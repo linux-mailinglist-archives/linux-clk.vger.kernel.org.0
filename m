@@ -2,204 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEB2592AA1
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E3C592CBC
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 12:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiHOH7W (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Aug 2022 03:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S240850AbiHOIHm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Aug 2022 04:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiHOH7K (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 03:59:10 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70073.outbound.protection.outlook.com [40.107.7.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D441DA73;
-        Mon, 15 Aug 2022 00:59:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B1zUdrrKFaSIN3JZk2lNrZCpA06CCz8F8vqQwY03iz1XT177ZiPqVtr3ioBX5RQ/cc7RYKPI1dR0TuhfRzclpQ3jMUcwAozIMqX2bOrK81G8t2CPkJcICsqp9r0IDgSNpgghD/u9Mq4T9IIkiMRkxQqzm1zAC69hbUw+0V1avJnEwM31ZGE7joBFFsMMxMGbmPO6VjzMI/woerA/7S9l/bFtcVnagh3XEQ4/3EyfQITcTv5n9FdtE4bbhhiL84VMHuidL7+J3gxP9PptF22JhXutRnT9LHbCvwmJFkJfvbgrPPoQ2Q+Ik19YVuYGVXnLzQlkRALtN9Krctw23xbJ2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Inn4xH9c8tBjTTgWBs+mvCzdb/LzliO2RaL54StVzfs=;
- b=dBtWUqNh3u2pjRMTpM4yUBxzSskLrI6TE/4ImXS08Kwol721P3gBuYiU0CIDIYeL5VEhwc5tj/sLnzhfmNKAd3n1qMY0pUN23ycZd47b3AowoG4m6/2pEKpjdI5lZeV9q1adUOr0XbDO+jMJIbPHPp8naoRt2XNEa/D6PGA9xIv6HARCYKRARXeTBaCOcLD2srJUoAEtK1lBYOaSbib11xdhav5wKQ7TtFe5bvYhrISHlRhsT8JB+7nojV3ldoSnsmgrgB/zYUPylP9o1k8opxaIT/e7XPPUbthXDhkdMc/n7/pQxUiF6IWHvfLJRfQJ+ayPOoKmVATVglLObMeNJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Inn4xH9c8tBjTTgWBs+mvCzdb/LzliO2RaL54StVzfs=;
- b=mE2DWy4hcHtzCgVPIZHd88kQxckklbavq9DqNiQlSTrwZ/gVNRNXFZRWTd2VzAg4D4xK/SceHG8FsMchL6+QqmMnVTRq6O3NeMSEkgjXmFfUD8oijt/jjFUOs2/TLICeS0IyDMzpgj4d6L0GvJx93gcAzZ4Ws3f5NRJ0g+jQ+z8=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM5PR04MB3059.eurprd04.prod.outlook.com (2603:10a6:206:b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.27; Mon, 15 Aug
- 2022 07:59:06 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::3c6c:b7e6:a93d:d442%4]) with mapi id 15.20.5525.011; Mon, 15 Aug 2022
- 07:59:06 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "abelvesa@kernel.org" <abelvesa@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ye Li <ye.li@nxp.com>
-Subject: RE: [PATCH V2] clk: imx8mp: tune the order of enet_qos_root_clk
-Thread-Topic: [PATCH V2] clk: imx8mp: tune the order of enet_qos_root_clk
-Thread-Index: AQHYsEbvQWxYY3ZlFUCiyhkgScPOJ62vmPmAgAAAI3A=
-Date:   Mon, 15 Aug 2022 07:59:06 +0000
-Message-ID: <DU0PR04MB9417BD20354981A3B690D02B88689@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220815013428.476015-1-peng.fan@oss.nxp.com>
- <Yvn8k0INnkF40Oky@linaro.org>
-In-Reply-To: <Yvn8k0INnkF40Oky@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 23e133f0-d07d-49ff-7ed2-08da7e9406f8
-x-ms-traffictypediagnostic: AM5PR04MB3059:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 71T2v/40kCA6oECTb2DpGd0lAqWSnCANI751yuKym/aHVW+v38sxN2bq93VQgR/IeQkTjbxOIwtVWwr3AhImhI3AcTrhCIOxEgp7psV4/hRv18MuPPg0fVWBQoeddIkngNkJ/5UNsDoSjhE8s9EA/vuDfziLqg5nntp/2mtRLCYD2lM6hytDBJaJOnFffNWqjDLxhQpzXQ+TvkkgWCbxM4Ef5ZJLqmrr/2t6jqKYvxQRPRZ5KkHfLjaO8Qle+82aaMLkW7BF/GUt8X9XCqFrz7URhPdwk9IMr5R8qEil/y33PRLmalXzS9cPHejPPBc3HmWRT3tS8QHIXyJud3Mc19SDxpadhB55tS3ykA82HIH/LDq/V9o++aqllgp4DVJ8Dou8p2MUwmpEbtXzoh5e8Zwa4dHdzrCXnZqYlsBHIacR6rdY9/+Wv9uKGm9GdhYcF+dNx9mSjZDXDipzdS0si3OzsQ2rB/2NTg93jzVAgUWmKYfmyMmDzN0ZejQ29qnS1nGVdydtgXY7SlvUFchT0enb3cB6UStqD1APf5FSa44CnHEIDvYziLbyUrN0IIOvADcNYlGz+XsOb0aYi8CvyKi6Fzt6IduKjtyECRfc9UgWiFoT9gdLP9AUifUezuoLLzzgCY/2DxG2qMYTia0CLv+KfxGH4amrVvYKZlA/q17pk2d2sWeL6LMir11TjAt3HkwPnyOsm84e84EJwJG/5hLISfH+P0f6ez8u31hwt83NkNLlAReVrj8mFr6RInKvt2pEUMO7pDYe6k3SdH5+5y4s//zsKe0Jq/T3d7chhAJyQLHuUEgE7V1P6+Oj8C/lpVg1ps30JQWGNdzwmpRE5A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(346002)(376002)(396003)(39860400002)(33656002)(83380400001)(8676002)(9686003)(26005)(71200400001)(186003)(478600001)(8936002)(54906003)(4326008)(66556008)(76116006)(64756008)(66476007)(66946007)(316002)(66446008)(110136005)(44832011)(55016003)(5660300002)(52536014)(2906002)(7416002)(41300700001)(7696005)(38070700005)(53546011)(6506007)(86362001)(122000001)(38100700002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vxgB1vov/nXM9lTlDgd/i02n3kFZ31CdVDUQeJ630Vco7tvyJLz/z5VdLcwq?=
- =?us-ascii?Q?9S62q+qhgO3RRqov8UKVT/Qmj1y9RXns5mgisMDnb+v29c5bSUDheMrws4P6?=
- =?us-ascii?Q?fpSlr3RntCCn91Mdzlil6IWYOHvWf4RlOBB/Sl0I6vbKqrVOxJmN6LtkbM9P?=
- =?us-ascii?Q?xE4eThMrMOyK5vFsyPpfdlczfhuWLNcvObj0a8vbZoUby1XEt73MAwhAdVjp?=
- =?us-ascii?Q?RgOTykPs3oAtxIYIqif8rZVBsnl6+k0ASEmKs5okd51HVfdFa7D89C9ufS/q?=
- =?us-ascii?Q?4D6zAkwDm4NpGDNnPnGkLJ/5se+Q+KIQ2vtV6irIBrJE436OeGwoEp3dKuFD?=
- =?us-ascii?Q?fYS8aR7y95XjU36n2brmyZyAWYfOCQjo36ZlRcNv46n2PfcBqZiItfcVkZIB?=
- =?us-ascii?Q?obKprqX2W+mhbk+WGogB8VqVQRbuKra7JOfbwsI7b7gzScVj0Rn3a3aPkmUt?=
- =?us-ascii?Q?yuDN49L5i80tSeDnaD/n9jV1VOO4MGzudb+Zdgvf3ZGmvDtbL71G1hs3DFfl?=
- =?us-ascii?Q?Gnhqs2SWJSRqF3o0g3FedNNBKzzuBx+CeukEsaHsg7ivB8hPgCVr8TqL6ycx?=
- =?us-ascii?Q?XN8SBc0fyzOA7KYKaHSJr6HMcZz6ckOl0FMJGGlVBNLDvo81UgaeSmfdVU4T?=
- =?us-ascii?Q?+zY/wn0FFqsOmyYPh7x/gzEos6i0+wVVwfeGBdNDIx5CyU2O+0w8HpUSXtZY?=
- =?us-ascii?Q?ZcZ0280i5bthfivBVgn5z1L0Ubecp6SM6yzoapgxWuRRJ9fDeUBYbLIQLe4w?=
- =?us-ascii?Q?WtORcrdITjHXKy/7eqiCzuy4Ju6mutivMN4EWG9GTjumxlBFAbEc52rKkgM6?=
- =?us-ascii?Q?LCa4hK4He3NLXI7/YVIFd0s1j48qJLcR+JKfKNj6N3tALaU+7uvI1kbZzuJd?=
- =?us-ascii?Q?5In838y1jxFrHLQGAB/kidi728CRlZ6hwKk4MHLX7u6By2ifBIYImI9QlHHB?=
- =?us-ascii?Q?rwCqT7fi4jrFk8cB9e44kYuDva0gdNt13lvtmvkZEwubvsQM5etzbonGWhtI?=
- =?us-ascii?Q?E0RFTmIODyz+9gF9KcIwofDBS48DyYeIMgj6N7kRp4Wc3OkTXnzD9R0SNmAt?=
- =?us-ascii?Q?GXJvFEHpT5w3uHdZGiKM+AfsB7dLh9HeLe7uz1HTzErVgLjgN4rIG/JM7Zlu?=
- =?us-ascii?Q?8NY7zlL3D2rA3cJ/y4S2rLfhfG1eR7OWfGU4a/ChfTmQZU50BFrU4KiObEIa?=
- =?us-ascii?Q?NRUv+mDQ7TlHAMeY/sNKRTgYzmHl5i0fOyuOeN82CVzNLUKy/sSIHJSxKcc+?=
- =?us-ascii?Q?7+3iBBm+91r8CRj028A+DaGYVaZG0bUpng0R4cekD8d1O4Ya8XHM699Iigd6?=
- =?us-ascii?Q?yj8fkdcRaMe0p+IQgg+MhuUA3FzqNb9i9LiKyxuXJHGa600UrR5KTe8kDLr7?=
- =?us-ascii?Q?qZYN8wFphOZdAnU6QYYRBbejltrh9hLftePz2qVRKk5khyPHjhK0TeREgbLZ?=
- =?us-ascii?Q?XNxQEbl8d+p09k6mJLYiAQkHGxayvc2ao4AqMXwSXq3+SB4BG/j4inG1ngMX?=
- =?us-ascii?Q?zgA96kdGgmjWZDRI7Zu222evVfSAKEsuXrlgguvksbqym2MQfySztNzeHMoF?=
- =?us-ascii?Q?J3HVzKo3szsyLEEHfLY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S232840AbiHOIHm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 04:07:42 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3581E3CA
+        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 01:07:41 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id c3so6489559vsc.6
+        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 01:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=0j2fNWlhqHDdR8vDkqVbAvzs/vaD31QYk8D65F418vw=;
+        b=IH+bjnKLoIGwxrzbWto9f8hMWC2ogzh12LDwldBu4Zp/a4b3uwVAzjthn596wXA/Uv
+         h9kL9pr24vKRPoGoEnQ9YWqZ+fccbrtH06UK084c9O+ISOZAxKP618fJnkYJmO9MY4EA
+         2HVVVBArpKyo2zz3hpYNLQrbu5JYvsFS+bNj6UapYQqkwqAPK2PgeSqWDgasZ1TI40qR
+         Tzta/54t5Bjjl2qAvm9jjJjmS0MEArUjT7xK8hPRHQtuKDp7UYfeRdzM9DqGCrC6IcGe
+         pVBNLsLrku4gN6JE6bfMxHsY/NG6MdeCgAO+Tw7ZD8aBkpowdN3ce0nOai9iDksp19lC
+         G70w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=0j2fNWlhqHDdR8vDkqVbAvzs/vaD31QYk8D65F418vw=;
+        b=jNtgjwEarAmkzf8rfZ2UHdyhQGQ8npQkOi53eoQy8JqH1VlFOW+V3+yOlBb8dHWRYL
+         nvUG6MpLgc2OFxeVC6M+L+SotnGIjU3KB1ZSyC9EjBQp0a4toJmeZZtSEGFNcWaL3q1x
+         okckjGCilHWto746SctpM8jy8iuzCMP94rds3/dbBLnrgUEkIWW7wEGf73IkLfnkaJ9h
+         dYpH3bNvezjkiqo0fM9bliVSXaRatRDpi7DIyhcaRQw7CfgJy6xVJaLd1bqiJwugnoDW
+         TJS9VzsI7wQs0KlXQetCtfwg9Sc5gM5dGBgXRipgsIkXdFx/lIBMgzF5gXSFe2Q40uid
+         5a/A==
+X-Gm-Message-State: ACgBeo2VBF94BZavQP0DLQ1cVlvbTE+UJQkDxT8pzm9g/iQp7qZORAO3
+        ZG0Gffv4slpqD5VWfKGhJ+jyuZRRyXxR9N9SPBM=
+X-Google-Smtp-Source: AA6agR7uhYPKSpurcf9CPZPx3Jdzobb9lV5A8QBl4IeDgD75oZ04VR0Igm75Tb53g0rO3i+Oe8tVGfK9AWE+sINiYRA=
+X-Received: by 2002:a67:e9c2:0:b0:385:8f3:23c1 with SMTP id
+ q2-20020a67e9c2000000b0038508f323c1mr5890535vso.63.1660550860100; Mon, 15 Aug
+ 2022 01:07:40 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23e133f0-d07d-49ff-7ed2-08da7e9406f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2022 07:59:06.3086
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sj7vRHzSpGRihQU/iVmr+hFeBU3rIl7803RrV8G7iH9apYzK0sMnn31XYKk2ingIX6p50itkh9CBZ1VrpZGlOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3059
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:5c51:0:b0:2da:55bb:dbeb with HTTP; Mon, 15 Aug 2022
+ 01:07:39 -0700 (PDT)
+Reply-To: ausmann@inbox.lt
+From:   Abu Usman <shehuahmedutono05@gmail.com>
+Date:   Mon, 15 Aug 2022 09:07:39 +0100
+Message-ID: <CALChzRb6bp3nBSiMEFEuCbei2C=7iv0HRCH1-cJ49cGHDmJnuw@mail.gmail.com>
+Subject: Hello Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [shehuahmedutono05[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [shehuahmedutono05[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.6 URG_BIZ Contains urgent matter
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  2.2 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  1.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Abel,
+Greeting,
 
-> Subject: Re: [PATCH V2] clk: imx8mp: tune the order of enet_qos_root_clk
->=20
-> On 22-08-15 09:34:28, Peng Fan (OSS) wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > The enet_qos_root_clk takes sim_enet_root_clk as parent. When
-> > registering enet_qos_root_clk, it will be put into clk orphan list,
-> > because sim_enet_root_clk is not ready.
-> >
-> > When sim_enet_root_clk is ready, clk_core_reparent_orphans_nolock will
-> > set enet_qos_root_clk parent to sim_enet_root_clk.
-> >
-> > Because CLK_OPS_PARENT_ENABLE is set, sim_enet_root_clk will be
-> > enabled and disabled during the enet_qos_root_clk reparent phase.
-> >
-> > All the above are correct. But with M7 booted early and using enet, M7
-> > enet feature will be broken, because clk driver probe phase disable
-> > the needed clks, in case M7 firmware not configure sim_enet_root_clk.
-> >
-> > And tune the order would also save cpu cycles.
-> >
-> > Reviewed-by: Ye Li <ye.li@nxp.com>
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
->=20
-> Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-Wrong address?
+I am indeed glad to be in contact with you even though this medium of
+communication (internet) has been grossly abused by criminal minded
+people making it difficult for people with genuine intention to
+correspond and exchange views without skepticism.
 
-Thanks,
-Peng.
->=20
-> > ---
-> >
-> > V2:
-> >  Use Abel's new address
-> >
-> > V1:
-> >  Patch got reviewed in NXP internal.
-> >
-> >  drivers/clk/imx/clk-imx8mp.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/clk/imx/clk-imx8mp.c
-> > b/drivers/clk/imx/clk-imx8mp.c index e89db568f5a8..652ae58c2735
-> 100644
-> > --- a/drivers/clk/imx/clk-imx8mp.c
-> > +++ b/drivers/clk/imx/clk-imx8mp.c
-> > @@ -665,8 +665,8 @@ static int imx8mp_clocks_probe(struct
-> platform_device *pdev)
-> >  	hws[IMX8MP_CLK_CAN1_ROOT] =3D
-> imx_clk_hw_gate2("can1_root_clk", "can1", ccm_base + 0x4350, 0);
-> >  	hws[IMX8MP_CLK_CAN2_ROOT] =3D
-> imx_clk_hw_gate2("can2_root_clk", "can2", ccm_base + 0x4360, 0);
-> >  	hws[IMX8MP_CLK_SDMA1_ROOT] =3D
-> imx_clk_hw_gate4("sdma1_root_clk", "ipg_root", ccm_base + 0x43a0, 0);
-> > -	hws[IMX8MP_CLK_ENET_QOS_ROOT] =3D
-> imx_clk_hw_gate4("enet_qos_root_clk", "sim_enet_root_clk", ccm_base +
-> 0x43b0, 0);
-> >  	hws[IMX8MP_CLK_SIM_ENET_ROOT] =3D
-> > imx_clk_hw_gate4("sim_enet_root_clk", "enet_axi", ccm_base + 0x4400,
-> > 0);
-> > +	hws[IMX8MP_CLK_ENET_QOS_ROOT] =3D
-> > +imx_clk_hw_gate4("enet_qos_root_clk", "sim_enet_root_clk", ccm_base
-> +
-> > +0x43b0, 0);
-> >  	hws[IMX8MP_CLK_GPU2D_ROOT] =3D
-> imx_clk_hw_gate4("gpu2d_root_clk", "gpu2d_core", ccm_base + 0x4450, 0);
-> >  	hws[IMX8MP_CLK_GPU3D_ROOT] =3D
-> imx_clk_hw_gate4("gpu3d_root_clk", "gpu3d_core", ccm_base + 0x4460, 0);
-> >  	hws[IMX8MP_CLK_UART1_ROOT] =3D
-> imx_clk_hw_gate4("uart1_root_clk",
-> > "uart1", ccm_base + 0x4490, 0);
-> > --
-> > 2.37.1
-> >
+This is a private effort to introduce a partnership intention and
+proposal to you, I decided to write to you. I have decided that I seek
+your assistance in a matter that requires your urgent attention
+
+I'm Abu Usman from Afghanistan, and I am contacting you due to the
+ongoing takeover by the Taliban in my country.
+
+I need your urgent response to help me receive some funds for me.If
+this is something you can do, I will appreciate your early response,
+so that I can provide more and appropriate details of the entire
+proposal, given the fact that this is only a skeletal introduction.
+
+I will appreciate if you could let me have the following information
+
+1. Your Name
+2. Address
+3. Your cell Phone Number.
+4. Occupation
+
+Your positive response will be highly appreciated. As soon as I
+receive your response I will get back to you Asap.
+
+Sincerely,
+
+Abu Usman
