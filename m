@@ -2,32 +2,32 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4859259DB92
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Aug 2022 14:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EE959E3DF
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Aug 2022 14:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243961AbiHWKMe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 23 Aug 2022 06:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S244608AbiHWMh7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 23 Aug 2022 08:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352886AbiHWKJ2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 23 Aug 2022 06:09:28 -0400
+        with ESMTP id S241241AbiHWMhe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 23 Aug 2022 08:37:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01542659F5;
-        Tue, 23 Aug 2022 01:55:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3474165D8;
+        Tue, 23 Aug 2022 02:48:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B3A0B81C3B;
-        Tue, 23 Aug 2022 08:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC25AC433C1;
-        Tue, 23 Aug 2022 08:55:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EF19B81C96;
+        Tue, 23 Aug 2022 09:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFACBC433C1;
+        Tue, 23 Aug 2022 09:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661244917;
-        bh=cCEb61r0Y2wt8EAuBv6xy9ICBFJ6QBNcUN34lz7odSM=;
+        s=korg; t=1661247761;
+        bh=8EVI3mMFSTsMNu+Ua9zkHwCiwDzpmPnjdop2C2/0PVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IvzZCcSdFtTVACDxxzciW8GJHtKT/4OKi9Z8g6uLyC1SwKrwewNklzCZSsY/3az/y
-         XWdzac6ztnafT2hTHZ8OS3DPc7AdJuR2XzH0BQnbLQQSjHs8mA/hpNfeVwd6MNLtFs
-         tXcuC+3eRqSb88Hqe5TXQ0AqWSXFz4Wmg21+vm08=
+        b=fRfkVcBh6Hzk4rMmR8gqJDaD47lWFldmfLIjSs77Bz6iuhCyAe09SIPbfrDADw2GU
+         zEZipQnxdkUA9TvXHMD4Hw9KvSk52pgJpu+GpgkF25nthlViKEibbNdwZ4WRLAaYhQ
+         IgohDjtSJVbNoMJ+wvi5QjARdMtHEoXobvCWUdRg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tero Kristo <kristo@kernel.org>,
         Tony Lindgren <tony@atomide.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 172/244] clk: ti: Stop using legacy clkctrl names for omap4 and 5
-Date:   Tue, 23 Aug 2022 10:25:31 +0200
-Message-Id: <20220823080105.016135088@linuxfoundation.org>
+Subject: [PATCH 5.10 108/158] clk: ti: Stop using legacy clkctrl names for omap4 and 5
+Date:   Tue, 23 Aug 2022 10:27:20 +0200
+Message-Id: <20220823080050.336124997@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220823080059.091088642@linuxfoundation.org>
-References: <20220823080059.091088642@linuxfoundation.org>
+In-Reply-To: <20220823080046.056825146@linuxfoundation.org>
+References: <20220823080046.056825146@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -87,7 +87,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 185 insertions(+), 189 deletions(-)
 
 diff --git a/drivers/clk/ti/clk-44xx.c b/drivers/clk/ti/clk-44xx.c
-index d078e5d73ed9..868bc7af21b0 100644
+index a38c92153979..cbf9922d93d4 100644
 --- a/drivers/clk/ti/clk-44xx.c
 +++ b/drivers/clk/ti/clk-44xx.c
 @@ -56,7 +56,7 @@ static const struct omap_clkctrl_bit_data omap4_aess_bit_data[] __initconst = {
@@ -449,7 +449,7 @@ index d078e5d73ed9..868bc7af21b0 100644
  };
  
 diff --git a/drivers/clk/ti/clk-54xx.c b/drivers/clk/ti/clk-54xx.c
-index 90e0a9ea6351..b4aff76eb373 100644
+index 8694bc9f5fc7..04a5408085ac 100644
 --- a/drivers/clk/ti/clk-54xx.c
 +++ b/drivers/clk/ti/clk-54xx.c
 @@ -50,7 +50,7 @@ static const struct omap_clkctrl_bit_data omap5_aess_bit_data[] __initconst = {
@@ -514,7 +514,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	{ 0 },
  };
  
-@@ -268,12 +268,12 @@ static const struct omap_clkctrl_bit_data omap5_gpio8_bit_data[] __initconst = {
+@@ -266,12 +266,12 @@ static const struct omap_clkctrl_bit_data omap5_gpio8_bit_data[] __initconst = {
  };
  
  static const struct omap_clkctrl_reg_data omap5_l4per_clkctrl_regs[] __initconst = {
@@ -533,7 +533,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	{ OMAP5_GPIO2_CLKCTRL, omap5_gpio2_bit_data, CLKF_HW_SUP, "l4_root_clk_div" },
  	{ OMAP5_GPIO3_CLKCTRL, omap5_gpio3_bit_data, CLKF_HW_SUP, "l4_root_clk_div" },
  	{ OMAP5_GPIO4_CLKCTRL, omap5_gpio4_bit_data, CLKF_HW_SUP, "l4_root_clk_div" },
-@@ -345,7 +345,7 @@ static const struct omap_clkctrl_bit_data omap5_dss_core_bit_data[] __initconst
+@@ -343,7 +343,7 @@ static const struct omap_clkctrl_bit_data omap5_dss_core_bit_data[] __initconst
  };
  
  static const struct omap_clkctrl_reg_data omap5_dss_clkctrl_regs[] __initconst = {
@@ -542,7 +542,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	{ 0 },
  };
  
-@@ -378,7 +378,7 @@ static const struct omap_clkctrl_bit_data omap5_gpu_core_bit_data[] __initconst
+@@ -376,7 +376,7 @@ static const struct omap_clkctrl_bit_data omap5_gpu_core_bit_data[] __initconst
  };
  
  static const struct omap_clkctrl_reg_data omap5_gpu_clkctrl_regs[] __initconst = {
@@ -551,7 +551,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	{ 0 },
  };
  
-@@ -389,7 +389,7 @@ static const char * const omap5_mmc1_fclk_mux_parents[] __initconst = {
+@@ -387,7 +387,7 @@ static const char * const omap5_mmc1_fclk_mux_parents[] __initconst = {
  };
  
  static const char * const omap5_mmc1_fclk_parents[] __initconst = {
@@ -560,7 +560,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	NULL,
  };
  
-@@ -405,7 +405,7 @@ static const struct omap_clkctrl_bit_data omap5_mmc1_bit_data[] __initconst = {
+@@ -403,7 +403,7 @@ static const struct omap_clkctrl_bit_data omap5_mmc1_bit_data[] __initconst = {
  };
  
  static const char * const omap5_mmc2_fclk_parents[] __initconst = {
@@ -569,7 +569,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	NULL,
  };
  
-@@ -430,12 +430,12 @@ static const char * const omap5_usb_host_hs_hsic480m_p3_clk_parents[] __initcons
+@@ -428,12 +428,12 @@ static const char * const omap5_usb_host_hs_hsic480m_p3_clk_parents[] __initcons
  };
  
  static const char * const omap5_usb_host_hs_utmi_p1_clk_parents[] __initconst = {
@@ -584,7 +584,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	NULL,
  };
  
-@@ -494,8 +494,8 @@ static const struct omap_clkctrl_bit_data omap5_usb_otg_ss_bit_data[] __initcons
+@@ -492,8 +492,8 @@ static const struct omap_clkctrl_bit_data omap5_usb_otg_ss_bit_data[] __initcons
  };
  
  static const struct omap_clkctrl_reg_data omap5_l3init_clkctrl_regs[] __initconst = {
@@ -595,7 +595,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	{ OMAP5_USB_HOST_HS_CLKCTRL, omap5_usb_host_hs_bit_data, CLKF_SW_SUP, "l3init_60m_fclk" },
  	{ OMAP5_USB_TLL_HS_CLKCTRL, omap5_usb_tll_hs_bit_data, CLKF_HW_SUP, "l4_root_clk_div" },
  	{ OMAP5_SATA_CLKCTRL, omap5_sata_bit_data, CLKF_SW_SUP, "func_48m_fclk" },
-@@ -519,7 +519,7 @@ static const struct omap_clkctrl_reg_data omap5_wkupaon_clkctrl_regs[] __initcon
+@@ -517,7 +517,7 @@ static const struct omap_clkctrl_reg_data omap5_wkupaon_clkctrl_regs[] __initcon
  	{ OMAP5_L4_WKUP_CLKCTRL, NULL, 0, "wkupaon_iclk_mux" },
  	{ OMAP5_WD_TIMER2_CLKCTRL, NULL, CLKF_SW_SUP, "sys_32k_ck" },
  	{ OMAP5_GPIO1_CLKCTRL, omap5_gpio1_bit_data, CLKF_HW_SUP, "wkupaon_iclk_mux" },
@@ -604,7 +604,7 @@ index 90e0a9ea6351..b4aff76eb373 100644
  	{ OMAP5_COUNTER_32K_CLKCTRL, NULL, 0, "wkupaon_iclk_mux" },
  	{ OMAP5_KBD_CLKCTRL, NULL, CLKF_SW_SUP, "sys_32k_ck" },
  	{ 0 },
-@@ -549,58 +549,58 @@ const struct omap_clkctrl_data omap5_clkctrl_data[] __initconst = {
+@@ -547,58 +547,58 @@ const struct omap_clkctrl_data omap5_clkctrl_data[] __initconst = {
  static struct ti_dt_clk omap54xx_clks[] = {
  	DT_CLK(NULL, "timer_32k_ck", "sys_32k_ck"),
  	DT_CLK(NULL, "sys_clkin_ck", "sys_clkin"),
