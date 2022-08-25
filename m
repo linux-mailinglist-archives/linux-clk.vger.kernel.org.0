@@ -2,121 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E365A10E8
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Aug 2022 14:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380475A1298
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Aug 2022 15:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiHYMqL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 Aug 2022 08:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S234550AbiHYNpK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Aug 2022 09:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233885AbiHYMqK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Aug 2022 08:46:10 -0400
-X-Greylist: delayed 387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 Aug 2022 05:46:06 PDT
-Received: from mail.bugwerft.de (mail.bugwerft.de [46.23.86.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00F694D17B;
-        Thu, 25 Aug 2022 05:46:06 -0700 (PDT)
-Received: from hq-00021.holoplot.net (unknown [176.126.217.202])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id A9A02421360;
-        Thu, 25 Aug 2022 12:39:37 +0000 (UTC)
-From:   Daniel Mack <daniel@zonque.org>
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, kuninori.morimoto.gx@renesas.com,
-        Daniel Mack <daniel@zonque.org>
-Subject: [PATCH 2/2] clk: cs2000-cp: make PLL lock timeout configurable
-Date:   Thu, 25 Aug 2022 14:39:24 +0200
-Message-Id: <20220825123924.2284276-2-daniel@zonque.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220825123924.2284276-1-daniel@zonque.org>
-References: <20220825123924.2284276-1-daniel@zonque.org>
+        with ESMTP id S233743AbiHYNpJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Aug 2022 09:45:09 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8FB11C2C;
+        Thu, 25 Aug 2022 06:45:07 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l23so8458579lji.1;
+        Thu, 25 Aug 2022 06:45:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=LNQ1P5VfR2hkrO1KVSkVyiPofBvt2GF2rWkw17ZqdPc=;
+        b=Uj3kdoKnIficr7T0mxpriXp3Bhpz+uGwLNnfEOqvw4QJBLkF1DPeQBXj12Rx9AMBHl
+         /9GbNFs8SAt20sraYH0vWtihEXigfs1Jz46PtgxQE3fCnhweauy24KnfVUNMHylbAN7q
+         488xIslKivbNcFC3fszq2p6rOXKAPj4tWhBr4T9LkyA7Vcee4QBsYWXl4wfaEruusuy0
+         HThiG1HWcPt9moxHpq1CsIqfQHvtpTKBVSbOdEOWRkVNbvYr5WzgHwriNyqvWlyeXMxP
+         havgWHIFHhQzEi88LyOBZ9EOyCS05e6rQGAVvgIqIjVh8ICOQT27pErGJzvTJxJy3dW4
+         baHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=LNQ1P5VfR2hkrO1KVSkVyiPofBvt2GF2rWkw17ZqdPc=;
+        b=mpzA2x12QaKTXcUcIxAo8ZsuHjpyjV1YhDIuCqBl0/8IengnmckaxpW1LVBjAXZSPF
+         KZSP6KocW6KVqMyePR2uv7mzFjSPdfIzfA80Dh81CQRyq2+NQA1CM+L44Dtf5tuYKmJB
+         VgwQd6f1NfwqDMCSNYcAQeNKiM9nUzGyJeVJAgnvZfOI3bVk2xOQCqKutB3xe5o1CFLC
+         EOcSIjxBR2p1xwuGGK1GWQKKpmP085UjukrXnxUM1kEsLvZs1ehjTXka6FuUspGSXUMq
+         Fvt21+WkJ5P5tWPA/vjqZw5mR0yzmYHFShmtMFmcl4ioxvUdLkAOMWBISAJdtKZo0ENO
+         61nA==
+X-Gm-Message-State: ACgBeo335xD7DC2Ou2rXe6kH3ehRt881SnHQ6hQAwZQ3EuxOIqBRwqj/
+        ep6CzKVAzGUUjI4TLtQSHU+jy7m/7M+8sw==
+X-Google-Smtp-Source: AA6agR6W/G7rOoiqL0vEYBlVB5eoB4lN8B1UfT+c7FAeskxQeqGUO6kguGNrdSz6l9Bzihl67aZmPQ==
+X-Received: by 2002:a05:651c:221e:b0:25f:f069:1c13 with SMTP id y30-20020a05651c221e00b0025ff0691c13mr1200422ljq.390.1661435105696;
+        Thu, 25 Aug 2022 06:45:05 -0700 (PDT)
+Received: from mobilestation ([95.79.140.178])
+        by smtp.gmail.com with ESMTPSA id a12-20020ac25e6c000000b0048af0df1041sm496671lfr.255.2022.08.25.06.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Aug 2022 06:45:05 -0700 (PDT)
+Date:   Thu, 25 Aug 2022 16:45:02 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-clk@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH RESEND v10 6/7] clk: baikal-t1: Add DDR/PCIe directly
+ controlled resets support
+Message-ID: <20220825134502.alxzlikv7ftir2fi@mobilestation>
+References: <20220822182934.23734-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822182934.23734-7-Sergey.Semin@baikalelectronics.ru>
+ <c3831c5a-7e10-2112-83e0-4ec2d70001c2@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3831c5a-7e10-2112-83e0-4ec2d70001c2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The driver currently does 256 iterations of reads from the DEVICE_CTRL
-register to wait for the PLL_LOCK to clear, and sleeps one microsecond
-after each attempts.
+On Tue, Aug 23, 2022 at 01:23:32PM +0300, Krzysztof Kozlowski wrote:
+> On 22/08/2022 21:29, Serge Semin wrote:
+> > Aside with a set of the trigger-like resets Baikal-T1 CCU provides two
+> > additional blocks with directly controlled reset signals. In particular it
+> > concerns DDR full and initial resets and various PCIe sub-domains resets.
+> > Let's add the direct reset assertion/de-assertion of the corresponding
+> > flags support into the Baikal-T1 CCU driver then. It will be required at
+> > least for the PCIe platform driver. Obviously the DDR controller isn't
+> > supposed to be fully reset in the kernel, so the corresponding controls
+> > are added just for the sake of the interface implementation completeness.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> > 
+> > ---
+> > 
+> > Changelog v6:
+> > - Refactor the code to support the linear reset IDs only. (@Philipp)
+> > 
+> > Changelog v7:
+> > - Drop empty line from the sys_rst_info structure initialization block.
+> >   (@Philipp)
+> > ---
+> >  drivers/clk/baikal-t1/ccu-rst.c     | 66 +++++++++++++++++++++++++++++
+> >  drivers/clk/baikal-t1/ccu-rst.h     | 10 +++++
+> >  include/dt-bindings/reset/bt1-ccu.h |  9 ++++
+> 
 
-This isn't ideal because
+> Do not mix drivers and bindings. Bindings always go separately, so this
+> has to be split.
 
- a) the total time this allows for the device to settle depends on the I2C
-    bus speed, and
- b) the device might need more time, depending on the application.
+Ok. Sigh...
 
-This patch allows users to configure this timeout through a new device-tree
-property "cirrus,pll-lock-timeout-msec".
+-Sergey
 
-In order to not break existing applications, a default value of 50 ms is
-assumed: For each read cycle, 8 bits are sent for the register address, and
-8 bits are read with the values. 16 bits take about 160 us on a 100 kHz bus
-and 40 us on a 400 kHz bus. Hence 256 iterations would take a maximum of
-around 44 ms. Round up to be on the safe side.
-
-Signed-off-by: Daniel Mack <daniel@zonque.org>
----
- drivers/clk/clk-cs2000-cp.c | 25 +++++++++++++------------
- 1 file changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/clk/clk-cs2000-cp.c b/drivers/clk/clk-cs2000-cp.c
-index aa5c72bab83e..6ba36b470a74 100644
---- a/drivers/clk/clk-cs2000-cp.c
-+++ b/drivers/clk/clk-cs2000-cp.c
-@@ -110,6 +110,8 @@ struct cs2000_priv {
- 	bool lf_ratio;
- 	bool clk_skip;
- 
-+	unsigned int pll_lock_timeout_ms;
-+
- 	/* suspend/resume */
- 	unsigned long saved_rate;
- 	unsigned long saved_parent_rate;
-@@ -171,21 +173,16 @@ static int cs2000_ref_clk_bound_rate(struct cs2000_priv *priv,
- static int cs2000_wait_pll_lock(struct cs2000_priv *priv)
- {
- 	struct device *dev = priv_to_dev(priv);
--	unsigned int i, val;
-+	unsigned int val;
- 	int ret;
- 
--	for (i = 0; i < 256; i++) {
--		ret = regmap_read(priv->regmap, DEVICE_CTRL, &val);
--		if (ret < 0)
--			return ret;
--		if (!(val & PLL_UNLOCK))
--			return 0;
--		udelay(1);
--	}
--
--	dev_err(dev, "pll lock failed\n");
-+	ret = regmap_read_poll_timeout(priv->regmap, DEVICE_CTRL, val,
-+				       !(val & PLL_UNLOCK), USEC_PER_MSEC,
-+				       priv->pll_lock_timeout_ms * USEC_PER_MSEC);
-+	if (ret < 0)
-+		dev_err(dev, "pll lock failed\n");
- 
--	return -ETIMEDOUT;
-+	return ret;
- }
- 
- static int cs2000_clk_out_enable(struct cs2000_priv *priv, bool enable)
-@@ -481,6 +478,10 @@ static int cs2000_clk_register(struct cs2000_priv *priv)
- 	if (ret < 0)
- 		return ret;
- 
-+	priv->pll_lock_timeout_ms = 50;
-+	of_property_read_u32(np, "cirrus,pll-lock-timeout-msec",
-+			     &priv->pll_lock_timeout_ms);
-+
- 	priv->clk_skip = of_property_read_bool(np, "cirrus,clock-skip");
- 
- 	ref_clk_rate = clk_get_rate(priv->ref_clk);
--- 
-2.37.2
-
+> 
+> Best regards,
+> Krzysztof
