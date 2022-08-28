@@ -2,105 +2,135 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF51C5A392C
-	for <lists+linux-clk@lfdr.de>; Sat, 27 Aug 2022 19:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833615A3F4F
+	for <lists+linux-clk@lfdr.de>; Sun, 28 Aug 2022 21:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbiH0RXs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 27 Aug 2022 13:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S229543AbiH1TWN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 28 Aug 2022 15:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiH0RXr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 27 Aug 2022 13:23:47 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EE42A72C
-        for <linux-clk@vger.kernel.org>; Sat, 27 Aug 2022 10:23:45 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id m5so5850026lfj.4
-        for <linux-clk@vger.kernel.org>; Sat, 27 Aug 2022 10:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=0Mev3wBjKkNkiFX8lECGnY4J/j2vehNJSt2NBjpTkII=;
-        b=zwgU9H9OFoS/MCha3D3T74FztIUntYk0w7GricFMydQ02R6PZaY8fSgXHfEIYrzsq4
-         CwTKGebSWniXKRREJn0FUhXjQ8Wbw5DhcHw2mk3L+vNbM7ts8O08TKtMdlaV5XiWCR9Y
-         dY3BvvTqZCyh1WNsfZGmx04UoSPWI9AmWd6LvU2K2kDpsJ9Rik3rsiJhkOS6ZjPjD8k1
-         XaWrUpw3T0sq3IYZpC3uyN5kfekE9FjtXYqo64ob2x9SRHVDgcucxUzooaPFiqFIAPh9
-         Yi1mbp1xuzWpFpwYXGUZOLQ+axT0p3hWsK71/j4+ub+MBZp1nCdro/4gajyMbobFlklY
-         WR3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=0Mev3wBjKkNkiFX8lECGnY4J/j2vehNJSt2NBjpTkII=;
-        b=umu1nW2SXBYPc6uOsdSLy+XiVg0650luXgeAhzZdKGDq0xxBlLHKMfJUq92s5O5JAz
-         5mrumAzBmGKgzIvWA4LuVsRNoORKl3q9ZBTFJbOU9NVkM0rZW5Gswa9HxhtJ12n77cp0
-         f47i7Spic7Hd7R4Uea24GGe7XRqG8zW6rJZglxQkNNedFZc/C8DDQRN3hjy1FTkbsqOJ
-         zBlmUVYB1P93JuHNO6xqk4n1SkTsOp/kSQRS0Kbh+24yxu8msLDgqRyf6ywOCAnY7dsd
-         CfO/DuFu5VwyqOU3EWzdxC84DO048skpdoO9ZYzlxUW+lqtcu2YAVu7ygWF0ksgN8h4o
-         PhtA==
-X-Gm-Message-State: ACgBeo1GweZoSzAVcQYvJeb2RyGtRsXUozl1le+TYbLMPmKLbuBs0wK6
-        0YyfPStmuxpk6oN4g5Sx2CIxRw==
-X-Google-Smtp-Source: AA6agR4bp19iDkCA8mqVi96q7/mlsslLYUFbkHAqosVaZwo7xhtLr4GTcc2/bXIfPNJA5sfm6qM2jQ==
-X-Received: by 2002:a05:6512:3b90:b0:494:256d:943f with SMTP id g16-20020a0565123b9000b00494256d943fmr2441662lfv.497.1661621023972;
-        Sat, 27 Aug 2022 10:23:43 -0700 (PDT)
-Received: from [192.168.0.71] (82.131.98.15.cable.starman.ee. [82.131.98.15])
-        by smtp.gmail.com with ESMTPSA id q16-20020a0565123a9000b00492a0f02758sm725059lfu.28.2022.08.27.10.23.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Aug 2022 10:23:43 -0700 (PDT)
-Message-ID: <a73e509a-5260-41ff-2fb4-54b975ea59e9@linaro.org>
-Date:   Sat, 27 Aug 2022 20:23:42 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 5/5] dt-bindings: imx8ulp: clock: no spaces before tabs
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel@ziswiler.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
+        with ESMTP id S229977AbiH1TWK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 28 Aug 2022 15:22:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E431B248EE;
+        Sun, 28 Aug 2022 12:22:06 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27SJKtPn008995;
+        Sun, 28 Aug 2022 19:21:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=sDjRq8TtTtOhhdLNcU6fwDRQqh6Cf4gWnhHDwyUoa78=;
+ b=bg3Lrxj5COkokA0UNDOef+YLeepRPt/QwPZ2GIWO9WKQJxHdi8RzoDsDeZbYCw7ToMSr
+ 9a6vW/K6f+pxhZHgCF+Mqb/oB+1N4yMP3kXHIQ8v2Q4A6GyNiYzBVeI0KUCImEUllTrg
+ QN1rEerD+LH89WCLt8U5jXJk1wK5kndNPLtkHEaz1Bw5x3PQvosuFCluQ9wxs3kpVwDY
+ Big6BmzYwLTADdAnXjY8EMOTaTqmwzUsCkfp9RX3exMPE1thy2s3ijeII03cfAuwWlEC
+ 2xgdUr76SehKwfg1w+YCLY9NqsWIp2HM3EOA1QScalUK8VYrtJfi0HED7kpwzdKwgxf2 og== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j7cjf2m84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Aug 2022 19:21:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27SJLjtt031198
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Aug 2022 19:21:45 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Sun, 28 Aug 2022 12:21:38 -0700
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Stephen Boyd" <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <krzysztof.kozlowski@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        "Daniel Vetter" <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220826192252.794651-1-marcel@ziswiler.com>
- <20220826192252.794651-6-marcel@ziswiler.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220826192252.794651-6-marcel@ziswiler.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/6] clk/qcom: Support gdsc collapse polling using 'reset' interface
+Date:   Mon, 29 Aug 2022 00:51:13 +0530
+Message-ID: <1661714479-28981-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mc4o8glu7q703h3L4d1-ddhZaMgHzsFL
+X-Proofpoint-ORIG-GUID: mc4o8glu7q703h3L4d1-ddhZaMgHzsFL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-28_12,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 adultscore=0 malwarescore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208280080
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 26/08/2022 22:22, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> This fixes the following warnings:
-> 
-> include/dt-bindings/clock/imx8ulp-clock.h:204: warning: please, no space
->  before tabs
-> include/dt-bindings/clock/imx8ulp-clock.h:215: warning: please, no space
->  before tabs
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
+Some clients like adreno gpu driver would like to ensure that its gdsc
+is collapsed at hardware during a gpu reset sequence. This is because it
+has a votable gdsc which could be ON due to a vote from another subsystem
+like tz, hyp etc or due to an internal hardware signal. To allow
+this, gpucc driver can expose an interface to the client driver using
+reset framework. Using this the client driver can trigger a polling within
+the gdsc driver.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This series is rebased on top of linus's master branch.
 
+Related discussion: https://patchwork.freedesktop.org/patch/493144/
 
-Best regards,
-Krzysztof
+Changes in v5:
+- Nit: Remove a duplicate blank line (Krzysztof)
+
+Changes in v4:
+- Update gpu dt-binding schema
+- Typo fix in commit text
+
+Changes in v3:
+- Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
+
+Changes in v2:
+- Return error when a particular custom reset op is not implemented. (Dmitry)
+
+Akhil P Oommen (6):
+  dt-bindings: clk: qcom: Support gpu cx gdsc reset
+  clk: qcom: Allow custom reset ops
+  clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+  clk: qcom: gpucc-sc7280: Add cx collapse reset support
+  dt-bindings: drm/msm/gpu: Add optional resets
+  arm64: dts: qcom: sc7280: Add Reset support for gpu
+
+ .../devicetree/bindings/display/msm/gpu.yaml       |  6 +++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +++
+ drivers/clk/qcom/gdsc.c                            | 23 ++++++++++++++----
+ drivers/clk/qcom/gdsc.h                            |  7 ++++++
+ drivers/clk/qcom/gpucc-sc7280.c                    | 10 ++++++++
+ drivers/clk/qcom/reset.c                           | 27 ++++++++++++++++++++++
+ drivers/clk/qcom/reset.h                           |  8 +++++++
+ include/dt-bindings/clock/qcom,gpucc-sc7280.h      |  3 +++
+ 8 files changed, 83 insertions(+), 4 deletions(-)
+
+-- 
+2.7.4
+
