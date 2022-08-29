@@ -2,73 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D585A5051
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Aug 2022 17:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AC95A5436
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Aug 2022 20:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiH2Pj3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Aug 2022 11:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37852 "EHLO
+        id S229587AbiH2Sum (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Aug 2022 14:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiH2PjY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Aug 2022 11:39:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4135956A1
-        for <linux-clk@vger.kernel.org>; Mon, 29 Aug 2022 08:39:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EDEB71F8F4;
-        Mon, 29 Aug 2022 15:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661787554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ueNs86UFTJjj7RHZjMtBbl+FZzSEy2RU3fTLV1g4LWQ=;
-        b=1qqKObPR5uXbaLX9jU1Tfys9jf1NjWdo23ibzfp458QNFJ7ej+X5cjot7IjL27SjMlI3+p
-        NJ7lueh2RZQJ3kDQel9l1ideNxWEZUp/zjCegPDPtSLab7y/LRFKDVA3dHM0up8F16NwID
-        hiTXtWjP7Q+BMcdxCqd3uaIcT8SzJa0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661787554;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ueNs86UFTJjj7RHZjMtBbl+FZzSEy2RU3fTLV1g4LWQ=;
-        b=69y+U27EYL0AWFZsx/cFkhdzguhMVPY2aUGt6S69NwJO6CB72A7wSQ5cJ+ScOIKTyIr4th
-        tZM45L8EJ1vTBwDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8AAB139C4;
-        Mon, 29 Aug 2022 15:39:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8Hm2NKLdDGPrDAAAMHmgww
-        (envelope-from <iivanov@suse.de>); Mon, 29 Aug 2022 15:39:14 +0000
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Guillaume Gardet <Guillaume.Gardet@arm.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Dom Cobley <popcornmix@gmail.com>,
-        "Ivan T . Ivanov" <iivanov@suse.de>
-Subject: [RESEND v4 3/3] clk: bcm: rpi: Add support for VEC clock
-Date:   Mon, 29 Aug 2022 18:21:54 +0300
-Message-Id: <20220829152154.147250-4-iivanov@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220829152154.147250-1-iivanov@suse.de>
-References: <20220829152154.147250-1-iivanov@suse.de>
+        with ESMTP id S229551AbiH2Sul (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Aug 2022 14:50:41 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0709631DF1
+        for <linux-clk@vger.kernel.org>; Mon, 29 Aug 2022 11:50:41 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id fy31so17122863ejc.6
+        for <linux-clk@vger.kernel.org>; Mon, 29 Aug 2022 11:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=UsH6vMnY8y4Ttu+isOPB3+ny2RRrwbwy+Fk4xe0xGfI=;
+        b=TmT0ew7t5e/hIFdUh7DJdVohu61lYVG2q2uj4GPamJ7TCX9iLmLjkz6rZKXEyNwKaM
+         biVXEi7r7zrg+s1E9FlSfLyvH5sOJJW2cZmNCbbHOC7iT2M0gnDtCuSWb7pxJtBlX30H
+         lKEOLBfQFTe6T8RQQBv+C+cduk0Vll+PKPT0dbtQZAl9qDBlIEIb/1HuTI09LlW+QEMf
+         m7q5uYXpi6wJnye4k5R3+DNWBO7NYRnfvJn6xZQVnb4ZPygG7UMTHSvzy5GR+OOP1O86
+         EeJ1ZnT5c4e18eoJGXOLtu+UKR8w1pDrss0Xpejx5yhe8J7da+vURHmrknDRCsirStWZ
+         pwdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=UsH6vMnY8y4Ttu+isOPB3+ny2RRrwbwy+Fk4xe0xGfI=;
+        b=pCsFLazesVGQVQOIBlHGDheF8YbsanFoCdGH0a7MP6b0FIJjUwbyX6uO7rm4sZRt3U
+         SVC+HZqMORH4B5eVoOfi8EyLl7Mj4ASqVx+Ummaq6chpVNToJ8eXKl1krrdqy0T/PdyB
+         qL8KmV20F/dFX4V0xWSz7zAwJJ/YUs8GoRO+KLKS3cm0Mm8rhbq8OnUivrjVSXsbDjsJ
+         JQZKw/HvmzL7nbOGGKGSjwVeCrwMKLj/VSHHmJFptZ3QgY8xyvgtNCaVxTAoNoyv3dPf
+         SFwSyYaXeUIcZjTGRJ1By148CqWpJ3F0qxjRziWc2MtGdoA5XaX5Wa9/Pk4QfkifXmXi
+         DY7Q==
+X-Gm-Message-State: ACgBeo2uDvlULsZKmumaTHwOT8/YWfiTxfBw+iCEnLa4KJCghzvMQsQa
+        QjBjmCF38RN5wF4ypL6v8c4=
+X-Google-Smtp-Source: AA6agR5uEzUgvUID6TSoYGZYd6H4sZh0hgxGrmuuPTUhHcGg971+6QsReFBvVZPGiq2Jq003fQalIw==
+X-Received: by 2002:a17:907:7678:b0:730:e1ad:b128 with SMTP id kk24-20020a170907767800b00730e1adb128mr15019810ejc.67.1661799039523;
+        Mon, 29 Aug 2022 11:50:39 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:bd96:2400:287c:a714:9c3c:aa54? (dynamic-2a01-0c23-bd96-2400-287c-a714-9c3c-aa54.c23.pool.telefonica.de. [2a01:c23:bd96:2400:287c:a714:9c3c:aa54])
+        by smtp.googlemail.com with ESMTPSA id lb26-20020a170907785a00b0073bdf71995dsm4803419ejc.139.2022.08.29.11.50.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 11:50:38 -0700 (PDT)
+Message-ID: <f670d8e7-30a9-387a-156a-9ebeee9f638d@gmail.com>
+Date:   Mon, 29 Aug 2022 20:50:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] clk: meson: pll: adjust timeout in
+ meson_clk_pll_wait_lock()
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-clk@vger.kernel.org,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <22f1d799-a3bb-3d71-a3fd-f6128b205231@gmail.com>
+ <1jo7w3tlyo.fsf@starbuckisacylon.baylibre.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <1jo7w3tlyo.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +83,68 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Dom Cobley <popcornmix@gmail.com>
+On 29.08.2022 11:52, Jerome Brunet wrote:
+> 
+> On Sun 14 Aug 2022 at 23:29, Heiner Kallweit <hkallweit1@gmail.com> wrote:
+> 
+>> Currently we loop over meson_parm_read() up to 24mln times.
+>> This results in a unpredictable timeout period. In my case
+>> it's over 5s on a S905X4-based system. Make the timeout
+>> period predictable and set it to 100ms.
+>>
+>> Whilst we're at it: All callers of this function return -EIO
+>> in case of failure, therefore we can return this value directly
+>> in the timeout case.
+> 
+> I'm okay with this change but I'd prefer if one change addressed a
+> single topic. Please split this out.
+> 
+OK, I'll send a v2.
 
-Platform driver clk-bcm2835 gets an inaccurate clock for VEC (107MHz).
-Export VEC clock trough clk-raspberrypi which uses the right PLL to
-get an accurate 108MHz.
-
-Signed-off-by: Dom Cobley <popcornmix@gmail.com>
-[iivanov: Adapted on top of v5.17-rc6]
-Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
----
- drivers/clk/bcm/clk-raspberrypi.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index 1248c0d64eae..d70bb9283af7 100644
---- a/drivers/clk/bcm/clk-raspberrypi.c
-+++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -33,6 +33,7 @@ enum rpi_firmware_clk_id {
- 	RPI_FIRMWARE_EMMC2_CLK_ID,
- 	RPI_FIRMWARE_M2MC_CLK_ID,
- 	RPI_FIRMWARE_PIXEL_BVB_CLK_ID,
-+	RPI_FIRMWARE_VEC_CLK_ID,
- 	RPI_FIRMWARE_NUM_CLK_ID,
- };
- 
-@@ -51,6 +52,7 @@ static char *rpi_firmware_clk_names[] = {
- 	[RPI_FIRMWARE_EMMC2_CLK_ID]	= "emmc2",
- 	[RPI_FIRMWARE_M2MC_CLK_ID]	= "m2mc",
- 	[RPI_FIRMWARE_PIXEL_BVB_CLK_ID]	= "pixel-bvb",
-+	[RPI_FIRMWARE_VEC_CLK_ID]	= "vec",
- };
- 
- #define RPI_FIRMWARE_STATE_ENABLE_BIT	BIT(0)
-@@ -138,6 +140,9 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
- 	[RPI_FIRMWARE_PIXEL_BVB_CLK_ID] = {
- 		.export = true,
- 	},
-+	[RPI_FIRMWARE_VEC_CLK_ID] = {
-+		.export = true,
-+	},
- };
- 
- /*
--- 
-2.35.3
+>>
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+>> ---
+>>  drivers/clk/meson/clk-pll.c | 15 ++++++---------
+>>  1 file changed, 6 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/clk/meson/clk-pll.c b/drivers/clk/meson/clk-pll.c
+>> index daa025b6d..d70bee331 100644
+>> --- a/drivers/clk/meson/clk-pll.c
+>> +++ b/drivers/clk/meson/clk-pll.c
+>> @@ -277,17 +277,17 @@ static int meson_clk_pll_wait_lock(struct clk_hw *hw)
+>>  {
+>>  	struct clk_regmap *clk = to_clk_regmap(hw);
+>>  	struct meson_clk_pll_data *pll = meson_clk_pll_data(clk);
+>> -	int delay = 24000000;
+>> +	int delay = 5000;
+>>  
+>>  	do {
+>> -		/* Is the clock locked now ? */
+>> +		/* Is the clock locked now ? Time out after 100ms. */
+>>  		if (meson_parm_read(clk->map, &pll->l))
+>>  			return 0;
+>>  
+>> -		delay--;
+>> -	} while (delay > 0);
+>> +		udelay(20);
+>> +	} while (--delay);
+>>  
+>> -	return -ETIMEDOUT;
+>> +	return -EIO;
+>>  }
+>>  
+>>  static int meson_clk_pll_init(struct clk_hw *hw)
+>> @@ -350,10 +350,7 @@ static int meson_clk_pll_enable(struct clk_hw *hw)
+>>  	/* Take the pll out reset */
+>>  	meson_parm_write(clk->map, &pll->rst, 0);
+>>  
+>> -	if (meson_clk_pll_wait_lock(hw))
+>> -		return -EIO;
+>> -
+>> -	return 0;
+>> +	return meson_clk_pll_wait_lock(hw);
+>>  }
+>>  
+>>  static void meson_clk_pll_disable(struct clk_hw *hw)
+> 
 
