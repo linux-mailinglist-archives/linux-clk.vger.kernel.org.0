@@ -2,67 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AEE5A6414
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Aug 2022 14:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A295A655C
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Aug 2022 15:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiH3Myh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Aug 2022 08:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S229732AbiH3NpY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 Aug 2022 09:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiH3MyP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Aug 2022 08:54:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E5161295;
-        Tue, 30 Aug 2022 05:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661864042; x=1693400042;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xhkGjXxUZ6UD4DKI2S418ztKaA/H6Y24X06etHrP3/c=;
-  b=hNpOa42QSRXS9d8/ZCG0QBC5FZUJOdWqq9pmNT0k/EkIEg6XQVkgTXoF
-   l1NufVqme1GVyV7u8Rwg3nayF1djuiZKz/wncBhMCA2mrpQlOxy/Lmv5+
-   H1ZVHMhE6rlEQ47UdG6yIeV/Fr5lB4Uug/1iChbIn/kF1VPqoG3qW9aqH
-   XZS3FTv7GIAqbmLV7hFvnRWLN9phEjEsB6Wajne1beZV3Fa9rhP9pAs67
-   Q8uYtf2rde8QykaUiuNIKGwaX51US5hvKr9DoJowdocrF9GshDX+TwW5X
-   OekX0zJgXuaTwhUzf9ltMEQz+tPLKM29AsUj4a2ZYawG8ga7DPwe4esgw
-   g==;
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="171583410"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Aug 2022 05:54:00 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 30 Aug 2022 05:53:53 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 30 Aug 2022 05:53:50 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v4 13/13] clk: microchip: mpfs: update module authorship & licencing
-Date:   Tue, 30 Aug 2022 13:52:50 +0100
-Message-ID: <20220830125249.2373416-13-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220830125110.2372514-1-conor.dooley@microchip.com>
-References: <20220830125110.2372514-1-conor.dooley@microchip.com>
+        with ESMTP id S229804AbiH3No7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Aug 2022 09:44:59 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37CD1612A1
+        for <linux-clk@vger.kernel.org>; Tue, 30 Aug 2022 06:43:20 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id s11so14220331edd.13
+        for <linux-clk@vger.kernel.org>; Tue, 30 Aug 2022 06:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=zeqCrYbLRqbzzFt4QKomGEJNQndGCiBbRSxMMbNW/MY=;
+        b=iD+jR834O/23Q1+XGpSqyaXld/4kkuf5B9D8H8ohS0Wdymhqe+RRZ9WcD4amHdx77O
+         reCUJoXHQzu409HzizTeEctZKVSH7LOB9XXzESSb7cgYmnjcUfgK5K77a91FRvRtuJDA
+         0+qQ7FqFVUzCL4pdaqo1AmviIaZT3D4mUlSsE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=zeqCrYbLRqbzzFt4QKomGEJNQndGCiBbRSxMMbNW/MY=;
+        b=PX0OE43Dkd3kr4j2iu3yYLJIecNUUd5p6Fxva7uJ0SC33rRirSlb7LIRCuvkbp5vGc
+         PAMSyQLC4bdS5MfdsZS+Gew+RhM+vBkfBuOoYa3+0cQBF0SmYiD73MgE12qm32NdzSU/
+         T1AwJa86Dn9sBr3LVsQn+X7tUaCKcFt9y2eYg43BCu9Rzhr/hjrKPawph3lYIe5WCQdE
+         ZhFnLK6Z4wISBE4AaxesMesIUI1QqQgQqOkX8SQAI0J8aGj+YvQeSuQbc+y6hAo1IEQB
+         F2kkUF9OOldo6wG7fxOPDSB3jpOtDOmRE9t+UToE82PHuapAxTJlrZ8nPU7F33kwULgI
+         5bow==
+X-Gm-Message-State: ACgBeo0z6RRCxq14xGEm1He7a31o6PRb14cE5yfQ4xl/roiR0ryxG1+l
+        PKy37RDgsyAfEhvcFniKiwghKZtZmVz/FcbfkSmMdg==
+X-Google-Smtp-Source: AA6agR7u8cywbHV4Qndx4R3eFD3tb1TBNDA1nKLbYkdYbLwCOrN/QBJqqMMKopj+F5/B11o3QKmyXjxIVKUoCqGy1s4=
+X-Received: by 2002:a05:6402:27d3:b0:43e:5490:27ca with SMTP id
+ c19-20020a05640227d300b0043e549027camr21062997ede.307.1661866864670; Tue, 30
+ Aug 2022 06:41:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220822081424.1310926-1-wenst@chromium.org> <12115951.O9o76ZdvQC@steina-w>
+ <CAGXv+5E788T01XJF-dYRW6ZB5-TTU_L5=0hT3AQ0g+zA=LzG2w@mail.gmail.com> <2254919.ElGaqSPkdT@steina-w>
+In-Reply-To: <2254919.ElGaqSPkdT@steina-w>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 30 Aug 2022 21:40:53 +0800
+Message-ID: <CAGXv+5Hf0n5jkqwuQmh0PG8ejxDND6BRVG47J9HTQrqz9OhLdQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2 1/2] clk: core: Honor CLK_OPS_PARENT_ENABLE for
+ clk gate ops
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,45 +70,287 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Padmarao wrote the driver in its original, pre upstream form.
-Daire & myself have been responsible for getting it upstreamable and
-subsequent development.
-Move Daire out of the blurb & into a MODULE_AUTHOR entry & add entries
-for myself and Padmarao.
+On Tue, Aug 30, 2022 at 8:37 PM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Hi,
+>
+> Am Montag, 29. August 2022, 11:22:16 CEST schrieb Chen-Yu Tsai:
+> > Hi,
+> >
+> > On Fri, Aug 26, 2022 at 8:28 PM Alexander Stein
+> >
+> > <alexander.stein@ew.tq-group.com> wrote:
+> > > Hi everybody,
+> > >
+> > > Am Montag, 22. August 2022, 10:14:23 CEST schrieb Chen-Yu Tsai:
+> > > > In the previous commits that added CLK_OPS_PARENT_ENABLE, support f=
+or
+> > > > this flag was only added to rate change operations (rate setting an=
+d
+> > > > reparent) and disabling unused subtree. It was not added to the
+> > > > clock gate related operations. Any hardware driver that needs it fo=
+r
+> > > > these operations will either see bogus results, or worse, hang.
+> > > >
+> > > > This has been seen on MT8192 and MT8195, where the imp_ii2_* clk
+> > > > drivers set this, but dumping debugfs clk_summary would cause it
+> > > > to hang.
+> > > >
+> > > > Fixes: fc8726a2c021 ("clk: core: support clocks which requires pare=
+nts
+> > > > enable (part 2)") Fixes: a4b3518d146f ("clk: core: support clocks w=
+hich
+> > > > requires parents enable (part 1)") Signed-off-by: Chen-Yu Tsai
+> > > > <wenst@chromium.org>
+> > > > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > ---
+> > > >
+> > > >  drivers/clk/clk.c | 28 ++++++++++++++++++++++++++++
+> > > >  1 file changed, 28 insertions(+)
+> > > >
+> > > > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > > > index 7fc191c15507..9b365cd6d14b 100644
+> > > > --- a/drivers/clk/clk.c
+> > > > +++ b/drivers/clk/clk.c
+> > > > @@ -196,6 +196,9 @@ static bool clk_core_rate_is_protected(struct
+> > > > clk_core
+> > > > *core) return core->protect_count;
+> > > >
+> > > >  }
+> > > >
+> > > > +static int clk_core_prepare_enable(struct clk_core *core);
+> > > > +static void clk_core_disable_unprepare(struct clk_core *core);
+> > > > +
+> > > >
+> > > >  static bool clk_core_is_prepared(struct clk_core *core)
+> > > >  {
+> > > >
+> > > >       bool ret =3D false;
+> > > >
+> > > > @@ -208,7 +211,11 @@ static bool clk_core_is_prepared(struct clk_co=
+re
+> > > > *core) return core->prepare_count;
+> > > >
+> > > >       if (!clk_pm_runtime_get(core)) {
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_prepare_enable(core->parent);
+> > > >
+> > > >               ret =3D core->ops->is_prepared(core->hw);
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_disable_unprepare(core->parent);
+> > > >
+> > > >               clk_pm_runtime_put(core);
+> > > >
+> > > >       }
+> > > >
+> > > > @@ -244,7 +251,13 @@ static bool clk_core_is_enabled(struct clk_cor=
+e
+> > > > *core)
+> > > >
+> > > >               }
+> > > >
+> > > >       }
+> > > >
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_prepare_enable(core->parent);
+> > > > +
+> > > >
+> > > >       ret =3D core->ops->is_enabled(core->hw);
+> > > >
+> > > > +
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_disable_unprepare(core->parent);
+> > > >
+> > > >  done:
+> > > >       if (core->rpm_enabled)
+> > > >
+> > > >               pm_runtime_put(core->dev);
+> > > >
+> > > > @@ -812,6 +825,9 @@ int clk_rate_exclusive_get(struct clk *clk)
+> > > >
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(clk_rate_exclusive_get);
+> > > >
+> > > > +static int clk_core_enable_lock(struct clk_core *core);
+> > > > +static void clk_core_disable_lock(struct clk_core *core);
+> > > > +
+> > > >
+> > > >  static void clk_core_unprepare(struct clk_core *core)
+> > > >  {
+> > > >
+> > > >       lockdep_assert_held(&prepare_lock);
+> > > >
+> > > > @@ -835,6 +851,9 @@ static void clk_core_unprepare(struct clk_core
+> > > > *core)
+> > > >
+> > > >       WARN(core->enable_count > 0, "Unpreparing enabled %s\n", core=
+-
+> > > >
+> > > >name);
+> > > >
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_enable_lock(core->parent);
+> > > > +
+> > > >
+> > > >       trace_clk_unprepare(core);
+> > > >
+> > > >       if (core->ops->unprepare)
+> > > >
+> > > > @@ -843,6 +862,9 @@ static void clk_core_unprepare(struct clk_core
+> > > > *core)
+> > > >
+> > > >       clk_pm_runtime_put(core);
+> > > >
+> > > >       trace_clk_unprepare_complete(core);
+> > > >
+> > > > +
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_disable_lock(core->parent);
+> > > >
+> > > >       clk_core_unprepare(core->parent);
+> > > >
+> > > >  }
+> > > >
+> > > > @@ -891,6 +913,9 @@ static int clk_core_prepare(struct clk_core *co=
+re)
+> > > >
+> > > >               if (ret)
+> > > >
+> > > >                       goto runtime_put;
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_enable_lock(core->parent);
+> > > > +
+> > > >
+> > > >               trace_clk_prepare(core);
+> > > >
+> > > >               if (core->ops->prepare)
+> > > >
+> > > > @@ -898,6 +923,9 @@ static int clk_core_prepare(struct clk_core *co=
+re)
+> > > >
+> > > >               trace_clk_prepare_complete(core);
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_disable_lock(core->parent);
+> > > > +
+> > > >
+> > > >               if (ret)
+> > > >
+> > > >                       goto unprepare;
+> > > >
+> > > >       }
+> > >
+> > > Unfortunately this completely locks up my i.MX8M Plus based board dur=
+ing
+> > > early boot.
+> > > I'm currently running on next-20220826 using
+> > > arch/arm64/boot/dts/freescale/
+> > > imx8mp-tqma8mpql-mba8mpxl.dts
+> > > Reverting this patch gets my board booting again. dmesg until hard lo=
+ckup
+> > > below.
+> >
+> > The standard logs don't have anything to go on. Could you add some prin=
+tk
+> > calls to the clk core around the areas this patch touchs? That would he=
+lp.
+> >
+> > Could you also provide a dump of /sys/kernel/debug/clk/clk_summary? Tha=
+t
+> > would help to understand the clock tree.
+>
+> Sure,
+>
+> These are the last kernel log lines before hard lockup:
+> [    0.686357] io scheduler mq-deadline registered
+> [    0.690907] io scheduler kyber registered
+> [    0.699275] clk_core_prepare: clk: main_axi CLK_OPS_PARENT_ENABLE
+>
+> main_axi is also the only debug output up to this point. This is the used
+> patch for debugging:
+> ---8<---
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -211,8 +211,10 @@ static bool clk_core_is_prepared(struct clk_core *co=
+re)
+>                 return core->prepare_count;
+>
+>         if (!clk_pm_runtime_get(core)) {
+> -               if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +               if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +                       pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n",
+> __func__, core->name);
+>                         clk_core_prepare_enable(core->parent);
+> +               }
+>                 ret =3D core->ops->is_prepared(core->hw);
+>                 if (core->flags & CLK_OPS_PARENT_ENABLE)
+>                         clk_core_disable_unprepare(core->parent);
+> @@ -251,8 +253,10 @@ static bool clk_core_is_enabled(struct clk_core *cor=
+e)
+>                 }
+>         }
+>
+> -       if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +       if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +               pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n", __func__, =
+core-
+> >name);
+>                 clk_core_prepare_enable(core->parent);
+> +       }
+>
+>         ret =3D core->ops->is_enabled(core->hw);
+>
+> @@ -851,8 +855,10 @@ static void clk_core_unprepare(struct clk_core *core=
+)
+>
+>         WARN(core->enable_count > 0, "Unpreparing enabled %s\n", core->na=
+me);
+>
+> -       if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +       if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +               pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n", __func__, =
+core-
+> >name);
+>                 clk_core_enable_lock(core->parent);
+> +       }
+>
+>         trace_clk_unprepare(core);
+>
+> @@ -912,8 +918,10 @@ static int clk_core_prepare(struct clk_core *core)
+>                 if (ret)
+>                         goto runtime_put;
+>
+> -               if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +               if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +                       pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n",
+> __func__, core->name);
+>                         clk_core_enable_lock(core->parent);
+> +               }
+>
+>                 trace_clk_prepare(core);
+>
+>
+> ---8<---
 
-While we are at it, convert the MODULE_LICENSE field to its preferred
-form of "GPL".
+Thanks. So the part of the clock tree that's problematic is this:
 
-Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/clk/microchip/clk-mpfs.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ osc_24m (fixed)
+    sys_pll1_ref_sel (mux)
+       sys_pll1 (imx pll14xx)
+          sys_pll1_bypass (mux)
+             sys_pll1_out (gate)
+                sys_pll1_800m (fixed factor)
+                   main_axi (composite CLK_IS_CRITICAL)
 
-diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
-index fa46176eb9ca..253a55a04084 100644
---- a/drivers/clk/microchip/clk-mpfs.c
-+++ b/drivers/clk/microchip/clk-mpfs.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Daire McNamara,<daire.mcnamara@microchip.com>
-- * Copyright (C) 2020 Microchip Technology Inc.  All rights reserved.
-+ * PolarFire SoC MSS/core complex clock control
-+ *
-+ * Copyright (C) 2020-2022 Microchip Technology Inc. All rights reserved.
-  */
- #include <linux/auxiliary_bus.h>
- #include <linux/clk-provider.h>
-@@ -505,4 +506,7 @@ static void __exit clk_mpfs_exit(void)
- module_exit(clk_mpfs_exit);
- 
- MODULE_DESCRIPTION("Microchip PolarFire SoC Clock Driver");
--MODULE_LICENSE("GPL v2");
-+MODULE_AUTHOR("Padmarao Begari <padmarao.begari@microchip.com>");
-+MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
-+MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
-+MODULE_LICENSE("GPL");
--- 
-2.36.1
+Would it be possible for you to produce a stack dump as well? And also
+enable lock debugging? This likely still won't catch anything if it's
+a spinlock deadlock though.
 
+
+Thanks
+ChenYu
