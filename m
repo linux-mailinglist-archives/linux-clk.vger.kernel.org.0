@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1EE5A977D
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Sep 2022 14:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C5115A978A
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Sep 2022 14:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbiIAM5X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Sep 2022 08:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S233617AbiIAM5e (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Sep 2022 08:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbiIAM5V (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Sep 2022 08:57:21 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6110D40548
-        for <linux-clk@vger.kernel.org>; Thu,  1 Sep 2022 05:57:19 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id m16so22222169wru.9
-        for <linux-clk@vger.kernel.org>; Thu, 01 Sep 2022 05:57:19 -0700 (PDT)
+        with ESMTP id S233479AbiIAM5X (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Sep 2022 08:57:23 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C4880528
+        for <linux-clk@vger.kernel.org>; Thu,  1 Sep 2022 05:57:20 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso1339692wmc.0
+        for <linux-clk@vger.kernel.org>; Thu, 01 Sep 2022 05:57:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=2nwWkT4441Zvq5igIAOKA8C0HAjPPXDmTRADPlAyhok=;
-        b=basRl/C6QptrvQbTpk+LkAHZh/MQJacL+ZAGvkDnh7vGFvFVx3cZ7eoHvSXNXOEMVW
-         A4/IH1a11cZI4vc/n4x/VucSGHK99YV85DWyCtXisj+J/mQ6xmVjDBUuHl/Kco27tSwI
-         nqblv1KDC35mISIbMzGoWcfd96GO8QAzNAwZg0QExhm6WokwnnSBXXpqXkhFPx1ekAfG
-         fcqmxQdL3+pJETQVLfLTg76nse9tFnjPYwwdXKyxU0pZne2j5YF/m22/3GUTt/+uLpBl
-         MyenoYaM3m+G+t6Nkho53sd12AD2vB8eOCRsV0hceISDDgdaEDPogkiYeqSNAODuzdbo
-         aalA==
+        bh=5oq+K0wpCSsh7jUwt6+vmm/hcvr/21v0i001Dyw+Eww=;
+        b=DdLEChHulzdasOuIWPUlvh6/dx1pv3JVup4WbLGKn8GZsDUWAeHKhRXg8s3zgqoS4D
+         zfCnpWVLLQgQDTgIhJgSaYxq+gtoHzG1yztUdHZk7U1Vb9/PzweyZfmYzy1j7qGMYnp8
+         hFCGKvNcS5LLVeuc54F3KGX0w2Fvuf2SVvVrsx43CmfrvZ2Evu8fU0KYNTCojgdBwW2W
+         hNxd2bhrWhmMpKUWXkZmaHK8C8bnBhnTyQ2tpAXZMXzIXdGgb/jPCxZvPqxoSXN2wKUA
+         UwqbbkRJlL8aUniD+sedCbytuSuM+u96t5FxdGx5lcNS93a0JsxwRVL+Bc8tVYjmaGEJ
+         G4Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=2nwWkT4441Zvq5igIAOKA8C0HAjPPXDmTRADPlAyhok=;
-        b=p6EvNVJbcimQStnJF+9+VmIVBm47e5PMAF4A7i759cKh0BbeTUpF5EsDW+waSuepv+
-         r+0HVxiY0Yc5EyuJPWZDdQ6rJH3HRBYNbuuO0TYMiOO39Tp/jcrQI+MXDQKzRybNC90O
-         OvNpcdl1uSJYTAxIRQjn5sVHroyqdc7SJv0QoJLXBKo90ZwNxJnEziMKeh/vHB23v5d7
-         PCWTImv2I5F+TfFbo6l0FfIjtq9asnZACb2EPWjQGZ4OqgVNJJexcyl9qqCqL8FenerT
-         qYi+dCxcrPHKWS0pMBMJ0wyWxPklvK4kkgZcuJQ49/4De+ZHOsRITraxSdwrmsI86hXj
-         FyLA==
-X-Gm-Message-State: ACgBeo2HfDnbabOcF3CbQHhDwHvQBFS5sHxXoOe5mRV//+AhKO/SfvQs
-        SzRwEwJCdlqfdD9xfWLLebNpeQ==
-X-Google-Smtp-Source: AA6agR4IYKknEQA+lBEG/42xj8hTQq56MSul1p6lQ4/KRXttWn5L3gn9Kon82s1xc34ZKvNatRXxcQ==
-X-Received: by 2002:a5d:6b09:0:b0:225:37cf:fb8b with SMTP id v9-20020a5d6b09000000b0022537cffb8bmr14603530wrw.179.1662037037975;
-        Thu, 01 Sep 2022 05:57:17 -0700 (PDT)
+        bh=5oq+K0wpCSsh7jUwt6+vmm/hcvr/21v0i001Dyw+Eww=;
+        b=ATwE34GxJETuYP1eAa2XPAhDoNtFYDdiUT9+kmBVbLjFcu8QdsN1/qnXl+TP55BNoF
+         yEZGJwoIYIJgLhz9o/NlytrNTmhaDvuVQX359w0FWvvo4hC4GBIlldvefekX31LZZ/2i
+         GzKyAd7iqQmeCGQ1wau7AhQ9Ur5NAhI8n4e9vKhcLZfJvx5qpYP/OQR3ryt65Pge9SFm
+         yFfqH342YJNiPn1+XyZ7QKG5Ub9mxz+++2WrdZPYP9gRlSeiYckRmnv+GbO1T4uW/CoX
+         FLJCHvNJtouILztOyMl3WbHvW6Am7sA8N5V/WZ8zgu1Gh1bkPQeoL1P+B/aRsC4gBh4o
+         r1jg==
+X-Gm-Message-State: ACgBeo3kH+g7xpsPHc63eKA062GbmlfGQPNluySY0DMvFtbapSM3ezD5
+        oo1oy1qmQZv8hoUo05ujXkA3ig==
+X-Google-Smtp-Source: AA6agR7sSVB8GDqHA/SNdpU3efGHrOX2Si3u7vU37Gf21cUjmMfyxBMIMocd/FwxLdJzZOAFR16rnQ==
+X-Received: by 2002:a05:600c:1e88:b0:3a6:2ca3:f7f2 with SMTP id be8-20020a05600c1e8800b003a62ca3f7f2mr5333101wmb.7.1662037038960;
+        Thu, 01 Sep 2022 05:57:18 -0700 (PDT)
 Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id v5-20020a5d59c5000000b002257fd37877sm15556709wry.6.2022.09.01.05.57.17
+        by smtp.googlemail.com with ESMTPSA id v5-20020a5d59c5000000b002257fd37877sm15556709wry.6.2022.09.01.05.57.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 05:57:17 -0700 (PDT)
+        Thu, 01 Sep 2022 05:57:18 -0700 (PDT)
 From:   Corentin Labbe <clabbe@baylibre.com>
 To:     heiko@sntech.de, herbert@gondor.apana.org.au, ardb@kernel.org,
         davem@davemloft.net, krzysztof.kozlowski+dt@linaro.org,
@@ -56,9 +56,9 @@ Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         Corentin Labbe <clabbe@baylibre.com>,
         John Keeping <john@metanate.com>
-Subject: [PATCH v9 01/33] crypto: rockchip: use dev_err for error message about interrupt
-Date:   Thu,  1 Sep 2022 12:56:38 +0000
-Message-Id: <20220901125710.3733083-2-clabbe@baylibre.com>
+Subject: [PATCH v9 02/33] crypto: rockchip: do not use uninitialized variable
+Date:   Thu,  1 Sep 2022 12:56:39 +0000
+Message-Id: <20220901125710.3733083-3-clabbe@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220901125710.3733083-1-clabbe@baylibre.com>
 References: <20220901125710.3733083-1-clabbe@baylibre.com>
@@ -74,28 +74,27 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Interrupt is mandatory so the message should be printed as error.
+crypto_info->dev is not yet set, so use pdev->dev instead.
 
 Reviewed-by: John Keeping <john@metanate.com>
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 ---
- drivers/crypto/rockchip/rk3288_crypto.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/crypto/rockchip/rk3288_crypto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/crypto/rockchip/rk3288_crypto.c b/drivers/crypto/rockchip/rk3288_crypto.c
-index 35d73061d156..45cc5f766788 100644
+index 45cc5f766788..21d3f1458584 100644
 --- a/drivers/crypto/rockchip/rk3288_crypto.c
 +++ b/drivers/crypto/rockchip/rk3288_crypto.c
-@@ -371,8 +371,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
+@@ -381,7 +381,7 @@ static int rk_crypto_probe(struct platform_device *pdev)
+ 			       "rk-crypto", pdev);
  
- 	crypto_info->irq = platform_get_irq(pdev, 0);
- 	if (crypto_info->irq < 0) {
--		dev_warn(crypto_info->dev,
--			 "control Interrupt is not available.\n");
-+		dev_err(&pdev->dev, "control Interrupt is not available.\n");
- 		err = crypto_info->irq;
+ 	if (err) {
+-		dev_err(crypto_info->dev, "irq request failed.\n");
++		dev_err(&pdev->dev, "irq request failed.\n");
  		goto err_crypto;
  	}
+ 
 -- 
 2.35.1
 
