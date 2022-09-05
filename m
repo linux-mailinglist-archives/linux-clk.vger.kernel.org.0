@@ -2,142 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F775ACCE6
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Sep 2022 09:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE95F5ACD3F
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Sep 2022 09:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbiIEHf3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Sep 2022 03:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S237051AbiIEHyP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Sep 2022 03:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236854AbiIEHfO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Sep 2022 03:35:14 -0400
-X-Greylist: delayed 59674 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Sep 2022 00:34:57 PDT
-Received: from 1.mo560.mail-out.ovh.net (1.mo560.mail-out.ovh.net [46.105.63.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41E6193D3
-        for <linux-clk@vger.kernel.org>; Mon,  5 Sep 2022 00:34:57 -0700 (PDT)
-Received: from player772.ha.ovh.net (unknown [10.110.171.96])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id B6BCA23810
-        for <linux-clk@vger.kernel.org>; Mon,  5 Sep 2022 07:16:39 +0000 (UTC)
-Received: from RCM-web10.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player772.ha.ovh.net (Postfix) with ESMTPSA id 3E8D92E399D8C;
-        Mon,  5 Sep 2022 07:16:31 +0000 (UTC)
+        with ESMTP id S236988AbiIEHyH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Sep 2022 03:54:07 -0400
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED26459A0
+        for <linux-clk@vger.kernel.org>; Mon,  5 Sep 2022 00:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1662364381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cXsJkI9uheokmDJdr4Al6h7pqoH+3TWVaaDrZ0MDZeY=;
+        b=b64WXEXL32FZt7IXnfMe6YgCo6URilexHHHUuFrvToC+selj++Ys4Pm4M+Vabfa/Bod2Yb
+        yWAFxN3mXVsCUCiswyukABfjhawxp4yXii20wnPSFvpo0OScjWYUakDJgtR9OVbhjfBn4b
+        0cv25/5arudpn8DacLZbQIkAFaZCmKHw/iECM/a3Fq2TrLdhngFQP9rKOju6jrvgQs+jS3
+        lF+yQJOxSIPl2XXxe1bfqBrsJmg/BkeLmMlNEvaFwzxucthMmtXovuw3r7nHTsDMGgrDxx
+        lecYWi4BjJPalUV2M08pI9w3CSoax6+TBKBumrnWwOebTriyGTHZu2Eogn13dg==
+Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-86-t3i3N88IO3eHPMNn8pxtqw-1; Mon, 05 Sep 2022 03:43:54 -0400
+X-MC-Unique: t3i3N88IO3eHPMNn8pxtqw-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
+ Mon, 5 Sep 2022 00:43:51 -0700
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
+        <linux-clk@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
+        "Rahul Tanwar" <rtanwar@maxlinear.com>
+Subject: [PATCH v2 0/5] Modify MxL's CGU clk driver to make it secure boot compatible
+Date:   Mon, 5 Sep 2022 15:43:43 +0800
+Message-ID: <cover.1662363020.git.rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Date:   Mon, 05 Sep 2022 09:16:31 +0200
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: iproc: Do not rely on node name for correct PLL
- setup
-In-Reply-To: <20220803025836.107886-1-f.fainelli@gmail.com>
-References: <20220803025836.107886-1-f.fainelli@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <b25e377dc1272f7bb45cbb9ea1a99887@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 11697818560452471771
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelhedguddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepveeikeevgeetfeffheehheelgfekffdvvdetuedtkeejjefffefhteevudevieehnecuffhomhgrihhnpehophgvnhifrhhtrdhorhhgnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejvddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehiedt
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2022-08-03 04:58, Florian Fainelli wrote:
-> After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
-> description") a warning from clk-iproc-pll.c was generated due to a
-> duplicate PLL name as well as the console stopped working. Upon closer
-> inspection it became clear that iproc_pll_clk_setup() used the Device
-> Tree node unit name as an unique identifier as well as a parent name to
-> parent all clocks under the PLL.
-> 
-> BCM5301X was the first platform on which that got noticed because of 
-> the
-> DT node unit name renaming but the same assumptions hold true for any
-> user of the iproc_pll_clk_setup() function.
-> 
-> The first 'clock-output-names' property is always guaranteed to be
-> unique as well as providing the actual desired PLL clock name, so we
-> utilize that to register the PLL and as a parent name of all children
-> clock.
-> 
-> Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+MxL's CGU driver was found to be lacking below required features. Add these
+required lacking features:
 
-One nitpick below.
+1. Since it is a core driver, it has to conform to secure boot & secure
+   access architecture. In order for the register accesses to be secure
+   access compliant, it needs regmap support as per our security architectu=
+re.
+   Hence, replace direct read/writel with regmap based IO. Also remove spin=
+locks
+   because they are no longer necessary because regmap uses its own lock.
 
+2. There are some gate clocks which are used by the power mgmt IP to gate w=
+hen
+   a certain power saving mode is activated. These gate clocks can also be=
+=20
+   gated from CGU clk driver. This creates a conflict. To avoid the conflic=
+t,
+   by default disable gating such gate registers from CGU clk driver. But k=
+eep
+   a flag to do so for other older IP's which uses same CGU clk IP but does=
+ not
+   use same power mgmt IP.
 
-> ---
-> Rafal,
-> 
-> This is a replacement for this patch that you checked into OpenWrt:
-> 
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/bcm53xx/patches-5.15/320-ARM-dts-BCM5301X-Switch-back-to-old-clock-nodes-name.patch;h=cee37732ab9e2ac8bc2a399a53d01b9ead756cb8;hb=HEAD
-> 
-> 
->  drivers/clk/bcm/clk-iproc-pll.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clk/bcm/clk-iproc-pll.c 
-> b/drivers/clk/bcm/clk-iproc-pll.c
-> index 33da30f99c79..92be88eb1d11 100644
-> --- a/drivers/clk/bcm/clk-iproc-pll.c
-> +++ b/drivers/clk/bcm/clk-iproc-pll.c
-> @@ -736,6 +736,7 @@ void iproc_pll_clk_setup(struct device_node *node,
->  	const char *parent_name;
->  	struct iproc_clk *iclk_array;
->  	struct clk_hw_onecell_data *clk_data;
-> +	const char *clk_name;
-> 
->  	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
->  		return;
-> @@ -783,7 +784,12 @@ void iproc_pll_clk_setup(struct device_node *node,
->  	iclk = &iclk_array[0];
->  	iclk->pll = pll;
-> 
-> -	init.name = node->name;
-> +	ret = of_property_read_string_index(node, "clock-output-names",
-> +					    0, &clk_name);
-> +	if (WARN_ON(ret))
-> +		goto err_pll_register;
-> +
-> +	init.name = clk_name;
->  	init.ops = &iproc_pll_ops;
->  	init.flags = 0;
->  	parent_name = of_clk_get_parent_name(node, 0);
-> @@ -803,13 +809,12 @@ void iproc_pll_clk_setup(struct device_node 
-> *node,
->  		goto err_pll_register;
-> 
->  	clk_data->hws[0] = &iclk->hw;
-> +	parent_name = clk_name;
-> 
->  	/* now initialize and register all leaf clocks */
->  	for (i = 1; i < num_clks; i++) {
-> -		const char *clk_name;
-> 
->  		memset(&init, 0, sizeof(init));
+3. Fix two functional bugs found during testing.
 
-You could probably get rid of that empty line above memset().
+This patch series is based on below git tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
 
 
-> -		parent_name = node->name;
-> 
->  		ret = of_property_read_string_index(node, "clock-output-names",
->  						    i, &clk_name);
+Rahul Tanwar (5):
+  clk: mxl: Switch from direct readl/writel based IO to regmap based IO
+  clk: mxl: Remove unnecessary spinlocks
+  clk: mxl: Avoid disabling gate clocks from clk driver
+  clk: mxl: Add validation for register reads/writes
+  clk: mxl: Add a missing flag to allow parent clock rate change
+
+ drivers/clk/x86/Kconfig       |   5 +-
+ drivers/clk/x86/clk-cgu-pll.c |  23 ++-----
+ drivers/clk/x86/clk-cgu.c     | 117 +++++++++++-----------------------
+ drivers/clk/x86/clk-cgu.h     |  71 +++++++++++++--------
+ drivers/clk/x86/clk-lgm.c     |  16 +++--
+ 5 files changed, 101 insertions(+), 131 deletions(-)
+
+--=20
+2.17.1
+
