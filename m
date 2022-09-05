@@ -2,91 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E8E5ACD39
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Sep 2022 09:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E045ACF9A
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Sep 2022 12:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbiIEHzL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Sep 2022 03:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58012 "EHLO
+        id S237304AbiIEKEg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Sep 2022 06:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236213AbiIEHzJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Sep 2022 03:55:09 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E70F165AA
-        for <linux-clk@vger.kernel.org>; Mon,  5 Sep 2022 00:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1662364501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtUJUYZOy4dsKmtYSOJkIch/jexIUqRsQ+FbLNIyJJQ=;
-        b=HvvjpPNYr6G2Rg53atVCceL0cWusJNbrtwFjF2G5ko0pnAp41yA8up0Vwq9UmtdEzvE4xr
-        pL/xXI8woEf+/m+NhAezPe7W4OW6drCdEsRUZqTI7u4V/dxr4sgFsonuKrrqo66jOgcnG+
-        RpkI3K7XQpvWNToYGjK2vFTN3/pG3t14TywMdWEyf2qrKkxow8f/DpNrf+Pweb9k23zCiQ
-        RNz5K62VAQQs+JgX16i/itTNxe5duBuocCZBmzVt5K4XiXuz5uikpfnd82iJDB4oDSYRf9
-        3EE4R8L2rZubCxT3X7qPbabWxE5HQ2/4QkXMBNdU6GDKrIk1ZbTsS4DOlTaiGQ==
-Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-78-H49kdtHfNy6Rs7NwcPrkMA-1; Mon, 05 Sep 2022 03:44:08 -0400
-X-MC-Unique: H49kdtHfNy6Rs7NwcPrkMA-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
- Mon, 5 Sep 2022 00:44:05 -0700
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
-        "Rahul Tanwar" <rtanwar@maxlinear.com>
-Subject: [PATCH v2 5/5] clk: mxl: Add a missing flag to allow parent clock rate change
-Date:   Mon, 5 Sep 2022 15:43:48 +0800
-Message-ID: <112a3d6f959fdb14a853897fe4b171d50eab7e55.1662363020.git.rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1662363020.git.rtanwar@maxlinear.com>
-References: <cover.1662363020.git.rtanwar@maxlinear.com>
+        with ESMTP id S236507AbiIEKEf (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Sep 2022 06:04:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271E4A46C;
+        Mon,  5 Sep 2022 03:04:30 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 94FD16601EAD;
+        Mon,  5 Sep 2022 11:04:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662372268;
+        bh=q3ggcdRFxWtvuQH/J4p7gIno75V1s953WThVIwULfWg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nzmA17bEeJPqoBrg4P8jZ97yMVBtqGVAwMYj/po8VQR1JpOm39PDgodEqv2bfulRn
+         ryxH6bsyJucdcBUMYeyHpiLy4fTKt9O/cuXNka/UDheR4dA+v2aDa1702D0KOq8EKZ
+         IJ+sZAotyY5/fWyMRIxGWPK3M+ToRH8z3MlLnTeddgUICnMXs4JRhO3HYpUJctpXd+
+         BaIc6Hy1tUdsjmrzvU4biH4ANrtIiNmIWS0pYvmmu0X19ZAs3l5+k34y7LMj1HvvMB
+         98xWrQ1xHCBITpPZOtBHc/F65Gm0QQ5aOaP7unmPXwWFz2+lxr2OawFZ5tUtihW0gv
+         +G9Fl6fiZGeSQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        miles.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        nfraprado@collabora.com, chun-jie.chen@mediatek.com,
+        jose.exposito89@gmail.com, drinkcat@chromium.org,
+        weiyi.lu@mediatek.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: [PATCH 00/10] MediaTek SoC safe clock muxing and GPU clocks
+Date:   Mon,  5 Sep 2022 12:04:06 +0200
+Message-Id: <20220905100416.42421-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-One of the clock entry "dcl" clk's rate can only be changed by
-changing its parent's clock rate. But it was missing to have
-CLK_SET_RATE_PARENT flag as enabled.
+This series adds a clock notifier for MediaTek clock muxes, required
+in order to achieve stability for GPU DVFS.
 
-Add/enable CLK_SET_RATE_PARENT flag for dcl clk in order to
-allow its clk rate to be changed via its parent's clk.
+The GPU frequency scaling mechanism requires us to switch the GPU
+mux clock to a safe parent which frequency is always less or equal
+to the "current" GPU frequency before reprogramming its dedicated
+"MFG" PLL.
+This is needed because the PLL needs time to reconfigure for its
+output to stabilize (so, for the PLL to lock again): failing to do
+so will lead to instabilities such as glitches, GPU lockups and/or
+full system lockups.
 
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- drivers/clk/x86/clk-lgm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+While at it, reparenting of some GPU clocks was also performed, as
+the clock tree was slightly incorrect.
 
-diff --git a/drivers/clk/x86/clk-lgm.c b/drivers/clk/x86/clk-lgm.c
-index e312af42e97a..34e16ea90596 100644
---- a/drivers/clk/x86/clk-lgm.c
-+++ b/drivers/clk/x86/clk-lgm.c
-@@ -255,7 +255,7 @@ static const struct lgm_clk_branch lgm_branch_clks[] =
-=3D {
- =09LGM_FIXED(LGM_CLK_SLIC, "slic", NULL, 0, CGU_IF_CLK1,
- =09=09  8, 2, CLOCK_FLAG_VAL_INIT, 8192000, 2),
- =09LGM_FIXED(LGM_CLK_DOCSIS, "v_docsis", NULL, 0, 0, 0, 0, 0, 16000000, 0)=
-,
--=09LGM_DIV(LGM_CLK_DCL, "dcl", "v_ifclk", 0, CGU_PCMCR,
-+=09LGM_DIV(LGM_CLK_DCL, "dcl", "v_ifclk", CLK_SET_RATE_PARENT, CGU_PCMCR,
- =09=0925, 3, 0, 0, 0, 0, dcl_div),
- =09LGM_MUX(LGM_CLK_PCM, "pcm", pcm_p, 0, CGU_C55_PCMCR,
- =09=090, 1, CLK_MUX_ROUND_CLOSEST, 0),
---=20
-2.17.1
+This series was tested, along with mtk-regulator-coupler [1], on
+Chromebooks with different SoCs (MT8183, MT8192, MT8195*), resulting
+in fully working GPU DVFS with the Panfrost driver.
+
+[1]: https://patchwork.kernel.org/project/linux-mediatek/patch/20220628120224.81180-1-angelogioacchino.delregno@collabora.com/
+
+* MT8195 does not require mtk-regulator-coupler. This series, along
+  with [1], are required to perform GPU DVFS also on non-Chromebook SoCs.
+
+AngeloGioacchino Del Regno (6):
+  clk: mediatek: clk-mt8195-mfg: Reparent mfg_bg3d and propagate rate
+    changes
+  clk: mediatek: clk-mt8195-topckgen: Register mfg_ck_fast_ref as
+    generic mux
+  clk: mediatek: clk-mt8195-topckgen: Add GPU clock mux notifier
+  clk: mediatek: clk-mt8195-topckgen: Drop univplls from mfg mux parents
+  clk: mediatek: clk-mt8192-mfg: Propagate rate changes to parent
+  clk: mediatek: clk-mt8192: Add clock mux notifier for mfg_pll_sel
+
+Chen-Yu Tsai (4):
+  arm64: dts: mt8183: Fix Mali GPU clock
+  clk: mediatek: mt8183: mfgcfg: Propagate rate changes to parent
+  clk: mediatek: mux: add clk notifier functions
+  clk: mediatek: mt8183: Add clk mux notifier for MFG mux
+
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi   |  2 +-
+ drivers/clk/mediatek/clk-mt8183-mfgcfg.c   |  6 ++--
+ drivers/clk/mediatek/clk-mt8183.c          | 28 ++++++++++++++++
+ drivers/clk/mediatek/clk-mt8192-mfg.c      |  6 ++--
+ drivers/clk/mediatek/clk-mt8192.c          | 28 ++++++++++++++++
+ drivers/clk/mediatek/clk-mt8195-mfg.c      |  6 ++--
+ drivers/clk/mediatek/clk-mt8195-topckgen.c | 39 ++++++++++++++--------
+ drivers/clk/mediatek/clk-mux.c             | 38 +++++++++++++++++++++
+ drivers/clk/mediatek/clk-mux.h             | 15 +++++++++
+ 9 files changed, 147 insertions(+), 21 deletions(-)
+
+-- 
+2.37.2
 
