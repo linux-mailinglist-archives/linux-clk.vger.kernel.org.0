@@ -2,84 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84D15ACBCA
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Sep 2022 09:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3CD5ACD33
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Sep 2022 09:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbiIEHA2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Sep 2022 03:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S236902AbiIEHyT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Sep 2022 03:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236269AbiIEHAW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Sep 2022 03:00:22 -0400
-Received: from mail-m975.mail.163.com (mail-m975.mail.163.com [123.126.97.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE51822B14;
-        Mon,  5 Sep 2022 00:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=G9PRu
-        m1izor0nngmVMOFcOHtkmJgD11qKZ6kZyikhek=; b=FgfKLRQ8WjPqaOqWnvYPu
-        M7NLW0gX4jvMiAvSsSV+G9hVBY//eZF+k771vG5tbV8/wDa+B1O81BS9zdEmi6di
-        Aq5zR9F0+uFJdGCTnul0DnogisFYFiDLivQ7lPYHBIaFHQ6Q4BXecAZFkmMm8wKC
-        B0aK2QCivBL+fsWpdlt760=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp5 (Coremail) with SMTP id HdxpCgAnRDk7nhVjrtvGZw--.51372S2;
-        Mon, 05 Sep 2022 14:59:08 +0800 (CST)
-From:   Jiangshan Yi <13667453960@163.com>
-To:     david@lechnology.com, mturquette@baylibre.com, sboyd@kernel.org
-Cc:     nsekhar@ti.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH] clk: davinci: pll: fix spelling typo in comment
-Date:   Mon,  5 Sep 2022 14:58:33 +0800
-Message-Id: <20220905065833.1831473-1-13667453960@163.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S237069AbiIEHyR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Sep 2022 03:54:17 -0400
+X-Greylist: delayed 1198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Sep 2022 00:54:14 PDT
+Received: from 6.mo550.mail-out.ovh.net (6.mo550.mail-out.ovh.net [46.105.43.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A258443E78
+        for <linux-clk@vger.kernel.org>; Mon,  5 Sep 2022 00:54:14 -0700 (PDT)
+Received: from player778.ha.ovh.net (unknown [10.109.156.62])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id E4ED723BEB
+        for <linux-clk@vger.kernel.org>; Mon,  5 Sep 2022 07:15:36 +0000 (UTC)
+Received: from RCM-web10.webmail.mail.ovh.net (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
+        (Authenticated sender: rafal@milecki.pl)
+        by player778.ha.ovh.net (Postfix) with ESMTPSA id 8380C2E205F4C;
+        Mon,  5 Sep 2022 07:15:28 +0000 (UTC)
 MIME-Version: 1.0
+Date:   Mon, 05 Sep 2022 09:15:28 +0200
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: iproc: Do not rely on node name for correct PLL
+ setup
+In-Reply-To: <2cd712a5ae4fc0bf93e5b16ea640f1dc@milecki.pl>
+References: <20220803025836.107886-1-f.fainelli@gmail.com>
+ <2cd712a5ae4fc0bf93e5b16ea640f1dc@milecki.pl>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d2ad5cda0e9786e43d5cd235e5dcec59@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: HdxpCgAnRDk7nhVjrtvGZw--.51372S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrury7Jr47ZFy5Gr4ruF1Utrb_yoW3KFc_WF
-        W8W34DW398KFsav3Wjq3yFqFyFyFs5uF97W3WYva1fJ3y5Z39rG3yvqw1Iv342krWUWF9F
-        y3Wayr15Crn8ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbuOJ7UUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: bprtllyxuvjmiwq6il2tof0z/1tbizRxz+1c7OAtEywAAsJ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Ovh-Tracer-Id: 11680085637051165659
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelhedguddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhgpofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepgfefuefgleeffefhvefgueeffeeftdeljeevkefhudffheffheegvedukeejlefhnecuffhomhgrihhnpehsphhinhhitghsrdhnvghtnecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejkedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehhedt
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On 2022-09-04 17:00, Rafał Miłecki wrote:
+> On 2022-08-03 04:58, Florian Fainelli wrote:
+>> After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
+>> description") a warning from clk-iproc-pll.c was generated due to a
+>> duplicate PLL name as well as the console stopped working. Upon closer
+>> inspection it became clear that iproc_pll_clk_setup() used the Device
+>> Tree node unit name as an unique identifier as well as a parent name 
+>> to
+>> parent all clocks under the PLL.
+>> 
+>> BCM5301X was the first platform on which that got noticed because of 
+>> the
+>> DT node unit name renaming but the same assumptions hold true for any
+>> user of the iproc_pll_clk_setup() function.
+>> 
+>> The first 'clock-output-names' property is always guaranteed to be
+>> unique as well as providing the actual desired PLL clock name, so we
+>> utilize that to register the PLL and as a parent name of all children
+>> clock.
+>> 
+>> Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Acked-by: Rafał Miłecki <rafal@milecki.pl>
+> 
+> 
+> Thanks for looking into this!
+> 
+> In the past I debugged this too and even developed a simple fix:
+> clk & clock-controller@ DT nodes: __clk_core_init: clk
+> clock-controller already initialized
+> https://www.spinics.net/lists/linux-clk/msg63855.html
+> 
+> For some reason my old fix didn't work with usbclk clock.
 
-Fix spelling typo in comment.
+I compared your changes with my old attempt and found the missing bit. I
+forgot about updating parent_name.
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
----
- drivers/clk/davinci/pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+FWIW something like below would work too.
 
-diff --git a/drivers/clk/davinci/pll.c b/drivers/clk/davinci/pll.c
-index 0d750433eb42..c53dd4ff8530 100644
---- a/drivers/clk/davinci/pll.c
-+++ b/drivers/clk/davinci/pll.c
-@@ -98,7 +98,7 @@
-  * @hw: clk_hw for the pll
-  * @base: Base memory address
-  * @pllm_min: The minimum allowable PLLM[PLLM] value
-- * @pllm_max: The maxiumum allowable PLLM[PLLM] value
-+ * @pllm_max: The maximum allowable PLLM[PLLM] value
-  * @pllm_mask: Bitmask for PLLM[PLLM] value
-  */
- struct davinci_pll_clk {
--- 
-2.27.0
+Thanks again for taking care of this old regression.
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+diff --git a/drivers/clk/bcm/clk-iproc-pll.c 
+b/drivers/clk/bcm/clk-iproc-pll.c
+index 33da30f99..af9ca32b8 100644
+--- a/drivers/clk/bcm/clk-iproc-pll.c
++++ b/drivers/clk/bcm/clk-iproc-pll.c
+@@ -783,7 +783,7 @@ void iproc_pll_clk_setup(struct device_node *node,
+  	iclk = &iclk_array[0];
+  	iclk->pll = pll;
 
+-	init.name = node->name;
++	init.name = node->full_name;
+  	init.ops = &iproc_pll_ops;
+  	init.flags = 0;
+  	parent_name = of_clk_get_parent_name(node, 0);
+@@ -809,7 +809,7 @@ void iproc_pll_clk_setup(struct device_node *node,
+  		const char *clk_name;
+
+  		memset(&init, 0, sizeof(init));
+-		parent_name = node->name;
++		parent_name = node->full_name;
+
+  		ret = of_property_read_string_index(node, "clock-output-names",
+  						    i, &clk_name);
