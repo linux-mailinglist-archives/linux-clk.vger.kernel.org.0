@@ -2,113 +2,202 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FD45B06F5
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Sep 2022 16:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D16E5B0993
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Sep 2022 18:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiIGOdo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Sep 2022 10:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41812 "EHLO
+        id S229741AbiIGQEp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Sep 2022 12:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiIGOdO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Sep 2022 10:33:14 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3190B56C1
-        for <linux-clk@vger.kernel.org>; Wed,  7 Sep 2022 07:32:46 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id 29so14929165edv.2
-        for <linux-clk@vger.kernel.org>; Wed, 07 Sep 2022 07:32:46 -0700 (PDT)
+        with ESMTP id S230063AbiIGQEV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Sep 2022 12:04:21 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FC3BBA68
+        for <linux-clk@vger.kernel.org>; Wed,  7 Sep 2022 09:02:45 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id pj10so4576210pjb.2
+        for <linux-clk@vger.kernel.org>; Wed, 07 Sep 2022 09:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=mqK4Urm6SI0LL0fIUpNglz2SbMFsznWTf0PUQzqjeQH/Bx12DkdTnBbzDZaQ4NR5iF
-         EQ7O7aO6doj8u/y3juxRvQfrpZ+4GxqWxP8xLHHcNMflWyA+nbVtyNaPRhtr9ofPoPwP
-         8B+OpsMdCo4QTDhmgZx918/MwMfvch/o8zTMSvXvdQRmqiXAGAGG0BMKFEwgydJ+Wh2g
-         mACuo7ixacFf2kfjc0mw39zk8rxwdiQKq9VKx4zvYpa6O1ByXXOPP+qBaWEXo7gAHnwA
-         FAVlPjIOEE2/ttEfWJe2qBCmRSUgsg0XQyoATWJy8k712P//auvk1V/Dh46aKaKpfIy+
-         X5Hw==
+        d=edgeble-ai.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=jLaf/5NHXDrr37rXgj5J2aSIlPrAjSKXcBsh3e3FWQY=;
+        b=cxeyf2uX1X91oEvejkorId5aX0Ks8DCIid8AsOPLsYCNNS8EbPNM5gGli9xi5jMraO
+         SijHN0T7lmu5vvyuZuv7yEM7udHqhVHfBkoh4s/nzEI7gjuhdRe8cSsGb4gvBvlFM+2G
+         LtL7+T/PYVHiczqBIWJHJ8TczkZZHSVKNBMsj8VhIfuq6CmZZgqKWhQlNgYYw1suNfEQ
+         jri5+ywwBS79zgNP5SpuZQAkIO1PyRayiY9o/uGW7qJdvtpltbTHbervqmXgL/z0Ip9K
+         rmq+bS8VO/nlPbIo0/YcF46F0qWy3M864toopfrSlNVCKKwFs0axmeaRkE6Wity9AOoE
+         WgPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=kc4Kh90KM9Rie64XdcHEVco6vAZaU51+p+Qv4cV78IznddXzUgWie4BKWeEU1ZXY4y
-         d+uhJDGdiM8cl5gqEMyNMIQjnrAFOTVUxTdbsJDfAJ8+vda9YmPTSoGi9x6tZzDYpZil
-         0Tqx2QhMDdCXwd6s7rx4SUKk3EWeX0CPoYvPtgyUmr5l3yLlxEslcgMjNHb/fRLPDcCA
-         4VEAN2HY2AGH0MNGqktDJwF1Qlm2JYUxUpzZTkmgcXgrG+6dFniD5y/P30WlvJdpTSAp
-         JyQ4o/8P0TddVHLP6XWk5ehSddK3ygjkUuHeZenNie7i9384B/wSaFuvoCmcRSjk4bbV
-         LUpA==
-X-Gm-Message-State: ACgBeo3dI3mfjWYDmjZOb7TwRbHjWdVt1UzHgkebNAdXTr0yJ+8/Yqgb
-        MD2A+3MyxLNynyaUqKkqCktB+fjqbflQfnDPVXI=
-X-Google-Smtp-Source: AA6agR4rVWBPLpn6GXYzkUIV6dVS5ftgYaJRvLA5IUNE2znvSte/lik1W2yhM2ubbwRHIY2/TUDyhZrg0vh1fMG2v9I=
-X-Received: by 2002:a05:6402:510c:b0:43e:305c:a4d1 with SMTP id
- m12-20020a056402510c00b0043e305ca4d1mr3247713edd.35.1662561165041; Wed, 07
- Sep 2022 07:32:45 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=jLaf/5NHXDrr37rXgj5J2aSIlPrAjSKXcBsh3e3FWQY=;
+        b=5aAuFHJxGDexlCWH5cH5WhqCDI3jXsRKxTuD3WV1dnmSeAlqwfco6lHi4msemQ5DpJ
+         Ib0Xl3HX9On723f9zMq9apX7nmHtDIdAy+IgY7zkpGsGmyaxX+R01e/kPqskO1jBv01y
+         mxem2ObDcL0fiC09sfK/CrxQFKW/vGE7yeDmDtjCbbpbZQwNLNEJx4BkqgC8kFAvv/0l
+         5GkAm0noQN+67Q/CnCBMepJFoGHdB9+hfsbEnMsYx47eznabe4TThkGegUDzSwePGYmF
+         Ur5sdFI9K4X2GnUMdb1R7YRMF6cIV3++a6Ht6xk150nRbrmOS/1cSqDLaBCCiIqjJT+m
+         L+vA==
+X-Gm-Message-State: ACgBeo0Temf+1rYrXHEUDKB/L3onGzfcWFS99qOS7kbLZmx1CNVtKk/8
+        tid6CNpwjSeolLAPu62YAcJoGw==
+X-Google-Smtp-Source: AA6agR5sApjijE2qHLIwWXNgROi9CG8KxBKXkSVjqjgG2rNO+vQBt9sQkV786oUWx5oAEt4bxD8gJg==
+X-Received: by 2002:a17:902:db08:b0:176:d40e:4b57 with SMTP id m8-20020a170902db0800b00176d40e4b57mr4489839plx.172.1662566553960;
+        Wed, 07 Sep 2022 09:02:33 -0700 (PDT)
+Received: from localhost.localdomain ([23.27.44.184])
+        by smtp.gmail.com with ESMTPSA id x13-20020a17090a1f8d00b001f510175984sm14919719pja.41.2022.09.07.09.02.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 09:02:33 -0700 (PDT)
+From:   Jagan Teki <jagan@edgeble.ai>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kever Yang <kever.yang@rock-chips.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Jagan Teki <jagan@edgeble.ai>
+Subject: [PATCH v4 02/13] clk: rockchip: Add MUXTBL variant
+Date:   Wed,  7 Sep 2022 21:31:56 +0530
+Message-Id: <20220907160207.3845791-3-jagan@edgeble.ai>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220907160207.3845791-1-jagan@edgeble.ai>
+References: <20220907160207.3845791-1-jagan@edgeble.ai>
 MIME-Version: 1.0
-Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:32:44 -0700 (PDT)
-Reply-To: lumar.casey@outlook.com
-From:   LUMAR CASEY <miriankushrat@gmail.com>
-Date:   Wed, 7 Sep 2022 16:32:44 +0200
-Message-ID: <CAO4StN0TpPxKN5zH_svRaRqGX4qmv4BYo2qpgmikVSdFaMxdLg@mail.gmail.com>
-Subject: ATTENTION/PROPOSAL
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [miriankushrat[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-ATTENTION
+From: Elaine Zhang <zhangqing@rock-chips.com>
 
-BUSINESS PARTNER,
+A clock branch consisting of a mux with non-standard
+select values.
+The parent in Mux table is sorted by priority.
 
-I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
-MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
-PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
-DIPLOMATIC OUTLET.
+Cc: linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+---
+Changes for v4:
+- rebase on -next
+Changes for v3, v2:
+- none
 
-I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
-PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
-YOUR COUNTRY.
+ drivers/clk/rockchip/clk.c | 27 +++++++++++++++++++++------
+ drivers/clk/rockchip/clk.h | 17 +++++++++++++++++
+ 2 files changed, 38 insertions(+), 6 deletions(-)
 
-I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
+diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+index bb8a844309bf..e63d4f20b479 100644
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -40,6 +40,7 @@ static struct clk *rockchip_clk_register_branch(const char *name,
+ 		const char *const *parent_names, u8 num_parents,
+ 		void __iomem *base,
+ 		int muxdiv_offset, u8 mux_shift, u8 mux_width, u8 mux_flags,
++		u32 *mux_table,
+ 		int div_offset, u8 div_shift, u8 div_width, u8 div_flags,
+ 		struct clk_div_table *div_table, int gate_offset,
+ 		u8 gate_shift, u8 gate_flags, unsigned long flags,
+@@ -62,6 +63,7 @@ static struct clk *rockchip_clk_register_branch(const char *name,
+ 		mux->shift = mux_shift;
+ 		mux->mask = BIT(mux_width) - 1;
+ 		mux->flags = mux_flags;
++		mux->table = mux_table;
+ 		mux->lock = lock;
+ 		mux_ops = (mux_flags & CLK_MUX_READ_ONLY) ? &clk_mux_ro_ops
+ 							: &clk_mux_ops;
+@@ -270,6 +272,8 @@ static struct clk *rockchip_clk_register_frac_branch(
+ 		frac_mux->shift = child->mux_shift;
+ 		frac_mux->mask = BIT(child->mux_width) - 1;
+ 		frac_mux->flags = child->mux_flags;
++		if (child->mux_table)
++			frac_mux->table = child->mux_table;
+ 		frac_mux->lock = lock;
+ 		frac_mux->hw.init = &init;
+ 
+@@ -444,11 +448,21 @@ void rockchip_clk_register_branches(struct rockchip_clk_provider *ctx,
+ 		/* catch simple muxes */
+ 		switch (list->branch_type) {
+ 		case branch_mux:
+-			clk = clk_register_mux(NULL, list->name,
+-				list->parent_names, list->num_parents,
+-				flags, ctx->reg_base + list->muxdiv_offset,
+-				list->mux_shift, list->mux_width,
+-				list->mux_flags, &ctx->lock);
++			if (list->mux_table)
++				clk = clk_register_mux_table(NULL, list->name,
++					list->parent_names, list->num_parents,
++					flags,
++					ctx->reg_base + list->muxdiv_offset,
++					list->mux_shift, list->mux_width,
++					list->mux_flags, list->mux_table,
++					&ctx->lock);
++			else
++				clk = clk_register_mux(NULL, list->name,
++					list->parent_names, list->num_parents,
++					flags,
++					ctx->reg_base + list->muxdiv_offset,
++					list->mux_shift, list->mux_width,
++					list->mux_flags, &ctx->lock);
+ 			break;
+ 		case branch_muxgrf:
+ 			clk = rockchip_clk_register_muxgrf(list->name,
+@@ -506,7 +520,8 @@ void rockchip_clk_register_branches(struct rockchip_clk_provider *ctx,
+ 				ctx->reg_base, list->muxdiv_offset,
+ 				list->mux_shift,
+ 				list->mux_width, list->mux_flags,
+-				list->div_offset, list->div_shift, list->div_width,
++				list->mux_table, list->div_offset,
++				list->div_shift, list->div_width,
+ 				list->div_flags, list->div_table,
+ 				list->gate_offset, list->gate_shift,
+ 				list->gate_flags, flags, &ctx->lock);
+diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
+index 7aa45cc70287..93937fb1d368 100644
+--- a/drivers/clk/rockchip/clk.h
++++ b/drivers/clk/rockchip/clk.h
+@@ -448,6 +448,7 @@ struct rockchip_clk_branch {
+ 	u8				mux_shift;
+ 	u8				mux_width;
+ 	u8				mux_flags;
++	u32				*mux_table;
+ 	int				div_offset;
+ 	u8				div_shift;
+ 	u8				div_width;
+@@ -680,6 +681,22 @@ struct rockchip_clk_branch {
+ 		.gate_offset	= -1,				\
+ 	}
+ 
++#define MUXTBL(_id, cname, pnames, f, o, s, w, mf, mt)		\
++	{							\
++		.id		= _id,				\
++		.branch_type	= branch_mux,			\
++		.name		= cname,			\
++		.parent_names	= pnames,			\
++		.num_parents	= ARRAY_SIZE(pnames),		\
++		.flags		= f,				\
++		.muxdiv_offset	= o,				\
++		.mux_shift	= s,				\
++		.mux_width	= w,				\
++		.mux_flags	= mf,				\
++		.gate_offset	= -1,				\
++		.mux_table	= mt,				\
++	}
++
+ #define MUXGRF(_id, cname, pnames, f, o, s, w, mf)		\
+ 	{							\
+ 		.id		= _id,				\
+-- 
+2.25.1
 
-REGARDS,
-
-LUMAR CASEY
