@@ -2,107 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608DA5B01F4
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Sep 2022 12:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC985B0225
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Sep 2022 12:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiIGKdA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Sep 2022 06:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S229459AbiIGKz0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Sep 2022 06:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiIGKc7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Sep 2022 06:32:59 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74A282FBE
-        for <linux-clk@vger.kernel.org>; Wed,  7 Sep 2022 03:32:58 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t14so12378346wrx.8
-        for <linux-clk@vger.kernel.org>; Wed, 07 Sep 2022 03:32:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=2ruloj/z3HDay2BKVOinqhlNi8ynnawFv8TyAHfi4aE=;
-        b=dZyKHcWPXPMjfQQVb82YQg0g8szO5nzUeoT7amZCpaUh53dl4c7uRXuhm0Rq1iMrjB
-         IuTII7EPndQipA8fXtUisPXVsvaKqv/GmO2BV+nppTZW7ShvKyY9YS0i7ozhF1DYZcSk
-         FwNnL2X42/NvVkiIZj/dREcbb4WBZ6C4kY30TFCsnVeBnDRPUCBk3IIduMdbnrhuxbje
-         sQBFkmtnhB+ZjRhmS8iUZxmRa3aRo3NdJ34J3AlJEt2o4QDtqOBMQ7qR6Ae/sbltCYF4
-         3FM50+A0mSmA9rRU8gGKYRh+rZPTvLz4fCyBcNwisI083CdHHtEDYS9MzFuv/2NCX/mF
-         OIEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2ruloj/z3HDay2BKVOinqhlNi8ynnawFv8TyAHfi4aE=;
-        b=Gff9IPe/pWuz4jXMXiYlAjI4W7GnK0WgZAzG7D3WRoReE6vppv2DM/QDFbTQqoBz/M
-         6VoqtsANDXdC1Z7587mid3zNpxw8Qiu6XTj/zG6hnC5SxIyWh9uKVu2iLchkVYFJI1kH
-         t44SaBl+LXjO0DJzAyFI3IvWMFBkUnGKmJy3Bq5eriSjRLyWfDV02QUDmwy4NT1aFHmo
-         +dFl0EEFaHF/Cn5+D1+77CSPFOipRLZvt+lt1qthOc+n282hRbY3Cj4lkIrMDZNxFPv3
-         kiekT9nIla5aa1muS3yd6dfzfVCaG6UYW8D6kXpPMHjEtOpujwmriE/BqwId5+ts5TFD
-         1frg==
-X-Gm-Message-State: ACgBeo0EaUL+KPIq1Jysgv6weXIIDD/9hFcO9SK+U51i8paz4gtTy+Fq
-        gMsWzg5APhCoMtl5/TOsC2CobQ==
-X-Google-Smtp-Source: AA6agR76EAW1iCZg1Y5GR+57LAFTMm7SP2jL98SG0N0sPj/FczolhY5MHi5c9sJ4SR8elSFOgFivuQ==
-X-Received: by 2002:a5d:58eb:0:b0:228:62cb:a615 with SMTP id f11-20020a5d58eb000000b0022862cba615mr1721578wrd.71.1662546777302;
-        Wed, 07 Sep 2022 03:32:57 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id m9-20020a05600c4f4900b003a84375d0d1sm27308382wmq.44.2022.09.07.03.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Sep 2022 03:32:56 -0700 (PDT)
-Date:   Wed, 7 Sep 2022 13:32:55 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        with ESMTP id S229472AbiIGKzZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Sep 2022 06:55:25 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60082.outbound.protection.outlook.com [40.107.6.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409674056D;
+        Wed,  7 Sep 2022 03:55:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hMRbxefo9DtGvp1nPUyMwnmtObCL30nhaio/aSoBsIpbSSloZ+OV64SQaKCBtm5dACxh+NdCWFDaDl6L+2IbIMtcdv34k4ZetLjmhBL+811St3KNoDqMf9lGNK/awpY5j/MIB5a0zTwJCNIbSIHEUYe4v8I5SlKEv3dnmC5CbVgJ2Is3JEFFubfzVPHuREvHildz8HeZNyAnR86o+q/loQ5sMMGzE2QWizlL/DZfA9yUv8QlfE9Z6bTeoqQtxF0urRQW+M+YcS/IiZL/aeyHLonMtyec0o/lw+rv4JVzcytUwzScyrjmDu4XI1tsR263KodUFKMTqrAIQc8szo5h3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EKKEfcZ1bthl+coW9fz7Rk6dRzrtdFkLzLY8AWwPask=;
+ b=O+YvJgtWo2rYlpL+arXUzkXmYSEkqWR/3MkqjLy+V+1Bjffcb4TG9iNgBCo8NwLs06SLDm+CWWY/I6qzx9WOSUyc2UwUDV0jOjxbO6WUlmM35zmYIo97XgNSQeb/SnF4vpklwtwVf3vgD9iNFlm3e+Y9yeD270X0eqtQyRx+2e9GB/y6QYC6qrzB3OL4UAkCoFyHD+wO7gD5c+8AxPNBu+G3Aix3t2hpzDNN8geTeVTEkx46aeL1bByWIc4LUgrkJyEJ2ElkW0a+uJ19lF/QZyQTL3y1UpmggsgEOqxOONcfgpdB1kUGbO9RV5DHqv2tTFoNE4c4jEGis5IFifAoSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EKKEfcZ1bthl+coW9fz7Rk6dRzrtdFkLzLY8AWwPask=;
+ b=n6n+dmgCMSSEb1JlKJnw6wcpJ4npv6/LkIzODwock5rwWblJxT6L7YD+uiT07OLA3lr8HWOcItYP9LY3bXycjf70ixZCkuqzjo+PnfyUyneWSwKkmRv4eC+vFH6V9oRHMDwf55xKyJkWXGS+ykXbVil5usl+JkTgucedyDrCrNk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
+ by DB8PR04MB5628.eurprd04.prod.outlook.com (2603:10a6:10:a7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5612.14; Wed, 7 Sep
+ 2022 10:55:20 +0000
+Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::25b6:d7f1:c25e:24d2]) by PA4PR04MB9640.eurprd04.prod.outlook.com
+ ([fe80::25b6:d7f1:c25e:24d2%9]) with mapi id 15.20.5588.012; Wed, 7 Sep 2022
+ 10:55:20 +0000
+From:   Li Jun <jun.li@nxp.com>
+To:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, robh+dt@kernel.org,
+        festevam@gmail.com
+Cc:     linux-imx@nxp.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: clocks: imx8mp: Add ID for usb suspend
- clock
-Message-ID: <YxhzV5pG6/ZMHZR7@linaro.org>
-References: <1661328262-3867-1-git-send-email-jun.li@nxp.com>
- <YxJJ0IQ1Gu1lp02p@linaro.org>
+Subject: [PATCH v2 1/2] dt-bindings: clocks: imx8mp: Add ID for usb suspend clock
+Date:   Wed,  7 Sep 2022 18:37:07 +0800
+Message-Id: <1662547028-22279-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: SG3P274CA0008.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::20)
+ To PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxJJ0IQ1Gu1lp02p@linaro.org>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8e8a3a26-bc26-4f7a-21a1-08da90bf74d9
+X-MS-TrafficTypeDiagnostic: DB8PR04MB5628:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +WE3vFDeoqzc+WeVp742oiv34htlKt7KtjhFmAR6i/WIathsR6A3KKVghH6UdyjkaaIlcaV68r+27kCbrZkqZzFrCLbxhm/KFj7ZkPWEARc+2X9UJFNlBwcNMwy5iHbDwc6u+PoKXzfd6ipZCeDevpY3LpxQmznCKjqTkS/xOCuYk2qbyh7dRznzGE1Fdd1PxyCwIHF3sC91KQswsqWQUgMHwCRmGhURZlmySW10SXEngnmZ/uKN3LDZ8qHNZrepkLlKRP9CqwTuH+NiI/0oPym8Nbk7gRJ9Ix9ug1Hv3050XH83/xV85Y4+Id5QVsvB3Iku9q4NKLvnn8yo1BwQ3OVBVTFEwXJEf+WJWK9g45wwBYRU3J6fNcbjvkTxuW5KpDRmnwu3pstBrd0uJnHo+v9QcS1/QbR1Mh1B70vz737ZSGlYXmQ+b/jI7h7x1o0eCVKp2/1zbTII9iVKJe09R/JH+btvsNNKp0SK/q0Q1vEbYhJYiqGBHwVx74nvf/K095nXftQf47pe1slI3mBSeRYjgas3xHPrxKG3Y59+viSUI06IlfFoqFTuTtdGusGitAtuJo3A8N0RevJ+UtftUudtExhTlQLHdyciH/X9sjbL5kaHroTINVKvzWM46jpMtyvOSRMrLU6ObrhRKTZ7LHqAKm/g320ZutBC4SPrqOSS2N9n8bOS9SO2wS0vrjm4kPuZHaGASNNuEEI4133hwmkzJchIpRHP+D4zeqjlmLhl1y6ccX5t7iO9Dt8+pOA51ocKvT4qv+++EfDu67TzmqBaZ+y4Sy1b/fV37VcBDDM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(39860400002)(366004)(396003)(376002)(5660300002)(8936002)(41300700001)(26005)(6512007)(15650500001)(52116002)(2906002)(6666004)(7416002)(86362001)(6506007)(2616005)(38350700002)(38100700002)(4744005)(186003)(6486002)(66476007)(66556008)(4326008)(83380400001)(8676002)(66946007)(316002)(478600001)(36756003)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SYSy8jC6KEnezdfIYaWwTfwpiCUKPOSnP78NDpxgffVWZ3XGQs0Kf3sVM3zI?=
+ =?us-ascii?Q?IbmWx9QxF5KOPDzvqFAkW0ZPKfleGBhfqMabSLOCxnHXrXKEOjKbbFg5j3tg?=
+ =?us-ascii?Q?5PyVfxFHzm3V6F2TEWFcVJQJxGGAoh2C6IKpBOoGUtXsMQfN/JNh8pM5ZkVo?=
+ =?us-ascii?Q?bcV8vHxhZ3Y8ekOTHjf8Zkd+OOKPJgdfnWzs8YBqQiBmOeGooAaUO6FRYkMl?=
+ =?us-ascii?Q?nDHL7Nhi/01PCEpwAkg14D1cTuv949AVJJ5xyxbRrzTr8cKF0zIDRdrEuSzb?=
+ =?us-ascii?Q?SContlmFF8yzq8wHVJa+muh1zzLSDnAeUp+EqoP55WRQ102yzmW2VDZtUWmq?=
+ =?us-ascii?Q?nnMp2T+c/ToR0HuD3f9nsPI0IunENCfJRVFEeTIESohXclPaN1TKZdFzisti?=
+ =?us-ascii?Q?OBxottmPcPWxZ65TmEQuXhGprvZs5Ey8yH0zIJ7bsVIodRzYJTlY9ICvZ1TT?=
+ =?us-ascii?Q?LKW4QiNPWtIbS5FdYC6UnSsm3BUxNiF8bOgFXXYxKtVuhPN+NI+Ul5nu7uhl?=
+ =?us-ascii?Q?jfSSYHoaFWHCgqzJOB5dcsAtywWOnJtm0akKI0QSxSWZ2Xuyydgng/JAk8u+?=
+ =?us-ascii?Q?MwRIknshqjqYwZzdZ71FEDgay1+x5IQDsinK7usAAC8kGPs/YjROpNcHi/QM?=
+ =?us-ascii?Q?lRAtsFkHjMGne3bljbyVaR4VQyQqmALDcYO+EF8U900+LhD5ea3G5MaAd04s?=
+ =?us-ascii?Q?m9U80cSJiAr/4oscF9jeUBfuuV1fTTKIhhIhwZcv4E171UXgw9C/8CPOi3Nw?=
+ =?us-ascii?Q?bGijVL9zspirgQGCcON3hl7ATHLXX5A60qHWoBRxs626z5RasxNZ0tgafo7M?=
+ =?us-ascii?Q?eeuNUimCXBr1sczlLZpIf4vLUpNIHHYnOr6oN72bI3dtd55uLsKviyZ38qZD?=
+ =?us-ascii?Q?anjTlRfUkBm/qWICWkvogsjxUZKgOFCJoyvKb3alrn/9Ao+7lO/ymPMZ9j9o?=
+ =?us-ascii?Q?cyFB3TDCUyvk3ERCo/FI2T+F/KdDp+PG7monruNDRNXXCjiaG55FKRPj7ox3?=
+ =?us-ascii?Q?HSJw6tHVv2n92Up0P5RKjLTRknstbJGb+kgS2meqflIxQ7i2AfEHwCwIWTRG?=
+ =?us-ascii?Q?gPJQQvp9HTXmGQdXmD61yYgSzqR5Fp7ybaPlVKHAB/KqFpsUwHqVCi0Ehrzx?=
+ =?us-ascii?Q?QyffDRfB3I2C00MfBLRqnhdPpqk0mtnte5eJpCug1/oBTIxumgtmJtF1Df8E?=
+ =?us-ascii?Q?hB2eUwq5me+rWEfm7uvsG1tJMOwEHCtnl6N2MT+HKe81hLjvlqpuFFbd8eh5?=
+ =?us-ascii?Q?VSvIj++PVB6pWfJNAjsshEbpfNYB/OObv0LphlO1f9FJtGrRdonzivTo0z+8?=
+ =?us-ascii?Q?l3AzrcXxsNzC4jJppWjtXyyRCZbhhGIgNyHfbXozgbLUoWuDF/LCj1pTyDl4?=
+ =?us-ascii?Q?AErCB5oGwfeeVMO4mTv5pEGKtrycUvpPHmIFX1ZDJBpYEPodN+jNPDeJ4PlN?=
+ =?us-ascii?Q?9Mb5idlrEBkFGAxvyMvJSsdxWmNeduUDwyKb1Z5nlDzdNZ76kZsB2Vy6QGP4?=
+ =?us-ascii?Q?ZTG7ocGu5SZJgQQk0kqMHB0qt4SjCtgox3uyoOogPc/aJbyHE9XGxsRg2luZ?=
+ =?us-ascii?Q?2DeAPUsEXBSB4Ml9SPo=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e8a3a26-bc26-4f7a-21a1-08da90bf74d9
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2022 10:55:20.2698
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VBw/O4I4WtrgAXBWH7yKexWYssayvf5l9Y+1AUSQdlyCFzh39srvPodwHPpjXfZM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB5628
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 22-09-02 21:22:08, Abel Vesa wrote:
-> On 22-08-24 16:04:21, Li Jun wrote:
-> > usb suspend clock has a gate shared with usb_root_clk.
-> > 
-> > Signed-off-by: Li Jun <jun.li@nxp.com>
-> 
-> Applied both, thanks!
+usb suspend clock has a gate shared with usb_root_clk.
 
-As discussed in the thread [1], I dropped this patch from my tree for
-now. You need to send a new version wil Fixes tag.
+Fixes: 9c140d9926761 ("clk: imx: Add support for i.MX8MP clock driver")
+Cc: stable@vger.kernel.org # v5.19+
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+ include/dt-bindings/clock/imx8mp-clock.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-[1] https://lore.kernel.org/all/YxhxSdDGXfO%2F%2Fbgc@linaro.org/
-> 
-> > 
-> > diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
-> > index 9d5cc2ddde89..1417b7b1b7df 100644
-> > --- a/include/dt-bindings/clock/imx8mp-clock.h
-> > +++ b/include/dt-bindings/clock/imx8mp-clock.h
-> > @@ -324,8 +324,9 @@
-> >  #define IMX8MP_CLK_CLKOUT2_SEL			317
-> >  #define IMX8MP_CLK_CLKOUT2_DIV			318
-> >  #define IMX8MP_CLK_CLKOUT2			319
-> > +#define IMX8MP_CLK_USB_SUSP			320
-> >  
-> > -#define IMX8MP_CLK_END				320
-> > +#define IMX8MP_CLK_END				321
-> >  
-> >  #define IMX8MP_CLK_AUDIOMIX_SAI1_IPG		0
-> >  #define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK1		1
-> > -- 
-> > 2.34.1
-> > 
+diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
+index 9d5cc2ddde89..1417b7b1b7df 100644
+--- a/include/dt-bindings/clock/imx8mp-clock.h
++++ b/include/dt-bindings/clock/imx8mp-clock.h
+@@ -324,8 +324,9 @@
+ #define IMX8MP_CLK_CLKOUT2_SEL			317
+ #define IMX8MP_CLK_CLKOUT2_DIV			318
+ #define IMX8MP_CLK_CLKOUT2			319
++#define IMX8MP_CLK_USB_SUSP			320
+ 
+-#define IMX8MP_CLK_END				320
++#define IMX8MP_CLK_END				321
+ 
+ #define IMX8MP_CLK_AUDIOMIX_SAI1_IPG		0
+ #define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK1		1
+-- 
+2.34.1
+
