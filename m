@@ -2,83 +2,111 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52905B33E8
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Sep 2022 11:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE5D5B3491
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Sep 2022 11:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiIIJ1M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 9 Sep 2022 05:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
+        id S229661AbiIIJvz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 9 Sep 2022 05:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiIIJ0t (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Sep 2022 05:26:49 -0400
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFD4C04E3
-        for <linux-clk@vger.kernel.org>; Fri,  9 Sep 2022 02:25:23 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:91db:705e:cfbc:a001])
-        by laurent.telenet-ops.be with bizsmtp
-        id HlRN2800E0sKggw01lRNcn; Fri, 09 Sep 2022 11:25:22 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oWaGH-004bev-O0; Fri, 09 Sep 2022 11:25:21 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1oWaGH-004OnP-4p; Fri, 09 Sep 2022 11:25:21 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 4/4] clk: renesas: r8a779g0: Add EtherAVB clocks
-Date:   Fri,  9 Sep 2022 11:25:15 +0200
-Message-Id: <e9382b0d9acc84acc2357a6921a1459f3a32240e.1662714852.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1662714852.git.geert+renesas@glider.be>
-References: <cover.1662714852.git.geert+renesas@glider.be>
+        with ESMTP id S229786AbiIIJvg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Sep 2022 05:51:36 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181048A6C6;
+        Fri,  9 Sep 2022 02:50:58 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id k2so537888ilu.9;
+        Fri, 09 Sep 2022 02:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=iXpi4U8D0jaH4ywTCd7jtJqMOxZPuO4ixqMMM3v8Cm0=;
+        b=gy+X09X/RNQ4H6tibwvG0tzOvReyZtjiSFRUJ2CzxhUdURHeBxxU/OkH8yT922mRQT
+         +gjpFUKX/OKuV1IWkLN1WpBSYhRbJqpdELwywSpGTlTJ9n5sow7627EtQFbivc2t6Uvy
+         dLdhuxk8pQ4iIgzrA8QVKlkXH0eA5WoYVDTPunLwfAsdfaOjq8S+PLRsar9WlLY8xmPV
+         O3ok4OAE+mVzLIGSK4GeS3rROGIiZafCCdgoU8WWvaMcSp/0S8XmSyt/FZF19SIsAgzi
+         c8t3tkpJmeSgTBmG9Xzzfs/m+RA+iVz0iZlSWVwEsxoJGgBGUoyhEM70FoBK8Y4EfdfS
+         1Dww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=iXpi4U8D0jaH4ywTCd7jtJqMOxZPuO4ixqMMM3v8Cm0=;
+        b=taX0Ztsy8aucfiqSBaRHOIl0naBK/wgSynsKQUM3TSKDO0uPIpoW/aMe2k2G68StPI
+         eS5iYZrXa9jTNuMLfc5YHMSEotuqGjEDCer6PENNTSFl32GyeIoRmaEaxVi+DPBU9XsT
+         8TUM1uPbRGKiwHlVnKXc/KYUI6NPzQgvDlGXu161FwJHr4N+lfggsvwwXVioUuksxIP9
+         ObcMplew6d4mcJ9e7PfoDOO+RgtJAUWg9fv4blZlMWYfT9CCNtc1Bs0fC0IMbM/biy7R
+         RA8cenAFA7nBuyjXuDewjkwocbNXmWJPWqx50bFhLMoDaQSdJKsXYUtgV8SmqUgXhl9m
+         sgsA==
+X-Gm-Message-State: ACgBeo30XSHpaT7XAB1fd9rKeBWNT9dCf55NuQRlbGXIvOfLG2Mx//Lx
+        Hw5FslRIlz9abzMx8fnsgKlrMtpeg12K+9yNh2Y=
+X-Google-Smtp-Source: AA6agR7KW/O26IuwfE8+w6n2uh6iQn/xc37vHGc2t5D1if8njYyXjIDt+1pCy8VRdbo8CwxIzKeTAV0l9jKnXIPH5bc=
+X-Received: by 2002:a05:6e02:198d:b0:2ec:d6c5:49e8 with SMTP id
+ g13-20020a056e02198d00b002ecd6c549e8mr4044219ilf.187.1662717057366; Fri, 09
+ Sep 2022 02:50:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220909073456.239668-1-gengcixi@gmail.com> <20220909073456.239668-2-gengcixi@gmail.com>
+ <Yxr0+LJWWsF53dr2@google.com>
+In-Reply-To: <Yxr0+LJWWsF53dr2@google.com>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Fri, 9 Sep 2022 17:50:21 +0800
+Message-ID: <CAF12kFteDZLk-2PBufnuar43bgPzoxWsOjR0-zQ01ZqLyTCxQw@mail.gmail.com>
+Subject: Re: [PATCH V7 1/2] dt-bindings: mfd: sprd: Add bindings for ums512
+ global registers
+To:     Lee Jones <lee@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        baolin.wang@linux.alibaba.com,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the module clocks used by the Ethernet AVB (EtherAVB-IF) blocks on
-the Renesas R-Car V4H (R8A779G0) SoC.
+Lee Jones <lee@kernel.org> =E4=BA=8E2022=E5=B9=B49=E6=9C=889=E6=97=A5=E5=91=
+=A8=E4=BA=94 16:10=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, 09 Sep 2022, Cixi Geng wrote:
+>
+> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >
+> > Add bindings for Unisoc system global register which provide register m=
+ap
+> > for clocks.
+> >
+> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
+> >  1 file changed, 68 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-g=
+lbreg.yaml
+>
+> I'll take this when the clk driver changes are merged.
+this patch is depends on the clk dt-bingdings, which is already merged [1]
+so the patch can be applied without wating the clk driver
+and the clk driver need merge this first
 
-Based on a larger patch in the BSP by Kazuya Mizuguchi.
+commitID =EF=BC=886a3a6c7ae0ef235faebf66bac56384dbd5f944dc=EF=BC=89
+[1]. https://lore.kernel.org/all/20220711202740.198F4C34115@smtp.kernel.org=
+/
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Changes compared to the BSP:
-  - Use S0D4_HSC instead of S0D8_HSC.
-    While the EtherAVB section in the R-Car V4H Hardware User's Manual
-    Rev. 0.51 says the HP clock input is S0D8, the latter is not
-    documented in the Clock Pulse Generator section.
-    As the RAVB driver doesn't use any clock properties, the actual
-    clock doesn't matter much, though.
----
- drivers/clk/renesas/r8a779g0-cpg-mssr.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clk/renesas/r8a779g0-cpg-mssr.c b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-index d40ad40e4b76863d..9641122133b54f9a 100644
---- a/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a779g0-cpg-mssr.c
-@@ -150,6 +150,9 @@ static const struct cpg_core_clk r8a779g0_core_clks[] __initconst = {
- };
- 
- static const struct mssr_mod_clk r8a779g0_mod_clks[] __initconst = {
-+	DEF_MOD("avb0",		211,	R8A779G0_CLK_S0D4_HSC),
-+	DEF_MOD("avb1",		212,	R8A779G0_CLK_S0D4_HSC),
-+	DEF_MOD("avb2",		213,	R8A779G0_CLK_S0D4_HSC),
- 	DEF_MOD("hscif0",	514,	R8A779G0_CLK_S0D3_PER),
- 	DEF_MOD("hscif1",	515,	R8A779G0_CLK_S0D3_PER),
- 	DEF_MOD("hscif2",	516,	R8A779G0_CLK_S0D3_PER),
--- 
-2.25.1
-
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
