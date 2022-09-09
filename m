@@ -2,66 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2A55B36B5
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Sep 2022 13:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C185B37C9
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Sep 2022 14:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiIILui (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 9 Sep 2022 07:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
+        id S231193AbiIIMb4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 9 Sep 2022 08:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiIILug (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Sep 2022 07:50:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAD6102D6B;
-        Fri,  9 Sep 2022 04:50:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FA85B824F0;
-        Fri,  9 Sep 2022 11:50:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B68D9C433D6;
-        Fri,  9 Sep 2022 11:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662724229;
-        bh=PtQE/YhXm6St5Y9JcAd1LJh87edXn81fJl5QLGWj/kg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F+Iluq77ucNorR29R6YwzNMUt5accogZTJmkvYv17gl/mXvDEMklaE4mbhjOr+mCs
-         ZlEs4BSrHWIdIt+BIUz0+wrZBy08Vw4tG8D/wJgduSvnCmqmmksAal7zT8Y/IlrpmQ
-         Lnjh3UiayP7t1qAoJ9D8wQx1CXmLovb3q49tosHg0Azb465TiLaylb72L6cbqxgaGU
-         95ta8EctiYo7VjlB2mOkjwTD6Ub3HTz2fjAqbNrVj8K36aDfgSqmrpLvlHcfHWQcsw
-         m+u0vHvLmElAPSJz4xazcttJjv4fck1YodoIh8dOCkYzyr78h/524oWGMxTZd1L1eJ
-         wtCpjGmxNR1PA==
-Date:   Fri, 9 Sep 2022 12:50:23 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Cixi Geng <gengcixi@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        baolin.wang@linux.alibaba.com,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S230360AbiIIMb4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Sep 2022 08:31:56 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442731153BC;
+        Fri,  9 Sep 2022 05:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662726715; x=1694262715;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HX/acfokj679TW0p8JjwsB6cH8hSfz79iHSDR58YKNY=;
+  b=xAR6r1ArqAtkeWuIdgLB2nHh6er5g/bJNtXI9M4OlMyr5D/ylghmp7hP
+   /bSqi1oml54G07bLQUjpiVmfjoVZfKHPzv36v21ehXpaUG4ovlpEZaI83
+   /SHY8pJsGAfP1RXvoHGJoOsOsMkoTu3EtMowAY6u7MNR3OFX91W1tOMKn
+   T1eFYHymtdFF22vbXd+X5hEm9ZAw9RsQxhAV3xg+D3A16tbUzmsWPKVvk
+   X+37kPz2sNKhI1MF4Lz+t4oA07eWuZEle0l2PUT4lmvjucPvuzub7F6dx
+   gbCyIunhNMcby4T890EVsHRYVk7sLU/A7lYTLIV38sTJ8BVe1447yXYxR
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,303,1654585200"; 
+   d="scan'208";a="176399083"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Sep 2022 05:31:51 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Sep 2022 05:31:46 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 9 Sep 2022 05:31:43 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH V7 1/2] dt-bindings: mfd: sprd: Add bindings for ums512
- global registers
-Message-ID: <YxsofwCfTZqqJOiK@google.com>
-References: <20220909073456.239668-1-gengcixi@gmail.com>
- <20220909073456.239668-2-gengcixi@gmail.com>
- <Yxr0+LJWWsF53dr2@google.com>
- <CAF12kFteDZLk-2PBufnuar43bgPzoxWsOjR0-zQ01ZqLyTCxQw@mail.gmail.com>
- <dc63bd52-edbf-d13b-86b3-db83bfd8b7e1@linaro.org>
- <CAF12kFt95PYcK249Zm8r+jZtEm3vGTd3AXn2DB_CG0Xf=3xeFQ@mail.gmail.com>
- <fe1838eb-8ec5-62a9-3d90-bf2fe4070535@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v5 00/14] PolarFire SoC reset controller & clock cleanups
+Date:   Fri, 9 Sep 2022 13:31:09 +0100
+Message-ID: <20220909123123.2699583-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fe1838eb-8ec5-62a9-3d90-bf2fe4070535@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,51 +68,83 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 09 Sep 2022, Krzysztof Kozlowski wrote:
+@Stephen, even if you do not take the rest of the series for v6.1, the
+first patch is a bugfix for boot failures that can be trigged with v6.0
+so even if you have reservations about the aux device stuff, I would
+appreciate if you would take the first patch.
 
-> On 09/09/2022 12:16, Cixi Geng wrote:
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 于2022年9月9日周五 17:57写道：
-> >>
-> >> On 09/09/2022 11:50, Cixi Geng wrote:
-> >>> Lee Jones <lee@kernel.org> 于2022年9月9日周五 16:10写道：
-> >>>>
-> >>>> On Fri, 09 Sep 2022, Cixi Geng wrote:
-> >>>>
-> >>>>> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> >>>>>
-> >>>>> Add bindings for Unisoc system global register which provide register map
-> >>>>> for clocks.
-> >>>>>
-> >>>>> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> >>>>> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> >>>>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>>>> ---
-> >>>>>  .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
-> >>>>>  1 file changed, 68 insertions(+)
-> >>>>>  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
-> >>>>
-> >>>> I'll take this when the clk driver changes are merged.
-> >>> this patch is depends on the clk dt-bingdings, which is already merged [1]
-> >>
-> >> which is merged to different tree, so this one here cannot go via MFD
-> >> tree without cross-tree merges.
-> > Hi Krzysztof:
-> > I test on the latest kernel 506357871c18e06565840d71c2ef9f818e19f460
-> > (torvalds/master) version:6.0.0.rc4
-> > what you mean is I must warting your branch upgrade the cross-tree?
-> 
-> Ah, you linked email message so that rather indicated applying to clk
-> tree, but indeed it is already in the mainline.
+Unfortunately, the rest of the series does have a conflict with/depends
+on the fix - so if you do take it on -fixes could you do it as a commit
+on top of -rc1 so the rest of the series will apply?
 
-... and also, I'm *still* not playing that game with DT bindings.
+Thanks,
+Conor.
 
-It's bad enough that we have to sync across subsystems to avoid
-build-breakages.  If documentation comes together in -next and
-subsequently Mainline that should be adequate.
+Original Cover:
+Hey all,
 
-I doubt Linus is running DT checker(s) on each pull-request he merges,
-nor are there any stipulations for DT bindings to be bisectable
-post-merge.
+Kinda two things happening in this series, but I sent it together to
+ensure the second part would apply correctly.
 
+The first is the reset controller that I promised after discovering the
+issue triggered by CONFIG_PM & the phy not coming up correctly. I have
+now removed all the messing with resets from clock enable/disable
+functions & now use the aux bus to set up a reset controller driver.
+Since I needed something to test it, I hooked up the reset for the
+Cadence MACB on PolarFire SoC. This has been split into a second series
+for v2 (and is now in v6.0-rcN):
+https://lore.kernel.org/all/20220704114511.1892332-1-conor.dooley@microchip.com/
+
+The second part adds rate control for the MSS PLL clock, followed by
+some simplifications to the driver & conversions of some custom structs
+to the corresponding structs in the framework.
+
+I'll take the dts patch myself when the rest of this is okay-ed.
+Thanks,
+Conor.
+
+Changes since v4:
+- use the alternative macro Claudiu suggested for patch 1
+- drop a ~useless intermediate variable in mpfs_deassert()
+
+Changes since v3:
+- return results directly in probe() & reset_controller_register()
+
+Changes since v2:
+- reorder reset Makefile/Kconfig entries
+- fix a pre-existing bug exposed by clang with this series applied
+- add Padmarao who co-authored the original driver to the authors
+
+Conor Dooley (14):
+  clk: microchip: mpfs: fix clk_cfg array bounds violation
+  clk: microchip: mpfs: make the rtc's ahb clock critical
+  dt-bindings: clk: microchip: mpfs: add reset controller support
+  clk: microchip: mpfs: add reset controller
+  reset: add polarfire soc reset support
+  MAINTAINERS: add polarfire soc reset controller
+  riscv: dts: microchip: add mpfs specific macb reset support
+  clk: microchip: mpfs: add MSS pll's set & round rate
+  clk: microchip: mpfs: move id & offset out of clock structs
+  clk: microchip: mpfs: simplify control reg access
+  clk: microchip: mpfs: delete 2 line mpfs_clk_register_foo()
+  clk: microchip: mpfs: convert cfg_clk to clk_divider
+  clk: microchip: mpfs: convert periph_clk to clk_gate
+  clk: microchip: mpfs: update module authorship & licencing
+
+ .../bindings/clock/microchip,mpfs.yaml        |  17 +-
+ MAINTAINERS                                   |   1 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |   7 +-
+ drivers/clk/microchip/Kconfig                 |   1 +
+ drivers/clk/microchip/clk-mpfs.c              | 384 +++++++++---------
+ drivers/reset/Kconfig                         |   7 +
+ drivers/reset/Makefile                        |   2 +-
+ drivers/reset/reset-mpfs.c                    | 157 +++++++
+ include/soc/microchip/mpfs.h                  |   8 +
+ 9 files changed, 388 insertions(+), 196 deletions(-)
+ create mode 100644 drivers/reset/reset-mpfs.c
+
+
+base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
 -- 
-Lee Jones [李琼斯]
+2.36.1
+
