@@ -2,106 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378B75B2F8B
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Sep 2022 09:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D465B308B
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Sep 2022 09:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiIIHOw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 9 Sep 2022 03:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S231459AbiIIHjS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 9 Sep 2022 03:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiIIHOv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Sep 2022 03:14:51 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACB41CB0A
-        for <linux-clk@vger.kernel.org>; Fri,  9 Sep 2022 00:14:46 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id w8so1164082lft.12
-        for <linux-clk@vger.kernel.org>; Fri, 09 Sep 2022 00:14:46 -0700 (PDT)
+        with ESMTP id S231687AbiIIHie (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Sep 2022 03:38:34 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCE011B020;
+        Fri,  9 Sep 2022 00:35:40 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id t65so814500pgt.2;
+        Fri, 09 Sep 2022 00:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=4nbvtgapf/DbnFmqi93Nv0OlYIMtttn1cU2cr0YoWgA=;
-        b=pZmjtcSBZ/2Ynrvacs3Oqiei4FzLWDJeSha22/DQU4noEPcMCqpy8CXFLfC/Ng2Cy8
-         awj7MaL6B+YJZjrWN3If0VRa5E/HNwAu3E4qZMzvzCXyJSM8ZG14DPLxPQVqZPq/Uvwk
-         Wol72ZRvRJ/f1ezLjWymXAIqMagEk6UbfjwN4NJeBi9wD/l9GhCVRuEOBKeJQQiIzedg
-         bEdA786eyCAv/QUpvJM17ZNm4cq/lSbDGGs5untedAT7S9xDxSAEC7Sw5THCagVn75fx
-         c82HXjpHSubUy6P9UME7nBv1PBaA2H4IEv4lVy4IabEn4NqCANeSyLfoJeMx0bep/GD6
-         +9EA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=84egTDT1/lAGh+ekFxVhTTrXVTkSlhCJVYW1hdORQu8=;
+        b=NMlJkcQ6a08q1uCn1snYIqPbZSZ82Um4jzZ8T+2UQFz3Pj0jIbG3JcMbMppG6NRJt2
+         sIAW07T5t0eJwaCYoPlzDtvCq1Vgsxt9zgOKa1bnnp1jxCPQaV+YBQnvIsve1jCXDQl+
+         /HTmBVOd1BOvUzWfCgDlVk+pivf83ioAcYX1EIcSYJOOPyFPV240Menio2/3zcA7Ud+R
+         iVllGl4hzohF2O5a/c++/csZ7SZ+xw+c00rIyUckDTxaNV6SafFJ7lFCCzvc3Xe1r45g
+         w+6adFvwc+ae+Wa48ZhEQcb4RymIZ8OqlMW4rKIQzaUwVyS0Wj7JysSI67/h26U3TR0G
+         eabg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=4nbvtgapf/DbnFmqi93Nv0OlYIMtttn1cU2cr0YoWgA=;
-        b=v+6iDoq5AkQHI9GOFqabN7UTYlqj/N41yU5hQca0bKGhD57GIiefZEYS6ZMj2eMzmb
-         FvHo5j4S/dvLTsX3SYxIPznNehFME9dochJctrgUMZXuPRKYDijpR50jK0DB472t84wY
-         T5c1jL2clNdnS/xPnPnkK81VXapd5jEE0udjTQO/jlh4F2qsZenvuwEmGi97rKaeIuxe
-         O7v+Iqm4KfWOlsOaC5Gh1Ep545IqWg9mIfh5FPdEoJDnkreebY+lRPbM2sg3DGcX87gb
-         RTHbflM4BFGUc9SUy3fekPIhAEXik+ziQ/k+WFw+ng/DlXLs4KMUNXBvln2A7fVkvCdt
-         Nmbg==
-X-Gm-Message-State: ACgBeo069XUZkmWIwyPr24UQhQiAcg7IzvF7VBmQhBWLNzRWkwDlT4bG
-        hnwA3tMfHvquDTghzgOzIqEarE0TNIZ64A==
-X-Google-Smtp-Source: AA6agR5SXJnle1aJY2acpppvmoi8PC0XcNOeUomBn3MgCIawLIpELv7rrrjZfDGElv6mDGyChsAc3w==
-X-Received: by 2002:a05:6512:c0c:b0:48d:1e9d:aa14 with SMTP id z12-20020a0565120c0c00b0048d1e9daa14mr4180975lfu.322.1662707685119;
-        Fri, 09 Sep 2022 00:14:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g6-20020a2ea4a6000000b0026be23f24efsm170485ljm.18.2022.09.09.00.14.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 00:14:44 -0700 (PDT)
-Message-ID: <9b009a58-5a2b-1276-49de-3c4f93b2f356@linaro.org>
-Date:   Fri, 9 Sep 2022 09:14:43 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=84egTDT1/lAGh+ekFxVhTTrXVTkSlhCJVYW1hdORQu8=;
+        b=s0kZCLclf9cbC7wfOFdNG8V8PgTjbhTOOFRMMRXw8ekBoP3XhU6U8Meekbtk+NSjAw
+         2iXr4fLxr70rNs5Uv52s/OzwI6iemhLPCu1S1x7aZnXb5TEs8xYzDGlXeW3Jc9Ez9tfG
+         TTVszq0R4GWTR51y3AEkaXSoBwRXdcJo4l91IHh73Uk1iNM7PjcItZQUjFMiHOz7H5Nv
+         6ouVnGEN/k8hLJzBFsqIXPRjnSPyPmq9wY/PuetSl9x0c2mMmkvQAFV9zdOpoM/JWaqe
+         YdVowTesoFjEGY1wIxXGnafeTeukqvNqSl5bTCB/9JB2olFMZENTp4PeXuH19p4qLHuZ
+         pqPw==
+X-Gm-Message-State: ACgBeo3Oc9p8u4Zo+2DYXsNrvSnFVV7KICbay846NYx6VTl8i/ecUkNr
+        y052ZdIaxwRNgA19ooYSV+M=
+X-Google-Smtp-Source: AA6agR6hQrmuvCiEu5/BNDodrrIftjxQLHxObdA2P7Rf8jFssdZej+OLUk7VjJEqu+dI4T6/ZmiX/A==
+X-Received: by 2002:a63:5209:0:b0:434:9e1a:bdba with SMTP id g9-20020a635209000000b004349e1abdbamr11316901pgb.297.1662708937563;
+        Fri, 09 Sep 2022 00:35:37 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id ix19-20020a170902f81300b00174e5fe9ce1sm720938plb.159.2022.09.09.00.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Sep 2022 00:35:37 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH V7 0/2] Add ums512 clocks and relative bindings file
+Date:   Fri,  9 Sep 2022 15:34:54 +0800
+Message-Id: <20220909073456.239668-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: clock: gcc-sdm845: add sdm670 global
- clocks
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tdas@codeaurora.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, caleb@connolly.tech,
-        jo@jsfamily.in
-References: <2d4de63a-c536-669d-b90d-21f60bc6b6fb@linaro.org>
- <20220908230102.207682-1-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220908230102.207682-1-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 09/09/2022 01:01, Richard Acayan wrote:
->>> +        clock-names:
->>> +          items:
->>> +            - const: bi_tcxo
->>> +            - const: bi_tcxo_ao
->>> +            - const: sleep_clk
->>> +            - const: pcie_0_pipe_clk
->>> +            - const: pcie_1_pipe_clk
->>
->> Blank line here.
->>
->> With this:
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Thanks for reviewing. While I'm at it, I might as well swap sdm670 and
-> sdm845 if statements so they're at least in the same order as in the enum
-> (I don't know what order to put them in).
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Put them in alphabetical order.
+This patchset is add the UMS512 clocks support
 
-Best regards,
-Krzysztof
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
+
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items"
+  list when use the latest dtschema.
+
+v4 changes:
+  move the syscon bindins from clk to glbreg yaml file by pickup 
+  chunyan's patch for global registers bindings
+  fix the comments from Krzysztof in v3 patchset
+  add the Acked-by: Krzysztof in patch v4 3/4
+  fix the  warning Prefer "GPL" over "GPL v2"
+
+v5 changes:
+  Add review tags.
+  fix the comments in ums512-glbreg.yaml.
+
+v6 changes:
+  No more send the patch 1/4 and 3/4 in V5 for applied by Stephen
+  change GPL to GPL v2 license
+  fix the lack of space in some "{" and "}"
+  add check error for sprd_clk_regmap_init.
+
+v7 changes:
+  Resend the patchset after the cross-tree patch merged
+  use thr absolute path for the mfd refs of patternProperties
+
+Chunyan Zhang (1):
+  dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+
+Cixi Geng (1):
+  clk: sprd: Add clocks support for UMS512
+
+ .../bindings/mfd/sprd,ums512-glbreg.yaml      |   68 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2202 +++++++++++++++++
+ 4 files changed, 2277 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+
+-- 
+2.34.1
+
