@@ -2,97 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0075B76B0
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Sep 2022 18:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7C35B7687
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Sep 2022 18:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiIMQrn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Sep 2022 12:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        id S231818AbiIMQdK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 13 Sep 2022 12:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiIMQrS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Sep 2022 12:47:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FFDBD13F;
-        Tue, 13 Sep 2022 08:41:21 -0700 (PDT)
-Received: from mercury (unknown [185.122.133.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2F1876601FFD;
-        Tue, 13 Sep 2022 16:21:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1663082507;
-        bh=NUa1OR6r2YL7gqnNpqtAfFahv7FW51v7az7dmzd//2U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Mmg2KKuQgNfwZM4YmjTZs2YlfG3d64XkYl5FYOkjb8zFnmR/fYrb4lQY37gPz8cy5
-         uwe25u0Jh15EpeNEoOiWdZF3QeeNbbri+AV2m5zUUew85xJIt2pfyWhc60h6RXpUrW
-         LVpMXzEIxkQTTevmotPnYV2inYPafP+Wl055i6loL+Mh1SJIL1ODahKbEGh17ArxrT
-         iQKWNvifQ883mm8eWQjF67vr9ivItdEWa5xFY6pyJ6C3SJBFEJ7QbZgJEzoEkRFsfI
-         kAcTiFXIGkjcO+GwJYaemMX+DiuQpyQpWi9J2103ivv3t5yTNTG9IKh0zPSV45r9OJ
-         fH+r3RkaKTDNg==
-Received: by mercury (Postfix, from userid 1000)
-        id 6E94C106084A; Tue, 13 Sep 2022 17:21:40 +0200 (CEST)
-Date:   Tue, 13 Sep 2022 17:21:40 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     peng.fan@oss.nxp.com
-Cc:     festevam@gmail.com, linux-clk@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, marex@denx.de,
-        mazziesaccount@gmail.com, mturquette@baylibre.com,
-        peng.fan@nxp.com, sboyd@kernel.org, shawnguo@kernel.org,
-        tharvey@gateworks.com
-Subject: Re: BD71847 clk driver disables clk-32k-out causing RTC/WDT failure
-Message-ID: <20220913152140.iikckob5h3ecagfi@mercury.elektranox.org>
+        with ESMTP id S231709AbiIMQcw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Sep 2022 12:32:52 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB238B1B9A;
+        Tue, 13 Sep 2022 08:27:50 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-127f5411b9cso33055144fac.4;
+        Tue, 13 Sep 2022 08:27:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=VVZjlnn+THkJqyJoRk9RBQPIt/3qGui9L2xBWv1no4A=;
+        b=DYXOx2epFovfGFJTyFufOREnqZSd/pnX/KWK7PnZ3qLZURRyDlndYPqJl/ADpBT900
+         mX0Fa0EIkc92ZJbud+WnwTiICsiTfN89X5NDDGDDpXTpXWCLtCJI3hHa1ZiEqdr5L1jX
+         zAtG895Q3mXXM8Lhq4ZAB1cB9001BqqkCGfGzVaRlNlWBiij8Gb3tfGS+U0gwWITIfBe
+         pmEbnzj7i1g1oT4+R+2vcJBkJgl7U36Ui88oyHE+Q7ilMKiZDq4rWKXQ4sfXHOQ+b6ri
+         +kJlbZO2c5CiF1PwstzVIa4iiLuXKZa13AI31x3Qobk1BZIXxEsyjzTiBFjxtoIrCubP
+         G9bw==
+X-Gm-Message-State: ACgBeo32xxELQbZK/Mwz/SXs2D6hf9n9jBYgXu8c5STJPKQ/U3MH2Sfb
+        mGXd6Nf8peegEYc6nDjB1w==
+X-Google-Smtp-Source: AA6agR6Xeph40B/AphNQeHOSVdWolS1Sqe/wRlZeFUjKP/k/ZntbKo+PcwJJyVFs2nGsVh70g3Qr4w==
+X-Received: by 2002:a05:6870:4727:b0:126:e6:3848 with SMTP id b39-20020a056870472700b0012600e63848mr2027523oaq.60.1663082781782;
+        Tue, 13 Sep 2022 08:26:21 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x88-20020a9d20e1000000b00637032a39a3sm5977109ota.6.2022.09.13.08.26.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Sep 2022 08:26:21 -0700 (PDT)
+Received: (nullmailer pid 3767287 invoked by uid 1000);
+        Tue, 13 Sep 2022 15:26:20 -0000
+Date:   Tue, 13 Sep 2022 10:26:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: clock: add QCOM SM6115 display clock
+ bindings
+Message-ID: <20220913152620.GA3762864-robh@kernel.org>
+References: <20220911164635.182973-1-a39.skl@gmail.com>
+ <20220911164635.182973-2-a39.skl@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d6njs6zsqbehlyas"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <57b89f2e-dc70-9890-143c-f6da5aaba015@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220911164635.182973-2-a39.skl@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Sun, Sep 11, 2022 at 06:46:18PM +0200, Adam Skladowski wrote:
+> Add device tree bindings for display clock controller for
+> Qualcomm Technology Inc's SM6115 SoC.
+> 
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
+>  .../bindings/clock/qcom,sm6115-dispcc.yaml    | 70 +++++++++++++++++++
+>  .../dt-bindings/clock/qcom,sm6115-dispcc.h    | 36 ++++++++++
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,sm6115-dispcc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+> new file mode 100644
+> index 000000000000..a6bf363b5015
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sm6115-dispcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Display Clock Controller Binding for SM6115
 
---d6njs6zsqbehlyas
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+s/Binding //
 
-Hi,
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +description: |
 
-I had the same trouble before for QMX6 system on module, which feeds
-the i.MX6 32k clock via I2C RTC's 32k output. Here is how it has
-been solved upstream:
+Don't need '|' when no formatting to preserve.
 
-https://lore.kernel.org/all/20210428222953.235280-1-sebastian.reichel@collabora.com/
+With those fixes,
 
-Patch 1 and patch 5 (look for "rtc_sqw") are relevant for this
-specific issue. Discussion history is linked from the cover letter.
-
--- Sebastian
-
---d6njs6zsqbehlyas
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMgn/gACgkQ2O7X88g7
-+ppZ3w/8COoF/mtQh0ZKXTMdGaUv4W257a1AiVH61kU8s6d4+ud5HyNXrSBqSVw8
-qbEyCvIIgLHHpTsanm+/k/WA5GQSy505Fa/EvPWQ+pcD6pOqgttDdERSNMPobSXl
-UsJyEw2aUgBdHxrhMg03geb0VptS1QuOhgbqL5qRJ/Kel7EqhMnGF4v95f6BtX46
-EhhdtkeO+tORGrFN0pISTz6IZjmUHg5MEHFKuVSV4ZRGD1dhTobfoEakV+JRJEOU
-4SkhDTCwPaXHAxHTzuPv+vAQPyZhjPZl1gJA8Bi0qfOisydLNvnz4je99J3sx4ki
-n4Twu8Q/r8TekWPUAxMTKTqWE81l33DR2hsF7Sb3EmIj8XN1NOmjQKhggqTwdB0j
-xYSjDyEsmTUqFfvbg7OpZaJyyxwGQEpam6NCbwn5P8HwNiPFV9PrTuCyz2RrbvNT
-voBHYTFj1Pd3eFuzMNWi6eOH20SjWhBvH7larbcr1jgMs+Px3ExxqPeaNnrknteY
-ipTQcPaIIggG57FyeQO2A+O77aT+IfDGdbKwNnNz/YYihcUhoDi6fDUkpuTD6tEm
-4snyhXrkNuu5394w4CKIs3wctQABXXmKY65GVRsVu3aooNtFMfdGsLgVvAss/CyK
-uXlCo4ix8QjpNGFVLg25ECg4Nc1vzkpcrgc/CYuHCCK6MGz6/Qk=
-=Yq+I
------END PGP SIGNATURE-----
-
---d6njs6zsqbehlyas--
+Reviewed-by: Rob Herring <robh@kernel.org>
