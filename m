@@ -2,75 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C905A5B6ED3
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Sep 2022 16:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A5E5B7597
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Sep 2022 17:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbiIMOF0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Sep 2022 10:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S235294AbiIMPwH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 13 Sep 2022 11:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbiIMOFZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Sep 2022 10:05:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE59923BE0
-        for <linux-clk@vger.kernel.org>; Tue, 13 Sep 2022 07:05:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e16so20981840wrx.7
-        for <linux-clk@vger.kernel.org>; Tue, 13 Sep 2022 07:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=j9AE7+MGh6BY4KWPPr0cYlAvnl+eZtdW7kdT8YeWHs4=;
-        b=t7zXByxfhkphBgJbdx3n8AKs4Gz+pxXzSTFS5wBaNmr+qOv7Sr4XhjrvTVxIhkh0Ta
-         8L75sQ/srTNdlt0SQfgnmHvUfxDGE6fJ8Au2UWZQO8Z8ZRfdjc78TCFNuEc+nN27fwh+
-         Te4qdHZP09jJzN5Ry8mPXvWZZ+AOdbctnHFk50Qh5ITXsL/+jQadBoon96xZh+7IYJ9D
-         +ws4w5IJuKdcfoHimVRKpfIv0eIuNPrbQFMQ5h2dtVW4RZ/Lk8S6bOjtH8vCKGMmDndV
-         kPHLeVQMU1y8WZGAcKjK5Y3Wx+bALc6FahO41KIhhnhUDX7Xei0L8BPDsT6ggJFAzTLC
-         Mn+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=j9AE7+MGh6BY4KWPPr0cYlAvnl+eZtdW7kdT8YeWHs4=;
-        b=6ypfV4qz6xSwj7V7n4bqL6jArVJfZlzWielXLsqPFE78+uKhVErmqhob2jV+ixS+S4
-         NEtsqjmUIbNMHCn9aDLN3+l+CqOM/PGhnVq1H1picDmDqJl9fCYJ1hcvUOXNh7M5NTY5
-         0xqkTUNzoTIim0mbqaXSd0iqfFKbgRZuDTxzV5oSRvc91MCKqHHu1j+9zk+YCcsrdZNb
-         F+AFyqJCrNIgEjqqXWL893aVLwGaayiqHSm8bk2NRURR8gLql49dvFPInJSB0Rfg6Cm9
-         uwv6Ry4SWu9aKtdJX+0eeg5BoJMjsUcrpdsfsNhVcx+3pI9AWYdJ8GBxSljZozJudh5q
-         g+qg==
-X-Gm-Message-State: ACgBeo0KCiHw5O1/Q2mfZZcgp+6cuxUCTtVFhYPivchd5PvtHSF31fEI
-        Y86ioGemyhpNjErwZD505DhrhQ==
-X-Google-Smtp-Source: AA6agR6O1+8Y82XcsDX3f13kxIP4XvI+yu4ytmhCNVBE5REp8reHPbHcE+gUKAFUNjCG8wSqIsMnaw==
-X-Received: by 2002:a5d:648c:0:b0:22a:2c04:97a5 with SMTP id o12-20020a5d648c000000b0022a2c0497a5mr16033680wri.326.1663077919967;
-        Tue, 13 Sep 2022 07:05:19 -0700 (PDT)
-Received: from [10.119.22.201] ([89.101.193.67])
-        by smtp.gmail.com with ESMTPSA id l17-20020a5d6751000000b0021efc75914esm10468603wrw.79.2022.09.13.07.05.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Sep 2022 07:05:19 -0700 (PDT)
-Message-ID: <638002c3-f402-96d3-7eb8-991f7f05f703@linaro.org>
-Date:   Tue, 13 Sep 2022 16:05:18 +0200
+        with ESMTP id S234356AbiIMPvu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Sep 2022 11:51:50 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409D08E0E2;
+        Tue, 13 Sep 2022 07:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663080830; x=1694616830;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=pLJ8priI7RmY67VypJNLPFkfcfxWAxaQ7nFJHrNbVhI=;
+  b=neolalmZlbeg0Cd8OmeZQeOnG7uEwFZyCMvomSBD5w15HJAPJteumXOU
+   +P/h8/TjVldCi8NOYeEkYmZ8KlbaIdTd33EhmwDfrBYYCJ2aUf8xXKdDC
+   aMcXqXjBCuFx7ntVH94TqY0k3ryLCX6sursai79XeQYOXeWfATUVVLYo6
+   Km5auT4V1i9fB3gtyoFwrZOMc2gue0T0Qq1IUBXcxsp3ooV9oG927Rgog
+   cyzBjpgRRJ4Uc+vKYDZ2IxWx4AhSU4X4Qz6o7rcQekwTQf5h1jHdlaXxD
+   Nvspvsl03zKeLVsGm4rxzhv34QgbXbJuyg6LQio0SAt3Vbz0LMo4S46S4
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,313,1654585200"; 
+   d="scan'208";a="190643859"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Sep 2022 07:24:55 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 13 Sep 2022 07:24:55 -0700
+Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 13 Sep 2022 07:24:50 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
+        <gregkh@linuxfoundation.org>, <broonie@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <jirislaby@kernel.org>, <sergiu.moga@microchip.com>,
+        <admin@hifiphile.com>, <kavyasree.kotagiri@microchip.com>,
+        <tudor.ambarus@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v3 02/14] ARM: dts: at91: sam9x60ek: Add DBGU compatibles to uart1
+Date:   Tue, 13 Sep 2022 17:21:54 +0300
+Message-ID: <20220913142205.162399-3-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220913142205.162399-1-sergiu.moga@microchip.com>
+References: <20220913142205.162399-1-sergiu.moga@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH V2] dt-bindings: clock: add i.MX8M Anatop
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
-        abel.vesa@linaro.org, sboyd@kernel.org
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20220913092908.1708931-1-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220913092908.1708931-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,61 +71,40 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 13/09/2022 11:29, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX8M Family features an anatop module the produces PLL to clock
-> control module(CCM) root clock. Add the missing yaml file.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
-> V2:
->  Drop syscon, use clock-controller
->  Add fsl vendor prefix
->  Add interrupt property
-> 
->  dts update not included, so there will be dtbs_check fail.
-> 
->  .../bindings/clock/fsl,imx8m-anatop.yaml      | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/fsl,imx8m-anatop.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/fsl,imx8m-anatop.yaml b/Documentation/devicetree/bindings/clock/fsl,imx8m-anatop.yaml
-> new file mode 100644
-> index 000000000000..2c0efa58d898
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/fsl,imx8m-anatop.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/fsl,imx8m-anatop.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX8M Family Anatop Module
-> +
-> +maintainers:
-> +  - Peng Fan <peng.fan@nxp.com>
-> +
-> +description: |
-> +  NXP i.MX8M Family anatop PLL module which generates PLL to CCM root.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - fsl,imx8mm-anatop
-> +          - fsl,imx8mq-anatop
-> +      - items:
-> +          - enum:
-> +              - fsl,imx8mn-anatop
-> +              - fsl,imx8mp-anatop
-> +          - const: fsl,imx8mm-anatop
+Maintain consistency among the compatibles of the serial nodes of
+sam9x60ek and highlight the incremental characteristic of its serial
+IP's by making sure that all serial nodes contain both the sam9x60
+and sam9260 usart/dbgu compatibles.
 
-You dropped syscon which solves part of my previous comment. I suggested
-to make it proper clock provider, so you would need clock-cells. Any
-reason it is no a real clock provider?
+Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+---
 
-Best regards,
-Krzysztof
+
+v1 -> v2:
+- Nothing, this patch was not here before
+
+
+v2 -> v3:
+- Nothing, previously this was [PATCH 4]
+
+
+
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
+index 7ade9979e1c6..67bce8d60908 100644
+--- a/arch/arm/boot/dts/at91-sam9x60ek.dts
++++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
+@@ -258,7 +258,7 @@ &flx5 {
+ 	status = "okay";
+ 
+ 	uart1: serial@200 {
+-		compatible = "microchip,sam9x60-usart", "atmel,at91sam9260-usart";
++		compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+ 		reg = <0x200 0x200>;
+ 		interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		dmas = <&dma0
+-- 
+2.34.1
+
