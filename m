@@ -2,88 +2,207 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF6E5B9352
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Sep 2022 05:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8245B936D
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Sep 2022 06:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiIODh6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 14 Sep 2022 23:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S229458AbiIOEAt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Sep 2022 00:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiIODhp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Sep 2022 23:37:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1096C9322B;
-        Wed, 14 Sep 2022 20:37:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96E1E6206E;
-        Thu, 15 Sep 2022 03:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CFB3C43142;
-        Thu, 15 Sep 2022 03:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663213042;
-        bh=oZK4TmRjdWUzhH8K3J+wY8ciuZJRIg5qg2U1p3zyxus=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FFw0cXZTS889EJdJXf8zO8IruuBSdCmNK/aMORosutG98bJ6FFhHl3nmMNULwz+Um
-         futDfJnYk0Yq+JTBf89DiD6YYt3jfvovqlxwvaG3fU4kLVJY1x4Q5nod8dTe0EMQpY
-         S685Qs1F9cvyL8DyI0YPnmRGcWFgefFtlndCFxYI/cZbz4qahySJlcwZndLtrV4fTv
-         JQA8OF8s5HnY+iXppn+m5T7TJowuMgBE0KOygMRO2QDAzLNVwwPU/35uFKQ+JJIO56
-         TRw69Usp4vX+2fWV05t7NzpSlababks3LmKQIkFp/+vS5armtpgULwiPdlD/jd2QfB
-         u9PDjjKd/lRVA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        stephan.gerhold@kernkonzept.com
-Cc:     agross@kernel.org, mturquette@baylibre.com,
-        dominikkobinski314@gmail.com, sboyd@kernel.org,
-        konrad.dybcio@somainline.org, p.zabel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        stephan@gerhold.net, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] clk: qcom: Add clocks for MSM8909
-Date:   Wed, 14 Sep 2022 22:37:03 -0500
-Message-Id: <166321302055.788007.16496767011703935092.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220706134132.3623415-1-stephan.gerhold@kernkonzept.com>
-References: <20220706134132.3623415-1-stephan.gerhold@kernkonzept.com>
+        with ESMTP id S229448AbiIOEAs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Sep 2022 00:00:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6CA7FE46;
+        Wed, 14 Sep 2022 21:00:46 -0700 (PDT)
+X-UUID: 00915933d2e14e81b4d06fabd70aef1f-20220915
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=QyzP8AuS/Yj0m/junatFACxq+Em7ckmn0zUUcXx/+6Y=;
+        b=jNUOM6Aa7TMxJMOdy654GIdhBC/Oc19rbw9iyarUcTXy8t2X49Svo/F7pMC0Gp9muKzAiYNKUC/hV5ssILbODkJF+JCwa8Szo52PDeu8+hcWbCtwWfPGDQYt2VohlVbUA1efBRZW9doJv/VeuzTNb5GqYK76fjAibpGIapiozvs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:16e903de-09ca-4471-b54e-783b31bc17a6,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:3e3bb65d-5ed4-4e28-8b00-66ed9f042fbd,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 00915933d2e14e81b4d06fabd70aef1f-20220915
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 48536846; Thu, 15 Sep 2022 12:00:42 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 15 Sep 2022 12:00:40 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 15 Sep 2022 12:00:40 +0800
+Message-ID: <47ad92dfc593681508fcf09df1303cdfe86c4202.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: arm: mediatek: Add new bindings of
+ MediaTek frequency hopping
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <sboyd@kernel.org>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>
+Date:   Thu, 15 Sep 2022 12:00:40 +0800
+In-Reply-To: <06eb15ea-56b3-4f18-be18-3fc710cef779@collabora.com>
+References: <20220914124552.16964-1-johnson.wang@mediatek.com>
+         <20220914124552.16964-3-johnson.wang@mediatek.com>
+         <06eb15ea-56b3-4f18-be18-3fc710cef779@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 6 Jul 2022 15:41:26 +0200, Stephan Gerhold wrote:
-> Add a driver for the Global Clock Controller (GCC) that provides clocks,
-> resets and power domains for the various hardware blocks in the MSM8909
-> SoC. Make it possible to have longer delay between assertion/deassertion
-> of particular reset signals (this is needed for the USB PHY on MSM8909).
-> Finally, add the necessary definitions for the clocks controlled by the
-> RPM firmware on MSM8909.
+Hi Angelo,
+
+Thanks for your review.
+
+On Wed, 2022-09-14 at 15:46 +0200, AngeloGioacchino Del Regno wrote:
+> Il 14/09/22 14:45, Johnson Wang ha scritto:
+> > Add the new binding documentation for MediaTek frequency hopping
+> > and spread spectrum clocking control.
+> > 
+> > Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > ---
+> >   .../bindings/arm/mediatek/mediatek,fhctl.yaml | 47
+> > +++++++++++++++++++
+> >   1 file changed, 47 insertions(+)
+> >   create mode 100644
+> > Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yam
+> > l
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yam
+> > l
+> > new file mode 100644
+> > index 000000000000..7b0fd0889bb6
+> > --- /dev/null
+> > +++
+> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yam
+> > l
+> > @@ -0,0 +1,47 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: 
+> > https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,fhctl.yaml*__;Iw!!CTRNKA9wMg0ARbw!3sumdhtrK5Ah5_rfIilgm4UUmnwkkqMpc3r_ZfkLfsXsLn-_AKm9ZokhJGD1Fl-gJpckAKHZh-jNVW64KRU8Duv1kg$
+> >  
+> > +$schema: 
+> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!3sumdhtrK5Ah5_rfIilgm4UUmnwkkqMpc3r_ZfkLfsXsLn-_AKm9ZokhJGD1Fl-gJpckAKHZh-jNVW64KRWMb8jIsw$
+> >  
+> > +
+> > +title: MediaTek frequency hopping and spread spectrum clocking
+> > control
+> > +
+> > +maintainers:
+> > +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
+> > +
+> > +description: |
+> > +  Frequency hopping control (FHCTL) is a piece of hardware that
+> > control
+> > +  some PLLs to adopt "hopping" mechanism to adjust their
+> > frequency.
+> > +  Spread spectrum clocking (SSC) is another function provided by
+> > this hardware.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mediatek,mt8186-fhctl
+> > +
+> > +  reg:
+> > +    maxItems: 1
 > 
-> [...]
+> There are still a few issues in this binding that I can immediately
+> see...
+> 
+> > +
+> > +  clocks:
+> 
+> MT8195 has 23 PLLs, MT8186 has 14, but perhaps in the future we may
+> see
+> something more than that on some newer SoC, so...
+> 
+>    clocks:
+>      maxItems: 30
 
-Applied, thanks!
+May I add "minItems: 1" to clocks property?
 
-[1/6] dt-bindings: clock: Add schema for MSM8909 GCC
-      commit: c40668048f236da6f7725998f93f0d6180003da3
-[2/6] clk: qcom: Add driver for MSM8909 GCC
-      commit: bf37a05744ebc6a488e3cfd3ec6d502d626740cc
-[3/6] clk: qcom: reset: Allow specifying custom reset delay
-      commit: 2cb8a39b6781ea23accd1fa93b3ad000d0948aec
-[4/6] clk: qcom: gcc-msm8909: Increase delay for USB PHY reset
-      commit: dcc6c9fb712875bf1897eaeb0c9d4e4237861723
-[5/6] dt-bindings: clock: qcom,rpmcc: Add MSM8909
-      commit: 1727a402c1fcf2594923be47ed03fab2db0eacfb
-[6/6] clk: qcom: smd-rpm: Add clocks for MSM8909
-      commit: 94a70c873d56e8bb7bce52cfb68d004be174dfff
+Without this, dt_binding_check will fail because we don't have enough
+clocks in the example. (Both MT8195 and MT8186 don't have 30 PLLs)
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> 
+> > +    description: Phandles of the PLL with FHCTL hardware
+> > capability.
+> > +
+> > +  mediatek,hopping-ssc-percents:
+> > +    description: The percentage of spread spectrum clocking for
+> > one PLL.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> This is an array, so...
+> $ref: /schemas/types.yaml#/definitions/uint32-array
+> 
+> ...also, maxItems?
+
+As you know, mediatek,hopping-ssc-percents property is used to specify
+ssc rate for matching clocks.
+
+If we have to add maxItems, I think we should specify the same value
+as clocks property. Is my understanding wrong?
+
+
+Thanks!
+
+BRs,
+Johnson Wang
+> 
+> and you should also specify:
+> 
+> default: 0   <- because, by default, SSC is disabled
+> minimum: 0   <- because this is the minimum accepted value
+> 
+> 
+> Regards,
+> Angelo
+> 
+> > +    maximum: 8
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/mt8186-clk.h>
+> > +    fhctl: fhctl@1000ce00 {
+> > +        compatible = "mediatek,mt8186-fhctl";
+> > +        reg = <0x1000c000 0xe00>;
+> > +        clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
+> > +        mediatek,hopping-ssc-percents = <3>;
+> > +    };
+> 
+> 
+
