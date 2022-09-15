@@ -2,77 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E615B935D
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Sep 2022 05:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74565B932B
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Sep 2022 05:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiIODmH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 14 Sep 2022 23:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S230268AbiIODhN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 14 Sep 2022 23:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiIODmG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Sep 2022 23:42:06 -0400
-X-Greylist: delayed 1822 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 14 Sep 2022 20:42:02 PDT
-Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13DC426C;
-        Wed, 14 Sep 2022 20:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8klXX
-        5ncOj/JqdaK9P3vyLs+eSbA7W/UiVirrasLRHE=; b=kTlkcv30PEvq1fQVSoSba
-        bQwHFuQkuaWCXggJdtIVIBNSOizkI1Tm8KDZ9PpV4ZpEpJeE1RROLYXZBMEmGqbK
-        I2I+fxZAVH/s633rGWlpvgNwMQiDsmuMCxzJSIVT6AoknpLLxRuxVIpi7uF8UD1Y
-        XSgClB9B4++wntBvD9aUJI=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp9 (Coremail) with SMTP id NeRpCgC3nqrclyJjlCu8Bw--.29768S2;
-        Thu, 15 Sep 2022 11:11:27 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, kristo@kernel.org,
-        linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH] clk: ti: Call of_node_get() before of_find_xxx() API
-Date:   Thu, 15 Sep 2022 11:11:21 +0800
-Message-Id: <20220915031121.4003589-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229553AbiIODhM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Sep 2022 23:37:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA50C90188;
+        Wed, 14 Sep 2022 20:37:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91CB9B81D75;
+        Thu, 15 Sep 2022 03:37:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86DA7C43140;
+        Thu, 15 Sep 2022 03:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663213028;
+        bh=Gvyk/SWdp3y76yHv4Si3MDoRW3QEYPbCruPd8bBJkkA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=o1zxrBI266Ktw+9MqdykBQZ7Tdx5QiCDK8cUwW/JBBYGqu5lEFacP6exwyh2drYID
+         wgYnfhiQHhQqfQJRQ0uO2xLUm/J5CLQilP7SB2+I+986AbuWuHWrmp+cgBXsPSH97k
+         BHC3svEDhN3pKYnq96mrxVtvloIOvIfB2mygr5MJFdACNKQgYmAQQgaJ6gWR0Cg4pc
+         29G0OVyooYkbJCDfwJW5+CUtLyUZAdAGxebe5ovb0h/PKSWLcKb7aoWS2nPYMhFgE8
+         yfJuZ5rD7eSoJGQivGhaJE7gXdM/13QPH18dIDPhR2odYqzrBtQ0E2rm02p3xXUYMB
+         E6TOZuk8wBFog==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     mturquette@baylibre.com, agross@kernel.org, quic_tdas@quicinc.com,
+        Bjorn Andersson <andersson@kernel.org>,
+        dmitry.baryshkov@linaro.org, robh+dt@kernel.org,
+        swboyd@chromium.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH 00/15] clk: qcom: use parent_hws/_data for APQ8064 clocks
+Date:   Wed, 14 Sep 2022 22:36:51 -0500
+Message-Id: <166321302052.788007.14469840237160862340.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220623120418.250589-1-dmitry.baryshkov@linaro.org>
+References: <20220623120418.250589-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NeRpCgC3nqrclyJjlCu8Bw--.29768S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWUtr17Aw4xCF18Ww13XFb_yoW3CrgEkr
-        1fX3s2v3WUCwn3tFnFvFs3Xa4Yyry8uF18ZF1Sva43J345Ar42qr45X395X3sxGFW2yF98
-        ur17G3yjkryUXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_lApDUUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AB9F1pEEQiXwgAAsk
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In ti_find_clock_provider(), we need to call of_node_get() for
-of_find_node_by_name() which will automatically call of_node_put()
-for the 'from' argument.
+On Thu, 23 Jun 2022 15:04:03 +0300, Dmitry Baryshkov wrote:
+> This series converts the APQ8064/MSM8960 clock drivers, bindings and DTs
+> to use parent_hws/_data and excplicit clock binding in DT.
+> 
+> Dependencies: [1] (whole series), [2], [3]
+> 
+> [1] https://lore.kernel.org/linux-arm-msm/20220521151437.1489111-1-dmitry.baryshkov@linaro.org/
+> [2] https://lore.kernel.org/linux-arm-msm/20220617122922.769562-2-dmitry.baryshkov@linaro.org/
+> [3] https://lore.kernel.org/linux-arm-msm/20220617122922.769562-3-dmitry.baryshkov@linaro.org/
+> 
+> [...]
 
-Fixes: 51f661ef9a10 ("clk: ti: Add ti_find_clock_provider() to use clock-output-names")
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/clk/ti/clk.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied, thanks!
 
-diff --git a/drivers/clk/ti/clk.c b/drivers/clk/ti/clk.c
-index 373e9438b57a..7c390cd67e1a 100644
---- a/drivers/clk/ti/clk.c
-+++ b/drivers/clk/ti/clk.c
-@@ -147,6 +147,7 @@ static struct device_node *ti_find_clock_provider(struct device_node *from,
- 		return np;
- 
- 	/* Fall back to using old node name base provider name */
-+	of_node_get(from);
- 	return of_find_node_by_name(from, name);
- }
- 
+[10/15] ARM: dts: qcom: apq8064: add clocks to the LCC device node
+        commit: 30f17249c171c9ac50e9f6d51c0bb5db1f5b2403
+[11/15] ARM: dts: qcom: msm8960: add clocks to the LCC device node
+        commit: 6e9b4595609adf4ee97970a84a6eaeb1610aacb3
+[12/15] ARM: dts: qcom: apq8064: add clocks to the GCC device node
+        commit: 85ddc865219b04ea7930a8107943fe3c2e3af886
+[13/15] ARM: dts: qcom: msm8960: add clocks to the GCC device node
+        commit: 80787e417f3058c6ea59af726e803ca307b67867
+[14/15] ARM: dts: qcom: apq8064: add clocks to the MMCC device node
+        commit: f79742da254e47d38ea934813fb44a91aa834ee9
+[15/15] ARM: dts: qcom: msm8960: add clocks to the MMCC device node
+        commit: 2e312b3429244eae1b105cb942550f2e5282f887
+
+Best regards,
 -- 
-2.25.1
-
+Bjorn Andersson <andersson@kernel.org>
