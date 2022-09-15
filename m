@@ -2,159 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF145B966F
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Sep 2022 10:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10515B975D
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Sep 2022 11:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiIOIek (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 15 Sep 2022 04:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
+        id S229449AbiIOJY4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Sep 2022 05:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiIOIeX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Sep 2022 04:34:23 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7980C96744;
-        Thu, 15 Sep 2022 01:34:21 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 9A51C3200B0A;
-        Thu, 15 Sep 2022 04:34:19 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 15 Sep 2022 04:34:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1663230859; x=1663317259; bh=vUqGwLgGnv
-        jdJN3EeYf2AxkvIZhOPYtabrS2PcOns6o=; b=le+JZ+5CDlwi9EXQabwtuvDK+e
-        e87H/rMyJt3a6KbeNM3dXWouovQYQFDWIT04BCRL+c2BSIsxpwxRHrgpEiUMx3jW
-        ybljVlZUbuXr8R4dwM52sZlhRH/s27nPhnuW3hJHLsEwr9EAfhOB781H5iXDu9fW
-        QE7oIvkoHBdKCE87Uo+0iR9J3fzzyiAJJzCwVB5gu6PWQ0xmfAxJYnz5GE4nXt8w
-        FZjROLHhwIFViLlRxIS3N4Ydjeoa/65xtgbgUFMMGtsqcNEoZ017DJRv/fDIQ7iN
-        lhXv2PAW/8xy2Fq3JryOHoflLiRAWga8kEctgpVyhjS5z7TTOcwe50EoxVqA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663230859; x=1663317259; bh=vUqGwLgGnvjdJN3EeYf2AxkvIZhO
-        PYtabrS2PcOns6o=; b=l/0D1SxBe0pTzrYfJ8BgnHFf91ySUsC/VIa7YceXkWX0
-        qw2TGaiAJDRLs2maPY/4809U78Gj1RTq6/ojfZPAbchEyp3kg2RPuHz1Vh20igm7
-        ks7uKjcn69KAM/pQ7UTHc1McDlDWrE5xEnYgGNhW6XBM7Uqy7DE6gmwBvCaenLCJ
-        MLGysr012dMpp+FLEQqGySzV+8ZkjVqo0HMTPrDImzHDwHslscTlXxuACcJb9cF9
-        3oBPXHgvwBvzEajpsqaMe+OpXrCwj6iH5lU5r/uV4LBBs1qdT3LI3Jkgh6HsJavz
-        uooAlBDDbTa91cLN4fwLQUIJlnL2xe9fD6rWNNL1qA==
-X-ME-Sender: <xms:iuMiYxLPxTEiUPDOaQStd7AVPFmjc7Q1NkTFVDUYM6pe3uZgi9_2Ig>
-    <xme:iuMiY9Jy0bGvEpOBcIXjgnIA8qPV3u2T1ydiqK1BtaxpT-Zk-SthEj54LUOlK_rXo
-    BdhzNm1JKOkgkWwJk4>
-X-ME-Received: <xmr:iuMiY5vnTtC8exCYKvmzHdXDpOcjLTesl8dmxkjiY-vz0Y_Fjl0pQHeTTfk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgtdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:iuMiYyZLdcfd0yePK5bEe3AS1AnvzYzcVFNYVsbsGFuNQ4k5tBfXFA>
-    <xmx:iuMiY4bnwMWnulBNX4mruedb7YjgK9YJsU9W25BDFYbCS_nxr9WpYg>
-    <xmx:iuMiY2CUk6fxSvEk2DOn59AIwV2Pc9E2r-JvunQTAK2vKlEVRTQyJQ>
-    <xmx:i-MiY-yraWZtP3k3T-lqqHDcOHTUMhtsFyWZSlT0qMEHzlTDSb62eA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Sep 2022 04:34:18 -0400 (EDT)
-Date:   Thu, 15 Sep 2022 08:54:59 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, Dom Cobley <popcornmix@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/7] clk: bcm: rpi: Add a function to retrieve the
- maximum
-Message-ID: <20220915075459.d2snlbwkingwnbh3@penduick>
-References: <20220815-rpi-fix-4k-60-v1-0-c52bd642f7c6@cerno.tech>
- <20220815-rpi-fix-4k-60-v1-2-c52bd642f7c6@cerno.tech>
- <20220914155035.88E45C433C1@smtp.kernel.org>
- <50e8f1e8-806a-3599-7cbe-0c7d4bec1c51@i2se.com>
- <20220914180508.0EDD9C433D6@smtp.kernel.org>
- <c221873f-f230-0cce-e120-7e3cc732cf00@i2se.com>
- <20220914181458.C6FCCC433C1@smtp.kernel.org>
- <ecfe17be-5d81-3456-9a86-77acc848f95f@i2se.com>
+        with ESMTP id S229458AbiIOJYz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Sep 2022 05:24:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B6D2653
+        for <linux-clk@vger.kernel.org>; Thu, 15 Sep 2022 02:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1663233893; x=1694769893;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zCPYWjFwVtG8hSnAfoTVUSXlAecrb1LRiOi7L7wwCLk=;
+  b=LUcAc6587hS2Ul0KoKVQ7UPzHKpnNp9wQrV2i66USH6HFRTdGNyIWVXV
+   Jv8DhoxusQPOxUKT5DoU9IcGQyqVKRlXed/LPBSl2xGuMUui4l2buygBd
+   ogybbQXI06a+gYRm118wJSpPs7wRBBZ6ZrIh6237mnzoX+ff1OIzuZuje
+   7npJ2B1Yiz6YCAFIQE2lZeRboSbu0bRagm5aNCaX69scTMvJdlR0Sl/x3
+   hiV6vzfbE69bJPacBUjjWsJXW1PZjg6PSyMZipPG05Dd/XE8vgjhqucAg
+   IFrjjczz8H0BXlqnzgULBhIVsalOSjZm+jKLQ+orhxzESJnerfuG8LC/B
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,317,1654585200"; 
+   d="scan'208";a="113801741"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Sep 2022 02:24:52 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 15 Sep 2022 02:24:52 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 15 Sep 2022 02:24:51 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <conor.dooley@microchip.com>, <daire.mcnamara@microchip.com>
+CC:     <linux-clk@vger.kernel.org>
+Subject: [GIT PULL] Microchip clock fixes for 6.0
+Date:   Thu, 15 Sep 2022 12:27:11 +0300
+Message-ID: <20220915092711.4158723-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hrirgpyhbd54p5r5"
-Content-Disposition: inline
-In-Reply-To: <ecfe17be-5d81-3456-9a86-77acc848f95f@i2se.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi, Stephen, Micheal,
 
---hrirgpyhbd54p5r5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Microchip we decided to send a single clock pull request for both
+AT91 and Polarfire architectures. Let us know if you would prefer otherwise.
 
-On Wed, Sep 14, 2022 at 08:26:55PM +0200, Stefan Wahren wrote:
-> Am 14.09.22 um 20:14 schrieb Stephen Boyd:
-> > Quoting Stefan Wahren (2022-09-14 11:09:04)
-> > > Am 14.09.22 um 20:05 schrieb Stephen Boyd:
-> > > > Quoting Stefan Wahren (2022-09-14 10:45:48)
-> > > > > Am 14.09.22 um 17:50 schrieb Stephen Boyd:
-> > > > > > Furthermore, I wonder if even that part needs to be implemented.  Why
-> > > > > > not make a direct call to rpi_firmware_property() and get the max rate?
-> > > > > > All of that can live in the drm driver. Making it a generic API that
-> > > > > > takes a 'struct clk' means that it looks like any clk can be passed,
-> > > > > > when that isn't true. It would be better to restrict it to the one use
-> > > > > > case so that the scope of the problem doesn't grow. I understand that it
-> > > > > > duplicates a few lines of code, but that looks like a fair tradeoff vs.
-> > > > > > exposing an API that can be used for other clks in the future.
-> > > > > it would be nice to keep all the Rpi specific stuff out of the DRM
-> > > > > driver, since there more users of it.
-> > > > Instead of 'all' did you mean 'any'?
-> > > yes
-> > Why?
-> This firmware is written specific for the Raspberry Pi and not stable from
-> interface point of view. So i'm afraid that the DRM driver is only usable
-> for the Raspberry Pi at the end with all these board specific dependencies.
+Thank you,
+Claudiu Beznea
 
-I'm open for suggestions there, but is there any other bcm2711 device
-that we support upstream?
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-If not, I'm not sure what the big deal is at this point. Chances are the
-DRM driver won't work as is on a different board.
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-Plus, such a board wouldn't be using config.txt at all, so this whole
-dance to find what was enabled or not wouldn't be used at all.
+are available in the Git repository at:
 
-> Emma invested a lot of time to make this open source and now it looks that
-> like that more and more functionality moves back to firmware.
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-microchip-fixes-6.0
 
-What functionality has been moved back to firmware?
+for you to fetch changes up to 05d27090b6dc88bce71a608d1271536e582b73d1:
 
-Maxime
+  clk: microchip: mpfs: make the rtc's ahb clock critical (2022-09-14 10:45:52 +0300)
 
---hrirgpyhbd54p5r5
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Microchip clock fixes for 6.0
 
------BEGIN PGP SIGNATURE-----
+It contains fixes for Polarire SoCs:
+- fix panic at boot in clock initialization when building with clang-15
+- make RTC's AHB clock critical as rtc will stop if the AHB
+  interface clock is disabled
 
-iHUEABMIAB0WIQTXEe0+DlZaRlgM8LOIQ8rmN6G3ywUCYyLaUwAKCRCIQ8rmN6G3
-y9OpAP4piBbM6aPirswtJbaB00rQd11MuWbOXRUllFGsa+tQTAEAp0zgBVW200Xw
-HsAzlYqWG/1RsqziBcl/XungkVnV4Ck=
-=Rad4
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Conor Dooley (2):
+      clk: microchip: mpfs: fix clk_cfg array bounds violation
+      clk: microchip: mpfs: make the rtc's ahb clock critical
 
---hrirgpyhbd54p5r5--
+ drivers/clk/microchip/clk-mpfs.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
