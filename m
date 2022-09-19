@@ -2,109 +2,155 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CD25BD30C
-	for <lists+linux-clk@lfdr.de>; Mon, 19 Sep 2022 19:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D255BD444
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Sep 2022 19:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiISRCA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 19 Sep 2022 13:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
+        id S229979AbiISR6Y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 19 Sep 2022 13:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiISRBC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Sep 2022 13:01:02 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD413E756
-        for <linux-clk@vger.kernel.org>; Mon, 19 Sep 2022 10:00:30 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id q21so106633edc.9
-        for <linux-clk@vger.kernel.org>; Mon, 19 Sep 2022 10:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date;
-        bh=w6fAZjUSUbrTkGOCw5LFlmC1xlGoTF8FJL/IRWB3F4k=;
-        b=VyeY5nKyZ2Xt/Foj79ukjzeYW4F8E4loVlhOJLflWXPXa38+TG6kPPbnPJK5N6wYlp
-         l00cwyDPfxCvQZiSOSkA5M2GaDMATf8caLakqM7xgzSCpDc/np8/N3mN6C5k/Z5eGs5M
-         wbmqXtAovwQK910RwxBV10RsnW/DTczpNc0tkVi+KPEn5b9+M4uh8g7fSddQOAMawP2K
-         4Zb4cHnVWy5+eeIIKaTBXD8QEb6y5h5w+Yw4DlEj8JOI8cWnh+fcrvbfZKYqQXVXfpjW
-         s9yJLZzVW357YxZ6NIUfkLNAeku8MQ/rpeEFJ3Nz/EOZYEe8b0ZB5EvQcow/777qr4B0
-         ubnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=w6fAZjUSUbrTkGOCw5LFlmC1xlGoTF8FJL/IRWB3F4k=;
-        b=78/fNOccMUo0VfNV6yNHab2k/dbGl//Ca868QtLrJSonqwQLBxa6045IrxzD4rb8xc
-         ILuhH5ZIf0toQ70sLRHvjcEx7JnKmxIA17kZqKPBM/CL3BR4mO5bSwv5++K0ibrbnl4C
-         VZJdj+MFXQ7y2nkXxeLavEi/bj7VBraE/tzbGTyr4Lgw5EsauaAniOtYJvxSVZ69Ch+h
-         eEnENeT5cGqguwTi4BHWO5cFPO+U99yXejLfVw0vll2uvmcpNR8+rcKla41yyW4t0JOo
-         sVGiG6alqwJ4lHovU6lcxXc90U1UYuoedwwe/pMksgOD6WYJLwN0SV1CbIX8TXxYpfZv
-         iNjA==
-X-Gm-Message-State: ACrzQf02p4s/cXyNfN0P1KpIbKkWhrh71ujXANhCO4JocyVnvk0oH8jl
-        l1X89kHnLvkGhBksogmdKSdj7w==
-X-Google-Smtp-Source: AMsMyM59bK7bV3ogR0Vq/U6qyHBj+7WUNCJVJ7yTHkO06E3cAutw018u4siyFRxzjVJRBcxdwPWWvA==
-X-Received: by 2002:aa7:ca56:0:b0:453:ceea:99d4 with SMTP id j22-20020aa7ca56000000b00453ceea99d4mr7672718edt.54.1663606823801;
-        Mon, 19 Sep 2022 10:00:23 -0700 (PDT)
-Received: from [127.0.0.1] (2a02-8440-6340-f287-3074-96af-9642-0003.rev.sfr.net. [2a02:8440:6340:f287:3074:96af:9642:3])
-        by smtp.gmail.com with ESMTPSA id cf16-20020a0564020b9000b0044fc3c0930csm20424246edb.16.2022.09.19.10.00.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 10:00:23 -0700 (PDT)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-Date:   Mon, 19 Sep 2022 18:56:15 +0200
-Subject: [PATCH v1 17/17] drm/mediatek: Add mt8195-dpi support to drm_drv
+        with ESMTP id S229691AbiISR6W (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Sep 2022 13:58:22 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFD4121E22;
+        Mon, 19 Sep 2022 10:58:20 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 96F191C80FC7;
+        Tue, 20 Sep 2022 01:48:02 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 20 Sep
+ 2022 01:48:02 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Tue, 20 Sep 2022 01:48:01 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 793B262EFF; Mon, 19 Sep 2022 20:47:59 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>
+CC:     <openbmc@lists.ozlabs.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v10 0/1] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Mon, 19 Sep 2022 20:47:49 +0300
+Message-ID: <20220919174750.118651-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220919-v1-17-4844816c9808@baylibre.com>
-References: <20220919-v1-0-4844816c9808@baylibre.com>
-In-Reply-To: <20220919-v1-0-4844816c9808@baylibre.com>
-To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Pablo Sun <pablo.sun@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.10.0-dev
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add dpi support to enable the HDMI path.
+This patchset adds clock support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family.
+ 
+This patchset cover letter is based from the initial support for NPCM8xx BMC to
+keep tracking the version history.
+ 
+all the other initial support patches had been applied to Linux kernel 6.0.
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+This patchset was tested on the Arbel NPCM8XX evaluation board.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 72049a530ae1..27f029ca760b 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -820,6 +820,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8192-dpi",
- 	  .data = (void *)MTK_DPI },
-+	{ .compatible = "mediatek,mt8195-dpi",
-+	  .data = (void *)MTK_DPI },
- 	{ .compatible = "mediatek,mt8195-dp-intf",
- 	  .data = (void *)MTK_DP_INTF },
- 	{ .compatible = "mediatek,mt2701-dsi",
+Addressed comments from:
+ - Stephen Boyd: https://www.spinics.net/lists/arm-kernel/msg996551.html
+
+Changes since version 9:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Using clk_parent_data instead of parent_name
+	- using devm_ioremap instead of ioremap. deeply sorry, I know we had
+	 a long discussion on what should the driver use, from other examples 
+	 (also in other clock drivers) I see the combination of 
+	 platform_get_resource and devm_ioremap are commonly used and it answer
+	 the reset and clock needs.
+
+Changes since version 8:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Add space before and aftre '{' '}'.
+	- Handle devm_of_clk_add_hw_provider function error.
+
+Changes since version 7:
+ - NPCM8XX clock driver
+	- The clock and reset registers using the same memory region, 
+	  due to it the clock driver should claim the ioremap directly 
+	  without checking the memory region.
+
+Changes since version 6:
+ - NPCM reset driver
+	- Modify warning message.
+ - dt-bindings: serial: 8250: Add npcm845 compatible string patch accepted, due
+   to it the patch removed from the patchset.
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+ - NPCM8XX clock source driver
+	- Remove NPCM8XX TIMER_OF_DECLARE support, using the same as NPCM7XX.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (1):
+  clk: npcm8xx: add clock controller
+
+ drivers/clk/Kconfig       |   6 +
+ drivers/clk/Makefile      |   1 +
+ drivers/clk/clk-npcm8xx.c | 589 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 596 insertions(+)
+ create mode 100644 drivers/clk/clk-npcm8xx.c
 
 -- 
-b4 0.10.0-dev
+2.33.0
+
