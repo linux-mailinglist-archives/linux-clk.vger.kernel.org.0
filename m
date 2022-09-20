@@ -2,152 +2,172 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2885BE66F
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Sep 2022 14:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E4F5BE748
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Sep 2022 15:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiITMyO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 20 Sep 2022 08:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S230492AbiITNkW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Sep 2022 09:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiITMxk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Sep 2022 08:53:40 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21375FDC;
-        Tue, 20 Sep 2022 05:53:25 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id A97683200A0C;
-        Tue, 20 Sep 2022 08:53:23 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 20 Sep 2022 08:53:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1663678403; x=
-        1663764803; bh=wGqLmKp8PyrCWTiski6RZ9ILduluZPIkJhco5wIZcAs=; b=X
-        nMjZ841XeoCfJsO/Ga2e8KRZBI9BfRkLJYsauzFgSdp86HD6ti5ybHpc7KeY/Ojt
-        N/ohr9g/wb23hgFp5YSLM3qb7DXKFw/FSpV0a0KcrvD9fwy52qNOR6eJOWEL5nE/
-        A7zfy7IFSNG1lV0wrDq9LZ7rPp9RGZA7jXz+AV15xH9ziV0cFSYov1rtmQzFQBnZ
-        bpP70LxE2TvxKDuMwU4XHGX1j6yhlPBo4bXSlSvcPWbBGD4AQ0IRJycODtZEhpYo
-        W213L5bJiFsAnH9Hu3Q4JssBd94duaBtqTP329H6JrXKsltb8ac2/Ei4UY7NYqrU
-        mVDGNspd5SjHw6L4TqGIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1663678403; x=
-        1663764803; bh=wGqLmKp8PyrCWTiski6RZ9ILduluZPIkJhco5wIZcAs=; b=z
-        ZmbmMhjJYLtD89tLN/IOlairvEfjMDcnCv7RC1Ti+TyNE0Fr+FHuw61hwSjule6T
-        9af7wc0hugoYAQ52Ix8RgcndEx7AnCWDI5MoeuxiMzbMf1ni5sRwyPgiDm4mv6wY
-        ZX3/FlFmdwU1xZczRL/ny6zl89F6L84hsCshhLK+w9mNuVoWluM1eDeJjkEBiBlh
-        UD3f1WksZ7MO3kocXgoMISeHHQfFbx1yyX4pXtIRcv3xFthw6ClRfE63+dKIxvAF
-        mRt01imSnzKnpVGIOko9bEBNd4F5OUXxjsY8tSY7HgeRoPvjJthJPabUxoM3olCt
-        ZVAjcRZiygJp6micv5zjg==
-X-ME-Sender: <xms:w7cpY2iOaqLycF5URQd1bnsOXVk4dR7GuD9I-1nkogq4KRsCyjrwTA>
-    <xme:w7cpY3AuJqOp5S3Kd-2-MqfrLkXNFCvxJ9Hjm8sXfgAoRugLdezKBIyx-z3ZIASzd
-    FvkM_0vZ_l18s_m1b4>
-X-ME-Received: <xmr:w7cpY-G9mquNPd0TbUUZvdEhzRlUx4kD8rwn-84KpkEROt2EabFij1_-ByjO>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvledgheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepudduudfhveejteefgedvffdvvedvjedugedukeejhedtlefhffevtefh
-    jeeltdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:w7cpY_RqyoWmxys0UNsLPP-i3BuKS-oen-qkRjMYXkhznHkWzEoCWA>
-    <xmx:w7cpYzyGekDNPKqTG_L0Eyt_veFcRXhmigRhdBXTYwfD-etpA7PeVA>
-    <xmx:w7cpY96r-9ADy-k2poLscqYM656popZpMllR5fUrUo7kAgzVoSb5VA>
-    <xmx:w7cpYzCqr95pHE4bwzKhaaVGK6KitQvqB8usd8ZgOwlFAtZbQJPXGA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Sep 2022 08:53:22 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Tue, 20 Sep 2022 14:50:26 +0200
-Subject: [PATCH v2 7/7] drm/vc4: Make sure we don't end up with a core clock too high
+        with ESMTP id S230352AbiITNkV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Sep 2022 09:40:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240ABA44C;
+        Tue, 20 Sep 2022 06:40:18 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28K7xowN027936;
+        Tue, 20 Sep 2022 13:40:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=b1e3AHVC/0qp/VyT6Kx+8h82x7dGKfCvUhxUV/Y/EOE=;
+ b=KDgzzngk6WbDknh/pq/FupkNn2VGr22gzu1UVubtoAW+TZEAscWPklHaSUv57iWL39Sw
+ VnxpJSIyBBgH2HnDG0kdKx+cGkT43qmUhDF2DWiLaMnf3hbrzkc0s+Hp5INkvHYzt4fr
+ XPUfUKWVfA8W9COhx3hO/eKQPzYf9UcKOG+65gS3EThObvezbQjFT6vFTaSv6saBycvx
+ p1ThXULOheVi7XthoeeJWSKU1ijzpGEkP9Qau9vkZCFV8B03gVLW4QJR47dzgavBUlS2
+ xX4ocGFNvKc7aOH44pVqaxl8XYQAvTI9O1USYOTv4H7jZ93uvJZP8+fyQbwaT2wPkWzI 2A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jpx50b3a0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 13:40:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28KDe5Y8014533
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Sep 2022 13:40:05 GMT
+Received: from [10.216.12.81] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 20 Sep
+ 2022 06:40:00 -0700
+Message-ID: <096205ee-2c8a-facf-87ce-2309c63d2400@quicinc.com>
+Date:   Tue, 20 Sep 2022 19:09:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET
+ support
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <mka@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <johan+linaro@kernel.org>, <quic_kriskura@quicinc.com>,
+        <dianders@chromium.org>, <linux-clk@vger.kernel.org>
+References: <20220920111517.10407-1-quic_rjendra@quicinc.com>
+ <d813e8a5-9eba-b3f7-2eee-cd721d120a30@collabora.com>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <d813e8a5-9eba-b3f7-2eee-cd721d120a30@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20220815-rpi-fix-4k-60-v2-7-983276b83f62@cerno.tech>
-References: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
-In-Reply-To: <20220815-rpi-fix-4k-60-v2-0-983276b83f62@cerno.tech>
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Stephen Boyd <sboyd@kernel.org>, Emma Anholt <emma@anholt.net>,
-        Ray Jui <rjui@broadcom.com>, Maxime Ripard <mripard@kernel.org>
-Cc:     linux-rpi-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
-        linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.10.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1880; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=ktzm8C9IydCiRKTg61h6xCxAgPQPdqFOXPfUpNJEefY=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMma2/k8XyfPEslInSfzsn/HPx+nqS2317rKzlr3d71VxsJ1
- alsSOkpZGMS4GGTFFFlihM2XxJ2a9bqTjW8ezBxWJpAhDFycAjARRXtGho+R+a/8XG75hTAc2KY1cc
- lS5+J/B2c1lsxO2DRTTD+zMJ2RYbaBgdC0J/duRwdkR1ekn715qXWC06blFn/rKw+Waf6sYwEA
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oXxF8KOKMmDWv1zlFj3L9Hbgv8UgGvK-
+X-Proofpoint-GUID: oXxF8KOKMmDWv1zlFj3L9Hbgv8UgGvK-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-20_05,2022-09-20_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209200080
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Following the clock rate range improvements to the clock framework,
-trying to set a disjoint range on a clock will now result in an error.
 
-Thus, we can't set a minimum rate higher than the maximum reported by
-the firmware, or clk_set_min_rate() will fail.
+On 9/20/2022 6:09 PM, AngeloGioacchino Del Regno wrote:
+> Il 20/09/22 13:15, Rajendra Nayak ha scritto:
+>> GDSCs cannot be transitioned into a Retention state in SW.
+>> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
+>> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
+>> takes care of retaining the memory/logic for the domain when
+>> the parent domain transitions to power collapse/power off state.
+>>
+>> On some platforms where the parent domains lowest power state
+>> itself is Retention, just leaving the GDSC in ON (without any
+>> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
+>> it to Retention.
+>>
+>> The existing logic handling the PWRSTS_RET seems to set the
+>> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
+>> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
+>> Fix that by leaving the GDSC in ON state.
+>>
+>> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+>> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>> v3:
+>> Updated changelog
+>>
+>> There are a few existing users of PWRSTS_RET and I am not
+>> sure if they would be impacted with this change
+>>
+>> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
+>> gdsc is actually transitioning to OFF and might be left
+>> ON as part of this change, atleast till we hit system wide
+>> low power state.
+>> If we really leak more power because of this
+>> change, the right thing to do would be to update .pwrsts for
+>> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
+>> I dont have a msm8974 hardware, so if anyone who has can report
+>> any issues I can take a look further on how to fix it.
+> 
+> I think that the safest option is to add a PWRSTS_RET_HW_CTRL flag (or similar),
+> used for the specific cases of SC7180 and SC7280 (and possibly others) where the
+> GDSC is automatically transitioned to a Retention state by HW control, with no
+> required software (kernel driver) intervention.
 
-Thus we need to clamp the rate we are about to ask for to the maximum
-rate possible on that clock.
+Having a PWRSTS_RET_HW_CTRL flag would make sense if there was also a
+PWRSTS_RET_SW_CTRL way of achieving Retention state, but FWIK there isn't.
+I am sure that's the way it is on 8974 as well, I just don't have hardware to
+confirm.
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+>>
+>> 2. gpu_gx_gdsc in gpucc-msm8998.c and
+>>     gpu_gx_gdsc in gpucc-sdm660.c
+>> Both of these seem to add support for 3 power state
+>> OFF, RET and ON, however I dont see any logic in gdsc
+>> driver to handle 3 different power states.
+>> So I am expecting that these are infact just transitioning
+>> between ON and OFF and RET state is never really used.
+>> The ideal fix for them would be to just update their resp.
+>> .pwrsts to PWRSTS_OFF_ON only.
+> 
+> static int gdsc_init(struct gdsc *sc)
+> {
+> 
+>      ...
+> 
+>      if (on || (sc->pwrsts & PWRSTS_RET))
+>          gdsc_force_mem_on(sc);
+>      else
+>          gdsc_clear_mem_on(sc);
+> 
+>      ...
+> }
+> 
+> On MSM8998 and SDM630/636/660, we're reaching that point with a GDSC that is
+> left OFF from the bootloader, but we want (at least for 630/660) memretain
+> without periph-retain: this is required to make the hypervisor happy.
 
-diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
-index b45dcdfd7306..d241620fd5a7 100644
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -397,8 +397,8 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
- 	if (vc4->is_vc5) {
- 		unsigned long state_rate = max(old_hvs_state->core_clock_rate,
- 					       new_hvs_state->core_clock_rate);
--		unsigned long core_rate = max_t(unsigned long,
--						500000000, state_rate);
-+		unsigned long core_rate = clamp_t(unsigned long, state_rate,
-+						  500000000, hvs->max_core_rate);
- 
- 		drm_dbg(dev, "Raising the core clock at %lu Hz\n", core_rate);
- 
-@@ -432,14 +432,17 @@ static void vc4_atomic_commit_tail(struct drm_atomic_state *state)
- 	drm_atomic_helper_cleanup_planes(dev, state);
- 
- 	if (vc4->is_vc5) {
--		drm_dbg(dev, "Running the core clock at %lu Hz\n",
--			new_hvs_state->core_clock_rate);
-+		unsigned long core_rate = min_t(unsigned long,
-+						hvs->max_core_rate,
-+						new_hvs_state->core_clock_rate);
-+
-+		drm_dbg(dev, "Running the core clock at %lu Hz\n", core_rate);
- 
- 		/*
- 		 * Request a clock rate based on the current HVS
- 		 * requirements.
- 		 */
--		WARN_ON(clk_set_min_rate(hvs->core_clk, new_hvs_state->core_clock_rate));
-+		WARN_ON(clk_set_min_rate(hvs->core_clk, core_rate));
- 
- 		drm_dbg(dev, "Core clock actual rate: %lu Hz\n",
- 			clk_get_rate(hvs->core_clk));
+Ideally setting the memretain bits while the GDSC is OFF should have no affect
+at all. Is this for the gpu_gx_gdsc on 630/660? Is this needed only at the init
+time (when the bootloader has left it OFF) or is it needed everytime the kernel
+turns it OFF too?
+How did we come up with this trick to keep the hypervisor happy, was it picked
+up from some downstream reference code?
 
--- 
-b4 0.10.0
+> 
+> Regards,
+> Angelo
+> 
