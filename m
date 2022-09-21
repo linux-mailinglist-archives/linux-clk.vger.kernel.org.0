@@ -2,141 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB74A5BF25B
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Sep 2022 02:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5DF5BF3C3
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Sep 2022 04:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbiIUApM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 20 Sep 2022 20:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
+        id S229811AbiIUCtA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Sep 2022 22:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiIUApL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Sep 2022 20:45:11 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE54E726A5
-        for <linux-clk@vger.kernel.org>; Tue, 20 Sep 2022 17:45:08 -0700 (PDT)
-Received: from localhost.localdomain (95.49.29.188.neoplus.adsl.tpnet.pl [95.49.29.188])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 17C913F637;
-        Wed, 21 Sep 2022 02:45:06 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        with ESMTP id S229676AbiIUCs7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Sep 2022 22:48:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44734BD21;
+        Tue, 20 Sep 2022 19:48:51 -0700 (PDT)
+X-UUID: bb899c095730417f8550dbb20c369c24-20220921
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=LZ8TKW4921hpmzu6cbHG4qSi1zO+4c+6IQ2eX6a4QM4=;
+        b=CmDrPdM/jhHPPWeKlLGjCQBSTtFlSwi1cyd2vsnDYHoT99pZ0pCs0t2CRnwIvj63ELpMM/L11PrE8rQHXtKy+IvHgcT7/XWcKYCmDAQJsJB3PqDDDD4YguAardt4J0h8vwR+l/rtBP8JiHyB5a1Gga5kdN2dc/dqEzKrde5gO/4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.11,REQID:cc08c40f-088e-4c65-82e5-910d3d0df1aa,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:39a5ff1,CLOUDID:d3ed595e-5ed4-4e28-8b00-66ed9f042fbd,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: bb899c095730417f8550dbb20c369c24-20220921
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1279531616; Wed, 21 Sep 2022 10:48:46 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 21 Sep 2022 10:48:44 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Wed, 21 Sep 2022 10:48:44 +0800
+Message-ID: <ca635a06d36a7815ae16013fd916cda682c3ab7c.camel@mediatek.com>
+Subject: Re: [PATCH v1 01/17] dt-bindings: clk: mediatek: Add MT8195 DPI
+ clocks
+From:   Bo-Chen Chen <rex-bc.chen@mediatek.com>
+To:     Guillaume Ranquet <granquet@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        CK Hu <ck.hu@mediatek.com>, Jitao shi <jitao.shi@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] clk: qcom: smd: Add SM6375 clocks
-Date:   Wed, 21 Sep 2022 02:44:58 +0200
-Message-Id: <20220921004458.151842-3-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220921004458.151842-1-konrad.dybcio@somainline.org>
-References: <20220921004458.151842-1-konrad.dybcio@somainline.org>
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Pablo Sun <pablo.sun@mediatek.com>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>
+Date:   Wed, 21 Sep 2022 10:48:44 +0800
+In-Reply-To: <20220919-v1-1-4844816c9808@baylibre.com>
+References: <20220919-v1-0-4844816c9808@baylibre.com>
+         <20220919-v1-1-4844816c9808@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for controlling SMD RPM clocks on SM6375.
+On Mon, 2022-09-19 at 18:55 +0200, Guillaume Ranquet wrote:
+> From: Pablo Sun <pablo.sun@mediatek.com>
+> 
+> Expand dt-bindings slot for VDOSYS1 of MT8195.
+> This clock is required by the DPI1 hardware
+> and is a downstream of the HDMI pixel clock.
+> 
+> Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> 
+> diff --git a/include/dt-bindings/clock/mt8195-clk.h b/include/dt-
+> bindings/clock/mt8195-clk.h
+> index 95cf812a0b37..d70d017ad69c 100644
+> --- a/include/dt-bindings/clock/mt8195-clk.h
+> +++ b/include/dt-bindings/clock/mt8195-clk.h
+> @@ -859,6 +859,8 @@
+>  #define CLK_VDO1_DPINTF				47
+>  #define CLK_VDO1_DISP_MONITOR_DPINTF		48
+>  #define CLK_VDO1_26M_SLOW			49
+> -#define CLK_VDO1_NR_CLK				50
+> +#define CLK_VDO1_DPI1_HDMI			50
+> +#define CLK_VDO1_NR_CLK				51
+> +
+>  
+>  #endif /* _DT_BINDINGS_CLK_MT8195_H */
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Hello Guillaume,
+
+I am not sure the reason, but it seems patches in this series lack of
+something like this for whole series:
+
 ---
-Changes since v1:
-- changed the compatible to match the style used in the file
+ Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/clk/qcom/clk-smd-rpm.c   | 46 ++++++++++++++++++++++++++++++--
- include/linux/soc/qcom/smd-rpm.h |  1 +
- 2 files changed, 45 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 56096123081c..fea505876855 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -1119,13 +1119,54 @@ static const struct rpm_smd_clk_desc rpm_clk_sm6115 = {
- 	.num_clks = ARRAY_SIZE(sm6115_clks),
- };
- 
-+/* SM6375 */
-+DEFINE_CLK_SMD_RPM(sm6375, mmnrt_clk, mmnrt_a_clk, QCOM_SMD_RPM_MMXI_CLK, 0);
-+DEFINE_CLK_SMD_RPM(sm6375, mmrt_clk, mmrt_a_clk, QCOM_SMD_RPM_MMXI_CLK, 1);
-+DEFINE_CLK_SMD_RPM(qcm2290, hwkm_clk, hwkm_a_clk, QCOM_SMD_RPM_HWKM_CLK, 0);
-+DEFINE_CLK_SMD_RPM(qcm2290, pka_clk, pka_a_clk, QCOM_SMD_RPM_PKA_CLK, 0);
-+DEFINE_CLK_SMD_RPM_BRANCH(sm6375, bimc_freq_log, bimc_freq_log_a, QCOM_SMD_RPM_MISC_CLK, 4, 1);
-+static struct clk_smd_rpm *sm6375_clks[] = {
-+	[RPM_SMD_XO_CLK_SRC] = &sdm660_bi_tcxo,
-+	[RPM_SMD_XO_A_CLK_SRC] = &sdm660_bi_tcxo_a,
-+	[RPM_SMD_SNOC_CLK] = &sm6125_snoc_clk,
-+	[RPM_SMD_SNOC_A_CLK] = &sm6125_snoc_a_clk,
-+	[RPM_SMD_BIMC_CLK] = &msm8916_bimc_clk,
-+	[RPM_SMD_BIMC_A_CLK] = &msm8916_bimc_a_clk,
-+	[RPM_SMD_QDSS_CLK] = &sm6125_qdss_clk,
-+	[RPM_SMD_QDSS_A_CLK] = &sm6125_qdss_a_clk,
-+	[RPM_SMD_CNOC_CLK] = &sm6125_cnoc_clk,
-+	[RPM_SMD_CNOC_A_CLK] = &sm6125_cnoc_a_clk,
-+	[RPM_SMD_IPA_CLK] = &msm8976_ipa_clk,
-+	[RPM_SMD_IPA_A_CLK] = &msm8976_ipa_a_clk,
-+	[RPM_SMD_QUP_CLK] = &sm6125_qup_clk,
-+	[RPM_SMD_QUP_A_CLK] = &sm6125_qup_a_clk,
-+	[RPM_SMD_MMRT_CLK] = &sm6375_mmrt_clk,
-+	[RPM_SMD_MMRT_A_CLK] = &sm6375_mmrt_a_clk,
-+	[RPM_SMD_MMNRT_CLK] = &sm6375_mmnrt_clk,
-+	[RPM_SMD_MMNRT_A_CLK] = &sm6375_mmnrt_a_clk,
-+	[RPM_SMD_SNOC_PERIPH_CLK] = &sm6125_snoc_periph_clk,
-+	[RPM_SMD_SNOC_PERIPH_A_CLK] = &sm6125_snoc_periph_a_clk,
-+	[RPM_SMD_SNOC_LPASS_CLK] = &sm6125_snoc_lpass_clk,
-+	[RPM_SMD_SNOC_LPASS_A_CLK] = &sm6125_snoc_lpass_a_clk,
-+	[RPM_SMD_CE1_CLK] = &msm8992_ce1_clk,
-+	[RPM_SMD_CE1_A_CLK] = &msm8992_ce1_a_clk,
-+	[RPM_SMD_HWKM_CLK] = &qcm2290_hwkm_clk,
-+	[RPM_SMD_HWKM_A_CLK] = &qcm2290_hwkm_a_clk,
-+	[RPM_SMD_PKA_CLK] = &qcm2290_pka_clk,
-+	[RPM_SMD_PKA_A_CLK] = &qcm2290_pka_a_clk,
-+	[RPM_SMD_BIMC_FREQ_LOG] = &sm6375_bimc_freq_log,
-+};
-+
-+static const struct rpm_smd_clk_desc rpm_clk_sm6375 = {
-+	.clks = sm6375_clks,
-+	.num_clks = ARRAY_SIZE(sm6375_clks),
-+};
-+
- /* QCM2290 */
- DEFINE_CLK_SMD_RPM_XO_BUFFER(qcm2290, ln_bb_clk2, ln_bb_clk2_a, 0x2, 19200000);
- DEFINE_CLK_SMD_RPM_XO_BUFFER(qcm2290, rf_clk3, rf_clk3_a, 6, 38400000);
- 
- DEFINE_CLK_SMD_RPM(qcm2290, qpic_clk, qpic_a_clk, QCOM_SMD_RPM_QPIC_CLK, 0);
--DEFINE_CLK_SMD_RPM(qcm2290, hwkm_clk, hwkm_a_clk, QCOM_SMD_RPM_HWKM_CLK, 0);
--DEFINE_CLK_SMD_RPM(qcm2290, pka_clk, pka_a_clk, QCOM_SMD_RPM_PKA_CLK, 0);
- DEFINE_CLK_SMD_RPM(qcm2290, cpuss_gnoc_clk, cpuss_gnoc_a_clk,
- 		   QCOM_SMD_RPM_MEM_CLK, 1);
- DEFINE_CLK_SMD_RPM(qcm2290, bimc_gpu_clk, bimc_gpu_a_clk,
-@@ -1195,6 +1236,7 @@ static const struct of_device_id rpm_smd_clk_match_table[] = {
- 	{ .compatible = "qcom,rpmcc-sdm660",  .data = &rpm_clk_sdm660  },
- 	{ .compatible = "qcom,rpmcc-sm6115",  .data = &rpm_clk_sm6115  },
- 	{ .compatible = "qcom,rpmcc-sm6125",  .data = &rpm_clk_sm6125  },
-+	{ .compatible = "qcom,rpmcc-sm6375",  .data = &rpm_clk_sm6375  },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, rpm_smd_clk_match_table);
-diff --git a/include/linux/soc/qcom/smd-rpm.h b/include/linux/soc/qcom/smd-rpm.h
-index 82c9d489833a..3ab8c07f71c0 100644
---- a/include/linux/soc/qcom/smd-rpm.h
-+++ b/include/linux/soc/qcom/smd-rpm.h
-@@ -41,6 +41,7 @@ struct qcom_smd_rpm;
- #define QCOM_SMD_RPM_HWKM_CLK	0x6d6b7768
- #define QCOM_SMD_RPM_PKA_CLK	0x616b70
- #define QCOM_SMD_RPM_MCFG_CLK	0x6766636d
-+#define QCOM_SMD_RPM_MMXI_CLK	0x69786d6d
- 
- int qcom_rpm_smd_write(struct qcom_smd_rpm *rpm,
- 		       int state,
--- 
-2.37.3
+BRs,
+Bo-Chen
 
