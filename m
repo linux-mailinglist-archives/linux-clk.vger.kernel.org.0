@@ -2,64 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794215E678C
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Sep 2022 17:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E895E67E3
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Sep 2022 18:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiIVPu3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Sep 2022 11:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S229488AbiIVQAJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Sep 2022 12:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiIVPuT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Sep 2022 11:50:19 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FECE9750B
-        for <linux-clk@vger.kernel.org>; Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id fs14so10184584pjb.5
-        for <linux-clk@vger.kernel.org>; Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
+        with ESMTP id S229723AbiIVQAI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Sep 2022 12:00:08 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C398C6AEB0
+        for <linux-clk@vger.kernel.org>; Thu, 22 Sep 2022 09:00:06 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id z20so11573470ljq.3
+        for <linux-clk@vger.kernel.org>; Thu, 22 Sep 2022 09:00:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=+K8j+06amGtBzqeg3LNqPUQmrr7rn1eOJcYvflTHpZU=;
-        b=lOHQ8lKwbjZvnvS3yQLZcUqXmMeEsdLz6FNSdk+7PMZ7YY/m+r2qhSSiySViGuXDpS
-         cIX5pBPGnOBnVHl2Tor8dhRbEHujEh3n5/qotF3PiI4uiApxJQQuQ43eP64gPDGTDhej
-         2lqiXVbf0UDSzN+d/1zaVyg5z3hsrKD44qJHM=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=V6c4rAkBN7foufFnqvB7xWcwVdlx3krdKAsSA3LKM2E=;
+        b=EYPGtsJB9cW2i8ii2puNH0fl/Zo+U86V5lGXj2D6qdBeobw33K4NOA3XttPpBcTQxj
+         BmifAf8To/Ekt7txQ0CRAsoStMlTM9qzDNX21zyAM+0RsHiy+Du3fI/AJ0fvAiAkfCmw
+         2+la+sBJePp/H9saQOBkOdDYQQagqXLVHlNt1DmTlcwiMzBUooRHMOftwDb4KTQPn1EP
+         dL1bH1zU6/qLtMD9bx81tSrcuoxmigJIZD0GtFir1mriQVY5T+PGXaJIhR6T8KCnV6W1
+         WpxA7eL5BOC1RYZQmGS0iMY+9MlypPsXM70o7KWWjekX3ilZqy9TJShlzaUrx56Rb5V/
+         QIZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=+K8j+06amGtBzqeg3LNqPUQmrr7rn1eOJcYvflTHpZU=;
-        b=eI5YYHtulLU6VCgpGfyjidSpVxAYFiR4i+KrIrcA5pdtOAJ9RF7ha/V/NbK0cp6BPt
-         6H6nsQXibWyh5JxMn3/OqRhNeGXVreNm5MKc/wLNRXKifUUU30p7iFvOyhDGwgJVt5Cq
-         AH7hjtV12uJYTMkhx8OKLA70l50FHs3OzyHP/ZnQR9CzHM1fHDo25eSxHI4uMEuu0okI
-         E2d8fzc4uSVM+ElmBtqAUucwiIheiFx+3aPSEWtm/uxdg1G3NZjXUGuSeXDvnvGli+3l
-         CzyurIxnLZn14Iext4DTxHBePB1e4EtNPutP8oza23lBDsWzql22Gp5NBqW7dGVq3vdd
-         q28Q==
-X-Gm-Message-State: ACrzQf2MRsY7Q1PBarsWprdjTXFEmn45JMX8sXaSSYUY51MBcNg0ZU4y
-        6rB+E7nleFwq72bySb2/FmisQA==
-X-Google-Smtp-Source: AMsMyM5+8V2TbVOIhMKjrSqfuProxMDRnSuL6sl56sCUeKf7dIX/0qlV5tFaFwUmF1ejQN105A0zzQ==
-X-Received: by 2002:a17:902:8307:b0:172:e611:491f with SMTP id bd7-20020a170902830700b00172e611491fmr3831261plb.111.1663861810112;
-        Thu, 22 Sep 2022 08:50:10 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:5321:6ad9:3932:13d8])
-        by smtp.gmail.com with ESMTPSA id 145-20020a630097000000b00439c1e13112sm4049425pga.22.2022.09.22.08.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Sep 2022 08:50:09 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     rafael@kernel.org, sboyd@kernel.org
-Cc:     linux-pm@vger.kernel.org, len.brown@intel.com,
-        gregkh@linuxfoundation.org, pavel@ucw.cz,
-        linux-clk@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] PM: clk: Avoid lockdep warning between prepare lock and &psd->lock
-Date:   Thu, 22 Sep 2022 08:49:58 -0700
-Message-Id: <20220922084941.RFC.1.I206ec946a190e3de9fd13be806498821e9a6612d@changeid>
-X-Mailer: git-send-email 2.37.3.968.ga6b4b080e4-goog
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=V6c4rAkBN7foufFnqvB7xWcwVdlx3krdKAsSA3LKM2E=;
+        b=pUIeqUIG19LvNTTIQTwSKHPwvZOBjUtPKuCFf9mi9D0FyYxVc6rhqPoRZh4+7L9Xp8
+         mc8p813YjpkkhqVOs5YbtRF6T9Nu/DZO4gRmaH5zaT45QCgBC440FOxKKWB07caAqiLg
+         ym/fwtIFsRj2Jc2rBhSwBFiDJhKC3ifdUXaUpjRF97eJDfhY8p/hF5w/Mj/haD1PyWCm
+         JllvT/XS6wNShw34Muyh2W4UVsqZD5v/7Co0IUbslVqQbdzx2pTHb7AGKgWtvmWtIlyR
+         it0A8oIqbIidCvNrLVveibBUP5ZDA1vdpzzd1GjduVzWCvNTngmR/DhosrGn+8e+7FkE
+         Rd/w==
+X-Gm-Message-State: ACrzQf2lS+lk5XZ4EOqdqFVj3OhrPuOAdg3+2/pObZjzX0W0Z7femV19
+        eYIBY07PQ1OUqOQYfCTqtcVA3w==
+X-Google-Smtp-Source: AMsMyM73gkh5v4gbhi++Eqv5Q8s+pslKnw3lQRjbKqjuIm9witwFzTyTHNJ1ckYpHAt0TqUTGvqYhg==
+X-Received: by 2002:a2e:780b:0:b0:26c:1458:ddc3 with SMTP id t11-20020a2e780b000000b0026c1458ddc3mr1443600ljc.375.1663862404991;
+        Thu, 22 Sep 2022 09:00:04 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d9-20020a196b09000000b004999c243331sm994865lfa.141.2022.09.22.09.00.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Sep 2022 09:00:04 -0700 (PDT)
+Message-ID: <297f22b9-931f-669b-6539-c59fb411aa38@linaro.org>
+Date:   Thu, 22 Sep 2022 18:00:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v6 2/8] dt-bindings: phy: Add Lynx 10G phy binding
+Content-Language: en-US
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, Vinod Koul <vkoul@kernel.org>,
+        devicetree@vger.kernel.org, Madalin Bucur <madalin.bucur@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Camelia Alexandra Groza <camelia.groza@nxp.com>,
+        Rob Herring <robh@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-phy@lists.infradead.org
+References: <20220920202356.1451033-1-sean.anderson@seco.com>
+ <20220920202356.1451033-3-sean.anderson@seco.com>
+ <20220921065718.lafutkkgiium5ycu@krzk-bin>
+ <4e125df2-b815-c0cd-336c-97b20c2702c8@seco.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4e125df2-b815-c0cd-336c-97b20c2702c8@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,167 +86,24 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-If you get the exact right boot sequence / timing / hardware setup,
-lockdep can complain at bootup about an unsafe locking scenario:
+On 22/09/2022 17:23, Sean Anderson wrote:
+>>
+>> This check can fail if there are any dependencies. The base for a patch
+>> series is generally the most recent rc1.
+>>
+>> If you already ran 'make dt_binding_check' and didn't see the above
+>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+>> date:
+>>
+>> pip3 install dtschema --upgrade
+>>
+>> Please check and re-submit.
+>>
+> 
+> I believe this is due to the previous patch not being applied, same as last time.
 
-       CPU0                    CPU1
-       ----                    ----
-  lock(&psd->clock_mutex);
-                               lock(prepare_lock);
-                               lock(&psd->clock_mutex);
-  lock(prepare_lock);
+Yes, please ignore bot's report.
 
-The case of &psd->clock_mutex being grabbed before the prepare lock is
-illustrated by this stack crawl:
-
-  clk_prepare_lock()
-  clk_unprepare()
-  clk_disable_unprepare()
-  pm_clk_suspend()
-  pm_clk_runtime_suspend()
-
-The critical things to note are:
-- pm_clk_suspend(), in some cases, will grab and hold
-  "&psd->clock_mutex" first before calling the clock prepare/unprepare
-  functions.
-- pm_clk_suspend() can be called in cases where the clock prepare
-  mutex isn't already held.
-
-The reverse case, where the prepare lock is held first and then the
-&psd->clock_mutex is illustrated by:
-
-  pm_clk_op_lock()
-  pm_clk_resume()
-  pm_generic_runtime_resume()
-  ...
-  pm_runtime_resume_and_get()
-  clk_pm_runtime_get()
-  __clk_core_init()
-  __clk_register()
-  clk_hw_register()
-
-In the above:
-- __clk_core_init() grabs the prepare lock and holds it while calling
-  clk_pm_runtime_get().
-- pm_clk_op_lock() grabs &psd->clock_mutex.
-
-Presumably nobody noticed this before because it only happens in one
-specific case of the pm_clk code. It's also possible that it was
-unnoticed before because the clock prepare lock is a funny little
-animal and allows the lock to be acquired more than once in a given
-callchain but lockdep doesn't really track this.
-
-Let's fix this lockdep error by just consistently grabbing the clock
-prepare lock before &psd->clock_mutex. This means adding a private
-interface since the clock's prepare lock isn't exposed. We'll add it
-in a way to discourage anyone else from using it. We're special since
-"pm_clk" is core code and already quite intertwined with the clock
-core anyway.
-
-NOTE: I haven't done any analysis about whether what lockdep complains
-about is really a feasible lockup. I merely confirmed that, indeed, we
-have an ABBA situation and it seems like we should fix it.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-As you can tell at just a glance, this is a terrible hack. I'm mostly
-throwing it out into the world to try to start a conversation. I'd be
-very happy for someone else to send a better patch or to tell me of a
-better way to solve this. I've still tried to at least make it a
-landable patch, however, in case nobody has any better ideas and we
-want to land this.
-
-I'll note that this lockdep warning showed up on my system at the same
-time as a deadlock. Unfortunately, to the best of my ability to debug
-the two are unrelated. Fixing this lockdep warning doesn't fix the
-deadlock and fixing the deadlock doesn't make lockdep happy. If you
-want to see my fix for the deadlock, feel free to peruse:
-
-https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
-
-NOTE: problem was found and debugging was done on a downstream kernel
-(chromeos-5.15), not pure upstream. I see no reason why this won't
-apply to upstream, but if you have some belief that this problem is
-already solved or can't happen upstream then please yell and tell me
-that I should abandon this patch.
-
-If need be, I can also split this into two patches. I figured I'd do
-that on-demand if someone actually told me that would be useful to
-them and that they were considering landing this patch.
-
- drivers/base/power/clock_ops.c | 14 ++++++++++++++
- drivers/clk/clk.c              | 12 ++++++++++++
- 2 files changed, 26 insertions(+)
-
-diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
-index 4110c19c08dc..86066d5a00d9 100644
---- a/drivers/base/power/clock_ops.c
-+++ b/drivers/base/power/clock_ops.c
-@@ -18,6 +18,13 @@
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- 
-+/*
-+ * These are purposely not in any headers since we don't want anyone to use
-+ * them except us.
-+ */
-+void __clk_prepare_lock(void);
-+void __clk_prepare_unlock(void);
-+
- #ifdef CONFIG_PM_CLK
- 
- enum pce_status {
-@@ -108,6 +115,10 @@ static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
- 
- 	/* we must switch to the mutex */
- 	spin_unlock_irqrestore(&psd->lock, *flags);
-+
-+	/* Manually grab the prepare lock to avoid ABBA w/ psd->clock_mutex */
-+	__clk_prepare_lock();
-+
- 	mutex_lock(&psd->clock_mutex);
- 
- 	/*
-@@ -118,6 +129,8 @@ static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
- 		return 0;
- 
- 	mutex_unlock(&psd->clock_mutex);
-+	__clk_prepare_unlock();
-+
- 	goto try_again;
- }
- 
-@@ -132,6 +145,7 @@ static void pm_clk_op_unlock(struct pm_subsys_data *psd, unsigned long *flags)
- {
- 	if (psd->clock_op_might_sleep) {
- 		mutex_unlock(&psd->clock_mutex);
-+		__clk_prepare_unlock();
- 	} else {
- 		/* the __acquire is there to work around sparse limitations */
- 		__acquire(&psd->lock);
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index bd0b35cac83e..bf563b3fa5f4 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -149,6 +149,18 @@ static void clk_prepare_unlock(void)
- 	mutex_unlock(&prepare_lock);
- }
- 
-+/* Non-static wrapper of lock function for drivers/base/power/clock_ops.c */
-+void __clk_prepare_lock(void)
-+{
-+	clk_prepare_lock();
-+}
-+
-+/* Non-static wrapper of unlock function for drivers/base/power/clock_ops.c */
-+void __clk_prepare_unlock(void)
-+{
-+	clk_prepare_unlock();
-+}
-+
- static unsigned long clk_enable_lock(void)
- 	__acquires(enable_lock)
- {
--- 
-2.37.3.968.ga6b4b080e4-goog
+Best regards,
+Krzysztof
 
