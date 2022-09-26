@@ -2,57 +2,54 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DED35EAEBC
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Sep 2022 19:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6FD5EAF0F
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Sep 2022 20:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiIZRzW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Sep 2022 13:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
+        id S230459AbiIZSFW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Sep 2022 14:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiIZRyt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Sep 2022 13:54:49 -0400
+        with ESMTP id S229657AbiIZSE4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Sep 2022 14:04:56 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD9CDFA;
-        Mon, 26 Sep 2022 10:31:01 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QHUXxU008667;
-        Mon, 26 Sep 2022 17:30:33 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1171113F3C;
+        Mon, 26 Sep 2022 10:48:57 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QHUmNQ014464;
+        Mon, 26 Sep 2022 17:48:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=4mml1tOT7Y67UvnzZjr6Nyf4oPsIuAzSW1FY/DvFo2U=;
- b=WL3jIABIiO9RKtumaxmHeQwMJQQcCXKWUI5+pg9K6Q8i8hszzyK/MAlqYeZv00PTwUVF
- hoeKm5RAEmu8X1txBQZtWRIxCZG2tRA1nQuiXXlC5k05QzGDKkH3OTtENxVwM1VpxNJA
- PYidGBoDiwwp6tRZTZCKR/MJsWFflivv4E4DlFej6Y3bqjj/HTezSTEOSryi2W/Pr/Lj
- ZK9V8xyQcuvonzxXEAn7hnso/GoTEgkm1uboA8tfp9UGaHw7HVPr+1Am4TOCIJ7rnY1N
- TvWdKPf/cb8NK+nfRNBCH3aoQauFPaaTOqbjIk381kj/Eyd7HRCtqVbagxRYqpT55Lq8 Lg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jsq8vmdyu-1
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=B/zdlc+mkusN2u7dIng+cQ20Um0isFzz6GieYch4ivw=;
+ b=Ju4nz0U1XbRw2s3TEoC9/Yipj/fXTRB/B3/Usg2f3o7QDclNlqomyEOLCK+CI8WTmj6a
+ TGwHXVqSYlfi93vyLCLLGBy2YIKk//QHOV9mr3+vvsSxx8y243Pso5HW0sfyMoUJPENx
+ gkQzd2nlTKhZ14mFDO4pvULDQ9dYxtvO05volSgjR+y7qciCksx0eMqcWJdXf5/rNoD3
+ 74k0KScojhi3Qi5SNgD8MXy0oGWhmz4w0ZLqvqNiHY6fzK8Y4ywBMfHCw4Hvbajs8GqY
+ oJy1tAU4GxxNBiEEY4XHRhyCNBrY9oKjcF4KNatMWktUpcYOy0IbE7bDuWlp9mwYAtXy iA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jss7sc9mq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Sep 2022 17:30:32 +0000
+        Mon, 26 Sep 2022 17:48:51 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28QHUV1F016819
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28QHUVAN028231
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 26 Sep 2022 17:30:31 GMT
 Received: from core-thresher1.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 26 Sep 2022 10:30:31 -0700
+ 15.2.986.29; Mon, 26 Sep 2022 10:30:30 -0700
 From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
-Date:   Mon, 26 Sep 2022 10:30:24 -0700
-Message-ID: <20220926173025.4747-2-quic_bjorande@quicinc.com>
+Subject: [PATCH v2 0/2] clk: qcom: Add SC8280XP GPU clock controller
+Date:   Mon, 26 Sep 2022 10:30:23 -0700
+Message-ID: <20220926173025.4747-1-quic_bjorande@quicinc.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220926173025.4747-1-quic_bjorande@quicinc.com>
-References: <20220926173025.4747-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -60,16 +57,16 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: K6s_8k7S0El45fGRgrXmQgMn9MpaY1RW
-X-Proofpoint-ORIG-GUID: K6s_8k7S0El45fGRgrXmQgMn9MpaY1RW
+X-Proofpoint-ORIG-GUID: 5b0ZXNi3itJ393RfUgDLKStTG6AO0RXY
+X-Proofpoint-GUID: 5b0ZXNi3itJ393RfUgDLKStTG6AO0RXY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- adultscore=0 mlxscore=0 mlxlogscore=990 spamscore=0 priorityscore=1501
- suspectscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2209260110
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ spamscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=845
+ impostorscore=0 clxscore=1015 mlxscore=0 priorityscore=1501 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209260111
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,85 +76,21 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+What the subject says.
 
-Add compatible for the Qualcomm SC8280XP GPU.
+Bjorn Andersson (2):
+  dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
+  clk: qcom: Add SC8280XP GPU clock controller
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
-
-Changes since v1:
-- None
-
- .../devicetree/bindings/clock/qcom,gpucc.yaml |  2 ++
- .../dt-bindings/clock/qcom,gpucc-sc8280xp.h   | 35 +++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ .../devicetree/bindings/clock/qcom,gpucc.yaml |   2 +
+ drivers/clk/qcom/Kconfig                      |   8 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/gpucc-sc8280xp.c             | 461 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,gpucc-sc8280xp.h   |  35 ++
+ 5 files changed, 507 insertions(+)
+ create mode 100644 drivers/clk/qcom/gpucc-sc8280xp.c
  create mode 100644 include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-index 9ebcb1943b0a..a7d0af1bd9e0 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-@@ -17,6 +17,7 @@ description: |
-     dt-bindings/clock/qcom,gpucc-sdm845.h
-     dt-bindings/clock/qcom,gpucc-sc7180.h
-     dt-bindings/clock/qcom,gpucc-sc7280.h
-+    dt-bindings/clock/qcom,gpucc-sc8280xp.h
-     dt-bindings/clock/qcom,gpucc-sm6350.h
-     dt-bindings/clock/qcom,gpucc-sm8150.h
-     dt-bindings/clock/qcom,gpucc-sm8250.h
-@@ -28,6 +29,7 @@ properties:
-       - qcom,sc7180-gpucc
-       - qcom,sc7280-gpucc
-       - qcom,sc8180x-gpucc
-+      - qcom,sc8280xp-gpucc
-       - qcom,sm6350-gpucc
-       - qcom,sm8150-gpucc
-       - qcom,sm8250-gpucc
-diff --git a/include/dt-bindings/clock/qcom,gpucc-sc8280xp.h b/include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
-new file mode 100644
-index 000000000000..bb7da46333b0
---- /dev/null
-+++ b/include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
-@@ -0,0 +1,35 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLK_QCOM_GPU_CC_SC8280XP_H
-+#define _DT_BINDINGS_CLK_QCOM_GPU_CC_SC8280XP_H
-+
-+/* GPU_CC clocks */
-+#define GPU_CC_PLL0						0
-+#define GPU_CC_PLL1						1
-+#define GPU_CC_AHB_CLK						2
-+#define GPU_CC_CB_CLK						3
-+#define GPU_CC_CRC_AHB_CLK					4
-+#define GPU_CC_CX_GMU_CLK					5
-+#define GPU_CC_CX_SNOC_DVM_CLK					6
-+#define GPU_CC_CXO_AON_CLK					7
-+#define GPU_CC_CXO_CLK						8
-+#define GPU_CC_FREQ_MEASURE_CLK					9
-+#define GPU_CC_GMU_CLK_SRC					10
-+#define GPU_CC_GX_GMU_CLK					11
-+#define GPU_CC_GX_VSENSE_CLK					12
-+#define GPU_CC_HUB_AHB_DIV_CLK_SRC				13
-+#define GPU_CC_HUB_AON_CLK					14
-+#define GPU_CC_HUB_CLK_SRC					15
-+#define GPU_CC_HUB_CX_INT_CLK					16
-+#define GPU_CC_HUB_CX_INT_DIV_CLK_SRC				17
-+#define GPU_CC_SLEEP_CLK					18
-+#define GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK				19
-+
-+/* GPU_CC power domains */
-+#define GPU_CC_CX_GDSC				0
-+#define GPU_CC_GX_GDSC				1
-+
-+#endif
 -- 
 2.17.1
 
