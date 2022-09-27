@@ -2,94 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE395EB8B4
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Sep 2022 05:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBAD5EBA7B
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Sep 2022 08:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiI0DYo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Sep 2022 23:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        id S229910AbiI0GWA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 27 Sep 2022 02:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbiI0DX6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Sep 2022 23:23:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E7F5C37A;
-        Mon, 26 Sep 2022 20:23:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A31F061585;
-        Tue, 27 Sep 2022 03:23:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD677C43143;
-        Tue, 27 Sep 2022 03:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664248995;
-        bh=MbHislodbHWamvfQ72iARjTJC113lxMjN7t13HcDaCQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aApuCfnscjtUP2X01tAoaY7Z3EPOKYw0faY5GFVVDcrcGFIvI16MkQ5aeGM/Vgbyd
-         hMFfghzbzr3Fy4LCq1KZ0LKJHqpS5Lbgd5lY88Qk2VytxWM8wLvFKS8KYEz/6WBqkO
-         QvNp5/cFvdXETXUdw99tay5DRtwic5CxvEWKtIYZf0oc4Rq0HpEf+TkP60us85GGoy
-         6FqXrvRGCgnyibz1s8ms4H4CSex1zCn9F+WiW+LkfU3mfo8VWCi7vKiutlK5b46WpM
-         mA1Busa6JAsdLJ6A9ZQKhBt5cbliFdzpJdinP561ei7T4OamZ7eHAj3PSs+mozDi6/
-         F3lgtF/WAoewA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     loic.poulain@linaro.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, Bjorn Andersson <andersson@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        sboyd@kernel.org, yassine.oudjana@gmail.com
-Cc:     y.oudjana@protonmail.com, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        jami.kettunen@somainline.org, linux-clk@vger.kernel.org,
-        martin.botka@somainline.org, dmitry.baryshkov@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/6] clk: qcom: msm8996-cpu: Cleanup and migrate to parent_data
-Date:   Mon, 26 Sep 2022 22:23:04 -0500
-Message-Id: <166424897968.1766486.11324579765862390238.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220621160621.24415-1-y.oudjana@protonmail.com>
-References: <20220621160621.24415-1-y.oudjana@protonmail.com>
+        with ESMTP id S229735AbiI0GV7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Sep 2022 02:21:59 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2791C81B07;
+        Mon, 26 Sep 2022 23:21:57 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id E879B80E0;
+        Tue, 27 Sep 2022 06:13:36 +0000 (UTC)
+Date:   Tue, 27 Sep 2022 09:21:54 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 37/44] arm,omap2: Use WFI for omap2_pm_idle()
+Message-ID: <YzKWgjNLWSmDss/h@atomide.com>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101522.842219871@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919101522.842219871@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 21 Jun 2022 20:06:15 +0400, Yassine Oudjana wrote:
-> This series includes some cleanup of the MSM8996 CPU clock driver, as well as
-> migration from parent_names to parent_data for all of its clocks. The DT schema
-> is also fixed in this series to show the actual clocks consumed by the clock
-> controller and pass checks.
+* Peter Zijlstra <peterz@infradead.org> [220919 10:09]:
+> arch_cpu_idle() is a very simple idle interface and exposes only a
+> single idle state and is expected to not require RCU and not do any
+> tracing/instrumentation.
 > 
-> Yassine Oudjana (6):
->   clk: qcom: msm8996-cpu: Rename DIV_2_INDEX to SMUX_INDEX
->   clk: qcom: msm8996-cpu: Statically define PLL dividers
->   clk: qcom: msm8996-cpu: Unify cluster order
->   clk: qcom: msm8996-cpu: Convert secondary muxes to clk_regmap_mux
->   dt-bindings: clock: qcom,msm8996-apcc: Fix clocks
->   clk: qcom: msm8996-cpu: Use parent_data for all clocks
+> As such, omap2_pm_idle() is not a valid implementation. Replace it
+> with a simple (shallow) omap2_do_wfi() call.
 > 
-> [...]
+> Omap2 doesn't have a cpuidle driver; but adding one would be the
+> recourse to (re)gain the other idle states.
 
-Applied, thanks!
+Looks good to me thanks:
 
-[1/6] clk: qcom: msm8996-cpu: Rename DIV_2_INDEX to SMUX_INDEX
-      commit: 1ba0a3bbd5ed5a1bb8d0165912d9904b812af74b
-[2/6] clk: qcom: msm8996-cpu: Statically define PLL dividers
-      commit: de37e0214c28330cf0dbf4fe51db1d9d38c13c93
-[3/6] clk: qcom: msm8996-cpu: Unify cluster order
-      commit: 382139bfd68fe6cc9dc94ffe3b9d783b85be3b1c
-[4/6] clk: qcom: msm8996-cpu: Convert secondary muxes to clk_regmap_mux
-      commit: 9a9f5f9a5a0ca3f463eb28ba5920a6fd18dc9956
-[5/6] dt-bindings: clock: qcom,msm8996-apcc: Fix clocks
-      commit: b4feed4a3d0a6b8cef4a574a9df707c556928ec2
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Acked-by: Tony Lindgren <tony@atomide.com>
