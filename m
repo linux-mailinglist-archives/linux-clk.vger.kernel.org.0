@@ -2,107 +2,167 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D985A5ECE8A
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Sep 2022 22:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161035ECF6C
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Sep 2022 23:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiI0UbJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 27 Sep 2022 16:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S229584AbiI0Voc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 27 Sep 2022 17:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiI0UbI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Sep 2022 16:31:08 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D145D10D;
-        Tue, 27 Sep 2022 13:31:07 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id u16-20020a05600c211000b003b5152ebf09so7582967wml.5;
-        Tue, 27 Sep 2022 13:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=00ysRaGn1+uuyHYovWFc2fyLe0FbaGvnUPiX3NT3tOA=;
-        b=TjLSgJWhGwsrJaAPS7yq8DC0NokO9BLyPxdHH06ZYl0OYHGNjvZdlaVV3wW/nNoogw
-         UVYsgCwXNhJ5h2FppVzrkvjoJ6rvnm0KepoF+39urwKffslISnGJRYzPwKV45UqyXmSt
-         g3ywbj1uQM9pvp0J8mWafYulHKtmNR35VYcwi3y47VcrMTzHwYrK5zpMpSgBA86i7n8z
-         pshJJaAsQb3aMAve0eGkiT+60pbyTvgrDPhLJQxpTeHDejkXUB3zNJmT5TGfw1gZkM15
-         qEZraDB2PTKGde8MWlky1SNrIf/5/AjEOrw4j7h/ZrxdLgotQt8pwZbc8R5mHHWpYFgp
-         yXrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=00ysRaGn1+uuyHYovWFc2fyLe0FbaGvnUPiX3NT3tOA=;
-        b=XfPlrrEjOzbjBOL+z1RhYqo6uOgsnMeKvftwpo961Wi6Lf5/ANDqopqZWc4hffuYei
-         k0yAkJvsU1L0aTi7g7ZD+8HMXwIglz7DC3PVYq1bk8idrgSMa8uxNZxGJMUvsFOCzo13
-         knj+lx2Lze5FU4GMbSqfXMkEk7CjW2yEKhDgYofVWpcKDiR/UcDIotEhDzEv6ZfkLMI7
-         w3Umca6Y3fXp9taEqsu97U94LTDNHbLnyiFXVhw1PbftrQt0pkE6/EuGpRSDIVfNnvTn
-         /HaeUpZ8b23D02XhcdYBTVnAdJiNCCmppkdk6IR+JTYC8g2PRV70PjsGjZrxQuLogDgK
-         Kngw==
-X-Gm-Message-State: ACrzQf3DTWSBl+gv4Jw/JWUg9ti8xRB/VJ0WWvm58AfXRLF1y4MiOzBM
-        ecZ16o7U6YrJ4vS8MmRFNCI=
-X-Google-Smtp-Source: AMsMyM6xpLDtZWn/yUglFmRLH7kW4iJBnk5wv7CWXhDdwAB77dhKg2SrFlZC6ayrrn4FAE29B2gu2g==
-X-Received: by 2002:a05:600c:3ba0:b0:3b4:8ad0:6c with SMTP id n32-20020a05600c3ba000b003b48ad0006cmr4038012wms.186.1664310665923;
-        Tue, 27 Sep 2022 13:31:05 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:c6a:3c62:baf6:511c])
-        by smtp.gmail.com with ESMTPSA id ck16-20020a5d5e90000000b0022cc4b7861fsm754830wrb.97.2022.09.27.13.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Sep 2022 13:31:05 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        with ESMTP id S230203AbiI0Vob (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Sep 2022 17:44:31 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2DC10B59F
+        for <linux-clk@vger.kernel.org>; Tue, 27 Sep 2022 14:44:28 -0700 (PDT)
+Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id B676784C60;
+        Tue, 27 Sep 2022 23:44:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1664315065;
+        bh=QIdqS8zKQL1YbNi3m8izj2npUth1cDHCqpNZn9i8PVU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xs5vht3ASDSk5mAHxWNKutC5KYkUqeEOqdpUwvNsRif1OUAKIjWIOla9qjCdL34k5
+         08gI8C01ngB5WUsE7BGeNGi6YnFm+VUZSf4hhcCqKJXPFJT36GY08vtVLKcVCzqVAh
+         kK4y0EJNrO26T+EcXpZjTBiBzoacNROdkx7kConF8565VL/zSZuW606x/JSAJKMcox
+         Np5NxyWnLfbkp7nB4g5cQ5gGOjVJ7MH/vCpEatPq2laYrUkedEKjY2tJBQBsBQyw00
+         sD1v/JVRc86Ji8MeZbCFbgz230fj+NDC5E0UQR00jN7UeWf92O0Xj2S6CGUF4tvwPt
+         xTf7fcaauSp7Q==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-clk@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [RFC PATCH 2/2] clk: renesas: r9a07g044: Mark CRU_SYSCLK and CRU_VCLK as no PM
-Date:   Tue, 27 Sep 2022 21:30:44 +0100
-Message-Id: <20220927203044.751611-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220927203044.751611-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220927203044.751611-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3] clk: rs9: Fix I2C accessors
+Date:   Tue, 27 Sep 2022 23:44:14 +0200
+Message-Id: <20220927214415.418140-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Add custom I2C accessors to this driver, since the regular I2C regmap ones
+do not generate the exact I2C transfers required by the chip. On I2C write,
+it is mandatory to send transfer length first, on read the chip returns the
+transfer length in first byte. Instead of always reading back 8 bytes, which
+is the default and also the size of the entire register file, set BCP register
+to 1 to read out 1 byte which is less wasteful.
 
-CRU_SYSCLK and CRU_VCLK clocks need to be turned ON/OFF in particular
-sequence for the CRU block hence use DEF_NO_PM() to set the no_pm flag.
-
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Fixes: 892e0ddea1aa6 ("clk: rs9: Add Renesas 9-series PCIe clock generator driver")
+Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- drivers/clk/renesas/r9a07g044-cpg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+V2: Fix endianness handling in rs9_regmap_i2c_read() i2c_transfer
+V3: - Disable regcache, the driver does a couple of I2C writes on boot
+      and that is all, so it only adds complexity
+    - Set regmap max_register to RS9_REG_BCP which is the correct one
+---
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/clk-renesas-pcie.c | 60 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 57 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
-index 6935441f7504..31b1437c57e4 100644
---- a/drivers/clk/renesas/r9a07g044-cpg.c
-+++ b/drivers/clk/renesas/r9a07g044-cpg.c
-@@ -252,9 +252,9 @@ static const struct {
- 					0x558, 1),
- 		DEF_MOD("gpu_ace_clk",	R9A07G044_GPU_ACE_CLK, R9A07G044_CLK_P1,
- 					0x558, 2),
--		DEF_MOD("cru_sysclk",   R9A07G044_CRU_SYSCLK, CLK_M2_DIV2,
-+		DEF_NO_PM("cru_sysclk",	R9A07G044_CRU_SYSCLK, CLK_M2_DIV2,
- 					0x564, 0),
--		DEF_MOD("cru_vclk",     R9A07G044_CRU_VCLK, R9A07G044_CLK_M2,
-+		DEF_NO_PM("cru_vclk",	R9A07G044_CRU_VCLK, R9A07G044_CLK_M2,
- 					0x564, 1),
- 		DEF_MOD("cru_pclk",     R9A07G044_CRU_PCLK, R9A07G044_CLK_ZT,
- 					0x564, 2),
+diff --git a/drivers/clk/clk-renesas-pcie.c b/drivers/clk/clk-renesas-pcie.c
+index 4f5df1fc74b46..138aaab05fc8a 100644
+--- a/drivers/clk/clk-renesas-pcie.c
++++ b/drivers/clk/clk-renesas-pcie.c
+@@ -90,13 +90,61 @@ static const struct regmap_access_table rs9_writeable_table = {
+ 	.n_yes_ranges = ARRAY_SIZE(rs9_writeable_ranges),
+ };
+ 
++static int rs9_regmap_i2c_write(void *context,
++				unsigned int reg, unsigned int val)
++{
++	struct i2c_client *i2c = context;
++	const u8 data[3] = { reg, 1, val };
++	const int count = ARRAY_SIZE(data);
++	int ret;
++
++	ret = i2c_master_send(i2c, data, count);
++	if (ret == count)
++		return 0;
++	else if (ret < 0)
++		return ret;
++	else
++		return -EIO;
++}
++
++static int rs9_regmap_i2c_read(void *context,
++			       unsigned int reg, unsigned int *val)
++{
++	struct i2c_client *i2c = context;
++	struct i2c_msg xfer[2];
++	u8 txdata = reg;
++	u8 rxdata[2];
++	int ret;
++
++	xfer[0].addr = i2c->addr;
++	xfer[0].flags = 0;
++	xfer[0].len = 1;
++	xfer[0].buf = (void *)&txdata;
++
++	xfer[1].addr = i2c->addr;
++	xfer[1].flags = I2C_M_RD | I2C_M_RECV_LEN;
++	xfer[1].len = 1;
++	xfer[1].buf = (void *)rxdata;
++
++	ret = i2c_transfer(i2c->adapter, xfer, 2);
++	if (ret < 0)
++		return ret;
++	if (ret != 2)
++		return -EIO;
++
++	*val = rxdata[1];
++	return 0;
++}
++
+ static const struct regmap_config rs9_regmap_config = {
+ 	.reg_bits = 8,
+ 	.val_bits = 8,
+-	.cache_type = REGCACHE_FLAT,
+-	.max_register = 0x8,
++	.cache_type = REGCACHE_NONE,
++	.max_register = RS9_REG_BCP,
+ 	.rd_table = &rs9_readable_table,
+ 	.wr_table = &rs9_writeable_table,
++	.reg_write = rs9_regmap_i2c_write,
++	.reg_read = rs9_regmap_i2c_read,
+ };
+ 
+ static int rs9_get_output_config(struct rs9_driver_data *rs9, int idx)
+@@ -242,11 +290,17 @@ static int rs9_probe(struct i2c_client *client)
+ 			return ret;
+ 	}
+ 
+-	rs9->regmap = devm_regmap_init_i2c(client, &rs9_regmap_config);
++	rs9->regmap = devm_regmap_init(&client->dev, NULL,
++				       client, &rs9_regmap_config);
+ 	if (IS_ERR(rs9->regmap))
+ 		return dev_err_probe(&client->dev, PTR_ERR(rs9->regmap),
+ 				     "Failed to allocate register map\n");
+ 
++	/* Always read back 1 Byte via I2C */
++	ret = regmap_write(rs9->regmap, RS9_REG_BCP, 1);
++	if (ret < 0)
++		return ret;
++
+ 	/* Register clock */
+ 	for (i = 0; i < rs9->chip_info->num_clks; i++) {
+ 		snprintf(name, 5, "DIF%d", i);
 -- 
-2.25.1
+2.35.1
 
