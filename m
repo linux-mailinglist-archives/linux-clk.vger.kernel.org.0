@@ -2,182 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60995ED314
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Sep 2022 04:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7475ED33A
+	for <lists+linux-clk@lfdr.de>; Wed, 28 Sep 2022 05:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbiI1ClI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 27 Sep 2022 22:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S232351AbiI1DG5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 27 Sep 2022 23:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiI1ClH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Sep 2022 22:41:07 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F09C10253C;
-        Tue, 27 Sep 2022 19:41:04 -0700 (PDT)
-X-UUID: 0116d708030d4f4794d5bae4c99aee36-20220928
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=zoVsh+lBpo2kny9dOeVB7K/RKMo8E8eyudzqFaV/N2w=;
-        b=HMLzuwVhQUv9fun+rv1k2zOt8bo+rAt3MGJQgaJsh3/LQWZY5q4MYAQK9Tb8kPs2uO7MGhsc4Ng0MfdA2/DS21g/8mypnT4pbxo7kRU9Xp2Mr90rD6eSXDhvBt0I82rYylp75lxcHcUf7JT7jb5wF4iFjbgHtS2aej+iB4jFjXw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.11,REQID:73bf7f0f-e40b-4efc-a84c-afd2fc491e7f,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:39a5ff1,CLOUDID:6faf73e4-87f9-4bb0-97b6-34957dc0fbbe,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 0116d708030d4f4794d5bae4c99aee36-20220928
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1773477499; Wed, 28 Sep 2022 10:41:01 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 28 Sep 2022 10:41:00 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Sep 2022 10:40:59 +0800
-Message-ID: <da5c39fb351a7ca5a9dfa1c938d2e3d914ecb0d2.camel@mediatek.com>
-Subject: Re: [PATCH v1 14/17] phy: mediatek: add support for
- phy-mtk-hdmi-mt8195
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao shi <jitao.shi@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Pablo Sun <pablo.sun@mediatek.com>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>
-Date:   Wed, 28 Sep 2022 10:40:59 +0800
-In-Reply-To: <CABnWg9v4OuAU0x7n1q09gO7u3faOsmeq_4PFpw=_wAn1+erF8A@mail.gmail.com>
-References: <20220919-v1-0-4844816c9808@baylibre.com>
-         <20220919-v1-14-4844816c9808@baylibre.com>
-         <d1346dcf6b6906d153c13c086bf963dc89c5549b.camel@mediatek.com>
-         <CABnWg9v4OuAU0x7n1q09gO7u3faOsmeq_4PFpw=_wAn1+erF8A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S229630AbiI1DGw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Sep 2022 23:06:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483521CE914;
+        Tue, 27 Sep 2022 20:06:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF5CC61CFD;
+        Wed, 28 Sep 2022 03:06:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121D0C433C1;
+        Wed, 28 Sep 2022 03:06:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664334410;
+        bh=3j7lUQIdsrYc+2eX2IWCd5WxozwgI6aTea19eKPxzvU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bTp2dMKIU62NKZzR4WBN0UtxZTi3QxOAmhfp1eXtYrc/oU2apkEel6XqbVATUlQPA
+         NwZPV7pumHl62El5uKmip3TIRWkPFAi4ShYBTQLHxdG2HznRSyOzUGX+2WlURYYNeg
+         EgksWQJDDUnxNQHhcw9/lXhMW8Md66aG4kOwDaqHZUdJdAqW2hHKwUADzl+0NuPcKK
+         YEOmdXJZlqspPIY31cQwYXEvG6pD2i4sDRmEnlguXopKS47PLDb5VAxxCQgvz4Qdy3
+         Vb6b3rERIAEUyjKOxNQ5yvDZVtMrCe87/Q7oeYkgO6DL2MaBmTkuCL+bA7tYB0vgCG
+         TyoW5D4hglu5g==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     konrad.dybcio@somainline.org, ~postmarketos/upstreaming@lists.sr.ht
+Cc:     jamipkettunen@somainline.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, marijn.suijten@somainline.org,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        mturquette@baylibre.com, martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org
+Subject: Re: (subset) [PATCH v2 1/3] dt-bindings: clock: qcom,rpmcc: Add compatible for SM6375
+Date:   Tue, 27 Sep 2022 22:06:44 -0500
+Message-Id: <166433439996.1849007.15361302726140615662.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220921004458.151842-1-konrad.dybcio@somainline.org>
+References: <20220921004458.151842-1-konrad.dybcio@somainline.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_CSS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 2022-09-27 at 06:23 -0700, Guillaume Ranquet wrote:
-> On Tue, 20 Sep 2022 09:46, Chunfeng Yun <chunfeng.yun@mediatek.com>
-> wrote:
-> > On Mon, 2022-09-19 at 18:56 +0200, Guillaume Ranquet wrote:
-> > > Add basic support for the mediatek hdmi phy on MT8195 SoC
-> > > 
-> > > Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> > > 
-> > > diff --git a/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
-> > > b/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
-> > > index bb7593ea4c86..0157acdce56c 100644
-> > > --- a/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
-> > > +++ b/drivers/gpu/drm/mediatek/mtk_mt8195_hdmi.c
-> > > @@ -1344,6 +1344,8 @@ static void mtk_hdmi_bridge_disable(struct
-> > > drm_bridge *bridge,
-> > >  	mtk_hdmi_disable_hdcp_encrypt(hdmi);
-> > >  	usleep_range(50000, 50050);
-> > > 
-> > > +	phy_power_off(hdmi->phy);
-> > > +
-> > >  	hdmi->enabled = false;
-> > >  }
-> > > 
-> > > diff --git a/drivers/phy/mediatek/Makefile
-> > > b/drivers/phy/mediatek/Makefile
-> > > index fb1f8edaffa7..c9a50395533e 100644
-> > > --- a/drivers/phy/mediatek/Makefile
-> > > +++ b/drivers/phy/mediatek/Makefile
-> > > @@ -12,6 +12,7 @@ obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-
-> > > mtk-
-> > > xsphy.o
-> > >  phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
-> > >  phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-
-> > > mt2701.o
-> > >  phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-
-> > > mt8173.o
-> > > +phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-
-> > > mt8195.o
-> > >  obj-$(CONFIG_PHY_MTK_HDMI)		+= phy-mtk-hdmi-drv.o
-> > > 
-> > >  phy-mtk-mipi-dsi-drv-y			:= phy-mtk-mipi-dsi.o
-> > > diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> > > b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> > > new file mode 100644
-> > > index 000000000000..149015b64c02
-> > > --- /dev/null
-> > > +++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-> > > @@ -0,0 +1,673 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Copyright (c) 2021 MediaTek Inc.
-> > > + * Copyright (c) 2021 BayLibre, SAS
-> > > + */
-> > > +#include <linux/delay.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/mfd/syscon.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/phy/phy.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/types.h>
-> > > +#include <linux/nvmem-consumer.h>
-> > > +
-> > > +#include "phy-mtk-hdmi.h"
-> > > +#include "phy-mtk-hdmi-mt8195.h"
-> > > +
-> > > +static void mtk_hdmi_ana_fifo_en(struct mtk_hdmi_phy *hdmi_phy)
-> > > +{
-> > > +	/* make data fifo writable for hdmi2.0 */
-> > > +	mtk_hdmi_phy_mask(hdmi_phy, HDMI_ANA_CTL,
-> > > REG_ANA_HDMI20_FIFO_EN,
-> > > +			  REG_ANA_HDMI20_FIFO_EN);
-> > > +}
-> > > +
-> > > +static void
-> > > +mtk_mt8195_phy_tmds_high_bit_clk_ratio(struct mtk_hdmi_phy
-> > > *hdmi_phy,
-> > > +				       bool enable)
-> > > +{
-> > > +	mtk_hdmi_ana_fifo_en(hdmi_phy);
-> > > +
-> > > +	/* HDMI 2.0 specification, 3.4Gbps <= TMDS Bit Rate <= 6G,
-> > > +	 * clock bit ratio 1:40, under 3.4Gbps, clock bit ratio 1:10
-> > > +	 */
-> > > +	if (enable)
-> > > +		mtk_hdmi_phy_mask(hdmi_phy, HDMI20_CLK_CFG,
-> > > +				  0x2 << REG_TXC_DIV_SHIFT,
-> > 
-> > Use FIELD_PREP() macro, then no need define REG_TXC_DIV_SHIFT
-> > anymore.
-> > 
+On Wed, 21 Sep 2022 02:44:56 +0200, Konrad Dybcio wrote:
+> Add a compatible for RPMCC on SM6375.
 > 
-> Didn't know about FIELD_* macros, will use them for V2.
 > 
-> Thx for the suggestion.
-Please use helpers defined in phy-mtk-io.h, the register access helpers
-of mtk_hdmi_phy_* are already removed in phy next branch.
 
-Thanks a lot
+Applied, thanks!
 
+[1/3] dt-bindings: clock: qcom,rpmcc: Add compatible for SM6375
+      commit: de55ec3b3af0db790948906b0e41f468fcfa9f98
+[2/3] dt-bindings: clock: qcom: rpmcc: Add BIMC_FREQ_LOG
+      commit: 65cfaf4eface0a347f62187b52eeb84f635b6be0
+[3/3] clk: qcom: smd: Add SM6375 clocks
+      commit: 644c4229559257cadc4267fc36c2dc22ee9c040f
 
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
