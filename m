@@ -2,60 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E8B5EF7BC
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Sep 2022 16:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421645EF7F0
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Sep 2022 16:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiI2Ogu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 29 Sep 2022 10:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S234729AbiI2Oph (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 29 Sep 2022 10:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235391AbiI2Ogo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 29 Sep 2022 10:36:44 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB441B14C2
-        for <linux-clk@vger.kernel.org>; Thu, 29 Sep 2022 07:36:42 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id s6so2541088lfo.7
-        for <linux-clk@vger.kernel.org>; Thu, 29 Sep 2022 07:36:42 -0700 (PDT)
+        with ESMTP id S231199AbiI2Opg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 29 Sep 2022 10:45:36 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF7627B13
+        for <linux-clk@vger.kernel.org>; Thu, 29 Sep 2022 07:45:29 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id i26so2570041lfp.11
+        for <linux-clk@vger.kernel.org>; Thu, 29 Sep 2022 07:45:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=s4k7ZRcK6Gp/A9rk+5L7WMB7pBPWsHR6E4YWZnsnsFY=;
-        b=BzRL6P9E+x0ljQ/GjnXz24cJualfsUfAOT7lR2uqdBiMzfkKXgCVVawJACjTtHPUGR
-         9WcpW/3Pm4zV8GdU7+7joDXlMbqqlYok0leythazyg2oZYltwuw3mB4sirM1XBmwiq+K
-         nRsKuCHiPwP7ICkJnJS+B59VCuBWJwcn+h2ikqyCT0HhXS190BfM3lCJFPDqg7OTnevq
-         vmcOXaBXK9gq/umqRWFM5oHKyshhZJnIcck0JyYSwNE96YKUyn+R7v+BD8ZY84rl25WM
-         QXoPk3W0umkr1TzsJ5zSDAFKrB9ssprULlmYf/TU3juxQB9DeezLR01HbC1SG11TjO+A
-         FNyA==
+        bh=qzBDhl7t1REqzvir5ZdPbV96Uq1Uf8HIWsulX9tDLco=;
+        b=UE2OLueI9yxUnBykbJzpgEuis+WsG9HBCzYKdl7C4VHvvupku4ndsX3EytfCrNbNRo
+         WquUzKkuz2U/dFsQUlAodrirE42L7NPf6qa92U+V8TO9o4PverBizzi8iX1+3POTxt1R
+         ANI+tlbFXLD1gG9sNrARaoRZm4+m04SxRiDAey7sLbBG4tg/rleq/PJl3kQo6uOkOFrv
+         eaR+MJQQLYesrFvmelBq9OuWYn38PfkuArN98goynhBlWaOxblhDXyeY0Aamv2voLvUb
+         A2lmgNWpLxIino1vSaQT8P/v6u/UhfZXDnjrBLKjML2kbwY1TBTm2J/nouhZshh6jmFM
+         jEBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=s4k7ZRcK6Gp/A9rk+5L7WMB7pBPWsHR6E4YWZnsnsFY=;
-        b=jikwy21OOdoqy//SNALjirPJt14X6PDmxLt67blJk6ocj8GvVERilnhKdW7Qz/nyUt
-         55i1AGiC0Hq+5y97IRLOoo7lnbSiffcp4RVSb9kXYpZXUQ9Z3YB57anHa36nLRGplXi5
-         TumPwa7m+UNGEOtpABQNu2QYtxtpbcF2QPewaQutsF9ZJN0EcLld71Fh+m2QivFfmJMH
-         qNW6ZSBqiF/J+lSXObCA0XiIdaGrQftHeNMOUx5q7Ffmj/C56hYOWB4SGh5UWygXeVBN
-         L5lBH77XYAAzu4EHLnqE9+HEjvbZBwti3Ca3E7ksrjDSfwxfrTZQqU2T24bzbMp2Ehf1
-         PwzQ==
-X-Gm-Message-State: ACrzQf2VU4XwPfSrNI9cy+pvXhjhN3uHRld73Its1sQwy1nmcQTjMJdv
-        qN1H6mU8n6nEM+n4cMoi4zX+PA==
-X-Google-Smtp-Source: AMsMyM454F9rJIE+M/q8VrZHdlpougBUdq2HV6F93yGSzajinuWq67hQyweHcERSBN9bF3l3CE3MBw==
-X-Received: by 2002:a05:6512:308e:b0:4a2:e1f:f08d with SMTP id z14-20020a056512308e00b004a20e1ff08dmr411971lfd.615.1664462199812;
-        Thu, 29 Sep 2022 07:36:39 -0700 (PDT)
+        bh=qzBDhl7t1REqzvir5ZdPbV96Uq1Uf8HIWsulX9tDLco=;
+        b=hrEqKogfg9EvQElrLRwAKz5NR0v4Ct8XB+IaHGdYfh/LDxzJ576F2D3n72SYwEKdy6
+         9of0VimA6roHhMV4WSwd0JDnEB8AEVx08GuyuNvd/dGYi3ETAvKDomUDUbyFU0aGisN6
+         JOFp7cVeypSmckveyFF/qrPJ0KpQDxRvZmKEjuCMR+WDoxEojQjQ8rrZQejBPvLZN7YS
+         HwbVuO7+xe1JWToFp5SRyR0/f98CBotLycbnsV9lvPgNtcleF4KkJLwsfQfXBrIbSCvS
+         pYjLeFrkW7D/8Hq+Vmwe9fZkUD8WIcU67hr1stJbJyN7SVMa5+399JI49YaBlAz2zSVY
+         eGTQ==
+X-Gm-Message-State: ACrzQf0bdN5brBmhizwoovrXA3an1RCIJb1SnHqDTAEs0AiyabtQZ2Ur
+        DVQ02ozbGSsv36jnLWaMKfgS/A==
+X-Google-Smtp-Source: AMsMyM4KXJ2MlU8uJdcg/31skmTZciBaJAm9dGDzpXsimxBLfYQrpN6veJNIvTuoeeINPpRin+aQ/w==
+X-Received: by 2002:a05:6512:31d5:b0:498:f3dc:dd2 with SMTP id j21-20020a05651231d500b00498f3dc0dd2mr1451559lfe.101.1664462728238;
+        Thu, 29 Sep 2022 07:45:28 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n10-20020a2e82ca000000b0026bf0d71b1esm728584ljh.93.2022.09.29.07.36.38
+        by smtp.gmail.com with ESMTPSA id u11-20020ac243cb000000b00497ad8e6d07sm801754lfl.222.2022.09.29.07.45.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 07:36:39 -0700 (PDT)
-Message-ID: <998432d0-7e67-0112-b130-bbf9eb1b8a27@linaro.org>
-Date:   Thu, 29 Sep 2022 16:36:38 +0200
+        Thu, 29 Sep 2022 07:45:27 -0700 (PDT)
+Message-ID: <4ddabe3a-9f55-2a6a-c1c1-ccc3fc74e98a@linaro.org>
+Date:   Thu, 29 Sep 2022 16:45:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH v1 04/30] dt-bindings: sifive-l2-cache: Support StarFive
- JH71x0 SoCs
+Subject: Re: [PATCH v1 00/30] Basic StarFive JH7110 RISC-V SoC support
 Content-Language: en-US
 To:     Hal Feng <hal.feng@linux.starfivetech.com>,
         linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
@@ -75,15 +74,13 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Emil Renner Berthing <kernel@esmil.dk>,
         linux-kernel@vger.kernel.org
 References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
- <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220929143225.17907-5-hal.feng@linux.starfivetech.com>
+In-Reply-To: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,13 +88,34 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 29/09/2022 16:31, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
+
+> This series is also available at 
+> https://github.com/hal-feng/linux/commits/visionfive2-minimal
 > 
-> This cache controller is also used on the StarFive JH7100 and JH7110
-> SoCs.
+> [1] https://www.cnx-software.com/2022/08/23/starfive-visionfive-2-quad-core-risc-v-sbc-linux/
+> [2] https://wiki.rvspace.org/
+> 
+> Emil Renner Berthing (17):
+>   dt-bindings: riscv: Add StarFive JH7110 bindings
+>   dt-bindings: timer: Add StarFive JH7110 clint
+>   dt-bindings: interrupt-controller: Add StarFive JH7110 plic
+>   dt-bindings: sifive-l2-cache: Support StarFive JH71x0 SoCs
+>   soc: sifive: l2 cache: Convert to platform driver
+>   soc: sifive: l2 cache: Add StarFive JH71x0 support
+>   reset: starfive: jh7100: Use 32bit I/O on 32bit registers
+>   dt-bindings: reset: Add StarFive JH7110 reset definitions
+>   clk: starfive: Factor out common clock driver code
+>   dt-bindings: clock: Add StarFive JH7110 system clock definitions
+>   dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
+>   clk: starfive: Add StarFive JH7110 system clock driver
+>   dt-bindings: clock: Add StarFive JH7110 always-on definitions
+>   dt-bindings: clock: Add starfive,jh7110-clkgen-aon bindings
+>   clk: starfive: Add StarFive JH7110 always-on clock driver
+>   RISC-V: Add initial StarFive JH7110 device tree
+>   RISC-V: Add StarFive JH7110 VisionFive2 board device tree
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Where is the rest of patches? Lists got only 5 of them. Anyway this is a
+bit too big patchset. Split per subsystem.
 
 Best regards,
 Krzysztof
