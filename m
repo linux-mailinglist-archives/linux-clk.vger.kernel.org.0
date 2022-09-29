@@ -1,311 +1,197 @@
 Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5475EF60B
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Sep 2022 15:08:06 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 7862B5EF799
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Sep 2022 16:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbiI2NIB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 29 Sep 2022 09:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S235406AbiI2OdC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 29 Sep 2022 10:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiI2NIA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 29 Sep 2022 09:08:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8649155647;
-        Thu, 29 Sep 2022 06:07:57 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0234A66022B2;
-        Thu, 29 Sep 2022 14:07:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664456876;
-        bh=RjlWLo52J1xNwaKPgALSVeCL23CVX4BxrRKCP/uj7qE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ASQJa+WfH5MA04whKpSPfFrM9asKFZ0w37qUq5KY6Vyn+4MSq5fxxwlNcDA9Eq3gn
-         MkwpQXOK1Y8utihd3I10ocrMrGYJu1fK+hOSs8fYHsaqv0/CZ3FgyU70jAV12vIrM4
-         ST7fBC8YXl6JllVli27C5pjGErQEv12Veos3SPbplvOhZJ59ZjytlqzPMA9MtCVd9m
-         ph8vIw/QLXuDzE4tKaAn5T6eVlagZD1mHu3W+MbNvJWQnWgTWsW9BtUbXiRRnQG3+C
-         rD7e5eWdG/iQlXRuzk4poiV6kwFJ3cKHE48yI/ukWccvExJITDhXgR/IcSWKG86tDz
-         5BzVdK7o/j/cQ==
-Message-ID: <7dff6595-f3e1-5a2e-0a81-2f3bf1903f12@collabora.com>
-Date:   Thu, 29 Sep 2022 15:07:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v3 1/4] clk: mediatek: Export PLL operations symbols
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        kuan-hsin.lee@mediatek.com, yu-chang.wang@mediatek.com,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>
-References: <20220929114624.16809-1-johnson.wang@mediatek.com>
- <20220929114624.16809-2-johnson.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220929114624.16809-2-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235035AbiI2OdB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 29 Sep 2022 10:33:01 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2141BCAEE;
+        Thu, 29 Sep 2022 07:32:56 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1664461951tron3wmm
+Received: from localhost.localdomain ( [113.72.145.157])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 29 Sep 2022 22:32:30 +0800 (CST)
+X-QQ-SSF: 01000000002000201000B00A0000000
+X-QQ-FEAT: zT6n3Y95oi2dV4Ml4TeENn6rWDhM72I0AUGipTNm6zw3cZPAnb4ndNllPSfyP
+        8da56NPWHPn+O4O6aWhrbdjZkTnKiAyFK/ognXdOrZaGH7ksIDUoYVoIhKn+I7gEawmJjA1
+        KiZGfpwO11HkO9cFhwvZANwlebLyV32+081rK3OIrF6YqDHnx/pnFDfCy5lQjoOWpyj92j8
+        1zF7OUkq1zQjtKO3aD0uUqFsvsV+b3Z6FHp9DLVo6iFLBpIYeUXz99y022L9tWrb1z3DgOM
+        GrmFofepc4nb7K3c/mEibz7Oikb5YRuqtbheAQz45lcZ+0njxKcTqSJdDyhp+fhVcoVjiGg
+        bTh44dbo+fva7cz435yTBxuRfcXJNa4tOzLcR/XpWoExXcm1IrlTPyROvUonoJF+mrth3yU
+        7NyOb5sEg9k=
+X-QQ-GoodBg: 0
+From:   Hal Feng <hal.feng@linux.starfivetech.com>
+To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Hal Feng <hal.feng@linux.starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 00/30] Basic StarFive JH7110 RISC-V SoC support
+Date:   Thu, 29 Sep 2022 22:31:55 +0800
+Message-Id: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 29/09/22 13:46, Johnson Wang ha scritto:
-> Export PLL operations and register functions for different type
-> of clock driver used.
-> 
-> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
-> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> ---
->   drivers/clk/mediatek/clk-pll.c | 84 ++++++++++++++--------------------
->   drivers/clk/mediatek/clk-pll.h | 56 +++++++++++++++++++++++
->   2 files changed, 90 insertions(+), 50 deletions(-)
-> 
-> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
-> index 54e6cfd29dfc..a4eca5fd539c 100644
-> --- a/drivers/clk/mediatek/clk-pll.c
-> +++ b/drivers/clk/mediatek/clk-pll.c
-> @@ -27,37 +27,10 @@
->   
->   #define AUDPLL_TUNER_EN		BIT(31)
->   
-> -#define POSTDIV_MASK		0x7
-> -
->   /* default 7 bits integer, can be overridden with pcwibits. */
->   #define INTEGER_BITS		7
->   
-> -/*
-> - * MediaTek PLLs are configured through their pcw value. The pcw value describes
-> - * a divider in the PLL feedback loop which consists of 7 bits for the integer
-> - * part and the remaining bits (if present) for the fractional part. Also they
-> - * have a 3 bit power-of-two post divider.
-> - */
-> -
-> -struct mtk_clk_pll {
-> -	struct clk_hw	hw;
-> -	void __iomem	*base_addr;
-> -	void __iomem	*pd_addr;
-> -	void __iomem	*pwr_addr;
-> -	void __iomem	*tuner_addr;
-> -	void __iomem	*tuner_en_addr;
-> -	void __iomem	*pcw_addr;
-> -	void __iomem	*pcw_chg_addr;
-> -	void __iomem	*en_addr;
-> -	const struct mtk_pll_data *data;
-> -};
-> -
-> -static inline struct mtk_clk_pll *to_mtk_clk_pll(struct clk_hw *hw)
-> -{
-> -	return container_of(hw, struct mtk_clk_pll, hw);
-> -}
-> -
-> -static int mtk_pll_is_prepared(struct clk_hw *hw)
-> +int mtk_pll_is_prepared(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   
-> @@ -161,8 +134,8 @@ static void mtk_pll_set_rate_regs(struct mtk_clk_pll *pll, u32 pcw,
->    * @fin:	The input frequency
->    *
->    */
-> -static void mtk_pll_calc_values(struct mtk_clk_pll *pll, u32 *pcw, u32 *postdiv,
-> -		u32 freq, u32 fin)
-> +void mtk_pll_calc_values(struct mtk_clk_pll *pll, u32 *pcw, u32 *postdiv,
-> +			 u32 freq, u32 fin)
->   {
->   	unsigned long fmin = pll->data->fmin ? pll->data->fmin : (1000 * MHZ);
->   	const struct mtk_pll_div_table *div_table = pll->data->div_table;
-> @@ -198,8 +171,8 @@ static void mtk_pll_calc_values(struct mtk_clk_pll *pll, u32 *pcw, u32 *postdiv,
->   	*pcw = (u32)_pcw;
->   }
->   
-> -static int mtk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-> -		unsigned long parent_rate)
-> +int mtk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-> +		     unsigned long parent_rate)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 pcw = 0;
-> @@ -211,8 +184,7 @@ static int mtk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
->   	return 0;
->   }
->   
-> -static unsigned long mtk_pll_recalc_rate(struct clk_hw *hw,
-> -		unsigned long parent_rate)
-> +unsigned long mtk_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 postdiv;
-> @@ -227,8 +199,8 @@ static unsigned long mtk_pll_recalc_rate(struct clk_hw *hw,
->   	return __mtk_pll_recalc_rate(pll, parent_rate, pcw, postdiv);
->   }
->   
-> -static long mtk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-> -		unsigned long *prate)
-> +long mtk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-> +			unsigned long *prate)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 pcw = 0;
-> @@ -239,7 +211,7 @@ static long mtk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
->   	return __mtk_pll_recalc_rate(pll, *prate, pcw, postdiv);
->   }
->   
-> -static int mtk_pll_prepare(struct clk_hw *hw)
-> +int mtk_pll_prepare(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 r;
-> @@ -273,7 +245,7 @@ static int mtk_pll_prepare(struct clk_hw *hw)
->   	return 0;
->   }
->   
-> -static void mtk_pll_unprepare(struct clk_hw *hw)
-> +void mtk_pll_unprepare(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   	u32 r;
-> @@ -301,7 +273,7 @@ static void mtk_pll_unprepare(struct clk_hw *hw)
->   	writel(r, pll->pwr_addr);
->   }
->   
-> -static const struct clk_ops mtk_pll_ops = {
-> +const struct clk_ops mtk_pll_ops = {
->   	.is_prepared	= mtk_pll_is_prepared,
->   	.prepare	= mtk_pll_prepare,
->   	.unprepare	= mtk_pll_unprepare,
-> @@ -310,18 +282,15 @@ static const struct clk_ops mtk_pll_ops = {
->   	.set_rate	= mtk_pll_set_rate,
->   };
->   
-> -static struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
-> -		void __iomem *base)
-> +struct clk_hw *mtk_clk_register_pll_ops(struct mtk_clk_pll *pll,
-> +					const struct mtk_pll_data *data,
-> +					void __iomem *base,
-> +					const struct clk_ops *pll_ops)
->   {
-> -	struct mtk_clk_pll *pll;
->   	struct clk_init_data init = {};
->   	int ret;
->   	const char *parent_name = "clk26m";
->   
-> -	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> -	if (!pll)
-> -		return ERR_PTR(-ENOMEM);
-> -
->   	pll->base_addr = base + data->reg;
->   	pll->pwr_addr = base + data->pwr_reg;
->   	pll->pd_addr = base + data->pd_reg;
-> @@ -343,7 +312,7 @@ static struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
->   
->   	init.name = data->name;
->   	init.flags = (data->flags & PLL_AO) ? CLK_IS_CRITICAL : 0;
-> -	init.ops = &mtk_pll_ops;
-> +	init.ops = pll_ops;
->   	if (data->parent_name)
->   		init.parent_names = &data->parent_name;
->   	else
-> @@ -360,7 +329,22 @@ static struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
->   	return &pll->hw;
->   }
->   
-> -static void mtk_clk_unregister_pll(struct clk_hw *hw)
-> +struct clk_hw *mtk_clk_register_pll(const struct mtk_pll_data *data,
-> +				    void __iomem *base)
-> +{
-> +	struct mtk_clk_pll *pll;
-> +	struct clk_hw *hw;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	hw = mtk_clk_register_pll_ops(pll, data, base, &mtk_pll_ops);
-> +
-> +	return hw;
-> +}
-> +
-> +void mtk_clk_unregister_pll(struct clk_hw *hw)
->   {
->   	struct mtk_clk_pll *pll;
->   
-> @@ -423,8 +407,8 @@ int mtk_clk_register_plls(struct device_node *node,
->   }
->   EXPORT_SYMBOL_GPL(mtk_clk_register_plls);
->   
-> -static __iomem void *mtk_clk_pll_get_base(struct clk_hw *hw,
-> -					  const struct mtk_pll_data *data)
-> +__iomem void *mtk_clk_pll_get_base(struct clk_hw *hw,
-> +				   const struct mtk_pll_data *data)
->   {
->   	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
->   
-> diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
-> index fe3199715688..e87ab08eea9b 100644
-> --- a/drivers/clk/mediatek/clk-pll.h
-> +++ b/drivers/clk/mediatek/clk-pll.h
-> @@ -7,6 +7,7 @@
->   #ifndef __DRV_CLK_MTK_PLL_H
->   #define __DRV_CLK_MTK_PLL_H
->   
-> +#include <linux/clk-provider.h>
->   #include <linux/types.h>
->   
->   struct clk_ops;
-> @@ -20,6 +21,7 @@ struct mtk_pll_div_table {
->   
->   #define HAVE_RST_BAR	BIT(0)
->   #define PLL_AO		BIT(1)
-> +#define POSTDIV_MASK	0x7
+This series adds basic support for the StarFive JH7110 RISC-V SoC to
+boot up and get a serial console. This series includes basic clock, 
+reset, pinctrl and uart drivers, which are necessary for booting.
+It's should be noted that the reset and clock driver codes of JH7110
+are partly common with those of JH7100, so the common codes are
+factored out and can be reused by drivers of JH7110 and other more
+SoCs from StarFive.
 
-While moving this, can you please also fixup declaring this mask as GENMASK()?
+The JH7110 is the upgraded version of JH7100 and also the first official
+released version of JH71XX series SoCs from StarFive Technology Ltd. 
+The VisionFive 2 boards equipped with JH7110 SoCs are launched
+recently [1]. More information and support can visit RVspace wiki [2].
 
-#define POSTDIV_MASK	GENMASK(2, 0)
+This series is also available at 
+https://github.com/hal-feng/linux/commits/visionfive2-minimal
 
->   
->   struct mtk_pll_data {
->   	int id;
-> @@ -48,10 +50,64 @@ struct mtk_pll_data {
->   	u8 pll_en_bit; /* Assume 0, indicates BIT(0) by default */
->   };
->   
-> +/*
-> + * MediaTek PLLs are configured through their pcw value. The pcw value describes
-> + * a divider in the PLL feedback loop which consists of 7 bits for the integer
-> + * part and the remaining bits (if present) for the fractional part. Also they
-> + * have a 3 bit power-of-two post divider.
-> + */
-> +
-> +struct mtk_clk_pll {
-> +	struct clk_hw	hw;
-> +	void __iomem	*base_addr;
-> +	void __iomem	*pd_addr;
-> +	void __iomem	*pwr_addr;
-> +	void __iomem	*tuner_addr;
-> +	void __iomem	*tuner_en_addr;
-> +	void __iomem	*pcw_addr;
-> +	void __iomem	*pcw_chg_addr;
-> +	void __iomem	*en_addr;
-> +	const struct mtk_pll_data *data;
-> +};
-> +
-> +
+[1] https://www.cnx-software.com/2022/08/23/starfive-visionfive-2-quad-core-risc-v-sbc-linux/
+[2] https://wiki.rvspace.org/
 
-Please drop this extra newline.
+Emil Renner Berthing (17):
+  dt-bindings: riscv: Add StarFive JH7110 bindings
+  dt-bindings: timer: Add StarFive JH7110 clint
+  dt-bindings: interrupt-controller: Add StarFive JH7110 plic
+  dt-bindings: sifive-l2-cache: Support StarFive JH71x0 SoCs
+  soc: sifive: l2 cache: Convert to platform driver
+  soc: sifive: l2 cache: Add StarFive JH71x0 support
+  reset: starfive: jh7100: Use 32bit I/O on 32bit registers
+  dt-bindings: reset: Add StarFive JH7110 reset definitions
+  clk: starfive: Factor out common clock driver code
+  dt-bindings: clock: Add StarFive JH7110 system clock definitions
+  dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
+  clk: starfive: Add StarFive JH7110 system clock driver
+  dt-bindings: clock: Add StarFive JH7110 always-on definitions
+  dt-bindings: clock: Add starfive,jh7110-clkgen-aon bindings
+  clk: starfive: Add StarFive JH7110 always-on clock driver
+  RISC-V: Add initial StarFive JH7110 device tree
+  RISC-V: Add StarFive JH7110 VisionFive2 board device tree
 
-Thanks,
-Angelo
+Hal Feng (8):
+  reset: starfive: jh7100: Use regmap APIs to operate registers
+  reset: starfive: jh7100: Move necessary properties to device tree
+  reset: starfive: Rename 'reset-starfive-jh7100.c' to
+    'reset-starfive.c'
+  dt-bindings: reset: Add starfive,jh7110-reset bindings
+  reset: starfive: Add StarFive JH7110 SoC support
+  clk: starfive: Use regmap APIs to operate registers
+  RISC-V: defconfig: Enable CONFIG_SERIAL_8250_DW
+  RISC-V: Add StarFive JH7100 and JH7110 SoC Kconfig options
+
+Jianlong Huang (5):
+  pinctrl: Create subdirectory for StarFive drivers
+  pinctrl: starfive: Rename "pinctrl-starfive" to
+    "pinctrl-starfive-jh7100"
+  dt-bindings: pinctrl: Add StarFive JH7110 pinctrl definitions
+  dt-bindings: pinctrl: Add StarFive JH7110 pinctrl bindings
+  pinctrl: starfive: Add StarFive JH7110 driver
+
+ .../clock/starfive,jh7110-clkgen-aon.yaml     |  62 ++
+ .../clock/starfive,jh7110-clkgen-sys.yaml     |  69 ++
+ .../sifive,plic-1.0.0.yaml                    |   1 +
+ .../pinctrl/starfive,jh7100-pinctrl.yaml      |   2 +-
+ .../pinctrl/starfive,jh7110-pinctrl.yaml      | 202 ++++
+ .../bindings/reset/starfive,jh7100-reset.yaml |  20 +
+ .../bindings/reset/starfive,jh7110-reset.yaml |  54 +
+ .../bindings/riscv/sifive-l2-cache.yaml       |   4 +
+ .../devicetree/bindings/riscv/starfive.yaml   |   3 +
+ .../bindings/timer/sifive,clint.yaml          |   1 +
+ MAINTAINERS                                   |  27 +-
+ arch/riscv/Kconfig.socs                       |  28 +-
+ arch/riscv/boot/dts/starfive/Makefile         |   3 +-
+ .../dts/starfive/jh7100-beaglev-starlight.dts |   2 +-
+ arch/riscv/boot/dts/starfive/jh7100.dtsi      |   3 +
+ .../jh7110-starfive-visionfive-v2.dts         |  91 ++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      | 449 +++++++++
+ arch/riscv/configs/defconfig                  |   1 +
+ drivers/clk/starfive/Kconfig                  |  29 +-
+ drivers/clk/starfive/Makefile                 |   6 +-
+ .../clk/starfive/clk-starfive-jh7100-audio.c  | 138 +--
+ drivers/clk/starfive/clk-starfive-jh7100.c    | 836 +++++-----------
+ drivers/clk/starfive/clk-starfive-jh7100.h    | 112 ---
+ .../clk/starfive/clk-starfive-jh7110-aon.c    | 161 +++
+ .../clk/starfive/clk-starfive-jh7110-sys.c    | 648 ++++++++++++
+ drivers/clk/starfive/clk-starfive.c           | 349 +++++++
+ drivers/clk/starfive/clk-starfive.h           | 112 +++
+ drivers/pinctrl/Kconfig                       |  18 +-
+ drivers/pinctrl/Makefile                      |   2 +-
+ drivers/pinctrl/starfive/Kconfig              |  37 +
+ drivers/pinctrl/starfive/Makefile             |   8 +
+ drivers/pinctrl/starfive/pinctrl-jh7110-aon.c | 718 ++++++++++++++
+ drivers/pinctrl/starfive/pinctrl-jh7110-sys.c | 925 +++++++++++++++++
+ .../pinctrl-starfive-jh7100.c}                |  10 +-
+ drivers/pinctrl/starfive/pinctrl-starfive.c   | 539 ++++++++++
+ drivers/pinctrl/starfive/pinctrl-starfive.h   | 131 +++
+ drivers/reset/Kconfig                         |   7 +-
+ drivers/reset/Makefile                        |   2 +-
+ drivers/reset/reset-starfive-jh7100.c         | 173 ----
+ drivers/reset/reset-starfive.c                | 218 ++++
+ drivers/soc/Makefile                          |   2 +-
+ drivers/soc/sifive/Kconfig                    |   2 +-
+ drivers/soc/sifive/sifive_l2_cache.c          |  86 +-
+ .../dt-bindings/clock/starfive-jh7110-aon.h   |  26 +
+ .../dt-bindings/clock/starfive-jh7110-sys.h   | 215 ++++
+ ...l-starfive.h => pinctrl-starfive-jh7100.h} |   6 +-
+ .../pinctrl/pinctrl-starfive-jh7110.h         | 931 ++++++++++++++++++
+ include/dt-bindings/reset/starfive-jh7110.h   | 154 +++
+ 48 files changed, 6604 insertions(+), 1019 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-aon.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-clkgen-sys.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/starfive,jh7110-reset.yaml
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+ create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
+ delete mode 100644 drivers/clk/starfive/clk-starfive-jh7100.h
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-aon.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-sys.c
+ create mode 100644 drivers/clk/starfive/clk-starfive.c
+ create mode 100644 drivers/clk/starfive/clk-starfive.h
+ create mode 100644 drivers/pinctrl/starfive/Kconfig
+ create mode 100644 drivers/pinctrl/starfive/Makefile
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-aon.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-jh7110-sys.c
+ rename drivers/pinctrl/{pinctrl-starfive.c => starfive/pinctrl-starfive-jh7100.c} (99%)
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive.h
+ delete mode 100644 drivers/reset/reset-starfive-jh7100.c
+ create mode 100644 drivers/reset/reset-starfive.c
+ create mode 100644 include/dt-bindings/clock/starfive-jh7110-aon.h
+ create mode 100644 include/dt-bindings/clock/starfive-jh7110-sys.h
+ rename include/dt-bindings/pinctrl/{pinctrl-starfive.h => pinctrl-starfive-jh7100.h} (98%)
+ create mode 100644 include/dt-bindings/pinctrl/pinctrl-starfive-jh7110.h
+ create mode 100644 include/dt-bindings/reset/starfive-jh7110.h
+
+-- 
+2.17.1
+
