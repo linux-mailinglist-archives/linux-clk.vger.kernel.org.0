@@ -2,191 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F4C5F0F11
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Sep 2022 17:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B086F5F1114
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Sep 2022 19:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiI3PjJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Sep 2022 11:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S231204AbiI3RpW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Sep 2022 13:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiI3PjH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 11:39:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A595E1A0D29;
-        Fri, 30 Sep 2022 08:39:05 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-096-057-200.ewe-ip-backbone.de [91.96.57.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5313666022F7;
-        Fri, 30 Sep 2022 16:39:04 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664552344;
-        bh=f2J6aSdhOrco8r48KzyqFH7xfmYiAHooce2bTGVTOLA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aGw8rUef91nf5fjOJLcNKGqTHWVj+ZravbU2wiyILPyg0wDPkbYdKhG6b/3KeUlFm
-         idh35TpjELpuuqM0pMvuVxWTNpGmQzU0nCGkDkc6kB4+xu8/sslS1mBGb0FyHU5oCq
-         tiW+0Pu3+F5czH2c2+oFV10F9ieQVnzyhxCiHPOx6dVSnvii5u9S2+F7zVi8RTituW
-         NGuImJvLWse0fuVk12crFXwI2lWhHNoViMs4NWbZ4/ocULfnK3TwxNEsMGclPkuTKZ
-         q80Q0vJkveO7ig6TtEXs92EVx3bFLdyd9kzlugIHyPYMoxXU0EykkxiqaRF1Vbmclu
-         K18KdkcyrF0wA==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 10F9F480163; Fri, 30 Sep 2022 17:38:59 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        with ESMTP id S229971AbiI3RpV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 13:45:21 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0993FA5C0;
+        Fri, 30 Sep 2022 10:45:19 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id m130so5428668oif.6;
+        Fri, 30 Sep 2022 10:45:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=oA8vjf+oEK7/6CmiiKkGDsr2L2BO0kznifjtJdNNi7M=;
+        b=GlXOByoDUbYgXHA2FXPJcK0zhAZklfhtv7tH/NwHL7q45P4tqxXP1FQuaba5udB7Vm
+         bODU814FkZxosqih9KU+WRP35GaE/kolqf5mgeQ8kZqr4hU8RnKm8FkXJbql2J1+ajqJ
+         bu8rQf9ltYRbtcx2Z79mWE0szNXu5RIXvyBFD46FajJOG3Js//KjjQf/GjJcVvR7s3Gr
+         Z7Vv4ZyRafLx0aHuftwxE+bfcg3rHoCqdMKNB6vWTsa4LxbyV6SCaC3lgQOM0UGThe6J
+         AX5pAz3VpEHOgfj46fGtlwJcw1lFtokx2cndGT61Hf7o+bpo/mlzfwPErgCO6pqe2CWS
+         BFUw==
+X-Gm-Message-State: ACrzQf0xqMxuLISgVz+vRySS+gHoa2ZA4QqGH6hKlESKqmVZxL5TD3JJ
+        5bUthGhJUqwLXNKGLbl+G+KcFjDhJg==
+X-Google-Smtp-Source: AMsMyM6TAbFxGS4TndhN4N8aHuZF+Iz3Y4Rwch27qWsHMv3QuZnmkGXEOvRqNM7LcI6Ty/xZz7igdg==
+X-Received: by 2002:a05:6808:6cd:b0:34b:73b3:416b with SMTP id m13-20020a05680806cd00b0034b73b3416bmr4263255oih.196.1664559919167;
+        Fri, 30 Sep 2022 10:45:19 -0700 (PDT)
+Received: from macbook.herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q19-20020a9d6313000000b0065c3bb3c72esm695038otk.14.2022.09.30.10.45.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Sep 2022 10:45:18 -0700 (PDT)
+Received: (nullmailer pid 567099 invoked by uid 1000);
+        Fri, 30 Sep 2022 17:45:17 -0000
+Date:   Fri, 30 Sep 2022 12:45:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv2 8/9] clk: rockchip: add lookup table support
-Date:   Fri, 30 Sep 2022 17:38:56 +0200
-Message-Id: <20220930153857.299396-9-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220930153857.299396-1-sebastian.reichel@collabora.com>
-References: <20220930153857.299396-1-sebastian.reichel@collabora.com>
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v2 01/11] dt-bindings: clock: split
+ qcom,gcc-msm8974,-msm8226 to the separate file
+Message-ID: <166455991729.567045.15845722857981778415.robh@kernel.org>
+References: <20220929092145.473009-1-dmitry.baryshkov@linaro.org>
+ <20220929092145.473009-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929092145.473009-2-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for mapping reset IDs to register offsets
-to support gapless continous platform reset IDs.
+On Thu, 29 Sep 2022 12:21:35 +0300, Dmitry Baryshkov wrote:
+> Move schema for the GCC on MSM8974 and MSM8226 platforms to a separate
+> file to be able to define device-specific clock properties.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../bindings/clock/qcom,gcc-msm8974.yaml      | 64 +++++++++++++++++++
+>  .../bindings/clock/qcom,gcc-other.yaml        |  9 +--
+>  2 files changed, 65 insertions(+), 8 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8974.yaml
+> 
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/clk/rockchip/clk.h     | 21 +++++++++++++++------
- drivers/clk/rockchip/softrst.c | 34 +++++++++++++++++++++++++---------
- 2 files changed, 40 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
-index 4a84491faf39..65e1dc57c068 100644
---- a/drivers/clk/rockchip/clk.h
-+++ b/drivers/clk/rockchip/clk.h
-@@ -922,15 +922,24 @@ struct clk *rockchip_clk_register_halfdiv(const char *name,
- 					  spinlock_t *lock);
- 
- #ifdef CONFIG_RESET_CONTROLLER
--void rockchip_register_softrst(struct device_node *np,
--			       unsigned int num_regs,
--			       void __iomem *base, u8 flags);
-+void rockchip_register_softrst_lut(struct device_node *np,
-+				   const int *lookup_table,
-+				   unsigned int num_regs,
-+				   void __iomem *base, u8 flags);
- #else
--static inline void rockchip_register_softrst(struct device_node *np,
--			       unsigned int num_regs,
--			       void __iomem *base, u8 flags)
-+static inline void rockchip_register_softrst_lut(struct device_node *np,
-+				   const int *lookup_table,
-+				   unsigned int num_regs,
-+				   void __iomem *base, u8 flags)
- {
- }
- #endif
- 
-+static inline void rockchip_register_softrst(struct device_node *np,
-+					     unsigned int num_regs,
-+					     void __iomem *base, u8 flags)
-+{
-+	return rockchip_register_softrst_lut(np, NULL, num_regs, base, flags);
-+}
-+
- #endif
-diff --git a/drivers/clk/rockchip/softrst.c b/drivers/clk/rockchip/softrst.c
-index 5d07266745b8..fd56aaefe6d1 100644
---- a/drivers/clk/rockchip/softrst.c
-+++ b/drivers/clk/rockchip/softrst.c
-@@ -12,6 +12,7 @@
- 
- struct rockchip_softrst {
- 	struct reset_controller_dev	rcdev;
-+	const int			*lut;
- 	void __iomem			*reg_base;
- 	int				num_regs;
- 	int				num_per_reg;
-@@ -25,8 +26,13 @@ static int rockchip_softrst_assert(struct reset_controller_dev *rcdev,
- 	struct rockchip_softrst *softrst = container_of(rcdev,
- 						     struct rockchip_softrst,
- 						     rcdev);
--	int bank = id / softrst->num_per_reg;
--	int offset = id % softrst->num_per_reg;
-+	int bank, offset;
-+
-+	if (softrst->lut)
-+		id = softrst->lut[id];
-+
-+	bank = id / softrst->num_per_reg;
-+	offset = id % softrst->num_per_reg;
- 
- 	if (softrst->flags & ROCKCHIP_SOFTRST_HIWORD_MASK) {
- 		writel(BIT(offset) | (BIT(offset) << 16),
-@@ -52,8 +58,13 @@ static int rockchip_softrst_deassert(struct reset_controller_dev *rcdev,
- 	struct rockchip_softrst *softrst = container_of(rcdev,
- 						     struct rockchip_softrst,
- 						     rcdev);
--	int bank = id / softrst->num_per_reg;
--	int offset = id % softrst->num_per_reg;
-+	int bank, offset;
-+
-+	if (softrst->lut)
-+		id = softrst->lut[id];
-+
-+	bank = id / softrst->num_per_reg;
-+	offset = id % softrst->num_per_reg;
- 
- 	if (softrst->flags & ROCKCHIP_SOFTRST_HIWORD_MASK) {
- 		writel((BIT(offset) << 16), softrst->reg_base + (bank * 4));
-@@ -77,9 +88,10 @@ static const struct reset_control_ops rockchip_softrst_ops = {
- 	.deassert	= rockchip_softrst_deassert,
- };
- 
--void rockchip_register_softrst(struct device_node *np,
--			       unsigned int num_regs,
--			       void __iomem *base, u8 flags)
-+void rockchip_register_softrst_lut(struct device_node *np,
-+				   const int *lookup_table,
-+				   unsigned int num_regs,
-+				   void __iomem *base, u8 flags)
- {
- 	struct rockchip_softrst *softrst;
- 	int ret;
-@@ -91,13 +103,17 @@ void rockchip_register_softrst(struct device_node *np,
- 	spin_lock_init(&softrst->lock);
- 
- 	softrst->reg_base = base;
-+	softrst->lut = lookup_table;
- 	softrst->flags = flags;
- 	softrst->num_regs = num_regs;
- 	softrst->num_per_reg = (flags & ROCKCHIP_SOFTRST_HIWORD_MASK) ? 16
- 								      : 32;
- 
- 	softrst->rcdev.owner = THIS_MODULE;
--	softrst->rcdev.nr_resets =  num_regs * softrst->num_per_reg;
-+	if (lookup_table)
-+		softrst->rcdev.nr_resets = num_regs;
-+	else
-+		softrst->rcdev.nr_resets = num_regs * softrst->num_per_reg;
- 	softrst->rcdev.ops = &rockchip_softrst_ops;
- 	softrst->rcdev.of_node = np;
- 	ret = reset_controller_register(&softrst->rcdev);
-@@ -107,4 +123,4 @@ void rockchip_register_softrst(struct device_node *np,
- 		kfree(softrst);
- 	}
- };
--EXPORT_SYMBOL_GPL(rockchip_register_softrst);
-+EXPORT_SYMBOL_GPL(rockchip_register_softrst_lut);
--- 
-2.35.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
