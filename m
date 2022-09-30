@@ -2,67 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882AB5F12C7
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Sep 2022 21:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59925F12D9
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Sep 2022 21:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiI3Tgr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Sep 2022 15:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S231772AbiI3TkH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Sep 2022 15:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbiI3TgV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 15:36:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC39B5B;
-        Fri, 30 Sep 2022 12:35:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A5336248B;
-        Fri, 30 Sep 2022 19:35:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7CFC433C1;
-        Fri, 30 Sep 2022 19:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664566546;
-        bh=uEXyapb0XYYTD+6FmQtFH3wQwjKpwaogYOeODksXiFQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=NG/8akH565hcGpLmjPhSRJQdKM+hkOKng7KwBbsY5RVdf+Jct3Dy7icQ05kF+hJqE
-         yqR5BWz6R+wLz/VLkbEK/nDVnpCl5bhzEWMK12bkjr49pZRcwZwKvIK3S2Hxz/Pdhd
-         AY/TWV57C4hafZXNSKu00LvqAGsnzV9xDJXFZvE6+exHgXKz91qdayG2xLhYT524N2
-         yLUOPd6emAmMSWQo647izXI4gPBeEjBltxpjAJlo/AkILub6ilX612sv4Hq85z0Nwx
-         POyMZNfFjlzTuz+XLWvTvEoCSSMw8TAO1n5EUqc7Opz+JYfu9nWXv1vidD9nR7ZWcs
-         ZpZ8E+lg1RuvA==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231774AbiI3Tj5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 15:39:57 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC29F4B9B7
+        for <linux-clk@vger.kernel.org>; Fri, 30 Sep 2022 12:39:56 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id o7so1100791lfk.7
+        for <linux-clk@vger.kernel.org>; Fri, 30 Sep 2022 12:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Kexj9jmleBsDfwwkBkPxMkuYeCJgJWx87FEOimL3smo=;
+        b=Uca6wRSaQ314c1mD7HkDNYsz4BMz6hhG7In9DSHxzGoav9Tb6deaTYOo0isa9dQuBB
+         ikrmmvvE6RiFZaRM87b7j+3PDgJJPUJfFhMqjMNmj4kTRY8N44mpeXNyJkIVqzooiO0s
+         5vRvfu1dJ4zREQm3TAhiDpRIas2s24Kyr8bCpKmzeoUXG3QGwINcPEZybJiRHJPMo5gD
+         3X5IjW2EG3PcE3pNwR9D/hS32aWLlcTRmL98HXZLdKTiBTuRSp5EDgWJYcc8071HGzaZ
+         ojrWmsRZSwkgvldQiNuL70nenXhcFeTrSeTZdthH314Dw8cHDqyPyc170RkmO62TvaPq
+         6dzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Kexj9jmleBsDfwwkBkPxMkuYeCJgJWx87FEOimL3smo=;
+        b=P0KiuUkpWS0BNJlzYdG1vFAN1EHA8GcPFTOnjcvsgLJaNeVJT3peLL4neHz3C9vFCy
+         URmJIBDlbp11XSK6ElyECZVmUmKaCc+KBB/Y+jcs40B/ytAJ/9s/Mze4Bc3bH4VXKhkb
+         +QnVE/TbutX6AHvbzzEbT4TfODWd72fIR+jj1uOHDlTBAPZUFPYOaprDjM4RmCflJbpc
+         hs6bX0AVroh29ZvbaXLnJuTmgFvvqUmsRzOkbRQJLJfYe2CF2M9l1dhqInPFhEe8j1vQ
+         D70+Pt4gKXi7WjVWihAKrgFrJzHRB0D/WZnIcdPO7W8rBgLRMEU3iux/fGXvH/vsEwv3
+         utfw==
+X-Gm-Message-State: ACrzQf3WY/WALbQ2FHvLFTa6ZrbzG+wPJEl5Xq9OuTQEk+5AzuQEZeAn
+        1sCkWqagmozy9jsonx2IAnTE9g==
+X-Google-Smtp-Source: AMsMyM6iPftXl0sBmyr3SGVuGUUJ2CmeWU/2q985iI5wBYIe+9XgA9De0+untg6lJyt12XABEPRsMw==
+X-Received: by 2002:ac2:5317:0:b0:4a1:abe3:93c3 with SMTP id c23-20020ac25317000000b004a1abe393c3mr3641763lfh.527.1664566794909;
+        Fri, 30 Sep 2022 12:39:54 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id z13-20020a056512308d00b00499b57032c1sm396418lfd.144.2022.09.30.12.39.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Sep 2022 12:39:54 -0700 (PDT)
+Message-ID: <f525a6e7-c2ca-f8bb-95ba-7297d8d6f55e@linaro.org>
+Date:   Fri, 30 Sep 2022 22:39:53 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220909152421.278662-3-gengcixi@gmail.com>
-References: <20220909152421.278662-1-gengcixi@gmail.com> <20220909152421.278662-3-gengcixi@gmail.com>
-Subject: Re: [RESEND][PATCH V8 2/2] clk: sprd: Add clocks support for UMS512
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-To:     Cixi Geng <gengcixi@gmail.com>, baolin.wang@linux.alibaba.com,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, orsonzhai@gmail.com, robh+dt@kernel.org,
-        zhang.lyra@gmail.com
-Date:   Fri, 30 Sep 2022 12:35:44 -0700
-User-Agent: alot/0.10
-Message-Id: <20220930193546.CF7CFC433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 2/2] clk: qcom: kpss-xcc: convert to parent data API
+Content-Language: en-GB
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220914144743.17369-1-ansuelsmth@gmail.com>
+ <20220914144743.17369-2-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220914144743.17369-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Cixi Geng (2022-09-09 08:24:21)
-> From: Cixi Geng <cixi.geng1@unisoc.com>
->=20
-> Add the list of clocks for the Unisoc UMS512, along with clock
-> initialization.
->=20
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> ---
+On 14/09/2022 17:47, Christian Marangi wrote:
+> Convert the driver to parent data API. From the Documentation pll8_vote
+> and pxo should be declared in the DTS so fw_name can be used instead of
+> parent_names. .name is changed to the legacy pxo_board following how
+> it's declared in other drivers.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-Applied to clk-next
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+> ---
+> v2:
+> - Change .name from pxo to pxo_board following other driver
+> 
+>   drivers/clk/qcom/kpss-xcc.c | 26 +++++++++-----------------
+>   1 file changed, 9 insertions(+), 17 deletions(-)
+
+-- 
+With best wishes
+Dmitry
+
