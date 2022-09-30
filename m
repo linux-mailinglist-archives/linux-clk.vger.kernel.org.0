@@ -2,72 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40965F124A
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Sep 2022 21:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7870D5F12CB
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Sep 2022 21:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbiI3TTO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Sep 2022 15:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S231931AbiI3ThE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Sep 2022 15:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiI3TTO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 15:19:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1852197F0E;
-        Fri, 30 Sep 2022 12:19:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4678A623E4;
-        Fri, 30 Sep 2022 19:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C378C433D6;
-        Fri, 30 Sep 2022 19:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664565551;
-        bh=DiN9MtLFNf7YLaifl0hJ3/nCg3eh+XZGECMBb0tbbF4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=axy2ncIrgnrwLGdExAo/xs92K0OQQXvy2pMf4G2pLhUIcCRECotdOSvR+o4FWhKXE
-         WNoDiaUt+v0GtB4vsqU1p2k9fvnP1+7BUVevyqAwTHdmM4VI0kqtKq90zYDzeenCnv
-         wI5ZxrSAyz7+sUh0c+W7pJ/OULO9zGqZ0tDU7bdn/PaG/F8KpG+ewvOKVu2NnD5pSv
-         bRQPD0JDbiw8eh3mBHJkdvaktKeVuPkZjIblNP4oK6VDDRLEsXAM8b7ks/MTptrpAq
-         RAtkgF3cPA9GnhKOhd+O6D+C+7Z+8IDe8OW6Idxe5hj3598yrzsNZFyxCNlXlkUeTZ
-         sV1F0Zaulg+4Q==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220914144743.17369-1-ansuelsmth@gmail.com>
-References: <20220914144743.17369-1-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 1/2] clk: introduce (devm_)hw_register_mux_parent_data_table API
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        with ESMTP id S231817AbiI3Tgk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 15:36:40 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 771D110E032;
+        Fri, 30 Sep 2022 12:36:18 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 28UJZZ5S009609;
+        Fri, 30 Sep 2022 21:35:35 +0200
+Date:   Fri, 30 Sep 2022 21:35:35 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Daniel Palmer <daniel@0x0f.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Romain Perier <romain.perier@gmail.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Date:   Fri, 30 Sep 2022 12:19:09 -0700
-User-Agent: alot/0.10
-Message-Id: <20220930191911.9C378C433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH RESEND v5 1/1] clk: mstar: msc313 cpupll clk driver
+Message-ID: <20220930193535.GB9469@1wt.eu>
+References: <20220603190509.45986-1-romain.perier@gmail.com>
+ <20220603190509.45986-2-romain.perier@gmail.com>
+ <20220930191742.9A9FEC433C1@smtp.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220930191742.9A9FEC433C1@smtp.kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Christian Marangi (2022-09-14 07:47:42)
-> Introduce (devm_)hw_register_mux_parent_data_table new API. We have
-> basic support for clk_register_mux using parent_data but we lack any API
-> to provide a custom parent_map. Add these 2 new API to correctly handle
-> these special configuration instead of using the generic
-> __(devm_)clk_hw_register_mux API.
->=20
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
+Hi Stephen,
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+On Fri, Sep 30, 2022 at 12:17:40PM -0700, Stephen Boyd wrote:
+> Quoting Romain Perier (2022-06-03 12:05:09)
+> > From: Daniel Palmer <daniel@0x0f.com>
+> > 
+> > Add a driver for the CPU pll/ARM pll/MIPS pll that is present
+> > in MStar SoCs.
+> > 
+> > Currently there is no documentation for this block so it's possible
+> > this driver isn't entirely correct.
+> > 
+> > Only tested on the version of this IP in the MStar/SigmaStar
+> > ARMv7 SoCs.
+> > 
+> > Co-authored-by: Willy Tarreau <w@1wt.eu>
+> 
+> This is not a standard tag, maybe Co-developed-by is what you want?
 
-or I'll pick it up after Bjorn sends qcom PR.
+Yeah it's the same. We're seeing 122 co-authored-by tags in the
+kernel's history vs 3122 co-developed-by, so that's only 3% but
+at least not a fantasist one..
+
+> A Signed-off-by tag should be here from Willy Tarreau then.
+
+Not all commits follow this, but indeed some do. Regardless I
+really don't care at all about my name being listed there.
+
+> > Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+> 
+> Your Signed-off-by needs to be here. I can't apply this otherwise.
+
+Quite frankly, we're talking about an old patch that was first
+submitted 9 months ago (!), let's not postpone it even further just
+for headers reason, please just drop this line mentioning my
+little contribution, I don't care a single second at all, really.
+
+Thanks,
+Willy
