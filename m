@@ -2,117 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7489E5F1849
-	for <lists+linux-clk@lfdr.de>; Sat,  1 Oct 2022 03:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55FC5F18C7
+	for <lists+linux-clk@lfdr.de>; Sat,  1 Oct 2022 05:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233065AbiJABV2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Sep 2022 21:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S231995AbiJADFS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Sep 2022 23:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiJABVE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 21:21:04 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E313A2BE3E;
-        Fri, 30 Sep 2022 18:17:48 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1664586871tcwf5ude
-Received: from CSD1051 ( [113.72.146.201])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 01 Oct 2022 09:14:29 +0800 (CST)
-X-QQ-SSF: 01000000000000308000000A0000000
-X-QQ-FEAT: PXtIlpCZyqdoUCaznDtdk1gVxdQFhDYD3xz//q16G0AgZvwIO2tuR6R0JunZn
-        uxvR+gjF7QCJd/Vn6HBzqgWAfDT0XURA9RI5t+BFQetFrVz9CFQnuU6VO6Nk+L8kIEZ4Gna
-        0WhRHPrxLqR4kbt8kzIozEzYDeg3FOe0/VFf2mzwKPM86sf0cNpmmSciBtnnKl7La4P6iXy
-        TbFieBvcljfVC5YsGyJQLSk9IlT4ZzCYCI4cgAGwC7/5EUBU0IU0djPo6pZ86BTHKhhja9o
-        k6XXlhPiWxO2Ox6oyTAjEOR0f4nTM2SoXpUxD02jtmKFRMMk28OQILWco8LehWnqTB9xrv0
-        zucVUFcdqPvSqxvf88=
-X-QQ-GoodBg: 0
-From:   <hal.feng@linux.starfivetech.com>
-To:     "'Conor Dooley'" <conor@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>
-Cc:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        "'Paul Walmsley'" <paul.walmsley@sifive.com>,
-        "'Palmer Dabbelt'" <palmer@dabbelt.com>,
-        "'Albert Ou'" <aou@eecs.berkeley.edu>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        "'Marc Zyngier'" <maz@kernel.org>,
-        "'Philipp Zabel'" <p.zabel@pengutronix.de>,
-        "'Stephen Boyd'" <sboyd@kernel.org>,
-        "'Michael Turquette'" <mturquette@baylibre.com>,
-        "'Linus Walleij'" <linus.walleij@linaro.org>,
-        "'Emil Renner Berthing'" <kernel@esmil.dk>,
-        <linux-kernel@vger.kernel.org>
-References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com> <4ddabe3a-9f55-2a6a-c1c1-ccc3fc74e98a@linaro.org> <YzXc/FSbDpkElK0O@spud>
-In-Reply-To: <YzXc/FSbDpkElK0O@spud>
-Subject: Re: [PATCH v1 00/30] Basic StarFive JH7110 RISC-V SoC support
-Date:   Sat, 1 Oct 2022 09:13:01 +0800
-Message-ID: <617C2EE03810F071+013401d8d532$f4548310$dcfd8930$@linux.starfivetech.com>
+        with ESMTP id S231955AbiJADFM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 23:05:12 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF533844A;
+        Fri, 30 Sep 2022 20:04:54 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2912oaNN003721;
+        Sat, 1 Oct 2022 03:04:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=igv6niMS2DbBmnf0TO0/yZyVq6ba24oDDUVUV0BoS0o=;
+ b=DScxxCg3U0hDSS8q3E7dpQxTWia1w/n/G0SJI5yhdtewD6mug2CVgc5LgBFugQd/C31s
+ YvJUWfBfBymvwTpFXmVfeGZcxaBV118zJrl4jk1HDMsf1wUNtICkqanAOGYCzOk1SLta
+ jIDwWJhLNRssNomviwEunpWYvDBnGKZ7lCkj/BsN9Adv2Btk/XzQo8cA+JtPUjzIhmjS
+ Eqiqeqr+AyavkSubRL/BhC4dBOTtS39ylqsCdXNM7bFx2C18iWUB+FyEDAOe5vCugsYD
+ DgZe1HgGUVFQGuu7vhDOxeFazie9IKlJXyre3ubHoq7IIDDtnMt0uFE2BEkueU6N04um rA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jx70grpfe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 01 Oct 2022 03:04:33 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29134W2W029604
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 1 Oct 2022 03:04:32 GMT
+Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 30 Sep 2022 20:04:32 -0700
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH 0/5] clk: qcom: Add clocks for the QDU1000 and QRU1000 SoCs
+Date:   Fri, 30 Sep 2022 20:03:58 -0700
+Message-ID: <20221001030403.27659-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AQLyOrMrqu8us6tOmdilaJnshXDZwAImr5qgAixKxMCro1Q8gA==
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:linux.starfivetech.com:qybglogicsvr:qybglogicsvr2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hMmyXbbYZiuXI_tEk7tPidP7-7iks5rJ
+X-Proofpoint-ORIG-GUID: hMmyXbbYZiuXI_tEk7tPidP7-7iks5rJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-01_02,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 malwarescore=0 mlxlogscore=873 adultscore=0 impostorscore=0
+ bulkscore=0 phishscore=0 spamscore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210010016
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 18:59:24 +0100, Conor Dooley wrote:
-> On Thu, Sep 29, 2022 at 04:45:26PM +0200, Krzysztof Kozlowski wrote:
-> > On 29/09/2022 16:31, Hal Feng wrote:
-> >
-> > > This series is also available at
-> > > https://github.com/hal-feng/linux/commits/visionfive2-minimal
-> > >
-> > > [1]
-> > > https://www.cnx-software.com/2022/08/23/starfive-visionfive-2-quad-c
-> > > ore-risc-v-sbc-linux/
-> > > [2] https://wiki.rvspace.org/
-> > >
-> > > Emil Renner Berthing (17):
-> > >   dt-bindings: riscv: Add StarFive JH7110 bindings
-> > >   dt-bindings: timer: Add StarFive JH7110 clint
-> > >   dt-bindings: interrupt-controller: Add StarFive JH7110 plic
-> > >   dt-bindings: sifive-l2-cache: Support StarFive JH71x0 SoCs
-> > >   soc: sifive: l2 cache: Convert to platform driver
-> > >   soc: sifive: l2 cache: Add StarFive JH71x0 support
-> > >   reset: starfive: jh7100: Use 32bit I/O on 32bit registers
-> > >   dt-bindings: reset: Add StarFive JH7110 reset definitions
-> > >   clk: starfive: Factor out common clock driver code
-> > >   dt-bindings: clock: Add StarFive JH7110 system clock definitions
-> > >   dt-bindings: clock: Add starfive,jh7110-clkgen-sys bindings
-> > >   clk: starfive: Add StarFive JH7110 system clock driver
-> > >   dt-bindings: clock: Add StarFive JH7110 always-on definitions
-> > >   dt-bindings: clock: Add starfive,jh7110-clkgen-aon bindings
-> > >   clk: starfive: Add StarFive JH7110 always-on clock driver
-> > >   RISC-V: Add initial StarFive JH7110 device tree
-> > >   RISC-V: Add StarFive JH7110 VisionFive2 board device tree
-> >
-> > Where is the rest of patches? Lists got only 5 of them. Anyway this is
-> > a bit too big patchset. Split per subsystem.
-> 
-> They seem to be coming in over time in dribs and drabs. I assume it is not
-a
-> mailing list problem given how many lists are CCed on the mail and the
-fact
-> that they have different providers.
-> 
-> For v2 (or multiple v2s) please fix up your process so that this gets sent
-> normally and not a couple of patches every hour.
+This series adds the GCC, RPMh, and PDC clock support required for the
+QDU1000 and QRU1000 SoCs along with the devicetree bindings for them.
 
-Our email server has technical issue and we are aware of this.
-Will fix in next revision. Sorry for the inconvenience caused.
+The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+1000 are new SoCs meant for enabling Open RAN solutions. See more at
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
 
-Best Regards,
-Hal
+This patchset is based on the YAML conversion patch [1] submitted already.
+
+[1] https://lore.kernel.org/r/20220103074348.6039-1-luca.weiss@fairphone.com
+
+Melody Olvera (4):
+  dt-bindings: clock: Add QDU1000 and QRU1000 GCC clock bindings
+  dt-bindings: clock: Add RPMHCC bindings for QDU1000 and QRU1000
+  clk: qcom: Add support for QDU1000 and QRU1000 RPMh clocks
+  dt-bindings: clock: Introduce pdc bindings for QDU1000 and QRU1000
+
+Taniya Das (1):
+  clk: qcom: Add QDU1000 and QRU1000 GCC support
+
+ .../bindings/clock/qcom,gcc-qdru1000.yaml     |   74 +
+ .../bindings/clock/qcom,rpmhcc.yaml           |    2 +
+ .../interrupt-controller/qcom,pdc.yaml        |    2 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-branch.c                 |    5 +
+ drivers/clk/qcom/clk-branch.h                 |    2 +
+ drivers/clk/qcom/clk-rpmh.c                   |   14 +
+ drivers/clk/qcom/gcc-qdru1000.c               | 2649 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-qdru1000.h |  170 ++
+ 10 files changed, 2927 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-qdru1000.yaml
+ create mode 100644 drivers/clk/qcom/gcc-qdru1000.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-qdru1000.h
+
+
+base-commit: 987a926c1d8a40e4256953b04771fbdb63bc7938
+prerequisite-patch-id: d3a56569439f223ee220dee951400e18983fee3e
+-- 
+2.37.3
 
