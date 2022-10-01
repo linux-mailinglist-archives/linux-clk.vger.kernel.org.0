@@ -2,142 +2,86 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7FC5F1853
-	for <lists+linux-clk@lfdr.de>; Sat,  1 Oct 2022 03:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DDA5F16E7
+	for <lists+linux-clk@lfdr.de>; Sat,  1 Oct 2022 02:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbiJABWg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Sep 2022 21:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
+        id S231666AbiJAAFI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Sep 2022 20:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiJABVu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 21:21:50 -0400
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F129214DE96;
-        Fri, 30 Sep 2022 18:19:12 -0700 (PDT)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 24887E0EB9;
-        Fri, 30 Sep 2022 01:54:11 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:from:from:in-reply-to:message-id
-        :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=QH7GNUWefqwCW/+YkV5wkb8ElUPYxmHqO2/8vZKiw/g=; b=j+Zzh9Uz2J1t
-        NLnYOJ0yKqX2IntkywpeHhrxWZFRdG9xQh7gZXPHWQ6iIygL+dGxvGIny7jVzzGW
-        wbNRnsQSprhDkzkI84oBMgJoSk2Q4Y3QFP9vgNcqZ1SEKAWup9J7Wi7+rDevzCMD
-        hIsyrGM5h4+HbaLNrNPSBDzTh1+oFoo=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 176BAE0E6B;
-        Fri, 30 Sep 2022 01:54:11 +0300 (MSK)
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 30 Sep 2022 01:54:11 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v12 3/8] clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
-Date:   Fri, 30 Sep 2022 01:53:57 +0300
-Message-ID: <20220929225402.9696-4-Sergey.Semin@baikalelectronics.ru>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220929225402.9696-1-Sergey.Semin@baikalelectronics.ru>
+        with ESMTP id S231759AbiJAAFG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Sep 2022 20:05:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8686F2CC83
+        for <linux-clk@vger.kernel.org>; Fri, 30 Sep 2022 17:05:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C919561CB4
+        for <linux-clk@vger.kernel.org>; Sat,  1 Oct 2022 00:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23268C433D6;
+        Sat,  1 Oct 2022 00:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664582703;
+        bh=RoJNLUp38GFc1nuFRzD/OOXEm6iNua2g/dUtuRk6+iU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=lsHUniJ6R9o2mNfUnz2Jz+Bd++NTdtFnSBxhrelqMSmNagjjnQePwLIBWwZswT0/K
+         66eKGfsC5qwVcZdjgyIv+7WGwre/Lh4evzEzfoH/8nvNY6s00I3MevVwEDKHFUMeBe
+         beavkEz7oXCAVA1nEC/+2amml+uNQdzO3d4SOiBGuOkSVTdPVt2i3k1ylhitKN4Dzz
+         vr2rkGbAiYlTds8C7q29Wm+BiTr8ib9AUNGxd9+mZ6O9tSIFZqVCKbF7/2cADK9jbb
+         PAzQJpUNI4w0fhMueRPa461ME1jSHxAn+1MlG1j5kmjJ3C1Bwaj/+i3Xg18uihaGWN
+         wWCH2dn4Whp/g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [192.168.168.10]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <11481209-7c8f-7543-1e04-5723ffc2ccd4@windriver.com>
+References: <20220928201656.30318-1-laurent.pinchart@ideasonboard.com> <11481209-7c8f-7543-1e04-5723ffc2ccd4@windriver.com>
+Subject: Re: [PATCH] clk: zynqmp: pll: Fix divider calculation to avoid out-of-range rate
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Maxime Ripard <maxime@cerno.tech>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Quanyang Wang <quanyang.wang@windriver.com>,
+        linux-clk@vger.kernel.org
+Date:   Fri, 30 Sep 2022 17:05:01 -0700
+User-Agent: alot/0.10
+Message-Id: <20221001000503.23268C433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Baikal-T1 CCU reference manual says that both xGMAC reference and xGMAC
-PTP clocks are generated by two different wrappers with the same constant
-divider thus each producing a 156.25 MHz signal. But for some reason both
-of these clock sources are gated by a single switch-flag in the CCU
-registers space - CCU_SYS_XGMAC_BASE.BIT(0). In order to make the clocks
-handled independently we need to define a shared parental gate so the base
-clock signal would be switched off only if both of the child-clocks are
-disabled.
++Maxime
 
-Note the ID is intentionally set to -2 since we are going to add a one
-more internal clock identifier in the next commit.
+Quoting Quanyang Wang (2022-09-28 18:05:10)
+> Hi Laurent,
+>=20
+> I have sent a patch as below to fix this issue which set rate failed and =
 
-Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> it's in linux-next repo now.
+>=20
+> https://lore.kernel.org/linux-arm-kernel/20220826142030.213805-1-quanyang=
+.wang@windriver.com/T/
+>=20
+>=20
+> As for the frequency gap between the requested rate and the actual, it's =
 
----
+> because of the commit:
+>=20
+> commit 948fb0969eae8
+> Author: Maxime Ripard <maxime@cerno.tech>
+> Date:=C2=A0=C2=A0 Fri Feb 25 15:35:26 2022 +0100
+>=20
+>  =C2=A0=C2=A0=C2=A0 clk: Always clamp the rounded rate
+>=20
+> And I haven't figured out how to fix it.
+>=20
 
-Changelog v4:
-- Change the ID macro name to the more descriptive CCU_SYS_XGMAC_CLK.
----
- drivers/clk/baikal-t1/ccu-div.c     | 1 +
- drivers/clk/baikal-t1/ccu-div.h     | 6 ++++++
- drivers/clk/baikal-t1/clk-ccu-div.c | 8 +++++---
- 3 files changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/clk/baikal-t1/ccu-div.c b/drivers/clk/baikal-t1/ccu-div.c
-index 4062092d67f9..bbfa3526ee10 100644
---- a/drivers/clk/baikal-t1/ccu-div.c
-+++ b/drivers/clk/baikal-t1/ccu-div.c
-@@ -579,6 +579,7 @@ struct ccu_div *ccu_div_hw_register(const struct ccu_div_init_data *div_init)
- 		goto err_free_div;
- 	}
- 	parent_data.fw_name = div_init->parent_name;
-+	parent_data.name = div_init->parent_name;
- 	hw_init.parent_data = &parent_data;
- 	hw_init.num_parents = 1;
- 
-diff --git a/drivers/clk/baikal-t1/ccu-div.h b/drivers/clk/baikal-t1/ccu-div.h
-index 795665caefbd..b6a9c8e45318 100644
---- a/drivers/clk/baikal-t1/ccu-div.h
-+++ b/drivers/clk/baikal-t1/ccu-div.h
-@@ -13,6 +13,12 @@
- #include <linux/bits.h>
- #include <linux/of.h>
- 
-+/*
-+ * CCU Divider private clock IDs
-+ * @CCU_SYS_XGMAC_CLK: CCU XGMAC internal clock
-+ */
-+#define CCU_SYS_XGMAC_CLK		-2
-+
- /*
-  * CCU Divider private flags
-  * @CCU_DIV_SKIP_ONE: Due to some reason divider can't be set to 1.
-diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
-index ea77eec40ddd..3953ae5664be 100644
---- a/drivers/clk/baikal-t1/clk-ccu-div.c
-+++ b/drivers/clk/baikal-t1/clk-ccu-div.c
-@@ -204,10 +204,12 @@ static const struct ccu_div_info sys_info[] = {
- 			  "eth_clk", CCU_SYS_GMAC1_BASE, 5),
- 	CCU_DIV_FIXED_INFO(CCU_SYS_GMAC1_PTP_CLK, "sys_gmac1_ptp_clk",
- 			   "eth_clk", 10),
--	CCU_DIV_GATE_INFO(CCU_SYS_XGMAC_REF_CLK, "sys_xgmac_ref_clk",
--			  "eth_clk", CCU_SYS_XGMAC_BASE, 8),
-+	CCU_DIV_GATE_INFO(CCU_SYS_XGMAC_CLK, "sys_xgmac_clk",
-+			  "eth_clk", CCU_SYS_XGMAC_BASE, 1),
-+	CCU_DIV_FIXED_INFO(CCU_SYS_XGMAC_REF_CLK, "sys_xgmac_ref_clk",
-+			   "sys_xgmac_clk", 8),
- 	CCU_DIV_FIXED_INFO(CCU_SYS_XGMAC_PTP_CLK, "sys_xgmac_ptp_clk",
--			   "eth_clk", 8),
-+			   "sys_xgmac_clk", 8),
- 	CCU_DIV_GATE_INFO(CCU_SYS_USB_CLK, "sys_usb_clk",
- 			  "eth_clk", CCU_SYS_USB_BASE, 10),
- 	CCU_DIV_VAR_INFO(CCU_SYS_PVT_CLK, "sys_pvt_clk",
--- 
-2.37.3
-
-
+Maxime has some more patches to fix this and they're in linux-next.
+Maybe those fix this problem?
