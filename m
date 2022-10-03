@@ -2,48 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168575F3653
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Oct 2022 21:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CF65F365C
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Oct 2022 21:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiJCTck (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 3 Oct 2022 15:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S229484AbiJCTer (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 3 Oct 2022 15:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbiJCTcj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Oct 2022 15:32:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F12230565;
-        Mon,  3 Oct 2022 12:32:39 -0700 (PDT)
+        with ESMTP id S229802AbiJCTep (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Oct 2022 15:34:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12948BF53;
+        Mon,  3 Oct 2022 12:34:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C381611AA;
-        Mon,  3 Oct 2022 19:32:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748B8C433D6;
-        Mon,  3 Oct 2022 19:32:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EED7611D0;
+        Mon,  3 Oct 2022 19:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96285C433C1;
+        Mon,  3 Oct 2022 19:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664825558;
-        bh=MAtg7jDIDFO35CN+8Gz4aSXHpYT+vFmA/qwTbN35zxs=;
+        s=k20201202; t=1664825681;
+        bh=YTRCQYS5gwiLBwDfHgyeyCgWl/i616lUexzsbqfs9SY=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=TfagG6Q0/LUDJa2smU0DUyNLU0O3D0KiaK/b0WexBMUdOKQ1mMjZvBzhjmwleljyE
-         AmgT0DUcY497aryhqUgKLY5Q7f7GzL6gjrghL6FI3AruPqmBFVpu9gwSM7jnLJC4In
-         IFgCHvv3zJKfYW04b4zA3Nn0TgyTyiOrT2/oXI4ArFEjjX5mFy6G6+HSjbfsldYgYz
-         lCJ9g19I/oRgp44naRPPMRwBf8ppUJlPjC7oSQB9tQkJ3XlcXIvuRsNehaovIHQKnk
-         8JlJm3mNlJZLg+cwhQW6Q+ovzD+qlRA/o46CvJLjKpL5PNJ5bnNOKIRUM3WsEPSjd/
-         ves7P0z7/OLWw==
+        b=F+CxN7j0pcNRA9YSRo2BZuksk3YmOqbog0BGXwm8mpF/GyzItQy/rRNpBkKqaGhjI
+         5+uDhAcYozhwWOzM4mhe01CSUMUvMQiRMaijHrcAOtKUT7C26paF8FYcop8Xdhr2OE
+         xrPDu2mQoAOUTC8gdzC3scL1xShjgI7y9bOisJ5sViHs1Rd3NnPXpIb0XiHbHwIAX2
+         HGcddXetXi9iXg01/INAyBMfHF1ENfn/MVifwZEVzCQCAwrQ+tK54t05cqKgQJ7WPI
+         qG+W6uNgW9utC6TXALgdq0EWBDGOMfooiNTogA+GN114auoaXsKK0wzd52KRJE9V6D
+         H0hcs31NbSLuQ==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <tencent_2B9817738F38B02844C245946EFF3B407E09@qq.com>
-References: <tencent_2B9817738F38B02844C245946EFF3B407E09@qq.com>
-Subject: Re: [PATCH v2] clk: pxa: add a check for the return value of kzalloc()
+In-Reply-To: <20220521111145.81697-42-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-42-Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] clk: nxp: fix typo in comment
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-To:     mturquette@baylibre.com, xkernel.wang@foxmail.com
-Date:   Mon, 03 Oct 2022 12:32:36 -0700
+Cc:     kernel-janitors@vger.kernel.org, Vladimir Zapolskiy <vz@mleia.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+To:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Mon, 03 Oct 2022 12:34:39 -0700
 User-Agent: alot/0.10
-Message-Id: <20221003193238.748B8C433D6@smtp.kernel.org>
+Message-Id: <20221003193441.96285C433C1@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,14 +55,12 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting xkernel.wang@foxmail.com (2022-04-07 02:33:49)
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+Quoting Julia Lawall (2022-05-21 04:10:52)
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
 >=20
-> kzalloc() is a memory allocation function which can return NULL when
-> some internal memory errors happen. So it is better to check it to
-> prevent potential wrong memory access.
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 >=20
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 > ---
 
 Applied to clk-next
