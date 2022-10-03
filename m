@@ -2,71 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A915F2BB8
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Oct 2022 10:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8823B5F2C02
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Oct 2022 10:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiJCI0S (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 3 Oct 2022 04:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S229933AbiJCIhv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 3 Oct 2022 04:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiJCIZy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Oct 2022 04:25:54 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20618.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::618])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B9512AF0;
-        Mon,  3 Oct 2022 00:59:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ewT1vH3Tkp+IezCgAbN3S07TLzTWiEV+HH02DHYy0f0O69rH1lPSUfG5pDBIUZRCUKY8fBaFjR+FX83wkqCcxFxf/C+w7G0AFA5yod6/6kVciChiKQgERen5Wx5iXv4d+PXKsDHma4H5OJrDXknJRBDYNSZ0BnFC3NPgIz3U3tA6GeKNSF+d4ugZtBEuo1pBH2TxZg5YYsMpmiFz0BT6I40kDb+RrkDB0eBbKT9aUVLj282MdO/YL+hOEXoWoqBKQiOuStAMMBAjxj71bsefrYHnAD1hvGFW5WuMlSdex9vNnGSYGHIh26KKgwgT5O8s46QDhjMQKplc0+QTCnyNNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aSg2EUavR+TIfx1BZ1mteLbkC1EOQjXuUDjCjH3QyWc=;
- b=XNQGmVHsm0gu9kT2FoWcHVWXZ3Y6phTSHVym0OxKqV4AhU2UUHP6S/8pnMd5Xh+CG+NgiM5RN7U6M6QnwKSa9AHwgftWbBoVZ91PXkS/Thx503lRkE8SUfo+VIdekVRr4OcejMb7xKhMbAXHkcufTeY/3LpOMYJ35kNaiTNZ7/sIQH+5JOpWZ1AZ+3DtKwz3Db7GaA2cMoiIognChTXlbBKkWR6m+r2segs1okSFgDTo7J3FLUS1fFiIpXvXa2R5i4MXAJSLqMp+MtuXDxwkFL0KJVdkvQC0IWllepYx+JLgtStl4Vu6WK1BJoVgxmeshM1ctjv7G095IdrdLrNi/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aSg2EUavR+TIfx1BZ1mteLbkC1EOQjXuUDjCjH3QyWc=;
- b=qLNmvD93Nhz0NvHxauZ0ZuO/Xd2FKEhSSogZ91desHN5mK2MejX4vZf66T8nZpEOMaveUJTpcVjmQldKQLP6IG0sSFRxr/hG6hsSpXHoQtuG6xdN3i4LA+a+UfcRZ9T9QSEqWcDysIqbXxqkV3CTiNC2Gb1YbwtA+uwHbArh2H8=
-Received: from BN9PR03CA0767.namprd03.prod.outlook.com (2603:10b6:408:13a::22)
- by CY8PR12MB7756.namprd12.prod.outlook.com (2603:10b6:930:85::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.15; Mon, 3 Oct
- 2022 07:58:39 +0000
-Received: from BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13a:cafe::24) by BN9PR03CA0767.outlook.office365.com
- (2603:10b6:408:13a::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.26 via Frontend
- Transport; Mon, 3 Oct 2022 07:58:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT007.mail.protection.outlook.com (10.13.177.109) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 07:58:38 +0000
-Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 3 Oct
- 2022 02:58:34 -0500
-Message-ID: <57989d3e-a186-1d67-cff9-6a059f94ebd3@amd.com>
-Date:   Mon, 3 Oct 2022 09:58:09 +0200
+        with ESMTP id S229680AbiJCIh3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Oct 2022 04:37:29 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20CD26AF9
+        for <linux-clk@vger.kernel.org>; Mon,  3 Oct 2022 01:10:43 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 25so5181416lft.9
+        for <linux-clk@vger.kernel.org>; Mon, 03 Oct 2022 01:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=eXaFPG7O71TlrjOlyZgGAeCaZ3F/ycTE/sXbYYMHuP4=;
+        b=s0+mIKAvUZEvgmgonEKww5oPbahGRopc2Ay2dsYHArohjvVRoIxDLBNTbFSDkDNDXt
+         ebiPS4clUrUS3Wdmjh2C5RSfJO5Mlhwtrtrdcu+MANzvmG1mVvyxfV8aq1cWYjXR+uhE
+         35IoRjevMIDr+7ZhEfsLcKm4Z77TaNk6MuV9uyxqPjx7khT7eVLF0YFGY49ZGCfeFdKP
+         YIDKdf7y9lTC9Ri7SUtlv73ZL+NZEo9iCIYLtnKppVZO2uWs9ANQA074RGa8SEqVI/WD
+         Xagx0aJ+I2/pIZaAbHdL0zPUZUv/HNMQ+cJB7j8Pi3G9XTtNMd0geqpYPKOKc8eQOxX+
+         RP7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=eXaFPG7O71TlrjOlyZgGAeCaZ3F/ycTE/sXbYYMHuP4=;
+        b=Lem7o0qBo4DKUN9bmonuclw6+9hoJuDu5eYzs73ylEv80SMfi7eI4fOLFk67Lygl76
+         3pJxbfFctCSbDaIBo1YNjMsNy6VWYi7hKjvYPSDPYWMPYCgm9jNg4Kbjt8TOr5SZTvdF
+         c1IRHm5/H58AFV6VilolRrdjdJbfjRFQLvZriOKImtETo3l7pOtPMs7eQS4lOl0n4MeK
+         m1urgdpcSUaynj+Lbeyrkh6pbffPcI0v88lENdhITFCD6nXODEICBLV6L6WPXkdf7fTM
+         yQF/phXuClx70rNu/ZweTSMKz8sgfWj9nZqaocr1K+XDmR7YKfMKk0IKBFjyVVtcfhNe
+         jVSg==
+X-Gm-Message-State: ACrzQf0n7ipLdoFHO93+83xnDOtH7Hi2M9LPIJ4HyCYkEFaFfNw630Go
+        1S4hFyZKzbu5EMWgnzukRJpmPQ==
+X-Google-Smtp-Source: AMsMyM6OUuWc/dvFQ91BsYOtDLcPcqIILG+nZHW3JX1+gH9U/Do7kht0fCrlWvHjdr3d6j3nqLECrw==
+X-Received: by 2002:a19:ee0a:0:b0:497:a2e3:a9dc with SMTP id g10-20020a19ee0a000000b00497a2e3a9dcmr6601344lfb.96.1664784641239;
+        Mon, 03 Oct 2022 01:10:41 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g22-20020a05651222d600b0048aa9d67483sm1351778lfu.160.2022.10.03.01.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Oct 2022 01:10:40 -0700 (PDT)
+Message-ID: <f611237f-0401-9e3c-3a21-79b33141bb51@linaro.org>
+Date:   Mon, 3 Oct 2022 10:10:38 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
 Subject: Re: [PATCH 1/2] dt-bindings: clk: Add binding for versal clocking
  wizard
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-CC:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-        <linux-clk@vger.kernel.org>, <git@amd.com>,
-        <devicetree@vger.kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <sboyd@kernel.org>, <mturquette@baylibre.com>,
+To:     Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>
+Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
+        linux-clk@vger.kernel.org, git@amd.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        mturquette@baylibre.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 References: <20220930080400.15619-1-shubhrajyoti.datta@amd.com>
  <20220930080400.15619-2-shubhrajyoti.datta@amd.com>
@@ -75,94 +70,86 @@ References: <20220930080400.15619-1-shubhrajyoti.datta@amd.com>
  <20220930213924.GA1079711-robh@kernel.org>
  <6e58837e-896c-7069-7913-2afb90af5e95@amd.com>
  <b495804c-cf04-4512-ac05-424eded46468@linaro.org>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <b495804c-cf04-4512-ac05-424eded46468@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <57989d3e-a186-1d67-cff9-6a059f94ebd3@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <57989d3e-a186-1d67-cff9-6a059f94ebd3@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT007:EE_|CY8PR12MB7756:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe72d258-251a-4b5a-dca9-08daa51514d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E4jIXR7xksXfbPeu7xaDFM+FlwtbmGv2aWo7/zHWHxkXo63p7LqUV/yxVJWYdP+y7y3J2TfFKbJj3aT4xgplk1nZU9UQmcXlCeIY340aWZIDeINw/6kIsNoRXsm9Eyf7Id3sjkdDdpPFo+gX8ZEN24HscJPVDgAj0pKpDV3sXqYzuezqXwiInQQHKyrYg2mdTgiwsYCe+U/4dEnfaDqrHP+ptJNc9odhafHrMioFKErLs2wYmopexDP66eI8o7j8AofX4m5A/4guaJEvSG/xxDTyLWWBZA7VtJXGJcy6wZzDg3bFuF16PhF31UrsxX4u+lB6zq8Frr2lPeCeyEO3w/9luIjKvDW5Yh/ZL3JuIJfq+ccx4ilEJGHsGyA6XPC6tkB3lfh9pQQKbySwJxD93FGwQH8MMAczGcRlvYQUjTbxQ5ypWsmOgXKjsk6RZp67TjjTh6SRj+1DKHL9ziQ4qKs8mSGwo8zytcw/bXoRSNrPuVRVrb8XJ3AjlqHhK+b6puIeb+TFAe3AxW7yWCcvUwkklt6RETZkz58+2rt1WqkJ+3bJThUaYvWOW7w0RAGO99ZgwTqo335PbzcUHl261Fqh/sd4nBgJQo1r55TEoN43ZjB/8/85mdwMLMrX9+WoC4GTHR1hApqSt1bDPXp+VBKXBGlGg1j0u3NkdOusU2qMsJ6BCqFUfRE91uDOWDG7thYUNp6JJk849hff8XtDQmOs6V1j03sjLzWzwlqbAod1/I5i6ZmoHhH/raSNGyIGkUFwrIatBxD29I4XKcG2R+8FX4O121rOwZvLGSsSWXFKas33ZO0JKa5y9xw2EdYrItRZ6Bu9NrbhCXbWf7UWdaAoXStJQK2U3ZoZ2j/uyO4=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199015)(46966006)(36840700001)(40470700004)(31686004)(186003)(16526019)(66899015)(47076005)(83380400001)(426003)(40480700001)(336012)(36756003)(41300700001)(70586007)(70206006)(6666004)(86362001)(966005)(5660300002)(316002)(16576012)(44832011)(356005)(8936002)(31696002)(2616005)(53546011)(36860700001)(40460700003)(81166007)(26005)(4326008)(82740400003)(8676002)(54906003)(478600001)(110136005)(2906002)(82310400005)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 07:58:38.7693
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe72d258-251a-4b5a-dca9-08daa51514d0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT007.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7756
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-
-On 10/3/22 09:23, Krzysztof Kozlowski wrote:
-> On 03/10/2022 09:15, Michal Simek wrote:
->>>> And this is new IP. Not sure who has chosen similar name but this targets
->>>> Xilinx Versal SOCs. Origin one was targeting previous families.
+On 03/10/2022 09:58, Michal Simek wrote:
+> 
+> 
+> On 10/3/22 09:23, Krzysztof Kozlowski wrote:
+>> On 03/10/2022 09:15, Michal Simek wrote:
+>>>>> And this is new IP. Not sure who has chosen similar name but this targets
+>>>>> Xilinx Versal SOCs. Origin one was targeting previous families.
+>>>>
+>>>> Do we need a whole new schema doc?
 >>>
->>> Do we need a whole new schema doc?
->>
->> It is completely new IP with different logic compare to origin one.
->>
+>>> It is completely new IP with different logic compare to origin one.
 >>>
->>> It is not ideal to define the same property, xlnx,nr-outputs, more than
->>> once. And it's only a new compatible string.
+>>>>
+>>>> It is not ideal to define the same property, xlnx,nr-outputs, more than
+>>>> once. And it's only a new compatible string.
+>>>
+>>> I can't see any issue with using dt binding for xlnx,clocking-wizard.yaml
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
 >>
->> I can't see any issue with using dt binding for xlnx,clocking-wizard.yaml
+>> So we already have out of staging document:
+>> devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+> 
+> in 6.1 yes.
+> 
 >>
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+>> and author wants to add one more:
+>> devicetree/bindings/clock/xlnx,clk-wizard.yaml
 > 
-> So we already have out of staging document:
-> devicetree/bindings/clock/xlnx,clocking-wizard.yaml
-
-in 6.1 yes.
-
+> as I said it is completely different IP which requires complete different driver 
+> but IP designers choose similar name which is out of developer control.
 > 
-> and author wants to add one more:
-> devicetree/bindings/clock/xlnx,clk-wizard.yaml
-
-as I said it is completely different IP which requires complete different driver 
-but IP designers choose similar name which is out of developer control.
-
-> 
-> Shall we expect in two years, a third document like:
-> devicetree/bindings/clock/xlnx,clk-wzrd.yaml
-> ?
-
-Developer definitely doesn't know. If new SoC requires for the same purpose 
-different IP with completely different driver is something out of developer 
-control. As of today I am not aware about such a requirement and need and 
-personally I can just hope that if they need to do such a change they will be 
-able to keep current SW driver compatible with new HW IP.
-
 >>
->> also for this IP if that's fine with you.
->> Only xlnx,speed-grade can be defined for previous IP which is easy to mark.
+>> Shall we expect in two years, a third document like:
+>> devicetree/bindings/clock/xlnx,clk-wzrd.yaml
+>> ?
 > 
-> That old binding also explained nr-outputs as "Number of outputs".
-> Perfect... :(
+> Developer definitely doesn't know. If new SoC requires for the same purpose 
+> different IP with completely different driver is something out of developer 
+> control. As of today I am not aware about such a requirement and need and 
+> personally I can just hope that if they need to do such a change they will be 
+> able to keep current SW driver compatible with new HW IP.
 
-Anyway if description should be improved let's just do it. I just want to get 
-guidance if we should update current dt binding for similar IP or just create 
-new one as this one is trying to do.
+Then please start naming them reasonable, not two (and in future
+x-times) the same names for entirely different blocks. And by name I
+mean compatible, filename and device name.
 
-Thanks,
-Michal
+>>> also for this IP if that's fine with you.
+>>> Only xlnx,speed-grade can be defined for previous IP which is easy to mark.
+>>
+>> That old binding also explained nr-outputs as "Number of outputs".
+>> Perfect... :(
+> 
+> Anyway if description should be improved let's just do it. I just want to get 
+> guidance if we should update current dt binding for similar IP or just create 
+> new one as this one is trying to do.
+
+IMHO, new binding is extremely confusing. We already have support for
+devices named "xlnx,clocking-wizard" and now you add exactly the same
+(clk=clocking) with almost the same properties, named
+"xlnx,clk-wizard-1.0". For a different IP?
+
+How anyone (even Xilinx' customer) can understand which block is for
+what if they have exactly the same name and (almost) the same
+properties, but as you said - these are entirely different IP?
+
+Best regards,
+Krzysztof
 
