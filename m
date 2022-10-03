@@ -2,119 +2,246 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2DB5F2B38
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Oct 2022 09:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781875F2BD3
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Oct 2022 10:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiJCHw4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 3 Oct 2022 03:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
+        id S231185AbiJCIan (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 3 Oct 2022 04:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232291AbiJCHwU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Oct 2022 03:52:20 -0400
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957D7B846
-        for <linux-clk@vger.kernel.org>; Mon,  3 Oct 2022 00:29:48 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id b2so4379579lfp.6
-        for <linux-clk@vger.kernel.org>; Mon, 03 Oct 2022 00:29:48 -0700 (PDT)
+        with ESMTP id S231215AbiJCIaS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Oct 2022 04:30:18 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F50A67142
+        for <linux-clk@vger.kernel.org>; Mon,  3 Oct 2022 01:03:12 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id b2so20404973eja.6
+        for <linux-clk@vger.kernel.org>; Mon, 03 Oct 2022 01:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=OWR0WOYIaygxKBvBdUgm8aSkracuNoxTbBMzqtzlAGM=;
-        b=SgggRDKZ9637LDD9qoLTBMhZMGXPdWXed2DPJceiSK9Tc7Vq8nN2AZ2+pur7kK1vOr
-         5QFpa7N1crON1mLhqfo3rguSdfAw+YtMbIrt9+xLNCU3I3Ts0JQtIFelpWyfhF2hjRiI
-         2Z5pjmq5qQspmbGp1Al5jj4i1JpJeXxIIqBs1AQxiWVMR9DmWr9p5tXDFfNr05F9HAwK
-         twd5N4ljZuoKr56ETEDFQIjdX2Xj75wOg2RWCgCGPoZQAlqK8aBGe5pAChJ6f8iA9roC
-         OpIMYNUEKkZ4ZlUdyvZW0AxOqjnHWAM74+4X2Iza6NCUJnPik9SQ//yEIrtO8YmFNgqb
-         wt3Q==
+        bh=bB4QODiV4ix6zkRrvYNhY3GV2ClzEd5J+34STuLCzKw=;
+        b=yZ5ng242zRMNlTnRBjTZtxobncF3M8tT6KrSVOIR2XyKNpVv8ggJpdPN+rPLdlpGNL
+         sPFvj6JbmhwHVfzA3eDj9eT7NWDi4F2nvyFlLWJvZ7MebMNACswGxSTlTtSoDH3oRYtg
+         3PAaOCFesm7gfsx4C47Z8N11ICSaWRgvEmguT05aqsi8Sajet3NUHYKFAZr/XKMso/7n
+         o39yxNo1PRx2b3MeyKIDtyHNmTsoSwydwd/vnVqYVwzhTFujKSDLdVytMZFhVZfV+KoB
+         z6pX0OE0kPF5suH5jVt2eRrwhnMrrwBpgKn4TXSp/16ecozMkQI9SdpEZ9o0sIkdwRPd
+         dNEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=OWR0WOYIaygxKBvBdUgm8aSkracuNoxTbBMzqtzlAGM=;
-        b=J8NqsKMZSZx3QKL41eShbCYhfRBhjV2vNbzruWjJoA1GQe+N4VX7hqA1u4d+yWEJUC
-         aCVTgr311JQSq57dpfmhis61p6mpJhpcmocG7R2hjYaAOdzkin2xfaDQc/dQTrIqCyDi
-         X4Ba7S0q+sqVfO2GF8nXgbEmQhoioW37cXyfl1DCgAoe7Emz3CGueD0S5dFDQqL8EMbg
-         I3OmUz4zMgJEImannjAk6yPR3YUUoK0FiRBOgOXwp+D393xBam3SttweSuxd7nTZTwxN
-         REtKQ2dCLdIN+nDBzxMEDOPu35p5vB9GAV4KoioaBzVewgqmpovNoddBWWZM+0C7Sd42
-         Cxeg==
-X-Gm-Message-State: ACrzQf26HBtCJEDAW1JDq1V0xVT4Aw55HkBFrxB2qFu/ydpatpYEvG7P
-        Lhkiiu8UtfLDr/p7TBAWuOYJ4uHNUBYLRA==
-X-Google-Smtp-Source: AMsMyM48/WNE88THbqjlggjZtr95vdx5GT4rzEmO+1YcVjo0LbjTYzb5mlh5xE+DQbWZ6ZhqrlXliQ==
-X-Received: by 2002:a05:6512:2342:b0:4a2:e4a:5fb7 with SMTP id p2-20020a056512234200b004a20e4a5fb7mr6340939lfu.272.1664781802167;
-        Mon, 03 Oct 2022 00:23:22 -0700 (PDT)
+        bh=bB4QODiV4ix6zkRrvYNhY3GV2ClzEd5J+34STuLCzKw=;
+        b=0KShRVx0rE2d9dT0XGYhRqwn+l61rQcemw74tHmwKuOr+0PRV3yq57QmwWZiGuZPnE
+         +HXx5P844IUu+MddbRbMx0kBUujzx+Xo0wtQDD7WksW8LEWM3PzAw/VBEffx3yJN9ZbN
+         5vkp7tyQxtGE52L5VfFbT5sxXlU+lTcy2Fv6aIXJN+WBtP2pw8j1kPyvVAmHGrW6qJWZ
+         ItH4sWRbhg0H3/775AQV0/PaerjJE8VH8gWCFRahfJ4pc/WpIZ3TWzZBGSK+ltMpYlqv
+         8ZuPJJASE2GzpTIxKxZL8fiBdc5xWo3BerGpAvLm8YN/yRmnJ+N+UiWLIitADXuLQVSb
+         yp1g==
+X-Gm-Message-State: ACrzQf2Ep4Lt3Msdlg0PSSwBdRnRCL2w9zF6c1QOF/qZxE/Gqwmb2H5C
+        fBocnkMxn3GkB1yYWkmRDlqLIPN/cB4lbw==
+X-Google-Smtp-Source: AMsMyM6oHyT1f+Ni6PLeXacAjkpE6naKgTyswsbAsDu1OnUxvpPuNqtcoODYeCbSnrRiT8UBoIhs3Q==
+X-Received: by 2002:a05:651c:1a0a:b0:26c:d1e:7b3 with SMTP id by10-20020a05651c1a0a00b0026c0d1e07b3mr6508293ljb.160.1664783159226;
+        Mon, 03 Oct 2022 00:45:59 -0700 (PDT)
 Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o12-20020a056512230c00b004946748ad4dsm1344042lfu.159.2022.10.03.00.23.21
+        by smtp.gmail.com with ESMTPSA id br32-20020a056512402000b0049d83646ce7sm1350514lfb.110.2022.10.03.00.45.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 00:23:21 -0700 (PDT)
-Message-ID: <b495804c-cf04-4512-ac05-424eded46468@linaro.org>
-Date:   Mon, 3 Oct 2022 09:23:21 +0200
+        Mon, 03 Oct 2022 00:45:58 -0700 (PDT)
+Message-ID: <7b253e51-30d4-7a71-2b14-7b987c3045fc@linaro.org>
+Date:   Mon, 3 Oct 2022 09:45:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] dt-bindings: clk: Add binding for versal clocking
- wizard
+Subject: Re: [PATCH v1 27/30] RISC-V: Add initial StarFive JH7110 device tree
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>
-Cc:     Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
-        linux-clk@vger.kernel.org, git@amd.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
-        mturquette@baylibre.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220930080400.15619-1-shubhrajyoti.datta@amd.com>
- <20220930080400.15619-2-shubhrajyoti.datta@amd.com>
- <CAL_JsqLaqjZeZd3c-fd9f5m-4OCXgOZcOu+paik9FV_eno5sLg@mail.gmail.com>
- <afb3f19f-eb40-5453-a82b-295e06861f86@amd.com>
- <20220930213924.GA1079711-robh@kernel.org>
- <6e58837e-896c-7069-7913-2afb90af5e95@amd.com>
+To:     Conor Dooley <conor@kernel.org>,
+        Hal Feng <hal.feng@linux.starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220929143225.17907-1-hal.feng@linux.starfivetech.com>
+ <20220930074914.6757-1-hal.feng@linux.starfivetech.com>
+ <Yzgb0GzpLsV3RJyk@spud>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6e58837e-896c-7069-7913-2afb90af5e95@amd.com>
+In-Reply-To: <Yzgb0GzpLsV3RJyk@spud>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 03/10/2022 09:15, Michal Simek wrote:
->>> And this is new IP. Not sure who has chosen similar name but this targets
->>> Xilinx Versal SOCs. Origin one was targeting previous families.
+On 01/10/2022 12:52, Conor Dooley wrote:
+> On Fri, Sep 30, 2022 at 03:49:14PM +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil.dk>
 >>
->> Do we need a whole new schema doc?
-> 
-> It is completely new IP with different logic compare to origin one.
-> 
+>> Add initial device tree for the JH7110 RISC-V SoC by
+>> StarFive Technology Ltd.
 >>
->> It is not ideal to define the same property, xlnx,nr-outputs, more than
->> once. And it's only a new compatible string.
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+>> Signed-off-by: Hal Feng <hal.feng@linux.starfivetech.com>
 > 
-> I can't see any issue with using dt binding for xlnx,clocking-wizard.yaml
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+> There's little point reviewing this dt since there's a load of issues
+> that you can trivially find by running dtbs_check/dt_binding_check, but
 
-So we already have out of staging document:
-devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+Yep...
 
-and author wants to add one more:
-devicetree/bindings/clock/xlnx,clk-wizard.yaml
+> this SoB change is wrong - if Emil wrote the patch, then Jianlong's SoB
+> is either redundant or should be accompanied by a Co-developed-by tag.
 
-Shall we expect in two years, a third document like:
-devicetree/bindings/clock/xlnx,clk-wzrd.yaml
-?
+Depends. Jianlong might have just rebased the patch.
 
 > 
-> also for this IP if that's fine with you.
-> Only xlnx,speed-grade can be defined for previous IP which is easy to mark.
+> Ditto for patch 28/30 "RISC-V: Add StarFive JH7110 VisionFive2 board
+> device tree".
+> 
+>> ---
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 449 +++++++++++++++++++++++
+>>  1 file changed, 449 insertions(+)
+>>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110.dtsi
+>>
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> new file mode 100644
+>> index 000000000000..46f418d4198a
+>> --- /dev/null
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> 
+>> +
+>> +	osc: osc {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +	};
+>> +
+>> +	clk_rtc: clk_rtc {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +	};
+>> +
+>> +	gmac0_rmii_refin: gmac0_rmii_refin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <50000000>;
+> 
+> I assume, given osc has it's frequency set in the board dts, that these
+> are all oscillators on the SoC?
+> 
+>> +	};
+>> +
+>> +	gmac0_rgmii_rxin: gmac0_rgmii_rxin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <125000000>;
+>> +	};
+>> +
+>> +	gmac1_rmii_refin: gmac1_rmii_refin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <50000000>;
+>> +	};
+>> +
+>> +	gmac1_rgmii_rxin: gmac1_rgmii_rxin {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <125000000>;
+>> +	};
+>> +
+>> +	i2stx_bclk_ext: i2stx_bclk_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <12288000>;
+>> +	};
+>> +
+>> +	i2stx_lrck_ext: i2stx_lrck_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <192000>;
+>> +	};
+>> +
+>> +	i2srx_bclk_ext: i2srx_bclk_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <12288000>;
+>> +	};
+>> +
+>> +	i2srx_lrck_ext: i2srx_lrck_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <192000>;
+>> +	};
+>> +
+>> +	tdm_ext: tdm_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <49152000>;
+>> +	};
+>> +
+>> +	mclk_ext: mclk_ext {
+>> +		compatible = "fixed-clock";
+>> +		#clock-cells = <0>;
+>> +		clock-frequency = <49152000>;
+>> +	};
+> 
+>> +		syscrg: syscrg@13020000 {
+> 
+> The generic node name for syscons is just "syscon" afaik.
 
-That old binding also explained nr-outputs as "Number of outputs".
-Perfect... :(
+Yes.
+
+> 
+>> +			compatible = "syscon", "simple-mfd";
+
+And this is not allowed. Needs specific compatible.
+
+
+>> +			reg = <0x0 0x13020000 0x0 0x10000>;
+>> +
+> 
+>> +		aoncrg: aoncrg@17000000 {
+> 
+> Again, syscon as the node name?
+
+Yes.
+
+> 
+>> +			compatible = "syscon", "simple-mfd";
+
+And this is a NAK.
+
+>> +			reg = <0x0 0x17000000 0x0 0x10000>;
+>> +
+>> +		gpio: gpio@13040000 {
+> 
+> Someone else (Krzysztof maybe?) should comment, but is "pinctrl" not the
+> genric node name for pinctrl nodes?
+
+Yes, for pin controller nodes, this should be "pinctrl" and schema
+requires it. The problem was that his driver did not use generic pinctrl
+bindings, which is no-go on its own.
+
+This could be a gpio controller (so "gpio" would be fine), although
+compatible suggests otherwise.
+
 
 Best regards,
 Krzysztof
