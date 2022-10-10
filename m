@@ -2,112 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701B35F93B2
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Oct 2022 01:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2715F9686
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Oct 2022 03:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbiJIXme (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 9 Oct 2022 19:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S230443AbiJJBS7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 9 Oct 2022 21:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiJIXlr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Oct 2022 19:41:47 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C94F9C7E0;
-        Sun,  9 Oct 2022 16:14:20 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id p26-20020a7bcc9a000000b003c384e59047so3489390wma.4;
-        Sun, 09 Oct 2022 16:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uR3JBsPeUWL8GJ7HMbmzxwJZVM4Y7GwWcCapqwWfp+E=;
-        b=HjbVEQkJ3X7FYvYtfn+UE0Z9pEjY1EZk+mUGjKnFlCkPjfL2Gijx8fUoOsnia99yjx
-         6OUDX8/ACs3TwWy3KRf5RnrbYYjOKqQIFTXdnZMODJVaRdEB3nuO5GnJG3Pfi4egZMXS
-         rOEMwLEAS7ctHkTxlQ/uUUqhvtAnSYne1ddiUrD89pI3Qlx/CZlrSs3URV5JLTZJToxf
-         T5uUdybbo4nU3i+hNd10d7uEWb/bHlyRs9cxPevO3udtlLNHdb0AU+V2r5EeTFE6UXos
-         aj34foGcnDRPP1e8zWHc1DR4ACiBOcT0FqvGIrDCLHqm/SNsEDPp7nxD4V3Jl1q84f34
-         LvfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uR3JBsPeUWL8GJ7HMbmzxwJZVM4Y7GwWcCapqwWfp+E=;
-        b=vEYM+h22KNLVVTluMhEZgtFWQGcYMjmQB0uuawGVVW3CNSPJG/K9WpcjzosXj0P34x
-         yTWer3wjzZv88edZ/pht5zGRsVTk4htAMsnLS0Zo34QsEglXtLTtyJ3Kxt7x8J4TnR8h
-         sKiVRYQlj217hsuS4hobJzomwbH+klbaAuIbKeZnwKuGqRB4OUB4oWkisCHZKUIga8QM
-         gRfvIXmTwyoXGGvhlEKDJ+R14L4XqCY1A+DVZheXIavsMWN4jvK3IzXq8ixd3tdlYtiS
-         gjpYOhzZVZd4KWR1GN0RMVfW8cydIvL/UH7fYeFEdsdmQZh6J/m+msoiYjiWe4odjBF5
-         ZHlw==
-X-Gm-Message-State: ACrzQf3y3vftVAZhabnrdC7VaH5TQhDA/5dMXet9Z3imgIUEuNP73H28
-        IyFAxccCmn5O8N3q9sWCgf46daqmM+swEQ==
-X-Google-Smtp-Source: AMsMyM4l9RyEElS54NCLBXPa//r1tmDKgKk+QnANVBVvjJXCGRjHx39IxOguhOHnZVcYj3W8CvciUA==
-X-Received: by 2002:a05:600c:ace:b0:3b4:621f:93f4 with SMTP id c14-20020a05600c0ace00b003b4621f93f4mr10464640wmr.8.1665357182423;
-        Sun, 09 Oct 2022 16:13:02 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:e4:5cde:80ab:dfd4])
-        by smtp.gmail.com with ESMTPSA id v24-20020a1cf718000000b003a6125562e1sm8325155wmh.46.2022.10.09.16.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 16:13:01 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] clk: renesas: r9a07g043: Drop WDT2 clock and reset entry
-Date:   Mon, 10 Oct 2022 00:12:53 +0100
-Message-Id: <20221009231253.15592-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230479AbiJJBSt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Oct 2022 21:18:49 -0400
+Received: from novek.ru (unknown [213.148.174.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F012D303CD;
+        Sun,  9 Oct 2022 18:18:45 -0700 (PDT)
+Received: from nat1.ooonet.ru (gw.zelenaya.net [91.207.137.40])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by novek.ru (Postfix) with ESMTPSA id DAF2D504AE0;
+        Mon, 10 Oct 2022 04:14:46 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 novek.ru DAF2D504AE0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=novek.ru; s=mail;
+        t=1665364488; bh=eIx0GJ/f4awLP5PFW0SIJ0eabOt5oi27kRTYl48YUHU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xslZqpfvdk4K/9NvP3Z3xNR/oDBMNNETbH/VfNa0VGafScg2SplIA3SXNB+jULq4t
+         wWiUrPwwgsQ3Ilhx7cCYmmFranMP0YG3RdX31PnxENEgGiVezJv4qFXizW6q84EQGo
+         ucfn9RU5pnyw1b3vIju//zQWD8qgOrvliwJ9hRiM=
+From:   Vadim Fedorenko <vfedorenko@novek.ru>
+To:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, Vadim Fedorenko <vadfed@fb.com>,
+        Vadim Fedorenko <vfedorenko@novek.ru>
+Subject: [RFC PATCH v3 0/5] Create common DPLL/clock configuration API
+Date:   Mon, 10 Oct 2022 04:17:58 +0300
+Message-Id: <20221010011804.23716-1-vfedorenko@novek.ru>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Implement common API for clock/DPLL configuration and status reporting.
+The API utilises netlink interface as transport for commands and event
+notifications. This API aim to extend current pin configuration and
+make it flexible and easy to cover special configurations.
 
-WDT CH2 is specifically to check the operation of Cortex-M33 CPU and if
-used from CA55 CPU would result in an unexpected behaviour. Hence drop
-WDT2 clock and reset entries.
+v2 -> v3:
+ * implement source select mode (Arkadiusz)
+ * add documentation
+ * implementation improvements (Jakub)
+v1 -> v2:
+ * implement returning supported input/output types
+ * ptp_ocp: follow suggestions from Jonathan
+ * add linux-clk mailing list
+v0 -> v1:
+ * fix code style and errors
+ * add linux-arm mailing list
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- drivers/clk/renesas/r9a07g043-cpg.c | 5 -----
- 1 file changed, 5 deletions(-)
+Arkadiusz Kubalewski (2):
+  dpll: add support for source selection modes
+  dpll: get source/output name
 
-diff --git a/drivers/clk/renesas/r9a07g043-cpg.c b/drivers/clk/renesas/r9a07g043-cpg.c
-index 37475465100d..99f72bf590fa 100644
---- a/drivers/clk/renesas/r9a07g043-cpg.c
-+++ b/drivers/clk/renesas/r9a07g043-cpg.c
-@@ -158,10 +158,6 @@ static struct rzg2l_mod_clk r9a07g043_mod_clks[] = {
- 				0x548, 0),
- 	DEF_MOD("wdt0_clk",	R9A07G043_WDT0_CLK, R9A07G043_OSCCLK,
- 				0x548, 1),
--	DEF_MOD("wdt2_pclk",	R9A07G043_WDT2_PCLK, R9A07G043_CLK_P0,
--				0x548, 4),
--	DEF_MOD("wdt2_clk",	R9A07G043_WDT2_CLK, R9A07G043_OSCCLK,
--				0x548, 5),
- 	DEF_MOD("spi_clk2",	R9A07G043_SPI_CLK2, R9A07G043_CLK_SPI1,
- 				0x550, 0),
- 	DEF_MOD("spi_clk",	R9A07G043_SPI_CLK, R9A07G043_CLK_SPI0,
-@@ -269,7 +265,6 @@ static struct rzg2l_reset r9a07g043_resets[] = {
- 	DEF_RST(R9A07G043_OSTM1_PRESETZ, 0x834, 1),
- 	DEF_RST(R9A07G043_OSTM2_PRESETZ, 0x834, 2),
- 	DEF_RST(R9A07G043_WDT0_PRESETN, 0x848, 0),
--	DEF_RST(R9A07G043_WDT2_PRESETN, 0x848, 2),
- 	DEF_RST(R9A07G043_SPI_RST, 0x850, 0),
- 	DEF_RST(R9A07G043_SDHI0_IXRST, 0x854, 0),
- 	DEF_RST(R9A07G043_SDHI1_IXRST, 0x854, 1),
+Vadim Fedorenko (3):
+  dpll: add netlink events
+  dpll: documentation on DPLL subsystem interface
+  ptp_ocp: implement DPLL ops
+
+ Documentation/networking/dpll.rst  | 157 +++++++++++++
+ Documentation/networking/index.rst |   1 +
+ drivers/dpll/dpll_core.c           |   3 +
+ drivers/dpll/dpll_netlink.c        | 346 ++++++++++++++++++++++++++++-
+ drivers/dpll/dpll_netlink.h        |   5 +
+ drivers/ptp/Kconfig                |   1 +
+ drivers/ptp/ptp_ocp.c              | 170 +++++++++++---
+ include/linux/dpll.h               |  14 ++
+ include/uapi/linux/dpll.h          |  26 ++-
+ 9 files changed, 678 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/networking/dpll.rst
+
 -- 
-2.25.1
+2.27.0
 
