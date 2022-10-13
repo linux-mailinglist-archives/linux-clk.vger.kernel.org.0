@@ -2,126 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150225FD533
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 08:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C435FD53F
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 08:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiJMGtS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Oct 2022 02:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S229529AbiJMGxk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Oct 2022 02:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiJMGtA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Oct 2022 02:49:00 -0400
-Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F2141132
-        for <linux-clk@vger.kernel.org>; Wed, 12 Oct 2022 23:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
-        s=selector; t=1665643732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dhP4jaM4XIlkfR2xTtkiZH3Y1zjayl4lTAKfRlU3uXo=;
-        b=dOoSoBUpRDUxGcBKN2kNtQLpzpdCu+uKQYaMUthssNX2NCBH6RiYf8a2tXHJXIo5O5uhUI
-        Tb5ujZdNHpV43OYkpm/IjrSS/M8no0nuFfKcG2U2ZzUxbfTF8ghg0Ko6Qdj04ngQ9yBslr
-        NFCbH/YPlFm4Pcl3cnS/w2gfPX9ki8w+GN6YILh7XUWEb6v5XGaPJ8omSVwjXgMHP2Dnjc
-        JfhPxos1tjp/6gk8hfQBq4z2e5ycmWSxN5asYVY6tRraEbeYGtWTmZa6R/I8GUt9jhEUIh
-        es3M8XZ7GLoG3zmx6S4h2TlcvCjBXGdZr7TKYUeDfEDKzatSz9t88jUrFqyFWw==
-Received: from mail.maxlinear.com (174-47-1-84.static.ctl.one [174.47.1.84])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- us-mta-580-DxLAlAjxMnKnigqKHPfofw-1; Thu, 13 Oct 2022 02:48:51 -0400
-X-MC-Unique: DxLAlAjxMnKnigqKHPfofw-1
-Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
- mail.maxlinear.com (10.23.38.119) with Microsoft SMTP Server id 15.1.2375.24;
- Wed, 12 Oct 2022 23:48:48 -0700
-From:   Rahul Tanwar <rtanwar@maxlinear.com>
-To:     <sboyd@kernel.org>, <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>, <yzhu@maxlinear.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
-        "Rahul Tanwar" <rtanwar@maxlinear.com>
-Subject: [PATCH v4 4/4] clk: mxl: Fix a clk entry by adding relevant flags
-Date:   Thu, 13 Oct 2022 14:48:33 +0800
-Message-ID: <a4770e7225f8a0c03c8ab2ba80434a4e8e9afb17.1665642720.git.rtanwar@maxlinear.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1665642720.git.rtanwar@maxlinear.com>
-References: <cover.1665642720.git.rtanwar@maxlinear.com>
+        with ESMTP id S229460AbiJMGxj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Oct 2022 02:53:39 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49314326D5;
+        Wed, 12 Oct 2022 23:53:38 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id z8so484949qtv.5;
+        Wed, 12 Oct 2022 23:53:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NqhIn7a8GZxoIOZ2jLL7IXtV3541/fwKqELCVRadkpg=;
+        b=0pdsgcoUPyaXuJ2KVz0nImCXBH4kAsuvRZk+2+lHRNZHS9WND9XtT0H9HtCN234YBX
+         KT8yjxtD6cyGGS6g+RzznJFlyE+wP8aAj1ZDNMK6CF/EGtRJgyl3RuCB+mawZar0W4xc
+         /pUEfTxkSQyx6nEiUHCfVIm7dfgdQhphmqZBUlSwfGpP1LsKxTjwEnt1tgQQvdCpINH7
+         OPToW1Uq8rCsYU1dlXUjPEBozzmRtxgYVkTjLRrrhifNfXYlIXG6UOrVK/FCXr6kIkZ7
+         s3cgVU24pclRUWMb2H4EvzjEJ61RKJJ/Is/1EiQ3fPBi4DOvyAaa1wpotrUqKXbumm4s
+         XIUg==
+X-Gm-Message-State: ACrzQf1oMFsfDgSfyDQsBNwaSBNswbLhgLjnMW1BsIoe/YMjhCHqPWQo
+        XnmvhyWGT3OB8nEvGfvlV7gL3O+4DQNtiA==
+X-Google-Smtp-Source: AMsMyM5nSJYhc3pFDply2YBgLnlb9r6ioC7l1SY6e/YkUPkUCUbTZ2mg3u6gJltJSvHt1tub4oO4cg==
+X-Received: by 2002:ac8:4892:0:b0:398:9975:52a6 with SMTP id i18-20020ac84892000000b00398997552a6mr19661708qtq.580.1665644017247;
+        Wed, 12 Oct 2022 23:53:37 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id c7-20020ac85a87000000b00304fe5247bfsm15064970qtc.36.2022.10.12.23.53.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 23:53:37 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-358bf076f1fso9158787b3.9;
+        Wed, 12 Oct 2022 23:53:36 -0700 (PDT)
+X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
+ h64-20020a0dde43000000b0034931bde8d5mr29044497ywe.283.1665644016653; Wed, 12
+ Oct 2022 23:53:36 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: maxlinear.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221012184830.3199-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20221012184830.3199-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 13 Oct 2022 08:53:24 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWkp_jMLZxCW6atKMy8XPsrhnjX5L6Nm3uZqM+77pvaVw@mail.gmail.com>
+Message-ID: <CAMuHMdWkp_jMLZxCW6atKMy8XPsrhnjX5L6Nm3uZqM+77pvaVw@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: r8a779a0: Fix SD0H clock name
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-One of the clock entry "dcl" clk has some HW limitations. One is that
-its rate can only by changed by changing its parent clk's rate & two
-is that HW does not support enable/disable for this clk.
+Hi Wolfram,
 
-Handle above two limitations by adding relevant flags. Add standard
-flag CLK_SET_RATE_PARENT to handle rate change and add driver internal
-flag DIV_CLK_NO_MASK to handle enable/disable.
+On Wed, Oct 12, 2022 at 8:48 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Correct the misspelled textual name of the SD0H clock.
+>
+> Fixes: 470e3f0d0b15 ("clk: renesas: rcar-gen4: Introduce R-Car Gen4 CPG driver")
 
-Fixes: d058fd9e8984c ("clk: intel: Add CGU clock driver for a new SoC")
-Reviewed-by: Yi xin Zhu <yzhu@maxlinear.com>
-Signed-off-by: Rahul Tanwar <rtanwar@maxlinear.com>
----
- drivers/clk/x86/clk-cgu.c | 5 +++--
- drivers/clk/x86/clk-cgu.h | 1 +
- drivers/clk/x86/clk-lgm.c | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+Thanks for your patch!
 
-diff --git a/drivers/clk/x86/clk-cgu.c b/drivers/clk/x86/clk-cgu.c
-index 5eafd7e0d945..ce253cce5814 100644
---- a/drivers/clk/x86/clk-cgu.c
-+++ b/drivers/clk/x86/clk-cgu.c
-@@ -164,8 +164,9 @@ static int lgm_clk_divider_enable_disable(struct clk_hw=
- *hw, int enable)
- {
- =09struct lgm_clk_divider *div =3D to_lgm_clk_divider(hw);
-=20
--=09lgm_set_clk_val(div->membase, div->reg, div->shift_gate,
--=09=09=09div->width_gate, enable);
-+=09if (div->flags !=3D DIV_CLK_NO_MASK)
-+=09=09lgm_set_clk_val(div->membase, div->reg, div->shift_gate,
-+=09=09=09=09div->width_gate, enable);
- =09return 0;
- }
-=20
-diff --git a/drivers/clk/x86/clk-cgu.h b/drivers/clk/x86/clk-cgu.h
-index 73ce84345f81..bcaf8aec94e5 100644
---- a/drivers/clk/x86/clk-cgu.h
-+++ b/drivers/clk/x86/clk-cgu.h
-@@ -198,6 +198,7 @@ struct lgm_clk_branch {
- #define CLOCK_FLAG_VAL_INIT=09BIT(16)
- #define MUX_CLK_SW=09=09BIT(17)
- #define GATE_CLK_HW=09=09BIT(18)
-+#define DIV_CLK_NO_MASK=09=09BIT(19)
-=20
- #define LGM_MUX(_id, _name, _pdata, _f, _reg,=09=09\
- =09=09_shift, _width, _cf, _v)=09=09\
-diff --git a/drivers/clk/x86/clk-lgm.c b/drivers/clk/x86/clk-lgm.c
-index e312af42e97a..4de77b2c750d 100644
---- a/drivers/clk/x86/clk-lgm.c
-+++ b/drivers/clk/x86/clk-lgm.c
-@@ -255,8 +255,8 @@ static const struct lgm_clk_branch lgm_branch_clks[] =
-=3D {
- =09LGM_FIXED(LGM_CLK_SLIC, "slic", NULL, 0, CGU_IF_CLK1,
- =09=09  8, 2, CLOCK_FLAG_VAL_INIT, 8192000, 2),
- =09LGM_FIXED(LGM_CLK_DOCSIS, "v_docsis", NULL, 0, 0, 0, 0, 0, 16000000, 0)=
-,
--=09LGM_DIV(LGM_CLK_DCL, "dcl", "v_ifclk", 0, CGU_PCMCR,
--=09=0925, 3, 0, 0, 0, 0, dcl_div),
-+=09LGM_DIV(LGM_CLK_DCL, "dcl", "v_ifclk", CLK_SET_RATE_PARENT, CGU_PCMCR,
-+=09=0925, 3, 0, 0, DIV_CLK_NO_MASK, 0, dcl_div),
- =09LGM_MUX(LGM_CLK_PCM, "pcm", pcm_p, 0, CGU_C55_PCMCR,
- =09=090, 1, CLK_MUX_ROUND_CLOSEST, 0),
- =09LGM_FIXED_FACTOR(LGM_CLK_DDR_PHY, "ddr_phy", "ddr",
---=20
-2.17.1
+> Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+I hadn't even noticed the R-Car S4-8 misspelling was copied from V3U ;-)
+
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
