@@ -2,114 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E875FDA12
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 15:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5305FDC11
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 16:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbiJMNOh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Oct 2022 09:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S229598AbiJMOIK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Oct 2022 10:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiJMNOf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Oct 2022 09:14:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE6714D8D8;
-        Thu, 13 Oct 2022 06:14:34 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id sc25so3772145ejc.12;
-        Thu, 13 Oct 2022 06:14:34 -0700 (PDT)
+        with ESMTP id S229764AbiJMOII (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Oct 2022 10:08:08 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2833B9BF
+        for <linux-clk@vger.kernel.org>; Thu, 13 Oct 2022 07:07:56 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id g1so2634473lfu.12
+        for <linux-clk@vger.kernel.org>; Thu, 13 Oct 2022 07:07:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGUo79V8IknEK9RaV+1rr5dfMkYi9KkvLOC/DC9705Q=;
-        b=AVen059q46QGaA+8FXo1xeVtCkArAxsMnZBK5w7Ry+FszVgIdYDCyXZkSlXU0yY5bw
-         hN8oOJWkxYwbb4NkjupmcmuddUwq683rib3T/pzH3Fl/c+KwaxKCLolw+MOaHSlr06SR
-         ZGLVYXYxr+cfvB7t2Xk22h5wHVYorLFm6n6Gkq2qlS9cno7Ufe1zXdImwp3qao74//+x
-         o21OK2caMqf6E3DGYfe2b/nR5I7WfTfxLNrNswQQB815OBuIyKoQ48rWNnbq70H4slrc
-         SRVG1YFyeuD0wt8g64Q/3j31qhk6+wnmfFL1NvYxsxHTE45hrql5/OaW68YYRqvM4gb0
-         +Onw==
+        bh=a/9nHumm6XpsQ10fpRG0LtkxDofAzVRYhYfPVNzOqa4=;
+        b=ErZQy9oJV5S3vGZ/tlAlj02GD9dlkHuaCbV6gTt/8H+LaO0o7HAQ29hUM+M36bvFC5
+         3HuUBj/bppoNadjUFnkZ6fNNCL/F5ZbdkPyMT7K8TznUyyfaEhX8B4SXOZ7VgPwsoTYo
+         GYjUt7UctrVX893Ndq9ATcjln47ISz3ZCCW6T71Lm1ypjRVJlV9rsGhCDq+zhNdbXVtz
+         J2xA/c+hzEkG5CIAzYTeNcioxKm/qvEWUI0wyu4qNzHWXKx6twDbDFTy1NwOrG7cKGf6
+         yPZCNIGK2Y3iiRlLG86sw9dIkW20lV1yMLKp+6T6OCCsoTDT72nZmLfq4iyEPBeLnKG0
+         oO+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sGUo79V8IknEK9RaV+1rr5dfMkYi9KkvLOC/DC9705Q=;
-        b=wSS+PtL8+WaMmqoHglzILAai4HwoCDxibnDR7gstxpxSslm1Qwmla6WLDzQ2JxPIU0
-         +UPHemiiJUBhYQuuIYRmVYVoPNHm+w6WbcvsmaXjLVyCUWEAjt/jG72NoOvtb+hcRK1d
-         JP7KJTi0ucaASjIhbNsvqC08gj/mFd2p5Hv2mZMm59gsRg7zcHElelJMkInY+XDPMDWj
-         WROZy5k4CRMKw6YNGZx7gGHSJKl2c4M6pCyuXttlMXkcfaaTGXzUIqvqggRDzvkLvImx
-         T0svmjWkOhGpC/bwKAawCdNraHQYp+z3n0D+o3Yce3/1n3Iwnm8bJUcgGOvtgIFXnIFX
-         ToZQ==
-X-Gm-Message-State: ACrzQf2jF//oSmb/PZ3UMALgI6LIPcSuCU1Q/Ev9eGd/8JtT//WWaX5x
-        d+M8JT1CFxODMkyF2jvUvls=
-X-Google-Smtp-Source: AMsMyM6LOGJYoYQIpmmtN2CdUldLXR3AacaXVeUiEDZltHjmtGeGxJJ8+SKyLWJ9CpR56YDPfAgWWw==
-X-Received: by 2002:a17:907:75dc:b0:78b:339:63c7 with SMTP id jl28-20020a17090775dc00b0078b033963c7mr26357963ejc.480.1665666872691;
-        Thu, 13 Oct 2022 06:14:32 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
-        by smtp.googlemail.com with ESMTPSA id kv11-20020a17090778cb00b0078d4e39d87esm2926083ejc.225.2022.10.13.06.14.31
+        bh=a/9nHumm6XpsQ10fpRG0LtkxDofAzVRYhYfPVNzOqa4=;
+        b=yy6tJMLauUfdbTmf7PJg3A1TX/n7XDa7AG1NZXqNm+qjW9G6FIC4ku7iPcw1pn6+xT
+         y2CrcJZFlhEVF3waaiaGYsdLqm8ZgXo9HMUyFtcB0tBUajMslfAgFICjUY5dMSRmtwsU
+         c2hwjLlb8yztA3DS2mGj9Kr8sLf0SKCMxe8F41LGF5H8JqalL0isZ4VkAQzDh9D67QFp
+         AzEIIqroAzsiroRotIFIL62vBvHkwNy9S3SpWGGPxhoVgyUJs0tDYbPQepIW5LNHHBGY
+         fz/6Vud2krj145FAKF+avliS//NWL1UXaBVRpGXExOy/M7BR8P/WsFq10+nSTdtiWfC+
+         aeaw==
+X-Gm-Message-State: ACrzQf0QHoXUIfkW6MNCNazH/1YGYvpSwNsTd9Fa4HjrNm3bITCK9T1S
+        dKLcsbau34mbT9e4QRqsTrd6CA==
+X-Google-Smtp-Source: AMsMyM72miqV2jb9bZkj82ujgaSBinpvvzNQalv24ZxeOmhG5wGPs0sdTkeiG/smQ4tKZHydkrK3NQ==
+X-Received: by 2002:ac2:4d46:0:b0:4a2:473f:1fb3 with SMTP id 6-20020ac24d46000000b004a2473f1fb3mr11588627lfp.408.1665670067779;
+        Thu, 13 Oct 2022 07:07:47 -0700 (PDT)
+Received: from fedora.. ([85.235.10.72])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b004a100c21eaesm416820lfr.97.2022.10.13.07.07.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Oct 2022 06:14:32 -0700 (PDT)
-From:   David Virag <virag.david003@gmail.com>
-Cc:     David Virag <virag.david003@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] clk: samsung: exynos7885: Correct "div4" clock parents
-Date:   Thu, 13 Oct 2022 17:13:40 +0200
-Message-Id: <20221013151341.151208-1-virag.david003@gmail.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 13 Oct 2022 07:07:47 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH] clk: qcom: gcc-msm8660: Drop hardcoded fixed board clocks
+Date:   Thu, 13 Oct 2022 16:07:45 +0200
+Message-Id: <20221013140745.7801-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-"div4" DIVs which divide PLLs by 4 are actually dividing "div2" DIVs by
-2 to achieve a by 4 division, thus their parents are the respective
-"div2" DIVs. These DIVs were mistakenly set to have the PLLs as parents.
-This leads to the kernel thinking "div4"s and everything under them run
-at 2x the clock speed. Fix this.
+These two clocks are now registered in the device tree as fixed clocks,
+causing a regression in the driver as the clock already exists with
+e.g. the name "pxo_board" as the MSM8660 GCC driver probes.
 
-Fixes: 45bd8166a1d8 ("clk: samsung: Add initial Exynos7885 clock driver")
-Signed-off-by: David Virag <virag.david003@gmail.com>
+Fix this by just not hard-coding this anymore and everything works
+like a charm.
+
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: baecbda52933 ("ARM: dts: qcom: msm8660: fix node names for fixed clocks")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/clk/samsung/clk-exynos7885.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/gcc-msm8660.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-exynos7885.c b/drivers/clk/samsung/clk-exynos7885.c
-index a7b106302706..368c50badd15 100644
---- a/drivers/clk/samsung/clk-exynos7885.c
-+++ b/drivers/clk/samsung/clk-exynos7885.c
-@@ -182,7 +182,7 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
- 	    CLK_CON_DIV_PLL_SHARED0_DIV2, 0, 1),
- 	DIV(CLK_DOUT_SHARED0_DIV3, "dout_shared0_div3", "fout_shared0_pll",
- 	    CLK_CON_DIV_PLL_SHARED0_DIV3, 0, 2),
--	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "fout_shared0_pll",
-+	DIV(CLK_DOUT_SHARED0_DIV4, "dout_shared0_div4", "dout_shared0_div2",
- 	    CLK_CON_DIV_PLL_SHARED0_DIV4, 0, 1),
- 	DIV(CLK_DOUT_SHARED0_DIV5, "dout_shared0_div5", "fout_shared0_pll",
- 	    CLK_CON_DIV_PLL_SHARED0_DIV5, 0, 3),
-@@ -190,7 +190,7 @@ static const struct samsung_div_clock top_div_clks[] __initconst = {
- 	    CLK_CON_DIV_PLL_SHARED1_DIV2, 0, 1),
- 	DIV(CLK_DOUT_SHARED1_DIV3, "dout_shared1_div3", "fout_shared1_pll",
- 	    CLK_CON_DIV_PLL_SHARED1_DIV3, 0, 2),
--	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "fout_shared1_pll",
-+	DIV(CLK_DOUT_SHARED1_DIV4, "dout_shared1_div4", "dout_shared1_div2",
- 	    CLK_CON_DIV_PLL_SHARED1_DIV4, 0, 1),
+diff --git a/drivers/clk/qcom/gcc-msm8660.c b/drivers/clk/qcom/gcc-msm8660.c
+index 657e1154bb9b..a9eb6a9ac445 100644
+--- a/drivers/clk/qcom/gcc-msm8660.c
++++ b/drivers/clk/qcom/gcc-msm8660.c
+@@ -2767,17 +2767,6 @@ MODULE_DEVICE_TABLE(of, gcc_msm8660_match_table);
  
- 	/* CORE */
+ static int gcc_msm8660_probe(struct platform_device *pdev)
+ {
+-	int ret;
+-	struct device *dev = &pdev->dev;
+-
+-	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 19200000);
+-	if (ret)
+-		return ret;
+-
+-	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 27000000);
+-	if (ret)
+-		return ret;
+-
+ 	return qcom_cc_probe(pdev, &gcc_msm8660_desc);
+ }
+ 
 -- 
-2.35.1
+2.34.1
 
