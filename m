@@ -2,172 +2,146 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5475FD1AD
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 02:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E985FD01C
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 02:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiJMAnR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Oct 2022 20:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S230409AbiJMAYp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Oct 2022 20:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiJMAnB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Oct 2022 20:43:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C444A24BF9;
-        Wed, 12 Oct 2022 17:35:00 -0700 (PDT)
+        with ESMTP id S231328AbiJMAYS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Oct 2022 20:24:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFF2CDF1;
+        Wed, 12 Oct 2022 17:23:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0890B81CED;
-        Thu, 13 Oct 2022 00:23:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82642C433C1;
-        Thu, 13 Oct 2022 00:23:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47A1B61646;
+        Thu, 13 Oct 2022 00:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FDA3C433C1;
+        Thu, 13 Oct 2022 00:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620617;
-        bh=+uNZkwr6oPBtDUd6jzY7rCjmM98v3IRGZerJnhG2IWo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LzdOq8n72EnhhONrj9ksj8+OVeJth//wMCu0JRUxUhlPi7fJ85u0VUGz/DPs3rpJ1
-         aXG4qyAhqhgMJzeKAQccCJZAJhmi3f+vDHF92D1Rt0alevSxPJFCQp9AS1CYfSaUi8
-         its9Q7/7EZbDb/aXltmrjLuCVZDXYRdhoZtrwtOiLvSA/zmB4SLxHdrwoJ/wAok9XS
-         2q1PEXP95ic8Zpll5KCpvIfBW3aCKhc3/TFVU8tEGSCh1EL5H+j624LCd+xXil9HS1
-         XBSoCXdrnCDgXVka2pIEztxrswMzV6h/8zKN1Z8girzumSIS0Y7gQI0kO8oQsv5YG0
-         hAZyIq6hsi8IA==
+        s=k20201202; t=1665620626;
+        bh=4yEgmnwTZHctMTUP9k2Sgbjd3eyxLywPyXolyPXXje0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nPkJLtl9GNzSJWmMEYeFFWSM3j28g86DAGbL/rL6WknVC2wv2vRg05sgSzhJc1H3f
+         /4ZLaQFFsZk5xePQAWwWYIqPadxpxAfqgoXPLzU28pkDFW4dK2Drvgr1sfMn/ulxsm
+         EgssHTlsxarjb3pYA4M/zwREN6luH50xe0S0TisNftXA9Rr82JoZjfU16ls4FbH20Y
+         jwJpRd24scam6bCFy6e3EDbhBuXM+1xNeXCqo23Jl2C7puqwfbVISh0GLzUJ3FRKxX
+         VKcHVbB0n1hDwozxHRWDemSwZ4aG3TI+7JJLbhD+kRHZn6PTiU9YVRzvryZK3/967R
+         RfinmoADxE2Pw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ian Nam <young.kwan.nam@xilinx.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Michal Simek <michal.simek@amd.com>,
+Cc:     Quanyang Wang <quanyang.wang@windriver.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>, mturquette@baylibre.com,
-        michal.simek@xilinx.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 01/33] clk: zynqmp: Fix stack-out-of-bounds in strncpy`
-Date:   Wed, 12 Oct 2022 20:23:00 -0400
-Message-Id: <20221013002334.1894749-1-sashal@kernel.org>
+        michal.simek@xilinx.com, m.tretter@pengutronix.de,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 03/33] clk: zynqmp: pll: rectify rate rounding in zynqmp_pll_round_rate
+Date:   Wed, 12 Oct 2022 20:23:02 -0400
+Message-Id: <20221013002334.1894749-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221013002334.1894749-1-sashal@kernel.org>
+References: <20221013002334.1894749-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Ian Nam <young.kwan.nam@xilinx.com>
+From: Quanyang Wang <quanyang.wang@windriver.com>
 
-[ Upstream commit dd80fb2dbf1cd8751efbe4e53e54056f56a9b115 ]
+[ Upstream commit 30eaf02149ecc3c5815e45d27187bf09e925071d ]
 
-"BUG: KASAN: stack-out-of-bounds in strncpy+0x30/0x68"
+The function zynqmp_pll_round_rate is used to find a most appropriate
+PLL frequency which the hardware can generate according to the desired
+frequency. For example, if the desired frequency is 297MHz, considering
+the limited range from PS_PLL_VCO_MIN (1.5GHz) to PS_PLL_VCO_MAX (3.0GHz)
+of PLL, zynqmp_pll_round_rate should return 1.872GHz (297MHz * 5).
 
-Linux-ATF interface is using 16 bytes of SMC payload. In case clock name is
-longer than 15 bytes, string terminated NULL character will not be received
-by Linux. Add explicit NULL character at last byte to fix issues when clock
-name is longer.
+There are two problems with the current code of zynqmp_pll_round_rate:
 
-This fixes below bug reported by KASAN:
+1) When the rate is below PS_PLL_VCO_MIN, it can't find a correct rate
+when the parameter "rate" is an integer multiple of *prate, in other words,
+if "f" is zero, zynqmp_pll_round_rate won't return a valid frequency which
+is from PS_PLL_VCO_MIN to PS_PLL_VCO_MAX. For example, *prate is 33MHz
+and the rate is 660MHz, zynqmp_pll_round_rate will not boost up rate and
+just return 660MHz, and this will cause clk_calc_new_rates failure since
+zynqmp_pll_round_rate returns an invalid rate out of its boundaries.
 
- ==================================================================
- BUG: KASAN: stack-out-of-bounds in strncpy+0x30/0x68
- Read of size 1 at addr ffff0008c89a7410 by task swapper/0/1
+2) Even if the rate is higher than PS_PLL_VCO_MIN, there is still a risk
+that zynqmp_pll_round_rate returns an invalid rate because the function
+DIV_ROUND_CLOSEST makes some loss in the fractional part. If the parent
+clock *prate is 33333333Hz and we want to set the PLL rate to 1.5GHz,
+this function will return 1499999985Hz by using the formula below:
+    value = *prate * DIV_ROUND_CLOSEST(rate, *prate)).
+This value is also invalid since it's slightly smaller than PS_PLL_VCO_MIN.
+because DIV_ROUND_CLOSEST makes some loss in the fractional part.
 
- CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.4.0-00396-g81ef9e7-dirty #3
- Hardware name: Xilinx Versal vck190 Eval board revA (QSPI) (DT)
- Call trace:
-  dump_backtrace+0x0/0x1e8
-  show_stack+0x14/0x20
-  dump_stack+0xd4/0x108
-  print_address_description.isra.0+0xbc/0x37c
-  __kasan_report+0x144/0x198
-  kasan_report+0xc/0x18
-  __asan_load1+0x5c/0x68
-  strncpy+0x30/0x68
-  zynqmp_clock_probe+0x238/0x7b8
-  platform_drv_probe+0x6c/0xc8
-  really_probe+0x14c/0x418
-  driver_probe_device+0x74/0x130
-  __device_attach_driver+0xc4/0xe8
-  bus_for_each_drv+0xec/0x150
-  __device_attach+0x160/0x1d8
-  device_initial_probe+0x10/0x18
-  bus_probe_device+0xe0/0xf0
-  device_add+0x528/0x950
-  of_device_add+0x5c/0x80
-  of_platform_device_create_pdata+0x120/0x168
-  of_platform_bus_create+0x244/0x4e0
-  of_platform_populate+0x50/0xe8
-  zynqmp_firmware_probe+0x370/0x3a8
-  platform_drv_probe+0x6c/0xc8
-  really_probe+0x14c/0x418
-  driver_probe_device+0x74/0x130
-  device_driver_attach+0x94/0xa0
-  __driver_attach+0x70/0x108
-  bus_for_each_dev+0xe4/0x158
-  driver_attach+0x30/0x40
-  bus_add_driver+0x21c/0x2b8
-  driver_register+0xbc/0x1d0
-  __platform_driver_register+0x7c/0x88
-  zynqmp_firmware_driver_init+0x1c/0x24
-  do_one_initcall+0xa4/0x234
-  kernel_init_freeable+0x1b0/0x24c
-  kernel_init+0x10/0x110
-  ret_from_fork+0x10/0x18
-
- The buggy address belongs to the page:
- page:ffff0008f9be1c88 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0
- raw: 0008d00000000000 ffff0008f9be1c90 ffff0008f9be1c90 0000000000000000
- raw: 0000000000000000 0000000000000000 00000000ffffffff
- page dumped because: kasan: bad access detected
-
- addr ffff0008c89a7410 is located in stack of task swapper/0/1 at offset 112 in frame:
-  zynqmp_clock_probe+0x0/0x7b8
-
- this frame has 3 objects:
-  [32, 44) 'response'
-  [64, 80) 'ret_payload'
-  [96, 112) 'name'
-
- Memory state around the buggy address:
-  ffff0008c89a7300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  ffff0008c89a7380: 00 00 00 00 f1 f1 f1 f1 00 04 f2 f2 00 00 f2 f2
- >ffff0008c89a7400: 00 00 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
-                          ^
-  ffff0008c89a7480: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  ffff0008c89a7500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ==================================================================
-
-Signed-off-by: Ian Nam <young.kwan.nam@xilinx.com>
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Link: https://lore.kernel.org/r/20220510070154.29528-3-shubhrajyoti.datta@xilinx.com
-Acked-by: Michal Simek <michal.simek@amd.com>
+Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
+Link: https://lore.kernel.org/r/20220826142030.213805-1-quanyang.wang@windriver.com
+Reviewed-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/zynqmp/clkc.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/clk/zynqmp/pll.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/clk/zynqmp/clkc.c b/drivers/clk/zynqmp/clkc.c
-index db8d0d7161ce..9c82ae240c40 100644
---- a/drivers/clk/zynqmp/clkc.c
-+++ b/drivers/clk/zynqmp/clkc.c
-@@ -687,6 +687,13 @@ static void zynqmp_get_clock_info(void)
- 				  FIELD_PREP(CLK_ATTR_NODE_INDEX, i);
+diff --git a/drivers/clk/zynqmp/pll.c b/drivers/clk/zynqmp/pll.c
+index abe6afbf3407..2ae7f9129b07 100644
+--- a/drivers/clk/zynqmp/pll.c
++++ b/drivers/clk/zynqmp/pll.c
+@@ -99,26 +99,25 @@ static long zynqmp_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+ 				  unsigned long *prate)
+ {
+ 	u32 fbdiv;
+-	long rate_div, f;
++	u32 mult, div;
  
- 		zynqmp_pm_clock_get_name(clock[i].clk_id, &name);
+-	/* Enable the fractional mode if needed */
+-	rate_div = (rate * FRAC_DIV) / *prate;
+-	f = rate_div % FRAC_DIV;
+-	if (f) {
+-		if (rate > PS_PLL_VCO_MAX) {
+-			fbdiv = rate / PS_PLL_VCO_MAX;
+-			rate = rate / (fbdiv + 1);
+-		}
+-		if (rate < PS_PLL_VCO_MIN) {
+-			fbdiv = DIV_ROUND_UP(PS_PLL_VCO_MIN, rate);
+-			rate = rate * fbdiv;
+-		}
+-		return rate;
++	/* Let rate fall inside the range PS_PLL_VCO_MIN ~ PS_PLL_VCO_MAX */
++	if (rate > PS_PLL_VCO_MAX) {
++		div = DIV_ROUND_UP(rate, PS_PLL_VCO_MAX);
++		rate = rate / div;
++	}
++	if (rate < PS_PLL_VCO_MIN) {
++		mult = DIV_ROUND_UP(PS_PLL_VCO_MIN, rate);
++		rate = rate * mult;
+ 	}
+ 
+ 	fbdiv = DIV_ROUND_CLOSEST(rate, *prate);
+-	fbdiv = clamp_t(u32, fbdiv, PLL_FBDIV_MIN, PLL_FBDIV_MAX);
+-	return *prate * fbdiv;
++	if (fbdiv < PLL_FBDIV_MIN || fbdiv > PLL_FBDIV_MAX) {
++		fbdiv = clamp_t(u32, fbdiv, PLL_FBDIV_MIN, PLL_FBDIV_MAX);
++		rate = *prate * fbdiv;
++	}
 +
-+		/*
-+		 * Terminate with NULL character in case name provided by firmware
-+		 * is longer and truncated due to size limit.
-+		 */
-+		name.name[sizeof(name.name) - 1] = '\0';
-+
- 		if (!strcmp(name.name, RESERVED_CLK_NAME))
- 			continue;
- 		strncpy(clock[i].clk_name, name.name, MAX_NAME_LEN);
++	return rate;
+ }
+ 
+ /**
 -- 
 2.35.1
 
