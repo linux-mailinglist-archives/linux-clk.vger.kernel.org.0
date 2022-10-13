@@ -2,35 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED515FD14A
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 02:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DFE5FD0D7
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Oct 2022 02:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbiJMAfz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Oct 2022 20:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S231151AbiJMAaN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Oct 2022 20:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbiJMAeC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Oct 2022 20:34:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0639B42D73;
-        Wed, 12 Oct 2022 17:29:02 -0700 (PDT)
+        with ESMTP id S231950AbiJMA3a (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Oct 2022 20:29:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2EB129759;
+        Wed, 12 Oct 2022 17:27:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E87B1616EC;
-        Thu, 13 Oct 2022 00:26:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC241C433D6;
-        Thu, 13 Oct 2022 00:26:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8F7616CC;
+        Thu, 13 Oct 2022 00:27:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A33C433C1;
+        Thu, 13 Oct 2022 00:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665620778;
-        bh=sSSiodqJSl4UCZSe25ePy/bpdrUXdRItPgPSfdFrbXI=;
+        s=k20201202; t=1665620831;
+        bh=ZV0c09dSBJY1PswURuA8I1QmLIT9hO93rRzTYy22ghk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hEVYCvWcNoYLWgZW3hDgaK3H3O9+QPUTg5ROuOo1jp/0S/8Jf7wnA3v54zDcA/TdC
-         nmZLukvT4EWbg+dCiWoC7N9UxsIrbqsUo2jCQyPUusk2+IF21wOC57uUQam3Vdp7UK
-         4+BtrbqRCyt4y2szxqpqRArDCM55JFtXd8CLf/6EPBu8/xzwquVdgtEUzD5dX5pccJ
-         LkR/wIDQhUv3+/IKtrakUjTlZS8kWPhyd1PeO9xmBWuBLPMilq8oqvF+4KUUmFtGEo
-         IfUYWx81yjkItgBfXeQd5Y6IFQSFnTWoZNFwfvCvaPrpS5uG5cxV8TNimliRXHsRts
-         dhRPkHAvNR9iw==
+        b=H3s0LUHJnLl1Bi7KTTOqOBGvuV5KPIIk6JOSx8E7lvP0BZvW5kCruHeJHW2BDPWlC
+         Jwm63Jj7qXAfGWZ7ZPCQfbTmQSEoqgBiF1Ab3xrZGccMU5jUVDxEP08+reTk96eYkf
+         6A1lpwsnrrGgd1vM8+ih5DL3RURML7ZObCFH4h0lOe6MPt2eyiUNOLsSS/tQTUpgE8
+         ubJF+bpGfR+qzGIT/7seID84GmVP7Xh85f/75SwsRiSlzLT/p4PiflK/SVMCHEAcHe
+         k9I8+xHy1qfj1+TtnmYD4byKIdzu/Pc/D98ZskBToFRXGOoffymr/QCIwzO5dpljxB
+         T7z53F3V7UHVw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Maxime Ripard <maxime@cerno.tech>,
@@ -42,12 +42,12 @@ Cc:     Maxime Ripard <maxime@cerno.tech>,
         iivanov@suse.de, linux-clk@vger.kernel.org,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 27/27] clk: bcm2835: Make peripheral PLLC critical
-Date:   Wed, 12 Oct 2022 20:24:59 -0400
-Message-Id: <20221013002501.1895204-27-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 19/19] clk: bcm2835: Make peripheral PLLC critical
+Date:   Wed, 12 Oct 2022 20:26:18 -0400
+Message-Id: <20221013002623.1895576-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221013002501.1895204-1-sashal@kernel.org>
-References: <20221013002501.1895204-1-sashal@kernel.org>
+In-Reply-To: <20221013002623.1895576-1-sashal@kernel.org>
+References: <20221013002623.1895576-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -89,10 +89,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index e637bd6b295b..5a4d13365399 100644
+index fd78dd5356ed..4d5ac0b7b008 100644
 --- a/drivers/clk/bcm/clk-bcm2835.c
 +++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -1756,7 +1756,7 @@ static const struct bcm2835_clk_desc clk_desc_array[] = {
+@@ -1737,7 +1737,7 @@ static const struct bcm2835_clk_desc clk_desc_array[] = {
  		.load_mask = CM_PLLC_LOADPER,
  		.hold_mask = CM_PLLC_HOLDPER,
  		.fixed_divider = 1,
