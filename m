@@ -2,81 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822D65FF58B
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Oct 2022 23:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4682B5FF5F6
+	for <lists+linux-clk@lfdr.de>; Sat, 15 Oct 2022 00:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiJNVnw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Oct 2022 17:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S229651AbiJNWKo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Oct 2022 18:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiJNVnv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Oct 2022 17:43:51 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE1A1958C8;
-        Fri, 14 Oct 2022 14:43:50 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id k11-20020a4ab28b000000b0047659ccfc28so1882582ooo.8;
-        Fri, 14 Oct 2022 14:43:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsufLNFM7jG51GY0dQr+V7Jz/aTFB4t5E1h05t4lU/Q=;
-        b=xpYRQhzpu0GtOGtWDS6yxDeRhfDoHU2CvF9Ji4b+5f8SLb2ao0VhwLfaQuR+7Q/hw5
-         Dychab4i3xf+g47oMph31Mykq2hxFGSYxNycp6CStjT+6Bt0WRvoJEUCETWc0CP8c1qe
-         hM6Yr9sJXE0kgPER12EnKDW1B/JkVu+LFgI7qQPlAguAEJKoIUdRxbHnw4OmVwkMn9YE
-         3ohxF2EwQoMi5T0qB2CB0/tGmyNjyJj376wdXbbFrXwvlOeOMK42qIme6mvP6lQA7BFx
-         rdZAIlU8TwdEKjriEprabvI3GeHg1v9tYFx7hbfSX7sYQtA+/wEISLhe16v6HiO7YsWf
-         nfog==
-X-Gm-Message-State: ACrzQf26vO/370sKnofckWIqIXdrAUcQeMtc/xhwgCrQFV9vVYCjilsJ
-        VKQ9UrYWtUc1pWmPqNB/SA==
-X-Google-Smtp-Source: AMsMyM6fLTHPSbOXoYwxDCAkaGDn+10AxfgooMekB9fxUJGM4iLfCvcG7NzoSyU6LCucpf/wUNLOZg==
-X-Received: by 2002:a4a:346:0:b0:476:8699:bdca with SMTP id 67-20020a4a0346000000b004768699bdcamr2768723ooi.29.1665783829754;
-        Fri, 14 Oct 2022 14:43:49 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cv36-20020a056870c6a400b0011bde9f5745sm1902094oab.23.2022.10.14.14.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 14:43:49 -0700 (PDT)
-Received: (nullmailer pid 2949845 invoked by uid 1000);
-        Fri, 14 Oct 2022 21:43:50 -0000
-Date:   Fri, 14 Oct 2022 16:43:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S229585AbiJNWKn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Oct 2022 18:10:43 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B86FAE66;
+        Fri, 14 Oct 2022 15:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1665785442; x=1697321442;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=P3QMyKLfirC1SWV0s4npdIwk7ADO33QXeooooDPohT0=;
+  b=pp21dJaT00y2e8s+mxG25Eb8VvR7M5zuigk7DgjCQTYmY8NzfaFudJWm
+   FShny/33ayH9wyLK8YUpW78xc6whEPErv9u5sbd9/AjJ1YqTcSXfVztbD
+   pbPuc4OoKNkXk6+4w8S74l89X3QL6ytl3lwHdO9iXATlz7SrsVN1U57hj
+   o=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Oct 2022 15:10:38 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2022 15:10:37 -0700
+Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 14 Oct 2022 15:10:22 -0700
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH] dt-bindings: clock: Convert pwm-clock to DT schema
-Message-ID: <166578382952.2949791.14457951848803615803.robh@kernel.org>
-References: <20221011162919.3025038-1-robh@kernel.org>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v2 0/6] clk: qcom: Add clocks for the QDU1000 and QRU1000 SoCs
+Date:   Fri, 14 Oct 2022 15:10:05 -0700
+Message-ID: <20221014221011.7360-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011162919.3025038-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 11 Oct 2022 11:29:18 -0500, Rob Herring wrote:
-> Convert the pwm-clock binding to DT schema format. A straight-forward
-> conversion.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/pwm-clock.txt   | 26 -----------
->  .../devicetree/bindings/clock/pwm-clock.yaml  | 45 +++++++++++++++++++
->  2 files changed, 45 insertions(+), 26 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/pwm-clock.txt
->  create mode 100644 Documentation/devicetree/bindings/clock/pwm-clock.yaml
-> 
+This series adds the GCC, RPMh, and PDC clock support required for the
+QDU1000 and QRU1000 SoCs along with the devicetree bindings for them.
 
-Applied, thanks!
+The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+1000 are new SoCs meant for enabling Open RAN solutions. See more at
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
+
+This patchset is based on the YAML conversion patch [1] submitted already.
+
+[1] https://lore.kernel.org/r/20220103074348.6039-1-luca.weiss@fairphone.com
+
+Imran Shaik (1):
+  clk: qcom: branch: Add BRANCH_HALT_INVERT flag support for branch
+    clocks
+
+Melody Olvera (4):
+  dt-bindings: clock: Add QDU1000 and QRU1000 GCC clock bindings
+  dt-bindings: clock: Add RPMHCC bindings for QDU1000 and QRU1000
+  clk: qcom: Add support for QDU1000 and QRU1000 RPMh clocks
+  dt-bindings: qcom,pdc: Introduce pdc bindings for QDU1000 and QRU1000
+
+Taniya Das (1):
+  clk: qcom: Add QDU1000 and QRU1000 GCC support
+
+ .../bindings/clock/qcom,gcc-qdu1000.yaml      |   70 +
+ .../bindings/clock/qcom,rpmhcc.yaml           |    2 +
+ .../interrupt-controller/qcom,pdc.yaml        |    2 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-branch.c                 |    5 +
+ drivers/clk/qcom/clk-branch.h                 |    2 +
+ drivers/clk/qcom/clk-rpmh.c                   |   14 +
+ drivers/clk/qcom/gcc-qdu1000.c                | 2644 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-qdu1000.h  |  170 ++
+ 10 files changed, 2918 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-qdu1000.yaml
+ create mode 100644 drivers/clk/qcom/gcc-qdu1000.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-qdu1000.h
+
+
+base-commit: dca0a0385a4963145593ba417e1417af88a7c18d
+-- 
+2.38.0
+
