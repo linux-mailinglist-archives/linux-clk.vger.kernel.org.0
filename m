@@ -2,49 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C86E601AFD
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Oct 2022 23:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4DF601B07
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Oct 2022 23:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiJQVIW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Oct 2022 17:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S230014AbiJQVJ6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Oct 2022 17:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiJQVIH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Oct 2022 17:08:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FC878BE5
-        for <linux-clk@vger.kernel.org>; Mon, 17 Oct 2022 14:08:03 -0700 (PDT)
+        with ESMTP id S230274AbiJQVJw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Oct 2022 17:09:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4C21D32A;
+        Mon, 17 Oct 2022 14:09:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2F6DB81681
-        for <linux-clk@vger.kernel.org>; Mon, 17 Oct 2022 21:08:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75355C4347C;
-        Mon, 17 Oct 2022 21:08:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBF53611EF;
+        Mon, 17 Oct 2022 21:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B54AC433D6;
+        Mon, 17 Oct 2022 21:09:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666040880;
-        bh=PEd3VMfM3ZdUTCnWiOBM/cEisVoIk6qegWHGtLrK200=;
+        s=k20201202; t=1666040989;
+        bh=nhxavo8RpMYLFsWqg39tCn8fm9MCY9/SKFHfqalsN6M=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=DfqKUKtezIK5olz07bjE9D6ObY92gS+vXbPKLTpYKkOLOf7Rmq3/55B7EJj+QJXk7
-         0YaXf9v+gF9gaD9kp1scQYynsCXFHChs2uUE8Ds2atiiRiRZV8uEM0bIHQYCDAOUBN
-         7ahWhiHCHznExv0d0G8UzVIy7PcK0WueMXeQXpGIwXd5wxS7IP1/mB+UhFZgfIOPsG
-         kfoLr0GJ5WquSzI16sZ/IBw8U9oS8BM3XHkcnppY9dIF7Yedxsa1Evh/kYE3Ab2t4x
-         cOa7/gqOGXSDuzWSzKTF7NYhwG1eKeEBPqAQyIfCCZSjCJTNhWXqBmhGW1TwwIWj7o
-         xGGUgQA48QTKA==
+        b=Kmf2LSpuHihQpDKiEGVHoQ17A9lCtTmwjD/7xULJ8dd+qQqnSb9VhigC7j74E9F/p
+         3SR0Fx0pZ8BFrgjiN9M6M6zyG56p3rCv4mWS9DCgFTmNQfY8GZ0nmrYbqDsiN0XOiX
+         sqTT9iQXjK70eCRygmESup9OUyvnhxXp+ywhzBhe2PnVFJ7JEEefKH9Imqy5U92R81
+         g2qwxfpcG7Kf8P8SyFyNOo8u2dm68gO8GYsYcs5MsLlctlMG/0EZhlxby8Ixn8Wsu4
+         SS0tobJiMuv5PRoE3+fbALiQJUN/14cj1b7j2LQIaJsD4AvGWntGFHX9wAZ559IHWK
+         Mt9j+vahB/Z4g==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221009025056.35311-1-yangyingliang@huawei.com>
-References: <20221009025056.35311-1-yangyingliang@huawei.com>
-Subject: Re: [PATCH] clk: mediatek: clk-mt8195-topckgen: Fix error return code in clk_mt8195_topck_probe()
+In-Reply-To: <20220823033414.198525-1-seanga2@gmail.com>
+References: <20220823033414.198525-1-seanga2@gmail.com>
+Subject: Re: [RESEND PATCH] clk: ls1c: Fix PLL rate calculation
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        mturquette@baylibre.com, yangyingliang@huawei.com
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org
-Date:   Mon, 17 Oct 2022 14:07:57 -0700
+Cc:     Yang Ling <gnaygnil@gmail.com>, linux-kernel@vger.kernel.org,
+        Kelvin Cheung <keguang.zhang@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Sean Anderson <seanga2@gmail.com>
+To:     Sean Anderson <seanga2@gmail.com>, linux-clk@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Date:   Mon, 17 Oct 2022 14:09:47 -0700
 User-Agent: alot/0.10
-Message-Id: <20221017210800.75355C4347C@smtp.kernel.org>
+Message-Id: <20221017210949.1B54AC433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,14 +57,11 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Yang Yingliang (2022-10-08 19:50:56)
-> If devm_clk_hw_register_mux() fails in clk_mt8195_topck_probe(), it shoul=
-d return
-> error code.
+Quoting Sean Anderson (2022-08-22 20:34:14)
+> While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+> noticed the following calculation, which is copied from
+> drivers/clk/loongson1/clk-loongson1c.c:
 >=20
-> Fixes: deeb2af77cf6 ("clk: mediatek: clk-mt8195-topckgen: Register mfg_ck=
-_fast_ref as generic mux")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
 
-Applied to clk-fixes
+Nobody has provided a review for this patch. If it is still important,
+please resend. Thanks.
