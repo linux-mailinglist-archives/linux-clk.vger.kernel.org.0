@@ -2,74 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DA1602E9B
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Oct 2022 16:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82424602F4F
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Oct 2022 17:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiJROfN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 Oct 2022 10:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
+        id S229675AbiJRPOa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 18 Oct 2022 11:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiJROfL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Oct 2022 10:35:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EDFC7879;
-        Tue, 18 Oct 2022 07:35:10 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S230045AbiJRPO1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Oct 2022 11:14:27 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081AE267E;
+        Tue, 18 Oct 2022 08:14:20 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-095-033-155-016.ewe-ip-backbone.de [95.33.155.16])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7AC0A6602387;
-        Tue, 18 Oct 2022 15:35:08 +0100 (BST)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 006116602330;
+        Tue, 18 Oct 2022 16:14:18 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666103708;
-        bh=68YbTYqOl/0rz+JrgfLKPEGUzM7uWWXCeoy4uvrLjFI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DUWJyGrxQhsjjL3lESvpZUGccoLTKWVvN8t3SGt8NnFgsYwWPvPzh4CQ6dctU3bAK
-         HT33kX7pSkST1IHmHAUMiht6mwwPz8tAf9jwgKWhJU9ELHe61ZogxyyHttHYcm23t1
-         TjMG6GhMawr1/M+SFrarQCI+DWiAskhV15eOVyZ/gIFU5aM1cTrPrFy28x7RLq8Grh
-         6Lb1cQO3ypln/1q29RYcwPrOxJmr5ryC++K5kHyBsOPvf643ExXEtxiRQpN21PRGVa
-         uzqq2CEs1VbFOuk06jLazomp4xVWYF1v1CP3H5Uh6oWMxJJCFyDkPEuBqUkVd6bC+R
-         EjUGeHZrGa0PA==
-Message-ID: <d6286188-c84e-83b0-0694-37999614b5ef@collabora.com>
-Date:   Tue, 18 Oct 2022 16:35:05 +0200
+        s=mail; t=1666106059;
+        bh=NkKRrDVZj8gB3i6gg8ddA0fplJuwGJ1jb3t8bIeXgSM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TD3fy15Os+Wmgu1v03Uk9ECOni9fECz+dj4aUEYTqo5MknXJCb0A3fqtYmhfomyBT
+         cMzc7cPdFB8Di2XFXLW0ok84Bw/HaknBsTvHHxpAkhf9mX0j0+QsQFEF8zGA/OQmx/
+         M+ew8QfbJjuHSSPgspH5LDtLFQNHDYOWMpsc5AgNVWj9qQIS9uui3dcdmXQEbtKvqm
+         PcO1eWxQ6N8Gf+GkvRnFXZe4K+ZZK4sqfGqKU7XfUWwn7oqcoccCmEDv/s9nkbPmMG
+         FAr3AZ0RHJLFYeNlELf6waC2LtWsifediEy/Apx37oSw9xFXZFXfJYAHR7evr61mNg
+         Fc8nBzFwjjJ3w==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 1FFBC4801B3; Tue, 18 Oct 2022 17:14:16 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCHv3 0/9] RK3588 Clock and Reset Support
+Date:   Tue, 18 Oct 2022 17:13:58 +0200
+Message-Id: <20221018151407.63395-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 3/4] clk: Initialize max_rate in struct clk_rate_request
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech>
- <20221018-clk-range-checks-fixes-v1-3-f3ef80518140@cerno.tech>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221018-clk-range-checks-fixes-v1-3-f3ef80518140@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 18/10/22 15:52, Maxime Ripard ha scritto:
-> Since commit b46fd8dbe8ad ("clk: Zero the clk_rate_request structure"),
-> the clk_core_init_rate_req() function clears the struct clk_rate_request
-> passed as argument.
-> 
-> However, the default value for max_rate isn't 0 but ULONG_MAX, and we
-> end up creating a clk_rate_request instance where the maximum rate is 0.
-> 
-> Let's initialize max_rate to ULONG_MAX properly.
-> 
-> Fixes: b46fd8dbe8ad ("clk: Zero the clk_rate_request structure")
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Hi,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+This has been part of a bigger patchset adding basic rk3588 support.
+Since that gets more and more out of hand, I'm now sending patches
+for each subsystem as individual patchset.
 
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20220930153857.299396-1-sebastian.reichel@collabora.com/
+ * rebased to v6.1-rc1
+ * define rk3588_rst_init() in clk.h to fix build warning
+ * add input clocks to the binding
+ * add some more rates from the rate table (merged downstream fix)
+ * fix input of mux_700m_400m_200m_24m_p clock (merged downstream fix)
+
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20220623160329.239501-1-sebastian.reichel@collabora.com/
+ * split dt-binding header addition into its own patch (requested by Heiko)
+ * split dt-binding header into clock and reset one (requested by Krzysztof)
+ * use reset identifier instead of register offset (requested by Krzysztof)
+  * (involves adding lookup table support to rockchip CRU reset code)
+ * use linear, gapless clock identifier (requested by Krzysztof)
+ * reword the DT binding description
+
+Changes since PATCHv0:
+ * https://lore.kernel.org/all/20220504213251.264819-1-sebastian.reichel@collabora.com/
+ * Sync'd with latest downstream changes
+ * Update bindings according to Rob's comments, except for license
+   (no feedback from Rockchip)
+
+-- Sebastian
+
+Elaine Zhang (5):
+  dt-bindings: clock: add rk3588 cru bindings
+  clk: rockchip: add register offset of the cores select parent
+  clk: rockchip: add pll type for RK3588
+  clk: rockchip: clk-cpu: add mux setting for cpu change frequency
+  clk: rockchip: add clock controller for the RK3588
+
+Sebastian Reichel (4):
+  dt-bindings: clock: add rk3588 clock definitions
+  dt-bindings: reset: add rk3588 reset definitions
+  clk: rockchip: simplify rockchip_clk_add_lookup
+  clk: rockchip: add lookup table support
+
+ .../bindings/clock/rockchip,rk3588-cru.yaml   |   71 +
+ drivers/clk/rockchip/Kconfig                  |    8 +
+ drivers/clk/rockchip/Makefile                 |    1 +
+ drivers/clk/rockchip/clk-cpu.c                |   69 +-
+ drivers/clk/rockchip/clk-pll.c                |  218 +-
+ drivers/clk/rockchip/clk-rk3588.c             | 2538 +++++++++++++++++
+ drivers/clk/rockchip/clk.c                    |   14 +-
+ drivers/clk/rockchip/clk.h                    |   95 +-
+ drivers/clk/rockchip/rst-rk3588.c             |  857 ++++++
+ drivers/clk/rockchip/softrst.c                |   34 +-
+ .../dt-bindings/clock/rockchip,rk3588-cru.h   |  766 +++++
+ .../dt-bindings/reset/rockchip,rk3588-cru.h   |  754 +++++
+ 12 files changed, 5390 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+ create mode 100644 drivers/clk/rockchip/clk-rk3588.c
+ create mode 100644 drivers/clk/rockchip/rst-rk3588.c
+ create mode 100644 include/dt-bindings/clock/rockchip,rk3588-cru.h
+ create mode 100644 include/dt-bindings/reset/rockchip,rk3588-cru.h
+
+-- 
+2.35.1
 
