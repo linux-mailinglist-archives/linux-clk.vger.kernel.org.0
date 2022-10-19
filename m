@@ -2,219 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2829604091
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 12:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE0F604614
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 14:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbiJSKEl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Oct 2022 06:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S231793AbiJSM50 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Oct 2022 08:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiJSKEM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 06:04:12 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on0623.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0c::623])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A558D2CFB;
-        Wed, 19 Oct 2022 02:42:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=emm+jDNSAjBFOSZ2NOBR9CMSIstoI8hxNfljAoYpD2m7Ov5QiLZ2eAhI2QjKY21ac5jtCe1wq+Sr78h6e4ZhXvL3efTOxwWnpA9eEZrqus0TToxbzSek72adas0RYWqQHERt9GIrtpIHlbDCtgqJmlPj/+3L1OuLtSM70EX44sN5Ov7C2WXMbUc/sUTRdwTGf5EDNtcQ39YqpzTGSMP4G3yEviBYV+0NdmdQvMVpNxphFSzsBm6lYsFNlDfSy3mylHEz0+b/mZhlVUvy6UHe2OufUu2FYKLnjSXGntoZnwTesGZrueTO39NU07mnNHK3Rm2d3g9cAqj+L+/gJPAGgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=59sgFrPDR/lc2sRtJZ2iGWhYJL1MStDl3Dlm9usaw7Q=;
- b=YMOmDdjhfeAE4ib/vLO1cLOQeesN6zStiIcodVNDt+jYOasKALUtIf1EJGHCFXziuwiZI2/6mpI6UsLCjSBpZrRpLVgqMa0tHcN3Iaj0YHMDKI2Swqvvp4+SQy13l1fMS+NtfTSHLBIhBL3oBujwkRE2RvlLn/tY1oOhMQsLQPLkg0MLhkBTMsLXV+kQl082R8Uzdp4NusBqfxjtYA5TVDQRTCCY0u+Tb8UyhbSeZ7iSuldXQwk4GNkQJYlSXVV1QDD7yx7M0l07znI+zmczVVC3olyW41PptBjUaLK+RiNshnTIfR0urHQ/bRizYp7TTVpHkQnTWAsGi0DjQhZeVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=59sgFrPDR/lc2sRtJZ2iGWhYJL1MStDl3Dlm9usaw7Q=;
- b=GUs2ZS/XEEfkxQsLvzZlk6EFjR+wNkcstxYdstgRR4o2drwqVf/TBrSIX6t07ljcyN93gLx6JLpZ3u1aIiVJGe5G2iyyQdJc7zbITjClOor6fTpeGqGM9KRy82xjGBY3fHZ6p9bXyDq2mEYlRwfEiAWiQ69nyXds3Ma0lI1SSn8=
-Received: from PA4PR04MB9640.eurprd04.prod.outlook.com (2603:10a6:102:261::21)
- by DU0PR04MB9493.eurprd04.prod.outlook.com (2603:10a6:10:350::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Wed, 19 Oct
- 2022 09:26:01 +0000
-Received: from PA4PR04MB9640.eurprd04.prod.outlook.com
- ([fe80::89ef:2505:c50f:3607]) by PA4PR04MB9640.eurprd04.prod.outlook.com
- ([fe80::89ef:2505:c50f:3607%5]) with mapi id 15.20.5723.034; Wed, 19 Oct 2022
- 09:26:01 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "abelvesa@kernel.org" <abelvesa@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v4 2/3] clk: imx: imx8mp: add shared clk gate for usb
- suspend clk
-Thread-Topic: [PATCH v4 2/3] clk: imx: imx8mp: add shared clk gate for usb
- suspend clk
-Thread-Index: AQHY1N8+3DslQb0H3EmVnh4V22Fjr64VjPbw
-Date:   Wed, 19 Oct 2022 09:26:00 +0000
-Message-ID: <PA4PR04MB964042A30D09FAF4A5C40227892B9@PA4PR04MB9640.eurprd04.prod.outlook.com>
-References: <1664549663-20364-1-git-send-email-jun.li@nxp.com>
- <1664549663-20364-2-git-send-email-jun.li@nxp.com>
-In-Reply-To: <1664549663-20364-2-git-send-email-jun.li@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR04MB9640:EE_|DU0PR04MB9493:EE_
-x-ms-office365-filtering-correlation-id: c98a965a-1c07-4eb8-b3d7-08dab1b3effd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gFCyndxv2lHB9gq2SzlSvgSfe2f5OnX0dfalFhRPbdCE2CFblWE/adnp+t18n7qkEOcR9S97q4Jfu2r/7LTUu+Nrn96vFbjT2wJXlmxNcJL3K3GAeM+DDKw5q1Y30mEg+fVVA/8ptIBhTWPWUCfkyaIvvfphmbnNakUd/6Nfrq/WHyrAqqijNpVXh+w6W2Z3M6/5v5us/rV2ssmBDfS15JGx0rS4BjsYL/Yp/e0bA8K7UfRICIvrdglBWeUr/PtHhSHGIig+ceyKFPtlLK+atgARJrGHF0to86md7VFJfGNuw+uCEEL+r28vtQCcddWbJNOqInY0gjlR2y+ZZRTy4PS+W2AKrtTiXBxbAwB6NGj1Z5f2C5BpZHVrZHZoVGoSMd/Wb7H1RexbLAep/hXiUXIkH4wxcyQwiyk0ZiOnDPpSoOntlAXc8GeIUaayisjGMyrlhEtpe/5ltRClbn2Htn3hLUOSmnfzjgL/Pyf+rv7j07JJR7pL7TVxZyoVjci+vSdGZ9ogJWCyizYMxA7ZK8qJpK6SgyPEz7fzOhykyN70bqZExlmUaNbx2ZP8omkBsusnPdTtPSIWf6YAWcnR8jbSlmGCZ1v3OwKMQ8ZclFBiiIIzuWqNCC1QvZpZoKPead3KJctRWy32ya4/nfiAZOTWPq5aLEZ+tRbIhUn1X3YiIsAYsI2NrxvQsmspRCgxyb3+UXf2QXJmrBl93WccaFcgC2Yx9pJputOfqgqV0bJptXxufeo9aZKYvLlIrIgs6T9SIIQhONqCCxgBg9LvjD21OzCHUSFDJg4iBRAykV8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9640.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199015)(2906002)(5660300002)(52536014)(66476007)(8936002)(7416002)(83380400001)(41300700001)(8676002)(4326008)(6506007)(66946007)(44832011)(66556008)(66446008)(64756008)(76116006)(15650500001)(33656002)(7696005)(186003)(478600001)(26005)(316002)(9686003)(110136005)(122000001)(54906003)(71200400001)(53546011)(38070700005)(55016003)(38100700002)(86362001)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?01RqHP0O7JueZyXk8jKHzo1QFUtrd/q12V/hePsnDGFIl9LwcI0AapT2VRmu?=
- =?us-ascii?Q?pHamb7GPfDQevZMeKjTfIhjRf2PMw4vMA24vlHTReN0IY4k9iCUCyZKDY7Ah?=
- =?us-ascii?Q?sXWwRafSSQ1p5X6rgQSEGeo+LoeQnKDMLtanVebhjRPxVSybvdgTJt4aBSu8?=
- =?us-ascii?Q?N04rsis9edOOp7AbbA+SGKJHgnHb52MCqsB6BEAh4elOHBqUzR171RATR6KF?=
- =?us-ascii?Q?lIkhkG2Ihrq5cHib+YAfrKhxc21Uqgy5/10xwVgz53CTnmnMtlKG+u9kiPU1?=
- =?us-ascii?Q?vCuza3RU4YcqIOx453G0E3vVlMfDhWJaPIPtf5cjhaaUxFoTs7QMNF+USWs7?=
- =?us-ascii?Q?PWgxxluY1ZFRvgehQLjZ4AagrDD7ceM7NMDB9C5JPg04AGmIGkAue/GRNw+v?=
- =?us-ascii?Q?gtPpUmmK7s+IIgm2NghRdPJe5Bp7ksuSikhsYRIOeqsY+wlFuL++ts0rtL6F?=
- =?us-ascii?Q?E4Y1Y3qCwa+oyvjRFbonjSU6Byd+jVpY6eDGKGpfKorfIm11cATQsMmf5s0X?=
- =?us-ascii?Q?BZVMapx0/63mrzPcfM7cOIDw4mTT/lCGT3Dufts6IvyG3F1jyNTf9l/D+Qmf?=
- =?us-ascii?Q?O95crRAUkfPl6PN9+hwdEezMaj4C79/QfcDj5FRExu7yIJss428QOMaSZJWd?=
- =?us-ascii?Q?/amcmiNcwsueZCjGlRQArpTdzz7klNCBE2KgutLZE5FzhyDLbKhqoIwXZenR?=
- =?us-ascii?Q?bolUmefv2pDpGMOU03Eot2ldrh4Smgd3gwKPqhs3Td0gCW8GqnIFiaaG2J+c?=
- =?us-ascii?Q?jYG2TXh4mPj8VGDnnTiTfYmkZQD3MaLSr+P2fL70k4FmHY3jlGl44mW5wn/g?=
- =?us-ascii?Q?z0DyO5SGbC5b8PoUl2CGHbdwAgMLo9dSrzkqSAA5m9gGRVorvZksHFRBiP84?=
- =?us-ascii?Q?gvJb6KQV/Nq4Job83BXZ1lTNzUpDw5VTDxxZwVkUxDdArq0sIkf6DUK30GTk?=
- =?us-ascii?Q?arZevSewxb4pFGA6pCSSa+uiRPfG9ItNvhAmZ/rKFcUuEcvI4Ab321xuiSkK?=
- =?us-ascii?Q?kIsJHN79rGylsK5PI0RF0wdi2LZFnTtXHSj6y+Y37cPVeELiqNeFJS6dI7jP?=
- =?us-ascii?Q?BLheQf+gLRtvbpFy6hWMQKQwMt18Lu5bX5mwqOI/BAYvmfmfaMInAUWzA63F?=
- =?us-ascii?Q?g/5SqRYo6raKKX/9AuXrizzuRnVCVr3Syh3hr7KAXDhJFUIZPGGDcQXAk7Nu?=
- =?us-ascii?Q?jWh+Lf5q36eA/NbPKPU0I0fctOSD5KJBMcnnwDWw17sjxH+2sQmTr2J4kC8G?=
- =?us-ascii?Q?Oy/eVD1jso2io1/s7Gn3FRB6PqurrfjcVRaO2czzRke3ab+fT0pvh0Wxcuv1?=
- =?us-ascii?Q?D3T5TNn6CCJ+mVhrpsZlxzWB5we6vARSIQVAtLgAucBrD2SRFJfBitdqj9WA?=
- =?us-ascii?Q?vpND4faG8pzCT7Y8B6X2EC1BnkXPHpoMDKsiUT90e3yva5VItpxHiIFTrNfn?=
- =?us-ascii?Q?gpJw4fa24rG9YlXfV1+Ej6bZBYy4oVHgs1NwBbNcmy8rFRYxbIfRoWKaolTa?=
- =?us-ascii?Q?NFGeBDEH2kPQaEr63wxQ2AYa7KR/zyPSSFxuOowfGDfIOvyKeAnsiwawDkwT?=
- =?us-ascii?Q?BUoUF28h2BrCbWfq37Q=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S232112AbiJSM4z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 08:56:55 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A990170DCB
+        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 05:40:17 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id cr19so8257536qtb.0
+        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 05:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sJdU4vN2UwEe970CPN5btDuDeCsHPbb95xpFu5R9G2k=;
+        b=jTC5Se0zrBPlKxBKf997B9mwVq02UQF9KKrNW52+iV4JgYOqBeg+b+wM5MHOjn6gZ0
+         RYP7Emp6gexAYVW41GzP0l9Tbme6LKvVYkyBqYtkEQ6kToyFL5MgFPCf+DDdNvTDh0JP
+         IEK8XmV+CoXouJKHdxmv9tB7l7yz38jvtWkzB8hB6vATVbvIHsFqoN6XZ65MTsm96stp
+         zSX3Y0AR0CFQWJ8UryVCLjZB5ocDnADBBbFxo4X2TlE+fo2JVGgHrQlXIaXE24KjUwLX
+         FXCFd4dRbup62c6johjpl1MtIdpx+kdiPR2cTEUfZtizYt7vqaJO1E+OZ6jllR3FfdaP
+         iYtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sJdU4vN2UwEe970CPN5btDuDeCsHPbb95xpFu5R9G2k=;
+        b=UWSQNEvdl5fpt5vWG3jU2EJvMjQMllPryldrJ8Wrzht6sTor4vEXxfatXjEC1RglN3
+         2uoAe/hPC1Cy2dxbIOiJLLN7YOZwab9ARAdFPU1CuB8EJnaiWIuZUDAAxVzU/RQYSxR5
+         m+Hq9DSQZIcQ25W1L5IwkphSZyIzYljuRP84I1s03mT+MHuAHicoFj19YjcqfcaDc0J0
+         xscC+Le7m10wlvRwANLKmkiXnnB3Qf9JN//J08N15uq1dGdSWsFHBKUbg/rurs4lnYTy
+         wM3A+v1FkSz63PGkHACRzDVFV0bmKTHPZyyypr6RnrTj5FXGzzyOmC2O6y04wqSgbsKO
+         7YOw==
+X-Gm-Message-State: ACrzQf0PThQ4pi+ezgi6AWBF/GqL+uZp8x1Lt5tocvzmQGRh/KWleOms
+        a7IDDEfuO6HmUR7nJmCErjBpl+K/TJKh0g==
+X-Google-Smtp-Source: AMsMyM4o9PlRhMnYMKOaZD0/RuCTiRm9Sq8uEerfrFDJqDvRP+jzIrYyuegB2IPYiYvSo26kfTqYeA==
+X-Received: by 2002:a05:622a:491:b0:39c:e770:2813 with SMTP id p17-20020a05622a049100b0039ce7702813mr6143638qtx.384.1666181180433;
+        Wed, 19 Oct 2022 05:06:20 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id q26-20020a37f71a000000b006ed519554cfsm4508771qkj.61.2022.10.19.05.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 05:06:19 -0700 (PDT)
+Message-ID: <621684ba-9ad1-e265-2b1b-c99020a6568a@linaro.org>
+Date:   Wed, 19 Oct 2022 08:06:18 -0400
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9640.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c98a965a-1c07-4eb8-b3d7-08dab1b3effd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Oct 2022 09:26:00.9677
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZkWb7KI4Yl985CP2TQyc5Vw0HgYxJ+YsxhHLSJ7Ocmj9E7RNuFdLMPKy3DY8E5tc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9493
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SPF_PERMERROR autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/1] dt-bindings: clock: ti,cdce925: Convert to DT schema
+Content-Language: en-US
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221018072106.2391771-1-alexander.stein@ew.tq-group.com>
+ <3339aa03-5e43-7579-837f-d70eb0f4dae6@linaro.org>
+ <8628461.lOV4Wx5bFT@steina-w>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8628461.lOV4Wx5bFT@steina-w>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+On 19/10/2022 01:49, Alexander Stein wrote:
+> Hi Krzysztof,
+> 
+> thanks for your review.
+> 
+> Am Dienstag, 18. Oktober 2022, 15:51:35 CEST schrieb Krzysztof Kozlowski:
+>> On 18/10/2022 03:21, Alexander Stein wrote:
+>>> Convert the TI CDCE925 clock binding to DT schema format.
+>>> Including a small fix: Add the missing 'ti' prefix in the example
+>>> compatible.
+>>>
+>>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/ti,cdce925.yaml
+>>> b/Documentation/devicetree/bindings/clock/ti,cdce925.yaml new file mode
+>>> 100644
+>>> index 000000000000..1e68ee68e458
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/clock/ti,cdce925.yaml
+>>> @@ -0,0 +1,104 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/clock/ti,cdce925.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: TI CDCE913/925/937/949 programmable I2C clock synthesizers node
+>>> bindings
+>> Drop "node bindings"
+> 
+> Thanks, will do so.
+> 
+>>> +
+>>> +maintainers:
+>>> +  - Mike Looijmans <mike.looijmans@topic.nl>
+>>> +
+>>> +description: |
+>>> +  Flexible Low Power LVCMOS Clock Generator with SSC Support for EMI
+>>> Reduction +
+>>> +  - CDCE(L)913: 1-PLL, 3 Outputs https://www.ti.com/product/cdce913
+>>> +  - CDCE(L)925: 2-PLL, 5 Outputs https://www.ti.com/product/cdce925
+>>> +  - CDCE(L)937: 3-PLL, 7 Outputs https://www.ti.com/product/cdce937
+>>> +  - CDCE(L)949: 4-PLL, 9 Outputs https://www.ti.com/product/cdce949
+>>> +
+>>> +properties:
+>>> +  $nodename:
+>>> +    pattern: "^clock-controller$"
+>>
+>> Drop this requirement. It is in general expected, but there is no need
+>> for each binding to specify it.
+> 
+> Should this be put in a common binding then?
 
-> -----Original Message-----
-> From: Jun Li <jun.li@nxp.com>
-> Sent: Friday, September 30, 2022 10:54 PM
-> To: sboyd@kernel.org; abelvesa@kernel.org
-> Cc: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
-> shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
-> festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>;
-> mturquette@baylibre.com; l.stach@pengutronix.de; Peng Fan
-> <peng.fan@nxp.com>; alexander.stein@ew.tq-group.com;
-> gregkh@linuxfoundation.org; devicetree@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org; linux-clk@vger.kernel.org
-> Subject: [PATCH v4 2/3] clk: imx: imx8mp: add shared clk gate for usb sus=
-pend
-> clk
->=20
-> 32K usb suspend clock gate is shared with usb_root_clk, this shared clock
-> gate was initially defined only for usb suspend clock, usb suspend clk is
-> kept on while system is active or system sleep with usb wakeup enabled, s=
-o
-> usb root clock is fine with this situation; with the commit cf7f3f4fa9e5
-> ("clk: imx8mp: fix usb_root_clk parent"), this clock gate is changed to b=
-e
-> for usb root clock, but usb root clock will be off while usb is suspended=
-,
-> so usb suspend clock will be gated too, this cause some usb functionaliti=
-es
-> will not work, so define this clock to be a shared clock gate to conform
-> with the real HW status.
->=20
-> Fixes: 9c140d9926761 ("clk: imx: Add support for i.MX8MP clock driver")
-> Cc: stable@vger.kernel.org # v5.19+
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+Could be but we do not have dedicated binding for clock controllers, so
+this would be a common binding only for name. :)
 
-Is this version okay for you?=20
 
-Thanks
-Li Jun
-
-> ---
-> change for v4:
-> - improve the commit log to explain why this is stable stuff.
->=20
->  drivers/clk/imx/clk-imx8mp.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-> index e89db568f5a8..5b66514bdd0c 100644
-> --- a/drivers/clk/imx/clk-imx8mp.c
-> +++ b/drivers/clk/imx/clk-imx8mp.c
-> @@ -17,6 +17,7 @@
->=20
->  static u32 share_count_nand;
->  static u32 share_count_media;
-> +static u32 share_count_usb;
->=20
->  static const char * const pll_ref_sels[] =3D { "osc_24m", "dummy", "dumm=
-y",
-> "dummy", };  static const char * const audio_pll1_bypass_sels[] =3D
-> {"audio_pll1", "audio_pll1_ref_sel", }; @@ -673,7 +674,8 @@ static int
-> imx8mp_clocks_probe(struct platform_device *pdev)
->  	hws[IMX8MP_CLK_UART2_ROOT] =3D imx_clk_hw_gate4("uart2_root_clk",
-> "uart2", ccm_base + 0x44a0, 0);
->  	hws[IMX8MP_CLK_UART3_ROOT] =3D imx_clk_hw_gate4("uart3_root_clk",
-> "uart3", ccm_base + 0x44b0, 0);
->  	hws[IMX8MP_CLK_UART4_ROOT] =3D imx_clk_hw_gate4("uart4_root_clk",
-> "uart4", ccm_base + 0x44c0, 0);
-> -	hws[IMX8MP_CLK_USB_ROOT] =3D imx_clk_hw_gate4("usb_root_clk",
-> "hsio_axi", ccm_base + 0x44d0, 0);
-> +	hws[IMX8MP_CLK_USB_ROOT] =3D imx_clk_hw_gate2_shared2("usb_root_clk",
-> "hsio_axi", ccm_base + 0x44d0, 0, &share_count_usb);
-> +	hws[IMX8MP_CLK_USB_SUSP] =3D
-> imx_clk_hw_gate2_shared2("usb_suspend_clk",
-> +"osc_32k", ccm_base + 0x44d0, 0, &share_count_usb);
->  	hws[IMX8MP_CLK_USB_PHY_ROOT] =3D imx_clk_hw_gate4("usb_phy_root_clk",
-> "usb_phy_ref", ccm_base + 0x44f0, 0);
->  	hws[IMX8MP_CLK_USDHC1_ROOT] =3D imx_clk_hw_gate4("usdhc1_root_clk",
-> "usdhc1", ccm_base + 0x4510, 0);
->  	hws[IMX8MP_CLK_USDHC2_ROOT] =3D imx_clk_hw_gate4("usdhc2_root_clk",
-> "usdhc2", ccm_base + 0x4520, 0);
-> --
-> 2.34.1
+Best regards,
+Krzysztof
 
