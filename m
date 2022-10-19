@@ -2,71 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE0F604614
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 14:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0989A6045D1
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 14:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiJSM50 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Oct 2022 08:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S233411AbiJSMuI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Oct 2022 08:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbiJSM4z (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 08:56:55 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A990170DCB
-        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 05:40:17 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id cr19so8257536qtb.0
-        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 05:40:17 -0700 (PDT)
+        with ESMTP id S233674AbiJSMtV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 08:49:21 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658E110C4C4
+        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 05:32:12 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id r19so11508956qtx.6
+        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 05:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sJdU4vN2UwEe970CPN5btDuDeCsHPbb95xpFu5R9G2k=;
-        b=jTC5Se0zrBPlKxBKf997B9mwVq02UQF9KKrNW52+iV4JgYOqBeg+b+wM5MHOjn6gZ0
-         RYP7Emp6gexAYVW41GzP0l9Tbme6LKvVYkyBqYtkEQ6kToyFL5MgFPCf+DDdNvTDh0JP
-         IEK8XmV+CoXouJKHdxmv9tB7l7yz38jvtWkzB8hB6vATVbvIHsFqoN6XZ65MTsm96stp
-         zSX3Y0AR0CFQWJ8UryVCLjZB5ocDnADBBbFxo4X2TlE+fo2JVGgHrQlXIaXE24KjUwLX
-         FXCFd4dRbup62c6johjpl1MtIdpx+kdiPR2cTEUfZtizYt7vqaJO1E+OZ6jllR3FfdaP
-         iYtw==
+        bh=whlykbQsNRDmBUFhZqH43vmu3PG1yI/9OA5fIpYLMqI=;
+        b=qNV4e3eA/V25xQDFfA53+l3QpBYZ4hKhtUdH4C2TCUXYtZUJv1WoLDiQtRweDm9KwA
+         GDuxKtKUYvRSWkZmN+Qv1Hjx2cRuHBRZJDkmJiySsa43OQBtwlznBctHWmzUeulQ0I43
+         hfQDS21yFxMeZWGtCGpsjLPh1BADnewcVXX7uhtEOomWZpPsZVjcTZXoykB9OcxdeGp/
+         zZHRvksJn5SYp++R+TLj1PrPd52JoulzvzNxxyvKJk2Lt+eqTA6pNH0mZzy5c4FnzYy8
+         t3n5IB4dXC6cauJXazobwnH2cenhVPsKfnpLPU1TSUTkGF2pYf6/v+I84sQqiGYRxPZl
+         InCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sJdU4vN2UwEe970CPN5btDuDeCsHPbb95xpFu5R9G2k=;
-        b=UWSQNEvdl5fpt5vWG3jU2EJvMjQMllPryldrJ8Wrzht6sTor4vEXxfatXjEC1RglN3
-         2uoAe/hPC1Cy2dxbIOiJLLN7YOZwab9ARAdFPU1CuB8EJnaiWIuZUDAAxVzU/RQYSxR5
-         m+Hq9DSQZIcQ25W1L5IwkphSZyIzYljuRP84I1s03mT+MHuAHicoFj19YjcqfcaDc0J0
-         xscC+Le7m10wlvRwANLKmkiXnnB3Qf9JN//J08N15uq1dGdSWsFHBKUbg/rurs4lnYTy
-         wM3A+v1FkSz63PGkHACRzDVFV0bmKTHPZyyypr6RnrTj5FXGzzyOmC2O6y04wqSgbsKO
-         7YOw==
-X-Gm-Message-State: ACrzQf0PThQ4pi+ezgi6AWBF/GqL+uZp8x1Lt5tocvzmQGRh/KWleOms
-        a7IDDEfuO6HmUR7nJmCErjBpl+K/TJKh0g==
-X-Google-Smtp-Source: AMsMyM4o9PlRhMnYMKOaZD0/RuCTiRm9Sq8uEerfrFDJqDvRP+jzIrYyuegB2IPYiYvSo26kfTqYeA==
-X-Received: by 2002:a05:622a:491:b0:39c:e770:2813 with SMTP id p17-20020a05622a049100b0039ce7702813mr6143638qtx.384.1666181180433;
-        Wed, 19 Oct 2022 05:06:20 -0700 (PDT)
+        bh=whlykbQsNRDmBUFhZqH43vmu3PG1yI/9OA5fIpYLMqI=;
+        b=hnqfkBp1KEYH16U1vqufCoVQBM36xUA0F3/XEiBf2TONe90aJaRzl82IHVesVTDZIA
+         34+X3Dqs5mXDBCH/FKdpEopQjLmFcajV2fe47K2B1rqRxNlxKlcNvVjkFF1sO2C9fIBC
+         2YBt+BE7i/cjp8ZPjt4W3fP2EOK9MoPh9r0EPRIVhbZtsx5zksCUZjlqBWJuB8bIUDtJ
+         rmp2rqTLFqbl1Xd3M5A58lwS7l7kEpy6E87FvY0PxViJu4KRgN98cofVyXVpSbs2mncY
+         PVlk58zO6SlGsunUFxqeBrEiasx74spHhZRXKUPKif3E30VLfy/FhT2yAbWTZRCDphRb
+         AjGw==
+X-Gm-Message-State: ACrzQf3LLqjtuMUyN8Aj+7rOo/Fb7Gv5M5ajFgwLrntjY5j6VD2Bhebm
+        F5RThrVvZCKXBk2onVoE9fJB7A==
+X-Google-Smtp-Source: AMsMyM7bUSOzzZ6K0iuspDrCqy2b1YagSH5wAqYiNXw/7EInOLjCDS1oLVxV6rMmh9ZpGER8tXYtrg==
+X-Received: by 2002:a05:622a:15d1:b0:39c:f1da:fe0e with SMTP id d17-20020a05622a15d100b0039cf1dafe0emr6113062qty.662.1666182672542;
+        Wed, 19 Oct 2022 05:31:12 -0700 (PDT)
 Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
-        by smtp.gmail.com with ESMTPSA id q26-20020a37f71a000000b006ed519554cfsm4508771qkj.61.2022.10.19.05.06.19
+        by smtp.gmail.com with ESMTPSA id h3-20020ac87763000000b0035d5e5660cbsm3899065qtu.59.2022.10.19.05.31.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 05:06:19 -0700 (PDT)
-Message-ID: <621684ba-9ad1-e265-2b1b-c99020a6568a@linaro.org>
-Date:   Wed, 19 Oct 2022 08:06:18 -0400
+        Wed, 19 Oct 2022 05:31:11 -0700 (PDT)
+Message-ID: <9e3fb6b4-c929-66b9-a1de-d39f2893c37d@linaro.org>
+Date:   Wed, 19 Oct 2022 08:31:10 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH 1/1] dt-bindings: clock: ti,cdce925: Convert to DT schema
+Subject: Re: [PATCH v2 3/3] dt-bindings: clock: add loongson2 clock binding
 Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221018072106.2391771-1-alexander.stein@ew.tq-group.com>
- <3339aa03-5e43-7579-837f-d70eb0f4dae6@linaro.org>
- <8628461.lOV4Wx5bFT@steina-w>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221019062912.3463-1-zhuyinbo@loongson.cn>
+ <20221019062912.3463-3-zhuyinbo@loongson.cn>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8628461.lOV4Wx5bFT@steina-w>
+In-Reply-To: <20221019062912.3463-3-zhuyinbo@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,64 +84,100 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 19/10/2022 01:49, Alexander Stein wrote:
-> Hi Krzysztof,
+On 19/10/2022 02:29, Yinbo Zhu wrote:
+> Add the loongson2 clock binding with DT schema format using
+> json-schema.
 > 
-> thanks for your review.
-> 
-> Am Dienstag, 18. Oktober 2022, 15:51:35 CEST schrieb Krzysztof Kozlowski:
->> On 18/10/2022 03:21, Alexander Stein wrote:
->>> Convert the TI CDCE925 clock binding to DT schema format.
->>> Including a small fix: Add the missing 'ti' prefix in the example
->>> compatible.
->>>
->>> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
->>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> diff --git a/Documentation/devicetree/bindings/clock/ti,cdce925.yaml
->>> b/Documentation/devicetree/bindings/clock/ti,cdce925.yaml new file mode
->>> 100644
->>> index 000000000000..1e68ee68e458
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/clock/ti,cdce925.yaml
->>> @@ -0,0 +1,104 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/clock/ti,cdce925.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: TI CDCE913/925/937/949 programmable I2C clock synthesizers node
->>> bindings
->> Drop "node bindings"
-> 
-> Thanks, will do so.
-> 
->>> +
->>> +maintainers:
->>> +  - Mike Looijmans <mike.looijmans@topic.nl>
->>> +
->>> +description: |
->>> +  Flexible Low Power LVCMOS Clock Generator with SSC Support for EMI
->>> Reduction +
->>> +  - CDCE(L)913: 1-PLL, 3 Outputs https://www.ti.com/product/cdce913
->>> +  - CDCE(L)925: 2-PLL, 5 Outputs https://www.ti.com/product/cdce925
->>> +  - CDCE(L)937: 3-PLL, 7 Outputs https://www.ti.com/product/cdce937
->>> +  - CDCE(L)949: 4-PLL, 9 Outputs https://www.ti.com/product/cdce949
->>> +
->>> +properties:
->>> +  $nodename:
->>> +    pattern: "^clock-controller$"
->>
->> Drop this requirement. It is in general expected, but there is no need
->> for each binding to specify it.
-> 
-> Should this be put in a common binding then?
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-Could be but we do not have dedicated binding for clock controllers, so
-this would be a common binding only for name. :)
+Drop redundant (last) binding from the title.
 
+
+> ---
+> Change in v2:
+> 		1. Drop "Binding" string in the title.
+> 		2. Drop entire allOf and move the contents to top level.
+> 		3. Change string "refclk_100m" to "ref_100m". 
+> 
+>  .../bindings/clock/loongson,ls2k-clk.yaml     | 64 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 65 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+> new file mode 100644
+> index 000000000000..104e38a618e2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson2 SoC Clock Control Module
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +description: |
+> +  Loongson2 SoC clock control module is an integrated clock controller, which
+> +  generates and supplies to all modules.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - loongson,ls2k-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: 100m ref
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref_100m
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +    description:
+> +      The clock consumer should specify the desired clock by having the clock
+> +      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
+> +      for the full list of loongson2 SoC clock IDs.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ref_100m: clock-ref-100m {
+> +        compatible = "fixed-clock";
+> +        #clock-cells = <0>;
+> +        clock-frequency = <100000000>;
+> +        clock-output-names = "ref_100m";
+> +    };
+> +
+> +  - |
+
+Drop this. This splits examples into two separate ones, but you have
+here only one example.
+
+> +    clk: clock-controller@1fe00480 {
+> +        compatible = "loongson,ls2k-clk";
+> +        reg = <0x1fe00480 0x58>;
+> +        #clock-cells = <1>;
+> +        clocks = <&ref_100m>;
+> +        clock-names = "ref_100m";
+> +    };
 
 Best regards,
 Krzysztof
