@@ -2,124 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9060604BF9
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 17:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2A0604E15
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 19:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbiJSPqQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Oct 2022 11:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S230493AbiJSRGK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Oct 2022 13:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiJSPps (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 11:45:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7051CFF21;
-        Wed, 19 Oct 2022 08:40:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D23EFB824B0;
-        Wed, 19 Oct 2022 15:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78462C433D6;
-        Wed, 19 Oct 2022 15:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666193975;
-        bh=R5mUdvcbU/2/tJ5ejtkz4jCaK/oLwR1v0C5V24F/6/k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zjb61FJnSBefpHHnl1oA1kqetSFgeFF//FrU7kAN9jPwJ8ucHxBbhv3DNoABZ7Xvr
-         7UEj06IcirGVTOiz+Beq5LEQGjoMaqygdMVoVt4J192L3atmvpTDsLINx3sdkT//Fl
-         WP1htq1Nev9xjix5Qh5Lwxntmow9dH5Zd7UvO886IrNjriWoqt+I8xc7Hwo29Xv5BI
-         yC58Nmz4w9y7E5MSTGAegHwpuOFF095SCKQ5XJFPMYccIvsjAI4cXrtydl2qJefsbn
-         I5HBje7WUSFQH3Z4CDN1Hn1fLHnxqL4j8adgWZqVY13ekYxs6qYcT6H5S2WBGbyg03
-         N0amDzKZZNaQQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        with ESMTP id S231394AbiJSRGH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 13:06:07 -0400
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B882B15D095
+        for <linux-clk@vger.kernel.org>; Wed, 19 Oct 2022 10:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oRIooemmvL5rYb82UnBnVi3B/Pn+CODMXib3Ofvbw0U=; b=jRhB5LwA1I56IRGjW6uu22Bp1i
+        O/Lm7vrEPFNpa8/r3SIbI37uekZMZj2TPWN9zyBEr2QVhpXRUfAMrqT0uMwmi+BbsqEnJ3SQVjchF
+        kqKr+WA5TqRc+KNACOgb2ny2HEsDLb6gNytY7btRtz+AvQOQyWbp+x1VxRQuCO+qufxgPnds0qPg2
+        V9Wr+5s1UHneAP9G84UQnwaI/BfI4QODs2BIw5BvZNL8Z6PX4GCeaJrcr3CJm81zunwbDOaLFiBw7
+        Nm2srGa/YdGiBvP88sCDzNkNuXHgdOjkp+/4n4FpaDNWcEbZu1+HS7p+BI2D4FUwOKnmInKRAmTfl
+        85RziXeA==;
+Received: from [2600:1700:4830:1658::fb2] (port=55226)
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1olBAK-0001Wd-VX;
-        Wed, 19 Oct 2022 16:39:33 +0100
-Date:   Wed, 19 Oct 2022 16:39:32 +0100
-Message-ID: <867d0vg6vf.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        David Lechner <david@lechnology.com>,
+        (envelope-from <david@lechnology.com>)
+        id 1olC4I-00031J-GZ;
+        Wed, 19 Oct 2022 12:37:31 -0400
+Message-ID: <e723900c-41ae-6e01-4415-7a859ab071fd@lechnology.com>
+Date:   Wed, 19 Oct 2022 11:37:28 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 02/14] ARM: davinci: drop DAVINCI_DMxxx references
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bin Liu <b-liu@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 00/14] ARM: remove unused davinci board & drivers
-In-Reply-To: <20221019152947.3857217-1-arnd@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-clk@vger.kernel.org
 References: <20221019152947.3857217-1-arnd@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: arnd@kernel.org, nsekhar@ti.com, brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, khilman@baylibre.com, arnd@arndb.de, linux@armlinux.org.uk, mchehab@kernel.org, damien.lemoal@opensource.wdc.com, s.shtylyov@omp.ru, david@lechnology.com, mturquette@baylibre.com, sboyd@kernel.org, dmitry.torokhov@gmail.com, tglx@linutronix.de, prabhakar.csengg@gmail.com, lee@kernel.org, a.zummo@towertech.it, alexandre.belloni@bootlin.com, gregkh@linuxfoundation.org, b-liu@ti.com, peter.ujfalusi@gmail.com, lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz, tiwai@suse.com, laurent.pinchart@ideasonboard.com, hverkuil-cisco@xs4all.nl, yangyingliang@huawei.com, linux-media@vger.kernel.org, linux-ide@vger.kernel.org, linux-clk@vger.kernel.org, linux-input@vger.kernel.org, linux-rtc@vger.kernel.org, linux-staging@lists.linux.dev, linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221019152947.3857217-3-arnd@kernel.org>
+From:   David Lechner <david@lechnology.com>
+In-Reply-To: <20221019152947.3857217-3-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 19 Oct 2022 16:29:26 +0100,
-Arnd Bergmann <arnd@kernel.org> wrote:
-> 
+On 10/19/22 10:29 AM, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> As part of removing all board files that were previously marked as unused,
-> I looked through the davinci platform and recursively removed everything
-> that has now become unused.
+> Support for all the dm3xx/dm64xx SoCs is no longer
+> available, so drop all other references to those.
 > 
-> In particular, this is for all dm3xx support, in addition to the dm64xx
-> support removed previously. The remaining support is now for da8xx using
-> devicetree only, which means a lot of the da8xx specific device support
-> can also go away.
-> 
-> As with the previous series, I can keep patches together in the
-> soc tree, or subsystem maintainers can pick them up individually
-> through their subsystems, whichever they prefer.
-> 
-> Arnd Bergmann (14):
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
 
-[...]
+>   int __init davinci_serial_init(struct platform_device *serial_dev)
+> diff --git a/arch/arm/mach-davinci/usb.c b/arch/arm/mach-davinci/usb.c
+> index a9e5c6e91e5d..9dc14c7977b3 100644
+> --- a/arch/arm/mach-davinci/usb.c
+> +++ b/arch/arm/mach-davinci/usb.c
+> @@ -41,11 +41,6 @@ static struct resource usb_resources[] = {
+>   		.flags          = IORESOURCE_IRQ,
+>   		.name		= "mc"
+>   	},
+> -	{
+> -		/* placeholder for the dedicated CPPI IRQ */
+> -		.flags          = IORESOURCE_IRQ,
+> -		.name		= "dma"
+> -	},
+>   };
+>   
+>   static u64 usb_dmamask = DMA_BIT_MASK(32);
+> @@ -67,14 +62,6 @@ void __init davinci_setup_usb(unsigned mA, unsigned potpgt_ms)
+>   	usb_data.power = mA > 510 ? 255 : mA / 2;
+>   	usb_data.potpgt = (potpgt_ms + 1) / 2;
+>   
+> -	if (cpu_is_davinci_dm646x()) {
+> -		/* Override the defaults as DM6467 uses different IRQs. */
+> -		usb_dev.resource[1].start = DAVINCI_INTC_IRQ(IRQ_DM646X_USBINT);
+> -		usb_dev.resource[2].start = DAVINCI_INTC_IRQ(
+> -							IRQ_DM646X_USBDMAINT);
+> -	} else	/* other devices don't have dedicated CPPI IRQ */
+> -		usb_dev.num_resources = 2;
+> -
+>   	platform_device_register(&usb_dev);
+>   }
+>   
 
->   irqchip: remove davinci aintc driver
+Shouldn't the else case be kept since it applies to *all* "other devices"?
+(and therfore the usb_resources shouldn't be modified either?)
 
-Acked-by: Marc Zyngier <maz@kernel.org>
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
