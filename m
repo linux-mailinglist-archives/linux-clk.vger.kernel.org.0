@@ -2,89 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD82F604E13
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 19:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FC0604E1C
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Oct 2022 19:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiJSRGA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Oct 2022 13:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S231254AbiJSRHk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Oct 2022 13:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbiJSRF5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 13:05:57 -0400
-X-Greylist: delayed 1576 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Oct 2022 10:05:49 PDT
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412381578A5;
-        Wed, 19 Oct 2022 10:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=++P8P8qjfNt1suFBjhkyQfz1Y5h3Np7YkfW/laOGHwk=; b=Trqs8jTjgRTZsnIk3NHCQV0jjm
-        rzksNYJYBhbwplL/YGv7o1oKiybfQvH1BVguYJCczKhDczOymMFI06JapYcx1JwihFAlKjEwb/hu3
-        jn2MBHoBoedNl74jOSqMKo0GkmBF6wB8cBZ8yrGI9W5pVWqjvlx7ktAIoYn+OiZ19qFhMdvdw3hI2
-        9w1VaiWZaxSGG5vqarpMsaUX4wGla5cXc8iZyTLN0tqUBzodFP78sqlA4MAFSQssKHhl/p9QzApR2
-        O/Xv7N2MltlenQjZrS+1faRCczzZ2NYGot2MsEoG0CTjCLWfgGBUZVvvoaccZ6ZliGfdQwGWCA65l
-        XOYOeA5w==;
-Received: from [2600:1700:4830:1658::fb2] (port=50850)
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <david@lechnology.com>)
-        id 1olC6D-0003V7-8h;
-        Wed, 19 Oct 2022 12:39:29 -0400
-Message-ID: <0586f41d-e316-b6b9-b962-f50766a680ed@lechnology.com>
-Date:   Wed, 19 Oct 2022 11:39:27 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 04/14] clk: remove davinci dm3xx drivers
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S230006AbiJSRHj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Oct 2022 13:07:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39341C0703;
+        Wed, 19 Oct 2022 10:07:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87595B82565;
+        Wed, 19 Oct 2022 17:07:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BF4C433D6;
+        Wed, 19 Oct 2022 17:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666199255;
+        bh=HOZtk4W+w1Xim3D+4yZ/unb12q6aclG13DIwl0OBJx8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o5kdMxIduRtb8Mzx9YssNawI1DyaXBB8MfOzqsMEeeT6zXexwhScPQLMDkvct+l+T
+         rBJiQSzFP7HSq5MKNphjSYJpXdBijhnK+g21hTCNgYtOSZl63X9ynZrDQLOfm1D3SE
+         qwpwZMT58udOteGG+rjOotFZRrDtCcSKSebtee43ug4tNnd5YKBgTIYbzxv0T9jPIE
+         TWap46K2cZHjxuckg68p33rLCCJgHPYGPnk39z7GeA/3y2dNBJJr6D5KzzB1mJgUcq
+         3vOGJuLofNC0SuBcI4+yp6aKrvlSMjhSc2M/tJVz+L9aFxtz2c3cfN5NmWrzF5hX7j
+         ayW5CVQhd7lKQ==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jh80.chung@samsung.com
+Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-References: <20221019152947.3857217-1-arnd@kernel.org>
- <20221019152947.3857217-5-arnd@kernel.org>
-From:   David Lechner <david@lechnology.com>
-In-Reply-To: <20221019152947.3857217-5-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCHv5 0/6] arm: socfpga: use clk-phase-sd-hs
+Date:   Wed, 19 Oct 2022 12:06:51 -0500
+Message-Id: <20221019170657.68014-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 10/19/22 10:29 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The davinci dm3xx machines are all removed, so the clk driver
-> is no longer needed. The da8xx platforms are now using DT
-> exclusively, so those drivers remain untouched.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Hi,
 
-Reviewed-by: David Lechner <david@lechnology.com>
+Just wanted to address the comments regarding the dt-bindings
+document of "altr,sysmgr-syscon". I ran the 'make dt_binding_check'
+after: pip3 install dtschema --upgrade and I checked to make sure I have
+yamllint installed and I still don't see any warnings. I'm also confused
+about whether "altr,socfpga-dw-mshc" should be a const. I see the same
+usage in:
 
+Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml
+
+allOf:
+  - $ref: "mmc-controller.yaml#"
+  - if:
+      properties:
+        compatible:
+          contains:
+            const: arasan,sdhci-5.1
+
+Please advise on how to address this comment!
+
+Thanks,
+Dinh
+
+Dinh Nguyen (6):
+  dt-bindings: mmc: synopsys-dw-mshc: document "altr,sysmgr-syscon"
+  arm64: dts: socfpga: Add clk-phase-sd-hs property to the sdmmc node
+  arm: dts: socfpga: Add clk-phase-sd-hs property to the sdmmc node
+  mmc: dw_mmc-pltfm: socfpga: add method to configure clk-phase
+  clk: socfpga: remove the setting of clk-phase for sdmmc_clk
+  arm: dts: socfpga: remove "clk-phase" in sdmmc_clk
+
+ .../bindings/mmc/synopsys-dw-mshc.yaml        | 32 ++++++++-
+ arch/arm/boot/dts/socfpga.dtsi                |  2 +-
+ arch/arm/boot/dts/socfpga_arria10.dtsi        |  2 +-
+ .../boot/dts/socfpga_arria10_mercury_aa1.dtsi |  1 +
+ .../boot/dts/socfpga_arria10_socdk_sdmmc.dts  |  1 +
+ arch/arm/boot/dts/socfpga_arria5.dtsi         |  1 +
+ arch/arm/boot/dts/socfpga_cyclone5.dtsi       |  1 +
+ arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi   |  1 +
+ .../boot/dts/altera/socfpga_stratix10.dtsi    |  1 +
+ .../dts/altera/socfpga_stratix10_socdk.dts    |  1 +
+ arch/arm64/boot/dts/intel/socfpga_agilex.dtsi |  1 +
+ .../boot/dts/intel/socfpga_agilex_socdk.dts   |  1 +
+ .../boot/dts/intel/socfpga_n5x_socdk.dts      |  1 +
+ drivers/clk/socfpga/clk-gate-a10.c            | 68 -------------------
+ drivers/clk/socfpga/clk-gate.c                | 60 ----------------
+ drivers/clk/socfpga/clk.h                     |  1 -
+ drivers/mmc/host/dw_mmc-pltfm.c               | 43 +++++++++++-
+ 17 files changed, 83 insertions(+), 135 deletions(-)
+
+-- 
+2.25.1
 
