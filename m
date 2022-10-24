@@ -2,140 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469A660B6CB
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Oct 2022 21:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746C660B5B5
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Oct 2022 20:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbiJXTLG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Oct 2022 15:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S230439AbiJXSiE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Oct 2022 14:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiJXTKi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Oct 2022 15:10:38 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C002DD7
-        for <linux-clk@vger.kernel.org>; Mon, 24 Oct 2022 10:49:24 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        with ESMTP id S231659AbiJXShg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Oct 2022 14:37:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A36746DA0;
+        Mon, 24 Oct 2022 10:19:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id B9BB480076;
-        Mon, 24 Oct 2022 17:09:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1666624195;
-        bh=Yx8gNpZwSkH+u0dz5auO3h/0qkztyKzZiTPX1tvLoFU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XGZxABIi+H55GxLTX6rRXt74ktWxpKxOYYkieXir3zuLbfSGXrX/c8DnrhAhc78/N
-         4v0HMA2xYraCRBohwE8or11wObxuF2L/Fs5RY8TzQNq4x2+O8FF/UPx4ya3mRJCDLU
-         XdKiwcaNWx9lpdKrLHTN2tyna4Dd0CHfrKsBsV4O1x4ywlTkRlCfwbQhHcptf2jZrE
-         VWyrAkSeLqhBDpOmRuzMuwYXEQWaSrFuyXsUMTfRbILguc3NsXJC+buM31K3lV9p8I
-         CEvogBFJh57nBxrgsRTS1i6tLjDTbcODakOtLMgAIy1XtZE1fa/dCHha3xemFOCegC
-         spUUPudaGmyfA==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH] [RFC] soc: imx: imx8m-blk-ctrl: Split clock prepare from clock enable in the domain
-Date:   Mon, 24 Oct 2022 17:09:47 +0200
-Message-Id: <20221024150947.10739-1-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 707956147C;
+        Mon, 24 Oct 2022 16:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38206C433C1;
+        Mon, 24 Oct 2022 16:19:16 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 12:19:26 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 2/2] clk: Add trace events for rate requests
+Message-ID: <20221024121926.1f11c57a@gandalf.local.home>
+In-Reply-To: <20221018-clk-rate-request-tracing-v1-2-6f3aa0b0b9de@cerno.tech>
+References: <20221018-clk-rate-request-tracing-v1-0-6f3aa0b0b9de@cerno.tech>
+        <20221018-clk-rate-request-tracing-v1-2-6f3aa0b0b9de@cerno.tech>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-It is possible for clk_disable_unused() to trigger lockdep warning
-regarding lock ordering in this driver. This happens in case of the
-following conditions:
+On Tue, 18 Oct 2022 15:56:42 +0200
+Maxime Ripard <maxime@cerno.tech> wrote:
 
-A) clock core clk_disable_unused() triggers the following sequence in a
-   driver which also uses blkctrl domain:
-   - clk_prepare_lock() -> obtains clock core prepare_lock
-   - pm_runtime_get*() -> obtains &blk_ctrl_genpd_lock_class
+I know I reviewed this but looking at this again, I noticed:
 
-B) driver powers up a power domain and triggers the following sequence
-   in blkctrl:
-   - pm_runtime_get_sync() -> obtains &blk_ctrl_genpd_lock_class
-   - clk_bulk_prepare_enable() -> obtains clock core prepare_lock
 
-This can lead to a deadlock in case A and B runs on separate CPUs.
+> +DECLARE_EVENT_CLASS(clk_rate_request,
+> +
+> +	TP_PROTO(struct clk_rate_request *req),
+> +
+> +	TP_ARGS(req),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(        name, req->core ? req->core->name : "none")
+> +		__field(unsigned long,           min                       )
+> +		__field(unsigned long,           max                       )
+> +		__string(       pname, req->best_parent_hw ? clk_hw_get_name(req->best_parent_hw) : "none" )
 
-To avoid the deadlock, split clk_*prepare() from clk_*enable() and
-call the former before pm_runtime_get_sync(). This way, the blkctrl
-driver always claims the prepare_lock before blk_ctrl_genpd_lock_class
-and the deadlock is avoided.
+It may be best to move the two __string() declarations together. The reason
+is that dynamic strings (which __string() is) uses 4 bytes embedded in the
+first part of the event. Two bytes for offset, where the dynamic string
+exists, and two bytes for the strings length.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Fabio Estevam <festevam@denx.de>
-Cc: Jacky Bai <ping.bai@nxp.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-imx@nxp.com
-To: linux-arm-kernel@lists.infradead.org
----
- drivers/soc/imx/imx8mp-blk-ctrl.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+On 64 bit machines the above has:
 
-diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
-index b7d4161fcda9c..571c98b5b005b 100644
---- a/drivers/soc/imx/imx8mp-blk-ctrl.c
-+++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
-@@ -393,15 +393,21 @@ static int imx8mp_blk_ctrl_power_on(struct generic_pm_domain *genpd)
- 	struct imx8mp_blk_ctrl *bc = domain->bc;
- 	int ret;
- 
-+	ret = clk_bulk_prepare(data->num_clks, domain->clks);
-+	if (ret) {
-+		dev_err(bc->dev, "failed to enable clocks\n");
-+		return ret;
-+	}
-+
- 	/* make sure bus domain is awake */
- 	ret = pm_runtime_resume_and_get(bc->bus_power_dev);
- 	if (ret < 0) {
- 		dev_err(bc->dev, "failed to power up bus domain\n");
--		return ret;
-+		goto rpm_put;
- 	}
- 
- 	/* enable upstream clocks */
--	ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
-+	ret = clk_bulk_enable(data->num_clks, domain->clks);
- 	if (ret) {
- 		dev_err(bc->dev, "failed to enable clocks\n");
- 		goto bus_put;
-@@ -426,9 +432,11 @@ static int imx8mp_blk_ctrl_power_on(struct generic_pm_domain *genpd)
- 	return 0;
- 
- clk_disable:
--	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
-+	clk_bulk_disable(data->num_clks, domain->clks);
- bus_put:
- 	pm_runtime_put(bc->bus_power_dev);
-+rpm_put:
-+	clk_bulk_unprepare(data->num_clks, domain->clks);
- 
- 	return ret;
- }
--- 
-2.35.1
+	__string()		4 bytes
+	__field(unsigned long)	8 bytes
+	__field(unsigned long)	8 bytes
+	__string()		4 bytes
 
+and then another unsigned long field below, which is another 8 bytes.
+
+> +		__field(unsigned long,           prate                     )
+> +	),
+> +
+> +	
+
+As compilers tend to use word alignment, the above turns into:
+
+	__string()		4 bytes
+
+	__PADDING__		4 bytes
+
+	__field(unsigned long)	8 bytes
+	__field(unsigned long)	8 bytes
+	__string()		4 bytes
+
+	__PADDING__		4 bytes
+
+	__field(unsigned long)	8 bytes
+
+
+Where there will be 8 bytes of padding in that event that wastes precious
+ring buffer space. By changing the event to:
+
+	TP_STRUCT__entry(
+		__string(        name, req->core ? req->core->name : "none")
+		__string(       pname, req->best_parent_hw ? clk_hw_get_name(req->best_parent_hw) : "none" )
+		__field(unsigned long,           min                       )
+		__field(unsigned long,           max                       )
+		__field(unsigned long,           prate                     )
+	),
+
+It will turn the size into:
+
+	__string()		4 bytes
+	__string()		4 bytes
+	__field(unsigned long)	8 bytes
+	__field(unsigned long)	8 bytes
+	__field(unsigned long)	8 bytes
+
+With no padding and no wasted space.
+
+I would suggest changing this.
+
+-- Steve
