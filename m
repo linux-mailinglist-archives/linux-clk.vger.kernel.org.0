@@ -2,180 +2,345 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7605D60C881
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Oct 2022 11:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD0660CA2E
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Oct 2022 12:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbiJYJiR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Oct 2022 05:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S232091AbiJYKg0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Oct 2022 06:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiJYJhs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Oct 2022 05:37:48 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02061156255;
-        Tue, 25 Oct 2022 02:35:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BhfJZ5e7kdpEYpZMAFUU/93bAJCPOC6PGoGLJlUU6Vd60c5wk74jkWMvXpOZ7eK/Ylokm0lkB85ibLCr88+MR91NIpxrOs+J4M0bTcW7Ty7xfK9Rx1N4dlv3YWxYUCxdyCtCVoHHnpVPQ0uHnxrjWwg1lcXXjdApSxrofSXlLf9R9MCs/s1e61hjcSS1I/fOwIGdFQtPFKs6v+VLe6YycW56PRPGFH1csNYEVWNDb5EY34zgECXEOOBfo2xluvBZ0o38gLUkvf6bHo7U2Fl5UYJ4iAOgMQyOLtaE++QqeB5WKNlQZjSFBf3wJmp68VnhUc4Fclm/7+N9I5Z//vS3Ag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Adm7U0CfFgr31gW3Wc3kq0OEC3B0NpIVmIH8LihxQA=;
- b=OGk07ngXLgmjif+AIKg2nqhrV6BVwVxD0MuGo/aCdeXlobtdjFhnDRtsOUC405kKwMzXh4t5T8a+xM+glPtReO5yI0DYBleJFUEJCRx82pvNF8fzxqV8JLAELyGuVbyM993OlLZBTAvEou4CjMXxoFeYy7fGGJGB+1/KnHx1Ix9RtHlSBScqVViNJDziy+wKM82zaa1g9T6yKXhhfbGVAsO+KQDHxXL1oAORpCJXOyCMvTLJ8RaGGEC7jWK204c6wZ+S2/LCT+7XGssK+pOYYrAIOEdPS/1/nsR0OoYAxhUICrIwpcbOVdK9S60w2BH90lKgdMv1QWqmYqn9gDtWSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8Adm7U0CfFgr31gW3Wc3kq0OEC3B0NpIVmIH8LihxQA=;
- b=BiaXw/JHJHON34qcq51PMshJa9r/ouy/KOLE6WRBI9dEvk92TUdGtzs2G8UUL3zHV/0Naxf4GpxJRaDHeiIE2C/urPOQQqtz7JDTrScqeEl4FHvMYh3Sa/jKhWCxt/ob/c2G1OBGzCSHHhNh3n3NfKCUZIMGhbo+lQhf5AwyK8/BeGdm3tY7ZW0Jai9MbpETthyIQb1Ut5vQlNTNf1wjUDZartKZRM6DXb6rGmsPeR3AQTOlVwi4SGnDo34crtpqgrAET4aKBWsdo2y0Ld/Qlc9nhz858O6PeBEOhbDwIhSJ7H6q+BnGXsvdmS3GOLQ7QEJeT2Q2IKQiVgU+jbRlTw==
-Received: from BN9PR03CA0384.namprd03.prod.outlook.com (2603:10b6:408:f7::29)
- by PH7PR12MB5831.namprd12.prod.outlook.com (2603:10b6:510:1d6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Tue, 25 Oct
- 2022 09:35:57 +0000
-Received: from BN8NAM11FT087.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:f7:cafe::37) by BN9PR03CA0384.outlook.office365.com
- (2603:10b6:408:f7::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
- Transport; Tue, 25 Oct 2022 09:35:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT087.mail.protection.outlook.com (10.13.177.24) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.16 via Frontend Transport; Tue, 25 Oct 2022 09:35:56 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Tue, 25 Oct
- 2022 02:35:44 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 25 Oct
- 2022 02:35:44 -0700
-Received: from 44189d9-lcedt.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.986.29 via Frontend
- Transport; Tue, 25 Oct 2022 02:35:43 -0700
-From:   Peter De Schrijver <pdeschrijver@nvidia.com>
-To:     <treding@nvidia.com>, <linux-tegra@vger.kernel.org>
-CC:     <linux-clk@vger.kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>
-Subject: [PATCH v2 2/2] clk: tegra: support BPMP-FW ABI deny flags
-Date:   Tue, 25 Oct 2022 12:35:36 +0300
-Message-ID: <20221025093536.4143397-2-pdeschrijver@nvidia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025093536.4143397-1-pdeschrijver@nvidia.com>
-References: <20221025093536.4143397-1-pdeschrijver@nvidia.com>
+        with ESMTP id S232120AbiJYKgX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Oct 2022 06:36:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26322E9D4;
+        Tue, 25 Oct 2022 03:36:18 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D14D366023A0;
+        Tue, 25 Oct 2022 11:36:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666694177;
+        bh=88jblz1wmZWqYd6CzvM6lyG5xtCcQ3zRGSsWSArI80U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Lw7uR5PWo6cOI9fF+wmjXzJ0LfMvtyfiJls4R2fj8Hnwz8bSnSnhhjNWwyu0CBxLy
+         OMR+YkJMOHJGQB5+bEuC5Ip21ANdHXEoZAlVKoTftbY57AkU3OPLgxpHv8iNmYJS7O
+         IeMqNJ2RiPxc/Ryi79SgXDrQvj7KgzNYOWSPu64ie8GpakVzJv3Xs3NELfOA+WOeVB
+         4NSAo71LzvZLBxrDVzl9d2kCzzIQ4AZWXFRHvBnrqOBfDGZAflgKJaQWjc3GBSYud+
+         rD2G92aTgKRSN3Pdnqbl5V0UwlPdQ3WqbBH+aMCkVliU6O0OTuL2Hp4ANOSg93OSYl
+         9RZjyGg4dKZtQ==
+Message-ID: <8b73e38b-ae78-1f85-f5f0-f13bce6e45de@collabora.com>
+Date:   Tue, 25 Oct 2022 12:36:14 +0200
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT087:EE_|PH7PR12MB5831:EE_
-X-MS-Office365-Filtering-Correlation-Id: e77f53f2-202e-46b2-20f2-08dab66c51b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Pku7rMzlhAV9KvCSDZ548y+1XcVnzJnyTvKoKm4KexacIIvSQYpluPWDC1/V+uueSa3B4UAVXBG7L/gvgg4TZ6tWSn9Z58OAR9jaTBO7LNCmxYDydrXlUdwkhQvNtaTqiYYIjRbkOjmWzIhIjCrGJs7S1Be0PliAzczscV13M4Z8o99A2F8LwqK1QQqhBtx2JJE14+9towRwTPz+OLKjGy7CsTRnxceVlhB0CIFM7KuWX2QcZGqq9WJhLOths15iyA6ReUdWRqoumLU0ltPS7PUQ5ZSbD6y0+WSpncd3sYTkpwq6NzWw9uBTPyWh5Jh22EGZf9ugIFD0GTblB8+UGJoSEkhWfQMKbczf4K3QVnhvn3TMTx+l0YWSAgSfHz4wO/besfFU4epvoKMQ7yNPmHLoDXpDfWLJNntq7Nk0XC62WOsdy2pj7Ttj2rA4kjWhfvaOfAyOT9U9h3WfnQCwq7BjSxxTKa0Z9uPlRUh7yRV+TbQvcugWbwNSdWsGYid+eIMtQbOH6EUw0ax7DsGOw3SwppjNs3Di8Yr/9JPzigMkWMj6C6UXc3eF3fMs3a8qcX4vz14yFyrdIYWuOOqSHRv+yq1Hj3I/euifTCPZg9gfMq2re6voSOZYjbCOkm8NykFK3ZPCV7mfDswkAG62wVvEhhRr5ouAd1Rrqx4ZTNdTuTB3bmEwAzsyICeZrKnGRps44Vk8FOm+QJXRq7i7QdrCXETd7S3QV4vXPXiz7LIg7ndCG6I01SGW4FVuLmet8EX/LYS2FnEkKLVb0bG2Ew==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(107886003)(6666004)(2616005)(36756003)(110136005)(426003)(47076005)(41300700001)(70206006)(4326008)(70586007)(54906003)(8936002)(36860700001)(86362001)(40480700001)(336012)(356005)(8676002)(82310400005)(7636003)(186003)(26005)(1076003)(83380400001)(478600001)(316002)(7696005)(82740400003)(40460700003)(2906002)(450100002)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 09:35:56.7863
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e77f53f2-202e-46b2-20f2-08dab66c51b5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT087.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5831
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v6 1/3] reset: mediatek: Move MediaTek system clock reset
+ to reset/mediatek
+Content-Language: en-US
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, sboyd@kernel.org,
+        mturquette@baylibre.com, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de
+Cc:     runyang.chen@mediatek.com, miles.chen@mediatek.com,
+        wenst@chromium.org, nfraprado@collabora.com,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221021104804.21391-1-rex-bc.chen@mediatek.com>
+ <20221021104804.21391-2-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221021104804.21391-2-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Support BPMP_CLK_STATE_CHANGE_DENIED by not populating state changing
-operations when the flag is set.
+Il 21/10/22 12:48, Bo-Chen Chen ha scritto:
+> To manager MediaTek system clock reset easier, we move the driver to
+> drivers/reset/mediatek.
+> 
+> - Create reset/mediatek folder.
+> - Move clk/mediatek/reset.c to reset/mediatek/reset-mediatek-sysclk.c
+> - Because we don't want to build in unsed static variable, we use clk
+>    KConfig to separate them. For example, when we use MT8186, we don't
+>    want to build in the static constants for MT8195.
+> - Move reset data which are scattered around the mediatek drivers to
+>    reset-mtxxxx.c.
+> - There are two version for mtk_reset_init because some mediatek clock
+>    drivers (mt8135 and mt8173) are using device_node instead of device,
+>    so we need to add two version for the init function.
+> 
+> Suggested-by: Stephen Boyd <sboyd@kernel.org>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> ---
+>   drivers/clk/mediatek/Kconfig                  |   1 +
+>   drivers/clk/mediatek/Makefile                 |   2 +-
+>   drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
+>   drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
+>   drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
+>   drivers/clk/mediatek/clk-mt2701.c             |  22 +-
+>   drivers/clk/mediatek/clk-mt2712.c             |  22 +-
+>   drivers/clk/mediatek/clk-mt6795-infracfg.c    |  22 +-
+>   drivers/clk/mediatek/clk-mt6795-pericfg.c     |  20 +-
+>   drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
+>   drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
+>   drivers/clk/mediatek/clk-mt7622.c             |  22 +-
+>   drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
+>   drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
+>   drivers/clk/mediatek/clk-mt8135.c             |  23 +-
+>   drivers/clk/mediatek/clk-mt8173.c             |  22 +-
+>   drivers/clk/mediatek/clk-mt8183.c             |  15 +-
+>   drivers/clk/mediatek/clk-mt8186-infra_ao.c    |  23 +-
+>   drivers/clk/mediatek/clk-mt8192.c             |  27 +-
+>   drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  28 +-
+>   drivers/clk/mediatek/clk-mtk.c                |   5 +-
+>   drivers/clk/mediatek/clk-mtk.h                |   5 +-
+>   drivers/clk/mediatek/reset.c                  | 233 -----------
+>   drivers/reset/Kconfig                         |   1 +
+>   drivers/reset/Makefile                        |   1 +
+>   drivers/reset/mediatek/Kconfig                |   5 +
+>   drivers/reset/mediatek/Makefile               |  13 +
+>   .../reset/mediatek/reset-mediatek-sysclk.c    | 388 ++++++++++++++++++
+>   drivers/reset/mediatek/reset-mt2701.c         | 102 +++++
+>   drivers/reset/mediatek/reset-mt2712.c         |  42 ++
+>   drivers/reset/mediatek/reset-mt6795.c         |  61 +++
+>   drivers/reset/mediatek/reset-mt7622.c         |  91 ++++
+>   drivers/reset/mediatek/reset-mt7629.c         |  62 +++
+>   drivers/reset/mediatek/reset-mt8135.c         |  43 ++
+>   drivers/reset/mediatek/reset-mt8173.c         |  43 ++
+>   drivers/reset/mediatek/reset-mt8183.c         |  31 ++
+>   drivers/reset/mediatek/reset-mt8186.c         |  39 ++
+>   drivers/reset/mediatek/reset-mt8192.c         |  43 ++
+>   drivers/reset/mediatek/reset-mt8195.c         |  44 ++
+>   .../linux/reset/reset-mediatek-sysclk.h       |  62 +--
+>   40 files changed, 1080 insertions(+), 557 deletions(-)
+>   delete mode 100644 drivers/clk/mediatek/reset.c
+>   create mode 100644 drivers/reset/mediatek/Kconfig
+>   create mode 100644 drivers/reset/mediatek/Makefile
+>   create mode 100644 drivers/reset/mediatek/reset-mediatek-sysclk.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt2701.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt2712.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt6795.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt7622.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt7629.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt8135.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt8173.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt8183.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt8186.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt8192.c
+>   create mode 100644 drivers/reset/mediatek/reset-mt8195.c
+>   rename drivers/clk/mediatek/reset.h => include/linux/reset/reset-mediatek-sysclk.h (59%)
+> 
+> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+> index 843cea0c7a44..e372f145eada 100644
+> --- a/drivers/clk/mediatek/Kconfig
+> +++ b/drivers/clk/mediatek/Kconfig
+> @@ -8,6 +8,7 @@ menu "Clock driver for MediaTek SoC"
+>   config COMMON_CLK_MEDIATEK
+>   	tristate
+>   	select RESET_CONTROLLER
+> +	select RESET_MEDIATEK_SYSCLK
+>   	help
+>   	  MediaTek SoCs' clock support.
+>   
 
-Support BPMP_CLK_RATE_PARENT_CHANGE_DENIED by not populating rate or
-parent  changing operations when the flag is set.
+..snip..
 
-Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
----
- drivers/clk/tegra/clk-bpmp.c | 37 +++++++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 3e7e5fd633a8..5cef7ccc9a7d 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -1,6 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   obj-y += core.o
+>   obj-y += hisilicon/
+> +obj-y += mediatek/
 
-diff --git a/drivers/clk/tegra/clk-bpmp.c b/drivers/clk/tegra/clk-bpmp.c
-index d82a71f10c2c..c912c5f0d1eb 100644
---- a/drivers/clk/tegra/clk-bpmp.c
-+++ b/drivers/clk/tegra/clk-bpmp.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2016-2020 NVIDIA Corporation
-+ * Copyright (C) 2016-2022 NVIDIA Corporation
-  */
- 
- #include <linux/clk-provider.h>
-@@ -310,6 +310,23 @@ static const struct clk_ops tegra_bpmp_clk_mux_rate_ops = {
- 	.set_rate = tegra_bpmp_clk_set_rate,
- };
- 
-+static const struct clk_ops tegra_bpmp_clk_mux_read_only_ops = {
-+	.get_parent = tegra_bpmp_clk_get_parent,
-+	.recalc_rate = tegra_bpmp_clk_recalc_rate,
-+};
-+
-+static const struct clk_ops tegra_bpmp_clk_read_only_ops = {
-+	.recalc_rate = tegra_bpmp_clk_recalc_rate,
-+};
-+
-+static const struct clk_ops tegra_bpmp_clk_gate_mux_read_only_ops = {
-+	.prepare = tegra_bpmp_clk_prepare,
-+	.unprepare = tegra_bpmp_clk_unprepare,
-+	.is_prepared = tegra_bpmp_clk_is_prepared,
-+	.recalc_rate = tegra_bpmp_clk_recalc_rate,
-+	.get_parent = tegra_bpmp_clk_get_parent,
-+};
-+
- static int tegra_bpmp_clk_get_max_id(struct tegra_bpmp *bpmp)
- {
- 	struct cmd_clk_get_max_clk_id_response response;
-@@ -510,8 +527,22 @@ tegra_bpmp_clk_register(struct tegra_bpmp *bpmp,
- 	memset(&init, 0, sizeof(init));
- 	init.name = info->name;
- 	clk->hw.init = &init;
--
--	if (info->flags & TEGRA_BPMP_CLK_HAS_MUX) {
-+	if (info->flags & BPMP_CLK_STATE_CHANGE_DENIED) {
-+		if ((info->flags & BPMP_CLK_RATE_PARENT_CHANGE_DENIED) == 0) {
-+			dev_warn(bpmp->dev,
-+				"clock %s does not allow state change but does allow rate/parent change",
-+				 init.name);
-+		}
-+		if (info->flags & TEGRA_BPMP_CLK_HAS_MUX)
-+			init.ops = &tegra_bpmp_clk_mux_read_only_ops;
-+		else
-+			init.ops = &tegra_bpmp_clk_read_only_ops;
-+	} else if (info->flags & BPMP_CLK_RATE_PARENT_CHANGE_DENIED) {
-+		if (info->flags & TEGRA_BPMP_CLK_HAS_MUX)
-+			init.ops = &tegra_bpmp_clk_gate_mux_read_only_ops;
-+		else
-+			init.ops = &tegra_bpmp_clk_gate_ops;
-+	} else if (info->flags & TEGRA_BPMP_CLK_HAS_MUX) {
- 		if (info->flags & TEGRA_BPMP_CLK_HAS_SET_RATE)
- 			init.ops = &tegra_bpmp_clk_mux_rate_ops;
- 		else
--- 
-2.34.1
+I'd be more for
 
+obj-$(CONFIG_ARCH_MEDIATEK) += mediatek/
+
+as there's no reason to even compile these if MTK support isn't enabled at all.
+
+>   obj-$(CONFIG_ARCH_STI) += sti/
+>   obj-$(CONFIG_ARCH_TEGRA) += tegra/
+>   obj-$(CONFIG_RESET_A10SR) += reset-a10sr.o
+> diff --git a/drivers/reset/mediatek/Kconfig b/drivers/reset/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..a416cb938753
+> --- /dev/null
+> +++ b/drivers/reset/mediatek/Kconfig
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+
+Similarly, we should at this point also do....
+
+if ARCH_MEDIATEK
+
+> +config RESET_MEDIATEK_SYSCLK
+> +	tristate "MediaTek System Clock Reset Driver"
+> +	help
+> +	  This enables the system clock reset driver for MediaTek SoCs.
+
+endif # ARCH_MEDIATEK
+
+> diff --git a/drivers/reset/mediatek/Makefile b/drivers/reset/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..83f26c2cecdd
+> --- /dev/null
+> +++ b/drivers/reset/mediatek/Makefile
+> @@ -0,0 +1,13 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_RESET_MEDIATEK_SYSCLK) += reset-mediatek-sysclk.o
+> +obj-$(CONFIG_COMMON_CLK_MT2701) += reset-mt2701.o
+> +obj-$(CONFIG_COMMON_CLK_MT2712) += reset-mt2712.o
+> +obj-$(CONFIG_COMMON_CLK_MT6795) += reset-mt6795.o
+> +obj-$(CONFIG_COMMON_CLK_MT7622) += reset-mt7622.o
+> +obj-$(CONFIG_COMMON_CLK_MT7629) += reset-mt7629.o
+> +obj-$(CONFIG_COMMON_CLK_MT8135) += reset-mt8135.o
+> +obj-$(CONFIG_COMMON_CLK_MT8173) += reset-mt8173.o
+> +obj-$(CONFIG_COMMON_CLK_MT8183) += reset-mt8183.o
+> +obj-$(CONFIG_COMMON_CLK_MT8186) += reset-mt8186.o
+> +obj-$(CONFIG_COMMON_CLK_MT8192) += reset-mt8192.o
+> +obj-$(CONFIG_COMMON_CLK_MT8195) += reset-mt8195.o
+> diff --git a/drivers/reset/mediatek/reset-mediatek-sysclk.c b/drivers/reset/mediatek/reset-mediatek-sysclk.c
+> new file mode 100644
+> index 000000000000..9cf115e66a4d
+> --- /dev/null
+> +++ b/drivers/reset/mediatek/reset-mediatek-sysclk.c
+
+..snip..
+
+> +
+> +static struct mtk_rst_id mtk_sysclk_reset_ids[] = {
+
+..snip..
+
+> +	{
+> +		.name = "mt2712-peri-rst",
+> +		.driver_data = MTK_RST_ID_MT2712_PERI,
+> +	},
+> +	{
+> +		.name = "mt6795-ifa",
+
+Keep the names consistent please... "mt6795-infra-rst"
+
+> +		.driver_data = MTK_RST_ID_MT6795_INFRA,
+> +	},
+> +	{
+> +		.name = "mt6795-peri",
+
+mt6795-peri-rst
+
+> +		.driver_data = MTK_RST_ID_MT6795_PERI,
+> +	},
+> +	{
+> +		.name = "mt7622-eth-rst",
+> +		.driver_data = MTK_RST_ID_MT7622_ETH,
+> +	},
+> +	{
+> +		.name = "mt7622-usb-rst",
+> +		.driver_data = MTK_RST_ID_MT7622_SSUSBSYS,
+> +	},
+> +	{
+> +		.name = "mt7622-pcie-rst",
+> +		.driver_data = MTK_RST_ID_MT7622_PCIESYS,
+> +	},
+> +	{
+> +		.name = "mt7622-infrasys-rst",
+> +		.driver_data = MTK_RST_ID_MT7622_INFRASYS,
+> +	},
+> +	{
+> +		.name = "mt7622-pericfg-rst",
+> +		.driver_data = MTK_RST_ID_MT7622_PERICFG,
+> +	},
+> +	{
+> +		.name = "mt7629-ethsys-rst",
+> +		.driver_data = MTK_RST_ID_MT7629_ETHSYS,
+> +	},
+> +	{
+> +		.name = "mt7629-usb-rst",
+> +		.driver_data = MTK_RST_ID_MT7629_SSUSBSYS,
+> +	},
+> +	{
+> +		.name = "mt7629-pcie-rst",
+> +		.driver_data = MTK_RST_ID_MT7629_PCIESYS,
+> +	},
+> +	{
+> +		.name = "clk_mt8135.mt8135-infrasys-rst",
+
+Why do we have this "clk_mt8135." prefix here (and also mt8173), when all of
+the others don't have any prefix?
+
+That's not consistent and shall be changed, unless there's a valid reason not to.
+
+> +		.driver_data = MTK_RST_ID_MT8135_INFRASYS,
+> +	},
+> +	{
+> +		.name = "clk_mt8135.mt8135-pericfg-rst",
+> +		.driver_data = MTK_RST_ID_MT8135_PERICFG,
+> +	},
+> +	{
+> +		.name = "clk_mt8173.mt8173-infracfg-rst",
+> +		.driver_data = MTK_RST_ID_MT8173_INFRACFG,
+> +	},
+> +	{
+> +		.name = "clk_mt8173.mt8173-pericfg-rst",
+> +		.driver_data = MTK_RST_ID_MT8173_PERICFG,
+> +	},
+> +	{
+> +		.name = "mt8183-infra-rst",
+> +		.driver_data = MTK_RST_ID_MT8183_INFRA,
+> +	},
+> +	{
+> +		.name = "mt8186-infra-ao-rst",
+> +		.driver_data = MTK_RST_ID_MT8186_INFRA_AO,
+> +	},
+> +	{
+> +		.name = "mt8192-infra-rst",
+> +		.driver_data = MTK_RST_ID_MT8192_INFRA,
+> +	},
+> +	{
+> +		.name = "mt8195-infra-ao-rst",
+> +		.driver_data = MTK_RST_ID_MT8195_INFRA_AO,
+> +	},
+> +	{
+> +	},
+> +};
+> +
+
+..snip..
+
+> +
+> +int mtk_rst_register_clk_rst_data(u32 index, struct mtk_clk_rst_data *data)
+> +{
+> +	if (index >= MTK_RST_ID_MAX)
+> +		return -EINVAL;
+> +
+> +	p_clk_rst_data[index] = data;
+> +
+> +	pr_info("%s, register mediatek sysclock reset(%d).\n", __func__, index);
+
+Is this really informative?
+There's sysfs telling you infos about drivers that has been (or hasn't been yet)
+registered... so, please change that to a pr_debug() instead.
+
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_rst_register_clk_rst_data);
+> +
+
+Apart from that, looks good.
+
+Regards,
+Angelo
