@@ -2,107 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF56660E86D
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Oct 2022 21:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B58D460E955
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Oct 2022 21:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbiJZTID (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Oct 2022 15:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S234717AbiJZTow (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Oct 2022 15:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234824AbiJZTHg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Oct 2022 15:07:36 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CEC1DA9;
-        Wed, 26 Oct 2022 12:05:09 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QIosJp024231;
-        Wed, 26 Oct 2022 19:04:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=UZHehpVp8e90UONbXq+gSjjGXYUrA2KBTJ0Zqa5XAD0=;
- b=Csj0S7WUjruIcaYTe/3wOIJ1WqxQGzfRx/OENKgny4/QGCd9GsAGS1PmiQhV/1CFWSrH
- SegA3KSo/66lN/HDE5c1RXuDsHzJDaJe44YHp7MRG6NSPZIqoQmfjzzSrX6EU4eBFxKA
- Elj0DBXtmLtrLk13xODuu8CQ2E24EkN8zsDGC+Enn4elgQIYHaUvVN2wWQ+6VDdZdrf9
- xWXzinzLloybOAf4QLqY2t5WEscDYN+xSeqvYRoa1ev8yhfyKdpIglUTuI1Kkl+XqIuV
- ZUkR42V43cU4mMb5qMhtjPhQdKLUH7MoUd2FdVpVKHn/6hcla+4NBi7MJ6h9K+UhFMXq Lg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfah4r1yb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 19:04:56 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QJ4uUD005471
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 19:04:56 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 26 Oct 2022 12:04:55 -0700
-From:   Melody Olvera <quic_molvera@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-CC:     Taniya Das <quic_tdas@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>
-Subject: [PATCH v3 5/5] dt-bindings: qcom,pdc: Introduce pdc bindings for QDU1000 and QRU1000
-Date:   Wed, 26 Oct 2022 12:04:41 -0700
-Message-ID: <20221026190441.4002212-6-quic_molvera@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026190441.4002212-1-quic_molvera@quicinc.com>
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
+        with ESMTP id S234108AbiJZTo0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Oct 2022 15:44:26 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BF710DE67;
+        Wed, 26 Oct 2022 12:43:52 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id h9so17117671wrt.0;
+        Wed, 26 Oct 2022 12:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORoQDh2bzxbybTBIICtiM6Bx1pQkzrw52vv9hk0I9Po=;
+        b=BOPdWFtXsbOjApuxxFp/AXYwOkGyCX8muLb77Xw8wCbL9CHgQLXGLFnO0D2YL+I5cr
+         nuHYDS0LxklbZUVjnk6rh9gCErC41oEPZksXW1/r/+1S9HGLRNEoflo2tkmJuMjboezG
+         nzwDF1HsLhV88SLMS/+NJtkuUzZWnN0usRjpZ3sHfw1NDTIvXlIfSzkJAjQVdBd6XS1t
+         39bG/ZASeAXjGjF5Rz1WctwUYmbbpZfAFz02xin9R1x/lXNaRvMRonVi/271J4oJUzaJ
+         QYbNQ8teYyR4G0reiuTl1xL0tJGwfUPW3ZVUsREYnVKh+nj9fhyAE/D7564rcSpj1Zvd
+         w5nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ORoQDh2bzxbybTBIICtiM6Bx1pQkzrw52vv9hk0I9Po=;
+        b=CRgyXfl80/W2A+u32Ij3lPoe6JiSagQROBaOw0MfEHCohYtu/40MNWBZYu3gl4+cWO
+         vsYldeMxSWIhtQNrBdthXDK/iOOBQZHokaO2OldzZOR9HBI4nWBfAm70mTUH0yYpL5jk
+         QRtar7TMPpQ6v8i8gtinMazVUg2SPbjGG0ju86DnsyW1CpSKoat+PwJu09Cnip8p1B7M
+         qN19P52qXuoP2xFXRoIe/XEFbLuGhMt5GT3Kz2S1xz9aW86xiS4YQjkYTafEwPMK1t8e
+         QS7Q3Rbm7cz4btmp4y4O6gs2v840qWExXK+qCoclonasL14IvUEn8kqW0jWyAd6Lp4O7
+         eflA==
+X-Gm-Message-State: ACrzQf3QJg91sdh6p5FDHVFousmafpc4AiMuUzz/3K7qRfi2npV4m977
+        uqBs8q+gQeNzTLZga/QqNyg=
+X-Google-Smtp-Source: AMsMyM74qPQyGVBqHv8D8V4H1TUz0Gg0/3rYN3LVednYEsyCeCLcsp6FNlDQn0ZGTR8UlbyLLyl7kA==
+X-Received: by 2002:a5d:6d8e:0:b0:22e:60ae:8875 with SMTP id l14-20020a5d6d8e000000b0022e60ae8875mr30435324wrs.676.1666813431237;
+        Wed, 26 Oct 2022 12:43:51 -0700 (PDT)
+Received: from localhost (188.28.0.84.threembb.co.uk. [188.28.0.84])
+        by smtp.gmail.com with ESMTPSA id y5-20020adfd085000000b002364c77bcacsm6021198wrh.38.2022.10.26.12.43.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 12:43:50 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] Add support for X1000 audio clocks
+Date:   Wed, 26 Oct 2022 20:43:39 +0100
+Message-Id: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: yBJDkjE5D8cRCsYlf8MwOGeYD-BJn99i
-X-Proofpoint-ORIG-GUID: yBJDkjE5D8cRCsYlf8MwOGeYD-BJn99i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-26_07,2022-10-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=728
- clxscore=1015 mlxscore=0 phishscore=0 suspectscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210260107
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add compatible fields for QDU1000 and QRU1000 pdcs.
+The first three patches of this series modify the Ingenic CGU driver to
+allow the X1000's I2S divider to be modeled as a PLL clock. This is not
+really true -- it's just a fractional divider -- but doing it this way
+maximizes code reuse and avoids the need for a custom clock. (Thanks to
+Zhou Yanjie & Paul Cercueil for the idea.)
 
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
----
- .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml       | 1 +
- 1 file changed, 1 insertion(+)
+Patches 04-05 actually add the X1000 SoC's audio clocks. The last patch
+is just a cosmetic cleanup, feel free to take it or leave it.
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-index b6f56cf5fbe3..afeed7b8c0fa 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-@@ -26,6 +26,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - qcom,qdu1000-pdc
-           - qcom,sc7180-pdc
-           - qcom,sc7280-pdc
-           - qcom,sdm845-pdc
+Aidan MacDonald (6):
+  clk: ingenic: Make PLL clock "od" field optional
+  clk: ingenic: Make PLL clock enable_bit and stable_bit optional
+  clk: ingenic: Add .set_rate_hook() for PLL clocks
+  dt-bindings: ingenic,x1000-cgu: Add audio clocks
+  clk: ingenic: Add X1000 audio clocks
+  clk: ingenic: Minor cosmetic fixups for X1000
+
+ drivers/clk/ingenic/cgu.c                     |  38 ++++--
+ drivers/clk/ingenic/cgu.h                     |  17 ++-
+ drivers/clk/ingenic/x1000-cgu.c               | 119 ++++++++++++++----
+ include/dt-bindings/clock/ingenic,x1000-cgu.h |   4 +
+ 4 files changed, 141 insertions(+), 37 deletions(-)
+
 -- 
-2.25.1
+2.38.1
 
