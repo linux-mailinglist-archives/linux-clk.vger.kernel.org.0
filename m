@@ -2,279 +2,136 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632B860E968
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Oct 2022 21:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE6B60EA92
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Oct 2022 22:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiJZTpY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Oct 2022 15:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S234654AbiJZUu3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Oct 2022 16:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiJZTon (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Oct 2022 15:44:43 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7537B119BFC;
-        Wed, 26 Oct 2022 12:44:00 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5so3193306wmo.1;
-        Wed, 26 Oct 2022 12:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tgTbY0wb7NEE8wsfRVlRc/ObdS/WC2z2i1h/J+MWlCI=;
-        b=KY7cMPd1GFfcrGv0PtiHQ5CIfXDiI+sstPxdDLC0fKy9ZpCkfKTaukI07g1MBrNmVA
-         zL77VTcV1eiCDazbQjF8hfvixA5jyXmPdIl6gJNgatTKiCOVq1IiLMVEjDlFQcxp9f+h
-         Mw5VTwQ4zBarNl911bm/OChOqRHUH6l5cvtcqO/eErY8TeudrfdCiYhAUFADRTsRHH/r
-         8l8NxMwp6+PoKWUV2eKqZ9ZmQNj1HNXOB70qziXt9gVT1uvhJMfgfaEN+uv4hYwy8Ni1
-         PzRlDSBmUxYZhjJvVZhKB4Vy4haShFsol9Gy8MeNj7Udp9BMEaF7Usip/JLL1o3bi3CC
-         H/5g==
+        with ESMTP id S234615AbiJZUuY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Oct 2022 16:50:24 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A0631F9;
+        Wed, 26 Oct 2022 13:50:21 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id g10so20306870oif.10;
+        Wed, 26 Oct 2022 13:50:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tgTbY0wb7NEE8wsfRVlRc/ObdS/WC2z2i1h/J+MWlCI=;
-        b=4tli4QnkRi8MQuFELRdII8TouQFPe5hCdRqzH5ROcD8FU/o8IUXK84V/1VCKqLKfH0
-         258XHVRdkUEXqWHv0N7nbOvgjNg1fX/mtHSDMx1RGjxYVoatdPKw0L/f7W4NVgPiPgRv
-         BW34k802pxeXPgE9OTGrLojaJFzItZ11kBlLedgZKo5SrO0/VmUHycyoGzNPWPi7myj4
-         O4UYP3maaT2VQWA6fn4pBHUaFXLMJMxYXkM9GrUMzbFrlzsEO+6hu3bMYort+uaIFIjc
-         zgn6WdYdYoFHT0dHcENUeswxuUGZrfbWqrOZazvhIjMLddzoXIoIYxgo+xtWi4V7+3w/
-         YNZg==
-X-Gm-Message-State: ACrzQf33E6HAvJN236fwVAPaAzxcjRZCA3WnMiDKbxwlJMiizk33M03p
-        Y2dlSWeejKFjz9/4C9R1zZw=
-X-Google-Smtp-Source: AMsMyM7Ilr1r8KPJxosCeQz1/nn4rtexXjzOkrLF8BsmDihsFZPMCGK61eqqOXZToHLPYQwpcNjG2A==
-X-Received: by 2002:a05:600c:4e8f:b0:3c9:9657:9c0a with SMTP id f15-20020a05600c4e8f00b003c996579c0amr3725394wmq.157.1666813438756;
-        Wed, 26 Oct 2022 12:43:58 -0700 (PDT)
-Received: from localhost (188.28.0.84.threembb.co.uk. [188.28.0.84])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c304500b003a84375d0d1sm2492662wmh.44.2022.10.26.12.43.58
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HykrIfDGj0Emwb0ltWiGLZGl2PcTl3HkdAqnWg1OeHs=;
+        b=gyJn1LwtZnto6T6KX5woSq3gTSjAP8sei/VgtHJkcCAoA6dcXE33Gu9quK/nmCyhJj
+         WqWRNLBppkVn22akepRle2YdQIU9adqSvpTPApbpT/cjitrjtNJUo67D9rjQ/zKRziFH
+         /BOVYYtzK3Gvl0bHP1WTWnOBsfHfZSxoD1rkQBGBeC8hzs3WvXoQmdrZGL2NgF9Z6dn/
+         kiP/Adatjt0gjfzN3C9Cf5phsYqUJpKGtP1BuzrwjozBOoAGpioy8uisSaMJJBrS4nyQ
+         sahlNsDBD2zPAwXhjIlv8/ibuAdzfNno4ekCTE0GjnletwO5sBEHxAz7HzTi1Gu6VA99
+         N26Q==
+X-Gm-Message-State: ACrzQf2V3B4R4WvIOAPrmSa1DG7AEZ+qMQz2l27qXkDcZ4gbriE0B2ZQ
+        6zHhEpsmDcQ+Ms4029L5Rg==
+X-Google-Smtp-Source: AMsMyM6KS8E4GJgpsN95NTujJva07W8KKKeA3reyNOFR2b1fz7WjG1LUzrKyh0h31G0KPSeL8vLmTg==
+X-Received: by 2002:aca:c155:0:b0:355:1aa6:d7ad with SMTP id r82-20020acac155000000b003551aa6d7admr3004216oif.0.1666817421025;
+        Wed, 26 Oct 2022 13:50:21 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z3-20020a4ad583000000b00480816a5b8csm1268377oos.18.2022.10.26.13.50.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 12:43:58 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     paul@crapouillou.net, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     zhouyu@wanyeetech.com, linux-mips@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] clk: ingenic: Minor cosmetic fixups for X1000
-Date:   Wed, 26 Oct 2022 20:43:45 +0100
-Message-Id: <20221026194345.243007-7-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
-References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+        Wed, 26 Oct 2022 13:50:20 -0700 (PDT)
+Received: (nullmailer pid 1294279 invoked by uid 1000);
+        Wed, 26 Oct 2022 20:50:22 -0000
+Date:   Wed, 26 Oct 2022 15:50:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     jh80.chung@samsung.com, ulf.hansson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCHv6 1/6] dt-bindings: mmc: synopsys-dw-mshc: document
+ "altr,sysmgr-syscon"
+Message-ID: <20221026205022.GA1291041-robh@kernel.org>
+References: <20221026141631.696863-1-dinguyen@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026141631.696863-1-dinguyen@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Remove redundant -1 entries from the parents array and fix
-a couple indentation / whitespace issues.
+On Wed, Oct 26, 2022 at 09:16:26AM -0500, Dinh Nguyen wrote:
+> Document the optional "altr,sysmgr-syscon" binding that is used to
+> access the System Manager register that controls the SDMMC clock
+> phase.
+> 
+> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+> ---
+> v6: make "altr,sysmgr-syscon" optional
+> v5: document reg shift
+> v4: add else statement
+> v3: document that the "altr,sysmgr-syscon" binding is only applicable to
+>     "altr,socfpga-dw-mshc"
+> v2: document "altr,sysmgr-syscon" in the MMC section
+> ---
+>  .../bindings/mmc/synopsys-dw-mshc.yaml        | 23 ++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
+> index ae6d6fca79e2..0e2024eb9018 100644
+> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
+> @@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+>  title: Synopsys Designware Mobile Storage Host Controller Binding
+>  
+> -allOf:
+> -  - $ref: "synopsys-dw-mshc-common.yaml#"
+> -
+>  maintainers:
+>    - Ulf Hansson <ulf.hansson@linaro.org>
+>  
+> @@ -38,6 +35,26 @@ properties:
+>        - const: biu
+>        - const: ciu
+>  
+> +allOf:
+> +  - $ref: synopsys-dw-mshc-common.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: altr,socfpga-dw-mshc
+> +    then:
+> +      properties:
+> +        altr,sysmgr-syscon:
+> +          $ref: /schemas/types.yaml#/definitions/phandle-array
+> +          items:
+> +            - description: phandle to the sysmgr node
+> +            - description: register offset that controls the SDMMC clock phase
+> +            - description: register shift for the smplsel(drive in) setting
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
- drivers/clk/ingenic/x1000-cgu.c | 49 ++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 25 deletions(-)
+This goes in the top-level. Use if/then schema to add constraints, not 
+define properties.
 
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 95d5e3a44cee..feb03eed4fe8 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -216,7 +216,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_APLL] = {
- 		"apll", CGU_CLK_PLL,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.pll = {
- 			.reg = CGU_REG_APLL,
- 			.rate_multiplier = 1,
-@@ -239,7 +239,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MPLL] = {
- 		"mpll", CGU_CLK_PLL,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.pll = {
- 			.reg = CGU_REG_MPLL,
- 			.rate_multiplier = 1,
-@@ -289,7 +289,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		 * system; mark it critical.
- 		 */
- 		.flags = CLK_IS_CRITICAL,
--		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_CPUMUX },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 30 },
- 	},
-@@ -301,7 +301,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		 * disabling it or any parent clocks will hang the system.
- 		 */
- 		.flags = CLK_IS_CRITICAL,
--		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_CPUMUX },
- 		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
- 	},
- 
-@@ -320,13 +320,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_AHB2] = {
- 		"ahb2", CGU_CLK_DIV,
--		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2PMUX },
- 		.div = { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
- 	},
- 
- 	[X1000_CLK_PCLK] = {
- 		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2PMUX },
- 		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 28 },
- 	},
-@@ -393,13 +393,13 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MSCMUX] = {
- 		"msc_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_MSC0CDR, 31, 1 },
- 	},
- 
- 	[X1000_CLK_MSC0] = {
- 		"msc0", CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_MSCMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_MSCMUX },
- 		.div = { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 4 },
- 	},
-@@ -413,8 +413,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_OTG] = {
- 		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, -1,
--					 X1000_CLK_APLL, X1000_CLK_MPLL },
-+		.parents = { X1000_CLK_EXCLK, -1, X1000_CLK_APLL, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_USBCDR, 30, 2 },
- 		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 3 },
-@@ -422,7 +421,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_SSIPLL] = {
- 		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_SSICDR, 31, 1 },
- 		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
- 	},
-@@ -435,7 +434,7 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_SSIMUX] = {
- 		"ssi_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2 },
- 		.mux = { CGU_REG_SSICDR, 30, 1 },
- 	},
- 
-@@ -456,37 +455,37 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_EMC] = {
- 		"emc", CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2 },
- 		.gate = { CGU_REG_CLKGR, 0 },
- 	},
- 
- 	[X1000_CLK_EFUSE] = {
- 		"efuse", CGU_CLK_GATE,
--		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.parents = { X1000_CLK_AHB2 },
- 		.gate = { CGU_REG_CLKGR, 1 },
- 	},
- 
- 	[X1000_CLK_SFC] = {
- 		"sfc", CGU_CLK_GATE,
--		.parents = { X1000_CLK_SSIPLL, -1, -1, -1 },
-+		.parents = { X1000_CLK_SSIPLL },
- 		.gate = { CGU_REG_CLKGR, 2 },
- 	},
- 
- 	[X1000_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 7 },
- 	},
- 
- 	[X1000_CLK_I2C1] = {
- 		"i2c1", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 8 },
- 	},
- 
- 	[X1000_CLK_I2C2] = {
- 		"i2c2", CGU_CLK_GATE,
--		.parents = { X1000_CLK_PCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_PCLK },
- 		.gate = { CGU_REG_CLKGR, 9 },
- 	},
- 
-@@ -498,43 +497,43 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_UART0] = {
- 		"uart0", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 14 },
- 	},
- 
- 	[X1000_CLK_UART1] = {
- 		"uart1", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK},
- 		.gate = { CGU_REG_CLKGR, 15 },
- 	},
- 
- 	[X1000_CLK_UART2] = {
- 		"uart2", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 16 },
- 	},
- 
- 	[X1000_CLK_TCU] = {
- 		"tcu", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 18 },
- 	},
- 
- 	[X1000_CLK_SSI] = {
- 		"ssi", CGU_CLK_GATE,
--		.parents = { X1000_CLK_SSIMUX, -1, -1, -1 },
-+		.parents = { X1000_CLK_SSIMUX },
- 		.gate = { CGU_REG_CLKGR, 19 },
- 	},
- 
- 	[X1000_CLK_OST] = {
- 		"ost", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 20 },
- 	},
- 
- 	[X1000_CLK_PDMA] = {
- 		"pdma", CGU_CLK_GATE,
--		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK },
- 		.gate = { CGU_REG_CLKGR, 21 },
- 	},
- };
--- 
-2.38.1
+> +    else:
 
+Then you'll need to negate the if:  if: { not: { properties: ... }}
+
+> +      properties:
+> +        altr,sysmgr-syscon: false
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.25.1
+> 
+> 
