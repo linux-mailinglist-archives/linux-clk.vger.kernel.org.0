@@ -2,95 +2,195 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB7C60F7AD
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Oct 2022 14:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FE160F7BB
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Oct 2022 14:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbiJ0MnP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Oct 2022 08:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S235722AbiJ0Mnm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Oct 2022 08:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbiJ0MnO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Oct 2022 08:43:14 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8B674B91
-        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 05:43:12 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id p8so2543728lfu.11
-        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 05:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zjus4Lr0mUJgIUezKjrW0GVyYQEzhhCvXjhUecntBY4=;
-        b=aBnkL+Gocmi/zSZlxJoPrpTqFzaxt4RPjqGteTNMBjULBg0HQ80YWiJScZMc8/ZAmA
-         N/1wckLU8mEmU/f++51N7+jIryV+kisI3lHsKEzOPYSWExce1pjoUYAyURvx1sSn8PJS
-         TRBxx837VgQTzbULNsgU5VnrRHQF5CUo8e0gPX/eaZsx93bj+O1z9a7ozELkMpy6HW0z
-         vmi1VaaE9NaOr0qdwApEObm7gg2ubkcMxhdDvG5RK5KEsLW+vXob0czrdnMEf4KWWG1p
-         0oVtL1gntGc022FmYgnfBjeErgNAE4HdarBEWFqhC9fF/Hinx+2FUwIF9IMxGlxeuzmZ
-         nUkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjus4Lr0mUJgIUezKjrW0GVyYQEzhhCvXjhUecntBY4=;
-        b=rMTG+e3qFx8xcOXFJmgJ4qdcbs95Ykix9D/FN6jUx8wE3Jl32QKSbl0BhDHfD5r6Td
-         sIaEyKolU5aNlUo96efa3WeBOfEiNv2wMy8NhXzOq4iWoz54RYy9fzavTpjnL8m6Vzep
-         N+alCu+oG/LZeqCsIPJqop/5N87eH6wDx+a5L64KLkYtc+HJn4EgWdnlvqD2Dml0AolN
-         yLgO5hUuIs9mE8sXhjrWfnwsJ6UylVURRykj/Ss691KJAMod4RcsoDLgh8OgDW70txta
-         rzE0T85Cpeo+CLT4iAOca0t0MKhMn5P/GI3GrPiwMcDVtXG9xRo7Qtac3x2mq3+sg+Pg
-         3PkA==
-X-Gm-Message-State: ACrzQf372sDc7Q+Jk79XqfG2h8COKFe7fq2VFCpkelZDIgUANojtjRrk
-        NHRE0DR5js4ufc/S0Z4+6lkjCw==
-X-Google-Smtp-Source: AMsMyM50yf2JWdGhQGJTPH/iX4++QAjFltwPWNfb0to5tRN6b9WvutsNUTgmYquih5lM+wQAlU3tcg==
-X-Received: by 2002:a05:6512:3503:b0:496:55d:a186 with SMTP id h3-20020a056512350300b00496055da186mr17549123lfs.340.1666874590962;
-        Thu, 27 Oct 2022 05:43:10 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id x25-20020a19f619000000b0049ad2619becsm173970lfe.131.2022.10.27.05.43.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 05:43:10 -0700 (PDT)
-Message-ID: <e6e410f4-5417-0ad8-7d99-2af75f97980e@linaro.org>
-Date:   Thu, 27 Oct 2022 15:43:09 +0300
+        with ESMTP id S234140AbiJ0Mnh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Oct 2022 08:43:37 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E63167253;
+        Thu, 27 Oct 2022 05:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666874613; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=um9/OS7dgazyiG2HSas0gGeFZisZOzGn8RMAzZOsWsE=;
+        b=RnY+S9citCYf4A1np5gWktC9TFg+p1PTiWCzc4L9VgWrDK0wCyGOeUtjz/W+XiJVmQvfUB
+        Y0fVCq9MlCnU0MI/Tj/ardWiCClOhsrAUoibplJyQdgy059cNaQNfd7+tYH/s9y5QoUJOj
+        xNPUiRUPpe6ZtQBUpW8e89k8yLnLlHc=
+Date:   Thu, 27 Oct 2022 13:43:23 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 5/6] clk: ingenic: Add X1000 audio clocks
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, zhouyu@wanyeetech.com,
+        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <BOWEKR.6I1HK0CSJNAT@crapouillou.net>
+In-Reply-To: <20221026194345.243007-6-aidanmacdonald.0x0@gmail.com>
+References: <20221026194345.243007-1-aidanmacdonald.0x0@gmail.com>
+        <20221026194345.243007-6-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v1 1/5] clk: qcom: dispcc-sm8250: Disable EDP_GTC for
- sm8350
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>
-References: <20221027123432.1818530-1-robert.foss@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221027123432.1818530-1-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 27/10/2022 15:34, Robert Foss wrote:
-> SM8350 does not have the EDP_GTC clock, so let's disable it
-> for this SoC.
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Hi Aidan,
+
+Le mer. 26 oct. 2022 =E0 20:43:44 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The X1000's CGU supplies the I2S system clock to the AIC module
+> and ultimately the audio codec, represented by the "i2s" clock.
+> It is a simple mux which can either pass through EXCLK or a PLL
+> multiplied by a fractional divider (the "i2s_pll" clock).
+>=20
+> The AIC contains a separate 1/N divider controlled by the I2S
+> driver, which generates the bit clock from the system clock.
+> The frame clock is always fixed to 1/64th of the bit clock.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
 > ---
->   drivers/clk/qcom/dispcc-sm8250.c | 3 +++
->   1 file changed, 3 insertions(+)
+> v1 -> v2:
+> * Fix I2SCDR1 refresh to ensure the register is properly initialized
+>   and we don't rely on the reset value. Since the I2SDIV_D field can
+>   be automatically calculated by the hardware we don't need to provide
+>   it, writing 0 triggers the auto calculation.
+> * Remove redundant -1 entries from parent clocks.
+>=20
+>  drivers/clk/ingenic/x1000-cgu.c | 70=20
+> +++++++++++++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>=20
+> diff --git a/drivers/clk/ingenic/x1000-cgu.c=20
+> b/drivers/clk/ingenic/x1000-cgu.c
+> index b2ce3fb83f54..95d5e3a44cee 100644
+> --- a/drivers/clk/ingenic/x1000-cgu.c
+> +++ b/drivers/clk/ingenic/x1000-cgu.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/io.h>
+>  #include <linux/of.h>
+> +#include <linux/rational.h>
+>=20
+>  #include <dt-bindings/clock/ingenic,x1000-cgu.h>
+>=20
+> @@ -168,6 +169,38 @@ static const struct clk_ops x1000_otg_phy_ops =3D {
+>  	.is_enabled	=3D x1000_usb_phy_is_enabled,
+>  };
+>=20
+> +static void
+> +x1000_i2spll_calc_m_n_od(const struct ingenic_cgu_pll_info *pll_info,
+> +			 unsigned long rate, unsigned long parent_rate,
+> +			 unsigned int *pm, unsigned int *pn, unsigned int *pod)
+> +{
+> +	const unsigned long m_max =3D GENMASK(pll_info->m_bits - 1, 0);
+> +	const unsigned long n_max =3D GENMASK(pll_info->n_bits - 1, 0);
+> +	unsigned long m, n;
+> +
+> +	rational_best_approximation(rate, parent_rate, m_max, n_max, &m,=20
+> &n);
+> +
+> +	/* n should not be less than 2*m */
+> +	if (n < 2 * m)
+> +		n =3D 2 * m;
+> +
+> +	*pm =3D m;
+> +	*pn =3D n;
+> +	*pod =3D 1;
+> +}
+> +
+> +static void
+> +x1000_i2spll_set_rate_hook(const struct ingenic_cgu_pll_info=20
+> *pll_info,
+> +			   unsigned long rate, unsigned long parent_rate)
+> +{
+> +	/*
+> +	 * Writing 0 causes I2SCDR1.I2SDIV_D to be automatically=20
+> recalculated
+> +	 * based on the current value of I2SCDR.I2SDIV_N, which is needed=20
+> for
+> +	 * the divider to function correctly.
+> +	 */
+> +	writel(0, cgu->base + CGU_REG_I2SCDR1);
+> +}
+> +
+>  static const s8 pll_od_encoding[8] =3D {
+>  	0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
+>  };
+> @@ -319,6 +352,37 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>  		.gate =3D { CGU_REG_CLKGR, 25 },
+>  	},
+>=20
+> +	[X1000_CLK_I2SPLLMUX] =3D {
+> +		"i2s_pll_mux", CGU_CLK_MUX,
+> +		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+> +		.mux =3D { CGU_REG_I2SCDR, 31, 1 },
+> +	},
+> +
+> +	[X1000_CLK_I2SPLL] =3D {
+> +		"i2s_pll", CGU_CLK_PLL,
+> +		.parents =3D { X1000_CLK_I2SPLLMUX },
+> +		.pll =3D {
+> +			.reg =3D CGU_REG_I2SCDR,
+> +			.rate_multiplier =3D 1,
+> +			.m_shift =3D 13,
+> +			.m_bits =3D 9,
+> +			.n_shift =3D 0,
+> +			.n_bits =3D 13,
+> +			.calc_m_n_od =3D x1000_i2spll_calc_m_n_od,
+> +			.set_rate_hook =3D x1000_i2spll_set_rate_hook,
+> +		},
+> +	},
+> +
+> +	[X1000_CLK_I2S] =3D {
+> +		"i2s", CGU_CLK_MUX,
+> +		.parents =3D { X1000_CLK_EXCLK, -1, -1, X1000_CLK_I2SPLL },
+> +		/*
+> +		 * NOTE: the mux is at bit 30; bit 29 enables the M/N divider.
+> +		 * Therefore, the divider is disabled when EXCLK is selected.
+> +		 */
+> +		.mux =3D { CGU_REG_I2SCDR, 29, 2 },
+> +	},
+> +
+>  	[X1000_CLK_LCD] =3D {
+>  		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
+>  		.parents =3D { X1000_CLK_SCLKA, X1000_CLK_MPLL },
+> @@ -426,6 +490,12 @@ static const struct ingenic_cgu_clk_info=20
+> x1000_cgu_clocks[] =3D {
+>  		.gate =3D { CGU_REG_CLKGR, 9 },
+>  	},
+>=20
+> +	[X1000_CLK_AIC] =3D {
+> +		"aic", CGU_CLK_GATE,
+> +		.parents =3D { X1000_CLK_EXCLK },
+> +		.gate =3D { CGU_REG_CLKGR, 11 },
+> +	},
+> +
+>  	[X1000_CLK_UART0] =3D {
+>  		"uart0", CGU_CLK_GATE,
+>  		.parents =3D { X1000_CLK_EXCLK, -1, -1, -1 },
+> --
+> 2.38.1
+>=20
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
 
