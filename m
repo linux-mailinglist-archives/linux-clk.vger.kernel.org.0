@@ -2,111 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28F1610B2B
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Oct 2022 09:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B4D610B8C
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Oct 2022 09:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiJ1HTN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 28 Oct 2022 03:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
+        id S230158AbiJ1HtR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 28 Oct 2022 03:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiJ1HTM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 28 Oct 2022 03:19:12 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D03B1B76C9;
-        Fri, 28 Oct 2022 00:19:09 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id t25so2921632qkm.2;
-        Fri, 28 Oct 2022 00:19:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3ygvJZjS5cqGS/Wb19opJUCwMym/FSRX+6Prvu5QHTU=;
-        b=qn0p4/DGOzi1Pyy+uoxWGPTsvd8rHGQBsjab4yUwWcr+9UkyV3Tk3CKtU9X6u32/We
-         /BrbyM6wIVQW02ShN2Q3fx4vAyWtiyGYw5HKOjvjT+9yHv57+Mmj5l43nL4eGOUgTz4g
-         Y+U8512rbKv1PYW0HADkeErqgcDfSJ0Cj1zTB+GrtZQKxBYY0z4/K4+iOUXAPpiBVrdb
-         rl4g1C9JTnZqWuLJ5R1dCys1ECMB3tbDCyW41E91/Jr2C7F99OXnHKXr07yyn6mpFwdU
-         Jv2SuElNbFNrP7iqX1uFz0RUoPHjtICWszFondrBxpmzgBEffHcRUfY+9xyg1ME8y77N
-         uWYA==
-X-Gm-Message-State: ACrzQf2ZfDW6joIs2+C/Og66ReS8lOrloe09gvTH5Z9PgR6AAQGevPAR
-        ReIkbTm1kFIGXO/aQMOY4CCQUV95uHgv9A==
-X-Google-Smtp-Source: AMsMyM4Wo4amUI5IdMl7bBCrpcs0+L7Fy7tKm9b4SdsQOIrJ4cAa0tol0CwupC4LKdYR68pR0C6t3Q==
-X-Received: by 2002:a05:620a:44cd:b0:6ec:51f9:5e82 with SMTP id y13-20020a05620a44cd00b006ec51f95e82mr38698350qkp.521.1666941548374;
-        Fri, 28 Oct 2022 00:19:08 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id q39-20020a05620a2a6700b006b640efe6dasm2462438qkp.132.2022.10.28.00.19.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 00:19:08 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id f205so5232066yba.2;
-        Fri, 28 Oct 2022 00:19:07 -0700 (PDT)
-X-Received: by 2002:a25:d64e:0:b0:6cb:7faa:af94 with SMTP id
- n75-20020a25d64e000000b006cb7faaaf94mr15955833ybg.36.1666941547538; Fri, 28
- Oct 2022 00:19:07 -0700 (PDT)
+        with ESMTP id S229962AbiJ1HtQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 28 Oct 2022 03:49:16 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E78419ABE7;
+        Fri, 28 Oct 2022 00:49:15 -0700 (PDT)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id E92141C0002;
+        Fri, 28 Oct 2022 07:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666943353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=m0oOZ7l6RvS8VTaNyT1SmYC8MhtuXGooOBg79bTfEm4=;
+        b=mdVRAKjAmqXAEtpaIwhfCi/rf7DHOZx/gC3jDRriH1FZY0O/hDmwlu+bQux9smX7b6AUm+
+        gOrFrbQPsVr0f5uwEPDH7ic7XQfK1SOJENmxclMb3XRhSs4Ngtj1ekQxQWp1p+RgjmDZMF
+        t/5t7V9yhHbfKGUViZnGmgQ+WsDvoiUDTswTdvnMSneIY5A9QaKoqIzBCAP0ZMKMDtEI3E
+        Cc66hEsNGMEwu7UHh49EEGNrroWaynC2/B2f+eFiXUrG7rIlEPD8H7lhXILaL4gW52z7O0
+        DDH5V5UoXFxKM3+oR7hryFXUVczlWTBXYAAFX4IsOHyeJBpuvNyZobLh0ik1Vg==
+From:   luca.ceresoli@bootlin.com
+To:     linux-tegra@vger.kernel.org
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] clk: tegra: fix HOST1X clock divider on Tegra20 and Tegra30
+Date:   Fri, 28 Oct 2022 09:48:26 +0200
+Message-Id: <20221028074826.2317640-1-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221027163057.37257-1-marex@denx.de>
-In-Reply-To: <20221027163057.37257-1-marex@denx.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Oct 2022 09:18:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW64XYebA_mMWAvB+CyKkguZT9ShMMsLELVFHR8c_=cRA@mail.gmail.com>
-Message-ID: <CAMuHMdW64XYebA_mMWAvB+CyKkguZT9ShMMsLELVFHR8c_=cRA@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: r9a06g032: Repair grave increment error
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-clk@vger.kernel.org,
-        Ralph Siemsen <ralph.siemsen@linaro.org>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-CC s/Phil/Gareth/
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-On Thu, Oct 27, 2022 at 6:31 PM Marek Vasut <marex@denx.de> wrote:
-> If condition (clkspec.np != pd->dev.of_node) is true, then the
-> driver ends up in endless loop, forever, locking up the machine.
->
-> Signed-off-by: Marek Vasut <marex@denx.de>
+On Tegra20 and Tegra30 the HOST1X clock is a fractional clock divider with
+7 integer bits + 1 decimal bit. This has been verified on both
+documentation and real hardware for Tegra20 an on the documentation I was
+able to find for Tegra30.
 
-Fixes: aad03a66f902e18b ("clk: renesas: r9a06g032: Add clock domain support")
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk-for-v6.2.
+However in the kernel code this clock is declared as an integer divider. A
+consequence of this is that requesting 144 MHz for HOST1X which is fed by
+pll_p running at 216 MHz would result in 108 MHz (216 / 2) instead of 144
+MHz (216 / 1.5).
 
-> --- a/drivers/clk/renesas/r9a06g032-clocks.c
-> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
-> @@ -412,7 +412,7 @@ static int r9a06g032_attach_dev(struct generic_pm_domain *pd,
->         int error;
->         int index;
->
-> -       while (!of_parse_phandle_with_args(np, "clocks", "#clock-cells", i,
-> +       while (!of_parse_phandle_with_args(np, "clocks", "#clock-cells", i++,
->                                            &clkspec)) {
->                 if (clkspec.np != pd->dev.of_node)
->                         continue;
-> @@ -425,7 +425,6 @@ static int r9a06g032_attach_dev(struct generic_pm_domain *pd,
->                         if (error)
->                                 return error;
->                 }
-> -               i++;
->         }
->
->         return 0;
-> --
-> 2.35.1
+Fix by replacing the INT() macro with the MUX() macro which, despite the
+name, defines a fractional divider. The only difference between the two
+macros is the former does not have the TEGRA_DIVIDER_INT flag.
 
-Gr{oetje,eeting}s,
+Also move the line together with the other MUX*() ones to keep the existing
+file organization.
 
-                        Geert
+Fixes: 76ebc134d45d ("clk: tegra: move periph clocks to common file")
+Cc: stable@vger.kernel.org
+Cc: Peter De Schrijver <pdeschrijver@nvidia.com>
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+ drivers/clk/tegra/clk-tegra-periph.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/drivers/clk/tegra/clk-tegra-periph.c b/drivers/clk/tegra/clk-tegra-periph.c
+index 4dcf7f7cb8a0..806d835ca0d2 100644
+--- a/drivers/clk/tegra/clk-tegra-periph.c
++++ b/drivers/clk/tegra/clk-tegra-periph.c
+@@ -615,7 +615,6 @@ static struct tegra_periph_init_data periph_clks[] = {
+ 	INT("vde", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_VDE, 61, 0, tegra_clk_vde),
+ 	INT("vi", mux_pllm_pllc_pllp_plla, CLK_SOURCE_VI, 20, 0, tegra_clk_vi),
+ 	INT("epp", mux_pllm_pllc_pllp_plla, CLK_SOURCE_EPP, 19, 0, tegra_clk_epp),
+-	INT("host1x", mux_pllm_pllc_pllp_plla, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x),
+ 	INT("mpe", mux_pllm_pllc_pllp_plla, CLK_SOURCE_MPE, 60, 0, tegra_clk_mpe),
+ 	INT("2d", mux_pllm_pllc_pllp_plla, CLK_SOURCE_2D, 21, 0, tegra_clk_gr2d),
+ 	INT("3d", mux_pllm_pllc_pllp_plla, CLK_SOURCE_3D, 24, 0, tegra_clk_gr3d),
+@@ -664,6 +663,7 @@ static struct tegra_periph_init_data periph_clks[] = {
+ 	MUX("owr", mux_pllp_pllc_clkm, CLK_SOURCE_OWR, 71, TEGRA_PERIPH_ON_APB, tegra_clk_owr_8),
+ 	MUX("nor", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_NOR, 42, 0, tegra_clk_nor),
+ 	MUX("mipi", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_MIPI, 50, TEGRA_PERIPH_ON_APB, tegra_clk_mipi),
++	MUX("host1x", mux_pllm_pllc_pllp_plla, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x),
+ 	MUX("vi_sensor", mux_pllm_pllc_pllp_plla, CLK_SOURCE_VI_SENSOR, 20, TEGRA_PERIPH_NO_RESET, tegra_clk_vi_sensor),
+ 	MUX("vi_sensor", mux_pllc_pllp_plla, CLK_SOURCE_VI_SENSOR, 20, TEGRA_PERIPH_NO_RESET, tegra_clk_vi_sensor_9),
+ 	MUX("cilab", mux_pllp_pllc_clkm, CLK_SOURCE_CILAB, 144, 0, tegra_clk_cilab),
+-- 
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
