@@ -2,83 +2,41 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D41610718
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Oct 2022 03:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B37F6107B4
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Oct 2022 04:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiJ1BJs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Oct 2022 21:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S234467AbiJ1COZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Oct 2022 22:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbiJ1BJr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Oct 2022 21:09:47 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CACE1ADB4
-        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 18:09:45 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id l9so2546836qkk.11
-        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 18:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NqWJUv7RHF72o6asga23lrHNA3l+QNl6qrRvFoALfC0=;
-        b=xNY+5H8aLsuLqj5SHMC6+3oVJMnmAwJEywEYQRhVfMYTHImPvFLQ1xjheNghCtawx8
-         56u0KNrtfK/g27UvusPueR/KF+K0f7KKxD2H5uB9+4U04yCt+S7gzcs6oywD133JgKsu
-         Q8H6qc46rDkbKEMdsrwc8e8qyTA4h1RpAs1o1/HMLpvz6w7DvSMdyD87akjaamsTYhYe
-         2xBP5vgryWZx2R/CvvkPgqsgOJ33A/Nz57081y7dR8uSEASI/EsV1kZte7vHpuUsdVMC
-         I0LLf8BW5MDDbWK3FiB75Kg3Cmj5vndNRaNrlljvEs9edA6C1UvBTkis9pyEoEMn4oEa
-         E0HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NqWJUv7RHF72o6asga23lrHNA3l+QNl6qrRvFoALfC0=;
-        b=CyJ74Xttz6qC8smuC9DbrqkILiOr+73FVpm7A5lEcsvUhOTUjSN4efyrCmLviHhJkJ
-         Y9fgiQu6k/XpbKIqeZajYzp4mulJ4i8JqFWGM/Ou8u5EYv7qr5fyNIXCqaTVwYr48uky
-         V0XktQoZXrgamfRRgR6/ve/5I9hQw3h+8GnfNkV8Gu99NzoKU+5F8ywXvR69wP+mwLdU
-         lUborhRmdAG1YifV7sCQrVVP/sTJBc20sno/P7Dmv4YkHLgFwpMxUDB8qduXqjgps0Xk
-         NWrDgKV0sqPYB8Utl16ZXtzAEW5ojBgHibhxMWP2k6N1dc5IDkQt3KI60f6qTpg0/O2o
-         vUMA==
-X-Gm-Message-State: ACrzQf1cmMHdxF0TkCCIxKwYnWghNapS8xTgCL5QQqgQiB1h7wxIgxb5
-        Su/W8sRWdj2r2yF2LXNjhJqEEw==
-X-Google-Smtp-Source: AMsMyM4BLpfVzD9/T6Vh002ms5kTcmfVgy8ChfBo+r70aLAfiUIOQMVATnUfpTdIW3jfsHWmvZVK1g==
-X-Received: by 2002:a37:ab0c:0:b0:6ec:e84f:7487 with SMTP id u12-20020a37ab0c000000b006ece84f7487mr37406434qke.522.1666919384782;
-        Thu, 27 Oct 2022 18:09:44 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id bl24-20020a05620a1a9800b006ed61f18651sm1988799qkb.16.2022.10.27.18.09.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 18:09:44 -0700 (PDT)
-Message-ID: <f6293fb0-9892-1f94-47a6-a9275231d741@linaro.org>
-Date:   Thu, 27 Oct 2022 21:09:41 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Add RPMHCC bindings for
- QDU1000 and QRU1000
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221026190441.4002212-1-quic_molvera@quicinc.com>
- <20221026190441.4002212-3-quic_molvera@quicinc.com>
- <de2cd5c0-1c3d-5d47-4896-82e32f3c0d88@linaro.org>
- <52cf61ed-88bd-b04e-1596-15013d613c4c@quicinc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <52cf61ed-88bd-b04e-1596-15013d613c4c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        with ESMTP id S235652AbiJ1COY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Oct 2022 22:14:24 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD921B7ED5;
+        Thu, 27 Oct 2022 19:14:22 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 57FCF200AB2;
+        Fri, 28 Oct 2022 04:14:21 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1A8A0200A9F;
+        Fri, 28 Oct 2022 04:14:21 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 3A236180222C;
+        Fri, 28 Oct 2022 10:14:19 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     shengjiu.wang@gmail.com, abelvesa@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, marex@denx.de
+Subject: [PATCH v3 0/3] clk: imx8mp: Add audio shared gate
+Date:   Fri, 28 Oct 2022 09:53:42 +0800
+Message-Id: <1666922026-6943-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,42 +44,25 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 27/10/2022 21:04, Melody Olvera wrote:
-> 
-> 
-> On 10/27/2022 8:57 AM, Krzysztof Kozlowski wrote:
->> On 26/10/2022 15:04, Melody Olvera wrote:
->>> Add compatible strings for RPMHCC for QDU1000 and QRU1000.
->>>
->>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>> ---
->> This looks correct except:
->> 1. redundant bindings in subject
->> 2. not cc-ing all maintainers
->>
->> so still not tag.
->>
->>
-> Not sure what you mean by redundant bindings; should I remove
-> "QRU1000"? "Compatible strings"? Please advise.
+Add audio shared gate because CCGR101 is shared
 
-In the subject please drop second 'bindings' word, because it is
-redundant so:
+changes in v3:
+- remove IMX8MP_CLK_AUDIO_ROOT
 
-dt-bindings: clock: Add RPMHCC for QDU1000 and QRU1000
-or
-dt-bindings: clock: Add QDU1000/QRU1000 RPMHCC
+changes in v2:
+- split dt-binding to separate patch
 
-> 
-> Also, I got maintainers from running get_maintainers.pl on
-> linux-next/master; is this wrong? Not sure what I'm missing here.
+Abel Vesa (2):
+  dt-bindings: clock: imx8mp: Add ids for the audio shared gate
+  clk: imx8mp: Add audio shared gate
 
-You miss some of Qualcomm maintainers. Maybe more, I did not check every
-possible output for every patchset. I just spotted missing Konrad,
-because it sticks out. If you copy the output of some commands, be sure
-you copy everything. Otherwise, just automate it so there will be no
-chances for mistakes.
+Shengjiu Wang (1):
+  dt-bindings: clock: imx8mp: Remove unused IMX8MP_CLK_AUDIO_ROOT
 
-Best regards,
-Krzysztof
+ drivers/clk/imx/clk-imx8mp.c             | 11 ++++++++++-
+ include/dt-bindings/clock/imx8mp-clock.h | 12 ++++++++++--
+ 2 files changed, 20 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
 
