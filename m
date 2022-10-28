@@ -2,75 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BE361079C
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Oct 2022 04:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9564B6107D7
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Oct 2022 04:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiJ1CGT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Oct 2022 22:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S236054AbiJ1CRo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Oct 2022 22:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiJ1CGS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Oct 2022 22:06:18 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE1759716
-        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 19:06:17 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id ay12so2072535qtb.12
-        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 19:06:17 -0700 (PDT)
+        with ESMTP id S236092AbiJ1CRh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Oct 2022 22:17:37 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B11EBA935
+        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 19:17:32 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id w29so2728565qtv.9
+        for <linux-clk@vger.kernel.org>; Thu, 27 Oct 2022 19:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=q1LMLjq5zpfIikLtv+miyJRP8UZATL8cTTo41bIU76g=;
-        b=lH2F9fMGOBO7pc9d2vdcuEK19wvkTVdrsrj78FtX8hzwFEzXpDpJ5jzGrSOJFLMIHk
-         Met1S0879lRdxrRo76LzKGeYmxvH+VOOLokQ0pxNqgDaw3u/j/aRGLboIxbf2KAzedkk
-         th7y6QGpuKBKe3Hku5QoTBIemJorNktf1HTscs7lfyFWnsktePPxS8SSmHBHQuUo8m4t
-         2xGERDBg0OMY5RbW410viCwicg4/GB+mG06R+8gixowT5bfwFh10dxAoLjc3CtCpjYTW
-         v1t1j7zBlkAgXACVj9P8NcKKLzZQzmYFSYjxnW7MLXiwe2CMOBHcOGcYQ2ALfWGTQ8kG
-         v/Mg==
+        bh=BJWq+oV9qCWB9nsJJoQSKw7FQSgWYiEd+bdoELvwk7c=;
+        b=VybGqElICFb96ny5ImphHSJ4bPBiryi0OLukwgdxtu7Apmvl6DqhkGO6US9H+puEjr
+         rOdYx4AAQ7ijRQ0853O4pV3fdTdfBOay+Y9RNZkyd5DP5OlmvtyqYJoj7NdxTdfPKZZs
+         pJ0tBSoKW+EHYTQNRmAPOztYPVOk8WwYRCSPdCu72M1k036ZDrOpjWTyitgfsGwyPiKh
+         7S5wakI/81U1g04sbymHYoat3Zr9W0mZOU4pqNPLSpzcc06bxKDj4TbI60UIpG+ufErA
+         aCuEuC1/Uk5kSG9GlmrHMtBmMNoyKLAXL/cb5HK0v21yq7kqgSsHMvvuIb+Fslsu7Rw5
+         Ftow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q1LMLjq5zpfIikLtv+miyJRP8UZATL8cTTo41bIU76g=;
-        b=t/cl8gQNfkcv/k+gIoV7nIQ5BY06tMAhmLfXJrowicTSjmKuPLPsm4no/uXadLVQ9k
-         yY9Q3btedzP9wQVtjPW4pHdXDY2l3tMwVr7QuuZrA7tTp+YXQDJdPLtKqSo8qXzWEfYn
-         gCyPBvcSuX4Mx06zrK2jmljVx3C92H1Twr2M3zjhDxVrQtyeK26gkPmjNhEA3AWNUPYo
-         hbw7RfTxc+AUssO9rt8ZDTsDxJNpq86Mp5+u7jSyJRC9zed52kjzYwffvlhvOF2EVI5c
-         bM/neXPwVoTiiXz/Nogv5oZ1UFCnb4sf3ZyWFBN8QHM+Yj6hhvQRKbQOd3jj2ziLm2VV
-         cpYw==
-X-Gm-Message-State: ACrzQf0fmMEel6v1g4DKgMkE65SMuyvAck71KrZcwp7tlLyaDBi6Rt1X
-        EVmasitDXWrXQ3dWDIVZokkWFQ==
-X-Google-Smtp-Source: AMsMyM4+JeXMGKJpNzhYtik1KMxwYxLCVnhkikb9ZUBnzm5aaGM9Cn7gp+7FSY+I73K5aQwb6iIguw==
-X-Received: by 2002:ac8:7c46:0:b0:39c:fa92:a27a with SMTP id o6-20020ac87c46000000b0039cfa92a27amr42324109qtv.61.1666922776986;
-        Thu, 27 Oct 2022 19:06:16 -0700 (PDT)
+        bh=BJWq+oV9qCWB9nsJJoQSKw7FQSgWYiEd+bdoELvwk7c=;
+        b=anXDoTDyHj3EyBBDCiWizRAM1LFGClVu/3JFRe9bas86pXSDYABLLJ+xS6qC0KFQSe
+         GgLnUdR48q+hzElTszhg+WtO67DQ5VcwSqYtVb088luyzCermUmq0A3Ld+amjnkaOpP+
+         KC6hzdN6c7W7z2EdM78gcf8V7FrFN7ujNuCCBMuVbb0pCD64RooxvA3Dmldn5yeTpdgY
+         N9fD+Pjb8ErKBUvXn2MofeXZO3HaJL/uN9Xx1H4RjkyGJzAP8odEpKnaFRJnSCOrk/PH
+         qGs3JZWD7pQxcONS9W2XdDsJbzQYIxK/3CWMdFH0QA5aiIM26cl8mXc+Vu+PfRdnPxu0
+         aZgQ==
+X-Gm-Message-State: ACrzQf2K2bb6roijuy8yRg7vTQ0CeOGtsXcPfn9aSjtIduzp9xOWNTaq
+        UsYML+EcYJBu/iBH1V3HgSAAVw==
+X-Google-Smtp-Source: AMsMyM6sHImfq+ADwCCpfFGFstcpO4jS6IWwSFdv+ExMapjj41nSytwQQbllPPAuW9NuIBm3yZW0Iw==
+X-Received: by 2002:a05:622a:1646:b0:3a4:e8b5:b8c8 with SMTP id y6-20020a05622a164600b003a4e8b5b8c8mr12886869qtj.339.1666923451637;
+        Thu, 27 Oct 2022 19:17:31 -0700 (PDT)
 Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id g23-20020ac84b77000000b003a4efd59754sm1741747qts.12.2022.10.27.19.06.15
+        by smtp.gmail.com with ESMTPSA id bs15-20020a05620a470f00b006ec09d7d357sm2101353qkb.47.2022.10.27.19.17.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 19:06:16 -0700 (PDT)
-Message-ID: <2c3ac59f-fc9e-a1eb-3778-a553ee833de2@linaro.org>
-Date:   Thu, 27 Oct 2022 22:06:14 -0400
+        Thu, 27 Oct 2022 19:17:31 -0700 (PDT)
+Message-ID: <7fe4bf93-6b60-f1f7-d89f-8d7f75c9e58c@linaro.org>
+Date:   Thu, 27 Oct 2022 22:17:29 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH v10 00/33] crypto: rockchip: permit to pass self-tests
+Subject: Re: [PATCH v3 3/3] dt-bindings: clock: imx8mp: Remove unused
+ IMX8MP_CLK_AUDIO_ROOT
 Content-Language: en-US
-To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        Corentin LABBE <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     ardb@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-References: <20220927075511.3147847-1-clabbe@baylibre.com>
- <Y1jkqiYjXT30/hk5@Red> <Y1kGdWyYPtcgQPtd@gondor.apana.org.au>
- <6031281.lOV4Wx5bFT@diego>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>, shengjiu.wang@gmail.com,
+        abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, marex@denx.de
+References: <1666922026-6943-1-git-send-email-shengjiu.wang@nxp.com>
+ <1666922026-6943-4-git-send-email-shengjiu.wang@nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6031281.lOV4Wx5bFT@diego>
+In-Reply-To: <1666922026-6943-4-git-send-email-shengjiu.wang@nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -81,30 +80,11 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 26/10/2022 06:25, Heiko Stübner wrote:
-> Hi Herbert,
-> 
-> Am Mittwoch, 26. Oktober 2022, 12:05:41 CEST schrieb Herbert Xu:
->> On Wed, Oct 26, 2022 at 09:41:30AM +0200, Corentin LABBE wrote:
->>>
->>> Herbert any thought ?
->>
->> Please let me know exactly which patches you want me to apply.
-> 
-> it would be great if you could apply:
-> - patches 01 - 25
-> - patches 29 - 33
-> 
-> They all start with either
-> 	"crypto: rockchip: ..."
-> or
-> 	"dt-bindings: crypto: ..."
+On 27/10/2022 21:53, Shengjiu Wang wrote:
+> Remove unused IMX8MP_CLK_AUDIO_ROOT which is replaced by
+> IMX8MP_CLK_AUDIO_AHB_ROOT.
 
-The series probably should be split in such case (with links to lore),
-otherwise it creates impression of some dependencies. Bindings are in
-the middle, DTS as well (which is usually sign of ABI break).
-
-The clk change at the end also does not help.
+You break users, so this should be a bit better explained.
 
 Best regards,
 Krzysztof
