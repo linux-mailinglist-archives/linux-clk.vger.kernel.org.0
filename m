@@ -2,166 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3821E6120C6
-	for <lists+linux-clk@lfdr.de>; Sat, 29 Oct 2022 08:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FDD61214D
+	for <lists+linux-clk@lfdr.de>; Sat, 29 Oct 2022 10:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiJ2Gla (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 29 Oct 2022 02:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
+        id S229871AbiJ2IMl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 29 Oct 2022 04:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiJ2Gl3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 29 Oct 2022 02:41:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADA306A4B6;
-        Fri, 28 Oct 2022 23:41:26 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxvrcVy1xjYzsDAA--.7274S3;
-        Sat, 29 Oct 2022 14:41:25 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx5VYPy1xjiSgHAA--.5709S4;
-        Sat, 29 Oct 2022 14:41:24 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 3/3] dt-bindings: clock: add loongson-2 clock
-Date:   Sat, 29 Oct 2022 14:41:18 +0800
-Message-Id: <20221029064118.27413-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221029064118.27413-1-zhuyinbo@loongson.cn>
-References: <20221029064118.27413-1-zhuyinbo@loongson.cn>
+        with ESMTP id S229457AbiJ2IMk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 29 Oct 2022 04:12:40 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C0586810;
+        Sat, 29 Oct 2022 01:12:36 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oogx5-00055T-D4; Sat, 29 Oct 2022 10:12:23 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        Corentin Labbe <clabbe@baylibre.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
+        mturquette@baylibre.com, ardb@kernel.org
+Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v10 00/33] crypto: rockchip: permit to pass self-tests
+Date:   Sat, 29 Oct 2022 10:12:21 +0200
+Message-Id: <166703105270.1426558.18336536991217213193.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220927075511.3147847-1-clabbe@baylibre.com>
+References: <20220927075511.3147847-1-clabbe@baylibre.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx5VYPy1xjiSgHAA--.5709S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4kJw4fKFyfWF1kuFg_yoW5GrWDpF
-        sxC343GryIvF17Zws5Ka4xA3Z5u3Z7CF17ZwnrCa42kr98W3W5XF17K34DZa9rAFy7Za9r
-        ZFWfCr4jka1Ikw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07UNjjkUUUUU=
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the Loongson-2 clock binding with DT schema format using
-json-schema.
+On Tue, 27 Sep 2022 07:54:38 +0000, Corentin Labbe wrote:
+> The rockchip crypto driver is broken and do not pass self-tests.
+> This serie's goal is to permit to become usable and pass self-tests.
+> 
+> This whole serie is tested on a rk3328-rock64, rk3288-miqi and
+> rk3399-khadas-edge-v with selftests (with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS=y)
+> 
+> Regards
+> 
+> [...]
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+Applied, thanks!
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..63a59015987e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson-2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of Loongson-2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5136684fb6c6..e5fb270dd363 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11911,6 +11911,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
+[26/33] clk: rk3399: use proper crypto0 name
+        commit: b136468a0024ea90c1259767c732eed12ce6edba
+[27/33] arm64: dts: rockchip: add rk3328 crypto node
+        commit: d1152bc533c941f7e267bf53d344cee510ea2808
+[28/33] arm64: dts: rockchip: rk3399: add crypto node
+        commit: 8c701fa6e38c43dba75282e4d919298a5cfc5b05
+
+Best regards,
 -- 
-2.31.1
-
+Heiko Stuebner <heiko@sntech.de>
