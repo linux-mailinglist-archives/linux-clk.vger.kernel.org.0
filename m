@@ -2,230 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F223613A24
-	for <lists+linux-clk@lfdr.de>; Mon, 31 Oct 2022 16:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C17613AC4
+	for <lists+linux-clk@lfdr.de>; Mon, 31 Oct 2022 16:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbiJaPgG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 31 Oct 2022 11:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
+        id S231713AbiJaPyd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 31 Oct 2022 11:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbiJaPgF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 31 Oct 2022 11:36:05 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2058.outbound.protection.outlook.com [40.107.20.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6F3646B;
-        Mon, 31 Oct 2022 08:36:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TBkJ+peUK6Uxr3YXywGld3ww1iSIBHq/B+gMBDLWca1T7LytK+h3YTrVlWAaxmS3VV5uaRufffZ81z+x8//rokt9QhJtsagHFoeqEjKYI5Gos3zTq4Xd/nwhwTKApT+ovg7iRxcxQLFtHDa2Zqzb8zaK6h9QnaMWWOhADd7Pugqyv542m7DFsmcmvubNlhwGrcsTyuUFGJgikTM7bTUqgJgBrFoOcyA5U2updUV4Yke8M82HdAYWxhc5DMbMta+Gve7fz/Nfo3/La6XXCBuB4/JClHbmx82WoF0ayExAMdqwKVZqsmf1PN5YNbLlzoArNqiZ3NCtQbNdmVvqWbJzNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GlmN0TMeFl0fvy/eUckGxjHUQHPSD0L3a7MM2+fk7L0=;
- b=kBsdmLnau9Y3jN/p9etswafA7icAtSTAOOwBnkDVsOo+fSzi8ppQ5Q6kwQyoFeF1yTHNYSv+GnvSTmMs4KZi/BHODUfxj5zxmSubmGIuzw3U50xw/ep+SymQuUvwMuZEhMAqPpLpKHHybub2jcyEmqdIbpdwAr4sPryi9Atqg6VcCSF0y0d/uWW7kvGFJGI2Vktdv3HQsc66EQXNAPP0i+NLWBQUEWYa6LeENwfTh5msP4/IGUHg8IsPSHXecGV5fDgi+XsguEeNymcc1MYXfQ9Z0QzbDoP+BDNwgu+64MZGyTroYeMzzmoQb5/q3gQ7z4SKv30asUgkQ41QsaQhnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GlmN0TMeFl0fvy/eUckGxjHUQHPSD0L3a7MM2+fk7L0=;
- b=ijp/CZQ2XWJFF9mBvPqnESZNwqWa0Vx40r63QD11n2dbIcwVRNcIhb4S59sgdd47MTYB/+lB4U4rh6FQt6ejXeO+G/dg6rzHuJkHuK/eNj+TPhAdXbGvbrA+tIkRPjQh9XVojmn2FZPsmGkzr+K0XaFAmEzUiN5XQUR77+COgd8hNU78uLW321ikqAHXE5QXyIg6jdVabkFSD/28gcSqE4elOpZts3fAZnCTz4ASZVo5tC1B7u2fit9hnDJny/NGqGnj7eRzNTuOWDYV4iVTwlEJ12xqa7oL44Yt8reFfTDLQZMz4xH7otHj/zJmiKP665Q2kFuNBUvOl76cX5LTLQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
- by AS8PR03MB8713.eurprd03.prod.outlook.com (2603:10a6:20b:54e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Mon, 31 Oct
- 2022 15:35:57 +0000
-Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::9489:5192:ea65:b786]) by DB7PR03MB4972.eurprd03.prod.outlook.com
- ([fe80::9489:5192:ea65:b786%7]) with mapi id 15.20.5769.015; Mon, 31 Oct 2022
- 15:35:57 +0000
-Message-ID: <f7d631ef-0d51-ce9a-7e9d-fcdd314ff279@seco.com>
-Date:   Mon, 31 Oct 2022 11:33:30 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v8 4/9] phy: fsl: Add Lynx 10G SerDes driver
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221027191113.403712-1-sean.anderson@seco.com>
- <20221027191113.403712-5-sean.anderson@seco.com> <Y1zuQvkyqtHOPGrk@debian.me>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <Y1zuQvkyqtHOPGrk@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0308.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::13) To DB7PR03MB4972.eurprd03.prod.outlook.com
- (2603:10a6:10:7d::22)
+        with ESMTP id S231917AbiJaPy3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 31 Oct 2022 11:54:29 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FFF12619
+        for <linux-clk@vger.kernel.org>; Mon, 31 Oct 2022 08:54:27 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id k2so30561905ejr.2
+        for <linux-clk@vger.kernel.org>; Mon, 31 Oct 2022 08:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=54IXG2FPqhGXRhjbMJeBZJCoE2PKYVWz3wVMDeZTLCU=;
+        b=ggQuzJDmtFt6ASf4MAUPpLpVRWq6C7d6tt/xb2JvHAUqilqDuKCKdgzoD+ZHtcZ4fq
+         1eGGH4GCkwFmv29dMVSA+sfIupMAQoPy3Udm0shqfwmjwPGRMgse5DloY6LJ1rN88fY5
+         7w6hrxuUesvdnXYoKXWNpBj8Pr4Xr8VccPz4cuzn5bfujDLgEBPPC3xuLT0jbsm1ipxh
+         FUhqBkZXPIIrWP2PsdxLUGOhzhmQjhACQa60SJn3FJ739vynVm2k1qMYY8Csfsj0y2lM
+         nw2YA5xx80yJfSa/JhPpfgs1o84qgLa+OLcJIGH+THHb6qZkx3Z3XMPBiJeb5RsMIDTj
+         0+FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=54IXG2FPqhGXRhjbMJeBZJCoE2PKYVWz3wVMDeZTLCU=;
+        b=n2TDSShiNa+qtlRqcZaiBoam+M4IJR42X19fw9cGLrBiIpcbtQ4CoslSp7I3LEGttY
+         DtEa8JJ9WQbSFWEKUS6cAxiW9zZHQFQvGQYcAW740+B2kQ2ACm9yvav94HO1hJAPHG2X
+         KeHnUGB+S/87xiiN9q1szurCW8kuCMX64V+JRKTPPA1ih33H+p6V8WuS769lTwvdJtdH
+         e3/nyw9+60s9gBzRmIvQvQVdLW37nqVT9AAGbIViuZg402ElSofU7Aix7hFV//gpl9NS
+         QCW9WBDdezvNU5Qc3xPS3JAoEhihGT0C2oOyWE8OT3Ul2AaRCrhs5PUiNmoVSaCxRfsW
+         O+UQ==
+X-Gm-Message-State: ACrzQf21nftqN82KPzVkdiHUJIss4uLoVoLZIrCixl5R/PMI3Q617Qa3
+        WnZhGHbq5LCOg1jhyRNoszwaaCZytOOfcTgAZZ4=
+X-Google-Smtp-Source: AMsMyM5ij4ZkrsD6JU9uNQElQEIR/nCACjnjtY6wVFIdrV6cBJv1SK5jJ5zr23msglTQ3T5SKFNEM5GHVkDHr+Qm+NE=
+X-Received: by 2002:a17:906:3054:b0:7ad:e82b:ac23 with SMTP id
+ d20-20020a170906305400b007ade82bac23mr282876ejd.235.1667231665911; Mon, 31
+ Oct 2022 08:54:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|AS8PR03MB8713:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff4ce1c9-b01e-4cc4-e8d1-08dabb559a1b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vYnZhOMtFPJW7rVQFfgrIt21m9rI+Q2Y/nqygnEAB5IxaAd2Ik2jC2S7TjusO4coCFgfaTvJlgXAqLIYF5OHvcb1hBnW7JKaexCUdoFhkzqpl9bZ1BJ62AK1SM8UhIPBTUDbLmL7YO/cO+P2tC3KSQB/9qb6DJZUnONqTm+1xzw0NWVH+q0bDI9GgaJzoFV0f9cTOMRuKXtRVTmzxrOp9Xp9k5M4PdSR1zkIctdN9fHA27EOiPq/vtJ5MsB7FsthXEnNq5tX33fjAoXCf74O2Se9iRTVey1SFE+p+xCrXiYHEu4OX0EIcFdlh+GiPm5TqSMh9qiO+zBkunIwxSMlVwB8NL8Hckam3vnTDf9A85tHA+xKBeS5GW3I2t6/fU40d+JFRqyda4UYsPPm+adBVrvuB4J8pEpBTIz96tLX9Gmypeq4KOZu8ntloR2ZnPb9TiKOIU2iiCoYJHQ79HMd7z1OfUbQSa+vWW2RBhNRrWPays4MFErYsD+GHLtZ0xKVM1HDNq9Kg6DfxLQRvehzErZQIP1n/98ypJhfk7vlbKjlg0CFzl45VNV7PciLjJ/tHtBusbI5IE4yQKtrpiiHu/4oeO35fsigYICHyKRo3yqXONX7ci/gOUFX3Iyh/B3Sas0N1MUtsacgOL9Cqyn0OXgLOj8QIoX15qLhy4SdL71ixlZJLJC2V99vmPTFD8zUHaKwovsQiCx+vYjCvymgUUenvE0qTdToUZFnQCPl4PbPAxYVU0qGSaApuMUafRj1+uI8ImA84s+KX4ouuv6owZ+7lP5B6mF8icLPdrQ/huO51vgPQIfXt//EguViaMIa6ejnTorzrDpOvRRwIZX78w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(366004)(39840400004)(136003)(396003)(376002)(451199015)(8936002)(83380400001)(41300700001)(5660300002)(66556008)(66476007)(7416002)(86362001)(2906002)(186003)(52116002)(6506007)(2616005)(38350700002)(478600001)(44832011)(6512007)(6486002)(53546011)(26005)(38100700002)(54906003)(66946007)(4326008)(6666004)(316002)(31686004)(6916009)(8676002)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzNoZGxVTFBWZm1qSDM5ZXFrZHQzT0lYMitXSnc3MFhSN0VrWEQxVDBlYjBs?=
- =?utf-8?B?NEUwblJiWWYrTFQzM0Y1WGZVRENtREJXUkdISnlObHYxK2sycm4wY0s4QWQw?=
- =?utf-8?B?OFNWVEowR3hRaks5ZHJXekVFOG1IdWZjclRQNTR2aU92UTRFa01pZndsL00z?=
- =?utf-8?B?MXE5QmxVckFOM2V3aW5rczJ4am9JdGZNdThvMnk1MWRHb2dnZ3RqNDZ5NjBx?=
- =?utf-8?B?SENmTjRPLzljbVVaYXYzdmU0cGhwWURzaXFyakFvd21WOC84Y3RwcE5CVlYx?=
- =?utf-8?B?YWJoWENFR1R3bHh5T25ydUNTMGZPZEJ3aHUxSmJ0NGt5L3BOQXBkSDRYbWxS?=
- =?utf-8?B?VzBKYzNGY2dEOWxnLzljb1hMSUZjVWd5V3BTQTJXV2xSUjhoT2hQalRFZDhV?=
- =?utf-8?B?TjBLeEJ0UTkyMDJ4bGtodWtrMjFJamt0ZTRJTjNKOVovdmxwUG1OOVYyRm5K?=
- =?utf-8?B?TUhHcW1hUGR6K2orTWcvZDNHZ0htZnZTRWxIZmt0M0xKNEcwRVVjM3NqMjNZ?=
- =?utf-8?B?enZyRTVJT3RlZU9NektyakNEU21ab3RwSGNYNUc2Wlc3bTloQ1dNcFl4YU5o?=
- =?utf-8?B?emZXNjVnckNnUk95VXc1bUsybS9sQk1ySk9zVmQxYmtwcmRnYWJ2bldQUmlR?=
- =?utf-8?B?UzRQZjhvZDk5dEJwSDIvSEJjY0tURTB5bVZqdmwvTmhGL2pYSVNoTEFXemlq?=
- =?utf-8?B?NjZyMmMydDRDRWVkc0ZFa3RZMTZVNFhuWDV4UmQzWERrMGJTNXFpZFgyN3kx?=
- =?utf-8?B?T0FOS1J5YkR6MW1IcmlidDV4T01tby9UN0luTC9xTTNJTzNrTjEvNXlRYWV4?=
- =?utf-8?B?ZFdTT1diMmMxS3JGd3A3RVZwS0NIRUhWYUJyZHBOY21MUi9sdm5aaWpTZDRz?=
- =?utf-8?B?MVdxY3EyWmE0RXhRQUxFOWIrSWV4OWNzeWJHNmtwbzE3K3d4YTM3UlBUcW0z?=
- =?utf-8?B?RlFSNXhQQlROZjFnSEZtSDRhSDBLdjVRaHhudlgwdFVLTWZNNmJVMGpQVGpQ?=
- =?utf-8?B?cmlXTmZTcTZnZHZBQ1M5aWZ0N0ZLR1ZFTEdUVVJrQTdoakd1a3pCN1NmcEFn?=
- =?utf-8?B?bnREbEZkbzBya3VRblVLeWw0OWtKVVFibWhpWGdlenZlaUZ4M3M4cy9Oa2Uy?=
- =?utf-8?B?VkFnWTNXS3hKaGNlMy9rTEZKd0JtaTJ1OW5mb1dIcUF5YU5oYjkreG5aK2VJ?=
- =?utf-8?B?dXN3cUJxbzVOZkY5dzRLcC9tQWtYajlPc09GM1NZeDlaREVvL3ZPY29qQ2E5?=
- =?utf-8?B?RFBlb2xLMWlaSVlBc2R2aHZScjdERU8rSzBSdm0wOXZnYjd3Y3h2ZVJ0NDcy?=
- =?utf-8?B?YWtaQ0tBLzYyWE1GV3M4NDVIVzllbmt5T055ZEVTbmJNM1ppVWhzdHJxMzVC?=
- =?utf-8?B?cWpvTHN1a09mZWxUdkpLb21SVXFDR1ZqUkhMTDdxYW02cjRrcWEyUGZEVjBk?=
- =?utf-8?B?L1NlRUVGVjlXV3NoY0NqZWFoaHBTWEdLWk1ocVgvOC8vM0lTNGE2cDRKOHc3?=
- =?utf-8?B?RjlHSTRKdWNwVW1hMm1WdWR6bzZBOXpyNnNRakVNNEpVcDhUcEFXOUxMb1E0?=
- =?utf-8?B?aFk4NWY2SUtUSWs0K1RxWlBsUXd2dEpodjBWVzlYbWpRc2pHdXArL0NwZ0Vo?=
- =?utf-8?B?RnpKaDU5Sy9GMU8wZnhsc1dvSldBMDdoWFlKc0doSGZVYUNVZHJFLzRSZjh4?=
- =?utf-8?B?d0J5QlVHK0txckREb0tVQ1F1MkU4Tml2dnE0dXp5MFZtOEZvcGtWbUxDaU0y?=
- =?utf-8?B?S0twRWFNWDB2eHJhMDdycEVGV0ZkSjR2dVhEQWV3OFZOQnZtQWdNWnYyK1l6?=
- =?utf-8?B?TzZsQXdJcHVUN1RNand6M0hSVVRNazdMS2laTUswQjlDbllSUUhHVTJRU2I2?=
- =?utf-8?B?UnJCYVpEMkZWWjRta3RPNkJPWWVxaVRwUk5rTFNlZmIwNVNlUklxNkQ3Mkxy?=
- =?utf-8?B?UzcwUTVKakFGck1NYmg1OU5zbEhNUnBSdkErZ0NuZTN6ZHRnd2ZQOWRINHFC?=
- =?utf-8?B?ZVI4NWdyMFdJMGk3SVdLcm5iNkJvc3VMWE1tQVlCQnJmb3RFYnp0SlFnSGZm?=
- =?utf-8?B?U09QWllmb0ZreVJrZmFZQ1RadWtTd3lpYWI5Q2didmpMSXJvdC9BaVVYaEZW?=
- =?utf-8?B?cmNuRmFXRTY0ME9hUjJNWi9ZdlZXSUhTU2JKdllybFdWK0MxdlZzWmdScDZw?=
- =?utf-8?B?elE9PQ==?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff4ce1c9-b01e-4cc4-e8d1-08dabb559a1b
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 15:35:57.0355
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TFw0Kulf2y7/9K4SZTx3Lu9710TGdJYYVFAl4YjEjZeVco+AQ4cbLGf6sAuZ76YMkf6KoM4OOrbgwLrreS2OLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB8713
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7208:608b:b0:5d:5fd:eaac with HTTP; Mon, 31 Oct 2022
+ 08:54:25 -0700 (PDT)
+Reply-To: victorinaquezon01@yahoo.com
+From:   Victorina <victorinaquezon@gmail.com>
+Date:   Mon, 31 Oct 2022 15:54:25 +0000
+Message-ID: <CAAOoKduTk21eCti1a2TBD7guF=FZ3iOogb8zsgEqi1wEJNe+NQ@mail.gmail.com>
+Subject: Good Morning
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 10/29/22 05:11, Bagas Sanjaya wrote:
-> On Thu, Oct 27, 2022 at 03:11:08PM -0400, Sean Anderson wrote:
->>  .. only::  subproject and html
->> diff --git a/Documentation/driver-api/phy/lynx_10g.rst b/Documentation/driver-api/phy/lynx_10g.rst
->> new file mode 100644
->> index 000000000000..ebbf4dd86726
->> --- /dev/null
->> +++ b/Documentation/driver-api/phy/lynx_10g.rst
->> @@ -0,0 +1,58 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +===========================
->> +Lynx 10G Phy (QorIQ SerDes)
->> +===========================
->> +
->> +Using this phy
->> +--------------
->> +
->> +:c:func:`phy_get` just gets (or creates) a new :c:type:`phy` with the lanes
->> +described in the phandle. :c:func:`phy_init` is what actually reserves the
->> +lanes for use. Unlike some other drivers, when the phy is created, there is no
->> +default protocol. :c:func:`phy_set_mode <phy_set_mode_ext>` must be called in
->> +order to set the protocol.
->> +
->> +Supporting SoCs
->> +---------------
->> +
->> +Each new SoC needs a :c:type:`struct lynx_conf <lynx_conf>`, containing the
->> +number of lanes in each device, the endianness of the device, and the helper
->> +functions to use when selecting protocol controllers. For example, the
->> +configuration for the LS1046A is::
-> 
-> Did you mean struct lynx_cfg as in below snippet?
-
-Yes.
-
->> +
->> +    static const struct lynx_cfg ls1046a_cfg = {
->> +        .lanes = 4,
->> +        .endian = REGMAP_ENDIAN_BIG,
->> +        .mode_conflict = lynx_ls_mode_conflict,
->> +        .mode_apply = lynx_ls_mode_apply,
->> +        .mode_init = lynx_ls_mode_init,
->> +    };
->> +
->> +The ``mode_`` functions will generally be common to all SoCs in a series (e.g.
->> +all Layerscape SoCs or all T-series SoCs).
->> +
->> +In addition, you will need to add a device node as documented in
->> +``Documentation/devicetree/bindings/phy/fsl,lynx-10g.yaml``. This lets the
->> +driver know which lanes are available to configure.
->> +
->> +Supporting Protocols
->> +--------------------
->> +
->> +Each protocol is a combination of values which must be programmed into the lane
->> +registers. To add a new protocol, first add it to :c:type:`enum lynx_protocol
->> +<lynx_protocol>`. Add a new entry to `lynx_proto_params`, and populate the
->> +appropriate fields. Modify `lynx_lookup_proto` to map the :c:type:`enum
->> +phy_mode <phy_mode>` to :c:type:`enum lynx_protocol <lynx_protocol>`. Update
->> +the ``mode_conflict``, ``mode_apply``, and ``mode_init`` helpers are updated to
->> +support your protocol.
->> +
-> 
-> These lynx_ keywords should be in double backticks to be consistent
-> (rendered as inline code).
-> 
-
-OK
-
-> Also, don't forget to add conjunctions:
-> 
-> "... Then modify ``lynx_lookup_proto`` ... Finally, update the ...
-> helpers ..."
-
-Personally, I like to be conservative with connectives when describing
-sequences. I do agree that a "finally" would help here.
-
---Sean
-
->> +You may need to modify :c:func:`lynx_set_mode` in order to support your
->> +protocol. This can happen when you have added members to :c:type:`struct
->> +lynx_proto_params <lynx_proto_params>`. It can also happen if you have specific
->> +clocking requirements, or protocol-specific registers to program.
->> +
->> +Internal API Reference
->> +----------------------
->> +
->> +.. kernel-doc:: drivers/phy/freescale/phy-fsl-lynx-10g.c
-> 
-> Otherwise LGTM, thanks.
-> 
+-- 
+I am Madam Victorina Quezon a citizen of philippine,A widow
+I am  woman going through so much pain and suffer and might not walk
+again if nothing is been done fast
+Please  I want you to help me retrieve the only Thing I have now in a
+box  which contains my jewelries and 585,000 thounsand dollars   which
+ my late husband left for me which is currently in a Security company,
+I have no strength to do this due to my health condition and safety
+Please Keep this Confidential
+I await your response
+Please reply me at     victorinaquezon01@yahoo.com
+So i can explain more
+With love
+Victorina Quezon
