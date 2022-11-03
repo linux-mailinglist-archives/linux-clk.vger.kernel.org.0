@@ -2,190 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691476175E6
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Nov 2022 06:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B895B617959
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Nov 2022 10:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiKCFAr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 3 Nov 2022 01:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        id S229548AbiKCJGp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 3 Nov 2022 05:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiKCFAo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Nov 2022 01:00:44 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1837718369;
-        Wed,  2 Nov 2022 22:00:41 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8CxPLb4SmNjCikEAA--.2664S3;
-        Thu, 03 Nov 2022 13:00:40 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxZ1fySmNjf2MLAA--.15382S4;
-        Thu, 03 Nov 2022 13:00:39 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v9 3/3] dt-bindings: clock: add loongson-2 clock
-Date:   Thu,  3 Nov 2022 13:00:32 +0800
-Message-Id: <20221103050032.29236-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221103050032.29236-1-zhuyinbo@loongson.cn>
-References: <20221103050032.29236-1-zhuyinbo@loongson.cn>
+        with ESMTP id S229450AbiKCJGo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Nov 2022 05:06:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1220BE2D;
+        Thu,  3 Nov 2022 02:06:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B5CE1B823C1;
+        Thu,  3 Nov 2022 09:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472E2C433D6;
+        Thu,  3 Nov 2022 09:06:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667466399;
+        bh=mq89lDSCjzvWLmDVVgCplEqijbSaS32v3s0UtQjTo6w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SdoWxSg/odQ8/yEIYEb5jT4AS7KkEdZC4DtJbcj3LedphlBZDJ/uTOE1WNExEhur2
+         bv3bfuV7kup2ls0ldwSnV8UAKUzkM2r2FDWbtqFJd/l5F57MA2jKoIsRzC+DxLbekA
+         FXWxCTTGVdZzpKu8iK1DNHUiUzjHdOaXUN3tbkb+gsPv9EWpE5S5KcLYbJFcTItg9q
+         4WAsyAeGmTzHGbtbnwV9S6zcBZOwA3Fs1L1GtpSRuV5xvOPdfrf4gnPD/qZm86cZUW
+         6bsYpjd4b/K7g6nMf1J6GJOadtRrGgkQjEPV2w2phM7WOs12+jhiSEyX6n0rEmldVE
+         m4Ga3S3UuHpyg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oqWB2-0000EN-FY; Thu, 03 Nov 2022 10:06:21 +0100
+Date:   Thu, 3 Nov 2022 10:06:20 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>, bmasney@redhat.com,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] clk: qcom: gcc-sc8280xp: add cxo as parent for
+ gcc_ufs_ref_clkref_clk
+Message-ID: <Y2OEjNAPXg5BfOxH@hovoldconsulting.com>
+References: <20221030142333.31019-1-quic_shazhuss@quicinc.com>
+ <20221101182402.32CE5C433C1@smtp.kernel.org>
+ <Y2IZaxukERXNcPGR@hovoldconsulting.com>
+ <c96304da-f57e-4926-2f3f-665c2054fb00@quicinc.com>
+ <Y2Imnf1+v5j5CH9r@hovoldconsulting.com>
+ <bb590bfb-07a4-97c1-e5c0-d00d840e2e11@quicinc.com>
+ <Y2I3tekSAO42r0xR@hovoldconsulting.com>
+ <20221103024949.lw4g2tavk7uw5xt4@builder.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxZ1fySmNjf2MLAA--.15382S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4DJw1xAFWruF1xKrg_yoW5uF1UpF
-        sxCr95JrWIyF13uFsxKFyxAwn5Za4xAFyDAw42ka4jyr90gw15XF1xKa4UZ39xXrW7Za9F
-        vFyS9r4UCa1Uuw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU2iFxUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103024949.lw4g2tavk7uw5xt4@builder.lan>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the Loongson-2 clock binding with DT schema format using
-json-schema.
+On Wed, Nov 02, 2022 at 09:49:49PM -0500, Bjorn Andersson wrote:
+> On Wed, Nov 02, 2022 at 10:26:13AM +0100, Johan Hovold wrote:
+> > On Wed, Nov 02, 2022 at 02:15:26PM +0530, Shazad Hussain wrote:
+> > > On 11/2/2022 1:43 PM, Johan Hovold wrote:
+> > 
+> > > > Right, but if the PHYs really requires CX and it is not an ancestor of
+> > > > the refclk then this should be described by the binding (and not be
+> > > > hidden away in the clock driver).
+> > 
+> > > This makes sense, will be posting v2 post for the same.
+> > > I assume this should use the Fixes tag then !
+> > 
+> > Yeah, I guess to you can add a fixes tag for the commits adding support
+> > for sc8280xp to the UFS PHY binding and driver.
+> > 
+> > But please do check with the hardware documentation first so we get this
+> > right this time.
+> > 
+> > I've already asked Bjorn to see what he can dig out as it is still not
+> > clear how the two "card" refclocks (GCC_UFS_CARD_CLKREF_CLK and
+> > GCC_UFS_1_CARD_CLKREF_CLK) are supposed to be used.
+> > 
+> 
+> We've come full circle and Shazad's patch came from that discussion :)
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v9:
-		1. Add all history changlog information.
-Change in v8:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v7:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v6:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v5:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v4:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v3:
-		1. Drop redundant (last) binding from the title.
-		2. Drop "- |" between ref_100m node and clk node.
-Change in v2:
-		1. Drop "Binding" string in the title.
-		2. Drop entire allOf and move the contents to top level.
-		3. Change string "refclk_100m" to "ref_100m". 
+Ah, good. :)
 
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+> In line with the downstream dts, we have GCC_UFS{,_1}_CARD_CLKREF_CLK
+> providing a reference clock to the two phys. Then GCC_UFS_REF_CLKREF_CLK
+> feeds the UFS refclock pads (both of them), which connect to the memory
+> device(s).
+> 
+> In other words, GCC_UFS{,_1}_CARD_CLKREF_CLK should be "ref" in
+> respective phy.
+> 
+> GCC_UFS_REF_CLKREF_CLK is the clock to the devices, but as we don't
+> represent the memory device explicitly it seems suitable to use as
+> "ref_clk" in the ufshc nodes - which would then match the special
+> handling of the "link clock" in the UFS driver.
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..63a59015987e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson-2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of Loongson-2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8b3d7bb18350..7afaf6d72800 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12022,6 +12022,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
--- 
-2.33.0
+Thanks for clearing that up. Using GCC_UFS_REF_CLKREF_CLK as ref_clk for
+the controller sounds reasonable.
 
+I guess the only missing piece is which "card" ref clock is used by
+which PHY.
+
+The ADP dts uses:
+
+	phy			ref clock
+
+	phy@1d87000 (UFS_PHY)	GCC_UFS_CARD_CLKREF_CLK
+	phy@1da7000 (UFS_CARD)	GCC_UFS_1_CARD_CLKREF_CLK
+
+but that is not what the firmware on ADP and CRD seem to enable.
+
+Both the ADP and CRD fw leaves GCC_UFS_1_CARD_CLKREF_CLK enabled, while
+GCC_UFS_CARD_CLKREF_CLK is only enabled on ADP (which unlike the CRD
+also uses the UFS_CARD controller).
+
+Does the ADP dts have these clocks switched or is the firmware confused?
+
+(Also note that experiments suggest that neither refclock appears to
+has to be explicitly enabled for the controllers to function.)
+
+> All three clocks are sourced off the CXO pad, so I would like this patch
+> to cover at least all of these. And
+> 
+> Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
+> 
+> seems to be in order for such patch.
+> 
+> 
+> @Johan, would you mind writing a dts patch flipping the clocks around
+> and Shazad can update this patch?
+
+I'll do so, but I'll wait with posting until you can confirm which
+clkref is which.
+
+Johan
