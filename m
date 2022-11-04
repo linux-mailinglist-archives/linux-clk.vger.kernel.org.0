@@ -2,173 +2,185 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D9D619CEA
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Nov 2022 17:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB587619D91
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Nov 2022 17:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbiKDQTk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 4 Nov 2022 12:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
+        id S231354AbiKDQpv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 4 Nov 2022 12:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiKDQTj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Nov 2022 12:19:39 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA67286CA;
-        Fri,  4 Nov 2022 09:19:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667578751; bh=MBljRn36u0FL6eNZY6eErtpM03PtwqJkbltkRok4Li4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=b7s0Z+KTIeqEHxHDUdWI9aKPAt+V65qGQebEI6Z3VCLgoEt+ntJjGUdU+DWWYBDiS
-         VMvuhSZimoXNVhLzUtTGaqVT0QeOGAjvQ+ipYZ9VO/wJxH3y0IrfzeDI9engdAKrMT
-         0NPblUT8o/V7j6VZQnXBNmzTfG58pWA1g14rKHOCwHksTepTycL4kVijVCps9nlPDY
-         +DCBeFKr5laZQ8Y60lIZ9OANqszQ3//Aa+vmFxqk0tIPr2g2NhU2wfcEgoHTfSVcz7
-         haoh9VWJ0xBLxWscW2oRn9V2Uobk5U/xq+wdf2k6Rmk+a1n5FhtqE+ooVS9LNbJcQy
-         ixD0He1C55ugA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8ykW-1oup9l2QBK-0065Zs; Fri, 04
- Nov 2022 17:19:11 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: [PATCH v5 6/6] [NOT FOR MERGE] ARM: dts: wpcm450: Switch clocks to clock controller
-Date:   Fri,  4 Nov 2022 17:18:50 +0100
-Message-Id: <20221104161850.2889894-7-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
-References: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
+        with ESMTP id S229496AbiKDQpr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Nov 2022 12:45:47 -0400
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CF631F82;
+        Fri,  4 Nov 2022 09:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4AvnEeQeniDWkQBvG292xKcyqRcJZJN4ObwNBkkj5tk=; b=WdhahLUmGJpQ95hVL+3u1VjMxb
+        tUf7myaQndCk0qHzeKh1A+E2O/JcVf+aJ+IiQD/qFkAbTU535DJ2WAUD6UP1/EvQ/y4beijc5YALa
+        Q3fcMmim22RAxWP0Rh4RhjXR+GqdPYPNBO9KnnRYGmufKc5r2oNWcdiYm05562NzkHszBUsTfAWO7
+        JgFdZNqyyoguqSiEpMW173KJx1qkCjb5qv/86gVYx+OCVFDAJzuXuMvEgrqYPPENnQENv9FFS7mH/
+        qsMwcba1c5ad5x6Y1xKSIlEvINxjtsa56wEJ+F6ehiPRzOvf9PnvY6QcDHcSY53EeaOn9zO5Boa6z
+        wQg4vJPQ==;
+Received: from ip98-183-112-30.ok.ok.cox.net ([98.183.112.30]:58206 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <david@lechnology.com>)
+        id 1oqzog-00Chgx-Is;
+        Fri, 04 Nov 2022 12:45:28 -0400
+Message-ID: <187e61cd-7d02-2453-acf1-30180559d42f@lechnology.com>
+Date:   Fri, 4 Nov 2022 11:45:17 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MYaeCPeDHwfn24gZVmiUqk9z7xM6e/jUPy6MKhIikdpA3HBDwFz
- UPp6tSuHKU/z7b7PsJjllo3vmeFJZptVEU2QXAHNiY2I8AJkob0mzz/qwVYoQJYbkBAD+Dk
- xKVhac7D6yIJca8gtyFgqTjzTz2zPPm3I1es/04qTDxDscDKf0doEVfyMw93mvBqAG0LFoM
- 3Ng60zXjhmxenOm0K21iw==
-UI-OutboundReport: notjunk:1;M01:P0:H9UjfNO3BD0=;kgrWtE3l80XGZSPTutt39o5kwnt
- tMldVm6TmhS9PqJSDVDvROfSM4rYukkyJAsxSKKPi7dgzvIG3GUYsHuW/dOdqn2Cow3EpwyxM
- 5Iy3vl+0G2Jr2LvKUHz5sRCAZgpn6HZSyUhHYMPCdhzUbWu1mDggnQpD9r/AXNAzi/ZDc7/ge
- 5i1w0qZcYXrUu3eKlynm9xXpDWfRmS/MoK7Z7bUzqnwlJR8KsIEkNPR+CuLS6zahqHTpFTgs4
- n9Ly50nI9gdX5MTw0gO/bqtljAnVSk+U8/MQu1wKQ1bD0rJ8087Xx8MSB448YP7lUNQoP9ElD
- 3mLkuj+bdlA9ukKpXeJ0EUV9owNOg1kaOdzpmir3KWddJValLUIeWAWKBFVkExzWB7Pdt0wAu
- N/Xzdvh3kc3ueS2J+tfaa7mfQ+Bl9B2Quuw6YPM/ViekkY06/6wQmyRX9L7uoiFDuCkzd6XI6
- L+5WMZJfyrggVRcdiDwdTfDTF7DENd+c9EE9Iuwz5q0EozRzkPV0SMcrbrow5blKiLUNrFAd1
- 67fyj8RXn8Z1VuVk16Stlk62ScSoTfpbyIZuPQrrKiT+RizvhX9hSGr7z8+OYiKZa1zcrWUU4
- zNZFT4PLC5wClZBT872ZdEUOtEj5G8uqMO9tzwrhA66deLNIUASfNDqbeapanb57mm8e20SPx
- 3q6c9LfFN4DraqBEL1q0QZvp5GAfQGafrEPYLkCog9K5sTbvLe6VTXNckL9bjJ2D5Y4bOAGLw
- BLSOkOWQy81gdBvzYv2RQ0QeIR2pjNFe7G/XbLMyL0W3GLq+2MjvcopTD0UwJhHZfWXsTz4AG
- wEfY7ZPT3FGErm+ZfrptAl8C/Pp4psjCHlo9Yjr4BVygnMKZXjVNwCgY0uSNP7cuKFPFaNLox
- fJegGfD5OF89PN89qdPpOi5miGgk2tj1oIDBR6dQKXILGaDGknOW0kFYBw5sutRLtUgFZBlCD
- EQ5XFqTKKdSMCyOzz4uuXDZUopg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 21/65] clk: davinci: da8xx-cfgchip: Add a
+ determine_rate hook
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        David Airlie <airlied@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
+ <20221018-clk-range-checks-fixes-v2-21-f6736dec138e@cerno.tech>
+From:   David Lechner <david@lechnology.com>
+In-Reply-To: <20221018-clk-range-checks-fixes-v2-21-f6736dec138e@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+On 11/4/22 8:17 AM, Maxime Ripard wrote:
+> The Davinci DA8xxx cfgchip mux clock implements a mux with a set_parent
+> hook, but doesn't provide a determine_rate implementation.
+> 
+> This is a bit odd, since set_parent() is there to, as its name implies,
+> change the parent of a clock. However, the most likely candidate to
+> trigger that parent change is a call to clk_set_rate(), with
+> determine_rate() figuring out which parent is the best suited for a
+> given rate.
+> 
+> The other trigger would be a call to clk_set_parent(), but it's far less
+> used, and it doesn't look like there's any obvious user for that clock.
+> 
+> So, the set_parent hook is effectively unused, possibly because of an
+> oversight. However, it could also be an explicit decision by the
+> original author to avoid any reparenting but through an explicit call to
+> clk_set_parent().
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
 
-This patch is currently only for demonstration purposes, as it will
-break the build if applied in parallel (going through different
-maintainer trees) with the other patches in this series.
-I will resend it once the other patches have been merged.
+The parent is defined in the device tree and is not expected to change
+at runtime, so if I am understanding the patch correctly, setting the
+CLK_SET_RATE_NO_REPARENT flag seems correct.
 
-v2-v5:
-- no changes
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
-
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 332cc222c7dc5..439f9047ad651 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
-
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -30,13 +31,6 @@ cpu@0 {
- 		};
- 	};
-
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-48mhz {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -71,7 +65,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -82,7 +76,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
-
-@@ -90,14 +84,18 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_TIMER0>,
-+				 <&clk WPCM450_CLK_TIMER1>,
-+				 <&clk WPCM450_CLK_TIMER2>,
-+				 <&clk WPCM450_CLK_TIMER3>,
-+				 <&clk WPCM450_CLK_TIMER4>;
- 		};
-
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
-
- 		aic: interrupt-controller@b8002000 {
-=2D-
-2.35.1
+> 
+> The latter case would be equivalent to setting the flag
+> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
+> to __clk_mux_determine_rate(). Indeed, if no determine_rate
+> implementation is provided, clk_round_rate() (through
+> clk_core_round_rate_nolock()) will call itself on the parent if
+> CLK_SET_RATE_PARENT is set, and will not change the clock rate
+> otherwise. __clk_mux_determine_rate() has the exact same behavior when
+> CLK_SET_RATE_NO_REPARENT is set.
+> 
+> And if it was an oversight, then we are at least explicit about our
+> behavior now and it can be further refined down the line.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>   drivers/clk/davinci/da8xx-cfgchip.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/davinci/da8xx-cfgchip.c b/drivers/clk/davinci/da8xx-cfgchip.c
+> index 4103d605e804..c04276bc4051 100644
+> --- a/drivers/clk/davinci/da8xx-cfgchip.c
+> +++ b/drivers/clk/davinci/da8xx-cfgchip.c
+> @@ -229,6 +229,7 @@ static u8 da8xx_cfgchip_mux_clk_get_parent(struct clk_hw *hw)
+>   }
+>   
+>   static const struct clk_ops da8xx_cfgchip_mux_clk_ops = {
+> +	.determine_rate	= __clk_mux_determine_rate,
+>   	.set_parent	= da8xx_cfgchip_mux_clk_set_parent,
+>   	.get_parent	= da8xx_cfgchip_mux_clk_get_parent,
+>   };
+> @@ -251,7 +252,7 @@ da8xx_cfgchip_mux_clk_register(struct device *dev,
+>   	init.ops = &da8xx_cfgchip_mux_clk_ops;
+>   	init.parent_names = parent_names;
+>   	init.num_parents = 2;
+> -	init.flags = 0;
+> +	init.flags = CLK_SET_RATE_NO_REPARENT;
+>   
+>   	mux->hw.init = &init;
+>   	mux->regmap = regmap;
+> 
 
