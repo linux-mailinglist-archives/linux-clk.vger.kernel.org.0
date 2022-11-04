@@ -2,51 +2,55 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E39619F76
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Nov 2022 19:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B455619F80
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Nov 2022 19:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbiKDSKT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 4 Nov 2022 14:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S230193AbiKDSMc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 4 Nov 2022 14:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiKDSKR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Nov 2022 14:10:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E252045A20;
-        Fri,  4 Nov 2022 11:10:16 -0700 (PDT)
+        with ESMTP id S229548AbiKDSMc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Nov 2022 14:12:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7753137F;
+        Fri,  4 Nov 2022 11:12:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5C58BCE2DAD;
-        Fri,  4 Nov 2022 18:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A664FC433C1;
-        Fri,  4 Nov 2022 18:10:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5D5F622F3;
+        Fri,  4 Nov 2022 18:12:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A001C433D6;
+        Fri,  4 Nov 2022 18:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667585413;
-        bh=4i3rTbABUBKm7zPRQ7BoILAAr1dZHMGBMPBm6EZ/bnQ=;
+        s=k20201202; t=1667585550;
+        bh=U9bt9ylt7yMf9CDfDRcO6MQQ2UNKCSEwJSPsP6zavKI=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=keeLyl+YtL4w+aTBw3rQzjkQAiV5J4SmtwLNGXAy7vdFyGCugoJOak8BiX79g0prG
-         oDdwrbV+yNIk15Wqt6cduiNBoGfV/WfF4XzlwEDKWJEr5yslrrmXAeaC3XsBzW5PN1
-         V5ZC0c75Oq+vNrRDNeM72Egkk75II09Rv/MRbNiXGJg4boACSN12SymwAfbFh062gQ
-         k1SjRRdb4wbPw/9AaPPiIEzjNkl1Uh+mqdpxaH2BzaKqwE553dBSoVmhcomOQQwwf6
-         RnDGUfywauGG1QtA7i6wxOfIzcKLTYTxTZKIKBWZgCZdAw6Kr6liL/zjcj1zICsYSK
-         vCwogRcmVjEbQ==
+        b=gw57mwV41gR+YG09so0cTwYZF59Y349+yxd/1o2OB+qt+2nJbNXUbaQLgQM8Wmyro
+         CJ17KwayoN/MSWkfRGmUiDNFJoqV0aWoao9N0g+XakhgY8I2054JOjTSW0y2+LKSSk
+         QCshy67YEQAk6au0tYoVdpxLsE0eZPEDlv9u9ulcC9+E7OimXK//zlrTaZK15eyMdM
+         mz5cIP9VZOvg+sIBlfaIz0ukAqJfO1Y7+RvmHDvFpMLvwcn64+fXzSufjovkmY1WH+
+         ity0JGfv+sUwRCD4FsqYkYkxHhz7qGzqh7cK68094dMF3L2u9qgCrhYAZtXlVaG5p5
+         sf01a1qlGaIdQ==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221103123328.stzhtq5e2jscjdxd@houat>
-References: <20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech> <20221018-clk-range-checks-fixes-v1-4-f3ef80518140@cerno.tech> <20221026020800.38AC8C433C1@smtp.kernel.org> <20221103123328.stzhtq5e2jscjdxd@houat>
-Subject: Re: [PATCH 4/4] clk: Warn if we register a mux without determine_rate
+In-Reply-To: <20221104170552.72242-1-krzysztof.kozlowski@linaro.org>
+References: <20221104170552.72242-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] dt-bindings: clock: qcom,sdm845-lpasscc: convert to dtschema
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-clk@vger.kernel.org
-To:     Maxime Ripard <maxime@cerno.tech>
-Date:   Fri, 04 Nov 2022 11:10:11 -0700
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 04 Nov 2022 11:12:28 -0700
 User-Agent: alot/0.10
-Message-Id: <20221104181013.A664FC433C1@smtp.kernel.org>
+Message-Id: <20221104181230.2A001C433D6@smtp.kernel.org>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,20 +60,23 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Maxime Ripard (2022-11-03 05:33:28)
-> On Tue, Oct 25, 2022 at 07:07:58PM -0700, Stephen Boyd wrote:
-> > There is another case which is a leaf clk that is a mux where you only
-> > expect clk_set_parent() to be used, and not clk_set_rate(). This use
-> > case is odd though, so I'm not sure how much we care.
->=20
-> It looks like there's a good number of clocks that do indeed only
-> provide get_parent / set_parent. It's hard to tell if it's an oversight
-> or a choice.
->=20
-> I think we can make that decision explicit by providing a determine_rate
-> helper that always returns the current parent and its rate. It shouldn't
-> change anything from a CCF behavior point of view, and it makes it clear
-> what the behavior is. And if someone wants something else, then they can
-> change it to whatever they want.
+Quoting Krzysztof Kozlowski (2022-11-04 10:05:52)
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.=
+yaml b/Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.yaml
+> new file mode 100644
+> index 000000000000..10aa9b6e8d89
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sdm845-lpasscc.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sdm845-lpasscc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SDM845 LPASS Clock Controller
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Ok sounds like a plan.
+Should fix this email.
