@@ -2,107 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7608A619C63
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Nov 2022 17:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2716619CEC
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Nov 2022 17:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbiKDQAN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 4 Nov 2022 12:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
+        id S231625AbiKDQTl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 4 Nov 2022 12:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbiKDQAM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Nov 2022 12:00:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7B131230;
-        Fri,  4 Nov 2022 09:00:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B0F262271;
-        Fri,  4 Nov 2022 16:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407C5C433C1;
-        Fri,  4 Nov 2022 15:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667577610;
-        bh=RnKpU/hTdTSmTNhPFE1pRi4HN2+uJR5IYJ3mHMOQJ94=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cT/Z80DQRnPv/70/29SwYeenhOJLyjbBPUFlgfpd/AZinAJl0ffseRleU9nuJBUko
-         sIKZREqhjpM5ixmbGPtno+npoo5AfZQueFrKX4MHj5HbO6032QcomMPEs11RxlCRCF
-         +npEC1nMjw2yzXE3+8fu/b6DX5Zyh1ekZsGoJSUiBNkV8rAVlWCjALi+TPQALz5yLf
-         8JmAJZSyXbUsqNPG3SJPuUdwaXQ/YK17sNKIv6mAuSRsBddzrpVxhgHxOUN/vVDF21
-         VhZaoe2BNXMOANIoVRwbo95TtqPu/Q5GIO4aUt0cX2VGbao265lJ1lyL1fG/C3KEu+
-         lOiIL5YO6XPRw==
-Date:   Fri, 4 Nov 2022 15:59:53 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        with ESMTP id S230074AbiKDQTj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Nov 2022 12:19:39 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5165027B14;
+        Fri,  4 Nov 2022 09:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667578740; bh=LhRYUcUS4u8OV+9RNXhDtH8dqOK1KsFZcv0nUDJIzxE=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=OV+mNK+aouDnE1zZgQzYWSElBgiiBK82WKd/GrLOXQ2i7K3MQ8Ffd3CiVlhMCJY3J
+         SkS12t2741T7FH0iEkMI63d7FFgbET9dl7ur3lzQVFuYMM0Mcag4z200iv64c9II2L
+         N9easJDcXfoXktA5ugq6JF8YfduJVkHwjL4nI4TAkcMKz6i4VX5v2tkvyeePn0s2kf
+         BCf4xfGUqoKvoJd5zRb/7DnfUQ7GC2WJRdN4tXoNFwywLfcCJpyg15S4rHDJZZTZIC
+         yJCHb+0R1L+aekmPptJ+sWotCkMkVhfrLKznW92sLeagOcCR+azy34B6EUbapOCz2g
+         hnLkhH/9ij+YQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MZTmO-1oUSZ808xC-00WSCd; Fri, 04
+ Nov 2022 17:19:00 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        David Airlie <airlied@gmail.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Lechner <david@lechnology.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
-Message-ID: <Y2U2+ePwRieYkNjv@sirena.org.uk>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <20221018-clk-range-checks-fixes-v2-43-f6736dec138e@cerno.tech>
- <Y2UzdYyjgahJsbHg@sirena.org.uk>
- <20221104155123.qomguvthehnogkdd@houat>
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v5 0/6] Nuvoton WPCM450 clock and reset driver
+Date:   Fri,  4 Nov 2022 17:18:44 +0100
+Message-Id: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UFrR3s30/s3KKRzK"
-Content-Disposition: inline
-In-Reply-To: <20221104155123.qomguvthehnogkdd@houat>
-X-Cookie: Quack!
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FCwV9JvsPcP+/ukEXvtT5JQEPjjCfNvZiG04kNrMA+7aEUxckfE
+ VLjTmKQcGPL9TfVkYY331ujiSgniBvINDKuNEOWQvc/gzmjP8G/cnbhtdF2eEGnAmQlkw8o
+ SJJNjV6o+uJY721cIs4xqtVJgFh20KJQ7vAG3o4/59lPUpk9g5pGiWOFNgiANIS8hcI0r9B
+ Z2GTnbBPwO7EqNlCB/k5w==
+UI-OutboundReport: notjunk:1;M01:P0:Ify3fxgaC30=;mA6KToZbBe+f3Vg/mn6fKdaf0V6
+ iSVO2hwj9T9QMPOvhsSZzmoT1kpZylcE0ED3SlU399Z6G7nOGBzMdnAtA0X/yLKxCQvmXmsQO
+ Bgt2V7yT7RCOgMXyxu97+s8iz3O9qXvNDbr5s+nFwpRlC0TJMDrzHrgZbGUKbTWawoyx7M4Fw
+ 6LjmPIUi5c4YCiwIaxh8+Tw2+8ba/V9SY7TRHpEI4b2lYwT2I7UG/PQIp9Rg4LWwUS+UbJ9d7
+ kEdeds3o9G/1YwpGXp4VMbSu9UvPVHVTtOPGOqksqDy+13tPWe3FqWt38bXrGn1XFBA+rGHA2
+ o4lPFuho76sOf1pXyB96bu7gEfnmio1P++vbXx/NpCxm6dibmtqpJSg7NEbFamXMQ6fXWrFHD
+ 7AY7nipe22CnECqQEAhr7IshuJy+B5zgK570jcTU1Lyv9X+LDzXD0phUiEuyvU8M+rNNOfYdN
+ SoOhdM1zaCjW5DPDBkR+e9oUBGju/x3UHy37BCNYVXw9L8HVWPTQGhJw3PUjM1LjpzKYW4Otv
+ u4uHsvDYC+iXUPa4CNkEh6Jk+FEi5bhxWiqpQhyCA2SKAVSyezTKKyEajvFsTBlVKWZUDgmtZ
+ IyafM7zGCOP9vGuY8M++OkBn93oKei1+y/hGQrRLmk6RImn2rLh+H3KIQI0bcgw9CR04okwqF
+ UCGaWoi0eCa0cZ0tNegVcjSEFmmBkl6SepenEQgJUrcp8k6aI/7csz7Q4ZrZL69WAQ8l+zdv0
+ xBXVIgcmcNWQ2x+09ihWPNspqX8VWE/vc3thAtRuRB9pSfS7HG0GdRpLBtzZaYPPalEWpUzG7
+ 1GSlqITGx719BwJyn67RlQmDaZy0HxIlnH5n5XUIsPnLGxRoF9ciE0b/zadMRVuQCFaTacTie
+ jz6czV8KyToySocxcxKLe2UKwOnIwyuzFYG3BOhpG4jh6peQYvmNv/J7L8AmtoUCjETLSXmD1
+ 6MLq5G/7To9SnWArzRv61nECtLs=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,37 +82,90 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This series adds support for the clock and reset controller in the Nuvoton
+WPCM450 SoC. This means that the clock rates for peripherals will be calcu=
+lated
+automatically based on the clock tree as it was preconfigured by the bootl=
+oader.
+The 24 MHz dummy clock, that is currently in the devicetree, is no longer =
+needed.
+Somewhat unfortunately, this also means that there is a breaking change on=
+ce
+the devicetree starts relying on the clock driver, but I find it acceptabl=
+e in
+this case, because WPCM450 is still at a somewhat early stage.
 
---UFrR3s30/s3KKRzK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Nov 04, 2022 at 04:51:23PM +0100, Maxime Ripard wrote:
+Upstreaming plan (although other suggestions are welcome):
 
-> Just filling determine_rate if it's missing with
-> __clk_mux_determine_rate will possibly pick different parents, and I'm
-> fairly certain that this have never been tested on most platforms, and
-> will be completely broken. And I don't really want to play a game of
-> whack-a-mole adding that flag everywhere it turns out it's broken.
+Once reviewed,
 
-Well, hopefully everyone for whom it's an issue currently will be
-objecting to this version of the change anyway so we'll either know
-where to set the flag or we'll get the whack-a-mole with the series
-being merged?
+- The ARM/dts changes should go through Joel Stanley's bmc tree
+- The clocksource/timer changes should probably go via Daniel Lezcano and =
+TIP
+- The clock controller bindings and driver should go through the clk tree
+- It probably makes sense to delay the final ARM/dts patch ("ARM: dts:
+  wpcm450: Switch clocks to clock controller") until next cycle to make
+  sure it is merged after the clock driver.
 
---UFrR3s30/s3KKRzK
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+v5:
+- Dropped patch 2 (watchdog: npcm: Enable clock if provided), which
+  was since merged upstream
+- Added patch 2 (clocksource: timer-npcm7xx: Enable timer 1 clock before u=
+se) again,
+  because I wasn't able to find it in linux-next
+- Switched the driver to using struct clk_parent_data
+- Rebased on 6.1-rc3
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNlNvgACgkQJNaLcl1U
-h9CDMAf+IBF/7wHY1CiObYqxme229wA2t2WnnYY98dUUNS5r9zuNUi7juhvrvn+E
-VFS2XsBkk6YvHvT2mQdVWxnTb3suMHPfHzr2euHUVwNVevnBNKDVYp8nlYmyRSUC
-orLXibEBBMbA69rPzQyaFqZHj17zEyWQvHSrWk44MnQJH2f7JFEmcLPXgug1dpsP
-mmWyfYnKKlRXMqDPkJ3ozY2AaABQkWdk64ke2unO7z9M7ySybhybPHBibISAn/WA
-8mQ7NgbHPzpVnTCfrRwSEd05eCvJaEacBYFByW87lEEEtfxwwJsXSZCJpmc9ZVPm
-WTCliiQC4/Pd0EJKpPQCXYinp/27fw==
-=2DXe
------END PGP SIGNATURE-----
+v4:
+- https://lore.kernel.org/lkml/20220610072141.347795-1-j.neuschaefer@gmx.n=
+et/
+- Leave WDT clock running during after restart handler
+- Fix reset controller initialization
+- Dropped patch 2/7 (clocksource: timer-npcm7xx: Enable timer 1 clock befo=
+re use),
+  as it was applied by Daniel Lezcano
 
---UFrR3s30/s3KKRzK--
+v3:
+- https://lore.kernel.org/lkml/20220508194333.2170161-1-j.neuschaefer@gmx.=
+net/
+- Changed "refclk" string to "ref"
+- Fixed some dead code in the driver
+- Added clk_prepare_enable call to the watchdog restart handler
+- Added a few review tags
+
+v2:
+- https://lore.kernel.org/lkml/20220429172030.398011-1-j.neuschaefer@gmx.n=
+et/
+- various small improvements
+
+v1:
+- https://lore.kernel.org/lkml/20220422183012.444674-1-j.neuschaefer@gmx.n=
+et/
+
+Jonathan Neusch=C3=A4fer (6):
+  dt-bindings: timer: nuvoton,npcm7xx-timer: Allow specifying all clocks
+  clocksource: timer-npcm7xx: Enable timer 1 clock before use
+  dt-bindings: clock: Add Nuvoton WPCM450 clock/reset controller
+  ARM: dts: wpcm450: Add clock controller node
+  clk: wpcm450: Add Nuvoton WPCM450 clock/reset controller driver
+  [NOT FOR MERGE] ARM: dts: wpcm450: Switch clocks to clock controller
+
+ .../bindings/clock/nuvoton,wpcm450-clk.yaml   |  66 +++
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   8 +-
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi        |  29 +-
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-wpcm450.c                     | 375 ++++++++++++++++++
+ drivers/clocksource/timer-npcm7xx.c           |  10 +
+ drivers/reset/Kconfig                         |   2 +-
+ .../dt-bindings/clock/nuvoton,wpcm450-clk.h   |  67 ++++
+ 8 files changed, 549 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,wpcm45=
+0-clk.yaml
+ create mode 100644 drivers/clk/clk-wpcm450.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,wpcm450-clk.h
+
+=2D-
+2.35.1
+
