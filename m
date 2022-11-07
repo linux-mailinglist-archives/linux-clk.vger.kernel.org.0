@@ -2,93 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD5961F4E6
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 15:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA8761F612
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 15:31:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232294AbiKGOAv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Nov 2022 09:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S232375AbiKGObG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Mon, 7 Nov 2022 09:31:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232217AbiKGOA1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 09:00:27 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348C763A8;
-        Mon,  7 Nov 2022 06:00:23 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 2F6264000C;
-        Mon,  7 Nov 2022 14:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667829622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mN6bMISN8/quik0hVN/Gi0mi4nBwMPhsvIb81fONIic=;
-        b=fIGwx3ckq2fKf8XeucWm++XpjTJiYkDBQ5cFSyUp51u8xFmwF9X1kfh2G0VvHNeVi5k7uk
-        t15D4Q4fqQ1/Kw+u5YMNy8hXTJLZl0wYK0X3vRaVuMkzbXMuc3z7k+59XbB36EoYxKh8Hq
-        fJspvhdiWfFl4HDsEP62TRTFCK4DTMc4NpeJXM37j8GEyav4JqNAX5Pu5gXLaFkt9CosQd
-        NA4mBWrXml62FAIZ/9zYlbyIiUf3xpCH++RAUCo7xZk8opqjLJM5uKprteGWAuCN6JOmR8
-        eOkE4Qpg3CP6x44G44fjaP809DCHQcr5AZIO1HU8KWXI+6e27J9YWfJN+UU7ZA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S232385AbiKGOaw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 09:30:52 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8261E3D9;
+        Mon,  7 Nov 2022 06:26:56 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id g10so7205843qkl.6;
+        Mon, 07 Nov 2022 06:26:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ft1r9aPFGJF0+nCT//rpLeqH0WDImyUG+eP+SvMdOUM=;
+        b=aQyZyVWsvpNpO/mxf/icp5EiRCg6lZ5KxIh3CaOEExqJiKWvJ0Uwsqza4zBgLK0zje
+         XEPuquZgemOHm8UoeuETaoYRyfvW202c8bDjNWSRGb3AcQZHh336vndZx1gcNOMndzmk
+         jDFIEwn4gikfQINXXX8Al0z8v57Z1mL/lnaYvVb4Xs2PgXvIMR+rDJAIwHjK0fw5unnw
+         7n81mGLlCSwl2m9vOOanZORGNEthVLBiqttuZPQ8z2vhGGPRB44GCntu+5SaLiugz2Nx
+         HqvGhdRyXEeoOYfbfacO4uBYz9xDgOxQw1vYLjwYJB7ignoSoG9uZn3GJXoQ8bt12LIn
+         x6sQ==
+X-Gm-Message-State: ACrzQf08b0yeD6gkp5YT2E7TinyczM9FZ+ao38B5FxcmXo2++8QEV3FI
+        Aq7HZNW1jHRGDjWoxUaeYPe8A8tBSHOocw==
+X-Google-Smtp-Source: AMsMyM6Jpv0EgHEXEmn+VZEsX8fU0eJLbwDLeD2piUtkylPTDhDBomQ0VQSOPxjzO4jkMEVQv5l5mg==
+X-Received: by 2002:a37:65c9:0:b0:6fa:1ef8:fa10 with SMTP id z192-20020a3765c9000000b006fa1ef8fa10mr32177855qkb.648.1667831215541;
+        Mon, 07 Nov 2022 06:26:55 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id u17-20020a05622a011100b003a598fcddefsm664637qtw.87.2022.11.07.06.26.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 06:26:54 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id o70so13760513yba.7;
+        Mon, 07 Nov 2022 06:26:54 -0800 (PST)
+X-Received: by 2002:a05:6902:503:b0:6cf:c510:6a23 with SMTP id
+ x3-20020a056902050300b006cfc5106a23mr30733838ybs.380.1667831214389; Mon, 07
+ Nov 2022 06:26:54 -0800 (PST)
+MIME-Version: 1.0
+References: <20221107135825.583877-1-herve.codina@bootlin.com> <20221107135825.583877-5-herve.codina@bootlin.com>
+In-Reply-To: <20221107135825.583877-5-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 7 Nov 2022 15:26:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX9WBxkrQRV6yEXmJdj3qQ9Ne4W0xmiGDEC6j=R_ARgsQ@mail.gmail.com>
+Message-ID: <CAMuHMdX9WBxkrQRV6yEXmJdj3qQ9Ne4W0xmiGDEC6j=R_ARgsQ@mail.gmail.com>
+Subject: Re: [PATCH 4/7] dt-bindings: usb: add the Renesas USBF controller binding
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 7/7] MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
-Date:   Mon,  7 Nov 2022 14:58:25 +0100
-Message-Id: <20221107135825.583877-8-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221107135825.583877-1-herve.codina@bootlin.com>
-References: <20221107135825.583877-1-herve.codina@bootlin.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer
-for Renesas RZ/N1 USBF controller.
+Hi Hervé,
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Mon, Nov 7, 2022 at 3:00 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> The Renesas USBF controller is an USB2.0 device controller
+> (UDC) available in Renesas r9a06g032 SoC (RZ/N1 family).
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 379945f82a64..9ccac3275a88 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17627,6 +17627,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
- F:	drivers/rtc/rtc-rzn1.c
- 
-+RENESAS RZ/N1 USBF CONTROLLER DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	linux-renesas-soc@vger.kernel.org
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/renesas,usbf.yaml
-+F:	drivers/usb/gadget/udc/renesas_usbf.c
-+
- RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
- L:	linux-mtd@lists.infradead.org
--- 
-2.37.3
+Thanks for your patch!
 
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usbf.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/renesas,usbf.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas USBF (USB Function) controller binding
+> +
+> +description: |
+> +   The Renesas USBF controller is an USB2.0 device
+> +   controller (UDC).
+> +
+> +maintainers:
+> +  - Herve Codina <herve.codina@bootlin.com>
+
+Hervé? ;-)
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a06g032-usbf
+> +          - const: renesas,rzn1-usbf
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Internal bus clock (AHB) for Function
+> +      - description: Internal bus clock (AHB) for Power Management
+> +  clock-names:
+> +    items:
+> +      - const: hclkf
+> +      - const: hclkpm
+
+power-domains?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
