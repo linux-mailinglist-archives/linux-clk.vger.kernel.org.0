@@ -2,117 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6010561EE68
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 10:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B66861F07D
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 11:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbiKGJMT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Nov 2022 04:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S231808AbiKGKYe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Nov 2022 05:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiKGJMI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 04:12:08 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4472E167CE
-        for <linux-clk@vger.kernel.org>; Mon,  7 Nov 2022 01:12:07 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id g12so15867391lfh.3
-        for <linux-clk@vger.kernel.org>; Mon, 07 Nov 2022 01:12:07 -0800 (PST)
+        with ESMTP id S231790AbiKGKYT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 05:24:19 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C5319005
+        for <linux-clk@vger.kernel.org>; Mon,  7 Nov 2022 02:24:03 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id 4so10694832pli.0
+        for <linux-clk@vger.kernel.org>; Mon, 07 Nov 2022 02:24:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lnsPOK5motup9T8XBniEK+peF/D2fTuyq/bCy58k14U=;
-        b=bvOlLbXhahamOjqO+zkLPF8mhi4RlovgUaredeyun24ljOLREs9ppJVlJDipQmET9F
-         10KOQMwRSPJjZGOSvfSm+AQ5/8x2yTkCwd56WPI0oFTGR/YDdJj1OHtJldSWYo5mnP6R
-         TtjJxmftemResRP6WaV+b/pga2IveLsputjMd78VuHC/RFKQv9EW+LSntd246g2gMK/h
-         WTzSLL4hmksJhkznSmwYLEeEObYEShDfxLRvKoWZ2JHFY5bxV7oNR4oYjAEhJrKlCMqG
-         GNqY42NPIBSaMgccF3sYiF7GTRMlidv+/1s2KiuFGPoDatfTKdFYB7jng7EtmADN4Tqo
-         ivHQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=Zv++OJ/ncK2pWuUWAQT+z52+cIoHK/WVJU4bVze52hunD5wDL4D5XJdl5mW2VbRjhi
+         PKA0tQ/z42/ONfUnPJoBfdYRGEG2gwiyoDRW7hecaxcg+/0t0u3g44ISFlpe+B9l1fvu
+         TmkNgtKOyak6WThRMAIvY+g5IgPZxvnz63e21BpajeaX9653GP4qpHUHyfV7BL4cSNb4
+         pCU1fNGxZBn7NlKzWZCMHMxM9LSs8sKofgpQ0FSoeb/qTDQ+CPP+tvlBe/vGQ8T8hOyn
+         vdUZr48/zTuwVxtBDF6IrOR7pT19nf73qD9i1Q8QUWEzM8dVJjwmGS+xVbVCXqFaE09J
+         SKzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lnsPOK5motup9T8XBniEK+peF/D2fTuyq/bCy58k14U=;
-        b=nc22GImmN4DKCllsFY66mnwxAMiED3pQ/h0uGg8hPeor2e5LEr994qvUBFSdEhxaFV
-         hBz3cDx6AhLEO8fTVlFXXSwJj1Utwi2dA6TOrqth1OfNG0iUVJnFuD3FEaN6WzIMS+8R
-         f2fIlSwv5dvBpOHZISotIktffxrq20JkOyOVqXTd+V0YOw65RGuoecK45TLuF/yjRHpU
-         KVZ2Y6fwcXTiummVdCa9tTXppVWdQ5F8QM/NgV2dc8BNUHt6ms1J4nLHlcR4WobLjEDq
-         Jc3aRCDHDtR2FiosJHkV8u7bFO4VULPOaF7GPsSNga7BceNsMvONzLPM0e0Uvk1WZv1u
-         vSqw==
-X-Gm-Message-State: ACrzQf2NIojyFHtjp3Zu/4ufjKtkw1wnWqAvwRPw99gDfzK6s1jPhgfX
-        4yIPkZsPCZDZBbw1l42+B2NT1g==
-X-Google-Smtp-Source: AMsMyM7bXG55cIesK9wxtNvqOTQV+Xf1GiFjjQy9uqOkUa9uGlR/Zjx94GQGqhw1F7vSxJkhQLmuQA==
-X-Received: by 2002:a19:654a:0:b0:4b0:831b:ef35 with SMTP id c10-20020a19654a000000b004b0831bef35mr15143654lfj.206.1667812325644;
-        Mon, 07 Nov 2022 01:12:05 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id r17-20020a194411000000b0048a9e899693sm1146236lfa.16.2022.11.07.01.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 01:12:05 -0800 (PST)
-Message-ID: <0e929d35-2a90-94fb-49d6-7f6a0f0a3ed0@linaro.org>
-Date:   Mon, 7 Nov 2022 10:12:04 +0100
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=Sd+IyN4ChGW+UnclJkfphwJHsYaqyJqloEoNEVohCDaUfL10psZzZP/ccQ5qKB4Itq
+         9G3Ye65x9R2FGF9kiHSQ6fn3NqRfSsygpF57p1HdF/ZcZQRn9UTrM2EUyMLb2ZSeIrOS
+         RvWgUMccIPI8N1TV8jXyR2f7aiYK1r/Pe1JTW2anwd8+nM4tltrYIbAV4b5wuwGPQkBj
+         bNq5C3Ilk+NLH7m+AtDniYMnnLOPyHb1q6jobWl9hH0GqWabv3FjqIkGZQ0Y62qwmGL4
+         9Ydzjt6ARgWkIeEwEAQ9FPiOcpOP3LA6MKb4asNgplV5XaKYM+fnybZzYtD0ScWG7JxR
+         p3xw==
+X-Gm-Message-State: ACrzQf38FdkKyE5qoiFHWSMPZfMd9GMWxCCF2oaBwIbxMmUjTSVYdFlF
+        LYOCUlKvUw2uNuaN1XvH2CvYE8vNYSHZiIplBIapvDrY+Xo=
+X-Google-Smtp-Source: AMsMyM7DPjaK7bSeUBIcMTkNZUaqK+NSwCEUfp88ZZDLY5TXShnQ2+B86xH3ryBKqTyGQWW3ozA/96x60VupsK8qo34=
+X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id
+ p16-20020a1709028a9000b00186b145f5ecmr50774476plo.103.1667816632274; Mon, 07
+ Nov 2022 02:23:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: clock: exynosautov9: fix reference to
- CMU_FSYS1 mmc card clock
-Content-Language: en-US
-To:     chanho61.park@samsung.com, Inbaraj E <inbaraj.e@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        "tomasz.figa@gmail.com" <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        PANKAJ KUMAR DUBEY <pankaj.dubey@samsung.com>
-References: <8f026f38-ef09-788e-7bd8-45683b074075@linaro.org>
- <20221104090019.88387-1-inbaraj.e@samsung.com>
- <CGME20221104085410epcas5p24d88f59001b739075e9e190e2c47841e@epcms2p3>
- <20221107000401epcms2p3eeeecbfb2b1cdfb30dcee99bbb48780c@epcms2p3>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107000401epcms2p3eeeecbfb2b1cdfb30dcee99bbb48780c@epcms2p3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
+ 02:23:51 -0800 (PST)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
+Date:   Mon, 7 Nov 2022 11:23:51 +0100
+Message-ID: <CAHAXD+bPNCns8Ez=7iXmPLADMtJgZj3-mFTk3NMhWC-Ca1b9rw@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_20,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:643 listed in]
+        [list.dnswl.org]
+        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
+        *      [score: 0.1662]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [977638ib[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 07/11/2022 01:04, CHANHO PARK wrote:
->>> Fix reference to CMU_FSYS1 mmc card clock to gout clock instead of dout.
->>>
->>> This fixes make dtbs_check warning as shown below:
->>>
->>> arch/arm64/boot/dts/exynos/exynosautov9-sadk.dtb: clock-
->> controller@17040000:
->>> clock-names:2: 'dout_clkcmu_fsys1_mmc_card' was expected From schema:
->>> /home/inbaraj/mainline/linux/Documentation/devicetree/
->>> bindings/clock/samsung,exynosautov9-clock.yaml
->>
->> I don't understand:
->> 1. Why bindings are wrong not DTSI?
->> 2. What is "gout"? "dout" had a meaning as clock divider output.
-> 
-> "gout" is output of a gate clock, AFAIK.
-> Unlike any other clocks, the fsys1 mmc top clock does not have a divider. So, it should be "mout -> gout" instead of "mout -> gout -> dout".
-
-OK, then this should be in commit msg.
-
-My question about full legal name remains, as here in replies I see
-"Inbaraj E".
-
-Best regards,
-Krzysztof
-
+Hei ja miten voit?
+Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
+ toivolla
+v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
+leikkaus
+t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
+suudet selviyty=C3=A4.
+Mutta ennen kuin min=C3=A4
+Tee toinen vaarallinen operaatio, annan sen sinulle
+Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
+sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
+voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
+iden auttamista
+ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
+=C3=A4 minulla ei ole niit=C3=A4
+kenelt=C3=A4 perii rahaa.
+Vastaa minulle nopeasti
+terveisi=C3=A4
+Rouva Monika Evereen
+Florida, Amerikan Yhdysvallat
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
