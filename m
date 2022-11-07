@@ -2,72 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4DF61F2B8
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 13:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1C761F5E5
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 15:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbiKGMRV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Nov 2022 07:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S232517AbiKGO1t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Nov 2022 09:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiKGMRU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 07:17:20 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBF226FD;
-        Mon,  7 Nov 2022 04:17:17 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-13b23e29e36so12384107fac.8;
-        Mon, 07 Nov 2022 04:17:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=S2yieh1wiWDy5xfyur7n11zDi2HVy+kcdU1nq6yM8l4=;
-        b=L2CkKcWFWmK3Rb0T2VdR7iR5fs2mLpW+Bvyq45sTa8mlWogCpbzP4Kryfc3XY4fkL1
-         qgcAl8ykcnOmyxrhhOH+86PC4XP6PX0PiWHYb3jiLqgPkTs42+k7p9hnVzEiZPQ5k0OK
-         n6afhfMUub/GOhXhFQTUbRfBPcnYCgY/2Y691tpWZGhwm8mMSsqNBDEHj8pdGlnCZp2b
-         +halp4A4ADyupsk++YufxJWz7JDf1FCgbsX/BbeHyrTm9a662cIXX1FWVymtR7wqh3zm
-         cnhIGcNOioH3I/XxdFIV4ziWgscUkP70+kpl4lA5GaBR9m9/HFhKnzi/EytNU8xTBXxE
-         Ocag==
-X-Gm-Message-State: ANoB5pmQ7xfPJciHS1i4hsXkarBj8iGGrCBSoNWjXmXtHymKT1Fnkagx
-        0C5ioD1CFxJhDVz78qNd7A==
-X-Google-Smtp-Source: AA0mqf4wGuK46O6WkOOp/T9UvHCTdkhrDVGEt21AKF+HdKr9QRlqNabKZBtWjISO+ZCFJIUplwizfA==
-X-Received: by 2002:a05:6870:f725:b0:140:7c91:c1bb with SMTP id ej37-20020a056870f72500b001407c91c1bbmr9527785oab.177.1667823385983;
-        Mon, 07 Nov 2022 04:16:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x34-20020a056870b42200b0013d7fffbc3csm2924018oap.58.2022.11.07.04.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 04:16:25 -0800 (PST)
-Received: (nullmailer pid 652846 invoked by uid 1000);
-        Mon, 07 Nov 2022 12:16:26 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S231693AbiKGO10 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 09:27:26 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6911E3D7
+        for <linux-clk@vger.kernel.org>; Mon,  7 Nov 2022 06:21:24 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221107142123epoutp041e6d7b7e1d41e403bff3e615f687ee83~lU1oSDq1W2058720587epoutp04O
+        for <linux-clk@vger.kernel.org>; Mon,  7 Nov 2022 14:21:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221107142123epoutp041e6d7b7e1d41e403bff3e615f687ee83~lU1oSDq1W2058720587epoutp04O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667830883;
+        bh=GJPGR28YHzLW8aa+11D1L3daiZSgpHyWT54CiXQP0a0=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=lBQxt8BIpyT45Jwg1blX2mWvsWzx5hkFCce68XiILqidCo8GysX5GHUpnV2po7JXP
+         /8EiTeXmgu2zKdvDSRFrpvy+OSOn+pVaxoBkDdD+LUcKjuipDZL13eoMVJNQXyic8S
+         iBu0wcHJ0WBeEfiu/2LknwRAXppKIWmNpnpjrP2c=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221107142122epcas5p2c58404c8859ef86ae9ce9725f137d723~lU1nUdSMw1427014270epcas5p2h;
+        Mon,  7 Nov 2022 14:21:22 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4N5YLm0HYGz4x9Pv; Mon,  7 Nov
+        2022 14:21:20 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        27.24.56352.F5419636; Mon,  7 Nov 2022 23:21:19 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221107123746epcas5p41165707efc8f199d341bcbcd308cd1e1~lTbKBbDJw2127721277epcas5p4K;
+        Mon,  7 Nov 2022 12:37:46 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221107123746epsmtrp2b8de868dccbc7f7e7093c96ad3542b0f~lTbKAf5q82307523075epsmtrp2T;
+        Mon,  7 Nov 2022 12:37:46 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-32-6369145f010a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7F.4C.14392.91CF8636; Mon,  7 Nov 2022 21:37:45 +0900 (KST)
+Received: from FDSFTE196 (unknown [107.116.189.214]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221107123743epsmtip1eae7ecf77d881767d0f45f2c1faa5d2b~lTbH77Bmc1469414694epsmtip1N;
+        Mon,  7 Nov 2022 12:37:43 +0000 (GMT)
+From:   "Inbaraj E" <inbaraj.e@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        <chanho61.park@samsung.com>,
+        "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>,
+        <tomasz.figa@gmail.com>, "'Chanwoo Choi'" <cw00.choi@samsung.com>,
+        "'ALIM AKHTAR'" <alim.akhtar@samsung.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh+dt@kernel.org>
+Cc:     <linux-samsung-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "'PANKAJ KUMAR DUBEY'" <pankaj.dubey@samsung.com>
+In-Reply-To: <0e929d35-2a90-94fb-49d6-7f6a0f0a3ed0@linaro.org>
+Subject: RE: [PATCH] dt-bindings: clock: exynosautov9: fix reference to
+ CMU_FSYS1 mmc card clock
+Date:   Mon, 7 Nov 2022 18:07:42 +0530
+Message-ID: <001201d8f2a5$bcb8e870$362ab950$@samsung.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     robh+dt@kernel.org, sboyd@kernel.org, kernel@pengutronix.de,
-        linus.walleij@linaro.org, arnd@arndb.de, Mr.Bossman075@gmail.com,
-        festevam@gmail.com, stefan@agner.ch,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        giulio.benetti@benettiengineering.com,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        leoyang.li@nxp.com, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        shawnguo@kernel.org, tharvey@gateworks.com,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, aisheng.dong@nxp.com,
-        fugang.duan@nxp.com, linux-imx@nxp.com, dev@lynxeye.de,
-        marcel.ziswiler@toradex.com, abel.vesa@nxp.com
-In-Reply-To: <20221107071511.2764628-4-Mr.Bossman075@gmail.com>
-References: <20221107071511.2764628-1-Mr.Bossman075@gmail.com>
- <20221107071511.2764628-4-Mr.Bossman075@gmail.com>
-Message-Id: <166782289581.604263.3296101897705323287.robh@kernel.org>
-Subject: Re: [PATCH v1 3/7] dt-bindings: timer: gpt: Add i.MXRT compatible
- Documentation
-Date:   Mon, 07 Nov 2022 06:16:26 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQC1phSFSdu+vla0SFvWf4cJPX/nGQGqLtLGAhvc4qsBWKVYVQHZlEqXsEI86EA=
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFJsWRmVeSWpSXmKPExsWy7bCmlm68SGaywca/lhYP5m1js7i8X9vi
+        +pfnrBbzj5xjtdj7eiu7xabH11gtPvbcY7W4vGsOm8WM8/uYLC6ecrVYtPULu0Xr3iPsFoff
+        tLNa/Lu2kcVi1a4/jA78Hu9vtLJ77Jx1l91j06pONo871/aweWxeUu/Rt2UVo8fnTXIB7FHZ
+        NhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAVysplCXm
+        lAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL89L18lJLrAwNDIxMgQoTsjM2
+        fGljLWjmr5j3dC9bA+MZni5GTg4JAROJPzsWsHYxcnEICexmlFg+8zEbhPOJUeLPpzXsIFVC
+        At8YJeYu5ofpOP7kKhNE0V5GidvbLjJDOC8ZJXa9amMDqWIT0JS4efQfI0hCROAok8Sct2dZ
+        QBxmgceMEs0zuoA2cnBwCthJnDsgCtIgLJAkMeP4IyYQm0VARWL/xLdgNq+ApcTD59dYIGxB
+        iZMzn4DZzALaEssWvmaGOElB4ufTZWAjRQT8JA5fToMoEZc4+rMH7DgJgTscEvd3vGOBqHeR
+        aDjZwQ5hC0u8Or4FypaS+PxuLxuE7SOxf84vRgg7Q+LY9uWsELa9xIErc1hAdjEDPbl+lz5E
+        WFZi6ql1TBB7+SR6fz9hgojzSuyYB2MrS8w8ch9qvKTEzss7WSYwKs1C8tksJJ/NQvLCLIRt
+        CxhZVjFKphYU56anFpsWGOellsMjPDk/dxMjOFFree9gfPTgg94hRiYOxkOMEhzMSiK8N9zS
+        koV4UxIrq1KL8uOLSnNSiw8xmgKDeyKzlGhyPjBX5JXEG5pYGpiYmZmZWBqbGSqJ8y6eoZUs
+        JJCeWJKanZpakFoE08fEwSnVwLRot3/nCpvwJ6UHZGvnvLUJX+ZfcuD6I44flTeMfrVNavKw
+        P2YqcbafteL4rUZOteuXQ5fJBCUsCOD24BQQXTg9S+76rZWtvdK7WL5kb/vFtP3ZbtW+jUov
+        T6858qfGMer6yW7rr6GB4kYm617xfNQKztTI53/c7JOpd+vwKSW9OYzXBV7Ofeemwyi4rKbF
+        /P3xrin3rO2vzy64cWte5UZZt4hjKbs78mQXTF28z8BPKK789dPShXOYte49bVw23XibkIlH
+        1eJAjV+x1k07XFe9s1c8NLE+vfZ3b71S4bEiq7j8qVoO4gslkq3yKsJOBMfe6+cRqU5MtWV4
+        dn2eVMHFzyddQx5Vfbu3zyTKVYmlOCPRUIu5qDgRAIqfntFdBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMIsWRmVeSWpSXmKPExsWy7bCSnK7kn4xkg9X/zC0ezNvGZnF5v7bF
+        9S/PWS3mHznHarH39VZ2i02Pr7FafOy5x2pxedccNosZ5/cxWVw85WqxaOsXdovWvUfYLQ6/
+        aWe1+HdtI4vFql1/GB34Pd7faGX32DnrLrvHplWdbB53ru1h89i8pN6jb8sqRo/Pm+QC2KO4
+        bFJSczLLUov07RK4MmZtXsxUsJuv4lT3O8YGxg6eLkZODgkBE4njT64ydTFycQgJ7GaUOLjq
+        HjtEQlJi9u/pULawxMp/z9khip4zSixd8JMRJMEmoClx8+g/RpCEiMBZJom/GxrARjGDVC1/
+        fIINomUZk0RTbzdrFyMHB6eAncS5A6Ig3cICCRJ9+yYyg9gsAioS+ye+ZQKxeQUsJR4+v8YC
+        YQtKnJz5BMxmFtCWeHrzKZy9bOFrZojzFCR+Pl0GNl5EwE/i8OU0iBJxiaM/e5gnMArPQjJp
+        FpJJs5BMmoWkZQEjyypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOB41dLcwbh91Qe9
+        Q4xMHIyHGCU4mJVEeG+4pSUL8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1
+        ILUIJsvEwSnVwNSU7iOZOrWnd8YTztK2Gz1z59w8Y382N3bL31aL9NOvdoQm894+tmh/WNN0
+        rRMPl/0+YqVz8+Pc9pcvLrl8Ul+YwRwdvmvSl22nN9iLrZDmvqe210PL8Wt1bgCrY8eK8Jky
+        Yis4q7tPuH46X8nb4y+4MfLsydD+QvHVX2b8XemzKvz0kWAt8cqY97ZCi5fFCUSlcR0pffzd
+        qzLxn9vDk60ef5y/F3scO29UEX3uyX3HzcrTpnwIaXlZl95meM47oX/vo23Hj5b0bsjSE4ye
+        t3pVqdYjn4qgrU6L9P8+ehx3X6vklnJa/nnbhcFRVWf//Az3Vil/pXE57abd5Gsa38WSMxeG
+        n8+onXrjbf/FE2pKLMUZiYZazEXFiQDUdp06RgMAAA==
+X-CMS-MailID: 20221107123746epcas5p41165707efc8f199d341bcbcd308cd1e1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221104085410epcas5p24d88f59001b739075e9e190e2c47841e
+References: <8f026f38-ef09-788e-7bd8-45683b074075@linaro.org>
+        <20221104090019.88387-1-inbaraj.e@samsung.com>
+        <CGME20221104085410epcas5p24d88f59001b739075e9e190e2c47841e@epcms2p3>
+        <20221107000401epcms2p3eeeecbfb2b1cdfb30dcee99bbb48780c@epcms2p3>
+        <0e929d35-2a90-94fb-49d6-7f6a0f0a3ed0@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,709 +131,59 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-On Mon, 07 Nov 2022 02:15:07 -0500, Jesse Taube wrote:
-> Both the i.MXRT1170 and 1050 have the same GPT timer as "fsl,imx6dl-gpt"
-> Add i.MXRT to the compatible list.
-> 
-> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+> -----Original Message-----
+> From: Krzysztof Kozlowski =5Bmailto:krzysztof.kozlowski=40linaro.org=5D
+> Sent: 07 November 2022 14:42
+> To: chanho61.park=40samsung.com; Inbaraj E <inbaraj.e=40samsung.com>;
+> Sylwester Nawrocki <s.nawrocki=40samsung.com>; tomasz.figa=40gmail.com;
+> Chanwoo Choi <cw00.choi=40samsung.com>; ALIM AKHTAR
+> <alim.akhtar=40samsung.com>; mturquette=40baylibre.com;
+> sboyd=40kernel.org; robh+dt=40kernel.org
+> Cc: linux-samsung-soc=40vger.kernel.org; linux-clk=40vger.kernel.org;
+> devicetree=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; lin=
+ux-
+> kernel=40vger.kernel.org; PANKAJ KUMAR DUBEY
+> <pankaj.dubey=40samsung.com>
+> Subject: Re: =5BPATCH=5D dt-bindings: clock: exynosautov9: fix reference =
+to
+> CMU_FSYS1 mmc card clock
+>=20
+> On 07/11/2022 01:04, CHANHO PARK wrote:
+> >>> Fix reference to CMU_FSYS1 mmc card clock to gout clock instead of
+> dout.
+> >>>
+> >>> This fixes make dtbs_check warning as shown below:
+> >>>
+> >>> arch/arm64/boot/dts/exynos/exynosautov9-sadk.dtb: clock-
+> >> controller=4017040000:
+> >>> clock-names:2: 'dout_clkcmu_fsys1_mmc_card' was expected From
+> schema:
+> >>> /home/inbaraj/mainline/linux/Documentation/devicetree/
+> >>> bindings/clock/samsung,exynosautov9-clock.yaml
+> >>
+> >> I don't understand:
+> >> 1. Why bindings are wrong not DTSI?
+> >> 2. What is =22gout=22? =22dout=22 had a meaning as clock divider outpu=
+t.
+> >
+> > =22gout=22 is output of a gate clock, AFAIK.
+> > Unlike any other clocks, the fsys1 mmc top clock does not have a divide=
+r.
+> So, it should be =22mout -> gout=22 instead of =22mout -> gout -> dout=22=
+.
+>=20
+> OK, then this should be in commit msg.
+>=20
+> My question about full legal name remains, as here in replies I see =22In=
+baraj
+> E=22.
+>=20
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+I have address your review comment, and posted v2.=20
+Thanks for review.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
+> Best regards,
+> Krzysztof
 
-
-timer@2098000: clock-names: ['ipg', 'per', 'osc_per'] is too long
-	arch/arm/boot/dts/imx6dl-alti6p.dtb
-	arch/arm/boot/dts/imx6dl-apf6dev.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos2_4.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos2_7.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos_4.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos_7.dtb
-	arch/arm/boot/dts/imx6dl-b105pv2.dtb
-	arch/arm/boot/dts/imx6dl-b105v2.dtb
-	arch/arm/boot/dts/imx6dl-b125pv2.dtb
-	arch/arm/boot/dts/imx6dl-b125v2.dtb
-	arch/arm/boot/dts/imx6dl-b155v2.dtb
-	arch/arm/boot/dts/imx6dl-colibri-aster.dtb
-	arch/arm/boot/dts/imx6dl-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx6dl-colibri-iris.dtb
-	arch/arm/boot/dts/imx6dl-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx6dl-cubox-i.dtb
-	arch/arm/boot/dts/imx6dl-cubox-i-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-cubox-i-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-dfi-fs700-m60.dtb
-	arch/arm/boot/dts/imx6dl-dhcom-picoitx.dtb
-	arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dtb
-	arch/arm/boot/dts/imx6dl-emcon-avari.dtb
-	arch/arm/boot/dts/imx6dl-gw51xx.dtb
-	arch/arm/boot/dts/imx6dl-gw52xx.dtb
-	arch/arm/boot/dts/imx6dl-gw53xx.dtb
-	arch/arm/boot/dts/imx6dl-gw54xx.dtb
-	arch/arm/boot/dts/imx6dl-gw551x.dtb
-	arch/arm/boot/dts/imx6dl-gw552x.dtb
-	arch/arm/boot/dts/imx6dl-gw553x.dtb
-	arch/arm/boot/dts/imx6dl-gw560x.dtb
-	arch/arm/boot/dts/imx6dl-gw5903.dtb
-	arch/arm/boot/dts/imx6dl-gw5904.dtb
-	arch/arm/boot/dts/imx6dl-gw5907.dtb
-	arch/arm/boot/dts/imx6dl-gw5910.dtb
-	arch/arm/boot/dts/imx6dl-gw5912.dtb
-	arch/arm/boot/dts/imx6dl-gw5913.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard2.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard2-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard2-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-icore.dtb
-	arch/arm/boot/dts/imx6dl-icore-mipi.dtb
-	arch/arm/boot/dts/imx6dl-icore-rqs.dtb
-	arch/arm/boot/dts/imx6dl-lanmcu.dtb
-	arch/arm/boot/dts/imx6dl-mamoj.dtb
-	arch/arm/boot/dts/imx6dl-mba6a.dtb
-	arch/arm/boot/dts/imx6dl-mba6b.dtb
-	arch/arm/boot/dts/imx6dl-nit6xlite.dtb
-	arch/arm/boot/dts/imx6dl-nitrogen6x.dtb
-	arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb
-	arch/arm/boot/dts/imx6dl-phytec-pbab01.dtb
-	arch/arm/boot/dts/imx6dl-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6dl-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6dl-pico-nymph.dtb
-	arch/arm/boot/dts/imx6dl-pico-pi.dtb
-	arch/arm/boot/dts/imx6dl-plybas.dtb
-	arch/arm/boot/dts/imx6dl-plym2m.dtb
-	arch/arm/boot/dts/imx6dl-prtmvt.dtb
-	arch/arm/boot/dts/imx6dl-prtrvt.dtb
-	arch/arm/boot/dts/imx6dl-prtvt7.dtb
-	arch/arm/boot/dts/imx6dl-rex-basic.dtb
-	arch/arm/boot/dts/imx6dl-riotboard.dtb
-	arch/arm/boot/dts/imx6dl-sabreauto.dtb
-	arch/arm/boot/dts/imx6dl-sabrelite.dtb
-	arch/arm/boot/dts/imx6dl-sabresd.dtb
-	arch/arm/boot/dts/imx6dl-savageboard.dtb
-	arch/arm/boot/dts/imx6dl-skov-revc-lt2.dtb
-	arch/arm/boot/dts/imx6dl-skov-revc-lt6.dtb
-	arch/arm/boot/dts/imx6dl-solidsense.dtb
-	arch/arm/boot/dts/imx6dl-ts4900.dtb
-	arch/arm/boot/dts/imx6dl-ts7970.dtb
-	arch/arm/boot/dts/imx6dl-tx6dl-comtft.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8034.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8034-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8035.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8035-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-801x.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-8033.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-8033-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-80xx-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-811x.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-81xx-mb7.dtb
-	arch/arm/boot/dts/imx6dl-udoo.dtb
-	arch/arm/boot/dts/imx6dl-victgo.dtb
-	arch/arm/boot/dts/imx6dl-vicut1.dtb
-	arch/arm/boot/dts/imx6dl-wandboard.dtb
-	arch/arm/boot/dts/imx6dl-wandboard-revb1.dtb
-	arch/arm/boot/dts/imx6dl-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-draco.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-hydra.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-orion.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-ursa.dtb
-	arch/arm/boot/dts/imx6q-apalis-eval.dtb
-	arch/arm/boot/dts/imx6q-apalis-ixora.dtb
-	arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dtb
-	arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dtb
-	arch/arm/boot/dts/imx6q-apf6dev.dtb
-	arch/arm/boot/dts/imx6q-arm2.dtb
-	arch/arm/boot/dts/imx6q-b450v3.dtb
-	arch/arm/boot/dts/imx6q-b650v3.dtb
-	arch/arm/boot/dts/imx6q-b850v3.dtb
-	arch/arm/boot/dts/imx6q-bosch-acc.dtb
-	arch/arm/boot/dts/imx6q-cm-fx6.dtb
-	arch/arm/boot/dts/imx6q-cubox-i.dtb
-	arch/arm/boot/dts/imx6q-cubox-i-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6q-cubox-i-som-v15.dtb
-	arch/arm/boot/dts/imx6q-dfi-fs700-m60.dtb
-	arch/arm/boot/dts/imx6q-dhcom-pdk2.dtb
-	arch/arm/boot/dts/imx6q-display5-tianma-tm070-1280x768.dtb
-	arch/arm/boot/dts/imx6q-dmo-edmqmx6.dtb
-	arch/arm/boot/dts/imx6q-dms-ba16.dtb
-	arch/arm/boot/dts/imx6q-ds.dtb
-	arch/arm/boot/dts/imx6q-emcon-avari.dtb
-	arch/arm/boot/dts/imx6q-evi.dtb
-	arch/arm/boot/dts/imx6q-gk802.dtb
-	arch/arm/boot/dts/imx6q-gw51xx.dtb
-	arch/arm/boot/dts/imx6q-gw52xx.dtb
-	arch/arm/boot/dts/imx6q-gw53xx.dtb
-	arch/arm/boot/dts/imx6q-gw5400-a.dtb
-	arch/arm/boot/dts/imx6q-gw54xx.dtb
-	arch/arm/boot/dts/imx6q-gw551x.dtb
-	arch/arm/boot/dts/imx6q-gw552x.dtb
-	arch/arm/boot/dts/imx6q-gw553x.dtb
-	arch/arm/boot/dts/imx6q-gw560x.dtb
-	arch/arm/boot/dts/imx6q-gw5903.dtb
-	arch/arm/boot/dts/imx6q-gw5904.dtb
-	arch/arm/boot/dts/imx6q-gw5907.dtb
-	arch/arm/boot/dts/imx6q-gw5910.dtb
-	arch/arm/boot/dts/imx6q-gw5912.dtb
-	arch/arm/boot/dts/imx6q-gw5913.dtb
-	arch/arm/boot/dts/imx6q-h100.dtb
-	arch/arm/boot/dts/imx6q-hummingboard2.dtb
-	arch/arm/boot/dts/imx6q-hummingboard2-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6q-hummingboard2-som-v15.dtb
-	arch/arm/boot/dts/imx6q-hummingboard.dtb
-	arch/arm/boot/dts/imx6q-hummingboard-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6q-hummingboard-som-v15.dtb
-	arch/arm/boot/dts/imx6q-icore.dtb
-	arch/arm/boot/dts/imx6q-icore-mipi.dtb
-	arch/arm/boot/dts/imx6q-icore-ofcap10.dtb
-	arch/arm/boot/dts/imx6q-icore-ofcap12.dtb
-	arch/arm/boot/dts/imx6q-icore-rqs.dtb
-	arch/arm/boot/dts/imx6q-kp-tpc.dtb
-	arch/arm/boot/dts/imx6q-logicpd.dtb
-	arch/arm/boot/dts/imx6q-marsboard.dtb
-	arch/arm/boot/dts/imx6q-mba6a.dtb
-	arch/arm/boot/dts/imx6q-mba6b.dtb
-	arch/arm/boot/dts/imx6q-mccmon6.dtb
-	arch/arm/boot/dts/imx6q-nitrogen6_max.dtb
-	arch/arm/boot/dts/imx6q-nitrogen6_som2.dtb
-	arch/arm/boot/dts/imx6q-nitrogen6x.dtb
-	arch/arm/boot/dts/imx6q-novena.dtb
-	arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb
-	arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb
-	arch/arm/boot/dts/imx6q-phytec-pbab01.dtb
-	arch/arm/boot/dts/imx6q-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6q-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6q-pico-nymph.dtb
-	arch/arm/boot/dts/imx6q-pico-pi.dtb
-	arch/arm/boot/dts/imx6q-pistachio.dtb
-	arch/arm/boot/dts/imx6qp-mba6b.dtb
-	arch/arm/boot/dts/imx6qp-nitrogen6_max.dtb
-	arch/arm/boot/dts/imx6qp-nitrogen6_som2.dtb
-	arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb
-	arch/arm/boot/dts/imx6qp-prtwd3.dtb
-	arch/arm/boot/dts/imx6q-prti6q.dtb
-	arch/arm/boot/dts/imx6q-prtwd2.dtb
-	arch/arm/boot/dts/imx6qp-sabreauto.dtb
-	arch/arm/boot/dts/imx6qp-sabresd.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8037.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8037-mb7.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8137.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8137-mb7.dtb
-	arch/arm/boot/dts/imx6qp-vicutp.dtb
-	arch/arm/boot/dts/imx6qp-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dtb
-	arch/arm/boot/dts/imx6qp-zii-rdu2.dtb
-	arch/arm/boot/dts/imx6q-rex-pro.dtb
-	arch/arm/boot/dts/imx6q-sabreauto.dtb
-	arch/arm/boot/dts/imx6q-sabrelite.dtb
-	arch/arm/boot/dts/imx6q-sabresd.dtb
-	arch/arm/boot/dts/imx6q-savageboard.dtb
-	arch/arm/boot/dts/imx6q-sbc6x.dtb
-	arch/arm/boot/dts/imx6q-skov-revc-lt2.dtb
-	arch/arm/boot/dts/imx6q-skov-revc-lt6.dtb
-	arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dtb
-	arch/arm/boot/dts/imx6q-solidsense.dtb
-	arch/arm/boot/dts/imx6q-tbs2910.dtb
-	arch/arm/boot/dts/imx6q-ts4900.dtb
-	arch/arm/boot/dts/imx6q-ts7970.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1010-comtft.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1010.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1020-comtft.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1020.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1036.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1036-mb7.dtb
-	arch/arm/boot/dts/imx6q-tx6q-10x0-mb7.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1110.dtb
-	arch/arm/boot/dts/imx6q-tx6q-11x0-mb7.dtb
-	arch/arm/boot/dts/imx6q-udoo.dtb
-	arch/arm/boot/dts/imx6q-utilite-pro.dtb
-	arch/arm/boot/dts/imx6q-var-dt6customboard.dtb
-	arch/arm/boot/dts/imx6q-vicut1.dtb
-	arch/arm/boot/dts/imx6q-wandboard.dtb
-	arch/arm/boot/dts/imx6q-wandboard-revb1.dtb
-	arch/arm/boot/dts/imx6q-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6q-yapp4-crux.dtb
-	arch/arm/boot/dts/imx6q-zii-rdu2.dtb
-	arch/arm/boot/dts/imx6s-dhcom-drc02.dtb
-
-timer@2098000: clocks: [[2, 119], [2, 120], [2, 237]] is too long
-	arch/arm/boot/dts/imx6dl-alti6p.dtb
-	arch/arm/boot/dts/imx6dl-apf6dev.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos2_4.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos2_7.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos_4.dtb
-	arch/arm/boot/dts/imx6dl-aristainetos_7.dtb
-	arch/arm/boot/dts/imx6dl-b105pv2.dtb
-	arch/arm/boot/dts/imx6dl-b105v2.dtb
-	arch/arm/boot/dts/imx6dl-b125pv2.dtb
-	arch/arm/boot/dts/imx6dl-b125v2.dtb
-	arch/arm/boot/dts/imx6dl-b155v2.dtb
-	arch/arm/boot/dts/imx6dl-colibri-aster.dtb
-	arch/arm/boot/dts/imx6dl-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx6dl-colibri-iris.dtb
-	arch/arm/boot/dts/imx6dl-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx6dl-cubox-i.dtb
-	arch/arm/boot/dts/imx6dl-cubox-i-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-cubox-i-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-dfi-fs700-m60.dtb
-	arch/arm/boot/dts/imx6dl-dhcom-picoitx.dtb
-	arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dtb
-	arch/arm/boot/dts/imx6dl-emcon-avari.dtb
-	arch/arm/boot/dts/imx6dl-gw51xx.dtb
-	arch/arm/boot/dts/imx6dl-gw52xx.dtb
-	arch/arm/boot/dts/imx6dl-gw53xx.dtb
-	arch/arm/boot/dts/imx6dl-gw54xx.dtb
-	arch/arm/boot/dts/imx6dl-gw551x.dtb
-	arch/arm/boot/dts/imx6dl-gw552x.dtb
-	arch/arm/boot/dts/imx6dl-gw553x.dtb
-	arch/arm/boot/dts/imx6dl-gw560x.dtb
-	arch/arm/boot/dts/imx6dl-gw5903.dtb
-	arch/arm/boot/dts/imx6dl-gw5904.dtb
-	arch/arm/boot/dts/imx6dl-gw5907.dtb
-	arch/arm/boot/dts/imx6dl-gw5910.dtb
-	arch/arm/boot/dts/imx6dl-gw5912.dtb
-	arch/arm/boot/dts/imx6dl-gw5913.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard2.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard2-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard2-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-hummingboard-som-v15.dtb
-	arch/arm/boot/dts/imx6dl-icore.dtb
-	arch/arm/boot/dts/imx6dl-icore-mipi.dtb
-	arch/arm/boot/dts/imx6dl-icore-rqs.dtb
-	arch/arm/boot/dts/imx6dl-lanmcu.dtb
-	arch/arm/boot/dts/imx6dl-mamoj.dtb
-	arch/arm/boot/dts/imx6dl-mba6a.dtb
-	arch/arm/boot/dts/imx6dl-mba6b.dtb
-	arch/arm/boot/dts/imx6dl-nit6xlite.dtb
-	arch/arm/boot/dts/imx6dl-nitrogen6x.dtb
-	arch/arm/boot/dts/imx6dl-phytec-mira-rdk-nand.dtb
-	arch/arm/boot/dts/imx6dl-phytec-pbab01.dtb
-	arch/arm/boot/dts/imx6dl-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6dl-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6dl-pico-nymph.dtb
-	arch/arm/boot/dts/imx6dl-pico-pi.dtb
-	arch/arm/boot/dts/imx6dl-plybas.dtb
-	arch/arm/boot/dts/imx6dl-plym2m.dtb
-	arch/arm/boot/dts/imx6dl-prtmvt.dtb
-	arch/arm/boot/dts/imx6dl-prtrvt.dtb
-	arch/arm/boot/dts/imx6dl-prtvt7.dtb
-	arch/arm/boot/dts/imx6dl-rex-basic.dtb
-	arch/arm/boot/dts/imx6dl-riotboard.dtb
-	arch/arm/boot/dts/imx6dl-sabreauto.dtb
-	arch/arm/boot/dts/imx6dl-sabrelite.dtb
-	arch/arm/boot/dts/imx6dl-sabresd.dtb
-	arch/arm/boot/dts/imx6dl-savageboard.dtb
-	arch/arm/boot/dts/imx6dl-skov-revc-lt2.dtb
-	arch/arm/boot/dts/imx6dl-skov-revc-lt6.dtb
-	arch/arm/boot/dts/imx6dl-solidsense.dtb
-	arch/arm/boot/dts/imx6dl-ts4900.dtb
-	arch/arm/boot/dts/imx6dl-ts7970.dtb
-	arch/arm/boot/dts/imx6dl-tx6dl-comtft.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8034.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8034-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8035.dtb
-	arch/arm/boot/dts/imx6dl-tx6s-8035-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-801x.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-8033.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-8033-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-80xx-mb7.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-811x.dtb
-	arch/arm/boot/dts/imx6dl-tx6u-81xx-mb7.dtb
-	arch/arm/boot/dts/imx6dl-udoo.dtb
-	arch/arm/boot/dts/imx6dl-victgo.dtb
-	arch/arm/boot/dts/imx6dl-vicut1.dtb
-	arch/arm/boot/dts/imx6dl-wandboard.dtb
-	arch/arm/boot/dts/imx6dl-wandboard-revb1.dtb
-	arch/arm/boot/dts/imx6dl-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-draco.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-hydra.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-orion.dtb
-	arch/arm/boot/dts/imx6dl-yapp4-ursa.dtb
-	arch/arm/boot/dts/imx6q-apalis-eval.dtb
-	arch/arm/boot/dts/imx6q-apalis-ixora.dtb
-	arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dtb
-	arch/arm/boot/dts/imx6q-apalis-ixora-v1.2.dtb
-	arch/arm/boot/dts/imx6q-apf6dev.dtb
-	arch/arm/boot/dts/imx6q-arm2.dtb
-	arch/arm/boot/dts/imx6q-b450v3.dtb
-	arch/arm/boot/dts/imx6q-b650v3.dtb
-	arch/arm/boot/dts/imx6q-b850v3.dtb
-	arch/arm/boot/dts/imx6q-bosch-acc.dtb
-	arch/arm/boot/dts/imx6q-cm-fx6.dtb
-	arch/arm/boot/dts/imx6q-cubox-i.dtb
-	arch/arm/boot/dts/imx6q-cubox-i-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6q-cubox-i-som-v15.dtb
-	arch/arm/boot/dts/imx6q-dfi-fs700-m60.dtb
-	arch/arm/boot/dts/imx6q-dhcom-pdk2.dtb
-	arch/arm/boot/dts/imx6q-display5-tianma-tm070-1280x768.dtb
-	arch/arm/boot/dts/imx6q-dmo-edmqmx6.dtb
-	arch/arm/boot/dts/imx6q-dms-ba16.dtb
-	arch/arm/boot/dts/imx6q-ds.dtb
-	arch/arm/boot/dts/imx6q-emcon-avari.dtb
-	arch/arm/boot/dts/imx6q-evi.dtb
-	arch/arm/boot/dts/imx6q-gk802.dtb
-	arch/arm/boot/dts/imx6q-gw51xx.dtb
-	arch/arm/boot/dts/imx6q-gw52xx.dtb
-	arch/arm/boot/dts/imx6q-gw53xx.dtb
-	arch/arm/boot/dts/imx6q-gw5400-a.dtb
-	arch/arm/boot/dts/imx6q-gw54xx.dtb
-	arch/arm/boot/dts/imx6q-gw551x.dtb
-	arch/arm/boot/dts/imx6q-gw552x.dtb
-	arch/arm/boot/dts/imx6q-gw553x.dtb
-	arch/arm/boot/dts/imx6q-gw560x.dtb
-	arch/arm/boot/dts/imx6q-gw5903.dtb
-	arch/arm/boot/dts/imx6q-gw5904.dtb
-	arch/arm/boot/dts/imx6q-gw5907.dtb
-	arch/arm/boot/dts/imx6q-gw5910.dtb
-	arch/arm/boot/dts/imx6q-gw5912.dtb
-	arch/arm/boot/dts/imx6q-gw5913.dtb
-	arch/arm/boot/dts/imx6q-h100.dtb
-	arch/arm/boot/dts/imx6q-hummingboard2.dtb
-	arch/arm/boot/dts/imx6q-hummingboard2-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6q-hummingboard2-som-v15.dtb
-	arch/arm/boot/dts/imx6q-hummingboard.dtb
-	arch/arm/boot/dts/imx6q-hummingboard-emmc-som-v15.dtb
-	arch/arm/boot/dts/imx6q-hummingboard-som-v15.dtb
-	arch/arm/boot/dts/imx6q-icore.dtb
-	arch/arm/boot/dts/imx6q-icore-mipi.dtb
-	arch/arm/boot/dts/imx6q-icore-ofcap10.dtb
-	arch/arm/boot/dts/imx6q-icore-ofcap12.dtb
-	arch/arm/boot/dts/imx6q-icore-rqs.dtb
-	arch/arm/boot/dts/imx6q-kp-tpc.dtb
-	arch/arm/boot/dts/imx6q-logicpd.dtb
-	arch/arm/boot/dts/imx6q-marsboard.dtb
-	arch/arm/boot/dts/imx6q-mba6a.dtb
-	arch/arm/boot/dts/imx6q-mba6b.dtb
-	arch/arm/boot/dts/imx6q-mccmon6.dtb
-	arch/arm/boot/dts/imx6q-nitrogen6_max.dtb
-	arch/arm/boot/dts/imx6q-nitrogen6_som2.dtb
-	arch/arm/boot/dts/imx6q-nitrogen6x.dtb
-	arch/arm/boot/dts/imx6q-novena.dtb
-	arch/arm/boot/dts/imx6q-phytec-mira-rdk-emmc.dtb
-	arch/arm/boot/dts/imx6q-phytec-mira-rdk-nand.dtb
-	arch/arm/boot/dts/imx6q-phytec-pbab01.dtb
-	arch/arm/boot/dts/imx6q-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6q-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6q-pico-nymph.dtb
-	arch/arm/boot/dts/imx6q-pico-pi.dtb
-	arch/arm/boot/dts/imx6q-pistachio.dtb
-	arch/arm/boot/dts/imx6qp-mba6b.dtb
-	arch/arm/boot/dts/imx6qp-nitrogen6_max.dtb
-	arch/arm/boot/dts/imx6qp-nitrogen6_som2.dtb
-	arch/arm/boot/dts/imx6qp-phytec-mira-rdk-nand.dtb
-	arch/arm/boot/dts/imx6qp-prtwd3.dtb
-	arch/arm/boot/dts/imx6q-prti6q.dtb
-	arch/arm/boot/dts/imx6q-prtwd2.dtb
-	arch/arm/boot/dts/imx6qp-sabreauto.dtb
-	arch/arm/boot/dts/imx6qp-sabresd.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8037.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8037-mb7.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8137.dtb
-	arch/arm/boot/dts/imx6qp-tx6qp-8137-mb7.dtb
-	arch/arm/boot/dts/imx6qp-vicutp.dtb
-	arch/arm/boot/dts/imx6qp-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6qp-yapp4-crux-plus.dtb
-	arch/arm/boot/dts/imx6qp-zii-rdu2.dtb
-	arch/arm/boot/dts/imx6q-rex-pro.dtb
-	arch/arm/boot/dts/imx6q-sabreauto.dtb
-	arch/arm/boot/dts/imx6q-sabrelite.dtb
-	arch/arm/boot/dts/imx6q-sabresd.dtb
-	arch/arm/boot/dts/imx6q-savageboard.dtb
-	arch/arm/boot/dts/imx6q-sbc6x.dtb
-	arch/arm/boot/dts/imx6q-skov-revc-lt2.dtb
-	arch/arm/boot/dts/imx6q-skov-revc-lt6.dtb
-	arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dtb
-	arch/arm/boot/dts/imx6q-solidsense.dtb
-	arch/arm/boot/dts/imx6q-tbs2910.dtb
-	arch/arm/boot/dts/imx6q-ts4900.dtb
-	arch/arm/boot/dts/imx6q-ts7970.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1010-comtft.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1010.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1020-comtft.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1020.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1036.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1036-mb7.dtb
-	arch/arm/boot/dts/imx6q-tx6q-10x0-mb7.dtb
-	arch/arm/boot/dts/imx6q-tx6q-1110.dtb
-	arch/arm/boot/dts/imx6q-tx6q-11x0-mb7.dtb
-	arch/arm/boot/dts/imx6q-udoo.dtb
-	arch/arm/boot/dts/imx6q-utilite-pro.dtb
-	arch/arm/boot/dts/imx6q-var-dt6customboard.dtb
-	arch/arm/boot/dts/imx6q-vicut1.dtb
-	arch/arm/boot/dts/imx6q-wandboard.dtb
-	arch/arm/boot/dts/imx6q-wandboard-revb1.dtb
-	arch/arm/boot/dts/imx6q-wandboard-revd1.dtb
-	arch/arm/boot/dts/imx6q-yapp4-crux.dtb
-	arch/arm/boot/dts/imx6q-zii-rdu2.dtb
-	arch/arm/boot/dts/imx6s-dhcom-drc02.dtb
-
-timer@2098000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx6sl-evk.dtb
-	arch/arm/boot/dts/imx6sll-evk.dtb
-	arch/arm/boot/dts/imx6sll-kobo-clarahd.dtb
-	arch/arm/boot/dts/imx6sll-kobo-librah2o.dtb
-	arch/arm/boot/dts/imx6sl-tolino-shine2hd.dtb
-	arch/arm/boot/dts/imx6sl-tolino-shine3.dtb
-	arch/arm/boot/dts/imx6sl-tolino-vision5.dtb
-	arch/arm/boot/dts/imx6sl-warp.dtb
-	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ul-ccimx6ulsbcexpress.dtb
-	arch/arm/boot/dts/imx6ul-ccimx6ulsbcpro.dtb
-	arch/arm/boot/dts/imx6ul-geam.dtb
-	arch/arm/boot/dts/imx6ul-isiot-emmc.dtb
-	arch/arm/boot/dts/imx6ul-isiot-nand.dtb
-	arch/arm/boot/dts/imx6ul-kontron-bl-43.dtb
-	arch/arm/boot/dts/imx6ul-kontron-bl.dtb
-	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ull-colibri-aster.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dtb
-	arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx6ull-colibri-iris.dtb
-	arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dtb
-	arch/arm/boot/dts/imx6ul-liteboard.dtb
-	arch/arm/boot/dts/imx6ull-jozacp.dtb
-	arch/arm/boot/dts/imx6ull-kontron-bl.dtb
-	arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dtb
-	arch/arm/boot/dts/imx6ull-opos6uldev.dtb
-	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-emmc.dtb
-	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb
-	arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb
-	arch/arm/boot/dts/imx6ull-phytec-tauri-emmc.dtb
-	arch/arm/boot/dts/imx6ull-phytec-tauri-nand.dtb
-	arch/arm/boot/dts/imx6ull-tqma6ull2l-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ull-tqma6ull2-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-opos6uldev.dtb
-	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-emmc.dtb
-	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb
-	arch/arm/boot/dts/imx6ul-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6ul-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6ul-pico-pi.dtb
-	arch/arm/boot/dts/imx6ul-prti6g.dtb
-	arch/arm/boot/dts/imx6ul-tqma6ul1-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-tqma6ul2l-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-tqma6ul2-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-tx6ul-0010.dtb
-	arch/arm/boot/dts/imx6ul-tx6ul-0011.dtb
-	arch/arm/boot/dts/imx6ul-tx6ul-mainboard.dtb
-	arch/arm/boot/dts/imx6ulz-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dtb
-
-timer@20e8000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx6ul-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ul-ccimx6ulsbcexpress.dtb
-	arch/arm/boot/dts/imx6ul-ccimx6ulsbcpro.dtb
-	arch/arm/boot/dts/imx6ul-geam.dtb
-	arch/arm/boot/dts/imx6ul-isiot-emmc.dtb
-	arch/arm/boot/dts/imx6ul-isiot-nand.dtb
-	arch/arm/boot/dts/imx6ul-kontron-bl-43.dtb
-	arch/arm/boot/dts/imx6ul-kontron-bl.dtb
-	arch/arm/boot/dts/imx6ull-14x14-evk.dtb
-	arch/arm/boot/dts/imx6ull-colibri-aster.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-aster.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-iris.dtb
-	arch/arm/boot/dts/imx6ull-colibri-emmc-iris-v2.dtb
-	arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx6ull-colibri-iris.dtb
-	arch/arm/boot/dts/imx6ull-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-aster.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-eval-v3.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-iris.dtb
-	arch/arm/boot/dts/imx6ull-colibri-wifi-iris-v2.dtb
-	arch/arm/boot/dts/imx6ul-liteboard.dtb
-	arch/arm/boot/dts/imx6ull-jozacp.dtb
-	arch/arm/boot/dts/imx6ull-kontron-bl.dtb
-	arch/arm/boot/dts/imx6ull-myir-mys-6ulx-eval.dtb
-	arch/arm/boot/dts/imx6ull-opos6uldev.dtb
-	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-emmc.dtb
-	arch/arm/boot/dts/imx6ull-phytec-segin-ff-rdk-nand.dtb
-	arch/arm/boot/dts/imx6ull-phytec-segin-lc-rdk-nand.dtb
-	arch/arm/boot/dts/imx6ull-phytec-tauri-emmc.dtb
-	arch/arm/boot/dts/imx6ull-phytec-tauri-nand.dtb
-	arch/arm/boot/dts/imx6ull-tqma6ull2l-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ull-tqma6ull2-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-opos6uldev.dtb
-	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-emmc.dtb
-	arch/arm/boot/dts/imx6ul-phytec-segin-ff-rdk-nand.dtb
-	arch/arm/boot/dts/imx6ul-pico-dwarf.dtb
-	arch/arm/boot/dts/imx6ul-pico-hobbit.dtb
-	arch/arm/boot/dts/imx6ul-pico-pi.dtb
-	arch/arm/boot/dts/imx6ul-prti6g.dtb
-	arch/arm/boot/dts/imx6ul-tqma6ul1-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-tqma6ul2l-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-tqma6ul2-mba6ulx.dtb
-	arch/arm/boot/dts/imx6ul-tx6ul-0010.dtb
-	arch/arm/boot/dts/imx6ul-tx6ul-0011.dtb
-	arch/arm/boot/dts/imx6ul-tx6ul-mainboard.dtb
-
-timer@302d0000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx7d-cl-som-imx7.dtb
-	arch/arm/boot/dts/imx7d-colibri-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
-	arch/arm/boot/dts/imx7d-mba7.dtb
-	arch/arm/boot/dts/imx7d-meerkat96.dtb
-	arch/arm/boot/dts/imx7d-nitrogen7.dtb
-	arch/arm/boot/dts/imx7d-pico-dwarf.dtb
-	arch/arm/boot/dts/imx7d-pico-hobbit.dtb
-	arch/arm/boot/dts/imx7d-pico-nymph.dtb
-	arch/arm/boot/dts/imx7d-pico-pi.dtb
-	arch/arm/boot/dts/imx7d-remarkable2.dtb
-	arch/arm/boot/dts/imx7d-sbc-imx7.dtb
-	arch/arm/boot/dts/imx7d-sdb.dtb
-	arch/arm/boot/dts/imx7d-sdb-reva.dtb
-	arch/arm/boot/dts/imx7d-sdb-sht11.dtb
-	arch/arm/boot/dts/imx7d-smegw01.dtb
-	arch/arm/boot/dts/imx7d-zii-rmu2.dtb
-	arch/arm/boot/dts/imx7d-zii-rpu2.dtb
-	arch/arm/boot/dts/imx7s-colibri-aster.dtb
-	arch/arm/boot/dts/imx7s-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7s-mba7.dtb
-	arch/arm/boot/dts/imx7s-warp.dtb
-
-timer@302e0000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx7d-cl-som-imx7.dtb
-	arch/arm/boot/dts/imx7d-colibri-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
-	arch/arm/boot/dts/imx7d-mba7.dtb
-	arch/arm/boot/dts/imx7d-meerkat96.dtb
-	arch/arm/boot/dts/imx7d-nitrogen7.dtb
-	arch/arm/boot/dts/imx7d-pico-dwarf.dtb
-	arch/arm/boot/dts/imx7d-pico-hobbit.dtb
-	arch/arm/boot/dts/imx7d-pico-nymph.dtb
-	arch/arm/boot/dts/imx7d-pico-pi.dtb
-	arch/arm/boot/dts/imx7d-remarkable2.dtb
-	arch/arm/boot/dts/imx7d-sbc-imx7.dtb
-	arch/arm/boot/dts/imx7d-sdb.dtb
-	arch/arm/boot/dts/imx7d-sdb-reva.dtb
-	arch/arm/boot/dts/imx7d-sdb-sht11.dtb
-	arch/arm/boot/dts/imx7d-smegw01.dtb
-	arch/arm/boot/dts/imx7d-zii-rmu2.dtb
-	arch/arm/boot/dts/imx7d-zii-rpu2.dtb
-	arch/arm/boot/dts/imx7s-colibri-aster.dtb
-	arch/arm/boot/dts/imx7s-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7s-mba7.dtb
-	arch/arm/boot/dts/imx7s-warp.dtb
-
-timer@302f0000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx7d-cl-som-imx7.dtb
-	arch/arm/boot/dts/imx7d-colibri-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
-	arch/arm/boot/dts/imx7d-mba7.dtb
-	arch/arm/boot/dts/imx7d-meerkat96.dtb
-	arch/arm/boot/dts/imx7d-nitrogen7.dtb
-	arch/arm/boot/dts/imx7d-pico-dwarf.dtb
-	arch/arm/boot/dts/imx7d-pico-hobbit.dtb
-	arch/arm/boot/dts/imx7d-pico-nymph.dtb
-	arch/arm/boot/dts/imx7d-pico-pi.dtb
-	arch/arm/boot/dts/imx7d-remarkable2.dtb
-	arch/arm/boot/dts/imx7d-sbc-imx7.dtb
-	arch/arm/boot/dts/imx7d-sdb.dtb
-	arch/arm/boot/dts/imx7d-sdb-reva.dtb
-	arch/arm/boot/dts/imx7d-sdb-sht11.dtb
-	arch/arm/boot/dts/imx7d-smegw01.dtb
-	arch/arm/boot/dts/imx7d-zii-rmu2.dtb
-	arch/arm/boot/dts/imx7d-zii-rpu2.dtb
-	arch/arm/boot/dts/imx7s-colibri-aster.dtb
-	arch/arm/boot/dts/imx7s-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7s-mba7.dtb
-	arch/arm/boot/dts/imx7s-warp.dtb
-
-timer@30300000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx7d-cl-som-imx7.dtb
-	arch/arm/boot/dts/imx7d-colibri-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-aster.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-emmc-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris.dtb
-	arch/arm/boot/dts/imx7d-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator.dtb
-	arch/arm/boot/dts/imx7d-flex-concentrator-mfg.dtb
-	arch/arm/boot/dts/imx7d-mba7.dtb
-	arch/arm/boot/dts/imx7d-meerkat96.dtb
-	arch/arm/boot/dts/imx7d-nitrogen7.dtb
-	arch/arm/boot/dts/imx7d-pico-dwarf.dtb
-	arch/arm/boot/dts/imx7d-pico-hobbit.dtb
-	arch/arm/boot/dts/imx7d-pico-nymph.dtb
-	arch/arm/boot/dts/imx7d-pico-pi.dtb
-	arch/arm/boot/dts/imx7d-remarkable2.dtb
-	arch/arm/boot/dts/imx7d-sbc-imx7.dtb
-	arch/arm/boot/dts/imx7d-sdb.dtb
-	arch/arm/boot/dts/imx7d-sdb-reva.dtb
-	arch/arm/boot/dts/imx7d-sdb-sht11.dtb
-	arch/arm/boot/dts/imx7d-smegw01.dtb
-	arch/arm/boot/dts/imx7d-zii-rmu2.dtb
-	arch/arm/boot/dts/imx7d-zii-rpu2.dtb
-	arch/arm/boot/dts/imx7s-colibri-aster.dtb
-	arch/arm/boot/dts/imx7s-colibri-eval-v3.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris.dtb
-	arch/arm/boot/dts/imx7s-colibri-iris-v2.dtb
-	arch/arm/boot/dts/imx7s-mba7.dtb
-	arch/arm/boot/dts/imx7s-warp.dtb
-
-timer@401ec000: clock-names:0: 'ipg' was expected
-	arch/arm/boot/dts/imxrt1050-evk.dtb
-
-timer@401ec000: clock-names: ['per'] is too short
-	arch/arm/boot/dts/imxrt1050-evk.dtb
-
-timer@401ec000: clocks: [[7]] is too short
-	arch/arm/boot/dts/imxrt1050-evk.dtb
-
-timer@401ec000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imxrt1050-evk.dtb
-
-timer@53f90000: compatible: 'oneOf' conditional failed, one must be fixed:
-	arch/arm/boot/dts/imx35-eukrea-mbimxsd35-baseboard.dtb
-	arch/arm/boot/dts/imx35-pdk.dtb
 
