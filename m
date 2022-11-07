@@ -2,154 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A8161F5E0
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 15:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F15061F44D
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Nov 2022 14:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbiKGO1n (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Nov 2022 09:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S232001AbiKGN3T (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Nov 2022 08:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiKGO1T (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 09:27:19 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052711E3E0
-        for <linux-clk@vger.kernel.org>; Mon,  7 Nov 2022 06:21:12 -0800 (PST)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221107142108epoutp04cb7a42f763d8b540b3d84f2c4772dae6~lU1a7cp7D1706117061epoutp043
-        for <linux-clk@vger.kernel.org>; Mon,  7 Nov 2022 14:21:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221107142108epoutp04cb7a42f763d8b540b3d84f2c4772dae6~lU1a7cp7D1706117061epoutp043
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667830869;
-        bh=xu5HiGuhdMYiBk9eR1LTVtkgBzlNFGVtIT25yDzOKAw=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=K+5LOTA7ELqIC6IZU2dGm7wz5WdyPJwgrN5ELTd8dXGksXnOUSJnqMbR7pdoiIO4a
-         C+yVPKhfYxC4RZ2GIDhnREVCKX4O0hKQxMkwwN3HNwaahOE96cu80FA6gs2Trr7ehK
-         VU4MC7XZ6vOPNaOHnMsme/r+rfJld/bJxnfqjo4A=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20221107142108epcas5p4b6cb4ac45bd2a5043348b29b2feb5b94~lU1aLfryZ1230712307epcas5p4o;
-        Mon,  7 Nov 2022 14:21:08 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4N5YLT1KnVz4x9Pp; Mon,  7 Nov
-        2022 14:21:05 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2D.B0.01710.15419636; Mon,  7 Nov 2022 23:21:05 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20221107123641epcas5p26e310f1ab6addb4fa6757f5147b8e50b~lTaOE4FgY3098230982epcas5p2I;
-        Mon,  7 Nov 2022 12:36:41 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221107123641epsmtrp26e438fe0d8ca7ed98536aae7e72eb6bd~lTaOD23qo2366723667epsmtrp2f;
-        Mon,  7 Nov 2022 12:36:41 +0000 (GMT)
-X-AuditID: b6c32a49-a41ff700000006ae-09-63691451f7e5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        89.84.18644.9DBF8636; Mon,  7 Nov 2022 21:36:41 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20221107123639epsmtip1258435c8702be6a964d137db2ae6cc31~lTaL71AQ40856308563epsmtip1D;
-        Mon,  7 Nov 2022 12:36:39 +0000 (GMT)
-From:   Inbaraj E <inbaraj.e@samsung.com>
-To:     krzysztof.kozlowski@linaro.org, s.nawrocki@samsung.com,
-        tomasz.figa@gmail.com, cw00.choi@samsung.com,
-        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, chanho61.park@samsung.com
-Cc:     linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, pankaj.dubey@samsung.com,
-        Inbaraj E <inbaraj.e@samsung.com>
-Subject: [PATCH v2] dt-bindings: clock: exynosautov9: fix reference to
- CMU_FSYS1
-Date:   Mon,  7 Nov 2022 18:13:37 +0530
-Message-Id: <20221107124337.114135-1-inbaraj.e@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpnk+LIzCtJLcpLzFFi42LZdlhTXTdQJDPZ4MFWVosH87axWVzer21x
-        /ctzVov5R86xWtz9M4nNYu/rrewWmx5fY7X42HOP1eLyrjlsFjPO72OyuHjK1WLR1i/sFq17
-        j7BbHH7Tzmrx79pGFotVu/4wOgh4vL/Ryu6xc9Zddo9NqzrZPO5c28PmsXlJvUffllWMHp83
-        yQWwR2XbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCd
-        rqRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIF
-        KkzIzviyZg1bQQtPxaEPTcwNjM1cXYycHBICJhKL/3aygthCArsZJY5/U+pi5AKyPzFKXOqe
-        ygrhfGaUmNB6iA2m4/KRpywQiV2MEgsXTGCGaG9lkvj40wjEZhNQl9jQ/Z0NpEhE4CGjxP7m
-        ZkYQh1ngMaPElYs32UGqhAWCJD7s/soCYrMIqEpcW3sObBKvgLXE5RtbodbJS6zecIAZpFlC
-        oJFD4uDxDSwQCReJiZsmM0HYwhKvjm9hh7ClJD6/2wvV7COxf84vRgg7Q+LY9uWsELa9xIEr
-        c4DmcABdpCmxfpc+RFhWYuqpdWAjmQX4JHp/P4EazyuxYx6MrSwx88h9qPGSEjsv74Q6x0Pi
-        7OfbYCOFBGIlrl1wnMAoOwthwQJGxlWMkqkFxbnpqcWmBYZ5qeXwiErOz93ECE6RWp47GO8+
-        +KB3iJGJg/EQowQHs5II7w23tGQh3pTEyqrUovz4otKc1OJDjKbAIJvILCWanA9M0nkl8YYm
-        lgYmZmZmJpbGZoZK4ryLZ2glCwmkJ5akZqemFqQWwfQxcXBKNTBpX+DXZIz/Htz+SM0/xuz0
-        xI9aB58dnmcm2OKqLvXj7P0DE6wYHmfMfh7v3ynJYX4wbG3geoO8qBOrW7jeCERPOGluWf20
-        /3Oe6F8R7xiX4MA9p/oU7k1sfjE3ID3gypWSFPGa2YnLVAo9Ctex/pj2/j/LE9/sMww+tx79
-        PBs341FFYmlemtT0Q18F/bY3i5qxlE5salrNK2G5+rV2bLLQvZmqrYzzfNL8f6sUx/5/1Pmp
-        TGLaNLvGpLirK+zbhN7uKv13S5Zt1vMaofIL3KcuyfxjytV7cmtiWYrmFJPe58H3Pd6nOvqs
-        +Z68bqVGwjXf4019pvmnJAoP+Nkt2vvS2iTgitMv09Vel6MuBCqxFGckGmoxFxUnAgAcE5xg
-        GgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCLMWRmVeSWpSXmKPExsWy7bCSnO7N3xnJBi+3qFo8mLeNzeLyfm2L
-        61+es1rMP3KO1eLun0lsFntfb2W32PT4GqvFx557rBaXd81hs5hxfh+TxcVTrhaLtn5ht2jd
-        e4Td4vCbdlaLf9c2slis2vWH0UHA4/2NVnaPnbPusntsWtXJ5nHn2h42j81L6j36tqxi9Pi8
-        SS6APYrLJiU1J7MstUjfLoEr48uaNWwFLTwVhz40MTcwNnN1MXJySAiYSFw+8pSli5GLQ0hg
-        B6PEoSlr2CASkhKzf09nh7CFJVb+e84OUdTMJHFo4y4WkASbgLrEhu7vbCAJEYHXjBL/731j
-        BnGYBV4ySrxYdwTI4eAQFgiQOLbDFqSBRUBV4trac8wgNq+AtcTlG1uhtslLrN5wgHkCI88C
-        RoZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBAaultYNxz6oPeocYmTgYDzFKcDAr
-        ifDecEtLFuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNTqoHJ
-        fOWC0AAf/sUH3kpdkT88f23o+dYNby1i1Rc+E845oDn9y66aVxMe8rcFhvplPApg/v+wIbP4
-        x8e6jTdyK5r5l7OsbJFMNSi3dl+Xu29dzuTyvj33+TjV5JRrWpNXzJwnyr/u3ukSxhXPRA46
-        N6zaHzuDSVj1GYeT/j+DKwU9U8+s1nj6u20u3+kN98Iin/0Q3lx22LagPLE11GTbnYXKikX7
-        IqOXXUj9ObvRYNvsu4VCKSlsVXvyGpa0cPffTl/3lvvAu3jb1BW1z0qj8iJ4srS8Ly/9LH2Z
-        acetK5PyXn92sztcunwFd3XvoVlZv66ov5f0Ofds/rGa1+/82230FNez2Akc2uIkozj3pA+r
-        EktxRqKhFnNRcSIABLQpW8cCAAA=
-X-CMS-MailID: 20221107123641epcas5p26e310f1ab6addb4fa6757f5147b8e50b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221107123641epcas5p26e310f1ab6addb4fa6757f5147b8e50b
-References: <CGME20221107123641epcas5p26e310f1ab6addb4fa6757f5147b8e50b@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231667AbiKGN3S (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Nov 2022 08:29:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF211CB0D;
+        Mon,  7 Nov 2022 05:29:05 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id d26so30036373eje.10;
+        Mon, 07 Nov 2022 05:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4s/Ptq8qmBpFC+qJpngwSoeByDBagm3Zx2Ag2l+arII=;
+        b=L2PeUV/vUgUVmloujR/vHOf91PEBnyAq+3zmOkc/1hunmGtWrlLICfsUgd0JwBoOUT
+         bBfomTM43fmiMli/d4SrMTUHLjvFhvkyF1DF+Bw66b+QdZoHOJwJ4pIeLR/jVT7tlnii
+         jU1gZJL2rRk6pTzfGaEw1Dmx4kN+yaw88/ofOkt57hseoZ7yMjh4TNuAWbhwmQ8GCCAD
+         HMlgfNfW790FXoM50zTC/NTBLGefApdwayg6+JAmL6phIFVMnuwk5AQlTbZ1k3kDanhm
+         5bHu9GL2FfO9hRr+XK9phvhMELcg9otEYnT0mTBj4kkBtsqN9rXK+wzYUYJpC5BP3LGs
+         rBqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4s/Ptq8qmBpFC+qJpngwSoeByDBagm3Zx2Ag2l+arII=;
+        b=LlCfFSGoE4BWaqBZ+DKn2oaQ4PNye78Gh4e3niJ7SKSd8UHuQqMB6D8erSVD/D0UbD
+         HxCvlAfgDaX0nX8JxJN00BdO9YUuyf6RZhkhLda/CD2KjluK+skiDU/bucL8Cng7KOFK
+         hmO9Ouy4QAMlpfDeY+Y5TG/ODOSHLlll1nOmqtrq8gh6ndS5A3eq0EIFyBf6S8JL4lcx
+         86CX5bOrtIh2Hos66Ob7fnPsgWofRuTcDIQ9+QdBxOh18nb33KrxsAKD59LHXCpSFlJi
+         A8007s43AHYCQb8W8JhQmY4VRRzeVHDanyu7JuxvWpCJa1ikiGv3MllaT1ebVYXcQNjI
+         nMYg==
+X-Gm-Message-State: ACrzQf2bCe75t8Fpl7jXXxqiwfmkg4APsAKqMaAVwzubFBHqz7IRXKVP
+        /g77w1NXwwlf1LPg+fB4Bek=
+X-Google-Smtp-Source: AMsMyM4TLYEv7krxKJO9xwNS3FvCmLCYf5ofH5o7VJkH2pssMqj/zXD3EyEdd1qPST+FPuEXv2IuXg==
+X-Received: by 2002:a17:906:794a:b0:7a0:72b8:2368 with SMTP id l10-20020a170906794a00b007a072b82368mr47657792ejo.601.1667827744013;
+        Mon, 07 Nov 2022 05:29:04 -0800 (PST)
+Received: from fedora.. (dh207-98-26.xnet.hr. [88.207.98.26])
+        by smtp.googlemail.com with ESMTPSA id ky14-20020a170907778e00b0073c8d4c9f38sm3446037ejc.177.2022.11.07.05.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 05:29:03 -0800 (PST)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/3] clk: qcom: reset: support resetting multiple bits
+Date:   Mon,  7 Nov 2022 14:28:59 +0100
+Message-Id: <20221107132901.489240-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fix reference to CMU_FSYS1 mmc card clock to gout clock instead of dout.
+This patch adds the support for giving the complete bitmask
+in reset structure and reset operation will use this bitmask
+for all reset operations.
 
-"gout" is output of a gate clock.
-Unlike any other clocks, the fsys1 mmc top clock does not have a divider.
-So, it should be "mout -> gout" instead of "mout -> gout -> dout".
+Currently, reset structure only takes a single bit for each reset
+and then calculates the bitmask by using the BIT() macro.
 
-This fixes make dtbs_check warning as shown below:
+However, this is not sufficient anymore for newer SoC-s like IPQ8074,
+IPQ6018 and more, since their networking resets require multiple bits
+to be asserted in order to properly reset the HW block completely.
 
-arch/arm64/boot/dts/exynos/exynosautov9-sadk.dtb: clock-controller@17040000:
-clock-names:2: 'dout_clkcmu_fsys1_mmc_card' was expected
-From schema: /home/inbaraj/mainline/linux/Documentation/devicetree/
-bindings/clock/samsung,exynosautov9-clock.yaml
+So, in order to allow asserting multiple bits add "bitmask" field to
+qcom_reset_map, and then use that bitmask value if its populated in the
+driver, if its not populated, then we just default to existing behaviour
+and calculate the bitmask on the fly.
 
-Fixes: 4b6ec8d88623 ("dt-bindings: clock: exynosautov9: add schema for cmu_fsys0/1")
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
-Signed-off-by: Inbaraj E <inbaraj.e@samsung.com>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- .../devicetree/bindings/clock/samsung,exynosautov9-clock.yaml   | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/qcom/reset.c | 4 ++--
+ drivers/clk/qcom/reset.h | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
-index 2ab4642679c0..55c4f94a14d1 100644
---- a/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
-@@ -148,7 +148,7 @@ allOf:
-           items:
-             - const: oscclk
-             - const: dout_clkcmu_fsys1_bus
--            - const: dout_clkcmu_fsys1_mmc_card
-+            - const: gout_clkcmu_fsys1_mmc_card
-             - const: dout_clkcmu_fsys1_usbdrd
+diff --git a/drivers/clk/qcom/reset.c b/drivers/clk/qcom/reset.c
+index 2a16adb572d2..0e914ec7aeae 100644
+--- a/drivers/clk/qcom/reset.c
++++ b/drivers/clk/qcom/reset.c
+@@ -30,7 +30,7 @@ qcom_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
  
-   - if:
+ 	rst = to_qcom_reset_controller(rcdev);
+ 	map = &rst->reset_map[id];
+-	mask = BIT(map->bit);
++	mask = map->bitmask ? map->bitmask : BIT(map->bit);
+ 
+ 	return regmap_update_bits(rst->regmap, map->reg, mask, mask);
+ }
+@@ -44,7 +44,7 @@ qcom_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
+ 
+ 	rst = to_qcom_reset_controller(rcdev);
+ 	map = &rst->reset_map[id];
+-	mask = BIT(map->bit);
++	mask = map->bitmask ? map->bitmask : BIT(map->bit);
+ 
+ 	return regmap_update_bits(rst->regmap, map->reg, mask, 0);
+ }
+diff --git a/drivers/clk/qcom/reset.h b/drivers/clk/qcom/reset.h
+index b8c113582072..9a47c838d9b1 100644
+--- a/drivers/clk/qcom/reset.h
++++ b/drivers/clk/qcom/reset.h
+@@ -12,6 +12,7 @@ struct qcom_reset_map {
+ 	unsigned int reg;
+ 	u8 bit;
+ 	u8 udelay;
++	u32 bitmask;
+ };
+ 
+ struct regmap;
 -- 
-2.17.1
+2.38.1
 
