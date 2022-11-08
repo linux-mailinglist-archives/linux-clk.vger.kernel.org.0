@@ -2,93 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4678620E59
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Nov 2022 12:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6631620ED1
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Nov 2022 12:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbiKHLOE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Nov 2022 06:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S233737AbiKHLXy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Nov 2022 06:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiKHLOC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Nov 2022 06:14:02 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109AAF5BD
-        for <linux-clk@vger.kernel.org>; Tue,  8 Nov 2022 03:13:58 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id s24so20562021ljs.11
-        for <linux-clk@vger.kernel.org>; Tue, 08 Nov 2022 03:13:57 -0800 (PST)
+        with ESMTP id S233674AbiKHLXc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Nov 2022 06:23:32 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADF94AF06
+        for <linux-clk@vger.kernel.org>; Tue,  8 Nov 2022 03:23:24 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id n191so11163008iod.13
+        for <linux-clk@vger.kernel.org>; Tue, 08 Nov 2022 03:23:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uEGHhzKbszqMWjuxMkREdBe3r8rfRgsqdTFsuaG+D8g=;
-        b=NJ7n5tDHA4FKrxdgKfMSK0JsHzzrPAaCYu9uFHzMI+iTMHzefvTrNRAMFyVDOa+Oke
-         SW0pFZ6VU3hfW9BacyR3YDPhurrPdQ0CX54079uUcGSkc5ci79eI5s0ENkwlVcxMumu/
-         JMK0yeEhyIe1tAIHjkny0+Qi/juWsPUek0fiUAirUKHM5bRLwFLmsv2ymf8Bl6bDntf0
-         tuL1j5f95LjnqRlvoeZsSRpFgW/3+N+1BFu3GByNkq0kjw6j317MtEYkxcg9K4hmGmsI
-         eqTliulwoOQVUFWIzLRzamvebCQH9XKIIvLN+FNGAVwTENV0KufYpY8qdPdCT3s/yVgO
-         QkPg==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=SKxoMXk71fzsH4RiXsi+C/6DrTYSmJg4y1x26aHehdukMfOTxbvTz1RDZUF5ezzzn/
+         SQHYV4p3Y0wU6zNmLXlSGC0M0pB4u1QXpkiFBqj96YkCT31bBeSPHVyC9vbsQojRcKKa
+         SwDbPs5WKRvZ1NoWEDhTso55tNTqvUdAli9jMSpajt514Wj81lAxmYoGpi6DQ4M8d/YW
+         uNuOs+TGP30ZU5GtAl8fFqJCJVBKD4dazlRxiLu29LiZYp1FL2RFvwqDLOuunnObSg9E
+         p/NuCd3UGlvOiIG98Srp88iAS0c7bT56QT5PdmY+ak3wAUeTvaY55MnBzDy9nfsyKYCp
+         Znkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uEGHhzKbszqMWjuxMkREdBe3r8rfRgsqdTFsuaG+D8g=;
-        b=quOzOlXVp8iCQsrcTrqmhTh0aZa2XgIixlW9C4BvHNQfPEhmVL4o+0SmFaEblJRVgB
-         thq1n1cTOAw6OdwC2RxayHbJnQ6qPaCsP4tw1eQo1lhUbdxvwXMYNWJsULpIclJAMtqt
-         TwoEDQFgg/pXYa222Pqp/mzoGs0fD0QiKjWXVL1pUq2SNKZ+9xb0KXaO1TdX4pGdMGCa
-         baFZoBRhdOXcKCL8QuRWR3pImu2A6TuEzFOCyIiKy8IgwUc5A/AQc0z5loS5BZnBiY4j
-         jVzvcxsTmxf6NC7V5Lg/jlkeai+WqNGHtgjqi5a0vBWhbi+fu0ShjXIALaKloWjnd4Q8
-         kVvw==
-X-Gm-Message-State: ACrzQf1b24OJ3WLo7sRdhT44cDH036bxX2J1Gl2cRFWLWwplCdCiIyuU
-        wSZvO4YNyDBwie2bhNaxydIrAw==
-X-Google-Smtp-Source: AMsMyM5LerxL9uLhjvhqx4rdYZ00h9GhQiY/qVsIX6zMEtdfJqU1Zg/x1+q1u6X6IVzcNyzLs9GczQ==
-X-Received: by 2002:a2e:8ec6:0:b0:26d:f909:6b7f with SMTP id e6-20020a2e8ec6000000b0026df9096b7fmr6984570ljl.482.1667906036420;
-        Tue, 08 Nov 2022 03:13:56 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id a11-20020ac25e6b000000b004b3e6010827sm685992lfr.66.2022.11.08.03.13.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 03:13:55 -0800 (PST)
-Message-ID: <37f8f24a-0f25-2f3d-1bc6-de9d5556d18e@linaro.org>
-Date:   Tue, 8 Nov 2022 12:13:55 +0100
+        bh=5B7dfi7xVJ3OslQ0ALi00lhJojz9IHhiYsVHA/RHqOE=;
+        b=fnplaFlXuVdJvbH+Guw+WxjYDsoXnMvSkCvFz4TVWfHIwGUmkIAUYWTJuE2odylzKV
+         Tj20MccY512y9L57amTjwspiwGUS7QE0kkuYhtkdBC6/1RDtzt33JCAVpWeUNInsrZF/
+         nfOsyeC9SZhKP/6jB8/oHO5TdrYJ32mwjrKqAWUEzWAQJbYB8Stbxf15UMyXoEVblSc0
+         v+4MckB9St82WUDTOiYkBWkberA0tjax9UloKWoBLZykg0QaBs2rBjPk7TUw7zSUtkyk
+         bke04WS7bQOu9urOncSgyAJswRrOEZHTKVmEeVrES/xgp6lVPC28tZEmzO85VAyvuLuJ
+         MuGw==
+X-Gm-Message-State: ACrzQf2rqm5DK9p+B2WENi0xGgGOKhWNBvsouTOQvbzAyqCJ0MEqh+51
+        rEZ9ngjz6+l8oL+ASlqNxfYt1UZDoqxPrJo3K2I=
+X-Google-Smtp-Source: AMsMyM7+myFlW6XFCXeSKLT27SlDPwGDh9RuXs3znV2KSQYgkg4ZcNfREnZlVBvtvS1gzBfTPQfDB8rVRvELVHxJ/ls=
+X-Received: by 2002:a05:6638:2:b0:363:8330:d75 with SMTP id
+ z2-20020a056638000200b0036383300d75mr32884715jao.33.1667906603907; Tue, 08
+ Nov 2022 03:23:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom: ipq8074: add missing
- networking resets
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221107132901.489240-1-robimarko@gmail.com>
- <20221107132901.489240-2-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221107132901.489240-2-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6638:1921:0:0:0:0 with HTTP; Tue, 8 Nov 2022 03:23:23
+ -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik10@gmail.com>
+Date:   Tue, 8 Nov 2022 03:23:23 -0800
+Message-ID: <CAEbPynvgXcwj+VPyZrCxfVHXTsPyXOo7WiLoVkUCLehN3kB_iQ@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik10[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik10[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 07/11/2022 14:29, Robert Marko wrote:
-> Add bindings for the missing networking resets found in IPQ8074 GCC.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  include/dt-bindings/clock/qcom,gcc-ipq8074.h | 14 ++++++++++++++
+-- 
+Dear
 
+How are you, I have a serious client, whom will be interested to
+invest in your country, I got your Details through the Investment
+Network and world Global Business directory.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Let me know if you are interested for more details.....
 
-Best regards,
-Krzysztof
-
+Sincerely,
+Mr. Kairi Andrew
