@@ -2,97 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144F36216BC
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Nov 2022 15:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF216219E3
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Nov 2022 17:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbiKHOcQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Nov 2022 09:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
+        id S233727AbiKHQ4g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Nov 2022 11:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234282AbiKHObF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Nov 2022 09:31:05 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C13DFF2
-        for <linux-clk@vger.kernel.org>; Tue,  8 Nov 2022 06:31:04 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id b185so13955063pfb.9
-        for <linux-clk@vger.kernel.org>; Tue, 08 Nov 2022 06:31:04 -0800 (PST)
+        with ESMTP id S234207AbiKHQ4f (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Nov 2022 11:56:35 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7995986B
+        for <linux-clk@vger.kernel.org>; Tue,  8 Nov 2022 08:56:33 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id k19so22033177lji.2
+        for <linux-clk@vger.kernel.org>; Tue, 08 Nov 2022 08:56:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hC7+VolI2Xokgb3dmDEH4B60P4b9V47rxRyDrGnv7BY=;
+        b=Kvh1XU2ygifF8pd1pPYP3ss9QpfF5Pm4e3f1LTjwSDi8McME5MKp5XYnCoKryE5a4L
+         LI10oVlOhIkZ5ZAlQa2vWVShH3If5lawcb1l+4YhnVKgTA8vjrdjmExReZS+4dU0xdrY
+         29F0K2HTD4i/7U61F2duHKuWHCoVGdoF68T+gklopltu9ERau/FjUceOuEcWiUimBMBj
+         vvmcoHNOFd3UBBwUwcbNoA5QloXV3ObbT+WHvHiCmxSSkkTvbkiJ6ttu+amvAHPp960H
+         NXVtEsSN9z31KIxQVXmJEMh0L2RgPcpFPHoR+ATjYNAwpRnlKkvEaEtJSTPy88dkPVwC
+         dXKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=Ld03XPnAIEioHNfeygwOWsKM6ZWNxV1f/KQhczTPnO0+yXwHJrwVANqkbv0qE7aBYY
-         fU0wjClk/t7Lwm0YaORMgiRDrr2PzJ0PLiJy1vCQSpwuY5FW8Wvx+oBWWVLa7bBbKVqy
-         kI2oJc8yKur1TBliY4K9SzOIKo+oS72GlQ0entgeNK3lJs+0gN97/x3MQ15Mb5i6vzDb
-         wVPUb3aGaSI4JhzK34jXMTl+WbCn0cBbBcH+IJ5Md6lLMSB/sqU8aWEIkBmnKJcsMYp7
-         H0zFDAtLNl3Enf0d651KRNQnukxm5ZCaez8k66BfIKsjN2ubme0q0AkBAqmxd5gcZL5l
-         v9Pw==
-X-Gm-Message-State: ACrzQf1qE07Yc0aPZ18BWig4opASvxmmBesbqXJvQtOWtDBRt11oKDwc
-        sCpr/ng4OIMKpz3IioGoxWP/0wzVp+mdewo8qR8=
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hC7+VolI2Xokgb3dmDEH4B60P4b9V47rxRyDrGnv7BY=;
+        b=4iOHMxAYcd/PN57yE8tq5x/4t8qec+tSH4/dyJBbH6RHcvOdWE/SCYLr/rSTrsFcTt
+         +S6bmAIGs2fc0KAfN6rWG/COIIo/G+jwAO7Ma4Ey8EPQWlxsFZ7JNuJFQSyrtjeorApA
+         Xi3NGiWoxAWwiwnATtNCbTZmNqprfoUJbUMxj+nnBLRA/q8kusWG6rguHuLwjcaPQvud
+         sJBezcooL6vK1SdhCy90d/aiizqsLmghJkg69RU1uQPocQgHWH6Aiisix1GkdgAbldoV
+         1ILaj0Ofgre2NpHnfV/j3PFi5uhi35xv/JcO6n2mcI6r5ajQQuL4+R64ERw1D0ZJmNGe
+         U69w==
+X-Gm-Message-State: ACrzQf02X1xSvMXk+LIiJuDLvQUBbMolkwEnJcZo0yUOzguAWbFNDDVJ
+        sYbmHoZt8QCMdZ3CDtaQuJyBDg==
+X-Google-Smtp-Source: AMsMyM4XfQkuOM+aro7Fw77Bc9UCPCloL04gi1Xnx+NAhUmjFjVBoBMf3JHPikC/1fibOF/L2SZuWQ==
+X-Received: by 2002:a2e:a910:0:b0:26a:ed13:cda6 with SMTP id j16-20020a2ea910000000b0026aed13cda6mr18721501ljq.250.1667926591517;
+        Tue, 08 Nov 2022 08:56:31 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05651220c300b0049e9122bd1bsm1841693lfr.164.2022.11.08.08.56.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Nov 2022 08:56:30 -0800 (PST)
+Message-ID: <34f22ebb-2b9c-080f-697d-b37cd6deeed0@linaro.org>
+Date:   Tue, 8 Nov 2022 17:56:29 +0100
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:42d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4794]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v2 2/2] clk: qcom: Add SC8280XP display clock controller
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220926203800.16771-1-quic_bjorande@quicinc.com>
+ <20220926203800.16771-3-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20220926203800.16771-3-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+
+
+On 26/09/2022 22:38, Bjorn Andersson wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> The Qualcomm SC8280XP platform has two display clock controller
+> instances, add support for these. Duplication between the two
+> implementations is reduced by reusing any constant data between the two
+> sets of clock data.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Just a couple of bits:
+
+- Use lowercase hex in constants
+- I'm not sure I like hacking clocks up with magic writes.. this
+driver can and will be compiled as a module by default and that
+prevents a de-facto clean removal.
+
+Other than that:
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
