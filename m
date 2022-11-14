@@ -2,54 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184536288CA
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Nov 2022 20:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E00862898D
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Nov 2022 20:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbiKNTAC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Nov 2022 14:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
+        id S237226AbiKNTlc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Nov 2022 14:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236281AbiKNTAB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Nov 2022 14:00:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322D926A
-        for <linux-clk@vger.kernel.org>; Mon, 14 Nov 2022 11:00:00 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ouegK-0003lF-RY; Mon, 14 Nov 2022 19:59:44 +0100
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1ouegK-00008o-KG; Mon, 14 Nov 2022 19:59:44 +0100
-Date:   Mon, 14 Nov 2022 19:59:44 +0100
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Claudiu.Beznea@microchip.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        alexandre.belloni@bootlin.com, sboyd@kernel.org,
-        mturquette@baylibre.com, Ludovic.Desroches@microchip.com,
-        kernel@pengutronix.de, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] clk: at91: rm9200: fix usb device clock id
-Message-ID: <20221114185944.GC18924@pengutronix.de>
-References: <20221109124638.147270-1-m.grzeschik@pengutronix.de>
- <20221109124638.147270-2-m.grzeschik@pengutronix.de>
- <94c6679c-f518-aa74-5cda-f28f1dc3129a@microchip.com>
- <048269a7-3aea-129f-f4db-4cd321e89fa3@microchip.com>
+        with ESMTP id S237117AbiKNTl3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Nov 2022 14:41:29 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA6521260
+        for <linux-clk@vger.kernel.org>; Mon, 14 Nov 2022 11:41:27 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id v3so11135434pgh.4
+        for <linux-clk@vger.kernel.org>; Mon, 14 Nov 2022 11:41:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yd27tgQr+0/60rgjYTAmAKuLM8bTPM8JxSoQaSar6No=;
+        b=wm5MacI9Icz3uTsibnoP0tS3rbE085GVnTJR3uBY6eeg9Y0CUTRmfpy2UUIPyMU0aB
+         1tsiI+xnhFsMqSDkmq1jb0Tar0dErUI85TRFcRMMWKI9wWCYx7dX9ppSdCzON9SZvDfp
+         k3p+yVaA/f9AuB0lmmeqGlEiZaobkSigurkq6dW2rPmlIKphoCPqbdmk3iWRKxoZYJP/
+         D14hyf09VrytR4xyk0D5UlP96veA3RmbYrdj23Z814rN6msvEIrE7xICHrMkwVdRE5gt
+         HLrtLcq+3LREaKREMbQclF/hZXDxmY68KkWIaaJ9j3nn9gCdlx979bck0sGvmTNguNSh
+         SBlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yd27tgQr+0/60rgjYTAmAKuLM8bTPM8JxSoQaSar6No=;
+        b=jjRMN+ICu3mJhOy61+kKD/kbqWxEVckhanFxDezqQkAkaJY/dy/+fh4HuJQVFiyKj2
+         qNMEWhaBjj4BuDLd9xO5xrgUwL9iNXcOd/y9C7AxP3rsljMCw1vcH86L2MLUIkKrJc0y
+         KIXgF/ONL/dWnBB10Wm5mf9j4WpqjbKjL5KDyxo50VMt7OvLboCSaBvcSqEuGlwGnEht
+         g/O4HAyiTelN/d+Yfe+/8FteU4Jd11dn8cXwXT3yQSMjgMmuBZQFhtoptKVSy3lmbNwI
+         7BoACAy2QUDxdaDfGkVi+oZfMsHJRgUcDqT1k6bwwEzabQobC0uqzYwFQSeuMWk7Qfzt
+         sLXQ==
+X-Gm-Message-State: ANoB5plZmJq274t8f8ackc5Tj677De90A1ZF+jqvds9keraeEMIZunpE
+        LLIA5ybiz/2jwrKvbySuJhD0GDFS6FPvHYhsSuuWXQ==
+X-Google-Smtp-Source: AA0mqf6+Ps0tnDmGtxM5PjS7+fsyJ9xn6V2nTtdaGUJIaciaB0E+S+B+jWQVKytEt4DtrLr5itomEiLh2oDfWs6cV8s=
+X-Received: by 2002:a05:6a00:88c:b0:56b:e1d8:e7a1 with SMTP id
+ q12-20020a056a00088c00b0056be1d8e7a1mr15136590pfj.28.1668454887057; Mon, 14
+ Nov 2022 11:41:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tqI+Z3u+9OQ7kwn0"
-Content-Disposition: inline
-In-Reply-To: <048269a7-3aea-129f-f4db-4cd321e89fa3@microchip.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221108013517.749665-1-marex@denx.de>
+In-Reply-To: <20221108013517.749665-1-marex@denx.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 14 Nov 2022 20:40:50 +0100
+Message-ID: <CAPDyKFoUdfUjZMgzU-3SS0gVstj-04FbTSjxihdar2wxu5c97w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] [RFC] PM: domains: Introduce .power_pre/post_on/off callbacks
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-pm@vger.kernel.org, Adam Ford <aford173@gmail.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Len Brown <len.brown@intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Kepplinger <martink@posteo.de>,
+        Pavel Machek <pavel@ucw.cz>, Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,108 +83,331 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
---tqI+Z3u+9OQ7kwn0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Nov 11, 2022 at 11:00:53AM +0000, Claudiu.Beznea@microchip.com wrot=
-e:
->On 10.11.2022 12:41, Claudiu Beznea - M18063 wrote:
->> On 09.11.2022 14:46, Michael Grzeschik wrote:
->>> EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
->>>
->>> Referring to the datasheet the index 2 is the MCKUDP. When enabled, it
->>> "Enables the automatic disable of the Master Clock of the USB Device
->>> Port when a suspend condition occurs". We fix the index to the real UDP
->>> id which "Enables the 48 MHz clock of the USB Device Port".
->>>
->>> Cc: mturquette@baylibre.com
->>> Cc: sboyd@kernel.org
->>> Cc: nicolas.ferre@microchip.com
->>> Cc: alexandre.belloni@bootlin.com
->>> Cc: ludovic.desroches@microchip.com
->>> Cc: claudiu.beznea@microchip.com
->>> Cc: linux-clk@vger.kernel.org
->>> Cc: linux-arm-kernel@lists.infradead.org
->>> Cc: kernel@pengutronix.de
->>> Fixes: 02ff48e4d7f7 ("clk: at91: add at91rm9200 pmc driver")
->>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>
->> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+On Tue, 8 Nov 2022 at 02:35, Marek Vasut <marex@denx.de> wrote:
 >
->Actually, looking again at this... I think it is best to squash this patch
->with path 2/3 from this series. Otherwise applying them independently will
->lead to usb driver probe failure. Back porting them (with proper
->dependency) to older kernel version may also lead to failures.
+> Currently it is possible that a power domain power on or off would claim
+> the genpd lock first and clock core prepare_lock second, while another
+> thread could do the reverse, and this would trigger lockdep warning.
 
+I am not quite sure I fully understand. In this case is the lockdep
+warning relevant or just something that we want to silence?
 
-I just send v4.
-
-
->>
->>
->>>
->>> ---
->>> v1 -> v2: - removed ; from patch description
->>>           - added fixes tag
->>> v2 -> v3: - updated the fixes tag
->>>
->>>  drivers/clk/at91/at91rm9200.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/clk/at91/at91rm9200.c b/drivers/clk/at91/at91rm920=
-0.c
->>> index b174f727a8ef8d..16870943a13e54 100644
->>> --- a/drivers/clk/at91/at91rm9200.c
->>> +++ b/drivers/clk/at91/at91rm9200.c
->>> @@ -40,7 +40,7 @@ static const struct clk_pll_characteristics rm9200_pl=
-l_characteristics =3D {
->>>  };
->>>
->>>  static const struct sck at91rm9200_systemck[] =3D {
->>> -       { .n =3D "udpck", .p =3D "usbck",    .id =3D 2 },
->>> +       { .n =3D "udpck", .p =3D "usbck",    .id =3D 1 },
->>>         { .n =3D "uhpck", .p =3D "usbck",    .id =3D 4 },
->>>         { .n =3D "pck0",  .p =3D "prog0",    .id =3D 8 },
->>>         { .n =3D "pck1",  .p =3D "prog1",    .id =3D 9 },
->>> --
->>> 2.30.2
->>>
->>
 >
->_______________________________________________
->linux-arm-kernel mailing list
->linux-arm-kernel@lists.infradead.org
->http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> Introduce new callbacks, .power_pre/post_on() and .power_off_pre/post(), which
+> are triggered before the genpd_lock() and after genpd_unlock() respectively in
+> case the domain is powered on and off. Those are meant to let drivers claim
+> clock core prepare_lock via clk_*prepare() call and release the lock via
+> clk_*unprepare() call to always assure that the clock and genpd lock ordering
+> is correct.
+
+To me, this sounds like a problem that may be better fixed by trying
+to model the parent/child-domains in a more strict way, through genpd.
+
+There is a comment in the code in imx8mp_blk_ctrl_probe() that seems
+to be pointing in this direction too.
+
+"* We use runtime PM to trigger power on/off of the upstream GPC
+  * domain, as a strict hierarchical parent/child power domain
+  * setup doesn't allow us to meet the sequencing requirements......"
+
+I am wondering about what those "sequencing requirements" are - and
+whether it could make better sense to fix these issues instead?
+
+Kind regards
+Uffe
+
 >
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---tqI+Z3u+9OQ7kwn0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmNykBsACgkQC+njFXoe
-LGQN4Q//f0+VeZcatgewF/LAlo92vgb1GmdPvoMope4FhnWt30Ng1T/8/Y2btDXl
-8w+XTxPYl8HFTkGPiM/14gr+7L7sapShd8dSikjVHd8WK200xBtmEeueKepobpHq
-w1SVhqdE9489gjlV8C5fbMY3akdZi3DYbG7S5xyg47j2hWo+oFjnggeVhUJ2wH8H
-kpzcT4dTI8CMprvChgnoerSdxU0gWSWZeZmFdnGnZNhdlL9SbwNdZnN183wWt8rh
-nWFj9fL/BM0wPifXa5gRR4EsciF+OTrkR68DiD667w6QtPvrrdiWkKHRNz23Ybvo
-c5zQP/kR+tmWyJEetmAcjBiRoN4kqSPG3Hq/aYm9v4F09B2pA25/dpl7bt7A1lhq
-S41QNcAahzocGHHLyehUvu2WyPj33XMnak/FV5NWm4TNuUvGRikr+ILWjmyIxfNd
-oyOeQ07iLrcP8r/MaGtBK+aX2vLnfm0pmNDiWNM+2sWHFRW4luCbjXh1aLT9wksQ
-aj14dLRxHZBofJWpc/RZRnp+fNltsjw3I4BPAC01hCJaP7EzzgmeLLsdH+3GfQkc
-8rQDlrPesA4i9K103z56vxHxwaLxADAw9+RQJq9eBVMFck0PXK62ryijzcDk0Pbh
-q6wbumeZz4PyApg3HKbku5D0Yk3EtKQ/n1jYNq/Z9Te95dkzwPc=
-=/nzc
------END PGP SIGNATURE-----
-
---tqI+Z3u+9OQ7kwn0--
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Adam Ford <aford173@gmail.com>
+> Cc: Fabio Estevam <festevam@denx.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jacky Bai <ping.bai@nxp.com>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Marek Vasut <marex@denx.de>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Martin Kepplinger <martink@posteo.de>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Peng Fan <peng.fan@nxp.com>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Shengjiu Wang <shengjiu.wang@nxp.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-imx@nxp.com
+> Cc: linux-pm@vger.kernel.org
+> To: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/base/power/domain.c | 103 ++++++++++++++++++++++++++++++++----
+>  include/linux/pm_domain.h   |   4 ++
+>  2 files changed, 97 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 6471b559230e9..df2a93d0674e4 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -494,6 +494,22 @@ void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
+>
+> +static int genpd_power_pre_on(struct generic_pm_domain *genpd)
+> +{
+> +       if (!genpd->power_pre_on)
+> +               return 0;
+> +
+> +       return genpd->power_pre_on(genpd);
+> +}
+> +
+> +static int genpd_power_post_on(struct generic_pm_domain *genpd)
+> +{
+> +       if (!genpd->power_post_on)
+> +               return 0;
+> +
+> +       return genpd->power_post_on(genpd);
+> +}
+> +
+>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>  {
+>         unsigned int state_idx = genpd->state_idx;
+> @@ -544,6 +560,22 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>         return ret;
+>  }
+>
+> +static int genpd_power_off_pre(struct generic_pm_domain *genpd)
+> +{
+> +       if (!genpd->power_off_pre)
+> +               return 0;
+> +
+> +       return genpd->power_off_pre(genpd);
+> +}
+> +
+> +static int genpd_power_off_post(struct generic_pm_domain *genpd)
+> +{
+> +       if (!genpd->power_off_post)
+> +               return 0;
+> +
+> +       return genpd->power_off_post(genpd);
+> +}
+> +
+>  static int _genpd_power_off(struct generic_pm_domain *genpd, bool timed)
+>  {
+>         unsigned int state_idx = genpd->state_idx;
+> @@ -816,12 +848,18 @@ static int genpd_dev_pm_qos_notifier(struct notifier_block *nb,
+>  static void genpd_power_off_work_fn(struct work_struct *work)
+>  {
+>         struct generic_pm_domain *genpd;
+> +       int ret;
+>
+>         genpd = container_of(work, struct generic_pm_domain, power_off_work);
+>
+> +       ret = genpd_power_off_pre(genpd);
+> +       if (ret)
+> +               return;
+>         genpd_lock(genpd);
+>         genpd_power_off(genpd, false, 0);
+>         genpd_unlock(genpd);
+> +       ret = genpd_power_off_post(genpd);
+> +       WARN_ON_ONCE(ret);
+>  }
+>
+>  /**
+> @@ -938,12 +976,14 @@ static int genpd_runtime_suspend(struct device *dev)
+>         if (irq_safe_dev_in_sleep_domain(dev, genpd))
+>                 return 0;
+>
+> +       ret = genpd_power_off_pre(genpd);
+> +       if (ret)
+> +               return ret;
+>         genpd_lock(genpd);
+>         gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>         genpd_power_off(genpd, true, 0);
+>         genpd_unlock(genpd);
+> -
+> -       return 0;
+> +       return genpd_power_off_post(genpd);
+>  }
+>
+>  /**
+> @@ -977,12 +1017,21 @@ static int genpd_runtime_resume(struct device *dev)
+>         if (irq_safe_dev_in_sleep_domain(dev, genpd))
+>                 goto out;
+>
+> +       ret = genpd_power_pre_on(genpd);
+> +       if (ret)
+> +               return ret;
+>         genpd_lock(genpd);
+>         ret = genpd_power_on(genpd, 0);
+>         if (!ret)
+>                 genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+>         genpd_unlock(genpd);
+>
+> +       if (ret) {
+> +               genpd_power_post_on(genpd);
+> +               return ret;
+> +       }
+> +
+> +       ret = genpd_power_post_on(genpd);
+>         if (ret)
+>                 return ret;
+>
+> @@ -1017,10 +1066,13 @@ static int genpd_runtime_resume(struct device *dev)
+>         genpd_stop_dev(genpd, dev);
+>  err_poweroff:
+>         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+> -               genpd_lock(genpd);
+> -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+> -               genpd_power_off(genpd, true, 0);
+> -               genpd_unlock(genpd);
+> +               if (!genpd_power_off_pre(genpd)) {
+> +                       genpd_lock(genpd);
+> +                       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+> +                       genpd_power_off(genpd, true, 0);
+> +                       genpd_unlock(genpd);
+> +                       genpd_power_off_post(genpd);
+> +               }
+>         }
+>
+>         return ret;
+> @@ -1225,12 +1277,14 @@ static int genpd_finish_suspend(struct device *dev, bool poweroff)
+>                 }
+>         }
+>
+> +       ret = genpd_power_off_pre(genpd);
+> +       if (ret)
+> +               return ret;
+>         genpd_lock(genpd);
+>         genpd->suspended_count++;
+>         genpd_sync_power_off(genpd, true, 0);
+>         genpd_unlock(genpd);
+> -
+> -       return 0;
+> +       return genpd_power_off_post(genpd);
+>  }
+>
+>  /**
+> @@ -1267,10 +1321,16 @@ static int genpd_resume_noirq(struct device *dev)
+>         if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
+>                 return pm_generic_resume_noirq(dev);
+>
+> +       ret = genpd_power_pre_on(genpd);
+> +       if (ret)
+> +               return ret;
+>         genpd_lock(genpd);
+>         genpd_sync_power_on(genpd, true, 0);
+>         genpd->suspended_count--;
+>         genpd_unlock(genpd);
+> +       ret = genpd_power_post_on(genpd);
+> +       if (ret)
+> +               return ret;
+>
+>         if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+>             !pm_runtime_status_suspended(dev)) {
+> @@ -1378,6 +1438,9 @@ static int genpd_restore_noirq(struct device *dev)
+>          * At this point suspended_count == 0 means we are being run for the
+>          * first time for the given domain in the present cycle.
+>          */
+> +       ret = genpd_power_pre_on(genpd);
+> +       if (ret)
+> +               return ret;
+>         genpd_lock(genpd);
+>         if (genpd->suspended_count++ == 0) {
+>                 /*
+> @@ -1390,6 +1453,9 @@ static int genpd_restore_noirq(struct device *dev)
+>
+>         genpd_sync_power_on(genpd, true, 0);
+>         genpd_unlock(genpd);
+> +       ret = genpd_power_post_on(genpd);
+> +       if (ret)
+> +               return ret;
+>
+>         if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+>             !pm_runtime_status_suspended(dev)) {
+> @@ -1413,6 +1479,7 @@ static int genpd_restore_noirq(struct device *dev)
+>  static void genpd_complete(struct device *dev)
+>  {
+>         struct generic_pm_domain *genpd;
+> +       int ret;
+>
+>         dev_dbg(dev, "%s()\n", __func__);
+>
+> @@ -1435,6 +1502,7 @@ static void genpd_switch_state(struct device *dev, bool suspend)
+>  {
+>         struct generic_pm_domain *genpd;
+>         bool use_lock;
+> +       int ret;
+>
+>         genpd = dev_to_genpd_safe(dev);
+>         if (!genpd)
+> @@ -1442,8 +1510,13 @@ static void genpd_switch_state(struct device *dev, bool suspend)
+>
+>         use_lock = genpd_is_irq_safe(genpd);
+>
+> -       if (use_lock)
+> +       if (use_lock) {
+> +               ret = suspend ? genpd_power_off_pre(genpd) :
+> +                               genpd_power_pre_on(genpd);
+> +               if (ret)
+> +                       return;
+>                 genpd_lock(genpd);
+> +       }
+>
+>         if (suspend) {
+>                 genpd->suspended_count++;
+> @@ -1453,8 +1526,12 @@ static void genpd_switch_state(struct device *dev, bool suspend)
+>                 genpd->suspended_count--;
+>         }
+>
+> -       if (use_lock)
+> +       if (use_lock) {
+>                 genpd_unlock(genpd);
+> +               ret = suspend ? genpd_power_off_post(genpd) :
+> +                               genpd_power_post_on(genpd);
+> +               WARN_ON_ONCE(ret);
+> +       }
+>  }
+>
+>  /**
+> @@ -2750,9 +2827,15 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>         dev->pm_domain->sync = genpd_dev_pm_sync;
+>
+>         if (power_on) {
+> +               ret = genpd_power_pre_on(pd);
+> +               if (ret)
+> +                       return ret;
+>                 genpd_lock(pd);
+>                 ret = genpd_power_on(pd, 0);
+>                 genpd_unlock(pd);
+> +               ret = genpd_power_post_on(pd);
+> +               if (ret)
+> +                       return ret;
+>         }
+>
+>         if (ret) {
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index ebc3516980907..3cf231a27cb1b 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -134,8 +134,12 @@ struct generic_pm_domain {
+>         unsigned int prepared_count;    /* Suspend counter of prepared devices */
+>         unsigned int performance_state; /* Aggregated max performance state */
+>         cpumask_var_t cpus;             /* A cpumask of the attached CPUs */
+> +       int (*power_off_pre)(struct generic_pm_domain *domain);
+>         int (*power_off)(struct generic_pm_domain *domain);
+> +       int (*power_off_post)(struct generic_pm_domain *domain);
+> +       int (*power_pre_on)(struct generic_pm_domain *domain);
+>         int (*power_on)(struct generic_pm_domain *domain);
+> +       int (*power_post_on)(struct generic_pm_domain *domain);
+>         struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
+>         struct opp_table *opp_table;    /* OPP table of the genpd */
+>         unsigned int (*opp_to_performance_state)(struct generic_pm_domain *genpd,
+> --
+> 2.35.1
+>
