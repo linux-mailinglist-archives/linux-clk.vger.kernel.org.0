@@ -2,111 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431A862CB3F
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Nov 2022 21:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4DB62CB83
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Nov 2022 21:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiKPUlT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 16 Nov 2022 15:41:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S234081AbiKPUwx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 16 Nov 2022 15:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiKPUlS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 16 Nov 2022 15:41:18 -0500
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08B9CD5A
-        for <linux-clk@vger.kernel.org>; Wed, 16 Nov 2022 12:41:16 -0800 (PST)
-Received: from [192.168.50.220] ([146.241.88.137])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id vPDfousiuEclovPDfoJfGd; Wed, 16 Nov 2022 21:41:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1668631276; bh=ua4Hct9zgOjT9Ac685aAx6spkrDlHZGn59ZRs5eaYP0=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=jKjnFGcRyeZJ8+3/LauE7ThKXsIBtvJmfbj4n020e6kUu7hTuyMnqRCUzQNvd/pnR
-         bSZkq6vBJfJRQANaxJrD3tQW1A2Lt2HOjI/tAuyOn8QY06Ol1UEUywS/rdEGQGZzU4
-         ImexpHOdcsVfJqNePa10tSkhRwneJXIxbiGiF/I8sYMBJPj21ccpu+kPOSVQcYP3yC
-         HW6F/fS1u/xrL9NYFt2U2KrX915YywKvEugziM6jtfwvByEt+lUZVY7rNzRrbig+I5
-         ceHelVRPgWOfmRndQ9QhoRKl2xIeXS2/V220Z1jqnAT4voGzm/NES+MZNV/BH054Hv
-         mhazheT2kGAcA==
-Message-ID: <3149ce35-14bb-7df0-b578-b426b8e365fa@benettiengineering.com>
-Date:   Wed, 16 Nov 2022 21:41:15 +0100
+        with ESMTP id S234223AbiKPUw0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 16 Nov 2022 15:52:26 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033E1623BC;
+        Wed, 16 Nov 2022 12:52:26 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id r18so17863745pgr.12;
+        Wed, 16 Nov 2022 12:52:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gbYnmWfFwp1UDbDUMiegygKv0UO9A8Z8IaNCbOZSzU=;
+        b=ZuFm3T0GbXgpL4+Y5uxJ5YntrAhi3/VZhVIbvw9HuLzbn/NxDqFkSZAiTC/sD0VOkg
+         RdJF3ZvKPo7k5dW8uwerVP4t9egAF1OxKJfzfa93Ey3/irSC3USBI0Di9f6MxQpIflWK
+         fgUQnZcgH/8v0LHckM9iSCV0+/9NA7ayuhdgiWJkmQbMYqSVSntm+e3+O8+bqJGWN5wW
+         E389c27RsZrDny3kk2GPGbwptemvo8kwzvm3wJTgFNXDaLC2OY5750YqPc6BPuMco1aU
+         lPvfcpcdnFT5r3lCkUPBpBNfObmriOMZIDoJ71xzrvZtv3mAzv43yy3FaYO5u2wwDMZC
+         Whtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0gbYnmWfFwp1UDbDUMiegygKv0UO9A8Z8IaNCbOZSzU=;
+        b=rnnR1PC4LsR1PC1tZE40oF/P8ycBZbu7Wxo+GmpRwfJPRW+od0A2NYb0IxvzxRTivQ
+         d8mWMZbZU0Gu6FrRYr+UeHo4UiX7hJCv47q8DX/x62Lg/vC6H+mHabX8IolpFc1tBBxb
+         1beuo3VxAH6i8k5xS+H+hMp9wvTJjRZy7d6NWyNmJjeEhYoeDjOejJoUIG7r3gJc841Z
+         ujKPcBLMySWy9xj4ZKCxMjdljpWtWf4iXfI4luxAUO2kwMUFt18kRGblMib/924lRsoS
+         sW58a8atpj/mn647plAe3b6HK9BqLpSangXNxdzTKffoWVLT1K8Nmjul+05EjMdzFyOD
+         taCw==
+X-Gm-Message-State: ANoB5pnhAj/muglcjUIGVitFPA6eD7jw4pY6MB9c2L/UtX2YaI/4vj1B
+        8RBa8Dkvqmg/XgUM8XGJXQkVme60SAwXUrkt8Zw=
+X-Google-Smtp-Source: AA0mqf5h+7Zor/qxsyOAxV1pF12XbZyA9VLwWnUFiQLfL+et20EUzEZe94gNRNqDJ18RD4nbJD3hSt5F9JAhH6lMMcU=
+X-Received: by 2002:a63:1e05:0:b0:434:911a:301 with SMTP id
+ e5-20020a631e05000000b00434911a0301mr22751990pge.50.1668631945505; Wed, 16
+ Nov 2022 12:52:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 3/4] ARM: dts: imxrt1050: increase mmc max-frequency
- property
-Content-Language: en-US
-To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
+References: <20221116203520.8300-1-giulio.benetti@benettiengineering.com>
+In-Reply-To: <20221116203520.8300-1-giulio.benetti@benettiengineering.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 16 Nov 2022 17:52:08 -0300
+Message-ID: <CAOMZO5A9dhxtv2di57tkumS5Y7uDvkKqWvt4MfB9bbdH5dTPwg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] clk: imx: imxrt1050: fix IMXRT1050_CLK_LCDIF_APB offsets
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Abel Vesa <abelvesa@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Bough Chen <haibo.chen@nxp.com>,
         Jesse Taube <mr.bossman075@gmail.com>
-References: <20221116203520.8300-1-giulio.benetti@benettiengineering.com>
- <20221116203520.8300-3-giulio.benetti@benettiengineering.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20221116203520.8300-3-giulio.benetti@benettiengineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfPVpncSEOCCHpzyD8TvUG1v+Q4+0n/jgcG/RkU/q3r1jBC4VIBiGT9ANThQyvIMtxM6agnBjalzv3sYR8xWmpVtvKfyAY4J3+DdPF28FhLW3D73/x2Jt
- WbCypBvZfIg+inE5SunvSuoHSmfhG0Rbh/Wrj+Qv35iXBWwRv0Hf37gNyceMvoM0jVB69kkdHJfqXEOESDjg2MDA32vJCmMp7j5WeT1S7HWMaihZZkqaSGts
- 7kwmbtQ12auHH05PgI/iy3lk/gXny06MupIirDs73nhokfbfljAK1j8NagcuilFySOrzPYxonBDcBkRjiVV/TIgA1wG4D3NuEYatNBPmgPfSBCtkiVHuDa8K
- gZqGJIXvWTNviNG+wf0jkHcvBpgQKBvrLYX8udm/KrfYwl/yzOsY4Ey12gIKFaIRHjEpRkvZc1gPHoIThxPUjakg5uepFD5HNYtiBR9Rt1WJze8mMgLdiPGj
- H2nuauIp4KhOmzRyxd5m16wCWTF6CVIrNnd89HoerhOWQdAYuJ6+n5vOjiymaHrNl34SRk7WW/RpVQ82XJKftuNYkoZtxnnilMyp48FFRpkpJ9CTV2+kvimK
- EGOUXJnUhP4OTljepZ5QPT4cGisKGKYH7HZma2TjHj9XfZVIM9qYRvNBwKlbel4S75WYkDoAM60C1W1aCRZ+VJoobx/usJW+m40/MkamtuzSJs9c7CThBjuW
- H4G5lsOy0+4BbUt7kOnzU4G6tI1J7dXcIRBA6f64dLmmytAMquRoyw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 16/11/22 21:35, Giulio Benetti wrote:
-> According to i.MXRT1050 Datasheet usdhc supports up to 200Mhz clock so
-> let's increase max-frequency property to 200Mhz.
-> 
+Hi Giulio,
+
+On Wed, Nov 16, 2022 at 5:35 PM Giulio Benetti
+<giulio.benetti@benettiengineering.com> wrote:
+>
+> Fix IMXRT1050_CLK_LCDIF_APB offsets.
+>
 > Cc: Jesse Taube <mr.bossman075@gmail.com>
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> Acked-by: Jesse Taube <mr.bossman075@gmail.com>
-> ---
-> V1->V2:
-> * nothing done
 
-Pardon:
-V1->V2:
-* set max-frequency to 200Mhz instead of removing it as suggested by
-   Bough Chen
-
--- 
-Giulio Benetti
-CEO/CTO@Benetti Engineering sas
-
-> V2->V3:
-> * added Jesse Taube's Acked-by:
-> ---
->   arch/arm/boot/dts/imxrt1050.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
-> index 114465e4dde6..5b1991c32748 100644
-> --- a/arch/arm/boot/dts/imxrt1050.dtsi
-> +++ b/arch/arm/boot/dts/imxrt1050.dtsi
-> @@ -93,7 +93,7 @@ usdhc1: mmc@402c0000 {
->   			bus-width = <4>;
->   			fsl,wp-controller;
->   			no-1-8-v;
-> -			max-frequency = <4000000>;
-> +			max-frequency = <200000000>;
->   			fsl,tuning-start-tap = <20>;
->   			fsl,tuning-step = <2>;
->   			status = "disabled";
-
+Since this is a fix, please add a Fixes tag.
