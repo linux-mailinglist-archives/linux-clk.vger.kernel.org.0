@@ -2,115 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9C462E373
-	for <lists+linux-clk@lfdr.de>; Thu, 17 Nov 2022 18:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BBB62E3D0
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Nov 2022 19:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiKQRwb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Nov 2022 12:52:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
+        id S240037AbiKQSK2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Nov 2022 13:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240398AbiKQRwN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Nov 2022 12:52:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0CD7FC26;
-        Thu, 17 Nov 2022 09:52:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09755621E1;
-        Thu, 17 Nov 2022 17:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4C2C433D7;
-        Thu, 17 Nov 2022 17:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668707531;
-        bh=wVcYKV9ryyiDH/YHL+yzTatasapLPFcACLj99oy49LE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a7sDmIc+MIiyHVMXaBusQ6SkTG7PgwM/a0EJ4zKHIvOVy6oKK6b3AT7G6BL7IAhyb
-         tQrGOQ8EZryz0g9CPyeova2t7BapHsbt5mf3emi2EuVCeQXhXqwUn+kqAW/vkW3pTf
-         Kd3saMsh3WvsIsW95EjyysGP+2g6w6bUubvY77zS2JNX3hodGbWwqnkeOfkUkv44d1
-         wVdNvSyfxUXTwGs/CxfcJu1R/YNgmbTF9P0hHUecae9laDee6pIqWGqoCswKxWBQ7e
-         3D8Kmq02sXbN6LrlSaw20+B84srvuF3HVurawDtGLsPyRommshzXNIKHm27diMG12K
-         Io+tfOlGUFb/g==
-Date:   Thu, 17 Nov 2022 17:52:03 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S235039AbiKQSKW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Nov 2022 13:10:22 -0500
+Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4C99786D6
+        for <linux-clk@vger.kernel.org>; Thu, 17 Nov 2022 10:10:17 -0800 (PST)
+Received: from localhost.localdomain ([146.241.88.137])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id vjL5ohRGp6OFPvjL5oOWAI; Thu, 17 Nov 2022 19:10:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1668708616; bh=DkD0FT6uYp5PVEwHynX8RbPLNYVMQoXPIJI6hhGbE00=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=bNO8Qyxjl1HcvXCgM+DH7YLuJQNnlJf+GDOGxsMS62ibounZzmUi24sw3G5YVBhcE
+         Q635xLP5MTcuTGzYi+6s4UbeL5eBGnWW3s+hO9slPotM1fI8j3RJ3dBF1cgcuWhGJI
+         ULbttpOLMrPUPqRqS8Rj7QmMxRqhv0ja9qM74XgesaC6ISy2XdpwO4bLsk9aE56Ncy
+         BgpqFim6+V4HfUo5pK1hGD8qhmufcXOHED4Jcdnwj8z+g0YtYTxueOT3jBbBmauNte
+         hfD+B8ZBpOc5VyXDjzDNtxIflKZ3Ytz0z6fPLYTi49zam0OzTdQxolGFCc8FHfOlVB
+         mnQo8JCM0F7LQ==
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     Bough Chen <haibo.chen@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 1/9] dt-bindings: drop redundant part of title of
- shared bindings
-Message-ID: <Y3Z0w6JH1f5zgwvW@spud>
-References: <20221117123850.368213-1-krzysztof.kozlowski@linaro.org>
- <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>
+Subject: [PATCH 1/4] clk: imx: imxrt1050: fix IMXRT1050_CLK_LCDIF_APB offsets
+Date:   Thu, 17 Nov 2022 19:10:11 +0100
+Message-Id: <20221117181014.851505-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117123850.368213-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfAT4tLLIX8LwkPEPsgf5zfUM23STm/KarxmCHJZ5jZe3wzxKcQF//zBr0dWDUhOCKovxe5gzDQX8EMNDgLi6HivYqerbbJdRTRHxN77PHACFaRFfxOUt
+ NgagsNVF8AAhylhDkdyqOYeSxK6ayJn62YPHhw7G9Q2+aOPGVLeqifaHhL9kWNyjWzfeUY1Wu8J4WnigiQBQyliIJBzTfzzAGSRMDK+Kg2Klg8OGVr3pqMLL
+ /xeUWkXhRcDoyQMoYnSfEBwBktbpd4WhVrQ58rXgtiIghAnFMxWzYs3SC4paajitxGEhwfsZLhhkZKZJRpbXwGx9HFAG7AAxUQVoiePWheYRfsXxRbD8soXG
+ 6ZCID992Z5Qiel8YvuFPtHOvU0T2AtXkPhD3xCjvOyHkxevvrxRwF7Kz/oQCf5ILZYOqg4gB+vvZ10MzjAinkqpEAvccrZ0qx6I8d45DQ04RvB9JtpITQDof
+ 3nJK9ZgaZDNAFP5TPEk0PJCfkuNoGRg3e1XJ+gD6FxPACC5aWRunLar5W1v9Qr1GnR4onhvJzLiPrh1gMreKlidSbwQ+WmO7IUr55yumjCn0EsenJNaofRFO
+ PVzL/DIVShFor6Mx8XcuVwk2dntqt1SzNo5CU+/eILDdcUvnkHAPEhVimA874GdHOTB0QEw3WnikcTYvZ5c/xytTpDbq2uSeM/yvBTQXvl8dkQqlQ6oHfG3j
+ FNiZQxJmwEQz1FHoDtzClvT59WZ065gcfECv7F5c23MeST4N9HIPiwq2nryqCosPDvsg6VTX/spB4tEGbcO7NBhrdnz8uJSIiDiY4B8kjqomVq+qT/9DYg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 01:38:42PM +0100, Krzysztof Kozlowski wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "binding", but instead just describe the hardware.  For shared
-> (re-usable) schemas, name them all as "common properties".
+Fix IMXRT1050_CLK_LCDIF_APB offsets.
 
+Fixes: 7154b046d8f3 ("clk: imx: Add initial support for i.MXRT1050 clock driver")
+Cc: Jesse Taube <mr.bossman075@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+V1->V2:
+* nothing done
+V2->V3:
+* added commit log and not only subject as suggested by Jesse Taube
+V3->V4:
+* added Fixes: as suggested by Fabio Estevam
+---
+ drivers/clk/imx/clk-imxrt1050.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> index 1ab416c83c8d..d2de3d128b73 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Qualcomm Global Clock & Reset Controller Common Bindings
-> +title: Qualcomm Global Clock & Reset Controller common parts
->  
->  maintainers:
->    - Stephen Boyd <sboyd@kernel.org>
-
-
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> index cf9c2f7bddc2..20ac432dc683 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/opp/opp-v2-base.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Generic OPP (Operating Performance Points) Common Binding
-> +title: Generic OPP (Operating Performance Points) common parts
->  
->  maintainers:
->    - Viresh Kumar <viresh.kumar@linaro.org>
-
-Hey Krzysztof,
-
-Hopefully I've not overlooked something obvious, but it wasnt noted in
-the commit message - how come these two are "parts" rather than
-"properties"? The opp one at least don't seem to have much more than
-properties and patterProperties in it.
-
-Thanks,
-Conor.
+diff --git a/drivers/clk/imx/clk-imxrt1050.c b/drivers/clk/imx/clk-imxrt1050.c
+index 9539d35588ee..26108e9f7e67 100644
+--- a/drivers/clk/imx/clk-imxrt1050.c
++++ b/drivers/clk/imx/clk-imxrt1050.c
+@@ -140,7 +140,7 @@ static int imxrt1050_clocks_probe(struct platform_device *pdev)
+ 	hws[IMXRT1050_CLK_USDHC1] = imx_clk_hw_gate2("usdhc1", "usdhc1_podf", ccm_base + 0x80, 2);
+ 	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
+ 	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
+-	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x74, 10);
++	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x70, 28);
+ 	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
+ 	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
+ 	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
+-- 
+2.34.1
 
