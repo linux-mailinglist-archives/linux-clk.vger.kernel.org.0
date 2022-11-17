@@ -2,124 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C4D62D982
-	for <lists+linux-clk@lfdr.de>; Thu, 17 Nov 2022 12:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0BD62D9B5
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Nov 2022 12:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239451AbiKQLhH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Nov 2022 06:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S234777AbiKQLnA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Nov 2022 06:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239756AbiKQLg4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Nov 2022 06:36:56 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F336068C51
-        for <linux-clk@vger.kernel.org>; Thu, 17 Nov 2022 03:36:55 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id t25so4301384ejb.8
-        for <linux-clk@vger.kernel.org>; Thu, 17 Nov 2022 03:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V3uDGf6nFwfo97/RpmImJcIh+Hx1nK4UXLWDjOMYdaw=;
-        b=nghdVoejMDXntacsNMzk02oYdAH1coNLAAX6KPeORBPUIb7lccM+HohiaZmwdB2xZ1
-         qac0MMxDTK5WP7KQm2UBZo6UIF+7tOl+tJdtpwkKqOY9Usr8o/1zqlliEgeW9s7qCbUz
-         VxVHop7EHwDiK1nJknM04XVO07/dBquGZN3fY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V3uDGf6nFwfo97/RpmImJcIh+Hx1nK4UXLWDjOMYdaw=;
-        b=MTnILdz33gFXeGdILxJ+u7TbCtVTdh1BQ/oTo4f5VlDSViC8ua+cFASdmrt6TX6O1t
-         q386gnOoiMGsRhcZx/Ji9TLY4VoxbLW/F+hSFS8AIyXscfn0AE/FhRytKwmk7+skVsyE
-         hxwOFo9+vyYnIiaAaygPRjKNo4u/dLnC3bOqfB6wg26Y3449A9ACOjfcW7LE8FXwtktm
-         BYOe/VPY9C38XbavwmDqveJWHYUhg8kuCCfci+odrTuwcd7F4b4BCGzmlJRfrQ4eBD1w
-         FXcdJ19CZDp83d2j3qLOXRr0Yn3+ZYxSb5kfYN7fK1DNmqwr1reXSI1f1lmPsqylfl/S
-         5q1w==
-X-Gm-Message-State: ANoB5pl7L+WgXrPeF8Rm63ws+SBfJZ4/OxzezdzuQ4N6PDuQLL0TkRX3
-        k+8pJXajpzOLkjbwvUhejuyaXQ==
-X-Google-Smtp-Source: AA0mqf69VIOyLwRRt2pkjgSAuCU7OJ+nTpFybk4c/13Qw5Eo+FsO7QNm+AvpwZWJ2r8izt+7M0uwTg==
-X-Received: by 2002:a17:906:49c2:b0:7aa:23ac:608e with SMTP id w2-20020a17090649c200b007aa23ac608emr1738874ejv.450.1668685015577;
-        Thu, 17 Nov 2022 03:36:55 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (mob-5-90-137-239.net.vodafone.it. [5.90.137.239])
-        by smtp.gmail.com with ESMTPSA id g3-20020aa7c843000000b0043bbb3535d6sm413897edt.66.2022.11.17.03.36.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 03:36:55 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-amarula@amarulasolutions.com, michael@amarulasolutions.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        with ESMTP id S239848AbiKQLm6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Nov 2022 06:42:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA0E1580A
+        for <linux-clk@vger.kernel.org>; Thu, 17 Nov 2022 03:42:57 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ovdID-0005Ao-34; Thu, 17 Nov 2022 12:42:53 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1ovdIC-0007xX-EO; Thu, 17 Nov 2022 12:42:52 +0100
+Date:   Thu, 17 Nov 2022 12:42:52 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
+        Anson Huang <Anson.Huang@nxp.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [PATCH v2 5/5] clk: imx8mn: fix imx8mn_enet_phy_sels clocks list
-Date:   Thu, 17 Nov 2022 12:36:37 +0100
-Message-Id: <20221117113637.1978703-6-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221117113637.1978703-1-dario.binacchi@amarulasolutions.com>
+        linux-amarula@amarulasolutions.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, michael@amarulasolutions.com,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Abel Vesa <abelvesa@kernel.org>
+Subject: Re: [PATCH v2 0/5] clk: imx8mn: miscellaneous cleanups and bug fixes
+Message-ID: <20221117114252.g3bcggwzyf4dxa3z@pengutronix.de>
 References: <20221117113637.1978703-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117113637.1978703-1-dario.binacchi@amarulasolutions.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-According to the "Clock Root" table of the reference manual (document
-IMX8MNRM Rev 2, 07/2022):
+Hi Dario,
 
-     Clock Root         offset     Source Select (CCM_TARGET_ROOTn[MUX])
-        ...              ...                    ...
- ENET_PHY_REF_CLK_ROOT  0xAA80            000 - 24M_REF_CLK
-                                          001 - SYSTEM_PLL2_DIV20
-                                          010 - SYSTEM_PLL2_DIV8
-                                          011 - SYSTEM_PLL2_DIV5
-                                          100 - SYSTEM_PLL2_DIV2
-                                          101 - AUDIO_PLL1_CLK
-                                          110 - VIDEO_PLL_CLK
-                                          111 - AUDIO_PLL2_CLK
-        ...              ...                    ...
+On 22-11-17, Dario Binacchi wrote:
+> This series has been tested on the BSH SystemMaster (SMM) S2 board.
+> 
+> Changes in v2:
+> - Update the commit message.
+> - Add Fixes tag.
+> - Maintain IMX8MN_VPU_* constants to not break backward compatibility.
+> - Update the commit message.
+> - Add Fixes tag.
+> - Maintain IMX8MN_VIDEO_PLL1* constants to not break backward
+>   compatibility.
+> 
+> Dario Binacchi (5):
+>   clk: imx8mn: rename vpu_pll to m7_alt_pll
+>   clk: imx: replace osc_hdmi with dummy
+>   clk: imx: rename video_pll1 to video_pll
+>   clk: imx8mn: fix imx8mn_sai2_sels clocks list
+>   clk: imx8mn: fix imx8mn_enet_phy_sels clocks list
 
-while the imx8mn_enet_phy_sels list didn't contained audio_pll1_out for
-source select bits 101b.
+Whole series lgtm, feel free to add my
 
-Fixes: 96d6392b54dbb ("clk: imx: Add support for i.MX8MN clock driver")
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-
----
-
-(no changes since v1)
-
- drivers/clk/imx/clk-imx8mn.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index 37128c35198d..2afea905f7f3 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -140,8 +140,8 @@ static const char * const imx8mn_enet_timer_sels[] = {"osc_24m", "sys_pll2_100m"
- 						      "clk_ext4", "video_pll_out", };
- 
- static const char * const imx8mn_enet_phy_sels[] = {"osc_24m", "sys_pll2_50m", "sys_pll2_125m",
--						    "sys_pll2_200m", "sys_pll2_500m", "video_pll_out",
--						    "audio_pll2_out", };
-+						    "sys_pll2_200m", "sys_pll2_500m", "audio_pll1_out",
-+						    "video_pll_out", "audio_pll2_out", };
- 
- static const char * const imx8mn_nand_sels[] = {"osc_24m", "sys_pll2_500m", "audio_pll1_out",
- 						"sys_pll1_400m", "audio_pll2_out", "sys_pll3_out",
--- 
-2.32.0
-
+Acked-by: Marco Felsch <m.felsch@pengutronix.de>
