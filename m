@@ -2,130 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710CA62FB77
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Nov 2022 18:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F8362FBF8
+	for <lists+linux-clk@lfdr.de>; Fri, 18 Nov 2022 18:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242518AbiKRRSl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 18 Nov 2022 12:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
+        id S235396AbiKRRsZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 18 Nov 2022 12:48:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242123AbiKRRSj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 18 Nov 2022 12:18:39 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F6617A92
-        for <linux-clk@vger.kernel.org>; Fri, 18 Nov 2022 09:18:37 -0800 (PST)
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E800E3F4B3
-        for <linux-clk@vger.kernel.org>; Fri, 18 Nov 2022 17:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1668791915;
-        bh=Ihl+Je3Z+y8gG//tf2j+pj2UsuFi/UkCnl/8sS+58OE=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=AjLhQ40i1l+2Hc8kL1a9pZ1f0v/938FYIp2MYmTAxeVorh+GFsDhiI+gbv0aPbtsS
-         U4MmRrOQWcwtCIh5QO6AAzd8B/azM4dBob2Mmbet0+b1QE75nVnLIJXd+JpRujlfOX
-         daO5Rwk4YGVpTC9uhtGGx29sSTIpIKL+m3cDLZ8SNWgX4WPdkgaqrBelcknCbu4+VY
-         jcnCGM+8ue7H6j+SR/qDdhfIJil2ivAWsDnEECnRFsV0YK1/Q3BzvcNGYYYTXm2e4L
-         SGFJofoOHEsVwqWsPEYpsAh/qpLmxkimyaaDqEVUdLKWzMRPmCQ5FkWiEZyb7qkFdc
-         iXTlHt780PZlw==
-Received: by mail-yb1-f199.google.com with SMTP id y82-20020a253255000000b006e7a04f3824so4220387yby.19
-        for <linux-clk@vger.kernel.org>; Fri, 18 Nov 2022 09:18:35 -0800 (PST)
+        with ESMTP id S242417AbiKRRsV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 18 Nov 2022 12:48:21 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54375EF89
+        for <linux-clk@vger.kernel.org>; Fri, 18 Nov 2022 09:48:20 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id d6so9356206lfs.10
+        for <linux-clk@vger.kernel.org>; Fri, 18 Nov 2022 09:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DLuxvrtTwLpjQCdZkBOlAPtT4PuOt7o3XUb4SWGRYeY=;
+        b=Xp5hsF3ZcA4JNkrWePSAeHwOrOVi9oPmNBagmr0NNG9vrT2qIy03d9XIdkxfSs7Ycs
+         L5mBHjI42fbW99+DwGAR3KDPJhdSabjF/dkYmSPPR18Lx/A8Y/tuY4ODsDBb2Khjv/i1
+         jmacQX8zziLazzRGVKlwFY1c1gzpB8q5vvHGbEBOWP8sQCp3qDZhSr1+UPg73QhW53UT
+         nXh02/SH4RDSWzumVmk466rcibQkzqImJVAhsQ01KyzAUMd1fVCFLrxTbZmL70RQSTPF
+         hoXwA9ipEEfcaJ1f3oi4rnnyLWRwjRQ8VUySG5mUxGoX5LqkPdj+YdhSrIH8KymvXDnf
+         F7ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ihl+Je3Z+y8gG//tf2j+pj2UsuFi/UkCnl/8sS+58OE=;
-        b=fR1S0JPbDQGtXpzKVRo3IWdAGdtVVfot61abMVjPkdexJj7O3SOu2Bmh/gXejhuTne
-         eD/OA9eZQrtluCJnkV9HTG35XsjvJYL8DTsnxeIoLGe3lUHFASt3+yVBt1+NYSAXDzY8
-         I+xVCoQwJiNiGiTzDyTHPI9V/FbGRBDJjCJ5gLHfgU579PYwzNsmRibIpsRhk4kTXHsm
-         cPF00wRLjGRKToEmql8wCPSdZUe0bNuFpbTlI8M5KQfuQePTnH1HfaGfJLToZ4GdivKe
-         67LuMFuIn8ky6Zs0wDfekmm38Lr2EUk5N4cXwagKty4iqlBTfETqmbhbwTs2grkHVlnm
-         55aQ==
-X-Gm-Message-State: ANoB5plaDyDAJMAjdQt4VG6YnJpb4SsfTPxrqNfPPHujXfqm1+NeFT/D
-        0Wee9ykTnGlg4sbOTqIK3kGOz2vAnbGsllNAiuQOI8+el5n5Pq3yc+p4pMuuTtajH0PtOZlEm7j
-        3EUjE/dzCusRWnLRDjeApnIloOvaV0NM5QeH1Psk52Jwy7BRulv54fQ==
-X-Received: by 2002:a25:3b51:0:b0:6de:f83b:3160 with SMTP id i78-20020a253b51000000b006def83b3160mr7210021yba.467.1668791914852;
-        Fri, 18 Nov 2022 09:18:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6gNMjZV4v2icTvtOBtm8WnqynWPCLqrTz9saKsC/CrUDCNOM3JEQ5u9gZtmPCMVbMaRenaOlMRVu0ODuMyivY=
-X-Received: by 2002:a25:3b51:0:b0:6de:f83b:3160 with SMTP id
- i78-20020a253b51000000b006def83b3160mr7210002yba.467.1668791914667; Fri, 18
- Nov 2022 09:18:34 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLuxvrtTwLpjQCdZkBOlAPtT4PuOt7o3XUb4SWGRYeY=;
+        b=Epo3wUNkMLNsqeW8Z1z/UPsjg0oC8lJX2hWk94CUi5v/kb2YmNDRYA2A1KvlN8+oqk
+         f842yw3aQXw59K9FiJu9b03dX6IuNVkfMKUhH9JJQ5bwnNf+dmgSETq1nOW9xYiuQkb9
+         UnDq378+E/HhmVZzaG+LPQAYiAwxWmcvZIXiI+tpvy1bBDNQd+Fj68g4UQYZBmKuAFNp
+         f+xBAHsR7i1VLdi0M6b8ZSu08TTdegAfvxtO0QxFSPzUgcX7VmI9TqhMwz2jddGq9FXo
+         zBG8anRNTaeUkTSr2+gvwg3sgBTJco99Hv/0zTFxBI5zig2/1Uq1Kit6umLiuOJJiSl6
+         ncUQ==
+X-Gm-Message-State: ANoB5pn08Pz08BOTrmEptfQl4X44QQ6RL+2v7fBPYL4mPUBk/s7wkEJl
+        Occ5AEhBJy+xaYQAHFrvzwAqaUB+QpBxl9Tp1HQ=
+X-Google-Smtp-Source: AA0mqf7NEOl5fCq9S+v16birSZketomBxGgaIuFTxUFuJUgR/0PF94RL78dd4tRSt4jSn1AFfE/dsKbdW4oyraCCzIs=
+X-Received: by 2002:a05:6512:250f:b0:4b4:abb4:c34d with SMTP id
+ be15-20020a056512250f00b004b4abb4c34dmr3248994lfb.218.1668793699034; Fri, 18
+ Nov 2022 09:48:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20221118010627.70576-1-hal.feng@starfivetech.com> <20221118010627.70576-15-hal.feng@starfivetech.com>
-In-Reply-To: <20221118010627.70576-15-hal.feng@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Fri, 18 Nov 2022 18:18:18 +0100
-Message-ID: <CAJM55Z8t8yotMTWVw2J7gtGMyx5no2onj-YcfB6d1BY0ACeDJg@mail.gmail.com>
-Subject: Re: [PATCH v2 14/14] clk: starfive: jh71x0: Don't register aux
- devices if JH7110 reset is disabled
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
+Received: by 2002:a05:651c:4cc:0:0:0:0 with HTTP; Fri, 18 Nov 2022 09:48:18
+ -0800 (PST)
+Reply-To: thajxoa@gmail.com
+From:   Thaj Xoa <arounayawo@gmail.com>
+Date:   Fri, 18 Nov 2022 17:48:18 +0000
+Message-ID: <CALU0pJeD98fk4MpGC26Lb-S0PdMpV=+woqSWEgVz_jxBvfbXCA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 18 Nov 2022 at 02:06, Hal Feng <hal.feng@starfivetech.com> wrote:
->
-> The JH7110 clock drivers will not register redundant auxiliary
-> devices if the JH7110 reset auxiliary driver is disabled.
->
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  drivers/clk/starfive/clk-starfive-jh71x0.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/starfive/clk-starfive-jh71x0.c b/drivers/clk/starfive/clk-starfive-jh71x0.c
-> index dda19c6937cb..4e69f56b00cc 100644
-> --- a/drivers/clk/starfive/clk-starfive-jh71x0.c
-> +++ b/drivers/clk/starfive/clk-starfive-jh71x0.c
-> @@ -333,7 +333,7 @@ const struct clk_ops *starfive_jh71x0_clk_ops(u32 max)
->  }
->  EXPORT_SYMBOL_GPL(starfive_jh71x0_clk_ops);
->
-> -#if IS_ENABLED(CONFIG_CLK_STARFIVE_JH7110_SYS)
-> +#if IS_ENABLED(CONFIG_RESET_STARFIVE_JH7110)
+-- 
+Dear Friend,
 
-I don't see any reason you'd want to build a kernel that needs the
-clock driver but not the resets, so I don't think this is something we
-should optimize for. I'd just drop this patch and let such broken
-kernels register the auxiliary devices even when no reset driver is
-there to use them.
+I have an important message for you.
 
->  static void jh7110_reset_unregister_adev(void *_adev)
->  {
-> @@ -384,4 +384,13 @@ int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
->  }
->  EXPORT_SYMBOL_GPL(jh7110_reset_controller_register);
->
-> +#else /* !CONFIG_RESET_STARFIVE_JH7110 */
-> +
-> +int jh7110_reset_controller_register(struct jh71x0_clk_priv *priv,
-> +                                    const char *adev_name,
-> +                                    u32 adev_id)
-> +{
-> +       return 0;
-> +}
-> +
->  #endif
-> --
-> 2.38.1
->
+Sincerely,
+
+Mr thaj xoa
+Deputy Financial State Securities Commission (SSC)
+Hanoi-Vietnam
