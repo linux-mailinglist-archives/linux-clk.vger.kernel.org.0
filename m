@@ -2,184 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D8E633A7B
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Nov 2022 11:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C7C633C30
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Nov 2022 13:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiKVKtH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 22 Nov 2022 05:49:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S232547AbiKVMON (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 22 Nov 2022 07:14:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbiKVKsl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Nov 2022 05:48:41 -0500
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7221B9C8;
-        Tue, 22 Nov 2022 02:48:03 -0800 (PST)
-Received: by mail-qk1-f172.google.com with SMTP id v8so9908869qkg.12;
-        Tue, 22 Nov 2022 02:48:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FJ2JMQwyOik22IxySZbtvNMc0gxR6KMN5eX+1lUk9qE=;
-        b=RTrTcPzNGvFyESwdcG4h/tCEGDp6+RkzXNM7n0dCsG27c7XCim9KEc7Jz3ke5AVTuS
-         Pi8kXyKupwoPsg0cY347ObfXD4JNFdK1m8L8/bcowgixag6V0tC2YvnUVy+4I4bnLxAG
-         GIO3uNbrxADjUvO4yDC4UfgZaQjIsMqhib6E7S+/lyY26ddcHJlF4MpQ1H9eBkC2lYmO
-         ISj1Ii2IwEPAPMK6l2hJkLhuCwFNCFu4RJ8/gNrsHgO3jCGW6kbkUXYyQMhCN2JwhvsG
-         QeHX00bbjPwYpRv3IgP5VQ8mFqxyOC+0rWBuCg14FfnnAUri7ruGcsLrkXOHrKRSKxKX
-         Qm6A==
-X-Gm-Message-State: ANoB5pnkzj9tpt5+dQ6XOvAEapA422NBY3MpGKwY9oVkE7DAs06usPlK
-        eObYmzNm9+X0HahEWTH59cllYWitMJofoA==
-X-Google-Smtp-Source: AA0mqf48iCG8KTvFv07zsDDyox+Wz16lpl+9Fm0PLPtd1DLXgPugoHG22/HGpzJvdKPOUwvwEC5TnA==
-X-Received: by 2002:a37:e212:0:b0:6cd:f16e:320a with SMTP id g18-20020a37e212000000b006cdf16e320amr20308671qki.495.1669114082001;
-        Tue, 22 Nov 2022 02:48:02 -0800 (PST)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id y19-20020a05620a44d300b006bbf85cad0fsm10369578qkp.20.2022.11.22.02.48.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Nov 2022 02:48:01 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-39451671bdfso115107947b3.10;
-        Tue, 22 Nov 2022 02:48:01 -0800 (PST)
-X-Received: by 2002:a0d:fec2:0:b0:36b:56d3:71b8 with SMTP id
- o185-20020a0dfec2000000b0036b56d371b8mr20908152ywf.384.1669114080819; Tue, 22
- Nov 2022 02:48:00 -0800 (PST)
+        with ESMTP id S233614AbiKVMOK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Nov 2022 07:14:10 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2067.outbound.protection.outlook.com [40.107.101.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7905A12D3B;
+        Tue, 22 Nov 2022 04:14:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JQ3sHfDiAZwYfmyL/yrPmwMGw+rBXdpW5MuEB5hqp4Hqa2LG/ZroMzrFtQr0gefIQRIthi090oc5afawV5i7x3Q98gwBLsphOJZi1HJAPTBUYQRknJYhrHLI2ZKeAMiTYPa5hP3DgjUl9KMJazB5RFhkOrtzkq5J6kwLL4U1gA7ryDV7jDgjIKK2+blgMW0Xfqym44LkO8YqVAQJgaNFhlsAQa8FGx8mUUSa6v9YQVhpaaACPS3r9ntPrK2zqGeEmshzhaghT9JCub6nxXcLLkoGB332jy5qkQE+FV9bF1mGaQlwq4n3YcCE4vGouvpjvEGVuT0bUwliQ5yvLxeEsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OJIvbq1Vb6T3+WO+j7GVlP7E6z8WEf30hailPYcbsm8=;
+ b=T2ubjSc13y3HhgpctPg2RTIvZgGqwduWU8N0LHngZUNKVrmhwXPZUnIngjFjxWeuyuMbrmqG3CNWpp/x3KV20OENpm/fM8zDa/4DEVXQcLNS/VeS6LqvYnN4+GtHbimglalopiEnvlwaKyVkh58UuS5G5eSj+kKCRpFtA2FY1pxhFNhQrezazAQfd3g62yBvs8d/vRIdV7MbJMLi8a0vEOSVy5eaOD3Uha8y3TzHOiFS+HQWf0NXqPWTjJgTEuD2W0Nahq2+gyw6v3sgSrOfXgiVf6THUons6ZtuPo71UUOOxhi7ZDqXcqToEZjvOK/hEesK4I0hKs7iZQ+JbL48vQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OJIvbq1Vb6T3+WO+j7GVlP7E6z8WEf30hailPYcbsm8=;
+ b=M2CQS4UMB9a4Xq7c95etd7uIBjsRTZ9wDJvzXlFYIULkALmasvPMDPGvjv2YDDORt3faqA5dLg9SI11oR35xbwoSRQLXFFpEa8l0JM3T6FlG09DFYNNB2e28waLeRd90GB48W6L7u2zajhQLce9tnTaftqI1IiCAaHz2/9bimjY=
+Received: from BN9PR03CA0063.namprd03.prod.outlook.com (2603:10b6:408:fc::8)
+ by LV2PR12MB5918.namprd12.prod.outlook.com (2603:10b6:408:174::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15; Tue, 22 Nov
+ 2022 12:14:04 +0000
+Received: from BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:fc:cafe::fa) by BN9PR03CA0063.outlook.office365.com
+ (2603:10b6:408:fc::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.15 via Frontend
+ Transport; Tue, 22 Nov 2022 12:14:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT006.mail.protection.outlook.com (10.13.177.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Tue, 22 Nov 2022 12:14:04 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 22 Nov
+ 2022 06:13:23 -0600
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 22 Nov 2022 06:13:21 -0600
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To:     <linux-clk@vger.kernel.org>
+CC:     <git@amd.com>, <devicetree@vger.kernel.org>,
+        <michal.simek@xilinx.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <sboyd@kernel.org>, <mturquette@baylibre.com>
+Subject: [PATCH v3 0/2] clocking-wizard: Add versal clocking wizard support
+Date:   Tue, 22 Nov 2022 17:42:53 +0530
+Message-ID: <20221122121255.6823-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-3-herve.codina@bootlin.com> <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
- <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org> <20221115150417.513955a7@bootlin.com>
- <20221118112349.7f09eefb@bootlin.com> <d9bd5075-9d06-888d-36a9-911e2d7ec5af@linaro.org>
- <20221121165921.559d6538@bootlin.com> <4e54bfb4-bb67-73b8-f58f-56797c5925d3@linaro.org>
- <CAMuHMdU=-ZUzHSb0Z8P3wsLK9cgGVCPdMi6AcjTH23tUQEeEBA@mail.gmail.com>
- <a3e1332e-fc15-8a78-0ddd-6d5b26197f11@linaro.org> <CAMuHMdXzqZB4sKMmroriq5oPp7z=yXiHk=+eQKwSyPhNbYqgYA@mail.gmail.com>
- <1f12883b-1e37-7f2b-f9e9-c8bad290a133@linaro.org> <CAMuHMdVbzg8y2So+A=z8nUwHMoL+XKUrvoXp9QdbCnUve1_Atw@mail.gmail.com>
- <191a7f3e-0733-8058-5829-fe170a06dd5a@linaro.org> <20221122100706.739cec4d@bootlin.com>
- <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
-In-Reply-To: <3856e2d8-1c16-a69f-4ac5-34b8e7f18c2b@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Nov 2022 11:47:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
-Message-ID: <CAMuHMdXPndkt=+k1CAcDbH7eK=TFfS6wMu+xdqWZSCz1+hyhEA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
- h2mode property
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Herve Codina <herve.codina@bootlin.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT006:EE_|LV2PR12MB5918:EE_
+X-MS-Office365-Filtering-Correlation-Id: fd7fe1c6-fbd2-41ae-f34d-08dacc830c3f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d8kaS6ynWUvIPHDrDa1OGwYgkchwYvEhc5evY2JnxZ294F44wPuvnQzzn/3rR9I7JcB1M/GPInX/ikFwlvguXlCKS0vq6Uei3B+bEaKZm/GDtrtXg1qCSBP6Ovms2gXZIWrkFaEwm/UrR4xHwKWs2j1nWUo0xlJir7Hah1XFBGPYA1eq1O1fZtd3KO5RHodxwQcIIjPkoJlnJ2C5PbJqjrZ3FPbHpRk796lOZ4uqXJwdBHeiUKlUrTkgOSVqdRWFCdGW9xurQ1BzNKFfrA2s/raCje+atUVFMIe0gPABUey0jhqsGjbNORc4uLyVCcTiSPUOvd6F5izhJAxv69V7bCMAVpRYeUfeVBMGLabXJP3uMc+bPg753GnODXpTv5+4TuHXPrmHGMkz8AAbDcTbsVpNmwVUdH6QX3kgG8Irxc4pvTewKq7ziX3/4SN0BKCMRQhArYPF3ucPVV8QNvh3Bsld4J3dXlkY7wAotGcF5hLjzhasF1Yb1uajQCMH5Xm+4fJv3+X0Yd65YwKu3BUGyNZoV/SngLZzxzfUU657Krovx7PcH+LNB9lxsbbITu/KhhoRaQHDJ/RBIqggpeK58KFlrguYpdzEy1ydLV5EX/SJAYgLcGnO679NWl+IDPtCoUJehNUc/bvawrt/CASMfZ0yUPeoN8etPuRvJDvM/99qlwEjMvWxJePp/cAX1e4A+BXAZM+iDNyNKMgAze91HRpva4IK4t12fZ6dTVQBO1buZadxjbkk4jW6xoAywvrtbKzbxGdTfrDtWKh0ealM5g==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199015)(36840700001)(40470700004)(46966006)(36756003)(82740400003)(2906002)(41300700001)(356005)(81166007)(44832011)(47076005)(83380400001)(426003)(36860700001)(86362001)(4326008)(8676002)(316002)(70586007)(478600001)(70206006)(26005)(186003)(1076003)(336012)(966005)(6916009)(54906003)(5660300002)(8936002)(82310400005)(2616005)(40460700003)(40480700001)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 12:14:04.4177
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd7fe1c6-fbd2-41ae-f34d-08dacc830c3f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT006.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5918
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Krzysztof,
 
-On Tue, Nov 22, 2022 at 11:30 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 22/11/2022 10:07, Herve Codina wrote:
-> > On Tue, 22 Nov 2022 09:42:48 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> >> On 22/11/2022 09:25, Geert Uytterhoeven wrote:
-> >>> Hi Krzysztof,
-> >>>
-> >>> On Tue, Nov 22, 2022 at 8:45 AM Krzysztof Kozlowski
-> >>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>> On 21/11/2022 21:46, Geert Uytterhoeven wrote:
-> >>>>>> This does not change anything. Herve wrote:
-> >>>>>>
-> >>>>>>> probe some devices (USB host and probably others)
-> >>>>>>
-> >>>>>> Why some can be probed earlier and some not, if there are no
-> >>>>>> dependencies? If there are dependencies, it's the same case with sysctrl
-> >>>>>> touching the register bit and the USB controller touching it (as well
-> >>>>>> via syscon, but that's obvious, I assume).
-> >>>>>>
-> >>>>>> Where is the synchronization problem?
-> >>>>>
-> >>>>> The h2mode bit (and probably a few other controls we haven't figured out
-> >>>>> yet) in the sysctrl must be set before any of the USB devices is active.
-> >>>>> Hence it's safest for the sysctrl to do this before any of the USB drivers
-> >>>>> probes.
-> >>>>
-> >>>> Again, this does not differ from many, many of other devices. All of
-> >>>> them must set something in system controller block, before they start
-> >>>> operating (or at specific time). It's exactly the same everywhere.
-> >>>
-> >>> The issue here is that there are two _different drivers_ (USB host
-> >>> and device). When both are modular, and the driver that depends on the
-> >>> sysctrl setting is loaded second, you have a problem: the sysctrl change
-> >>> must not be done when the first driver is already using the hardware.
-> >>>
-> >>> Hence the sysctrl driver should take care of it itself during early
-> >>> initialization (it's the main clock controller, so it's a dependency
-> >>> for all other I/O device drivers).
-> >>
-> >> I assumed you have there bit for the first device (which can switch
-> >> between USB host and USB device) to choose appropriate mode. The
-> >> bindings also expressed this - "the USBs are". Never said anything about
-> >> dependency between these USBs.
-> >>
-> >> Are you saying that the mode for first device cannot be changed once the
-> >> second device (which is only host) is started? IOW, the mode setup must
-> >> happen before any of these devices are started?
-> >>
-> >> Anyway with sysctrl approach you will have dependency and you cannot
-> >> rely on clock provider-consumer relationship to order that dependency.
-> >> What if you make all clocks on and do not take any clocks in USB device?
-> >> Broken dependency. What if you want to use this in a different SoC,
-> >> where the sysctrl does not provide clocks? Broken dependency.
-> >
-> > The issue is really related to the Renesas sysctrl itself and not related
-> > to the USB drivers themselves.
-> > From the drivers themselves, the issue is not seen (I mean the driver
-> > takes no specific action related to this issue).
-> > If we change the SOC, the issue will probably not exist anymore.
->
-> Yeah, and in the next SoC you will bring 10 of such properties to
-> sysctrl arguing that if one was approved, 10 is also fine. Somehow
-> people on the lists like to use that argument - I saw it somewhere, so I
-> am allowed to do here the same.
+Add Versal clocking wizard IP driver support
 
-Like pin control properties? ;-)
-This property represents a wiring on the board...
-I.e. a system integration issue.
+The Versal clocking wizard is clock circuits customized to cater to
+clocking requirements. It provides configurable number of outputs.
 
-> I understand that the registers responsible for configuration are in
-> sysctrl block, but it does not mean that it should be described as part
-> of sysctrl Devicetree node. If there was no synchronization problem,
-> this would be regular example of register in syscon which is handled
-> (toggled) by the device (so USB device/host controller). Since there is
-> synchronization problem, you argue that it is correct representation of
-> hardware. No, it is not, because logically in DT you do not describe
-> mode or existence of other devices in some other node and it still does
-> not describe this ordering.
+Datasheet: https://docs.xilinx.com/r/en-US/pg321-clocking-wizard
 
-So we have to drop the property, and let the sysctrl block look
-for <name>@<reg> nodes, and check which ones are enabled?
+Changes in v3:
+rename the clocks to clk_in1 and s_axi_clk dt
+rename the clocks to clk_in1 and s_axi_clk in driver
 
-Running out of ideas...
+Changes in v2:
+rename the clocks clk_in1 to in1 and s_axi_clk to s_axi in dt
+rename the clocks clk_in1 to in1 and s_axi_clk to s_axi in driver
+update the warn
+Update the compatible to reflect versal
 
-Gr{oetje,eeting}s,
+Shubhrajyoti Datta (2):
+  dt-bindings: clk: Add binding for versal clocking wizard
+  clocking-wizard: Add versal clocking wizard support
 
-                        Geert
+ .../clock/xlnx,versal-clk-wizard.yaml         |  65 ++
+ drivers/clk/xilinx/Kconfig                    |  13 +
+ drivers/clk/xilinx/Makefile                   |   1 +
+ drivers/clk/xilinx/clk-xlnx-clock-wizard-v.c  | 739 ++++++++++++++++++
+ 4 files changed, 818 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/xlnx,versal-clk-wizard.yaml
+ create mode 100644 drivers/clk/xilinx/clk-xlnx-clock-wizard-v.c
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-- 
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
