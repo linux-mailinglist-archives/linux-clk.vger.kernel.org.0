@@ -2,65 +2,36 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A457B635F83
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Nov 2022 14:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B6C636008
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Nov 2022 14:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbiKWN2c (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 23 Nov 2022 08:28:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S236483AbiKWNhW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 23 Nov 2022 08:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235978AbiKWN2K (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Nov 2022 08:28:10 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E8BC78DC
-        for <linux-clk@vger.kernel.org>; Wed, 23 Nov 2022 05:07:02 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id a15so21297006ljb.7
-        for <linux-clk@vger.kernel.org>; Wed, 23 Nov 2022 05:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ccqh3dfGzML1aBGj7t/YrqY2QT7pR2uNL+e7DNuF1s=;
-        b=NTz8FoNtJ/3ZrpELLvCYWVTs1l2QYVefQOUUa43xmopc3UEmPvePHMJSVKHqy/sqJ5
-         qY92VBAkQjFaYJngeKZGTzNUNHJvkBkLJC8lisKE8S/bv/zckV1tg3G7HrQG8steUfvq
-         VelhR4nq3DQHY0mQNijfoW149T5Dvz06H48Qhsnq9ajy6PhnZv7jFc0I1hbnGoVHr3QH
-         uqccIGYC5o1uugg7zDi5pr1imEa3DLPyPzXFpFhBh/XLh0CCLoelejWsd3ZHd3X6MAbf
-         7MHD/5U0VZKi8R7jNpJ/MW7o77ATRMQAfsxc+nfY7XAnOoyh8RCAfBC4hDZbYH8vXgQF
-         KiFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ccqh3dfGzML1aBGj7t/YrqY2QT7pR2uNL+e7DNuF1s=;
-        b=5RPjoEtwWm8UsRZomrpHyULqRRbEL+DbShOfMkGGZEAh8mdbaXcTmKB7+hZqL+3OTd
-         zXAHR6Io5SR28Pj1HTszEmIoz7i5UT4Tq7GyKjRhwFJqUAG4axVzC+pJicojUG6PFWfm
-         H4WUVpaZZ6XV2ZqlxLwtClKVO70V4DOhj+98j7KFyFeBpD15VahZxOCO12w8U27bFe43
-         pjlVnPl5i25c5ZJk+2iemC5hejEfhWy1uGo4MLpDkh5eASqtNrBcmnoJ9BBE+PDChfsS
-         zjNwAa5Ml6YxPpKRozs4hBiqFF/AxDcqyQGWt7ph3GkgciMspHFfmvS0uY23viskTnZt
-         aZFQ==
-X-Gm-Message-State: ANoB5pkQvI9CsJfhbdmWmLJ197EbxD8CXgvzoGFbKasw7m/yyeXdv6kD
-        858YFdqgVKIRfodRXnB7hbDhHA==
-X-Google-Smtp-Source: AA0mqf5NaHTNZWztbivNnH1bVjzcoFbgIS8edaP6RX+ZaLqm31IxoNIMjBsE8vCZBviPdnlqNqQTNQ==
-X-Received: by 2002:a2e:bd17:0:b0:277:50a:bd5c with SMTP id n23-20020a2ebd17000000b00277050abd5cmr8965045ljq.6.1669208821202;
-        Wed, 23 Nov 2022 05:07:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id j23-20020ac253b7000000b004a62ff61b3dsm2904375lfh.252.2022.11.23.05.06.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 05:07:00 -0800 (PST)
-Message-ID: <2418f79c-ae56-9e4e-46e2-f1ca757642ee@linaro.org>
-Date:   Wed, 23 Nov 2022 14:06:59 +0100
+        with ESMTP id S238877AbiKWNgn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Nov 2022 08:36:43 -0500
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EB51DA6D;
+        Wed, 23 Nov 2022 05:23:02 -0800 (PST)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 23 Nov
+ 2022 21:23:00 +0800
+Message-ID: <3bdaa648-c607-a79c-f6bb-c75baa1e8509@amlogic.com>
+Date:   Wed, 23 Nov 2022 21:23:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V5 3/4] clk: meson: s4: add s4 SoC peripheral clock
- controller driver and bindings
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V5 4/4] arm64: dts: meson: add S4 Soc Peripheral clock
+ controller in DT
 Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
@@ -68,17 +39,20 @@ To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com
+CC:     <kelvin.zhang@amlogic.com>
 References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-4-yu.tu@amlogic.com>
- <09a443b3-4e27-a751-ba2c-057d69363a13@linaro.org>
- <cf7295c7-3ec6-3017-0c21-167da06e3214@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cf7295c7-3ec6-3017-0c21-167da06e3214@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
+ <20221123021346.18136-5-yu.tu@amlogic.com>
+ <ae43fadf-9255-7db7-8b5e-01200e02a2c6@linaro.org>
+ <9858039f-e635-2749-80a2-75072d6e9cea@amlogic.com>
+ <8dbb3ce2-c8d9-70be-d1de-ed875de0ea1b@linaro.org>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <8dbb3ce2-c8d9-70be-d1de-ed875de0ea1b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,38 +60,66 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 23/11/2022 12:22, Yu Tu wrote:
+
+
+On 2022/11/23 21:02, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
 > 
-> 
-> On 2022/11/23 18:09, Krzysztof Kozlowski wrote:
->> [ EXTERNAL EMAIL ]
->>
->> On 23/11/2022 03:13, Yu Tu wrote:
->>> Add the peripherals clock controller found and bindings in the s4 SoC family.
+> On 23/11/2022 12:27, Yu Tu wrote:
+>> Hi Krzysztof,
+>> 	
+>> On 2022/11/23 18:10, Krzysztof Kozlowski wrote:
+>>> [ EXTERNAL EMAIL ]
 >>>
->>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>> ---
->>>   .../clock/amlogic,s4-peripherals-clkc.yaml    |  105 +
+>>> On 23/11/2022 03:13, Yu Tu wrote:
+>>>> Added information about the S4 SOC Peripheral Clock controller in DT.
+>>>>
+>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 26 +++++++++++++++++++++++
+>>>>    1 file changed, 26 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>>>> index bd9c2ef83314..e7fab6e400be 100644
+>>>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>>>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
+>>>> @@ -6,6 +6,8 @@
+>>>>    #include <dt-bindings/interrupt-controller/irq.h>
+>>>>    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>>    #include <dt-bindings/gpio/gpio.h>
+>>>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+>>>> +#include <dt-bindings/clock/amlogic,s4-peripherals-clkc.h>
+>>>>    
+>>>>    / {
+>>>>    	cpus {
+>>>> @@ -100,6 +102,30 @@ clkc_pll: clock-controller@8000 {
+>>>>    				#clock-cells = <1>;
+>>>>    			};
+>>>>    
+>>>> +			clkc_periphs: clock-controller {
+>>>> +				compatible = "amlogic,s4-peripherals-clkc";
+>>>> +				reg = <0x0 0x0 0x0 0x49c>;
+>>>
+>>> This is broken... did you check for warnings?
+>> Yes, i do.
+>> You can have a look at the results of my test, as follows.
 >>
->> No, this is total mess now.
+>> total: 0 errors, 0 warnings, 0 checks, 38 lines checked
 >>
->> Additionally, you received a lot of feedback but your changelog says only:
->> "V3 -> V4: change format and clock flags."
->> so you ignored entire feedback?
+>> ../patch_clk_v5_1122/0004-arm64-dts-meson-add-S4-Soc-Peripheral-clock-controll.patch
+>> has no obvious style problems and is ready for submission.
 >>
->> That's not the way to work with patches.
 > 
-> Hi Krzysztof,
-> 	You can check the previous email reply. Now I don't know who to follow 
-> your advice or Jerome's. I'm confused. Maybe you need to come to a 
-> conclusion. So I can change it in the next patch.
+> This is a checkpatch output. I am talking about DTS broken. dtc should
+> warn you.
 
-I don't understand your comment. You received a lot of things to change
-for your v3. You said here "change format and clock flagS", so all other
-feedbacks from me were ignored? They were not contradicting to Jerome's
-comments, so either you implement them and mention this in changelog, or
-you keep discussing.
+Do you mean I will have wraning in compiling?
+I actually compiled without warning.
+ccf$ make ARCH=arm64 dtbs -j12
+   DTC     arch/arm64/boot/dts/amlogic/meson-s4-s805x2-aq222.dtb
 
-Best regards,
-Krzysztof
-
+> 
+> Best regards,
+> Krzysztof
+> 
+> .
