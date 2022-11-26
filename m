@@ -2,86 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC9C6394B6
-	for <lists+linux-clk@lfdr.de>; Sat, 26 Nov 2022 10:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543DF6396BE
+	for <lists+linux-clk@lfdr.de>; Sat, 26 Nov 2022 16:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbiKZJAK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 26 Nov 2022 04:00:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S229496AbiKZPXg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 26 Nov 2022 10:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKZJAK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 26 Nov 2022 04:00:10 -0500
-X-Greylist: delayed 1290 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Nov 2022 01:00:05 PST
-Received: from sp13.canonet.ne.jp (sp13.canonet.ne.jp [210.134.168.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBC802098C;
-        Sat, 26 Nov 2022 01:00:05 -0800 (PST)
-Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
-        by sp13.canonet.ne.jp (Postfix) with ESMTP id 099161E03D3;
-        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
-Received: from echeck13.canonet.ne.jp ([172.21.160.123])
-        by csp3 with ESMTP
-        id yqNVovGVhxJr5yqNVocUA4; Sat, 26 Nov 2022 17:17:37 +0900
-X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=S49nfKgP c=1 sm=1 tr=0
- ts=6381cba1 cx=g_jp:t_eml p=JJaDG7uySNsA:10 p=Ik1pXvdftEAPl7FGfynI:22
- a=c8wCX2VJ6RehaN9m5YqYzw==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
- a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=9xFQ1JgjjksA:10 a=x7bEGLp0ZPQA:10
- a=JQiPw2jszkcqZPIXoVMA:9 a=CjuIK1q_8ugA:10"
-X-CNT-CMCheck-Score: 100.00
-Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id 9B11A1C0251;
-        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
-        by echeck13.canonet.ne.jp (Postfix) with ESMTP id 6BA4E1C0263;
-        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
-Received: from eikohnet.co.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id A506115F964;
-        Sat, 26 Nov 2022 17:17:36 +0900 (JST)
+        with ESMTP id S229446AbiKZPXg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 26 Nov 2022 10:23:36 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C25C15FCD
+        for <linux-clk@vger.kernel.org>; Sat, 26 Nov 2022 07:23:32 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id C19918447C;
+        Sat, 26 Nov 2022 16:23:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1669476210;
+        bh=ORhUdPiMSPxcTdmDB6lmYEYs/frODvFOQ5OncYhGRfE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OW6KM0wyj67l9zFZWZjLD6xNiI+01jjRBrUequkqLO5BADcgrIfRLYNFbVhQFaLXN
+         yzibUUBHHgKb0my18MoY8rYkAeU/5Zup8u5sH0OVpsoJ1jQHVvtM6qn/TPpHoLZgAz
+         lArJyRrxBmJSagFIqf43Cza32e8c9RPfBfXx3e09kD3G385K5uYkdOLQcEqgjx2vjm
+         xfzoz0nok4cw1iH3Dngo8XKhSkm9mje2E4VVp+fooTMPjuCR61XwWizKg/7JqhckAG
+         tFAxrD8azHAybcR3qhOXp14UzPP6QGkqrDF7MNg/f87iZ4kPJZnnaB75GnAqqI0ZkU
+         INRJ2WDJZUdHQ==
+Message-ID: <2cc590a3-4b03-03b8-c537-3a0d8e9840b6@denx.de>
+Date:   Sat, 26 Nov 2022 16:23:29 +0100
 MIME-Version: 1.0
-Message-ID: <20221126081736.00001C7B.0156@eikohnet.co.jp>
-Date:   Sat, 26 Nov 2022 17:17:36 +0900
-From:   "Mrs Zainab Abbas" <toda@eikohnet.co.jp>
-To:     <Inbox@eikohnet.co.jp>
-Reply-To: <mrs.zainababbas75@gmail.com>
-Subject: Hi
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 1/6] clk: Introduce
+ devm_clk_hw_register_mux_parent_data()
+Content-Language: en-US
+To:     Richard Leitner <richard.leitner@linux.dev>
+Cc:     linux-clk@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
+References: <20220625013235.710346-1-marex@denx.de>
+ <Y3s0GzxgSG9Tu450@skidata.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <Y3s0GzxgSG9Tu450@skidata.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: Mrs Zainab Abbas
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1669450657;VERSION=7940;MC=3218539519;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
-        SPF_HELO_NONE,SPF_PASS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5018]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrs.zainababbas75[at]gmail.com]
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  2.4 XPRIO_SHORT_SUBJ Has X Priority header + short subject
-X-Spam-Level: *******
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On 11/21/22 09:17, Richard Leitner wrote:
+> Hi,
 
-Hello,
-Good day, I am still waiting for your reply to my previous email, hope you see the email?
+Hi,
 
-Regards
-Mrs Zainab Abbas
+> On Sat, Jun 25, 2022 at 03:32:30AM +0200, Marek Vasut wrote:
+>> Add an API for clock mux that uses parent_data for the parent instead of
+>> a string parent_name.
+> 
+> Just stubled across this thread while trying to bring up audio on a
+> i.MX8MP. The last reply in this series is from October and patch #1 & #6
+> doesn't apply on v6.1-rc6...
+> Therefore I'm curious if there is any newer version of this series I
+> missed? Or is there something I can help with? Especially testing?
 
+Currently blocked by race conditions between clock and genpd locking, 
+those need to be fixed first. See discussion in:
 
+[PATCH 1/3] [RFC] PM: domains: Introduce .power_pre/post_on/off callbacks
