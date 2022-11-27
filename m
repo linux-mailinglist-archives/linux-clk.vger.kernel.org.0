@@ -2,148 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C2763A55E
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Nov 2022 10:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B19E63A734
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Nov 2022 12:26:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiK1JuL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Nov 2022 04:50:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        id S231205AbiK1L0w (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Nov 2022 06:26:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiK1JuK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 04:50:10 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9022912AFC
-        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 01:50:08 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id z4so15869985wrr.3
-        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 01:50:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QYr3PilnPfWFQx/WIKEh38kY2BYH/dcp/YHhoxh8Bg8=;
-        b=pIYQDfZ6HevvCeW6JkvkPYU94gSISP8LKRfeusWna5rnmfks+QnVirtOsyIDXn6pMt
-         gjK0bTnH6KKf0RAzypNj0lC/chxDxtuo6OXo7tHam0+lG0HMHk14nC6gEUGKZTFL10Uv
-         6ql9Gx0/jZKNE2q9RyMBt6+Q3Y0W6i2QPlA82TzEXPpNZcJIWDjMWEnYKSLICS0/pmlC
-         xRfXgSJ6vv4Gww5f+XVExV4ziK+LbArKsuBXi/JwIAseZkT4ZwXNUNC7zALP7u6r0mUJ
-         jwzIG/v1Z+/isCqaVAeclcOzDP3W+PP8WtfTppN8wpLl+r59DR56EjQ2rR6y2+EeLl/J
-         eEPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QYr3PilnPfWFQx/WIKEh38kY2BYH/dcp/YHhoxh8Bg8=;
-        b=4mg0EgtOfHwSi1QdO3O9xV7C5q6QIELZYRcUYsfDDq7muweDxXvZWyu0iKpz5OsBQB
-         C3AeAQ+ExGjqy7YZmqjet0yOI8HVZacbyYeCn0ED1zyCSeuQ7RzR+pESum11Ry12tdgY
-         yWvydCI9sCvD7UYKXIY9z/6Y/recUVBdL+Hh+9g154z8wKZ+FYeZd1t1HmLr3OXINHq3
-         njOVjaZaoLSD6Wcy6CXVlIrLG+WE39by+KE+OXVaGdh5IoVWpu95dk+T2iK5/CuRZSVx
-         DR+iOX8g9gT0tJRtyZECS6FY+GBsPCdse+wpbSObQts5AuJhfhJKNjBIb89mCeeyWPlL
-         Th9A==
-X-Gm-Message-State: ANoB5pmxoBKeATNJegGkJkavN/1V1SfES1MGaNIKEK7+aViZMGohK3Fd
-        VNtpOBZJw5SelB3uBJb7ebAjOnGcAgTYyw==
-X-Google-Smtp-Source: AA0mqf4TqhtfTx2q9HBSScoSM1pxasjaHVG8orHA6o3c8NPUwqjEi3am9lKc1nd+omUA/b25dyHnRw==
-X-Received: by 2002:adf:f3cb:0:b0:22e:3659:2d92 with SMTP id g11-20020adff3cb000000b0022e36592d92mr21009773wrp.604.1669629007113;
-        Mon, 28 Nov 2022 01:50:07 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id q10-20020a05600c46ca00b003c6bd91caa5sm15569079wmo.17.2022.11.28.01.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 01:50:06 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] clk: imx: Updates for v6.2
-Date:   Mon, 28 Nov 2022 11:49:52 +0200
-Message-Id: <20221128094952.667315-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S231199AbiK1L0A (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 06:26:00 -0500
+X-Greylist: delayed 45246 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 03:25:54 PST
+Received: from bd11.exonhost.com (bd11.exonhost.com [103.138.151.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E502C11C35
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 03:25:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=patrika71.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=J00LEJiSrB+qvIFPDPqzZd/6nMYVVkupqrOt9mSmvBQ=; b=h2wSEZTEHQuThtbG76fBz2HtgJ
+        Iw9jxc49xB8Yghl3izy4UD/FQW2W/C4tfq5HQj1oWLqCO1ialt0J1kgaMGmZJoq42SX41uIz1EYZC
+        VKiCKlotxaI/tmxHxrfy3xA+w4Mk7LxV/elXM7DiUj58xd3b4/n+j+vTMK3b0LRRoxHqV5wnSlVyk
+        WJPlZcmMhZIaVohVnK+G9ZCr2swu8ouw+gV9xZY2Zcs4HA1jptXHOW6mut0+joWAZRWH00hCf9ezQ
+        tNo+iQMDCQWWuJ4yNZKcpLqO816lABKJs3SCs9zmMsKjUmmraaf4kCm4jN9diMwVT87IfPsKO8qjJ
+        8idNWxHw==;
+Received: from ec2-3-140-198-151.us-east-2.compute.amazonaws.com ([3.140.198.151]:65204 helo=alicequiltingclub.org.au)
+        by bd11.exonhost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <supports@alicequiltingclub.org.au>)
+        id 1ozQUy-00AjvK-7U
+        for linux-clk@vger.kernel.org;
+        Mon, 28 Nov 2022 04:51:45 +0600
+Reply-To: adnakhalid@alrashidprojects.co
+From:   Adana khalid <director@patrika71.com>
+To:     linux-clk@vger.kernel.org
+Subject:  LOAN FUNDING [OMAN]
+Date:   27 Nov 2022 22:51:44 +0000
+Message-ID: <20221127225142.FBF8758FA449EEBA@patrika71.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bd11.exonhost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - alicequiltingclub.org.au
+X-Get-Message-Sender-Via: bd11.exonhost.com: authenticated_id: director@patrika71.com
+X-Authenticated-Sender: bd11.exonhost.com: director@patrika71.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_99,BAYES_999,
+        DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
+        *      mail domains are different
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+Dear Sir/Madam,
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+I recommend credible Entrepreneur/viable projects to a Consortium=20
+of Private Investors who are looking for good business=20
+plan/Entrepreneurs to invest and manage funds on a short and long=20
+term at interest rate of 3% for duration of 10 years.
 
-are available in the Git repository at:
+The investor is ready to fund any kind of project that requires=20
+funding, 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/clk-imx-6.2
+revert back if you are interested=20
+(adnakhalid@alrashidprojects.co)
 
-for you to fetch changes up to 8178e245fa953f793670147368642717fcdb302e:
+Best Regards,
+Adana khalid.
 
-  clk: imx: rename imx_obtain_fixed_clk_hw() to imx_get_clk_hw_by_name() (2022-11-25 11:22:15 +0200)
-
-----------------------------------------------------------------
-i.MX clocks changes for 6.2
-
-- Fix parent for FlexSPI clock for i.MX93
-- Add USB suspend clock on i.MX8MP
-- Unmap anatop base on error for i.MX93 driver
-- Change enet clock parent to wakeup_axi_root for i.MX93
-- Drop LPIT1, LPIT2, TPM1 and TPM3 clocks for i.MX93
-- Mark HSIO bus clock and SYS_CNT clock as critical on i.MX93
-- Add 320MHz and 640MHz entries to PLL146x
-- Add audio shared gate and SAI clocks for i.MX8MP
-
-----------------------------------------------------------------
-Abel Vesa (2):
-      dt-bindings: clock: imx8mp: Add ids for the audio shared gate
-      clk: imx8mp: Add audio shared gate
-
-Dario Binacchi (6):
-      clk: imx8mn: rename vpu_pll to m7_alt_pll
-      clk: imx: replace osc_hdmi with dummy
-      clk: imx: rename video_pll1 to video_pll
-      clk: imx8mn: fix imx8mn_sai2_sels clocks list
-      clk: imx8mn: fix imx8mn_enet_phy_sels clocks list
-      clk: imx: rename imx_obtain_fixed_clk_hw() to imx_get_clk_hw_by_name()
-
-Giulio Benetti (2):
-      clk: imx: imxrt1050: fix IMXRT1050_CLK_LCDIF_APB offsets
-      clk: imx: imxrt1050: add IMXRT1050_CLK_LCDIF_PIX clock gate
-
-Haibo Chen (1):
-      clk: imx93: correct the flexspi1 clock setting
-
-Jacky Bai (2):
-      clk: imx: keep hsio bus clock always on
-      clk: imx93: keep sys ctr clock always on
-
-Li Jun (2):
-      dt-bindings: clocks: imx8mp: Add ID for usb suspend clock
-      clk: imx: imx8mp: add shared clk gate for usb suspend clk
-
-Marek Vasut (1):
-      clk: imx: pll14xx: Add 320 MHz and 640 MHz entries for PLL146x
-
-Peng Fan (4):
-      clk: imx93: unmap anatop base in error handling path
-      clk: imx93: correct enet clock
-      dt-bindings: clock: imx93: drop TPM1/3 LPIT1/2 entry
-      clk: imx93: drop tpm1/3, lpit1/2 clk
-
- drivers/clk/imx/clk-imx6sll.c            |   8 +-
- drivers/clk/imx/clk-imx6sx.c             |  12 +--
- drivers/clk/imx/clk-imx6ul.c             |   8 +-
- drivers/clk/imx/clk-imx7d.c              |   4 +-
- drivers/clk/imx/clk-imx7ulp.c            |  10 +--
- drivers/clk/imx/clk-imx8mm.c             |  12 +--
- drivers/clk/imx/clk-imx8mn.c             | 128 +++++++++++++++----------------
- drivers/clk/imx/clk-imx8mp.c             |  28 +++++--
- drivers/clk/imx/clk-imx8mq.c             |  14 ++--
- drivers/clk/imx/clk-imx93.c              |  46 ++++++-----
- drivers/clk/imx/clk-imxrt1050.c          |   5 +-
- drivers/clk/imx/clk-pll14xx.c            |   2 +
- drivers/clk/imx/clk.c                    |   5 +-
- drivers/clk/imx/clk.h                    |   3 +-
- include/dt-bindings/clock/imx8mn-clock.h |  24 ++++--
- include/dt-bindings/clock/imx8mp-clock.h |  12 ++-
- include/dt-bindings/clock/imx93-clock.h  |   4 -
- 17 files changed, 178 insertions(+), 147 deletions(-)
