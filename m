@@ -2,97 +2,200 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B19E63A734
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Nov 2022 12:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6765763A87A
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Nov 2022 13:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiK1L0w (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Nov 2022 06:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S230203AbiK1Mdf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Nov 2022 07:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiK1L0A (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 06:26:00 -0500
-X-Greylist: delayed 45246 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Nov 2022 03:25:54 PST
-Received: from bd11.exonhost.com (bd11.exonhost.com [103.138.151.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E502C11C35
-        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 03:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=patrika71.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=J00LEJiSrB+qvIFPDPqzZd/6nMYVVkupqrOt9mSmvBQ=; b=h2wSEZTEHQuThtbG76fBz2HtgJ
-        Iw9jxc49xB8Yghl3izy4UD/FQW2W/C4tfq5HQj1oWLqCO1ialt0J1kgaMGmZJoq42SX41uIz1EYZC
-        VKiCKlotxaI/tmxHxrfy3xA+w4Mk7LxV/elXM7DiUj58xd3b4/n+j+vTMK3b0LRRoxHqV5wnSlVyk
-        WJPlZcmMhZIaVohVnK+G9ZCr2swu8ouw+gV9xZY2Zcs4HA1jptXHOW6mut0+joWAZRWH00hCf9ezQ
-        tNo+iQMDCQWWuJ4yNZKcpLqO816lABKJs3SCs9zmMsKjUmmraaf4kCm4jN9diMwVT87IfPsKO8qjJ
-        8idNWxHw==;
-Received: from ec2-3-140-198-151.us-east-2.compute.amazonaws.com ([3.140.198.151]:65204 helo=alicequiltingclub.org.au)
-        by bd11.exonhost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <supports@alicequiltingclub.org.au>)
-        id 1ozQUy-00AjvK-7U
-        for linux-clk@vger.kernel.org;
-        Mon, 28 Nov 2022 04:51:45 +0600
-Reply-To: adnakhalid@alrashidprojects.co
-From:   Adana khalid <director@patrika71.com>
-To:     linux-clk@vger.kernel.org
-Subject:  LOAN FUNDING [OMAN]
-Date:   27 Nov 2022 22:51:44 +0000
-Message-ID: <20221127225142.FBF8758FA449EEBA@patrika71.com>
+        with ESMTP id S230132AbiK1Mdc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 07:33:32 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A501A05F
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 04:33:31 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 83-20020a1c0256000000b003d03017c6efso10818343wmc.4
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 04:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=+gmo9nIirdbed4J/LDnU4BNvdJRcxPBpHK1YwQWHx3A=;
+        b=Ov/KaEuWs1Y8eHtYdGfDUCbL84zNHUFESCRmPJbwiL4b4IkVYPUs0G1f90nHsfQ/zv
+         ehKTVNWofEcOeyX9H++dsbFfqvqpLv4UI5SpMeltJX+7PhkxVUhqbOS5sWWAgao/afWy
+         Vmu2IYeujw1lNxavecWXZtBV2Xt7zVVCw10XpuwEZq0dkxd13hpGwtmlvIqyQeE/KNoX
+         rA3Xh3b7GEY59tYVfwF7IRQcBMpp4dMqeAK/0dBG+Bw03kgBT6s60v17KxK+pPdPro6G
+         FLxZbP+uH3QEA3DqFca6aUkawOebjlWwlLD1jmOpKkTr40d27MyLfvvmN0ta9OMOThQY
+         4WLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+gmo9nIirdbed4J/LDnU4BNvdJRcxPBpHK1YwQWHx3A=;
+        b=CNQiOnXRnzTOcUixHCbfQWG+ub0iKXssU9OhLNAXpTvdxxB8p/SyiWXUwBsAd/5Nat
+         84T+rEikChyeoC2rnI/60cejO6WeVr9KrhPXINGonsBLZbWomATNpg1dr+SiISqQQFUk
+         Rpl/+MVXm4Qw/rVTAaLzZT39FXPdpSLMU8qF5b45NtB5XRrEgJfkIypaiUuTs0ykz2ID
+         HnvSFcP6pRcBMniPdYCu+iYjCrm2tEe864xiO+jwIOxMJ5e10UWRyCkvWqTnoONORUHG
+         mpwHmkEAIVIEo3n9Fx7K3XitmuPobDNF9PtN2jJr7hc1oqzOONIVgJdY+WmrMJSdFtH1
+         mY0A==
+X-Gm-Message-State: ANoB5pkLyXZ3hGZUtzY+YG1obUFE94liJVqMcOR4kfy45aqsYvsgjt96
+        Onxse5C3eKApjw3XZvz8JG0BmA==
+X-Google-Smtp-Source: AA0mqf4jVHezM2bL21HVhzKH1EZ/A3CxuShkRmJj0N14THKAhU4L/c00faHr4CoC1CPZ4bH3MFrAHA==
+X-Received: by 2002:a05:600c:35cf:b0:3cf:aa11:93a8 with SMTP id r15-20020a05600c35cf00b003cfaa1193a8mr41173747wmq.31.1669638809617;
+        Mon, 28 Nov 2022 04:33:29 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id bs30-20020a056000071e00b002364c77bcacsm10489898wrb.38.2022.11.28.04.33.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 04:33:28 -0800 (PST)
+References: <20221123021346.18136-1-yu.tu@amlogic.com>
+ <20221123021346.18136-4-yu.tu@amlogic.com>
+ <1jbkov2vb9.fsf@starbuckisacylon.baylibre.com>
+ <81d9a794-2920-64f1-1d80-50653113624c@amlogic.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com
+Subject: Re: [PATCH V5 3/4] clk: meson: s4: add s4 SoC peripheral clock
+ controller driver and bindings
+Date:   Mon, 28 Nov 2022 13:23:08 +0100
+In-reply-to: <81d9a794-2920-64f1-1d80-50653113624c@amlogic.com>
+Message-ID: <1jilizp8bs.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bd11.exonhost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - alicequiltingclub.org.au
-X-Get-Message-Sender-Via: bd11.exonhost.com: authenticated_id: director@patrika71.com
-X-Authenticated-Sender: bd11.exonhost.com: director@patrika71.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=BAYES_99,BAYES_999,
-        DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-X-Spam-Level: ******
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Dear Sir/Madam,
 
-I recommend credible Entrepreneur/viable projects to a Consortium=20
-of Private Investors who are looking for good business=20
-plan/Entrepreneurs to invest and manage funds on a short and long=20
-term at interest rate of 3% for duration of 10 years.
+On Mon 28 Nov 2022 at 16:08, Yu Tu <yu.tu@amlogic.com> wrote:
 
-The investor is ready to fund any kind of project that requires=20
-funding, 
+>>> +
+>>> +/*
+>>> + * This RTC clock can be supplied by an external 32KHz crystal oscillator.
+>>> + * If it is used, it should be documented in using fw_name and documented in the
+>>> + * Bindings. Not currently in use on this board, so skip it.
+>>> + */
+>>> +static u32 rtc_clk_sel[] = { 0, 1 };
+>> No reason to do that
+>
+> I'm going to change it to static u32 rtc_clk_sel[] = { 0, 1, 2 };.
+> I don't know if that's okay with you?
 
-revert back if you are interested=20
-(adnakhalid@alrashidprojects.co)
+... then there is no need to specify this table.
 
-Best Regards,
-Adana khalid.
 
+
+>
+>> 
+>>> +static const struct clk_parent_data rtc_clk_sel_parent_data[] = {
+>>> +	{ .hw = &s4_rtc_32k_by_oscin.hw },
+>>> +	{ .hw = &s4_rtc_32k_by_oscin_div.hw },
+>>> +	{ .fw_name = "ext_32k",  }
+>>> +};
+>>> +
+>>> +static struct clk_regmap s4_rtc_clk = {
+>>> +	.data = &(struct clk_regmap_mux_data) {
+>>> +		.offset = CLKCTRL_RTC_CTRL,
+>>> +		.mask = 0x3,
+>>> +		.shift = 0,
+>>> +		.table = rtc_clk_sel,
+>>> +		.flags = CLK_MUX_ROUND_CLOSEST,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "rtc_clk_sel",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = rtc_clk_sel_parent_data,
+>>> +		.num_parents = 2,
+>>> +		.flags = CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+>>> +
+
+[...]
+
+>>> +
+>>> +/* Video Clocks */
+>>> +static struct clk_regmap s4_vid_pll_div = {
+>>> +	.data = &(struct meson_vid_pll_div_data){
+>>> +		.val = {
+>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
+>>> +			.shift   = 0,
+>>> +			.width   = 15,
+>>> +		},
+>>> +		.sel = {
+>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
+>>> +			.shift   = 16,
+>>> +			.width   = 2,
+>>> +		},
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data) {
+>>> +		.name = "vid_pll_div",
+>>> +		/* Same to g12a */
+>>> +		.ops = &meson_vid_pll_div_ro_ops,
+>> Please add an helpful explanation.
+>> 'Same to g12a' is not helpful.
+>> 
+>
+> "Because the vid_pll_div clock is a clock that does not need to change the
+> divisor, ops only provides meson_vid_pll_div_ro_ops."
+> I wonder if this description is ok for you?
+
+I understand this divider will not change with RO ops.
+I'm interrested why it does not change and how it is expected to be setup.
+
+>
+>>> +		.parent_data = (const struct clk_parent_data []) {
+>>> +			{ .fw_name = "hdmi_pll", }
+>>> +		},
+>>> +		.num_parents = 1,
+>>> +		.flags = CLK_SET_RATE_PARENT,
+>>> +	},
+>>> +};
+
+[...]
+
+>>> +
+>>> +static struct clk_regmap s4_vclk_sel = {
+>>> +	.data = &(struct clk_regmap_mux_data){
+>>> +		.offset = CLKCTRL_VID_CLK_CTRL,
+>>> +		.mask = 0x7,
+>>> +		.shift = 16,
+>>> +	},
+>>> +	.hw.init = &(struct clk_init_data){
+>>> +		.name = "vclk_sel",
+>>> +		.ops = &clk_regmap_mux_ops,
+>>> +		.parent_data = s4_vclk_parent_data,
+>>> +		.num_parents = ARRAY_SIZE(s4_vclk_parent_data),
+>>> +	},
+>> You are stopping rate propagation here.
+>> It deserves an explanation. Same goes below.
+>
+> "When the driver uses this clock, needs to specify the patent clock he
+> wants in the dts."
+> Is ok for you?
+
+Then you still don't understand the clock flag usage.
+
+Preserving the parent selection (CLK_SET_RATE_NO_REPARENT) and rate
+propagation (CLK_SET_RATE_PARENT) is not the same thing.
+
+As it stands, your comment is not aliged with what you do.
+
+>
+>> 
+>>> +};
