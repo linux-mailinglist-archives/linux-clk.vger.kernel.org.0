@@ -2,200 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6765763A87A
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Nov 2022 13:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7AE063A848
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Nov 2022 13:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiK1Mdf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Nov 2022 07:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S230203AbiK1M2j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Nov 2022 07:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiK1Mdc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 07:33:32 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A501A05F
-        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 04:33:31 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 83-20020a1c0256000000b003d03017c6efso10818343wmc.4
-        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 04:33:31 -0800 (PST)
+        with ESMTP id S230019AbiK1M2h (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 07:28:37 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01E0DF69
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 04:28:34 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id w15so3328882wrl.9
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 04:28:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gmo9nIirdbed4J/LDnU4BNvdJRcxPBpHK1YwQWHx3A=;
-        b=Ov/KaEuWs1Y8eHtYdGfDUCbL84zNHUFESCRmPJbwiL4b4IkVYPUs0G1f90nHsfQ/zv
-         ehKTVNWofEcOeyX9H++dsbFfqvqpLv4UI5SpMeltJX+7PhkxVUhqbOS5sWWAgao/afWy
-         Vmu2IYeujw1lNxavecWXZtBV2Xt7zVVCw10XpuwEZq0dkxd13hpGwtmlvIqyQeE/KNoX
-         rA3Xh3b7GEY59tYVfwF7IRQcBMpp4dMqeAK/0dBG+Bw03kgBT6s60v17KxK+pPdPro6G
-         FLxZbP+uH3QEA3DqFca6aUkawOebjlWwlLD1jmOpKkTr40d27MyLfvvmN0ta9OMOThQY
-         4WLw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRbycICMlh6MzVLeROs9V0fuaWLhFxskewtEQHYdgC0=;
+        b=BkXhnII9LnGEO0cfog3xYqFDi3Ly3wHmI0Q4i0q/24bvvi+yHNky1EuVYJQ42m1dgL
+         AqESCAuBWGFFwznAXx1QT+MrPpLZk12Pd0a7HGP4ph5Fl13BU70ix+uYxjGmXrQfsP8K
+         JnsFXpWFPumJ6GAsVi2RcfRc7eaMQjd0Ny0+ZlAT8viqdHUe2qi8D8NxWvHCcqd0SUa6
+         o3Zn7gaZWwS8O4fRp8ME1UgbDQWcFmX5YduYxynjy2mL5kx8hyh+DfIXFICf7ZJ4jkT8
+         dTCeDmBFphrYw9KBpcyNf5qjY8rk0fF6ay0kXs+/stGJQgyyyH4TEOEZ/DXmLsrQU+4l
+         FE1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+gmo9nIirdbed4J/LDnU4BNvdJRcxPBpHK1YwQWHx3A=;
-        b=CNQiOnXRnzTOcUixHCbfQWG+ub0iKXssU9OhLNAXpTvdxxB8p/SyiWXUwBsAd/5Nat
-         84T+rEikChyeoC2rnI/60cejO6WeVr9KrhPXINGonsBLZbWomATNpg1dr+SiISqQQFUk
-         Rpl/+MVXm4Qw/rVTAaLzZT39FXPdpSLMU8qF5b45NtB5XRrEgJfkIypaiUuTs0ykz2ID
-         HnvSFcP6pRcBMniPdYCu+iYjCrm2tEe864xiO+jwIOxMJ5e10UWRyCkvWqTnoONORUHG
-         mpwHmkEAIVIEo3n9Fx7K3XitmuPobDNF9PtN2jJr7hc1oqzOONIVgJdY+WmrMJSdFtH1
-         mY0A==
-X-Gm-Message-State: ANoB5pkLyXZ3hGZUtzY+YG1obUFE94liJVqMcOR4kfy45aqsYvsgjt96
-        Onxse5C3eKApjw3XZvz8JG0BmA==
-X-Google-Smtp-Source: AA0mqf4jVHezM2bL21HVhzKH1EZ/A3CxuShkRmJj0N14THKAhU4L/c00faHr4CoC1CPZ4bH3MFrAHA==
-X-Received: by 2002:a05:600c:35cf:b0:3cf:aa11:93a8 with SMTP id r15-20020a05600c35cf00b003cfaa1193a8mr41173747wmq.31.1669638809617;
-        Mon, 28 Nov 2022 04:33:29 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id bs30-20020a056000071e00b002364c77bcacsm10489898wrb.38.2022.11.28.04.33.28
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vRbycICMlh6MzVLeROs9V0fuaWLhFxskewtEQHYdgC0=;
+        b=tGn25mQNu6+No3iW+0fMlsa/syqMaAEjnBNjWIeHVj/wktIhRGzCLYhZ38KUYDQrED
+         W7+KN6o2fYRqsRESniHRfZYdxAq3+9NYPN3B8ogTKO1ZcGaqws6nBxSYKwtgLyTQRFn+
+         mVWfkLVtBjMoBO+M2feUyMLTK9R40/Bu4c99SeBfnlAbxatRiPBOhm72Oj38gMZDa6kb
+         c4xZwXUWF2+dfTmhUgvj5j4WTyAvM4ccQ4EbzPIx//fOeXUWs9A1FaMejQiCIf09KAc1
+         asdFgQEHL37xosmp2XATYieTv6S0E5M6VlY3RF7GmQYxXib2FbeNMPszg0EDjr+V7i0d
+         rSFA==
+X-Gm-Message-State: ANoB5plHbKGQOA9fHxfzaLuaA+GKL+BGmEsjzphpiq+w64DNHvauNkg0
+        /9tP/JSarOOQ2TkdYWrsfv+fbw==
+X-Google-Smtp-Source: AA0mqf6o7O86dAX13xPVwmED8xdJy3JfoN8fCDfnBTFvip/GNTKkDrrvXF0lZcqbunQbi3zxCqFPSw==
+X-Received: by 2002:a5d:5d0f:0:b0:236:6f6f:8dd7 with SMTP id ch15-20020a5d5d0f000000b002366f6f8dd7mr21003296wrb.4.1669638513509;
+        Mon, 28 Nov 2022 04:28:33 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u18-20020adfdd52000000b002421db5f279sm598405wrm.78.2022.11.28.04.28.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 04:33:28 -0800 (PST)
-References: <20221123021346.18136-1-yu.tu@amlogic.com>
- <20221123021346.18136-4-yu.tu@amlogic.com>
- <1jbkov2vb9.fsf@starbuckisacylon.baylibre.com>
- <81d9a794-2920-64f1-1d80-50653113624c@amlogic.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        Mon, 28 Nov 2022 04:28:33 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com
-Subject: Re: [PATCH V5 3/4] clk: meson: s4: add s4 SoC peripheral clock
- controller driver and bindings
-Date:   Mon, 28 Nov 2022 13:23:08 +0100
-In-reply-to: <81d9a794-2920-64f1-1d80-50653113624c@amlogic.com>
-Message-ID: <1jilizp8bs.fsf@starbuckisacylon.baylibre.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v3 0/9] clk: qcom: Add support for SM8550
+Date:   Mon, 28 Nov 2022 14:28:11 +0200
+Message-Id: <20221128122820.798610-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This patchset adds clock support for the Qualcomm SM8550 SoC,
+It adds support for the new type of PLL, the TCSR clock controller
+driver, support for configurable poll timeout, the RPMh clocks
+and the bindings.
 
-On Mon 28 Nov 2022 at 16:08, Yu Tu <yu.tu@amlogic.com> wrote:
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
->>> +
->>> +/*
->>> + * This RTC clock can be supplied by an external 32KHz crystal oscillator.
->>> + * If it is used, it should be documented in using fw_name and documented in the
->>> + * Bindings. Not currently in use on this board, so skip it.
->>> + */
->>> +static u32 rtc_clk_sel[] = { 0, 1 };
->> No reason to do that
->
-> I'm going to change it to static u32 rtc_clk_sel[] = { 0, 1, 2 };.
-> I don't know if that's okay with you?
+Abel Vesa (9):
+  dt-bindings: clock: Add SM8550 GCC clocks
+  dt-bindings: clock: Add SM8550 TCSR CC clocks
+  clk: qcom: gdsc: Add configurable poll timeout
+  clk: qcom: Add LUCID_OLE PLL type for SM8550
+  clk: qcom: Add GCC driver for SM8550
+  dt-bindings: clock: Add RPMHCC for SM8550
+  dt-bindings: clock: qcom,rpmh: Add CXO PAD clock IDs
+  clk: qcom: rpmh: Add support for SM8550 rpmh clocks
+  clk: qcom: Add TCSR clock driver for SM8550
 
-... then there is no need to specify this table.
+ .../bindings/clock/qcom,rpmhcc.yaml           |    1 +
+ .../bindings/clock/qcom,sm8550-gcc.yaml       |   62 +
+ .../bindings/clock/qcom,sm8550-tcsrcc.yaml    |   45 +
+ drivers/clk/qcom/Kconfig                      |   15 +
+ drivers/clk/qcom/Makefile                     |    2 +
+ drivers/clk/qcom/clk-alpha-pll.c              |   16 +
+ drivers/clk/qcom/clk-alpha-pll.h              |    5 +
+ drivers/clk/qcom/clk-rpmh.c                   |  110 +-
+ drivers/clk/qcom/gcc-sm8550.c                 | 3396 +++++++++++++++++
+ drivers/clk/qcom/gdsc.c                       |    5 +-
+ drivers/clk/qcom/gdsc.h                       |    1 +
+ drivers/clk/qcom/tcsrcc-sm8550.c              |  193 +
+ include/dt-bindings/clock/qcom,rpmh.h         |    2 +
+ include/dt-bindings/clock/qcom,sm8550-gcc.h   |  231 ++
+ .../dt-bindings/clock/qcom,sm8550-tcsrcc.h    |   18 +
+ 15 files changed, 4081 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-gcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-tcsrcc.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sm8550.c
+ create mode 100644 drivers/clk/qcom/tcsrcc-sm8550.c
+ create mode 100644 include/dt-bindings/clock/qcom,sm8550-gcc.h
+ create mode 100644 include/dt-bindings/clock/qcom,sm8550-tcsrcc.h
 
+-- 
+2.34.1
 
-
->
->> 
->>> +static const struct clk_parent_data rtc_clk_sel_parent_data[] = {
->>> +	{ .hw = &s4_rtc_32k_by_oscin.hw },
->>> +	{ .hw = &s4_rtc_32k_by_oscin_div.hw },
->>> +	{ .fw_name = "ext_32k",  }
->>> +};
->>> +
->>> +static struct clk_regmap s4_rtc_clk = {
->>> +	.data = &(struct clk_regmap_mux_data) {
->>> +		.offset = CLKCTRL_RTC_CTRL,
->>> +		.mask = 0x3,
->>> +		.shift = 0,
->>> +		.table = rtc_clk_sel,
->>> +		.flags = CLK_MUX_ROUND_CLOSEST,
->>> +	},
->>> +	.hw.init = &(struct clk_init_data){
->>> +		.name = "rtc_clk_sel",
->>> +		.ops = &clk_regmap_mux_ops,
->>> +		.parent_data = rtc_clk_sel_parent_data,
->>> +		.num_parents = 2,
->>> +		.flags = CLK_SET_RATE_PARENT,
->>> +	},
->>> +};
->>> +
-
-[...]
-
->>> +
->>> +/* Video Clocks */
->>> +static struct clk_regmap s4_vid_pll_div = {
->>> +	.data = &(struct meson_vid_pll_div_data){
->>> +		.val = {
->>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>> +			.shift   = 0,
->>> +			.width   = 15,
->>> +		},
->>> +		.sel = {
->>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>> +			.shift   = 16,
->>> +			.width   = 2,
->>> +		},
->>> +	},
->>> +	.hw.init = &(struct clk_init_data) {
->>> +		.name = "vid_pll_div",
->>> +		/* Same to g12a */
->>> +		.ops = &meson_vid_pll_div_ro_ops,
->> Please add an helpful explanation.
->> 'Same to g12a' is not helpful.
->> 
->
-> "Because the vid_pll_div clock is a clock that does not need to change the
-> divisor, ops only provides meson_vid_pll_div_ro_ops."
-> I wonder if this description is ok for you?
-
-I understand this divider will not change with RO ops.
-I'm interrested why it does not change and how it is expected to be setup.
-
->
->>> +		.parent_data = (const struct clk_parent_data []) {
->>> +			{ .fw_name = "hdmi_pll", }
->>> +		},
->>> +		.num_parents = 1,
->>> +		.flags = CLK_SET_RATE_PARENT,
->>> +	},
->>> +};
-
-[...]
-
->>> +
->>> +static struct clk_regmap s4_vclk_sel = {
->>> +	.data = &(struct clk_regmap_mux_data){
->>> +		.offset = CLKCTRL_VID_CLK_CTRL,
->>> +		.mask = 0x7,
->>> +		.shift = 16,
->>> +	},
->>> +	.hw.init = &(struct clk_init_data){
->>> +		.name = "vclk_sel",
->>> +		.ops = &clk_regmap_mux_ops,
->>> +		.parent_data = s4_vclk_parent_data,
->>> +		.num_parents = ARRAY_SIZE(s4_vclk_parent_data),
->>> +	},
->> You are stopping rate propagation here.
->> It deserves an explanation. Same goes below.
->
-> "When the driver uses this clock, needs to specify the patent clock he
-> wants in the dts."
-> Is ok for you?
-
-Then you still don't understand the clock flag usage.
-
-Preserving the parent selection (CLK_SET_RATE_NO_REPARENT) and rate
-propagation (CLK_SET_RATE_PARENT) is not the same thing.
-
-As it stands, your comment is not aliged with what you do.
-
->
->> 
->>> +};
