@@ -2,193 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B47A63B8D4
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Nov 2022 04:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B3763BA21
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Nov 2022 08:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbiK2DmL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Nov 2022 22:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S229579AbiK2HEE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Nov 2022 02:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbiK2DmH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Nov 2022 22:42:07 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC0EE4B985;
-        Mon, 28 Nov 2022 19:42:05 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8CxruuMf4Vjd+gBAA--.4653S3;
-        Tue, 29 Nov 2022 11:42:04 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuCGf4VjjecdAA--.10584S5;
-        Tue, 29 Nov 2022 11:42:03 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v10 4/4] dt-bindings: clock: add loongson-2 clock
-Date:   Tue, 29 Nov 2022 11:41:57 +0800
-Message-Id: <20221129034157.15036-4-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221129034157.15036-1-zhuyinbo@loongson.cn>
-References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
+        with ESMTP id S229449AbiK2HEC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Nov 2022 02:04:02 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EE1391D8
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 23:04:01 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so762629pjt.0
+        for <linux-clk@vger.kernel.org>; Mon, 28 Nov 2022 23:04:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PO/cDnZZW/RlYHuzoKyfVL5YxwkikYi3mPwl9HeEE7E=;
+        b=oTlxBTjxb0OLs3LbtbLfBJy+5BE4R1aiDbHvx7Le4Ike9jM0Ec1TgEe8ZTAv3pACeV
+         pc8VkakOjvc3fBYd/f0vQMP0EOWw3WZNUaok6ZRd2zuQL4NAor8HNgA/jeKfxWfO9Cxf
+         P25OeRVnt7yFQbez6xPQ07sIqlDzOaQ+pGTvI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PO/cDnZZW/RlYHuzoKyfVL5YxwkikYi3mPwl9HeEE7E=;
+        b=AFtCJ8vT7edGeBKglyYAyXvX9Jj0Rys4cE2XInDRBSlshoxJ4wf+WlPl9R1F+yVOlX
+         /e+I4vW8g7RaO4lv8NWE2WHal1hQY5VE/gtST5TMwhHvmMSHjZlBZkQiUaw3/ObKpMbZ
+         pjP5/c0zaRHjFo1Kp4uV0dmrCr6YWthxsGNK4U5c+ifrbgaIr+hHL/CdXiowm8QrKgHh
+         G+Lb5jNvarzspHJ8468i6/FDBZTvUsbnbINy6+D1u9wnS4Wyo3lGeIs8v9c6ASmSLx31
+         3ZKFK8ktY8bXqDHRk4WnKO7MvANJfZ747a7hG0IrMr3+n5z09E3RU1QG1r+x/I6FUJFd
+         IBHw==
+X-Gm-Message-State: ANoB5pmGG8HeU4z0SKb1R7W4il8uI1+mhvPuG6kHRoXDJrkib3ydg0LB
+        l9gr7SLxUdOtQC9yncLpsvThCA==
+X-Google-Smtp-Source: AA0mqf5XVl2scp/GL8QqnK/jwLxKtG6rYycCaa648SfkyfYV/m7xzyJUi6ZoDwIhFKq1LLUDb7xy0w==
+X-Received: by 2002:a17:902:f243:b0:189:8046:4335 with SMTP id j3-20020a170902f24300b0018980464335mr12291749plc.152.1669705440997;
+        Mon, 28 Nov 2022 23:04:00 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:ac4a:f96:259:b58a])
+        by smtp.gmail.com with ESMTPSA id y69-20020a62ce48000000b0056d3b8f530csm9140261pfg.34.2022.11.28.23.03.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 23:04:00 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     sboyd@kernel.org, angelogioacchino.delregno@collabora.com
+Cc:     mturquette@baylibre.com, yangyingliang@huawei.com,
+        jose.exposito89@gmail.com, matthias.bgg@gmail.com,
+        linux-clk@vger.kernel.org, rex-bc.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, msp@baylibre.com,
+        nfraprado@collabora.com, linux-arm-kernel@lists.infradead.org,
+        miles.chen@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221024102307.33722-1-angelogioacchino.delregno@collabora.com>
+References: <20221024102307.33722-1-angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 00/10] MTK: Undesired set_rate on main PLLs and GPU DVFS
+Message-Id: <166970543840.607733.16874108898291986445.b4-ty@chromium.org>
+Date:   Tue, 29 Nov 2022 15:03:58 +0800
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxPuCGf4VjjecdAA--.10584S5
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4DJw1xAFWruF1xKrg_yoW5tr1DpF
-        sxCr95JrWIyF13uFsxKFyIywn5Za4xAFWDAw42ka42yr90gw15XF1xKa4UZ39xXr17Za9F
-        vFyS9r4UCa1Uuw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
-        1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC
-        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj
-        6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxUwD7aUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the Loongson-2 clock binding with DT schema format using
-json-schema.
+On Mon, 24 Oct 2022 12:22:57 +0200, AngeloGioacchino Del Regno wrote:
+> There's no reason to declare CLK_SET_RATE_PARENT on main system PLL
+> dividers, as any rate change on those (mainpll, syspll, univpll) will
+> change clock rates on critical system peripherals and busses.
+> 
+> This change was performed only on SoCs that I could test... I'm sure
+> that the same can (and should) be done on more MTK clock drivers for
+> practically all MTK SoCs, but I don't feel confident in pushing things
+> that I couldn't test, so that's done only for MT8173/83/86/92/95 and
+> on MT6795.
+> While at it, I've also added the much needed clock notifier treatment
+> on MT8186 for GPU DVFS, like done on other clock drivers in the past.
+> 
+> [...]
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v10:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v9:
-		1. Add all history changlog information.
-Change in v8:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v7:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v6:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v5:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v4:
-		1. NO change, but other patch in this series of patches has
-		   changes.
-Change in v3:
-		1. Drop redundant (last) binding from the title.
-		2. Drop "- |" between ref_100m node and clk node.
-Change in v2:
-		1. Drop "Binding" string in the title.
-		2. Drop entire allOf and move the contents to top level.
-		3. Change string "refclk_100m" to "ref_100m". 
+Applied, thanks!
 
- .../bindings/clock/loongson,ls2k-clk.yaml     | 63 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 64 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+[01/10] clk: mediatek: clk-mtk: Allow specifying flags on mtk_fixed_factor clocks
+        commit: 672c779e4cff5f4a103077e9b398f144c85db802
+[02/10] clk: mediatek: mt8186-topckgen: Drop flags for main/univpll fixed factors
+        commit: 295de9d0d063cc576c5c6322aeeda64d3579d9e5
+[03/10] clk: mediatek: mt8183: Compress top_divs array entries
+        commit: 23037ab63336a4a1d98645bf7ee76240ed20bc65
+[04/10] clk: mediatek: mt8183: Drop flags for sys/univpll fixed factors
+        commit: c01d64ca5166fa88d27c7c4a2a294dd10d20f780
+[05/10] clk: mediatek: mt8173: Drop flags for main/sys/univpll fixed factors
+        commit: f757c9e951b89c40db41592a22785b5a25c58224
+[06/10] clk: mediatek: mt6795-topckgen: Drop flags for main/sys/univpll fixed factors
+        commit: 0cf308ee3472019539582ee279b637beb34ad2ff
+[07/10] clk: mediatek: mt8192: Drop flags for main/univpll fixed factors
+        commit: b56603285f7e323591267bec9a9d6950e9bdb7cb
+[08/10] clk: mediatek: mt8195-topckgen: Drop flags for main/univpll fixed factors
+        commit: 327eeb6c240ab9293ab730789ea651fbc3fe6123
+[09/10] clk: mediatek: mt8186-mfg: Propagate rate changes to parent
+        commit: ecc639ddbe0d7bf1c66f6c69ee54ee005484d886
+[10/10] clk: mediatek: mt8186-topckgen: Add GPU clock mux notifier
+        commit: 3256ea4f6582d2cb9b63ad96451957c217a52582
 
-diff --git a/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-new file mode 100644
-index 000000000000..63a59015987e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/loongson,ls2k-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Clock Control Module
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  Loongson-2 SoC clock control module is an integrated clock controller, which
-+  generates and supplies to all modules.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - loongson,ls2k-clk
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: 100m ref
-+
-+  clock-names:
-+    items:
-+      - const: ref_100m
-+
-+  '#clock-cells':
-+    const: 1
-+    description:
-+      The clock consumer should specify the desired clock by having the clock
-+      ID in its "clocks" phandle cell. See include/dt-bindings/clock/loongson,ls2k-clk.h
-+      for the full list of Loongson-2 SoC clock IDs.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ref_100m: clock-ref-100m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <100000000>;
-+        clock-output-names = "ref_100m";
-+    };
-+
-+    clk: clock-controller@1fe00480 {
-+        compatible = "loongson,ls2k-clk";
-+        reg = <0x1fe00480 0x58>;
-+        #clock-cells = <1>;
-+        clocks = <&ref_100m>;
-+        clock-names = "ref_100m";
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 73fa56f1fd5d..0cdd1437c093 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12025,6 +12025,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-clk@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
- F:	drivers/clk/clk-loongson2.c
- F:	include/dt-bindings/clock/loongson,ls2k-clk.h
- 
+Best regards,
 -- 
-2.31.1
-
+Chen-Yu Tsai <wenst@chromium.org>
