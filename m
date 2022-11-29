@@ -2,47 +2,49 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86B163C8E2
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Nov 2022 21:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6906763C8F3
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Nov 2022 21:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237154AbiK2UAz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Nov 2022 15:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S237154AbiK2UIc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Nov 2022 15:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbiK2UAy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Nov 2022 15:00:54 -0500
+        with ESMTP id S230346AbiK2UIb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Nov 2022 15:08:31 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4098D248FF
-        for <linux-clk@vger.kernel.org>; Tue, 29 Nov 2022 12:00:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703AC58BED;
+        Tue, 29 Nov 2022 12:08:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE968B818D4
-        for <linux-clk@vger.kernel.org>; Tue, 29 Nov 2022 20:00:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C38FC433D6;
-        Tue, 29 Nov 2022 20:00:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A5DEB818BE;
+        Tue, 29 Nov 2022 20:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05EAC433C1;
+        Tue, 29 Nov 2022 20:08:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669752050;
-        bh=nsQ6UZTMVS7LxhIx+qo0FTX8OImT7Hswtc/eyiei6i0=;
+        s=k20201202; t=1669752507;
+        bh=f1gq4ohUujseo9cnRHV3gkS6655KrFsXkNePMpOcDjw=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=HGshhsHq2CrvtUiUE9E7ql6ycdfYLuHU30B8aLpOoYSKXsIESDxsMc49AAjrWwmDL
-         dRtuorbsL1RrggJfa/G82ZD7Kc1H+FRqX3P7mtY4OaHv5aiDeNJqb5b23YzFiN4ne3
-         eilsUza/kNPYEMIf5Ydy3a8o4Tfwa64O8l81J+jx1MlxYlfit0yFzriLIHA4w1wsxB
-         NkKDRquw55xROA3meOxUrfRCo4OqXN7BKCo3SonONo3JMtE8eccYM76sHr3OhJO+BS
-         9la6TD31Lekex+n6zQn+WulfcjxbaIDTNOsi7RUOoBv2ptTeaeYlckSQKuTl30DLGZ
-         YA043B3i1hKJA==
+        b=TdXJjWeKUJXU58GbLYMvx6CL5IqiPSqfBEnNOykBHio0cGBO9DdQ1sRooKx5eD9Nv
+         +1jLrkz4AFO1OVJsx+4FZxH4HG7ko8xwpyS5Pg+6Q834DC8GJUK0I5GIq5Dsvo7FM3
+         ZxcCNAcIeOaG+CUUn1N6EGLBlJ/WDGcz3zeDb4eLUK84sioK9qOWduvkM9YY3eAvyH
+         V2/F9d6rtPUWU33RdivmIbhYsWRb30JbDRYiR4HlY59gbzUU9DAVaDTtPwan5SzxWK
+         1EToo9Ix7DqYRqFPdGDxasPOFIzG8IlaN/z5eBL4ceOQ9mRxZikSzbrKYekJ03hVcj
+         ldzE1y1wULUow==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <23196966.EfDdHjke4D@phil>
-References: <23196966.EfDdHjke4D@phil>
-Subject: Re: [GIT PULL] Rockchip clock changes for 6.1 #1
+In-Reply-To: <20221128094952.667315-1-abel.vesa@linaro.org>
+References: <20221128094952.667315-1-abel.vesa@linaro.org>
+Subject: Re: [GIT PULL] clk: imx: Updates for v6.2
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org
-To:     Heiko Stuebner <heiko@sntech.de>, mturquette@baylibre.com
-Date:   Tue, 29 Nov 2022 12:00:48 -0800
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>
+Date:   Tue, 29 Nov 2022 12:08:25 -0800
 User-Agent: alot/0.10
-Message-Id: <20221129200050.9C38FC433D6@smtp.kernel.org>
+Message-Id: <20221129200827.C05EAC433C1@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,18 +54,7 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Heiko Stuebner (2022-11-23 06:01:01)
-> Hi Mike, Stephen,
->=20
-> please find below a pull-request with some Rockchip stuff.
->=20
-> Mainly the support for the clock-controller for the new and shiny rk3588,
->=20
-> Please pull.
->=20
-> Thanks
-> Heiko
->=20
+Quoting Abel Vesa (2022-11-28 01:49:52)
 > The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc7=
 80:
 >=20
@@ -71,13 +62,13 @@ Quoting Heiko Stuebner (2022-11-23 06:01:01)
 >=20
 > are available in the Git repository at:
 >=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git =
-tags/v6.2-rockchip-clk-1
+>   git://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/ tags/=
+clk-imx-6.2
 >=20
-> for you to fetch changes up to 739a6a6bbdb793bd57938cb24aa5a6df89983546:
+> for you to fetch changes up to 8178e245fa953f793670147368642717fcdb302e:
 >=20
->   clk: rockchip: Fix memory leak in rockchip_clk_register_pll() (2022-11-=
-23 14:51:30 +0100)
+>   clk: imx: rename imx_obtain_fixed_clk_hw() to imx_get_clk_hw_by_name() =
+(2022-11-25 11:22:15 +0200)
 >=20
 > ----------------------------------------------------------------
 
