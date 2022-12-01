@@ -2,65 +2,54 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A51F63FB06
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Dec 2022 23:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A9063FBE0
+	for <lists+linux-clk@lfdr.de>; Fri,  2 Dec 2022 00:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiLAW5N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Dec 2022 17:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S231484AbiLAXWq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Dec 2022 18:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbiLAW5M (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Dec 2022 17:57:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51973BE4E6;
-        Thu,  1 Dec 2022 14:57:11 -0800 (PST)
+        with ESMTP id S231436AbiLAXWp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Dec 2022 18:22:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7231413FAA;
+        Thu,  1 Dec 2022 15:22:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0649CB82059;
-        Thu,  1 Dec 2022 22:57:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158DCC433C1;
-        Thu,  1 Dec 2022 22:57:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E2DF621B7;
+        Thu,  1 Dec 2022 23:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFF9C433C1;
+        Thu,  1 Dec 2022 23:22:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669935428;
-        bh=Iece4Ggdjnc0zgVTxLn8Qf6TaPc+ROmQXehO4YnTyUk=;
+        s=k20201202; t=1669936963;
+        bh=Tq4/vS4WOadYDdmm4cBARlvtMI2A8Xm8XMNbM+viXj8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dhi9a4n1MDkugPm6zzlyfa1b463Z4vsP2TF/EUCWg0UeTI/wZXo9HV75Wrqt9ktiN
-         0VE/7gjmbALvarkSaaTK2vduEPR3b0vHlQ8YRjQW8VWmt3r+0KG1ZSer25P2FwUi4j
-         cIPN0/vWkJ8U0tyCI294h+QP/yExXFxgYvLJKem9oRgF7bqTyzY4Cwk8MzOUMgialh
-         XqMJ+4y7T+NuC9fDSOQlLlGdDWFmKH7jGWrxKiw6TPwsijz0ec+D7b7uT0a9dTAuWG
-         W4sAIyUbit8zbldtmN0SLaKsxMhCJgIrQev/i8YLwVihXjXRSQEWEKeAiL1dqsFWj6
-         m/m92RAlKTIxA==
-Date:   Thu, 1 Dec 2022 16:57:05 -0600
+        b=uMtK1UYHJtdAziisN3UXANhSGP0+QXCp6Za1c/kzyJsGXIa86Nh6/UIx9OQYLjWMI
+         6vY2lzFV44m5f6f1E2ZCDvT0zh2F/09kQ/0dYk/7hNOnL5iqcXjK0Hs41Esz1mkVpU
+         w9SGLGeA050t3wVrmS8p3EftV5eWS92hQCLkHyttEXg6sy3pGPVBlD+FFVyB3ki934
+         bHD7pinv2CyO+BmiB8T2or/w8uJri6NjZUThE9Do14YtKOFAsfnAAqy34pJ+QjSQen
+         gQV1u6TQKCj+yDR6W4/dHDLWDYxbU8SA3xvKmJoV6N077vS7IHZonnGyQRkIC8evyj
+         iQiBQ4ieGjQRA==
+Date:   Thu, 1 Dec 2022 17:22:40 -0600
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
- 'reset' interface
-Message-ID: <20221201225705.46r2m35ketvzipox@builder.lan>
-References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Alex Elder <elder@linaro.org>
+Subject: Re: [PATCH v2 4/8] clk: qcom: rpmh: remove platform names from BCM
+ clocks
+Message-ID: <20221201232240.7luz2hfsao345o6v@builder.lan>
+References: <20221130131001.20912-1-dmitry.baryshkov@linaro.org>
+ <20221130131001.20912-5-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+In-Reply-To: <20221130131001.20912-5-dmitry.baryshkov@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,86 +59,155 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
+On Wed, Nov 30, 2022 at 03:09:57PM +0200, Dmitry Baryshkov wrote:
+> There are no platform-specific parts in the BCM clocks, drop the
+> platform name from the clock definitions, replacing it with clk_rpmh to
+> have the common prefix.
 > 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/clk/qcom/clk-rpmh.c | 52 ++++++++++++++++++-------------------
+>  1 file changed, 26 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+> index 00c0c8f851bd..5044f9fa156d 100644
+> --- a/drivers/clk/qcom/clk-rpmh.c
+> +++ b/drivers/clk/qcom/clk-rpmh.c
+> @@ -119,8 +119,8 @@ static DEFINE_MUTEX(rpmh_clk_lock);
+>  	__DEFINE_CLK_RPMH(_platform, _name, _res_name,			\
+>  			  CLK_RPMH_VRM_EN_OFFSET, 1, _div)
+>  
+> -#define DEFINE_CLK_RPMH_BCM(_platform, _name, _res_name)		\
+> -	static struct clk_rpmh _platform##_##_name = {			\
+> +#define DEFINE_CLK_RPMH_BCM(_name, _res_name)				\
+> +	static struct clk_rpmh clk_rpmh_##_name = {			\
+>  		.res_name = _res_name,					\
+>  		.valid_state_mask = BIT(RPMH_ACTIVE_ONLY_STATE),	\
+>  		.div = 1,						\
+> @@ -368,11 +368,11 @@ DEFINE_CLK_RPMH_VRM(sc8180x, rf_clk4, "rfclkd4", 1);
+>  
+>  DEFINE_CLK_RPMH_VRM(sm8350, div_clk1, "divclka1", 2);
+>  
+> -DEFINE_CLK_RPMH_BCM(sdm845, ipa, "IP0");
+> -DEFINE_CLK_RPMH_BCM(sdm845, ce, "CE0");
+> -DEFINE_CLK_RPMH_BCM(sdx55, qpic_clk, "QP0");
+> -DEFINE_CLK_RPMH_BCM(sm8350, pka, "PKA0");
+> -DEFINE_CLK_RPMH_BCM(sm8350, hwkm, "HK0");
+> +DEFINE_CLK_RPMH_BCM(ipa, "IP0");
+> +DEFINE_CLK_RPMH_BCM(ce, "CE0");
+> +DEFINE_CLK_RPMH_BCM(qpic_clk, "QP0");
+> +DEFINE_CLK_RPMH_BCM(pka, "PKA0");
+> +DEFINE_CLK_RPMH_BCM(hwkm, "HK0");
 
-@Ulf, Akhil has a power-domain for a piece of hardware which may be
-voted active by multiple different subsystems (co-processors/execution
-contexts) in the system.
+Would you mind sorting these alphabetically?
 
-As such, during the powering down sequence we don't wait for the
-power-domain to turn off. But in the event of an error, the recovery
-mechanism relies on waiting for the hardware to settle in a powered off
-state.
-
-The proposal here is to use the reset framework to wait for this state
-to be reached, before continuing with the recovery mechanism in the
-client driver.
-
-Given our other discussions on quirky behavior, do you have any
-input/suggestions on this?
-
-> Some clients like adreno gpu driver would like to ensure that its gdsc
-> is collapsed at hardware during a gpu reset sequence. This is because it
-> has a votable gdsc which could be ON due to a vote from another subsystem
-> like tz, hyp etc or due to an internal hardware signal. To allow
-> this, gpucc driver can expose an interface to the client driver using
-> reset framework. Using this the client driver can trigger a polling within
-> the gdsc driver.
-
-@Akhil, this description is fairly generic. As we've reached the state
-where the hardware has settled and we return to the client, what
-prevents it from being powered up again?
-
-Or is it simply a question of it hitting the powered-off state, not
-necessarily staying there?
-
-Regards,
+Thanks for cleaning this up!
 Bjorn
 
-> 
-> This series is rebased on top of qcom/linux:for-next branch.
-> 
-> Related discussion: https://patchwork.freedesktop.org/patch/493144/
-> 
-> Changes in v7:
-> - Update commit message (Bjorn)
-> - Rebased on top of qcom/linux:for-next branch.
-> 
-> Changes in v6:
-> - No code changes in this version. Just captured the Acked-by tags
-> 
-> Changes in v5:
-> - Nit: Remove a duplicate blank line (Krzysztof)
-> 
-> Changes in v4:
-> - Update gpu dt-binding schema
-> - Typo fix in commit text
-> 
-> Changes in v3:
-> - Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
-> 
-> Changes in v2:
-> - Return error when a particular custom reset op is not implemented. (Dmitry)
-> 
-> Akhil P Oommen (6):
->   dt-bindings: clk: qcom: Support gpu cx gdsc reset
->   clk: qcom: Allow custom reset ops
->   clk: qcom: gdsc: Add a reset op to poll gdsc collapse
->   clk: qcom: gpucc-sc7280: Add cx collapse reset support
->   dt-bindings: drm/msm/gpu: Add optional resets
->   arm64: dts: qcom: sc7280: Add Reset support for gpu
-> 
->  .../devicetree/bindings/display/msm/gpu.yaml       |  6 +++++
->  arch/arm64/boot/dts/qcom/sc7280.dtsi               |  3 +++
->  drivers/clk/qcom/gdsc.c                            | 23 ++++++++++++++----
->  drivers/clk/qcom/gdsc.h                            |  7 ++++++
->  drivers/clk/qcom/gpucc-sc7280.c                    | 10 ++++++++
->  drivers/clk/qcom/reset.c                           | 27 +++++++++++++++++++++-
->  drivers/clk/qcom/reset.h                           |  8 +++++++
->  include/dt-bindings/clock/qcom,gpucc-sc7280.h      |  3 +++
->  8 files changed, 82 insertions(+), 5 deletions(-)
-> 
+>  
+>  static struct clk_hw *sdm845_rpmh_clocks[] = {
+>  	[RPMH_CXO_CLK]		= &sdm845_bi_tcxo.hw,
+> @@ -387,8 +387,8 @@ static struct clk_hw *sdm845_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK2_A]	= &sdm845_rf_clk2_ao.hw,
+>  	[RPMH_RF_CLK3]		= &sdm845_rf_clk3.hw,
+>  	[RPMH_RF_CLK3_A]	= &sdm845_rf_clk3_ao.hw,
+> -	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> -	[RPMH_CE_CLK]		= &sdm845_ce.hw,
+> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+> +	[RPMH_CE_CLK]		= &clk_rpmh_ce.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sdm845 = {
+> @@ -407,8 +407,8 @@ static struct clk_hw *sdm670_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK1_A]	= &sdm845_rf_clk1_ao.hw,
+>  	[RPMH_RF_CLK2]		= &sdm845_rf_clk2.hw,
+>  	[RPMH_RF_CLK2_A]	= &sdm845_rf_clk2_ao.hw,
+> -	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> -	[RPMH_CE_CLK]		= &sdm845_ce.hw,
+> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+> +	[RPMH_CE_CLK]		= &clk_rpmh_ce.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sdm670 = {
+> @@ -423,8 +423,8 @@ static struct clk_hw *sdx55_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK1_A]	= &sc8180x_rf_clk1_ao.hw,
+>  	[RPMH_RF_CLK2]		= &sc8180x_rf_clk2.hw,
+>  	[RPMH_RF_CLK2_A]	= &sc8180x_rf_clk2_ao.hw,
+> -	[RPMH_QPIC_CLK]		= &sdx55_qpic_clk.hw,
+> -	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> +	[RPMH_QPIC_CLK]		= &clk_rpmh_qpic_clk.hw,
+> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sdx55 = {
+> @@ -463,7 +463,7 @@ static struct clk_hw *sc7180_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK1_A]	= &sdm845_rf_clk1_ao.hw,
+>  	[RPMH_RF_CLK2]		= &sdm845_rf_clk2.hw,
+>  	[RPMH_RF_CLK2_A]	= &sdm845_rf_clk2_ao.hw,
+> -	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sc7180 = {
+> @@ -528,9 +528,9 @@ static struct clk_hw *sm8350_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK4_A]	= &sm8350_rf_clk4_ao.hw,
+>  	[RPMH_RF_CLK5]		= &sm8350_rf_clk5.hw,
+>  	[RPMH_RF_CLK5_A]	= &sm8350_rf_clk5_ao.hw,
+> -	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> -	[RPMH_PKA_CLK]		= &sm8350_pka.hw,
+> -	[RPMH_HWKM_CLK]		= &sm8350_hwkm.hw,
+> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+> +	[RPMH_PKA_CLK]		= &clk_rpmh_pka.hw,
+> +	[RPMH_HWKM_CLK]		= &clk_rpmh_hwkm.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sm8350 = {
+> @@ -543,9 +543,9 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
+>  	[RPMH_CXO_CLK_A]	= &sdm845_bi_tcxo_ao.hw,
+>  	[RPMH_LN_BB_CLK3]       = &sdm845_ln_bb_clk3.hw,
+>  	[RPMH_LN_BB_CLK3_A]     = &sdm845_ln_bb_clk3_ao.hw,
+> -	[RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> -	[RPMH_PKA_CLK]          = &sm8350_pka.hw,
+> -	[RPMH_HWKM_CLK]         = &sm8350_hwkm.hw,
+> +	[RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> +	[RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
+> +	[RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
+> @@ -568,7 +568,7 @@ static struct clk_hw *sm8450_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK3_A]	= &sdm845_rf_clk3_ao.hw,
+>  	[RPMH_RF_CLK4]		= &sm8350_rf_clk4.hw,
+>  	[RPMH_RF_CLK4_A]	= &sm8350_rf_clk4_ao.hw,
+> -	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
+> @@ -587,9 +587,9 @@ static struct clk_hw *sc7280_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK3_A]    = &sdm845_rf_clk3_ao.hw,
+>  	[RPMH_RF_CLK4]      = &sm8350_rf_clk4.hw,
+>  	[RPMH_RF_CLK4_A]    = &sm8350_rf_clk4_ao.hw,
+> -	[RPMH_IPA_CLK]      = &sdm845_ipa.hw,
+> -	[RPMH_PKA_CLK]      = &sm8350_pka.hw,
+> -	[RPMH_HWKM_CLK]     = &sm8350_hwkm.hw,
+> +	[RPMH_IPA_CLK]      = &clk_rpmh_ipa.hw,
+> +	[RPMH_PKA_CLK]      = &clk_rpmh_pka.hw,
+> +	[RPMH_HWKM_CLK]     = &clk_rpmh_hwkm.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sc7280 = {
+> @@ -626,8 +626,8 @@ static struct clk_hw *sdx65_rpmh_clocks[] = {
+>  	[RPMH_RF_CLK3_A]        = &sdm845_rf_clk3_ao.hw,
+>  	[RPMH_RF_CLK4]          = &sm8350_rf_clk4.hw,
+>  	[RPMH_RF_CLK4_A]        = &sm8350_rf_clk4_ao.hw,
+> -	[RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> -	[RPMH_QPIC_CLK]         = &sdx55_qpic_clk.hw,
+> +	[RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> +	[RPMH_QPIC_CLK]         = &clk_rpmh_qpic_clk.hw,
+>  };
+>  
+>  static const struct clk_rpmh_desc clk_rpmh_sdx65 = {
 > -- 
-> 2.7.4
+> 2.35.1
 > 
