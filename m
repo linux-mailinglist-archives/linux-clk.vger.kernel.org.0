@@ -2,117 +2,236 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CF463FF57
-	for <lists+linux-clk@lfdr.de>; Fri,  2 Dec 2022 05:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D24664009B
+	for <lists+linux-clk@lfdr.de>; Fri,  2 Dec 2022 07:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbiLBEKP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Dec 2022 23:10:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S232281AbiLBGjZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 2 Dec 2022 01:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbiLBEKK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Dec 2022 23:10:10 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23ABD158B;
-        Thu,  1 Dec 2022 20:10:06 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id m7-20020a9d6447000000b0066da0504b5eso2237279otl.13;
-        Thu, 01 Dec 2022 20:10:06 -0800 (PST)
+        with ESMTP id S232279AbiLBGjY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 2 Dec 2022 01:39:24 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E96C5EFBB
+        for <linux-clk@vger.kernel.org>; Thu,  1 Dec 2022 22:39:23 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3691e040abaso39539307b3.9
+        for <linux-clk@vger.kernel.org>; Thu, 01 Dec 2022 22:39:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kikY3IcwaZagWEbuTkKCMYSUl9bP97jYT1cght6uEHg=;
+        b=SHRmjHPKD95J5/4EDFILLaH7P6016n9nafkE0BD6HoJEJUntiBOxwMDv1gTVK9N3Az
+         +/nfnxK0t7jnPpBFKtVTmIXqX3+Jj0XQF7YcKJJE7tfXZIWgq9YirQBcHNBl1m7neiBc
+         lgamho9GwSrQKsVDpjX7VydhUR+S4D03V6fAW6j8sTJPXZ8tVceJvn5ovdBMm50SzfsK
+         U1amwiXF3mVAW2BD39ttXTvnWYA4AkZRSDvHwCMETsvVIkCG1jufaSL0/liBuqDHNQPf
+         fS8FVEoPvzKzOw2zUwtOrxJSAXYsV9VfhYiBAn7RjNMJiABcfQMQAvpBaCPvaRB4qL3+
+         2Zng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KwpvofZtZWOvE931Uob1EiKUjPOMVVWCH9lqebLD3Vk=;
-        b=u/pobSQaUWg5vwx8P8Hh+0/Jx45KcAr9hr7tCshGXSc+kcUOcf0nrYkP+vtZsGEYeI
-         m7mU9FINv3VmU2WN0/lPcTiGJMq2IV2LMhRqCZ4e+J5NHfpK50m+LNriIcYzq3P6O/cn
-         mqtSLZ4qHbXyNzP6cBSEBQ0hdkbW0kqnt8USWi1h3s2raAWm3HI0WNirLV+9j2pAdr2o
-         UNP6sbbyOaY8QS65OAsU/9IlyIw2RIAtSFdXIDNH6EZM4aQGbmq+q3h7V/rI5kufvkUu
-         FbkvTu5+iiBIjjMTf5PouEGa07/9aBFLlXhWyqbbj0JaHAJra14jlMFdaxpXXIKyatB5
-         AUDA==
-X-Gm-Message-State: ANoB5plOgL1TdV+wtrIdr4NcxPYhNDGEa4gI+CeAv72dYlLkAwfSKU5n
-        WiVNlOse9szg4xNE3A6OSw==
-X-Google-Smtp-Source: AA0mqf5SsmaLvP52A2IYGBATobGjnwZZWGFa6BSCWZ/mMkz+D/PfdCTzcv4CbYGr+v+4OHkszkFltg==
-X-Received: by 2002:a9d:7dca:0:b0:66c:6cf1:7967 with SMTP id k10-20020a9d7dca000000b0066c6cf17967mr34701459otn.139.1669954205964;
-        Thu, 01 Dec 2022 20:10:05 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o35-20020a056870912300b0014185b2b3d5sm3581893oae.18.2022.12.01.20.10.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 20:10:05 -0800 (PST)
-Received: (nullmailer pid 2118010 invoked by uid 1000);
-        Fri, 02 Dec 2022 04:10:04 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kikY3IcwaZagWEbuTkKCMYSUl9bP97jYT1cght6uEHg=;
+        b=DUGwST1Eptpr/Fvg01U0XOQf7RROK3vqSl2rovaKrqBEYHTFDopuJ6myHhuC0go+kw
+         9lnpnBsV3ckcEpVtQxoFSZ0n18Df61Dz7tlcice/4pX0+ZyBGqCuqWP720amJHjPLTcQ
+         aCq+GH8322L5C7ZGUECvpYgYGKWLrpLBsrjUYpxep1uZtDYkTTL50Bvc8PUTinBoqDZI
+         LAEInoZcjymxPLz2RVggsuqutTAaEenFQAWKj02oHI2AKerVvT/dKJw457XKVm8/lLVz
+         mXiYOLtrEw5Qh15+d6bTRvmuoiTIiynZAnc/zYkz5TdY2PjvtOpb1dGk1USN+cgMaldY
+         wuaQ==
+X-Gm-Message-State: ANoB5pnvIiD2EwQEfkxbd51jWWhPntfxg1RVtc5BKI78MY4YN/hylbzm
+        DC6epmirYnqAb0sNhi6+/oSziwsOLXUN/0OEXGTEvQ==
+X-Google-Smtp-Source: AA0mqf5oUVXa1tQXXicX5lpRIlr1WED5PlHwsHQSifqrQeHPI0ecQebxjwiUaGN4PPlx7hMsDOUID0fHCu5JAkgSUlc=
+X-Received: by 2002:a0d:d103:0:b0:370:4c23:eacc with SMTP id
+ t3-20020a0dd103000000b003704c23eaccmr67437149ywd.127.1669963162568; Thu, 01
+ Dec 2022 22:39:22 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     devicetree@vger.kernel.org, sboyd@kernel.org, khilman@baylibre.com,
-        kernel@sberdevices.ru, robh+dt@kernel.org,
-        martin.blumenstingl@googlemail.com,
-        linux-arm-kernel@lists.infradead.org, jian.hu@amlogic.com,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-amlogic@lists.infradead.org, jbrunet@baylibre.com,
-        rockosov@gmail.com, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, neil.armstrong@linaro.org
-In-Reply-To: <20221201225703.6507-2-ddrokosov@sberdevices.ru>
-References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
- <20221201225703.6507-2-ddrokosov@sberdevices.ru>
-Message-Id: <166995398251.2089685.16059995540663317860.robh@kernel.org>
-Subject: Re: [PATCH v8 01/11] dt-bindings: clock: meson: add A1 PLL clock
- controller bindings
-Date:   Thu, 01 Dec 2022 22:10:04 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221130131001.20912-1-dmitry.baryshkov@linaro.org>
+ <20221130131001.20912-5-dmitry.baryshkov@linaro.org> <20221201232240.7luz2hfsao345o6v@builder.lan>
+In-Reply-To: <20221201232240.7luz2hfsao345o6v@builder.lan>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 2 Dec 2022 08:39:11 +0200
+Message-ID: <CAA8EJprM6dBAPvibnNYnCb1EO262TmrSda7Rga1t-xfyqvor3w@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] clk: qcom: rpmh: remove platform names from BCM clocks
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Alex Elder <elder@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Fri, 2 Dec 2022 at 01:22, Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Wed, Nov 30, 2022 at 03:09:57PM +0200, Dmitry Baryshkov wrote:
+> > There are no platform-specific parts in the BCM clocks, drop the
+> > platform name from the clock definitions, replacing it with clk_rpmh to
+> > have the common prefix.
+> >
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >  drivers/clk/qcom/clk-rpmh.c | 52 ++++++++++++++++++-------------------
+> >  1 file changed, 26 insertions(+), 26 deletions(-)
+> >
+> > diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+> > index 00c0c8f851bd..5044f9fa156d 100644
+> > --- a/drivers/clk/qcom/clk-rpmh.c
+> > +++ b/drivers/clk/qcom/clk-rpmh.c
+> > @@ -119,8 +119,8 @@ static DEFINE_MUTEX(rpmh_clk_lock);
+> >       __DEFINE_CLK_RPMH(_platform, _name, _res_name,                  \
+> >                         CLK_RPMH_VRM_EN_OFFSET, 1, _div)
+> >
+> > -#define DEFINE_CLK_RPMH_BCM(_platform, _name, _res_name)             \
+> > -     static struct clk_rpmh _platform##_##_name = {                  \
+> > +#define DEFINE_CLK_RPMH_BCM(_name, _res_name)                                \
+> > +     static struct clk_rpmh clk_rpmh_##_name = {                     \
+> >               .res_name = _res_name,                                  \
+> >               .valid_state_mask = BIT(RPMH_ACTIVE_ONLY_STATE),        \
+> >               .div = 1,                                               \
+> > @@ -368,11 +368,11 @@ DEFINE_CLK_RPMH_VRM(sc8180x, rf_clk4, "rfclkd4", 1);
+> >
+> >  DEFINE_CLK_RPMH_VRM(sm8350, div_clk1, "divclka1", 2);
+> >
+> > -DEFINE_CLK_RPMH_BCM(sdm845, ipa, "IP0");
+> > -DEFINE_CLK_RPMH_BCM(sdm845, ce, "CE0");
+> > -DEFINE_CLK_RPMH_BCM(sdx55, qpic_clk, "QP0");
+> > -DEFINE_CLK_RPMH_BCM(sm8350, pka, "PKA0");
+> > -DEFINE_CLK_RPMH_BCM(sm8350, hwkm, "HK0");
+> > +DEFINE_CLK_RPMH_BCM(ipa, "IP0");
+> > +DEFINE_CLK_RPMH_BCM(ce, "CE0");
+> > +DEFINE_CLK_RPMH_BCM(qpic_clk, "QP0");
+> > +DEFINE_CLK_RPMH_BCM(pka, "PKA0");
+> > +DEFINE_CLK_RPMH_BCM(hwkm, "HK0");
+>
+> Would you mind sorting these alphabetically?
 
-On Fri, 02 Dec 2022 01:56:53 +0300, Dmitry Rokosov wrote:
-> From: Jian Hu <jian.hu@amlogic.com>
-> 
-> Add the documentation to support Amlogic A1 PLL clock driver,
-> and add A1 PLL clock controller bindings.
-> 
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> ---
->  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 52 +++++++++++++++++++
->  include/dt-bindings/clock/a1-pll-clkc.h       | 16 ++++++
->  2 files changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
-> 
+Sure, will do.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml:26:6: [warning] wrong indentation: expected 6 but found 5 (indentation)
+>
+> Thanks for cleaning this up!
+> Bjorn
+>
+> >
+> >  static struct clk_hw *sdm845_rpmh_clocks[] = {
+> >       [RPMH_CXO_CLK]          = &sdm845_bi_tcxo.hw,
+> > @@ -387,8 +387,8 @@ static struct clk_hw *sdm845_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK2_A]        = &sdm845_rf_clk2_ao.hw,
+> >       [RPMH_RF_CLK3]          = &sdm845_rf_clk3.hw,
+> >       [RPMH_RF_CLK3_A]        = &sdm845_rf_clk3_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > -     [RPMH_CE_CLK]           = &sdm845_ce.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> > +     [RPMH_CE_CLK]           = &clk_rpmh_ce.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sdm845 = {
+> > @@ -407,8 +407,8 @@ static struct clk_hw *sdm670_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK1_A]        = &sdm845_rf_clk1_ao.hw,
+> >       [RPMH_RF_CLK2]          = &sdm845_rf_clk2.hw,
+> >       [RPMH_RF_CLK2_A]        = &sdm845_rf_clk2_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > -     [RPMH_CE_CLK]           = &sdm845_ce.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> > +     [RPMH_CE_CLK]           = &clk_rpmh_ce.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sdm670 = {
+> > @@ -423,8 +423,8 @@ static struct clk_hw *sdx55_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK1_A]        = &sc8180x_rf_clk1_ao.hw,
+> >       [RPMH_RF_CLK2]          = &sc8180x_rf_clk2.hw,
+> >       [RPMH_RF_CLK2_A]        = &sc8180x_rf_clk2_ao.hw,
+> > -     [RPMH_QPIC_CLK]         = &sdx55_qpic_clk.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > +     [RPMH_QPIC_CLK]         = &clk_rpmh_qpic_clk.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sdx55 = {
+> > @@ -463,7 +463,7 @@ static struct clk_hw *sc7180_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK1_A]        = &sdm845_rf_clk1_ao.hw,
+> >       [RPMH_RF_CLK2]          = &sdm845_rf_clk2.hw,
+> >       [RPMH_RF_CLK2_A]        = &sdm845_rf_clk2_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sc7180 = {
+> > @@ -528,9 +528,9 @@ static struct clk_hw *sm8350_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK4_A]        = &sm8350_rf_clk4_ao.hw,
+> >       [RPMH_RF_CLK5]          = &sm8350_rf_clk5.hw,
+> >       [RPMH_RF_CLK5_A]        = &sm8350_rf_clk5_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > -     [RPMH_PKA_CLK]          = &sm8350_pka.hw,
+> > -     [RPMH_HWKM_CLK]         = &sm8350_hwkm.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> > +     [RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
+> > +     [RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sm8350 = {
+> > @@ -543,9 +543,9 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
+> >       [RPMH_CXO_CLK_A]        = &sdm845_bi_tcxo_ao.hw,
+> >       [RPMH_LN_BB_CLK3]       = &sdm845_ln_bb_clk3.hw,
+> >       [RPMH_LN_BB_CLK3_A]     = &sdm845_ln_bb_clk3_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > -     [RPMH_PKA_CLK]          = &sm8350_pka.hw,
+> > -     [RPMH_HWKM_CLK]         = &sm8350_hwkm.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> > +     [RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
+> > +     [RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
+> > @@ -568,7 +568,7 @@ static struct clk_hw *sm8450_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK3_A]        = &sdm845_rf_clk3_ao.hw,
+> >       [RPMH_RF_CLK4]          = &sm8350_rf_clk4.hw,
+> >       [RPMH_RF_CLK4_A]        = &sm8350_rf_clk4_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
+> > @@ -587,9 +587,9 @@ static struct clk_hw *sc7280_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK3_A]    = &sdm845_rf_clk3_ao.hw,
+> >       [RPMH_RF_CLK4]      = &sm8350_rf_clk4.hw,
+> >       [RPMH_RF_CLK4_A]    = &sm8350_rf_clk4_ao.hw,
+> > -     [RPMH_IPA_CLK]      = &sdm845_ipa.hw,
+> > -     [RPMH_PKA_CLK]      = &sm8350_pka.hw,
+> > -     [RPMH_HWKM_CLK]     = &sm8350_hwkm.hw,
+> > +     [RPMH_IPA_CLK]      = &clk_rpmh_ipa.hw,
+> > +     [RPMH_PKA_CLK]      = &clk_rpmh_pka.hw,
+> > +     [RPMH_HWKM_CLK]     = &clk_rpmh_hwkm.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sc7280 = {
+> > @@ -626,8 +626,8 @@ static struct clk_hw *sdx65_rpmh_clocks[] = {
+> >       [RPMH_RF_CLK3_A]        = &sdm845_rf_clk3_ao.hw,
+> >       [RPMH_RF_CLK4]          = &sm8350_rf_clk4.hw,
+> >       [RPMH_RF_CLK4_A]        = &sm8350_rf_clk4_ao.hw,
+> > -     [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > -     [RPMH_QPIC_CLK]         = &sdx55_qpic_clk.hw,
+> > +     [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+> > +     [RPMH_QPIC_CLK]         = &clk_rpmh_qpic_clk.hw,
+> >  };
+> >
+> >  static const struct clk_rpmh_desc clk_rpmh_sdx65 = {
+> > --
+> > 2.35.1
+> >
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.example.dtb: pll-clock-controller@7c80: reg: [[0, 31872], [0, 396]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201225703.6507-2-ddrokosov@sberdevices.ru
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+-- 
+With best wishes
+Dmitry
