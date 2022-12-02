@@ -2,68 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1184563FDED
-	for <lists+linux-clk@lfdr.de>; Fri,  2 Dec 2022 03:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93A9863FF59
+	for <lists+linux-clk@lfdr.de>; Fri,  2 Dec 2022 05:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiLBCGM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Dec 2022 21:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S232263AbiLBEKR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Dec 2022 23:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbiLBCGK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Dec 2022 21:06:10 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A993D4257;
-        Thu,  1 Dec 2022 18:06:04 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id EDA2524E059;
-        Fri,  2 Dec 2022 10:05:51 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Dec
- 2022 10:05:52 +0800
-Received: from [192.168.125.106] (113.72.147.18) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 2 Dec
- 2022 10:05:51 +0800
-Message-ID: <fd1ca52a-8f2f-0c3a-aefd-3fac380ecdf2@starfivetech.com>
-Date:   Fri, 2 Dec 2022 10:06:32 +0800
+        with ESMTP id S232261AbiLBEKL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Dec 2022 23:10:11 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32242D158C;
+        Thu,  1 Dec 2022 20:10:08 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1322d768ba7so4438148fac.5;
+        Thu, 01 Dec 2022 20:10:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tztRLB6mzSF4TXzBNH2EqTDisdRWShlDqP2hXZ6ZShA=;
+        b=2NwjEXvvcP2IFAlqbC875JRCj/En3S1uBbpjqMXfHcSzRMBYpAwlknHgXrz04OnMYv
+         A+ovHPZjYBpuE2uI1tIT0X99hMVW5Q9kWhUD68Z2iuJdfPAYWKtUf6N1IdcmqZh9n9U4
+         lv9Rr2+sPOKFn5nMcvlOgZny1YIqpDL9/5z7+NQsR8DBB2AYUX2ws5Yh02p2IJCOHjhn
+         MQMxsAdMSesL28QyCamjekh72azJjxA5qNQyzLSkDUe9CeAkVYMz1uA2skKTjO6qUY5W
+         NkmoXQrp3WWAP+52rlJWYXCcS+x6IIQZLdy3+6PARqffxQp6LI6IcBOHJ/Ol5n9DOY2B
+         0wXw==
+X-Gm-Message-State: ANoB5pmMlaT97uvc63NSoKU3EIYkOG52hwYTm3yfVRMpT7tOP5wlRFSi
+        MOZJfUP3Q4C4rbxz2WAW/Q==
+X-Google-Smtp-Source: AA0mqf6gG6R8BWacHtluarpNJ8HkJUosCxyDgCp9hbhu6ftL/iTTIfVwtgs6UTN5W3nPfjPGq686bQ==
+X-Received: by 2002:a05:6870:9a18:b0:142:efc1:1394 with SMTP id fo24-20020a0568709a1800b00142efc11394mr27456427oab.11.1669954207422;
+        Thu, 01 Dec 2022 20:10:07 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o126-20020aca4184000000b003544822f725sm2605035oia.8.2022.12.01.20.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 20:10:06 -0800 (PST)
+Received: (nullmailer pid 2118014 invoked by uid 1000);
+        Fri, 02 Dec 2022 04:10:04 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 09/14] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118010627.70576-1-hal.feng@starfivetech.com>
- <20221118010627.70576-10-hal.feng@starfivetech.com>
- <1d62f95f-0edc-afd4-abb4-37fadc0b6a47@linaro.org>
- <72b3d10e-5a8e-ed42-6808-f53773913422@starfivetech.com>
- <768c2add-4c1f-0b36-5709-dbcdd560f504@starfivetech.com>
- <1fb1474b-ec13-e83a-973e-bd9e9a86cb44@linaro.org>
- <98d1bac7-8af5-f481-59b2-d58ca4c228ee@starfivetech.com>
- <9183bac6-121e-0027-a88b-d77d5c9a077e@linaro.org>
- <e954511b-e74a-2c3a-95ec-d33c938b146f@starfivetech.com>
- <4e94c635-4cbb-449e-24af-f6fee47fb45e@linaro.org>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <4e94c635-4cbb-449e-24af-f6fee47fb45e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.18]
-X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     martin.blumenstingl@googlemail.com,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        jian.hu@amlogic.com, jbrunet@baylibre.com, mturquette@baylibre.com,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        rockosov@gmail.com, kernel@sberdevices.ru,
+        neil.armstrong@linaro.org, robh+dt@kernel.org, sboyd@kernel.org
+In-Reply-To: <20221201225703.6507-4-ddrokosov@sberdevices.ru>
+References: <20221201225703.6507-1-ddrokosov@sberdevices.ru>
+ <20221201225703.6507-4-ddrokosov@sberdevices.ru>
+Message-Id: <166995398331.2089708.18189499743713568568.robh@kernel.org>
+Subject: Re: [PATCH v8 03/11] dt-bindings: clock: meson: add A1 peripheral
+ clock controller bindings
+Date:   Thu, 01 Dec 2022 22:10:04 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,76 +70,49 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 1 Dec 2022 11:21:04 +0100, Krzysztof Kozlowski wrote:
-> On 30/11/2022 19:05, Hal Feng wrote:
->> On Wed, 30 Nov 2022 16:19:06 +0100, Krzysztof Kozlowski wrote:
->>> On 30/11/2022 16:12, Hal Feng wrote:
->>>> On Wed, 30 Nov 2022 12:48:30 +0100, Krzysztof Kozlowski wrote:
->>>>> On 30/11/2022 10:47, Hal Feng wrote:
->>>>>> On Fri, 25 Nov 2022 14:41:12 +0800, Hal Feng wrote:
->>>>>>> On Mon, 21 Nov 2022 09:47:08 +0100, Krzysztof Kozlowski wrote:
->>>>>>>> On 18/11/2022 02:06, Hal Feng wrote:
->>>>>>>>> From: Emil Renner Berthing <kernel@esmil.dk>
->>>>>>>>>
->>>>>>>>> Add bindings for the system clock and reset generator (SYSCRG) on the
->>>>>>>>> JH7110 RISC-V SoC by StarFive Ltd.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->>>>>>>>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->>>>>>>>
->>>>>>>> Binding headers are coming with the file bringing bindings for the
->>>>>>>> device, so you need to squash patches.
->>>>>>>
->>>>>>> As we discussed in patch 7, could I merge patch 7, 8, 9, 10 and add the
->>>>>>> following files in one commit?
->>>>>>>
->>>>>>> include/dt-bindings/clock/starfive,jh7110-crg.h
->>>>>>> include/dt-bindings/reset/starfive,jh7110-crg.h
->>>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
->>>>>>> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml
->>>>>>
->>>>>> Hi, Krzysztof,
->>>>>>
->>>>>> Could you please give me some suggestions?
->>>>>
->>>>> You can keep aon and sys split. First add one of them with their own
->>>>> headers. Then add second with their own defines.
->>>>
->>>> You mean split patch 7 and patch 8 into sys part and aon part
->>>> respectively? There are totally five regions (sys/aon/stg/isp/vout)
->>>> for clocks and resets in JH7110. If we do that, there will be 5
->>>> headers for JH7110 in either clock or reset directory finally. Is
->>>> that OK if there are too many headers for just one SoC?
->>>
->>>
->>> Sorry, I lost the track of what patches you have. The comment was -
->>> bindings include both the doc and headers. You want to split some, some
->>> merge, sorry, no clue. I did not propose splitting headers...
->> 
->> It's ok. The problem was that the header
->> 
->> include/dt-bindings/clock/starfive,jh7110-crg.h
->> 
->> was used in both
->> 
->> Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
->> 
->> and
->> 
->> Documentation/devicetree/bindings/clock/starfive,jh7110-aoncrg.yaml.
->> 
->> The same for include/dt-bindings/reset/starfive,jh7110-crg.h.
->> So should I add these four files in one patch?
+
+On Fri, 02 Dec 2022 01:56:55 +0300, Dmitry Rokosov wrote:
+> From: Jian Hu <jian.hu@amlogic.com>
 > 
-> No. I think I wrote proposed flow of patches:
-> 1. syscrg bindings with header
-> 2. aoncrg bindings with changes to header
-
-Great. Got it. Thanks a lot!
-
-Best regards,
-Hal
-
+> Add the documentation to support Amlogic A1 peripheral clock driver,
+> and add A1 peripheral clock controller bindings.
 > 
-> Why do you need to merge anything?
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  .../bindings/clock/amlogic,a1-clkc.yaml       | 65 ++++++++++++
+>  include/dt-bindings/clock/a1-clkc.h           | 98 +++++++++++++++++++
+>  2 files changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/a1-clkc.h
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/clock/amlogic,a1-clkc.yaml#
+Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts:18.48-30.11: Warning (unit_address_vs_reg): /example-0/periphs-clock-controller: node has a reg or ranges property, but no unit name
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dtb: periphs-clock-controller: reg: [[0, 2048], [0, 260]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221201225703.6507-4-ddrokosov@sberdevices.ru
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
