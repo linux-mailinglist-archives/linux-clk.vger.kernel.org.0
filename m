@@ -2,107 +2,119 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D12642798
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Dec 2022 12:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB99642AD4
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Dec 2022 16:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiLELfz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Dec 2022 06:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S231586AbiLEPAJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Dec 2022 10:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiLELfx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Dec 2022 06:35:53 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0511A061
-        for <linux-clk@vger.kernel.org>; Mon,  5 Dec 2022 03:35:52 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id c17so6794217edj.13
-        for <linux-clk@vger.kernel.org>; Mon, 05 Dec 2022 03:35:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9b59iFvofQpoKBEaYeQhFybU9NmyF7WlZBKIJce18E=;
-        b=hbs+USPpFBZKRF/tug7MDLQSmfqVJbidEvpUgMVjKTYzJI+P7XcwTDngm7SahaSO0K
-         iuQb3QeZi1ZOQPVCY4RNw2HabP89aKsWp5YylYgKiSrrYEIUANVuJ3lZdeFoepuKUPAl
-         rpugTdctPHudbeVKnKvIfDTxgiSF309QLeAWd43944UlSOYsq+T/pURyZe04rnlZX4KZ
-         NrevYRSFEvJM7S+Tr0Co7+XdUnidwDMtNCjN+bCG3Flys7Hrr109QkgnofeWDwt1a094
-         G6hm8n3dOEMVzwnU08SjqU/faHT/oKuqyFe1FDAg5BeAFWN6hHmUt+uZtvqB1XFadCk6
-         oBcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b9b59iFvofQpoKBEaYeQhFybU9NmyF7WlZBKIJce18E=;
-        b=SN8Z2lmgZMf2nV9U5UILluE/x+Ox8Gyv9w94xOPV+dgY703Ha4hqRxQ0yoQxpn8C+i
-         NHS1ymmJ1VaTUtH70+6IyzuoldL9hA4xccOkZ1pyLS4Rjyp799KG4MTiMkkjX2VxJa42
-         PtX3iRu/k8/AeDLO6TjWl/rLJFVzFRGh/xZ+ewL15scuXNWBKHKaeIlhGaEUp4hZCi/h
-         7ZsMRtTD99kRKhM8NBc9HkCJPa0WU07E11zPUoNHmKoyOMjmbkVbwXG02a+giTqe5H+8
-         CQyhA9dWAYZhdfhHUd5iNG9oqpoaQ2f88egn3qjJ1NPbw6gE3XsVmNP2C1RE36T9DpHA
-         GvAw==
-X-Gm-Message-State: ANoB5pkG1OJ+fvgg9NEfO/nOk8l4sHIGmYySNY3NKDHI4fcoOTQwxMQe
-        wi+7lVv363YHRtnuPawRuLJznw==
-X-Google-Smtp-Source: AA0mqf4XBZBNLqDHPdHU/DC0N6f8lDzA5/GvMqXPm4ghYzrxzndI2QiAGJwitj6kTYfdthLLBTHHCg==
-X-Received: by 2002:a05:6402:449b:b0:459:2b41:3922 with SMTP id er27-20020a056402449b00b004592b413922mr4788067edb.160.1670240150767;
-        Mon, 05 Dec 2022 03:35:50 -0800 (PST)
-Received: from fedora.. ([188.252.220.250])
-        by smtp.googlemail.com with ESMTPSA id q26-20020a170906389a00b007bdc2de90e6sm6164189ejd.42.2022.12.05.03.35.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 03:35:50 -0800 (PST)
-From:   Robert Marko <robert.marko@sartura.hr>
-To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     luka.perkov@sartura.hr, Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH] clk: qcom: gcc-ipq4019: switch to devm_clk_notifier_register
-Date:   Mon,  5 Dec 2022 12:35:45 +0100
-Message-Id: <20221205113545.575702-1-robert.marko@sartura.hr>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S229970AbiLEPAI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Dec 2022 10:00:08 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 868C8BC85;
+        Mon,  5 Dec 2022 07:00:03 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,219,1665414000"; 
+   d="scan'208";a="142271622"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 06 Dec 2022 00:00:02 +0900
+Received: from localhost.localdomain (unknown [10.226.92.127])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8F8834007F3F;
+        Mon,  5 Dec 2022 23:59:57 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-iio@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: [PATCH 0/6] Add RZ/V2M Compare-Match Timer (TIM) support
+Date:   Mon,  5 Dec 2022 14:59:49 +0000
+Message-Id: <20221205145955.391526-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Switch to using devres-managed version of clk_notifier_register(). This
-allows us to drop driver's remove() callback.
+This patch series aims to add support for Compare-Match Timer (TIM)
+module found on RZ/V2M SoC.
 
-Signed-off-by: Robert Marko <robert.marko@sartura.hr>
----
- drivers/clk/qcom/gcc-ipq4019.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+it is composed of 32 channels and channels 0-7 and 24-32 are
+reserved for ISP usage.
 
-diff --git a/drivers/clk/qcom/gcc-ipq4019.c b/drivers/clk/qcom/gcc-ipq4019.c
-index 9102150d144a..e4cb9e240a72 100644
---- a/drivers/clk/qcom/gcc-ipq4019.c
-+++ b/drivers/clk/qcom/gcc-ipq4019.c
-@@ -1795,19 +1795,12 @@ static int gcc_ipq4019_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
--	return clk_notifier_register(apps_clk_src.clkr.hw.clk,
--				     &gcc_ipq4019_cpu_clk_notifier);
--}
--
--static int gcc_ipq4019_remove(struct platform_device *pdev)
--{
--	return clk_notifier_unregister(apps_clk_src.clkr.hw.clk,
--				       &gcc_ipq4019_cpu_clk_notifier);
-+	return devm_clk_notifier_register(&pdev->dev, apps_clk_src.clkr.hw.clk,
-+					  &gcc_ipq4019_cpu_clk_notifier);
- }
- 
- static struct platform_driver gcc_ipq4019_driver = {
- 	.probe		= gcc_ipq4019_probe,
--	.remove		= gcc_ipq4019_remove,
- 	.driver		= {
- 		.name	= "qcom,gcc-ipq4019",
- 		.of_match_table = gcc_ipq4019_match_table,
+Channel 22 is modelled as clock source and Channel 23 is modelled as clock
+event driver and the rest of the channels are modelled as counter driver
+as it provides
+
+1) counter for counting
+2) configurable counter value for generating timer interrupt
+3) userspace event for each interrupt.
+
+logs:-
+Counter driver:
+Counter driver is tested by reading counts and interrupts tested by
+counter-example in tools/counter/counter_example.c
+
+Count snapshot value:
+3114
+Output from counter_example when it triggers interrupts:
+Timestamp 0: 24142152969        Count 0: 5
+Error Message 0: Success
+
+Clock source:
+Clock source driver is tested by clock-source-switch app.
+[ 1275.703567] clocksource: Switched to clocksource arch_sys_counter
+[ 1275.710189] clocksource: Switched to clocksource a4000b00.timer
+[OK]
+# Totals: pass[ 1275.718112] clocksource: Switched to clocksource arch_sys_counter
+:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Clock event:
+clock event driver is tested by changing the rating as 500.
+
+Biju Das (6):
+  clk: renesas: r9a09g011: Add TIM clock and reset entries
+  dt-bindings: timer: Add RZ/V2M TIM binding
+  clocksource/drivers/rzv2m-tim: Add Renesas RZ/V2M compare match
+    timer(TIM) driver
+  dt-bindings: counter: Add RZ/V2M TIM counter binding
+  counter: Add Renesas RZ/V2M TIM counter driver
+  arm64: dts: renesas: r9a09g011: Add tim nodes
+
+ .../counter/renesas,rzv2m-tim-cnt.yaml        |  83 +++++
+ .../bindings/timer/renesas,rzv2m-tim.yaml     |  83 +++++
+ arch/arm64/boot/dts/renesas/r9a09g011.dtsi    | 192 ++++++++++
+ drivers/clk/renesas/r9a09g011-cpg.c           |  22 ++
+ drivers/clocksource/Kconfig                   |   7 +
+ drivers/clocksource/Makefile                  |   1 +
+ drivers/clocksource/rzv2m-tim.c               | 330 ++++++++++++++++++
+ drivers/counter/Kconfig                       |  10 +
+ drivers/counter/Makefile                      |   1 +
+ drivers/counter/rzv2m-tim-cnt.c               | 312 +++++++++++++++++
+ 10 files changed, 1041 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/counter/renesas,rzv2m-tim-cnt.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/renesas,rzv2m-tim.yaml
+ create mode 100644 drivers/clocksource/rzv2m-tim.c
+ create mode 100644 drivers/counter/rzv2m-tim-cnt.c
+
 -- 
-2.38.1
+2.25.1
 
