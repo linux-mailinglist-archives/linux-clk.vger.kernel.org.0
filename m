@@ -2,126 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C712F641D0D
-	for <lists+linux-clk@lfdr.de>; Sun,  4 Dec 2022 13:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 241946426B6
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Dec 2022 11:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiLDMpY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 4 Dec 2022 07:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S230036AbiLEKcK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Dec 2022 05:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiLDMpV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 4 Dec 2022 07:45:21 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BF216495
-        for <linux-clk@vger.kernel.org>; Sun,  4 Dec 2022 04:45:19 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id n1so10580383ljg.3
-        for <linux-clk@vger.kernel.org>; Sun, 04 Dec 2022 04:45:19 -0800 (PST)
+        with ESMTP id S229544AbiLEKcJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Dec 2022 05:32:09 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCB2BE3B
+        for <linux-clk@vger.kernel.org>; Mon,  5 Dec 2022 02:32:07 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id e13so15076559edj.7
+        for <linux-clk@vger.kernel.org>; Mon, 05 Dec 2022 02:32:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zz6SK3rDjXic/7QlaiKOpz4oBBRo4oAab1QkPKIoqeE=;
-        b=qyWQRNks3BmC++YHNhD0nCSWaXK04RmlUdFOw3kRN+u1neP974oIRGq9+OMrLtjaOf
-         sWj+E+/p6vv0aJ/cxpeNsQVSmUqQpjkaq+aYllvjB2RZ2Akg/CGyaNAfC4/I3W/Rq90e
-         TXSp6ngAShijT1foy1Eidt/Nq7lV3dv3rJ9rXnMDpehhCVVvK1GZWr7J3WWMNDsVLObK
-         wQSFGNP1XhJVS8hvCkHU1+MW5zZtAb167u62WIvDkq4v/49eQCD6RpbRSEFEbYvLANpe
-         H+x1yL8+ZLlX1EAZeDaJJv04V+npmpYQPbaLoyzNjQV8mHC35WAe2PginiKVDzVMk34K
-         gnNA==
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5fpoZJPaIxa+iAwbcp/aUZH0HPeDz4PPni1VjWgLtZs=;
+        b=tG60iLLOTJzz/wdBJOABaJkp41N7vWZuGWo3OfpG0y4mIn7iLlr5LFlGFQ4LRWN9de
+         fDT6GRKZ4OX820ZQpxodCU4W02sEr/McVZbEDygubp1Ui5LNvYQTkGeNdzlpDYNu0maG
+         Fk7M4xL8VDo29lS8R8rFx54ErIwc+FUFW8zzxaTWdtoXrKYXWi4kpKbJpezqJtc+dgK6
+         nJys8tdoOw/0x8XvDw+VRnMtOE/yHDAesRrniTEMims89aIfmN6G1iDUBfylhlFn/9Pu
+         fItBBy4HYjnpo2aFww0sDxbgDL5vWXHHEspLoq0vKky7e7PJo1RR0tBqyjtc9tl398Hm
+         F84g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zz6SK3rDjXic/7QlaiKOpz4oBBRo4oAab1QkPKIoqeE=;
-        b=YkgqkDkYjanbaPX5lBprdebUQtt5ycmamxY6KtSKzy3+mjgG9zjjcaswqUxn70sNR9
-         ipL+aYww5EV74tVNcfyulmchbxLHCwgLwZCtUPIXLv/8ytDEGoIzrUAkVU5ryucwrgo0
-         whDrEiql2t6DZ2NLgZggr0yemK1qbdzAsUMOTx9XAVYF2aMlU8yt9fvDP14zvNYGkUcG
-         4losYls2MtTmjddnGP64OA+IxVRluFC8JMv8NFkjfKxKtcun6TwNHsmQIG3g1if6FnrP
-         gBbFCwmwS8x2g8a82f0GKZLF6intBlpAkxnsRskz1KacQYwX/qkwa81AlDXf+aEBfW3q
-         1/Jw==
-X-Gm-Message-State: ANoB5pmK04GeL/cBOT/vy+c3sf2n607Zcl5qHPstMugVaXHm72yrPL3U
-        sEj+VTYbC0BzJkJIq+0uKhSE6A==
-X-Google-Smtp-Source: AA0mqf7c4f9udhhUW/TaMW7meiyjZQ2hGgzQbQOAXKc29Yhq0HFTYlMZZ71FSYtpfUmLWgCyNz7b+g==
-X-Received: by 2002:a05:651c:88d:b0:278:f53c:380d with SMTP id d13-20020a05651c088d00b00278f53c380dmr19718123ljq.1.1670157918889;
-        Sun, 04 Dec 2022 04:45:18 -0800 (PST)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05651239d200b0049771081b10sm1763006lfu.31.2022.12.04.04.45.18
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5fpoZJPaIxa+iAwbcp/aUZH0HPeDz4PPni1VjWgLtZs=;
+        b=SRBohHBJUSM1ah7BOAUNBzD04mfiUiNDrZeiohRvXPwfGjzujcSnVZKcwft7opNuiT
+         CpmXN+NfvJRmjrGrhvKtNESiH6E4Qe+8eWrMoFIVUW8RAn4nW7GpBnE3bMmVkqhT5hnj
+         PEWwZYyCRx3xtOcgwdaKWKqX9764TXfIlz22aY3/2ORh+mViAj77F+Y3tFeuNdPffbDB
+         OPRMseY/r9dJQ3batm50wDfcv3TTqW0QelSvAqDiAE1nTIy7reI+FX057Z4aF1QV5qLr
+         PeylKt7Lse1/PsBt4uq887v61LaYxw6AkWzxM5s/0feB6TtWVOVtsiKQJZWGGYe9TJu9
+         +F1g==
+X-Gm-Message-State: ANoB5pl8VeTLdOuQ3E1G1ZNTbIi1zCE9cNAzv+AYjQuCqjg4JA3OofsP
+        wal5Jqq+uvbrIqYyfo3KBICDFA==
+X-Google-Smtp-Source: AA0mqf6uqbOB5OxqzEMjwdQ0h5HDWCr4Cs7UQe0Ido3SB9WNJ7dIV7UGBAws/2Jm7WwGS9+B1EuQZA==
+X-Received: by 2002:aa7:c502:0:b0:46c:6bdc:40fd with SMTP id o2-20020aa7c502000000b0046c6bdc40fdmr7258470edq.74.1670236325970;
+        Mon, 05 Dec 2022 02:32:05 -0800 (PST)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056402124200b004615f7495e0sm6109204edw.8.2022.12.05.02.32.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 04:45:18 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: [PATCH v4 11/11] ARM: dts: qcom: msm8974: add clocks and clock-names to mmcc device
-Date:   Sun,  4 Dec 2022 14:45:08 +0200
-Message-Id: <20221204124508.1415713-12-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221204124508.1415713-1-dmitry.baryshkov@linaro.org>
-References: <20221204124508.1415713-1-dmitry.baryshkov@linaro.org>
+        Mon, 05 Dec 2022 02:32:05 -0800 (PST)
+Date:   Mon, 5 Dec 2022 11:32:04 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Vadim Fedorenko <vadfed@fb.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "Michalik, Michal" <michal.michalik@intel.com>
+Subject: Re: [RFC PATCH v4 2/4] dpll: Add DPLL framework base functions
+Message-ID: <Y43IpIQ3C0vGzHQW@nanopsycho>
+References: <20221129213724.10119-1-vfedorenko@novek.ru>
+ <20221129213724.10119-3-vfedorenko@novek.ru>
+ <Y4eGxb2i7uwdkh1T@nanopsycho>
+ <DM6PR11MB4657DE713E4E83E09DFCFA4B9B179@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <Y4nyBwNPjuJFB5Km@nanopsycho>
+ <DM6PR11MB4657C8417DEB0B14EC35802E9B179@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <Y4okm5TrBj+JAJrV@nanopsycho>
+ <20221202212206.3619bd5f@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202212206.3619bd5f@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add clocks and clock-names nodes to the mmcc device to bind clocks using
-the DT links.
+Sat, Dec 03, 2022 at 06:22:06AM CET, kuba@kernel.org wrote:
+>On Fri, 2 Dec 2022 17:15:23 +0100 Jiri Pirko wrote:
+>> >OK, I now see your point what is the confusion.
+>> >Thanks for explanation.
+>> >But I am still not sure how to make it this way in Linux, if interface added to
+>> >netns uses original netdev ifindex, and driver after reload receives new
+>> >(previously unused ifindex) what would be the steps/commands to make it as you
+>> >described?
+>>
+>> As I said, I don't see a way to have the ifindex exposed throught dpll
+>> at all.
+>
+>We can quite easily only report ifindexes in the same namespace
+>as the socket, right?
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-msm8974.dtsi | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Sure, hmm, thinkign about it more, this would be probably a good start.
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 10ce92772e7b..c48db7a8f671 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -1528,6 +1528,30 @@ mmcc: clock-controller@fd8c0000 {
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
- 			reg = <0xfd8c0000 0x6000>;
-+			clocks = <&xo_board>,
-+				 <&gcc GCC_MMSS_GPLL0_CLK_SRC>,
-+				 <&gcc GPLL0_VOTE>,
-+				 <&gcc GPLL1_VOTE>,
-+				 <&rpmcc RPM_SMD_GFX3D_CLK_SRC>,
-+				 <&dsi0_phy 1>,
-+				 <&dsi0_phy 0>,
-+				 <&dsi1_phy 1>,
-+				 <&dsi1_phy 0>,
-+				 <0>,
-+				 <0>,
-+				 <0>;
-+			clock-names = "xo",
-+				      "mmss_gpll0_vote",
-+				      "gpll0_vote",
-+				      "gpll1_vote",
-+				      "gfx3d_clk_src",
-+				      "dsi0pll",
-+				      "dsi0pllbyte",
-+				      "dsi1pll",
-+				      "dsi1pllbyte",
-+				      "hdmipll",
-+				      "edp_link_clk",
-+				      "edp_vco_div";
- 		};
- 
- 		mdss: mdss@fd900000 {
--- 
-2.35.1
 
+>
+>> I believe we should do it only the other way around. Assign
+>> dpll_pin pointer to struct net_device and expose this over new attr
+>> IFLA_DPLL_PIN over RT netlink.
+>
+>The ID table is global, what's the relationship between DPLLs
+>and net namespaces? We tie DPLLs to a devlink instance which
+>has a namespace? We pretend namespaces don't exist? :S
+
+Well, if would be odd to put dpll itself into a namespace. It might not
+have anything to do with networking, for example in case of ptp_ocp.
+What would mean for a dpll to be in a net namespace?
