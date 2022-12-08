@@ -2,90 +2,190 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4DF64707F
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Dec 2022 14:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635056470F6
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Dec 2022 14:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbiLHNH6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Dec 2022 08:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S229960AbiLHNmL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Dec 2022 08:42:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiLHNHx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Dec 2022 08:07:53 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07965D79
-        for <linux-clk@vger.kernel.org>; Thu,  8 Dec 2022 05:07:47 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:5574:4fdf:a801:888e])
-        by albert.telenet-ops.be with bizsmtp
-        id tp7m2800D2deJRf06p7mz3; Thu, 08 Dec 2022 14:07:46 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p3GIF-002tBF-HV; Thu, 08 Dec 2022 13:46:27 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p3DeN-002fnQ-6n; Thu, 08 Dec 2022 10:57:07 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Magnus Damm <magnus.damm@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Tho Vu <tho.vu.wh@renesas.com>, linux-renesas-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 3/3] arm64: dts: renesas: r8a779g0: Add Cortex-A76 1.8 GHz opp
-Date:   Thu,  8 Dec 2022 10:57:00 +0100
-Message-Id: <cc2bae27776523f499d01655ef18fe463a3ae1ae.1670492384.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1670492384.git.geert+renesas@glider.be>
-References: <cover.1670492384.git.geert+renesas@glider.be>
+        with ESMTP id S230152AbiLHNls (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Dec 2022 08:41:48 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300DB98575
+        for <linux-clk@vger.kernel.org>; Thu,  8 Dec 2022 05:41:32 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id jn7so1508099plb.13
+        for <linux-clk@vger.kernel.org>; Thu, 08 Dec 2022 05:41:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsVDMGdrrcenDbAQ2t+1J/nqCclkhOqEn3pqIwRUG2w=;
+        b=uQy/0f7YV2jnlbCc1jSFqVrE4lbQvl+RRAJkhOLwNKMTRwuan4cjvWkayuWGs0R8oL
+         vnygiP558bf0VxQTsmO1gMaSyfuPFtroV61zbBi/whfupcirDxi2CZL1YSNKEfXqDE+T
+         5piNZUnqR67+TNZqTfGGTQsSVyDTmdMKrUSaB/GcKRURw0DdMy1ZRW3zLz+Mm9NTRcz4
+         dXo/Fy6vLBQU6ntaMD3EpYjq2lVYXCLz0x7AANz9QfcsPOPKY33HoqaaBT3zcY9lcMkH
+         yXHm35VDMvBDL6KcyGNoNfTrflmO5iPsaeb9inrWk2puhSN2S/QjoIr7Dnn/InlZbwtU
+         f9Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nsVDMGdrrcenDbAQ2t+1J/nqCclkhOqEn3pqIwRUG2w=;
+        b=hlGpnUqKks5sknx4W+Q5rA6uKdJ6khhTHR6p8ISviWe65LhiS8VxHAMQBTA7I+2kyN
+         FCSZqMcp0trzNfUg8c6MO9/sHIIpHR1qLgAiP+xWqDc0EkmROKN6OkKxGCpHClpZAZIb
+         DK4TSqzqnesuIcvL2tvKWzWNdwkTZUqzngdM3rg7lOx8xe7ciI6y8ilInaEvOfxhh+wI
+         MwueemMG6jCZtBGGBEckvScjY6o31nSDAmT+LzDqYRMaOaL289Zh4NIg5BpODvWRv7hM
+         qoxboFrkLxXWqXSnrBlI9xvAGYvKf8SYbOrtkxvjveXaXDoLtD++ICntU+NAWrE9ngNw
+         OCow==
+X-Gm-Message-State: ANoB5ploUozXWx+LbnDsdL7NbXKj3yWlnUagWSQpQlCMw2ReevgZq95u
+        6lM0S8vwp8iklSZ/zXUglTDANAwLJpH4Liejp85rJg==
+X-Google-Smtp-Source: AA0mqf7MdR24OCVzRBWFHBA1Ih0rv9hUVtp5dojJr48004Fk2Ur1P7IRRT950dIzOhONwDL/P4n1lllvwgn2ibEO+gk=
+X-Received: by 2002:a17:903:40c6:b0:189:f799:676e with SMTP id
+ t6-20020a17090340c600b00189f799676emr6120063pld.148.1670506892322; Thu, 08
+ Dec 2022 05:41:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20221201225705.46r2m35ketvzipox@builder.lan> <CAPDyKFofsqcoFbYt-9BcisbPdreLGqAAMWorqHi0_D1kwCdYhg@mail.gmail.com>
+ <20221207165457.kwdwwiycbwjpogxl@builder.lan>
+In-Reply-To: <20221207165457.kwdwwiycbwjpogxl@builder.lan>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Dec 2022 14:40:55 +0100
+Message-ID: <CAPDyKFpYgYkDdJ79xxkwr-Mqnj5CoBrV+ZZe6Xz4hGLNR4zUVw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
+ 'reset' interface
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        krzysztof.kozlowski@linaro.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add an operating point for running the Cortex-A76 CPU cores on R-Car
-V4H at 1.8 GHz (High Performance mode).
+On Wed, 7 Dec 2022 at 17:55, Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Wed, Dec 07, 2022 at 05:00:51PM +0100, Ulf Hansson wrote:
+> > On Thu, 1 Dec 2022 at 23:57, Bjorn Andersson <andersson@kernel.org> wrote:
+> > >
+> > > On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
+> > > >
+> > >
+> > > @Ulf, Akhil has a power-domain for a piece of hardware which may be
+> > > voted active by multiple different subsystems (co-processors/execution
+> > > contexts) in the system.
+> > >
+> > > As such, during the powering down sequence we don't wait for the
+> > > power-domain to turn off. But in the event of an error, the recovery
+> > > mechanism relies on waiting for the hardware to settle in a powered off
+> > > state.
+> > >
+> > > The proposal here is to use the reset framework to wait for this state
+> > > to be reached, before continuing with the recovery mechanism in the
+> > > client driver.
+> >
+> > I tried to review the series (see my other replies), but I am not sure
+> > I fully understand the consumer part.
+> >
+> > More exactly, when and who is going to pull the reset and at what point?
+> >
+> > >
+> > > Given our other discussions on quirky behavior, do you have any
+> > > input/suggestions on this?
+> > >
+> > > > Some clients like adreno gpu driver would like to ensure that its gdsc
+> > > > is collapsed at hardware during a gpu reset sequence. This is because it
+> > > > has a votable gdsc which could be ON due to a vote from another subsystem
+> > > > like tz, hyp etc or due to an internal hardware signal. To allow
+> > > > this, gpucc driver can expose an interface to the client driver using
+> > > > reset framework. Using this the client driver can trigger a polling within
+> > > > the gdsc driver.
+> > >
+> > > @Akhil, this description is fairly generic. As we've reached the state
+> > > where the hardware has settled and we return to the client, what
+> > > prevents it from being powered up again?
+> > >
+> > > Or is it simply a question of it hitting the powered-off state, not
+> > > necessarily staying there?
+> >
+> > Okay, so it's indeed the GPU driver that is going to assert/de-assert
+> > the reset at some point. Right?
+> >
+> > That seems like a reasonable approach to me, even if it's a bit
+> > unclear under what conditions that could happen.
+> >
+>
+> Generally the disable-path of the power-domain does not check that the
+> power-domain is actually turned off, because the status might indicate
+> that the hardware is voting for the power-domain to be on.
 
-Based on a patch in the BSP by Tho Vu.
+Is there a good reason why the HW needs to vote too, when the GPU
+driver is already in control?
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Tested on the Renesas White-Hawk development board by using the CPUfreq
-userspace governor, enabling boost mode, writing the desired CPU clock
-rate to the CPUfreq policy's "scaling_setspeed" file in sysfs, verifying
-the clock rate of the Z0φ clock in debugfs, and running the dhrystones
-benchmark on the various CPU cores.
+Or perhaps that depends on the running use case?
 
-$ echo 1 > /sys/devices/system/cpu/cpufreq/boost
-$ echo 1800000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_setspeed
----
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+>
+> As part of the recovery of the GPU after some fatal fault, the GPU
+> driver does something which will cause the hardware votes for the
+> power-domain to be let go, and then the driver does pm_runtime_put().
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-index 83d1666a2ea16de2..7a87a5dc1b6ad219 100644
---- a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-@@ -39,6 +39,12 @@ opp-1700000000 {
- 			clock-latency-ns = <500000>;
- 			opp-suspend;
- 		};
-+		opp-1800000000 {
-+			opp-hz = /bits/ 64 <1800000000>;
-+			opp-microvolt = <880000>;
-+			clock-latency-ns = <500000>;
-+			turbo-mode;
-+		};
- 	};
- 
- 	cpus {
--- 
-2.25.1
+Okay. That "something", sounds like a device specific setting for the
+corresponding gdsc, right?
 
+So somehow the GPU driver needs to manage that setting, right?
+
+>
+> But in this case the GPU driver wants to ensure that the power-domain is
+> actually powered down, before it does pm_runtime_get() again. To ensure
+> that the hardware lost its state...
+
+I see.
+
+>
+> The proposal here is to use a reset to reach into the power-domain
+> provider and wait for the hardware to be turned off, before the GPU
+> driver attempts turning the power-domain on again.
+>
+>
+> In other words, there is no reset. This is a hack to make a normally
+> asynchronous pd.power_off() to be synchronous in this particular case.
+
+Alright, assuming I understood your clarifications above correctly
+(thanks!), I think I have got a much better picture now.
+
+Rather than abusing the reset interface, I think we should manage this
+through the genpd's power on/off notifiers (GENPD_NOTIFY_OFF). The GPU
+driver should register its corresponding device for them
+(dev_pm_genpd_add_notifier()).
+
+The trick however, is to make the behaviour of the power-domain for
+the gdsc (the genpd->power_off() callback) conditional on whether the
+HW is configured to vote or not. If the HW can vote, it should not
+poll for the state - and vice versa when the HW can't vote.
+
+Would this work?
+
+Kind regards
+Uffe
