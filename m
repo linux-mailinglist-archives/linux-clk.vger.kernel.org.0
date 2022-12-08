@@ -2,66 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7906474D0
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Dec 2022 18:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C6164757C
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Dec 2022 19:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiLHRFX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Dec 2022 12:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36226 "EHLO
+        id S229592AbiLHSXh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Dec 2022 13:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiLHRFW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Dec 2022 12:05:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CF2A711;
-        Thu,  8 Dec 2022 09:05:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09C0DB82569;
-        Thu,  8 Dec 2022 17:05:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592BDC433D2;
-        Thu,  8 Dec 2022 17:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670519118;
-        bh=mVa4rAGYCODwDCVnY1411oDOU/OwbCxVWI/1gCV76L4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TVJAMl42DI3KGjqjl4yeG1Wb6wkYJ+HxG3Pl28rRAwWLrbFkeKsbGjSrXw5wYJOQw
-         Va7W/v57CD8QmKvGBsWThaTFS4pyk5a+1NVSc7aAtlFJ1E4OvTcIYHgCy7d7qmudi/
-         3gQ8Shs0AxWEmrIMBtlkjow+1GOdhiFcCuburUbDwqgbyB8bVD1mPo28Enl7zPXLXS
-         MsGC7E63EqRyb7lYqZ5kNjZ+lqeWMomsNqaP/kdEtnS1RjIbrYeTzQCUyrQEmqdvPW
-         mFrc5X3u9GoSuA1hlt9zsMVWCOOJPKw41Jp6cn1W0EQdRbtH/YAkEFWNa1XKIxj6UH
-         f6stCSkh8wQYA==
-Date:   Thu, 8 Dec 2022 09:05:17 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Vadim Fedorenko <vadfed@fb.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "Michalik, Michal" <michal.michalik@intel.com>
-Subject: Re: [RFC PATCH v4 2/4] dpll: Add DPLL framework base functions
-Message-ID: <20221208090517.643277e8@kernel.org>
-In-Reply-To: <Y5IR2MzXfqgFXGHW@nanopsycho>
-References: <Y4okm5TrBj+JAJrV@nanopsycho>
-        <20221202212206.3619bd5f@kernel.org>
-        <Y43IpIQ3C0vGzHQW@nanopsycho>
-        <20221205161933.663ea611@kernel.org>
-        <Y48CS98KYCMJS9uM@nanopsycho>
-        <20221206092705.108ded86@kernel.org>
-        <Y5CQ0qddxuUQg8R8@nanopsycho>
-        <20221207085941.3b56bc8c@kernel.org>
-        <Y5Gc6E+mpWeVSBL7@nanopsycho>
-        <20221208081955.335ca36c@kernel.org>
-        <Y5IR2MzXfqgFXGHW@nanopsycho>
+        with ESMTP id S229478AbiLHSXg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Dec 2022 13:23:36 -0500
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Dec 2022 10:23:34 PST
+Received: from sender4-of-o53.zoho.com (sender4-of-o53.zoho.com [136.143.188.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3114D5F2;
+        Thu,  8 Dec 2022 10:23:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670522891; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=clSJvTgXI3YP5BwKy+RhSSz8KV/7/WlKN8jkv1vgDWLqjKvdw+VxronQE0ilzYXReEAPmrAUT4v1FfIV0wxfEgef9x3veI+5Bcl63iiAfAANKhp7DGDd5SQ1J/P/h1EMA7RcaBJQ7V0Ez32RBcc0+IwprwWlBgGDwGoEPk17XF8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670522891; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=lVl0AW6NjKtrDN8pXdhzjnNBt7YZtcamrLdGxj4L9Y4=; 
+        b=Ov44NLqvu0uUaN4cxaC5UUWXgDQBLazCzgeGT+8vMQJrJqsVJjSlbYE/0GnykbB+ndtAwJWwluCd45e7p6BIKYmASHCTx1FSJknwcoW2IazukLB/ksssbYR4Z9zVJyIBb8Issk/+689CYYsPzkjd49EY2ybZB959nK/8iklnhBA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=machnikowski.net;
+        spf=pass  smtp.mailfrom=maciek@machnikowski.net;
+        dmarc=pass header.from=<maciek@machnikowski.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670522891;
+        s=zoho; d=machnikowski.net; i=maciek@machnikowski.net;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=lVl0AW6NjKtrDN8pXdhzjnNBt7YZtcamrLdGxj4L9Y4=;
+        b=QVSEZbndRq3Zzufk8gnYWqfmBP3KeMuj09MZEdyjs7ElO+TfjiWSxzi7DOdi4vfb
+        6fimYWaP0E0IF4+3opGuV3IRifOrb0hm8miLsNfsqfSUp7eOfKAU/qTfobzqY5AqK7z
+        miahNHBuKvfGKHoCFJuPiScgYIY1aQ9ixjeXDzeh5a3WFDu9MkBDjMCvQjdU9QnTD6t
+        gEgqsAvDIap4MbXdQJrt4LajvVaoLs2Fou5e/3JDVzB2UN05kNKW427KNLoVCd3g0Da
+        Heaa8jXhadYJCI3aTUNNZZZykqqLQ2FFjrXSHjx/OUFgtvnfyFsfMetI6Wes0RKGHip
+        RuJbhIUA6w==
+Received: from [192.168.1.227] (83.8.188.9.ipv4.supernova.orange.pl [83.8.188.9]) by mx.zohomail.com
+        with SMTPS id 167052288851018.2093850153816; Thu, 8 Dec 2022 10:08:08 -0800 (PST)
+Message-ID: <6e252f6d-283e-7138-164f-092709bc1292@machnikowski.net>
+Date:   Thu, 8 Dec 2022 19:08:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH v4 0/4] Create common DPLL/clock configuration API
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     'Jiri Pirko' <jiri@resnulli.us>,
+        "'Kubalewski, Arkadiusz'" <arkadiusz.kubalewski@intel.com>,
+        'Vadim Fedorenko' <vfedorenko@novek.ru>,
+        'Jonathan Lemon' <jonathan.lemon@gmail.com>,
+        'Paolo Abeni' <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+References: <20221129213724.10119-1-vfedorenko@novek.ru>
+ <Y4dNV14g7dzIQ3x7@nanopsycho>
+ <DM6PR11MB4657003794552DC98ACF31669B179@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <Y4oj1q3VtcQdzeb3@nanopsycho> <20221206184740.28cb7627@kernel.org>
+ <10bb01d90a45$77189060$6549b120$@gmail.com>
+ <20221207152157.6185b52b@kernel.org>
+From:   Maciek Machnikowski <maciek@machnikowski.net>
+In-Reply-To: <20221207152157.6185b52b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,20 +72,91 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 8 Dec 2022 17:33:28 +0100 Jiri Pirko wrote:
-> For any synce pin manipulation over dpll netlink, we can use the netns
-> check of the linked netdev. This is the netns aware leg of the dpll,
-> it should be checked for.
+On 12/8/2022 12:21 AM, Jakub Kicinski wrote:
+> On Wed, 7 Dec 2022 15:09:03 +0100 netdev.dump@gmail.com wrote:
+>>> -----Original Message-----
+>>> From: Jakub Kicinski <kuba@kernel.org>
+>> pins between the DPLLs exposed by a single driver, but not really outside of
+>> it.
+>> And that can be done simply by putting the pin ptr from the DPLLA into the
+>> pin
+>> list of DPLLB.
+> 
+> Are you saying within the driver it's somehow easier? The driver state
+> is mostly per bus device, so I don't see how.
+> 
+>> If we want the kitchen-and-sink solution, we need to think about corner
+>> cases.
+>> Which pin should the API give to the userspace app - original, or
+>> muxed/parent?
+> 
+> IDK if I parse but I think both. If selected pin is not directly
+> attached the core should configure muxes.
+> 
+>> How would a teardown look like - if Driver A registered DPLLA with Pin1 and
+>> Driver B added the muxed pin then how should Driver A properly
+>> release its pins? Should it just send a message to driver B and trust that
+>> it
+>> will receive it in time before we tear everything apart?
+> 
+> Trivial.
+> 
+>> There are many problems with that approach, and the submitted patch is not
+>> explaining any of them. E.g. it contains the dpll_muxed_pin_register but no
+>> free 
+>> counterpart + no flows.
+> 
+> SMOC.
+> 
+>> If we want to get shared pins, we need a good example of how this mechanism
+>> can be used.
+> 
+> Agreed.
 
-The OCP card is an atomic clock, it does not have any networking.
+My main complaint about the current pins implementation is that they put
+everything in a single bag. In a netdev world - it would be like we put
+TX queues and RX queues together, named them "Queues", expose a list to
+the userspace and let the user figure out which ones which by reading a
+"TX" flag.
 
-> I can't imagine practically havind the whole dpll instance netns aware.
-> Omitting the fact that it really has no meaning for non-synce pins, what
-> would be the behaviour when for example pin 1 is in netns a, pin 2 in
-> netns b and dpll itself in netns c?
+All DPLLs I know have a Sources block, DPLLs and Output blocks. See:
 
-To be clear I don't think it's a bad idea in general, I've done 
-the same thing for my WIP PSP patches. But we already have one
-device without netdevs, hence I thought maybe devlink. So maybe
-we do the same thing with devlink? I mean - allow multiple devlink
-instances to be linked and require caps on any of them?
+https://www.renesas.com/us/en/products/clocks-timing/jitter-attenuators-frequency-translation/8a34044-multichannel-dpll-dco-four-eight-channels#overview
+
+https://ww1.microchip.com/downloads/aemDocuments/documents/TIM/ProductDocuments/ProductBrief/ZL3063x-System-Synchronizers-with-up-to-5-Channels-10-Inputs-20-Outputs-Product-Brief-DS20006634.pdf
+
+https://www.sitime.com/support/resource-library/product-briefs/cascade-sit9514x-clock-system-chip-family
+
+https://www.ti.com/lit/ds/symlink/lmk5b33414.pdf?ts=1670516132647&ref_url=https%253A%252F%252Fwww.ti.com%252Fclocks-timing%252Fjitter-cleaners-synchronizers%252Fproducts.html
+
+If we model everything as "pins" we won't be able to correctly extend
+the API to add new features.
+
+Sources can configure the expected frequency, input signal monitoring
+(on multiple layers), expected signal levels, input termination and so
+on. Outputs will need the enable flag, signal format, frequency, phase
+offset etc. Multiple DPLLs can reuse a single source inside the same
+package simultaneously.
+
+A source should be able to link to a pin or directly to the netdev for
+some embedded solutions. We don't need to go through the pin abstraction
+at all.
+
+An optional pin entity should only represent a physical connection with
+a name and maybe a 3-state selection of In/Out/HiZ and then link to
+sources or output of the DPLL(s).
+
+Finally, the DPLL object should keep track of the source priority list,
+have a proper status (locked/unlocked/holdover/freerunning), implement
+the NCO mode, lock thresholds, bandwidths, auto-switch mode and so on.
+
+Current implementation creates a lot of ambiguity, mixes input pins with
+output pins and assigns priories to pins. Every SW entity will receive a
+big list of pins and will need to parse it.
+
+I prefer the approach that the ptp subsystem set - with its abstraction
+of input/output channels and pins that can be assigned to them. While
+not perfect - it represents reality much closer.
+
+Thanks
+Maciek
