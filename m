@@ -2,245 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B28646F32
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Dec 2022 13:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C5864707C
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Dec 2022 14:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiLHMCQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Dec 2022 07:02:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S229936AbiLHNH4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Dec 2022 08:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHMCP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Dec 2022 07:02:15 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FC6862D0
-        for <linux-clk@vger.kernel.org>; Thu,  8 Dec 2022 04:02:12 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id i15so1782527edf.2
-        for <linux-clk@vger.kernel.org>; Thu, 08 Dec 2022 04:02:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qz3MP8hDU1IsxsCEe+N2MZItnF0m71Vp8b1O7ckwZcA=;
-        b=7iGcG4y6WEOvG7ppT7je8BwERX7JRrYwRxsJTwKO7IkUnzyhTABt2RuFROoI1/AITF
-         mqhvHnUsOzwlPBMdbYE/bKMWQtZQnS/+7i0n05HCIypZhJfEvFqyxotpVFYCzJp5WBoL
-         HaMUZTbLcW4vcDXjp+B8CUByJ1ACdZFF9ejZ2VUZikcblsk2B0FuH09+ZsOb6/4EDSBT
-         EhBYBI71EEvP9r6g2+rD9KhzA9/re3POEVnUNqTLtp2GRlhg2Vk8m6j7XLR9yUkdpOGv
-         1i8VpMfI5JP8KaPfxsbTnW++lF2X0y84l+BBocT5txuBvTrqXw8EwNpEIBYCWbC23/RS
-         v6dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qz3MP8hDU1IsxsCEe+N2MZItnF0m71Vp8b1O7ckwZcA=;
-        b=F5B5mYHkie6Z/tI0IDUVSAvIJlBUdfANdIk48FT/YlLfQZUxXaYP6s6qfxT4VYmfoo
-         VtA3+7loxHZyRcJz75qdS1hByVhXO1zGwdNbP6hZNplln+DJ2i7Borokeg7UZrqB70DZ
-         H/5MrwF7VYuqEUGbQ/S7eVe7LjFIbfmpI/5uRCQiFL4e3lrgS782lftPxYRXMO3Vpjdy
-         aXsrF4eXz9AyhA69V10k+u3R8yk4ksrZ3xNvmDoesEtln2Giq53ETYyIoI8htk7lWS0I
-         9/ywrtpCny8IsemUHLYr7lwV9JjCl5x3bu58gwXvPrbg6ZCu1MV7V5iNn6PPwjmwa+Cc
-         gz6Q==
-X-Gm-Message-State: ANoB5pm06NsQECBEbpZdBS2hSoomP3Puzis3lNNopGj20vEyik9w86qx
-        2M06IjGSrPNEnfHUCODDUSSSyA==
-X-Google-Smtp-Source: AA0mqf7dmEc8cfEAKf5s+0mmMiNPbAoDNOYS0r9qBabTpzLNPaiSbpCgcK9k0zK7FwH5wNdXlo7RDg==
-X-Received: by 2002:a05:6402:eaa:b0:462:c7ed:7b41 with SMTP id h42-20020a0564020eaa00b00462c7ed7b41mr2063468eda.21.1670500931147;
-        Thu, 08 Dec 2022 04:02:11 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id r19-20020aa7cb93000000b00463c5c32c6esm3269411edt.89.2022.12.08.04.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 04:02:10 -0800 (PST)
-Date:   Thu, 8 Dec 2022 13:02:09 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [RFC PATCH v4 0/4] Create common DPLL/clock configuration API
-Message-ID: <Y5HSQU1aCGpOZLiJ@nanopsycho>
-References: <20221129213724.10119-1-vfedorenko@novek.ru>
- <Y4dNV14g7dzIQ3x7@nanopsycho>
- <DM6PR11MB4657003794552DC98ACF31669B179@DM6PR11MB4657.namprd11.prod.outlook.com>
- <Y4oj1q3VtcQdzeb3@nanopsycho>
- <20221206184740.28cb7627@kernel.org>
- <Y5CofhLCykjsFie6@nanopsycho>
- <20221207091946.3115742f@kernel.org>
+        with ESMTP id S229988AbiLHNHx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Dec 2022 08:07:53 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BCA23145
+        for <linux-clk@vger.kernel.org>; Thu,  8 Dec 2022 05:07:46 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:5574:4fdf:a801:888e])
+        by albert.telenet-ops.be with bizsmtp
+        id tp7k2800C2deJRf06p7kyk; Thu, 08 Dec 2022 14:07:45 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1p3GIF-002tBF-Ng; Thu, 08 Dec 2022 13:46:27 +0100
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1p3DeN-002fmq-2w; Thu, 08 Dec 2022 10:57:07 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Magnus Damm <magnus.damm@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Tho Vu <tho.vu.wh@renesas.com>, linux-renesas-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/3] renesas: r8a779g0: Add support for boost mode
+Date:   Thu,  8 Dec 2022 10:56:57 +0100
+Message-Id: <cover.1670492384.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207091946.3115742f@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Wed, Dec 07, 2022 at 06:19:46PM CET, kuba@kernel.org wrote:
->On Wed, 7 Dec 2022 15:51:42 +0100 Jiri Pirko wrote:
->> Wed, Dec 07, 2022 at 03:47:40AM CET, kuba@kernel.org wrote:
->> >On Fri, 2 Dec 2022 17:12:06 +0100 Jiri Pirko wrote:  
->> >> Yep, you have the knowledge of sharing inside the driver, so you should
->> >> do it there. For multiple instances, use in-driver notifier for example.  
->> >
->> >No, complexity in the drivers is not a good idea. The core should cover
->> >the complexity and let the drivers be simple.  
->> 
->> Really, even in case only one driver actually consumes the complexicity?
->> I understand having a "libs" to do common functionality for drivers,
->> even in case there is one. But this case, I don't see any benefit.
->
->In the same email thread you admit that mlx5 has multiple devlink
->instances for the same ASIC and refuse to try to prevent similar
->situation happening in the new subsystem.
+	Hi all,
 
-I don't understand your point. In CX there is 1 clock for 2 pci PFs. I
-plan to have 1 dpll instance for the clock shared.
+This patch series adds support for running the Cortex-A76 CPU cores on
+R-Car V4H at 1.8 GHz (High Performance mode aka "boost mode").
 
-But how is what you write relevant to the discussion? We are talking
-about:
-a) 1 pin in 2 dpll instances
-what I undestand you say here is to prevent:
-b) 2 dpll instances for 1 clock
-apples and oranges. Am I missing something?
+The first patch adds boost support to the clock driver.
+The second patch contains an RFC improvement for the clock driver.
+The third patch describes the 1.8 GHz operating point in DT.
 
-I'm totally against b) but that is not what we discuss here, correct?
+Thanks for your comments!
 
+Geert Uytterhoeven (3):
+  clk: renesas: r8a779g0: Add custom clock for PLL2
+  clk: renesas: rcar-gen4: Add support for fractional multiplication
+  arm64: dts: renesas: r8a779g0: Add Cortex-A76 1.8 GHz opp
 
->
->> >> There are currently 3 drivers for dpll I know of. This in ptp_ocp and
->> >> mlx5 there is no concept of sharing pins. You you are talking about a
->> >> single driver.
->> >> 
->> >> What I'm trying to say is, looking at the code, the pin sharing,
->> >> references and locking makes things uncomfortably complex. You are so
->> >> far the only driver to need this, do it internally. If in the future
->> >> other driver appears, this code would be eventually pushed into dpll
->> >> core. No impact on UAPI from what I see. Please keep things as simple as
->> >> possible.  
->> >
->> >But the pin is shared for one driver. Who cares if it's not shared in
->> >another. The user space must be able to reason about the constraints.  
->> 
->> Sorry, I don't follow :/ Could you please explain what do you mean by
->> this?
->
->We don't wait with adding APIs until there is more than one driver that
->needs them.
+ arch/arm64/boot/dts/renesas/r8a779g0.dtsi |   6 +
+ drivers/clk/renesas/r8a779g0-cpg-mssr.c   |  14 +-
+ drivers/clk/renesas/rcar-gen4-cpg.c       | 195 ++++++++++++++++++++++
+ drivers/clk/renesas/rcar-gen4-cpg.h       |   1 +
+ 4 files changed, 209 insertions(+), 7 deletions(-)
 
-Agreed. I was under impression that this is only kernel internals and
-won't affect the UAPI. Perhaps I'm wrong.
+-- 
+2.25.1
 
+Gr{oetje,eeting}s,
 
->
->> >You are suggesting drivers to magically flip state in core objects
->> >because of some hidden dependencies?!  
->> 
->> It's not a state flip. It's more like a well propagated event of a state
->> change. The async changes may happen anyway, so the userspace needs
->> to handle them. Why is this different?
->
->What if the user space wants conflicting configurations for the muxes
->behind a shared pin?
->
->The fact that there is a notification does not solve the problem of
->user space not knowing what's going on. Why would the user space play
->guessing games if the driver _knows_ the topology and can easily tell
->it.
+						Geert
 
-Okay. I get your point. This visibility is probably something nice to
-have. If it weights over the added complexicity, I'm not sure. But it
-looks like you are, and I don't care that much. So let's focus on
-defining the shared pin model properly.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
->> >> There is a big difference if we model flat list of pins with a set of
->> >> attributes for each, comparing to a tree of pins, some acting as leaf,
->> >> node and root. Do we really need such complexicity? What value does it
->> >> bring to the user to expose this?  
->> >
->> >The fact that you can't auto select from devices behind muxes.  
->> 
->> Why? What's wrong with the mechanism I described in another part of this
->> thread?
->> 
->> Extending my example from above
->> 
->>    pin 1 source
->>    pin 2 output
->>    pin 3 muxid 100 source
->>    pin 4 muxid 100 source
->>    pin 5 muxid 101 source
->>    pin 6 muxid 101 source
->>    pin 7 output
->> 
->> User now can set individial prios for sources:
->> 
->> dpll x pin 1 set prio 10
->> etc
->> The result would be:
->> 
->>    pin 1 source prio 10
->>    pin 2 output
->>    pin 3 muxid 100 source prio 8
->>    pin 4 muxid 100 source prio 20
->>    pin 5 muxid 101 source prio 50
->>    pin 6 muxid 101 source prio 60
->>    pin 7 output
->> 
->> Now when auto is enabled, the pin 3 is selected. Why would user need to
->> manually select between 3 and 4? This is should be abstracted out by the
->> driver.
->> 
->> Actually, this is neat as you have one cmd to do selection in manual
->> mode and you have uniform way of configuring/monitoring selection in
->> autosel. Would the muxed pin make this better?
->> 
->> For muxed pin being output, only one pin from mux would be set:
->> 
->>    pin 1 source
->>    pin 2 output
->>    pin 3 muxid 100 disconnected
->>    pin 4 muxid 100 disconnected
->>    pin 5 muxid 101 output
->>    pin 6 muxid 101 disconnected
->>    pin 7 output
->
->Sorry, can't parse, could you draw the diagram?
-
-There is no diagram. It's a plain list of pins with attributes, one pin
-with attributes per line.
-
-
->
->To answer the most basic question - my understanding is that for
->prio-based selection there needs to be silicon that can tell if
->there is a valid clock on the line. While mux is just a fancy switch,
->it has no complex logic, just connects wires.
->
->Arkadiusz, is my understanding incorrect? I may have "intuited" this.
->
->IDK if there are any bidirectional pins after a mux, but that'd be
->another problem. Muxes are only simple for inputs.
->
->> >The HW topology is of material importance to user space.  
->> 
->> Interesting. When I was working on linecards, you said that the user
->> does not care about the inner HW topology. And it makes sense. When
->> things could be abstracted out to make iface clean, I think they should.
->
->I recall only the FW related conversations, but what I think is key 
->is whether the information can be acted upon.
-
-What I was refering to was the device/gearbox exposure per-linecard.
-
->
->> >How many times does Arkadiusz have to explain this :|  
->> 
->> Pardon my ignorance, I don't see why exactly we need mux hierarchy
->> (trees) exposed to user.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
