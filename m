@@ -2,231 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4379F648682
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Dec 2022 17:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88896486C1
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Dec 2022 17:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiLIQbL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 9 Dec 2022 11:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
+        id S229745AbiLIQtA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 9 Dec 2022 11:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLIQbK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Dec 2022 11:31:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272F285D08;
-        Fri,  9 Dec 2022 08:31:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5AEA62086;
-        Fri,  9 Dec 2022 16:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DD61C433D2;
-        Fri,  9 Dec 2022 16:31:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670603466;
-        bh=CrsN70tzxNPFnIPgooUqIeKbdNwzxazgCygNJ9rpjl0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TTwjopn4Ryhmuk9UVzJyXCvzn55rgfLfErBS7J80wtyuvdYVH001ybdQ1L14PTu6K
-         aXSE5/Z/EWjmemGnz9KXm1Lv4MpsD2iUFCy/JVBPnISTJ5oq4pvnyQlWUliL9YhgVW
-         uEp2cE3OOm+GC5Wv+iL7OK/v97FAhIOQuipn/Oqin4TbzIXziFFsVL41qUhvUzewFH
-         bH6+fB6u8J7L53Sylx8Kso1xA2+5KEgwV+YI9A5y+zuGEXlMetOCLlfj6Y7wt9dsZA
-         nq2uR6+UiiZOOeWoJL6btts93lHXA9KtOpq+sJeOlgX96kCqmyx5qhtXYyjL3oqF0y
-         U82sWQvMl/hjg==
-Date:   Fri, 9 Dec 2022 08:31:04 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maciek Machnikowski <maciek@machnikowski.net>
-Cc:     Jiri Pirko <jiri@resnulli.us>,
-        "'Kubalewski, Arkadiusz'" <arkadiusz.kubalewski@intel.com>,
-        'Vadim Fedorenko' <vfedorenko@novek.ru>,
-        'Jonathan Lemon' <jonathan.lemon@gmail.com>,
-        'Paolo Abeni' <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: Re: [RFC PATCH v4 0/4] Create common DPLL/clock configuration API
-Message-ID: <20221209083104.2469ebd6@kernel.org>
-In-Reply-To: <a8f9792b-93f1-b0b7-2600-38ac3c0e3832@machnikowski.net>
-References: <20221129213724.10119-1-vfedorenko@novek.ru>
-        <Y4dNV14g7dzIQ3x7@nanopsycho>
-        <DM6PR11MB4657003794552DC98ACF31669B179@DM6PR11MB4657.namprd11.prod.outlook.com>
-        <Y4oj1q3VtcQdzeb3@nanopsycho>
-        <20221206184740.28cb7627@kernel.org>
-        <10bb01d90a45$77189060$6549b120$@gmail.com>
-        <20221207152157.6185b52b@kernel.org>
-        <6e252f6d-283e-7138-164f-092709bc1292@machnikowski.net>
-        <Y5MW/7jpMUXAGFGX@nanopsycho>
-        <a8f9792b-93f1-b0b7-2600-38ac3c0e3832@machnikowski.net>
+        with ESMTP id S229650AbiLIQs7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Dec 2022 11:48:59 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E613B93A6A
+        for <linux-clk@vger.kernel.org>; Fri,  9 Dec 2022 08:48:57 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id y25so7910629lfa.9
+        for <linux-clk@vger.kernel.org>; Fri, 09 Dec 2022 08:48:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=J30FnQ0XiYOkHjVMLeIVpKVykgV1Qs0n+YPAOVIOpV4=;
+        b=b2D2uGJ8VV2as0TF1iNkhi3Q/zjaAfpIkf9XcqE8w9rpm8q7up3YA5WxPVwjsrahZH
+         LHPxphF3tauv7GfBtCx+k7iMQmR85VR0jbOAIeBBoUcwSOmp9B+v964HnrIFQJArDsqs
+         sGiW2VREDwkxJoz2iJc8qnCR9BRfNJinyYlyQY4MJEz/BfloTsvI3mrYoskO+YqGu5Mr
+         TmWQ0PTlYqC7yDdA2q52PuVvXo+uCcuvkRfsjQGZDLs5MDk8vpMAL8KVOGNds6lQ0X4P
+         qLaJfe0mHDoe22frX4AznQG/cuqryHPti8ECBfTmrDcQFWQynDLUT5IxoTafTHsvikGe
+         s77A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J30FnQ0XiYOkHjVMLeIVpKVykgV1Qs0n+YPAOVIOpV4=;
+        b=GZkFeB20deJsxcwqnNfAqcOhb7QotO1/1wYafGqq+lLnNghXMGF0OmxoikfOiKP/dn
+         H4Y3uLaePpeUDOFxJI/8bSBT+w+tQ/zCNokfUB6tmU3BTe1wBuBvXuO+bO6NKKc8FCkF
+         VwPUtppDpxPwJ6MioGGRV+OE2xyvlEQI02ffbtFM0PCPoZ2b1FZNnOekwhn4w7xR/8z5
+         KJqd6fQsqSMpFUvrzfN8nQvT6kzgNDu5Xt8tlFcfDXnomSekEiddRXH9mwk+7BU8ZRs1
+         4mC4z3KMZWC/KHEAjGcu6K2Qlqbol8wqi9lM5F6Y24w1SaBKv7Ogi64th6224McY9IAK
+         LTqA==
+X-Gm-Message-State: ANoB5pm5oyL48LP6Ywlbovbr4krPmdVc3rMYTrt4rgKzCYgt6bB6Tmkw
+        j+UwdA3Nag/PZasgMsMoJ56bXQ==
+X-Google-Smtp-Source: AA0mqf6QHZX7sydljwe+pLb3NkfHGfOKw8Be2gecYqlnlnkhxnyLI7iY4fQjrJ3kufXVJrNts406fQ==
+X-Received: by 2002:ac2:4c4f:0:b0:4a4:68b8:f4f4 with SMTP id o15-20020ac24c4f000000b004a468b8f4f4mr3021215lfk.58.1670604536319;
+        Fri, 09 Dec 2022 08:48:56 -0800 (PST)
+Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id y2-20020a05651c106200b002770fb5722fsm275242ljm.123.2022.12.09.08.48.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 08:48:55 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, Alex Elder <elder@linaro.org>
+Subject: [PATCH v3 00/19] clk: qcom: smd-rpm: drop platform names
+Date:   Fri,  9 Dec 2022 18:48:36 +0200
+Message-Id: <20221209164855.128798-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 9 Dec 2022 15:09:08 +0100 Maciek Machnikowski wrote:
-> On 12/9/2022 12:07 PM, Jiri Pirko wrote:
-> > Looking at the documentation of the chips, they all have mupltiple DPLLs
-> > on a die. Arkadiusz, in your proposed implementation, do you model each
-> > DPLL separatelly? If yes, then I understand the urgency of need of a
-> > shared pin. So all DPLLs sharing the pin are part of the same chip?
-> >=20
-> > Question: can we have an entity, that would be 1:1 mapped to the actual
-> > device/chip here? Let's call is "a synchronizer". It would contain
-> > multiple DPLLs, user-facing-sources(input_connector),
-> > user-facing-outputs(output_connector), i/o pins.
-> >=20
-> > An example:
-> >                                SYNCHRONIZER
-> >=20
-> >                               =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=90
-> >                               =E2=94=82                                =
-       =E2=94=82
-> >                               =E2=94=82                                =
-       =E2=94=82
-> >   SyncE in connector          =E2=94=82              =E2=94=8C=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=90              =E2=94=82     SyncE out connector
-> >                 =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =
-=E2=94=82in pin 1      =E2=94=82DPLL_1   =E2=94=82     out pin 1=E2=94=82  =
-  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=90
-> >                 =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=9C=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=A4   =E2=94=82
-> >                 =E2=94=82   =E2=94=82         =E2=94=82              =
-=E2=94=82         =E2=94=82              =E2=94=82    =E2=94=82   =E2=94=82
-> >                 =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =
-=E2=94=82              =E2=94=82         =E2=94=82              =E2=94=82  =
-  =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98
-> >                               =E2=94=82              =E2=94=82         =
-=E2=94=82              =E2=94=82
-> >                               =E2=94=82           =E2=94=8C=E2=94=80=E2=
-=94=80=E2=94=A4         =E2=94=82              =E2=94=82
-> >    GNSS in connector          =E2=94=82           =E2=94=82  =E2=94=94=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=98              =E2=94=82
-> >                 =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =
-=E2=94=82in pin 2   =E2=94=82                  out pin 2=E2=94=82     EXT S=
-MA connector
-> >                 =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=98                           =E2=94=82    =E2=94=8C=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=90
-> >                 =E2=94=82   =E2=94=82         =E2=94=82                =
-           =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=A4   =E2=94=82
-> >                 =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =
-=E2=94=82                           =E2=94=82           =E2=94=82    =E2=94=
-=82   =E2=94=82
-> >                               =E2=94=82                           =E2=
-=94=82           =E2=94=82    =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98
-> >                               =E2=94=82                           =E2=
-=94=82           =E2=94=82
-> >    EXT SMA connector          =E2=94=82                           =E2=
-=94=82           =E2=94=82
-> >                 =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=90   mux   =
-=E2=94=82in pin 3      =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90  =E2=94=82           =E2=
-=94=82
-> >                 =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=AC=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=BC=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=90  =E2=94=82         =E2=94=82  =E2=94=82           =E2=94=82
-> >                 =E2=94=82   =E2=94=82    =E2=94=82    =E2=94=82        =
-   =E2=94=82  =E2=94=82DPLL_2   =E2=94=82  =E2=94=82           =E2=94=82
-> >                 =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98    =E2=94=
-=82    =E2=94=82           =E2=94=82  =E2=94=82         =E2=94=82  =E2=94=
-=82           =E2=94=82
-> >                          =E2=94=82    =E2=94=82           =E2=94=94=E2=
-=94=80=E2=94=80=E2=94=A4         =E2=94=9C=E2=94=80=E2=94=80=E2=94=98      =
-     =E2=94=82
-> >                          =E2=94=82    =E2=94=82              =E2=94=82 =
-        =E2=94=82              =E2=94=82
-> >    EXT SMA connector     =E2=94=82    =E2=94=82              =E2=94=82 =
-        =E2=94=82              =E2=94=82
-> >                 =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=90    =E2=94=
-=82    =E2=94=82              =E2=94=82         =E2=94=82              =E2=
-=94=82
-> >                 =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=98    =E2=94=82              =E2=94=94=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98            =
-  =E2=94=82
-> >                 =E2=94=82   =E2=94=82         =E2=94=82                =
-                       =E2=94=82
-> >                 =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =
-=E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98
-> >=20
-> > Do I get that remotelly correct? =20
->=20
-> It looks goot, hence two corrections are needed:
-> - all inputs can go to all DPLLs, and a single source can drive more
->   than one DPLL
-> - The external mux for SMA connector should not be a part of the
->   Synchronizer subsystem - I believe there's already a separate MUX
->   subsystem in the kernel and all external connections should be handled
->   by a devtree or a similar concept.
->=20
-> The only "muxing" thing that could potentially be modeled is a
-> synchronizer output to synchronizer input relation. Some synchronizers
-> does that internally and can use the output of one DPLL as a source for
-> another.
+This series concludes the previous work on Qualcomm RPM and RPMH clock
+drivers. It reworks the clk-smd-rpm driver to drop the SoC name from the
+clock symbol name, as the clock definitions are shared between different
+SoCs (platforms). Having an SoC name in the clock definition can lead to
+all sources of confusion and/or errors.
 
-My experience with DT and muxes is rapidly aging, have you worked with
-those recently? From what I remember the muxes were really.. "embedded"
-and static compared to what we want here.
+Changes since v2:
+ - Split bindings into a separate patch
 
-Using DT may work nicely for defining the topology, but for config we
-still need a different mechanism.
+Changes since v1:
+ - Split the MMXI/MMAXI and sm6375 vs sm6125 changes into two different
+   patches
+ - Reworked macro definitions and usage to remove empty arguments
+ - Dropped qcm2290_bimc_gpu_clk definition in the corresponding patch
+ - Alignment fixes
 
-> > synch
-> > synchronizer_register(synch)
-> >    dpll_1
-> >    synchronizer_dpll_register(synch, dpll_1)
-> >    dpll_2
-> >    synchronizer_dpll_register(synch, dpll_2)
-> >    source_pin_1
-> >    synchronizer_pin_register(synch, source_pin_1)
-> >    output_pin_1
-> >    synchronizer_pin_register(synch, output_pin_1)
-> >    output_pin_2
-> >    synchronizer_pin_register(synch, output_pin_2)
-> >=20
-> > synch_board
-> >    synchronizer_board_register(synch_board)
-> >    synch
-> >    synchronizer_board_sync_register(synch_board, synch)
-> >    source_connector_1
-> >    synchronizer_board_connector_register(synch_board, source_connector_=
-1, source_pin_1)
-> >    output_connector_1
-> >    synchronizer_board_connector_register(synch_board, output_connector_=
-1, output_pin_1)
-> >    output_connector_2
-> >    synchronizer_board_connector_register(synch_board, output_connector_=
-2, output_pin_2) =20
->=20
-> I'd rather not use pins at all - just stick to sources and outputs. Both
-> can use some labels to be identifiable.
 
-TBH I can't comprehend your suggestion.
-IIUC you want an object for a source, but my brain can't handle
-modeling an external object. For instance the source could be GNSS,=20
-but this is not the GNSS subsystem. We have a pin connected to GNSS,
-not the GNSS itself.=20
-Maybe a diagram would help?
+Dmitry Baryshkov (19):
+  dt-bindings: clocks: qcom: rpmcc: add LN_BB_CLK_PIN clocks
+  clk: qcom: smd-rpm: enable pin-controlled ln_bb_clk clocks on qcs404
+  clk: qcom: smd-rpm: remove duplication between MMXI and MMAXI defines
+  clk: qcom: smd-rpm: remove duplication between qcs404 and qcm2290
+    clocks
+  clk: qcom: smd-rpm: add missing ln_bb_clkN clocks
+  clk: qcom: smd-rpm: use msm8998_ln_bb_clk2 for qcm2290 SoC
+  clk: qcom: smd-rpm: rename msm8992_ln_bb_* clocks to qcs404_ln_bb_*
+  clk: qcom: smd-rpm: remove duplication between sm6375 and sm6125
+    clocks
+  clk: qcom: smd-rpm: add XO_BUFFER clock for each XO_BUFFER_PINCTRL
+    clock
+  clk: qcom: smd-rpm: drop the rpm_status_id field
+  clk: qcom: smd-rpm: fix alignment of line breaking backslashes
+  clk: qcom: smd-rpm: move clock definitions together
+  clk: qcom: smd-rpm: rename some msm8974 active-only clocks
+  clk: qcom: smd-rpm: simplify XO_BUFFER clocks definitions
+  clk: qcom: smd-rpm: simplify SMD_RPM/_BRANCH/_QDSS clock definitions
+  clk: qcom: smd-rpm: rename SMD_RPM_BRANCH clock symbols
+  clk: qcom: smd-rpm: rename the qcm2290 rf_clk3 clocks
+  clk: qcom: smd-rpm: rename SMD_RPM_BUS clocks
+  clk: qcom: smd-rpm: remove usage of platform name
+
+ drivers/clk/qcom/clk-smd-rpm.c         | 1441 ++++++++++++------------
+ include/dt-bindings/clock/qcom,rpmcc.h |    2 +
+ include/linux/soc/qcom/smd-rpm.h       |    1 -
+ 3 files changed, 723 insertions(+), 721 deletions(-)
+
+-- 
+2.35.1
+
