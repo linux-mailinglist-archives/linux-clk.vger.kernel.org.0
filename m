@@ -2,148 +2,150 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC7F64E94C
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Dec 2022 11:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAD964E9AF
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Dec 2022 11:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiLPKWQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Dec 2022 05:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S229620AbiLPKqU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Dec 2022 05:46:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLPKWO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 16 Dec 2022 05:22:14 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DE226AFC;
-        Fri, 16 Dec 2022 02:22:12 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BG9oQkj011185;
-        Fri, 16 Dec 2022 10:22:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=clyrmdbLgNyncy6VSf4C1UFgXnOB1Y9vkjufiDDOJM8=;
- b=dr7+o9B7jX5ZgEO553ciEme2NPK4Nq6oNUuGI7hH0pQT50hKTSXT+VPHMTWFpdog4juS
- 5iDIQdT/E9ypyI5UxxvIi95OMJFulUe3OwqXch+d4S/co6tGKMDzoV60pjxvf+mRSDC4
- pNWsxiKpVRtwZCLExP9F6V7IA9WHORz0ACJSNOxalhxBAK7z+pLJLBZJqnj4w1KRzNSf
- PhRPpCKssY2GkelQ4vw5w5s9Khx+xolp+O0Ym+eUUZxwmDX9OE3bPc1bhuqAECQm93Vd
- PQlXkKc3iahQ54iHDQY/u6HgYZeunM/ZO/92w8eAx+p2oUs2ze3/NvG0hhcOs3jkq3s+ UA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mg6v7tr3g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 10:22:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGAM6r7011530
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Dec 2022 10:22:06 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 16 Dec 2022 02:22:01 -0800
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/5] clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
-Date:   Fri, 16 Dec 2022 15:51:21 +0530
-Message-ID: <20221216155038.v2.2.Ic128c1df50b7fc9a6b919932a3b41a799b5ed5e8@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671186084-11356-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1671186084-11356-1-git-send-email-quic_akhilpo@quicinc.com>
+        with ESMTP id S229561AbiLPKqS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 16 Dec 2022 05:46:18 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7E01A7;
+        Fri, 16 Dec 2022 02:46:17 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id w15so2054001wrl.9;
+        Fri, 16 Dec 2022 02:46:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sO4cl5xjhBVd3+iJHoMx+vhvACtxqzk7PC5Y+IYSlGo=;
+        b=U+wbUqs6y5Ha3t9PLfeWlC2Tn5Exdl4K5spuYibUc5x4Tako5sn+lV2bE7eNBDrXHY
+         TphwwB5MfnzepvG/hWZZBVC2+59pd3VSdorV4S1rQRJpujtVaPon1fkyvAv35JO63SpW
+         DMAvbbLO8MAPK05sKTQWD/lsr6eZ1zmwpB0dM0PlrTWBFwMoso37SLjeIlIGak0TFaMq
+         Idfn+zrcnNvR7XcyxkzF1B65JRBzk+MjX6RVkutgYUJ8l1mDq5K6ze7/FVgvuow77c0q
+         7NioshZexPrE9jJ/SWXfGZFbNm65oL75dnovVmi1hDXz/AMqAdPaF3HezRiydofhTUcx
+         nJCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sO4cl5xjhBVd3+iJHoMx+vhvACtxqzk7PC5Y+IYSlGo=;
+        b=43W0/Q68SrbIgUOKt9UmTPqmsa/bCgHgxRrSHgdWbot/Mt6OiPDV4YnEk4heLS8Jcv
+         1eaIS8LfzQkMOEsP3K0ECby1Nole1rxbHgRPLNjaw8yIJYhD8MD7CfXV6If7IB6hfBPf
+         nrLhuhQLWYTvrxFjz4H+7bbmmz2D2uqd3AGCyPRTXuvlh6x0lB6e239Mn/qIPzIFVG9o
+         FwPUHMZGLvKeQgdBWzPcaTFHVlwvopKSnQmq/dJ3tVkrR+ewzHSEvXnH6+8A1jJau22q
+         ewYs1cxEUjIxFccIHlLFIVFxbKmbmrHpOpAiffnj8HwXyk5U07fuNh5ZcGOJN8yIpwOF
+         GqQw==
+X-Gm-Message-State: ANoB5pkGMVK/QsEgdMUE7y9kYVfXtBdNELBSNfKyAyM0plq5fr2UUsMX
+        ZIjwL0QyjmE7/xiGrknrEVY=
+X-Google-Smtp-Source: AA0mqf4HOHiYTqq0kp7OdkUCzJ8BQs4DBeNan81nRQTiiI1Wk2/CM9cRgA6TnfWggcAf6dckKY2Xsg==
+X-Received: by 2002:adf:a44f:0:b0:242:63e5:2449 with SMTP id e15-20020adfa44f000000b0024263e52449mr22819655wra.69.1671187575593;
+        Fri, 16 Dec 2022 02:46:15 -0800 (PST)
+Received: from [192.168.1.132] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r4-20020adfa144000000b002367ad808a9sm1974295wrr.30.2022.12.16.02.46.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 02:46:14 -0800 (PST)
+Message-ID: <ebc435fd-0acb-6588-8acd-c8d504ad4289@gmail.com>
+Date:   Fri, 16 Dec 2022 11:46:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7nj7sIkSs85yu8qFeQJjI8XuEtFqVQHq
-X-Proofpoint-ORIG-GUID: 7nj7sIkSs85yu8qFeQJjI8XuEtFqVQHq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-16_06,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1015 mlxscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=999 phishscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212160091
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 01/10] arm64: dts: mt8183: Fix Mali GPU clock
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, wenst@chromium.org,
+        miles.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, jose.exposito89@gmail.com,
+        drinkcat@chromium.org, weiyi.lu@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        angelogioacchino.delregno@collabora.com
+References: <20220927101128.44758-1-angelogioacchino.delregno@collabora.com>
+ <20220927101128.44758-2-angelogioacchino.delregno@collabora.com>
+ <20221206183037.3jnssar4yxcx5hpb@notapiano>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221206183037.3jnssar4yxcx5hpb@notapiano>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for the newly added 'synced_poweroff' genpd flag. This allows
-some clients (like adreno gpu driver) to request gdsc driver to ensure
-a votable gdsc (like gpucc cx gdsc) has collapsed at hardware.
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
 
-(no changes since v1)
+On 06/12/2022 19:30, Nícolas F. R. A. Prado wrote:
+> On Tue, Sep 27, 2022 at 12:11:19PM +0200, AngeloGioacchino Del Regno wrote:
+>> From: Chen-Yu Tsai <wenst@chromium.org>
+>>
+>> The actual clock feeding into the Mali GPU on the MT8183 is from the
+>> clock gate in the MFGCFG block, not CLK_TOP_MFGPLL_CK from the TOPCKGEN
+>> block, which itself is simply a pass-through placeholder for the MFGPLL
+>> in the APMIXEDSYS block.
+>>
+>> Fix the hardware description with the correct clock reference.
+>>
+>> Fixes: a8168cebf1bc ("arm64: dts: mt8183: Add node for the Mali GPU")
+>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> Hi,
+> 
+> it seems that while all other patches on this series were applied by Chen-Yu
+> through the clk tree, this commit never made it to the mediatek tree.
+> 
+> As a result, MT8183-based machines (or at least mt8183-kukui-jacuzzi, where I
+> tested on) currently hang during boot not only on next, but also on mainline,
+> v6.1-rc8. With this commit applied I've confirmed that the machine boots fine
+> again.
+> 
+> Matthias, could you please apply this commit and make sure it makes its way to
+> v6.1? Given the Fixes tag it should eventually make its way there anyway, but if
+> still possible would be good to have it fixed right from v6.1.
+> 
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
- drivers/clk/qcom/gdsc.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+Applied now.
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 9e4d6ce891aa..575019ba4768 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -136,7 +136,8 @@ static int gdsc_update_collapse_bit(struct gdsc *sc, bool val)
- 	return 0;
- }
- 
--static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
-+static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status,
-+		bool force_sync)
- {
- 	int ret;
- 
-@@ -149,7 +150,7 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
- 	ret = gdsc_update_collapse_bit(sc, status == GDSC_OFF);
- 
- 	/* If disabling votable gdscs, don't poll on status */
--	if ((sc->flags & VOTABLE) && status == GDSC_OFF) {
-+	if ((sc->flags & VOTABLE) && status == GDSC_OFF && !force_sync) {
- 		/*
- 		 * Add a short delay here to ensure that an enable
- 		 * right after it was disabled does not put it in an
-@@ -275,7 +276,7 @@ static int gdsc_enable(struct generic_pm_domain *domain)
- 		gdsc_deassert_clamp_io(sc);
- 	}
- 
--	ret = gdsc_toggle_logic(sc, GDSC_ON);
-+	ret = gdsc_toggle_logic(sc, GDSC_ON, false);
- 	if (ret)
- 		return ret;
- 
-@@ -352,7 +353,7 @@ static int gdsc_disable(struct generic_pm_domain *domain)
- 	if (sc->pwrsts == PWRSTS_RET_ON)
- 		return 0;
- 
--	ret = gdsc_toggle_logic(sc, GDSC_OFF);
-+	ret = gdsc_toggle_logic(sc, GDSC_OFF, domain->synced_poweroff);
- 	if (ret)
- 		return ret;
- 
-@@ -392,7 +393,7 @@ static int gdsc_init(struct gdsc *sc)
- 
- 	/* Force gdsc ON if only ON state is supported */
- 	if (sc->pwrsts == PWRSTS_ON) {
--		ret = gdsc_toggle_logic(sc, GDSC_ON);
-+		ret = gdsc_toggle_logic(sc, GDSC_ON, false);
- 		if (ret)
- 			return ret;
- 	}
--- 
-2.7.4
+Sorry for the late reply.
+Matthias
 
+> 
+> Thanks,
+> Nícolas
+> 
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> index a70b669c49ba..402136bfd535 100644
+>> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+>> @@ -1678,7 +1678,7 @@ gpu: gpu@13040000 {
+>>   				<GIC_SPI 278 IRQ_TYPE_LEVEL_LOW>;
+>>   			interrupt-names = "job", "mmu", "gpu";
+>>   
+>> -			clocks = <&topckgen CLK_TOP_MFGPLL_CK>;
+>> +			clocks = <&mfgcfg CLK_MFG_BG3D>;
+>>   
+>>   			power-domains =
+>>   				<&spm MT8183_POWER_DOMAIN_MFG_CORE0>,
+>> -- 
+>> 2.37.2
+>>
+>>
+>>
