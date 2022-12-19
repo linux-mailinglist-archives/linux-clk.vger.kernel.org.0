@@ -2,853 +2,311 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A20650631
-	for <lists+linux-clk@lfdr.de>; Mon, 19 Dec 2022 03:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910C3650931
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Dec 2022 10:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiLSCLH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 18 Dec 2022 21:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
+        id S231352AbiLSJO2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 19 Dec 2022 04:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiLSCLG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 18 Dec 2022 21:11:06 -0500
-X-Greylist: delayed 1083 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Dec 2022 18:10:48 PST
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0935381
-        for <linux-clk@vger.kernel.org>; Sun, 18 Dec 2022 18:10:48 -0800 (PST)
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(28559:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Mon, 19 Dec 2022 09:52:01 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Qin Jian <qinjian@cqplus1.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [RESEND PATCH v2] clk: Add Sunplus SP7021 clock driver
-Date:   Mon, 19 Dec 2022 09:51:30 +0800
-Message-Id: <20221219015130.42621-1-qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S231550AbiLSJON (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Dec 2022 04:14:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09FDBCB9
+        for <linux-clk@vger.kernel.org>; Mon, 19 Dec 2022 01:13:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671441188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q3p9EZ8ldUCyzfQTOYOKoUroF8oLLp0ISbvBLH22RLk=;
+        b=Ba7Gf0j96xfOLthBYcMn0YLWPpc/lvFM/C6lWtuf7lBZZRhlHuSndthoZXZviKPbIYP305
+        s/D8PlkmMTPLXNXXpB/KVWCFZxi7bbrBqAJvD/W2jivAnbVnx1YtQg9Iatve5c209v/aMd
+        uutR7kFv+e+5a20/FmjJYsswSf6i7is=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-163-IRyaLk_WNLa4T-C-1IH5qg-1; Mon, 19 Dec 2022 04:13:07 -0500
+X-MC-Unique: IRyaLk_WNLa4T-C-1IH5qg-1
+Received: by mail-wm1-f72.google.com with SMTP id 9-20020a1c0209000000b003d1c0a147f6so6352666wmc.4
+        for <linux-clk@vger.kernel.org>; Mon, 19 Dec 2022 01:13:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q3p9EZ8ldUCyzfQTOYOKoUroF8oLLp0ISbvBLH22RLk=;
+        b=pMJqWdpHaKn1EUkJ75AOmfO1FdmcTPPEuY2j2vmk5kJLrT7N0QOz72XLyO6M/19w1G
+         W1k6f6/nmZtSPUVk4fLKRnHBU17SALBHWlKLaa2IGke73cKcZtza/5TcOOzGoFuRGokq
+         Z7bGTmYp9fov7nFpNdpI3YEajmGuHY86vhPVrMWm1ftTdyX0TKCxMrVsRcmfAoZgDbjN
+         Q8FDvo2MfEV2kLT4MonqOn5q7/3QvIxFibgqnBMbMyqGzGtKn6IfkwmPo/am+0V404n9
+         K9wZ67xxTIVoLb0iaj06dF2b7CkKifAqdzwuJwm0cn/sKzsRgT1Uo9lsvND93TMvytyT
+         rOCQ==
+X-Gm-Message-State: ANoB5pmSUS+bvKWNLXr9LNcJCye+kx1Zn44r5MzUhyX5a6I0O5L1QzhQ
+        jHWAuT8tucJr2+egdDwGgiVnkj3koZawl9Ry/uiRC4Ff0oP3tDDXw3HKP9VWZI9wuUTGlzVk2PA
+        5cgw83D2Bg2Qz35Gi8B0g
+X-Received: by 2002:adf:ee88:0:b0:24a:9b90:b621 with SMTP id b8-20020adfee88000000b0024a9b90b621mr26052041wro.30.1671441186477;
+        Mon, 19 Dec 2022 01:13:06 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4BgdvKzAtgyIFlDc81nV+WrS3W3PY9JeL48r8SaAfQ+I1dh+CB69vl6wqcAEKAebtXHJGG+Q==
+X-Received: by 2002:adf:ee88:0:b0:24a:9b90:b621 with SMTP id b8-20020adfee88000000b0024a9b90b621mr26052021wro.30.1671441186193;
+        Mon, 19 Dec 2022 01:13:06 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-101-173.dyn.eolo.it. [146.241.101.173])
+        by smtp.gmail.com with ESMTPSA id cc6-20020a5d5c06000000b002428c4fb16asm9423740wrb.10.2022.12.19.01.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 01:13:05 -0800 (PST)
+Message-ID: <60c011eb99c1859d4ee7191d4cbc20d11548f327.camel@redhat.com>
+Subject: Re: [RFC PATCH v4 3/4] dpll: documentation on DPLL subsystem
+ interface
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Vadim Fedorenko <vfedorenko@novek.ru>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>
+Cc:     netdev@vger.kernel.org, Vadim Fedorenko <vadfed@fb.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Date:   Mon, 19 Dec 2022 10:13:04 +0100
+In-Reply-To: <20221129213724.10119-4-vfedorenko@novek.ru>
+References: <20221129213724.10119-1-vfedorenko@novek.ru>
+         <20221129213724.10119-4-vfedorenko@novek.ru>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add clock driver for Sunplus SP7021 SoC.
+Hello,
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
-Addressed Dan's comments: https://lore.kernel.org/lkml/202208212144.aUofUlUt-lkp@intel.com/
----
- MAINTAINERS                  |   1 +
- drivers/clk/Kconfig          |  10 +
- drivers/clk/Makefile         |   1 +
- drivers/clk/clk-sp7021.c     | 711 +++++++++++++++++++++++++++++++++++
- include/linux/clk-provider.h |  18 +
- 5 files changed, 741 insertions(+)
- create mode 100644 drivers/clk/clk-sp7021.c
+I have a just a few minor notes WRT the documentation - which was a
+very useful entry point for me to help understanding the subsystem.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6..d7c875ac6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2883,6 +2883,7 @@ F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
- F:	arch/arm/boot/dts/sunplus-sp7021*.dts*
- F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
-+F:	drivers/clk/clk-sp7021.c
- F:	drivers/irqchip/irq-sp7021-intc.c
- F:	drivers/reset/reset-sunplus.c
- F:	include/dt-bindings/clock/sunplus,sp7021-clkc.h
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 48f8f4221..134919446 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -428,6 +428,16 @@ config COMMON_CLK_K210
- 	help
- 	  Support for the Canaan Kendryte K210 RISC-V SoC clocks.
- 
-+config COMMON_CLK_SP7021
-+	tristate "Clock driver for Sunplus SP7021 SoC"
-+	depends on SOC_SP7021 || COMPILE_TEST
-+	default SOC_SP7021
-+	help
-+	  This driver supports the Sunplus SP7021 SoC clocks.
-+	  It implements SP7021 PLLs/gate.
-+	  Not all features of the PLL are currently supported
-+	  by the driver.
-+
- source "drivers/clk/actions/Kconfig"
- source "drivers/clk/analogbits/Kconfig"
- source "drivers/clk/baikal-t1/Kconfig"
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index d5db170d3..2979675a5 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_COMMON_CLK_SI5351)		+= clk-si5351.o
- obj-$(CONFIG_COMMON_CLK_SI514)		+= clk-si514.o
- obj-$(CONFIG_COMMON_CLK_SI544)		+= clk-si544.o
- obj-$(CONFIG_COMMON_CLK_SI570)		+= clk-si570.o
-+obj-$(CONFIG_COMMON_CLK_SP7021)		+= clk-sp7021.o
- obj-$(CONFIG_COMMON_CLK_STM32F)		+= clk-stm32f4.o
- obj-$(CONFIG_COMMON_CLK_STM32H7)	+= clk-stm32h7.o
- obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= clk-stm32mp1.o
-diff --git a/drivers/clk/clk-sp7021.c b/drivers/clk/clk-sp7021.c
-new file mode 100644
-index 000000000..316f8cad4
---- /dev/null
-+++ b/drivers/clk/clk-sp7021.c
-@@ -0,0 +1,711 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Copyright (C) Sunplus Technology Co., Ltd.
-+ *       All rights reserved.
-+ */
-+#include <linux/module.h>
-+#include <linux/clk-provider.h>
-+#include <linux/of.h>
-+#include <linux/bitfield.h>
-+#include <linux/slab.h>
-+#include <linux/io.h>
-+#include <linux/err.h>
-+#include <linux/platform_device.h>
-+#include <dt-bindings/clock/sunplus,sp7021-clkc.h>
-+
-+/* speical div_width values for PLLTV/PLLA */
-+#define DIV_TV		33
-+#define DIV_A		34
-+
-+/* PLLTV parameters */
-+enum {
-+	SEL_FRA,
-+	SDM_MOD,
-+	PH_SEL,
-+	NFRA,
-+	DIVR,
-+	DIVN,
-+	DIVM,
-+	P_MAX
-+};
-+
-+#define MASK_SEL_FRA	GENMASK(1, 1)
-+#define MASK_SDM_MOD	GENMASK(2, 2)
-+#define MASK_PH_SEL	GENMASK(4, 4)
-+#define MASK_NFRA	GENMASK(12, 6)
-+#define MASK_DIVR	GENMASK(8, 7)
-+#define MASK_DIVN	GENMASK(7, 0)
-+#define MASK_DIVM	GENMASK(14, 8)
-+
-+/* HIWORD_MASK FIELD_PREP */
-+#define HWM_FIELD_PREP(mask, value)		\
-+({						\
-+	u32 _m = mask;				\
-+	(_m << 16) | FIELD_PREP(_m, value);	\
-+})
-+
-+struct sp_pll {
-+	struct clk_hw hw;
-+	void __iomem *reg;
-+	spinlock_t lock;	/* lock for reg */
-+	int div_shift;
-+	int div_width;
-+	int pd_bit;		/* power down bit idx */
-+	int bp_bit;		/* bypass bit idx */
-+	unsigned long brate;	/* base rate, TODO: replace brate with muldiv */
-+	u32 p[P_MAX];		/* for hold PLLTV/PLLA parameters */
-+};
-+
-+#define to_sp_pll(_hw)	container_of(_hw, struct sp_pll, hw)
-+
-+struct sp_clk_gate_info {
-+	u16	reg;		/* reg_index_shift */
-+	u16	ext_parent;	/* parent is extclk */
-+};
-+
-+static const struct sp_clk_gate_info sp_clk_gates[] = {
-+	{ 0x02 },
-+	{ 0x05 },
-+	{ 0x06 },
-+	{ 0x07 },
-+	{ 0x09 },
-+	{ 0x0b, 1 },
-+	{ 0x0f, 1 },
-+	{ 0x14 },
-+	{ 0x15 },
-+	{ 0x16 },
-+	{ 0x17 },
-+	{ 0x18, 1 },
-+	{ 0x19, 1 },
-+	{ 0x1a, 1 },
-+	{ 0x1b, 1 },
-+	{ 0x1c, 1 },
-+	{ 0x1d, 1 },
-+	{ 0x1e },
-+	{ 0x1f, 1 },
-+	{ 0x20 },
-+	{ 0x21 },
-+	{ 0x22 },
-+	{ 0x23 },
-+	{ 0x24 },
-+	{ 0x25 },
-+	{ 0x26 },
-+	{ 0x2a },
-+	{ 0x2b },
-+	{ 0x2d },
-+	{ 0x2e },
-+	{ 0x30 },
-+	{ 0x31 },
-+	{ 0x32 },
-+	{ 0x33 },
-+	{ 0x3d },
-+	{ 0x3e },
-+	{ 0x3f },
-+	{ 0x42 },
-+	{ 0x44 },
-+	{ 0x4b },
-+	{ 0x4c },
-+	{ 0x4d },
-+	{ 0x4e },
-+	{ 0x4f },
-+	{ 0x50 },
-+	{ 0x55 },
-+	{ 0x60 },
-+	{ 0x61 },
-+	{ 0x6a },
-+	{ 0x73 },
-+	{ 0x86 },
-+	{ 0x8a },
-+	{ 0x8b },
-+	{ 0x8d },
-+	{ 0x8e },
-+	{ 0x8f },
-+	{ 0x90 },
-+	{ 0x92 },
-+	{ 0x93 },
-+	{ 0x95 },
-+	{ 0x96 },
-+	{ 0x97 },
-+	{ 0x98 },
-+	{ 0x99 },
-+};
-+
-+#define _M		1000000UL
-+#define F_27M		(27 * _M)
-+
-+/*********************************** PLL_TV **********************************/
-+
-+/* TODO: set proper FVCO range */
-+#define FVCO_MIN	(100 * _M)
-+#define FVCO_MAX	(200 * _M)
-+
-+#define F_MIN		(FVCO_MIN / 8)
-+#define F_MAX		(FVCO_MAX)
-+
-+static long plltv_integer_div(struct sp_pll *clk, unsigned long freq)
-+{
-+	/* valid m values: 27M must be divisible by m */
-+	static const u32 m_table[] = {
-+		1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20, 24, 25, 27, 30, 32
-+	};
-+	u32 m, n, r;
-+	unsigned long fvco, nf;
-+	long ret;
-+
-+	freq = clamp(freq, F_MIN, F_MAX);
-+
-+	/* DIVR 0~3 */
-+	for (r = 0; r <= 3; r++) {
-+		fvco = freq << r;
-+		if (fvco <= FVCO_MAX)
-+			break;
-+	}
-+
-+	/* DIVM */
-+	for (m = 0; m < ARRAY_SIZE(m_table); m++) {
-+		nf = fvco * m_table[m];
-+		n = nf / F_27M;
-+		if ((n * F_27M) == nf)
-+			break;
-+	}
-+	if (m >= ARRAY_SIZE(m_table)) {
-+		ret = -EINVAL;
-+		goto err_not_found;
-+	}
-+
-+	/* save parameters */
-+	clk->p[SEL_FRA] = 0;
-+	clk->p[DIVR]    = r;
-+	clk->p[DIVN]    = n;
-+	clk->p[DIVM]    = m_table[m];
-+
-+	return freq;
-+
-+err_not_found:
-+	pr_err("%s: %s freq:%lu not found a valid setting\n",
-+	       __func__, clk_hw_get_name(&clk->hw), freq);
-+
-+	return ret;
-+}
-+
-+/* parameters for PLLTV fractional divider */
-+static const u32 pt[][5] = {
-+	/* conventional fractional */
-+	{
-+		1,			/* factor */
-+		5,			/* 5 * p0 (nint) */
-+		1,			/* 1 * p0 */
-+		F_27M,			/* F_27M / p0 */
-+		1,			/* p0 / p2 */
-+	},
-+	/* phase rotation */
-+	{
-+		10,			/* factor */
-+		54,			/* 5.4 * p0 (nint) */
-+		2,			/* 0.2 * p0 */
-+		F_27M / 10,		/* F_27M / p0 */
-+		5,			/* p0 / p2 */
-+	},
-+};
-+
-+static const u32 sdm_mod_vals[] = { 91, 55 };
-+
-+static long plltv_fractional_div(struct sp_pll *clk, unsigned long freq)
-+{
-+	u32 m, r;
-+	u32 nint, nfra;
-+	u32 df_quotient_min = 210000000;
-+	u32 df_remainder_min = 0;
-+	unsigned long fvco, nf, f, fout = 0;
-+	int sdm, ph;
-+
-+	freq = clamp(freq, F_MIN, F_MAX);
-+
-+	/* DIVR 0~3 */
-+	for (r = 0; r <= 3; r++) {
-+		fvco = freq << r;
-+		if (fvco <= FVCO_MAX)
-+			break;
-+	}
-+	f = F_27M >> r;
-+
-+	/* PH_SEL */
-+	for (ph = ARRAY_SIZE(pt) - 1; ph >= 0; ph--) {
-+		const u32 *pp = pt[ph];
-+
-+		/* SDM_MOD */
-+		for (sdm = 0; sdm < ARRAY_SIZE(sdm_mod_vals); sdm++) {
-+			u32 mod = sdm_mod_vals[sdm];
-+
-+			/* DIVM 1~32 */
-+			for (m = 1; m <= 32; m++) {
-+				u32 df; /* diff freq */
-+				u32 df_quotient, df_remainder;
-+
-+				nf = fvco * m;
-+				nint = nf / pp[3];
-+
-+				if (nint < pp[1])
-+					continue;
-+				if (nint > pp[1])
-+					break;
-+
-+				nfra = (((nf % pp[3]) * mod * pp[4]) + (F_27M / 2)) / F_27M;
-+				if (nfra) {
-+					u32 df0 = f * (nint + pp[2]) / pp[0];
-+					u32 df1 = f * (mod - nfra) / mod / pp[4];
-+
-+					df = df0 - df1;
-+				} else {
-+					df = f * (nint) / pp[0];
-+				}
-+
-+				df_quotient  = df / m;
-+				df_remainder = ((df % m) * 1000) / m;
-+
-+				if (freq > df_quotient) {
-+					df_quotient  = freq - df_quotient - 1;
-+					df_remainder = 1000 - df_remainder;
-+				} else {
-+					df_quotient = df_quotient - freq;
-+				}
-+
-+				if (df_quotient_min > df_quotient ||
-+				    (df_quotient_min == df_quotient &&
-+				    df_remainder_min > df_remainder)) {
-+					/* found a closer freq, save parameters */
-+					clk->p[SEL_FRA] = 1;
-+					clk->p[SDM_MOD] = sdm;
-+					clk->p[PH_SEL]  = ph;
-+					clk->p[NFRA]    = nfra;
-+					clk->p[DIVR]    = r;
-+					clk->p[DIVM]    = m;
-+
-+					fout = df / m;
-+					df_quotient_min = df_quotient;
-+					df_remainder_min = df_remainder;
-+				}
-+			}
-+		}
-+	}
-+
-+	if (!fout) {
-+		pr_err("%s: %s freq:%lu not found a valid setting\n",
-+		       __func__, clk_hw_get_name(&clk->hw), freq);
-+		return -EINVAL;
-+	}
-+
-+	return fout;
-+}
-+
-+static long plltv_div(struct sp_pll *clk, unsigned long freq)
-+{
-+	if (freq % 100)
-+		return plltv_fractional_div(clk, freq);
-+
-+	return plltv_integer_div(clk, freq);
-+}
-+
-+static int plltv_set_rate(struct sp_pll *clk)
-+{
-+	unsigned long flags;
-+	u32 r0, r1, r2;
-+
-+	r0  = BIT(clk->bp_bit + 16);
-+	r0 |= HWM_FIELD_PREP(MASK_SEL_FRA, clk->p[SEL_FRA]);
-+	r0 |= HWM_FIELD_PREP(MASK_SDM_MOD, clk->p[SDM_MOD]);
-+	r0 |= HWM_FIELD_PREP(MASK_PH_SEL, clk->p[PH_SEL]);
-+	r0 |= HWM_FIELD_PREP(MASK_NFRA, clk->p[NFRA]);
-+
-+	r1  = HWM_FIELD_PREP(MASK_DIVR, clk->p[DIVR]);
-+
-+	r2  = HWM_FIELD_PREP(MASK_DIVN, clk->p[DIVN] - 1);
-+	r2 |= HWM_FIELD_PREP(MASK_DIVM, clk->p[DIVM] - 1);
-+
-+	spin_lock_irqsave(&clk->lock, flags);
-+	writel(r0, clk->reg);
-+	writel(r1, clk->reg + 4);
-+	writel(r2, clk->reg + 8);
-+	spin_unlock_irqrestore(&clk->lock, flags);
-+
-+	return 0;
-+}
-+
-+/*********************************** PLL_A ***********************************/
-+
-+/* from Q628_PLLs_REG_setting.xlsx */
-+static const struct {
-+	u32 rate;
-+	u32 regs[5];
-+} pa[] = {
-+	{
-+		.rate = 135475200,
-+		.regs = {
-+			0x4801,
-+			0x02df,
-+			0x248f,
-+			0x0211,
-+			0x33e9
-+		}
-+	},
-+	{
-+		.rate = 147456000,
-+		.regs = {
-+			0x4801,
-+			0x1adf,
-+			0x2490,
-+			0x0349,
-+			0x33e9
-+		}
-+	},
-+	{
-+		.rate = 196608000,
-+		.regs = {
-+			0x4801,
-+			0x42ef,
-+			0x2495,
-+			0x01c6,
-+			0x33e9
-+		}
-+	},
-+};
-+
-+static int plla_set_rate(struct sp_pll *clk)
-+{
-+	const u32 *pp = pa[clk->p[0]].regs;
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&clk->lock, flags);
-+	for (i = 0; i < ARRAY_SIZE(pa->regs); i++)
-+		writel(0xffff0000 | pp[i], clk->reg + (i * 4));
-+	spin_unlock_irqrestore(&clk->lock, flags);
-+
-+	return 0;
-+}
-+
-+static long plla_round_rate(struct sp_pll *clk, unsigned long rate)
-+{
-+	int i = ARRAY_SIZE(pa);
-+
-+	while (--i) {
-+		if (rate >= pa[i].rate)
-+			break;
-+	}
-+	clk->p[0] = i;
-+
-+	return pa[i].rate;
-+}
-+
-+/********************************** SP_PLL ***********************************/
-+
-+static long sp_pll_calc_div(struct sp_pll *clk, unsigned long rate)
-+{
-+	u32 fbdiv;
-+	u32 max = 1 << clk->div_width;
-+
-+	fbdiv = DIV_ROUND_CLOSEST(rate, clk->brate);
-+	if (fbdiv > max)
-+		fbdiv = max;
-+
-+	return fbdiv;
-+}
-+
-+static long sp_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-+			      unsigned long *prate)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+	long ret;
-+
-+	if (rate == *prate) {
-+		ret = *prate; /* bypass */
-+	} else if (clk->div_width == DIV_A) {
-+		ret = plla_round_rate(clk, rate);
-+	} else if (clk->div_width == DIV_TV) {
-+		ret = plltv_div(clk, rate);
-+		if (ret < 0)
-+			ret = *prate;
-+	} else {
-+		ret = sp_pll_calc_div(clk, rate) * clk->brate;
-+	}
-+
-+	return ret;
-+}
-+
-+static unsigned long sp_pll_recalc_rate(struct clk_hw *hw,
-+					unsigned long prate)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+	u32 reg = readl(clk->reg);
-+	unsigned long ret;
-+
-+	if (reg & BIT(clk->bp_bit)) {
-+		ret = prate; /* bypass */
-+	} else if (clk->div_width == DIV_A) {
-+		ret = pa[clk->p[0]].rate;
-+	} else if (clk->div_width == DIV_TV) {
-+		u32 m, r, reg2;
-+
-+		r = FIELD_GET(MASK_DIVR, readl(clk->reg + 4));
-+		reg2 = readl(clk->reg + 8);
-+		m = FIELD_GET(MASK_DIVM, reg2) + 1;
-+
-+		if (reg & MASK_SEL_FRA) {
-+			/* fractional divider */
-+			u32 sdm  = FIELD_GET(MASK_SDM_MOD, reg);
-+			u32 ph   = FIELD_GET(MASK_PH_SEL, reg);
-+			u32 nfra = FIELD_GET(MASK_NFRA, reg);
-+			const u32 *pp = pt[ph];
-+			unsigned long r0, r1;
-+
-+			ret = prate >> r;
-+			r0  = ret * (pp[1] + pp[2]) / pp[0];
-+			r1  = ret * (sdm_mod_vals[sdm] - nfra) / sdm_mod_vals[sdm] / pp[4];
-+			ret = (r0 - r1) / m;
-+		} else {
-+			/* integer divider */
-+			u32 n = FIELD_GET(MASK_DIVN, reg2) + 1;
-+
-+			ret = (prate / m * n) >> r;
-+		}
-+	} else {
-+		u32 fbdiv = ((reg >> clk->div_shift) & ((1 << clk->div_width) - 1)) + 1;
-+
-+		ret = clk->brate * fbdiv;
-+	}
-+
-+	return ret;
-+}
-+
-+static int sp_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-+			   unsigned long prate)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+	unsigned long flags;
-+	u32 reg;
-+
-+	reg = BIT(clk->bp_bit + 16); /* HIWORD_MASK */
-+
-+	if (rate == prate) {
-+		reg |= BIT(clk->bp_bit); /* bypass */
-+	} else if (clk->div_width == DIV_A) {
-+		return plla_set_rate(clk);
-+	} else if (clk->div_width == DIV_TV) {
-+		return plltv_set_rate(clk);
-+	} else if (clk->div_width) {
-+		u32 fbdiv = sp_pll_calc_div(clk, rate);
-+		u32 mask = GENMASK(clk->div_shift + clk->div_width - 1, clk->div_shift);
-+
-+		reg |= mask << 16;
-+		reg |= ((fbdiv - 1) << clk->div_shift) & mask;
-+	}
-+
-+	spin_lock_irqsave(&clk->lock, flags);
-+	writel(reg, clk->reg);
-+	spin_unlock_irqrestore(&clk->lock, flags);
-+
-+	return 0;
-+}
-+
-+static int sp_pll_enable(struct clk_hw *hw)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+
-+	writel(BIT(clk->pd_bit + 16) | BIT(clk->pd_bit), clk->reg);
-+
-+	return 0;
-+}
-+
-+static void sp_pll_disable(struct clk_hw *hw)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+
-+	writel(BIT(clk->pd_bit + 16), clk->reg);
-+}
-+
-+static int sp_pll_is_enabled(struct clk_hw *hw)
-+{
-+	struct sp_pll *clk = to_sp_pll(hw);
-+
-+	return readl(clk->reg) & BIT(clk->pd_bit);
-+}
-+
-+static const struct clk_ops sp_pll_ops = {
-+	.enable = sp_pll_enable,
-+	.disable = sp_pll_disable,
-+	.is_enabled = sp_pll_is_enabled,
-+	.round_rate = sp_pll_round_rate,
-+	.recalc_rate = sp_pll_recalc_rate,
-+	.set_rate = sp_pll_set_rate
-+};
-+
-+static const struct clk_ops sp_pll_sub_ops = {
-+	.enable = sp_pll_enable,
-+	.disable = sp_pll_disable,
-+	.is_enabled = sp_pll_is_enabled,
-+	.recalc_rate = sp_pll_recalc_rate,
-+};
-+
-+static struct clk_hw *sp_pll_register(struct device *dev, const char *name,
-+				      const struct clk_parent_data *parent_data,
-+				      void __iomem *reg, int pd_bit, int bp_bit,
-+				      unsigned long brate, int shift, int width,
-+				      unsigned long flags)
-+{
-+	struct sp_pll *pll;
-+	struct clk_hw *hw;
-+	struct clk_init_data initd = {
-+		.name = name,
-+		.parent_data = parent_data,
-+		.ops = (bp_bit >= 0) ? &sp_pll_ops : &sp_pll_sub_ops,
-+		.num_parents = 1,
-+		.flags = flags,
-+	};
-+	int ret;
-+
-+	pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
-+	if (!pll)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pll->hw.init = &initd;
-+	pll->reg = reg;
-+	pll->pd_bit = pd_bit;
-+	pll->bp_bit = bp_bit;
-+	pll->brate = brate;
-+	pll->div_shift = shift;
-+	pll->div_width = width;
-+	spin_lock_init(&pll->lock);
-+
-+	hw = &pll->hw;
-+	ret = devm_clk_hw_register(dev, hw);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return hw;
-+}
-+
-+#define PLLA_CTL	(pll_base + 0x1c)
-+#define PLLE_CTL	(pll_base + 0x30)
-+#define PLLF_CTL	(pll_base + 0x34)
-+#define PLLTV_CTL	(pll_base + 0x38)
-+
-+static int sp7021_clk_probe(struct platform_device *pdev)
-+{
-+	static const u32 sp_clken[] = {
-+		0x67ef, 0x03ff, 0xff03, 0xfff0, 0x0004, /* G0.1~5  */
-+		0x0000, 0x8000, 0xffff, 0x0040, 0x0000, /* G0.6~10 */
-+	};
-+	static struct clk_parent_data pd_ext, pd_sys, pd_e;
-+	struct device *dev = &pdev->dev;
-+	void __iomem *clk_base, *pll_base, *sys_base;
-+	struct clk_hw_onecell_data *clk_data;
-+	struct clk_hw **hws;
-+	int i;
-+
-+	clk_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (!clk_base)
-+		return -ENXIO;
-+	pll_base = devm_platform_ioremap_resource(pdev, 1);
-+	if (!pll_base)
-+		return -ENXIO;
-+	sys_base = devm_platform_ioremap_resource(pdev, 2);
-+	if (!sys_base)
-+		return -ENXIO;
-+
-+	/* enable default clks */
-+	for (i = 0; i < ARRAY_SIZE(sp_clken); i++)
-+		writel((sp_clken[i] << 16) | sp_clken[i], clk_base + i * 4);
-+
-+	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, CLK_MAX),
-+				GFP_KERNEL);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	hws = clk_data->hws;
-+	pd_ext.index = 0;
-+
-+	/* PLLs */
-+	hws[PLL_A] = sp_pll_register(dev, "plla", &pd_ext, PLLA_CTL,
-+				     11, 12, 27000000, 0, DIV_A, 0);
-+	if (IS_ERR(hws[PLL_A]))
-+		return PTR_ERR(hws[PLL_A]);
-+
-+	hws[PLL_E] = sp_pll_register(dev, "plle", &pd_ext, PLLE_CTL,
-+				     6, 2, 50000000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E]))
-+		return PTR_ERR(hws[PLL_E]);
-+	pd_e.hw = hws[PLL_E];
-+	hws[PLL_E_2P5] = sp_pll_register(dev, "plle_2p5", &pd_e, PLLE_CTL,
-+					 13, -1, 2500000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E_2P5]))
-+		return PTR_ERR(hws[PLL_E_2P5]);
-+	hws[PLL_E_25] = sp_pll_register(dev, "plle_25", &pd_e, PLLE_CTL,
-+					12, -1, 25000000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E_25]))
-+		return PTR_ERR(hws[PLL_E_25]);
-+	hws[PLL_E_112P5] = sp_pll_register(dev, "plle_112p5", &pd_e, PLLE_CTL,
-+					   11, -1, 112500000, 0, 0, 0);
-+	if (IS_ERR(hws[PLL_E_112P5]))
-+		return PTR_ERR(hws[PLL_E_112P5]);
-+
-+	hws[PLL_F] = sp_pll_register(dev, "pllf", &pd_ext, PLLF_CTL,
-+				     0, 10, 13500000, 1, 4, 0);
-+	if (IS_ERR(hws[PLL_F]))
-+		return PTR_ERR(hws[PLL_F]);
-+
-+	hws[PLL_TV] = sp_pll_register(dev, "plltv", &pd_ext, PLLTV_CTL,
-+				      0, 15, 27000000, 0, DIV_TV, 0);
-+	if (IS_ERR(hws[PLL_TV]))
-+		return PTR_ERR(hws[PLL_TV]);
-+	hws[PLL_TV_A] = devm_clk_hw_register_divider(dev, "plltv_a", "plltv", 0,
-+						     PLLTV_CTL + 4, 5, 1,
-+						     CLK_DIVIDER_POWER_OF_TWO,
-+						     &to_sp_pll(hws[PLL_TV])->lock);
-+	if (IS_ERR(hws[PLL_TV_A]))
-+		return PTR_ERR(hws[PLL_TV_A]);
-+
-+	/* system clock, should not be disabled */
-+	hws[PLL_SYS] = sp_pll_register(dev, "pllsys", &pd_ext, sys_base,
-+				       10, 9, 13500000, 0, 4, CLK_IS_CRITICAL);
-+	if (IS_ERR(hws[PLL_SYS]))
-+		return PTR_ERR(hws[PLL_SYS]);
-+	pd_sys.hw = hws[PLL_SYS];
-+
-+	/* gates */
-+	for (i = 0; i < ARRAY_SIZE(sp_clk_gates); i++) {
-+		char name[10];
-+		u32 j = sp_clk_gates[i].reg;
-+		struct clk_parent_data *pd = sp_clk_gates[i].ext_parent ? &pd_ext : &pd_sys;
-+
-+		sprintf(name, "%02d_0x%02x", i, j);
-+		hws[i] = devm_clk_hw_register_gate_parent_data(dev, name, pd, 0,
-+							       clk_base + (j >> 4) * 4,
-+							       j & 0x0f,
-+							       CLK_GATE_HIWORD_MASK,
-+							       NULL);
-+		if (IS_ERR(hws[i]))
-+			return PTR_ERR(hws[i]);
-+	}
-+
-+	clk_data->num = CLK_MAX;
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-+}
-+
-+static const struct of_device_id sp7021_clk_dt_ids[] = {
-+	{ .compatible = "sunplus,sp7021-clkc" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, sp7021_clk_dt_ids);
-+
-+static struct platform_driver sp7021_clk_driver = {
-+	.probe  = sp7021_clk_probe,
-+	.driver = {
-+		.name = "sp7021-clk",
-+		.of_match_table = sp7021_clk_dt_ids,
-+	},
-+};
-+module_platform_driver(sp7021_clk_driver);
-+
-+MODULE_AUTHOR("Sunplus Technology");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Clock driver for Sunplus SP7021 SoC");
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 1615010aa..672866c3e 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -567,6 +567,24 @@ struct clk *clk_register_gate(struct device *dev, const char *name,
- 	__devm_clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, \
- 			       NULL, (flags), (reg), (bit_idx),		      \
- 			       (clk_gate_flags), (lock))
-+/**
-+ * devm_clk_hw_register_gate_parent_data - register a gate clock with the
-+ * clock framework
-+ * @dev: device that is registering this clock
-+ * @name: name of this clock
-+ * @parent_data: parent clk data
-+ * @flags: framework-specific flags for this clock
-+ * @reg: register address to control gating of this clock
-+ * @bit_idx: which bit in the register controls gating of this clock
-+ * @clk_gate_flags: gate-specific flags for this clock
-+ * @lock: shared register lock for this clock
-+ */
-+#define devm_clk_hw_register_gate_parent_data(dev, name, parent_data, flags,  \
-+					      reg, bit_idx, clk_gate_flags,   \
-+					      lock)                           \
-+	__devm_clk_hw_register_gate((dev), NULL, (name), NULL, NULL,	      \
-+				    (parent_data), (flags), (reg), (bit_idx), \
-+				    (clk_gate_flags), (lock))
- void clk_unregister_gate(struct clk *clk);
- void clk_hw_unregister_gate(struct clk_hw *hw);
- int clk_gate_is_enabled(struct clk_hw *hw);
+On Wed, 2022-11-30 at 00:37 +0300, Vadim Fedorenko wrote:
+> From: Vadim Fedorenko <vadfed@fb.com>
+> 
+> Add documentation explaining common netlink interface to configure DPLL
+> devices and monitoring events. Common way to implement DPLL device in
+> a driver is also covered.
+> 
+> Co-developed-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+> Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+> Signed-off-by: Vadim Fedorenko <vadfed@fb.com>
+> ---
+>  Documentation/networking/dpll.rst  | 271 +++++++++++++++++++++++++++++
+>  Documentation/networking/index.rst |   1 +
+>  2 files changed, 272 insertions(+)
+>  create mode 100644 Documentation/networking/dpll.rst
+> 
+> diff --git a/Documentation/networking/dpll.rst b/Documentation/networking/dpll.rst
+> new file mode 100644
+> index 000000000000..58401e2b70a7
+> --- /dev/null
+> +++ b/Documentation/networking/dpll.rst
+> @@ -0,0 +1,271 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +===============================
+> +The Linux kernel DPLL subsystem
+> +===============================
+> +
+> +
+> +The main purpose of DPLL subsystem is to provide general interface
+> +to configure devices that use any kind of Digital PLL and could use
+> +different sources of signal to synchronize to as well as different
+> +types of outputs.
+> +The main interface is NETLINK_GENERIC based protocol with an event
+> +monitoring multicast group defined.
+> +
+> +
+> +Pin object
+> +==========
+> +A pin is amorphic object which represents either input and output, it
+> +could be internal component of the device, as well as externaly
+> +connected.
+> +The number of pins per dpll vary, but usually multiple pins shall be
+> +provided for a single dpll device.
+> +Direction of a pin and it's capabilities are provided to the user in
+> +response for netlink dump request messages.
+> +Pin can be shared by multiple dpll devices. Where configuration on one
+> +pin can alter multiple dplls (i.e. DPLL_PIN_SGINAL_TYPE, DPLL_PIN_TYPE,
 
-base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
--- 
-2.33.1
+Likely typo above: DPLL_PIN_SIGNAL_TYPE
+
+> +DPLL_PIN_STATE), or just one pin-dpll pair (i.e. DPLL_PIN_PRIO).
+> +Pin can be also a MUX type, where one or more pins are attached to
+> +a parent pin. The parent pin is the one directly connected to the dpll,
+> +which may be used by dplls in DPLL_MODE_AUTOMATIC selection mode, where
+> +only pins directly connected to the dpll are capable of automatic
+> +source pin selection. In such case, pins are dumped with
+> +DPLLA_PIN_PARENT_IDX, and are able to be selected by the userspace with
+> +netlink request.
+> +
+> +Configuration commands group
+> +============================
+> +
+> +Configuration commands are used to get or dump information about
+> +registered DPLL devices (and pins), as well as set configuration of
+> +device or pins. As DPLL device could not be abstract and reflects real
+> +hardware, there is no way to add new DPLL device via netlink from user
+> +space and each device should be registered by it's driver.
+
+Side note: in the long run we could end-up with a virtual/dummy dpll
+driver for self-tests and/or reference's implementation sake.
+
+> +
+> +List of command with possible attributes
+> +========================================
+> +
+> +All constants identifying command types use ``DPLL_CMD_`` prefix and
+> +suffix according to command purpose. All attributes use ``DPLLA_``
+> +prefix and suffix according to attribute purpose:
+> +
+> +  ============================  =======================================
+> +  ``DEVICE_GET``                userspace to get device info
+> +    ``ID``                      attr internal dpll device index
+> +    ``NAME``                    attr dpll device name
+> +    ``MODE``                    attr selection mode
+> +    ``MODE_SUPPORTED``          attr available selection modes
+> +    ``SOURCE_PIN_IDX``          attr index of currently selected source
+> +    ``LOCK_STATUS``             attr internal frequency-lock status
+> +    ``TEMP``                    attr device temperature information
+> +    ``NETIFINDEX``              attr dpll owner Linux netdevice index
+
+should we include also the cookie (or wuhatever will be used for
+persistent device identification) into the readable attributes list? 
+
+> +  ``DEVICE_SET``                userspace to set dpll device
+> +                                configuration
+> +    ``ID``                      attr internal dpll device index
+> +    ``MODE``                    attr selection mode to configure
+> +    ``PIN_IDX``                 attr index of source pin to select as
+> +                                active source
+
+It looks like the descrition for the above attribute ('PIN_IDX') and
+'SOURCE_PIN_IDX' has been swapped.
+
+> +  ``PIN_SET``                   userspace to set pins configuration
+> +    ``ID``                      attr internal dpll device index
+> +    ``PIN_IDX``                 attr index of a pin to configure
+> +    ``PIN_TYPE``                attr type configuration value for
+> +                                selected pin
+> +    ``PIN_SIGNAL_TYPE``         attr signal type configuration value
+> +                                for selected pin
+> +    ``PIN_CUSTOM_FREQ``         attr signal custom frequency to be set
+> +    ``PIN_STATE``               attr pin state to be set
+> +    ``PIN_PRIO``                attr pin priority to be set
+> +
+> +Netlink dump requests
+> +=====================
+> +The ``DEVICE_GET`` command is capable of dump type netlink requests.
+> +In such case the userspace shall provide ``DUMP_FILTER`` attribute
+> +value to filter the response as required.
+> +If filter is not provided only name and id of available dpll(s) is
+> +provided. If the request also contains ``ID`` attribute, only selected
+> +dpll device shall be dumped.
+
+Should we explicitly document even the required permissions?
+
+> +
+> +Possible response message attributes for netlink requests depending on
+> +the value of ``DPLLA_DUMP_FILTER`` attribute:
+> +
+> +  =============================== ====================================
+> +  ``DPLL_DUMP_FILTER_PINS``       value of ``DUMP_FILTER`` attribute
+> +    ``PIN``                       attr nested type contain single pin
+> +                                  attributes
+> +    ``PIN_IDX``                   attr index of dumped pin
+> +    ``PIN_DESCRIPTION``           description of a pin provided by
+> +                                  driver
+> +    ``PIN_TYPE``                  attr value of pin type
+> +    ``PIN_TYPE_SUPPORTED``        attr value of supported pin type
+> +    ``PIN_SIGNAL_TYPE``           attr value of pin signal type
+> +    ``PIN_SIGNAL_TYPE_SUPPORTED`` attr value of supported pin signal
+> +                                  type
+> +    ``PIN_CUSTOM_FREQ``           attr value of pin custom frequency
+> +    ``PIN_STATE``                 attr value of pin state
+> +    ``PIN_STATE_SUPPORTED``       attr value of supported pin state
+> +    ``PIN_PRIO``                  attr value of pin prio
+> +    ``PIN_PARENT_IDX``            attr value of pin patent index
+> +    ``PIN_NETIFINDEX``            attr value of netdevice assocaiated
+> +                                  with the pin
+> +  ``DPLL_DUMP_FILTER_STATUS``     value of ``DUMP_FILTER`` attribute
+> +    ``ID``                        attr internal dpll device index
+> +    ``NAME``                      attr dpll device name
+> +    ``MODE``                      attr selection mode
+> +    ``MODE_SUPPORTED``            attr available selection modes
+> +    ``SOURCE_PIN_IDX``            attr index of currently selected
+> +                                  source
+> +    ``LOCK_STATUS``               attr internal frequency-lock status
+> +    ``TEMP``                      attr device temperature information
+> +    ``NETIFINDEX``                attr dpll owner Linux netdevice index
+> +
+> +
+> +The pre-defined enums
+> +=====================
+> +
+> +All the enums use the ``DPLL_`` prefix.
+> +
+> +Values for ``PIN_TYPE`` and ``PIN_TYPE_SUPPORTED`` attributes:
+> +
+> +  ============================ ========================================
+> +  ``PIN_TYPE_MUX``             MUX type pin, connected pins shall
+> +                               have their own types
+> +  ``PIN_TYPE_EXT``             External pin
+> +  ``PIN_TYPE_SYNCE_ETH_PORT``  SyncE on Ethernet port
+> +  ``PIN_TYPE_INT_OSCILLATOR``  Internal Oscillator (i.e. Holdover
+> +                               with Atomic Clock as a Source)
+> +  ``PIN_TYPE_GNSS``            GNSS 1PPS source
+> +
+> +Values for ``PIN_SIGNAL_TYPE`` and ``PIN_SIGNAL_TYPE_SUPPORTED``
+> +attributes:
+> +
+> +  ===============================  ===================================
+> +  ``PIN_SIGNAL_TYPE_1_PPS``        1 Hz frequency
+> +  ``PIN_SIGNAL_TYPE_10_MHZ``       10 MHz frequency
+> +  ``PIN_SIGNAL_TYPE_CUSTOM_FREQ``  Frequency value provided in attr
+> +                                   ``PIN_CUSTOM_FREQ``
+> +
+> +Values for ``LOCK_STATUS`` attribute:
+> +
+> +  ============================= ======================================
+> +  ``LOCK_STATUS_UNLOCKED``      DPLL is in freerun, not locked to any
+> +                                source pin
+> +  ``LOCK_STATUS_CALIBRATING``   DPLL device calibrates to lock to the
+> +                                source pin signal
+> +  ``LOCK_STATUS_LOCKED``        DPLL device is locked to the source
+> +                                pin frequency
+> +  ``LOCK_STATUS_HOLDOVER``      DPLL device lost a lock, using its
+> +                                frequency holdover capabilities
+> +
+> +Values for ``PIN_STATE`` and ``PIN_STATE_SUPPORTED`` attributes:
+> +
+> +============================= ============================
+> +  ``PIN_STATE_CONNECTED``     Pin connected to a dpll
+> +  ``PIN_STATE_DISCONNECTED``  Pin disconnected from dpll
+> +  ``PIN_STATE_SOURCE``        Source pin
+> +  ``PIN_STATE_OUTPUT``        Output pin
+> +
+> +Possible DPLL source selection mode values:
+> +
+> +  =================== ================================================
+> +  ``MODE_FORCED``     source pin is force-selected by
+> +                      ``DPLL_CMD_DEVICE_SET`` with given value of
+> +                      ``DPLLA_SOURCE_PIN_IDX`` attribute
+> +  ``MODE_AUTOMATIC``  source pin ise auto selected according to
+
+typo above 'ise' -> 'is'
+
+
+Cheers,
+
+Paolo
 
