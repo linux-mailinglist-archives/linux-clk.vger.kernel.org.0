@@ -2,187 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F2265174D
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Dec 2022 01:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A18651BDD
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Dec 2022 08:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbiLTAvN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Mon, 19 Dec 2022 19:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
+        id S233510AbiLTHpV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Dec 2022 02:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbiLTAvG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Dec 2022 19:51:06 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2C316490;
-        Mon, 19 Dec 2022 16:51:05 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DDA6124E004;
-        Tue, 20 Dec 2022 08:51:03 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 20 Dec
- 2022 08:51:03 +0800
-Received: from ubuntu.localdomain (183.27.97.120) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 20 Dec
- 2022 08:51:03 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        with ESMTP id S233676AbiLTHpO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Dec 2022 02:45:14 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BB81182B;
+        Mon, 19 Dec 2022 23:45:11 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BK6pRC6004460;
+        Tue, 20 Dec 2022 07:44:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=GU/43o5aYgQU494/wwpx1NXvBoK3twBIVcRyWPGgpG8=;
+ b=MwyqbcjbughfVljkZOKSxIVdVZVm1BluZTXBlXawCiEiWKYMmTdA9PBmktLdd5hMLVmp
+ kgF71rzukz76deCfpatr4DCTeSUUyvgyu0zEVRylQUb9s20Sz8IY0SPhLBl7rFwm71Eo
+ yI7gA/ZwlsWt+8utJVgs/0nfUtMk1gOW5hgZVXSHNn8lrm1AYTxPpu46ZVH4KSVvqPgv
+ 0oOc7swSUIXbROarDsVsEZctY/1tTY5dVHQuEOgXqNRlJ3UYBqZj3wEabrR4qaeYMXgn
+ ep+KDu5yhKJyJGqkhx4geLeFQojwzSXtOHCqQTmoOniNIeiKUEwxWwc5/pmoxx+Oeo2Q Aw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mk83xr4k2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 07:44:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BK7ibkA017977
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Dec 2022 07:44:37 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 19 Dec 2022 23:44:29 -0800
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 11/11] reset: starfive: Add StarFive JH7110 reset driver
-Date:   Tue, 20 Dec 2022 08:50:54 +0800
-Message-ID: <20221220005054.34518-12-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221220005054.34518-1-hal.feng@starfivetech.com>
-References: <20221220005054.34518-1-hal.feng@starfivetech.com>
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Len Brown" <len.brown@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Sean Paul" <sean@poorly.run>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v3 0/5] Improve GPU reset sequence for Adreno GPU
+Date:   Tue, 20 Dec 2022 13:14:12 +0530
+Message-ID: <1671522257-38778-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [183.27.97.120]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: MZw744GSw6qEKIu2d7SsqSrh8Y93nJJs
+X-Proofpoint-GUID: MZw744GSw6qEKIu2d7SsqSrh8Y93nJJs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-20_01,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ clxscore=1015 bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 spamscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2212200063
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add auxiliary driver to support StarFive JH7110 system
-and always-on resets.
 
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- drivers/reset/starfive/Kconfig                |  8 +++
- drivers/reset/starfive/Makefile               |  1 +
- .../reset/starfive/reset-starfive-jh7110.c    | 64 +++++++++++++++++++
- .../reset/starfive/reset-starfive-jh71x0.h    |  6 ++
- 4 files changed, 79 insertions(+)
- create mode 100644 drivers/reset/starfive/reset-starfive-jh7110.c
+This is a rework of [1] using genpd instead of 'reset' framework.
 
-diff --git a/drivers/reset/starfive/Kconfig b/drivers/reset/starfive/Kconfig
-index 9d15c4110e40..fab1a081af17 100644
---- a/drivers/reset/starfive/Kconfig
-+++ b/drivers/reset/starfive/Kconfig
-@@ -10,3 +10,11 @@ config RESET_STARFIVE_JH7100
- 	default SOC_STARFIVE
- 	help
- 	  This enables the reset controller driver for the StarFive JH7100 SoC.
-+
-+config RESET_STARFIVE_JH7110
-+	bool "StarFive JH7110 Reset Driver"
-+	depends on AUXILIARY_BUS && CLK_STARFIVE_JH7110_SYS
-+	select RESET_STARFIVE_JH71X0
-+	default CLK_STARFIVE_JH7110_SYS
-+	help
-+	  This enables the reset controller driver for the StarFive JH7110 SoC.
-diff --git a/drivers/reset/starfive/Makefile b/drivers/reset/starfive/Makefile
-index f6aa12466fad..7a44b66fb9d5 100644
---- a/drivers/reset/starfive/Makefile
-+++ b/drivers/reset/starfive/Makefile
-@@ -2,3 +2,4 @@
- obj-$(CONFIG_RESET_STARFIVE_JH71X0)		+= reset-starfive-jh71x0.o
- 
- obj-$(CONFIG_RESET_STARFIVE_JH7100)		+= reset-starfive-jh7100.o
-+obj-$(CONFIG_RESET_STARFIVE_JH7110)		+= reset-starfive-jh7110.o
-diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
-new file mode 100644
-index 000000000000..74bbc79f86af
---- /dev/null
-+++ b/drivers/reset/starfive/reset-starfive-jh7110.c
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Reset driver for the StarFive JH7110 SoC
-+ *
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+
-+#include "reset-starfive-jh71x0.h"
-+
-+#include <dt-bindings/reset/starfive,jh7110-crg.h>
-+
-+static int jh7110_reset_probe(struct auxiliary_device *adev,
-+			      const struct auxiliary_device_id *id)
-+{
-+	struct reset_info *info = (struct reset_info *)(id->driver_data);
-+	void __iomem *base = dev_get_drvdata(adev->dev.parent);
-+
-+	if (!info || !base)
-+		return -ENODEV;
-+
-+	return reset_starfive_jh71x0_register(&adev->dev, adev->dev.parent->of_node,
-+					      base + info->assert_offset,
-+					      base + info->status_offset,
-+					      NULL,
-+					      info->nr_resets,
-+					      NULL);
-+}
-+
-+static const struct reset_info jh7110_sys_info = {
-+	.nr_resets = JH7110_SYSRST_END,
-+	.assert_offset = 0x2F8,
-+	.status_offset = 0x308,
-+};
-+
-+static const struct reset_info jh7110_aon_info = {
-+	.nr_resets = JH7110_AONRST_END,
-+	.assert_offset = 0x38,
-+	.status_offset = 0x3C,
-+};
-+
-+static const struct auxiliary_device_id jh7110_reset_ids[] = {
-+	{
-+		.name = "clk_starfive_jh71x0.reset-sys",
-+		.driver_data = (kernel_ulong_t)&jh7110_sys_info,
-+	},
-+	{
-+		.name = "clk_starfive_jh71x0.reset-aon",
-+		.driver_data = (kernel_ulong_t)&jh7110_aon_info,
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
-+
-+static struct auxiliary_driver jh7110_reset_driver = {
-+	.probe		= jh7110_reset_probe,
-+	.id_table	= jh7110_reset_ids,
-+};
-+module_auxiliary_driver(jh7110_reset_driver);
-+
-+MODULE_AUTHOR("Hal Feng <hal.feng@starfivetech.com>");
-+MODULE_DESCRIPTION("StarFive JH7110 reset driver");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/reset/starfive/reset-starfive-jh71x0.h b/drivers/reset/starfive/reset-starfive-jh71x0.h
-index db7d39a87f87..e485472e1adc 100644
---- a/drivers/reset/starfive/reset-starfive-jh71x0.h
-+++ b/drivers/reset/starfive/reset-starfive-jh71x0.h
-@@ -6,6 +6,12 @@
- #ifndef __RESET_STARFIVE_JH71X0_H
- #define __RESET_STARFIVE_JH71X0_H
- 
-+struct reset_info {
-+	unsigned int nr_resets;
-+	unsigned int assert_offset;
-+	unsigned int status_offset;
-+};
-+
- int reset_starfive_jh71x0_register(struct device *dev, struct device_node *of_node,
- 				   void __iomem *assert, void __iomem *status,
- 				   const u32 *asserted, unsigned int nr_resets,
+As per the recommended reset sequence of Adreno gpu, we should ensure that
+gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
+Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
+wait until its hw status says OFF.
+
+So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
+provide a hint to the gdsc driver to poll for the hw status and use genpd
+notifier to wait from adreno gpu driver until gdsc is turned OFF.
+
+This series is rebased on top of linux-next (20221215) since the changes span
+multiple drivers.
+
+[1] https://patchwork.freedesktop.org/series/107507/
+
+Changes in v3:
+- Rename the var 'force_sync' to 'wait (Stephen)
+
+Changes in v2:
+- Minor formatting fix
+- Select PM_GENERIC_DOMAINS from Kconfig
+
+Akhil P Oommen (4):
+  clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
+  drm/msm/a6xx: Vote for cx gdsc from gpu driver
+  drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+  drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
+
+Ulf Hansson (1):
+  PM: domains: Allow a genpd consumer to require a synced power off
+
+ drivers/base/power/domain.c           | 23 ++++++++++++++++++
+ drivers/clk/qcom/gdsc.c               | 11 +++++----
+ drivers/gpu/drm/msm/Kconfig           |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
+ drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
+ drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
+ include/linux/pm_domain.h             |  5 ++++
+ 9 files changed, 94 insertions(+), 20 deletions(-)
+
 -- 
-2.38.1
+2.7.4
 
