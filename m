@@ -2,112 +2,145 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84D36532D3
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Dec 2022 16:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F5A6534DA
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Dec 2022 18:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiLUPCI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 21 Dec 2022 10:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S234830AbiLURP6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 21 Dec 2022 12:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiLUPCH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Dec 2022 10:02:07 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9F722295;
-        Wed, 21 Dec 2022 07:02:07 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id r130so13543335oih.2;
-        Wed, 21 Dec 2022 07:02:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZUouVsuH4nDvHqNLQ+k2JwBPwVSp7b+SrA5Adtq8QyU=;
-        b=BE1lw3gqL3acaBnun5oJAV3wxvNvCcQ1Dbmr6Sen++AT6qYOVyr3O7LvGCWoaXKdFd
-         cgKnFhO8ysKdhjJziutFhwcGts+joxRV/jT471jrxCpm2EBN+jMQ+9s/Q3G/H1pPftp3
-         hXj5FgZj0/cYtXTSprhcCgwMXkev3Krp5yZPB5eRlte6CmyfN4yNM5xVg7E7bHfTz9tN
-         nJn8AdsSu1q4jynHCuBbSbQ9OuGxzfPY5EYGkvG4AV0edhVPn/qZvHEykRdjM4C2QHG1
-         SdDcSV1lol2JQHomU+ja6LDYUnwh9uZvmT/ccCO1Ewby4nAoGbyNHnM4eqJjY3yJ9PLz
-         ZpQQ==
-X-Gm-Message-State: AFqh2kpoOHiNzJoB4moI8SmEPukbJ3ybC+kSUEIbn1ve04EWKHGusFkY
-        WWdpQ+Eo83ZQ5Nk7OEa3tstt1OH2IITHsw==
-X-Google-Smtp-Source: AMrXdXvNq0OApu+uBKwR+qJ2s7bsdWrjS5FAU3cILaQIa+Yr5KEkVTYR8aiIPBYUaq8AGn2UjDHuIw==
-X-Received: by 2002:a05:6808:1911:b0:360:e643:7e27 with SMTP id bf17-20020a056808191100b00360e6437e27mr1265875oib.36.1671634923973;
-        Wed, 21 Dec 2022 07:02:03 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id ay14-20020a05620a178e00b006b929a56a2bsm10964365qkb.3.2022.12.21.07.02.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 07:02:02 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-46198b81e5eso16931017b3.4;
-        Wed, 21 Dec 2022 07:02:02 -0800 (PST)
-X-Received: by 2002:a81:c84:0:b0:3b4:8af5:48e with SMTP id 126-20020a810c84000000b003b48af5048emr154231ywm.383.1671634922295;
- Wed, 21 Dec 2022 07:02:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20221213230129.549968-1-fabrizio.castro.jz@renesas.com> <20221213230129.549968-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221213230129.549968-2-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 21 Dec 2022 16:01:50 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWpViKrCmnO-X0BTemJWqhmNZ-D5anzitJh6atbnFB6dQ@mail.gmail.com>
-Message-ID: <CAMuHMdWpViKrCmnO-X0BTemJWqhmNZ-D5anzitJh6atbnFB6dQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] clk: renesas: r9a09g011: Add SDHI/eMMC clock and
- reset entries
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S234799AbiLURP1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Dec 2022 12:15:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D87DAE;
+        Wed, 21 Dec 2022 09:14:56 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLDqBvK018901;
+        Wed, 21 Dec 2022 17:14:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=gBhHKx02h6Axdy+iRKzp80j+cKaack/GA8r6SHvEQjg=;
+ b=Hcq/uMmEZDfqTcvh88boF5kjeDCqSG+DcwHnt/fnoOnlJG3QDe4SgGBF2t/67L3e2FPU
+ ZNrRm6kYOVdHoHfHgDhYRoNYnZ81ttlsTjafzlTkB+w0+l8uTTd1DbfhjkMy5UN2WmPq
+ UGJjSMekoOuPsQLpVl/iBIZumje8tw6gkmTKB+1M9hGojm9CB49dcag7M/qmX3QzUzeP
+ g7LCK8T5jpf2ODJ0qUqInUiDyNgQUZ+zMooGK8NEnq6yul0+qGGUqPd5ta1jJz+/u8Tt
+ F30lPx84kDXdpbxRZfcAXNYWLMkgenaqLqny1tsSi3Sza5/uWFWOI1SigfFXoxL7AySC AA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm2brrjcb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 17:14:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLHEOd0024082
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Dec 2022 17:14:24 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 21 Dec 2022 09:14:16 -0800
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Len Brown" <len.brown@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Sean Paul" <sean@poorly.run>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v4 0/5] Improve GPU reset sequence for Adreno GPU
+Date:   Wed, 21 Dec 2022 22:43:58 +0530
+Message-ID: <1671642843-5244-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: A7scqoT25a38Jvcnb90YnPX4YI2t75XX
+X-Proofpoint-GUID: A7scqoT25a38Jvcnb90YnPX4YI2t75XX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-21_09,2022-12-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 spamscore=0 suspectscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212210143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Fabrizio,
 
-On Wed, Dec 14, 2022 at 12:01 AM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> From: Phil Edworthy <phil.edworthy@renesas.com>
->
-> Add SDHI/eMMC clock/reset entries to CPG driver.
->
-> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
-> ---
->
-> This patch can clash with the below patch (which hasn't been reviewed
-> yet):
-> https://patchwork.kernel.org/project/linux-renesas-soc/patch/20221212172804.1277751-2-biju.das.jz@bp.renesas.com/
+This is a rework of [1] using genpd instead of 'reset' framework.
 
-I'll just ignore the overlap...
+As per the recommended reset sequence of Adreno gpu, we should ensure that
+gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
+Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
+wait until its hw status says OFF.
 
-I couldn't review the clock parents, as that information seems to
-be restricted, but the rest LGTM.
+So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
+provide a hint to the gdsc driver to poll for the hw status and use genpd
+notifier to wait from adreno gpu driver until gdsc is turned OFF.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk-for-v6.3.
+This series is rebased on top of linux-next (20221215) since the changes span
+multiple drivers.
 
-Gr{oetje,eeting}s,
+[1] https://patchwork.freedesktop.org/series/107507/
 
-                        Geert
+Changes in v4:
+- Update genpd function documentation (Ulf)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Changes in v3:
+- Rename the var 'force_sync' to 'wait (Stephen)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Changes in v2:
+- Minor formatting fix
+- Select PM_GENERIC_DOMAINS from Kconfig
+
+Akhil P Oommen (4):
+  clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
+  drm/msm/a6xx: Vote for cx gdsc from gpu driver
+  drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+  drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
+
+Ulf Hansson (1):
+  PM: domains: Allow a genpd consumer to require a synced power off
+
+ drivers/base/power/domain.c           | 26 ++++++++++++++++++++
+ drivers/clk/qcom/gdsc.c               | 11 +++++----
+ drivers/gpu/drm/msm/Kconfig           |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
+ drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
+ drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
+ include/linux/pm_domain.h             |  5 ++++
+ 9 files changed, 97 insertions(+), 20 deletions(-)
+
+-- 
+2.7.4
+
