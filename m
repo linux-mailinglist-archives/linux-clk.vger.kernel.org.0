@@ -2,152 +2,164 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8753F6534D2
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Dec 2022 18:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F42653832
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Dec 2022 22:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbiLURPr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 21 Dec 2022 12:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
+        id S231897AbiLUV1Y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 21 Dec 2022 16:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiLURPT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Dec 2022 12:15:19 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEF8B4B;
-        Wed, 21 Dec 2022 09:14:42 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BLGnphm011216;
-        Wed, 21 Dec 2022 17:14:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=SFm4sYMp/c3P2qEYhneJ47yxJuztQysWAUYzINhpWsw=;
- b=nbThkgGfnr/hDxuQZA6CLIEsqT80aXNWs0kBDnIAbQRZV0AUhb/LLkBI8DPg77Fby7f+
- aPhC7OlWly/h7f6yKRux29fJmKqeijuqiYajlmMBFhGUp7wcEdFwD0W2HZezHyj4dqQ2
- GD8ZvUz2eXX3zDh2s0NBvgSnCFnDnF3aALrfF0kXREOiTP4tM/tQTcRDSmqFl9nwFasV
- IrQlL7fEHeA0CKVCM2OzvqCSm3Xyu+/8s+xg18SDfm8nFOwEIOfERPUxtUQclppyGdt4
- TenQjFkiUgPZpTYdSbXPl/jjEscsbT7uJTWktV2vQDFUAi0yUwerVDMTqVKY+B/7qa1d tg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mm4xkr6ma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:14:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BLHEYH1022866
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Dec 2022 17:14:34 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 21 Dec 2022 09:14:30 -0800
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S229620AbiLUV1X (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Dec 2022 16:27:23 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C8F24081;
+        Wed, 21 Dec 2022 13:27:22 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id h7so16226162wrs.6;
+        Wed, 21 Dec 2022 13:27:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7zmmT5hUEnO3YazAV+S9BqS9lPQTzWcusR7HN4o+fWk=;
+        b=Wd5DoTpz0Fo5tZAlJQhUqNUno8iKGOVHsHfJHuvKc+SYB4XsH2sPDlKhiBweug0Kvx
+         z+xs66VZA8FLuxDmEqxg0j1TBLu1kWjyFINRtp7Jg6LKRPricB42JiG03/Cx1jJo0f06
+         p+CgGH64g738kMUP7izzPmeZi77kiQw/HX+TsVv/APBF8JyW+Cwu0D7u+SPnUgh8MsAi
+         AqeRGvRhcRyUbt9HWTzXAYihIzSMJUXyfpF6/SDH8cEuPhPRjkYTn29J5qbIYkZekdvm
+         4XgHf87egoQBI0iZBu1E2ShdicriOa3gB6PAMb4A0lTt4RhYEtGNgzG9D1QybX6FXjx/
+         J4Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7zmmT5hUEnO3YazAV+S9BqS9lPQTzWcusR7HN4o+fWk=;
+        b=egAIgD1u6w9qsaOgRnAtsXL7xUw7lJ5kMKmH/AKMfs17F/f1oCGbNp5FZIFRm6ovWS
+         bNnjlwFXrzjqaGnUYVDS9lvqoFCLcglgrMcLx7kGNMVhRbUm3gLWm2FMD4+77MS097y2
+         w7zhUGQ97DjQ/KucAf/6Qm+dw8LKn2C2GkOJbXI1RbhvV9/QbKQ5H9Pecp/GhTX2Xgxc
+         C4uqcmmy0DAuOYrFlA17+akvXj27s3z13fCF/6oFuEd6UaAd9dMZ7lLeBppgcqz97pJQ
+         5GJ8+nYjuC6F+KoNsf2VniFLuNIlAJVECtkY1V1nipnCKbiNyNn6Re/2P4y2o4+2/CKZ
+         b/zg==
+X-Gm-Message-State: AFqh2kq1jjcGjS+D5AysXxHTk0qVtMu5cHS/F7IDTF1uGnMMZ8mmv1tO
+        tX+PkZfB1aDv7itboMxF0vpXa9PylT6JZQ==
+X-Google-Smtp-Source: AMrXdXvYzrwIHgsVAWninWjMasl/s+mUYdtgmo6Fhy1U6+5Q0POGtpHfJ+gZBf7VEtZj/uBNCXMZ4g==
+X-Received: by 2002:a5d:4d50:0:b0:242:7fdb:923b with SMTP id a16-20020a5d4d50000000b002427fdb923bmr1927864wru.59.1671658040405;
+        Wed, 21 Dec 2022 13:27:20 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:1595:a48c:95a8:15e0])
+        by smtp.gmail.com with ESMTPSA id bo28-20020a056000069c00b002415dd45320sm16524761wrb.112.2022.12.21.13.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Dec 2022 13:27:19 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 2/5] clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
-Date:   Wed, 21 Dec 2022 22:44:00 +0530
-Message-ID: <20221221224338.v4.2.Ic128c1df50b7fc9a6b919932a3b41a799b5ed5e8@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671642843-5244-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1671642843-5244-1-git-send-email-quic_akhilpo@quicinc.com>
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] clk: renesas: r9a07g044: Add clock and reset entries for CRU
+Date:   Wed, 21 Dec 2022 21:27:03 +0000
+Message-Id: <20221221212703.348278-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: a6rJ0FJEmWy7j7LoqvQEdWLJ-f2Uw8Np
-X-Proofpoint-ORIG-GUID: a6rJ0FJEmWy7j7LoqvQEdWLJ-f2Uw8Np
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-21_10,2022-12-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2212210144
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for the newly added 'synced_poweroff' genpd flag. This allows
-some clients (like adreno gpu driver) to request gdsc driver to ensure
-a votable gdsc (like gpucc cx gdsc) has collapsed at hardware.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Add CRU clock and reset entries to CPG driver.
+
+CRU_SYSCLK and CRU_VCLK clocks need to be turned ON/OFF in particular
+sequence for the CRU block hence add these clocks to
+r9a07g044_no_pm_mod_clks[] array and pass it as part of CPG data for
+both RZ/G2L and RZ/V2L SoCs.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
+ drivers/clk/renesas/r9a07g044-cpg.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-(no changes since v3)
-
-Changes in v3:
-- Rename the var 'force_sync' to 'wait (Stephen)
-
- drivers/clk/qcom/gdsc.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 9e4d6ce891aa..5358e28122ab 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -136,7 +136,8 @@ static int gdsc_update_collapse_bit(struct gdsc *sc, bool val)
- 	return 0;
- }
+diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
+index f5550fccb029..c597414a94d8 100644
+--- a/drivers/clk/renesas/r9a07g044-cpg.c
++++ b/drivers/clk/renesas/r9a07g044-cpg.c
+@@ -182,7 +182,7 @@ static const struct {
+ };
  
--static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
-+static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status,
-+		bool wait)
- {
- 	int ret;
+ static const struct {
+-	struct rzg2l_mod_clk common[75];
++	struct rzg2l_mod_clk common[79];
+ #ifdef CONFIG_CLK_R9A07G054
+ 	struct rzg2l_mod_clk drp[0];
+ #endif
+@@ -250,6 +250,14 @@ static const struct {
+ 					0x558, 1),
+ 		DEF_MOD("gpu_ace_clk",	R9A07G044_GPU_ACE_CLK, R9A07G044_CLK_P1,
+ 					0x558, 2),
++		DEF_MOD("cru_sysclk",   R9A07G044_CRU_SYSCLK, CLK_M2_DIV2,
++					0x564, 0),
++		DEF_MOD("cru_vclk",     R9A07G044_CRU_VCLK, R9A07G044_CLK_M2,
++					0x564, 1),
++		DEF_MOD("cru_pclk",     R9A07G044_CRU_PCLK, R9A07G044_CLK_ZT,
++					0x564, 2),
++		DEF_MOD("cru_aclk",     R9A07G044_CRU_ACLK, R9A07G044_CLK_M0,
++					0x564, 3),
+ 		DEF_MOD("dsi_pll_clk",	R9A07G044_MIPI_DSI_PLLCLK, R9A07G044_CLK_M1,
+ 					0x568, 0),
+ 		DEF_MOD("dsi_sys_clk",	R9A07G044_MIPI_DSI_SYSCLK, CLK_M2_DIV2,
+@@ -368,6 +376,9 @@ static struct rzg2l_reset r9a07g044_resets[] = {
+ 	DEF_RST(R9A07G044_GPU_RESETN, 0x858, 0),
+ 	DEF_RST(R9A07G044_GPU_AXI_RESETN, 0x858, 1),
+ 	DEF_RST(R9A07G044_GPU_ACE_RESETN, 0x858, 2),
++	DEF_RST(R9A07G044_CRU_CMN_RSTB, 0x864, 0),
++	DEF_RST(R9A07G044_CRU_PRESETN, 0x864, 1),
++	DEF_RST(R9A07G044_CRU_ARESETN, 0x864, 2),
+ 	DEF_RST(R9A07G044_MIPI_DSI_CMN_RSTB, 0x868, 0),
+ 	DEF_RST(R9A07G044_MIPI_DSI_ARESET_N, 0x868, 1),
+ 	DEF_RST(R9A07G044_MIPI_DSI_PRESET_N, 0x868, 2),
+@@ -412,6 +423,11 @@ static const unsigned int r9a07g044_crit_mod_clks[] __initconst = {
+ 	MOD_CLK_BASE + R9A07G044_DMAC_ACLK,
+ };
  
-@@ -149,7 +150,7 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
- 	ret = gdsc_update_collapse_bit(sc, status == GDSC_OFF);
++static const unsigned int r9a07g044_no_pm_mod_clks[] = {
++	MOD_CLK_BASE + R9A07G044_CRU_SYSCLK,
++	MOD_CLK_BASE + R9A07G044_CRU_VCLK,
++};
++
+ #ifdef CONFIG_CLK_R9A07G044
+ const struct rzg2l_cpg_info r9a07g044_cpg_info = {
+ 	/* Core Clocks */
+@@ -429,6 +445,10 @@ const struct rzg2l_cpg_info r9a07g044_cpg_info = {
+ 	.num_mod_clks = ARRAY_SIZE(mod_clks.common),
+ 	.num_hw_mod_clks = R9A07G044_TSU_PCLK + 1,
  
- 	/* If disabling votable gdscs, don't poll on status */
--	if ((sc->flags & VOTABLE) && status == GDSC_OFF) {
-+	if ((sc->flags & VOTABLE) && status == GDSC_OFF && !wait) {
- 		/*
- 		 * Add a short delay here to ensure that an enable
- 		 * right after it was disabled does not put it in an
-@@ -275,7 +276,7 @@ static int gdsc_enable(struct generic_pm_domain *domain)
- 		gdsc_deassert_clamp_io(sc);
- 	}
++	/* No PM Module Clocks */
++	.no_pm_mod_clks = r9a07g044_no_pm_mod_clks,
++	.num_no_pm_mod_clks = ARRAY_SIZE(r9a07g044_no_pm_mod_clks),
++
+ 	/* Resets */
+ 	.resets = r9a07g044_resets,
+ 	.num_resets = R9A07G044_TSU_PRESETN + 1, /* Last reset ID + 1 */
+@@ -454,6 +474,10 @@ const struct rzg2l_cpg_info r9a07g054_cpg_info = {
+ 	.num_mod_clks = ARRAY_SIZE(mod_clks.common) + ARRAY_SIZE(mod_clks.drp),
+ 	.num_hw_mod_clks = R9A07G054_STPAI_ACLK_DRP + 1,
  
--	ret = gdsc_toggle_logic(sc, GDSC_ON);
-+	ret = gdsc_toggle_logic(sc, GDSC_ON, false);
- 	if (ret)
- 		return ret;
- 
-@@ -352,7 +353,7 @@ static int gdsc_disable(struct generic_pm_domain *domain)
- 	if (sc->pwrsts == PWRSTS_RET_ON)
- 		return 0;
- 
--	ret = gdsc_toggle_logic(sc, GDSC_OFF);
-+	ret = gdsc_toggle_logic(sc, GDSC_OFF, domain->synced_poweroff);
- 	if (ret)
- 		return ret;
- 
-@@ -392,7 +393,7 @@ static int gdsc_init(struct gdsc *sc)
- 
- 	/* Force gdsc ON if only ON state is supported */
- 	if (sc->pwrsts == PWRSTS_ON) {
--		ret = gdsc_toggle_logic(sc, GDSC_ON);
-+		ret = gdsc_toggle_logic(sc, GDSC_ON, false);
- 		if (ret)
- 			return ret;
- 	}
++	/* No PM Module Clocks */
++	.no_pm_mod_clks = r9a07g044_no_pm_mod_clks,
++	.num_no_pm_mod_clks = ARRAY_SIZE(r9a07g044_no_pm_mod_clks),
++
+ 	/* Resets */
+ 	.resets = r9a07g044_resets,
+ 	.num_resets = R9A07G054_STPAI_ARESETN + 1, /* Last reset ID + 1 */
 -- 
-2.7.4
+2.25.1
 
