@@ -2,146 +2,152 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E59654074
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Dec 2022 12:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA68654447
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Dec 2022 16:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbiLVL5K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Dec 2022 06:57:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
+        id S235757AbiLVP0T (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Dec 2022 10:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235538AbiLVLzv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Dec 2022 06:55:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3292CCAF;
-        Thu, 22 Dec 2022 03:49:58 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E4D816602D1D;
-        Thu, 22 Dec 2022 11:49:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1671709797;
-        bh=PXg/FppXIPAwQaA1oQS+Wf5hDsh7ZOHb0BNVjLOTW5Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f9W6n2Y+3XLDFPStXfD7nv1eW8u2Cq6hou75Mr0KBNGbXgRhbFUvBDL0gRaXjmkg7
-         UMOAtHy9RpleUcKMqypwUm+7FAP+7WV94SPPDS+iflSM0R/3B0aYQ+zVzsCrD1kbCN
-         GLQRSRhrcBvuMao4KMZkkxqhvQDXv5uRUpuNxj/JtHPg+K9qzLfeMANU/PKqlwK/IW
-         jWq29M4zs7VdJhfxxuCcltCFciWJYoREentf1WHh1zoMt7+ZBmdnEzDUFeSiN8AEmd
-         crxVtp/VRrYmXTljITVZtiquORGQRHUQmrruNQeeitOGEvtUI2kb2G0cp9sMJ1mkVR
-         u8wQ8i1Fqflcw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v1 25/25] clk: mediatek: clk-mt7986-topckgen: Migrate to mtk_clk_simple_probe()
-Date:   Thu, 22 Dec 2022 12:48:57 +0100
-Message-Id: <20221222114857.120060-26-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221222114857.120060-1-angelogioacchino.delregno@collabora.com>
-References: <20221222114857.120060-1-angelogioacchino.delregno@collabora.com>
+        with ESMTP id S235759AbiLVPZ5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Dec 2022 10:25:57 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003E52B268;
+        Thu, 22 Dec 2022 07:24:42 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A6BD140002;
+        Thu, 22 Dec 2022 15:24:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1671722681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=paTDVkvAnOW0G/nrH5hLopHfXkzR9wnPXZ3DRptHKzE=;
+        b=An1s8lISNjsPvQ1ituTK/aN3u0eD6UmoFmKwIL0GQfGp0XvXqvtsK7VWOQKsisikEGAN7q
+        muHMLfnUj9yHCYDEFEMNgMuF7RfsFT/acVCNbJH7UNgauLLskDpn43sPiZ/dBSMYF7lrzA
+        zP4cUUaSokxDZ4VxRXLq01Zun+/zSNg4/3lrpVCYkyojIls7kUtcdLgMNik5FrwTPJsBxp
+        c4pm2wnqiWjeg+ZliKFWAAp/2G1W+ZeGAyrooqc7g9jfxp5qHhp8AGzu5JDv61DkzHMALr
+        MDCoPNRIpRzb53IT9AqPTu59V4MlDFJOc2aZ9wTUQnOYjjAI8RhTisk42WDATg==
+Date:   Thu, 22 Dec 2022 16:24:38 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v4 3/5] usb: gadget: udc: add Renesas RZ/N1 USBF
+ controller support
+Message-ID: <20221222162438.4d06bd77@bootlin.com>
+In-Reply-To: <Y6MFKdOU4IUQo70L@kroah.com>
+References: <20221213133302.218955-1-herve.codina@bootlin.com>
+ <20221213133302.218955-4-herve.codina@bootlin.com>
+ <CAMuHMdV7QNZ8Rv6iFLhj_MmBHL-vGWuWZdKB=REWba1UAWgkHw@mail.gmail.com>
+ <Y6MFKdOU4IUQo70L@kroah.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There are no more non-common calls in clk_mt7986_topckgen_probe():
-migrate this driver to mtk_clk_simple_probe().
+Hi Geert, Greg,
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt7986-topckgen.c | 52 +++++-----------------
- 1 file changed, 12 insertions(+), 40 deletions(-)
+On Wed, 21 Dec 2022 14:07:53 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-topckgen.c b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-index bf3088e6d9e3..286418aa00a0 100644
---- a/drivers/clk/mediatek/clk-mt7986-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-@@ -290,52 +290,24 @@ static const struct mtk_mux top_muxes[] = {
- 			     0x1C4, 5),
- };
- 
--static int clk_mt7986_topckgen_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
--	int r;
--	void __iomem *base;
--	int nr = ARRAY_SIZE(top_fixed_clks) + ARRAY_SIZE(top_divs) +
--		 ARRAY_SIZE(top_muxes);
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return -ENOMEM;
--	}
--
--	clk_data = mtk_alloc_clk_data(nr);
--	if (!clk_data)
--		return -ENOMEM;
--
--	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
--				    clk_data);
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_register_muxes(top_muxes, ARRAY_SIZE(top_muxes), node,
--			       &mt7986_clk_lock, clk_data, &pdev->dev);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--
--	if (r) {
--		pr_err("%s(): could not register clock provider: %d\n",
--		       __func__, r);
--		goto free_topckgen_data;
--	}
--	return r;
--
--free_topckgen_data:
--	mtk_free_clk_data(clk_data);
--	return r;
--}
-+static const struct mtk_clk_desc topck_desc = {
-+	.fixed_clks = top_fixed_clks,
-+	.num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.mux_clks = top_muxes,
-+	.num_mux_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt7986_clk_lock,
-+};
- 
- static const struct of_device_id of_match_clk_mt7986_topckgen[] = {
--	{ .compatible = "mediatek,mt7986-topckgen", },
-+	{ .compatible = "mediatek,mt7986-topckgen", .data = &topck_desc },
- 	{}
- };
- 
- static struct platform_driver clk_mt7986_topckgen_drv = {
--	.probe = clk_mt7986_topckgen_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt7986-topckgen",
- 		.of_match_table = of_match_clk_mt7986_topckgen,
--- 
-2.39.0
+> On Wed, Dec 21, 2022 at 02:03:43PM +0100, Geert Uytterhoeven wrote:
+> > Hi Herv=C3=A9,
+> >=20
+> > On Tue, Dec 13, 2022 at 2:33 PM Herve Codina <herve.codina@bootlin.com>=
+ wrote: =20
+> > > Add support for the Renesas USBF controller.
+> > > This controller is an USB2.0 UDC controller available in the
+> > > Renesas r9a06g032 SoC (RZ/N1 family).
+> > >
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+> >=20
+> > Thanks for your patch!
+> >  =20
+> > > --- /dev/null
+> > > +++ b/drivers/usb/gadget/udc/renesas_usbf.c =20
+> >  =20
+> > > +#ifdef DEBUG
+> > > +#define TRACE(_fmt, ...) trace_printk("%s: " _fmt, __func__, ##__VA_=
+ARGS__)
+> > > +#define USBF_TRACE_EP_MASK 0x0ffff /* All the 16 endpoints */
+> > > +#define TRACEEP(_ep, _fmt, ...)                                     =
+        \
+> > > +       do {                                                         =
+       \
+> > > +               if ((1 << (_ep)->id) & USBF_TRACE_EP_MASK)           =
+       \
+> > > +                       trace_printk("%s: " _fmt, __func__, ##__VA_AR=
+GS__); \
+> > > +       } while (0)
+> > > +#else
+> > > +#define TRACE(_fmt, ...) do { } while (0)
+> > > +#define TRACEEP(_ep, _fmt, ...) do { } while (0) =20
+> >=20
+> > Please use "no_printk(fmt, ##__VA_ARGS__)" instead of dummy loops,
+> > to avoid bad callers going unnoticed if DEBUG is not defined. =20
+>=20
+> Even better, do NOT define custom debug/trace macros for a single
+> driver, just use the ones that the rest of the kernel uses instead
+> please.
+>=20
+> thanks,
+>=20
+> greg k-h
 
+I would like to keep some granularity in debug messages and
+also keep the function name automatically added.
+I propose 3 kinds of messages:
+- general ones,
+- specific Endpoint0 ones,
+- other Endpoints ones.
+
+So before doing any modification in the source code, what do you
+think about:
+    /*
+     * Suggested tracers:
+     * - no_printk:    Disable tracing
+     * - trace_printk: Print to trace buffer
+     */
+    #define usbf_dbg(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA_ARG=
+S__)
+    #define usbf_dbg_ep0(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
+_ARGS__)
+    #define usbf_dbg_epn(_fmt, ...) no_printk("%s: " _fmt, __func__, ##__VA=
+_ARGS__)
+
+The code will use only these macros instead of the previously
+defined TRACE and TRACEEP as follow:
+- usbf_dbg() will be called instead of TRACE()
+- usbf_dbg_ep0() will be called instead of TRACEEP() for Endpoint0
+- usbf_dbg_epn() will be called instead of TRACEEP() for other Endpoints
+
+Is that ok for you ?
+
+Best regards,
+Herv=C3=A9
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
