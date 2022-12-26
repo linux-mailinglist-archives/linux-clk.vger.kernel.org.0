@@ -2,97 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530756560A1
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Dec 2022 08:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D75B6561B7
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Dec 2022 10:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiLZHHY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Dec 2022 02:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S231728AbiLZJ6G (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Dec 2022 04:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiLZHHX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Dec 2022 02:07:23 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7992625
-        for <linux-clk@vger.kernel.org>; Sun, 25 Dec 2022 23:07:22 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id c26so2211503uak.5
-        for <linux-clk@vger.kernel.org>; Sun, 25 Dec 2022 23:07:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kc7UX5qQFKgxUp5GIPhkGqMn4OUOgloWMZmKzKsecYc=;
-        b=F36ks6qgrclKiSq119LjQgu9DDYLk5CwlQlwTUbhE5kBes/fyuLFzf2adOZlVDDvZH
-         4pwMnuHAkPHbxR/8o/VFR5Yswpv3I4g9VXlfbDbGA015CZQY333kwSZLDrNcrlzxfxCs
-         oHpmv6xmktdygibJiDmwyOOUKvYzvkDEUmm1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kc7UX5qQFKgxUp5GIPhkGqMn4OUOgloWMZmKzKsecYc=;
-        b=nITJEbu5fB/INqrxjLLtwxeTdyteldH75JKYY+48lKd3Psa9iMAbCI3YC90j5g3mZv
-         1SG6uHZl4ZzGSpY3ewvR+CYZtXiE8oE4ahdsOTn67me/hWMXVQz+FYpue1B5u0KiU80Y
-         2Mg1VU9HTQkAp/PZt6tsKtCR0OnoyCYg2GYuM3B/pb7zudAZQNkZbzK1bKXQ62sNUHBa
-         PTlrz+915CS5ybi2v2HGTRnUBHreHIWCAZ5/5vP2G+YTdhMmiHVqPeBjc/g5j3si7U8T
-         iyE9dQH6w3D+wTeULvFjJLw14Eh8o5ipufJnssaYB3nGXZ79Io2CLK0aVLOKJ+4NR9vV
-         9qBA==
-X-Gm-Message-State: AFqh2krxQct2s+pHbyYcoXSUPUh3zGe35BrAIkEYt2A+K9s7kLQSAnQ/
-        AiiFEaURoRX1eVM3mIa9oQglLQimEwRcqF/9pxvdyg==
-X-Google-Smtp-Source: AMrXdXv2VqQXGVz7UsmxIS87BTXQNUJ4d3yeAlvbMCKPSnAPa13HYbgf2LvkaebhY9B0OY4hysESqwW4AfdqoejLjw4=
-X-Received: by 2002:ab0:7411:0:b0:418:b849:8187 with SMTP id
- r17-20020ab07411000000b00418b8498187mr1585399uap.43.1672038441665; Sun, 25
- Dec 2022 23:07:21 -0800 (PST)
+        with ESMTP id S229447AbiLZJ6E (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Dec 2022 04:58:04 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F12603;
+        Mon, 26 Dec 2022 01:58:02 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BQ9vk6R078242;
+        Mon, 26 Dec 2022 03:57:46 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672048667;
+        bh=iHhOUXpNSlhf+aIXB7cwH4ZQHQG6+xLFZJXmmofWBM8=;
+        h=From:To:CC:Subject:Date;
+        b=QLs8CJTcw7OO2+SIzSsESij60DuJnA6+1qwFCX6vT9twmSPXyp5HEN8R7pnfwVJzk
+         czacw1K381uVNiUVG1QDKGZ65c8DNLVP+euEU9eGVUtzKi4psVndnyuz2ov1v6R257
+         DnugGubXoX57ytDRuSDsmcJSSgjRA0wkxCVBgAzk=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BQ9vk09112194
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 26 Dec 2022 03:57:46 -0600
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 26
+ Dec 2022 03:57:46 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 26 Dec 2022 03:57:46 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BQ9vjCi003614;
+        Mon, 26 Dec 2022 03:57:46 -0600
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Tomi Valkeinen <tomba@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Linux Clock List <linux-clk@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>, Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [PATCH 0/2] Re-introduce parent clock-rate set for fixed-factor clock
+Date:   Mon, 26 Dec 2022 15:27:43 +0530
+Message-ID: <20221226095745.19757-1-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20221223094259.87373-1-angelogioacchino.delregno@collabora.com> <20221223094259.87373-5-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221223094259.87373-5-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 26 Dec 2022 15:07:10 +0800
-Message-ID: <CAGXv+5F8QZGc4oDKJAGbpvubqiewvngURpNhrenS3pcGQNrOYw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/23] clk: mediatek: cpumux: Propagate struct device
- where possible
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 5:43 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Take a pointer to a struct device in mtk_clk_register_cpumuxes() and
-> propagate the same to mtk_clk_register_cpumux() => clk_hw_register().
-> Even though runtime pm is unlikely to be used with CPU muxes, this
-> helps with code consistency and possibly opens to commonization of
-> some mtk_clk_register_(x) functions.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hi all,
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+The support for configuring CLK_SET_RATE_PARENT flag for a few specific
+clocks was only used by the legacy Allwinner A10 sunxi clock, and the
+reason its compatible was dropped was that the code supporting the
+legacy sunxi platforms was removed (as the below-mentioned patch set
+highlights) and no other fixed factor clock needed to do the same.
 
-As with the gates patch, could we make the |struct device *| parameter the
-first one? Also for this case I think we could even drop the
-|struct device_node *| parameter.
+https://lore.kernel.org/lkml/20220531051742.43273-1-samuel@sholland.org/T/
 
 
-Regards
-ChenYu
+The current patch series adds "ti,k3-am62-oldi-clk-div" (TI's display
+subsystem (DSS) clock for the 1st videoport (vp0) on the AM625 SoC) as
+a fixed factor clock and further, it also re-introduces the same support
+to set the CLK_SET_RATE_PARENT flag.
+
+Based on the clock-set request from DSS (equivalent to pixel frequency),
+this clock asks its parent for a serial clock (with 7 times the pixel
+frequrncy), which is required for the generation of serial LVDS signals.
+This clock thus requires the CLK_SET_RATE_PARENT flag to be set, in
+order to propagate the set clock-rate request to its parent clock.
+
+Aradhya Bhatia (2):
+  dt-bindings: clock: fixed-factor: Add TI AM62 SoC OLDI clock
+  clk: fixed-factor: Re-introduce support for clocks to set parent
+    clock-rate
+
+ .../devicetree/bindings/clock/fixed-factor-clock.yaml |  1 +
+ drivers/clk/clk-fixed-factor.c                        | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+-- 
+2.39.0
+
