@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B966585EC
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Dec 2022 19:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9176B6585F1
+	for <lists+linux-clk@lfdr.de>; Wed, 28 Dec 2022 19:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiL1Sws (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Dec 2022 13:52:48 -0500
+        id S233144AbiL1Swu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Dec 2022 13:52:50 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbiL1Swo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Dec 2022 13:52:44 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FB715835
-        for <linux-clk@vger.kernel.org>; Wed, 28 Dec 2022 10:52:43 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id g14so17269977ljh.10
-        for <linux-clk@vger.kernel.org>; Wed, 28 Dec 2022 10:52:43 -0800 (PST)
+        with ESMTP id S233266AbiL1Swr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Dec 2022 13:52:47 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1023014D33
+        for <linux-clk@vger.kernel.org>; Wed, 28 Dec 2022 10:52:46 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id e13so14728191ljn.0
+        for <linux-clk@vger.kernel.org>; Wed, 28 Dec 2022 10:52:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i4OtaAmGJY7xxd4PSBjC+YPPX7IIqZeRJZLCtFq4Lnw=;
-        b=u01nM3/M8jJxPl+mr3IfJwLIMqgfgRkIc7w6xP4R3YYk54xNiardAR6Z9wPu9UoKEY
-         LUwSxpXpdpmAo9PdU5aRwtE2WvRWq5GyDXNmj86oXozOA5M98SHOVi9K4DnyGcI7LCI7
-         8Of3y6Ot3xff/fraFZ6h8KBR6J40sRNXQpduLLa5mileAL3XTz7Ph4gLXyyTknRRdJ5x
-         ACEAAVug2c0D4Tc+pcgumucDt6yGdaIJW+sAhQ0+Rzz0bKlmbSmcq6bmo2H2iOwu1e2n
-         I6vKjeV4a8liWReXXy5sGCSEwX6yq9TA34q44N+pyWpAJjZqnKbes2xi8nNuBzDax44B
-         MuvA==
+        bh=xhFDc1hg+Eb9tEQftxzX0BdtZxOOhzNp27cW9co6hFs=;
+        b=nSJDr/NpSXdbqjRrnAl3kAaM39YIdBbqoty8jnR10wztBSHfiIgTPrl0KtW6jOGGFc
+         l7cnggSn94PT5+Z86poBh8W7P+c/7R4TMR7anjO44SvZXfkxKjNPGsrcXDr/ULfa6ss1
+         ieGyeTSguQ/C0TZxB875nRrUOcGUpTuU08DGST2xfcbaGhWhAhoaG/JPAmoZ5Bzz1UTc
+         3DHpUzzY8Ghs2i7NfIhZlQvnYj9OK8Sm7php/FRbXjdjZ2ZSUGcO8/7eLfFayERDDu5f
+         uI3SY91N/YNSTHxy4MTcLVqqvwHIUVrM5JP3T1wTMbEu8mo+syo5uNai6PmnFJPRA3MT
+         qx+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=i4OtaAmGJY7xxd4PSBjC+YPPX7IIqZeRJZLCtFq4Lnw=;
-        b=lJuvarYTuPt1ikz28xhBa/GR+IR8/py+HjaU6THDx2GYwdxFth+qzxx0LKfk/iwdCf
-         +722zJUEqd60H7nq7MhlBQ6roQsWgmHDi08YTqGfB9+1SaZgCeAYpnibuZrYdJDK0fMe
-         2sAhRyBbZyPrJGCKbnlmz6YvrhBFQLxWBG8ETM8w/Qhx7rZnZLu9kJ/9epgkWBCOlvs5
-         m/ehVOXYEU2kNx7+EOxgz6cRUQ8PuvyGn5dmPhoXfsZhI0W3yjPZchz3y5S3VWWi86vF
-         C78+3RuZ2BWrT66QS8bWr7r4kAMnGc4L/pX+oyaGzCqlmhHSl7VTqVNKfwdGyoDAD+AH
-         jFzA==
-X-Gm-Message-State: AFqh2koeKu9y0gPPpEmOpUpHblsnj0fBCAb/EBHtgRt847g2pmLn5C37
-        1UYv7ED6UBe+U1tMkMIRkWZb5w==
-X-Google-Smtp-Source: AMrXdXs5A0KKKYhlVKfhYdRGa5MYw8svD9+CStJ1H0ghSEZaZbLaiB6BsOctc9Nb/nY8Mm87LaErDg==
-X-Received: by 2002:a2e:9002:0:b0:277:9fc:5927 with SMTP id h2-20020a2e9002000000b0027709fc5927mr6745784ljg.0.1672253563428;
-        Wed, 28 Dec 2022 10:52:43 -0800 (PST)
+        bh=xhFDc1hg+Eb9tEQftxzX0BdtZxOOhzNp27cW9co6hFs=;
+        b=ylUiYS7lB9fnRCWM6PheYS3AN7ypoowhbirGac7FcpVRyAZXriszeTwkQ96wRUDR3Q
+         HuReArI7xxYlXQeI2v1432rEU0nLEEyzJZm8+wG7b/AOTYJF+/4OMmG/tbfqftIGH6TR
+         X/ZnxizfGQKAu41ypjWeLr0jQ5hw4z2FnOy0Gw+5qWVe9L6q06FrkWYvMlNOofOf6SRE
+         JJ8AYEZs5GTzoc3G6e/MH2Rx4J/q+jhOWRDqbV+nAl2/yiyaJmU6uJTKU9UtFze2nUtv
+         u5o6ffbW91wDJ5P4WvHzpPqmkNMt0JE8qQyGiDRgDdsQCEIs1+VkRw2IhqnGqj2rlOO1
+         V03w==
+X-Gm-Message-State: AFqh2kqfYtZUEqg96doGDVLSa3MiFC8HeKxMoqI7NfysXQK/HqmcRBLE
+        TCy74toAU6M54QJMc90TQnQwzVkuP7/Hbv6IuiM=
+X-Google-Smtp-Source: AMrXdXviI+DWKchELH2hrpNTVuKm/QYC+AEQVMeD0/y87/nJHKWZ8P4FBiCrpCFjDyVGq0Vbf3Ah1w==
+X-Received: by 2002:a2e:9052:0:b0:27f:9493:76ab with SMTP id n18-20020a2e9052000000b0027f949376abmr7134543ljg.7.1672253565638;
+        Wed, 28 Dec 2022 10:52:45 -0800 (PST)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s7-20020a2e83c7000000b00279d206a43bsm2031893ljh.34.2022.12.28.10.52.42
+        by smtp.gmail.com with ESMTPSA id s7-20020a2e83c7000000b00279d206a43bsm2031893ljh.34.2022.12.28.10.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 10:52:42 -0800 (PST)
+        Wed, 28 Dec 2022 10:52:43 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
         Taniya Das <quic_tdas@quicinc.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 05/16] dt-bindings: clock: qcom,mmcc-msm8998: drop core_bi_pll_test_se
-Date:   Wed, 28 Dec 2022 20:52:26 +0200
-Message-Id: <20221228185237.3111988-6-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 06/16] dt-bindings: clock: qcom: gcc-sm8350: drop test clock
+Date:   Wed, 28 Dec 2022 20:52:27 +0200
+Message-Id: <20221228185237.3111988-7-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221228185237.3111988-1-dmitry.baryshkov@linaro.org>
 References: <20221228185237.3111988-1-dmitry.baryshkov@linaro.org>
@@ -81,29 +81,21 @@ The test clock apparently it's not used by anyone upstream. Remove it.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- Documentation/devicetree/bindings/clock/qcom,mmcc.yaml | 2 --
- 1 file changed, 2 deletions(-)
+ include/dt-bindings/clock/qcom,gcc-sm8350.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
-index e6d17426e903..cf04d791093f 100644
---- a/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
-@@ -229,7 +229,6 @@ allOf:
-             - description: HDMI phy PLL clock
-             - description: DisplayPort phy PLL link clock
-             - description: DisplayPort phy PLL vco clock
--            - description: Test clock
+diff --git a/include/dt-bindings/clock/qcom,gcc-sm8350.h b/include/dt-bindings/clock/qcom,gcc-sm8350.h
+index f6be3da5f781..529c1b8b0417 100644
+--- a/include/dt-bindings/clock/qcom,gcc-sm8350.h
++++ b/include/dt-bindings/clock/qcom,gcc-sm8350.h
+@@ -8,7 +8,6 @@
+ #define _DT_BINDINGS_CLK_QCOM_GCC_SM8350_H
  
-         clock-names:
-           items:
-@@ -242,7 +241,6 @@ allOf:
-             - const: hdmipll
-             - const: dplink
-             - const: dpvco
--            - const: core_bi_pll_test_se
- 
-   - if:
-       properties:
+ /* GCC HW clocks */
+-#define CORE_BI_PLL_TEST_SE					0
+ #define PCIE_0_PIPE_CLK						1
+ #define PCIE_1_PIPE_CLK						2
+ #define UFS_CARD_RX_SYMBOL_0_CLK				3
 -- 
 2.39.0
 
