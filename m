@@ -2,120 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77DB65AE7C
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Jan 2023 09:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D611665AFD7
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Jan 2023 11:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjABI7U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Jan 2023 03:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
+        id S232491AbjABKtx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Jan 2023 05:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbjABI7Q (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Jan 2023 03:59:16 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73145270F
-        for <linux-clk@vger.kernel.org>; Mon,  2 Jan 2023 00:59:14 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id bp15so40766065lfb.13
-        for <linux-clk@vger.kernel.org>; Mon, 02 Jan 2023 00:59:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L4q/jhl+3gZkrvW3nGc8IjCx71O7qM9VQv4+FQ3jfK4=;
-        b=OODQjf8rzsECesI4/DlAy5E/7P5nVKNg0lV1B9Xv8ILMlNkm2Yym4c4r0lwkXnCoEq
-         3YS9B9m/beohywqDiF2OhJGAqWnhcaSnOzHoxkeMAdz2UQABwhHOzQCk2Yx7ZEmCv8/h
-         kZEJn37eo//zRMt8mznFLHx2FAlUAmBPp0C2gP8MfuN1nF+svRmVUCEECKrP7pHlA0aa
-         queXEG8Xu074Yc6TbMYcBe7vp8D00EgyFek3AllapVNNtn+ODVq3S5+OnpXD5uTMRRYk
-         l3hb30Zs3VwvJwxOwO59q+0VzB11eyBOZMGhMLAMA10psY7CSzJasLBDwj3isGK3iX6l
-         /24g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L4q/jhl+3gZkrvW3nGc8IjCx71O7qM9VQv4+FQ3jfK4=;
-        b=aHfzTX7R36QCRoJoaILGIZWY8Bav/UFjbwoYYyTTYHLUSIZ9GViLnY7+5TnvIUaCAt
-         Lj3bwYig0RNvHkH33ZO2w9AUw4gSj6sOtNiMXmlEtwAi7ftqwGCLwNpfkRaNOHY/J8Bt
-         wyoann0NCQ5WdS9O7SVdBpXuG0Q7BiAw3KHi7oQDII5+uc96c1w7jsVfekrKjQjnW7is
-         /nCFOfMfa08cLPzU/971xHRpEDlrdaNCtqJGDD7N46u00FFzGJzv+cIxGXE5iP6mdUGk
-         FqF/oeUfEvB6dFYe4b5SFj9acM4zohDTDjK1vbc9g8E78CPJZOCYOIHY6JhugaaSRqUB
-         EAIA==
-X-Gm-Message-State: AFqh2kpeIhM+zrsC39JKgZJKZBNbgm2bdVo89TxKqAmGxR+GtZY7fa2b
-        NJI8K6rnaqGH5CzaJ/F5xDi57g==
-X-Google-Smtp-Source: AMrXdXspJWKdIifZHT3HNdT448iaptTWyDEqqaBpjqDxBVVjJnOAtDMpV+0t1lZYPG9PjGA2DRekLA==
-X-Received: by 2002:a05:6512:3901:b0:4a4:68b7:e71c with SMTP id a1-20020a056512390100b004a468b7e71cmr11302705lfu.6.1672649952849;
-        Mon, 02 Jan 2023 00:59:12 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id y2-20020ac24202000000b004bd8534ebbcsm4370798lfh.37.2023.01.02.00.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 00:59:12 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+        with ESMTP id S232378AbjABKtV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Jan 2023 05:49:21 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CFDB87;
+        Mon,  2 Jan 2023 02:49:21 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 302AAvrD012099;
+        Mon, 2 Jan 2023 10:48:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=RSf8P3pVo0pQ3dKKyoCr9K8iN7clmptkqL8x8ilOuQk=;
+ b=bSfhQs7Nwy6pULR2796STV+GUkaHZhgGYuDWmlftjVtHvy02+x6NJv1hrvip3o2MLf14
+ 6oP5OL/5trRww1mu9bKTA4jmRuRfbM7peLUpVZ/Kji3K35SH0YZYrtO0t8f8TOVxBKPh
+ 4/kYOkaiRvSLlTcSDNk/o21kV0vKqofbY/70IRnDQFTR6+vNMaVIhk5nf+QTDJsgCkA3
+ q9qMkkKsE8N1WwIg9jqWuyRlhSjuXKBADx3/60zwFHSjZB5Ac9bVm6Bt8kTRNUtWFT2A
+ n7S/e61UjwoRpd/8EAiicGSuPZzuPbTRRqofcayshjnzOiYcVBaDanuzQi1l63txT0WB dw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtcdsjwxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 10:48:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 302AmnDE012583
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 2 Jan 2023 10:48:49 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 2 Jan 2023 02:48:40 -0800
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: clock: qcom,gcc-sc8280xp: document power domain
-Date:   Mon,  2 Jan 2023 09:59:09 +0100
-Message-Id: <20230102085909.24620-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Len Brown" <len.brown@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Sean Paul" <sean@poorly.run>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v5 0/5] Improve GPU reset sequence for Adreno GPU
+Date:   Mon, 2 Jan 2023 16:18:26 +0530
+Message-ID: <1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jSLXBoal9ABZNoKgyxYqjiPhCZZiQZoA
+X-Proofpoint-GUID: jSLXBoal9ABZNoKgyxYqjiPhCZZiQZoA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=974 phishscore=0 suspectscore=0
+ spamscore=0 adultscore=0 mlxscore=0 malwarescore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301020098
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-GCC clock controller is supplied by CX power domain:
 
-  sc8280xp-crd.dtb: clock-controller@100000: Unevaluated properties are not allowed ('power-domains' was unexpected)
+This is a rework of [1] using genpd instead of 'reset' framework.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml       | 7 +++++++
- 1 file changed, 7 insertions(+)
+As per the recommended reset sequence of Adreno gpu, we should ensure that
+gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
+Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
+wait until its hw status says OFF.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-index c9d8e436d73a..5681e535fede 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
-@@ -55,6 +55,10 @@ properties:
-       - description: First EMAC controller reference clock
-       - description: Second EMAC controller reference clock
- 
-+  power-domains:
-+    items:
-+      - description: CX domain
-+
-   protected-clocks:
-     maxItems: 389
- 
-@@ -70,6 +74,8 @@ unevaluatedProperties: false
- examples:
-   - |
-     #include <dt-bindings/clock/qcom,rpmh.h>
-+    #include <dt-bindings/power/qcom-rpmpd.h>
-+
-     clock-controller@100000 {
-       compatible = "qcom,gcc-sc8280xp";
-       reg = <0x00100000 0x1f0000>;
-@@ -106,6 +112,7 @@ examples:
-                <&pcie4_lane>,
-                <&rxc0_ref_clk>,
-                <&rxc1_ref_clk>;
-+      power-domains = <&rpmhpd SC8280XP_CX>;
- 
-       #clock-cells = <1>;
-       #reset-cells = <1>;
+So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
+provide a hint to the gdsc driver to poll for the hw status and use genpd
+notifier to wait from adreno gpu driver until gdsc is turned OFF.
+
+This series is rebased on top of linux-next (20221215) since the changes span
+multiple drivers.
+
+[1] https://patchwork.freedesktop.org/series/107507/
+
+Changes in v5:
+- Capture all Reviewed-by tags
+
+Changes in v4:
+- Update genpd function documentation (Ulf)
+
+Changes in v3:
+- Rename the var 'force_sync' to 'wait (Stephen)
+
+Changes in v2:
+- Minor formatting fix
+- Select PM_GENERIC_DOMAINS from Kconfig
+
+Akhil P Oommen (4):
+  clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
+  drm/msm/a6xx: Vote for cx gdsc from gpu driver
+  drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+  drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
+
+Ulf Hansson (1):
+  PM: domains: Allow a genpd consumer to require a synced power off
+
+ drivers/base/power/domain.c           | 26 ++++++++++++++++++++
+ drivers/clk/qcom/gdsc.c               | 11 +++++----
+ drivers/gpu/drm/msm/Kconfig           |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
+ drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
+ drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
+ include/linux/pm_domain.h             |  5 ++++
+ 9 files changed, 97 insertions(+), 20 deletions(-)
+
 -- 
-2.34.1
+2.7.4
 
