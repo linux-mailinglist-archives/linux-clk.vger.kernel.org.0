@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69D765C271
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 15:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DACA65C275
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 15:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238086AbjACO4C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 Jan 2023 09:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S238119AbjACO42 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Jan 2023 09:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238032AbjACOzq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 09:55:46 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B466210FF8
-        for <linux-clk@vger.kernel.org>; Tue,  3 Jan 2023 06:55:36 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id i19so19163616ljg.8
-        for <linux-clk@vger.kernel.org>; Tue, 03 Jan 2023 06:55:36 -0800 (PST)
+        with ESMTP id S238046AbjACOzr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 09:55:47 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C622612608
+        for <linux-clk@vger.kernel.org>; Tue,  3 Jan 2023 06:55:38 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id q2so32081600ljp.6
+        for <linux-clk@vger.kernel.org>; Tue, 03 Jan 2023 06:55:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5PUHxikh6ixLObBbSQSvhLpdNZFpYsbA0B7Pmct7Lkg=;
-        b=uuzV6YGdI/nFu0MJa9RiVYtwlAsWrxwij7AMGjAlo8213pjVDzEhvgjVZ+jCHmdm1r
-         Wb5A9QDECKIENr/3WIyM7jTdFDespXtnpG0fj47I66xsrUTIsYOFC+lIdiZpmpImZ3N+
-         z+UUHwlMEoPPH1hLXQxts8NnZa5m83jp47Cw5lvFzdzstETH+VZoKptWf3LHnv6bQvbT
-         Zkw2lFe3rbPCCtsFa8j7DN2ZdNurR3t9fchYP3s/BUt27TTiBWdpKWL7hNnw52GgyB80
-         9vlrzXdT1Rfx7GqRvLHN3iGAYKrwIzFKqIzKSXzrpreDioYCYOsbs4FU77ipWy7XgtLu
-         IKgg==
+        bh=/ecG01MseYDGzxuYzsAOlgatMWjsrGPZZ+HmBBVoTDM=;
+        b=H1h+9lzpC+AeRXC+ftcpfCGaFs+iH+C4LM2HZgJMl0R+fJQ85vqi/CrvSa9WqyCf13
+         gONL5lQ6OoYifbMI6nIamb0Ug7Ve9mPL8R6QwIyL1Jo9SKKh1APB8QVG9Xx9jDYZRI/q
+         ZlRwDR/3bhrPiCgidlyQu7RyIq5Fq3GY9eE9TQDjJfLBWH/xU25MpnbvQIoLu852WFFK
+         C/LLaSJ9ZteAB9I9CZuZYt2wu+G2rJIG0rrNW1i1HnOWcyTE5Joc6E70aPaIGtR7St4n
+         rt2ZwhHtLV8Fn/Woq/rS5g3DiJf9H+qmeWp9uq06D2lpqAJOJ0J4nw+V9UatuaN8jl9T
+         qZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5PUHxikh6ixLObBbSQSvhLpdNZFpYsbA0B7Pmct7Lkg=;
-        b=DnA0aR3zX+FnbPPBRQhCvGR/6akgmdCGFEernzyrB8DgPPuZZixG4jiufLc0PhjJof
-         fC4Apjm+VrnPKF6jdYdGQ9KssEABoZmxKUQGKB3BorFE67jcoDR3odZrkpUGv+zRF3N2
-         dgKZWUrB/m3CmG1uJgVwfODMA+KuTAgCKw3pdVLQBE2gsH9fv6QJGGZf/3gOYSR9xmV0
-         RcWYS1z8d4Sgrd45OfEaNGWPNL/2FvnNik3jK5slakwO3UwZzS2Lk2NvOPZdERqB/Va2
-         EYv+yFvnZ2wrgKr6gnO6E0HEDBBeIiytgNApULSJWLrjl2YVxOVDaLhxTKg7s1ZknJdI
-         sU7w==
-X-Gm-Message-State: AFqh2kokErGrUBRSV10ScjrjZ4jB1fBmiYQbrAkSppCve+G5N/3ls33D
-        YdY8jV2cnHz8egwuNMR9r7wQyQ==
-X-Google-Smtp-Source: AMrXdXtg5Z9jsUeRUcJYDTPzlpCywVNNBeEiA8Zd3VF8SlHHxj5b+uumrSXdE2wBIYtKwfGZYs9Tyw==
-X-Received: by 2002:a2e:9b9a:0:b0:27f:be4b:286a with SMTP id z26-20020a2e9b9a000000b0027fbe4b286amr8169876lji.42.1672757736305;
-        Tue, 03 Jan 2023 06:55:36 -0800 (PST)
+        bh=/ecG01MseYDGzxuYzsAOlgatMWjsrGPZZ+HmBBVoTDM=;
+        b=dEjmpPVo5rTWFN7iqG95ja817fkbm0QrmS7sPhTVi3kc+MjKm9HDI954oWgL+YIRw2
+         mKio7HFdSQ4wO7p/KG69HI3r5TOUCLTR9TOURV1BjyZAioH8REIjNHEjsBVm5fGM7VKf
+         TCX1Md966FRG46jaaWQAt7BmoMJdMHnEqZXri3Ftq86M+d3SM9VQXU1gHDB66GM5ASCq
+         uRHlepoJ6NJWXnevrJ7F790L7ZJFDAVmFK41QXpHxIC4Fz9LmUEGGaPJ52aELsMLOKXt
+         tp+SA/R0StAOkCj0LgRmeKCo7fx9MtKcZn2Q5TmYaVEyMyZ17bk2yISb5pqo5tWojEzH
+         4hXw==
+X-Gm-Message-State: AFqh2koOA0x/DEB+6tl7+4RWy2H3D17sL50QWxyf0/Elsu6gE4c67Q1Z
+        +/yFlf0mJhO0C0dCYOYCMTVkHw==
+X-Google-Smtp-Source: AMrXdXtgeLOw7R4XDMjsTCZvYGAaoiffPqHVYpyrr8md29sczIZIiqvuqxV9KMa+G1+fc/LB+HJnkw==
+X-Received: by 2002:a2e:780f:0:b0:27f:bd6b:9dbb with SMTP id t15-20020a2e780f000000b0027fbd6b9dbbmr8502279ljc.23.1672757737160;
+        Tue, 03 Jan 2023 06:55:37 -0800 (PST)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s24-20020a2eb638000000b00279cbcfd7dbsm3544015ljn.30.2023.01.03.06.55.35
+        by smtp.gmail.com with ESMTPSA id s24-20020a2eb638000000b00279cbcfd7dbsm3544015ljn.30.2023.01.03.06.55.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 06:55:35 -0800 (PST)
+        Tue, 03 Jan 2023 06:55:36 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -57,9 +57,9 @@ To:     Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Taniya Das <quic_tdas@quicinc.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 19/21] clk: qcom: dispcc-sm8450: switch to devm_pm_runtime_enable
-Date:   Tue,  3 Jan 2023 16:55:13 +0200
-Message-Id: <20230103145515.1164020-20-dmitry.baryshkov@linaro.org>
+Subject: [PATCH 20/21] clk: qcom: lpasscc-sc7280: switch to devm_pm_runtime_enable
+Date:   Tue,  3 Jan 2023 16:55:14 +0200
+Message-Id: <20230103145515.1164020-21-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230103145515.1164020-1-dmitry.baryshkov@linaro.org>
 References: <20230103145515.1164020-1-dmitry.baryshkov@linaro.org>
@@ -67,7 +67,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,33 +80,38 @@ corresponding action to call pm_runtime_disable().
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/dispcc-sm8450.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/clk/qcom/lpasscc-sc7280.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/qcom/dispcc-sm8450.c b/drivers/clk/qcom/dispcc-sm8450.c
-index 40efa4682bed..adbfd30bfc96 100644
---- a/drivers/clk/qcom/dispcc-sm8450.c
-+++ b/drivers/clk/qcom/dispcc-sm8450.c
-@@ -1762,19 +1762,12 @@ static const struct of_device_id disp_cc_sm8450_match_table[] = {
- };
- MODULE_DEVICE_TABLE(of, disp_cc_sm8450_match_table);
- 
--static void disp_cc_sm8450_pm_runtime_disable(void *data)
--{
--	pm_runtime_disable(data);
--}
--
- static int disp_cc_sm8450_probe(struct platform_device *pdev)
- {
- 	struct regmap *regmap;
+diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc-sc7280.c
+index 5c1e17bd0d76..48432010ce24 100644
+--- a/drivers/clk/qcom/lpasscc-sc7280.c
++++ b/drivers/clk/qcom/lpasscc-sc7280.c
+@@ -107,10 +107,13 @@ static int lpass_cc_sc7280_probe(struct platform_device *pdev)
+ 	const struct qcom_cc_desc *desc;
  	int ret;
  
 -	pm_runtime_enable(&pdev->dev);
--
--	ret = devm_add_action_or_reset(&pdev->dev, disp_cc_sm8450_pm_runtime_disable, &pdev->dev);
 +	ret = devm_pm_runtime_enable(&pdev->dev);
++	if (ret)
++		return ret;
++
+ 	ret = pm_clk_create(&pdev->dev);
  	if (ret)
- 		return ret;
+-		goto disable_pm_runtime;
++		return ret;
+ 
+ 	ret = pm_clk_add(&pdev->dev, "iface");
+ 	if (ret < 0) {
+@@ -137,9 +140,6 @@ static int lpass_cc_sc7280_probe(struct platform_device *pdev)
+ destroy_pm_clk:
+ 	pm_clk_destroy(&pdev->dev);
+ 
+-disable_pm_runtime:
+-	pm_runtime_disable(&pdev->dev);
+-
+ 	return ret;
+ }
  
 -- 
 2.39.0
