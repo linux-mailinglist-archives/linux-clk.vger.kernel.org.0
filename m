@@ -2,96 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2AF65C320
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 16:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3034865C376
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 17:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbjACPiS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 Jan 2023 10:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S233512AbjACQAd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Jan 2023 11:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjACPiS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 10:38:18 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B9411C0E;
-        Tue,  3 Jan 2023 07:38:16 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id m18so74537009eji.5;
-        Tue, 03 Jan 2023 07:38:16 -0800 (PST)
+        with ESMTP id S233348AbjACQAc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 11:00:32 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20486120B1
+        for <linux-clk@vger.kernel.org>; Tue,  3 Jan 2023 08:00:31 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id p36so46206844lfa.12
+        for <linux-clk@vger.kernel.org>; Tue, 03 Jan 2023 08:00:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qnD1cDOmNAJpkQ6T4dHEcYD9uVqliMR1LVDe+Z15bUE=;
-        b=Iv1X7xuxVaFSptHgLbIWWfPN9wFmWy5OetaEGRHUYf+22Qc0pMRgXhMJR52ZpXUwrh
-         XpifyNSEbtPqKt35Ofss4i2mxykqjemG0v3qLPLJP72K3ZtJzNb/94Qhz+fIlGHd3Jfq
-         1ABhT9xZLiu8AImzZgkeD3Om/BLz4VVs05Vd3Er/4CBFggQswMloVJj3ttYWgm3FmwNE
-         87X1puDaCguiScnZE4EhpNzr8EjnK6i6CI5ztjIdzFMSukLUP/DlPtncXIaQpbZsDVy/
-         sKDIa3oc3s6nJT3BT2U3hWCY6lnwrBk3Ryxvg+hQwYxwy6pW1FLMYDQ+q+9xSsX9c+Dh
-         27bA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fsEzWFiMVhRqX2IFEPw8asDdcQK9y3UraFOcKRzBzCg=;
+        b=BPV6b+Qwim5BalbzVnJ6nZUkbCljHaizqzeos+hbzBV2gcgFWYcp7JnVFN+jt86Pug
+         tP77izEL1ADvjJyz7zPTKK9sSnTzyuVVwUgEvrgiAbjXehtBlruJcjru2fEAmBnpa77P
+         vS1DFxQMcAPJGP1S/JIedx/eC+F1XFgjso66soIDLSSi5B5qMWUsOmp3/IyiZOS3dtvP
+         MsDT+DDteytECWc7QWND/4LfXSvLjAPi1Fcqu0dBVbwd3p974WXo3kjY6L6vf8D23gib
+         6RC9yKNnU9iq/q24e+OctmKXMdvpYbMbdKeV+z9fU1jvPDKk2slUov/q6BsHR2sIfEcw
+         O/lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qnD1cDOmNAJpkQ6T4dHEcYD9uVqliMR1LVDe+Z15bUE=;
-        b=pV+9ccFLytlpLulJqY7caybps/tHn6Jh2DPnMWfgBtbs6A2uZ6SXophT3NbzClI3Yk
-         hw1p9TA5wHmRvtGY9bfKFsMuQuibnk03lg48CF9lBv/A4rzHC/GjOVCD5GM4I5prztDL
-         NbDNAiSPtrjfILfeLce50Z7zKBl7hWRpa7euR6UGk3Q3DiJ4LaFifB8FozB/VTAN4emI
-         b1DmpBf+kmpLoB3Vc7Q1dAxdkd8YYrQAiSdib/UOos0ix2vf+DWSKfVLqDNl8rR5TScH
-         aVMS/ynZb+dHA7e6El1WOXGv+ZmA+AVfF1uJVnF9o7FXjyzzam332azXEwDZpfTBe6kR
-         8vKg==
-X-Gm-Message-State: AFqh2kqyhn4qcMznGupwIzPxUoMULkW6LWlUSHwXA62TycZUAdiYujmQ
-        u3BpKTtt9uN70L0V37Pz286o3rEwOFm3ChY+87M=
-X-Google-Smtp-Source: AMrXdXsqsRWBmQm2rrCrJ26cXBP2shbcsB3baAFq/41tPZjRzMUN2eJ0DUIMQZfQvqKpoxQGfEpCn9x5+tmyeD1QNcM=
-X-Received: by 2002:a17:906:a3cd:b0:7c1:9b74:d27a with SMTP id
- ca13-20020a170906a3cd00b007c19b74d27amr5362235ejb.601.1672760295330; Tue, 03
- Jan 2023 07:38:15 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fsEzWFiMVhRqX2IFEPw8asDdcQK9y3UraFOcKRzBzCg=;
+        b=UP1gWDOilzvHJYbcA+MXGRxBWTntSgS6//sg5LNijNwdCSJqDjydySt3kokYu1MgL8
+         eno9M/t2xpx/8OuumEgn7/6ujxIDMyhQr1oupUCxcGfu6hq3fFvUBu2cRraSOAZFCO2e
+         dQ4y/KU4rk6NYc0xABDsmK/OIk3QJKDv2MGPsvXANEoZgtSLWfmaUX079DT2ahqG42nV
+         Mfx1nKaSU9EGnFrNB8zHHhDghRxstLUVsPvcMOFxlKOSHdgsT3aAR8V49TMznQQ/zZny
+         tqwHCUua9SehcQ/++xkM06Xp3JWospIZ5KcxmsooGx/70U35iN6ucIFeQucW7RNRU7ev
+         DPvw==
+X-Gm-Message-State: AFqh2koRUeVoI1I0S8Em9vPUA84wgjJfKe9NkXLRQuJDb3Hi0v9hUUIz
+        DPHMDAQOjrB8uAiIJfcamJ56Cg==
+X-Google-Smtp-Source: AMrXdXucfa+6dsTdEF05zpniX4JCgXxQZApYR5KwR6nyG+e03FSeQg0Sm8IsDKLktspatDf/o4lBSA==
+X-Received: by 2002:a05:6512:2624:b0:4b5:8e1e:867b with SMTP id bt36-20020a056512262400b004b58e1e867bmr12760289lfb.59.1672761629251;
+        Tue, 03 Jan 2023 08:00:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id p14-20020ac24ece000000b004cb40db03desm242737lfr.55.2023.01.03.08.00.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 08:00:28 -0800 (PST)
+Message-ID: <e2493080-f7fd-50de-173f-2e46fa846e23@linaro.org>
+Date:   Tue, 3 Jan 2023 18:00:28 +0200
 MIME-Version: 1.0
-References: <20221228133243.3052132-1-dmitry.baryshkov@linaro.org> <20221228133243.3052132-6-dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221228133243.3052132-6-dmitry.baryshkov@linaro.org>
-From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Date:   Tue, 3 Jan 2023 08:38:04 -0700
-Message-ID: <CAOCk7Noa1A4mBqg3OAxk3hnnUg-qjCeCE0tyhq3ktbFcETicqw@mail.gmail.com>
-Subject: Re: [PATCH 05/16] dt-bindings: clock: qcom,mmcc-msm8998: drop core_bi_pll_test_se
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 15/21] clk: qcom: gpucc-msm8998: switch to parent_hws
+Content-Language: en-GB
+To:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230103145515.1164020-1-dmitry.baryshkov@linaro.org>
+ <20230103145515.1164020-16-dmitry.baryshkov@linaro.org>
+ <CAOCk7Nr4smGnQS-yh1hGKFFXzeUUt86JSdiuoSun7vJ11z9SWQ@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAOCk7Nr4smGnQS-yh1hGKFFXzeUUt86JSdiuoSun7vJ11z9SWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Dec 28, 2022 at 6:33 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> The test clock apparently it's not used by anyone upstream. Remove it.
+On 03/01/2023 17:08, Jeffrey Hugo wrote:
+> On Tue, Jan 3, 2023 at 7:56 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>>
+>> Change several entries of parent_data to use parent_hws instead, which
+>> results in slightly more ovbious code.
+> 
+> obvious -> obvious
+> 
+> Also, you are changing one of two parent_data structs in this file.
+> That's not "several".  It's really not clear why you are touching one,
+> but not the other.  Can you be more specific about what is going on in
+> this particular file?
 
-IMO, NACK,
+The other struct has .hw and .fw_data entries so it can not be switched 
+to just clk_hw enumeration.
 
-This is not a valid justification.
+I agree, that one is not 'several' (yeah, I was just using template for 
+commit messages), I can change that for v2.
 
-The DT is supposed to describe the hardware, and should be complete in
-that regard.  This clock exists in the hardware, so it should be
-described.
+-- 
+With best wishes
+Dmitry
 
-DT is supposed to be separate from Linux, that is it doesn't matter
-that Linux doesn't consume this clock.  Maybe FreeBSD does, or some
-other OS.  Linux doesn't own Device Tree any more than it owns BIOS or
-ACPI.
-
-Also, I'm listed as a maintainer for this binding, yet this series is
-not addressed to me.  Seems like you might need to review how you are
-composing your patches.
