@@ -2,71 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BBD65C272
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 15:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFC765C338
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 16:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238110AbjACO40 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 Jan 2023 09:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S233478AbjACPpO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Jan 2023 10:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237984AbjACOzr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 09:55:47 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855AC12604
-        for <linux-clk@vger.kernel.org>; Tue,  3 Jan 2023 06:55:38 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id v23so21935001ljj.9
-        for <linux-clk@vger.kernel.org>; Tue, 03 Jan 2023 06:55:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/uwobszORt87pwL1AH7ZVk/kYoJ04eNFcidz9MKWGI=;
-        b=kOfPzQ/ei7XOeNhiRlhR2/NKnTFi07r4Z78NJp5Tp/H1nsLG3OimnpgX767EECJK79
-         XuDOXAg2Wspe9T2GkISlrX4I49EHBzlkvIRqylMeO1gMwpdYLMNIbP55v2VPbKomCUra
-         GMQn0L9FChKEaIQrzUIatm1nORBj2Oqdhm7rMiuAfxaQFGnTp8jAD/zbUOKlU9mg4NST
-         n79fWX32jMIBxsEJtx5p+uOcHs3ccihuFd6dANvl12/op3Rtmq6E1k944wwVuxra8iOV
-         e0K/yVS72mTnzGne+PJV7jdlCxJd15bOb5tXq6gdYXOppiOPZah1w+G3Gd2PdOXkBX8W
-         cj6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s/uwobszORt87pwL1AH7ZVk/kYoJ04eNFcidz9MKWGI=;
-        b=ZDuGpiLQd0hJZlrOpHMaSwtK3piJg0L83fUKd2Da7stUUu44vNm5ZTtn++kahEoFOo
-         Nk54jtNoqA06R5g2ZJnhBWPP3rIZHkHyU0Xo0bd1Jo+08eUBMIQOcIFR9IF7eTQJgl76
-         Gm05AM5a7Mg+SaTQD1VTRQ8h1tZ3PolOJx3YN29EQhjttPGFkSBijWAsn3QIGN+VyVA+
-         IOPUZsaq9+5gFNmSN2DfmD0BZ0AeiHL7HAv1XJ/gUSPniBO8vFzvnOk97dcokHMvy3Wo
-         tXsWazp/NGcM6F0P8gTm0tG6NlQznSqCm/m6fBUZnhL/6fk0pq/X1B/hEUqvlNuO3t34
-         SGrw==
-X-Gm-Message-State: AFqh2kq0Yq6lJR87qG0cuPvXqUCiUzS7q7hLB9A+H33tOGsFzhkH9rqJ
-        0BeFt1o6OzbUpxh+t4iVCzeWMg==
-X-Google-Smtp-Source: AMrXdXsS9PO49PSertcVCgvx9gyspkIoepPHdp+DovL+eGvfCcptgZxXP2MkIKPbPcwtf6/aqIHjXg==
-X-Received: by 2002:a2e:9084:0:b0:27b:57da:b39b with SMTP id l4-20020a2e9084000000b0027b57dab39bmr16330037ljg.23.1672757738086;
-        Tue, 03 Jan 2023 06:55:38 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id s24-20020a2eb638000000b00279cbcfd7dbsm3544015ljn.30.2023.01.03.06.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 06:55:37 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 21/21] clk: qcom: videocc-sm8250: switch to devm_pm_runtime_enable
-Date:   Tue,  3 Jan 2023 16:55:15 +0200
-Message-Id: <20230103145515.1164020-22-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230103145515.1164020-1-dmitry.baryshkov@linaro.org>
-References: <20230103145515.1164020-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S233348AbjACPpN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 10:45:13 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A2411C10;
+        Tue,  3 Jan 2023 07:45:12 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 1B56D8556B;
+        Tue,  3 Jan 2023 16:45:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1672760709;
+        bh=7iNJcgcDAh7Ls4Cwi/5Xh89LG1+kct/Np5PWKTrZQZc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=L8AFUajdHQQmMdtM7NEqO3SpeBYw4Bn7tcdMJoVMIJmCyEVgwF4hGA7RCYum9y5mM
+         CYpDTPjolWXeMIpGiMnmqTbFsvrpVrRmvUTcqF5WCYCuhdhhVCL8Krolq+DmZO+gSZ
+         8mhrWIC6hvyiNXfIfpxNZWmx3FdX22H79BQRAyfp89w1rdQesE+2zZjOkffqAUARwx
+         MFmpPN/F3NEqTtTjYCdCROnBb+e/oRebwGCK72ToapRXlSUSdLIEzAT5/Dd+01f6sV
+         1oBV5rO/Ge3woRpgt4k5oOONXYGdZOkmBdU5d7cCmo5Qjfh18YjQt9CjVO/rgpo2wz
+         MfjYKuTUISwfQ==
+Message-ID: <2ba4e002-9f27-2e36-2bd2-8753c455b21f@denx.de>
+Date:   Tue, 3 Jan 2023 15:28:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/4] clk: rs9: Check for vendor/device ID
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230103123154.3424817-1-alexander.stein@ew.tq-group.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230103123154.3424817-1-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +61,81 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Switch to using the devm_pm_runtime_enable() instead of hand-coding
-corresponding action to call pm_runtime_disable().
+On 1/3/23 13:31, Alexander Stein wrote:
+> This is in preparation to support additional devices which have different
+> IDs as well as a slightly different register layout.
+> 
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>   drivers/clk/clk-renesas-pcie.c | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/clk/clk-renesas-pcie.c b/drivers/clk/clk-renesas-pcie.c
+> index e6247141d0c0..0076ed8f11b0 100644
+> --- a/drivers/clk/clk-renesas-pcie.c
+> +++ b/drivers/clk/clk-renesas-pcie.c
+> @@ -45,6 +45,13 @@
+>   #define RS9_REG_DID				0x6
+>   #define RS9_REG_BCP				0x7
+>   
+> +#define RS9_REG_VID_IDT				0x01
+> +
+> +#define RS9_REG_DID_TYPE_FGV			(0x0 << RS9_REG_DID_TYPE_SHIFT)
+> +#define RS9_REG_DID_TYPE_DBV			(0x1 << RS9_REG_DID_TYPE_SHIFT)
+> +#define RS9_REG_DID_TYPE_DMV			(0x2 << RS9_REG_DID_TYPE_SHIFT)
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/clk/qcom/videocc-sm8250.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+I'm not entirely sure whether this shouldn't be using the BIT() macro, 
+what do you think ?
 
-diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
-index f28f2cb051d7..ad46c4014a40 100644
---- a/drivers/clk/qcom/videocc-sm8250.c
-+++ b/drivers/clk/qcom/videocc-sm8250.c
-@@ -361,19 +361,12 @@ static const struct of_device_id video_cc_sm8250_match_table[] = {
- };
- MODULE_DEVICE_TABLE(of, video_cc_sm8250_match_table);
- 
--static void video_cc_sm8250_pm_runtime_disable(void *data)
--{
--	pm_runtime_disable(data);
--}
--
- static int video_cc_sm8250_probe(struct platform_device *pdev)
- {
- 	struct regmap *regmap;
- 	int ret;
- 
--	pm_runtime_enable(&pdev->dev);
--
--	ret = devm_add_action_or_reset(&pdev->dev, video_cc_sm8250_pm_runtime_disable, &pdev->dev);
-+	ret = devm_pm_runtime_enable(&pdev->dev);
- 	if (ret)
- 		return ret;
- 
--- 
-2.39.0
+> +#define RS9_REG_DID_TYPE_SHIFT			0x6
+> +
+>   /* Supported Renesas 9-series models. */
+>   enum rs9_model {
+>   	RENESAS_9FGV0241,
+> @@ -54,6 +61,7 @@ enum rs9_model {
+>   struct rs9_chip_info {
+>   	const enum rs9_model	model;
+>   	unsigned int		num_clks;
+> +	u8			did;
 
+Should this be const (and also the num_clks) ?
+
+>   };
+>   
+>   struct rs9_driver_data {
+> @@ -270,6 +278,7 @@ static int rs9_probe(struct i2c_client *client)
+>   {
+>   	unsigned char name[5] = "DIF0";
+>   	struct rs9_driver_data *rs9;
+> +	unsigned int vid, did;
+>   	struct clk_hw *hw;
+>   	int i, ret;
+>   
+> @@ -306,6 +315,20 @@ static int rs9_probe(struct i2c_client *client)
+>   	if (ret < 0)
+>   		return ret;
+>   
+> +	ret = regmap_read(rs9->regmap, RS9_REG_VID, &vid);
+> +	if (ret < 0)
+> +		return ret;
+
+Newline here.
+
+> +	ret = regmap_read(rs9->regmap, RS9_REG_DID, &did);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if ((vid != RS9_REG_VID_IDT) || (did != rs9->chip_info->did)) {
+
+Drop the unnecessary inner () parenthesis .
+
+> +		dev_err(&client->dev,
+
+return dev_err_probe() might work better here ?
+
+> +			"Incorrect VID/DID: %#02x, %#02x. Expected %#02x, %#02x\n",
+> +			vid, did, RS9_REG_VID_IDT, rs9->chip_info->did);
+> +		return -ENODEV;
+> +	}
+
+[...]
