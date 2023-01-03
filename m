@@ -2,124 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A635E65C33C
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 16:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E3C65C2C5
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 16:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237725AbjACPpP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 Jan 2023 10:45:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
+        id S233511AbjACPIR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Jan 2023 10:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233299AbjACPpN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 10:45:13 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA5911C22;
-        Tue,  3 Jan 2023 07:45:12 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id B881785569;
-        Tue,  3 Jan 2023 16:45:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1672760711;
-        bh=Ny4n0JEVF8y3jagsgv6Gt81L9Gok9NESzZwAFZRsUlc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BL9x05ZvWcIsIkBbAM47qtqp6/l0P/ouM5+8krCAWqakSIu7t5+WgHIlqNBP1DTz0
-         ujRQLszhk5a3LrnBl3i8YMvIN4xTkoYfUaB82GKEF3GZRz+6mh5Zrg3lseM8GuJz8Y
-         Go2stngw3xjg1AJTcpgwFbRZfeg42lKTwmK4SEzSwrripW29HpWh1A10pq7JEgHR64
-         z5dtds3K6LeXYuQqSK1qKiynje4VebdqSwhKGfbLQAtAEdpj1q8zE0vS+y5I/1aVik
-         oKb4kTOJgfwUVqSdH8tbszVn/MxSSYDG0P5xBOTfVZXX5nXk9TSs5g8tH1XCmvCja4
-         dy5WiKpmrG+mA==
-Message-ID: <8e9cc8fa-cddc-3c99-9810-f2355a1e1913@denx.de>
-Date:   Tue, 3 Jan 2023 15:31:21 +0100
+        with ESMTP id S237764AbjACPIQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 10:08:16 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2082DE016;
+        Tue,  3 Jan 2023 07:08:15 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id i9so44166787edj.4;
+        Tue, 03 Jan 2023 07:08:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CSPq5yWRC/HN3+IV4EMGejHH3BfnS0uYnlKMfUqiABA=;
+        b=Mi7kh54ZuRKNF7iTtPdRl4ylg2qyJVH9qGo2E75htRrborm0TpfJ9I4ZmrHFb4Zwvf
+         wYelNvAwOLdt8xMYgFRbryRG6yL92oIiLlLqluSvrhAJcVWRuyiKe1xVUAG0R2AIKZRo
+         HhLRPIeuxnzc71bHLh21cKlOGwIMbLaUT9SWk5f9MnoiZ/q3vdCBy8iLAD0xh1oAStOS
+         fF00fJlPMXCew3A8qs2fq1s3IKs6a9JPIac/ZP82CrQiPBiHEBJs3ZzPzWBcLDzJ4ma3
+         7FaVhoyV90OOJTs3cga7XisFX7B8J5T99qUfphrLeJNccdZabUcsBszfJycA5ii4ld+G
+         EFDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CSPq5yWRC/HN3+IV4EMGejHH3BfnS0uYnlKMfUqiABA=;
+        b=566RKbRzYV7wcs0+pYr77wP63CRfkFG+WhAlv+Ro5mO/HX84Cg3gKSzRyB7itWX7bS
+         rUK7afIJDv5kvrdDxgukIsX2Xt7OQuGnZ4H6uiJSyFiVLLePuM5K5uQQGOFoksqUoNFO
+         3bxy93dF+Uam/E592ZYrA/zAYSPBaYwO/3znDVMTsr7f+iI13ANe7SbxB983AV/GUatn
+         6UbyQfA7lLO2bPg026QyKT11nM/JKyReyY8B9Q5MplTeZqni/DEPTA93fYrurMQjJ7RP
+         qqODAhF9uZKeTXMIJAJK/NQubpGVTll+vKJ3A1LGhNGHFp3C9UPtuu2RqQFL9ikCvmqI
+         rq3A==
+X-Gm-Message-State: AFqh2kpB7dPGlsMvwYNW3VfI6PeZpJc5tixB+UJIzLSe0+Uc8XXW3QFx
+        CzsUQ5V2u5TgQc7ih0yyrBDg5EGFplAAfDGyxF0=
+X-Google-Smtp-Source: AMrXdXvYnuLBC4Fj0rKv0iLw2gdsYOf4uyg+BbMa4D8vswaCBJ6neJWhUajjhoFS7FdLq5jx+JKSdPeQqPPXLQGVOvQ=
+X-Received: by 2002:a50:951e:0:b0:484:a88c:a850 with SMTP id
+ u30-20020a50951e000000b00484a88ca850mr2614952eda.400.1672758493675; Tue, 03
+ Jan 2023 07:08:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 3/4] clk: rs9: Support device specific dif bit calculation
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
+References: <20230103145515.1164020-1-dmitry.baryshkov@linaro.org> <20230103145515.1164020-16-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230103145515.1164020-16-dmitry.baryshkov@linaro.org>
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Date:   Tue, 3 Jan 2023 08:08:02 -0700
+Message-ID: <CAOCk7Nr4smGnQS-yh1hGKFFXzeUUt86JSdiuoSun7vJ11z9SWQ@mail.gmail.com>
+Subject: Re: [PATCH 15/21] clk: qcom: gpucc-msm8998: switch to parent_hws
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230103123154.3424817-1-alexander.stein@ew.tq-group.com>
- <20230103123154.3424817-3-alexander.stein@ew.tq-group.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230103123154.3424817-3-alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 1/3/23 13:31, Alexander Stein wrote:
-> The calculation DIFx is BIT(n) +1 is only true for 9FGV0241. With
-> additional devices this is getting more complicated.
-> Support a base bit for the DIF calculation, currently only devices
-> with consecutive bits are supported, e.g. the 6-channel device needs
-> additional logic.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->   drivers/clk/clk-renesas-pcie.c | 29 ++++++++++++++++-------------
->   1 file changed, 16 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/clk/clk-renesas-pcie.c b/drivers/clk/clk-renesas-pcie.c
-> index 0076ed8f11b0..d19b8e759eea 100644
-> --- a/drivers/clk/clk-renesas-pcie.c
-> +++ b/drivers/clk/clk-renesas-pcie.c
-> @@ -18,7 +18,6 @@
->   #include <linux/regmap.h>
->   
->   #define RS9_REG_OE				0x0
-> -#define RS9_REG_OE_DIF_OE(n)			BIT((n) + 1)
->   #define RS9_REG_SS				0x1
->   #define RS9_REG_SS_AMP_0V6			0x0
->   #define RS9_REG_SS_AMP_0V7			0x1
-> @@ -31,9 +30,6 @@
->   #define RS9_REG_SS_SSC_MASK			(3 << 3)
->   #define RS9_REG_SS_SSC_LOCK			BIT(5)
->   #define RS9_REG_SR				0x2
-> -#define RS9_REG_SR_2V0_DIF(n)			0
-> -#define RS9_REG_SR_3V0_DIF(n)			BIT((n) + 1)
-> -#define RS9_REG_SR_DIF_MASK(n)		BIT((n) + 1)
->   #define RS9_REG_REF				0x3
->   #define RS9_REG_REF_OE				BIT(4)
->   #define RS9_REG_REF_OD				BIT(5)
-> @@ -62,6 +58,7 @@ struct rs9_chip_info {
->   	const enum rs9_model	model;
->   	unsigned int		num_clks;
->   	u8			did;
-> +	u8			(*calc_dif)(int idx);
->   };
->   
->   struct rs9_driver_data {
-> @@ -160,8 +157,14 @@ static const struct regmap_config rs9_regmap_config = {
->   	.reg_read = rs9_regmap_i2c_read,
->   };
->   
-> +static u8 rs9fgv0241_calc_dif(int idx)
-> +{
-> +	return BIT(idx) + 1;
+On Tue, Jan 3, 2023 at 7:56 AM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> Change several entries of parent_data to use parent_hws instead, which
+> results in slightly more ovbious code.
 
-Can't we just do
+obvious -> obvious
 
-if (model == ...)
-  return BIT(idx) + 1
-else if (model == ...)
-  return BIT(idx);
-...
-
-?
-
-[...]
+Also, you are changing one of two parent_data structs in this file.
+That's not "several".  It's really not clear why you are touching one,
+but not the other.  Can you be more specific about what is going on in
+this particular file?
