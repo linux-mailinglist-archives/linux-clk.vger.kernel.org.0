@@ -2,105 +2,311 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A746E65C120
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 14:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9A365C134
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Jan 2023 14:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233197AbjACNuG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 Jan 2023 08:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S237602AbjACNyG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Jan 2023 08:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbjACNuC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 08:50:02 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6EC11477;
-        Tue,  3 Jan 2023 05:50:00 -0800 (PST)
+        with ESMTP id S237456AbjACNyF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Jan 2023 08:54:05 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDB66160
+        for <linux-clk@vger.kernel.org>; Tue,  3 Jan 2023 05:54:03 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so26296870wma.1
+        for <linux-clk@vger.kernel.org>; Tue, 03 Jan 2023 05:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672753801; x=1704289801;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WpLDfQkVCsUYAuYxOb9Sk3VMgL/XIHPK14s28skQZk8=;
-  b=iV7PCCkkC1gwyxqpenm0ZJFU5WzoXyww9fPDsM/IIt9PcePnT4vG+fvK
-   Okv82wiesCgB2DBtA5VH1McYRaGDqr/iMsBeER2b0XboipbRm34wdMogs
-   M+pTUj88jbNT7EoskBFYm04DOh0ogPWhsZUqmhBmXTju+2nBnYd5Kysb2
-   Tr2baWDvOyWweWOSvtZ0NsFYAspzzNLHF/C3cPOYLsqxFDItgAqUlrq6y
-   W6dFUOiprrd4iaoS/O+BH0m+W6Vqf1t/Yd0Ym6A3YYLvjnqJ7jTdqQ+Bo
-   c0NMzK8Wf7Rj08KFppqA9P3hfenWwtkZXN3KeVZP3UvoaDnvKPj25hXJG
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,297,1665439200"; 
-   d="scan'208";a="28222612"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 03 Jan 2023 14:49:59 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 03 Jan 2023 14:49:59 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 03 Jan 2023 14:49:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1672753799; x=1704289799;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WpLDfQkVCsUYAuYxOb9Sk3VMgL/XIHPK14s28skQZk8=;
-  b=FBR76nUyKbCaRiwWKPoiJhPeevuDXc3Cr+2Db+xNCNm/XikGf11SoOLq
-   XO0lauRxix6R8BHnBZj3MEsCNQ/U25zpHPQR5EjVCRnteN1LOO5px0UFi
-   O3NC1hnAIzORAAVV4Gdr8Btr8lQceB64Gfo0h/v1As1w1IeGVsY3p9MZy
-   Sb0vKYvjNnKQN4TEdevnOfGe2ITJBGSmdm1iHsr0jsunvDif7Z0Z7Ve3m
-   zhWbEQtvGEwMCQSVzAquMNhexoJGnvpnSimTiu4TydlQkf4zpuYsoRFsh
-   9i/UcR7O2L9z4ihG+FhSInYJgLPXgT35mwL9r0ljDaHFVeCRyOMso+oC6
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,297,1665439200"; 
-   d="scan'208";a="28222611"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 03 Jan 2023 14:49:59 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id E08D5280056;
-        Tue,  3 Jan 2023 14:49:58 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        d=linaro.org; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UpwhHma8piz6/MBi40TBeXOcZ3UlgFDgKhUmh3BfGhE=;
+        b=E8mrLpt0A4zrdpvYzf3wPVYTUz6Cy1erBfhV30ZlPFtYvXERDsTDe+3xDXA/M5G/f2
+         H1RQ4NAVaEUaboxz0IZJlgOA5qzBpCl7ZSJvRDct+pj/pDbke4DOJ2PZrB3zU2Q2JrxB
+         0z9lSa2s8rLGZa6VVb8sXgxEszxJ7CfFasCvyICTxsMTsX43bn3jaYG/32jBfTMsE/cc
+         v7dC28JamM7MG7cXUtp5QFXCfMGl977IGNwkOKzqraN1TTAWrIoBEqeGWP1xGg2Xqbt5
+         wfNZCyJy9D6W5XYnZLD9F5qlTLl0wqKpsg3SlT7ScVScjwwBj8b/avwSNL9g/H1heUMn
+         EYPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UpwhHma8piz6/MBi40TBeXOcZ3UlgFDgKhUmh3BfGhE=;
+        b=cEfVQ0spw4xJrJC7eCqUWOlOmAHfYGTECQUkSx8MDsiQVGGqlekvUNJ8OEpOoQEZi2
+         6LQYErKU6ZfShAXCe2fwLPTxKeye79UeaNO2hqgR1FAqugX6zAAbOPxpe5jZfKYU+yiz
+         V5JyU4muQO+sPf+KwVmGeGA6bGvuwyioaWaZvMQAtJ/yoXF8f8vGJfOnwp9c+T7ltzQl
+         1xPwg0wgRBjIiA2ismH7ccPh+acCWVQEX7dcx/6uzyI3x5rD9C4JOrg1bA6h9a+YXChg
+         TA5PkGDuOespHH7NB0TyRHMVdz/hEbuzissduAlhKtw3maBVwcC8qSmr+D/dhwPRb1VA
+         CEQQ==
+X-Gm-Message-State: AFqh2koYRLJ1pLiCsFkvElgm9YUeafL72bbfcUO0vzmsSazbZu+IfKg3
+        NlBibykxGcoCF+wNgv1OK2VJDA==
+X-Google-Smtp-Source: AMrXdXskftYtVsw1lLMDSb/EULvWtJ17A6xGxwvaRq5KKRFj+Gpu6vEg8owWQ4r8owHys+Xonln36w==
+X-Received: by 2002:a05:600c:35ca:b0:3d1:f2de:195a with SMTP id r10-20020a05600c35ca00b003d1f2de195amr34415673wmq.32.1672754042525;
+        Tue, 03 Jan 2023 05:54:02 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id ay39-20020a05600c1e2700b003cfa80443a0sm42138195wmb.35.2023.01.03.05.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Jan 2023 05:54:02 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 03 Jan 2023 14:53:58 +0100
+Subject: [PATCH 1/3] dt-bindings: clock: document SM8550 DISPCC clock controller
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230103-topic-sm8550-upstream-dispcc-v1-1-81bfcc26b2dc@linaro.org>
+References: <20230103-topic-sm8550-upstream-dispcc-v1-0-81bfcc26b2dc@linaro.org>
+In-Reply-To: <20230103-topic-sm8550-upstream-dispcc-v1-0-81bfcc26b2dc@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Vasut <marex@denx.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/4] dt-bindings: clk: rs9: Add bindings for 9FGV0441
-Date:   Tue, 03 Jan 2023 14:49:56 +0100
-Message-ID: <2306967.n0HT0TaD9V@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <0d106f4d-4683-4117-0812-e83f8e5974c2@linaro.org>
-References: <20230103123154.3424817-1-alexander.stein@ew.tq-group.com> <20230103123154.3424817-2-alexander.stein@ew.tq-group.com> <0d106f4d-4683-4117-0812-e83f8e5974c2@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Krzysztof,
+Document device tree bindings for display clock controller for
+Qualcomm SM8550 SoC.
 
-Am Dienstag, 3. Januar 2023, 14:25:19 CET schrieb Krzysztof Kozlowski:
-> On 03/01/2023 13:31, Alexander Stein wrote:
-> > This is a 4-channel variant of 9FGV series.
-> 
-> Subject: drop second, redundant "bindings for".
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ .../bindings/clock/qcom,sm8550-dispcc.yaml         | 106 +++++++++++++++++++++
+ include/dt-bindings/clock/qcom,sm8550-dispcc.h     | 101 ++++++++++++++++++++
+ 2 files changed, 207 insertions(+)
 
-Thanks, will drop it on next version.
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml
+new file mode 100644
+index 000000000000..06c04656cb55
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml
+@@ -0,0 +1,106 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,sm8550-dispcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Display Clock & Reset Controller for SM8550
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++description: |
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SM8550.
++
++  See also:: include/dt-bindings/clock/qcom,sm8550-dispcc.h
++
++properties:
++  compatible:
++    enum:
++      - qcom,sm8550-dispcc
++
++  clocks:
++    minItems: 3
++    items:
++      - description: Board XO source
++      - description: Board Always On XO source
++      - description: Display's AHB clock
++      - description: sleep clock
++      - description: Byte clock from DSI PHY0
++      - description: Pixel clock from DSI PHY0
++      - description: Byte clock from DSI PHY1
++      - description: Pixel clock from DSI PHY1
++      - description: Link clock from DP PHY0
++      - description: VCO DIV clock from DP PHY0
++      - description: Link clock from DP PHY1
++      - description: VCO DIV clock from DP PHY1
++      - description: Link clock from DP PHY2
++      - description: VCO DIV clock from DP PHY2
++      - description: Link clock from DP PHY3
++      - description: VCO DIV clock from DP PHY3
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  '#power-domain-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++  power-domains:
++    description:
++      A phandle and PM domain specifier for the MMCX power domain.
++    maxItems: 1
++
++  required-opps:
++    description:
++      A phandle to an OPP node describing required MMCX performance point.
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#clock-cells'
++  - '#reset-cells'
++  - '#power-domain-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,sm8550-gcc.h>
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    #include <dt-bindings/power/qcom-rpmpd.h>
++    clock-controller@af00000 {
++      compatible = "qcom,sm8550-dispcc";
++      reg = <0x0af00000 0x10000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>,
++               <&rpmhcc RPMH_CXO_CLK_A>,
++               <&gcc GCC_DISP_AHB_CLK>,
++               <&sleep_clk>,
++               <&dsi0_phy 0>,
++               <&dsi0_phy 1>,
++               <&dsi1_phy 0>,
++               <&dsi1_phy 1>,
++               <&dp0_phy 0>,
++               <&dp0_phy 1>,
++               <&dp1_phy 0>,
++               <&dp1_phy 1>,
++               <&dp2_phy 0>,
++               <&dp2_phy 1>,
++               <&dp3_phy 0>,
++               <&dp3_phy 1>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++      power-domains = <&rpmhpd SM8550_MMCX>;
++      required-opps = <&rpmhpd_opp_low_svs>;
++    };
++...
+diff --git a/include/dt-bindings/clock/qcom,sm8550-dispcc.h b/include/dt-bindings/clock/qcom,sm8550-dispcc.h
+new file mode 100644
+index 000000000000..ed3094c694e0
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,sm8550-dispcc.h
+@@ -0,0 +1,101 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_SM8550_DISP_CC_H
++#define _DT_BINDINGS_CLK_QCOM_SM8550_DISP_CC_H
++
++/* DISP_CC clocks */
++#define DISP_CC_MDSS_ACCU_CLK					0
++#define DISP_CC_MDSS_AHB1_CLK					1
++#define DISP_CC_MDSS_AHB_CLK					2
++#define DISP_CC_MDSS_AHB_CLK_SRC				3
++#define DISP_CC_MDSS_BYTE0_CLK					4
++#define DISP_CC_MDSS_BYTE0_CLK_SRC				5
++#define DISP_CC_MDSS_BYTE0_DIV_CLK_SRC				6
++#define DISP_CC_MDSS_BYTE0_INTF_CLK				7
++#define DISP_CC_MDSS_BYTE1_CLK					8
++#define DISP_CC_MDSS_BYTE1_CLK_SRC				9
++#define DISP_CC_MDSS_BYTE1_DIV_CLK_SRC				10
++#define DISP_CC_MDSS_BYTE1_INTF_CLK				11
++#define DISP_CC_MDSS_DPTX0_AUX_CLK				12
++#define DISP_CC_MDSS_DPTX0_AUX_CLK_SRC				13
++#define DISP_CC_MDSS_DPTX0_CRYPTO_CLK				14
++#define DISP_CC_MDSS_DPTX0_LINK_CLK				15
++#define DISP_CC_MDSS_DPTX0_LINK_CLK_SRC				16
++#define DISP_CC_MDSS_DPTX0_LINK_DIV_CLK_SRC			17
++#define DISP_CC_MDSS_DPTX0_LINK_INTF_CLK			18
++#define DISP_CC_MDSS_DPTX0_PIXEL0_CLK				19
++#define DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC			20
++#define DISP_CC_MDSS_DPTX0_PIXEL1_CLK				21
++#define DISP_CC_MDSS_DPTX0_PIXEL1_CLK_SRC			22
++#define DISP_CC_MDSS_DPTX0_USB_ROUTER_LINK_INTF_CLK		23
++#define DISP_CC_MDSS_DPTX1_AUX_CLK				24
++#define DISP_CC_MDSS_DPTX1_AUX_CLK_SRC				25
++#define DISP_CC_MDSS_DPTX1_CRYPTO_CLK				26
++#define DISP_CC_MDSS_DPTX1_LINK_CLK				27
++#define DISP_CC_MDSS_DPTX1_LINK_CLK_SRC				28
++#define DISP_CC_MDSS_DPTX1_LINK_DIV_CLK_SRC			29
++#define DISP_CC_MDSS_DPTX1_LINK_INTF_CLK			30
++#define DISP_CC_MDSS_DPTX1_PIXEL0_CLK				31
++#define DISP_CC_MDSS_DPTX1_PIXEL0_CLK_SRC			32
++#define DISP_CC_MDSS_DPTX1_PIXEL1_CLK				33
++#define DISP_CC_MDSS_DPTX1_PIXEL1_CLK_SRC			34
++#define DISP_CC_MDSS_DPTX1_USB_ROUTER_LINK_INTF_CLK		35
++#define DISP_CC_MDSS_DPTX2_AUX_CLK				36
++#define DISP_CC_MDSS_DPTX2_AUX_CLK_SRC				37
++#define DISP_CC_MDSS_DPTX2_CRYPTO_CLK				38
++#define DISP_CC_MDSS_DPTX2_LINK_CLK				39
++#define DISP_CC_MDSS_DPTX2_LINK_CLK_SRC				40
++#define DISP_CC_MDSS_DPTX2_LINK_DIV_CLK_SRC			41
++#define DISP_CC_MDSS_DPTX2_LINK_INTF_CLK			42
++#define DISP_CC_MDSS_DPTX2_PIXEL0_CLK				43
++#define DISP_CC_MDSS_DPTX2_PIXEL0_CLK_SRC			44
++#define DISP_CC_MDSS_DPTX2_PIXEL1_CLK				45
++#define DISP_CC_MDSS_DPTX2_PIXEL1_CLK_SRC			46
++#define DISP_CC_MDSS_DPTX3_AUX_CLK				47
++#define DISP_CC_MDSS_DPTX3_AUX_CLK_SRC				48
++#define DISP_CC_MDSS_DPTX3_CRYPTO_CLK				49
++#define DISP_CC_MDSS_DPTX3_LINK_CLK				50
++#define DISP_CC_MDSS_DPTX3_LINK_CLK_SRC				51
++#define DISP_CC_MDSS_DPTX3_LINK_DIV_CLK_SRC			52
++#define DISP_CC_MDSS_DPTX3_LINK_INTF_CLK			53
++#define DISP_CC_MDSS_DPTX3_PIXEL0_CLK				54
++#define DISP_CC_MDSS_DPTX3_PIXEL0_CLK_SRC			55
++#define DISP_CC_MDSS_ESC0_CLK					56
++#define DISP_CC_MDSS_ESC0_CLK_SRC				57
++#define DISP_CC_MDSS_ESC1_CLK					58
++#define DISP_CC_MDSS_ESC1_CLK_SRC				59
++#define DISP_CC_MDSS_MDP1_CLK					60
++#define DISP_CC_MDSS_MDP_CLK					61
++#define DISP_CC_MDSS_MDP_CLK_SRC				62
++#define DISP_CC_MDSS_MDP_LUT1_CLK				63
++#define DISP_CC_MDSS_MDP_LUT_CLK				64
++#define DISP_CC_MDSS_NON_GDSC_AHB_CLK				65
++#define DISP_CC_MDSS_PCLK0_CLK					66
++#define DISP_CC_MDSS_PCLK0_CLK_SRC				67
++#define DISP_CC_MDSS_PCLK1_CLK					68
++#define DISP_CC_MDSS_PCLK1_CLK_SRC				69
++#define DISP_CC_MDSS_RSCC_AHB_CLK				70
++#define DISP_CC_MDSS_RSCC_VSYNC_CLK				71
++#define DISP_CC_MDSS_VSYNC1_CLK					72
++#define DISP_CC_MDSS_VSYNC_CLK					73
++#define DISP_CC_MDSS_VSYNC_CLK_SRC				74
++#define DISP_CC_PLL0						75
++#define DISP_CC_PLL1						76
++#define DISP_CC_SLEEP_CLK					77
++#define DISP_CC_SLEEP_CLK_SRC					78
++#define DISP_CC_XO_CLK						79
++#define DISP_CC_XO_CLK_SRC					80
++
++/* DISP_CC resets */
++#define DISP_CC_MDSS_CORE_BCR					0
++#define DISP_CC_MDSS_CORE_INT2_BCR				1
++#define DISP_CC_MDSS_RSCC_BCR					2
++
++/* DISP_CC GDSCR */
++#define MDSS_GDSC						0
++#define MDSS_INT2_GDSC						1
++
++#endif
 
-Best regards,
-Alexander
-
-
-
+-- 
+2.34.1
