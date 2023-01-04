@@ -2,110 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BDA65D42D
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Jan 2023 14:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD33765D438
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Jan 2023 14:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236983AbjADNcF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Jan 2023 08:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S239213AbjADNcH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Jan 2023 08:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239445AbjADNbV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Jan 2023 08:31:21 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A6E3D9DA;
-        Wed,  4 Jan 2023 05:27:06 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id c7so27127172qtw.8;
-        Wed, 04 Jan 2023 05:27:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3apLs5SUEYCS8chIsKhmtTxwRF+eOByUathcApBcwhU=;
-        b=tREeZoatX4hC/sEGfSkC1T1RW1lXCIzjWw+rj9cIsb9iu8R8hZTL2c+vcMs+mEgx+r
-         2HASgJVSloNieaOSRBx6DCScq/wFT7yT0giPVLl95oOgwNzK2xQRWm22i/VWaJY1Fogl
-         Z7AKmlIq2i8zjj6Q/CW8vbB8ztiG9V+w0ANKO0bVbGVcwdJCoSUcWJOg2+DaQWAo0kd6
-         1SKd6TMi2W7pL2YzdHFr3HGSHrocdGEqnKSFpFP0MQ7bsqXX+XPf7NKAUfVdQD/LAVYF
-         7zKugAyV0elP7apZoW9LsUjzzFYj9T1kaFkV5PIl+aqC1F2lCbSmLDoAVtY5BKFdK0Pe
-         ubIA==
-X-Gm-Message-State: AFqh2kobJKjg+4uKtGowr/HMaFm4VeFeVzVF8+JVpcSPGwG+bM8ATn+Q
-        t50nxYqVvrRtlq73k0kpC/8fl2i2Lu4LKw==
-X-Google-Smtp-Source: AMrXdXsRMiUBdFPQxgwSndmnnsvCE17pTM+kW/eH0JJCydi8O/nTMKjYyO0fMfFeldbzuW4PnIow1Q==
-X-Received: by 2002:ac8:7457:0:b0:3a8:2122:7c28 with SMTP id h23-20020ac87457000000b003a821227c28mr69960797qtr.47.1672838825357;
-        Wed, 04 Jan 2023 05:27:05 -0800 (PST)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id g14-20020ac87d0e000000b003a7eceb8cbasm20494228qtb.90.2023.01.04.05.27.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Jan 2023 05:27:05 -0800 (PST)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-43ea87d0797so476160087b3.5;
-        Wed, 04 Jan 2023 05:27:04 -0800 (PST)
-X-Received: by 2002:a81:1b0a:0:b0:37e:6806:a5f9 with SMTP id
- b10-20020a811b0a000000b0037e6806a5f9mr5542429ywb.47.1672838824691; Wed, 04
- Jan 2023 05:27:04 -0800 (PST)
+        with ESMTP id S239402AbjADNbe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Jan 2023 08:31:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862866586;
+        Wed,  4 Jan 2023 05:29:40 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 304C2SSX031851;
+        Wed, 4 Jan 2023 13:29:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=fUw5rIZT+w0OaKCTkpkfHTn9ZdkIHNTL3qKKX182P/U=;
+ b=IBDvQlm0JNzBPu+Zz1ZW8nAbLzmRcZOaGWXCKR1AKGgPgTzG/1TCtp/cs0TqrXnDB/2A
+ B5IpTEZER/KNGY7Y+usbZcam29cKDVGiIsxERuK8qHqcQsqcDAH2ifWzJCTLWDV6bwDN
+ sguJCngVMyzJtQbPZ5jbkEuYCWKsysGpdomv1JvDusjXoVZf0PE6F9yABN1cq27g4OOb
+ ay01klX6ZLGk5Jh1Daou+7ah6Dtwl++bIpQeDnl0hTI4C+574Md6yLTjJQWMoM66GT9s
+ g+dLiL9ItHaXYiLikO3ThuV1dT+PjwP/JCAIFM2k+ACmZyA02eI/5N52vvM6+a/FkCkk Xw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mvsvva0hk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Jan 2023 13:29:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 304DTVaj006473
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 4 Jan 2023 13:29:31 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 4 Jan 2023 05:29:26 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <swboyd@chromium.org>, <agross@kernel.org>, <andersson@kernel.org>,
+        <robh+dt@kernel.org>, <broonie@kernel.org>,
+        <quic_plai@quicinc.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v3 0/4] Add resets for ADSP based audio clock controller driver.
+Date:   Wed, 4 Jan 2023 18:59:11 +0530
+Message-ID: <1672838955-7759-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <f904fd28b2087d1463ea65f059924e3b1acc193c.1672764239.git.geert+renesas@glider.be>
- <Y7RmnswYX+1g5vci@spud>
-In-Reply-To: <Y7RmnswYX+1g5vci@spud>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Jan 2023 14:26:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX--sfenmb7WMgpe5045YfR7UjXAM-T9ZNZO3eTN_R=bg@mail.gmail.com>
-Message-ID: <CAMuHMdX--sfenmb7WMgpe5045YfR7UjXAM-T9ZNZO3eTN_R=bg@mail.gmail.com>
-Subject: Re: [PATCH] clk: microchip: mpfs-ccc: Use devm_kasprintf() for
- allocating formatted strings
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8CKuKcmpTFeTP3ljGXgEbwlEVXgIRLut
+X-Proofpoint-GUID: 8CKuKcmpTFeTP3ljGXgEbwlEVXgIRLut
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-04_07,2023-01-04_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ impostorscore=0 adultscore=0 bulkscore=0 mlxlogscore=706
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301040113
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Conor,
+Add resets and remove qdsp6ss clcok controller for audioreach based platforms. 
 
-On Tue, Jan 3, 2023 at 6:32 PM Conor Dooley <conor@kernel.org> wrote:
-> On Tue, Jan 03, 2023 at 05:45:30PM +0100, Geert Uytterhoeven wrote:
-> > In various places, string buffers of a fixed size are allocated, and
-> > filled using snprintf() with the same fixed size, which is error-prone.
-> >
-> > Replace this by calling devm_kasprintf() instead, which always uses the
-> > appropriate size.
-> >
-> > While at it, remove an unneeded intermediate variable, which allows us
-> > to drop a cast as a bonus.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Changes since v2:
+    -- Avoid Removing qdsp6ss clock control by conditional check.
+Changes since v1:
+    -- Update commit message.
+    -- Remove qdsp6ss clock control.
 
-Thanks!
+Srinivasa Rao Mandadapu (4):
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add qcom,adsp-pil-mode
+    property
+  dt-bindings: clock: qcom,sc7280-lpasscc: Add resets for audioreach
+  clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+  clk: qcom: lpasscc-sc7280: Add resets for audioreach
 
-> I half wonder if this should actually have a fixes tag too. Since it
-> used what came after the @ in $full_name, it'd be possible to create
-> (an incorrect) DTS that would lead to a clash between pll names &
-> therefore probe would fail.
-> The tag would be:
-> Fixes: d39fb172760e ("clk: microchip: add PolarFire SoC fabric clock support")
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml        | 19 +++++++++++--
+ drivers/clk/qcom/lpasscc-sc7280.c                  | 33 ++++++++++++++++++----
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
-But I don't change any of that in my patch?
-/me confused.
+-- 
+2.7.4
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
