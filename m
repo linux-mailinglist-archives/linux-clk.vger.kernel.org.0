@@ -2,512 +2,177 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A20465EF8C
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Jan 2023 16:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2781565EFEC
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Jan 2023 16:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbjAEPAS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Jan 2023 10:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S232141AbjAEPXY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Jan 2023 10:23:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbjAEPAQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Jan 2023 10:00:16 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC295B165
-        for <linux-clk@vger.kernel.org>; Thu,  5 Jan 2023 07:00:14 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id s67so15360627pgs.3
-        for <linux-clk@vger.kernel.org>; Thu, 05 Jan 2023 07:00:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6P0vmp5SN9zxC+D6NDNyTo1YBZGy2lU8dMs8nRgcLoQ=;
-        b=seRoskioJjvbfTzavzySrJJfxGUi+D0GqrxMsRMRZ/0lyCJuVviPbr02xdVDWp4o2m
-         avSts8lKGZSQrwmnQHAi869ehLanggSnxf7pzFCvrthep8pcvqsLZVc+3FGNHhOLwas7
-         F+6Hz0VIajeESWA0sGk0m3oULcuvd5gTMnEolCTPE1xM5FKn/PHeOUfBVHZUSSH7ut8H
-         Xke0O8kQ1RG2F1MBwZn/KyLZJdE58ctGIBGqKeNZj4G28rPULzqBQ+PPTBwke7kfADm6
-         UfGsqjkp5+q9u2rwQ6xFg9hYWCdNtOU+kz9cdDY9RewpQz2FkotlrtNM3p/m/xr1aUIz
-         FK8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6P0vmp5SN9zxC+D6NDNyTo1YBZGy2lU8dMs8nRgcLoQ=;
-        b=jGgd4skNZoN22YwPk+trBSLFBDzaZRyxZGp5w5s3PIEAWE2aG1TjzMY6A4+jWL2JK1
-         GA2mf+H2d2maj9gkIRxNvifKGDFdTkq6qHw2ke/BIrT32XqfxfjkrdWTMMWKCW21D8l4
-         dAoiATCOb/8y8UxQQMsn/11GMvW/to5CeBmt2JNHOWfs3hTisL0uIl5anLshPct+g2cA
-         xYZIyQMSZ6XufYAWQZLdDquVVpXvl5dRZqLORh8ld6kFUtUu6nEgHBchUW+eV1DNHrci
-         v1yloyouCTy2kHViILfdMkfk44F7E23lQECuIc52NiZg7nLaztjAT2ZXAruVXlABiDaX
-         c5KQ==
-X-Gm-Message-State: AFqh2kr7gPnwQ9waD7sG4sh3e0mR+7jsRSNuPLChfAt1E11O0XrYTUzr
-        OrgFYEOboaHB2eJ7+kQZjubFatiH/xlqzuRR3vTpOA==
-X-Google-Smtp-Source: AMrXdXt3J9vK0MkVvkjW6BEKTBeP7fDgStLFqNvOAm6GM/v6BIKrBDwcMtifsbrC6jdpQSahEX9PvI/VhpROPdGTLhA=
-X-Received: by 2002:a62:2f07:0:b0:580:b57:f7ad with SMTP id
- v7-20020a622f07000000b005800b57f7admr2700734pfv.28.1672930813845; Thu, 05 Jan
- 2023 07:00:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20230105134622.254560-1-arnd@kernel.org> <20230105134622.254560-5-arnd@kernel.org>
-In-Reply-To: <20230105134622.254560-5-arnd@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 5 Jan 2023 15:59:37 +0100
-Message-ID: <CAPDyKFqGH70bkeB9v4QvXD0K6U3Wjf71hvjokf7qObWqoknCxw@mail.gmail.com>
-Subject: Re: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S234509AbjAEPXJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Jan 2023 10:23:09 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B7D288;
+        Thu,  5 Jan 2023 07:23:07 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 89348E0015;
+        Thu,  5 Jan 2023 15:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1672932186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Y7hEx4jCdi5gZ1clrt4nc1ulwGgfHk1FihM6F9ggSy4=;
+        b=G/qSdJ0ydV8Xr7/XCkRJgxtAvxWYqZr8MKEt1Hi93EBzvUUdqVbu28IIZlQDeEJ1MBQ2u5
+        Dzd0gKB9pavVblmFt7cuEyE3SDi4JsSKTddd5RwcP03y0W2HkgpFO1PwJiOi7WoEHDw6WS
+        /7tspGqfhXQq9BevoClufVtGuXi+119mZg9IoMjI+KYIlF8kWC0Hq/tO4Ei4cBon4Axq7+
+        kPB+QGdviuDD3z0sQsmjdJQRg/IpwvzwZA1pQZayhOuz6WcZ4ELSeFDiclrXBkhdg9KnPW
+        nbygepLIVF5ENUoKQRbVR+mnJrjtD76zwYOu5eiyNfD4ytNH75OEFimyL+qveQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v5 0/5] Add the Renesas USBF controller support
+Date:   Thu,  5 Jan 2023 16:22:52 +0100
+Message-Id: <20230105152257.310642-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 5 Jan 2023 at 14:46, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> There is currently no devicetree support for any of these three
-> SoCs, and no board files remain. As it seems unlikely that anyone
-> is going to add DT support soon, let's drop the SoC specific code
-> now.
->
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
+This series add support for the Renesas USBF controller (USB Device
+Controller) available in the Renesas RZ/N1 SoC.
 
-Kind regards
-Uffe
+Based on previous iteration:
+  https://lore.kernel.org/lkml/20221213133302.218955-1-herve.codina@bootlin.com/
+Custom debug macros present in the controller driver source code
+have been replaced by dev_dbg() calls.
 
-> ---
->  arch/arm/mach-pxa/devices.h      |   1 -
->  arch/arm/mach-pxa/mfp-pxa300.h   |  52 ----
->  arch/arm/mach-pxa/mfp-pxa930.h   | 495 -------------------------------
->  arch/arm/mach-pxa/pxa300.c       |  17 +-
->  arch/arm/mach-pxa/pxa3xx.c       |   4 +-
->  drivers/clk/pxa/clk-pxa3xx.c     |  22 +-
->  drivers/cpufreq/pxa3xx-cpufreq.c |  21 +-
->  drivers/mmc/host/pxamci.c        |   3 +-
->  drivers/pcmcia/pxa2xx_base.c     |   6 -
->  include/linux/soc/pxa/cpu.h      |  93 +-----
->  10 files changed, 9 insertions(+), 705 deletions(-)
->  delete mode 100644 arch/arm/mach-pxa/mfp-pxa930.h
->
-> diff --git a/arch/arm/mach-pxa/devices.h b/arch/arm/mach-pxa/devices.h
-> index 82c83939017a..1c252eca39c1 100644
-> --- a/arch/arm/mach-pxa/devices.h
-> +++ b/arch/arm/mach-pxa/devices.h
-> @@ -54,7 +54,6 @@ extern struct platform_device pxa_device_asoc_ssp4;
->  extern struct platform_device pxa25x_device_gpio;
->  extern struct platform_device pxa27x_device_gpio;
->  extern struct platform_device pxa3xx_device_gpio;
-> -extern struct platform_device pxa93x_device_gpio;
->
->  void __init pxa_register_device(struct platform_device *dev, void *data);
->  void __init pxa2xx_set_dmac_info(struct mmp_dma_platdata *dma_pdata);
-> diff --git a/arch/arm/mach-pxa/mfp-pxa300.h b/arch/arm/mach-pxa/mfp-pxa300.h
-> index 1223e350cea0..058698e7e513 100644
-> --- a/arch/arm/mach-pxa/mfp-pxa300.h
-> +++ b/arch/arm/mach-pxa/mfp-pxa300.h
-> @@ -27,15 +27,6 @@
->  #define GPIO61_GPIO            MFP_CFG(GPIO61, AF0)
->  #define GPIO62_GPIO            MFP_CFG(GPIO62, AF0)
->
-> -#ifdef CONFIG_CPU_PXA310
-> -#define GPIO7_2_GPIO           MFP_CFG(GPIO7_2, AF0)
-> -#define GPIO8_2_GPIO           MFP_CFG(GPIO8_2, AF0)
-> -#define GPIO9_2_GPIO           MFP_CFG(GPIO9_2, AF0)
-> -#define GPIO10_2_GPIO          MFP_CFG(GPIO10_2, AF0)
-> -#define GPIO11_2_GPIO          MFP_CFG(GPIO11_2, AF0)
-> -#define GPIO12_2_GPIO          MFP_CFG(GPIO12_2, AF0)
-> -#endif
-> -
->  /* Chip Select */
->  #define GPIO1_nCS2             MFP_CFG(GPIO1,  AF1)
->  #define GPIO2_nCS3             MFP_CFG(GPIO2,  AF1)
-> @@ -526,47 +517,4 @@
->  #define GPIO46_UTM_PHYDATA_7   MFP_CFG(GPIO46,  AF3)
->  #endif /* CONFIG_CPU_PXA300 */
->
-> -/*
-> - * PXA310 specific MFP configurations
-> - */
-> -#ifdef CONFIG_CPU_PXA310
-> -/* USB P2 */
-> -#define GPIO36_USB_P2_1                MFP_CFG(GPIO36, AF1)
-> -#define GPIO30_USB_P2_2                MFP_CFG(GPIO30, AF1)
-> -#define GPIO35_USB_P2_3                MFP_CFG(GPIO35, AF1)
-> -#define GPIO32_USB_P2_4                MFP_CFG(GPIO32, AF1)
-> -#define GPIO34_USB_P2_5                MFP_CFG(GPIO34, AF1)
-> -#define GPIO31_USB_P2_6                MFP_CFG(GPIO31, AF1)
-> -
-> -/* MMC1 */
-> -#define GPIO24_MMC1_CMD                MFP_CFG(GPIO24, AF3)
-> -#define GPIO29_MMC1_DAT0       MFP_CFG(GPIO29, AF3)
-> -
-> -/* MMC3 */
-> -#define GPIO103_MMC3_CLK       MFP_CFG(GPIO103, AF2)
-> -#define GPIO105_MMC3_CMD       MFP_CFG(GPIO105, AF2)
-> -#define GPIO11_2_MMC3_CLK      MFP_CFG(GPIO11_2, AF1)
-> -#define GPIO12_2_MMC3_CMD      MFP_CFG(GPIO12_2, AF1)
-> -#define GPIO7_2_MMC3_DAT0      MFP_CFG(GPIO7_2, AF1)
-> -#define GPIO8_2_MMC3_DAT1      MFP_CFG(GPIO8_2, AF1)
-> -#define GPIO9_2_MMC3_DAT2      MFP_CFG(GPIO9_2, AF1)
-> -#define GPIO10_2_MMC3_DAT3     MFP_CFG(GPIO10_2, AF1)
-> -
-> -/* ULPI */
-> -#define GPIO38_ULPI_CLK                MFP_CFG(GPIO38, AF1)
-> -#define GPIO30_ULPI_DATA_OUT_0 MFP_CFG(GPIO30, AF3)
-> -#define GPIO31_ULPI_DATA_OUT_1 MFP_CFG(GPIO31, AF3)
-> -#define GPIO32_ULPI_DATA_OUT_2 MFP_CFG(GPIO32, AF3)
-> -#define GPIO33_ULPI_DATA_OUT_3 MFP_CFG(GPIO33, AF3)
-> -#define GPIO34_ULPI_DATA_OUT_4 MFP_CFG(GPIO34, AF3)
-> -#define GPIO35_ULPI_DATA_OUT_5 MFP_CFG(GPIO35, AF3)
-> -#define GPIO36_ULPI_DATA_OUT_6 MFP_CFG(GPIO36, AF3)
-> -#define GPIO37_ULPI_DATA_OUT_7 MFP_CFG(GPIO37, AF3)
-> -#define GPIO33_ULPI_OTG_INTR   MFP_CFG(GPIO33, AF1)
-> -
-> -#define ULPI_DIR       MFP_CFG_DRV(ULPI_DIR, AF0, DS01X)
-> -#define ULPI_NXT       MFP_CFG_DRV(ULPI_NXT, AF0, DS01X)
-> -#define ULPI_STP       MFP_CFG_DRV(ULPI_STP, AF0, DS01X)
-> -#endif /* CONFIG_CPU_PXA310 */
-> -
->  #endif /* __ASM_ARCH_MFP_PXA300_H */
-> diff --git a/arch/arm/mach-pxa/mfp-pxa930.h b/arch/arm/mach-pxa/mfp-pxa930.h
-> deleted file mode 100644
-> index 0d195d3a8c61..000000000000
-> diff --git a/arch/arm/mach-pxa/pxa300.c b/arch/arm/mach-pxa/pxa300.c
-> index f77ec118d5b9..accd270ff8e2 100644
-> --- a/arch/arm/mach-pxa/pxa300.c
-> +++ b/arch/arm/mach-pxa/pxa300.c
-> @@ -69,28 +69,13 @@ static struct mfp_addr_map pxa300_mfp_addr_map[] __initdata = {
->         MFP_ADDR_END,
->  };
->
-> -/* override pxa300 MFP register addresses */
-> -static struct mfp_addr_map pxa310_mfp_addr_map[] __initdata = {
-> -       MFP_ADDR_X(GPIO30,  GPIO98,   0x0418),
-> -       MFP_ADDR_X(GPIO7_2, GPIO12_2, 0x052C),
-> -
-> -       MFP_ADDR(ULPI_STP, 0x040C),
-> -       MFP_ADDR(ULPI_NXT, 0x0410),
-> -       MFP_ADDR(ULPI_DIR, 0x0414),
-> -
-> -       MFP_ADDR_END,
-> -};
-> -
->  static int __init pxa300_init(void)
->  {
-> -       if (cpu_is_pxa300() || cpu_is_pxa310()) {
-> +       if (cpu_is_pxa300()) {
->                 mfp_init_base(io_p2v(MFPR_BASE));
->                 mfp_init_addr(pxa300_mfp_addr_map);
->         }
->
-> -       if (cpu_is_pxa310())
-> -               mfp_init_addr(pxa310_mfp_addr_map);
-> -
->         return 0;
->  }
->
-> diff --git a/arch/arm/mach-pxa/pxa3xx.c b/arch/arm/mach-pxa/pxa3xx.c
-> index b26f00fc75d5..7a02ddb30969 100644
-> --- a/arch/arm/mach-pxa/pxa3xx.c
-> +++ b/arch/arm/mach-pxa/pxa3xx.c
-> @@ -496,8 +496,6 @@ static int __init pxa3xx_init(void)
->                 pxa3xx_init_pm();
->
->                 enable_irq_wake(IRQ_WAKEUP0);
-> -               if (cpu_is_pxa320())
-> -                       enable_irq_wake(IRQ_WAKEUP1);
->
->                 register_syscore_ops(&pxa_irq_syscore_ops);
->                 register_syscore_ops(&pxa3xx_mfp_syscore_ops);
-> @@ -509,7 +507,7 @@ static int __init pxa3xx_init(void)
->                 ret = platform_add_devices(devices, ARRAY_SIZE(devices));
->                 if (ret)
->                         return ret;
-> -               if (cpu_is_pxa300() || cpu_is_pxa310() || cpu_is_pxa320()) {
-> +               if (cpu_is_pxa300()) {
->                         platform_device_add_data(&pxa3xx_device_gpio,
->                                                  &pxa3xx_gpio_pdata,
->                                                  sizeof(pxa3xx_gpio_pdata));
-> diff --git a/drivers/clk/pxa/clk-pxa3xx.c b/drivers/clk/pxa/clk-pxa3xx.c
-> index 42958a542662..9b45dc297b22 100644
-> --- a/drivers/clk/pxa/clk-pxa3xx.c
-> +++ b/drivers/clk/pxa/clk-pxa3xx.c
-> @@ -269,19 +269,6 @@ static struct desc_clk_cken pxa300_310_clocks[] __initdata = {
->         PXA3XX_CKEN_1RATE("pxa3xx-gpio", NULL, GPIO, pxa3xx_13MHz_bus_parents),
->  };
->
-> -static struct desc_clk_cken pxa320_clocks[] __initdata = {
-> -       PXA3XX_PBUS_CKEN("pxa3xx-nand", NULL, NAND, 1, 2, 1, 6, 0),
-> -       PXA3XX_PBUS_CKEN("pxa3xx-gcu", NULL, PXA320_GCU, 1, 1, 1, 1, 0),
-> -       PXA3XX_CKEN_1RATE("pxa3xx-gpio", NULL, GPIO, pxa3xx_13MHz_bus_parents),
-> -};
-> -
-> -static struct desc_clk_cken pxa93x_clocks[] __initdata = {
-> -
-> -       PXA3XX_PBUS_CKEN("pxa3xx-gcu", NULL, PXA300_GCU, 1, 1, 1, 1, 0),
-> -       PXA3XX_PBUS_CKEN("pxa3xx-nand", NULL, NAND, 1, 2, 1, 4, 0),
-> -       PXA3XX_CKEN_1RATE("pxa93x-gpio", NULL, GPIO, pxa3xx_13MHz_bus_parents),
-> -};
-> -
->  static unsigned long clk_pxa3xx_system_bus_get_rate(struct clk_hw *hw,
->                                             unsigned long parent_rate)
->  {
-> @@ -446,13 +433,8 @@ int __init pxa3xx_clocks_init(void __iomem *regs, void __iomem *oscc_reg)
->         ret = clk_pxa_cken_init(pxa3xx_clocks, ARRAY_SIZE(pxa3xx_clocks), regs);
->         if (ret)
->                 return ret;
-> -       if (cpu_is_pxa320())
-> -               return clk_pxa_cken_init(pxa320_clocks,
-> -                                        ARRAY_SIZE(pxa320_clocks), regs);
-> -       if (cpu_is_pxa300() || cpu_is_pxa310())
-> -               return clk_pxa_cken_init(pxa300_310_clocks,
-> -                                        ARRAY_SIZE(pxa300_310_clocks), regs);
-> -       return clk_pxa_cken_init(pxa93x_clocks, ARRAY_SIZE(pxa93x_clocks), regs);
-> +       return clk_pxa_cken_init(pxa300_310_clocks,
-> +                                ARRAY_SIZE(pxa300_310_clocks), regs);
->  }
->
->  static void __init pxa3xx_dt_clocks_init(struct device_node *np)
-> diff --git a/drivers/cpufreq/pxa3xx-cpufreq.c b/drivers/cpufreq/pxa3xx-cpufreq.c
-> index 4afa48d172db..23bc3c7a6288 100644
-> --- a/drivers/cpufreq/pxa3xx-cpufreq.c
-> +++ b/drivers/cpufreq/pxa3xx-cpufreq.c
-> @@ -91,15 +91,6 @@ static struct pxa3xx_freq_info pxa300_freqs[] = {
->         OP(624, 24, 2, 208, 260, 208, 312, 3, 1375, 1400), /* 624MHz */
->  };
->
-> -static struct pxa3xx_freq_info pxa320_freqs[] = {
-> -       /*  CPU XL XN  HSS DMEM SMEM SRAM DFI VCC_CORE VCC_SRAM */
-> -       OP(104,  8, 1, 104, 260,  78, 104, 3, 1000, 1100), /* 104MHz */
-> -       OP(208, 16, 1, 104, 260, 104, 156, 2, 1000, 1100), /* 208MHz */
-> -       OP(416, 16, 2, 156, 260, 104, 208, 2, 1100, 1200), /* 416MHz */
-> -       OP(624, 24, 2, 208, 260, 208, 312, 3, 1375, 1400), /* 624MHz */
-> -       OP(806, 31, 2, 208, 260, 208, 312, 3, 1400, 1400), /* 806MHz */
-> -};
-> -
->  static unsigned int pxa3xx_freqs_num;
->  static struct pxa3xx_freq_info *pxa3xx_freqs;
->  static struct cpufreq_frequency_table *pxa3xx_freqs_table;
-> @@ -186,17 +177,11 @@ static int pxa3xx_cpufreq_init(struct cpufreq_policy *policy)
->
->         /* set default policy and cpuinfo */
->         policy->min = policy->cpuinfo.min_freq = 104000;
-> -       policy->max = policy->cpuinfo.max_freq =
-> -               (cpu_is_pxa320()) ? 806000 : 624000;
-> +       policy->max = policy->cpuinfo.max_freq = 624000;
->         policy->cpuinfo.transition_latency = 1000; /* FIXME: 1 ms, assumed */
->
-> -       if (cpu_is_pxa300() || cpu_is_pxa310())
-> -               ret = setup_freqs_table(policy, pxa300_freqs,
-> -                                       ARRAY_SIZE(pxa300_freqs));
-> -
-> -       if (cpu_is_pxa320())
-> -               ret = setup_freqs_table(policy, pxa320_freqs,
-> -                                       ARRAY_SIZE(pxa320_freqs));
-> +       ret = setup_freqs_table(policy, pxa300_freqs,
-> +                               ARRAY_SIZE(pxa300_freqs));
->
->         if (ret) {
->                 pr_err("failed to setup frequency table\n");
-> diff --git a/drivers/mmc/host/pxamci.c b/drivers/mmc/host/pxamci.c
-> index 2a988f942b6c..60bdd691c391 100644
-> --- a/drivers/mmc/host/pxamci.c
-> +++ b/drivers/mmc/host/pxamci.c
-> @@ -44,8 +44,7 @@
->  #define NR_SG  1
->  #define CLKRT_OFF      (~0)
->
-> -#define mmc_has_26MHz()                (cpu_is_pxa300() || cpu_is_pxa310() \
-> -                               || cpu_is_pxa935())
-> +#define mmc_has_26MHz()                (cpu_is_pxa300())
->
->  struct pxamci_host {
->         struct mmc_host         *mmc;
-> diff --git a/drivers/pcmcia/pxa2xx_base.c b/drivers/pcmcia/pxa2xx_base.c
-> index 5254028354f4..a6c6ee034582 100644
-> --- a/drivers/pcmcia/pxa2xx_base.c
-> +++ b/drivers/pcmcia/pxa2xx_base.c
-> @@ -268,12 +268,6 @@ static int pxa2xx_drv_pcmcia_probe(struct platform_device *dev)
->                 goto err0;
->         }
->
-> -       if (cpu_is_pxa320() && ops->nr > 1) {
-> -               dev_err(&dev->dev, "pxa320 supports only one pcmcia slot");
-> -               ret = -EINVAL;
-> -               goto err0;
-> -       }
-> -
->         clk = devm_clk_get(&dev->dev, NULL);
->         if (IS_ERR(clk))
->                 return -ENODEV;
-> diff --git a/include/linux/soc/pxa/cpu.h b/include/linux/soc/pxa/cpu.h
-> index 5782450ee45c..0f894d12fe1d 100644
-> --- a/include/linux/soc/pxa/cpu.h
-> +++ b/include/linux/soc/pxa/cpu.h
-> @@ -56,12 +56,6 @@
->   *  PXA935     B1      0x56056938      0x8E653013
->   */
->  #ifdef CONFIG_PXA25x
-> -#define __cpu_is_pxa210(id)                            \
-> -       ({                                              \
-> -               unsigned int _id = (id) & 0xf3f0;       \
-> -               _id == 0x2120;                          \
-> -       })
-> -
->  #define __cpu_is_pxa250(id)                            \
->         ({                                              \
->                 unsigned int _id = (id) & 0xf3ff;       \
-> @@ -80,7 +74,6 @@
->                 _id == 0x2100;                          \
->         })
->  #else
-> -#define __cpu_is_pxa210(id)    (0)
->  #define __cpu_is_pxa250(id)    (0)
->  #define __cpu_is_pxa255(id)    (0)
->  #define __cpu_is_pxa25x(id)    (0)
-> @@ -106,51 +99,6 @@
->  #define __cpu_is_pxa300(id)    (0)
->  #endif
->
-> -#ifdef CONFIG_CPU_PXA310
-> -#define __cpu_is_pxa310(id)                            \
-> -       ({                                              \
-> -               unsigned int _id = (id) >> 4 & 0xfff;   \
-> -               _id == 0x689;                           \
-> -        })
-> -#else
-> -#define __cpu_is_pxa310(id)    (0)
-> -#endif
-> -
-> -#ifdef CONFIG_CPU_PXA320
-> -#define __cpu_is_pxa320(id)                            \
-> -       ({                                              \
-> -               unsigned int _id = (id) >> 4 & 0xfff;   \
-> -               _id == 0x603 || _id == 0x682;           \
-> -        })
-> -#else
-> -#define __cpu_is_pxa320(id)    (0)
-> -#endif
-> -
-> -#ifdef CONFIG_CPU_PXA930
-> -#define __cpu_is_pxa930(id)                            \
-> -       ({                                              \
-> -               unsigned int _id = (id) >> 4 & 0xfff;   \
-> -               _id == 0x683;                           \
-> -        })
-> -#else
-> -#define __cpu_is_pxa930(id)    (0)
-> -#endif
-> -
-> -#ifdef CONFIG_CPU_PXA935
-> -#define __cpu_is_pxa935(id)                            \
-> -       ({                                              \
-> -               unsigned int _id = (id) >> 4 & 0xfff;   \
-> -               _id == 0x693;                           \
-> -        })
-> -#else
-> -#define __cpu_is_pxa935(id)    (0)
-> -#endif
-> -
-> -#define cpu_is_pxa210()                                        \
-> -       ({                                              \
-> -               __cpu_is_pxa210(read_cpuid_id());       \
-> -       })
-> -
->  #define cpu_is_pxa250()                                        \
->         ({                                              \
->                 __cpu_is_pxa250(read_cpuid_id());       \
-> @@ -176,27 +124,6 @@
->                 __cpu_is_pxa300(read_cpuid_id());       \
->          })
->
-> -#define cpu_is_pxa310()                                        \
-> -       ({                                              \
-> -               __cpu_is_pxa310(read_cpuid_id());       \
-> -        })
-> -
-> -#define cpu_is_pxa320()                                        \
-> -       ({                                              \
-> -               __cpu_is_pxa320(read_cpuid_id());       \
-> -        })
-> -
-> -#define cpu_is_pxa930()                                        \
-> -       ({                                              \
-> -               __cpu_is_pxa930(read_cpuid_id());       \
-> -        })
-> -
-> -#define cpu_is_pxa935()                                        \
-> -       ({                                              \
-> -               __cpu_is_pxa935(read_cpuid_id());       \
-> -        })
-> -
-> -
->
->  /*
->   * CPUID Core Generation Bit
-> @@ -215,25 +142,12 @@
->  #ifdef CONFIG_PXA3xx
->  #define __cpu_is_pxa3xx(id)                            \
->         ({                                              \
-> -               __cpu_is_pxa300(id)                     \
-> -                       || __cpu_is_pxa310(id)          \
-> -                       || __cpu_is_pxa320(id)          \
-> -                       || __cpu_is_pxa93x(id);         \
-> +               __cpu_is_pxa300(id);                    \
->          })
->  #else
->  #define __cpu_is_pxa3xx(id)    (0)
->  #endif
->
-> -#if defined(CONFIG_CPU_PXA930) || defined(CONFIG_CPU_PXA935)
-> -#define __cpu_is_pxa93x(id)                            \
-> -       ({                                              \
-> -               __cpu_is_pxa930(id)                     \
-> -                       || __cpu_is_pxa935(id);         \
-> -        })
-> -#else
-> -#define __cpu_is_pxa93x(id)    (0)
-> -#endif
-> -
->  #define cpu_is_pxa2xx()                                        \
->         ({                                              \
->                 __cpu_is_pxa2xx(read_cpuid_id());       \
-> @@ -244,9 +158,4 @@
->                 __cpu_is_pxa3xx(read_cpuid_id());       \
->          })
->
-> -#define cpu_is_pxa93x()                                        \
-> -       ({                                              \
-> -               __cpu_is_pxa93x(read_cpuid_id());       \
-> -        })
-> -
->  #endif
-> --
-> 2.39.0
->
+Best regards,
+Herve Codina
+
+Changes v4 -> v5:
+  - patch 1
+    Add 'Reviewed-by: Rob Herring <robh@kernel.org>'
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - patch 3
+    Remove custom TRACE() and TRACEEP() debug macros and
+    use directly dev_dbg() instead.
+
+  - patch 2, 4 and 5
+    No changes
+
+Changes v3 -> v4:
+  - v3 patches 1, 2, 3 and 4 removed
+
+  - Patch 1 (v3 patch 5)
+    Remove 'depends-on' property
+
+  - Patch 2 (v3 patch 6)
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - Patch 3 (v3 patch 7)
+    Fix warning raised by the kernel test robot
+
+  - Patch 4 (v3 patch 8)
+    Remove 'depends-on' property
+    add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+  - Patch 5 (v3 patch 9)
+    No changes
+
+Changes v2 -> v3:
+  - v2 Patches 1, 2 and 3 removed.
+
+  - Patches 1, 2, 3 and 4 (new patches)
+
+  - Patch 5 (v2 patch 4):
+    Add 'depends-on' property
+    Removed redundant 'binding' word
+
+  - Patch 6 (new patch)
+
+  - Patch 7 (v2 patch 5)
+    Removed h2mode checking. This check is no more needed and the API no more
+    available.
+
+  - Patch 8 (v2 patch 6)
+    Add 'depends-on' property
+
+  - Patch 9 (v2 patch 7)
+    Fix file name
+
+Changes v1 -> v2:
+  - Patch 1:
+    Rename r9a06g032_sysctrl_get_usb_h2mode to r9a06g032_sysctrl_get_usb_role
+    and return USB_ROLE_{HOST,DEVICE} or an error code.
+    Reword commit log
+
+  - Patches 2 and 3:
+    No changes. Some previous feedbacks still need to be taken into account
+      https://lore.kernel.org/all/20221107182642.05a09f2f@bootlin.com/
+      https://lore.kernel.org/all/20221107173614.474707d7@bootlin.com/
+
+  - Patch 4:
+    Rename file from renesas,usbf.yaml to renesas,rzn1-usbf.yaml.
+    Remove 'oneOf'.
+    Add blank line and line break.
+    Add 'power-domains'.
+    Reword commit log
+
+  - Patch 5:
+    Remove clocks handling (handled by runtime PM through the clock domain
+    pointed by power-domains).
+    Fix compilation warning raised by the 'kernel test robot'.
+
+  - Patch 6:
+    Add 'power-domains'
+
+  - Patch 7:
+    Add 'Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>'
+
+
+Herve Codina (5):
+  dt-bindings: usb: add the Renesas RZ/N1 USBF controller
+  soc: renesas: r9a06g032-sysctrl: Handle h2mode setting based on USBF
+    presence
+  usb: gadget: udc: add Renesas RZ/N1 USBF controller support
+  ARM: dts: r9a06g032: Add the USBF controller node
+  MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
+
+ .../bindings/usb/renesas,rzn1-usbf.yaml       |   68 +
+ MAINTAINERS                                   |    8 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |   12 +
+ drivers/clk/renesas/r9a06g032-clocks.c        |   28 +
+ drivers/usb/gadget/udc/Kconfig                |   11 +
+ drivers/usb/gadget/udc/Makefile               |    1 +
+ drivers/usb/gadget/udc/renesas_usbf.c         | 3406 +++++++++++++++++
+ 7 files changed, 3534 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml
+ create mode 100644 drivers/usb/gadget/udc/renesas_usbf.c
+
+-- 
+2.38.1
+
