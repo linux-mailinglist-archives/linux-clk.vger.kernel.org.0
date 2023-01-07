@@ -2,110 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713786607B4
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Jan 2023 21:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2648B660E79
+	for <lists+linux-clk@lfdr.de>; Sat,  7 Jan 2023 13:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbjAFULA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 6 Jan 2023 15:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S230178AbjAGMEl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 7 Jan 2023 07:04:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236544AbjAFUKm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Jan 2023 15:10:42 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899AF840A7
-        for <linux-clk@vger.kernel.org>; Fri,  6 Jan 2023 12:10:41 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id cf42so3546896lfb.1
-        for <linux-clk@vger.kernel.org>; Fri, 06 Jan 2023 12:10:41 -0800 (PST)
+        with ESMTP id S229475AbjAGMEk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 7 Jan 2023 07:04:40 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCFB59F9B
+        for <linux-clk@vger.kernel.org>; Sat,  7 Jan 2023 04:04:39 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id n5so3515875ljc.9
+        for <linux-clk@vger.kernel.org>; Sat, 07 Jan 2023 04:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sjPB6qMW5CCrupsiViZnWcfIPvSm2Sn0b8lV/kmvycs=;
-        b=fiycu6f9SM9Qtvt4lC3tNhv6teCDNmJVHyj58FWRNeK0Fp03pk1Vnqq5U7Y4x3nfLt
-         KWXrya3wMr+nx9JFkKDDcfsemDxzoZ4A2vwrF9oRX7k6sAKd6Icnhqux9/nmfkbaD4BI
-         PkNm4eME6SGquYHpDEVfWUzLNknfBpo8W97WE8ESIVQ+8mCfWnTDysR9Zueu+YEEpFcl
-         f12MQAnMa96SCcdbTKrI3v3E2cRBCJfdL/lSpv86KJa6dBrd7OSuaTkor033iRydsUXp
-         BeEqM9trnbEehpSsd2kGd+vvESTQtKEVQBFVQRYvdMkIshK9Z8YUIqSsAt7RkdzvE/s/
-         LTiw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wz4wfE/YkxeRpDHi0xsr/1VlzIloR8P1Orz6mqqqXdI=;
+        b=u5hZHU1DLWiMN3icESMKB+5pSnFsgMiK1TNUvkhYeA/oYjnbU7bLdklGIoyE3tITOA
+         6+y7o0p79rP8BvhRs7D9GVhWp/IPOJ23Ax6ukxewGzbhmXMTsnqnaIkxEwGEL01sN4B2
+         4cJCjppRhAuSB52Xs8f8/hLJue+ELy3xsGZM/fxhL/oKcKm+74GdpMipf2MfFyNOXGuu
+         JuY47z6jD4RrDi7YkI4Wg+GitcZKHkSjBg0TA9PeIP4dvBD43GM5dkQoNE+A73noUMYT
+         TTtnkz6qlBrJYyyrlCtnwYZbAI1u+ZaXX9AflawLIJVvkb37xH2qsf3CSf+tl4ru8R0c
+         7wag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sjPB6qMW5CCrupsiViZnWcfIPvSm2Sn0b8lV/kmvycs=;
-        b=5rcIE43ZSlDvqf7aR+xElZH6KhWnwZo0GasCTFhSVOxjymhHgwdtaRzDHmpZtEz/Qr
-         5QgxNZpFvMt3mkAxbwGOVszpQsGOZBY/0Qc8pOOT9j0bgFQikRTLLv493Z8m10/JEdHk
-         jjVWjx6zjMUeyIM5mbXNUUO2hORe3391s/vWCfQysPWZPUk64NdlMSmZtv5Deb4ed9lU
-         vDMoAC+2/oORqeQw/tn0ukqVQd/TK13/fWi01YC+WQ9Nb+PmLCk2xvZCUtYGCo4k38xq
-         TPrYKHPPiy4qtP11RlFT4DWYNIOhebg/WRPkn4qLc7OaDpvUTAZXB16zJh0+HktIez/J
-         0uQg==
-X-Gm-Message-State: AFqh2kr8QH90dGoIFbCvQkInK/TpW+Ryd4nNRZYUGOQcavEP0RdXKrGq
-        AeZaczA9za0EACMNLgUakPBLSQ==
-X-Google-Smtp-Source: AMrXdXt8wl68v8XvhFZ6lYEY21ShlaYEfGBja0VDtA8DeQOt+TRWmuY5YIn8qmWT0jSjvdWGvExG0w==
-X-Received: by 2002:ac2:5f43:0:b0:4cb:2c19:ec26 with SMTP id 3-20020ac25f43000000b004cb2c19ec26mr6719874lfz.35.1673035839977;
-        Fri, 06 Jan 2023 12:10:39 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id f14-20020a0565123b0e00b004b7033da2d7sm260875lfv.128.2023.01.06.12.10.39
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wz4wfE/YkxeRpDHi0xsr/1VlzIloR8P1Orz6mqqqXdI=;
+        b=GahFpHztkPX1hcUQi2c6CmXtAxrRnPDU4hkyuFxSpE3DfqYHTgVIG/IsC2Pwh6C0HO
+         KqZ9vhvF2WtQnfAjiCmYzS3+Vd5OXOYy8TrlE0uLNiW1CMB6rlXVbkq7JmeJ7L83Pin7
+         xes+/b6B/i4ScEj7r240XjXLX43h5U2/l++lGgG6/hlKusOxjMJGUCB/Gi+cfXzGBdBm
+         W7clK4ULHpvwF9LkLarR1fzBZdsTWUPa4k/NdhP1eTQsBV1gDdM+MmF1NLyfJasCAaZm
+         V76InDfCD5Rlo/fBxFUeDkN7E77REc4vzJPy6ztW/ztDU2+KRVP0b3x1Vdw+qCkPm2Nn
+         7tbQ==
+X-Gm-Message-State: AFqh2koeL4uAHdDoYvEx6DU+jFSuEwZFkrT3xUoKAA8wrBgGoQbkuzBK
+        spWg4hkNmEF4HX73yoDA1nBlnw==
+X-Google-Smtp-Source: AMrXdXu8hqdGKJPcfqsVB/g+ExpJckzz1eBU6hDjGOXRZM631RBaYm3VGB0ibYEB4gGKjA7gKcR9tQ==
+X-Received: by 2002:a2e:8606:0:b0:280:c06f:1f52 with SMTP id a6-20020a2e8606000000b00280c06f1f52mr3539180lji.11.1673093077381;
+        Sat, 07 Jan 2023 04:04:37 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id g3-20020a2ea4a3000000b0027fdd6ded99sm343521ljm.4.2023.01.07.04.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 12:10:39 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Sat, 07 Jan 2023 04:04:36 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        kernel test robot <lkp@intel.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     Georgi Djakov <djakov@kernel.org>, Alex Elder <elder@linaro.org>,
-        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 11/11] arm64: dts: qcom: sm8250: drop the virtual ipa-virt device
-Date:   Fri,  6 Jan 2023 22:10:28 +0200
-Message-Id: <20230106201028.1809541-12-dmitry.baryshkov@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: qcom: camcc-sm6350: Make camcc_sm6350_hws static
+Date:   Sat,  7 Jan 2023 13:04:34 +0100
+Message-Id: <20230107120434.1902666-1-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230106201028.1809541-1-dmitry.baryshkov@linaro.org>
-References: <20230106201028.1809541-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Drop the virtual ipa-virt device. The interconnects it provided are
-going to be represented as <&rpmhcc RPMH_IPA_CLK> clock.
+There's no reason for it not to be static, and some compilers don't
+like not it being that way. Make it so.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 80f5451d9a7c ("clk: qcom: Add camera clock controller driver for SM6350")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/clk/qcom/camcc-sm6350.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index b3ab2896a6cc..af298dec0568 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2215,13 +2215,6 @@ ufs_mem_phy_lanes: phy@1d87400 {
- 			};
- 		};
+diff --git a/drivers/clk/qcom/camcc-sm6350.c b/drivers/clk/qcom/camcc-sm6350.c
+index ea8600530046..acba9f99d960 100644
+--- a/drivers/clk/qcom/camcc-sm6350.c
++++ b/drivers/clk/qcom/camcc-sm6350.c
+@@ -1742,7 +1742,7 @@ static struct gdsc titan_top_gdsc = {
+ 	.pwrsts = PWRSTS_OFF_ON,
+ };
  
--		ipa_virt: interconnect@1e00000 {
--			compatible = "qcom,sm8250-ipa-virt";
--			reg = <0 0x01e00000 0 0x1000>;
--			#interconnect-cells = <1>;
--			qcom,bcm-voters = <&apps_bcm_voter>;
--		};
--
- 		tcsr_mutex: hwlock@1f40000 {
- 			compatible = "qcom,tcsr-mutex";
- 			reg = <0x0 0x01f40000 0x0 0x40000>;
+-struct clk_hw *camcc_sm6350_hws[] = {
++static struct clk_hw *camcc_sm6350_hws[] = {
+ 	[CAMCC_PLL2_OUT_EARLY] = &camcc_pll2_out_early.hw,
+ };
+ 
 -- 
 2.39.0
 
