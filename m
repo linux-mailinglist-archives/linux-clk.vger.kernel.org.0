@@ -2,49 +2,49 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589F9666463
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Jan 2023 21:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA2366646C
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Jan 2023 21:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239579AbjAKUF0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Jan 2023 15:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S238692AbjAKUF2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Jan 2023 15:05:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbjAKUFD (ORCPT
+        with ESMTP id S239627AbjAKUFD (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Jan 2023 15:05:03 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897E443D97
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8951043D92
         for <linux-clk@vger.kernel.org>; Wed, 11 Jan 2023 12:01:34 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id y25so25191112lfa.9
+Received: by mail-lf1-x131.google.com with SMTP id bq39so25246361lfb.0
         for <linux-clk@vger.kernel.org>; Wed, 11 Jan 2023 12:01:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rCHat37cJtM2Qvwrjq9+VD2WQIcOHoBDwG3chmbNUpY=;
-        b=YvhlSLlldXA1ktk13wJ/O4Gp1RC+o6+9JqJAspbyguImj2C138rOw33Rn6+RfNQiEG
-         BB/hZkVvjEzo/2yafBAhi8TIOek1sw2+aggntqRUlChQfN8q+b37+vU62S+CahLI8vNl
-         1J2mDFiS7DSGkUdjtRXBIEUZ2cp6dCZCMKfSqXYXxUq+S6wvgWxpC6+AF1Obm3orLg60
-         LvSUVXMlf05x/qVUUCWD1HdDSE6Tx3daWo2XpgGAl2ODOZ2t7LBy5No1NAZaq7ag7fjk
-         YsIlgJpnNerVEOAqAddzxbqGMXrWRR05w/U2BKKs8NxIA88ESUkzDACOkKK5BeaFnW0b
-         4tnw==
+        bh=UcTrQNFFbWCL7GgAo7RNP0TzY01GvFcQgkQKLT8ew64=;
+        b=GvnUTovdSaH2y/t2hZgjAMqhy0bL8GpaM2GmZ7CRWjrVpGkVO7YZGCrV2S0bH5/x4R
+         h2YAWuD6xrgAZBG+j+7Dhjb9nmz+YSdRgkUgjApy2zaz+uJJu5Vd0YRm+WIONodwtRpE
+         7qMrgDab9BAKeROCPZfv2Ty5Tgic/tLqewdIJDGtBAjxLyuaEi8xa/5Y7b6zL2LoCop7
+         SMKRX72A+2bVNNFJgrmaXYXfwtkaDGKFG+zz9tEzs2yb5MrKuvhr0J81OtfESfHz2Gnr
+         rA0XSDxGmmWQS+E1+iyIGt4bUMo8Qu7Hjg3+273ahAJfXlfzYff1NWmmz/pGbs8pmAya
+         4Z9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rCHat37cJtM2Qvwrjq9+VD2WQIcOHoBDwG3chmbNUpY=;
-        b=iQyD9/qqbzS/5cZ0VV6qGA8YuYZKCodk4FXfEwFedInh2l7AmeqJvoDSQyA0PLMjif
-         ypDyuF+FMK31NAVpLlhVVQ1YFn5D9YmMkDCEiwemnxaDzceIc/UGWGdkzoZgwDGoCJB/
-         s8wEC9vEbOct20WJvJ3E5aTH+c4FPEjzdRIYdRo0OxuaivQU1gQA8hYsKNu5Z+kTjLXv
-         Zo3BSgk/gGgMx57L89SAtzm1QUEwcT2M3HdAnywrRXEnep15kVlpOfDLpDLEX7DvE7QV
-         qAjAaHNeUsdqEP1k/e6qZhUVt5uFURGDCn/M+If38k3GFUGVefnT8iC+vraO+q5znOqw
-         8/VQ==
-X-Gm-Message-State: AFqh2kpEqM6IQI4shlfyzlhBufsvsDuinFdHVpCQczfDIMNU1F2kAYTy
-        cdy5duUef4Jo+80HuItIYRBA+g==
-X-Google-Smtp-Source: AMrXdXu58ILgQPiKFsmXUedyxiC7SkBuhOkzFHpC7cly8MPvCBn2S8/B6TUEQ9MaLjuaaNWbZGsSGQ==
-X-Received: by 2002:ac2:4bd1:0:b0:4a4:6af4:43b7 with SMTP id o17-20020ac24bd1000000b004a46af443b7mr20048900lfq.69.1673467292658;
-        Wed, 11 Jan 2023 12:01:32 -0800 (PST)
+        bh=UcTrQNFFbWCL7GgAo7RNP0TzY01GvFcQgkQKLT8ew64=;
+        b=lrwh4B8FE9u3dyUX0ZeeU2Ry0wMV/Dx69Qbttg+eJZ9AF6DZMvDdQbCpULgi+GrVWr
+         p6xDPfxxC7v51v1yC+nVKzSnM8dzRRuPa5Z2vin+V1RZEtJGU6r2VNuPQWj/4gE0YJ7c
+         4OF4Rdahf2sYG/4WKogtx9OMsDu1Nq+PKx7Hk4Yr8a9MJUcoU8tuwKEjDgSODfe2OkIS
+         T4Ot0Pd24/h2q3cszU52sTBKwV6HBzjRHJfLN9S296AKQ33pJNlkzLUSQf1tg/uAEIrp
+         3xgjo3pyocKq55vIQ7HsKvmzzjdlo1J/0lo6sb6mSg7boIFEayOZGqk42OuMx3XzVmAV
+         a3Aw==
+X-Gm-Message-State: AFqh2kor2tDhYCRbkrEOF1xgvJ1FnGplvtDR+0KvFay9u6v/t43oV0wV
+        rP0/Z/LtoAbnKL2uYfbRnL0FD7jD8iQaOGAT
+X-Google-Smtp-Source: AMrXdXu0iCRkiiReh19/Xr0H079pJ0g71zSpaJfuuYIcqiIji5/Tx9DsEseAgyhkwDvwR//d+1WMfA==
+X-Received: by 2002:ac2:5df2:0:b0:4aa:7821:8021 with SMTP id z18-20020ac25df2000000b004aa78218021mr24329911lfq.34.1673467293337;
+        Wed, 11 Jan 2023 12:01:33 -0800 (PST)
 Received: from umbar.unikie.fi ([192.130.178.91])
         by smtp.gmail.com with ESMTPSA id v20-20020a05651203b400b004b4e6dab30esm2881437lfp.222.2023.01.11.12.01.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
         Taniya Das <quic_tdas@quicinc.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v2 05/14] clk: qcom: cpu-8996: support using GPLL0 as SMUX input
-Date:   Wed, 11 Jan 2023 23:01:19 +0300
-Message-Id: <20230111200128.2593359-6-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 06/14] clk: qcom: cpu-8996: skip ACD init if the setup is valid
+Date:   Wed, 11 Jan 2023 23:01:20 +0300
+Message-Id: <20230111200128.2593359-7-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230111200128.2593359-1-dmitry.baryshkov@linaro.org>
 References: <20230111200128.2593359-1-dmitry.baryshkov@linaro.org>
@@ -70,72 +70,50 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In some cases the driver might need using GPLL0 to drive CPU clocks.
-Bring it in through the sys_apcs_aux clock.
+Check whether L2 registers contain correct values and skip programming
+if they are valid. This follows the code present downstream.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/clk-cpu-8996.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/clk/qcom/clk-cpu-8996.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu-8996.c
-index d51965fda56d..0e0c00d44c6f 100644
+index 0e0c00d44c6f..7e5246ca7e7f 100644
 --- a/drivers/clk/qcom/clk-cpu-8996.c
 +++ b/drivers/clk/qcom/clk-cpu-8996.c
-@@ -12,6 +12,8 @@
-  *                              +-------+
-  *               XO             |       |
-  *           +------------------>0      |
-+ *               SYS_APCS_AUX   |       |
-+ *           +------------------>3      |
-  *                              |       |
-  *                    PLL/2     | SMUX  +----+
-  *                      +------->1      |    |
-@@ -310,20 +312,29 @@ static const struct clk_ops clk_cpu_8996_pmux_ops = {
- 	.determine_rate = clk_cpu_8996_pmux_determine_rate,
- };
+@@ -472,10 +472,15 @@ static void __iomem *base;
+ static void qcom_cpu_clk_msm8996_acd_init(void __iomem *base)
+ {
+ 	u64 hwid;
++	u32 val;
+ 	unsigned long flags;
  
-+static const struct parent_map smux_parent_map[] = {
-+	{ .cfg = 0, }, /* xo */
-+	{ .cfg = 1, }, /* pll */
-+	{ .cfg = 3, }, /* sys_apcs_aux */
-+};
+ 	spin_lock_irqsave(&qcom_clk_acd_lock, flags);
+ 
++	val = kryo_l2_get_indirect_reg(L2ACDTD_REG);
++	if (val == 0x00006a11)
++		goto out;
 +
- static const struct clk_parent_data pwrcl_smux_parents[] = {
- 	{ .fw_name = "xo" },
- 	{ .hw = &pwrcl_pll_postdiv.hw },
-+	{ .fw_name = "sys_apcs_aux" },
- };
+ 	hwid = read_cpuid_mpidr() & CPU_AFINITY_MASK;
  
- static const struct clk_parent_data perfcl_smux_parents[] = {
- 	{ .fw_name = "xo" },
- 	{ .hw = &perfcl_pll_postdiv.hw },
-+	{ .fw_name = "sys_apcs_aux" },
- };
+ 	kryo_l2_set_indirect_reg(L2ACDTD_REG, 0x00006a11);
+@@ -492,6 +497,7 @@ static void qcom_cpu_clk_msm8996_acd_init(void __iomem *base)
+ 		writel(0xf, base + PERFCL_REG_OFFSET + SSSCTL_OFFSET);
+ 	}
  
- static struct clk_regmap_mux pwrcl_smux = {
- 	.reg = PWRCL_REG_OFFSET + MUX_OFFSET,
- 	.shift = 2,
- 	.width = 2,
-+	.parent_map = smux_parent_map,
- 	.clkr.hw.init = &(struct clk_init_data) {
- 		.name = "pwrcl_smux",
- 		.parent_data = pwrcl_smux_parents,
-@@ -337,6 +348,7 @@ static struct clk_regmap_mux perfcl_smux = {
- 	.reg = PERFCL_REG_OFFSET + MUX_OFFSET,
- 	.shift = 2,
- 	.width = 2,
-+	.parent_map = smux_parent_map,
- 	.clkr.hw.init = &(struct clk_init_data) {
- 		.name = "perfcl_smux",
- 		.parent_data = perfcl_smux_parents,
++out:
+ 	spin_unlock_irqrestore(&qcom_clk_acd_lock, flags);
+ }
+ 
 -- 
 2.30.2
 
