@@ -2,99 +2,116 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD45669B04
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 15:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD5A669B2B
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 15:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjAMOxi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Jan 2023 09:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S230018AbjAMO7u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Jan 2023 09:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjAMOw4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 09:52:56 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825797ECBF
-        for <linux-clk@vger.kernel.org>; Fri, 13 Jan 2023 06:38:37 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id t5so16857481wrq.1
-        for <linux-clk@vger.kernel.org>; Fri, 13 Jan 2023 06:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ejaSnB1iatZ6NYDeZgR8Ys8saXOivDL9OIRxuhbO4g=;
-        b=1FED3wJOiUsiU/4XBOp+Iew/qsd5F05j1dL4ieFLIRSoAOucms+VIRY2TkWLYK1/Mo
-         C000/abxcNXlJFgYoGeAnOw0EwHqZFJsXd/o7NxdpZiGFQ2D83/R2vP1Iwy/J7zyAQZO
-         /Bz7mwDgzMDdXXTn2BoE2+7ZtHpBsoFWonZ+c4ujuSzkiwdZUeSCnzDtobGpxyGIryFs
-         QdWiQUOxIby/1P9JP7YAGrjvzaqWTLxXSThxMGjV4e/u2y9bqo0FywWIdYhe7bRo3/+v
-         lkkwmp/VNJumPVcTUnlF651Rqb6QGfB8vQlHVhlJYaWKl8KOqfJt5TMKaunqMKYKXYu1
-         AGqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2ejaSnB1iatZ6NYDeZgR8Ys8saXOivDL9OIRxuhbO4g=;
-        b=qBJelggpEnpDhhA7+A9XzcgBn4gVWpNoOIApizRx71VF5ItB7FfmeqiCPqRyiq69Uh
-         dcTi7ARCp5u2LduuFXHBmYRJeVwqrMhIqKSo3EB41t/WGafI7maa1O/9+NXCx0z533we
-         IUEOoGI/2N59uKm59YV9dQQuEvIQYWVdsJ69ynixrVbszup608m+kSynGACGhgEvXcE7
-         ADxb9ypEHbIxhLNYAqzhaL96B22Agig9qnB8IKwWto7q4G3jDN/zLqfEFjd6SUN4x/xo
-         42FOJZayjyjs7mf2Z8VegkwhIvIFIwuxXeLBXkimHixLntoFJvnweoei5Xb+TF7Fbu/6
-         iIHg==
-X-Gm-Message-State: AFqh2kpSaFoUKVYfn08wnNC/gxwL3bbVCSv473Ts3dW+4ZjB+VBalOPx
-        6/mI25mpQIFr7vZFpqRx+z9d6Q==
-X-Google-Smtp-Source: AMrXdXs6wVwbGhncvBdLaUdQtZ76sjJkpM7KXwjIMOaf1uFHHJunxBWWY6eu8hoiKtY2O5CNHxNT6Q==
-X-Received: by 2002:adf:da50:0:b0:242:6777:bfa0 with SMTP id r16-20020adfda50000000b002426777bfa0mr54038944wrl.53.1673620709705;
-        Fri, 13 Jan 2023 06:38:29 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id q4-20020adfdfc4000000b002bc6c180738sm14721156wrn.90.2023.01.13.06.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 06:38:29 -0800 (PST)
-References: <20221225212632.2760126-1-martin.blumenstingl@googlemail.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/4] clk: meson: switch from .round_rate to
- .determine_rate
-Date:   Fri, 13 Jan 2023 15:37:55 +0100
-In-reply-to: <20221225212632.2760126-1-martin.blumenstingl@googlemail.com>
-Message-ID: <1jzgamcxej.fsf@starbuckisacylon.baylibre.com>
+        with ESMTP id S229600AbjAMO7C (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 09:59:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877E87279B;
+        Fri, 13 Jan 2023 06:48:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76C8BB82143;
+        Fri, 13 Jan 2023 14:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291BDC433EF;
+        Fri, 13 Jan 2023 14:48:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673621336;
+        bh=mKDVcodgQCR6DPkp/F4rI7u1VeNzP/9JniqcDRZGYt8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GlkccT/Hr2LutWYIz7x2OeZwDKnzimkm3AKE/6pQDz7vMVa+5Ysxp2cXVA1uDc585
+         tQu+sSYrG4mCQCUpcKotZX/0gkRc6Sp8eojXlizzx2VSGudlXZ6UHXs0UTKUkFg07t
+         Zg0lVU7doBCMAB56RDZ86axs+9pIsk5l6QWfD2Y46HgJWHg4wzQsIYdkPKMQRNqPSB
+         QEKxqUKniznS11sgtKlEeomB6ebH21Lpsh7UJD9Dhdz3yuNDJQoy/VZGU1Mt1s8x2G
+         dz6k2lOgOQS84JcpLtasgHMczxnX0Jz6Mb0VVq7hrsV9zhlZqGUplkzxDt/aBlB2qg
+         /G/4NlCcu07Bg==
+Date:   Fri, 13 Jan 2023 14:48:48 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v1 17/20] clk: imx6ul: add ethernet refclock mux support
+Message-ID: <Y8FvULElX2D8FGXA@google.com>
+References: <20230113142718.3038265-1-o.rempel@pengutronix.de>
+ <20230113142718.3038265-18-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230113142718.3038265-18-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Fri, 13 Jan 2023, Oleksij Rempel wrote:
 
-On Sun 25 Dec 2022 at 22:26, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
+> Add ethernet refclock mux support and set it to internal clock by
+> default. This configuration will not affect existing boards.
+> 
+> clock tree before this patch:
+> fec1 <- enet1_ref_125m (gate) <- enet1_ref (divider) <-,
+>                                                        |- pll6_enet
+> fec2 <- enet2_ref_125m (gate) <- enet2_ref (divider) <-´
+> 
+> after this patch:
+> fec1 <- enet1_ref_sel(mux) <- enet1_ref_125m (gate) <- ...
+>                `--<> enet1_ref_pad                      |- pll6_enet
+> fec2 <- enet2_ref_sel(mux) <- enet2_ref_125m (gate) <- ...
+>                `--<> enet2_ref_pad
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/clk/imx/clk-imx6ul.c                | 26 +++++++++++++++++++++
+>  include/dt-bindings/clock/imx6ul-clock.h    |  6 ++++-
+>  include/linux/mfd/syscon/imx6q-iomuxc-gpr.h |  6 +++--
+>  3 files changed, 35 insertions(+), 3 deletions(-)
 
-> The goal of this series is to switch the meson sub-drivers to use
-> clk_ops.determine_rate instead of clk_ops.round_rate. The former has
-> lower precision (2^31 instead of 2^32 on 32-bit systems). Also the idea
-> of the .determine_rate callback is that is replaces .round_rate so the
-> latter can be removed at some point.
->
-> No functional changes (apart from the 2^31 to 2^32 difference mentioned
-> bove) intended.
+[...]
 
-Applied. Thx Martin.
+> --- a/include/linux/mfd/syscon/imx6q-iomuxc-gpr.h
+> +++ b/include/linux/mfd/syscon/imx6q-iomuxc-gpr.h
+> @@ -451,8 +451,10 @@
+>  #define IMX6SX_GPR12_PCIE_RX_EQ_2			(0x2 << 0)
+>  
+>  /* For imx6ul iomux gpr register field define */
+> -#define IMX6UL_GPR1_ENET1_CLK_DIR		(0x1 << 17)
+> -#define IMX6UL_GPR1_ENET2_CLK_DIR		(0x1 << 18)
+> +#define IMX6UL_GPR1_ENET2_TX_CLK_DIR		BIT(18)
+> +#define IMX6UL_GPR1_ENET1_TX_CLK_DIR		BIT(17)
+> +#define IMX6UL_GPR1_ENET2_CLK_SEL		BIT(14)
+> +#define IMX6UL_GPR1_ENET1_CLK_SEL		BIT(13)
+>  #define IMX6UL_GPR1_ENET1_CLK_OUTPUT		(0x1 << 17)
+>  #define IMX6UL_GPR1_ENET2_CLK_OUTPUT		(0x1 << 18)
+>  #define IMX6UL_GPR1_ENET_CLK_DIR		(0x3 << 17)
 
->
->
-> Martin Blumenstingl (4):
->   clk: meson: mpll: Switch from .round_rate to .determine_rate
->   clk: meson: dualdiv: switch from .round_rate to .determine_rate
->   clk: meson: sclk-div: switch from .round_rate to .determine_rate
->   clk: meson: clk-cpu-dyndiv: switch from .round_rate to .determine_rate
->
->  drivers/clk/meson/clk-cpu-dyndiv.c |  9 ++++-----
->  drivers/clk/meson/clk-dualdiv.c    | 21 +++++++++++++--------
->  drivers/clk/meson/clk-mpll.c       | 20 +++++++++++++-------
->  drivers/clk/meson/sclk-div.c       | 11 ++++++-----
->  4 files changed, 36 insertions(+), 25 deletions(-)
+Why not convert more of them them?
 
+Either way, could you please refrain from sending me subsequent
+patch-sets please.
+
+Acked-by: Lee Jones <lee@kernel.org>
+
+-- 
+Lee Jones [李琼斯]
