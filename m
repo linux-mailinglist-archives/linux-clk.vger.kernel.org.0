@@ -2,68 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABB5668C5B
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 07:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82204669165
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 09:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237727AbjAMGRS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Jan 2023 01:17:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
+        id S240123AbjAMIn7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Jan 2023 03:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbjAMGQc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 01:16:32 -0500
-X-Greylist: delayed 895 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 22:10:46 PST
-Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE591BCB6;
-        Thu, 12 Jan 2023 22:10:42 -0800 (PST)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id D016EE0D73;
-        Fri, 13 Jan 2023 05:45:50 +0000 (UTC)
-Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
-        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 9144B26892;
-        Fri, 13 Jan 2023 05:45:50 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: 3.651
-X-Spam-Level: ****
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_60,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS autolearn=no autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
-        with ESMTP id kVGLbP-el9qG; Fri, 13 Jan 2023 05:45:50 +0000 (UTC)
-Received: from localhost (unknown [208.85.220.72])
-        by mail.ca.inter.net (Postfix) with ESMTP id 9E6262688E;
-        Fri, 13 Jan 2023 05:45:47 +0000 (UTC)
-Received: from reverse.rain.network (reverse.rain.network [197.184.176.8])
- by webmail.ca.inter.net (Horde Framework) with HTTP; Fri, 13 Jan 2023
- 00:45:47 -0500
-Message-ID: <20230113004547.66912vqb15xco557@webmail.ca.inter.net>
-Date:   Fri, 13 Jan 2023 00:45:47 -0500
-From:   INFO <boothg@istar.ca>
-Reply-to: s.g0392440821@gmail.com
-To:     undisclosed-recipients:;
-Subject: IST DIESE E-MAIL AKTIV?
+        with ESMTP id S233650AbjAMInz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 03:43:55 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A1155650
+        for <linux-clk@vger.kernel.org>; Fri, 13 Jan 2023 00:43:53 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id vm8so50655004ejc.2
+        for <linux-clk@vger.kernel.org>; Fri, 13 Jan 2023 00:43:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zB+Yx7ZN+t7edTSSom9Kj39XMeVTKD+ND0VCe3SN4Xo=;
+        b=T0mlgn8SoCNdoXKYzWPoS6UZfF4bzgKg38/V/2QqDRoLC8pHUYv6ZiFwbPYy3kJjyf
+         gOZ0KTVHs9NjUAqYjo+BNTiT809LbyGIQaQ2tRv9TBNw9x+NOWfWunTvDHWn/hYiMhgX
+         ks/HSCZqpbrt3g/tYDo5xacZQ6Kg7EwNxgCCMBRCuvCeIiHQgoAL1mKgyBroSxKB1P3P
+         lI1FulipNUMrGHzrKS7Kzotv+wldtlp4dc4iHAVOOaTOKrwpQtYW2GEF8mX1YQanjtYQ
+         qHCOiL942qC1P2KpmkiocIEW7RF6lZS3RKqBF2l9C1joEWR2MoG8QlBAGvmi1BL1mqo4
+         94EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zB+Yx7ZN+t7edTSSom9Kj39XMeVTKD+ND0VCe3SN4Xo=;
+        b=xEBuwWtl7VmuYm50kUF9UC//16yuiP6Ag3sG01h6LVstEiP5CxiwxFaea6qdYFAEU0
+         EFz9wZKLx+E99F584CXUqLh7+cxwbiJNJ4YRMwevPRR/vPFQkjDvCPe1cnbLNxbPP0G4
+         1GA59nNjB+uLOeALK1OGfznpCEiQrKj9ywHcghJVY5iksj53d24W0v7tSSpddbgq83d9
+         EUkkk3HB3hsK9joKMegmEhiUDIOoi8wpT0bTF7x585rMz0FTR6GqWYqcjTIkU7T9aHWv
+         zsQIl9dqjukUdn0epnW57IkulIt0+cTmAhlOjWfBeVYAYVggrRue6aOXWWlAKHcWCBsW
+         PgQg==
+X-Gm-Message-State: AFqh2kqXXxmmFbZF7LjqSczv+PRyAhR1gmaze8iJQWuopvMXJ1QL84Bz
+        jJhDEOfLZ5fZl16bHERMk4x94g==
+X-Google-Smtp-Source: AMrXdXtxzKO66Ep+oG3JB08FrDupgVqkcya4/5xLrZ8ij7hNjKIxPF0yY8p0tpEqRM+R6h/+bYJM8A==
+X-Received: by 2002:a17:906:5fd0:b0:862:11f6:a082 with SMTP id k16-20020a1709065fd000b0086211f6a082mr6581682ejv.17.1673599431999;
+        Fri, 13 Jan 2023 00:43:51 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b0084d242d07ffsm7979277ejm.8.2023.01.13.00.43.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 00:43:51 -0800 (PST)
+Message-ID: <04e90058-606e-9f0d-3e1c-844595b36fb1@linaro.org>
+Date:   Fri, 13 Jan 2023 09:43:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=ISO-8859-1;
- DelSp="Yes";
- format="flowed"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Internet Messaging Program (IMP) H3 (4.3.7)
-X-Originating-User-Info: boothg@istar.ca 208.85.219.96
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v6 1/2] dt-bindings: clock: Add QDU1000 and QRU1000 GCC
+ clocks
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230112204446.30236-1-quic_molvera@quicinc.com>
+ <20230112204446.30236-2-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230112204446.30236-2-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On 12/01/2023 21:44, Melody Olvera wrote:
+> Add device tree bindings for global clock controller on QDU1000 and
+> QRU1000 SoCs.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  .../bindings/clock/qcom,qdu1000-gcc.yaml      |  51 +++++
+>  include/dt-bindings/clock/qcom,qdu1000-gcc.h  | 175 ++++++++++++++++++
+>  2 files changed, 226 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,qdu1000-gcc.h
+> 
 
 
-Sehr geehrter E-Mail-Begünstigter, Sie wurden für eine Spende in Höhe  
-von 3.500.000,00 ? ausgewählt. Wenden Sie sich an diese  
-E-Mail-Adresse: s.g0392440821@gmail.com, um weitere Informationen zum  
-Erhalt Ihrer Spende zu erhalten. Vielen Dank
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
