@@ -2,150 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BC2669537
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 12:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F15E6669547
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 12:15:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241478AbjAMLO1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Jan 2023 06:14:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S241435AbjAMLPM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Jan 2023 06:15:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241102AbjAMLMk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 06:12:40 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0A0564D3;
-        Fri, 13 Jan 2023 03:07:35 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4F9F26602A65;
-        Fri, 13 Jan 2023 11:07:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1673608054;
-        bh=OR96jyfG6jmlGtj7KrVYH6mHMab9y7sfZFD/VnKDl1k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5+8FSGTCLUJQnG1Of1fWBSzc1RKou1ZivE0+Nd99L83XIGMENM7yhYAhDJ+2KmjN
-         h0a9wm+vvFtHXJLEL1qVrTZlAsDWJ2UZfZ6nQ1SRU4B/h4j7w1LU/TE/m+3l/jQsyI
-         j6z8XATxvDJda/xepGBfp9JDcGtrTh+A8oLJcyGAoWdBNU1OGVYkgNL+usceEWFojl
-         u+2TpWrZZAIctUV20cLNAizKWatfFIuVXk5eGgp+WvH5TBDhSg5JaR+rXaIYz1i7nt
-         /jvSkWKsnT9v3EIXoTWmwJ4PXTdJ1PpdP3OKcJjgoQFtP+5F/YsFwr06RDW5yXt0i3
-         /k3s8ZwDqoiFA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        fparent@baylibre.com, chun-jie.chen@mediatek.com,
-        sam.shih@mediatek.com, y.oudjana@protonmail.com,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        ryder.lee@kernel.org, daniel@makrotopia.org,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        pablo.sun@mediatek.com, msp@baylibre.com, weiyi.lu@mediatek.com,
-        ikjn@chromium.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v3 23/23] clk: mediatek: clk-mt7986-topckgen: Migrate to mtk_clk_simple_probe()
-Date:   Fri, 13 Jan 2023 12:06:16 +0100
-Message-Id: <20230113110616.111001-24-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113110616.111001-1-angelogioacchino.delregno@collabora.com>
-References: <20230113110616.111001-1-angelogioacchino.delregno@collabora.com>
+        with ESMTP id S239679AbjAMLNG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 06:13:06 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB13A5C1C7;
+        Fri, 13 Jan 2023 03:10:50 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 20so10504432pfu.13;
+        Fri, 13 Jan 2023 03:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqiLRE9h/fekKbJDmUy9t3EeJ+WTeQsUaiDr7CJjX90=;
+        b=L4fJ71iaxbvPAX7vFbFgYrkDfOgL55S8aFPY0Pw7dQktBZYUvXtC3+eX8aMGhc8QAg
+         YZIIzsPu+BVrpCejeLFXdoKu4v20SbSt5LhumRjBF1e/0+9oA1q6mWS1xo2i188UfNo2
+         gkdDnY5fYPen/iPtrxL/LZzLFt+TdjdNsD8rxy/ASD+/UAZp3ooilR7mJYD+UbX7WmDb
+         Wsmq0OSj0cefmXYIlykjbYwMFgbYVHGpkuJlFMPcmWrTrIn9vLKf3rJKowkgsSzC06OB
+         W+m1PKHYugBBbhgWV5S5GRjKosnK0GbOp+/M1I6taEg8jIzOObDToSxjOdjtExCwhZ1v
+         P3TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jqiLRE9h/fekKbJDmUy9t3EeJ+WTeQsUaiDr7CJjX90=;
+        b=dfpCK7xGJpAX9r8587VtncxWSTMqFU8EhNMFVmEIFLDIXFozLq1gahL0/qMBlBvdX7
+         PsSL0ypiKoFMm50ylSH/rnATovps1QT1vwYbRrAmNmretgAEQE2NRHxZjToW145JdzQn
+         mR2Mf6Mw1pV5Y1VAkpf4I9oXZm0vxLXw/tOtbksr+0W6i1JV5iJW4EqCrHLYN5hWHaCY
+         EMbKFVCJJTag6gx8/t7tq4tJhNKBfxfkjEs3fjhFb752fIsnj0an23lCMYmWYxb+p7ti
+         T6tZyKhD0lyYP9W7vdGPlUn0l/M9hyTUxq1DJp9v5IW3nA0JKtVcVJSVK5ENQWDGmKiO
+         AAvg==
+X-Gm-Message-State: AFqh2kqDDDvUoL7neguPd7EnzElqwaNV3bkKTnoHevbMu2vsBrHb2cSU
+        LkV0PPuUzlnRAYaVSpnKLCYPUjH3I1aCKxN0
+X-Google-Smtp-Source: AMrXdXs+lHN+WnuOFCl7Dj6tqaQC4Q0yCMDe2a9LKsyLA3199pbRURp9GgW2cD4No57iCRDtWscUvg==
+X-Received: by 2002:a05:6a00:4c94:b0:58b:b9ce:cd88 with SMTP id eb20-20020a056a004c9400b0058bb9cecd88mr1705706pfb.20.1673608250034;
+        Fri, 13 Jan 2023 03:10:50 -0800 (PST)
+Received: from kelvin-ThinkPad-L14-Gen-1.. (ec2-18-163-35-77.ap-east-1.compute.amazonaws.com. [18.163.35.77])
+        by smtp.gmail.com with ESMTPSA id x189-20020a6263c6000000b00576259507c0sm13410597pfb.100.2023.01.13.03.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 03:10:49 -0800 (PST)
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [PATCH 0/2] Devicetree support for Loongson-1 clock
+Date:   Fri, 13 Jan 2023 19:07:36 +0800
+Message-Id: <20230113110738.1505973-1-keguang.zhang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There are no more non-common calls in clk_mt7986_topckgen_probe():
-migrate this driver to mtk_clk_simple_probe().
+This patchset adds devicetree support for Loongson-1 clock,
+including the devicetree binding and the driver.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/clk/mediatek/clk-mt7986-topckgen.c | 55 +++++-----------------
- 1 file changed, 13 insertions(+), 42 deletions(-)
+Keguang Zhang (2):
+  dt-bindings: clock: Add binding for Loongson-1 clock driver
+  clk: loongson1: Refactor to add devicetree support
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-topckgen.c b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-index 36553f0c13fe..dff9976fa689 100644
---- a/drivers/clk/mediatek/clk-mt7986-topckgen.c
-+++ b/drivers/clk/mediatek/clk-mt7986-topckgen.c
-@@ -290,53 +290,24 @@ static const struct mtk_mux top_muxes[] = {
- 			     0x1C4, 5),
- };
- 
--static int clk_mt7986_topckgen_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	struct device_node *node = pdev->dev.of_node;
--	int r;
--	void __iomem *base;
--	int nr = ARRAY_SIZE(top_fixed_clks) + ARRAY_SIZE(top_divs) +
--		 ARRAY_SIZE(top_muxes);
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return -ENOMEM;
--	}
--
--	clk_data = mtk_alloc_clk_data(nr);
--	if (!clk_data)
--		return -ENOMEM;
--
--	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
--				    clk_data);
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_register_muxes(&pdev->dev, top_muxes,
--			       ARRAY_SIZE(top_muxes), node,
--			       &mt7986_clk_lock, clk_data);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--
--	if (r) {
--		pr_err("%s(): could not register clock provider: %d\n",
--		       __func__, r);
--		goto free_topckgen_data;
--	}
--	return r;
--
--free_topckgen_data:
--	mtk_free_clk_data(clk_data);
--	return r;
--}
-+static const struct mtk_clk_desc topck_desc = {
-+	.fixed_clks = top_fixed_clks,
-+	.num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.mux_clks = top_muxes,
-+	.num_mux_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt7986_clk_lock,
-+};
- 
- static const struct of_device_id of_match_clk_mt7986_topckgen[] = {
--	{ .compatible = "mediatek,mt7986-topckgen", },
--	{}
-+	{ .compatible = "mediatek,mt7986-topckgen", .data = &topck_desc },
-+	{ /* sentinel */ }
- };
- 
- static struct platform_driver clk_mt7986_topckgen_drv = {
--	.probe = clk_mt7986_topckgen_probe,
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt7986-topckgen",
- 		.of_match_table = of_match_clk_mt7986_topckgen,
+ .../bindings/clock/loongson,ls1x-clk.yaml     |  81 ++++
+ drivers/clk/Makefile                          |   2 +-
+ drivers/clk/clk-loongson1.c                   | 348 ++++++++++++++++++
+ drivers/clk/loongson1/Makefile                |   4 -
+ drivers/clk/loongson1/clk-loongson1b.c        | 118 ------
+ drivers/clk/loongson1/clk-loongson1c.c        |  95 -----
+ drivers/clk/loongson1/clk.c                   |  41 ---
+ drivers/clk/loongson1/clk.h                   |  15 -
+ 8 files changed, 430 insertions(+), 274 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/loongson,ls1x-clk.yaml
+ create mode 100644 drivers/clk/clk-loongson1.c
+ delete mode 100644 drivers/clk/loongson1/Makefile
+ delete mode 100644 drivers/clk/loongson1/clk-loongson1b.c
+ delete mode 100644 drivers/clk/loongson1/clk-loongson1c.c
+ delete mode 100644 drivers/clk/loongson1/clk.c
+ delete mode 100644 drivers/clk/loongson1/clk.h
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 -- 
-2.39.0
+2.34.1
 
