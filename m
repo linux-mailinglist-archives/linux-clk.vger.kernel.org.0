@@ -2,91 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1DB66A423
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 21:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9D066A3EE
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Jan 2023 21:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjAMUgT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Jan 2023 15:36:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S230192AbjAMUPb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Jan 2023 15:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjAMUgS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 15:36:18 -0500
-X-Greylist: delayed 4177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 Jan 2023 12:35:59 PST
-Received: from mail.dmbarone.com (mail.dmbarone.com [5.181.144.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3061B1D7;
-        Fri, 13 Jan 2023 12:35:57 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dmbarone.com (Postfix) with ESMTP id A6A2A2A56DC;
-        Fri, 13 Jan 2023 15:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
-        t=1673623549; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=aZlCZBThkmHI4RIfhijFhrDQnHCy/Xl7TNfW0/j1wX1qfdzwVqggHO2ETrOVEE9ox
-         5L9Zof05uKP8fn6Oz6SAqdZjOLEzkW1bNmIudiM3C/JGSJCfDMVpscJUw2BQ8k1IWV
-         kGfvZ5LRxhdcH3yPO1sXVrBpL67PNHP6E0ARFzgY=
-X-Virus-Scanned: Debian amavisd-new at ispdmbarone.kubeitalia.it
-Received: from mail.dmbarone.com ([127.0.0.1])
-        by localhost (ispdmbarone.kubeitalia.it [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id 77yDe_Wyf_gF; Fri, 13 Jan 2023 15:25:49 +0000 (UTC)
-Received: from [172.20.10.6] (unknown [129.205.124.225])
-        (Authenticated sender: admin@dmbarone.com)
-        by mail.dmbarone.com (Postfix) with ESMTPSA id B337E2A544D;
-        Fri, 13 Jan 2023 15:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
-        t=1673623549; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=aZlCZBThkmHI4RIfhijFhrDQnHCy/Xl7TNfW0/j1wX1qfdzwVqggHO2ETrOVEE9ox
-         5L9Zof05uKP8fn6Oz6SAqdZjOLEzkW1bNmIudiM3C/JGSJCfDMVpscJUw2BQ8k1IWV
-         kGfvZ5LRxhdcH3yPO1sXVrBpL67PNHP6E0ARFzgY=
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S231232AbjAMUP1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Jan 2023 15:15:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98DC89BC3
+        for <linux-clk@vger.kernel.org>; Fri, 13 Jan 2023 12:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1673640883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V54z6rLYX2VOlDzoy2qPL6F5L+cbM84DrtMdlJiXWFI=;
+        b=Hoo0YEqY8yQlnM/u+prrzklcZrCKSkBF8AN5ssMtcpa9sHWk/emJFFgw0ndCLyPdRwJzkM
+        ymZ+SRMugmztTCPdbebz4FbSEtA+MJesUMyNSegF8pga62WENRbFMO+YAbC73nF00I8ygz
+        qkJd0uHtPiLVEImYtF8wQG/NvwfQ97c=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-262-r7Y215jlOAe1wc4qSq4edA-1; Fri, 13 Jan 2023 15:14:34 -0500
+X-MC-Unique: r7Y215jlOAe1wc4qSq4edA-1
+Received: by mail-ot1-f71.google.com with SMTP id y14-20020a0568301d8e00b00670641b451bso11163545oti.15
+        for <linux-clk@vger.kernel.org>; Fri, 13 Jan 2023 12:14:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V54z6rLYX2VOlDzoy2qPL6F5L+cbM84DrtMdlJiXWFI=;
+        b=NKGs0/UixXEcDJ4s3AA3hvU4YdQbjKrhoBB6I1wOblpBxMjOtwYSDT0+RjktRcfebi
+         gba9cwzsp2KU9rIYvJDyz6PCzYSMCcIp/t6Ux9ruau1Wxnwwl/JpcHQ5w2UDwAjw8oa8
+         51Htwm+Pkf8m+e1UCDVi9QCbspM7XyKb4JVO3MJmEPGcmTmMKrrZ12q/ce6cnzwVmYTw
+         JOaCl4muBqArZxzcwZGnngd4iKssN6utrG7h5Dypl302kunAg0T69bVUu5v8phu7Us2B
+         roa8daHETJGyqKZ+3G7ZiCEjmBffRAizNGfwEwMc6Ayih73SjrZKfPMc/j+DW0cogzQ0
+         fn+w==
+X-Gm-Message-State: AFqh2koBGLoGXB/1PSLxDp7hKPIO6i3aiaOUbGxY1NJ+Dtx416pshs2k
+        btdFqmCTH+jj9ABpZqnbD87jN2rMLHY5erXZEkUmEJNbrBJLMpcIE8ndYEXOUN6IpzWpYTXGT3s
+        qNwO2wC0r8Hxt3PMFkKCo
+X-Received: by 2002:a4a:840b:0:b0:4a3:7135:d6e6 with SMTP id l11-20020a4a840b000000b004a37135d6e6mr27292078oog.2.1673640873203;
+        Fri, 13 Jan 2023 12:14:33 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXs9qurBkZ0NHbx4xl/ouYmunfvjOxLSlaDzU3BupNJH5CSmq96OKqhSoII4T2zcJaJLgYoaaA==
+X-Received: by 2002:a4a:840b:0:b0:4a3:7135:d6e6 with SMTP id l11-20020a4a840b000000b004a37135d6e6mr27292066oog.2.1673640872939;
+        Fri, 13 Jan 2023 12:14:32 -0800 (PST)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::41])
+        by smtp.gmail.com with ESMTPSA id y139-20020a4a4591000000b004c60069d1fbsm3018728ooa.11.2023.01.13.12.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 12:14:32 -0800 (PST)
+Date:   Fri, 13 Jan 2023 14:14:30 -0600
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: qcom: Remove need for clk_ignore_unused on sc8280xp
+Message-ID: <20230113201430.c4oa46ry2bx2axhd@halaney-x13s>
+References: <20230113041038.4188995-1-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeit!!?=
-To:     Recipients <admi@dmbarone.com>
-From:   <admi@dmbarone.com>
-Date:   Fri, 13 Jan 2023 16:25:49 +0100
-Reply-To: theresasteven225@gmail.com
-X-Antivirus: Avast (VPS 230113-2, 1/13/2023), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20230113152549.A6A2A2A56DC@mail.dmbarone.com>
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9291]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [129.205.124.225 listed in zen.spamhaus.org]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [5.181.144.66 listed in bl.score.senderscore.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [theresasteven225[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113041038.4188995-1-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Eine Spende wurde an Sie get=E4tigt, antworten Sie f=FCr weitere Einzelheit=
-en.
+On Thu, Jan 12, 2023 at 08:10:38PM -0800, Bjorn Andersson wrote:
+> With the transition of disabling unused clocks at sync_state, rather
+> than late_initcall() it's now possible to drop clk_ignore_unused and
+> unused clock disabled once client drivers have probed. Do this on
+> SC8280XP.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Gr=FC=DFe
-Theresia Steven
+Tested-by: Andrew Halaney <ahalaney@redhat.com> # sc8280xp-lenovo-thinkpad-x13s
 
--- 
-This email has been checked for viruses by Avast antivirus software.
-www.avast.com
+I've booted with this (and without clk_ignore_unused) a few times today
+and have been working with on the machine without any apparent issues.
+
+Thanks! It is nice to have to modify less of the kernel cli to boot.
+
+> ---
+>  drivers/clk/qcom/dispcc-sc8280xp.c | 1 +
+>  drivers/clk/qcom/gcc-sc8280xp.c    | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/dispcc-sc8280xp.c b/drivers/clk/qcom/dispcc-sc8280xp.c
+> index 167470beb369..c84a6481b879 100644
+> --- a/drivers/clk/qcom/dispcc-sc8280xp.c
+> +++ b/drivers/clk/qcom/dispcc-sc8280xp.c
+> @@ -3199,6 +3199,7 @@ static struct platform_driver disp_cc_sc8280xp_driver = {
+>  	.driver = {
+>  		.name = "disp_cc-sc8280xp",
+>  		.of_match_table = disp_cc_sc8280xp_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
+>  
+> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+> index b3198784e1c3..f4fdc5b9663c 100644
+> --- a/drivers/clk/qcom/gcc-sc8280xp.c
+> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
+> @@ -7441,6 +7441,7 @@ static struct platform_driver gcc_sc8280xp_driver = {
+>  	.driver = {
+>  		.name = "gcc-sc8280xp",
+>  		.of_match_table = gcc_sc8280xp_match_table,
+> +		.sync_state = clk_sync_state_disable_unused,
+>  	},
+>  };
+>  
+> -- 
+> 2.37.3
+> 
+
