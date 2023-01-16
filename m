@@ -2,117 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9F266B6DC
-	for <lists+linux-clk@lfdr.de>; Mon, 16 Jan 2023 06:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BDC66B88E
+	for <lists+linux-clk@lfdr.de>; Mon, 16 Jan 2023 09:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjAPF0z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 Jan 2023 00:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S232120AbjAPIAE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 16 Jan 2023 03:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjAPF0y (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Jan 2023 00:26:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540558699
-        for <linux-clk@vger.kernel.org>; Sun, 15 Jan 2023 21:26:53 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pHI0n-0002zC-FI; Mon, 16 Jan 2023 06:26:25 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pHI0k-0001HV-VI; Mon, 16 Jan 2023 06:26:22 +0100
-Date:   Mon, 16 Jan 2023 06:26:22 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Abel Vesa <abelvesa@kernel.org>,
+        with ESMTP id S232101AbjAPH77 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Jan 2023 02:59:59 -0500
+X-Greylist: delayed 903 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 15 Jan 2023 23:59:11 PST
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1244412050;
+        Sun, 15 Jan 2023 23:59:10 -0800 (PST)
+Received: from droid06.amlogic.com (10.18.11.248) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Mon, 16 Jan 2023
+ 15:44:04 +0800
+From:   Yu Tu <yu.tu@amlogic.com>
+To:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Lee Jones <lee@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v1 05/20] ARM: dts: imx6qdl: use enet_clk_ref instead of
- enet_out for the FEC node
-Message-ID: <20230116052622.GA980@pengutronix.de>
-References: <20230113142718.3038265-1-o.rempel@pengutronix.de>
- <20230113142718.3038265-6-o.rempel@pengutronix.de>
- <76716956-3f15-edd0-e9e2-bdba78de54f9@oss.nxp.com>
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
+        "qi . duan" <qi.duan@amlogic.com>, Yu Tu <yu.tu@amlogic.com>
+Subject: [PATCH V6 0/3] Add S4 SoC PLL and Peripheral clock controller
+Date:   Mon, 16 Jan 2023 15:42:11 +0800
+Message-ID: <20230116074214.2326-1-yu.tu@amlogic.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <76716956-3f15-edd0-e9e2-bdba78de54f9@oss.nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.18.11.248]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 09:01:08AM +0800, Peng Fan wrote:
-> Hi Oleksij,
-> 
-> On 1/13/2023 10:27 PM, Oleksij Rempel wrote:
-> > Old imx6q machine code makes RGMII/RMII clock direction decision based on
-> > configuration of "ptp" clock. "enet_out" is not used and make no real
-> > sense, since we can't configure it as output or use it as clock
-> > provider.
-> > 
-> > Instead of "enet_out" use "enet_clk_ref" which is actual selector to
-> > choose between internal and external clock source:
-> > 
-> > FEC MAC <---------- enet_clk_ref <--------- SoC PLL
-> >                           \
-> > 			  ^------<-> refclock PAD (bi directional)
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >   arch/arm/boot/dts/imx6qdl.dtsi | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
-> > index ff1e0173b39b..71522263031a 100644
-> > --- a/arch/arm/boot/dts/imx6qdl.dtsi
-> > +++ b/arch/arm/boot/dts/imx6qdl.dtsi
-> > @@ -1050,8 +1050,8 @@ fec: ethernet@2188000 {
-> >   				clocks = <&clks IMX6QDL_CLK_ENET>,
-> >   					 <&clks IMX6QDL_CLK_ENET>,
-> >   					 <&clks IMX6QDL_CLK_ENET_REF>,
-> > -					 <&clks IMX6QDL_CLK_ENET_REF>;
-> > -				clock-names = "ipg", "ahb", "ptp", "enet_out";
-> > +					 <&clks IMX6QDL_CLK_ENET_REF_SEL>;
-> > +				clock-names = "ipg", "ahb", "ptp", "enet_clk_ref";
-> 
-> 
-> Please also update fec binding, otherwise there will be dtbs check error.
+1. Add S4 SoC PLL and Peripheral clock controller dt-bindings.
+2. Add PLL and Peripheral clock controller driver for S4 SOC.
 
-Hm, there is no restriction on enet_clk_ref use or requirements to use
-enet_out in Documentation/devicetree/bindings/net/fsl,fec.yaml
+Yu Tu (3):
+  dt-bindings: clock: document Amlogic S4 SoC PLL & peripheral clock
+    controller
+  clk: meson: S4: add support for Amlogic S4 SoC PLL clock driver
+  clk: meson: s4: add support for Amlogic S4 SoC peripheral clock
+    controller
 
-Do I missing something?
+V5 -> V6: Change send patch series, as well change format and clock flags.
+V4 -> V5: change format and clock flags and adjust the patch series as suggested
+by Jerome.
+V3 -> V4: change format and clock flags.
+V2 -> V3: Use two clock controller.
+V1 -> V2: Change format as discussed in the email.
 
-Regards,
-Oleksij
+Link:https://lore.kernel.org/all/20221123021346.18136-1-yu.tu@amlogic.com/
+
+ .../clock/amlogic,s4-peripherals-clkc.yaml    |  104 +
+ .../bindings/clock/amlogic,s4-pll-clkc.yaml   |   50 +
+ MAINTAINERS                                   |    1 +
+ drivers/clk/meson/Kconfig                     |   25 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/s4-peripherals.c            | 3874 +++++++++++++++++
+ drivers/clk/meson/s4-peripherals.h            |  218 +
+ drivers/clk/meson/s4-pll.c                    |  875 ++++
+ drivers/clk/meson/s4-pll.h                    |   88 +
+ .../clock/amlogic,s4-peripherals-clkc.h       |  131 +
+ .../dt-bindings/clock/amlogic,s4-pll-clkc.h   |   30 +
+ 11 files changed, 5398 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-peripherals-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,s4-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/s4-peripherals.c
+ create mode 100644 drivers/clk/meson/s4-peripherals.h
+ create mode 100644 drivers/clk/meson/s4-pll.c
+ create mode 100644 drivers/clk/meson/s4-pll.h
+ create mode 100644 include/dt-bindings/clock/amlogic,s4-peripherals-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,s4-pll-clkc.h
+
+
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.33.1
+
