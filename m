@@ -2,53 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF96670BF2
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Jan 2023 23:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0E7670DF2
+	for <lists+linux-clk@lfdr.de>; Wed, 18 Jan 2023 00:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjAQWpk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 Jan 2023 17:45:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S229879AbjAQXtf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 Jan 2023 18:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjAQWnd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Jan 2023 17:43:33 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937265D926
-        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:30:22 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id qx13so20528388ejb.13
-        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:30:22 -0800 (PST)
+        with ESMTP id S229642AbjAQXtV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Jan 2023 18:49:21 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73505A81C
+        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:58:27 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id vm8so79026871ejc.2
+        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BMW+GSgIGk9zwaJfSGSRXu37YBef4YGDH39JKBNKrJA=;
-        b=BoKG1OZTpfvzhI6p7Wx4cZO5GpdbUwLl7Aqfiy9zZqIWnK3vhoy2A4+kB4SrelaSiw
-         M4/D+IarDEfMD0L0GUmZK9Pjx5N7gTeogVyk/CVpjC1bnXOnw0Ta1LP9hvHrHuduJc56
-         d4oA1W+nUA0VeZJ/u0h2fNzn4sydScL73pQePQfqz8ZNMoH9diWNicXiNnmjJ3dg8PSN
-         oH9B/DEVuwi5kc4dhi6GXFK1a3x72dvCbhe4r5ORUj1sW2TERNZijcoVEaiTxML83xV9
-         AyCmkAVhAB2C9ZAJ2bnDZbNpkdqFrIiFY2lcVGlchOVeAzrHtVSp442NrWTfpCqpAKUF
-         EDaw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fhtQCvX/tSJys6S4hJnViiM+9HKQO1LNRZqOWTVY3ys=;
+        b=Z/nRzHyyYai5h0kOA3n7z0u6uDaptTMvYCHvbIszz03m3bT77thMVojvGrK227u3t6
+         EkHw7jfdL+8HlXAIIy6NLyJTkijTShj7jjl3zpZOTnnScoAfq1D0flpOZHkSeI1m1Tkr
+         RXMQJbdqvLLJwYmu5pIy33h5AuFJIM3M9BevLfr85wTz9O39XI6H3GAIGol+wCZoO3pv
+         wjDbW0v4ky5oXcy3rV5Ci3RJA5mJcxS0jmta1uimjexJzgkqcTh0USZ1CyzHAMe0yN6u
+         peNBEZRFCY4IVvZty47Nf680cN4cRh5ep1e7qx7GbEWyPh3qib9cP9jLfLZitzsUGDk1
+         i5GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BMW+GSgIGk9zwaJfSGSRXu37YBef4YGDH39JKBNKrJA=;
-        b=tAvw4Z/nibBsrkED2oGBP5/raZtpwPapl79KvzdJ51JT07krIHkurtGTyPGXzuvUxd
-         +PCCwmpZupEIZTQ4qHQKhdOcREa1ZDErwtG5IU3uqCMIUWdseGpxergDX/oBc1W/6bjG
-         T8U+Bd6sWAFNz6lQpRHAfH8wEKtSeVHgjmnBPjwLCeD2vii+EHLxUjR6WRcYK9wIR90L
-         RnTtoRoGHaFQQbS7nm+rViMqCuFKM1XzBsikJWJg3qhiY7DMeXrrhSIDOZm204sIwLdP
-         L3c1OQqFifk7tNlCm50MUQbG86brb89zfYDp/ZRXdb6hs6/c4jgIl0ViB8FATbj2yGar
-         66Vg==
-X-Gm-Message-State: AFqh2krwNlCwVIb6B8D7GPi6w1wVP6KEO516AEPeBPeEx8U14FKJaqPF
-        NPJmkjzIfqYUkA2iAO5r5MZVsA==
-X-Google-Smtp-Source: AMrXdXudN6nTxFbHDx27w6zXqOJNRvsMyhu4ZNFDTJEErbNGnp6tMNUFCofTH87JTrgDYSP2xJ9zqA==
-X-Received: by 2002:a17:907:214c:b0:838:1b80:9a7a with SMTP id rk12-20020a170907214c00b008381b809a7amr4668012ejb.12.1673994621202;
-        Tue, 17 Jan 2023 14:30:21 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fhtQCvX/tSJys6S4hJnViiM+9HKQO1LNRZqOWTVY3ys=;
+        b=Lyz0FZN7AIJOkhCktNFueYgkfIOJ3BwR+55VNoSOHnh0OJy7ZGIaLU2d3z50WrSiwP
+         VbDF8j+bhKAF75H46PSlQ2yHjXXzNvenBrN7DYe/C5MDiH3Z6pDu0Lyj2lS+H9OWQnZu
+         1v2rIQPnP4gGtMhgGETuD2U0XCEDQefCLvGEpLkFLRLIYKyqxcMhVGLFsN9MRhlGmsrN
+         YNLsaTTOOlSYpl5fA1e6Dqbq03JR1/+GPvQ6xS7tOanHJT6HtBfrig/4KW5qQHJ4gy5s
+         VCsNgiwxaWLIGiMNqals06W4mWQpa/MKwg8ADSkxerIM1KbQwVkvEPAG/WwIu8v2e4DP
+         X4gg==
+X-Gm-Message-State: AFqh2kriEFPIXBJjEQJJWkSSu8L6YZlqtmmWTfazFB3yV0OpjQ5gHAE5
+        rrd5/Ih7sU8MQwi18d9Ok+a+vw==
+X-Google-Smtp-Source: AMrXdXsWCV+QyQsM/XeACm1myMGgjrnpAmFwb2gixdmqaOLIsdzjpBocVpSOC0zre3aqMCTW3S3daQ==
+X-Received: by 2002:a17:906:5da8:b0:7b2:c227:126d with SMTP id n8-20020a1709065da800b007b2c227126dmr844649ejv.20.1673996306267;
+        Tue, 17 Jan 2023 14:58:26 -0800 (PST)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id ec20-20020a170906b6d400b007c0f5d6f754sm13835189ejb.79.2023.01.17.14.30.20
+        by smtp.gmail.com with ESMTPSA id t1-20020a1709061be100b0086f40238403sm3919762ejg.223.2023.01.17.14.58.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 14:30:20 -0800 (PST)
+        Tue, 17 Jan 2023 14:58:25 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -57,138 +56,66 @@ To:     Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>
+        Taniya Das <quic_tdas@quicinc.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/6] clk: qcom: add the driver for the MSM8996 APCS clocks
-Date:   Wed, 18 Jan 2023 00:30:13 +0200
-Message-Id: <20230117223013.1545026-7-dmitry.baryshkov@linaro.org>
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/7] clk: qcom: msm8996: add support for the CBF clock
+Date:   Wed, 18 Jan 2023 00:58:17 +0200
+Message-Id: <20230117225824.1552604-1-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230117223013.1545026-1-dmitry.baryshkov@linaro.org>
-References: <20230117223013.1545026-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add a simple driver handling the APCS clocks on MSM8996. For now it
-supports just a single aux clock, linking GPLL0 to CPU and CBF clocks.
+On MSM8996 two CPU clusters are interconnected using the Core Bus
+Fabric (CBF). In order for the CPU clusters to function properly, it
+should be clocked following the core's frequencies to provide adequate
+bandwidth. On the other hand the CBF's clock rate can be used by other
+drivers (e.g. by the pending SPDM driver to provide input on the CPU
+performance).
 
-Note, there is little sense in registering sys_apcs_aux as a child of
-gpll0. The PLL is always-on. And listing the gpll0 as a property of the
-apcs would delay its probing until the GCC has been probed (while we
-would like for the apcs to be probed as early as possible).
+Thus register CBF as a clock (required for CPU to boot) and add a tiny
+interconnect layer on top of it to let cpufreq/opp scale the CBF clock.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/clk/qcom/Makefile       |  2 +-
- drivers/clk/qcom/apcs-msm8996.c | 76 +++++++++++++++++++++++++++++++++
- 2 files changed, 77 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/qcom/apcs-msm8996.c
+Dependencies: [1]
 
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index 6c589f671003..98523c48c541 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -52,7 +52,7 @@ obj-$(CONFIG_MSM_MMCC_8998) += mmcc-msm8998.o
- obj-$(CONFIG_QCOM_A53PLL) += a53-pll.o
- obj-$(CONFIG_QCOM_A7PLL) += a7-pll.o
- obj-$(CONFIG_QCOM_CLK_APCS_MSM8916) += apcs-msm8916.o
--obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += clk-cpu-8996.o
-+obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += apcs-msm8996.o clk-cpu-8996.o
- obj-$(CONFIG_QCOM_CLK_APCS_SDX55) += apcs-sdx55.o
- obj-$(CONFIG_QCOM_CLK_RPM) += clk-rpm.o
- obj-$(CONFIG_QCOM_CLK_RPMH) += clk-rpmh.o
-diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
-new file mode 100644
-index 000000000000..7e46ea8ed444
---- /dev/null
-+++ b/drivers/clk/qcom/apcs-msm8996.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Qualcomm APCS clock controller driver
-+ *
-+ * Copyright (c) 2022, Linaro Limited
-+ * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#define APCS_AUX_OFFSET	0x50
-+
-+#define APCS_AUX_DIV_MASK GENMASK(17, 16)
-+#define APCS_AUX_DIV_2 0x1
-+
-+static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device *parent = dev->parent;
-+	struct regmap *regmap;
-+	struct clk_hw *hw;
-+	unsigned int val;
-+	int ret = -ENODEV;
-+
-+	regmap = dev_get_regmap(parent, NULL);
-+	if (!regmap) {
-+		dev_err(dev, "failed to get regmap: %d\n", ret);
-+		return ret;
-+	}
-+
-+	regmap_read(regmap, APCS_AUX_OFFSET, &val);
-+	regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
-+			   FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
-+
-+	/* Hardware mandated delay */
-+	udelay(5);
-+
-+	/*
-+	 * Register the clock as fixed rate instead of being a child of gpll0
-+	 * to let the driver register probe as early as possible.
-+	 */
-+	hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
-+	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
-+
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
-+}
-+
-+static struct platform_driver qcom_apcs_msm8996_clk_driver = {
-+	.probe = qcom_apcs_msm8996_clk_probe,
-+	.driver = {
-+		.name = "qcom-apcs-msm8996-clk",
-+	},
-+};
-+
-+/* Register early enough to fix the clock to be used for other cores */
-+static int __init qcom_apcs_msm8996_clk_init(void)
-+{
-+	return platform_driver_register(&qcom_apcs_msm8996_clk_driver);
-+}
-+postcore_initcall(qcom_apcs_msm8996_clk_init);
-+
-+static void __exit qcom_apcs_msm8996_clk_exit(void)
-+{
-+	platform_driver_unregister(&qcom_apcs_msm8996_clk_driver);
-+}
-+module_exit(qcom_apcs_msm8996_clk_exit);
-+
-+MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Qualcomm MSM8996 APCS clock driver");
+[1] https://lore.kernel.org/linux-arm-msm/20230111191453.2509468-1-dmitry.baryshkov@linaro.org/
+
+- Relicensed schema to GPL-2.0 + BSD-2-Clause (Krzysztof)
+- Changed clock driver to use parent_hws (Konrad)
+- Fixed indentation in CBF clock driver (Konrad)
+- Changed MODULE_LICENSE of CBF clock driver to GPL from GPL-v2
+- Switched CBF to use RPM_SMD_XO_CLK_SRC as one of the parents
+- Enabled RPM_SMD_XO_CLK_SRC on msm8996 platform and switch to it from
+  RPM_SMD_BB_CLK1 clock
+
+Dmitry Baryshkov (7):
+  dt-bindings: clock: qcom,msm8996-cbf: Describe the MSM8996 CBF clock
+    controller
+  clk: qcom: add msm8996 Core Bus Framework (CBF) support
+  clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
+  clk: qcom: smd-rpm: provide RPM_SMD_XO_CLK_SRC on MSM8996 platform
+  arm64: qcom: dts: msm8996 switch from RPM_SMD_BB_CLK1 to
+    RPM_SMD_XO_CLK_SRC
+  arm64: dts: qcom: msm8996: add CBF device entry
+  arm64: dts: qcom: msm8996: scale CBF clock according to the CPUfreq
+
+ .../bindings/clock/qcom,msm8996-cbf.yaml      |  53 ++
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  71 ++-
+ drivers/clk/qcom/Makefile                     |   2 +-
+ drivers/clk/qcom/clk-cbf-8996.c               | 456 ++++++++++++++++++
+ drivers/clk/qcom/clk-smd-rpm.c                |   2 +
+ 5 files changed, 576 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml
+ create mode 100644 drivers/clk/qcom/clk-cbf-8996.c
+
 -- 
 2.39.0
 
