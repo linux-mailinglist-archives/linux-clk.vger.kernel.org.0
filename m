@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27684670BFA
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Jan 2023 23:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF96670BF2
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Jan 2023 23:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjAQWqB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 Jan 2023 17:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S230053AbjAQWpk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 Jan 2023 17:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjAQWnc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Jan 2023 17:43:32 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F8A676D7
-        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:30:21 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id mg12so6574144ejc.5
-        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:30:21 -0800 (PST)
+        with ESMTP id S229571AbjAQWnd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Jan 2023 17:43:33 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937265D926
+        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:30:22 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qx13so20528388ejb.13
+        for <linux-clk@vger.kernel.org>; Tue, 17 Jan 2023 14:30:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=60yxEW22hoAOOhOWGOTH5M2hZiABdMD97947KesUJto=;
-        b=LwMWS+VvZVE3ldXkhlFA4EaXFH8AblN2KRcYiAQP6o7of1u4dcCgb1dJP/rpth5t4k
-         Y2IKKB9CIj6xVahlZZVQRDwnoe799ut4gnmptapV2yjLf9nqZE3+bM+JVITcyGE8RUx9
-         PqKz0Ew1R1Ro5BgRDODZvcJhESueuzOCt6ScW22dAAUK41oGvh+z8ehqv7FXQKUH5chy
-         /KAxV60irRCRx4xAyP7eLp7pHVO6ejLc82KYB6c9i4i4bJdTXhA/L6JW0nfxGc2v7gQB
-         feHpE3i1Jw6SyPKMo5PQskzRr+9CP6ykf31ReA0enPDSNgkWMTQng2u5/3BS7rUG+9mv
-         5Ysg==
+        bh=BMW+GSgIGk9zwaJfSGSRXu37YBef4YGDH39JKBNKrJA=;
+        b=BoKG1OZTpfvzhI6p7Wx4cZO5GpdbUwLl7Aqfiy9zZqIWnK3vhoy2A4+kB4SrelaSiw
+         M4/D+IarDEfMD0L0GUmZK9Pjx5N7gTeogVyk/CVpjC1bnXOnw0Ta1LP9hvHrHuduJc56
+         d4oA1W+nUA0VeZJ/u0h2fNzn4sydScL73pQePQfqz8ZNMoH9diWNicXiNnmjJ3dg8PSN
+         oH9B/DEVuwi5kc4dhi6GXFK1a3x72dvCbhe4r5ORUj1sW2TERNZijcoVEaiTxML83xV9
+         AyCmkAVhAB2C9ZAJ2bnDZbNpkdqFrIiFY2lcVGlchOVeAzrHtVSp442NrWTfpCqpAKUF
+         EDaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=60yxEW22hoAOOhOWGOTH5M2hZiABdMD97947KesUJto=;
-        b=IRzgCwUBtiORqvoqvMqJ8GFiaVLBPX0l8DcY2GP8LmYTstbZa2+GPVvEnTQK+aykEh
-         vQZQAqtxLKPKIebB/2elr5BYYX7lxKJf9/nxAKt+bpOTxeR/eZBSeofznQLq0Ebn/Pol
-         T2A6XW4FTP9F9YCg/aNfqeH3mXyrEx1dozdI7B7ieYQslSqy8dP+t2oX+e6eyaZLy89R
-         7AwvkdCpTVnHqjZ0Pp8pP/949VZtP7J8gyPZ8jJwBR/nj2PwCLBfiYbEB+XRFtdvlii6
-         TJijui6ePGXc1Eml/jBQKlkygbp3z0A/qbkrdn7fGFbqLAt1Q0dlmxKNwdU8e6HuhY3y
-         OhXA==
-X-Gm-Message-State: AFqh2kozP/bMuBGic+wQ51Zem8r8NVenJA8nE6sTghuHWpFzCMLGaFX4
-        xh8ec+/ByZkHQ4otMs+79/63/g==
-X-Google-Smtp-Source: AMrXdXtjLoM3h1yIIOScwTckOqNzXWURKc4/sjRj8UvHCQsCg/p9ym++eVy5WH4cGIlE66qHNG9S4w==
-X-Received: by 2002:a17:907:a092:b0:85a:4230:756c with SMTP id hu18-20020a170907a09200b0085a4230756cmr4816939ejc.59.1673994620146;
-        Tue, 17 Jan 2023 14:30:20 -0800 (PST)
+        bh=BMW+GSgIGk9zwaJfSGSRXu37YBef4YGDH39JKBNKrJA=;
+        b=tAvw4Z/nibBsrkED2oGBP5/raZtpwPapl79KvzdJ51JT07krIHkurtGTyPGXzuvUxd
+         +PCCwmpZupEIZTQ4qHQKhdOcREa1ZDErwtG5IU3uqCMIUWdseGpxergDX/oBc1W/6bjG
+         T8U+Bd6sWAFNz6lQpRHAfH8wEKtSeVHgjmnBPjwLCeD2vii+EHLxUjR6WRcYK9wIR90L
+         RnTtoRoGHaFQQbS7nm+rViMqCuFKM1XzBsikJWJg3qhiY7DMeXrrhSIDOZm204sIwLdP
+         L3c1OQqFifk7tNlCm50MUQbG86brb89zfYDp/ZRXdb6hs6/c4jgIl0ViB8FATbj2yGar
+         66Vg==
+X-Gm-Message-State: AFqh2krwNlCwVIb6B8D7GPi6w1wVP6KEO516AEPeBPeEx8U14FKJaqPF
+        NPJmkjzIfqYUkA2iAO5r5MZVsA==
+X-Google-Smtp-Source: AMrXdXudN6nTxFbHDx27w6zXqOJNRvsMyhu4ZNFDTJEErbNGnp6tMNUFCofTH87JTrgDYSP2xJ9zqA==
+X-Received: by 2002:a17:907:214c:b0:838:1b80:9a7a with SMTP id rk12-20020a170907214c00b008381b809a7amr4668012ejb.12.1673994621202;
+        Tue, 17 Jan 2023 14:30:21 -0800 (PST)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id ec20-20020a170906b6d400b007c0f5d6f754sm13835189ejb.79.2023.01.17.14.30.19
+        by smtp.gmail.com with ESMTPSA id ec20-20020a170906b6d400b007c0f5d6f754sm13835189ejb.79.2023.01.17.14.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 14:30:19 -0800 (PST)
+        Tue, 17 Jan 2023 14:30:20 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
         Jassi Brar <jassisinghbrar@gmail.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/6] mailbox: qcom-apcs-ipc: enable APCS clock device for MSM8996
-Date:   Wed, 18 Jan 2023 00:30:12 +0200
-Message-Id: <20230117223013.1545026-6-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v3 6/6] clk: qcom: add the driver for the MSM8996 APCS clocks
+Date:   Wed, 18 Jan 2023 00:30:13 +0200
+Message-Id: <20230117223013.1545026-7-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230117223013.1545026-1-dmitry.baryshkov@linaro.org>
 References: <20230117223013.1545026-1-dmitry.baryshkov@linaro.org>
@@ -79,28 +79,116 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MSM8996 also has the clock-related part of the APCS mailbox device.
-Follow the usual pattern and create a child device to handle these
-clocks.
+Add a simple driver handling the APCS clocks on MSM8996. For now it
+supports just a single aux clock, linking GPLL0 to CPU and CBF clocks.
+
+Note, there is little sense in registering sys_apcs_aux as a child of
+gpll0. The PLL is always-on. And listing the gpll0 as a property of the
+apcs would delay its probing until the GCC has been probed (while we
+would like for the apcs to be probed as early as possible).
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/mailbox/qcom-apcs-ipc-mailbox.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/qcom/Makefile       |  2 +-
+ drivers/clk/qcom/apcs-msm8996.c | 76 +++++++++++++++++++++++++++++++++
+ 2 files changed, 77 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/clk/qcom/apcs-msm8996.c
 
-diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-index 0e9f9cba8668..bd61dacb44ba 100644
---- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-+++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-@@ -42,7 +42,7 @@ static const struct qcom_apcs_ipc_data msm8994_apcs_data = {
- };
- 
- static const struct qcom_apcs_ipc_data msm8996_apcs_data = {
--	.offset = 16, .clk_name = NULL
-+	.offset = 16, .clk_name = "qcom-apcs-msm8996-clk"
- };
- 
- static const struct qcom_apcs_ipc_data apps_shared_apcs_data = {
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index 6c589f671003..98523c48c541 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -52,7 +52,7 @@ obj-$(CONFIG_MSM_MMCC_8998) += mmcc-msm8998.o
+ obj-$(CONFIG_QCOM_A53PLL) += a53-pll.o
+ obj-$(CONFIG_QCOM_A7PLL) += a7-pll.o
+ obj-$(CONFIG_QCOM_CLK_APCS_MSM8916) += apcs-msm8916.o
+-obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += clk-cpu-8996.o
++obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += apcs-msm8996.o clk-cpu-8996.o
+ obj-$(CONFIG_QCOM_CLK_APCS_SDX55) += apcs-sdx55.o
+ obj-$(CONFIG_QCOM_CLK_RPM) += clk-rpm.o
+ obj-$(CONFIG_QCOM_CLK_RPMH) += clk-rpmh.o
+diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-msm8996.c
+new file mode 100644
+index 000000000000..7e46ea8ed444
+--- /dev/null
++++ b/drivers/clk/qcom/apcs-msm8996.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Qualcomm APCS clock controller driver
++ *
++ * Copyright (c) 2022, Linaro Limited
++ * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
++ */
++
++#include <linux/bits.h>
++#include <linux/clk-provider.h>
++#include <linux/delay.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#define APCS_AUX_OFFSET	0x50
++
++#define APCS_AUX_DIV_MASK GENMASK(17, 16)
++#define APCS_AUX_DIV_2 0x1
++
++static int qcom_apcs_msm8996_clk_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device *parent = dev->parent;
++	struct regmap *regmap;
++	struct clk_hw *hw;
++	unsigned int val;
++	int ret = -ENODEV;
++
++	regmap = dev_get_regmap(parent, NULL);
++	if (!regmap) {
++		dev_err(dev, "failed to get regmap: %d\n", ret);
++		return ret;
++	}
++
++	regmap_read(regmap, APCS_AUX_OFFSET, &val);
++	regmap_update_bits(regmap, APCS_AUX_OFFSET, APCS_AUX_DIV_MASK,
++			   FIELD_PREP(APCS_AUX_DIV_MASK, APCS_AUX_DIV_2));
++
++	/* Hardware mandated delay */
++	udelay(5);
++
++	/*
++	 * Register the clock as fixed rate instead of being a child of gpll0
++	 * to let the driver register probe as early as possible.
++	 */
++	hw = devm_clk_hw_register_fixed_rate(dev, "sys_apcs_aux", NULL, 0, 300000000);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
++
++	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
++}
++
++static struct platform_driver qcom_apcs_msm8996_clk_driver = {
++	.probe = qcom_apcs_msm8996_clk_probe,
++	.driver = {
++		.name = "qcom-apcs-msm8996-clk",
++	},
++};
++
++/* Register early enough to fix the clock to be used for other cores */
++static int __init qcom_apcs_msm8996_clk_init(void)
++{
++	return platform_driver_register(&qcom_apcs_msm8996_clk_driver);
++}
++postcore_initcall(qcom_apcs_msm8996_clk_init);
++
++static void __exit qcom_apcs_msm8996_clk_exit(void)
++{
++	platform_driver_unregister(&qcom_apcs_msm8996_clk_driver);
++}
++module_exit(qcom_apcs_msm8996_clk_exit);
++
++MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Qualcomm MSM8996 APCS clock driver");
 -- 
 2.39.0
 
