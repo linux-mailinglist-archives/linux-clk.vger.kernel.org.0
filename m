@@ -2,152 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2A7673759
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Jan 2023 12:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734BF673919
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Jan 2023 14:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjASLsx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Jan 2023 06:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S230269AbjASNAq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Jan 2023 08:00:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjASLsx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Jan 2023 06:48:53 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FF4302AA
-        for <linux-clk@vger.kernel.org>; Thu, 19 Jan 2023 03:48:50 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id vw16so4909349ejc.12
-        for <linux-clk@vger.kernel.org>; Thu, 19 Jan 2023 03:48:50 -0800 (PST)
+        with ESMTP id S230221AbjASNAj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Jan 2023 08:00:39 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE536469F
+        for <linux-clk@vger.kernel.org>; Thu, 19 Jan 2023 05:00:33 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1210465wms.2
+        for <linux-clk@vger.kernel.org>; Thu, 19 Jan 2023 05:00:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OfApbZNaZr6Z8xIb2jJ8eKCH2W+NHkUdXeZjNWjuExM=;
-        b=wRk71RacpT28/nFBKA4seJvhpniWQPuqi5ZADNXVsWB2YH4xD9zKiOrjea+yjyn6t8
-         QZF+nfkDog3jK/unutjliAh8EJ/mmnf+z//oqXhtZN3lm3x4ADDvuFJE29Ryd4AL4gkv
-         P5NCYiOT9saYrheRYEWyGTw/z7jEEiIy5r5F1XDexU4Wj8yR4jpoNvv2y076/nHgGaq8
-         sK9AAqjegyite6tXt+erofB6p+lMWDw8pUD2XO3uZbLMSfzWbTHQrKZKkFBQ6cPA5/Mx
-         b2svUQwHCJ4W+aFFOSKH8gBtS6+g7FkzE8u5JrsKKuaeG9E4gwXPQ6PLRrQLIla2SlXT
-         pu8g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5iAatbMm50roXpPwJZoEAAqSTHxKtI+AETl8/m024c0=;
+        b=WbZqGFOoZiOMxpFxHhCKw3j3d/vKrQIrHyP3xgYdIXxNoxugJGVY/MHZD7wlAEdia7
+         Yo9AfX8dGT6lHOrOkIGaMEueXoMM73SFQDputJXfgI+NRZwrRC/sOOEiQNm+QL4eylXy
+         0/snQVqSM0FPb7G9fDt6C0AjLal74lN28sQajowhHBQzlphGMwPsc9unQR21ICaJ5p0L
+         caPVu2NMG5auwm33HDezJuyMFwyp+MaQ98hkVwFyKVg5a3pKkLH6LsiDXC7RUJ4H8gP5
+         vR7of402OZVJh203N66pW4QBGs+YXZFueacOnO9AKWlQL7gc4EkgLqSBsfiKlAVZs9+E
+         Qadw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OfApbZNaZr6Z8xIb2jJ8eKCH2W+NHkUdXeZjNWjuExM=;
-        b=XD6WjT4BE2N1eCwdQZ+a1un3boUifQyQaJX69BDcZYcsqzR86C7393qwMQiRs0m7kl
-         yoXUswwNFwWJ/jwrczAoYv1WdgYwnM6v1BJyg7REinIrq6VJYviSwB6Mjd58e60SZi0o
-         Ty01ogVOiXR0o7BTHg6aVqSkjh5x4UmuYHdwJWFhW08c9koGATiYnsn1dAKAaeoEaQ4z
-         sGfLZgyLXkJFoCG2aK74OD2fegAi9agZ1gZJWUv/kYh3mkib7+PbOeoAddjn2WEGIkhr
-         q/v7GZd8jY6r1nnKedGAjXJzCZBDo06UX1PlvkiorsNQ79/rTsEPt2E0PqJzN8pJRpUB
-         oxOA==
-X-Gm-Message-State: AFqh2kpKMATJtDZ3pUaCaxVYXi/9ojicJMR07dkjPLzcxMNh1xhCPS5M
-        a0SW2WTdq4tXdeNRQvESYM8Ecg==
-X-Google-Smtp-Source: AMrXdXuVZ6e1vq1DuWiskM3xp3ei42aLAUo7/50sjxdXOkzfqZ7xYsRSzXeQimL6PctKmRJV6oHbkQ==
-X-Received: by 2002:a17:906:804e:b0:86b:6a54:36e0 with SMTP id x14-20020a170906804e00b0086b6a5436e0mr9757970ejw.36.1674128928948;
-        Thu, 19 Jan 2023 03:48:48 -0800 (PST)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170906768c00b0085ff3202ce7sm10454657ejm.219.2023.01.19.03.48.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5iAatbMm50roXpPwJZoEAAqSTHxKtI+AETl8/m024c0=;
+        b=DOXhdpHW851XHKOwK6wn53sCcziztuYdadcYylNfEUcj2GwNkmlYNj+z6a8Cp+iYin
+         tn31pJO6GcBOWByNjpFJ8b8C8MYWDu9IXjC73d2qPEry429QRerrt3hzK5QV6CBwBaHT
+         XDhO2uIHVxSyS1LzRlu5QcglPvwLZYHKsV15NkAYHZLRHQXbWW7uVhaGdlgdJKxKqAIe
+         NTNjN8HqQTP3hLJhyFvSTXthv2/GUFEjgQH8sMGneFnx1EsDIWo8EGjut2l4ePaCfRxs
+         Lxg0Y6215YRRTic1aYK/39yEIW3+sZ59T2lbWrYX/U/5NKceIztfEqphL+Rf/yAOHzOx
+         flUQ==
+X-Gm-Message-State: AFqh2kp9NkbT7jhy8Atjr80imgXW2PXjxWJ5aXa9JBdiJbGeTGdoaa5l
+        7xwHbEVrm8tdIPEEPYzysOeGoA==
+X-Google-Smtp-Source: AMrXdXuhYv3zCBTXGGIkujjhqRrT2fRieE6U681od4zQ+xjM9g3Til1CcJMygyxEC8URaHm9fOjo+g==
+X-Received: by 2002:a7b:cbcb:0:b0:3db:2ad:e330 with SMTP id n11-20020a7bcbcb000000b003db02ade330mr10159304wmi.5.1674133232206;
+        Thu, 19 Jan 2023 05:00:32 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id w1-20020a1cf601000000b003daf681d05dsm4823808wmc.26.2023.01.19.05.00.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 03:48:48 -0800 (PST)
-Date:   Thu, 19 Jan 2023 12:48:47 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        Vadim Fedorenko <vadfed@meta.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 0/4] Create common DPLL/clock configuration API
-Message-ID: <Y8kuH7pfdIA3Dbdk@nanopsycho>
-References: <20230117180051.2983639-1-vadfed@meta.com>
- <DM6PR11MB4657644893C565877A71E1F19BC79@DM6PR11MB4657.namprd11.prod.outlook.com>
- <20230118161525.01d6b94f@kernel.org>
+        Thu, 19 Jan 2023 05:00:31 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: clock: qcom,sm8450-camcc: constrain required-opps
+Date:   Thu, 19 Jan 2023 14:00:27 +0100
+Message-Id: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118161525.01d6b94f@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Thu, Jan 19, 2023 at 01:15:25AM CET, kuba@kernel.org wrote:
->On Wed, 18 Jan 2023 18:07:53 +0000 Kubalewski, Arkadiusz wrote:
->> Based on today's sync meeting, changes we are going to introduce in next
->> version:
->> - reduce the muxed-pin number (artificial multiplication) on list of dpll's
->> pins, have a single pin which can be connected with multiple parents,
->> - introduce separated get command for the pin attributes,
->> - allow infinite name length of dpll device,
->> - remove a type embedded in dpll's name and introduce new attribute instead,
->> - remove clock class attribute as it is not known by the driver without
->> compliance testing on given SW/HW configuration,
->> - add dpll device "default" quality level attribute, as shall be known
->> by driver for a given hardware.
->
->I converted the patches to use the spec, and pushed them out here:
->
->https://github.com/kuba-moo/ynl/tree/dpll
->
->I kept the conversion step-by-step to help the readers a bit but
->the conversion patches should all be squashed into the main DPLL patch.
->
->The patches are on top of my YNL branch ('main' in that repo). 
->I'll post the YNL patches later today, so hopefully very soon they will
->be upstream.
->
->Two major pieces of work which I didn't do for DPLL:
-> - docs - I dropped most of the kdocs, the copy-n-pasting was too much;
->   if you want to keep the docs in the uAPI you need to add the
->   appropriate stuff in the spec (look at the definition of
->   pin-signal-type for an example of a fully documented enum)
-> - the notifications are quite unorthodox in the current 
->   implementation, so I faked the enums :S
->   Usually the notification is the same as the response to a get.
->   IIRC 'notify' and 'event' operation types should be used in the spec.
+Be specific how many required-opps are allowed.
 
-I already pointed this out in the past. This is not he only thing that
-was ignored during the dpll review. I have to say I'm a bit annoyed by
-that.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+---
 
->
->There is documentation on the specs in
->Documentation/userspace-api/netlink/ which should give some idea of how
->things work. There is also another example of a spec here:
->https://github.com/kuba-moo/ynl/blob/psp/Documentation/netlink/specs/psp.yaml
->
->To regenerate the C code after changes to YAML:
->
->  ./tools/net/ynl/ynl-regen.sh
->
->if the Python script doing the generation dies and eats the files -
->bring them back with:
->
->  git checkout drivers/dpll/dpll_nl.c drivers/dpll/dpll_nl.h \
->               include/uapi/linux/dpll.h
->
->There is a "universal CLI" script in:
->
->  ./tools/net/ynl/samples/cli.py
->
->which should be able to take in JSON requests and output JSON responses.
->I'm improvising, because I don't have any implementation to try it 
->out, but something like:
->
->  ./tools/net/ynl/samples/cli.py \
->       --spec Documentation/netlink/specs/dpll.yaml \
->       --do device-get --json '{"id": 1}'
->
->should pretty print the info about device with id 1. Actually - it
->probably won't because I didn't fill in all the attrs in the pin nest.
->But with a bit more work on the spec it should work.
->
->Would you be able to finish this conversion. Just LMK if you have any
->problems, the edges are definitely very sharp at this point.
+This change is independent, although logically is connected with my
+dtschema pull:
+https://github.com/devicetree-org/dt-schema/pull/95
+---
+ Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
+index a52a83fe2831..87ae74166807 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
+@@ -32,6 +32,7 @@ properties:
+       A phandle and PM domain specifier for the MMCX power domain.
+ 
+   required-opps:
++    maxItems: 1
+     description:
+       A phandle to an OPP node describing required MMCX performance point.
+ 
+-- 
+2.34.1
+
