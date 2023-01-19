@@ -2,22 +2,21 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B963673414
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Jan 2023 10:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A42F673417
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Jan 2023 10:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjASJAF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Jan 2023 04:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S229630AbjASJAI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Jan 2023 04:00:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjASJAD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Jan 2023 04:00:03 -0500
-X-Greylist: delayed 313 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 Jan 2023 01:00:02 PST
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA7B67975
-        for <linux-clk@vger.kernel.org>; Thu, 19 Jan 2023 01:00:02 -0800 (PST)
+        with ESMTP id S229699AbjASJAH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Jan 2023 04:00:07 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3DE6796A
+        for <linux-clk@vger.kernel.org>; Thu, 19 Jan 2023 01:00:05 -0800 (PST)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MHnyM-1pXKPO2Kb0-00Eqzc;
- Thu, 19 Jan 2023 09:54:33 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1N33hJ-1oZIlF0O2H-013PPj;
+ Thu, 19 Jan 2023 09:54:36 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
@@ -32,29 +31,29 @@ Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v1 1/2] clk: imx6sll: add proper spdx license identifier
-Date:   Thu, 19 Jan 2023 09:54:20 +0100
-Message-Id: <20230119085421.102804-2-marcel@ziswiler.com>
+Subject: [RESEND PATCH v1 2/2] dt-bindings: imx8ulp: clock: no spaces before tabs
+Date:   Thu, 19 Jan 2023 09:54:21 +0100
+Message-Id: <20230119085421.102804-3-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230119085421.102804-1-marcel@ziswiler.com>
 References: <20230119085421.102804-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:GL2rVT1JpqMd06MBhb1IBAtTIz0M492IhxLsitDd6WeuTyBlAKe
- t/SnNg0eLxYXzBrOdrC5iH2Pa+Cbnf00EVKe5G9N21OsAXQZRwY6DPR8DSiJry1Oh47o8HM
- +XJNHHHF/aNHU5Y3DqZJx+CZHMRLwsQ6/Mwfky5ODwMtzs3t03+NJ+JrZn7krRY1+1bVbcA
- CfnjzHWB3E5trFWT0K2fg==
-UI-OutboundReport: notjunk:1;M01:P0:SNMhYVDnNOs=;R0dkgFMnbPT3sxFZ3yfu1TyMqfM
- xPmFVf0g+PcXpA/wVjcOVXZjbW3tDNAz8Pz8wBARAJtkKMSOUOUl77wM8Vt9VHP48kzq7/pay
- ZVmFrCzivlxA7S978LXVaYFd4ts0r8PqFcKmg7tgoJbXQdnaiK2EfNYRMnDPhK7Oyctd6udQL
- 2h2A5jG6/7Jew7zyB9D7/3LGOqBd4WlCOdHVMn+3O0Yoo1XaDcJnbt3Cul24C0mtPdECJ2L7e
- GV4rI+c2Wrp/9y7w9YDeZxdemhIxGrwGpRNnZmJ6nfPWRIu1D4q9NRxqINOrfmlkrzj9r68KP
- v3nwjxTF0iJXf1O3a4J0WF6GB06JRYcM7yvaHPTugfQ+k+HnuChjZGjlicVTWx5l9AC4CYQbQ
- l8lTUKeLp3MB+20uH/Bk61bjLqYrlnQEmNNR5O8nF0p5WFgFxIGsZqyBjx/TxZ2JSKj12KSQH
- n/g4izKJui7WGOMKm+BTmONACfFX89lA6PhjZPKH36ZLuy7xwrrIVIfpy805jCtdYNl2Dkna+
- KnHqVf+oIM3tcu2/1H0491UwxSrXe6dr/IOTwgCO7gy8nMgMih/Jb9LZWJvVgkGR/ligo5MsT
- SYibpczQVS0+iYtU5WJlYubeX3WRtBEzPV9AqEK/VROo3IM+4rv1JZJ5PhdRNPbfGpRsHCyNC
- /XsumcsRdAsvgJ/wRBkOY5nzowsGJTk9oDhSZUt02w==
+X-Provags-ID: V03:K1:3lsqMvUjg840JDNVAxsVGyJ9oYSECeJt/YcR4tz5LlvH0MyIZ5M
+ 8Npt2lmIuRVcgtf1FuK5eoaiXKMvRPsy03Q6VVJH3lsSLnN2gYdZEAWQsDbTE/2rTJmN8Ny
+ mDYkTeBq2CZQToy+ImK2B61bskOsXQpfclANoSvv8huslrBWc4l+TwjcPLtnViecnxUt0z0
+ YO+I3Wm/IbA8cJEvn3NNA==
+UI-OutboundReport: notjunk:1;M01:P0:dFUiy6TnYGY=;f35icOD0Cj6LpLsQF+z4FEdzXzx
+ WLJ6qHmpIlWQGH8Pagpd2RyT725Wuyv/vM7FWAXJCQuWSi1ZP4XOfXho9Xuet5V8nIxevGusj
+ dq6vwQNaoYTzx/woK2p34AEbCRd7nM/vU2WuxTflTt0rju0Hi0nkWtGHjY1/ceVKpXYib21Mv
+ 78HAVLEXrvY18nqHOsAwuSS30FJMT2KolZuIDzR5B2xcJo3juRl3IHgcFc5YzFL57wy87DKox
+ T7wZQ+mpMc9HapUYA/YcHMhYN6psJn4Nr0z94pLEHxx8jPYX6tcfyu+xiFFsmg6OnZmxUSacb
+ VjUorHEQQaRe7RZmv7ZvcGNuVqi71O+aJVOVJQSrvlP5X36fC7BoyJHIW2onEVRoJFwpfcvcQ
+ qr8BS/dAzmCfs1VWdALqeYy5biiR5pPP4GQUGtegsJIkP+beGMace/2vmERrhB8aIbsGqesiR
+ kh1cJhEa/yxJuA1b41UdcvJali7n2IVU8IjPFPf3QtShjDtvXaSvwon5CRCUDhFkqaRLtihDB
+ HlKYgWOBggWz+sdqcW1Ctz6A4iHnehu3M7pmw5s59wbyuSphIY9iD8RKH2T+VqJuzKPnXbm/u
+ mXj8mKoXBGeehm/A6neoBzhuO9mR2B1mhrlAATD7SOy2HNIC5fWVKNm1um1rDetKRVl8WKMey
+ xKv0nOpy2xDCTzjS5YF0hjxJDkAwu1/GJUheT1HTVw==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -66,30 +65,42 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This fixes the following error:
+This fixes the following warnings:
 
-include/dt-bindings/clock/imx6sll-clock.h:1: warning: Improper SPDX
- comment style for 'include/dt-bindings/clock/imx6sll-clock.h', please
- use '/*' instead
-include/dt-bindings/clock/imx6sll-clock.h:1: warning: Missing or
- malformed SPDX-License-Identifier tag in line 1
+include/dt-bindings/clock/imx8ulp-clock.h:204: warning: please, no space
+ before tabs
+include/dt-bindings/clock/imx8ulp-clock.h:215: warning: please, no space
+ before tabs
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
 ---
 
- include/dt-bindings/clock/imx6sll-clock.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/dt-bindings/clock/imx8ulp-clock.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/dt-bindings/clock/imx6sll-clock.h b/include/dt-bindings/clock/imx6sll-clock.h
-index f446710fe63d..494fd0c37fb5 100644
---- a/include/dt-bindings/clock/imx6sll-clock.h
-+++ b/include/dt-bindings/clock/imx6sll-clock.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Copyright (C) 2016 Freescale Semiconductor, Inc.
-  * Copyright 2017-2018 NXP.
+diff --git a/include/dt-bindings/clock/imx8ulp-clock.h b/include/dt-bindings/clock/imx8ulp-clock.h
+index 953ecfe8ebcc..827404fadf5c 100644
+--- a/include/dt-bindings/clock/imx8ulp-clock.h
++++ b/include/dt-bindings/clock/imx8ulp-clock.h
+@@ -201,7 +201,7 @@
+ #define IMX8ULP_CLK_SAI7		2
+ #define IMX8ULP_CLK_SPDIF		3
+ #define IMX8ULP_CLK_ISI			4
+-#define IMX8ULP_CLK_CSI_REGS 		5
++#define IMX8ULP_CLK_CSI_REGS		5
+ #define IMX8ULP_CLK_PCTLD		6
+ #define IMX8ULP_CLK_CSI			7
+ #define IMX8ULP_CLK_DSI			8
+@@ -212,7 +212,7 @@
+ #define IMX8ULP_CLK_GPU2D		13
+ #define IMX8ULP_CLK_GPU3D		14
+ #define IMX8ULP_CLK_DC_NANO		15
+-#define IMX8ULP_CLK_CSI_CLK_UI 		16
++#define IMX8ULP_CLK_CSI_CLK_UI		16
+ #define IMX8ULP_CLK_CSI_CLK_ESC		17
+ #define IMX8ULP_CLK_RGPIOD		18
+ #define IMX8ULP_CLK_DMA2_MP		19
 -- 
 2.36.1
 
