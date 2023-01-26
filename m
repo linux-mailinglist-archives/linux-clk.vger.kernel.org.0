@@ -2,79 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CECC67D39F
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Jan 2023 18:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DF267D206
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Jan 2023 17:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjAZRz5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Jan 2023 12:55:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S232046AbjAZQph (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Jan 2023 11:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjAZRz5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Jan 2023 12:55:57 -0500
-X-Greylist: delayed 2639 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 09:55:56 PST
-Received: from sp14.canonet.ne.jp (sp14.canonet.ne.jp [210.134.168.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81843EC72;
-        Thu, 26 Jan 2023 09:55:56 -0800 (PST)
-Received: from csp14.canonet.ne.jp (unknown [172.21.160.134])
-        by sp14.canonet.ne.jp (Postfix) with ESMTP id 418BA1E03C8;
-        Fri, 27 Jan 2023 01:28:13 +0900 (JST)
-Received: from echeck14.canonet.ne.jp ([172.21.160.124])
-        by csp4 with ESMTP
-        id L56ipIOBSVjWJL56jp2bsx; Fri, 27 Jan 2023 01:28:13 +0900
-X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=WsmVjfTv c=1 sm=1 tr=0
- ts=63d2aa1d cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=WKcvGfCz9DfGexK3dBCb:22
- a=puqJfqqrwnhV2n3dwg+kWg==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
- a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10
- a=QA8zHFxAwLBQ4A9MkZgA:9 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
- a=xo5jKAKm-U-Zyk2_beg_:22"
-X-CNT-CMCheck-Score: 100.00
-Received: from echeck14.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id E3BCF1C020D;
-        Fri, 27 Jan 2023 01:28:12 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp14.canonet.ne.jp (unknown [172.21.160.104])
-        by echeck14.canonet.ne.jp (Postfix) with ESMTP id 9C5F41C0259;
-        Fri, 27 Jan 2023 01:28:12 +0900 (JST)
-Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp14.canonet.ne.jp (Postfix) with ESMTPA id D33FD15F967;
-        Fri, 27 Jan 2023 01:28:11 +0900 (JST)
+        with ESMTP id S229732AbjAZQpg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Jan 2023 11:45:36 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912364EE1;
+        Thu, 26 Jan 2023 08:45:35 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30QGjC0r027852;
+        Thu, 26 Jan 2023 16:45:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0DhafgZeBu6HoCEQt1MHmaUDfE+Qyo6YP+SijjNjXz0=;
+ b=UGeVHheLaY+xz1iWUuxipjPRsekOxBu8ossFpFVG1PLVOysG3kCHcXA/IfN8WSUo6lfI
+ kNm/NQ/u1aiKClA3dWec7isCoPN1f1NkDTDj+wAGJKtUZ4GVCeWMA1t7xioupJGDeZRw
+ ShjFY5fOJqG3Qbf6nq1bSj4z0+ZyPb8qSG60SYpv4VKg8YPH/GDa6xn3UAaGH6wh0tSh
+ 9dSZV+tOwSAf25ohsT/++wB9dvn1JKq8CzBHXG2CSkXd9UnICdYSIXb1Ep8QTZECb3V1
+ Nfi44kraf+VH3/GCmJ0QrGZz7rXhJ40FJnVV01slM/D4abs99DROAIH9SvyIiS0RjWiO RA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nasr0kkq9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 16:45:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30QGjBVv020425
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Jan 2023 16:45:11 GMT
+Received: from [10.50.43.212] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 26 Jan
+ 2023 08:45:03 -0800
+Message-ID: <37fccf60-75e7-3170-4e63-cafa62777596@quicinc.com>
+Date:   Thu, 26 Jan 2023 22:15:00 +0530
 MIME-Version: 1.0
-Message-ID: <20230126162811.00005172.0013@daime.co.jp>
-Date:   Fri, 27 Jan 2023 01:28:11 +0900
-From:   "Mrs Alice Walton" <daime@daime.co.jp>
-To:     <INQUIRY@daime.co.jp>
-Reply-To: <alicewaltton1@gmail.com>
-Subject: INQUIRY
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 05/10] clk: qcom: add Global Clock controller (GCC) driver
+ for IPQ5332 SoC
+To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <arnd@arndb.de>,
+        <bhupesh.sharma@linaro.org>, <broonie@kernel.org>,
+        <catalin.marinas@arm.com>, <devicetree@vger.kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <konrad.dybcio@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <marcel.ziswiler@toradex.com>,
+        <mturquette@baylibre.com>, <nfraprado@collabora.com>,
+        <quic_gurus@quicinc.com>, <robh+dt@kernel.org>,
+        <robimarko@gmail.com>, <shawnguo@kernel.org>,
+        <ulf.hansson@linaro.org>, <will@kernel.org>
+References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
+ <20230125104520.89684-6-quic_kathirav@quicinc.com>
+ <9cf8a94f7ec4d8912bcf507631991999.sboyd@kernel.org>
+Content-Language: en-US
+From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+In-Reply-To: <9cf8a94f7ec4d8912bcf507631991999.sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: Mrs Alice Walton
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674750493;VERSION=7944;MC=599861430;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOCALPART_IN_SUBJECT,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_MR_MRS,
-        UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5748]
-        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
-        *      Subject
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [alicewaltton1[at]gmail.com]
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 T_HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
-X-Spam-Level: ******
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8YFMf9iChCf7TO-g8rvLTswHK1rj14mB
+X-Proofpoint-ORIG-GUID: 8YFMf9iChCf7TO-g8rvLTswHK1rj14mB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-26_07,2023-01-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 clxscore=1015 phishscore=0 lowpriorityscore=0 adultscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301260162
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,12 +92,50 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-Greetings,
+On 1/26/2023 2:24 AM, Stephen Boyd wrote:
+> Quoting Kathiravan Thirumoorthy (2023-01-25 02:45:15)
+>> diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+>> new file mode 100644
+>> index 000000000000..8351096a4d32
+>> --- /dev/null
+>> +++ b/drivers/clk/qcom/gcc-ipq5332.c
+>> @@ -0,0 +1,3954 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/regmap.h>
+> [...]
+>> +
+>> +static const struct freq_tbl ftbl_gcc_pcnoc_bfdcd_clk_src[] = {
+>> +       F(24000000, P_XO, 1, 0, 0),
+>> +       F(50000000, P_GPLL0_OUT_MAIN, 16, 0, 0),
+>> +       F(100000000, P_GPLL0_OUT_MAIN, 8, 0, 0),
+>> +       { }
+>> +};
+>> +
+>> +static struct clk_rcg2 gcc_pcnoc_bfdcd_clk_src = {
+>> +       .cmd_rcgr = 0x31004,
+>> +       .mnd_width = 0,
+>> +       .hid_width = 5,
+>> +       .parent_map = gcc_parent_map_0,
+>> +       .freq_tbl = ftbl_gcc_pcnoc_bfdcd_clk_src,
+>> +       .clkr.hw.init = &(const struct clk_init_data){
+>> +               .name = "gcc_pcnoc_bfdcd_clk_src",
+>> +               .parent_data = gcc_parent_data_0,
+>> +               .num_parents = ARRAY_SIZE(gcc_parent_data_0),
+>> +               .ops = &clk_rcg2_ops,
+>> +               .flags = CLK_IS_CRITICAL,
+> Why not just turn these clks on in probe and never register them with
+> the framework? That saves some memory for clks that there is no desire
+> to control from linux. This is an RCG, so in theory the frequency can
+> change, but does it really? Usually bus clks are controlled by the
+> interconnect driver.
 
-I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
-Please let me know as soon as possible,
-
-Regard
-Mrs Alice Walton
-
+Thanks Stephen for reviewing the patch. I will look into this and make 
+changes appropriately in V2.
 
