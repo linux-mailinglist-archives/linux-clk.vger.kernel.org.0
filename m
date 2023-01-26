@@ -2,110 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1EC67D0C5
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Jan 2023 17:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CECC67D39F
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Jan 2023 18:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjAZQBM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Jan 2023 11:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S229777AbjAZRz5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Jan 2023 12:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbjAZQBM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Jan 2023 11:01:12 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C82049950
-        for <linux-clk@vger.kernel.org>; Thu, 26 Jan 2023 08:01:10 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l8so1442886wms.3
-        for <linux-clk@vger.kernel.org>; Thu, 26 Jan 2023 08:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FcQ8vq6lUSoBcskeTdnLtSTsDVmAwYg1jg2lyisgCl8=;
-        b=l2geVIF7Cfn/0E5HIjMq40Ir/HPwxXgiS7dR57dcGci+Y95s25TMwfB0YUJqd6DzVv
-         qEfN6GkXi+VyC7xiGffcp0Hhn2GgRG+IbuZ+IRN6QUgS+CswhZq7jNb5RdlgRvv5gUqQ
-         AN2XAOLGWn8yGWqpjyEBxuV5KCru+byPUtX0opGO87zUIBYJlxuHdpl/xeaV9fo1gc6a
-         En8sW7dzkyZ3cYuE6Xv8z04LVTHnqYw6OVG6pJ2xhn6g1EVB/31ydh66u7BUWg/XO7Dh
-         X3yXsMpRrDojOZi2gNQ2PruEHPbamKlCnTCIAdMzdMf2IsvNA+QyYp3qs0X4m9FgVuDg
-         xLoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FcQ8vq6lUSoBcskeTdnLtSTsDVmAwYg1jg2lyisgCl8=;
-        b=jN3uuYjmLos3uKwQ6cMjFJz8M0NmXBux7MiyDcGjXkiZwJqtFIzMCSotCVG2m9NBX4
-         Av1/o4HfSEIp/WL4nXtauKXIGsLTsAjI7cNKqq1owWPGFhJZcjoflBdoxzgaJ9aXo9oO
-         gc2ACf81koWCPTNQBZ855K8ZV4/YYoT9gdXuNozHddgWW0wWvdFSW7gQICufACEh0YJN
-         /BrBuvAWwZ2ZpbVFtnGV0eS03aW0JA33YBcZUlkjc9Bbe9fQ8D9cDycsJxZwUK2sfaf0
-         7KHtc42IK3G30xDdQXvgeOFn4AWad8GBSMBpUJNrZ3q3V5nAPjb1ZPNcgCFiwZxFK5SH
-         El8w==
-X-Gm-Message-State: AFqh2koWZPzVv6Ju9sY6Bk0hHqaVrSROnkhVcgFndcNvoU3nMrTbL9YY
-        9k3JqfDa1Rj+62ZilobVYgeTjw==
-X-Google-Smtp-Source: AMrXdXs6JAtLvjTpQlUAkzsZq1XnTeNHQWtt5ki8p1OQb+ECja5bbx3QJ6wq8n9QR639AVO1rNPmdQ==
-X-Received: by 2002:a05:600c:1906:b0:3da:1d51:ef9d with SMTP id j6-20020a05600c190600b003da1d51ef9dmr36757088wmq.15.1674748869113;
-        Thu, 26 Jan 2023 08:01:09 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n10-20020a05600c180a00b003daf672a616sm1753836wmp.22.2023.01.26.08.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 08:01:08 -0800 (PST)
-Message-ID: <9cbc160e-5aef-1de4-f1c8-a2d51b37aa0e@linaro.org>
-Date:   Thu, 26 Jan 2023 17:01:07 +0100
+        with ESMTP id S229459AbjAZRz5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Jan 2023 12:55:57 -0500
+X-Greylist: delayed 2639 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 09:55:56 PST
+Received: from sp14.canonet.ne.jp (sp14.canonet.ne.jp [210.134.168.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81843EC72;
+        Thu, 26 Jan 2023 09:55:56 -0800 (PST)
+Received: from csp14.canonet.ne.jp (unknown [172.21.160.134])
+        by sp14.canonet.ne.jp (Postfix) with ESMTP id 418BA1E03C8;
+        Fri, 27 Jan 2023 01:28:13 +0900 (JST)
+Received: from echeck14.canonet.ne.jp ([172.21.160.124])
+        by csp4 with ESMTP
+        id L56ipIOBSVjWJL56jp2bsx; Fri, 27 Jan 2023 01:28:13 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=WsmVjfTv c=1 sm=1 tr=0
+ ts=63d2aa1d cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=WKcvGfCz9DfGexK3dBCb:22
+ a=puqJfqqrwnhV2n3dwg+kWg==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
+ a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10
+ a=QA8zHFxAwLBQ4A9MkZgA:9 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
+ a=xo5jKAKm-U-Zyk2_beg_:22"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck14.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id E3BCF1C020D;
+        Fri, 27 Jan 2023 01:28:12 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp14.canonet.ne.jp (unknown [172.21.160.104])
+        by echeck14.canonet.ne.jp (Postfix) with ESMTP id 9C5F41C0259;
+        Fri, 27 Jan 2023 01:28:12 +0900 (JST)
+Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp14.canonet.ne.jp (Postfix) with ESMTPA id D33FD15F967;
+        Fri, 27 Jan 2023 01:28:11 +0900 (JST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 2/6] clk: qcom: Add GPU clock controller driver for SM6125
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230126144033.216206-1-konrad.dybcio@linaro.org>
- <20230126144033.216206-3-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126144033.216206-3-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <20230126162811.00005172.0013@daime.co.jp>
+Date:   Fri, 27 Jan 2023 01:28:11 +0900
+From:   "Mrs Alice Walton" <daime@daime.co.jp>
+To:     <INQUIRY@daime.co.jp>
+Reply-To: <alicewaltton1@gmail.com>
+Subject: INQUIRY
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Priority: 3
+ORGANIZATION: Mrs Alice Walton
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674750493;VERSION=7944;MC=599861430;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=0;RNP=
+X-ESET-Antispam: OK
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOCALPART_IN_SUBJECT,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_MR_MRS,
+        UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5748]
+        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
+        *      Subject
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [alicewaltton1[at]gmail.com]
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 T_HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 26/01/2023 15:40, Konrad Dybcio wrote:
-> Add support for the GPU clock controller found on SM6125.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/clk/qcom/Kconfig        |   8 +
->  drivers/clk/qcom/Makefile       |   1 +
->  drivers/clk/qcom/gpucc-sm6125.c | 444 ++++++++++++++++++++++++++++++++
->  3 files changed, 453 insertions(+)
->  create mode 100644 drivers/clk/qcom/gpucc-sm6125.c
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index ca6c7d2ada6c..ca2c83ecc6a6 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -798,6 +798,14 @@ config SM_GCC_8550
->  	  Say Y if you want to use peripheral devices such as UART,
->  	  SPI, I2C, USB, SD/UFS, PCIe etc.
->  
-> +config SM_GPUCC_6125
-> +	tristate "SM6125 Graphics Clock Controller"
-> +	select SM_GCC_6125
 
-depends on ARM64 || COMPILE_TEST
+Greetings,
 
-Same for second patch
+I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
+Please let me know as soon as possible,
 
-Best regards,
-Krzysztof
+Regard
+Mrs Alice Walton
+
 
