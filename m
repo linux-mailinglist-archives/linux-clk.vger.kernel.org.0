@@ -2,114 +2,93 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90FA67D3F6
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Jan 2023 19:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56FC67D490
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Jan 2023 19:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjAZSTm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Jan 2023 13:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S229940AbjAZSqN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Jan 2023 13:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjAZSTl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Jan 2023 13:19:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B585E504;
-        Thu, 26 Jan 2023 10:19:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2258DB81EC9;
-        Thu, 26 Jan 2023 18:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22712C433EF;
-        Thu, 26 Jan 2023 18:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674757177;
-        bh=fMbvpdY4LhT/plsYFJopPqhOxAufgim8fKxCWytJLaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcILIp7kPxYF23bBgm/G20DBJ9ES7nqnnZX4jep/Ttz/YQIA6rYoViK0wToZ+aRiS
-         FmchqdUTmyQn5u+t3FWe64ZJwf0vaBvLH+axoImbEOK1lQirPGXRxEeqiJn282cCL8
-         tUfkku3R5jQwEl4AmjVrA308mKS5Rwatj6rUjxctbYlFDx66cOwWUdD5SLbVh8zX8V
-         RzQ+2M31UdObPbquc7jk0CYZyoDZIFiND4wGLdCvG9VVfn8TlCmVjZ6/60imsqCQA8
-         va6Ny9rMFUieaUxczbUwHyDRfFDLnJZgD3hWXRQM4hCx7KQndmfs4dlCvSZ0rBUJko
-         ja3VL4rnEDlSw==
-Date:   Thu, 26 Jan 2023 12:19:35 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 2/6] clk: qcom: Add GPU clock controller driver for SM6125
-Message-ID: <20230126181935.mg7eida2e5vp42hc@builder.lan>
-References: <20230126144033.216206-1-konrad.dybcio@linaro.org>
- <20230126144033.216206-3-konrad.dybcio@linaro.org>
+        with ESMTP id S229619AbjAZSqN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Jan 2023 13:46:13 -0500
+Received: from sp11.canonet.ne.jp (sp11.canonet.ne.jp [210.134.168.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4206B171C
+        for <linux-clk@vger.kernel.org>; Thu, 26 Jan 2023 10:46:12 -0800 (PST)
+Received: from csp11.canonet.ne.jp (unknown [172.21.160.131])
+        by sp11.canonet.ne.jp (Postfix) with ESMTP id 00E211E060E;
+        Fri, 27 Jan 2023 03:46:09 +0900 (JST)
+Received: from echeck11.canonet.ne.jp ([172.21.160.121])
+        by csp1 with ESMTP
+        id L7GCpbP7Q4VyBL7GCpTPWx; Fri, 27 Jan 2023 03:46:08 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=bsjyuGWi c=1 sm=1 tr=0
+ ts=63d2ca70 cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=QA8zHFxAwLBQ4A9MkZgA:9
+ p=WKcvGfCz9DfGexK3dBCb:22 a=cYGYO7ts52rupuxT5MoNxg==:117
+ a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
+ a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
+ a=xo5jKAKm-U-Zyk2_beg_:22"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck11.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id B87091C023D;
+        Fri, 27 Jan 2023 03:46:08 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp11.canonet.ne.jp (unknown [172.21.160.101])
+        by echeck11.canonet.ne.jp (Postfix) with ESMTP id 671CC1C0261;
+        Fri, 27 Jan 2023 03:46:08 +0900 (JST)
+Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp11.canonet.ne.jp (Postfix) with ESMTPA id 8727D15F962;
+        Fri, 27 Jan 2023 03:46:07 +0900 (JST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126144033.216206-3-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <20230126184607.00004CFB.0193@daime.co.jp>
+Date:   Fri, 27 Jan 2023 03:46:07 +0900
+From:   "Mrs Alice Walton" <daime@daime.co.jp>
+To:     <INQUIRY@daime.co.jp>
+Reply-To: <alicewaltton1@gmail.com>
+Subject: INQUIRY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Mrs Alice Walton
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674758768;VERSION=7944;MC=1657521849;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=0;RNP=
+X-ESET-Antispam: OK
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        LOCALPART_IN_SUBJECT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_MR_MRS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5002]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [210.134.168.88 listed in wl.mailspike.net]
+        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
+        *      Subject
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [alicewaltton1[at]gmail.com]
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 T_HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 03:40:29PM +0100, Konrad Dybcio wrote:
-> diff --git a/drivers/clk/qcom/gpucc-sm6125.c b/drivers/clk/qcom/gpucc-sm6125.c
-[..]
-> +static int gpu_cc_sm6125_probe(struct platform_device *pdev)
-> +{
-> +	struct regmap *regmap;
-> +	unsigned int value, mask;
-> +
-> +	regmap = qcom_cc_map(pdev, &gpu_cc_sm6125_desc);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	clk_alpha_pll_configure(&gpu_cc_pll0_out_aux2, regmap, &gpu_pll0_config);
-> +	clk_alpha_pll_configure(&gpu_cc_pll1_out_aux2, regmap, &gpu_pll1_config);
-> +
-> +	/* Recommended WAKEUP/SLEEP settings for the gpu_cc_cx_gmu_clk */
-> +	mask = CX_GMU_CBCR_WAKE_MASK << CX_GMU_CBCR_WAKE_SHIFT;
-> +	mask |= CX_GMU_CBCR_SLEEP_MASK << CX_GMU_CBCR_SLEEP_SHIFT;
-> +	value = 0xf << CX_GMU_CBCR_WAKE_SHIFT | 0xf << CX_GMU_CBCR_SLEEP_SHIFT;
 
-Perhaps I'm missing something here, but isn't mask == value after this?
+Greetings,
 
-Feels like this could be written cleaner using FIELD_PREP(), or perhaps
-even moved to a helper function, so that we don't need to open code this
-if it's needed in other places?
+I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
+Please let me know as soon as possible,
 
-> +	regmap_update_bits(regmap, gpu_cc_cx_gmu_clk.clkr.enable_reg, mask, value);
-> +
-> +	/* Set up PERIPH/MEM retain on the GPU core clock */
-> +	regmap_update_bits(regmap, gpu_cc_gx_gfx3d_clk.halt_reg,
-> +			   (BIT(14) | BIT(13)), (BIT(14) | BIT(13)));
+Regard
+Mrs Alice Walton
 
-You don't need the extra parenthesis here.
 
-> +
-> +	return qcom_cc_really_probe(pdev, &gpu_cc_sm6125_desc, regmap);
-> +}
-> +
-> +static struct platform_driver gpu_cc_sm6125_driver = {
-> +	.probe = gpu_cc_sm6125_probe,
-> +	.driver = {
-> +		.name = "gpucc-sm6125",
-> +		.of_match_table = gpu_cc_sm6125_match_table,
-> +	},
-> +};
-> +
-> +static int __init gpu_cc_sm6125_init(void)
-> +{
-> +	return platform_driver_register(&gpu_cc_sm6125_driver);
-> +}
-> +subsys_initcall(gpu_cc_sm6125_init);
-
-You don't need GPU at subsys, module_platform_driver() should be
-sufficient (and =m in defconfig).
-
-Thanks,
-Bjorn
