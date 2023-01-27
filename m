@@ -2,91 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DC667F05C
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Jan 2023 22:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9496167F083
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Jan 2023 22:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjA0VYq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Jan 2023 16:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S230414AbjA0Viw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Jan 2023 16:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjA0VYh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Jan 2023 16:24:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A744F5254;
-        Fri, 27 Jan 2023 13:24:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 586ADB821E7;
-        Fri, 27 Jan 2023 21:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E296BC433D2;
-        Fri, 27 Jan 2023 21:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674854674;
-        bh=X77o2EN7hu23p9QesyJvTlz4zrfiHmazTL3NOd2r6wc=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=XYDjhkCvEFwo2gbUTAUv8mpgCTLgHgubvIVMl3pIylJTF22WS4Bw4wU/Qa3Unrno1
-         kp/Qj8On1hPhQw2TaXJThKLilmLJXzJXHmx93JmmowCfh1OuJ0tit/vi9sogWv3iT8
-         OBELeFFu7BB5yYsfhrMwKRX12wCVajOmjlhM7cV3OkQ8HVVcn4iRjd7B8/WodfxUG3
-         2o7JTCqicknaCsFfV7+/pHmq7OXhCC8qnVUVCWQAhlrJYVCnr+aalpSpLvBSWtuH10
-         RnkdVlOZFc60UVt+aFG5zeLtXJzYx5/ySWmf7VBhg4coSfCuHMyulAZBX+9IFVB7QL
-         tsBZD3Udy97Eg==
-Message-ID: <73c3a79bb8b429d8f2ef23c5d2666a8a.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230502AbjA0Viv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Jan 2023 16:38:51 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006A224C99
+        for <linux-clk@vger.kernel.org>; Fri, 27 Jan 2023 13:38:50 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id x26so2953481qkj.4
+        for <linux-clk@vger.kernel.org>; Fri, 27 Jan 2023 13:38:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EkjlJx23CrkCdR6Z9AlaV1vvEzLjMrV/VSTIV1fEBgE=;
+        b=mdSFmRNUmWQq+PcXXLwJph7CYzqDTSPiartUvARRGxoGc1aVC4POxGBX2FggO/3pu3
+         tQFZhD+2V6mS+vdDTGCdjH8/FrQxi8HRqTTNNPcMu5W5wnxcbINbEwC2uNxi16VqiCrO
+         spk3LNSUUGWq9NS1/ROkCfB5Ox947kYiSkJhopYy57uEk7X1FazkJABT0QaaWtsjwE7r
+         wO/3wn0B/X9ffj10o5BpGlMf6j3OkxuiwccZ79tRyIm09vaB2+BsgheNIk/XNgIon8r0
+         AAe5cGFFuaXLmz3cJvk7X0bAKvEdrCkDma6CLHS4KCzXss+wZOUs7zLIkLGlwB9b1ui4
+         u6Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EkjlJx23CrkCdR6Z9AlaV1vvEzLjMrV/VSTIV1fEBgE=;
+        b=TRTxPEQ+LFJ7zDFVF1HPT4yCWg4jywOLLrCqC32fXDzlKIkO7gB+YTOZL8FPFcqtor
+         ju8RLPn8dJG8itAPKpPly6caeaLcplEmDW3vmbfdjMgjBfwHq4DKI6c4rBeh5759Vxkh
+         NMKx2QExDL6FhJ5EzKTGw3cWJiBeAjjmNjxG4aOhkL5Njpf51Z2TaftxGoVtYSwmgCLB
+         5MrkoQzNwSQrtyxaOgyhBlDk7SKv0sKTLgK97al86o+Svk9uG/560Ehsz3qNsWz3XNcN
+         hwI1VdKgI1B8YFTZ9XItXqHLArjfcBFGlHQcP1G4EzQYy9MwnIIACKCzLvcOhjKfXLwy
+         t0xQ==
+X-Gm-Message-State: AFqh2kqOp7EKEBUU1KU0S0i4M2pxoIZwvCLTe3kJYMxi7gQblVrYqYux
+        PF/oSWzO8qUdv6c7qKA0rGfc8wGnBU63LmlJaHk=
+X-Google-Smtp-Source: AMrXdXsk2W296jrqnhgL8kKhRiSFwc9CWIOCXF0g3sGOXBKyQYL5TqE8x1jplv4n4pOuAMZpZqMCweE4nKqi6Xud/Ak=
+X-Received: by 2002:ae9:e214:0:b0:708:ee3b:e153 with SMTP id
+ c20-20020ae9e214000000b00708ee3be153mr1126380qkc.352.1674855529998; Fri, 27
+ Jan 2023 13:38:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7d0582ac-e5c1-7dbf-8063-f6ea8cb59862@linaro.org>
-References: <20230118132254.2356209-1-dmitry.baryshkov@linaro.org> <20230118132254.2356209-8-dmitry.baryshkov@linaro.org> <7055af43f4a8894ac34e53c5847fb3de.sboyd@kernel.org> <7d0582ac-e5c1-7dbf-8063-f6ea8cb59862@linaro.org>
-Subject: Re: [PATCH v4 7/7] clk: qcom: add the driver for the MSM8996 APCS clocks
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Date:   Fri, 27 Jan 2023 13:24:31 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:622a:2c6:b0:3b6:4a9d:4c83 with HTTP; Fri, 27 Jan 2023
+ 13:38:49 -0800 (PST)
+Reply-To: mrsmargaret1960r@gmail.com
+From:   "Mrs. Margaret Christopher" <alkasimabubakar644@gmail.com>
+Date:   Fri, 27 Jan 2023 22:38:49 +0100
+Message-ID: <CAC84WCrZJNgrSfmMM24wp7WU8T7ZCPvgPUyXRBgHx++ro78g4w@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:734 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7452]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [alkasimabubakar644[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [alkasimabubakar644[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Dmitry Baryshkov (2023-01-26 14:51:51)
-> On 25/01/2023 23:38, Stephen Boyd wrote:
-> > Quoting Dmitry Baryshkov (2023-01-18 05:22:54)
-> >> diff --git a/drivers/clk/qcom/apcs-msm8996.c b/drivers/clk/qcom/apcs-m=
-sm8996.c
-> >> new file mode 100644
-> >> index 000000000000..7e46ea8ed444
-> >> --- /dev/null
-> >> +++ b/drivers/clk/qcom/apcs-msm8996.c
-> >> @@ -0,0 +1,76 @@
-> >> +
-> >> +       /*
-> >> +        * Register the clock as fixed rate instead of being a child o=
-f gpll0
-> >> +        * to let the driver register probe as early as possible.
-> >=20
-> > The function doesn't block or return EPROBE_DEFER if the clk is orphaned
-> > when registered. Why is this necessary? Are you getting defered by the
-> > fw_devlink logic thinking it needs to defer probe of this driver until
-> > gpll0 provider probes? We should fix fw_devlink to not do that. Maybe if
-> > the node is a clk provider (#clock-cells exists) then we don't wait for
-> > clocks property to be provided, because the clk core already handles
-> > that itself.
->=20
-> Letting clock-controllers probe was my idea for the patch, but it was=20
-> delayed again by Saravana, see [1], [2]
+-- 
+Hello Dear
 
-Ah, I didn't see it because linux-clk wasn't Cced and I look at that
-mail pile less regularly.
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over  a month ago. I am A business woman who is
+dealing with Gold Exportation, I Am from USA California i have a
+charitable and unfulfilling project that am about to handover to you,
+if you are interested to know more about this project please reply me.
+ Hope to hear from you
+
+Best Regard
+Mrs Margaret
