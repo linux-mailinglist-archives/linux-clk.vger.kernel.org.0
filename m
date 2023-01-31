@@ -2,61 +2,116 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F32C68267F
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Jan 2023 09:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E961268265C
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Jan 2023 09:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjAaIeN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 31 Jan 2023 03:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S230011AbjAaIav (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Jan 2023 03:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbjAaIdo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Jan 2023 03:33:44 -0500
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F7D46D58
-        for <linux-clk@vger.kernel.org>; Tue, 31 Jan 2023 00:33:31 -0800 (PST)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id 10A22839AF; Tue, 31 Jan 2023 08:31:47 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1675154010; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=DUylNzkEn7uJvujI1V47RCAzo5mI+G/xRTUqrjBGXN0y0EqeNg1nKlwNJjmjQplRK
-         JISt4nXFWuXOy0cgCHyGDid9asalN+lODg+PwPEGt9Bx6INPGXJHNVVdvFPhGw3F0v
-         7aqVN7gzkOvGIkBLe7h+DrUFMWUba5+m8TMz2Am9aEXEWHXzyMkppJbt2rb0qrnhZz
-         YXHX08U/d3SJHaqCi/ftSdIRYsT2FJYlOH4UdCLY5L1kwDFTZnC1xfSScWx19cn0zQ
-         tp/S2Pca019fnJn8yPi58y4lsCFIIcqCJEb8zxYZVPCeUR0f6OlTH7+3W4TBtyI5XE
-         IAJ4mUbzKNTZQ==
-Received: by mail.lokoho.com for <linux-clk@vger.kernel.org>; Tue, 31 Jan 2023 08:30:34 GMT
-Message-ID: <20230131074501-0.1.3q.w0mi.0.drdbck20rv@lokoho.com>
-Date:   Tue, 31 Jan 2023 08:30:34 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-clk@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S229468AbjAaIau (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Jan 2023 03:30:50 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDB91B568;
+        Tue, 31 Jan 2023 00:30:48 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 27D1C40005;
+        Tue, 31 Jan 2023 08:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675153846;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ajrwn/groQlhkLs4SJ7ZwaJ9XDOkgLm/eBN16amo+YQ=;
+        b=OwNt/8tkiHh5fwf3XqyErTgI8UCrtLcy2eE5f/XPpRKVMUS+47eIMD/2JQ6fdKI1baKrJy
+        cnH8QZLebKEOOdr2W7uBHyBSEiI4LZbgwAwrBt9DxBDY+i3wYjByHjFASJZMZ8BUt94ctg
+        An3KyNY2Dx1afu3JQEjEqS+628uMKbuNbSr1Ws8nfI6Zhl8IvlmTSheJyhvqxJ6libzfsr
+        DUVgHe/9bj5egNp+qqzEvg+kHBn59RjFKHClCCBrnbLBB+QZQI4z4R6zhYfsOSJoJKx4lf
+        MnU6WV63lY7xOn+9rxYMmtMlxH3XADo38HxEKtFiuklFekk8bHBnVdHXR1x1Ww==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] clk: add missing of_node_put() in "assigned-clocks" property parsing
+Date:   Tue, 31 Jan 2023 09:32:27 +0100
+Message-Id: <20230131083227.10990-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Dzie=C5=84 dobry,
+When returning from of_parse_phandle_with_args(), the np member of the
+of_phandle_args structure should be put after usage. Add missing
+of_node_put() calls in both __set_clk_parents() and __set_clk_rates().
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Fixes: 86be408bfbd8 ("clk: Support for clock parents and rates assigned from device tree")
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+v2:
+ - Add "Fixes"
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+ drivers/clk/clk-conf.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+diff --git a/drivers/clk/clk-conf.c b/drivers/clk/clk-conf.c
+index 2ef819606c41..1a4e6340f95c 100644
+--- a/drivers/clk/clk-conf.c
++++ b/drivers/clk/clk-conf.c
+@@ -33,9 +33,12 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
+ 			else
+ 				return rc;
+ 		}
+-		if (clkspec.np == node && !clk_supplier)
++		if (clkspec.np == node && !clk_supplier) {
++			of_node_put(clkspec.np);
+ 			return 0;
++		}
+ 		pclk = of_clk_get_from_provider(&clkspec);
++		of_node_put(clkspec.np);
+ 		if (IS_ERR(pclk)) {
+ 			if (PTR_ERR(pclk) != -EPROBE_DEFER)
+ 				pr_warn("clk: couldn't get parent clock %d for %pOF\n",
+@@ -48,10 +51,12 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
+ 		if (rc < 0)
+ 			goto err;
+ 		if (clkspec.np == node && !clk_supplier) {
++			of_node_put(clkspec.np);
+ 			rc = 0;
+ 			goto err;
+ 		}
+ 		clk = of_clk_get_from_provider(&clkspec);
++		of_node_put(clkspec.np);
+ 		if (IS_ERR(clk)) {
+ 			if (PTR_ERR(clk) != -EPROBE_DEFER)
+ 				pr_warn("clk: couldn't get assigned clock %d for %pOF\n",
+@@ -93,10 +98,13 @@ static int __set_clk_rates(struct device_node *node, bool clk_supplier)
+ 				else
+ 					return rc;
+ 			}
+-			if (clkspec.np == node && !clk_supplier)
++			if (clkspec.np == node && !clk_supplier) {
++				of_node_put(clkspec.np);
+ 				return 0;
++			}
+ 
+ 			clk = of_clk_get_from_provider(&clkspec);
++			of_node_put(clkspec.np);
+ 			if (IS_ERR(clk)) {
+ 				if (PTR_ERR(clk) != -EPROBE_DEFER)
+ 					pr_warn("clk: couldn't get clock %d for %pOF\n",
+-- 
+2.39.0
 
-
-Pozdrawiam
-Adam Charachuta
