@@ -2,249 +2,376 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A50E682978
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Jan 2023 10:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8845A682AB9
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Jan 2023 11:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjAaJuZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 31 Jan 2023 04:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S231539AbjAaKmH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Jan 2023 05:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233095AbjAaJuS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Jan 2023 04:50:18 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AA41B6
-        for <linux-clk@vger.kernel.org>; Tue, 31 Jan 2023 01:50:17 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id j7so15424877vsl.11
-        for <linux-clk@vger.kernel.org>; Tue, 31 Jan 2023 01:50:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ay4JjzFOi8u8tMMqeo9ypRaHpCzMeD1s8ySg55sDfvA=;
-        b=X7qkWyQt8Nmpyd8tODNC6MVvJAs6pPWPg4+UGaJtcp92pV5yFejhXVMlk9N6Ne0O/x
-         sJDx+ymPit1ElxTDAPp2M2NaD+94yYbcjDeTJeHkBQndJoaPQzDoh/O0k5kga8a0/02c
-         rvzmD7VHZTbrwQPOdYeJNYWMApcfFEkMQ96vo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ay4JjzFOi8u8tMMqeo9ypRaHpCzMeD1s8ySg55sDfvA=;
-        b=1hfUcivvbD4Pg5JPtdHVypmLXIm8ZgqFMCDEusF4PrjdJtPZBCvdmSJ5ZePqb7ovL+
-         +BCV/oUjzGfS4SmlUSKw6NJ4ihV33ljiMUz3VAODMp8JMsDyBBU5T7f1bZeUvIbpxShX
-         qMYI7E+JA4T0blcEkgL7NjJGjey56iLf3Pcq3b7YRwkmQcLp7l7gM4vr1Urrx1m7BG+x
-         0MnHuQGvOmPKyZNuv9QvAtlq1sMZ7xjDZl3+NPSXODzchOVYVxKk5+06QQP1HGw/+KoB
-         jT86mQRRVRXs9WuUJp9T/Vk/aYzZNgTGCstJJ38RBZtWoAt4eRqIgo06C1Lnzw0Rm8Xn
-         gysQ==
-X-Gm-Message-State: AO0yUKVlGY+d0R7G2TUONpG/m5mYqQ6ECkH5mi82vFihDxhl0Yadi0sz
-        BHrBxaVp4Q5svv3jIhGR4NX8zrKufapOt8CkAFkTCA==
-X-Google-Smtp-Source: AK7set+/qcQFjgwbi+Ocj+LtBVuICC7AYNVeLlyhaPp038xPLhOSZqARwYUNLiyEVrFfSwlzmO4Suik/9e/bTguM2EY=
-X-Received: by 2002:a67:d294:0:b0:3ed:89c7:4bd2 with SMTP id
- z20-20020a67d294000000b003ed89c74bd2mr2766641vsi.26.1675158616078; Tue, 31
- Jan 2023 01:50:16 -0800 (PST)
+        with ESMTP id S231297AbjAaKmG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Jan 2023 05:42:06 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578AC34038;
+        Tue, 31 Jan 2023 02:42:04 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V5UTIm000912;
+        Tue, 31 Jan 2023 10:41:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iKkNf0L9heYRi4sfoswTm/mTkhsfIhxq0Gt1gSuru3E=;
+ b=YydTrergHA5KPR8ZL65UiZy9tcgMmHt7k2OaiTSLINi4b9fSyVQ4phoVKYe02bXQlk2y
+ XxXWUCKvVmAy8o+QBiMJO+YvZAU9xBPEIFjZjYVoHGjqRrWNjUr9dwi11Ms7H7wSQI/U
+ wnecH/6SxmqSi2Vp/mJOv4KVx1Bx2Q653XacYBp9E6zZAL8vkhd8IgukY8Sa180gP0zZ
+ y8hfapoXcX2anL2boTn/Q+MhpmmYYaHbzJZXhAHntYGNQ5KnKmhqJrysi6yO8sAIzcGl
+ tW4tLu2KSzEeATNcEThY/3ZV1XpywmpGp3P2z/Q2e7l2cmEXluUG+zgaKHc0G6SELyqF Bg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3neuwc8xv0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 10:41:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30VAfC2I007494
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 10:41:12 GMT
+Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 02:41:04 -0800
+Message-ID: <9d06de84-78cc-0d8b-87bf-004d4cedd598@quicinc.com>
+Date:   Tue, 31 Jan 2023 16:11:01 +0530
 MIME-Version: 1.0
-References: <20230118031509.29834-1-moudy.ho@mediatek.com> <20230118031509.29834-4-moudy.ho@mediatek.com>
-In-Reply-To: <20230118031509.29834-4-moudy.ho@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 31 Jan 2023 17:50:05 +0800
-Message-ID: <CAGXv+5Gid0xT=Ru0G3d-z+ED_wKWpGYSbhwiFXRv5jqJL0vC_A@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] clk: mediatek: remove MT8195 vppsys/0/1 simple_probe
-To:     Moudy Ho <moudy.ho@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V3 6/7] arm64: dts: qcom: Add ipq9574 SoC and AL02 board
+ support
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230130125528.11509-1-quic_devipriy@quicinc.com>
+ <20230130125528.11509-7-quic_devipriy@quicinc.com>
+ <a1171edc-f1f2-da95-b0b4-81e3f5f7935d@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <a1171edc-f1f2-da95-b0b4-81e3f5f7935d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: s2ppZM4fyezpoQlZEJM01tyft4FYLbaI
+X-Proofpoint-ORIG-GUID: s2ppZM4fyezpoQlZEJM01tyft4FYLbaI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_04,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 phishscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310092
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:16 AM Moudy Ho <moudy.ho@mediatek.com> wrote:
->
-> MT8195 VPPSYS0/1 will be probed by the compatible name in
-> the mtk-mmsys driver and then probe its own clock driver as
-> a platform driver.
->
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> ---
->  drivers/clk/mediatek/clk-mt8195-vpp0.c | 58 +++++++++++++++++++-------
->  drivers/clk/mediatek/clk-mt8195-vpp1.c | 58 +++++++++++++++++++-------
->  2 files changed, 86 insertions(+), 30 deletions(-)
->
-> diff --git a/drivers/clk/mediatek/clk-mt8195-vpp0.c b/drivers/clk/mediatek/clk-mt8195-vpp0.c
-> index bf2939c3a023..6d5800f69f6c 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-vpp0.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-vpp0.c
-> @@ -86,26 +86,54 @@ static const struct mtk_gate vpp0_clks[] = {
->         GATE_VPP0_2(CLK_VPP0_WARP1_MDP_DL_ASYNC, "vpp0_warp1_mdp_dl_async", "top_wpe_vpp", 3),
->  };
->
-> -static const struct mtk_clk_desc vpp0_desc = {
-> -       .clks = vpp0_clks,
-> -       .num_clks = ARRAY_SIZE(vpp0_clks),
-> -};
-> +static int clk_mt8195_vpp0_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct device_node *node = dev->parent->of_node;
-> +       struct clk_onecell_data *clk_data;
-
-mtk_alloc_clk_data() API changed a couple releases back. So:
-
-          struct clk_hw_onecell_data
-
-> +       int r;
->
-> -static const struct of_device_id of_match_clk_mt8195_vpp0[] = {
-> -       {
-> -               .compatible = "mediatek,mt8195-vppsys0",
-> -               .data = &vpp0_desc,
-> -       }, {
-> -               /* sentinel */
-> -       }
-> -};
-> +       clk_data = mtk_alloc_clk_data(CLK_VPP0_NR_CLK);
-> +       if (!clk_data)
-> +               return -ENOMEM;
-> +
-> +       r = mtk_clk_register_gates(node, vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
-
-API changed.
-
-> +       if (r)
-> +               goto free_vpp0_data;
-> +
-> +       r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-
-              of_clk_add_provider(node, of_clk_hw_onecell_get, clk_data);
-
-Same for the other driver.
 
 
-ChenYu
-
-> +       if (r)
-> +               goto unregister_gates;
-> +
-> +       platform_set_drvdata(pdev, clk_data);
-> +
-> +       return r;
-> +
-> +unregister_gates:
-> +       mtk_clk_unregister_gates(vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
-> +free_vpp0_data:
-> +       mtk_free_clk_data(clk_data);
-> +       return r;
-> +}
-> +
-> +static int clk_mt8195_vpp0_remove(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct device_node *node = dev->parent->of_node;
-> +       struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +
-> +       of_clk_del_provider(node);
-> +       mtk_clk_unregister_gates(vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
-> +       mtk_free_clk_data(clk_data);
-> +
-> +       return 0;
-> +}
->
->  static struct platform_driver clk_mt8195_vpp0_drv = {
-> -       .probe = mtk_clk_simple_probe,
-> -       .remove = mtk_clk_simple_remove,
-> +       .probe = clk_mt8195_vpp0_probe,
-> +       .remove = clk_mt8195_vpp0_remove,
->         .driver = {
->                 .name = "clk-mt8195-vpp0",
-> -               .of_match_table = of_match_clk_mt8195_vpp0,
->         },
->  };
->  builtin_platform_driver(clk_mt8195_vpp0_drv);
-> diff --git a/drivers/clk/mediatek/clk-mt8195-vpp1.c b/drivers/clk/mediatek/clk-mt8195-vpp1.c
-> index ffd52c762890..3b88c69e96c9 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-vpp1.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-vpp1.c
-> @@ -84,26 +84,54 @@ static const struct mtk_gate vpp1_clks[] = {
->         GATE_VPP1_1(CLK_VPP1_VPP_SPLIT_26M, "vpp1_vpp_split_26m", "clk26m", 26),
->  };
->
-> -static const struct mtk_clk_desc vpp1_desc = {
-> -       .clks = vpp1_clks,
-> -       .num_clks = ARRAY_SIZE(vpp1_clks),
-> -};
-> +static int clk_mt8195_vpp1_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct device_node *node = dev->parent->of_node;
-> +       struct clk_onecell_data *clk_data;
-> +       int r;
->
-> -static const struct of_device_id of_match_clk_mt8195_vpp1[] = {
-> -       {
-> -               .compatible = "mediatek,mt8195-vppsys1",
-> -               .data = &vpp1_desc,
-> -       }, {
-> -               /* sentinel */
-> -       }
-> -};
-> +       clk_data = mtk_alloc_clk_data(CLK_VPP1_NR_CLK);
-> +       if (!clk_data)
-> +               return -ENOMEM;
-> +
-> +       r = mtk_clk_register_gates(node, vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
-> +       if (r)
-> +               goto free_vpp1_data;
-> +
-> +       r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-> +       if (r)
-> +               goto unregister_gates;
-> +
-> +       platform_set_drvdata(pdev, clk_data);
-> +
-> +       return r;
-> +
-> +unregister_gates:
-> +       mtk_clk_unregister_gates(vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
-> +free_vpp1_data:
-> +       mtk_free_clk_data(clk_data);
-> +       return r;
-> +}
-> +
-> +static int clk_mt8195_vpp1_remove(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct device_node *node = dev->parent->of_node;
-> +       struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
-> +
-> +       of_clk_del_provider(node);
-> +       mtk_clk_unregister_gates(vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
-> +       mtk_free_clk_data(clk_data);
-> +
-> +       return 0;
-> +}
->
->  static struct platform_driver clk_mt8195_vpp1_drv = {
-> -       .probe = mtk_clk_simple_probe,
-> -       .remove = mtk_clk_simple_remove,
-> +       .probe = clk_mt8195_vpp1_probe,
-> +       .remove = clk_mt8195_vpp1_remove,
->         .driver = {
->                 .name = "clk-mt8195-vpp1",
-> -               .of_match_table = of_match_clk_mt8195_vpp1,
->         },
->  };
->  builtin_platform_driver(clk_mt8195_vpp1_drv);
-> --
-> 2.18.0
->
+On 1/31/2023 5:25 AM, Konrad Dybcio wrote:
+> 
+> 
+> On 30.01.2023 13:55, devi priya wrote:
+>> Add initial device tree support for Qualcomm IPQ9574 SoC
+>> and AL02 board
+>>
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> ---
+>>   Changes in V3:
+>>          - Updated the order of signed-offs
+>>
+>>   Changes in V2:
+>>          - Updated the node name - emmc_pins to sdc_default_state
+>>          - Moved the xo and sleep clock frequency to board DT
+>>          - Removed the pipe clock definitions
+>>          - Dropped clock frequency property for timer nodes
+>>          - Added qcom,ipq9574-sdhci compatible string
+>>          - Updated the copyright year to 2023
+>>          - Corrected the indentations
+>>
+>>   arch/arm64/boot/dts/qcom/Makefile            |   1 +
+>>   arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  78 +++++
+>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 285 +++++++++++++++++++
+>>   3 files changed, 364 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>>   create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>> index b0423ca3e79f..ff40e86181d4 100644
+>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
+>> +dtb-$(CONFIG_ARCH_QCOM) += ipq9574-al02-c7.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>> new file mode 100644
+>> index 000000000000..4aa06e4f63c7
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>> @@ -0,0 +1,78 @@
+>> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+>> +/*
+>> + * IPQ9574 AL02-C7 board device tree source
+>> + *
+>> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "ipq9574.dtsi"
+>> +
+>> +/ {
+>> +	model = "Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7";
+>> +	compatible = "qcom,ipq9574-ap-al02-c7", "qcom,ipq9574";
+>> +
+>> +	aliases {
+>> +		serial0 = &blsp1_uart2;
+>> +	};
+>> +
+>> +	chosen {
+>> +		stdout-path = "serial0:115200n8";
+>> +	};
+>> +};
+>> +
+>> +&blsp1_uart2 {
+>> +	pinctrl-0 = <&uart2_pins>;
+>> +	pinctrl-names = "default";
+>> +	status = "okay";
+>> +};
+>> +
+>> +&sdhc_1 {
+>> +	pinctrl-0 = <&sdc_default_state>;
+>> +	pinctrl-names = "default";
+>> +	status = "okay";
+>> +};
+>> +
+>> +&sleep_clk {
+>> +	clock-frequency = <32000>;
+>> +};
+>> +
+>> +&tlmm {
+>> +	sdc_default_state: sdc-default-state {
+>> +		clk-pins {
+>> +			pins = "gpio5";
+>> +			function = "sdc_clk";
+>> +			drive-strength = <8>;
+>> +			bias-disable;
+>> +		};
+>> +
+>> +		cmd-pins {
+>> +			pins = "gpio4";
+>> +			function = "sdc_cmd";
+>> +			drive-strength = <8>;
+>> +			bias-pull-up;
+>> +		};
+>> +
+>> +		data-pins {
+>> +			pins = "gpio0", "gpio1", "gpio2",
+>> +				"gpio3", "gpio6", "gpio7",
+>> +				"gpio8", "gpio9";
+> The second and third rows are still incorrectly indented.
+okay. will correct it.
+> 
+>> +			function = "sdc_data";
+>> +			drive-strength = <8>;
+>> +			bias-pull-up;
+>> +		};
+>> +
+>> +		rclk-pins {
+>> +			pins = "gpio10";
+>> +			function = "sdc_rclk";
+>> +			drive-strength = <8>;
+>> +			bias-pull-down;
+>> +		};
+>> +	};
+> 
+> [...]
+> 
+>> +	reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		tz_region: memory@4a600000 {
+> tz@
+> 
+Sure
+>> +			reg = <0x0 0x4a600000 0x0 0x400000>;
+>> +			no-map;
+>> +		};
+>> +	};
+>> +
+>> +	soc: soc@0 {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0 0 0xffffffff>;
+>> +		compatible = "simple-bus";
+> compatible first, please
+> 
+Sure, okay
+>> +
+>> +		tlmm: pinctrl@1000000 {
+>> +			compatible = "qcom,ipq9574-tlmm";
+>> +			reg = <0x01000000 0x300000>;
+>> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
+>> +			gpio-controller;
+>> +			#gpio-cells = <2>;
+>> +			gpio-ranges = <&tlmm 0 0 65>;
+>> +			gpio-reserved-ranges = <59 1>;
+> It's reserved in the pinctrl driver, no need to do it again here.
+> 
+Okay, got it.
+> 
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +
+>> +			uart2_pins: uart2-state {
+>> +				pins = "gpio34", "gpio35";
+> 
+> [...]
+> 
+>> +
+>> +		intc: interrupt-controller@b000000 {
+>> +			compatible = "qcom,msm-qgic2";
+>> +			reg = <0x0b000000 0x1000>,  /* GICD */
+>> +			      <0x0b002000 0x1000>,  /* GICC */
+>> +			      <0x0b001000 0x1000>,  /* GICH */
+>> +			      <0x0b004000 0x1000>;  /* GICV */
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <3>;
+>> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +			ranges = <0 0x0b00c000 0x3000>;
+>> +
+>> +			v2m0: v2m@0 {
+>> +				compatible = "arm,gic-v2m-frame";
+>> +				reg = <0x0 0xffd>;
+>> +				msi-controller;
+>> +			};
+>> +
+>> +			v2m1: v2m@1 {
+>> +				compatible = "arm,gic-v2m-frame";
+>> +				reg = <0x00001000 0xffd>;
+> Unit address must match the address part of the reg property.
+> 
+Okay
+>> +				msi-controller;
+>> +			};
+>> +
+>> +			v2m2: v2m@2 {
+> And here.
+> 
+Okay
+> Konrad
+>> +				compatible = "arm,gic-v2m-frame";
+>> +				reg = <0x00002000 0xffd>;
+>> +				msi-controller;
+>> +			};
+>> +		};
+>> +
+>> +		timer@b120000 {
+>> +			compatible = "arm,armv7-timer-mem";
+>> +			reg = <0x0b120000 0x1000>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges;
+>> +
+>> +			frame@b120000 {
+>> +				reg = <0x0b121000 0x1000>,
+>> +				      <0x0b122000 0x1000>;
+>> +				frame-number = <0>;
+>> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>> +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+>> +			};
+>> +
+>> +			frame@b123000 {
+>> +				reg = <0x0b123000 0x1000>;
+>> +				frame-number = <1>;
+>> +				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b124000 {
+>> +				reg = <0x0b124000 0x1000>;
+>> +				frame-number = <2>;
+>> +				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b125000 {
+>> +				reg = <0x0b125000 0x1000>;
+>> +				frame-number = <3>;
+>> +				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b126000 {
+>> +				reg = <0x0b126000 0x1000>;
+>> +				frame-number = <4>;
+>> +				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b127000 {
+>> +				reg = <0x0b127000 0x1000>;
+>> +				frame-number = <5>;
+>> +				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@b128000 {
+>> +				reg = <0x0b128000 0x1000>;
+>> +				frame-number = <6>;
+>> +				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	timer {
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+>> +	};
+>> +};
+Best Regards,
+Devi Priya
