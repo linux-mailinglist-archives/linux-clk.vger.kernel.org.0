@@ -2,30 +2,30 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040D668279B
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Jan 2023 09:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 605226827A0
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Jan 2023 09:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjAaIxa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 31 Jan 2023 03:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S231708AbjAaIxp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Jan 2023 03:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjAaIxE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Jan 2023 03:53:04 -0500
+        with ESMTP id S231896AbjAaIxW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Jan 2023 03:53:22 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A06A4DCD2
-        for <linux-clk@vger.kernel.org>; Tue, 31 Jan 2023 00:49:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60CE4DCDA
+        for <linux-clk@vger.kernel.org>; Tue, 31 Jan 2023 00:49:06 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1pMmHw-0003vs-Es; Tue, 31 Jan 2023 09:46:48 +0100
+        id 1pMmHv-0003sD-5O; Tue, 31 Jan 2023 09:46:47 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1pMmHw-001eMQ-36; Tue, 31 Jan 2023 09:46:47 +0100
+        id 1pMmHv-001eLt-57; Tue, 31 Jan 2023 09:46:46 +0100
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1pMmHr-002ybM-9p; Tue, 31 Jan 2023 09:46:43 +0100
+        id 1pMmHr-002ybV-AO; Tue, 31 Jan 2023 09:46:43 +0100
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -41,9 +41,9 @@ Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         Russell King <linux@armlinux.org.uk>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 17/19] ARM: dts: imx6ul: set enet_clk_ref to CLK_ENETx_REF_SEL
-Date:   Tue, 31 Jan 2023 09:46:40 +0100
-Message-Id: <20230131084642.709385-18-o.rempel@pengutronix.de>
+Subject: [PATCH v3 18/19] ARM: mach-imx: imx6ul: remove not optional ethernet refclock overwrite
+Date:   Tue, 31 Jan 2023 09:46:41 +0100
+Message-Id: <20230131084642.709385-19-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230131084642.709385-1-o.rempel@pengutronix.de>
 References: <20230131084642.709385-1-o.rempel@pengutronix.de>
@@ -62,53 +62,59 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-IMX6UL_CLK_ENETx_REF is behind of CLK_ENETx_REF_SEL:
-
-FEC MAC <---------- CLK_ENETx_REF_SEL <--------- CLK_ENETx_REF
-		       \
-		        ^------<-> CLK_ENETx_REF_PAD
-
-We should point to the clock selector instead. So, we will be able to
-use external clock source from CLK_ENETx_REF_PAD as well.
-
-At same time, remove enet_out clk. It is using always the same clock as
-enet_clk_ref and do not help to solve any challenges of this HW.
+Ethernet refclock direction is board specific and should be configurable
+by devicetree. In fact there are board not working with this defaults,
+which will be fixed by separate patch.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm/boot/dts/imx6ul.dtsi | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ arch/arm/mach-imx/mach-imx6ul.c | 20 --------------------
+ 1 file changed, 20 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-index 2b5996395701..fa9afedb6549 100644
---- a/arch/arm/boot/dts/imx6ul.dtsi
-+++ b/arch/arm/boot/dts/imx6ul.dtsi
-@@ -532,10 +532,9 @@ fec2: ethernet@20b4000 {
- 				clocks = <&clks IMX6UL_CLK_ENET>,
- 					 <&clks IMX6UL_CLK_ENET_AHB>,
- 					 <&clks IMX6UL_CLK_ENET_PTP>,
--					 <&clks IMX6UL_CLK_ENET2_REF_125M>,
--					 <&clks IMX6UL_CLK_ENET2_REF_125M>;
-+					 <&clks IMX6UL_CLK_ENET2_REF_SEL>;
- 				clock-names = "ipg", "ahb", "ptp",
--					      "enet_clk_ref", "enet_out";
-+					      "enet_clk_ref";
- 				fsl,num-tx-queues = <1>;
- 				fsl,num-rx-queues = <1>;
- 				fsl,stop-mode = <&gpr 0x10 4>;
-@@ -880,10 +879,9 @@ fec1: ethernet@2188000 {
- 				clocks = <&clks IMX6UL_CLK_ENET>,
- 					 <&clks IMX6UL_CLK_ENET_AHB>,
- 					 <&clks IMX6UL_CLK_ENET_PTP>,
--					 <&clks IMX6UL_CLK_ENET_REF>,
--					 <&clks IMX6UL_CLK_ENET_REF>;
-+					 <&clks IMX6UL_CLK_ENET1_REF_SEL>;
- 				clock-names = "ipg", "ahb", "ptp",
--					      "enet_clk_ref", "enet_out";
-+					      "enet_clk_ref";
- 				fsl,num-tx-queues = <1>;
- 				fsl,num-rx-queues = <1>;
- 				fsl,stop-mode = <&gpr 0x10 3>;
+diff --git a/arch/arm/mach-imx/mach-imx6ul.c b/arch/arm/mach-imx/mach-imx6ul.c
+index 35e81201cb5d..9208a2d6a9da 100644
+--- a/arch/arm/mach-imx/mach-imx6ul.c
++++ b/arch/arm/mach-imx/mach-imx6ul.c
+@@ -4,8 +4,6 @@
+  */
+ #include <linux/irqchip.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/mfd/syscon/imx6q-iomuxc-gpr.h>
+-#include <linux/micrel_phy.h>
+ #include <linux/of_platform.h>
+ #include <linux/phy.h>
+ #include <linux/regmap.h>
+@@ -16,30 +14,12 @@
+ #include "cpuidle.h"
+ #include "hardware.h"
+ 
+-static void __init imx6ul_enet_clk_init(void)
+-{
+-	struct regmap *gpr;
+-
+-	gpr = syscon_regmap_lookup_by_compatible("fsl,imx6ul-iomuxc-gpr");
+-	if (!IS_ERR(gpr))
+-		regmap_update_bits(gpr, IOMUXC_GPR1, IMX6UL_GPR1_ENET_CLK_DIR,
+-				   IMX6UL_GPR1_ENET_CLK_OUTPUT);
+-	else
+-		pr_err("failed to find fsl,imx6ul-iomux-gpr regmap\n");
+-}
+-
+-static inline void imx6ul_enet_init(void)
+-{
+-	imx6ul_enet_clk_init();
+-}
+-
+ static void __init imx6ul_init_machine(void)
+ {
+ 	imx_print_silicon_rev(cpu_is_imx6ull() ? "i.MX6ULL" : "i.MX6UL",
+ 		imx_get_soc_revision());
+ 
+ 	of_platform_default_populate(NULL, NULL, NULL);
+-	imx6ul_enet_init();
+ 	imx_anatop_init();
+ 	imx6ul_pm_init();
+ }
 -- 
 2.30.2
 
