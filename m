@@ -2,139 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BFC690300
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Feb 2023 10:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E8869038F
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Feb 2023 10:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjBIJOQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Feb 2023 04:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S230071AbjBIJZi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Feb 2023 04:25:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjBIJOP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Feb 2023 04:14:15 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023649E;
-        Thu,  9 Feb 2023 01:14:14 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FA9966020B9;
-        Thu,  9 Feb 2023 09:14:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675934053;
-        bh=X5aykjwR6Noi8jAOHiqv2GSFOIbKzmDiWJfxsu4VbMg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FkgnIEjwSVQE5ec4W06abDhr1CC/YzTFVarvXPYUPv7D1zgXwHOdWwPSCspFnzugx
-         2VBw66rpynAQuskqFhNrPQaVMtIrP9oKKbJ4U75nvZIVmJK/zB3rFy5JKdp4v2NogA
-         R3+fe3ywtA0F2km85iyHw7Udf2aD8o7JYTvQrB3NnsCNLE5CaogZHHm8hpA19w7+2N
-         ryKevvAcea6/xFzwuN19ELDukLFQZsa1I7JvuGqSonY3icS+MH0pHogm2BuZNFDNgj
-         iXKxjp9OQUWx+7eQp/Gr7mhjYtRCv6avpsyinnH0ar6LoxuS1ziPbTtXDho8KdWh3m
-         /fBHZTZsz15UQ==
-Message-ID: <62a86fd9-5770-c32c-ad65-467940cc3ee0@collabora.com>
-Date:   Thu, 9 Feb 2023 10:14:09 +0100
+        with ESMTP id S230122AbjBIJZd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Feb 2023 04:25:33 -0500
+Received: from mr85p00im-ztdg06011201.me.com (mr85p00im-ztdg06011201.me.com [17.58.23.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B506C3A879
+        for <linux-clk@vger.kernel.org>; Thu,  9 Feb 2023 01:25:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1675934270; bh=7pXasyRfKVF9IUAegxYhrYLSu6imwBLW9zNCQeKHD28=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=gQAkvJMpUts7a8vDkqQd8GpQeoy7dmn5CdJoIVWcMt2TI05q7hZtVu7ymLgwmxtPW
+         jYrQFag7YJqsQna1g/p3iooJtr6pIu9D+CFDfBPNJXscL12udNk6LMru2QFpGyaTyB
+         OanYyBAZ//EDDKLCQD23RWvAPalvEdZuiu0q+SIgSG9blEkG85+9vQjn9glf8aFVCD
+         7d4uXJyZe8rGsZNMz2KWBKkIIYmcTSm3MYTmK8yRrsHhwhhb58rXPelT3/mb08wHh5
+         4KanEtSETSy7fxWuJTtssk2AecLCWWGR24r1yl8P/wTWE10lPUIe8bWX5+WN+eCboR
+         xwIJb9qWOYBbA==
+Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06011201.me.com (Postfix) with ESMTPSA id B9FD79622C0;
+        Thu,  9 Feb 2023 09:17:49 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, Alain Volmat <avolmat@me.com>
+Subject: [PATCH 00/11] ARM: removal of STiH415/STiH416 remainings bits
+Date:   Thu,  9 Feb 2023 10:16:48 +0100
+Message-Id: <20230209091659.1409-1-avolmat@me.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 35/45] clk: mediatek: Split MT8195 clock drivers and
- allow module build
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
- <20230206152928.918562-36-angelogioacchino.delregno@collabora.com>
- <CAGXv+5HTP0cLGEQ+qkAt8nsOp5DqCOgPyAOJ66fF91SKX=hZvw@mail.gmail.com>
- <45f8e284-8d56-898b-0897-94c576e09c2c@collabora.com>
- <CAGXv+5FmmDx0Q_d17hv1gu+drfD12-vtgPoTpefExHGvdkcQyA@mail.gmail.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5FmmDx0Q_d17hv1gu+drfD12-vtgPoTpefExHGvdkcQyA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: C2vTVmPR7z1gInH5yviJ2h-bYafnNbiR
+X-Proofpoint-GUID: C2vTVmPR7z1gInH5yviJ2h-bYafnNbiR
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2302090088
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 09/02/23 04:46, Chen-Yu Tsai ha scritto:
-> On Wed, Feb 8, 2023 at 5:00 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 08/02/23 09:28, Chen-Yu Tsai ha scritto:
->>> On Mon, Feb 6, 2023 at 11:30 PM AngeloGioacchino Del Regno
->>> <angelogioacchino.delregno@collabora.com> wrote:
->>>>
->>>> MT8195 clock drivers were encapsulated in one single (and big) Kconfig
->>>> option: there's no reason to do that, as it is totally unnecessary to
->>>> build in all or none of them.
->>>>
->>>> Split them out: keep boot-critical clocks as bool and allow choosing
->>>> non critical clocks as tristate.
->>>
->>> The power domain controller references vppsys*, vdecsys*, vdosys*, wpesys,
->>> imgsys and camsys. I'd argue that this makes these clock drivers
->>> semi-boot-critical. Maybe mfgcfg as well when we add the GPU?
->>
->> You don't need to power on additional power domains if you want to load modules
->> from a ramdisk! :-)
-> 
-> Right.
-> 
->> Besides, you caught me: mtk-pm-domains will be my next target after clocks...
->> I don't like how it behaves in regard to probe deferrals. Specifically,
->> I dislike the fact that you either register *all domains* or *none at all*
->> (unless instantiating two different driver instances and that's ugly).
-> 
-> I don't really like it either, but is it possible to split probe deferrals?
-> I mean, if you skip a couple power domains because the clocks aren't
-> available, how do you come back to them?
-> 
+Most of code in order to support STiH415 and STiH416 have already
+been removed from the kernel in 2016, however few bits are still
+remainings.
+This serie removes the last pieces of support for STiH415, STiH416
+and STiD127.
 
-Honestly, I have no clue right now - I didn't even think about any possible
-implementation for now... but let's see what I can come up with whenever I
-get a chance to actually take a look.
+Alain Volmat (11):
+  Documentation: arm: remove stih415/stih416 related entries
+  ARM: sti: removal of stih415/stih416 related entries
+  irqchip/st: remove stih415/stih416 and stid127 platforms support
+  dt-bindings: irqchip: sti: remove stih415/stih416 and stid127
+  dt-bindings: arm: sti: remove bindings for stih415 and stih416
+  thermal/drivers/st: remove syscfg based driver
+  net: ethernet: stmmac: dwmac-sti: remove stih415/stih416/stid127
+  dt-bindings: net: dwmac: sti: remove stih415/sti416/stid127
+  dt-bindings: reset: remove stih415/stih416 reset bindings
+  dt-bindings: clock: remove stih416 bindings
+  ARM: debug: removal of STiH415/STiH416 related debug uart
 
-Surely not before finishing work on this series, though.
+ Documentation/arm/index.rst                   |   2 -
+ Documentation/arm/sti/overview.rst            |  10 +-
+ Documentation/arm/sti/stih415-overview.rst    |  14 --
+ Documentation/arm/sti/stih416-overview.rst    |  13 --
+ .../devicetree/bindings/arm/sti.yaml          |   2 -
+ .../st,sti-irq-syscfg.txt                     |   9 +-
+ .../devicetree/bindings/net/sti-dwmac.txt     |   3 +-
+ arch/arm/Kconfig.debug                        |  28 ---
+ arch/arm/mach-sti/Kconfig                     |  20 +-
+ arch/arm/mach-sti/board-dt.c                  |   2 -
+ drivers/irqchip/irq-st.c                      |  15 --
+ .../net/ethernet/stmicro/stmmac/dwmac-sti.c   |  60 +-----
+ drivers/thermal/st/Kconfig                    |   4 -
+ drivers/thermal/st/Makefile                   |   1 -
+ drivers/thermal/st/st_thermal_syscfg.c        | 174 ------------------
+ include/dt-bindings/clock/stih416-clks.h      |  17 --
+ include/dt-bindings/reset/stih415-resets.h    |  28 ---
+ include/dt-bindings/reset/stih416-resets.h    |  52 ------
+ 18 files changed, 8 insertions(+), 446 deletions(-)
+ delete mode 100644 Documentation/arm/sti/stih415-overview.rst
+ delete mode 100644 Documentation/arm/sti/stih416-overview.rst
+ delete mode 100644 drivers/thermal/st/st_thermal_syscfg.c
+ delete mode 100644 include/dt-bindings/clock/stih416-clks.h
+ delete mode 100644 include/dt-bindings/reset/stih415-resets.h
+ delete mode 100644 include/dt-bindings/reset/stih416-resets.h
 
-> And IIRC for a clock provider that is _not_ marked as disabled in the DT,
-> trying to fetch a clock from it would just give -EPROBEDEFER until
-> the provider is registered.
-> 
-
-Yes it will give a probe deferral. An internal probe retry mechanism on the
-power domains that couldn't probe would be one of the possible options.
-
-Actually, we have almost endless options on how to resolve that power domains
-issue, so it's not worrying me at all!
-
-Cheers,
-Angelo
-
-> ChenYu
-> 
->>>
->>> They should be bundled together at the very least. The power domain
->>> controller not probing disables all display and multimedia capabilities.
->>>
->>> Also wondering if we should have "default COMMON_CLK_MT8195" ...
->>>
->>> I suppose the same questions apply to other SoCs.
->>>
->>> ChenYu
->>
->>
+-- 
+2.34.1
 
