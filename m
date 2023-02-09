@@ -2,32 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0491690360
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Feb 2023 10:22:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E536903AC
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Feb 2023 10:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjBIJUd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Feb 2023 04:20:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53842 "EHLO
+        id S230138AbjBIJaB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Feb 2023 04:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjBIJTp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Feb 2023 04:19:45 -0500
-Received: from mr85p00im-zteg06021501.me.com (mr85p00im-zteg06021501.me.com [17.58.23.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD388611E3
-        for <linux-clk@vger.kernel.org>; Thu,  9 Feb 2023 01:19:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1675934358; bh=SZhlB5Amphohnu89nA8T+9EvfjDSfEbmKX2qUghxvcs=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=o/NxLQ9PU1l9X2sTMiXYxKhsPVmuzHGBO9PUsOvwhybe6UaP3w5cBwtG4Zdsj1UEh
-         N95VLTGsgxOg5d+OLa1AF9ChzM4EYIltiU99YPlgqCcEpojXv2bE3I3sXw9N2VlXkx
-         lEvu2MqlCqSNulpnjZvUm8HBJW1R5k2gKvmTSVaDOXNn/K2FWUqCaRpbIeihtVlAVc
-         bdEoU4cx3ZZutCWfUme4wy3t5yKPE8MlpWC+/KKeVimmtCzf9Q37gr2Bp5fHSZYWbb
-         Pg/W84KNZoKWpUAlpaKOmP/kU+Aih71SROAeduaqG184O+t7TI5E+jh/RqI/z9W+fc
-         WdZHNkF4+XPCA==
-Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-        by mr85p00im-zteg06021501.me.com (Postfix) with ESMTPSA id 255E927945ED;
-        Thu,  9 Feb 2023 09:19:18 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229630AbjBIJaA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Feb 2023 04:30:00 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9255EFA9
+        for <linux-clk@vger.kernel.org>; Thu,  9 Feb 2023 01:29:59 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id r2so1101036wrv.7
+        for <linux-clk@vger.kernel.org>; Thu, 09 Feb 2023 01:29:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gCVLv0yCFVHZfvArLek6WTlYqONgG0fn0UVa0wLiFeo=;
+        b=GtP1PpX5UFqxDd7fPSgM5FnQpTMBGKkFEbKq5qbBynITNJS4wr+JnNZWzmrK8m0s4w
+         /DWtyViy1Erx2yglIEirlH6UWPX5Moyrlx/IomcAZ0yJqghT3OzBMzOzBYOlBxSf+pvp
+         EBzCCR5s+uSzYRU73CVf9romeOkS1PZN4viE/W0fhpXw0vyfXhwbFrFY1x3zYcGxrJfp
+         jieJwlK2SkWAShdzpDuOOFh3g/J/s8bqIxtc+FWTZc9QibfZPepvhZT+djq96EtQzXXJ
+         cbMd9ZiesSzGMpAmR10rX4YxWK4PnmUCp5EWoIQxd8cocesTFFIDT1KMy02+tSd9TG3Y
+         jWlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gCVLv0yCFVHZfvArLek6WTlYqONgG0fn0UVa0wLiFeo=;
+        b=fbSh2gkW//b8B/0ZwcC9Kf6Nqdvjn0Q4r2VKdO7ly0p2iq8aZpuUNdtGPZitTAHP3y
+         inQmgH/MwfXFD06SCdwTz7vBJTzu4Gml5b75vmqSfwrDoy/fDfuJ7uuTjTFk+na8ceuT
+         IQhYpNrgA+MkZvvRQvoB4QhRUF+TL2nQb0uxYi9yAYpIv9+owHa9v5CM9t57IeQba3Re
+         4qHgERb/ktQn4zrlO/bOQWVMztMRgqmbYZZGz8NSbfXI/+JUF+/FGq6eI9HirJe8HkPK
+         nzhi4ZsnG+IRTd5Mtc64HbADJYLkKN4yYZmQBCHyzM3M+nUaDVxJhjlw/88glg5I+aY/
+         bHrA==
+X-Gm-Message-State: AO0yUKUiezH4h7uFz7sJG3z7wLomWaG5zAT+YvEBZnnBK4fOK2E4nkCg
+        OMFcL8l1ByMWIa1/y9+FSe5S/g==
+X-Google-Smtp-Source: AK7set9AVtfTdH8bY245wbUqhbQU9zpYNOboLM+wXyB1lN7SZsadOztEe86bQgjrZoBDxmIebpdyAQ==
+X-Received: by 2002:adf:ecc1:0:b0:2c5:3d7d:8662 with SMTP id s1-20020adfecc1000000b002c53d7d8662mr616932wro.58.1675934997655;
+        Thu, 09 Feb 2023 01:29:57 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i3-20020adffc03000000b002c53d69a8easm337100wrr.92.2023.02.09.01.29.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 01:29:57 -0800 (PST)
+Message-ID: <8cf0cfac-2998-39aa-e5e1-7b674d13d2cb@linaro.org>
+Date:   Thu, 9 Feb 2023 10:29:53 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 04/11] dt-bindings: irqchip: sti: remove stih415/stih416
+ and stid127
+Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -52,119 +83,30 @@ Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, Alain Volmat <avolmat@me.com>
-Subject: [PATCH 11/11] ARM: debug: removal of STiH415/STiH416 related debug uart
-Date:   Thu,  9 Feb 2023 10:16:59 +0100
-Message-Id: <20230209091659.1409-12-avolmat@me.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230209091659.1409-1-avolmat@me.com>
+        linux-clk@vger.kernel.org
 References: <20230209091659.1409-1-avolmat@me.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 8Huc_KYpmbvx0eZVYoyHvKSEhimig7mi
-X-Proofpoint-ORIG-GUID: 8Huc_KYpmbvx0eZVYoyHvKSEhimig7mi
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
- =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 spamscore=0
- clxscore=1015 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2302090088
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+ <20230209091659.1409-5-avolmat@me.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230209091659.1409-5-avolmat@me.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Remove the entries related to the debug uart addresses for
-platforms STiH415 and STiH416 which are no more supported.
+On 09/02/2023 10:16, Alain Volmat wrote:
+> Remove bindings for the stih415/stih416/stid127 since they are
+> not supported within the kernel anymore.
+> 
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- arch/arm/Kconfig.debug | 28 ----------------------------
- 1 file changed, 28 deletions(-)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index c345775f035b..e7307eeb2abb 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -1205,26 +1205,6 @@ choice
- 		  Say Y here if you want kernel low-level debugging support
- 		  on ST SPEAr13xx based platforms.
- 
--	config DEBUG_STIH41X_ASC2
--		bool "Use StiH415/416 ASC2 UART for low-level debug"
--		depends on ARCH_STI
--		help
--		  Say Y here if you want kernel low-level debugging support
--		  on STiH415/416 based platforms like b2000, which has
--		  default UART wired up to ASC2.
--
--		  If unsure, say N.
--
--	config DEBUG_STIH41X_SBC_ASC1
--		bool "Use StiH415/416 SBC ASC1 UART for low-level debug"
--		depends on ARCH_STI
--		help
--		  Say Y here if you want kernel low-level debugging support
--		  on STiH415/416 based platforms like b2020. which has
--		  default UART wired up to SBC ASC1.
--
--		  If unsure, say N.
--
- 	config DEBUG_STIH418_SBC_ASC0
- 		bool "Use StiH418 SBC ASC0 UART for low-level debug"
- 		depends on ARCH_STI
-@@ -1597,8 +1577,6 @@ config DEBUG_LL_INCLUDE
- 	default "debug/renesas-scif.S" if DEBUG_RMOBILE_SCIFA4
- 	default "debug/s3c24xx.S" if DEBUG_S3C24XX_UART || DEBUG_S3C64XX_UART
- 	default "debug/s5pv210.S" if DEBUG_S5PV210_UART
--	default "debug/sti.S" if DEBUG_STIH41X_ASC2
--	default "debug/sti.S" if DEBUG_STIH41X_SBC_ASC1
- 	default "debug/sti.S" if DEBUG_STIH418_SBC_ASC0
- 	default "debug/stm32.S" if DEBUG_STM32_UART
- 	default "debug/tegra.S" if DEBUG_TEGRA_UART
-@@ -1728,9 +1706,7 @@ config DEBUG_UART_PHYS
- 	default 0xfc00c000 if DEBUG_AT91_SAMA5D4_USART3
- 	default 0xfcb00000 if DEBUG_HI3620_UART
- 	default 0xfd883000 if DEBUG_ALPINE_UART0
--	default 0xfe531000 if DEBUG_STIH41X_SBC_ASC1
- 	default 0xfe800000 if ARCH_IOP32X
--	default 0xfed32000 if DEBUG_STIH41X_ASC2
- 	default 0xff690000 if DEBUG_RK32_UART2
- 	default 0xffc02000 if DEBUG_SOCFPGA_UART0
- 	default 0xffc02100 if DEBUG_SOCFPGA_ARRIA10_UART1
-@@ -1759,7 +1735,6 @@ config DEBUG_UART_PHYS
- 		DEBUG_BCM63XX_UART || DEBUG_ASM9260_UART || \
- 		DEBUG_DIGICOLOR_UA0 || \
- 		DEBUG_AT91_UART || DEBUG_STM32_UART || \
--		DEBUG_STIH41X_ASC2 || DEBUG_STIH41X_SBC_ASC1 || \
- 		DEBUG_STIH418_SBC_ASC0
- 
- config DEBUG_UART_VIRT
-@@ -1827,9 +1802,7 @@ config DEBUG_UART_VIRT
- 	default 0xfcfe8600 if DEBUG_BCM63XX_UART
- 	default 0xfd000000 if DEBUG_SPEAR3XX || DEBUG_SPEAR13XX
- 	default 0xfd064200 if DEBUG_AT91_LAN966_FLEXCOM
--	default 0xfd531000 if DEBUG_STIH41X_SBC_ASC1
- 	default 0xfd883000 if DEBUG_ALPINE_UART0
--	default 0xfdd32000 if DEBUG_STIH41X_ASC2
- 	default 0xfe010000 if STM32MP1_DEBUG_UART
- 	default 0xfe017000 if DEBUG_MMP_UART2
- 	default 0xfe018000 if DEBUG_MMP_UART3
-@@ -1871,7 +1844,6 @@ config DEBUG_UART_VIRT
- 		DEBUG_BCM63XX_UART || DEBUG_ASM9260_UART || \
- 		DEBUG_DIGICOLOR_UA0 || \
- 		DEBUG_AT91_UART || DEBUG_STM32_UART || \
--		DEBUG_STIH41X_ASC2 || DEBUG_STIH41X_SBC_ASC1 || \
- 		DEBUG_STIH418_SBC_ASC0
- 
- config DEBUG_UART_8250_SHIFT
--- 
-2.34.1
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
