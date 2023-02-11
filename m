@@ -2,95 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA60692C49
-	for <lists+linux-clk@lfdr.de>; Sat, 11 Feb 2023 01:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AC9692ED0
+	for <lists+linux-clk@lfdr.de>; Sat, 11 Feb 2023 07:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBKAwm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 10 Feb 2023 19:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S229625AbjBKGkC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 11 Feb 2023 01:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjBKAwm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 10 Feb 2023 19:52:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB567E8C0;
-        Fri, 10 Feb 2023 16:52:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 075DCB82657;
-        Sat, 11 Feb 2023 00:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A137C433D2;
-        Sat, 11 Feb 2023 00:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676076758;
-        bh=D49sgUgNLNWlzLq20NRbDWd+naxD5xg3/gh6XeOqQdQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ezIYBNWxvGlxjgjxs6/gVS9z7elFP9vZFoz9LoYnRMQhJHmBjmp4XbP+um4OtooER
-         obAOz7AYif362RhprGvM2PUwT0ik2CCn4ebZ6WG48xGYbDu1FX1Gko8n/ISXVhxXU8
-         4aW49heEjAvg1ubW2yvuUcT1PBS8R3INHp3SLHRyxjsIBL9SaB9PD2ZzAxwpMMyC92
-         2HrNMn83EkZ5tPsqyvNri1XT40YQfGEn4jcoiocftUM+FZpmQlKSzxOpv3j0sFKiCP
-         oh8wUqsfsD9fl0y2FoqRVxCmOiikYKTOASRYVz8ue2ENW3C+CqTRukg3H1iDLAkhu+
-         jMnwZLQjsQx6g==
-Message-ID: <47e7fa4c103d08374d071fdf6de3b8ca.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230131160829.23369-2-ansuelsmth@gmail.com>
-References: <20230131160829.23369-1-ansuelsmth@gmail.com> <20230131160829.23369-2-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 2/2] clk: gate: Add missing fw_name for clk_gate_register_test_parent_data_legacy
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
+        with ESMTP id S229647AbjBKGjw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 11 Feb 2023 01:39:52 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0EF35B1
+        for <linux-clk@vger.kernel.org>; Fri, 10 Feb 2023 22:39:50 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id cz14so6249732oib.12
+        for <linux-clk@vger.kernel.org>; Fri, 10 Feb 2023 22:39:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOL/t5qBo5/69OTBXU9K1Tb25sSUsXIonQCXIzPu+54=;
+        b=tHzsDq4HNF/rGckcDAHo6fj26lDoOoe8KuraYxDcWmx6Ab6WvmFZNUpMBfyQiBvqgI
+         btoJcI59TQYSEby+Gk2LMtpPuYRtCCTyxoAwIEFrHLQYqOWlRBjSBY/JpZPDgVWVm/Gx
+         bU9nioRCt9gDLYDPfdFzAVX8za0DNIsaDYU1T/wVrbTpaAeVEcZXDu6FzlKZgE+ONwfz
+         Pb1gwRd/I6CPVImHkEIyt/+J8QRcvHsXKZ/2NNStdJMfOitEAq46X8PYgw3ERHh0n3KB
+         jiD+fo6MciNYEau+57gvTTE6VfzQ8mRs099+rIlIuDXN7U2x51xcAivUl+qhuMhWx5u5
+         59pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zOL/t5qBo5/69OTBXU9K1Tb25sSUsXIonQCXIzPu+54=;
+        b=u+AKcCcDTTgFCJ7nB+o7Q0oZmdrnvx3N692tHSOrljdlP9IUnYI+VRNwTaevsJEYmu
+         CN/8Jhb0+vLQHG8758nijMOhhD6gVJLtI08G0abeX+L9pbz8W/rOeZpQ0/U85NhPwG6F
+         M90Zm9dnYXyBjBiNQX+MY1Fx7xPrHanXYQZsnVvqm2XGrYNSDOiuRbH8LSyXUAqhx/3l
+         kUV7xSH9JkOtzv8Yg6Rv7hWhBFZtMKCma+Iq3T1pYEZxu/uloboDG7buUubBiO3p5Ru1
+         f9gLV7BYWwNnDoiZikpiL8RkIagWfT6IMYvb61j9D0kmPcMvMq9jsI9C3SQf7hrRpbSJ
+         pG0w==
+X-Gm-Message-State: AO0yUKVtquGpYgx0gRABdyThADtLIZrqG9KjjeoovZRp2PipbovTuo5j
+        2sdC/bCJPMW9mf0q3xirT9QVdA==
+X-Google-Smtp-Source: AK7set+HnpNlRcQyXbCbbLqOkb0wDhIY0ti/vlL9ybU+Qhg2C9bTqXY/4LfABv+YVA51snNn1EpSTg==
+X-Received: by 2002:a05:6808:b13:b0:35e:d30c:e918 with SMTP id s19-20020a0568080b1300b0035ed30ce918mr8027850oij.39.1676097589646;
+        Fri, 10 Feb 2023 22:39:49 -0800 (PST)
+Received: from localhost ([136.49.140.41])
+        by smtp.gmail.com with ESMTPSA id w8-20020aca6208000000b0037832f60518sm2977541oib.14.2023.02.10.22.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Feb 2023 22:39:49 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     David Virag <virag.david003@gmail.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 10 Feb 2023 16:52:36 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] clk: samsung: exynos850: Add missing clocks for PM
+Date:   Sat, 11 Feb 2023 00:40:00 -0600
+Message-Id: <20230211064006.14981-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Christian Marangi (2023-01-31 08:08:29)
-> Fix warning for missing .fw_name in parent_data based on names.
-> It's wrong to define only .name since clk core expect always .fw_name to
-> be defined.
->=20
-> Reported-by: kernel test robot <oliver.sang@intel.com>
+As a part of preparation for PM enablement in Exynos850 clock driver,
+this patch series implements CMU_G3D, and also main gate clocks for AUD
+and HSI CMUs. The series brings corresponding changes to bindings, the
+driver and SoC dts file.
 
-What was the report?
+Sam Protsenko (6):
+  dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
+  dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
+  clk: samsung: clk-pll: Implement pll0818x PLL type
+  clk: samsung: exynos850: Implement CMU_G3D domain
+  clk: samsung: exynos850: Add AUD and HSI main gate clocks
+  arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/clk/clk-gate_test.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/clk/clk-gate_test.c b/drivers/clk/clk-gate_test.c
-> index e136aaad48bf..a0a63cd4ce0b 100644
-> --- a/drivers/clk/clk-gate_test.c
-> +++ b/drivers/clk/clk-gate_test.c
-> @@ -74,6 +74,7 @@ static void clk_gate_register_test_parent_data_legacy(s=
-truct kunit *test)
->                                             1000000);
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent);
->         pdata.name =3D "test_parent";
-> +       pdata.fw_name =3D "test_parent";
-> =20
->         ret =3D clk_hw_register_gate_parent_data(NULL, "test_gate", &pdat=
-a, 0,
+ .../clock/samsung,exynos850-clock.yaml        |  19 +++
+ arch/arm64/boot/dts/exynos/exynos850.dtsi     |   9 ++
+ drivers/clk/samsung/clk-exynos850.c           | 139 ++++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |   1 +
+ drivers/clk/samsung/clk-pll.h                 |   1 +
+ include/dt-bindings/clock/exynos850.h         |  28 +++-
+ 6 files changed, 194 insertions(+), 3 deletions(-)
 
-We don't pass a 'dev' here, so the pdata.index isn't looked at. I
-suppose we can assign .index to -1 to be more explicit, but because
-there isn't a device used for registering, we won't try to use the
-.index. Instead we'll try to use .fw_name for clkdev, of which there
-won't be a clkdev lookup either. Eventually we'll fallback to the .name
-lookup, and it will be fine.
+-- 
+2.39.1
 
-We need tests that exercises the 'dev' path and also the DT path and the
-clkdev path. I was thinking about working on that outside of the gate
-test though, and just having a generic clk test for that with simple
-clk_ops that do basically nothing.
