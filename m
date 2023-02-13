@@ -2,30 +2,30 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D38F6946E7
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Feb 2023 14:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4266946EB
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Feb 2023 14:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjBMNYr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Feb 2023 08:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
+        id S230048AbjBMNYs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Feb 2023 08:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjBMNYk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Feb 2023 08:24:40 -0500
+        with ESMTP id S230324AbjBMNYl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Feb 2023 08:24:41 -0500
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029321A963;
-        Mon, 13 Feb 2023 05:24:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6935FF4;
+        Mon, 13 Feb 2023 05:24:41 -0800 (PST)
 Received: by codeconstruct.com.au (Postfix, from userid 10000)
-        id 55953202E2; Mon, 13 Feb 2023 21:24:38 +0800 (AWST)
+        id D5C112035B; Mon, 13 Feb 2023 21:24:38 +0800 (AWST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=codeconstruct.com.au; s=2022a; t=1676294678;
-        bh=g+nn19uiKqv62SinRddEJdqDBAu/bfZiWyBp1ABFHYQ=;
+        bh=5PxLrMDn/dYNEzqEiYFSmslE1pxFn8IWWRuK6ldS/Oc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JzmUhCiZsCq+qp1d0kdeLYHU8qL155J57C1RDlQF1BhLbL+nk0GHGHCRwuJv2CnQ5
-         t2/v6PLZvx1laqHGIy3zLKECI3Eliatd+QV5tesSkLNDpEyjI6g2cDHGHyH0XcuefD
-         kd8GtHwITdPLLl7rlW6Jqdw03hnDw4hTW6XIrKs2uTC88b084u9ezorGMOoeqIxPnz
-         dQNykDTFAVIVSFrOCHE0N53q2fjzXDY5yUB4JOPzrp7FL4enFfoZR7Eh6DXle1mUnz
-         XgYtUWPkzU/33MKws/CzP+INIIcE6m2AFsTK9G7VkVXik8dtWn3h267ZZYQrCFT2SK
-         PooVdfOTmqt0g==
+        b=DnMh/K7bJO0hZNUbAA9RBlOV6QhOuDNC/ThRc2itAqDgLI/L6M9F7q4k0+ihKqMSz
+         2/c9Z3dDvDy5FWT89GXxLkOu6HKOuML7wwD3C08G5bpuWcVgDnSVcrk0jZkOK8RaHD
+         y4739CP8fC7wFUFLWJhiHIh6KLHbJnaf5FGH2h2UG20LrLg7HqJWH2OBt2QBhQzn3C
+         a93YAmPjh9tYPx+ljGBSfYbzRQjSinmhY7AtRpO+xJvO8r0zfdj8FDAscZ4V3LMS39
+         VZ4GpMHJS5lVb+pPDjn0M9VvQiqPfEoeK0v9Ma0IYgjfEz0Av1qeCqtBUCHbbDTIt2
+         Le9txVougpxuA==
 From:   Jeremy Kerr <jk@codeconstruct.com.au>
 To:     linux-aspeed@lists.ozlabs.org, linux-clk@vger.kernel.org
 Cc:     devicetree@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc:     devicetree@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
         Dylan Hung <dylan_hung@aspeedtech.com>,
         Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Subject: [PATCH v3 4/5] dt-bindings: clock: ast2600: remove IC36 & I3C7 clock definitions
-Date:   Mon, 13 Feb 2023 21:24:20 +0800
-Message-Id: <1b9bb33e75c0a84880035954d500a6e608668b99.1676294433.git.jk@codeconstruct.com.au>
+Subject: [PATCH v3 5/5] dt-bindings: clock: ast2600: Add reset config for I3C
+Date:   Mon, 13 Feb 2023 21:24:21 +0800
+Message-Id: <3aad8dc671a65e65f0cced648847c504514f5b0e.1676294433.git.jk@codeconstruct.com.au>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1676294433.git.jk@codeconstruct.com.au>
 References: <cover.1676294433.git.jk@codeconstruct.com.au>
@@ -52,42 +52,34 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The current ast2600 clock definitions include entries for i3c6 and i3c7
-devices, which don't exist: there are no clock control lines documented
-for these, and only i3c devices 0 through 5 are present.
-
-So, remove the definitions for I3C6 and I3C7. Although this is a
-potential ABI-breaking change, there are no in-tree users of these, and
-any references would be broken anyway, as the hardware doesn't exist.
-
-This is a partial cherry-pick and rework of ed44b8cdfdb and 1a35eb926d7
-from Aspeed's own tree, originally by Dylan Hung
-<dylan_hung@aspeedtech.com>.
+Add reset line definitions for the AST2600 I3C block's reset inputs.
 
 Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 
 ---
-v3:
- - split dt-bindings and clk changes
 v2:
  - reword commit message
 ---
- include/dt-bindings/clock/ast2600-clock.h | 2 --
- 1 file changed, 2 deletions(-)
+ include/dt-bindings/clock/ast2600-clock.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/include/dt-bindings/clock/ast2600-clock.h b/include/dt-bindings/clock/ast2600-clock.h
-index 608ce576e63e..600549d7bee8 100644
+index 600549d7bee8..16b7389bbb9c 100644
 --- a/include/dt-bindings/clock/ast2600-clock.h
 +++ b/include/dt-bindings/clock/ast2600-clock.h
-@@ -57,8 +57,6 @@
- #define ASPEED_CLK_GATE_I3C3CLK		40
- #define ASPEED_CLK_GATE_I3C4CLK		41
- #define ASPEED_CLK_GATE_I3C5CLK		42
--#define ASPEED_CLK_GATE_I3C6CLK		43
--#define ASPEED_CLK_GATE_I3C7CLK		44
- 
- #define ASPEED_CLK_GATE_FSICLK		45
- 
+@@ -90,6 +90,12 @@
+ /* Only list resets here that are not part of a gate */
+ #define ASPEED_RESET_ADC		55
+ #define ASPEED_RESET_JTAG_MASTER2	54
++#define ASPEED_RESET_I3C5		45
++#define ASPEED_RESET_I3C4		44
++#define ASPEED_RESET_I3C3		43
++#define ASPEED_RESET_I3C2		42
++#define ASPEED_RESET_I3C1		41
++#define ASPEED_RESET_I3C0		40
+ #define ASPEED_RESET_I3C_DMA		39
+ #define ASPEED_RESET_PWM		37
+ #define ASPEED_RESET_PECI		36
 -- 
 2.39.1
 
