@@ -2,78 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73449693811
-	for <lists+linux-clk@lfdr.de>; Sun, 12 Feb 2023 16:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7846693D22
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Feb 2023 04:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjBLPlp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 12 Feb 2023 10:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S229614AbjBMDt2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 12 Feb 2023 22:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjBLPlh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 12 Feb 2023 10:41:37 -0500
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A591612588;
-        Sun, 12 Feb 2023 07:41:36 -0800 (PST)
-Received: from robin.home.jannau.net (p579ad32f.dip0.t-ipconnect.de [87.154.211.47])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 45D4C26F788;
-        Sun, 12 Feb 2023 16:41:35 +0100 (CET)
-From:   Janne Grunau <j@jannau.net>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229560AbjBMDt1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 12 Feb 2023 22:49:27 -0500
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8D7D500;
+        Sun, 12 Feb 2023 19:49:26 -0800 (PST)
+Received: by codeconstruct.com.au (Postfix, from userid 10000)
+        id 85AC6200E3; Mon, 13 Feb 2023 11:49:20 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=codeconstruct.com.au; s=2022a; t=1676260160;
+        bh=erDpDwF/cExM1uPDf3agcPHzcsJY6zCHxSnfbsh5mzA=;
+        h=From:To:Cc:Subject:Date;
+        b=RVbFq5CG921DVFcPRPnb67FYhhn7CPLIgahEtHg/I+rnjerSxXX+5Wz4MFhDEvl12
+         vca7cvYsf7NooFdsVk1apdroFoxHupcRBa2D3yX5iM3zh/oVppwzz/QJSuwouV+xtl
+         iXshkACFCZkbNe3jTnwR0mPXWjTDvgtysHKnLeHzwNy9JWN8cV8r8hsPSiQalY+jbF
+         4uZGvstOXr20otJueIwAk5bbdJO/l9Cu11P6xN3VITKEEEb1mGlo+50D8f1BVqh1I3
+         NJXiF9rON5WQ2vHjlXJfgcqEYrMtNitzNBl2vipiX7AfcYlMTLDFtRoGQOE6NQkztm
+         x5qqts8dy8EUw==
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     linux-aspeed@lists.ozlabs.org, linux-clk@vger.kernel.org
+Cc:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>,
         Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?=A1er?= <povik+lin@cutebit.org>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH 13/17] dt-bindings: clock: apple,nco: Add t8112-nco compatible
-Date:   Sun, 12 Feb 2023 16:41:23 +0100
-Message-Id: <20230202-asahi-t8112-dt-v1-13-cb5442d1c229@jannau.net>
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        Joel Stanley <jms@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Subject: [PATCH 0/2] Add definitions for AST2600 i3c clocks and resets
+Date:   Mon, 13 Feb 2023 11:48:31 +0800
+Message-Id: <cover.1676259904.git.jk@codeconstruct.com.au>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=899; i=j@jannau.net; h=from:subject:message-id; bh=guQoP4sTJ6J0hvW04dgo+MfAOGedfXRIgUStRwklrig=; b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuSX7Cdmzdm4cvfPzkT7S7f/Td73YFm/q9f11hkiCczba pqWSG5q6ShlYRDjYJAVU2RJ0n7ZwbC6RjGm9kEYzBxWJpAhDFycAjCRdUqMDBP4hOfF2UxsvX+7 uHJx+I1rxsHhz3k56tpulZkZPbObOZfhf3SHwizzmt/LuC2PB8/eNOu7u/rW1ur48O8RJaHvn1i 3MwAA
-X-Developer-Key: i=j@jannau.net; a=openpgp; fpr=8B336A6BE4E5695E89B8532B81E806F586338419
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The block found on Apple's M2 SoC is compatible with the existing driver
-so add its per-SoC compatible.
+This series adds some base configuration for the i3c controllers on
+ast2600 hardware. We'll use the reset and clock definitions in the
+proposed dt binding example, hence sending these first.
 
-Signed-off-by: Janne Grunau <j@jannau.net>
+Jeremy Kerr (2):
+  clk: aspeed: Add full configs for i3c clocks
+  dts: ast2600: Add reset config for I3C
 
----
-This trivial dt-bindings update should be merged through the asahi-soc
-tree to ensure validation of the Apple M2 (t8112) devicetrees in this
-series.
----
- Documentation/devicetree/bindings/clock/apple,nco.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/clock/apple,nco.yaml b/Documentation/devicetree/bindings/clock/apple,nco.yaml
-index 74eab5c0d24a..8b8411dc42f6 100644
---- a/Documentation/devicetree/bindings/clock/apple,nco.yaml
-+++ b/Documentation/devicetree/bindings/clock/apple,nco.yaml
-@@ -23,6 +23,7 @@ properties:
-       - enum:
-           - apple,t6000-nco
-           - apple,t8103-nco
-+          - apple,t8112-nco
-       - const: apple,nco
- 
-   clocks:
+ drivers/clk/clk-ast2600.c                 | 39 ++++++++++++++++++-----
+ include/dt-bindings/clock/ast2600-clock.h | 12 +++++--
+ 2 files changed, 40 insertions(+), 11 deletions(-)
 
 -- 
 2.39.1
