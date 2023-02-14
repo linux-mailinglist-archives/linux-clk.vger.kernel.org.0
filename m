@@ -2,109 +2,111 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC5A695E39
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Feb 2023 10:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E7C695F84
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Feb 2023 10:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjBNJIW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Feb 2023 04:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S231499AbjBNJoT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Feb 2023 04:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjBNJHz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Feb 2023 04:07:55 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24ADF2386A
-        for <linux-clk@vger.kernel.org>; Tue, 14 Feb 2023 01:07:03 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pRrH4-0005kT-48; Tue, 14 Feb 2023 10:06:54 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pRrH2-004qGK-1t; Tue, 14 Feb 2023 10:06:53 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pRrH2-003R4d-GP; Tue, 14 Feb 2023 10:06:52 +0100
-Date:   Tue, 14 Feb 2023 10:06:52 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] clk: Disambiguate comment about clk_get_rate() for
- disabled clocks
-Message-ID: <20230214090652.dq2gdipvxnrxil7p@pengutronix.de>
-References: <20230201082309.233348-1-u.kleine-koenig@pengutronix.de>
- <Y+UX2ysd1B5/cHpk@shell.armlinux.org.uk>
+        with ESMTP id S231492AbjBNJoS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Feb 2023 04:44:18 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA62CDEE
+        for <linux-clk@vger.kernel.org>; Tue, 14 Feb 2023 01:44:16 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id by3so13656313wrb.10
+        for <linux-clk@vger.kernel.org>; Tue, 14 Feb 2023 01:44:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1V6X7LS4W1rOsDectubi4KTeJ0veVK4x1Eb4mq8We4o=;
+        b=NTGB1A8hi0FI4d0n7r1u647W9aZjL6itDmVIUW6Qef/Ns1oCssg5+T4pgN8GuHwygL
+         LfX5rXVF6PFKzetgUtNSE4/bPKphcZNhNKjBIyaHuwSjYlcESXyVbMAqaV9g8LELU0AY
+         W8qgSlxQ1N8mw09qsWLJT+MB9dOxyc+mAxPhIqeanAvZmS+EB8PfpLpuxEZIPeGczM7A
+         CQl8XppAmLLKLCwBznID10RjyS6VPpE4qRu1Gq6G41V3rlhchMIOapYbUmhI6SZ8t2g4
+         ILlb4U+xDvkPk/bCrfwbDmAadV9uIOXEqG7QPbzVPu5D4k8M1YmPkRMnj19Lu8wU6BgS
+         rhmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1V6X7LS4W1rOsDectubi4KTeJ0veVK4x1Eb4mq8We4o=;
+        b=ueqqh+gcFz8zfE9BBqRMA0ngT83oQLkbY0XYu8tmyO2txZlAsVozn0TJog2cwf98pF
+         f2ijIQUTe116Jkqs8xCm2epn9FzxGk1N17lGMqYx+4zaKBhkxoUm3VNKMCr8LiR7dsmG
+         7uTluIuqBPCLpG7mEJ4Hq78rtqwHnyarUXxVDP51J3CDFwZl0mT1cBprhjAvv+reSBrV
+         z23ma6Fzrkx/sZAOXHyk6EZritp474xZgtMK+Drtfj71gPnFk0oYzXNzjqSySfIO3wHs
+         h0CxNW0WVYnWlliQelD3N9cslikQsUfgqL7+UTfgnH2ryMzsOdfKnBackDXM8i69DU5z
+         r7TQ==
+X-Gm-Message-State: AO0yUKUBmSDiR2C18qrhkmWnpsEfCmmtnbIWr8kx9AsAelwl7v7Xan1t
+        eKIC368HqHMb+2A7hcscXYXT3w==
+X-Google-Smtp-Source: AK7set+MeaNJDHWeQ3lmWJpTPfV0TrfI0EEoITSixsaaKVn0LPBKNUaNqT/3OtyQiTgAXMzeQBqd/g==
+X-Received: by 2002:adf:f712:0:b0:2c5:50aa:f89d with SMTP id r18-20020adff712000000b002c550aaf89dmr1335007wrp.42.1676367855108;
+        Tue, 14 Feb 2023 01:44:15 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id q13-20020adff94d000000b002be099f78c0sm12399605wrr.69.2023.02.14.01.44.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 01:44:14 -0800 (PST)
+Message-ID: <5c67ecd2-075a-5b0b-feb9-57570f539ee1@linaro.org>
+Date:   Tue, 14 Feb 2023 10:44:12 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="34qbsxp25tb4vwwf"
-Content-Disposition: inline
-In-Reply-To: <Y+UX2ysd1B5/cHpk@shell.armlinux.org.uk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V3 2/5] arm64: dts: qcom: Add support for Crashdump
+ collection on IPQ9574
+Content-Language: en-US
+To:     POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org,
+        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230208053332.16537-1-quic_poovendh@quicinc.com>
+ <20230208053332.16537-3-quic_poovendh@quicinc.com>
+ <dbc93125-afd5-9ed9-7b45-0d79f728b4a5@linaro.org>
+ <1a9ad881-7753-935a-ce7d-a2a79d34f16c@quicinc.com>
+ <e569e7e8-4d7f-1e69-5a4b-ee4c4f83d7ce@linaro.org>
+ <86bb95e4-2e07-19a5-7b4f-15f25067d513@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <86bb95e4-2e07-19a5-7b4f-15f25067d513@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On 14/02/2023 10:35, POOVENDHAN SELVARAJ wrote:
+>>>> compatible = "arm,cortex-a73-pmu";
+>>>> interrupts = <GIC_PPI 7 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+>  >>> @@ -95,11 +102,17 @@
+>>>> #address-cells = <2>;
+>>>> #size-cells = <2>;
+>>>> ranges;
+> *>>> -*
+>  >> I don't think anything improved here - still unrelated change.
+>  >>
+> 
+> Are you referring to the deleted line here?
 
---34qbsxp25tb4vwwf
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes, the line removal does not seem related nor justified.
 
-Hello Russell,
+Best regards,
+Krzysztof
 
-On Thu, Feb 09, 2023 at 03:57:15PM +0000, Russell King (Oracle) wrote:
-> On Wed, Feb 01, 2023 at 09:23:09AM +0100, Uwe Kleine-K=F6nig wrote:
-> > The sentence "[clk_get_rate()] is only valid once the clock source has
-> > been enabled." can be understood in two ways:
-> >=20
-> > a) When called for a disabled clock the return value might be wrong; or
-> > b) The disabled clock must be enabled before it runs at the returned
-> > rate.
-> >=20
-> > It's hard to find evidence what is actually meant, but given that the
-> > clock tree can change between the call to clk_get_rate() and the return
-> > of a later clk_enable() call, it's prudent to assume a).
-> >=20
-> > Adapt the comment accordingly to be unambiguous.
->=20
-> From the API perspective, it's both.
-
-I documented a) now which is weaker than b), so b) is (only somewhat?)
-implied.
-
-I wonder if your mail is essentialy an Ack, or if you are unhappy with
-my change. Can you suggest an alternative wording?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---34qbsxp25tb4vwwf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPrTykACgkQwfwUeK3K
-7Ak41AgAkaVbUzpTblmWCIwyh57953oJwytftBf9Fvrb/I5u0zOiK0MlxnKI8eeH
-Gbh6tNouY1ETBK5CEY3dEAaFiswDytqYETrRTq8dSXEQSrEbuD/lEpBWaQEa/n6u
-4NnrLO6gBdGaZ5FgjIBxkHZVJ2YXzBfu6EyHJH98ZrU25Ie1mihUSWJvrR1QXXmX
-FVxrFoi5u/5oQS9ILsaixnNjuyIy+G4/nW55dc5+DdKHg0zi4+vEUu03Y8xTLTp0
-xNciKYfjnh14YUz7n/SK7a6IMolhp/xX3uIuPCUa0xFg82bXIS1gLX+vMBFQcLOO
-TGBmi2qEEiQ2v2AkuL8Bfd+5m+mOyA==
-=G4w9
------END PGP SIGNATURE-----
-
---34qbsxp25tb4vwwf--
