@@ -2,82 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DA16969A5
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Feb 2023 17:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2062A6969F2
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Feb 2023 17:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbjBNQdP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Feb 2023 11:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S232119AbjBNQmp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Feb 2023 11:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjBNQdN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Feb 2023 11:33:13 -0500
+        with ESMTP id S231710AbjBNQmo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Feb 2023 11:42:44 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC3D23841;
-        Tue, 14 Feb 2023 08:32:57 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E8R2YX019443;
-        Tue, 14 Feb 2023 16:32:39 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CC71BC6;
+        Tue, 14 Feb 2023 08:42:26 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31E0fCB3012982;
+        Tue, 14 Feb 2023 16:42:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=2BG/t9czVGoNLmZhsJNUd2cUC/rQPsQHouwqX6sY4wM=;
- b=oRkge8BEZqop25FqCQfjLTQNOCdtlR8P9afP056NkD9h3MUY16IgrKMHz40sO4mrDWWS
- Vkaymrnw+cAEUJLAczDH0ax71JnEQhN3oetp7SNlNfd8/OWErtuxwUBHTslh6Gjcwr6Y
- yICBvh7QeplaLK21pqfVkMsKSeAtBn+mNPBpirXkoMabhv9RtvnpgRriAdvs08tJIBBF
- zuDuLeQ67Aa/6uMONDu0FhsTsW36upxpFYtgObWZP1TLlU5EGq89GovBAGCWNlbRIr9u
- u2b9LE0n3uh5jVK6+0b/05gb+9WRi2DIOvk6KojA5bFbylWCIeOazzqEdBCpKLxXk6nO TQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqpmmkacc-1
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=PZNsfcpSNgi6XSftsTxLifara0hUhG2V7agojxm3mJQ=;
+ b=ZKb9LGMaqRV346KkqqLVXGQg/28E5ckR8GT1DL7gNeD36sGnImmIpLVJ7aTdsVIVp2QP
+ raN/0Qh3lCi9Y+hsmo2VcB2zvDwVdNLRRvNX7/ymtE+WiCAs3PXo1tT6kHz76GJET6y4
+ k6UPx7qgt/NVAvtM4Du3zvzgdiJQpgA1rAFPl2TJ2m8dGlWJhOgCuon+6wQupIVVzla+
+ MZWnnRw/f84n4zcMqgdxrNDjT+tjQPNEpt+l7S7uFSdkbkLiduTO+CIgKvk5qDewU9OK
+ NVHvxoZIg67o9wLrgvJk4VWDSHk2HyijkjXPeVqVkykGGx5U5JhJIYiKJpfIJoktT+gJ cg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nqyygt3tu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 16:32:39 +0000
+        Tue, 14 Feb 2023 16:42:08 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EGWc35011402
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31EGg7tf002753
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Feb 2023 16:32:38 GMT
+        Tue, 14 Feb 2023 16:42:07 GMT
 Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Feb 2023 08:32:30 -0800
+ 15.2.986.36; Tue, 14 Feb 2023 08:42:00 -0800
 From:   Devi Priya <quic_devipriy@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <svarbanov@mm-sol.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>
 CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
         <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-Subject: [PATCH V8 7/7] arm64: defconfig: Enable IPQ9574 SoC base configs
-Date:   Tue, 14 Feb 2023 22:01:16 +0530
-Message-ID: <20230214163116.9924-8-quic_devipriy@quicinc.com>
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+Subject: [PATCH 0/7] Add PCIe support for IPQ9574
+Date:   Tue, 14 Feb 2023 22:11:28 +0530
+Message-ID: <20230214164135.17039-1-quic_devipriy@quicinc.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230214163116.9924-1-quic_devipriy@quicinc.com>
-References: <20230214163116.9924-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: K1vqlMjXA_q1-N6F2rnAaskrEpmJfuy7
-X-Proofpoint-GUID: K1vqlMjXA_q1-N6F2rnAaskrEpmJfuy7
+X-Proofpoint-ORIG-GUID: QOfNvi5NJaTEc2br4e0KXsGlWhFeT3i8
+X-Proofpoint-GUID: QOfNvi5NJaTEc2br4e0KXsGlWhFeT3i8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
  definitions=2023-02-14_11,2023-02-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0 impostorscore=0
- bulkscore=0 clxscore=1015 mlxscore=0 mlxlogscore=787 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302140140
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 mlxlogscore=789 mlxscore=0
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302140142
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -87,37 +81,38 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enables clk & pinctrl related configs for Qualcomm IPQ9574 SoC
+PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
+are found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane
+Gen3 host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- Changes in V8:
-	- No changes
+This series adds support for enabling the same
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+DTS patch is based on the crashdump series
+https://lore.kernel.org/linux-arm-kernel/20230214051414.10740-1-quic_poovendh@quicinc.com/
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index b452d8d7a32c..c2dfa833af3f 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -545,6 +545,7 @@ CONFIG_PINCTRL_IMX93=y
- CONFIG_PINCTRL_MSM=y
- CONFIG_PINCTRL_IPQ8074=y
- CONFIG_PINCTRL_IPQ6018=y
-+CONFIG_PINCTRL_IPQ9574=y
- CONFIG_PINCTRL_MSM8916=y
- CONFIG_PINCTRL_MSM8953=y
- CONFIG_PINCTRL_MSM8976=y
-@@ -1123,6 +1124,7 @@ CONFIG_QCOM_CLK_SMD_RPM=y
- CONFIG_QCOM_CLK_RPMH=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
-+CONFIG_IPQ_GCC_9574=y
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_MMCC_8996=y
+Devi Priya (7):
+  dt-bindings: PCI: qcom: Add IPQ9574 specific compatible
+  PCI: qcom: Add IPQ9574 PCIe support
+  dt-bindings: phy: qcom,qmp-pcie: Add ipq9574 compatible
+  phy: qcom-qmp-pcie: Add support for IPQ9574 platform
+  dt-bindings: clock: Add PCIe pipe clock definitions
+  clk: qcom: gcc-ipq9574: Add PCIe related clocks
+  arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
+
+ .../devicetree/bindings/pci/qcom,pcie.yaml    |  72 ++-
+ .../phy/qcom,ipq8074-qmp-pcie-phy.yaml        |  28 +
+ arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts  |  28 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 477 +++++++++++++++++-
+ drivers/clk/qcom/gcc-ipq9574.c                |  76 +++
+ drivers/pci/controller/dwc/pcie-qcom.c        | 119 +++++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 309 ++++++++++++
+ .../phy/qualcomm/phy-qcom-qmp-pcs-pcie-v5.h   |  26 +-
+ .../phy/qualcomm/phy-qcom-qmp-qserdes-pll.h   |   3 +
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  | 276 +++++-----
+ 10 files changed, 1264 insertions(+), 150 deletions(-)
+
+
+base-commit: 3ebb0ac55efaf1d0fb1b106f852c114e5021f7eb
 -- 
 2.17.1
 
