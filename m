@@ -2,102 +2,154 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04B8669A761
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Feb 2023 09:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD6F69B568
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Feb 2023 23:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjBQIsm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Feb 2023 03:48:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S229716AbjBQWUe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Feb 2023 17:20:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjBQIsj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Feb 2023 03:48:39 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A641F604F0;
-        Fri, 17 Feb 2023 00:48:26 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31H63KTZ014637;
-        Fri, 17 Feb 2023 08:48:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=33eDyuvYJVBHbnCO5NSYD6X2R8vEOym0xz2B1IWSiNg=;
- b=OIzwO8AxZ1YEu1WVQkroLorCRDoyjaojbAzbQTYgUPPpqLFaxp4ghkZ9IX/VogWDw7qH
- yTKGdlOVi6ylU2qBDFvH7PeLyo+QW7Xc2ss0akTBlH5SVw6c8EhiuCLsDXSwfm+S5M7T
- f5ph1fTyguTQKzyO3leW+qksSnT8+1VJubAYzrHZdRTrPcQBBcTXwUWsVP2fcGqyBdbB
- 83qiq7ls4+U69wb4NijORuMQQCt3u2KHt3zRewnZE2DTzCYw0SK9tUqyzW+aaQsjDyzf
- vyPvIo1Vgh15nhK5x9zYP83dh8+VEs4fDveRVNHW7kPuSiycyVJNbfcDw1jkBEbfci6K bg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nt10u0v06-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 08:48:16 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31H8mFVp000693
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Feb 2023 08:48:15 GMT
-Received: from [10.216.47.237] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Feb
- 2023 00:48:06 -0800
-Message-ID: <a987fc17-3924-7ece-59e2-3fa1d000afc1@quicinc.com>
-Date:   Fri, 17 Feb 2023 14:18:03 +0530
+        with ESMTP id S229854AbjBQWUd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Feb 2023 17:20:33 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFE86664F;
+        Fri, 17 Feb 2023 14:20:31 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id r11so2423598wru.1;
+        Fri, 17 Feb 2023 14:20:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=1i9LuC5d4vZMEjYcLaTDdxYBMP8JELhgLW32Lccsw8U=;
+        b=dE3LmgLpmjeY+DmAATb3i1XnQ1jyDGNp4fRaFnX2YVVZFjjNdGsEDtmGrxMtfVM7a1
+         +8W1YzKvMdQUMaYYW7ZGhQUGrePfoOTVnajA7C8s4i5ZkbewOE0qXQz/0ZMXh+avqepZ
+         IN7tU/4rTisczW5751ZNVVsgVnK06QP9fmPqiuOuDiNHgtVq/aXNzi8hkyGjXSr9UykV
+         g6R1XE0q2l7aGhd8TJMSbGKefUDCI/IeubTdmsxDqUdfvYS4rwUEgbYyPXvLEGvosUp0
+         wESXlRQDOX2gDy2g1kcSzwRAGZ5I+wDffIDDKfRZQ0OuFKBJFgvgPalMN+A8PX4W2y/g
+         /wNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1i9LuC5d4vZMEjYcLaTDdxYBMP8JELhgLW32Lccsw8U=;
+        b=0w/rp8JqjkONQh8LJTmM24mDOT1rEqH4Uuj3KdJG/nUMhmxG6hgWs2l0HpYYiLsNQI
+         5bf5cCUR1vkAxbOTCizMLfWNIE4bTEMK+c3xp7WLzn59KCh1Qq+8JS+UKXvxvk4BFAn1
+         l/Zo7xXnwwPiwIWzQ9MEM0QEt6yXrZ5wbvLLyqvI6pn8iKqp139NYR2gw45SGUqZCXQa
+         B+NzuUY7o6YiPYFOeJCVh0NVIuUfh9BaOzXD+GOWwtVWcVOtmu3BVklXpHK5KUfOvedj
+         nxljmwZhZgXZ2++8BspWs8sYxbO/0Y+VfYkIvWiiUPJAWHiIH4frR02Osys018+dYZGB
+         7yvw==
+X-Gm-Message-State: AO0yUKVWeD042jWc6ERGwC/ti+U5AzyhK+xvn1IcnkQznG4g7R4Ynv8X
+        Lk2BjOGk0vb272JUMJeo6gc=
+X-Google-Smtp-Source: AK7set+uHhngYpSmVrvC/pgYx28HXmftNTpLC75+bTJkM9v8lzwviIbSj4gtCTGaM4J8T/kkosKgsA==
+X-Received: by 2002:a5d:48d0:0:b0:2c4:503:7afc with SMTP id p16-20020a5d48d0000000b002c405037afcmr1104857wrs.7.1676672429782;
+        Fri, 17 Feb 2023 14:20:29 -0800 (PST)
+Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.gmail.com with ESMTPSA id j28-20020a5d453c000000b002c6eaf53bcdsm1141798wra.28.2023.02.17.14.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 14:20:29 -0800 (PST)
+Message-ID: <63effdad.5d0a0220.28f2a.4738@mx.google.com>
+X-Google-Original-Message-ID: <Y+8MEMI/BLy46EmQ@Ansuel-xps.>
+Date:   Fri, 17 Feb 2023 06:09:36 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Chen-Yu Tsai <wens@csie.org>
+Subject: Re: [PATCH] clk: Fix wrong clock returned in parent_data with .name
+ and no .index
+References: <20230215232712.17072-1-ansuelsmth@gmail.com>
+ <6dcb55104d5065d30a9dab4bca878922.sboyd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 0/7] Add PCIe support for IPQ9574
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <lpieralisi@kernel.org>, <kw@linux.com>, <robh@kernel.org>,
-        <bhelgaas@google.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <vkoul@kernel.org>, <kishon@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <mani@kernel.org>, <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <20230214164135.17039-1-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SkGcIu3rfLWbX5OreuJ1hWeFzovxmJIH
-X-Proofpoint-GUID: SkGcIu3rfLWbX5OreuJ1hWeFzovxmJIH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-17_04,2023-02-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxscore=0 impostorscore=0
- adultscore=0 mlxlogscore=693 phishscore=0 suspectscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302170078
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6dcb55104d5065d30a9dab4bca878922.sboyd@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-
-On 2/14/2023 10:11 PM, Devi Priya wrote:
-> PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
-> are found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane
-> Gen3 host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
+On Fri, Feb 17, 2023 at 02:11:20PM -0800, Stephen Boyd wrote:
+> Quoting Christian Marangi (2023-02-15 15:27:12)
+> > Commit 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+> > introduced a regression due to a "fragile" implementation present in some very
+> > corner case.
+> > 
+> > Such commit introduced the support for parents to be specified using
+> > clkspec index. The index is an int and should be -1 if the feature
+> > should not be used. This is the case with parent_hws or legacy
+> > parent_names used and the index value is set to -1 by default.
+> > With parent_data the situation is different, since it's a struct that
+> > can have multiple value (.index, .name, .fw_name), it's init to all 0 by
+> > default. This cause the index value to be set to 0 everytime even if not
 > 
-> This series adds support for enabling the same
+> It's only initialized to all 0 because that's what you've decided to do.
+> It could be on the stack and have random stack junk values.
+>
+
+Yes and that itself is problematic on his own. The index value may be
+set to an unintended value and we really can't update each parent_data
+to -1. And as you can see in the example index is used as an alternative
+source to search the parent.
+
+Hope it's clear what is the problem here.
+
+> > intended to be defined and used.
+> > 
+> > This simple "fragile" implementation cause side-effect and unintended
+> > behaviour.
+> > 
+> > Assuming the following scenario (to repro the corner case and doesn't
+> > reflect real code):
+> > 
+> > In dt we have a node like this:
+> >                 acc1: clock-controller@2098000 {
+> >                         compatible = "qcom,kpss-acc-v1";
+> >                         reg = <0x02098000 0x1000>, <0x02008000 0x1000>;
+> >                         clock-output-names = "acpu1_aux";
+> >                         clocks = <&pxo_board>;
+> >                         clock-names = "pxo";
+> >                         #clock-cells = <0>;
+> >                 };
+> > 
+> > And on the relevant driver we have the parent data defined as such:
+> >                 static const struct clk_parent_data aux_parents[] = {
+> >                         { .name = "pll8_vote" },
+> >                         { .fw_name = "pxo", .name = "pxo_board" },
+> >                 };
+> > 
+> > Someone would expect the first parent to be globally searched and set to
+> > point to the clock named "pll8_vote".
+> > But this is not the case and instead under the hood, the parent point to
+> > the pxo clock. This happen without any warning and was discovered on
+> > another platform while the gcc driver was converted to parent_data and
+> > only .name was defined.
 > 
+> You didn't set .index explicitly to zero, but it is zero because of the
+> use of static struct initializers here. If the struct was on the stack
+> nobody knows what the value would be. Set -1 if you don't want to use
+> the index lookup path.
 
+There is at least one driver that use .name for global searching and
+it's clear that he didn't intend to use index lookup.
 
-<svarbanov@mm-sol.com>  --> This is bouncing, please remove it
+Are you totally against this or you are suggesting I should use a
+different word for this?
 
-Regards,
-  Sricharan
+To me this looks very sensible and something we should take care since
+sounds a bit fragile to me. (I know 99% of the time it would be a dev
+error but we could have case where things works by luck and for example
+someone starts adding an additional parent in later changes and regression
+happens.)
+
+-- 
+	Ansuel
