@@ -2,156 +2,131 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1F069DC10
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Feb 2023 09:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C793769DE6C
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Feb 2023 12:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjBUIds convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Tue, 21 Feb 2023 03:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S233908AbjBULHG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Feb 2023 06:07:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjBUIdo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Feb 2023 03:33:44 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C5A234CC;
-        Tue, 21 Feb 2023 00:33:43 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5D8E124E3A5;
-        Tue, 21 Feb 2023 16:33:39 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 16:33:39 +0800
-Received: from localhost.localdomain (183.27.98.67) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 21 Feb
- 2023 16:33:38 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>
-CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 11/11] riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
-Date:   Tue, 21 Feb 2023 16:33:23 +0800
-Message-ID: <20230221083323.302471-12-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
-References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+        with ESMTP id S234016AbjBULGz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Feb 2023 06:06:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC2D2685D;
+        Tue, 21 Feb 2023 03:06:49 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 20996660087C;
+        Tue, 21 Feb 2023 11:06:47 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1676977608;
+        bh=PMnNGjPvWftnPBnMRvQt50qzmTHbAhshh3s2urxuXwc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eUyminmoBQKwOMgFYfsku8UgYGtzivSZAatwk2TUILx4JcfaZCGhc9o/vMpZD/uUu
+         P5/ZsGU8+WXaDz4WVXyjFr2ytyStSTvgGq5050n7D++vPdPp2RwVLRyjKLWdrTl4k+
+         pclKrO6otdKc6mx56gLFJDKIgSNMiuHOHOO8TxdKljbgieN5bAEfyC3l9Q8oGiFCeH
+         RpffElpyxAmTirjQdKcgNkOJLL2vYm35JfuyhACyLbTZhFtSmNxCONKq9gGTfkHUYp
+         mOivYiessym9uWjAv4UrGs3otnsTxfdxBKCeVyyPn6MOihSEKvPXcnNtmyTpOuZQdq
+         d8v63Rz/MocTQ==
+Message-ID: <6dd97011-9ea1-6276-6589-9dd97ccff8d6@collabora.com>
+Date:   Tue, 21 Feb 2023 12:06:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.98.67]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v3 39/55] clk: mediatek: Split MT8195 clock drivers and
+ allow module build
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230220150111.77897-1-angelogioacchino.delregno@collabora.com>
+ <20230220150111.77897-40-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5Eztv3RuXPXSYFd2qH_Wd18OcLNaqO+Lcp4hytjkBarfA@mail.gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5Eztv3RuXPXSYFd2qH_Wd18OcLNaqO+Lcp4hytjkBarfA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add STGCRG/ISPCRG/VOUTCRG new node to support JH7110
-System-Top-Group, Image-Signal-Process and Video-Output
-clock and reset drivers for the JH7110 RISC-V SoC.
+Il 21/02/23 04:53, Chen-Yu Tsai ha scritto:
+> On Mon, Feb 20, 2023 at 11:02 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> MT8195 clock drivers were encapsulated in one single (and big) Kconfig
+>> option: there's no reason to do that, as it is totally unnecessary to
+>> build in all or none of them.
+>>
+>> Split them out: keep boot-critical clocks as bool and allow choosing
+>> non critical clocks as tristate.
+>>
+>> As a note, the dependencies of VDEC/VENCSYS and CAM/IMG/IPE/WPESYS
+>> are not for build-time but rather for runtime, as clocks registered
+>> by those have runtime dependencies on either or both VPP and IMGSYS.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/clk/mediatek/Kconfig  | 100 ++++++++++++++++++++++++++++++++++
+>>   drivers/clk/mediatek/Makefile |  20 ++++---
+>>   2 files changed, 113 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+>> index 45b7aea7648d..49919da2be26 100644
+>> --- a/drivers/clk/mediatek/Kconfig
+>> +++ b/drivers/clk/mediatek/Kconfig
+>> @@ -692,6 +692,106 @@ config COMMON_CLK_MT8195
+>>           help
+>>             This driver supports MediaTek MT8195 clocks.
+>>
+>> +config COMMON_CLK_MT8195_APUSYS
+>> +       tristate "Clock driver for MediaTek MT8195 apusys"
+>> +       depends on COMMON_CLK_MT8195
+>> +       default COMMON_CLK_MT8195
+>> +       help
+>> +         This driver supports MediaTek MT8195 AI Processor Unit System clocks.
+>> +
+>> +config COMMON_CLK_MT8195_AUDSYS
+>> +       tristate "Clock driver for MediaTek MT8195 audsys"
+>> +       depends on COMMON_CLK_MT8195
+>> +       default COMMON_CLK_MT8195
+>> +       help
+>> +         This driver supports MediaTek MT8195 audsys clocks.
+>> +
+>> +config COMMON_CLK_MT8195_IMP_IIC_WRAP
+>> +       tristate "Clock driver for MediaTek MT8195 imp_iic_wrap"
+>> +       depends on COMMON_CLK_MT8195
+>> +       default COMMON_CLK_MT8195
+>> +       help
+>> +         This driver supports MediaTek MT8195 I2C/I3C clocks.
+>> +
+>> +config COMMON_CLK_MT8195_IPESYS
+>> +       tristate "Clock driver for MediaTek MT8195 ipesys"
+>> +       depends on COMMON_CLK_MT8195_IMGSYS
+> 
+> This should also be moved to just after IMGSYS.
+> This is the only one that is not ordered right, so after it is fixed,
+> 
 
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 59 ++++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+Big embarassing oops. Done for v4.
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index a5e6fb3ad188..697ab59191a1 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -6,6 +6,7 @@
- 
- /dts-v1/;
- #include <dt-bindings/clock/starfive,jh7110-crg.h>
-+#include <dt-bindings/power/starfive,jh7110-pmu.h>
- #include <dt-bindings/reset/starfive,jh7110-crg.h>
- 
- / {
-@@ -374,6 +375,25 @@ i2c2: i2c@10050000 {
- 			status = "disabled";
- 		};
- 
-+		stgcrg: clock-controller@10230000 {
-+			compatible = "starfive,jh7110-stgcrg";
-+			reg = <0x0 0x10230000 0x0 0x10000>;
-+			clocks = <&osc>,
-+				 <&syscrg JH7110_SYSCLK_HIFI4_CORE>,
-+				 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
-+				 <&syscrg JH7110_SYSCLK_USB_125M>,
-+				 <&syscrg JH7110_SYSCLK_CPU_BUS>,
-+				 <&syscrg JH7110_SYSCLK_HIFI4_AXI>,
-+				 <&syscrg JH7110_SYSCLK_NOCSTG_BUS>,
-+				 <&syscrg JH7110_SYSCLK_APB_BUS>;
-+			clock-names = "osc", "hifi4_core",
-+				      "stg_axiahb", "usb_125m",
-+				      "cpu_bus", "hifi4_axi",
-+				      "nocstg_bus", "apb_bus";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
-+
- 		uart3: serial@12000000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x12000000 0x0 0x10000>;
-@@ -522,5 +542,44 @@ pwrc: power-controller@17030000 {
- 			interrupts = <111>;
- 			#power-domain-cells = <1>;
- 		};
-+
-+		ispcrg: clock-controller@19810000 {
-+			compatible = "starfive,jh7110-ispcrg";
-+			reg = <0x0 0x19810000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_ISP_TOP_CORE>,
-+				 <&syscrg JH7110_SYSCLK_ISP_TOP_AXI>,
-+				 <&syscrg JH7110_SYSCLK_NOC_BUS_ISP_AXI>,
-+				 <&dvp_clk>;
-+			clock-names = "isp_top_core", "isp_top_axi",
-+				      "noc_bus_isp_axi", "dvp_clk";
-+			resets = <&syscrg JH7110_SYSRST_ISP_TOP>,
-+				 <&syscrg JH7110_SYSRST_ISP_TOP_AXI>,
-+				 <&syscrg JH7110_SYSRST_NOC_BUS_ISP_AXI>;
-+			reset-names = "isp_top_core",
-+				      "isp_top_axi",
-+				      "noc_bus_isp_axi";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			power-domains = <&pwrc JH7110_PD_ISP>;
-+		};
-+
-+		voutcrg: clock-controller@295C0000 {
-+			compatible = "starfive,jh7110-voutcrg";
-+			reg = <0x0 0x295C0000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_VOUT_SRC>,
-+				 <&syscrg JH7110_SYSCLK_VOUT_TOP_AHB>,
-+				 <&syscrg JH7110_SYSCLK_VOUT_TOP_AXI>,
-+				 <&syscrg JH7110_SYSCLK_VOUT_TOP_HDMITX0_MCLK>,
-+				 <&syscrg JH7110_SYSCLK_I2STX0_BCLK>,
-+				 <&hdmitx0_pixelclk>;
-+			clock-names = "vout_src", "vout_top_ahb",
-+				      "vout_top_axi", "vout_top_hdmitx0_mclk",
-+				      "i2stx0_bclk", "hdmitx0_pixelclk";
-+			resets = <&syscrg JH7110_SYSRST_VOUT_TOP_SRC>;
-+			reset-names = "vout_top_src";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			power-domains = <&pwrc JH7110_PD_VOUT>;
-+		};
- 	};
- };
--- 
-2.25.1
-
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Thanks!
