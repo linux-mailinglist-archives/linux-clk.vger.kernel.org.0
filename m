@@ -2,116 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9559E69E5F4
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Feb 2023 18:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E0F69E6A8
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Feb 2023 19:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbjBUR1N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 Feb 2023 12:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S231418AbjBUSAf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Feb 2023 13:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235070AbjBUR1C (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Feb 2023 12:27:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD4B1DB88;
-        Tue, 21 Feb 2023 09:27:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 318B9B8101F;
-        Tue, 21 Feb 2023 17:27:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E370C433D2;
-        Tue, 21 Feb 2023 17:26:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677000418;
-        bh=cU3JZqMV8I3eS5IY8uyBVDPij+HEK0bbMqGZL/n+ibs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BBd6XKzZRC4zypG8/Sv9m1DgSz4NXl7JmiIuHWIdOoGLcVmFuqzGWIz8lLvasbrmt
-         OmUOGbn9LJUJN4DPV5G3c5OnfUoTQLc9dNe1lJJ1bJepKb5xd66OaYofBoS3C5Rg4G
-         OWRJmZ3CnCBdG8XWXsySLYKz3QqeF16N5EXUQpkzJyPtXp6ribvWPcfiDyBUaeV9Ze
-         8bqx8Zhjwvbvx1hDMrUGIXo92NL5iuUbhDXRVJqEyNhKnsaTpEjrBe/DxHm3phNFeg
-         pV1g/a14ODF7PXArEtZf35UTxyq8MAopmkMH8DvhvsAz/9p4+nAfgAyHcnrwTe1iwW
-         5KnBkidNZ01IQ==
-Date:   Tue, 21 Feb 2023 17:26:52 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 10/19] dt-bindings: clock: Add StarFive JH7110
- always-on clock and reset generator
-Message-ID: <Y/T+3H8A7jrX+I9M@spud>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-11-hal.feng@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uwaipNMKG/E3gxwR"
-Content-Disposition: inline
-In-Reply-To: <20230221024645.127922-11-hal.feng@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229993AbjBUSAd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Feb 2023 13:00:33 -0500
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3732CFE0;
+        Tue, 21 Feb 2023 10:00:29 -0800 (PST)
+Received: from srv01.abscue.de (localhost [127.0.0.1])
+        by spamfilter.srv.local (Postfix) with ESMTP id BAD8C1C0048;
+        Tue, 21 Feb 2023 18:50:22 +0100 (CET)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from fluffy-mammal.fritz.box (dslb-092-072-008-248.092.072.pools.vodafone-ip.de [92.72.8.248])
+        by srv01.abscue.de (Postfix) with ESMTPSA id 4D4131C0046;
+        Tue, 21 Feb 2023 18:50:22 +0100 (CET)
+From:   =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: [PATCH 0/4] clk: qcom: Add clocks for MSM8917 and QM215
+Date:   Tue, 21 Feb 2023 18:49:05 +0100
+Message-Id: <20230221174909.164029-1-otto.pflueger@abscue.de>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Add support for clocks, resets and power domains provided by the global
+clock controller (GCC) and clocks controlled by the RPM firmware on
+MSM8917/QM215 SoCs.
 
---uwaipNMKG/E3gxwR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The only clock configuration difference between QM215 and MSM8917
+is the source mapping of the GPU clock, so a single driver is used
+for both SoCs.
 
-On Tue, Feb 21, 2023 at 10:46:36AM +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
->=20
-> Add bindings for the always-on clock and reset generator (AONCRG) on the
-> JH7110 RISC-V SoC by StarFive Ltd.
+Otto Pflüger (4):
+  dt-bindings: clock: Add MSM8917 global clock controller
+  clk: qcom: Add global clock controller driver for MSM8917
+  dt-bindings: clock: qcom,rpmcc: Add MSM8917
+  clk: qcom: smd-rpm: Add clocks for MSM8917
 
-> +  clocks:
-> +    items:
-> +      - description: Main Oscillator (24 MHz)
-> +      - description: RTC Oscillator (32.768 kHz)
-> +      - description: GMAC0 RMII reference
-> +      - description: GMAC0 RGMII RX
-> +      - description: STG AXI/AHB
-> +      - description: APB Bus
-> +      - description: GMAC0 GTX
+ .../bindings/clock/qcom,gcc-msm8909.yaml      |   13 +-
+ .../devicetree/bindings/clock/qcom,rpmcc.yaml |    2 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-smd-rpm.c                |   35 +
+ drivers/clk/qcom/gcc-msm8917.c                | 3283 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-msm8917.h  |  190 +
+ 7 files changed, 3528 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/clk/qcom/gcc-msm8917.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8917.h
 
-Ditto here, are some of these clocks, especially gmac0, also optional?
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: osc
-> +      - const: rtc_osc
-> +      - const: gmac0_rmii_refin
-> +      - const: gmac0_rgmii_rxin
-> +      - const: stg_axiahb
-> +      - const: apb_bus
-> +      - const: gmac0_gtxclk
-
---uwaipNMKG/E3gxwR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/T+3AAKCRB4tDGHoIJi
-0lMNAQDqgVssSvoD3wO1kWvaRRB+UiE+OxXFzbBA7J4AeUX9hgEA+XWwcgAbEcF4
-SWAUhBnnb6ev3bxrmG4+m7rCyVZ9og4=
-=Az7l
------END PGP SIGNATURE-----
-
---uwaipNMKG/E3gxwR--
+-- 
+2.39.1
