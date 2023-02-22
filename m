@@ -2,114 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED9D69EC89
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Feb 2023 02:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9728069ECAA
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Feb 2023 03:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjBVBsI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 Feb 2023 20:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S229840AbjBVCCj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Feb 2023 21:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjBVBsH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Feb 2023 20:48:07 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2718DEB50;
-        Tue, 21 Feb 2023 17:48:00 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E426F24E1D1;
-        Wed, 22 Feb 2023 09:47:51 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Feb
- 2023 09:47:51 +0800
-Received: from [192.168.125.128] (113.72.147.165) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 22 Feb
- 2023 09:47:50 +0800
-Message-ID: <7b3e09f0-a44f-0735-a049-eef7f0acec4c@starfivetech.com>
-Date:   Wed, 22 Feb 2023 09:48:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 01/11] dt-bindings: clock: Add StarFive JH7110
- System-Top-Group clock and reset generator
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S229779AbjBVCCi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Feb 2023 21:02:38 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01C793345F;
+        Tue, 21 Feb 2023 18:02:33 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8CxEZSzd_Vj+WgDAA--.1475S3;
+        Wed, 22 Feb 2023 10:02:27 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxrb6cd_VjO1I4AA--.42644S3;
+        Wed, 22 Feb 2023 10:02:04 +0800 (CST)
+Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver
+ support
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
+        Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
- <20230221083323.302471-2-xingyu.wu@starfivetech.com>
- <430318ed-5b30-e549-a5ce-df83aa18adf9@linaro.org>
- <43d00fd9-ab24-442e-3f82-208edaf399d0@starfivetech.com>
- <ae468e63-d8d3-dbfb-64da-75a147e1cd2d@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <ae468e63-d8d3-dbfb-64da-75a147e1cd2d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.165]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
+        WANG Xuerui <kernel@xen0n.name>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liupeibao@loongson.cn,
+        loongarch@lists.linux.dev, wanghongliang@loongson.cn
+References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
+ <20221129034157.15036-2-zhuyinbo@loongson.cn>
+ <31c690a347f858a477bbba9c838984ed.sboyd@kernel.org>
+ <4b5fd886-57ce-01ef-8224-432898b7fb1c@loongson.cn>
+ <8332a1cf44b01f06bdd5db9dc5d7f387.sboyd@kernel.org>
+ <01ee3dc6-a868-fd2b-93aa-11e6bdfcc9df@loongson.cn>
+ <9e8952c9415973dc7276185e3cdf5ae7.sboyd@kernel.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <d92223a0-6d4c-33ea-1473-3d40bdd0ad9e@loongson.cn>
+Date:   Wed, 22 Feb 2023 10:02:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <9e8952c9415973dc7276185e3cdf5ae7.sboyd@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Dxrb6cd_VjO1I4AA--.42644S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7Kw4xtw45CF1DZw4xJry7ZFb_yoW8AF1Upr
+        ZxZay7KF4qqr42vwnFga1UAas09F43tF17Zw4ftw1DCa4qk345ur4UXFn5CF93Jr43W3yv
+        qr1kta17CFyq9rJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
+        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
+        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8FAp5UUUUU==
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2023/2/21 21:37, Krzysztof Kozlowski wrote:
-> On 21/02/2023 14:01, Xingyu Wu wrote:
->> On 2023/2/21 19:25, Krzysztof Kozlowski wrote:
->>> On 21/02/2023 09:33, Xingyu Wu wrote:
->>>> Add bindings for the System-Top-Group clock and reset generator (STGCRG)
->>>> on the JH7110 RISC-V SoC by StarFive Ltd.
+
+在 2023/2/22 上午7:07, Stephen Boyd 写道:
+> Quoting zhuyinbo (2023-02-19 21:44:51)
+>> 在 2023/2/18 上午6:15, Stephen Boyd 写道:
+>>> Quoting zhuyinbo (2023-02-14 23:35:22)
+>>>> 在 2023/2/11 上午7:42, Stephen Boyd 写道:
+>>>>>> +
+>>>>>> +err:
+>>>>>> +       iounmap(loongson2_pll_base);
+>>>>>> +}
+>>>>>> +
+>>>>>> +CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
+>>>>> Any reason this can't be a platform driver?
+>> Your question is that  why I don't use the platform_driver_register to
+>> register  clk and use CLK_OF_DECLARE ?
+> Yes.
+>
+>> I was  consider other clock controllers of Loongson-2 series may be
+>> different with 2k1000 and I can add a line
+>>
+>> CLK_OF_DECLARE() for compatible other platform in the future. eg.
+>>
+>> CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
+>>
+>> +  CLK_OF_DECLARE(xxx1, xxx2,  xxx3);  // for other clock controllers of
+>> Loongson-2 series
+>>
+>>>> For the compatible consideration of other clock controllers of
+>>>> Loongson-2 series in the future, the way of using dts can be
 >>>>
->>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>
->>>
->>>> +    };
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index 93eb504c3b21..2e70c9f21989 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -19914,6 +19914,7 @@ F:	arch/riscv/boot/dts/starfive/
->>>>  STARFIVE JH71X0 CLOCK DRIVERS
->>>>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>>>  M:	Hal Feng <hal.feng@starfivetech.com>
->>>> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
->>>
->>> No improvements here. You add here new bindings for one device and then
->>> - without explanation - add yourself to all Starfive clock bindings.
->>> Either explain it or drop it or move it to separate patch.
->>>
->>> You already got comment for this.
->>>
->> 
->> Sorry, I didn't understand what you meant before. Now my understanding is that, 
->> If I improvements JH71X0 driver no JH7110 driver, I could add this here. Right?
->> 
->> Is it OK if I do it this way to move it to separate patch like this?:
->> +STARFIVE JH7110 STG CLOCK DRIVERS
->> +M:	Xingyu Wu <xingyu.wu@starfivetech.com>
-> 
-> If you want to be the maintainer of all drivers, add separate commit for
-> this, so this is obvious. Or at least explain this change in commit msg.
-> 
-
-OK, got it. Thanks.
-
-Best regard,
-Xingyu Wu
+>>>> better compatible.
+>>>>
+>>> Sorry that sentence doesn't make sense to me. The use of dts doesn't
+>>> require the use of CLK_OF_DECLARE.
+>> yes, the use of dts doesn't require the use of CLK_OF_DECLARE and can
+>> use platform_driver_register
+>>
+>> but my drvier not use platform_driver_register to register  clk and use
+>> CLK_OF_DECLARE to match of_clk_init.
+> of_clk_init() is there to register clks that are needed for early init,
+> i.e. the clockevent/clocksource or the root interrupt controller
+> (irqchip). Otherwise, it isn't necessary to register clks via
+> of_clk_init().
+okay, I got it.
 
