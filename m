@@ -2,297 +2,165 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EA069F1F4
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Feb 2023 10:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8F669F2D7
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Feb 2023 11:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjBVJj3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Feb 2023 04:39:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S231495AbjBVKld (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Feb 2023 05:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjBVJjH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Feb 2023 04:39:07 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3873BD99
-        for <linux-clk@vger.kernel.org>; Wed, 22 Feb 2023 01:36:03 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id 6so6647075wrb.11
-        for <linux-clk@vger.kernel.org>; Wed, 22 Feb 2023 01:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QYSBNjZMUqqg3o3xKcoCzAQfKFWE704AcgxDUXOHQ9Y=;
-        b=lQ5ofJgulmki2D9dnrA9jEH4OTkQLUfJCFm3Jtj9oGwkFgOqzEKaQidbQSjDy/gywt
-         18NNq6yXLW0EvwBwQDf2A42UW7TjNh0T57dl4c3aAHMSjzYyMLCg4Z+KF5pB6f2xDAVz
-         NDWmmfHkialfRI2CZb1vYGx5q8F8GR80bAzu5iI3va3oiecWe3kFVmSgZRYBqH3VqnRq
-         gp0E4XGhuR3Tu20Gb3mRfb6ZxzAGHBQjyM4SqIQriMDnRHcxE8OPaV4WwlJJSFXzfyfm
-         jhmkTcghutcNWHPwn1xwXkVbjEX/vD1g5ByC3xJzbmnBnufEW6DrNVwhZCuZvf92WBJ5
-         HSnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QYSBNjZMUqqg3o3xKcoCzAQfKFWE704AcgxDUXOHQ9Y=;
-        b=TruygLD6iYHC6lO+fCbnWQ6jUIGETZFTyb0rpFOoFoowxnIhjNdB9Fv2NTtmbfAqK9
-         UpGlZMJjRhJYT/IPGT49ADZc0emOImmF/0diaO7tPgLG1QlKB1Grk4Tsu08hViZhve/P
-         bqI9hQ4p/ryY3EtMk6vu5EaT+NmIeyeM+SC8ytnZS88tv7qp8F7RCrqRPsaIve+6oLeh
-         2tuE+SUsy2f6VBWvh++x72gAwiW2GwR2x8PweeS2n6I9q+RSGfIx7SdASXCePAu12s0S
-         hV7n0lS0op2A0bVrusn0m1nQ5Jxh2UkY/+uwCYL/NjhEcRHVnL2vmL9nCqeQb+t/fRuK
-         es7w==
-X-Gm-Message-State: AO0yUKXSxhnkAdZrPK03qzF6IShFruwC379GuNzeTt4U4qDVR51ZMPEz
-        qv9T5JH4P7z1zKAj3MDNZRF6Uw==
-X-Google-Smtp-Source: AK7set/E4R6V6MKYdreloJzvGIbISJCF04gsNrCaalEmNNxojDMfP5ElNc2fg0ejzT6oCgNmOoEFcw==
-X-Received: by 2002:adf:ea92:0:b0:2c7:b51:65ce with SMTP id s18-20020adfea92000000b002c70b5165cemr1448134wrm.12.1677058511923;
-        Wed, 22 Feb 2023 01:35:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id e6-20020a5d5006000000b002c57384dfe0sm9006229wrt.113.2023.02.22.01.34.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Feb 2023 01:34:10 -0800 (PST)
-Message-ID: <e9e63c87-b491-b4d5-b226-0539ef0de2d0@linaro.org>
-Date:   Wed, 22 Feb 2023 10:34:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFC 1/3] dt-bindings: clock: Add Renesas versa3 clock
- generator bindings
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S231218AbjBVKlc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Feb 2023 05:41:32 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E693756E;
+        Wed, 22 Feb 2023 02:41:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1677062490; x=1708598490;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=og8oc3RuSx7isHJHsUxe9wkqbVmwchIzWVG+7PVsMs0=;
+  b=ot0euPjuqJzHLYsUGyy3nLXSphmj6hIdfqH0Ucz5UdDTevJyR/bYBF4M
+   XR0ohvH2Xx3Of5svmVIB+ZS6HwB5hyPsm3FI962RR9Su44WmwOFOO3zdV
+   3tGGr12vCncrvs8Tcci/wPG4LuKmKRNvayMueWgZCjPbPP1sPs0wUwWPN
+   dXfenECVMLZy4yp3xx8+7v7a1/oNah6qIge2lUtWbqARSA/IvBBqOfZim
+   JChrsP5/HqOnjxJ10eTs1lfzX5kY7PsNXNUzhGuu/bmqkYY04gjp6WHBo
+   4ekAmHHni/avINgmMKqi2XnY6QEwQhbgX+cZ9dQErpCjJ9ghcfxh+cION
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,318,1669100400"; 
+   d="asc'?scan'208";a="138452374"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Feb 2023 03:41:29 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 22 Feb 2023 03:41:28 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Wed, 22 Feb 2023 03:41:25 -0700
+Date:   Wed, 22 Feb 2023 10:40:59 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Hal Feng <hal.feng@starfivetech.com>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-References: <20230220131307.269100-1-biju.das.jz@bp.renesas.com>
- <20230220131307.269100-2-biju.das.jz@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230220131307.269100-2-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 09/19] dt-bindings: clock: Add StarFive JH7110 system
+ clock and reset generator
+Message-ID: <Y/XxOw+T0WdYY7jP@wendy>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <20230221024645.127922-10-hal.feng@starfivetech.com>
+ <e4c2b711-7953-821b-4281-04e4b40154ea@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="A5GMe6d9NPNRqkf9"
+Content-Disposition: inline
+In-Reply-To: <e4c2b711-7953-821b-4281-04e4b40154ea@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 20/02/2023 14:13, Biju Das wrote:
-> Document Renesas versa3 clock generator(5P35023) bindings.
-> 
-> The 5P35023 is a VersaClock programmable clock generator and
-> is designed for low-power, consumer, and high-performance PCI
-> Express applications. The 5P35023 device is a three PLL
-> architecture design, and each PLL is individually programmable
-> and allowing for up to 6 unique frequency outputs.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
->  .../bindings/clock/renesas,versaclock3.yaml   | 135 ++++++++++++++++++
->  1 file changed, 135 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/renesas,versaclock3.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/renesas,versaclock3.yaml b/Documentation/devicetree/bindings/clock/renesas,versaclock3.yaml
-> new file mode 100644
-> index 000000000000..f45b8da73ec3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/renesas,versaclock3.yaml
+--A5GMe6d9NPNRqkf9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Filename usually is based on the compatible. Why these two are so different?
+On Wed, Feb 22, 2023 at 10:13:19AM +0100, Krzysztof Kozlowski wrote:
+> On 21/02/2023 03:46, Hal Feng wrote:
+> > From: Emil Renner Berthing <kernel@esmil.dk>
+> >=20
+> > Add bindings for the system clock and reset generator (SYSCRG) on the
+> > JH7110 RISC-V SoC by StarFive Ltd.
+> >=20
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>=20
+> I don't know what is happening here as neither this nor other patchset
+> explains anything. Please stop writing what you do in the patches, but
+> explain why. What is easy to get.
+>=20
+> (...)
+>=20
+>=20
+> > +
+> > +#define JH7110_SYSCLK_PLL0_OUT			190
+> > +#define JH7110_SYSCLK_PLL1_OUT			191
+> > +#define JH7110_SYSCLK_PLL2_OUT			192
+>=20
+> NAK. Do not add incorrect bindings just to remove it THE SAME TIME.
 
-
-> @@ -0,0 +1,135 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/renesas,versaclock3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+For some context, the PLL driver series [1] does the following, which is
+where this complaint stems from:
+> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt=
+-bindings/clock/starfive,jh7110-crg.h
+> index 5e4f21ca0642..086a6ddcf380 100644
+> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
+> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
+> @@ -6,6 +6,12 @@
+>  #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+>  #define __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
+> =20
+> +/* PLL clocks */
+> +#define JH7110_CLK_PLL0_OUT			0
+> +#define JH7110_CLK_PLL1_OUT			1
+> +#define JH7110_CLK_PLL2_OUT			2
+> +#define JH7110_PLLCLK_END			3
 > +
-> +title: Renesas VersaClock 3 programmable I2C clock generators
-> +
-> +description: |
-> +  The 5P35023 is a VersaClock programmable clock generator and
-> +  is designed for low-power, consumer, and high-performance PCI
-> +  express applications. The 5P35023 device is a three PLL
-> +  architecture design, and each PLL is individually programmable
-> +  and allowing for up to 6 unique frequency outputs.
-> +
-> +  An internal OTP memory allows the user to store the configuration
-> +  in the device. After power up, the user can change the device register
-> +  settings through the I2C interface when I2C mode is selected.
-> +
-> +  The driver can read a full register map from the DT, and will use that
-> +  register map to initialize the attached part (via I2C) when the system
-> +  boots. Any configuration not supported by the common clock framework
-> +  must be done via the full register map, including optimized settings.
-> +
-> +  Link to datasheet: https://www.renesas.com/us/en/products/clocks-timing/
-> +                     clock-generation/programmable-clocks/
-> +                     5p35023-versaclock-3s-programmable-clock-generator
+>  /* SYSCRG clocks */
+>  #define JH7110_SYSCLK_CPU_ROOT			0
+>  #define JH7110_SYSCLK_CPU_CORE			1
+> @@ -198,11 +204,7 @@
+>  #define JH7110_SYSCLK_TDM_TDM_INV		188
+>  #define JH7110_SYSCLK_JTAG_CERTIFICATION_TRNG	189
+> =20
+> -#define JH7110_SYSCLK_PLL0_OUT			190
+> -#define JH7110_SYSCLK_PLL1_OUT			191
+> -#define JH7110_SYSCLK_PLL2_OUT			192
 
-I think link should not be wrapped. Start in next line and just make it
-long.
+I was talking to Emil, who pointed out that these defines aren't
+actually ever used in the dts, so there's nothing really gained
+by adding them here in the first place.
+Seems like this series could simply move these defines into the driver
+(as the PLL addition series also does) and then we would not have to
+be worried about breaking the ABI in the future?
 
-While touching this, please keep the same order of entries as in
-example-schema, so maintainers go after title.
+Thanks,
+Conor.
 
-> +
-> +maintainers:
-> +  - Biju Das <biju.das.jz@bp.renesas.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - renesas,5p35023
-> +
-> +  reg:
-> +    description: I2C device address
-
-Drop description, it's obvious.
-
-> +    maxItems: 1
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  clock-names:
-> +    oneOf:
-> +      - items:
-> +          - const: x1
-> +      - items:
-> +          - const: clkin
-
-This should be specific, not one or another. Why do you have two
-entirely different clock inputs?
-
-(and if this stays, then just items: - enum: [])
+1 - https://patchwork.kernel.org/project/linux-riscv/patch/20230221141147.3=
+03642-3-xingyu.wu@starfivetech.com/
 
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  renesas,settings:
-> +    description: Optional, complete register map of the device.
-> +      Optimized settings for the device must be provided in full
-> +      and are written during initialization.
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 37
+--A5GMe6d9NPNRqkf9
+Content-Type: application/pgp-signature; name="signature.asc"
 
-maxItems instead... but I am not sure that we allow register settings in
-DT in general.
+-----BEGIN PGP SIGNATURE-----
 
-> +
-> +  assigned-clocks:
-> +    minItems: 6
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY/XxOwAKCRB4tDGHoIJi
+0ouHAQD1J4/fzbT7Ija75eE1nauMe2czMcMbWAzQIL1nwqgxdAD9GIT1Ap0dMr5V
+1t1LqyevhjLJUO2GrLIxTX8k1p6Zqw8=
+=KcGW
+-----END PGP SIGNATURE-----
 
-Drop.
-
-> +
-> +  assigned-clock-rates:
-> +    minItems: 6
-
-Drop.
-
-> +
-> +  renesas,clock-divider-read-only:
-> +    description: Flag for setting divider in read only mode.
-
-Flag? Then type: boolean.
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 5
-
-This is broken...
-
-> +
-> +  renesas,clock-flags:
-> +    description: Flags used in common clock frame work for configuring
-> +      clk outputs. See include/linux/clk-provider.h
-
-These are not bindings, so why do you non-bindings constants as
-bindings? They can change anytime. Choose one:
-1. Drop entire property,
-2. Make it a proper binding property, so an ABI and explain why this is
-DT specific. None of clock providers have to do it, so you need here
-good explanation.
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    minItems: 6
-
-maxItems instead
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    /* 24MHz crystal */
-> +    x1_x2: xtal {
-> +      compatible = "fixed-clock";
-> +      #clock-cells = <0>;
-> +      clock-frequency = <24000000>;
-> +    };
-
-Drop this part, obvious.
-
-> +
-> +    i2c@0 {
-> +        reg = <0x0 0x100>;
-
-Just i2c { and drop reg
-
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        versa3: clock-generator@68 {
-> +            compatible = "renesas,5p35023";
-> +            reg = <0x68>;
-> +            #clock-cells = <1>;
-> +
-> +            clocks = <&x1_x2>;
-> +            clock-names = "x1";
-> +
-> +            renesas,settings = [
-> +                80 00 11 19 4c 02 23 7f 83 19 08 a9 5f 25 24 bf
-> +                00 14 7a e1 00 00 00 00 01 55 59 bb 3f 30 90 b6
-> +                80 b0 45 c4 95
-> +            ];
-> +
-> +            assigned-clocks = <&versa3 0>,
-> +                              <&versa3 1>,
-> +                              <&versa3 2>,
-> +                              <&versa3 3>,
-> +                              <&versa3 4>,
-> +                              <&versa3 5>;
-> +            assigned-clock-rates = <12288000>, <25000000>,
-> +                                   <12000000>, <11289600>,
-> +                                   <11289600>, <24000000>;
-> +            renesas,clock-divider-read-only = <1>, <1>, <1>, <1>, <1>;
-> +            renesas,clock-flags = <2176>, <2176>, <2176>, <2052>,
-> +                                  <2176>, <2048>;
-> +        };
-> +    };
-> +
-> +    /* Consumer referencing the versa 3 */
-> +    consumer {
-> +        /* ... */
-> +        clocks = <&versa3 3>;
-> +        /* ... */
-
-Drop consumer. Do you see it anywhere else?
-
-Best regards,
-Krzysztof
-
+--A5GMe6d9NPNRqkf9--
