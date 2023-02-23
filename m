@@ -2,99 +2,86 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F316A0ED0
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 18:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03996A0F3B
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 19:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjBWRj1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Feb 2023 12:39:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
+        id S230453AbjBWSKl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Feb 2023 13:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjBWRj1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 12:39:27 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11A215CA6;
-        Thu, 23 Feb 2023 09:39:24 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id D825080AE4;
-        Thu, 23 Feb 2023 18:39:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1677173963;
-        bh=O3IRV+shEDtZsoaALUQKrtNo9sDC2VLCvqXxuJK8bUQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Gyqof24y1xX0/Da9dgFTlfK4TWqU2HB3AiaJqSMsRuLJ8xZtWb83CjYuHqxUqhRp0
-         8zuqWw84XyUP3/7QkUMemeVZMJPKVmfuS6VLSVW1OtkbMOoQIEIcNbE9csulJXEVB5
-         NTDWsoegBjAx0Oj6WgCcAjWR6ybVH2L9OY1pF2CLEAWufNlBSEr4sN2EuIfsjKdIMl
-         uL/F4SZmqIj6mw+wKZDnPXo0oG8RJmZkZKIJNn04uatwyLBJNDdEGl4Lu4Vc1Qx3hk
-         157V6qkIDMc/lpV1Luf6QlhDb/xpeztpFlMiHWBXy/lUUX96PdAEqwGnR5bLogvb4w
-         FCkBf6MX4mAyg==
-Message-ID: <9bcaaa02-d9e6-1086-91bf-b94a10330577@denx.de>
-Date:   Thu, 23 Feb 2023 18:39:21 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 5/5] arm64: dts: imx8mp: Add analog audio output on
- i.MX8MP EVK
-Content-Language: en-US
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     linux-clk@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <20230223171114.59164-1-marex@denx.de>
- <20230223171114.59164-5-marex@denx.de>
- <CAOMZO5A5k0EdE9_VqXe5iJ5x+dPFse=jqjMaL-3ip3r0zDQ=5w@mail.gmail.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <CAOMZO5A5k0EdE9_VqXe5iJ5x+dPFse=jqjMaL-3ip3r0zDQ=5w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231180AbjBWSKg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 13:10:36 -0500
+Received: from srv01.abscue.de (abscue.de [IPv6:2a03:4000:63:bf5:4817:8eff:feeb:8ac7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2943B5708C;
+        Thu, 23 Feb 2023 10:10:19 -0800 (PST)
+Received: from srv01.abscue.de (localhost [127.0.0.1])
+        by spamfilter.srv.local (Postfix) with ESMTP id 93D6D1C0048;
+        Thu, 23 Feb 2023 19:10:17 +0100 (CET)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from fluffy-mammal.fritz.box (dslb-092-073-085-163.092.073.pools.vodafone-ip.de [92.73.85.163])
+        by srv01.abscue.de (Postfix) with ESMTPSA id 1FE431C0046;
+        Thu, 23 Feb 2023 19:10:17 +0100 (CET)
+From:   =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?q?Otto=20Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: [PATCH v2 0/4] clk: qcom: Add clocks for MSM8917 and QM215
+Date:   Thu, 23 Feb 2023 19:09:31 +0100
+Message-Id: <20230223180935.60546-1-otto.pflueger@abscue.de>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2/23/23 18:28, Fabio Estevam wrote:
-> Hi Marek,
+Add support for clocks, resets and power domains provided by the global
+clock controller (GCC) and clocks controlled by the RPM firmware on
+MSM8917/QM215 SoCs.
 
-Hi,
+The only clock configuration difference between QM215 and MSM8917
+is the source mapping of the GPU clock, so a single driver is used
+for both SoCs.
 
-> On Thu, Feb 23, 2023 at 2:11 PM Marek Vasut <marex@denx.de> wrote:
-> 
->> +       reg_audio_pwr: regulator-audio-pwr {
->> +               compatible = "regulator-fixed";
->> +               regulator-name = "audio-pwr";
->> +               regulator-min-microvolt = <3300000>;
->> +               regulator-max-microvolt = <3300000>;
->> +               gpio = <&gpio4 29 GPIO_ACTIVE_HIGH>;
->> +               enable-active-high;
->> +               regulator-always-on;
-> 
-> It seems that "regulator-always-on" could be removed as the regulator
-> is controlled by the codec.
+Changes in v2:
+ - Added Krzysztof's Acked-by and Reviewed-by
+ - Rebased onto linux-next-20230223
+ - Fixed address in oxili_gx_gdsc
+ - Mentioned QM215 in Kconfig
+ - Switched to index-based device tree clock lookup
+ - Switched to of_device_get_match_data for determining the SoC variant
+ - Formatting fixes as suggested by Konrad
+ - Added depends on ARM64 || COMPILE_TEST as suggested by Krzysztof
 
-Ah yes
+Otto Pflüger (4):
+  dt-bindings: clock: Add MSM8917 global clock controller
+  clk: qcom: Add global clock controller driver for MSM8917
+  dt-bindings: clock: qcom,rpmcc: Add MSM8917
+  clk: qcom: smd-rpm: Add clocks for MSM8917
 
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+ .../bindings/clock/qcom,gcc-msm8909.yaml      |   13 +-
+ .../devicetree/bindings/clock/qcom,rpmcc.yaml |    2 +
+ drivers/clk/qcom/Kconfig                      |   10 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-smd-rpm.c                |   35 +
+ drivers/clk/qcom/gcc-msm8917.c                | 3303 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-msm8917.h  |  190 +
+ 7 files changed, 3550 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/clk/qcom/gcc-msm8917.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8917.h
 
-Thanks
+-- 
+2.39.1
