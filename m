@@ -2,142 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0986A0605
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 11:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124296A0DDA
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 17:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233669AbjBWKXK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Feb 2023 05:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S233421AbjBWQYg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Feb 2023 11:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbjBWKXD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 05:23:03 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4905F3AB0;
-        Thu, 23 Feb 2023 02:23:00 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 1D09424E289;
-        Thu, 23 Feb 2023 18:22:59 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
- 2023 18:22:59 +0800
-Received: from [192.168.125.82] (113.72.147.165) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 23 Feb
- 2023 18:22:57 +0800
-Message-ID: <04e071d8-3195-d065-d33f-ef81e3fcfb22@starfivetech.com>
-Date:   Thu, 23 Feb 2023 18:22:52 +0800
+        with ESMTP id S233240AbjBWQYg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 11:24:36 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4774B18155
+        for <linux-clk@vger.kernel.org>; Thu, 23 Feb 2023 08:24:35 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id E7D4E8573B;
+        Thu, 23 Feb 2023 17:24:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1677169473;
+        bh=qHoCgY1CenvXwJXW4zQHN5F30ppdmCRXgdneYtQV+Vo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Qjt7pScawpQg1/YjTnvUzRuoDrxAasAMC68vh1mINBNQXCnx/ZngVWc5t0X/QkjpL
+         1BG0shXjPrZMJCar68xypdx8pJ+mL5+3p/Z4WXjw+iHVbVku4Hkimit344tRpsB29r
+         94Lfn2jNIBUXC7/8AXSBb3lICzqzWpfCAugbyP1z5BABrpZG7Mt8rzeo4Gr+EXxb3h
+         DcEP0UpaEqFMcjmUXhPFAO26YV56s4E+yNX8uyi05Gl5dfUEj/F8mMKSnhUV7RYb8c
+         dvHsAOEUwC5AOWAm52of/c+I+tt1xmOQ7kOvAsoDvGzfN/0s28OCv+lqeKL77tsm8X
+         0wNbc0SLchBsg==
+Message-ID: <9aa7d898-d3ba-2018-7f88-d8978e0e52a1@denx.de>
+Date:   Thu, 23 Feb 2023 17:24:32 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v4 09/19] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 6/6] arm64: dts: imx8mp: Add analog audio output on
+ i.MX8MP EVK
 Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <20230221024645.127922-10-hal.feng@starfivetech.com>
- <e4c2b711-7953-821b-4281-04e4b40154ea@linaro.org> <Y/XxOw+T0WdYY7jP@wendy>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <Y/XxOw+T0WdYY7jP@wendy>
-Content-Type: text/plain; charset="UTF-8"
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc:     linux-clk@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
+References: <20220625013235.710346-1-marex@denx.de>
+ <20220625013235.710346-6-marex@denx.de> <20230222182252.2ad6d82b@booty>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230222182252.2ad6d82b@booty>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.147.165]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 22 Feb 2023 10:40:59 +0000, Conor Dooley wrote:
-> On Wed, Feb 22, 2023 at 10:13:19AM +0100, Krzysztof Kozlowski wrote:
->> On 21/02/2023 03:46, Hal Feng wrote:
->> > From: Emil Renner Berthing <kernel@esmil.dk>
->> > 
->> > Add bindings for the system clock and reset generator (SYSCRG) on the
->> > JH7110 RISC-V SoC by StarFive Ltd.
->> > 
->> > Reviewed-by: Rob Herring <robh@kernel.org>
->> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> > Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> 
->> I don't know what is happening here as neither this nor other patchset
->> explains anything. Please stop writing what you do in the patches, but
->> explain why. What is easy to get.
->> 
->> (...)
->> 
->> 
->> > +
->> > +#define JH7110_SYSCLK_PLL0_OUT			190
->> > +#define JH7110_SYSCLK_PLL1_OUT			191
->> > +#define JH7110_SYSCLK_PLL2_OUT			192
->> 
->> NAK. Do not add incorrect bindings just to remove it THE SAME TIME.
-> 
-> For some context, the PLL driver series [1] does the following, which is
-> where this complaint stems from:
->> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
->> index 5e4f21ca0642..086a6ddcf380 100644
->> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
->> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
->> @@ -6,6 +6,12 @@
->>  #ifndef __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
->>  #define __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__
->>  
->> +/* PLL clocks */
->> +#define JH7110_CLK_PLL0_OUT			0
->> +#define JH7110_CLK_PLL1_OUT			1
->> +#define JH7110_CLK_PLL2_OUT			2
->> +#define JH7110_PLLCLK_END			3
->> +
->>  /* SYSCRG clocks */
->>  #define JH7110_SYSCLK_CPU_ROOT			0
->>  #define JH7110_SYSCLK_CPU_CORE			1
->> @@ -198,11 +204,7 @@
->>  #define JH7110_SYSCLK_TDM_TDM_INV		188
->>  #define JH7110_SYSCLK_JTAG_CERTIFICATION_TRNG	189
->>  
->> -#define JH7110_SYSCLK_PLL0_OUT			190
->> -#define JH7110_SYSCLK_PLL1_OUT			191
->> -#define JH7110_SYSCLK_PLL2_OUT			192
-> 
-> I was talking to Emil, who pointed out that these defines aren't
-> actually ever used in the dts, so there's nothing really gained
-> by adding them here in the first place.
-> Seems like this series could simply move these defines into the driver
-> (as the PLL addition series also does) and then we would not have to
-> be worried about breaking the ABI in the future?
+On 2/22/23 18:22, Luca Ceresoli wrote:
+> Hello Marek,
 
-Sorry for that I didn't synchronize this with Xingyu. I'll move these
-PLL definitions into the driver in the next version.
+Hi,
 
-Best regards,
-Hal
-
+> On Sat, 25 Jun 2022 03:32:35 +0200
+> Marek Vasut <marex@denx.de> wrote:
 > 
-> 1 - https://patchwork.kernel.org/project/linux-riscv/patch/20230221141147.303642-3-xingyu.wu@starfivetech.com/
+>> Enable SAI3 on i.MX8MP EVK, add WM8960 codec binding and regulator.
+>> This is all that is needed to get analog audio output operational
+>> on i.MX8MP EVK.
+>>
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+>> Cc: Abel Vesa <abel.vesa@nxp.com>
+>> Cc: Fabio Estevam <festevam@gmail.com>
+>> Cc: Jacky Bai <ping.bai@nxp.com>
+>> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>> Cc: Lucas Stach <l.stach@pengutronix.de>
+>> Cc: Michael Turquette <mturquette@baylibre.com>
+>> Cc: Shawn Guo <shawnguo@kernel.org>
+>> Cc: Stephen Boyd <sboyd@kernel.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-clk@vger.kernel.org
+>> Cc: linux-imx@nxp.com
 > 
+> I'm sending in reply to this e-mail the device tree patch I have used
+> for my audio testing on the MSC SM2-MB-EP1 board. Feel free to add it to
+> your series if you want, it obviously depends on it.
 
+Lemme just mark this email locally and start with the MX8MP EVK . If the 
+audio patches ever get upstream, then this one can be easily 
+resubmitted. Does that work ?
