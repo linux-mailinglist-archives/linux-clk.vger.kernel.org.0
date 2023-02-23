@@ -2,202 +2,224 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1F66A0648
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 11:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABB36A05D2
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 11:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjBWKbA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Feb 2023 05:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
+        id S234103AbjBWKPo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Feb 2023 05:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjBWKbA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 05:31:00 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE9451FA0
-        for <linux-clk@vger.kernel.org>; Thu, 23 Feb 2023 02:30:29 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id t13so10210080wrv.13
-        for <linux-clk@vger.kernel.org>; Thu, 23 Feb 2023 02:30:29 -0800 (PST)
+        with ESMTP id S233205AbjBWKPn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 05:15:43 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17122724
+        for <linux-clk@vger.kernel.org>; Thu, 23 Feb 2023 02:15:40 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id f13so10337573vsg.6
+        for <linux-clk@vger.kernel.org>; Thu, 23 Feb 2023 02:15:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/d1V97xfn1urp1yFSAFHB4bA8otMHdcMdq0yddMNFI=;
-        b=hcoIV/z8lyL+ysVNVs6Y6+yJCu00ToOB1RctbNGmzn6TVnVvxY7XobmvDx0cUkA2xQ
-         xfM4zr3AWE+b2Gtowo9aLR8xr2kvlYJfKxP9Itoq39971OTw4jDjtvXuJIaW6qUeofV5
-         EQWm9Hn8VbRrY4wbZjRT+ENuVYy9Veq5SwjN8cFj2tCHTSpNKWogtut2gHDMrwDsU5cZ
-         ZKqDIGyOhckxOd0wsydnj2kidFvup2vNd5mqGZHNZgcLygtgv2+azbCyRnBMohLbAGHA
-         LQxmw22JVxiWV5822JzZZs1rVzyf1J1uIGehZSU3KFmWDRLsvMPcd89e+agLiMmUJ+0h
-         ah3g==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HVrmhpIhfXy3UeuiMvhWtzlXyLF71Bh8N6i0HHEh++k=;
+        b=Vy+v7B1L/N1iP4TtkYyhKLOX54+Ab8N3nCHjI6ZMfn6WL58RNwjgJMG3fvpDZcTnTm
+         8RkJ8/AE7csCDyL35SzdfqW11Yx5JO0WCBDPM/YmObEAsuPtd06cgFhO7ZKMYk5g5tfR
+         JIbWLjZswOE/2RfD7dOmER6IEZrmokRAkAkOU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3/d1V97xfn1urp1yFSAFHB4bA8otMHdcMdq0yddMNFI=;
-        b=qezLgHIZRUTOxy+wxQ7HBwgRz4fE8HaBU+LEc8wEFlEqPMY7qB5/oIOBJrrZbHyyO/
-         PJw0032gtwxO5zyTvWoQsODLycIjw2/RkxcNia/0ZGLfl89iYv6eY4RP/sTX57ktcELS
-         GsnETLsBvxXKbNB/k/KiRqnUP/eJjcrLeYW7ZzzmW/HNMobMf0HST2PMteBQ8dRIw3Ck
-         vn2xmBTnZmf2u5JgrBEeXtgsApsl7rwxyr3TDrdk7FuZqBjkGjht+G8waCYI9F/JdMz/
-         z8FArP8lGN/iqaCnLNYFAdyQ0t8nPEbBNYiWz1AXdbPWIKsUG4tE+5ZVCHfb8YQ4Wx5c
-         NK9g==
-X-Gm-Message-State: AO0yUKU5zId9xB6uqN4fk8PP2X8BEsTnQBr+oAfcyisMAMibUgAqFYhV
-        PVdnhsaf/+WDiay6Z7VC+s7voQ==
-X-Google-Smtp-Source: AK7set/AJ/sQ293L1C/QDJKZNG/kThSW0HregqvGRPQyAGhtGjSWliE7pQlcCpSYC0riIpZo4sB8jQ==
-X-Received: by 2002:a5d:6190:0:b0:2c7:a0b:e8d2 with SMTP id j16-20020a5d6190000000b002c70a0be8d2mr5185559wru.19.1677148226407;
-        Thu, 23 Feb 2023 02:30:26 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id t6-20020a5d4606000000b002c55306f6edsm13119455wrq.54.2023.02.23.02.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Feb 2023 02:30:25 -0800 (PST)
-References: <20230223062723.4770-1-yu.tu@amlogic.com>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
-Subject: Re: [PATCH] clk: meson: vid-pll-div: added meson_vid_pll_div_ops
- support to enable vid_pll_div to meet clock setting requirements,
- especially for late chip
-Date:   Thu, 23 Feb 2023 11:11:29 +0100
-In-reply-to: <20230223062723.4770-1-yu.tu@amlogic.com>
-Message-ID: <1jv8jsoerm.fsf@starbuckisacylon.baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HVrmhpIhfXy3UeuiMvhWtzlXyLF71Bh8N6i0HHEh++k=;
+        b=lZGCWOqN+9BOQO9VvB2ylc22bJx0eLDDO4ALvbV9iXMfUn/8KHAupNIqOGWWPfvFmk
+         LmTWxrL/01e0Je1JNBsbzCJtKikBsVAx0KuiQVEsI2l5dA+n47bubKLeVtNla62fb//n
+         1JOav6rRzwbjTXpycMwb/Yfm0g3QhHgyhCiSAiEGOQ/Nijyo/EerQgCDgFEVoxhe5GZb
+         ddAQbHeQQicTXcKWzP0zqOMYXnCyXL94XKC1wUxJEXG5GpNattrmhhpnEY0YGtCJOyfj
+         GRzxauegBEOOkEIIj+YDqgJaC+Y9kxD+W5YOPppygaE355m7WF2pboHZZLh25SDGGMEH
+         fyqQ==
+X-Gm-Message-State: AO0yUKWWLNyZNQPHiSEc5vExP8u11h6+z8oF9gDQflT9RNQhW4Zssc3c
+        1A7Q9VZulZIp/NBQZvoJhr26yoyWYvokaxKpLS03ew==
+X-Google-Smtp-Source: AK7set8MyCeyTUK6IdQ4DvBm7Map5jOAl0KfiFtNYDeLA/IdqwjM0ZzHDxJ7NMFAseTCuHWrBKcEHKCr19wduN2lrLc=
+X-Received: by 2002:a05:6102:31a9:b0:415:48dd:e0b9 with SMTP id
+ d9-20020a05610231a900b0041548dde0b9mr210695vsh.3.1677147339682; Thu, 23 Feb
+ 2023 02:15:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230222092543.19187-1-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 23 Feb 2023 18:15:28 +0800
+Message-ID: <CAGXv+5EA9Ed2tyg2f3TSeXYdZOZ8a=VztaOc_UTFK2dEsENjJQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/54] MediaTek clocks: full module build and cleanups
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-On Thu 23 Feb 2023 at 14:27, Yu Tu <yu.tu@amlogic.com> wrote:
-
-Title is way too long, 75 char max
-
-> The previous chip only provides "ro_ops" for the vid_pll_div clock,
-
-The driver does. Other chip could use RW ops I suppose.
-
-> which is not satisfied with the operation requirements of the later
-> chip for this clock, so the ops that can be set for the clock is added.
+On Wed, Feb 22, 2023 at 5:25 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-
-What requirements ? What "late" chip ? all this is quite vague.
-
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> ---
->  drivers/clk/meson/vid-pll-div.c | 59 +++++++++++++++++++++++++++++++++
->  drivers/clk/meson/vid-pll-div.h |  1 +
->  2 files changed, 60 insertions(+)
+> Changes in v5:
+>  - Fixed typo in MODULE_DEVICE_TABLE() for clk-mt8195-vpp0/vpp1
 >
-> diff --git a/drivers/clk/meson/vid-pll-div.c b/drivers/clk/meson/vid-pll-div.c
-> index daff235bc763..e75fa6f75efe 100644
-> --- a/drivers/clk/meson/vid-pll-div.c
-> +++ b/drivers/clk/meson/vid-pll-div.c
-> @@ -89,6 +89,65 @@ static unsigned long meson_vid_pll_div_recalc_rate(struct clk_hw *hw,
->  	return DIV_ROUND_UP_ULL(parent_rate * div->multiplier, div->divider);
->  }
->  
-> +static int meson_vid_pll_div_determine_rate(struct clk_hw *hw,
-> +					    struct clk_rate_request *req)
-> +{
-> +	unsigned long best = 0, now = 0;
-> +	unsigned int i, best_i = 0;
-> +
-> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
-
-It would be nice to actually describe how this vid pll work so we can
-stop using precompute "magic" values and actually use the IP to its full
-capacity.
-
-> +		now = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
-
-This effectively stops rate propagation. That's not how determine_rate()
-call back should work. Have a look a clk-divider.c and how it calls
-clk_hw_round_rate().
-
-> +					    vid_pll_div_table[i].multiplier,
-> +					    vid_pll_div_table[i].divider);
-> +		if (req->rate == now) {
-> +			return 0;
-> +		} else if (abs(now - req->rate) < abs(best - req->rate)) {
-> +			best = now;
-> +			best_i = i;
-> +		}
-> +	}
-> +
-> +	if (best_i < ARRAY_SIZE(vid_pll_div_table))
-> +		req->rate = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate *
-> +						  vid_pll_div_table[best_i].multiplier,
-> +						  vid_pll_div_table[best_i].divider);
-> +	else
-
-What is the point of this 'if' clause ?
-It looks like the 'else' part is dead code. 
-
-> +		req->rate = meson_vid_pll_div_recalc_rate(hw, req->best_parent_rate);
-> +
-> +	return 0;
-> +}
-> +
-> +static int meson_vid_pll_div_set_rate(struct clk_hw *hw, unsigned long rate,
-> +				      unsigned long parent_rate)
-> +{
-> +	struct clk_regmap *clk = to_clk_regmap(hw);
-> +	struct meson_vid_pll_div_data *pll_div = meson_vid_pll_div_data(clk);
-> +	int i;
-> +
-> +	for (i = 0 ; i < ARRAY_SIZE(vid_pll_div_table) ; ++i) {
-> +		if (DIV_ROUND_CLOSEST_ULL(parent_rate * vid_pll_div_table[i].multiplier,
-> +					  vid_pll_div_table[i].divider) == rate) {
-
-This assumes the set_rate() is going to have a perfect match and
-otherwise fail. You should not assume that. Have a look at clk-divider.c
-for examples.
-
-> +			meson_parm_write(clk->map, &pll_div->val, vid_pll_div_table[i].shift_val);
-> +			meson_parm_write(clk->map, &pll_div->sel, vid_pll_div_table[i].shift_sel);
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (i >= ARRAY_SIZE(vid_pll_div_table)) {
-> +		pr_debug("%s: Invalid rate value for vid_pll_div\n", __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +const struct clk_ops meson_vid_pll_div_ops = {
-> +	.recalc_rate	= meson_vid_pll_div_recalc_rate,
-> +	.determine_rate	= meson_vid_pll_div_determine_rate,
-> +	.set_rate	= meson_vid_pll_div_set_rate,
-> +};
-> +EXPORT_SYMBOL_GPL(meson_vid_pll_div_ops);
-> +
->  const struct clk_ops meson_vid_pll_div_ro_ops = {
->  	.recalc_rate	= meson_vid_pll_div_recalc_rate,
->  };
-> diff --git a/drivers/clk/meson/vid-pll-div.h b/drivers/clk/meson/vid-pll-div.h
-> index c0128e33ccf9..3ab729b85fde 100644
-> --- a/drivers/clk/meson/vid-pll-div.h
-> +++ b/drivers/clk/meson/vid-pll-div.h
-> @@ -16,5 +16,6 @@ struct meson_vid_pll_div_data {
->  };
->  
->  extern const struct clk_ops meson_vid_pll_div_ro_ops;
-> +extern const struct clk_ops meson_vid_pll_div_ops;
->  
->  #endif /* __MESON_VID_PLL_DIV_H */
+> Changes in v4:
+>  - Rebased over clk-next branch as of 21/02/2023
+>  - MT8135: Squashed removal of __initconst annotation with conversion
+>    to platform drivers as suggested by Chen-Yu
+>  - MT8135: Added mention of the introduction of the dummy clock in
+>    the commit description of patch [54/54]
+>  - Fixed Kconfig ordering issue for MT8195 IMGSYS dependant option
 >
-> base-commit: 8a9fbf00acfeeeaac8efab8091bb464bd71b70ea
+> Changes in v3:
+>  - Added conversion to simple_probe for MT8135 clocks
+>  - Reordered added Kconfig options for MT8195, MT8186
+>  - Additional config options for MT8195, MT8186 are now default
+>    enabled if parent COMMON_CLK_MT81{95,86} is enabled
+>  - Added .remove() callback to MT2712 and MT7622 apmixedsys drivers
+>    to avoid resource leakage on unbind/removal
+>  - Dropped unwanted and useless change on mt7629-eth.c
+>
+> Changes in v2:
+>  - Fixed issues on MT8183 (thanks Chen-Yu!)
+>  - Changed builtin_platform_driver() -> module_platform_driver() for
+>    MT8167 vdecsys clocks (as that was a mistake!)
+>  - Some patches were split, some others were reordered
+>  - Summarized: applied changes from Chen-Yu's review
+>
+> This is part 2 of the "MediaTek clocks cleanups and improvements" series,
+> which was already picked.
+>
+> If reading this full cover letter is too boring for you, here's a short
+> summary of the changes of this series:
+>  - Added mtk_clk_pdev_probe() for mtk-mmsys probed clocks;
+>  - Added divider clock support to common probe mechanism;
+>  - Various cleanups here and there;
+>  - Converted most clock drivers to platform_driver;
+>  - MediaTek clocks can now be built as modules.
+>
+> NOTE: Applies on top of [1] and [2].
+>
+>
+> Full blurb:
+>
+> This huge series adds more cleanups on top, reducing size and adding more
+> commonization for clock drivers probe/remove, which also includes a new
+> common probe mechanism for multimedia clock drivers that are usually
+> probed by mtk-mmsys instead of a dt clock node: thanks to this, it was
+> finally possible to convert almost all clock drivers to the common probe
+> mechanism, which *finally again* makes us able to build all these drivers
+> as modules!
+>
+> Since this looked like being *the* way forward, I went on converting some
+> more drivers away from OF_CLK_DECLARE_DRIVER to full platform_driver(s),
+> allowing for more (actually, almost all!) drivers to be built as modules.
+>
+> While at it, I also added some more consistency in macros usage by
+> removing all of the duplicated full macro declaration for MediaTek gate
+> clocks and replacing all of those with using the GATE_MTK macro instead,
+> producing a nice reduction in amount of lines per file but, more
+> importantly, improving readability and eventual future batch changes.
+>
+> This amount of commonization will also, in my opinion, greatly improve
+> the review process for new clock drivers, as they will be mostly just a
+> list of clocks and won't contain much new code, as it's all going to be
+> handled in the common places, which also reduces chances to see new clock
+> driver related bugs emerging on one SoC or the other.
+>
+> Since I don't own devices with all of the supported MediaTek SoCs, I
+> could not test some of the conversions on real hardware... but I am
+> confident that this will work as the drivers are *very* similar on a
+> per-generation basis.
+>
+> This series was build-tested for all (both module and built-in build)
+> and was manually tested on MT6795, MT8173, MT8192, MT8195.
+>
+> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=719067
+> [2]: https://patchwork.kernel.org/project/linux-mediatek/patch/20230207014800.7619-2-moudy.ho@mediatek.com/
+>
+> AngeloGioacchino Del Regno (54):
+>   clk: mediatek: clk-mtk: Switch to device_get_match_data()
+>   clk: mediatek: clk-mtk: Introduce clk_mtk_pdev_{probe,remove}()
+>   clk: mediatek: Migrate to mtk_clk_pdev_probe() for multimedia clocks
+>   clk: mediatek: Add divider clocks to mtk_clk_simple_{probe,remove}()
+>   clk: mediatek: mt2712: Migrate topckgen/mcucfg to
+>     mtk_clk_simple_probe()
+>   clk: mediatek: mt2712: Compress clock arrays entries to 90 columns
+>   clk: mediatek: mt2712: Add error handling to
+>     clk_mt2712_apmixed_probe()
+>   clk: mediatek: mt2712: Move apmixedsys clock driver to its own file
+>   clk: mediatek: mt2712-apmixedsys: Add .remove() callback for module
+>     build
+>   clk: mediatek: mt2712: Change to use module_platform_driver macro
+>   clk: mediatek: mt8365: Move apmixedsys clock driver to its own file
+>   clk: mediatek: mt8365: Convert simple_gate to mtk_gate clocks
+>   clk: mediatek: mt8365: Join top_misc_mux_gates and top_misc_muxes
+>     arrays
+>   clk: mediatek: mt8365: Convert to mtk_clk_simple_{probe,remove}()
+>   clk: mediatek: mt8167: Compress GATE_TOPx macros
+>   clk: mediatek: mt8167: Move apmixedsys as platform_driver in new file
+>   clk: mediatek: mt8167: Remove __initconst annotation from arrays
+>   clk: mediatek: mt8167: Convert to mtk_clk_simple_{probe,remove}()
+>   clk: mediatek: mt8183: Move apmixedsys clock driver to its own file
+>   clk: mediatek: mt8183: Compress clocks arrays entries where possible
+>   clk: mediatek: mt8183: Convert all remaining clocks to common probe
+>   clk: mediatek: Consistently use GATE_MTK() macro
+>   clk: mediatek: mt7622: Properly use CLK_IS_CRITICAL flag
+>   clk: mediatek: mt7622: Move apmixedsys clock driver to its own file
+>   clk: mediatek: mt7622-apmixedsys: Add .remove() callback for module
+>     build
+>   clk: mediatek: mt7622: Move infracfg to clk-mt7622-infracfg.c
+>   clk: mediatek: mt7622: Convert to platform driver and simple probe
+>   clk: mediatek: mt8516: Move apmixedsys clock driver to its own file
+>   clk: mediatek: mt8516: Convert to platform driver and simple probe
+>   clk: mediatek: mt8516: Allow building clock drivers as modules
+>   clk: mediatek: Propagate struct device with
+>     mtk_clk_register_dividers()
+>   clk: mediatek: mt7986-apmixed: Use PLL_AO flag to set critical clock
+>   clk: mediatek: mt7986-infracfg: Migrate to common probe mechanism
+>   clk: mediatek: mt7986-eth: Migrate to common probe mechanism
+>   clk: mediatek: mt8186-mcu: Migrate to common probe mechanism
+>   clk: mediatek: Switch to module_platform_driver() where possible
+>   clk: mediatek: Add MODULE_LICENSE() where missing
+>   clk: mediatek: mt2712: Change Kconfig options to allow module build
+>   clk: mediatek: Split MT8195 clock drivers and allow module build
+>   clk: mediatek: Allow building MT8192 non-critical clocks as modules
+>   clk: mediatek: Allow MT7622 clocks to be built as modules
+>   clk: mediatek: Allow all MT8167 clocks to be built as modules
+>   clk: mediatek: Allow all MT8183 clocks to be built as modules
+>   clk: mediatek: Allow building most MT6765 clock drivers as modules
+>   clk: mediatek: Allow building most MT6797 clock drivers as modules
+>   clk: mediatek: Split configuration options for MT8186 clock drivers
+>   clk: mediatek: mt8192: Move apmixedsys clock driver to its own file
+>   clk: mediatek: Kconfig: Allow module build for core mt8192 clocks
+>   clk: mediatek: Add MODULE_DEVICE_TABLE() where appropriate
+>   clk: mediatek: mt8135: Move apmixedsys to its own file
+>   clk: mediatek: mt8135: Properly use CLK_IS_CRITICAL flag
+>   clk: mediatek: mt8135-apmixedsys: Convert to platform_driver and
+>     module
+>   clk: mediatek: mt8135: Join root_clk_alias and top_divs arrays
+>   clk: mediatek: mt8135: Convert to simple probe and enable module build
 
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+
+on MT8183, MT8192, MT8195. Unfortunately on MT8186 the patch series causes
+the kernel to freeze during boot. I need to build a verbose kernel to figure
+it out.
+
+ChenYu
