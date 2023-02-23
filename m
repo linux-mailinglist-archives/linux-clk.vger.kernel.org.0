@@ -2,37 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C2C6A0E66
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 18:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD966A0E68
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Feb 2023 18:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBWRLn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Feb 2023 12:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S229608AbjBWRLo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Feb 2023 12:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjBWRLm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 12:11:42 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03DA570B0;
-        Thu, 23 Feb 2023 09:11:33 -0800 (PST)
+        with ESMTP id S229586AbjBWRLn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Feb 2023 12:11:43 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E151E57D00;
+        Thu, 23 Feb 2023 09:11:34 -0800 (PST)
 Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id BFBB0858FB;
-        Thu, 23 Feb 2023 18:11:30 +0100 (CET)
+        by phobos.denx.de (Postfix) with ESMTPSA id A1FFE8595D;
+        Thu, 23 Feb 2023 18:11:31 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1677172291;
-        bh=m6MP9CmBZQwunrZW7sTvV5cM9OTNsJ2o1tNv0UfOKLg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hcQm2veTzjKdj9gk6AB5tY4QpY3IDZpetkB5PEdcWYfM+9G9lOaZDVaXbc8QQKSf+
-         mIxnBp7UqfpZ1AoRzjac0Ql8ASxNfySZ4WwOYxwEzakB56vJ06DLCFLBIMsQ0lLb1p
-         fGAIcp6Zm2lcVAVpFnT/iTEV9caCZCjw9mOt8BwB1/J4xpEWqnutSaONJfah++7QM0
-         S52kbwQDw0JobeFRIQ52J1fvUoidMPupRhJauq9gmoX9sp6sj1xiRs1y1RfTVczvAg
-         TWEmKsU/9rgLYZy+ZfSbxnrIoo3oskR9mpEWdhEUVqywT4Y40G5AEpaccnc2Oruzpk
-         1sBc6YC4s3LXg==
+        s=phobos-20191101; t=1677172292;
+        bh=A4Lpl0E5TCZZOh4V21/ki+n6VeJraoapqRk7FJQHi8E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cLkZ2X4ENEEii9k9/O8DXZBd1B1CMLP011Z/ijXRmIvWzuuj/pvUVrehnNa8QGfKr
+         HlrLjRRtUuz67aq+VSKnaCEuDUXGVkVb4U/VOLVRuUMamw0xOXqpsU+hCTmtlZqtHk
+         PaN/OFrWPtlgZt4Ei9akMNMlx/n1ZJX2qkywQUVp6WCGhx2+4nECz/ny9YzsUf91eF
+         sGYfsG8JmBvfQRzluAl/YccG6yAUzCzTmzLVsxsovxIQzrQSMQlWtJ+VvXkMeeVnjI
+         X9lxJ9eKTojk8nggVWpGUuUTgJYFKgMTO0QzrVeAWshG6jl/JSuAS53/Ik4mTcigLR
+         fpM0f41Pdic8A==
 From:   Marek Vasut <marex@denx.de>
 To:     linux-clk@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Abel Vesa <abelvesa@kernel.org>,
+Cc:     Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Abel Vesa <abelvesa@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
         Jacky Bai <ping.bai@nxp.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -49,10 +51,12 @@ Cc:     Marek Vasut <marex@denx.de>, Abel Vesa <abelvesa@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 1/5] clk: Introduce devm_clk_hw_register_gate_parent_data()
-Date:   Thu, 23 Feb 2023 18:11:10 +0100
-Message-Id: <20230223171114.59164-1-marex@denx.de>
+Subject: [PATCH v4 2/5] clk: imx: imx8mp: Add audiomix block control
+Date:   Thu, 23 Feb 2023 18:11:11 +0100
+Message-Id: <20230223171114.59164-2-marex@denx.de>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230223171114.59164-1-marex@denx.de>
+References: <20230223171114.59164-1-marex@denx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
@@ -66,9 +70,12 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add an API for clock gate that uses parent_data for the parent instead of
-a string parent_name.
+Unlike the other block control IPs in i.MX8M, the audiomix is mostly a
+series of clock gates and muxes. Model it as a large static table of
+gates and muxes with one exception, which is the PLL14xx . The PLL14xx
+SAI PLL has to be registered separately.
 
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
 Cc: Abel Vesa <abelvesa@kernel.org>
@@ -91,42 +98,319 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-clk@vger.kernel.org
 ---
-V3: New patch
-V4: - Rebase on next 20230223
+V2: No change
+V3: - Use devm_platform_ioremap_resource
+    - Use clk_hw_onecell_data instead of clk_imx8mp_audiomix_priv
+    - Include mod_devicetable.h for of_device_id struct
+    - Use struct clk_parent_data instead of string parent_name
+V4: - Fix SAI_MCLK_SEL offset as pointed out by Marco
+    - Add TB from Luca
+    - Use devm_clk_hw_register_mux_parent_data_table() and drop
+      custom devm_clk_hw_register_mux_parent_data() patch, tweak
+      the indent to be less hideous
+    - Rebase on next 20230223
 ---
- include/linux/clk-provider.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/clk/imx/Makefile              |   2 +-
+ drivers/clk/imx/clk-imx8mp-audiomix.c | 277 ++++++++++++++++++++++++++
+ 2 files changed, 278 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/clk/imx/clk-imx8mp-audiomix.c
 
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 842e72a5348fa..92b7c794c6272 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -608,6 +608,25 @@ struct clk *clk_register_gate(struct device *dev, const char *name,
- 	__devm_clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, \
- 			       NULL, (flags), (reg), (bit_idx),		      \
- 			       (clk_gate_flags), (lock))
-+
-+/**
-+ * devm_clk_hw_register_gate - register a gate clock with the clock framework
-+ * @dev: device that is registering this clock
-+ * @name: name of this clock
-+ * @parent_data: parent clk data
-+ * @flags: framework-specific flags for this clock
-+ * @reg: register address to control gating of this clock
-+ * @bit_idx: which bit in the register controls gating of this clock
-+ * @clk_gate_flags: gate-specific flags for this clock
-+ * @lock: shared register lock for this clock
+diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
+index a75d59f7cb8a6..ae9d84ef046ba 100644
+--- a/drivers/clk/imx/Makefile
++++ b/drivers/clk/imx/Makefile
+@@ -27,7 +27,7 @@ obj-$(CONFIG_MXC_CLK) += mxc-clk.o
+ 
+ obj-$(CONFIG_CLK_IMX8MM) += clk-imx8mm.o
+ obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
+-obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
++obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o clk-imx8mp-audiomix.o
+ obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
+ 
+ obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
+diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
+new file mode 100644
+index 0000000000000..e4300df88f1ac
+--- /dev/null
++++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
+@@ -0,0 +1,277 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Driver for i.MX8M Plus Audio BLK_CTRL
++ *
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
 + */
-+#define devm_clk_hw_register_gate_parent_data(dev, name, parent_data, flags,  \
-+					      reg, bit_idx, clk_gate_flags,   \
-+					      lock)			      \
-+	__devm_clk_hw_register_gate((dev), NULL, (name), NULL, NULL,	      \
-+				    (parent_data), (flags), (reg), (bit_idx), \
-+				    (clk_gate_flags), (lock))
 +
- void clk_unregister_gate(struct clk *clk);
- void clk_hw_unregister_gate(struct clk_hw *hw);
- int clk_gate_is_enabled(struct clk_hw *hw);
++#include <linux/clk-provider.h>
++#include <linux/device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++
++#include "clk.h"
++
++#define CLKEN0			0x000
++#define CLKEN1			0x004
++#define SAI_MCLK_SEL(n)		(0x300 + 4 * (n))	/* n in 0..5 */
++#define PDM_SEL			0x318
++#define SAI_PLL_GNRL_CTL	0x400
++
++#define SAIn_MCLK1_PARENT(n)						\
++static const struct clk_parent_data					\
++clk_imx8mp_audiomix_sai##n##_mclk1_parents[] = {			\
++	{								\
++		.fw_name = "sai"__stringify(n),				\
++		.name = "sai"__stringify(n)				\
++	}, {								\
++		.fw_name = "sai"__stringify(n)"_mclk",			\
++		.name = "sai"__stringify(n)"_mclk"			\
++	},								\
++}
++
++SAIn_MCLK1_PARENT(1);
++SAIn_MCLK1_PARENT(2);
++SAIn_MCLK1_PARENT(3);
++SAIn_MCLK1_PARENT(5);
++SAIn_MCLK1_PARENT(6);
++SAIn_MCLK1_PARENT(7);
++
++static const struct clk_parent_data clk_imx8mp_audiomix_sai_mclk2_parents[] = {
++	{ .fw_name = "sai1", .name = "sai1" },
++	{ .fw_name = "sai2", .name = "sai2" },
++	{ .fw_name = "sai3", .name = "sai3" },
++	{ .name = "dummy" },
++	{ .fw_name = "sai5", .name = "sai5" },
++	{ .fw_name = "sai6", .name = "sai6" },
++	{ .fw_name = "sai7", .name = "sai7" },
++	{ .fw_name = "sai1_mclk", .name = "sai1_mclk" },
++	{ .fw_name = "sai2_mclk", .name = "sai2_mclk" },
++	{ .fw_name = "sai3_mclk", .name = "sai3_mclk" },
++	{ .name = "dummy" },
++	{ .fw_name = "sai5_mclk", .name = "sai5_mclk" },
++	{ .fw_name = "sai6_mclk", .name = "sai6_mclk" },
++	{ .fw_name = "sai7_mclk", .name = "sai7_mclk" },
++	{ .fw_name = "spdif_extclk", .name = "spdif_extclk" },
++	{ .name = "dummy" },
++};
++
++static const struct clk_parent_data clk_imx8mp_audiomix_pdm_parents[] = {
++	{ .fw_name = "pdm", .name = "pdm" },
++	{ .name = "sai_pll_out_div2" },
++	{ .fw_name = "sai1_mclk", .name = "sai1_mclk" },
++	{ .name = "dummy" },
++};
++
++
++static const struct clk_parent_data clk_imx8mp_audiomix_pll_parents[] = {
++	{ .fw_name = "osc_24m", .name = "osc_24m" },
++	{ .name = "dummy" },
++	{ .name = "dummy" },
++	{ .name = "dummy" },
++};
++
++static const struct clk_parent_data clk_imx8mp_audiomix_pll_bypass_sels[] = {
++	{ .fw_name = "sai_pll", .name = "sai_pll" },
++	{ .fw_name = "sai_pll_ref_sel", .name = "sai_pll_ref_sel" },
++};
++
++#define CLK_GATE(gname, cname)						\
++	{								\
++		gname"_cg",						\
++		IMX8MP_CLK_AUDIOMIX_##cname,				\
++		{ .fw_name = "ahb", .name = "ahb" }, NULL, 1,		\
++		CLKEN0 + 4 * !!(IMX8MP_CLK_AUDIOMIX_##cname / 32),	\
++		1, IMX8MP_CLK_AUDIOMIX_##cname % 32			\
++	}
++
++#define CLK_SAIn(n)							\
++	{								\
++		"sai"__stringify(n)"_mclk1_sel",			\
++		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1_SEL, {},		\
++		clk_imx8mp_audiomix_sai##n##_mclk1_parents,		\
++		ARRAY_SIZE(clk_imx8mp_audiomix_sai##n##_mclk1_parents), \
++		SAI_MCLK_SEL(n), 1, 0					\
++	}, {								\
++		"sai"__stringify(n)"_mclk2_sel",			\
++		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2_SEL, {},		\
++		clk_imx8mp_audiomix_sai_mclk2_parents,			\
++		ARRAY_SIZE(clk_imx8mp_audiomix_sai_mclk2_parents),	\
++		SAI_MCLK_SEL(n), 4, 1					\
++	}, {								\
++		"sai"__stringify(n)"_ipg_cg",				\
++		IMX8MP_CLK_AUDIOMIX_SAI##n##_IPG,			\
++		{ .fw_name = "ahb", .name = "ahb" }, NULL, 1,		\
++		CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_IPG		\
++	}, {								\
++		"sai"__stringify(n)"_mclk1_cg",				\
++		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1,			\
++		{							\
++			.fw_name = "sai"__stringify(n)"_mclk1_sel",	\
++			.name = "sai"__stringify(n)"_mclk1_sel"		\
++		}, NULL, 1,						\
++		CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1		\
++	}, {								\
++		"sai"__stringify(n)"_mclk2_cg",				\
++		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2,			\
++		{							\
++			.fw_name = "sai"__stringify(n)"_mclk2_sel",	\
++			.name = "sai"__stringify(n)"_mclk2_sel"		\
++		}, NULL, 1,						\
++		CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2		\
++	}, {								\
++		"sai"__stringify(n)"_mclk3_cg",				\
++		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK3,			\
++		{							\
++			.fw_name = "sai_pll_out_div2",			\
++			.name = "sai_pll_out_div2"			\
++		}, NULL, 1,						\
++		CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK3		\
++	}
++
++#define CLK_PDM								\
++	{								\
++		"pdm_sel", IMX8MP_CLK_AUDIOMIX_PDM_SEL, {},		\
++		clk_imx8mp_audiomix_pdm_parents,			\
++		ARRAY_SIZE(clk_imx8mp_audiomix_pdm_parents),		\
++		PDM_SEL, 2, 0						\
++	}
++
++struct clk_imx8mp_audiomix_sel {
++	const char			*name;
++	int				clkid;
++	const struct clk_parent_data	parent;		/* For gate */
++	const struct clk_parent_data	*parents;	/* For mux */
++	int				num_parents;
++	u16				reg;
++	u8				width;
++	u8				shift;
++};
++
++static struct clk_imx8mp_audiomix_sel sels[] = {
++	CLK_GATE("asrc", ASRC_IPG),
++	CLK_GATE("pdm", PDM_IPG),
++	CLK_GATE("earc", EARC_IPG),
++	CLK_GATE("ocrama", OCRAMA_IPG),
++	CLK_GATE("aud2htx", AUD2HTX_IPG),
++	CLK_GATE("earc_phy", EARC_PHY),
++	CLK_GATE("sdma2", SDMA2_ROOT),
++	CLK_GATE("sdma3", SDMA3_ROOT),
++	CLK_GATE("spba2", SPBA2_ROOT),
++	CLK_GATE("dsp", DSP_ROOT),
++	CLK_GATE("dspdbg", DSPDBG_ROOT),
++	CLK_GATE("edma", EDMA_ROOT),
++	CLK_GATE("audpll", AUDPLL_ROOT),
++	CLK_GATE("mu2", MU2_ROOT),
++	CLK_GATE("mu3", MU3_ROOT),
++	CLK_PDM,
++	CLK_SAIn(1),
++	CLK_SAIn(2),
++	CLK_SAIn(3),
++	CLK_SAIn(5),
++	CLK_SAIn(6),
++	CLK_SAIn(7)
++};
++
++static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
++{
++	struct clk_hw_onecell_data *priv;
++	struct device *dev = &pdev->dev;
++	void __iomem *base;
++	struct clk_hw *hw;
++	int i;
++
++	priv = devm_kzalloc(dev,
++			    struct_size(priv, hws, IMX8MP_CLK_AUDIOMIX_END),
++			    GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->num = IMX8MP_CLK_AUDIOMIX_END;
++
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
++
++	for (i = 0; i < ARRAY_SIZE(sels); i++) {
++		if (sels[i].num_parents == 1) {
++			hw = devm_clk_hw_register_gate_parent_data(dev,
++				sels[i].name, &sels[i].parent, 0,
++				base + sels[i].reg, sels[i].shift, 0, NULL);
++		} else {
++			hw = devm_clk_hw_register_mux_parent_data_table(dev,
++				sels[i].name, sels[i].parents,
++				sels[i].num_parents, 0,
++				base + sels[i].reg,
++				sels[i].shift, sels[i].width,
++				0, NULL, NULL);
++		}
++
++		if (IS_ERR(hw))
++			return PTR_ERR(hw);
++
++		priv->hws[sels[i].clkid] = hw;
++	}
++
++	/* SAI PLL */
++	hw = devm_clk_hw_register_mux_parent_data_table(dev,
++		"sai_pll_ref_sel", clk_imx8mp_audiomix_pll_parents,
++		ARRAY_SIZE(clk_imx8mp_audiomix_pll_parents),
++		CLK_SET_RATE_NO_REPARENT, base + SAI_PLL_GNRL_CTL,
++		0, 2, 0, NULL, NULL);
++	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL_REF_SEL] = hw;
++
++	hw = imx_dev_clk_hw_pll14xx(dev, "sai_pll", "sai_pll_ref_sel",
++				    base + 0x400, &imx_1443x_pll);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
++	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL] = hw;
++
++	hw = devm_clk_hw_register_mux_parent_data_table(dev,
++		"sai_pll_bypass", clk_imx8mp_audiomix_pll_bypass_sels,
++		ARRAY_SIZE(clk_imx8mp_audiomix_pll_bypass_sels),
++		CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
++		base + SAI_PLL_GNRL_CTL, 16, 1, 0, NULL, NULL);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
++	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL_BYPASS] = hw;
++
++	hw = devm_clk_hw_register_gate(dev, "sai_pll_out", "sai_pll_bypass",
++				       0, base + SAI_PLL_GNRL_CTL, 13,
++				       0, NULL);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
++	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL_OUT] = hw;
++
++	hw = devm_clk_hw_register_fixed_factor(dev, "sai_pll_out_div2",
++					       "sai_pll_out", 0, 1, 2);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
++
++	return devm_of_clk_add_hw_provider(&pdev->dev, of_clk_hw_onecell_get,
++					   priv);
++}
++
++static const struct of_device_id clk_imx8mp_audiomix_of_match[] = {
++	{ .compatible = "fsl,imx8mp-audio-blk-ctrl" },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, clk_imx8mp_audiomix_of_match);
++
++static struct platform_driver clk_imx8mp_audiomix_driver = {
++	.probe	= clk_imx8mp_audiomix_probe,
++	.driver = {
++		.name = "imx8mp-audio-blk-ctrl",
++		.of_match_table = clk_imx8mp_audiomix_of_match,
++	},
++};
++
++module_platform_driver(clk_imx8mp_audiomix_driver);
++
++MODULE_AUTHOR("Marek Vasut <marex@denx.de>");
++MODULE_DESCRIPTION("Freescale i.MX8MP Audio Block Controller driver");
++MODULE_LICENSE("GPL");
 -- 
 2.39.1
 
