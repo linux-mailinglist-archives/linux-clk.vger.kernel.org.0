@@ -2,61 +2,62 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3BE6A1C91
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Feb 2023 14:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB576A1F6F
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Feb 2023 17:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjBXNAL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 Feb 2023 08:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S229507AbjBXQQc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 Feb 2023 11:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjBXNAK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Feb 2023 08:00:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C788763DF8
-        for <linux-clk@vger.kernel.org>; Fri, 24 Feb 2023 05:00:08 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pVXg6-0007RR-8K; Fri, 24 Feb 2023 13:59:58 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pVXg5-0005cG-Oo; Fri, 24 Feb 2023 13:59:57 +0100
-Date:   Fri, 24 Feb 2023 13:59:57 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
+        with ESMTP id S229485AbjBXQQb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Feb 2023 11:16:31 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149FE63DE7
+        for <linux-clk@vger.kernel.org>; Fri, 24 Feb 2023 08:16:16 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 945B4C000A;
+        Fri, 24 Feb 2023 16:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1677255375;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CEcJzAt1Nz9tEOX4g5xEs4R3tREJCiS0mtbc0K3mvxI=;
+        b=fD3VsbT4BDR8SfSzuUnNJEGrGVDhDyEw/gJTS1KCKzVQDxY4/67AkUlPrYnhEqqB8Z8QlP
+        bQzOl5I6r5hB+GMi3aVFDZxyKognPth+TFYoZVOberRpqMRAq+fdhzs+E/vLe0e8yta03E
+        WyMzzGacOXIFKyobU4/KGwZBwdFhBXSYVvl4ZZ3nhgCvv/wJKNYzzGqdPbCD7EjUOSKdBZ
+        83BOtTWrAbrkwFVAqt/moszJH+PbOFxTpA/w7JyInvIpMiwS9BaNxRN3XHk9L6hqGY9iX+
+        z0HVKKoq2r0sj5RfCxRlX9ZTq31E7bkp88G4pWfPoNP7oZnKtJ/uHApaKxK09Q==
+Date:   Fri, 24 Feb 2023 17:16:11 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
 To:     Marek Vasut <marex@denx.de>
-Cc:     linux-clk@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
+Cc:     linux-clk@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
         Fabio Estevam <festevam@gmail.com>,
         Jacky Bai <ping.bai@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 5/5] arm64: dts: imx8mp: Add analog audio output on
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
+Subject: Re: [PATCH v3 6/6] arm64: dts: imx8mp: Add analog audio output on
  i.MX8MP EVK
-Message-ID: <20230224125957.ynbqionkmhce2uij@pengutronix.de>
-References: <20230223171114.59164-1-marex@denx.de>
- <20230223171114.59164-5-marex@denx.de>
+Message-ID: <20230224171611.42760f58@booty>
+In-Reply-To: <9aa7d898-d3ba-2018-7f88-d8978e0e52a1@denx.de>
+References: <20220625013235.710346-1-marex@denx.de>
+        <20220625013235.710346-6-marex@denx.de>
+        <20230222182252.2ad6d82b@booty>
+        <9aa7d898-d3ba-2018-7f88-d8978e0e52a1@denx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223171114.59164-5-marex@denx.de>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,73 +66,45 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Hi Marek,
 
-On 23-02-23, Marek Vasut wrote:
-> Enable SAI3 on i.MX8MP EVK, add WM8960 codec binding and regulator.
-> This is all that is needed to get analog audio output operational
-> on i.MX8MP EVK.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Abel Vesa <abelvesa@kernel.org>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Jacky Bai <ping.bai@nxp.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Marco Felsch <m.felsch@pengutronix.de>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Richard Cochran <richardcochran@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-clk@vger.kernel.org
-> ---
-> V2: No change
-> V3: No change
-> V4: - Update codec node name and phandle label
->     - Use just sound for the sound node name
->     - Rebase on next 20230223
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 60 ++++++++++++++++++++
->  1 file changed, 60 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> index 7816853162b3f..9ed94f271ef9a 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-> @@ -40,6 +40,16 @@ pcie0_refclk: pcie0-refclk {
->  		clock-frequency = <100000000>;
->  	};
->  
-> +	reg_audio_pwr: regulator-audio-pwr {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "audio-pwr";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpio = <&gpio4 29 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +		regulator-always-on;
-> +	};
-> +
->  	reg_can1_stby: regulator-can1-stby {
->  		compatible = "regulator-fixed";
->  		regulator-name = "can1-stby";
-> @@ -83,6 +93,23 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
->  		enable-active-high;
->  	};
-> +
-> +	sound {
-> +		compatible = "fsl,imx-audio-wm8960";
+On Thu, 23 Feb 2023 17:24:32 +0100
+Marek Vasut <marex@denx.de> wrote:
 
-Can we make use the "simple-audio-card" here? At least the 8mq-evk and
-the 8mm-evk is using this as well.
+> On 2/22/23 18:22, Luca Ceresoli wrote:
+> > Hello Marek,  
+> 
+> Hi,
+> 
+> > On Sat, 25 Jun 2022 03:32:35 +0200
+> > Marek Vasut <marex@denx.de> wrote:
+> >   
+> >> Enable SAI3 on i.MX8MP EVK, add WM8960 codec binding and regulator.
+> >> This is all that is needed to get analog audio output operational
+> >> on i.MX8MP EVK.
+> >>
+> >> Signed-off-by: Marek Vasut <marex@denx.de>
+> >> Cc: Abel Vesa <abel.vesa@nxp.com>
+> >> Cc: Fabio Estevam <festevam@gmail.com>
+> >> Cc: Jacky Bai <ping.bai@nxp.com>
+> >> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >> Cc: Lucas Stach <l.stach@pengutronix.de>
+> >> Cc: Michael Turquette <mturquette@baylibre.com>
+> >> Cc: Shawn Guo <shawnguo@kernel.org>
+> >> Cc: Stephen Boyd <sboyd@kernel.org>
+> >> Cc: linux-arm-kernel@lists.infradead.org
+> >> Cc: linux-clk@vger.kernel.org
+> >> Cc: linux-imx@nxp.com  
+> > 
+> > I'm sending in reply to this e-mail the device tree patch I have used
+> > for my audio testing on the MSC SM2-MB-EP1 board. Feel free to add it to
+> > your series if you want, it obviously depends on it.  
+> 
+> Lemme just mark this email locally and start with the MX8MP EVK . If the 
+> audio patches ever get upstream, then this one can be easily 
+> resubmitted. Does that work ?
 
-Regards,
-  Marco
+Sure.
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
