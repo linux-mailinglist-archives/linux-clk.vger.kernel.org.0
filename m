@@ -2,73 +2,137 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9C16A2C8D
-	for <lists+linux-clk@lfdr.de>; Sun, 26 Feb 2023 00:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAD96A2E65
+	for <lists+linux-clk@lfdr.de>; Sun, 26 Feb 2023 06:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjBYXWN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 25 Feb 2023 18:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41526 "EHLO
+        id S229649AbjBZFkB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 26 Feb 2023 00:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjBYXWM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 25 Feb 2023 18:22:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DBD14229;
-        Sat, 25 Feb 2023 15:22:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E145B80B46;
-        Sat, 25 Feb 2023 23:22:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3B2F2C433D2;
-        Sat, 25 Feb 2023 23:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677367329;
-        bh=laxUjxKUL1KdFBI5/DZLgXrZDWAz4MZtnAzUt4/SxLM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jYpgHvyMEpi0iMzSn6aUzcEi74EEbjbjD0IsZa7aNmLcU3T81w5uCpF1n4bh122Tp
-         B3+9sPO0CG3MY1vhPYegre10PnwXiA4st4NPJDGSv7w19xylQ6btRR7Tfg3h58rTH/
-         EMe88QR9GBK6GWYUR22gj4ZvyLbGZGAwo4hs0LOgSGLy7KNbT4SoKCcxxEvCHNgXfO
-         uss9Y2DV9NAzQ9njpWS9eqBBcXBiYdjQWwJWyycBa/AEg6bsEBxibtiKx7RpR8LpFx
-         IhfaTn0lpiO7tCKKpIpXNggDfejnUm9Fg7DeADF7k6m46uBNDJcmkmFIIT4lDGgsTQ
-         6GcLm66wYiVTQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A0EBE68D26;
-        Sat, 25 Feb 2023 23:22:09 +0000 (UTC)
-Subject: Re: [GIT PULL] clk changes for the merge window
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230225044543.502452-1-sboyd@kernel.org>
-References: <20230225044543.502452-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-clk.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230225044543.502452-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
-X-PR-Tracked-Commit-Id: b64baafa24d2c430513329daf5ebb821620d0c03
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1ec35eadc3b448c91a6b763371a7073444e95f9d
-Message-Id: <167736732916.9412.3213886750778915610.pr-tracker-bot@kernel.org>
-Date:   Sat, 25 Feb 2023 23:22:09 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S229601AbjBZFkA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 26 Feb 2023 00:40:00 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21925136F7;
+        Sat, 25 Feb 2023 21:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=EI1aXrE2jWnMQpvhJWCxJ0A1m6hExM8zG6kHodDd/Yk=; b=aj3A5Ot6MEhhd9SZR6hiyed6PQ
+        EdZuqG07G/Vk/F8skIZAfGRc6sNw4DC3faae0Cu3vMc4szUf4tDAjvfhrUYJgE2qrG+wA3gREi+N9
+        PxwHUdCcxP7gl8263NKtViUAcgY2zI6M/LMZBz9lNggC95W1ux6ZsuulZKWLDOGTRoKB45Cn6oWKQ
+        wmRpRz9HJa6rXmn93Yj2Kp+oVd2a57W+8ogtuK5beZyvX1IVvMsN0ws+h4BF3CcUdqyDY6oBTAOxv
+        yxF6SU+Dxy/zjph+VaxFK8u1DqBXUvUKhjqVRXd4V3udKqotaho/14nhEhUecI4IwtIGLrTY08V5M
+        lQmQqocw==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pW9lK-006qYL-N4; Sun, 26 Feb 2023 05:39:54 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Corey Minyard <minyard@acm.org>,
+        openipmi-developer@lists.sourceforge.net,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Riku Voipio <riku.voipio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-clk@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        platform-driver-x86@vger.kernel.org,
+        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
+        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
+        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
+Subject: [PATCH 0/8] drivers: select REGMAP instead of depending on it
+Date:   Sat, 25 Feb 2023 21:39:45 -0800
+Message-Id: <20230226053953.4681-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The pull request you sent on Fri, 24 Feb 2023 20:45:42 -0800:
+REGMAP is a hidden (not user visible) symbol. Users cannot set it
+directly thru "make *config", so drivers should select it instead of
+depending on it if they need it.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+Consistently using "select" or "depends on" can also help reduce
+Kconfig circular dependency issues.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1ec35eadc3b448c91a6b763371a7073444e95f9d
+REGMAP is selected 94 times and is depended on 11 times in
+current linux-next. Eliminate the uses of "depends on" by
+converting them to "select".
 
-Thank you!
+ [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead of depending on it
+ [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
+ [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending on it
+ [PATCH 4/8] leds: TI_LMU_COMMON: select REGMAP instead of depending on it
+ [PATCH 5/8] platform: mellanox: select REGMAP instead of depending on it
+ [PATCH 6/8] platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
+ [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
+ [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+diffstat:
+ drivers/char/ipmi/Kconfig         |    3 ++-
+ drivers/clk/Kconfig               |    2 +-
+ drivers/gpio/Kconfig              |    2 +-
+ drivers/leds/Kconfig              |    2 +-
+ drivers/platform/mellanox/Kconfig |    9 ++++-----
+ drivers/platform/x86/Kconfig      |    3 ++-
+ drivers/thermal/intel/Kconfig     |    3 ++-
+ drivers/tty/serial/8250/Kconfig   |    3 ++-
+ 8 files changed, 15 insertions(+), 12 deletions(-)
+
+Cc: Andrew Jeffery <andrew@aj.id.au>
+Cc: Corey Minyard <minyard@acm.org>
+Cc: openipmi-developer@lists.sourceforge.net
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Riku Voipio <riku.voipio@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: linux-clk@vger.kernel.org
+Cc: Michael Walle <michael@walle.cc>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-gpio@vger.kernel.org
+Cc: Dan Murphy <dmurphy@ti.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Lee Jones <lee@kernel.org>
+Cc: linux-leds@vger.kernel.org
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Michael Shych <michaelsh@nvidia.com>
+Cc: Mark Gross <markgross@kernel.org>
+Cc: Vadim Pasternak <vadimp@nvidia.com>
+Cc: platform-driver-x86@vger.kernel.org
+Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
+Cc: Bin Gao <bin.gao@intel.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Amit Kucheria <amitk@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: Oskar Senft <osk@google.com>
+Cc: linux-serial@vger.kernel.org
