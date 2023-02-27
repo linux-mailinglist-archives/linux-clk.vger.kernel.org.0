@@ -2,176 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9186A46B5
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Feb 2023 17:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2A96A4869
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Feb 2023 18:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjB0QHN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Feb 2023 11:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S229698AbjB0Roc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Feb 2023 12:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjB0QHM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Feb 2023 11:07:12 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B62F233C8;
-        Mon, 27 Feb 2023 08:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=1vz2UEdjmQXWhUlE3HWzfK6c4UyQl3yd4RAPwcSJ89A=; b=ZTBfsGzw1Zz25agNHtP5dojHJj
-        SbvBw4DWjkluj57TGsurxGKn7gq5utVt4Xo3T87VCnghOCjxsyOzwSFD6p9BzQA8dzP6aFzroou/G
-        joiJ2HyB6hVfZie38EcUmBZtP13momINHbb8XT2j4fAjqp3Qy2L7cV8ty1o0CBQL9ZEmrBFPas6B9
-        hCyor6yF7a5nzuuNCJo+8LQbNEfALDGwi0FHT3YgblTzpvR0rVQfzjEzd6ZPJeDq7FdCg+eKyKAY4
-        1TARqq1Vn1SRIuIhwDqKPV3mwmE+gt26RF978mC3zR66Misshi/Y8AiXx1BjQTKxkLcfITK3b0m8i
-        s73G6E1w==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWg1q-00AItm-J2; Mon, 27 Feb 2023 16:07:06 +0000
-Message-ID: <6a95a337-2972-427f-635d-5ef4e91a82fa@infradead.org>
-Date:   Mon, 27 Feb 2023 08:07:04 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 0/8] drivers: select REGMAP instead of depending on it
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Jeffery <andrew@aj.id.au>, Corey Minyard <minyard@acm.org>,
-        openipmi-developer@lists.sourceforge.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Riku Voipio <riku.voipio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S229657AbjB0Rob (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Feb 2023 12:44:31 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC2310DE;
+        Mon, 27 Feb 2023 09:44:08 -0800 (PST)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id CC4F580EB1;
+        Mon, 27 Feb 2023 18:43:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1677519801;
+        bh=7nz1XcRxj6TFZuWC/bRpJWFJIsnTTnq+NMOPyKTlr0c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b3kzNWCcpClv1EodCcDdVijWjWt8B6XOwBFR7uDJrznp/83riQgsJbvS/tMAAlwlN
+         9Xx07VZvWuPqJHIYHXAj/6cD+4JnovXf2Ze7ZfNIlMC/78SI00Zq8Qr3lxBrmWzuHg
+         3XNl47XDzQx+RNXQ3Y+gZ2tKQxpvyLnhsJEoT7ljBqu66vSxUq+/WYtgb0m8A6F4ls
+         xQXoh/xkx+iUx37QBvg8FOi29Y9GhQY7GLvUgY17cet9LbZOR1XrkP8753Fl5/xv0D
+         kNAMr1YXmlLOI3CTXsOT3X5Aa7qIkkkCML48IyiIInwciIj84ERyXaPP4VyKhxTUo1
+         Kj5/YKHqbBBiQ==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-clk@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Adam Ford <aford173@gmail.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marco Felsch <m.felsch@pengutronix.de>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Michael Shych <michaelsh@nvidia.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        platform-driver-x86@vger.kernel.org,
-        Yegnesh S Iyer <yegnesh.s.iyer@intel.com>,
-        Bin Gao <bin.gao@intel.com>, Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        Oskar Senft <osk@google.com>, linux-serial@vger.kernel.org
-References: <20230226053953.4681-1-rdunlap@infradead.org>
- <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <7dd27ec5-0619-128d-8407-6711a05ef271@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 1/5] clk: Introduce devm_clk_hw_register_gate_parent_data()
+Date:   Mon, 27 Feb 2023 18:43:04 +0100
+Message-Id: <20230227174308.87286-1-marex@denx.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Add an API for clock gate that uses parent_data for the parent instead of
+a string parent_name.
 
+Tested-by: Adam Ford <aford173@gmail.com> #imx8mp-beacon-kit
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Abel Vesa <abelvesa@kernel.org>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Jacky Bai <ping.bai@nxp.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Marco Felsch <m.felsch@pengutronix.de>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-clk@vger.kernel.org
+---
+V3: New patch
+V4: - Rebase on next 20230223
+V5: Add TB from Adam and Alexander
+---
+ include/linux/clk-provider.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-On 2/27/23 01:31, Hans de Goede wrote:
-> Hi Randy,
-> 
-> On 2/26/23 06:39, Randy Dunlap wrote:
->> REGMAP is a hidden (not user visible) symbol. Users cannot set it
->> directly thru "make *config", so drivers should select it instead of
->> depending on it if they need it.
->>
->> Consistently using "select" or "depends on" can also help reduce
->> Kconfig circular dependency issues.
->>
->> REGMAP is selected 94 times and is depended on 11 times in
->> current linux-next. Eliminate the uses of "depends on" by
->> converting them to "select".
-> 
-> Thank you for your work on this. Mixing of depends on vs select
-> is a real problem with many Kconfig symbols.
-> 
->>  [PATCH 1/8] ipmi: ASPEED_BT_IPMI_BMC: select REGMAP_MMIO instead of depending on it
->>  [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
->>  [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending on it
->>  [PATCH 4/8] leds: TI_LMU_COMMON: select REGMAP instead of depending on it
->>  [PATCH 5/8] platform: mellanox: select REGMAP instead of depending on it
->>  [PATCH 6/8] platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
->>  [PATCH 7/8] thermal: intel: BXT_PMIC: select REGMAP instead of depending on it
->>  [PATCH 8/8] serial: 8250: ASPEED_VUART: select REGMAP instead of depending on it
-> 
-> For patch 5/8 and 6/8, do you want me to merge them through the pdx86
-> (platform-drivers-x86) tree, or do you plan to merge this whole series
-> in one go through some other tree?
-
-Hi Hans,
-Please merge them thru the pdx86 tree.
-
-Thanks.
-
-> If you plan to merge the whole series through some other tree,
-> here is my acked by for doing so for 5/8 and 6/8:
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> 
->>
->> diffstat:
->>  drivers/char/ipmi/Kconfig         |    3 ++-
->>  drivers/clk/Kconfig               |    2 +-
->>  drivers/gpio/Kconfig              |    2 +-
->>  drivers/leds/Kconfig              |    2 +-
->>  drivers/platform/mellanox/Kconfig |    9 ++++-----
->>  drivers/platform/x86/Kconfig      |    3 ++-
->>  drivers/thermal/intel/Kconfig     |    3 ++-
->>  drivers/tty/serial/8250/Kconfig   |    3 ++-
->>  8 files changed, 15 insertions(+), 12 deletions(-)
->>
->> Cc: Andrew Jeffery <andrew@aj.id.au>
->> Cc: Corey Minyard <minyard@acm.org>
->> Cc: openipmi-developer@lists.sourceforge.net
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Riku Voipio <riku.voipio@linaro.org>
->> Cc: Stephen Boyd <sboyd@kernel.org>
->> Cc: Michael Turquette <mturquette@baylibre.com>
->> Cc: linux-clk@vger.kernel.org
->> Cc: Michael Walle <michael@walle.cc>
->> Cc: Linus Walleij <linus.walleij@linaro.org>
->> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
->> Cc: linux-gpio@vger.kernel.org
->> Cc: Dan Murphy <dmurphy@ti.com>
->> Cc: Pavel Machek <pavel@ucw.cz>
->> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
->> Cc: Lee Jones <lee@kernel.org>
->> Cc: linux-leds@vger.kernel.org
->> Cc: Darren Hart <dvhart@infradead.org>
->> Cc: Hans de Goede <hdegoede@redhat.com>
->> Cc: Michael Shych <michaelsh@nvidia.com>
->> Cc: Mark Gross <markgross@kernel.org>
->> Cc: Vadim Pasternak <vadimp@nvidia.com>
->> Cc: platform-driver-x86@vger.kernel.org
->> Cc: Yegnesh S Iyer <yegnesh.s.iyer@intel.com>
->> Cc: Bin Gao <bin.gao@intel.com>
->> Cc: Zhang Rui <rui.zhang@intel.com>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Cc: Amit Kucheria <amitk@kernel.org>
->> Cc: linux-pm@vger.kernel.org
->> Cc: Oskar Senft <osk@google.com>
->> Cc: linux-serial@vger.kernel.org
->>
-> 
-
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 842e72a5348fa..92b7c794c6272 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -608,6 +608,25 @@ struct clk *clk_register_gate(struct device *dev, const char *name,
+ 	__devm_clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, \
+ 			       NULL, (flags), (reg), (bit_idx),		      \
+ 			       (clk_gate_flags), (lock))
++
++/**
++ * devm_clk_hw_register_gate - register a gate clock with the clock framework
++ * @dev: device that is registering this clock
++ * @name: name of this clock
++ * @parent_data: parent clk data
++ * @flags: framework-specific flags for this clock
++ * @reg: register address to control gating of this clock
++ * @bit_idx: which bit in the register controls gating of this clock
++ * @clk_gate_flags: gate-specific flags for this clock
++ * @lock: shared register lock for this clock
++ */
++#define devm_clk_hw_register_gate_parent_data(dev, name, parent_data, flags,  \
++					      reg, bit_idx, clk_gate_flags,   \
++					      lock)			      \
++	__devm_clk_hw_register_gate((dev), NULL, (name), NULL, NULL,	      \
++				    (parent_data), (flags), (reg), (bit_idx), \
++				    (clk_gate_flags), (lock))
++
+ void clk_unregister_gate(struct clk *clk);
+ void clk_hw_unregister_gate(struct clk_hw *hw);
+ int clk_gate_is_enabled(struct clk_hw *hw);
 -- 
-~Randy
+2.39.2
+
