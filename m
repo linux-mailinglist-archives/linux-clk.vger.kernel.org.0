@@ -2,55 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E2B6A3DDF
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Feb 2023 10:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 443686A3E0E
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Feb 2023 10:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjB0JIh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Feb 2023 04:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        id S229806AbjB0JPb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Feb 2023 04:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjB0JIR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Feb 2023 04:08:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BAB2DE71;
-        Mon, 27 Feb 2023 00:59:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D46FCB80CAF;
-        Mon, 27 Feb 2023 08:59:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18BEEC433EF;
-        Mon, 27 Feb 2023 08:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677488362;
-        bh=1tHIKd104QyfvtA3q/kKbEIMUdEcyl2i2c8bvAcFeJM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Kw5Zqn3DimaluDdXJOPEW3TIh2enf/BL6FWitZ2pgqn32NU8fyQBiFD9SWkcBm7qN
-         +emkN8tvZ/4iESvOQ/UtudrbbXa/LWWs6KiVoxtoVZAyqPCMSCoTsgt0Bn7u+0nQA9
-         XWtBYwPhn+52wPffdcA5meTR6EeB13RrAhvxDZlRO4Yp3isQHC/Pdc0u8ZSQnYTVuY
-         jMm5tZBNmigDFqPMsheWS9xEQiLqfv7JzVNYQYBKYaVGxX0n4oXiVY+hdnmAJzCzmy
-         rlWMljaC521Ik8QRNFNo0NpDy5oOVp8S9l9khz4Iny/Kbxq44BeHeaiWbAJgJEpgBS
-         hBRrx2DZF805g==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        with ESMTP id S229849AbjB0JPQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Feb 2023 04:15:16 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7104265A1
+        for <linux-clk@vger.kernel.org>; Mon, 27 Feb 2023 01:08:27 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id m14-20020a7bce0e000000b003e00c739ce4so3346306wmc.5
+        for <linux-clk@vger.kernel.org>; Mon, 27 Feb 2023 01:08:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q+3pF92mSwYUhZy9VRH+vsVoYv/M6+lCoICkuRbVNPs=;
+        b=tUj0g530f3WAX6zMkiIob+nD3+znuJH4ZEokLzpC9j0yMozZ+6j4xtIysbReCzryyc
+         hmmVw4LwVO+K2a0x1sTkTF1fmfE7o06O02wHgNXEbAptfuXSch+ew/MNWqFtFEqGjZME
+         90gBrUhTclwaxlicifCU9E18i2aLswra3wMOB/JnZynfRBKWyhuWhcF0L9VxuOVNIjCX
+         7dzuvotjWXMRGOXquSEyEZ4ZRCo9Nvr3imV6Ng+aEVPMc8H7BwkiFuARGkHaLyCkP0tc
+         M3xt61M+nC6QnKYIqM1x01Kt5ENmULXB0+NHnhZv0XgFfCES6v8uQkeKHYCpfE5GMcxA
+         oyiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q+3pF92mSwYUhZy9VRH+vsVoYv/M6+lCoICkuRbVNPs=;
+        b=YSWBePugukbxeC2EhnDSzCYAwr5dUW0dptOOaexcExhsmVfD8lbsAELDRoIVXM7maL
+         jXuCKOderfndSYZxO4H6392KHB7CctNqnSbZdCG1UlviodjMXS9gUTyQENyUWoftcNxe
+         cANxQfOYfa8g3O1ftE7ct6VA2WrrCwq3pumIDbvgLjUEHpOzVIKnThZB2GJOz3Tn2aHU
+         OyBHDVN7OLKuCw/sCNe9dLbo3cWYKTtV175M+qqXlvwHaD4in6EG28oFbnE7fB9CFcdv
+         CAywJOGCm9jUje+KX5+cId+WYNIGM6shw1tBQIpPEcadFCVtYaf/erhnBZKOaw59fGP1
+         zSlA==
+X-Gm-Message-State: AO0yUKX+uE2RkABqbrTDjYJ+PaYYnrKFwoQkWIIGkLDCekKyFFixph7Z
+        qQpspUMpk5BOFK+vkUT4kQouP3a+/K0bbU95
+X-Google-Smtp-Source: AK7set+CgWk1B+qEbO2S6zEfsqUjUh/9Lug+Zx2H+A7mNnO3xd751GxZ8Zsy42rsWWaEMswByX9LgQ==
+X-Received: by 2002:a05:600c:4e12:b0:3eb:3998:8bca with SMTP id b18-20020a05600c4e1200b003eb39988bcamr3861828wmq.17.1677488903422;
+        Mon, 27 Feb 2023 01:08:23 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o25-20020a05600c511900b003dfe549da4fsm13368751wms.18.2023.02.27.01.08.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Feb 2023 01:08:23 -0800 (PST)
+Message-ID: <d2e43fe8-2072-6723-dbb4-500a6ff8f719@linaro.org>
+Date:   Mon, 27 Feb 2023 10:08:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: clock: Add MediaTek MT6735 clock
+ bindings
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Miaoqian Lin <linmq006@gmail.com>, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: tegra20: fix gcc-7 constant overflow warning
-Date:   Mon, 27 Feb 2023 09:59:10 +0100
-Message-Id: <20230227085914.2560984-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
+References: <20230225094246.261697-1-y.oudjana@protonmail.com>
+ <20230225094246.261697-2-y.oudjana@protonmail.com>
+ <52d479ff-14c6-b65d-952b-e7753fee2dea@linaro.org>
+ <2XCQQR.YSBPBN01H6D31@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2XCQQR.YSBPBN01H6D31@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,68 +97,47 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 27/02/2023 09:29, Yassine Oudjana wrote:
+> 
+> On Mon, Feb 27 2023 at 09:18:45 AM +01:00:00, Krzysztof Kozlowski 
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 25/02/2023 10:42, Yassine Oudjana wrote:
+>>>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>
+>>>  Add clock definitions for the main clock controllers of MT6735 
+>>> (apmixedsys,
+>>>  topckgen, infracfg and pericfg).
+>>>
+>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>  Acked-by: Rob Herring <robh@kernel.org>
+>>>  ---
+>>>   MAINTAINERS                                   | 10 +++
+>>>   .../clock/mediatek,mt6735-apmixedsys.h        | 16 ++++
+>>>   .../clock/mediatek,mt6735-infracfg.h          | 25 ++++++
+>>>   .../clock/mediatek,mt6735-pericfg.h           | 37 +++++++++
+>>>   .../clock/mediatek,mt6735-topckgen.h          | 79 
+>>> +++++++++++++++++++
+>>>   5 files changed, 167 insertions(+)
+>>
+>> You should squash it with other part of binding. What is the reason
+>> behind splitting one binding into three patches?
+> 
+> It seemed logical to me that each of clock and reset bindings as well 
+> as documentation would be separate parts especially since they go in 
 
-Older gcc versions get confused by comparing a u32 value to a negative
-constant in a switch()/case block:
+I don't understand. All of these are bindings. What do you mean by
+"documentation"?
 
-drivers/clk/tegra/clk-tegra20.c: In function 'tegra20_clk_measure_input_freq':
-drivers/clk/tegra/clk-tegra20.c:581:2: error: case label does not reduce to an integer constant
-  case OSC_CTRL_OSC_FREQ_12MHZ:
-  ^~~~
-drivers/clk/tegra/clk-tegra20.c:593:2: error: case label does not reduce to an integer constant
-  case OSC_CTRL_OSC_FREQ_26MHZ:
+> different paths, but if combining them is how it's done then sure, I'll 
+> squash them and resend.
 
-Make the constants unsigned instead.
+They cannot go different paths and your submissions creates false
+impression they can. If you want to see - apply these on separate
+branches and test if: driver compiles and paths to files in doc are not
+broken. Answer: driver won't compile and paths will point to
+non-existing files.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/clk/tegra/clk-tegra20.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
-index 422d78247553..dcacc5064d33 100644
---- a/drivers/clk/tegra/clk-tegra20.c
-+++ b/drivers/clk/tegra/clk-tegra20.c
-@@ -21,24 +21,24 @@
- #define MISC_CLK_ENB 0x48
- 
- #define OSC_CTRL 0x50
--#define OSC_CTRL_OSC_FREQ_MASK (3<<30)
--#define OSC_CTRL_OSC_FREQ_13MHZ (0<<30)
--#define OSC_CTRL_OSC_FREQ_19_2MHZ (1<<30)
--#define OSC_CTRL_OSC_FREQ_12MHZ (2<<30)
--#define OSC_CTRL_OSC_FREQ_26MHZ (3<<30)
--#define OSC_CTRL_MASK (0x3f2 | OSC_CTRL_OSC_FREQ_MASK)
--
--#define OSC_CTRL_PLL_REF_DIV_MASK (3<<28)
--#define OSC_CTRL_PLL_REF_DIV_1		(0<<28)
--#define OSC_CTRL_PLL_REF_DIV_2		(1<<28)
--#define OSC_CTRL_PLL_REF_DIV_4		(2<<28)
-+#define OSC_CTRL_OSC_FREQ_MASK (3u<<30)
-+#define OSC_CTRL_OSC_FREQ_13MHZ (0u<<30)
-+#define OSC_CTRL_OSC_FREQ_19_2MHZ (1u<<30)
-+#define OSC_CTRL_OSC_FREQ_12MHZ (2u<<30)
-+#define OSC_CTRL_OSC_FREQ_26MHZ (3u<<30)
-+#define OSC_CTRL_MASK (0x3f2u | OSC_CTRL_OSC_FREQ_MASK)
-+
-+#define OSC_CTRL_PLL_REF_DIV_MASK	(3u<<28)
-+#define OSC_CTRL_PLL_REF_DIV_1		(0u<<28)
-+#define OSC_CTRL_PLL_REF_DIV_2		(1u<<28)
-+#define OSC_CTRL_PLL_REF_DIV_4		(2u<<28)
- 
- #define OSC_FREQ_DET 0x58
--#define OSC_FREQ_DET_TRIG (1<<31)
-+#define OSC_FREQ_DET_TRIG (1u<<31)
- 
- #define OSC_FREQ_DET_STATUS 0x5c
--#define OSC_FREQ_DET_BUSY (1<<31)
--#define OSC_FREQ_DET_CNT_MASK 0xFFFF
-+#define OSC_FREQ_DET_BUSYu (1<<31)
-+#define OSC_FREQ_DET_CNT_MASK 0xFFFFu
- 
- #define TEGRA20_CLK_PERIPH_BANKS	3
- 
--- 
-2.39.2
+Best regards,
+Krzysztof
 
