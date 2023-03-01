@@ -2,249 +2,247 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9244B6A7146
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Mar 2023 17:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124166A7399
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Mar 2023 19:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCAQfS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Mar 2023 11:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S229986AbjCASi1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Mar 2023 13:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjCAQer (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Mar 2023 11:34:47 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CCA4AFE0;
-        Wed,  1 Mar 2023 08:34:02 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 3705185911;
-        Wed,  1 Mar 2023 17:33:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1677688393;
-        bh=9Xa+lXue4wmQOXJx42ssnSJeXONL/HdAZL1Vp0LjBmA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JJw9uuHgbYkhqM3XVIfk9NJwskQ8cCOqehzWcgJcCPIyk3KBLmk16cCobRHkgKhoz
-         jHTOu/wBDKrS50oakkZD17YwY0e9Mv2zoJYHuZJ5jIDp8w/ZBokWncfCJTeMgNOpTs
-         yHuhVM8mbns13b5Sl0/THOqHhvLiTRdqFh+q8zJt1fwrdtsUAagUd80aNrsnDCWusQ
-         3IoJGlpTFkmQLZc+21zSNaicvGReVJpd+u7RQ3l9ZGAAqI+GpO4s1Obk+8N9g7/t8G
-         E41EnCtodYDy9vYZtHw9LFWSzuhC4Dh0Tl8lgONR43Jjpl/7ScgfwKGKWTajOmBTNX
-         tynlXkmZg7gxQ==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-clk@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v7 5/5] arm64: dts: imx8mp: Add analog audio output on i.MX8MP EVK
-Date:   Wed,  1 Mar 2023 17:32:57 +0100
-Message-Id: <20230301163257.49005-5-marex@denx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230301163257.49005-1-marex@denx.de>
-References: <20230301163257.49005-1-marex@denx.de>
+        with ESMTP id S229942AbjCASiZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Mar 2023 13:38:25 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C694C2D67;
+        Wed,  1 Mar 2023 10:38:22 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id CA8F75FD78;
+        Wed,  1 Mar 2023 21:38:19 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1677695899;
+        bh=Q7bkAuXQpSbuVUCgoDA0jmxc5cabY8gnRQJbhBQm3vk=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=mfBF8sxL58ntXKDAqsxiPIc/8oNFQs4Z1+VOTFNlnXKfIg48oatqLrbMRXyGZ2yWa
+         1f9t4c+wQi9S42RweMQBYSBdga2YGOXCPrbBodsAayY23p7q0JB46lCSjiN6M2TJC+
+         e/4F1jkUrS3da4mZ2SYLfp/tAsTKessh+vPGFHR8j6ivWrPUBuhAUwn7bN6fpPScBC
+         eOlE8NfJ3uJlweROJ8IhsdcxWS7i1pzJhzeL84qgvdwtXZBp4Eyz5IAWgwL/PrJmJV
+         7jM2Qazaq5xdr8axfniQayauU80KjS7iU2sXa4puWQUoiqN5/jE7kd/UyGrp6bbV1f
+         ih0rS+XNd4lIA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  1 Mar 2023 21:38:17 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v9 0/5] add Amlogic A1 clock controller drivers
+Date:   Wed, 1 Mar 2023 21:37:54 +0300
+Message-ID: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/01 14:15:00 #20905952
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable SAI3 on i.MX8MP EVK, add WM8960 codec binding and regulator.
-This is all that is needed to get analog audio output operational
-on i.MX8MP EVK.
+A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+and Audio. The audio clock controller is different from others, but the
+rest are very similar from a functional and regmap point of view.
+This patch series add support for Amlogic A1 PLL and Peripherals clock
+drivers.
+It blocks all A1 peripherals mainline support and a couple of patch series,
+which were already reviewed and acked, but weren't merged due to pending
+clock controller drivers series, e.g.
+https://lore.kernel.org/linux-amlogic/7hd09cw9oh.fsf@baylibre.com/
 
-Acked-by: Peng Fan <peng.fan@nxp.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Abel Vesa <abelvesa@kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Jacky Bai <ping.bai@nxp.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-clk@vger.kernel.org
----
-V2: No change
-V3: No change
-V4: - Update codec node name and phandle label
-    - Use just sound for the sound node name
-    - Rebase on next 20230223
-V5: - Drop regulator-always-on from codec regulator
-    - Add RB from Fabio
-    - TB by Alexander added and removed again, since the patch was reworked
-    - Switch to simple-audio-card
-    - Add sound-dai-cells to codec node
-V6: - Split off separate pinctrl for regulator
-    - Drop unused SAI3_RXFS pinmux
-V7: - Add AB from Peng
-    - Add RB from Marco
----
- arch/arm64/boot/dts/freescale/imx8mp-evk.dts | 80 ++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+TODO: CPU and Audio clock controllers are not included in this patch
+series, it will be sent later. The following clks from these controllers
+are not supported for now:
+* Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+   pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+   audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+   audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+   audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+   audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+   audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-index 7816853162b3f..fa37ce89f8d3d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-evk.dts
-@@ -40,6 +40,17 @@ pcie0_refclk: pcie0-refclk {
- 		clock-frequency = <100000000>;
- 	};
- 
-+	reg_audio_pwr: regulator-audio-pwr {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_audio_pwr_reg>;
-+		regulator-name = "audio-pwr";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpio4 29 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	reg_can1_stby: regulator-can1-stby {
- 		compatible = "regulator-fixed";
- 		regulator-name = "can1-stby";
-@@ -83,6 +94,37 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
- 		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
- 	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "wm8960-audio";
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,frame-master = <&cpudai>;
-+		simple-audio-card,bitclock-master = <&cpudai>;
-+		simple-audio-card,widgets =
-+			"Headphone", "Headphone Jack",
-+			"Speaker", "External Speaker",
-+			"Microphone", "Mic Jack";
-+		simple-audio-card,routing =
-+			"Headphone Jack", "HP_L",
-+			"Headphone Jack", "HP_R",
-+			"External Speaker", "SPK_LP",
-+			"External Speaker", "SPK_LN",
-+			"External Speaker", "SPK_RP",
-+			"External Speaker", "SPK_RN",
-+			"LINPUT1", "Mic Jack",
-+			"LINPUT3", "Mic Jack",
-+			"Mic Jack", "MICB";
-+
-+		cpudai: simple-audio-card,cpu {
-+			sound-dai = <&sai3>;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&wm8960>;
-+		};
-+
-+	};
- };
- 
- &flexspi {
-@@ -344,6 +386,18 @@ &i2c3 {
- 	pinctrl-0 = <&pinctrl_i2c3>;
- 	status = "okay";
- 
-+	wm8960: codec@1a {
-+		compatible = "wlf,wm8960";
-+		reg = <0x1a>;
-+		#sound-dai-cells = <0>;
-+		clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_SAI3_MCLK1>;
-+		clock-names = "mclk";
-+		wlf,shared-lrclk;
-+		wlf,hp-cfg = <3 2 3>;
-+		wlf,gpio-cfg = <1 3>;
-+		SPKVDD1-supply = <&reg_audio_pwr>;
-+	};
-+
- 	pca6416: gpio@20 {
- 		compatible = "ti,tca6416";
- 		reg = <0x20>;
-@@ -422,6 +476,16 @@ &pwm4 {
- 	status = "okay";
- };
- 
-+&sai3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai3>;
-+	assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
-+	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
-+	assigned-clock-rates = <12288000>;
-+	fsl,sai-mclk-direction-output;
-+	status = "okay";
-+};
-+
- &snvs_pwrkey {
- 	status = "okay";
- };
-@@ -499,6 +563,12 @@ &wdog1 {
- };
- 
- &iomuxc {
-+	pinctrl_audio_pwr_reg: audiopwrreggrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29		0xd6
-+		>;
-+	};
-+
- 	pinctrl_eqos: eqosgrp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x2
-@@ -668,6 +738,16 @@ MX8MP_IOMUXC_UART3_TXD__UART1_DCE_RTS	0x140
- 		>;
- 	};
- 
-+	pinctrl_sai3: sai3grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI3_TXFS__AUDIOMIX_SAI3_TX_SYNC	0xd6
-+			MX8MP_IOMUXC_SAI3_TXC__AUDIOMIX_SAI3_TX_BCLK	0xd6
-+			MX8MP_IOMUXC_SAI3_RXD__AUDIOMIX_SAI3_RX_DATA00	0xd6
-+			MX8MP_IOMUXC_SAI3_TXD__AUDIOMIX_SAI3_TX_DATA00	0xd6
-+			MX8MP_IOMUXC_SAI3_MCLK__AUDIOMIX_SAI3_MCLK	0xd6
-+		>;
-+	};
-+
- 	pinctrl_uart2: uart2grp {
- 		fsl,pins = <
- 			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x140
+* CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+            cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
+
+Validation:
+* to double check all clk flags run below helper script:
+    pushd /sys/kernel/debug/clk
+    for f in *; do
+        if [[ -f "$f/clk_flags" ]]; then
+            flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+            echo -e "$f: $flags"
+        fi
+    done
+    popd
+* to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+  with jq post-processing:
+    cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
+
+Changes v9 since v8 at [9]:
+    - remove common a1-clkc driver for the first version of a1 clock
+      controllers as Jerome suggested (it will be discussed after s4 and
+      a1 clks landed, hope so)
+    - replace inherited a1-pll clk_pll_ops with common ops and
+      introduce custom A1 PLL logic under MESON_PARM_APPLICABLE()
+      conditions
+    - rename xtal depended clocks in PLL and Peripherals domains
+    - remove 'a1_' prefix for all clocks, because they are already
+      inside A1 driver, it's redundant
+    - change udelay() to usleep_range() as preferred for small msec
+      amount
+    - purge all double quotes from the yaml schemas
+    - use proper dt node names following kernel guidelines
+      https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+    - use devm_platform_ioremap_resource() instead of simple
+      devm_ioremap_resource()
+    - mark all dspX clocks as CLK_IGNORE_UNUSED, because we do not want
+      to touch these clocks during CCF initialization due to possible
+      workload execution on it started from bootloader; in this case
+      bootloader already made all initialization stuff for dspX
+    - also mark all dspX with NO_REPARENT tag, because from dspX clocks
+      we want to select proper clk source from device tree
+
+Changes v8 since v7 at [8]:
+    - introduced a1-clkc common driver for all A1 clock controllers
+    - exported meson_clk_pll_wait_lock symbol
+    - supported meson-a1-clkc common driver in the a1-pll and a1 clkc
+    - inherited a1-pll from the base clk-pll driver, implemented own
+      version of init/enable/disable/enabled routines; rate calculating
+      logic is fully the same
+    - aligned CLKID-related definitions with CLKID list from order
+      perspective to remove holes and permutations
+    - corrected Kconfig dependencies and types
+    - provided correct MODULE_AUTHORs()
+    - optimized and fixed up some clock relationships
+    - removed unused register offset definitions
+    - fixed up A1 PLL and Peripherals clkc dtb_check errors
+    - fixed clk_summary kernel panic due to missing a1_pad_ctrl
+      clk_regmap definition
+    - included PLL and Peripherals clk controllers to the base a1 dts
+    - The previous v7 version [8] had several logic and style problems,
+      all of them are resolved in this version. Original Jian Hu v7 patches
+      are not touched, and all additional fixes are implemented in separate
+      patches. Patch "clk: meson: add support for A1 PLL clock ops" is
+      removed, because a1-pll clk driver inherits all stuff from clk-pll
+      base driver, just implements custom init/enable/disable/is_enabled
+      callbacks.
+
+Changes v7 since v6 at [7]:
+    - fix 'dt_binding_check' compiling error
+    - add acked-by
+
+Changes v6 since v5 at [6]:
+    - fix yaml file
+    - add rst/current_en/l_detect parm detection
+    - remove 'meson_eeclkc_data' in a1.c and a1-pll.c
+
+Changes v5 since v4 at [5]:
+    - change yaml GPL
+    - drop meson-eeclk.c patch, add probe function in each driver
+    - add CLK_IS_CRITICAL for sys_clk clock, drop the flag for sys_a
+      and sys_b
+    - add new parm for pll, add protection for rst parm
+    - drop flag for a1_fixed_pll
+    - remove the same comment for fclk_div, add "refer to"
+    - add critical flag for a1_sys_clk
+    - remove rtc table
+    - rename a1_dspa_en_dspa and a1_dspb_en_dspb
+    - remove useless comment
+
+Changes v4 since v3 at [3]:
+    - fix reparenting orphan failed, it depends on jerome's patch [4]
+    - fix changelist in v3 about reparenting orphan
+    - remove the dts patch 
+
+Changes v3 since v2 at [2]:
+    - add probe function for A1
+    - separate the clock driver into two patch
+    - change some clock flags and ops
+    - add support for a1 PLL ops
+    - add A1 clock node
+    - fix reparenting orphan clock failed, registering xtal_fixpll
+      and xtal_hifipll after the provider registration, it is not
+      a best way.
+
+Changes v2 since v1 at [1]:
+    - place A1 config alphabetically
+    - add actual reason for RO ops, CLK_IS_CRITICAL, CLK_IGNORE_UNUSED
+    - separate the driver into two driver: peripheral and pll driver
+    - delete CLK_IGNORE_UNUSED flag for pwm b/c/d/e/f clock, dsp clock
+    - delete the change in Kconfig.platforms, address to Kevin alone
+    - remove the useless comments
+    - modify the meson pll driver to support A1 PLLs
+
+[1] https://lkml.kernel.org/r/1569411888-98116-1-git-send-email-jian.hu@amlogic.com
+[2] https://lkml.kernel.org/r/1571382865-41978-1-git-send-email-jian.hu@amlogic.com
+[3] https://lkml.kernel.org/r/20191129144605.182774-1-jian.hu@amlogic.com
+[4] https://lkml.kernel.org/r/20191203080805.104628-1-jbrunet@baylibre.com
+[5] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+[6] https://lkml.kernel.org/r/20191227094606.143637-1-jian.hu@amlogic.com
+[7] https://lkml.kernel.org/r/20200116080440.118679-1-jian.hu@amlogic.com
+[8] https://lore.kernel.org/linux-amlogic/20200120034937.128600-1-jian.hu@amlogic.com/
+[9] https://lore.kernel.org/linux-amlogic/20221201225703.6507-1-ddrokosov@sberdevices.ru/
+
+Dmitry Rokosov (4):
+  clk: meson: a1: add Amlogic A1 PLL clock controller driver
+  dt-bindings: clock: meson: add A1 PLL clock controller bindings
+  clk: meson: a1: add Amlogic A1 Peripherals clock controller driver
+  dt-bindings: clock: meson: add A1 Peripherals clock controller
+    bindings
+
+Jian Hu (1):
+  clk: meson: add support for A1 PLL clock ops
+
+ .../bindings/clock/amlogic,a1-clkc.yaml       |   73 +
+ .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   59 +
+ MAINTAINERS                                   |    1 +
+ drivers/clk/meson/Kconfig                     |   18 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/a1-pll.c                    |  365 +++
+ drivers/clk/meson/a1-pll.h                    |   47 +
+ drivers/clk/meson/a1.c                        | 2291 +++++++++++++++++
+ drivers/clk/meson/a1.h                        |  116 +
+ drivers/clk/meson/clk-pll.c                   |   47 +-
+ drivers/clk/meson/clk-pll.h                   |    2 +
+ include/dt-bindings/clock/a1-clkc.h           |  102 +
+ include/dt-bindings/clock/a1-pll-clkc.h       |   20 +
+ 13 files changed, 3136 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/a1-pll.c
+ create mode 100644 drivers/clk/meson/a1-pll.h
+ create mode 100644 drivers/clk/meson/a1.c
+ create mode 100644 drivers/clk/meson/a1.h
+ create mode 100644 include/dt-bindings/clock/a1-clkc.h
+ create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
+
 -- 
-2.39.2
+2.36.0
 
