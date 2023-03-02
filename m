@@ -2,40 +2,41 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B1B6A81A1
-	for <lists+linux-clk@lfdr.de>; Thu,  2 Mar 2023 12:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEF36A819F
+	for <lists+linux-clk@lfdr.de>; Thu,  2 Mar 2023 12:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjCBL4y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 2 Mar 2023 06:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S229703AbjCBL4x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 2 Mar 2023 06:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCBL4w (ORCPT
+        with ESMTP id S229579AbjCBL4w (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Thu, 2 Mar 2023 06:56:52 -0500
-Received: from out-60.mta1.migadu.com (out-60.mta1.migadu.com [IPv6:2001:41d0:203:375::3c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A7034035
-        for <linux-clk@vger.kernel.org>; Thu,  2 Mar 2023 03:56:51 -0800 (PST)
-Date:   Thu, 2 Mar 2023 12:50:58 +0100
+X-Greylist: delayed 337 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 03:56:51 PST
+Received: from out-4.mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4261D34007
+        for <linux-clk@vger.kernel.org>; Thu,  2 Mar 2023 03:56:50 -0800 (PST)
+Date:   Thu, 2 Mar 2023 12:51:09 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677757860;
+        t=1677757871;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=08ekkotVo/7wea+t0o65FQHG/o1o1pxzonmpikTVPD8=;
-        b=DqgwUpLGe8k9I2oxDcBkbzqhYUXnow848Hf2YaK2kPdSXCnVwAgZk9sA43ltf/QcXffeqv
-        IhP0Y4su1TwqcaNyXLn2JeoTIetD2Y98lcuuJqQ+w0cL1Klllh+wO4vmE4U7iikivmBFn6
-        LN9o/Ax4O7olctW00SR21adZ1yPpBjk=
+        bh=FE9GjC2bK1XG/nthDRGbWMbXbw6CaAN7wTYJOCbYNYE=;
+        b=DEKW7jq3v+uWTUNjH4SNA+9aGFLB9HfH7zgMeKsQQzLx6E7wT/czf3skj+59ATVJg/Km+3
+        MNvsfwDAffo40g1aqvs3obf3gEue04CUnYC7cD4w2qNdgjG80mmUht9jk2/4KwFZi2izTK
+        HUZQx9RdeSPig5EhC+a9aVdaqU8i4Ds=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Richard Leitner <richard.leitner@linux.dev>
 To:     Marek Vasut <marex@denx.de>
-Cc:     linux-clk@vger.kernel.org, Marco Felsch <m.felsch@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
+Cc:     linux-clk@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Peng Fan <peng.fan@nxp.com>, Rob Herring <robh@kernel.org>,
         Adam Ford <aford173@gmail.com>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Abel Vesa <abelvesa@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Michael Turquette <mturquette@baylibre.com>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -46,36 +47,35 @@ Cc:     linux-clk@vger.kernel.org, Marco Felsch <m.felsch@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 2/5] clk: imx: imx8mp: Add audiomix block control
-Message-ID: <ZACNojvgyKTVjVtk@g0hl1n.net>
+Subject: Re: [PATCH v7 3/5] dt-bindings: clock: imx8mp: Add audiomix block
+ control
+Message-ID: <ZACNrbVDU/4ucU51@g0hl1n.net>
 References: <20230301163257.49005-1-marex@denx.de>
- <20230301163257.49005-2-marex@denx.de>
+ <20230301163257.49005-3-marex@denx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230301163257.49005-2-marex@denx.de>
+In-Reply-To: <20230301163257.49005-3-marex@denx.de>
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 05:32:54PM +0100, Marek Vasut wrote:
+On Wed, Mar 01, 2023 at 05:32:55PM +0100, Marek Vasut wrote:
 > Unlike the other block control IPs in i.MX8M, the audiomix is mostly a
-> series of clock gates and muxes. Model it as a large static table of
-> gates and muxes with one exception, which is the PLL14xx . The PLL14xx
-> SAI PLL has to be registered separately.
+> series of clock gates and muxes. Add DT bindings for this IP.
 > 
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 > Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
 > Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > Tested-by: Adam Ford <aford173@gmail.com> #imx8mp-beacon-kit
 > Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 > Signed-off-by: Marek Vasut <marex@denx.de>
 
 Hi Marek,
