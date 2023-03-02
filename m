@@ -2,30 +2,30 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AB76A7894
-	for <lists+linux-clk@lfdr.de>; Thu,  2 Mar 2023 01:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0237C6A789B
+	for <lists+linux-clk@lfdr.de>; Thu,  2 Mar 2023 01:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCBA6u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Mar 2023 19:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
+        id S229555AbjCBA6w (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Mar 2023 19:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjCBA6s (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Mar 2023 19:58:48 -0500
+        with ESMTP id S229610AbjCBA6v (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Mar 2023 19:58:51 -0500
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B97629E1C;
-        Wed,  1 Mar 2023 16:58:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C614923C6F;
+        Wed,  1 Mar 2023 16:58:49 -0800 (PST)
 Received: by codeconstruct.com.au (Postfix, from userid 10000)
-        id 9919C202D2; Thu,  2 Mar 2023 08:58:43 +0800 (AWST)
+        id 20338202DE; Thu,  2 Mar 2023 08:58:44 +0800 (AWST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codeconstruct.com.au; s=2022a; t=1677718723;
-        bh=IEyFZLfpA1uEgXR5ZyX8y5d2It4TK6VtIYulUQ+dyPU=;
+        d=codeconstruct.com.au; s=2022a; t=1677718724;
+        bh=rcWE5yATsN5CfBHBjwN3Th7/mIbe+8zUJTNmVPXeGSc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ieKdFh1BGAmeC5/SJGVl64xyVMLPZ0RbTVjRD8qTRHFaUNz2Ztpe7QtyTuN1EuLwh
-         4pmX+9hATTxIDPauCb/OYcm+eb1rtqy7HPF3cmbw2pNsNkWvoaywGaD3qp1Q6AHGps
-         DA4lSKnE9tddYOGh84irszykD3LxGg6MUicFMAYpJ0e7wT9w03Jx9oxpOfO0RoUDXI
-         iDJqvLtmhYO88kM1ec0ukWDoQE4FFRyg/OaRLJ5/d5p6+OP5DQqYwNr1Rx/jzrp4r/
-         BeX9+4qzq5O02iVfMshWPBbkOrG4WGSjIWsQqJCmqfuExNjiELmjtjqmwGpq/wUtl+
-         qiRZLmpAebj/Q==
+        b=bULp4tHX9LvWEoD+O0tDbtQG3s4oDme2J0Q/FAYByKN6kKE+O4di106eh3zw7xeXY
+         4rlZfJ8B/TlrNAdkJ3rvffN8C+9lHrnLQq92YBkxf/ikcmy25H4wk/yw+QnbPOyFIp
+         xqIoItmevyq2D36UtWBsrdbdhbxVFAfKud7CcWXTVgUKN76Y9gNOJCTMe73x92Ov1F
+         TmgByEfqaadAVsk6VKRis4K82MwT2W3M6opqFUirqoTCoEWZUkTV4vZmucnviqLIkt
+         lJ3El5uwroMfTEWlMYiju1C2LvBuLd8lCseHHS3qf5QJcHHAaSvxiWHJnmeH3/2DOu
+         vapF6dTn4SuGA==
 From:   Jeremy Kerr <jk@codeconstruct.com.au>
 To:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
         linux-clk@vger.kernel.org
@@ -35,9 +35,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Dylan Hung <dylan_hung@aspeedtech.com>,
         Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Subject: [PATCH v5 4/6] dt-bindings: clock: ast2600: remove IC36 & I3C7 clock definitions
-Date:   Thu,  2 Mar 2023 08:58:32 +0800
-Message-Id: <20230302005834.13171-5-jk@codeconstruct.com.au>
+Subject: [PATCH v5 5/6] clk: ast2600: Add comment about combined clock + reset handling
+Date:   Thu,  2 Mar 2023 08:58:33 +0800
+Message-Id: <20230302005834.13171-6-jk@codeconstruct.com.au>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230302005834.13171-1-jk@codeconstruct.com.au>
 References: <20230302005834.13171-1-jk@codeconstruct.com.au>
@@ -52,44 +52,47 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The current ast2600 clock definitions include entries for i3c6 and i3c7
-devices, which don't exist: there are no clock control lines documented
-for these, and only i3c devices 0 through 5 are present.
+Add a little description about how reset lines can be implicit with
+clock enable/disable. This is mostly based on the commit message
+from the original submission in 15ed8ce5f8.
 
-So, remove the definitions for I3C6 and I3C7. Although this is a
-potential ABI-breaking change, there are no in-tree users of these, and
-any references would be broken anyway, as the hardware doesn't exist.
-
-This is a partial cherry-pick and rework of ed44b8cdfdb and 1a35eb926d7
-from Aspeed's own tree, originally by Dylan Hung
-<dylan_hung@aspeedtech.com>.
-
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-
 ---
-v3:
- - split dt-bindings and clk changes
-v2:
- - reword commit message
----
- include/dt-bindings/clock/ast2600-clock.h | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/clk/clk-ast2600.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/include/dt-bindings/clock/ast2600-clock.h b/include/dt-bindings/clock/ast2600-clock.h
-index dd1581bfdf58..b4d69103d722 100644
---- a/include/dt-bindings/clock/ast2600-clock.h
-+++ b/include/dt-bindings/clock/ast2600-clock.h
-@@ -57,8 +57,6 @@
- #define ASPEED_CLK_GATE_I3C3CLK		40
- #define ASPEED_CLK_GATE_I3C4CLK		41
- #define ASPEED_CLK_GATE_I3C5CLK		42
--#define ASPEED_CLK_GATE_I3C6CLK		43
--#define ASPEED_CLK_GATE_I3C7CLK		44
+diff --git a/drivers/clk/clk-ast2600.c b/drivers/clk/clk-ast2600.c
+index 09f26ab5f9af..a094a2601a37 100644
+--- a/drivers/clk/clk-ast2600.c
++++ b/drivers/clk/clk-ast2600.c
+@@ -73,6 +73,27 @@ static void __iomem *scu_g6_base;
+ static u8 soc_rev;
  
- #define ASPEED_CLK_GATE_FSICLK		45
- 
+ /*
++ * The majority of the clocks in the system are gates paired with a reset
++ * controller that holds the IP in reset; this is represented by the @reset_idx
++ * member of entries here.
++ *
++ * This borrows from clk_hw_register_gate, but registers two 'gates', one
++ * to control the clock enable register and the other to control the reset
++ * IP. This allows us to enforce the ordering:
++ *
++ * 1. Place IP in reset
++ * 2. Enable clock
++ * 3. Delay
++ * 4. Release reset
++ *
++ * Consequently, if reset_idx is set, reset control is implicit: the clock
++ * consumer does not need its own reset handling, as enabling the clock will
++ * also deassert reset.
++ *
++ * There are some gates that do not have an associated reset; these are
++ * handled by using -1 as the index for the reset, and the consumer must
++ * explictly assert/deassert reset lines as required.
++ *
+  * Clocks marked with CLK_IS_CRITICAL:
+  *
+  *  ref0 and ref1 are essential for the SoC to operate
 -- 
 2.39.1
 
