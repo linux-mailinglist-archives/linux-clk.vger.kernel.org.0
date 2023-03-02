@@ -2,173 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510ED6A7803
-	for <lists+linux-clk@lfdr.de>; Thu,  2 Mar 2023 00:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B86B6A7899
+	for <lists+linux-clk@lfdr.de>; Thu,  2 Mar 2023 01:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCAXxU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Mar 2023 18:53:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S229579AbjCBA6v (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Mar 2023 19:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjCAXxU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Mar 2023 18:53:20 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4A1986
-        for <linux-clk@vger.kernel.org>; Wed,  1 Mar 2023 15:53:19 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so1047793pjb.1
-        for <linux-clk@vger.kernel.org>; Wed, 01 Mar 2023 15:53:19 -0800 (PST)
+        with ESMTP id S229555AbjCBA6s (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Mar 2023 19:58:48 -0500
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE6925960;
+        Wed,  1 Mar 2023 16:58:46 -0800 (PST)
+Received: by codeconstruct.com.au (Postfix, from userid 10000)
+        id 7702B2024F; Thu,  2 Mar 2023 08:58:41 +0800 (AWST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677714798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4UxHdhijEmH2EyOtzBINRHdLM65Pg4RR1uX5oWHJrGs=;
-        b=iPAqlLP8wwKKO1WdZ9KFnFOEEXb3jqCD4xiFYMj8I5h7L2FZJFLV7XbQtWKWi0wZfP
-         k/ypbOQ8iABno+EV3MAX0pkXD23QER5kEgGQYCZHeMDKxWhflUNZ9haRkBXqGvn1IigX
-         DA8ipR0sGVFIlzUHEJiLhF+fcb6FtbqO3aZudsc7UXrMgeTb2V7PlwBXE38R4R68Dg88
-         CpMrqZ0bt5NSTvo1UQnuH5Do+9VHosSKNcDVOFB7nhRQsEXgqVl18Vez8Q9mRryQZv6N
-         2b2He5XXnDzDmZMCtLbH7py5tdRx51pi8rRl7+wT+eQpfxzSsAKoXFjRSdh/bXOhFJcW
-         tiig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677714798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4UxHdhijEmH2EyOtzBINRHdLM65Pg4RR1uX5oWHJrGs=;
-        b=hn8Mn62XEg4E2XXpC/O7c/3BIWL4Zraamnvp27/vtqk/q/eJANjLJRXUPie8mQ/L4g
-         xOYuMBLBMGFqVgI0JcRaRhjorU2/diSmuV/Qd4nr6SoyyhXFkHR6GpzWW/5uCWPYKFtP
-         aC1P5p/9nq67eQvG55e96WT9lxEUqz7Gz8fGday9juIsVJYWW2p7D3ZnvpovT9WxAc/g
-         Uvg3/rSNuUsfewqz72IRkjJRwHwucwxty7Eg31d/fbkTzAfNW3o3Xgm/3iIn+FAwSOFK
-         uvZE81HMHicNdcvbdGuJJj7ScDNQHymgeqVu5GYR4txQpJZGFIlua0n9wA1xpTfItcWD
-         0ChQ==
-X-Gm-Message-State: AO0yUKVt38YXqFmpdaF5mSyrGq7BKpAFBx+Ms5z2lr5QY14g4q8EsWNF
-        5IHqzDb94G5evfOMy5z5IOJDxFVKSvDtdTKCQdIzaatNagranq1X
-X-Google-Smtp-Source: AK7set8OEP8qZ1fXhp8dBKMmkZESQT0zLW4ve3iPhJpUSUr5plbBBdGZeGBMNl9ORkTSS3FmOLJAAq3lrDXAhUnoAo0=
-X-Received: by 2002:a17:903:2601:b0:19a:fdca:e3e9 with SMTP id
- jd1-20020a170903260100b0019afdcae3e9mr3055313plb.10.1677714798260; Wed, 01
- Mar 2023 15:53:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20230301012506.1401883-1-saravanak@google.com>
- <31ae9957edf319416d4551f14eba2071.sboyd@kernel.org> <7cca9a24b24d849565cd6a4f40ddbee9.sboyd@kernel.org>
- <CAGETcx82r-YC7cBUY5xa57FCEOUP_BeGNp2zURG=HUJkUMSVPA@mail.gmail.com> <a3bde7aa1793c20638cbf2749f3209a2.sboyd@kernel.org>
-In-Reply-To: <a3bde7aa1793c20638cbf2749f3209a2.sboyd@kernel.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 1 Mar 2023 15:52:41 -0800
-Message-ID: <CAGETcx8w=Fi3QSw7+i6QoNeKF03O8seL+urhZBGZuodhUGgL7g@mail.gmail.com>
-Subject: Re: [PATCH v1] clk: Mark a fwnode as initialized when using
- CLK_OF_DECLARE* macros
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        d=codeconstruct.com.au; s=2022a; t=1677718721;
+        bh=lYoTPeexRcOzzTOGXNKHbOel7qjqCaaeX1rZP2bFTX4=;
+        h=From:To:Cc:Subject:Date;
+        b=U2Q0zgjRpreRtnQiVkZ+hd4kAZ01WdIXMuzxbAcRpPaMB8M0nhBk1ZzpvnQQvBuVy
+         QnoYzqraoWiTqtzrwAylgYGQ1YL8TJ3ledWHbiIJYtt6oFRUvGlusDTXAYCca8FIg3
+         o2vGoqQEI2Vj4bYeRDwHo2+HA7a6uD1uAxcTeOvqaaz3roPaxYCPyBHBGlSbAmGBUD
+         JO9NMaKwl/mR7nUkUBGxpRKTv/0+hBVXE5yp2E1DW+qqIcI/JDHryxH2Rw405xJ1e+
+         7ovoJVUVT4llNRFCeFSsWHtSTd1jFXJgg89POg4WMJUNoCQmRmHydoY7C+c4FbjEAc
+         YPeXEv2xqtWTA==
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     devicetree@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-clk@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kernel-team@android.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
+Subject: [PATCH v5 0/6] Add definitions for AST2600 i3c clocks
+Date:   Thu,  2 Mar 2023 08:58:28 +0800
+Message-Id: <20230302005834.13171-1-jk@codeconstruct.com.au>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 2:45=E2=80=AFPM Stephen Boyd <sboyd@kernel.org> wrot=
-e:
->
-> Quoting Saravana Kannan (2023-03-01 13:25:13)
-> > On Wed, Mar 1, 2023 at 12:48=E2=80=AFPM Stephen Boyd <sboyd@kernel.org>=
- wrote:
-> > >
-> > > Quoting Stephen Boyd (2023-03-01 12:40:03)
-> > > > Quoting Saravana Kannan (2023-02-28 17:25:06)
-> > > > > The CLK_OF_DECLARE macros sometimes prevent the creation of struc=
-t
-> > > > > devices for the device node being handled. It does this by
-> > > > > setting/clearing OF_POPULATED flag. This can block the probing of=
- some
-> > > > > devices because fw_devlink will block the consumers of this node =
-till a
-> > > > > struct device is created and probed.
-> > > >
-> > > > Why can't you use CLK_OF_DECLARE_DRIVER()?
-> > >
-> > > Ah I misunderstood. CLK_OF_DECLARE() _always_ prevents the creation o=
-f a
-> > > struct device for the device node being handled. The 'sometimes' thre=
-w
-> > > me off.
-> >
-> > The "sometimes" is because dependending on the macro we go back and
-> > clear the flag.
->
-> Ok. Maybe instead of this paragraph you can explain the problem being
-> fixed, specifically ux500 container node not being marked as
-> "initialized" and that preventing consumer devices from probing. That
-> would help the reviewer understand the specific problem you're solving.
+This series adds some base configuration for the i3c controllers on
+ast2600 hardware. We'll use the reset and clock definitions in the
+proposed dt binding example, hence sending these first.
 
-Ack
+v5:
+ - use regmap_update_bits rather than FIELD_PREP
+ - drop reset defines; resets should be handled by clock control
+ - add comments for the above
+ - add comment for NUM_CLKS semantics
+v4:
+ - ensure we have enough space in ASPEED_G6_NUM_CLKS
+v3:
+ - split dt-bindings from clk changes
+ - unify subject prefixes
+v2:
+ - based on feedback from Joel Stanley: avoid adding RESERVED clock
+   definitions, allowing empty entries in aspeed_g6_gates instead.
 
->
-> >
-> > > >
-> > > > >
-> > > > > Set the appropriate fwnode flags when these device nodes are init=
-ialized
-> > > > > by the clock framework and when OF_POPULATED flag is set/cleared.=
- This
-> > > > > will allow fw_devlink to handle the dependencies correctly.
->
-> This is the "what" and not the "why".
->
-> > >
-> > > How is this different from commit 3c9ea42802a1 ("clk: Mark fwnodes wh=
-en
-> > > their clock provider is added/removed")? Do you have some user of
-> > > CLK_OF_DECLARE() that isn't registering an OF clk provider?
-> >
-> > So it looks like drivers don't always register the same node used for
-> > CLK_OF_DECLARE() as the clock provider. So, this is covering for the
-> > case when that's not true.
->
-> Please add this information to the commit text. Otherwise the patch
-> looks entirely unnecessary.
+Jeremy Kerr (6):
+  clk: ast2600: allow empty entries in aspeed_g6_gates
+  dt-bindings: clock: ast2600: Add top-level I3C clock
+  clk: ast2600: Add full configs for I3C clocks
+  dt-bindings: clock: ast2600: remove IC36 & I3C7 clock definitions
+  clk: ast2600: Add comment about combined clock + reset handling
+  dt-bindings: clock: ast2600: Expand comment on reset definitions
 
-Ack.
+ drivers/clk/clk-ast2600.c                 | 67 ++++++++++++++++++++---
+ include/dt-bindings/clock/ast2600-clock.h |  5 +-
+ 2 files changed, 60 insertions(+), 12 deletions(-)
 
-> If the node used for CLK_OF_DECLARE() isn't the same as the node as the
-> clock provider then how are we certain that the CLK_OF_DECLARE() probe
-> function has actually registered a clk provider?
+-- 
+2.39.1
 
-Whether it's registered or not, we can't wait for a struct device to
-be created for it. That's what the flag is about. device link can't
-work without devices.
-
-> Should we simply remove the calls to fwnode_dev_initialized() in the OF
-> clk provider functions
-
-Not all clock providers are going through CLK_OF_DECLARE(). There are
-so many ways to register a clock provider. So it's good to cover all
-those cases and leave those existing calls in.
-
-> and put the call in CLK_OF_DECLARE() (and
-> specifically _not_ CLK_OF_DECLARE_DRIVER) as this patch does?
-
-Between the time the clk provider is initialized and a new struct
-device being created, we still don't want to block consumers from
-probing because they might be dependent on the already registered
-early clocks. So, we should set the flag in the DRIVER case too. And
-then we clear it once it has been initialized because we allow the
-struct device to be populated and it's okay to wait for those.
-
-> What about
-> bindings that are registering clks early with CLK_OF_DECLARE_DRIVER()
-> and then probing something like a reset controller later with a platform
-> device created by an MFD matching the same compatible as the
-> CLK_OF_DECLARE_DRIVER() compatible?
-
-I think I answered it above?
-
--Saravana
