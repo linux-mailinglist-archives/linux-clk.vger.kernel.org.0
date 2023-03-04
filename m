@@ -2,61 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD2A6AA9E3
-	for <lists+linux-clk@lfdr.de>; Sat,  4 Mar 2023 14:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062FC6AA9F1
+	for <lists+linux-clk@lfdr.de>; Sat,  4 Mar 2023 14:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjCDN2C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 4 Mar 2023 08:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S229720AbjCDN2W (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 4 Mar 2023 08:28:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCDN2B (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 4 Mar 2023 08:28:01 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD3F1E287
-        for <linux-clk@vger.kernel.org>; Sat,  4 Mar 2023 05:27:51 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id i9so7025270lfc.6
-        for <linux-clk@vger.kernel.org>; Sat, 04 Mar 2023 05:27:51 -0800 (PST)
+        with ESMTP id S229825AbjCDN2C (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 4 Mar 2023 08:28:02 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CE120683
+        for <linux-clk@vger.kernel.org>; Sat,  4 Mar 2023 05:27:53 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id j11so6958875lfg.13
+        for <linux-clk@vger.kernel.org>; Sat, 04 Mar 2023 05:27:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677936471;
+        d=linaro.org; s=google; t=1677936472;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J0QoQUCwZ4517scsxI8XcPjm+YClZabP+eyHX2AdjqU=;
-        b=fmHnCN6R3YH7slYJhITKJTZxd9LSPHvRpsLBtrEVzRcLmlwFBLCtWnvy3SMO0W8SfR
-         6IvyDbziVFTc229wIFU7yfqx2nHvIfAhv7mHI7h0iINRdLbnmmMFMbNMvUvKbPE++LS4
-         1tdN36MiQHKgT+2Hdb99QZscv/GP7dEEvpZYIlF9f51bu+r8Y1zN/eIKic0PJ8sNPAC3
-         DKnjEpLs9xmCq4vU5qRYo15EQPJVwlsxB8ta2BMDW+4Y3vqXgjpC+sLtdjknhePmD0qr
-         mxMNZb1i35zPv8Yg9eY1M80zdmp9VPBpCFVjjPK+C5CsmKhVoj75xn3lLv1S4iuiSibT
-         9IBg==
+        bh=qWlVTXk7WYZu7J2Or6ZWmESRrvvRWeXEPReJ0SD6qlY=;
+        b=RhL48itR43fFjXaTuvf9G3JUWZOElaWgeZDnLM9DJSygljD4PNeFkO3YDOqqt9BBBU
+         9f8gW6rN/PEnt6bHkohRsYg7ANs82SpW4i5UwYLyNLjqEK8lfmQtN74lkBFgDRP6NpiR
+         Sy1oTMadRN6LbXdIcWuYZ0zmqHcz64HTKo4aw8Fn5HuDKHfMdlI4gB3sT/+U9ohJeRet
+         P2D99QUahcDo08cEFsfybtB0WvNqhM/XfMNuIW9BriIWT/iRaiW8Egy1H8ZERAUGsjpY
+         ywakDf4z0XEPj+r5D6Q5HyePy79qoQKsIffn7cwuUnJayItJbIs59Am4aaV4bfUumN/S
+         0L0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677936471;
+        d=1e100.net; s=20210112; t=1677936472;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J0QoQUCwZ4517scsxI8XcPjm+YClZabP+eyHX2AdjqU=;
-        b=SAcjcr3G6tUXxh6YxWZxhXgwjOxfzlsMqg64vTVR+souRWk2OGjfWHgGrfoku5ve+P
-         ukSBjkD9O89rKnuRO17T2z1SSZ7vRpNcYI+MCxk8JxNKTs/1pIYv8aC6wTwmF9QINe9a
-         kAhFexFTIyND/p+PmYtHlhen/am7x8X46enUmD7hjB/W/VhOLp2+hjaOrRBj1JXeLGUe
-         m6LQfTzoz2VzQ2Ca4izZ4/rQ2pQMyBzXmSxAxeS2lj9X/a6T66YnB8BEOjEU5n97Rf4d
-         9q6H3Ht645yPEzj5Tx8pFwtWsSwhZAArBII9UfV7B1zqWhoW3BsFLstF/dFR1Te0AqB4
-         Tf0g==
-X-Gm-Message-State: AO0yUKVnhoSoSSIUepZGfbEIulRBS0QK/ACdUCAMEke5DXye08ysCRke
-        QWfNfJiyCDgtsH54b5EkwfWfpA==
-X-Google-Smtp-Source: AK7set8x6jBrzbsFAUpsrsbu2ojFfuc0nzvZBHNMjPAKBiVPa1uI8Kt7/Ja7nW5+obTxvjLy3QbaGw==
-X-Received: by 2002:ac2:5103:0:b0:4db:3848:86af with SMTP id q3-20020ac25103000000b004db384886afmr1425258lfb.12.1677936471099;
-        Sat, 04 Mar 2023 05:27:51 -0800 (PST)
+        bh=qWlVTXk7WYZu7J2Or6ZWmESRrvvRWeXEPReJ0SD6qlY=;
+        b=OIBp9fpoZjV4ZMH12ATljq5J1VYilovMvkJx0BUaGQgbhJDmNYXvULBd2YdEDRsiUg
+         9sdKiZr4pjWWH9hvvU8CBemh/LIIb4DGoiU87OXFsOvnt+Pn5zAKfNpAfgxiywCo/F6C
+         QKew2sJeUCYcuxgFKsoRgiNPYj+NMPLikryasKEhWnXfMMQvdHBbkOu+Cls3fMP1g9PZ
+         e5T1b8enFGa5dWQm2bdMYqxv9/bbhG560GgcslZOVMzOF0OEb42oUS4aAzi9iB4x9I30
+         CxQSrqFq3UJh2zKFnsdXKhoGwEf6eMCHasURaheDL6xfXVGno/qZxk8eCrO/d7SHdW9A
+         OP3Q==
+X-Gm-Message-State: AO0yUKVHfux3KEv2J6JXvnKGlNfzhlM00aFUMaptQlU5zQcKJF+lbK+Q
+        IqImwk5pJx+WbCqfnfA89RL5Yg==
+X-Google-Smtp-Source: AK7set+pAeXIBpSaR7RrWnLwuNr9xay+jAiWwaq4uSm4u+GC8qYsYJOuYmOtSZBQ3BWIWHzr/q9f8A==
+X-Received: by 2002:ac2:598b:0:b0:4db:513b:6ef4 with SMTP id w11-20020ac2598b000000b004db513b6ef4mr1477599lfn.11.1677936472091;
+        Sat, 04 Mar 2023 05:27:52 -0800 (PST)
 Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id j15-20020a19f50f000000b004e7fa99f2b5sm342975lfb.186.2023.03.04.05.27.50
+        by smtp.gmail.com with ESMTPSA id j15-20020a19f50f000000b004e7fa99f2b5sm342975lfb.186.2023.03.04.05.27.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 05:27:50 -0800 (PST)
+        Sat, 04 Mar 2023 05:27:51 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 04 Mar 2023 14:27:42 +0100
-Subject: [PATCH RFT 07/20] clk: qcom: smd-rpm: Add keepalive_clks for
- MSM8916
+Date:   Sat, 04 Mar 2023 14:27:43 +0100
+Subject: [PATCH RFT 08/20] clk: qcom: smd-rpm: Add keepalive_clks for
+ MSM8936
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-rpmcc_sleep-v1-7-d9cfaf9b27a7@linaro.org>
+Message-Id: <20230303-topic-rpmcc_sleep-v1-8-d9cfaf9b27a7@linaro.org>
 References: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
 In-Reply-To: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -67,43 +67,48 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677936461; l=782;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677936461; l=879;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=EjzJfBH80ZIEoJ+Wq0ik7Jj0/K7SI5Dj0zTT4DnJWEY=;
- b=gdzYNGD+fq1qcjQ/lc2oztJ9Fd9WHhUJgwc6ExEsJc1B31oDkehB50+0HGwTI9OsLUgDHvc9GS9x
- FG24puwMDKHhXLnPGygqD/JciwzP7fTy7LLNLSOsuJwItigty5fl
+ bh=/gM/F7jwDcMoS4RSi8rE2q3Rtn0GWlhQfGL+90g8EhM=;
+ b=0p4SS5CTVLe/gjtZJEtMJqFtlkA7PUIjV3mvn83ek41q9qUjO+OwrkYmarrbNyu9M+VmmFe9D/3V
+ kxwdaDQ5CYXsJIPEnxCc0lc6AnuSfkUFRNzuvwaOuUW1TAJHpUCt
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MSM8916 requires that the PCNoC clock always gets an active vote.
+MSM8936 requires that the PCNoC clock always gets an active vote.
 Guarantee that.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/qcom/clk-smd-rpm.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/clk-smd-rpm.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 1a678a962770..a93b4575f44f 100644
+index a93b4575f44f..6db78aeae9dd 100644
 --- a/drivers/clk/qcom/clk-smd-rpm.c
 +++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -596,6 +596,8 @@ static struct clk_smd_rpm *msm8916_clks[] = {
- static const struct rpm_smd_clk_desc rpm_clk_msm8916 = {
- 	.clks = msm8916_clks,
- 	.num_clks = ARRAY_SIZE(msm8916_clks),
+@@ -632,8 +632,10 @@ static struct clk_smd_rpm *msm8936_clks[] = {
+ };
+ 
+ static const struct rpm_smd_clk_desc rpm_clk_msm8936 = {
+-		.clks = msm8936_clks,
+-		.num_clks = ARRAY_SIZE(msm8936_clks),
++	.clks = msm8936_clks,
++	.num_clks = ARRAY_SIZE(msm8936_clks),
 +	.keepalive_clks = pnoc_keepalive_clks,
 +	.num_keepalive_clks = ARRAY_SIZE(pnoc_keepalive_clks),
  };
  
- static struct clk_smd_rpm *msm8936_clks[] = {
+ static struct clk_smd_rpm *msm8974_clks[] = {
 
 -- 
 2.39.2
