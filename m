@@ -2,80 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8F56ABE20
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Mar 2023 12:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062DC6ABE3C
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Mar 2023 12:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjCFL2J (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 6 Mar 2023 06:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S230112AbjCFLed (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 6 Mar 2023 06:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjCFL2I (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Mar 2023 06:28:08 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FE82006F
-        for <linux-clk@vger.kernel.org>; Mon,  6 Mar 2023 03:28:04 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id z42so9196684ljq.13
-        for <linux-clk@vger.kernel.org>; Mon, 06 Mar 2023 03:28:04 -0800 (PST)
+        with ESMTP id S230048AbjCFLec (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Mar 2023 06:34:32 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE35A25E0D
+        for <linux-clk@vger.kernel.org>; Mon,  6 Mar 2023 03:34:26 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r18so8467550wrx.1
+        for <linux-clk@vger.kernel.org>; Mon, 06 Mar 2023 03:34:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678102083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=205oYFe4/B3UC/X3qLrV4lWCFSwtZFx9u6zXNGXzdZg=;
-        b=tYxvsHkYitctMbDyn+0brKMs7h03vuc34++qTOgQCEXY0QOltjVFzavue7XOjwIBXz
-         LMKRO0A1xwNSzXZFnd0JnvqMD9VThgr+5mGucoUg14TXX2erPQBCSmP5U3Zv5gOQ65YF
-         aJr59vehRqEcPD2OJICJnlRAOPRS0o8Th0I/W50leAD4actrR0r66yCMpHZfK2W4QnVb
-         y2JpLiJKGSxhNvSnCXnVuO2CI3HaHH25c1zAjGpMDB/IfbeJY8iHeylBZssZHVRrvh0U
-         ZoIK374BF80gQZHCo+SjoxWz2s+K8KggfaBJCFuzAeZ4KmG3/3vlBTh6k7gY99yBx6HI
-         HjEQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678102465;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=kcFkvrShXbF2CFhK0/oJaKpo0rIrr4/wjiECE0Ry774=;
+        b=w1ITZjrGW/QOH32dwqCBDCxbtVTjziYE7WXm8LKh5W3RyN04hODHg58PYm+qGhBm98
+         ZX94ZnRvLkMhEHtTk4PGs8bNgjdjz4+8wRevETdd5TCQnCtxpDm9W9sxjiz+nhwhJIv9
+         jvhqKHdo4nikaFKjxUUgaYRH0kynXpx9QB8OvqEroBhhGNvyPp2Ga45vNO6R0WzwiPDQ
+         WHop+Pb18kIW5pYCmdtGfjjreG3LJaVE6oYvg5JY6g9H+Rfs1WM2SK87tkQb3EPm1Du5
+         /hJVZOH8gm0+OnikKifQFmUQGjbgH65+mGDLmjJuuMMQtuLciIVqOpDbaiaBFTrMrcRi
+         m1bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678102083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=205oYFe4/B3UC/X3qLrV4lWCFSwtZFx9u6zXNGXzdZg=;
-        b=FOYH7vjN5UAuyqYt0EKA0m6HfvZYMlopo3Y2ECYzTgaBYzd5b6gEpXIUQFpUPTUN0k
-         3AY6xTfGogyXdpo1NF4joIoFfN8JIf09krNQp+XORkSDs+hsGMJmaubVWFIcaTX9X9IH
-         YSmze2uYM3qdJk+Jqpffyp8ltepdrt6fuoNfcQG4eDwFfXOSD9ASBxTHPjSCBFZMSxpS
-         8lTS48x6KwkzdtzfRSLklRMPGLJ8q8ozdqagvfe0eClYu5SCrb//9ZiwN6NWkS9MurIG
-         QDukM+c8ADvk2otYBYqf6eGfr/+R0ufuNLDZmFKkdWvpHTEa4lC0TBx7PdPrPAMgP6+t
-         DwNg==
-X-Gm-Message-State: AO0yUKXzbrMu1+tnT6es4He6o8c2lffqqiY93XrvoyDdfEkbZ058Js5s
-        AKgc8iWDmrfZn3vbQ0Y9b4avBg==
-X-Google-Smtp-Source: AK7set8aBql9IKQglXdI+C9VtpQK0WdlDEU+pVafNQuJJSo71a5RDLIA3RP28ZVtY1ImqHSRtfjaDw==
-X-Received: by 2002:a2e:86d5:0:b0:295:a932:8e40 with SMTP id n21-20020a2e86d5000000b00295a9328e40mr2943634ljj.17.1678102082812;
-        Mon, 06 Mar 2023 03:28:02 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id c14-20020ac2530e000000b004db51387ad6sm1588681lfh.129.2023.03.06.03.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 03:28:02 -0800 (PST)
-Message-ID: <afa95a2d-dbf3-621e-a1ed-fa484d288432@linaro.org>
-Date:   Mon, 6 Mar 2023 12:28:01 +0100
+        d=1e100.net; s=20210112; t=1678102465;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kcFkvrShXbF2CFhK0/oJaKpo0rIrr4/wjiECE0Ry774=;
+        b=eTJU8y44wkxzQghQK7I5fMn6WSrpV0sdm5ucHXUKN82Q5nu3lXGDcZbPtV7ks6SMyc
+         gwoOEQVNzoQeH2MexgkdNEkyiyG5xfB+i0Dy/wyvnAH6Q2fiE9RJQcunRgrIy+Nu2dTS
+         WFGF7DHGCZkzkn7gWt+/nqFZ+Hi59Ggz1EOYd3nhdB/44dYS5ArJnRTEs13euF8NguZN
+         a5mCnQkKw2+SSd87yGtFLhCJcTFOfg0OVTz9I6mxIP7tqf4jeETdYXQ2AKisN2y99bBN
+         GcuzRU0ZBAFuMfoYlpc9479NzFZtIOwgKo7sPsOX+Xg6fIf0HS1X74oKifUbgB6G2cg4
+         F6Yg==
+X-Gm-Message-State: AO0yUKUjlU3W15CC+TpfFR2/xAklZUMuyTxbxbK5TO2NuvxKaCbWtVOd
+        d5J1tYPiZJQkNSo2TlhspHimwA==
+X-Google-Smtp-Source: AK7set9UafAXr/9TyjNLehZsI8q6PEwZzOGc97MEuj36r9xw0jHrushT4+jS9PqptIjPrV+Y8RSHyg==
+X-Received: by 2002:adf:eb87:0:b0:2ce:43c3:2fd with SMTP id t7-20020adfeb87000000b002ce43c302fdmr7064354wrn.4.1678102464886;
+        Mon, 06 Mar 2023 03:34:24 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id e13-20020adff34d000000b002c53cc7504csm9525832wrp.78.2023.03.06.03.34.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 03:34:24 -0800 (PST)
+References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+ <20230301183759.16163-4-ddrokosov@sberdevices.ru>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v9 3/5] dt-bindings: clock: meson: add A1 PLL clock
+ controller bindings
+Date:   Mon, 06 Mar 2023 12:33:48 +0100
+In-reply-to: <20230301183759.16163-4-ddrokosov@sberdevices.ru>
+Message-ID: <1jmt4qazb3.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFT 03/20] clk: qcom: smd-rpm: Add support for keepalive
- votes
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-References: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
- <20230303-topic-rpmcc_sleep-v1-3-d9cfaf9b27a7@linaro.org>
- <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,121 +78,127 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
+On Wed 01 Mar 2023 at 21:37, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-On 6.03.2023 02:21, Dmitry Baryshkov wrote:
-> On Sat, 4 Mar 2023 at 15:27, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> Some bus clock should always have a minimum (19.2 MHz) vote cast on
->> them, otherwise the platform will fall apart, hang and reboot.
->>
->> Add support for specifying which clocks should be kept alive and
->> always keep a vote on XO_A to make sure the clock tree doesn't
->> collapse. This removes the need to keep a maximum vote that was
->> previously guaranteed by clk_smd_rpm_handoff.
->>
->> This commit is a combination of existing (not-exactly-upstream) work
->> by Taniya Das, Shawn Guo and myself.
->>
->> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
->> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/clk/qcom/clk-smd-rpm.c | 23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->> index cce7daa97c1e..8e017c575361 100644
->> --- a/drivers/clk/qcom/clk-smd-rpm.c
->> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->> @@ -4,6 +4,7 @@
->>   * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->>   */
->>
->> +#include <linux/clk.h>
->>  #include <linux/clk-provider.h>
->>  #include <linux/err.h>
->>  #include <linux/export.h>
->> @@ -178,6 +179,8 @@ struct clk_smd_rpm_req {
->>  struct rpm_smd_clk_desc {
->>         struct clk_smd_rpm **clks;
->>         size_t num_clks;
->> +       struct clk_hw **keepalive_clks;
->> +       size_t num_keepalive_clks;
->>  };
->>
->>  static DEFINE_MUTEX(rpm_smd_clk_lock);
->> @@ -1278,6 +1281,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>         struct qcom_smd_rpm *rpm;
->>         struct clk_smd_rpm **rpm_smd_clks;
->>         const struct rpm_smd_clk_desc *desc;
->> +       struct clk_hw **keepalive_clks;
->>
->>         rpm = dev_get_drvdata(pdev->dev.parent);
->>         if (!rpm) {
->> @@ -1291,6 +1295,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>
->>         rpm_smd_clks = desc->clks;
->>         num_clks = desc->num_clks;
->> +       keepalive_clks = desc->keepalive_clks;
->>
->>         for (i = 0; i < num_clks; i++) {
->>                 if (!rpm_smd_clks[i])
->> @@ -1321,6 +1326,24 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>         if (ret)
->>                 goto err;
->>
->> +       /* Leave a permanent active vote on clocks that require it. */
->> +       for (i = 0; i < desc->num_keepalive_clks; i++) {
->> +               if (WARN_ON(!keepalive_clks[i]))
->> +                       continue;
->> +
->> +               ret = clk_prepare_enable(keepalive_clks[i]->clk);
->> +               if (ret)
->> +                       return ret;
-> 
-> Would it be better to use CLK_IS_CRITICAL instead? Using the existing
-> API has a bonus that it is more visible compared to the ad-hoc
-> solutions.
-Yeah, I think that makes sense.
+> Add the documentation for Amlogic A1 PLL clock driver, and A1 PLL
+> clock controller bindings.
+> Also include new A1 clock controller dt bindings to MAINTAINERS.
+>
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-> 
->> +
->> +               ret = clk_set_rate(keepalive_clks[i]->clk, 19200000);
-> 
-> Don't we also need to provide a determine_rate() that will not allow
-> one to set clock frequency below 19.2 MHz?
-Hm, sounds like a good idea..
+patch order is wrong.
+Bindings before drivers please.
 
-> 
->> +               if (ret)
->> +                       return ret;
->> +       }
->> +
->> +       /* Keep an active vote on CXO in case no other driver votes for it. */
->> +       if (rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC])
->> +               return clk_prepare_enable(rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC]->hw.clk);
->> +
->>         return 0;
->>  err:
->>         dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
-> 
-> 
-> I have mixed feelings towards this patch (and the rest of the
-> patchset). It looks to me like we are trying to patch an issue of the
-> interconnect drivers (or in kernel configuration).
-Well, as you noticed, this patch tries to address a situation where a
-critical clock could be disabled. The interconnect driver (as per my
-other recent patchset) also has a concept of "keepalive", but:
+> ---
+>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 59 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  include/dt-bindings/clock/a1-pll-clkc.h       | 20 +++++++
+>  3 files changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
+>
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> new file mode 100644
+> index 000000000000..8bd2c948df86
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson A/C serials PLL Clock Control Unit
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +  - Jerome Brunet <jbrunet@baylibre.com>
+> +  - Jian Hu <jian.hu@jian.hu.com>
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +properties:
+> +  compatible:
+> +    const: amlogic,a1-pll-clkc
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: input fixpll_in
+> +      - description: input hifipll_in
+> +
+> +  clock-names:
+> +    items:
+> +      - const: fixpll_in
+> +      - const: hifipll_in
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/a1-clkc.h>
+> +    apb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@7c80 {
+> +            compatible = "amlogic,a1-pll-clkc";
+> +            reg = <0 0x7c80 0 0x18c>;
+> +            #clock-cells = <1>;
+> +            clocks = <&clkc_periphs CLKID_FIXPLL_IN>,
+> +                     <&clkc_periphs CLKID_HIFIPLL_IN>;
+> +            clock-names = "fixpll_in", "hifipll_in";
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 39ff1a717625..8438bc9bd636 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1895,6 +1895,7 @@ L:	linux-amlogic@lists.infradead.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/clock/amlogic*
+>  F:	drivers/clk/meson/
+> +F:	include/dt-bindings/clock/a1*
+>  F:	include/dt-bindings/clock/gxbb*
+>  F:	include/dt-bindings/clock/meson*
+>  
+> diff --git a/include/dt-bindings/clock/a1-pll-clkc.h b/include/dt-bindings/clock/a1-pll-clkc.h
+> new file mode 100644
+> index 000000000000..3a559518c6e6
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/a1-pll-clkc.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + * Author: Jian Hu <jian.hu@amlogic.com>
+> + *
+> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> + */
+> +
+> +#ifndef __A1_PLL_CLKC_H
+> +#define __A1_PLL_CLKC_H
+> +
+> +#define CLKID_FIXED_PLL		1
+> +#define CLKID_FCLK_DIV2		6
+> +#define CLKID_FCLK_DIV3		7
+> +#define CLKID_FCLK_DIV5		8
+> +#define CLKID_FCLK_DIV7		9
+> +#define CLKID_HIFI_PLL		10
+> +
+> +#endif /* __A1_PLL_CLKC_H */
 
-1. not very many SoCs already have a functional icc driver
-2. devices with an existing interconnect driver should also be
-   testable without one (through painful ripping out everything-icc
-   from the dts) for regression tracking
-
-Konrad
-
-> 
-> 
-> --
-> With best wishes
-> Dmitry
