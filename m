@@ -2,53 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDDF6ACDAB
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Mar 2023 20:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4416ACE18
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Mar 2023 20:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbjCFTQB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 6 Mar 2023 14:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S230005AbjCFT37 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 6 Mar 2023 14:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCFTP6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Mar 2023 14:15:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A900065443;
-        Mon,  6 Mar 2023 11:15:57 -0800 (PST)
+        with ESMTP id S230027AbjCFT3y (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Mar 2023 14:29:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68583B842;
+        Mon,  6 Mar 2023 11:29:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21EBF6108D;
-        Mon,  6 Mar 2023 19:15:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD4FC433D2;
-        Mon,  6 Mar 2023 19:15:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED33B810D2;
+        Mon,  6 Mar 2023 19:29:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85ADC4339B;
+        Mon,  6 Mar 2023 19:29:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678130156;
-        bh=Ye8fF5L4qQexJxXqxoN7GU17SAbd7KXZ1DnaEWwRvpo=;
+        s=k20201202; t=1678130984;
+        bh=l4MJr1TuX+4CCg+Fz89fjWptfEHFzh6hDhxPWHE0w9I=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=FcnciynrfICCRoVPny7ApM1J3wWUh5TfXEn/e1M6KNvjb91D4DaupukW8mdnqwnry
-         M6vpZYCTGS/RbO+bYooe6VfvLqU0b6DRwNk63dwfPMQHEgyBilFhbszVEqw2liydLP
-         3XAWV1CaW+mHhNrkUNJAzM9iYjzm+sz7jTnWhPlN5xgsvEDjCz2e7u5L1w3+3ypRZ4
-         U0GfHT8PJOe3vvKxb7VAWP1UOohBXG2WoSTfEl12AkT8YU0oyarpI+xOMVGRg8q2vS
-         wQbBsA1Ij8iX1fwa1vUX4KiBhmIa1j2Mm7rUi/ob4HlQa9qm7ARqqMysZxSwOzNmcM
-         xM9jyzpiAbIvg==
-Message-ID: <32edd2dd9557b7e3debbd8f1bccccd8d.sboyd@kernel.org>
+        b=GYRyvIx0PepOT+7XUYww0ldfMO0kxDbmFzp67+l00Gcu/th8IDz0ArKmbJnGbBBi6
+         b7sBgti4nMycI755KD2VIQ0UJViiVDeOFByGF+wfLvriQXapn76WgSrOk5l8UbVe+B
+         iQA+/0BTlI4R2yFDpemjeYg/u37m34KGEl8Ld+oHZCCYjMp8bS5U0c8NtnEtxC2I3w
+         F1LHjTKWGMGpv3ihdOa/qZY7q7nJmpzbd0jNOs7pSRQDQvMj3Wdp1eEd3wHNWi4GU6
+         5nT+25ddMRqqdUMB7pXC+JOT2cqtmmhX0IFIiR6anSXy9QraQlcMho5g4tlTZ4aO19
+         A1aK8/JG9BNsw==
+Message-ID: <50e9af28f2f245f18cb426904fb6eec5.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAGETcx-W3o=rQoVLnKkvk=oTAMiwEcqAZ_trcMPBuune-7Hoiw@mail.gmail.com>
-References: <20230302014639.297514-1-saravanak@google.com> <CACRpkdacG4yxtZqwG5hKRY_8nY9qWeNPb-ZttMCnFH7ojZ3kCA@mail.gmail.com> <CAGETcx-W3o=rQoVLnKkvk=oTAMiwEcqAZ_trcMPBuune-7Hoiw@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: Mark a fwnode as initialized when using CLK_OF_DECLARE() macro
+In-Reply-To: <20230222121453.91915-13-nick.alcock@oracle.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com> <20230222121453.91915-13-nick.alcock@oracle.com>
+Subject: Re: [PATCH 12/27] kbuild, clk: remove MODULE_LICENSE in non-modules
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel-team@android.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Saravana Kannan <saravanak@google.com>
-Date:   Mon, 06 Mar 2023 11:15:54 -0800
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
+Date:   Mon, 06 Mar 2023 11:29:41 -0800
 User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,15 +55,26 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Saravana Kannan (2023-03-03 13:24:00)
-> On Thu, Mar 2, 2023 at 5:14=E2=80=AFAM Linus Walleij <linus.walleij@linar=
-o.org> wrote:
-> >
-> > Works like a charm on U8500!
-> > Tested-by: Linus Walleij <linus.walleij@linaro.org>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Quoting Nick Alcock (2023-02-22 04:14:38)
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
 >=20
-> Stephen, Does this look good? Can we have Greg pull this in?
+> So remove it in the files in this commit, none of which can be built as
+> modules.
 >=20
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> ---
 
-I picked it up for fixes. Will send it off later this week.
+Applied to clk-fixes
