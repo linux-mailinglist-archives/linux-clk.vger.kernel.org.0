@@ -2,199 +2,136 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC646AD995
-	for <lists+linux-clk@lfdr.de>; Tue,  7 Mar 2023 09:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30086ADB5A
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Mar 2023 11:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjCGIw1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 7 Mar 2023 03:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S230054AbjCGKFV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 7 Mar 2023 05:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCGIw0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Mar 2023 03:52:26 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709B92CFF1;
-        Tue,  7 Mar 2023 00:52:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678179142; x=1709715142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5GBiPeesd8xFReVcLee1l9cVo8XbRI4la4GvpsLYlT8=;
-  b=elavBS9zHOL8roNB80cIoVwNG2htbeKOBy/b3afssyXzunOoEtcLL+UF
-   l7YJthb4RHDsfBseXZIW5uoTR2YWLf3cyzdTttXNavpLmS/5vqZaUqCRX
-   3O+/Z5ExYNtKLarpy9kvVhz3PXZfP2xtLAYfz/5rd83mxubusASo7nD6L
-   RSVtuJTyH1Iw7fBXCW4BlkpVs5vMtz2T0p2je+wIHQwcRmAFGUehMI4Yj
-   jxqSYCwnfZxaQzSVlthZpNHTVMSGscqe86Su+OAi9DpAjMMUrO6kY99PK
-   JLuFTW3oPtBNsR0/gOnrXkJIiiKvLPYTUAnwer4M17ilQSTKAFEa1rIkC
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
-   d="asc'?scan'208";a="204037593"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 01:52:20 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Mar 2023 01:52:20 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Tue, 7 Mar 2023 01:52:17 -0700
-Date:   Tue, 7 Mar 2023 08:51:49 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hal Feng <hal.feng@starfivetech.com>
-CC:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Message-ID: <ZAb7JVghuiwZF1Q5@wendy>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
+        with ESMTP id S229651AbjCGKFM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Mar 2023 05:05:12 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E060739CC
+        for <linux-clk@vger.kernel.org>; Tue,  7 Mar 2023 02:04:53 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pZUBb-0005Gr-KS; Tue, 07 Mar 2023 11:04:47 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pZQSz-00032U-0c; Tue, 07 Mar 2023 07:06:29 +0100
+Date:   Tue, 7 Mar 2023 07:06:28 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michael Heimpold <mhei@heimpold.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: imx6ul: Recent enet refclock changes breaks custom i.mx6ull board
+Message-ID: <20230307060628.GC11936@pengutronix.de>
+References: <3ceda169-de1b-2c1f-9ee8-bc8fdb547433@i2se.com>
+ <20230306052531.GA30081@pengutronix.de>
+ <8a178040-ef52-d9ab-e704-69208d34f915@i2se.com>
+ <20230306094737.GA11506@pengutronix.de>
+ <953ee705-47a7-3f6b-408e-9d74f3bc30b4@i2se.com>
+ <20230306140207.GA11936@pengutronix.de>
+ <a1646cc8-0830-5add-2957-b9bdbb094b23@i2se.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BPAAyqVe2vfLu2rd"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a1646cc8-0830-5add-2957-b9bdbb094b23@i2se.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
---BPAAyqVe2vfLu2rd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Stefan,
 
-On Tue, Mar 07, 2023 at 04:36:41PM +0800, Hal Feng wrote:
-> On Tue, 21 Feb 2023 10:46:26 +0800, Hal Feng wrote:
-> > This patch series adds basic clock, reset & DT support for StarFive
-> > JH7110 SoC. Patch 17 depends on series [1] which provides pinctrl
-> > dt-bindings. Patch 19 depends on series [2] which provides dt-bindings
-> > of VisionFive 2 board and JH7110 SoC.
-> >=20
-> > You can simply review or test the patches at the link [3].
-> >=20
-> > [1]: https://lore.kernel.org/all/20230209143702.44408-1-hal.feng@starfi=
-vetech.com/
-> > [2]: https://lore.kernel.org/all/20230216131511.3327943-1-conor.dooley@=
-microchip.com/
-> > [3]: https://github.com/hal-feng/linux/commits/visionfive2-minimal
->=20
-> Hi Conor,
->=20
-> When I tried to rebase these patches on v6.3-rc1, I found the kernel
-> would crash on the VisionFive 2 board during startup. The logs are as
-> below. I checkout the branch to the mainline and found that the kernel
-> would also crash on the VisionFive board which is equipped with JH7100
-> SoC.
->=20
-> --------------------------------
-> Unable to handle kernel paging request at virtual address 0000004cccccccd4
-> Oops [#1]
-> Modules linked in:
-> CPU: 3 PID: 87 Comm: udevd Not tainted 6.3.0-rc1-00019-g239e7809f291 #305
-> Hardware name: StarFive VisionFive 2 v1.3B (DT)
-> epc : enqueue_timer+0x18/0x90
->  ra : internal_add_timer+0x2c/0x38
-> epc : ffffffff8006a714 ra : ffffffff8006a7b8 sp : ffffffc80443bc80
->  gp : ffffffff80eb5100 tp : ffffffd8c01db200 t0 : 0000000000000000
->  t1 : 000000000000000f t2 : 0000000038b3ea28 s0 : ffffffc80443bcb0
->  s1 : ffffffff80813940 a0 : ffffffff80813940 a1 : ffffffc80443bd48
->  a2 : 000000000000020b a3 : cccccccd0b000000 a4 : cccccccccccccccc
->  a5 : 000000000000020b a6 : ffffffff80814a08 a7 : 0000000000000001
->  s2 : ffffffc80443bd48 s3 : 0000000008400040 s4 : ffffffff80813940
->  s5 : ffffffff80eea0b8 s6 : ffffffff80eb7220 s7 : 0000000000000040
->  s8 : ffffffff80eb61e0 s9 : 0000002ac84a2548 s10: 0000002ad53e92c0
->  s11: 0000000000000001 t3 : 000000000000003f t4 : 0000000000000000
->  t5 : 0000000000000004 t6 : 0000000000000003
-> status: 0000000200000100 badaddr: 0000004cccccccd4 cause: 000000000000000f
-> [<ffffffff8006a714>] enqueue_timer+0x18/0x90
-> [<ffffffff8006aa64>] add_timer_on+0xf0/0x134
-> [<ffffffff80500f18>] try_to_generate_entropy+0x1ec/0x232
-> [<ffffffff8035a636>] urandom_read_iter+0x42/0xc2
-> [<ffffffff800fff16>] vfs_read+0x17c/0x1e4
-> [<ffffffff801005b6>] ksys_read+0x78/0x98
-> [<ffffffff801005e4>] sys_read+0xe/0x16
-> [<ffffffff800035dc>] ret_from_syscall+0x0/0x2
-> Code: 9381 9713 0037 0813 0705 983a 3703 0008 e198 c311 (e70c) d713=20
-> ---[ end trace 0000000000000000 ]---
-> note: udevd[87] exited with irqs disabled
-> Segmentation fault
-> FAIL
-> Saving random seed:=20
-> rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
-> rcu: 	1-...0: (0 ticks this GP) idle=3D19c4/1/0x4000000000000000 softirq=
-=3D42/42 fqs=3D7474
-> rcu: 	(detected by 2, t=3D15005 jiffies, g=3D-195, q=3D35 ncpus=3D4)
-> Task dump for CPU 1:
-> task:dd              state:R  running task     stack:0     pid:92    ppid=
-:88     flags:0x00000008
-> Call Trace:
-> [<ffffffff80003764>] ret_from_fork+0x0/0xc
-> rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
-> rcu: 	1-...0: (0 ticks this GP) idle=3D19c4/1/0x4000000000000000 softirq=
-=3D42/42 fqs=3D29814
-> rcu: 	(detected by 2, t=3D60018 jiffies, g=3D-195, q=3D35 ncpus=3D4)
-> Task dump for CPU 1:
-> task:dd              state:R  running task     stack:0     pid:92    ppid=
-:88     flags:0x00000008
-> Call Trace:
-> [<ffffffff80003764>] ret_from_fork+0x0/0xc
-> ...
-> --------------------------------
->=20
-> I used 'git bisect' and found out the commit 9493e6f3ce02 is the
-> cause. I tried to revert this commit on the tag v6.3-rc1, but it
-> seems there is no improvement.
+On Mon, Mar 06, 2023 at 04:50:18PM +0100, Stefan Wahren wrote:
+> Did you noticed that the error is caused for enet2_ref_sel?
+> 
+> On our board variants master/slave/slaveXT only ENET1 is used, so ENET2 is
+> kept to the defaults (ENET2_TX_CLK_DIR = 0, ENET2_CLK_SEL = 0) and the
+> bootloader won't touch those bits.
 
-Hmm, I'm not entirely sure that that is a good bisect.
-This is a fix for my stupidity in the commit you mention:
-https://lore.kernel.org/linux-riscv/20230302174154.970746-1-conor@kernel.or=
-g/
+Ok, i see. It makes sense.
 
-But the main backtrace there is not from that patch at all, I think it
-is Linus' fault.
-The HEAD of Linus' tree is currently 8ca09d5fa3549 ("cpumask: fix
-incorrect cpumask scanning result checks") should be a fix for the
-backtrace that you are seeing above.
+> > With this bits we have following variants:
+> > 1. internal clock source with output on ENET1_TX_CLK
+> > 2. internal clock source without output on ENET1_TX_CLK. Are there any
+> >     use cases need to support this mode?
+> After reading the reference manual, this mode refers to ENET1_TX_CLK_DIR =
+> 0, ENET1_CLK_SEL = 0. Is my understanding correct?
+> > 3. external clock source without output on ENET1_TX_CLK
+> > 4. external clock source with output on ENET1_TX_CLK, well ENET1_TX_CLK
+> >     is input it can't be out put on this case.
+> > 
+> > Current kernel supports modes 1 and 3. For mode 2 I do not have a use
+> > case and mode 4 make no sense.
+> > 
+> > In your case, the boot loader configures clocks to mode 2 which is not
+> > correct for this HW. It should be mode 1.
+> As written above the bootloader doesn't touch this. It's the reset default
+> according to the reference manual. So i consider mode 2 as disabled clock,
+> which is the right mode for boards without using this particular Ethernet
+> interface. For EMC reasons we don't want to enable ENET1 and ENET2 clock
+> output unconditionally.
+> > Probably, the way to go is do register dummy parents for not supported
+> > modes. It would silent the kernel. Other ideas?
+> 
+> Sorry, i don't have no idea how to properly achieve this.
 
-> Any options I am missing? Could you please give me some suggestions
-> to adapt to the new changes between 6.2 and 6.3? Thank you in
-> advance.
+can you please test this patch:
 
-LMK if the above two things don't fix it for you & I'll go digging
-tonight.
-
-Cheers,
-Conor.
-
---BPAAyqVe2vfLu2rd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAb7FQAKCRB4tDGHoIJi
-0qVTAPsHSMwYMcrmOSnP3im30f+2vZGSFqHJchJxrpjd09D3+AD/W49wo6JYEE0K
-54n79wuFUj4pxEaLUIJptbE2s62iGQU=
-=7ad+
------END PGP SIGNATURE-----
-
---BPAAyqVe2vfLu2rd--
+diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
+index 2836adb817b7..e3696a88b5a3 100644
+--- a/drivers/clk/imx/clk-imx6ul.c
++++ b/drivers/clk/imx/clk-imx6ul.c
+@@ -95,14 +95,16 @@ static const struct clk_div_table video_div_table[] = {
+ 	{ }
+ };
+ 
+-static const char * enet1_ref_sels[] = { "enet1_ref_125m", "enet1_ref_pad", };
++static const char * enet1_ref_sels[] = { "enet1_ref_125m", "enet1_ref_pad", "dummy", "dummy"};
+ static const u32 enet1_ref_sels_table[] = { IMX6UL_GPR1_ENET1_TX_CLK_DIR,
+-					    IMX6UL_GPR1_ENET1_CLK_SEL };
++					    IMX6UL_GPR1_ENET1_CLK_SEL, 0,
++					    IMX6UL_GPR1_ENET1_TX_CLK_DIR | IMX6UL_GPR1_ENET1_CLK_SEL };
+ static const u32 enet1_ref_sels_table_mask = IMX6UL_GPR1_ENET1_TX_CLK_DIR |
+ 					     IMX6UL_GPR1_ENET1_CLK_SEL;
+-static const char * enet2_ref_sels[] = { "enet2_ref_125m", "enet2_ref_pad", };
++static const char * enet2_ref_sels[] = { "enet2_ref_125m", "enet2_ref_pad", "dummy", "dummy"};
+ static const u32 enet2_ref_sels_table[] = { IMX6UL_GPR1_ENET2_TX_CLK_DIR,
+-					    IMX6UL_GPR1_ENET2_CLK_SEL };
++					    IMX6UL_GPR1_ENET2_CLK_SEL, 0,
++					    IMX6UL_GPR1_ENET2_TX_CLK_DIR | IMX6UL_GPR1_ENET2_CLK_SEL };
+ static const u32 enet2_ref_sels_table_mask = IMX6UL_GPR1_ENET2_TX_CLK_DIR |
+ 					     IMX6UL_GPR1_ENET2_CLK_SEL;
+ 
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
