@@ -2,220 +2,412 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3AC16AE6F0
-	for <lists+linux-clk@lfdr.de>; Tue,  7 Mar 2023 17:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB63C6AEF06
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Mar 2023 19:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjCGQnb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 7 Mar 2023 11:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S232645AbjCGSTm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 7 Mar 2023 13:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjCGQm7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Mar 2023 11:42:59 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0181E2A2
-        for <linux-clk@vger.kernel.org>; Tue,  7 Mar 2023 08:40:36 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:614d:21b0:703:d0f9])
-        by albert.telenet-ops.be with bizsmtp
-        id VUg82900A3mNwr406Ug80J; Tue, 07 Mar 2023 17:40:24 +0100
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pZaMC-00BCRZ-9r;
-        Tue, 07 Mar 2023 17:40:08 +0100
-Date:   Tue, 7 Mar 2023 17:40:08 +0100 (CET)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Guo Ren <guoren@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>, linux@armlinux.org.uk,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 07/51] cpuidle,psci: Push RCU-idle into driver
-In-Reply-To: <20230112195539.760296658@infradead.org>
-Message-ID: <ff338b9f-4ab0-741b-26ea-7b7351da156@linux-m68k.org>
-References: <20230112194314.845371875@infradead.org> <20230112195539.760296658@infradead.org>
+        with ESMTP id S232646AbjCGSTS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Mar 2023 13:19:18 -0500
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898739E67C;
+        Tue,  7 Mar 2023 10:13:40 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id o19-20020a056820041300b005259de79accso2160817oou.9;
+        Tue, 07 Mar 2023 10:13:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678212819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aVYR7iCf0Df+fEXPePrJvbhIP5bkr3lqWWb+w4AwRWk=;
+        b=IZfad8LvQwb8QHz6s8Hjs/vnZz8N0+8QkinO+X0iRaMYywru6SEs6bdQ8+u31xHCRp
+         YMWavxAonOR16PdwRLTohkXWRGbT2610fjHLYgxSVKOaHxxgku6QQD3LWQI96SvKicyk
+         LR4sztSHHeECdZJR6+mRkls03oj+t30zWtjuBlwY6/oR2ocqwmxTyd2J8lPdzZ4ppArh
+         b0u6XoItQ7TFSYAbitnaJ1py5Ak+drJ5yNNaJOJyIc0QaRIoRWZuh+gFckN6dakJnhFM
+         PGBReRAGQXyfBWcPI/Z8k0bzC1t/HtgpvTTMn4aDi/DPq0x0HCJGIWFlt2AWc4z3Ut5x
+         72VQ==
+X-Gm-Message-State: AO0yUKXemqGFqURFZMk/51NwkNKaMc2pJfbmgt0j2kUTsXWPoHtV8fI6
+        J10feE8HzBjJ5yxpEmLxTw==
+X-Google-Smtp-Source: AK7set8eLT156rIwA09j47KeETEgRAy4QOXPej01e007ZSnYi5Kuz2t5OdgI72EGvup7N2c453icNw==
+X-Received: by 2002:a4a:d1b1:0:b0:525:a9ad:e2b9 with SMTP id z17-20020a4ad1b1000000b00525a9ade2b9mr7501603oor.6.1678212819442;
+        Tue, 07 Mar 2023 10:13:39 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j15-20020a4adf4f000000b0051fce47fd1bsm608094oou.25.2023.03.07.10.13.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 10:13:38 -0800 (PST)
+Received: (nullmailer pid 2797 invoked by uid 1000);
+        Tue, 07 Mar 2023 14:26:14 -0000
+Date:   Tue, 7 Mar 2023 08:26:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        mathieu.poirier@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_gurus@quicinc.com, loic.poulain@linaro.org,
+        quic_eberman@quicinc.com, robimarko@gmail.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+Message-ID: <20230307142614.GA2742-robh@kernel.org>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
- 	Hoi Peter,
-
-(reduced the insane CC list)
-
-On Thu, 12 Jan 2023, Peter Zijlstra wrote:
-> Doing RCU-idle outside the driver, only to then temporarily enable it
-> again, at least twice, before going idle is daft.
->
-> Notably once implicitly through the cpu_pm_*() calls and once
-> explicitly doing ct_irq_*_irqon().
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-> Reviewed-by: Guo Ren <guoren@kernel.org>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-> Tested-by: Tony Lindgren <tony@atomide.com>
-> Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Thanks for your patch, which is now commit e038f7b8028a1d1b ("cpuidle,
-psci: Push RCU-idle into driver") in v6.3-rc1.
-
-I have bisected a PSCI checker regression on Renesas R-Car Gen3/4 SoCs
-to commit a01353cf1896ea5b ("cpuidle: Fix ct_idle_*() usage") (the 7
-commits before that do not compile):
-
-psci_checker: PSCI checker started using 2 CPUs
-psci_checker: Starting hotplug tests
-psci_checker: Trying to turn off and on again all CPUs
-psci: CPU0 killed (polled 0 ms)
-Detected PIPT I-cache on CPU0
-CPU0: Booted secondary processor 0x0000000000 [0x411fd073]
-psci_checker: Trying to turn off and on again group 0 (CPUs 0-1)
-psci: CPU0 killed (polled 0 ms)
-Detected PIPT I-cache on CPU0
-CPU0: Booted secondary processor 0x0000000000 [0x411fd073]
-psci_checker: Hotplug tests passed OK
-psci_checker: Starting suspend tests (10 cycles per state)
-psci_checker: CPU 0 entering suspend cycles, states 1 through 1
-psci_checker: CPU 1 entering suspend cycles, states 1 through 1
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 177 at kernel/context_tracking.c:141 ct_kernel_exit.constprop.0+0xd8/0xf4
-Modules linked in:
-CPU: 1 PID: 177 Comm: psci_suspend_te Not tainted 6.2.0-rc1-salvator-x-00052-ga01353cf1896 #1415
-Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ct_kernel_exit.constprop.0+0xd8/0xf4
-lr : ct_kernel_exit.constprop.0+0xc8/0xf4
-sp : ffffffc00b73bd30
-x29: ffffffc00b73bd30 x28: ffffff807fbadc90 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-x23: ffffff800981e140 x22: 0000000000000001 x21: 0000000000010000
-x20: ffffffc0086be1d8 x19: ffffff807fbac070 x18: 0000000000000000
-x17: ffffff80083d1000 x16: ffffffc00841fff8 x15: ffffffc00b73b990
-x14: ffffffc00895be78 x13: 0000000000000001 x12: 0000000000000000
-x11: 00000000000001aa x10: 00000000ffffffea x9 : 000000000000000f
-x8 : ffffffc00b73bb68 x7 : ffffffc00b73be18 x6 : ffffffc00815ff34
-x5 : ffffffc00a6a0c30 x4 : ffffffc00801ce00 x3 : 0000000000000000
-x2 : ffffffc008dc3070 x1 : ffffffc008dc3078 x0 : 0000000004208040
-Call trace:
-  ct_kernel_exit.constprop.0+0xd8/0xf4
-  ct_idle_enter+0x18/0x20
-  psci_enter_idle_state+0xa4/0xfc
-  suspend_test_thread+0x238/0x2f0
-  kthread+0xd8/0xe8
-  ret_from_fork+0x10/0x20
-irq event stamp: 0
-hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-hardirqs last disabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
-softirqs last  enabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
-softirqs last disabled at (0): [<0000000000000000>] 0x0
----[ end trace 0000000000000000 ]---
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 177 at kernel/context_tracking.c:186 ct_kernel_enter.constprop.0+0x78/0xa4
-Modules linked in:
-CPU: 1 PID: 177 Comm: psci_suspend_te Tainted: G        W          6.2.0-rc1-salvator-x-00052-ga01353cf1896 #1415
-Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ct_kernel_enter.constprop.0+0x78/0xa4
-lr : ct_kernel_enter.constprop.0+0x68/0xa4
-sp : ffffffc00b73bd30
-x29: ffffffc00b73bd30 x28: ffffff807fbadc90 x27: 0000000000000000
-x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-x23: ffffff800981e140 x22: 0000000000000001 x21: 00000000ffffffa1
-x20: ffffffc0086be1d8 x19: 00000000000000c0 x18: 0000000000000000
-x17: ffffff80083d1000 x16: ffffffc00841fff8 x15: ffffffc00b73b990
-x14: ffffffc00895be78 x13: ffffff800e325180 x12: ffffffc076de9000
-x11: 0000000034d4d91d x10: 0000000000000008 x9 : 0000000000001000
-x8 : ffffffc008012800 x7 : 0000000000000000 x6 : ffffff807fbac070
-x5 : ffffffc008dc3070 x4 : 0000000000000000 x3 : 000000000001a9fc
-x2 : 0000000000000003 x1 : ffffffc008dc3070 x0 : 0000000004208040
-Call trace:
-  ct_kernel_enter.constprop.0+0x78/0xa4
-  ct_idle_exit+0x18/0x38
-  psci_enter_idle_state+0xdc/0xfc
-  suspend_test_thread+0x238/0x2f0
-  kthread+0xd8/0xe8
-  ret_from_fork+0x10/0x20
-irq event stamp: 0
-hardirqs last  enabled at (0): [<0000000000000000>] 0x0
-hardirqs last disabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
-softirqs last  enabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
-softirqs last disabled at (0): [<0000000000000000>] 0x0
----[ end trace 0000000000000000 ]---
-psci_checker: Failed to suspend CPU 1: error -1 (requested state 1, cycle 0)
-psci_checker: CPU 0 suspend test results: success 0, shallow states 10, errors 0
-mmcblk0rpmb: mmc0:0001 BGSD3R 4.00 MiB, chardev (243:0)
-psci_checker: CPU 1 suspend test results: success 0, shallow states 9, errors 1
-psci_checker: 1 error(s) encountered in suspend tests
-psci_checker: PSCI checker completed
-
+On Tue, Mar 07, 2023 at 10:11:27AM +0530, Manikanta Mylavarapu wrote:
+> Add new binding document for multipd model remoteproc.
+> IPQ5018, IPQ9574 follows multipd model.
+> 
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 > ---
-> drivers/cpuidle/cpuidle-psci.c |    9 +++++----
-> 1 file changed, 5 insertions(+), 4 deletions(-)
->
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -69,12 +69,12 @@ static int __psci_enter_domain_idle_stat
-> 		return -1;
->
-> 	/* Do runtime PM to manage a hierarchical CPU toplogy. */
-> -	ct_irq_enter_irqson();
-> 	if (s2idle)
-> 		dev_pm_genpd_suspend(pd_dev);
-> 	else
-> 		pm_runtime_put_sync_suspend(pd_dev);
-> -	ct_irq_exit_irqson();
+>  .../bindings/remoteproc/qcom,multipd-pil.yaml | 282 ++++++++++++++++++
+>  1 file changed, 282 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+> new file mode 100644
+> index 000000000000..b788607f5abd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+> @@ -0,0 +1,282 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/qcom,multipd-pil.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	ct_idle_enter();
->
-> 	state = psci_get_domain_state();
-> 	if (!state)
-> @@ -82,12 +82,12 @@ static int __psci_enter_domain_idle_stat
->
-> 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
->
-> -	ct_irq_enter_irqson();
-> +	ct_idle_exit();
+> +title: Qualcomm Multipd Secure Peripheral Image Loader
 > +
-> 	if (s2idle)
-> 		dev_pm_genpd_resume(pd_dev);
-> 	else
-> 		pm_runtime_get_sync(pd_dev);
-> -	ct_irq_exit_irqson();
->
-> 	cpu_pm_exit();
->
-> @@ -240,6 +240,7 @@ static int psci_dt_cpu_init_topology(str
-> 	 * of a shared state for the domain, assumes the domain states are all
-> 	 * deeper states.
-> 	 */
-> +	drv->states[state_count - 1].flags |= CPUIDLE_FLAG_RCU_IDLE;
-> 	drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
-> 	drv->states[state_count - 1].enter_s2idle = psci_enter_s2idle_domain_idle_state;
-> 	psci_cpuidle_use_cpuhp = true;
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
+> +
+> +description:
+> +  Multipd Peripheral Image Loader loads firmware and boots Q6 pd, WCSS pd
+> +  remoteproc's on the Qualcomm IPQ5018, IPQ9574 SoC.
 
-Gr{oetje,eeting}s,
+What is PD? I don't see it defined anywhere.
 
- 						Geert
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,ipq5018-q6-mpd
+> +      - qcom,ipq9574-q6-mpd
+> +
+> +  '#address-cells': true
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Need to define the size.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+> +
+> +  '#size-cells': true
+
+ditto
+
+> +
+> +  'ranges': true
+
+Don't need quotes
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts-extended:
+
+Just 'interrupts'. Both forms are always supported.
+
+> +    items:
+> +      - description: Watchdog interrupt
+> +      - description: Fatal interrupt
+> +      - description: Ready interrupt
+> +      - description: Handover interrupt
+> +      - description: Stop acknowledge interrupt
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: wdog
+> +      - const: fatal
+> +      - const: ready
+> +      - const: handover
+> +      - const: stop-ack
+> +
+> +  clocks:
+> +    minItems: 25
+> +    maxItems: 25
+
+You need to list out what the clocks are.
+
+> +
+> +  clock-names:
+> +    minItems: 25
+> +    maxItems: 25
+> +
+> +  assigned-clocks:
+
+You can drop this. Implicitly supported.
+
+> +    minItems: 13
+> +    maxItems: 13
+> +
+> +  assigned-clock-rates:
+> +    minItems: 13
+> +    maxItems: 13
+> +
+> +  qcom,smem-states:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+I believe this already has a type. It should be defined in a common 
+schema if not already and then included in this schema.
+
+> +    description: States used by the AP to signal the remoteprocessor
+> +    items:
+> +      - description: Shutdown Q6
+> +      - description: Stop Q6
+> +
+> +  qcom,smem-state-names:
+> +    description:
+> +      Names of the states used by the AP to signal the remoteprocessor
+> +    items:
+> +      - const: shutdown
+> +      - const: stop
+> +
+> +  memory-region:
+> +    items:
+> +      - description: Q6 pd reserved region
+> +
+> +  glink-edge:
+> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
+> +    description:
+> +      Qualcomm G-Link subnode which represents communication edge, channels
+> +      and devices related to the Modem.
+> +
+> +patternProperties:
+> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
+> +    type: object
+> +    description:
+> +      In Multipd model, WCSS pd depends on Q6 pd i.e Q6 pd should be up before
+> +      WCSS. It can be achieved by keeping wcss pd node as subnode of Q6
+> +      device node.
+> +
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - "qcom,ipq5018-wcss-ahb-mpd"
+
+Don't need quotes.
+
+> +          - "qcom,ipq9574-wcss-ahb-mpd"
+> +          - "qcom,ipq5018-wcss-pcie-mpd"
+> +
+> +      interrupts-extended:
+
+Just interrupts
+
+> +        items:
+> +          - description: Fatal interrupt
+> +          - description: Ready interrupt
+> +          - description: Spawn acknowledge interrupt
+> +          - description: Stop acknowledge interrupt
+> +
+> +      interrupt-names:
+> +        items:
+> +          - const: fatal
+> +          - const: ready
+> +          - const: spawn-ack
+> +          - const: stop-ack
+> +
+> +      qcom,smem-states:
+> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+> +        description: States used by the AP to signal the remoteprocessor
+> +        items:
+> +          - description: Shutdown WCSS pd
+> +          - description: Stop WCSS pd
+> +          - description: Spawn WCSS pd
+> +
+> +      qcom,smem-state-names:
+> +        description:
+> +          Names of the states used by the AP to signal the remoteprocessor
+> +        items:
+> +          - const: shutdown
+> +          - const: stop
+> +          - const: spawn
+> +
+> +    required:
+> +      - compatible
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts-extended
+> +  - interrupt-names
+> +  - qcom,smem-states
+> +  - qcom,smem-state-names
+> +  - memory-region
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - qcom,ipq9574-q6-mpd
+> +    then:
+> +      properties:
+> +        assigned-clocks:
+
+Don't need to define assigned-clocks
+
+> +          items:
+> +            - description: Phandle, clock specifier of GCC_ANOC_WCSS_AXI_M_CLK
+> +            - description: Phandle, clock specifier of GCC_WCSS_AHB_S_CLK
+> +            - description: Phandle, clock specifier of GCC_WCSS_ECAHB_CLK
+> +            - description: Phandle, clock specifier of GCC_WCSS_ACMT_CLK
+> +            - description: Phandle, clock specifier of GCC_WCSS_AXI_M_CLK
+> +            - description: Phandle, clock specifier of GCC_Q6_AXIM_CLK
+> +            - description: Phandle, clock specifier of GCC_Q6_AXIM2_CLK
+> +            - description: Phandle, clock specifier of GCC_Q6_AHB_CLK
+> +            - description: Phandle, clock specifier of GCC_Q6_AHB_S_CLK
+> +            - description: Phandle, clock specifier of GCC_Q6SS_BOOT_CLK
+> +            - description: Phandle, clock specifier of GCC_MEM_NOC_Q6_AXI_CLK
+> +            - description: Phandle, clock specifier of GCC_WCSS_Q6_TBU_CLK
+> +            - description: Phandle, clock specifier of GCC_SYS_NOC_WCSS_AHB_CLK
+> +        assigned-clock-rates:
+> +          items:
+> +            - description: Must be 266666667 HZ
+> +            - description: Must be 133333333 HZ
+> +            - description: Must be 133333333 HZ
+> +            - description: Must be 133333333 HZ
+> +            - description: Must be 266666667 HZ
+> +            - description: Must be 533000000 HZ
+> +            - description: Must be 342857143 HZ
+> +            - description: Must be 133333333 HZ
+> +            - description: Must be 133333333 HZ
+> +            - description: Must be 342857143 HZ
+> +            - description: Must be 533000000 HZ
+> +            - description: Must be 533000000 HZ
+> +            - description: Must be 133333333 HZ
+> +
+> +examples:
+> +  - |
+> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +        #include <dt-bindings/clock/qcom,gcc-ipq5018.h>
+> +        #include <dt-bindings/reset/qcom,gcc-ipq5018.h>
+> +
+> +        q6v5_wcss: remoteproc@cd00000 {
+> +                compatible = "qcom,ipq5018-q6-mpd";
+> +                #address-cells = <1>;
+> +                #size-cells = <1>;
+> +                ranges;
+> +                reg = <0x0cd00000 0x4040>;
+> +                interrupts-extended = <&intc GIC_SPI 291 IRQ_TYPE_EDGE_RISING>,
+> +                                <&wcss_smp2p_in 0 0>,
+> +                                <&wcss_smp2p_in 1 0>,
+> +                                <&wcss_smp2p_in 2 0>,
+> +                                <&wcss_smp2p_in 3 0>;
+> +                interrupt-names = "wdog",
+> +                                  "fatal",
+> +                                  "ready",
+> +                                  "handover",
+> +                                  "stop-ack";
+> +
+> +                qcom,smem-states = <&wcss_smp2p_out 0>,
+> +                                   <&wcss_smp2p_out 1>;
+> +                qcom,smem-state-names = "shutdown",
+> +                                        "stop";
+> +
+> +                memory-region = <&q6_region>;
+> +
+> +                glink-edge {
+> +                        interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
+> +                        label = "rtr";
+> +                        qcom,remote-pid = <1>;
+> +                        mboxes = <&apcs_glb 8>;
+> +                };
+> +
+> +                q6_wcss_pd1: remoteproc_pd1 {
+> +                        compatible = "qcom,ipq5018-wcss-ahb-mpd";
+> +                        interrupts-extended = <&wcss_smp2p_in 8 0>,
+> +                                        <&wcss_smp2p_in 9 0>,
+> +                                        <&wcss_smp2p_in 12 0>,
+> +                                        <&wcss_smp2p_in 11 0>;
+> +                        interrupt-names = "fatal",
+> +                                          "ready",
+> +                                          "spawn-ack",
+> +                                          "stop-ack";
+> +                        qcom,smem-states = <&wcss_smp2p_out 8>,
+> +                                           <&wcss_smp2p_out 9>,
+> +                                           <&wcss_smp2p_out 10>;
+> +                        qcom,smem-state-names = "shutdown",
+> +                                                "stop",
+> +                                                "spawn";
+> +                };
+> +
+> +                q6_wcss_pd2: remoteproc_pd2 {
+> +                        compatible = "qcom,ipq5018-wcss-pcie-mpd";
+> +                        interrupts-extended = <&wcss_smp2p_in 16 0>,
+> +                                        <&wcss_smp2p_in 17 0>,
+> +                                        <&wcss_smp2p_in 20 0>,
+> +                                        <&wcss_smp2p_in 19 0>;
+> +                        interrupt-names = "fatal",
+> +                                          "ready",
+> +                                          "spawn-ack",
+> +                                          "stop-ack";
+> +
+> +                        qcom,smem-states = <&wcss_smp2p_out 16>,
+> +                                           <&wcss_smp2p_out 17>,
+> +                                           <&wcss_smp2p_out 18>;
+> +                        qcom,smem-state-names = "shutdown",
+> +                                                "stop",
+> +                                                "spawn";
+> +                        status = "okay";
+
+Don't need status in examples.
+
+> +                };
+> +
+> +                q6_wcss_pd3: remoteproc_pd3 {
+> +                        compatible = "qcom,ipq5018-wcss-pcie-mpd";
+> +                        interrupts-extended = <&wcss_smp2p_in 24 0>,
+> +                                        <&wcss_smp2p_in 25 0>,
+> +                                        <&wcss_smp2p_in 28 0>,
+> +                                        <&wcss_smp2p_in 27 0>;
+> +                        interrupt-names = "fatal",
+> +                                          "ready",
+> +                                          "spawn-ack",
+> +                                          "stop-ack";
+> +
+> +                        qcom,smem-states = <&wcss_smp2p_out 24>,
+> +                                           <&wcss_smp2p_out 25>,
+> +                                           <&wcss_smp2p_out 26>;
+> +                        qcom,smem-state-names = "shutdown",
+> +                                                "stop",
+> +                                                "spawn";
+> +                        status = "okay";
+> +                };
+> +        };
+> -- 
+> 2.34.1
+> 
