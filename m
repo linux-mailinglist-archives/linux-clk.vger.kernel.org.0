@@ -2,144 +2,165 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFB96AEB3E
-	for <lists+linux-clk@lfdr.de>; Tue,  7 Mar 2023 18:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ADA6AF5B3
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Mar 2023 20:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjCGRls (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 7 Mar 2023 12:41:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
+        id S233968AbjCGT35 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 7 Mar 2023 14:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbjCGRla (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Mar 2023 12:41:30 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EE8A6BF4
-        for <linux-clk@vger.kernel.org>; Tue,  7 Mar 2023 09:37:28 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p20so14883954plw.13
-        for <linux-clk@vger.kernel.org>; Tue, 07 Mar 2023 09:37:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678210648;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3zPHvN5mm4IalrCf6zpCmyS4kHEJ7HoGLzRUhQSOoA=;
-        b=o2ytZ6qS0PtfXoLYe5TafISzM6/h2NxL3pqfUqiGJeoJyjjcLmWruuJ3X0G/cQZI/Y
-         GA8IYvcfCRsdkKAPInrw3325Sv6gVIjQvQZMQxeDW96heslTnIO2xfDZjDmjHC8W6S8x
-         8Z/2W26QDYD+sh27LwKdicEwMxzzwNiKSCkfYYiyxDmhqDTlfyv/GgQVFNeN9y63ynUc
-         FJWQqXZIYzZfNoOQhPSUGyELPnY1YZET2qLKlry8+WtVnxDK6ZPqoUCsVZmIiYTHYfmu
-         AdbkopUuQy/vh3LicKLoQLp/1cN+bszEMZwG8pn13IbJ1xhfs2KAVC1bJolPRpetFKGQ
-         3vcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678210648;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o3zPHvN5mm4IalrCf6zpCmyS4kHEJ7HoGLzRUhQSOoA=;
-        b=DDxYySzx4+83/b6fajb6IEmEWz1SjVYiogUqK58ppjJgacfC26owMpwy+zkxjwXKd/
-         AIEAIIJFCsjCx9Va+cjGskYnEvq2tIqmB5tYk0VW4AwK3pBXq0SsIy0qD09GuwtzTaGv
-         Bqi4qZeZtwFSLOdhVt4Scfo2i/Ai6pmYPwnlp+Gei47QWK8lNMA21iAUz171kluVlsYD
-         enwyTna1hsqe5jHuL3086vauioVbq+NJFoJGU+A3xF2s423A9ksaFOObJg1pEt/47+Zg
-         NImnflP/0n650fhvDrHr95IA1m9Cj/rDfeyZr6nV17KFXyWBXzpOnosffIqd5ZzKSxAL
-         BPZw==
-X-Gm-Message-State: AO0yUKXCW9XlIvW/hHscyuogCG3oxC8FE9/VqLZUFGXeoFF+9712rav8
-        V5wSgr8ACVq5yVl7nrjNxrvSrcRnJHAmRBnDwSUbDQ==
-X-Google-Smtp-Source: AK7set+Kh/juOXVGFGBZq6ZQe/2ECYCsr+2HZ6cR5iMeJ5OSD5b0x9Znktqaib7dBWyXbAGUvwFiALZMirOESQVRZNg=
-X-Received: by 2002:a17:90a:9295:b0:233:fa52:828e with SMTP id
- n21-20020a17090a929500b00233fa52828emr5658345pjo.1.1678210648212; Tue, 07 Mar
- 2023 09:37:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20230223042133.26551-1-semen.protsenko@linaro.org>
- <167811290503.11716.15730246749418548221.b4-ty@linaro.org>
- <48c8a0cf-08dc-a831-33ef-3b8e32eef2d3@linaro.org> <CAPLW+4=9Vwxd4upa3j_cKtRrNyyx_XCz+TgOOziMguEonbHb0g@mail.gmail.com>
- <3a27febc-4d4e-1cfd-45dc-6ade4f25ca13@linaro.org>
-In-Reply-To: <3a27febc-4d4e-1cfd-45dc-6ade4f25ca13@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 7 Mar 2023 11:37:17 -0600
-Message-ID: <CAPLW+4nZF2POmD1kRUDktn2_gUWH_e84Lnqx=8qhuqbSnrdJ2A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] clk: samsung: exynos850: Add missing clocks for PM
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        with ESMTP id S231636AbjCGT3d (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Mar 2023 14:29:33 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05hn2208.outbound.protection.outlook.com [52.100.20.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C893CB71A3;
+        Tue,  7 Mar 2023 11:15:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Z19/KYxHJfZbjRC2u9g8OcNWWEVAHhKTVS+8o4WBBM=;
+ b=c7U3X7QH8s9e6HHAtwKDuzUQEjUny9H9fOzXYGZjVEfaV58OXG9CdtHHy7GaQZVO3x9+5D1X2vdueibbvaMpeJwBR3f9dva+/DoGC1oxx4gXrd7Mq8APgwBVoad4OQYnjR1R0N8LuGegcwn3aGZP8qFkSAeVPlnCAGryoSxzhoKyOPJPjpWlhRWdefrxahMFAo0hbx/QlF9aEwzuuLtJ/xpOSdiqyDO8Cvd+/G6cniVRTM+8me7A8CUTNe04nWpUiMUaFtgTQoFbsPbwmh1rwnuw83x/no+5drvrxGyKWCiP7E65NBi2DNKSl5OSnBCVhqxxgpIFDz7rSo9hA9Y8Ew==
+Received: from DB6PR1001CA0030.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:55::16)
+ by DB9PR03MB8399.eurprd03.prod.outlook.com (2603:10a6:10:396::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.16; Tue, 7 Mar
+ 2023 19:14:48 +0000
+Received: from DB8EUR05FT029.eop-eur05.prod.protection.outlook.com
+ (2603:10a6:4:55:cafe::5c) by DB6PR1001CA0030.outlook.office365.com
+ (2603:10a6:4:55::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27 via Frontend
+ Transport; Tue, 7 Mar 2023 19:14:48 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 20.160.56.82)
+ smtp.mailfrom=seco.com; dkim=pass (signature was verified)
+ header.d=seco.com;dmarc=pass action=none header.from=seco.com;
+Received-SPF: Fail (protection.outlook.com: domain of seco.com does not
+ designate 20.160.56.82 as permitted sender) receiver=protection.outlook.com;
+ client-ip=20.160.56.82; helo=inpost-eu.tmcas.trendmicro.com;
+Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.82) by
+ DB8EUR05FT029.mail.protection.outlook.com (10.233.239.51) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 19:14:47 +0000
+Received: from outmta (unknown [192.168.82.133])
+        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 4772F2008088D;
+        Tue,  7 Mar 2023 19:14:47 +0000 (UTC)
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (unknown [104.47.18.106])
+        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id EFCE72008006F;
+        Tue,  7 Mar 2023 19:13:04 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MAcXen+1Hh0nazcfvqWaEYc3s69fAQCqLe/UloQB2sSHnWgz4g4ijXPfjkl4MYQKo5YjnsE8ySc2kIoLBxLi5MeqV0ZEY0Lqstb1B7rH1EOTXCTtkWdyD3jhJizK6k+0p2d+oPX/LqsDd0skCPR1qf1AZmDaY5eJKQWnv3NpETBsv6ZIk4lC3FibccUX0DKC9E0GFlHnYg5INM3sT9VXgQyjVO7y9gwDLy8OXxEWEPD2tcNAonjv1Ni2PGzSAeTDl9/N+FZqIGN+dvqtCXKmKzjt6AaH86hBK0jjOwSUSmoA85IBv7j3C02FI0FxzWE4w+iQZkNLyWsHasNwotuFkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Z19/KYxHJfZbjRC2u9g8OcNWWEVAHhKTVS+8o4WBBM=;
+ b=atX0q3IGjx1S21OssRArlTYZ3jR7XkY0KkJxMPHjbcemFeqNVFKcdInMoQ3js1nPcB9zx7BwktfTBFTuSo4/+XJmkXjpfOuGwc1wqzlEPsCg111/uAGSEz1csPE66HSwHWOyx+CY+vKFuGmldmubCgO8SAe+gou48PRrnPYZLv9D88dTR9eHjYMaKyyMyuQPgIrjB6d4OmMpQVH9zES2cGwtSUW52+SsywximCvUuv2JwYvAa+I4uQKQQW5YcuNYUbFDqL5hcxYriAUtsRRYf1HzEDRbj+eFrNbPx6OP0LByv0vCTjZcOG8K2XrIbtG4KEW8vt4gHctm1qoyvhs4Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Z19/KYxHJfZbjRC2u9g8OcNWWEVAHhKTVS+8o4WBBM=;
+ b=c7U3X7QH8s9e6HHAtwKDuzUQEjUny9H9fOzXYGZjVEfaV58OXG9CdtHHy7GaQZVO3x9+5D1X2vdueibbvaMpeJwBR3f9dva+/DoGC1oxx4gXrd7Mq8APgwBVoad4OQYnjR1R0N8LuGegcwn3aGZP8qFkSAeVPlnCAGryoSxzhoKyOPJPjpWlhRWdefrxahMFAo0hbx/QlF9aEwzuuLtJ/xpOSdiqyDO8Cvd+/G6cniVRTM+8me7A8CUTNe04nWpUiMUaFtgTQoFbsPbwmh1rwnuw83x/no+5drvrxGyKWCiP7E65NBi2DNKSl5OSnBCVhqxxgpIFDz7rSo9hA9Y8Ew==
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
+ by AS8PR03MB9024.eurprd03.prod.outlook.com (2603:10a6:20b:5b6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
+ 2023 19:14:38 +0000
+Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::dbcf:1089:3242:614e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
+ ([fe80::dbcf:1089:3242:614e%5]) with mapi id 15.20.6156.027; Tue, 7 Mar 2023
+ 19:14:38 +0000
+Message-ID: <91e59ee2-d686-1afb-e639-d260fe8111ac@seco.com>
+Date:   Tue, 7 Mar 2023 14:14:33 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v10 02/13] dt-bindings: phy: Add Lynx 10G phy binding
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-phy@lists.infradead.org
+Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
+        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
+        Camelia Alexandra Groza <camelia.groza@nxp.com>,
         linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+References: <20230306191535.1917656-1-sean.anderson@seco.com>
+ <20230306191535.1917656-3-sean.anderson@seco.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <20230306191535.1917656-3-sean.anderson@seco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR15CA0024.namprd15.prod.outlook.com
+ (2603:10b6:208:1b4::37) To DB9PR03MB8847.eurprd03.prod.outlook.com
+ (2603:10a6:10:3dd::13)
+MIME-Version: 1.0
+X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|AS8PR03MB9024:EE_|DB8EUR05FT029:EE_|DB9PR03MB8399:EE_
+X-MS-Office365-Filtering-Correlation-Id: 007585cf-b159-4b74-8b4a-08db1f4037d5
+X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: 6H/lH7noXf8RQAyCyXbH8LaGIq5MqmLjXEVraGmxGFkM48E58JcscIW5ZODMAPm9hEW4s74TI0LAb04Hv0ovZjyLd5im58la7NXzW5XUaz6sOnTeFEA33tTM58LA1O7poi3v00D+3LL3kdihGWLJE0KAah0hFKxeInU6NIjgASlAmCpQPSOGEWROk5J3hEd/T/F1GYGvBPjb/eXAsgIP7fkh5+C8sMM/yLdr7N8prL7vhAUJljkFv5CVgcNqR4Eb+fHrs8Vzn7eGrd1wxjJZJ4rUVcjeDmD89DiQ8TAZjsZoZCdVpD7XhjEGA7fjSsxRe++cJXObROIiGlDGHRcqolDv5thl7haLWEW8dcKx4gMjaUf2CyDyWP+ooToY6qPiIlO1q72/jv3uCmqGZ36rXaoOnL2RyaN/q4X4UsvpJz377CTKbd1p266Tsr1TkfQ9612ahQrlp5Smr+SRAATZjpSZnwjb15/GrkbZQ4TLZz5KeH51UHy8CSLKwUFSz0uebAkHyjPsFHKb3WKOsYDGHkp1G2UeJFGaiJxTKBujHVHE68KnkdaVWMv97xYBxYXyfwq5Qbde9+VGePPdIWdPtGqQoeYOOBw3akHXTDGvAEIAeA6NLY463avJBLU/3WP0M84J3Ta6dq+2zzkUrls3Qy29nFRBFYTe68oamDcIshYwW1fzX1a6cbWD+E/4++ESGr6DLoK+Tzwx4RPwT3NMdFtiCH+RXMZtXpZ8qYvgIs2RknizjTS5WKwNZs9/CzT+pXgHx2rsnm/2JAL7eqEMhg==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(376002)(366004)(136003)(39850400004)(451199018)(316002)(110136005)(54906003)(83380400001)(36756003)(86362001)(31696002)(6506007)(31686004)(6486002)(186003)(2906002)(4326008)(66476007)(66946007)(41300700001)(8676002)(7416002)(26005)(44832011)(66556008)(6512007)(52116002)(53546011)(478600001)(2616005)(8936002)(6666004)(5660300002)(38100700002)(38350700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB9024
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB8EUR05FT029.eop-eur05.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: d3203212-0f43-48a7-dee4-08db1f40320c
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5EOj/7HOzN0ke2dMDqYJgjKI4b2agwR2du0FprViJ6ibiWow8+ljDbC7agkSnpFZKlvas294Pdo78G8cIHx+lrRwVoIYolADbek2YPwaPWnsrzmXnO6xblLyzkpC/T/4toRaFh0M48rm1iWnryRlFz5Glta8jBniypA0FtJskkkIZM/wxlas1fjiAqDZyOiGiXm1QWr2H9A1NJ3fYDEIpcqsR79G+i98EbLICcw3zLLVHUMUmNerGRhyOcxEqWReU2l4ktHVAdXnfVcazrKxqn1x+FZzDF+b1hIyikdGvJJtAgDNTKh+ylDSwwgoGgwIsJqg+OKrB1Feb7U6HHUkwqy+cXmy3lpSYU0KCNBzudj09biNc8EiR8rgk7GCMDiUYPdC3Yle/ZCSIuwOxCECM1qyNgj4CpXqcyZ7GgP0s5GvUP1skGO15nw5uewjPLr7Jb60UdEAUHfovGXLuzJxpIXAYPdgSEEJe7lxIiVqg3viVdhlWCiQCGAlaamc0vR/INxma5Q+24eZz3Q/WrXOTphiGr67hF8kpzgeA2ofUC/rYQULylmdfHSsfEQ21bde8rMDCe7oJY+zqAjRFCK5pNQDM2K+9rRG95tv1gEcqJmR9PJdaPzrW4k00QfzQqC04v+KO0gMSKs6dkzWX4vBt/CAAEBvk9KbCND7oF8LV+one8d7Q8OoqGKjyaPQtuxK6DqLXAsuB58pselnjsWcxRrXWoSUulD2MrXP7NBwCiKjgZVoajah+aYpY3sg64m2Ql7X8RfxNSOsQnw0QGu9IdXpfMDuDU0d0lwIeCz8viFJOQoBJCVwqkdGggfQ5y96RCvqVXeXobnuMW4Uq+2yBnH/fr1iADPBW/AUq27jVWk=
+X-Forefront-Antispam-Report: CIP:20.160.56.82;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230025)(39850400004)(136003)(346002)(376002)(396003)(451199018)(5400799012)(46966006)(36840700001)(40470700004)(31686004)(336012)(47076005)(54906003)(316002)(110136005)(40460700003)(36756003)(356005)(40480700001)(86362001)(31696002)(6512007)(7596003)(82740400003)(7636003)(34070700002)(34020700004)(36860700001)(6506007)(26005)(53546011)(82310400005)(83380400001)(186003)(2616005)(8936002)(5660300002)(7416002)(6486002)(478600001)(4326008)(41300700001)(6666004)(44832011)(2906002)(70586007)(70206006)(8676002)(45980500001)(43740500002)(12100799021);DIR:OUT;SFP:1501;
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 19:14:47.7229
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 007585cf-b159-4b74-8b4a-08db1f4037d5
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.82];Helo=[inpost-eu.tmcas.trendmicro.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB8EUR05FT029.eop-eur05.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB8399
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 01:47, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 06/03/2023 19:55, Sam Protsenko wrote:
-> > On Mon, 6 Mar 2023 at 09:51, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 06/03/2023 15:28, Krzysztof Kozlowski wrote:
-> >>> On Wed, 22 Feb 2023 22:21:27 -0600, Sam Protsenko wrote:
-> >>>> As a part of preparation for PM enablement in Exynos850 clock driver,
-> >>>> this patch series implements CMU_G3D, and also main gate clocks for AUD
-> >>>> and HSI CMUs. The series brings corresponding changes to bindings, the
-> >>>> driver and SoC dts file.
-> >>>>
-> >>>> Changes in v2:
-> >>>>   - Rebased all patches on top of the most recent soc/for-next tree
-> >>>>   - Added A-b and R-b tags
-> >>>>   - Minor fixes
-> >>>>
-> >>>> [...]
-> >>>
-> >>> Applied, thanks!
-> >>>
-> >>> [1/6] dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
-> >>>       https://git.kernel.org/krzk/linux/c/067ba1605806e52118bb598afb357718df9f0e19
-> >>> [2/6] dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
-> >>>       https://git.kernel.org/krzk/linux/c/e289665ed0d6df9fca3ebc128f1232d305e4600b
-> >>> [3/6] clk: samsung: clk-pll: Implement pll0818x PLL type
-> >>>       https://git.kernel.org/krzk/linux/c/a6feedab8ab9a9e4483deb0bcc87919d92c88b7e
-> >>> [4/6] clk: samsung: exynos850: Implement CMU_G3D domain
-> >>>       https://git.kernel.org/krzk/linux/c/c5704a56893b4e77e434597c7c53d878bb3073b0
-> >>> [5/6] clk: samsung: exynos850: Add AUD and HSI main gate clocks
-> >>>       https://git.kernel.org/krzk/linux/c/d8d12e0d079aff4b1d8079a0a55944c0596f1d67
-> >>> [6/6] arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
-> >>>       https://git.kernel.org/krzk/linux/c/ad8f6ad9a4f219950df65731a8ff91baa022c4b0
-> >>
-> >> And builds are broken. Please mention in cover letter or commit
-> >> dependencies and ordering...
-> >>
-> >
-> > Just checked all most recent commits on your for-next and next/clk
-> > branches. Seem to build fine for me. AFAIR I checked all patches in
-> > that series, and I guess there shouldn't be any issues if you apply
-> > those in the same order they are numbered inside the series. Or you
-> > mean you have some clash between different series? Anyways, I'm glad
-> > to help, but I'd need more details on where exactly the problem is (or
-> > maybe you already fixed it?).
->
-> The builds were failing after I applied everything to respective
-> branches (so DTS separate). I did not notice that your DTS and driver
-> (both) depend on bindings header constant. This requires special
-> handling. It actually always required, because it was going through
-> different trees. Now it goes through my tree, but I still need to handle
-> it. I reworked the branches and force-pushed, thus you did not see the
-> exact issue.
->
+On 3/6/23 14:15, Sean Anderson wrote:
+> This adds a binding for the SerDes module found on QorIQ processors.
+> Each phy is a subnode of the top-level device, possibly supporting
+> multiple lanes and protocols. This "thick" #phy-cells is used due to
+> allow for better organization of parameters. Note that the particular
+> parameters necessary to select a protocol-controller/lane combination
+> vary across different SoCs, and even within different SerDes on the same
+> SoC.
+> 
+> The driver is designed to be able to completely reconfigure lanes at
+> runtime. Generally, the phy consumer can select the appropriate
+> protocol using set_mode.
+> 
+> There are two PLLs, each of which can be used as the master clock for
+> each lane. Each PLL has its own reference. For the moment they are
+> required, because it simplifies the driver implementation. Absent
+> reference clocks can be modeled by a fixed-clock with a rate of 0.
+> 
+> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> ---
+> 
+> (no changes since v9)
 
-Thanks for explaining this. Next time I'll provide the dependencies
-info in my patch #0.
+I forgot to add Rob's review from last time
 
-> Best regards,
-> Krzysztof
->
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+If another revision is necessary, I will add this.
+
+--Sean
