@@ -2,82 +2,54 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B946B10B2
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Mar 2023 19:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC656B1168
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Mar 2023 19:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCHSL6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 8 Mar 2023 13:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S229621AbjCHSwA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 8 Mar 2023 13:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjCHSL5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Mar 2023 13:11:57 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09410CE96E;
-        Wed,  8 Mar 2023 10:11:55 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id e9-20020a056830200900b00694651d19f6so6569443otp.12;
-        Wed, 08 Mar 2023 10:11:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678299114;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SIxmU/QtppDrzLwRQM4/EQwwRkPiWGOq6+7u8fs1B9E=;
-        b=KIyuip82zCUZ3tJBEAdGR5DkYNQRqUvHETB03T4NSIDff0TZ7j0LLeGC0ZvsCHkVpO
-         GvJBnpLTNwMq83/0Q97eqj8cKhHM56QS0P0UioJdqeeP+QGVB5kYlysDCyJFGIt3nUwy
-         z2738obH1ONby9hp1Otqi1fpQ2KBm3e0H0urqmMVazligMQ3uvPXn/V1/aJ7+mUK/4dY
-         k65T2FaU0RXHLHK8n1XaZB2aRHy5vps0STG3Uz6Zwr1T4O9fveR5EP90SCuKbes3iNml
-         qRG2tZyapqo0fXYb9KWkbO5bvs/NmqQ+2N46pX0TPL/p0jYemuIQctyUhEkRfUNars3r
-         b0Fg==
-X-Gm-Message-State: AO0yUKWdmfc/jHC+sH+MEv0+HxemLfU3fdDt9d60yiayCrAmbZPoXboo
-        yHCHE95J7hfCY9PXMsrGmQ==
-X-Google-Smtp-Source: AK7set9H8k0goZQjGPEgNkkixy3gs3vd/sHKzFTM0Gx4xSIKWRHwsc1ffnNsJ1R+prua9m2CbtMAgg==
-X-Received: by 2002:a9d:7103:0:b0:690:d498:56d2 with SMTP id n3-20020a9d7103000000b00690d49856d2mr7763163otj.4.1678299114187;
-        Wed, 08 Mar 2023 10:11:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d1-20020a056830138100b0068bb73bd95esm6636451otq.58.2023.03.08.10.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 10:11:53 -0800 (PST)
-Received: (nullmailer pid 3526245 invoked by uid 1000);
-        Wed, 08 Mar 2023 18:11:52 -0000
-Date:   Wed, 8 Mar 2023 12:11:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-crypto@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        freedreno@lists.freedesktop.org, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-gpio@vger.kernel.org, linux-media@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>, Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Sean Paul <sean@poorly.run>,
-        netdev@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-spi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-clk@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: yamllint: Require a space after a comment
- '#'
-Message-ID: <167828471597.2730705.13533520056770041535.robh@kernel.org>
-References: <20230303214223.49451-1-robh@kernel.org>
+        with ESMTP id S229527AbjCHSv7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Mar 2023 13:51:59 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B77392BF
+        for <linux-clk@vger.kernel.org>; Wed,  8 Mar 2023 10:51:57 -0800 (PST)
+Received: from stefanw-SCHENKER ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MatZt-1q7ezx0LoR-00cTgR; Wed, 08 Mar 2023 19:46:26 +0100
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH] clk: imx: clk-gpr-mux: Provide clock name in error message
+Date:   Wed,  8 Mar 2023 19:46:03 +0100
+Message-Id: <20230308184603.10049-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303214223.49451-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:l+FAs1mpJfR268hEJgY5XDzD9Ul/vUp0E/XeiPUFFMnqWuytiTY
+ 2jhPF23J1tEoF7BnauHiBO6wh+ZIYSS+4dTLtmH/Jbs/wridXJLegHA0QqrfcKXEboHFoMU
+ Cbn4eMiB31KKWGip8Qvugv7hY8huGpNSSj0Mlp9gptNL+IBHeLci0en6hDGqY0Myu116Xn2
+ iyQshkUS8Qk1cIunlhr0w==
+UI-OutboundReport: notjunk:1;M01:P0:xPnspzz9GSY=;S1aVQcxkGRALLAV1UTeeq1yVNP0
+ n0VMdc+/sckFehly16YQiE8TIPuxiOR0C94+gLQs0XGoNUThndfSU7LRx3/bJKGg8cE21qCDI
+ 7lurgsyrZTgeDFuJmwTHWImzXMkanF+INFkmYhdgtkTGyY+mJAiWAjl+pjDqZQToQ2YpdkhHW
+ ucJNDeNA6pYW4xJpAQtC80duznegatKOk/wbJsNRExzMZhTM3VkQZiNZRxJGH9dqmdEdapH8G
+ UTkmGfjSQv048jyZOHI7dDcdbtF34pLvxZYejEuoLvb5F7RqWSCL/lvqBUeh3n8kTYBXB0YC8
+ MYV0J5g3l1bkpNW6BPXxF/slvDo+5BPyWrIi7o7dYEJJNWYtIOq4HN8XK5ehPu82oKUCyIRS3
+ pdyn8uyg8/qQROUFK3BERV+r4lCcbZ1cdEYR6NQMbp9kuJS9pTuWBbTrVy/Uotq30WsanSeXQ
+ VQPx4BFGrjnTaitrrnmnNMVoQhHAht6TmNIjWCTBaVoHdECTmlk1PbJw6aAHqwS5sSclpg0+k
+ o61jRJpRI3n1UJ4AmO9aEOXSoW6OIHMxSxp7NfR/1IMCA3NQmpqpl5iOHOQTuYIMR0d4YnMTA
+ UA/rJv3MW+YSY0CI8/c93iq3nOloDKzIeg3BQloWfezdNUXtKjUc3/6jqt7wqpE44m3/B12ad
+ 1ZfvEl2vLtwjF4QjofCg3JRAqOxBTs1VqjigJROeQg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,80 +57,32 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+In error case the error message doesn't provide much context:
 
-On Fri, 03 Mar 2023 15:42:23 -0600, Rob Herring wrote:
-> Enable yamllint to check the prefered commenting style of requiring a
-> space after a comment character '#'. Fix the cases in the tree which
-> have a warning with this enabled. Most cases just need a space after the
-> '#'. A couple of cases with comments which were not intended to be
-> comments are revealed. Those were in ti,sa2ul.yaml, ti,cal.yaml, and
-> brcm,bcmgenet.yaml.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Sean Paul <sean@poorly.run>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Conor Dooley <conor.dooley@microchip.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: freedreno@lists.freedesktop.org
-> Cc: linux-media@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-spi@vger.kernel.org
-> ---
->  Documentation/devicetree/bindings/.yamllint   |  2 +-
->  .../bindings/clock/qcom,a53pll.yaml           |  4 ++--
->  .../devicetree/bindings/crypto/ti,sa2ul.yaml  |  4 ++--
->  .../bindings/display/msm/qcom,mdp5.yaml       |  2 +-
->  .../interrupt-controller/arm,gic.yaml         |  4 ++--
->  .../loongson,pch-msi.yaml                     |  2 +-
->  .../bindings/media/renesas,vin.yaml           |  4 ++--
->  .../devicetree/bindings/media/ti,cal.yaml     |  4 ++--
->  .../bindings/net/brcm,bcmgenet.yaml           |  2 --
->  .../bindings/net/cortina,gemini-ethernet.yaml |  6 ++---
->  .../devicetree/bindings/net/mdio-gpio.yaml    |  4 ++--
->  .../phy/marvell,armada-cp110-utmi-phy.yaml    |  2 +-
->  .../bindings/phy/phy-stm32-usbphyc.yaml       |  2 +-
->  .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      |  2 +-
->  .../bindings/pinctrl/pinctrl-mt8192.yaml      |  2 +-
->  .../regulator/nxp,pca9450-regulator.yaml      |  8 +++----
->  .../regulator/rohm,bd71828-regulator.yaml     | 20 ++++++++--------
->  .../regulator/rohm,bd71837-regulator.yaml     |  6 ++---
->  .../regulator/rohm,bd71847-regulator.yaml     |  6 ++---
->  .../bindings/soc/renesas/renesas.yaml         |  2 +-
->  .../devicetree/bindings/soc/ti/ti,pruss.yaml  |  2 +-
->  .../bindings/sound/amlogic,axg-tdm-iface.yaml |  2 +-
->  .../bindings/sound/qcom,lpass-rx-macro.yaml   |  4 ++--
->  .../bindings/sound/qcom,lpass-tx-macro.yaml   |  4 ++--
->  .../bindings/sound/qcom,lpass-va-macro.yaml   |  4 ++--
->  .../sound/qcom,q6dsp-lpass-ports.yaml         |  2 +-
->  .../bindings/sound/simple-card.yaml           | 24 +++++++++----------
->  .../bindings/spi/microchip,mpfs-spi.yaml      |  2 +-
->  28 files changed, 65 insertions(+), 67 deletions(-)
-> 
+imx:clk-gpr-mux: failed to get parent (-EINVAL)
 
-Applied, thanks!
+So additionally provide the clock name in the message, in
+order to simplify the further analyze.
+
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ drivers/clk/imx/clk-gpr-mux.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/imx/clk-gpr-mux.c b/drivers/clk/imx/clk-gpr-mux.c
+index c8d6090f15d6..0b5a97698b47 100644
+--- a/drivers/clk/imx/clk-gpr-mux.c
++++ b/drivers/clk/imx/clk-gpr-mux.c
+@@ -48,7 +48,8 @@ static u8 imx_clk_gpr_mux_get_parent(struct clk_hw *hw)
+ 	return ret;
+ 
+ get_parent_err:
+-	pr_err("failed to get parent (%pe)\n", ERR_PTR(ret));
++	pr_err("%s: failed to get parent (%pe)\n",
++	       clk_hw_get_name(hw), ERR_PTR(ret));
+ 
+ 	/* return some realistic non negative value. Potentially we could
+ 	 * give index to some dummy error parent.
+-- 
+2.34.1
 
