@@ -2,113 +2,166 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3556B142F
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Mar 2023 22:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B226B1532
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Mar 2023 23:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjCHVg7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 8 Mar 2023 16:36:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S230088AbjCHWiO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 8 Mar 2023 17:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjCHVgX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Mar 2023 16:36:23 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EA0D30A4
-        for <linux-clk@vger.kernel.org>; Wed,  8 Mar 2023 13:35:59 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id i9so23108318lfc.6
-        for <linux-clk@vger.kernel.org>; Wed, 08 Mar 2023 13:35:59 -0800 (PST)
+        with ESMTP id S229696AbjCHWiN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Mar 2023 17:38:13 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5B926CD5
+        for <linux-clk@vger.kernel.org>; Wed,  8 Mar 2023 14:38:11 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so4056194pjg.4
+        for <linux-clk@vger.kernel.org>; Wed, 08 Mar 2023 14:38:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678311359;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZubkqDM02FAiEq3eW9W/hQGkoIRi+LbMNFc2dkt329w=;
-        b=U2+2EA4Y3hZZ4IySjfJI7Rl8yoiGa46ugFf4hmN9QuuP8TmiomTY4CaHr6rB8HomBu
-         1d58zX7S00aWHBBZPR/9Qn0NTAtJnx4USs+nIOvlr4IZkdCbpiqX2iFUgWZhVmtjwMhF
-         HwjoziRqgFYuPmfsOT0ZS+HAnLTHRS9MNFAqStOd4lVU8TSR8VgUBKPsgLLnr5hZOL/p
-         aQQzjQFknH52GZKA90Mjip+qHUNF15Q2GKbuq3ZeRxgpOBgMZ742kRiF0mDniqN3ygUL
-         PRE7HiM63+DplQpxJGy+qf4hW3UYDcYevICm0uYsosmmjnr9HSLo2RoMKZKCsi2leuyV
-         cWJw==
+        d=google.com; s=20210112; t=1678315090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MJdbC6w3SG4MYVN7j4d6HyU3EGtnN0pTLcXjZIeQBXQ=;
+        b=OPBNp/YttWUDsJFSSe6u6gfNGNjamRUW9J/pyRyChRJll/rzlE+0C4Hgds3FzyN+bo
+         fYiPQ8Bkl1Wlr9gIs812CcBLCF4z1asWyNml83uBJb3hrAXOl8eYBrrwzbO5S5CMNLBE
+         MKmv04+V3bqqPsHSkMTQR7in9mjpUwfTHDHn2GaX79XG4uHgoLomQETWFSQ8nKYo+B0W
+         wl3hgZwRAtBIVA0vEDyiILAvWICKCU5uINI8IGyZLuoPazXYilxQNZwQUgqYhMe+uZeJ
+         W1T+D4zyrB9lDHlCUQl84KmfbH4HhTnWeCjFGnnY9LkL/ii4NDDkoWcD65F3z834ZfR7
+         0Beg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678311359;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678315090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZubkqDM02FAiEq3eW9W/hQGkoIRi+LbMNFc2dkt329w=;
-        b=X185p3vn0TBjS88q6LRVTN0YjHeOIQMQg+PvCVJUH8UqJF+JGKAyaV19HlHCGjJ6X3
-         EqhUtY+Y7MnAIkS3013S7PbjgW8aLadToEw8z2YoqSbduN2EzQ0p+8B0x3RQqbh496TG
-         qVW7ui+MYwQpxvLlZzg27KbtQIB67yBaZIhzaXWQNLlwzE2jipipFXif7OxTzsxnSDeu
-         mSS3K9MnKSWpTKuzg6yYil90Y0f1LRhKyI28F4n2ggE2s7IpqsNc0o3wV1YI2l9olBuD
-         a7EYQRchlDEYluZvtU5B0TCka3f7GDmMzx2qi+iGoym+OAlS4oOr1bAP+76CEOhwRdmi
-         IRng==
-X-Gm-Message-State: AO0yUKWZgTOG7zQ2GReZVfPJ6EzEWrTXX+Lq1bJ7bLTu7M494OwXE36B
-        LG7FpALNlxkmKyXBzUffEfnnog==
-X-Google-Smtp-Source: AK7set+G3EUNHPXsQ1i0gem4UXH/5P0KEDgfYTdtkCno0b2iCeMPN8kRgDjX9mylfukjLAE3B1WfPA==
-X-Received: by 2002:ac2:508f:0:b0:4dd:a5aa:accb with SMTP id f15-20020ac2508f000000b004dda5aaaccbmr5350543lfm.44.1678311359487;
-        Wed, 08 Mar 2023 13:35:59 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id u7-20020ac243c7000000b004dc4d26c324sm2467479lfl.143.2023.03.08.13.35.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 13:35:58 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 08 Mar 2023 22:35:30 +0100
-Subject: [PATCH RFT v2 14/14] arm64: dts: qcom: msm8996: Enable rpmcc
- unused clk disablement
+        bh=MJdbC6w3SG4MYVN7j4d6HyU3EGtnN0pTLcXjZIeQBXQ=;
+        b=QGisqYa1c9sWaYhys+ulV/x/+kgW3fBwiM0PeCAfxEIc8PZ7LNLshk6o5DzapeZhUw
+         Zv2XMLINcFW7pK4C0HAEXGFcJEyK/nFHzABTbfB3TFP7XjKR5nBAmVTtrobzf9mIYY+1
+         KunAPD+ifjfqa0tdBZMhrLoUrCFR7f+YFLotBj48kWYSVunUwTMsvizTbHWcrEo5ZZBc
+         Wcomgr+UYboQkp8dcSVm2CtFXGKEW/g/3xNss89+PsfFW3lZHAEowC1srsWD7PVUayLl
+         pxqIga2XDd86ftkRSsOJtUwBBVqCmu9kUh2Q2ZhP/xaQeQbGGYX0tD6NBV5u8sEQLeuL
+         pobA==
+X-Gm-Message-State: AO0yUKVaNtkM++jdsMvnEZvAU7AomOzAms9SrAP4ubK8IFHWOaJMer8c
+        HT2iusu3okqPjbgS8hqEoBgMOWuh8Zw73LKQuGliwuk03Q4d+BIMBPg=
+X-Google-Smtp-Source: AK7set8/aQu37GV6TlGzEl1hGmKYEXe+8jMt96Eq9dvNK8lqb5Fev/lbf/mMmtT61CDOqg9Qxnegn9hFQivBUKI29p0=
+X-Received: by 2002:a17:903:449:b0:199:4830:5cc9 with SMTP id
+ iw9-20020a170903044900b0019948305cc9mr7546879plb.10.1678315089908; Wed, 08
+ Mar 2023 14:38:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-rpmcc_sleep-v2-14-ae80a325fe94@linaro.org>
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
-In-Reply-To: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678311334; l=658;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ymIRVOgSTZj4llDzbcFS8Jduc30n2FcF0wczQdKvVS8=;
- b=7LtP5xJlOff5hrptxWCmxeFmHS62ygyBcYYVTgt92Z6PwhXkfshXJ2lTCW00E24p6ufcwyRA44Pe
- zx7PeJN/D0AhenvXl0rkAAO1hHKJfYaoWqp532nuqUb1Ua8I72gw
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
+In-Reply-To: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 8 Mar 2023 14:37:34 -0800
+Message-ID: <CAGETcx_YSKw56HBJmbhYEpHzatb3YQu_msf6Mq=rJUAY_zXp-g@mail.gmail.com>
+Subject: Re: [PATCH] clk: Avoid invalid function names in CLK_OF_DECLARE()
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linus.walleij@linaro.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MSM8996 is in a good enough state to shut down unused RPM clocks.
-Do it!
+On Wed, Mar 8, 2023 at 12:47=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> After commit c28cd1f3433c ("clk: Mark a fwnode as initialized when using
+> CLK_OF_DECLARE() macro"), drivers/clk/mvebu/kirkwood.c fails to build:
+>
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
+>  CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
+>  ^
+>  include/linux/clk-provider.h:1367:21: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          static void __init name##_of_clk_init_declare(struct device_node=
+ *np) \
+>                             ^
+>  <scratch space>:124:1: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>  ^
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
+constant
+>  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+>                                          ^
+>  <scratch space>:125:3: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>    ^
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
+constant
+>  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+>                                          ^
+>  <scratch space>:125:3: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>    ^
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
+constant
+>  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+>                                          ^
+>  <scratch space>:125:3: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>    ^
+>
+> C function names must start with either an alphabetic letter or an
+> underscore. To avoid generating invalid function names from clock names,
+> add two underscores to the beginning of the identifier.
+>
+> Fixes: c28cd1f3433c ("clk: Mark a fwnode as initialized when using CLK_OF=
+_DECLARE() macro")
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  include/linux/clk-provider.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+> index c9f5276006a0..6f3175f0678a 100644
+> --- a/include/linux/clk-provider.h
+> +++ b/include/linux/clk-provider.h
+> @@ -1364,12 +1364,12 @@ struct clk_hw_onecell_data {
+>  };
+>
+>  #define CLK_OF_DECLARE(name, compat, fn) \
+> -       static void __init name##_of_clk_init_declare(struct device_node =
+*np) \
+> +       static void __init __##name##_of_clk_init_declare(struct device_n=
+ode *np) \
+>         {                                                               \
+>                 fn(np);                                                 \
+>                 fwnode_dev_initialized(of_fwnode_handle(np), true);     \
+>         }                                                               \
+> -       OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+> +       OF_DECLARE_1(clk, name, compat, __##name##_of_clk_init_declare)
+>
+>  /*
+>   * Use this macro when you have a driver that requires two initializatio=
+n
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Thanks Nathan!
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 905678e7175d..59451d87cfbf 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -488,6 +488,7 @@ rpmcc: clock-controller {
- 				#clock-cells = <1>;
- 				clocks = <&xo_board>;
- 				clock-names = "xo";
-+				qcom,clk-disable-unused;
- 			};
- 
- 			rpmpd: power-controller {
+Reviewed-by: Saravana Kannan <saravanak@google.com>
 
--- 
-2.39.2
+-Saravana
 
+>
+> ---
+> base-commit: 89dc65a7cc8a119c395c0931b12d7a514f9d2bcc
+> change-id: 20230308-clk_of_declare-fix-4fb89765923e
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
