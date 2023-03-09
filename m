@@ -2,62 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A4F6B2EF2
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Mar 2023 21:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31CC6B321D
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Mar 2023 00:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjCIUpo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Mar 2023 15:45:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S230171AbjCIXjN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Mar 2023 18:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjCIUpi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Mar 2023 15:45:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158EAF222B;
-        Thu,  9 Mar 2023 12:45:24 -0800 (PST)
+        with ESMTP id S230095AbjCIXjM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Mar 2023 18:39:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41251F366A;
+        Thu,  9 Mar 2023 15:39:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC7CCB8208A;
-        Thu,  9 Mar 2023 20:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E694CC4339B;
-        Thu,  9 Mar 2023 20:45:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DBC07B820C6;
+        Thu,  9 Mar 2023 23:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBEEC433D2;
+        Thu,  9 Mar 2023 23:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678394721;
-        bh=69cMqall9ySx9R5xXzMB2/T+YDWmm6o9YXNbjv3RYmQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=doG+ooEVvhghSuy3xmfVYkqGfZsYRIZmobvE6daPQDekROCM/vdBLNWB53oOyxq8v
-         uLp4Hunt6kZ2ikvm/vNbxA+j8ApIUnZmaGI9rmSirLCplLPKo7eDP2FDscSLGKk1aj
-         rIiiCJSEHF5zKia+z+Db4oASRNLRZuYt0h6AHs9yaIpwVZv+hBkiz38seuTHfmPa2Z
-         FKIw5xcfEb8IyJCq8HCnt6s7hcRmlN2jnB6G3JiXeh8bUtorsUm9rsYfaS7lIig5xz
-         y5Edku6QuBInyWAMVL++zfXQQ3FYr95SHSvx4jz5pkulYH3TZFQbyTG5THlxECaL8h
-         crb9NdE/9QWBQ==
-From:   Conor Dooley <conor@kernel.org>
-To:     linux-riscv@lists.infradead.org
-Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-clk@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>
-Subject: [PATCH v1 5/5] usb: musb: mpfs: convert SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
-Date:   Thu,  9 Mar 2023 20:44:52 +0000
-Message-Id: <20230309204452.969574-6-conor@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230309204452.969574-1-conor@kernel.org>
-References: <20230309204452.969574-1-conor@kernel.org>
+        s=k20201202; t=1678405148;
+        bh=1wMFil0QP+T2/FyaFVOMtx1T7V81zvH2ISpPAOZJtZs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ApV8KN2IAaVyh9vF8VBhdlRtM3ypNj2RvkhKeSjrFeluHMO6HitLTk4jb8ArSIKeX
+         onrFzS9nlvqyX9bdh1/EvZISE/WlcU1/AZzXSuDNrzUVlLoir4uLRtcFKncf1wEEZM
+         JTAUgMuSdTs6xNGZI2mvCJs+KoWWonjDuyctOQ7W+d3bjs4paoS5wTEahYlYIVxe1K
+         YcCAiA+V2xgByOKBfTuLDJroM3Ws9t2OA7DDjU6sLxTrWk29kCvSCXkQ33vp3DlsuT
+         fPB1OmX3XErwQa+O+u7tQltlJnLUrN0eKp5JVOebrQrT5uJstD4J6OvGRxaeUohd9r
+         qItCT7yvY/HOw==
+Message-ID: <6b9cbb2be5ec087773290af9538f8488.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=825; i=conor.dooley@microchip.com; h=from:subject; bh=ul3OSqO/d4GMmYQrlW57NLjBDlDK4kMBe+YtWdntPBE=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDClcri4Tg0KdO75ernl0V2oP577eig86pm6uk0uz1mV1l lSoeD/vKGVhEONgkBVTZEm83dcitf6Pyw7nnrcwc1iZQIYwcHEKwEROX2Fk6L6ywa+rfynbhi5t g79SvndjfvT9W6AQF790ycVnHj3vshn+V091U3+3NuX2Ej5V6Ru8Fid5Oy9OqDp62Ewm64pm/DU 7LgA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
+References: <20230308-clk_of_declare-fix-v1-1-317b741e2532@kernel.org>
+Subject: Re: [PATCH] clk: Avoid invalid function names in CLK_OF_DECLARE()
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linus.walleij@linaro.org, saravanak@google.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>, mturquette@baylibre.com
+Date:   Thu, 09 Mar 2023 15:39:04 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,30 +54,57 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Quoting Nathan Chancellor (2023-03-08 12:47:11)
+> After commit c28cd1f3433c ("clk: Mark a fwnode as initialized when using
+> CLK_OF_DECLARE() macro"), drivers/clk/mvebu/kirkwood.c fails to build:
+>=20
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: expected identifier or '('
+>  CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
+>  ^
+>  include/linux/clk-provider.h:1367:21: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          static void __init name##_of_clk_init_declare(struct device_node=
+ *np) \
+>                             ^
+>  <scratch space>:124:1: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>  ^
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
+constant
+>  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+>                                          ^
+>  <scratch space>:125:3: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>    ^
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
+constant
+>  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+>                                          ^
+>  <scratch space>:125:3: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>    ^
+>  drivers/clk/mvebu/kirkwood.c:358:1: error: invalid digit 'd' in decimal =
+constant
+>  include/linux/clk-provider.h:1372:34: note: expanded from macro 'CLK_OF_=
+DECLARE'
+>          OF_DECLARE_1(clk, name, compat, name##_of_clk_init_declare)
+>                                          ^
+>  <scratch space>:125:3: note: expanded from here
+>  98dx1135_clk_of_clk_init_declare
+>    ^
+>=20
+> C function names must start with either an alphabetic letter or an
+> underscore. To avoid generating invalid function names from clock names,
+> add two underscores to the beginning of the identifier.
+>=20
+> Fixes: c28cd1f3433c ("clk: Mark a fwnode as initialized when using CLK_OF=
+_DECLARE() macro")
+> Suggested-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-use of such symbols on other architectures, convert the Microchip FPGA
-usb glue layer driver to use the new symbol.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/usb/musb/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
-index 3a1f4bcea80c..9a8cf3de0617 100644
---- a/drivers/usb/musb/Kconfig
-+++ b/drivers/usb/musb/Kconfig
-@@ -113,7 +113,7 @@ config USB_MUSB_MEDIATEK
- 
- config USB_MUSB_POLARFIRE_SOC
- 	tristate "Microchip PolarFire SoC platforms"
--	depends on SOC_MICROCHIP_POLARFIRE || COMPILE_TEST
-+	depends on ARCH_MICROCHIP_POLARFIRE || COMPILE_TEST
- 	depends on NOP_USB_XCEIV
- 	select USB_MUSB_DUAL_ROLE
- 	help
--- 
-2.39.2
-
+Applied to clk-fixes
