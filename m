@@ -2,184 +2,426 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEEE6B2B4F
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Mar 2023 17:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AE26B2B61
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Mar 2023 18:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjCIQ5N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Mar 2023 11:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S230502AbjCIRBE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Mar 2023 12:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjCIQ4g (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Mar 2023 11:56:36 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB2F23674;
-        Thu,  9 Mar 2023 08:49:52 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id cw28so9586531edb.5;
-        Thu, 09 Mar 2023 08:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678380591;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pgic3f/gjOyxiKYh62jpCJs0jVWnVDJC8Te95iLZjwo=;
-        b=ax83c2vxhZYCk0TpyhtJp23BimvdTF6npaqHWRaMl0UBiouaMsGOTazXO4KhSRAwXT
-         KyUr79RoFtIBRDeUs4WRg0yzU6iiQqxwbTTEygh7xJBmS7tPRy+BRqARd9BnfXYjp/Yk
-         MoV2qiUvwG8hzMXWsWzOjHZ24PxmzbSZpHJucnJ3flEyzVhstRN7psnvwLZyzvPddb2T
-         Ltg+RsqSeNDnUdZqJ0Yh+JsVVbD/cII2nK2ejlEWuEXsPmFI27HjLHTpHJBPLxkxyEk4
-         FbPICI222spaHGlYelDxU/8rHP0ZYwnmoR0rQHnrzmIawSrgQ++GmeDwBo8WPWm8UooR
-         rLNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678380591;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pgic3f/gjOyxiKYh62jpCJs0jVWnVDJC8Te95iLZjwo=;
-        b=hsuSxf3WEtTPwSXrdlQ3m2lfDgNtJNkzIdtKJtVgELBQT40mEJjDfC68JIqx4xz9hA
-         xFEXhARgneSNKFsMj+jNYp3TFb3FObrv4a74KWgT+hiFhILxNk+nOMgOcJmnVhRI8dMg
-         +lNIIznCz9auixKqBsrNExIb6fheHr0Jo0lny5j1P1nys5Vd/1eTSX1InTgnhX+0G/z5
-         3MyMaT/v6IyhtLIgmRCHo6SMxP9LahuZOEZEURQgcBXMPnISe7W3CC+38VoM4DEV12L7
-         eQZ2wQVTGWlUgCaEpxNkctBjZt7Pqo0mIAuhO2TADLtxu5BXTwpA9mCyiZbNB6dLChC2
-         5RCQ==
-X-Gm-Message-State: AO0yUKWpYZvcrXCm//1NuXTl6lkeZ0yrEWYqCi8Fkyv+II34sWiJBjqS
-        mcvK8v2PPTJgP4YfF546W6A=
-X-Google-Smtp-Source: AK7set/LtRi8+lnJ2SlDyhowh2roV/4ee5bP9Xz1GN0BphVGFwWGGKTQXrjNcfFwwZie24/2Lqo2cw==
-X-Received: by 2002:a05:6402:1345:b0:4af:6e95:85ec with SMTP id y5-20020a056402134500b004af6e9585ecmr20569400edw.4.1678380590914;
-        Thu, 09 Mar 2023 08:49:50 -0800 (PST)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-49-172.cust.vodafonedsl.it. [188.217.49.172])
-        by smtp.gmail.com with ESMTPSA id c14-20020a50f60e000000b004af720b855fsm9927439edn.82.2023.03.09.08.49.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 08:49:50 -0800 (PST)
-Date:   Thu, 9 Mar 2023 17:49:48 +0100
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Hal Feng <hal.feng@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        with ESMTP id S230423AbjCIRAj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Mar 2023 12:00:39 -0500
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23FC26E692;
+        Thu,  9 Mar 2023 08:55:36 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.98,246,1673881200"; 
+   d="scan'208";a="152074630"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 10 Mar 2023 01:55:35 +0900
+Received: from localhost.localdomain (unknown [10.226.92.41])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 31E254006DEA;
+        Fri, 10 Mar 2023 01:55:31 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Message-ID: <ZAoOLIERMYI8UVlA@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
- <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
- <ZAb7JVghuiwZF1Q5@wendy>
- <2f03dfb2-5cf8-e954-913c-f0c27db6bcf5@starfivetech.com>
- <ZAh/UeSlUeGoKxki@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <4c071642-e3c8-4716-a580-5b42e25efb1c@spud>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 0/3] Add Versa3 clock generator support
+Date:   Thu,  9 Mar 2023 16:55:26 +0000
+Message-Id: <20230309165529.223052-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c071642-e3c8-4716-a580-5b42e25efb1c@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.4 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 01:36:41PM +0000, Conor Dooley wrote:
-> On Wed, Mar 08, 2023 at 01:28:01PM +0100, Tommaso Merciai wrote:
-> > On Tue, Mar 07, 2023 at 06:08:53PM +0800, Hal Feng wrote:
-> 
-> > > The above two methods can fix the problem. Here are my test results.
-> > > The VisionFive board can boot up successfully if and only if all above
-> > > two applied.
-> > > The VisionFive 2 board can boot up successfully if I merge Linus's new
-> > > changes.
-> > 
-> > Tested also on my side. Hope this can be helpfull.
-> > 
-> > > Hope your fix will be merged in rc2. Thank you for your reply.
-> > 
-> > Fully agree.
-> 
-> If you only have a VisionFive 2, it shouldn't matter to you, as you
-> don't need to fix up any SiFive errata (at the moment at least).
-> Linus' fix is already in his tree, so should be in -rc2!
-> The fix for the VisionFive was applied to Palmer's RISC-V fixes tree
-> last night:
-> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=fixes&id=bf89b7ee52af5a5944fa3539e86089f72475055b
-> 
-> Thanks,
-> Conor.
+The 5P35023 is a VersaClock programmable clock generator and
+it provides 6 clk outputs {diff2, diff1, se3, se2, se1 and refin}.
+
+It has an internal OTP memory allows the user to store the configuration
+in the device. After power up, the user can change the device register
+settings through the I2C interface when I2C mode is selected.
+
+This driver is for overriding OTP default values during boot based on
+a full register map from DT, and also minimal support to change the
+parent of a output clock.
+
+The motivation for developing this driver is for supporting 48KHz
+playback/record with audio codec on RZ/G2L SMARC EVK.
+
+On RZ/G2L SMARC EVK, By default audio mclk is connected to
+11.2896 MHz clk which is multiple of 44.1KHz.
+
+Please see the below default OTP configuration of Dividers connected to
+output clocks.
+
+DIV3 12.2880 MHz   DIFF2--> Audio clk2
+DIV5 11.2896 MHz   SE1  --> Audio clk1
+DIV5 11.2896 MHz   SE2  --> Audio mck
+DIV4 12      MHz   SE3  --> This clk Not used
+DIV1 25 MHz        DIFF1-->Ethernet clk
+Ref1-> 24MHz
+
+With this setup, we won't be able to do 48KHz playback/record on audio codec,
+as mck is always connected to 11.2896MHz clk.
+
+But by programming the i2c, we can make use of DIV4 to generate 12.2880 MHz
+and make that as parent of SE2 and there by supporting 48KHz playback/record.
+
+A block diagram with modification can be find here[1]
+[1]https://paste.pics/a253ce7cdc8720c3b5eb6953b97b25ff
+
+DIV3 12.2880 MHz   DIFF2--> Audio clk2
+DIV5 11.2896 MHz   SE1  --> Audio clk1
+DIV5 11.2896 MHz | SE2  --> Audio mck
+DIV4 12.2880 MHz |
+DIV2 12      MHz   SE3  --> This clk Not used
+DIV1 25 MHz        DIFF1--> Ethernet clk
+Ref1-> 24MHz
+
+The driver can read a full register map from the DT, and will use that
+register map to initialize the clk generator when the system
+boots.
+and later, based on sampling rate, it switches the parent of SE2 and
+support both 44.1 and 48 KHz playback/record at run time.
 
 
-Hi Conor,
-Thanks for the info.
-Playing with this series I got the following error:
+RFC->v2:
+ * Renamed the filename to match with compatible
+ * Added maintainers entry after title
+ * Removed the wrapping for the link to data sheet.
+ * Removed reg description
+ * Removed clock names
+ * Replaced minItems->maxItems in renesas,settings property
+ * Dropped assigned-clocks, assigned-clock-rates
+ * Dropped renesas,clock-divider-read-only and renesas,clock-flags
+ * Drooped clock handle part from example
+ * Dropped reg from example.
+ * Dropped consumer example
+ * Dropped header file <linux/clk.h> and removed all
+   consumer api's
+ * struct clk_parent_data used for assigning the parent names.
+ * Replaced initpointer->const init pointer in vc3_clk_register
+ * Replaced of_clk_add_hw_provider with devm_clk_add_hw_provider
+ * Dropped vc3_remove() callback.
 
-[    6.278182] BUG: spinlock bad magic on CPU#0, udevd/136
-[    6.283414]  lock: 0xffffffd84135e6c0, .magic: ffffffff, .owner: <none>/-1, .owner_cpu: -1
-[    6.291677] CPU: 0 PID: 136 Comm: udevd Not tainted 6.3.0-rc1-g92569901a7f9-dirty #14
-[    6.299502] Hardware name: StarFive VisionFive 2 v1.3B (DT)
-[    6.305069] Call Trace:
-[    6.307517] [<ffffffff80005530>] dump_backtrace+0x1c/0x24
-[    6.312921] [<ffffffff80844b4e>] show_stack+0x2c/0x38
-[    6.317976] [<ffffffff8085032c>] dump_stack_lvl+0x3c/0x54
-[    6.323377] [<ffffffff80850358>] dump_stack+0x14/0x1c
-[    6.328429] [<ffffffff80845668>] spin_dump+0x64/0x70
-[    6.333394] [<ffffffff80058f26>] do_raw_spin_lock+0xb4/0xf2
-[    6.338970] [<ffffffff80857d04>] _raw_spin_lock+0x1a/0x22
-[    6.344370] [<ffffffff8008153c>] add_timer_on+0x8a/0x132
-[    6.349684] [<ffffffff8084b9fa>] try_to_generate_entropy+0x216/0x278
-[    6.356037] [<ffffffff804ebfdc>] urandom_read_iter+0x40/0xb8
-[    6.361697] [<ffffffff801a1216>] vfs_read+0x17e/0x1f8
-[    6.366752] [<ffffffff801a1986>] ksys_read+0x5e/0xc8
-[    6.371710] [<ffffffff801a19fe>] sys_read+0xe/0x16
-[    6.376503] [<ffffffff8000357a>] ret_from_syscall+0x0/0x2
-[    6.381905] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000007
-[    6.390683] Oops [#1]
-[    6.392956] Modules linked in:
-[    6.396011] CPU: 0 PID: 136 Comm: udevd Not tainted 6.3.0-rc1-g92569901a7f9-dirty #14
-[    6.403835] Hardware name: StarFive VisionFive 2 v1.3B (DT)
-[    6.409401] epc : enqueue_timer+0x1a/0x90
-[    6.413414]  ra : add_timer_on+0xe2/0x132
-[    6.417425] epc : ffffffff80080c60 ra : ffffffff80081594 sp : ffffffc8044dbc60
-[    6.424640]  gp : ffffffff814ffe50 tp : ffffffd8c171ad00 t0 : 6666666666663c5b
-[    6.431855]  t1 : 000000000000005b t2 : 666666666666663c s0 : ffffffc8044dbcc0
-[    6.439070]  s1 : ffffffc8044dbd08 a0 : ffffffd84135e6c0 a1 : ffffffc8044dbd08
-[    6.446284]  a2 : ffffffffffffffff a3 : 000000003e000000 a4 : 000000000000023e
-[    6.453498]  a5 : 000000000000023e a6 : ffffffd84135f930 a7 : 0000000000000038
-[    6.460712]  s2 : ffffffd84135e6c0 s3 : 0000000000000040 s4 : ffffffff81501080
-[    6.467926]  s5 : ffffffd84135e6c0 s6 : ffffffff815011b8 s7 : ffffffffffffffff
-[    6.475141]  s8 : ffffffff81502820 s9 : 0000000000000040 s10: 0000002ab0a49320
-[    6.482355]  s11: 0000000000000001 t3 : ffffffff81512e97 t4 : ffffffff81512e97
-[    6.489569]  t5 : ffffffff81512e98 t6 : ffffffc8044db948
-[    6.494875] status: 0000000200000100 badaddr: 0000000000000007 cause: 000000000000000f
-[    6.502783] [<ffffffff80080c60>] enqueue_timer+0x1a/0x90
-[    6.508095] [<ffffffff8084b9fa>] try_to_generate_entropy+0x216/0x278
-[    6.514448] [<ffffffff804ebfdc>] urandom_read_iter+0x40/0xb8
-[    6.520107] [<ffffffff801a1216>] vfs_read+0x17e/0x1f8
-[    6.525160] [<ffffffff801a1986>] ksys_read+0x5e/0xc8
-[    6.530126] [<ffffffff801a19fe>] sys_read+0xe/0x16
-[    6.534918] [<ffffffff8000357a>] ret_from_syscall+0x0/0x2
-[    6.540322] Code: 87b2 0813 0805 1613 0037 9832 3603 0008 e190 c211 (e60c) 5613
-[    6.547711] ---[ end trace 0000000000000000 ]---
-[    6.552325] note: udevd[136] exited with irqs disabled
-[    6.557531] note: udevd[136] exited with preempt_count 2
+Logs:
+root@smarc-rzg2l:~# /audio_test.sh
+                                 enable  prepare  protect                                duty  hardware
+   clock                          count    count    count        rate   accuracy phase  cycle    enable
+-------------------------------------------------------------------------------------------------------
+ xtal                                 0        0        0    24000000          0     0  50000         Y
+    ref                               0        0        0    24000000          0     0  50000         Y
+    pfd1                              0        0        0    24000000          0     0  50000         Y
+       pll1                           0        0        0   600000000          0     0  50000         Y
+          div2                        0        0        0    12000000          0     0  50000         Y
+             se3_mux                  0        0        0    12000000          0     0  50000         Y
+                se3                   0        0        0    12000000          0     0  50000         Y
+          div1_mux                    0        0        0   600000000          0     0  50000         Y
+             div1                     0        0        0    25000000          0     0  50000         Y
+                diff1_mux             0        0        0    25000000          0     0  50000         Y
+                   diff1              0        0        0    25000000          0     0  50000         Y
+    pfd3_mux                          0        0        0    24000000          0     0  50000         Y
+       pfd3                           0        0        0      960000          0     0  50000         Y
+          pll3                        0        0        0   564480000          0     0  50000         Y
+             div5                     0        0        0    11289600          0     0  50000         Y
+                se1_mux               0        0        0    11289600          0     0  50000         Y
+                   se1                0        0        0    11289600          0     0  50000         Y
+                se2_mux               0        0        0    11289600          0     0  50000         Y
+                   se2                0        0        0    11289600          0     0  50000         Y
+    pfd2_mux                          0        0        0    24000000          0     0  50000         Y
+       pfd2                           0        0        0    24000000          0     0  50000         Y
+          pll2                        0        0        0   491519897          0     0  50000         Y
+             div4_mux                 0        0        0   491519897          0     0  50000         Y
+                div4                  0        0        0    12287998          0     0  50000         Y
+             div3_mux                 0        0        0   491519897          0     0  50000         Y
+                div3                  0        0        0    12287998          0     0  50000         Y
+                   diff2_mux          0        0        0    12287998          0     0  50000         Y
+                      diff2           0        0        0    12287998          0     0  50000         Y
+ extal-clk                            4        4        0    24000000          0     0  50000         Y
+    .pll5_foutpostdiv                 0        0        0    24000000          0     0  50000         Y
+       M1                             0        0        0    24000000          0     0  50000         Y
+          dsi_pll_clk                 0        0        0    24000000          0     0  50000         N
+       .sel_pll5_4                    0        0        0    24000000          0     0  50000         Y
+          DSI_DIV                     0        0        0    24000000          0     0  50000         Y
+             M3                       0        0        0    24000000          0     0  50000         Y
+                lcdc_clk_d            0        0        0    24000000          0     0  50000         N
+                dsi_vclk              0        0        0    24000000          0     0  50000         N
+       .pll5_fout1ph0                 0        0        0    12000000          0     0  50000         Y
+    .pll6                             2        2        0   500000000          0     0  50000         Y
+       .sel_gpu2                      1        1        0   500000000          0     0  50000         Y
+          G                           1        1        0    62500000          0     0  50000         Y
+             gpu_clk                  1        2        0    62500000          0     0  50000         Y
+       .pll6_250                      1        1        0   250000000          0     0  50000         Y
+          HP                          2        2        0   250000000          0     0  50000         Y
+    .pll5                             0        0        0  3000000000          0     0  50000         Y
+       .pll5_fout3                    0        0        0   500000000          0     0  50000         Y
+          .pll5_250                   0        0        0   250000000          0     0  50000         Y
+    .pll3                             1        2        0  1600000000          0     0  50000         Y
+       .pll3_div2                     1        1        0   800000000          0     0  50000         Y
+          .pll3_div2_4                3        3        0   200000000          0     0  50000         Y
+             M0                       2        2        0   200000000          0     0  50000         Y
+                eth1_axi              1        1        0   200000000          0     0  50000         Y
+                eth0_axi              1        1        0   200000000          0     0  50000         Y
+                lcdc_a                0        0        0   200000000          0     0  50000         N
+                cru_aclk              0        0        0   200000000          0     0  50000         N
+             P1                      11       12        0   200000000          0     0  50000         Y
+                usb_pclk              8       12        0   200000000          0     0  50000         Y
+                usb0_func             1        1        0   200000000          0     0  50000         Y
+                usb1_host             3        5        0   200000000          0     0  50000         Y
+                usb0_host             3        5        0   200000000          0     0  50000         Y
+                dsi_aclk              0        0        0   200000000          0     0  50000         N
+                gpu_ace_clk           0        1        0   200000000          0     0  50000         N
+                gpu_axi_clk           1        2        0   200000000          0     0  50000         Y
+                sdhi1_aclk            1        1        0   200000000          0     0  50000         Y
+                sdhi0_aclk            1        1        0   200000000          0     0  50000         Y
+                dmac_aclk             2        2        0   200000000          0     0  50000         Y
+                ia55_clk              2        2        0   200000000          0     0  50000         Y
+                gic                   1        1        0   200000000          0     0  50000         Y
+                P1_DIV2               1        1        0   100000000          0     0  50000         Y
+                   dmac_pclk          1        1        0   100000000          0     0  50000         Y
+             .pll3_div2_4_2           2        2        0   100000000          0     0  50000         Y
+                ZT                    2        2        0   100000000          0     0  50000         Y
+                   eth1_chi           1        1        0   100000000          0     0  50000         Y
+                   eth0_chi           1        1        0   100000000          0     0  50000         Y
+                   lcdc_p             0        0        0   100000000          0     0  50000         N
+                   cru_pclk           0        0        0   100000000          0     0  50000         N
+                P2                    1        1        0   100000000          0     0  50000         Y
+                   dsi_pclk           0        0        0   100000000          0     0  50000         N
+                   ia55_pclk          1        1        0   100000000          0     0  50000         Y
+          .pll3_div2_2                0        0        0   400000000          0     0  50000         Y
+       .pll3_533                      0        1        0   533333333          0     0  50000         Y
+          M2                          0        0        0   266666666          0     0  50000         Y
+             cru_vclk                 0        0        0   266666666          0     0  50000         N
+             M2_DIV2                  0        0        0   133333333          0     0  50000         Y
+                dsi_sys_clk           0        0        0   133333333          0     0  50000         N
+                cru_sysclk            0        0        0   133333333          0     0  50000         N
+          .sel_pll3_3                 0        1        0   533333333          0     0  50000         Y
+             divpl3c                  0        2        0   266666667          0     0  50000         Y
+                SPI1                  0        1        0    66666666          0     0  50000         Y
+                   spi_clk2           0        1        0    66666666          0     0  50000         N
+                SPI0                  0        1        0   133333333          0     0  50000         Y
+                   spi_clk            0        1        0   133333333          0     0  50000         N
+       .pll3_400                      0        0        0   400000000          0     0  50000         Y
+    .pll2                             2        2        0  1600000000          0     0  50000         Y
+       .clk_533                       2        2        0   533333333          0     0  50000         Y
+          sd1                         2        2        0   533333333          0     0  50000         Y
+             sdhi1_clk_hs             1        1        0   533333333          0     0  50000         Y
+             SD1_DIV4                 2        2        0   133333333          0     0  50000         Y
+                sdhi1_imclk2          2        2        0   133333333          0     0  50000         Y
+                sdhi1_imclk           1        1        0   133333333          0     0  50000         Y
+          sd0                         2        2        0   533333333          0     0  50000         Y
+             sdhi0_clk_hs             1        1        0   533333333          0     0  50000         Y
+             SD0_DIV4                 2        2        0   133333333          0     0  50000         Y
+                sdhi0_imclk2          2        2        0   133333333          0     0  50000         Y
+                sdhi0_imclk           1        1        0   133333333          0     0  50000         Y
+          .clk_266                    0        0        0   266666666          0     0  50000         Y
+       .clk_800                       0        0        0   800000000          0     0  50000         Y
+          .clk_400                    0        0        0   400000000          0     0  50000         Y
+       .pll2_div2                     2        2        0   800000000          0     0  50000         Y
+          .pll2_div2_10               1        1        0    80000000          0     0  50000         Y
+             TSU                      1        2        0    80000000          0     0  50000         Y
+                tsu_pclk              1        1        0    80000000          0     0  50000         Y
+                adc_adclk             0        1        0    80000000          0     0  50000         N
+          .pll2_div2_8                1        1        0   100000000          0     0  50000         Y
+             P0                       6       14        0   100000000          0     0  50000         Y
+                adc_pclk              0        1        0   100000000          0     0  50000         N
+                canfd                 1        2        0   100000000          0     0  50000         Y
+                rspi2                 0        0        0   100000000          0     0  50000         N
+                rspi1                 0        1        0   100000000          0     0  50000         N
+                rspi0                 0        0        0   100000000          0     0  50000         N
+                sci1                  0        0        0   100000000          0     0  50000         N
+                sci0                  0        0        0   100000000          0     0  50000         N
+                scif4                 0        0        0   100000000          0     0  50000         N
+                scif3                 0        0        0   100000000          0     0  50000         N
+                scif2                 0        1        0   100000000          0     0  50000         N
+                scif1                 0        0        0   100000000          0     0  50000         N
+                scif0                 2        2        0   100000000          0     0  50000         Y
+                i2c3                  0        1        0   100000000          0     0  50000         N
+                i2c2                  0        0        0   100000000          0     0  50000         N
+                i2c1                  0        1        0   100000000          0     0  50000         N
+                i2c0                  0        1        0   100000000          0     0  50000         N
+                ssi3_sfr              0        0        0   100000000          0     0  50000         N
+                ssi3_pclk             0        0        0   100000000          0     0  50000         N
+                ssi2_sfr              0        0        0   100000000          0     0  50000         N
+                ssi2_pclk             0        0        0   100000000          0     0  50000         N
+                ssi1_sfr              0        0        0   100000000          0     0  50000         N
+                ssi1_pclk             0        0        0   100000000          0     0  50000         N
+                ssi0_sfr              1        1        0   100000000          0     0  50000         Y
+                ssi0_pclk             1        1        0   100000000          0     0  50000         Y
+                wdt1_pclk             0        1        0   100000000          0     0  50000         N
+                wdt0_pclk             0        1        0   100000000          0     0  50000         N
+                poeg_d_clkp           0        0        0   100000000          0     0  50000         N
+                poeg_c_clkp           0        0        0   100000000          0     0  50000         N
+                poeg_b_clkp           0        0        0   100000000          0     0  50000         N
+                poeg_a_clkp           0        0        0   100000000          0     0  50000         N
+                gpt_pclk              0        0        0   100000000          0     0  50000         N
+                mtu_x_mck             0        0        0   100000000          0     0  50000         N
+                ostm2_pclk            1        2        0   100000000          0     0  50000         Y
+                ostm1_pclk            1        2        0   100000000          0     0  50000         Y
+                ostm0_pclk            0        0        0   100000000          0     0  50000         N
+                P0_DIV2               0        0        0    50000000          0     0  50000         Y
+       .pll2_533                      0        0        0   533333333          0     0  50000         Y
+          .pll2_533_div2              0        0        0   266666666          0     0  50000         Y
+             .div_dsi_lpclk           0        0        0    16666667          0     0  50000         Y
+                M4                    0        0        0    16666667          0     0  50000         Y
+                   dsi_lpclk          0        0        0    16666667          0     0  50000         N
+    .pll1                             0        0        0  1200000000          0     0  50000         Y
+       I                              0        0        0  1200000000          0     0  50000         Y
+    .osc_div1000                      0        0        0       24000          0     0  50000         Y
+    .osc                              1        3        0    24000000          0     0  50000         Y
+       gpio                           1        2        0    24000000          0     0  50000         Y
+       wdt1_clk                       0        1        0    24000000          0     0  50000         N
+       wdt0_clk                       0        1        0    24000000          0     0  50000         N
+ can-clk                              0        0        0           0          0     0  50000         Y
+ audio2-clk                           0        0        0    12288000          0     0  50000         Y
+ audio1-clk                           0        0        0    11289600          0     0  50000         Y
+playback 48000 kHz sample
 
+speaker-test 1.2.1
 
-I'm working on top of Linux version 6.3.0-rc1-g92569901a7f.
-Did you already see this crash?
-Let me know.
+Playback device is hw:0,0
+Stream parameters are 48000Hz, S16_LE, 2 channels
+Using 16 octaves of pink noise
+Rate set to 48000Hz (requested 48000Hz)
+Buffer size range from 8 to 8192
+Period size range from 8 to 2048
+Using max buffer size 8192
+Periods = 4
+was set period_size = 2048
+was set buffer_size = 8192
+ 0 - Front Left
+00: 80
+01: 00
+02: 11
+03: 19
+04: 4c
+05: 02
+06: 23
+07: 7f
+08: 83
+09: 19
+0a: 08
+0b: a9
+0c: 5f
+0d: 25
+0e: 24
+0f: bf
+10: 00
+11: 14
+12: 7a
+13: e1
+14: 00
+15: 00
+16: 00
+17: 00
+18: 01
+19: 55
+1a: 59
+1b: bb
+1c: 3f
+1d: 30
+1e: 90
+1f: f6
+20: 80
+21: b0
+22: 45
+23: c4
+24: 95
+Read at address  0x10049C00 (0xffff9a615c00): 0x300B4022
+       pfd2                           1        1        0    24000000          0     0  50000         Y
+          pll2                        1        1        0   491519897          0     0  50000         Y
+             div4_mux                 1        1        0   491519897          0     0  50000         Y
+                div4                  1        1        0    12287998          0     0  50000         Y
+                   se2_mux            1        1        0    12287998          0     0  50000         Y
+                      se2             1        1        0    12287998          0     0  50000         Y
+ 1 - Front Right
+playback 44100 kHz sample
 
-Thanks,
-Tommaso
+speaker-test 1.2.1
 
+Playback device is hw:0,0
+Stream parameters are 44100Hz, S16_LE, 2 channels
+Using 16 octaves of pink noise
+Rate set to 44100Hz (requested 44100Hz)
+Buffer size range from 8 to 8192
+Period size range from 8 to 2048
+Using max buffer size 8192
+Periods = 4
+was set period_size = 2048
+was set buffer_size = 8192
+ 0 - Front Left
+/audio_test.sh: line 2:   187 Killed                  speaker-test -D hw:0,0 -c 2 -r $1
+00: 80
+01: 00
+02: 11
+03: 19
+04: 4c
+05: 02
+06: 23
+07: 7f
+08: 83
+09: 19
+0a: 08
+0b: a9
+0c: 5f
+0d: 25
+0e: 24
+0f: bf
+10: 00
+11: 14
+12: 7a
+13: e1
+14: 00
+15: 00
+16: 00
+17: 00
+18: 01
+19: 55
+1a: 59
+1b: bb
+1c: 3f
+1d: 30
+1e: 90
+1f: b6
+20: 80
+21: b0
+22: 45
+23: c4
+24: 95
+Read at address  0x10049C00 (0xffffb7957c00): 0x700B4022
+    pfd3_mux                          1        1        0    24000000          0     0  50000         Y
+       pfd3                           1        1        0      960000          0     0  50000         Y
+          pll3                        1        1        0   564480000          0     0  50000         Y
+             div5                     1        1        0    11289600          0     0  50000         Y
+                se2_mux               1        1        0    11289600          0     0  50000         Y
+                   se2                1        1        0    11289600          0     0  50000         Y
 
+Biju Das (3):
+  dt-bindings: clock: Add Renesas versa3 clock generator bindings
+  drivers: clk: Add support for versa3 clock driver
+  arm64: dts: renesas: rzg2l-smarc: Use versa3 clk for audio mclk
 
+ .../bindings/clock/renesas,5p35023.yaml       |   90 ++
+ .../boot/dts/renesas/rz-smarc-common.dtsi     |    7 -
+ arch/arm64/boot/dts/renesas/rzg2l-smarc.dtsi  |   32 +
+ drivers/clk/Kconfig                           |    9 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/clk-versaclock3.c                 | 1139 +++++++++++++++++
+ 6 files changed, 1271 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/renesas,5p35023.yaml
+ create mode 100644 drivers/clk/clk-versaclock3.c
+
+-- 
+2.25.1
 
