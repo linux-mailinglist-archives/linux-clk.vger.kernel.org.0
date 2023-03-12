@@ -2,373 +2,183 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260AA6B62E8
-	for <lists+linux-clk@lfdr.de>; Sun, 12 Mar 2023 03:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A59A6B6610
+	for <lists+linux-clk@lfdr.de>; Sun, 12 Mar 2023 13:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjCLC2v (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 11 Mar 2023 21:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S229636AbjCLM55 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 12 Mar 2023 08:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjCLC2t (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 11 Mar 2023 21:28:49 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870C934327;
-        Sat, 11 Mar 2023 18:28:46 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32BK7wL0004410;
-        Sat, 11 Mar 2023 18:28:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=ggbvdIb1jxpDfp7KaumFFjElGm6Nvg9XcVu+wvvPnlQ=;
- b=SEoc4CB3+fNTGaIaWPpJVLU1m9ctfuLFAOcHJDnGNqyysDZr4DQHNv8H/Jiv0z7yIi2w
- 61ipbKy0vhmY4OIapNuo467PAH6piZFNuc9pEhkp2QgOH+h/758n44TjJEhtdBdBiof/
- UUcoODGL+/GTouGIWjlVxwvEEOnxXJwb0xD54hNKkapUF4XtLZWggIfvDhObUvvrwgVl
- mtLy5cUhzALYU06TjVIGdQqv2JOqVr09YqjbvjBsACGmCy4JRkRD6l2tbR2CTVx8TlCs
- //U0lo7RyaudzP4csRmUCe4JywrfgMIZS+SZ6TTD8gKqdIAdfRji1Putq7mVVGWAVFlN kA== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3p8r25h4bd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sat, 11 Mar 2023 18:28:31 -0800
-Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
- ash-exhub102.TheFacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Sat, 11 Mar 2023 18:28:30 -0800
-Received: from devvm1736.cln0.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server id
- 15.1.2507.17; Sat, 11 Mar 2023 18:28:28 -0800
-From:   Vadim Fedorenko <vadfed@meta.com>
-To:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        Vadim Fedorenko <vadfed@meta.com>, <poros@redhat.com>,
-        <mschmidt@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH RFC v6 6/6] ptp_ocp: implement DPLL ops
-Date:   Sat, 11 Mar 2023 18:28:07 -0800
-Message-ID: <20230312022807.278528-7-vadfed@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230312022807.278528-1-vadfed@meta.com>
-References: <20230312022807.278528-1-vadfed@meta.com>
+        with ESMTP id S229493AbjCLM5z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 12 Mar 2023 08:57:55 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2070.outbound.protection.outlook.com [40.107.21.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED734BEA7;
+        Sun, 12 Mar 2023 05:57:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kHoR1GDIbv+kUpRW40R+sqfQeqm0a2otfKYYE3984XSOYJkWLZMevw6aWh4AkOZ/NvBxYckcf4VKRFpTiBG6EInLRfV2BNYdcBuF/pTfR8bFWOaQTsm6pjYzPbBWdg2PddrU7W3P5jJkkMc5zYUqgnAq1fQzCj3xwYC6ZuN1z48fbqvLhPjGkjInwM3bRahqzOPXArgK9kcgnd5g7WAAgRK9NfHn9K7JKE1iZJ4jZYHmRkEh+bDPTfWvTaKNnNlESgJS9QFhRNNCiSPlVtiRi7/Yi9NMGOG5JEqtIrzL4Cbj6s9WahiACkJUSqU1RSbzmMZEq2Z3XPwpz1QJ+07DcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eSlr+lNbeD1aiiqo/GcwkDy3znpnfzOMtiCJAg3PW/M=;
+ b=LBL1RyczmtynmP7jNq2kI7fWkTCCgZAaVVE/UJEm+STiz17QSoUXLayj23mxJgs4IUWNIJ+yaGhakykCP3SBwn8OM7s2xNpkQHjap5GJZE8AF6r0D9ulIKBL7O43waVxVzaUEoj4a1gEULI33DbM1YJlN/lFgTjOkOxb1u4bo649uPN33roCzAIABUpxGQE4ndglihLSaXDIcplCriGH6qLsjyAqZbS2GvsnX7Nyp2yRj9BihlqtxThNXwgUsF0nWOzY3APpfRdmpw49YzB1ZS2767x8ZpXihBorzdQQGHQcLrcowzMfllfzVKSwAmzKuIkIomif+vqQGMxTVXUudg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eSlr+lNbeD1aiiqo/GcwkDy3znpnfzOMtiCJAg3PW/M=;
+ b=RyadmFDAslBq4reSCCXBoBV7O7/UKW2eFtBhr6gR54y1iw2gzS619+zDpSPzbVrJCBY8UtJGbHks/qLCw/fh7gfhTMi13ISPsdL4CWx2gysyfJC9oEVawqiaPF4+uWx9XgYinOYVVNGtTKUn7GTRnibfcDazAdIBqqBVwVAmQWM=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB8963.eurprd04.prod.outlook.com (2603:10a6:20b:42e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Sun, 12 Mar
+ 2023 12:57:51 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::f55a:cf12:da08:6d2a%7]) with mapi id 15.20.6178.024; Sun, 12 Mar 2023
+ 12:57:51 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v1] clk: imx6ul: fix "failed to get parent" error
+Thread-Topic: [PATCH v1] clk: imx6ul: fix "failed to get parent" error
+Thread-Index: AQHZU2+8jn4VzPFqR0+ypgqiFldpoa73HYTQ
+Date:   Sun, 12 Mar 2023 12:57:51 +0000
+Message-ID: <DU0PR04MB9417D33088377F41D33EF33088B89@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20230310164523.534571-1-o.rempel@pengutronix.de>
+In-Reply-To: <20230310164523.534571-1-o.rempel@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AS8PR04MB8963:EE_
+x-ms-office365-filtering-correlation-id: d9b4da7f-daff-4923-b4b3-08db22f96385
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gGAy+G5e+CY2GAzPv26A/ewSIlv0aFg+fUBJ8QE1Dda9yf+uob72t7qg7O6q7YnbEwsLGj4sBWt5ZUuChET4ePO9eL8jAeO73+9u9VvftQ0TQ6TaekJY1PvNxsE8Wv1IsRZQGtZllObjuBxT5oRXODHTJ5Me58nPZ8UZU794+gaIKmYoH/Tbm3xM4s72zNjYDqa0fKbMBx5gQSAMVrKbwFwZwXLcknrQfeA5WNkhIJZAEdAIuc3aAYWxY74vY9jqZK75u4JJqSvzZOzNZioI2TcCXF4pht/xjEzPnmFAJvCPyFl3kFZqDseg0aeYkYbziwwifY/DGKosR5d1bd+Ax4Z3Uu1SH1PGo+iJbDsP2axTaVGDGwpVE7VyE4cqxc9qDH86nuyC7K170c6XcTG9eRO//g2AuI1RQ02ZK+hlvseR2+iOtwygJWHH+K3k6zS+kxMpkXMaAvs93BJ47DrcBOywypmlgyCiCAqCTwzWnjmFgGd5X90IUQukW7dtybsxvBOyMxR3yTccFiXbq2ZVLQ1a7hQExwEKaoFC6Nvbr1nz3+nQRFSQBELCL/BK8W/PDCLuy4BK2qFf0//XIJnL9lkA9z/gkLljvdEBE1PycqMScFwcmxhidE2jeW92EdlmPJ7xyrHgN88mXJe9W01wBC90H7rkT3ateryfqnXnij4kTgZHNv8imEYTjH5Jtnnr/D6xHzx5yGYg862ydr00oT47t7FehynRcuomeH7Um5s=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199018)(38070700005)(71200400001)(2906002)(66946007)(41300700001)(76116006)(7696005)(66446008)(66476007)(66556008)(55016003)(64756008)(8676002)(33656002)(4326008)(478600001)(316002)(110136005)(86362001)(54906003)(122000001)(38100700002)(5660300002)(44832011)(26005)(6506007)(186003)(9686003)(7416002)(52536014)(8936002)(83380400001)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qyb6LpxPMFpAgcS4mDuN+J6DCflR9s/GAajIIg/h5xPJ1OVuorus/T7Ot1LI?=
+ =?us-ascii?Q?8HvdsZRAPQ28OSkay69pnEBZjp3Sc6uZFWkIXuKU9JMsbUyzLr5jYV1Hpycr?=
+ =?us-ascii?Q?x5sg5jj6TCau/6j0dU+JChcJXhfErYxJm1JmZ/Lf3pHPoWjha/6fOmMcRZtr?=
+ =?us-ascii?Q?f8OsimOJL2zsRYMeF3z+igBpHEBQGbwl0QZBQ+KphgB1PLtkG/yB2oj0+Z1v?=
+ =?us-ascii?Q?bkY9ebUng7Uh4I2H6O4jPWHpjmk3572aRd1TB0dwW/0NA6WLYMgO2+OMowMV?=
+ =?us-ascii?Q?rGcw8BTfX8N820SDLXxT8YGkLX4rU+DL9jt0NDbjsjvmyirxeqsJ/CsmUBSB?=
+ =?us-ascii?Q?o+53l1GxVCNtd9J0nT9DVSrRZivPW44CGyMw5lAH0fgIvrzr+j3VTZLuuogb?=
+ =?us-ascii?Q?vzvtJ7qFZ3mLqnPHqKWocr2KLIb1h10sgZ3d57oNJb8QcierfwQ+DAfcu7ht?=
+ =?us-ascii?Q?W0cdfBdZuPBJXOrWX/50fhlHJQts8JTs2GZ6CbTUT9j7gC+9ybw/wFU/cctK?=
+ =?us-ascii?Q?6MedEI+BbXMmjyJfYtjJHS+AGr+JvwsewIMRkdGWo1+ttNT1Dpu6ca8f1KKV?=
+ =?us-ascii?Q?5RKcDBokc+l0BWMDAYL5Ej2tG+CUH+JQTugz8G7Ywn/XAIEYQX8o2LX+eqyl?=
+ =?us-ascii?Q?V/GYSCS6obuxrZ72C+ZZ4FKzP+lrZ92g023nJXkXS7mCD+alZhanjwLZWcU4?=
+ =?us-ascii?Q?QdYsmx+wkTF8Gn6qH0rvlpTTx5sPzIwpjmIGYAtrdYFverwfuzhmdABupvVa?=
+ =?us-ascii?Q?RFhOs5k0wDKamPF4W8rdWMoOjqYib8ZH7FBwJ+bWQPlqrrzEfdskvz/MDOn9?=
+ =?us-ascii?Q?qdxQ43oyFQeJvL2vso2d1XRUhfW3sY7mmFzRR4WvLHNhodxVK7C9WrsIjjAu?=
+ =?us-ascii?Q?8Z/dxgkr1gXihJV/WW0JpC+pNGxhyLIkNHXMTdaXG8KyFCAJANH1v18E/JTT?=
+ =?us-ascii?Q?YHAcBF/VjBGCP0siPr12Fx7US+VYvOhbbOeXF7xXxSGYnZISof0Nm+c0B4NB?=
+ =?us-ascii?Q?b3bBSu9I5qDZTUX8pF+9g5mItm4PUlFUgOjhqMRe+dMdOPSIvaiwcrzIWu6F?=
+ =?us-ascii?Q?MYETkPqN3hvC4RQxEqoXfBqxAEE0ly/m/htF0ml655AOh6UHzrgttBE9IHHp?=
+ =?us-ascii?Q?tFjNw2//3EiHd2tsfJ5ry8piDtRnslhxKCkFf6WxBEEU9PnNjnchWeXflSVl?=
+ =?us-ascii?Q?YTSFgYSz1NBRewOJBpdzTiUv5pCN2lKf5+ivMSjQyoBb+/VZ4r18gLJuxmTN?=
+ =?us-ascii?Q?IbaWGPnLiKpz/vfDjYrqMdE5ILdW3Ria7ocp0qxYT8VMudXvQY7g46cMVHvq?=
+ =?us-ascii?Q?EyN4ja3cIw6ELWaHKiLTyhhSk+5NWmFT49I64nLUuw8AZ5QVwhh6MukixjCG?=
+ =?us-ascii?Q?MI4cUumWLe1dwJ8g9fUSmBlpnJoK87MEyxCYW/F/jShsWjFHA+kt/fMV/OFM?=
+ =?us-ascii?Q?Gkks/4ESKGQXF///R5CSxNseI14bI5n2i/mvFaRU6O0agzrDZWPuPaou54gI?=
+ =?us-ascii?Q?//fmU9MCTAdXkal3wJb/5M9lMh801zSjmSo9QANMeh9TsN5hybuO6d60OJiy?=
+ =?us-ascii?Q?nOKLd8ByUkie9qMjWio=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [2620:10d:c0a8:1b::d]
-X-Proofpoint-GUID: LGcuQrBwPad_9xncnzpnhpW2xR2RN_Jf
-X-Proofpoint-ORIG-GUID: LGcuQrBwPad_9xncnzpnhpW2xR2RN_Jf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-11_04,2023-03-10_01,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9b4da7f-daff-4923-b4b3-08db22f96385
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Mar 2023 12:57:51.4340
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mtkbKdKIhZkLSNjiPWIGGgrhXTPXp4N6Sf0NsN0qYILl6r6XSxqHn2DyGkHyZ3qwpIhSpVh/kN/rMFgyThSMqA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8963
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Implement basic DPLL operations in ptp_ocp driver as the
-simplest example of using new subsystem.
+> Subject: [PATCH v1] clk: imx6ul: fix "failed to get parent" error
+>=20
+> On some configuration we may get following error:
+> [    0.000000] imx:clk-gpr-mux: failed to get parent (-EINVAL)
+>=20
+> This happens if selector is configured to not supported value. To avoid t=
+his
+> warnings add dummy parents for not supported values.
+>=20
+> Fixes: 4e197ee880c2 ("clk: imx6ul: add ethernet refclock mux support")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+[Peng Fan]=20
 
-Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
----
- drivers/ptp/Kconfig   |   1 +
- drivers/ptp/ptp_ocp.c | 209 ++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 200 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/ptp/Kconfig b/drivers/ptp/Kconfig
-index fe4971b65c64..8c4cfabc1bfa 100644
---- a/drivers/ptp/Kconfig
-+++ b/drivers/ptp/Kconfig
-@@ -177,6 +177,7 @@ config PTP_1588_CLOCK_OCP
- 	depends on COMMON_CLK
- 	select NET_DEVLINK
- 	select CRC16
-+	select DPLL
- 	help
- 	  This driver adds support for an OpenCompute time card.
- 
-diff --git a/drivers/ptp/ptp_ocp.c b/drivers/ptp/ptp_ocp.c
-index 4bbaccd543ad..02c95e724ec8 100644
---- a/drivers/ptp/ptp_ocp.c
-+++ b/drivers/ptp/ptp_ocp.c
-@@ -23,6 +23,8 @@
- #include <linux/mtd/mtd.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/crc16.h>
-+#include <linux/dpll.h>
-+#include <uapi/linux/dpll.h>
- 
- #define PCI_VENDOR_ID_FACEBOOK			0x1d9b
- #define PCI_DEVICE_ID_FACEBOOK_TIMECARD		0x0400
-@@ -267,6 +269,7 @@ struct ptp_ocp_sma_connector {
- 	bool	fixed_dir;
- 	bool	disabled;
- 	u8	default_fcn;
-+	struct dpll_pin *dpll_pin;
- };
- 
- struct ocp_attr_group {
-@@ -353,6 +356,7 @@ struct ptp_ocp {
- 	struct ptp_ocp_signal	signal[4];
- 	struct ptp_ocp_sma_connector sma[4];
- 	const struct ocp_sma_op *sma_op;
-+	struct dpll_device *dpll;
- };
- 
- #define OCP_REQ_TIMESTAMP	BIT(0)
-@@ -2689,16 +2693,9 @@ sma4_show(struct device *dev, struct device_attribute *attr, char *buf)
- }
- 
- static int
--ptp_ocp_sma_store(struct ptp_ocp *bp, const char *buf, int sma_nr)
-+ptp_ocp_sma_store_val(struct ptp_ocp *bp, int val, enum ptp_ocp_sma_mode mode, int sma_nr)
- {
- 	struct ptp_ocp_sma_connector *sma = &bp->sma[sma_nr - 1];
--	enum ptp_ocp_sma_mode mode;
--	int val;
--
--	mode = sma->mode;
--	val = sma_parse_inputs(bp->sma_op->tbl, buf, &mode);
--	if (val < 0)
--		return val;
- 
- 	if (sma->fixed_dir && (mode != sma->mode || val & SMA_DISABLE))
- 		return -EOPNOTSUPP;
-@@ -2733,6 +2730,21 @@ ptp_ocp_sma_store(struct ptp_ocp *bp, const char *buf, int sma_nr)
- 	return val;
- }
- 
-+static int
-+ptp_ocp_sma_store(struct ptp_ocp *bp, const char *buf, int sma_nr)
-+{
-+	struct ptp_ocp_sma_connector *sma = &bp->sma[sma_nr - 1];
-+	enum ptp_ocp_sma_mode mode;
-+	int val;
-+
-+	mode = sma->mode;
-+	val = sma_parse_inputs(bp->sma_op->tbl, buf, &mode);
-+	if (val < 0)
-+		return val;
-+
-+	return ptp_ocp_sma_store_val(bp, val, mode, sma_nr);
-+}
-+
- static ssize_t
- sma1_store(struct device *dev, struct device_attribute *attr,
- 	   const char *buf, size_t count)
-@@ -4171,12 +4183,151 @@ ptp_ocp_detach(struct ptp_ocp *bp)
- 	device_unregister(&bp->dev);
- }
- 
-+static int ptp_ocp_dpll_pin_to_sma(const struct ptp_ocp *bp, const struct dpll_pin *pin)
-+{
-+	int i;
-+
-+	for (i = 0; i < 4; i++) {
-+		if (bp->sma[i].dpll_pin == pin)
-+			return i;
-+	}
-+	return -1;
-+}
-+
-+static int ptp_ocp_dpll_lock_status_get(const struct dpll_device *dpll,
-+				    enum dpll_lock_status *status,
-+				    struct netlink_ext_ack *extack)
-+{
-+	struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-+	int sync;
-+
-+	sync = ioread32(&bp->reg->status) & OCP_STATUS_IN_SYNC;
-+	*status = sync ? DPLL_LOCK_STATUS_LOCKED : DPLL_LOCK_STATUS_UNLOCKED;
-+
-+	return 0;
-+}
-+
-+static int ptp_ocp_dpll_source_idx_get(const struct dpll_device *dpll,
-+				    u32 *idx, struct netlink_ext_ack *extack)
-+{
-+	struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-+
-+	if (bp->pps_select) {
-+		*idx = ioread32(&bp->pps_select->gpio1);
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+
-+static int ptp_ocp_dpll_mode_get(const struct dpll_device *dpll,
-+				    u32 *mode, struct netlink_ext_ack *extack)
-+{
-+	*mode = DPLL_MODE_AUTOMATIC;
-+
-+	return 0;
-+}
-+
-+static bool ptp_ocp_dpll_mode_supported(const struct dpll_device *dpll,
-+				    const enum dpll_mode mode,
-+				    struct netlink_ext_ack *extack)
-+{
-+	if (mode == DPLL_MODE_AUTOMATIC)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int ptp_ocp_dpll_direction_get(const struct dpll_pin *pin,
-+				     const struct dpll_device *dpll,
-+				     enum dpll_pin_direction *direction,
-+				     struct netlink_ext_ack *extack)
-+{
-+	struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-+	int sma_nr = ptp_ocp_dpll_pin_to_sma(bp, pin);
-+
-+	if (sma_nr < 0)
-+		return -EINVAL;
-+
-+	*direction = bp->sma[sma_nr].mode == SMA_MODE_IN ? DPLL_PIN_DIRECTION_SOURCE :
-+							   DPLL_PIN_DIRECTION_OUTPUT;
-+	return 0;
-+}
-+
-+static int ptp_ocp_dpll_direction_set(const struct dpll_pin *pin,
-+				     const struct dpll_device *dpll,
-+				     enum dpll_pin_direction direction,
-+				     struct netlink_ext_ack *extack)
-+{
-+	struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-+	int sma_nr = ptp_ocp_dpll_pin_to_sma(bp, pin);
-+	enum ptp_ocp_sma_mode mode;
-+
-+	if (sma_nr < 0)
-+		return -EINVAL;
-+
-+	mode = direction == DPLL_PIN_DIRECTION_SOURCE ? SMA_MODE_IN : SMA_MODE_OUT;
-+	return ptp_ocp_sma_store_val(bp, 0, mode, sma_nr);
-+}
-+
-+static int ptp_ocp_dpll_frequency_set(const struct dpll_pin *pin,
-+			      const struct dpll_device *dpll,
-+			      const u32 frequency,
-+			      struct netlink_ext_ack *extack)
-+{
-+	struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-+	int sma_nr = ptp_ocp_dpll_pin_to_sma(bp, pin);
-+	int val = frequency == 10000000 ? 0 : 1;
-+
-+	if (sma_nr < 0)
-+		return -EINVAL;
-+
-+
-+	return ptp_ocp_sma_store_val(bp, val, bp->sma[sma_nr].mode, sma_nr);
-+}
-+
-+static int ptp_ocp_dpll_frequency_get(const struct dpll_pin *pin,
-+			      const struct dpll_device *dpll,
-+			      u32 *frequency,
-+			      struct netlink_ext_ack *extack)
-+{
-+	struct ptp_ocp *bp = (struct ptp_ocp *)dpll_priv(dpll);
-+	int sma_nr = ptp_ocp_dpll_pin_to_sma(bp, pin);
-+	u32 val;
-+
-+	if (sma_nr < 0)
-+		return -EINVAL;
-+
-+	val = bp->sma_op->get(bp, sma_nr);
-+	if (!val)
-+		*frequency = 1000000;
-+	else
-+		*frequency = 0;
-+	return 0;
-+}
-+
-+static struct dpll_device_ops dpll_ops = {
-+	.lock_status_get = ptp_ocp_dpll_lock_status_get,
-+	.source_pin_idx_get = ptp_ocp_dpll_source_idx_get,
-+	.mode_get = ptp_ocp_dpll_mode_get,
-+	.mode_supported = ptp_ocp_dpll_mode_supported,
-+};
-+
-+static struct dpll_pin_ops dpll_pins_ops = {
-+	.frequency_get = ptp_ocp_dpll_frequency_get,
-+	.frequency_set = ptp_ocp_dpll_frequency_set,
-+	.direction_get = ptp_ocp_dpll_direction_get,
-+	.direction_set = ptp_ocp_dpll_direction_set,
-+};
-+
- static int
- ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- {
-+	struct dpll_pin_properties prop;
- 	struct devlink *devlink;
-+	char sma[4] = "SMA0";
- 	struct ptp_ocp *bp;
--	int err;
-+	int err, i;
-+	u64 clkid;
- 
- 	devlink = devlink_alloc(&ptp_ocp_devlink_ops, sizeof(*bp), &pdev->dev);
- 	if (!devlink) {
-@@ -4226,8 +4377,44 @@ ptp_ocp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	ptp_ocp_info(bp);
- 	devlink_register(devlink);
--	return 0;
- 
-+	clkid = pci_get_dsn(pdev);
-+	bp->dpll = dpll_device_get(clkid, 0, THIS_MODULE);
-+	if (!bp->dpll) {
-+		dev_err(&pdev->dev, "dpll_device_alloc failed\n");
-+		goto out;
-+	}
-+
-+	err = dpll_device_register(bp->dpll, DPLL_TYPE_PPS, &dpll_ops, bp, &pdev->dev);
-+	if (err)
-+		goto out;
-+
-+	prop.description = &sma[0];
-+	prop.freq_supported = DPLL_PIN_FREQ_SUPP_MAX;
-+	prop.type = DPLL_PIN_TYPE_EXT;
-+	prop.any_freq_max = 10000000;
-+	prop.any_freq_min = 0;
-+	prop.capabilities = DPLL_PIN_CAPS_DIRECTION_CAN_CHANGE;
-+
-+	for (i = 0; i < 4; i++) {
-+		sma[3] = 0x31 + i;
-+		bp->sma[i].dpll_pin = dpll_pin_get(clkid, i, THIS_MODULE, &prop);
-+		if (IS_ERR_OR_NULL(bp->sma[i].dpll_pin)) {
-+			bp->sma[i].dpll_pin = NULL;
-+			goto out_dpll;
-+		}
-+		err = dpll_pin_register(bp->dpll, bp->sma[i].dpll_pin, &dpll_pins_ops, bp, NULL);
-+		if (err)
-+			goto out_dpll;
-+	}
-+
-+	return 0;
-+out_dpll:
-+	for (i = 0; i < 4; i++) {
-+		if (bp->sma[i].dpll_pin)
-+			dpll_pin_put(bp->sma[i].dpll_pin);
-+	}
-+	dpll_device_put(bp->dpll);
- out:
- 	ptp_ocp_detach(bp);
- out_disable:
-@@ -4243,6 +4430,8 @@ ptp_ocp_remove(struct pci_dev *pdev)
- 	struct ptp_ocp *bp = pci_get_drvdata(pdev);
- 	struct devlink *devlink = priv_to_devlink(bp);
- 
-+	dpll_device_unregister(bp->dpll);
-+	dpll_device_put(bp->dpll);
- 	devlink_unregister(devlink);
- 	ptp_ocp_detach(bp);
- 	pci_disable_device(pdev);
--- 
-2.34.1
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/clk/imx/clk-imx6ul.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c =
+index
+> 2836adb817b7..e3696a88b5a3 100644
+> --- a/drivers/clk/imx/clk-imx6ul.c
+> +++ b/drivers/clk/imx/clk-imx6ul.c
+> @@ -95,14 +95,16 @@ static const struct clk_div_table video_div_table[] =
+=3D {
+>  	{ }
+>  };
+>=20
+> -static const char * enet1_ref_sels[] =3D { "enet1_ref_125m",
+> "enet1_ref_pad", };
+> +static const char * enet1_ref_sels[] =3D { "enet1_ref_125m",
+> +"enet1_ref_pad", "dummy", "dummy"};
+>  static const u32 enet1_ref_sels_table[] =3D
+> { IMX6UL_GPR1_ENET1_TX_CLK_DIR,
+> -					    IMX6UL_GPR1_ENET1_CLK_SEL };
+> +					    IMX6UL_GPR1_ENET1_CLK_SEL, 0,
+> +
+> IMX6UL_GPR1_ENET1_TX_CLK_DIR | IMX6UL_GPR1_ENET1_CLK_SEL };
+>  static const u32 enet1_ref_sels_table_mask =3D
+> IMX6UL_GPR1_ENET1_TX_CLK_DIR |
+>  					     IMX6UL_GPR1_ENET1_CLK_SEL;
+> -static const char * enet2_ref_sels[] =3D { "enet2_ref_125m",
+> "enet2_ref_pad", };
+> +static const char * enet2_ref_sels[] =3D { "enet2_ref_125m",
+> +"enet2_ref_pad", "dummy", "dummy"};
+>  static const u32 enet2_ref_sels_table[] =3D
+> { IMX6UL_GPR1_ENET2_TX_CLK_DIR,
+> -					    IMX6UL_GPR1_ENET2_CLK_SEL };
+> +					    IMX6UL_GPR1_ENET2_CLK_SEL, 0,
+> +
+> IMX6UL_GPR1_ENET2_TX_CLK_DIR | IMX6UL_GPR1_ENET2_CLK_SEL };
+>  static const u32 enet2_ref_sels_table_mask =3D
+> IMX6UL_GPR1_ENET2_TX_CLK_DIR |
+>  					     IMX6UL_GPR1_ENET2_CLK_SEL;
+>=20
+> --
+> 2.30.2
 
