@@ -2,58 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB2D6B7E96
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Mar 2023 18:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39ADC6B7E73
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Mar 2023 18:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCMRAa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Mar 2023 13:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S230025AbjCMRAv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Mar 2023 13:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjCMRAH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Mar 2023 13:00:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC21367C3
-        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:58:56 -0700 (PDT)
+        with ESMTP id S231521AbjCMQ7t (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Mar 2023 12:59:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A591717C
+        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:58:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678726639;
+        s=mimecast20190719; t=1678726646;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=t5POBg1qZ82GqoEDaDaIA79xn4Mgw94E10MmvGFG+QA=;
-        b=JLOjZqJ0RWQzrZ1tdSlDJBvZFrtJus2alQQIor9zsGGha4WRZUFDeQtdg6u3YhCIz2XfHA
-        FVvcb6W6my2NiSH5eA3ipsebRU+njvFDFrWmbfzOLNA9xwUuRYzcdl/Vj4I0Gqds11NXBV
-        XGYTuqMu8HtIYACOAHESkLTh6j6zFQc=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HOcsF4tnS6k1nG+I3+/hCEkdwUCH/vj5+6sHXcjYo8o=;
+        b=MSigK9y+PXNwYVOl5gfN6kZyK/tiLy70PyI+mGuFnTDVKAHfuRLkz53nh9Hz4XFkEWT/HR
+        VN3Vgf0Rd9TfO3Tep0zhnBYRLbTONMc9Nc3x/HDpqfSzexIZ7SkOwElH2pJew1LaWL2rLo
+        BtZGP44jhTe7ZxiwJlChrYC0IZ1viI8=
 Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
  [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-150-YwZVYtUSOUut3ZIQk8NVlA-1; Mon, 13 Mar 2023 12:57:18 -0400
-X-MC-Unique: YwZVYtUSOUut3ZIQk8NVlA-1
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-17270774b8fso7539570fac.3
-        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:57:18 -0700 (PDT)
+ us-mta-433-f6-nwEaNNqWFPMOFtV_whQ-1; Mon, 13 Mar 2023 12:57:25 -0400
+X-MC-Unique: f6-nwEaNNqWFPMOFtV_whQ-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-176249fbc56so7479811fac.6
+        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:57:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678726638;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t5POBg1qZ82GqoEDaDaIA79xn4Mgw94E10MmvGFG+QA=;
-        b=LeUQs5Lh+dL5Wb66gYaCMirFDt18zizgMmb/slw9dc3GwMkhmzvfWQVUWEBvmdgVup
-         qusdqLQitwzUssZFTUVBh3ZsYL6bJ/xHP0yAqLXTU/SYlb3c+7YRh5reViYannB8X6ov
-         EoMZNRduesU+F+23FIyBSBlufCLyvuUoQoRYn6N6TRkruqeHFlyZKYFGo+rA50b+CwRz
-         FFX5Ru8hoOq4Ie16+9iVvMdRTnzlLT4uM3ybeZqlFvRvpat/IXn7xpfzLCpJg+N5gbtl
-         73tzD/RCJSKp4a5lqY3qOBRfjhuDFTS3/n5ol/bMo+v/PzYaVDf4ZZZo/vVUvgGySKhg
-         /T5A==
-X-Gm-Message-State: AO0yUKWoNXh+5HkTY99G+QN5ZXMyv8fOmNOyIjjbruoTGCo1zEwPa0J3
-        qjd6UttFAdsdx4tsbXTCKM3Z4k4frJeqp1TwFWd//WRgd7VvAgLkFnDBvwOtUYVkSmwDA7zLXZd
-        M6HDDzzRdyyPdRvP4T+Ip
-X-Received: by 2002:a05:6808:150:b0:37f:b1d6:9f3c with SMTP id h16-20020a056808015000b0037fb1d69f3cmr17439005oie.46.1678726637931;
-        Mon, 13 Mar 2023 09:57:17 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/DcZ9ZIOTk8pbqQbIpqBKMFacVCaRW/B1/QFZ8b2XK2GO2nvasDBBZ4a2w0GAU24OnbrYXGg==
-X-Received: by 2002:a05:6808:150:b0:37f:b1d6:9f3c with SMTP id h16-20020a056808015000b0037fb1d69f3cmr17438954oie.46.1678726636191;
-        Mon, 13 Mar 2023 09:57:16 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678726644;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HOcsF4tnS6k1nG+I3+/hCEkdwUCH/vj5+6sHXcjYo8o=;
+        b=L2Lw0jXGDif8Q0bvr3Rq9GvHx2WmQYL2pHGZjRoGAkikW4mHXWc4yd8SjOcWQgbx9z
+         ruXT7qCWrWda4EVr5MP42eaD9jOV77ImOAZss+2row+ElC+fmw7EFMUpfXT9eVai/4QC
+         m+OfRKnx7PYvN+FK4XNTaFeXRF4voQchSKNNVxqbZJZ/zg3lQ5ckfo1RelMlSGR1Fexa
+         tAlYEQaSteIOUsRZdMNkQTUhK+qcHnoG88daq4ZihzE11lYufdZXG90b4Uc0LuxpJgiI
+         sEFPCeaviCxJ/Qx5HqOi/Of6tZh9mHSRJHEhlfYjBMHMXA5zcBDi+VMv1SMP5whSkbTQ
+         4TTA==
+X-Gm-Message-State: AO0yUKUo/+o4Pyaxyfkn7xxVK70jO4uJm1V+jlVk6o2+a1nfK+jrmQtU
+        ftJNkw4iN84WMfOX2dqtleOmpGXEHE7mHLMnuT1Udl4wkfIVB4Hsc1+WniGEUPZruIFB15oFWgJ
+        HjftsfbNWJawbVMoyFfPu
+X-Received: by 2002:aca:190f:0:b0:383:caf3:a30e with SMTP id l15-20020aca190f000000b00383caf3a30emr15249948oii.17.1678726643031;
+        Mon, 13 Mar 2023 09:57:23 -0700 (PDT)
+X-Google-Smtp-Source: AK7set85oH1vWCZvr9VmhYS81pq72TuOP89pm0eNesoHATb65m1WlepR/ukthKK/bKkyu3w52zg7AQ==
+X-Received: by 2002:aca:190f:0:b0:383:caf3:a30e with SMTP id l15-20020aca190f000000b00383caf3a30emr15249900oii.17.1678726641268;
+        Mon, 13 Mar 2023 09:57:21 -0700 (PDT)
 Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id o2-20020acad702000000b00384d3003fa3sm3365273oig.26.2023.03.13.09.57.14
+        by smtp.gmail.com with ESMTPSA id o2-20020acad702000000b00384d3003fa3sm3365273oig.26.2023.03.13.09.57.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:57:15 -0700 (PDT)
+        Mon, 13 Mar 2023 09:57:20 -0700 (PDT)
 From:   Andrew Halaney <ahalaney@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -73,11 +74,14 @@ Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
         jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next 00/11] Add EMAC3 support for sa8540p-ride
-Date:   Mon, 13 Mar 2023 11:56:09 -0500
-Message-Id: <20230313165620.128463-1-ahalaney@redhat.com>
+Subject: [PATCH net-next 01/11] dt-bindings: net: snps,dwmac: Update interrupt-names
+Date:   Mon, 13 Mar 2023 11:56:10 -0500
+Message-Id: <20230313165620.128463-2-ahalaney@redhat.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230313165620.128463-1-ahalaney@redhat.com>
+References: <20230313165620.128463-1-ahalaney@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -91,57 +95,42 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This is a forward port / upstream refactor of code delivered
-downstream by Qualcomm over at [0] to enable the DWMAC5 based
-implementation called EMAC3 on the sa8540p-ride dev board.
+From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
-From what I can tell with the board schematic in hand,
-as well as the code delivered, the main changes needed are:
+As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
+interrupt error msg") noted, not every stmmac based platform
+makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
 
-    1. A new address space layout for /dwmac5/EMAC3 MTL/DMA regs
-    2. A new programming sequence required for the EMAC3 base platforms
+So, update the 'interrupt-names' inside 'snps,dwmac' YAML
+bindings to reflect the same.
 
-This series makes those adaptations as well as other housekeeping items
-such as converting dt-bindings to yaml, adding clock descriptions, etc.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
 
-[0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
+I picked this up from:
+	https://lore.kernel.org/netdev/20220929060405.2445745-2-bhupesh.sharma@linaro.org/
+No changes other than collecting the Acked-by.
 
-Thanks,
-Andrew
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Bhupesh Sharma (3):
-  dt-bindings: net: snps,dwmac: Update interrupt-names
-  dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
-  dt-bindings: net: qcom,ethqos: Convert bindings to yaml
-
-Brian Masney (1):
-  net: stmmac: Add EMAC3 variant of dwmac4
-
- .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ----
- .../devicetree/bindings/net/qcom,ethqos.yaml  | 113 ++++++
- .../devicetree/bindings/net/snps,dwmac.yaml   |  11 +-
- MAINTAINERS                                   |   2 +-
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 181 ++++++++++
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  53 +++
- drivers/clk/qcom/gcc-sc8280xp.c               |  18 +
- .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 161 ++++++---
- drivers/net/ethernet/stmicro/stmmac/dwmac4.h  |  32 +-
- .../net/ethernet/stmicro/stmmac/dwmac4_core.c | 190 ++++++++--
- .../net/ethernet/stmicro/stmmac/dwmac4_dma.c  | 336 ++++++++++++++----
- .../net/ethernet/stmicro/stmmac/dwmac4_dma.h  |  38 ++
- .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  | 144 ++++++--
- drivers/net/ethernet/stmicro/stmmac/hwif.c    |  29 +-
- drivers/net/ethernet/stmicro/stmmac/hwif.h    |   2 +
- .../ethernet/stmicro/stmmac/stmmac_ethtool.c  |   6 +-
- .../net/ethernet/stmicro/stmmac/stmmac_main.c |  17 +-
- .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   9 +-
- .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  |   4 +-
- include/dt-bindings/clock/qcom,gcc-sc8280xp.h |   2 +
- include/linux/stmmac.h                        |   1 +
- 21 files changed, 1164 insertions(+), 251 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
- create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
-
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index 16b7d2904696..52ce14a4bea7 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -105,8 +105,8 @@ properties:
+     minItems: 1
+     items:
+       - const: macirq
+-      - const: eth_wake_irq
+-      - const: eth_lpi
++      - enum: [eth_wake_irq, eth_lpi]
++      - enum: [eth_wake_irq, eth_lpi]
+ 
+   clocks:
+     minItems: 1
 -- 
 2.39.2
 
