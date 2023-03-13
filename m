@@ -2,76 +2,272 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CAE6B8134
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Mar 2023 19:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB746B82AF
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Mar 2023 21:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjCMSyo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Mar 2023 14:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S229872AbjCMU1Z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Mar 2023 16:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjCMSy1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Mar 2023 14:54:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33966D535;
-        Mon, 13 Mar 2023 11:53:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C4C61469;
-        Mon, 13 Mar 2023 18:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAB5C433D2;
-        Mon, 13 Mar 2023 18:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678733280;
-        bh=/d48bhLyzRVyeGxbnJF3Qv5h7/XTC0mhguBxZRlvvqU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=GfHGVKoxU0W/N2wLo63mnd3Wc7tjoxw0cGbP7H/w/QB19ZggiY552NYKNip1AuS7O
-         yyEhBH5QUlTGepcYtQ0rYggBoxFGql5gkm+/6tE56b+9lS7Aszl6U3Uw11ZuLiRxbl
-         icEgjpYGDpuvQaidAQ+DoXKSfAmEC9XMwwHAe5fteGtrtJ8x/7Lx0KXHS9HEmbzWLO
-         RTfX5PzuiaXOTdpdG4PJEil+sMdxq5mEBJWaH60BSkHM8rFfpRuQ3Gzu7rihSDEYUp
-         Hi1BVYbP7E5WI9ncfgl22zSPBmHMqY9zEoEFS18oQT76bnG8/W0hZTazCNFmWO9OX/
-         Tze0GVrUJZQOg==
-Message-ID: <f0333440693d55316a064e3ad1dbd307.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229863AbjCMU1O (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Mar 2023 16:27:14 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC5D89F19;
+        Mon, 13 Mar 2023 13:27:03 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 71EE55FD13;
+        Mon, 13 Mar 2023 23:13:11 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678738391;
+        bh=Pt/rMVZVzjxdoqrvWivQZAPujmubQBrmNfuoW/GP36w=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=pggFpvg5Ubo2d0XPAzbBoYGREaPkv64UR3bBf6Sv6C42zr99v/g/Cyj+FCUaCGgf+
+         3fFXoB7+V7uwHNng/3gLmxF+xMbyTUMehyrKHgUhBtmSbNcPOekeMlBWgJg4QQbX4y
+         9piPxH0rEENH8waWdov+OpeH+phv5OxbaFbLJoyIVxQSgu67SaIBhrOplskywj39fL
+         T2Hvoxnj+39rL5S3Q69oy5QF9GdCmnt6W5Jxc/JceiJ2dgsyoxDFtjgyIeNTHJflHJ
+         TUoptR3OyuTWOc2EWiz2uRSQqgaJoaW9D5Mu+Bvw0YoLo2EQD+25WoyhNMGZ0fs8zS
+         OXb4O969DbkIA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 13 Mar 2023 23:13:10 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v10 0/5] add Amlogic A1 clock controller drivers
+Date:   Mon, 13 Mar 2023 23:12:54 +0300
+Message-ID: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
-References: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com> <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v3 7/7] clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
-        wenst@chromium.org, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Date:   Mon, 13 Mar 2023 11:47:58 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/13 10:14:00 #20942017
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2023-02-06 02:01:05)
-> Add FHCTL parameters and register PLLs through FHCTL to add support
-> for frequency hopping and SSC. FHCTL will be enabled only on PLLs
-> specified in devicetree.
->=20
-> This commit brings functional changes only upon addition of
-> devicetree configuration.
->=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+and Audio. The audio clock controller is different from others, but the
+rest are very similar from a functional and regmap point of view.
+This patch series add support for Amlogic A1 PLL and Peripherals clock
+drivers.
+It blocks all A1 peripherals mainline support and a couple of patch series,
+which were already reviewed and acked, but weren't merged due to pending
+clock controller drivers series, e.g.
+https://lore.kernel.org/linux-amlogic/7hd09cw9oh.fsf@baylibre.com/
 
-Applied to clk-next
+TODO: CPU and Audio clock controllers are not included in this patch
+series, it will be sent later. The following clks from these controllers
+are not supported for now:
+* Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+   pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+   audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+   audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+   audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+   audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+   audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
+
+* CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+            cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
+
+Validation:
+* to double check all clk flags run below helper script:
+    pushd /sys/kernel/debug/clk
+    for f in *; do
+        if [[ -f "$f/clk_flags" ]]; then
+            flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+            echo -e "$f: $flags"
+        fi
+    done
+    popd
+
+* to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+  with jq post-processing:
+    $ cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
+
+* to debug clk rate propagation, compile kernel with the following
+  definition:
+    $ sed -i "s/undef CLOCK_ALLOW_WRITE_DEBUGFS/define CLOCK_ALLOW_WRITE_DEBUGFS/g" drivers/clk/clk.c
+  after that, clk_rate debug node for each clock will be available for
+  write operation
+
+Changes v10 since v9 at [10]:
+    - split general clk-pll changes into two different patchsets:
+      optional rst usage and new power sequence
+    - squash dt bindings patchsets to avoid chicken-or-the-egg problem
+      during run dt binding check routines
+    - add vendor prefix to PLL and Peripherals clkcs bindings filenames
+    - clear managed hifi_pll fields from initial poke table
+    - move DSPA_SEL, DSPB_SEL and SARADC_SEL to private clkid table,
+      because it should not be opened for direct usage
+    - pwm_a clk used for voltage regulation is not critical anymore, it
+      must be included to the proper cpu voltage regulation setup (will
+      be available in the next patch series)
+    - as discussed with Jerome, dspX clks are simple clocks and it
+      should be enabled/disabled/ignored/anything else from appropriate
+      DSP driver, so remove CLK_IGNORE_UNUSED tags
+    - provide more understandable comments and remove irrelevant (I hope so)
+    - remove CONFIG_OF usage, because it's redundant
+    - fix license issue, it's GPL-2.0+ only in the current version
+    - some commit msgs rewording
+
+Changes v9 since v8 at [9]:
+    - remove common a1-clkc driver for the first version of a1 clock
+      controllers as Jerome suggested (it will be discussed after s4 and
+      a1 clks landed, hope so)
+    - replace inherited a1-pll clk_pll_ops with common ops and
+      introduce custom A1 PLL logic under MESON_PARM_APPLICABLE()
+      conditions
+    - rename xtal depended clocks in PLL and Peripherals domains
+    - remove 'a1_' prefix for all clocks, because they are already
+      inside A1 driver, it's redundant
+    - change udelay() to usleep_range() as preferred for small msec
+      amount
+    - purge all double quotes from the yaml schemas
+    - use proper dt node names following kernel guidelines
+      https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+    - use devm_platform_ioremap_resource() instead of simple
+      devm_ioremap_resource()
+    - mark all dspX clocks as CLK_IGNORE_UNUSED, because we do not want
+      to touch these clocks during CCF initialization due to possible
+      workload execution on it started from bootloader; in this case
+      bootloader already made all initialization stuff for dspX
+    - also mark all dspX with NO_REPARENT tag, because from dspX clocks
+      we want to select proper clk source from device tree
+
+Changes v8 since v7 at [8]:
+    - introduced a1-clkc common driver for all A1 clock controllers
+    - exported meson_clk_pll_wait_lock symbol
+    - supported meson-a1-clkc common driver in the a1-pll and a1 clkc
+    - inherited a1-pll from the base clk-pll driver, implemented own
+      version of init/enable/disable/enabled routines; rate calculating
+      logic is fully the same
+    - aligned CLKID-related definitions with CLKID list from order
+      perspective to remove holes and permutations
+    - corrected Kconfig dependencies and types
+    - provided correct MODULE_AUTHORs()
+    - optimized and fixed up some clock relationships
+    - removed unused register offset definitions
+    - fixed up A1 PLL and Peripherals clkc dtb_check errors
+    - fixed clk_summary kernel panic due to missing a1_pad_ctrl
+      clk_regmap definition
+    - included PLL and Peripherals clk controllers to the base a1 dts
+    - The previous v7 version [8] had several logic and style problems,
+      all of them are resolved in this version. Original Jian Hu v7 patches
+      are not touched, and all additional fixes are implemented in separate
+      patches. Patch "clk: meson: add support for A1 PLL clock ops" is
+      removed, because a1-pll clk driver inherits all stuff from clk-pll
+      base driver, just implements custom init/enable/disable/is_enabled
+      callbacks.
+
+Changes v7 since v6 at [7]:
+    - fix 'dt_binding_check' compiling error
+    - add acked-by
+
+Changes v6 since v5 at [6]:
+    - fix yaml file
+    - add rst/current_en/l_detect parm detection
+    - remove 'meson_eeclkc_data' in a1.c and a1-pll.c
+
+Changes v5 since v4 at [5]:
+    - change yaml GPL
+    - drop meson-eeclk.c patch, add probe function in each driver
+    - add CLK_IS_CRITICAL for sys_clk clock, drop the flag for sys_a
+      and sys_b
+    - add new parm for pll, add protection for rst parm
+    - drop flag for a1_fixed_pll
+    - remove the same comment for fclk_div, add "refer to"
+    - add critical flag for a1_sys_clk
+    - remove rtc table
+    - rename a1_dspa_en_dspa and a1_dspb_en_dspb
+    - remove useless comment
+
+Changes v4 since v3 at [3]:
+    - fix reparenting orphan failed, it depends on jerome's patch [4]
+    - fix changelist in v3 about reparenting orphan
+    - remove the dts patch 
+
+Changes v3 since v2 at [2]:
+    - add probe function for A1
+    - separate the clock driver into two patch
+    - change some clock flags and ops
+    - add support for a1 PLL ops
+    - add A1 clock node
+    - fix reparenting orphan clock failed, registering xtal_fixpll
+      and xtal_hifipll after the provider registration, it is not
+      a best way.
+
+Changes v2 since v1 at [1]:
+    - place A1 config alphabetically
+    - add actual reason for RO ops, CLK_IS_CRITICAL, CLK_IGNORE_UNUSED
+    - separate the driver into two driver: peripheral and pll driver
+    - delete CLK_IGNORE_UNUSED flag for pwm b/c/d/e/f clock, dsp clock
+    - delete the change in Kconfig.platforms, address to Kevin alone
+    - remove the useless comments
+    - modify the meson pll driver to support A1 PLLs
+
+[1] https://lkml.kernel.org/r/1569411888-98116-1-git-send-email-jian.hu@amlogic.com
+[2] https://lkml.kernel.org/r/1571382865-41978-1-git-send-email-jian.hu@amlogic.com
+[3] https://lkml.kernel.org/r/20191129144605.182774-1-jian.hu@amlogic.com
+[4] https://lkml.kernel.org/r/20191203080805.104628-1-jbrunet@baylibre.com
+[5] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+[6] https://lkml.kernel.org/r/20191227094606.143637-1-jian.hu@amlogic.com
+[7] https://lkml.kernel.org/r/20200116080440.118679-1-jian.hu@amlogic.com
+[8] https://lore.kernel.org/linux-amlogic/20200120034937.128600-1-jian.hu@amlogic.com/
+[9] https://lore.kernel.org/linux-amlogic/20221201225703.6507-1-ddrokosov@sberdevices.ru/
+[10] https://lore.kernel.org/all/20230301183759.16163-1-ddrokosov@sberdevices.ru/
+
+Dmitry Rokosov (5):
+  clk: meson: make pll rst bit as optional
+  clk: meson: introduce new pll power-on sequence for A1 SoC family
+  dt-bindings: clock: meson: add A1 PLL and Peripherals clkcs bindings
+  clk: meson: a1: add Amlogic A1 PLL clock controller driver
+  clk: meson: a1: add Amlogic A1 Peripherals clock controller driver
+
+ .../bindings/clock/amlogic,a1-clkc.yaml       |   73 +
+ .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   59 +
+ MAINTAINERS                                   |    1 +
+ drivers/clk/meson/Kconfig                     |   20 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/a1-pll.c                    |  356 +++
+ drivers/clk/meson/a1-pll.h                    |   47 +
+ drivers/clk/meson/a1.c                        | 2242 +++++++++++++++++
+ drivers/clk/meson/a1.h                        |  118 +
+ drivers/clk/meson/clk-pll.c                   |   47 +-
+ drivers/clk/meson/clk-pll.h                   |    2 +
+ include/dt-bindings/clock/amlogic,a1-clkc.h   |  100 +
+ .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |   20 +
+ 13 files changed, 3080 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/a1-pll.c
+ create mode 100644 drivers/clk/meson/a1-pll.h
+ create mode 100644 drivers/clk/meson/a1.c
+ create mode 100644 drivers/clk/meson/a1.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+
+-- 
+2.36.0
+
