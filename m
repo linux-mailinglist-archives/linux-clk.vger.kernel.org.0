@@ -2,147 +2,146 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38816B7DF4
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Mar 2023 17:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB2D6B7E96
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Mar 2023 18:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjCMQrx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Mar 2023 12:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32958 "EHLO
+        id S230075AbjCMRAa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Mar 2023 13:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjCMQrw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Mar 2023 12:47:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A375FE86
-        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:47:51 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pblKh-0003ZU-O7; Mon, 13 Mar 2023 17:47:35 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pblKf-0008IJ-PH; Mon, 13 Mar 2023 17:47:33 +0100
-Date:   Mon, 13 Mar 2023 17:47:33 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Adam Ford <aford173@gmail.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Abel Vesa <abelvesa@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 1/5] clk: Introduce
- devm_clk_hw_register_gate_parent_data()
-Message-ID: <20230313164733.wav2s46y3n4sxyzz@pengutronix.de>
-References: <20230301163257.49005-1-marex@denx.de>
+        with ESMTP id S231699AbjCMRAH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Mar 2023 13:00:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC21367C3
+        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678726639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=t5POBg1qZ82GqoEDaDaIA79xn4Mgw94E10MmvGFG+QA=;
+        b=JLOjZqJ0RWQzrZ1tdSlDJBvZFrtJus2alQQIor9zsGGha4WRZUFDeQtdg6u3YhCIz2XfHA
+        FVvcb6W6my2NiSH5eA3ipsebRU+njvFDFrWmbfzOLNA9xwUuRYzcdl/Vj4I0Gqds11NXBV
+        XGYTuqMu8HtIYACOAHESkLTh6j6zFQc=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-150-YwZVYtUSOUut3ZIQk8NVlA-1; Mon, 13 Mar 2023 12:57:18 -0400
+X-MC-Unique: YwZVYtUSOUut3ZIQk8NVlA-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-17270774b8fso7539570fac.3
+        for <linux-clk@vger.kernel.org>; Mon, 13 Mar 2023 09:57:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678726638;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t5POBg1qZ82GqoEDaDaIA79xn4Mgw94E10MmvGFG+QA=;
+        b=LeUQs5Lh+dL5Wb66gYaCMirFDt18zizgMmb/slw9dc3GwMkhmzvfWQVUWEBvmdgVup
+         qusdqLQitwzUssZFTUVBh3ZsYL6bJ/xHP0yAqLXTU/SYlb3c+7YRh5reViYannB8X6ov
+         EoMZNRduesU+F+23FIyBSBlufCLyvuUoQoRYn6N6TRkruqeHFlyZKYFGo+rA50b+CwRz
+         FFX5Ru8hoOq4Ie16+9iVvMdRTnzlLT4uM3ybeZqlFvRvpat/IXn7xpfzLCpJg+N5gbtl
+         73tzD/RCJSKp4a5lqY3qOBRfjhuDFTS3/n5ol/bMo+v/PzYaVDf4ZZZo/vVUvgGySKhg
+         /T5A==
+X-Gm-Message-State: AO0yUKWoNXh+5HkTY99G+QN5ZXMyv8fOmNOyIjjbruoTGCo1zEwPa0J3
+        qjd6UttFAdsdx4tsbXTCKM3Z4k4frJeqp1TwFWd//WRgd7VvAgLkFnDBvwOtUYVkSmwDA7zLXZd
+        M6HDDzzRdyyPdRvP4T+Ip
+X-Received: by 2002:a05:6808:150:b0:37f:b1d6:9f3c with SMTP id h16-20020a056808015000b0037fb1d69f3cmr17439005oie.46.1678726637931;
+        Mon, 13 Mar 2023 09:57:17 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/DcZ9ZIOTk8pbqQbIpqBKMFacVCaRW/B1/QFZ8b2XK2GO2nvasDBBZ4a2w0GAU24OnbrYXGg==
+X-Received: by 2002:a05:6808:150:b0:37f:b1d6:9f3c with SMTP id h16-20020a056808015000b0037fb1d69f3cmr17438954oie.46.1678726636191;
+        Mon, 13 Mar 2023 09:57:16 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id o2-20020acad702000000b00384d3003fa3sm3365273oig.26.2023.03.13.09.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 09:57:15 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH net-next 00/11] Add EMAC3 support for sa8540p-ride
+Date:   Mon, 13 Mar 2023 11:56:09 -0500
+Message-Id: <20230313165620.128463-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301163257.49005-1-marex@denx.de>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+This is a forward port / upstream refactor of code delivered
+downstream by Qualcomm over at [0] to enable the DWMAC5 based
+implementation called EMAC3 on the sa8540p-ride dev board.
 
-seems like we all agreed on this series. Can you have a look on this as
-well?
+From what I can tell with the board schematic in hand,
+as well as the code delivered, the main changes needed are:
+
+    1. A new address space layout for /dwmac5/EMAC3 MTL/DMA regs
+    2. A new programming sequence required for the EMAC3 base platforms
+
+This series makes those adaptations as well as other housekeeping items
+such as converting dt-bindings to yaml, adding clock descriptions, etc.
+
+[0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
 
 Thanks,
-  Marco
+Andrew
 
-On 23-03-01, Marek Vasut wrote:
-> Add an API for clock gate that uses parent_data for the parent instead of
-> a string parent_name.
-> 
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
-> Tested-by: Adam Ford <aford173@gmail.com> #imx8mp-beacon-kit
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Abel Vesa <abelvesa@kernel.org>
-> Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Jacky Bai <ping.bai@nxp.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Marco Felsch <m.felsch@pengutronix.de>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Richard Cochran <richardcochran@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-clk@vger.kernel.org
-> ---
-> V3: New patch
-> V4: - Rebase on next 20230223
-> V5: Add TB from Adam and Alexander
-> V6: Add RB from Fabio
-> V7: Add RB from Peng
-> ---
->  include/linux/clk-provider.h | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-> index 842e72a5348fa..92b7c794c6272 100644
-> --- a/include/linux/clk-provider.h
-> +++ b/include/linux/clk-provider.h
-> @@ -608,6 +608,25 @@ struct clk *clk_register_gate(struct device *dev, const char *name,
->  	__devm_clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, \
->  			       NULL, (flags), (reg), (bit_idx),		      \
->  			       (clk_gate_flags), (lock))
-> +
-> +/**
-> + * devm_clk_hw_register_gate - register a gate clock with the clock framework
-> + * @dev: device that is registering this clock
-> + * @name: name of this clock
-> + * @parent_data: parent clk data
-> + * @flags: framework-specific flags for this clock
-> + * @reg: register address to control gating of this clock
-> + * @bit_idx: which bit in the register controls gating of this clock
-> + * @clk_gate_flags: gate-specific flags for this clock
-> + * @lock: shared register lock for this clock
-> + */
-> +#define devm_clk_hw_register_gate_parent_data(dev, name, parent_data, flags,  \
-> +					      reg, bit_idx, clk_gate_flags,   \
-> +					      lock)			      \
-> +	__devm_clk_hw_register_gate((dev), NULL, (name), NULL, NULL,	      \
-> +				    (parent_data), (flags), (reg), (bit_idx), \
-> +				    (clk_gate_flags), (lock))
-> +
->  void clk_unregister_gate(struct clk *clk);
->  void clk_hw_unregister_gate(struct clk_hw *hw);
->  int clk_gate_is_enabled(struct clk_hw *hw);
-> -- 
-> 2.39.2
-> 
-> 
+Bhupesh Sharma (3):
+  dt-bindings: net: snps,dwmac: Update interrupt-names
+  dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
+  dt-bindings: net: qcom,ethqos: Convert bindings to yaml
+
+Brian Masney (1):
+  net: stmmac: Add EMAC3 variant of dwmac4
+
+ .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ----
+ .../devicetree/bindings/net/qcom,ethqos.yaml  | 113 ++++++
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  11 +-
+ MAINTAINERS                                   |   2 +-
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 181 ++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  53 +++
+ drivers/clk/qcom/gcc-sc8280xp.c               |  18 +
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 161 ++++++---
+ drivers/net/ethernet/stmicro/stmmac/dwmac4.h  |  32 +-
+ .../net/ethernet/stmicro/stmmac/dwmac4_core.c | 190 ++++++++--
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.c  | 336 ++++++++++++++----
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.h  |  38 ++
+ .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  | 144 ++++++--
+ drivers/net/ethernet/stmicro/stmmac/hwif.c    |  29 +-
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    |   2 +
+ .../ethernet/stmicro/stmmac/stmmac_ethtool.c  |   6 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  17 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   9 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  |   4 +-
+ include/dt-bindings/clock/qcom,gcc-sc8280xp.h |   2 +
+ include/linux/stmmac.h                        |   1 +
+ 21 files changed, 1164 insertions(+), 251 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+
+-- 
+2.39.2
+
