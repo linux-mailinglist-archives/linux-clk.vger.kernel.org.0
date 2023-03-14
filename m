@@ -2,90 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172106B96F0
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Mar 2023 14:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BDD6B9737
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Mar 2023 15:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjCNNz7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Mar 2023 09:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S232308AbjCNOGH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Mar 2023 10:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjCNNzl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Mar 2023 09:55:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166231D907
-        for <linux-clk@vger.kernel.org>; Tue, 14 Mar 2023 06:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678801995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=27KQYZgjkZx3cO9u5MRtjq+WwG0d0GtPOCjo6zjWpFI=;
-        b=c6lhnQrz648sEL3L/d9qHl4MvPYuoYmHpbnulT/qDgA7Bb39hyMT1tiq/GrRXNyJjqHQO/
-        pmFy5H+INiOvXHr3J9gD5GPQhUxNFpnlOOPkc85ULl1kFJkxui9SfZTK0vwH0qTeN7e41/
-        XtUei5ZbqZpZAj/POsYybSREc8gvlic=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-21-FkyKSu5zM2OdG8bpuKZa7A-1; Tue, 14 Mar 2023 09:53:13 -0400
-X-MC-Unique: FkyKSu5zM2OdG8bpuKZa7A-1
-Received: by mail-ot1-f69.google.com with SMTP id o8-20020a9d5c08000000b00693d403480aso7501399otk.3
-        for <linux-clk@vger.kernel.org>; Tue, 14 Mar 2023 06:53:13 -0700 (PDT)
+        with ESMTP id S231282AbjCNOF7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Mar 2023 10:05:59 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BEEA54FC
+        for <linux-clk@vger.kernel.org>; Tue, 14 Mar 2023 07:05:51 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y4so33076182edo.2
+        for <linux-clk@vger.kernel.org>; Tue, 14 Mar 2023 07:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678802750;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IP0KSz4lT+u+HebFhfe8Z+E9HmxxFebdK40uPcNluho=;
+        b=VMc3dHzCbH8kAJ0met49jqj4q9sBl/CTcqfdk/2nAnFSUiJzxX/Zb/9/l0ZWxk252f
+         37AK1+OPk5JYUlso2MptIakR4qrC0Ss/fr9vkG0FAAfCKf0uUb79OBLLNZt/LLdT2xdA
+         jjIfKv7ccyresFXV4cfJekvDRuZohYfJm4RJx+EAMl4ctNtFdnvOipU5vY/5bpokXBWV
+         NcAjbMeReFutRGDUNC9lQsjRE/7b9SJBV0PonTKxvkmxC7K3FbdnkARKR12hLUl/G/Zr
+         aPnx1vB4nJXckOea2G5aO/v51VApWofZjWiEunv668LELL/MfYnsPejtB1pP0S4CUyir
+         o+rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678801993;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=27KQYZgjkZx3cO9u5MRtjq+WwG0d0GtPOCjo6zjWpFI=;
-        b=j6ITeY7A67mOrBDW7HXP70pEmgA/9bP4luXr4ovaPB7ru22+lMoAkJYfupQ+XwURAq
-         YP8Ip69gXiX+MZbo84JeYP63c9nU51kFUjxoPK+wwxpz9M49cSdPQhhd1qqyNXAGzqpy
-         f04R12SjzTcRcPhmuDfxuzPD0KRXD4wYfKDg9TuWyPv1idTQZ1P5zS+Qc/u60RnPM/qn
-         CEzWmu8SUe9TlAGJOnJCym/kECXYKuyo4Nlvmw1etngwWr8nfD9Qmxjx3fi2FkABI4rJ
-         JlKFSR2XyzEFUZJDKIRVubRExN92sg23tYZLafhTREUEk5bmrQ99+78UYhI2wShKz/k5
-         jTTw==
-X-Gm-Message-State: AO0yUKU/bBNCHekONc9B1sLjtd5L4Mq3USUVFlUJ1AnxUJUfQ05fJNX4
-        yfSjSw88kdM8BxPxcgqRXeTYFhsQ0KjI7yUgy1giQjX6jn/YFX+XdKYZozM+Gsg/3CuXxHchu4t
-        3SIwjP9OzbxBDbI0TA2QO
-X-Received: by 2002:a05:6870:40c5:b0:177:9f48:6282 with SMTP id l5-20020a05687040c500b001779f486282mr5967646oal.53.1678801992955;
-        Tue, 14 Mar 2023 06:53:12 -0700 (PDT)
-X-Google-Smtp-Source: AK7set865OV+J0WHIBTC/561ECQlv4RbYP6x5QMO3SK6tB+6M0mPsz58Rsx3evTgj9Holgi7Z6/nvg==
-X-Received: by 2002:a05:6870:40c5:b0:177:9f48:6282 with SMTP id l5-20020a05687040c500b001779f486282mr5967618oal.53.1678801992726;
-        Tue, 14 Mar 2023 06:53:12 -0700 (PDT)
-Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id an36-20020a056871b1a400b00177c314a358sm1088290oac.22.2023.03.14.06.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 06:53:12 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 08:53:09 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Stephen Boyd <sboyd@kernel.org>, andersson@kernel.org
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-Subject: Re: [PATCH net-next 05/11] clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
-Message-ID: <20230314135309.o7y2ofzdvpowu53j@halaney-x13s>
-References: <20230313165620.128463-1-ahalaney@redhat.com>
- <20230313165620.128463-6-ahalaney@redhat.com>
- <e5cb46e8874b12dbe438be12ee0cf949.sboyd@kernel.org>
+        d=1e100.net; s=20210112; t=1678802750;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IP0KSz4lT+u+HebFhfe8Z+E9HmxxFebdK40uPcNluho=;
+        b=TnpCAsZxvaKsSFEiFMgzsKkeccFW+fj4rruzikZl4Px239SpugHdilVpq9nP8yOOK1
+         UKhb85ADm14khKfyuX8ta8DzPxSZWdqKHv7xmYwLAsYob+4OLa2YxTPmbfrKYV/dWb1E
+         zlybxiTgtHkcRPTuXcdfTuwCGuMquxf3oMVqDDL2mUzO+LQjs7ODs4gjOeBml48q2pj8
+         5Dw2/Scace6v9Uude1CsDCpqEBerqJcWpv6CuNSPjyZLqQcQjRzbvfcRRHRjEAFi0it2
+         MBm3fX6z5CH6qKsstvn+3RUR/AZTed5qzxq2L3Fujd2EaClkwEdH698Yco/YSaWo9Gme
+         mikw==
+X-Gm-Message-State: AO0yUKWfk0m/3OHytmESMQQqWygUi9IjXiO4F6XRFp3kehzDyWohex60
+        WtlveKV5HZk5oyxyG8hEEUs8GH3xNG1N7YnRCuM=
+X-Google-Smtp-Source: AK7set+/9ywuRumyeAN238PsARcUKnYZ2ALTYHhTX6lxmf3l+Q2lmS+pqtOVRHP6a3kcf9WpQQ8jUg==
+X-Received: by 2002:a17:906:13d4:b0:861:4671:a834 with SMTP id g20-20020a17090613d400b008614671a834mr3084596ejc.71.1678802750006;
+        Tue, 14 Mar 2023 07:05:50 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id ga17-20020a170906b85100b00922e3221c88sm1182419ejb.117.2023.03.14.07.05.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 07:05:49 -0700 (PDT)
+Message-ID: <2d9297e9-dab7-9615-3859-79b3b2980d9a@linaro.org>
+Date:   Tue, 14 Mar 2023 15:05:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5cb46e8874b12dbe438be12ee0cf949.sboyd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com, jian.hu@amlogic.com,
+        kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+ <20230313201259.19998-4-ddrokosov@sberdevices.ru>
+ <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
+ <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,27 +84,112 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Bjorn,
-
-On Mon, Mar 13, 2023 at 03:57:27PM -0700, Stephen Boyd wrote:
-> Quoting Andrew Halaney (2023-03-13 09:56:14)
-> > Add the EMAC GDSCs to allow the EMAC hardware to be enabled.
-> > 
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> > ---
+On 14/03/2023 12:48, Dmitry Rokosov wrote:
+> On Tue, Mar 14, 2023 at 12:28:40PM +0100, Krzysztof Kozlowski wrote:
+>> On 13/03/2023 21:12, Dmitry Rokosov wrote:
 > 
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> [...]
 > 
-> I'm not sure if Bjorn Andersson is planning on modifying this file too,
-> so please confirm it can go through netdev tree.
+>>> +#define CLKID_SPIFC		84
+>>> +#define CLKID_USB_BUS		85
+>>> +#define CLKID_SD_EMMC		86
+>>> +#define CLKID_PSRAM		87
+>>> +#define CLKID_DMC		88
+>>
+>> And what is here? Between 88 and 121?
+>>
 > 
+> Explained below.
+> 
+>>> +#define CLKID_GEN_SEL		121
+>>> +
+>>> +#endif /* __A1_CLKC_H */
+>>> diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+>>> new file mode 100644
+>>> index 000000000000..8e97d3fb9d30
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+>>> @@ -0,0 +1,20 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0+ */
+>>
+>> I found in changelog:
+>> "fix license issue, it's GPL-2.0+ only in the current version"
+>> and I do not understand.
+>>
+>> The license is wrong, so what did you fix?
+>>
+> 
+> Sorry don't get you. Why is it wrong?
 
-Can you please help respond to Stephen's comment above? I admittedly
-don't have much experience sending patch series that span across
-multiple subsystems, so if there's something I should be doing
-differently (to indicate who takes what patches, etc) in submission
-please do not hesitate to be overly verbose in instructing me!
+Run checkpatch - it will tell you why wrong. The license is not correct.
+This is part of binding and should be the same as binding.
 
-Thanks,
-Andrew
+> I've changed all new source files to GPL-2.0+ except yaml, because yaml
+> dt bindings schemas require the following license:
+> 
+>     # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> 
+> I've pointed it in the changelog.
+
+The only thing I found was:
+"fix license issue, it's GPL-2.0+ only in the current version"
+
+so what exactly you pointed out in changelog? What was to fix? What was
+fixed? Correct license into incorrect? But why?
+
+> 
+>>> +/*
+>>> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+>>> + * Author: Jian Hu <jian.hu@amlogic.com>
+>>> + *
+>>> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+>>> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>>> + */
+>>> +
+>>> +#ifndef __A1_PLL_CLKC_H
+>>> +#define __A1_PLL_CLKC_H
+>>> +
+>>> +#define CLKID_FIXED_PLL		1
+>>> +#define CLKID_FCLK_DIV2		6
+>>> +#define CLKID_FCLK_DIV3		7
+>>> +#define CLKID_FCLK_DIV5		8
+>>> +#define CLKID_FCLK_DIV7		9
+>>> +#define CLKID_HIFI_PLL		10
+>>
+>>
+>> Probably I asked about this... why indices are not continuous? You know
+>> that consumers are allowed to use number 2 and it will be your ABI, even
+>> though you did not write it in the binding? That's a tricky and
+>> confusing pattern for no real gains.
+> 
+> Actually, indices are continuou but splitted into two parts: public and
+> private. The public part is located in the dt bindings and can be included
+> from device tree sources. The private part is in the drivers/clk/meson
+> folder, and only clk drivers can use it.
+> I know, there is some trick when the user just inserts a digit value and
+> doesn't use constants.
+
+This is not a trick. This is how DTS works. You have only indices/numbers.
+
+> But I'm starting from the assumption that such
+> dts changes will not be approved by maintainers. In other words, the user
+> *must* apply defined ABI constants from dt bindings; it's a strong
+> restriction.
+
+But it is not correct assumption. Defines are very important, but they
+are just helpers. Otherwise without defines you could not use any clock?
+We pretty often use IDs - for DTS to allow merging via different trees,
+for DT binding examples to not rely on headers.
+
+Your driver implements the ABI and the driver exposes for example clock
+ID=2, even if it is not in the header.
+
+These IDs are unfortunately undocumented ABI and you if you change them,
+users are allowed to complain.
+
+Solution: don't do this. Have all exposed clock IDs and clocks in sync
+(and continuous).
+
+Best regards,
+Krzysztof
 
