@@ -2,66 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CE96B95FB
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Mar 2023 14:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 172106B96F0
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Mar 2023 14:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCNNVr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Mar 2023 09:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S230520AbjCNNz7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Mar 2023 09:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbjCNNV2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Mar 2023 09:21:28 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A40AA8C72;
-        Tue, 14 Mar 2023 06:17:53 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d36so19969706lfv.8;
-        Tue, 14 Mar 2023 06:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678799871;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qFrp6mNEmGMQ8XFqlpuxBB/MWI7MG2f0UoJdue3eE3E=;
-        b=Pd38mR+Co6Z+QfV/zdxM3InYiPPvSWTHyvwOAdcSHK15xy7dXM7E5QYeowkEMYt8DN
-         GebXMK9DuljKlfhC3hwaW+dLHGsaE5rISpfQ+cPIJ7FhatGeeFBGnQdS5CwgkvJ2RVgy
-         ubXuW3AYiUfzvdFBjcjXhWd/L5UvoSDPsdAvwIIQmWOzrXZrupQqkYaNmtOByarKOvU6
-         EiRsNdNhPvFPAGw5GJ75lvikGGnb4YtUiZ1d8ljIGfddWmHjrVMktSZRU5xmbFjqG7k2
-         FARK/m9/VHkvz3fQPwfwrmgAeAJ8bRinfHUKc2Fe1KeAjy/6wkTc5nS2eu6khEIFs5m/
-         PLng==
+        with ESMTP id S230329AbjCNNzl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Mar 2023 09:55:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166231D907
+        for <linux-clk@vger.kernel.org>; Tue, 14 Mar 2023 06:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678801995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=27KQYZgjkZx3cO9u5MRtjq+WwG0d0GtPOCjo6zjWpFI=;
+        b=c6lhnQrz648sEL3L/d9qHl4MvPYuoYmHpbnulT/qDgA7Bb39hyMT1tiq/GrRXNyJjqHQO/
+        pmFy5H+INiOvXHr3J9gD5GPQhUxNFpnlOOPkc85ULl1kFJkxui9SfZTK0vwH0qTeN7e41/
+        XtUei5ZbqZpZAj/POsYybSREc8gvlic=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-21-FkyKSu5zM2OdG8bpuKZa7A-1; Tue, 14 Mar 2023 09:53:13 -0400
+X-MC-Unique: FkyKSu5zM2OdG8bpuKZa7A-1
+Received: by mail-ot1-f69.google.com with SMTP id o8-20020a9d5c08000000b00693d403480aso7501399otk.3
+        for <linux-clk@vger.kernel.org>; Tue, 14 Mar 2023 06:53:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678799871;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qFrp6mNEmGMQ8XFqlpuxBB/MWI7MG2f0UoJdue3eE3E=;
-        b=4TrOx3T/md3p+gMxz7eB+oMi6aPYvteOBrdR/vGhXBGTvt9cGGH4oepzunhalfgyOk
-         RhjU7Y1q2wYUfUEUBQym5jDMu23acEA/KLtFPh9GyUEJJz7T+K/iUFDkdIpPcQbDdGHI
-         kgXHR9b1bThmj0HSDQrve1LDeePiTN8AhYar+11DEhqPfWzBux64g4o05I6gPfwCO6Qe
-         8MBEoseoFX8VZ7M68vf3pjXMi+eLMZLIAFL5gMLlDSPwDNjhTGYqpgwSavSUXQwq8FYz
-         zisxtpSCyS5aYmcnIowbkYnqE4daWLtOSVh4njQ4Vycy0l7JVzhJ9ELrb3s5QOd0tw4r
-         ZgCQ==
-X-Gm-Message-State: AO0yUKX/fA3WN9vXRmFvjmr5XU+hiq8p0VjrGWGYBV+VPQov/E3UMGJG
-        zzmlajPT0R1Xri0yoEEFRA==
-X-Google-Smtp-Source: AK7set9Q+E1S+jof5ejuZA8hQbHWrMrCUVEZyDFM7ls6gK5sbqzaJzvH+lDQZW22ER01+/ftLQ7Dxg==
-X-Received: by 2002:ac2:596d:0:b0:4d8:4f53:37ad with SMTP id h13-20020ac2596d000000b004d84f5337admr722945lfp.7.1678799870792;
-        Tue, 14 Mar 2023 06:17:50 -0700 (PDT)
-Received: from cphcirce.. (80-62-116-106-mobile.dk.customer.tdc.net. [80.62.116.106])
-        by smtp.gmail.com with ESMTPSA id o15-20020ac2494f000000b004a2c447598fsm399865lfi.159.2023.03.14.06.17.49
+        d=1e100.net; s=20210112; t=1678801993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=27KQYZgjkZx3cO9u5MRtjq+WwG0d0GtPOCjo6zjWpFI=;
+        b=j6ITeY7A67mOrBDW7HXP70pEmgA/9bP4luXr4ovaPB7ru22+lMoAkJYfupQ+XwURAq
+         YP8Ip69gXiX+MZbo84JeYP63c9nU51kFUjxoPK+wwxpz9M49cSdPQhhd1qqyNXAGzqpy
+         f04R12SjzTcRcPhmuDfxuzPD0KRXD4wYfKDg9TuWyPv1idTQZ1P5zS+Qc/u60RnPM/qn
+         CEzWmu8SUe9TlAGJOnJCym/kECXYKuyo4Nlvmw1etngwWr8nfD9Qmxjx3fi2FkABI4rJ
+         JlKFSR2XyzEFUZJDKIRVubRExN92sg23tYZLafhTREUEk5bmrQ99+78UYhI2wShKz/k5
+         jTTw==
+X-Gm-Message-State: AO0yUKU/bBNCHekONc9B1sLjtd5L4Mq3USUVFlUJ1AnxUJUfQ05fJNX4
+        yfSjSw88kdM8BxPxcgqRXeTYFhsQ0KjI7yUgy1giQjX6jn/YFX+XdKYZozM+Gsg/3CuXxHchu4t
+        3SIwjP9OzbxBDbI0TA2QO
+X-Received: by 2002:a05:6870:40c5:b0:177:9f48:6282 with SMTP id l5-20020a05687040c500b001779f486282mr5967646oal.53.1678801992955;
+        Tue, 14 Mar 2023 06:53:12 -0700 (PDT)
+X-Google-Smtp-Source: AK7set865OV+J0WHIBTC/561ECQlv4RbYP6x5QMO3SK6tB+6M0mPsz58Rsx3evTgj9Holgi7Z6/nvg==
+X-Received: by 2002:a05:6870:40c5:b0:177:9f48:6282 with SMTP id l5-20020a05687040c500b001779f486282mr5967618oal.53.1678801992726;
+        Tue, 14 Mar 2023 06:53:12 -0700 (PDT)
+Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id an36-20020a056871b1a400b00177c314a358sm1088290oac.22.2023.03.14.06.53.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 06:17:50 -0700 (PDT)
-From:   Alfredo Cruz <alfredo.carlon@gmail.com>
-To:     mturquette@baylibre.com, pdeschrijver@nvidia.com,
-        pgaikwad@nvidia.com, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Cc:     Alfredo Cruz <alfredo.carlon@gmail.com>
-Subject: [PATCH] clk/tegra/clk-tegra124-dfll-fcpu: Add check to 'regulator_list_voltage'
-Date:   Tue, 14 Mar 2023 14:17:18 +0100
-Message-Id: <20230314131718.27031-1-alfredo.carlon@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 14 Mar 2023 06:53:12 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 08:53:09 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Stephen Boyd <sboyd@kernel.org>, andersson@kernel.org
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
+Subject: Re: [PATCH net-next 05/11] clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
+Message-ID: <20230314135309.o7y2ofzdvpowu53j@halaney-x13s>
+References: <20230313165620.128463-1-ahalaney@redhat.com>
+ <20230313165620.128463-6-ahalaney@redhat.com>
+ <e5cb46e8874b12dbe438be12ee0cf949.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5cb46e8874b12dbe438be12ee0cf949.sboyd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +93,27 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Signed-off-by: Alfredo Cruz <alfredo.carlon@gmail.com>
----
-Hi,
-I'm not entirely sure if 'regulator_list_voltage(reg, 0)' will never return less than 0.
- drivers/clk/tegra/clk-tegra124-dfll-fcpu.c | 2 ++
- 1 file changed, 2 insertions(+)
+Bjorn,
 
-diff --git a/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c b/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c
-index 5e339ad0a97c..745bb828e53e 100644
---- a/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c
-+++ b/drivers/clk/tegra/clk-tegra124-dfll-fcpu.c
-@@ -543,6 +543,8 @@ static int get_alignment_from_regulator(struct device *dev,
- 		return PTR_ERR(reg);
- 
- 	align->offset_uv = regulator_list_voltage(reg, 0);
-+	if (align->offset_uv < 0)
-+		align->offset_uv = 0;
- 	align->step_uv = regulator_get_linear_step(reg);
- 
- 	regulator_put(reg);
--- 
-2.39.2
+On Mon, Mar 13, 2023 at 03:57:27PM -0700, Stephen Boyd wrote:
+> Quoting Andrew Halaney (2023-03-13 09:56:14)
+> > Add the EMAC GDSCs to allow the EMAC hardware to be enabled.
+> > 
+> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> > ---
+> 
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> 
+> I'm not sure if Bjorn Andersson is planning on modifying this file too,
+> so please confirm it can go through netdev tree.
+> 
+
+Can you please help respond to Stephen's comment above? I admittedly
+don't have much experience sending patch series that span across
+multiple subsystems, so if there's something I should be doing
+differently (to indicate who takes what patches, etc) in submission
+please do not hesitate to be overly verbose in instructing me!
+
+Thanks,
+Andrew
 
