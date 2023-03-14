@@ -2,152 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B88B6B9209
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Mar 2023 12:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5426B94E9
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Mar 2023 13:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjCNLsm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Mar 2023 07:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S232391AbjCNMw2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Tue, 14 Mar 2023 08:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjCNLsl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Mar 2023 07:48:41 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD1346A3;
-        Tue, 14 Mar 2023 04:48:28 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 5576E5FD1A;
-        Tue, 14 Mar 2023 14:48:27 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678794507;
-        bh=marFiN47fr+Q7MFOCmdErjItiqHs7/cgayQIHPn8o7A=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=biN9QXQ+GzSQr7wcFa+QfG5JRntdnWm9/Wu0T6S/6iTOTMHlN0Wy2zlNhadFUno0l
-         0o0zTqvmMr0fn6Tgzh/gWnrqGT1onen90KfpytT34E7+3ffksNeeQlcSmCNgEwAFIz
-         G+92O3ABna3Oiu6dQvkfFhXLcvMYWsI2dJaBpkhAZgw2N6NMMvDB5OY/97dAzsHkvg
-         Qn0n/7J50CbBM801iRfbkkUUXL4voWuGWQWrm3mYpRn0Y8HhSja0vgl3BN6xHKz85l
-         /y62Sn+MrFT+rULGOzT6gD5FH6yZ9txoP8JOqC1S/UvyJLwjvDTfuwZP4TBsVuqPRO
-         XpvKzMr2snI5A==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 14:48:26 +0300 (MSK)
-Date:   Tue, 14 Mar 2023 14:48:25 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Message-ID: <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
-References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
- <20230313201259.19998-4-ddrokosov@sberdevices.ru>
- <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
+        with ESMTP id S232395AbjCNMwD (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Mar 2023 08:52:03 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0522A8C7A;
+        Tue, 14 Mar 2023 05:47:53 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D7DA624E3C6;
+        Tue, 14 Mar 2023 20:44:07 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 20:44:07 +0800
+Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 20:44:06 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>
+CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v3 02/11] reset: starfive: jh7110: Add StarFive System-Top-Group reset support
+Date:   Tue, 14 Mar 2023 20:43:55 +0800
+Message-ID: <20230314124404.117592-3-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
+References: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:28:40PM +0100, Krzysztof Kozlowski wrote:
-> On 13/03/2023 21:12, Dmitry Rokosov wrote:
+Add auxiliary_device_id to support StarFive JH7110 System-Top-Group resets
+of which the auxiliary device name is "clk_starfive_jh71x0.reset-stg".
 
-[...]
+Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+---
+ drivers/reset/starfive/reset-starfive-jh7110.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-> > +#define CLKID_SPIFC		84
-> > +#define CLKID_USB_BUS		85
-> > +#define CLKID_SD_EMMC		86
-> > +#define CLKID_PSRAM		87
-> > +#define CLKID_DMC		88
-> 
-> And what is here? Between 88 and 121?
-> 
-
-Explained below.
-
-> > +#define CLKID_GEN_SEL		121
-> > +
-> > +#endif /* __A1_CLKC_H */
-> > diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> > new file mode 100644
-> > index 000000000000..8e97d3fb9d30
-> > --- /dev/null
-> > +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> > @@ -0,0 +1,20 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ */
-> 
-> I found in changelog:
-> "fix license issue, it's GPL-2.0+ only in the current version"
-> and I do not understand.
-> 
-> The license is wrong, so what did you fix?
-> 
-
-Sorry don't get you. Why is it wrong?
-I've changed all new source files to GPL-2.0+ except yaml, because yaml
-dt bindings schemas require the following license:
-
-    # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-
-I've pointed it in the changelog.
-
-> > +/*
-> > + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> > + * Author: Jian Hu <jian.hu@amlogic.com>
-> > + *
-> > + * Copyright (c) 2023, SberDevices. All Rights Reserved.
-> > + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > + */
-> > +
-> > +#ifndef __A1_PLL_CLKC_H
-> > +#define __A1_PLL_CLKC_H
-> > +
-> > +#define CLKID_FIXED_PLL		1
-> > +#define CLKID_FCLK_DIV2		6
-> > +#define CLKID_FCLK_DIV3		7
-> > +#define CLKID_FCLK_DIV5		8
-> > +#define CLKID_FCLK_DIV7		9
-> > +#define CLKID_HIFI_PLL		10
-> 
-> 
-> Probably I asked about this... why indices are not continuous? You know
-> that consumers are allowed to use number 2 and it will be your ABI, even
-> though you did not write it in the binding? That's a tricky and
-> confusing pattern for no real gains.
-
-Actually, indices are continuou but splitted into two parts: public and
-private. The public part is located in the dt bindings and can be included
-from device tree sources. The private part is in the drivers/clk/meson
-folder, and only clk drivers can use it.
-I know, there is some trick when the user just inserts a digit value and
-doesn't use constants. But I'm starting from the assumption that such
-dts changes will not be approved by maintainers. In other words, the user
-*must* apply defined ABI constants from dt bindings; it's a strong
-restriction.
-
+diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
+index 4ccb3f72ca83..2dc46d91a244 100644
+--- a/drivers/reset/starfive/reset-starfive-jh7110.c
++++ b/drivers/reset/starfive/reset-starfive-jh7110.c
+@@ -29,6 +29,12 @@ static const struct jh7110_reset_info jh7110_aon_info = {
+ 	.status_offset = 0x3C,
+ };
+ 
++static const struct jh7110_reset_info jh7110_stg_info = {
++	.nr_resets = JH7110_STGRST_END,
++	.assert_offset = 0x74,
++	.status_offset = 0x78,
++};
++
+ static int jh7110_reset_probe(struct auxiliary_device *adev,
+ 			      const struct auxiliary_device_id *id)
+ {
+@@ -55,6 +61,10 @@ static const struct auxiliary_device_id jh7110_reset_ids[] = {
+ 		.name = "clk_starfive_jh71x0.reset-aon",
+ 		.driver_data = (kernel_ulong_t)&jh7110_aon_info,
+ 	},
++	{
++		.name = "clk_starfive_jh71x0.reset-stg",
++		.driver_data = (kernel_ulong_t)&jh7110_stg_info,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
 -- 
-Thank you,
-Dmitry
+2.25.1
+
