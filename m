@@ -2,52 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225046BC156
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Mar 2023 00:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7906BC16F
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Mar 2023 00:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjCOXey (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Mar 2023 19:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S233328AbjCOXf1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Mar 2023 19:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbjCOXe2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Mar 2023 19:34:28 -0400
+        with ESMTP id S233340AbjCOXeu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Mar 2023 19:34:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BC27FD50;
-        Wed, 15 Mar 2023 16:33:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B38A8C40;
+        Wed, 15 Mar 2023 16:33:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 931D1B81FAA;
-        Wed, 15 Mar 2023 23:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8EF5C433AA;
-        Wed, 15 Mar 2023 23:32:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 629F4B81F9A;
+        Wed, 15 Mar 2023 23:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40613C433D2;
+        Wed, 15 Mar 2023 23:32:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678923169;
-        bh=TztJJoAB6d1POBSwF2F6LPHhJ889Q1ZZwKBG9GfxuF4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=hYGHQdWlGJecZiXMu+JIX/RKgRakH81fwi7MrI5kqOkVN2IoE+M3AEvjWvVRsWFFy
-         2L7SmNYXPMIu1BvO+r9LnhlYxQRQ5F/6YTMrpIfSb2n/ZIuTz84bjGtAPmJgqsrkcc
-         yWb+hkKayMT/cvdZkrORMw+CBKq5KqEVYUBSChKkm4WhbpO4f2FTCxN7AZAbLLFsgN
-         92lzoXcEtRyzs5l6M5sKWBB+34CiT9Hm79ZCrCdN3fiGoODaYY7dQugUszUooK9I2E
-         6NHtkuYXg5yn+0YBq+u/2YRebmzydizPcwARDHOTIfsw1sTnz6IMmVsiGnMTxPB4Oz
-         8S2b1gN2Spk0g==
+        s=k20201202; t=1678923176;
+        bh=aoz2bnbiFrBxlSw6q0XxgH+8ryhNBVBOEYUuwtxFdQM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YvPpbXMkjrmQVwvQaBYqfnhvkekanx11vUo31RXxBu5OGLj6kWpapyqgnNcwrme7t
+         otesIGB1z+mSBUfq76W5e30FZOMzFxS4N2nBj/a5HQDs4PIydryzbK7S8fmhMx56ks
+         f/1vXeFFNp22KOMx5jHekYndfKGv/irSuB17lmQkMy/TlhTXNEJruYq2TMeN1N5lYL
+         MIEXbii9n2sx/cSxMZHc4GSWY48i/C+YbeawcSnOarei9pZfZIiUYnv8eVB6G/GTh9
+         uI2MKZCAfETqafs8b40dcddc2Rhvf4EErFEoQfAmpMGlCX+VqPCGwGfrSN1s4D0RAM
+         k9ezEB9LcrtOw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     broonie@kernel.org, agross@kernel.org,
-        Kathiravan T <quic_kathirav@quicinc.com>,
-        geert+renesas@glider.be, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, linux-clk@vger.kernel.org,
-        rafal@milecki.pl, devicetree@vger.kernel.org, will@kernel.org,
-        mturquette@baylibre.com, dmitry.baryshkov@linaro.org,
-        linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
-        robimarko@gmail.com, robh+dt@kernel.org, nfraprado@collabora.com,
-        konrad.dybcio@linaro.org, quic_gurus@quicinc.com, arnd@arndb.de,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH V6 0/9] Add minimal boot support for IPQ5332
-Date:   Wed, 15 Mar 2023 16:35:20 -0700
-Message-Id: <167892332568.4030021.1650680100964955590.b4-ty@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
+        konrad.dybcio@linaro.org, Robert Marko <robert.marko@sartura.hr>,
+        robh+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, mturquette@baylibre.com
+Cc:     luka.perkov@sartura.hr
+Subject: Re: (subset) [PATCH 1/7] dt-bindings: clock: split qcom,gcc-ipq4019 to separate file
+Date:   Wed, 15 Mar 2023 16:35:26 -0700
+Message-Id: <167892332566.4030021.2066671633508562447.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307062232.4889-1-quic_kathirav@quicinc.com>
-References: <20230307062232.4889-1-quic_kathirav@quicinc.com>
+In-Reply-To: <20230214162325.312057-1-robert.marko@sartura.hr>
+References: <20230214162325.312057-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,24 +56,18 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 7 Mar 2023 11:52:23 +0530, Kathiravan T wrote:
-> The IPQ5332 is Qualcomm's 802.11be SoC for Routers, Gateways and
-> Access Points.
+On Tue, 14 Feb 2023 17:23:19 +0100, Robert Marko wrote:
+> Move schema for the GCC on IPQ4019 platform to a separate file to be able
+> to allow passing XO and sleep clks directly to GCC.
 > 
-> This series adds minimal board boot support for ipq5332-mi01.2 board.
 > 
-> Changes in V6:
-> 	- Added couple of patches 1/9 and 5/9 in the series to make sure
-> 	  all the dependent patches are together
-> 	- V5 can be found at
-> 	  https://lore.kernel.org/linux-arm-msm/20230217075835.460-1-quic_kathirav@quicinc.com/
-> 
-> [...]
 
 Applied, thanks!
 
-[9/9] arm64: defconfig: Enable IPQ5332 SoC base configs
-      commit: 48adb3be7d617ecc7d9656032e7253406b8040f5
+[3/7] ARM: dts: qcom: ipq4019: pass XO and sleep clocks to GCC
+      commit: 66e4811ab3967332c52a72f04d615f0faabb145e
+[4/7] ARM: dts: qcom: ipq4019: remove clk-output-names for sleep clock
+      commit: 2a41c611f21751150cf4c0132a02828700e58e2d
 
 Best regards,
 -- 
