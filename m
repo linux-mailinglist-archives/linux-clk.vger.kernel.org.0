@@ -2,105 +2,167 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9EA6BAD6C
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Mar 2023 11:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36EC6BAF2B
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Mar 2023 12:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjCOKS4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Mar 2023 06:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S230212AbjCOLYy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Mar 2023 07:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbjCOKSq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Mar 2023 06:18:46 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C73861A81
-        for <linux-clk@vger.kernel.org>; Wed, 15 Mar 2023 03:18:21 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id m25-20020a05683026d900b006941a2838caso9881885otu.7
-        for <linux-clk@vger.kernel.org>; Wed, 15 Mar 2023 03:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678875499;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C+D7r5o17V7MbRD4rEUKPxc+NqVXUsVJyVbcYC8a9Kg=;
-        b=S9ioBUKruxchmg3LqAudFc5ju0v74S+G2v8jifnB0w5xwCOnD6bo5HwiMEGVvvhtWt
-         xOKv/QYtcSIYBbChJeN9eARRFm7yTOzF0t3UAG2BdzYj2fVsNc8CXajNTVjLNGqaYFR9
-         Ibrq+xcAq43xU7TGCcaH7ppyCH0BUBAOBP7Xd+YI8wdsPkB4Fmey04ezFJQ1FL85ZaBj
-         k+u0wGaZvCsg/8JAg3e2H9TN0Ed1zncjKbIciLhW0b07lSsDxY1AFoiNn8HCC3V3hgtU
-         PXwiWgbbQ/katmwNBeHKfYuxyMfhXu8w4YrUH/gFLO+eStAlHE056Z7P23iMsHpiJQ9V
-         uQqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678875499;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+D7r5o17V7MbRD4rEUKPxc+NqVXUsVJyVbcYC8a9Kg=;
-        b=Fi1K+xFr9RpsSMG0uoKe+GzoYjZ1q0MlcEkLQOFRfxSSUIa1R5tWIdyTIxsGchMf8d
-         Nbw4+J/BHRGHFhi//g5g6GdBy5MtP4FmOub1VJIc22nvF3wi516L7Zazg4P50VoeSX4t
-         Pc84JqkoI9H2BE38LJdEFRS/B0t3F2FF4eTr6iL6SGc4iZPYd6uSHg8Y6+2k2n2EL1iM
-         6v7JLxM3kGPnfW6YTFe3vsqWNQzSzGRmmGNrfmYcFKMBpT2ksEVpMGmdBsQ6TF7Vx4Ih
-         3BiaG+NACYmkoFe9WXBkhX8fuUkFE5cj4fUVjI4c5FjA4t8tGGmZcpceBeDRmw4Z404I
-         8N1A==
-X-Gm-Message-State: AO0yUKXeHiYYGa2eJ3nsL0gcFFAYdkC+KkECmoQJQoL54fUAiO2tmpE4
-        KRRRbP1NgSz1QjZbi+Olpmck0QcFkbgRUyU1p/w=
-X-Google-Smtp-Source: AK7set9hAcqB9bV08yCjwuKfpN9GF7jmVeh9cFKZbN+u/RKFOqemYCQ+gAPPK/1AM053BBuV22jkYDQH36/YBt7/UVI=
-X-Received: by 2002:a9d:7194:0:b0:68b:d3f1:aa1b with SMTP id
- o20-20020a9d7194000000b0068bd3f1aa1bmr13818045otj.3.1678875499558; Wed, 15
- Mar 2023 03:18:19 -0700 (PDT)
+        with ESMTP id S231807AbjCOLYf (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Mar 2023 07:24:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E398EA2F;
+        Wed, 15 Mar 2023 04:23:48 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FATaYi025361;
+        Wed, 15 Mar 2023 11:23:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aYH1IAU5lpVLRcwPmpY5z2BHPzzxvgI4uSFyVQBkL+0=;
+ b=WW2+4NRZT0RH/AdK6eiRjHdnalwywc69U4qra2iIg9FjVmMDazDD/2n34A9SD3V4sNt6
+ J0qSlwLkSdDmw2Jo534OkjEWSaVSK2M7k1+LDnPd1hCI1TCJigmjkPqo/ougdYEaDEl5
+ A8NwFb/C362ALK+Wa5GUwg36X67jw4iKv0KFLulNoVYIbSrWzotbjxO3Nt6nl6o0PFLW
+ amOEc6gQu9NUd9lUsc9PfnQvPDSzJ1VzVv6ghS1rGqQYqMpcrJVMwKa6YSdr9DGAen/8
+ Fnm3/qqKpDZlDEr8Vd3wdOw1DV1NFz6P4VqPVTx74ZoLde2dZ2wrrsLWYavNFR5tayrb qQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2c99b45-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 11:22:59 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32FBMwwU027486
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 11:22:58 GMT
+Received: from [10.216.13.129] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 15 Mar
+ 2023 04:22:48 -0700
+Message-ID: <e482a189-823f-35b1-b411-4c4db22a86a6@quicinc.com>
+Date:   Wed, 15 Mar 2023 16:52:39 +0530
 MIME-Version: 1.0
-Received: by 2002:a05:6358:1a9c:b0:f6:c472:2ab1 with HTTP; Wed, 15 Mar 2023
- 03:18:19 -0700 (PDT)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <rebender6@gmail.com>
-Date:   Wed, 15 Mar 2023 03:18:19 -0700
-Message-ID: <CAJ1QMTea23VDpCSQf-Tc+T7y_zE0U_MvyiPYVbfb2-1izuhm-g@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:336 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [rebender6[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [rebender6[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hitnodeby23[at]yahoo.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V8 4/7] pinctrl: qcom: Add IPQ9574 pinctrl driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230214163116.9924-1-quic_devipriy@quicinc.com>
+ <20230214163116.9924-5-quic_devipriy@quicinc.com>
+ <ZAZ+GeGu8mW1XqpG@surfacebook>
+ <15d270ca-1068-b926-efc9-a14ddfc90a54@quicinc.com>
+ <CAHp75VfMae9M2R0Bw6-sYuHPPberakEzKct65SXV0XEaOFtXTg@mail.gmail.com>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <CAHp75VfMae9M2R0Bw6-sYuHPPberakEzKct65SXV0XEaOFtXTg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: D0mbF0bygG_qOvrQGKZ46Ph7JFlKDuzE
+X-Proofpoint-GUID: D0mbF0bygG_qOvrQGKZ46Ph7JFlKDuzE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_05,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=908 clxscore=1015 spamscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2302240000 definitions=main-2303150097
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Hello
 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business
-Proposal, if you are interested kindly reply to me so i can give you
-all the details
 
-.Thanks and God Bless You.
-Ms Hinda Itno Deby
+On 3/8/2023 6:54 PM, Andy Shevchenko wrote:
+> On Wed, Mar 8, 2023 at 11:52 AM Devi Priya <quic_devipriy@quicinc.com> wrote:
+>> On 3/7/2023 5:28 AM, andy.shevchenko@gmail.com wrote:
+> 
+> ...
+> 
+>>>> +    depends on OF
+>>>
+>>> No compile test on non-OF configurations?
+> 
+>> As per the generic convention followed in other
+>> SoCs, we do not have compile test on non-OF configurations
+> 
+> Why not? So, you have to explain the deliberate narrowing of the test coverageOn adding 'depends on OF || COMPILE_TEST', the driver compiles
+for non-OF configuration as well.
+Will update this in the next spin!
+> 
+>>>> +    depends on ARM64 || COMPILE_TEST
+> 
+> ...
+> 
+>>>> +#define FUNCTION(fname)                                     \
+>>>
+>>> PINCTRL_PINFUNCTION() ?
+>> I see that there are quite a bunch of files that has to
+>> be modified for using the generic data type and
+>> macro for the pin function definition
+>> We shall post a separate series to accommodate the changes
+> 
+> Sure, that's fine. Please do!
+Sure, thanks
+> 
+>>>> +    [msm_mux_##fname] = {                           \
+>>>> +            .name = #fname,                         \
+>>>> +            .groups = fname##_groups,               \
+>>>> +            .ngroups = ARRAY_SIZE(fname##_groups),  \
+>>>> +    }
+> 
+> ...
+> 
+>>>> +#define PINGROUP(id, f1, f2, f3, f4, f5, f6, f7, f8, f9)    \
+>>>> +    {                                               \
+>>>> +            .name = "gpio" #id,                     \
+>>>> +            .pins = gpio##id##_pins,                \
+>>>> +            .npins = (unsigned int)ARRAY_SIZE(gpio##id##_pins),     \
+>>>
+>>> Can you embed struct pingroup?
+>> Will take care of this in a separate series
+> 
+> Ditto. Thanks!
+Sure, thanks
+> 
+>>>> +    }
+> 
+> ...
+> 
+>>>> +};
+>>>
+>>> No MODULE_DEVICE_TABLE()?
+>> The MODULE_DEVICE_TABLE(of, ipq9574_pinctrl_of_match) entry has
+>> been added at the end of the file
+> 
+> So, you know what to do then to address my comment :-)
+Yep, got it!
+> 
+
+Best Regards,
+Devi Priya
