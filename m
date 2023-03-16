@@ -2,111 +2,87 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEEA6BC42B
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Mar 2023 04:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F2B6BC453
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Mar 2023 04:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbjCPDFe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Wed, 15 Mar 2023 23:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
+        id S229581AbjCPDR4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Mar 2023 23:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjCPDF0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Mar 2023 23:05:26 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9830BF951;
-        Wed, 15 Mar 2023 20:05:23 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id EFADD24E2B2;
-        Thu, 16 Mar 2023 11:05:21 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 11:05:21 +0800
-Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 11:05:20 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S229602AbjCPDRw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Mar 2023 23:17:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEE096C03;
+        Wed, 15 Mar 2023 20:17:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CF65B81FB2;
+        Thu, 16 Mar 2023 03:17:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2B5C4339B;
+        Thu, 16 Mar 2023 03:17:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678936667;
+        bh=18q+EUM1V5K95X8f6dK5IfTeRfqj4x1R67isBHg9scg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=OQ0uAlMl/KD2uP58tsM6ZHNfrDEnuyzVahPsM+xbJ2ZtBvtxmzqkppDPyR58g8kM0
+         QXypG0m99OdeQBzZWzc7Lc4pMRMdqvOBDi3qpYZ/b1xFp+YcbhcqZTyGcl4lU4ZvJw
+         F7hbYBpeEyL4u0b+mXW+/dmAxPP6hK8DSKHodCFPdHxFmecaEs8PqLw9NWtOMxX8YW
+         e13+wF47DDGhRMoGsOsCq6Z0nbVga6b6kbRr+b2+WRKRAk2RVB6i0Y1cT7QPIJgBFA
+         60vM22YKpN5+h1Q60Cw5ny/wudDH5JUreKZHNlDLE8zX/h/C8gO7lbrA5Y24+jRfLB
+         kpbL4Wb6hQ2Zg==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 6/6] riscv: dts: starfive: jh7110: Add PLL clock node and modify syscrg node
-Date:   Thu, 16 Mar 2023 11:05:14 +0800
-Message-ID: <20230316030514.137427-7-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
-References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Subject: Re: (subset) [PATCH v7 0/7] Krait Documentation conversion
+Date:   Wed, 15 Mar 2023 20:20:51 -0700
+Message-Id: <167893686408.303819.7722718672200121136.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230116204751.23045-1-ansuelsmth@gmail.com>
+References: <20230116204751.23045-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the PLL clock node for the Starfive JH7110 SoC and
-modify the SYSCRG node to add PLL clocks.
+On Mon, 16 Jan 2023 21:47:44 +0100, Christian Marangi wrote:
+> This series convert the krait-cc and the kpps-acc/gcc Documentation to
+> yaml.
+> 
+> This series comes form a split of a bigger series that got too big and
+> now hard to review.
+> 
+> While they are still more or less wrong and doesn't really reflect real
+> driver implementation, they are converted to prepare for a fixup later
+> when dts and driver are finally fixed.
+> 
+> [...]
 
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+Applied, thanks!
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 49dd62276b0d..37ccd4600da8 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -461,19 +461,29 @@ syscrg: clock-controller@13020000 {
- 				 <&gmac1_rgmii_rxin>,
- 				 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
- 				 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
--				 <&tdm_ext>, <&mclk_ext>;
-+				 <&tdm_ext>, <&mclk_ext>,
-+				 <&pllclk JH7110_CLK_PLL0_OUT>,
-+				 <&pllclk JH7110_CLK_PLL1_OUT>,
-+				 <&pllclk JH7110_CLK_PLL2_OUT>;
- 			clock-names = "osc", "gmac1_rmii_refin",
- 				      "gmac1_rgmii_rxin",
- 				      "i2stx_bclk_ext", "i2stx_lrck_ext",
- 				      "i2srx_bclk_ext", "i2srx_lrck_ext",
--				      "tdm_ext", "mclk_ext";
-+				      "tdm_ext", "mclk_ext",
-+				      "pll0_out", "pll1_out", "pll2_out";
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 		};
- 
- 		sys_syscon: syscon@13030000 {
--			compatible = "starfive,jh7110-sys-syscon", "syscon";
-+			compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
- 			reg = <0x0 0x13030000 0x0 0x1000>;
-+
-+			pllclk: pll-clock-controller {
-+				compatible = "starfive,jh7110-pll";
-+				clocks = <&osc>;
-+				#clock-cells = <1>;
-+			};
- 		};
- 
- 		sysgpio: pinctrl@13040000 {
+[4/7] ARM: dts: qcom: add per SoC compatible for qcom,kpss-gcc nodes
+      commit: b74ca4a0e3043af06819905306e05189f337466a
+[5/7] ARM: dts: qcom: add and fix clock configuration for kpss-gcc nodes
+      commit: a9e6d16ad493529da4a48d7ae474ecdc399ee884
+[6/7] ARM: dts: qcom: add missing clock configuration for kpss-acc-v1
+      commit: 6b20edd72930d83e9c2c2017df883b3c5c1502fd
+[7/7] ARM: dts: qcom: rename kpss-acc-v2 nodes to power-manager nodes
+      commit: 158ce4b3e1dfcf3e38c0dbfd626aee0f1bbfa3d1
+
+Best regards,
 -- 
-2.25.1
-
+Bjorn Andersson <andersson@kernel.org>
