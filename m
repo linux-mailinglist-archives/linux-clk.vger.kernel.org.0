@@ -2,106 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2696BD4EC
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Mar 2023 17:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA016BD620
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Mar 2023 17:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCPQQy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Mar 2023 12:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        id S231130AbjCPQpF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Mar 2023 12:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjCPQQq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Mar 2023 12:16:46 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2BECB04B
-        for <linux-clk@vger.kernel.org>; Thu, 16 Mar 2023 09:16:12 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so1532802wmb.3
-        for <linux-clk@vger.kernel.org>; Thu, 16 Mar 2023 09:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1678983368;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wX835sOTXGenDvrM9Jk5H9iGd+G5Ry9hzVMonTiqeF8=;
-        b=8W0GlkXluf3WSvAkb2eCYF1ksoQ+1Ay9zcraA9kwWP4UCSDo89FkIS+UE/JTNtOr+R
-         AKtVGGwXB55JlOnOqDS8UWhoXIjfn1F0XrT1FCJY9/4OYjKsobz+Xm6NxUmo8DWwNwbh
-         wUOsAGtwBt8Ytz43m0FzmZZfaLPazDYjWOyo92vt15hBpmyyKrOVwRbB1iglpMhYMJSq
-         l6/Aqee0FuI59mTebLgsv34/RvnB9QPfUOSgGdv/CPoCNKZnihLdPc3zKVZDmaIN+SEJ
-         1SULjAWVRvZo/NcvXuTm7RKLJV3DkiNZ3nA3bXME910UCXQPgAf/0RIgMwU4wxo4/ynf
-         jlmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678983368;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wX835sOTXGenDvrM9Jk5H9iGd+G5Ry9hzVMonTiqeF8=;
-        b=uPpeHD1MDMMvfnhTzCvBxN6auUfd6J50SAtegs1uVEu5GKPmuSS2Yf2mRfJo0NMNvQ
-         eu0vfF+Ogx5UsJx5XRt08VkU8JgwsE0JtxP2SkWdKio9IrrYDF8yxsQHOCzar8K5uHlU
-         ZWSFy3Bdnnav3K+jGYv2MfllHCZQidddQ9oCoz10/tuAZvt1gTy36z5fHrMhPufJ10O/
-         Wpzndvj6RDLl21v75GVbNMePKNjlmJ6Is33xxJgpcWGenaVkSJIT2Dy88Av2nCg82lsY
-         ymDXOvnPSgHKjfqZRVVmsYl7aruNyOK62vKfle0COAuW+MGu5LeOnYuE9aIBxl9h91mW
-         pyug==
-X-Gm-Message-State: AO0yUKUOgXWygu6bMK+zCmZicRxj+OkdieiOmZOMj7N+dNP0SGxtcj4P
-        J8t7q9AG0yKfp8HIQSzN1KzBbA==
-X-Google-Smtp-Source: AK7set/5iz9jce0skzNhfyE7OilWfOKtLGfxC9x0HFGwKgdOeFNkTmKmSTfB37p5pR3ZiYxJTEBuXw==
-X-Received: by 2002:a05:600c:4f07:b0:3ed:3cec:d2ec with SMTP id l7-20020a05600c4f0700b003ed3cecd2ecmr4720861wmq.15.1678983368217;
-        Thu, 16 Mar 2023 09:16:08 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05600c358300b003ed2eb5c2dcsm5734716wmq.43.2023.03.16.09.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 09:16:07 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 17:16:06 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vadim Fedorenko <vadfed@meta.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vadim Fedorenko <vadim.fedorenko@linux.dev>, poros@redhat.com,
-        mschmidt@redhat.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Milena Olech <milena.olech@intel.com>,
-        Michal Michalik <michal.michalik@intel.com>
-Subject: Re: [PATCH RFC v6 2/6] dpll: Add DPLL framework base functions
-Message-ID: <ZBNAxlNhSnTxNz3z@nanopsycho>
-References: <20230312022807.278528-1-vadfed@meta.com>
- <20230312022807.278528-3-vadfed@meta.com>
+        with ESMTP id S230495AbjCPQpE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Mar 2023 12:45:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86F914223;
+        Thu, 16 Mar 2023 09:44:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1634762071;
+        Thu, 16 Mar 2023 16:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64545C433D2;
+        Thu, 16 Mar 2023 16:44:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678985074;
+        bh=yfx4iiucYGIUOEIaNe/Ybg77Apth21Lr71vscJTJmnk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XE+bKJewW8yN3Sbjp9vsvxlMkgKiA8UP1lu/rPOiFJ1ot1S+Q5yW+RbWxgLqS9wm+
+         oHaimwJphGUcJWzgf+b6ZkqmG1cR7KMDqSlTBl6MTP45jrs++dITnej253R+MM+cop
+         ixw+FWVouml+2bMnyrdHP2UIF8Wvmir55NMp/0AFhyuzdvFDf7y8+15zccnl/m4RDp
+         Qhaex5OPg7QDaKQPhoa9qY/HRjAGq4SE9puythuzkoU2wL3pbuqejsH9Mia3g0Gqzr
+         2ltD9oQZ6k9veA1kjuVvKix09uz/C25If9nm6++t87qSRZ8mfSYcEMFoUmEkydWski
+         YMoyEV+N0QMIQ==
+Date:   Thu, 16 Mar 2023 16:44:28 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Jacky Huang <ychuang570808@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, schung@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH 11/15] arm64: dts: nuvoton: Add initial ma35d1 device tree
+Message-ID: <20230316164428.GY9667@google.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-12-ychuang570808@gmail.com>
+ <2063c6d1-85ed-43d9-b572-a762b6ce18c1@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230312022807.278528-3-vadfed@meta.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2063c6d1-85ed-43d9-b572-a762b6ce18c1@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Sun, Mar 12, 2023 at 03:28:03AM CET, vadfed@meta.com wrote:
+On Thu, 16 Mar 2023, Arnd Bergmann wrote:
 
-[...]
+> On Wed, Mar 15, 2023, at 08:28, Jacky Huang wrote:
+> > +	mem: memory@80000000 {
+> > +		device_type = "memory";
+> > +		reg = <0x00000000 0x80000000 0 0x20000000>; /* 512M DRAM */
+> > +	};
+> > +};
+>
+> In most machines, the memory size is detected by the boot loader
+> and filled in the dtb in memory before starting the kernel, so
+> you should not need two separate files here for the two common
+> memory configurations.
+>
+> Since the machine is called 'som', I would assume that this is a
+> module that is integrated on another board, so more commonly one
+> would have a dtsi file for the som in addition to the one for the
+> soc, and have all the components of the module listed in this
+> file, while the dts file that includes the som.dtsi lists the
+> devices on the carrier board and enables the on-chip devices
+> that are connected to the outside.
 
+It's using syscon and simple-mfd by the looks of it.
 
->+int dpll_device_register(struct dpll_device *dpll, enum dpll_type type,
->+			 struct dpll_device_ops *ops, void *priv,
-
-ops should be const
-
-
->+			 struct device *owner)
-
-[...]
-
-
->+
->+static int
->+__dpll_pin_register(struct dpll_device *dpll, struct dpll_pin *pin,
->+		    struct dpll_pin_ops *ops, void *priv,
-
-ops should be const
-
-
->+		    const char *rclk_device_name)
->+{
-
-[...]
+--
+Lee Jones [李琼斯]
