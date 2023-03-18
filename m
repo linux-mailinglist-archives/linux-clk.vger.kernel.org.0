@@ -2,132 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90926BF929
-	for <lists+linux-clk@lfdr.de>; Sat, 18 Mar 2023 10:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4FA6BFA08
+	for <lists+linux-clk@lfdr.de>; Sat, 18 Mar 2023 13:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjCRJId (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 18 Mar 2023 05:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S229516AbjCRM1t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 18 Mar 2023 08:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCRJIb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 18 Mar 2023 05:08:31 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A124BC8;
-        Sat, 18 Mar 2023 02:08:15 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B36285C016C;
-        Sat, 18 Mar 2023 05:08:12 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 18 Mar 2023 05:08:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1679130492; x=1679216892; bh=sqGrH9AvBNgztCnhiLWyU9ykzV8JgafnPoz
-        z27BeCm8=; b=r6PoI9GbafoXODI5wpFQtvhqCYIbdZWhsk0Z7ElJJTUKsBQpYn2
-        Ode+YilJeVD+54bk7RO9iqKKs4BCOTDBLtiFlzwsXuUjZJ4lw238xQwiczmAdJzN
-        zG4URauxC33obSxz/QufokFjViTwcpkAE0f3p1MWhipXrmHBvaMIbwysY1HEkQJP
-        gt8UVK2vJabDrD08skXIAitomdPGfiGZfVmk6YG64AabzxdQtMNARqvvM8/7Vuc6
-        LFDFQE1kS0jfbsnDOePr5upmmY+LOTfdB1D+ChYqO4m0bMJGE8gAc20lbo4vWlm7
-        9HBfGHqkL4lSHKNU4riX9/SMIgLDK5qpErA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1679130492; x=1679216892; bh=sqGrH9AvBNgztCnhiLWyU9ykzV8JgafnPoz
-        z27BeCm8=; b=ALgAwfVlw0rg1LJolgBO63qcgsx6OFhNW/qpu/yH0WuxTh/zFVW
-        hz4XsUN+BPsmsevMcQx5/Y+j3moRBXQZvh+OGY/ZFHZxu5gwa52fQOGDhhne+JBC
-        yopVZXTAmeI5KWGh/YQRlvy6gjNjt6Rj7UEgDglpG5O1iJma72Ee6MYleu9WzBKO
-        mxcyOz/H9uLYeBpkYFWgESy7SY+utKfcs6CLSEl9pOGSLV/zYaDzHVfqfcQSzpud
-        saM/JcZ5vZd1wSioPrhBMKW7X4tkpWS+R1fuVLB084DJW5pQWd9qINeGWWiKdqNP
-        0rVUg5z3fjfASWX6Q4s5543bd2fT6LWPEMw==
-X-ME-Sender: <xms:e38VZGShd-0DmUZZL2czFGIVU6cNCQLHXas-jamhZDGtEiohZ-5uqA>
-    <xme:e38VZLyrFV_amNuf4kGeRmBPFpSwQh6aY-3_6YXpn7SZDlJ31iNJ8tMWIwwi2ls3V
-    avtWbBks-vzGnMqtm8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeffedgudeftdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
-    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:e38VZD1fNUWFvFSbebieEMt9jjii7BSrdlXHfW39Vr3AZW5BOrhwDA>
-    <xmx:e38VZCDHaWJBBexLNNZjXswKto_iKoYKFybnUKa1px71KrBs64Wnhg>
-    <xmx:e38VZPhMtH33aj5xLjWV7vpbamm_R99NGv3irS1neUGf_wFPC8YIGg>
-    <xmx:fH8VZKTgzOFS_XrKE3c73tP9vZTgE_Qyl0wb2H3NlciLVfmYh87-nA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CD0BEB60086; Sat, 18 Mar 2023 05:08:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <adf72f73-23c9-4260-b649-755af4068a02@app.fastmail.com>
-In-Reply-To: <f21df56b-43b8-a48e-ab8f-e0cf2b163976@gmail.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <f2699aa1-4d8a-48c0-b332-484db0b04252@app.fastmail.com>
- <1a1277ac-4ae5-eaab-01c3-0242c12be76b@gmail.com>
- <6ed7e89f-2d2c-4134-9c6f-a9d18e2fc8a8@app.fastmail.com>
- <a90fc6f6-df95-3a4f-da5b-ebdafbe7dd34@linaro.org>
- <f21df56b-43b8-a48e-ab8f-e0cf2b163976@gmail.com>
-Date:   Sat, 18 Mar 2023 10:07:50 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jacky Huang" <ychuang570808@gmail.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Jiri Slaby" <jirislaby@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
-Subject: Re: [PATCH 00/15] Introduce Nuvoton ma35d1 SoC
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229478AbjCRM1s (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 18 Mar 2023 08:27:48 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C9D35EE1
+        for <linux-clk@vger.kernel.org>; Sat, 18 Mar 2023 05:27:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679142466; x=1710678466;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s4uKCE6hBcUQ7DN5slUxXsahuEIyHc6ytTV7jgdT7fA=;
+  b=LDFlH8PUqyeMyFq5/iLBqxCRZIPFshedM/WDMtSd0Nz5vnwLXWe1Z0p/
+   LehVEzazTs/93NlD4inHWMFl7TjSee+Gp3sB6CfV31zEukNSiiIw472VM
+   6FoXDa71gvdFsMcm2gTYyD/vyLVx8khddsRxnYQ65iZKofRMkqljxBOT0
+   UBWtom40ndV8EBJzPT9m1QrybO/HPl4qT30ni3HEuNOBnTVW6B/tb85Qc
+   BmKXDnYB2S00ddCC3Y0C73o82UXIKq6YwyynyiOCi49h4gJiYZmi8Rmre
+   MTWDctdsFXU+sfu/gpaMv3O/FUFadjjyFCYqGczujc6pePdWLtD3Ofgll
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="337136997"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="337136997"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 05:27:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="926457559"
+X-IronPort-AV: E=Sophos;i="5.98,271,1673942400"; 
+   d="scan'208";a="926457559"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 18 Mar 2023 05:27:43 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdVex-000A3Y-0N;
+        Sat, 18 Mar 2023 12:27:43 +0000
+Date:   Sat, 18 Mar 2023 20:27:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: [clk:clk-mediatek 5/62] arc-elf-ld:
+ clk-mt8173-apmixedsys.c:undefined reference to `mtk_clk_unregister_pllfhs'
+Message-ID: <202303182041.EbxBxTlR-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Mar 18, 2023, at 04:07, Jacky Huang wrote:
-> On 2023/3/18 =E4=B8=8A=E5=8D=88 12:06, Krzysztof Kozlowski wrote:
->> On 17/03/2023 14:21, Arnd Bergmann wrote:
->>> I only now saw that you had already submitted this several times
->>> at the beginning of last year, and this is technically 'v5'
->>> of the series, and it would make sense to add 'v6' to the subject
->>> next time and link back to the previous [1] and this[2] submission
->>> on lore.kernel.org.
->> ... and address previous feedback. Or at least make it clear in
->> changelog that you addressed it, so our review was not ignored.
->>
->
-> Of course, I will add back the changelog.
->
-> And, I have a question. If subsequent modifications made to a patch,=20
-> should the
->
-> "Reviewed-by" still be valid? Can we keep it?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-mediatek
+head:   eddc63094855f411455db85b77eb8439201dc779
+commit: 45a5cbe05d1f562b24db8ce67bd1bb3a3a9ec425 [5/62] clk: mediatek: mt8173: Add support for frequency hopping through FHCTL
+config: arc-randconfig-r043-20230312 (https://download.01.org/0day-ci/archive/20230318/202303182041.EbxBxTlR-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/commit/?id=45a5cbe05d1f562b24db8ce67bd1bb3a3a9ec425
+        git remote add clk https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
+        git fetch --no-tags clk clk-mediatek
+        git checkout 45a5cbe05d1f562b24db8ce67bd1bb3a3a9ec425
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-In general yes, but it's a bit of a grey area and you have
-to apply common sense. Examples where I would drop the
-Reviewed-by tag are
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303182041.EbxBxTlR-lkp@intel.com/
 
-- if you changed something based on feedback from a reviewer and
-  they provided a Reviewed-by tag based on that changed, but then
-  another person asked you change the same thing differently, or
-  back to the original version
+All errors (new ones prefixed by >>):
 
-- if you combine a patch with another one that was not also
-  reviewed by the same person.
+   arc-elf-ld: drivers/clk/mediatek/clk-mt8173-apmixedsys.o: in function `clk_mt8173_apmixed_remove':
+   clk-mt8173-apmixedsys.c:(.text+0x24): undefined reference to `mtk_clk_unregister_pllfhs'
+>> arc-elf-ld: clk-mt8173-apmixedsys.c:(.text+0x24): undefined reference to `mtk_clk_unregister_pllfhs'
+   arc-elf-ld: drivers/clk/mediatek/clk-mt8173-apmixedsys.o: in function `clk_mt8173_apmixed_probe':
+   clk-mt8173-apmixedsys.c:(.text+0xb6): undefined reference to `fhctl_parse_dt'
+>> arc-elf-ld: clk-mt8173-apmixedsys.c:(.text+0xb6): undefined reference to `fhctl_parse_dt'
+>> arc-elf-ld: clk-mt8173-apmixedsys.c:(.text+0xd0): undefined reference to `mtk_clk_register_pllfhs'
+>> arc-elf-ld: clk-mt8173-apmixedsys.c:(.text+0xd0): undefined reference to `mtk_clk_register_pllfhs'
+   arc-elf-ld: clk-mt8173-apmixedsys.c:(.text+0x142): undefined reference to `mtk_clk_unregister_pllfhs'
+   arc-elf-ld: clk-mt8173-apmixedsys.c:(.text+0x142): undefined reference to `mtk_clk_unregister_pllfhs'
 
-      Arnd
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
