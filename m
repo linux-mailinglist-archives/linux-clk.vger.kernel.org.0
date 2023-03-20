@@ -2,103 +2,87 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF946C1B7A
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Mar 2023 17:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373C46C1BDC
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Mar 2023 17:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjCTQ0R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Mar 2023 12:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S232085AbjCTQgt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 Mar 2023 12:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbjCTQZZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Mar 2023 12:25:25 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EA630B38;
-        Mon, 20 Mar 2023 09:18:51 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i10-20020a05600c354a00b003ee0da1132eso1278558wmq.4;
-        Mon, 20 Mar 2023 09:18:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679329122;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X/XyMbhBKX7Uw3dkwx0fKsxzPHEWI6L3uTBJAp+icNs=;
-        b=JrXDNwD6zgeKP3j8t2RvVhr/qpCRNJig9CSoKWXjkHIGyAnkepI7cR3q5wPYUVNCu7
-         19q0USvz156CjLKCkDNN4gSVVG7MbpdVn4v7o1Izd06dVIdb5Ka3VWwTtbacPOw9nwQR
-         6/2des/VMC+gmwJbKjICLj/YfA5vMnSrWo+/MvNdXlLU3DdkxePhclaT5yBXeX/jBWfy
-         XcFe4Decqg7Zt0RPxk2MKm6b5faAUNzg4rRqpbV57C8RcSmvnueZ9iNgR7978GPQ2w2l
-         tYJfuHxA1jVDSeJVpbTwHgduS/Zw32KSfk3vLHkey2ELbzXeMkMXc+B877PN2qD837+4
-         ZsuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679329122;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X/XyMbhBKX7Uw3dkwx0fKsxzPHEWI6L3uTBJAp+icNs=;
-        b=Yfwh2fprCy9Fhcl9knS7AuTd52Y1/VgWo6/IvQTz65YWkf57jAWbqkEJOcRDvEUMqT
-         DDiiwIK6ZRX+QNlYT474zTGGUggvLmfXQGd07QwS8T/s1oy706HVp4muXv8Ipe73TdBM
-         FgGXBzRcpaq6a3/okS3md5/Vm8LUb6BVGq21C1/VnsR81bS3x1JLIXqSphzmL9gLt3QO
-         CM1e06R3IMm/kku0N4zgKU3XKpM598VtzIug9JW21tv3f/bhphcPk65A7+fMBKWEWeIA
-         6PFxya92VZFcx5t0Al3bvekwFlXa8/PTIRltk7vj3Gioasx425eDZmyYpXZDt2+orj6Y
-         GMxg==
-X-Gm-Message-State: AO0yUKX5jprHnyui3U1GxuAjTgC2ai+qHUgYWoUbq+cmgKxtTDQ1Omnq
-        S/yGPe9uPO3UXp/3oYAScfz5XWp+nfQ=
-X-Google-Smtp-Source: AK7set+WyFdkXkjhmexTtFgmFRQO85LsHVXhvhlIxes07sVIoXtq0jUOJ6PJz6oCAJxfw5F2eNLI0w==
-X-Received: by 2002:a1c:6a08:0:b0:3ea:ed4d:38eb with SMTP id f8-20020a1c6a08000000b003eaed4d38ebmr44203wmc.24.1679329121985;
-        Mon, 20 Mar 2023 09:18:41 -0700 (PDT)
-Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
-        by smtp.gmail.com with ESMTPSA id iv16-20020a05600c549000b003ee1acdaf95sm847776wmb.36.2023.03.20.09.18.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 09:18:41 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
-Subject: [PATCH 10/10] MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-Date:   Mon, 20 Mar 2023 17:18:23 +0100
-Message-Id: <20230320161823.1424278-11-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
-References: <20230320161823.1424278-1-sergio.paracuellos@gmail.com>
+        with ESMTP id S232075AbjCTQg0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Mar 2023 12:36:26 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12BCE063
+        for <linux-clk@vger.kernel.org>; Mon, 20 Mar 2023 09:30:14 -0700 (PDT)
+Received: from ramsan.of.borg ([84.195.187.55])
+        by laurent.telenet-ops.be with bizsmtp
+        id agWB2900A1C8whw01gWBZi; Mon, 20 Mar 2023 17:30:11 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1peIO2-00E2up-BF;
+        Mon, 20 Mar 2023 17:30:11 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1peIOh-007SSj-4I;
+        Mon, 20 Mar 2023 17:30:11 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Magnus Damm <magnus.damm@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/2] ARM: dts: r8a7779: Add PWM support
+Date:   Mon, 20 Mar 2023 17:30:04 +0100
+Message-Id: <cover.1679329211.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Adding myself as maintainer for Mediatek MTMIPS clock driver.
+	Hi all,
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+This patch series adds support for the seven PWM Timers on the Renesas
+R-Car H1 SoC.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..f11e8d1da326 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13137,6 +13137,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml
- F:	drivers/phy/ralink/phy-mt7621-pci.c
- 
-+MEDIATEK MTMIPS CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mtmips-clock.yaml
-+F:	drivers/clk/ralink/clk-mtmips.c
-+
- MEDIATEK NAND CONTROLLER DRIVER
- L:	linux-mtd@lists.infradead.org
- S:	Orphan
+For proper operation, this depends on [1].  PWM0 (b/d), PWM2, and PWM5
+have been tested with PWM sysfs and a logic analyzer on the Marzen
+development board using DT overlays available from [2].
+
+I plan to queue this series in renesas-devel-for-v6.4.
+
+Thanks for your comments!
+
+[1] [PATCH] pinctrl: renesas: r8a7779: Add PWM pins, groups, and functions
+    https://lore.kernel.org/r/cea9723e9c3df4b1408750caa38886aac1fab5f7.1679329090.git.geert+renesas@glider.be
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/renesas-overlays
+
+Geert Uytterhoeven (2):
+  dt-bindings: clock: r8a7779: Add PWM module clock
+  ARM: dts: r8a7779: Add PWM support
+
+ arch/arm/boot/dts/r8a7779.dtsi            | 91 +++++++++++++++++++----
+ include/dt-bindings/clock/r8a7779-clock.h |  1 +
+ 2 files changed, 79 insertions(+), 13 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
