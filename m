@@ -2,80 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDA86C13C0
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Mar 2023 14:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E3B6C1626
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Mar 2023 16:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjCTNmq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Mar 2023 09:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
+        id S231899AbjCTPCb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 Mar 2023 11:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjCTNme (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Mar 2023 09:42:34 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D2610409
-        for <linux-clk@vger.kernel.org>; Mon, 20 Mar 2023 06:42:32 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id w9so46947690edc.3
-        for <linux-clk@vger.kernel.org>; Mon, 20 Mar 2023 06:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679319752;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5bAvIgcdwvK6qGlX9/tkRQ+PgCIHsC6PUxID2XxtmJs=;
-        b=uQJkr15djkVmBgXdKKgYT+9o9C75QiioeKW8Q5/wJYPZfxnhvse2/8a0DDverHAWLS
-         V4MRks7KPnmb3/58MMbQeBZJCd+WBChFQ/qlPGj271EniIbqjMTbcFNtivNU+bjVjPo3
-         VJ8RMTBwR3qb8UntS5t8Mbw6a7v6pOYhS7hWQ322eXdq3ae0xeb281kDss612++wBbkl
-         dFNiQ9tS/f7YmtYvC8fQTGYMgak7u2A8A0NWXOYfPEzqdzOVdoEsbBM1FOBolkv0PEJG
-         8F5nYdKwqjF2UqeqKa5HdYWamA+Adnph+EsOxTr0nRpV6i04HhKU+5xExxxro1quh0yR
-         j/Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679319752;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5bAvIgcdwvK6qGlX9/tkRQ+PgCIHsC6PUxID2XxtmJs=;
-        b=BStQbGUdRhWsmxcNhUZMzlCEnSrxmXj5HfbCmu+LyMvlLGq7U4n2ENNYwoHc66Zey8
-         WUl1BgI5mntT69FknwUhgmDB7wVbsX6uhmzOXG5D/svL/5Znmd2hm3cOv0mrxJwmXva9
-         8PeopCQuaqzTJbHAEJmeZJR1lTbyYGyXYToOyubxckZTn2JG9P8xV/Vs9l7KizDFeo4k
-         pYBxpTYTEMdyXXCo+IJaGzPFmfF6fFkJ7unOgnkHGWoscLO21TWgP6j2rcSyM5fqRVWi
-         zj9OZNvLcK+yaAYmNe3Nm1pRcOBWYKspzAkg4fprk3BDvnzeHx2J4l9HzP30V+4Eaw7P
-         zjzw==
-X-Gm-Message-State: AO0yUKVEQGkBk1Uk4BSm4xd64uh15LaXRX4drGO+ufry8WPig1PabRFG
-        m370/dEMS8ywSizJt7WQT4L6rw==
-X-Google-Smtp-Source: AK7set+MK8KcRE7MiT2j4MzvskiRjviqc1Ln0yYh7b/PAFNB5eSsRSEpWjDZaOM3sZzgMOex9ThcPg==
-X-Received: by 2002:a17:906:5015:b0:922:ae30:3c23 with SMTP id s21-20020a170906501500b00922ae303c23mr9566199ejj.18.1679319751913;
-        Mon, 20 Mar 2023 06:42:31 -0700 (PDT)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id u23-20020a170906409700b009334a6ef3e8sm2368602ejj.141.2023.03.20.06.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 06:42:31 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
+        with ESMTP id S231732AbjCTPBv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Mar 2023 11:01:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832D3CDC9;
+        Mon, 20 Mar 2023 07:58:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D025EB80EC7;
+        Mon, 20 Mar 2023 14:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBE2C4339E;
+        Mon, 20 Mar 2023 14:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679324287;
+        bh=RYEgoQfy5g2obq3M1OeoK2adxxmexkLppMESHV9PtqY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gY/PtiKZbzww4GV88lr2T649mmQ9r/A7X01xOvFP2qH36eBudQaoIFgAetNff6mL2
+         zuapJFNs8Ufep1Ou/rwkk6RAzS0SMQF5FeKGogradwa8kubIzSRSSOB8it6TJVu9MZ
+         WwKOaQBHDTCAW5/fSmhrxGptAGJOlCS+RqenPZTc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Randy Dunlap <rdunlap@infradead.org>,
+        Riku Voipio <riku.voipio@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [RFC PATCH v2 5/5] clk: qcom: Add sync state callback to all SM8450 providers
-Date:   Mon, 20 Mar 2023 15:42:17 +0200
-Message-Id: <20230320134217.1685781-6-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230320134217.1685781-1-abel.vesa@linaro.org>
-References: <20230320134217.1685781-1-abel.vesa@linaro.org>
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 03/36] clk: HI655X: select REGMAP instead of depending on it
+Date:   Mon, 20 Mar 2023 15:54:29 +0100
+Message-Id: <20230320145424.339190661@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230320145424.191578432@linuxfoundation.org>
+References: <20230320145424.191578432@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,53 +55,47 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now that we have support for sync state delayed disabling of unused
-power domains and a provided generic gdsc sync state callback, add it to
-all the providers related to the SM8450 platform.
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+[ Upstream commit 0ffad67784a097beccf34d297ddd1b0773b3b8a3 ]
+
+REGMAP is a hidden (not user visible) symbol. Users cannot set it
+directly thru "make *config", so drivers should select it instead of
+depending on it if they need it.
+
+Consistently using "select" or "depends on" can also help reduce
+Kconfig circular dependency issues.
+
+Therefore, change the use of "depends on REGMAP" to "select REGMAP".
+
+Fixes: 3a49afb84ca0 ("clk: enable hi655x common clk automatically")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Riku Voipio <riku.voipio@linaro.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: linux-clk@vger.kernel.org
+Link: https://lore.kernel.org/r/20230226053953.4681-3-rdunlap@infradead.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/camcc-sm8450.c  | 1 +
- drivers/clk/qcom/dispcc-sm8450.c | 1 +
- drivers/clk/qcom/gcc-sm8450.c    | 1 +
- 3 files changed, 3 insertions(+)
+ drivers/clk/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/camcc-sm8450.c b/drivers/clk/qcom/camcc-sm8450.c
-index 51338a2884d2..b2c6109c7eba 100644
---- a/drivers/clk/qcom/camcc-sm8450.c
-+++ b/drivers/clk/qcom/camcc-sm8450.c
-@@ -2847,6 +2847,7 @@ static struct platform_driver cam_cc_sm8450_driver = {
- 	.driver = {
- 		.name = "camcc-sm8450",
- 		.of_match_table = cam_cc_sm8450_match_table,
-+		.sync_state = qcom_cc_sync_state,
- 	},
- };
- 
-diff --git a/drivers/clk/qcom/dispcc-sm8450.c b/drivers/clk/qcom/dispcc-sm8450.c
-index adbfd30bfc96..0ea719940a8e 100644
---- a/drivers/clk/qcom/dispcc-sm8450.c
-+++ b/drivers/clk/qcom/dispcc-sm8450.c
-@@ -1803,6 +1803,7 @@ static struct platform_driver disp_cc_sm8450_driver = {
- 	.driver = {
- 		.name = "disp_cc-sm8450",
- 		.of_match_table = disp_cc_sm8450_match_table,
-+		.sync_state = qcom_cc_sync_state,
- 	},
- };
- 
-diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
-index 84764cc3db4f..248709fb975e 100644
---- a/drivers/clk/qcom/gcc-sm8450.c
-+++ b/drivers/clk/qcom/gcc-sm8450.c
-@@ -3262,6 +3262,7 @@ static struct platform_driver gcc_sm8450_driver = {
- 	.driver = {
- 		.name = "gcc-sm8450",
- 		.of_match_table = gcc_sm8450_match_table,
-+		.sync_state = qcom_cc_sync_state,
- 	},
- };
- 
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index 292056bbb30e9..ffe81449ce246 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -63,7 +63,7 @@ config COMMON_CLK_RK808
+ config COMMON_CLK_HI655X
+ 	tristate "Clock driver for Hi655x" if EXPERT
+ 	depends on (MFD_HI655X_PMIC || COMPILE_TEST)
+-	depends on REGMAP
++	select REGMAP
+ 	default MFD_HI655X_PMIC
+ 	---help---
+ 	  This driver supports the hi655x PMIC clock. This
 -- 
-2.34.1
+2.39.2
+
+
 
