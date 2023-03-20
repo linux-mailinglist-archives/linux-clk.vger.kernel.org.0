@@ -2,79 +2,223 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1096C0C26
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Mar 2023 09:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3846C0C2F
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Mar 2023 09:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjCTIYh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Mar 2023 04:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S229795AbjCTI0X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 Mar 2023 04:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjCTIYg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Mar 2023 04:24:36 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851871E9FD
-        for <linux-clk@vger.kernel.org>; Mon, 20 Mar 2023 01:24:22 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso12956159pjf.0
-        for <linux-clk@vger.kernel.org>; Mon, 20 Mar 2023 01:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679300662;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vXJEuXGL6bDH3PwmPPaT3IM8ABOywFoq2Dgyfl9GkNU=;
-        b=n+mfzmqOFxZIaeBGdi7plJsb84IQidbPZCdTZd3c33zPhpNYdRTHw5R6n4tU/aqBz2
-         bIlF6yPcWpdrU/g3uJxxmxqFXvWFHJwthv2ZvqiJo1uyai5EOaWydEr9iA1LQEQhDevP
-         eQPZ/0JnNJfZc6r28fwp0tdAFPjyGdp3SAjHb9588VsJbw/R80KjU3yYsuyFwSiZ9EK9
-         hym+/RJrom2gN96vZNEbf8Oi7hAoj8XAcXJCw+NJ7OtVsYSzD7zd/pLm2kNFQKmA4ZwM
-         npTQlysrZCTJLSU5/KWAL/UpMUHkAvWmjX+0idXBWZNtxKqDy32f09ib/iGUcnpHkuo0
-         HxGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679300662;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vXJEuXGL6bDH3PwmPPaT3IM8ABOywFoq2Dgyfl9GkNU=;
-        b=sA71n234MDuTCC9bRonOgLAu7FhPRsgVSfQHGDh7dlUpr59+ZCQhs0QExhfTWtT/qV
-         8wbQILy48kDQjNO16Ztg6NoNYZkorqlzThNLAlUqs+EakyoiWYseNrPOldNsFeEI2pMH
-         LdeHz1rXiO6hvKpNzOHkJr8SrLJtS8AmI9Zcyv+XDEoyxFGqN0AEWjhmU1IrQ6bDm4C9
-         6lNKfodEbBocUDIr5DeBU729Xq4tIMBQ+0Jh93pEnGF4+03sDmqm5A2XkCo5EZwXsJl1
-         i/QIOFk9JKGv9ZPLZeErxux80nU+Ui0SjQXaRE8P6vA/RDwL0lSjan21QsqsBr657vYl
-         nc5A==
-X-Gm-Message-State: AO0yUKWl01iKufRVr8RCJm6MufHe/Sl9hTxbTD3Gz8fhbBdORE4HGgkV
-        ba6E81bvQtH7itBEwuNGE4YmcqFLgcgQgP5LMwY=
-X-Google-Smtp-Source: AK7set9GzDdYtXbS0Cf4yAA4xqveR5Vmohd0FI0u+fdQW6Ug7dxgg8RitZb0cnV8InVskl+KrxUfwhJXl3LAAiWnvBc=
-X-Received: by 2002:a17:90a:5b01:b0:23c:fa47:e763 with SMTP id
- o1-20020a17090a5b0100b0023cfa47e763mr4371695pji.0.1679300662083; Mon, 20 Mar
- 2023 01:24:22 -0700 (PDT)
+        with ESMTP id S229782AbjCTI0W (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Mar 2023 04:26:22 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118AA188;
+        Mon, 20 Mar 2023 01:26:20 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 2A62824E284;
+        Mon, 20 Mar 2023 16:26:18 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 16:26:18 +0800
+Received: from [192.168.125.128] (183.27.97.64) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 20 Mar
+ 2023 16:26:17 +0800
+Message-ID: <2eb0380e-bbb7-83fd-3916-9bdd8b068334@starfivetech.com>
+Date:   Mon, 20 Mar 2023 16:26:09 +0800
 MIME-Version: 1.0
-Sender: anmoniteashale@gmail.com
-Received: by 2002:a05:7300:fc14:b0:b1:4517:6f5a with HTTP; Mon, 20 Mar 2023
- 01:24:21 -0700 (PDT)
-From:   Miss Sherri <sherrigallagher409@gmail.com>
-Date:   Mon, 20 Mar 2023 08:24:21 +0000
-X-Google-Sender-Auth: -HS-ahRR8J6Jge_3KuHHTR18V9M
-Message-ID: <CAFF8bF4snVpLsT-+vJHgpc1oAR0Qch90pBWD_QX8ogT9DmgOqg@mail.gmail.com>
-Subject: RE: Hello Dear
-To:     undisclosed-recipients:;
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional
+ patternProperties
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        William Qiu <william.qiu@starfivetech.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
+ <20230316030514.137427-4-xingyu.wu@starfivetech.com>
+ <1f352445-4677-e33b-be14-c76bd7ffa188@linaro.org>
+ <45221a1c-dc01-2759-3e32-658636625529@starfivetech.com>
+ <a6b9bab2-4151-c811-85ff-2424866e21d8@linaro.org>
+ <ce674ea9-41ec-2862-c39c-207f0b6c45a2@starfivetech.com>
+ <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <a65697f4-0a75-23e2-517c-2784b0c382bc@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.64]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hallo,
+On 2023/3/20 15:40, Krzysztof Kozlowski wrote:
+> On 20/03/2023 08:29, Xingyu Wu wrote:
+>> On 2023/3/20 14:37, Krzysztof Kozlowski wrote:
+>>> On 20/03/2023 04:54, Xingyu Wu wrote:
+>>>> On 2023/3/19 20:28, Krzysztof Kozlowski wrote:
+>>>>> On 16/03/2023 04:05, Xingyu Wu wrote:
+>>>>>> Add optional compatible and patternProperties.
+>>>>>>
+>>>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>>>>>> ---
+>>>>>>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
+>>>>>>  1 file changed, 33 insertions(+), 6 deletions(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>> index ae7f1d6916af..b61d8921ef42 100644
+>>>>>> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>>>>> @@ -15,16 +15,31 @@ description: |
+>>>>>>  
+>>>>>>  properties:
+>>>>>>    compatible:
+>>>>>> -    items:
+>>>>>> -      - enum:
+>>>>>> -          - starfive,jh7110-aon-syscon
+>>>>>> -          - starfive,jh7110-stg-syscon
+>>>>>> -          - starfive,jh7110-sys-syscon
+>>>>>> -      - const: syscon
+>>>>>> +    oneOf:
+>>>>>> +      - items:
+>>>>>> +          - enum:
+>>>>>> +              - starfive,jh7110-aon-syscon
+>>>>>> +              - starfive,jh7110-stg-syscon
+>>>>>> +              - starfive,jh7110-sys-syscon
+>>>>>> +          - const: syscon
+>>>>>> +      - items:
+>>>>>> +          - enum:
+>>>>>> +              - starfive,jh7110-aon-syscon
+>>>>>> +              - starfive,jh7110-stg-syscon
+>>>>>> +              - starfive,jh7110-sys-syscon
+>>>>>> +          - const: syscon
+>>>>>> +          - const: simple-mfd
+> 
+> BTW, this also looks wrong. You just said that clock controller exists
+> only in few variants. Also, why sometimes the same device  goes with
+> simple-mfd and sometimies without? It's the same device.
 
-Sie haben meine vorherige Nachricht erhalten? Ich habe Sie schon
-einmal kontaktiert, aber die Nachricht ist fehlgeschlagen, also habe
-ich beschlossen, noch einmal zu schreiben. Bitte best=C3=A4tigen Sie, ob
-Sie dies erhalten, damit ich fortfahren kann.
+Oh yes, If modified to:
 
-warte auf deine Antwort.
+oneOf:
+      - items:
+          - enum:
+              - starfive,jh7110-aon-syscon
+              - starfive,jh7110-stg-syscon
+          - const: syscon
+      - items:
+          - const: starfive,jh7110-sys-syscon
+          - const: syscon
+          - const: simple-mfd
 
-Gr=C3=BC=C3=9Fe,
-Fr=C3=A4ulein Sherri
+Or:
+
+     - minItems: 2
+       items:
+         - enum:
+             - starfive,jh7110-aon-syscon
+             - starfive,jh7110-stg-syscon
+             - starfive,jh7110-sys-syscon
+         - const: syscon
+         - const: simple-mfd
+
+
+Which one is better?
+
+> 
+>>>>>>  
+>>>>>>    reg:
+>>>>>>      maxItems: 1
+>>>>>>  
+>>>>>> +patternProperties:
+>>>>>> +  # Optional children
+>>>>>> +  "pll-clock-controller":
+>>>>>
+>>>>> It's not a pattern.
+>>>>
+>>>> Does it use 'properties' instead of 'patternProperties'?
+>>>
+>>> Yes.
+>>>
+>>>>
+>>>>>
+>>>>> Anyway should be clock-controller
+>>>>
+>>>> Will fix.
+>>>>
+>>>>>
+>>>>>> +    type: object
+>>>>>> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+>>>>>> +    description: Clock provider for PLL.
+>>>>>> +
+>>>>>
+>>>>> You just added these bindings! So the initial submission was incomplete
+>>>>> on purpose?
+>>>>>
+>>>>> No, add complete bindings.
+>>>>
+>>>> Does you mean that it should drop the 'description', or add complete 'description',
+>>>> or add 'compatible', 'clocks' and 'clock-cells' of complete clock-controller bindings?
+>>>
+>>> It means it should be squashed with the patch which adds it.
+>> 
+>> Should I drop the 'decription' here and keep the 'decription' in patch1?
+> 
+> There should be no this patch at all. However I do not understand what
+> you want to do with description. What's wrong with description?
+
+I thought you were commenting under description, saying a conflict with pll dtbindings' description.
+Is that mean I should add it in the syscon patch fo william not this patchset?
+
+>> 
+>>>
+>>>>
+>>>>>
+>>>>>>  required:
+>>>>>>    - compatible
+>>>>>>    - reg
+>>>>>> @@ -38,4 +53,16 @@ examples:
+>>>>>>          reg = <0x10240000 0x1000>;
+>>>>>>      };
+>>>>>>  
+>>>>>> +  - |
+>>>>>> +    syscon@13030000 {
+>>>>>
+>>>>> No need for new example... Just put it in existing one.
+>>>>>
+>>>>
+>>>> Actually, the PLL clock-controller are just set in sys-syscon resgisters. The stg-syscon and
+>>>> aon-syscon don't need it. So PLL clock-controller node only is added in sys-syscon node.
+>>>
+>>> So why having other examples if they are included here? Drop them.
+>>>
+>> 
+>> Should I drop the old example of stg-syscon and add a new example of sys-syscon which
+>> include clock-controller child node?
+> 
+> No, there should be no stg-syscon example, it's useless.
+> 
+
+Thanks. I will remind william to use sys-syscon example instead.
+
+Best regards,
+Xingyu Wu
+
