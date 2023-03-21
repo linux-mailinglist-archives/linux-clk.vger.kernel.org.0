@@ -2,103 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497AF6C2975
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Mar 2023 06:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42706C2A58
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Mar 2023 07:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCUFBQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 Mar 2023 01:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S229683AbjCUGVA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Mar 2023 02:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjCUFBF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Mar 2023 01:01:05 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B7131E19;
-        Mon, 20 Mar 2023 22:00:51 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso8729175wmo.0;
-        Mon, 20 Mar 2023 22:00:51 -0700 (PDT)
+        with ESMTP id S230193AbjCUGU7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 Mar 2023 02:20:59 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D6B35266
+        for <linux-clk@vger.kernel.org>; Mon, 20 Mar 2023 23:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679374848;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ENURxkCD4SFoaP6aebwo/q0vo0bcMItJOR8Kmmrb9B8=;
-        b=MzDi76ThSJ8I2UkP/1F3yZstqxOBzhMRm8kTOdg93unOq72ahgfP3W5Ulb0xwBZP+j
-         EikY+r0Rvr+oAzMBNm1hsM2pVmZkhoe8vrWeiJvB3E56/WBg9o+LTMkYDpu3wrIgEa9O
-         BlNq2mLNyFfjSfPX8eMbinPcw15IgQ+1yGUm8ZuFHLgJgeTyJI+2UJwQdx/4Egs7FO6u
-         BRqaD1JbmAXUT6Ff4yv8PURggJngN7R9cS1hawx7RZeYnwbmeHCbbnKdEl02QtTPbnAj
-         PTZtHB5Yu8IlAhnGRt9bkx56cPi9yMuuRQ/x3N7drBUJ6W3hOBPBTTNOuC+cVJLJbKJ9
-         q41g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679374848;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ENURxkCD4SFoaP6aebwo/q0vo0bcMItJOR8Kmmrb9B8=;
-        b=UZEV3eGwYh9cKYA71l3txjzxDz9XJm5Ui0xKyko84o41Ff70M7/KoHmDDixzZUMq9L
-         6Y81Ei0C4VPqh52HQfJvD+Dd3CAKLMkWvJB6FvjSKyvkSJ41Y/u1UJQIwv61gt+isyEC
-         fPzVxK5Wj0g1gf+LUR+TNKHH4paiyS6Gbo/L1kC48jnctQ5W790aYiC/7Ktr0knjCiu+
-         1OFKTc6MZCrQOEG/paA48B/yIoIPt4UvdC6senF2H/gpmMhimO5wV8V80ZUtREvz/4JZ
-         46wIP0W9BX8bkf+ghq/uwYk6krxMKlDCgNeS/1AA27feClRvlqRHPsZDpXSzkc9Zh351
-         /XmA==
-X-Gm-Message-State: AO0yUKXVRclGd2AMnTOGldZ2XesbTfr8kZUOShjJISHG7WdEAIRNVTsu
-        mK60EOG315ZN+JtlAmBqXhRrLnjsJ9s=
-X-Google-Smtp-Source: AK7set/nSITNOfKlnwangQvWZxYyjfmmynvUdRicYyvRkVc2yJbushi7SPSbH8E30up/WyxNbmzEwg==
-X-Received: by 2002:a7b:c3c8:0:b0:3dc:4fd7:31f7 with SMTP id t8-20020a7bc3c8000000b003dc4fd731f7mr1143547wmj.41.1679374848699;
-        Mon, 20 Mar 2023 22:00:48 -0700 (PDT)
-Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c020300b003eddefd8792sm6238432wmi.14.2023.03.20.22.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Mar 2023 22:00:48 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        arinc.unal@arinc9.com
-Subject: [PATCH v2 9/9] MAINTAINERS: add Mediatek MTMIPS Clock maintainer
-Date:   Tue, 21 Mar 2023 06:00:34 +0100
-Message-Id: <20230321050034.1431379-10-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
-References: <20230321050034.1431379-1-sergio.paracuellos@gmail.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1679379655; x=1710915655;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=x/JKQO/tvXLKFrfpzBs7bKa38ecdXEcKSMQn3siIxCc=;
+  b=jArOACVhV3PIAfAgxq2Nkp2yEyDs3uPC2hoaKtA7tgK3I2kK36YB6J61
+   eZgmmt9DOkMzpINld5EDKOtF5Lb/J6P0+sUTpvC1wGeS/Qm/SkTlDIynx
+   4PIcJTqdPY6Y68C8DI7sbATT1x+/6nEmdfOCyEsazOUMGBdams5A2jDeW
+   mcJT1dhtjLFbtzPyAJqFStXRF05KhRhM0hCfTeCeX2R1UeEStALV9kAdF
+   kFmBFYq50H5R06QfEdLgIP6ahRJijQER6LZZC2y335haEYaVpP2qLm2Pk
+   XvQwNvSNY+VkHE+8fU2/EG+coHjdF59WZThtnKxI5qiWZjq1YbccmP0RG
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,278,1673910000"; 
+   d="scan'208";a="29816836"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 21 Mar 2023 07:20:53 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 21 Mar 2023 07:20:53 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 21 Mar 2023 07:20:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1679379653; x=1710915653;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=x/JKQO/tvXLKFrfpzBs7bKa38ecdXEcKSMQn3siIxCc=;
+  b=cx/v5mNcfnc4HI14UYjq64HzbGI7nhU6EAv3kJEMnjyLOlNgE5GEhRx6
+   FCilRqoFqhqdDQVW8RWKHw5GXV+eR6MkcBlcOAtdkUZQJFAy89m0+sBmI
+   PVO54LHb/+qhZ2z3SlrD9/2PsudTWBZhL7Syg0ZXZa7b+EycTUfATEoN9
+   Zln5Tg4w+ZNWOT1PtoZo1hMjQqRDhXDUwTd5bEjODdSYkjciyS01gxGUo
+   yYvGPfjLKY33j1VqGLNHL+6aOKZIA7AGiqCJFYL1KjGcb5tzPWyuJcE/J
+   thowGw54wGHNzzWweXncDkh4ISeDupiZ8qVlXI3dnuyiKK0brTgPL4Mim
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,278,1673910000"; 
+   d="scan'208";a="29816835"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 21 Mar 2023 07:20:52 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id CE0D6280056;
+        Tue, 21 Mar 2023 07:20:52 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Marek Vasut <marex@denx.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org
+Subject: Re: [PATCH 1/1] clk: rs9: Fix suspend/resume
+Date:   Tue, 21 Mar 2023 07:20:50 +0100
+Message-ID: <12182972.O9o76ZdvQC@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <47c091b45aac1dc7a88e154a70e9a655.sboyd@kernel.org>
+References: <20230310074940.3475703-1-alexander.stein@ew.tq-group.com> <3227516.44csPzL39Z@steina-w> <47c091b45aac1dc7a88e154a70e9a655.sboyd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Adding myself as maintainer for Mediatek MTMIPS clock driver.
+Am Montag, 20. M=C3=A4rz 2023, 20:35:41 CET schrieb Stephen Boyd:
+> Quoting Alexander Stein (2023-03-14 00:22:07)
+>=20
+> > Am Montag, 13. M=EF=BF=BDrz 2023, 23:26:54 CET schrieb Stephen Boyd:
+> > > Quoting Alexander Stein (2023-03-09 23:49:40)
+> > >=20
+> > > > Disabling the cache in commit 2ff4ba9e3702 ("clk: rs9: Fix I2C
+> > > > accessors")
+> > > > without removing cache synchronization in resume path results in a
+> > > > kernel panic as map->cache_ops is unset, due to REGCACHE_NONE.
+> > > > Enable flat cache again to support resume again. num_reg_defaults_r=
+aw
+> > > > is necessary to read the cache defaults from hardware. Some registe=
+rs
+> > > > are strapped in hardware and cannot be provided in software.
+> > > >=20
+> > > > Fixes: 2ff4ba9e3702 ("clk: rs9: Fix I2C accessors")
+> > > > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > > > ---
+> > > > There is also a series to not panic when using regcache_sync on
+> > > > REGCACHE_NONE maps at [1].
+> > >=20
+> > > And it was rejected?
+> >=20
+> > v2 has been accepted and is available at [1] in regmap's for-next branc=
+h.
+>=20
+> So this still needs to be applied and backported to fix stable kernels?
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+IMHO yes, because without cache nothing will be stored/restored upon suspen=
+d/
+resume. The other patch in regcache was just to ensure broken drivers (like=
+=20
+this one in the current state) do not crash the kernel.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..581234dfa735 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13137,6 +13137,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/phy/mediatek,mt7621-pci-phy.yaml
- F:	drivers/phy/ralink/phy-mt7621-pci.c
- 
-+MEDIATEK MTMIPS CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-+F:	drivers/clk/ralink/clk-mtmips.c
-+
- MEDIATEK NAND CONTROLLER DRIVER
- L:	linux-mtd@lists.infradead.org
- S:	Orphan
--- 
-2.25.1
+Best regards,
+Alexander
+
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
 
