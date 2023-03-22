@@ -2,134 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A736C476F
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Mar 2023 11:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCF06C4739
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Mar 2023 11:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjCVKVB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Mar 2023 06:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S229524AbjCVKHM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Mar 2023 06:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjCVKUz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Mar 2023 06:20:55 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5F95D747;
-        Wed, 22 Mar 2023 03:20:53 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id 3B7282B06B3B;
-        Wed, 22 Mar 2023 06:02:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 22 Mar 2023 06:02:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679479320; x=1679486520; bh=Gt
-        a6DeZfb/Xau68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=NorTwVKQADW6KDf4kx
-        gTnHWfLbpN0EHokeoC3DrOhiZ8CU+KJABXVU+NCa4piYXo6HpTy5HuzRNiFF7tvk
-        kS1uF/ZP394MUuAXVna9Fpn5iDdg0QWtevomnrNhpIe8AFZeNrF8jhIQTLTrI4Ez
-        F8Qq3dke4/3ZmogeOMWjTD3G0qEPqcWsVr1d4vEZWddG5PYi4J+p82qo/RJd1+Pc
-        D0wApM8Ce7YBSMxA8ajCR6phnmYRwiQ+O0944pCsdBUvTlzEsCNbSTwkGxjs5mkS
-        NFc+f7bGpNjIchGEdl3yn7/xBjiqmaS6rxVy3+SCY/EzwAAydjJ28Yv1QCgqUXW5
-        bw3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679479320; x=1679486520; bh=Gta6DeZfb/Xau
-        68OA4+XAVPoV3SlTyjlH7iq8FkVbq0=; b=hSHnolcwH3t3bdKswDish1u/kHXRm
-        GBRI+wa61UtRx0Zfrdsmq8CnsjhuT0V4tk4WhsMm/dY76LIFlaULjvwZ2Is4sByR
-        wnxq6k16NmOke2GgTmcYxC0a6B4M8NbJbdxhf7RYClD05krVRz4oMtNmPPFUz6R8
-        X7AoD2/fmudieEE2qro35wOUjhLadWUNt4yny+XeRhuzuTRtnQEOj4VK4BUdxU/D
-        zi0g/ITaWRhuRN9kFMW6pQhMC12Gxcd91h/lhV8gMs1zfdQ6CWUNBs/ZUdzW133y
-        7r1y/0Q0UW2r7+wW+iKmkbtAUEOh+P4wH5qpItfTivzwuUxdDObXugLGA==
-X-ME-Sender: <xms:FtIaZH_cP3JOYJvAj5oXSd2OXcDDKRtpMgnneLT8maCrLgFT1uQ4nw>
-    <xme:FtIaZDsYVbTOawAhmoa1oHa1uoPNqdzfMuj7H8tTDpE_F1DWS5baFq1_V5RMtYsKY
-    9ZpEjgEFQHUDWVr4rk>
-X-ME-Received: <xmr:FtIaZFCrxLPEjFjrYQZiYYmsseQcWkD9OS0c3-ySi7agJ-uGVLqJDI9_JpnBVpkVO-euEIby8gsGmxPlhwdU9mKdE7Bvs1g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdegvddguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetfefffefgkedtfefgledugfdtjeefjedvtddtkeetieffjedvgfehheff
-    hfevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:FtIaZDc9Ss_19xgb6mhlQrLE2QXKvFoiIL34VGbsSSZIH4FlYiJYkQ>
-    <xmx:FtIaZMM-k1IhWCLqsm0aMt16t2CzF1nOejsm53Durk41tY8K7upzcA>
-    <xmx:FtIaZFmHv-kP0VetVBA3YfQuGBF9hqOu-s8l7lOOTdqLpGXLYmgqsQ>
-    <xmx:GNIaZAV9AZ4qhuQDCpvviTReJqZxJZ2jgJo22F_udVCHmNFQ2Gz5SS1iyA8>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Mar 2023 06:01:56 -0400 (EDT)
-Date:   Wed, 22 Mar 2023 11:01:53 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Abel Vesa <abelvesa@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        David Lechner <david@lechnology.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sekhar Nori <nsekhar@ti.com>, Shawn Guo <shawnguo@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        patches@opensource.cirrus.com, linux-tegra@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 00/65] clk: Make determine_rate mandatory for muxes
-Message-ID: <20230322100153.gzyznaukbdngcvko@houat>
-References: <20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech>
- <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
+        with ESMTP id S229682AbjCVKHM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Mar 2023 06:07:12 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E35E5A185
+        for <linux-clk@vger.kernel.org>; Wed, 22 Mar 2023 03:07:10 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id x8so11810857qvr.9
+        for <linux-clk@vger.kernel.org>; Wed, 22 Mar 2023 03:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679479630;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QnZosvUq8qzkgLxKKE/9sPWIfB/HU/AWtKSlc35tW34=;
+        b=cMsBUuFOrqgW4w0tLieqeHBMLL41hmnKw7r8Fp9vPn1fChqVnwXV8aYmpJpZ/hT8fE
+         ixgJ7yOsH9QUmpPf+cewXdGkRCHC8AgUosnRlVYEpIxyPfj2spF3Y4qEbY1XfyLGlz0s
+         XIwKQwNpdvGo6mumkR4yE3dmIVip9uIWmqfTqJMKhnva6rzroVlp8gyU3xKlQRXBM7AU
+         7jaYevdLxFFj7nl6Z7nw4yIbtxrqs6y+NnqUpWs6Jo9/s0SAuGeawoHJLOEca52HFkp3
+         Cg7TXt2zsO46AwG19yCvTgqkT/Rr0dgtSN4TjcuRkBfZjUf7uQTW5RQ/i5hFdNzLGzq1
+         BdwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679479630;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QnZosvUq8qzkgLxKKE/9sPWIfB/HU/AWtKSlc35tW34=;
+        b=vKS+7zEFsvIkJkHr0ZmCfr/H4TARN4qUIjUgHu29A+iPtE45kRXFQGqxv2HMEt+7wZ
+         aHKW5YFaRYN7FHDdTvf1CE/7oWT/Pl/baUBw6L7CYpG6Xd309mkZcClGRQwxhmDud9ES
+         /Ou/BLuT7VbE1NUIJkfZp3V8iI83T79SOBTJlG40iN91bwSDnIytYYYzjPQvAEiONlhD
+         R7qAWCBJqe3tmOEwVPl14qX029OSI4SwikPan9GtTzUJ5PS8EWdN4LdxHJMonVkhXChp
+         uDliO1W/PDuFz2AdUXEcYySEDfW8/j541dw3NJpepm0ciev6FzihGODfePQGivJrss8H
+         QIRA==
+X-Gm-Message-State: AO0yUKW20FjlNYNedCIX0Yo20CCg4ptXfxBuQYdfLMO42xPodQx+ga7/
+        0i2G2zh2WwRBL/BfP81+jqq4RgW5LvS0QsHn1gRf7g==
+X-Google-Smtp-Source: AK7set8ZJjgsD0g8hB/7Rat/s/Hv8yPnY9iwyQc6Q23dgWte7vKx0c7Bwb+1pdWnuluDFJFx03CmZ7jldKPs+8eHFos=
+X-Received: by 2002:ad4:4ba3:0:b0:56f:6b7:3a7b with SMTP id
+ i3-20020ad44ba3000000b0056f06b73a7bmr621393qvw.7.1679479629674; Wed, 22 Mar
+ 2023 03:07:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vv4zkvfgrnplpmur"
-Content-Disposition: inline
-In-Reply-To: <f804380a14c346fdbbf3286bcb40b3c2.sboyd@kernel.org>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+References: <20230321175758.26738-1-srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230321175758.26738-1-srinivas.kandagatla@linaro.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Wed, 22 Mar 2023 15:36:33 +0530
+Message-ID: <CAMi1Hd06QKQ3B_fSsvmP6pJOPCCv3J5ntd+VvHSA8u1Q8pJmCw@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: gfm-mux: use runtime pm while accessing registers
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,52 +67,90 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Tue, 21 Mar 2023 at 23:28, Srinivas Kandagatla
+<srinivas.kandagatla@linaro.org> wrote:
+>
+> gfm mux driver does support runtime pm but we never use it while
+> accessing registers. Looks like this driver was getting lucky and
+> totally depending on other drivers to leave the clk on.
+>
+> Fix this by doing runtime pm while accessing registers.
 
---vv4zkvfgrnplpmur
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you Srini, this fixes the boot regression I see on the RB5
+booting v6.1.y and v6.3-rc kernel versions.
 
-Hi Stephen,
+Tested-by: Amit Pundir <amit.pundir@linaro.org>
 
-On Tue, Mar 21, 2023 at 04:55:03PM -0700, Stephen Boyd wrote:
-> Quoting Maxime Ripard (2022-11-04 06:17:17)
-> > Hi,
-> >=20
-> > This is a follow-up to a previous series that was printing a warning
-> > when a mux has a set_parent implementation but is missing
-> > determine_rate().
-> >=20
-> > The rationale is that set_parent() is very likely to be useful when
-> > changing the rate, but it's determine_rate() that takes the parenting
-> > decision. If we're missing it, then the current parent is always going
-> > to be used, and thus set_parent() will not be used. The only exception
-> > being a direct call to clk_set_parent(), but those are fairly rare
-> > compared to clk_set_rate().
-> >=20
-> > Stephen then asked to promote the warning to an error, and to fix up all
-> > the muxes that are in that situation first. So here it is :)
-> >=20
-> > Let me know what you think,
->=20
-> What's the plan here? Are you going to resend?
-
-It wasn't clear to me whether or not this was something that you wanted,
-and I got some pushback on the drivers so I kind of forgot about it.
-
-If you do want it (and it looks like you do), I'll resend it.
-
-Maxime
-
---vv4zkvfgrnplpmur
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBrSEQAKCRDj7w1vZxhR
-xbTqAQDfuo+7won5pWzakHyWfnltaYo2jqEYfAWn/jNs6cp2QwD9EUEVxPQOk0xp
-CPNSu0go9roDa7ZOHrlkqTVTbZM0DQo=
-=JaLV
------END PGP SIGNATURE-----
-
---vv4zkvfgrnplpmur--
+>
+> Fixes: a2d8f507803e ("clk: qcom: Add support to LPASS AUDIO_CC Glitch Free Mux clocks")
+> Cc: stable@vger.kernel.org
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  drivers/clk/qcom/lpass-gfm-sm8250.c | 29 ++++++++++++++++++++++++++++-
+>  1 file changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/qcom/lpass-gfm-sm8250.c b/drivers/clk/qcom/lpass-gfm-sm8250.c
+> index 96f476f24eb2..bcf0ea534f7f 100644
+> --- a/drivers/clk/qcom/lpass-gfm-sm8250.c
+> +++ b/drivers/clk/qcom/lpass-gfm-sm8250.c
+> @@ -38,14 +38,37 @@ struct clk_gfm {
+>  static u8 clk_gfm_get_parent(struct clk_hw *hw)
+>  {
+>         struct clk_gfm *clk = to_clk_gfm(hw);
+> +       int ret;
+> +       u8 parent;
+> +
+> +       ret = pm_runtime_resume_and_get(clk->priv->dev);
+> +       if (ret < 0 && ret != -EACCES) {
+> +               dev_err_ratelimited(clk->priv->dev,
+> +                                   "pm_runtime_resume_and_get failed in %s, ret %d\n",
+> +                                   __func__, ret);
+> +               return ret;
+> +       }
+> +
+> +       parent = readl(clk->gfm_mux) & clk->mux_mask;
+> +
+> +       pm_runtime_mark_last_busy(clk->priv->dev);
+>
+> -       return readl(clk->gfm_mux) & clk->mux_mask;
+> +       return parent;
+>  }
+>
+>  static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
+>  {
+>         struct clk_gfm *clk = to_clk_gfm(hw);
+>         unsigned int val;
+> +       int ret;
+> +
+> +       ret = pm_runtime_resume_and_get(clk->priv->dev);
+> +       if (ret < 0 && ret != -EACCES) {
+> +               dev_err_ratelimited(clk->priv->dev,
+> +                                   "pm_runtime_resume_and_get failed in %s, ret %d\n",
+> +                                   __func__, ret);
+> +               return ret;
+> +       }
+>
+>         val = readl(clk->gfm_mux);
+>
+> @@ -57,6 +80,8 @@ static int clk_gfm_set_parent(struct clk_hw *hw, u8 index)
+>
+>         writel(val, clk->gfm_mux);
+>
+> +       pm_runtime_mark_last_busy(clk->priv->dev);
+> +
+>         return 0;
+>  }
+>
+> @@ -251,6 +276,8 @@ static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
+>         if (IS_ERR(cc->base))
+>                 return PTR_ERR(cc->base);
+>
+> +       cc->dev = dev;
+> +
+>         err = devm_pm_runtime_enable(dev);
+>         if (err)
+>                 return err;
+> --
+> 2.21.0
+>
