@@ -2,73 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0976CA6BC
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Mar 2023 16:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCBA6CA7FF
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Mar 2023 16:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjC0ODs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Mar 2023 10:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S229804AbjC0OpQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Mar 2023 10:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232307AbjC0ODm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Mar 2023 10:03:42 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B711730;
-        Mon, 27 Mar 2023 07:03:12 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id B12435FD0E;
-        Mon, 27 Mar 2023 17:03:05 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679925785;
-        bh=jZJpM/4Rc9Qnh+EaqKtl2e+nmyTvBNftV4dt5AeUO6o=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=S9eYE1SL04rTfWAEoOx6gCpQx2yfCJ2JmZs3JCHm2AVGOcW1U1oiGCud2YYAwVkoy
-         +VyZ+InOP5B5LU2TrIA0FdmZKtwEdQxaAn6L6ImMkqLndPdYEiGJj3Kn5O5XyzX+Zn
-         ifqCkCELQ4NXWy4R6FKxZSCuDTU8yfuQcCSU72EfIGz1Fp419xuAhnuJyjz5UteiZv
-         BmJ+vONU49UVB5NKiEneVCAPRMbsrznRh8BKU4ciYeIbb50vDwRSOcjSxpxQFOg6mh
-         f7n1YRNEKKbe3DHTzNtSyUm7iYdPHJ3ge8N4luawuaEk9Cy5euez0VXRlGhN/PyVP8
-         BZJcid7h8ZuHw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 27 Mar 2023 17:03:05 +0300 (MSK)
-Date:   Mon, 27 Mar 2023 17:02:59 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <neil.armstrong@linaro.org>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v11 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Message-ID: <20230327140259.xtiyoia4f7eir4bm@CAB-WSD-L081021>
-References: <20230321193014.26349-1-ddrokosov@sberdevices.ru>
- <20230321193014.26349-4-ddrokosov@sberdevices.ru>
- <1jmt3yo5r0.fsf@starbuckisacylon.baylibre.com>
- <20230327105115.ury3w4xpzhcpnqjg@CAB-WSD-L081021>
- <1jilemo1r9.fsf@starbuckisacylon.baylibre.com>
- <ae367a80-e617-42a6-f873-73a1ecfe7c0d@linaro.org>
- <20230327131927.k7uswfn6i3jqjrzv@CAB-WSD-L081021>
- <01bac126-d057-d189-ca19-37db31057e99@linaro.org>
+        with ESMTP id S229733AbjC0OpP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Mar 2023 10:45:15 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C912E1736
+        for <linux-clk@vger.kernel.org>; Mon, 27 Mar 2023 07:45:13 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54606036bb3so9011867b3.6
+        for <linux-clk@vger.kernel.org>; Mon, 27 Mar 2023 07:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679928313;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L12ayakUPlP/19pA0REczduySKLGqF0UobwpxbA4vYI=;
+        b=HCMDYbOpcls0l7uJ+OcpKeY9i+39w/6k34p7qzXuauPoRiiQ/iBrgNX6plxv3DaduO
+         LYUg1kmkuYUu1ASohU87q45xXcF5zZwjhZcjxLHNRqunmGVyvdE0ncfAbM4jYGL2a6Hi
+         ZQrZHvwxbn7Qj9gGrEo+lSWNxtJMehoP7+sMxooTClbw9a72tymMpZDtFWW9QK55dq7j
+         tZzKAyZROkTUGYIO6A8fULGQ90NIoJvIq/X31peKCSn6/V/RtSMVwdv2Xr54SK5CP77n
+         J/+otEjjHgbrbE2HS1bwHf02GJDWrMg5vm71JCafQx1tGYW2IJIyWC5MrHLym5gAKPjm
+         rKkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679928313;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L12ayakUPlP/19pA0REczduySKLGqF0UobwpxbA4vYI=;
+        b=Zkr5cD0FCZaJg8qM+Jy+9u5ZZd35Z/otGhSRDnnmYC3O2D6BL/WakTxORkIyTlcr+q
+         mz0dGP46o3hCcdQ8OKVOqoU3foh1eOuNu3dg9jqcdxuXtkAc2WKzX3dW97JaJrXpxaO9
+         wK68vg2U9dOdvMw+wbgwEMj0rLFvZ3xDXT4s5wn0kosJeyctFA5jLYzcCDHWVJZsCsgj
+         xRRaEZ5Dg/jTfzix0SYywZ9FtsX7zPQjW5lpxHRlGqvq7NdCJWQaZChSlyFqf5r2dy2g
+         kLhcTB1asccg+9y1vFqDbEdzxA0f/Sb3aFbutDPHOkWFKh5UnilgDDknJHTnRp4mgtPj
+         Wi8Q==
+X-Gm-Message-State: AAQBX9dZJ2Dpsd7CyL5WNoVxWMJubrzsfwnH/lQJp54k/UpZn+vZCbuD
+        fYu9SC9nLZ5EvByPSgNfvbtU5ksKaOzQ3RTI0TyLZA==
+X-Google-Smtp-Source: AKy350ZjBUkCK3zk3r6esLgw2CWtnPJs9phaPxb0j+BPMz06Xywjq1t0XhIWnlijihL/e6IBy3vNDh1mPbmMAfJ9vJ8=
+X-Received: by 2002:a81:b617:0:b0:541:7f69:aa8b with SMTP id
+ u23-20020a81b617000000b005417f69aa8bmr5256500ywh.5.1679928312880; Mon, 27 Mar
+ 2023 07:45:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <01bac126-d057-d189-ca19-37db31057e99@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/27 05:49:00 #21016052
-X-KSMG-AntiVirus-Status: Clean, skipped
+References: <20230327132718.573-1-quic_devipriy@quicinc.com> <20230327132718.573-4-quic_devipriy@quicinc.com>
+In-Reply-To: <20230327132718.573-4-quic_devipriy@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 27 Mar 2023 17:45:02 +0300
+Message-ID: <CAA8EJprTm1sZ8fnfNee+NJTiaFq17QwWaEnSoJWVYs_GY65xFg@mail.gmail.com>
+Subject: Re: [PATCH V10 3/4] arm64: dts: qcom: Add support for ipq9574 SoC and
+ RDP433 variant
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
+        marcel.ziswiler@toradex.com, nfraprado@collabora.com,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, quic_srichara@quicinc.com,
+        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,201 +77,178 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 03:55:46PM +0200, neil.armstrong@linaro.org wrote:
-> On 27/03/2023 15:19, Dmitry Rokosov wrote:
-> > On Mon, Mar 27, 2023 at 02:03:25PM +0200, neil.armstrong@linaro.org wrote:
-> > > On 27/03/2023 13:39, Jerome Brunet wrote:
-> > > > 
-> > > > On Mon 27 Mar 2023 at 13:51, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> > > > 
-> > > > > On Mon, Mar 27, 2023 at 11:51:21AM +0200, Jerome Brunet wrote:
-> > > > > > 
-> > > > > > On Tue 21 Mar 2023 at 22:30, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> > > > > > 
-> > > > > > > Add the documentation for Amlogic A1 PLL and Amlogic A1 Peripherals
-> > > > > > > clock drivers.
-> > > > > > > Introduce Amlogic A1 PLL and Amlogic A1 Peripherals device tree
-> > > > > > > bindings and include them to MAINTAINERS.
-> > > > > > > 
-> > > > > > > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> > > > > > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > > > > > > ---
-> > > > > > >    .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
-> > > > > > >    .../bindings/clock/amlogic,a1-pll-clkc.yaml   |  59 +++++++++
-> > > > > > >    MAINTAINERS                                   |   1 +
-> > > > > > >    include/dt-bindings/clock/amlogic,a1-clkc.h   | 113 ++++++++++++++++++
-> > > > > > >    .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |  21 ++++
-> > > > > > >    5 files changed, 267 insertions(+)
-> > > > > > >    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
-> > > > > > >    create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> > > > > > 
-> > > > > > There is two drivers (and 2 independent patches). There should be 2
-> > > > > > bindings patches as well.
-> > > > > > 
-> > > > > 
-> > > > > Before, in previous versions I had two versions, but it wasn't bisectable
-> > > > > approach.
-> > > > 
-> > > > You are confusing bisectable and Rob's robot. Splitting patches is more
-> > > > that likely to help bisect (and patches backport) - not the other way around.
-> > > > 
-> > > > > a1-clkc schema depends on a1-pll-clkc headers and vice versa.
-> > > > > It means dt schemas checkers will show us failure if we split them into two
-> > > > > patchsets.
-> > > > 
-> > > > Only because you are patches are not upstream yet ...
-> > > > 
-> > > > > I know, that we can use raw digits instead of CLKID names, but IMO it doesn't
-> > > > > look like production schema and it requires one more patchset above the
-> > > > > series with proper CLKID definitons usage and proper header including.
-> > > > > 
-> > > > > BTW, there is an example of Rob's test bot failure found in the previous
-> > > > > v10 patch series due to chicken or the egg problem.
-> > > > > https://lore.kernel.org/all/167769997208.7087.5344356236212731922.robh@kernel.org/
-> > > > > 
-> > > > > Please advise what's the best practice to resolve that..
-> > > > 
-> > > > Don't use the header in your example would solve the problem and
-> > > > still be correct DT wise.
-> > > > 
-> > > > The examples are just examples, they are not required to actually
-> > > > matches a real HW, as far as I know.
-> > > 
-> > > Exact, you can use fake lables instead of defined:
-> > > 
-> > > <&clkc_pll CLKID_FCLK_DIV2>,
-> > > 
-> > > =>
-> > > remove "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
-> > > 
-> > > <&clkc_pll_fclk_div2>,
-> > > 
-> > > is perfectly ok and will permit have 2 separate patches.
-> > > 
-> > > The dependency is only if you have a common yaml file for
-> > > both bindings files, but this is not the case here.
-> > 
-> > Simple removal of "#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>"
-> > header doesn't work, dt_binding_check make rule is failed:
-> 
-> I never wrote you to only remove the include, adding fake labels phandles was the logical next step.
+On Mon, 27 Mar 2023 at 16:28, Devi Priya <quic_devipriy@quicinc.com> wrote:
+>
+> Add initial device tree support for Qualcomm IPQ9574 SoC and
+> Reference Design Platform(RDP) 433 which is based on IPQ9574
+> family of SoCs
+>
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  Changes in V10:
+>         - Renamed the Board Device Tree Source to use the RDP numbers
+>         - Updated the Makefile, subject and commit message accordingly
+>
+>  arch/arm64/boot/dts/qcom/Makefile           |   1 +
+>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts |  84 ++++++
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 270 ++++++++++++++++++++
+>  3 files changed, 355 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>  create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 1a29403400b7..52f1f92c5195 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -8,6 +8,7 @@ dtb-$(CONFIG_ARCH_QCOM) += ipq6018-cp01-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += ipq8074-hk01.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += ipq8074-hk10-c1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += ipq8074-hk10-c2.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)        += ipq9574-rdp433.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += msm8916-acer-a1-724.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += msm8916-alcatel-idol347.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)        += msm8916-asus-z00l.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> new file mode 100644
+> index 000000000000..2ce8e09e7565
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> @@ -0,0 +1,84 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+> +/*
+> + * IPQ9574 RDP433 board device tree source
+> + *
+> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "ipq9574.dtsi"
+> +
+> +/ {
+> +       model = "Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7";
+> +       compatible = "qcom,ipq9574-ap-al02-c7", "qcom,ipq9574";
+> +
+> +       aliases {
+> +               serial0 = &blsp1_uart2;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = "serial0:115200n8";
+> +       };
+> +};
+> +
+> +&blsp1_uart2 {
+> +       pinctrl-0 = <&uart2_pins>;
+> +       pinctrl-names = "default";
+> +       status = "okay";
+> +};
+> +
+> +&sdhc_1 {
+> +       pinctrl-0 = <&sdc_default_state>;
+> +       pinctrl-names = "default";
+> +       mmc-ddr-1_8v;
+> +       mmc-hs200-1_8v;
+> +       mmc-hs400-1_8v;
+> +       mmc-hs400-enhanced-strobe;
+> +       max-frequency = <384000000>;
+> +       bus-width = <8>;
+> +       status = "okay";
+> +};
+> +
+> +&sleep_clk {
+> +       clock-frequency = <32000>;
+> +};
+> +
+> +&tlmm {
+> +       sdc_default_state: sdc-default-state {
+> +               clk-pins {
+> +                       pins = "gpio5";
+> +                       function = "sdc_clk";
+> +                       drive-strength = <8>;
+> +                       bias-disable;
+> +               };
+> +
+> +               cmd-pins {
+> +                       pins = "gpio4";
+> +                       function = "sdc_cmd";
+> +                       drive-strength = <8>;
+> +                       bias-pull-up;
+> +               };
+> +
+> +               data-pins {
+> +                       pins = "gpio0", "gpio1", "gpio2",
+> +                              "gpio3", "gpio6", "gpio7",
+> +                              "gpio8", "gpio9";
+> +                       function = "sdc_data";
+> +                       drive-strength = <8>;
+> +                       bias-pull-up;
+> +               };
+> +
+> +               rclk-pins {
+> +                       pins = "gpio10";
+> +                       function = "sdc_rclk";
+> +                       drive-strength = <8>;
+> +                       bias-pull-down;
+> +               };
+> +       };
+> +};
+> +
+> +&xo_board_clk {
+> +       clock-frequency = <24000000>;
+> +};
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> new file mode 100644
+> index 000000000000..3bb7435f5e7f
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -0,0 +1,270 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+> +/*
+> + * IPQ9574 SoC device tree source
+> + *
+> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+> +#include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+> +
+> +/ {
+> +       interrupt-parent = <&intc>;
+> +       #address-cells = <2>;
+> +       #size-cells = <2>;
+> +
+> +       clocks {
+> +               bias_pll_ubi_nc_clk: bias-pll-ubi-nc-clk {
+> +                       compatible = "fixed-clock";
+> +                       clock-frequency = <353000000>;
+> +                       #clock-cells = <0>;
+> +               };
 
-Ah, sorry, I've confused. Anyway, the fake labels are working perfectly.
-DT checkers are silent.
+What is the source for this clock? With it clocking at 353 MHz, I
+doubt that it is an external clock.
 
-> > 
-> > Error: Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts:28.37-38 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > 
-> > It happens, because 'dt_binding_check' generates simple dts example and
-> > tries to compile it:
-> > 
-> > cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
-> > ===
-> > 
-> > /dts-v1/;
-> > /plugin/; // silence any missing phandle references
-> > 
-> > 
-> > /{
-> >      compatible = "foo";
-> >      model = "foo";
-> >      #address-cells = <1>;
-> >      #size-cells = <1>;
-> > 
-> > 
-> > 
-> >      example-0 {
-> >          #address-cells = <1>;
-> >          #size-cells = <1>;
-> > 
-> > 
-> >          apb {
-> >              #address-cells = <2>;
-> >              #size-cells = <2>;
-> >              clock-controller@800 {
-> >                  compatible = "amlogic,a1-clkc";
-> >                  reg = <0 0x800 0 0x104>;
-> >                  #clock-cells = <1>;
-> >                  clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-> >                           <&clkc_pll CLKID_FCLK_DIV3>,
-> >                           <&clkc_pll CLKID_FCLK_DIV5>,
-> >                           <&clkc_pll CLKID_FCLK_DIV7>,
-> >                           <&clkc_pll CLKID_HIFI_PLL>,
-> >                           <&xtal>;
-> >                  clock-names = "fclk_div2", "fclk_div3",
-> >                                "fclk_div5", "fclk_div7",
-> >                                "hifi_pll", "xtal";
-> >              };
-> >          };
-> > 
-> >      };
-> > };
-> > ===
-> > 
-> > As you can see, header is required.
-> > 
-> > But looks like, dt binding checker is happy with the fake references hack :)
-> > Below there is generated example dts:
-> > 
-> > cat Documentation/devicetree/bindings/clock/amlogic,a1-clkc.example.dts
-> > ===
-> > 
-> > /dts-v1/;
-> > /plugin/; // silence any missing phandle references
-> > 
-> > 
-> > /{
-> >      compatible = "foo";
-> >      model = "foo";
-> >      #address-cells = <1>;
-> >      #size-cells = <1>;
-> > 
-> > 
-> > 
-> >      example-0 {
-> >          #address-cells = <1>;
-> >          #size-cells = <1>;
-> > 
-> > 
-> >          apb {
-> >              #address-cells = <2>;
-> >              #size-cells = <2>;
-> >              clock-controller@800 {
-> >                  compatible = "amlogic,a1-clkc";
-> >                  reg = <0 0x800 0 0x104>;
-> >                  #clock-cells = <1>;
-> >                  clocks = <&clkc_pll_fclk_div2>,
-> >                           <&clkc_pll_fclk_div3>,
-> >                           <&clkc_pll_fclk_div5>,
-> >                           <&clkc_pll_fclk_div7>,
-> >                           <&clkc_pll_hifi_pll>,
-> >                           <&xtal>;
-> >                  clock-names = "fclk_div2", "fclk_div3",
-> >                                "fclk_div5", "fclk_div7",
-> >                                "hifi_pll", "xtal";
-> >              };
-> >          };
-> > 
-> >      };
-> > };
-> > ===
-> > 
-> > Yep, we are able to cheat dt checkers, but we don't help dt developers
-> > with such example.
-> > May be, it's better to prepare two patches in such hierarchy:
-> > 
-> > 1) A1 PLL clkc bindings with fake references without clkc headers
-> > 2) A1 clkc bindings with real CLKID bindings + A1 PLL clkc bindings fix
-> > with real CLKID A1 clkc bindings + header.
-> > 
-> > The such approach resolves DT checkers failures and split DT bindings
-> > into two patchsets.
+> +
+> +               sleep_clk: sleep-clk {
+> +                       compatible = "fixed-clock";
+> +                       #clock-cells = <0>;
+> +               };
+> +
+> +               xo_board_clk: xo-board-clk {
+> +                       compatible = "fixed-clock";
+> +                       #clock-cells = <0>;
+> +               };
+> +       };
 
-What do you think about patchsets form listed above? Fake labels as a
-first step and real CLKIDs as a second. I'm embarrassed only that second
-patch fixes the previous in the one patch series...
+[skipped the rest]
 
 -- 
-Thank you,
+With best wishes
 Dmitry
