@@ -2,72 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36A36CB3E8
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Mar 2023 04:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0A56CB4F8
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Mar 2023 05:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbjC1CVD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Mar 2023 22:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S232488AbjC1DjS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Mar 2023 23:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbjC1CUV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Mar 2023 22:20:21 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B765A3A80;
-        Mon, 27 Mar 2023 19:20:00 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id le6so10257065plb.12;
-        Mon, 27 Mar 2023 19:20:00 -0700 (PDT)
+        with ESMTP id S231841AbjC1DjQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Mar 2023 23:39:16 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA1F171E
+        for <linux-clk@vger.kernel.org>; Mon, 27 Mar 2023 20:39:15 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id e21so11115423ljn.7
+        for <linux-clk@vger.kernel.org>; Mon, 27 Mar 2023 20:39:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679969994;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E7dJ/bjg1F9FQ9capUh4BLZhZjrrXicn0p5OerG2+tM=;
-        b=NgMeXDWdQBj8d7ErGEkcrsqAL8i8QIJqB85y8OmhazOco61f/AsEf6bcIotiSSv5gr
-         nhsCeIjFkFb/J3G/cqJtsReZ5jYUjMcZprCjDI1HrB4WY/W8zSZuT2vOPy/0+bBXvIRv
-         lRnMUwuBOAidzIevUGiYBwT+hJ1E8c/77UoSk/xbLeNKXmbNots4SHULuyRQm7P+5dBb
-         KPHvTG4vuF/YCTgW1NRrudlA3IovaoWCWf7F7E9xVjD3M3q6lyz4wiJuLxpPulXTrC0+
-         R4RnkSvzODP6F66MZQ3u9Qm1UgMfzJygYcacWrhO5LOLHrxx7SAwORAkeOgo/BXZ+V0f
-         bIMA==
+        d=cogentembedded-com.20210112.gappssmtp.com; s=20210112; t=1679974753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+teYGhMbJ/qz9LQzLhsSWOaFjw154Q/LczJdwFN1UeE=;
+        b=F25dTMryVlQgpQKpjDgvxzOxrW0aEVP+Jq/+lByoYVS4zsu4zkgCJDRkE1d60fMccI
+         U2JOv0BB7HitFjCJ7FNotbGPYdFO3+qc1LUidTvGZmaIEoJAdCxMbHGY6sFK67fqTa8D
+         wA6nqM6YJpJqaUQsHT0d+grlxH3eBNSTK3d/Jne867T6UGBPA0McqjIrs6H2OxOBiHVT
+         lkxmZyDkc1gc2ONr6Aupt+KVjw4o1zXiN+cL00c6b7xcZI6WLjnDaoMD4d6S7bRqNrfw
+         49xt5E4eyIFwFj+EkD22/H4x23prEI3eQWCIDWf1idGAd3kmYWna6PNMNa/jAPqG2oRq
+         bi0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679969994;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E7dJ/bjg1F9FQ9capUh4BLZhZjrrXicn0p5OerG2+tM=;
-        b=wYRRJhG2FWxu+ezmHlcnhLTocfdL8R3uKHumpebnF/Kr5+/NiRbtzk+qIoRbGn72hR
-         eojn3WGNCbjwVIxA9ZaH/5g8dFb0mB62tRx64YC50ZnzoWt74bj+6TbN25+qXYyoIfen
-         m3Wbv7XMPgrEWiIDszj3ydZkP8DEuDFRVn/OTNxTA+dgY8DM+y6QKht2TqTmtNZlv/aM
-         ilLegc/emQ6Nal9Al7fmmWl9kQiHiSIDNNDiDP38HWUk/0cbupkVbD5hYH8SqiYucTWu
-         d5sWBhq0md90+wBGgy6KMvNQaRq990Plo0RoJGfAKc6jqq45sAhy/flFGijgREapZHFL
-         lHGw==
-X-Gm-Message-State: AAQBX9f15nt0e5IXmQjqNZhH+y1Y9ek1wc8KhCi5Jt0/DuwvbwcV2ThF
-        bt6gtiJJjolaIvxUc7dODFo=
-X-Google-Smtp-Source: AKy350a09Q0z1OAREfN69d8V24aTLlOXOre3ocv7OCVWbE4J+go0Qi105oq10UXv6Bv8FBPGBEjPwA==
-X-Received: by 2002:a17:90a:7062:b0:240:6623:733a with SMTP id f89-20020a17090a706200b002406623733amr7923003pjk.8.1679969994103;
-        Mon, 27 Mar 2023 19:19:54 -0700 (PDT)
-Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id f17-20020a17090ac29100b00232cc61e16bsm5029301pjt.35.2023.03.27.19.19.51
+        d=1e100.net; s=20210112; t=1679974753;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+teYGhMbJ/qz9LQzLhsSWOaFjw154Q/LczJdwFN1UeE=;
+        b=kr285cDHQP1MUPb65iKn1c/ieUji6oOcnBMY6LLD57FYBT7tN0dZqi6P0G/vh+BnTQ
+         AE9NQ7Tz83jytCgwl4d+aNxqB/KQDTnHxir91RfETB3sXbs98KmX1je+qcy5x4Mm1M/l
+         8uKbGdYH9pmCFgHzsNn3vkkXzqX51rHhFkA7pJR0t3cBWH7EdrmuNXvhVhYrIM0CMRDh
+         sqquI+FnccUvdSDLSxrOAWdsuQ9CmfkIR594okrrKWjnFlpTCj3USOIk1WCZGJGsyGdM
+         +BLGYo0nm/sHEOwiqLH0iXxZG58gao0a5iqasrBIPXwU2Ryyqx4zY4IFUqqQSbnvE4kY
+         sJjw==
+X-Gm-Message-State: AAQBX9e+23HJq/Y6bLrFEaroaBZJAydP3azXGr751VBPjmAKWqdke8wt
+        j/idZs7ZglBDraBiD6oqItKPhg==
+X-Google-Smtp-Source: AKy350ZXmlguZVLGLGK8nHVPZeZlcJTzhlT/xD/9+u+W4Dc/kdvYAValjAG/AN1/BfQqHwd4pZb1UA==
+X-Received: by 2002:a2e:868c:0:b0:298:9b8d:cc17 with SMTP id l12-20020a2e868c000000b002989b8dcc17mr4391050lji.9.1679974753652;
+        Mon, 27 Mar 2023 20:39:13 -0700 (PDT)
+Received: from cobook.lan ([85.193.119.48])
+        by smtp.gmail.com with ESMTPSA id r10-20020a2eb60a000000b002945b851ea5sm4865094ljn.21.2023.03.27.20.39.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Mar 2023 19:19:53 -0700 (PDT)
-From:   Jacky Huang <ychuang570808@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v6 12/12] MAINTAINERS: Add entry for NUVOTON MA35
-Date:   Tue, 28 Mar 2023 02:19:12 +0000
-Message-Id: <20230328021912.177301-13-ychuang570808@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230328021912.177301-1-ychuang570808@gmail.com>
-References: <20230328021912.177301-1-ychuang570808@gmail.com>
+        Mon, 27 Mar 2023 20:39:13 -0700 (PDT)
+From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Subject: [PATCH] clk: renesas: r8a77980: Add i2c5 clock
+Date:   Tue, 28 Mar 2023 09:39:02 +0600
+Message-Id: <20230328033902.830269-1-nikita.yoush@cogentembedded.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,35 +70,25 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Jacky Huang <ychuang3@nuvoton.com>
+The MSSR clock definition for i2c5 was missing. Add it.
 
-Add entry for Nuvton ma35d1 maintainer and files.
-
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
 ---
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/clk/renesas/r8a77980-cpg-mssr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1dc8bd26b6cf..a3912717f1da 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2501,6 +2501,15 @@ F:	drivers/rtc/rtc-ab8500.c
- F:	drivers/rtc/rtc-pl031.c
- F:	drivers/soc/ux500/
- 
-+ARM/NUVOTON MA35 ARCHITECTURE
-+M:	Jacky Huang <ychuang3@nuvoton.com>
-+M:	Shan-Chun Hung <schung@nuvoton.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Supported
-+F:	Documentation/devicetree/bindings/*/*nuvoton*
-+F:	arch/arm64/boot/dts/nuvoton/*ma35*
-+K:	ma35d1
-+
- ARM/NUVOTON NPCM ARCHITECTURE
- M:	Avi Fishman <avifishman70@gmail.com>
- M:	Tomer Maimon <tmaimon77@gmail.com>
+diff --git a/drivers/clk/renesas/r8a77980-cpg-mssr.c b/drivers/clk/renesas/r8a77980-cpg-mssr.c
+index 01ea09891b32..2f21a8725907 100644
+--- a/drivers/clk/renesas/r8a77980-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a77980-cpg-mssr.c
+@@ -206,6 +206,7 @@ static const struct mssr_mod_clk r8a77980_mod_clks[] __initconst = {
+ 	DEF_MOD("gpio0",		 912,	R8A77980_CLK_CP),
+ 	DEF_MOD("can-fd",		 914,	R8A77980_CLK_S3D2),
+ 	DEF_MOD("rpc-if",		 917,	R8A77980_CLK_RPCD2),
++	DEF_MOD("i2c5",			 919,	R8A77980_CLK_S0D6),
+ 	DEF_MOD("i2c4",			 927,	R8A77980_CLK_S0D6),
+ 	DEF_MOD("i2c3",			 928,	R8A77980_CLK_S0D6),
+ 	DEF_MOD("i2c2",			 929,	R8A77980_CLK_S3D2),
 -- 
-2.34.1
+2.30.2
 
