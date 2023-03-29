@@ -2,123 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0173E6CD4AB
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Mar 2023 10:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448AB6CD4BF
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Mar 2023 10:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjC2Ida (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Mar 2023 04:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S229959AbjC2Ig4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Mar 2023 04:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjC2Id1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Mar 2023 04:33:27 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0470846B2
-        for <linux-clk@vger.kernel.org>; Wed, 29 Mar 2023 01:33:14 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id g19so6010513lfr.9
-        for <linux-clk@vger.kernel.org>; Wed, 29 Mar 2023 01:33:14 -0700 (PDT)
+        with ESMTP id S229481AbjC2Igz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Mar 2023 04:36:55 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2CBBA;
+        Wed, 29 Mar 2023 01:36:54 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id ja10so14241369plb.5;
+        Wed, 29 Mar 2023 01:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680078793;
+        d=gmail.com; s=20210112; t=1680079014;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/mj5Xq6+JfoalzpG1WEfQLWuCEqNy/WskP4LNoja4eI=;
-        b=mZu4wAUV9wtAfMe4oDDeNDOHrT8dJJ4XXAMQIKc4TBMCYrBJJnqF+x5EH1iO2TsVfl
-         aEvpWhvc+NId0UWzgJvVeZnPy35HPwgKrybTyP8/JMuTKgLnVdMdU6L6FJf+kIKW3Mlr
-         sg5w+KDBwE8p+3OWtejmvCjocBLh2P+KpPYxHenen9Hrvn1yNTMC9BSInu5jy3O49Pqz
-         V+CaV4YqzWhb5b0avKwGAVVgbm1H4WVWBcTsCVUgNqf0rjfVX0mCfX4UMnDM/lPpB24y
-         Q2BgzsrZn7DLQqsTGqrCcsj2/8sXjsIpKCANJH1ihtRrIdEsc2mx1tA8OqGXEysBodkO
-         +uFg==
+        bh=OvPiX5ci5jR6Qhqc7feloIWYWq1Fjc5rTBladfN4lhU=;
+        b=dyUUzHU4tiokOMdzwerinToRc3tjTR+C2f7uSV/CU3B1iLaLkYNetRFJGKuCklbpcr
+         YDJlVng+AupMYmc9dPSDC8MbwP7b1CHVPIpSAZe4Wq79d1re6XcParhQr0122TlpfYsN
+         Bos+pOP8Umxkk6HMP1V194HvHBUHBgqoyyQY+6mrd/OReaSfmDvS7mNoYuI/8tOahO+7
+         qu6v5NuPPEgImIxkPs55rNu6YF57vS+01omcdGFqFAeqV42gowpQ8pzdtBMnhQ4rLEN1
+         jAl1U3E3QbkzWUI51bULWKbd2bC/kUWyL7UxJXIlE6tn7JfurpIPrNaSm/hHSa+deKBc
+         xnbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680078793;
+        d=1e100.net; s=20210112; t=1680079014;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/mj5Xq6+JfoalzpG1WEfQLWuCEqNy/WskP4LNoja4eI=;
-        b=RL8hJKjZKu/v1ckA9x1KJJK1g/RcCftPpWWV30XlMihsmd1X3CWlKtLI4+8B8Ge8xV
-         28pmq9hSBE11VXL18a3pD1dzJizVDL/cAsgYR6/3Ot8DkIt+z7byRftccoqS6YS1uXnL
-         4+Oaf9bG9OzqpESjWmrgrrEAY/Cr4XJN+1MRcrLw1VuigevmB8OMmPNeKSMvlsqXZme4
-         y9/dEO6hgVVTTgUIlokn3GBFlLNFoh7whmjymfWeerR85VDlPZObBqwuamcXrAPeBg3D
-         SiUNyvuOLHJOmBd71rOfjsb6RAFtpW9KMlwpwb1eQ4sNLmseqmzvBxON0WmW/BBzZ0aK
-         K+qg==
-X-Gm-Message-State: AAQBX9djn8eBOFjqFWfegKIkK33Lcc/Ygv+b0u8khP4KYrbSzfPOhvH4
-        6dwXcGiyj1z+uKbdGpGnolTisw==
-X-Google-Smtp-Source: AKy350aNzNob6HbJ/RxdWslNWAtB+K0yVD/z7brX3plRakI3Uhf8hEdc3GG+W8V8r8TlCiYY/4Ui8A==
-X-Received: by 2002:a19:4f1d:0:b0:4d8:86c1:477e with SMTP id d29-20020a194f1d000000b004d886c1477emr483750lfb.19.1680078793292;
-        Wed, 29 Mar 2023 01:33:13 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o1-20020ac24941000000b004ea889258d1sm3974268lfi.72.2023.03.29.01.33.12
+        bh=OvPiX5ci5jR6Qhqc7feloIWYWq1Fjc5rTBladfN4lhU=;
+        b=FUpWm71DbbaLrhedojABm6JN979kzLeFxAARurQC19nyGYV6l9shzYKoiHLbsif3Sf
+         USmDsebHK+iP7JjtA2/ZJuSJ3yBdbY+1u9xaj2bJgzpTUMfQgXSsj/tHTwsDMYC8+AKX
+         AkzKRGoVosmpN9R2L10i98DONcJXin4p4gAwggiruqOYh4ysaCIOykSpjeT/69tNj3CG
+         lRt+vycXsJrQE6fLLVyCrHPLK+WVA67msbxhd/NMH3bgX6wwE/oGwW6fChMxUB5K0Yo1
+         Lsuqm3AjPgEwHu01XiQiGqZus/zQ10wAxJFWcEDzxAqs+uHFxJGYCAM5B/IZlsEdQBT1
+         /XFw==
+X-Gm-Message-State: AAQBX9dccCKNgsRQTvpAmB/CxlA27KMcChEZkfJsSQTFLguIQCt4Ochq
+        pz1XE0pz0pdHcTnvW5vXtpM=
+X-Google-Smtp-Source: AKy350YSk+R2sNpPl1vdd78/1HInutyjP12GZAdtg9vQ9/lJ/EkymFBWgcDnhrLRzz9RZGoi3crlrQ==
+X-Received: by 2002:a17:90b:33c7:b0:23d:4ffc:43e with SMTP id lk7-20020a17090b33c700b0023d4ffc043emr18456574pjb.38.1680079014215;
+        Wed, 29 Mar 2023 01:36:54 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id ji17-20020a170903325100b00199023c688esm22480280plb.26.2023.03.29.01.36.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 01:33:12 -0700 (PDT)
-Message-ID: <4ac63dc9-a420-f9c7-a1c2-1384dbf37fec@linaro.org>
-Date:   Wed, 29 Mar 2023 10:33:11 +0200
+        Wed, 29 Mar 2023 01:36:54 -0700 (PDT)
+Message-ID: <c2e430ac-c23d-4268-151c-a3a398252382@gmail.com>
+Date:   Wed, 29 Mar 2023 16:36:50 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 3/7] arm64: defconfig: enable the SA8775P GPUCC driver
+Subject: Re: [PATCH v6 08/12] arm64: dts: nuvoton: Add initial ma35d1 device
+ tree
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>
-References: <20230328193632.226095-1-brgl@bgdev.pl>
- <20230328193632.226095-4-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328193632.226095-4-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230328021912.177301-1-ychuang570808@gmail.com>
+ <20230328021912.177301-9-ychuang570808@gmail.com>
+ <36f75c71-cf5b-7cbd-8eac-8a8f628d1201@linaro.org>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <36f75c71-cf5b-7cbd-8eac-8a8f628d1201@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 28/03/2023 21:36, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Enable the GPUCC module for SA8775P platforms in the arm64 defconfig.
+Dear Krzysztof,
 
-...for Qualcomm SA8775P platforms...
 
-(you know, this is defconfig for every ARMv8 SoC)
+On 2023/3/29 下午 04:21, Krzysztof Kozlowski wrote:
+> On 28/03/2023 04:19, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> Add initial device tree support for Nuvoton ma35d1 SoC, including
+>> cpu, clock, reset, and serial controllers.
+>> Add reference boards som-256m and iot-512m.
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>
+>
+>> +	gic: interrupt-controller@50801000 {
+>> +		compatible = "arm,gic-400";
+>> +		reg =   <0x0 0x50801000 0 0x1000>, /* GICD */
+>> +			<0x0 0x50802000 0 0x2000>, /* GICC */
+>> +			<0x0 0x50804000 0 0x2000>, /* GICH */
+>> +			<0x0 0x50806000 0 0x2000>; /* GICV */
+>> +		#interrupt-cells = <3>;
+>> +		interrupt-parent = <&gic>;
+>> +		interrupt-controller;
+>> +		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
+>> +			      IRQ_TYPE_LEVEL_HIGH)>;
+>> +	};
+>> +
+>> +	uart0:serial@40700000 {
+> There is always space after label:.
+>
+>
+> Best regards,
+> Krzysztof
+>
 
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index d206a9120ee4..fa0a145defe2 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1161,6 +1161,7 @@ CONFIG_MSM_MMCC_8998=m
->  CONFIG_MSM_GCC_8998=y
->  CONFIG_QCS_GCC_404=y
->  CONFIG_SA_GCC_8775P=y
-> +CONFIG_SA_GPUCC_8775P=y
+I will fix them all.
 
-Are you sure this is correct place? Your Kconfig has it in different
-location.
-
->  CONFIG_SC_DISPCC_8280XP=m
->  CONFIG_SC_GCC_7180=y
->  CONFIG_SC_GCC_7280=y
 
 Best regards,
-Krzysztof
+Jacky Huang
 
