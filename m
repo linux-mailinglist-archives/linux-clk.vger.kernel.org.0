@@ -2,189 +2,293 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72B96D1FD5
-	for <lists+linux-clk@lfdr.de>; Fri, 31 Mar 2023 14:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81CA6D2033
+	for <lists+linux-clk@lfdr.de>; Fri, 31 Mar 2023 14:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjCaMPn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 31 Mar 2023 08:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S232366AbjCaM0g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 31 Mar 2023 08:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232089AbjCaMPm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 31 Mar 2023 08:15:42 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC01D1DF90;
-        Fri, 31 Mar 2023 05:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680264940; x=1711800940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MDqfavBp0xhE9zr6CTvKsp9hMprvzZOnmnyhz/PHj+8=;
-  b=XdyqMmaxy9mdQX8UmVRgRM3gEEcYc+Zis2igX6pWfcLhertv0EzzwRQ4
-   JR3Cu/aszxmoDw2NKhUBGMW4fmCZWcD/ZtdkZuWPwuZWEADt3SP5mtKla
-   uzQLOXpgwlFIexyxHlWKxsgHX28ghfh2WfBVjjabHuufIzDImOxnGeHzv
-   dgZ9kDWH5u7flPd6T8r2ajxIZfjpReXOmB40LirkKM36G0H1YcXVJWSJ0
-   mvGTkmDPyRBY4nxWYx/TuHbQjyEeWfUFT/utT5Ua+79wMxL9/Z5tmx4y9
-   8h/UUreewXZuyZkvET7q2QB43D7TmNgSdwgmWJtywMU07fH48GZqyHl0U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="404155580"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="404155580"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2023 05:15:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10665"; a="809018313"
-X-IronPort-AV: E=Sophos;i="5.98,307,1673942400"; 
-   d="scan'208";a="809018313"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 31 Mar 2023 05:15:36 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1piDfL-000LlO-1i;
-        Fri, 31 Mar 2023 12:15:35 +0000
-Date:   Fri, 31 Mar 2023 20:14:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, abelvesa@kernel.org,
-        abel.vesa@linaro.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
-Message-ID: <202303312017.I9c9cLVj-lkp@intel.com>
-References: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
+        with ESMTP id S232144AbjCaM0f (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 31 Mar 2023 08:26:35 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AD226BE;
+        Fri, 31 Mar 2023 05:26:33 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32V7DMgV006937;
+        Fri, 31 Mar 2023 12:26:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KecvlXR5Xf+6vpH/FS8Z60UCAHN1qIrGzVAd51rNoOQ=;
+ b=KK+G+XysT+0jpo8exI2ZxVrGf38rjxJ6mBGNx9HXwrnXFhh/HIvUErt5570N7UrZPsOP
+ TleraHmFlWZ3uvt8RCW53WofOLG7D7n/Gf1nD5vgJipY1zMUBq63zJVbuES1qjpzYmiI
+ BQCEC/MiEA3J1wDzNE77hJ7Zz+bIwpUFyZ1V6Vvywb41crpjktcmLcgWG4b20RX7BB/F
+ QBDVRRnw2gdgXQ23hKr6sKRKTxPOHRAzu1hKqLiwdoGfqsWJ9Xitn3CTpk+3cFJSW0kT
+ bEhRs6afnQRruZXKX+fYYEqGTwW2ABzvQpNwO0jg1cwFvlvdxn+Pi4J54QGwfst0tD6n 2g== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pntxf8uaf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 12:26:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32VCPxcf018378
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Mar 2023 12:25:59 GMT
+Received: from [10.50.5.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 31 Mar
+ 2023 05:25:50 -0700
+Message-ID: <0316b1fb-0581-e3e6-b5ba-64c2a6ef2ec4@quicinc.com>
+Date:   Fri, 31 Mar 2023 17:52:51 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230331064629.2475338-5-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V10 3/4] arm64: dts: qcom: Add support for ipq9574 SoC and
+ RDP433 variant
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <nfraprado@collabora.com>,
+        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <20230327132718.573-1-quic_devipriy@quicinc.com>
+ <20230327132718.573-4-quic_devipriy@quicinc.com>
+ <CAA8EJprTm1sZ8fnfNee+NJTiaFq17QwWaEnSoJWVYs_GY65xFg@mail.gmail.com>
+ <a6225636-7abb-3c5c-c78f-8d40c25167b9@quicinc.com>
+ <CAA8EJprgcMOX-WRXP2i9k850La1A1UKaKuODd-fVi27nOxMbyA@mail.gmail.com>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <CAA8EJprgcMOX-WRXP2i9k850La1A1UKaKuODd-fVi27nOxMbyA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vW7OdrM7OPZuEvEvwN9zF4gpPlQa2XXp
+X-Proofpoint-ORIG-GUID: vW7OdrM7OPZuEvEvwN9zF4gpPlQa2XXp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-31_06,2023-03-30_04,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ bulkscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 clxscore=1015 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2303310099
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Peng,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on abelvesa/clk/imx]
-[also build test WARNING on linus/master v6.3-rc4 next-20230331]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/clk-imx-fracn-gppll-fix-the-rate-table/20230331-144314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git clk/imx
-patch link:    https://lore.kernel.org/r/20230331064629.2475338-5-peng.fan%40oss.nxp.com
-patch subject: [PATCH 4/6] clk: imx: fracn-gppll: support integer pll
-config: hexagon-randconfig-r045-20230329 (https://download.01.org/0day-ci/archive/20230331/202303312017.I9c9cLVj-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b80cff81a332a2005b90c5c1fbab96e732c03494
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/clk-imx-fracn-gppll-fix-the-rate-table/20230331-144314
-        git checkout b80cff81a332a2005b90c5c1fbab96e732c03494
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303312017.I9c9cLVj-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/clk/imx/clk-fracn-gppll.c:10:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/clk/imx/clk-fracn-gppll.c:340:16: warning: no previous prototype for function '_imx_clk_fracn_gppll' [-Wmissing-prototypes]
-   struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-                  ^
-   drivers/clk/imx/clk-fracn-gppll.c:340:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-   ^
-   static 
-   7 warnings generated.
 
 
-vim +/_imx_clk_fracn_gppll +340 drivers/clk/imx/clk-fracn-gppll.c
+On 3/28/2023 4:09 PM, Dmitry Baryshkov wrote:
+> On Tue, 28 Mar 2023 at 10:31, Devi Priya <quic_devipriy@quicinc.com> wrote:
+>> On 3/27/2023 8:15 PM, Dmitry Baryshkov wrote:
+>>> On Mon, 27 Mar 2023 at 16:28, Devi Priya <quic_devipriy@quicinc.com> wrote:
+>>>>
+>>>> Add initial device tree support for Qualcomm IPQ9574 SoC and
+>>>> Reference Design Platform(RDP) 433 which is based on IPQ9574
+>>>> family of SoCs
+>>>>
+>>>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>>>> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>>>> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>>>> ---
+>>>>    Changes in V10:
+>>>>           - Renamed the Board Device Tree Source to use the RDP numbers
+>>>>           - Updated the Makefile, subject and commit message accordingly
+>>>>
+>>>>    arch/arm64/boot/dts/qcom/Makefile           |   1 +
+>>>>    arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts |  84 ++++++
+>>>>    arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 270 ++++++++++++++++++++
+>>>>    3 files changed, 355 insertions(+)
+>>>>    create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>>>>    create mode 100644 arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>>> index 1a29403400b7..52f1f92c5195 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>>> @@ -8,6 +8,7 @@ dtb-$(CONFIG_ARCH_QCOM) += ipq6018-cp01-c1.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)        += ipq8074-hk01.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)        += ipq8074-hk10-c1.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)        += ipq8074-hk10-c2.dtb
+>>>> +dtb-$(CONFIG_ARCH_QCOM)        += ipq9574-rdp433.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)        += msm8916-acer-a1-724.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)        += msm8916-alcatel-idol347.dtb
+>>>>    dtb-$(CONFIG_ARCH_QCOM)        += msm8916-asus-z00l.dtb
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>>>> new file mode 100644
+>>>> index 000000000000..2ce8e09e7565
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>>>> @@ -0,0 +1,84 @@
+>>>> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+>>>> +/*
+>>>> + * IPQ9574 RDP433 board device tree source
+>>>> + *
+>>>> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
+>>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>>> + */
+>>>> +
+>>>> +/dts-v1/;
+>>>> +
+>>>> +#include "ipq9574.dtsi"
+>>>> +
+>>>> +/ {
+>>>> +       model = "Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C7";
+>>>> +       compatible = "qcom,ipq9574-ap-al02-c7", "qcom,ipq9574";
+>>>> +
+>>>> +       aliases {
+>>>> +               serial0 = &blsp1_uart2;
+>>>> +       };
+>>>> +
+>>>> +       chosen {
+>>>> +               stdout-path = "serial0:115200n8";
+>>>> +       };
+>>>> +};
+>>>> +
+>>>> +&blsp1_uart2 {
+>>>> +       pinctrl-0 = <&uart2_pins>;
+>>>> +       pinctrl-names = "default";
+>>>> +       status = "okay";
+>>>> +};
+>>>> +
+>>>> +&sdhc_1 {
+>>>> +       pinctrl-0 = <&sdc_default_state>;
+>>>> +       pinctrl-names = "default";
+>>>> +       mmc-ddr-1_8v;
+>>>> +       mmc-hs200-1_8v;
+>>>> +       mmc-hs400-1_8v;
+>>>> +       mmc-hs400-enhanced-strobe;
+>>>> +       max-frequency = <384000000>;
+>>>> +       bus-width = <8>;
+>>>> +       status = "okay";
+>>>> +};
+>>>> +
+>>>> +&sleep_clk {
+>>>> +       clock-frequency = <32000>;
+>>>> +};
+>>>> +
+>>>> +&tlmm {
+>>>> +       sdc_default_state: sdc-default-state {
+>>>> +               clk-pins {
+>>>> +                       pins = "gpio5";
+>>>> +                       function = "sdc_clk";
+>>>> +                       drive-strength = <8>;
+>>>> +                       bias-disable;
+>>>> +               };
+>>>> +
+>>>> +               cmd-pins {
+>>>> +                       pins = "gpio4";
+>>>> +                       function = "sdc_cmd";
+>>>> +                       drive-strength = <8>;
+>>>> +                       bias-pull-up;
+>>>> +               };
+>>>> +
+>>>> +               data-pins {
+>>>> +                       pins = "gpio0", "gpio1", "gpio2",
+>>>> +                              "gpio3", "gpio6", "gpio7",
+>>>> +                              "gpio8", "gpio9";
+>>>> +                       function = "sdc_data";
+>>>> +                       drive-strength = <8>;
+>>>> +                       bias-pull-up;
+>>>> +               };
+>>>> +
+>>>> +               rclk-pins {
+>>>> +                       pins = "gpio10";
+>>>> +                       function = "sdc_rclk";
+>>>> +                       drive-strength = <8>;
+>>>> +                       bias-pull-down;
+>>>> +               };
+>>>> +       };
+>>>> +};
+>>>> +
+>>>> +&xo_board_clk {
+>>>> +       clock-frequency = <24000000>;
+>>>> +};
+>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>> new file mode 100644
+>>>> index 000000000000..3bb7435f5e7f
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>> @@ -0,0 +1,270 @@
+>>>> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+>>>> +/*
+>>>> + * IPQ9574 SoC device tree source
+>>>> + *
+>>>> + * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
+>>>> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>>>> + */
+>>>> +
+>>>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>> +#include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+>>>> +#include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+>>>> +
+>>>> +/ {
+>>>> +       interrupt-parent = <&intc>;
+>>>> +       #address-cells = <2>;
+>>>> +       #size-cells = <2>;
+>>>> +
+>>>> +       clocks {
+>>>> +               bias_pll_ubi_nc_clk: bias-pll-ubi-nc-clk {
+>>>> +                       compatible = "fixed-clock";
+>>>> +                       clock-frequency = <353000000>;
+>>>> +                       #clock-cells = <0>;
+>>>> +               };
+>>>
+>>> What is the source for this clock? With it clocking at 353 MHz, I
+>>> doubt that it is an external clock.
+>> bias_pll_ubi_nc_clk (353MHz)is a backup source
+>> for Q6_AXIM2_CLK/PCIE2_AXIM_CLK/PCIE3_AXIM_CLK/SNOC-CLK
+>> It is from the CMN_PLL, and is the same as that of PPE core clock.
+>> Do you suggest to move its clock-frequency to Board DT similar to
+>> xo/sleep clock?
+> 
+> No, I suggest moving it to the device where it originates. If it comes
+> from GCC, it should be provided by the GCC, not by the top-level fixed
+> clock.Bias PLL is a fixed PLL on the SoC which provides 352MHz.
+As it is just a backup source for PCIE2_AXIM_CLK, we would remove the
+clock node as it is not being used.
 
-   339	
- > 340	struct clk_hw *_imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-   341					    const struct imx_fracn_gppll_clk *pll_clk, u32 pll_flags)
-   342	{
-   343		struct clk_fracn_gppll *pll;
-   344		struct clk_hw *hw;
-   345		struct clk_init_data init;
-   346		int ret;
-   347	
-   348		pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-   349		if (!pll)
-   350			return ERR_PTR(-ENOMEM);
-   351	
-   352		init.name = name;
-   353		init.flags = pll_clk->flags;
-   354		init.parent_names = &parent_name;
-   355		init.num_parents = 1;
-   356		init.ops = &clk_fracn_gppll_ops;
-   357	
-   358		pll->base = base;
-   359		pll->hw.init = &init;
-   360		pll->rate_table = pll_clk->rate_table;
-   361		pll->rate_count = pll_clk->rate_count;
-   362		pll->flags = pll_flags;
-   363	
-   364		hw = &pll->hw;
-   365	
-   366		ret = clk_hw_register(NULL, hw);
-   367		if (ret) {
-   368			pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
-   369			kfree(pll);
-   370			return ERR_PTR(ret);
-   371		}
-   372	
-   373		return hw;
-   374	}
-   375	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+>>>
+>>>> +
+>>>> +               sleep_clk: sleep-clk {
+>>>> +                       compatible = "fixed-clock";
+>>>> +                       #clock-cells = <0>;
+>>>> +               };
+>>>> +
+>>>> +               xo_board_clk: xo-board-clk {
+>>>> +                       compatible = "fixed-clock";
+>>>> +                       #clock-cells = <0>;
+>>>> +               };
+>>>> +       };
+>>>
+>>> [skipped the rest]
+>>>
+>> Regards,
+>> Devi Priya
+> 
+> 
+>
+Regards,
+Devi Priya
