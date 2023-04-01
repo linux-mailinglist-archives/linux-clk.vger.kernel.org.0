@@ -2,103 +2,259 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1A86D301C
-	for <lists+linux-clk@lfdr.de>; Sat,  1 Apr 2023 13:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16DE6D30CF
+	for <lists+linux-clk@lfdr.de>; Sat,  1 Apr 2023 14:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjDALU7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Sat, 1 Apr 2023 07:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S229505AbjDAMts (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 1 Apr 2023 08:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjDALUk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 1 Apr 2023 07:20:40 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA751CBAE;
-        Sat,  1 Apr 2023 04:19:59 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9BF7224E197;
-        Sat,  1 Apr 2023 19:19:58 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 1 Apr
- 2023 19:19:58 +0800
-Received: from ubuntu.localdomain (113.72.144.76) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 1 Apr
- 2023 19:19:57 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 22/22] riscv: dts: starfive: jh7110: Correct the properties of S7 core
-Date:   Sat, 1 Apr 2023 19:19:34 +0800
-Message-ID: <20230401111934.130844-23-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230401111934.130844-1-hal.feng@starfivetech.com>
-References: <20230401111934.130844-1-hal.feng@starfivetech.com>
+        with ESMTP id S229475AbjDAMts (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 1 Apr 2023 08:49:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997E0C15F
+        for <linux-clk@vger.kernel.org>; Sat,  1 Apr 2023 05:49:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id i5so100322468eda.0
+        for <linux-clk@vger.kernel.org>; Sat, 01 Apr 2023 05:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112; t=1680353384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ewVCP+wDJHX46RNaKAZarx7ThtmmaIaa+PN5mp/uXI=;
+        b=KjoCp7+uXnJLPnyG7tx0qBq+jW2fO0pUeHxkLnG2pfZRO45BJ2F7oFWMNPVoes+kSv
+         SN/87ysk/WTWanPqKDYoFmasrbGoIXR3RFI5Fz/mZQ7qt7D/lbsNCU1XVfe+Ki3nQuYs
+         BYJONtvqyweOdKlBwq8+pB9aeVIgHKkmEHppCEiy5Upltb/1QTFoIl/e9yqsY/ivBnC4
+         XqXUJL0N6gbMWGCvRS427wQ2bSeHLPC+7VVozrjNW4Wp2v7W2phYz4tVNpby0TTXUdnm
+         7VpBx4Ubong80KWZYgNHRG8OI4ofwEo/zfD5aWIAVKIiUKZAzoQE2hpHlRztcYZumvgH
+         Fw5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680353384;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ewVCP+wDJHX46RNaKAZarx7ThtmmaIaa+PN5mp/uXI=;
+        b=Faf0N5Q1+Kt1E+EJX2EOvsbksoCEd0AkzBFsXW7ybx+iYGSsg2gG7wKBPf9NlMCZWP
+         EsSm5CaW8lMX0USuRga7dUVaguZIegzVU7KeAcl+kYV0v8CGJnKtkir5BfUDTVccQdEa
+         Qwtkd7UhL6q0jpOi50GOpmkN5654YOiG+7Dz7lRRazaFIGPTuGUUUEWDRt7937qQ/6gF
+         J4fCBfwIPWOOoM7CcYxMt+uUHNB1PUFmG0zg3PQGs8DVP6T8XgZx9fH+Gulb6fo4CGRe
+         esAZohz+EcN7sSfK/+MypY8Zpau7+52e6yYXTOHhyOR117Jxw0gbv6GcwAjnZe9w48W6
+         nHDQ==
+X-Gm-Message-State: AAQBX9fG2RfFouAasFZ4c7aA7pjamoNbwyWr+sVTFklpcTDebXZGui9V
+        +IHRseTQg0trTxnH6w6T7uh3JQ==
+X-Google-Smtp-Source: AKy350adyWbn7jQXnTGpzPFF4lXd+Au+soeUfPr6sJfOYwooSsz1o63aMbbl5rmMFD3s3DKr3f0MMg==
+X-Received: by 2002:aa7:d3cc:0:b0:502:ef8:1c80 with SMTP id o12-20020aa7d3cc000000b005020ef81c80mr31270334edr.21.1680353383732;
+        Sat, 01 Apr 2023 05:49:43 -0700 (PDT)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id f24-20020a50a6d8000000b004acbda55f6bsm2070677edc.27.2023.04.01.05.49.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Apr 2023 05:49:42 -0700 (PDT)
+Date:   Sat, 1 Apr 2023 14:49:41 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Vadim Fedorenko <vadfed@meta.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "Michalik, Michal" <michal.michalik@intel.com>
+Subject: Re: [PATCH RFC v6 2/6] dpll: Add DPLL framework base functions
+Message-ID: <ZCgoZWjFcivWmDNJ@nanopsycho>
+References: <20230312022807.278528-1-vadfed@meta.com>
+ <20230312022807.278528-3-vadfed@meta.com>
+ <ZA9Nbll8+xHt4ygd@nanopsycho>
+ <2b749045-021e-d6c8-b265-972cfa892802@linux.dev>
+ <ZBA8ofFfKigqZ6M7@nanopsycho>
+ <DM6PR11MB4657120805D656A745EF724E9BBE9@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZBGOWQW+1JFzNsTY@nanopsycho>
+ <c7da39fb-f60d-ac0c-ddc3-cb9b9280081d@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.144.76]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7da39fb-f60d-ac0c-ddc3-cb9b9280081d@linux.dev>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The S7 core has no L1 data cache and MMU, so delete some
-related properties.
+Tue, Mar 28, 2023 at 05:22:04PM CEST, vadim.fedorenko@linux.dev wrote:
+>On 15/03/2023 09:22, Jiri Pirko wrote:
+>> Tue, Mar 14, 2023 at 06:50:57PM CET, arkadiusz.kubalewski@intel.com wrote:
+>> > > From: Jiri Pirko <jiri@resnulli.us>
+>> > > Sent: Tuesday, March 14, 2023 10:22 AM
+>> > > 
+>> > > Mon, Mar 13, 2023 at 11:59:32PM CET, vadim.fedorenko@linux.dev wrote:
+>> > > > On 13.03.2023 16:21, Jiri Pirko wrote:
+>> > > > > Sun, Mar 12, 2023 at 03:28:03AM CET, vadfed@meta.com wrote:
 
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 9 ---------
- 1 file changed, 9 deletions(-)
+[...]
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index d484ecdf93f7..4c5fdb905da8 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -20,21 +20,12 @@ cpus {
- 		S7_0: cpu@0 {
- 			compatible = "sifive,s7", "riscv";
- 			reg = <0>;
--			d-cache-block-size = <64>;
--			d-cache-sets = <64>;
--			d-cache-size = <8192>;
--			d-tlb-sets = <1>;
--			d-tlb-size = <40>;
- 			device_type = "cpu";
- 			i-cache-block-size = <64>;
- 			i-cache-sets = <64>;
- 			i-cache-size = <16384>;
--			i-tlb-sets = <1>;
--			i-tlb-size = <40>;
--			mmu-type = "riscv,sv39";
- 			next-level-cache = <&ccache>;
- 			riscv,isa = "rv64imac_zba_zbb";
--			tlb-split;
- 			status = "disabled";
- 
- 			cpu0_intc: interrupt-controller {
--- 
-2.38.1
 
+>> > > > > > +static int
+>> > > > > > +dpll_msg_add_dev_handle(struct sk_buff *msg, const struct dpll_device
+>> > > > > > *dpll)
+>> > > > > > +{
+>> > > > > > +	if (nla_put_u32(msg, DPLL_A_ID, dpll->id))
+>> > > > > 
+>> > > > > Why exactly do we need this dua--handle scheme? Why do you need
+>> > > > > unpredictable DPLL_A_ID to be exposed to userspace?
+>> > > > > It's just confusing.
+>> > > > > 
+>> > > > To be able to work with DPLL per integer after iterator on the list deducts
+>> > > > which DPLL device is needed. It can reduce the amount of memory copies and
+>> > > > simplify comparisons. Not sure why it's confusing.
+>> > > 
+>> > > Wait, I don't get it. Could you please explain a bit more?
+>> > > 
+>> > > My point is, there should be not such ID exposed over netlink
+>> > > You don't need to expose it to userspace. The user has well defined
+>> > > handle as you agreed with above. For example:
+>> > > 
+>> > > ice/c92d02a7129f4747/1
+>> > > ice/c92d02a7129f4747/2
+>> > > 
+>> > > This is shown in dpll device GET/DUMP outputs.
+>> > > Also user passes it during SET operation:
+>> > > $ dplltool set ice/c92d02a7129f4747/1 mode auto
+>> > > 
+>> > > Isn't that enough stable and nice?
+>> > > 
+>> > 
+>> > I agree with Vadim, this is rather to be used by a daemon tools, which
+>> > would get the index once, then could use it as long as device is there.
+>> 
+>> So basically you say, you can have 2 approaches in app:
+>> 1)
+>> id = dpll_device_get_id("ice/c92d02a7129f4747/1")
+>> dpll_device_set(id, something);
+>> dpll_device_set(id, something);
+>> dpll_device_set(id, something);
+>> 2):
+>> dpll_device_set("ice/c92d02a7129f4747/1, something);
+>> dpll_device_set("ice/c92d02a7129f4747/1, something);
+>> dpll_device_set("ice/c92d02a7129f4747/1, something);
+>> 
+>> What is exactly benefit of the first one? Why to have 2 handles? Devlink
+>> is a nice example of 2) approach, no problem there.
+>> 
+>> Perhaps I'm missing something, but looks like you want the id for no
+>> good reason and this dual-handle scheme just makes things more
+>> complicated with 0 added value.
+>
+>I would like to avoid any extra memory copies or memory checks when it's
+>possible to compare single u32/u64 index value. I might be invisible on a
+>single host setup, but running monitoring at scale which will parse and
+>compare string on every get/event can burn a bit of compute capacity.
+
+Wait, that does not make any sense what so ever.
+Show me numbers and real usecase. A sane app gets once at start, then
+processes notifications. You have a flow where string compare on a
+netlink command makes difference to int compare? Like tens of thousands
+of netlink cmds per second? I doubt that. If yes, it is a misuse. Btw,
+the string compare would be your last problem comparing the overhead of
+Netlink processing with ioctl for example.
+
+Your dual handle scheme just adds complexicity, confusion with 0 added
+value. Please drop it. I really don't understand the need to defend this
+odd approach :/
+
+[...]
+
+
+>> > > > > > +
+>> > > > > > +	return dpll_pre_dumpit(cb);
+>> > > > > > +}
+>> > > > > > +
+>> > > > > > +int dpll_pin_post_dumpit(struct netlink_callback *cb)
+>> > > > > > +{
+>> > > > > > +	mutex_unlock(&dpll_pin_xa_lock);
+>> > > > > > +
+>> > > > > > +	return dpll_post_dumpit(cb);
+>> > > > > > +}
+>> > > > > > +
+>> > > > > > +static int
+>> > > > > > +dpll_event_device_change(struct sk_buff *msg, struct dpll_device
+>> > > > > > *dpll,
+>> > > > > > +			 struct dpll_pin *pin, struct dpll_pin *parent,
+>> > > > > > +			 enum dplla attr)
+>> > > > > > +{
+>> > > > > > +	int ret = dpll_msg_add_dev_handle(msg, dpll);
+>> > > > > > +	struct dpll_pin_ref *ref = NULL;
+>> > > > > > +	enum dpll_pin_state state;
+>> > > > > > +
+>> > > > > > +	if (ret)
+>> > > > > > +		return ret;
+>> > > > > > +	if (pin && nla_put_u32(msg, DPLL_A_PIN_IDX, pin-
+>> > > > > > dev_driver_id))
+>> > > > > > +		return -EMSGSIZE;
+>> > > > > 
+>> > > > > I don't really understand why you are trying figure something new and
+>> > > > > interesting with the change notifications. This object mix and random
+>> > > > > attrs fillup is something very wrong and makes userspace completely
+>> > > > > fuzzy about what it is getting. And yet it is so simple:
+>> > > > > You have 2 objects, dpll and pin, please just have:
+>> > > > > dpll_notify()
+>> > > > > dpll_pin_notify()
+>> > > > > and share the attrs fillup code with pin_get() and dpll_get() callbacks.
+>> > > > > No need for any smartness. Have this dumb and simple.
+>> > > > > 
+>> > > > > Think about it more as about "object-state-snapshot" than "atomic-change"
+>> > > > 
+>> > > > But with full object-snapshot user space app will lose the information about
+>> > > > what exactly has changed. The reason to have this event is to provide the
+>> > > > attributes which have changed. Otherwise, the app should have full snapshot
+>> > > > and
+>> > > > compare all attributes to figure out changes and that's might not be great
+>> > > > idea.
+>> > > 
+>> > > Wait, are you saying that the app is stateless? Could you provide
+>> > > example use cases?
+>> > > 
+>> > >From what I see, the app managing dpll knows the state of the device and
+>> > > pins, it monitors for the changes and saves new state with appropriate
+>> > > reaction (might be some action or maybe just log entry).
+>> > > 
+>> > 
+>> > It depends on the use case, right? App developer having those information knows
+>> > what has changed, thus can react in a way it thinks is most suitable.
+>> > IMHO from user perspective it is good to have a notification which actually
+>> > shows it's reason, so proper flow could be assigned to handle the reaction.
+>> 
+>> Again, could you provide me specific example in which this is needed?
+>> I may be missing something, but I don't see how it can bring
+>> and benefit. It just makes the live of the app harder because it has to
+>> treat the get and notify messages differently.
+>> 
+>> It is quite common for app to:
+>> init:
+>> 1) get object state
+>> 2) store it
+>> 3) apply configuration
+>> runtime:
+>> 1) listen to object state change
+>> 2) store it
+>> 3) apply configuration
+>> 
+>> Same code for both.
+>
+>Well, I'm thinking about simple monitoring app which will wait for the events
+>and create an alert if the changes coming from the event differ from the
+>"allowed configs". In this case no real reason to store whole object state,
+>but the changes in events are very useful.
+
+No problem. But as I wrote elsewhere in this thread, make sure that msg
+format of a change message is the same as the format of get cmd message.
+Basically think of it as a get cmd message filtered to have only
+attrs which changed. Same nesting and everything. Makes it simple for
+the app to have same parsing code for get/dump/notification messages.
+
+[...]
