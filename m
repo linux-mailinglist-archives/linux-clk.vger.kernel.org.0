@@ -2,41 +2,144 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FEE6D5B97
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Apr 2023 11:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4A36D5D1B
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Apr 2023 12:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbjDDJJY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 4 Apr 2023 05:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
+        id S234475AbjDDKWV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 4 Apr 2023 06:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234342AbjDDJI6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 4 Apr 2023 05:08:58 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DBF730EF;
-        Tue,  4 Apr 2023 02:08:36 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.98,317,1673881200"; 
-   d="scan'208";a="158239946"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 04 Apr 2023 18:08:35 +0900
-Received: from localhost.localdomain (unknown [10.226.93.86])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id A4364424BF84;
-        Tue,  4 Apr 2023 18:08:33 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-clk@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 2/3] drivers: clk: Add support for versa3 clock driver
-Date:   Tue,  4 Apr 2023 10:08:22 +0100
-Message-Id: <20230404090823.148226-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230404090823.148226-1-biju.das.jz@bp.renesas.com>
-References: <20230404090823.148226-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S234480AbjDDKWR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 4 Apr 2023 06:22:17 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6AB3AA5;
+        Tue,  4 Apr 2023 03:22:03 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 55040582041;
+        Tue,  4 Apr 2023 06:21:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 04 Apr 2023 06:21:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm3; t=1680603717; x=
+        1680610917; bh=HfFAtQpE7BaTkEYQ0u2Ynx4ouaJzSTjkYPluvZNu8hE=; b=h
+        Pa6w32LG6ZGsw9w5HpvU1X8+s70WJVZqSVEeb0w9tGcqObzCwt/9vsQNmLbZI/hh
+        UHt52yWqIoA1S0AYq+9IyjAB0URJghQU7n2sTmfMyVFA/mkE5/QdO6oNXNPgaRwU
+        wDtHV44+nyu6r17tzpkIMMv/ieCrmFtoHZhQjQmteldfZ+fZHQpWBwDUN1ao9lyn
+        /pAqBV9TECC9lN7jEGVlPLDYiHuZK7OJcglDkJqhy8S7YtLi8+24FSwiPDEe18A0
+        Ym6cEe1NEXDnOVKILQVY50myqzVXGZCYdAdDNmFlW/3JjfnJfTa5fwlrtMohI599
+        2Y4Ow0fgwiBgGIc810prQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1680603717; x=1680610917; bh=H
+        fFAtQpE7BaTkEYQ0u2Ynx4ouaJzSTjkYPluvZNu8hE=; b=u+sXLZ7CZSUuVdx1E
+        fHxv9w0Der3HiA1daXyY5iSuv0hQabFzJkwFELrXWZfnmbwKQPrnGYCQiaYv44cs
+        xuMLUpt9g+8massfJIi/9xCB4mwfSP0PP1ZBAMkca+BZoul68F3wX2d4snWi+D74
+        s+5lpznGNfnPJVUsnnmVGHDBn6YuvJjkRhtIxqGzIfjJwrdZflIZSffRRQh+Y+Cu
+        5eSVp+o7H7X6ojmF4t8J2Va11g9QYB8S0YRR+CF/T2n9AhTIhkCxpH34320JD0BM
+        roe02fONC6XwwYHEj2ho5wtveGI29hnVQ7FqQjbRNqiGodIJZeIRXgJhS/+/wk4v
+        nyZAg==
+X-ME-Sender: <xms:QvorZPY6zLvt0o6cXhzQ23zP4TAe4cJCsSMKFfdK2IiCVudBlYOQgQ>
+    <xme:QvorZOY6rGks4FqL41YSYj74tg-ZhId6cm5IcUaxjYPkrqzMqvUlxa0vEEDb0Vg4D
+    S6ruEAxTkMmv4PcMCs>
+X-ME-Received: <xmr:QvorZB8QqHLdBnfYJTsRU9U-asZkFWoEcpC-bp8uSZmm6kvKELwpQnuEIS18eFO0IeGU8XD9qsUtRE1RaIezyXk-8iaqiJU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffufffkgggtgffvvefosehtjeertdertdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfeutdejvdeiheffveetieejtdfhleekleffheejtdfhkeehfeekgedvgeei
+    tddtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:QvorZFojgtNbJTHiiXYEfZp3V-_TIESjBO6qvXjEX1jNP-dSHfSlXA>
+    <xmx:QvorZKqtZ9nRAOzsdNv3bcZ8wUb3HJFn5NMv2JbgGkCYmrC3ESxpFw>
+    <xmx:QvorZLRJyrzEISGAaDVyAwY6JiqEEqER-iGGR122q-s0osVhP8eKug>
+    <xmx:RforZPOqyIjBbuy21MUJCgJlCjRtc3KcBxXm8jWkbKOVuzrWCcu7wA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 06:21:53 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v3 00/65] clk: Make determine_rate mandatory for muxes
+Date:   Tue, 04 Apr 2023 12:10:50 +0200
+Message-Id: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKr3K2QC/43NzQ7CIAwH8FdZOFsDZZvoyfcwHjZWhGxhCUyiM
+ Xt3626e9NT8+/HrS2RKgbI4VS+RqIQc5shB7yphfRdvBGHgLFAiKqkM2GmEtA2sJztmcOFBGVD
+ qo9MNaqyl4OO+ywQ9L1rP5/E+Tdz0IS9zem7PiuJy+ekWBRKcJmdko4yq5dlSivN+IYavbBb8z
+ 8GP0x50O5BV2tCXs67rGzN7xKMKAQAA
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>,
+        Liam Beguin <liambeguin@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8407; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=f/Knn1kk7vVUXORQfxa+QfreHaZSdTArsNS+gG1C4RA=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCna37eIXJ9r9bU2NZTxI2e6xOUNZ4zyD2zen+fTxNDRKd7e
+ xnGso5SFQYyLQVZMkSVG2HxJ3KlZrzvZ+ObBzGFlAhnCwMUpABMRMmb4Z5Yqmp38+lxyluzpNf9ry4
+ Vn/r3nLZd4auNprhVG3+VvzmH472xmvN/z4eEzPa3WC+9ftpz8f1fMw1z3nz2TjQQWz7Ll5wIA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,1214 +147,203 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for Renesas versa3 clock driver(5p35023).
-The clock generator provides 6 output clocks.
+Hi,
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v3->v4:
- * Fixed the warning reported by  kernel test robot.
- * Added error check for devm_clk_hw_register_fixed_factor_* in probe().
-v2->v3:
- * Updated copy right information.
- * Removed .name from parent data and started using index or struct clk_hw.
- * Dropped vc3_clk_out_ops  and started using fixed factor clocks for
-   output clk.
- * Dropped vc3_divider_type_parse_dt function.
- * Dropped struct vc3_driver_data
-RFC->v2:
- * Dropped header file <linux/clk.h> and removed all
-   consumer api's
- * struct clk_parent_data used for assigning the parent names.
- * Replaced initpointer->const init pointer in vc3_clk_register
- * Replaced of_clk_add_hw_provider with devm_clk_add_hw_provider
- * Dropped vc3_remove() callback.
----
- drivers/clk/Kconfig           |    9 +
- drivers/clk/Makefile          |    1 +
- drivers/clk/clk-versaclock3.c | 1141 +++++++++++++++++++++++++++++++++
- 3 files changed, 1151 insertions(+)
- create mode 100644 drivers/clk/clk-versaclock3.c
+This is a follow-up to a previous series that was printing a warning
+when a mux has a set_parent implementation but is missing
+determine_rate().
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 016814e15536..73f2ef11ffd5 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -385,6 +385,15 @@ config COMMON_CLK_SI521XX
- 	  This driver supports the SkyWorks Si521xx PCIe clock generator
- 	  models Si52144/Si52146/Si52147.
- 
-+config COMMON_CLK_VC3
-+	tristate "Clock driver for Renesas VersaClock 3 devices"
-+	depends on I2C
-+	depends on OF
-+	select REGMAP_I2C
-+	help
-+	  This driver supports the Renesas VersaClock 3 programmable clock
-+	  generators.
-+
- config COMMON_CLK_VC5
- 	tristate "Clock driver for IDT VersaClock 5,6 devices"
- 	depends on I2C
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 9b7a414b5614..3b27a97b66f6 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -76,6 +76,7 @@ obj-$(CONFIG_CLK_TWL6040)		+= clk-twl6040.o
- obj-$(CONFIG_ARCH_VT8500)		+= clk-vt8500.o
- obj-$(CONFIG_COMMON_CLK_RS9_PCIE)	+= clk-renesas-pcie.o
- obj-$(CONFIG_COMMON_CLK_SI521XX)	+= clk-si521xx.o
-+obj-$(CONFIG_COMMON_CLK_VC3)		+= clk-versaclock3.o
- obj-$(CONFIG_COMMON_CLK_VC5)		+= clk-versaclock5.o
- obj-$(CONFIG_COMMON_CLK_VC7)		+= clk-versaclock7.o
- obj-$(CONFIG_COMMON_CLK_WM831X)		+= clk-wm831x.o
-diff --git a/drivers/clk/clk-versaclock3.c b/drivers/clk/clk-versaclock3.c
-new file mode 100644
-index 000000000000..518921f0a693
---- /dev/null
-+++ b/drivers/clk/clk-versaclock3.c
-@@ -0,0 +1,1141 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Driver for Renesas Versaclock 3
-+ *
-+ * Copyright (C) 2023 Renesas Electronics Corp.
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/i2c.h>
-+#include <linux/limits.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#define NUM_CONFIG_REGISTERS		37
-+
-+#define VC3_GENERAL_CTR			0x0
-+#define VC3_GENERAL_CTR_DIV1_SRC_SEL	BIT(3)
-+#define VC3_GENERAL_CTR_PLL3_REFIN_SEL	BIT(2)
-+
-+#define VC3_PLL3_M_DIVIDER		0x3
-+#define VC3_PLL3_M_DIV1			BIT(7)
-+#define VC3_PLL3_M_DIV2			BIT(6)
-+#define VC3_PLL3_M_DIV(n)		((n) & GENMASK(5, 0))
-+
-+#define VC3_PLL3_N_DIVIDER		0x4
-+#define VC3_PLL3_LOOP_FILTER_N_DIV_MSB	0x5
-+
-+#define VC3_PLL3_CHARGE_PUMP_CTRL	0x6
-+#define VC3_PLL3_CHARGE_PUMP_CTRL_OUTDIV3_SRC_SEL	BIT(7)
-+
-+#define VC3_PLL1_CTRL_OUTDIV5		0x7
-+#define VC3_PLL1_CTRL_OUTDIV5_PLL1_MDIV_DOUBLER		BIT(7)
-+
-+#define VC3_PLL1_M_DIVIDER		0x8
-+#define VC3_PLL1_M_DIV1			BIT(7)
-+#define VC3_PLL1_M_DIV2			BIT(6)
-+#define VC3_PLL1_M_DIV(n)		((n) & GENMASK(5, 0))
-+
-+#define VC3_PLL1_VCO_N_DIVIDER		0x9
-+#define VC3_PLL1_LOOP_FILTER_N_DIV_MSB	0x0a
-+
-+#define VC3_OUT_DIV1_DIV2_CTRL		0xf
-+
-+#define VC3_PLL2_FB_INT_DIV_MSB		0x10
-+#define VC3_PLL2_FB_INT_DIV_LSB		0x11
-+#define VC3_PLL2_FB_FRC_DIV_MSB		0x12
-+#define VC3_PLL2_FB_FRC_DIV_LSB		0x13
-+
-+#define VC3_PLL2_M_DIVIDER		0x1a
-+#define VC3_PLL2_MDIV_DOUBLER		BIT(7)
-+#define VC3_PLL2_M_DIV1			BIT(6)
-+#define VC3_PLL2_M_DIV2			BIT(5)
-+#define VC3_PLL2_M_DIV(n)		((n) & GENMASK(4, 0))
-+
-+#define VC3_OUT_DIV3_DIV4_CTRL		0x1b
-+
-+#define VC3_PLL_OP_CTRL			0x1c
-+#define VC3_PLL_OP_CTRL_PLL2_REFIN_SEL	6
-+
-+#define VC3_OUTPUT_CTR			0x1d
-+#define VC3_OUTPUT_CTR_DIV4_SRC_SEL	BIT(3)
-+
-+#define VC3_SE2_CTRL_REG0		0x1f
-+#define VC3_SE2_CTRL_REG0_SE2_CLK_SEL	BIT(6)
-+
-+#define VC3_SE3_DIFF1_CTRL_REG		0x21
-+#define VC3_SE3_DIFF1_CTRL_REG_SE3_CLK_SEL	BIT(6)
-+
-+#define VC3_DIFF1_CTRL_REG		0x22
-+#define VC3_DIFF1_CTRL_REG_DIFF1_CLK_SEL	BIT(7)
-+
-+#define VC3_DIFF2_CTRL_REG		0x23
-+#define VC3_DIFF2_CTRL_REG_DIFF2_CLK_SEL	BIT(7)
-+
-+#define VC3_SE1_DIV4_CTRL		0x24
-+#define VC3_SE1_DIV4_CTRL_SE1_CLK_SEL	BIT(3)
-+
-+#define VC3_PLL1_VCO_MIN		300000000UL
-+#define VC3_PLL1_VCO_MAX		600000000UL
-+
-+#define VC3_PLL2_VCO_MIN		400000000UL
-+#define VC3_PLL2_VCO_MAX		1200000000UL
-+
-+#define VC3_PLL3_VCO_MIN		300000000UL
-+#define VC3_PLL3_VCO_MAX		800000000UL
-+
-+#define VC3_2_POW_16			(U16_MAX + 1)
-+#define VC3_DIV_MASK(width)		((1 << (width)) - 1)
-+
-+enum vc3_pfd_mux {
-+	VC3_PFD2_MUX,
-+	VC3_PFD3_MUX,
-+};
-+
-+enum vc3_pfd {
-+	VC3_PFD1,
-+	VC3_PFD2,
-+	VC3_PFD3,
-+};
-+
-+enum vc3_pll {
-+	VC3_PLL1,
-+	VC3_PLL2,
-+	VC3_PLL3,
-+};
-+
-+enum vc3_div_mux {
-+	VC3_DIV1_MUX,
-+	VC3_DIV3_MUX,
-+	VC3_DIV4_MUX,
-+};
-+
-+enum vc3_div {
-+	VC3_DIV1,
-+	VC3_DIV2,
-+	VC3_DIV3,
-+	VC3_DIV4,
-+	VC3_DIV5,
-+};
-+
-+enum vc3_clk_mux {
-+	VC3_DIFF2_MUX,
-+	VC3_DIFF1_MUX,
-+	VC3_SE3_MUX,
-+	VC3_SE2_MUX,
-+	VC3_SE1_MUX,
-+};
-+
-+enum vc3_clk {
-+	VC3_DIFF2,
-+	VC3_DIFF1,
-+	VC3_SE3,
-+	VC3_SE2,
-+	VC3_SE1,
-+	VC3_REF,
-+};
-+
-+struct vc3_clk_data {
-+	u8 offs;
-+	u8 bitmsk;
-+};
-+
-+struct vc3_pfd_data {
-+	u8 num;
-+	u8 offs;
-+	u8 mdiv1_bitmsk;
-+	u8 mdiv2_bitmsk;
-+};
-+
-+struct vc3_pll_data {
-+	u8 num;
-+	u8 int_div_msb_offs;
-+	u8 int_div_lsb_offs;
-+	unsigned long vco_min;
-+	unsigned long vco_max;
-+};
-+
-+struct vc3_div_data {
-+	u8 offs;
-+	const struct clk_div_table *table;
-+	u8 shift;
-+	u8 width;
-+	u8 flags;
-+};
-+
-+struct vc3_hw_data {
-+	struct clk_hw hw;
-+	struct regmap *regmap;
-+	const void *data;
-+
-+	u32 div_int;
-+	u32 div_frc;
-+};
-+
-+static const struct clk_div_table div1_divs[] = {
-+	{ .val = 0, .div = 1, }, { .val = 1, .div = 4, },
-+	{ .val = 2, .div = 5, }, { .val = 3, .div = 6, },
-+	{ .val = 4, .div = 2, }, { .val = 5, .div = 8, },
-+	{ .val = 6, .div = 10, }, { .val = 7, .div = 12, },
-+	{ .val = 8, .div = 4, }, { .val = 9, .div = 16, },
-+	{ .val = 10, .div = 20, }, { .val = 11, .div = 24, },
-+	{ .val = 12, .div = 8, }, { .val = 13, .div = 32, },
-+	{ .val = 14, .div = 40, }, { .val = 15, .div = 48, },
-+	{}
-+};
-+
-+static const struct clk_div_table div245_divs[] = {
-+	{ .val = 0, .div = 1, }, { .val = 1, .div = 3, },
-+	{ .val = 2, .div = 5, }, { .val = 3, .div = 10, },
-+	{ .val = 4, .div = 2, }, { .val = 5, .div = 6, },
-+	{ .val = 6, .div = 10, }, { .val = 7, .div = 20, },
-+	{ .val = 8, .div = 4, }, { .val = 9, .div = 12, },
-+	{ .val = 10, .div = 20, }, { .val = 11, .div = 40, },
-+	{ .val = 12, .div = 5, }, { .val = 13, .div = 15, },
-+	{ .val = 14, .div = 25, }, { .val = 15, .div = 50, },
-+	{}
-+};
-+
-+static const struct clk_div_table div3_divs[] = {
-+	{ .val = 0, .div = 1, }, { .val = 1, .div = 3, },
-+	{ .val = 2, .div = 5, }, { .val = 3, .div = 10, },
-+	{ .val = 4, .div = 2, }, { .val = 5, .div = 6, },
-+	{ .val = 6, .div = 10, }, { .val = 7, .div = 20, },
-+	{ .val = 8, .div = 4, }, { .val = 9, .div = 12, },
-+	{ .val = 10, .div = 20, }, { .val = 11, .div = 40, },
-+	{ .val = 12, .div = 8, }, { .val = 13, .div = 24, },
-+	{ .val = 14, .div = 40, }, { .val = 15, .div = 80, },
-+	{}
-+};
-+
-+static struct clk_hw *clk_out[6];
-+
-+static unsigned char vc3_pfd_mux_get_parent(struct clk_hw *hw)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_clk_data *pfd_mux = vc3->data;
-+	u32 src;
-+
-+	regmap_read(vc3->regmap, pfd_mux->offs, &src);
-+
-+	return !!(src & pfd_mux->bitmsk);
-+}
-+
-+static int vc3_pfd_mux_set_parent(struct clk_hw *hw, u8 index)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_clk_data *pfd_mux = vc3->data;
-+
-+	regmap_update_bits(vc3->regmap, pfd_mux->offs, pfd_mux->bitmsk,
-+			   index ? pfd_mux->bitmsk : 0);
-+	return 0;
-+}
-+
-+static const struct clk_ops vc3_pfd_mux_ops = {
-+	.set_parent = vc3_pfd_mux_set_parent,
-+	.get_parent = vc3_pfd_mux_get_parent,
-+};
-+
-+static unsigned long vc3_pfd_recalc_rate(struct clk_hw *hw,
-+					 unsigned long parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_pfd_data *pfd = vc3->data;
-+	unsigned int prediv, premul;
-+	unsigned long rate;
-+	u8 mdiv;
-+
-+	regmap_read(vc3->regmap, pfd->offs, &prediv);
-+	if (pfd->num == VC3_PFD1) {
-+		/* The bypass_prediv is set, PLL fed from Ref_in directly. */
-+		if (prediv & pfd->mdiv1_bitmsk) {
-+			/* check doubler is set or not */
-+			regmap_read(vc3->regmap, VC3_PLL1_CTRL_OUTDIV5, &premul);
-+			if (premul & VC3_PLL1_CTRL_OUTDIV5_PLL1_MDIV_DOUBLER)
-+				parent_rate *= 2;
-+			return parent_rate;
-+		}
-+		mdiv = VC3_PLL1_M_DIV(prediv);
-+	} else if (pfd->num == VC3_PFD2) {
-+		/* The bypass_prediv is set, PLL fed from Ref_in directly. */
-+		if (prediv & pfd->mdiv1_bitmsk) {
-+			regmap_read(vc3->regmap, VC3_PLL2_M_DIVIDER, &premul);
-+			/* check doubler is set or not */
-+			if (premul & VC3_PLL2_MDIV_DOUBLER)
-+				parent_rate *= 2;
-+			return parent_rate;
-+		}
-+
-+		mdiv = VC3_PLL2_M_DIV(prediv);
-+	} else {
-+		/* The bypass_prediv is set, PLL fed from Ref_in directly. */
-+		if (prediv & pfd->mdiv1_bitmsk)
-+			return parent_rate;
-+
-+		mdiv = VC3_PLL3_M_DIV(prediv);
-+	}
-+
-+	if (prediv & pfd->mdiv2_bitmsk)
-+		rate = parent_rate / 2;
-+	else
-+		rate = parent_rate / mdiv;
-+
-+	return rate;
-+}
-+
-+static long vc3_pfd_round_rate(struct clk_hw *hw, unsigned long rate,
-+			       unsigned long *parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_pfd_data *pfd = vc3->data;
-+	unsigned long idiv;
-+
-+	/* PLL cannot operate with input clock above 50 MHz. */
-+	if (rate > 50000000)
-+		return -EINVAL;
-+
-+	/* CLKIN within range of PLL input, feed directly to PLL. */
-+	if (*parent_rate <= 50000000)
-+		return *parent_rate;
-+
-+	idiv = DIV_ROUND_UP(*parent_rate, rate);
-+	if (pfd->num == VC3_PFD1 || pfd->num == VC3_PFD3) {
-+		if (idiv > 63)
-+			return -EINVAL;
-+	} else {
-+		if (idiv > 31)
-+			return -EINVAL;
-+	}
-+
-+	return *parent_rate / idiv;
-+}
-+
-+static int vc3_pfd_set_rate(struct clk_hw *hw, unsigned long rate,
-+			    unsigned long parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_pfd_data *pfd = vc3->data;
-+	unsigned long idiv;
-+	u8 div;
-+
-+	/* CLKIN within range of PLL input, feed directly to PLL. */
-+	if (parent_rate <= 50000000) {
-+		regmap_update_bits(vc3->regmap, pfd->offs, pfd->mdiv1_bitmsk,
-+				   pfd->mdiv1_bitmsk);
-+		regmap_update_bits(vc3->regmap, pfd->offs, pfd->mdiv2_bitmsk, 0);
-+		return 0;
-+	}
-+
-+	idiv = DIV_ROUND_UP(parent_rate, rate);
-+	/* We have dedicated div-2 predivider. */
-+	if (idiv == 2) {
-+		regmap_update_bits(vc3->regmap, pfd->offs, pfd->mdiv2_bitmsk,
-+				   pfd->mdiv2_bitmsk);
-+		regmap_update_bits(vc3->regmap, pfd->offs, pfd->mdiv1_bitmsk, 0);
-+	} else {
-+		if (pfd->num == VC3_PFD1)
-+			div = VC3_PLL1_M_DIV(idiv);
-+		else if (pfd->num == VC3_PFD2)
-+			div = VC3_PLL2_M_DIV(idiv);
-+		else
-+			div = VC3_PLL3_M_DIV(idiv);
-+
-+		regmap_write(vc3->regmap, pfd->offs, div);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops vc3_pfd_ops = {
-+	.recalc_rate = vc3_pfd_recalc_rate,
-+	.round_rate = vc3_pfd_round_rate,
-+	.set_rate = vc3_pfd_set_rate,
-+};
-+
-+static unsigned long vc3_pll_recalc_rate(struct clk_hw *hw,
-+					 unsigned long parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_pll_data *pll = vc3->data;
-+	u32 div_int, div_frc, val;
-+	unsigned long rate;
-+
-+	regmap_read(vc3->regmap, pll->int_div_msb_offs, &val);
-+	div_int = (val & GENMASK(2, 0)) << 8;
-+	regmap_read(vc3->regmap, pll->int_div_lsb_offs, &val);
-+	div_int |= val;
-+
-+	if (pll->num == VC3_PLL2) {
-+		regmap_read(vc3->regmap, VC3_PLL2_FB_FRC_DIV_MSB, &val);
-+		div_frc = val << 8;
-+		regmap_read(vc3->regmap, VC3_PLL2_FB_FRC_DIV_LSB, &val);
-+		div_frc |= val;
-+		rate = (parent_rate *
-+			(div_int * VC3_2_POW_16 + div_frc) / VC3_2_POW_16);
-+	} else {
-+		rate = parent_rate * div_int;
-+	}
-+
-+	return rate;
-+}
-+
-+static long vc3_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-+			       unsigned long *parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_pll_data *pll = vc3->data;
-+	u64 div_frc;
-+
-+	if (rate < pll->vco_min)
-+		rate = pll->vco_min;
-+	if (rate > pll->vco_max)
-+		rate = pll->vco_max;
-+
-+	vc3->div_int = rate / *parent_rate;
-+
-+	if (pll->num == VC3_PLL2) {
-+		if (vc3->div_int > 0x7ff)
-+			rate = *parent_rate * 0x7ff;
-+
-+		/* Determine best fractional part, which is 16 bit wide */
-+		div_frc = rate % *parent_rate;
-+		div_frc *= BIT(16) - 1;
-+		do_div(div_frc, *parent_rate);
-+
-+		vc3->div_frc = (u32)div_frc;
-+		rate = (*parent_rate *
-+			(vc3->div_int * VC3_2_POW_16 + div_frc) / VC3_2_POW_16);
-+	} else {
-+		rate = *parent_rate * vc3->div_int;
-+	}
-+
-+	return rate;
-+}
-+
-+static int vc3_pll_set_rate(struct clk_hw *hw, unsigned long rate,
-+			    unsigned long parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_pll_data *pll = vc3->data;
-+	u32 val;
-+
-+	regmap_read(vc3->regmap, pll->int_div_msb_offs, &val);
-+	val = (val & 0xf8) | ((vc3->div_int >> 8) & 0x7);
-+	regmap_write(vc3->regmap, pll->int_div_msb_offs, val);
-+	regmap_write(vc3->regmap, pll->int_div_lsb_offs, vc3->div_int & 0xff);
-+
-+	if (pll->num == VC3_PLL2) {
-+		regmap_write(vc3->regmap, VC3_PLL2_FB_FRC_DIV_MSB,
-+			     vc3->div_frc >> 8);
-+		regmap_write(vc3->regmap, VC3_PLL2_FB_FRC_DIV_LSB,
-+			     vc3->div_frc & 0xff);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops vc3_pll_ops = {
-+	.recalc_rate = vc3_pll_recalc_rate,
-+	.round_rate = vc3_pll_round_rate,
-+	.set_rate = vc3_pll_set_rate,
-+};
-+
-+static unsigned char vc3_div_mux_get_parent(struct clk_hw *hw)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_clk_data *div_mux = vc3->data;
-+	u32 src;
-+
-+	regmap_read(vc3->regmap, div_mux->offs, &src);
-+
-+	return !!(src & div_mux->bitmsk);
-+}
-+
-+static int vc3_div_mux_set_parent(struct clk_hw *hw, u8 index)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_clk_data *div_mux = vc3->data;
-+
-+	regmap_update_bits(vc3->regmap, div_mux->offs, div_mux->bitmsk,
-+			   index ? div_mux->bitmsk : 0);
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops vc3_div_mux_ops = {
-+	.set_parent = vc3_div_mux_set_parent,
-+	.get_parent = vc3_div_mux_get_parent,
-+};
-+
-+static unsigned int vc3_get_div(const struct clk_div_table *table,
-+				unsigned int val, unsigned long flag)
-+{
-+	const struct clk_div_table *clkt;
-+
-+	for (clkt = table; clkt->div; clkt++)
-+		if (clkt->val == val)
-+			return clkt->div;
-+
-+	return 0;
-+}
-+
-+static unsigned long vc3_div_recalc_rate(struct clk_hw *hw,
-+					 unsigned long parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_div_data *div_data = vc3->data;
-+	unsigned int val;
-+
-+	regmap_read(vc3->regmap, div_data->offs, &val);
-+	val >>= div_data->shift;
-+	val &= VC3_DIV_MASK(div_data->width);
-+
-+	return divider_recalc_rate(hw, parent_rate, val, div_data->table,
-+				   div_data->flags, div_data->width);
-+}
-+
-+static long vc3_div_round_rate(struct clk_hw *hw, unsigned long rate,
-+			       unsigned long *parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_div_data *div_data = vc3->data;
-+	unsigned int bestdiv;
-+
-+	/* if read only, just return current value */
-+	if (div_data->flags & CLK_DIVIDER_READ_ONLY) {
-+		regmap_read(vc3->regmap, div_data->offs, &bestdiv);
-+		bestdiv >>= div_data->shift;
-+		bestdiv &= VC3_DIV_MASK(div_data->width);
-+		bestdiv = vc3_get_div(div_data->table, bestdiv, div_data->flags);
-+		return DIV_ROUND_UP(*parent_rate, bestdiv);
-+	}
-+
-+	return divider_round_rate(hw, rate, parent_rate, div_data->table,
-+				  div_data->width, div_data->flags);
-+}
-+
-+static int vc3_div_set_rate(struct clk_hw *hw, unsigned long rate,
-+			    unsigned long parent_rate)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_div_data *div_data = vc3->data;
-+	unsigned int value;
-+
-+	value = divider_get_val(rate, parent_rate, div_data->table,
-+				div_data->width, div_data->flags);
-+	regmap_update_bits(vc3->regmap, div_data->offs,
-+			   VC3_DIV_MASK(div_data->width) << div_data->shift,
-+			   value << div_data->shift);
-+	return 0;
-+}
-+
-+static const struct clk_ops vc3_div_ops = {
-+	.recalc_rate = vc3_div_recalc_rate,
-+	.round_rate = vc3_div_round_rate,
-+	.set_rate = vc3_div_set_rate,
-+};
-+
-+static int vc3_clk_mux_determine_rate(struct clk_hw *hw,
-+				      struct clk_rate_request *req)
-+{
-+	int ret;
-+	int frc;
-+
-+	ret = clk_mux_determine_rate_flags(hw, req, CLK_SET_RATE_PARENT);
-+	if (ret) {
-+		if (req->best_parent_rate / req->rate) {
-+			frc = DIV_ROUND_CLOSEST_ULL(req->best_parent_rate,
-+						    req->rate);
-+			req->rate *= frc;
-+			return clk_mux_determine_rate_flags(hw, req,
-+							    CLK_SET_RATE_PARENT);
-+		}
-+		ret = 0;
-+	}
-+
-+	return ret;
-+}
-+
-+static unsigned char vc3_clk_mux_get_parent(struct clk_hw *hw)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_clk_data *clk_mux = vc3->data;
-+	u32 val;
-+
-+	regmap_read(vc3->regmap, clk_mux->offs, &val);
-+
-+	return !!(val & clk_mux->bitmsk);
-+}
-+
-+static int vc3_clk_mux_set_parent(struct clk_hw *hw, u8 index)
-+{
-+	struct vc3_hw_data *vc3 = container_of(hw, struct vc3_hw_data, hw);
-+	const struct vc3_clk_data *clk_mux = vc3->data;
-+
-+	regmap_update_bits(vc3->regmap, clk_mux->offs,
-+			   clk_mux->bitmsk, index ? clk_mux->bitmsk : 0);
-+	return 0;
-+}
-+
-+static const struct clk_ops vc3_clk_mux_ops = {
-+	.determine_rate = vc3_clk_mux_determine_rate,
-+	.set_parent = vc3_clk_mux_set_parent,
-+	.get_parent = vc3_clk_mux_get_parent,
-+};
-+
-+static bool vc3_regmap_is_writeable(struct device *dev, unsigned int reg)
-+{
-+	return true;
-+}
-+
-+static const struct regmap_config vc3_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.cache_type = REGCACHE_RBTREE,
-+	.max_register = 0x24,
-+	.writeable_reg = vc3_regmap_is_writeable,
-+};
-+
-+static struct vc3_hw_data clk_div[5];
-+
-+static const struct clk_parent_data pfd_mux_parent_data[] = {
-+	{ .index = 0, },
-+	{ .hw = &clk_div[VC3_DIV2].hw }
-+};
-+
-+static struct vc3_hw_data clk_pfd_mux[] = {
-+	[VC3_PFD2_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_PLL_OP_CTRL,
-+			.bitmsk = BIT(VC3_PLL_OP_CTRL_PLL2_REFIN_SEL)
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pfd2_mux",
-+			.ops = &vc3_pfd_mux_ops,
-+			.parent_data = pfd_mux_parent_data,
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_PFD3_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_GENERAL_CTR,
-+			.bitmsk = BIT(VC3_GENERAL_CTR_PLL3_REFIN_SEL)
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pfd3_mux",
-+			.ops = &vc3_pfd_mux_ops,
-+			.parent_data = pfd_mux_parent_data,
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	}
-+};
-+
-+static struct vc3_hw_data clk_pfd[] = {
-+	[VC3_PFD1] = {
-+		.data = &(struct vc3_pfd_data) {
-+			.num = VC3_PFD1,
-+			.offs = VC3_PLL1_M_DIVIDER,
-+			.mdiv1_bitmsk = VC3_PLL1_M_DIV1,
-+			.mdiv2_bitmsk = VC3_PLL1_M_DIV2
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pfd1",
-+			.ops = &vc3_pfd_ops,
-+			.parent_data = &(const struct clk_parent_data) {
-+				.index = 0
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_PFD2] = {
-+		.data = &(struct vc3_pfd_data) {
-+			.num = VC3_PFD2,
-+			.offs = VC3_PLL2_M_DIVIDER,
-+			.mdiv1_bitmsk = VC3_PLL2_M_DIV1,
-+			.mdiv2_bitmsk = VC3_PLL2_M_DIV2
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pfd2",
-+			.ops = &vc3_pfd_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pfd_mux[VC3_PFD2_MUX].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_PFD3] = {
-+		.data = &(struct vc3_pfd_data) {
-+			.num = VC3_PFD3,
-+			.offs = VC3_PLL3_M_DIVIDER,
-+			.mdiv1_bitmsk = VC3_PLL3_M_DIV1,
-+			.mdiv2_bitmsk = VC3_PLL3_M_DIV2
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pfd3",
-+			.ops = &vc3_pfd_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pfd_mux[VC3_PFD3_MUX].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	}
-+};
-+
-+static struct vc3_hw_data clk_pll[] = {
-+	[VC3_PLL1] = {
-+		.data = &(struct vc3_pll_data) {
-+			.num = VC3_PLL1,
-+			.int_div_msb_offs = VC3_PLL1_LOOP_FILTER_N_DIV_MSB,
-+			.int_div_lsb_offs = VC3_PLL1_VCO_N_DIVIDER,
-+			.vco_min = VC3_PLL1_VCO_MIN,
-+			.vco_max = VC3_PLL1_VCO_MAX
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pll1",
-+			.ops = &vc3_pll_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pfd[VC3_PFD1].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_PLL2] = {
-+		.data = &(struct vc3_pll_data) {
-+			.num = VC3_PLL2,
-+			.int_div_msb_offs = VC3_PLL2_FB_INT_DIV_MSB,
-+			.int_div_lsb_offs = VC3_PLL2_FB_INT_DIV_LSB,
-+			.vco_min = VC3_PLL2_VCO_MIN,
-+			.vco_max = VC3_PLL2_VCO_MAX
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pll2",
-+			.ops = &vc3_pll_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pfd[VC3_PFD2].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_PLL3] = {
-+		.data = &(struct vc3_pll_data) {
-+			.num = VC3_PLL3,
-+			.int_div_msb_offs = VC3_PLL3_LOOP_FILTER_N_DIV_MSB,
-+			.int_div_lsb_offs = VC3_PLL3_N_DIVIDER,
-+			.vco_min = VC3_PLL3_VCO_MIN,
-+			.vco_max = VC3_PLL3_VCO_MAX
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "pll3",
-+			.ops = &vc3_pll_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pfd[VC3_PFD3].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	}
-+};
-+
-+static const struct clk_parent_data div_mux_parent_data[][2] = {
-+	[VC3_DIV1_MUX] = {
-+		{ .hw = &clk_pll[VC3_PLL1].hw },
-+		{ .index = 0 }
-+	},
-+	[VC3_DIV3_MUX] = {
-+		{ .hw = &clk_pll[VC3_PLL2].hw },
-+		{ .hw = &clk_pll[VC3_PLL3].hw }
-+	},
-+	[VC3_DIV4_MUX] = {
-+		{ .hw = &clk_pll[VC3_PLL2].hw },
-+		{ .index = 0 }
-+	}
-+};
-+
-+static struct vc3_hw_data clk_div_mux[] = {
-+	[VC3_DIV1_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_GENERAL_CTR,
-+			.bitmsk = VC3_GENERAL_CTR_DIV1_SRC_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div1_mux",
-+			.ops = &vc3_div_mux_ops,
-+			.parent_data = div_mux_parent_data[VC3_DIV1_MUX],
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIV3_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_PLL3_CHARGE_PUMP_CTRL,
-+			.bitmsk = VC3_PLL3_CHARGE_PUMP_CTRL_OUTDIV3_SRC_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div3_mux",
-+			.ops = &vc3_div_mux_ops,
-+			.parent_data = div_mux_parent_data[VC3_DIV3_MUX],
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIV4_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_OUTPUT_CTR,
-+			.bitmsk = VC3_OUTPUT_CTR_DIV4_SRC_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div4_mux",
-+			.ops = &vc3_div_mux_ops,
-+			.parent_data = div_mux_parent_data[VC3_DIV4_MUX],
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	}
-+};
-+
-+static struct vc3_hw_data clk_div[] = {
-+	[VC3_DIV1] = {
-+		.data = &(struct vc3_div_data) {
-+			.offs = VC3_OUT_DIV1_DIV2_CTRL,
-+			.table = div1_divs,
-+			.shift = 4,
-+			.width = 4,
-+			.flags = CLK_DIVIDER_READ_ONLY
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div1",
-+			.ops = &vc3_div_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div_mux[VC3_DIV1_MUX].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIV2] = {
-+		.data = &(struct vc3_div_data) {
-+			.offs = VC3_OUT_DIV1_DIV2_CTRL,
-+			.table = div245_divs,
-+			.shift = 0,
-+			.width = 4,
-+			.flags = CLK_DIVIDER_READ_ONLY
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div2",
-+			.ops = &vc3_div_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pll[VC3_PLL1].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIV3] = {
-+		.data = &(struct vc3_div_data) {
-+			.offs = VC3_OUT_DIV3_DIV4_CTRL,
-+			.table = div3_divs,
-+			.shift = 4,
-+			.width = 4,
-+			.flags = CLK_DIVIDER_READ_ONLY
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div3",
-+			.ops = &vc3_div_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div_mux[VC3_DIV3_MUX].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIV4] = {
-+		.data = &(struct vc3_div_data) {
-+			.offs = VC3_OUT_DIV3_DIV4_CTRL,
-+			.table = div245_divs,
-+			.shift = 0,
-+			.width = 4,
-+			.flags = CLK_DIVIDER_READ_ONLY
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div4",
-+			.ops = &vc3_div_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div_mux[VC3_DIV4_MUX].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIV5] = {
-+		.data = &(struct vc3_div_data) {
-+			.offs = VC3_PLL1_CTRL_OUTDIV5,
-+			.table = div245_divs,
-+			.shift = 0,
-+			.width = 4,
-+			.flags = CLK_DIVIDER_READ_ONLY
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "div5",
-+			.ops = &vc3_div_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_pll[VC3_PLL3].hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	}
-+};
-+
-+static struct vc3_hw_data clk_mux[] = {
-+	[VC3_DIFF2_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_DIFF2_CTRL_REG,
-+			.bitmsk = VC3_DIFF2_CTRL_REG_DIFF2_CLK_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "diff2_mux",
-+			.ops = &vc3_clk_mux_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div[VC3_DIV1].hw,
-+				&clk_div[VC3_DIV3].hw
-+			},
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_DIFF1_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_DIFF1_CTRL_REG,
-+			.bitmsk = VC3_DIFF1_CTRL_REG_DIFF1_CLK_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "diff1_mux",
-+			.ops = &vc3_clk_mux_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div[VC3_DIV1].hw,
-+				&clk_div[VC3_DIV3].hw
-+			},
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_SE3_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_SE3_DIFF1_CTRL_REG,
-+			.bitmsk = VC3_SE3_DIFF1_CTRL_REG_SE3_CLK_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "se3_mux",
-+			.ops = &vc3_clk_mux_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div[VC3_DIV2].hw,
-+				&clk_div[VC3_DIV4].hw
-+			},
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_SE2_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_SE2_CTRL_REG0,
-+			.bitmsk = VC3_SE2_CTRL_REG0_SE2_CLK_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "se2_mux",
-+			.ops = &vc3_clk_mux_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div[VC3_DIV5].hw,
-+				&clk_div[VC3_DIV4].hw
-+			},
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	},
-+	[VC3_SE1_MUX] = {
-+		.data = &(struct vc3_clk_data) {
-+			.offs = VC3_SE1_DIV4_CTRL,
-+			.bitmsk = VC3_SE1_DIV4_CTRL_SE1_CLK_SEL
-+		},
-+		.hw.init = &(struct clk_init_data){
-+			.name = "se1_mux",
-+			.ops = &vc3_clk_mux_ops,
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&clk_div[VC3_DIV5].hw,
-+				&clk_div[VC3_DIV4].hw
-+			},
-+			.num_parents = 2,
-+			.flags = CLK_SET_RATE_PARENT
-+		}
-+	}
-+};
-+
-+static struct clk_hw *vc3_of_clk_get(struct of_phandle_args *clkspec,
-+				     void *data)
-+{
-+	unsigned int idx = clkspec->args[0];
-+	struct clk_hw **clkout_hw = data;
-+
-+	if (idx >= ARRAY_SIZE(clk_out)) {
-+		pr_err("invalid clk index %u for provider %pOF\n", idx, clkspec->np);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	return clkout_hw[idx];
-+}
-+
-+static int vc3_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	u8 settings[NUM_CONFIG_REGISTERS];
-+	struct regmap *regmap;
-+	const char *name;
-+	int ret, i;
-+
-+	regmap = devm_regmap_init_i2c(client, &vc3_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap),
-+				     "failed to allocate register map\n");
-+
-+	ret = of_property_read_u8_array(dev->of_node, "renesas,settings",
-+					settings, ARRAY_SIZE(settings));
-+	if (!ret) {
-+		/*
-+		 * A raw settings array was specified in the DT. Write the
-+		 * settings to the device immediately.
-+		 */
-+		for  (i = 0; i < NUM_CONFIG_REGISTERS; i++) {
-+			ret = regmap_write(regmap, i, settings[i]);
-+			if (ret) {
-+				dev_err(dev, "error writing to chip (%i)\n", ret);
-+				return ret;
-+			}
-+		}
-+	} else if (ret == -EOVERFLOW) {
-+		dev_err(&client->dev, "EOVERFLOW reg settings. ARRAY_SIZE: %zu",
-+			ARRAY_SIZE(settings));
-+		return ret;
-+	}
-+
-+	/* Register pfd muxes */
-+	for (i = 0; i < ARRAY_SIZE(clk_pfd_mux); i++) {
-+		clk_pfd_mux[i].regmap = regmap;
-+		ret = devm_clk_hw_register(dev, &clk_pfd_mux[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "%s failed\n",
-+					     clk_pfd_mux[i].hw.init->name);
-+	}
-+
-+	/* Register pfd's */
-+	for (i = 0; i < ARRAY_SIZE(clk_pfd); i++) {
-+		clk_pfd[i].regmap = regmap;
-+		ret = devm_clk_hw_register(dev, &clk_pfd[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "%s failed\n",
-+					     clk_pfd[i].hw.init->name);
-+	}
-+
-+	/* Register pll's */
-+	for (i = 0; i < ARRAY_SIZE(clk_pll); i++) {
-+		clk_pll[i].regmap = regmap;
-+		ret = devm_clk_hw_register(dev, &clk_pll[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "%s failed\n",
-+					     clk_pll[i].hw.init->name);
-+	}
-+
-+	/* Register divider muxes */
-+	for (i = 0; i < ARRAY_SIZE(clk_div_mux); i++) {
-+		clk_div_mux[i].regmap = regmap;
-+		ret = devm_clk_hw_register(dev, &clk_div_mux[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "%s failed\n",
-+					     clk_div_mux[i].hw.init->name);
-+	}
-+
-+	/* Register dividers */
-+	for (i = 0; i < ARRAY_SIZE(clk_div); i++) {
-+		clk_div[i].regmap = regmap;
-+		ret = devm_clk_hw_register(dev, &clk_div[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "%s failed\n",
-+					     clk_div[i].hw.init->name);
-+	}
-+
-+	/* Register clk muxes */
-+	for (i = 0; i < ARRAY_SIZE(clk_mux); i++) {
-+		clk_mux[i].regmap = regmap;
-+		ret = devm_clk_hw_register(dev, &clk_mux[i].hw);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "%s failed\n",
-+					     clk_mux[i].hw.init->name);
-+	}
-+
-+	/* Register clk outputs */
-+	for (i = 0; i < ARRAY_SIZE(clk_out); i++) {
-+		switch (i) {
-+		case VC3_DIFF2:
-+			name = "diff2";
-+			break;
-+		case VC3_DIFF1:
-+			name = "diff1";
-+			break;
-+		case VC3_SE3:
-+			name = "se3";
-+			break;
-+		case VC3_SE2:
-+			name = "se2";
-+			break;
-+		case VC3_SE1:
-+			name = "se1";
-+			break;
-+		case VC3_REF:
-+			name = "ref";
-+			break;
-+		default:
-+			pr_err("invalid clk output %d\n", i);
-+			return -EINVAL;
-+		}
-+
-+		if (i == VC3_REF)
-+			clk_out[i] = devm_clk_hw_register_fixed_factor_index(dev,
-+				name, 0, CLK_SET_RATE_PARENT, 1, 1);
-+		else
-+			clk_out[i] = devm_clk_hw_register_fixed_factor_parent_hw(dev,
-+				name, &clk_mux[i].hw, CLK_SET_RATE_PARENT, 1, 1);
-+
-+		if (IS_ERR(clk_out[i]))
-+			return PTR_ERR(clk_out[i]);
-+	}
-+
-+	ret = devm_of_clk_add_hw_provider(dev, vc3_of_clk_get, clk_out);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "unable to add clk provider\n");
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id dev_ids[] = {
-+	{ .compatible = "renesas,5p35023" },
-+	{ /* Sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, dev_ids);
-+
-+static struct i2c_driver vc3_driver = {
-+	.driver = {
-+		.name = "vc3",
-+		.of_match_table = of_match_ptr(dev_ids),
-+	},
-+	.probe_new = vc3_probe,
-+};
-+module_i2c_driver(vc3_driver);
-+
-+MODULE_AUTHOR("Biju Das <biju.das.jz@bp.renesas.com>");
-+MODULE_DESCRIPTION("Renesas VersaClock 3 driver");
-+MODULE_LICENSE("GPL");
+The rationale is that set_parent() is very likely to be useful when
+changing the rate, but it's determine_rate() that takes the parenting
+decision. If we're missing it, then the current parent is always going
+to be used, and thus set_parent() will not be used. The only exception
+being a direct call to clk_set_parent(), but those are fairly rare
+compared to clk_set_rate().
+
+Stephen then asked to promote the warning to an error, and to fix up all
+the muxes that are in that situation first. So here it is :)
+
+It was build-tested on x86, arm and arm64.
+
+Affected drivers have been tracked down by the following coccinelle
+script:
+
+virtual report 
+
+@ clk_ops @
+identifier ops;
+position p;
+@@
+
+ struct clk_ops ops@p = {
+   ...
+ };
+
+@ has_set_parent @
+identifier clk_ops.ops;
+identifier set_parent_f;
+@@
+
+  struct clk_ops ops = {
+	.set_parent = set_parent_f,
+  };
+
+@ has_determine_rate @
+identifier clk_ops.ops;
+identifier determine_rate_f;
+@@
+
+  struct clk_ops ops = {
+	.determine_rate = determine_rate_f,
+  };
+
+@ script:python depends on report && has_set_parent && !has_determine_rate @
+ops << clk_ops.ops;
+set_parent_f << has_set_parent.set_parent_f;
+p << clk_ops.p;
+@@
+
+coccilib.report.print_report(p[0], "ERROR: %s has set_parent (%s)" % (ops, set_parent_f))
+
+Berlin is the only user still matching after this series has been
+applied, but it's because it uses a composite clock which throws the
+script off. The driver has been converted and shouldn't be a problem. 
+
+Let me know what you think,
+Maxime
+
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+---
+Changes in v3:
+- Rebased on top of next-20230404
+- Link to v2: https://lore.kernel.org/r/20221018-clk-range-checks-fixes-v2-0-f6736dec138e@cerno.tech
+
+Changes in v2:
+- Drop all the patches already applied
+- Promote the clk registration warning to an error
+- Make all muxes use determine_rate
+- Link to v1: https://lore.kernel.org/r/20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech
+
+---
+Maxime Ripard (65):
+      clk: Export clk_hw_forward_rate_request()
+      clk: lan966x: Remove unused round_rate hook
+      clk: nodrv: Add a determine_rate hook
+      clk: test: Add a determine_rate hook
+      clk: actions: composite: Add a determine_rate hook for pass clk
+      clk: at91: main: Add a determine_rate hook
+      clk: at91: sckc: Add a determine_rate hook
+      clk: berlin: div: Add a determine_rate hook
+      clk: cdce706: Add a determine_rate hook
+      clk: k210: pll: Add a determine_rate hook
+      clk: k210: aclk: Add a determine_rate hook
+      clk: k210: mux: Add a determine_rate hook
+      clk: lmk04832: clkout: Add a determine_rate hook
+      clk: lochnagar: Add a determine_rate hook
+      clk: qoriq: Add a determine_rate hook
+      clk: si5341: Add a determine_rate hook
+      clk: stm32f4: mux: Add a determine_rate hook
+      clk: vc5: mux: Add a determine_rate hook
+      clk: vc5: clkout: Add a determine_rate hook
+      clk: wm831x: clkout: Add a determine_rate hook
+      clk: davinci: da8xx-cfgchip: Add a determine_rate hook
+      clk: davinci: da8xx-cfgchip: Add a determine_rate hook
+      clk: imx: busy: Add a determine_rate hook
+      clk: imx: fixup-mux: Add a determine_rate hook
+      clk: imx: scu: Add a determine_rate hook
+      clk: mediatek: cpumux: Add a determine_rate hook
+      clk: pxa: Add a determine_rate hook
+      clk: renesas: r9a06g032: Add a determine_rate hook
+      clk: socfpga: gate: Add a determine_rate hook
+      clk: stm32: core: Add a determine_rate hook
+      clk: tegra: bpmp: Add a determine_rate hook
+      clk: tegra: super: Add a determine_rate hook
+      clk: tegra: periph: Add a determine_rate hook
+      clk: ux500: prcmu: Add a determine_rate hook
+      clk: ux500: sysctrl: Add a determine_rate hook
+      clk: versatile: sp810: Add a determine_rate hook
+      drm/tegra: sor: Add a determine_rate hook
+      phy: cadence: sierra: Add a determine_rate hook
+      phy: cadence: torrent: Add a determine_rate hook
+      phy: ti: am654-serdes: Add a determine_rate hook
+      phy: ti: j721e-wiz: Add a determine_rate hook
+      rtc: sun6i: Add a determine_rate hook
+      ASoC: tlv320aic32x4: Add a determine_rate hook
+      clk: actions: composite: div: Switch to determine_rate
+      clk: actions: composite: fact: Switch to determine_rate
+      clk: at91: smd: Switch to determine_rate
+      clk: axi-clkgen: Switch to determine_rate
+      clk: cdce706: divider: Switch to determine_rate
+      clk: cdce706: clkout: Switch to determine_rate
+      clk: si5341: Switch to determine_rate
+      clk: si5351: pll: Switch to determine_rate
+      clk: si5351: msynth: Switch to determine_rate
+      clk: si5351: clkout: Switch to determine_rate
+      clk: da8xx: clk48: Switch to determine_rate
+      clk: imx: scu: Switch to determine_rate
+      clk: ingenic: cgu: Switch to determine_rate
+      clk: ingenic: tcu: Switch to determine_rate
+      clk: sprd: composite: Switch to determine_rate
+      clk: st: flexgen: Switch to determine_rate
+      clk: stm32: composite: Switch to determine_rate
+      clk: tegra: periph: Switch to determine_rate
+      clk: tegra: super: Switch to determine_rate
+      ASoC: tlv320aic32x4: pll: Switch to determine_rate
+      ASoC: tlv320aic32x4: div: Switch to determine_rate
+      clk: Forbid to register a mux without determine_rate
+
+ drivers/clk/actions/owl-composite.c       | 35 +++++++++++-----
+ drivers/clk/actions/owl-composite.h       |  2 +-
+ drivers/clk/at91/clk-main.c               |  3 +-
+ drivers/clk/at91/clk-smd.c                | 29 +++++++------
+ drivers/clk/at91/sckc.c                   |  3 +-
+ drivers/clk/berlin/berlin2-div.c          |  3 +-
+ drivers/clk/clk-axi-clkgen.c              | 14 ++++---
+ drivers/clk/clk-cdce706.c                 | 31 ++++++++------
+ drivers/clk/clk-k210.c                    | 17 +++++---
+ drivers/clk/clk-lan966x.c                 | 17 --------
+ drivers/clk/clk-lmk04832.c                |  1 +
+ drivers/clk/clk-lochnagar.c               |  2 +
+ drivers/clk/clk-qoriq.c                   | 10 +++--
+ drivers/clk/clk-si5341.c                  | 21 +++++-----
+ drivers/clk/clk-si5351.c                  | 67 +++++++++++++++++--------------
+ drivers/clk/clk-stm32f4.c                 |  3 +-
+ drivers/clk/clk-versaclock5.c             |  8 ++--
+ drivers/clk/clk-wm831x.c                  |  3 +-
+ drivers/clk/clk.c                         | 15 +++++++
+ drivers/clk/clk_test.c                    |  1 +
+ drivers/clk/davinci/da8xx-cfgchip.c       | 15 ++++---
+ drivers/clk/imx/clk-busy.c                |  3 +-
+ drivers/clk/imx/clk-fixup-mux.c           |  3 +-
+ drivers/clk/imx/clk-scu.c                 | 27 +++++++++++--
+ drivers/clk/ingenic/cgu.c                 | 15 +++----
+ drivers/clk/ingenic/tcu.c                 | 19 +++++----
+ drivers/clk/mediatek/clk-cpumux.c         |  3 +-
+ drivers/clk/pxa/clk-pxa.c                 |  3 +-
+ drivers/clk/renesas/r9a06g032-clocks.c    |  3 +-
+ drivers/clk/socfpga/clk-gate.c            |  3 +-
+ drivers/clk/sprd/composite.c              | 16 +++++---
+ drivers/clk/st/clk-flexgen.c              | 15 +++----
+ drivers/clk/stm32/clk-stm32-core.c        | 33 ++++++++++-----
+ drivers/clk/tegra/clk-bpmp.c              |  7 +++-
+ drivers/clk/tegra/clk-periph.c            | 19 ++++++---
+ drivers/clk/tegra/clk-super.c             | 18 ++++++---
+ drivers/clk/ux500/clk-prcmu.c             |  3 +-
+ drivers/clk/ux500/clk-sysctrl.c           |  4 +-
+ drivers/clk/versatile/clk-sp810.c         |  3 +-
+ drivers/gpu/drm/tegra/sor.c               |  3 +-
+ drivers/phy/cadence/phy-cadence-sierra.c  |  1 +
+ drivers/phy/cadence/phy-cadence-torrent.c |  1 +
+ drivers/phy/ti/phy-am654-serdes.c         |  1 +
+ drivers/phy/ti/phy-j721e-wiz.c            |  1 +
+ drivers/rtc/rtc-sun6i.c                   |  2 +
+ sound/soc/codecs/tlv320aic32x4-clk.c      | 37 ++++++++++-------
+ 46 files changed, 343 insertions(+), 200 deletions(-)
+---
+base-commit: 6a53bda3aaf3de5edeea27d0b1d8781d067640b6
+change-id: 20221018-clk-range-checks-fixes-2039f3523240
+
+Best regards,
 -- 
-2.25.1
+Maxime Ripard <maxime@cerno.tech>
 
