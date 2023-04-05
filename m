@@ -2,113 +2,143 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335606D7BE7
-	for <lists+linux-clk@lfdr.de>; Wed,  5 Apr 2023 13:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56056D7CCC
+	for <lists+linux-clk@lfdr.de>; Wed,  5 Apr 2023 14:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbjDELs4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 5 Apr 2023 07:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S237015AbjDEMiz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 5 Apr 2023 08:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbjDELsz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 5 Apr 2023 07:48:55 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E87940C4;
-        Wed,  5 Apr 2023 04:48:52 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pk1d2-0006eI-Mo; Wed, 05 Apr 2023 13:48:40 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Hal Feng <hal.feng@starfivetech.com>
-Subject: Re: [PATCH v7 03/22] clk: starfive: Replace SOC_STARFIVE with ARCH_STARFIVE
-Date:   Wed, 05 Apr 2023 13:48:39 +0200
-Message-ID: <23535525.6Emhk5qWAg@diego>
-In-Reply-To: <20230401111934.130844-4-hal.feng@starfivetech.com>
-References: <20230401111934.130844-1-hal.feng@starfivetech.com>
- <20230401111934.130844-4-hal.feng@starfivetech.com>
+        with ESMTP id S234940AbjDEMiy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 5 Apr 2023 08:38:54 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457501FD2;
+        Wed,  5 Apr 2023 05:38:53 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id eh3so140658584edb.11;
+        Wed, 05 Apr 2023 05:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680698332;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4K2LKX1I/lpH9z36xVqg4K3J7Cq4KIfhLzcdDFePTjg=;
+        b=fgTMGHyFXa1qgCs24AWiAtsKN1GUERIpL7hx0zAr43ZhQsScAvqCWhDhb4vrNpcH7I
+         B00YCVw5JO2C9zfFbuGtjhKKEOe4XXjDUDAKckyIwZGzLeS4ACxr1+QGi9zkom0q31+V
+         WivyZrXYrJ/7QRIxJO5kyX6gju292ueuvZMnaUeNiQhIwHoaEzpsZ9C+DK1PjtVqtXwH
+         1orftxS1c26RldkzVJ9i3L1LPEHRorwADG788OCL0Np17WVJyEfWLu/i5t3lrlXxIhJc
+         ulrvSC1o8eaxcKOu8JCYS2nHKF6CwVcXxGiSH41qVS5mE+hShgqSG2tbsG+bNFQKWFM9
+         Xvrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680698332;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4K2LKX1I/lpH9z36xVqg4K3J7Cq4KIfhLzcdDFePTjg=;
+        b=yowHhc23/4pgx7MC6ZIuhSmEVmn9TWJMxCYOe0WhP5D3lM9dK+BZkrJf9iihJGOYF2
+         IpKrLfKjhNo474Fitag9x2EOZTT8NNZ2lNsHYelSMaPIaWMPiv5OfBYpqLyLXCcw3SZl
+         Kt8jhlzyCRJEQpQ+j1wo5xfDCOcNdINdu/DVgLeKjOqNlViMafKJcgW5V0kC+U75Ql21
+         YT7kjRJEJ4PzvyxhusHgx/hP4p/IUXo60wG9NbBVHvWYYfCWojY7h1HlAfmZWmxY70sX
+         8Y4BSvWaQ2KWdyNj1wOg65CemaaJVksjutl+JjCYscGA4AltXIhuiLYzJuwLEstdUi1o
+         E5/w==
+X-Gm-Message-State: AAQBX9fa59kqi5rRuI1mz76sVOJBtDHyV2z30TsIwCiqBmAbCU6B5z36
+        FvnwHeLp8fr7tdL4aCNj7JAAb+vhl8o=
+X-Google-Smtp-Source: AKy350b9tUVv6KbsM0u4XCKcvjKrck+Twvgfz4UZM0jkzyar0vGjPwXlE8UB9UWvaAeZWbWOVWYfiQ==
+X-Received: by 2002:a17:906:a38f:b0:932:a14e:4c57 with SMTP id k15-20020a170906a38f00b00932a14e4c57mr2900292ejz.76.1680698331643;
+        Wed, 05 Apr 2023 05:38:51 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id y7-20020a1709064b0700b00946be16f725sm7338185eju.153.2023.04.05.05.38.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 05:38:51 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 14:38:49 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Yuan Can <yuancan@huawei.com>
+Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com,
+        mturquette@baylibre.com, sboyd@kernel.org, jonathanh@nvidia.com,
+        mperttunen@nvidia.com, tomeu.vizoso@collabora.com,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] clk: tegra: tegra124-emc: Fix potential memory leak
+Message-ID: <ZC1r2esSZkqEjRVr@orome>
+References: <20221209094124.71043-1-yuancan@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="iA7IswaSxcKGbw9g"
+Content-Disposition: inline
+In-Reply-To: <20221209094124.71043-1-yuancan@huawei.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Am Samstag, 1. April 2023, 13:19:15 CEST schrieb Hal Feng:
-> Using ARCH_FOO symbol is preferred than SOC_FOO.
-> Set obj-y for starfive/ in Makefile, so the StarFive drivers
-> can be compiled with COMPILE_TEST=y but ARCH_STARFIVE=n.
-> 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
 
-Reviewed-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+--iA7IswaSxcKGbw9g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Dec 09, 2022 at 09:41:24AM +0000, Yuan Can wrote:
+> The tegra and tegra needs to be freed in the error handling path, otherwi=
+se
+> it will be leaked.
+>=20
+> Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
+> Signed-off-by: Yuan Can <yuancan@huawei.com>
 > ---
->  drivers/clk/Makefile         | 2 +-
->  drivers/clk/starfive/Kconfig | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> index e3ca0d058a25..3bed88d67a3a 100644
-> --- a/drivers/clk/Makefile
-> +++ b/drivers/clk/Makefile
-> @@ -117,7 +117,7 @@ obj-$(CONFIG_PLAT_SPEAR)		+= spear/
->  obj-y					+= sprd/
->  obj-$(CONFIG_ARCH_STI)			+= st/
->  obj-$(CONFIG_ARCH_STM32)		+= stm32/
-> -obj-$(CONFIG_SOC_STARFIVE)		+= starfive/
-> +obj-y					+= starfive/
->  obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
->  obj-y					+= sunxi-ng/
->  obj-$(CONFIG_ARCH_TEGRA)		+= tegra/
-> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
-> index 003bd2d56ce7..ef3517f4a276 100644
-> --- a/drivers/clk/starfive/Kconfig
-> +++ b/drivers/clk/starfive/Kconfig
-> @@ -2,8 +2,8 @@
->  
->  config CLK_STARFIVE_JH7100
->  	bool "StarFive JH7100 clock support"
-> -	depends on SOC_STARFIVE || COMPILE_TEST
-> -	default SOC_STARFIVE
-> +	depends on ARCH_STARFIVE || COMPILE_TEST
-> +	default ARCH_STARFIVE
->  	help
->  	  Say yes here to support the clock controller on the StarFive JH7100
->  	  SoC.
-> @@ -11,7 +11,7 @@ config CLK_STARFIVE_JH7100
->  config CLK_STARFIVE_JH7100_AUDIO
->  	tristate "StarFive JH7100 audio clock support"
->  	depends on CLK_STARFIVE_JH7100
-> -	default m if SOC_STARFIVE
-> +	default m if ARCH_STARFIVE
->  	help
->  	  Say Y or M here to support the audio clocks on the StarFive JH7100
->  	  SoC.
-> 
+>  drivers/clk/tegra/clk-tegra124-emc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/clk/tegra/clk-tegra124-emc.c b/drivers/clk/tegra/clk=
+-tegra124-emc.c
+> index 219c80653dbd..2a6db0434281 100644
+> --- a/drivers/clk/tegra/clk-tegra124-emc.c
+> +++ b/drivers/clk/tegra/clk-tegra124-emc.c
+> @@ -464,6 +464,7 @@ static int load_timings_from_dt(struct tegra_clk_emc =
+*tegra,
+>  		err =3D load_one_timing_from_dt(tegra, timing, child);
+>  		if (err) {
+>  			of_node_put(child);
+> +			kfree(tegra->timings);
+>  			return err;
+>  		}
+> =20
+> @@ -515,6 +516,7 @@ struct clk *tegra124_clk_register_emc(void __iomem *b=
+ase, struct device_node *np
+>  		err =3D load_timings_from_dt(tegra, node, node_ram_code);
+>  		if (err) {
+>  			of_node_put(node);
+> +			kfree(tegra);
+>  			return ERR_PTR(err);
+>  		}
+>  	}
 
+Don't we need another kfree(tegra) in case the clk_register() fails? We
+could do that as a follow-up and this patch isn't wrong, so:
 
+Acked-by: Thierry Reding <treding@nvidia.com>
 
+--iA7IswaSxcKGbw9g
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQta9kACgkQ3SOs138+
+s6HSag//eS09lcEbbY1RShWxt8Hi4ee6/NG5MgmyiRmF1ZwyUXAA9E/pRi66LofB
+9+cf6f1AlhXhV3V83n+gOxi3XqZi5xCgiH0KstvdEJ0BxpFP6rCjdFJHsZ92FBqx
+uyFJqkV9yp+dknyvz46NXnqPgJLIn+3dA6JUMj+XyZSiaCghQ5CqH17radn5RrlN
+RjSO2KUJeZO86HEYL4uaQuyPIbEKiNcInZry4dVRTsfRxzxLe+1wJoF/GY1HUWip
+nuk10yhksKYeJv0ckJahbTU6DDFXghKVm2TtpJn0mJExnZuqNn4M/+8G0e7twvo6
+JB/Y1mpGJSR8pEsENw42l79ILWPJB29beH8eYPrJ5ddJPTGFF1pdj/XiUBtcJ5Dn
+BoJjkBCpLdE5yz0evXRJOaBws0msXr0qt8QFetyc9theNGjsBSX0rgh+RfJExd4N
+SAAUUimciaYVDz5q7GkPC/KU295hRskK8mKTJA166n17Di7mI3A4WDM0l+2vUZV0
++FbhL1+zRnEcOc4IlnyGLsaBuTQsQPoYE+I5Iqhso8/5DxB9CXH4n5xZ/T8VK1mg
+B1jSaQyTuuj5f111QrMkJlJm0K47zwkCuj8ztlf1/pnbaYI5nEn06OlxOrvyYeMC
+bID+AGG6BhwNN1HHpOjtgtsTsAbYRiNcK6//rba4VWn27LOAMX0=
+=e6mM
+-----END PGP SIGNATURE-----
+
+--iA7IswaSxcKGbw9g--
