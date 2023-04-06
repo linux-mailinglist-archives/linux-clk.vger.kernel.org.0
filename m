@@ -2,77 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC85F6D9EE1
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Apr 2023 19:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F6E6DA01D
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Apr 2023 20:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239476AbjDFRfJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 6 Apr 2023 13:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S240183AbjDFSok (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 6 Apr 2023 14:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239497AbjDFRez (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 6 Apr 2023 13:34:55 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131CAA276
-        for <linux-clk@vger.kernel.org>; Thu,  6 Apr 2023 10:34:27 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id sg7so3197020ejc.9
-        for <linux-clk@vger.kernel.org>; Thu, 06 Apr 2023 10:34:26 -0700 (PDT)
+        with ESMTP id S240084AbjDFSoi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 6 Apr 2023 14:44:38 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F183E2
+        for <linux-clk@vger.kernel.org>; Thu,  6 Apr 2023 11:44:35 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id n21so3660688ejz.4
+        for <linux-clk@vger.kernel.org>; Thu, 06 Apr 2023 11:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680802464;
+        d=linaro.org; s=google; t=1680806674;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8o3EoZ1JRk710zUyDpdKYa+magSoQJ+Man8QMgiHo6Q=;
-        b=CTi/ZXhL3hOFciRN9KFDq+NfuU4tBzhjNWf1azXXymquM8nG1Sasbb16e5cuVzFi0H
-         xzETDrvvAFIZlA/7B9UXS9u+BMBdAQOjXzdSdT2Ta1vnliqVSrOXQLdnOzytDVYS0Q0c
-         YC7p5f25tQHaE2y6VegCYklQ+ufUwQqX+OsBzUVENuX7z/xPFzN18jZHLFtON6x8AD0E
-         o1CFZv7yDX63QjykmoemK+d+LSiMMeC3rM9JBCrVLVtstlYvetA+yWPVe2ri8ov7RsB0
-         cRY6UterViYwxThApTz2bwwZno7RHwHVbhgPQG7nhgv5ijnBf1uUpQ0qGp+7m9tOHAwF
-         Zo9Q==
+        bh=q8g90x98LXVZKTYfPdZhxPdL74gdette1vAfoZX+cdM=;
+        b=kcgv6yi0QLB7ShwPAKe9m7cXZfGh1sUgla0uyOzsjY5uGcAxJ2IfbzNF6bmQ0ubrOT
+         hhIF9q51mp03MMNIKiCfDrSaHbREV/TXY2/y6sqI7RhB1zF7bWgfaxHljti5KIbe0rij
+         ZUZDZhu/oxeQG6YOUEL82wi+TwrKYfuAuaQrsj2VffzSYfCIRjl/vorFTCnbCobQ1d1R
+         HOmivUXAjWRgclFMneyzgagcvPXeS06eqh5Xmp59lmC4Zh1BmorYzYtwmx+9wleBgfMx
+         7DXnFvUwl3VzQPAypx9+42kU2zL/TRdQ5G87765BGRWghf4XpEOju5u3CZaX/JnuRJ+q
+         nXsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680802464;
+        d=1e100.net; s=20210112; t=1680806674;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8o3EoZ1JRk710zUyDpdKYa+magSoQJ+Man8QMgiHo6Q=;
-        b=vVOrQ1CAKAk6ZGEdywwsEPHrO7DnMEVZ3SObIzBReJsV28pqIPJ9GFkBHETKLGWgDF
-         0YeQDgWuFv85cBmHkYIxMIQqsBCwbb05juANsvEimSVydROz1hotV80V5jCVrwo2+t5S
-         9xDYtlWHQWeHft7ausHRtm1FwZhT/7VfQZf2ZaDgc3I1Z9SbHjrRz+D4FSAQbmFiwl47
-         ZatRVj27IINHKEOiunJWzqSNqxT+ffjbcYWeXGr/6CnmK0VDLr0FKWXM7UhlUjalCzti
-         bV3iXWxY+og2ztcbZC0j9RcM3ICyYzJIrBhbZZ3medKNCcAfS7Qfej55imGlpIWl2+LT
-         urNA==
-X-Gm-Message-State: AAQBX9eIMyCav5Ybghxn8axL3odpi0XZIDS+D2ZO52szGqm9s80h3hDZ
-        oCYXi58eVg+9Mj4neHTWZJa2Zg==
-X-Google-Smtp-Source: AKy350Zbh0P1Aw932RSOPLQD+3BjO5PlqOGIucWLDsJF9mruynrNaAF87yNNnH1iwPMfg7zfaPiMog==
-X-Received: by 2002:a17:906:8a75:b0:931:6921:bdb7 with SMTP id hy21-20020a1709068a7500b009316921bdb7mr6690097ejc.60.1680802463784;
-        Thu, 06 Apr 2023 10:34:23 -0700 (PDT)
+        bh=q8g90x98LXVZKTYfPdZhxPdL74gdette1vAfoZX+cdM=;
+        b=ps9PafRw3uZQaHoxQOGbxtveqKnBsqa+6PaHlV1lnKviTkBsO2vPSX+Ndy0wuBVm3c
+         VPRsHNwlaTTj6UBYLpqS4HZ1oY1FCSUbJ9ydDvLPZxWMsYaJhFoZD6hhog/akiortPD1
+         HULEYXktA/4mZSn04gnj0WfubXc1PYSa/Kq0IE64dswaPOWkLwtX+7yykpFlxcodW8vw
+         5bo8xSiBVT9LFQ8XuNxIEXlLfNEyNXhBxfFHo3ItncZ0YcPjUUt9osgho7rdfulZE3+a
+         L0KV2AwxyuF5d7nRwreT+I9ivrvj7HYKu74v2PCv66QCImzs1ZNrsPpuOdQ1DkAh4AYH
+         WuzQ==
+X-Gm-Message-State: AAQBX9c9b7xGil4z/WRtRISk0PMNoR3fVgTm3Ter8C4aJLkWZYkisvFU
+        eyMLMDHhMV8KtFsp5zzf5Jp1Cw==
+X-Google-Smtp-Source: AKy350btA+NYro6fqR3M06UURUJD1z7vnVctka0f92M2FXEcjuP+Gr0jLKj/kQbkTtek6kiTjEYioQ==
+X-Received: by 2002:a17:906:c2c2:b0:933:2f77:ca78 with SMTP id ch2-20020a170906c2c200b009332f77ca78mr7081258ejb.28.1680806674282;
+        Thu, 06 Apr 2023 11:44:34 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id p1-20020a1709060e8100b0092421bf4927sm1072728ejf.95.2023.04.06.10.34.22
+        by smtp.gmail.com with ESMTPSA id h6-20020a17090634c600b00934823127c8sm1136596ejb.78.2023.04.06.11.44.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 10:34:23 -0700 (PDT)
-Message-ID: <0a09e2f4-b3aa-7f23-48b1-743e8f561635@linaro.org>
-Date:   Thu, 6 Apr 2023 19:34:22 +0200
+        Thu, 06 Apr 2023 11:44:33 -0700 (PDT)
+Message-ID: <4fd0edf8-519d-082c-29df-b96c3d5466e9@linaro.org>
+Date:   Thu, 6 Apr 2023 20:44:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] Add support for Blaize BLZP1600 SoC
+Subject: Re: [PATCH v2 4/8] clk: qcom: gcc-ipq9574: Add USB related clocks
 Content-Language: en-US
-To:     Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "soc@kernel.org" <soc@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "sboyd@kernel.org" <sboyd@kernel.org>
-References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1677749625.git.quic_varada@quicinc.com>
+ <cover.1679388632.git.quic_varada@quicinc.com>
+ <24293be77ccdcf5e9b1fa0fd219de6152f234616.1679388632.git.quic_varada@quicinc.com>
+ <20230406184506.65d2gjycuvrley6f@ripper>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+In-Reply-To: <20230406184506.65d2gjycuvrley6f@ripper>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -85,20 +83,27 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 06/04/2023 12:22, Niko Pasaloukos wrote:
-> Adds basic support for the Blaize BLZP1600 SoC.
-> This SoC contains two cores of Cortex-A53 CPUs, one Blaize
-> Graph Streaming Processor (GSP) and several other IPs.
+On 06/04/2023 20:45, Bjorn Andersson wrote:
+> On Tue, Mar 21, 2023 at 02:24:22PM +0530, Varadarajan Narayanan wrote:
+>> diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
+> [..]
+>> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>> index c89e96d..96b7c0b 100644
+>> --- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+>> @@ -214,4 +214,6 @@
+>>  #define GCC_SNOC_PCIE1_1LANE_S_CLK			205
+>>  #define GCC_SNOC_PCIE2_2LANE_S_CLK			206
+>>  #define GCC_SNOC_PCIE3_2LANE_S_CLK			207
+>> +#define GCC_USB0_PIPE_CLK				208
+>> +#define GCC_USB0_SLEEP_CLK				209
 > 
-> Nikolaos Pasaloukos (5):
->   dt-bindings: Add Blaize vendor prefix
->   dt-bindings: arm: blaize: Add Blaize BLZP1600 SoC
->   dt-bindings: reset: Add binding constants for BLZP1600
->   dt-bindings: clock: Add binding constants for BLZP1600
->   arm64: Add initial support for Blaize BLZP1600 CB2
+> Please split out the dt binding/include change in a separate patch, to
+> better facilitate picking both the clock and dts patch for the same
+> kernel version.
 
-You miss maintainers entry. Cc soc@kernel when your submission is ready,
-because now it is too early.
+Uh, bindings must be split to their own patch as they are exported from
+kernel repo.
 
 Best regards,
 Krzysztof
