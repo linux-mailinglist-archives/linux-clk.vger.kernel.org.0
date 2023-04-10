@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA3B6DC2C0
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A144F6DC2B8
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjDJC3d (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 9 Apr 2023 22:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S229704AbjDJC2H (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 9 Apr 2023 22:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjDJC3c (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:29:32 -0400
+        with ESMTP id S229716AbjDJC2G (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:28:06 -0400
 Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA222707
-        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:29:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6DA269A
+        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
         s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=P2ytClwWS6+nU1uzBbgjEyN/lfcPDV2AzQGJ53LURtY=; b=FHKQ35rgIoDsWhNmOWsQRMvIaw
-        LtBxYsDIqGj75zXWbo2O4RvYXufhSjQTsrTB9qxSQQb0KcNukOjbtQsmXj6WbSV/RDues/SebIiN1
-        PFxr8wTHGxOpi+nD12LVajUvOdd2cbCMA34PYVZQW2Aj3oyW+o2HoWNVgxWGpdVHJYOE7TlrCHEMy
-        8mnCrhu9ga+USd9gY6IDYBgdN6d4Mmck8ywOA7S6VK5ko71o84WVNizmvtOkQz0sZ7DHQlabXdSWi
-        n/IQERo2hpUU8MqKUjr8UJZZEHnIjL4Qt8+AEwpSp5Erk00SHKhGru1KK0bJJ3J46VrZgWBHPb4oP
-        cM2o2igw==;
+        bh=mIjkrk724YD/HXZW413oauwHdopAvLJKM812ASmnn4E=; b=WoLwHqt7CH4bupj7HlkHpRbEJl
+        GLFm3l6AQZSwq+/ud5l8M2lcE1SSBTGvP/mU+7CaJHVYtQ8q+B5huThdaH5LCHWk+x0io2KpKIiSe
+        ZdqjbIDn9PqBUjGWkhVBb7v15Dig6ODCbe1iLRqCYCBuXyPPQtN4PGS3rhKgqmHmAMxwyNqmEu+ZI
+        bXOQkcUvXpRQRINyHIj1eF0FP5nbkDmVlrCEkfYYqJU6cpjNd5kthOhtxBqUqHnDy4TozUxDZd6aa
+        qA0yIYrHXmhPkGvn8nSD9JE6EGJ6jJaD6tOAe5MW8yYh/aHcIxeGhjlk0+L5bf7ZKhrk9lRVMMSdf
+        Co45/JbQ==;
 Received: from sslproxy04.your-server.de ([78.46.152.42])
         by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <lars@metafoo.de>)
-        id 1plgbC-0002Qq-O7; Mon, 10 Apr 2023 03:45:38 +0200
+        id 1plgbF-0002R8-4X; Mon, 10 Apr 2023 03:45:41 +0200
 Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
         by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <lars@metafoo.de>)
-        id 1plgbC-000EJ6-4I; Mon, 10 Apr 2023 03:45:38 +0200
+        id 1plgbE-000EJ6-Fi; Mon, 10 Apr 2023 03:45:40 +0200
 From:   Lars-Peter Clausen <lars@metafoo.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -46,9 +46,9 @@ Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         linux-clk@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 04/11] clk: cdce706: Use managed `of_clk_add_hw_provider()`
-Date:   Sun,  9 Apr 2023 18:44:55 -0700
-Message-Id: <20230410014502.27929-4-lars@metafoo.de>
+Subject: [PATCH 05/11] clk: hsdk-pll: Use managed `of_clk_add_hw_provider()`
+Date:   Sun,  9 Apr 2023 18:44:56 -0700
+Message-Id: <20230410014502.27929-5-lars@metafoo.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230410014502.27929-1-lars@metafoo.de>
 References: <20230410014502.27929-1-lars@metafoo.de>
@@ -73,40 +73,36 @@ allows to completely eliminate the drivers `remove()` callback.
 
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 ---
- drivers/clk/clk-cdce706.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/clk/clk-hsdk-pll.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/clk-cdce706.c b/drivers/clk/clk-cdce706.c
-index 1449d0537674..d8bee8180a6b 100644
---- a/drivers/clk/clk-cdce706.c
-+++ b/drivers/clk/clk-cdce706.c
-@@ -661,16 +661,10 @@ static int cdce706_probe(struct i2c_client *client)
- 	ret = cdce706_register_clkouts(cdce);
- 	if (ret < 0)
+diff --git a/drivers/clk/clk-hsdk-pll.c b/drivers/clk/clk-hsdk-pll.c
+index 766e139972fe..33b48ea5ea3d 100644
+--- a/drivers/clk/clk-hsdk-pll.c
++++ b/drivers/clk/clk-hsdk-pll.c
+@@ -346,13 +346,8 @@ static int hsdk_pll_clk_probe(struct platform_device *pdev)
  		return ret;
--	return of_clk_add_hw_provider(client->dev.of_node, of_clk_cdce_get,
--				      cdce);
-+	return devm_of_clk_add_hw_provider(&client->dev, of_clk_cdce_get,
-+					   cdce);
- }
+ 	}
  
--static void cdce706_remove(struct i2c_client *client)
--{
--	of_clk_del_provider(client->dev.of_node);
+-	return of_clk_add_hw_provider(dev->of_node, of_clk_hw_simple_get,
+-			&pll_clk->hw);
 -}
 -
--
- #ifdef CONFIG_OF
- static const struct of_device_id cdce706_dt_match[] = {
- 	{ .compatible = "ti,cdce706" },
-@@ -691,7 +685,6 @@ static struct i2c_driver cdce706_i2c_driver = {
- 		.of_match_table = of_match_ptr(cdce706_dt_match),
+-static void hsdk_pll_clk_remove(struct platform_device *pdev)
+-{
+-	of_clk_del_provider(pdev->dev.of_node);
++	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
++					   &pll_clk->hw);
+ }
+ 
+ static void __init of_hsdk_pll_clk_setup(struct device_node *node)
+@@ -431,6 +426,5 @@ static struct platform_driver hsdk_pll_clk_driver = {
+ 		.of_match_table = hsdk_pll_clk_id,
  	},
- 	.probe_new	= cdce706_probe,
--	.remove		= cdce706_remove,
- 	.id_table	= cdce706_id,
+ 	.probe = hsdk_pll_clk_probe,
+-	.remove_new = hsdk_pll_clk_remove,
  };
- module_i2c_driver(cdce706_i2c_driver);
+ builtin_platform_driver(hsdk_pll_clk_driver);
 -- 
 2.30.2
 
