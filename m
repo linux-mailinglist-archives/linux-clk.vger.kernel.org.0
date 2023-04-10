@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A144F6DC2B8
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B236DC2BB
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjDJC2H (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 9 Apr 2023 22:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S229727AbjDJC2o (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 9 Apr 2023 22:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjDJC2G (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:28:06 -0400
+        with ESMTP id S229716AbjDJC2n (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:28:43 -0400
 Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6DA269A
-        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:28:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8E82707
+        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:28:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
         s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=mIjkrk724YD/HXZW413oauwHdopAvLJKM812ASmnn4E=; b=WoLwHqt7CH4bupj7HlkHpRbEJl
-        GLFm3l6AQZSwq+/ud5l8M2lcE1SSBTGvP/mU+7CaJHVYtQ8q+B5huThdaH5LCHWk+x0io2KpKIiSe
-        ZdqjbIDn9PqBUjGWkhVBb7v15Dig6ODCbe1iLRqCYCBuXyPPQtN4PGS3rhKgqmHmAMxwyNqmEu+ZI
-        bXOQkcUvXpRQRINyHIj1eF0FP5nbkDmVlrCEkfYYqJU6cpjNd5kthOhtxBqUqHnDy4TozUxDZd6aa
-        qA0yIYrHXmhPkGvn8nSD9JE6EGJ6jJaD6tOAe5MW8yYh/aHcIxeGhjlk0+L5bf7ZKhrk9lRVMMSdf
-        Co45/JbQ==;
+        bh=G0V3U0998TVqR3tc0CCyhvwPc8WLgBtTHLL57EMnumM=; b=F0NFHoIVWh5YYkR48yRMysOtxX
+        6rXKSiYPzNj/S+MdWHE3rEbGTwyVSzXLqSsCsWi9q4Z+wPrIyafgAlyzZqFtRrR2mtiWf2ZchZ0MB
+        H9IeabnGMHogd2vOMhjxszx+ldJfX9NRMQ9zR0bk9GusqNE44xr8Vv9AvyI34/C518AzTrgX9x82t
+        8x+UqgI3B99P7dZUkqJIDrLd7gHCOV4ZfCt70A3AVTZMSB8Xj28y9iPug+Z3pnHLG3PKVDmZOZXng
+        k4esRFuvN8R7qtaZxzpjzIDzfSimdG1/Ni3edrHvas3ItFufkEXEXz0yn1dIXY5cZvbb6joDpufQu
+        PJ+xSqRA==;
 Received: from sslproxy04.your-server.de ([78.46.152.42])
         by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <lars@metafoo.de>)
-        id 1plgbF-0002R8-4X; Mon, 10 Apr 2023 03:45:41 +0200
+        id 1plgbH-0002RO-Ev; Mon, 10 Apr 2023 03:45:43 +0200
 Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
         by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <lars@metafoo.de>)
-        id 1plgbE-000EJ6-Fi; Mon, 10 Apr 2023 03:45:40 +0200
+        id 1plgbG-000EJ6-R9; Mon, 10 Apr 2023 03:45:43 +0200
 From:   Lars-Peter Clausen <lars@metafoo.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -46,9 +46,9 @@ Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         linux-clk@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 05/11] clk: hsdk-pll: Use managed `of_clk_add_hw_provider()`
-Date:   Sun,  9 Apr 2023 18:44:56 -0700
-Message-Id: <20230410014502.27929-5-lars@metafoo.de>
+Subject: [PATCH 06/11] clk: lmk04832: Use managed `of_clk_add_hw_provider()`
+Date:   Sun,  9 Apr 2023 18:44:57 -0700
+Message-Id: <20230410014502.27929-6-lars@metafoo.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230410014502.27929-1-lars@metafoo.de>
 References: <20230410014502.27929-1-lars@metafoo.de>
@@ -68,41 +68,36 @@ X-Mailing-List: linux-clk@vger.kernel.org
 Use the managed `devm_of_clk_add_hw_provider()` instead of
 `of_clk_add_hw_provider()`.
 
-This makes sure the provider gets automatically removed on unbind and
-allows to completely eliminate the drivers `remove()` callback.
+This makes sure the provider gets automatically removed on unbind.
 
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 ---
- drivers/clk/clk-hsdk-pll.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/clk/clk-lmk04832.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/clk-hsdk-pll.c b/drivers/clk/clk-hsdk-pll.c
-index 766e139972fe..33b48ea5ea3d 100644
---- a/drivers/clk/clk-hsdk-pll.c
-+++ b/drivers/clk/clk-hsdk-pll.c
-@@ -346,13 +346,8 @@ static int hsdk_pll_clk_probe(struct platform_device *pdev)
- 		return ret;
+diff --git a/drivers/clk/clk-lmk04832.c b/drivers/clk/clk-lmk04832.c
+index 57485356de4c..afdfee3b365f 100644
+--- a/drivers/clk/clk-lmk04832.c
++++ b/drivers/clk/clk-lmk04832.c
+@@ -1522,8 +1522,8 @@ static int lmk04832_probe(struct spi_device *spi)
  	}
  
--	return of_clk_add_hw_provider(dev->of_node, of_clk_hw_simple_get,
--			&pll_clk->hw);
--}
--
--static void hsdk_pll_clk_remove(struct platform_device *pdev)
--{
--	of_clk_del_provider(pdev->dev.of_node);
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+					   &pll_clk->hw);
+ 	lmk->clk_data->num = info->num_channels;
+-	ret = of_clk_add_hw_provider(lmk->dev->of_node, of_clk_hw_onecell_get,
+-				     lmk->clk_data);
++	ret = devm_of_clk_add_hw_provider(lmk->dev, of_clk_hw_onecell_get,
++					  lmk->clk_data);
+ 	if (ret) {
+ 		dev_err(lmk->dev, "failed to add provider (%d)\n", ret);
+ 		goto err_disable_vco;
+@@ -1547,7 +1547,6 @@ static void lmk04832_remove(struct spi_device *spi)
+ 	struct lmk04832 *lmk = spi_get_drvdata(spi);
+ 
+ 	clk_disable_unprepare(lmk->oscin);
+-	of_clk_del_provider(spi->dev.of_node);
  }
  
- static void __init of_hsdk_pll_clk_setup(struct device_node *node)
-@@ -431,6 +426,5 @@ static struct platform_driver hsdk_pll_clk_driver = {
- 		.of_match_table = hsdk_pll_clk_id,
- 	},
- 	.probe = hsdk_pll_clk_probe,
--	.remove_new = hsdk_pll_clk_remove,
- };
- builtin_platform_driver(hsdk_pll_clk_driver);
+ static const struct spi_device_id lmk04832_id[] = {
 -- 
 2.30.2
 
