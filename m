@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21396DC2B6
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25A26DC2BD
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjDJC1y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 9 Apr 2023 22:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S229729AbjDJC3G (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 9 Apr 2023 22:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjDJC1x (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:27:53 -0400
+        with ESMTP id S229716AbjDJC3F (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:29:05 -0400
 Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A783581
-        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:27:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7919E2707
+        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
         s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=BjDI/aGsiz4hqT2SW8NQu0wSC+gKkAqaZALS5Khm6vM=; b=WI2q75yO38pIJY94syHtZunf9T
-        QWWWEGNkL1ewz6D1eTYVj2p8nybwzobfQ36qGvuNjLR+/HduSFuiOwBP1C5uX6B6Ub8AAg1pWQiwa
-        AWCF6DjO+wzRGhXE89ZvpVuyfmTsuEMkVFUbjdm9a64nDB78SgeolkowfSWpGa6IN7b9o9JStEeeE
-        spKoh2y90fKLNmQpap9aZgtJaQUSrJobnLtOq3EcsDsk43wMi6t97eIZDOGlThoYPkIcT9nqRHzuz
-        ulb9YR9KGRWnqgLIJXbLEMSbRQzxE/xiXNn/CMrQ5BK5WXQZM3sZwfp1zPQJbcT7VRqgpUEL/A49D
-        uuo8L5SQ==;
+        bh=OACAmCnJzzFUADEQwQY2DOfhADXTuYzl/Z0mQvX1m/k=; b=ZpRq8Ww3H0IWdX6Tsa8mZNc8v1
+        UDShxpMROjSzSiAlDk3YVmWBg/n1Ij97AySYsZFw/QfsgNnDkdt4DvQATD+38obgqFxTr5NEZaU9b
+        5HAkZQ2WiFaCaVgzvCycfGbvQC5r0cf3rneUAcNr9Lj9VRpujlA3vpc8eEsMGQRUWfA0GuvjzTSkc
+        VT8aSoiulZeW3FJkuaz5+kf5eAuFQQxPhVpNd6IqgeDgskvCLf3gWM7iBeQ3X6fvpd3MjD6pakNvK
+        Ke9rXAgyAx/Ugp4Zl/vdEPtDs4/aM2ACtGN+FyVFX8UVT8UoaJ4ysPolD9PvMv6xDZjkwFmfIUR0h
+        ePfjORyw==;
 Received: from sslproxy04.your-server.de ([78.46.152.42])
         by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <lars@metafoo.de>)
-        id 1plgbM-0002Sr-67; Mon, 10 Apr 2023 03:45:48 +0200
+        id 1plgbO-0002U3-HC; Mon, 10 Apr 2023 03:45:50 +0200
 Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
         by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <lars@metafoo.de>)
-        id 1plgbL-000EJ6-Hk; Mon, 10 Apr 2023 03:45:47 +0200
+        id 1plgbN-000EJ6-T9; Mon, 10 Apr 2023 03:45:50 +0200
 From:   Lars-Peter Clausen <lars@metafoo.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -46,9 +46,9 @@ Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         linux-clk@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 08/11] clk: si514: Use managed `of_clk_add_hw_provider()`
-Date:   Sun,  9 Apr 2023 18:44:59 -0700
-Message-Id: <20230410014502.27929-8-lars@metafoo.de>
+Subject: [PATCH 09/11] clk: si570: Use managed `of_clk_add_hw_provider()`
+Date:   Sun,  9 Apr 2023 18:45:00 -0700
+Message-Id: <20230410014502.27929-9-lars@metafoo.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230410014502.27929-1-lars@metafoo.de>
 References: <20230410014502.27929-1-lars@metafoo.de>
@@ -66,20 +66,21 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 Use the managed `devm_of_clk_add_hw_provider()` instead of
-`of_clk_add_hw_provider()`. This makes sure the provider gets automatically
-removed on unbind and allows to completely eliminate the drivers `remove()`
-callback.
+`of_clk_add_hw_provider()`.
+
+This makes sure the provider gets automatically removed on unbind and
+allows to completely eliminate the drivers `remove()` callback.
 
 Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 ---
- drivers/clk/clk-si514.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/clk/clk-si570.c | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/clk/clk-si514.c b/drivers/clk/clk-si514.c
-index c028fa103bed..cabdd8e8f4db 100644
---- a/drivers/clk/clk-si514.c
-+++ b/drivers/clk/clk-si514.c
-@@ -360,8 +360,8 @@ static int si514_probe(struct i2c_client *client)
+diff --git a/drivers/clk/clk-si570.c b/drivers/clk/clk-si570.c
+index 0a6d70c49726..0b834e9efb4b 100644
+--- a/drivers/clk/clk-si570.c
++++ b/drivers/clk/clk-si570.c
+@@ -474,8 +474,8 @@ static int si570_probe(struct i2c_client *client)
  		dev_err(&client->dev, "clock registration failed\n");
  		return err;
  	}
@@ -90,26 +91,38 @@ index c028fa103bed..cabdd8e8f4db 100644
  	if (err) {
  		dev_err(&client->dev, "unable to add clk provider\n");
  		return err;
-@@ -370,11 +370,6 @@ static int si514_probe(struct i2c_client *client)
+@@ -485,10 +485,8 @@ static int si570_probe(struct i2c_client *client)
+ 	if (!of_property_read_u32(client->dev.of_node, "clock-frequency",
+ 				&initial_fout)) {
+ 		err = clk_set_rate(data->hw.clk, initial_fout);
+-		if (err) {
+-			of_clk_del_provider(client->dev.of_node);
++		if (err)
+ 			return err;
+-		}
+ 	}
+ 
+ 	/* Display a message indicating that we've successfully registered */
+@@ -498,11 +496,6 @@ static int si570_probe(struct i2c_client *client)
  	return 0;
  }
  
--static void si514_remove(struct i2c_client *client)
+-static void si570_remove(struct i2c_client *client)
 -{
 -	of_clk_del_provider(client->dev.of_node);
 -}
 -
- static const struct i2c_device_id si514_id[] = {
- 	{ "si514", 0 },
- 	{ }
-@@ -393,7 +388,6 @@ static struct i2c_driver si514_driver = {
- 		.of_match_table = clk_si514_of_match,
+ static const struct of_device_id clk_si570_of_match[] = {
+ 	{ .compatible = "silabs,si570" },
+ 	{ .compatible = "silabs,si571" },
+@@ -518,7 +511,6 @@ static struct i2c_driver si570_driver = {
+ 		.of_match_table = clk_si570_of_match,
  	},
- 	.probe_new	= si514_probe,
--	.remove		= si514_remove,
- 	.id_table	= si514_id,
+ 	.probe_new	= si570_probe,
+-	.remove		= si570_remove,
+ 	.id_table	= si570_id,
  };
- module_i2c_driver(si514_driver);
+ module_i2c_driver(si570_driver);
 -- 
 2.30.2
 
