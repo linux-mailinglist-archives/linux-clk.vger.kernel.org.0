@@ -2,62 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0016DC2BF
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 04:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B85866DC394
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Apr 2023 08:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjDJC3U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 9 Apr 2023 22:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46032 "EHLO
+        id S229682AbjDJGe4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 10 Apr 2023 02:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjDJC3T (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Apr 2023 22:29:19 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED9F2707
-        for <linux-clk@vger.kernel.org>; Sun,  9 Apr 2023 19:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=LEugraMhat8ELuRgKAwGAhgX6HCm0l+FgWHQ3aPTooQ=; b=j/9YNhj0aV5MD3L1JRFoApoGbg
-        hqxLXQ8zptFZNDe0b4BAOY1FweT4SyBy4uIGJtltN6Ndht3BDugu5h9NHGXxfalbPxwDOPBYcx8UD
-        +FIHfzP3t4+yi5+PqrCqROY0ELSa83rC/TsWMkT2sJJytjeOGcYKRlPtdVb1NTjGEtUGdENyos1yk
-        FHQ7GGpwR8bQ93386hJI6xZ/j4Yi+wA9tItVo7F4Dmfj3tuEfsa+wt3Cse6Uoy/gXYARpvTUrdJI+
-        BGz6lK7Vc/JcrXm9jTPYU+jn3p+YZK1QcEqmyTy53z2PeLRsiVjZpZlpkRzRWqoSqdYB3km6JXYaO
-        d6NJqFnQ==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1plgt9-0004HP-AP; Mon, 10 Apr 2023 04:04:11 +0200
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b] (helo=lars-desktop.lan)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1plgbS-000EJ6-Jk; Mon, 10 Apr 2023 03:45:54 +0200
-From:   Lars-Peter Clausen <lars@metafoo.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-clk@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 11/11] clk: uniphier: Use managed `of_clk_add_hw_provider()`
-Date:   Sun,  9 Apr 2023 18:45:02 -0700
-Message-Id: <20230410014502.27929-11-lars@metafoo.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230410014502.27929-1-lars@metafoo.de>
-References: <20230410014502.27929-1-lars@metafoo.de>
+        with ESMTP id S229679AbjDJGez (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 10 Apr 2023 02:34:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF11840E0;
+        Sun,  9 Apr 2023 23:34:54 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33A5tI9C012895;
+        Mon, 10 Apr 2023 06:34:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Hclue6ug/7B1tehPsDnrLRVAC5+IwS28gpXRNRQ59eY=;
+ b=L4SWaNAtgyzPMgy2W/nju2PEwQdLPkIgDEu3gTr0/13wEdHpZVcMzwQ1jTLcf2zxIPeN
+ Couofl3KKCcL0nPUSjLk0Bqpt+AGEafqm+T2M48ZZECHO5zrqMwVrGSoGpaXNJrFcPdh
+ m8AVrAjwGjzJg+7mO+WA3/9fwIRYNRxHlcEcTZhDvaKcVNaVN/olRlWlFZtHKStHiHKS
+ NNNTtukVDwR8huJB7SZ4z/F4KDtE7q+fsDklIj+8aAfCfxaXL23AC4lT5abHDM5jv0IP
+ brbWcxh/lnaAyyPepe7VijPf8f7DT32E1yagKT6jSfT+E2E5xP6kE9ITX6+alExOgJmV HQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pu0c32bhp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 06:34:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33A6YaVq022406
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Apr 2023 06:34:36 GMT
+Received: from [10.216.3.168] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 9 Apr 2023
+ 23:34:26 -0700
+Message-ID: <858e8459-75bb-c507-5cbb-146d56e1ad27@quicinc.com>
+Date:   Mon, 10 Apr 2023 12:04:17 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26870/Sun Apr  9 09:25:02 2023)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V2 6/9] dt-bindings: pinctrl: qcom: Add few missing
+ functions
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <p.zabel@pengutronix.de>,
+        <linus.walleij@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_ipkumar@quicinc.com>
+References: <20230404164828.8031-1-quic_devipriy@quicinc.com>
+ <20230404164828.8031-7-quic_devipriy@quicinc.com>
+ <445ed49a-9ea6-0851-b0c5-bdd1d420689e@linaro.org>
+Content-Language: en-US
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <445ed49a-9ea6-0851-b0c5-bdd1d420689e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DaHnYsZOODC7SRrBMg0JxUu9a5NB5J05
+X-Proofpoint-ORIG-GUID: DaHnYsZOODC7SRrBMg0JxUu9a5NB5J05
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-10_03,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 spamscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=580 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304100055
+X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,45 +92,28 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Use the managed `devm_of_clk_add_hw_provider()` instead of
-`of_clk_add_hw_provider()`.
 
-This makes sure the provider gets automatically removed on unbind and
-allows to completely eliminate the drivers `remove()` callback.
 
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
----
- drivers/clk/uniphier/clk-uniphier-core.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/clk/uniphier/clk-uniphier-core.c b/drivers/clk/uniphier/clk-uniphier-core.c
-index 92f4ddc593db..a61213311d6c 100644
---- a/drivers/clk/uniphier/clk-uniphier-core.c
-+++ b/drivers/clk/uniphier/clk-uniphier-core.c
-@@ -87,13 +87,8 @@ static int uniphier_clk_probe(struct platform_device *pdev)
- 			hw_data->hws[p->idx] = hw;
- 	}
- 
--	return of_clk_add_hw_provider(dev->of_node, of_clk_hw_onecell_get,
--				      hw_data);
--}
--
--static void uniphier_clk_remove(struct platform_device *pdev)
--{
--	of_clk_del_provider(pdev->dev.of_node);
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-+					   hw_data);
- }
- 
- static const struct of_device_id uniphier_clk_match[] = {
-@@ -218,7 +213,6 @@ static const struct of_device_id uniphier_clk_match[] = {
- 
- static struct platform_driver uniphier_clk_driver = {
- 	.probe = uniphier_clk_probe,
--	.remove_new = uniphier_clk_remove,
- 	.driver = {
- 		.name = "uniphier-clk",
- 		.of_match_table = uniphier_clk_match,
--- 
-2.30.2
-
+On 4/5/2023 12:28 PM, Krzysztof Kozlowski wrote:
+> On 04/04/2023 18:48, Devi Priya wrote:
+>> Added the missing functions cri_trng2, gpio and removed the
+>> duplicate entry qdss_tracedata_b
+>>
+>> Fixes: 5b63ccb69ee8 ("dt-bindings: pinctrl: qcom: Add support for IPQ9574")
+> 
+> Fixes are either separate patches or sent as first in the series. This
+> is not really related to PCI, so it should be separate patchset.
+Got it, will post it as a separate patch
+> 
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+>>   Changes in V2:
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks!
+> 
+> Best regards,
+> Krzysztof
+> 
+Best Regards,
+Devi Priya
