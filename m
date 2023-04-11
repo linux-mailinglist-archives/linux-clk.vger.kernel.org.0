@@ -2,139 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA246DDA17
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Apr 2023 13:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0236DDAD3
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Apr 2023 14:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjDKLwY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 11 Apr 2023 07:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S229577AbjDKMai (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 11 Apr 2023 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjDKLwX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 Apr 2023 07:52:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA06E0;
-        Tue, 11 Apr 2023 04:52:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0E5662292;
-        Tue, 11 Apr 2023 11:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F87C433EF;
-        Tue, 11 Apr 2023 11:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681213941;
-        bh=7RJUk4YSpd3pqSy0exl1oYWF66yQpy0/ne486dtH/XM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c1gOSy88hc71+QkoCHhohvTl/y7A+kQeo7BHoUCffJqiu75CRPLLtcZljbp7c1tkK
-         CtAtZ+H1vzm6I1idVCZdhZiSwX9Ku3emALK6adwDciQtTSRJk2/W3qIkGF+yB20PNc
-         Sx2RV87NVXxczyNoNCqgWzrVEdhPenghf+raL60PnomNznqiHYC4cwSEOr/RhazCYX
-         sMpF6bwTcZqy5NimR+veX23m7xDpm1q4MMZjzBfQ4/WawLoBQCcdf1G+m4fMsdYCRi
-         l5y96hmZLSNOwQXVRsVYPeSQ+1RSOouhWKqq7Z1GHe/CMaxKt/0RLMe/h/LRnWDArR
-         nSWwSz5zbxdiA==
-Date:   Tue, 11 Apr 2023 17:22:01 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, mani@kernel.org, p.zabel@pengutronix.de,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Subject: Re: [PATCH V2 5/9] dt-bindings: PCI: qcom: Add IPQ9574
-Message-ID: <20230411115201.GM5333@thinkpad>
-References: <20230404164828.8031-1-quic_devipriy@quicinc.com>
- <20230404164828.8031-6-quic_devipriy@quicinc.com>
- <79ddaff0-00a9-36db-2bc0-4c844ffd9528@linaro.org>
- <999dfe1c-3b0d-1cc1-7407-e0917fc62d77@quicinc.com>
+        with ESMTP id S229533AbjDKMah (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 Apr 2023 08:30:37 -0400
+Received: from sp14.canonet.ne.jp (sp14.canonet.ne.jp [210.134.168.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91FCF49E6;
+        Tue, 11 Apr 2023 05:30:06 -0700 (PDT)
+Received: from csp14.canonet.ne.jp (unknown [172.21.160.134])
+        by sp14.canonet.ne.jp (Postfix) with ESMTP id 9FFF61E02EC;
+        Tue, 11 Apr 2023 21:30:04 +0900 (JST)
+Received: from echeck14.canonet.ne.jp ([172.21.160.124])
+        by csp4 with ESMTP
+        id mD8Op1wRtVjWJmD8OpUdkg; Tue, 11 Apr 2023 21:30:04 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=WsmVjfTv c=1 sm=1 tr=0
+ ts=643552cc cx=g_jp:t_eml p=ISLhRirdagkA:10 a=puqJfqqrwnhV2n3dwg+kWg==:117
+ a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
+ a=dKHAf1wccvYA:10 a=x7bEGLp0ZPQA:10 a=uUN0uIi2KnPteaT9AOsA:9
+ a=CjuIK1q_8ugA:10"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck14.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id 40B2A1C026B;
+        Tue, 11 Apr 2023 21:30:04 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp14.canonet.ne.jp (unknown [172.21.160.104])
+        by echeck14.canonet.ne.jp (Postfix) with ESMTP id 1199F1C025B;
+        Tue, 11 Apr 2023 21:30:04 +0900 (JST)
+Received: from wakaba-foods.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp14.canonet.ne.jp (Postfix) with ESMTPA id E093115F967;
+        Tue, 11 Apr 2023 21:30:02 +0900 (JST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <999dfe1c-3b0d-1cc1-7407-e0917fc62d77@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <20230411123002.0000448C.0303@wakaba-foods.co.jp>
+Date:   Tue, 11 Apr 2023 21:30:02 +0900
+From:   "Mr. Jerry Chang" <tozawa@wakaba-foods.co.jp>
+To:     <jc@jc.jc>
+Reply-To: <c-genghis0@yandex.com>
+Subject: Best Regards..., 
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Banking
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=SPAM;S=100;OP=CALC;TIME=1681216204;VERSION=7952;MC=1568820569;ID=1378267868;TRN=15;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=442,624:0;RNP=c-genghis0@yandex.com
+X-ESET-Antispam: SPAM
+X-Spam-Status: No, score=4.5 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,SPF_HELO_NONE,SPF_PASS,
+        UNRESOLVED_TEMPLATE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 04:27:23PM +0530, Devi Priya wrote:
-> 
-> 
-> On 4/5/2023 12:28 PM, Krzysztof Kozlowski wrote:
-> > On 04/04/2023 18:48, Devi Priya wrote:
-> > > Add bindings for PCIe hosts on IPQ9574 platform and allow
-> > > msi-parent property
-> > 
-> > Missing full stop. Also in your other patches.
-> Okay
-> > 
-> > > 
-> > > Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> > > ---
-> > >   Changes in V2:
-> > > 	- Updated the commit message and dropped the aggr_noc entries
-> > > 	  as it will be handled via interconnect driver
-> > > 
-> > >   .../devicetree/bindings/pci/qcom,pcie.yaml    | 48 +++++++++++++++++++
-> > >   1 file changed, 48 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > index fb32c43dd12d..8657ab65008c 100644
-> > > --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> > > @@ -26,6 +26,7 @@ properties:
-> > >             - qcom,pcie-ipq8064-v2
-> > >             - qcom,pcie-ipq8074
-> > >             - qcom,pcie-ipq8074-gen3
-> > > +          - qcom,pcie-ipq9574
-> > >             - qcom,pcie-msm8996
-> > >             - qcom,pcie-qcs404
-> > >             - qcom,pcie-sa8540p
-> > > @@ -105,6 +106,8 @@ properties:
-> > >       items:
-> > >         - const: pciephy
-> > > +  msi-parent: true
-> > 
-> 
-> Yes right, will rebase it on Mani's series.
-> But, as you have pointed out don't see the binding changes
-> in linux-next/master
-> Mani, could you please provide the tree details onto which the
-> binding change is merged?
-> 
 
-Looks like the initial msi-map binding's patch [1] never got merged even though
-the dts patch went in.
+Hello! 
+Best Regards..., 
+How are you doing today? 
+I hope this email finds you in good health. 
+You have not responded to my previous emails to you regarding Mr. Husson. 
+Kindly acknowledge my proposal and let me know what your decisions are, if you are taking the offer. 
+Kindly get back to me as soon as possible for more details. 
+Best regards,
+Mr. Jerry Chang.
 
-I'll squash the later fix to this, post v4 and CC you.
 
-- Mani
-
-[1] https://lore.kernel.org/all/20230102105821.28243-3-manivannan.sadhasivam@linaro.org/
-
-> > Isn't this conflicting with Mani's series:
-> > https://lore.kernel.org/all/20230108203340.GA229573-robh@kernel.org/
-> > https://lore.kernel.org/all/20230111123004.21048-1-manivannan.sadhasivam@linaro.org/#t
-> > 
-> > Although for some reason Mani's patch references non-existing commit and
-> > hunk...
-> > 
-> > Best regards,
-> > Krzysztof
-> > 
-> Best Regards,
-> Devi Priya
-
--- 
-மணிவண்ணன் சதாசிவம்
