@@ -2,252 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4336E29A5
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Apr 2023 19:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B90286E29DB
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Apr 2023 20:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjDNRsV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Apr 2023 13:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S229479AbjDNSNQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Apr 2023 14:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDNRsU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Apr 2023 13:48:20 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E504AD3C
-        for <linux-clk@vger.kernel.org>; Fri, 14 Apr 2023 10:48:08 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d7so35500013lfj.3
-        for <linux-clk@vger.kernel.org>; Fri, 14 Apr 2023 10:48:08 -0700 (PDT)
+        with ESMTP id S229468AbjDNSNP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Apr 2023 14:13:15 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0589005;
+        Fri, 14 Apr 2023 11:13:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id hg12so4632703pjb.2;
+        Fri, 14 Apr 2023 11:13:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681494486; x=1684086486;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q8j1jr5BkH9v0KQPH+g+TSZh3RFTw5oSiPfNJDMkbUI=;
-        b=eFVLbYGIciacDsJBsokCs+zDUEpRfZe/mbufuCA7rjpl8voW1F8fW+mDemas8NMbQB
-         U+2rhs7A/DGfQBE+5bCXo9w4Vw3mKbqiSDg/qRSx/mZug/YPNnD/f0y3nrqYQJeKlT0R
-         xnm8Ipc4zKrkWklZQeU6uIORyrZvw/hnq33b9gNN6dBUcq3bu/Z/fgt7hWFVhug2PYvH
-         pSoAE+gz7Gky2f5sev3FQb32VcUO/8BmEcuzEAGMDCZCLe9nsvaNyW1jHuJo8T1ABF3K
-         P5HMB5LD/D83HIzJY+7wSBCeDtS9pC54TsViwQSnjELHdeMy0zHq6oc8dfdTrp/DL2xr
-         dR1w==
+        d=gmail.com; s=20221208; t=1681495993; x=1684087993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i64S1Gb6i6BXvs6qSii52zJ3ScYuWSR5RAeuO5Zmt1E=;
+        b=svfYttqfWSSUok6CpHujVXjjJvDgSsKJQ3NOi5dXibBi3pfs8SRbGvDnQwdLRSuGSw
+         Z3uG2oGsPlA6qQH+j+vfsQm+ggEK/rfgGByiDyqMKhspdtsPls2XqkM8//O4CrryA4cS
+         tMn+wVf/tF8+hii0o/qvUgNb3Gotp7vJx3T6JtWABlS98Zt8KLfQiI7J032xpCoXe9rv
+         KOyoJ7cG7T6FivwbX12+UAMuq/GcaFEI4u47QyE+MY7wP3moelorBBempP2iCw3Dx+/e
+         jd9Dl2r0vDJTdwo0fWhdXBjCVp/mbAUO7su8CscejVqfm776z8aF4BqkaciuaYLTdDtB
+         gl9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681494486; x=1684086486;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q8j1jr5BkH9v0KQPH+g+TSZh3RFTw5oSiPfNJDMkbUI=;
-        b=ebwU5a3qrGQ5FLU6enR+GNVNdICbhi7rpyxM2U7+/W27HBe3bBW8EfJSXa6fiUHrrO
-         j8zheJpAXdqWquXBpE78UdztSmUJg0fYJkJfsLK8M6kxz2MG6h8CpyiuFdzOnifTO5EU
-         xJ0NDG8v7y9kHdLPhImezNil/X8ujLh53txFc55H71OeLob6OytE+kFG/0Jc6fd8bYQY
-         jRE+PNSRIIN0JLiCvSU5+t/5WWqiFlMuSeieA9dCQ6JfpZg0xIz1J5Q/7iIdSbMqyG8N
-         6189uCZb/h3iMyBuRYJP3IieaVn8ZQsNTXkjyzA6sba7uYWLytHMEVul79u28v+sUb6h
-         I28g==
-X-Gm-Message-State: AAQBX9eOniHlkzW+7EtQcjQkDz3JiBMvWjNS9teq1ZXPRV5/gPz5kDF9
-        3HnGE8ogCTQkfxzFdmOGhBGSHw==
-X-Google-Smtp-Source: AKy350Y8qOhfBv0DEfMa0AOWbSWbMI2Avxvvgkp83SOAZx+cTkGCMDntuL3v/WIQVj/hLPyMQFsvAw==
-X-Received: by 2002:a19:ae17:0:b0:4ec:5607:9055 with SMTP id f23-20020a19ae17000000b004ec56079055mr1962569lfc.31.1681494486467;
-        Fri, 14 Apr 2023 10:48:06 -0700 (PDT)
-Received: from [192.168.1.101] (abyk99.neoplus.adsl.tpnet.pl. [83.9.30.99])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac252ad000000b004d5a6dcb94fsm901536lfm.33.2023.04.14.10.48.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 10:48:06 -0700 (PDT)
-Message-ID: <34797b11-b654-a9a4-ac26-5287ca582a82@linaro.org>
-Date:   Fri, 14 Apr 2023 19:48:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] clk: qcom: Introduce SM8350 VIDEOCC
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+        d=1e100.net; s=20221208; t=1681495993; x=1684087993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i64S1Gb6i6BXvs6qSii52zJ3ScYuWSR5RAeuO5Zmt1E=;
+        b=hMDwOg8FoYCNnBQfYZ2I7xGAFpmsoZ6ZLFB8+s71c2uanj6VAedXc8D++DGOIx9f0n
+         c1YktRouJ0v4JWwocsCOzkH1VBevREmldrKBvSDmowJH+dm/Kbyq37xNMsuy/W0ALtmO
+         RT/piYqa9VlUI4I13TWg79zMM0K9+oHRFDPGo9XiNH8woiqYziJ1Re8P/5JygYQiU/pv
+         Zp7+5fMjYlGdJCcjKGRLaoW+31xPdw5jKQ9BbHE79RpR4+P1zc8daWfGIuB5gNCXnQnO
+         /DPAQYMWw0CFJg+p9KCECthqNpfN/DiQ63ZT7yrgMq8dHqznvxEfrTPCY+dJap/lzGDK
+         XDXg==
+X-Gm-Message-State: AAQBX9csje5WUeJcYVBJWeZZ4cgCKPJ2JV/7LvNaF8Y73tg7nKLCX358
+        t0ksopDODUp0gdDxWPKTveP5PlTbv9jeX/VpXZ0=
+X-Google-Smtp-Source: AKy350YU1CIR3iw6zpttN9gepz/ix/4ajKULqxnkjM9T/mEG6FVjNP/Uq5emblEduY1pRimowtbF3A==
+X-Received: by 2002:a17:903:2290:b0:1a2:afdd:8476 with SMTP id b16-20020a170903229000b001a2afdd8476mr4116249plh.2.1681495993419;
+        Fri, 14 Apr 2023 11:13:13 -0700 (PDT)
+Received: from d.home.yangfl.dn42 ([104.28.245.200])
+        by smtp.gmail.com with ESMTPSA id x11-20020a170902820b00b0019a593e45f1sm3309371pln.261.2023.04.14.11.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Apr 2023 11:13:13 -0700 (PDT)
+From:   David Yang <mmyangfl@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     David Yang <mmyangfl@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230413-topic-lahaina_vidcc-v2-0-f721d507e555@linaro.org>
- <20230413-topic-lahaina_vidcc-v2-2-f721d507e555@linaro.org>
- <CAA8EJpoxvjWrvJENkFSimfU=CG7C3jZ=ToZep1tnJbtPzCcS9Q@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpoxvjWrvJENkFSimfU=CG7C3jZ=ToZep1tnJbtPzCcS9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: [PATCH 0/2] clk: Add basic register clock controller
+Date:   Sat, 15 Apr 2023 02:12:58 +0800
+Message-Id: <20230414181302.986271-1-mmyangfl@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+These clocks were provided in `include/linux/clk-provider.h`, but lacks DT
+bindings. Add a clock controller to avoid operation conflict on same
+register.
+
+*** BLURB HERE ***
+
+David Yang (2):
+  dt-bindings: clock: Add reg-clock-controller
+  clk: Add basic register clock controller
+
+ .../bindings/clock/reg-clock-controller.yaml  | 245 +++++++
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-reg.c                         | 638 ++++++++++++++++++
+ 3 files changed, 884 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/reg-clock-controller.yaml
+ create mode 100644 drivers/clk/clk-reg.c
 
 
-On 14.04.2023 18:31, Dmitry Baryshkov wrote:
-> On Fri, 14 Apr 2023 at 14:26, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> Add support for the Video Clock Controller found on the SM8350 SoC.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
+base-commit: 7a934f4bd7d6f9da84c8812da3ba42ee10f5778e
+-- 
+2.39.2
 
-[...]
-
->> +static struct clk_rcg2 video_cc_ahb_clk_src = {
->> +       .cmd_rcgr = 0xbd4,
->> +       .mnd_width = 0,
->> +       .hid_width = 5,
->> +       .parent_map = video_cc_parent_map_0,
->> +       .freq_tbl = ftbl_video_cc_ahb_clk_src,
->> +       .clkr.hw.init = &(const struct clk_init_data) {
->> +               .name = "video_cc_ahb_clk_src",
->> +               .parent_data = video_cc_parent_data_0,
->> +               .num_parents = ARRAY_SIZE(video_cc_parent_data_0),
->> +               .flags = CLK_SET_RATE_PARENT,
->> +               .ops = &clk_rcg2_shared_ops,
->> +       },
->> +};
-> 
-> Do we need this clock at all? We don't have the child
-> video_cc_ahb_clk, so potentially CCF can try disabling or modifying
-> this clock.
-Hm.. I see a few things:
-
-1. downstream kona has it, upstream does not
-2. it's shared so we never actually hard-shut it off..
-2a. ..but it'd be good to ensure it's on when it's ready..
-2b. ..but we never do anyway..
-2c. ..but should we even? doesn't Venus govern it internally?
-
-
-> 
->> +
->> +static const struct freq_tbl ftbl_video_cc_mvs0_clk_src[] = {
->> +       F(720000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       F(1014000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       F(1098000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       F(1332000000, P_VIDEO_PLL0_OUT_MAIN, 1, 0, 0),
->> +       { }
->> +};
->> +
-
-[...]
-
->> +static struct clk_branch video_cc_mvs1_clk = {
->> +       .halt_reg = 0xdb4,
->> +       .halt_check = BRANCH_HALT_VOTED,
-> 
-> As a note, sm8250 has BRANCH_HALT here.
-No, it does on the div2 clk, and so do we:
-[...]
-
->> +};
->> +
->> +static struct clk_branch video_cc_mvs1_div2_clk = {
->> +       .halt_reg = 0xdf4,
->> +       .halt_check = BRANCH_HALT_VOTED,
->> +       .hwcg_reg = 0xdf4,
-
-[...]
-
->> +
->> +static const struct qcom_reset_map video_cc_sm8350_resets[] = {
->> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0xe54 },
->> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0xd14 },
-> 
-> Would it be better to use common VIDEO_CC prefix here (IOW:
-> VIDEO_CC_CVP_MVS0_BCR, VIDEO_CC_CVP_INTERFACE_BCR), etc.
-My best guess would be that the ones prefixed with CVP_
-are actual INTF/INSTANCEn(CORE) reset lines whereas
-the ones containing _CLK_ reset their clock sub-branches.
-
-> 
->> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0xc34, 2 },
->> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0xbf4 },
->> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0xd94 },
->> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0xcd4, 2 },
->> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0xc94 },
->> +};
-
-[...]
-
->> +       ret = pm_runtime_resume_and_get(&pdev->dev);
->> +       if (ret)
->> +               return ret;
->> +
->> +       regmap = qcom_cc_map(pdev, &video_cc_sm8350_desc);
->> +       if (IS_ERR(regmap)) {
->> +               pm_runtime_put(&pdev->dev);
->> +               return PTR_ERR(regmap);
->> +       };
-> 
-> Extra semicolon
-Ooeh!
-
-> 
->> +
->> +       clk_lucid_pll_configure(&video_pll0, regmap, &video_pll0_config);
->> +       clk_lucid_pll_configure(&video_pll1, regmap, &video_pll1_config);
->> +
->> +       /*
->> +        * Keep clocks always enabled:
->> +        *      video_cc_ahb_clk
->> +        *      video_cc_xo_clk
->> +        */
->> +       regmap_update_bits(regmap, 0xe58, BIT(0), BIT(0));
->> +       regmap_update_bits(regmap, 0xeec, BIT(0), BIT(0));
->> +
->> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8350_desc, regmap);
->> +       pm_runtime_put(&pdev->dev);
->> +
->> +       return ret;
->> +}
->> +
->> +static const struct dev_pm_ops video_cc_sm8350_pm_ops = {
->> +       SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
-> 
-> The driver doesn't use pm_clk at all. Are these PM_OPS correct?
-I'm unsure. I see the pm state changing in debugfs when the clocks are
-(not) consumed. But let's continue our discussion about using pm_clks
-for AHB.
-
-> 
->> +};
->> +
->> +static const struct of_device_id video_cc_sm8350_match_table[] = {
->> +       { .compatible = "qcom,sm8350-videocc" },
->> +       { }
->> +};
->> +MODULE_DEVICE_TABLE(of, video_cc_sm8350_match_table);
->> +
->> +static struct platform_driver video_cc_sm8350_driver = {
->> +       .probe = video_cc_sm8350_probe,
->> +       .driver = {
->> +               .name = "sm8350-videocc",
->> +               .of_match_table = video_cc_sm8350_match_table,
->> +               .pm = &video_cc_sm8350_pm_ops,
->> +       },
->> +};
->> +module_platform_driver(video_cc_sm8350_driver);
->> +
->> +MODULE_DESCRIPTION("QTI SM8350 VIDEOCC Driver");
->> +MODULE_LICENSE("GPL");
->>
->> --
->> 2.40.0
->>
-> 
-> Generic note: the register layout follows closely sm8250. However the
-> existing differences probably do not warrant merging them.
-No, I don't think merging any designs that are farther away
-than 8150 and 8155 or 8992 and 8994 etc. is a good idea..
-
-I don't want to ever look at something like dispcc-sm8[123]50.c
-again!
-
-Konrad
-> 
