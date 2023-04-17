@@ -2,79 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05226E46CB
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Apr 2023 13:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256156E4976
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Apr 2023 15:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjDQLur (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Apr 2023 07:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S230443AbjDQNLl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Apr 2023 09:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjDQLuq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Apr 2023 07:50:46 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EE791
-        for <linux-clk@vger.kernel.org>; Mon, 17 Apr 2023 04:49:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4ec8133c698so6259426e87.0
-        for <linux-clk@vger.kernel.org>; Mon, 17 Apr 2023 04:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681732169; x=1684324169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T/OjZyhE0ENwMdI5KuPOl9FD06Q0NXkVYxfRjcYOPrE=;
-        b=KCLNbnzyHTT8esQG29pR8LPrFJTnKlZAOfEg3RK+HOPSU2yxVxgAlRF8i0+JCGuwp6
-         J1nHX03YXSz2YOM9JYWcrlU7XvehWfW/2OjA6ndP8EHl6GC4lTXDQH14IMnXV37y9iqK
-         /Szv3Q28HSyN/6UrCIHTCakLzKcyF15cd/2Mz1skZweAGdAJPaLyGt4QtTvLNPczG1fe
-         DvcMgugL+6INRO6iBievWC2oYghp4nH2QK3A4vR7nXrTvkGKTrgHh7IiCzqNIvrKzz2S
-         DJnyq325yzVsRr4zHEsPlZQI2YVWbpcjBsjatJ5vlran414DVJbTTUk+XqhLQV+6TTmH
-         SAeg==
+        with ESMTP id S230316AbjDQNL3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Apr 2023 09:11:29 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824CFB77B;
+        Mon, 17 Apr 2023 06:10:50 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id be20so2604211oib.4;
+        Mon, 17 Apr 2023 06:10:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681732169; x=1684324169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/OjZyhE0ENwMdI5KuPOl9FD06Q0NXkVYxfRjcYOPrE=;
-        b=biBnEWCOY0uBQJcxfCqAHMXo5HX06N4EkPDkjmiPtvRD4GibK4XdgFhijS+QXJh2A2
-         hFOQ+eod7Z5jR0n+LNkSu0lJirzjxzBpG0sABk7vH/gJlE4r7Acr56B4zGKryz3t2ldA
-         nTBrJPCYP6usB2fPFqu28W4Heys2fniWhwRkahBddTcg6WyHiim5n06qIIMakQeQsL2X
-         K4YZLsL73zSd9NZq+soeNUa6JbiY3CiGweKL9ROYEw2cVEWy+4aHVTbV8tW9ZPVp2rkV
-         5X5rNCWzhqjr0vEAaU3d/VRbd3GATjG1n+WpMn4SsGUMpBj5kgT9SqWVlJGB+LTwpKLW
-         0EvQ==
-X-Gm-Message-State: AAQBX9f7prT3ZYsydTx3dm7TO16uwIMOjshfX1kYzlI0Z97v7byiR4/V
-        dUqZzli9BLZV6574jZLtjhAmaA==
-X-Google-Smtp-Source: AKy350ZJpouc9mBroBFCAgLb2jZvQ22H22pgo7QKQsZ0p87Se9m+QKD6rvyA8mhUwAVUxNENBdntrA==
-X-Received: by 2002:ac2:532c:0:b0:4eb:e8e:4139 with SMTP id f12-20020ac2532c000000b004eb0e8e4139mr2275009lfh.2.1681732168874;
-        Mon, 17 Apr 2023 04:49:28 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u9-20020a056512094900b004e887fd71acsm1994012lft.236.2023.04.17.04.49.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Apr 2023 04:49:28 -0700 (PDT)
-Message-ID: <d850071e-162d-9303-6e28-1fe675f69ce4@linaro.org>
-Date:   Mon, 17 Apr 2023 14:49:27 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] clk: qcom: common: Handle invalid index error
-Content-Language: en-GB
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230303092859.22094-1-quic_tdas@quicinc.com>
- <20230303092859.22094-2-quic_tdas@quicinc.com>
- <CAA8EJpq5xBF=Wt-1_hGR-7qZHREcALurmR4ucmMmZaC-R_7Ttg@mail.gmail.com>
- <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <ce6c952b-2e2b-67d9-5023-e740ed798758@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        d=1e100.net; s=20221208; t=1681737028; x=1684329028;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XGc5GbTW6kZhqyLY58+PiGrV4TzfIzCtj6GSngzzGx0=;
+        b=Lc5xMvcAHe6Hj4NCjygMrZEa6RW1PRBMh5dkaq+Zvr4wufgdqodC8g2of3SBjwv4Jl
+         xQ+p3JPbtzMs2T+JZJr72nslbUyK34+hWwYTXcmmPQq1H6OQwyLwBNg4ML+BRaew4x6B
+         2x7rGXbytBb8zqaN4oh5ry6ZLTVE/6szrxQtSUn7TOrU9gK5pJt4yuPlXfx6rotAeNRk
+         INHKQsOKzTFprpWAG/nS8L960K2qVmtaJc9ewYdPG/2EGVjnRM8dcHw19Euiif8IcUNq
+         iab9vlFFRcRFBxe07tt301rEvq3Ui1VsyWTBhFB7Pz7/EZofEepr+Z7accOI79kB1VDD
+         7LPQ==
+X-Gm-Message-State: AAQBX9dLTteALJlJcMNDL0qTUTuUcWTs0MLZ+7+WqIxIoNMwsH1qGtf2
+        N63my02ROw+sUxEJat8fguxAJzHmKA==
+X-Google-Smtp-Source: AKy350bLOodLTGfu7sS/UE8gZ4DIs15DTghBMqDc5P7PbXHAE80LzdytFuibl1XHbvlxfKHLrIz+Rw==
+X-Received: by 2002:a05:6808:23c6:b0:38e:8c6:8793 with SMTP id bq6-20020a05680823c600b0038e08c68793mr1670112oib.2.1681737028477;
+        Mon, 17 Apr 2023 06:10:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 63-20020aca0742000000b003896b3269d3sm4570296oih.20.2023.04.17.06.10.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 06:10:28 -0700 (PDT)
+Received: (nullmailer pid 2588762 invoked by uid 1000);
+        Mon, 17 Apr 2023 13:10:27 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     David Yang <mmyangfl@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <20230414181302.986271-2-mmyangfl@gmail.com>
+References: <20230414181302.986271-1-mmyangfl@gmail.com>
+ <20230414181302.986271-2-mmyangfl@gmail.com>
+Message-Id: <168173527448.2535459.6262053412684555960.robh@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Add reg-clock-controller
+Date:   Mon, 17 Apr 2023 08:10:27 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,154 +66,41 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 17/04/2023 07:40, Taniya Das wrote:
-> Hi Dmitry,
-> 
-> Thanks for the comments.
-> 
-> 
-> On 3/3/2023 4:14 PM, Dmitry Baryshkov wrote:
->> On Fri, 3 Mar 2023 at 11:30, Taniya Das <quic_tdas@quicinc.com> wrote:
->>>
->>> Introduce start_index to handle invalid index error
->>> seen when there are two clock descriptors assigned
->>> to the same clock controller.
->>
->> Please provide details of the exact case that you are trying to solve
->> (this might go to the cover letter). I think the commit message is
->> slightly misleading here. Are you trying to add error messages or to
->> prevent them from showing up?
->>
-> 
-> We are trying to avoid error messages from showing up.
-> 
->> I'm asking because error messages do not seem to correspond to patch
->> 2. You add start_index to make the kernel warn for the clock indices
->> less than LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC = 4, while quoted
->> messages show indices 5,6,7.
->>
-> 
-> Right, we want the kernel to warn if the clock index is less than 
-> start_index,
 
-This is arguable but logical. Usually we do not warn for absent clocks.
-
-> along with that we also want to handle the case where 
-> num_rclks is uninitialized because of same clock descriptor being 
-> assigned to two clock controllers.
-
-Hmm, but num_rclks is always initialized, isn't it? In the worst case it 
-will default to 0 meaning that
-
-> Earlier Invalid index error was showing up for valid indices 5,6,7 
-> because of the simple if check(idx >= num_rclks), hence we enhanced the 
-> checks to handle the above case and compare the index to the start_index 
-> + num_rclks, instead of simply comparing it with num_clks.
-
-This is not a part of the patch and it will be incorrect anyway, since 
-num_rclks = desc->num_clks = ARRAY_SIZE(some_cc_clocks).
-
-Checking idx against `start_index + num_rclks` will allow one to get 
-clocks after the end of rclks array.
-
-For lpass_audio_cc_sc7280_desc num_rclks should get the value of 16, as 
-the last entry in llpass_audio_cc_sc7280_clocks has index 
-LPASS_AUDIO_CC_RX_MCLK_CLK_SRC = 15.
-
-My analysis might be completely wrong, but I can only assume that 
-somehow wrong clock controller got used. Could you please give it a try 
-with the 
-https://lore.kernel.org/linux-clk/20230417114659.137535-1-dmitry.baryshkov@linaro.org/ 
-being applied?
-
+On Sat, 15 Apr 2023 02:12:59 +0800, David Yang wrote:
+> Add DT bindings documentation for reg-clock-controller, collection of
+> basic clocks common to many platforms.
 > 
->> Nit: please don't overwrap the commit message, the recommended line
->> width is about 72-77 chars.
->>
-> 
-> Done.
-> 
->>>
->>> [ 3.600604] qcom_cc_clk_hw_get: invalid index 5
->>> [ 3.625251] qcom_cc_clk_hw_get: invalid index 6
->>> [ 3.648190] qcom_cc_clk_hw_get: invalid index 7
->>
->>>
->>> Fixes: 120c15528390 ("clk: qcom: Migrate to clk_hw based registration 
->>> and OF APIs")
->>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->>> ---
->>>   drivers/clk/qcom/common.c | 12 ++++++++----
->>>   drivers/clk/qcom/common.h |  1 +
->>>   2 files changed, 9 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
->>> index 75f09e6e057e..0e80535b61f2 100644
->>> --- a/drivers/clk/qcom/common.c
->>> +++ b/drivers/clk/qcom/common.c
->>> @@ -21,6 +21,7 @@ struct qcom_cc {
->>>          struct qcom_reset_controller reset;
->>>          struct clk_regmap **rclks;
->>>          size_t num_rclks;
->>> +       u32 rclks_start_index;
->>>   };
->>>
->>>   const
->>> @@ -226,12 +227,13 @@ static struct clk_hw *qcom_cc_clk_hw_get(struct 
->>> of_phandle_args *clkspec,
->>>          struct qcom_cc *cc = data;
->>>          unsigned int idx = clkspec->args[0];
->>>
->>> -       if (idx >= cc->num_rclks) {
->>> +       if (idx >= cc->rclks_start_index && idx < cc->num_rclks)
->>> +               return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->>> +       else if (idx < cc->rclks_start_index && idx >= cc->num_rclks)
->>>                  pr_err("%s: invalid index %u\n", __func__, idx);
->>> -               return ERR_PTR(-EINVAL);
->>> -       }
->>>
->>> -       return cc->rclks[idx] ? &cc->rclks[idx]->hw : NULL;
->>> +       return ERR_PTR(-EINVAL);
->>> +
->>>   }
->>>
->>>   int qcom_cc_really_probe(struct platform_device *pdev,
->>> @@ -281,6 +283,8 @@ int qcom_cc_really_probe(struct platform_device 
->>> *pdev,
->>>
->>>          cc->rclks = rclks;
->>>          cc->num_rclks = num_clks;
->>> +       if (desc->start_index)
->>> +               cc->rclks_start_index = desc->start_index;
->>>
->>>          qcom_cc_drop_protected(dev, cc);
->>>
->>> diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
->>> index 9c8f7b798d9f..924f36af55b3 100644
->>> --- a/drivers/clk/qcom/common.h
->>> +++ b/drivers/clk/qcom/common.h
->>> @@ -23,6 +23,7 @@ struct qcom_cc_desc {
->>>          const struct regmap_config *config;
->>>          struct clk_regmap **clks;
->>>          size_t num_clks;
->>> +       u32 start_index;
->>>          const struct qcom_reset_map *resets;
->>>          size_t num_resets;
->>>          struct gdsc **gdscs;
->>> -- 
->>> 2.17.1
->>>
->>
->>
->> -- 
->> With best wishes
->>
->>
->>
->> Dmitry
+> Signed-off-by: David Yang <mmyangfl@gmail.com>
+> ---
+>  .../bindings/clock/reg-clock-controller.yaml  | 245 ++++++++++++++++++
+>  1 file changed, 245 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/reg-clock-controller.yaml
 > 
 
--- 
-With best wishes
-Dmitry
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/reg-clock-controller.example.dtb: reg-clk-ctrl@ffff0000: 'gate-clock@cc-3' does not match any of the regexes: '.*-names$', '.*-supply$', '^#.*-cells$', '^#[a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z0-9][a-zA-Z0-9,+\\-._]{0,63}$', '^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+(,[0-9a-fA-F]+)*$', '^__.*__$', 'pinctrl-[0-9]+'
+	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/dt-core.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230414181302.986271-2-mmyangfl@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
