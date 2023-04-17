@@ -2,91 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847246E4DB2
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Apr 2023 17:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB136E4F82
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Apr 2023 19:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjDQPx3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Apr 2023 11:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S230347AbjDQRol (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Apr 2023 13:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjDQPxV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Apr 2023 11:53:21 -0400
-Received: from out-16.mta1.migadu.com (out-16.mta1.migadu.com [IPv6:2001:41d0:203:375::10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6979AB444
-        for <linux-clk@vger.kernel.org>; Mon, 17 Apr 2023 08:53:10 -0700 (PDT)
-Message-ID: <ea8a7a65-3c1c-bb83-2d88-e961306d87d5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681746786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b3YsTgVO4RylBnjdLN7yJQDgG+k90LtVzdRN7p16/bg=;
-        b=H8DpitgZjbMn5bOEkl1h0l7Gdv4mbNJnD/cWezPSke1ZG9UuUiTqRr5enkiszSqnJKdoUa
-        DLvxS42YJIaYOaNGiavj3qoyCwsjMad+fdE+YVO9BDAU5531xehe3DmlzKfGonNnH7uPcI
-        K9ebqmGgUfFoCMrGaxQUR52fplNcT70=
-Date:   Mon, 17 Apr 2023 16:53:00 +0100
+        with ESMTP id S229692AbjDQRoj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Apr 2023 13:44:39 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A5FAF02;
+        Mon, 17 Apr 2023 10:44:26 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id gw13so14228862wmb.3;
+        Mon, 17 Apr 2023 10:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681753465; x=1684345465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJW18Rs7JyEs07/Vsxl5Q/32nWcrgJz6KvKEee91fk0=;
+        b=BV10jJi+xwQ6OOPKITXXNWMZq06YdlI4y7lJhXPx918vi9tx96j23IdJF8FJ30yeWF
+         kHE/oPeOweEOXFPIZM7gTOY8i+YUhXHpfZinoPBJD/zY7gizeO9k+UUMbxR1ioNc7/E7
+         y46KJ3eDsRmJ3yTYOcVQJENEmRk3j8f4VThzaELqqpiNf8nLBaIfa+6E74K4K4FY1gWR
+         BVfgJ2/EukUqOLwhpzd+MKpORW5ON8kJSG3b7ohVBwe4luZVpqWyPhV4hqRUzwTLhH1C
+         KTsjXYoF3JYO740OiQd3VRvVxkcMe+BIe5T49dPCHBcAcrFUZ7dwVEDFnRUyWCqr4kUD
+         n3xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681753465; x=1684345465;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jJW18Rs7JyEs07/Vsxl5Q/32nWcrgJz6KvKEee91fk0=;
+        b=k0eX/PaV+ksyOj7jzDvGa6fyQ11WbmFA/DS1x+BSxphgPR05QA6Vt61ZymkweoSXLI
+         w6Lpq+nP0ySJKg/9hlot8rpL53RRAzVMMa/WrUDoQf9HyacdZ7DdEcTordQrIBcLjrmI
+         0BtFe/6ksye3Nz8qrbPq0lT3pRiSUfHbfcUq+CrSLikvKF151aiOxkAaCDL052xByCAc
+         FzxHAn1NKJmQMvdAGGl4RxCT0+us+OzDx02x/zXf8NIzP1Osqdng2g0L/sUuKNxMJRKo
+         WV+sBLUs4nwIEwDDJVxmNYZ/+KsfOY7JSEfdymQ39J78lsGA6PKaOknuiPH4tQJT/ykM
+         PdMg==
+X-Gm-Message-State: AAQBX9fDyGnevtIyu/9gljr1zua3YgEvZulO/wFfP3rpkBcfuptLpWOo
+        pZ73NHvohYNECxz2ztPaYqA=
+X-Google-Smtp-Source: AKy350apxZRx4/sxLOBqB59xySZBVPcCeQ+i8o2uxY9qtWQKPTKExJWAsp2IFvQ1442jz7n6Uz1dxQ==
+X-Received: by 2002:a05:600c:229a:b0:3f0:a098:f503 with SMTP id 26-20020a05600c229a00b003f0a098f503mr11484013wmf.14.1681753464918;
+        Mon, 17 Apr 2023 10:44:24 -0700 (PDT)
+Received: from localhost.localdomain (host-87-7-13-196.retail.telecomitalia.it. [87.7.13.196])
+        by smtp.googlemail.com with ESMTPSA id f24-20020a7bcd18000000b003f09a9151c1sm12516155wmj.30.2023.04.17.10.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 10:44:24 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH 1/2] clk: qcom: gcc-ipq6018: drop redundant F define
+Date:   Mon, 17 Apr 2023 19:44:07 +0200
+Message-Id: <20230417174408.23722-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC v6 2/6] dpll: Add DPLL framework base functions
-To:     Jiri Pirko <jiri@resnulli.us>, Jakub Kicinski <kuba@kernel.org>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        Vadim Fedorenko <vadfed@meta.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "Michalik, Michal" <michal.michalik@intel.com>
-References: <20230312022807.278528-1-vadfed@meta.com>
- <20230312022807.278528-3-vadfed@meta.com> <ZA9Nbll8+xHt4ygd@nanopsycho>
- <2b749045-021e-d6c8-b265-972cfa892802@linux.dev>
- <ZBA8ofFfKigqZ6M7@nanopsycho>
- <DM6PR11MB4657120805D656A745EF724E9BBE9@DM6PR11MB4657.namprd11.prod.outlook.com>
- <ZBGOWQW+1JFzNsTY@nanopsycho> <20230403111812.163b7d1d@kernel.org>
- <ZDJulCXj9H8LH+kl@nanopsycho> <20230410153149.602c6bad@kernel.org>
- <ZDwg88x3HS2kd6lY@nanopsycho>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <ZDwg88x3HS2kd6lY@nanopsycho>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 16/04/2023 17:23, Jiri Pirko wrote:
-> Tue, Apr 11, 2023 at 12:31:49AM CEST, kuba@kernel.org wrote:
->> On Sun, 9 Apr 2023 09:51:48 +0200 Jiri Pirko wrote:
->>> Wait, not sure you get the format of the "name". It does not contain any
->>> bus address, so the auxdev issue you pointed out is not applicable.
->>> It is driver/clock_id/index.
->>> All 3 are stable and user can rely on them. Do you see any issue in
->>> that?
->>
->> What is index? I thought you don't want an index and yet there is one,
->> just scoped by random attributes :(
-> 
-> Index internal within a single instance. Like Intel guys, they have 1
-> clock wired up with multiple DPLLs. The driver gives every DPLL index.
-> This is internal, totally up to the driver decision. Similar concept to
-> devlink port index.
+The same exact F frequency table entry is defined in clk-rcg.h
+Drop the redundant define to cleanup code.
 
-It feels like a dead-lock in conversation here. We have to agree on 
-something because for now it's the only blocker to post the next version 
-with all the comments from the previous one addressed in the code.
-My position here is that I'm ok to have any of the properties being an 
-identifier as well as keep both of them, the code already has all the 
-lines to support any decision. I just to want to go back to this part 
-again in the next iteration.
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/clk/qcom/gcc-ipq6018.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/clk/qcom/gcc-ipq6018.c b/drivers/clk/qcom/gcc-ipq6018.c
+index 3f9c2f61a5d9..350ead66914c 100644
+--- a/drivers/clk/qcom/gcc-ipq6018.c
++++ b/drivers/clk/qcom/gcc-ipq6018.c
+@@ -26,8 +26,6 @@
+ #include "clk-regmap-mux.h"
+ #include "reset.h"
+ 
+-#define F(f, s, h, m, n) { (f), (s), (2 * (h) - 1), (m), (n) }
+-
+ enum {
+ 	P_XO,
+ 	P_BIAS_PLL,
+-- 
+2.39.2
 
