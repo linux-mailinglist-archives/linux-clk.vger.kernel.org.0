@@ -2,105 +2,214 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E796E77F9
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Apr 2023 13:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C8B6E78A4
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Apr 2023 13:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjDSLDd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Apr 2023 07:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S232725AbjDSLbK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Apr 2023 07:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjDSLDb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Apr 2023 07:03:31 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388D946B4
-        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 04:03:30 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-54f6a796bd0so380215167b3.12
-        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 04:03:30 -0700 (PDT)
+        with ESMTP id S232814AbjDSLbJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Apr 2023 07:31:09 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B2513C32
+        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 04:31:04 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2a8b082d6feso27189571fa.2
+        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 04:31:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681902209; x=1684494209;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZtZFW4Yu8/s9hisFwTitWaI2cjRerxPZcc9cSg2rPE=;
-        b=jfUC/JrMl5HBoSD8vzvfnPIPKcL9zGugtYiYjLVIoE5hCxJz5aERW2NkEn1mrG+oJV
-         AJ2cGlzuHwMZsQhzB+PumeC6fHkSGGG4EP3XExXEW2xC1unTIiYxBhGyy1cGSImyKfSh
-         0l40U69pxec1llfmtFKtBoKY11ChWJfZcLPVdYsE5HtWoAr5q3SnTgOEWjry7WO2zBcj
-         pcyI1UIehQjC/j1PXgoJufhFSmVnCQqK0Qn2Cposas3kN2nw+GtFMy9itoYN2sOpP5r3
-         RElcCXWnS+cnLpbBsNiodvYeTEcE1W6L6i31Kfg8L1/tMCaXHLCaGedWQxYr9XvsTHhL
-         PY3g==
+        d=linaro.org; s=google; t=1681903863; x=1684495863;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O7UCE8GzO2c65rYrCJp4d+7DvvzyB48DxhH3k91mObY=;
+        b=FQt2xR2dcMbRk1kYnBpw/JhzL8174t3yF1k7CgYZjcgnPbKWgvpocUOX+nfnV43ZyU
+         Yp+2J+AU9FqoM97XRS+lR4dCQMVSEO7s7NtmMpue+pL/3F+pX2uIcl5mKY1EnP32zEBn
+         lUAG5ewl3I68KnQuMpfJLOucbg7VdsA1XVBEJYQzKDbwT41mtLRi9X0/2W65wXbWzZVj
+         Szag6Ej+vctVxMPOGIHRataW1PotxJ4+3hqAiSq2lqi6hCc3WV4vMbYe0njLEJvuBHdV
+         /jHNm7DdbCeqe2UXhLs5bHbcmRTEP4lvO/l36mmIBsYVUq/aPIXlyKJrAKZGv6DZgKpN
+         D5GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681902209; x=1684494209;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZtZFW4Yu8/s9hisFwTitWaI2cjRerxPZcc9cSg2rPE=;
-        b=GfmmbitpId+D8Tm+LpPiNf0RHBFslbD7PNDUERxw+6lGVTg+OLb0unBQ86ZGciXeK5
-         6TuOT0JXcALl0AcHRrGeWg9iO+6/+tCMX+xjyZBaEyKY3fzV9YNx2jRqa3XQKznHVqDW
-         Kq0WTrBr+qSN79h04SQx3TMyNUWg2u/Ci0Mp9qY5c7ZJlSFyM5uoQ19fCot0q/MhSXep
-         drNEJI2PRUMmR0Og2pRDzx+EomhOnhFwTThy+9prwS594cCp97sj4jn/M8zyBbwEYSbs
-         86SkxD8+DHMJHJl6TGEGj4X4OxkPuTmZ1R7wGwZ+FdkHHHq9OJdga/CraWJzNrsS5ecM
-         9Z1w==
-X-Gm-Message-State: AAQBX9cMZ7jFIjAnfGoODqoLQpJVa3GFT7U6Uu9dTeWpLI9nxEwXUFwI
-        79yuCavgHU+cVMA2GGeH9Np811hVPemWuj4j/xs=
-X-Google-Smtp-Source: AKy350a1axSdqNbQE9/Wu3QBoJySvv+BHKuWixkV5Rj8uRt+NptGgvr5ZT7S2wqRwAdFH74QuTidxnO9I3xDtKYErbA=
-X-Received: by 2002:a81:643:0:b0:54f:85bc:a808 with SMTP id
- 64-20020a810643000000b0054f85bca808mr1852708ywg.16.1681902208520; Wed, 19 Apr
- 2023 04:03:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681903863; x=1684495863;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O7UCE8GzO2c65rYrCJp4d+7DvvzyB48DxhH3k91mObY=;
+        b=h5j/5cOVpHgMsBjGDij5xqs0lWCmJcQrtN50efRS0nLkxv9qAC8Tecok9wXKqDaDc6
+         PPEt5Zz70fj0peRv30oqBUg6XKrLXJFKibwnWXOzUfNcYOdXmjozukQeAJ4rs/bHEQWc
+         xH6lse+hUdOA0oUn5Ji8ty4S7H6B4kfTHugg1/kgLoxkDaVM1obDohnbU45PukjqBVv3
+         93yKeiGJLkXM9NZhj9n9DoDCq1rVDTZcsB0G4YC9CbPjLuEX6YLSXYSke62ZGcCrkP/H
+         w8uFHCUTR1BxNykeoDvl2XbjBDw9cR2+iv3km5s/nZ9vmUUf7ICF+sLINrdmvS1Lv232
+         /2aA==
+X-Gm-Message-State: AAQBX9ecYOlAzFkSwPYNl6W+Ts39btxy0CyAimVYmXnkBrzFcyEXYo3S
+        8T2Mi06NPT1HcKUiH+20A+ndwg==
+X-Google-Smtp-Source: AKy350aEn0e9OD1X7a2puiTo3/NeCpeyOKBpGnXQIA2KfNbtpPL6PABCjjk1R4ersu0zuSQM9Uxs2w==
+X-Received: by 2002:ac2:47ea:0:b0:4ec:9e4a:f893 with SMTP id b10-20020ac247ea000000b004ec9e4af893mr4115565lfp.56.1681903863040;
+        Wed, 19 Apr 2023 04:31:03 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id s22-20020a2e98d6000000b002a76c16ad65sm2903450ljj.87.2023.04.19.04.31.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 04:31:02 -0700 (PDT)
+Message-ID: <6407af2a-18c6-9baf-cc9b-dcf7001812b7@linaro.org>
+Date:   Wed, 19 Apr 2023 13:31:01 +0200
 MIME-Version: 1.0
-Reply-To: mis.vera145@gmail.com
-Sender: adamsfrancis140@gmail.com
-Received: by 2002:a05:7010:218c:b0:344:4f01:f1f with HTTP; Wed, 19 Apr 2023
- 04:03:27 -0700 (PDT)
-From:   Vera Wilfred <mis.vera145@gmail.com>
-Date:   Wed, 19 Apr 2023 12:03:27 +0100
-X-Google-Sender-Auth: VhMy34hnjLDOgImwuuurqZ3v79s
-Message-ID: <CAD3yhOUetLWku9w1EXAcbSk4HoudPHpM+3sQXos9+-Kx9TEmzg@mail.gmail.com>
-Subject: Ich bin Mis Vera Wilfred
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way to
+ enable unused clock cleanup
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
+ <ZD2YYrOdQMD3pi7u@gerhold.net>
+ <d63d4896afe8a1a901470f88862ce608.sboyd@kernel.org>
+ <3873483f-7f7d-a146-cca9-b50f054289d4@linaro.org>
+In-Reply-To: <3873483f-7f7d-a146-cca9-b50f054289d4@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
---=20
-Hallo,
 
-Ich bin Mis Vera Wilfred aus Abidjan Cote D'Ivoire (Elfenbeink=C3=BCste)
-Ich bin 22 Jahre alt, M=C3=A4dchen, Waise, das hei=C3=9Ft, weil ich keine E=
-ltern
-habe, ich habe ungef=C3=A4hr (10.500.000,00 US-Dollar) Zehn Millionen,
-f=C3=BCnfhunderttausend vereint Staatsdollar.
 
-Was ich von meinem verstorbenen Vater geerbt habe, hat er den Fonds
-auf einem Fest- / Wechselkonto bei einer der besten Banken hier in
-Abidjan hinterlegt.
+On 18.04.2023 12:33, Konrad Dybcio wrote:
+> 
+> 
+> On 18.04.2023 02:19, Stephen Boyd wrote:
+>> Quoting Stephan Gerhold (2023-04-17 12:05:06)
+>>> On Wed, Mar 08, 2023 at 10:35:17PM +0100, Konrad Dybcio wrote:
+>>>> Disabling RPMCC clocks can be a bit touchy. If we can't guarantee all
+>>>> (or at least most) of the oneline peripherals ask the interconnect
+>>>> framework to keep their buses online and guarantee enough bandwidth,
+>>>> we're relying on bootloader defaults to keep the said buses alive through
+>>>> RPM requests and rate setting on RPM clocks.
+>>>>
+>>>> Without that in place, the RPM clocks are never enabled in the CCF, which
+>>>> qualifies them to be cleaned up, since - as far as Linux is concerned -
+>>>> nobody's using them and they're just wasting power. Doing so will end
+>>>> tragically, as within miliseconds we'll get *some* access attempt on an
+>>>> unlocked bus which will cause a platform crash.
+>>>>
+>>>> On the other hand, if we want to save power and put well-supported
+>>>> platforms to sleep, we should be shutting off at least some of these
+>>>> clocks (this time with a clear distinction of which ones are *actually*
+>>>> not in use, coming from the interconnect driver).
+>>>>
+>>>> To differentiate between these two cases while not breaking older DTs,
+>>>> introduce an opt-in property to correctly mark RPM clocks as enabled
+>>>> after handoff (the initial max freq vote) and hence qualify them for the
+>>>> common unused clock cleanup.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml | 6 ++++++
+>>>>  1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+>>>> index 2a95bf8664f9..386153f61971 100644
+>>>> --- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+>>>> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
+>>>> @@ -58,6 +58,12 @@ properties:
+>>>>      minItems: 1
+>>>>      maxItems: 2
+>>>>  
+>>>> +  qcom,clk-disable-unused:
+>>>> +    type: boolean
+>>>> +    description:
+>>>> +      Indicates whether unused RPM clocks can be shut down with the common
+>>>> +      unused clock cleanup. Requires a functional interconnect driver.
+>>>> +
+>>>
+>>> I'm surprised that Stephen Boyd did not bring up his usual "rant" here
+>>> of moving the interconnect clock voting out of rpmcc into the
+>>> interconnect drivers (see [1], [2]). :-)
+>>
+>> :) I was hoping to get a fix for disabling unused clks during late init
+>> at the same time. Shucks!
+>>
+>>>
+>>> I was a bit "cautious" about it back then but at this point I think it
+>>> kind of makes sense. Make sure to read Stephen's detailed explanation in
+>>> https://lore.kernel.org/linux-arm-msm/159796605593.334488.8355244657387381953@swboyd.mtv.corp.google.com/
+>>>
+>>> We keep looking for workarounds to prevent the CCF from "messing" with
+>>> interconnect-related clocks. But the CCF cannot mess with "clocks" it
+>>> does not manage. The RPM interconnect drivers already talk directly to
+>>> the RPM in drivers/interconnect/qcom/smd-rpm.c. I think it should be
+>>> quite easy to move the QCOM_SMD_RPM_BUS_CLK relates defines over there
+>>> and just bypass the CCF entirely.
+>>
+>> Please do it!
+> Okay, that's a plan..
+> 
+>>
+>>>
+>>> For backwards compatibility (for platforms without interconnect drivers)
+>>> one could either assume that the bootloader bandwidth votes will be
+>>> sufficient and just leave those clocks completely alone. Or the
+>>> "icc_smd_rpm" platform device could initially make max votes similar to
+>>> the rpmcc device. By coincidence the "icc_smd_rpm" platform device is
+>>> always created, no matter how the device tree looks or if the platform
+>>> actually has an interconnect driver.
+>>>
+>>
+>> Yeah that's a good plan. Suspend will be broken or burn a lot of power,
+> (that's what happens as of today, so sgtm!)
+> 
+>> but presumably the new DTB will be used fairly quickly. Or you can
+>> implement something like clkdev for interconnects that lets you hack up
+>> an association between interconnects and consumers for existing DTs and
+>> then drop those lookups months later.
+> Uh.. let's not.. Let's just contain it in the interconnect driver.
+> 
+> The buses will be at bearable frequencies coming from the bootloader
+> (as RPM, storage etc. are enabled) and boosting them at icc_rpm_smd
+> probe sounds sane.
+What should we do about the non-bus RPM clocks though? I don't fancy
+IPA_CLK running 24/7.. And Stephan Gerhold was able to achieve VDD_MIN
+on msm8909 with these clocks shut down (albeit with a very basic dt setup)!
 
-mein Vater hat meinen Namen als seine einzige Tochter und einziges
-Kind f=C3=BCr die n=C3=A4chsten Angeh=C3=B6rigen des Fonds verwendet.
+Taking into account the old interconnect-enabled DTs, some of the
+clocks would need to be on so that the QoS writes can succeed
+(e.g. the MAS_IPA endpoint needs IPA_CLK), it gets complicated again..
 
-Zweitens bekunden Sie mit Ihrer vollen Zustimmung, mit mir zu diesem
-Zweck zusammenzuarbeiten, Ihr Interesse, indem Sie mir antworten,
-damit ich Ihnen die notwendigen Informationen und die Details zum
-weiteren Vorgehen zukommen lassen kann. Ich werde Ihnen 20% des Geldes
-anbieten deine Hilfe f=C3=BCr mich.
+I suppose something like this would work-ish:
 
-M=C3=B6ge Gott Sie f=C3=BCr Ihre schnelle Aufmerksamkeit segnen. Meine best=
-en
-und liebensw=C3=BCrdigen Gr=C3=BC=C3=9Fe an Sie und Ihre ganze Familie, wen=
-n Sie mich
-f=C3=BCr weitere Details kontaktieren.
+0. remove clock handles as they're now contained within icc and
+   use them as a "legacy marker"
+1. add:
+	if (qp->bus_clocks)
+		// skip qos writes
 
-Ich brauche Ihre Assistentin, um mir zu helfen, diesen Fonds in Ihrem
-Land zu investieren. Kontaktieren Sie mich jetzt f=C3=BCr weitere Details.
-Vielen Dank
+This will:
+- let us add is_enabled so that all RPM clocks bar XO_A will be cleaned up
+- save massively on code complexity
 
-Vera Wilfred.
+at the cost of retroactively removing features (QoS settings) for people
+with old DTs and new kernels (don't tell Torvalds!)
+
+This DTB ABI stuff really gets in the way sometimes :/ We're only now
+fixing up U-Boot to be able to use upstream Linux DTs and other than
+that I think only OpenBSD uses it with 8280.. Wish we could get rid of
+all old junk once and then establish immutability but oh well..
+
+Konrad
+> 
+> Konrad
