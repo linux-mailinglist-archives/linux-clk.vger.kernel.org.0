@@ -2,241 +2,190 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D80FE6E82C3
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Apr 2023 22:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A546A6E8305
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Apr 2023 23:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjDSUc3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Apr 2023 16:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S229822AbjDSVIJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Apr 2023 17:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjDSUc2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Apr 2023 16:32:28 -0400
-X-Greylist: delayed 478 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 19 Apr 2023 13:32:19 PDT
-Received: from out-61.mta0.migadu.com (out-61.mta0.migadu.com [91.218.175.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CCEC6
-        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 13:32:19 -0700 (PDT)
-Date:   Wed, 19 Apr 2023 22:24:16 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1681935859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V20VJv1TvezaAhFXg1TxVwCOql54YGFqOYPkGP8pazQ=;
-        b=cT8c6lY/bJVW3tUmDsyOXCpLyLqQnkGWUJhsaPyDTQDN+T0llTayhLrryh//uChH+//JHo
-        x17+hr5gXmgXXv214KbPtSXg1i5+Whi6AkB87RxbFU1t5mpoZ5++enCMNkSEDLKNkmnQb6
-        3IMIQH5r+ho1nDTvIw+DjYAL79D8v9M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Artur Weber <aweber.kernel@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 03/12] ARM: exynos: Re-introduce Exynos4212 support
-Message-ID: <ZEBN8ImTp/tRdej+@L14.lan>
-References: <20230416133422.1949-1-aweber.kernel@gmail.com>
- <20230416133422.1949-4-aweber.kernel@gmail.com>
+        with ESMTP id S231263AbjDSVII (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Apr 2023 17:08:08 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406959F0
+        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 14:08:05 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4ec8da7aaf8so136139e87.2
+        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 14:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681938483; x=1684530483;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y4Qr1DXe1yvvm/vxNEQkt+SEuJu0KzbnH1GeDOIlXyQ=;
+        b=hC5WFtDnayfS8GWsFSCr2rWJ952sK2ZuuSjzPTBUweoBJYnzyc2+eTgmkgOhIxUf6S
+         BDUeCh7ucPblx5vCU3jh+xHT7Ufl8nN568uL5OmBnUcENBwm8bURgtNWq1VHsGfHoQUI
+         ao+7dER7M8FSI9y9EZ9ygtz4MVXj+UtJo1J/wkLA5md3YI1VllMsFuxHqDOoAv3Q/9eq
+         pKf1KX9NK63kJsc6Lw4xl+brmE4IpG3DC+/l8nMljCwNPA2FnaRThvXhgBlOpuVAso6f
+         HVSuaVmL/BsETOwLRgDgVwyJFI+rsgciODVoEphuGnhlT6K2XNQYlcHlybGlaxaYDPjF
+         6pAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681938483; x=1684530483;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y4Qr1DXe1yvvm/vxNEQkt+SEuJu0KzbnH1GeDOIlXyQ=;
+        b=H0TKyPxN4s2nCoqil0FkbIzhIX5cYrov8FQhfLLCN49s9G2GDDi9FkfKDmUuuJtS9t
+         kW1vTTdrlvqunA7zH3ujQEtg2IM66HtvK/0GnNG/9Om4ZxyZJf/aU1NGRC0c36Sonj9k
+         8tGpioVSSgv1uB13DNKi/QGrLykh4uKe7ot0NZ2BHdt9pijSzp4XrHhMdRaWoUWRNXzo
+         bfnq7BnhXr70GTnVhJclQ/40Gt3xOFDYjTrhNGedoIDGLUYO4xqQj6DhZTG+4smGeY2I
+         asfsqkVfeQoKJ+s5n+/RPsLAWSLEAqiGDdwq0RnTWN7TnNvWn5xDPO3QvBJeizO3E6qr
+         AHmg==
+X-Gm-Message-State: AAQBX9dYXVrQQ8OkvxGf05Pum8R/n0+/FluwhXNruc5qmBmaRVxF7UTD
+        1IQnPYgPpi/d5Dtqar14oRZgYQ==
+X-Google-Smtp-Source: AKy350bRPbKgT0N5fxItGxuOvv+MyhtWesynq8EjEf51YmaoGEZIZO4bHS/rGvjxJZSOp9eSI5UMZA==
+X-Received: by 2002:ac2:4833:0:b0:4cc:96f8:f9c6 with SMTP id 19-20020ac24833000000b004cc96f8f9c6mr4457459lft.5.1681938483555;
+        Wed, 19 Apr 2023 14:08:03 -0700 (PDT)
+Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
+        by smtp.gmail.com with ESMTPSA id r4-20020ac24d04000000b004db0a7ce483sm11410lfi.162.2023.04.19.14.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 14:08:03 -0700 (PDT)
+Message-ID: <6e55d3fa-744e-1f85-7642-6138f4e6e5a5@linaro.org>
+Date:   Wed, 19 Apr 2023 23:08:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416133422.1949-4-aweber.kernel@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way to
+ enable unused clock cleanup
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
+ <ZD2YYrOdQMD3pi7u@gerhold.net>
+ <d63d4896afe8a1a901470f88862ce608.sboyd@kernel.org>
+ <3873483f-7f7d-a146-cca9-b50f054289d4@linaro.org>
+ <6407af2a-18c6-9baf-cc9b-dcf7001812b7@linaro.org>
+ <ZD_0AmYU-N5vzv8f@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZD_0AmYU-N5vzv8f@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Artur,
 
-On Sun, Apr 16, 2023 at 03:34:13PM +0200, Artur Weber wrote:
-> The platform was originally dropped in commit bca9085e0ae9 ("ARM:
-> dts: exynos: remove Exynos4212 support (dead code)"), as there were
-> no boards using it.
+
+On 19.04.2023 16:00, Stephan Gerhold wrote:
+> On Wed, Apr 19, 2023 at 01:31:01PM +0200, Konrad Dybcio wrote:
+>> What should we do about the non-bus RPM clocks though? I don't fancy
+>> IPA_CLK running 24/7.. And Stephan Gerhold was able to achieve VDD_MIN
+>> on msm8909 with these clocks shut down (albeit with a very basic dt setup)!
+>>
+>> Taking into account the old interconnect-enabled DTs, some of the
+>> clocks would need to be on so that the QoS writes can succeed
+>> (e.g. the MAS_IPA endpoint needs IPA_CLK), it gets complicated again..
+>>
 > 
-> We will be adding a device that uses it, so add it back.
+> I guess MSM8996 is the only platform affected by this? sdm630.dtsi seems
+> to list the clock already in the a2noc and all others don't seem to have
+> an interconnect driver yet.
 > 
-> This effectively reverts commit 9e43eca3c874 ("ARM: EXYNOS: Remove
-> Exynos4212 related dead code").
+> This will be subjective and someone will surely disagree but...
 > 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-> ---
->  arch/arm/mach-exynos/Kconfig    | 5 +++++
->  arch/arm/mach-exynos/common.h   | 8 ++++++++
->  arch/arm/mach-exynos/exynos.c   | 2 ++
->  arch/arm/mach-exynos/firmware.c | 8 +++++++-
->  arch/arm/mach-exynos/pm.c       | 2 +-
->  arch/arm/mach-exynos/suspend.c  | 4 ++++
->  6 files changed, 27 insertions(+), 2 deletions(-)
+> IMO forcing all RPM clocks on during boot and keeping them enabled is
+> not part of the DT ABI. If you don't describe the hardware correctly and
+> are missing necessary clocks in the description (like the IPA_CLK on the
+> interconnect node) then your DT is wrong and should be fixed.
 > 
-> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-> index 4d3b40e4049a..b3d5df5225fe 100644
-> --- a/arch/arm/mach-exynos/Kconfig
-> +++ b/arch/arm/mach-exynos/Kconfig
-> @@ -78,6 +78,11 @@ config CPU_EXYNOS4210
->  	default y
->  	depends on ARCH_EXYNOS4
->  
-> +config SOC_EXYNOS4212
-> +	bool "Samsung Exynos4212"
-> +	default y
-> +	depends on ARCH_EXYNOS4
-> +
->  config SOC_EXYNOS4412
->  	bool "Samsung Exynos4412"
->  	default y
-> diff --git a/arch/arm/mach-exynos/common.h b/arch/arm/mach-exynos/common.h
-> index 29eb075b24a4..c9e85d33c309 100644
-> --- a/arch/arm/mach-exynos/common.h
-> +++ b/arch/arm/mach-exynos/common.h
-> @@ -15,6 +15,7 @@
->  #define EXYNOS3_SOC_MASK	0xFFFFF000
->  
->  #define EXYNOS4210_CPU_ID	0x43210000
-> +#define EXYNOS4212_CPU_ID	0x43220000
->  #define EXYNOS4412_CPU_ID	0xE4412200
->  #define EXYNOS4_CPU_MASK	0xFFFE0000
->  
-> @@ -34,6 +35,7 @@ static inline int is_samsung_##name(void)	\
->  
->  IS_SAMSUNG_CPU(exynos3250, EXYNOS3250_SOC_ID, EXYNOS3_SOC_MASK)
->  IS_SAMSUNG_CPU(exynos4210, EXYNOS4210_CPU_ID, EXYNOS4_CPU_MASK)
-> +IS_SAMSUNG_CPU(exynos4212, EXYNOS4212_CPU_ID, EXYNOS4_CPU_MASK)
->  IS_SAMSUNG_CPU(exynos4412, EXYNOS4412_CPU_ID, EXYNOS4_CPU_MASK)
->  IS_SAMSUNG_CPU(exynos5250, EXYNOS5250_SOC_ID, EXYNOS5_SOC_MASK)
->  IS_SAMSUNG_CPU(exynos5410, EXYNOS5410_SOC_ID, EXYNOS5_SOC_MASK)
-> @@ -52,6 +54,12 @@ IS_SAMSUNG_CPU(exynos5800, EXYNOS5800_SOC_ID, EXYNOS5_SOC_MASK)
->  # define soc_is_exynos4210()	0
->  #endif
->  
-> +#if defined(CONFIG_SOC_EXYNOS4212)
-> +# define soc_is_exynos4212()	is_samsung_exynos4212()
-> +#else
-> +# define soc_is_exynos4212()	0
-> +#endif
-> +
->  #if defined(CONFIG_SOC_EXYNOS4412)
->  # define soc_is_exynos4412()	is_samsung_exynos4412()
->  #else
-> diff --git a/arch/arm/mach-exynos/exynos.c b/arch/arm/mach-exynos/exynos.c
-> index 51a247ca4da8..5671621f1661 100644
-> --- a/arch/arm/mach-exynos/exynos.c
-> +++ b/arch/arm/mach-exynos/exynos.c
-> @@ -178,6 +178,7 @@ static void __init exynos_dt_machine_init(void)
->  		exynos_cpuidle.dev.platform_data = &cpuidle_coupled_exynos_data;
->  #endif
->  	if (of_machine_is_compatible("samsung,exynos4210") ||
-> +	    of_machine_is_compatible("samsung,exynos4212") ||
->  	    (of_machine_is_compatible("samsung,exynos4412") &&
->  	     (of_machine_is_compatible("samsung,trats2") ||
->  		  of_machine_is_compatible("samsung,midas") ||
-> @@ -192,6 +193,7 @@ static char const *const exynos_dt_compat[] __initconst = {
->  	"samsung,exynos3250",
->  	"samsung,exynos4",
->  	"samsung,exynos4210",
-> +	"samsung,exynos4212",
->  	"samsung,exynos4412",
->  	"samsung,exynos5",
->  	"samsung,exynos5250",
-> diff --git a/arch/arm/mach-exynos/firmware.c b/arch/arm/mach-exynos/firmware.c
-> index 2da5b60b59e2..110c8064ee64 100644
-> --- a/arch/arm/mach-exynos/firmware.c
-> +++ b/arch/arm/mach-exynos/firmware.c
-> @@ -63,12 +63,18 @@ static int exynos_cpu_boot(int cpu)
->  	 *
->  	 * On Exynos5 devices the call is ignored by trustzone firmware.
->  	 */
-> -	if (!soc_is_exynos4210() && !soc_is_exynos4412())
-> +	if (!soc_is_exynos4210() && !soc_is_exynos4412() &&
-> +	    !soc_is_exynos4212())
-
-Seems more logical to have 4212 before 4412 here.
-
->  		return 0;
->  
->  	/*
->  	 * The second parameter of SMC_CMD_CPU1BOOT command means CPU id.
-> +	 * But, Exynos4212 has only one secondary CPU so second parameter
-> +	 * isn't used for informing secure firmware about CPU id.
->  	 */
-> +	if (soc_is_exynos4212())
-> +		cpu = 0;
-
-Is it necessary to set cpu = 0?  Are there any obvious issues without
-it (like second cpu not being brought up)?  It seems vendor kernel
-does this for both exynos4210 and exynos4212 [1], but mainline has not
-done this for exynos4210 and there has been no reported issues on for
-that platform as far as I know.
-
-The assembly that handles SMC_CMD_CPU1BOOT in sboot.bin from firmware
-version T310XXSBQB2 is identical to what is found in sboot.bin from
-exynos4412-galaxy-s3, and it uses the cpu arg in both cases, so seems
-likely that we need this and I am mostly asking out of curiosity.
-
-[1] https://github.com/krzk/linux-vendor-backup/blob/mokee/android-3.4-samsung-galaxy-tab-s-10.5-sm-t805-exynos5420/arch/arm/mach-exynos/platsmp.c#L225-L229
-
-Best regards,
-Henrik Grimler
-
->  	exynos_smc(SMC_CMD_CPU1BOOT, cpu, 0, 0);
->  	return 0;
->  }
-> diff --git a/arch/arm/mach-exynos/pm.c b/arch/arm/mach-exynos/pm.c
-> index 30f4e55bf39e..9b6db04e4e34 100644
-> --- a/arch/arm/mach-exynos/pm.c
-> +++ b/arch/arm/mach-exynos/pm.c
-> @@ -161,7 +161,7 @@ void exynos_enter_aftr(void)
->  
->  	exynos_pm_central_suspend();
->  
-> -	if (soc_is_exynos4412()) {
-> +	if (soc_is_exynos4412() || soc_is_exynos4212()) {
->  		/* Setting SEQ_OPTION register */
->  		pmu_raw_writel(S5P_USE_STANDBY_WFI0 | S5P_USE_STANDBY_WFE0,
->  			       S5P_CENTRAL_SEQ_OPTION);
-> diff --git a/arch/arm/mach-exynos/suspend.c b/arch/arm/mach-exynos/suspend.c
-> index 3bf14ca78b62..df1e10033f90 100644
-> --- a/arch/arm/mach-exynos/suspend.c
-> +++ b/arch/arm/mach-exynos/suspend.c
-> @@ -231,6 +231,7 @@ static int __init exynos_pmu_irq_init(struct device_node *node,
->  
->  EXYNOS_PMU_IRQ(exynos3250_pmu_irq, "samsung,exynos3250-pmu");
->  EXYNOS_PMU_IRQ(exynos4210_pmu_irq, "samsung,exynos4210-pmu");
-> +EXYNOS_PMU_IRQ(exynos4212_pmu_irq, "samsung,exynos4212-pmu");
->  EXYNOS_PMU_IRQ(exynos4412_pmu_irq, "samsung,exynos4412-pmu");
->  EXYNOS_PMU_IRQ(exynos5250_pmu_irq, "samsung,exynos5250-pmu");
->  EXYNOS_PMU_IRQ(exynos5420_pmu_irq, "samsung,exynos5420-pmu");
-> @@ -640,6 +641,9 @@ static const struct of_device_id exynos_pmu_of_device_ids[] __initconst = {
->  	}, {
->  		.compatible = "samsung,exynos4210-pmu",
->  		.data = &exynos4_pm_data,
-> +	}, {
-> +		.compatible = "samsung,exynos4212-pmu",
-> +		.data = &exynos4_pm_data,
->  	}, {
->  		.compatible = "samsung,exynos4412-pmu",
->  		.data = &exynos4_pm_data,
-> -- 
-> 2.40.0
+> I would see this a bit like typical optimizing C compilers nowadays. If
+> you write correct code it can optimize, e.g. drop unnecessary function
+> calls. But if you write incorrect code with undefined behavior it's not
+> the fault of the compiler if you run into trouble. The code must be
+> fixed.
 > 
+> The DT bindings don't specify that unused resources (clocks, ...) stay
+> "magically" active. They specify that that the resources you reference
+> are available. As such, I would say the OS is free to optimize here and
+> turn off unused resources.
+> 
+> The more important point IMO is not breaking all platforms without
+> interconnect drivers. This goes beyond just adding a missing clock to
+> the DT, you need to write the driver first. But having the max vote in
+> icc_smd_rpm (somehow) should hopefully take care of that.
+Hm, interesting argument.
+
+Krzysztof, Bjorn, what's your stance on this?
+
+We *need* to add unused cleanup to rpmcc for feature completion and
+there's no good way of discerning whether it's safe to do so..
+
+Doing so will make clk_ignore_unused necessary to boot with legacy DTs.
+
+Stephan argues the DTs were incomplete from the start and the breakage
+is only a result of us previously abusing what's essentially undefined
+behavior.. I think I second this, but it is *a* breakage so I want to
+know your opinion.
+
+FWIW the same happens when we have simple-framebuffer enabled and then
+introduce dispcc on a given platform without adding the clocks under
+the simplefb node and we've not been frowning upon that too much, so I'd
+be willing to give it a pass if you're okay with it..
+
+Not caring about this would make things far, far easier really..
+
+Konrad
+> 
+>> I suppose something like this would work-ish:
+>>
+>> 0. remove clock handles as they're now contained within icc and
+>>    use them as a "legacy marker"
+>> 1. add:
+>> 	if (qp->bus_clocks)
+>> 		// skip qos writes
+> 
+> Maybe you can just check if all necessary clocks for QOS are there or
+> not? I don't think it's a problem to skip it on broken DTs. I think it
+> would be even fine to refuse loading the interconnect driver completely
+> and just have the standard max vote (as long as that results in a
+> booting system).
+> 
+>>
+>> This will:
+>> - let us add is_enabled so that all RPM clocks bar XO_A will be cleaned up
+>> - save massively on code complexity
+>>
+> 
+> +1
+> 
+>> at the cost of retroactively removing features (QoS settings) for people
+>> with old DTs and new kernels (don't tell Torvalds!)
+>>
+> 
+> I doubt anyone will notice :p
+> 
+>> This DTB ABI stuff really gets in the way sometimes :/ We're only now
+>> fixing up U-Boot to be able to use upstream Linux DTs and other than
+>> that I think only OpenBSD uses it with 8280.. Wish we could get rid of
+>> all old junk once and then establish immutability but oh well..
+> 
+> Nice, thanks a lot for working on addressing the Qualcomm DT mess in
+> U-Boot. I've been meaning to work this myself for a long time but never
+> found the time to start... :')
+> 
+> Thanks,
+> Stephan
