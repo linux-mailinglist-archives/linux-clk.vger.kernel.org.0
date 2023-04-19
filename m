@@ -2,130 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7B36E77D6
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Apr 2023 12:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E796E77F9
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Apr 2023 13:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbjDSKzc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Apr 2023 06:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S231844AbjDSLDd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Apr 2023 07:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjDSKz3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Apr 2023 06:55:29 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB1146F4
-        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 03:55:02 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4edbd6cc46bso2647740e87.2
-        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 03:55:02 -0700 (PDT)
+        with ESMTP id S231593AbjDSLDb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Apr 2023 07:03:31 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388D946B4
+        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 04:03:30 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-54f6a796bd0so380215167b3.12
+        for <linux-clk@vger.kernel.org>; Wed, 19 Apr 2023 04:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681901700; x=1684493700;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lh/sqHL3qHKRy6dQR9+KQaAuRIDGOMEf4MBRJHiB854=;
-        b=N5fsIoDmgtEt/kcUKU0QATGP7wRO0N11y0zOW5T0Yg/sEWU0itWCnApN8KjjAMbJ4H
-         UzpUmzhkgUkI5YoWZfKAhnGC9ZlN1K7h+V9rYKUdmh6VG8drZXpIuQdiW4Yl0e9bW7kv
-         KcIOzhLrfnws8zkxXZRbc5Fs/hXR+rdLUTj3ighFEs90DZqUGK1SAUZgbWBy3rqGuLhQ
-         eA7ovAOYp0/UXNxbl0cLAOvECynlzfdOKHj2GwTdJmbKQsIesQVODgcYrVMkakn+OXyp
-         ZInZYY442RScnrYcIw/0pA0sBdTRlTDHWMwKPz1wLBTHCAKDxpJpPc+C6yGrm6XoNnMi
-         OGrQ==
+        d=gmail.com; s=20221208; t=1681902209; x=1684494209;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AZtZFW4Yu8/s9hisFwTitWaI2cjRerxPZcc9cSg2rPE=;
+        b=jfUC/JrMl5HBoSD8vzvfnPIPKcL9zGugtYiYjLVIoE5hCxJz5aERW2NkEn1mrG+oJV
+         AJ2cGlzuHwMZsQhzB+PumeC6fHkSGGG4EP3XExXEW2xC1unTIiYxBhGyy1cGSImyKfSh
+         0l40U69pxec1llfmtFKtBoKY11ChWJfZcLPVdYsE5HtWoAr5q3SnTgOEWjry7WO2zBcj
+         pcyI1UIehQjC/j1PXgoJufhFSmVnCQqK0Qn2Cposas3kN2nw+GtFMy9itoYN2sOpP5r3
+         RElcCXWnS+cnLpbBsNiodvYeTEcE1W6L6i31Kfg8L1/tMCaXHLCaGedWQxYr9XvsTHhL
+         PY3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681901700; x=1684493700;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lh/sqHL3qHKRy6dQR9+KQaAuRIDGOMEf4MBRJHiB854=;
-        b=EtGgTyn/asMLLraF/l8nPLU6XXMjOmVDmnssljDSKM9hRjU7ULy9hmi5dFGVv8wZ5l
-         F3cefc108uO0auiaI1nKL7AuMlOQ8HzqZI25BWTbEyT4D1qa2+gO4ub+oevzezX19bPr
-         excvHv99ZvM/1g8C27Q4L9JLGSWqmEQ9q5xqBYOfsTKxD4T8n8t0sM9j2pQ+2uqDIvTB
-         E23MgMGLXCLZipS4NkZb9UDF7DDEp9XXx5QRt+uM6gYcdzwwci6qFHqV1skufRfHLbXb
-         yZIJkxJ4a+guRtALd+ZFZHU3mMh65ZpCGll2EizynPD+pEtzZsk1qFySlmOsBYqPpQ4m
-         bM6g==
-X-Gm-Message-State: AAQBX9cgzSsC1enTfUUnuXbzVDYxBAc8iZAvWQP6ZQX6pp0da2rooIJ6
-        vxAu8zSz3tvPwpTZmp2njExzRw==
-X-Google-Smtp-Source: AKy350Z6ikEpiz+UqB2/wfMi4ArQIxiTpGKOyPcyl4zyXnvhdgCwOAbXSMbb9famVCg8NVkkDb/ZBQ==
-X-Received: by 2002:a05:6512:204:b0:4db:d97:224d with SMTP id a4-20020a056512020400b004db0d97224dmr3921802lfo.19.1681901699942;
-        Wed, 19 Apr 2023 03:54:59 -0700 (PDT)
-Received: from [192.168.1.101] (abyj144.neoplus.adsl.tpnet.pl. [83.9.29.144])
-        by smtp.gmail.com with ESMTPSA id e7-20020ac25467000000b004edc20b8929sm1243763lfn.69.2023.04.19.03.54.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 03:54:59 -0700 (PDT)
-Message-ID: <65e285d0-e3a8-030d-ee9e-28b875526288@linaro.org>
-Date:   Wed, 19 Apr 2023 12:54:57 +0200
+        d=1e100.net; s=20221208; t=1681902209; x=1684494209;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AZtZFW4Yu8/s9hisFwTitWaI2cjRerxPZcc9cSg2rPE=;
+        b=GfmmbitpId+D8Tm+LpPiNf0RHBFslbD7PNDUERxw+6lGVTg+OLb0unBQ86ZGciXeK5
+         6TuOT0JXcALl0AcHRrGeWg9iO+6/+tCMX+xjyZBaEyKY3fzV9YNx2jRqa3XQKznHVqDW
+         Kq0WTrBr+qSN79h04SQx3TMyNUWg2u/Ci0Mp9qY5c7ZJlSFyM5uoQ19fCot0q/MhSXep
+         drNEJI2PRUMmR0Og2pRDzx+EomhOnhFwTThy+9prwS594cCp97sj4jn/M8zyBbwEYSbs
+         86SkxD8+DHMJHJl6TGEGj4X4OxkPuTmZ1R7wGwZ+FdkHHHq9OJdga/CraWJzNrsS5ecM
+         9Z1w==
+X-Gm-Message-State: AAQBX9cMZ7jFIjAnfGoODqoLQpJVa3GFT7U6Uu9dTeWpLI9nxEwXUFwI
+        79yuCavgHU+cVMA2GGeH9Np811hVPemWuj4j/xs=
+X-Google-Smtp-Source: AKy350a1axSdqNbQE9/Wu3QBoJySvv+BHKuWixkV5Rj8uRt+NptGgvr5ZT7S2wqRwAdFH74QuTidxnO9I3xDtKYErbA=
+X-Received: by 2002:a81:643:0:b0:54f:85bc:a808 with SMTP id
+ 64-20020a810643000000b0054f85bca808mr1852708ywg.16.1681902208520; Wed, 19 Apr
+ 2023 04:03:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V2 4/4] arm64: dts: qcom: ipq9574: rename al02-c7 dts to
- rdp433
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-References: <20230417053355.25691-1-quic_devipriy@quicinc.com>
- <20230417053355.25691-5-quic_devipriy@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230417053355.25691-5-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Reply-To: mis.vera145@gmail.com
+Sender: adamsfrancis140@gmail.com
+Received: by 2002:a05:7010:218c:b0:344:4f01:f1f with HTTP; Wed, 19 Apr 2023
+ 04:03:27 -0700 (PDT)
+From:   Vera Wilfred <mis.vera145@gmail.com>
+Date:   Wed, 19 Apr 2023 12:03:27 +0100
+X-Google-Sender-Auth: VhMy34hnjLDOgImwuuurqZ3v79s
+Message-ID: <CAD3yhOUetLWku9w1EXAcbSk4HoudPHpM+3sQXos9+-Kx9TEmzg@mail.gmail.com>
+Subject: Ich bin Mis Vera Wilfred
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+--=20
+Hallo,
 
+Ich bin Mis Vera Wilfred aus Abidjan Cote D'Ivoire (Elfenbeink=C3=BCste)
+Ich bin 22 Jahre alt, M=C3=A4dchen, Waise, das hei=C3=9Ft, weil ich keine E=
+ltern
+habe, ich habe ungef=C3=A4hr (10.500.000,00 US-Dollar) Zehn Millionen,
+f=C3=BCnfhunderttausend vereint Staatsdollar.
 
-On 17.04.2023 07:33, Devi Priya wrote:
-> Rename the dts after Reference Design Platform(RDP) to adopt
-> standard naming convention.
-> 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Was ich von meinem verstorbenen Vater geerbt habe, hat er den Fonds
+auf einem Fest- / Wechselkonto bei einer der besten Banken hier in
+Abidjan hinterlegt.
 
-Konrad
->  Changes since V9:
-> 	- Renamed the Board Device Tree Source to use the RDP numbers
-> 
->  arch/arm64/boot/dts/qcom/Makefile                               | 2 +-
->  .../boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts}   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->  rename arch/arm64/boot/dts/qcom/{ipq9574-al02-c7.dts => ipq9574-rdp433.dts} (97%)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index e0e2def48470..f926e7e1aa7d 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -9,7 +9,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
-> -dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-al02-c7.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp433.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> similarity index 97%
-> rename from arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-> rename to arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> index 2c8430197ec0..2ce8e09e7565 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
->  /*
-> - * IPQ9574 AL02-C7 board device tree source
-> + * IPQ9574 RDP433 board device tree source
->   *
->   * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
->   * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+mein Vater hat meinen Namen als seine einzige Tochter und einziges
+Kind f=C3=BCr die n=C3=A4chsten Angeh=C3=B6rigen des Fonds verwendet.
+
+Zweitens bekunden Sie mit Ihrer vollen Zustimmung, mit mir zu diesem
+Zweck zusammenzuarbeiten, Ihr Interesse, indem Sie mir antworten,
+damit ich Ihnen die notwendigen Informationen und die Details zum
+weiteren Vorgehen zukommen lassen kann. Ich werde Ihnen 20% des Geldes
+anbieten deine Hilfe f=C3=BCr mich.
+
+M=C3=B6ge Gott Sie f=C3=BCr Ihre schnelle Aufmerksamkeit segnen. Meine best=
+en
+und liebensw=C3=BCrdigen Gr=C3=BC=C3=9Fe an Sie und Ihre ganze Familie, wen=
+n Sie mich
+f=C3=BCr weitere Details kontaktieren.
+
+Ich brauche Ihre Assistentin, um mir zu helfen, diesen Fonds in Ihrem
+Land zu investieren. Kontaktieren Sie mich jetzt f=C3=BCr weitere Details.
+Vielen Dank
+
+Vera Wilfred.
