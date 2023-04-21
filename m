@@ -2,119 +2,134 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D066EAE5B
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Apr 2023 17:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5766EAF0B
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Apr 2023 18:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjDUP4q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Apr 2023 11:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
+        id S233125AbjDUQ2I (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Apr 2023 12:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjDUP4o (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Apr 2023 11:56:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B712C87;
-        Fri, 21 Apr 2023 08:56:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28F0C64EEE;
-        Fri, 21 Apr 2023 15:56:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8977EC433EF;
-        Fri, 21 Apr 2023 15:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682092602;
-        bh=XU1f54RNsab+tDqSiS+rVrizLk0jrqbfUMef83cufsg=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=Selg5O2+RUBECvFqLlQohN+8XjmUmtjKxpt4N/aE+OJDKSVkhXoXgLEjop/Rn0uBU
-         VoZ+QeJFK7biU3TxB0Jo1UhiC4bSyVYcIndBVDCptM9KAPCL5kputKxE0JGqeBNgFM
-         0r+LoXgQtPi67fFXw4RrM7BgZ3HFr+VvGSpYklj5Rrb98FxEWfONRo7e2uUf1jM0qU
-         EcWS2BA/fRvBP+ZBkxp8r6637cMh4R4J8SM/kInxJBqZxhDcVJEqHAyzJcptJzhDA1
-         uc3VZF3QJs4oo+X90YLypB8pn2eKkyfEI2DtliTTFXqVsPc8tz9RJ+RyPwECVgO1Qk
-         K4+LKDmxWSgHQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 76BB4C77B61;
-        Fri, 21 Apr 2023 15:56:42 +0000 (UTC)
-From:   Yang Xiwen via B4 Relay 
-        <devnull+forbidden405.outlook.com@kernel.org>
-Date:   Fri, 21 Apr 2023 23:56:38 +0800
-Subject: [PATCH] clk: use ULONG_MAX as the initial value for the iteration
- in clk_mux_determine_rate_flags()
+        with ESMTP id S233088AbjDUQ2G (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Apr 2023 12:28:06 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED713F89
+        for <linux-clk@vger.kernel.org>; Fri, 21 Apr 2023 09:28:01 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-506b8c6bc07so3097934a12.2
+        for <linux-clk@vger.kernel.org>; Fri, 21 Apr 2023 09:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682094479; x=1684686479;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S51TzJEKK9WWVDYr4Tc1gJpcMzkHWh1WXqblt4YDlC0=;
+        b=CETPV90ihN3b3DZOnlv9hQKr0fh4gspi1VCr9VdP4hwDkdtmZ9AgF5tdmnECAHPp+V
+         RKWp1KvQD2X5o8mx+dj5hshVZywtPp011NNTJ1RVMADvlgve1fngNYOOtu8/mkGQv8S3
+         UQ4bja+i7aMHCdtiERCr0Kgvko21kA8OJ2FNFCa6SRpFiBUyyaljnZWHdVDyu8sksfeI
+         h/qQuwtNvzj1lVvuYVJr/87Ah+oIUnGt4mEOfV5eBH3noIbpPg+/FxLR9om20wPDR89K
+         TyR4zf0P3Hb8lkQ6duOweA3p9nR6TklUsLo05M+ge6x8oJzsaY0bBFh/y2FVuvSzXZaw
+         IJhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682094479; x=1684686479;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S51TzJEKK9WWVDYr4Tc1gJpcMzkHWh1WXqblt4YDlC0=;
+        b=PhjgBUrZuE+ZQcqbAMoYwhN2v1A1LbogE83vKVC6RoEu7cXjiSWH9X38+zXyBetFu2
+         97r83seOgEky3c6oDHZg4nIjDXBrXMgn1/JL5vv9Lim4o4jUAt8VgjTjNBrT673fylTs
+         Gm+MZATX6QOQa0VjGBMV9rRxROgzhH4mf9RdyktiGhhMNx8vfmY3kr8+6UFAx9xkM7mC
+         FIubEAAWmy/UOtn/CeCXwX0MLCwNid8lcM4wJ8nm8fbvnaSICT74OuUIx8iJi42+J9hX
+         KRL4o6Gs8gaVuDuzMPfnYp7vNqQjk5OhQTIuEwQ7GqxV6OZDtmTvesqrBgik5aEgl0/Y
+         voGw==
+X-Gm-Message-State: AAQBX9cdAm877H66RRgJu5Vj2tmHu08j8zSpt/kTVQRbbhMfkP39ChZd
+        ipDOXUSdAf+e8ZQ569Mg4DQgIg==
+X-Google-Smtp-Source: AKy350YDsOgKLoK5tAIioZExs34dWYBZrpIx7o0tWafmx6898YyxY8cwVVzZn6+Qk1owXo7rwySlYg==
+X-Received: by 2002:a05:6402:6c7:b0:504:9345:ffa4 with SMTP id n7-20020a05640206c700b005049345ffa4mr7172456edy.21.1682094479554;
+        Fri, 21 Apr 2023 09:27:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:687d:8c5:41cb:9883? ([2a02:810d:15c0:828:687d:8c5:41cb:9883])
+        by smtp.gmail.com with ESMTPSA id v1-20020aa7dbc1000000b005029c47f814sm1983225edt.49.2023.04.21.09.27.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Apr 2023 09:27:59 -0700 (PDT)
+Message-ID: <f8aae62c-e3c5-5fca-7a56-0bc9c0efbd66@linaro.org>
+Date:   Fri, 21 Apr 2023 18:27:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v8 2/8] dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3
+ PHY
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1680693149.git.quic_varada@quicinc.com>
+ <1efa9a64499767d939efadd0aef897ac4a6e54eb.1680693149.git.quic_varada@quicinc.com>
+ <0a66e291-a86d-1ff9-e674-839b8cc8f1da@linaro.org>
+ <ZDz9t9TkBqZ1fcfn@hovoldconsulting.com>
+ <20230421095838.GA5813@varda-linux.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230421095838.GA5813@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230421-clk-v1-1-bb503f2f2cf3@outlook.com>
-X-B4-Tracking: v=1; b=H4sIADWyQmQC/x2MQQqEMAwAvyI5W7BVevAryx7aNGpQu0siIoh/t
- 3ocZpgTlIRJoa9OENpZ+ZcL2LoCnEIeyXAqDK5xbdM5a3CZje/QR0/OYopQyhiUTJSQcXraNeh
- G8oi/0MDHu/98r+sG21J/qm4AAAA=
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Xiwen <forbidden405@outlook.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1682092599; l=1447;
- i=forbidden405@outlook.com; s=20230415; h=from:subject:message-id;
- bh=ytvGjpTT/iD/YyNfNbs7xnF5FUQ/FGezwhki/7VVuk0=;
- b=x/5HVLQ6VewfSBPSIWtRlNHZMEnOYh3iOPFIDFCFysM+v7AJ4ZhdQ4kQumhDKGoJXg4En8/nb
- 1PAI+QnHqkmD/rLNmamWa3YjAYVPYM+hJeAj7n+hBfdW3WkYUpkddvZ
-X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
- pk=hfdpPU3AXR+t7fdv58tXCD4UzRNq+fop2TMJezFlAhM=
-X-Endpoint-Received: by B4 Relay for forbidden405@outlook.com/20230415 with auth_id=44
-X-Original-From: Yang Xiwen <forbidden405@outlook.com>
-Reply-To: <forbidden405@outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Yang Xiwen <forbidden405@outlook.com>
+On 21/04/2023 11:58, Varadarajan Narayanan wrote:
+> On Mon, Apr 17, 2023 at 10:05:11AM +0200, Johan Hovold wrote:
+>> On Thu, Apr 06, 2023 at 09:41:49AM +0200, Krzysztof Kozlowski wrote:
+>>> On 05/04/2023 13:41, Varadarajan Narayanan wrote:
+>>>> Add dt-bindings for USB3 PHY found on Qualcomm IPQ9574
+>>>>
+>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>>> ---
+>>>>  Changes in v8:
+>>>> 	- Update clock names for ipq9574
+>>>>
+>>>>  Changes in v6:
+>>>> 	- Made power-domains optional
+>>>>
+>>>> Note: In the earlier patch sets, had used the (legacy)
+>>>> specification available in qcom,msm8996-qmp-usb3-phy.yaml. Moved
+>>>> to newer specification in qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+>>>> ---
+>>>>  .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        | 43 +++++++++++++++++++---
+>>>>  1 file changed, 37 insertions(+), 6 deletions(-)
+>>
+>>>> +        clock-names:
+>>>> +          items:
+>>>> +            - const: aux
+>>>> +            - const: ref
+>>>> +            - const: com_aux
+>>>
+>>> Can anyone explain me why do we name these (here and other Qualcomm
+>>> bindings) based on clock name, not input? Just because different clock
+>>> is fed to the block, does not necessarily mean the input should be named
+>>> differently.
+>>
+>> I guess part of the answer is that this has just been copied from the
+>> vendor dts and (almost) no one but Qualcomm has access to the
+>> documentation. What would the input names be here?
+>>
+>> Also note that there are SoCs that enable both 'cfg_ahb' and 'com_aux'
+>> (e.g. sc7180).
+> 
+> The clock name definitions are auto-generated based on the clock
+> tree definitions provided by the h/w team. We followed the naming
+> pattern done in the previous SoCs.
 
-Currently, clk_mux_determine_rate_flags() use 0 as the initial value for
-selecting the best matching parent. However, this will choose a
-non-existant rate(0) if the requested rate is closer to 0 than the
-minimum rate the parents have.
-
-Fix that by initializing the initial value to ULONG_MAX and treat it as a
-magic number.
-
-Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
----
- drivers/clk/clk.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index ae07685c7588b..ab8a2acfac8f3 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -541,6 +541,9 @@ EXPORT_SYMBOL_GPL(__clk_is_enabled);
- static bool mux_is_better_rate(unsigned long rate, unsigned long now,
- 			   unsigned long best, unsigned long flags)
- {
-+	if (best == ULONG_MAX)
-+		return true;
-+
- 	if (flags & CLK_MUX_ROUND_CLOSEST)
- 		return abs(now - rate) < abs(best - rate);
- 
-@@ -600,7 +603,7 @@ int clk_mux_determine_rate_flags(struct clk_hw *hw,
- {
- 	struct clk_core *core = hw->core, *parent, *best_parent = NULL;
- 	int i, num_parents, ret;
--	unsigned long best = 0;
-+	unsigned long best = ULONG_MAX;
- 
- 	/* if NO_REPARENT flag set, pass through to current parent */
- 	if (core->flags & CLK_SET_RATE_NO_REPARENT) {
-
----
-base-commit: 76f598ba7d8e2bfb4855b5298caedd5af0c374a8
-change-id: 20230421-clk-64c6b6e21cdb
+Are you sure? We talk about clock inputs here.
 
 Best regards,
--- 
-Yang Xiwen <forbidden405@outlook.com>
+Krzysztof
 
