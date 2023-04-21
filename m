@@ -2,144 +2,119 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F896EAE86
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Apr 2023 17:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D066EAE5B
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Apr 2023 17:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjDUP63 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Apr 2023 11:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
+        id S232248AbjDUP4q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Apr 2023 11:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbjDUP6Y (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Apr 2023 11:58:24 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BAB15445;
-        Fri, 21 Apr 2023 08:57:53 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33LDOEZr012123;
-        Fri, 21 Apr 2023 15:57:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=g7zNvIsaxWwDnD36Bk05Up9/pLpj6vKJVgZyei7Os8w=;
- b=pTWsfBdET4InvH0+sgXNjS+VpRhKQy1BzJ/tWmL72J+5oJd9ZsjXpFUz5ylTTXypgbDX
- BbwQOaEJXx69/ZfAloeyoaMLLRAPzs0vLlCjefw0R3//nJ4kH5siAAJrQmSftym1Wrb0
- dxlh7x29YemotDcgRQAXdaVj7kS5uxVkzmLGJ75EP4NyBJ/SBDuETmUkNVDPsk7Qt/xJ
- 3BG+OAeN6N5WNzZUog1ytOMfMiaN9PkntDOM84XXEVWx9p2bIdyuGV1ln9jGYkmU0Pmh
- Nu8vYv7wO56jhtfhJkyWZiRA0lIi5Ix7ZV+9wmHemKdfUVKY+ZYE1brrbHl5zvtBRhGw Jw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q3cpyt2np-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 15:57:40 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33LFvdsX017745
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Apr 2023 15:57:39 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 21 Apr 2023 08:57:34 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v9 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Fri, 21 Apr 2023 21:24:50 +0530
-Message-ID: <1fed70d69f9ba3c61f34895f956bf604cece9c71.1682092324.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1682092324.git.quic_varada@quicinc.com>
-References: <cover.1682092324.git.quic_varada@quicinc.com>
+        with ESMTP id S232002AbjDUP4o (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Apr 2023 11:56:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B712C87;
+        Fri, 21 Apr 2023 08:56:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28F0C64EEE;
+        Fri, 21 Apr 2023 15:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8977EC433EF;
+        Fri, 21 Apr 2023 15:56:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682092602;
+        bh=XU1f54RNsab+tDqSiS+rVrizLk0jrqbfUMef83cufsg=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=Selg5O2+RUBECvFqLlQohN+8XjmUmtjKxpt4N/aE+OJDKSVkhXoXgLEjop/Rn0uBU
+         VoZ+QeJFK7biU3TxB0Jo1UhiC4bSyVYcIndBVDCptM9KAPCL5kputKxE0JGqeBNgFM
+         0r+LoXgQtPi67fFXw4RrM7BgZ3HFr+VvGSpYklj5Rrb98FxEWfONRo7e2uUf1jM0qU
+         EcWS2BA/fRvBP+ZBkxp8r6637cMh4R4J8SM/kInxJBqZxhDcVJEqHAyzJcptJzhDA1
+         uc3VZF3QJs4oo+X90YLypB8pn2eKkyfEI2DtliTTFXqVsPc8tz9RJ+RyPwECVgO1Qk
+         K4+LKDmxWSgHQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 76BB4C77B61;
+        Fri, 21 Apr 2023 15:56:42 +0000 (UTC)
+From:   Yang Xiwen via B4 Relay 
+        <devnull+forbidden405.outlook.com@kernel.org>
+Date:   Fri, 21 Apr 2023 23:56:38 +0800
+Subject: [PATCH] clk: use ULONG_MAX as the initial value for the iteration
+ in clk_mux_determine_rate_flags()
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4tA7VCWUt7REh-LPirB692MnJrMh1246
-X-Proofpoint-ORIG-GUID: 4tA7VCWUt7REh-LPirB692MnJrMh1246
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-21_08,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 mlxlogscore=677 spamscore=0 mlxscore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 adultscore=0 phishscore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304210140
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230421-clk-v1-1-bb503f2f2cf3@outlook.com>
+X-B4-Tracking: v=1; b=H4sIADWyQmQC/x2MQQqEMAwAvyI5W7BVevAryx7aNGpQu0siIoh/t
+ 3ocZpgTlIRJoa9OENpZ+ZcL2LoCnEIeyXAqDK5xbdM5a3CZje/QR0/OYopQyhiUTJSQcXraNeh
+ G8oi/0MDHu/98r+sG21J/qm4AAAA=
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Xiwen <forbidden405@outlook.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1682092599; l=1447;
+ i=forbidden405@outlook.com; s=20230415; h=from:subject:message-id;
+ bh=ytvGjpTT/iD/YyNfNbs7xnF5FUQ/FGezwhki/7VVuk0=;
+ b=x/5HVLQ6VewfSBPSIWtRlNHZMEnOYh3iOPFIDFCFysM+v7AJ4ZhdQ4kQumhDKGoJXg4En8/nb
+ 1PAI+QnHqkmD/rLNmamWa3YjAYVPYM+hJeAj7n+hBfdW3WkYUpkddvZ
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=hfdpPU3AXR+t7fdv58tXCD4UzRNq+fop2TMJezFlAhM=
+X-Endpoint-Received: by B4 Relay for forbidden405@outlook.com/20230415 with auth_id=44
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: <forbidden405@outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Turn on USB related nodes
+From: Yang Xiwen <forbidden405@outlook.com>
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+Currently, clk_mux_determine_rate_flags() use 0 as the initial value for
+selecting the best matching parent. However, this will choose a
+non-existant rate(0) if the requested rate is closer to 0 than the
+minimum rate the parents have.
+
+Fix that by initializing the initial value to ULONG_MAX and treat it as a
+magic number.
+
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+---
+ drivers/clk/clk.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index ae07685c7588b..ab8a2acfac8f3 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -541,6 +541,9 @@ EXPORT_SYMBOL_GPL(__clk_is_enabled);
+ static bool mux_is_better_rate(unsigned long rate, unsigned long now,
+ 			   unsigned long best, unsigned long flags)
+ {
++	if (best == ULONG_MAX)
++		return true;
++
+ 	if (flags & CLK_MUX_ROUND_CLOSEST)
+ 		return abs(now - rate) < abs(best - rate);
+ 
+@@ -600,7 +603,7 @@ int clk_mux_determine_rate_flags(struct clk_hw *hw,
+ {
+ 	struct clk_core *core = hw->core, *parent, *best_parent = NULL;
+ 	int i, num_parents, ret;
+-	unsigned long best = 0;
++	unsigned long best = ULONG_MAX;
+ 
+ 	/* if NO_REPARENT flag set, pass through to current parent */
+ 	if (core->flags & CLK_SET_RATE_NO_REPARENT) {
 
 ---
- Changes in v5:
-	- Move "host" mode specification to board dts
-	- Due to dependency with earlier patches board dts
-	  filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+base-commit: 76f598ba7d8e2bfb4855b5298caedd5af0c374a8
+change-id: 20230421-clk-64c6b6e21cdb
 
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index bdc1434..cae1c1b 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -63,6 +63,10 @@
- 	};
- };
- 
-+&dwc_0 {
-+	dr_mode = "host";
-+};
-+
- &pcie1_phy {
- 	status = "okay";
- };
-@@ -115,6 +119,14 @@
- 	clock-frequency = <32000>;
- };
- 
-+&usb_0_qmpphy {
-+	status = "okay";
-+};
-+
-+&usb_0_qusbphy {
-+	status = "okay";
-+};
-+
- &tlmm {
- 
- 	pcie_1_pin: pcie-1-state {
-@@ -181,6 +193,10 @@
- 	};
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
+Best regards,
 -- 
-2.7.4
+Yang Xiwen <forbidden405@outlook.com>
 
