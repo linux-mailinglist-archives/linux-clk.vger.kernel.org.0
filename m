@@ -2,115 +2,234 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C131D6ECE07
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Apr 2023 15:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B1B6ECFC1
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Apr 2023 15:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjDXN2t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Apr 2023 09:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S231642AbjDXNyi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Mon, 24 Apr 2023 09:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjDXN2o (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Apr 2023 09:28:44 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D6661B8;
-        Mon, 24 Apr 2023 06:28:30 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-18665c1776dso3429632fac.2;
-        Mon, 24 Apr 2023 06:28:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682342899; x=1684934899;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/1fifvOlhjvGQRsm6j4YqMXPrKDsFNdYCXL46lCn8YU=;
-        b=ToILqyCuyxvKv8o2UEc2/BSqKu+empVWthhSOanIFg8odBdqJNaYmUpADGWK7Um9BI
-         9H0Otn8yamLbpKyVh4+af25FLtx0lNF9kMg6uaHgtNTXu89MTtAH6rENwtJIvmD8biba
-         noVDXDgmce2eap8OTyczxIT08BhSJkVOH4hiWoyfeRddDRG2nJmV0WAYydPLVLx52fNc
-         sIP3ZagcsWOGBczUcMDGOeI5r8bdPVGdUM+I7HxkPl5FJ9yaGjBXEeQ3JUIZQs6GLHCt
-         2tJqa5a69JO90MXdJ0GhEpff76hBUFu0dtcSXUmQ2hHafWrjtFA2nXVd2U2tyB3sg/YR
-         KSRg==
-X-Gm-Message-State: AAQBX9e4/Sw/aKKNjrVosG4qyQrybOUBQxAuDqDNS3lGJBrwGP0mqior
-        3xn2PqXxNCO5xL3nzv7Bl2O/dUN+Tg==
-X-Google-Smtp-Source: AKy350Z/KIM/MbuvqVhEgg+x+VUTScdkDFKPCUzehJ/arFPHhmjsjLY4NRJsXPO/Tp0B3D1Pm5Dr7Q==
-X-Received: by 2002:a05:6871:707:b0:188:5:bc87 with SMTP id f7-20020a056871070700b001880005bc87mr9645448oap.6.1682342898797;
-        Mon, 24 Apr 2023 06:28:18 -0700 (PDT)
-Received: from robh_at_kernel.org ([2605:ef80:80e7:4387:ec9f:155:c2d2:6e82])
-        by smtp.gmail.com with ESMTPSA id n17-20020a9d6f11000000b006a5d7d7f6c3sm4607867otq.7.2023.04.24.06.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 06:28:18 -0700 (PDT)
-Received: (nullmailer pid 2494968 invoked by uid 1000);
-        Mon, 24 Apr 2023 13:28:08 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linusw@kernel.org>,
+        with ESMTP id S231501AbjDXNyb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Apr 2023 09:54:31 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294387D84;
+        Mon, 24 Apr 2023 06:54:24 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 421A224E023;
+        Mon, 24 Apr 2023 21:54:16 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 24 Apr
+ 2023 21:54:16 +0800
+Received: from localhost.localdomain (113.72.145.137) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 24 Apr
+ 2023 21:54:14 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Arnd Bergmann <arnd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
-In-Reply-To: <20230424123522.18302-12-nikita.shubin@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-12-nikita.shubin@maquefel.me>
-Message-Id: <168234108008.2461298.8379802160390368703.robh@kernel.org>
-Subject: Re: [PATCH 11/43] dt-bindings: clock: add DT bindings for Cirrus
- EP93xx
-Date:   Mon, 24 Apr 2023 08:28:08 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v5 00/10] Add STG/ISP/VOUT clock and reset drivers for StarFive JH7110
+Date:   Mon, 24 Apr 2023 21:53:59 +0800
+Message-ID: <20230424135409.6648-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.137]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This patch serises are base on the basic JH7110 SYSCRG/AONCRG
+drivers and add new partial clock drivers and reset supports
+about System-Top-Group(STG), Image-Signal-Process(ISP)
+and Video-Output(VOUT) for the StarFive JH7110 RISC-V SoC. These
+clocks and resets could be used by DMA, VIN and Display modules.
 
-On Mon, 24 Apr 2023 15:34:27 +0300, Nikita Shubin wrote:
-> This adds device tree bindings for the Cirrus Logic EP93xx
-> clock block used in these SoCs.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> ---
->  .../devicetree/bindings/arm/ep93xx.yaml       | 102 ++++++++++++++++++
->  .../dt-bindings/clock/cirrus,ep93xx-clock.h   |  53 +++++++++
->  2 files changed, 155 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/ep93xx.yaml
->  create mode 100644 include/dt-bindings/clock/cirrus,ep93xx-clock.h
-> 
+Patches 1 and 2 are about the System-Top-Group clock and reset
+generator(STGCRG) part. The first patch adds docunmentation to
+describe STG bindings, and the second patch adds clock driver to
+support STG clocks and resets as auxiliary device for JH7110.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Patches 3 and 4 are about the Image-Signal-Process clock and reset
+gennerator(ISPCRG) part. The first patch adds docunmentation to
+describe ISP bindings, and the second patch adds clock driver to
+support ISP clocks and resets as auxiliary device for JH7110.
+And ISP clocks should power on and enable the SYSCRG clocks first
+before registering.
 
-yamllint warnings/errors:
+Patches 5 and 6 are about the Video-Output clock and reset
+generator(VOUTCRG) part. The first patch adds docunmentation to
+describe VOUT bindings, and the second patch adds clock driver to
+support VOUT clocks and resets as auxiliary device for JH7110.
+And VOUT clocks also should power on and enable the SYSCRG clocks
+first before registering.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/ep93xx.example.dtb: /: compatible: 'oneOf' conditional failed, one must be fixed:
-	['technologic,ts7250', 'cirrus,ep9301'] is too short
-	'liebherr,bk3' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/ep93xx.yaml
+Patch 7 adds the maintainer who take charge of the STGCRG/ISPCRG/VOUTCRG
+for JH7110.
+Patch 8 adds struct members to support STG/ISP/VOUT resets.
+Patch 9 adds external clocks which ISP and VOUT clock driver need.
+Patch 10 adds device node about STGCRG, ISPCRG and VOUTCRG to JH7110 dts.
 
-doc reference errors (make refcheckdocs):
+Patches 2, 4, 6, 7 and 8 are dependent on the patchset [1] which
+is about JH71x0 clock and reset driver, and the patches [2][3][4]
+are complementary to the basic drivers.
+Patchdes 9 and 10 are dependent on the patchset [1] and [5] which is
+about JH7110 device tree and PMU node.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230424123522.18302-12-nikita.shubin@maquefel.me
+This patchset should be applied after their patchset:
+[1] https://lore.kernel.org/all/20230401111934.130844-1-hal.feng@starfivetech.com/
+[2] https://lore.kernel.org/all/20230413205528.4044216-1-sboyd@kernel.org/
+[3] https://lore.kernel.org/all/20230417074115.30786-3-hal.feng@starfivetech.com/
+[4] https://lore.kernel.org/all/20230418123756.62495-2-hal.feng@starfivetech.com/
+[5] https://lore.kernel.org/all/20230116074259.22874-4-walker.chen@starfivetech.com/
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Changes since v4:
+- Rebased on the lastest patches about fixing the basic clock and reset drivers.
+- Dropped the 'dev_set_drvdata()' in STG clock driver.
+- Modified the data with 'dev_set_drvdata()' in ISP/VOUT clock driver
+  and move the struct about the data to JH7110 header file, which both
+  ISP and VOUT clock drivers will use.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+v4: https://lore.kernel.org/all/20230411135558.44282-1-xingyu.wu@starfivetech.com/
 
-pip3 install dtschema --upgrade
+Changes since v3: 
+- Rebased on the lastest JH71X0 clock and reset driver of patchset[1]
+  and modified the parameters of the register reset functions.
+- The patch 1 combined three commits on STG/ISP/VOUT resets into one.
+  And Changed the auxiliary_device_id name from
+  "clk_starfive_jh71x0.reset-*" to "clk_starfive_jh7110_sys.rst-*".
+- Added a maintainer in STARFIVE JH71X0 CLOCK DRIVERS.
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+v3: https://lore.kernel.org/all/20230314124404.117592-1-xingyu.wu@starfivetech.com/
+
+Changes since v2: 
+Patch 1:
+- Dropped the modification of maintainers.
+- Modified clock and reset names in the dt-bindings header files.
+Patch 3:
+- Added 'Emil Renner Berthing' as the author.
+- Used 'default m' in Kconfig file.
+- Changed the flags of 'CLK_IGNORE_UNUSED' to 0 or 'CLK_IS_CRITICAL'.
+Patch 4:
+- Dropped the 'reset-names' property.
+- Shortened the clock and reset names in the dt-bindings header files.
+Pacth 6:
+- Used 'default m' in Kconfig file.
+- Changed the flags of 'CLK_IGNORE_UNUSED' to 0.
+- Set reset_control struct to a local variable because it just is used
+  one time in probe.
+Pacth 7:
+- Dropped the 'reset-names' property.
+Patch 9:
+- Used 'default m' in Kconfig file.
+- Set reset_control struct to a local variable because it just is used
+  one time in probe.
+Patch 10:
+- Changed the order of externel clock in alphanumerical order.
+Patch 11:
+- Dropped the 'reset-names' property in ispcrg and voutcrg node.
+
+v2: https://lore.kernel.org/all/20230221083323.302471-1-xingyu.wu@starfivetech.com/
+
+Changes since v1:
+- Modified the binding and dropped the indentation.
+- Removed the useless header files in the drivers.
+- Used an array lookup instead of a pile of conditions about parent
+  clocks' name.
+- Added clocks operation on driver remove.
+
+v1: https://lore.kernel.org/all/20230120024445.244345-1-xingyu.wu@starfivetech.com/
+
+Emil Renner Berthing (1):
+  clk: starfive: Add StarFive JH7110 System-Top-Group clock driver
+
+Xingyu Wu (9):
+  dt-bindings: clock: Add StarFive JH7110 System-Top-Group clock and
+    reset generator
+  dt-bindings: clock: Add StarFive JH7110 Image-Signal-Process clock and
+    reset generator
+  clk: starfive: Add StarFive JH7110 Image-Signal-Process clock driver
+  dt-bindings: clock: Add StarFive JH7110 Video-Output clock and reset
+    generator
+  clk: starfive: Add StarFive JH7110 Video-Output clock driver
+  MAINTAINERS: Update maintainer of JH71x0 clock drivers
+  reset: starfive: jh7110: Add StarFive STG/ISP/VOUT resets support
+  riscv: dts: starfive: jh7110: Add DVP and HDMI TX pixel external
+    clocks
+  riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
+
+ .../clock/starfive,jh7110-ispcrg.yaml         |  87 +++++++
+ .../clock/starfive,jh7110-stgcrg.yaml         |  82 ++++++
+ .../clock/starfive,jh7110-voutcrg.yaml        |  90 +++++++
+ MAINTAINERS                                   |   1 +
+ .../jh7110-starfive-visionfive-2.dtsi         |   8 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  67 +++++
+ drivers/clk/starfive/Kconfig                  |  33 +++
+ drivers/clk/starfive/Makefile                 |   3 +
+ .../clk/starfive/clk-starfive-jh7110-isp.c    | 232 +++++++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-stg.c    | 173 +++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-vout.c   | 239 ++++++++++++++++++
+ drivers/clk/starfive/clk-starfive-jh7110.h    |   6 +
+ .../reset/starfive/reset-starfive-jh7110.c    |  30 +++
+ .../dt-bindings/clock/starfive,jh7110-crg.h   |  74 ++++++
+ .../dt-bindings/reset/starfive,jh7110-crg.h   |  60 +++++
+ 15 files changed, 1185 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-voutcrg.yaml
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-isp.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-stg.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-vout.c
+
+
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+prerequisite-patch-id: 388b8adbb0fe2daf4d07a21eafd4f1bd50ce2403
+prerequisite-patch-id: 1117ecaa40a353c667b71802ab34ecf9568d8bb2
+prerequisite-patch-id: b00c6b21fbd0353d88b7c9b09093ba30b765f45b
+prerequisite-patch-id: 08ec9027e8a5c6fdf201726833168c7464a9b94d
+prerequisite-patch-id: fb5120248e48fe1faf053ae0b490c92507ec2b44
+prerequisite-patch-id: 4b93d8d590b0a2abe7b4be5287232c494c35be4a
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: c09c4c68af017b8e5c97b515cb50b70c18a2e705
+prerequisite-patch-id: 0df8ccb0e848c2df4c2da95026494bebecede92d
+prerequisite-patch-id: 315303931e4b6499de7127a88113763f86e97e16
+prerequisite-patch-id: 40cb8212ddb024c20593f73d8b87d9894877e172
+prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
+prerequisite-patch-id: d57cc467fb036241b9276320ff076c4a30d376d6
+prerequisite-patch-id: 6e563d68bc5dbf951d4ced17897f9cc4d56169fe
+prerequisite-patch-id: 61ec2caa21fd0fc60e57977f7d16d3f72b135745
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: 9007c8610fdcd387592475949864edde874c20a2
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 0a0ac5a8a90655b415f6b62e324f3db083cdaaee
+prerequisite-patch-id: 1387a7e87b446329dfc21f3e575ceae7ebcf954c
+prerequisite-patch-id: f6c6ca1490a996ef0183bb92e66ed4f8744ae28d
+prerequisite-patch-id: 905cffb08818b964b9cdc52f2ab5ab12c93fb553
+prerequisite-patch-id: fdb2280da77e8d8c22e37b8f44d8e34311217127
+prerequisite-patch-id: 2ddada18ab6ea5cd1da14212aaf59632f5203d40
+-- 
+2.25.1
 
