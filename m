@@ -2,82 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4A96EF173
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Apr 2023 11:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 123A06EF185
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Apr 2023 11:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240090AbjDZJwz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Apr 2023 05:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S240301AbjDZJ6Y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Apr 2023 05:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240086AbjDZJwz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Apr 2023 05:52:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ECB19B0;
-        Wed, 26 Apr 2023 02:52:52 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33Q8Zxts011189;
-        Wed, 26 Apr 2023 09:52:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=ZMknH08rBNRYhdFyzois4KIAtz1F0F4+lyQpgqg38qY=;
- b=c08p+x/P6iD0TswBn4CExf5j1YJXb+9UWFo9ZCfvl9t9fe5hNT+Jzj52rBk17/mhGYwQ
- x0EkFhFGFDjdY2S6/TDV/oQDA3VsTGLTZvouN985A1H3bC0tph0177su0OwcgA/H9Kpv
- 6qeji6rdAbKuPJ/ZXTkR1APmJ62n5r19evWiDlMLYecxmyo3ldFzNaR7sQZ5VhPPQgZ1
- CUCOHYfX/83yM3pK8cuKsJiIuYXlChT7vw1nhay72/0fDZdAaq8DsDAhP5MJ31IzlZ3a
- uau+7wozSQtXt5Sb8z+vfqLQPxcRJxg7CxF3Z4w0qoMTKjlRDhu70YatKxrYNLIge0Iv hA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6uuvgsm5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 09:52:31 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33Q9qUoY016737
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 09:52:30 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 26 Apr 2023 02:52:03 -0700
-Date:   Wed, 26 Apr 2023 15:21:58 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        with ESMTP id S239821AbjDZJ6T (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Apr 2023 05:58:19 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4144170E;
+        Wed, 26 Apr 2023 02:58:15 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 878E65FD76;
+        Wed, 26 Apr 2023 12:58:13 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682503093;
+        bh=6G86vv0ZldsF0tx3obmD9tnm4TnBh9yFNnhE+Kn7PNY=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=Pok9v816oQJwV/KKO9Xt638ZeQZOS4JCQDV9ER/DtJY4Mk9bboasX7F0bC42BFUJE
+         KweaN3uLmVqGRTrH7UDwhO8OyJePs9wTV1Blw2RSgI2jE8maj++qc7YG2sRti6F38i
+         mpqEDIg3NNxruFZj43B9QyGDomy2m8y/yva5TmD4YCYETt83q6/Jn7/UO9ivasFxtY
+         ahkCiG+a7CTok5zgTe2aGU6lEhaZPFXtfhr3YnGRPYhoZJAW7yHLj4fUp9ODybM/ss
+         djQ4ygoWR+V6uKasKesaOJ57HVS+2tH8WkrcCijOauQ4iKTlM97faU4SIoXFPgwA84
+         biwadFW8zdFaA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 26 Apr 2023 12:58:12 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
         <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-Message-ID: <20230426095157.GA884@varda-linux.qualcomm.com>
-References: <cover.1680693149.git.quic_varada@quicinc.com>
- <55db8487a7cbf3354749dd2d3a35c05bfd9fa4fc.1680693149.git.quic_varada@quicinc.com>
- <e142ff5d-543f-80bb-94f9-3f1fb90f1b83@linaro.org>
- <20230424090402.GB21232@varda-linux.qualcomm.com>
- <CAA8EJprqH5esxQkH3v-1i539OO3jQG9fN-YOqjZTwEqqgUfUyg@mail.gmail.com>
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v14 0/6] add Amlogic A1 clock controller drivers
+Date:   Wed, 26 Apr 2023 12:57:59 +0300
+Message-ID: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJprqH5esxQkH3v-1i539OO3jQG9fN-YOqjZTwEqqgUfUyg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nS1QL3R4vIwMm3tufPVDmxpDsscBzYsU
-X-Proofpoint-GUID: nS1QL3R4vIwMm3tufPVDmxpDsscBzYsU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-26_04,2023-04-26_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- phishscore=0 clxscore=1015 suspectscore=0 impostorscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304260088
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,298 +68,257 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 02:17:06PM +0300, Dmitry Baryshkov wrote:
-> On Mon, 24 Apr 2023 at 12:04, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > On Sat, Apr 22, 2023 at 12:07:01AM +0300, Dmitry Baryshkov wrote:
-> > > On 05/04/2023 14:41, Varadarajan Narayanan wrote:
-> > > >Add USB phy and controller related nodes
-> > > >
-> > > >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > >---
-> > > >  Changes in v8:
-> > > >     - Change clocks order to match the bindings
-> > > >  Changes in v7:
-> > > >     - Change com_aux -> cfg_ahb
-> > > >  Changes in v6:
-> > > >     - Introduce fixed regulators for the phy
-> > > >     - Resolved all 'make dtbs_check' messages
-> > > >
-> > > >  Changes in v5:
-> > > >     - Fix additional comments
-> > > >     - Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> > > >     - 'make dtbs_check' giving the following messages since
-> > > >       ipq9574 doesn't have power domains. Hope this is ok
-> > > >
-> > > >             /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
-> > > >             From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> > > >             /local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
-> > > >             From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> > > >
-> > > >  Changes in v4:
-> > > >     - Use newer bindings without subnodes
-> > > >     - Fix coding style issues
-> > > >
-> > > >  Changes in v3:
-> > > >     - Insert the nodes at proper location
-> > > >
-> > > >  Changes in v2:
-> > > >     - Fixed issues flagged by Krzysztof
-> > > >     - Fix issues reported by make dtbs_check
-> > > >     - Remove NOC related clocks (to be added with proper
-> > > >       interconnect support)
-> > > >---
-> > > >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 120 ++++++++++++++++++++++++++++++++++
-> > > >  1 file changed, 120 insertions(+)
-> > > >
-> > > >diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > > >index 43a3dbe..1242382 100644
-> > > >--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > > >+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > > >@@ -150,6 +150,33 @@
-> > > >             method = "smc";
-> > > >     };
-> > > >+    reg_usb_3p3: s3300 {
-> > >
-> > > The node names do not look generic enough. Please take a look at other
-> > > platforms.
-> >
-> > Please see below.
-> >
-> > > >+            compatible = "regulator-fixed";
-> > > >+            regulator-min-microvolt = <3300000>;
-> > > >+            regulator-max-microvolt = <3300000>;
-> > > >+            regulator-boot-on;
-> > > >+            regulator-always-on;
-> > > >+            regulator-name = "usb-phy-vdd-dummy";
-> > >
-> > > This also doesn't look correct. This regulator should not just fill the gap.
-> > > Does it represent a generic voltage network on the board?
-> > >
-> > > Please do not add 'dummy' voltage regulators if there is no real voltage
-> > > wire.
-> >
-> > These are real voltage wires. I used dummy since they are
-> > always-on and cannot be increased/decreased (i.e. fixed).
-> > Would something along the following lines be appropriate?
->
-> Still not fully correct. Please use regulator name that corresponds to
-> the power grid on the board schematics. I don't think that you have a
-> separate power grids for USB PHY.
->
-> >
-> >         vreg_ae10_3p3: s3300 {
->
-> Naming suggests that these voltages are generated by some PMIC. Is
-> this correct? If so, please describe the PMIC instead.
+A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+and Audio. The audio clock controller is different from others, but the
+rest are very similar from a functional and regmap point of view.
+This patch series add support for Amlogic A1 PLL and Peripherals clock
+drivers.
+It blocks all A1 peripherals mainline support and a couple of patch series,
+which were already reviewed and acked, but weren't merged due to pending
+clock controller drivers series, e.g.
+https://lore.kernel.org/all/20230418111612.19479-1-ddrokosov@sberdevices.ru/
 
-SS PHY needs two supplies and HS PHY needs three supplies. 3.3V
-and 0.925V are from fixed DC - DC regulators and 1.8V is
-generated from MP5496 PMIC. Would the following node definitions
-be ok?
+TODO: CPU and Audio clock controllers are not included in this patch
+series, it will be sent later. The following clks from these controllers
+are not supported for now:
+* Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+   pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+   audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+   audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+   audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+   audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+   audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
 
-usb_hs_vreg0: usb_hs_vreg0 {
-	compatible = "regulator-fixed";
-	regulator-min-microvolt = <3300000>;
-	regulator-max-microvolt = <3300000>;
-	regulator-boot-on;
-	regulator-always-on;
-	regulator-name = "usb-phy-vdd";
-};
+* CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+            cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
 
-usb_hs_vreg1: usb_hs_vreg1 {
-	compatible = "regulator-fixed";
-	regulator-min-microvolt = <925000>;
-	regulator-max-microvolt = <925000>;
-	regulator-boot-on;
-	regulator-always-on;
-	regulator-name = "usb-phy";
-};
+Validation:
+* to double check all clk flags run below helper script:
+    pushd /sys/kernel/debug/clk
+    for f in *; do
+        if [[ -f "$f/clk_flags" ]]; then
+            flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+            echo -e "$f: $flags"
+        fi
+    done
+    popd
 
-&rpm_requests {
-	regulators {
-		compatible = "qcom,rpm-mp5496-regulators";
-		.
-		.
-		.
-		ipq9574_l2: l2 {
-			regulator-min-microvolt = <1800000>;
-			regulator-max-microvolt = <1800000>;
-			regulator-boot-on;
-			regulator-always-on;
-		};
-	};
-};
+* to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+  with jq post-processing:
+    $ cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
 
-Thanks
-Varada
+* to debug clk rate propagation, compile kernel with the following
+  definition:
+    $ sed -i "s/undef CLOCK_ALLOW_WRITE_DEBUGFS/define CLOCK_ALLOW_WRITE_DEBUGFS/g" drivers/clk/clk.c
+  after that, clk_rate debug node for each clock will be available for
+  write operation
 
-> >                 compatible = "regulator-fixed";
-> >                 regulator-min-microvolt = <3300000>;
-> >                 regulator-max-microvolt = <3300000>;
-> >                 regulator-boot-on;
-> >                 regulator-always-on;
-> >                 regulator-name = "usb-phy-vdd";
-> >         };
-> >
-> >         vreg_ad8_1p8: s1800 {
-> >                 compatible = "regulator-fixed";
-> >                 regulator-min-microvolt = <1800000>;
-> >                 regulator-max-microvolt = <1800000>;
-> >                 regulator-boot-on;
-> >                 regulator-always-on;
-> >                 regulator-name = "usb-phy-pll";
-> >         };
-> >
-> >         vreg_ad9_0p925: s0925 {
-> >                 compatible = "regulator-fixed";
-> >                 regulator-min-microvolt = <925000>;
-> >                 regulator-max-microvolt = <925000>;
-> >                 regulator-boot-on;
-> >                 regulator-always-on;
-> >                 regulator-name = "usb-phy";
-> >         };
-> >
-> > Thanks
-> > Varada
-> >
-> > > >+    };
-> > > >+
-> > > >+    reg_usb_1p8: s1800 {
-> > > >+            compatible = "regulator-fixed";
-> > > >+            regulator-min-microvolt = <1800000>;
-> > > >+            regulator-max-microvolt = <1800000>;
-> > > >+            regulator-boot-on;
-> > > >+            regulator-always-on;
-> > > >+            regulator-name = "usb-phy-pll-dummy";
-> > > >+    };
-> > > >+
-> > > >+    reg_usb_0p925: s0925 {
-> > > >+            compatible = "regulator-fixed";
-> > > >+            regulator-min-microvolt = <925000>;
-> > > >+            regulator-max-microvolt = <925000>;
-> > > >+            regulator-boot-on;
-> > > >+            regulator-always-on;
-> > > >+            regulator-name = "usb-phy-dummy";
-> > > >+    };
-> > > >+
-> > > >     reserved-memory {
-> > > >             #address-cells = <2>;
-> > > >             #size-cells = <2>;
-> > > >@@ -179,6 +206,52 @@
-> > > >             #size-cells = <1>;
-> > > >             ranges = <0 0 0 0xffffffff>;
-> > > >+            usb_0_qusbphy: phy@7b000 {
-> > > >+                    compatible = "qcom,ipq9574-qusb2-phy";
-> > > >+                    reg = <0x0007b000 0x180>;
-> > > >+                    #phy-cells = <0>;
-> > > >+
-> > > >+                    clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> > > >+                             <&xo_board_clk>;
-> > > >+                    clock-names = "cfg_ahb",
-> > > >+                                  "ref";
-> > > >+
-> > > >+                    vdd-supply = <&reg_usb_0p925>;
-> > > >+                    vdda-pll-supply = <&reg_usb_1p8>;
-> > > >+                    vdda-phy-dpdm-supply = <&reg_usb_3p3>;
-> > > >+
-> > > >+                    resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> > > >+                    status = "disabled";
-> > > >+            };
-> > > >+
-> > > >+            usb_0_qmpphy: phy@7d000 {
-> > > >+                    compatible = "qcom,ipq9574-qmp-usb3-phy";
-> > > >+                    reg = <0x0007d000 0xa00>;
-> > > >+                    #phy-cells = <0>;
-> > > >+
-> > > >+                    clocks = <&gcc GCC_USB0_AUX_CLK>,
-> > > >+                             <&xo_board_clk>,
-> > > >+                             <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> > > >+                             <&gcc GCC_USB0_PIPE_CLK>;
-> > > >+                    clock-names = "aux",
-> > > >+                                  "ref",
-> > > >+                                  "cfg_ahb",
-> > > >+                                  "pipe";
-> > > >+
-> > > >+                    resets = <&gcc GCC_USB0_PHY_BCR>,
-> > > >+                             <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> > > >+                    reset-names = "phy",
-> > > >+                                  "phy_phy";
-> > > >+
-> > > >+                    vdda-pll-supply = <&reg_usb_1p8>;
-> > > >+                    vdda-phy-supply = <&reg_usb_0p925>;
-> > > >+
-> > > >+                    status = "disabled";
-> > > >+
-> > > >+                    #clock-cells = <0>;
-> > > >+                    clock-output-names = "usb0_pipe_clk";
-> > > >+            };
-> > > >+
-> > > >             pcie0_phy: phy@84000 {
-> > > >                     compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
-> > > >                     reg = <0x00084000 0x1000>;
-> > > >@@ -548,6 +621,53 @@
-> > > >                     status = "disabled";
-> > > >             };
-> > > >+            usb3: usb@8a00000 {
-> > > >+                    compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> > > >+                    reg = <0x08af8800 0x400>;
-> > > >+                    #address-cells = <1>;
-> > > >+                    #size-cells = <1>;
-> > > >+                    ranges;
-> > > >+
-> > > >+                    clocks = <&gcc GCC_SNOC_USB_CLK>,
-> > > >+                             <&gcc GCC_USB0_MASTER_CLK>,
-> > > >+                             <&gcc GCC_ANOC_USB_AXI_CLK>,
-> > > >+                             <&gcc GCC_USB0_SLEEP_CLK>,
-> > > >+                             <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > > >+
-> > > >+                    clock-names = "cfg_noc",
-> > > >+                                  "core",
-> > > >+                                  "iface",
-> > > >+                                  "sleep",
-> > > >+                                  "mock_utmi";
-> > > >+
-> > > >+                    assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> > > >+                                      <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > > >+                    assigned-clock-rates = <200000000>,
-> > > >+                                           <24000000>;
-> > > >+
-> > > >+                    interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> > > >+                    interrupt-names = "pwr_event";
-> > > >+
-> > > >+                    resets = <&gcc GCC_USB_BCR>;
-> > > >+                    status = "disabled";
-> > > >+
-> > > >+                    dwc_0: usb@8a00000 {
-> > > >+                            compatible = "snps,dwc3";
-> > > >+                            reg = <0x8a00000 0xcd00>;
-> > > >+                            clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > > >+                            clock-names = "ref";
-> > > >+                            interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> > > >+                            phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
-> > > >+                            phy-names = "usb2-phy", "usb3-phy";
-> > > >+                            tx-fifo-resize;
-> > > >+                            snps,is-utmi-l1-suspend;
-> > > >+                            snps,hird-threshold = /bits/ 8 <0x0>;
-> > > >+                            snps,dis_u2_susphy_quirk;
-> > > >+                            snps,dis_u3_susphy_quirk;
-> > > >+                            dr_mode = "host";
-> > > >+                    };
-> > > >+            };
-> > > >+
-> > > >             intc: interrupt-controller@b000000 {
-> > > >                     compatible = "qcom,msm-qgic2";
-> > > >                     reg = <0x0b000000 0x1000>,  /* GICD */
-> > >
-> > > --
-> > > With best wishes
-> > > Dmitry
-> > >
->
->
->
-> --
-> With best wishes
-> Dmitry
+Changes v14 since v13 at [14]:
+    - remove the term "Meson" from all patchsets or replace it with
+      "Amlogic"
+    - purge extra commas as per Martin's suggestion
+    - drop the unneeded use of of_match_ptr(), since all Meson clock
+      drivers depend on the ARM64 config which selects CONFIG_OF by default
+
+Changes v13 since v12 at [13]:
+    - make the clock object registration order from the roots to the leaves
+    - rearrange the clkids following above rule
+
+Changes v12 since v11 at [12]:
+    - split the DT bindings patchset into two patches: one for the PLL clock
+      controller driver, and one for the peripherals clock controller driver
+    - to satisfy the DT binding checker, use fake references to the
+      peripherals clock controller in the PLL DT bindings schema, and then
+      replace them with real references when the peripherals bindings
+      become available.
+    - remove the public/private clocks concept from both controllers,
+      and instead use a linear clkid list with both exposed and internal
+      objects, all of which are registered in the clock provider
+    - combine all comments about RTC children with the flag
+      'CLK_SET_RATE_NO_REPARENT' into a single item with multiple
+      references to it
+
+Changes v11 since v10 at [11]:
+    - change include/dt-bindings license to proper value required for
+      bindings files: 'GPL-2.0-only OR BSD-2-Clause'
+    - pll and peripherals clocks are split into public and private parts;
+      public clocks are available for external consumers through the DT layer,
+      private clocks include internal muxes and dividers of composite clocks,
+      they are placed inside clock controller driver without external access
+    - make public clks CLKID bindings continuous
+    - mark the following clock muxes as NO_REPARENT and add them to
+      public clocks list: GEN_SEL, DSPA_A_SEL, DSPA_B_SEL, DSPB_A_SEL,
+      DSP_B_B_SEL, PWM_A_SEL, PWM_B_SEL, PWM_C_SEL, PWM_D_SEL,
+      PWM_E_SEL, PWM_F_SEL, CECA_32K_SEL, CECB_32K_SEL; each of them can
+      be inherited from more accurate RTC clock and sometimes it's
+      required to forbid reparenting in such situation; also GEN_SEL can
+      be connected to external PAD and should not change parent
+      automatically due to rate propagation. For such clocks user must
+      setup parents on the DT side
+
+Changes v10 since v9 at [10]:
+    - split general clk-pll changes into two different patchsets:
+      optional rst usage and new power sequence
+    - squash dt bindings patchsets to avoid chicken-or-the-egg problem
+      during run dt binding check routines
+    - add vendor prefix to PLL and Peripherals clkcs bindings filenames
+    - clear managed hifi_pll fields from initial poke table
+    - move DSPA_SEL, DSPB_SEL and SARADC_SEL to private clkid table,
+      because it should not be opened for direct usage
+    - pwm_a clk used for voltage regulation is not critical anymore, it
+      must be included to the proper cpu voltage regulation setup (will
+      be available in the next patch series)
+    - as discussed with Jerome, dspX clks are simple clocks and it
+      should be enabled/disabled/ignored/anything else from appropriate
+      DSP driver, so remove CLK_IGNORE_UNUSED tags
+    - provide more understandable comments and remove irrelevant (I hope so)
+    - remove CONFIG_OF usage, because it's redundant
+    - fix license issue, it's GPL-2.0+ only in the current version
+    - some commit msgs rewording
+
+Changes v9 since v8 at [9]:
+    - remove common a1-clkc driver for the first version of a1 clock
+      controllers as Jerome suggested (it will be discussed after s4 and
+      a1 clks landed, hope so)
+    - replace inherited a1-pll clk_pll_ops with common ops and
+      introduce custom A1 PLL logic under MESON_PARM_APPLICABLE()
+      conditions
+    - rename xtal depended clocks in PLL and Peripherals domains
+    - remove 'a1_' prefix for all clocks, because they are already
+      inside A1 driver, it's redundant
+    - change udelay() to usleep_range() as preferred for small msec
+      amount
+    - purge all double quotes from the yaml schemas
+    - use proper dt node names following kernel guidelines
+      https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+    - use devm_platform_ioremap_resource() instead of simple
+      devm_ioremap_resource()
+    - mark all dspX clocks as CLK_IGNORE_UNUSED, because we do not want
+      to touch these clocks during CCF initialization due to possible
+      workload execution on it started from bootloader; in this case
+      bootloader already made all initialization stuff for dspX
+    - also mark all dspX with NO_REPARENT tag, because from dspX clocks
+      we want to select proper clk source from device tree
+
+Changes v8 since v7 at [8]:
+    - introduced a1-clkc common driver for all A1 clock controllers
+    - exported meson_clk_pll_wait_lock symbol
+    - supported meson-a1-clkc common driver in the a1-pll and a1 clkc
+    - inherited a1-pll from the base clk-pll driver, implemented own
+      version of init/enable/disable/enabled routines; rate calculating
+      logic is fully the same
+    - aligned CLKID-related definitions with CLKID list from order
+      perspective to remove holes and permutations
+    - corrected Kconfig dependencies and types
+    - provided correct MODULE_AUTHORs()
+    - optimized and fixed up some clock relationships
+    - removed unused register offset definitions
+    - fixed up A1 PLL and Peripherals clkc dtb_check errors
+    - fixed clk_summary kernel panic due to missing a1_pad_ctrl
+      clk_regmap definition
+    - included PLL and Peripherals clk controllers to the base a1 dts
+    - The previous v7 version [8] had several logic and style problems,
+      all of them are resolved in this version. Original Jian Hu v7 patches
+      are not touched, and all additional fixes are implemented in separate
+      patches. Patch "clk: meson: add support for A1 PLL clock ops" is
+      removed, because a1-pll clk driver inherits all stuff from clk-pll
+      base driver, just implements custom init/enable/disable/is_enabled
+      callbacks.
+
+Changes v7 since v6 at [7]:
+    - fix 'dt_binding_check' compiling error
+    - add acked-by
+
+Changes v6 since v5 at [6]:
+    - fix yaml file
+    - add rst/current_en/l_detect parm detection
+    - remove 'meson_eeclkc_data' in a1.c and a1-pll.c
+
+Changes v5 since v4 at [5]:
+    - change yaml GPL
+    - drop meson-eeclk.c patch, add probe function in each driver
+    - add CLK_IS_CRITICAL for sys_clk clock, drop the flag for sys_a
+      and sys_b
+    - add new parm for pll, add protection for rst parm
+    - drop flag for a1_fixed_pll
+    - remove the same comment for fclk_div, add "refer to"
+    - add critical flag for a1_sys_clk
+    - remove rtc table
+    - rename a1_dspa_en_dspa and a1_dspb_en_dspb
+    - remove useless comment
+
+Changes v4 since v3 at [3]:
+    - fix reparenting orphan failed, it depends on jerome's patch [4]
+    - fix changelist in v3 about reparenting orphan
+    - remove the dts patch 
+
+Changes v3 since v2 at [2]:
+    - add probe function for A1
+    - separate the clock driver into two patch
+    - change some clock flags and ops
+    - add support for a1 PLL ops
+    - add A1 clock node
+    - fix reparenting orphan clock failed, registering xtal_fixpll
+      and xtal_hifipll after the provider registration, it is not
+      a best way.
+
+Changes v2 since v1 at [1]:
+    - place A1 config alphabetically
+    - add actual reason for RO ops, CLK_IS_CRITICAL, CLK_IGNORE_UNUSED
+    - separate the driver into two driver: peripheral and pll driver
+    - delete CLK_IGNORE_UNUSED flag for pwm b/c/d/e/f clock, dsp clock
+    - delete the change in Kconfig.platforms, address to Kevin alone
+    - remove the useless comments
+    - modify the meson pll driver to support A1 PLLs
+
+Links:
+    [1] https://lkml.kernel.org/r/1569411888-98116-1-git-send-email-jian.hu@amlogic.com
+    [2] https://lkml.kernel.org/r/1571382865-41978-1-git-send-email-jian.hu@amlogic.com
+    [3] https://lkml.kernel.org/r/20191129144605.182774-1-jian.hu@amlogic.com
+    [4] https://lkml.kernel.org/r/20191203080805.104628-1-jbrunet@baylibre.com
+    [5] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+    [6] https://lkml.kernel.org/r/20191227094606.143637-1-jian.hu@amlogic.com
+    [7] https://lkml.kernel.org/r/20200116080440.118679-1-jian.hu@amlogic.com
+    [8] https://lore.kernel.org/linux-amlogic/20200120034937.128600-1-jian.hu@amlogic.com/
+    [9] https://lore.kernel.org/linux-amlogic/20221201225703.6507-1-ddrokosov@sberdevices.ru/
+    [10] https://lore.kernel.org/all/20230301183759.16163-1-ddrokosov@sberdevices.ru/
+    [11] https://lore.kernel.org/all/20230313201259.19998-1-ddrokosov@sberdevices.ru/
+    [12] https://lore.kernel.org/all/20230321193014.26349-1-ddrokosov@sberdevices.ru/
+    [13] https://lore.kernel.org/all/20230404155332.9571-1-ddrokosov@sberdevices.ru/
+    [14] https://lore.kernel.org/linux-amlogic/20230405195927.13487-1-ddrokosov@sberdevices.ru/
+
+Dmitry Rokosov (6):
+  clk: meson: make pll rst bit as optional
+  clk: meson: introduce new pll power-on sequence for A1 SoC family
+  dt-bindings: clock: meson: add A1 PLL clock controller bindings
+  clk: meson: a1: add Amlogic A1 PLL clock controller driver
+  dt-bindings: clock: meson: add A1 Peripherals clock controller
+    bindings
+  clk: meson: a1: add Amlogic A1 Peripherals clock controller driver
+
+ .../bindings/clock/amlogic,a1-clkc.yaml       |   73 +
+ .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   59 +
+ MAINTAINERS                                   |    1 +
+ drivers/clk/meson/Kconfig                     |   20 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/a1-pll.c                    |  356 +++
+ drivers/clk/meson/a1-pll.h                    |   47 +
+ drivers/clk/meson/a1.c                        | 2273 +++++++++++++++++
+ drivers/clk/meson/a1.h                        |  114 +
+ drivers/clk/meson/clk-pll.c                   |   47 +-
+ drivers/clk/meson/clk-pll.h                   |    2 +
+ include/dt-bindings/clock/amlogic,a1-clkc.h   |  114 +
+ .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |   20 +
+ 13 files changed, 3121 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/a1-pll.c
+ create mode 100644 drivers/clk/meson/a1-pll.h
+ create mode 100644 drivers/clk/meson/a1.c
+ create mode 100644 drivers/clk/meson/a1.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+
+-- 
+2.36.0
+
