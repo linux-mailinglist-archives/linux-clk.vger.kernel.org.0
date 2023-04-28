@@ -2,180 +2,216 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C6E6F0C5A
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Apr 2023 21:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8A56F0F7C
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Apr 2023 02:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244381AbjD0TJ6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Apr 2023 15:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S1344255AbjD1AVW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Apr 2023 20:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244687AbjD0TJ5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Apr 2023 15:09:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01E79E;
-        Thu, 27 Apr 2023 12:09:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BE9D63F22;
-        Thu, 27 Apr 2023 19:09:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAF8C433EF;
-        Thu, 27 Apr 2023 19:09:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682622594;
-        bh=4MuGyWTQQD8YDc9ZDP5EuTvCXfhs1RGXEGefTe8GbFs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OEyoAdAg2oHj1kpUaFAUQnORGNgUcMTwXna94WirWc4/7OFURAmKcVKLlVxGAFkME
-         toxsg2t0o0U7Q+9nKKAWfOe1B/t1z3g1kRabot2L3KU7VvngL293h0JsGHTQ534ZJP
-         wb/t5pQP0ryuyOaWJAQ0Akswuclq647TVGmt1KHHbj8adW21pY6mXqBy4ogxoG3XiT
-         nl8v4DuX6FhDVh3IAmmeTltphT6HmwSaAdaxUAAee3iYvoH2HR36H28EF1sUk2sy35
-         kac9ZjDMYlfFNHS8ZZYJ4TPcDUlbU3BEvZYy9X6SsaJklf3YKOr0nvFwrR0eNy/XBZ
-         ccVK16xunjKbA==
-Message-ID: <57dd81d0-510e-0fab-670d-1109eb8dd974@kernel.org>
-Date:   Thu, 27 Apr 2023 14:09:48 -0500
+        with ESMTP id S1344465AbjD1AVU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Apr 2023 20:21:20 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC9E40FE;
+        Thu, 27 Apr 2023 17:20:54 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RIPmcV029097;
+        Thu, 27 Apr 2023 17:20:36 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=NYdUMJvVDkQ93vROgTEHRiBpmRyQC3+ON6XrWgewyJ4=;
+ b=VfurQi2l35LLHtbhDhG97l6/S1IlJI8t4mWXxUtUHAJgAbi7B4i49Kg1KFlU5u4xZufy
+ TmLm2jlTNDkbTxbIAXmMSwbM9E6vB5SWlwcIcbChMFOJMuPIi4aQY9oJXs7FejNxEv0V
+ NmJgD72hJ+oHXMIdiE4rluDDd6ara90Nglxz77RAjVJ0jl49xIIJ0WtUImaNQUa0+XFs
+ wFC4Nrz33HjdpHA4mWmKLu8GHurz9n+GYpCnK4fmYvBx50U+Kh4ocVRvfjrYbFubr2ev
+ j/+A48Uz5P5ek1w6zowIoGmvWjC4RFd4/Y+bQ5Bw/KlwP8ptyb/T+fDuMBFHisKZO1vU 8w== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q7e8hgsv7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 27 Apr 2023 17:20:35 -0700
+Received: from devvm1736.cln0.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server id
+ 15.1.2507.23; Thu, 27 Apr 2023 17:20:19 -0700
+From:   Vadim Fedorenko <vadfed@meta.com>
+To:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Milena Olech <milena.olech@intel.com>,
+        Michal Michalik <michal.michalik@intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+        <poros@redhat.com>, <mschmidt@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [RFC PATCH v7 0/8] Create common DPLL configuration API
+Date:   Thu, 27 Apr 2023 17:20:01 -0700
+Message-ID: <20230428002009.2948020-1-vadfed@meta.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 29/65] clk: socfpga: gate: Add a determine_rate hook
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-29-9a1358472d52@cerno.tech>
- <679921ee-98d4-d6ef-5934-e009fd4b31fc@kernel.org>
- <sjlp5ubnpvulgwhhymmfkmmobkgxacyqwagqozodkee3di2qik@3igj6k3zgbk6>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <sjlp5ubnpvulgwhhymmfkmmobkgxacyqwagqozodkee3di2qik@3igj6k3zgbk6>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [2620:10d:c085:108::4]
+X-Proofpoint-GUID: USJo7jUamDGqxv346iHC61P-0R9J4cv5
+X-Proofpoint-ORIG-GUID: USJo7jUamDGqxv346iHC61P-0R9J4cv5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Maxime,
+From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
 
-On 4/25/23 09:48, Maxime Ripard wrote:
-> Hi Dinh,
-> 
-> On Mon, Apr 24, 2023 at 01:32:28PM -0500, Dinh Nguyen wrote:
->> On 4/4/23 05:11, Maxime Ripard wrote:
->>> The SoCFGPA gate clock implements a mux with a set_parent hook, but
->>> doesn't provide a determine_rate implementation.
->>>
->>> This is a bit odd, since set_parent() is there to, as its name implies,
->>> change the parent of a clock. However, the most likely candidate to
->>> trigger that parent change is a call to clk_set_rate(), with
->>> determine_rate() figuring out which parent is the best suited for a
->>> given rate.
->>>
->>> The other trigger would be a call to clk_set_parent(), but it's far less
->>> used, and it doesn't look like there's any obvious user for that clock.
->>>
->>> So, the set_parent hook is effectively unused, possibly because of an
->>> oversight. However, it could also be an explicit decision by the
->>> original author to avoid any reparenting but through an explicit call to
->>> clk_set_parent().
->>>
->>> The latter case would be equivalent to setting the flag
->>> CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
->>> to __clk_mux_determine_rate(). Indeed, if no determine_rate
->>> implementation is provided, clk_round_rate() (through
->>> clk_core_round_rate_nolock()) will call itself on the parent if
->>> CLK_SET_RATE_PARENT is set, and will not change the clock rate
->>> otherwise. __clk_mux_determine_rate() has the exact same behavior when
->>> CLK_SET_RATE_NO_REPARENT is set.
->>>
->>> And if it was an oversight, then we are at least explicit about our
->>> behavior now and it can be further refined down the line.
->>>
->>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->>> ---
->>>    drivers/clk/socfpga/clk-gate.c | 3 ++-
->>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
->>> index 32ccda960f28..cbba8462a09e 100644
->>> --- a/drivers/clk/socfpga/clk-gate.c
->>> +++ b/drivers/clk/socfpga/clk-gate.c
->>> @@ -110,6 +110,7 @@ static unsigned long socfpga_clk_recalc_rate(struct clk_hw *hwclk,
->>>    static struct clk_ops gateclk_ops = {
->>>    	.recalc_rate = socfpga_clk_recalc_rate,
->>> +	.determine_rate = __clk_mux_determine_rate,
->>>    	.get_parent = socfpga_clk_get_parent,
->>>    	.set_parent = socfpga_clk_set_parent,
->>>    };
->>> @@ -166,7 +167,7 @@ void __init socfpga_gate_init(struct device_node *node)
->>>    	init.name = clk_name;
->>>    	init.ops = ops;
->>> -	init.flags = 0;
->>> +	init.flags = CLK_SET_RATE_NO_REPARENT;
->>>    	init.num_parents = of_clk_parent_fill(node, parent_name, SOCFPGA_MAX_PARENTS);
->>>    	if (init.num_parents < 2) {
->>>
->>
->> This patch broke SoCFPGA boot serial port. The characters are mangled.
-> 
-> Do you have any other access to that board? If so, could you dump
-> clk_summary in debugfs with and without that patch?
-> 
+Implement common API for clock/DPLL configuration and status reporting.
+The API utilises netlink interface as transport for commands and event
+notifications. This API aim to extend current pin configuration and
+make it flexible and easy to cover special configurations.
 
-That dump from the clk_summary are identical for both cases.
+v6 -> v7:
+ * YAML spec:
+   - remove nested 'pin' attribute
+   - clean up definitions on top of the latest changes
+ * pin object:
+   - pin xarray uses id provided by the driver
+   - remove usage of PIN_IDX_INVALID in set function
+   - source_pin_get() returns object instead of idx
+   - fixes in frequency support API
+ * device and pin operations are const now
+ * small fixes in naming in Makefile and in the functions
+ * single mutex for the subsystem to avoid possible ABBA locks
+ * no special *_priv() helpers anymore, private data is passed as void*
+ * no netlink filters by name anymore, only index is supported
+ * update ptp_ocp and ice drivers to follow new API version
+ * add mlx5e driver as a new customer of the subsystem
+v5 -> v6:
+ * rework pin part to better fit shared pins use cases
+ * add YAML spec to easy generate user-space apps
+ * simple implementation in ptp_ocp is back again
+v4 -> v5:
+ * fix code issues found during last reviews:
+   - replace cookie with clock id
+   - follow one naming schema in dpll subsys
+   - move function comments to dpll_core.c, fix exports
+   - remove single-use helper functions
+   - merge device register with alloc
+   - lock and unlock mutex on dpll device release
+   - move dpll_type to uapi header
+   - rename DPLLA_DUMP_FILTER to DPLLA_FILTER
+   - rename dpll_pin_state to dpll_pin_mode
+   - rename DPLL_MODE_FORCED to DPLL_MODE_MANUAL
+   - remove DPLL_CHANGE_PIN_TYPE enum value
+ * rewrite framework once again (Arkadiusz)
+   - add clock class:
+     Provide userspace with clock class value of DPLL with dpll device dump
+     netlink request. Clock class is assigned by driver allocating a dpll
+     device. Clock class values are defined as specified in:
+     ITU-T G.8273.2/Y.1368.2 recommendation.
+   - dpll device naming schema use new pattern:
+     "dpll_%s_%d_%d", where:
+       - %s - dev_name(parent) of parent device,
+       - %d (1) - enum value of dpll type,
+       - %d (2) - device index provided by parent device.
+   - new muxed/shared pin registration:
+     Let the kernel module to register a shared or muxed pin without finding
+     it or its parent. Instead use a parent/shared pin description to find
+     correct pin internally in dpll_core, simplifing a dpll API
+ * Implement complex DPLL design in ice driver (Arkadiusz)
+ * Remove ptp_ocp driver from the series for now
+v3 -> v4:
+ * redesign framework to make pins dynamically allocated (Arkadiusz)
+ * implement shared pins (Arkadiusz)
+v2 -> v3:
+ * implement source select mode (Arkadiusz)
+ * add documentation
+ * implementation improvements (Jakub)
+v1 -> v2:
+ * implement returning supported input/output types
+ * ptp_ocp: follow suggestions from Jonathan
+ * add linux-clk mailing list
+v0 -> v1:
+ * fix code style and errors
+ * add linux-arm mailing list
+
+Arkadiusz Kubalewski (3):
+  dpll: spec: Add Netlink spec in YAML
+  ice: add admin commands to access cgu configuration
+  ice: implement dpll interface to control cgu
+
+Jiri Pirko (2):
+  netdev: expose DPLL pin handle for netdevice
+  mlx5: Implement SyncE support using DPLL infrastructure
+
+Vadim Fedorenko (3):
+  dpll: Add DPLL framework base functions
+  dpll: documentation on DPLL subsystem interface
+  ptp_ocp: implement DPLL ops
+
+ Documentation/dpll.rst                        |  408 ++++
+ Documentation/netlink/specs/dpll.yaml         |  472 ++++
+ Documentation/networking/index.rst            |    1 +
+ MAINTAINERS                                   |    8 +
+ drivers/Kconfig                               |    2 +
+ drivers/Makefile                              |    1 +
+ drivers/dpll/Kconfig                          |    7 +
+ drivers/dpll/Makefile                         |   10 +
+ drivers/dpll/dpll_core.c                      |  939 ++++++++
+ drivers/dpll/dpll_core.h                      |  113 +
+ drivers/dpll/dpll_netlink.c                   |  991 +++++++++
+ drivers/dpll/dpll_netlink.h                   |   27 +
+ drivers/dpll/dpll_nl.c                        |  126 ++
+ drivers/dpll/dpll_nl.h                        |   42 +
+ drivers/net/ethernet/intel/Kconfig            |    1 +
+ drivers/net/ethernet/intel/ice/Makefile       |    3 +-
+ drivers/net/ethernet/intel/ice/ice.h          |    5 +
+ .../net/ethernet/intel/ice/ice_adminq_cmd.h   |  240 +-
+ drivers/net/ethernet/intel/ice/ice_common.c   |  467 ++++
+ drivers/net/ethernet/intel/ice/ice_common.h   |   43 +
+ drivers/net/ethernet/intel/ice/ice_dpll.c     | 1929 +++++++++++++++++
+ drivers/net/ethernet/intel/ice/ice_dpll.h     |  101 +
+ drivers/net/ethernet/intel/ice/ice_lib.c      |   17 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     |    7 +
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.c   |  414 ++++
+ drivers/net/ethernet/intel/ice/ice_ptp_hw.h   |  230 ++
+ drivers/net/ethernet/intel/ice/ice_type.h     |    1 +
+ .../net/ethernet/mellanox/mlx5/core/Kconfig   |    8 +
+ .../net/ethernet/mellanox/mlx5/core/Makefile  |    3 +
+ drivers/net/ethernet/mellanox/mlx5/core/dev.c |   17 +
+ .../net/ethernet/mellanox/mlx5/core/dpll.c    |  438 ++++
+ drivers/ptp/Kconfig                           |    1 +
+ drivers/ptp/ptp_ocp.c                         |  327 ++-
+ include/linux/dpll.h                          |  294 +++
+ include/linux/mlx5/driver.h                   |    2 +
+ include/linux/mlx5/mlx5_ifc.h                 |   59 +-
+ include/linux/netdevice.h                     |    7 +
+ include/uapi/linux/dpll.h                     |  204 ++
+ include/uapi/linux/if_link.h                  |    2 +
+ net/core/dev.c                                |   20 +
+ net/core/rtnetlink.c                          |   38 +
+ 41 files changed, 7966 insertions(+), 59 deletions(-)
+ create mode 100644 Documentation/dpll.rst
+ create mode 100644 Documentation/netlink/specs/dpll.yaml
+ create mode 100644 drivers/dpll/Kconfig
+ create mode 100644 drivers/dpll/Makefile
+ create mode 100644 drivers/dpll/dpll_core.c
+ create mode 100644 drivers/dpll/dpll_core.h
+ create mode 100644 drivers/dpll/dpll_netlink.c
+ create mode 100644 drivers/dpll/dpll_netlink.h
+ create mode 100644 drivers/dpll/dpll_nl.c
+ create mode 100644 drivers/dpll/dpll_nl.h
+ create mode 100644 drivers/net/ethernet/intel/ice/ice_dpll.c
+ create mode 100644 drivers/net/ethernet/intel/ice/ice_dpll.h
+ create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/dpll.c
+ create mode 100644 include/linux/dpll.h
+ create mode 100644 include/uapi/linux/dpll.h
+
+-- 
+2.34.1
+
