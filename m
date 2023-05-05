@@ -2,84 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658286F81EF
+	by mail.lfdr.de (Postfix) with ESMTP id CF47B6F81F0
 	for <lists+linux-clk@lfdr.de>; Fri,  5 May 2023 13:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjEEL21 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 5 May 2023 07:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S231897AbjEEL22 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 5 May 2023 07:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjEEL2S (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 May 2023 07:28:18 -0400
+        with ESMTP id S231963AbjEEL2V (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 May 2023 07:28:21 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FAC16343
-        for <linux-clk@vger.kernel.org>; Fri,  5 May 2023 04:28:16 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id BFD9732008FB;
-        Fri,  5 May 2023 07:28:15 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9001A49B
+        for <linux-clk@vger.kernel.org>; Fri,  5 May 2023 04:28:19 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 8691D32008FB;
+        Fri,  5 May 2023 07:28:18 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 05 May 2023 07:28:16 -0400
+  by compute2.internal (MEProxy); Fri, 05 May 2023 07:28:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:content-type:date
         :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1683286095; x=1683372495; bh=6038Wb1yIMQSTNcxHtVFOjM4nNjjX1PUdrn
-        bzJSqaak=; b=WVgrdSIEQ+KInEgXWglZI64uqyeZYJa9e1+aUcBUX3vsM6R8yhO
-        94wuR5c6JItclGIAJVV2zDQ4fpO0YvSZwXSztKuh32OxNRLS46g8EDg60se0SX7I
-        YAxjGDaZKhD8v7Dr4OoqJcBiiXTO2CiC0vQ/zhOrv4d1Ehk3nD/N6iLSfAskoGMx
-        T/0cJyQ7evY6jpStEKReh1Z8JN+L0R9Ag4xriS6Gl/ZqwkQU63T2C2YQjH3uK50G
-        cu8pHFN+h6Xfn20b1VLHYSQ2oMhbQJv2qnSbleUVz+hFTGTYXR0lBbG8gK7AkA1N
-        +AIq7Yd5yHkRzSOaEqRuHZS41zAaYjpOmRA==
+        1683286098; x=1683372498; bh=ZEcqZ1zEpZiT/ye8OZXPzspFpxe6CFVMI8F
+        +hIwDKmg=; b=qYogqhmI/nEuLQpRiiZ842ekL5RvX7IkQAKEo9GbgVAZJYoGJ2n
+        QA6Q4RBlpzMeDoz7DoX0Rkf7HKrq932Ax1ANhw5RO7yGKvyIRXzOgrLNGto/HO2j
+        w/dfcFf+Zg88RWrgMnA0k/Qqi+aGBKxXXqH2JxemNdgdomwU1n92d6BQkLY5zn4E
+        dXCdGJ6Nxi1taXDrmRB+dIkWnDEaFg9M1pD/nEadFPByke2vMLxPvvmmSknL1tfq
+        H4Fd+FKbg7p2N7854ZfrcuklYtXLyz7k9WLhPS6jCrK5iiAq7yjXtaAGhAmnMw6A
+        Yv1ntVU4kIRuQ+Xa0XhqK0yWt+mL3IZCKEA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:content-type:date:date:feedback-id:feedback-id
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683286095; x=1683372495; bh=6038Wb1yIMQSTNcxHtVFOjM4nNjjX1PUdrn
-        bzJSqaak=; b=BxV9hKYaaxC0z5HaQoBGvG2uQ7dBsnA8byRREnMve6IVicbcOXJ
-        9SRhTAXjuqxNQhoLsKMPgJLMK2+9/ZQTV2+6le4vn59rBZCvPjNgtWia3LTGODOv
-        EWWv3aTADReuk92Nz5DRXi3qhtsc+mMosHvghiZydIo3qmC93jbCZZvLEQRWqPnU
-        zBi/yPTFMRG4xZ/Fc+5BGjDlpXVWmCLgtTHckiq9S0ts7dtk8LoRmlKFHvEtqaNG
-        RWHv3A6jXhqjmKLxhR16ujMGGeZQAnlxF+06r9wn971ORYrSdJ5SaH8x2VzqPFzv
-        GRVeIDGug6/4nyxhI70h41iqsT4PonzIelQ==
-X-ME-Sender: <xms:T-hUZPgN67XzX_mObzeOAItWqqBpMMZ6xDBUQTeEPqdWRMvBkbtSJw>
-    <xme:T-hUZMDeN9zvrm5gy3OCHclvA4SDbro7yrFxpK6wauheHgloAnHBn3mP_omX50GsJ
-    fgUn2lounjEayfKhe8>
-X-ME-Received: <xmr:T-hUZPGvSsZMf1x20RRJji6VgFa6jEKeodyJSLpPfzinNQAFhy9Qc1MFFaOC1Bd90cj3sPaAQqY3NxFmuh6VIVVFx5wBzx4>
+        1683286098; x=1683372498; bh=ZEcqZ1zEpZiT/ye8OZXPzspFpxe6CFVMI8F
+        +hIwDKmg=; b=eh2nSRkUhD42r87ppu7cJKwJ074i0VgSUxZYd9m9sjyb6L6/ak1
+        pu7tnDOkxl4eebH9eheXrtiuSOEFfYk1t4MoRxmlCC+Ns82WfFZP5utqPS0jTHtS
+        9xKEK+ZzyWao2Ipo5TyEWXOWl1df5OX3alvMaonNGagGRH6lSrPczvgqqV2KUw/x
+        OOVHmW0qL01G3NLfUeViJN9rHWO0Q6Y4RXAL48JK4itiPsi8UsW4FGF5R+hWvbl9
+        ZWcr6IRrYbLYbHANnvtshfNzTgYsqryugbbDYLXNXuzCrsKkTKW/b5JxwHHq2Qzo
+        0R6pNgIZQPEKTkrO6TvjY046dTLXqM7alYQ==
+X-ME-Sender: <xms:UuhUZO-SlNEQ5c6Vkh1LYMb1CwwNCBQZuM2TJ-18_YrdCEMAjWXo8w>
+    <xme:UuhUZOtlj7YbJihRnhKE2h7vWG7TcIkJ0egOgqmjXtRbbBlTtxHkDQ9i11RHEO68J
+    YqBPS6EKq78XyRgDb0>
+X-ME-Received: <xmr:UuhUZEDfo0a58dJumc7tfcW3SXpBoTvZzfk1dMFEHJbTV0ONQwIaEQw0zZahsDfu6AtxxF6Wbjf6GvXUGzOIsu2VJavFFFc>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeefvddggedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeforgig
     ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
     grthhtvghrnhepvedvleeijeegvdekffehkeehieelhfeggfffheetkeeuledvtdeuffeh
-    teeltdffnecuvehluhhsthgvrhfuihiivgepudefnecurfgrrhgrmhepmhgrihhlfhhroh
+    teeltdffnecuvehluhhsthgvrhfuihiivgepuddtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:T-hUZMTb7vz8y3QDDPOiIo9JPcluQEReMZIXX9s6QLcizZMjl7rhOw>
-    <xmx:T-hUZMxuGRi0f_nPOIyojtwxsSzpDG75I85NH2YUfa0GMEo6ftsTGw>
-    <xmx:T-hUZC4RVqlmbn6SV3edsyT289FfwdHHTa3k2KAbmpTRrGfUPhYGCg>
-    <xmx:T-hUZH8JX1tqCtn-JtBxe2tvcBQjKdzr-YxL_VUUGJ7dwVgtYF6KBQ>
+X-ME-Proxy: <xmx:UuhUZGf6POKWw37ZibQpWQ5oQ-ACKDg4ysgu_izaLqzTPCjM-mZskw>
+    <xmx:UuhUZDPsJoJOjO5V6d0UKZ6Cf-26lYzmc4VFDyKFfFw4q3T6Jwermw>
+    <xmx:UuhUZAkAs9xI0lzDsfP7q9M-i4DOooU7q0BZxA4d1fJ79dG6t7yJqQ>
+    <xmx:UuhUZMr9DR46Up0H5sajhUZHQZ3jsVrqGQNdo2lojFg4RxRyBZgZkg>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 May 2023 07:28:14 -0400 (EDT)
+ 5 May 2023 07:28:17 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Fri, 05 May 2023 13:25:52 +0200
-Subject: [PATCH v4 50/68] clk: axi-clkgen: Switch to determine_rate
+Date:   Fri, 05 May 2023 13:25:53 +0200
+Subject: [PATCH v4 51/68] clk: cdce706: divider: Switch to determine_rate
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221018-clk-range-checks-fixes-v4-50-971d5077e7d2@cerno.tech>
+Message-Id: <20221018-clk-range-checks-fixes-v4-51-971d5077e7d2@cerno.tech>
 References: <20221018-clk-range-checks-fixes-v4-0-971d5077e7d2@cerno.tech>
 In-Reply-To: <20221018-clk-range-checks-fixes-v4-0-971d5077e7d2@cerno.tech>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-clk@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Max Filippov <jcmvbkbc@gmail.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3069; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=+trBbQOXrS0+UKHh9hoh760H9Vj/FoeLh3zyKaozfcU=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCkhz5ceLAo9eMjIZMUdx4jnP85lfNv1/c68pQ89H/+zexq2
- 7F6xZUcpC4MYF4OsmCJLjLD5krhTs153svHNg5nDygQyhIGLUwAm8mAyw/8K7ctfZrLOqT2979rPjW
- /NYkMeWXnOj8hyefvXhSta0XwWw1/BtlxhiXD5b0EicdvLHv233cP52nPymoSbR1Q7nPTM+ZkB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3599; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=nAbW1sEMOOMuQjPHOFRKtN94gFBW+nEdxy6krENBKJ8=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCkhz5daKopV6smzbFfYH7Y3Jmqda7TP0SYOxthr2zWX823l
+ YentKGVhEONikBVTZIkRNl8Sd2rW6042vnkwc1iZQIYwcHEKwER6FzL84V/iZ9nMMFteVlDSsFG7+8
+ PfRTP1DIVmiS2R7lR2UTjCyPC/OnXzkddsEx+cEQ59tZSnqGE+h+G/kkydf+97XnX1Tz3IBwA=
 X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,7 +93,7 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The AXI clkgen clocks implements a mux with a set_parent hook, but
+The cdce706 divider clocks implements a mux with a set_parent hook, but
 doesn't provide a determine_rate implementation.
 
 This is a bit odd, since set_parent() is there to, as its name implies,
@@ -120,55 +121,70 @@ convert the round_rate() implementation to a determine_rate(), which
 will also make the current behavior explicit. And if it was an
 oversight, the clock behaviour can be adjusted later on.
 
+Cc: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/clk-axi-clkgen.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/clk/clk-cdce706.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-index a04a3d38c76e..bf4d8ddc93ae 100644
---- a/drivers/clk/clk-axi-clkgen.c
-+++ b/drivers/clk/clk-axi-clkgen.c
-@@ -384,23 +384,25 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
+diff --git a/drivers/clk/clk-cdce706.c b/drivers/clk/clk-cdce706.c
+index 139aa0954cc1..1c112bb51be6 100644
+--- a/drivers/clk/clk-cdce706.c
++++ b/drivers/clk/clk-cdce706.c
+@@ -288,18 +288,19 @@ static unsigned long cdce706_divider_recalc_rate(struct clk_hw *hw,
  	return 0;
  }
  
--static long axi_clkgen_round_rate(struct clk_hw *hw, unsigned long rate,
--	unsigned long *parent_rate)
-+static int axi_clkgen_determine_rate(struct clk_hw *hw,
-+				     struct clk_rate_request *req)
+-static long cdce706_divider_round_rate(struct clk_hw *hw, unsigned long rate,
+-				       unsigned long *parent_rate)
++static int cdce706_divider_determine_rate(struct clk_hw *hw,
++					  struct clk_rate_request *req)
  {
- 	struct axi_clkgen *axi_clkgen = clk_hw_to_axi_clkgen(hw);
- 	const struct axi_clkgen_limits *limits = &axi_clkgen->limits;
- 	unsigned int d, m, dout;
- 	unsigned long long tmp;
+ 	struct cdce706_hw_data *hwd = to_hw_data(hw);
+ 	struct cdce706_dev_data *cdce = hwd->dev_data;
++	unsigned long rate = req->rate;
+ 	unsigned long mul, div;
  
--	axi_clkgen_calc_params(limits, *parent_rate, rate, &d, &m, &dout);
-+	axi_clkgen_calc_params(limits, req->best_parent_rate, req->rate,
-+			       &d, &m, &dout);
+ 	dev_dbg(&hwd->dev_data->client->dev,
+ 		"%s, rate: %lu, parent_rate: %lu\n",
+-		__func__, rate, *parent_rate);
++		__func__, rate, req->best_parent_rate);
  
- 	if (d == 0 || dout == 0 || m == 0)
- 		return -EINVAL;
+-	rational_best_approximation(rate, *parent_rate,
++	rational_best_approximation(rate, req->best_parent_rate,
+ 				    1, CDCE706_DIVIDER_DIVIDER_MAX,
+ 				    &mul, &div);
+ 	if (!mul)
+@@ -344,8 +345,8 @@ static long cdce706_divider_round_rate(struct clk_hw *hw, unsigned long rate,
  
--	tmp = (unsigned long long)*parent_rate * m;
-+	tmp = (unsigned long long)req->best_parent_rate * m;
- 	tmp = DIV_ROUND_CLOSEST_ULL(tmp, dout * d);
+ 		dev_dbg(&hwd->dev_data->client->dev,
+ 			"%s, altering parent rate: %lu -> %lu\n",
+-			__func__, *parent_rate, rate * div);
+-		*parent_rate = rate * div;
++			__func__, req->best_parent_rate, rate * div);
++		req->best_parent_rate = rate * div;
+ 	}
+ 	hwd->div = div;
  
--	return min_t(unsigned long long, tmp, LONG_MAX);
-+	req->rate = min_t(unsigned long long, tmp, LONG_MAX);
+@@ -353,7 +354,8 @@ static long cdce706_divider_round_rate(struct clk_hw *hw, unsigned long rate,
+ 		"%s, divider: %d, div: %lu\n",
+ 		__func__, hwd->idx, div);
+ 
+-	return *parent_rate / div;
++	req->rate = req->best_parent_rate / div;
 +	return 0;
  }
  
- static unsigned int axi_clkgen_get_div(struct axi_clkgen *axi_clkgen,
-@@ -495,7 +497,7 @@ static u8 axi_clkgen_get_parent(struct clk_hw *clk_hw)
+ static int cdce706_divider_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -375,7 +377,7 @@ static const struct clk_ops cdce706_divider_ops = {
+ 	.set_parent = cdce706_divider_set_parent,
+ 	.get_parent = cdce706_divider_get_parent,
+ 	.recalc_rate = cdce706_divider_recalc_rate,
+-	.round_rate = cdce706_divider_round_rate,
++	.determine_rate = cdce706_divider_determine_rate,
+ 	.set_rate = cdce706_divider_set_rate,
+ };
  
- static const struct clk_ops axi_clkgen_ops = {
- 	.recalc_rate = axi_clkgen_recalc_rate,
--	.round_rate = axi_clkgen_round_rate,
-+	.determine_rate = axi_clkgen_determine_rate,
- 	.set_rate = axi_clkgen_set_rate,
- 	.enable = axi_clkgen_enable,
- 	.disable = axi_clkgen_disable,
 
 -- 
 2.40.0
