@@ -2,67 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6BC6F8210
-	for <lists+linux-clk@lfdr.de>; Fri,  5 May 2023 13:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567416F826C
+	for <lists+linux-clk@lfdr.de>; Fri,  5 May 2023 14:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjEELaa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 5 May 2023 07:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S232003AbjEEMBU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 5 May 2023 08:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjEELa3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 May 2023 07:30:29 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234DBC9
-        for <linux-clk@vger.kernel.org>; Fri,  5 May 2023 04:30:28 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-559de1d36a9so23316427b3.1
-        for <linux-clk@vger.kernel.org>; Fri, 05 May 2023 04:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683286227; x=1685878227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ACUxaYVJKcQREY7wFJGhOWfayaLLaVfA3/FmEYpJGs=;
-        b=RxfqYp7yHKS9GWv3vDrdpW6Pd3sZ/w6GQV4t9VOcHxKG3VNv9edkN5H3opANddGyGB
-         m/dMras5DXNOKFsKAlEDZ1Uqo+OkKNYnDiyMJtYg/ld3+iCnLnjHmxvBzkZonT+Qklcj
-         LyvuMl+RbgT7LGtkGdVSPzUHvZbXFTaijgLJQeuCCp0W1QJAXDqgD76veCY9vmkLxYPZ
-         IM/M+3yXtUf6bXu0gpX1jAhqbX1f1pAgG26/28OR0UqMDpVhMwhsax+PnPblX/4rZ1Zl
-         oRFn1/xcedMEX4esdT3tdSeylh2FsHab+7UwCXvq3IRSQOX+2LaFlP/m9L/nZps3XWOT
-         0eng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683286227; x=1685878227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+ACUxaYVJKcQREY7wFJGhOWfayaLLaVfA3/FmEYpJGs=;
-        b=gQdZti+olQvuwZWNn/TCycYFKhsuwbS6GBP7FT4DQiWoFYvjzgv/IyUH4lDx+bDV9u
-         foUoOP9H1otituNlS8OurtJP2sIa1O6Yq+GgVMGSQ/Y8bE1STTzFiFkijOM+BCSe8kCg
-         4fulwL8tpp9CaLxsvIzttZon9pbDPbBVlqVXDAaH0NQD5sB6wyUJ5JxvuicuKzWAPJcu
-         LylhFieZMEhhkQO7aJddGhWVf8ccJ7sl98THo+csvKQLLMZsFBFerwquC0aSHpYiFKhV
-         tF1aQXHvi4IltbhFFN2w8Lly1KRxnhvZ++9lUASO2qVA0sLxktyW9BSzVY9zEqD1yx4B
-         8zig==
-X-Gm-Message-State: AC+VfDyc22TZ7E1JvUtFmpLa++7Z2sp1y1CvCv/enci9J/Q5VmqxxyEP
-        v4fo8YJEwnO0Ac4hHGfL7tLbGLZbWkprSZ9E0rreYg==
-X-Google-Smtp-Source: ACHHUZ5ybfZH6/VMf13Mv27JzaWIeq3+NNAmeG8yJOVmJagSObJdajsDI2DJJRxJbP/aaYdkgqEYPVAP8zR8PIj4EfE=
-X-Received: by 2002:a81:dd0c:0:b0:55a:ad24:6d01 with SMTP id
- e12-20020a81dd0c000000b0055aad246d01mr1323979ywn.41.1683286227381; Fri, 05
- May 2023 04:30:27 -0700 (PDT)
+        with ESMTP id S231706AbjEEMBS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 May 2023 08:01:18 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A1D1A63F;
+        Fri,  5 May 2023 05:01:15 -0700 (PDT)
+X-UUID: 87387a68eb3c11edb20a276fd37b9834-20230505
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=luAbm/cIf5DEjsuZn9nfRPhegMwL+AJHD3PniRM34VE=;
+        b=KR/+bcp61QlUR5OeosRVygtHBWKYPt/882cl7tgij11yW++IsPXoksva6ErcI9HuSWztPOQufnMDQ0/PfaDWSNDTLctCRYQtKwnPPJr+KRz4oc3caazuWUi/S3QUf1+Pss0sAaA7BNDfnTNw+8rDYEoAiYDlZZP5/sJmmwXQcc0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.23,REQID:22f102bc-0398-402f-be35-4ebf1c4b3e6a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:697ab71,CLOUDID:68aedd30-6935-4eab-a959-f84f8da15543,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 87387a68eb3c11edb20a276fd37b9834-20230505
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <runyang.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1281634735; Fri, 05 May 2023 20:01:11 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 5 May 2023 20:01:11 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 5 May 2023 20:01:10 +0800
+From:   Runyang Chen <runyang.chen@mediatek.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Runyang Chen <runyang.chen@mediatek.com>
+Subject: [PATCH 0/2] Add infra_ao reset support for MT8188 Soc
+Date:   Fri, 5 May 2023 20:01:06 +0800
+Message-ID: <20230505120108.26603-1-runyang.chen@mediatek.com>
+X-Mailer: git-send-email 2.9.2
 MIME-Version: 1.0
-References: <20221018-clk-range-checks-fixes-v4-0-971d5077e7d2@cerno.tech> <20221018-clk-range-checks-fixes-v4-39-971d5077e7d2@cerno.tech>
-In-Reply-To: <20221018-clk-range-checks-fixes-v4-39-971d5077e7d2@cerno.tech>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 5 May 2023 13:30:16 +0200
-Message-ID: <CACRpkdY-n6NO7AFmAaoJgO0WfqAd52mMcDj0q+WdGY-UwzmuKA@mail.gmail.com>
-Subject: Re: [PATCH v4 39/68] clk: versatile: sp810: Add a determine_rate hook
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Pawel Moll <pawel.moll@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,34 +68,19 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, May 5, 2023 at 1:27=E2=80=AFPM Maxime Ripard <maxime@cerno.tech> wr=
-ote:
+Based on tag: next-20230504, linux-next/master
 
-> The Versatile sp810 "timerclken" clock implements a mux with a
-> set_parent hook, but doesn't provide a determine_rate implementation.
->
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. However, the most likely candidates to
-> trigger that parent change are either the assigned-clock-parents device
-> tree property or a call to clk_set_rate(), with determine_rate()
-> figuring out which parent is the best suited for a given rate.
->
-> This mismatch is probably due to the fact that the driver introduction
-> predates the determine_rate introduction, and it was never revised since
-> then.
->
-> The default, implicit, behaviour that has been in use so far has thus
-> been to simply keep using the current parent in all cases. This is also
-> the behaviour of the new clk_hw_determine_rate_no_reparent() helper, so
-> we can simply use it to make our expectation explicit.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Pawel Moll <pawel.moll@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+1. Add thermal reset bit for MT8188.
+2. Add infra_ao reset support for MT8188.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-I think Pawel's reply reads as an ACK as well?
+Runyang Chen (2):
+  dt-bindings: reset: mt8188: add thermal reset control bit
+  clk: mediatek: reset: add infra_ao reset support for  MT8188
 
-Yours,
-Linus Walleij
+ drivers/clk/mediatek/clk-mt8188-infra_ao.c | 24 ++++++++++++++++++++++
+ include/dt-bindings/reset/mt8188-resets.h  |  5 +++++
+ 2 files changed, 29 insertions(+)
+
+-- 
+2.18.0
+
