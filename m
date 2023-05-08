@@ -2,86 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FC56FAA6C
-	for <lists+linux-clk@lfdr.de>; Mon,  8 May 2023 13:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C866FAC38
+	for <lists+linux-clk@lfdr.de>; Mon,  8 May 2023 13:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbjEHLCv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 8 May 2023 07:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        id S235597AbjEHLWK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 8 May 2023 07:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbjEHLCh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 May 2023 07:02:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE092E80E;
-        Mon,  8 May 2023 04:01:25 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3486Eqs2025662;
-        Mon, 8 May 2023 11:01:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=30YV3GSfUJH7uuAX8OaPEaPxhsD0B30A4xbCT71CEQo=;
- b=WGHVlF3BsyIuV/3SBrU26+mSJHJfuxCpxS0A4EPFCSIZPqVCmu2edkCUpANl261nQVDH
- IJKmmANwNZ2pWLDEwsGtr4OKjv/o5iPw/wWd56LwUGXjAhHaf5X5IY9GUfxY6ASRZ3m4
- S7VeeZMEx/2JaEV6u7tCLCLPL5fh10l2IXG1QMBk7b7gBL+rWaVfmeyX0jx029Uvhpo2
- oaV9CEdyxq5IbyNTvk1eM7ogRngQ2qIkQtKWrUafeBrHBRF/W8T80mvbJMvq9rFoKIuS
- +4wlbkvPEuvB6I/mHdNz7kKo1Oeaz+uzMy/4CCUpc/frjFVMKz7t+9SHL7Sxln39tOqz Lg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qdf4b3ce1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 08 May 2023 11:01:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 348B1J0P008879
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 8 May 2023 11:01:19 GMT
-Received: from [10.216.33.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 8 May 2023
- 04:01:14 -0700
-Message-ID: <62a80dec-91ff-8a07-9818-7207a08a35b3@quicinc.com>
-Date:   Mon, 8 May 2023 16:31:11 +0530
+        with ESMTP id S235598AbjEHLWI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 May 2023 07:22:08 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDA02E075
+        for <linux-clk@vger.kernel.org>; Mon,  8 May 2023 04:22:03 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-55a5a830238so38760197b3.3
+        for <linux-clk@vger.kernel.org>; Mon, 08 May 2023 04:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683544923; x=1686136923;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ko/U1fePk/WQPy7Vn3m2ZCRRwSMISl8BqLJIER3u0Oc=;
+        b=lmH0XMw8PpvMAbg4bTIjxo7HrMUANXnsUFHAGj4B/mc9GFBCjA8omr6ylekmWkYkhn
+         6Z6uO30eTzH+govAWZABsibcAaCFm4bxOHizPQYwPIX998PelJ/aRHI9BhWZvuA/0RTc
+         L27hLqc7EVPLe5WpS1yCjZXfSORDmbnHsH9qYJsXK6gRuQDaVw1B4EQwt/WVy54savt8
+         CTObqlSg0mBBX9N4XY2o7IoofdceWwM2Jkgf9UH8/a8V3K9LECpbwxeAASI1HSGsnlDH
+         VWbxvbXnl6V4UczO1yrBQo5vMiRDzC1WnKLkdPf4o9OJNIQKVwjwFFVIYE4VMAJJp+gw
+         43lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683544923; x=1686136923;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ko/U1fePk/WQPy7Vn3m2ZCRRwSMISl8BqLJIER3u0Oc=;
+        b=Ess1L2L1PeNjYFNKIKagag4Fjao50BJO/2Cg6tn4mlz2G6uzbkpEsessibEdLPSbW2
+         p3viXKv1hzPa3iJ577l3KUjFPFaEPuue947VkI2c3wszxS8iUNgvXo0rLtzmQkrIL5x2
+         seIqgzl0MD79WnuQactikCLjIyWwAGvm3xZhEdSJjmQJhT6E4c8HYLG9TUC98I2V3Kyj
+         EnvsYDwgMR/Jf+3/KfKT5YQK48wnDawxro+SBrYVRmCgwC2afXOXsoBYeSPTYdkucoL5
+         Q3JA629xRY9ipg/etoSc+yWxldOuqcsy9xVVV4KAnS/fwipqwJUbAiXbTc4Onohr0KEd
+         7sXQ==
+X-Gm-Message-State: AC+VfDxEBTV6icAL7QY0YNd8lnKzH88A9wzVJ0aBL9ZU0rWdhqeBIJZO
+        xFWBULeCwrJOEU7IFgw6LtErXG1NEIurYOxdcTBfNQ==
+X-Google-Smtp-Source: ACHHUZ5au/Vo+wSxMFwJFjI/9KWWlfBLe/b0UuwxkO/sVsdYW6os9E+PkdqReYK5feb3ykElLiD8ESJVRHb4HRFlL5A=
+X-Received: by 2002:a25:d008:0:b0:b92:3958:dad9 with SMTP id
+ h8-20020a25d008000000b00b923958dad9mr10268569ybg.40.1683544922857; Mon, 08
+ May 2023 04:22:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 1/4] clk: qcom: branch: Extend the invert logic for
- branch2 clocks
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>
-CC:     <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohiagar@quicinc.com>, <netdev@vger.kernel.org>
-References: <20230419133013.2563-1-quic_tdas@quicinc.com>
- <20230419133013.2563-2-quic_tdas@quicinc.com>
- <0dc457cbd13ea76a3aa3c70b2a31a537.sboyd@kernel.org>
-From:   Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <0dc457cbd13ea76a3aa3c70b2a31a537.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kQ3XYs3uLOipgrKCKIHyYStYliBRUIOY
-X-Proofpoint-GUID: kQ3XYs3uLOipgrKCKIHyYStYliBRUIOY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 adultscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2305080075
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <cover.1683183860.git.quic_varada@quicinc.com> <8894bf2c44eaf4959c7a1966b66229e6cf5cda96.1683183860.git.quic_varada@quicinc.com>
+ <CAA8EJppvj2nzqwdsC+Xct4cJg2-_yPpiGDELjHJG4HyAH3zGMA@mail.gmail.com>
+ <20230506110918.GC10918@varda-linux.qualcomm.com> <CAA8EJpqg2htfa2QZ7q6SP58N5YAABa8knBn4c5eYqYOU6HQNiA@mail.gmail.com>
+ <20230508051657.GA24472@varda-linux.qualcomm.com>
+In-Reply-To: <20230508051657.GA24472@varda-linux.qualcomm.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 8 May 2023 14:21:52 +0300
+Message-ID: <CAA8EJppubMsUrG3Vo=2W8Y6=MCBKd7OCViM30jdGAdCc8x65Ww@mail.gmail.com>
+Subject: Re: [PATCH v10 8/9] arm64: dts: qcom: ipq9574: Add LDO regulator node
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,69 +74,92 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Stephen,
+On Mon, 8 May 2023 at 08:17, Varadarajan Narayanan
+<quic_varada@quicinc.com> wrote:
+>
+> On Sat, May 06, 2023 at 02:33:11PM +0300, Dmitry Baryshkov wrote:
+> > On Sat, 6 May 2023 at 14:09, Varadarajan Narayanan
+> > <quic_varada@quicinc.com> wrote:
+> > >
+> > > On Fri, May 05, 2023 at 12:29:54PM +0300, Dmitry Baryshkov wrote:
+> > > > On Fri, 5 May 2023 at 11:23, Varadarajan Narayanan
+> > > > <quic_varada@quicinc.com> wrote:
+> > > > >
+> > > > > Add LDO regulator node
+> > > >
+> > > > As this LDO is provided by the PMIC, it would be nice to know why it
+> > > > is modelled as an always-on regulator instead of the proper PMIC
+> > > > regulator. Up to now we were doing this only for the outstanding power
+> > > > rails like CX/MX or EBI.
+> > >
+> > > These are always ON because USB phy doesn't support power
+> > > collapse, and there is a chance that other IP blocks might be
+> > > sharing the rail.
+> >
+> > You are describing the software side here. From the hardware point of
+> > view, it is an I2C regulator, which is probably also exported as an
+> > SMD_RPM regulator. Unless you have a good reason not to do so, there
+> > should be a node under rpm-requests, which describes mp5496 regulators
+> > exported via RPM. then USB should refer to those regulators.
+>
+> Yes. It is a part of rpm-requests. That is why have mentioned V10
+> is dependent on
+> https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/.
+> The 4th patch of the above series
+> (https://lore.kernel.org/lkml/20230407155727.20615-1-quic_devipriy@quicinc.com/T/#mea3f0ea37c53cf5e39e10cd6cf3bed5243cec629)
+> adds the rpm_requests node and this regulator definition is added
+> to it. Hope that is ok.
 
-Thanks for your review.
+It is fine. Most probably I was mistaken by the patch itself. Please
+excuse me. If this this is an RPM regulator, it's is fine and correct.
 
-On 4/20/2023 3:07 AM, Stephen Boyd wrote:
-> Quoting Taniya Das (2023-04-19 06:30:10)
->> From: Imran Shaik <quic_imrashai@quicinc.com>
->>
->> Add support to handle the invert logic for branch2 clocks.
->> Invert branch halt would indicate the clock ON when CLK_OFF
->> bit is '1' and OFF when CLK_OFF bit is '0'.
->>
->> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   drivers/clk/qcom/clk-branch.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
->> index f869fc6aaed6..4b24d45be771 100644
->> --- a/drivers/clk/qcom/clk-branch.c
->> +++ b/drivers/clk/qcom/clk-branch.c
->> @@ -48,6 +48,7 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
->>   {
->>          u32 val;
->>          u32 mask;
->> +       bool invert = (br->halt_check == BRANCH_HALT_ENABLE);
->>   
->>          mask = BRANCH_NOC_FSM_STATUS_MASK << BRANCH_NOC_FSM_STATUS_SHIFT;
->>          mask |= BRANCH_CLK_OFF;
->> @@ -56,9 +57,16 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
->>   
->>          if (enabling) {
->>                  val &= mask;
->> +
->> +               if (invert)
->> +                       return (val & BRANCH_CLK_OFF) == BRANCH_CLK_OFF;
->> +
->>                  return (val & BRANCH_CLK_OFF) == 0 ||
->>                          val == BRANCH_NOC_FSM_STATUS_ON;
-> 
-> Do these clks have a NOC_FSM_STATUS bit? I think it would be better to
-> make a local variable for the val we're looking for, and then test for
-> that. We may need a mask as well, but the idea is to not duplicate the
-> test and return from multiple places.
-> 
-
-Clocks which has invert status doesn't have NOC_FSM_STATUS bit.
-Will remove the multiple returns in next patch.
-
->>          } else {
->> +               if (invert)
->> +                       return (val & BRANCH_CLK_OFF) == 0;
->> +
->>                  return val & BRANCH_CLK_OFF;
->>          }
-> 
-> While at it, I'd get rid of this else and de-indent the code because if
-> we're 'enabling' we'll return from the function regardless.
+>
+> Thanks
+> Varada
+>
+> > > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > > > > ---
+> > > > >  Changes in v10:
+> > > > >         - Add LDO regulator node
+> > > > > ---
+> > > > >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
+> > > > >  1 file changed, 7 insertions(+)
+> > > > >
+> > > > > diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > > > index bdc1434..1f5d14f 100644
+> > > > > --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > > > +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> > > > > @@ -60,6 +60,13 @@
+> > > > >                         regulator-min-microvolt = <725000>;
+> > > > >                         regulator-max-microvolt = <1075000>;
+> > > > >                 };
+> > > > > +
+> > > > > +               mp5496_l2: l2 {
+> > > > > +                       regulator-min-microvolt = <1800000>;
+> > > > > +                       regulator-max-microvolt = <1800000>;
+> > > > > +                       regulator-boot-on;
+> > > > > +                       regulator-always-on;
+> > > > > +               };
+> > > > >         };
+> > > > >  };
+> > > > >
+> > > > > --
+> > > > > 2.7.4
+> > > > >
+> > > >
+> > > >
+> > > > --
+> > > > With best wishes
+> > > > Dmitry
+> >
+> >
+> >
+> > --
+> > With best wishes
+> > Dmitry
 
 
-Yes, Stephen, will take care in the next patch.
 
 -- 
-Thanks & Regards,
-Taniya Das.
+With best wishes
+Dmitry
