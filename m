@@ -2,35 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299D66FD123
-	for <lists+linux-clk@lfdr.de>; Tue,  9 May 2023 23:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75F26FD130
+	for <lists+linux-clk@lfdr.de>; Tue,  9 May 2023 23:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbjEIVXQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 May 2023 17:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S236207AbjEIVXs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 May 2023 17:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbjEIVWK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 May 2023 17:22:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2738A51;
-        Tue,  9 May 2023 14:20:49 -0700 (PDT)
+        with ESMTP id S235913AbjEIVXM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 May 2023 17:23:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009386A54;
+        Tue,  9 May 2023 14:21:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D854634F7;
-        Tue,  9 May 2023 21:20:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2733DC433A8;
-        Tue,  9 May 2023 21:20:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCADF63738;
+        Tue,  9 May 2023 21:21:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3178C433A4;
+        Tue,  9 May 2023 21:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683667248;
-        bh=Oi+gQzDH22UxfWh2JyqJkOQEmh0VRe7t9VVL4UTI+PE=;
+        s=k20201202; t=1683667263;
+        bh=3nSx2KCemwv4hbknYteFY1HJuji8xiFBfgoofsSnr+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KwNrdWrdcjF+H9n6b3l4gUmwdO2DKMhz2B7x83ytiTU1UIx3pcK80hDCYZWpRE1ZJ
-         jwaM1RzXSr1/xVYtVIkm4ui8CG6WxFElrQ6hnWNikuPCeUUBEndAdtoNlQK+RILTd5
-         mPwC/6BIzuQIsuhtw0ffKgrvnhgVMU0/rQ/ycxZeG4bIHVF3zgGjWnDYRSKAUDsLwl
-         dKS4H+/D2KadHBhXYVc4lU/Ed3c/hDO+PSwUw8nPFGPkSgjoaXcoLuUc6NhjvQOzz9
-         syB3eeQNrJjcFmA//KQN5ZijWNvF4tjZ4oUicBhpzXpoAH1XZiXWN9hdhrbJxVerg2
-         IEAhKx0iJ5VDA==
+        b=Jt3+9xWZcMoui6vtgzuXSgSJCvdXmCrKk1BgEJDsElzX0ekOs2Ddm1baylS7BO2t0
+         rRXrKLIOj720bqaLK/qINdVmahYrJm+sfw3jjgDDBEeYSQ22EUvXDeSsnlmksVVL/A
+         qaFMg6fxievsQ0IOeY+ftiujHZjnr6oF+zLaFgiX2WKEk6d6BOrmBPc54Bht9S6qwD
+         QGhCAX3WNmpHB6Z+WB+MoxD12cea7cKD49DL3lb42OyuTda/zJPtIisbVuT4oueBnS
+         EhUX+2XnRlWaMkCkw2pPk1WRy06GFeossvcnwZbkTe9I5q9KN2kLdWX+XMjz3kDPrm
+         ZwMkujYEpd9KA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
@@ -38,18 +38,18 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
         pgaikwad@nvidia.com, mturquette@baylibre.com,
         thierry.reding@gmail.com, jonathanh@nvidia.com,
         linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 3/5] clk: tegra20: fix gcc-7 constant overflow warning
-Date:   Tue,  9 May 2023 17:20:39 -0400
-Message-Id: <20230509212044.22294-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 2/4] clk: tegra20: fix gcc-7 constant overflow warning
+Date:   Tue,  9 May 2023 17:20:54 -0400
+Message-Id: <20230509212058.22651-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230509212044.22294-1-sashal@kernel.org>
-References: <20230509212044.22294-1-sashal@kernel.org>
+In-Reply-To: <20230509212058.22651-1-sashal@kernel.org>
+References: <20230509212058.22651-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,7 +83,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
-index d60ee6e318a55..fb1da5d63f4b2 100644
+index 3e0f04f0e16e5..3f74497d73e58 100644
 --- a/drivers/clk/tegra/clk-tegra20.c
 +++ b/drivers/clk/tegra/clk-tegra20.c
 @@ -18,24 +18,24 @@
