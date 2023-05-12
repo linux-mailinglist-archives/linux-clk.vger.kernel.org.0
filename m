@@ -2,112 +2,247 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3827010FB
-	for <lists+linux-clk@lfdr.de>; Fri, 12 May 2023 23:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3D7701166
+	for <lists+linux-clk@lfdr.de>; Fri, 12 May 2023 23:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240477AbjELVSO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 12 May 2023 17:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S239981AbjELVfa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 12 May 2023 17:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240532AbjELVSN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 May 2023 17:18:13 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B86A258
-        for <linux-clk@vger.kernel.org>; Fri, 12 May 2023 14:17:50 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac80da3443so115023301fa.0
-        for <linux-clk@vger.kernel.org>; Fri, 12 May 2023 14:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683926257; x=1686518257;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UhWJCvsiOM+PbnYgsNzdrZ31BrHJ3YrqzSWfh68CWBg=;
-        b=LTCeDjNIPw9zFiuXJu99yoJ6EnntXtG3+RtvRtFiyUPyHdAcDwFqQEyveGm941vond
-         0RKkviUk1NZ8eX3A5HRLZfCet6/FFjlj2rmWeRk022gSQjdMCjtuHp7Pyl5Z3KeO+uJ+
-         zqOkuNvAx6LJAftmVG6DZiE8ksQAc+xaC92KUMoYPoJrc48iM5Hnw7MwtiGL+YNLsVib
-         l+1V5SJmNc1uY2pKe0cnr1roau8Cwv2LiLJC/zh6/a1VS4aM/WAfpZCIcq88Z6iz1j+9
-         fdT6r2J8wQGxZwJe7N7DfwVKlMO0y270kBk71hJW4HM3/5gRSPnmBAwCOj8i7RhhgQoD
-         jxJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683926257; x=1686518257;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UhWJCvsiOM+PbnYgsNzdrZ31BrHJ3YrqzSWfh68CWBg=;
-        b=R+crNFo7vb3uOg2uU8qnFz4OSCLaD0wqf0UCfgI0u2Jzc0dNGgoQbalrEDVqzN18SO
-         6UaBRX4g5ReEjZMNKHDTK6mFSHiloaiypvGT2GQsTrWT/MKtK8NcCLnjH9cY112Eo8uB
-         0EfmKHBp7QWvZQMbFTvUDaOM4YnC8vb/DDSAaCHtaIh4vT3/Z0QIS7QI0f1feijIfGkm
-         fTHQMRZnez1r+XFdoc0Xl6SI8Q96mtUATWUiz2pGU7gvg+YiEi3HMY171MEmRWipmISJ
-         /DCXvOCOoMJBRXaHKd4tyG+ud924YYp6V8s+v615lxlmdhgj5eV3NadU2+FGkNJeP1Ob
-         xtOQ==
-X-Gm-Message-State: AC+VfDyNrQpio/9dkYvbBa6fiGyRCtCzFqTN4zUECTiZ/aiWp+za+HSf
-        qI02z4PRqz75J0WwHT16kzsqdQ==
-X-Google-Smtp-Source: ACHHUZ64lNbAweb8iOnKkk1XHLEikx3Xor5qRBwHiMlnolDco6DeWqdIFsODjadj1J5mvoqdPuF/LA==
-X-Received: by 2002:ac2:44cc:0:b0:4e8:3fca:4927 with SMTP id d12-20020ac244cc000000b004e83fca4927mr3971478lfm.58.1683926257521;
-        Fri, 12 May 2023 14:17:37 -0700 (PDT)
-Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id w4-20020ac254a4000000b004edafe3f8dbsm1590363lfk.11.2023.05.12.14.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 14:17:37 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S239867AbjELVfU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 May 2023 17:35:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EFE9ECA;
+        Fri, 12 May 2023 14:35:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E49C361C11;
+        Fri, 12 May 2023 21:35:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011DCC433D2;
+        Fri, 12 May 2023 21:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683927308;
+        bh=ssPoigezhCRrDjg7mcA2KStxlVolfI3YMYndQSDR72E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rnWJ+EWH6NpSxhEi+rjIYtoO0FVqUzj+M2yz0JL6ra6laKLTgsewUkAJGF7WDI7db
+         kAMtFsNX2vDmy63695efG66uBHWQLnMGPinOgtPVd4knXqdExsA3zrvoIoHRB9lb3N
+         BZbZhqEV6/kl0ZSGozTekrAacngCLqYGsopfJKkPhpkK3k0l4lptSMdDGS1i0q7+9S
+         mBVdrlmEhvFX8CPNgd3rLUSR8GlL+RyA/vXFDMydaftSdcXg+KMQHW/qjGqbgz+tz9
+         uFBcTtAVC8QM0LM2G+BJxUJQlPEcJrlZmaEPJOxoR7zQtletlJG8vCQCsIyDpc7AeY
+         HFIAh5kfx00+w==
+Date:   Fri, 12 May 2023 22:35:01 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v3 10/10] ARM: dts: qcom-mdm9615: specify gcc clocks
-Date:   Sat, 13 May 2023 00:17:27 +0300
-Message-Id: <20230512211727.3445575-11-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230512211727.3445575-1-dmitry.baryshkov@linaro.org>
-References: <20230512211727.3445575-1-dmitry.baryshkov@linaro.org>
+        Conor Dooley <conor+dt@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Nicolas Belin <nbelin@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v4 04/13] dt-bindings: display: add Amlogic MIPI DSI Host
+ Controller bindings
+Message-ID: <20230512-elevation-stream-8acf60905d6b@spud>
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-4-2592c29ea263@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="s/aEe9Onk7m7s45t"
+Content-Disposition: inline
+In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-4-2592c29ea263@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fully specify the clocks used by the GCC on the mdm9615 platform.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-mdm9615.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+--s/aEe9Onk7m7s45t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index 556abe90cf5b..fc4f52f9e9f7 100644
---- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-+++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -10,6 +10,7 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,gcc-mdm9615.h>
-+#include <dt-bindings/clock/qcom,lcc-msm8960.h>
- #include <dt-bindings/reset/qcom,gcc-mdm9615.h>
- #include <dt-bindings/mfd/qcom-rpm.h>
- #include <dt-bindings/soc/qcom,gsbi.h>
-@@ -106,6 +107,8 @@ gcc: clock-controller@900000 {
- 			#power-domain-cells = <1>;
- 			#reset-cells = <1>;
- 			reg = <0x900000 0x4000>;
-+			clocks = <&cxo_board>,
-+				 <&lcc PLL4>;
- 		};
- 
- 		lcc: clock-controller@28000000 {
--- 
-2.39.2
+On Fri, May 12, 2023 at 03:11:35PM +0200, Neil Armstrong wrote:
+> The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI transceiv=
+er (ver 1.21a),
+> with a custom glue managing the IP resets, clock and data input similar t=
+o the DW-HDMI Glue
+> on the same Amlogic SoCs.
+>=20
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
+This looks fine to me,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+but I would like Krzysztof to take a look too to be on the safe side!
+
+Cheers,
+Conor.
+
+> ---
+>  .../display/amlogic,meson-g12a-dw-mipi-dsi.yaml    | 117 +++++++++++++++=
+++++++
+>  1 file changed, 117 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/display/amlogic,meson-g12a=
+-dw-mipi-dsi.yaml b/Documentation/devicetree/bindings/display/amlogic,meson=
+-g12a-dw-mipi-dsi.yaml
+> new file mode 100644
+> index 000000000000..8169c7e93ff5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/amlogic,meson-g12a-dw-mip=
+i-dsi.yaml
+> @@ -0,0 +1,117 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2020 BayLibre, SAS
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/amlogic,meson-g12a-dw-mipi-ds=
+i.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic specific extensions to the Synopsys Designware MIPI DSI H=
+ost Controller
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +
+> +description: |
+> +  The Amlogic Meson Synopsys Designware Integration is composed of
+> +  - A Synopsys DesignWare MIPI DSI Host Controller IP
+> +  - A TOP control block controlling the Clocks & Resets of the IP
+> +
+> +allOf:
+> +  - $ref: dsi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - amlogic,meson-g12a-dw-mipi-dsi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 3
+> +
+> +  clock-names:
+> +    minItems: 3
+> +    items:
+> +      - const: pclk
+> +      - const: bit_clk
+> +      - const: px_clk
+> +      - const: meas_clk
+> +
+> +  resets:
+> +    minItems: 1
+> +
+> +  reset-names:
+> +    items:
+> +      - const: top
+> +
+> +  phys:
+> +    minItems: 1
+> +
+> +  phy-names:
+> +    items:
+> +      - const: dphy
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Input node to receive pixel data.
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: DSI output node to panel.
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - phys
+> +  - phy-names
+> +  - ports
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    dsi@7000 {
+> +          compatible =3D "amlogic,meson-g12a-dw-mipi-dsi";
+> +          reg =3D <0x6000 0x400>;
+> +          resets =3D <&reset_top>;
+> +          reset-names =3D "top";
+> +          clocks =3D <&clk_pclk>, <&bit_clk>, <&clk_px>;
+> +          clock-names =3D "pclk", "bit_clk", "px_clk";
+> +          phys =3D <&mipi_dphy>;
+> +          phy-names =3D "dphy";
+> +
+> +          ports {
+> +              #address-cells =3D <1>;
+> +              #size-cells =3D <0>;
+> +
+> +              /* VPU VENC Input */
+> +              mipi_dsi_venc_port: port@0 {
+> +                  reg =3D <0>;
+> +
+> +                  mipi_dsi_in: endpoint {
+> +                       remote-endpoint =3D <&dpi_out>;
+> +                  };
+> +              };
+> +
+> +              /* DSI Output */
+> +              mipi_dsi_panel_port: port@1 {
+> +                  reg =3D <1>;
+> +
+> +                  mipi_out_panel: endpoint {
+> +                      remote-endpoint =3D <&mipi_in_panel>;
+> +                  };
+> +              };
+> +          };
+> +    };
+>=20
+> --=20
+> 2.34.1
+>=20
+
+--s/aEe9Onk7m7s45t
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF6xBQAKCRB4tDGHoIJi
+0lkLAP9aw2fomhWlSF6eQEZVTD8Xm33bApDDIK5TJfpd9yZupQD8DFLo/uqOZeTX
+Sifp4pc02lgSSSXPXhf84CIoaGUoHAU=
+=h7tW
+-----END PGP SIGNATURE-----
+
+--s/aEe9Onk7m7s45t--
