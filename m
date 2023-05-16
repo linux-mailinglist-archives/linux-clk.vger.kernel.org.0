@@ -2,165 +2,220 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34AE704D3C
-	for <lists+linux-clk@lfdr.de>; Tue, 16 May 2023 14:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE7F704D5B
+	for <lists+linux-clk@lfdr.de>; Tue, 16 May 2023 14:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjEPMBW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 16 May 2023 08:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S232847AbjEPMF7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 16 May 2023 08:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjEPMBV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 May 2023 08:01:21 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD13E44AA;
-        Tue, 16 May 2023 05:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684238480; x=1715774480;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MkgobwPTSWoToec9i45GpRXlMt8+RnGcFPDnD9ytMaA=;
-  b=CC1CaOLVx4pfc5YQdEedRq3kX4pw1tvGB2CqChiLaUZLNsCBpSHfz3oD
-   rIrVrZEgTvJEEnaRGcuRV45yG+CEaXrjbw+QIyMgyWi2b0gth6G2IeWFf
-   dSRrCuvc6hWIGEvIVwqxCsD7ouJ8VetcM3fRb4weUeUcf3l+kGsVpVvyj
-   +MTNHJpQnitxtb82b4SUXgbNUjjqqSV1Op0t+HzuvmtTXfCnZz6lWaOuv
-   no/V7YfQYjpy5u6oxTxRws6thETWk+lE5ITYD6txKVtc8btTsTV7fsfXe
-   K/aM73DiRn0ta36sVaPNm8LrSAlLNFhLLivSxc2PayUeP+J4DDQZ4Q8tS
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,278,1677567600"; 
-   d="asc'?scan'208";a="213511896"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 May 2023 05:01:19 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 16 May 2023 05:01:19 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 16 May 2023 05:01:17 -0700
-Date:   Tue, 16 May 2023 13:00:57 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc:
- convert to yaml
-Message-ID: <20230516-modulator-reason-1d3a754c6dd7@wendy>
-References: <20230516051836.2511149-1-claudiu.beznea@microchip.com>
- <20230516051836.2511149-3-claudiu.beznea@microchip.com>
+        with ESMTP id S232607AbjEPMF6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 May 2023 08:05:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6B110D2;
+        Tue, 16 May 2023 05:05:54 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GBTu8j016044;
+        Tue, 16 May 2023 12:05:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=tX/my1SwYZPgLxEVNvnjUMSY7/9Bl5CftXwMRn4aaL0=;
+ b=BPGWpxhkcaECGNCG/BfPrzTHBBLaIsPErYJs+s86L3uCUja7XxfSHa2+skHywIV5ILs1
+ q1XD1SGP3AcDcL24HZPpWyffXJp7dUDzPbYlx6FDV7V1oqXXMaHpR0MBqGCdwkLuJa9+
+ cnB6++WKQY3qwJpUcDo2YTPFEdS+Cq9dK5xjIq2z97zh9jyg/EJru95GmKH/PGQwX0kR
+ gj7Le0KMvhGqbn77Lx0vSP1GC9W9O0zPvqXW2Rwo9YfS357ylLyn9fyxmn6OlRkaKifp
+ 85PiVT0D+mPQcvwhMbL2cKwQ5SvGT3gAvuWlb7AlL93SeoeN3uZfZgnvR9h5sEvzwaRg sQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkqg8t434-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:05:46 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GC5jBY019170
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:05:45 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 16 May 2023 05:05:39 -0700
+Date:   Tue, 16 May 2023 17:35:35 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Kathiravan T <quic_kathirav@quicinc.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v11 7/9] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230516120535.GB1679@varda-linux.qualcomm.com>
+References: <cover.1683630932.git.quic_varada@quicinc.com>
+ <b4c9dcfbfc328e9404be0edeaa70dde076cb7144.1683630932.git.quic_varada@quicinc.com>
+ <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/p49LlXOSFYXPS6l"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230516051836.2511149-3-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: CZTdxF-EgkOSF8rP1cgjb77J_zTu2FLL
+X-Proofpoint-GUID: CZTdxF-EgkOSF8rP1cgjb77J_zTu2FLL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160102
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
---/p49LlXOSFYXPS6l
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, May 15, 2023 at 04:06:29PM +0530, Kathiravan T wrote:
+> 
+> On 5/9/2023 5:24 PM, Varadarajan Narayanan wrote:
+> >Add USB phy and controller related nodes
+> >
+> >SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+> >and 3.3V are from fixed regulators and 1.8V is generated from
+> >PMIC's LDO
+> >
+> >Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >---
+> >  Changes in v11:
+> >	- Rename dwc_0 -> usb_0_dwc3
+> >  Changes in v10:
+> >	- Fix regulator definitions
+> >  Changes in v8:
+> >	- Change clocks order to match the bindings
+> >  Changes in v7:
+> >	- Change com_aux -> cfg_ahb
+> >  Changes in v6:
+> >	- Introduce fixed regulators for the phy
+> >	- Resolved all 'make dtbs_check' messages
+> >
+> >  Changes in v5:
+> >	- Fix additional comments
+> >	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >	- 'make dtbs_check' giving the following messages since
+> >	  ipq9574 doesn't have power domains. Hope this is ok
+> >
+> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> >
+> >  Changes in v4:
+> >	- Use newer bindings without subnodes
+> >	- Fix coding style issues
+> >
+> >  Changes in v3:
+> >	- Insert the nodes at proper location
+> >
+> >  Changes in v2:
+> >	- Fixed issues flagged by Krzysztof
+> >	- Fix issues reported by make dtbs_check
+> >	- Remove NOC related clocks (to be added with proper
+> >	  interconnect support)
+> >---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 104 insertions(+)
+> >
+> >diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >index 93b4ba9..42b61f6 100644
+> >--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >@@ -150,6 +150,24 @@
+> >  		method = "smc";
+> >  	};
+> >+	fixed_3p3: s3300 {
+> >+		compatible = "regulator-fixed";
+> >+		regulator-min-microvolt = <3300000>;
+> >+		regulator-max-microvolt = <3300000>;
+> >+		regulator-boot-on;
+> >+		regulator-always-on;
+> >+		regulator-name = "fixed_3p3";
+> >+	};
+> >+
+> >+	fixed_0p925: s0925 {
+> >+		compatible = "regulator-fixed";
+> >+		regulator-min-microvolt = <925000>;
+> >+		regulator-max-microvolt = <925000>;
+> >+		regulator-boot-on;
+> >+		regulator-always-on;
+> >+		regulator-name = "fixed_0p925";
+> >+	};
+> >+
+> >  	reserved-memory {
+> >  		#address-cells = <2>;
+> >  		#size-cells = <2>;
+> >@@ -191,6 +209,45 @@
+> >  			reg = <0x00060000 0x6000>;
+> >  		};
+> >+		usb_0_qusbphy: phy@7b000 {
+> >+			compatible = "qcom,ipq9574-qusb2-phy";
+> >+			reg = <0x0007b000 0x180>;
+> >+			#phy-cells = <0>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> >+				 <&xo_board_clk>;
+> >+			clock-names = "cfg_ahb",
+> >+				      "ref";
+> >+
+> >+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> >+			status = "disabled";
+> >+		};
+> >+
+> >+		usb_0_qmpphy: phy@7d000 {
+> >+			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> >+			reg = <0x0007d000 0xa00>;
+> >+			#phy-cells = <0>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> >+				 <&xo_board_clk>,
+> >+				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> >+				 <&gcc GCC_USB0_PIPE_CLK>;
+> >+			clock-names = "aux",
+> >+				      "ref",
+> >+				      "cfg_ahb",
+> >+				      "pipe";
+> >+
+> >+			resets = <&gcc GCC_USB0_PHY_BCR>,
+> >+				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> >+			reset-names = "phy",
+> >+				      "phy_phy";
+> >+
+> >+			status = "disabled";
+> >+
+> >+			#clock-cells = <0>;
+> >+			clock-output-names = "usb0_pipe_clk";
+> >+		};
+> >+
+> >  		pcie0_phy: phy@84000 {
+> >  			compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> >  			reg = <0x00084000 0x1000>;
+> >@@ -560,6 +617,53 @@
+> >  			status = "disabled";
+> >  		};
+> >+		usb3: usb@8a00000 {
+> 
+> node address should be updated to 8af8800 ?
 
-Hey Claudiu,
+Ok. Will update and post a new patchset.
 
-On Tue, May 16, 2023 at 08:18:33AM +0300, Claudiu Beznea wrote:
-> Convert Atmel PMC documentation to yaml. Along with it clock names
-> were adapted according to the current available device trees as
-> different controller versions accept different clock (some of them
-> have 3 clocks as input, some has 2 clocks as inputs and some with 2
-> input clocks uses different clock names).
-> diff --git a/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
-> new file mode 100644
-> index 000000000000..e5f514bc4bf7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
-> @@ -0,0 +1,153 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/atmel,at91rm9200-pmc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel Power Management Controller (PMC)
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  The power management controller optimizes power consumption by controlling all
-> +  system and user peripheral clocks. The PMC enables/disables the clock inputs
-> +  to many of the peripherals and to the processor.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: atmel,at91sam9g20-pmc
-> +          - const: atmel,at91sam9260-pmc
-> +          - const: syscon
-> +      - items:
-> +          - enum:
-> +              - atmel,at91sam9g15-pmc
-> +              - atmel,at91sam9g25-pmc
-> +              - atmel,at91sam9g35-pmc
-> +              - atmel,at91sam9x25-pmc
-> +              - atmel,at91sam9x35-pmc
-> +          - const: atmel,at91sam9x5-pmc
-
-Yet another combinations question for you...
-With this binding the following is not possible:
-
-"atmel,at91sam9x5-pmc", "syscon"
-
-Is that intended?
-I notice "atmel,at91sam9260-pmc" is able to appear as:
-
-"atmel,at91sam9260-pmc", "syscon"
-
-So the inconsistency stands out.
-
-> +          - const: syscon
-> +      - items:
-> +          - enum:
-> +              - atmel,at91rm9200-pmc
-> +              - atmel,at91sam9260-pmc
-> +              - atmel,at91sam9g45-pmc
-> +              - atmel,at91sam9n12-pmc
-> +              - atmel,at91sam9rl-pmc
-> +              - atmel,sama5d2-pmc
-> +              - atmel,sama5d3-pmc
-> +              - atmel,sama5d4-pmc
-> +              - microchip,sam9x60-pmc
-> +              - microchip,sama7g5-pmc
-> +          - const: syscon
-
-Otherwise, this looks grand to me.
-
-Cheers,
-Conor.
-
---/p49LlXOSFYXPS6l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGNweAAKCRB4tDGHoIJi
-0klMAP0feKg5Rk+Yx1hTTlWBFl+34Zjsn4gGKdFx2Qpcp5s4OwD+IIa9fAnSmOd/
-OrjaQNfj+Ol17iJGt9+PsDIjVzpxsQE=
-=6H0j
------END PGP SIGNATURE-----
-
---/p49LlXOSFYXPS6l--
+Thanks
+Varada
