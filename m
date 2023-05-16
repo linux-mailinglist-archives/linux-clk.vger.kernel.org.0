@@ -2,77 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2514D704D5A
-	for <lists+linux-clk@lfdr.de>; Tue, 16 May 2023 14:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E6B704D94
+	for <lists+linux-clk@lfdr.de>; Tue, 16 May 2023 14:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjEPMFt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 16 May 2023 08:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S232324AbjEPMQB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 16 May 2023 08:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232976AbjEPMFq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 May 2023 08:05:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E12159EB;
-        Tue, 16 May 2023 05:05:42 -0700 (PDT)
+        with ESMTP id S231888AbjEPMQA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 May 2023 08:16:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDACFFA;
+        Tue, 16 May 2023 05:15:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684238742; x=1715774742;
+  t=1684239358; x=1715775358;
   h=from:to:cc:subject:date:message-id:references:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=YIWZqXf4HHzoNtQY7oOIo41y/nKSq234f+rEaRbkZGk=;
-  b=d+LkLmoZ6h9w+c/VI3iJpC3VFG3imzsD9/9ldrkNBC5F0Zj0dDPwZFPC
-   xm52eg2+VotdwBpZOtyBvIKfaQqOcgbhmKH7jpR3KWyOPSOWkCpGw2pcm
-   ve0ZFszPNPtmx1lTlOBxJVR4H35YvaJOFYljCFJ3GG5cqJET8TVluk5WD
-   Bs+b4e1cc+mwb9maTDIt7b75U/2qMorBb03W7OwRAKT53hhqpcdiBhlgy
-   Ud3Q3bK03ng/wL4sKSI9SYqpqhPkYdFpmRvOYpCKLLx9O+AmKSbmQRx9L
-   5c5c5FPQLYD+XJNuJ4Zunh3cI5JdsyjxB7ngW2x0b7vog0IL/X3I0ezFr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="331821082"
+  bh=0eVWaBQtn79Ddp9/7zqrwtCa85gGLWM+uFF6qfuCBHU=;
+  b=Ak6YuViU1ILwaQF9uPc42NoVoR9e7ViMxpPbzi86w7LX7JIrdJxlmEKO
+   NF8X/CJZEFhKpsxzso0GCPHD6dyF3NM7AF4Rps+IuG82lQh/82CA9ZNPa
+   0088+0iR7lzBPg64VOuKS5Av5fNBlHqiK3WF494DuOqdiWBbftmQND/ub
+   lrplhW7qLU2GtK18fiy9+Vfzhgu2qojlOSOtI09/f1QTILWg9WQMKd2tW
+   wom/WXAZSR0XnBuWYsJhE53udRl0zQstfmt83Ao59cdpIEyOLPtTBEbJn
+   U4N432FcqNT83LhvC0/PuGmLC7q51GShqDbwTp5QaGKVObWQE/JB143bh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="336005243"
 X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="331821082"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:05:41 -0700
+   d="scan'208";a="336005243"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:15:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="875593982"
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="813405396"
 X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="875593982"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga005.jf.intel.com with ESMTP; 16 May 2023 05:05:41 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="813405396"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga002.fm.intel.com with ESMTP; 16 May 2023 05:15:56 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 05:05:40 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.23; Tue, 16 May 2023 05:15:57 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 05:05:40 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.23; Tue, 16 May 2023 05:15:56 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 05:15:56 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 16 May 2023 05:05:40 -0700
+ 15.1.2507.23; Tue, 16 May 2023 05:15:56 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WNeWheMYi8gWuRMGChDDzJhBDWy65QzRdfbS3sKl0B+3HBa0k4WMl8ZUFdgSIw7KflXBGKGgjZoUfoSp45sWO0XSRxYjxVdAEqYa2K+tA7N3WWoqL7Y2b4b/YS0eyF/l9Gpe6l/0HPFpgs0pmKgrBWlHziwyS85MTz1gQBQxPdN07cfCX3IN1Guw+hkzWXHPvBN3uvEhYELCarQR86j/eb+Zdvpuo8oyUYfc3/v64Y6jbyq7x2Z9UUcuzclZggq2EGlNNjWjIpr/Vh5sdjxn8J9V3E2Ez2t1+XjJ4is1br8CGlZ8s8JEJ90/9q/3JEfO6X0XjRkjtokbloeHmH3Fiw==
+ b=flp8PNMWZe7kvcWHxBdLnWO6YZYtP9/5g4cxBy6FLz8EsTTu97j3OfvsOEsNjw1fGW5LoWtM6BIyEX8/5gRxEfCaeyZC/aFhfeqFw2g9W2GainKioxpK1kkv8oHM7H1yArbI3z1o4JM9VvrrstwVj3wNDzkCK3Rmi/I+NrBoH3kecIGuQNtZXvsGUokptpU861zWrrCjaq4qA/87omXH/pZXo7m2KmqgHxzYu+dfcjHpR7WruEf/6OYWcbrTAZHtKU9D8E937q0YJMs+zZTIZehBKzNY5YAzov6IJLMhSf7K/RWyrHsOuVwmQuHpU7nyHgLWMpdSYVd6Cdla9bZs2Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uJsIb01ONcV6I/KG6Uj9Ku6PFDqpSDYIFD7eSS6ugMI=;
- b=Pnf/xxr2rqo6BmRru/pOqh4Aq0Z+aMY7EhqHJog7bMElq0DEm+RoN5RuRs9CzCB69ExYuyhuDlWGBqGls33uIkLOdVe2W5NgafvL3eJH8vse9s8jwoaoOi7xSvt0dD5rGy7wwQPHaRKxqYBgzh6NpJDV9N/OsgBiJE/TG0of4+TbKr87V/myYw7H/Q8whYYaWvHoam/CnjPYksCwPOgHoKsb+IjP73am0mA6S5RwLZftvzbR0/nQbzuiR9LQQpn31ws0ZQd8bUoNlStadNHkRBzhD5G/CRJk2/U0z6xALrlP01RFbJpSNQeTzBlLnX1G3hqZa25BcfgWE/QgQ2NGMA==
+ bh=Hc4/RNdHP0AzgM3cHd54VccJSu3r88Fm+en5C20FNrw=;
+ b=UCdbpsQkCWj4lRF//bGdmwmOq6aOfISQrRq5Cqi5BeMScpSTVszGgESdPeNdeS9eT/e0iyMAWEZt1nndJwUj8qJm60hXo285u4w3+9fAcyFkGtuOA0K8TMnXibizikriA4ShLJkSENvghSpliSDdNMXhBEw/ueqmJFwtAGf/HYY/oTCITjci04sI3AJq7CsWGDffB326lUN+Jefcm6mcBLe6Xk4HxN74Mz6WAeACSZ5WR49ZJ5hACbcLaNelt0FsJCbl8t1kMI9PU1PUzZy8mIvH8vI5McKxSUhy2ok1oTqEJvij14IKGJGhDP60kCDDpclCkbar55dOBtwsvez4Mg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Received: from DM6PR11MB4657.namprd11.prod.outlook.com (2603:10b6:5:2a6::7) by
- MW4PR11MB5869.namprd11.prod.outlook.com (2603:10b6:303:168::9) with Microsoft
+ DM4PR11MB6168.namprd11.prod.outlook.com (2603:10b6:8:ab::22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6387.32; Tue, 16 May 2023 12:05:38 +0000
+ 15.20.6387.33; Tue, 16 May 2023 12:15:53 +0000
 Received: from DM6PR11MB4657.namprd11.prod.outlook.com
  ([fe80::7887:a196:2b04:c96e]) by DM6PR11MB4657.namprd11.prod.outlook.com
  ([fe80::7887:a196:2b04:c96e%5]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 12:05:38 +0000
+ 12:15:53 +0000
 From:   "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
-To:     Jiri Pirko <jiri@resnulli.us>
-CC:     Jakub Kicinski <kuba@kernel.org>,
-        Vadim Fedorenko <vadfed@meta.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Vadim Fedorenko <vadfed@meta.com>, Jiri Pirko <jiri@resnulli.us>,
+        "Jonathan Lemon" <jonathan.lemon@gmail.com>,
         Paolo Abeni <pabeni@redhat.com>,
         "Olech, Milena" <milena.olech@intel.com>,
         "Michalik, Michal" <michal.michalik@intel.com>,
@@ -84,17 +87,17 @@ CC:     Jakub Kicinski <kuba@kernel.org>,
         Vadim Fedorenko <vadim.fedorenko@linux.dev>
 Subject: RE: [RFC PATCH v7 1/8] dpll: spec: Add Netlink spec in YAML
 Thread-Topic: [RFC PATCH v7 1/8] dpll: spec: Add Netlink spec in YAML
-Thread-Index: AQHZeWdNus9yie+T1ke/i4FdVA4f5K9KDcsAgACdH4CAChnlwIAABXaAgACPXPCABdNcAIABvNIA
-Date:   Tue, 16 May 2023 12:05:38 +0000
-Message-ID: <DM6PR11MB4657670163F45823F66B28619B799@DM6PR11MB4657.namprd11.prod.outlook.com>
+Thread-Index: AQHZeWdNus9yie+T1ke/i4FdVA4f5K9KDcsAgACdH4CAChnlwIAAgLyAgAA0FNCAAFRrAIAG+76g
+Date:   Tue, 16 May 2023 12:15:53 +0000
+Message-ID: <DM6PR11MB4657499C8AA3DDB87AAB16AD9B799@DM6PR11MB4657.namprd11.prod.outlook.com>
 References: <20230428002009.2948020-1-vadfed@meta.com>
- <20230428002009.2948020-2-vadfed@meta.com> <ZFOe1sMFtAOwSXuO@nanopsycho>
- <20230504142451.4828bbb5@kernel.org>
- <MN2PR11MB46645511A6C93F5C98A8A66F9B749@MN2PR11MB4664.namprd11.prod.outlook.com>
- <ZFygbd1H+VdvCTyH@nanopsycho>
- <DM6PR11MB4657924148B84F502A44903D9B749@DM6PR11MB4657.namprd11.prod.outlook.com>
- <ZGH7uvxD55Pan0gf@nanopsycho>
-In-Reply-To: <ZGH7uvxD55Pan0gf@nanopsycho>
+        <20230428002009.2948020-2-vadfed@meta.com>      <ZFOe1sMFtAOwSXuO@nanopsycho>
+        <20230504142451.4828bbb5@kernel.org>
+        <MN2PR11MB46645511A6C93F5C98A8A66F9B749@MN2PR11MB4664.namprd11.prod.outlook.com>
+        <20230511082053.7d2e57e3@kernel.org>
+        <DM6PR11MB4657EF0A57977C56264BC7A99B749@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <20230511162926.009994bb@kernel.org>
+In-Reply-To: <20230511162926.009994bb@kernel.org>
 Accept-Language: pl-PL, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -102,285 +105,126 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4657:EE_|MW4PR11MB5869:EE_
-x-ms-office365-filtering-correlation-id: d4c5411a-1b42-4a0e-82b2-08db5605dce1
+x-ms-traffictypediagnostic: DM6PR11MB4657:EE_|DM4PR11MB6168:EE_
+x-ms-office365-filtering-correlation-id: 75e09df6-d335-4b42-a13f-08db56074b83
 x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mukTX484AmO7K/KS0T+W9+MR51/R2CZ4VXON4elogV2Uoa5wXUOPIq+iGm53jJFhmG08KA0hf4qaej9+aTWanithwEMVUmF2+kq3eJStySEWgQpYfcGCYng+ic5pAb979C9UBvT57Uct//JSrHlnwoU/RiQZrhr/cBOFId5k/4ZRO9XCQVi4oiIs+TvBE0ejiv4t5PASgWw1mqmQl+jLrAYz/FZc6sIx8ktHSQj5JSMcz1KbI1/hlB9pQDRNCiFJQsLg8emwPwb3/YsebkrBf1E6vJniCwv90LGg3aLhKVH0j/1VwFXSzF9qNE0lgVf+0WOTbnP5rfNAn1N+tZY9PMGMP0Sazb5TrrGGKw8kcbeDKxu/LiQ6iyxJeDyaIzTL/OhOWFHe6dHi4rNocdLySu+KcwaV52zLJGqxEcerXYI7KPsHfb2qFFID5nSeCwbvVEVJrtui0OX69XJWJkvUS5fHkl+PbkkuhJWNNdUcwCfswhENyUybZTnARpUn0hqdAExA9wyroMCB7xVgxWN65d/3qTN33DkPTbU27l008A68IVPe7r9wEhKHKE2uyRRNrL6xAhbWOxA4wREjbnU1EVVF4TEDMnij93V6gpAM9uZQkCf100OYtt7XLShHGXd3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(346002)(136003)(366004)(39860400002)(451199021)(66446008)(6916009)(2906002)(316002)(7416002)(52536014)(5660300002)(8936002)(4326008)(8676002)(76116006)(66556008)(64756008)(66476007)(66946007)(41300700001)(54906003)(33656002)(55016003)(7696005)(478600001)(71200400001)(186003)(26005)(6506007)(82960400001)(86362001)(9686003)(83380400001)(38070700005)(122000001)(38100700002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: OOv031ukjyYFMRfiQkncYQFpUovFnP9I9jaxqLhMU9z+FOv/KvqWTqOQfmmZKf9do5XBIMFcwxfXo76YJgBioCJD9Ys6VHddCI66Hb0VcBQiQf5i7YwT1NpmBjrxo0xLxs5VuAvlEzbLGFvKRkoQVYEiOI1FNp92Ol+GpP+8kq4gSXkOTD1anuiKK42vxgW32n/1xGOKE+aUxYibFEZgrlHsqwBhVCRa6KSJ1RQF7rkv8z+CbOz5GGMB+OHhCqJwqu42zCaPAMZqyuSVU5qXpjpf3TU2FN2EApacLtJq18ADVtjLS/2HDul07W/GZdXF1qQbpyd7TVk/+642PteWCowbxpixWC6yqVArC4AjRYLWqUtskyKVWQMntbF7uQhuqdoFEuoelPOMZp/T33uaI2GMy+sxOrxiyuiPEgLZ5G/mJPXMp1/TprY6nx5iC0ErrYAAsDE6ueGdyi90JEU7zQ23OZq/DwUE485wRRF4H82kl9jNZX67GqWfeq5vTwIPCQHuV6VGa3Hl90DVuhrLDxMa5vpRlwlmEUUheBaIxMwKP2TXj4C2vYPXr5F091hW/K4Bx7wcSQkf4cwWzPrVrdi3rrMrn4w4p2WS28/g3p0t+ua8rpMNrEzz0+S380j+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(136003)(39860400002)(396003)(451199021)(8676002)(7416002)(8936002)(316002)(6916009)(52536014)(4326008)(5660300002)(122000001)(55016003)(38100700002)(71200400001)(2906002)(41300700001)(478600001)(82960400001)(38070700005)(7696005)(54906003)(66946007)(26005)(186003)(64756008)(66556008)(33656002)(66476007)(66446008)(83380400001)(9686003)(6506007)(76116006)(86362001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K+V2kwitMleMQ2cyxWf94J2ESpQd83Jnvg7Gj1w29U0ckKwjx/fwdTJO3VmA?=
- =?us-ascii?Q?4AlU1VMHaWgkoD6QMExe00KsalAXAkkjED/LqT71sb6vsJud5XWjVgCRRIN4?=
- =?us-ascii?Q?6bDjP7mSxPzTiE1XVNndq86yhOvHQOyqKKFm7qY3o/sn2QlggxlaPAL6DZc2?=
- =?us-ascii?Q?ImsFdFe2bRIUFQE+t5KZTdAsSBDjIKp+RQXeg0hh1ij0UwIn9MuNyL06lKmH?=
- =?us-ascii?Q?mrCpDjhLQbFBbJhcJr/GRJDMif+kMcAZ8LfHU3Rigckooxiwt+ivfGZEKOQK?=
- =?us-ascii?Q?gPXXaKsh4Ink0ZxoKn5qqQ8Dr1PieqSqqw3rH/gQsNUOTS0Pw5cNoHi3yt60?=
- =?us-ascii?Q?rroFGEK2FXk518ToeJjEcx3wbkqx2GpuuDY/XzaKdTevKbKAob7Zf9KBHg8r?=
- =?us-ascii?Q?afwIw5xjegXHYr5O3rDTcWEs3jgxYU5RGS9DM4u7dIhBfUyuDCkankK/NoYB?=
- =?us-ascii?Q?veqIM/z+o6MwB1thwYTOwZ95Slafj/b0naJNVLqgtjYarscM0aV5Gg3N6Tl+?=
- =?us-ascii?Q?1ELFVo/xVo7//BmQa0CP9fEqUC29VQ1O3271FuyE2rnq4qN3W/Q/jrWUAVh1?=
- =?us-ascii?Q?qiQPVImoIPTrWX+xDt0/tZerknIMbyyuNU1eI33bPlfXpn4zjtRi2FdMCEQI?=
- =?us-ascii?Q?pA8Gl+ndCGRFFSMkmDPYesAIvwZNqYvFRLyZO4QoK6ijmAOlMPa7eLFtrw1J?=
- =?us-ascii?Q?N2phEKYwPXNBG5n6N2MaT4xH9/1DL0PU/cAozGKYsvsAtnK6TenOKr5wHRlr?=
- =?us-ascii?Q?JLSKrwLJgN/K6rIJrCQo9g2Bjtf3MTM9ydeYx1Av+lKgZzvgFi6tqSPfb+qA?=
- =?us-ascii?Q?tnlo30WuvXnhsYCgHv+tmdS5pJEArX/Cuo3O5cOdPNIxEyknGlN/KxDqHneF?=
- =?us-ascii?Q?+8f7MOdSpYjgVMuqGZB8WUK2AAh0H+ZEv4XzFMeQUyultWPaTh0emVTpi2mK?=
- =?us-ascii?Q?p9IgGQR+kUdey0dU6z+FlIGcUsTg+nh4hc20YEexue0NoyxX4WYEkpBvzxCO?=
- =?us-ascii?Q?h1T4y4EJYBlEI5pMMq8LFiZpPGbg12DZUvCWH12Hzwvc3QstBtfV54AoYuq/?=
- =?us-ascii?Q?7BCPG/bxgQxcs5jzcydb7iWXRafXs49tBSvMltd+mWCpVazr237yFiIJrqiS?=
- =?us-ascii?Q?x/EtHFifhK3rb4L6OOQPro377aq+9SJU/FSwZ1pL8eRKJZbrTKMAvK45o3al?=
- =?us-ascii?Q?EHlFrRZZutJ5wTfW67qqTY08ohO0A4t6wStRb0Q5KXInqpDScRTQ5hQdnK7t?=
- =?us-ascii?Q?ZyJ9eFudBlHS6/JsnKAtOjytsXHYta7v+kZr+UXy3Lff3Pv53ohfT7vhEdF2?=
- =?us-ascii?Q?DBqIG+GghdXslldGnnAI5ku4Ke726MRzdfJUFRkp5PV9cuM8eJf+gSQSbreC?=
- =?us-ascii?Q?AaSr6qvGEuKhJ3jzB09i2YfH/rXi0MCuo7fem4SxNLqNkJgHIShWzTySlZ4b?=
- =?us-ascii?Q?Ua4UpNk35ciodUTzJTr8JVBINN/4nyMASb0OhADC1eK8/CMy/6EA+Z3F93B5?=
- =?us-ascii?Q?Bjl4yYChv5q3cCMp0OvQsWrIlBpde0xvXopVhWu226XE3BoN27DANMPf+RP7?=
- =?us-ascii?Q?Gmg9dt0f1jLLhss78dVBDZELE5uZTl3tIB9ac9HcULCuVGuESQxzQbo6nZdV?=
- =?us-ascii?Q?hg=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7O6mlkj15Ba5XdPW0bJi1I8AhIaU5ANT8dkdoDXBxiJ5x9GT4KCFGmRLWHNm?=
+ =?us-ascii?Q?j/P4SqnjBTMVSmJpxRiJdC209ggH2lD6PdzUXaCy0nZcMxAS4sNQ6ahNRuyX?=
+ =?us-ascii?Q?V9DQAYUHw4Iqu3yS4sDd39I7CyOgjCYt143DfmAsS7vpkxtLc2Cppev2tgYN?=
+ =?us-ascii?Q?iw7RIzTf7qVotqGewXZu8cNpntIBmHfzMGgKXtzqOCKneaM65byFmBGLN1zB?=
+ =?us-ascii?Q?Sb/io+OJ72JTTvO2yGZ8dV/lxNxGyuanuV4zw4gEE6LW7rGSVa5746lCN+nt?=
+ =?us-ascii?Q?OasgcU1TvJw87HivpZFmt4CzVUumwRrHl/pfjLg4EZBNBUK0nJgRKKSmVJlF?=
+ =?us-ascii?Q?Bq9aBYmjedP5KMnkVSZClTRV6wMESFjev0x3CZsV/7rsKc82Z6tjQFiEvsio?=
+ =?us-ascii?Q?R6FKzq4/1Ks3rqBJYoygIFRt2LP8I9bxRnIljMXZCyG8MD8xBBGd9ZoIyaNz?=
+ =?us-ascii?Q?w5YqfdlG2gGx2WzzOlmHNRKR8rJIWd4DngoE0fJQShZ1iZQkRzbAQx1/R/nY?=
+ =?us-ascii?Q?lhQBSRKAOelw7SA1jCNsouBKGc0lq4wMim/qScK/7uKgITDfDv/HxO/dyWaT?=
+ =?us-ascii?Q?CdVWo+V/2Fw8ttzEEgh2L/74cmYWLGYXHvYsTUtgPwbDHwyyM54NBLdYmNlq?=
+ =?us-ascii?Q?nfJeutSbBQJe6XrocxK7ada1L9ixzJD/JcfAwb3/WqJImQUODPMx4Wk/sILW?=
+ =?us-ascii?Q?nIr2Ba0gRvgIpq/+kRF7ZsSamFA0gYT7NgFixgFm8Y4mV2WVBFNcwkhPMceg?=
+ =?us-ascii?Q?Go6zE+vTpDO+3F4SataMzHn+sPAVmnovUgXGKt+nBYls9AwN2QyYHABxK2d1?=
+ =?us-ascii?Q?yWgBv62LaMbe+SK40I8EDyk6o/Z6zShtfNGxy4kMVWPK+4GDY2asA1RNWAdv?=
+ =?us-ascii?Q?Ge5T3fIr5Z8BBQ7kk+LgJEtVrGqDHePLVUb2eyQbj6VL6JBLPVzkR91Qgtqr?=
+ =?us-ascii?Q?BfUYk4cF16LKSL4J35NH6+Q7EKFp1rUFxyG0pBO2bNC1xinxQGGC+7HIDjsz?=
+ =?us-ascii?Q?olsTMr0G3KN4hHjjgsZxv6Op1k1R58rq/LDq6vX9C09bzgxOs2ydX/ere41T?=
+ =?us-ascii?Q?oKU1JLeWwNCanYqR/6h3qdfIgJ4Gn5yFtwsUDhm4hKqNw/ybrx8+nVtqcqQQ?=
+ =?us-ascii?Q?5bk8ILYqaFxtsb4VWPGR09NY1OzJKONGXy1YGb9zS5Ldwqd3mYsDldxvlKRL?=
+ =?us-ascii?Q?r20r3Ibmz4agw/5fcf3J8sFBC5/dRQ3s2SaWKX/SAE96bEzYKekTE9P1p5S1?=
+ =?us-ascii?Q?S34lkrEAeTr5c8j6NMzbxzyKqiRzX+J/5Y4m42GwcYrzQPeTh3Ig2rRyVF3J?=
+ =?us-ascii?Q?196E9YzADMIZL0+TAW2qivocZzsgG0Ui5GaruXXmZS2c6IUxrxOMPgfUZTl1?=
+ =?us-ascii?Q?6Gd9LgfDSVI8ieCqens397ykj6npDfX9gysvIquyYx5Q9t66AzS7m4Lxzagl?=
+ =?us-ascii?Q?Bcb8j8RGusxidfUkqbyLp7xgAE3gRRp/uP8OI3afUTaajnu/gnh0MROrgTzk?=
+ =?us-ascii?Q?CiyFkqvK4fgZR6XH3vr65TLMR70u8TsibSBAGCZQZCXzXZsHOkPvjRzPJvYc?=
+ =?us-ascii?Q?ggVNW2yNyUSmSz62Z66iTW7pBcq/s9nOQfQSmxjlc1TdOS7X7exAOE4PyodL?=
+ =?us-ascii?Q?PA=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4657.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4c5411a-1b42-4a0e-82b2-08db5605dce1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2023 12:05:38.3538
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75e09df6-d335-4b42-a13f-08db56074b83
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2023 12:15:53.4637
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qW5RK5r6kE5J0K5Rb+dQw8vjxqQd0K7ceoKzIeNm3xeUUFH/fc5VxvTlW89bYms6sRKay5C+uH9jvsLNe7xwQXh0urz7O1hrlMSex/cYAHk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5869
+X-MS-Exchange-CrossTenant-userprincipalname: YrF7+fOFJrzonzo7lfKys06eovKEnrLZSoY+7U2aqot5rq4uV18jtb/IHfTZRnV5DeEowstgCAUbIvpRQcSUngS24etq5vTOnj5C4Pr4HPo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6168
 X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
->From: Jiri Pirko <jiri@resnulli.us>
->Sent: Monday, May 15, 2023 11:31 AM
+
+>From: Jakub Kicinski <kuba@kernel.org>
+>Sent: Friday, May 12, 2023 1:29 AM
 >
->Thu, May 11, 2023 at 10:51:43PM CEST, arkadiusz.kubalewski@intel.com wrote=
-:
->>>From: Jiri Pirko <jiri@resnulli.us>
->>>Sent: Thursday, May 11, 2023 10:00 AM
->>>
->>>Thu, May 11, 2023 at 09:40:26AM CEST, arkadiusz.kubalewski@intel.com wro=
-te:
->>>>>From: Jakub Kicinski <kuba@kernel.org>
->>>>>Sent: Thursday, May 4, 2023 11:25 PM
->>>>>
->>>>>On Thu, 4 May 2023 14:02:30 +0200 Jiri Pirko wrote:
->>>>>> >+definitions:
->>>>>> >+  -
->>>>>> >+    type: enum
->>>>>> >+    name: mode
->>>>>> >+    doc: |
->>>>>> >+      working-modes a dpll can support, differentiate if and how d=
-pll
->>>>>>selects
->>>>>> >+      one of its sources to syntonize with it, valid values for
->>>>>>DPLL_A_MODE
->>>>>> >+      attribute
->>>>>> >+    entries:
->>>>>> >+      -
->>>>>> >+        name: unspec
->>>>>>
->>>>>> In general, why exactly do we need unspec values in enums and CMDs?
->>>>>> What is the usecase. If there isn't please remove.
->>>>>
->>>>>+1
->>>>>
->>>>
->>>>Sure, fixed.
->>>>
->>>>>> >+        doc: unspecified value
->>>>>> >+      -
->>>>>> >+        name: manual
->>>>>
->>>>>I think the documentation calls this "forced", still.
->>>>>
->>>>
->>>>Yes, good catch, fixed docs.
->>>>
->>>>>> >+        doc: source can be only selected by sending a request to d=
-pll
->>>>>> >+      -
->>>>>> >+        name: automatic
->>>>>> >+        doc: highest prio, valid source, auto selected by dpll
->>>>>> >+      -
->>>>>> >+        name: holdover
->>>>>> >+        doc: dpll forced into holdover mode
->>>>>> >+      -
->>>>>> >+        name: freerun
->>>>>> >+        doc: dpll driven on system clk, no holdover available
->>>>>>
->>>>>> Remove "no holdover available". This is not a state, this is a mode
->>>>>> configuration. If holdover is or isn't available, is a runtime info.
->>>>>
->>>>>Agreed, seems a little confusing now. Should we expose the system clk
->>>>>as a pin to be able to force lock to it? Or there's some extra magic
->>>>>at play here?
->>>>
->>>>In freerun you cannot lock to anything it, it just uses system clock fr=
-om
->>>>one of designated chip wires (which is not a part of source pins pool) =
-to
->>>>feed the dpll. Dpll would only stabilize that signal and pass it furthe=
-r.
->>>>Locking itself is some kind of magic, as it usually takes at least ~15
->>>>seconds before it locks to a signal once it is selected.
->>>>
->>>>>
->>>>>> >+      -
->>>>>> >+        name: nco
->>>>>> >+        doc: dpll driven by Numerically Controlled Oscillator
->>>>>
->>>>>Noob question, what is NCO in terms of implementation?
->>>>>We source the signal from an arbitrary pin and FW / driver does
->>>>>the control? Or we always use system refclk and then tune?
->>>>>
->>>>
->>>>Documentation of chip we are using, stated NCO as similar to FREERUN, a=
-nd
->>>>it
->>>
->>>So how exactly this is different to freerun? Does user care or he would
->>>be fine with "freerun" in this case? My point is, isn't "NCO" some
->>>device specific thing that should be abstracted out here?
->>>
+>On Thu, 11 May 2023 20:53:40 +0000 Kubalewski, Arkadiusz wrote:
+>> >Because I think that'd be done by an NCO, no?
 >>
->>Sure, it is device specific, some synchronizing circuits would have this
->>capability, while others would not.
->>Should be abstracted out? It is a good question.. shall user know that he=
- is
->>in
->>freerun with possibility to control the frequency or not?
->>Let's say we remove NCO, and have dpll with enabled FREERUN mode and pins
->>supporting multiple output frequencies.
->>How the one would know if those frequencies are supported only in
->>MANUAL/AUTOMATIC modes or also in the FREERUN mode?
->>In other words: As the user can I change a frequency of a dpll if active
->>mode is FREERUN?
+>> From docs I can also see that chip has additional designated dpll for NC=
+O
+>>mode,
+>> and this statement:
+>> "Numerically controlled oscillator (NCO) behavior allows system software
+>>to steer
+>> DPLL frequency or synthesizer frequency with resolution better than 0.00=
+5
+>>ppt."
+>>
+>> I am certainly not an expert on this, but seems like the NCO mode for
+>this chip
+>> is better than FREERUN, since signal produced on output is somehow highe=
+r
+>quality.
 >
->Okay, I think I'm deep in the DPLL infra you are pushing, but my
->understanding that you can control frequency in NCO mode is not present
->:/ That only means it may be confusing and not described properly.
->How do you control this frequency exactly? I see no such knob.
->
-
-The set frequency is there already, although we miss phase offset I guess.
-
-But I have changed my mind on having this in the kernel..
-Initially I have added this mode as our HW supports it, while thinking that
-dpll subsystem shall have this, and we will implement it one day..
-But as we have not implemented it yet, let's leave work and discussion on
-this mode for the future, when someone will actually try to implement it.
-
->Can't the oscilator be modeled as a pin and then you are not in freerun
->but locked this "internal pin"? We know how to control frequency there.
+>Herm, this seems complicated. Do you have a use case for this?
+>Maybe we can skip it :D
 >
 
-Hmm, yeah probably could work this way.
+True!
+Actually yeah, I agree let's skip it, we don't have implemented example and
+there is no need for it for now, we will have to discuss it someday if some=
+one
+want to give control over it to the user, and as Jiri already pointed, prob=
+ably
+it could be done with using internal oscillator type of pin and just
+configurable frequency.
 
+Thus I will remove the NCO from the dpll modes.
 
-Thank you!
+>My reading of the quote is that there is an NCO which SW can control
+>precisely. But that does not answer the questions:
+> - is the NCO driven by system clock=20
+
+Yes it is, other part of documentation lead to this conclusion.
+
+> or can it be used in locked mode?
+
+There is also a behavior called "NCO-hybrid", and as I understand works
+somehow as you described, dpll can lock to something but additional offset
+based on so called "System Clock Input (Jitter Reference)" pin is applied
+to the signal (the pin is also used for normal NCO mode).
+
+> - what is the "system software"? FW which based on temperature
+>   information, and whatever else compensates drift of system clock?
+>   or there are exposed registers to control the NCO?
+
+The synchronizer chip firmware provides the knobs in form of registers to
+control frequency offset for all the outputs, as well as for dpll's
+frequency offset.
+
+Thank you,
 Arkadiusz
 
->
->>
->>I would say it is better to have such mode, we could argue on naming thou=
-gh.
->>
->>>
->>>>runs on a SYSTEM CLOCK provided to the chip (plus some stabilization an=
-d
->>>>dividers before it reaches the output).
->>>>It doesn't count as an source pin, it uses signal form dedicated wire f=
-or
->>>>SYSTEM CLOCK.
->>>>In this case control over output frequency is done by synchronizer chip
->>>>firmware, but still it will not lock to any source pin signal.
->>>>
->>>>>> >+    render-max: true
->>>>>> >+  -
->>>>>> >+    type: enum
->>>>>> >+    name: lock-status
->>>>>> >+    doc: |
->>>>>> >+      provides information of dpll device lock status, valid value=
-s for
->>>>>> >+      DPLL_A_LOCK_STATUS attribute
->>>>>> >+    entries:
->>>>>> >+      -
->>>>>> >+        name: unspec
->>>>>> >+        doc: unspecified value
->>>>>> >+      -
->>>>>> >+        name: unlocked
->>>>>> >+        doc: |
->>>>>> >+          dpll was not yet locked to any valid source (or is in on=
-e of
->>>>>> >+          modes: DPLL_MODE_FREERUN, DPLL_MODE_NCO)
->>>>>> >+      -
->>>>>> >+        name: calibrating
->>>>>> >+        doc: dpll is trying to lock to a valid signal
->>>>>> >+      -
->>>>>> >+        name: locked
->>>>>> >+        doc: dpll is locked
->>>>>> >+      -
->>>>>> >+        name: holdover
->>>>>> >+        doc: |
->>>>>> >+          dpll is in holdover state - lost a valid lock or was for=
-ced by
->>>>>> >+          selecting DPLL_MODE_HOLDOVER mode
->>>>>>
->>>>>> Is it needed to mention the holdover mode. It's slightly confusing,
->>>>>> because user might understand that the lock-status is always "holdov=
-er"
->>>>>> in case of "holdover" mode. But it could be "unlocked", can't it?
->>>>>> Perhaps I don't understand the flows there correctly :/
->>>>>
->>>>>Hm, if we want to make sure that holdover mode must result in holdover
->>>>>state then we need some extra atomicity requirements on the SET
->>>>>operation. To me it seems logical enough that after setting holdover
->>>>>mode we'll end up either in holdover or unlocked status, depending on
->>>>>lock status when request reached the HW.
->>>>>
->>>>
->>>>Improved the docs:
->>>>        name: holdover
->>>>        doc: |
->>>>          dpll is in holdover state - lost a valid lock or was forced
->>>>          by selecting DPLL_MODE_HOLDOVER mode (latter possible only
->>>>          when dpll lock-state was already DPLL_LOCK_STATUS_LOCKED,
->>>>	  if it was not, the dpll's lock-status will remain
->>>
->>>"if it was not" does not really cope with the sentence above that. Could
->>>you iron-out the phrasing a bit please?
->>
->>
->>Hmmm,
->>        name: holdover
->>        doc: |
->>          dpll is in holdover state - lost a valid lock or was forced
->>          by selecting DPLL_MODE_HOLDOVER mode (latter possible only
->>          when dpll lock-state was already DPLL_LOCK_STATUS_LOCKED,
->>          if dpll lock-state was not DPLL_LOCK_STATUS_LOCKED, the
->>          dpll's lock-state shall remain DPLL_LOCK_STATUS_UNLOCKED
->>          even if DPLL_MODE_HOLDOVER was requested)
->>
->>Hope this is better?
->
->Okay.
->
->>
->>
->>Thank you!
->>Arkadiusz
->>
->>[...]
