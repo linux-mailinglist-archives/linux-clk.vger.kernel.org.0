@@ -2,120 +2,205 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B92F707D70
-	for <lists+linux-clk@lfdr.de>; Thu, 18 May 2023 12:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A6F707DB6
+	for <lists+linux-clk@lfdr.de>; Thu, 18 May 2023 12:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjERKAG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 18 May 2023 06:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S230381AbjERKMs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Thu, 18 May 2023 06:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjERKAF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 18 May 2023 06:00:05 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EA0E54
-        for <linux-clk@vger.kernel.org>; Thu, 18 May 2023 03:00:02 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30636edb493so695738f8f.1
-        for <linux-clk@vger.kernel.org>; Thu, 18 May 2023 03:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684404001; x=1686996001;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lV65uYDNQ5TvvWuRiVgzk+2JrT6t7043/Z81uTK4Qgw=;
-        b=S4tS8G0e8AYQZqd60BQHBTw5RH3TNQuqfN0rgaezi4S/A2jen5dchewfpQI5CKO5SN
-         cFfDiOcTZJ3jm8j7SJd5DHrMSPw/RlTw35hRtsNT5T1EbLJgy9IcErc8XGrUj86P022B
-         2BWQx3XvN1sMMqf3NxtqSihyuKs7xp/ZPzxkqgiw7YnVwKjLvMl9U43g1wH6q0/tU15b
-         +glkx6S0/FQissy0rMe4NUgDS332uenr5JXZ0ThNAZcRtnOQrgzDJGVAhkdzWhzkg+NK
-         Sz5Mwf1okQqMRycUfN4UHLIO34Vh0YneXsOf81oGQf8VW5UeqFc7L8zMVu256trDZjnR
-         OMSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684404001; x=1686996001;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lV65uYDNQ5TvvWuRiVgzk+2JrT6t7043/Z81uTK4Qgw=;
-        b=XOIGfOpUhauM7K7tG+aWy2Ymf8+4THjUsehn8I/hv+uTJ/RwLz7PyEt9K8nyKe+Idl
-         S0ifULv29ZP1As9qKjehHz11NcOaYMQM9n8j2UV3t66qq0+V3y3dOKXcYb/l0NX6/yHM
-         QtnGSfpz0jk4DKrH+wS5Qp+F7PJq5XG7IHM22yJMdOTlaw6CWbXxyUDQRJB/IxvYbXju
-         fSc3q7/LRojdHvrdu9YKqR3mskOhsdaEY7ABFKjjfHkwQWckl58X1obnxt6YH2fF9wwZ
-         1ciBJZeRllbrmHxxg8cayjiA/sA+5kfCzInZYOV1gIHddOhhf6aBLvPiZ9ho8YrZa3YY
-         nT9w==
-X-Gm-Message-State: AC+VfDznB5o+0MPaPmoqIueA/1Pngo0br6+QvWbi+ZX0CsyuyR885ng6
-        10EiqO3AUvpIdRn7cXVrUxZ+0g==
-X-Google-Smtp-Source: ACHHUZ44D3lPYnhh32GvMyacH177ZLl1QoNRmF54oFzPZX4K0iCQBGnVV8OgelQRrE+L+kMlgevhIA==
-X-Received: by 2002:a5d:61c7:0:b0:306:3163:2b76 with SMTP id q7-20020a5d61c7000000b0030631632b76mr1090301wrv.15.1684404001294;
-        Thu, 18 May 2023 03:00:01 -0700 (PDT)
-Received: from linaro.org ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id k14-20020adff5ce000000b003062c0ef959sm1629961wrp.69.2023.05.18.03.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 03:00:00 -0700 (PDT)
-Date:   Thu, 18 May 2023 12:59:59 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     abelvesa@kernel.org, sboyd@kernel.org, linux-clk@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH] clk: imx: imx6sx: Remove CLK_SET_RATE_PARENT from the
- LDB clocks
-Message-ID: <ZGX3Hw29uJTRDBcI@linaro.org>
-References: <20230416150004.16834-1-festevam@gmail.com>
+        with ESMTP id S230269AbjERKMo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 18 May 2023 06:12:44 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F6D1BDA;
+        Thu, 18 May 2023 03:12:42 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id ABCAA24E212;
+        Thu, 18 May 2023 18:12:35 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 18:12:35 +0800
+Received: from localhost.localdomain (113.72.146.100) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 18:12:34 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v6 00/11] Add STG/ISP/VOUT clock and reset drivers for StarFive JH7110
+Date:   Thu, 18 May 2023 18:12:23 +0800
+Message-ID: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230416150004.16834-1-festevam@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.146.100]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 23-04-16 12:00:04, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
-> 
-> On the i.MX6SX, it is common to use the LDB and LCDIF with the same
-> parent clock, such as the IMX6SX_CLK_PLL5_VIDEO_DIV, for example.
-> 
-> Due to the CLK_SET_RATE_PARENT flag, the LDB clock would try to set the
-> clock parent rate, which can mess with the required clock rate calculated
-> from the eLCDIF driver.
-> 
-> To prevent this problem, remove the CLK_SET_RATE_PARENT flag from the
-> LDB clocks, so that a correct clock relationship can be achieved.
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
+This patch serises are base on the basic JH7110 SYSCRG/AONCRG
+drivers and add new partial clock drivers and reset supports
+about System-Top-Group(STG), Image-Signal-Process(ISP)
+and Video-Output(VOUT) for the StarFive JH7110 RISC-V SoC. These
+clocks and resets could be used by DMA, VIN and Display modules.
 
-Looks good to me.
+Patches 1 and 2 are about the System-Top-Group clock and reset
+generator(STGCRG) part. The first patch adds docunmentation to
+describe STG bindings, and the second patch adds clock driver to
+support STG clocks and resets as auxiliary device for JH7110.
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Patches 3 and 4 are about the Image-Signal-Process clock and reset
+gennerator(ISPCRG) part. The first patch adds docunmentation to
+describe ISP bindings, and the second patch adds clock driver to
+support ISP clocks and resets as auxiliary device for JH7110.
+And ISP clocks should power on and enable the SYSCRG clocks first
+before registering.
 
-This has missed my inbox as I filter on linux-imx email, which you
-forgot to CC. Please do that next time.
+Patches 5 and 6 are about the Video-Output clock and reset
+generator(VOUTCRG) part. The first patch adds docunmentation to
+describe VOUT bindings, and the second patch adds clock driver to
+support VOUT clocks and resets as auxiliary device for JH7110.
+And VOUT clocks also should power on and enable the SYSCRG clocks
+first before registering.
 
-> ---
->  drivers/clk/imx/clk-imx6sx.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
-> index 7cf86707bc39..3f1502933e59 100644
-> --- a/drivers/clk/imx/clk-imx6sx.c
-> +++ b/drivers/clk/imx/clk-imx6sx.c
-> @@ -302,10 +302,10 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
->  	hws[IMX6SX_CLK_CKO2_SEL]           = imx_clk_hw_mux("cko2_sel",         base + 0x60,  16,     5,      cko2_sels,         ARRAY_SIZE(cko2_sels));
->  	hws[IMX6SX_CLK_CKO]                = imx_clk_hw_mux("cko",              base + 0x60,  8,      1,      cko_sels,          ARRAY_SIZE(cko_sels));
->  
-> -	hws[IMX6SX_CLK_LDB_DI1_DIV_SEL]    = imx_clk_hw_mux_flags("ldb_di1_div_sel", base + 0x20, 11, 1, ldb_di1_div_sels, ARRAY_SIZE(ldb_di1_div_sels), CLK_SET_RATE_PARENT);
-> -	hws[IMX6SX_CLK_LDB_DI0_DIV_SEL]    = imx_clk_hw_mux_flags("ldb_di0_div_sel", base + 0x20, 10, 1, ldb_di0_div_sels, ARRAY_SIZE(ldb_di0_div_sels), CLK_SET_RATE_PARENT);
-> -	hws[IMX6SX_CLK_LDB_DI1_SEL]        = imx_clk_hw_mux_flags("ldb_di1_sel",     base + 0x2c, 12, 3, ldb_di1_sels,      ARRAY_SIZE(ldb_di1_sels),    CLK_SET_RATE_PARENT);
-> -	hws[IMX6SX_CLK_LDB_DI0_SEL]        = imx_clk_hw_mux_flags("ldb_di0_sel",     base + 0x2c, 9,  3, ldb_di0_sels,      ARRAY_SIZE(ldb_di0_sels),    CLK_SET_RATE_PARENT);
-> +	hws[IMX6SX_CLK_LDB_DI1_DIV_SEL]    = imx_clk_hw_mux("ldb_di1_div_sel", base + 0x20, 11, 1, ldb_di1_div_sels, ARRAY_SIZE(ldb_di1_div_sels));
-> +	hws[IMX6SX_CLK_LDB_DI0_DIV_SEL]    = imx_clk_hw_mux("ldb_di0_div_sel", base + 0x20, 10, 1, ldb_di0_div_sels, ARRAY_SIZE(ldb_di0_div_sels));
-> +	hws[IMX6SX_CLK_LDB_DI1_SEL]        = imx_clk_hw_mux("ldb_di1_sel",     base + 0x2c, 12, 3, ldb_di1_sels,      ARRAY_SIZE(ldb_di1_sels));
-> +	hws[IMX6SX_CLK_LDB_DI0_SEL]        = imx_clk_hw_mux("ldb_di0_sel",     base + 0x2c, 9,  3, ldb_di0_sels,      ARRAY_SIZE(ldb_di0_sels));
->  	hws[IMX6SX_CLK_LCDIF1_PRE_SEL]     = imx_clk_hw_mux_flags("lcdif1_pre_sel",  base + 0x38, 15, 3, lcdif1_pre_sels,   ARRAY_SIZE(lcdif1_pre_sels), CLK_SET_RATE_PARENT);
->  	hws[IMX6SX_CLK_LCDIF1_SEL]         = imx_clk_hw_mux_flags("lcdif1_sel",      base + 0x38, 9,  3, lcdif1_sels,       ARRAY_SIZE(lcdif1_sels),     CLK_SET_RATE_PARENT);
->  
-> -- 
-> 2.34.1
-> 
+Patch 7 adds the maintainer who take charge of the STGCRG/ISPCRG/VOUTCRG
+for JH7110.
+Patch 8 adds struct members to support STG/ISP/VOUT resets.
+Patch 9 adds pmu node for JH7110.
+Patch 10 adds external clocks which ISP and VOUT clock driver need.
+Patch 11 adds device node about STGCRG, ISPCRG and VOUTCRG to JH7110 dts.
+
+Changes since v5:
+- Rebased on the Linux 6.4-rc2.
+- Modified the reset name about VOUTCRG to fix the error with
+  CONFIG_FORTIFY_SOURCE=y
+- Added the patch about pmu node.
+
+v5: https://lore.kernel.org/all/20230424135409.6648-1-xingyu.wu@starfivetech.com/
+
+Changes since v4: 
+- Rebased on the lastest patches about fixing the basic clock and reset drivers.
+- Dropped the 'dev_set_drvdata()' in STG clock driver.
+- Modified the data with 'dev_set_drvdata()' in ISP/VOUT clock driver
+  and move the struct about the data to JH7110 header file, which both
+  ISP and VOUT clock drivers will use.
+
+v4: https://lore.kernel.org/all/20230411135558.44282-1-xingyu.wu@starfivetech.com/
+
+Changes since v3: 
+- Rebased on the lastest JH71X0 clock and reset driver of patchset[1]
+  and modified the parameters of the register reset functions.
+- The patch 1 combined three commits on STG/ISP/VOUT resets into one.
+  And Changed the auxiliary_device_id name from
+  "clk_starfive_jh71x0.reset-*" to "clk_starfive_jh7110_sys.rst-*".
+- Added a maintainer in STARFIVE JH71X0 CLOCK DRIVERS.
+
+v3: https://lore.kernel.org/all/20230314124404.117592-1-xingyu.wu@starfivetech.com/
+
+Changes since v2:
+Patch 1:
+- Dropped the modification of maintainers.
+- Modified clock and reset names in the dt-bindings header files.
+Patch 3:
+- Added 'Emil Renner Berthing' as the author.
+- Used 'default m' in Kconfig file.
+- Changed the flags of 'CLK_IGNORE_UNUSED' to 0 or 'CLK_IS_CRITICAL'.
+Patch 4:
+- Dropped the 'reset-names' property.
+- Shortened the clock and reset names in the dt-bindings header files.
+Pacth 6:
+- Used 'default m' in Kconfig file.
+- Changed the flags of 'CLK_IGNORE_UNUSED' to 0.
+- Set reset_control struct to a local variable because it just is used
+  one time in probe.
+Pacth 7:
+- Dropped the 'reset-names' property.
+Patch 9:
+- Used 'default m' in Kconfig file.
+- Set reset_control struct to a local variable because it just is used
+  one time in probe.
+Patch 10:
+- Changed the order of externel clock in alphanumerical order.
+Patch 11:
+- Dropped the 'reset-names' property in ispcrg and voutcrg node.
+
+v2: https://lore.kernel.org/all/20230221083323.302471-1-xingyu.wu@starfivetech.com/
+
+Changes since v1:
+- Modified the binding and dropped the indentation.
+- Removed the useless header files in the drivers.
+- Used an array lookup instead of a pile of conditions about parent
+  clocks' name.
+- Added clocks operation on driver remove.
+
+v1: https://lore.kernel.org/all/20230120024445.244345-1-xingyu.wu@starfivetech.com/
+
+Emil Renner Berthing (1):
+  clk: starfive: Add StarFive JH7110 System-Top-Group clock driver
+
+Walker Chen (1):
+  riscv: dts: starfive: jh7110: add pmu controller node
+
+Xingyu Wu (9):
+  dt-bindings: clock: Add StarFive JH7110 System-Top-Group clock and
+    reset generator
+  dt-bindings: clock: Add StarFive JH7110 Image-Signal-Process clock and
+    reset generator
+  clk: starfive: Add StarFive JH7110 Image-Signal-Process clock driver
+  dt-bindings: clock: Add StarFive JH7110 Video-Output clock and reset
+    generator
+  clk: starfive: Add StarFive JH7110 Video-Output clock driver
+  MAINTAINERS: Update maintainer of JH71x0 clock drivers
+  reset: starfive: jh7110: Add StarFive STG/ISP/VOUT resets support
+  riscv: dts: starfive: jh7110: Add DVP and HDMI TX pixel external
+    clocks
+  riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
+
+ .../clock/starfive,jh7110-ispcrg.yaml         |  87 +++++++
+ .../clock/starfive,jh7110-stgcrg.yaml         |  82 ++++++
+ .../clock/starfive,jh7110-voutcrg.yaml        |  90 +++++++
+ MAINTAINERS                                   |   1 +
+ .../jh7110-starfive-visionfive-2.dtsi         |   8 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  74 ++++++
+ drivers/clk/starfive/Kconfig                  |  33 +++
+ drivers/clk/starfive/Makefile                 |   3 +
+ .../clk/starfive/clk-starfive-jh7110-isp.c    | 232 +++++++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-stg.c    | 173 +++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-vout.c   | 239 ++++++++++++++++++
+ drivers/clk/starfive/clk-starfive-jh7110.h    |   6 +
+ .../reset/starfive/reset-starfive-jh7110.c    |  30 +++
+ .../dt-bindings/clock/starfive,jh7110-crg.h   |  74 ++++++
+ .../dt-bindings/reset/starfive,jh7110-crg.h   |  60 +++++
+ 15 files changed, 1192 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-voutcrg.yaml
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-isp.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-stg.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-vout.c
+
+-- 
+2.25.1
+
