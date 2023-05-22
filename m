@@ -2,219 +2,135 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C77870B514
-	for <lists+linux-clk@lfdr.de>; Mon, 22 May 2023 08:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DB670B76E
+	for <lists+linux-clk@lfdr.de>; Mon, 22 May 2023 10:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjEVGcX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 May 2023 02:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
+        id S229490AbjEVITP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Mon, 22 May 2023 04:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjEVGcW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 May 2023 02:32:22 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EABDB;
-        Sun, 21 May 2023 23:32:16 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34M6W1jO087189;
-        Mon, 22 May 2023 01:32:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684737121;
-        bh=ogPbVDCU54/sxqzMwna8jLDsQGKPOdbkB99e+HaBCQ8=;
-        h=From:Date:Subject:References:In-Reply-To:To:CC;
-        b=rZuRqLUQ29HStom512qOF1e4EuF0Ll9yIEbWvY8R3rdecptjeWXbAJuqSbO8jPPCG
-         iQ+OOKOt//32nm+o+VtryHJXuOyL2Wv8otVYpGJk1xv/ThTVaiDTHoCb3xJX3iCtsj
-         7Q6xvX5aCZXKhSBckC5Yz6TG7vr4mZCV6GbUdluY=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34M6W1L1112686
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 May 2023 01:32:01 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 22
- May 2023 01:32:01 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 22 May 2023 01:32:01 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34M6W05T014378;
-        Mon, 22 May 2023 01:32:01 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-Date:   Mon, 22 May 2023 12:01:56 +0530
-Subject: [PATCH v2 2/2] clk: keystone: syscon-clk: Add support for audio
- refclk
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20230515-refclk-v2-2-fc9ff08826f5@ti.com>
-References: <20230515-refclk-v2-0-fc9ff08826f5@ti.com>
-In-Reply-To: <20230515-refclk-v2-0-fc9ff08826f5@ti.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S229639AbjEVITL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 May 2023 04:19:11 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB47EED
+        for <linux-clk@vger.kernel.org>; Mon, 22 May 2023 01:19:09 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-147-ariLRcbvMsic7sM9JfpM6Q-1; Mon, 22 May 2023 09:18:59 +0100
+X-MC-Unique: ariLRcbvMsic7sM9JfpM6Q-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 22 May
+ 2023 09:18:53 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 22 May 2023 09:18:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Sebastian Reichel' <sebastian.reichel@collabora.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>, Andrew Davis <afd@ti.com>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Jai Luthra <j-luthra@ti.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4211; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=1OzTfUSpjR4REarTZh76zHNZ7RzUS4w0+ba0D9vqK7s=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkawxfQnHmMzLFiY78JW5j1v1AX7PO7magNPFId
- Js5a0KWrAmJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZGsMXwAKCRBD3pH5JJpx
- RVUWD/9rUv52D/C/WSBmzCrn3o3TtU7wabRaGg62QL9M5tP4DgOkhKMCM1wKYxSI8TiNi5UC+Ri
- 0K3h17r53i5yW90bJ7/mp47+PpL2VNm3Ag/VKQx7YwiUkUIj28xhySmg9yFH93PJmcSHh5fSLD/
- tPzfAGY/6VvzHk6KB4v8XNh6kjs7hXbDG5FxQbW/gqxcbSro7Jlg0n9ZPImc/qXHHt7k5tjkh/t
- mhZ6LSOA90szKELTbUaqjhGJ1zO3HypQZ1Mpw08Y0twBsdJS/qEcAzDrhSUFYcCRa3pctEddg+z
- Fvo05WuQ0UUFuH0KZZTKOR2qyWvLG2vnhf66z/3eoSxtQ50PPUtKvAoHLvz51NBmpro2Vkm5mjt
- cE8a0GaoZccX2yUxJE9iPLtRPiORHkkhyUPwVxfX5fbBQTWUFZmGx0hY7sgfw2QDstKT6KHxn5E
- dGmBORWKymb1NNk/pntzpsoU1f/Mn4nMcYhaTY101FU5CUIi1ritqYiFFJEDaMJ6Enl47f7g3MK
- Y+jLCstgVCftzoxE2VDLQmLtL617LiUvmeyo4YFCnIbL/VT/rPqeUOd+nF0o4BmvjnWotPSCQqy
- jz297uHYGBVp3pmnpwx4uHVna8mzsIP1/JIb5d8cYG9GfoZje3+RCENfXh1xyx9mJU4zjUcbyiU
- Z5+/YqdjUXKCCIw==
-X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
- fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "kernel@collabora.com" <kernel@collabora.com>
+Subject: RE: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
+ UINT_MAX
+Thread-Topic: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
+ UINT_MAX
+Thread-Index: AQHZioTsgOA8rKF4Y0+0s2ErF0La269l9j4w
+Date:   Mon, 22 May 2023 08:18:53 +0000
+Message-ID: <1b74d2ea2c3a458694c4c74f2381fcab@AcuMS.aculab.com>
+References: <20230519190522.194729-1-sebastian.reichel@collabora.com>
+ <20230519190522.194729-3-sebastian.reichel@collabora.com>
+In-Reply-To: <20230519190522.194729-3-sebastian.reichel@collabora.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-TI's AM62 SoC can optionally provide two audio reference clocks
-(AUDIO_REFCLKx) to external peripherals.
+From: Sebastian Reichel
+> Sent: 19 May 2023 20:05
+> 
+> Requesting rates exceeding UINT_MAX (so roughly 4.3 GHz) results
+> in very small rate being chosen instead of very high ones, since
+> DIV_ROUND_UP_ULL takes a 32 bit integer as second argument.
+> 
+> Correct this by using DIV64_U64_ROUND_UP instead, which takes proper
+> 64 bit values for dividend and divisor.
 
-By default this reference clock is looped-back inside the SoC to a mux
-that goes to McASP AHCLK, but can optionally be enabled as an output to
-peripherals outside the SoC by setting a bit through CTRL_MMR registers.
+This doesn't look right on 32-bit architectures.
+While you really don't want to be doing full 64bit divides
+there is also the problem that any input values over 4.3Ghz
+have already been masked.
 
-This bit only controls the direction of the clock, while the parent
-is a muxed input from sci-clk [1] which may be a configurable PLL or a
-master clock from one of the McASP instances.
+In the values can be over 4.3GHz then the function arguments
+need to be 64bit - not long.
 
-Link: http://downloads.ti.com/tisci/esd/latest/5_soc_doc/am62x/clocks.html#clocks-for-board0-device [1]
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
- drivers/clk/keystone/syscon-clk.c | 43 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 38 insertions(+), 5 deletions(-)
+	David
 
-diff --git a/drivers/clk/keystone/syscon-clk.c b/drivers/clk/keystone/syscon-clk.c
-index bd5cec0bd12d..7f686c12a109 100644
---- a/drivers/clk/keystone/syscon-clk.c
-+++ b/drivers/clk/keystone/syscon-clk.c
-@@ -61,21 +61,31 @@ static const struct clk_ops ti_syscon_gate_clk_ops = {
- 
- static struct clk_hw
- *ti_syscon_gate_clk_register(struct device *dev, struct regmap *regmap,
-+			     const char *parent_name,
- 			     const struct ti_syscon_gate_clk_data *data)
- {
- 	struct ti_syscon_gate_clk_priv *priv;
- 	struct clk_init_data init;
-+	char *name = NULL;
- 	int ret;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return ERR_PTR(-ENOMEM);
- 
--	init.name = data->name;
- 	init.ops = &ti_syscon_gate_clk_ops;
--	init.parent_names = NULL;
--	init.num_parents = 0;
--	init.flags = 0;
-+	if (parent_name) {
-+		name = kasprintf(GFP_KERNEL, "%s:%s", data->name, parent_name);
-+		init.name = name;
-+		init.parent_names = &parent_name;
-+		init.num_parents = 1;
-+		init.flags = CLK_SET_RATE_PARENT;
-+	} else {
-+		init.name = data->name;
-+		init.parent_names = NULL;
-+		init.num_parents = 0;
-+		init.flags = 0;
-+	}
- 
- 	priv->regmap = regmap;
- 	priv->reg = data->offset;
-@@ -83,6 +93,10 @@ static struct clk_hw
- 	priv->hw.init = &init;
- 
- 	ret = devm_clk_hw_register(dev, &priv->hw);
-+
-+	if (name)
-+		kfree(init.name);
-+
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-@@ -94,8 +108,9 @@ static int ti_syscon_gate_clk_probe(struct platform_device *pdev)
- 	const struct ti_syscon_gate_clk_data *data, *p;
- 	struct clk_hw_onecell_data *hw_data;
- 	struct device *dev = &pdev->dev;
-+	int num_clks, num_parents, i;
-+	const char *parent_name;
- 	struct regmap *regmap;
--	int num_clks, i;
- 
- 	data = device_get_match_data(dev);
- 	if (!data)
-@@ -110,6 +125,13 @@ static int ti_syscon_gate_clk_probe(struct platform_device *pdev)
- 	for (p = data; p->name; p++)
- 		num_clks++;
- 
-+	num_parents = of_clk_get_parent_count(dev->of_node);
-+	if (of_device_is_compatible(dev->of_node, "ti,am62-audio-refclk") &&
-+	    num_parents == 0) {
-+		return dev_err_probe(dev, -EINVAL,
-+				     "must specify a parent clock\n");
-+	}
-+
- 	hw_data = devm_kzalloc(dev, struct_size(hw_data, hws, num_clks),
- 			       GFP_KERNEL);
- 	if (!hw_data)
-@@ -117,8 +139,10 @@ static int ti_syscon_gate_clk_probe(struct platform_device *pdev)
- 
- 	hw_data->num = num_clks;
- 
-+	parent_name = of_clk_get_parent_name(dev->of_node, 0);
- 	for (i = 0; i < num_clks; i++) {
- 		hw_data->hws[i] = ti_syscon_gate_clk_register(dev, regmap,
-+							      parent_name,
- 							      &data[i]);
- 		if (IS_ERR(hw_data->hws[i]))
- 			dev_warn(dev, "failed to register %s\n",
-@@ -166,6 +190,11 @@ static const struct ti_syscon_gate_clk_data am62_clk_data[] = {
- 	{ /* Sentinel */ },
- };
- 
-+static const struct ti_syscon_gate_clk_data am62_audio_clk_data[] = {
-+	TI_SYSCON_CLK_GATE("audio_refclk", 0x0, 15),
-+	{ /* Sentinel */ },
-+};
-+
- static const struct of_device_id ti_syscon_gate_clk_ids[] = {
- 	{
- 		.compatible = "ti,am654-ehrpwm-tbclk",
-@@ -179,6 +208,10 @@ static const struct of_device_id ti_syscon_gate_clk_ids[] = {
- 		.compatible = "ti,am62-epwm-tbclk",
- 		.data = &am62_clk_data,
- 	},
-+	{
-+		.compatible = "ti,am62-audio-refclk",
-+		.data = &am62_audio_clk_data,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, ti_syscon_gate_clk_ids);
+> 
+> Note, that this is usually not an issue. ULONG_MAX sets the lower
+> 32 bits and thus effectively requests UINT_MAX. On most platforms
+> that is good enough. To trigger a real bug one of the following
+> conditions must be met:
+> 
+>  * A parent clock with more than 8.5 GHz is available
+>  * Instead of ULONG_MAX a specific frequency like 4.3 GHz is
+>    requested. That would end up becoming 5 MHz instead :)
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/clk/clk-divider.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
+> index a2c2b5203b0a..dddaaf0f9d25 100644
+> --- a/drivers/clk/clk-divider.c
+> +++ b/drivers/clk/clk-divider.c
+> @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *table,
+>  			 unsigned long parent_rate, unsigned long rate,
+>  			 unsigned long flags)
+>  {
+> -	int div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	int div = DIV64_U64_ROUND_UP(parent_rate, rate);
+> 
+>  	if (flags & CLK_DIVIDER_POWER_OF_TWO)
+>  		div = __roundup_pow_of_two(div);
+> @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_table *table,
+>  	int up, down;
+>  	unsigned long up_rate, down_rate;
+> 
+> -	up = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	up = DIV64_U64_ROUND_UP(parent_rate, rate);
+>  	down = parent_rate / rate;
+> 
+>  	if (flags & CLK_DIVIDER_POWER_OF_TWO) {
+> @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long parent_rate,
+>  {
+>  	unsigned int div, value;
+> 
+> -	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	div = DIV64_U64_ROUND_UP(parent_rate, rate);
+> 
+>  	if (!_is_valid_div(table, div, flags))
+>  		return -EINVAL;
+> --
+> 2.39.2
 
--- 
-2.40.1
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
