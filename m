@@ -2,54 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15497104BC
-	for <lists+linux-clk@lfdr.de>; Thu, 25 May 2023 06:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D467104DE
+	for <lists+linux-clk@lfdr.de>; Thu, 25 May 2023 06:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239531AbjEYEzy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 May 2023 00:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S240053AbjEYE5F (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 May 2023 00:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239275AbjEYEyi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 May 2023 00:54:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC93C1738;
-        Wed, 24 May 2023 21:51:59 -0700 (PDT)
+        with ESMTP id S229650AbjEYEzY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 May 2023 00:55:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502119A9;
+        Wed, 24 May 2023 21:52:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA0ED6429D;
-        Thu, 25 May 2023 04:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3E4C4339E;
-        Thu, 25 May 2023 04:51:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63414642CF;
+        Thu, 25 May 2023 04:51:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D842C433D2;
+        Thu, 25 May 2023 04:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684990309;
-        bh=Mg5+xNblxzB7LvQdn2eyHhoWieOkwzZvTCkzwL+uBr0=;
+        s=k20201202; t=1684990316;
+        bh=L6+h+9RDj4m+F/s1pLSzHonLLuW4an7ZQlZx1Wt57RI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qAmL5qTR4Zo+OzOCSN6FAAbskXnnIXHzNwOrGxdlzR5X3CEEToKIG5Gbdb0sTcFjM
-         OacMf7WSBYmeEjYS0mfKYNBVuZxDYlC3EJI/hSNgqepnxhBtWQF+zXBpBVHNPK1yQS
-         oRpWidpBkF3WqNqCjTl3sIMR1e3OqlgTxV3k9f+o3ptlACwtUCtWmMYcfuIqzDG36p
-         sLzegKflv4fVgGoikOHMsi4hImg04Wi7439+1ZEUTQ+zoo/3dC907eFxkewoZ4OAOP
-         4qWvHfix1VKAUmcS28sTEyLXjTg4TzU3/X2O+fCGrAduND676uLPhqScPCq79LS+n7
-         et/cFTXIoYlxw==
+        b=PgjAsN/SWRp93k8YKH4h76hPZ+srHCrL/3UhSdfF9kBKJCg2x1pQ1/11MRnRKRsK8
+         D09r0fQGeq29DDT618XTY1Grb8ggvX7K24EZCfSYdnBbjkH5hEZgaMoXKLiMte7mt3
+         e1V9EAXg6NeDXDe9jP7hKO9odZ6lYiWzljsMoAYYKodlxeiMCfHCxqsOW73uWckRN9
+         hVxWtBBgPEQdUWYPz9ggO/cSOpKJsrUcejli/KndmlKfZwc96sDtNhadNbuuYoTZR0
+         Yhmht+Nm35D+HU//XUtEIVfb08v+cMgzhOiNPHOkbeDf7Ke7lRteqPE+582r3UtJ8W
+         AwE6yqAj4VNDg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Andy Gross <agross@kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Mantas Pucka <mantas@8devices.com>
-Cc:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: qcom: gcc-ipq6018: Use floor ops for sdcc clocks
-Date:   Wed, 24 May 2023 21:54:27 -0700
-Message-Id: <168499048180.3998961.1263304299273224277.b4-ty@kernel.org>
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        linux-clk@vger.kernel.org, Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+Subject: Re: (subset) [PATCH V2 0/4] Add Video Clock Controller driver for SM8550
+Date:   Wed, 24 May 2023 21:54:34 -0700
+Message-Id: <168499048180.3998961.13400067851752606700.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1682413909-24927-1-git-send-email-mantas@8devices.com>
-References: <1682413909-24927-1-git-send-email-mantas@8devices.com>
+In-Reply-To: <20230524145203.13153-1-quic_jkona@quicinc.com>
+References: <20230524145203.13153-1-quic_jkona@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,15 +64,26 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 25 Apr 2023 12:11:49 +0300, Mantas Pucka wrote:
-> SDCC clocks must be rounded down to avoid overclocking the controller.
+On Wed, 24 May 2023 20:21:59 +0530, Jagadeesh Kona wrote:
+> Add bindings, driver and DT node for video clock controller on SM8550.
+> Also, add support to configure PLL_TEST_CTL_U2 register for ole pll.
 > 
+> Depends on [1] for SM8450 videocc YAML file
+> [1] https://patchwork.kernel.org/project/linux-clk/list/?series=750683
 > 
+> Jagadeesh Kona (4):
+>   clk: qcom: clk-alpha-pll: Add support to configure PLL_TEST_CTL_U2
+>   dt-bindings: clock: qcom: Add SM8550 video clock controller
+>   clk: qcom: videocc-sm8550: Add video clock controller driver for
+>     SM8550
+>   arm64: dts: qcom: sm8550: Add video clock controller
+> 
+> [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: gcc-ipq6018: Use floor ops for sdcc clocks
-      commit: 56e5ae0116aef87273cf1812d608645b076e4f02
+[4/4] arm64: dts: qcom: sm8550: Add video clock controller
+      commit: 22ff170d4551756e3e4ef57253c43e8c3fffefed
 
 Best regards,
 -- 
