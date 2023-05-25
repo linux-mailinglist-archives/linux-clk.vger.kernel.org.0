@@ -2,55 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DB471050F
-	for <lists+linux-clk@lfdr.de>; Thu, 25 May 2023 06:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CAA7104BF
+	for <lists+linux-clk@lfdr.de>; Thu, 25 May 2023 06:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240124AbjEYE6u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 May 2023 00:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S239910AbjEYEz5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 May 2023 00:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238359AbjEYE6N (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 May 2023 00:58:13 -0400
+        with ESMTP id S238843AbjEYEyj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 May 2023 00:54:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744EE1FD6;
-        Wed, 24 May 2023 21:52:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA91173A;
+        Wed, 24 May 2023 21:52:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77959642BB;
-        Thu, 25 May 2023 04:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9D1C433D2;
-        Thu, 25 May 2023 04:51:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2DC36428C;
+        Thu, 25 May 2023 04:51:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3057C43443;
+        Thu, 25 May 2023 04:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684990294;
-        bh=zTM6DdMQNVdtwAM/1d0VLKSLo6VWjufkAf79npGHoNo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=uHd3kJCos02om/GjtraZ5TAWsdyExa4KHzK/fh8Gm+nxMEJgfHukxSt0PWSpfBELC
-         VBSxF/X0R0ICOShJJ6zSubjI175rmSDD3wSiFtPgdVLNT5ENpR16j9fIIhAZHZZS2G
-         IwXqdAQoQ43dz6egSkB0p76Ch3kZP/9VOPIfa70kEqquHh9jB49locZjtrfhRFopN1
-         DFs0BR9qdYaBxEC+oVTKjHOhjIrQVXVZpoT3hkLr6EfDgt89a4aMXQFl4YcFeTBCaE
-         jVghG56J+9q0eM4o3OyxkJ4IV8ZGxB4HvNg0KC/MiRDiu3HaShyfuFjd0msBJ0Z0r4
-         iBDQXIYwy0QzQ==
+        s=k20201202; t=1684990298;
+        bh=SGDPLpsa4eFNFY+Mpqor59HeE4gd6oUtMpE0SSPmX4U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=rwg2ZxoSzZ4WkTX5XKXZjNCp3Ygprzon7pGpDY5K7JO2vOgb045rENVEWdvmvwSa4
+         wmlzAyIfKeJDoLnGSP7o++KJjHVr3aInJ9i6PWP+8iIkwU1a4nROHvV3apMLK62pDL
+         umgBpu8OdPQVrhEH1R9+cN69aEOLcS9RvDLV45ibcbWJGrgr4CqHM32UYtGplqemuC
+         d6TsAztkqHiaNCVAoJli3Xk5yqx58FcQk4dKowi9vf9hgw1KAQ+teeTH8wLbUUzN5v
+         DiKvMXx95dEbvgFmr5OpewrHtQYPIW4Lw+g4sJ+VV5rBZNtsmbK4vbYx/SiRRiNKiQ
+         d9D60Wb8271mg==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Adam Skladowski <a_skl39@protonmail.com>,
-        linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-clk@vger.kernel.org,
-        Sireesh Kodali <sireeshkodali@protonmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+        devicetree@vger.kernel.org,
+        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
         Taniya Das <tdas@codeaurora.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH] dt-bindings: clock: qcom,gcc-msm8953: split to separate schema
-Date:   Wed, 24 May 2023 21:54:14 -0700
-Message-Id: <168499048182.3998961.8632788520430791444.b4-ty@kernel.org>
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>
+Subject: Re: (subset) [PATCH v2 1/3] dt-bindings: clock: qcom,gcc-sm8250: add missing bi_tcxo_ao clock
+Date:   Wed, 24 May 2023 21:54:17 -0700
+Message-Id: <168499048185.3998961.10125805133783449583.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230408143729.84097-1-krzysztof.kozlowski@linaro.org>
-References: <20230408143729.84097-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516105241.30091-1-krzysztof.kozlowski@linaro.org>
+References: <20230516105241.30091-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,18 +66,24 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, 8 Apr 2023 16:37:29 +0200, Krzysztof Kozlowski wrote:
-> The Qualcomm MSM8953 GCC clock controller has clock inputs, thus
-> existing gcc-other.yaml was not describing it fully.  Move the binding
-> to its own schema file and document the clocks based on DTS.  Add driver
-> contributors as its maintainers.
+On Tue, 16 May 2023 12:52:39 +0200, Krzysztof Kozlowski wrote:
+> The initial SM8250 GCC driver added in commit 3e5770921a88 ("clk: qcom:
+> gcc: Add global clock controller driver for SM8250") already consumed it
+> on the clock.  This fixes warnings like:
+> 
+>   sm8250-xiaomi-elish-csot.dtb: clock-controller@100000: clock-names: ['bi_tcxo', 'bi_tcxo_ao', 'sleep_clk'] is too long
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] dt-bindings: clock: qcom,gcc-msm8953: split to separate schema
-      commit: 2f9b2096465da9f7eada1c3b297689b666a015cf
+[1/3] dt-bindings: clock: qcom,gcc-sm8250: add missing bi_tcxo_ao clock
+      commit: 2310ab77f1ee2611e34345ca1746c9e8aaa5bc31
+[2/3] dt-bindings: clock: qcom,gcc-sc7180: document CX power domain
+      commit: 21a95637a3fda45e6d3fd7a57d6ada204e28e484
+[3/3] dt-bindings: clock: qcom,gcc-sc7280: document CX power domain
+      commit: 7a52084ae14f49582b0ce19106cdad094499e204
 
 Best regards,
 -- 
