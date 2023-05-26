@@ -2,112 +2,215 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E209712B72
-	for <lists+linux-clk@lfdr.de>; Fri, 26 May 2023 19:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB1E712CC6
+	for <lists+linux-clk@lfdr.de>; Fri, 26 May 2023 20:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242186AbjEZRLD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 26 May 2023 13:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S242344AbjEZSrV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 26 May 2023 14:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjEZRLC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 26 May 2023 13:11:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00EA0F3;
-        Fri, 26 May 2023 10:11:00 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-132-021.ewe-ip-backbone.de [91.248.132.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S230280AbjEZSrT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 26 May 2023 14:47:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24D912A;
+        Fri, 26 May 2023 11:47:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 918536606E95;
-        Fri, 26 May 2023 18:10:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685121059;
-        bh=T4lpsRVLH6x7IReX3htoV7ctOeRMnG2Z8G+kSXW+NWE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CQMmdb+lt47Nfyk60vuz43mxBRGxAFCuth1e7EdEYjEs4yei18dyATChn8dt2sqYz
-         mTXJthprnnFujc8KXNsnukL+v6lc7oOLF1EH5FWqiCCNsILbqkBG82sQAlOGNiTFRU
-         iGZ37UJspuNS561holzqTqRltGh7PCKgwi7lfznv7aS8LDOQhfH6tohw5YhezK1UzG
-         kU/ifwIaMRaWzDU432gRJTscGZZpQXOkmRjlp5B1R/Bq/js+2gjnwLC2hUXzEVub70
-         pmxTBTJTW42CuKlTRDs5pRSyQR/ez5QtzAZK1kqx83gUfFLY0iDBfSIIaIuilxB7xw
-         fy1IZcNMojGdA==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id D41714807E3; Fri, 26 May 2023 19:10:57 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christopher Obbard <chris.obbard@collabora.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v2 2/2] clk: divider: Fix divisions
-Date:   Fri, 26 May 2023 19:10:57 +0200
-Message-Id: <20230526171057.66876-3-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230526171057.66876-1-sebastian.reichel@collabora.com>
-References: <20230526171057.66876-1-sebastian.reichel@collabora.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E636529B;
+        Fri, 26 May 2023 18:47:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B59C433D2;
+        Fri, 26 May 2023 18:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685126837;
+        bh=KVm/h7/hQejLAPfbXJ0XNl6nVho+GiUZ5mBW9zeA4JM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FZ2g8yrvQf7mM1/oXZVaJJ9fdV8N06kJJb1K+Y+CWDT0gJSCfbiUC+xQJljkdlzBs
+         dDwPaFexqYfItJo7/U4WfeFuL1FUIr5sOln2lLOSiCL/MC7BK7bnYjRU+48W63P/kM
+         XSz6Otrx6RV/Ftr7TYp/HE/IbyQQKszmCJwQAnL4otIOIPbYGeLPIM0K7GT4D/nWdJ
+         IH06nhz9fmUfboZjmS7hObQRWuYloPW6VZoomHVI8O1wc80OMH+muUXpqGHSYAVUfK
+         BeDGE1mFwZgVTuAD9gK3aGYn2udlAR1xfgdCTaRXygqEhZFN/kT3WeMltfkBZAs1VW
+         gVR3UjO16FSmg==
+Date:   Fri, 26 May 2023 19:47:13 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add nvmem-clock
+Message-ID: <20230526-wok-thwarting-90b7170d9e99@spud>
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.2167d5ad-7e99-4eb9-a313-030fc7a7d546@emailsignatures365.codetwo.com>
+ <20230526143807.10164-1-mike.looijmans@topic.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="XcYMVmXJ/sJCP8Sh"
+Content-Disposition: inline
+In-Reply-To: <20230526143807.10164-1-mike.looijmans@topic.nl>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The clock framework handles clock rates as "unsigned long", so u32 on
-32-bit architectures and u64 on 64-bit architectures.
 
-The current code pointlessly casts the dividend to u64 on 32-bit
-architectures and thus pointlessly reducing the performance.
+--XcYMVmXJ/sJCP8Sh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On the other hand on 64-bit architectures the divisor is masked and only
-the lower 32-bit are used. Thus requesting a frequency >= 4.3GHz results
-in incorrect values. For example requesting 4300000000 (4.3 GHz) will
-effectively request ca. 5 MHz. Requesting clk_round_rate(clk, ULONG_MAX)
-is a bit of a special case, since that still returns correct values as
-long as the parent clock is below 8.5 GHz.
+Hey Mike,
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/clk/clk-divider.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I have no comments about whether this is a good idea or not, I'll leave
+that Stephen, Krzysztof etc..
 
-diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-index a2c2b5203b0a..c38e8aa60e54 100644
---- a/drivers/clk/clk-divider.c
-+++ b/drivers/clk/clk-divider.c
-@@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *table,
- 			 unsigned long parent_rate, unsigned long rate,
- 			 unsigned long flags)
- {
--	int div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-+	int div = DIV_ROUND_UP(parent_rate, rate);
- 
- 	if (flags & CLK_DIVIDER_POWER_OF_TWO)
- 		div = __roundup_pow_of_two(div);
-@@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_table *table,
- 	int up, down;
- 	unsigned long up_rate, down_rate;
- 
--	up = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-+	up = DIV_ROUND_UP(parent_rate, rate);
- 	down = parent_rate / rate;
- 
- 	if (flags & CLK_DIVIDER_POWER_OF_TWO) {
-@@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long parent_rate,
- {
- 	unsigned int div, value;
- 
--	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-+	div = DIV_ROUND_UP(parent_rate, rate);
- 
- 	if (!_is_valid_div(table, div, flags))
- 		return -EINVAL;
--- 
-2.39.2
+On Fri, May 26, 2023 at 04:38:06PM +0200, Mike Looijmans wrote:
+> Add bindings for a fixed-rate clock that retrieves its rate from an
+> NVMEM provider. This allows to store clock settings in EEPROM or EFUSE
+> or similar device.
+>=20
+> Component shortages lead to boards being shipped with different clock
+> crystals, based on what was available at the time. The clock frequency
+> was written to EEPROM at production time. Systems can adapt to a wide
+> range of input frequencies using the clock framework, but this required
+> us to patch the devicetree at runtime or use some custom driver. This
+> provides a more generic solution.
+>=20
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+>=20
+> ---
+>=20
+> Changes in v2:
+> Changed "fixed-clock" into "nvmem-clock" in dts example
+> Add minItems:1 to nvmem-cell-names
+>=20
+>  .../bindings/clock/nvmem-clock.yaml           | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nvmem-clock.y=
+aml
+>=20
+> diff --git a/Documentation/devicetree/bindings/clock/nvmem-clock.yaml b/D=
+ocumentation/devicetree/bindings/clock/nvmem-clock.yaml
+> new file mode 100644
+> index 000000000000..af96a5e9372d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nvmem-clock.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nvmem-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Simple fixed-rate clock source from NVMEM
+> +
+> +maintainers:
+> +  - Mike Looijmans <mike.looijmans@topic.nl>
+> +
+> +description:
+> +  Provides a clock rate from NVMEM. Typical usage is that the factory pl=
+aces a
+> +  crystal on the board and writes the rate into an EEPROM or EFUSE. If s=
+ome math
+> +  is required, one can add a fixed-factor clock using this clock as inpu=
+t.
+> +
+> +properties:
+> +  compatible:
+> +    const: nvmem-clock
+> +
+> +  "#clock-cells":
+> +    const: 0
+> +
+> +  nvmem-cells:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description:
+> +      Reads clock-frequency and optionally clock-accuracy from an NVMEM =
+provider
+> +      in binary native integer format. The size of the NVMEM cell can be=
+ 1, 2, 4
+> +      or 8 bytes.
 
+How is that size communicated to the driver? Some nvmem magic just takes
+care of it?
+
+> +
+> +  nvmem-cell-names:
+> +    minItems: 1
+> +    items:
+> +      - const: clock-frequency
+> +      - const: clock-accuracy
+> +
+> +  clock-accuracy:
+
+I think the common pattern is to add a unit suffix for things like
+this, which I guess would be -ppb?
+
+Cheers,
+Conor.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      accuracy of clock in ppb (parts per billion). Alternative for prov=
+iding
+> +      this through nvmem, the nvmem provided value takes precedence.
+> +
+> +  clock-output-names:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - "#clock-cells"
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    xtal {
+> +      compatible =3D "nvmem-clock";
+> +      #clock-cells =3D <0>;
+> +      nvmem-cells =3D <&efuse_xtal_freq>;
+> +      nvmem-cell-names =3D "clock-frequency";
+> +    };
+> +...
+> --=20
+> 2.17.1
+>=20
+>=20
+> Met vriendelijke groet / kind regards,
+>=20
+> Mike Looijmans
+> System Expert
+>=20
+>=20
+> TOPIC Embedded Products B.V.
+> Materiaalweg 4, 5681 RJ Best
+> The Netherlands
+>=20
+> T: +31 (0) 499 33 69 69
+> E: mike.looijmans@topicproducts.com
+> W: www.topic.nl
+>=20
+> Please consider the environment before printing this e-mail
+
+--XcYMVmXJ/sJCP8Sh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHD+sQAKCRB4tDGHoIJi
+0gXlAP9tM6VZjMbCk7uDsxgVhuxkssWXoWpS9GExKxdhR2SuNAEA+ZWMC6Qu2G9A
+ilC37CZ8ryNiVLmlQXyADnGi4Q0wIQU=
+=ix/J
+-----END PGP SIGNATURE-----
+
+--XcYMVmXJ/sJCP8Sh--
