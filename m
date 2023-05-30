@@ -2,77 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9379F715CF5
-	for <lists+linux-clk@lfdr.de>; Tue, 30 May 2023 13:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE0E715E7D
+	for <lists+linux-clk@lfdr.de>; Tue, 30 May 2023 14:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjE3LVJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 May 2023 07:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S231736AbjE3MHq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 May 2023 08:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjE3LVI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 May 2023 07:21:08 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257B9E8;
-        Tue, 30 May 2023 04:21:06 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3909756b8b1so1442319b6e.1;
-        Tue, 30 May 2023 04:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685445665; x=1688037665;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fZAcV0XNcMwrhSLLa6b9f3EOQQtrnYuiRx8TP1TjfRs=;
-        b=q5+FzL0bPNCscQLgbG5qP397449sMQM06sM1URLamdujhkCEyPJPRIvVYu0izRkAQE
-         +5kkaNJyYSzZeI2vm4N7Sax7llgUQIW6hxlX5CLP/2A0r7h9B67RdjDqEgT6mFZC/hKh
-         KucA3MtGbzMwnAkbIolfd/f/9+DrEVnlKYJ8jg024dYqMNX8U6+CAP8mf1Lg81yrlbZT
-         G6ulBgxDGTnQq6YoD7j75PAaf3IqhKiFXSgw8QHbgo5RnYctQQMLgqOSTaLNoX3fPHGb
-         LXx6L8H1BWoINUOhwGNOuMM2lS7hIMMQB3gkLeTUfhUuWP2+/N69cBLDBm7556IeD3rv
-         ZH+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685445665; x=1688037665;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fZAcV0XNcMwrhSLLa6b9f3EOQQtrnYuiRx8TP1TjfRs=;
-        b=Kv8cuejAwcMPG78CpyXyko6K5geFbto+RywzypFlSLQEfUorNO1UwLMeVsh279MiTu
-         9TYn1APcD2OV3POi8EvqXz6XlMspSb+Lqrt0kFu+mVgg6GwS7mhpBxBoCwbkOZiv1Ua/
-         uE6gTCur8lilp0eV442+ae5MpHbJ9MqfIepUfdSDVfM6oUQLlK4kYPmu9XXmPH1RFMpb
-         Tf80UxBadhW4PyQ32nFBctFRugIxFc+1eBLJ5u+pzA/WRMiXERYYZuXAAkyEAnto+5fT
-         SWN5a3/hp2ciba2nS0dsUd71mVGb77aEAWm6gxOSu0fk2GRJgUmWBGIefpPzNPTSo7OT
-         CgZQ==
-X-Gm-Message-State: AC+VfDw6TNkbvNC0BO/6DO+deKRg9XmQPavpQBHpvd5WyoapC2qyrZHp
-        lkMz/zXtjpTurXeS34NCNAZr/bvNb+s=
-X-Google-Smtp-Source: ACHHUZ5Cu+qH+LAnGrvdDaNMQ2BwkspOHGM162mOCOgRwL3FKMJ/A11CHnMxdYWdt8SZPoqYCRl7Tg==
-X-Received: by 2002:aca:705:0:b0:398:937:6011 with SMTP id 5-20020aca0705000000b0039809376011mr861717oih.20.1685445664899;
-        Tue, 30 May 2023 04:21:04 -0700 (PDT)
-Received: from aford-B741.lan ([2601:447:d001:897f:a5e7:c9e9:bb20:39c1])
-        by smtp.gmail.com with ESMTPSA id co17-20020a0566383e1100b003c4e02148e5sm634363jab.53.2023.05.30.04.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 04:21:04 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     biju.das.jz@bp.renesas.com, marek.vasut+renesas@gmail.com,
-        cstevens@beaconembedded.com, aford@beaconembedded.com,
-        Adam Ford <aford173@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [RFC 3/3] arm64: dts: renesas: r8a774a1: Add GPU Node
-Date:   Tue, 30 May 2023 06:20:49 -0500
-Message-Id: <20230530112050.5635-3-aford173@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230530112050.5635-1-aford173@gmail.com>
-References: <20230530112050.5635-1-aford173@gmail.com>
+        with ESMTP id S231298AbjE3MHm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 May 2023 08:07:42 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF018B;
+        Tue, 30 May 2023 05:07:22 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 629495FD27;
+        Tue, 30 May 2023 15:06:42 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685448402;
+        bh=bZ/3zHJMAac2f/gPspgrR1bhRNJwTftEFFtSQZKfL4w=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=T/VLAf3TNfoVJrOANf6hHbbJuExBwVn1s34Zx2Avqmyr6aXJUY2cIo81qtQqduPh8
+         BRa6Cbzg+AbH9OJ+qZd2mrV3FqE8gfStR9callJ9oUXpm3tjNzQK7h1HNqqAsu8rmg
+         eynLSLUc+P+lB580prvqse1tiznlr56Bbrcy6ount+MMBrPSPhXvWI9tx4IuO3CKFe
+         QGZOXXGVoUiOrKq64nQtTMBkGHDE6B7gW1H63mZOAW5pYCSvhg5H0CHwOFmL4NnLY1
+         xTyJlBAWxZgPUe7+fCSSzsXOkB1Gb1GfJ6UNLz9IYtm8fxH7vtJ4BHYVgUOKvswm0t
+         +/XTIkInKJ/oQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 30 May 2023 15:06:41 +0300 (MSK)
+Date:   Tue, 30 May 2023 15:06:40 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v15 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+ controller driver
+Message-ID: <20230530120640.irugyrio3qa7czjy@CAB-WSD-L081021>
+References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
+ <20230517133309.9874-7-ddrokosov@sberdevices.ru>
+ <CAFBinCBs7-9CvfQLxLoG5=FjmSK+S5eGsLXOAyQN9kNOg2q-2g@mail.gmail.com>
+ <20230522133212.fcxgsml4hmvj65bb@CAB-WSD-L081021>
+ <1jr0qy42tn.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <1jr0qy42tn.fsf@starbuckisacylon.baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 07:59:00 #21376339
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,70 +76,145 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-With the 3dge and ZG clocks now available, the generic GPU node can
-be added.  Until proper firmware is made, it is not usable.
+Hello Jerome,
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
----
-This is based on the assumption that the Rogue 6250 could use
-generic driver [1] and firmware [2] being implemebted by the Mesa group
-and others.  In practice, the firmware isn't really compatible since
-the 6250 in the RZ/G2M appears to be a different variant.
+Thank you for the review!
 
-[1] - https://gitlab.freedesktop.org/frankbinns/powervr/-/tree/powervr-next
-[2] - https://gitlab.freedesktop.org/frankbinns/linux-firmware/-/tree/powervr/powervr
+On Tue, May 30, 2023 at 10:32:57AM +0200, Jerome Brunet wrote:
+> 
+> On Mon 22 May 2023 at 16:32, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> 
+> > Hello Martin,
+> >
+> > Thank you so much for the review, I really appreciate it!
+> > Please find my comments below.
+> >
+> > On Fri, May 19, 2023 at 11:03:54PM +0200, Martin Blumenstingl wrote:
+> >> Hi Dmitry,
+> >> 
+> >> On Wed, May 17, 2023 at 3:33 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >> [...]
+> >> > +static struct clk_regmap sys_b_sel = {
+> >> > +       .data = &(struct clk_regmap_mux_data){
+> >> > +               .offset = SYS_CLK_CTRL0,
+> >> > +               .mask = 0x7,
+> >> > +               .shift = 26,
+> >> > +               .table = mux_table_sys,
+> >> > +       },
+> >> > +       .hw.init = &(struct clk_init_data){
+> >> > +               .name = "sys_b_sel",
+> >> > +               .ops = &clk_regmap_mux_ro_ops,
+> >> the sys_*_sel muxes and sys_*_gate are _ro...
+> >> 
+> >> > +               .parent_data = sys_parents,
+> >> > +               .num_parents = ARRAY_SIZE(sys_parents),
+> >> > +       },
+> >> > +};
+> >> > +
+> >> > +static struct clk_regmap sys_b_div = {
+> >> > +       .data = &(struct clk_regmap_div_data){
+> >> > +               .offset = SYS_CLK_CTRL0,
+> >> > +               .shift = 16,
+> >> > +               .width = 10,
+> >> > +       },
+> >> > +       .hw.init = &(struct clk_init_data){
+> >> > +               .name = "sys_b_div",
+> >> > +               .ops = &clk_regmap_divider_ops,
+> >> ...but the sys_*_div aren't
+> >> Is this on purpose? If it is: why can the divider be changed at
+> >> runtime but the mux can't?
+> >> 
+> >
+> > Ah, that's a good catch. Since the system clock is set up by the BootROM
+> > code, all sys_* dividers and gates should be read-only. I'll make sure
+> > to change that in the next version.
+> >
+> >> [...]
+> >> > +/*
+> >> > + * the index 2 is sys_pll_div16, it will be implemented in the CPU clock driver,
+> >> We need to add the "sys_pll_div16" input to the dt-bindings since they
+> >> should always describe the hardware (regardless of what the driver
+> >> implements currently).
+> >> I'm not sure how to manage this while we don't have the CPU clock
+> >> driver ready yet but I'm sure Rob or Krzysztof will be able to help us
+> >> here.
+> >> 
+> >
+> > I've shared my thoughts about it in the bindings thread. Please take a
+> > look.
+> >
+> >> > + * the index 4 is the clock measurement source, it's not supported yet
+> >> I suspect that this comes from the clock measurer IP block and if so
+> >> the dt-bindings should probably describe this input. But again, we'd
+> >> need to keep it optional for now since our clock measurer driver
+> >> doesn't even implement a clock controller.
+> >> 
+> >
+> > Indeed, this is a similar situation to what we have with the inputs and
+> > clocks of the CPU and Audio clock controllers. It seems like there is
+> > only one option here: we should mark it with a TODO tag...
+> >
+> >> [...]
+> >> > +static struct clk_regmap pwm_a_sel = {
+> >> > +       .data = &(struct clk_regmap_mux_data){
+> >> > +               .offset = PWM_CLK_AB_CTRL,
+> >> > +               .mask = 0x1,
+> >> > +               .shift = 9,
+> >> > +       },
+> >> > +       .hw.init = &(struct clk_init_data){
+> >> > +               .name = "pwm_a_sel",
+> >> > +               .ops = &clk_regmap_mux_ops,
+> >> > +               .parent_data = pwm_abcd_parents,
+> >> > +               .num_parents = ARRAY_SIZE(pwm_abcd_parents),
+> >> > +               /* For more information, please refer to rtc clock */
+> >> > +               .flags = CLK_SET_RATE_NO_REPARENT,
+> >> As mentioned in [0] we'll work with Heiner to see if we can improve
+> >> the decision making process of the PWM controller driver so that we
+> >> can just have .flags = 0 here.
+> >> This applies to all other occurrences of the same comment about the rtc clock.
+> >
+> > Sure, I'll make the change in v16. In my opinion, we should remove the
+> > CLK_SET_RATE_NO_REPARENT flag from all RTC related clock objects,
+> > including PWM, regardless of the outcome of the Heiner discussion. Based
+> > on our IRC talk, the decision has more pros than cons -
+> > https://libera.irclog.whitequark.org/linux-amlogic/2023-05-18
+> 
+> The clock scheme of PWM could indeed be handled like audio is but it
+> not strictly required.
+> 
+> In audio we have a limited number of PLLs (root sources). There is a lot
+> more consummers than there is root sources. If the root sources rate is
+> not carefully chosen to statisfy all needs, we could end in a situation
+> where we can't satisfy all consummers or we must glitch the source to do
+> so.
+> 
+> For the PWM, I think (but I'm not 100% sure) that the main clock controller
+> provides a source for each PWM. No risk of race there. That is why AML
+> decided to completly ignore the clock element in the PWM IP, because
+> they can do almost everything with what is in the main controller ... Still
+> ignoring those part is wrong
+> 
+> For the RTC, If you want/need to handle external RTCs, I don't think you
+> have much of a choice. If both the internal and external *report* the
+> same rate, CCF can't really know if one is best. It will just pick one,
+> no necessarily the one you want. I don't really see a way around manual
+> selection for this.
+> 
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-index c21b78685123..7e5816113a3c 100644
---- a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-@@ -226,6 +226,27 @@ extalr_clk: extalr {
- 		clock-frequency = <0>;
- 	};
- 
-+	gpu_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+
-+		opp-200000000 {
-+			opp-hz = /bits/ 64 <200000000>;
-+			opp-microvolt = <830000>;
-+		};
-+		opp-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-microvolt = <830000>;
-+		};
-+		opp-400000000 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-microvolt = <830000>;
-+		};
-+		opp-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-microvolt = <830000>;
-+		};
-+	};
-+
- 	/* External PCIe clock - can be overridden by the board */
- 	pcie_bus_clk: pcie_bus {
- 		compatible = "fixed-clock";
-@@ -2347,6 +2368,18 @@ gic: interrupt-controller@f1010000 {
- 			resets = <&cpg 408>;
- 		};
- 
-+		gpu@fd000000 {
-+			compatible = "img,powervr-series6xt";
-+			reg = <0 0xfd000000 0 0x40000>;
-+			interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 112>, <&cpg CPG_MOD 112>,<&cpg CPG_MOD 112>;
-+			clock-names = "core", "mem", "sys";
-+			interrupt-names = "gpu";
-+			operating-points-v2 = <&gpu_opp_table>;
-+			power-domains = <&sysc R8A774A1_PD_3DG_B>;
-+			resets = <&cpg 112>;
-+		};
-+
- 		pciec0: pcie@fe000000 {
- 			compatible = "renesas,pcie-r8a774a1",
- 				     "renesas,pcie-rcar-gen3";
+Per my understading, the rtc32k Amlogic clock is an internal clock and
+cannot be an external one. Amlogic has provided it as an internal 32k
+stable clock with low jitter.
+
+You're absolutely right that there is no data available to confirm the
+choice of an external RTC clock in the CCF. However, as per the approach
+we discussed with Martin and Heiner, we can still use the RTC clock as a
+parent for PWM in the current implementation. If the parent clock
+already has 32k, we do not change the rate from the PWM driver. The
+benefit of this approach is that reparenting is still available, but the
+PWM child cannot change the RTC frequency; it simply uses the
+appropriate parent clock. Additionally, if the parent is already set to
+rtc32k, we shouldn't change it.
+
 -- 
-2.39.2
-
+Thank you,
+Dmitry
