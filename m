@@ -2,61 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32329715722
-	for <lists+linux-clk@lfdr.de>; Tue, 30 May 2023 09:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C3B71572C
+	for <lists+linux-clk@lfdr.de>; Tue, 30 May 2023 09:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjE3Hj0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 May 2023 03:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S230329AbjE3HkK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 May 2023 03:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbjE3HjD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 May 2023 03:39:03 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D2B192
+        with ESMTP id S231276AbjE3HjE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 May 2023 03:39:04 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C286127
         for <linux-clk@vger.kernel.org>; Tue, 30 May 2023 00:38:30 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30addbb1b14so2175069f8f.2
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f603ff9c02so27646055e9.2
         for <linux-clk@vger.kernel.org>; Tue, 30 May 2023 00:38:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685432309; x=1688024309;
+        d=linaro.org; s=google; t=1685432310; x=1688024310;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YYg3fc69ScJ7fp+A0MjAsWU7xUehEqfWXj7B6hyn3hM=;
-        b=JQ04iDdLMSAvRnw33ada0AcNyYSL1kQOGfFyhn38LnU4wNpARK7erpm/jOrY7x1tLF
-         059fkGG17a/oJfyafxgI01ct+6kb2OlEEkol2pmtSb6Z+/NcyZcOyNLhLKUOE7zfrK3U
-         N92qonlieUJZjdqOZgsvOaZywmmOS9PjRcQbMGhJWnsH5rV6U2ffzJJZqWjNzFdFuYZr
-         q+bb3z1lUADWFL3myXY5/fcSXTzNp6ubNdqAQiyLBaQcECl1y0XCFiRMuiyw9Ry6Mzpe
-         cPu9fmNoa/wPIE2sj4ZyJWxHfh3GwKO0z8H3dP81ZaumKnEy75iIWyefh2QvFGSFEURu
-         mqrw==
+        bh=FE2GzTAQAamADs2IkId4bbtx4jEKIzlUpXDBW+Z7PSk=;
+        b=cpT8kqGq/1CXoyY8S/D93smDoMCY7pfI5803gHEomPNLv1JW2Ymvl0BI5FFqWdx1QO
+         JB+3UUVOJsBeSTvppDUijNszyNs3lCsGJZF+qSGoJobJ7WKM3DOTE7YPvXYlXZguPlTr
+         OF/VyYpiUdinJEX65ZOz9I7YbtNcCG7HXraLvI0YsQiFJVLkQThIg4TW/cAqv50eLDIK
+         15iWI4Lpfu0EcVDgPIFg4CNA3bZLdAp3Rn7EFdkX0vDP1fM6WZsOFEAw1T453F6ZZV4y
+         Av+STk3U7c3TzGeOVji4AKLKpNHPEqjbkXVsgK5hYq6dkYsPlxtUXR5hTFjLLmT5S6y+
+         Vdlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685432309; x=1688024309;
+        d=1e100.net; s=20221208; t=1685432310; x=1688024310;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YYg3fc69ScJ7fp+A0MjAsWU7xUehEqfWXj7B6hyn3hM=;
-        b=FAGIj2AfvoqnEWx5ZqiuwqgcxoU7QXswKravvkRDcER6eI5cXYgs81Dk0VF6TkzbuV
-         q55EJydjGW+Hqf+FPzQECNYKViWhDxJyTIoUV/skJIa69p9bkaY5rRVexiLLMB34yDua
-         4Jo0QX4fx9X8J5HDFZ8IUNetA9hKMvTmQi2cNkwr5m1xObMbP37r0h1oe0H977wSXM60
-         iET88fyHxCGe41z3FI+SAJPHE06N/rEOcrp5uR2MwMgyHMFenedb+cBS1p66WehHvB9x
-         TIA6qZarrWQJ8ORI/75+TP3eXRZoTv4T5cgEAFVbW/UXzmFFCJTL9wFOvxkfqP/BUcn1
-         Wb1Q==
-X-Gm-Message-State: AC+VfDyWF6dYkjcvXsOcLwDSNKUf+1gXpirr/NW2Djbf2k1SVjOXaJ+g
-        DG/jMxYij+y6lHMl43Bkb7JbgQ==
-X-Google-Smtp-Source: ACHHUZ6R3/5jCvzC/EfbuZ2wl9ps+H31Dyo4EwKtZB12YzdkTlX839WIivh9XGpn75rT6sT0OWR+Zg==
-X-Received: by 2002:a5d:5544:0:b0:30a:e86d:17a3 with SMTP id g4-20020a5d5544000000b0030ae86d17a3mr831595wrw.46.1685432308830;
-        Tue, 30 May 2023 00:38:28 -0700 (PDT)
+        bh=FE2GzTAQAamADs2IkId4bbtx4jEKIzlUpXDBW+Z7PSk=;
+        b=Neb4vOH+tfzHpvgZLyfyepdu0UvpXCNDhgcFvPwT65AZ/2NOW2KMOPbBohZZ8wOG2g
+         BZhzuduDdiXTXbX14M98HO9RLaYvj8IrvRltbOdgsbHul7Q3zbIEKZXxFc8eatnvOQfJ
+         IvZX/i7C70FdNLOTJ0lH2aJ98T6zVOYa8lJjBvJXGOkYg7OEsQ66Bc1o6QAE8n/E4Sx7
+         xITyilIA0/R+pHqPtQckZ67dX+xHiPwt3JF6DvoKHova+FtKyUt3CI3EcUZg2uxDZTH7
+         Lc2qRed2Ev/Ww176f85u9Y9GcExnHRYJhje9UpAY/EtKz/8ytrLB3nunlRrYZIbK644w
+         oJug==
+X-Gm-Message-State: AC+VfDxXPYgSgDujRq5e7S1S9tWsiNzC28vTBvlKbooUOAqvEkCiRn3Q
+        YhqUR5chc+rDxh3PznMYNbhmtw==
+X-Google-Smtp-Source: ACHHUZ5twmldHpBlAi32g5KLdl0EhTqocg7KERT++T1cs5k8vLrKMExWYTOkQxBURLYBPI0dLoxsoQ==
+X-Received: by 2002:a5d:4acb:0:b0:309:3b8d:16a8 with SMTP id y11-20020a5d4acb000000b003093b8d16a8mr920169wrs.50.1685432310077;
+        Tue, 30 May 2023 00:38:30 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id m4-20020a5d4a04000000b003079c402762sm2312013wrq.19.2023.05.30.00.38.27
+        by smtp.gmail.com with ESMTPSA id m4-20020a5d4a04000000b003079c402762sm2312013wrq.19.2023.05.30.00.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 00:38:28 -0700 (PDT)
+        Tue, 30 May 2023 00:38:29 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 30 May 2023 09:38:14 +0200
-Subject: [PATCH v5 13/17] drm/panel: khadas-ts050: update timings to
- achieve 60Hz refresh rate
+Date:   Tue, 30 May 2023 09:38:15 +0200
+Subject: [PATCH v5 14/17] arm64: meson: g12-common: add the MIPI DSI nodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-13-56eb7a4d5b8e@linaro.org>
+Message-Id: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-14-56eb7a4d5b8e@linaro.org>
 References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
 In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -80,20 +79,20 @@ Cc:     "Lukas F. Hartmann" <lukas@mntre.com>,
         linux-phy@lists.infradead.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1491;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3033;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=mst4lZ0rnXCLGGf7dowtnVBMlyjZYveMg1KB2R/Nmno=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkdafiK1ejjQEfL6v/BkAEbC5WdiwOP7ROMvZsKoYw
- Bm0o05iJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHWn4gAKCRB33NvayMhJ0TDqEA
- CLl6EorbfHvfwJvkIKiFIEFczCFvIK7+cAt6kXd+MZQMXkMsqn5qPI3QRmk1ZBh7lN3LDRxeDrMoVh
- aFNCHjmTsOZDWCdughiNifGjmHO72l6LnfjHZC34b6H+87IZJboWXpjoYqFoLYf0YjiPJh/Zbcfg1P
- UAS97hEdsPuCrQ7fR/PBtK2gtocZFFBhrASg4BvAo5janiHp/zBFZdiGtahO1mn9/NmbYwysvI0hkX
- /v+ZB9ya+Tp1HwvDvPv3nQbrr6dwbny/i+c2I5MORDsyEKxiNMx5IT8YlHDclQND99GPPeUUWRAmur
- afkVVauiVFDjNvftRtHg+5c8pSRPApTa8jJ+sRidFqfHuxfkEZ/L76QHULozYOseDrx776EgU2s1V7
- hJrlpIxerxu8LLI0coEGyEdqkYxwiSlJJ9qgUCJrVu2ifLbFyk7+v9nTw3Y95dzeJvtbeSZG/b2lqx
- Cwx7FOIZ5xE9N5jmECgXAjFBJvU9TdVQU7NgSt9/y6MWVUBY2sP1JP+PfG2u/9SLBEBFelwpZsletR
- tefrmAF/JJdCOus8SXEBBcaUexGMqhxqQqyJV0jonRCk/IMnxaPyBGdy6aJ145a2NF1AwzGLeyuda9
- N5w7eDepG4GrvedwFQN0epbFI86B/7lVlpf09pz2Q2vM1OdV30aAYfxpK4AA==
+ bh=/UfTcMxSgIsvwzBMxXSJJlgFXjkzr+CK8wUoWlj1xNI=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkdafiT0we+6CO6c5N6Xq5y8TagHAvuLqF8e9bm7tN
+ VnQONMWJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHWn4gAKCRB33NvayMhJ0eqLEA
+ CEhldpVtcYRcSTem9eNv+vOccezhv5jI/pVsuhGNLCY7YLCBhJFOtTHhJwa+d5lk9fbChK2KFX9QdR
+ AOhbwa+ns+l1xn9eO7lcLQnepjWJX+yfOTqic4o/Mbxa3Zz+nD1Iijx65UXlk1XiCkCQ1fR7xNZrqs
+ WA1bKaQfSrHtGjJChg7cDnTfrgKv/cSwvTG1SHw7Z9F3V5uzxEEuIi9mIlxuZhpqksBxlFm0PlML4j
+ 8ASQtdVxQXYveD9H/r5B8EPcuQgOJteUqLgiHNCMp1pB418cp5YYxHcB/G9WWvoBVYCl6rLD9OZ9Wr
+ FjCJ2bKqeOZEX3ioAGa3Qvz5TXpSi2JsDwTvovO8xPJBmSXPYJmax5KiLjHlZGWZsqW/AwzvNreR7S
+ HpUzLXSRCSwqOOyrwcvvGgbKi/5PLZQXuM4JYQ2+9aPuXtm43lQq8fq4swjKBjTjEzukO2zG1DVjva
+ 8T0ZQKqINz0LZXfnpL74b9UDvh68nZumkWC3x9JQoKU/69Qaywlt+Hm3RaFIYVJLpe/3ll83tcln7O
+ OgZ7qqchqw91xhUYVPmZ/vfUYmjd/wqFSfeshPn0zusexxL1ntdfFce1bgPMU6l70ENs2iOLauOO+G
+ Jslbls3Kwq9GEVcnbVRq15oKM9Vq1AhOB3PuSTfCrwU63uvgiIWuyMeaYZxQ==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -106,49 +105,112 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This updates the panel timings to achieve a clean 60Hz refresh rate.
+Add the MIPI DSI Analog & Digital PHY nodes and the DSI control
+nodes with proper port endpoint to the VPU.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/gpu/drm/panel/panel-khadas-ts050.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 70 +++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/drivers/gpu/drm/panel/panel-khadas-ts050.c b/drivers/gpu/drm/panel/panel-khadas-ts050.c
-index 1ab1ebe30882..b942a0162274 100644
---- a/drivers/gpu/drm/panel/panel-khadas-ts050.c
-+++ b/drivers/gpu/drm/panel/panel-khadas-ts050.c
-@@ -568,7 +568,7 @@ static const struct khadas_ts050_panel_cmd init_code[] = {
- 	{0xfb, 0x01},
- 	/* Select CMD1 */
- 	{0xff, 0x00},
--	{0xd3, 0x05}, /* RGBMIPICTRL: VSYNC back porch = 5 */
-+	{0xd3, 0x22}, /* RGBMIPICTRL: VSYNC back porch = 34 */
- 	{0xd4, 0x04}, /* RGBMIPICTRL: VSYNC front porch = 4 */
- };
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+index 0c49655cc90c..e2d890e72940 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+@@ -1662,9 +1662,28 @@ pwrc: power-controller {
+ 								       <250000000>,
+ 								       <0>; /* Do Nothing */
+ 					};
++
++					mipi_analog_dphy: phy {
++						compatible = "amlogic,g12a-mipi-dphy-analog";
++						#phy-cells = <0>;
++						status = "disabled";
++					};
+ 				};
+ 			};
  
-@@ -717,15 +717,15 @@ static int khadas_ts050_panel_disable(struct drm_panel *panel)
- }
++			mipi_dphy: phy@44000 {
++				compatible = "amlogic,axg-mipi-dphy";
++				reg = <0x0 0x44000 0x0 0x2000>;
++				clocks = <&clkc CLKID_MIPI_DSI_PHY>;
++				clock-names = "pclk";
++				resets = <&reset RESET_MIPI_DSI_PHY>;
++				reset-names = "phy";
++				phys = <&mipi_analog_dphy>;
++				phy-names = "analog";
++				#phy-cells = <0>;
++				status = "disabled";
++			};
++
+ 			usb3_pcie_phy: phy@46000 {
+ 				compatible = "amlogic,g12a-usb3-pcie-phy";
+ 				reg = <0x0 0x46000 0x0 0x2000>;
+@@ -2151,6 +2170,15 @@ hdmi_tx_out: endpoint {
+ 					remote-endpoint = <&hdmi_tx_in>;
+ 				};
+ 			};
++
++			/* DPI output port */
++			dpi_port: port@2 {
++				reg = <2>;
++
++				dpi_out: endpoint {
++					remote-endpoint = <&mipi_dsi_in>;
++				};
++			};
+ 		};
  
- static const struct drm_display_mode default_mode = {
--	.clock = 120000,
--	.hdisplay = 1088,
--	.hsync_start = 1088 + 104,
--	.hsync_end = 1088 + 104 + 4,
--	.htotal = 1088 + 104 + 4 + 127,
-+	.clock = 160000,
-+	.hdisplay = 1080,
-+	.hsync_start = 1080 + 117,
-+	.hsync_end = 1080 + 117 + 5,
-+	.htotal = 1080 + 117 + 5 + 160,
- 	.vdisplay = 1920,
- 	.vsync_start = 1920 + 4,
--	.vsync_end = 1920 + 4 + 2,
--	.vtotal = 1920 + 4 + 2 + 3,
-+	.vsync_end = 1920 + 4 + 3,
-+	.vtotal = 1920 + 4 + 3 + 31,
- 	.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
- };
+ 		gic: interrupt-controller@ffc01000 {
+@@ -2188,6 +2216,48 @@ gpio_intc: interrupt-controller@f080 {
+ 				amlogic,channel-interrupts = <64 65 66 67 68 69 70 71>;
+ 			};
  
++			mipi_dsi: mipi-dsi@7000 {
++				compatible = "amlogic,meson-g12a-dw-mipi-dsi";
++				reg = <0x0 0x7000 0x0 0x1000>;
++				resets = <&reset RESET_MIPI_DSI_HOST>;
++				reset-names = "top";
++				clocks = <&clkc CLKID_MIPI_DSI_HOST>,
++					 <&clkc CLKID_MIPI_DSI_PXCLK>,
++					 <&clkc CLKID_CTS_ENCL>;
++				clock-names = "pclk", "bit", "px";
++				phys = <&mipi_dphy>;
++				phy-names = "dphy";
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++
++				assigned-clocks = <&clkc CLKID_MIPI_DSI_PXCLK_SEL>,
++					 <&clkc CLKID_CTS_ENCL_SEL>,
++					 <&clkc CLKID_VCLK2_SEL>;
++				assigned-clock-parents = <&clkc CLKID_GP0_PLL>,
++					 <&clkc CLKID_VCLK2_DIV1>,
++					 <&clkc CLKID_GP0_PLL>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					/* VPU VENC Input */
++					mipi_dsi_venc_port: port@0 {
++						reg = <0>;
++
++						mipi_dsi_in: endpoint {
++							remote-endpoint = <&dpi_out>;
++						};
++					};
++
++					/* DSI Output */
++					mipi_dsi_panel_port: port@1 {
++						reg = <1>;
++					};
++				};
++			};
++
+ 			watchdog: watchdog@f0d0 {
+ 				compatible = "amlogic,meson-gxbb-wdt";
+ 				reg = <0x0 0xf0d0 0x0 0x10>;
 
 -- 
 2.34.1
