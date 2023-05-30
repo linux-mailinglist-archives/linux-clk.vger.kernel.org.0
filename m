@@ -2,66 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24839715A6D
-	for <lists+linux-clk@lfdr.de>; Tue, 30 May 2023 11:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0417F715B57
+	for <lists+linux-clk@lfdr.de>; Tue, 30 May 2023 12:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjE3Jks (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 May 2023 05:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
+        id S230373AbjE3KUI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 May 2023 06:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjE3Jkj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 May 2023 05:40:39 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4388C19C;
-        Tue, 30 May 2023 02:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685439619; x=1716975619;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zaCpku09a8GcgYcESUClblE15AQp+FSilf+S/hwA1+k=;
-  b=m63MsVKpRQkaRdOVATWkZrPT1iixUWDb0L682jzGv/OjtRbcTyHLiwbw
-   umVRTWcIMhq1KDrRMowK4++H8imoHg+LqDQ803IqdRKEF2Yeclk2onODZ
-   l/bss9CxsV0LLXBA6ICSFWg4P2PMD6BEZ8jJWQetf/wCq1LMMIGtkxoKX
-   n/785UP5A4NOWDtOwmooLSOt2Jfhbd0f2pXioEE7ot11IJNo/kzyKnzGw
-   B4HA/WH7i+BdPL11us0pmvbGrGOTr2cencGkr3UcHf2M1KxIfSVJ3EPiY
-   c5Z+zSiQEeALX0HWWih5EigqYB4RZthB8nfXylyKX8ymt6ljpbPcpI6TN
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="227558719"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 02:40:18 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 30 May 2023 02:40:16 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 30 May 2023 02:40:11 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <luca.ceresoli@bootlin.com>, <nm@ti.com>, <kristo@kernel.org>,
-        <ssantosh@kernel.org>, <michal.simek@xilinx.com>
-CC:     <aford173@gmail.com>, <mike.looijmans@topic.nl>,
-        <robert.hancock@calian.com>, <shawn.guo@linaro.org>,
-        <fabio.estevam@freescale.com>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 8/8] clk: clocking-wizard: check return value of devm_kasprintf()
-Date:   Tue, 30 May 2023 12:39:13 +0300
-Message-ID: <20230530093913.1656095-9-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230530093913.1656095-1-claudiu.beznea@microchip.com>
-References: <20230530093913.1656095-1-claudiu.beznea@microchip.com>
+        with ESMTP id S230459AbjE3KUH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 May 2023 06:20:07 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653809F
+        for <linux-clk@vger.kernel.org>; Tue, 30 May 2023 03:20:05 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so4865659e87.2
+        for <linux-clk@vger.kernel.org>; Tue, 30 May 2023 03:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685442003; x=1688034003;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3mCrqWltv1neqVqCpZo0gfCGWXLEFNOguKdIUsP/Fuo=;
+        b=eeVzdLBgnCbIQSDvehs4g2Y1udKY5OVVr8yEIkmYaeA1N5ub/4ihUzU6fmNAvUKK7s
+         XHKRENGifZXrMQM7Mbf+9eZJOoEjJq3shnqpjS8kPhIv6qEpIX9KMPxqXBIQFQ7Jbh3i
+         dF/NXF2cNNltXaKVDP7iyi7Cejo5WGtwdYYtRBuT895s2OznKWYVHYZeJuBkQvTngsVo
+         h1z6fF8fpM4aLcgJu8Er/jR4qwdduW/81vJQxoaPo4smDVM2/iiuR3x0tk1lRPTzAL1S
+         EenFsxKGxZmxrdIERAbaD3Gl4biKpuQEtviH30vyYrylDYOPV52nJvtglRe7mcDD/yyf
+         /A8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685442003; x=1688034003;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3mCrqWltv1neqVqCpZo0gfCGWXLEFNOguKdIUsP/Fuo=;
+        b=OfBAdVnCxTKySwTcnr9GHWEIJMKGJsNr/9tn7nWDlagvwZueHEHaaHT/emnpnIW3Xg
+         D6S86BCMrx/SeVAbjfI8IFT/eknRm+Dwo3FKhFjxZjt1QpGHfF2atEqf0BPnI3NvOpYE
+         73XuSF+EOcnVg8gMuSywoqKiRMDqIfuWX97zhIk6dy1pjZITn7yBgWgTZLoVn4tnnLhv
+         Pegy3IhUH79q+AFfjS8yzM++I4wMBsJUQBB0AhwSC33jwiy/I+ygKo+e1lsLiNfEB387
+         5Je+3vX2lW8u4/tnMTbEbaaJMclI8AvLJ1ffLSF0ANn3hm9SxcklhnbNMzxb1SJqUh8L
+         QYQQ==
+X-Gm-Message-State: AC+VfDyi14yDOmJrWULSFX7HUF9V048ZW8skPKT7QkWsspiRKVg2+lJE
+        rzT/TLyp0D4GPbikYZ9rRV8SDQ==
+X-Google-Smtp-Source: ACHHUZ6LzQiKwm5NNt92+vL6PmntTJMXHFhIRImesVTAXXaH7iQjNZfL0vVIup8Tp0aQwOvgtVtgCw==
+X-Received: by 2002:ac2:489a:0:b0:4eb:2d47:602 with SMTP id x26-20020ac2489a000000b004eb2d470602mr492112lfc.59.1685442003660;
+        Tue, 30 May 2023 03:20:03 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac24159000000b004cc8196a308sm290902lfi.98.2023.05.30.03.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 03:20:02 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 00/20] Restructure RPM SMD ICC
+Date:   Tue, 30 May 2023 12:19:59 +0200
+Message-Id: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM/NdWQC/x2N0QqDMAwAf0XyvIDWOXS/MkTaNNOAq9KoDMR/X
+ 9jjHRx3gnIWVngWJ2Q+RGVJBtWtAJp8GhklGoMrXV027oHbsgqhfuIgRBhaV9XdvfUNR7AmeGU
+ M2SearEr7PJtcM7/l+5+8+uv6AYV8eQR0AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685442001; l=4253;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=Km9sqvTozptxIsrlMv2khmSR+d/xI6LidkhWc28eWlY=;
+ b=edruqj25akE940gqlnj49Rt1V4+E+Q47AlcTzS0rDBPMGy9OF2dB70oLMRr+Vcmxh6OSYy2Tq
+ DHYY4zhupelB+URtlh6a5cxUEV7zkaCNSzJKMQeAB4IFLGq5zj6D/H4
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +86,89 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-devm_kasprintf() returns a pointer to dynamically allocated memory.
-Pointer could be NULL in case allocation fails. Check pointer validity.
-Identified with coccinelle (kmerr.cocci script).
+This series reshuffles things around, moving the management of SMD RPM
+bus clocks to the interconnect framework where they belong. This helps
+us solve a couple of issues:
 
-Fixes: 2046338dcbc6 ("ARM: mxs: Use soc bus infrastructure")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+1. We can work towards unused clk cleanup of RPMCC without worrying
+   about it killing some NoC bus, resulting in the SoC dying.
+   Deasserting actually unused RPM clocks (among other things) will
+   let us achieve "true SoC-wide power collapse states", also known as
+   VDD_LOW and VDD_MIN.
+
+2. We no longer have to keep tons of quirky bus clock ifs in the icc
+   driver. You either have a RPM clock and call "rpm set rate" or you
+   have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
+
+3. There's less overhead - instead of going through layers and layers of
+   the CCF, ratesetting comes down to calling max() and sending a single
+   RPM message. ICC is very very dynamic so that's a big plus.
+
+The clocks still need to be vaguely described in the clk-smd-rpm driver,
+as it gives them an initial kickoff, before actually telling RPM to
+enable DVFS scaling.  After RPM receives that command, all clocks that
+have not been assigned a rate are considered unused and are shut down
+in hardware, leading to the same issue as described in point 1.
+
+We can consider marking them __initconst in the future, but this series
+is very fat even without that..
+
+Apart from that, it squashes a couple of bugs that really need fixing..
+
+--- MERGING STRATEGY ---
+If Stephen and Georgi agree, it would be best to take all of this through
+the qcom tree, as it touches on heavily intertwined components and
+introduces compile-time dependencies between icc and clk drivers.
+
+Tested on SM6375 (OOT), MSM8998 (OOT), MSM8996.
+
+MSM8974 conversion to common code and modernization will be handled separately.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/xilinx/clk-xlnx-clock-wizard.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Konrad Dybcio (20):
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      clk: qcom: smd-rpm: Export clock scaling availability
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: icc-rpm: Allow negative QoS offset
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: Divide clk rate by src node bus width
 
-diff --git a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
-index e83f104fad02..20e0e91552bc 100644
---- a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
-+++ b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
-@@ -648,6 +648,11 @@ static int clk_wzrd_probe(struct platform_device *pdev)
- 	}
- 
- 	clkout_name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%s_out0", dev_name(&pdev->dev));
-+	if (!clkout_name) {
-+		ret = -ENOMEM;
-+		goto err_disable_clk;
-+	}
-+
- 	if (nr_outputs == 1) {
- 		clk_wzrd->clkout[0] = clk_wzrd_register_divider
- 				(&pdev->dev, clkout_name,
+ drivers/clk/qcom/clk-smd-rpm.c             | 300 ++++++++++++-----------------
+ drivers/interconnect/qcom/Makefile         |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c |  66 +++++++
+ drivers/interconnect/qcom/icc-rpm.c        | 183 ++++++++++--------
+ drivers/interconnect/qcom/icc-rpm.h        |  55 ++++--
+ drivers/interconnect/qcom/msm8916.c        |   4 +-
+ drivers/interconnect/qcom/msm8939.c        |   5 +-
+ drivers/interconnect/qcom/msm8974.c        |   2 +-
+ drivers/interconnect/qcom/msm8996.c        |   9 +-
+ drivers/interconnect/qcom/qcm2290.c        |   7 +-
+ drivers/interconnect/qcom/qcs404.c         |   4 +-
+ drivers/interconnect/qcom/sdm660.c         |   7 +-
+ drivers/interconnect/qcom/smd-rpm.c        |  39 +++-
+ drivers/interconnect/qcom/smd-rpm.h        |  15 --
+ include/linux/soc/qcom/smd-rpm.h           |  22 ++-
+ 15 files changed, 424 insertions(+), 296 deletions(-)
+---
+base-commit: 8c33787278ca8db73ad7d23f932c8c39b9f6e543
+change-id: 20230526-topic-smd_icc-b8213948a5ed
+
+Best regards,
 -- 
-2.34.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
