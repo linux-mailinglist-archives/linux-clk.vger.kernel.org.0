@@ -2,104 +2,188 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7325F718A1C
-	for <lists+linux-clk@lfdr.de>; Wed, 31 May 2023 21:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6B0718AA2
+	for <lists+linux-clk@lfdr.de>; Wed, 31 May 2023 21:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjEaT1J (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 31 May 2023 15:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54654 "EHLO
+        id S229701AbjEaT6d (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 31 May 2023 15:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjEaT1I (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 May 2023 15:27:08 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B698A126
-        for <linux-clk@vger.kernel.org>; Wed, 31 May 2023 12:27:06 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96fbc74fbf1so1105986866b.1
-        for <linux-clk@vger.kernel.org>; Wed, 31 May 2023 12:27:06 -0700 (PDT)
+        with ESMTP id S229483AbjEaT6c (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 May 2023 15:58:32 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BF9C0
+        for <linux-clk@vger.kernel.org>; Wed, 31 May 2023 12:58:30 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f818c48fbso1081998466b.0
+        for <linux-clk@vger.kernel.org>; Wed, 31 May 2023 12:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685561225; x=1688153225;
+        d=linaro.org; s=google; t=1685563109; x=1688155109;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lrftfarF8lrxLQHV/dhPCAOO9/QVWmUkVudnThFh7ps=;
-        b=yYAMQ4i3zjwAlalP6o00lfhTK/eIpq+zAsEdl5GseT4+AwSsa6A2O1FUO1xlhREnyY
-         1bJHpStFR0yeP6moTYGYqQQ+ogQ/OQ7tKzStRXuDer0EXw/w2We4jLBmvOrj1RWlMg5/
-         VrWpvmG/NxJKKZLYlf3Vl2BbNwgv9P3xxj7CmXU0QouZf5KNkPXUzZc2OukUmpcdMCPE
-         u/gAaat/Os4NDr103mc+DHGP4LBfk3sylPwpbzX6nRzrkLzI1tH9fEGUJBK6bczBY4HL
-         Uz87Vi93lo1opRnPXMvEywyWZ6VSeyuVkZHlvR1pjEJ5sahuYVro3/LvBWb3bU3jkuLn
-         yEwQ==
+        bh=kO8WlvOUEbiLU2mYlRLfvqgungqdL2NWVtlvvYCWsaI=;
+        b=svHen/C2oRCz3tfMOEaRR1oMbW7v6BrhkCjHNRUIuM/YvboIDvnfH/iguJzCH/AmZR
+         1Kjss+M6JBfleCuDc2sEaQOYeAF2f2Pr0SSgQPUX5MxM/JKXlKAHEL3P4HjLEa/2OwJO
+         9YVVe1E4bGNqIrF6KOarmaTgngZ2UvJdWLJegUD66wOMul/Okn+jRyh43Zg343PCR12f
+         3irit6+pIsQodAZGhLVrEO83RT2lXlA/MmRq8KOwWNF/rENXPxIXJCz/3rNMZEsuYtBW
+         8Pxx6+nt6r/5s9oWDUO8cAiNZDipQ52UqAIYeaJ3n+7ztnCNFkmwvESbKbTam2BrY4f4
+         7/VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685561225; x=1688153225;
+        d=1e100.net; s=20221208; t=1685563109; x=1688155109;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lrftfarF8lrxLQHV/dhPCAOO9/QVWmUkVudnThFh7ps=;
-        b=kLTfip3IhEEllnA/MolLH147PVX7sf/CxDqDAqhYw87rupPFyt3JtJh59DlGo/HSWd
-         fod3F2NdyA7agRvO52TGbmrk/XVLrFPoOLyP+BNmbTUWMMZx41evm4aKFNrEnAe+MzNn
-         fTeogT3meXgHmA8nYx9PJF/Fkp9eU0xhZdPdo1t8cgDlcLMxdLK/BlbJpF4MCnysBRKb
-         uYyvwTD0BVaHBxU/JMPVCGSgExR6iZNnOVS0zzsGCMYwK4fjv29Ey7xTki5jodWtansl
-         lAO9tRRR8KsVa9f6WdtuGyLM1WaL7WIxZ/V4R6eJiHmy1UcFDU7Afl13hILtQun7JBoa
-         CnIQ==
-X-Gm-Message-State: AC+VfDwAKivEN7RJJnOHqZcMK0iXsuZJppSYZ7QVyJ4FDh3NKQvtIvLV
-        Hns0+IlSgLrxU6As2NNX5nh9jQ==
-X-Google-Smtp-Source: ACHHUZ45U3aEkoMvTvHr80BYZ2eTk3AFFN1dV8cQQGJaC2zAjiAWj0UixgAOh/feZBNlO+olpVAMTw==
-X-Received: by 2002:a17:907:a414:b0:96f:5f44:ea02 with SMTP id sg20-20020a170907a41400b0096f5f44ea02mr6329304ejc.8.1685561225150;
-        Wed, 31 May 2023 12:27:05 -0700 (PDT)
+        bh=kO8WlvOUEbiLU2mYlRLfvqgungqdL2NWVtlvvYCWsaI=;
+        b=c8ItcxFOrVBrvvmRMyXObO1P/PGan4deLddY/Y1Y9WdcRyf0zUmFhmoqizCi76Y3Id
+         Ui7eTpGRd4h+4+0VbmMdgA+8FuDgqQdfu0j5ttgGvMk6LwsYIeKEO75K5ziRQD006rL4
+         xkvBKv0aSyQJpV11ISybuOSBRTF2QKE+hp8fT8oP/ZqfmPsKiPXVUZeUfmhoBN2Fu4CT
+         WW8RcmTEN8/p+X89MjHoaaqkm25WLI751JrwUHsP3wGStFmMq950a2ckOtSKvBnLm9Pv
+         Mz63Qsy7LrrofdWur7/CSIx724vTu2WE8R6AAQF2bL/LOQofmj3GM02DZt0cWCK8c8GD
+         O9vw==
+X-Gm-Message-State: AC+VfDzAizhbZxiDp6ag7ix0G6IzUkXGwthY4g8n2r4z/yuQlK5QvfdV
+        0k1L/xvyIbSnFNYe1MLNX9tPrw==
+X-Google-Smtp-Source: ACHHUZ78+SP18m7Sljirv4lWr3WdkUxTqSqYQTLRkqby0dxS66JkZP6BIWLZHbYDZlwVBxzB+KwNZg==
+X-Received: by 2002:a17:907:1694:b0:96a:1ec1:2c9f with SMTP id hc20-20020a170907169400b0096a1ec12c9fmr5718651ejc.12.1685563108904;
+        Wed, 31 May 2023 12:58:28 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id w5-20020aa7dcc5000000b0050d83a39e6fsm6201203edu.4.2023.05.31.12.27.03
+        by smtp.gmail.com with ESMTPSA id m22-20020a1709066d1600b0096f777fc1ccsm9334299ejr.200.2023.05.31.12.58.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 12:27:04 -0700 (PDT)
-Message-ID: <c6d886d9-8f74-7af3-5478-030f5d6e4b1c@linaro.org>
-Date:   Wed, 31 May 2023 21:27:02 +0200
+        Wed, 31 May 2023 12:58:28 -0700 (PDT)
+Message-ID: <a1f1010f-5f8d-9737-725e-a15e918c7771@linaro.org>
+Date:   Wed, 31 May 2023 21:58:25 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add nvmem-clock
+Subject: Re: [PATCH v2 1/6] dt-bindings: clock: Add YAML schemas for LPASSCC
+ and reset on SC8280XP
 Content-Language: en-US
-To:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.2167d5ad-7e99-4eb9-a313-030fc7a7d546@emailsignatures365.codetwo.com>
- <20230526143807.10164-1-mike.looijmans@topic.nl>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     johan+linaro@kernel.org, agross@kernel.org,
+        konrad.dybcio@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230525122930.17141-1-srinivas.kandagatla@linaro.org>
+ <20230525122930.17141-2-srinivas.kandagatla@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230526143807.10164-1-mike.looijmans@topic.nl>
+In-Reply-To: <20230525122930.17141-2-srinivas.kandagatla@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 26/05/2023 16:38, Mike Looijmans wrote:
-> Add bindings for a fixed-rate clock that retrieves its rate from an
-> NVMEM provider. This allows to store clock settings in EEPROM or EFUSE
-> or similar device.
+On 25/05/2023 14:29, Srinivas Kandagatla wrote:
+> The LPASS (Low Power Audio Subsystem) clock controller provides reset
+> support when it is under the control of Q6DSP.
 > 
-> Component shortages lead to boards being shipped with different clock
-> crystals, based on what was available at the time. The clock frequency
-> was written to EEPROM at production time. Systems can adapt to a wide
-> range of input frequencies using the clock framework, but this required
-> us to patch the devicetree at runtime or use some custom driver. This
-> provides a more generic solution.
 
-This does not look like real hardware. I mean, the clock does not fetch
-its rate from nvmem, right? It's the Linux which does it, so basically
-you described here driver, not hardware.
-
-Extend existing fixed-clock bindings to allow reading frequency via
-nvmem cells.
+Thank you for your patch. There is something to discuss/improve.
 
 
+> Add support for those resets and adds IDs for clients to request the reset.
+> 
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  .../bindings/clock/qcom,sc8280xp-lpasscc.yaml | 57 +++++++++++++++++++
+>  .../dt-bindings/clock/qcom,lpasscc-sc8280xp.h | 12 ++++
+>  2 files changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc8280xp-lpasscc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,lpasscc-sc8280xp.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sc8280xp-lpasscc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc8280xp-lpasscc.yaml
+> new file mode 100644
+> index 000000000000..08a9ae60a365
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sc8280xp-lpasscc.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sc8280xp-lpasscc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm LPASS Core & Audio Clock Controller on SC8280XP
+> +
+> +maintainers:
+> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> +
+> +description: |
+> +  Qualcomm LPASS core and audio clock control module provides the clocks,
+> +  and reset on SC8280XP.
+> +
+> +  See also::
+> +    include/dt-bindings/clock/qcom,lpasscc-sc8280xp.h
+> +
+> +properties:
+> +  reg: true
 
+maxItems: 1
+
+> +
+> +  compatible:
+
+compatible is first in the list
+
+> +    enum:
+> +      - qcom,sc8280xp-lpasscc
+> +
+> +  qcom,adsp-pil-mode:
+> +    description:
+> +      Indicates if the LPASS would be brought out of reset using
+> +      peripheral loader.
+> +    type: boolean
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - qcom,adsp-pil-mode
+> +  - '#reset-cells'
+> +  - '#clock-cells'
+
+Keep the same order as in list of properties.
+
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,lpasscc-sc8280xp.h>
+> +    lpasscc: clock-controller@33e0000 {
+> +        compatible = "qcom,sc8280xp-lpasscc";
+> +        reg = <0x033e0000 0x12000>;
+> +        qcom,adsp-pil-mode;
+> +        #reset-cells = <1>;
+> +        #clock-cells = <1>;
+> +    };
+> +...
+> diff --git a/include/dt-bindings/clock/qcom,lpasscc-sc8280xp.h b/include/dt-bindings/clock/qcom,lpasscc-sc8280xp.h
+> new file mode 100644
+> index 000000000000..df800ea2741c
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/qcom,lpasscc-sc8280xp.h
+
+Filename matching compatible and bindings, so qcom,sc8280xp-lpasscc.h
+
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2023, Linaro Ltd.
+> + */
 Best regards,
 Krzysztof
 
