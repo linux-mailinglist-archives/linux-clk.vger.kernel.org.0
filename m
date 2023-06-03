@@ -2,104 +2,133 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7247472126A
-	for <lists+linux-clk@lfdr.de>; Sat,  3 Jun 2023 22:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B3A721319
+	for <lists+linux-clk@lfdr.de>; Sat,  3 Jun 2023 23:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjFCUIy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 3 Jun 2023 16:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S229501AbjFCVQK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 3 Jun 2023 17:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjFCUIq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 3 Jun 2023 16:08:46 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53FDE6F;
-        Sat,  3 Jun 2023 13:07:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685822875; x=1717358875;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZuPBRofcCh4+XxwWxNtafOL6nLRGQWKw7s1CYB0iMX4=;
-  b=pj61gaq8411KE5xN35inJlgBXphmAOIFeGI4RupHoaAnDl/f+kHpAZey
-   Bo9yYbE1ZwYXR0cw40odgOMXmfr8t5G4pchzDIVA645+kMC/uLbmqvcVq
-   ip/7oDMSelhecGICjYMY2jEYu5NiJYdGyUfkSp+5SHOFqJDbjXTCIc4lu
-   9+eVAsqctR/LDsB8gQpVYF5gvIfzT+uXDwPJsCixhWjaNI/Uh7vcjpgFV
-   uDJVmXlBHo0+UO06vYfrrcjsgapRGnOGDCvWy9Ra0raDGUFvzRPkAtOmp
-   HouTib/VuZCG23iaPQ5zyjoY2d0gm2SbmMSbm/d00R+dGzCkW94sRjmfh
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,216,1681196400"; 
-   d="scan'208";a="228308098"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jun 2023 13:07:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 3 Jun 2023 13:07:41 -0700
-Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Sat, 3 Jun 2023 13:07:27 -0700
-From:   Varshini Rajendran <varshini.rajendran@microchip.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <claudiu.beznea@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <gregkh@linuxfoundation.org>, <linux@armlinux.org.uk>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>, <sre@kernel.org>,
-        <broonie@kernel.org>, <varshini.rajendran@microchip.com>,
-        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
-        <sudeep.holla@arm.com>, <balamanikandan.gunasundar@microchip.com>,
-        <mihai.sain@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
-        <durai.manickamkr@microchip.com>, <manikandan.m@microchip.com>,
-        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
-        <balakrishnan.s@microchip.com>
-Subject: [PATCH 21/21] net: macb: add support for gmac to sam9x7
-Date:   Sun, 4 Jun 2023 01:32:43 +0530
-Message-ID: <20230603200243.243878-22-varshini.rajendran@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+        with ESMTP id S229452AbjFCVQK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 3 Jun 2023 17:16:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF9097;
+        Sat,  3 Jun 2023 14:16:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6013760B61;
+        Sat,  3 Jun 2023 21:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9503C433EF;
+        Sat,  3 Jun 2023 21:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685826963;
+        bh=LJM8vKQSQ2RdRTp9RFziQNMxva4VRFMhJsh8lrUlmRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EO0knllIEbHgMKF9bb/HSLeEyrNl2gcHYO2cqrr9UA3PsTXJnenHYAu7K+VbJFIwD
+         /RZU4zUCB9del9munixsYO0lqFugBAPh8B/HVIOstiqgvxT2MxYCkWZued6iiRDo5T
+         TicTu0H+y5VyOZ1R2mFWS4yPBozVSEnS0swMQDPRRxmiEPpsDoPVbY8Gsv6TKNwi2F
+         g5xp88gpKILBB5VyNZNZlSKa0G/txR0MYTC17ZrrCMRN7CyXARTMkqG227wm3T0GoO
+         XJI42e1GoB3IlVA+Kk+Sl34DruJbEIG6YAw6Id3Cbzqo1okisfHBVXK2bw3wO+vMey
+         cdrkXhcxZPQOA==
+Date:   Sat, 3 Jun 2023 22:15:54 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc:     tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, linux@armlinux.org.uk,
+        mturquette@baylibre.com, sboyd@kernel.org, sre@kernel.org,
+        broonie@kernel.org, arnd@arndb.de, gregory.clement@bootlin.com,
+        sudeep.holla@arm.com, balamanikandan.gunasundar@microchip.com,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 03/21] dt-bindings: usb: generic-ehci: Document
+ clock-names property
+Message-ID: <20230603-skincare-ideology-bfbc3fd384c5@spud>
 References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-4-varshini.rajendran@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nAMUQ1Zej8t05qRN"
+Content-Disposition: inline
+In-Reply-To: <20230603200243.243878-4-varshini.rajendran@microchip.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Add support for GMAC in sam9x7 SoC family
+--nAMUQ1Zej8t05qRN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
----
- drivers/net/ethernet/cadence/macb_main.c | 1 +
- 1 file changed, 1 insertion(+)
+Hey Varshini,
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 29a1199dad14..609c8e9305ba 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4913,6 +4913,7 @@ static const struct of_device_id macb_dt_ids[] = {
- 	{ .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
- 	{ .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
- 	{ .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
-+	{ .compatible = "microchip,sam9x7-gem", .data = &sama7g5_gem_config },
- 	{ .compatible = "xlnx,zynqmp-gem", .data = &zynqmp_config},
- 	{ .compatible = "xlnx,zynq-gem", .data = &zynq_config },
- 	{ .compatible = "xlnx,versal-gem", .data = &versal_config},
--- 
-2.25.1
+On Sun, Jun 04, 2023 at 01:32:25AM +0530, Varshini Rajendran wrote:
+> Document the property clock-names in the schema.
+>=20
+> It fixes the dtbs_warning,
 
+s/dtbs_warning/dtbs_check warning/?
+
+> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+Does this fix a warning currently in the tree, or fix a warning
+introduced by some patches in this series? (Or both?)
+
+Cheers,
+Conor.
+
+>=20
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Do=
+cumentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 7e486cc6cfb8..542ac26960fc 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -102,6 +102,10 @@ properties:
+>          - if a USB DRD channel: first clock should be host and second
+>            one should be peripheral
+> =20
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 4
+> +
+>    power-domains:
+>      maxItems: 1
+> =20
+> --=20
+> 2.25.1
+>
+
+--nAMUQ1Zej8t05qRN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHutdAAKCRB4tDGHoIJi
+0qo0AP492GWxNAZm5/JMwehSB/wjebZYTgg7CggXNDp4e+9ZmAEAqBHDVLVYKYXY
+7h8c0U3NLQA8eGWDBjGhhXJ+h5Ab0gc=
+=sdYv
+-----END PGP SIGNATURE-----
+
+--nAMUQ1Zej8t05qRN--
