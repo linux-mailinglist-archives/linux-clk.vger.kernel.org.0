@@ -2,116 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBD5722C63
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Jun 2023 18:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64BA722F4A
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Jun 2023 21:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbjFEQVk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Jun 2023 12:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S232480AbjFETIg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Jun 2023 15:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbjFEQVi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Jun 2023 12:21:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698EC106;
-        Mon,  5 Jun 2023 09:21:37 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        with ESMTP id S234380AbjFETIe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Jun 2023 15:08:34 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66D994;
+        Mon,  5 Jun 2023 12:08:25 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E67D26602242;
-        Mon,  5 Jun 2023 17:21:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685982096;
-        bh=0r6cQNK3uGc3pJiztNyfHAD9LI2rH/+twn3IcKzXoIo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V4JpGvCB73IwzBPjm0YatoVY3mRol/XEoRAZ3+D1ASiZxJth7e6ICWfWJeqBWhimK
-         BcLbtD6U02KToCRPB6XzmesJlXIS/Bt+u6XO1cnk9kZk2hWb/eHHFYuKyi5Wv5T55I
-         MSiybdyFVOttuRwEafHjMNlGmffYoW0qo6JWIpPRPJoxAa1XhLwHnQcGQ+3Vi/7Ssn
-         M02O2owhQXpJCltgx4O1yvn8hJ6vzkJjNqVR+5JccMrpLw2v/DHhr3w78kjHFm/pPU
-         2IKG13naY6jadkBvhkwOxpqvKNoUP8NnUZKrkymSyF+rRzOStH1OucJWsyLdIn5bL3
-         Y2Yd5t9Hi0zAw==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QZjn01gZDz9sTy;
+        Mon,  5 Jun 2023 21:08:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1685992100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=A6+BxjI7OK+Zyu+DiOoC1GzWLKWtwv1JdA+R6MwHfl4=;
+        b=KoDdPpgrPHnijD0a50D5hOz8zC93mnwA+hyD+GX8pKtCIG2Anlw1UhOWmATQNnEwcO1pax
+        IxCXo7IQ+GBWO06LxE1JRn3Mb/viG0A+3IaRQWeeCCmtLp+kvNSEK2VdprTG+gYGuijZi4
+        dLP/Ir8mP4/mtcFWDLlAePfRYbreDniKfi7ljscyDUeb6rZJbLkp5BxqlSCz/PgypHKi1+
+        yfVy9UVqYxfMRIF2XeaP0jkM1h73IPx13CVYGVgqZW02Dy+rr8tzKKbY629zU3iKFqGFZz
+        VvgEJoA1W5vHcWn6E0/qmvV3yIgB7nskmGXNDdU8dAqaIuaNCl1LG8SIGKsWQw==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Frank Oltmanns <frank@oltmanns.dev>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
         Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH 5/6] clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
-Date:   Mon,  5 Jun 2023 12:20:29 -0400
-Message-Id: <20230605162030.274395-6-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230605162030.274395-1-nfraprado@collabora.com>
-References: <20230605162030.274395-1-nfraprado@collabora.com>
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH 0/2] clk: sunxi-ng: Consider alternative parent rates when determining NKM clock rate
+Date:   Mon,  5 Jun 2023 21:07:43 +0200
+Message-Id: <20230605190745.366882-1-frank@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the CLK_VDEC_ACTIVE clock to the vdec clock driver. This clock is
-enabled by the VPU once it starts decoding.
+I would like to share a patchset that enables the NKM clock in pll-video0 to
+consider alternative parent rates. I have found this feature particularly useful
+to adjust the pll-video0's clock on Allwinner A64, as it allows me to achieve an
+optimal rate for driving the board's panel (in my case, the Pinephone).
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+To provide some context, the clock structure involved in this process is as follows:
+    clock                       clock type
+    --------------------------------------
+    pll-video0                  ccu_nm
+       pll-mipi                 ccu_nkm
+          tcon0                 ccu_mux
+             tcon-data-clock    sun4i_dclk
 
- drivers/clk/mediatek/clk-mt8183-vdec.c | 5 +++++
- include/dt-bindings/clock/mt8183-clk.h | 3 ++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+The divider between tcon0 and tcon-data-clock is fixed at 4. Therefore, in order
+to achieve a rate that closely matches the desired rate of the panel, I need
+pll-mipi to operate at a specific rate.
 
-diff --git a/drivers/clk/mediatek/clk-mt8183-vdec.c b/drivers/clk/mediatek/clk-mt8183-vdec.c
-index 513b7956cbea..5830934a6d25 100644
---- a/drivers/clk/mediatek/clk-mt8183-vdec.c
-+++ b/drivers/clk/mediatek/clk-mt8183-vdec.c
-@@ -27,6 +27,10 @@ static const struct mtk_gate_regs vdec1_cg_regs = {
- 	GATE_MTK(_id, _name, _parent, &vdec0_cg_regs, _shift,	\
- 		&mtk_clk_gate_ops_setclr_inv)
- 
-+#define GATE_VDEC0(_id, _name, _parent, _shift)		\
-+	GATE_MTK(_id, _name, _parent, &vdec0_cg_regs, _shift,	\
-+		&mtk_clk_gate_ops_setclr)
-+
- #define GATE_VDEC1_I(_id, _name, _parent, _shift)		\
- 	GATE_MTK(_id, _name, _parent, &vdec1_cg_regs, _shift,	\
- 		&mtk_clk_gate_ops_setclr_inv)
-@@ -34,6 +38,7 @@ static const struct mtk_gate_regs vdec1_cg_regs = {
- static const struct mtk_gate vdec_clks[] = {
- 	/* VDEC0 */
- 	GATE_VDEC0_I(CLK_VDEC_VDEC, "vdec_vdec", "mm_sel", 0),
-+	GATE_VDEC0(CLK_VDEC_ACTIVE, "vdec_active", "mm_sel", 4),
- 	/* VDEC1 */
- 	GATE_VDEC1_I(CLK_VDEC_LARB1, "vdec_larb1", "mm_sel", 0),
- };
-diff --git a/include/dt-bindings/clock/mt8183-clk.h b/include/dt-bindings/clock/mt8183-clk.h
-index a7b470b0ec8a..32dd7d91dbe2 100644
---- a/include/dt-bindings/clock/mt8183-clk.h
-+++ b/include/dt-bindings/clock/mt8183-clk.h
-@@ -357,7 +357,8 @@
- /* VDEC_GCON */
- #define CLK_VDEC_VDEC			0
- #define CLK_VDEC_LARB1			1
--#define CLK_VDEC_NR_CLK			2
-+#define CLK_VDEC_ACTIVE			2
-+#define CLK_VDEC_NR_CLK			3
- 
- /* VENC_GCON */
- #define CLK_VENC_LARB			0
+However, I must emphasize that setting the parent's rate for NKM clocks results
+in a significant increase in the time required to find the optimal rate. For
+instance, setting DCLK on the pinephone has seen a 60-fold increase in the time
+taken, from approximately 0.5 ms to around 30 ms. These figures were obtained
+through informal measurements on my pinephone, involving kernel logging and a
+few reboots. The worst-case scenario observed was approximately 37 ms, while the
+majority of cases were just under 30 ms.
+
+The reason for this considerable increase in time is that the code now iterates
+over all combinations of NKM for pll-mipi. For each combination, it subsequently
+iterates over all combinations of NM for pll-video0.
+
+I greatly appreciate your feedback and suggestions for further improving this
+patchset.
+
+Thanks,
+  Frank
+
+Frank Oltmanns (2):
+  clk: sunxi-ng: nkm: consider alternative parent rates when finding
+    rate
+  clk: sunxi-ng: a64: allow pll-mipi to set parent's rate
+
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c |  3 +-
+ drivers/clk/sunxi-ng/ccu_nkm.c        | 40 +++++++++++++++++++++------
+ 2 files changed, 33 insertions(+), 10 deletions(-)
+
 -- 
 2.40.1
 
