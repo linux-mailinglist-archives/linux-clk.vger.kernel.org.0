@@ -2,157 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA8E722468
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Jun 2023 13:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45E77224CE
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Jun 2023 13:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbjFELSG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Jun 2023 07:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S231839AbjFELl0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Jun 2023 07:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjFELSE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Jun 2023 07:18:04 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB13B8
-        for <linux-clk@vger.kernel.org>; Mon,  5 Jun 2023 04:17:53 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f7353993cbso11932955e9.0
-        for <linux-clk@vger.kernel.org>; Mon, 05 Jun 2023 04:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1685963872; x=1688555872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cE1s1SBRasCQ26tTjz3vS7kkfu8oXf1VV0juiyMiwK8=;
-        b=m4HZI5EmdHgPw2WGHg9wxlsh0bqAzRSeSWrByjeIZHspybo++CFpucOhCtrbQtUODD
-         9TBeM5JPTmg36p+B598Y2AbG7LEmYvEsYEp8wEUR+E63eUmw3eOzgjuLldwAF+E5/Szp
-         Sp0cuf+F9OXFAmEJJ35HpkN1YXcPhUUOBzsZrx1ARJbFOMxti0vkHNUQRyqhzPsEvbeZ
-         qcqbWjEdwx6pttTbEXm8StNP3/EEHdmfOS7lx+tCmT7aERdvtotUE53ADc6Qp5k+69Zj
-         LLxkcmwD/CujrADXyXCEenYEtwNM+V5s3TKQe8eVKXTtghV2G8lTFmVKazMF52hLDVYW
-         SdUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685963872; x=1688555872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cE1s1SBRasCQ26tTjz3vS7kkfu8oXf1VV0juiyMiwK8=;
-        b=hKHqmquSsI7lYtA5BdmUA74HpVnI4sXX+ks9PdPtv74Ri+a33TNx37p+0Lre7kxugc
-         CzTk9I92a+u5Px2f2+SrX+BGgkGvv4ZBn3SXoL7OsXDowbMSmSNVKHFpSazqug0Li907
-         ecTdz6dbupY5/1XNWoi9gdxJwfXCxqeUc2/12cd9eBh9xILjUYcPqIYaK8RE9w02+k10
-         6T1tSTAxR9ZnDFUIlWRvaC/C44SEucIDh6R92MtoGbqQOQXM4hpJIIiwW4Cq5fUxyWyK
-         yIzvwVsjV2mGnB9WTJ5pUf/kOeEKuULyeTZsS8LJdqd0bslmeYtG/dUQLb+r96ufPS+y
-         LWEw==
-X-Gm-Message-State: AC+VfDxaFSCybsU5/KKjg2wNnReXGOeaFYXjtw1P7jTxx7ZbP8vz/GU3
-        ARq+B2QSKpm6XFQu9Yv+KESL+A==
-X-Google-Smtp-Source: ACHHUZ6aLiqxnvjM26ak+7OYnd6YE8gM65tnKeFRHFkgrmqIUL8IWqvKo9CzWSj59s0bV3Yu6lPdJg==
-X-Received: by 2002:a1c:f305:0:b0:3f7:148b:c310 with SMTP id q5-20020a1cf305000000b003f7148bc310mr7496069wmq.13.1685963871878;
-        Mon, 05 Jun 2023 04:17:51 -0700 (PDT)
-Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f60101074dsm14129919wmc.33.2023.06.05.04.17.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 04:17:51 -0700 (PDT)
-Message-ID: <54ee38d1-5924-8305-0da8-0a2d35ff80a7@monstr.eu>
-Date:   Mon, 5 Jun 2023 13:17:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] dt-bindings: xilinx: Remove Rajan, Jolly and Manish
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        with ESMTP id S230189AbjFELlZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Jun 2023 07:41:25 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734629C;
+        Mon,  5 Jun 2023 04:41:24 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QZWsF3WQBz9sqj;
+        Mon,  5 Jun 2023 13:41:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1685965281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P7z/UoffUh1YYEy028D6jPchnsvqTeKCwT3Ef8OGYOM=;
+        b=DRB3tloLf6ynRPZH2ivFGP2IpNHHWfCZtzG3piH8zTBeCGxvSJaTtZOf3zImsXo1hQpndm
+        i9GSi/cFs4wKW91ao/5i03z6w2ps1YC04MvjF/2CZDxLHJfjaOPqR+yAaiiCpBbKQw1PGD
+        /+dhOeLHOayY0Ve69W8SeCkZ8QRgSkno8Cb2YrYWJaDOxPr7g/dFV+pLK4Moa0OJX1BnUQ
+        iTWvsGPFbjVTg6X19RamKwJlshnhA1mrwxkmUngrPsZr0kojmKNvyDNg7lXc8uPCkh8SPi
+        euy2vDk88fM6qqKA5vMjpjvl2LTXui1dMoqGlEVFCqaY5Uot7RzpvbsCP2MEEQ==
+References: <20230527132747.83196-1-frank@oltmanns.dev>
+ <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
+ <87mt1jbf18.fsf@oltmanns.dev> <4831731.31r3eYUQgx@jernej-laptop>
+ <bhjq4yxo7fvddq3kvvvbgefhyaygb5bwkzhsjp3adc5kp7ohtx@iclghpep3zkw>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-References: <9b252dd71c82593fa6b137eca2174d9ab6e57f7a.1684828606.git.michal.simek@amd.com>
-From:   Michal Simek <monstr@monstr.eu>
-In-Reply-To: <9b252dd71c82593fa6b137eca2174d9ab6e57f7a.1684828606.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC PATCH 0/3] clk: sunxi-ng: Optimize rate selection for NKM
+ clocks
+In-reply-to: <bhjq4yxo7fvddq3kvvvbgefhyaygb5bwkzhsjp3adc5kp7ohtx@iclghpep3zkw>
+Date:   Mon, 05 Jun 2023 13:41:17 +0200
+Message-ID: <877csi9lwi.fsf@oltmanns.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 4QZWsF3WQBz9sqj
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi Jernej,
+hi Maxime,
 
+On 2023-06-02 at 09:34:03 +0200, Maxime Ripard <mripard@kernel.org> wrote:
+> [[PGP Signed Part:Undecided]]
+> On Thu, Jun 01, 2023 at 09:41:30PM +0200, Jernej =C5=A0krabec wrote:
+>> Dne =C4=8Detrtek, 01. junij 2023 ob 07:16:45 CEST je Frank Oltmanns napi=
+sal(a):
+>> > Re: Why speed up factor calculation?
+>> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> > I'm not aware that the current implementation of calculating n, k, and=
+ m
+>> > poses a bottleneck in any situation. Again, while going through the
+>> > code, I wondered why not save a few CPU cycles by precalculating the
+>> > meaningful combinations. In my opinion, it does not have any side
+>> > effects, so we might as well do it. (There is of course the side effect
+>> > of using a higher rate, but this is unrelated to precalculation as I
+>> > could as well employ a rate comparison that only allows lower rates, or
+>> > only optionally higher rates.)
+>> >
+>> > > Clocks in general are very regression-prone, so I'd rather be a bit
+>> > > conservative there, and "if it ain't broke, don't fix it".
+>> >
+>> > Sure, I get that.
+>> >
+>> > As I stated in my cover letter:
+>> > "The motivation for these proposed changes lies in the current behavior
+>> > of rate selection for NKM clocks, which doesn't observe the
+>> > CLK_SET_RATE_PARENT flag. I.e. it does not select a different rate for
+>> > the parent clock to find the optimal rate."
+>> >
+>> > I thought that this required this optimization to be implemented, but =
+by
+>> > now, I'm no longer sure. I'll probably continue investigating different
+>> > paths for CLK_SET_RATE_PARENT for NKM clocks and follow up with new
+>> > findings.
+>>
+>> Let's leave out any optimizations that are not apparently needed. Most c=
+lock
+>> rates are set only once at boot and others, like video clocks, not that =
+often,
+>> so a suboptimal code speed doesn't hurt currently.
+>
+> I'm not even sure we can make that assumption for video clocks. We might
+> for a panel, but for a more "dynamic" output like HDMI all bets are off
+> and depending on the monitor, the user settings and the userspace stack
+> we can definitely expect the video clock to change quite frequently.
 
-On 5/23/23 09:56, Michal Simek wrote:
-> Rajan, Jolly and Manish are no longer work for AMD/Xilinx and there is no
-> activity from them to continue to maintain bindings that's why remove them.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
->   Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml    | 2 --
->   .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml        | 1 -
->   .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml         | 1 -
->   .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml        | 1 -
->   4 files changed, 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
-> index 93ae349cf9e9..5cbb34d0b61b 100644
-> --- a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
-> +++ b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
-> @@ -8,8 +8,6 @@ title: Xilinx Versal clock controller
->   
->   maintainers:
->     - Michal Simek <michal.simek@amd.com>
-> -  - Jolly Shah <jolly.shah@xilinx.com>
-> -  - Rajan Vaja <rajan.vaja@xilinx.com>
->   
->   description: |
->     The clock controller is a hardware block of Xilinx versal clock tree. It
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
-> index 6b62d5d83476..87ff9ee098f5 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml
-> @@ -8,7 +8,6 @@ title: Synopsys DesignWare Universal Multi-Protocol Memory Controller
->   
->   maintainers:
->     - Krzysztof Kozlowski <krzk@kernel.org>
-> -  - Manish Narani <manish.narani@xilinx.com>
->     - Michal Simek <michal.simek@amd.com>
->   
->   description: |
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml b/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
-> index 7864a1c994eb..75143db51411 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml
-> @@ -8,7 +8,6 @@ title: Zynq A05 DDR Memory Controller
->   
->   maintainers:
->     - Krzysztof Kozlowski <krzk@kernel.org>
-> -  - Manish Narani <manish.narani@xilinx.com>
->     - Michal Simek <michal.simek@amd.com>
->   
->   description:
-> diff --git a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-> index cdebfa991e06..24ad0614e61b 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml
-> @@ -8,7 +8,6 @@ title: Xilinx ZynqMP Pinctrl
->   
->   maintainers:
->     - Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
-> -  - Rajan Vaja <rajan.vaja@xilinx.com>
->   
->   description: |
->     Please refer to pinctrl-bindings.txt in this directory for details of the
+Thank you both for your valuable feedback!
 
-Applied.
-M
+The goal I head in mind was adjusting pll-video0's clock when setting
+DCLK on Allwinner A64. And you're both right, I got sidetracked by
+premature optimizations.
 
--- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
-TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
+As I wrote elsewhere in this thread, I will submit a patchset for the
+original goal and we can discuss potential needs for optimization there.
+
+Thanks,
+  Frank
+
+>
+> Maxime
+>
+> [[End of PGP Signed Part]]
