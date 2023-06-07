@@ -2,60 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B37725C69
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jun 2023 12:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC054725C6A
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jun 2023 12:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240080AbjFGK6p (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Jun 2023 06:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
+        id S236500AbjFGK6s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Jun 2023 06:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240192AbjFGK5k (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jun 2023 06:57:40 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3581D1FC3
-        for <linux-clk@vger.kernel.org>; Wed,  7 Jun 2023 03:57:08 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f7e7fc9fe6so24455035e9.3
-        for <linux-clk@vger.kernel.org>; Wed, 07 Jun 2023 03:57:08 -0700 (PDT)
+        with ESMTP id S240135AbjFGK5m (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jun 2023 06:57:42 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792AB1FD4
+        for <linux-clk@vger.kernel.org>; Wed,  7 Jun 2023 03:57:15 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f736e0c9a8so30642975e9.2
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jun 2023 03:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686135398; x=1688727398;
+        d=linaro.org; s=google; t=1686135399; x=1688727399;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=A26FY2EOWGHMttoswYCrKkWs1qsnhgkNG3ne6FDcRAY=;
-        b=f56RxJaY8iD0G/krUqQOnU0Zg4nKsTPfvhCYAvkQryp6ijzM6zjS6vvl4yS0ZPqR+S
-         94pljyqD14G0wz9XEPyq2DHt7A/IiD2eLKR2gnq5/ZYbuTBAhWaWJEJ1ncffhqNJv1My
-         ztV1xsgMEo/744bayRVmZqrdr2rF9dGRnYbB2SAT/Y/brL9Pg0PExTLdzBqFz9HzDCpP
-         IfSrh8658s86/m+Knv4+WyUysrJExFN5k5pTfcRjlGGTdE5/GSFOUeDQhVZ0clVl9HB9
-         329Y+Kz6nPyB8LxK051nFlKFQBGLcuR5XWVP/prFYvYMM2j3DAcH5qFqYI0IStlujE8N
-         JXNA==
+        bh=PgHlIp8rd/JoK3Zjsck6JfDJb4jbMhbNb4z71Qp9U50=;
+        b=ayjqD12N1ZsunmZ0tHTCvpj62FZC7XZ7/JoYBF0n/d+IDas0ncxLWZyNZ27P7KGH35
+         k2ikCN8lYROGcg/RcERXlcgWVQB7t18IiaTXxmzTk0pY+Xej2mH1l9+xTH9Sy8cfgdrA
+         /7+GY0kAA0/OytefhHhqVP5l0VqLkVenU6vrDMEe48FFbY8hjSHQHcQ5VoSkwai6H0CT
+         FmLD8LQGiQWa3M+7CmKT7sBVCpWilZmoZiLj6ReUw5YA2Mqv4cupBURlBnDDDGDGyjBe
+         go/HuAuTiFZt2UGXl0MhF1WSneGVINWapW+MhyPXpV83faFfDHjEaa5TA2Q0CZTuCMIx
+         gL4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686135398; x=1688727398;
+        d=1e100.net; s=20221208; t=1686135399; x=1688727399;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A26FY2EOWGHMttoswYCrKkWs1qsnhgkNG3ne6FDcRAY=;
-        b=hAUhm3kkcCxUAL9PoGziaYtRGJypj9B3lnP6YnVZTXpnwRoqDTt8Km49k6q+WtU6zD
-         uKHEw7A19x6ESoRnfboonTMFwS/pIkC7Nngb0gtdYoKJCgtQ+Kj0uXXKZdwPtIwxm6AA
-         oX84sCgLiLZanyiUI6yU34yqfh8Sy8rmWm27m6uaXT/CY2NSOZwqC5RTuWcX07tGsJuh
-         owKvk64nf1oVbHz/AOtX4O7B4Wxw7s5o9z+liT9/Wq6HXXsmmKtpv/Sbz5SOPfwOrrUB
-         3PbBp8sRX3msNuYqRrg0aUJ2bebdwn5tiTKsEcMEEAxoq21lqXGPNH94O1hLgI37XG9g
-         QbsQ==
-X-Gm-Message-State: AC+VfDy6Rx0CxcNQdYkWE/0OwSIhZ7TJok227Doo4uG4lpKNyrltEjWF
-        GIhDtCvdVdhn7MP0A5NPMQQQPA==
-X-Google-Smtp-Source: ACHHUZ7oGQhv6TBlxkdm8bfP4/QWswGA555Bc61XsXoDipcsadeEQhT/1eu2V6ruKae68LgSIcsB/w==
-X-Received: by 2002:a7b:cd98:0:b0:3f1:6fb3:ffcc with SMTP id y24-20020a7bcd98000000b003f16fb3ffccmr4535802wmj.22.1686135398362;
-        Wed, 07 Jun 2023 03:56:38 -0700 (PDT)
+        bh=PgHlIp8rd/JoK3Zjsck6JfDJb4jbMhbNb4z71Qp9U50=;
+        b=CXaU20nI2F2zxpYK8G9D9GuQOlAu3jiGBwhM6glBY7sPgi/X8WTx/IKyK44wB2rZp9
+         GXcYjF9u7LLLmQaiPkj8m6OdX9vPDSZ8K0o8+cEk6rPEDV1gYMrWoswwiVxgeMTWLSgS
+         C2LcySZmXfvaXq8D2ZCsgwSNIaNnAax4Yp7yqdvJlsuPSeGz8Xzg00CSBuCTWAZQrA24
+         yPSCCTK6Wa8+epQw6uoUweNtXJltgDGOoGNFlU3k5oKUCc1FDazbn2BFNm0qwYPlmp7H
+         gj40Ul8qDsPbEyQHOPauYyhPh3ubkZWKwdwb1aK8stJaC46aNJ96jTsMTTFexvEAIRqx
+         g6Vg==
+X-Gm-Message-State: AC+VfDwsGD59+P7EfriHsAa/ZdxoxGPlCx02wxVXk8oVT+TXOrskASGp
+        K8Wfe6KymknaaUxZIFqR8FJ9Cg==
+X-Google-Smtp-Source: ACHHUZ70TJJP4SrzSnaCG86sHEDnrTnK9xZg/EAQTAkcqN4pK+IYpDzCj2A9Z/oXOAXYObUpKmjuUA==
+X-Received: by 2002:a5d:65d2:0:b0:30a:f1dd:dc55 with SMTP id e18-20020a5d65d2000000b0030af1dddc55mr4380789wrw.53.1686135399201;
+        Wed, 07 Jun 2023 03:56:39 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05600c290a00b003f60faa4612sm1761879wmd.22.2023.06.07.03.56.37
+        by smtp.gmail.com with ESMTPSA id i10-20020a05600c290a00b003f60faa4612sm1761879wmd.22.2023.06.07.03.56.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 07 Jun 2023 03:56:38 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 07 Jun 2023 12:56:27 +0200
-Subject: [PATCH 16/18] clk: meson: a1: move bindings include to main driver
+Date:   Wed, 07 Jun 2023 12:56:28 +0200
+Subject: [PATCH 17/18] clk: meson: meson8b: move bindings include to main
+ driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-16-9676afa6b22c@linaro.org>
+Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-17-9676afa6b22c@linaro.org>
 References: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
 In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -71,20 +72,20 @@ Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2195;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1355;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=MiorzJT8BJ3U4Im9MU5+c0Np88TD4TVfN8gYXiV/42w=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkgGJUAVyrz2mTU4oIpoEcazaItKh5+V7OxNlXOYag
- mLvLgq2JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIBiVAAKCRB33NvayMhJ0cN5D/
- 4pAks67QJDuntqf61aBfWfAA1TyVWw/j9Y06kT3GiaWc5Ywdc9WwoInDtzgO98acEu6GPDFeQXEs1w
- TPosYPMpHEuGgRQam+tKtxdZBi0JsbYUc1BHCUqkFsHlJaHMIyNKy7SmqUj0b6l/T84uSG99FCp26g
- Ll65/4eVXTTwluQ8aK3RESWJtmV6h0SmsOOiFj9+p4A+hHarwTXbLXQj5nClqI8IF4gMmBTVcKtHcG
- QgIKrlh3idqyZD13pl8uL3Z5Nf6aPjzELDT8rsatb6KwJIXRHq1+XdVboAS0mTtZLIckzE/06GnzBp
- hAXiZEpv88EoGloOx5RV2eNLkuANdRdc9UPseOGsr4YytDyCEUKYRoo1HywptfE9ILLecKA61WEWEA
- pqTf15L99qqmOM5kqZidfV+JeFM/h0Ejev11Dg+hM/TkT60XUPR5JfxJpBPFyfv24JHJTTEQJ36ZKU
- JPFl69AiHFMxikHl7s6EL+ryQ48hvlZpYiZGdZ0GrpnyhrOBFW9IldJyJWKvUH7Yjt68EtEA0KZg3S
- pNDvF4KXwPSv9nbZ/gqrbt9mkqktE41uQ+weC/81CA2ONmPAgM3pLlliNdnqkriaiCXYiwIyLZIf34
- 64HQuI5B2TzQtSWK2DFPKRyGnjELLWvxzLDBozvbISGTUq6J0OLSzT8N+lcA==
+ bh=2v1ExfVoRjPSA8nhH9KXi+nhZZijoqLD9hcDzuwzg4E=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkgGJVq7uWY2TiwMErdfLhlEha1K68LCCHkbMA7gTs
+ zNQFznGJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIBiVQAKCRB33NvayMhJ0dNeD/
+ 4sg5Kq8ApucjxwUvHYp4Cpyg1G//MJithuQ5VrmaAYkNgw8VJjX5RZE149wz2Tam9Pa5bH115WziNY
+ CPya8S1pIG07N4jKl7uQbBudLaAsbwfnrW5cmHe5Pzdm5JhjeqIqusCILVnoWmP8rpM2Ch+mZTpGQS
+ dBflwJMCu+RqbOEPxd2pd3Efi1OFkDk7kKKHEQfVqE82P1FjTB8cktP+evFuKzXXR9R1RIARDj1GUF
+ /7cB3CnQbPmvASsaKQav6WW85lgI/QiTnnnvPKAMHrbgdZcg6wqBYg/D1zq07U6pcRNiKtFuP1gtWX
+ STHU2khMXfY6dT2bFvZxzn86G73l2hJ89gB20v3SJo2kCSKEPbJRWMADEIBba2zhFfqNb2QpdLuIff
+ 7hVqda8kAIrCTpxKkFws8D3yK7E6ZGag/G8pUGmCa5AZcbPwEneggZH79pbUQ4i5cquyphCoDyvn6R
+ 8Z6fq4SKIF/bEVkbPfpu1E6gp33XXglbEAyJOYIC70xXFRl71lxmeZyIGf5kdx0VDyjIjSlc1a6WeG
+ dNCjioLmVdmLa1/CqcLvqeVx8GbbAUYu3AI/odg/KIJDfhRZEXv7JExZWV48AUb0DVuGx5gRVAGLEA
+ 5dlZuOeigUlhS2Da+ZqYdiwQl7OJmVtdPB72Ayf8BJvg4NM7UIfAzxuzKhvw==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -103,62 +104,40 @@ driver file.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/clk/meson/a1-peripherals.c | 2 ++
- drivers/clk/meson/a1-peripherals.h | 3 ---
- drivers/clk/meson/a1-pll.c         | 2 ++
- drivers/clk/meson/a1-pll.h         | 3 ---
- 4 files changed, 4 insertions(+), 6 deletions(-)
+ drivers/clk/meson/meson8b.c | 3 +++
+ drivers/clk/meson/meson8b.h | 7 -------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
-index 094246cb5f6c..ef0881b8ee07 100644
---- a/drivers/clk/meson/a1-peripherals.c
-+++ b/drivers/clk/meson/a1-peripherals.c
-@@ -14,6 +14,8 @@
- #include "clk-dualdiv.h"
- #include "clk-regmap.h"
+diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
+index 1e1313991a68..f8fad1118472 100644
+--- a/drivers/clk/meson/meson8b.c
++++ b/drivers/clk/meson/meson8b.c
+@@ -21,6 +21,9 @@
+ #include "clk-pll.h"
+ #include "clk-mpll.h"
  
-+#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
++#include <dt-bindings/clock/meson8b-clkc.h>
++#include <dt-bindings/reset/amlogic,meson8b-clkc-reset.h>
 +
- static struct clk_regmap xtal_in = {
- 	.data = &(struct clk_regmap_gate_data){
- 		.offset = SYS_OSCIN_CTRL,
-diff --git a/drivers/clk/meson/a1-peripherals.h b/drivers/clk/meson/a1-peripherals.h
-index 842b52634ed0..26de8530184a 100644
---- a/drivers/clk/meson/a1-peripherals.h
-+++ b/drivers/clk/meson/a1-peripherals.h
-@@ -43,7 +43,4 @@
- #define PSRAM_CLK_CTRL		0xf4
- #define DMC_CLK_CTRL		0xf8
+ static DEFINE_SPINLOCK(meson_clk_lock);
  
--/* include the CLKIDs that have been made part of the DT binding */
--#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
+ struct meson8b_clk_reset {
+diff --git a/drivers/clk/meson/meson8b.h b/drivers/clk/meson/meson8b.h
+index 2a9c4fe29ca2..a5b6e67eeefb 100644
+--- a/drivers/clk/meson/meson8b.h
++++ b/drivers/clk/meson/meson8b.h
+@@ -77,11 +77,4 @@
+ #define HHI_MPLL_CNTL9			0x2A0 /* 0xa8 offset in data sheet */
+ #define HHI_MPLL_CNTL10			0x2A4 /* 0xa9 offset in data sheet */
+ 
+-/*
+- * include the CLKID and RESETID that have
+- * been made part of the stable DT binding
+- */
+-#include <dt-bindings/clock/meson8b-clkc.h>
+-#include <dt-bindings/reset/amlogic,meson8b-clkc-reset.h>
 -
- #endif /* __A1_PERIPHERALS_H */
-diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
-index 25d102dc8a5d..9a757862abab 100644
---- a/drivers/clk/meson/a1-pll.c
-+++ b/drivers/clk/meson/a1-pll.c
-@@ -13,6 +13,8 @@
- #include "a1-pll.h"
- #include "clk-regmap.h"
- 
-+#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
-+
- static struct clk_regmap fixed_pll_dco = {
- 	.data = &(struct meson_clk_pll_data){
- 		.en = {
-diff --git a/drivers/clk/meson/a1-pll.h b/drivers/clk/meson/a1-pll.h
-index 0add1c7ea9f5..4be17b2bf383 100644
---- a/drivers/clk/meson/a1-pll.h
-+++ b/drivers/clk/meson/a1-pll.h
-@@ -25,7 +25,4 @@
- #define ANACTRL_HIFIPLL_CTRL4	0xd0
- #define ANACTRL_HIFIPLL_STS	0xd4
- 
--/* include the CLKIDs that have been made part of the DT binding */
--#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
--
- #endif /* __A1_PLL_H */
+ #endif /* __MESON8B_H */
 
 -- 
 2.34.1
