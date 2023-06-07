@@ -2,117 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1063726983
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jun 2023 21:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA589726A87
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jun 2023 22:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjFGTJK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Jun 2023 15:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S232125AbjFGUQ6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Jun 2023 16:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjFGTJJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jun 2023 15:09:09 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA241FD5
-        for <linux-clk@vger.kernel.org>; Wed,  7 Jun 2023 12:09:05 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f6454a21a9so1023031e87.3
-        for <linux-clk@vger.kernel.org>; Wed, 07 Jun 2023 12:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686164943; x=1688756943;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UIB5Ez5/1zBL2wNPD4WgzbQ/0M0sdqjHOgDZ8J5dSvM=;
-        b=VdFAJtCLm+jUSR4aAxpLHLWbbFunpa2036Ss5uTS8Faf++8xMxEtm2XmjIKqT8sy4h
-         pDlzrwMepskf82EvzfInp/CueXdX9pcl67N3GZDqH+q+ed1CnpqvdFJyCBxRpFpwTh3d
-         rmVtBu4kFTBNDdgtTCjLH0ahjca4odKTFL7uPWbM5sUXudxM4U6B9C/ASZHxM/RGcay6
-         VEVgB/0VYaRMlDcKskZJSngefhIxYrBtRa+TO4+2ZOSeC1U7FCUmvjnmqRqpEQPhSWU0
-         2STruIBEzukUN3YKPEacvFISXSoGJrUBlJLWHhyJNUJ7tLSqjzS1O3ZySFAdK9ilLw0d
-         t0JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686164943; x=1688756943;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UIB5Ez5/1zBL2wNPD4WgzbQ/0M0sdqjHOgDZ8J5dSvM=;
-        b=YPy625oKDgamXnkaoQ7Y5BKPV+jwCFenfsuurY8+SqriFMCMnkL55w0TaJfuqt9JMC
-         0XflKB2CznZ+fEGO2eFuAMT1L/ZAxV73i7Q115AQM0I4klVJlxM+Z89iGcC7DQut6btF
-         bufXzhll6FlJvnkfrSHxEnKPuO9hANuXNGVDC36Hb+0IC1zelyoilo7dYe3Fsvre1tGW
-         LVoNLND7P2RZ9l5pUZCtnHgpyIHX9TSavzd2s+7oeZ9bBWkSfXtLbvIFDJaAcbd3cRwM
-         m2wQxrcFHQb24iQMu9dsCLfvebmqnJl4dZOc61RzmIqtbBnYxn6FsmN1dLd4Mlx2w9jl
-         MQag==
-X-Gm-Message-State: AC+VfDxxdF3Cq6tLmx4dko6GQNQDkg92FuHhleuT4PRziZzEBfezNNT8
-        V6BHoRssbhMhLIUEe2Qote8GXw==
-X-Google-Smtp-Source: ACHHUZ710ZCReHCFhPP1TIIATmB/KflMtrDahZqphOkAf/9lJrhLsazyy74FGBr3u7yhOEKpAf7yiA==
-X-Received: by 2002:a05:6512:61:b0:4f4:b10a:349f with SMTP id i1-20020a056512006100b004f4b10a349fmr2306981lfo.34.1686164943627;
-        Wed, 07 Jun 2023 12:09:03 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id c7-20020a197607000000b004f38411f148sm1896781lff.84.2023.06.07.12.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 12:09:03 -0700 (PDT)
-Message-ID: <594582c6-6b20-7a44-a833-834c6e5eb9c6@linaro.org>
-Date:   Wed, 7 Jun 2023 21:08:56 +0200
+        with ESMTP id S229563AbjFGUQ5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jun 2023 16:16:57 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDE61BD3;
+        Wed,  7 Jun 2023 13:16:53 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 6A6CD5FD05;
+        Wed,  7 Jun 2023 23:16:50 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686169010;
+        bh=M/we8RgDjwgR++pTBbcueO2YO/PO3K31bJrDaIQUUdE=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=C+kUCvyF7gc57sZzG2y48Vr72/2ceS66RatT0BvhZU4hmzAD35j+MeraX6XBUD0Gf
+         FNhuU2RDsciP98n0kMvXG8BNzq+ZcrlZnGvWtvoK1xf2nYdGWGTcQQJJNNgu98NDOU
+         9k5yP3AEg0+vB0BSMk6gkKZb7peorcZ/g+yFfljCcSve5s1wmLlK0RIEBKueW9JAPj
+         7udk1RP0ceU0FUZGWouH2I4TGbss8cqFQSA3nOnqCW4vhBJZ1L0ZCqBE2IfocvBjeZ
+         wly0shj1NQH1yjQXO/OxZ4yX6G8XYEwCjh8YEojqac1/aE923pUePjq15iopLt0NEK
+         i4XPXXtViiiHQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 23:16:50 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <conor+dt@kernel.org>
+CC:     <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v1 0/6] arm64: dts: meson: a1: introduce several peripheral IPs
+Date:   Wed, 7 Jun 2023 23:16:35 +0300
+Message-ID: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v12 4/5] arm64: dts: qcom: ipq9574: Add LDO regulator node
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1686045347.git.quic_varada@quicinc.com>
- <1e795c18d6e19dbb5eebee357dddeb5022033825.1686045347.git.quic_varada@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1e795c18d6e19dbb5eebee357dddeb5022033825.1686045347.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 16:55:00 #21454472
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This patch series introduces device tree declarations for various
+peripheral IPs of the A1 SoC family, including clock controllers, EFUSE,
+USB, SPI Flash Controller, SDIO, and UART_AO:
+    - CLK: A1 SoC has four types on the board, namely PLL, Peripherals,
+      CPU, and Audio, but only Amlogic A1 PLL and Peripherals clock
+      controllers are currently supported.
+    - EFUSE: consists of a 4k bit One Time Programmable (OTP) memory
+      divided into 32 128-bit blocks, and data is accessed using the APB
+      bus through software or the Key-ladder integrated with the EFUSE
+      block.
+    - USB: only one USB 2.0 high-speed port is available in the A1 SoC,
+      supporting both HOST and DEVICE modes for OTG.
+    - SPI Flash Controller: 4-bit QPI/SPI NOR Flash or NAND FLASH
+      controller.
+    - SDIO: for WiFi/IEEE802.11 connection.
+    - UART_AO: for Bluetooth connection.
 
+Alexey Romanov (1):
+  arm64: dts: meson: a1: enable efuse controller and setup its clk
 
-On 7.06.2023 12:48, Varadarajan Narayanan wrote:
-> Add LDO regulator node
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  Changes in v10:
-> 	- Add LDO regulator node
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> index 2b3ed8d..42d45e1 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> @@ -45,6 +45,13 @@
->  			regulator-min-microvolt = <725000>;
->  			regulator-max-microvolt = <1075000>;
->  		};
-> +
-> +		mp5496_l2: l2 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-boot-on;
-> +			regulator-always-on;
-Nit: since it looks like you'll need to send another revision,
-if you switched the order of the last two properties, it'd make
-a nice reverse-Christmas-tree
+Dmitry Rokosov (2):
+  arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
+  arm64: dts: meson: a1: support USB controller in OTG mode
 
-Konrad
-> +		};
->  	};
->  };
->  
+Jan Dakinevich (1):
+  arm64: dts: meson: a1: add eMMC controller and its pins
+
+Martin Kurbanov (1):
+  arm64: dts: meson: a1: introduce SPI Flash Controller
+
+Oleg Lyovin (1):
+  arm64: dts: meson: a1: introduce UART_AO mux definitions
+
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 164 ++++++++++++++++++++++
+ 1 file changed, 164 insertions(+)
+
+-- 
+2.36.0
+
