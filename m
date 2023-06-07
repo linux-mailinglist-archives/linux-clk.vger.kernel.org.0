@@ -2,96 +2,189 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB3772683D
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jun 2023 20:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F43726896
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jun 2023 20:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjFGSQB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Jun 2023 14:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S231124AbjFGSYy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Jun 2023 14:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjFGSP6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jun 2023 14:15:58 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0123A1FE3
-        for <linux-clk@vger.kernel.org>; Wed,  7 Jun 2023 11:15:27 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33d269dd56bso4660135ab.1
-        for <linux-clk@vger.kernel.org>; Wed, 07 Jun 2023 11:15:27 -0700 (PDT)
+        with ESMTP id S231384AbjFGSYl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jun 2023 14:24:41 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B8A2128
+        for <linux-clk@vger.kernel.org>; Wed,  7 Jun 2023 11:24:19 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f63ab1ac4aso2424794e87.0
+        for <linux-clk@vger.kernel.org>; Wed, 07 Jun 2023 11:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686161677; x=1688753677;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+        d=linaro.org; s=google; t=1686162248; x=1688754248;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u5iMSeOKpFSmRZGHk7AHtYahJMrc6/q+PHYUICyADXw=;
-        b=YAlZ/+mozlG80V/t2BtfDtl+iFp+40Mi7LNkiZiZ6FbnFdcPJlRcQLWv2SZ4eQ8eU8
-         4578xZybWU8uML4gjwp89xsLfU3C4ALPD0ZmovzjbzlCi38H4GfzbgJR9lcaRVe93fcR
-         4T1kdBau/SZx+K94afUk1WqnNgyDpjYXUr+NbzDkZ0t8B1WecJwQb/tXMUzWZPcDUcvt
-         Bs+79G97jt5pdDU/iNhVx5SivsGs/jCA1R4dUe13/bYwUl2u3YCbNJa9e/GzBW08Z47f
-         h3RcHkjEEVcNULBdp1s6JGjiIDdlt42ko4IwyvaAym0k2WlpnPJKFO4viavnmZpxmbr/
-         JAzA==
+        bh=GCynyLWoW2V3VpBJECgKopAvXwYKryE2bi0AEhbuOKc=;
+        b=UORlCDAJSTYZ4uIWUmqhcz5py1aYRNayzTtulmKmCRBhjbvUp5Sc4fYPJFnCb75juH
+         uWwpIburuUdUDyFMAIFi8TeiKQuQ6ndhBSsS5tOWCe3itNJG+EtJSRLhAPIX1MjX3f6n
+         oK6t/bVYLQ1CzirArOwccdOg/exui1KseunFxziTYoMvJqkLa8VvUdaH+edeqNCcOK25
+         dstAnZ5d9iOqhh4Vfo6OUP6MHv5/Oh7LrY4ClO8mkR6x0AAOXPd78wcv4HgUaEtAwvih
+         a0VEseZTwFw4fOa6vy/q6yFt2LPcjoswaEAKG2PUkOnoKRsZXXTYfiCsL7wDRFPlkX4C
+         9IrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686161677; x=1688753677;
-        h=to:subject:message-id:date:from:sender:mime-version
+        d=1e100.net; s=20221208; t=1686162248; x=1688754248;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u5iMSeOKpFSmRZGHk7AHtYahJMrc6/q+PHYUICyADXw=;
-        b=RiOjviQJT6YEirC/wxAcuP7WhzMTxDx2kKDi8PO+aHrzApZZs1AIkktLWvfHp78dOx
-         bS6GkIwOcjYiX4BnS70zQBTFh4TFM1mSgHdY3fATEcjrJLnT7n+uxq6eBUSLvV5cf5qq
-         88Gbnxo8scdA3leJEvtfjptoB+kzPnYjy4l0F0LkFF/oA92XQkRc7nxL9smMyNo9IytD
-         Up0zd0k/31shQOhSBc/eR6RdhWXnyU2MfO49h7rJXLUFz23voLI4WsQB5PI5jaHG0Rpr
-         8r0LPRiDWQvY70B+KcUCUmveqoJ/RXd++Z0ecZVySs1MitZSvULq20IiVJKMyBBjhSDv
-         LdcQ==
-X-Gm-Message-State: AC+VfDxSLrebmDd4rMYBnoUil1VosVqrpTBQOLNVQ5/PsUoz0d9gpcII
-        liLRLr5OSx7kmMpCWJjrVSe0kbSaGhWn0qRuqPc=
-X-Google-Smtp-Source: ACHHUZ6O0IM+kDh47Z0qfaejhYM3dW6HZQEgax2Yhuq1CRHKG0ydV1txYIzcA1tParE02p8+m2AFYYWuMWG8lL/rg18=
-X-Received: by 2002:a05:6e02:810:b0:33d:67c8:aebe with SMTP id
- u16-20020a056e02081000b0033d67c8aebemr4789690ilm.31.1686161676978; Wed, 07
- Jun 2023 11:14:36 -0700 (PDT)
+        bh=GCynyLWoW2V3VpBJECgKopAvXwYKryE2bi0AEhbuOKc=;
+        b=YH7ybyHLOfsUidNiY8k4Yh2xVZjlmGQJOH3c7D5qrJpkxPK1HdiGt0ImwC+RN5jV37
+         rCqIpgOvkfIfSOddrXbb1vc86M/rkV+hh4kQ9yespTBjDBQ++tW94vmSL5j62ti9CVV+
+         FapU1P3Abtt/+n3apvP9fXczpgXKfwp5T4FyYKndmKciBbRQlkIzAhKJTady9vU+E/an
+         9E/NGDmOesTBoU90Mc1EERggoJBK1oqjMVs7M2fIDw9AHOgpBXq1WWqK7j8v9XmKj757
+         zLaiv58GMN0qvCqjvi6eUryh7LbYnRVbri7hn3mJgyaORWtZcbY/Da0BnjWOZsbg93ac
+         8XdA==
+X-Gm-Message-State: AC+VfDwDCcyLh1/TfSCN5hUHRNiFS51VLt2Xn7qo3YfytXvx1SVxEbRP
+        Wffdx51+WP7Flv+mOPYqjHnYSw==
+X-Google-Smtp-Source: ACHHUZ7cQ53ZaeBJXCSc0n79qlL4eVvWwXaB9K9+BZIUq9VFZ/qoirsRWNkWsGjBsklIkcutqeGZhA==
+X-Received: by 2002:ac2:4c8e:0:b0:4f6:2629:6cf3 with SMTP id d14-20020ac24c8e000000b004f626296cf3mr2269056lfl.46.1686162247872;
+        Wed, 07 Jun 2023 11:24:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac24345000000b004f004c0498esm1879989lfl.71.2023.06.07.11.24.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 11:24:07 -0700 (PDT)
+Message-ID: <ff8c76e4-fb6c-106d-eae3-45edc06b0c0b@linaro.org>
+Date:   Wed, 7 Jun 2023 20:24:04 +0200
 MIME-Version: 1.0
-Sender: kimleemoon20@gmail.com
-Received: by 2002:a92:c503:0:b0:335:7c2e:10df with HTTP; Wed, 7 Jun 2023
- 11:14:36 -0700 (PDT)
-From:   Aisha Algaddafi <algaddafiaisha247@gmail.com>
-Date:   Wed, 7 Jun 2023 19:14:36 +0100
-X-Google-Sender-Auth: W6RpFxSvbXMCoqyf85jLPUpoAcE
-Message-ID: <CALPmVKL2w_0hEO9K=xbGP5Ehk9e0GQM8Jzo-NTw_TCHv_oNgvA@mail.gmail.com>
-Subject: PLEASE I NEED YOUR HELP.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.2 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MONEY_FORM_SHORT,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org,
+        catalin.marinas@arm.com, will@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
+In-Reply-To: <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-I want to use this medium to open a mutual conversations  with you
-seeking for your acceptance towards investing in your country under
-your management as my partner,
-
-My name is Aisha  Gaddaf and presently living in Oman, i am a Widow
-and single Mother with three Children, the only biological Daughter of
-late Libyan President (Late Colonel Muammar Gaddafi) and presently i
-am under political asylum protection by the Omani Government.
-
-I have funds worth " [ $7.500.000.00 US Dollars ] " [ $7.500.000.00 US
-Dollars ] which I want to entrust to you for investment projects in
-your country. If you are willing to handle this project on my behalf,
-kindly reply urgent to enable me provide you more details to start the
-transfer process, I shall appreciate your urgent response through my
-private email address below:
-
-algaddafiaisha247@gmail.com
-
-You can know more through the BBC news links below:
-
-http://www.bbc.com/news/world-africa-19966059
 
 
-Thanks
-Yours Truly
-Aisha Gaddafi
+On 7.06.2023 12:56, Varadarajan Narayanan wrote:
+> Add USB phy and controller nodes
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index c2d6cc65..3183357 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -383,6 +383,61 @@
+>  				status = "disabled";
+>  			};
+>  		};
+> +
+> +		usb_0_m31phy: hs_m31phy@7b000 {
+> +			compatible = "qcom,ipq5332-m31-usb-hsphy";
+> +			reg = <0x0007b000 0x12C>,
+random uppercase hex
+
+> +			      <0x08af8800 0x400>;
+> +			reg-names = "m31usb_phy_base",
+> +				    "qscratch_base";
+> +			phy_type= "utmi";
+Missing space before '='
+
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			reset-names = "usb2_phy_reset";
+> +
+> +			status = "okay";
+If you're only defining the node, it's enabled by default
+
+In this case, you'd probably want to disable it by default.
+
+> +		};
+> +
+> +		usb2: usb2@8a00000 {
+> +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+Please push these 3 properties to the end
+
+And add status = "disabled" below them.
+
+> +
+> +			reg = <0x08af8800 0x100>;
+> +
+> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +				<&gcc GCC_SNOC_USB_CLK>,
+> +				<&gcc GCC_USB0_SLEEP_CLK>,
+> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +
+Please remove this newline.
+
+> +			clock-names = "core",
+> +				"iface",
+> +				"sleep",
+> +				"mock_utmi";
+Please align this, and all other similar lists.
+
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+interrupts-extended is unnecessary with just a single interrupt
+source.. you can make it `interrupts` and drop the GIC reference.
+
+It would also be nice to push the interrupt properties below 'reg'.
+We're working on documenting and automating checking the preferred
+property order.
+
+> +			interrupt-names = "pwr_event";
+> +
+> +			resets = <&gcc GCC_USB_BCR>;
+> +
+> +			qcom,select-utmi-as-pipe-clk;
+> +
+> +			usb2_0_dwc: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x08a00000 0xe000>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> +				usb-phy = <&usb_0_m31phy>;
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +				snps,ref-clock-period-ns = <21>;
+1/21 is 0.0476..  that doesn't seem to correspond to the ref
+clk frequency?
+
+Konrad
+> +			};
+> +		};
+>  	};
+>  
+>  	timer {
