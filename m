@@ -2,116 +2,138 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FD9727A83
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jun 2023 10:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95009727B2C
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jun 2023 11:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbjFHIx5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Jun 2023 04:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S235502AbjFHJ0D (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Jun 2023 05:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234447AbjFHIxy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Jun 2023 04:53:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71EF2729;
-        Thu,  8 Jun 2023 01:53:52 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C8D66606F17;
-        Thu,  8 Jun 2023 09:53:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686214431;
-        bh=96X6k5oqBvIX1dBppWoB2S5z/C5qU+MMBXm3vBPWtl0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U3ly+JKpH51mwz8/4HmOI/6l6O91KLGeLtbNFx5lDpKMqv7TQ1mITadLrC40Su0BQ
-         QeRZtJIOhqTf/qwTJm/cqhT5+Cs1sp0y/uUMpZqu0LsaPGIDH0oVMkYtrTQ0THqqWS
-         8/31HkQESvhMEK2XMNloIwjBBUbQzCgQa1fvDLhbn32ipbD0dqkUJM6HsEuAteAkib
-         WYfcG5cleEOcK2/o+RH6gjQqsF0Qjo4AfOZPwUgeWGsX/7LccV0RiClCGDyabE/rd2
-         VzzDqxDow1OjcBisJ9WaIL7Pvhpi33MgY5E+SdEhBPyilu9EIz8kimWqBEhVTMnaIg
-         kYcYMRlXm2qDw==
-Message-ID: <38e5ffa2-93bd-ce70-ec00-6d61bad969c7@collabora.com>
-Date:   Thu, 8 Jun 2023 10:53:47 +0200
+        with ESMTP id S230099AbjFHJ0C (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Jun 2023 05:26:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CEA269F;
+        Thu,  8 Jun 2023 02:26:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e/A+WbqPGdzpREImrPimSJ7zICeRjb9l/mCtNcBaPiObh+rFZaY0YN/iRWcBjQ9JaH8vT0DLGwCuRnbbx38r6kXWaalLoU2PuirmzpS/KfRr4Ks0XDn4ySqVgtRxAej+ckI/uWswMLJO+8SzDUVTJpNcBsUqpnhuQ/m7dFaujnkIMA0se/VL84KMLuvqQc0lxsebTvdjBaC3aT235xbFifZwGPPywDmD06WQGjWUGSQ+DR6zn3fFvoVgwgc5O5lVG1/uLQaH2O02AvxmuRwq3IMvCMKrAJWwkJvHQHVmMJ4cYF40nwZMXYyicTpHSvJMSq1PVLeZfxcrqN1XY5QhDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sHzxAzRCQSFQ0dXOjKW9lvmszdoPKmb0qStwN/NcAWY=;
+ b=iXMKjHQRUsLANvjJPHFDSHljAMs3oi0GVs/atgdfdCPbHMx35rsGbu6KGCvwDmt91zETsgkAI3WtoiX4sLmaL1T7b27xg/x3LogQ/MtDEhu2LumbS3LlATvwyKdNY7nGkWzqz5U88/EbgQ3mTthZiq8LqtKvmgM7ffF93WmyIzk1oudpdg2RvNdJSS14lRjXoQW0OxiCUuWU2kHRATK/JM3cmwQAFdoEaB0ewhwzjKh++qU88qr17xUW1tOVXH431Xs7AJ/2Q5ajk0mO3DQX1pPLAJuefD7N41ZLbp9yEYC4avFD7q94NIOTmytTpJdEbiR4xOHR0/FtIPiNFadtcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sHzxAzRCQSFQ0dXOjKW9lvmszdoPKmb0qStwN/NcAWY=;
+ b=Z/HxepdGvZYP8/D21IUD1Yw0comGMqUzARxvcCHS+41MP32E49UVh2yRD/xaSPTdYVZx0lHSdWK11FHT2fM4tXjGb8CEzv72I01ohG3bEezXGPwK5BsNwAcXcMqwL5Yw2cgKCw93u9jjbDWSTd4uh5PdOMgIpVW4G2t20uSqxm0=
+Received: from BN9PR03CA0574.namprd03.prod.outlook.com (2603:10b6:408:10d::9)
+ by SA1PR12MB7247.namprd12.prod.outlook.com (2603:10b6:806:2bb::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 09:25:57 +0000
+Received: from BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10d:cafe::87) by BN9PR03CA0574.outlook.office365.com
+ (2603:10b6:408:10d::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
+ Transport; Thu, 8 Jun 2023 09:25:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT035.mail.protection.outlook.com (10.13.177.116) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6477.24 via Frontend Transport; Thu, 8 Jun 2023 09:25:57 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 8 Jun
+ 2023 04:25:51 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 8 Jun
+ 2023 04:25:35 -0500
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 8 Jun 2023 04:25:32 -0500
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To:     <linux-clk@vger.kernel.org>
+CC:     <git@amd.com>, <devicetree@vger.kernel.org>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <michal.simek@amd.com>,
+        <mturquette@baylibre.com>
+Subject: [PATCH v3] dt-bindings: clock: versal: Add versal-net compatible string
+Date:   Thu, 8 Jun 2023 14:55:26 +0530
+Message-ID: <20230608092526.6462-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 4/5] clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230607205714.510012-1-nfraprado@collabora.com>
- <20230607205714.510012-5-nfraprado@collabora.com>
- <CAGXv+5EgP+0fTDhdpnYDCVQAWtWqwKp=Xxh-pHc1137wHoywRQ@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5EgP+0fTDhdpnYDCVQAWtWqwKp=Xxh-pHc1137wHoywRQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT035:EE_|SA1PR12MB7247:EE_
+X-MS-Office365-Filtering-Correlation-Id: a24a69ab-11d3-40df-e3dd-08db68025d83
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TeOAhvpoOfc3w6NI//FMM+nx5tfbEeLDFpQeIKIvpgXgoDliqBysnMdruqGiTJVD1klKixTQ6Pxo7+g2mDonQYkeUKKQD7aM/MCGWel03haeZZEHPlyL+6I8xghqviUi1an8K21xTbDd6qGYSORVVyIQ23B0Oxy2BoFjXBSFLWis7Dbz0zkWIl9Qaq1L2PaxX2kiH8xFPVdj/IR8jSVICKIFmvGF88qRzMwv3J+WpnldSx76zvkQXxLr7wQ0LaKPoV75L3R5Gt1FZ//vo2iCq8/w+Cq8p99+WTU1Q5AYixrYOHaJHVWnlqMA/FnU3PpagJ550nsgZz+G3GtjqPvweopDiGy0k38t9e4HdVVN3ZTiPzRYjJndpj5J6fUy+l6ZEXSODFn+aUGKCfOHrtaZvbKNC1eaDzif554Gbzy0lvEpH2g8MzN6XY+3TnlSCtOFmaZsKGf+UnXKzq/7qS4ZNh8QU2G5x78Gsy/8G2xukuDPpf35zJ7ttof5AxMJx1kMNVcejhpF3DhZuGv21Cc2HvADYbjYx7wITAUOd5/B3qWho0C1sbraZflTWhRh8vyTZnCWOjUDs+xoaTMB6ltE+psh/BcpuOYuVtiRR1suI/xRuowmexvZK9qCwZ7ii2DJCSUk7G0F/hhakbSHBqXdzDb4TfhO+ubrVqHrYyVB+K+Fb3qypwy8y/63xzAjw104IRJHc+BrYjX+vhMghSBu7ufgBFRmf63sx1Pm3WoxFLnH776h3Ap8zP9UeLNXluw622O62tjIQu3a0/s+F7WMzg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199021)(40470700004)(36840700001)(46966006)(47076005)(2616005)(1076003)(26005)(41300700001)(83380400001)(36860700001)(6666004)(186003)(426003)(336012)(40460700003)(478600001)(54906003)(70586007)(356005)(4326008)(81166007)(82310400005)(70206006)(316002)(82740400003)(40480700001)(8676002)(44832011)(6916009)(5660300002)(4744005)(86362001)(8936002)(2906002)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 09:25:57.0892
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a24a69ab-11d3-40df-e3dd-08db68025d83
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7247
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 08/06/23 09:43, Chen-Yu Tsai ha scritto:
-> On Thu, Jun 8, 2023 at 4:57 AM Nícolas F. R. A. Prado
-> <nfraprado@collabora.com> wrote:
->>
->> Add the CLK_VDEC_ACTIVE clock to the vdec clock driver. This clock is
->> enabled by the VPU once it starts decoding.
->>
->> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>
->> ---
->>
->> Changes in v2:
->> - Added CLK_IGNORE_UNUSED flag
->>
->>   drivers/clk/mediatek/clk-mt8183-vdec.c | 5 +++++
->>   include/dt-bindings/clock/mt8183-clk.h | 3 ++-
->>   2 files changed, 7 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/mediatek/clk-mt8183-vdec.c b/drivers/clk/mediatek/clk-mt8183-vdec.c
->> index 513b7956cbea..03c4f1acfdb8 100644
->> --- a/drivers/clk/mediatek/clk-mt8183-vdec.c
->> +++ b/drivers/clk/mediatek/clk-mt8183-vdec.c
->> @@ -27,6 +27,10 @@ static const struct mtk_gate_regs vdec1_cg_regs = {
->>          GATE_MTK(_id, _name, _parent, &vdec0_cg_regs, _shift,   \
->>                  &mtk_clk_gate_ops_setclr_inv)
->>
->> +#define GATE_VDEC0(_id, _name, _parent, _shift)                \
->> +       GATE_MTK_FLAGS(_id, _name, _parent, &vdec0_cg_regs, _shift,     \
->> +               &mtk_clk_gate_ops_setclr, CLK_IGNORE_UNUSED)
-> 
-> I think what you want is a read-only gate clock only used for reading back
-> the status. The ops would only have .is_enabled.
+Add dt-binding documentation for Versal NET platforms.
 
-Technically, you're right... but I would delay the introduction of a RO GATE_MTK
-clock for later, as it's not worth adding that for just one clock driver usage.
+Signed-off-by: Jay Buddhabhatti <jay.buddhabhatti@xilinx.com>
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+---
+Change in v2:
+Add the versal net enum
 
-We're checking if the same can be applied to other SoCs as well - if it can,
-then it would make sense to do that (small, yes), work... the point here is to
-enable MT8183 decoders ASAP to enable decoder tests in KernelCI, along with
-all of the other MediaTek Chromebooks.
+Changes in v3:
+Add the compatible for versal net
+the usage will new compatible string followed by old one
 
-Though, if you think that it is a good idea to add a RO gate right now, I don't
-have any strong opinions against that.
+ .../devicetree/bindings/clock/xlnx,versal-clk.yaml         | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Cheers,
-Angelo
+diff --git a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+index 229af98b1d30..b90aa064a6d3 100644
+--- a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+@@ -20,7 +20,12 @@ select: false
+ 
+ properties:
+   compatible:
+-    const: xlnx,versal-clk
++    oneOf:
++      - const: xlnx,versal-clk
++      - items:
++          - enum:
++              - xlnx,versal-net-clk
++          - const: xlnx,versal-clk
+ 
+   "#clock-cells":
+     const: 1
+-- 
+2.17.1
+
