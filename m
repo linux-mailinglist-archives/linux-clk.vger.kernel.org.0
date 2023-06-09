@@ -2,168 +2,188 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA35372A2F8
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Jun 2023 21:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D1B72A446
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Jun 2023 22:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjFITTr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 9 Jun 2023 15:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
+        id S231319AbjFIUTV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 9 Jun 2023 16:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFITTq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Jun 2023 15:19:46 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03hn2215.outbound.protection.outlook.com [52.100.14.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCC7E62;
-        Fri,  9 Jun 2023 12:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/fZaCbyPA4PG9YwOAZW6PpKz0tRw29BfdhRN8WKwp3A=;
- b=xVXWBzVJnPizPru6r0oY2G/JSh717V7+ff0zJnL4CvlyYNYGDfyH20TCSxBJapM7ULazAvAnaV/tIePk2rw9I61RTgeIEwIJxvs/tp8tWeUn+e2hL3L0jZQEuzIqDWJuinfxKU/NU4RimB+igYEJbVuco/YNWCDUZ7uCHfn1du0iVA3w6T1sTYBfblHArHhvDhCZ19CptGCJ9V4hgcqdGXyWD6XQLcjjbkLPHV0g+O4DYqTrirjAc8NmmmOAZIdkuSVwpqSIKKbtZgrDeRddtmojZcRjOrPuZ5Vg44R8SpMJKOl2ZrTXqxq5BoS9oMhqEhG0/nIfDgiE3nBy4NwZbw==
-Received: from AM5PR0402CA0021.eurprd04.prod.outlook.com
- (2603:10a6:203:90::31) by AS4PR03MB8277.eurprd03.prod.outlook.com
- (2603:10a6:20b:4ff::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Fri, 9 Jun
- 2023 19:19:41 +0000
-Received: from VI1EUR05FT040.eop-eur05.prod.protection.outlook.com
- (2603:10a6:203:90:cafe::22) by AM5PR0402CA0021.outlook.office365.com
- (2603:10a6:203:90::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
- Transport; Fri, 9 Jun 2023 19:19:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.86)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.86 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.86; helo=inpost-eu.tmcas.trendmicro.com; pr=C
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.86) by
- VI1EUR05FT040.mail.protection.outlook.com (10.233.243.186) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.29 via Frontend Transport; Fri, 9 Jun 2023 19:19:39 +0000
-Received: from outmta (unknown [192.168.82.135])
-        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id C864220081129;
-        Fri,  9 Jun 2023 19:19:38 +0000 (UTC)
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (unknown [104.47.14.55])
-        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 1945120080073;
-        Fri,  9 Jun 2023 19:23:11 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PBhoh/W5NK9ejofCrVvdDxuaml2HhdgoL5jOJxMlhm4mcOYojGrnLzt3X7MrYAEvwEsEalPuf+K7vIJBGa2ijj0XT/KbGqG48Z9/uuwmw/Yw7qm5lRp06uHvrm+/t5Coe7fP65ssmmHmkuQ4aVeHQxIwCNCvXF7F2M3aO/Z6P6aSY4n7ai1vaklsUmFlVb22LorP3Fojq54SvrLYSaXbxlzNUHZ7wJjYgBxIfRTZk/MoPwpirjSIujlcCGJuzS1xisK5cfeVGBhVXxGbRV+HNf7qdB2eJRQOTKbE4vVz8fhqQ0ROsPWfs5mT1J3/PddX1G/gC/gGZrwjkvjoq6tubw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/fZaCbyPA4PG9YwOAZW6PpKz0tRw29BfdhRN8WKwp3A=;
- b=O8nqSJe4qRofFFYgr22+cI5zhIMqusbL8yowr3JVvhRzRijMMVGWiRd70gxXvRvI6np/jT8X+t/0rM1B1NjcbH0LS7M+7/bBt98zdgc5kbS+E0PRrvN7BZYc/8VABhEl82JryPuawEVgr9PuNaH7QttN8ePKwB3E3OrnJFhb1+J+WiyQYdGgIgTd16x/nhUmGy+gE1L3NW6NYvcKHWbt0wz5qAj5I5kHwMh/aRYUIpRZBWXCURQ+gB9N+HgzcUgsrbGBgg0q5/cCTQukqa6YZqPktgh8var3jZXP00YI32UYe7tU/co8yHV1douJmOtPIOAgHh4VvZc88Dx71s4f6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/fZaCbyPA4PG9YwOAZW6PpKz0tRw29BfdhRN8WKwp3A=;
- b=xVXWBzVJnPizPru6r0oY2G/JSh717V7+ff0zJnL4CvlyYNYGDfyH20TCSxBJapM7ULazAvAnaV/tIePk2rw9I61RTgeIEwIJxvs/tp8tWeUn+e2hL3L0jZQEuzIqDWJuinfxKU/NU4RimB+igYEJbVuco/YNWCDUZ7uCHfn1du0iVA3w6T1sTYBfblHArHhvDhCZ19CptGCJ9V4hgcqdGXyWD6XQLcjjbkLPHV0g+O4DYqTrirjAc8NmmmOAZIdkuSVwpqSIKKbtZgrDeRddtmojZcRjOrPuZ5Vg44R8SpMJKOl2ZrTXqxq5BoS9oMhqEhG0/nIfDgiE3nBy4NwZbw==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by PA4PR03MB6958.eurprd03.prod.outlook.com (2603:10a6:102:e5::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Fri, 9 Jun
- 2023 19:19:27 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::d632:8122:75f7:7b0e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::d632:8122:75f7:7b0e%3]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
- 19:19:28 +0000
-Message-ID: <22a28a6f-2c84-a6b1-bb57-a269af34c993@seco.com>
-Date:   Fri, 9 Jun 2023 15:19:22 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v14 00/15] phy: Add support for Lynx 10G SerDes
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Camelia Alexandra Groza <camelia.groza@nxp.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        =?UTF-8?B?RmVybuKUnMOtbmRleiBSb2phcw==?= <noltari@gmail.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, Li Yang <leoyang.li@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <b7779674-c3ac-e0ab-3ca8-db1ec5953a97@seco.com>
- <20230426105140.t4yqv6irtjcwptm5@skbuf>
- <20230425195002.fls5cmwolyrslpad@skbuf>
- <b7779674-c3ac-e0ab-3ca8-db1ec5953a97@seco.com>
- <20230426105140.t4yqv6irtjcwptm5@skbuf>
- <7c7ab84b-3c4a-4e44-b5b5-4acf733a0246@seco.com>
- <7c7ab84b-3c4a-4e44-b5b5-4acf733a0246@seco.com>
- <20230429172422.vc35tnwkekfieoru@skbuf>
- <c81d23b6-ed22-0b37-d71b-ddce9d5d58eb@seco.com>
- <c2f928d2-25f6-0e31-9ab3-9d585968df1b@seco.com>
- <20230522150010.q5zndfwcuvrb6pg2@skbuf>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <20230522150010.q5zndfwcuvrb6pg2@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR12CA0013.namprd12.prod.outlook.com
- (2603:10b6:208:a8::26) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+        with ESMTP id S231367AbjFIUTT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Jun 2023 16:19:19 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D87E47
+        for <linux-clk@vger.kernel.org>; Fri,  9 Jun 2023 13:19:17 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f65779894eso1832735e87.1
+        for <linux-clk@vger.kernel.org>; Fri, 09 Jun 2023 13:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686341955; x=1688933955;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sdIYwlKceBgYC+N9fRwUszhw4BX6aPSp6RBZQ9P/Ti0=;
+        b=lj8wWKoQnVy/VhgfQD/y/wYw3AIRhMFsHIMX4SLLjnph/cUMDy1gGhn/LnWEPsMZw2
+         eWVMTliGbNF12XEfXd5tJItarl4M+G+X9Z2FgkQIE4xunFwVw3Qk9XMHiht6lqNJCB+w
+         u1sXE+AMQvlGG6mukyut4YMt3+c3Ci40IjCzQC3oVuLbX0STxJQJxWIpH43Bed/1xNmk
+         HV1a4njPusA/VMPNoSFJWD9spQN8Uv9tKXBCJDrUpZZIvtfqHo5JDKHBHl1lJurwoEfZ
+         jL+y18fEuHRvqx8/qdJupdMSWNhomR5aqiPD1HrstjSBNBxjamPLhKOzNIR+guRq+Pum
+         UYEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686341955; x=1688933955;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sdIYwlKceBgYC+N9fRwUszhw4BX6aPSp6RBZQ9P/Ti0=;
+        b=PIKIeLcGVrYQ5CBCJfIY/e9IxRQ2n79H7sKAyQFafvdLwi6nknKnhjzDqNer49RqbZ
+         vA10x8NSM0sw18AJ+PhKXgaj6lnbO8ScozBcBTmLV/keEo8mm6w3so3j/i8V0IvdCy12
+         umD7+KlgYXJGSl35aGl/Sv06XkurM7eCqdAjajLlas73sHLMqCHiIUH+7Prh5XDShObi
+         KoLNSYMEIyWsQLTNCve7vKJ9Mp0PuIoN7J75icrAllM2YmVOtQjg79rcxQHeN01UjoAV
+         3LYj9ibJbwZNM3vQbyVGI3wkhkuiq1tGiNZDz8MdtDo5G8p/h3EjPxsQf23qbALH+uXF
+         hh/A==
+X-Gm-Message-State: AC+VfDxBQoIl4I7fDUYcLAU7xS+rZEHVnvKjxo9JQ0lh4t9eHS8qlqaX
+        +5NYPYUeETFAYh1YdblrgkKkyw==
+X-Google-Smtp-Source: ACHHUZ729FgVImbP3+bzW2KIwIhxOihS91E/smBNxVZQRhhzqLQMpg2ARlb0bzpFKIOZ/D5ZXZKIjg==
+X-Received: by 2002:a05:6512:3e15:b0:4f3:a526:6fd2 with SMTP id i21-20020a0565123e1500b004f3a5266fd2mr949318lfv.16.1686341955299;
+        Fri, 09 Jun 2023 13:19:15 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id b18-20020ac25632000000b004f628eb7884sm641349lff.232.2023.06.09.13.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 13:19:14 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 00/22] Restructure RPM SMD ICC
+Date:   Fri, 09 Jun 2023 22:19:05 +0200
+Message-Id: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|PA4PR03MB6958:EE_|VI1EUR05FT040:EE_|AS4PR03MB8277:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92094327-e588-49a8-be8b-08db691e78a1
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: 6Ce6HHma1hB09kOrIu9Ym+j4Woj0JyQMeDohkGIa7BJgl6ZGDJFvemumKBR59xcRLZ3aovgJv6Y5qpFObqe3VIeD1rNxPHL/+Epyi5xJ7PO1Bai5ZO5wp+FWzAjXiPKeLFCy3BhT09DMxdbfJ6imJrny1DydwvBDGZczppGWDJ7UmgZvgP4eZ/ij7YbKpVgpjrp+Pi+n3DxgTTGGbKngMc6fk7uVLYR+4VHq27gkPvx7fe8og4qJbvHdFYX8GBYDeb/0p6YCqPVMXykCWfoT48FIDC+VfOx5rMlh6csnBeQ3i9UDV3M3wLXbcjEUg8azeXgkGl9vc6nLkVFTRww9f1Pu1EzJUK6I1kIvQ7mpOm1rPqNb/rEY7QGjKSE+idMqFfbjuyRqpKcqzYvwxi9o/x69mG4D12Mg4L+bQ7q46uwIUMjygahn6EL+8ynN/GbOFwBORp4FqwfKOqKGV29O7Pndy2eFK6pbK2XwFDVSzUzW1X/9cwY5oAHNbPIfvPyiCdisSKbMgTWP4Fx9fmvkiJ9wl3fSuQJ78+hcUmXjAWxG2r87Euj+WnGXS/CBshXgzL4nbVnAjHo0+sn22vFELPfDtvUNoUwsaMr+gXSWbZjK9aEZtdj0ZlCNejYXnN8sjFLk4NUgrmsi3GXxFeFWhQXKxJH3e0YA6Rgj3ormC1UXS3HIvT+Aj6rRhQ4HudKZ
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(136003)(39850400004)(346002)(396003)(451199021)(6506007)(26005)(6512007)(53546011)(31686004)(7416002)(44832011)(4744005)(186003)(2906002)(86362001)(36756003)(8936002)(5660300002)(316002)(41300700001)(31696002)(2616005)(8676002)(6916009)(66946007)(66556008)(38350700002)(54906003)(6666004)(4326008)(38100700002)(478600001)(6486002)(66476007)(52116002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB6958
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR05FT040.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 9eee2c1e-4197-4ae6-4ab8-08db691e7205
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4m6ryoUHJhAC+d6Rdq3lNxv+1lXjFYrYyJvJ/T0+DLAHUYqab4B+YZwebwqN9uvwGrbR8HIkFP8gJ09NbwT1sRHRWdHS3dZEw/MwXH+STae/aBMwnhIW1ZRlzmPMP3MWWu0giHB1beOEVx3cftwWarOiYgNZXLQquEoBy30BCjKwyh31+KcvuUCNcOek/ibAeD8blwmc3QPo0xCmYLc2cK/kllqpIFGDYXVKLVf5x+1H64H3EyBkvbwPjXsQe8xPP+IwIAz0vGGI/vJI9Vx/lyyK6ygsA4epDVklV8tqIss6zoBhZmLk+dy0bBZZV7f9OwImXfsP/P2BwuakpTj4aB/8FtgaOIEnEMZ1M/9Agxn8G9XLYkYvSul4mekGvow44YXgvENyZVhyhAlIadlP5TBzbQpX4ami1BuRZkHtmJdyDr8UEZvk+zW9ebh6qwk0cXV6cAcsP0M5hBiHu8WTh8RlEqfMXYfog7jIw4xjqNZKa+qAvDfjk9V9ziBRuiMwawyIoC+zPLFldC6e5k6UIX/qeOudnp1cDOia8ov/HcByuSZbu0nWtPC5j2GyHJeYyfkjBhKT/kS7rVB0LYCKu0UnWYyBIs8KQQYGj/6QA50d7G1cP7gCEDBJH9rGJF3EpB/z8XZeC1polHKr7Cxp6obfhxYTtA9hK6IqcONW/y4Epd6Uxwh6oZFuMDRX+t/QhjXtMc/epMmluBWCCQC9+8aI0k3W0krw+QWWOMKNOoNXJOsSqKi9ypr9m9FHaA6MhvE8NyUvYdIs4FTSkimphIkvT7J5zIDA8afV+MQ5bW32q+oBj5BiRPjD5BkqCFM3IEQd9DR8nlv4o2o/Rslr+w==
-X-Forefront-Antispam-Report: CIP:20.160.56.86;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(39850400004)(396003)(451199021)(5400799015)(40470700004)(46966006)(36840700001)(40460700003)(31686004)(47076005)(6666004)(70586007)(316002)(70206006)(54906003)(6916009)(4326008)(86362001)(478600001)(36756003)(31696002)(36860700001)(336012)(26005)(6506007)(6512007)(34020700004)(186003)(53546011)(44832011)(8676002)(41300700001)(82310400005)(8936002)(7416002)(2906002)(4744005)(5660300002)(6486002)(40480700001)(7596003)(2616005)(82740400003)(356005)(7636003)(43740500002)(12100799033);DIR:OUT;SFP:1501;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 19:19:39.6077
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92094327-e588-49a8-be8b-08db691e78a1
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.86];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT040.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR03MB8277
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADmJg2QC/3WNQQ6CMBBFr0JmbQ0t0KAr72GIacsAk2BLpkg0p
+ He3snf5XvL/2yEiE0a4FjswbhQp+AzqVICbjB9RUJ8ZVKmqslFarGEhJ+Kzf5BzwrZKVpe6NQ3
+ 2kDfWRBSWjXdTXvnXPGe5MA70PiL3LvNEcQ38OZqb/Nl/95sUpZB2aFFrXbkabzN5w+EceIQup
+ fQF8a0zZ8AAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686341953; l=4861;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=vFiP9vIROTYaXe+Eii+OPNiUwBo8phYnrkzg7uqdXO4=;
+ b=aQb1MqVaJPPweVfLXQf5tt30v5CfFPMcwoUcfa4luWwSvMgeZNgEgQad7bnKDHw0uDdopSDd3
+ d8nB+ab8YGyCKKn5yXSwvEvho0dNxxQbaLGldKqGZkblbx2boPGEk+u
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 5/22/23 11:00, Vladimir Oltean wrote:
-> On Mon, May 22, 2023 at 10:42:04AM -0400, Sean Anderson wrote:
->> Have you had a chance to review this driver?
-> 
-> Partially / too little (and no, I don't have an answer yet). I am
-> debugging a SERDES protocol change procedure from XFI to SGMII.
+This series reshuffles things around, moving the management of SMD RPM
+bus clocks to the interconnect framework where they belong. This helps
+us solve a couple of issues:
 
-I'd just like to reiterate that, like I said in the cover letter, I
-believe this driver still has value even if it cannot yet perform
-protocol switching.
+1. We can work towards unused clk cleanup of RPMCC without worrying
+   about it killing some NoC bus, resulting in the SoC dying.
+   Deasserting actually unused RPM clocks (among other things) will
+   let us achieve "true SoC-wide power collapse states", also known as
+   VDD_LOW and VDD_MIN.
 
-Please send me your feedback, and I will try and incorporate it into the
-next revision. Previously, you said you had major objections to the
-contents of this series, but you still have not listed them.
+2. We no longer have to keep tons of quirky bus clock ifs in the icc
+   driver. You either have a RPM clock and call "rpm set rate" or you
+   have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
 
---Sean
+3. There's less overhead - instead of going through layers and layers of
+   the CCF, ratesetting comes down to calling max() and sending a single
+   RPM message. ICC is very very dynamic so that's a big plus.
+
+The clocks still need to be vaguely described in the clk-smd-rpm driver,
+as it gives them an initial kickoff, before actually telling RPM to
+enable DVFS scaling.  After RPM receives that command, all clocks that
+have not been assigned a rate are considered unused and are shut down
+in hardware, leading to the same issue as described in point 1.
+
+We can consider marking them __initconst in the future, but this series
+is very fat even without that..
+
+Apart from that, it squashes a couple of bugs that really need fixing..
+
+--- MERGING STRATEGY ---
+If Stephen and Georgi agree, it would be best to take all of this through
+the qcom tree, as it touches on heavily intertwined components and
+introduces compile-time dependencies between icc and clk drivers.
+
+Tested on SM6375 (OOT), MSM8998 (OOT), MSM8996.
+
+MSM8974 conversion to common code and modernization will be handled separately.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- Sort entries properly in "Add missing headers in icc-rpm.h"
+- Fix the check for no clocks on a given provider
+- Replace "Divide clk rate by src node bus width" with a proper fix
+- Add "Set correct bandwidth through RPM bw req"
+- Split "Add QCOM_SMD_RPM_STATE_NUM" into 2 logical changes
+- Move "Separate out interconnect bus clocks" a bit later in the series
+- Link to v1: https://lore.kernel.org/r/20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org
+
+---
+Konrad Dybcio (22):
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      soc: qcom: smd-rpm: Use tabs for defines
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      clk: qcom: smd-rpm: Export clock scaling availability
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: icc-rpm: Allow negative QoS offset
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: icc-rpm: Set correct bandwidth through RPM bw req
+      interconnect: qcom: icc-rpm: Fix bandwidth calculations
+
+ drivers/clk/qcom/clk-smd-rpm.c             | 300 ++++++++++++-----------------
+ drivers/interconnect/qcom/Makefile         |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c |  66 +++++++
+ drivers/interconnect/qcom/icc-rpm.c        | 212 ++++++++++----------
+ drivers/interconnect/qcom/icc-rpm.h        |  55 ++++--
+ drivers/interconnect/qcom/msm8916.c        |   4 +-
+ drivers/interconnect/qcom/msm8939.c        |   5 +-
+ drivers/interconnect/qcom/msm8974.c        |   2 +-
+ drivers/interconnect/qcom/msm8996.c        |   9 +-
+ drivers/interconnect/qcom/qcm2290.c        |   7 +-
+ drivers/interconnect/qcom/qcs404.c         |   4 +-
+ drivers/interconnect/qcom/sdm660.c         |   7 +-
+ drivers/interconnect/qcom/smd-rpm.c        |  39 +++-
+ drivers/interconnect/qcom/smd-rpm.h        |  15 --
+ include/linux/soc/qcom/smd-rpm.h           |  22 ++-
+ 15 files changed, 427 insertions(+), 322 deletions(-)
+---
+base-commit: 53ab6975c12d1ad86c599a8927e8c698b144d669
+change-id: 20230526-topic-smd_icc-b8213948a5ed
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
