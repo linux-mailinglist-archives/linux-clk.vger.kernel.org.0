@@ -2,132 +2,153 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E9772BB61
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 10:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C3372B2EF
+	for <lists+linux-clk@lfdr.de>; Sun, 11 Jun 2023 19:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjFLIzo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 04:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S229583AbjFKRC5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 11 Jun 2023 13:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234640AbjFLIyp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 04:54:45 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72741711;
-        Mon, 12 Jun 2023 01:53:09 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30aebe2602fso2590363f8f.3;
-        Mon, 12 Jun 2023 01:53:09 -0700 (PDT)
+        with ESMTP id S229523AbjFKRCz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 11 Jun 2023 13:02:55 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD046E63;
+        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so2156160a91.0;
+        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686559984; x=1689151984;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=aS9YsrNAcOn+NlKyUNyoFu7MvoAIEEYn2rw1UEKfcUg=;
-        b=dKjArm/xhT6edX4xaOmPXGu4g5jfK0NVxHxgtp+8qwLi0r4ZwcbMwnJElg3YMxWjb/
-         4+Oo39SV8Xi8f7hS7tg1LODUTpZh+vLmgw7LUO+F+TtVu/hnh00brmd65WQ2gticoWrM
-         NjZeguUUaYjBPL2jeUr9NsoIdQjNeBxXLkmrP0fU0ZdXUrqQUnlTwUJiMrgkze4sMdKr
-         F6lq7e+ZDFTiF4VFIvY74ZsZJeXsD82yiB7NzRi5sUUDQbENL7Gt54O0XwzqGhxVSm5c
-         JBK8lA/0ptgWGnh9JGGd9fYjTr6DCyG3uLGMa1Dk7jOSFoayjDNCdSZsetYddiWV264F
-         j7aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686559984; x=1689151984;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1686502974; x=1689094974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aS9YsrNAcOn+NlKyUNyoFu7MvoAIEEYn2rw1UEKfcUg=;
-        b=jWEKw1XfJsHbhhdGr5ntczAwdbIntG9lnQFEaG4Un7iw1OBMhP0gaKPcy9JgvrG1dY
-         C0qFaKmmtmteIQ6e8oRoMJU9MGX8z06YvEX06rdmy6YOk+ypVrRl9tpMnNqu+TvSrx2V
-         Jom+eryflvm8MwCxJ8QJtzKD6MF4yi1jnNNxm7phIlorehndTqRADxmzELawIbUgUT5Y
-         iX0vgcHsaFjesHqoFoc+nKeKYwXpICPGxobaB414QUGpmyZT64men52oSassAp/CF/vl
-         3BEJz8LW0yN23GjPKTLBDU+LJ6PZfptLYS/HeC2ee5QwGY0rBG0j9GQPT54GVFu8SSS7
-         tokg==
-X-Gm-Message-State: AC+VfDxN3kEQc8SKNqrTCqvPWrpfzc4WOAxYgK/ux9rUdTIC8mwoZ9p+
-        p67aLk9Pzi0XQcibZw/2lZ8=
-X-Google-Smtp-Source: ACHHUZ6OCXAHFB7ym2sqsJaX2aXW1mpqMoedSF5d27PM8ZVqy+wqMdokykjds2qq2trJkyITWxNVrw==
-X-Received: by 2002:adf:f10c:0:b0:30f:bb83:e6f6 with SMTP id r12-20020adff10c000000b0030fbb83e6f6mr2965454wro.0.1686559983908;
-        Mon, 12 Jun 2023 01:53:03 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id a3-20020a056000050300b003068f5cca8csm11758463wrf.94.2023.06.12.01.53.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 01:53:03 -0700 (PDT)
-Message-ID: <6486dcef.050a0220.4c054.4c59@mx.google.com>
-X-Google-Original-Message-ID: <ZIX12RbMtonZb+yM@Ansuel-xps.>
-Date:   Sun, 11 Jun 2023 18:27:05 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 00/18] ARM: qcom: apq8064: support CPU frequency scaling
-References: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
+        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
+        b=krayJ6uwWRTtbE+7Im6rE8BILvjlU83+RJsF2E+i5TO24DrKvzg4cLPYe6UAVudvJ8
+         Be2XUpr50dZfqxq+LOLvv9voaaTYvIsg6bkamBtggLW6ii/ugONs6LrjqwErtfpqOTZa
+         PiwTlhvtsVOkTwGOF95n9BTuGmVuZ/MJq/BI0R7GDa/sBKqzfdgtfXydrZvP3/bSh3u+
+         0SQ3KVrZjregxi2kG0glbTc0ncBKCVBt96zHMk/rfQELMGG2OuroUJPWcS7u2VpQfCpu
+         rqn2MzxuGIhhukFWNxv8pKJQVHYExePFXwlDLZAHqGcqOa0kTkw7dis8k8fXXqDk+HNd
+         VrMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686502974; x=1689094974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
+        b=cLxtBtVvbT+KYE7u6g+mKG2Re60ZMiS/vmpxv2falcbPESBqjXXfkwAVM6fq81BNZN
+         GqUT233km3758bdAeGduHwBpdi1aQjNA9Qb7ORN3eK6Ellm0khzlO5KX6OHBdZf+xHbM
+         mk9k1L6PXb7HUd9v2fXUaH80JPdz9ZE/Dgk+UtecgPJmzVCutGZfzFq5kfarHtSJUGQm
+         sOj9CAwJcLxPVyj8MpPEnbAY1fGU+LEmKOqrj+bG08M4Oi1p0JNAWvHMjG+lLZrW3+b6
+         Q27cIbQq2RedKz0vbsRfJ4b5Q2ZqYKnoWfqbDsQUdD+g3P/nGmploh2PUwsjYhTKIZAt
+         dKKA==
+X-Gm-Message-State: AC+VfDwoPaeqrytsT1Qb+ADCsUfrcpnuCysK4vSaj5Fe0YTwnPqa/t/+
+        uRsWlavSNOtwY5zXePUDGHptTCrlft7hDb7X/VI=
+X-Google-Smtp-Source: ACHHUZ7l+4TR3OHAvJEjzr3koYOCUElOXrpQlwUfhbtqoGZqePk86Nn0jhaQ0PWxIazQbuM4n3xcpXjQwvLY4Nidj6c=
+X-Received: by 2002:a17:90a:7565:b0:25b:ba0c:ab7c with SMTP id
+ q92-20020a17090a756500b0025bba0cab7cmr3444582pjk.27.1686502974159; Sun, 11
+ Jun 2023 10:02:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230506195325.876871-1-aford173@gmail.com> <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
+In-Reply-To: <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 11 Jun 2023 12:02:42 -0500
+Message-ID: <CAHCN7xLPKa2hrBMC1kaJkxVL9NC+c1TWgcQHMBPefnvxGPTCwQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 08:39:04AM +0300, Dmitry Baryshkov wrote:
-> Implement CPUFreq support for one of the oldest supported Qualcomm
-> platforms, APQ8064. Each core has independent power and frequency
-> control. Additionally the L2 cache is scaled to follow the CPU
-> frequencies (failure to do so results in strange semi-random crashes).
+On Tue, Jun 6, 2023 at 1:45=E2=80=AFPM Fabio Estevam <festevam@gmail.com> w=
+rote:
+>
+> On Sat, May 6, 2023 at 4:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
+te:
+> >
+> > Currently, certain clocks are derrived as a divider from their
+> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
+> > is set, the parent clock is not properly set which can lead
+> > to some relatively inaccurate clock values.
+> >
 
-Hi, can we talk, maybe in private about this interconnect-cpu thing?
++ Maxime
 
-I see you follow the original implementation of the msm_bus where in
-practice with the use of the kbps the correct clock and voltage was set.
-(and this was also used to set the fabric clock from nominal to fast)
+> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
+> > cannot rely on calling a standard determine_rate function,
+> > because the 8m composite clocks have a pre-divider and
+> > post-divider. Because of this, a custom determine_rate
+> > function is necessary to determine the maximum clock
+> > division which is equivalent to pre-divider * the
+> > post-divider.
+> >
+> > With this added, the system can attempt to adjust the parent rate
+> > when the proper flags are set which can lead to a more precise clock
+> > value.
+> >
+> > On the imx8mplus, no clock changes are present.
+> > On the Mini and Nano, this can help achieve more accurate
+> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
+> > on an imx8m Nano, the clocks divided the 594MHz down, but
+> > left the parent rate untouched which caused a calulation error.
+> >
+> > Before:
+> > video_pll              594000000
+> >   video_pll_bypass     594000000
+> >     video_pll_out      594000000
+> >       disp_pixel       31263158
+> >         disp_pixel_clk 31263158
+> >
+> > Variance =3D -236842 Hz
+> >
+> > After this patch:
+> > video_pll               31500000
+> >   video_pll_bypass      31500000
+> >     video_pll_out       31500000
+> >       disp_pixel        31500000
+> >         disp_pixel_clk  31500000
+> >
+> > Variance =3D 0 Hz
+> >
+> > All other clocks rates and parent were the same.
+> > Similar results on imx8mm were found.
+> >
+> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
+termine_rate"")
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+>
 
-On ipq806x and I assume other SoC there isn't always a 1:1 map of CPU
-freq and L2 freq. For example on ipq8064 we have max CPU freq of 1.4GHz
-and L2 freq of 1.2GHz, on ipq8065 we have CPU 1.7GHz and L2 of 1.4GHz.
-(and even that is curious since I used the debug regs and the cxo
-crystal to measure the clock by hardware (yes i ported the very ancient
-clk-debug to modern kernel and it works and discovered all sort of
-things) the L2 (I assume due to climitation of the hfpll) actually can't
-never reach that frequency (1.4GHz in reality results to something like
-1.2GHz from what I notice a stable clock is there only with frequency of
-max 1GHz))
+Peng / Abel,
 
-So my idea was to introduce a simple devfreq driver and use the PASSIVE
-governor where it was added the possibility to link to a CPU frequency
-and with interpolation select the L2 frequency (and voltage)
+Any suggestions on how we can move this forward?  Looking at the
+clk-composite-8m driver, imx8m_clk_composite_compute_dividers uses the
+max values which is basically what my patch does.  There was some
+discussion about making determine_rate mandatory for muxes[1] and this
+patch should help with this in addition to making it easier to sync
+more video resolutions on the 8m Mini and Nano.
 
-From some old comments in ancient qsdk code it was pointed out that due
-to a hw limitation the secondary cpu can't stay at a high clock if L2
-was at the idle clock. (no idea if this is specific to IPQ806x) So this
-might be a cause of your crash? (I also have random crash with L2
-scaling and we are planning to just force the L2 at max frequency)
+adam
+[1] - https://www.spinics.net/lists/alsa-devel/msg157914.html
 
-But sorry for all of this (maybe) useless info. I checked the other
-patch and I didn't understand how the different L2 frequency are
-declared and even the voltage. Is this something that will come later?
-I'm very interested in this implementation.
 
-> 
-> Core voltage is controlled through the SAW2 devices, one for each core.
-> The L2 has two regulators, vdd-mem and vdd-dig.
-> 
-> Depenency: [1] for interconnect-clk implementation
-> 
-> https://lore.kernel.org/linux-arm-msm/20230512001334.2983048-3-dmitry.baryshkov@linaro.org/
-> 
-
--- 
-	Ansuel
+> This works fine on my imx8mm-evk, so:
+>
+> Tested-by: Fabio Estevam <festevam@gmail.com>
