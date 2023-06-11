@@ -2,153 +2,257 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C3372B2EF
-	for <lists+linux-clk@lfdr.de>; Sun, 11 Jun 2023 19:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9B272C873
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 16:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjFKRC5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 11 Jun 2023 13:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S239103AbjFLO2N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 10:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFKRCz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 11 Jun 2023 13:02:55 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD046E63;
-        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so2156160a91.0;
-        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
+        with ESMTP id S238886AbjFLO1t (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 10:27:49 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0111FD9;
+        Mon, 12 Jun 2023 07:26:01 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f730c1253fso32875905e9.1;
+        Mon, 12 Jun 2023 07:26:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686502974; x=1689094974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
-        b=krayJ6uwWRTtbE+7Im6rE8BILvjlU83+RJsF2E+i5TO24DrKvzg4cLPYe6UAVudvJ8
-         Be2XUpr50dZfqxq+LOLvv9voaaTYvIsg6bkamBtggLW6ii/ugONs6LrjqwErtfpqOTZa
-         PiwTlhvtsVOkTwGOF95n9BTuGmVuZ/MJq/BI0R7GDa/sBKqzfdgtfXydrZvP3/bSh3u+
-         0SQ3KVrZjregxi2kG0glbTc0ncBKCVBt96zHMk/rfQELMGG2OuroUJPWcS7u2VpQfCpu
-         rqn2MzxuGIhhukFWNxv8pKJQVHYExePFXwlDLZAHqGcqOa0kTkw7dis8k8fXXqDk+HNd
-         VrMA==
+        d=gmail.com; s=20221208; t=1686579959; x=1689171959;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RjtSEA7DuOPBkcYthmOn7vURof3lAlYXKY7QmKw3HkY=;
+        b=Cwt8/EH1kDYTNz09VG4PrLvKE4Vjat0/KE85BrlKV5AzkkxI2MrMsU6Ee4FXxw6pkI
+         QehfdZgVRW8OUYq6ch0FzmGsloii12FBSnhvyFUZRZZZOUlZ799TeQPPshjIZgXSgjwb
+         OjMG07aw22Llo//b9xxnFVqiAaLA9acC/obL/Zcay9vJqmM1KqxMRJroFiS5+i+lFHy6
+         2xo+YbRUi8yjOGJAV7BFsFsEj7S7o41FrovPWQlp/8RL7SADp9MHfFzPxSrw5jIVVkbS
+         pw+YorK9pv6oHkr3k3W0SCipwnDrJLyHSz6KjefW/hMgvVSaZgbbGPtcT6E6LYmwriW2
+         0BGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686502974; x=1689094974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
-        b=cLxtBtVvbT+KYE7u6g+mKG2Re60ZMiS/vmpxv2falcbPESBqjXXfkwAVM6fq81BNZN
-         GqUT233km3758bdAeGduHwBpdi1aQjNA9Qb7ORN3eK6Ellm0khzlO5KX6OHBdZf+xHbM
-         mk9k1L6PXb7HUd9v2fXUaH80JPdz9ZE/Dgk+UtecgPJmzVCutGZfzFq5kfarHtSJUGQm
-         sOj9CAwJcLxPVyj8MpPEnbAY1fGU+LEmKOqrj+bG08M4Oi1p0JNAWvHMjG+lLZrW3+b6
-         Q27cIbQq2RedKz0vbsRfJ4b5Q2ZqYKnoWfqbDsQUdD+g3P/nGmploh2PUwsjYhTKIZAt
-         dKKA==
-X-Gm-Message-State: AC+VfDwoPaeqrytsT1Qb+ADCsUfrcpnuCysK4vSaj5Fe0YTwnPqa/t/+
-        uRsWlavSNOtwY5zXePUDGHptTCrlft7hDb7X/VI=
-X-Google-Smtp-Source: ACHHUZ7l+4TR3OHAvJEjzr3koYOCUElOXrpQlwUfhbtqoGZqePk86Nn0jhaQ0PWxIazQbuM4n3xcpXjQwvLY4Nidj6c=
-X-Received: by 2002:a17:90a:7565:b0:25b:ba0c:ab7c with SMTP id
- q92-20020a17090a756500b0025bba0cab7cmr3444582pjk.27.1686502974159; Sun, 11
- Jun 2023 10:02:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230506195325.876871-1-aford173@gmail.com> <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
-In-Reply-To: <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 11 Jun 2023 12:02:42 -0500
-Message-ID: <CAHCN7xLPKa2hrBMC1kaJkxVL9NC+c1TWgcQHMBPefnvxGPTCwQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        d=1e100.net; s=20221208; t=1686579959; x=1689171959;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RjtSEA7DuOPBkcYthmOn7vURof3lAlYXKY7QmKw3HkY=;
+        b=Y/70NrmSd9Jwi/ETn4fRIr/3JcV3OIoYylH8lgl8oLNBwqQ6sSTG9dRgWF4vUSFSMW
+         m8dR9QXbQgGoXc3ZwcfnsEC6TJD9zXPApah12lobq7JfILZGC58tSX4sF6GL58U4PPVD
+         Hka8fg7/GaZ1PDTrBQDAGtYwsjiTxABC1ygdM6odCOR0Cg3wLKISCOuH2WavS9sszu3M
+         zWGEMo3A2hbT+Ex2yGGcmfSCMKWO0kMYtj4oHFa2eTVuhtQxcrFitJbPvKp6gsW2006w
+         uw7SXxl2g5bYRpznYbjCquYwk5Az/Dq5Wxh9MKfjt2OAtf8pyS2U26x9KKJJKa6DrSGF
+         CU+A==
+X-Gm-Message-State: AC+VfDyp2TzBIPr7ptCAvFipxkUsGwG166Xdg4wik/n/GkR9CFNaqP7/
+        TQFJrfiPmA5U+DcIUQdl6JU=
+X-Google-Smtp-Source: ACHHUZ7Omyn97pOg8e3cGLPeeyE8qSbQSLg1G/lz5tM5DYso6n8pXS79Aq6p5zBQ9so0adBrOJ4W8Q==
+X-Received: by 2002:adf:e310:0:b0:306:3912:a7f0 with SMTP id b16-20020adfe310000000b003063912a7f0mr4144949wrj.50.1686579958579;
+        Mon, 12 Jun 2023 07:25:58 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id q7-20020adff947000000b0030af72bca98sm12584038wrr.103.2023.06.12.07.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 07:25:58 -0700 (PDT)
+Message-ID: <64872af6.df0a0220.53d8a.9284@mx.google.com>
+X-Google-Original-Message-ID: <ZIZHoO0e6gZtRP2B@Ansuel-xps.>
+Date:   Mon, 12 Jun 2023 00:16:00 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 15/18] ARM: dts: qcom: apq8064: provide voltage scaling
+ tables
+References: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
+ <20230612053922.3284394-16-dmitry.baryshkov@linaro.org>
+ <ZIbez4RA0OoVfHzt@gerhold.net>
+ <8c1085fd-8a73-d192-6624-d4f35728e68a@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c1085fd-8a73-d192-6624-d4f35728e68a@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 1:45=E2=80=AFPM Fabio Estevam <festevam@gmail.com> w=
-rote:
+On Mon, Jun 12, 2023 at 04:33:09PM +0300, Dmitry Baryshkov wrote:
+> On 12/06/2023 12:01, Stephan Gerhold wrote:
+> > On Mon, Jun 12, 2023 at 08:39:19AM +0300, Dmitry Baryshkov wrote:
+> > > APQ8064 has 4 speed bins, each of them having from 4 to 6 categorization
+> > > kinds. Provide tables necessary to handle voltage scaling on this SoC.
+> > > 
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >   arch/arm/boot/dts/qcom-apq8064.dtsi | 1017 +++++++++++++++++++++++++++
+> > >   1 file changed, 1017 insertions(+)
+> > > 
+> > > diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> > > index 4ef13f3d702b..f35853b59544 100644
+> > > --- a/arch/arm/boot/dts/qcom-apq8064.dtsi
+> > > +++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+> > > @@ -49,6 +49,9 @@ CPU0: cpu@0 {
+> > >   			clocks = <&kraitcc KRAIT_CPU_0>;
+> > >   			clock-names = "cpu";
+> > >   			clock-latency = <100000>;
+> > > +			vdd-mem-supply = <&pm8921_l24>;
+> > > +			vdd-dig-supply = <&pm8921_s3>;
+> > > +			vdd-core-supply = <&saw0_vreg>;
+> > >   			interconnects = <&kraitcc MASTER_KRAIT_L2 &kraitcc SLAVE_KRAIT_L2>;
+> > >   			operating-points-v2 = <&cpu_opp_table>;
+> > >   			#cooling-cells = <2>;
+> > > @@ -66,6 +69,9 @@ CPU1: cpu@1 {
+> > >   			clocks = <&kraitcc KRAIT_CPU_1>;
+> > >   			clock-names = "cpu";
+> > >   			clock-latency = <100000>;
+> > > +			vdd-mem-supply = <&pm8921_l24>;
+> > > +			vdd-dig-supply = <&pm8921_s3>;
+> > > +			vdd-core-supply = <&saw1_vreg>;
+> > >   			interconnects = <&kraitcc MASTER_KRAIT_L2 &kraitcc SLAVE_KRAIT_L2>;
+> > >   			operating-points-v2 = <&cpu_opp_table>;
+> > >   			#cooling-cells = <2>;
+> > > @@ -83,6 +89,9 @@ CPU2: cpu@2 {
+> > >   			clocks = <&kraitcc KRAIT_CPU_2>;
+> > >   			clock-names = "cpu";
+> > >   			clock-latency = <100000>;
+> > > +			vdd-mem-supply = <&pm8921_l24>;
+> > > +			vdd-dig-supply = <&pm8921_s3>;
+> > > +			vdd-core-supply = <&saw2_vreg>;
+> > >   			interconnects = <&kraitcc MASTER_KRAIT_L2 &kraitcc SLAVE_KRAIT_L2>;
+> > >   			operating-points-v2 = <&cpu_opp_table>;
+> > >   			#cooling-cells = <2>;
+> > > @@ -100,6 +109,9 @@ CPU3: cpu@3 {
+> > >   			clocks = <&kraitcc KRAIT_CPU_3>;
+> > >   			clock-names = "cpu";
+> > >   			clock-latency = <100000>;
+> > > +			vdd-mem-supply = <&pm8921_l24>;
+> > > +			vdd-dig-supply = <&pm8921_s3>;
+> > > +			vdd-core-supply = <&saw3_vreg>;
+> > >   			interconnects = <&kraitcc MASTER_KRAIT_L2 &kraitcc SLAVE_KRAIT_L2>;
+> > >   			operating-points-v2 = <&cpu_opp_table>;
+> > >   			#cooling-cells = <2>;
+> > > @@ -132,6 +144,81 @@ cpu_opp_table: opp-table-cpu {
+> > >   		opp-384000000 {
+> > >   			opp-hz = /bits/ 64 <384000000>;
+> > >   			opp-peak-kBps = <384000>;
+> > > +			opp-microvolt-speed0-pvs0 = <1050000 1050000 1150000>,
+> > > +						    <950000 950000 1150000>,
+> > > +						    <950000 950000 975000>;
+> > 
+> > I think this won't result in the correct switch order without making
+> > some changes to the OPP core. In _set_opp() the OPP core does
+> > 
+> > 	/* Scaling up? Configure required OPPs before frequency */
+> > 	if (!scaling_down) {
+> > 		_set_required_opps();
+> > 		_set_opp_bw();
+> > 		opp_table->config_regulators();
+> > 	}
+> > 
+> > 	opp_table->config_clks();
+> > 
+> > 	/* Scaling down? Configure required OPPs after frequency */
+> > 	if (scaling_down) {
+> > 		opp_table->config_regulators();
+> > 		_set_opp_bw();
+> > 		_set_required_opps();
+> > 	}
+> > 
+> > Since the "bandwidth" for the L2 cache is set before the regulators
+> > there is a short window where the L2 clock is running at a high
+> > frequency with too low voltage, which could potentially cause
+> > instability. On downstream this seems to be done in the proper order [1].
+> > 
+> > I'm not sure if the order in the OPP core is on purpose. If not, you
+> > could propose moving the config_regulators() first (for scaling up)
+> > and last (for scaling down). This would resolve the problem.
+> 
+> Nice catch, I missed this ordering point.
+> 
+> > 
+> > The alternative that I've already argued for on IRC in #linux-msm a
+> > couple of days ago would be to give the L2 cache (here: "interconnect")
+> > an own OPP table where it can describe its voltage requirements,
+> > independent from the CPU. That way the icc_set_bw() would be guaranteed
+> > to apply the correct voltage before adjusting the L2 cache clock. It
+> > looks like the "l2_level" voltages for vdd_dig and vdd_mem are not
+> > speedbin/PVS-specific [2] so this would also significantly reduce the DT
+> > size, since you wouldn't need to repeat the same vdd_dig/vdd_mem
+> > voltages for all of them.
+> 
+> Yes. I fact our discussion triggered me to do this patchset.
+> 
+> So, another option would be to have something like the following snippet. Do
+> you know if we are allowed to squish additional data into the L2 cache DT
+> node?
 >
-> On Sat, May 6, 2023 at 4:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
-te:
-> >
-> > Currently, certain clocks are derrived as a divider from their
-> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
-> > is set, the parent clock is not properly set which can lead
-> > to some relatively inaccurate clock values.
-> >
 
-+ Maxime
+I have a similar implementation with the l2 devfreq driver where I need
+to put a compatible in the l2-cache node. From what I observed, keeping
+the l2-cache node in the cpus node makes the extra compile not work
+(nothing is probed) but moving the l2-cache node in the soc node and
+referencing the phandle makes the compatible correctly works and that
+doesn't seems to cause any problem. IMHO it would be better to have a
+separate opp table for l2, should keep things more organized.
 
-> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
-> > cannot rely on calling a standard determine_rate function,
-> > because the 8m composite clocks have a pre-divider and
-> > post-divider. Because of this, a custom determine_rate
-> > function is necessary to determine the maximum clock
-> > division which is equivalent to pre-divider * the
-> > post-divider.
-> >
-> > With this added, the system can attempt to adjust the parent rate
-> > when the proper flags are set which can lead to a more precise clock
-> > value.
-> >
-> > On the imx8mplus, no clock changes are present.
-> > On the Mini and Nano, this can help achieve more accurate
-> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
-> > on an imx8m Nano, the clocks divided the 594MHz down, but
-> > left the parent rate untouched which caused a calulation error.
-> >
-> > Before:
-> > video_pll              594000000
-> >   video_pll_bypass     594000000
-> >     video_pll_out      594000000
-> >       disp_pixel       31263158
-> >         disp_pixel_clk 31263158
-> >
-> > Variance =3D -236842 Hz
-> >
-> > After this patch:
-> > video_pll               31500000
-> >   video_pll_bypass      31500000
-> >     video_pll_out       31500000
-> >       disp_pixel        31500000
-> >         disp_pixel_clk  31500000
-> >
-> > Variance =3D 0 Hz
-> >
-> > All other clocks rates and parent were the same.
-> > Similar results on imx8mm were found.
-> >
-> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
-termine_rate"")
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
->
+> CPU0: cpu@0 {
+>     vdd-core-supply = <&saw0_vreg>;
+>     interconnects = <&L2 MASTER_KRAIT_L2 &L2 SLAVE_KRAIT_L2>;
+>     operating-points-v2 = <&cpu_opp_table>;
+> };
+> 
+> L2: l2-cache {
+>     compatible = "qcom,apq8064-l2-cache", "cache";
+> 
+>     clocks = <&kraitcc KRAIT_L2>;
+>     vdd-mem-supply = <&pm8921_l24>;
+>     vdd-dig-supply = <&pm8921_s3>;
+>     operating-points-v2 = <&l2_opp_table>;
+> 
+>     l2_opp_table {
+>         compatible = "operating-points-v2";
+>         opp-384000000 {
+>             opp-hz = /bits/ 64 <384000000>;
+>             opp-microvolt = <1050000 1050000 1150000>,
+>                             <950000 950000 1150000>;
+>         };
+> 
+>         opp-648000000 {
+>             opp-hz = /bits/ 64 <648000000>;
+>             opp-microvolt = <1050000 1050000 1150000>,
+>                             <1050000 1050000 1150000>;
+>         };
+> 
+>         opp-1134000000 {
+>             opp-hz = /bits/ 64 <1134000000>;
+>             opp-microvolt = <1150000 1150000 1150000>,
+>                             <1150000 1150000 1150000>;
+>         };
+>     };
+> };
+> 
+> > 
+> > Thanks,
+> > Stephan
+> > 
+> > [1]: https://git.codelinaro.org/clo/la/kernel/msm/-/blob/LA.AF.1.2.1-08410-8064.0/arch/arm/mach-msm/acpuclock-krait.c#L529-588
+> > [2]: https://git.codelinaro.org/clo/la/kernel/msm/-/blob/LA.AF.1.2.1-08410-8064.0/arch/arm/mach-msm/acpuclock-8064.c#L118-135
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
 
-Peng / Abel,
-
-Any suggestions on how we can move this forward?  Looking at the
-clk-composite-8m driver, imx8m_clk_composite_compute_dividers uses the
-max values which is basically what my patch does.  There was some
-discussion about making determine_rate mandatory for muxes[1] and this
-patch should help with this in addition to making it easier to sync
-more video resolutions on the 8m Mini and Nano.
-
-adam
-[1] - https://www.spinics.net/lists/alsa-devel/msg157914.html
-
-
-> This works fine on my imx8mm-evk, so:
->
-> Tested-by: Fabio Estevam <festevam@gmail.com>
+-- 
+	Ansuel
