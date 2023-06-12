@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC2972BD04
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 856EC72BCFF
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjFLJtS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 05:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S231716AbjFLJsj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 05:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjFLJsH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:48:07 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DD55597
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:41 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977d02931d1so606202266b.0
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:41 -0700 (PDT)
+        with ESMTP id S231501AbjFLJrs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:47:48 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BB9A5ED
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:35 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-97668583210so611095066b.1
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686562407; x=1689154407;
+        d=linaro.org; s=google; t=1686562410; x=1689154410;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P7/I1ayBoe2EChOWGV7usCqZR+8SIH1+fvVOuYaCd8o=;
-        b=hQsfbC1hfvX/VkT1eqZm5DfS/WywUBfNcsJPDDu4FvXouSS4uGmSjMvie8Y7o22L8n
-         4PeVe/c0F18vWgnIz3raM4AR0kPeDO2Qbzjnc1UYuuoSoPBynADm400FuJz48W8fVwd2
-         tdA9yjlFwpO4H3g31t64F5OnsJCLzyI2ShbywFIZ6GW4XehMltmLEuPVXgXOEwikgqTz
-         Yi4/9ru4IUNjZxeg/FnBRwIC0dPNc+DMHIcX94ibRBIilBcsF8bfng+S8BTlHWyzd3ld
-         fNsS9lBggk3nKcLokp4hFOQ2JRXiMwhu8JCn4B7AkRJwMH2lmBf5Sex6BnCNmJ1H++Yp
-         y3+w==
+        bh=sn1KmoSk4w+76jXteo+X6vERxlyroWl5Pa1iBI+YhcU=;
+        b=aKH7YgYs7NdNLNjRM9saAyjtg6C3B3PKNqk8EubOZ6PjsYpJobwp71ACl+zvOE1iZb
+         9thz1H5IUgtL/SCUeJXGYRkmj5KgbZpHFsQDcZbwv/2q/YRrc+fPbfiSYYV9O/sw6+Rr
+         L3y8KeFvzqgT+g6J29ILMtchcRVu9zG1HOLeELMUENtL5YmqiXb79aLY8GRTERxHEko8
+         sbyoJuu7t5BHvloNCYKfQ0NwIPWoiZ4YwurXL6XjL2RNPfxGoaq57IOBZbKqyDFR4Vuk
+         175cfzC//CjQ3tTQubUK9eP2vVSP+DgR1Dn2lbHf5v6MSaq8WkFSEnm0R6jW1Pl6st8z
+         VClQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562407; x=1689154407;
+        d=1e100.net; s=20221208; t=1686562410; x=1689154410;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P7/I1ayBoe2EChOWGV7usCqZR+8SIH1+fvVOuYaCd8o=;
-        b=XwmO4Iznyxyhk1ryRbcrYjFbvsF3kIZbAV5u7eN+fP91VtP74duEwVEDUk7SkJnXRn
-         ewbwFbxVhuIZ+sGpra/lb7v+mBQE8bIX0NCVoQyqI4nsv8M3NKIkbHMzq+m8PVMTmEcw
-         rFW88q//RzqWv00pHDTyPq8dksLUufo5tuC0OJkQnaAGHrRTuhis+NYuVTvVLWBKuaYC
-         To4+TbzEsQqhekd9FS7waoKNgF0Vaevn/RajZpyv8KSgihczl3kH09VOmnDptH+E9jd5
-         GE5L5ulRDrYnurlkgOscjFkbNKJ3wC7bBJBf2B2QDY540XFOhzFtZi/gvtVu5fTYmcxF
-         W5+Q==
-X-Gm-Message-State: AC+VfDx/lPo1paAbg9Z/DAmE3GgMaRY7asHsduOdC1WjFWpntbvBpCVC
-        hjEyOzar3laXfwNDZqFnx3bMhw==
-X-Google-Smtp-Source: ACHHUZ7FiFwL8BPjh91CWEs26xmFRAo3yhdyy99t1MUNpBm1Q2o8g2tcPkZuAmMS/QfaGcOjlVTsVw==
-X-Received: by 2002:a17:907:2688:b0:967:a127:7e79 with SMTP id bn8-20020a170907268800b00967a1277e79mr8819298ejc.28.1686562407624;
-        Mon, 12 Jun 2023 02:33:27 -0700 (PDT)
+        bh=sn1KmoSk4w+76jXteo+X6vERxlyroWl5Pa1iBI+YhcU=;
+        b=Z5KgnvxlQaBgbC72EPurJirK8WB16rMsRf4/nBiPCW8m8OIBzmybJ/iH4cp3rbeZCE
+         hvS4aCgl+zchf5Erb5WihE9n2F0ypXoPeM9BrJbP+uPMHDj26BdwUKLyOfie9plT4klk
+         KVSIw18ERKL7MQq8bZL6BCyfL9HTQywq2hjALWyXVI3K9SrCm5khiZsTxvzBFZV7XddZ
+         +IL/6c+uwoCgidYtSGGFhDa2vvAK/rsl842Ys5dfKprNlIQ3dIUV9mcRqyEsb312ImVO
+         exk/26jKBh+dQ+ZrxqJF2ZQR0PD9E0WD2/qsaiYeTWmzsgLI6qpWPoEIYEISs/Zl4qw+
+         62Xg==
+X-Gm-Message-State: AC+VfDyVrIJ6bRP6Zg8dbjYUihIwE4M9Fjn6ZeHBnlkGG21gC5m3Y8Fr
+        UCqxLfEIy1L0ayRMGCFpU3nosw==
+X-Google-Smtp-Source: ACHHUZ4+8vTsEZaxwOtLPHygS9TYUr1UyDbsg0bBA37CkuzbfQ3tHT6uZY4O9wlvwavwYKWxUWhGsg==
+X-Received: by 2002:a17:906:ef07:b0:96f:7b4a:2904 with SMTP id f7-20020a170906ef0700b0096f7b4a2904mr9276446ejs.3.1686562409808;
+        Mon, 12 Jun 2023 02:33:29 -0700 (PDT)
 Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.26
+        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:33:27 -0700 (PDT)
+        Mon, 12 Jun 2023 02:33:29 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -58,23 +58,21 @@ To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Hao Luo <m202171776@hust.edu.cn>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
+        Zhanhao Hu <zero12113@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: clk-imx8mn: fix memory leak in imx8mn_clocks_probe
-Date:   Mon, 12 Jun 2023 12:32:39 +0300
-Message-Id: <168656228139.662397.489177987320185162.b4-ty@linaro.org>
+Subject: Re: [PATCH v2] clk: imx93: fix memory leak and missing unwind goto in imx93_clocks_probe
+Date:   Mon, 12 Jun 2023 12:32:40 +0300
+Message-Id: <168656228140.662397.4112940711975875013.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230411015107.2645-1-m202171776@hust.edu.cn>
-References: <20230411015107.2645-1-m202171776@hust.edu.cn>
+In-Reply-To: <20230601033825.336558-1-zero12113@hust.edu.cn>
+References: <20230601033825.336558-1-zero12113@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,20 +81,22 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-On Tue, 11 Apr 2023 09:51:07 +0800, Hao Luo wrote:
-> Use devm_of_iomap() instead of of_iomap() to automatically handle
-> the unused ioremap region.
+On Thu, 01 Jun 2023 03:38:25 +0000, Zhanhao Hu wrote:
+> In function probe(), it returns directly without unregistered hws
+> when error occurs.
 > 
-> If any error occurs, regions allocated by kzalloc() will leak,
-> but using devm_kzalloc() instead will automatically free the memory
-> using devm_kfree().
+> Fix this by adding 'goto unregister_hws;' on line 295 and
+> line 310.
+> 
+> Use devm_kzalloc() instead of kzalloc() to automatically
+> free the memory using devm_kfree() when error occurs.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] clk: imx: clk-imx8mn: fix memory leak in imx8mn_clocks_probe
-      commit: 188d070de9132667956f5aadd98d2bd87d3eac89
+[1/1] clk: imx93: fix memory leak and missing unwind goto in imx93_clocks_probe
+      commit: e02ba11b457647050cb16e7cad16cec3c252fade
 
 Best regards,
 -- 
