@@ -2,80 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3309E72BC5A
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2EF72BCFD
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbjFLJ3F (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 05:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S234765AbjFLJsb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 05:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjFLJ20 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:28:26 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD544C0C
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:22:53 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f642a24555so4795453e87.3
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:22:53 -0700 (PDT)
+        with ESMTP id S234769AbjFLJrn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:47:43 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9147A5E3
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:32 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-973bf581759so731800366b.0
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686561772; x=1689153772;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wF7kJNEVNClZhr22GJ39Mf3qOuL6Q0VFjYnT8ReRfhE=;
-        b=TQFyRQ9dCAAjzWOD1qlKjLIaGuoxP8JtMlaRrMdhIDuLRK4jGXpvd9VWW5vx2qTjIS
-         IgZLOVYLfGkuntkIxDONGBdGyukhQOKTQmYYsLh6KJvYOtOMEaC0oDUQ4TeQllmB9DSM
-         1TzEhCcbitB1S1jqEYzXDhZK370PA2R3KJV++NAO93DIWdcAszS+iaCEEAxw1tcDm7H7
-         mJ3naSjr4iUs1S/w7yidyLrpmVQyer7mjnZsSGAneL767HuG0AOWbx6jTgPk1QCfDYUv
-         NV/wwsgN7wXiJhI9YdNMImRO+Q7nHpXyWashbxmUNzs1qz2q4TAHosQq1BUxtgizWvKX
-         HqVA==
+        d=linaro.org; s=google; t=1686562382; x=1689154382;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wsfv8tU8typbArcFFZ3RmodVuhSCsV+o3+M2ATwIwoQ=;
+        b=TUVRaQrj978yj3MbisxqkjQ+TD0JBBm+EutSEaAHeOCuts1Q0j2OuxULpIx2+Bsi15
+         ltrB5Na0agI4WZIIGzJAK7rc6fkrTgH3/y+DbfbT7KocetCj2XbBDy8QAae/kCI03fcV
+         qqb5R0jk/XnngPe6DCxaj7C2MBSVu7X4Sf2Lbyc3+h624qAUhkiURnZDcXbFrOMcI8Go
+         OVnmbrHSlbfViKCQXu3P8DpOOaekybyyjRU7ezTIAYuQczHEHfthZeWLR0Nld+mrVTxZ
+         +9dWL+Vn5v8E4pBCcKXcmRdNfkln8Dycfdu6ib76K8yO27yfeZVCqD1kFtV+CUf5pmqW
+         wOIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686561772; x=1689153772;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686562382; x=1689154382;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wF7kJNEVNClZhr22GJ39Mf3qOuL6Q0VFjYnT8ReRfhE=;
-        b=hotN3jcetqE8qkxGIQE2Jl4jD65JoMhrmeF9EH/3r0r5faL7E+HIJM3dplaF6zuoam
-         6BEOFcXSD9ujBzI2IbY+hYHIC9F2DXFs23BSH5kBkrzTZ0VQZkLowpTRVHNnSfNEuetI
-         d5Avxug98AUKpUk1hr8IWYED8u2ZnRoOf9DLa8uI8pJv0OfLPwIhJHVKdyAqpqvRaHJm
-         9AEYYhlo43EU9R/SGhpSH8NjmBrP7bkQ0bCBk/kCacEdjuD4S3GFR+/W+iWgUNnB8g1b
-         YVY9Y92NaK2Vjmy8N2bC3cVKdeiEJIt/y2zC4AeAJ5G+DBGA5fRQnm3KnPwappBBd1zY
-         gnwQ==
-X-Gm-Message-State: AC+VfDwhahV69OTyKrDykSUjf9IoNqwFrI/5w8tVagkkuQiUKyxI2kl7
-        9FncRDlkfJM8HyZkhgnB4S5GIw==
-X-Google-Smtp-Source: ACHHUZ7RbAzssVMBcdrvdXlaVgKlkWxS5u0gD99JnUeFDv45MtVzgcIujsTbpXWa2jpkgJNModhPWA==
-X-Received: by 2002:a2e:8719:0:b0:2b1:e65a:a1d3 with SMTP id m25-20020a2e8719000000b002b1e65aa1d3mr2200583lji.40.1686561771994;
-        Mon, 12 Jun 2023 02:22:51 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id o20-20020a2e7314000000b002adc2fe3fc8sm1681722ljc.4.2023.06.12.02.22.51
+        bh=Wsfv8tU8typbArcFFZ3RmodVuhSCsV+o3+M2ATwIwoQ=;
+        b=E0bxgnhzsrZUlugC/QCFSjk0T/GiODP61lF8+mMMAS0D5fJXpRqQyAhmHc1QdoCrp5
+         vFMP6yAj05PyLW1c2aB61lFgVBFZa40EuE7qKHmNMqK9CpgO06SS9ty+lpLmqq/xaiLx
+         OMkhjy4Xj00qOiVRaimi2Y04v49rK++NeOxkqgPj58mUByBia6Wo4TR9vSyOpTsskbUw
+         RL/7HL+oclhoGmwSdXXAuqZGHlkf92IelJEzaRDRSJIz13I6+52u8QWOakCCPsH4jpM6
+         de4KG9Y6VPqMBCdlmAvWOag6ENu6e/M3CrMoph0lh9plFVTApfCFOCZwDad3oHLLZT5x
+         SZUw==
+X-Gm-Message-State: AC+VfDwwE4R0uw15UCYJnJuX2oSch5hmTYwSsPaPklhYkC9tk2XC2gZj
+        ZuyU3fgQH7TYXTchBKaEcmejKMRdr3YmDxLS91k=
+X-Google-Smtp-Source: ACHHUZ4FRCeN8jvFzEJ3tb+8GoTw8KH3QdvMi+2BF4JcQt89B9Ozs9bBPixR/raWCid1tZtHQT9T4Q==
+X-Received: by 2002:a17:906:4796:b0:973:fd02:a41f with SMTP id cw22-20020a170906479600b00973fd02a41fmr10476799ejc.40.1686562382087;
+        Mon, 12 Jun 2023 02:33:02 -0700 (PDT)
+Received: from hackbox.lan ([86.121.163.20])
+        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:22:51 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 12 Jun 2023 11:22:48 +0200
-Subject: [PATCH 2/2] clk: qcom: gcc-msm8996: Use read-only RCG ops for RPM
- bus clocks
+        Mon, 12 Jun 2023 02:33:01 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     linux-clk@vger.kernel.org, Adam Ford <aford173@gmail.com>
+Cc:     aford@beaconembedded.com, Abel Vesa <abelvesa@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+Date:   Mon, 12 Jun 2023 12:32:35 +0300
+Message-Id: <168656228135.662397.14806433100721864469.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230506195325.876871-1-aford173@gmail.com>
+References: <20230506195325.876871-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230612-topic-rcg2_ro-v1-2-e7d824aeb628@linaro.org>
-References: <20230612-topic-rcg2_ro-v1-0-e7d824aeb628@linaro.org>
-In-Reply-To: <20230612-topic-rcg2_ro-v1-0-e7d824aeb628@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686561768; l=1415;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ciUM7VVqmyaHUus+1v7jieLBfQZSXfrd5Ukd9qFyQXo=;
- b=34ZFn6hCgCgNYS/VVRxB/dsQm8stj9nIrROWY7b0B1M6RqHvB/A+SpcLbyv4XA5qQ4vbLebmW
- giUvvTAi9p0BcxEhM4uBTY9UCEv86kBgUMnYvr0BMrglAgg99c9oOtL
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -86,49 +80,28 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The config/periph/system NoC clocks are wholly controlled by the
-RPM firmware and Linux should never ever alter their configuration.
 
-Switch them over to read-only ops to avoid that.
+On Sat, 06 May 2023 14:53:25 -0500, Adam Ford wrote:
+> Currently, certain clocks are derrived as a divider from their
+> parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
+> is set, the parent clock is not properly set which can lead
+> to some relatively inaccurate clock values.
+> 
+> Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
+> cannot rely on calling a standard determine_rate function,
+> because the 8m composite clocks have a pre-divider and
+> post-divider. Because of this, a custom determine_rate
+> function is necessary to determine the maximum clock
+> division which is equivalent to pre-divider * the
+> post-divider.
+> 
+> [...]
 
-Fixes: b1e010c0730a ("clk: qcom: Add MSM8996 Global Clock Control (GCC) driver")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/gcc-msm8996.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/clk/qcom/gcc-msm8996.c b/drivers/clk/qcom/gcc-msm8996.c
-index 5e44d1bcca9e..588e3b67657a 100644
---- a/drivers/clk/qcom/gcc-msm8996.c
-+++ b/drivers/clk/qcom/gcc-msm8996.c
-@@ -264,7 +264,7 @@ static struct clk_rcg2 system_noc_clk_src = {
- 		.name = "system_noc_clk_src",
- 		.parent_data = gcc_xo_gpll0_gpll0_early_div,
- 		.num_parents = ARRAY_SIZE(gcc_xo_gpll0_gpll0_early_div),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_ro_ops,
- 	},
- };
- 
-@@ -284,7 +284,7 @@ static struct clk_rcg2 config_noc_clk_src = {
- 		.name = "config_noc_clk_src",
- 		.parent_data = gcc_xo_gpll0,
- 		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_ro_ops,
- 	},
- };
- 
-@@ -306,7 +306,7 @@ static struct clk_rcg2 periph_noc_clk_src = {
- 		.name = "periph_noc_clk_src",
- 		.parent_data = gcc_xo_gpll0,
- 		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_ro_ops,
- 	},
- };
- 
+[1/1] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+      commit: 8208181fe536bba3b411508f81c4426fc9c71d9a
 
+Best regards,
 -- 
-2.41.0
-
+Abel Vesa <abel.vesa@linaro.org>
