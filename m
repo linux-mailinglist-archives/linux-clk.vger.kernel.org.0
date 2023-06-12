@@ -2,80 +2,131 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C8E72CE61
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 20:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A9472CEEA
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 21:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbjFLSa5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 14:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S237643AbjFLTDx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 15:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237548AbjFLSaz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 14:30:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B060FCE;
-        Mon, 12 Jun 2023 11:30:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S237636AbjFLTDw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 15:03:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ED0B7;
+        Mon, 12 Jun 2023 12:03:49 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CFCC617E6;
-        Mon, 12 Jun 2023 18:30:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94604C433D2;
-        Mon, 12 Jun 2023 18:30:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686594653;
-        bh=QxpJzmrhs/s31q92ok3v7gD12r5Tp5raaCXLllOa6g0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=UvXzMCZI4lZ0ZAohnpSdiE521Tv/m8RJSWTongiULPGyPP05a4Yu7ILM7Og6cN/0m
-         g178wqzsU0l2t7XKDslRurm1hTvuZGc4nqEMFN67TBRzHTpI11YZSI6qxx6rkFIoBn
-         cgpKYbBRKUGMj0vcN24QD4eXLuLNfKZjFdvHxgmsf4G9qoqWro7MfSoc8e7577xHmG
-         eTUlxVa8heGtfQlyKSsbtoSv0+EV29H8RK/U40zrLRXKUw0ry2R/YcylDB+HP5V8Qi
-         QkfAs0fJAi6HueM9Rc4ayhnkkgx20dwJGEnQj2/9yqIY7vccK1am2M70zWE3acv2Uk
-         mhkdV5zflbBYg==
-Message-ID: <c602fd10aed6f16e6ff2be772dfc5ba3.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 598B16606EAE;
+        Mon, 12 Jun 2023 20:03:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686596627;
+        bh=skSAnaTgSHIV6cwfzXxaMUW4myAnueW+/ns3bFUzy8M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bJf/h/MKb4PKJ/uT4rymeQgnn0AllhVGqODjBRQDpE57+Wxi/lMfC8ncPQ296ZiQn
+         sCiTiqNTX3mlAgBI3bbXccPVVcvUffOrx4pqlPhzh5jIFL2szdnE9tK7ZL3wyTjYyP
+         Ksc7VY7cbgFNvKxGgEavDw0NprkEh5aLbX6v7t00uiOW44RAe8n4ReZQtGnfQBVC/x
+         hmX2luZj3O21yCQki+gw+Ot3iJz9y0K6niH/NPyjLwxxOzL4GpP8171UilbtnsDh12
+         +J4l/Dc4sDW7jGQhSe/7oYvJZwSWb1m/6P7DOo+J06sMZ+KWz26T+k6X5XToMvdDjL
+         LBoNvN30WoGEA==
+Date:   Mon, 12 Jun 2023 15:03:39 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 0/5] Enable decoder for mt8183
+Message-ID: <e8ddbc54-b929-4363-9bc7-b0f406062f46@notapiano>
+References: <20230607205714.510012-1-nfraprado@collabora.com>
+ <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
+ <fda4f196-8466-8290-9072-d80fff367720@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230612175910.289428-1-krzysztof.kozlowski@linaro.org>
-References: <20230612175910.289428-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [GIT PULL] clk: samsung: drivers for v6.5
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-clk@vger.kernel.org, Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Mon, 12 Jun 2023 11:30:51 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fda4f196-8466-8290-9072-d80fff367720@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2023-06-12 10:59:10)
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d=
-1b:
->=20
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
->=20
-> are available in the Git repository at:
->=20
->   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/sam=
-sung-clk-6.5
->=20
-> for you to fetch changes up to 2aac2d8b95923203e683c60124877ab434133679:
->=20
->   clk: samsung: add CONFIG_OF dependency (2023-06-12 11:45:20 +0200)
->=20
-> ----------------------------------------------------------------
+On Mon, Jun 12, 2023 at 11:53:51AM +0200, AngeloGioacchino Del Regno wrote:
+> Il 12/06/23 09:02, Hans Verkuil ha scritto:
+> > Hi Nicolas,
+> > 
+> > On 07/06/2023 22:53, Nícolas F. R. A. Prado wrote:
+> > > 
+> > > This series enables the hardware decoder present on mt8183. At first
+> > > glance, the only missing piece is the devicetree node for it, however,
+> > > simply adding it as is would cause an address collision between the
+> > > first register iospace and the clock-controller node, so a rework of the
+> > > dt-binding and driver, as well as addition of a clock, were needed
+> > > first.
+> > > 
+> > > Tested that H264 decoding works with the hardware decoder on
+> > > mt8183-kukui-jacuzzi-juniper-sku16, giving a fluster score of 98/135 on
+> > > the JVT-AVC_V1 test suite. And ensured other SoCs (MT8192 and MT8195)
+> > > still work as usual.
+> > > 
+> > > Changes in v2:
+> > > - Merged commit 1 (media: dt-bindings: mediatek,vcodec: Allow single
+> > >    clock for mt8183) into commit 3 (media: dt-bindings: mediatek,vcodec:
+> > >    Remove VDEC_SYS for mt8183)
+> > > - Further constrained properties in dt-binding
+> > > - Added CLK_IGNORE_UNUSED flag to active clock
+> > > - Reformatted reg-names in DT node
+> > > 
+> > > Nícolas F. R. A. Prado (4):
+> > >    media: dt-bindings: mediatek,vcodec: Don't require assigned-clocks
+> > >    media: dt-bindings: mediatek,vcodec: Remove VDEC_SYS for mt8183
+> > >    media: mediatek: vcodec: Read HW active status from clock
+> > >    clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
+> > 
+> > Is the clk patch independent from the others? It's not clear to me.
+> > 
+> > If the clk patch has to go in together with the media patches, then
+> > please let me know and post a v3 where the clk patch is also CC-ed to
+> > the linux-media mailinglist to ensure it ends up in our patchwork system.
+> > 
+> > And in that case I need a Acked-by from the clk maintainer as well.
+> > 
+> > If it is independent, then there is no need for a v3 (at least, not
+> > for this).
+> > 
+> 
+> The clock patch is not independent, as in the devicetree changes will not
+> work without the addition of that clock (and of course even fail building),
 
-Thanks. Pulled into clk-next
+Yes, but that means that the devicetree patch is dependent of the clock patch,
+but the clock patch is independent from the media patches, and can therefore be
+applied through the clock tree as usual.
+
+So, the media patches (first three) can be merged through the media tree, the
+clock patch (patch 4) through the clock tree independently, and the only
+requirement is that the DT patch (last one) is only applied by Matthias after
+the clock patch is present, to avoid build problems, and also after the media
+patches are present, to avoid dt-binding errors.
+
+Thanks,
+Nícolas
