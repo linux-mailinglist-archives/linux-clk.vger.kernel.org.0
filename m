@@ -2,61 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5226872BF1A
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 12:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD4872BEA1
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 12:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjFLKcw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 06:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S233496AbjFLKSX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 06:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjFLKc1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 06:32:27 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDC87AB6
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 03:13:46 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977d6aa3758so769566166b.0
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 03:13:46 -0700 (PDT)
+        with ESMTP id S234784AbjFLKRx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 06:17:53 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052231BF
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:58:46 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f7353993cbso30096425e9.0
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686564762; x=1689156762;
+        d=linaro.org; s=google; t=1686563861; x=1689155861;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lOOxEd2xRnDWvkV9MYR7ZpqM0tsywyUgbl+DjOPrtcI=;
-        b=TEbxE9fCqqd04azWaxWMjq+SdQRFxchshHtaB2WvfQu639l0VblFw22nOG5Xea0lGY
-         Dy4zmbbkd2ZLFkP91ywGTjOebWZ+VgFNwFOWrXZzI/73YCa2P+cGVgYbaE4tmIuF9I7x
-         TMGODOZHZjxA8N0zrmdshwWw0y+yl7RoJzOii+zeQ+vOz8Pf/BFGaDggt/iJrOZPWu0F
-         iEChFogQBr5kfLanIymT9KDS9URTqt/FrvlELhPdnEwpCXA4oQdm6bNTeUldHWeq7Sxy
-         Ct7TA6f3vrBkP4qduA/W+BvA5xCH2z5WcpLtu/eEX24/p3xEd67Hg/YVYr0WfpA+rkOS
-         Gd8Q==
+        bh=pW6LNHkUsFsDtatHPA0cTf9hV8W1qigWKCpwsjlPFFw=;
+        b=c/uc4KxsNRJuJ5LrA5ofTHqYaSQTZ913puzEgT2mMR2sSfaV4emsaFkSnGa6PBcrk0
+         /vDyvv7YbkF0+XfI8mWTYLhJ4deYQ5rSEEtyUNx3OecLMNO0XoiJJZF0UJ41qHi1xl3i
+         HXrxUiWSoOMBBbjZtm4sEu+f1sP90rfj2vtSg6+CAxuESkMjDLTmCn85n7xbwQxT+Zib
+         8yzlF0HdtnjjIx5h91wWdBreD6vrcAKS++4eX8Y+x1bm4CO+kHA0eFtM0qE4mfMl3ztn
+         WPv+7m+sJFe8+bhnoWmEze21PEBRzDNFWFRn2fEkUM30YKKmzoELU9B4QYbMGWucw6P/
+         WQ9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686564762; x=1689156762;
+        d=1e100.net; s=20221208; t=1686563861; x=1689155861;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lOOxEd2xRnDWvkV9MYR7ZpqM0tsywyUgbl+DjOPrtcI=;
-        b=jS1IY3ywPRgwBp633n7mtDTUYnHHKPfGOctngsK5j8aVVeOpn62VpjJzjH6Ru/+bbT
-         FSY54IEgAFmTaOnInVKsZVlpUVIigSttWfcjwE3YuyB+xcuAX6jkNghNrWaTCscDMgBz
-         AwxrTri7oJoYaEz9Dwd0bVBhWj/qPZePNF2W2xWOMZ358OJxPgh3lQmInR/ITRgtLCvE
-         PQ++/N7fHfG2eO9mvzbL7t5nV7cZkpbTMZJpSQG4aqjPwEZ334QqAauPPzROzQl5WSgY
-         u7rmm+g/Lt4pSEU5OYFsKMPSHpRfC6WVu8U57TfG7c3fOyepkaw/JP+NlbVAKDmy4ups
-         JgJw==
-X-Gm-Message-State: AC+VfDwVakc6DKNgF7XnfRDDLOnA6ST5Sm7QntHALgCn4R6r/duPDNw6
-        Ixc1g+xgf0ygtU/hA1WjrdmWmKT6SQANbQXabWCP1w==
-X-Google-Smtp-Source: ACHHUZ7bAin2qHyq751KCqeq2lmQX/cv1gGyRiT9SrOjqUby7VhGU3UM7adN434G3TQrv12zf5sM8Q==
-X-Received: by 2002:a7b:c7d4:0:b0:3f6:389:73b1 with SMTP id z20-20020a7bc7d4000000b003f6038973b1mr5463785wmk.6.1686563860453;
-        Mon, 12 Jun 2023 02:57:40 -0700 (PDT)
+        bh=pW6LNHkUsFsDtatHPA0cTf9hV8W1qigWKCpwsjlPFFw=;
+        b=KZvLY0KaRlhhbqIFgrZpY8hzc70QwRDW2WWOC6ZmSQlyWCwhseouqMFJMY0VQ3Iz+N
+         lrkmG7J55IrXYwt9iOPBRRqEGQMw6hl605OMllOjv5a/ACPDWta1SP6RM/8riIbzAZUX
+         tv3O1APxHp0TNzU1kByyr/H2xZjzG2cu7iXIY5EPdqSqA8ZXjQly6e93dHL5DRAGuRmT
+         gu1hxP0W/LdrwL5UPS0A7ygJeW5qMc8shkdfl8YS9spKM06jq26ejZjru5b/eXXaBJKx
+         u+c2VRKINxw1Di0iMXegEush2XSPi24sybKJIqvlzEsst1LgEbL6BU8aaHt3gKbsXFVf
+         xKNw==
+X-Gm-Message-State: AC+VfDyEmUHWwTQcle9mi/DZlElBTFxibQ4tLr8xdHqOzE0Qwt5GDNE1
+        k/+Fipjqxzxb7Wqxa1bxF8RWUw==
+X-Google-Smtp-Source: ACHHUZ7mSX5HlmT+AV39OxscjjHTjDt0Mhmb1l1rw7w0rne9EpWVO1cKOdt1iAtqMy262JJ4HdbVRg==
+X-Received: by 2002:a05:600c:34cf:b0:3f7:ecdf:ab2d with SMTP id d15-20020a05600c34cf00b003f7ecdfab2dmr8520586wmq.20.1686563861437;
+        Mon, 12 Jun 2023 02:57:41 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id f25-20020a7bcd19000000b003f7ff520a14sm10829525wmj.22.2023.06.12.02.57.39
+        by smtp.gmail.com with ESMTPSA id f25-20020a7bcd19000000b003f7ff520a14sm10829525wmj.22.2023.06.12.02.57.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:57:40 -0700 (PDT)
+        Mon, 12 Jun 2023 02:57:41 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 12 Jun 2023 11:57:23 +0200
-Subject: [PATCH v2 06/19] clk: meson: migrate axg-audio out of
- hw_onecell_data to drop NR_CLKS
+Date:   Mon, 12 Jun 2023 11:57:24 +0200
+Subject: [PATCH v2 07/19] dt-bindings: clk: gxbb-clkc: expose all clock ids
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-6-38172d17c27a@linaro.org>
+Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-7-38172d17c27a@linaro.org>
 References: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org>
 In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -70,999 +69,266 @@ To:     Jerome Brunet <jbrunet@baylibre.com>,
 Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=47059;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8080;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=YYX8lIIX3jmzeg3HrTwt23DnMW06lvpdqlxryX5P8sk=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkhuwHMhDmE3npYCRQ4KpmtnMHjStrV2MAebZkiaCy
- 8ms7j/SJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIbsBwAKCRB33NvayMhJ0Y4NEA
- C8BDxHioRqbCUE0mQSn8B6d8f7JpQbSjrwV1ngJvhinIK8VpxLYJYwkoUjEamXA8WwORN529xcQ0ZL
- TV8eZqash2rQQ+MvD+7aQxPHJqqU0Nnz4K94XYSVM9B7Es7bhMveimqLLNOpmhtkOwQzn4ctC2a3Xe
- adr0a0dCe715Gszjv4RlI4oXkGsDEa5M0+FwgqP2TS6KY3/D5l7R8szvW1HvjGLk4BfqnwckQvw8jk
- zoaUbkzm1KYuwGis10ENe+3WJyqPTXjBVpXnLG3NcoQXWGzUSdE2CBTwDTsn4lSBkf/5hnzgoL3cdb
- 6QVmIJ3YruonGOEchThsNUl8+O6pUZPwz4hoVmY7VmFPji0EOaEUNDB5jSc4CXQg6fO4hhqYZuZscB
- AJjpEUXNTLyhpN5IR7AHHyPHz0TqfgVfHwfKAraJsyM1Ic6E61lq/CpoujD9X0paO744MkHRg87BB4
- yxBvMvBbWu3SlZ5oYq0duLy0JyHfqLUUsm0c1KNfMtuD3I4zu7EiFmZYHrCIZzKhhtrMg3bWVWr8vW
- yNC1kchGqCrHMVj4mM9DRw3RpVWcym3ySK+ppaaLu5NsvHB1WrHEgFaWx6PKoL4U/4f/oN2U1RBWD/
- LBGcg/wEtx7vLfKtRaaDrk46cBZEGKhdoQbmLM2//1W8+j4L/SJcupyNac8w==
+ bh=GEoLrmVkTd3U2cPEqC0OW2YcUoe4iepMGORul/q6OMA=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkhuwHZCXvm7cZMrjnF1wfJtU6Eb5yVQEo4Hqqhw2e
+ GaENpPaJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIbsBwAKCRB33NvayMhJ0dVfEA
+ DOsGUqJAuaqj30HPo9R5ZmiBoN8DCXuDm+Rxd2uZqC+U+UQQCZxzVkhXDuLvzA/u2KXpOMbR+h5Zel
+ 88mppTk7KO4uMxZGQvpMZY2jdrskR59+ZqsbP38eltvXuaQ3v0fkBr2sViXzNCLEENFUcewDUV5vDP
+ 38gghi+oETuXKDKBWckjtCDbZitqdISVXjBxGrZnTNCKJNI+bj2RZpGN9YiShZ6TNUUdzyhVz9Wwmz
+ tC1rdJPKVgMYAhCUFAdGz4CvgUtnPUNV0M05El4Crnzxz2tqsK7QO6CFEHpaW+ZjEWDCjUGk6D9KHA
+ NJbxiSyIbwHCaJFB78B+MZNgZywUCI03fJ/DN0/2IiDfAzPnQh8JGqECvVXo7U8EltpmdcINXL4MHG
+ Kqo/Mz2q9skPlVN/HR08NWkI9zMRzXh5/yre/3B+XvakQj/1SiuoxV76zIQ0tU/5wK5Q21u/g1f/Ow
+ VyqDgFE60wVwhSXX5pIBz5brNojlbFYOkIWta+DXu7/xuSo2Agd/HumCbv8IpLH9Wfc/oReL8keMlo
+ 9tjJGRPZ9TmNPDBikr59NNhYDvG68Wnv2HuBBg1Ba506jRAVgmRMIYZAIBlpc0jZzZdhZnIhxK1Q1e
+ JkXpLfkFaPVP98bTENZM0gaFu7u0g7t69FSUP6S8fI4BsL3Dmba3wA1Ow1UQ==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The way hw_onecell_data is declared:
-struct clk_hw_onecell_data {
-	unsigned int num;
-	struct clk_hw *hws[];
-};
+Due to a policy change in clock ID bindings handling, expose
+all the "private" clock IDs to the public clock dt-bindings
+to move out of the previous maintenance scheme.
 
-makes it impossible to have the clk_hw table declared outside while
-using ARRAY_SIZE() to determine ".num" due to ".hws" being a flexible
-array member.
+This refers to a discussion at [1] & [2] with Krzysztof about
+the issue with the current maintenance.
 
-Completely move out of hw_onecell_data and add a custom
-devm_of_clk_add_hw_provider() "get" callback to retrieve the clk_hw
-in order to finally get rid on the NR_CLKS define.
+It was decided to move every gxbb-clkc ID to the public clock
+dt-bindings headers to be merged in a single tree so we
+can safely add new clocks without having merge issues.
 
+[1] https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
+[2] https://lore.kernel.org/all/2fabe721-7434-43e7-bae5-088a42ba128d@app.fastmail.com/
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/clk/meson/Kconfig     |   1 +
- drivers/clk/meson/axg-audio.c | 849 +++++++++++++++++++++---------------------
- drivers/clk/meson/axg-audio.h |   2 -
- 3 files changed, 424 insertions(+), 428 deletions(-)
+ drivers/clk/meson/gxbb.h              | 76 -----------------------------------
+ include/dt-bindings/clock/gxbb-clkc.h | 65 ++++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+), 76 deletions(-)
 
-diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-index ea88309c9582..135da8f2d0b1 100644
---- a/drivers/clk/meson/Kconfig
-+++ b/drivers/clk/meson/Kconfig
-@@ -100,6 +100,7 @@ config COMMON_CLK_AXG_AUDIO
- 	select COMMON_CLK_MESON_REGMAP
- 	select COMMON_CLK_MESON_PHASE
- 	select COMMON_CLK_MESON_SCLK_DIV
-+	select COMMON_CLK_MESON_CLKC_UTILS
- 	select REGMAP_MMIO
- 	help
- 	  Support for the audio clock controller on AmLogic A113D devices,
-diff --git a/drivers/clk/meson/axg-audio.c b/drivers/clk/meson/axg-audio.c
-index 5016682e47c8..6917e35232b6 100644
---- a/drivers/clk/meson/axg-audio.c
-+++ b/drivers/clk/meson/axg-audio.c
-@@ -15,6 +15,7 @@
- #include <linux/reset-controller.h>
- #include <linux/slab.h>
+diff --git a/drivers/clk/meson/gxbb.h b/drivers/clk/meson/gxbb.h
+index 6751cda25986..798ffb911103 100644
+--- a/drivers/clk/meson/gxbb.h
++++ b/drivers/clk/meson/gxbb.h
+@@ -112,82 +112,6 @@
+ #define HHI_BT656_CLK_CNTL		0x3D4 /* 0xf5 offset in data sheet */
+ #define HHI_SAR_CLK_CNTL		0x3D8 /* 0xf6 offset in data sheet */
  
-+#include "meson-clkc-utils.h"
- #include "axg-audio.h"
- #include "clk-regmap.h"
- #include "clk-phase.h"
-@@ -811,436 +812,424 @@ static struct clk_regmap sm1_tdm_sclk_pad_2 = AUD_TDM_PAD_CTRL(
-  * Array of all clocks provided by this provider
-  * The input clocks of the controller will be populated at runtime
-  */
--static struct clk_hw_onecell_data axg_audio_hw_onecell_data = {
--	.hws = {
--		[AUD_CLKID_DDR_ARB]		= &ddr_arb.hw,
--		[AUD_CLKID_PDM]			= &pdm.hw,
--		[AUD_CLKID_TDMIN_A]		= &tdmin_a.hw,
--		[AUD_CLKID_TDMIN_B]		= &tdmin_b.hw,
--		[AUD_CLKID_TDMIN_C]		= &tdmin_c.hw,
--		[AUD_CLKID_TDMIN_LB]		= &tdmin_lb.hw,
--		[AUD_CLKID_TDMOUT_A]		= &tdmout_a.hw,
--		[AUD_CLKID_TDMOUT_B]		= &tdmout_b.hw,
--		[AUD_CLKID_TDMOUT_C]		= &tdmout_c.hw,
--		[AUD_CLKID_FRDDR_A]		= &frddr_a.hw,
--		[AUD_CLKID_FRDDR_B]		= &frddr_b.hw,
--		[AUD_CLKID_FRDDR_C]		= &frddr_c.hw,
--		[AUD_CLKID_TODDR_A]		= &toddr_a.hw,
--		[AUD_CLKID_TODDR_B]		= &toddr_b.hw,
--		[AUD_CLKID_TODDR_C]		= &toddr_c.hw,
--		[AUD_CLKID_LOOPBACK]		= &loopback.hw,
--		[AUD_CLKID_SPDIFIN]		= &spdifin.hw,
--		[AUD_CLKID_SPDIFOUT]		= &spdifout.hw,
--		[AUD_CLKID_RESAMPLE]		= &resample.hw,
--		[AUD_CLKID_POWER_DETECT]	= &power_detect.hw,
--		[AUD_CLKID_MST_A_MCLK_SEL]	= &mst_a_mclk_sel.hw,
--		[AUD_CLKID_MST_B_MCLK_SEL]	= &mst_b_mclk_sel.hw,
--		[AUD_CLKID_MST_C_MCLK_SEL]	= &mst_c_mclk_sel.hw,
--		[AUD_CLKID_MST_D_MCLK_SEL]	= &mst_d_mclk_sel.hw,
--		[AUD_CLKID_MST_E_MCLK_SEL]	= &mst_e_mclk_sel.hw,
--		[AUD_CLKID_MST_F_MCLK_SEL]	= &mst_f_mclk_sel.hw,
--		[AUD_CLKID_MST_A_MCLK_DIV]	= &mst_a_mclk_div.hw,
--		[AUD_CLKID_MST_B_MCLK_DIV]	= &mst_b_mclk_div.hw,
--		[AUD_CLKID_MST_C_MCLK_DIV]	= &mst_c_mclk_div.hw,
--		[AUD_CLKID_MST_D_MCLK_DIV]	= &mst_d_mclk_div.hw,
--		[AUD_CLKID_MST_E_MCLK_DIV]	= &mst_e_mclk_div.hw,
--		[AUD_CLKID_MST_F_MCLK_DIV]	= &mst_f_mclk_div.hw,
--		[AUD_CLKID_MST_A_MCLK]		= &mst_a_mclk.hw,
--		[AUD_CLKID_MST_B_MCLK]		= &mst_b_mclk.hw,
--		[AUD_CLKID_MST_C_MCLK]		= &mst_c_mclk.hw,
--		[AUD_CLKID_MST_D_MCLK]		= &mst_d_mclk.hw,
--		[AUD_CLKID_MST_E_MCLK]		= &mst_e_mclk.hw,
--		[AUD_CLKID_MST_F_MCLK]		= &mst_f_mclk.hw,
--		[AUD_CLKID_SPDIFOUT_CLK_SEL]	= &spdifout_clk_sel.hw,
--		[AUD_CLKID_SPDIFOUT_CLK_DIV]	= &spdifout_clk_div.hw,
--		[AUD_CLKID_SPDIFOUT_CLK]	= &spdifout_clk.hw,
--		[AUD_CLKID_SPDIFIN_CLK_SEL]	= &spdifin_clk_sel.hw,
--		[AUD_CLKID_SPDIFIN_CLK_DIV]	= &spdifin_clk_div.hw,
--		[AUD_CLKID_SPDIFIN_CLK]		= &spdifin_clk.hw,
--		[AUD_CLKID_PDM_DCLK_SEL]	= &pdm_dclk_sel.hw,
--		[AUD_CLKID_PDM_DCLK_DIV]	= &pdm_dclk_div.hw,
--		[AUD_CLKID_PDM_DCLK]		= &pdm_dclk.hw,
--		[AUD_CLKID_PDM_SYSCLK_SEL]	= &pdm_sysclk_sel.hw,
--		[AUD_CLKID_PDM_SYSCLK_DIV]	= &pdm_sysclk_div.hw,
--		[AUD_CLKID_PDM_SYSCLK]		= &pdm_sysclk.hw,
--		[AUD_CLKID_MST_A_SCLK_PRE_EN]	= &mst_a_sclk_pre_en.hw,
--		[AUD_CLKID_MST_B_SCLK_PRE_EN]	= &mst_b_sclk_pre_en.hw,
--		[AUD_CLKID_MST_C_SCLK_PRE_EN]	= &mst_c_sclk_pre_en.hw,
--		[AUD_CLKID_MST_D_SCLK_PRE_EN]	= &mst_d_sclk_pre_en.hw,
--		[AUD_CLKID_MST_E_SCLK_PRE_EN]	= &mst_e_sclk_pre_en.hw,
--		[AUD_CLKID_MST_F_SCLK_PRE_EN]	= &mst_f_sclk_pre_en.hw,
--		[AUD_CLKID_MST_A_SCLK_DIV]	= &mst_a_sclk_div.hw,
--		[AUD_CLKID_MST_B_SCLK_DIV]	= &mst_b_sclk_div.hw,
--		[AUD_CLKID_MST_C_SCLK_DIV]	= &mst_c_sclk_div.hw,
--		[AUD_CLKID_MST_D_SCLK_DIV]	= &mst_d_sclk_div.hw,
--		[AUD_CLKID_MST_E_SCLK_DIV]	= &mst_e_sclk_div.hw,
--		[AUD_CLKID_MST_F_SCLK_DIV]	= &mst_f_sclk_div.hw,
--		[AUD_CLKID_MST_A_SCLK_POST_EN]	= &mst_a_sclk_post_en.hw,
--		[AUD_CLKID_MST_B_SCLK_POST_EN]	= &mst_b_sclk_post_en.hw,
--		[AUD_CLKID_MST_C_SCLK_POST_EN]	= &mst_c_sclk_post_en.hw,
--		[AUD_CLKID_MST_D_SCLK_POST_EN]	= &mst_d_sclk_post_en.hw,
--		[AUD_CLKID_MST_E_SCLK_POST_EN]	= &mst_e_sclk_post_en.hw,
--		[AUD_CLKID_MST_F_SCLK_POST_EN]	= &mst_f_sclk_post_en.hw,
--		[AUD_CLKID_MST_A_SCLK]		= &mst_a_sclk.hw,
--		[AUD_CLKID_MST_B_SCLK]		= &mst_b_sclk.hw,
--		[AUD_CLKID_MST_C_SCLK]		= &mst_c_sclk.hw,
--		[AUD_CLKID_MST_D_SCLK]		= &mst_d_sclk.hw,
--		[AUD_CLKID_MST_E_SCLK]		= &mst_e_sclk.hw,
--		[AUD_CLKID_MST_F_SCLK]		= &mst_f_sclk.hw,
--		[AUD_CLKID_MST_A_LRCLK_DIV]	= &mst_a_lrclk_div.hw,
--		[AUD_CLKID_MST_B_LRCLK_DIV]	= &mst_b_lrclk_div.hw,
--		[AUD_CLKID_MST_C_LRCLK_DIV]	= &mst_c_lrclk_div.hw,
--		[AUD_CLKID_MST_D_LRCLK_DIV]	= &mst_d_lrclk_div.hw,
--		[AUD_CLKID_MST_E_LRCLK_DIV]	= &mst_e_lrclk_div.hw,
--		[AUD_CLKID_MST_F_LRCLK_DIV]	= &mst_f_lrclk_div.hw,
--		[AUD_CLKID_MST_A_LRCLK]		= &mst_a_lrclk.hw,
--		[AUD_CLKID_MST_B_LRCLK]		= &mst_b_lrclk.hw,
--		[AUD_CLKID_MST_C_LRCLK]		= &mst_c_lrclk.hw,
--		[AUD_CLKID_MST_D_LRCLK]		= &mst_d_lrclk.hw,
--		[AUD_CLKID_MST_E_LRCLK]		= &mst_e_lrclk.hw,
--		[AUD_CLKID_MST_F_LRCLK]		= &mst_f_lrclk.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_SEL]	= &tdmin_a_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_SEL]	= &tdmin_b_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_SEL]	= &tdmin_c_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_SEL]	= &tdmin_lb_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_SEL]	= &tdmout_a_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_SEL]	= &tdmout_b_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_SEL]	= &tdmout_c_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_PRE_EN]	= &tdmin_a_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_PRE_EN]	= &tdmin_b_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_PRE_EN]	= &tdmin_c_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_PRE_EN] = &tdmin_lb_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_PRE_EN] = &tdmout_a_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_PRE_EN] = &tdmout_b_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_PRE_EN] = &tdmout_c_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_POST_EN] = &tdmin_a_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_POST_EN] = &tdmin_b_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_POST_EN] = &tdmin_c_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_POST_EN] = &tdmin_lb_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_POST_EN] = &tdmout_a_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_POST_EN] = &tdmout_b_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_POST_EN] = &tdmout_c_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_A_SCLK]	= &tdmin_a_sclk.hw,
--		[AUD_CLKID_TDMIN_B_SCLK]	= &tdmin_b_sclk.hw,
--		[AUD_CLKID_TDMIN_C_SCLK]	= &tdmin_c_sclk.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK]	= &tdmin_lb_sclk.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK]	= &axg_tdmout_a_sclk.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK]	= &axg_tdmout_b_sclk.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK]	= &axg_tdmout_c_sclk.hw,
--		[AUD_CLKID_TDMIN_A_LRCLK]	= &tdmin_a_lrclk.hw,
--		[AUD_CLKID_TDMIN_B_LRCLK]	= &tdmin_b_lrclk.hw,
--		[AUD_CLKID_TDMIN_C_LRCLK]	= &tdmin_c_lrclk.hw,
--		[AUD_CLKID_TDMIN_LB_LRCLK]	= &tdmin_lb_lrclk.hw,
--		[AUD_CLKID_TDMOUT_A_LRCLK]	= &tdmout_a_lrclk.hw,
--		[AUD_CLKID_TDMOUT_B_LRCLK]	= &tdmout_b_lrclk.hw,
--		[AUD_CLKID_TDMOUT_C_LRCLK]	= &tdmout_c_lrclk.hw,
--		[AUD_CLKID_TOP]			= &axg_aud_top,
--		[NR_CLKS] = NULL,
--	},
--	.num = NR_CLKS,
-+static struct clk_hw *axg_audio_hw_clks[] = {
-+	[AUD_CLKID_DDR_ARB]		= &ddr_arb.hw,
-+	[AUD_CLKID_PDM]			= &pdm.hw,
-+	[AUD_CLKID_TDMIN_A]		= &tdmin_a.hw,
-+	[AUD_CLKID_TDMIN_B]		= &tdmin_b.hw,
-+	[AUD_CLKID_TDMIN_C]		= &tdmin_c.hw,
-+	[AUD_CLKID_TDMIN_LB]		= &tdmin_lb.hw,
-+	[AUD_CLKID_TDMOUT_A]		= &tdmout_a.hw,
-+	[AUD_CLKID_TDMOUT_B]		= &tdmout_b.hw,
-+	[AUD_CLKID_TDMOUT_C]		= &tdmout_c.hw,
-+	[AUD_CLKID_FRDDR_A]		= &frddr_a.hw,
-+	[AUD_CLKID_FRDDR_B]		= &frddr_b.hw,
-+	[AUD_CLKID_FRDDR_C]		= &frddr_c.hw,
-+	[AUD_CLKID_TODDR_A]		= &toddr_a.hw,
-+	[AUD_CLKID_TODDR_B]		= &toddr_b.hw,
-+	[AUD_CLKID_TODDR_C]		= &toddr_c.hw,
-+	[AUD_CLKID_LOOPBACK]		= &loopback.hw,
-+	[AUD_CLKID_SPDIFIN]		= &spdifin.hw,
-+	[AUD_CLKID_SPDIFOUT]		= &spdifout.hw,
-+	[AUD_CLKID_RESAMPLE]		= &resample.hw,
-+	[AUD_CLKID_POWER_DETECT]	= &power_detect.hw,
-+	[AUD_CLKID_MST_A_MCLK_SEL]	= &mst_a_mclk_sel.hw,
-+	[AUD_CLKID_MST_B_MCLK_SEL]	= &mst_b_mclk_sel.hw,
-+	[AUD_CLKID_MST_C_MCLK_SEL]	= &mst_c_mclk_sel.hw,
-+	[AUD_CLKID_MST_D_MCLK_SEL]	= &mst_d_mclk_sel.hw,
-+	[AUD_CLKID_MST_E_MCLK_SEL]	= &mst_e_mclk_sel.hw,
-+	[AUD_CLKID_MST_F_MCLK_SEL]	= &mst_f_mclk_sel.hw,
-+	[AUD_CLKID_MST_A_MCLK_DIV]	= &mst_a_mclk_div.hw,
-+	[AUD_CLKID_MST_B_MCLK_DIV]	= &mst_b_mclk_div.hw,
-+	[AUD_CLKID_MST_C_MCLK_DIV]	= &mst_c_mclk_div.hw,
-+	[AUD_CLKID_MST_D_MCLK_DIV]	= &mst_d_mclk_div.hw,
-+	[AUD_CLKID_MST_E_MCLK_DIV]	= &mst_e_mclk_div.hw,
-+	[AUD_CLKID_MST_F_MCLK_DIV]	= &mst_f_mclk_div.hw,
-+	[AUD_CLKID_MST_A_MCLK]		= &mst_a_mclk.hw,
-+	[AUD_CLKID_MST_B_MCLK]		= &mst_b_mclk.hw,
-+	[AUD_CLKID_MST_C_MCLK]		= &mst_c_mclk.hw,
-+	[AUD_CLKID_MST_D_MCLK]		= &mst_d_mclk.hw,
-+	[AUD_CLKID_MST_E_MCLK]		= &mst_e_mclk.hw,
-+	[AUD_CLKID_MST_F_MCLK]		= &mst_f_mclk.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK_SEL]	= &spdifout_clk_sel.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK_DIV]	= &spdifout_clk_div.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK]	= &spdifout_clk.hw,
-+	[AUD_CLKID_SPDIFIN_CLK_SEL]	= &spdifin_clk_sel.hw,
-+	[AUD_CLKID_SPDIFIN_CLK_DIV]	= &spdifin_clk_div.hw,
-+	[AUD_CLKID_SPDIFIN_CLK]		= &spdifin_clk.hw,
-+	[AUD_CLKID_PDM_DCLK_SEL]	= &pdm_dclk_sel.hw,
-+	[AUD_CLKID_PDM_DCLK_DIV]	= &pdm_dclk_div.hw,
-+	[AUD_CLKID_PDM_DCLK]		= &pdm_dclk.hw,
-+	[AUD_CLKID_PDM_SYSCLK_SEL]	= &pdm_sysclk_sel.hw,
-+	[AUD_CLKID_PDM_SYSCLK_DIV]	= &pdm_sysclk_div.hw,
-+	[AUD_CLKID_PDM_SYSCLK]		= &pdm_sysclk.hw,
-+	[AUD_CLKID_MST_A_SCLK_PRE_EN]	= &mst_a_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_B_SCLK_PRE_EN]	= &mst_b_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_C_SCLK_PRE_EN]	= &mst_c_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_D_SCLK_PRE_EN]	= &mst_d_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_E_SCLK_PRE_EN]	= &mst_e_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_F_SCLK_PRE_EN]	= &mst_f_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_A_SCLK_DIV]	= &mst_a_sclk_div.hw,
-+	[AUD_CLKID_MST_B_SCLK_DIV]	= &mst_b_sclk_div.hw,
-+	[AUD_CLKID_MST_C_SCLK_DIV]	= &mst_c_sclk_div.hw,
-+	[AUD_CLKID_MST_D_SCLK_DIV]	= &mst_d_sclk_div.hw,
-+	[AUD_CLKID_MST_E_SCLK_DIV]	= &mst_e_sclk_div.hw,
-+	[AUD_CLKID_MST_F_SCLK_DIV]	= &mst_f_sclk_div.hw,
-+	[AUD_CLKID_MST_A_SCLK_POST_EN]	= &mst_a_sclk_post_en.hw,
-+	[AUD_CLKID_MST_B_SCLK_POST_EN]	= &mst_b_sclk_post_en.hw,
-+	[AUD_CLKID_MST_C_SCLK_POST_EN]	= &mst_c_sclk_post_en.hw,
-+	[AUD_CLKID_MST_D_SCLK_POST_EN]	= &mst_d_sclk_post_en.hw,
-+	[AUD_CLKID_MST_E_SCLK_POST_EN]	= &mst_e_sclk_post_en.hw,
-+	[AUD_CLKID_MST_F_SCLK_POST_EN]	= &mst_f_sclk_post_en.hw,
-+	[AUD_CLKID_MST_A_SCLK]		= &mst_a_sclk.hw,
-+	[AUD_CLKID_MST_B_SCLK]		= &mst_b_sclk.hw,
-+	[AUD_CLKID_MST_C_SCLK]		= &mst_c_sclk.hw,
-+	[AUD_CLKID_MST_D_SCLK]		= &mst_d_sclk.hw,
-+	[AUD_CLKID_MST_E_SCLK]		= &mst_e_sclk.hw,
-+	[AUD_CLKID_MST_F_SCLK]		= &mst_f_sclk.hw,
-+	[AUD_CLKID_MST_A_LRCLK_DIV]	= &mst_a_lrclk_div.hw,
-+	[AUD_CLKID_MST_B_LRCLK_DIV]	= &mst_b_lrclk_div.hw,
-+	[AUD_CLKID_MST_C_LRCLK_DIV]	= &mst_c_lrclk_div.hw,
-+	[AUD_CLKID_MST_D_LRCLK_DIV]	= &mst_d_lrclk_div.hw,
-+	[AUD_CLKID_MST_E_LRCLK_DIV]	= &mst_e_lrclk_div.hw,
-+	[AUD_CLKID_MST_F_LRCLK_DIV]	= &mst_f_lrclk_div.hw,
-+	[AUD_CLKID_MST_A_LRCLK]		= &mst_a_lrclk.hw,
-+	[AUD_CLKID_MST_B_LRCLK]		= &mst_b_lrclk.hw,
-+	[AUD_CLKID_MST_C_LRCLK]		= &mst_c_lrclk.hw,
-+	[AUD_CLKID_MST_D_LRCLK]		= &mst_d_lrclk.hw,
-+	[AUD_CLKID_MST_E_LRCLK]		= &mst_e_lrclk.hw,
-+	[AUD_CLKID_MST_F_LRCLK]		= &mst_f_lrclk.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_SEL]	= &tdmin_a_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_SEL]	= &tdmin_b_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_SEL]	= &tdmin_c_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_SEL]	= &tdmin_lb_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_SEL]	= &tdmout_a_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_SEL]	= &tdmout_b_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_SEL]	= &tdmout_c_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_PRE_EN]	= &tdmin_a_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_PRE_EN]	= &tdmin_b_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_PRE_EN]	= &tdmin_c_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_PRE_EN] = &tdmin_lb_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_PRE_EN] = &tdmout_a_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_PRE_EN] = &tdmout_b_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_PRE_EN] = &tdmout_c_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_POST_EN] = &tdmin_a_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_POST_EN] = &tdmin_b_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_POST_EN] = &tdmin_c_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_POST_EN] = &tdmin_lb_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_POST_EN] = &tdmout_a_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_POST_EN] = &tdmout_b_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_POST_EN] = &tdmout_c_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK]	= &tdmin_a_sclk.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK]	= &tdmin_b_sclk.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK]	= &tdmin_c_sclk.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK]	= &tdmin_lb_sclk.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK]	= &axg_tdmout_a_sclk.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK]	= &axg_tdmout_b_sclk.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK]	= &axg_tdmout_c_sclk.hw,
-+	[AUD_CLKID_TDMIN_A_LRCLK]	= &tdmin_a_lrclk.hw,
-+	[AUD_CLKID_TDMIN_B_LRCLK]	= &tdmin_b_lrclk.hw,
-+	[AUD_CLKID_TDMIN_C_LRCLK]	= &tdmin_c_lrclk.hw,
-+	[AUD_CLKID_TDMIN_LB_LRCLK]	= &tdmin_lb_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_A_LRCLK]	= &tdmout_a_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_B_LRCLK]	= &tdmout_b_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_C_LRCLK]	= &tdmout_c_lrclk.hw,
-+	[AUD_CLKID_TOP]			= &axg_aud_top,
- };
- 
- /*
-  * Array of all G12A clocks provided by this provider
-  * The input clocks of the controller will be populated at runtime
-  */
--static struct clk_hw_onecell_data g12a_audio_hw_onecell_data = {
--	.hws = {
--		[AUD_CLKID_DDR_ARB]		= &ddr_arb.hw,
--		[AUD_CLKID_PDM]			= &pdm.hw,
--		[AUD_CLKID_TDMIN_A]		= &tdmin_a.hw,
--		[AUD_CLKID_TDMIN_B]		= &tdmin_b.hw,
--		[AUD_CLKID_TDMIN_C]		= &tdmin_c.hw,
--		[AUD_CLKID_TDMIN_LB]		= &tdmin_lb.hw,
--		[AUD_CLKID_TDMOUT_A]		= &tdmout_a.hw,
--		[AUD_CLKID_TDMOUT_B]		= &tdmout_b.hw,
--		[AUD_CLKID_TDMOUT_C]		= &tdmout_c.hw,
--		[AUD_CLKID_FRDDR_A]		= &frddr_a.hw,
--		[AUD_CLKID_FRDDR_B]		= &frddr_b.hw,
--		[AUD_CLKID_FRDDR_C]		= &frddr_c.hw,
--		[AUD_CLKID_TODDR_A]		= &toddr_a.hw,
--		[AUD_CLKID_TODDR_B]		= &toddr_b.hw,
--		[AUD_CLKID_TODDR_C]		= &toddr_c.hw,
--		[AUD_CLKID_LOOPBACK]		= &loopback.hw,
--		[AUD_CLKID_SPDIFIN]		= &spdifin.hw,
--		[AUD_CLKID_SPDIFOUT]		= &spdifout.hw,
--		[AUD_CLKID_RESAMPLE]		= &resample.hw,
--		[AUD_CLKID_POWER_DETECT]	= &power_detect.hw,
--		[AUD_CLKID_SPDIFOUT_B]		= &spdifout_b.hw,
--		[AUD_CLKID_MST_A_MCLK_SEL]	= &mst_a_mclk_sel.hw,
--		[AUD_CLKID_MST_B_MCLK_SEL]	= &mst_b_mclk_sel.hw,
--		[AUD_CLKID_MST_C_MCLK_SEL]	= &mst_c_mclk_sel.hw,
--		[AUD_CLKID_MST_D_MCLK_SEL]	= &mst_d_mclk_sel.hw,
--		[AUD_CLKID_MST_E_MCLK_SEL]	= &mst_e_mclk_sel.hw,
--		[AUD_CLKID_MST_F_MCLK_SEL]	= &mst_f_mclk_sel.hw,
--		[AUD_CLKID_MST_A_MCLK_DIV]	= &mst_a_mclk_div.hw,
--		[AUD_CLKID_MST_B_MCLK_DIV]	= &mst_b_mclk_div.hw,
--		[AUD_CLKID_MST_C_MCLK_DIV]	= &mst_c_mclk_div.hw,
--		[AUD_CLKID_MST_D_MCLK_DIV]	= &mst_d_mclk_div.hw,
--		[AUD_CLKID_MST_E_MCLK_DIV]	= &mst_e_mclk_div.hw,
--		[AUD_CLKID_MST_F_MCLK_DIV]	= &mst_f_mclk_div.hw,
--		[AUD_CLKID_MST_A_MCLK]		= &mst_a_mclk.hw,
--		[AUD_CLKID_MST_B_MCLK]		= &mst_b_mclk.hw,
--		[AUD_CLKID_MST_C_MCLK]		= &mst_c_mclk.hw,
--		[AUD_CLKID_MST_D_MCLK]		= &mst_d_mclk.hw,
--		[AUD_CLKID_MST_E_MCLK]		= &mst_e_mclk.hw,
--		[AUD_CLKID_MST_F_MCLK]		= &mst_f_mclk.hw,
--		[AUD_CLKID_SPDIFOUT_CLK_SEL]	= &spdifout_clk_sel.hw,
--		[AUD_CLKID_SPDIFOUT_CLK_DIV]	= &spdifout_clk_div.hw,
--		[AUD_CLKID_SPDIFOUT_CLK]	= &spdifout_clk.hw,
--		[AUD_CLKID_SPDIFOUT_B_CLK_SEL]	= &spdifout_b_clk_sel.hw,
--		[AUD_CLKID_SPDIFOUT_B_CLK_DIV]	= &spdifout_b_clk_div.hw,
--		[AUD_CLKID_SPDIFOUT_B_CLK]	= &spdifout_b_clk.hw,
--		[AUD_CLKID_SPDIFIN_CLK_SEL]	= &spdifin_clk_sel.hw,
--		[AUD_CLKID_SPDIFIN_CLK_DIV]	= &spdifin_clk_div.hw,
--		[AUD_CLKID_SPDIFIN_CLK]		= &spdifin_clk.hw,
--		[AUD_CLKID_PDM_DCLK_SEL]	= &pdm_dclk_sel.hw,
--		[AUD_CLKID_PDM_DCLK_DIV]	= &pdm_dclk_div.hw,
--		[AUD_CLKID_PDM_DCLK]		= &pdm_dclk.hw,
--		[AUD_CLKID_PDM_SYSCLK_SEL]	= &pdm_sysclk_sel.hw,
--		[AUD_CLKID_PDM_SYSCLK_DIV]	= &pdm_sysclk_div.hw,
--		[AUD_CLKID_PDM_SYSCLK]		= &pdm_sysclk.hw,
--		[AUD_CLKID_MST_A_SCLK_PRE_EN]	= &mst_a_sclk_pre_en.hw,
--		[AUD_CLKID_MST_B_SCLK_PRE_EN]	= &mst_b_sclk_pre_en.hw,
--		[AUD_CLKID_MST_C_SCLK_PRE_EN]	= &mst_c_sclk_pre_en.hw,
--		[AUD_CLKID_MST_D_SCLK_PRE_EN]	= &mst_d_sclk_pre_en.hw,
--		[AUD_CLKID_MST_E_SCLK_PRE_EN]	= &mst_e_sclk_pre_en.hw,
--		[AUD_CLKID_MST_F_SCLK_PRE_EN]	= &mst_f_sclk_pre_en.hw,
--		[AUD_CLKID_MST_A_SCLK_DIV]	= &mst_a_sclk_div.hw,
--		[AUD_CLKID_MST_B_SCLK_DIV]	= &mst_b_sclk_div.hw,
--		[AUD_CLKID_MST_C_SCLK_DIV]	= &mst_c_sclk_div.hw,
--		[AUD_CLKID_MST_D_SCLK_DIV]	= &mst_d_sclk_div.hw,
--		[AUD_CLKID_MST_E_SCLK_DIV]	= &mst_e_sclk_div.hw,
--		[AUD_CLKID_MST_F_SCLK_DIV]	= &mst_f_sclk_div.hw,
--		[AUD_CLKID_MST_A_SCLK_POST_EN]	= &mst_a_sclk_post_en.hw,
--		[AUD_CLKID_MST_B_SCLK_POST_EN]	= &mst_b_sclk_post_en.hw,
--		[AUD_CLKID_MST_C_SCLK_POST_EN]	= &mst_c_sclk_post_en.hw,
--		[AUD_CLKID_MST_D_SCLK_POST_EN]	= &mst_d_sclk_post_en.hw,
--		[AUD_CLKID_MST_E_SCLK_POST_EN]	= &mst_e_sclk_post_en.hw,
--		[AUD_CLKID_MST_F_SCLK_POST_EN]	= &mst_f_sclk_post_en.hw,
--		[AUD_CLKID_MST_A_SCLK]		= &mst_a_sclk.hw,
--		[AUD_CLKID_MST_B_SCLK]		= &mst_b_sclk.hw,
--		[AUD_CLKID_MST_C_SCLK]		= &mst_c_sclk.hw,
--		[AUD_CLKID_MST_D_SCLK]		= &mst_d_sclk.hw,
--		[AUD_CLKID_MST_E_SCLK]		= &mst_e_sclk.hw,
--		[AUD_CLKID_MST_F_SCLK]		= &mst_f_sclk.hw,
--		[AUD_CLKID_MST_A_LRCLK_DIV]	= &mst_a_lrclk_div.hw,
--		[AUD_CLKID_MST_B_LRCLK_DIV]	= &mst_b_lrclk_div.hw,
--		[AUD_CLKID_MST_C_LRCLK_DIV]	= &mst_c_lrclk_div.hw,
--		[AUD_CLKID_MST_D_LRCLK_DIV]	= &mst_d_lrclk_div.hw,
--		[AUD_CLKID_MST_E_LRCLK_DIV]	= &mst_e_lrclk_div.hw,
--		[AUD_CLKID_MST_F_LRCLK_DIV]	= &mst_f_lrclk_div.hw,
--		[AUD_CLKID_MST_A_LRCLK]		= &mst_a_lrclk.hw,
--		[AUD_CLKID_MST_B_LRCLK]		= &mst_b_lrclk.hw,
--		[AUD_CLKID_MST_C_LRCLK]		= &mst_c_lrclk.hw,
--		[AUD_CLKID_MST_D_LRCLK]		= &mst_d_lrclk.hw,
--		[AUD_CLKID_MST_E_LRCLK]		= &mst_e_lrclk.hw,
--		[AUD_CLKID_MST_F_LRCLK]		= &mst_f_lrclk.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_SEL]	= &tdmin_a_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_SEL]	= &tdmin_b_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_SEL]	= &tdmin_c_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_SEL]	= &tdmin_lb_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_SEL]	= &tdmout_a_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_SEL]	= &tdmout_b_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_SEL]	= &tdmout_c_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_PRE_EN]	= &tdmin_a_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_PRE_EN]	= &tdmin_b_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_PRE_EN]	= &tdmin_c_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_PRE_EN] = &tdmin_lb_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_PRE_EN] = &tdmout_a_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_PRE_EN] = &tdmout_b_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_PRE_EN] = &tdmout_c_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_POST_EN] = &tdmin_a_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_POST_EN] = &tdmin_b_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_POST_EN] = &tdmin_c_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_POST_EN] = &tdmin_lb_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_POST_EN] = &tdmout_a_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_POST_EN] = &tdmout_b_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_POST_EN] = &tdmout_c_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_A_SCLK]	= &tdmin_a_sclk.hw,
--		[AUD_CLKID_TDMIN_B_SCLK]	= &tdmin_b_sclk.hw,
--		[AUD_CLKID_TDMIN_C_SCLK]	= &tdmin_c_sclk.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK]	= &tdmin_lb_sclk.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK]	= &g12a_tdmout_a_sclk.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK]	= &g12a_tdmout_b_sclk.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK]	= &g12a_tdmout_c_sclk.hw,
--		[AUD_CLKID_TDMIN_A_LRCLK]	= &tdmin_a_lrclk.hw,
--		[AUD_CLKID_TDMIN_B_LRCLK]	= &tdmin_b_lrclk.hw,
--		[AUD_CLKID_TDMIN_C_LRCLK]	= &tdmin_c_lrclk.hw,
--		[AUD_CLKID_TDMIN_LB_LRCLK]	= &tdmin_lb_lrclk.hw,
--		[AUD_CLKID_TDMOUT_A_LRCLK]	= &tdmout_a_lrclk.hw,
--		[AUD_CLKID_TDMOUT_B_LRCLK]	= &tdmout_b_lrclk.hw,
--		[AUD_CLKID_TDMOUT_C_LRCLK]	= &tdmout_c_lrclk.hw,
--		[AUD_CLKID_TDM_MCLK_PAD0]	= &g12a_tdm_mclk_pad_0.hw,
--		[AUD_CLKID_TDM_MCLK_PAD1]	= &g12a_tdm_mclk_pad_1.hw,
--		[AUD_CLKID_TDM_LRCLK_PAD0]	= &g12a_tdm_lrclk_pad_0.hw,
--		[AUD_CLKID_TDM_LRCLK_PAD1]	= &g12a_tdm_lrclk_pad_1.hw,
--		[AUD_CLKID_TDM_LRCLK_PAD2]	= &g12a_tdm_lrclk_pad_2.hw,
--		[AUD_CLKID_TDM_SCLK_PAD0]	= &g12a_tdm_sclk_pad_0.hw,
--		[AUD_CLKID_TDM_SCLK_PAD1]	= &g12a_tdm_sclk_pad_1.hw,
--		[AUD_CLKID_TDM_SCLK_PAD2]	= &g12a_tdm_sclk_pad_2.hw,
--		[AUD_CLKID_TOP]			= &axg_aud_top,
--		[NR_CLKS] = NULL,
--	},
--	.num = NR_CLKS,
-+static struct clk_hw *g12a_audio_hw_clks[] = {
-+	[AUD_CLKID_DDR_ARB]		= &ddr_arb.hw,
-+	[AUD_CLKID_PDM]			= &pdm.hw,
-+	[AUD_CLKID_TDMIN_A]		= &tdmin_a.hw,
-+	[AUD_CLKID_TDMIN_B]		= &tdmin_b.hw,
-+	[AUD_CLKID_TDMIN_C]		= &tdmin_c.hw,
-+	[AUD_CLKID_TDMIN_LB]		= &tdmin_lb.hw,
-+	[AUD_CLKID_TDMOUT_A]		= &tdmout_a.hw,
-+	[AUD_CLKID_TDMOUT_B]		= &tdmout_b.hw,
-+	[AUD_CLKID_TDMOUT_C]		= &tdmout_c.hw,
-+	[AUD_CLKID_FRDDR_A]		= &frddr_a.hw,
-+	[AUD_CLKID_FRDDR_B]		= &frddr_b.hw,
-+	[AUD_CLKID_FRDDR_C]		= &frddr_c.hw,
-+	[AUD_CLKID_TODDR_A]		= &toddr_a.hw,
-+	[AUD_CLKID_TODDR_B]		= &toddr_b.hw,
-+	[AUD_CLKID_TODDR_C]		= &toddr_c.hw,
-+	[AUD_CLKID_LOOPBACK]		= &loopback.hw,
-+	[AUD_CLKID_SPDIFIN]		= &spdifin.hw,
-+	[AUD_CLKID_SPDIFOUT]		= &spdifout.hw,
-+	[AUD_CLKID_RESAMPLE]		= &resample.hw,
-+	[AUD_CLKID_POWER_DETECT]	= &power_detect.hw,
-+	[AUD_CLKID_SPDIFOUT_B]		= &spdifout_b.hw,
-+	[AUD_CLKID_MST_A_MCLK_SEL]	= &mst_a_mclk_sel.hw,
-+	[AUD_CLKID_MST_B_MCLK_SEL]	= &mst_b_mclk_sel.hw,
-+	[AUD_CLKID_MST_C_MCLK_SEL]	= &mst_c_mclk_sel.hw,
-+	[AUD_CLKID_MST_D_MCLK_SEL]	= &mst_d_mclk_sel.hw,
-+	[AUD_CLKID_MST_E_MCLK_SEL]	= &mst_e_mclk_sel.hw,
-+	[AUD_CLKID_MST_F_MCLK_SEL]	= &mst_f_mclk_sel.hw,
-+	[AUD_CLKID_MST_A_MCLK_DIV]	= &mst_a_mclk_div.hw,
-+	[AUD_CLKID_MST_B_MCLK_DIV]	= &mst_b_mclk_div.hw,
-+	[AUD_CLKID_MST_C_MCLK_DIV]	= &mst_c_mclk_div.hw,
-+	[AUD_CLKID_MST_D_MCLK_DIV]	= &mst_d_mclk_div.hw,
-+	[AUD_CLKID_MST_E_MCLK_DIV]	= &mst_e_mclk_div.hw,
-+	[AUD_CLKID_MST_F_MCLK_DIV]	= &mst_f_mclk_div.hw,
-+	[AUD_CLKID_MST_A_MCLK]		= &mst_a_mclk.hw,
-+	[AUD_CLKID_MST_B_MCLK]		= &mst_b_mclk.hw,
-+	[AUD_CLKID_MST_C_MCLK]		= &mst_c_mclk.hw,
-+	[AUD_CLKID_MST_D_MCLK]		= &mst_d_mclk.hw,
-+	[AUD_CLKID_MST_E_MCLK]		= &mst_e_mclk.hw,
-+	[AUD_CLKID_MST_F_MCLK]		= &mst_f_mclk.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK_SEL]	= &spdifout_clk_sel.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK_DIV]	= &spdifout_clk_div.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK]	= &spdifout_clk.hw,
-+	[AUD_CLKID_SPDIFOUT_B_CLK_SEL]	= &spdifout_b_clk_sel.hw,
-+	[AUD_CLKID_SPDIFOUT_B_CLK_DIV]	= &spdifout_b_clk_div.hw,
-+	[AUD_CLKID_SPDIFOUT_B_CLK]	= &spdifout_b_clk.hw,
-+	[AUD_CLKID_SPDIFIN_CLK_SEL]	= &spdifin_clk_sel.hw,
-+	[AUD_CLKID_SPDIFIN_CLK_DIV]	= &spdifin_clk_div.hw,
-+	[AUD_CLKID_SPDIFIN_CLK]		= &spdifin_clk.hw,
-+	[AUD_CLKID_PDM_DCLK_SEL]	= &pdm_dclk_sel.hw,
-+	[AUD_CLKID_PDM_DCLK_DIV]	= &pdm_dclk_div.hw,
-+	[AUD_CLKID_PDM_DCLK]		= &pdm_dclk.hw,
-+	[AUD_CLKID_PDM_SYSCLK_SEL]	= &pdm_sysclk_sel.hw,
-+	[AUD_CLKID_PDM_SYSCLK_DIV]	= &pdm_sysclk_div.hw,
-+	[AUD_CLKID_PDM_SYSCLK]		= &pdm_sysclk.hw,
-+	[AUD_CLKID_MST_A_SCLK_PRE_EN]	= &mst_a_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_B_SCLK_PRE_EN]	= &mst_b_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_C_SCLK_PRE_EN]	= &mst_c_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_D_SCLK_PRE_EN]	= &mst_d_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_E_SCLK_PRE_EN]	= &mst_e_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_F_SCLK_PRE_EN]	= &mst_f_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_A_SCLK_DIV]	= &mst_a_sclk_div.hw,
-+	[AUD_CLKID_MST_B_SCLK_DIV]	= &mst_b_sclk_div.hw,
-+	[AUD_CLKID_MST_C_SCLK_DIV]	= &mst_c_sclk_div.hw,
-+	[AUD_CLKID_MST_D_SCLK_DIV]	= &mst_d_sclk_div.hw,
-+	[AUD_CLKID_MST_E_SCLK_DIV]	= &mst_e_sclk_div.hw,
-+	[AUD_CLKID_MST_F_SCLK_DIV]	= &mst_f_sclk_div.hw,
-+	[AUD_CLKID_MST_A_SCLK_POST_EN]	= &mst_a_sclk_post_en.hw,
-+	[AUD_CLKID_MST_B_SCLK_POST_EN]	= &mst_b_sclk_post_en.hw,
-+	[AUD_CLKID_MST_C_SCLK_POST_EN]	= &mst_c_sclk_post_en.hw,
-+	[AUD_CLKID_MST_D_SCLK_POST_EN]	= &mst_d_sclk_post_en.hw,
-+	[AUD_CLKID_MST_E_SCLK_POST_EN]	= &mst_e_sclk_post_en.hw,
-+	[AUD_CLKID_MST_F_SCLK_POST_EN]	= &mst_f_sclk_post_en.hw,
-+	[AUD_CLKID_MST_A_SCLK]		= &mst_a_sclk.hw,
-+	[AUD_CLKID_MST_B_SCLK]		= &mst_b_sclk.hw,
-+	[AUD_CLKID_MST_C_SCLK]		= &mst_c_sclk.hw,
-+	[AUD_CLKID_MST_D_SCLK]		= &mst_d_sclk.hw,
-+	[AUD_CLKID_MST_E_SCLK]		= &mst_e_sclk.hw,
-+	[AUD_CLKID_MST_F_SCLK]		= &mst_f_sclk.hw,
-+	[AUD_CLKID_MST_A_LRCLK_DIV]	= &mst_a_lrclk_div.hw,
-+	[AUD_CLKID_MST_B_LRCLK_DIV]	= &mst_b_lrclk_div.hw,
-+	[AUD_CLKID_MST_C_LRCLK_DIV]	= &mst_c_lrclk_div.hw,
-+	[AUD_CLKID_MST_D_LRCLK_DIV]	= &mst_d_lrclk_div.hw,
-+	[AUD_CLKID_MST_E_LRCLK_DIV]	= &mst_e_lrclk_div.hw,
-+	[AUD_CLKID_MST_F_LRCLK_DIV]	= &mst_f_lrclk_div.hw,
-+	[AUD_CLKID_MST_A_LRCLK]		= &mst_a_lrclk.hw,
-+	[AUD_CLKID_MST_B_LRCLK]		= &mst_b_lrclk.hw,
-+	[AUD_CLKID_MST_C_LRCLK]		= &mst_c_lrclk.hw,
-+	[AUD_CLKID_MST_D_LRCLK]		= &mst_d_lrclk.hw,
-+	[AUD_CLKID_MST_E_LRCLK]		= &mst_e_lrclk.hw,
-+	[AUD_CLKID_MST_F_LRCLK]		= &mst_f_lrclk.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_SEL]	= &tdmin_a_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_SEL]	= &tdmin_b_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_SEL]	= &tdmin_c_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_SEL]	= &tdmin_lb_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_SEL]	= &tdmout_a_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_SEL]	= &tdmout_b_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_SEL]	= &tdmout_c_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_PRE_EN]	= &tdmin_a_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_PRE_EN]	= &tdmin_b_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_PRE_EN]	= &tdmin_c_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_PRE_EN] = &tdmin_lb_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_PRE_EN] = &tdmout_a_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_PRE_EN] = &tdmout_b_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_PRE_EN] = &tdmout_c_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_POST_EN] = &tdmin_a_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_POST_EN] = &tdmin_b_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_POST_EN] = &tdmin_c_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_POST_EN] = &tdmin_lb_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_POST_EN] = &tdmout_a_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_POST_EN] = &tdmout_b_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_POST_EN] = &tdmout_c_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK]	= &tdmin_a_sclk.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK]	= &tdmin_b_sclk.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK]	= &tdmin_c_sclk.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK]	= &tdmin_lb_sclk.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK]	= &g12a_tdmout_a_sclk.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK]	= &g12a_tdmout_b_sclk.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK]	= &g12a_tdmout_c_sclk.hw,
-+	[AUD_CLKID_TDMIN_A_LRCLK]	= &tdmin_a_lrclk.hw,
-+	[AUD_CLKID_TDMIN_B_LRCLK]	= &tdmin_b_lrclk.hw,
-+	[AUD_CLKID_TDMIN_C_LRCLK]	= &tdmin_c_lrclk.hw,
-+	[AUD_CLKID_TDMIN_LB_LRCLK]	= &tdmin_lb_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_A_LRCLK]	= &tdmout_a_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_B_LRCLK]	= &tdmout_b_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_C_LRCLK]	= &tdmout_c_lrclk.hw,
-+	[AUD_CLKID_TDM_MCLK_PAD0]	= &g12a_tdm_mclk_pad_0.hw,
-+	[AUD_CLKID_TDM_MCLK_PAD1]	= &g12a_tdm_mclk_pad_1.hw,
-+	[AUD_CLKID_TDM_LRCLK_PAD0]	= &g12a_tdm_lrclk_pad_0.hw,
-+	[AUD_CLKID_TDM_LRCLK_PAD1]	= &g12a_tdm_lrclk_pad_1.hw,
-+	[AUD_CLKID_TDM_LRCLK_PAD2]	= &g12a_tdm_lrclk_pad_2.hw,
-+	[AUD_CLKID_TDM_SCLK_PAD0]	= &g12a_tdm_sclk_pad_0.hw,
-+	[AUD_CLKID_TDM_SCLK_PAD1]	= &g12a_tdm_sclk_pad_1.hw,
-+	[AUD_CLKID_TDM_SCLK_PAD2]	= &g12a_tdm_sclk_pad_2.hw,
-+	[AUD_CLKID_TOP]			= &axg_aud_top,
- };
- 
- /*
-  * Array of all SM1 clocks provided by this provider
-  * The input clocks of the controller will be populated at runtime
-  */
--static struct clk_hw_onecell_data sm1_audio_hw_onecell_data = {
--	.hws = {
--		[AUD_CLKID_DDR_ARB]		= &ddr_arb.hw,
--		[AUD_CLKID_PDM]			= &pdm.hw,
--		[AUD_CLKID_TDMIN_A]		= &tdmin_a.hw,
--		[AUD_CLKID_TDMIN_B]		= &tdmin_b.hw,
--		[AUD_CLKID_TDMIN_C]		= &tdmin_c.hw,
--		[AUD_CLKID_TDMIN_LB]		= &tdmin_lb.hw,
--		[AUD_CLKID_TDMOUT_A]		= &tdmout_a.hw,
--		[AUD_CLKID_TDMOUT_B]		= &tdmout_b.hw,
--		[AUD_CLKID_TDMOUT_C]		= &tdmout_c.hw,
--		[AUD_CLKID_FRDDR_A]		= &frddr_a.hw,
--		[AUD_CLKID_FRDDR_B]		= &frddr_b.hw,
--		[AUD_CLKID_FRDDR_C]		= &frddr_c.hw,
--		[AUD_CLKID_TODDR_A]		= &toddr_a.hw,
--		[AUD_CLKID_TODDR_B]		= &toddr_b.hw,
--		[AUD_CLKID_TODDR_C]		= &toddr_c.hw,
--		[AUD_CLKID_LOOPBACK]		= &loopback.hw,
--		[AUD_CLKID_SPDIFIN]		= &spdifin.hw,
--		[AUD_CLKID_SPDIFOUT]		= &spdifout.hw,
--		[AUD_CLKID_RESAMPLE]		= &resample.hw,
--		[AUD_CLKID_SPDIFOUT_B]		= &spdifout_b.hw,
--		[AUD_CLKID_MST_A_MCLK_SEL]	= &sm1_mst_a_mclk_sel.hw,
--		[AUD_CLKID_MST_B_MCLK_SEL]	= &sm1_mst_b_mclk_sel.hw,
--		[AUD_CLKID_MST_C_MCLK_SEL]	= &sm1_mst_c_mclk_sel.hw,
--		[AUD_CLKID_MST_D_MCLK_SEL]	= &sm1_mst_d_mclk_sel.hw,
--		[AUD_CLKID_MST_E_MCLK_SEL]	= &sm1_mst_e_mclk_sel.hw,
--		[AUD_CLKID_MST_F_MCLK_SEL]	= &sm1_mst_f_mclk_sel.hw,
--		[AUD_CLKID_MST_A_MCLK_DIV]	= &sm1_mst_a_mclk_div.hw,
--		[AUD_CLKID_MST_B_MCLK_DIV]	= &sm1_mst_b_mclk_div.hw,
--		[AUD_CLKID_MST_C_MCLK_DIV]	= &sm1_mst_c_mclk_div.hw,
--		[AUD_CLKID_MST_D_MCLK_DIV]	= &sm1_mst_d_mclk_div.hw,
--		[AUD_CLKID_MST_E_MCLK_DIV]	= &sm1_mst_e_mclk_div.hw,
--		[AUD_CLKID_MST_F_MCLK_DIV]	= &sm1_mst_f_mclk_div.hw,
--		[AUD_CLKID_MST_A_MCLK]		= &sm1_mst_a_mclk.hw,
--		[AUD_CLKID_MST_B_MCLK]		= &sm1_mst_b_mclk.hw,
--		[AUD_CLKID_MST_C_MCLK]		= &sm1_mst_c_mclk.hw,
--		[AUD_CLKID_MST_D_MCLK]		= &sm1_mst_d_mclk.hw,
--		[AUD_CLKID_MST_E_MCLK]		= &sm1_mst_e_mclk.hw,
--		[AUD_CLKID_MST_F_MCLK]		= &sm1_mst_f_mclk.hw,
--		[AUD_CLKID_SPDIFOUT_CLK_SEL]	= &spdifout_clk_sel.hw,
--		[AUD_CLKID_SPDIFOUT_CLK_DIV]	= &spdifout_clk_div.hw,
--		[AUD_CLKID_SPDIFOUT_CLK]	= &spdifout_clk.hw,
--		[AUD_CLKID_SPDIFOUT_B_CLK_SEL]	= &spdifout_b_clk_sel.hw,
--		[AUD_CLKID_SPDIFOUT_B_CLK_DIV]	= &spdifout_b_clk_div.hw,
--		[AUD_CLKID_SPDIFOUT_B_CLK]	= &spdifout_b_clk.hw,
--		[AUD_CLKID_SPDIFIN_CLK_SEL]	= &spdifin_clk_sel.hw,
--		[AUD_CLKID_SPDIFIN_CLK_DIV]	= &spdifin_clk_div.hw,
--		[AUD_CLKID_SPDIFIN_CLK]		= &spdifin_clk.hw,
--		[AUD_CLKID_PDM_DCLK_SEL]	= &pdm_dclk_sel.hw,
--		[AUD_CLKID_PDM_DCLK_DIV]	= &pdm_dclk_div.hw,
--		[AUD_CLKID_PDM_DCLK]		= &pdm_dclk.hw,
--		[AUD_CLKID_PDM_SYSCLK_SEL]	= &pdm_sysclk_sel.hw,
--		[AUD_CLKID_PDM_SYSCLK_DIV]	= &pdm_sysclk_div.hw,
--		[AUD_CLKID_PDM_SYSCLK]		= &pdm_sysclk.hw,
--		[AUD_CLKID_MST_A_SCLK_PRE_EN]	= &mst_a_sclk_pre_en.hw,
--		[AUD_CLKID_MST_B_SCLK_PRE_EN]	= &mst_b_sclk_pre_en.hw,
--		[AUD_CLKID_MST_C_SCLK_PRE_EN]	= &mst_c_sclk_pre_en.hw,
--		[AUD_CLKID_MST_D_SCLK_PRE_EN]	= &mst_d_sclk_pre_en.hw,
--		[AUD_CLKID_MST_E_SCLK_PRE_EN]	= &mst_e_sclk_pre_en.hw,
--		[AUD_CLKID_MST_F_SCLK_PRE_EN]	= &mst_f_sclk_pre_en.hw,
--		[AUD_CLKID_MST_A_SCLK_DIV]	= &mst_a_sclk_div.hw,
--		[AUD_CLKID_MST_B_SCLK_DIV]	= &mst_b_sclk_div.hw,
--		[AUD_CLKID_MST_C_SCLK_DIV]	= &mst_c_sclk_div.hw,
--		[AUD_CLKID_MST_D_SCLK_DIV]	= &mst_d_sclk_div.hw,
--		[AUD_CLKID_MST_E_SCLK_DIV]	= &mst_e_sclk_div.hw,
--		[AUD_CLKID_MST_F_SCLK_DIV]	= &mst_f_sclk_div.hw,
--		[AUD_CLKID_MST_A_SCLK_POST_EN]	= &mst_a_sclk_post_en.hw,
--		[AUD_CLKID_MST_B_SCLK_POST_EN]	= &mst_b_sclk_post_en.hw,
--		[AUD_CLKID_MST_C_SCLK_POST_EN]	= &mst_c_sclk_post_en.hw,
--		[AUD_CLKID_MST_D_SCLK_POST_EN]	= &mst_d_sclk_post_en.hw,
--		[AUD_CLKID_MST_E_SCLK_POST_EN]	= &mst_e_sclk_post_en.hw,
--		[AUD_CLKID_MST_F_SCLK_POST_EN]	= &mst_f_sclk_post_en.hw,
--		[AUD_CLKID_MST_A_SCLK]		= &mst_a_sclk.hw,
--		[AUD_CLKID_MST_B_SCLK]		= &mst_b_sclk.hw,
--		[AUD_CLKID_MST_C_SCLK]		= &mst_c_sclk.hw,
--		[AUD_CLKID_MST_D_SCLK]		= &mst_d_sclk.hw,
--		[AUD_CLKID_MST_E_SCLK]		= &mst_e_sclk.hw,
--		[AUD_CLKID_MST_F_SCLK]		= &mst_f_sclk.hw,
--		[AUD_CLKID_MST_A_LRCLK_DIV]	= &mst_a_lrclk_div.hw,
--		[AUD_CLKID_MST_B_LRCLK_DIV]	= &mst_b_lrclk_div.hw,
--		[AUD_CLKID_MST_C_LRCLK_DIV]	= &mst_c_lrclk_div.hw,
--		[AUD_CLKID_MST_D_LRCLK_DIV]	= &mst_d_lrclk_div.hw,
--		[AUD_CLKID_MST_E_LRCLK_DIV]	= &mst_e_lrclk_div.hw,
--		[AUD_CLKID_MST_F_LRCLK_DIV]	= &mst_f_lrclk_div.hw,
--		[AUD_CLKID_MST_A_LRCLK]		= &mst_a_lrclk.hw,
--		[AUD_CLKID_MST_B_LRCLK]		= &mst_b_lrclk.hw,
--		[AUD_CLKID_MST_C_LRCLK]		= &mst_c_lrclk.hw,
--		[AUD_CLKID_MST_D_LRCLK]		= &mst_d_lrclk.hw,
--		[AUD_CLKID_MST_E_LRCLK]		= &mst_e_lrclk.hw,
--		[AUD_CLKID_MST_F_LRCLK]		= &mst_f_lrclk.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_SEL]	= &tdmin_a_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_SEL]	= &tdmin_b_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_SEL]	= &tdmin_c_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_SEL]	= &tdmin_lb_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_SEL]	= &tdmout_a_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_SEL]	= &tdmout_b_sclk_sel.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_SEL]	= &tdmout_c_sclk_sel.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_PRE_EN]	= &tdmin_a_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_PRE_EN]	= &tdmin_b_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_PRE_EN]	= &tdmin_c_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_PRE_EN] = &tdmin_lb_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_PRE_EN] = &tdmout_a_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_PRE_EN] = &tdmout_b_sclk_pre_en.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_PRE_EN] = &tdmout_c_sclk_pre_en.hw,
--		[AUD_CLKID_TDMIN_A_SCLK_POST_EN] = &tdmin_a_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_B_SCLK_POST_EN] = &tdmin_b_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_C_SCLK_POST_EN] = &tdmin_c_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK_POST_EN] = &tdmin_lb_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK_POST_EN] = &tdmout_a_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK_POST_EN] = &tdmout_b_sclk_post_en.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK_POST_EN] = &tdmout_c_sclk_post_en.hw,
--		[AUD_CLKID_TDMIN_A_SCLK]	= &tdmin_a_sclk.hw,
--		[AUD_CLKID_TDMIN_B_SCLK]	= &tdmin_b_sclk.hw,
--		[AUD_CLKID_TDMIN_C_SCLK]	= &tdmin_c_sclk.hw,
--		[AUD_CLKID_TDMIN_LB_SCLK]	= &tdmin_lb_sclk.hw,
--		[AUD_CLKID_TDMOUT_A_SCLK]	= &g12a_tdmout_a_sclk.hw,
--		[AUD_CLKID_TDMOUT_B_SCLK]	= &g12a_tdmout_b_sclk.hw,
--		[AUD_CLKID_TDMOUT_C_SCLK]	= &g12a_tdmout_c_sclk.hw,
--		[AUD_CLKID_TDMIN_A_LRCLK]	= &tdmin_a_lrclk.hw,
--		[AUD_CLKID_TDMIN_B_LRCLK]	= &tdmin_b_lrclk.hw,
--		[AUD_CLKID_TDMIN_C_LRCLK]	= &tdmin_c_lrclk.hw,
--		[AUD_CLKID_TDMIN_LB_LRCLK]	= &tdmin_lb_lrclk.hw,
--		[AUD_CLKID_TDMOUT_A_LRCLK]	= &tdmout_a_lrclk.hw,
--		[AUD_CLKID_TDMOUT_B_LRCLK]	= &tdmout_b_lrclk.hw,
--		[AUD_CLKID_TDMOUT_C_LRCLK]	= &tdmout_c_lrclk.hw,
--		[AUD_CLKID_TDM_MCLK_PAD0]	= &sm1_tdm_mclk_pad_0.hw,
--		[AUD_CLKID_TDM_MCLK_PAD1]	= &sm1_tdm_mclk_pad_1.hw,
--		[AUD_CLKID_TDM_LRCLK_PAD0]	= &sm1_tdm_lrclk_pad_0.hw,
--		[AUD_CLKID_TDM_LRCLK_PAD1]	= &sm1_tdm_lrclk_pad_1.hw,
--		[AUD_CLKID_TDM_LRCLK_PAD2]	= &sm1_tdm_lrclk_pad_2.hw,
--		[AUD_CLKID_TDM_SCLK_PAD0]	= &sm1_tdm_sclk_pad_0.hw,
--		[AUD_CLKID_TDM_SCLK_PAD1]	= &sm1_tdm_sclk_pad_1.hw,
--		[AUD_CLKID_TDM_SCLK_PAD2]	= &sm1_tdm_sclk_pad_2.hw,
--		[AUD_CLKID_TOP]			= &sm1_aud_top.hw,
--		[AUD_CLKID_TORAM]		= &toram.hw,
--		[AUD_CLKID_EQDRC]		= &eqdrc.hw,
--		[AUD_CLKID_RESAMPLE_B]		= &resample_b.hw,
--		[AUD_CLKID_TOVAD]		= &tovad.hw,
--		[AUD_CLKID_LOCKER]		= &locker.hw,
--		[AUD_CLKID_SPDIFIN_LB]		= &spdifin_lb.hw,
--		[AUD_CLKID_FRDDR_D]		= &frddr_d.hw,
--		[AUD_CLKID_TODDR_D]		= &toddr_d.hw,
--		[AUD_CLKID_LOOPBACK_B]		= &loopback_b.hw,
--		[AUD_CLKID_CLK81_EN]		= &sm1_clk81_en.hw,
--		[AUD_CLKID_SYSCLK_A_DIV]	= &sm1_sysclk_a_div.hw,
--		[AUD_CLKID_SYSCLK_A_EN]		= &sm1_sysclk_a_en.hw,
--		[AUD_CLKID_SYSCLK_B_DIV]	= &sm1_sysclk_b_div.hw,
--		[AUD_CLKID_SYSCLK_B_EN]		= &sm1_sysclk_b_en.hw,
--		[NR_CLKS] = NULL,
--	},
--	.num = NR_CLKS,
-+static struct clk_hw *sm1_audio_hw_clks[] = {
-+	[AUD_CLKID_DDR_ARB]		= &ddr_arb.hw,
-+	[AUD_CLKID_PDM]			= &pdm.hw,
-+	[AUD_CLKID_TDMIN_A]		= &tdmin_a.hw,
-+	[AUD_CLKID_TDMIN_B]		= &tdmin_b.hw,
-+	[AUD_CLKID_TDMIN_C]		= &tdmin_c.hw,
-+	[AUD_CLKID_TDMIN_LB]		= &tdmin_lb.hw,
-+	[AUD_CLKID_TDMOUT_A]		= &tdmout_a.hw,
-+	[AUD_CLKID_TDMOUT_B]		= &tdmout_b.hw,
-+	[AUD_CLKID_TDMOUT_C]		= &tdmout_c.hw,
-+	[AUD_CLKID_FRDDR_A]		= &frddr_a.hw,
-+	[AUD_CLKID_FRDDR_B]		= &frddr_b.hw,
-+	[AUD_CLKID_FRDDR_C]		= &frddr_c.hw,
-+	[AUD_CLKID_TODDR_A]		= &toddr_a.hw,
-+	[AUD_CLKID_TODDR_B]		= &toddr_b.hw,
-+	[AUD_CLKID_TODDR_C]		= &toddr_c.hw,
-+	[AUD_CLKID_LOOPBACK]		= &loopback.hw,
-+	[AUD_CLKID_SPDIFIN]		= &spdifin.hw,
-+	[AUD_CLKID_SPDIFOUT]		= &spdifout.hw,
-+	[AUD_CLKID_RESAMPLE]		= &resample.hw,
-+	[AUD_CLKID_SPDIFOUT_B]		= &spdifout_b.hw,
-+	[AUD_CLKID_MST_A_MCLK_SEL]	= &sm1_mst_a_mclk_sel.hw,
-+	[AUD_CLKID_MST_B_MCLK_SEL]	= &sm1_mst_b_mclk_sel.hw,
-+	[AUD_CLKID_MST_C_MCLK_SEL]	= &sm1_mst_c_mclk_sel.hw,
-+	[AUD_CLKID_MST_D_MCLK_SEL]	= &sm1_mst_d_mclk_sel.hw,
-+	[AUD_CLKID_MST_E_MCLK_SEL]	= &sm1_mst_e_mclk_sel.hw,
-+	[AUD_CLKID_MST_F_MCLK_SEL]	= &sm1_mst_f_mclk_sel.hw,
-+	[AUD_CLKID_MST_A_MCLK_DIV]	= &sm1_mst_a_mclk_div.hw,
-+	[AUD_CLKID_MST_B_MCLK_DIV]	= &sm1_mst_b_mclk_div.hw,
-+	[AUD_CLKID_MST_C_MCLK_DIV]	= &sm1_mst_c_mclk_div.hw,
-+	[AUD_CLKID_MST_D_MCLK_DIV]	= &sm1_mst_d_mclk_div.hw,
-+	[AUD_CLKID_MST_E_MCLK_DIV]	= &sm1_mst_e_mclk_div.hw,
-+	[AUD_CLKID_MST_F_MCLK_DIV]	= &sm1_mst_f_mclk_div.hw,
-+	[AUD_CLKID_MST_A_MCLK]		= &sm1_mst_a_mclk.hw,
-+	[AUD_CLKID_MST_B_MCLK]		= &sm1_mst_b_mclk.hw,
-+	[AUD_CLKID_MST_C_MCLK]		= &sm1_mst_c_mclk.hw,
-+	[AUD_CLKID_MST_D_MCLK]		= &sm1_mst_d_mclk.hw,
-+	[AUD_CLKID_MST_E_MCLK]		= &sm1_mst_e_mclk.hw,
-+	[AUD_CLKID_MST_F_MCLK]		= &sm1_mst_f_mclk.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK_SEL]	= &spdifout_clk_sel.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK_DIV]	= &spdifout_clk_div.hw,
-+	[AUD_CLKID_SPDIFOUT_CLK]	= &spdifout_clk.hw,
-+	[AUD_CLKID_SPDIFOUT_B_CLK_SEL]	= &spdifout_b_clk_sel.hw,
-+	[AUD_CLKID_SPDIFOUT_B_CLK_DIV]	= &spdifout_b_clk_div.hw,
-+	[AUD_CLKID_SPDIFOUT_B_CLK]	= &spdifout_b_clk.hw,
-+	[AUD_CLKID_SPDIFIN_CLK_SEL]	= &spdifin_clk_sel.hw,
-+	[AUD_CLKID_SPDIFIN_CLK_DIV]	= &spdifin_clk_div.hw,
-+	[AUD_CLKID_SPDIFIN_CLK]		= &spdifin_clk.hw,
-+	[AUD_CLKID_PDM_DCLK_SEL]	= &pdm_dclk_sel.hw,
-+	[AUD_CLKID_PDM_DCLK_DIV]	= &pdm_dclk_div.hw,
-+	[AUD_CLKID_PDM_DCLK]		= &pdm_dclk.hw,
-+	[AUD_CLKID_PDM_SYSCLK_SEL]	= &pdm_sysclk_sel.hw,
-+	[AUD_CLKID_PDM_SYSCLK_DIV]	= &pdm_sysclk_div.hw,
-+	[AUD_CLKID_PDM_SYSCLK]		= &pdm_sysclk.hw,
-+	[AUD_CLKID_MST_A_SCLK_PRE_EN]	= &mst_a_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_B_SCLK_PRE_EN]	= &mst_b_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_C_SCLK_PRE_EN]	= &mst_c_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_D_SCLK_PRE_EN]	= &mst_d_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_E_SCLK_PRE_EN]	= &mst_e_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_F_SCLK_PRE_EN]	= &mst_f_sclk_pre_en.hw,
-+	[AUD_CLKID_MST_A_SCLK_DIV]	= &mst_a_sclk_div.hw,
-+	[AUD_CLKID_MST_B_SCLK_DIV]	= &mst_b_sclk_div.hw,
-+	[AUD_CLKID_MST_C_SCLK_DIV]	= &mst_c_sclk_div.hw,
-+	[AUD_CLKID_MST_D_SCLK_DIV]	= &mst_d_sclk_div.hw,
-+	[AUD_CLKID_MST_E_SCLK_DIV]	= &mst_e_sclk_div.hw,
-+	[AUD_CLKID_MST_F_SCLK_DIV]	= &mst_f_sclk_div.hw,
-+	[AUD_CLKID_MST_A_SCLK_POST_EN]	= &mst_a_sclk_post_en.hw,
-+	[AUD_CLKID_MST_B_SCLK_POST_EN]	= &mst_b_sclk_post_en.hw,
-+	[AUD_CLKID_MST_C_SCLK_POST_EN]	= &mst_c_sclk_post_en.hw,
-+	[AUD_CLKID_MST_D_SCLK_POST_EN]	= &mst_d_sclk_post_en.hw,
-+	[AUD_CLKID_MST_E_SCLK_POST_EN]	= &mst_e_sclk_post_en.hw,
-+	[AUD_CLKID_MST_F_SCLK_POST_EN]	= &mst_f_sclk_post_en.hw,
-+	[AUD_CLKID_MST_A_SCLK]		= &mst_a_sclk.hw,
-+	[AUD_CLKID_MST_B_SCLK]		= &mst_b_sclk.hw,
-+	[AUD_CLKID_MST_C_SCLK]		= &mst_c_sclk.hw,
-+	[AUD_CLKID_MST_D_SCLK]		= &mst_d_sclk.hw,
-+	[AUD_CLKID_MST_E_SCLK]		= &mst_e_sclk.hw,
-+	[AUD_CLKID_MST_F_SCLK]		= &mst_f_sclk.hw,
-+	[AUD_CLKID_MST_A_LRCLK_DIV]	= &mst_a_lrclk_div.hw,
-+	[AUD_CLKID_MST_B_LRCLK_DIV]	= &mst_b_lrclk_div.hw,
-+	[AUD_CLKID_MST_C_LRCLK_DIV]	= &mst_c_lrclk_div.hw,
-+	[AUD_CLKID_MST_D_LRCLK_DIV]	= &mst_d_lrclk_div.hw,
-+	[AUD_CLKID_MST_E_LRCLK_DIV]	= &mst_e_lrclk_div.hw,
-+	[AUD_CLKID_MST_F_LRCLK_DIV]	= &mst_f_lrclk_div.hw,
-+	[AUD_CLKID_MST_A_LRCLK]		= &mst_a_lrclk.hw,
-+	[AUD_CLKID_MST_B_LRCLK]		= &mst_b_lrclk.hw,
-+	[AUD_CLKID_MST_C_LRCLK]		= &mst_c_lrclk.hw,
-+	[AUD_CLKID_MST_D_LRCLK]		= &mst_d_lrclk.hw,
-+	[AUD_CLKID_MST_E_LRCLK]		= &mst_e_lrclk.hw,
-+	[AUD_CLKID_MST_F_LRCLK]		= &mst_f_lrclk.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_SEL]	= &tdmin_a_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_SEL]	= &tdmin_b_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_SEL]	= &tdmin_c_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_SEL]	= &tdmin_lb_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_SEL]	= &tdmout_a_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_SEL]	= &tdmout_b_sclk_sel.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_SEL]	= &tdmout_c_sclk_sel.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_PRE_EN]	= &tdmin_a_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_PRE_EN]	= &tdmin_b_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_PRE_EN]	= &tdmin_c_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_PRE_EN] = &tdmin_lb_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_PRE_EN] = &tdmout_a_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_PRE_EN] = &tdmout_b_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_PRE_EN] = &tdmout_c_sclk_pre_en.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK_POST_EN] = &tdmin_a_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK_POST_EN] = &tdmin_b_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK_POST_EN] = &tdmin_c_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK_POST_EN] = &tdmin_lb_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK_POST_EN] = &tdmout_a_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK_POST_EN] = &tdmout_b_sclk_post_en.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK_POST_EN] = &tdmout_c_sclk_post_en.hw,
-+	[AUD_CLKID_TDMIN_A_SCLK]	= &tdmin_a_sclk.hw,
-+	[AUD_CLKID_TDMIN_B_SCLK]	= &tdmin_b_sclk.hw,
-+	[AUD_CLKID_TDMIN_C_SCLK]	= &tdmin_c_sclk.hw,
-+	[AUD_CLKID_TDMIN_LB_SCLK]	= &tdmin_lb_sclk.hw,
-+	[AUD_CLKID_TDMOUT_A_SCLK]	= &g12a_tdmout_a_sclk.hw,
-+	[AUD_CLKID_TDMOUT_B_SCLK]	= &g12a_tdmout_b_sclk.hw,
-+	[AUD_CLKID_TDMOUT_C_SCLK]	= &g12a_tdmout_c_sclk.hw,
-+	[AUD_CLKID_TDMIN_A_LRCLK]	= &tdmin_a_lrclk.hw,
-+	[AUD_CLKID_TDMIN_B_LRCLK]	= &tdmin_b_lrclk.hw,
-+	[AUD_CLKID_TDMIN_C_LRCLK]	= &tdmin_c_lrclk.hw,
-+	[AUD_CLKID_TDMIN_LB_LRCLK]	= &tdmin_lb_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_A_LRCLK]	= &tdmout_a_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_B_LRCLK]	= &tdmout_b_lrclk.hw,
-+	[AUD_CLKID_TDMOUT_C_LRCLK]	= &tdmout_c_lrclk.hw,
-+	[AUD_CLKID_TDM_MCLK_PAD0]	= &sm1_tdm_mclk_pad_0.hw,
-+	[AUD_CLKID_TDM_MCLK_PAD1]	= &sm1_tdm_mclk_pad_1.hw,
-+	[AUD_CLKID_TDM_LRCLK_PAD0]	= &sm1_tdm_lrclk_pad_0.hw,
-+	[AUD_CLKID_TDM_LRCLK_PAD1]	= &sm1_tdm_lrclk_pad_1.hw,
-+	[AUD_CLKID_TDM_LRCLK_PAD2]	= &sm1_tdm_lrclk_pad_2.hw,
-+	[AUD_CLKID_TDM_SCLK_PAD0]	= &sm1_tdm_sclk_pad_0.hw,
-+	[AUD_CLKID_TDM_SCLK_PAD1]	= &sm1_tdm_sclk_pad_1.hw,
-+	[AUD_CLKID_TDM_SCLK_PAD2]	= &sm1_tdm_sclk_pad_2.hw,
-+	[AUD_CLKID_TOP]			= &sm1_aud_top.hw,
-+	[AUD_CLKID_TORAM]		= &toram.hw,
-+	[AUD_CLKID_EQDRC]		= &eqdrc.hw,
-+	[AUD_CLKID_RESAMPLE_B]		= &resample_b.hw,
-+	[AUD_CLKID_TOVAD]		= &tovad.hw,
-+	[AUD_CLKID_LOCKER]		= &locker.hw,
-+	[AUD_CLKID_SPDIFIN_LB]		= &spdifin_lb.hw,
-+	[AUD_CLKID_FRDDR_D]		= &frddr_d.hw,
-+	[AUD_CLKID_TODDR_D]		= &toddr_d.hw,
-+	[AUD_CLKID_LOOPBACK_B]		= &loopback_b.hw,
-+	[AUD_CLKID_CLK81_EN]		= &sm1_clk81_en.hw,
-+	[AUD_CLKID_SYSCLK_A_DIV]	= &sm1_sysclk_a_div.hw,
-+	[AUD_CLKID_SYSCLK_A_EN]		= &sm1_sysclk_a_en.hw,
-+	[AUD_CLKID_SYSCLK_B_DIV]	= &sm1_sysclk_b_div.hw,
-+	[AUD_CLKID_SYSCLK_B_EN]		= &sm1_sysclk_b_en.hw,
- };
- 
- 
-@@ -1745,7 +1734,7 @@ static const struct regmap_config axg_audio_regmap_cfg = {
- struct audioclk_data {
- 	struct clk_regmap *const *regmap_clks;
- 	unsigned int regmap_clk_num;
--	struct clk_hw_onecell_data *hw_onecell_data;
-+	struct meson_clk_hw_data hw_clks;
- 	unsigned int reset_offset;
- 	unsigned int reset_num;
- };
-@@ -1791,10 +1780,10 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
- 		data->regmap_clks[i]->map = map;
- 
- 	/* Take care to skip the registered input clocks */
--	for (i = AUD_CLKID_DDR_ARB; i < data->hw_onecell_data->num; i++) {
-+	for (i = AUD_CLKID_DDR_ARB; i < data->hw_clks.num; i++) {
- 		const char *name;
- 
--		hw = data->hw_onecell_data->hws[i];
-+		hw = data->hw_clks.hws[i];
- 		/* array might be sparse */
- 		if (!hw)
- 			continue;
-@@ -1808,8 +1797,7 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
--					data->hw_onecell_data);
-+	ret = devm_of_clk_add_hw_provider(dev, meson_clk_hw_get, (void *)&data->hw_clks);
- 	if (ret)
- 		return ret;
- 
-@@ -1834,13 +1822,19 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
- static const struct audioclk_data axg_audioclk_data = {
- 	.regmap_clks = axg_clk_regmaps,
- 	.regmap_clk_num = ARRAY_SIZE(axg_clk_regmaps),
--	.hw_onecell_data = &axg_audio_hw_onecell_data,
-+	.hw_clks = {
-+		.hws = axg_audio_hw_clks,
-+		.num = ARRAY_SIZE(axg_audio_hw_clks),
-+	},
- };
- 
- static const struct audioclk_data g12a_audioclk_data = {
- 	.regmap_clks = g12a_clk_regmaps,
- 	.regmap_clk_num = ARRAY_SIZE(g12a_clk_regmaps),
--	.hw_onecell_data = &g12a_audio_hw_onecell_data,
-+	.hw_clks = {
-+		.hws = g12a_audio_hw_clks,
-+		.num = ARRAY_SIZE(g12a_audio_hw_clks),
-+	},
- 	.reset_offset = AUDIO_SW_RESET,
- 	.reset_num = 26,
- };
-@@ -1848,7 +1842,10 @@ static const struct audioclk_data g12a_audioclk_data = {
- static const struct audioclk_data sm1_audioclk_data = {
- 	.regmap_clks = sm1_clk_regmaps,
- 	.regmap_clk_num = ARRAY_SIZE(sm1_clk_regmaps),
--	.hw_onecell_data = &sm1_audio_hw_onecell_data,
-+	.hw_clks = {
-+		.hws = sm1_audio_hw_clks,
-+		.num = ARRAY_SIZE(sm1_audio_hw_clks),
-+	},
- 	.reset_offset = AUDIO_SM1_SW_RESET0,
- 	.reset_num = 39,
- };
-diff --git a/drivers/clk/meson/axg-audio.h b/drivers/clk/meson/axg-audio.h
-index fd65a7d0704b..d6ed27c77729 100644
---- a/drivers/clk/meson/axg-audio.h
-+++ b/drivers/clk/meson/axg-audio.h
-@@ -138,6 +138,4 @@
- /* include the CLKIDs which are part of the DT bindings */
- #include <dt-bindings/clock/axg-audio-clkc.h>
- 
--#define NR_CLKS	178
+-/*
+- * CLKID index values
+- *
+- * These indices are entirely contrived and do not map onto the hardware.
+- * It has now been decided to expose everything by default in the DT header:
+- * include/dt-bindings/clock/gxbb-clkc.h. Only the clocks ids we don't want
+- * to expose, such as the internal muxes and dividers of composite clocks,
+- * will remain defined here.
+- */
+-/* ID 1 is unused (it was used by the non-existing CLKID_CPUCLK before) */
+-#define CLKID_MPEG_SEL		  10
+-#define CLKID_MPEG_DIV		  11
+-#define CLKID_SAR_ADC_DIV	  99
+-#define CLKID_MALI_0_DIV	  101
+-#define CLKID_MALI_1_DIV	  104
+-#define CLKID_CTS_AMCLK_SEL	  108
+-#define CLKID_CTS_AMCLK_DIV	  109
+-#define CLKID_CTS_MCLK_I958_SEL	  111
+-#define CLKID_CTS_MCLK_I958_DIV	  112
+-#define CLKID_32K_CLK_SEL	  115
+-#define CLKID_32K_CLK_DIV	  116
+-#define CLKID_SD_EMMC_A_CLK0_SEL  117
+-#define CLKID_SD_EMMC_A_CLK0_DIV  118
+-#define CLKID_SD_EMMC_B_CLK0_SEL  120
+-#define CLKID_SD_EMMC_B_CLK0_DIV  121
+-#define CLKID_SD_EMMC_C_CLK0_SEL  123
+-#define CLKID_SD_EMMC_C_CLK0_DIV  124
+-#define CLKID_VPU_0_DIV		  127
+-#define CLKID_VPU_1_DIV		  130
+-#define CLKID_VAPB_0_DIV	  134
+-#define CLKID_VAPB_1_DIV	  137
+-#define CLKID_HDMI_PLL_PRE_MULT	  141
+-#define CLKID_MPLL0_DIV		  142
+-#define CLKID_MPLL1_DIV		  143
+-#define CLKID_MPLL2_DIV		  144
+-#define CLKID_MPLL_PREDIV	  145
+-#define CLKID_FCLK_DIV2_DIV	  146
+-#define CLKID_FCLK_DIV3_DIV	  147
+-#define CLKID_FCLK_DIV4_DIV	  148
+-#define CLKID_FCLK_DIV5_DIV	  149
+-#define CLKID_FCLK_DIV7_DIV	  150
+-#define CLKID_VDEC_1_SEL	  151
+-#define CLKID_VDEC_1_DIV	  152
+-#define CLKID_VDEC_HEVC_SEL	  154
+-#define CLKID_VDEC_HEVC_DIV	  155
+-#define CLKID_GEN_CLK_SEL	  157
+-#define CLKID_GEN_CLK_DIV	  158
+-#define CLKID_FIXED_PLL_DCO	  160
+-#define CLKID_HDMI_PLL_DCO	  161
+-#define CLKID_HDMI_PLL_OD	  162
+-#define CLKID_HDMI_PLL_OD2	  163
+-#define CLKID_SYS_PLL_DCO	  164
+-#define CLKID_GP0_PLL_DCO	  165
+-#define CLKID_VID_PLL_SEL	  167
+-#define CLKID_VID_PLL_DIV	  168
+-#define CLKID_VCLK_SEL		  169
+-#define CLKID_VCLK2_SEL		  170
+-#define CLKID_VCLK_INPUT	  171
+-#define CLKID_VCLK2_INPUT	  172
+-#define CLKID_VCLK_DIV		  173
+-#define CLKID_VCLK2_DIV		  174
+-#define CLKID_VCLK_DIV2_EN	  177
+-#define CLKID_VCLK_DIV4_EN	  178
+-#define CLKID_VCLK_DIV6_EN	  179
+-#define CLKID_VCLK_DIV12_EN	  180
+-#define CLKID_VCLK2_DIV2_EN	  181
+-#define CLKID_VCLK2_DIV4_EN	  182
+-#define CLKID_VCLK2_DIV6_EN	  183
+-#define CLKID_VCLK2_DIV12_EN	  184
+-#define CLKID_CTS_ENCI_SEL	  195
+-#define CLKID_CTS_ENCP_SEL	  196
+-#define CLKID_CTS_VDAC_SEL	  197
+-#define CLKID_HDMI_TX_SEL	  198
+-#define CLKID_HDMI_SEL		  203
+-#define CLKID_HDMI_DIV		  204
 -
- #endif /*__AXG_AUDIO_CLKC_H */
+ /* include the CLKIDs that have been made part of the DT binding */
+ #include <dt-bindings/clock/gxbb-clkc.h>
+ 
+diff --git a/include/dt-bindings/clock/gxbb-clkc.h b/include/dt-bindings/clock/gxbb-clkc.h
+index 4073eb7a9da1..c0ce5e9c4151 100644
+--- a/include/dt-bindings/clock/gxbb-clkc.h
++++ b/include/dt-bindings/clock/gxbb-clkc.h
+@@ -15,6 +15,8 @@
+ #define CLKID_FCLK_DIV5		7
+ #define CLKID_FCLK_DIV7		8
+ #define CLKID_GP0_PLL		9
++#define CLKID_MPEG_SEL		10
++#define CLKID_MPEG_DIV		11
+ #define CLKID_CLK81		12
+ #define CLKID_MPLL0		13
+ #define CLKID_MPLL1		14
+@@ -102,35 +104,92 @@
+ #define CLKID_SD_EMMC_C		96
+ #define CLKID_SAR_ADC_CLK	97
+ #define CLKID_SAR_ADC_SEL	98
++#define CLKID_SAR_ADC_DIV	99
+ #define CLKID_MALI_0_SEL	100
++#define CLKID_MALI_0_DIV	101
+ #define CLKID_MALI_0		102
+ #define CLKID_MALI_1_SEL	103
++#define CLKID_MALI_1_DIV	104
+ #define CLKID_MALI_1		105
+ #define CLKID_MALI		106
+ #define CLKID_CTS_AMCLK		107
++#define CLKID_CTS_AMCLK_SEL	108
++#define CLKID_CTS_AMCLK_DIV	109
+ #define CLKID_CTS_MCLK_I958	110
++#define CLKID_CTS_MCLK_I958_SEL	111
++#define CLKID_CTS_MCLK_I958_DIV 112
+ #define CLKID_CTS_I958		113
+ #define CLKID_32K_CLK		114
++#define CLKID_32K_CLK_SEL	115
++#define CLKID_32K_CLK_DIV	116
++#define CLKID_SD_EMMC_A_CLK0_SEL 117
++#define CLKID_SD_EMMC_A_CLK0_DIV 118
+ #define CLKID_SD_EMMC_A_CLK0	119
++#define CLKID_SD_EMMC_B_CLK0_SEL 120
++#define CLKID_SD_EMMC_B_CLK0_DIV 121
+ #define CLKID_SD_EMMC_B_CLK0	122
++#define CLKID_SD_EMMC_C_CLK0_SEL 123
++#define CLKID_SD_EMMC_C_CLK0_DIV 124
+ #define CLKID_SD_EMMC_C_CLK0	125
+ #define CLKID_VPU_0_SEL		126
++#define CLKID_VPU_0_DIV		127
+ #define CLKID_VPU_0		128
+ #define CLKID_VPU_1_SEL		129
++#define CLKID_VPU_1_DIV		130
+ #define CLKID_VPU_1		131
+ #define CLKID_VPU		132
+ #define CLKID_VAPB_0_SEL	133
++#define CLKID_VAPB_0_DIV	134
+ #define CLKID_VAPB_0		135
+ #define CLKID_VAPB_1_SEL	136
++#define CLKID_VAPB_1_DIV	137
+ #define CLKID_VAPB_1		138
+ #define CLKID_VAPB_SEL		139
+ #define CLKID_VAPB		140
++#define CLKID_HDMI_PLL_PRE_MULT	141
++#define CLKID_MPLL0_DIV		142
++#define CLKID_MPLL1_DIV		143
++#define CLKID_MPLL2_DIV		144
++#define CLKID_MPLL_PREDIV	145
++#define CLKID_FCLK_DIV2_DIV	146
++#define CLKID_FCLK_DIV3_DIV	147
++#define CLKID_FCLK_DIV4_DIV	148
++#define CLKID_FCLK_DIV5_DIV	149
++#define CLKID_FCLK_DIV7_DIV	150
++#define CLKID_VDEC_1_SEL	151
++#define CLKID_VDEC_1_DIV	152
+ #define CLKID_VDEC_1		153
++#define CLKID_VDEC_HEVC_SEL	154
++#define CLKID_VDEC_HEVC_DIV	155
+ #define CLKID_VDEC_HEVC		156
++#define CLKID_GEN_CLK_SEL	157
++#define CLKID_GEN_CLK_DIV	158
+ #define CLKID_GEN_CLK		159
++#define CLKID_FIXED_PLL_DCO	160
++#define CLKID_HDMI_PLL_DCO	161
++#define CLKID_HDMI_PLL_OD	162
++#define CLKID_HDMI_PLL_OD2	163
++#define CLKID_SYS_PLL_DCO	164
++#define CLKID_GP0_PLL_DCO	165
+ #define CLKID_VID_PLL		166
++#define CLKID_VID_PLL_SEL	167
++#define CLKID_VID_PLL_DIV	168
++#define CLKID_VCLK_SEL		169
++#define CLKID_VCLK2_SEL		170
++#define CLKID_VCLK_INPUT	171
++#define CLKID_VCLK2_INPUT	172
++#define CLKID_VCLK_DIV		173
++#define CLKID_VCLK2_DIV		174
+ #define CLKID_VCLK		175
+ #define CLKID_VCLK2		176
++#define CLKID_VCLK_DIV2_EN	177
++#define CLKID_VCLK_DIV4_EN	178
++#define CLKID_VCLK_DIV6_EN	179
++#define CLKID_VCLK_DIV12_EN	180
++#define CLKID_VCLK2_DIV2_EN	181
++#define CLKID_VCLK2_DIV4_EN	182
++#define CLKID_VCLK2_DIV6_EN	183
++#define CLKID_VCLK2_DIV12_EN	184
+ #define CLKID_VCLK_DIV1		185
+ #define CLKID_VCLK_DIV2		186
+ #define CLKID_VCLK_DIV4		187
+@@ -141,10 +200,16 @@
+ #define CLKID_VCLK2_DIV4	192
+ #define CLKID_VCLK2_DIV6	193
+ #define CLKID_VCLK2_DIV12	194
++#define CLKID_CTS_ENCI_SEL	195
++#define CLKID_CTS_ENCP_SEL	196
++#define CLKID_CTS_VDAC_SEL	197
++#define CLKID_HDMI_TX_SEL	198
+ #define CLKID_CTS_ENCI		199
+ #define CLKID_CTS_ENCP		200
+ #define CLKID_CTS_VDAC		201
+ #define CLKID_HDMI_TX		202
++#define CLKID_HDMI_SEL		203
++#define CLKID_HDMI_DIV		204
+ #define CLKID_HDMI		205
+ #define CLKID_ACODEC		206
+ 
 
 -- 
 2.34.1
