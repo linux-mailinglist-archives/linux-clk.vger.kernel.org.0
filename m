@@ -2,71 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2EF72BCFD
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B033072BD05
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbjFLJsb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 05:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S231653AbjFLJtT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 05:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234769AbjFLJrn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:47:43 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9147A5E3
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:32 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-973bf581759so731800366b.0
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:32 -0700 (PDT)
+        with ESMTP id S234308AbjFLJsO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:48:14 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B71AD05
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:46 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5147f5efeb5so7426058a12.0
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686562382; x=1689154382;
+        d=linaro.org; s=google; t=1686562396; x=1689154396;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wsfv8tU8typbArcFFZ3RmodVuhSCsV+o3+M2ATwIwoQ=;
-        b=TUVRaQrj978yj3MbisxqkjQ+TD0JBBm+EutSEaAHeOCuts1Q0j2OuxULpIx2+Bsi15
-         ltrB5Na0agI4WZIIGzJAK7rc6fkrTgH3/y+DbfbT7KocetCj2XbBDy8QAae/kCI03fcV
-         qqb5R0jk/XnngPe6DCxaj7C2MBSVu7X4Sf2Lbyc3+h624qAUhkiURnZDcXbFrOMcI8Go
-         OVnmbrHSlbfViKCQXu3P8DpOOaekybyyjRU7ezTIAYuQczHEHfthZeWLR0Nld+mrVTxZ
-         +9dWL+Vn5v8E4pBCcKXcmRdNfkln8Dycfdu6ib76K8yO27yfeZVCqD1kFtV+CUf5pmqW
-         wOIQ==
+        bh=uw2vt//oAwfRUDirKEfuFTfUTv7LIcANL47GaMhJ2HY=;
+        b=tvljEK9M9gicBQPrr2CvNMR0e2D10EWl3TIXpZe8jfDI9UB/j1pUJcHMOgNNVrLmnB
+         CroIaJhnNHy9vKCpoAFHXsQrGEf9K2Lx4N0Nfvmlvig51euRaPlEj2yr1FgyXDM0I65P
+         xmBJ0QtcIyx+yxX+Pk0uaDHuQUk2P2u/nwCPJqydxAwRgTzWP8gYMvwEvOZxWnLtJKw+
+         7EEnsDkLGlaRB7lssdiIVnPVXxI30A99q6MhZS9zkovz9EJ9DuE7N6lUfsMwVLjgxH6Q
+         fEX08uTQjGMpURhdBUovE0+AUEYg1i2+70WYWT6RRt0Z9FwkM5o5JX64JstJ82f6Pe1N
+         XGqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562382; x=1689154382;
+        d=1e100.net; s=20221208; t=1686562396; x=1689154396;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wsfv8tU8typbArcFFZ3RmodVuhSCsV+o3+M2ATwIwoQ=;
-        b=E0bxgnhzsrZUlugC/QCFSjk0T/GiODP61lF8+mMMAS0D5fJXpRqQyAhmHc1QdoCrp5
-         vFMP6yAj05PyLW1c2aB61lFgVBFZa40EuE7qKHmNMqK9CpgO06SS9ty+lpLmqq/xaiLx
-         OMkhjy4Xj00qOiVRaimi2Y04v49rK++NeOxkqgPj58mUByBia6Wo4TR9vSyOpTsskbUw
-         RL/7HL+oclhoGmwSdXXAuqZGHlkf92IelJEzaRDRSJIz13I6+52u8QWOakCCPsH4jpM6
-         de4KG9Y6VPqMBCdlmAvWOag6ENu6e/M3CrMoph0lh9plFVTApfCFOCZwDad3oHLLZT5x
-         SZUw==
-X-Gm-Message-State: AC+VfDwwE4R0uw15UCYJnJuX2oSch5hmTYwSsPaPklhYkC9tk2XC2gZj
-        ZuyU3fgQH7TYXTchBKaEcmejKMRdr3YmDxLS91k=
-X-Google-Smtp-Source: ACHHUZ4FRCeN8jvFzEJ3tb+8GoTw8KH3QdvMi+2BF4JcQt89B9Ozs9bBPixR/raWCid1tZtHQT9T4Q==
-X-Received: by 2002:a17:906:4796:b0:973:fd02:a41f with SMTP id cw22-20020a170906479600b00973fd02a41fmr10476799ejc.40.1686562382087;
-        Mon, 12 Jun 2023 02:33:02 -0700 (PDT)
+        bh=uw2vt//oAwfRUDirKEfuFTfUTv7LIcANL47GaMhJ2HY=;
+        b=Ol27cSG8gcyl4iTEq6NUp1A+2A2BTb3idjijN0UvrzEvD2hXtKXSeNVmQaA7gfj2/0
+         S44EkQpgZU/UDInri6dZYV0SyYpW4aj8JLFGvPiKncdj4tWMdHALcWsVlElccHNLtQco
+         9U5PZVv8advsxJ3a6y55qpqFVR/flgTP9sbjG+56p94cZ5EkacSqDltBo2NVsbzwLvTn
+         sPYs9SMJFpBVCGzX+ika/jbqCLx6t5tRlodkmEPb8Cs5hsjp/S8hHlclwooSC7dDESsC
+         9jmuFHRiUByKAdUS8oVuS0B7DSmlBZMW2tbmyiv5JeMcfm8StJ2UOl4rYM7UFNACHqYF
+         Ye1Q==
+X-Gm-Message-State: AC+VfDwzygcg8U52yiPyb0azKV0jkVOjAPWiXti0PzqO7RYZUHh2JbVo
+        qhjwaofvWa0mJlTQwSX+PZ/DWQ==
+X-Google-Smtp-Source: ACHHUZ4VY3Aoz4gm30K5nUpn2AqyMQacV3tqPC7J4zZGUar4ttwHkuiDYKSoqdModohkXNgm4rVyxg==
+X-Received: by 2002:a17:907:16ab:b0:94f:1a23:2f1c with SMTP id hc43-20020a17090716ab00b0094f1a232f1cmr11100570ejc.50.1686562395859;
+        Mon, 12 Jun 2023 02:33:15 -0700 (PDT)
 Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.00
+        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:33:01 -0700 (PDT)
+        Mon, 12 Jun 2023 02:33:15 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
-To:     linux-clk@vger.kernel.org, Adam Ford <aford173@gmail.com>
-Cc:     aford@beaconembedded.com, Abel Vesa <abelvesa@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-Date:   Mon, 12 Jun 2023 12:32:35 +0300
-Message-Id: <168656228135.662397.14806433100721864469.b4-ty@linaro.org>
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/4] dt-bindings: clock: imx8m: Add missing interrupt property
+Date:   Mon, 12 Jun 2023 12:32:36 +0300
+Message-Id: <168656228138.662397.5023054171384904344.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230506195325.876871-1-aford173@gmail.com>
-References: <20230506195325.876871-1-aford173@gmail.com>
+In-Reply-To: <20230510065644.1317577-1-alexander.stein@ew.tq-group.com>
+References: <20230510065644.1317577-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -81,26 +84,17 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-On Sat, 06 May 2023 14:53:25 -0500, Adam Ford wrote:
-> Currently, certain clocks are derrived as a divider from their
-> parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
-> is set, the parent clock is not properly set which can lead
-> to some relatively inaccurate clock values.
+On Wed, 10 May 2023 08:56:41 +0200, Alexander Stein wrote:
+> All i.MX8M SoC have 2 CCM interrupts, called:
+> * Interrupt Request 1
+> * Interrupt Request 2
 > 
-> Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
-> cannot rely on calling a standard determine_rate function,
-> because the 8m composite clocks have a pre-divider and
-> post-divider. Because of this, a custom determine_rate
-> function is necessary to determine the maximum clock
-> division which is equivalent to pre-divider * the
-> post-divider.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-      commit: 8208181fe536bba3b411508f81c4426fc9c71d9a
+[1/4] dt-bindings: clock: imx8m: Add missing interrupt property
+      commit: 6e6bb1639136f36c82efda147b63e2a2197fa3f8
 
 Best regards,
 -- 
