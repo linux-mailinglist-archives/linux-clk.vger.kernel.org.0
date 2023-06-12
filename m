@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAD572BD03
-	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E664D72BCF9
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Jun 2023 11:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjFLJtQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jun 2023 05:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        id S233203AbjFLJsK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Jun 2023 05:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbjFLJr7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:47:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78902A5F5
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:37 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977cf86aae5so625004766b.0
-        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:37 -0700 (PDT)
+        with ESMTP id S233860AbjFLJr1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jun 2023 05:47:27 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAE5A5D8
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:24 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so10453541a12.1
+        for <linux-clk@vger.kernel.org>; Mon, 12 Jun 2023 02:34:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686562402; x=1689154402;
+        d=linaro.org; s=google; t=1686562405; x=1689154405;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fNA3pQAUnl5SwQH9eSGE6UJxUpnHbr8UA8zS8MrGEdo=;
-        b=S9ulLI6aWH4YWOkhKy47/q5SnI1L9ABRfn9txvV/Rsl022Krs+53C3JV7sEWiYQuEj
-         akU7FdTk4tPqBllOX7IAHz+cIfLrZVbm+bP19ATMoSJhrSVqvsQ7IhS0prPCXfrcOH+N
-         cj/XVwC94HuYfCB8ipUqNXkTUoNn0mEldWY7CKroL8ISzKQLn1BDUnV8yxbn1RRfD2xt
-         O12oxCShyKkaPF9KAvflSvkKeXkJhfN84RWZSqzpDjD8QUoz8B+iufd5hBu9n75udRgF
-         A+gGTT7/SSP19Ie9y4GiFCaO1c95Cd1P5uFDjryYCx5oc0PQyLjVCJVUGcm+gNRNz3JH
-         s/UA==
+        bh=FtoVIAYvvaeJCmzX3NdwvnzpTltebMwdZEZnlmKhDLQ=;
+        b=wdB5yrjrAs3jXnvkq4geD39hwuQE7x052nP4+T90RSSxrtqz8SvhypaMhV43pqDOU9
+         4JjfufjNGjSBpG22gBTRdm9u8PRCBSLOBFgbiKvg8cIjYT8KKUMx0f1HzpSvkMBTeeNg
+         +EEWF8QrVUIHz8MD8qmZa4v2YUhymK4IuJXiYSjsEEocta+bM5Kke8wX/9S5ETOYg5Rh
+         FOYMNSH3koOTvSWW+bJMgDjmW+FdVYmxvyYsaQcbiZLon2ytryAy4DfBb5XRbO9ygIOS
+         r3cDulPWDJxu/dvQFy9/KIGQDztK9AUHfjS5YKaXp0y7q+9LHX/KZuPnWAO/Ts28puZI
+         O5+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562402; x=1689154402;
+        d=1e100.net; s=20221208; t=1686562405; x=1689154405;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fNA3pQAUnl5SwQH9eSGE6UJxUpnHbr8UA8zS8MrGEdo=;
-        b=VQ/4YW6k0IEdBGI2MoxCsmGiv2Pz1BTsfxnTdMGORi/eJtqAsVntuz2ILRHPIxFjP9
-         EPohbJr/CNPco/Myi05+/gNbMcRsAAY1wYos/+OG+MpWBDH0ZNjJYA1kkoyDAugIta+b
-         C/ax9DanqLDFQS1K2sKbJpv3Fnx8+9zcAGaUwkVodKKOMbnZQbnXPnSmmzLH7yRuo8cK
-         Rr4hXkdS9fHfBGXRasfAdIbQIKmY4IlINZiERXGghkCpKXS0nagaH1/Hp7GP7Lhm+AUk
-         yTLk/ZqFaOHdWca5BoMLBxKVJaBMb3V9HBJcn6hFtTVqcGQwS15Z01izBZ5sfEV6fawc
-         elfA==
-X-Gm-Message-State: AC+VfDzqI4myWDFgkEgkczvRxLUtBfMIs8IAougisWNsgrdsc1wTJ5Qx
-        UNigW39TtlQiYlo9z8pADYEPcg==
-X-Google-Smtp-Source: ACHHUZ5xY/K6uqeggb7LAo0ieXQqhWmKB1pYCpBBY4cTeTnzfHALpqhjWDsCUnEiJkEnwfUYbNdMXw==
-X-Received: by 2002:a17:907:7da9:b0:973:946d:96ba with SMTP id oz41-20020a1709077da900b00973946d96bamr8620449ejc.69.1686562402724;
-        Mon, 12 Jun 2023 02:33:22 -0700 (PDT)
+        bh=FtoVIAYvvaeJCmzX3NdwvnzpTltebMwdZEZnlmKhDLQ=;
+        b=mBfMJHvVCBZf05W+0fbzPFJVKKt8WFgcNNozobm7XLPDz9zABT+KNMeFIzPyM38JXf
+         1Icomc6QQzAw5ZZ+D1NUxz1hgoHXPhikE2JiclbnbB/vibrjKSwWixWYAHAt15x7wTxI
+         EMFmMc4+w5DxBRlB1tapcI2Fvo52LaUXhrVcvE++afNIomFie6H61NjUeYJFgIXyijcX
+         gdH5K92+Zo1nhSxeu6wPqX3KF3+DOHvUcaxB2OCu0dJYqtSxqFMCxib47tXZYxeOIsZ7
+         JWhWsgAh6eH7WYt3aVNvrhq3CvVOgdxcwemQaNCLtUIFChabb9fkNF4lsdYeaVy79d0E
+         +HHA==
+X-Gm-Message-State: AC+VfDwDFq+mnhrW+Hep3DGwp8edHEY/YnUPtSF9lFqdSGnIBoUuxaAh
+        YsCb+V4BI9vBAvYIFB8z9Ck8Ng==
+X-Google-Smtp-Source: ACHHUZ6lI2jsO4Sm/86nevBsOTQv1TSTrEMT4rYq4dBh62a/5xR7uH8uhY9mKOjHGynVFTFxfsAgKQ==
+X-Received: by 2002:a17:907:969e:b0:968:892b:1902 with SMTP id hd30-20020a170907969e00b00968892b1902mr8936027ejc.6.1686562405173;
+        Mon, 12 Jun 2023 02:33:25 -0700 (PDT)
 Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.21
+        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:33:22 -0700 (PDT)
+        Mon, 12 Jun 2023 02:33:24 -0700 (PDT)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -58,22 +58,23 @@ To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Jesse Taube <mr.bossman075@gmail.com>,
-        Kai Ma <kaima@hust.edu.cn>
-Cc:     hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Yuxing Liu <lyx2022@hust.edu.cn>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: clk-imxrt1050: fix memory leak in imxrt1050_clocks_probe
-Date:   Mon, 12 Jun 2023 12:32:37 +0300
-Message-Id: <168656228136.662397.997641301782961079.b4-ty@linaro.org>
+Subject: Re: [PATCH] clk: imx: clk-imx8mp: improve error handling in imx8mp_clocks_probe()
+Date:   Mon, 12 Jun 2023 12:32:38 +0300
+Message-Id: <168656228140.662397.3944524571382952191.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230418113451.151312-1-kaima@hust.edu.cn>
-References: <20230418113451.151312-1-kaima@hust.edu.cn>
+In-Reply-To: <20230503070607.2462-1-lyx2022@hust.edu.cn>
+References: <20230503070607.2462-1-lyx2022@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,21 +83,20 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-On Tue, 18 Apr 2023 11:34:51 +0000, Kai Ma wrote:
-> Use devm_of_iomap() instead of of_iomap() to automatically
-> handle the unused ioremap region. If any error occurs, regions allocated by
-> kzalloc() will leak, but using devm_kzalloc() instead will automatically
-> free the memory using devm_kfree().
+On Wed, 03 May 2023 07:06:07 +0000, Yuxing Liu wrote:
+> Replace of_iomap() and kzalloc() with devm_of_iomap() and devm_kzalloc()
+> which can automatically release the related memory when the device
+> or driver is removed or unloaded to avoid potential memory leak.
 > 
-> Also, fix error handling of hws by adding unregister_hws label, which
-> unregisters remaining hws when iomap failed.
+> In this case, iounmap(anatop_base) in line 427,433 are removed
+> as manual release is not required.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] clk: imx: clk-imxrt1050: fix memory leak in imxrt1050_clocks_probe
-      commit: 1b280598ab3bd8a2dc8b96a12530d5b1ee7a8f4a
+[1/1] clk: imx: clk-imx8mp: improve error handling in imx8mp_clocks_probe()
+      commit: 878b02d5f3b56cb090dbe2c70c89273be144087f
 
 Best regards,
 -- 
