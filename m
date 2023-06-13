@@ -2,58 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E77072E159
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Jun 2023 13:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E5E72E28B
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Jun 2023 14:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239847AbjFMLXa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Jun 2023 07:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S240199AbjFMMNG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 13 Jun 2023 08:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241580AbjFMLXB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Jun 2023 07:23:01 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32ECA109
-        for <linux-clk@vger.kernel.org>; Tue, 13 Jun 2023 04:22:31 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso6510448e87.1
-        for <linux-clk@vger.kernel.org>; Tue, 13 Jun 2023 04:22:31 -0700 (PDT)
+        with ESMTP id S234563AbjFMMNF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Jun 2023 08:13:05 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4647E7D
+        for <linux-clk@vger.kernel.org>; Tue, 13 Jun 2023 05:13:01 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f61735676fso6765596e87.2
+        for <linux-clk@vger.kernel.org>; Tue, 13 Jun 2023 05:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686655332; x=1689247332;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KEiBlQtM1KSXPhrQOGJJ3O3U5L5lQAvJZUw1sBa4LaY=;
-        b=Q+ddL3nmDNPdTlA6UknAFxrHXmnW+yYVeECzdf0LBsU328rfuQBMTcGZIWDgCtDryB
-         Fdlfz97nbC0SKldsxcZK168dY6h5h4U0sN/DaOoO1aSPKRfsNCDx5xkt3JCNx8FJOTKl
-         1ly2NkBaSZEa30pZv2CX2uIUHmACtVnW2DQRpk0vZ7BKwRQZWHI8rc1qEjhJubG6YYx7
-         auBpou+K2cucsoLG526aZYLhBbCC/EYkiEPPnGyFBaDAt7Wcegr0+q8urmbhhzJXI68P
-         bg8QzAo2ZwOx4kLtj5qnZyKAwmv1w3s8Vzn0bwVj83j3h+/CaYR/P+X9ubjjIEYfMKlP
-         8WtA==
+        d=linaro.org; s=google; t=1686658380; x=1689250380;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6CMlQba2o43/QiP5kbF00C5SMM+pc3bqKwMdZ4o71Wg=;
+        b=jM2BdMoNCbF74BgGgRDVYE6LKUcsY3HAYxwagM7IqNQFDHyA50WMO364I8ZuLvp9v2
+         qGs2ogbEf4zfjDoEPz0k4SbACIKnBKeIiIbl2KvH80pi+vzd5qOkPP5s4xlkhj+omVsY
+         Fda5TdW3CDeMJ1S+ETpk01VHjri3rDZvXPmReSFUWb3CKvBXoQ7CHvP0ADadNSMQvNXq
+         GHb7DJ5uGPve8Yb61BMTRIQgCsLJzAsT7XypLTm7vQOIfHTMUGXr8V4TRJHEUupLOi5z
+         Sy7JgxGVPqzsucyCgYlz42JPFMkpeynHYwsNMvKT/PqSPAfou+yAxlxlLZKOFub+XpaR
+         1eAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686655332; x=1689247332;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686658380; x=1689250380;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KEiBlQtM1KSXPhrQOGJJ3O3U5L5lQAvJZUw1sBa4LaY=;
-        b=XA9RzxIN7cPD0jpb+d76sODmwE/WKCmkd/NEhSXOodSxbpBT8IWevUCTuw4lCs9GYp
-         5fhoCKvwbRQoAAUMqgdZtmQ4OQrOJLVDTPG8bbnToI3k265KI74egiZM7ZfIjR1PUggT
-         gjgq+Pqfell4OTaJo8FmZSjYqq8QYT7Ex6nXu4ubOQfarffPR/zHEn9dqVgTq90ODJFp
-         ymFUtsC5Q9DuCX0n5SCfAqjAFRPg666Z8Y9Odb2mlnHcqJC9U3a9TYJ2FzAnSEkEkIJJ
-         RFVWKm/+eaLOkH92aNfH4NZO6u9v9g+uZi+ltm9e39kWpSGY5OsDBd+78J1Emtt16SRd
-         JwTA==
-X-Gm-Message-State: AC+VfDxKa8tfgU4FhjhV8mSUCcqqAsR6U+MTwzYcSnePcNHsVAiFH5cQ
-        ra60IBPbgUVUzS4RKmDvzjo/Pg==
-X-Google-Smtp-Source: ACHHUZ7ef45PANVRG898Mup8KxCLByZBkt0J36XqbeDblWj/cLUyDMmPpoyrU329EgjQKrYm7x1U1w==
-X-Received: by 2002:a2e:3801:0:b0:2b2:a6:6132 with SMTP id f1-20020a2e3801000000b002b200a66132mr4627803lja.25.1686655332174;
-        Tue, 13 Jun 2023 04:22:12 -0700 (PDT)
+        bh=6CMlQba2o43/QiP5kbF00C5SMM+pc3bqKwMdZ4o71Wg=;
+        b=DsZdwz6jBPThLB2K50I+OHdlF1gydwT+mTg0xup4Vlw0Wju5dbxTH44K7chOfogCyc
+         bqCH3ver8sSAXm1q32Z0WP5449L7wiQbObtWTmKm6NyOEClBSZKlDHfKsA/vRPoSTZ/7
+         jXTwiem3rbZ7Tc+zKqD56Cft5HCpe7LayB7AB97Buy9GoV0iKO6p5ucqng0k4UehZjJJ
+         kBt8gynhL07ISULozyGGI7Q3RPlbVdfp6qW4bHeoSzIIm3G2S3/HuxfZmUV4P3HkNC7a
+         hM+go7Jlf0LHekFB6v7bR6TTqXXWYxB/FuHjH5oNjBmdpmXXRbMSbHKmf2TT+74m4xX9
+         raQA==
+X-Gm-Message-State: AC+VfDyFkJS4UMQ71lswAJ54QDzN4EU1etAu2s2SzxoEteKvcxRXIdwG
+        0z0ZfciIwFfT4tFLeJS8ws0S9Q==
+X-Google-Smtp-Source: ACHHUZ7v2g+t0UCuMLHeHfZftjO5zEOcIpmanWsJpdQFoH7LGbqE71Kf4m1iAu+cL1lUPxg/TiXWWg==
+X-Received: by 2002:ac2:5b83:0:b0:4f7:5a42:6af with SMTP id o3-20020ac25b83000000b004f75a4206afmr1024268lfn.37.1686658379752;
+        Tue, 13 Jun 2023 05:12:59 -0700 (PDT)
 Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id e3-20020a2e8183000000b002adaacdb900sm2113062ljg.42.2023.06.13.04.22.10
+        by smtp.gmail.com with ESMTPSA id w28-20020ac2599c000000b004f61a57797fsm1759751lfn.60.2023.06.13.05.12.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 04:22:11 -0700 (PDT)
-Message-ID: <88ce120e-dc2e-a07f-3c9f-53073e51a1af@linaro.org>
-Date:   Tue, 13 Jun 2023 13:22:09 +0200
+        Tue, 13 Jun 2023 05:12:59 -0700 (PDT)
+Message-ID: <a04f8089-0117-7c22-c6cc-97f5bd42a7d8@linaro.org>
+Date:   Tue, 13 Jun 2023 14:12:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
+Subject: Re: [PATCH v3 07/23] interconnect: qcom: icc-rpm: Allow negative QoS
+ offset
 Content-Language: en-US
 To:     Stephan Gerhold <stephan@gerhold.net>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -71,18 +73,16 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
- <20230526-topic-smd_icc-v3-18-5fb7d39b874f@linaro.org>
- <ZIeGGn7emge6Xkb0@gerhold.net>
+ <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
+ <ZId_qIAL8dvJOwai@gerhold.net>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v3 18/23] interconnect: qcom: icc-rpm: Control bus rpmcc
- from icc
-In-Reply-To: <ZIeGGn7emge6Xkb0@gerhold.net>
+In-Reply-To: <ZId_qIAL8dvJOwai@gerhold.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,157 +91,70 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 
 
-On 12.06.2023 22:54, Stephan Gerhold wrote:
-> On Mon, Jun 12, 2023 at 08:24:35PM +0200, Konrad Dybcio wrote:
->> The sole purpose of bus clocks that were previously registered with
->> rpmcc was to convey the aggregated bandwidth to RPM. There's no good
->> reason to keep them outside the interconnect framework, as it only
->> adds to the plentiful complexity.
+On 12.06.2023 22:27, Stephan Gerhold wrote:
+> On Mon, Jun 12, 2023 at 08:24:24PM +0200, Konrad Dybcio wrote:
+>> In some very very very very unfortunate cases, the correct offset of
+>> the QoS registers will be.. negative. One such case is MSM8998, where
+>> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
+>> take into account with the register calculation, making the actual
+>> BIMC node start at what-would-be-the-BIMC-base+0x300.
 >>
->> Add the required code to handle these clocks from within SMD RPM ICC.
->>
->> RPM-owned bus clocks are no longer considered a thing, but sadly we
->> have to allow for the existence of HLOS-owned bus clocks, as some
->> (mostly older) SoCs (ab)use these for bus scaling (e.g. MSM8998 and
->> &mmcc AHB_CLK_SRC).
->>
->> This in turn is trivially solved with a single *clk, which is filled
->> and used iff qp.bus_clk_desc is absent and we have a "bus" clock-names
->> entry in the DT node.
->>
->> This change should(tm) be fully compatible with all sorts of old
->> Device Trees as far as the interconnect functionality goes (modulo
->> abusing bus clock handles, but that's a mistake in and of itself).
+>> In order to keep the calculation code sane, the simplest - however
+>> ugly it may be - solution is to allow the offset to be negative.
 >>
 >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> Would be nice to add a comment here already that you're breaking
-> compatbility with the qcom,icc.h. It's a bit hidden otherwise.
-Right, wouldn't hurt..
+> I'm a bit confused why this patch is part of this series. It doesn't
+> seem to be directly related.
+> 
+> Can you send it as part of the series that adds the MSM8998 interconnect
+> driver?
+Ack
 
-> 
->> ---
->>  drivers/interconnect/qcom/icc-rpm.c | 114 ++++++++++++++++++++----------------
->>  drivers/interconnect/qcom/icc-rpm.h |  13 ++--
->>  drivers/interconnect/qcom/msm8996.c |   1 -
->>  drivers/interconnect/qcom/sdm660.c  |   1 -
->>  4 files changed, 66 insertions(+), 63 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->> index b8ecf9538ab9..5ffcf5ca8914 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.c
->> +++ b/drivers/interconnect/qcom/icc-rpm.c
->> @@ -49,7 +49,7 @@
->>  #define NOC_QOS_MODE_FIXED_VAL		0x0
->>  #define NOC_QOS_MODE_BYPASS_VAL		0x2
->>  
->> -#define ICC_BUS_CLK_MIN_RATE		19200000ULL
->> +#define ICC_BUS_CLK_MIN_RATE		19200ULL /* kHz */
->>  
->>  static int qcom_icc_set_qnoc_qos(struct icc_node *src)
->>  {
->> @@ -338,11 +338,10 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>  	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
->>  	struct icc_provider *provider;
->>  	u64 sum_bw;
->> -	u64 rate;
->> +	u64 active_rate, sleep_rate;
->>  	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
->>  	u64 max_agg_avg;
->> -	int ret, i;
->> -	int bucket;
->> +	int ret;
->>  
->>  	src_qn = src->data;
->>  	if (dst)
->> @@ -364,49 +363,54 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>  			return ret;
->>  	}
->>  
->> -	for (i = 0; i < qp->num_bus_clks; i++) {
->> -		/*
->> -		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
->> -		 * for other clocks.  If a platform doesn't set interconnect
->> -		 * path tags, by default use sleep bucket for all clocks.
->> -		 *
->> -		 * Note, AMC bucket is not supported yet.
->> -		 */
->> -		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
->> -			bucket = QCOM_ICC_BUCKET_WAKE;
->> -		else
->> -			bucket = QCOM_ICC_BUCKET_SLEEP;
->> -
->> -		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
->> -		do_div(rate, src_qn->buswidth);
->> -		rate = min_t(u64, rate, LONG_MAX);
->> -
->> -		/*
->> -		 * Downstream checks whether the requested rate is zero, but it makes little sense
->> -		 * to vote for a value that's below the lower threshold, so let's not do so.
->> -		 */
->> -		if (bucket == QCOM_ICC_BUCKET_WAKE && qp->keep_alive)
->> -			rate = max(ICC_BUS_CLK_MIN_RATE, rate);
->> -
->> -		if (qp->bus_clk_rate[i] == rate)
->> -			continue;
->> -
->> -		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
->> -		if (ret) {
->> -			pr_err("%s clk_set_rate error: %d\n",
->> -			       qp->bus_clks[i].id, ret);
->> +	/* Some providers don't have a bus clock to scale */
->> +	if (!qp->bus_clk_desc && !qp->bus_clk)
->> +		return 0;
->> +
->> +	/* Intentionally keep the rates in kHz as that's what RPM accepts */
->> +	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
->> +			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
->> +	do_div(active_rate, src_qn->buswidth);
->> +
->> +	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
->> +			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
->> +	do_div(sleep_rate, src_qn->buswidth);
->> +
->> +	/*
->> +	 * Downstream checks whether the requested rate is zero, but it makes little sense
->> +	 * to vote for a value that's below the lower threshold, so let's not do so.
->> +	 */
->> +	if (qp->keep_alive)
->> +		active_rate = max(ICC_BUS_CLK_MIN_RATE, active_rate);
->> +
->> +	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
->> +	if (qp->bus_clk) {
->> +		active_rate = max_t(u64, active_rate, sleep_rate);
->> +		/* ARM32 caps clk_set_rate arg to u32.. Nothing we can do about that! */
->> +		active_rate = min_t(u64, 1000ULL * active_rate, ULONG_MAX);
->> +		return clk_set_rate(qp->bus_clk, active_rate);
->> +	}
->> +
->> +	/* RPM only accepts <=INT_MAX rates */
->> +	active_rate = min_t(u32, active_rate, INT_MAX);
->> +	sleep_rate = min_t(u32, sleep_rate, INT_MAX);
->> +
->> +	if ((active_rate != qp->bus_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]) ||
->> +	    (sleep_rate != qp->bus_clk_rate[QCOM_SMD_RPM_SLEEP_STATE])) {
->> +		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc,
->> +						active_rate,
->> +						sleep_rate);
->> +		if (ret)
->>  			return ret;
-> 
-> Hm, do we have to set both rates together in all cases? If cpufreq is
-> quickly changing frequencies (and therefore active-only ICC bandwidths)
-> it should be sufficient to make one call into RPM and leave the sleep
-> rate as-is. Especially because you already cache the two rates
-> separately.
-> 
-> AFAICT downstream updates the contexts completely separately, so I don't
-> think it updates both rates at once either. And actually even the old
-> code before this patch didn't do that :D
-Right, I can trivially solve that by making qcom_icc_rpm_set_bus_rate
-accept an is_active parameter..
-
-Konrad 
+Konrad
 > 
 > Thanks,
 > Stephan
+> 
+>> ---
+>>  drivers/interconnect/qcom/icc-rpm.h | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+>> index d2c04c400cad..ba840a436cc0 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.h
+>> +++ b/drivers/interconnect/qcom/icc-rpm.h
+>> @@ -29,10 +29,10 @@ enum qcom_icc_type {
+>>   * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
+>>   * @type: the ICC provider type
+>>   * @regmap: regmap for QoS registers read/write access
+>> - * @qos_offset: offset to QoS registers
+>>   * @bus_clk_rate: bus clock rate in Hz
+>>   * @bus_clks: the clk_bulk_data table of bus clocks
+>>   * @intf_clks: a clk_bulk_data array of interface clocks
+>> + * @qos_offset: offset to QoS registers
+>>   * @keep_alive: whether to always keep a minimum vote on the bus clocks
+>>   * @is_on: whether the bus is powered on
+>>   */
+>> @@ -42,7 +42,7 @@ struct qcom_icc_provider {
+>>  	int num_intf_clks;
+>>  	enum qcom_icc_type type;
+>>  	struct regmap *regmap;
+>> -	unsigned int qos_offset;
+>> +	int qos_offset;
+>>  	u64 bus_clk_rate[NUM_BUS_CLKS];
+>>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
+>>  	struct clk_bulk_data *intf_clks;
+>> @@ -108,7 +108,7 @@ struct qcom_icc_desc {
+>>  	bool no_clk_scaling;
+>>  	enum qcom_icc_type type;
+>>  	const struct regmap_config *regmap_cfg;
+>> -	unsigned int qos_offset;
+>> +	int qos_offset;
+>>  };
+>>  
+>>  /* Valid for all bus types */
+>>
+>> -- 
+>> 2.41.0
+>>
