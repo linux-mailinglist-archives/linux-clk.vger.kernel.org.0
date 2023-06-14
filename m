@@ -2,223 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0ED7306E0
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Jun 2023 20:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2387307A6
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Jun 2023 20:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241113AbjFNSFk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 14 Jun 2023 14:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S232940AbjFNSzm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 14 Jun 2023 14:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241786AbjFNSFQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Jun 2023 14:05:16 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048F02689
-        for <linux-clk@vger.kernel.org>; Wed, 14 Jun 2023 11:05:09 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so9449144e87.1
-        for <linux-clk@vger.kernel.org>; Wed, 14 Jun 2023 11:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686765907; x=1689357907;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5bcXIhURMNb0zAXxfMHWv0nL5TXiAv91yaE+1dFMG5E=;
-        b=pq6bw0cXSTpklMxV25UMxnMsLsxx5Tc6Eb25fYs9CmWrd2LzuH3L4ZZ25tXXfMT1/4
-         WNNhfNlCuK/D/kdKixzZ67I7IuhdLNqZ9D4+d8r7palyPCiN0jICzuHr84vnyI9hyPxO
-         OmZ91ZiVkIIhbV55nZQsuusIoyOOjwBHtxImi0cXmgPiAGCgPX+0ry0xsPilIY4E+Ujn
-         Yh4pAnuW4m2+pJItNnFDWqytf997MXtz/dVHra2yFqaN5u3jXaIcJvj5yIwdwTJaP9Jt
-         931pdLVcYWp8ISnjcQpuA+wXcyEi1g7Stbpu5nRs9/s7xNw96IYtBr6CvFOfFInPip6p
-         oxwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686765907; x=1689357907;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5bcXIhURMNb0zAXxfMHWv0nL5TXiAv91yaE+1dFMG5E=;
-        b=fBylC5GUTRr+1Qy0WsqYfTkaoAS8oeUacIHfqCFlucXnCWde7Heq1PJR6urEzkW+2+
-         1zG6i8w4FnAeCLPqFKzbqSVAzqJPUqs7qg8CMkkUX33NrhEXPeiWfTJCt7GZWl35juFA
-         rhAVSBSF9l6eTD9ec24qPGxJHZTdwhFBQIQ2g/TIkiNw8OkTuhL0JMIEaBAFs3k1ru6C
-         R0HHS0c0Tik9/YLrumYmGgucMJldkIEGFTI9bWP2mrbU49KPZn0A6iqFVfRGGWnrEHgG
-         HUwB/A4CJNorlpO7M4y/KMtDWdQxjWQFIVC2Lu3D0hJn2uHbNderHG5beGAH62QqlZRV
-         ZBrw==
-X-Gm-Message-State: AC+VfDxsxJP5SFNLbCTus/Wlae+OMS8vTfN3ut837DkmFlaHt9wzdXZ4
-        bHUhGnQ7U59tEl0pAqN9PBNteQ==
-X-Google-Smtp-Source: ACHHUZ59EqaQR9FEQh7SMWnWu8T8pAgLDrueO2T6NI16i4qWW5o4JwYn3TPNcW7TliHXfCYk/FLYDg==
-X-Received: by 2002:a19:7104:0:b0:4f6:3000:4d5a with SMTP id m4-20020a197104000000b004f630004d5amr7266979lfc.38.1686765907332;
-        Wed, 14 Jun 2023 11:05:07 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id l18-20020a19c212000000b004eff1f7f206sm2224053lfc.9.2023.06.14.11.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 11:05:07 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 14 Jun 2023 20:04:41 +0200
-Subject: [PATCH v6 22/22] interconnect: qcom: icc-rpm: Fix bandwidth
- calculations
+        with ESMTP id S233826AbjFNSzl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Jun 2023 14:55:41 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495701A2;
+        Wed, 14 Jun 2023 11:55:39 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QhF450lFYz9sSN;
+        Wed, 14 Jun 2023 20:55:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686768933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=z3zE80Axoqx9I3Z6OPP9RKn3Hf32SECyjRv60EIg2KE=;
+        b=nW8+zhnIcN/WNBFCHMU1xRQdRR0uUyx+IqnE+6q3HUBtkiAIePwbFrwX1/97rs9J6Rh/At
+        rtiO0F5HhXcKA9kNGo/wxBJ0xg0DgOIJUFJ3Ru91j9zLCfiqOv/QKsiNKKSPAItedxdR7r
+        V5r17URgikI7v63ZbocdM9nHj6DzHqDOU89yJZwdKliM3S9dd6oLudMCsSyhvq3i6Zr9E8
+        yq50x0saXn6v633zoDVvsBABGtmWLdaL4NHA7Inmn5aKg/1pkwWb+xQYNflbcFPtKBTWE7
+        jEX/ZVzTbyW0Bgc9daav/7O08cFS2OgPaJNfOOtSwxAT1NDXSdYuuE5UE0lXUQ==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Frank Oltmanns <frank@oltmanns.dev>,
+        "A.s. Dong" <aisheng.dong@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: [PATCH v3 0/2] clk: fractional-divider: Improve approximation when zero based
+Date:   Wed, 14 Jun 2023 20:55:19 +0200
+Message-ID: <20230614185521.477924-1-frank@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-topic-smd_icc-v6-22-263283111e66@linaro.org>
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686765873; l=5027;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=tAzLN6zVkcV/6YKzpXaiTCXmJB8hBKbRsR3dIrek/EQ=;
- b=D2ggQXMuXsAaYFYORH7Xn4ImPyMS+lByHb8dqBMR8ngA5C+oEBTIgqB7mUrwAVgCNTKEwy5WK
- u2MZ94OJ/w4DnpOSuSecmyweXzoWS7dkBRw/6ssKhL+fzq1RcAfqkLo
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4QhF450lFYz9sSN
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Up until now, we've been aggregating the bandwidth values and only
-dividing them by the bus width of the source node. This was completely
-wrong, as different nodes on a given path may (and usually do) have
-varying bus widths.  That in turn, resulted in the calculated clock rates
-being completely bogus - usually they ended up being much higher, as
-NoC_A<->NoC_B links are very wide.
+I stumpled upon this, when familiarizing myself with clk drivers.
+Unfortunately, I have no boards to test this patch. It seems the only
+user of this flag in mainline is drivers/clk/imx/clk-composite-7ulp.c,
+therefore I'm cc-ing
+get_maintainers.pl --git-blame -f drivers/clk/imx/clk-composite-7ulp.c
+in the hopes of a wider audience.
 
-Since we're not using the aggregate bandwidth value for anything other
-than clock rate calculations, remodel qcom_icc_bus_aggregate() to
-calculate the per-context clock rate for a given provider, taking into
-account the bus width of every individual node.
+V2: https://lore.kernel.org/lkml/20230613083626.227476-1-frank@oltmanns.dev/
+V1: https://lore.kernel.org/lkml/20230529133433.56215-1-frank@oltmanns.dev/
 
-Fixes: 30c8fa3ec61a ("interconnect: qcom: Add MSM8916 interconnect provider driver")
-Reported-by: Stephan Gerhold <stephan@gerhold.net>
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 59 ++++++++++++-------------------------
- 1 file changed, 19 insertions(+), 40 deletions(-)
+Changes since V2:
+ - Completely reworked the test cases
+   - Moved tests to separate file as per Stephen's request
+   - Move each edge case into their individual test case as per
+     Stephen's request
+   - Test clk_fd_round_rate instead of
+     clk_fractional_divider_general_approximation as testing the latter
+     broke builds
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 5733261d9407..3209d8de709b 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -292,58 +292,44 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- }
- 
- /**
-- * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * qcom_icc_bus_aggregate - calculate bus clock rates by traversing all nodes
-  * @provider: generic interconnect provider
-- * @agg_avg: an array for aggregated average bandwidth of buckets
-- * @agg_peak: an array for aggregated peak bandwidth of buckets
-- * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ * @agg_clk_rate: array containing the aggregated clock rates in kHz
-  */
--static void qcom_icc_bus_aggregate(struct icc_provider *provider,
--				   u64 *agg_avg, u64 *agg_peak,
--				   u64 *max_agg_avg)
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_rate)
- {
--	struct icc_node *node;
-+	u64 agg_avg_rate, agg_rate;
- 	struct qcom_icc_node *qn;
--	u64 sum_avg[QCOM_SMD_RPM_STATE_NUM];
-+	struct icc_node *node;
- 	int i;
- 
--	/* Initialise aggregate values */
--	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
--		agg_avg[i] = 0;
--		agg_peak[i] = 0;
--	}
--
--	*max_agg_avg = 0;
--
- 	/*
--	 * Iterate nodes on the interconnect and aggregate bandwidth
--	 * requests for every bucket.
-+	 * Iterate nodes on the provider, aggregate bandwidth requests for
-+	 * every bucket and convert them into bus clock rates.
- 	 */
- 	list_for_each_entry(node, &provider->nodes, node_list) {
- 		qn = node->data;
- 		for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
- 			if (qn->channels)
--				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
-+				agg_avg_rate = div_u64(qn->sum_avg[i], qn->channels);
- 			else
--				sum_avg[i] = qn->sum_avg[i];
--			agg_avg[i] += sum_avg[i];
--			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+				agg_avg_rate = qn->sum_avg[i];
-+
-+			agg_rate = max_t(u64, agg_avg_rate, qn->max_peak[i]);
-+			do_div(agg_rate, qn->buswidth);
-+
-+			agg_clk_rate[i] = max_t(u64, agg_clk_rate[i], agg_rate);
- 		}
- 	}
--
--	/* Find maximum values across all buckets */
--	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++)
--		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
- }
- 
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- {
--	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
-+	u64 agg_clk_rate[QCOM_SMD_RPM_STATE_NUM] = { 0 };
- 	struct icc_provider *provider;
-+	struct qcom_icc_provider *qp;
- 	u64 active_rate, sleep_rate;
--	u64 agg_avg[QCOM_SMD_RPM_STATE_NUM], agg_peak[QCOM_SMD_RPM_STATE_NUM];
--	u64 max_agg_avg;
- 	int ret;
- 
- 	src_qn = src->data;
-@@ -352,7 +338,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
- 
--	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
-+	qcom_icc_bus_aggregate(provider, agg_clk_rate);
-+	active_rate = agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE];
-+	sleep_rate = agg_clk_rate[QCOM_SMD_RPM_SLEEP_STATE];
- 
- 	ret = qcom_icc_rpm_set(src_qn, src_qn->sum_avg);
- 	if (ret)
-@@ -368,15 +356,6 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	if (!qp->bus_clk_desc && !qp->bus_clk)
- 		return 0;
- 
--	/* Intentionally keep the rates in kHz as that's what RPM accepts */
--	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
--			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
--	do_div(active_rate, src_qn->buswidth);
--
--	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
--			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
--	do_div(sleep_rate, src_qn->buswidth);
--
- 	/*
- 	 * Downstream checks whether the requested rate is zero, but it makes little sense
- 	 * to vote for a value that's below the lower threshold, so let's not do so.
+Changes since V1:
+ - Added test case as requested by Stephen Boyd
+ - Fixed commit message as the Cc: was missing a closing bracket, so that the
+   original mail unfortunately did not go out to A. s. Dong.
+
+Thank you for considering this contribution,
+  Frank
+
+Frank Oltmanns (2):
+  clk: fractional-divider: Improve approximation when zero based
+  clk: fractional-divider: tests: Add test suite for edge cases
+
+ drivers/clk/.kunitconfig                  |   1 +
+ drivers/clk/Kconfig                       |   7 +
+ drivers/clk/Makefile                      |   1 +
+ drivers/clk/clk-fractional-divider.c      |  26 ++-
+ drivers/clk/clk-fractional-divider_test.c | 196 ++++++++++++++++++++++
+ 5 files changed, 224 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/clk/clk-fractional-divider_test.c
 
 -- 
 2.41.0
