@@ -2,55 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1E473180D
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Jun 2023 14:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88771731809
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Jun 2023 14:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239781AbjFOMCN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 15 Jun 2023 08:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S1344678AbjFOMCE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Jun 2023 08:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344696AbjFOMBv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Jun 2023 08:01:51 -0400
+        with ESMTP id S1344675AbjFOMBr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Jun 2023 08:01:47 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB08E52;
-        Thu, 15 Jun 2023 04:56:58 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FBuem5086483;
-        Thu, 15 Jun 2023 06:56:40 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082F53C10;
+        Thu, 15 Jun 2023 04:56:50 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35FBufmJ086492;
+        Thu, 15 Jun 2023 06:56:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686830200;
-        bh=Y27RJj3yszHtLyCh3vYh0g20X3ByJgQ1zU9XnvH+7Ow=;
-        h=From:Subject:Date:To:CC;
-        b=X7PTVndLQAzcs9MLcT6mNHyP70z+qykn0KqBUZvCLaTHcmDn7uH6CjEIbNIABalh+
-         cygLzdAROXxdG0wGGuIVUnVCxG3E9T/mmejq/Ix8UhphT29oBEqAP/WJRB5GjzospK
-         tgzh1m2PtS9hhZSVx+TIRHdoopNjACHavwm6TWNI=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FBue5G061479
+        s=ti-com-17Q1; t=1686830201;
+        bh=W9iiHwjdGP5imfSBo37bnm2qDQ491c1YdJEXZJipicM=;
+        h=From:Date:Subject:References:In-Reply-To:To:CC;
+        b=GW+k0fMhYHeJ6q9PPU5rGDxIZDhEuUWzzl0DPBDBW1VE8ILiVbX1GY4OQilntjACU
+         0U03oULZapFtRnkEH6B7SrO+sgdCLhEVG/NUyYfnQSCmO+2kg0KN1Lrh5PX6pkjeFU
+         qEs8l+/Z3IQD5pPmLKwzg8+kXvqCZMvP+oiaEa3A=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35FBufKm130043
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Jun 2023 06:56:40 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 15 Jun 2023 06:56:41 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Jun 2023 06:56:40 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2023 06:56:41 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Jun 2023 06:56:40 -0500
+ Frontend Transport; Thu, 15 Jun 2023 06:56:41 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FBudBt001989;
-        Thu, 15 Jun 2023 06:56:39 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35FBueiY002003;
+        Thu, 15 Jun 2023 06:56:41 -0500
 From:   Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v3 0/2] clk: keystone: syscon-clk: Enable audio reference
- clock
-Date:   Thu, 15 Jun 2023 17:25:34 +0530
-Message-ID: <20230515-refclk-v3-0-37c0b550f406@ti.com>
+Date:   Thu, 15 Jun 2023 17:25:35 +0530
+Subject: [PATCH v3 1/2] dt-bindings: clock: Add binding documentation for
+ TI Audio REFCLK
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADb8imQC/22Nyw6CMBREf4XctTV9UARW/odxAeVWbtRiWtJgC
- P9uy8KNLmdyzswKAT1hgLZYwWOkQJNLQR0KMGPnbshoSBkkl4proZlHax53pntdloMSpZEKEtx
- 3AVnvO2fGjDtc5ly/Ek7Lvn+5pjxSmCf/3u+iyO3PchSMM411Y7kYqpNS55mOZnpC9qP878jkW
- NNYy+taVlZ/nW3bPpc3jSPkAAAA
+Message-ID: <20230515-refclk-v3-1-37c0b550f406@ti.com>
+References: <20230515-refclk-v3-0-37c0b550f406@ti.com>
+In-Reply-To: <20230515-refclk-v3-0-37c0b550f406@ti.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -63,20 +61,20 @@ CC:     Vignesh Raghavendra <vigneshr@ti.com>, Andrew Davis <afd@ti.com>,
         Jai Luthra <j-luthra@ti.com>,
         Conor Dooley <conor.dooley@microchip.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2803; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=j7zSCgLQaqYgF9rUDBIsU7CuO/e6GSmhn3f0zKGfBcs=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkivx0lm74zAwEj58V3R8xvh1zhEqAPaTBihHa2
- MsMOu+rA3+JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZIr8dAAKCRBD3pH5JJpx
- RYWbEACAbzyNyDvq6ZqyGN7xsgXsybKd0JmTPszH68jrGzeTLYpgfKFQ3M/i+LvF4iakmJ6WBBs
- Vb8HwtboaP4ws2QzXnpUBxNYkrcso/PMtjFM+7v/jPfkMl4lzcb/sQ9mPbUIevP1ZTASlE1q8iR
- YPNGzYexprCkv+XMr5LbFUrQH7QeVp3j9vrg6U4cyHzWi+pmtuGHj8GINXi03WaY+8GVvGbHSL9
- pmMC6wCCRGQhdHy1ITETtj7gFrBGjX5nbJMUUpcyjLQtP8Sy3DBVwlCIPjV5Nm8yz+F8zcyhFLz
- pWwF7aE39DLWiZexjIwkppcXfJlN5NB4A5iVq4nZVAXvoH1DEwpgVMKQMh1UeeQVyod16Pl+fxR
- ookEy0z+r4vG7oxq5LXB8YcSDYu+ItO4Rd/lfg5+Wv4KGqK0DHsMMN5FcWBiLXN/5g79Fs8T+xc
- PsN5oqccoNm4nPgiNhPAeQJ7eHXUMoLwYyO7srMas/iem1ffDhqMXzpwkoLJP/4muEczJ0vOX5m
- YCA4fSy9qoTQ550oIq7Hu3JpZjD0lGAIQl19LqWcFayPQLMqwAISCfkR5rptJIkublvi/g/C99S
- XOp0KwlXANre28BSQ+K31U/IZ8HyZeQOddmFchF907j+VROdJbnC6VSjmRs/tAHMPuP94Or/AHl
- y609N0pEejOJtaA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1529; i=j-luthra@ti.com;
+ h=from:subject:message-id; bh=sQ9ec5YFJ+Y8ENQetUcqU9qt54E7RHL6FfG8IWKEvjo=;
+ b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkivx390StvIVTDs3XMMkmqkRhBKVHtbAo/YEYt
+ r7sfHiEX6WJAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZIr8dwAKCRBD3pH5JJpx
+ RQRLD/wPZVGXumEedqmhqZDtKFsGoATCbKaMebE+idnLSYKetn8ZAwL0LKabhowjDC5+m4/nvTh
+ sGurUHrhyZdE6S5dVJAe6XbzkAsR0llWpTisyJBOCBx/++Jxa7NtRYINu1os0OvCjHywwcrv6LH
+ DEfJcSWb3i+XmO3+NmcuyTjyrMPcbWex257sP56qFifasjxcsk6uVgit27kOggnIfaOxOPH+5Jf
+ VAbUD6TRy58AN4EvqJMTI39fP0B78lvyooAwmiyllB9BAsw87xtVv56ZGwGkHvjoj6vnCSoRn9o
+ R9X829qDuxCQ4sCasvPtw7V2BO2/gobbMZMoDADPt7+suunneVMl6yPSRwPPf1CSC/nD6JY4slW
+ FCGqRAxh6/DwfJ1CqLlXLxz1hTuSFaJ5RXFHjfyeUjlVjKvAWSxju4cJrOkICooMLDR/L4uuB9R
+ 5i14dK+VUrulWnaJMnUrAjmWiuyxJcY0wDlqdNyIidxnIKno1lc9QgBQK11cCNWsBFfaj/KLyka
+ tkoJlAeDW8IY2fVpifOeTx8HTrkO3gwbFruyaXqSI37kskgnj8YBarzFVYABRoD//zqTkKyNO+1
+ REVPfT8+woc8CTNQjss0Lj/O9208hAQEN2ioWwE4HXO7DPiZHMaOEza/ZB5vnexXXlqyI0FXAHn
+ yxSlY/7IuTwk+iw==
 X-Developer-Key: i=j-luthra@ti.com; a=openpgp;
  fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -90,78 +88,65 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-TI's AM62 SoC can optionally provide two audio reference clocks
-(AUDIO_REFCLKx) to external peripherals. By default the reference clock
-is looped-back inside the SoC to a mux that goes to McASP AHCLK, but can
-optionally be enabled as an output to peripherals outside the SoC by
-setting a bit through CTRL_MMR registers.
+Add DT bindings for TI's audio reference clocks (REFCLK) present on AM62
+SoC.
 
-This patch series extends the existing syscon-clk driver to support
-the audio reference clock, and also adds new device tree bindings
-documentation.
-
-Please apply this on-top-of Andrew's series [1] removing the unnecessary
-dependency on syscon compatible.
-
-[1]: https://lore.kernel.org/linux-clk/20230516184626.154892-1-afd@ti.com/#t
-
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Jai Luthra <j-luthra@ti.com>
 ---
-Changes in v3:
-- Add missing headers for kasprintf/kfree in [PATCH 2/2]
-- Add Conor's R-by for [PATCH 1/2]
-- Link to v2: https://lore.kernel.org/r/20230515-refclk-v2-0-fc9ff08826f5@ti.com
+ .../bindings/clock/ti,am62-audio-refclk.yaml       | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-Changes in v2:
-- Removed "syscon" compatible and rebased on top of [1]
-- Moved reg above other properties in bindings yaml
-- Link to v1: https://lore.kernel.org/r/20230515-refclk-v1-0-5e89f01d6733@ti.com
+diff --git a/Documentation/devicetree/bindings/clock/ti,am62-audio-refclk.yaml b/Documentation/devicetree/bindings/clock/ti,am62-audio-refclk.yaml
+new file mode 100644
+index 000000000000..b2e40bd39a3a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/ti,am62-audio-refclk.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/ti,am62-audio-refclk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI Audio Reference Clock
++
++maintainers:
++  - Jai Luthra <j-luthra@ti.com>
++
++properties:
++  compatible:
++    items:
++      - const: ti,am62-audio-refclk
++
++  reg:
++    maxItems: 1
++
++  "#clock-cells":
++    const: 0
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - "#clock-cells"
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    audio_refclk0: clock@82e0 {
++        compatible = "ti,am62-audio-refclk";
++        reg = <0x82e0 0x4>;
++        clocks = <&k3_clks 157 0>;
++        assigned-clocks = <&k3_clks 157 0>;
++        assigned-clock-parents = <&k3_clks 157 8>;
++        #clock-cells = <0>;
++    };
 
-Range diff from v2:
-1:  f1bb6a34efce ! 1:  db84010f924d dt-bindings: clock: Add binding documentation for TI Audio REFCLK
-    @@ Commit message
-         Add DT bindings for TI's audio reference clocks (REFCLK) present on AM62
-         SoC.
-
-    +    Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-         Signed-off-by: Jai Luthra <j-luthra@ti.com>
-
-      ## Documentation/devicetree/bindings/clock/ti,am62-audio-refclk.yaml (new) ##
-2:  bb1b58178bbd ! 2:  06186242572b clk: keystone: syscon-clk: Add support for audio refclk
-    @@ Commit message
-         Signed-off-by: Jai Luthra <j-luthra@ti.com>
-
-      ## drivers/clk/keystone/syscon-clk.c ##
-    +@@
-    +  */
-    +
-    + #include <linux/clk-provider.h>
-    ++#include <linux/kernel.h>
-    + #include <linux/mfd/syscon.h>
-    + #include <linux/module.h>
-    + #include <linux/platform_device.h>
-    + #include <linux/regmap.h>
-    ++#include <linux/slab.h>
-    +
-    + struct ti_syscon_gate_clk_priv {
-    +   struct clk_hw hw;
-     @@ drivers/clk/keystone/syscon-clk.c: static const struct clk_ops ti_syscon_gate_clk_ops = {
-
-      static struct clk_hw
-
----
-Jai Luthra (2):
-      dt-bindings: clock: Add binding documentation for TI Audio REFCLK
-      clk: keystone: syscon-clk: Add support for audio refclk
-
- .../bindings/clock/ti,am62-audio-refclk.yaml       | 43 +++++++++++++++++++++
- drivers/clk/keystone/syscon-clk.c                  | 45 +++++++++++++++++++---
- 2 files changed, 83 insertions(+), 5 deletions(-)
----
-base-commit: f9547f8abff52dfb21985057f10744558a7e4cc8
-change-id: 20230515-refclk-5b544d314c23
-
-Best regards,
 -- 
-Jai Luthra <j-luthra@ti.com>
+2.41.0
 
