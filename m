@@ -2,71 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C293F7349F7
-	for <lists+linux-clk@lfdr.de>; Mon, 19 Jun 2023 04:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16646734A9B
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Jun 2023 05:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjFSCPg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 18 Jun 2023 22:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S229660AbjFSDZX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 18 Jun 2023 23:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjFSCPf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 18 Jun 2023 22:15:35 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144A4E47;
-        Sun, 18 Jun 2023 19:15:34 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-77e35504c1bso72174939f.1;
-        Sun, 18 Jun 2023 19:15:34 -0700 (PDT)
+        with ESMTP id S229647AbjFSDZK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 18 Jun 2023 23:25:10 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7895DE7F
+        for <linux-clk@vger.kernel.org>; Sun, 18 Jun 2023 20:24:47 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666e64e97e2so1337228b3a.1
+        for <linux-clk@vger.kernel.org>; Sun, 18 Jun 2023 20:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687145087; x=1689737087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gqt51Wedx4m69k4BYNrm+CYeb0BA4dcpBkRvlKi17a4=;
+        b=ittZM8GxPcQopWHNt7Ly2wAXQ4tNpBnKAkizLpPXp4OHioLjELl4DIwex/nk7L38wM
+         4qqn2iA+OIiguh8n3cYxkILH6t+fd8ERPsG1Io/00BEboH7WgB8KQNw1THCSLa2U7yuE
+         BSqX+Iu5uHc4hpfAPFXUXlJCi1WqZlXernAjg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687140933; x=1689732933;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bBtnlsl4Pv/CEloCUaVVZxW6xo2UFnTXvxqXhklKZoE=;
-        b=F5G9pRqhc5Cjsfg18aNpWbo5KZrFVgZ7ffKzGXaOnp0SFk+QyL1JHtuvbruDBqAG6C
-         WRVjbUkiDcujmaESnfQjI2Ota77+xRuEzc4g3KD7GPVHe4cSdqUWUXfTDuAaGU2kL5NK
-         0Q/c32e7BE9/LVc8JLeHJwocuds2oPgvDj44k3IO1eJPF5WboKkdjHKRQkFSEoX34m17
-         m9RtjajHnoxU5TiMOd/DYlMxq+wyjUFbxbquJ9QJbbcbyjsrLM4x5u/CGG9Mhaa7Peld
-         I4YdH/EFDc1A6FfyB3bdBHZ6fQhv3lNSgoOCVxgX9nHFMHV2WDdggCBVImY14RjAdC0S
-         vdLQ==
-X-Gm-Message-State: AC+VfDz/7J9esFyODZADHYkCNj+axDXNka2z+MrCBcw4vwM+y2ssG9JN
-        yHPSYSxBGWZQxVQ7dh/SOQ==
-X-Google-Smtp-Source: ACHHUZ4vbf5Ns9/6gGG0RTqSrtAFSQNlqmKu62lK5EfG6OfihpRyqotDLGVxGu+nbKPTCZABchn2lw==
-X-Received: by 2002:a5d:8f95:0:b0:766:48cf:6ca9 with SMTP id l21-20020a5d8f95000000b0076648cf6ca9mr8693407iol.12.1687140933249;
-        Sun, 18 Jun 2023 19:15:33 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k25-20020a02cb59000000b0042675e04900sm290517jap.119.2023.06.18.19.15.31
+        d=1e100.net; s=20221208; t=1687145087; x=1689737087;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gqt51Wedx4m69k4BYNrm+CYeb0BA4dcpBkRvlKi17a4=;
+        b=c98fAtHZSoSxH8YupX54UtIgIEvVhGJ6lRbPLCNBWv1InDcOeQse041CAk9kX1csdv
+         mO8oLbtAKojs28H4yVBD/T5fxOwLNW9erbIJFadx9Vy/c65qo/7Pl0i3J+oSZMsrDDE+
+         /n6OJOJ+9eZZNzHxPnJii8RfZWNKvhPJpZdy2AURQ5vUA971EfX/IgMSVYH0kHnmwpR4
+         DSZLyl+1+6HnYHaFZO5mRA/S3dtKuQeoRQ6bWC6lGOEUcgEueMjEG4muhXy0jQaEz/oc
+         0BNmAMoXfuQBwQ7THZ6eE4rwcHyQJ5n5cALKQLCplwDG7xhG5T4YOlnODu0lZ2PKKmtM
+         EO1Q==
+X-Gm-Message-State: AC+VfDzrgF8AsoXKbbVjRuJfWomxv0r9DNGgcE05quLHCBu8x9pOVG4f
+        uCZJmHJHQhMychbMFOqvM+k0og==
+X-Google-Smtp-Source: ACHHUZ6zHxQWxjI9HO9Dz92X+EFkmXYQE63SoTZI6bipEY1TB+wBRtlYnhYp2PP7Wg6x0itVpVR5HQ==
+X-Received: by 2002:a05:6a00:3a10:b0:668:8596:7524 with SMTP id fj16-20020a056a003a1000b0066885967524mr83131pfb.20.1687145086953;
+        Sun, 18 Jun 2023 20:24:46 -0700 (PDT)
+Received: from fshao-p620.tpe.corp.google.com ([2401:fa00:1:10:59e8:aa0b:2092:f8fc])
+        by smtp.gmail.com with ESMTPSA id j9-20020aa78d09000000b0064b0326494asm11464995pfe.150.2023.06.18.20.24.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 19:15:32 -0700 (PDT)
-Received: (nullmailer pid 2833 invoked by uid 1000);
-        Mon, 19 Jun 2023 02:15:27 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     niravkumar.l.rabara@intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Wen Ping <wen.ping.teh@intel.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Sun, 18 Jun 2023 20:24:46 -0700 (PDT)
+From:   Fei Shao <fshao@chromium.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Fei Shao <fshao@chromium.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, netdev@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>
-In-Reply-To: <20230618132235.728641-3-niravkumar.l.rabara@intel.com>
-References: <20230618132235.728641-1-niravkumar.l.rabara@intel.com>
- <20230618132235.728641-3-niravkumar.l.rabara@intel.com>
-Message-Id: <168714092772.2813.6608190334028827343.robh@kernel.org>
-Subject: Re: [PATCH 2/4] dt-bindings: clock: Add Intel Agilex5 clocks and
- resets
-Date:   Sun, 18 Jun 2023 20:15:27 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] clk: Fix memory leak in devm_clk_notifier_register()
+Date:   Mon, 19 Jun 2023 11:22:53 +0800
+Message-ID: <20230619112253.v2.1.I13f060c10549ef181603e921291bdea95f83033c@changeid>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,49 +67,34 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+devm_clk_notifier_register() allocates a devres resource for clk
+notifier but didn't register that to the device, so the notifier didn't
+get unregistered on device detach and the allocated resource was leaked.
 
-On Sun, 18 Jun 2023 21:22:33 +0800, niravkumar.l.rabara@intel.com wrote:
-> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> 
-> Add clock and reset ID definitions for Intel Agilex5 SoCFPGA
-> 
-> Co-developed-by: Teh Wen Ping <wen.ping.teh@intel.com>
-> Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
-> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-> ---
->  .../bindings/clock/intel,agilex5.yaml         |  42 ++++++++
->  include/dt-bindings/clock/agilex5-clock.h     | 100 ++++++++++++++++++
->  .../dt-bindings/reset/altr,rst-mgr-agilex5.h  |  79 ++++++++++++++
->  3 files changed, 221 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/intel,agilex5.yaml
->  create mode 100644 include/dt-bindings/clock/agilex5-clock.h
->  create mode 100644 include/dt-bindings/reset/altr,rst-mgr-agilex5.h
-> 
+Fix the issue by registering the resource through devres_add().
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Fixes: 6d30d50d037d ("clk: add devm variant of clk_notifier_register")
+Signed-off-by: Fei Shao <fshao@chromium.org>
+---
 
-yamllint warnings/errors:
+Changes in v2:
+- Revise commit message
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/intel,agilex5.yaml: title: 'Intel SoCFPGA Agilex5 platform clock controller binding' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+ drivers/clk/clk.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230618132235.728641-3-niravkumar.l.rabara@intel.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 7ac9f7a8cb84..c249f9791ae8 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4741,6 +4741,7 @@ int devm_clk_notifier_register(struct device *dev, struct clk *clk,
+ 	if (!ret) {
+ 		devres->clk = clk;
+ 		devres->nb = nb;
++		devres_add(dev, devres);
+ 	} else {
+ 		devres_free(devres);
+ 	}
+-- 
+2.41.0.162.gfafddb0af9-goog
 
