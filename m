@@ -2,106 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFDC737FFE
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Jun 2023 13:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6CB738055
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Jun 2023 13:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjFUJfi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 21 Jun 2023 05:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S232001AbjFUJl7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 21 Jun 2023 05:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbjFUJfK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Jun 2023 05:35:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F06B268F
-        for <linux-clk@vger.kernel.org>; Wed, 21 Jun 2023 02:33:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qBuCp-0006Qd-Sp; Wed, 21 Jun 2023 11:32:52 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qBuCl-00906V-RR; Wed, 21 Jun 2023 11:32:47 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qBuCk-000KLd-Sb; Wed, 21 Jun 2023 11:32:46 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>, kernel@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: [PATCH v2 5/5] dt-bindings: input: touchscreen: edt-ft5x06: Add 'threshold' property
-Date:   Wed, 21 Jun 2023 11:32:45 +0200
-Message-Id: <20230621093245.78130-6-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230621093245.78130-1-o.rempel@pengutronix.de>
-References: <20230621093245.78130-1-o.rempel@pengutronix.de>
+        with ESMTP id S232049AbjFUJlY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Jun 2023 05:41:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66477170C
+        for <linux-clk@vger.kernel.org>; Wed, 21 Jun 2023 02:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687340476; x=1718876476;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n2QvkbDXJwVEcvdZIRT3TS2zHvMHwS0+dUrWcdjVevc=;
+  b=YJwnQKqcKtp/TBQUY+jN8RZbXiE/v7qmIqFpSDJsBrWXIsxlBajGObGs
+   +hi7WhaPzz7aeJSHIDAe4CMq50y7cHSgtcnN5+H+Tc5ZoQfwkpdkcZc+K
+   qpOlOkrqwAByjB3hR60inYcn9Rua/lKNpLoeHAxs57gW1lOzbL8EEk6K+
+   GQmbMKtJe/ngFPxgui/RyJ58wsUwjaWqjlrVe8S4rFvtHrPbpdRO2mEhq
+   OrOU6/RL1PNWCvJJWvinyDvGl57SjqxgowQ2HuBOItJw0sjBTxpb+uKDG
+   qXJSU+XokDhVPDUHQ3bOZx9SFWYzW0md7MjxMIob/6FUheqjdYzWai4vT
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="157905988"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jun 2023 02:41:13 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 21 Jun 2023 02:41:13 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 21 Jun 2023 02:41:11 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <conor.dooley@microchip.com>
+CC:     <linux-clk@vger.kernel.org>
+Subject: [GIT PULL] Microchip clock updates for 6.5 #2
+Date:   Wed, 21 Jun 2023 12:41:06 +0300
+Message-ID: <20230621094106.1575553-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add a new property 'threshold' to the edt-ft5x06 touchscreen binding.
-This property allows setting the "click"-threshold in the range from 0
-to 255. This change addresses the following dtbs_check warning:
-imx6dl-lanmcu.dtb: touchscreen@38: 'threshold' does not match any of the regexes: 'pinctrl-[0-9]+'
+Hi, Stephen,
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/input/touchscreen/edt-ft5x06.yaml   | 6 ++++++
- 1 file changed, 6 insertions(+)
+Please pull in case it is not too late.
 
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml b/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
-index ef4c841387bdd..f2808cb4d99df 100644
---- a/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
-+++ b/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
-@@ -93,6 +93,12 @@ properties:
-     minimum: 1
-     maximum: 255
- 
-+  threshold:
-+    description: Allows setting the  "click"-threshold in the range from 0 to 255.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 0
-+    maximum: 255
-+
-   touchscreen-size-x: true
-   touchscreen-size-y: true
-   touchscreen-fuzz-x: true
--- 
-2.39.2
+Thank you,
+Claudiu
 
+The following changes since commit 9a7b010116a430d74dc30a214ea55a58a2863d71:
+
+  dt-bindings: clocks: at91sam9x5-sckc: convert to yaml (2023-05-22 15:59:49 +0300)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-microchip-6.5-2
+
+for you to fetch changes up to 5619c2ddaf3ff77ce393716a6fed3267cb906344:
+
+  clk: at91: sama7g5: s/ep_chg_chg_id/ep_chg_id (2023-06-21 10:42:48 +0300)
+
+----------------------------------------------------------------
+Microchip clock updates for 6.5 #2
+
+It contains support for parent_data, parent_hw in AT91 clock drivers
+used by SAMA7G5 SoC (e.g. main, master, generic, peripheral, programmable,
+system, utmi, slow clocks) and also the update of SAMA7G5 to use
+this new support.
+
+----------------------------------------------------------------
+Claudiu Beznea (11):
+      clk: at91: clk-main: add support for parent_data/parent_hw
+      clk: at91: clk-generated: add support for parent_hw
+      clk: at91: clk-master: add support for parent_hw
+      clk: at91: clk-peripheral: add support for parent_hw
+      clk: at91: clk-programmable: add support for parent_hw
+      clk: at91: clk-system: add support for parent_hw
+      clk: at91: clk-utmi: add support for parent_hw
+      clk: at91: clk-sam9x60-pll: add support for parent_hw
+      clk: at91: sckc: switch to parent_data/parent_hw
+      clk: at91: sama7g5: switch to parent_hw and parent_data
+      clk: at91: sama7g5: s/ep_chg_chg_id/ep_chg_id
+
+ drivers/clk/at91/at91rm9200.c       |  14 +-
+ drivers/clk/at91/at91sam9260.c      |  14 +-
+ drivers/clk/at91/at91sam9g45.c      |  16 +-
+ drivers/clk/at91/at91sam9n12.c      |  14 +-
+ drivers/clk/at91/at91sam9rl.c       |  14 +-
+ drivers/clk/at91/at91sam9x5.c       |  20 +-
+ drivers/clk/at91/clk-generated.c    |  11 +-
+ drivers/clk/at91/clk-main.c         |  32 +-
+ drivers/clk/at91/clk-master.c       |  28 +-
+ drivers/clk/at91/clk-peripheral.c   |  22 +-
+ drivers/clk/at91/clk-programmable.c |  11 +-
+ drivers/clk/at91/clk-sam9x60-pll.c  |  17 +-
+ drivers/clk/at91/clk-system.c       |  12 +-
+ drivers/clk/at91/clk-utmi.c         |  24 +-
+ drivers/clk/at91/dt-compat.c        |  23 +-
+ drivers/clk/at91/pmc.h              |  36 +-
+ drivers/clk/at91/sam9x60.c          |  20 +-
+ drivers/clk/at91/sama5d2.c          |  20 +-
+ drivers/clk/at91/sama5d3.c          |  16 +-
+ drivers/clk/at91/sama5d4.c          |  18 +-
+ drivers/clk/at91/sama7g5.c          | 796 ++++++++++++++++++++----------------
+ drivers/clk/at91/sckc.c             |  75 ++--
+ 22 files changed, 730 insertions(+), 523 deletions(-)
