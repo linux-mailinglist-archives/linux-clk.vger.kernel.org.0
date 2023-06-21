@@ -2,76 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E753D737579
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jun 2023 22:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC4D73787E
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Jun 2023 03:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjFTUA0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 20 Jun 2023 16:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S229523AbjFUBD3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Jun 2023 21:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjFTUAZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Jun 2023 16:00:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FB11716;
-        Tue, 20 Jun 2023 13:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAC3E6119E;
-        Tue, 20 Jun 2023 20:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D35C433C0;
-        Tue, 20 Jun 2023 20:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687291223;
-        bh=8ne3WggJibkcVDXdme/7YxBMV+tnAI6zpdWZ2KkFQB4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nYmNKWvADgzVHi8IV9OxofdL0beaMKMwaYTPpoEmSwlozu7JsFU0P4oKiqHKKPYS6
-         wsosdFw7YDM0UgL9vyKWowssMyOd4waGyCfCzVHqr4NXYS0LpPFNZ+h01JOskEkgvr
-         4Tk612OUZWxFaso9L+bYdonjeHKS8y/gbkeonfRyWyUNsscPvHvYXNd3KImTy3hhnC
-         43bGFwIpx46yYjaUllN3wmgQfOOn/2xYZFoRzKphZzarO//yaVZHEi2Yxr5UfcH8UH
-         4beWODq0QsX0KJTda4FbRTWNZJX4+GBE8bAsXNw/qjgvVQ39henJY6KlL6GRvr5kNM
-         0PPXr5fiYpuvg==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/2] clk: qcom: mmcc-msm8974: use clk_rcg2_shared_ops for mdp_clk_src clock
-Date:   Tue, 20 Jun 2023 13:03:36 -0700
-Message-ID: <168729141436.721186.9010041163444104014.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230507175335.2321503-1-dmitry.baryshkov@linaro.org>
-References: <20230507175335.2321503-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S229479AbjFUBD2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Jun 2023 21:03:28 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306CC10D2
+        for <linux-clk@vger.kernel.org>; Tue, 20 Jun 2023 18:03:27 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-62ff0e0c5d7so42258256d6.1
+        for <linux-clk@vger.kernel.org>; Tue, 20 Jun 2023 18:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687309406; x=1689901406;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O5JtQ9d9ThWaTpSmJ1e6zGp7H/OfQzIYzzK0f4gBNZM=;
+        b=obfecwjtHIls7MYFZ3CyrsoUGLFP+RmvAEbZQe9nuahEcr8Aog6jFa6w5Cuj2iPxB3
+         SazAYVFI++/GcURg1yGvN3TyReXEJ+QH6Q2TVUvN0GcgcaqAvZmYaUDuBAxAFKzmuZWX
+         f+IVFTKnptk2qvTG80/bLkQO/fSGPDaBzcgJQGB8BUubXUaRsCacIPI7aZAWCKji6WVi
+         ND4udDvuINYoSA35Q658RUyOQ95AZYPqkuG/mJThEwNSfOFMdfnzOZ8qlOOfDkmlBNBq
+         zAGAchR0m2MHdn4T/EZRuR6OTb8uGwFhxVegLvbCjiRJ+yuqI4ALbop8e6cw2I4Y8jIn
+         He+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687309406; x=1689901406;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O5JtQ9d9ThWaTpSmJ1e6zGp7H/OfQzIYzzK0f4gBNZM=;
+        b=hn5CwyCvU02e8INzxu8IzeKTcn9FZXK9ORc1aBGDkEfkvV4BewXM0pRbSujCPUrWav
+         sdW6XwBGs1VUQr8Qj7JkXBirbONj+5/xlGSxv7PHe7wdffC9dYQRvsDbNahdgct2l68p
+         Pt20DWuJ80HzcFQIl3IfwoZ6gQ4M9Dyz0uRxK1DLxrM2mjMltbnTq5smmIpy6gObvjqS
+         xQl35owu4luOX17bZ9Q8fREtmQRYw0G5qQER75QEQloU74UeL8t+A1IQJeEq/Fex24Z/
+         kf7nzNbL+jqJKDqcoDSa2feiz66t0XsREjf94iwaNkUdSZNM/JYu45O4feXWZBjwN1KO
+         aztQ==
+X-Gm-Message-State: AC+VfDylQ/GLFsrK8xQkLRz9KCjxEnTgMrLMrYm6Xrc+6Rtpog6Vhutt
+        vxA6BKUq+HwtIaISnp8GLlPv0rwvW14QqcrQ3Fo=
+X-Google-Smtp-Source: ACHHUZ4LXF+DHnWW0TksXXMJmV8wGufd70Ci8JOs4Bdav7R/Dzp7wfJ/fhw7HeioM0Yrn05GUjvmU/LyyyXXvPx46Kk=
+X-Received: by 2002:a05:6214:764:b0:62d:f68a:ee2d with SMTP id
+ f4-20020a056214076400b0062df68aee2dmr15215020qvz.29.1687309406205; Tue, 20
+ Jun 2023 18:03:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a0c:a98a:0:b0:632:d3a:e674 with HTTP; Tue, 20 Jun 2023
+ 18:03:25 -0700 (PDT)
+Reply-To: infoconsul03@gmail.com
+From:   David Mensah <mensahclara557@gmail.com>
+Date:   Tue, 20 Jun 2023 18:03:25 -0700
+Message-ID: <CAJcHLO4YsffZ8vUE-yh8jszBuRAkr9eGhH6dYKv-rjA5zY1pDQ@mail.gmail.com>
+Subject: RES
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-On Sun, 07 May 2023 20:53:34 +0300, Dmitry Baryshkov wrote:
-> The mdp_clk_src clock should not be turned off. Instead it should be
-> 'parked' to the XO, as most of other mdp_clk_src clocks. Fix that by
-> using the clk_rcg2_shared_ops.
-> 
-> 
-
-Applied, thanks!
-
-[2/2] clk: qcom: mmcc-msm8974: fix MDSS_GDSC power flags
-      commit: 4e13c7a55cf752887f2b8d8008711dbbc64ea796
-
-Best regards,
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Hello my friend, I have some information for you.
