@@ -2,188 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F6773BCF5
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Jun 2023 18:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8DF73BDFD
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Jun 2023 19:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjFWQr1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 23 Jun 2023 12:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S232213AbjFWRm3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 23 Jun 2023 13:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjFWQrY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 12:47:24 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4A1270E
-        for <linux-clk@vger.kernel.org>; Fri, 23 Jun 2023 09:47:21 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so1096493e87.2
-        for <linux-clk@vger.kernel.org>; Fri, 23 Jun 2023 09:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687538840; x=1690130840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OBUMS6+Ixu1UXqr8YNawSIcwQonUlT827pYdb6QYXzM=;
-        b=Eq2l7Fk3m2lCefTcxvs3+qQRjgFuhPqfZXhyz91WenXW4qaDYW7tL3o4sqmvx9/h9j
-         LogKawFNSl8qmE2Hp9FS+L9O/1GgBEo4JVyOpq3EKMcdeaWTG4uCKlac7Bn3QrDpm948
-         DKGLo8OFoRAEn+dxZUeyzTNaVFZAq6hgkaXEcvzuRcj+Ko4n1I/3R85b1h6U5XBH0kG4
-         OG5XPKRxqTSdkMjATUKVBw5mn8z9gKEj7Svy62GCTLJno5ItYalw+YgijGwaGjKP7Ji/
-         ilV5ajz2eBLuT06wt+aqdJTX4kcI8NTfuQYEUs1h+0PBk/aUWrEV1IGibRteyY3l9WBz
-         SjRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687538840; x=1690130840;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OBUMS6+Ixu1UXqr8YNawSIcwQonUlT827pYdb6QYXzM=;
-        b=T8kbtZhupQT5jxDvwsIGh74T2SBUjwtMBMqrtAtp9nfyrPPnmh6Xk405x0vYmHBSCx
-         qQG/O14D1fsqtcOTwONXJYHoG6uUBXOp/aXNSnkv410aGslAbU3Wq0MQTiHLVHK9/9nE
-         dHb9wXAmhig6EqpsKzT8JolxJlnEUlw8FvcPL7+3QxM9xe3e5d/dusMukIjLsLiSvfOj
-         WZWo5bfVYPY3Sft/p5fwbKjm35sqRn9k9KLgPUICtCJaYqT3ZVT0UqjdrqzPS9m3OAbj
-         d9VdZxnlD6ax3lwUzPZ8s5ZzstdWG/CiuG+rd7hFAWM0Oir1gZDCyObhrDtrmXg18zW/
-         qGmQ==
-X-Gm-Message-State: AC+VfDxmyIfgruGDIcZNmT6SRi+PKVBq8lW9JgOxBCZunegs2hNgRapA
-        rRvecmjEYQU4yw4ak4k4Z8hpyw==
-X-Google-Smtp-Source: ACHHUZ4mTr8TfarXPNlaSuduTiF2uA8iz5vlWI4LEQ7eCH/nJ1M2G9BvOXl8zA6zlbqA6FLWYDfDmA==
-X-Received: by 2002:a19:670f:0:b0:4f8:7513:8cac with SMTP id b15-20020a19670f000000b004f875138cacmr9096198lfc.48.1687538839814;
-        Fri, 23 Jun 2023 09:47:19 -0700 (PDT)
-Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id l30-20020ac24a9e000000b004f86c43d615sm1481013lfp.295.2023.06.23.09.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 09:47:19 -0700 (PDT)
-Message-ID: <d0c08de9-0506-d430-4928-4a441d8102a4@linaro.org>
-Date:   Fri, 23 Jun 2023 18:47:17 +0200
+        with ESMTP id S232085AbjFWRm1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 13:42:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861451FDF;
+        Fri, 23 Jun 2023 10:42:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A27A61AEF;
+        Fri, 23 Jun 2023 17:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06578C433CD;
+        Fri, 23 Jun 2023 17:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687542145;
+        bh=B+ile9UQYyNQVSV2ovecEJKbv71x2PzA3Mu7PzfgpNM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V3n+dW/7W+8e4ky/y2CyPQlPjv86avWhWcfjxymBA4Y+zefycJKi8ZcW3Y4UdCeDd
+         ecCGXt5OXv7xbAB2gFl4x15UlnXyZc7d65neHutk/85HFFdSo+PS1Lo6PB53sRFxBP
+         xiWSzo6wQ58H3gdEAxcIRxnTAuKcwgJGSmNmWy85pdv+5qBxweplEJc3T0tw4UYfjC
+         474rwzv8sdgGpqCsDussCzD4t1h39VW749/8df2hG14suPM2epAAy+wlHB3/rbie1h
+         FzKyo28RbTcpg2kD+y7/dzqUOjxloaopxsE4ZVy5svZ8OCnX1vNyVT0C9KkR38tRSO
+         kS4iSHMz7h+dQ==
+Date:   Fri, 23 Jun 2023 12:42:21 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+        mani@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 1/4] pcie: qcom: Fix the macro
+ PARF_SLV_ADDR_SPACE_SIZE_2_3_3
+Message-ID: <20230623174221.GA180338@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH V4 4/4] arm64: dts: qcom: sm8550: Add camera clock
- controller
-Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230609115058.9059-1-quic_jkona@quicinc.com>
- <20230609115058.9059-5-quic_jkona@quicinc.com>
- <8d1ead23-8361-7943-baba-baf20d16cbe5@linaro.org>
- <a3652f67-3e48-db33-1dd2-c17abdbdae41@quicinc.com>
- <CAA8EJpqjAkdnU+WXoPJs2m4OSZQe10D=Y8nUAofEoEfV139VjA@mail.gmail.com>
- <bb149870-ed5a-3587-f85a-1080fd6ca03e@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <bb149870-ed5a-3587-f85a-1080fd6ca03e@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230623093445.3977772-2-quic_srichara@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 23.06.2023 18:45, Jagadeesh Kona wrote:
+On Fri, Jun 23, 2023 at 03:04:42PM +0530, Sricharan Ramabadhran wrote:
+> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro used for IPQ8074
+> pcie slave addr size was initially set to 0x358, but
+> was wrongly changed to 0x168 as a part of
+> 'PCI: qcom: Sort and group registers and bitfield definitions'
+> Fixing it back to right value here.
 > 
+> Without this pcie bring up on IPQ8074 is broken now.
 > 
-> On 6/14/2023 5:45 PM, Dmitry Baryshkov wrote:
->> On Wed, 14 Jun 2023 at 14:56, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
->>>
->>>
->>>
->>> On 6/9/2023 6:22 PM, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 9.06.2023 13:50, Jagadeesh Kona wrote:
->>>>> Add device node for camera clock controller on Qualcomm
->>>>> SM8550 platform.
->>>>>
->>>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->>>>> ---
->>>>> Changes since V3:
->>>>>    - No changes
->>>>> Changes since V2:
->>>>>    - No changes
->>>>> Changes since V1:
->>>>>    - Padded non-zero address part to 8 hex digits
->>>>>
->>>>>    arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
->>>>>    1 file changed, 15 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>>>> index 75cd374943eb..4d2d610fc66a 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>>>> @@ -5,6 +5,7 @@
->>>>>
->>>>>    #include <dt-bindings/clock/qcom,rpmh.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8450-videocc.h>
->>>>> +#include <dt-bindings/clock/qcom,sm8550-camcc.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8550-gcc.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8550-gpucc.h>
->>>>>    #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
->>>>> @@ -2419,6 +2420,20 @@ videocc: clock-controller@aaf0000 {
->>>>>                       #power-domain-cells = <1>;
->>>>>               };
->>>>>
->>>>> +            camcc: clock-controller@ade0000 {
->>>>> +                    compatible = "qcom,sm8550-camcc";
->>>>> +                    reg = <0 0x0ade0000 0 0x20000>;
->>>>> +                    clocks = <&gcc GCC_CAMERA_AHB_CLK>,
->>>>> +                             <&bi_tcxo_div2>,
->>>>> +                             <&bi_tcxo_ao_div2>,
->>>>> +                             <&sleep_clk>;
->>>>> +                    power-domains = <&rpmhpd SM8550_MMCX>;
->>>> I see that both MMCX ("mmcx.lvl") and MXC ("mxc.lvl") (and MX, FWIW)
->>>> are consumed on msm-5.15, with the latter one powering camcc PLLs..
->>>>
->>>> How are they related? Is that resolved internally or does it need
->>>> manual intervention?
->>>>
->>>> Konrad
->>>
->>> These are just different voltage rails, camcc clocks are powered by MMCX
->>> rail and camcc pll's are powered by MXC rail. Consumer drivers need to
->>> take care of voting on these rails properly based on the frequency of
->>> clocks requested.
->>
->> Which rail powers registers of the camcc? Which rail is required to
->> read PLL registers?
->>
-> MMCX rail is required to access camcc registers, both MMCX and MXC are required to read PLL registers. MXC rail should be left ON from bootloaders during bootup and hence does not require explicit voting.
-That's a bad approach. We have a sync_state callback in rpmhpd that kills
-unused-from-linux-POV power rails, so Linux should be made aware of any
-and all requirements there.
+> Fixes: 769e49d87b15 ("PCI: qcom: Sort and group registers and bitfield definitions")
 
-Konrad
+769e49d87b15 appeared in v6.4-rc1, so ideally this would get merged
+before v6.4 releases on Monday.  I can try to do that, given an ack
+from Manivannan.
+
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Thanks,
-> Jagadeesh
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 4ab30892f6ef..59823beed13f 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -43,7 +43,7 @@
+>  #define PARF_PHY_REFCLK				0x4c
+>  #define PARF_CONFIG_BITS			0x50
+>  #define PARF_DBI_BASE_ADDR			0x168
+> -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16c /* Register offset specific to IP ver 2.3.3 */
+> +#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x358 /* Register offset specific to IP ver 2.3.3 */
+>  #define PARF_MHI_CLOCK_RESET_CTRL		0x174
+>  #define PARF_AXI_MSTR_WR_ADDR_HALT		0x178
+>  #define PARF_AXI_MSTR_WR_ADDR_HALT_V2		0x1a8
+> -- 
+> 2.34.1
 > 
->>>
->>> Thanks,
->>> Jagadeesh
->>>
->>>>> +                    required-opps = <&rpmhpd_opp_low_svs>;
->>>>> +                    #clock-cells = <1>;
->>>>> +                    #reset-cells = <1>;
->>>>> +                    #power-domain-cells = <1>;
->>>>> +            };
->>>>> +
->>>>>               mdss: display-subsystem@ae00000 {
->>>>>                       compatible = "qcom,sm8550-mdss";
->>>>>                       reg = <0 0x0ae00000 0 0x1000>;
->>
->>
->>
