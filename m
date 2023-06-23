@@ -2,78 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F2C73B3F5
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Jun 2023 11:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C7073B48B
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Jun 2023 12:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjFWJpO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 23 Jun 2023 05:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S231393AbjFWKID (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 23 Jun 2023 06:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjFWJpC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 05:45:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1321FF5;
-        Fri, 23 Jun 2023 02:44:51 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35N9W1sF023206;
-        Fri, 23 Jun 2023 09:44:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Bbl2GUsX/+aU3++gosIdUgd7In2HdktUDbQX2d7ZDtw=;
- b=LvzzD6Ni0V1t2xso25ZScpvR7Dt9Dt39sLmoQgdQVOvTsEQqXQcNjYV6BmNUR8BZkYMS
- OXc5JYYJvcwG90IXCG9eEDHAMo7axLUUEoY2ZFFfzJgxRNHwO0320pTLnsOi2BRhXEEK
- +c5pZtPoHUsZ0zXMsMe1UZd3/WY6j5JJI/EYYtznRlxuwqQrv6yDW4TA9r3bqBOALFTN
- vu22YiSG5phIEOA/xtbVi+A7lbp7/jjVyQonIICdtsLIB92S+yvVZgJ3ixUKAU9k5kwD
- 2jIQbwIqrYM0VFhUOnjVxIKQ1hjpcvaK8GkTMqKeURs56caQHUN5ha8/Bq7JBab8851M 6Q== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rd64a0cw2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 09:44:45 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35N9iiKU010101
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 09:44:44 GMT
-Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 23 Jun 2023 02:44:39 -0700
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <sboyd@kernel.org>, <mturquette@baylibre.com>, <mani@kernel.org>,
-        <lpieralisi@kernel.org>, <bhelgaas@google.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <quic_srichara@quicinc.com>
-Subject: [PATCH 4/4] dts: Reserve memory region for NSS and TZ
-Date:   Fri, 23 Jun 2023 15:14:03 +0530
-Message-ID: <20230623094403.3978838-5-quic_srichara@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230623094403.3978838-1-quic_srichara@quicinc.com>
-References: <20230623094403.3978838-1-quic_srichara@quicinc.com>
+        with ESMTP id S230071AbjFWKHh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 06:07:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F182961;
+        Fri, 23 Jun 2023 03:06:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD152619F3;
+        Fri, 23 Jun 2023 10:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A0B5C433C8;
+        Fri, 23 Jun 2023 10:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687514734;
+        bh=u13o1+rrFLOmxywhCwBs2AYh1dkZZnD42oB3y8jhIpU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fh+7VyxZB1iLWw7j5+UyckQsRocruM9cSwxZG9GvVHMa8SEm06fMMZ4eTxtrpmSXy
+         FmOYLwb7tc+/UkDHE9k/vuXLLiWesRnYqh2Pt5UU1C53VH03UU7i/a+x+j5ZOgCgXf
+         PWCtyZoZwnrn8tcPOHB7bzWadciBfS9s3kSdiakWyt3dX7mgMe40vCjKukoP469Uq7
+         5KK3Cn0zs2Fwkya5+kmy1/cGKnnfMkmIg46+8T3GCAiEtIs6jXgxuog1+thdql0Uwu
+         y/Jm/skSiuPnAKtWOfCXC6BPvU8Rz6faa8a5zRuex5xjVYzra7xshse/l1Q40KNNzr
+         U38C+9AV2c6BQ==
+Date:   Fri, 23 Jun 2023 11:05:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+Subject: Re: [PATCH v2 0/5] spi: Add CSI support for Renesas RZ/V2M
+Message-ID: <ZJVuan8ddJyhU23M@finisterre.sirena.org.uk>
+References: <20230622113341.657842-1-fabrizio.castro.jz@renesas.com>
+ <168748034127.332493.277333132642198960.b4-ty@kernel.org>
+ <CAMuHMdU53jn5UP-5xB_YLh2T5gPaxL1dxWY5Vr5D8p2mUDnqwA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XCI8-8PcmvfJo-CB1Fqor9MKfxqj2TjI
-X-Proofpoint-ORIG-GUID: XCI8-8PcmvfJo-CB1Fqor9MKfxqj2TjI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_04,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 phishscore=0 mlxscore=0 adultscore=0
- mlxlogscore=624 clxscore=1015 priorityscore=1501 suspectscore=0
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306230087
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tNhmPaleGGTul9gb"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdU53jn5UP-5xB_YLh2T5gPaxL1dxWY5Vr5D8p2mUDnqwA@mail.gmail.com>
+X-Cookie: Slow day.  Practice crawling.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +79,52 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add reserved memory region for NSS and fix the name
-for tz region explicitly.
 
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+--tNhmPaleGGTul9gb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 791af73334cb..d51ff9b4f5c1 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -86,6 +86,11 @@ reserved-memory {
- 		#size-cells = <2>;
- 		ranges;
- 
-+		nss@40000000 {
-+			reg = <0x0 0x40000000 0x0 0x01000000>;
-+			no-map;
-+		};
-+
- 		bootloader@4a600000 {
- 			reg = <0x0 0x4a600000 0x0 0x400000>;
- 			no-map;
-@@ -104,7 +109,7 @@ smem@4ab00000 {
- 			hwlocks = <&tcsr_mutex 0>;
- 		};
- 
--		memory@4ac00000 {
-+		tz@4ac00000 {
- 			reg = <0x0 0x4ac00000 0x0 0x400000>;
- 			no-map;
- 		};
--- 
-2.34.1
+On Fri, Jun 23, 2023 at 08:49:05AM +0200, Geert Uytterhoeven wrote:
+> On Fri, Jun 23, 2023 at 2:32=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
+rote:
 
+> > [1/5] spi: dt-bindings: Add bindings for RZ/V2M CSI
+> >       commit: db63e7ad2895409f78a04f331f781baa7a879dd7
+> > [2/5] clk: renesas: r9a09g011: Add CSI related clocks
+> >       commit: 7c78eb3e5d30eaa217cecaa32711e41cd849d498
+> > [3/5] spi: Add support for Renesas CSI
+> >       commit: dcf92036cb3e1b7bf3472109e4290a0937b270dd
+> > [4/5] arm64: dts: renesas: r9a09g011: Add CSI nodes
+> >       commit: ef643c6b57020ee279d18636d9d967ee048dbffa
+> > [5/5] arm64: defconfig: Enable Renesas RZ/V2M CSI driver
+> >       commit: dfbd12ae0e7c761e07369f5a2d55fe06eb54ad31
+>=20
+> I hoped this would have been a bug in b4 thanks, but unfortunately it
+> is not.
+>=20
+> Please do not apply unreviewed clock, DTS, and defconfig patches to
+> your tree.  These are intended to go upstream through the renesas-clk
+> and clk, renesas-dt and soc, resp. renesas-defconfig and soc trees.
+
+Sorry, the series was only partially copied to me so it wasn't very
+visible that there were other patches - I just saw a simple 2 patch
+series in my inbox and it's not terribly visible in the rest of the
+process that there's more patches.
+
+--tNhmPaleGGTul9gb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSVbmkACgkQJNaLcl1U
+h9DFMgf/ehmxBqPaGijsQRJEGrYX5x/j1Agmk7LmRCreemyD/EaJyaB1aT3mdcoC
+7nS4KSunL13OM6AhhupjXibNhajMdQrVutiPRMQWoEOXlfTj8PU8wXCUrvlcIyMx
+DXzKAJR8GrRvHH8QiyoS0rngoyLqNrO+cU09zZeZ1oxo2tVLX5V9BmAzzvbtAOdl
+l5BpijDcQlRMLGVaZJ6NtJE4AcSZUCu3jjk96gqoIRM/GFoh4RfmL7XpqpxB/dBx
+QNXN6bRIpFOfALKmwjkM5YSD4lCVH4rd6NC8Tsu0cLzuw1OWbPUikjsQhUCcofl7
+RM/04tYgoCZb6kamopH8Ak4q8hydrA==
+=/eXQ
+-----END PGP SIGNATURE-----
+
+--tNhmPaleGGTul9gb--
