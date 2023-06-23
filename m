@@ -2,108 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3046D73BF57
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Jun 2023 22:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A8A73C17F
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Jun 2023 22:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjFWUSi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 23 Jun 2023 16:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S230506AbjFWUxB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 23 Jun 2023 16:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFWUSh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 16:18:37 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6829135;
-        Fri, 23 Jun 2023 13:18:36 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35NKITAL050172;
-        Fri, 23 Jun 2023 15:18:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1687551509;
-        bh=f7q6qzALH79mV4hDBDS7tVfeINhU4GHFP+Le2xR2a9Y=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nh7AcErGC4RlFcGD1QYM6BUbZjYlkcokkrVWePZ9lhrvf+ZTWJW17GngHP2PlcwMs
-         h1C6hIn3M39nuC3MZr9guXo6a91q9QKkmr2zy8de2JxbLLLCXHgf9AizKaXfrOUx8l
-         CudxsCOK4zWVr0zyIQi/JkB1HOynTAPiWmjsD+qE=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35NKITBX129411
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 23 Jun 2023 15:18:29 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 23
- Jun 2023 15:18:29 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 23 Jun 2023 15:18:29 -0500
-Received: from [10.250.37.10] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35NKISns008310;
-        Fri, 23 Jun 2023 15:18:28 -0500
-Message-ID: <602856f1-3c94-554d-58ac-461d10110538@ti.com>
-Date:   Fri, 23 Jun 2023 15:18:28 -0500
+        with ESMTP id S232389AbjFWUwo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 16:52:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9642949;
+        Fri, 23 Jun 2023 13:50:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0385D61B59;
+        Fri, 23 Jun 2023 20:50:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61111C433A9;
+        Fri, 23 Jun 2023 20:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687553429;
+        bh=L+6CxdM/BMnLbI2k1ibKf0RAH8c1L0gztQ5UBezDVR8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HPKXO7wP6NImxUExHPqC/aWnuJX+X+Mcj6fCGvAlfYMxHpu8dwTNuk7aOhHUKJjiz
+         SclNURIG8HmCfGiIQSVYerv30atjW1Jw9zveJFB45uWzbcIufe0qaJ+dpU/obrCe0e
+         DCpUepkEMQLt1xE94HtKGXLX0BsSNldR32ULCVu5+Mig/G5PK459eydA4++uCojxFy
+         K1zIgn8HWwnCQUhFvXS74ngs6PlxJGdVE1BHddLH+dhz59OuM1y2P31/dF056dhlCL
+         H4w0PE+5KY192bKP4uis465fnDb1+akMWHWZfK+DWB/ueaJnSOQVtfOHiDpSlvmVF3
+         oHYlhmlyI+P8Q==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b45bc83f26so18668131fa.0;
+        Fri, 23 Jun 2023 13:50:29 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyK70fTMbc7keckULTmrZ7YYjVbwh4ZuCdhJo0npr2MuYCm7/M3
+        /Ey2BdK2nkFaXU87hf/nGF0xTYEjPvMhWGbCsw==
+X-Google-Smtp-Source: ACHHUZ7XPdbDSO6fFPttpBHgX0oes55oWKYhlTk4zfNewB0e4KNRkHMN9UPS8Te16b23/SRNpvtL8i7GZAUllnlej10=
+X-Received: by 2002:a2e:9c98:0:b0:2b5:82c9:d85f with SMTP id
+ x24-20020a2e9c98000000b002b582c9d85fmr6511427lji.11.1687553427421; Fri, 23
+ Jun 2023 13:50:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] dt-bindings: clock: ehrpwm: Remove unneeded syscon
- compatible
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+References: <20230623201519.194269-1-afd@ti.com>
+In-Reply-To: <20230623201519.194269-1-afd@ti.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 23 Jun 2023 14:23:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKWUCJq8b4qfXHCiVmtZG8E8MpcTm54Q19dWr9hw8WM2g@mail.gmail.com>
+Message-ID: <CAL_JsqKWUCJq8b4qfXHCiVmtZG8E8MpcTm54Q19dWr9hw8WM2g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mfd: ti,j721e-system-controller: Remove
+ syscon from example
+To:     Andrew Davis <afd@ti.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-References: <20230516184626.154892-1-afd@ti.com>
- <20230516184626.154892-2-afd@ti.com>
- <20230517075310.iduc2eisw7a5bm45@krzk-bin>
- <CAL_JsqL7EPkBAigGJ8iR4t532R82N0fFFmb4BVUw84xpb0545w@mail.gmail.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <CAL_JsqL7EPkBAigGJ8iR4t532R82N0fFFmb4BVUw84xpb0545w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 6/23/23 2:59 PM, Rob Herring wrote:
-> On Wed, May 17, 2023 at 1:53 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On Tue, 16 May 2023 13:46:26 -0500, Andrew Davis wrote:
->>> This node's register space is not accessed by any other node, which
->>> is the traditional use for the "syscon" hint. It looks to have been
->>> added here to make use of a Linux kernel helper syscon_node_to_regmap().
->>> The Linux driver now uses a more appropriate helper that does not
->>> require the hint, so let's remove it from the binding.
->>>
->>> Signed-off-by: Andrew Davis <afd@ti.com>
->>> ---
->>>   .../devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml     | 5 ++---
->>>   1 file changed, 2 insertions(+), 3 deletions(-)
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.example.dtb: scm-conf@100000: clock-controller@4140:compatible: ['ti,am654-ehrpwm-tbclk', 'syscon'] is too long
->>          From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.yaml
->> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/ti,j721e-system-controller.example.dtb: clock-controller@4140: compatible: ['ti,am654-ehrpwm-tbclk', 'syscon'] is too long
->>          From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
-> 
-> Now failing in linux-next.
-> 
+On Fri, Jun 23, 2023 at 2:15=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
+>
+> The binding for ti,am654-ehrpwm-tbclk was updated to remove the syscon
+> compatible hint. Remove the same from the example in this binding.
+>
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  .../devicetree/bindings/mfd/ti,j721e-system-controller.yaml     | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sent fix: https://lore.kernel.org/lkml/20230623201519.194269-1-afd@ti.com/T/#u
+Thanks for the quick fix.
 
-Andrew
+Acked-by: Rob Herring <robh@kernel.org>
+
+Stephen should apply this.
+
+Rob
