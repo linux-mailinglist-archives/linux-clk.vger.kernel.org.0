@@ -2,134 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C690C73C4D6
-	for <lists+linux-clk@lfdr.de>; Sat, 24 Jun 2023 01:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502C673C596
+	for <lists+linux-clk@lfdr.de>; Sat, 24 Jun 2023 02:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjFWXnT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 23 Jun 2023 19:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S229558AbjFXAtF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 23 Jun 2023 20:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjFWXnS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 19:43:18 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EF02703;
-        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-78333585d28so32790139f.1;
-        Fri, 23 Jun 2023 16:43:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687563796; x=1690155796;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fTiyezCl+ncjMsIOOS0sUB9bYyrGCDjIJOvndxohyZs=;
-        b=JsAIoLHPQR83cIFWCg7WWq9dOFpHwbGPHK2yoY125gC8xVqx2+ttlxJX+sxoETmQlV
-         0nzPjnhz39qU6o87QsXUo3XE8rc8xVe1tCFq0v/HUv/SqKNKfCrP1E1R7lgXcGuOx6y2
-         Ye3G6ypunxQdjQzz2ukdGGZuVQNU006TpPpL8MAHc+uIiGpnV85+2gp/WvADNQ/2sRCU
-         AoLsbcQUu6qTlfBlobD2G6x4CJs0P6/7LAU5AFlr+R6jVOZVLv1PoQKKkeOqS1a/I5G5
-         iHh6o5EBG3JC2u0sVTRVWCc72uLnf7/POT8WGjwChV0ytJvnTeM9K3NQ4zI7JypbiFa8
-         xFfg==
-X-Gm-Message-State: AC+VfDw5DExrdMCkSqQcgXx602OXDOFT2Gsg8bbCY0m4jzAMeRS+bMz2
-        HjkFdCKixSxi9ODyQ8CMJA==
-X-Google-Smtp-Source: ACHHUZ704nUo/Qe+1L5BBq/vh9K03eeZluxsw6d51akGW3mbLVGxB1UGHdSEiXEdc5xMZV7l5fDOHg==
-X-Received: by 2002:a5d:9483:0:b0:760:e308:107e with SMTP id v3-20020a5d9483000000b00760e308107emr15001057ioj.0.1687563796356;
-        Fri, 23 Jun 2023 16:43:16 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id r27-20020a02c85b000000b0041407c67451sm72416jao.165.2023.06.23.16.43.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 16:43:15 -0700 (PDT)
-Received: (nullmailer pid 1606691 invoked by uid 1000);
-        Fri, 23 Jun 2023 23:43:09 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S232344AbjFXAs5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Jun 2023 20:48:57 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F0E26AE
+        for <linux-clk@vger.kernel.org>; Fri, 23 Jun 2023 17:48:49 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D454E3F78B;
+        Sat, 24 Jun 2023 02:41:00 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH 00/15] drm/msm: Add SM6125 MDSS/DPU hardware and enable
+ Sony Xperia 10 II panel
+Date:   Sat, 24 Jun 2023 02:40:58 +0200
+Message-Id: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc:     ulf.hansson@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        edumazet@google.com, broonie@kernel.org, arnd@arndb.de,
-        maz@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
-        alain.volmat@foss.st.com, p.zabel@pengutronix.de,
-        mihai.sain@microchip.com, soc@kernel.org,
-        linux-mtd@lists.infradead.org, cristian.birsan@microchip.com,
-        jerry.ray@microchip.com, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        balamanikandan.gunasundar@microchip.com, lee@kernel.org,
-        olivia@selenic.com, sboyd@kernel.org, mturquette@baylibre.com,
-        kuba@kernel.org, Hari.PrasathGE@microchip.com,
-        linux-kernel@vger.kernel.org, balakrishnan.s@microchip.com,
-        alsa-devel@alsa-project.org, durai.manickamkr@microchip.com,
-        sre@kernel.org, vkoul@kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, andrew@lunn.ch,
-        devicetree@vger.kernel.org, nayabbasha.sayed@microchip.com,
-        linux-gpio@vger.kernel.org, nicolas.ferre@microchip.com,
-        davem@davemloft.net, pabeni@redhat.com,
-        linux-arm-kernel@lists.infradead.org, linux@roeck-us.net,
-        wim@linux-watchdog.org, tglx@linutronix.de,
-        horatiu.vultur@microchip.com, radu_nicolae.pirea@upb.ro,
-        dharma.b@microchip.com, a.zummo@towertech.it,
-        linux-mmc@vger.kernel.org, richard.genoud@gmail.com,
-        claudiu.beznea@microchip.com, linus.walleij@linaro.org,
-        conor+dt@kernel.org, herbert@gondor.apana.org.au,
-        eugen.hristev@collabora.com, dmaengine@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux@armlinux.org.uk, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org, robh+dt@kernel.org,
-        linux-i2c@vger.kernel.org, linux-crypto@vger.kernel.org,
-        neil.armstrong@linaro.org, vigneshr@ti.com,
-        manikandan.m@microchip.com, linux-clk@vger.kernel.org,
-        olof@lixom.net
-In-Reply-To: <20230623203056.689705-32-varshini.rajendran@microchip.com>
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-32-varshini.rajendran@microchip.com>
-Message-Id: <168756378936.1606652.14221929175769628362.robh@kernel.org>
-Subject: Re: [PATCH v2 31/45] dt-bindings: atmel-classd: add sam9x7
- compatible
-Date:   Fri, 23 Jun 2023 17:43:09 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJs7lmQC/x2NSwqDQBAFryK9ToOOZiS5SnAxn5fYYCYyjSEg3
+ t0myyooaidFFSjdm50qvqLyKQbdpaE0h/ICSzYm17q+9W5gffvOXTmvGwfkdPP9CIyRLIhBwbG
+ GkmZLyrYsJteKp/z+h8d0HCeH6zvdcQAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Bring up the SM6125 DPU now that all preliminary series (such as INTF
+TE) have been merged (for me to test the hardware properly), and most
+other conflicting work (barring ongoing catalog *improvements*) has made
+its way in as well or is still being discussed.
 
-On Sat, 24 Jun 2023 02:00:42 +0530, Varshini Rajendran wrote:
-> Add sam9x7 compatible to DT bindings documentation.
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  .../devicetree/bindings/sound/atmel,sama5d2-classd.yaml      | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
+The second part of the series complements that by immediately utilizing
+this hardware in DT, and even enabling the MDSS/DSI nodes complete with
+a 6.0" 1080x2520 panel for Sony's Seine PDX201 (Xperia 10 II).
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The last patch ("sm6125-seine: Configure MDSS, DSI and panel") depends
+on (an impending v2 of) my Sony panel collection series [1].
 
-yamllint warnings/errors:
+[1]: https://lore.kernel.org/linux-arm-msm/20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org/
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/atmel,sama5d2-classd.example.dtb: sound@fc048000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['atmel,sama5d2-classd'] is too short
-	from schema $id: http://devicetree.org/schemas/sound/atmel,sama5d2-classd.yaml#
+---
+Marijn Suijten (15):
+      arm64: dts: qcom: sm6125: Sort spmi_bus node numerically by reg
+      dt-bindings: clock: qcom,dispcc-sm6125: Remove unused GCC_DISP_AHB_CLK
+      dt-bindings: clock: qcom,dispcc-sm6125: Require GCC PLL0 DIV clock
+      dt-bindings: clock: qcom,dispcc-sm6125: Allow power-domains property
+      dt-bindings: display/msm: dsi-controller-main: Document SM6125
+      dt-bindings: display/msm: sc7180-dpu: Describe SM6125
+      dt-bindings: display/msm: Add SM6125 MDSS
+      drm/msm/dpu: Add SM6125 support
+      drm/msm/mdss: Add SM6125 support
+      dt-bindings: msm: dsi-phy-14nm: Document SM6125 variant
+      drm/msm/dsi: Add 14nm phy configuration for SM6125
+      arm64: dts: qcom: sm6125: Switch fixed xo_board clock to RPM XO clock
+      arm64: dts: qcom: sm6125: Add dispcc node
+      arm64: dts: qcom: sm6125: Add display hardware nodes
+      arm64: dts: qcom: sm6125-seine: Configure MDSS, DSI and panel
 
-doc reference errors (make refcheckdocs):
+ .../bindings/clock/qcom,dispcc-sm6125.yaml         |  17 +-
+ .../bindings/display/msm/dsi-controller-main.yaml  |   2 +
+ .../bindings/display/msm/dsi-phy-14nm.yaml         |   1 +
+ .../bindings/display/msm/qcom,sc7180-dpu.yaml      |   1 +
+ .../bindings/display/msm/qcom,sm6125-mdss.yaml     | 206 +++++++++++++++++
+ .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   |  59 +++++
+ arch/arm64/boot/dts/qcom/sm6125.dtsi               | 244 +++++++++++++++++++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_4_sm6125.h | 173 +++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.c              |   2 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy.h              |   1 +
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c         |  15 ++
+ drivers/gpu/drm/msm/msm_mdss.c                     |   8 +
+ 15 files changed, 712 insertions(+), 25 deletions(-)
+---
+base-commit: 8d2be868b42c08290509c60515865f4de24ea704
+change-id: 20230624-sm6125-dpu-aedc9637ee7b
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230623203056.689705-32-varshini.rajendran@microchip.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Best regards,
+-- 
+Marijn Suijten <marijn.suijten@somainline.org>
 
