@@ -2,63 +2,28 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE3473E186
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Jun 2023 16:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8329D73E20C
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Jun 2023 16:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjFZOEm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Jun 2023 10:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S231620AbjFZOYZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Jun 2023 10:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjFZOEk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Jun 2023 10:04:40 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1BD10E3
-        for <linux-clk@vger.kernel.org>; Mon, 26 Jun 2023 07:04:34 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6985de215so25053071fa.2
-        for <linux-clk@vger.kernel.org>; Mon, 26 Jun 2023 07:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687788272; x=1690380272;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wyIEHWHQ/LcvFyprRxFC+Na0w05IbCRKTBTbUS5cgdA=;
-        b=WrUvnmCzy00urIpPmpCzBuKn8wT0tNNC0Wvh8x2Hzr/jbBkLeZGDoUteOMHOBFsEEY
-         WoPRB0G/A6/yyXEiFRPlmcWraG49HRyjcV8/EBzHdiTYK56VLk7u1kEfLdxvH8qDXJSh
-         I8dbmVCYnd94fxo/J65iv6vyR2bH/EYT8qSC0DRPY4D5jLf6QLfkW59Cb7by6aaSuZxm
-         NhzdyHUz0tKyGRIwNit5zGQG6ZpIiQJ8jyTCnRzP1tFP5MVQzSoegV74zffZPfyQ24y1
-         nP5pt7iHRUmuMqk2td+hy+rZLyhFJ08iiX5HZ7WorozJbCVkmk0hcbbBY9t4rfbnYsVD
-         Fxnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687788272; x=1690380272;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyIEHWHQ/LcvFyprRxFC+Na0w05IbCRKTBTbUS5cgdA=;
-        b=KVbzsNMvXtzagBp7Uc+YTWe69MMWGUYWU19BiLF9T46EsjdWuYXVXuHZOAxSp0uK7e
-         U3uR+TdiJfGjlHioSTyvvPoXLQKbjOIa2oJs/WvvX6VOwSXhcycUSjIMqeGi0P1xjD50
-         1St8j2aYvoJNXP4XbG+sXLG/6w///YtSwhX2fobNMEF7ZsyOrGkdEVGfrstg6O7/tQ8I
-         5PaP8v2qaoaz59E50iKCYoByU2Ml3vWvruqpN7efqa21pfz1R/x54iy+RP5BL84R4xDv
-         g7SZkRk7j883mHcTb7l4v7y/cin/wqjsPMzzzAO1P59eRwki8EOZLbztaECMbTeXSL4U
-         8BHw==
-X-Gm-Message-State: AC+VfDy4zeprsX9tNcDXdU9Icznaqrf0KtzzGiZ17etv3Bw1GwB8HbHl
-        GwBYb5kGculHw2nniDGoNDQWBQ==
-X-Google-Smtp-Source: ACHHUZ4cCys5jLmsTbxwl6vC2/4BuewVlsgk63nHZjzLyOKbLNIGAd+7i6deIkRRAZW5T+VP+CDn+Q==
-X-Received: by 2002:a2e:8855:0:b0:2b5:fef9:6ad6 with SMTP id z21-20020a2e8855000000b002b5fef96ad6mr3241115ljj.25.1687788272229;
-        Mon, 26 Jun 2023 07:04:32 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id a10-20020a2e88ca000000b002b6a4f35a0csm297726ljk.35.2023.06.26.07.04.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 07:04:30 -0700 (PDT)
-Message-ID: <631728c5-9e4f-fa5d-e954-d4ba35f6fd19@linaro.org>
-Date:   Mon, 26 Jun 2023 17:04:29 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu: Describe
- SM6125
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
+        with ESMTP id S231218AbjFZOYF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Jun 2023 10:24:05 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8C1198A
+        for <linux-clk@vger.kernel.org>; Mon, 26 Jun 2023 07:23:27 -0700 (PDT)
+Received: from SoMainline.org (82-72-63-87.cable.dynamic.v4.ziggo.nl [82.72.63.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id A80873F7B3;
+        Mon, 26 Jun 2023 16:17:44 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 16:17:42 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -67,14 +32,13 @@ To:     Marijn Suijten <marijn.suijten@somainline.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Martin Botka <martin.botka@somainline.org>,
         Jami Kettunen <jami.kettunen@somainline.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
@@ -82,15 +46,20 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+Subject: Re: [PATCH 00/15] drm/msm: Add SM6125 MDSS/DPU hardware and enable
+ Sony Xperia 10 II panel
+Message-ID: <jllpsyveqvxco3ihclqypwnfhac2g3gdm6ukd3x3fjsr6z54xy@2xwh5fixpprh>
 References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
- <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+ <035ffdd2-27e3-99bc-f8a4-41e66685db09@linaro.org>
+ <i5xxzhfhlwzoxlnezzgg42hzwzwfcgxv5gopqhb6vd3udz252b@wpznuvoleeta>
+ <701916b3-388e-8216-f7ae-1837d5895d87@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <701916b3-388e-8216-f7ae-1837d5895d87@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,36 +67,54 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 24/06/2023 03:41, Marijn Suijten wrote:
-> SM6125 is identical to SM6375 except that while downstream also defines
-> a throttle clock, its presence results in timeouts whereas SM6375
-> requires it to not observe any timeouts.
+On 2023-06-26 11:41:39, Konrad Dybcio wrote:
+> On 25.06.2023 21:18, Marijn Suijten wrote:
+> > On 2023-06-24 03:42:46, Konrad Dybcio wrote:
+> >> On 24.06.2023 02:40, Marijn Suijten wrote:
+> >>> Bring up the SM6125 DPU now that all preliminary series (such as INTF
+> >>> TE) have been merged (for me to test the hardware properly)
+> >> We should not repeat the same mistake in the future.. Finding a
+> >> balance between releasing early and releasing what we can declare
+> >> working and tested code is hard, but we waaaaaaaay overstayed on
+> >> this one..
+> > 
+> > I don't understand what you mean by "mistake" at all.  Yes the DPU
+> > catalog portion of this series sat in my local branch for a very long
+> > time.  Yes it had to be rebased on top of conflicts many many times.
+> > 
+> > However, that time has also been used to fix and extend DPU where
+> > necessary, instead of submitting a half-broken or half-incomplete
+> > catalog entry...
+> > 
+> > Re "we overstayed": you could have asked to clean up and send my patch,
+> > so I don't take this as a mistake on my part as you are completely aware
+> > of my time schedule ;)
+> I didn't mean to pick on you. I just wanted to emphasize that a more
+> upstream-forward approach would have saved us quite some time on the
+> rebasing and cleaning-up front.
 
-I see that the vendor DTS still references this clock.
+That is how it comes across ;) - our dream is all about upstream-first
+but as you know this becomes a mess really quickly when things are
+blocked on dependencies and you're working on 5 different features and
+testing across ±8 different Sony platforms on ±14 different devices at
+once... all in a limited portion of free time.
 
-Abhinav, Tanya, do possibly know what can be wrong here?
+Fwiw cleaning-up would have had to happen either way, and would have
+taken the same amount of time regardless of whether this series is
+submitted now or two months ago.
 
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
-> index 630b11480496..6d2ba9a1cca1 100644
-> --- a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
-> @@ -15,6 +15,7 @@ properties:
->     compatible:
->       enum:
->         - qcom,sc7180-dpu
-> +      - qcom,sm6125-dpu
->         - qcom,sm6350-dpu
->         - qcom,sm6375-dpu
->   
-> 
+> >> Konrad
+> >> , and most
+> > 
+> > Also here, don't forget to re-quote my message if you break half-way in
+> > the line.
+> Ugh. All the time I've been doing this I thought thunderfox was smart
+> enough to do it for me. Apparently not and you're the 1st one to point
+> that out.
 
--- 
-With best wishes
-Dmitry
+You're welcome!
+(Though I thought it should be visible in Thunderburd, unless you're not
+ in plaintext mode?  Does it still show the "this is quoted" line in
+ front of the broken sentence?)
 
+ - Marijn
