@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF55A744F5A
-	for <lists+linux-clk@lfdr.de>; Sun,  2 Jul 2023 19:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55A9744F62
+	for <lists+linux-clk@lfdr.de>; Sun,  2 Jul 2023 19:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjGBRu5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 2 Jul 2023 13:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
+        id S229649AbjGBRvA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 2 Jul 2023 13:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjGBRu4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 2 Jul 2023 13:50:56 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1A6E7D
+        with ESMTP id S229887AbjGBRu7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 2 Jul 2023 13:50:59 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C483E69
         for <linux-clk@vger.kernel.org>; Sun,  2 Jul 2023 10:50:53 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so4543301e87.1
-        for <linux-clk@vger.kernel.org>; Sun, 02 Jul 2023 10:50:52 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f875b267d9so5662760e87.1
+        for <linux-clk@vger.kernel.org>; Sun, 02 Jul 2023 10:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688320251; x=1690912251;
+        d=linaro.org; s=google; t=1688320252; x=1690912252;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7VyppmCQXuilTGQB3wrm3Kg/cbYa6gmWtfZYYvtVywc=;
-        b=V1E4BiAmo7N+qyuIKVoWjsG358Dsm/OIAjLN7B09/d1HL1Kp+WJSBOZpmf2kM3KFZ5
-         BtWCaOHUGoDBxLjlYDir0y0YFIdWkQYIXhyq2r223soRALd81uXoMXrglxLX8TQ2ov2+
-         dZujqUXY/P1xBifq1t2OdMHhCHQEJPvyz9Sxuxix4fNfFmFmabNc1Pn/tJHzoBxlf6Wx
-         qZkeM99AQdlql1cadRlGKli2rocbTZ0zKDuZB5ZHIR5VIy1/x/TCEqoRklcec6fgV7Ju
-         ++7MyD1juBxu3ib01TYA5dzMUK16UN22fPMddjNsBB02wG8xp7q/bZEMOxumJMRCXN2u
-         a4GQ==
+        bh=B2RgVgorpYxjC9AvaAjc78mFsqayussQmcq7fZZ+tBM=;
+        b=sYGfR4+r1lMAFY4Kl5LURFj+wWYYKZFUHdFStyAa4BpHFk+XsQ7AqerM+36UguibjA
+         O98WfrvLJzEAEdqcozgC+7URlDBXcfZyc6WfyZ0B+6ccu2mWcgtJRPMP0dfgA8yH2ziw
+         FosAb0n6bCKWBh/4pUoe32X0JubtMXGZeRQtzriC4jeEXDkk3UWFa41zdZrEfsE/FpaB
+         ia4vCvu2dl8P16UcFfZfChWD6VD+PfzTBzMcjGU/mV3ZSYZbGImGelXNIm/v6M5V1JZN
+         XhqUsiBf8LZlr/Fj5nH1wGDNKPMXsD2V8V0v7Xl0kEOFOyZh00DMug6CRLvTxEynMuHM
+         FRkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688320251; x=1690912251;
+        d=1e100.net; s=20221208; t=1688320252; x=1690912252;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7VyppmCQXuilTGQB3wrm3Kg/cbYa6gmWtfZYYvtVywc=;
-        b=HIgA059oE5ua75T343MK9BrbOchFVNSv+WanlQw2XBOOIejDjnLRrvbQAXfabzDuwb
-         +RFenYAgdi25SFOROXsjbXduzsX0sJrZnae+sspPn5xfxBmf+El7E+kZUxqCe3RzKJP4
-         w5JXutn/jjY/bhOp1bExME1OJQnfjU/a5Y1ueTL0Eo8cL7vQIN6BUv6/mVHUO+lTFfrw
-         tWLnbsK45MEOa0oCaGneP9BEtIwplEd74BXhUmbbPmZHCo0KCf8fiRjwKP5e9AaWVoU7
-         51lVdqcUF9t2XyVthVaNTsMbgWW7YNRBrf+Id8M82XGbSaewEUOPrOF8biN6jWVyAx4/
-         hqRQ==
-X-Gm-Message-State: AC+VfDw4tP/I9aUiCAHuuw4ru9Zgq8iR3ccGzRHWW970Egd+FHLepKRT
-        hjRLMUr7y5055WnZuQKo3wei5A==
-X-Google-Smtp-Source: ACHHUZ6iZUtgUFX6GHfndWo1pEqoTsBwjADAu+kP0CnIpbdZiLritZ34nsvckKEtzg9tdbYRiCZJ7A==
-X-Received: by 2002:a05:6512:3f24:b0:4eb:46c2:e771 with SMTP id y36-20020a0565123f2400b004eb46c2e771mr4046175lfa.14.1688320251213;
+        bh=B2RgVgorpYxjC9AvaAjc78mFsqayussQmcq7fZZ+tBM=;
+        b=S/eMY+FsYtG5YCmwtwoaUPzyXPpRQ1VlZUuz13rv3IPY+aRUwOxf+6JMhSDSrbhRcc
+         AcGbFi8Br6lc2RBNwwP5yD/6mzZ5MxrXk7LeMBuVVAME5Zpsnr2JAfZfGnG0UiebuXzl
+         U5V8G8snGUaKbRwrEZr+zN4/5w0+L9P27Lgl1L2jQcxM6EM3fbFkAYuoUQvJouE6XUT8
+         BoCz5Zi9bjKzEEc9NVRNYsMzIqQYfmB9PobraXZ2W9KYBI826YddeCOGSYmBNQiokQdV
+         M6L+ueZWDpnTtanxsf5ox+xJy1vPZGqTaUrOh59nnbsDN3l2xWYBwgUvu1mIsTCbSYJZ
+         V4jQ==
+X-Gm-Message-State: ABy/qLaF/EucFCg3q4dX6KaHBSODSL7EUfc1OaldosQB9oVmTHpdCtUa
+        9wD71SkZELVdwXuUxQ7cYrgAhQ==
+X-Google-Smtp-Source: APBJJlFG5aKzKDMSAGCx1p6Dn6e5WC1BjdJFPcpT+06se0Bm7uOX5iWizs4xSKzI2Vzjnu89YQVK/g==
+X-Received: by 2002:a05:6512:2022:b0:4f8:767d:9b98 with SMTP id s2-20020a056512202200b004f8767d9b98mr4847041lfs.37.1688320251983;
         Sun, 02 Jul 2023 10:50:51 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id d1-20020ac24c81000000b004fb759964a9sm3354130lfl.168.2023.07.02.10.50.50
+        by smtp.gmail.com with ESMTPSA id d1-20020ac24c81000000b004fb759964a9sm3354130lfl.168.2023.07.02.10.50.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 10:50:50 -0700 (PDT)
+        Sun, 02 Jul 2023 10:50:51 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -66,9 +66,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
         Stephan Gerhold <stephan@gerhold.net>
-Subject: [RFC PATCH 6/8] ARM: dts: qcom: msm8960: add Krait clock controller
-Date:   Sun,  2 Jul 2023 20:50:43 +0300
-Message-Id: <20230702175045.122041-7-dmitry.baryshkov@linaro.org>
+Subject: [RFC PATCH 7/8] ARM: dts: qcom: msm8960: add L2 cache scaling
+Date:   Sun,  2 Jul 2023 20:50:44 +0300
+Message-Id: <20230702175045.122041-8-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
 References: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
@@ -76,7 +76,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,43 +84,192 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add device node for the clock controller for the CPU cores and L2
-clocks. It will be further used by the L2 and by the CPUfreq nodes.
+Populate L2 cache node with clock, supplies and OPP information to
+facilitate scaling L2 frequency.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm/boot/dts/qcom/qcom-msm8960.dtsi | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts   |   5 +
+ .../qcom/qcom-msm8960-samsung-expressatt.dts  |   5 +
+ arch/arm/boot/dts/qcom/qcom-msm8960.dtsi      | 124 +++++++++++++++++-
+ 3 files changed, 133 insertions(+), 1 deletion(-)
 
+diff --git a/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts b/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+index cba0d1e460a1..2f73f058d855 100644
+--- a/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
++++ b/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+@@ -336,6 +336,11 @@ pm8921_ncp: ncp {
+ 	};
+ };
+ 
++&L2 {
++	vdd-mem-supply = <&pm8921_l24>;
++	vdd-dig-supply = <&pm8921_s3>;
++};
++
+ /* eMMC */
+ &sdcc1 {
+ 	status = "okay";
+diff --git a/arch/arm/boot/dts/qcom/qcom-msm8960-samsung-expressatt.dts b/arch/arm/boot/dts/qcom/qcom-msm8960-samsung-expressatt.dts
+index 6bc02bf25120..7132255c7003 100644
+--- a/arch/arm/boot/dts/qcom/qcom-msm8960-samsung-expressatt.dts
++++ b/arch/arm/boot/dts/qcom/qcom-msm8960-samsung-expressatt.dts
+@@ -321,6 +321,11 @@ pm8921_ncp: ncp {
+ 	};
+ };
+ 
++&L2 {
++	vdd-mem-supply = <&pm8921_l24>;
++	vdd-dig-supply = <&pm8921_s3>;
++};
++
+ &usb_hs1_phy {
+ 	v3p3-supply = <&pm8921_l3>;
+ 	v1p8-supply = <&pm8921_l4>;
 diff --git a/arch/arm/boot/dts/qcom/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom/qcom-msm8960.dtsi
-index ba82b6ab899e..65065276c885 100644
+index 65065276c885..48b3962dd4fb 100644
 --- a/arch/arm/boot/dts/qcom/qcom-msm8960.dtsi
 +++ b/arch/arm/boot/dts/qcom/qcom-msm8960.dtsi
-@@ -81,6 +81,24 @@ sleep_clk: sleep_clk {
+@@ -2,6 +2,7 @@
+ /dts-v1/;
+ 
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/clock/qcom,krait-cc.h>
+ #include <dt-bindings/clock/qcom,gcc-msm8960.h>
+ #include <dt-bindings/reset/qcom,gcc-msm8960.h>
+ #include <dt-bindings/clock/qcom,lcc-msm8960.h>
+@@ -41,9 +42,130 @@ cpu@1 {
+ 		};
+ 
+ 		L2: l2-cache {
+-			compatible = "cache";
++			compatible = "qcom,krait-l2-cache", "cache";
+ 			cache-level = <2>;
+ 			cache-unified;
++			clocks = <&kraitcc KRAIT_L2>;
++			#interconnect-cells = <1>;
++			operating-points-v2 = <&l2_opp_table>;
++
++			l2_opp_table: opp-table-l2 {
++				compatible = "operating-points-v2";
++
++				opp-384000000 {
++					opp-hz = /bits/ 64 <384000000>;
++					opp-microvolt = <1050000 1050000 1150000>,
++							<1050000 1050000 1150000>;
++				};
++
++				opp-432000000 {
++					opp-hz = /bits/ 64 <432000000>;
++					opp-microvolt = <1050000 1050000 1150000>,
++							<1050000 1050000 1150000>;
++				};
++
++				opp-486000000 {
++					opp-hz = /bits/ 64 <486000000>;
++					opp-microvolt = <1050000 1050000 1150000>,
++							<1050000 1050000 1150000>;
++				};
++
++				opp-540000000 {
++					opp-hz = /bits/ 64 <540000000>;
++					opp-microvolt = <1050000 1050000 1150000>,
++							<1050000 1050000 1150000>;
++				};
++
++				opp-594000000 {
++					opp-hz = /bits/ 64 <594000000>;
++					opp-microvolt = <1050000 1050000 1150000>,
++							<1050000 1050000 1150000>;
++				};
++
++				opp-648000000 {
++					opp-hz = /bits/ 64 <648000000>;
++					opp-microvolt = <1050000 1050000 1150000>,
++							<1050000 1050000 1150000>;
++				};
++
++				opp-702000000 {
++					opp-hz = /bits/ 64 <702000000>;
++					opp-microvolt = <1050000 1050000 1050000>,
++							<1050000 1050000 1050000>;
++				};
++
++				opp-756000000 {
++					opp-hz = /bits/ 64 <756000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-810000000 {
++					opp-hz = /bits/ 64 <810000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-864000000 {
++					opp-hz = /bits/ 64 <864000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-918000000 {
++					opp-hz = /bits/ 64 <918000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-972000000 {
++					opp-hz = /bits/ 64 <972000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1026000000 {
++					opp-hz = /bits/ 64 <1026000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1080000000 {
++					opp-hz = /bits/ 64 <1080000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1134000000 {
++					opp-hz = /bits/ 64 <1134000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1188000000 {
++					opp-hz = /bits/ 64 <1188000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1242000000 {
++					opp-hz = /bits/ 64 <1242000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1296000000 {
++					opp-hz = /bits/ 64 <1296000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++
++				opp-1350000000 {
++					opp-hz = /bits/ 64 <1350000000>;
++					opp-microvolt = <1150000 1150000 1150000>,
++							<1150000 1150000 1150000>;
++				};
++			};
  		};
  	};
  
-+	kraitcc: clock-controller {
-+		compatible = "qcom,krait-cc-v1";
-+		clocks = <&gcc PLL9>, /* hfpll0 */
-+			 <&gcc PLL10>, /* hfpll1 */
-+			 <&gcc PLL12>, /* hfpll_l2 */
-+			 <&acc0>,
-+			 <&acc1>,
-+			 <&l2cc>;
-+		clock-names = "hfpll0",
-+			      "hfpll1",
-+			      "hfpll_l2",
-+			      "acpu0_aux",
-+			      "acpu1_aux",
-+			      "acpu_l2_aux";
-+		#clock-cells = <1>;
-+		#interconnect-cells = <1>;
-+	};
-+
- 	/* Temporary fixed regulator */
- 	vsdcc_fixed: vsdcc-regulator {
- 		compatible = "regulator-fixed";
 -- 
 2.39.2
 
