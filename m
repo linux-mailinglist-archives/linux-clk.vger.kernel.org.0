@@ -2,87 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DC574CBEF
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Jul 2023 07:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D0874CDA6
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Jul 2023 08:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjGJFHf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 10 Jul 2023 01:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S231200AbjGJGxL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 10 Jul 2023 02:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjGJFGt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 10 Jul 2023 01:06:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5928CE75;
-        Sun,  9 Jul 2023 22:05:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        with ESMTP id S230187AbjGJGxK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 10 Jul 2023 02:53:10 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Jul 2023 23:53:09 PDT
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D23B8;
+        Sun,  9 Jul 2023 23:53:08 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77EF260E06;
-        Mon, 10 Jul 2023 05:05:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8411C433CD;
-        Mon, 10 Jul 2023 05:05:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688965510;
-        bh=qEuuH2tAUT9JrwW7gS3dZ20Ub/g5ZBiDfoOlmDnHAQk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=S73N0X4sfgyEJKS946ty0VQ6aaTDuV94uGIO3R7bwoT8gcbS9Uxpw0L3l8QZ0V0rZ
-         K7psvJxBdufrDZPueixTFj3o+MvaGPvkF8UtwIkLGtWCbUq1WtfGmeCruGUJT1XemN
-         KgVRg4X4CGns99r9GZakgH4ca5jMWXmqo+1mwfrin6xjBcOK9fejtNwtIFlJVkk+XZ
-         53ZwA4pg10UnLnFgroejdaYb1qiqCRABtHk7qV6cfGX/qlSYm2IbYQJ7p+Isb1N4gu
-         RxOEuHYN0IuUSMT203B+hXuV3o+w46MaP0X0LAzrT6+n8o+q9Kw53ns4L3monWWP9a
-         pFRBSzhg/WApA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, konrad.dybcio@linaro.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: Re: (subset) [PATCH v15 0/5] Enable IPQ9754 USB
-Date:   Sun,  9 Jul 2023 22:07:48 -0700
-Message-ID: <168896565947.1376307.7465231231196161276.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1686289721.git.quic_varada@quicinc.com>
-References: <cover.1686289721.git.quic_varada@quicinc.com>
+        by box.trvn.ru (Postfix) with ESMTPSA id 0BBDC400F4;
+        Mon, 10 Jul 2023 11:34:05 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1688970846; bh=DND5rpm/wmgsLveMaPobuACP8Vr/HQmeyKyeNsCd8+o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VatCx4zNsH8XVhtDNxxMbWubQSaBJWHv2qOvFQJfQjjrrc3MiDS/75JNYt2c/uQhW
+         FUYY5uJ5wlFRyEE7nF1sA/j7HnSqWPm5MMOVYXydradsjlibExvSNRV/SI20ifKLH/
+         DQJteOgLnHvSyWw6LLYJ9oIvKwRNlkFHdz0aRv+FIuIFsBq7/Q/TS7Upn2Uaqz2+Bq
+         zkD7Lu/LMJOT33H6ev6pRbawd3rV+/nQKyCQVlV2Kimam72MCdEbuTm+EzFWJzE36r
+         LKio3U6j2EfMhcnWp/eCEG1bsoUZKATUp0nQUFr5OHtNG6FfOqZcllcfOrsrtbe333
+         KpyTN0MGCxVQA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Date:   Mon, 10 Jul 2023 11:34:04 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     David Wronek <davidwronek@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org
+Subject: Re: [PATCH v2 5/7] arm64: dts: qcom: pm6150: Add resin and rtc nodes
+In-Reply-To: <20230706124339.134272-6-davidwronek@gmail.com>
+References: <20230706124339.134272-1-davidwronek@gmail.com>
+ <20230706124339.134272-6-davidwronek@gmail.com>
+Message-ID: <c4fa68f151b043bc60848f621b9aea66@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-On Fri, 09 Jun 2023 11:26:29 +0530, Varadarajan Narayanan wrote:
-> This patch series adds the relevant phy and controller
-> configurations for enabling USB on IPQ9754
+David Wronek писал(а) 06.07.2023 17:40:
+> Add support for the RTC which is the same as on other PMICs and add the
+> resin child node to the PM6150 PON device and disable it by default.
 > 
-> Portions of the patchset have been merged. Please see
-> 	https://lore.kernel.org/lkml/ZGN9gchu7dRb6QwC@matsya/
+> Signed-off-by: David Wronek <davidwronek@gmail.com>
+
+Actually... (+CC CROS watchers) Doug, this would enable a somewhat
+dubious RTC for trogdor devices. On qcom firmware the rtc is
+forever write-protected but you run TF-A so maybe it's more
+cooperative and you can add "allow-set-time" prop for trogdor, in
+case qtiseclib doesn't mess with it? Or, alternatively, disable this
+rtc for trogdor completely so it doesn't cause trouble?
+
+In any case, on the WoA firmware and with userspace offset handling,
+this works beautifully, so:
+
+Tested-by: Nikita Travkin <nikita@trvn.ru> # sc7180, Aspire 1
+
+Thanks!
+> ---
+>  arch/arm64/boot/dts/qcom/pm6150.dtsi | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> [v15]:
-> 	- Introduce fixed regulator definitions in the last patch
-> 	  instead of earlier patch
-> 
-> [...]
-
-Applied, thanks!
-
-[3/5] arm64: dts: qcom: ipq9574: Add USB related nodes
-      commit: a98bfb31f6766db26e0d4f39c909b7e8926cb0d8
-[4/5] arm64: dts: qcom: ipq9574: Add LDO regulator node
-      commit: d5506524d9d9f2be01cbff510b0b8eec0cc9d691
-[5/5] arm64: dts: qcom: ipq9574: Enable USB
-      commit: ec4f047679d59294c98095ae2470d34c2f2335a2
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> diff --git a/arch/arm64/boot/dts/qcom/pm6150.dtsi b/arch/arm64/boot/dts/qcom/pm6150.dtsi
+> index 2e6afa296141..43c50f890e8b 100644
+> --- a/arch/arm64/boot/dts/qcom/pm6150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pm6150.dtsi
+> @@ -53,6 +53,14 @@ pm6150_pwrkey: pwrkey {
+>  				bias-pull-up;
+>  				linux,code = <KEY_POWER>;
+>  			};
+> +
+> +			pm6150_resin: resin {
+> +				compatible = "qcom,pm8941-resin";
+> +				interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
+> +				debounce = <15625>;
+> +				bias-pull-up;
+> +				status = "disabled";
+> +			};
+>  		};
+>  
+>  		pm6150_temp: temp-alarm@2400 {
+> @@ -88,6 +96,13 @@ pm6150_adc_tm: adc-tm@3500 {
+>  			status = "disabled";
+>  		};
+>  
+> +		rtc@6000 {
+> +			compatible = "qcom,pm8941-rtc";
+> +			reg = <0x6000>, <0x6100>;
+> +			reg-names = "rtc", "alarm";
+> +			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
+> +		};
+> +
+>  		pm6150_gpios: gpio@c000 {
+>  			compatible = "qcom,pm6150-gpio", "qcom,spmi-gpio";
+>  			reg = <0xc000>;
