@@ -2,571 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D96F7547CC
-	for <lists+linux-clk@lfdr.de>; Sat, 15 Jul 2023 11:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F427548B4
+	for <lists+linux-clk@lfdr.de>; Sat, 15 Jul 2023 15:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjGOJUs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 15 Jul 2023 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
+        id S229487AbjGONUM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 15 Jul 2023 09:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjGOJUa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 15 Jul 2023 05:20:30 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F2B3C01;
-        Sat, 15 Jul 2023 02:20:09 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbfa811667so23887285e9.1;
-        Sat, 15 Jul 2023 02:20:09 -0700 (PDT)
+        with ESMTP id S229490AbjGONUL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 15 Jul 2023 09:20:11 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB02D75
+        for <linux-clk@vger.kernel.org>; Sat, 15 Jul 2023 06:20:09 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso4744338e87.0
+        for <linux-clk@vger.kernel.org>; Sat, 15 Jul 2023 06:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689412808; x=1692004808;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r8Ih9QONHUEJ7NhIIQ2aYQNVLh0fSU3axMBdQPuIZkw=;
-        b=Wp6oR6VkIsAGhlQ8TVbthS+TgMwIrPNMq8ODrR9UlJInkkThKXKmWqMvNmKDvnL54B
-         agkWy243/hGhw5n02TYG8rpA/VLX+6Ikr2GngoUrHIWwa2+uipB/cCjCEGJr+7oSVCNv
-         Gb53jEMNl+VwElI+ivkuj7OWusAfTcBF+xuch8CXnWvsfQcb6q6kZlAlZcKfbOPnRXCa
-         TUuG3Btw+/TAbrG1EMOn8E7pjE+XGA9YSuSZq7zi7ao6Kw+CEQvwqpvMeTDF2L+aJn1u
-         8IHLmRCqp4vVy6LZzDmKUsd8o1gQvBhZovUx951UbZe4ltt6GA6M41lfJreJhsyuIXCu
-         htKQ==
+        d=linaro.org; s=google; t=1689427208; x=1692019208;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LQhW1Szg22yqLkreXfyXXQvcUFN3IT4if2hwRUU8Cro=;
+        b=NvdsTgoHDj9lXC27YxlV+qyjrrqmsN3ASm9uJKOxzM8fGqcHBtp+G/5vHiFoHiEV7f
+         5nY6ReNSZy3379lMIBDJpnCI9E4+PvF2BupzxYxetcrQfuema/wf9bKmF3+ULS7+xIEQ
+         1aMK5F8dsXlXOypgqjDm+0pv/V7XluGjHQQHkYuRXCWLRbajn7z6lNE4fCFnI4Uy3G7P
+         AOS43d7wD/gvc+088w4tENBN4oSbZFyAnKBBv3aW75IEaXwXihLXKcFhfm4Rab1fPdly
+         18tuV1PCJrJl/9AizCtwi/4R0ajHTkcB0gK6OlySUFutT6nR9G+KWAct9tsWPbT9Q9QN
+         XGHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689412808; x=1692004808;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r8Ih9QONHUEJ7NhIIQ2aYQNVLh0fSU3axMBdQPuIZkw=;
-        b=G/SlLrHUZEaJW6e9EjQiZWDotcgQ/O/9t+fkYIsPrpdPlpQts+tPcFF8cBnd6THL1M
-         F14PtiexZvDBGnPXXCgN0AAK+7JbsqOG31ete3rfK24Pu+N6ezP/dYWG+LIK2+SU4MdZ
-         mI9Uk4z3+T12SKpYpZzBEed3N+BVgCY8wSIoPcLxymfRUJbXCWpTUWM1/P7sInkqJif4
-         sfuIleHoPoG8MzY7QK7bS91LLw8KutRlruYKj5RmgTKyqc3SCf59RHWZFRnTe2vS2ohy
-         7HlZ81JGPJXurWOt16JMLVeU/zeCFR7fB8+2UzMlpEzWtr7gz0T0wsFGCUU68GJXvi2f
-         Zk/w==
-X-Gm-Message-State: ABy/qLbuhMONZAc4IFNwjaU613gvpnq9tTKPDRwq2WSb+6bAtfxxipK0
-        kNVSMjIX0trBkNUA7L2YRO0=
-X-Google-Smtp-Source: APBJJlEUz0WRXnMgOKZfjATsCfX6f6jIzC1f85inM2IFN4iwwW8QUb4gha7XXcDfl2BfBE9R8HVK7w==
-X-Received: by 2002:adf:ed82:0:b0:314:2736:ba3e with SMTP id c2-20020adfed82000000b003142736ba3emr4058324wro.3.1689412807789;
-        Sat, 15 Jul 2023 02:20:07 -0700 (PDT)
-Received: from david-ryuzu.fritz.box ([188.195.202.152])
-        by smtp.googlemail.com with ESMTPSA id f22-20020a7bc8d6000000b003fbb5142c4bsm3238133wml.18.2023.07.15.02.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jul 2023 02:20:07 -0700 (PDT)
-From:   David Wronek <davidwronek@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1689427208; x=1692019208;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LQhW1Szg22yqLkreXfyXXQvcUFN3IT4if2hwRUU8Cro=;
+        b=GSUHZsYxGYQ3Itv3fnqCzZ6u5MVTLfuSWev0qL4WYFkRWZkgg77IJda5OM1LVyMbYR
+         p7JCC74fAOAQNUjr3xI0TzFJlOVQm93eLtyYaI6n3C0P9GHWiMsn4Xkcah+bs0xQI+sZ
+         O5r7f2e90TY/XiupM6djNNWAuxior3D/pKTQSHjSw368s5/NjJ0dQIctcpUbUDFNzXGX
+         DfYi53ck0Gy4VLG3VZbujhJRS1Fu1SYT29TUyr47xYB0FtUaEi1eWoGNRtYXMk4GrqPU
+         Geh1cRJKMpWp08UGMARuf+6DECrmV3UV3USyAEf2VtkZYTv4qiI5LzDvG9mUBaHjRGpt
+         j96A==
+X-Gm-Message-State: ABy/qLahWwJl+s4ioxp8/d3pez3C1suEMdqzDRVv833E9NkTX9P5MvQE
+        W76cL5z342Wbkeoj0Y9U0Tp46w==
+X-Google-Smtp-Source: APBJJlES0cvWT/cjYNdwu6j4QPnvmRbj3dgKlgYXs0/CAx0JRyeNJftRz20dfFsV4Lm2Iqeydw5o0Q==
+X-Received: by 2002:a19:6459:0:b0:4fb:9105:58b0 with SMTP id b25-20020a196459000000b004fb910558b0mr4853169lfj.20.1689427207697;
+        Sat, 15 Jul 2023 06:20:07 -0700 (PDT)
+Received: from [192.168.1.101] (abxi167.neoplus.adsl.tpnet.pl. [83.9.2.167])
+        by smtp.gmail.com with ESMTPSA id n6-20020a195506000000b004fd36c89c3csm437698lfe.43.2023.07.15.06.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Jul 2023 06:20:07 -0700 (PDT)
+Message-ID: <a2d362d0-3a58-0835-5106-fb60f0c3e4d0@linaro.org>
+Date:   Sat, 15 Jul 2023 15:20:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH V3 4/6] clk: qcom: gcc-qdu1000: Update GCC clocks as per
+ the latest hw version
+Content-Language: en-US
+To:     Imran Shaik <quic_imrashai@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org,
-        David Wronek <davidwronek@gmail.com>
-Subject: [PATCH v3 7/7] arm64: dts: qcom: Add support for the Xiaomi SM7125 platform
-Date:   Sat, 15 Jul 2023 11:16:13 +0200
-Message-ID: <20230715091932.161507-8-davidwronek@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230715091932.161507-1-davidwronek@gmail.com>
-References: <20230715091932.161507-1-davidwronek@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230706105045.633076-1-quic_imrashai@quicinc.com>
+ <20230706105045.633076-5-quic_imrashai@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230706105045.633076-5-quic_imrashai@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There are 6 Xiaomi smartphones with the SM7125 SoC:
+On 6.07.2023 12:50, Imran Shaik wrote:
+> Update the GCC clocks as per the latest hw version of QDU1000 and
+> QRU100 SoCs.
+> 
+> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> ---
+> Changes since v2:
+>  - Split the patch as per the review comments
+>  - Newly added
+> 
+>  drivers/clk/qcom/gcc-qdu1000.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/gcc-qdu1000.c b/drivers/clk/qcom/gcc-qdu1000.c
+> index 8df7b7983968..991fb2bc97e9 100644
+> --- a/drivers/clk/qcom/gcc-qdu1000.c
+> +++ b/drivers/clk/qcom/gcc-qdu1000.c
+> @@ -1131,6 +1131,26 @@ static struct clk_branch gcc_ddrss_ecpri_dma_clk = {
+>  	},
+>  };
+>  
+> +static struct clk_branch gcc_ddrss_ecpri_gsi_clk = {
+> +	.halt_reg = 0x54298,
+> +	.halt_check = BRANCH_HALT_VOTED,
+> +	.hwcg_reg = 0x54298,
+> +	.hwcg_bit = 1,
+> +	.clkr = {
+> +		.enable_reg = 0x54298,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(const struct clk_init_data) {
+> +			.name = "gcc_ddrss_ecpri_gsi_clk",
+> +			.parent_hws = (const struct clk_hw*[]) {
+> +				&gcc_aggre_noc_ecpri_gsi_clk_src.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.flags = CLK_SET_RATE_PARENT,
+> +			.ops = &clk_branch2_aon_ops,
+> +		},
+> +	},
+> +};
+> +
+>  static struct clk_branch gcc_ecpri_ahb_clk = {
+>  	.halt_reg = 0x3a008,
+>  	.halt_check = BRANCH_HALT_VOTED,
+> @@ -2521,6 +2541,8 @@ static struct clk_regmap *gcc_qdu1000_clocks[] = {
+>  	[GCC_AGGRE_NOC_ECPRI_GSI_CLK] = &gcc_aggre_noc_ecpri_gsi_clk.clkr,
+>  	[GCC_PCIE_0_PHY_AUX_CLK_SRC] = &gcc_pcie_0_phy_aux_clk_src.clkr,
+>  	[GCC_PCIE_0_PIPE_CLK_SRC] = &gcc_pcie_0_pipe_clk_src.clkr,
+> +	[GCC_GPLL1_OUT_EVEN] = &gcc_gpll1_out_even.clkr,
+Looks like you split it too much.. this clock is not being defined in this patch.
 
-- POCO M2 Pro (gram)
-- Redmi Note 9S (curtana)
-- Redmi Note 9 Pro (Global, joyeuse)
-- Redmi Note 9 Pro (India, curtana)
-- Redmi Note 9 Pro Max (excalibur)
-- Redmi Note 10 Lite (curtana)
-
-These devices share a common board design (a.k.a miatoll) with only a
-few differences. Add support for the common board, as well as support
-for the global Redmi Note 9 Pro.
-
-Signed-off-by: David Wronek <davidwronek@gmail.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sm7125-xiaomi-joyeuse.dts   |  16 +
- .../boot/dts/qcom/sm7125-xiaomi-miatoll.dtsi  | 423 ++++++++++++++++++
- 3 files changed, 440 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm7125-xiaomi-joyeuse.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sm7125-xiaomi-miatoll.dtsi
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 337abc4ceb17..7ef9e7d43904 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -192,6 +192,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-xiaomi-laurel-sprout.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm6350-sony-xperia-lena-pdx213.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm6375-sony-xperia-murray-pdx225.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sm7125-xiaomi-joyeuse.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm7225-fairphone-fp4.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8150-hdk.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8150-microsoft-surface-duo.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sm7125-xiaomi-joyeuse.dts b/arch/arm64/boot/dts/qcom/sm7125-xiaomi-joyeuse.dts
-new file mode 100644
-index 000000000000..2b3d1ed1bcae
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm7125-xiaomi-joyeuse.dts
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sm7125-xiaomi-miatoll.dtsi"
-+
-+/ {
-+	model = "Xiaomi Redmi Note 9 Pro (Global)";
-+	compatible = "xiaomi,joyeuse", "qcom,sm7125";
-+
-+	/* required for bootloader to select correct board */
-+	qcom,board-id = <0x50022 1>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sm7125-xiaomi-miatoll.dtsi b/arch/arm64/boot/dts/qcom/sm7125-xiaomi-miatoll.dtsi
-new file mode 100644
-index 000000000000..80073140e475
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm7125-xiaomi-miatoll.dtsi
-@@ -0,0 +1,423 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/firmware/qcom,scm.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include "sm7125.dtsi"
-+#include "pm6150.dtsi"
-+#include "pm6150l.dtsi"
-+
-+/delete-node/ &ipa_fw_mem;
-+/delete-node/ &rmtfs_mem;
-+
-+/ {
-+	chassis-type = "handset";
-+
-+	qcom,msm-id = <QCOM_ID_SM7125 0>;
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		framebuffer@9c000000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x0 0x9c000000 0x0 (1080 * 2400 * 4)>;
-+			width = <1080>;
-+			height = <2400>;
-+			stride = <(1080 * 4)>;
-+			format = "a8r8g8b8";
-+			clocks = <&gcc GCC_DISP_HF_AXI_CLK>;
-+		};
-+	};
-+
-+	gpio_keys: gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		key-vol-down {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&pm6150l_gpios 2 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			wakeup-source;
-+		};
-+	};
-+
-+	reserved-memory {
-+		mpss_mem: memory@86000000 {
-+			reg = <0x0 0x86000000 0x0 0x8400000>;
-+			no-map;
-+		};
-+
-+		venus_mem: memory@8ee00000 {
-+			reg = <0x0 0x8ee00000 0x0 0x500000>;
-+			no-map;
-+		};
-+
-+		cdsp_mem: memory@8f300000 {
-+			reg = <0x0 0x8f300000 0x0 0x1e00000>;
-+			no-map;
-+		};
-+
-+		adsp_mem: memory@91100000 {
-+			reg = <0x0 0x91100000 0x0 0x2800000>;
-+			no-map;
-+		};
-+
-+		wlan_mem: memory@93900000 {
-+			reg = <0x0 0x93900000 0x0 0x200000>;
-+			no-map;
-+		};
-+
-+		ipa_fw_mem: memory@93b00000 {
-+			reg = <0x0 0x93b00000 0x0 0x10000>;
-+			no-map;
-+		};
-+
-+		gpu_mem: memory@93b15000 {
-+			reg = <0x0 0x93b15000 0x0 0x2000>;
-+			no-map;
-+		};
-+
-+		cont_splash_mem: memory@9c000000 {
-+			reg = <0x0 0x9c000000 0x0 (1080 * 2400 * 4)>;
-+			no-map;
-+		};
-+
-+		pstore_mem: ramoops@9d800000 {
-+			compatible = "ramoops";
-+			reg = <0x0 0x9d800000 0x0 0x400000>;
-+			record-size = <0x80000>;
-+			pmsg-size = <0x200000>;
-+			console-size = <0x100000>;
-+		};
-+
-+		rmtfs_mem: memory@fa601000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0x0 0xfa601000 0x0 0x200000>;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+			qcom,vmid = <QCOM_SCM_VMID_MSS_MSA>;
-+		};
-+	};
-+};
-+
-+&apps_rsc {
-+	regulators-0 {
-+		compatible = "qcom,pm6150-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vreg_s1a_1p1: smps1 {
-+			regulator-min-microvolt = <1128000>;
-+			regulator-max-microvolt = <1128000>;
-+		};
-+
-+		vreg_s4a_1p0: smps4 {
-+			regulator-min-microvolt = <824000>;
-+			regulator-max-microvolt = <1120000>;
-+		};
-+
-+		vreg_s5a_2p0: smps5 {
-+			regulator-min-microvolt = <1744000>;
-+			regulator-max-microvolt = <2040000>;
-+		};
-+
-+		vreg_l1a_1p2: ldo1 {
-+			regulator-min-microvolt = <1178000>;
-+			regulator-max-microvolt = <1256000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l2a_1p0: ldo2 {
-+			regulator-min-microvolt = <944000>;
-+			regulator-max-microvolt = <1056000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l3a_1p0: ldo3 {
-+			regulator-min-microvolt = <968000>;
-+			regulator-max-microvolt = <1064000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l4a_0p88: ldo4 {
-+			regulator-min-microvolt = <824000>;
-+			regulator-max-microvolt = <928000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l5a_2p7: ldo5 {
-+			regulator-min-microvolt = <2496000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6a_0p6: ldo6 {
-+			regulator-min-microvolt = <568000>;
-+			regulator-max-microvolt = <648000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l9a_0p664: ldo9 {
-+			regulator-min-microvolt = <488000>;
-+			regulator-max-microvolt = <800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l10a_1p8: ldo10 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1832000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l11a_1p8: ldo11 {
-+			regulator-min-microvolt = <1696000>;
-+			regulator-max-microvolt = <1904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l12a_1p8: ldo12 {
-+			regulator-min-microvolt = <1696000>;
-+			regulator-max-microvolt = <1952000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l13a_1p8: ldo13 {
-+			regulator-min-microvolt = <1696000>;
-+			regulator-max-microvolt = <1904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l14a_1p8: ldo14 {
-+			regulator-min-microvolt = <1728000>;
-+			regulator-max-microvolt = <1832000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l15a_1p8: ldo15 {
-+			regulator-min-microvolt = <1696000>;
-+			regulator-max-microvolt = <1904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l16a_2p7: ldo16 {
-+			regulator-min-microvolt = <2496000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l17a_3p1: ldo17 {
-+			regulator-min-microvolt = <2920000>;
-+			regulator-max-microvolt = <3232000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l18a_3p0: ldo18 {
-+			regulator-min-microvolt = <1696000>;
-+			regulator-max-microvolt = <1904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l19a_3p0: ldo19 {
-+			regulator-min-microvolt = <2696000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+
-+	regulators-1 {
-+		compatible = "qcom,pm6150l-rpmh-regulators";
-+		qcom,pmic-id = "c";
-+
-+		vreg_s8c_1p3: smps8 {
-+			regulator-min-microvolt = <1120000>;
-+			regulator-max-microvolt = <1408000>;
-+		};
-+
-+		vreg_l1c_1p8: ldo1 {
-+			regulator-min-microvolt = <1616000>;
-+			regulator-max-microvolt = <1984000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l2c_1p3: ldo2 {
-+			regulator-min-microvolt = <1168000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l3c_1p23: ldo3 {
-+			regulator-min-microvolt = <1144000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l4c_1p8: ldo4 {
-+			regulator-min-microvolt = <1648000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l5c_1p8: ldo5 {
-+			regulator-min-microvolt = <1648000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6c_3p0: ldo6 {
-+			regulator-min-microvolt = <1648000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l7c_3p0: ldo7 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3312000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l8c_1p8: ldo8 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l9c_2p9: ldo9 {
-+			regulator-min-microvolt = <2952000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l10c_3p3: ldo10 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3400000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l11c_3p3: ldo11 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3400000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_bob: bob {
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3960000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
-+		};
-+	};
-+};
-+
-+&dispcc {
-+	/* HACK: disable until a panel driver is ready to retain simplefb */
-+	status = "disabled";
-+};
-+
-+&pm6150_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&pm6150_rtc {
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 69 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default","sleep";
-+	pinctrl-0 = <&sdc2_on>;
-+	pinctrl-1 = <&sdc2_off>;
-+	vmmc-supply = <&vreg_l9c_2p9>;
-+	vqmmc-supply = <&vreg_l6c_3p0>;
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <0 4>, <34 4>, <59 4>;
-+
-+	sdc2_on: sdc2-on-state {
-+		clk-pins {
-+			pins = "sdc2_clk";
-+			bias-disable;
-+			drive-strength = <16>;
-+		};
-+
-+		cmd-pins {
-+			pins = "sdc2_cmd";
-+			bias-pull-up;
-+			drive-strength = <10>;
-+		};
-+
-+		data-pins {
-+			pins = "sdc2_data";
-+			bias-pull-up;
-+			drive-strength = <10>;
-+		};
-+
-+		sd-cd-pins {
-+			pins = "gpio69";
-+			function = "gpio";
-+			bias-pull-up;
-+			drive-strength = <2>;
-+		};
-+	};
-+
-+	sdc2_off: sdc2-off-state {
-+		clk-pins {
-+			pins = "sdc2_clk";
-+			bias-disable;
-+			drive-strength = <2>;
-+		};
-+
-+		cmd-pins {
-+			pins = "sdc2_cmd";
-+			bias-pull-up;
-+			drive-strength = <2>;
-+		};
-+
-+		data-pins {
-+			pins = "sdc2_data";
-+			bias-pull-up;
-+			drive-strength = <2>;
-+		};
-+
-+		sd-cd-pins {
-+			pins = "gpio69";
-+			function = "gpio";
-+			bias-pull-up;
-+			drive-strength = <2>;
-+		};
-+	};
-+};
-+
-+&usb_1 {
-+	qcom,select-utmi-as-pipe-clk;
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	dr_mode = "peripheral";
-+	maximum-speed = "high-speed";
-+	status = "okay";
-+};
-+
-+&usb_1_hsphy {
-+	vdd-supply = <&vreg_l4a_0p88>;
-+	vdda-phy-dpdm-supply = <&vreg_l17a_3p1>;
-+	vdda-pll-supply = <&vreg_l11a_1p8>;
-+	status = "okay";
-+};
-+
-+&usb_1_qmpphy {
-+	vdda-phy-supply = <&vreg_l4a_0p88>;
-+	vdda-pll-supply = <&vreg_l3c_1p23>;
-+	status = "okay";
-+};
--- 
-2.41.0
-
+Konrad
+> +	[GCC_DDRSS_ECPRI_GSI_CLK] = &gcc_ddrss_ecpri_gsi_clk.clkr,
+>  };
+>  
+>  static const struct qcom_reset_map gcc_qdu1000_resets[] = {
