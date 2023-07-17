@@ -2,126 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8A5756383
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Jul 2023 14:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5417563E8
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Jul 2023 15:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjGQM5L (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Jul 2023 08:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S230169AbjGQNLa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Jul 2023 09:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbjGQM5F (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jul 2023 08:57:05 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F38D1985;
-        Mon, 17 Jul 2023 05:56:31 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7819024000C;
-        Mon, 17 Jul 2023 12:56:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689598586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PnbG2kna/5QHT9EZoNLKAsarfs/yBYCw+wIH6z79yFg=;
-        b=L3ynjZzdDrKioO7hJOL+RAxumAMQrd9Qkr6ob1LF2HeIoCuFwpRb7O1zlHkHb5n8/3TLRh
-        br4PQlx/DdcCn7fS8gdNR7NPsD4zbBdebrMkuskiiyIJS58fbDJQfaDUl7tcnDidCHeym7
-        2za91K0g8bAC0sJ4xb6mL41/uTPEYvm+RfVVj2mQAXrNFiE2GTrc8Zwwpya7z/F8UNff7B
-        Ulkvv+2ogRhACcaXBfLKWTd5AbeDIAjGgirFkTGOF3PorGnz0tyvq/fQ2wlDzk0960doBG
-        jnlf6utD8cNLFCGYyLfq7M2vyyG+UUSQeWl7SW0rSD918cKMmesEkH5vElAVHw==
-Date:   Mon, 17 Jul 2023 14:56:23 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek Vasut <marex@denx.de>,
-        Alexander Helms <alexander.helms.jy@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH 1/2] clk: vc5: Use i2c_get_match_data() instead of
- device_get_match_data()
-Message-ID: <20230717145623.473cffca@booty>
-In-Reply-To: <TYCPR01MB5933389C26B1C2FD6F35D97C863BA@TYCPR01MB5933.jpnprd01.prod.outlook.com>
-References: <20230716154442.93908-1-biju.das.jz@bp.renesas.com>
-        <20230716154442.93908-2-biju.das.jz@bp.renesas.com>
-        <CAMuHMdUjF-_pX53xaEXJVP1Yvz-o=0bdHLx7ekqbqrGX7ygCLA@mail.gmail.com>
-        <TYCPR01MB5933389C26B1C2FD6F35D97C863BA@TYCPR01MB5933.jpnprd01.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231432AbjGQNL2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jul 2023 09:11:28 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833E2E9
+        for <linux-clk@vger.kernel.org>; Mon, 17 Jul 2023 06:11:26 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:5803:2d6d:5bbc:e252])
+        by albert.telenet-ops.be with bizsmtp
+        id NDBP2A00V0ucMBo06DBPjh; Mon, 17 Jul 2023 15:11:24 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qLO0Q-001fnX-NF;
+        Mon, 17 Jul 2023 15:11:23 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1qLO0Z-007Qi3-Io;
+        Mon, 17 Jul 2023 15:11:23 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/3] clk: renesas: r-car-h3/m3-w/m3-n: Add 3DGE and ZG support
+Date:   Mon, 17 Jul 2023 15:11:19 +0200
+Message-Id: <cover.1689599217.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Biju,
+	Hi all,
 
-On Mon, 17 Jul 2023 07:46:34 +0000
-Biju Das <biju.das.jz@bp.renesas.com> wrote:
+This patch series adds support for the GPU clocks on the R-Car H3,
+M3-W(+), and M-N SoCs.  It is based on a similar series for RZ/G2[HMN]
+by Adam Ford.  Hopefully this series will aid in bootstrapping upstream
+GPU support for R-Car Gen3.
 
-> Hi Geert,
->=20
-> Thanks for the review.
->=20
-> > Subject: Re: [PATCH 1/2] clk: vc5: Use i2c_get_match_data() instead of
-> > device_get_match_data()
-> >=20
-> > Hi Biju,
-> >=20
-> > On Sun, Jul 16, 2023 at 5:44=E2=80=AFPM Biju Das <biju.das.jz@bp.renesa=
-s.com>
-> > wrote: =20
-> > > The device_get_match_data(), is to get match data for firmware
-> > > interfaces such as just OF/ACPI. This driver has I2C matching table as
-> > > well. Use
-> > > i2c_get_match_data() to get match data for I2C, ACPI and DT-based
-> > > matching.
+I intend to queue this in renesas-clk-for-v6.6.
 
-Good point, thanks!
+Thanks for your comments!
 
-> > > --- a/drivers/clk/clk-versaclock5.c
-> > > +++ b/drivers/clk/clk-versaclock5.c
-> > > @@ -956,7 +956,9 @@ static int vc5_probe(struct i2c_client *client)
-> > >
-> > >         i2c_set_clientdata(client, vc5);
-> > >         vc5->client =3D client;
-> > > -       vc5->chip_info =3D device_get_match_data(&client->dev);
-> > > +       vc5->chip_info =3D i2c_get_match_data(client);
-> > > +       if (!vc5->chip_info)
-> > > +               return -ENODEV; =20
-> >=20
-> > Can this actually happen? All tables have data pointers. =20
->=20
-> It is not needed. I just want to avoid people sending
-> patches as this function can return NULL, so add a check.
->=20
-> Please let me know, whether I should remove this?
-> I am happy to send V2 taking out this check.
+Geert Uytterhoeven (3):
+  clk: renesas: r8a7795: Add 3DGE and ZG support
+  clk: renesas: r8a7796: Add 3DGE and ZG support
+  clk: renesas: r8a77965: Add 3DGE and ZG support
 
-I cannot foresee any sensible future use case for adding an entry
-without a data pointer as the whole driver is now heavily based on this
-data to handle so many variants. Also, the error checking did not exist
-before and the i2c match table is not introducing anything new in terms
-of .driver_data values.
+ drivers/clk/renesas/r8a7795-cpg-mssr.c  | 2 ++
+ drivers/clk/renesas/r8a7796-cpg-mssr.c  | 2 ++
+ drivers/clk/renesas/r8a77965-cpg-mssr.c | 2 ++
+ 3 files changed, 6 insertions(+)
 
-Thus I vote for not adding any error checking here.
+-- 
+2.34.1
 
-Otherwise looks good.
+Gr{oetje,eeting}s,
 
-Luca
+						Geert
 
---=20
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
