@@ -2,108 +2,155 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E7C75B1CB
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 16:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B3275B19A
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 16:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjGTOyp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jul 2023 10:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S232328AbjGTOuL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jul 2023 10:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbjGTOyk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 10:54:40 -0400
-X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 07:54:37 PDT
-Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [IPv6:2001:41d0:203:375::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B5E270A
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 07:54:36 -0700 (PDT)
-Message-ID: <e4531880-7904-114e-9d4d-24b4a77a3565@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689864511;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PqpxIaHBRk8xxnz7Hdg9ZoxK/nTzDsDxJQBDdoeP+q0=;
-        b=wKkmkI7zWECYryWudv8WwXejFM9fQVXOYPItQC7Vr2+bUrtnphnf/7+MnLeelaJoddxerT
-        G3x/jZXMDwU0LYiaVKPG7MaIONfFPw6eNZmiwlewAH42RXBuzIU7xgQlce228EOuW4bZCL
-        tjLZgZ7MLhEA2s8gn6octroI1IJTY7g=
-Date:   Thu, 20 Jul 2023 15:48:30 +0100
+        with ESMTP id S230212AbjGTOuK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 10:50:10 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476BC26B5
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 07:50:08 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-4816078ab3cso645114e0c.1
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 07:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689864607; x=1690469407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=44I4QTXSdpRlGQNX01aNu7Q8jYmgKrsVdvaz0FbrT9w=;
+        b=VHsv4k0q2otI210G2fx8UlqZVBouT1yhHPQeX4/iYKRduLbBfujemaFd84GC3ZVtWX
+         jIbCktQqByAp5iqMc/vfuiwpcDzR/b7VidjqvAa00eAxbSRDadKzFL7ftVkL0wpM8mY4
+         3nANvQf6LnRvO72e3X3PIZq6dwVKEuHJlUuToqWh59bGJFqRqqo0SosmrUxvzzRd1bBC
+         FBz8bvcUB7PznBNwhuRezNy3z5i/4TW+ggCxtW15DP+i0Lj50o4B9jSN9WUDe5Vyw8rc
+         EUeWyncBdaKXPsUBWXs360RXDU8t4kC/iicYJ16kjPZL2O0Kgs5iYg9GIm/a1AZfdPvo
+         1iNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689864607; x=1690469407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=44I4QTXSdpRlGQNX01aNu7Q8jYmgKrsVdvaz0FbrT9w=;
+        b=FpoiW38pg4VNKtIb9HLdCjfIXCTVWfVRZ2I6JQqXVE9lAPov212JyKqhV69qBlDec7
+         Q2Dv6zMUGRwA+y9TTxrBZQI5D5vdkWC6GeFj6gn2w6vUu6oWG08nxKTbQACW0RTpdn0p
+         t11fT9CbRC0F6DkJi+8glcsMbtMA7I8gveerNG6QjlNWdsEL10/M/V3ipFM4cXkF42y3
+         reEsxj9X0Emc61pJD/3HbF6T8CL0/hEFWFRaV86j+GJIqDtSWh/5jkkT7dF/ViZhfotT
+         6ilXhZXlCYZ1OcfpqGCfl5qyIy+5Ne9BrCEWToXxi3V+Ynqk1lw34MyN/eaYf6wHEAcW
+         FXww==
+X-Gm-Message-State: ABy/qLbZXwYuQRb44Bq+0Jmy5HjeBdmdo3a+1SzM93svA/MvYGTmDlPM
+        775KDXGkigzxY5c83lp9vWhsVXrwBBLoZyaZ8DXbVw==
+X-Google-Smtp-Source: APBJJlHcVbVjnQaUrT7V7jD6HpKLdUNhc+KcBHJVAgkGL82QQnDc268rPznkIAv5GUoMxsi+qdzT6lIi9u/QnbbIPgk=
+X-Received: by 2002:a05:6122:929:b0:481:5132:48c7 with SMTP id
+ j41-20020a056122092900b00481513248c7mr2136264vka.1.1689864607273; Thu, 20 Jul
+ 2023 07:50:07 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next 01/11] tools: ynl-gen: fix enum index in
- _decode_enum(..)
-Content-Language: en-US
-To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20230720091903.297066-1-vadim.fedorenko@linux.dev>
- <20230720091903.297066-2-vadim.fedorenko@linux.dev>
- <ZLk5MMjChnRFNU49@nanopsycho>
- <DM6PR11MB46577F18C3C4229FEC00D7DA9B3EA@DM6PR11MB4657.namprd11.prod.outlook.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <DM6PR11MB46577F18C3C4229FEC00D7DA9B3EA@DM6PR11MB4657.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me> <20230605-ep93xx-v3-33-3d63a5f1103e@maquefel.me>
+In-Reply-To: <20230605-ep93xx-v3-33-3d63a5f1103e@maquefel.me>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 20 Jul 2023 16:49:56 +0200
+Message-ID: <CAMRc=McbD1w47GsfvY6p==jDiTQrwg96jFvVKO-9bPhNOBmapw@mail.gmail.com>
+Subject: Re: [PATCH v3 33/42] gpio: ep93xx: add DT support for gpio-ep93xx
+To:     nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 20.07.2023 14:58, Kubalewski, Arkadiusz wrote:
->> -----Original Message-----
->> From: Jiri Pirko <jiri@resnulli.us>
->> Sent: Thursday, July 20, 2023 3:40 PM
->>
->> Thu, Jul 20, 2023 at 11:18:53AM CEST, vadim.fedorenko@linux.dev wrote:
->>> From: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
->>>
->>> Remove wrong index adjustement, which is leftover from adding
->>
->> s/adjustement/adjustment/
->>
-> 
-> Sure will fix,
-> Although those "tools: ynl" patches were not intended to be a part of dpll
-> Series, they are being discussed on the other thread:
-> https://lore.kernel.org/netdev/20230718162225.231775-1-arkadiusz.kubalewski@intel.com/
-> 
-> I think Vadim have sent them, because I included them in the branch candidate
-> for next version, seems was not clear enough on that..
-> I think we can skip them for next submission.
+On Thu, Jul 20, 2023 at 10:30=E2=80=AFAM Nikita Shubin via B4 Relay
+<devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
+>
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+>
+> Add OF ID match table.
+>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+>  drivers/gpio/gpio-ep93xx.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/gpio/gpio-ep93xx.c b/drivers/gpio/gpio-ep93xx.c
+> index 9a25bb0caf17..c4e272a8773d 100644
+> --- a/drivers/gpio/gpio-ep93xx.c
+> +++ b/drivers/gpio/gpio-ep93xx.c
+> @@ -360,9 +360,15 @@ static int ep93xx_gpio_probe(struct platform_device =
+*pdev)
+>         return devm_gpiochip_add_data(&pdev->dev, gc, egc);
+>  }
+>
+> +static const struct of_device_id ep93xx_gpio_match[] =3D {
+> +       { .compatible =3D "cirrus,ep9301-gpio" },
+> +       { /* sentinel */ }
+> +};
+> +
+>  static struct platform_driver ep93xx_gpio_driver =3D {
+>         .driver         =3D {
+>                 .name   =3D "gpio-ep93xx",
+> +               .of_match_table =3D ep93xx_gpio_match,
+>         },
+>         .probe          =3D ep93xx_gpio_probe,
+>  };
+>
+> --
+> 2.39.2
+>
 
-Yeah, I just realised that these patches have been sent earlier as separate
-series and are still under review. Once they are committed I'll remove them
-from DPLL series, but for now they are needed for spec generation of DPLL
-yaml, so it's good to have them anyway.
-
-> Thank you!
-> Arkadiusz
-> 
->>
->>> support for sparse enums.
->>> enum.entries_by_val() function shall not subtract the start-value, as
->>> it is indexed with real enum value.
->>>
->>> Fixes: c311aaa74ca1 ("tools: ynl: fix enum-as-flags in the generic
->>> CLI")
->>> Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
->>> Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
->>
->> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-> 
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
