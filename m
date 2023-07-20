@@ -2,29 +2,29 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F258A75AAD5
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 11:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F08A75AAD6
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 11:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjGTJap (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jul 2023 05:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        id S230450AbjGTJaq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jul 2023 05:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjGTJaY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 05:30:24 -0400
-Received: from out-62.mta0.migadu.com (out-62.mta0.migadu.com [91.218.175.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3E42D4D
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 02:19:53 -0700 (PDT)
+        with ESMTP id S230292AbjGTJaZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 05:30:25 -0400
+Received: from out-42.mta0.migadu.com (out-42.mta0.migadu.com [91.218.175.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3302D63
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 02:19:56 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689844790;
+        t=1689844793;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aY5ZIHVzqKStKyl3k69PdYOrRbB8zSK0DaCbVQ7/OGA=;
-        b=fgIJIFH/Cnyi8aVF1Q+r8C7Thp478NsKaKk1wRZboWWj6Yxu5jcjjRloE1Vf+YkMk9TYRF
-        Vjry3TSPqhOlqODz00DJuvPXPlTSrN4jWkmXqNriwp8wp8wRDFoSIzG2qlx4ADDe1pA4fW
-        0vs7WMo0+27zCZxIXo9ZCp6oCIt/rnI=
+        bh=88kD5LtGsu72krDSvuVaSo3kF0C+fD95s9a3Fdq47T8=;
+        b=CkV6aDCX1vs7CfvgV8GzR/yD1WAA+EewD5luSSNkHC1jUhQ27Ogvnp5nc+s3HLEGRK3HPG
+        ILEDG9EkmZx5R49ZH7LQjtez2p1DxnwngDuSRh/hgUukVN610xQDyV790ByGHT8+IQ+Fj5
+        7aNo2g2SrsecEohx2xh1CG5F+xKtswA=
 From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
 To:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
         Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
@@ -36,9 +36,9 @@ Cc:     Milena Olech <milena.olech@intel.com>,
         linux-arm-kernel@lists.infradead.org, poros@redhat.com,
         mschmidt@redhat.com, netdev@vger.kernel.org,
         linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH net-next 01/11] tools: ynl-gen: fix enum index in _decode_enum(..)
-Date:   Thu, 20 Jul 2023 10:18:53 +0100
-Message-Id: <20230720091903.297066-2-vadim.fedorenko@linux.dev>
+Subject: [PATCH net-next 02/11] tools: ynl-gen: fix parse multi-attr enum attribute
+Date:   Thu, 20 Jul 2023 10:18:54 +0100
+Message-Id: <20230720091903.297066-3-vadim.fedorenko@linux.dev>
 In-Reply-To: <20230720091903.297066-1-vadim.fedorenko@linux.dev>
 References: <20230720091903.297066-1-vadim.fedorenko@linux.dev>
 MIME-Version: 1.0
@@ -56,41 +56,88 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
 
-Remove wrong index adjustement, which is leftover from adding
-support for sparse enums.
-enum.entries_by_val() function shall not subtract the start-value, as
-it is indexed with real enum value.
+When attribute is enum type and marked as multi-attr, the netlink
+respond is not parsed, fails with stack trace:
+Traceback (most recent call last):
+  File "/net-next/tools/net/ynl/./test.py", line 520, in <module>
+    main()
+  File "/net-next/tools/net/ynl/./test.py", line 488, in main
+    dplls=dplls_get(282574471561216)
+  File "/net-next/tools/net/ynl/./test.py", line 48, in dplls_get
+    reply=act(args)
+  File "/net-next/tools/net/ynl/./test.py", line 41, in act
+    reply = ynl.dump(args.dump, attrs)
+  File "/net-next/tools/net/ynl/lib/ynl.py", line 598, in dump
+    return self._op(method, vals, dump=True)
+  File "/net-next/tools/net/ynl/lib/ynl.py", line 584, in _op
+    rsp_msg = self._decode(gm.raw_attrs, op.attr_set.name)
+  File "/net-next/tools/net/ynl/lib/ynl.py", line 451, in _decode
+    self._decode_enum(rsp, attr_spec)
+  File "/net-next/tools/net/ynl/lib/ynl.py", line 408, in _decode_enum
+    value = enum.entries_by_val[raw].name
+TypeError: unhashable type: 'list'
+error: 1
 
-Fixes: c311aaa74ca1 ("tools: ynl: fix enum-as-flags in the generic CLI")
+Redesign _decode_enum(..) to take a enum int value and translate
+it to either a bitmask or enum name as expected.
+
 Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
 Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
 ---
- tools/net/ynl/lib/ynl.py | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/net/ynl/lib/ynl.py | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/tools/net/ynl/lib/ynl.py b/tools/net/ynl/lib/ynl.py
-index 1b3a36fbb1c3..3908438d3716 100644
+index 3908438d3716..06d88f083f95 100644
 --- a/tools/net/ynl/lib/ynl.py
 +++ b/tools/net/ynl/lib/ynl.py
-@@ -420,16 +420,14 @@ class YnlFamily(SpecFamily):
-     def _decode_enum(self, rsp, attr_spec):
-         raw = rsp[attr_spec['name']]
+@@ -417,8 +417,7 @@ class YnlFamily(SpecFamily):
+         pad = b'\x00' * ((4 - len(attr_payload) % 4) % 4)
+         return struct.pack('HH', len(attr_payload) + 4, nl_type) + attr_payload + pad
+ 
+-    def _decode_enum(self, rsp, attr_spec):
+-        raw = rsp[attr_spec['name']]
++    def _decode_enum(self, raw, attr_spec):
          enum = self.consts[attr_spec['enum']]
--        i = attr_spec.get('value-start', 0)
          if 'enum-as-flags' in attr_spec and attr_spec['enum-as-flags']:
              value = set()
-             while raw:
-                 if raw & 1:
--                    value.add(enum.entries_by_val[i].name)
-+                    value.add(enum.entries_by_val[raw & 1].name)
+@@ -428,7 +427,7 @@ class YnlFamily(SpecFamily):
                  raw >>= 1
--                i += 1
          else:
--            value = enum.entries_by_val[raw - i].name
-+            value = enum.entries_by_val[raw].name
-         rsp[attr_spec['name']] = value
+             value = enum.entries_by_val[raw].name
+-        rsp[attr_spec['name']] = value
++        return value
  
      def _decode_binary(self, attr, attr_spec):
+         if attr_spec.struct_name:
+@@ -436,7 +435,7 @@ class YnlFamily(SpecFamily):
+             decoded = attr.as_struct(members)
+             for m in members:
+                 if m.enum:
+-                    self._decode_enum(decoded, m)
++                    decoded[m] = self._decode_enum(decoded[m], m)
+         elif attr_spec.sub_type:
+             decoded = attr.as_c_array(attr_spec.sub_type)
+         else:
+@@ -464,6 +463,9 @@ class YnlFamily(SpecFamily):
+             else:
+                 raise Exception(f'Unknown {attr_spec["type"]} with name {attr_spec["name"]}')
+ 
++            if 'enum' in attr_spec:
++                decoded = self._decode_enum(int.from_bytes(attr.raw, "big"), attr_spec)
++
+             if not attr_spec.is_multi:
+                 rsp[attr_spec['name']] = decoded
+             elif attr_spec.name in rsp:
+@@ -471,8 +473,6 @@ class YnlFamily(SpecFamily):
+             else:
+                 rsp[attr_spec.name] = [decoded]
+ 
+-            if 'enum' in attr_spec:
+-                self._decode_enum(rsp, attr_spec)
+         return rsp
+ 
+     def _decode_extack_path(self, attrs, attr_set, offset, target):
 -- 
 2.27.0
 
