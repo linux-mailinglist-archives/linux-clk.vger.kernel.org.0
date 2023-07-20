@@ -2,161 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DC875B0D9
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 16:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E7C75B1CB
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 16:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjGTOJB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jul 2023 10:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S232345AbjGTOyp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jul 2023 10:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjGTOJA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 10:09:00 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB1D211F
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 07:08:59 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b6f943383eso12146781fa.2
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 07:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1689862137; x=1690466937;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0F4qt8y1B6CKQx+PcuHEtUg+2LdJdvmBAdu8A9bWVA=;
-        b=fk2W5inpSBgysWw6YjUv4qZziLX9MNP/62x8E1NtOwYLMXl8tWrS3ytc3dpdtvQXvR
-         2kCkA0KSwbUDPQqGYCmqQfYqrz178s/lkrVJFlK12TtHR+vyOO1dA3esZ6jSuKu4U/OZ
-         /zg2XBV8UkXzq2g3pBKTk10trZ8NwetQYlU6U/P7zVlHzOpn0S6P+m0E2Pti1FXKc0P5
-         HRIIzkbK8T2OqY6D5sQlLqg2YFkq8v9mAi6q+OiEWQRtx43gUkbHfMEhEJpVM+yX7Qlz
-         FCsq9fkqPP9DrGdJ0JQ2IYLr0hr6T+m8j/tDadxjqiaYh801FZCQAOzcvSWNvpro3Os2
-         k8RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689862137; x=1690466937;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0F4qt8y1B6CKQx+PcuHEtUg+2LdJdvmBAdu8A9bWVA=;
-        b=UFFqXDZUjyeCImEOFmwG3fm4VnPrYl+PdkM8tWeC9RFrhMytDsiC5SS1KTVSF6lS91
-         YFRgRyvLzCG5zvcoAuFGm2X0/cnhkKVFVAjDur6LIGUS+0DWIeJXKWlg04z0y2k+xzRE
-         r/VCcscwXfu70uPT2CVGt3jsnxKV5XORaJXHhCuNQvgzKuWWXNgaXtZ75/80r1wUJ5ke
-         sRgjcV1tNcgwmk3GkA7vGUXjX64Ee8oXUJG1lJsgLJ3NZDA3pLMWhAhsNGvciKRvqd1l
-         CxxjPxTeIgvr4EG2Yt08TPN7bWVM9tEFXGPJ4MCsXmOVehVCxr+NdcYzMGoRaGSPHZpp
-         aQXg==
-X-Gm-Message-State: ABy/qLZte9ImXLR+sswqRiqJ4/paLEGsmr/jpxfqNIBwizhv8uHzdL0N
-        FbWn7SgRPdPbeepYka93UEtdbg==
-X-Google-Smtp-Source: APBJJlGL5Xu/p/+dewcIpMhrBKBuamn+f5NSjDhyK8nrWTxvyRHHlMVTStlS2o7s5thnPRT6dqtz0g==
-X-Received: by 2002:a2e:3c14:0:b0:2b9:615b:39a9 with SMTP id j20-20020a2e3c14000000b002b9615b39a9mr2271784lja.52.1689862137543;
-        Thu, 20 Jul 2023 07:08:57 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05600c00c600b003fbb5142c4bsm4073779wmm.18.2023.07.20.07.08.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 07:08:56 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 16:08:55 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
+        with ESMTP id S232362AbjGTOyk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 10:54:40 -0400
+X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Jul 2023 07:54:37 PDT
+Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [IPv6:2001:41d0:203:375::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B5E270A
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 07:54:36 -0700 (PDT)
+Message-ID: <e4531880-7904-114e-9d4d-24b4a77a3565@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1689864511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PqpxIaHBRk8xxnz7Hdg9ZoxK/nTzDsDxJQBDdoeP+q0=;
+        b=wKkmkI7zWECYryWudv8WwXejFM9fQVXOYPItQC7Vr2+bUrtnphnf/7+MnLeelaJoddxerT
+        G3x/jZXMDwU0LYiaVKPG7MaIONfFPw6eNZmiwlewAH42RXBuzIU7xgQlce228EOuW4bZCL
+        tjLZgZ7MLhEA2s8gn6octroI1IJTY7g=
+Date:   Thu, 20 Jul 2023 15:48:30 +0100
+MIME-Version: 1.0
+Subject: Re: [PATCH net-next 01/11] tools: ynl-gen: fix enum index in
+ _decode_enum(..)
+Content-Language: en-US
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Jiri Pirko <jiri@resnulli.us>
 Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
         Paolo Abeni <pabeni@redhat.com>,
-        Milena Olech <milena.olech@intel.com>,
-        Michal Michalik <michal.michalik@intel.com>,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, netdev@vger.kernel.org,
-        linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH 09/11] ice: implement dpll interface to control cgu
-Message-ID: <ZLk/9zwbBHgs+rlb@nanopsycho>
+        "Olech, Milena" <milena.olech@intel.com>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>
 References: <20230720091903.297066-1-vadim.fedorenko@linux.dev>
- <20230720091903.297066-10-vadim.fedorenko@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720091903.297066-10-vadim.fedorenko@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ <20230720091903.297066-2-vadim.fedorenko@linux.dev>
+ <ZLk5MMjChnRFNU49@nanopsycho>
+ <DM6PR11MB46577F18C3C4229FEC00D7DA9B3EA@DM6PR11MB4657.namprd11.prod.outlook.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <DM6PR11MB46577F18C3C4229FEC00D7DA9B3EA@DM6PR11MB4657.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Thu, Jul 20, 2023 at 11:19:01AM CEST, vadim.fedorenko@linux.dev wrote:
->From: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+On 20.07.2023 14:58, Kubalewski, Arkadiusz wrote:
+>> -----Original Message-----
+>> From: Jiri Pirko <jiri@resnulli.us>
+>> Sent: Thursday, July 20, 2023 3:40 PM
+>>
+>> Thu, Jul 20, 2023 at 11:18:53AM CEST, vadim.fedorenko@linux.dev wrote:
+>>> From: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+>>>
+>>> Remove wrong index adjustement, which is leftover from adding
+>>
+>> s/adjustement/adjustment/
+>>
+> 
+> Sure will fix,
+> Although those "tools: ynl" patches were not intended to be a part of dpll
+> Series, they are being discussed on the other thread:
+> https://lore.kernel.org/netdev/20230718162225.231775-1-arkadiusz.kubalewski@intel.com/
+> 
+> I think Vadim have sent them, because I included them in the branch candidate
+> for next version, seems was not clear enough on that..
+> I think we can skip them for next submission.
 
-[...]
+Yeah, I just realised that these patches have been sent earlier as separate
+series and are still under review. Once they are committed I'll remove them
+from DPLL series, but for now they are needed for spec generation of DPLL
+yaml, so it's good to have them anyway.
 
+> Thank you!
+> Arkadiusz
+> 
+>>
+>>> support for sparse enums.
+>>> enum.entries_by_val() function shall not subtract the start-value, as
+>>> it is indexed with real enum value.
+>>>
+>>> Fixes: c311aaa74ca1 ("tools: ynl: fix enum-as-flags in the generic
+>>> CLI")
+>>> Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+>>> Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+>>
+>> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+> 
 
->+/**
->+ * ice_dpll_pin_enable - enable a pin on dplls
->+ * @hw: board private hw structure
->+ * @pin: pointer to a pin
->+ * @pin_type: type of pin being enabled
->+ * @extack: error reporting
->+ *
->+ * Enable a pin on both dplls. Store current state in pin->flags.
->+ *
->+ * Context: Called under pf->dplls.lock
->+ * Return:
->+ * * 0 - OK
->+ * * negative - error
->+ */
->+static int
->+ice_dpll_pin_enable(struct ice_hw *hw, struct ice_dpll_pin *pin,
->+		    enum ice_dpll_pin_type pin_type,
->+		    struct netlink_ext_ack *extack)
->+{
->+	u8 flags = 0;
->+	int ret;
->+
-
-
-
-I don't follow. Howcome you don't check if the mode is freerun here or
-not? Is it valid to enable a pin when freerun mode? What happens?
-
-Also, I am probably slow, but I still don't see anywhere in this
-patchset any description about why we need the freerun mode. What is
-diffrerent between:
-1) freerun mode
-2) automatic mode & all pins disabled?
-
-Isn't the behaviour of 1) and 2) exactly the same? If no, why? This
-needs to be documented, please.
-
-
-
-Another question, I asked the last time as well, but was not heard:
-Consider example where you have 2 netdevices, eth0 and eth1, each
-connected with a single DPLL pin:
-eth0 - DPLL pin 10 (DPLL device id 2)
-eth1 - DPLL pin 11 (DPLL device id 2)
-
-You have a SyncE daemon running on top eth0 and eth1.
-
-Could you please describe following 2 flows?
-
-1) SyncE daemon selects eth0 as a source of clock
-2) SyncE daemon selects eth1 as a source of clock
-
-
-For mlx5 it goes like:
-
-DPLL device mode is MANUAL.
-1)
- SynceE daemon uses RTNetlink to obtain DPLL pin number of eth0
-    -> pin_id: 10
- SenceE daemon will use PIN_GET with pin_id 10 to get DPLL device id
-    -> device_id: 2
- SynceE daemon does PIN_SET cmd on pin_id 10, device_id 2 -> state = CONNECTED
-
-2)
- SynceE daemon uses RTNetlink to obtain DPLL pin number of eth1
-    -> pin_id: 11
- SenceE daemon will use PIN_GET with pin_id 11 to get DPLL device id
-    -> device_id: 2
- SynceE daemon does PIN_SET cmd on pin_id 10, device_id 2 -> state = CONNECTED
- (that will in HW disconnect previously connected pin 10, there will be
-  notification of pin_id 10, device_id -> state DISCONNECT)
-
-
-Thanks!
-
-
-[...]
