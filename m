@@ -2,86 +2,137 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C231375A9B2
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 10:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962DF75A9B4
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jul 2023 10:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjGTI4u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jul 2023 04:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S229920AbjGTI4x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jul 2023 04:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjGTIms (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 04:42:48 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEFF268C
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 01:42:44 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R65mH1RCzzBRDsY
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 16:42:39 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689842558; x=1692434559; bh=Md6rh710L5XA/naj1kP/jEptljd
-        erUpfENeBbgOR95E=; b=IsHn5oTojRdCwIUOvrejeC7SF7COIg51M3qY7RgRAGT
-        tcZxZbhz3sWMEI3WH+iNq/koy3OaupW6lcU2bkEcnQ0NIv0iOKy0w8TsZPZ6vzZo
-        m31qy0PA/wDDFcsMkDE3ucs8Y4zN5cp1usee2snD+LeWwatRThP39Ec8jZNFvLOa
-        OvBQ3Qf4XODzqzOnkIH4CISv/z4aVPRkQcBsOoR+Q2MdHa17AGNIRyeL9wPdQPgw
-        uQNMZbwClnrgnjssiYYSxTxX6OSUk0b4oImlVnvwnU8h3q+Hv2f0fo6RTq5BTzGI
-        1mE1tTr/xcfSD9rW7LrLyBSzihABpuF44lD7Hws/xqQ==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id JWKlluRjUmj3 for <linux-clk@vger.kernel.org>;
-        Thu, 20 Jul 2023 16:42:38 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R65mG1s24zBHXhQ;
-        Thu, 20 Jul 2023 16:42:38 +0800 (CST)
+        with ESMTP id S231406AbjGTIyX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jul 2023 04:54:23 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC26268C
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 01:54:20 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb96e2b573so775173e87.3
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jul 2023 01:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689843258; x=1692435258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hr3GYuI4RGrQA8MLYXyJLt2ld5PTqpatMnFPkHbCrNI=;
+        b=Shpu1expb9UmeNTzkrqLpZgKTTgNTFnWaaLHFYEs8X9t52qsEc2qqYzhSS1wKDUyy1
+         n4EpvR8sgcpL9FLYrJpRYmBpPkbJYzeu10lN6wdKe7Ba3JMVPmK04th61cyw1jW0vioh
+         2k3CoD0TVIieY7nwHyzHbt5z0gDLKPnvLw6UMDKlMyXki3gNfYPvuUq+SrKIZ7RFQuBd
+         Px9Xf/3N008B/kEnqXS6fqGuDaol6sbJt4f/XDWyLT7f7F4gTOg0Y1UdNeEYpRgxFEy7
+         DaXKvwDjYnKA9he3hNDcHOhrri5jmEMFtNNli0s0ezLRD1kzQDFHIjgsiSo66GqPF4gC
+         ZR0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689843258; x=1692435258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr3GYuI4RGrQA8MLYXyJLt2ld5PTqpatMnFPkHbCrNI=;
+        b=R1ugssiG7NaZqfCtiV+7HJ3nUb7BOJ+724dazrW5PAWiBK6umQVxGOfCk7u/NgCf+y
+         SkYJXbyIm7xqxIb6CZ9Ajg+vf2CrpA9J3ZNLkzDzU29QMtZTk/OX0DdPGooK7mRbZbDQ
+         Dm6H/PC0v68llGElRO3Q5cLw3yuLewfvRye8jPTTO9tcblURtlH4jZAnvgkXYFuTePdO
+         HJ/ee8fi5P3nlP9XpG1Vn7P5SK+X3cKvVEGKPrArvy3qjPjMoqmY3ixba5FJWyODY1LP
+         bR8/mEOW4TVS2Pdb0aODodrGq3Wg8LC8HYqN23MTOaxwsy8ceBCQTI93E2lt1MHmLACr
+         TEnA==
+X-Gm-Message-State: ABy/qLYXZGoJ7BtYyKZaOCRuSjXSxi3BBlFDBDuFrCA0tFduHdETNTKO
+        Ngq31U2f19dAdms045g/a9viKQ==
+X-Google-Smtp-Source: APBJJlEh3NvNHBbbxheUFFyvpgKd2C0hcz7XJqCW4yZ6/zAz5ujRsINO2b569mPpxzPaezD6Arr+tg==
+X-Received: by 2002:a19:ca4a:0:b0:4fb:8dcc:59e5 with SMTP id h10-20020a19ca4a000000b004fb8dcc59e5mr1681346lfj.39.1689843258307;
+        Thu, 20 Jul 2023 01:54:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id a12-20020a5d53cc000000b00313f9a0c521sm657889wrw.107.2023.07.20.01.54.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 01:54:17 -0700 (PDT)
+Message-ID: <a6006558-5eca-a8a0-ed61-dfa746f223ae@linaro.org>
+Date:   Thu, 20 Jul 2023 10:54:12 +0200
 MIME-Version: 1.0
-Date:   Thu, 20 Jul 2023 16:42:38 +0800
-From:   sunran001@208suo.com
-To:     nm@ti.com, kristo@kernel.org, ssantosh@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH] clk: keystone: sci-clk: fix application of sizeof to pointer
-In-Reply-To: <20230720074906.3373-1-xujianghui@cdjrlc.com>
-References: <20230720074906.3373-1-xujianghui@cdjrlc.com>
-User-Agent: Roundcube Webmail
-Message-ID: <3ad9c41575c274137001916c896bf2b6@208suo.com>
-X-Sender: sunran001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 00/42] ep93xx device tree conversion
+Content-Language: en-US
+To:     nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The coccinelle check report:
-./drivers/scsi/csiostor/csio_mb.c:1554:46-52: ERROR: application of
-sizeof to pointer
+On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
+> This series aims to convert ep93xx from platform to full device tree support.
+> 
+> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
+> 
+> I've moved to b4, tricking it to consider v0 as v1, so it consider's
+> this version to be v3, this exactly the third version.
 
-Signed-off-by: Ran Sun <sunran001@208suo.com>
----
-  drivers/clk/keystone/sci-clk.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+Fix your clock/timezone, so your patches are not sent in the future.
+Unfortunately this will stay at top of my queue, which is unfair, so I
+will just ignore for now.
 
-diff --git a/drivers/clk/keystone/sci-clk.c 
-b/drivers/clk/keystone/sci-clk.c
-index 6c1df4f11536..2c68c1e09d1f 100644
---- a/drivers/clk/keystone/sci-clk.c
-+++ b/drivers/clk/keystone/sci-clk.c
-@@ -389,7 +389,7 @@ static struct clk_hw *sci_clk_get(struct 
-of_phandle_args *clkspec, void *data)
-  	key.clk_id = clkspec->args[1];
+Best regards,
+Krzysztof
 
-  	clk = bsearch(&key, provider->clocks, provider->num_clocks,
--		      sizeof(clk), _cmp_sci_clk);
-+		      sizeof(**clk), _cmp_sci_clk);
-
-  	if (!clk)
-  		return ERR_PTR(-ENODEV);
