@@ -2,106 +2,238 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A358675C769
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jul 2023 15:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0209F75C780
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jul 2023 15:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjGUNNd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Jul 2023 09:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S230472AbjGUNTW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Jul 2023 09:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbjGUNNb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jul 2023 09:13:31 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F9F30DB;
-        Fri, 21 Jul 2023 06:13:26 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-993a37b79e2so302938366b.1;
-        Fri, 21 Jul 2023 06:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689945204; x=1690550004;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y1ygg2Jn0dhD6FjKNZtwLf4GFouySs0VxaChZ+hIHFI=;
-        b=A8ce8Wv1hqz+dhMozEqVKU3Q5gbwjy3MoJ9HNcCltj8vUbqCuhdM5PHBhei1FNfqzF
-         6dudhjS0CtKUD4n+OmMkNndQlnrKniYVtKIVZEIAehPshPyseLsGlEu7RLScnesKSxqA
-         OXx+WMw4iglP6u14nArJgOI9NP3N/cJROWV1C/u73O1g3mN4Swn3fRG8g3zSEh/HDgcg
-         EBQlwWR5KMRQwTH/viVJeu4dSpg0cunXegVwbT3JN9gBqayaxk0glSSGgPeOJAJ076ek
-         8veNfICJ0etF/vaIzhVGVGt8s/2SBDDOJY2anx/WRxuJFyFaU47fvV/8+xKNKjtZRh4B
-         IYFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689945204; x=1690550004;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y1ygg2Jn0dhD6FjKNZtwLf4GFouySs0VxaChZ+hIHFI=;
-        b=Y36RKXbORC18H3s6qyaIMTYL9nx27ahsRzQBlWYlvywwW7DbiDQ1BSVXOwgOLsHgLq
-         UUb5DTYwtHAXNfwAZvcndlP7gu7AuYO6TEW1KuYsLSmXnTllITSX33zCQ0hPNVYc+vNQ
-         iN3TdA3tXuBihb+1hWuxfTk6q+jRqUH7sMNbGp5qG5HRgRoS7g+BivXzEC1a2l2hM440
-         JpYVFdMeUAcEIs4U2SWdbI6Mw/zyWe/sS9QhS38T5zk+PoeoYZ6RYW83HUu7EqG5lIsU
-         Oj1cBUTmw9xCr2QLPzSMZbic2sGWsMTN0qX9iyCt8O5xrb4u4xj9+Y0VWdXcxrhu3QeZ
-         YhTA==
-X-Gm-Message-State: ABy/qLYanVAfnThrk97vAwT3FuTKMqOlzcpllj+7KJEzkYfSIINcWDK4
-        q5di0vzlWcu8NOEchKotA78=
-X-Google-Smtp-Source: APBJJlHAtsOTOWgZFH3Pd4W1FZW8zutVblaO2WWAjSmBrQKyzTvNO4p3eMK3Hoxgutnv80gvTh6L/g==
-X-Received: by 2002:a17:906:7386:b0:99a:8053:158 with SMTP id f6-20020a170906738600b0099a80530158mr1691434ejl.68.1689945204493;
-        Fri, 21 Jul 2023 06:13:24 -0700 (PDT)
-Received: from localhost (p200300e41f1bd600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1b:d600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id jx16-20020a170906ca5000b00993664a9987sm2167822ejb.103.2023.07.21.06.13.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 06:13:23 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S230404AbjGUNTV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jul 2023 09:19:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4463595;
+        Fri, 21 Jul 2023 06:19:09 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="347313899"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="347313899"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 06:19:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="702053539"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="702053539"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2023 06:18:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andy@kernel.org>)
+        id 1qMq1x-005vpD-13;
+        Fri, 21 Jul 2023 16:18:49 +0300
+Date:   Fri, 21 Jul 2023 16:18:49 +0300
+From:   Andy Shevchenko <andy@kernel.org>
+To:     nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: clock: tegra: Document Tegra132 compatible
-Date:   Fri, 21 Jul 2023 15:13:22 +0200
-Message-ID: <20230721131322.2991364-2-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230721131322.2991364-1-thierry.reding@gmail.com>
-References: <20230721131322.2991364-1-thierry.reding@gmail.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 01/42] gpio: ep93xx: split device in multiple
+Message-ID: <ZLqFuWsxhdiP4ZjA@smile.fi.intel.com>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Thu, Jul 20, 2023 at 02:29:01PM +0300, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> This prepares ep93xx SOC gpio to convert into device tree driver:
+> - dropped banks and legacy defines
+> - split AB IRQ and make it shared
+> 
+> We are relying on IRQ number information A, B ports have single shared
+> IRQ, while F port have dedicated IRQ for each line.
+> 
+> Also we had to split single ep93xx platform_device into multiple, one
+> for each port, without this we can't do a full working transition from
+> legacy platform code into device tree capable. All GPIO_LOOKUP were
+> change to match new chip namings.
 
-The Tegra132 clock and reset controller is largely compatible with the
-version found on Tegra124 but it does have slight differences in what
-clocks it exposes, so a separate compatible string is needed.
+...
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../devicetree/bindings/clock/nvidia,tegra124-car.yaml        | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> -static void ep93xx_gpio_ab_irq_handler(struct irq_desc *desc)
+> +static u32 ep93xx_gpio_ab_irq_handler(struct gpio_chip *gc)
+>  {
+> -	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
+> -	struct ep93xx_gpio *epg = gpiochip_get_data(gc);
+> -	struct irq_chip *irqchip = irq_desc_get_chip(desc);
+> +	struct ep93xx_gpio_irq_chip *eic = to_ep93xx_gpio_irq_chip(gc);
+>  	unsigned long stat;
+>  	int offset;
+>  
+> -	chained_irq_enter(irqchip, desc);
+> -
+> -	/*
+> -	 * Dispatch the IRQs to the irqdomain of each A and B
+> -	 * gpiochip irqdomains depending on what has fired.
+> -	 * The tricky part is that the IRQ line is shared
+> -	 * between bank A and B and each has their own gpiochip.
+> -	 */
+> -	stat = readb(epg->base + EP93XX_GPIO_A_INT_STATUS);
+> +	stat = readb(eic->base + EP93XX_INT_STATUS_OFFSET);
+>  	for_each_set_bit(offset, &stat, 8)
+> -		generic_handle_domain_irq(epg->gc[0].gc.irq.domain,
+> -					  offset);
+> +		generic_handle_domain_irq(gc->irq.domain, offset);
+>  
+> -	stat = readb(epg->base + EP93XX_GPIO_B_INT_STATUS);
+> -	for_each_set_bit(offset, &stat, 8)
+> -		generic_handle_domain_irq(epg->gc[1].gc.irq.domain,
+> -					  offset);
+> +	return stat;
+> +}
+>  
+> -	chained_irq_exit(irqchip, desc);
+> +static irqreturn_t ep93xx_ab_irq_handler(int irq, void *dev_id)
+> +{
+> +	return IRQ_RETVAL(ep93xx_gpio_ab_irq_handler(dev_id));
+>  }
+>  
+>  static void ep93xx_gpio_f_irq_handler(struct irq_desc *desc)
+>  {
+> -	/*
+> -	 * map discontiguous hw irq range to continuous sw irq range:
+> -	 *
+> -	 *  IRQ_EP93XX_GPIO{0..7}MUX -> EP93XX_GPIO_LINE_F{0..7}
+> -	 */
+>  	struct irq_chip *irqchip = irq_desc_get_chip(desc);
+> -	unsigned int irq = irq_desc_get_irq(desc);
+> -	int port_f_idx = (irq & 7) ^ 4; /* {20..23,48..51} -> {0..7} */
+> -	int gpio_irq = EP93XX_GPIO_F_IRQ_BASE + port_f_idx;
+> +	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
+> +	struct gpio_irq_chip *gic = &gc->irq;
+> +	unsigned int parent = irq_desc_get_irq(desc);
+> +	unsigned int i;
+>  
+>  	chained_irq_enter(irqchip, desc);
+> -	generic_handle_irq(gpio_irq);
+> +	for (i = 0; i < gic->num_parents; i++)
+> +		if (gic->parents[i] == parent)
+> +			break;
+> +
+> +	if (i < gic->num_parents)
+> +		generic_handle_irq(irq_find_mapping(gc->irq.domain, i));
 
-diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-index 0fc55f441ac3..2d7736a10178 100644
---- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-+++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-@@ -27,7 +27,9 @@ description: |
- 
- properties:
-   compatible:
--    const: nvidia,tegra124-car
-+    enum:
-+      - nvidia,tegra124-car
-+      - nvidia,tegra132-car
- 
-   reg:
-     maxItems: 1
+Can we use
+
+		generic_handle_domain_irq(gc->irq.domain, i);
+
+here as well?
+
+>  	chained_irq_exit(irqchip, desc);
+>  }
+
+...
+
+> -	int offset = d->irq & 7;
+> +	int offset = irqd_to_hwirq(d);
+
+	irq_hw_number_t ?
+
+>  	irq_flow_handler_t handler;
+
+...
+
+> +	int ret, irq, i = 0;
+
+What do you need this assignment for?
+
+...
+
+> +		ret = devm_request_irq(dev, irq,
+> +				ep93xx_ab_irq_handler,
+
+It can be located on the previous line.
+
+> +				IRQF_SHARED, gc->label, gc);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret, "error requesting IRQ : %d\n", irq);
+
+Drop duplicating word 'error' in the message.
+Space is not needed before colon.
+
+...
+
+> +	/* TODO: replace with handle_bad_irq once we are fully hierarchical */
+
+To be pedantic: handle_bad_irq()
+
+> +	gc->label = dev_name(&pdev->dev);
+> +	if (platform_irq_count(pdev) > 0) {
+> +		dev_dbg(&pdev->dev, "setting up irqs for %s\n", dev_name(&pdev->dev));
+> +		ret = ep93xx_setup_irqs(pdev, egc);
+> +		if (ret)
+
+> +			dev_err(&pdev->dev, "setup irqs failed for %s\n", dev_name(&pdev->dev));
+
+What's the point to print dev name twice? Esp. taking into account
+gc->label assignment above. Why not use dev_err_probe() to unify
+the format of the messages from ->probe()?
+
 -- 
-2.41.0
+With Best Regards,
+Andy Shevchenko
+
 
