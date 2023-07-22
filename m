@@ -2,44 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3CF75D62C
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jul 2023 23:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB8B75D8DE
+	for <lists+linux-clk@lfdr.de>; Sat, 22 Jul 2023 04:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjGUVMD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Jul 2023 17:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S229552AbjGVCIj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Jul 2023 22:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjGUVMD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jul 2023 17:12:03 -0400
-X-Greylist: delayed 343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Jul 2023 14:11:57 PDT
-Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D08330E2;
-        Fri, 21 Jul 2023 14:11:57 -0700 (PDT)
-Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-        by mx.skole.hr (mx.skole.hr) with ESMTP id C2ED386D1E;
-        Fri, 21 Jul 2023 23:06:13 +0200 (CEST)
-From:   =?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        =?UTF-8?q?=87?= <duje.mihanovic@skole.hr>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afaerber@suse.com
-Subject: [PATCH 06/10] dt-bindings: clock: Add documentation for Marvell PXA1908
-Date:   Fri, 21 Jul 2023 22:37:48 +0200
-Message-ID: <20230721210042.21535-7-duje.mihanovic@skole.hr>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230721210042.21535-1-duje.mihanovic@skole.hr>
-References: <20230721210042.21535-1-duje.mihanovic@skole.hr>
+        with ESMTP id S229653AbjGVCIi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jul 2023 22:08:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A4930D0
+        for <linux-clk@vger.kernel.org>; Fri, 21 Jul 2023 19:08:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CC2161DC5
+        for <linux-clk@vger.kernel.org>; Sat, 22 Jul 2023 02:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B441C433C7;
+        Sat, 22 Jul 2023 02:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689991715;
+        bh=9NGLbvUwwVAcvCYY973O4b6WDduuentH0GBBnEGBEjk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AlMhkIbLgYxczvUbEIs65r6z2G26WTaynmjVeFpH9To5eyI2SkBfTnuGtaA4KKdcO
+         FBQLWKP+x7nLBxc4fosekBHr+8Us9J6YCsBbODXPdBaWt6RBqydCQTGDXeQGgqqgKz
+         kLKuzk0DDq3KGIUJxRw8ahKvO9perKPLATJhgiMI9QIbhygni+vamJGo29+yJtoBqF
+         /8/MoDlY3RgnPhfNlQl8K9nC1TQjv5lPqKrAzeTEeH88LC5wewXa97zbfBRnFnyqGB
+         5EoT8+iDCq8a8uPTNOsa3zLx7d6MF64ZcOh/8hyErWqfYObChp2A13b01mKxYoGEhi
+         q1PesA+s/3oNw==
+Date:   Fri, 21 Jul 2023 19:08:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH 09/11] ice: implement dpll interface to control cgu
+Message-ID: <20230721190834.375dbb79@kernel.org>
+In-Reply-To: <ZLo0ujuLMF2NrMog@nanopsycho>
+References: <20230720091903.297066-1-vadim.fedorenko@linux.dev>
+        <20230720091903.297066-10-vadim.fedorenko@linux.dev>
+        <ZLk/9zwbBHgs+rlb@nanopsycho>
+        <DM6PR11MB46572F438AADB5801E58227A9B3EA@DM6PR11MB4657.namprd11.prod.outlook.com>
+        <ZLo0ujuLMF2NrMog@nanopsycho>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,75 +68,26 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add dt bindings and documentation for Marvell PXA1908's clock controller
-blocks.
+On Fri, 21 Jul 2023 09:33:14 +0200 Jiri Pirko wrote:
+> >d) SyncE daemon uses PIN_SET to set state of pin_id:13 to CONNECTED with
+> >   parent pin (pin-id:2) =20
+>=20
+> For this you need pin_id and pin_parent_id because you set the state on
+> a parent pin.
+>=20
+>=20
+> Yeah, this is exactly why I initially was in favour of hiding all the
+> muxes and magic around it hidden from the user. Now every userspace app
+> working with this has to implement a logic of tracking pin and the mux
+> parents (possibly multiple levels) and configure everything. But it just
+> need a simple thing: "select this pin as a source" :/
+>=20
+>=20
+> Jakub, isn't this sort of unnecessary HW-details complexicity exposure
+> in UAPI you were against in the past? Am I missing something?
 
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
- .../bindings/clock/marvell,pxa1908.yaml       | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/marvell,pxa1908.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/marvell,pxa1908.yaml b/Documentation/devicetree/bindings/clock/marvell,pxa1908.yaml
-new file mode 100644
-index 000000000000..3fa6f00a26f7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/marvell,pxa1908.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/marvell,pxa1908.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell PXA1908 Clock Controllers
-+
-+maintainers:
-+  - Duje Mihanović <duje.mihanovic@skole.hr>
-+
-+description: |
-+  The PXA1908 clock subsystem generates and supplies clock to various
-+  controllers within the PXA1908 SoC. The PXA1908 contains numerous clock
-+  controller blocks, with the ones currently supported being APBC, APBCP, MPMU
-+  and APMU roughly corresponding to internal buses.
-+
-+  Each clock is assigned an identifier and client nodes use this identifier to
-+  specify the clock which they consume.
-+
-+  All these identifiers could be found in <include/dt-bindings/marvell,pxa1908.h>.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - marvell,pxa1908-apbc
-+      - marvell,pxa1908-apbcp
-+      - marvell,pxa1908-mpmu
-+      - marvell,pxa1908-apmu
-+  reg:
-+    maxItems: 1
-+    description: |
-+      Physical address of the clock controller and length of the memory mapped
-+      region.
-+
-+  '#clock-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  # APMU block:
-+  - |
-+    clock-controller@d4282800 {
-+      compatible = "marvell,pxa1908-apmu";
-+      reg = <0xd4282800 0x400>;
-+      #clock-cells = <1>;
-+    };
--- 
-2.41.0
-
-
+=46rom just reading what I'm quoting - I don't think so.
+Muxes are meaningful because they limit valid configurations.
+We can implement "automatic mutex config" in the kernel
+if user wants it, centrally in the core, otherwise each
+driver will have to do it on its own.
