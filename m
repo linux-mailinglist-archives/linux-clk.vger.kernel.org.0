@@ -2,128 +2,386 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A0C7655A6
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jul 2023 16:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE8C7658B9
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jul 2023 18:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbjG0ONj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Jul 2023 10:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S234596AbjG0Qab (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Jul 2023 12:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjG0ONi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jul 2023 10:13:38 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F7330C0
-        for <linux-clk@vger.kernel.org>; Thu, 27 Jul 2023 07:13:35 -0700 (PDT)
-Received: from SoMainline.org (82-72-63-87.cable.dynamic.v4.ziggo.nl [82.72.63.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 43D5B20443;
-        Thu, 27 Jul 2023 16:13:30 +0200 (CEST)
-Date:   Thu, 27 Jul 2023 16:13:28 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 00/17] drm/msm: Add SM6125 MDSS/DPU hardware and
- enable Sony Xperia 10 II panel
-Message-ID: <zvmz7i5jgrx27ildrc3tpcnrfgeivr3itv5qlwidsbr5iu5wwa@y3v2sehpw3vy>
-References: <20230723-sm6125-dpu-v4-0-a3f287dd6c07@somainline.org>
- <169046051039.1413710.12901529844343078449.b4-ty@linaro.org>
- <6c5197c9-e24d-70ac-fd75-2c72369d8b7f@linaro.org>
+        with ESMTP id S234525AbjG0Qa1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jul 2023 12:30:27 -0400
+Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1414130D4;
+        Thu, 27 Jul 2023 09:30:20 -0700 (PDT)
+Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+        by mx.skole.hr (mx.skole.hr) with ESMTP id 9A4F8821E0;
+        Thu, 27 Jul 2023 18:30:13 +0200 (CEST)
+From:   =?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afaerber@suse.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH v2 3/9] clk: mmp: Switch to use struct u32_fract instead of custom one
+Date:   Thu, 27 Jul 2023 18:29:01 +0200
+Message-ID: <20230727162909.6031-4-duje.mihanovic@skole.hr>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230727162909.6031-1-duje.mihanovic@skole.hr>
+References: <20230727162909.6031-1-duje.mihanovic@skole.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c5197c9-e24d-70ac-fd75-2c72369d8b7f@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2023-07-27 16:34:49, Dmitry Baryshkov wrote:
-> On 27/07/2023 15:22, Dmitry Baryshkov wrote:
-> > 
-> > On Sun, 23 Jul 2023 18:08:38 +0200, Marijn Suijten wrote:
-> >> Bring up the SM6125 DPU now that all preliminary series (such as INTF
-> >> TE) have been merged (for me to test the hardware properly), and most
-> >> other conflicting work (barring ongoing catalog *improvements*) has made
-> >> its way in as well or is still being discussed.
-> >>
-> >> The second part of the series complements that by immediately utilizing
-> >> this hardware in DT, and even enabling the MDSS/DSI nodes complete with
-> >> a 6.0" 1080x2520 panel for Sony's Seine PDX201 (Xperia 10 II).
-> >>
-> >> [...]
-> > 
-> > Applied, thanks!
-> > 
-> > [01/17] drm/msm/dsi: Drop unused regulators from QCM2290 14nm DSI PHY config
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/a7e3fda5948a
-> > [02/17] arm64: dts: qcom: sm6125: Pad APPS IOMMU address to 8 characters
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/b7d35a8eae54
-> > [03/17] arm64: dts: qcom: sm6125: Sort spmi_bus node numerically by reg
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/2be52ca96a71
-> 
-> Of course, these two patches sneaked in by the mistake, dropped them now.
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Lovely, glad to have that resolved so quickly.  Thanks!
+The struct mmp_clk_factor_tbl repeats the generic struct u32_fract.
+Kill the custom one and use the generic one instead.
 
-- Marijn
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+ drivers/clk/mmp/clk-frac.c       | 57 ++++++++++++++++----------------
+ drivers/clk/mmp/clk-mmp2.c       |  6 ++--
+ drivers/clk/mmp/clk-of-mmp2.c    | 26 +++++++--------
+ drivers/clk/mmp/clk-of-pxa168.c  |  4 +--
+ drivers/clk/mmp/clk-of-pxa1928.c |  6 ++--
+ drivers/clk/mmp/clk-of-pxa910.c  |  4 +--
+ drivers/clk/mmp/clk-pxa168.c     |  4 +--
+ drivers/clk/mmp/clk-pxa910.c     |  4 +--
+ drivers/clk/mmp/clk.h            | 10 ++----
+ 9 files changed, 58 insertions(+), 63 deletions(-)
 
-> 
-> > [04/17] dt-bindings: display/msm: Remove DSI1 ports from SM6350/SM6375 example
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/4be2c19261fc
-> > [05/17] dt-bindings: clock: qcom,dispcc-sm6125: Require GCC PLL0 DIV clock
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/4f86e343f3c6
-> > [06/17] dt-bindings: clock: qcom,dispcc-sm6125: Allow power-domains property
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/91043642f28c
-> > [07/17] dt-bindings: display/msm: dsi-controller-main: Document SM6125
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/cf5859476e5d
-> > [08/17] dt-bindings: display/msm: sc7180-dpu: Describe SM6125
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/04a664dffd19
-> > [09/17] dt-bindings: display/msm: Add SM6125 MDSS
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/3bde3b8f8a04
-> > [10/17] drm/msm/dpu: Add SM6125 support
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/76c5dffd0bc4
-> > [11/17] drm/msm/mdss: Add SM6125 support
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/de50357565d3
-> > [12/17] dt-bindings: msm: dsi-phy-14nm: Document SM6125 variant
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/cdac445883cc
-> > [13/17] drm/msm/dsi: Reuse QCM2290 14nm DSI PHY configuration for SM6125
-> >          https://gitlab.freedesktop.org/lumag/msm/-/commit/7638d8059ace
-> > 
-> > Best regards,
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+diff --git a/drivers/clk/mmp/clk-frac.c b/drivers/clk/mmp/clk-frac.c
+index 1b90867b60c4..6556f6ada2e8 100644
+--- a/drivers/clk/mmp/clk-frac.c
++++ b/drivers/clk/mmp/clk-frac.c
+@@ -26,14 +26,15 @@ static long clk_factor_round_rate(struct clk_hw *hw, unsigned long drate,
+ {
+ 	struct mmp_clk_factor *factor = to_clk_factor(hw);
+ 	u64 rate = 0, prev_rate;
++	struct u32_fract *d;
+ 	int i;
+ 
+ 	for (i = 0; i < factor->ftbl_cnt; i++) {
+-		prev_rate = rate;
+-		rate = *prate;
+-		rate *= factor->ftbl[i].den;
+-		do_div(rate, factor->ftbl[i].num * factor->masks->factor);
++		d = &factor->ftbl[i];
+ 
++		prev_rate = rate;
++		rate = (u64)(*prate) * d->denominator;
++		do_div(rate, d->numerator * factor->masks->factor);
+ 		if (rate > drate)
+ 			break;
+ 	}
+@@ -52,23 +53,22 @@ static unsigned long clk_factor_recalc_rate(struct clk_hw *hw,
+ {
+ 	struct mmp_clk_factor *factor = to_clk_factor(hw);
+ 	struct mmp_clk_factor_masks *masks = factor->masks;
+-	unsigned int val, num, den;
++	struct u32_fract d;
++	unsigned int val;
+ 	u64 rate;
+ 
+ 	val = readl_relaxed(factor->base);
+ 
+ 	/* calculate numerator */
+-	num = (val >> masks->num_shift) & masks->num_mask;
++	d.numerator = (val >> masks->num_shift) & masks->num_mask;
+ 
+ 	/* calculate denominator */
+-	den = (val >> masks->den_shift) & masks->den_mask;
+-
+-	if (!den)
++	d.denominator = (val >> masks->den_shift) & masks->den_mask;
++	if (!d.denominator)
+ 		return 0;
+ 
+-	rate = parent_rate;
+-	rate *= den;
+-	do_div(rate, num * factor->masks->factor);
++	rate = (u64)parent_rate * d.denominator;
++	do_div(rate, d.numerator * factor->masks->factor);
+ 
+ 	return rate;
+ }
+@@ -82,18 +82,18 @@ static int clk_factor_set_rate(struct clk_hw *hw, unsigned long drate,
+ 	int i;
+ 	unsigned long val;
+ 	unsigned long flags = 0;
++	struct u32_fract *d;
+ 	u64 rate = 0;
+ 
+ 	for (i = 0; i < factor->ftbl_cnt; i++) {
+-		rate = prate;
+-		rate *= factor->ftbl[i].den;
+-		do_div(rate, factor->ftbl[i].num * factor->masks->factor);
++		d = &factor->ftbl[i];
+ 
++		rate = (u64)prate * d->denominator;
++		do_div(rate, d->numerator * factor->masks->factor);
+ 		if (rate > drate)
+ 			break;
+ 	}
+-	if (i > 0)
+-		i--;
++	d = i ? &factor->ftbl[i - 1] : &factor->ftbl[0];
+ 
+ 	if (factor->lock)
+ 		spin_lock_irqsave(factor->lock, flags);
+@@ -101,10 +101,10 @@ static int clk_factor_set_rate(struct clk_hw *hw, unsigned long drate,
+ 	val = readl_relaxed(factor->base);
+ 
+ 	val &= ~(masks->num_mask << masks->num_shift);
+-	val |= (factor->ftbl[i].num & masks->num_mask) << masks->num_shift;
++	val |= (d->numerator & masks->num_mask) << masks->num_shift;
+ 
+ 	val &= ~(masks->den_mask << masks->den_shift);
+-	val |= (factor->ftbl[i].den & masks->den_mask) << masks->den_shift;
++	val |= (d->denominator & masks->den_mask) << masks->den_shift;
+ 
+ 	writel_relaxed(val, factor->base);
+ 
+@@ -118,7 +118,8 @@ static int clk_factor_init(struct clk_hw *hw)
+ {
+ 	struct mmp_clk_factor *factor = to_clk_factor(hw);
+ 	struct mmp_clk_factor_masks *masks = factor->masks;
+-	u32 val, num, den;
++	struct u32_fract d;
++	u32 val;
+ 	int i;
+ 	unsigned long flags = 0;
+ 
+@@ -128,23 +129,22 @@ static int clk_factor_init(struct clk_hw *hw)
+ 	val = readl(factor->base);
+ 
+ 	/* calculate numerator */
+-	num = (val >> masks->num_shift) & masks->num_mask;
++	d.numerator = (val >> masks->num_shift) & masks->num_mask;
+ 
+ 	/* calculate denominator */
+-	den = (val >> masks->den_shift) & masks->den_mask;
++	d.denominator = (val >> masks->den_shift) & masks->den_mask;
+ 
+ 	for (i = 0; i < factor->ftbl_cnt; i++)
+-		if (den == factor->ftbl[i].den && num == factor->ftbl[i].num)
++		if (d.denominator == factor->ftbl[i].denominator &&
++		    d.numerator == factor->ftbl[i].numerator)
+ 			break;
+ 
+ 	if (i >= factor->ftbl_cnt) {
+ 		val &= ~(masks->num_mask << masks->num_shift);
+-		val |= (factor->ftbl[0].num & masks->num_mask) <<
+-			masks->num_shift;
++		val |= (factor->ftbl[0].numerator & masks->num_mask) << masks->num_shift;
+ 
+ 		val &= ~(masks->den_mask << masks->den_shift);
+-		val |= (factor->ftbl[0].den & masks->den_mask) <<
+-			masks->den_shift;
++		val |= (factor->ftbl[0].denominator & masks->den_mask) << masks->den_shift;
+ 	}
+ 
+ 	if (!(val & masks->enable_mask) || i >= factor->ftbl_cnt) {
+@@ -168,8 +168,7 @@ static const struct clk_ops clk_factor_ops = {
+ struct clk *mmp_clk_register_factor(const char *name, const char *parent_name,
+ 		unsigned long flags, void __iomem *base,
+ 		struct mmp_clk_factor_masks *masks,
+-		struct mmp_clk_factor_tbl *ftbl,
+-		unsigned int ftbl_cnt, spinlock_t *lock)
++		struct u32_fract *ftbl, unsigned int ftbl_cnt, spinlock_t *lock)
+ {
+ 	struct mmp_clk_factor *factor;
+ 	struct clk_init_data init;
+diff --git a/drivers/clk/mmp/clk-mmp2.c b/drivers/clk/mmp/clk-mmp2.c
+index aabacfa10158..ab7dde7e7a44 100644
+--- a/drivers/clk/mmp/clk-mmp2.c
++++ b/drivers/clk/mmp/clk-mmp2.c
+@@ -59,9 +59,9 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 8125, .den = 1536},	/*14.745MHZ */
+-	{.num = 3521, .den = 689},	/*19.23MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 8125, .denominator = 1536 },	/* 14.745MHZ */
++	{ .numerator = 3521, .denominator =  689 },	/* 19.23MHZ */
+ };
+ 
+ static const char *uart_parent[] = {"uart_pll", "vctcxo"};
+diff --git a/drivers/clk/mmp/clk-of-mmp2.c b/drivers/clk/mmp/clk-of-mmp2.c
+index bcf60f43aa13..d771b3e5fb2d 100644
+--- a/drivers/clk/mmp/clk-of-mmp2.c
++++ b/drivers/clk/mmp/clk-of-mmp2.c
+@@ -141,9 +141,9 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 8125, .den = 1536},	/*14.745MHZ */
+-	{.num = 3521, .den = 689},	/*19.23MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 8125, .denominator = 1536 },	/* 14.745MHZ */
++	{ .numerator = 3521, .denominator =  689 },	/* 19.23MHZ */
+ };
+ 
+ static struct mmp_clk_factor_masks i2s_factor_masks = {
+@@ -155,16 +155,16 @@ static struct mmp_clk_factor_masks i2s_factor_masks = {
+ 	.enable_mask = 0xd0000000,
+ };
+ 
+-static struct mmp_clk_factor_tbl i2s_factor_tbl[] = {
+-	{.num = 24868, .den =  511},	/*  2.0480 MHz */
+-	{.num = 28003, .den =  793},	/*  2.8224 MHz */
+-	{.num = 24941, .den = 1025},	/*  4.0960 MHz */
+-	{.num = 28003, .den = 1586},	/*  5.6448 MHz */
+-	{.num = 31158, .den = 2561},	/*  8.1920 MHz */
+-	{.num = 16288, .den = 1845},	/* 11.2896 MHz */
+-	{.num = 20772, .den = 2561},	/* 12.2880 MHz */
+-	{.num =  8144, .den = 1845},	/* 22.5792 MHz */
+-	{.num = 10386, .den = 2561},	/* 24.5760 MHz */
++static struct u32_fract i2s_factor_tbl[] = {
++	{ .numerator = 24868, .denominator =  511 },	/*  2.0480 MHz */
++	{ .numerator = 28003, .denominator =  793 },	/*  2.8224 MHz */
++	{ .numerator = 24941, .denominator = 1025 },	/*  4.0960 MHz */
++	{ .numerator = 28003, .denominator = 1586 },	/*  5.6448 MHz */
++	{ .numerator = 31158, .denominator = 2561 },	/*  8.1920 MHz */
++	{ .numerator = 16288, .denominator = 1845 },	/* 11.2896 MHz */
++	{ .numerator = 20772, .denominator = 2561 },	/* 12.2880 MHz */
++	{ .numerator =  8144, .denominator = 1845 },	/* 22.5792 MHz */
++	{ .numerator = 10386, .denominator = 2561 },	/* 24.5760 MHz */
+ };
+ 
+ static DEFINE_SPINLOCK(acgr_lock);
+diff --git a/drivers/clk/mmp/clk-of-pxa168.c b/drivers/clk/mmp/clk-of-pxa168.c
+index 130d1a723879..17cb5c622c31 100644
+--- a/drivers/clk/mmp/clk-of-pxa168.c
++++ b/drivers/clk/mmp/clk-of-pxa168.c
+@@ -104,8 +104,8 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 8125, .den = 1536},	/*14.745MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 8125, .denominator = 1536 },	/* 14.745MHZ */
+ };
+ 
+ static void pxa168_pll_init(struct pxa168_clk_unit *pxa_unit)
+diff --git a/drivers/clk/mmp/clk-of-pxa1928.c b/drivers/clk/mmp/clk-of-pxa1928.c
+index 2508a0d795f8..675d695c5f7d 100644
+--- a/drivers/clk/mmp/clk-of-pxa1928.c
++++ b/drivers/clk/mmp/clk-of-pxa1928.c
+@@ -58,9 +58,9 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 832, .den = 234},	/*58.5MHZ */
+-	{.num = 1, .den = 1},		/*26MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 832, .denominator = 234 },	/* 58.5MHZ */
++	{ .numerator =   1, .denominator =   1 },	/* 26MHZ */
+ };
+ 
+ static void pxa1928_pll_init(struct pxa1928_clk_unit *pxa_unit)
+diff --git a/drivers/clk/mmp/clk-of-pxa910.c b/drivers/clk/mmp/clk-of-pxa910.c
+index 4d15bac987eb..f5b0b7b278c0 100644
+--- a/drivers/clk/mmp/clk-of-pxa910.c
++++ b/drivers/clk/mmp/clk-of-pxa910.c
+@@ -84,8 +84,8 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 8125, .den = 1536},	/*14.745MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 8125, .denominator = 1536 },	/* 14.745MHZ */
+ };
+ 
+ static void pxa910_pll_init(struct pxa910_clk_unit *pxa_unit)
+diff --git a/drivers/clk/mmp/clk-pxa168.c b/drivers/clk/mmp/clk-pxa168.c
+index 8a9b8fb3a465..2ea88945bffd 100644
+--- a/drivers/clk/mmp/clk-pxa168.c
++++ b/drivers/clk/mmp/clk-pxa168.c
+@@ -52,8 +52,8 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 8125, .den = 1536},	/*14.745MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 8125, .denominator = 1536 },	/* 14.745MHZ */
+ };
+ 
+ static const char *uart_parent[] = {"pll1_3_16", "uart_pll"};
+diff --git a/drivers/clk/mmp/clk-pxa910.c b/drivers/clk/mmp/clk-pxa910.c
+index 9fcd76316d7e..e29b0fd6f423 100644
+--- a/drivers/clk/mmp/clk-pxa910.c
++++ b/drivers/clk/mmp/clk-pxa910.c
+@@ -50,8 +50,8 @@ static struct mmp_clk_factor_masks uart_factor_masks = {
+ 	.den_shift = 0,
+ };
+ 
+-static struct mmp_clk_factor_tbl uart_factor_tbl[] = {
+-	{.num = 8125, .den = 1536},	/*14.745MHZ */
++static struct u32_fract uart_factor_tbl[] = {
++	{ .numerator = 8125, .denominator = 1536 },	/* 14.745MHZ */
+ };
+ 
+ static const char *uart_parent[] = {"pll1_3_16", "uart_pll"};
+diff --git a/drivers/clk/mmp/clk.h b/drivers/clk/mmp/clk.h
+index 55ac05379781..c83cec169ddc 100644
+--- a/drivers/clk/mmp/clk.h
++++ b/drivers/clk/mmp/clk.h
+@@ -3,6 +3,7 @@
+ #define __MACH_MMP_CLK_H
+ 
+ #include <linux/clk-provider.h>
++#include <linux/math.h>
+ #include <linux/pm_domain.h>
+ #include <linux/clkdev.h>
+ 
+@@ -20,16 +21,11 @@ struct mmp_clk_factor_masks {
+ 	unsigned int enable_mask;
+ };
+ 
+-struct mmp_clk_factor_tbl {
+-	unsigned int num;
+-	unsigned int den;
+-};
+-
+ struct mmp_clk_factor {
+ 	struct clk_hw hw;
+ 	void __iomem *base;
+ 	struct mmp_clk_factor_masks *masks;
+-	struct mmp_clk_factor_tbl *ftbl;
++	struct u32_fract *ftbl;
+ 	unsigned int ftbl_cnt;
+ 	spinlock_t *lock;
+ };
+@@ -37,7 +33,7 @@ struct mmp_clk_factor {
+ extern struct clk *mmp_clk_register_factor(const char *name,
+ 		const char *parent_name, unsigned long flags,
+ 		void __iomem *base, struct mmp_clk_factor_masks *masks,
+-		struct mmp_clk_factor_tbl *ftbl, unsigned int ftbl_cnt,
++		struct u32_fract *ftbl, unsigned int ftbl_cnt,
+ 		spinlock_t *lock);
+ 
+ /* Clock type "mix" */
+-- 
+2.41.0
+
+
