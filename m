@@ -2,87 +2,164 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492B076521E
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jul 2023 13:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F14C7652C8
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jul 2023 13:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjG0LVZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Jul 2023 07:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        id S233434AbjG0Lp0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Jul 2023 07:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjG0LVY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jul 2023 07:21:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED37E4C;
-        Thu, 27 Jul 2023 04:21:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CBBF61D28;
-        Thu, 27 Jul 2023 11:21:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE40AC433C7;
-        Thu, 27 Jul 2023 11:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690456882;
-        bh=YMIkANzVF5IWMvM3TWHa8uTtxzKUrIfXvCCdyJ6K8bM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eN6ABMkjoxXqXSTvVXYoSe9f4LEbwzvyhTvPLAbN/k22Qk+cODWXq3LyccY/t2VmM
-         4fDt81rSYsgmZbrkJeF4EbMpWlxI0xk9moYLIBv55B9MQjxHddBEDcXaJ88B+RVmaS
-         pxby76c1jVF2C/KZvsznWvnLHa8g48ijpGaHqLV/xDGfhEvPEUnA8Ew3LsM/km8nXR
-         DARDhgdwp283fAJqd01I9ZbxlwAGQ75m7nA+mHAaOseOJk5VvYBaAkBPzHr5MJpCe9
-         Fke9uc2263jFsdbJ0HnDRtjQyozyiIwYFyPsuFt3MNDpRUWk9lmGVUeY4jDBSyvg7p
-         uKvpqyjMRriHQ==
-Message-ID: <57ed9bd0-dc90-69ef-31fb-4eb5d821190d@kernel.org>
-Date:   Thu, 27 Jul 2023 13:21:17 +0200
+        with ESMTP id S233418AbjG0LpY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jul 2023 07:45:24 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C971A212B
+        for <linux-clk@vger.kernel.org>; Thu, 27 Jul 2023 04:45:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so4468781a12.0
+        for <linux-clk@vger.kernel.org>; Thu, 27 Jul 2023 04:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690458319; x=1691063119;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1qeXnvcAiq6YWv+BROwmiyjzVjwKIDX/fTfibW2U9Ng=;
+        b=haj4JLRqU16kQ/pCAc2zXSfGD4y2xOyhQZRlT94PCb08V82hArXlO7r+VBURosiLYF
+         hWxtoN1Q2Qr3zilvKIyJogZjp+ey0Wt9oMCeoZtE0Fq4avoYOoYh0Bey45uEA2+v0IHD
+         akKnLl/QQ2Kur95MNKXJTRaVSNjTs+jxxPyhIIIjphYwTWqLm3fjnFBlFMWBsFnXxTd0
+         OMVxkX/2AwCbwAq8mQTRKu3hmfYPuQVaZlmhOmT+9M/+Hd10CJb1ErjEQ8t3KsIXZTOM
+         DhR9Yk8mZws/ifAa8/gJvYwhRaHEwayj51zlajXVhKLSoBof0i/RPiHRtZYZQB9e4huu
+         s8hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690458319; x=1691063119;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1qeXnvcAiq6YWv+BROwmiyjzVjwKIDX/fTfibW2U9Ng=;
+        b=B8xXa/HsFH2NML8kqonZAYQqod/xbiiZn9iEBYUAMfHZ7wd7wLObQkhlKrc1RSfvK3
+         Ra49qxwPK0/i6lhA9AgDb0FrdBhsyHX+FepyHXI5l9ISE4pQ74TC/O2b5ivqdBeCKt/u
+         Ik2qC92zew5s8ppHootJoNhW3+1bc7U0pllV6A0ndJrISIEjQ3y41bd0N3ytwwlKfMLm
+         j8+WmLoQpU+3yObkceDyzuLoAQD1+IBPH6ZwgRDRre73iOzooxyBW8N7nfSFVK2QaQjg
+         WZiG8iA5i/RN7hP/o5q4eZ4MtPipW205PuTe7qc3+jksWvK7kRS0TKWAf3ocI9Fsu7hk
+         jWmw==
+X-Gm-Message-State: ABy/qLaweCrP12htTnl0BvqJPUP6Cz/6iIBlCYO7K0EX19BZXOXWrEIy
+        CoSovg8l5M0j2uuR4zSqGV1b9w==
+X-Google-Smtp-Source: APBJJlGkjcM0tXeGSbsXIHSEtxD4pxFRr5EaDSYdzWNrpPx1y6oDJ7i0CJP0zJjVwc+iwJNrOkN8LA==
+X-Received: by 2002:a17:906:2d2:b0:989:450:e565 with SMTP id 18-20020a17090602d200b009890450e565mr2267093ejk.23.1690458319274;
+        Thu, 27 Jul 2023 04:45:19 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id pv24-20020a170907209800b009920e9a3a73sm660346ejb.115.2023.07.27.04.45.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Jul 2023 04:45:18 -0700 (PDT)
+Message-ID: <2edb92b8-a6a8-c115-757c-daccef6be5f0@linaro.org>
+Date:   Thu, 27 Jul 2023 13:45:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v1 2/2] clk: rockchip: rk3588: Adjust the GATE_LINK
- parameter
-To:     Elaine Zhang <zhangqing@rock-chips.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, kever.yang@rock-chips.com, heiko@sntech.de
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangtao@rock-chips.com
-References: <20230727101139.23048-1-zhangqing@rock-chips.com>
- <20230727101139.23048-3-zhangqing@rock-chips.com>
+Subject: Re: [PATCH v2] dt-bindings: qcom: Update RPMHPD entries for some SoCs
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230727101139.23048-3-zhangqing@rock-chips.com>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     mathieu.poirier@linaro.org, mchehab@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, quic_vgarodia@quicinc.com,
+        konrad.dybcio@linaro.org, agross@kernel.org,
+        freedreno@lists.freedesktop.org, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, jonathan@marek.ca,
+        conor+dt@kernel.org, robh+dt@kernel.org, airlied@gmail.com,
+        linux-mmc@vger.kernel.org, quic_tdas@quicinc.com,
+        stanimir.k.varbanov@gmail.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andersson@kernel.org,
+        mturquette@baylibre.com, dmitry.baryshkov@linaro.org,
+        linux-remoteproc@vger.kernel.org, sean@poorly.run,
+        ulf.hansson@linaro.org, devicetree@vger.kernel.org,
+        vladimir.zapolskiy@linaro.org, rfoss@kernel.org, mani@kernel.org,
+        linux-media@vger.kernel.org, sboyd@kernel.org,
+        quic_abhinavk@quicinc.com, bhupesh.sharma@linaro.org,
+        linux-arm-msm@vger.kernel.org, marijn.suijten@somainline.org,
+        neil.armstrong@linaro.org, robdclark@gmail.com
+References: <1690448953-23425-1-git-send-email-quic_rohiagar@quicinc.com>
+ <169045659774.1058731.6391693092002547810.robh@kernel.org>
+ <fa84ec4f-bdb9-dace-c56a-46174a9b47ee@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fa84ec4f-bdb9-dace-c56a-46174a9b47ee@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 27/07/2023 12:11, Elaine Zhang wrote:
-> Using Id instead of name, if use name needs to use __clk_lookup().
-> But __clk_lookup() is not exported and is not friendly for GKI.
+On 27/07/2023 13:19, Rohit Agarwal wrote:
 > 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> ---
+> On 7/27/2023 4:46 PM, Rob Herring wrote:
+>> On Thu, 27 Jul 2023 14:39:13 +0530, Rohit Agarwal wrote:
+>>> Update the RPMHPD references with new bindings defined in rpmhpd.h
+>>> for Qualcomm SoCs SM8[2345]50.
+>>>
+>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml   | 4 ++--
+>>>   Documentation/devicetree/bindings/clock/qcom,sm8350-videocc.yaml  | 4 ++--
+>>>   Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml    | 4 ++--
+>>>   Documentation/devicetree/bindings/clock/qcom,sm8450-dispcc.yaml   | 4 ++--
+>>>   Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml  | 4 ++--
+>>>   Documentation/devicetree/bindings/clock/qcom,sm8550-dispcc.yaml   | 4 ++--
+>>>   Documentation/devicetree/bindings/clock/qcom,videocc.yaml         | 4 ++--
+>>>   .../devicetree/bindings/display/msm/qcom,sm8250-dpu.yaml          | 4 ++--
+>>>   .../devicetree/bindings/display/msm/qcom,sm8250-mdss.yaml         | 8 ++++----
+>>>   .../devicetree/bindings/display/msm/qcom,sm8350-dpu.yaml          | 4 ++--
+>>>   .../devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml         | 6 +++---
+>>>   .../devicetree/bindings/display/msm/qcom,sm8450-dpu.yaml          | 4 ++--
+>>>   .../devicetree/bindings/display/msm/qcom,sm8450-mdss.yaml         | 8 ++++----
+>>>   .../devicetree/bindings/display/msm/qcom,sm8550-dpu.yaml          | 4 ++--
+>>>   .../devicetree/bindings/display/msm/qcom,sm8550-mdss.yaml         | 8 ++++----
+>>>   Documentation/devicetree/bindings/media/qcom,sm8250-venus.yaml    | 4 ++--
+>>>   Documentation/devicetree/bindings/mmc/sdhci-msm.yaml              | 4 ++--
+>>>   Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml | 6 +++---
+>>>   18 files changed, 44 insertions(+), 44 deletions(-)
+>>>
+>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>
+>> yamllint warnings/errors:
+>>
+>> dtschema/dtc warnings/errors:
+>> Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.example.dts:21:18: fatal error: dt-bindings/power/qcom,rpmhpd.h: No such file or directory
+>>     21 |         #include <dt-bindings/power/qcom,rpmhpd.h>
+>>        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+>> make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.example.dtb] Error 1
+>> make[2]: *** Waiting for unfinished jobs....
+>> make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1500: dt_binding_check] Error 2
+>> make: *** [Makefile:234: __sub-make] Error 2
+>>
+>> doc reference errors (make refcheckdocs):
+>>
+>> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1690448953-23425-1-git-send-email-quic_rohiagar@quicinc.com
+>>
+>> The base for the series is generally the latest rc1. A different dependency
+>> should be noted in *this* patch.
+>>
+>> If you already ran 'make dt_binding_check' and didn't see the above
+>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+>> date:
+>>
+>> pip3 install dtschema --upgrade
+>>
+>> Please check and re-submit after running the above command yourself. Note
+>> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+>> your schema. However, it must be unset to test all examples with your schema.
+> This should be ignored as the patch that creates the new header is 
+> already applied.
+> Please follow this series
+> 
+> https://lore.kernel.org/all/1689744162-9421-1-git-send-email-quic_rohiagar@quicinc.com/
 
->  static void __init rk3588_clk_init(struct device_node *np)
-> diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-> index b5616bca7b44..864a321ab362 100644
-> --- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
-> +++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-> @@ -733,8 +733,9 @@
->  #define ACLK_AV1_PRE			718
->  #define PCLK_AV1_PRE			719
->  #define HCLK_SDIO_PRE			720
-> +#define PCLK_VO1GRF			721
-
-Bindings are separate patches.
-
-Please run scripts/checkpatch.pl and fix reported warnings. Some
-warnings can be ignored, but the code here looks like it needs a fix.
-Feel free to get in touch if the warning is not clear.
+Please mention the dependency in patch changelog ---, so it is obvious
+for people applying it and also for the bot.
 
 Best regards,
 Krzysztof
