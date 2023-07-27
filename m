@@ -2,247 +2,234 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F00E7650A8
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jul 2023 12:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92C576512D
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jul 2023 12:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbjG0KMA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Jul 2023 06:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
+        id S233553AbjG0K3K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Jul 2023 06:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233243AbjG0KLy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jul 2023 06:11:54 -0400
-Received: from mail-m12739.qiye.163.com (mail-m12739.qiye.163.com [115.236.127.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B111BDA;
-        Thu, 27 Jul 2023 03:11:48 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m12739.qiye.163.com (Hmail) with ESMTPA id 9EB164A01E0;
-        Thu, 27 Jul 2023 18:11:43 +0800 (CST)
-From:   Elaine Zhang <zhangqing@rock-chips.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org,
-        kever.yang@rock-chips.com, zhangqing@rock-chips.com,
-        heiko@sntech.de
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangtao@rock-chips.com
-Subject: [PATCH v1 2/2] clk: rockchip: rk3588: Adjust the GATE_LINK parameter
-Date:   Thu, 27 Jul 2023 18:11:39 +0800
-Message-Id: <20230727101139.23048-3-zhangqing@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230727101139.23048-1-zhangqing@rock-chips.com>
-References: <20230727101139.23048-1-zhangqing@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkMdSlYZHRlJGBhMH0tISR1VEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSk5MSUpJVUpLS1VKQl
-        kG
-X-HM-Tid: 0a8996d53a4bb212kuuu9eb164a01e0
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NhQ6Qhw*LT0CTzoUDgJNGU4L
-        OkMaFDhVSlVKTUJLT05JTEtPSEJMVTMWGhIXVQETGhUcChIVHDsJFBgQVhgTEgsIVRgUFkVZV1kS
-        C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpIS0lKNwY+
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231978AbjG0K2Z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jul 2023 06:28:25 -0400
+Received: from out-87.mta0.migadu.com (out-87.mta0.migadu.com [91.218.175.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0703B1FF3
+        for <linux-clk@vger.kernel.org>; Thu, 27 Jul 2023 03:28:20 -0700 (PDT)
+Message-ID: <fd03a5f4-151a-bc7d-429c-c045745da523@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1690453697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cdNMArdaFWVI5SKSPm1vQyJoyF/bmKiSh+QjqHSwJY0=;
+        b=NriIWc+uIleh+ze4o2J+UOpT04I4WThX6gf3dXAI8lj9M09YHk1OVVkXck++hhTRBTGk8E
+        4eD11Z3y+oNLibSGtUV+HnOmq1OsvnARyeqfL2Wx9+gW02TZ+HZXRAkKi1tB/Rw4BihKB4
+        GLLXJpQFGs6Ro14ZLlvr9uCoX7+GCBs=
+Date:   Thu, 27 Jul 2023 11:28:12 +0100
+MIME-Version: 1.0
+Subject: Re: [PATCH 09/11] ice: implement dpll interface to control cgu
+Content-Language: en-US
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>
+References: <ZLo0ujuLMF2NrMog@nanopsycho>
+ <DM6PR11MB46576153E0E28BA4C283A30A9B3FA@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZLpzwMQrqp7mIMFF@nanopsycho>
+ <DM6PR11MB46579CC7E6D314BFDE47E4EE9B3FA@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZLqoMhxHq3m4dp1u@nanopsycho>
+ <DM6PR11MB46571D843FB903AC050E2F129B3FA@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZLt5GPRls7UL4zGx@nanopsycho>
+ <DM6PR11MB465713389A234771BD29DF149B02A@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZL+B48Om/cf61/Vq@nanopsycho>
+ <DM6PR11MB465734F6AD226A39DE8574419B03A@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZMC/TRSYqMQ57Rf7@nanopsycho>
+ <DM6PR11MB46576A241EA1519BC559B5C09B00A@DM6PR11MB4657.namprd11.prod.outlook.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <DM6PR11MB46576A241EA1519BC559B5C09B00A@DM6PR11MB4657.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Using Id instead of name, if use name needs to use __clk_lookup().
-But __clk_lookup() is not exported and is not friendly for GKI.
+On 26/07/2023 22:11, Kubalewski, Arkadiusz wrote:
+>> From: Jiri Pirko <jiri@resnulli.us>
+>> Sent: Wednesday, July 26, 2023 8:38 AM
+>>
+> 
+> [...]
+>   
+>>>>>>>
+>>>>>>> Just to make it clear:
+>>>>>>>
+>>>>>>> AUTOMATIC:
+>>>>>>> - inputs monitored, validated, phase measurements available
+>>>>>>> - possible states: unlocked, locked, locked-ho-acq, holdover
+>>>>>>>
+>>>>>>> FREERUN:
+>>>>>>> - inputs not monitored, not validated, no phase measurements available
+>>>>>>> - possible states: unlocked
+>>>>>>
+>>>>>> This is your implementation of DPLL. Others may have it done
+>>>>>> differently. But the fact the input is monitored or not, does not make
+>>>>>> any difference from user perspective.
+>>>>>>
+>>>>>> When he has automatic mode and does:
+>>>>>> 1) disconnect all pins
+>>>>>> 2) reset state    (however you implement it in the driver is totaly up
+>>>>>> 		   to the device, you may go to your freerun dpll mode
+>>>>>> 		   internally and to automatic back, up to you)
+>>>>>> -> state will go to unlocked
+>>>>>>
+>>>>>> The behaviour is exactly the same, without any special mode.
+>>>>>
+>>>>> In this case there is special reset button, which doesn't exist in
+>>>>> reality, actually your suggestion to go into FREERUN and back to AUTOMATIC
+>>>>> to pretend the some kind of reset has happened, where in reality dpll went
+>>>>> to
+>>>>> FREERUN and AUTOMATIC.
+>>>>
+>>>> There are 3 pin states:
+>>>> disconnected
+>>>> connected
+>>>> selectable
+>>>>
+>>>> When the last source disconnects, go to your internal freerun.
+>>>> When some source gets selectable or connected, go to your internal
+>>>> automatic mode.
+>>>>
+>>>
+>>> This would make the driver to check if all the sources are disconnected
+>>> each time someone disconnects a source. Which in first place is not
+>>> efficient, but also dpll design already allows different driver instances
+>>> to
+>>> control separated sources, which in this case would force a driver to
+>>> implement
+>>> additional communication between the instances just to allow such hidden
+>>> FREERUN mode.
+>>> Which seems another argument not to do this in the way you are proposing:
+>>> inefficient and unnecessarily complicated.
+>>>
+>>> We know that you could also implement FREERUN mode by disconnecting all
+>>> the
+>>> sources, even if HW doesn't support it explicitly.
+>>>
+>>> >From user perspactive, the mode didn't change.
+>>>>
+>>>
+>>> The user didn't change the mode, the mode shall not change.
+>>> You wrote to do it silently, so user didn't change the mode but it would
+>> have
+>>> changed, and we would have pretended the different working mode of DPLL
+>> doesn't
+>>> exist.
+>>>
+>>> >From user perepective, this is exacly the behaviour he requested.
+>>>>
+>>>
+>>> IMHO this is wrong and comes from the definition of pin state DISCONNECTED,
+>>> which is not sharp, for our HW means that the input will not be considered
+>>> as valid input, but is not disconnecting anything, as input is still
+>>> monitored and measured.
+>>> Shall we have additional mode like PIN_STATE_NOT_SELECTABLE? As it is not
+>>> possible to actually disconnect a pin..
+>>>
+>>>>
+>>>>> For me it seems it seems like unnecessary complication of user's life.
+>>>>> The idea of FREERUN mode is to run dpll on its system clock, so all the
+>>>>> "external" dpll sources shall be disconnected when dpll is in FREERUN.
+>>>>
+>>>> Yes, that is when you set all pins to disconnect. no mode change needed.
+>>>>
+>>>
+>>> We don't disconnect anything, we used a pin state DISCONNECTED as this
+>>> seemed
+>>> most appropriate.
+>>>
+>>>>
+>>>>> Let's assume your HW doesn't have a FREERUN, can't you just create it by
+>>>>> disconnecting all the sources?
+>>>>
+>>>> Yep, that's what we do.
+>>>>
+>>>
+>>> No, you were saying that the mode doesn't exist and that your hardware
+>>> doesn't
+>>> support it. At the same time it can be achieved by manually disconnecting
+>>> all
+>>> the sources.
+>>>
+>>>>
+>>>>> BTW, what chip are you using on mlx5 for this?
+>>>>> I don't understand why the user would have to mangle state of all the pins
+>>>>> just
+>>>>> to stop dpll's work if he could just go into FREERUN and voila. Also what
+>>>>> if
+>>>>> user doesn't want change the configuration of the pins at all, and he just
+>>>>> want
+>>>>> to desynchronize it's dpll for i.e. testing reason.
+>>>>
+>>>> I tried to explain multiple times. Let the user have clean an abstracted
+>>>> api, with clear semantics. Simple as that. Your internal freerun mode is
+>>>> just something to abstract out, it is not needed to expose it.
+>>>>
+>>>
+>>> Our hardware can support in total 4 modes, and 2 are now supported in ice.
+>>> I don't get the idea for abstraction of hardware switches, modes or
+>>> capabilities, and having those somehow achievable through different
+>>> functionalities.
+>>>
+>>> I think we already discussed this long enough to make a decision..
+>>> Though I am not convinced by your arguments, and you are not convinced by
+>>> mine.
+>>>
+>>> Perhaps someone else could step in and cut the rope, so we could go further
+>>> with this?
+>>
+>> Or, even better, please drop this for the initial patchset and have this
+>> as a follow-up. Thanks!
+>>
+>>
+> 
+> On the responses from Jakub and Paolo, they supported the idea of having
+> such mode.
+> 
+> Although Jakub have asked if there could be better name then FREERUN, also
+> suggested DETACHED and STANDALONE.
+> For me DETACHED seems pretty good, STANDALONE a bit too far..
+> I am biased by the FREERUN from chip docs and don't have strong opinion
+> on any of those..
+> 
+> Any suggestions?
 
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
----
- drivers/clk/rockchip/clk-rk3588.c             | 109 ++++++++++--------
- .../dt-bindings/clock/rockchip,rk3588-cru.h   |   3 +-
- 2 files changed, 60 insertions(+), 52 deletions(-)
+It looks like we have a kind of split-brain situation, and my thoughts 
+are following:
+Even though right now we don't have any hardware supporting 
+freerun/standalone mode, I do really like the idea to have it. It will 
+be used in monitoring implementations where we refer to internal 
+oscillator (Rb/Cs) as a source of truth to compare with the signal on 
+the other pins. We can name it DETACHED if it sounds better.
 
-diff --git a/drivers/clk/rockchip/clk-rk3588.c b/drivers/clk/rockchip/clk-rk3588.c
-index 6994165e0395..f29aa8eac472 100644
---- a/drivers/clk/rockchip/clk-rk3588.c
-+++ b/drivers/clk/rockchip/clk-rk3588.c
-@@ -12,28 +12,6 @@
- #include <dt-bindings/clock/rockchip,rk3588-cru.h>
- #include "clk.h"
- 
--/*
-- * Recent Rockchip SoCs have a new hardware block called Native Interface
-- * Unit (NIU), which gates clocks to devices behind them. These effectively
-- * need two parent clocks.
-- *
-- * Downstream enables the linked clock via runtime PM whenever the gate is
-- * enabled. This implementation uses separate clock nodes for each of the
-- * linked gate clocks, which leaks parts of the clock tree into DT.
-- *
-- * The GATE_LINK macro instead takes the second parent via 'linkname', but
-- * ignores the information. Once the clock framework is ready to handle it, the
-- * information should be passed on here. But since these clocks are required to
-- * access multiple relevant IP blocks, such as PCIe or USB, we mark all linked
-- * clocks critical until a better solution is available. This will waste some
-- * power, but avoids leaking implementation details into DT or hanging the
-- * system.
-- */
--#define GATE_LINK(_id, cname, pname, linkname, f, o, b, gf) \
--	GATE(_id, cname, pname, f, o, b, gf)
--#define RK3588_LINKED_CLK		CLK_IS_CRITICAL
--
--
- #define RK3588_GRF_SOC_STATUS0		0x600
- #define RK3588_PHYREF_ALT_GATE		0xc38
- 
-@@ -1456,7 +1434,7 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
- 	COMPOSITE_NODIV(HCLK_NVM_ROOT,  "hclk_nvm_root", mux_200m_100m_50m_24m_p, 0,
- 			RK3588_CLKSEL_CON(77), 0, 2, MFLAGS,
- 			RK3588_CLKGATE_CON(31), 0, GFLAGS),
--	COMPOSITE(ACLK_NVM_ROOT, "aclk_nvm_root", gpll_cpll_p, RK3588_LINKED_CLK,
-+	COMPOSITE(ACLK_NVM_ROOT, "aclk_nvm_root", gpll_cpll_p, 0,
- 			RK3588_CLKSEL_CON(77), 7, 1, MFLAGS, 2, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(31), 1, GFLAGS),
- 	GATE(ACLK_EMMC, "aclk_emmc", "aclk_nvm_root", 0,
-@@ -1685,13 +1663,13 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
- 			RK3588_CLKGATE_CON(42), 9, GFLAGS),
- 
- 	/* vdpu */
--	COMPOSITE(ACLK_VDPU_ROOT, "aclk_vdpu_root", gpll_cpll_aupll_p, RK3588_LINKED_CLK,
-+	COMPOSITE(ACLK_VDPU_ROOT, "aclk_vdpu_root", gpll_cpll_aupll_p, 0,
- 			RK3588_CLKSEL_CON(98), 5, 2, MFLAGS, 0, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(44), 0, GFLAGS),
- 	COMPOSITE_NODIV(ACLK_VDPU_LOW_ROOT, "aclk_vdpu_low_root", mux_400m_200m_100m_24m_p, 0,
- 			RK3588_CLKSEL_CON(98), 7, 2, MFLAGS,
- 			RK3588_CLKGATE_CON(44), 1, GFLAGS),
--	COMPOSITE_NODIV(HCLK_VDPU_ROOT, "hclk_vdpu_root", mux_200m_100m_50m_24m_p, RK3588_LINKED_CLK,
-+	COMPOSITE_NODIV(HCLK_VDPU_ROOT, "hclk_vdpu_root", mux_200m_100m_50m_24m_p, 0,
- 			RK3588_CLKSEL_CON(98), 9, 2, MFLAGS,
- 			RK3588_CLKGATE_CON(44), 2, GFLAGS),
- 	COMPOSITE(ACLK_JPEG_DECODER_ROOT, "aclk_jpeg_decoder_root", gpll_cpll_aupll_spll_p, 0,
-@@ -1742,9 +1720,9 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
- 	COMPOSITE(ACLK_RKVENC0_ROOT, "aclk_rkvenc0_root", gpll_cpll_npll_p, 0,
- 			RK3588_CLKSEL_CON(102), 7, 2, MFLAGS, 2, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(47), 1, GFLAGS),
--	GATE(HCLK_RKVENC0, "hclk_rkvenc0", "hclk_rkvenc0_root", RK3588_LINKED_CLK,
-+	GATE(HCLK_RKVENC0, "hclk_rkvenc0", "hclk_rkvenc0_root", 0,
- 			RK3588_CLKGATE_CON(47), 4, GFLAGS),
--	GATE(ACLK_RKVENC0, "aclk_rkvenc0", "aclk_rkvenc0_root", RK3588_LINKED_CLK,
-+	GATE(ACLK_RKVENC0, "aclk_rkvenc0", "aclk_rkvenc0_root", 0,
- 			RK3588_CLKGATE_CON(47), 5, GFLAGS),
- 	COMPOSITE(CLK_RKVENC0_CORE, "clk_rkvenc0_core", gpll_cpll_aupll_npll_p, 0,
- 			RK3588_CLKSEL_CON(102), 14, 2, MFLAGS, 9, 5, DFLAGS,
-@@ -1754,10 +1732,10 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
- 			RK3588_CLKGATE_CON(48), 6, GFLAGS),
- 
- 	/* vi */
--	COMPOSITE(ACLK_VI_ROOT, "aclk_vi_root", gpll_cpll_npll_aupll_spll_p, RK3588_LINKED_CLK,
-+	COMPOSITE(ACLK_VI_ROOT, "aclk_vi_root", gpll_cpll_npll_aupll_spll_p, 0,
- 			RK3588_CLKSEL_CON(106), 5, 3, MFLAGS, 0, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(49), 0, GFLAGS),
--	COMPOSITE_NODIV(HCLK_VI_ROOT, "hclk_vi_root", mux_200m_100m_50m_24m_p, RK3588_LINKED_CLK,
-+	COMPOSITE_NODIV(HCLK_VI_ROOT, "hclk_vi_root", mux_200m_100m_50m_24m_p, 0,
- 			RK3588_CLKSEL_CON(106), 8, 2, MFLAGS,
- 			RK3588_CLKGATE_CON(49), 1, GFLAGS),
- 	COMPOSITE_NODIV(PCLK_VI_ROOT, "pclk_vi_root", mux_100m_50m_24m_p, 0,
-@@ -1929,10 +1907,10 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
- 	COMPOSITE(ACLK_VOP_ROOT, "aclk_vop_root", gpll_cpll_dmyaupll_npll_spll_p, 0,
- 			RK3588_CLKSEL_CON(110), 5, 3, MFLAGS, 0, 5, DFLAGS,
- 			RK3588_CLKGATE_CON(52), 0, GFLAGS),
--	COMPOSITE_NODIV(ACLK_VOP_LOW_ROOT, "aclk_vop_low_root", mux_400m_200m_100m_24m_p, RK3588_LINKED_CLK,
-+	COMPOSITE_NODIV(ACLK_VOP_LOW_ROOT, "aclk_vop_low_root", mux_400m_200m_100m_24m_p, 0,
- 			RK3588_CLKSEL_CON(110), 8, 2, MFLAGS,
- 			RK3588_CLKGATE_CON(52), 1, GFLAGS),
--	COMPOSITE_NODIV(HCLK_VOP_ROOT, "hclk_vop_root", mux_200m_100m_50m_24m_p, RK3588_LINKED_CLK,
-+	COMPOSITE_NODIV(HCLK_VOP_ROOT, "hclk_vop_root", mux_200m_100m_50m_24m_p, 0,
- 			RK3588_CLKSEL_CON(110), 10, 2, MFLAGS,
- 			RK3588_CLKGATE_CON(52), 2, GFLAGS),
- 	COMPOSITE_NODIV(PCLK_VOP_ROOT, "pclk_vop_root", mux_100m_50m_24m_p, 0,
-@@ -2433,26 +2411,55 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
- 	GATE(ACLK_AV1, "aclk_av1", "aclk_av1_pre", 0,
- 			RK3588_CLKGATE_CON(68), 2, GFLAGS),
- 
--	GATE_LINK(ACLK_ISP1_PRE, "aclk_isp1_pre", "aclk_isp1_root", "aclk_vi_root", 0, RK3588_CLKGATE_CON(26), 6, GFLAGS),
--	GATE_LINK(HCLK_ISP1_PRE, "hclk_isp1_pre", "hclk_isp1_root", "hclk_vi_root", 0, RK3588_CLKGATE_CON(26), 8, GFLAGS),
--	GATE_LINK(HCLK_NVM, "hclk_nvm", "hclk_nvm_root", "aclk_nvm_root", RK3588_LINKED_CLK, RK3588_CLKGATE_CON(31), 2, GFLAGS),
--	GATE_LINK(ACLK_USB, "aclk_usb", "aclk_usb_root", "aclk_vo1usb_top_root", 0, RK3588_CLKGATE_CON(42), 2, GFLAGS),
--	GATE_LINK(HCLK_USB, "hclk_usb", "hclk_usb_root", "hclk_vo1usb_top_root", 0, RK3588_CLKGATE_CON(42), 3, GFLAGS),
--	GATE_LINK(ACLK_JPEG_DECODER_PRE, "aclk_jpeg_decoder_pre", "aclk_jpeg_decoder_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(44), 7, GFLAGS),
--	GATE_LINK(ACLK_VDPU_LOW_PRE, "aclk_vdpu_low_pre", "aclk_vdpu_low_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(44), 5, GFLAGS),
--	GATE_LINK(ACLK_RKVENC1_PRE, "aclk_rkvenc1_pre", "aclk_rkvenc1_root", "aclk_rkvenc0", 0, RK3588_CLKGATE_CON(48), 3, GFLAGS),
--	GATE_LINK(HCLK_RKVENC1_PRE, "hclk_rkvenc1_pre", "hclk_rkvenc1_root", "hclk_rkvenc0", 0, RK3588_CLKGATE_CON(48), 2, GFLAGS),
--	GATE_LINK(HCLK_RKVDEC0_PRE, "hclk_rkvdec0_pre", "hclk_rkvdec0_root", "hclk_vdpu_root", 0, RK3588_CLKGATE_CON(40), 5, GFLAGS),
--	GATE_LINK(ACLK_RKVDEC0_PRE, "aclk_rkvdec0_pre", "aclk_rkvdec0_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(40), 6, GFLAGS),
--	GATE_LINK(HCLK_RKVDEC1_PRE, "hclk_rkvdec1_pre", "hclk_rkvdec1_root", "hclk_vdpu_root", 0, RK3588_CLKGATE_CON(41), 4, GFLAGS),
--	GATE_LINK(ACLK_RKVDEC1_PRE, "aclk_rkvdec1_pre", "aclk_rkvdec1_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(41), 5, GFLAGS),
--	GATE_LINK(ACLK_HDCP0_PRE, "aclk_hdcp0_pre", "aclk_vo0_root", "aclk_vop_low_root", 0, RK3588_CLKGATE_CON(55), 9, GFLAGS),
--	GATE_LINK(HCLK_VO0, "hclk_vo0", "hclk_vo0_root", "hclk_vop_root", 0, RK3588_CLKGATE_CON(55), 5, GFLAGS),
--	GATE_LINK(ACLK_HDCP1_PRE, "aclk_hdcp1_pre", "aclk_hdcp1_root", "aclk_vo1usb_top_root", 0, RK3588_CLKGATE_CON(59), 6, GFLAGS),
--	GATE_LINK(HCLK_VO1, "hclk_vo1", "hclk_vo1_root", "hclk_vo1usb_top_root", 0, RK3588_CLKGATE_CON(59), 9, GFLAGS),
--	GATE_LINK(ACLK_AV1_PRE, "aclk_av1_pre", "aclk_av1_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(68), 1, GFLAGS),
--	GATE_LINK(PCLK_AV1_PRE, "pclk_av1_pre", "pclk_av1_root", "hclk_vdpu_root", 0, RK3588_CLKGATE_CON(68), 4, GFLAGS),
--	GATE_LINK(HCLK_SDIO_PRE, "hclk_sdio_pre", "hclk_sdio_root", "hclk_nvm", 0, RK3588_CLKGATE_CON(75), 1, GFLAGS),
-+	/*
-+	 * Recent Rockchip SoCs have a new hardware block called Native Interface
-+	 * Unit (NIU), which gates clocks to devices behind them. These effectively
-+	 * need two parent clocks.
-+	 */
-+	GATE_LINK(ACLK_ISP1_PRE, "aclk_isp1_pre", "aclk_isp1_root", ACLK_VI_ROOT, 0,
-+			RK3588_CLKGATE_CON(26), 6, GFLAGS),
-+	GATE_LINK(HCLK_ISP1_PRE, "hclk_isp1_pre", "hclk_isp1_root", HCLK_VI_ROOT, 0,
-+			RK3588_CLKGATE_CON(26), 8, GFLAGS),
-+	GATE_LINK(HCLK_NVM, "hclk_nvm", "hclk_nvm_root", ACLK_NVM_ROOT, 0,
-+			RK3588_CLKGATE_CON(31), 2, GFLAGS),
-+	GATE_LINK(ACLK_USB, "aclk_usb", "aclk_usb_root", ACLK_VO1USB_TOP_ROOT, 0,
-+			RK3588_CLKGATE_CON(42), 2, GFLAGS),
-+	GATE_LINK(HCLK_USB, "hclk_usb", "hclk_usb_root", HCLK_VO1USB_TOP_ROOT, 0,
-+			RK3588_CLKGATE_CON(42), 3, GFLAGS),
-+	GATE_LINK(ACLK_JPEG_DECODER_PRE, "aclk_jpeg_decoder_pre", "aclk_jpeg_decoder_root", ACLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(44), 7, GFLAGS),
-+	GATE_LINK(ACLK_VDPU_LOW_PRE, "aclk_vdpu_low_pre", "aclk_vdpu_low_root", ACLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(44), 5, GFLAGS),
-+	GATE_LINK(ACLK_RKVENC1_PRE, "aclk_rkvenc1_pre", "aclk_rkvenc1_root", ACLK_RKVENC0, 0,
-+			RK3588_CLKGATE_CON(48), 3, GFLAGS),
-+	GATE_LINK(HCLK_RKVENC1_PRE, "hclk_rkvenc1_pre", "hclk_rkvenc1_root", HCLK_RKVENC0, 0,
-+			RK3588_CLKGATE_CON(48), 2, GFLAGS),
-+	GATE_LINK(HCLK_RKVDEC0_PRE, "hclk_rkvdec0_pre", "hclk_rkvdec0_root", HCLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(40), 5, GFLAGS),
-+	GATE_LINK(ACLK_RKVDEC0_PRE, "aclk_rkvdec0_pre", "aclk_rkvdec0_root", ACLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(40), 6, GFLAGS),
-+	GATE_LINK(HCLK_RKVDEC1_PRE, "hclk_rkvdec1_pre", "hclk_rkvdec1_root", HCLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(41), 4, GFLAGS),
-+	GATE_LINK(ACLK_RKVDEC1_PRE, "aclk_rkvdec1_pre", "aclk_rkvdec1_root", ACLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(41), 5, GFLAGS),
-+	GATE_LINK(ACLK_HDCP0_PRE, "aclk_hdcp0_pre", "aclk_vo0_root", ACLK_VOP_LOW_ROOT, 0,
-+			RK3588_CLKGATE_CON(55), 9, GFLAGS),
-+	GATE_LINK(HCLK_VO0, "hclk_vo0", "hclk_vo0_root", HCLK_VOP_ROOT, 0,
-+			RK3588_CLKGATE_CON(55), 5, GFLAGS),
-+	GATE_LINK(ACLK_HDCP1_PRE, "aclk_hdcp1_pre", "aclk_hdcp1_root", ACLK_VO1USB_TOP_ROOT, 0,
-+			RK3588_CLKGATE_CON(59), 6, GFLAGS),
-+	GATE_LINK(HCLK_VO1, "hclk_vo1", "hclk_vo1_root", HCLK_VO1USB_TOP_ROOT, 0,
-+			RK3588_CLKGATE_CON(59), 9, GFLAGS),
-+	GATE_LINK(ACLK_AV1_PRE, "aclk_av1_pre", "aclk_av1_root", ACLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(68), 1, GFLAGS),
-+	GATE_LINK(PCLK_AV1_PRE, "pclk_av1_pre", "pclk_av1_root", HCLK_VDPU_ROOT, 0,
-+			RK3588_CLKGATE_CON(68), 4, GFLAGS),
-+	GATE_LINK(HCLK_SDIO_PRE, "hclk_sdio_pre", "hclk_sdio_root", HCLK_NVM, 0,
-+			RK3588_CLKGATE_CON(75), 1, GFLAGS),
-+	GATE_LINK(PCLK_VO0GRF, "pclk_vo0grf", "pclk_vo0_root", HCLK_VO0, CLK_IGNORE_UNUSED,
-+			RK3588_CLKGATE_CON(55), 10, GFLAGS),
-+	GATE_LINK(PCLK_VO1GRF, "pclk_vo1grf", "pclk_vo1_root", HCLK_VO1, CLK_IGNORE_UNUSED,
-+			RK3588_CLKGATE_CON(59), 12, GFLAGS),
- };
- 
- static void __init rk3588_clk_init(struct device_node *np)
-diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-index b5616bca7b44..864a321ab362 100644
---- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
-+++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-@@ -733,8 +733,9 @@
- #define ACLK_AV1_PRE			718
- #define PCLK_AV1_PRE			719
- #define HCLK_SDIO_PRE			720
-+#define PCLK_VO1GRF			721
- 
--#define CLK_NR_CLKS			(HCLK_SDIO_PRE + 1)
-+#define CLK_NR_CLKS			(PCLK_VO1GRF + 1)
- 
- /* scmi-clocks indices */
- 
--- 
-2.17.1
+> 
+> Thank you!
+> Arkadiusz
+> 
+> [...]
 
