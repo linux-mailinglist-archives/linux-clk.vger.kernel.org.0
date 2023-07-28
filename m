@@ -2,230 +2,260 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46A7766972
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Jul 2023 11:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BA3766A4B
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Jul 2023 12:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbjG1Jz3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 28 Jul 2023 05:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S235798AbjG1KYz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 28 Jul 2023 06:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbjG1JzV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 28 Jul 2023 05:55:21 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B782736;
-        Fri, 28 Jul 2023 02:55:19 -0700 (PDT)
+        with ESMTP id S235864AbjG1KXE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 28 Jul 2023 06:23:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16AB3A8C;
+        Fri, 28 Jul 2023 03:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690538119; x=1722074119;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1OmnQPMoXZt/TzDOykdmCXNuKgxi35ktPqla2lfWNds=;
-  b=DoJfLHLfgNBLmYYa64GzBeBqCVzfmzLlN6MUS1QUSq3yFrFGxzAMf8wy
-   RQM9OxJNcIZYX9ZqUm4m84c2FHW0bFuULbICdi4LdRedaKu7WDVMHn57v
-   D77HMHLKwc03sJw2b59OXJjpIbXWPfoUDykpersnRlsfu8o9rl+5DqHJU
-   YtL2Lu+XStov6X1zxPneI4263RsG5ihg47BRLfEgc4Hln5KGfqBp43KIJ
-   FOJILXu9Sw0yt79elJUTVsZgEIUuO1B6SUULH5C+Fvjz6p2wvJ/bIDQrt
-   pkHYDITOqOhLPtqpznu32SE/hj5Me/uLi7oipjdwyte4qDCJQv7K4SVIK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="454915306"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1690539782; x=1722075782;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UoywkU2z5PUFwZqyn1H/+6DtaE/kYe+OTAC03fuk89g=;
+  b=BeXH80mcxznYo+DWNMtW9sR3im7fe7QY3Mnn40Lg4OAH69tfWjIS/30R
+   LrPVV9XPasECFJTnPINc7pA12gg0044hwh6ilbazMnyqSyepd+KN4ud4T
+   zvSBLLUKoxWdCU8CGKbReAru7dlSfIisCj/FGO3khAUZpx50nsPFT2OfN
+   1lW46y2RdNJpHp1ibfLZb28y3FZiAd4y1KVg8jefeUkhB3iA4/sGPph/+
+   jekJssQFxocOEbTsQNFGdxEg26CeVPmI1P2XRRIpMYBS6dDPcuFrANgc7
+   LAP+hISm9LzTvzw4cNtqkj6JdLJ+THdRQ2vO3fqw/b4jh698XKVb9yPlr
+   w==;
 X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="454915306"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 02:55:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="792874749"
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="792874749"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jul 2023 02:55:17 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+   d="scan'208";a="227046811"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2023 03:22:59 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 28 Jul 2023 02:55:16 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Fri, 28 Jul 2023 02:55:16 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Fri, 28 Jul 2023 02:55:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jmsFWl7aS8CznqQuQKvmJBQwS0b5lvDN39T/36qY5B1HEIWl96/6yyEJetYHGmvmdjXf+42lJ0jqFyRFykHS2GAUjENT01vL/MC5HLcTCe9QMiOLYibu4XWHg+yYoywHHlXLa5HtBad9YsfHFz8EBRBamCVNI5jl8pjhFhIjN7ZOQI6XI7L2YvhGdiwn8Hd8cM/QqsmaBEg0tokdcRd8p2lPkrVNhBbjHJhWJBfGdACNklH30WQcddVAM1eX5MaHQZsBi3Q1jUEH2UWWInsCbteU2ZttYwONd9QqEvqamXVbBAwzeN8Q7d1Iuy5EkCnTNogOBXjoHHTBY0sqrLuqDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1OmnQPMoXZt/TzDOykdmCXNuKgxi35ktPqla2lfWNds=;
- b=A7GSWTNLic8HeLwiJ3dg2QVrSaZx1OVFpgwlXoGt7zEOOrxvwU7NeejhQ1bxWfR/5DpfEz5Vb1Q0Nuupk5IMMXa+po8UCS4LmuDl9ABvPjaZgvDxeZzY8xYXQ2NRkGzLW0oK3OZFifDBY2UfsJZo1XMtqiKvVwecPDZ8xwB7sLpoKAjiulDIfHPvWzlmXRtjz91Zj/Aon/6DsQYvubhMdQdlemAvDrFDLLODHTXR78ebvXTrOpWjpnQ7g6UxGR80lYkpWvi35h42HrNgt28Dggj+GJmf/DfM7a/bvAjtUr5F4Li10P6xIPb5qOA7Nsz4b/0e7o1XCpCxIPV2kFY38Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4657.namprd11.prod.outlook.com (2603:10b6:5:2a6::7) by
- PH7PR11MB8124.namprd11.prod.outlook.com (2603:10b6:510:237::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.29; Fri, 28 Jul 2023 09:55:13 +0000
-Received: from DM6PR11MB4657.namprd11.prod.outlook.com
- ([fe80::c3cd:b8d0:5231:33a8]) by DM6PR11MB4657.namprd11.prod.outlook.com
- ([fe80::c3cd:b8d0:5231:33a8%5]) with mapi id 15.20.6631.026; Fri, 28 Jul 2023
- 09:55:13 +0000
-From:   "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     "kuba@kernel.org" <kuba@kernel.org>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "vadfed@fb.com" <vadfed@fb.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
-Subject: RE: [RFC PATCH v9 07/10] ice: add admin commands to access cgu
- configuration
-Thread-Topic: [RFC PATCH v9 07/10] ice: add admin commands to access cgu
- configuration
-Thread-Index: AQHZpdAYC1znvtigRE6MFYa5Ra1vVa/OU6cAgADLGvA=
-Date:   Fri, 28 Jul 2023 09:55:13 +0000
-Message-ID: <DM6PR11MB465760932106C0719648B3FA9B06A@DM6PR11MB4657.namprd11.prod.outlook.com>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <20230623123820.42850-8-arkadiusz.kubalewski@intel.com>
- <CACRpkdar39x8nd5cWEDiFDHwLqHghUQZqkR0rEcv2-sZOZZ0KQ@mail.gmail.com>
-In-Reply-To: <CACRpkdar39x8nd5cWEDiFDHwLqHghUQZqkR0rEcv2-sZOZZ0KQ@mail.gmail.com>
-Accept-Language: pl-PL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4657:EE_|PH7PR11MB8124:EE_
-x-ms-office365-filtering-correlation-id: 2c43a8dd-4dd4-4822-a917-08db8f50bcd1
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hGtTaIp0NIV3tOpUDL4bmWopnpOuA6fo6zKlEzzY/PEBFIWz+nzZDHp/CT6go044AXnsM95M76b+1oz/S7DSo2NxQBpLsIx/Xqq9QAULHuVB7b058An+he/KQwYlYXT5J6IgrCfwdJLAhUW/iyKyMm+Rss+cnH/QRzqs0j6HQHYyQKcLmVCfUFPzxK3QCPcXyULRGjtLgaFjaByaynKUKZkzJ+xzhANfbhhkrweirRGPS0rxFBTIVLK9WA+876BeH9+FTLLs1LdVGvBWTkLggya8/9KpyjKFxHJ3d/agTQ/tC1PbFGqoLOE+FVLjJ5/s/Jc/To8oYfrWG9gMwGyOiOLlqQiA2tK0CD3BzjaHO9gJm3ro+3DphRHrTZzXazxKzTxF37/GQqFEb5XjJ79CL4/grfkxXkg/SYzddEavCk1FuCfd1dOex/C3S8OTv+Ao8ZwcPK5Y2wQt0vj3mxbRu2Odxk+kb0kfiLSYSuvfvptCKNSUNchJIDUgNsaZAxQUcDbkudBTaANlbOBoOdlX+/Q+4iJ6uqXQ9GEsXj1NEs0uNkKv/NLVUCvp4R5b+6KD5GGgr8c+JFGXTVU/mYSgT9y5/zKb43tfLa61mOUN5qV0mel3AkEWVBJ+kP7Vamlu
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(396003)(136003)(376002)(346002)(451199021)(8676002)(8936002)(86362001)(41300700001)(33656002)(4744005)(2906002)(6506007)(7406005)(7416002)(186003)(55016003)(5660300002)(52536014)(82960400001)(7696005)(478600001)(76116006)(6916009)(4326008)(64756008)(66946007)(66476007)(66556008)(66446008)(38070700005)(71200400001)(122000001)(38100700002)(54906003)(316002)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VzU0VGQzZDZzY2p0YzVaV1NGclFCWEJsbEpUM3llOXdBSGo0Q05xUzdyV3Ru?=
- =?utf-8?B?N3dhN09zK1UwN0drbFJKTzFQbEQydnFPbWJjR1JRVVk0WDI1TlI2cGJ5V2tG?=
- =?utf-8?B?UHBTLzZFWG9tZU1DQTA0UFZzakhFenZPdFBESTM1TU5IM0N3NTNIYU1DMHMv?=
- =?utf-8?B?VStxUHdEampiMEJGbXpNZVJHK0VUZTZWOWx5NGNLR21ObkRkWFlucjF0d29X?=
- =?utf-8?B?UVp2Qjl4ckxZSURMMG5VSElTVW9IVFZMQUpBQnozNTkvRE95V2pHdGFwTHpB?=
- =?utf-8?B?NjdFNVg3YmlQd3ZBdExNNDVHWG9UbEkzRlR3VkdLblV6V1MrS3hpNlIrbGNI?=
- =?utf-8?B?blpiSlJ1SkNZQlArR1RVTjhHZVNYVjcweEF2bW9KYUhyYzVFa2VSSzF5Nlh0?=
- =?utf-8?B?VkRJN21DNlJnd20vT1hoSlBwcHp5b1RGZGNaRVE5aGVGdGNENVFOQ0t5ZHNP?=
- =?utf-8?B?ajdtRHpqS3VaWWNXSzhBbDI2eGQrTEN6aU9LcHM1dnBKNEhUeitIeHhDT1ZY?=
- =?utf-8?B?aWtiTHR4NzQrbmkwR0gydXdmYlhNd0piaTdMT2VST2JLeGx2ZGFzTWRkQ3kr?=
- =?utf-8?B?VW9FOWU1UytvY01TV0NZUzRHZ0FoYnNvbXljUXA0NlgyZEoyQkRJU080QlIw?=
- =?utf-8?B?UytscVFleXJuNjBqTTZOSVlWZERZbnlPYUpUM0ZON2s5MGg2MFVhZENHNzZL?=
- =?utf-8?B?NThNdDliVmQxQUlobWVaZ1QxK0tVd2JGL2Q5dEs5ZDJFa1ZCaXk5U0FUc3Rj?=
- =?utf-8?B?cnE3b0VkOU8wNUtWMmk0SXlDaEhLejNOZVZUMWdyckp1WDdrcTJsVFduNXRM?=
- =?utf-8?B?TEt3bitFTHpyOTNUT1g4czFvaGVVR0EvK1ZESStUKzVmdmZGaEZna3FkS1pq?=
- =?utf-8?B?ZTZWT0YrQm1xdDdnNDVoZGlFcmg5TlFPQnMyYkxDN0tzSWRMYmhXc0ZSMm9F?=
- =?utf-8?B?am5uTHR2cWRIVjdnMGFjaTlEWW5PbklTR1NOMHRia3pIK1FGZFlVSXpMcTN1?=
- =?utf-8?B?QjJYSVBzY0NmdjdHenBIMTB0L3g1eWtySzhnc3I4KzVrdVh2MGtxdmI0akNX?=
- =?utf-8?B?SWRIenJ0NVNvbnlHSldwcTFwendzOERaVlVicHJPQVRYWkYrbGRwT08zeHVG?=
- =?utf-8?B?U0dxREVWc3JaRFNTTWtSMjF6aEJ6dlpHUG5ZOWxxZ3VtUFBmMWFibGlPaktM?=
- =?utf-8?B?Qlp6RUtUNnRHOWJnM2pUSVpUaDB2d2JSWDkzQnV1cFhpaGM2TmxUUTkzOEwr?=
- =?utf-8?B?Rkd5QlFvb3hNVld4TU5FWWw4VW5oejZHZWZyc3lVU2lZS21GNlhlRGErOG1N?=
- =?utf-8?B?VWZTRzZvbVZCcjN5TEtGdWtZNU0rTnlvOGhtYk9paXkyanlJbk9EeVlBZmlx?=
- =?utf-8?B?WnRBdzhVb210anQ4TEc3V0xqcjczVklWMFViYzIzejhyVGhJc2Z3YUdSRFRO?=
- =?utf-8?B?N1l4TnZxNldWakF1T2NMckxPQVFFd24vQUNDT3VtTHUzS29LQld0YmFqYUVQ?=
- =?utf-8?B?N3czTjNQS1VFNU1mZDJGZS8wQjVFSWJmL1hYMWllRkVBb0dmSVBhbHNTS1Zn?=
- =?utf-8?B?TDhaZHVuMktQYUZLYnZpU0VxaFZjSDQ2UnpIQjhtZldqZXR1RjJKU25oTjhN?=
- =?utf-8?B?QmN5Vk5LVm9FOTB0OSt4TTlkYWJ1UWhoaHNHTXdkRFFnbS9VbVg1ZDNyMTc5?=
- =?utf-8?B?WmN1aG5ERE40RUNmTm5Fd0JVL2g0ZVpBN1R2dnVUK1J3Z1pvc3F0WDlFUWZa?=
- =?utf-8?B?Mmh6MktZZXdKQWVGRmo2L05vU05VNmEyZ2s2SEFoMkpuRnQvRFp1RTJRSDlk?=
- =?utf-8?B?R3R0TGtkUnhCT0FLaW1ybDhTNUtIYlZqODZOMXQwV05VTGlzV2RlZHdtbTlm?=
- =?utf-8?B?bVZRNld2dTdReE5pbXptdjNvU3gxbEMxVWhFKy9lc0pFcUlFZE1mSGFPakJX?=
- =?utf-8?B?MjFlNGd0VE8yeG9qMUlTMUJEblBtSm1mREE4ZjgyaktzY1pOZTM4MzQvNzBv?=
- =?utf-8?B?ZjFaa0N3WTZMVS9NYjNSalVRbUpXWE5XT0V0NW9Ub2dxTkltWkVrM1RUczBK?=
- =?utf-8?B?VDRaR0tyaU5GMUNpVGNCR3ZhTFlidlJWbjY1cWNjZUY2OEplSUY0RTRMazR3?=
- =?utf-8?B?NnUxNGFEWVJ0Uzhob3ZVVWJXR3RSemtrZG5raFJtdjBKU0pJQ2M4MS9PV0hx?=
- =?utf-8?B?NklnbFBMQUdsU1liTkVJWEx0bFp6dGU0b3NjM0ppNys4QmN2cHIySFd5T0tX?=
- =?utf-8?B?NkZ0Qy9yNlorUVpxVG1aZjZvTEJRPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 15.1.2507.21; Fri, 28 Jul 2023 03:22:55 -0700
+Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 28 Jul 2023 03:22:30 -0700
+From:   Varshini Rajendran <varshini.rajendran@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <vkoul@kernel.org>, <andi.shyti@kernel.org>, <tglx@linutronix.de>,
+        <maz@kernel.org>, <lee@kernel.org>, <ulf.hansson@linaro.org>,
+        <tudor.ambarus@linaro.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <linus.walleij@linaro.org>,
+        <sre@kernel.org>, <p.zabel@pengutronix.de>, <olivia@selenic.com>,
+        <a.zummo@towertech.it>, <radu_nicolae.pirea@upb.ro>,
+        <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <linux@armlinux.org.uk>, <durai.manickamkr@microchip.com>,
+        <varshini.rajendran@microchip.com>, <andrew@lunn.ch>,
+        <jerry.ray@microchip.com>, <andre.przywara@arm.com>,
+        <mani@kernel.org>, <alexandre.torgue@st.com>,
+        <gregory.clement@bootlin.com>, <arnd@arndb.de>,
+        <rientjes@google.com>, <deller@gmx.de>, <42.hyeyoo@gmail.com>,
+        <vbabka@suse.cz>, <mripard@kernel.org>, <mihai.sain@microchip.com>,
+        <codrin.ciubotariu@microchip.com>, <eugen.hristev@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-usb@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+Subject: [PATCH v3 00/50] Add support for sam9x7 SoC family
+Date:   Fri, 28 Jul 2023 15:52:23 +0530
+Message-ID: <20230728102223.265216-1-varshini.rajendran@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4657.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2c43a8dd-4dd4-4822-a917-08db8f50bcd1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jul 2023 09:55:13.0561
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FE2H+rQ4/2qSuZVKn+t0rQqQji2qWOdu5QhBLOYMdmifjTVqNuEuU8iQUPluGQmOmtXVWw1wqTnAXc44fnttRGSDINbEAt80bHHmvtATprA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8124
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-PkZyb206IExpbnVzIFdhbGxlaWogPGxpbnVzLndhbGxlaWpAbGluYXJvLm9yZz4NCj5TZW50OiBU
-aHVyc2RheSwgSnVseSAyNywgMjAyMyAxMToxNyBQTQ0KPg0KPkhpIEFya2FkaXVzeiwNCj4NCj5P
-biBGcmksIEp1biAyMywgMjAyMyBhdCAyOjQ14oCvUE0gQXJrYWRpdXN6IEt1YmFsZXdza2kNCj48
-YXJrYWRpdXN6Lmt1YmFsZXdza2lAaW50ZWwuY29tPiB3cm90ZToNCj4NCj4+ICsvKioNCj4+ICsg
-KiBjb252ZXJ0X3M0OF90b19zNjQgLSBjb252ZXJ0IDQ4IGJpdCB2YWx1ZSB0byA2NCBiaXQgdmFs
-dWUNCj4+ICsgKiBAc2lnbmVkXzQ4OiBzaWduZWQgNjQgYml0IHZhcmlhYmxlIHN0b3Jpbmcgc2ln
-bmVkIDQ4IGJpdCB2YWx1ZQ0KPj4gKyAqDQo+PiArICogQ29udmVydCBzaWduZWQgNDggYml0IHZh
-bHVlIHRvIGl0cyA2NCBiaXQgcmVwcmVzZW50YXRpb24uDQo+PiArICoNCj4+ICsgKiBSZXR1cm46
-IHNpZ25lZCA2NCBiaXQgcmVwcmVzZW50YXRpb24gb2Ygc2lnbmVkIDQ4IGJpdCB2YWx1ZS4NCj4+
-ICsgKi8NCj4+ICtzdGF0aWMgczY0IGNvbnZlcnRfczQ4X3RvX3M2NChzNjQgc2lnbmVkXzQ4KQ0K
-Pj4gK3sNCj4+ICsgICAgICAgcmV0dXJuIHNpZ25lZF80OCAmIEJJVF9VTEwoNDcpID8NCj4+ICsg
-ICAgICAgICAgICAgICBHRU5NQVNLX1VMTCg2MywgNDgpIHwgc2lnbmVkXzQ4IDogc2lnbmVkXzQ4
-Ow0KPj4gK30NCj4NCj5DYW4ndCB5b3UganVzdCB1c2Ugc2lnbl9leHRlbmQ2NCgpIGZyb20gPGxp
-bnV4L2JpdG9wcy5oPg0KPnBhc3NpbmcgYml0IDQ4IGFzIHNpZ24gYml0IGlzdGVhZCBvZiBpbnZl
-bnRpbmcgdGhpcz8NCj4NCg0KSGkgTGludXMsDQoNCkZpcnN0IG9mIGFsbCwgc29ycnkgZm9yIGxh
-dGUgYW5zd2VyLg0KV2VsbCwgWWVzIGl0IHNlZW1zIEkgY2FuIDopDQpUaGFuayB5b3UgZm9yIHBv
-aW50aW5nIHRoaXMgb3V0IQ0KQXJrYWRpdXN6DQoNCj5Zb3VycywNCj5MaW51cyBXYWxsZWlqDQo=
+This patch series adds support for the new SoC family - sam9x7.
+ - The device tree, configs and drivers are added
+ - Clock driver for sam9x7 is added
+ - Support for basic peripherals is added
+ - Target board SAM9X75 Curiosity is added
+
+ Changes in v3:
+ --------------
+
+ - Fixed the DT documentation errors pointed out in v2.
+ - Dropped Acked-by tag in tcb DT doc patch as it had to be adapted
+   according to sam9x7 correctly.
+ - Picked by the previously missed tags.
+ - Dropped this patch "dt-bindings: usb: generic-ehci: Document clock-names
+   property" as the warning was not found while validating DT-schema for
+   at91-sam9x75_curiosity.dtb.
+ - Dropped redundant words in the commit message.
+ - Fixed the CHECK_DTBS warnings validated against
+   at91-sam9x75_curiosity.dtb.
+ - Renamed dt nodes according to naming convention.
+ - Dropped unwanted status property in dts.
+ - Removed nodes that are not in use from the board dts.
+ - Removed spi DT doc patch from the series as it was already applied
+   and a fix patch was applied subsequently. Added a patch to remove the
+   compatible to adapt sam9x7.
+ - Added sam9x7 compatibles in usb dt documentation.
+
+
+ Changes in v2:
+ --------------
+
+ - Added sam9x7 specific compatibles in DT with fallbacks
+ - Documented all the newly added DT compatible strings
+ - Added device tree for the target board sam9x75 curiosity and
+   documented the same in the DT bindings documentation
+ - Removed the dt nodes that are not supported at the moment
+ - Removed the configs added by previous version that are not supported
+   at the moment
+ - Fixed all the corrections in the commit message
+ - Changed all the instances of copyright year to 2023
+ - Added sam9x7 flag in PIT64B configuration
+ - Moved macro definitions to header file
+ - Added another divider in mck characteristics in the pmc driver
+ - Fixed the memory leak in the pmc driver
+ - Dropped patches that are no longer needed
+ - Picked up Acked-by and Reviewed-by tags
+
+
+Hari Prasath (1):
+  irqchip/atmel-aic5: Add support for sam9x7 aic
+
+Varshini Rajendran (49):
+  dt-bindings: microchip: atmel,at91rm9200-tcb: add sam9x60, sam9x7
+    compatible
+  dt-bindings: usb: ehci: Add atmel at91sam9g45-ehci compatible
+  dt-bindings: net: cdns,macb: add sam9x7 ethernet interface
+  dt-bindings: clk: at91: add sam9x7
+  dt-bindings: clk: at91: add sam9x7 clock controller
+  dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: add sam9x7
+  dt-bindings: atmel-sysreg: add sam9x7
+  dt-bindings: crypto: add sam9x7 in Atmel AES
+  dt-bindings: crypto: add sam9x7 in Atmel SHA
+  dt-bindings: crypto: add sam9x7 in Atmel TDES
+  dt-bindings: dmaengine: at_xdmac: add compatible with microchip,sam9x7
+  dt-bindings: i2c: at91: Add sam9x7 compatible string
+  dt-bindings: mfd: at91: Add SAM9X7 compatible string
+  dt-bindings: atmel-gpbr: add microchip,sam9x7-gpbr
+  dt-bindings: atmel-matrix: add microchip,sam9x7-matrix
+  dt-bindings: atmel-smc: add microchip,sam9x7-smc
+  dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
+  dt-bindings: sdhci-of-at91: add microchip,sam9x7-sdhci
+  dt-bindings: atmel-nand: add microchip,sam9x7-pmecc
+  dt-bindings: pinctrl: at91: add sam9x7
+  dt-bindings: rng: atmel,at91-trng: add sam9x7 TRNG
+  dt-bindings: rtc: at91rm9200: add sam9x7 compatible
+  dt-bindings: rtt: at91rm9260: add sam9x7 compatible
+  dt-bindings: serial: atmel,at91-usart: add compatible for sam9x7
+  dt-bindings: atmel-classd: add sam9x7 compatible
+  dt-bindings: usb: atmel: add sam9x7
+  dt-bindings: watchdog: sama5d4-wdt: add compatible for sam9x7-wdt
+  dt-bindings: irqchip/atmel-aic5: Add support for sam9x7 aic
+  spi: dt-bindings: atmel,at91rm9200-spi: remove 9x60 compatible from
+    list
+  ASoC: dt-bindings: microchip: add sam9x7
+  dt-bindings: usb: ehci: Add sam9x7
+  dt-bindings: usb: add sam9x7
+  ARM: at91: pm: add support for sam9x7 SoC family
+  ARM: at91: pm: add sam9x7 SoC init config
+  ARM: at91: add support in SoC driver for new sam9x7
+  clk: at91: clk-sam9x60-pll: re-factor to support individual core freq
+    outputs
+  clk: at91: sam9x7: add support for HW PLL freq dividers
+  clk: at91: sama7g5: move mux table macros to header file
+  clk: at91: sam9x7: Allow PLLs to be exported and referenced in DT
+  clk: at91: sam9x7: add sam9x7 pmc driver
+  power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
+  power: reset: at91-reset: add reset support for sam9x7 SoC
+  power: reset: at91-reset: add sdhwc support for sam9x7 SoC
+  ARM: at91: Kconfig: add config flag for SAM9X7 SoC
+  ARM: configs: at91: enable config flags for sam9x7 SoC family
+  ARM: dts: at91: sam9x7: add device tree for SoC
+  dt-bindings: arm: add sam9x75 curiosity board
+  ARM: dts: at91: sam9x75_curiosity: add sam9x75 curiosity board
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt |    7 +-
+ .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    1 +
+ .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    3 +
+ .../crypto/atmel,at91sam9g46-aes.yaml         |    6 +-
+ .../crypto/atmel,at91sam9g46-sha.yaml         |    6 +-
+ .../crypto/atmel,at91sam9g46-tdes.yaml        |    6 +-
+ .../devicetree/bindings/dma/atmel-xdma.txt    |    3 +-
+ .../bindings/i2c/atmel,at91sam-i2c.yaml       |    4 +
+ .../interrupt-controller/atmel,aic.txt        |    2 +-
+ .../devicetree/bindings/mfd/atmel-flexcom.txt |    1 +
+ .../devicetree/bindings/mfd/atmel-gpbr.txt    |    1 +
+ .../devicetree/bindings/mfd/atmel-matrix.txt  |    1 +
+ .../devicetree/bindings/mfd/atmel-smc.txt     |    1 +
+ .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
+ .../devicetree/bindings/mmc/sdhci-atmel.txt   |    4 +-
+ .../devicetree/bindings/mtd/atmel-nand.txt    |    1 +
+ .../devicetree/bindings/net/cdns,macb.yaml    |    6 +
+ .../bindings/pinctrl/atmel,at91-pinctrl.txt   |    2 +
+ .../power/reset/atmel,sama5d2-shdwc.yaml      |    3 +
+ .../reset/atmel,at91sam9260-reset.yaml        |    4 +
+ .../bindings/rng/atmel,at91-trng.yaml         |    4 +
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |   18 +-
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |    3 +
+ .../bindings/serial/atmel,at91-usart.yaml     |    9 +
+ .../soc/microchip/atmel,at91rm9200-tcb.yaml   |   21 +-
+ .../bindings/sound/atmel,sama5d2-classd.yaml  |    7 +-
+ .../sound/microchip,sama7g5-i2smcc.yaml       |   11 +-
+ .../bindings/spi/atmel,at91rm9200-spi.yaml    |    1 -
+ .../devicetree/bindings/usb/atmel-usb.txt     |   11 +-
+ .../devicetree/bindings/usb/generic-ehci.yaml |    7 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |    6 +
+ .../bindings/watchdog/atmel,sama5d4-wdt.yaml  |   15 +-
+ arch/arm/boot/dts/microchip/Makefile          |    5 +
+ .../dts/microchip/at91-sam9x75_curiosity.dts  |  311 +++++
+ arch/arm/boot/dts/microchip/sam9x7.dtsi       | 1238 +++++++++++++++++
+ arch/arm/configs/at91_dt_defconfig            |    1 +
+ arch/arm/mach-at91/Kconfig                    |   23 +-
+ arch/arm/mach-at91/Makefile                   |    1 +
+ arch/arm/mach-at91/generic.h                  |    2 +
+ arch/arm/mach-at91/pm.c                       |   35 +
+ arch/arm/mach-at91/sam9x7.c                   |   34 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-sam9x60-pll.c            |   50 +-
+ drivers/clk/at91/pmc.h                        |   18 +
+ drivers/clk/at91/sam9x60.c                    |    7 +
+ drivers/clk/at91/sam9x7.c                     |  946 +++++++++++++
+ drivers/clk/at91/sama7g5.c                    |   42 +-
+ drivers/irqchip/irq-atmel-aic5.c              |   10 +
+ drivers/power/reset/Kconfig                   |    4 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
+ drivers/soc/atmel/soc.c                       |   23 +
+ drivers/soc/atmel/soc.h                       |    9 +
+ include/dt-bindings/clock/at91.h              |    4 +
+ 54 files changed, 2871 insertions(+), 76 deletions(-)
+ create mode 100644 arch/arm/boot/dts/microchip/at91-sam9x75_curiosity.dts
+ create mode 100644 arch/arm/boot/dts/microchip/sam9x7.dtsi
+ create mode 100644 arch/arm/mach-at91/sam9x7.c
+ create mode 100644 drivers/clk/at91/sam9x7.c
+
+-- 
+2.25.1
+
