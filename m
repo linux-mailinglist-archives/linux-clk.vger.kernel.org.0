@@ -2,172 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2447695FE
-	for <lists+linux-clk@lfdr.de>; Mon, 31 Jul 2023 14:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD22769604
+	for <lists+linux-clk@lfdr.de>; Mon, 31 Jul 2023 14:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjGaMT7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 31 Jul 2023 08:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
+        id S232359AbjGaMUd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 31 Jul 2023 08:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbjGaMTz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 31 Jul 2023 08:19:55 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E18171C
-        for <linux-clk@vger.kernel.org>; Mon, 31 Jul 2023 05:19:46 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so49460585e9.3
-        for <linux-clk@vger.kernel.org>; Mon, 31 Jul 2023 05:19:46 -0700 (PDT)
+        with ESMTP id S232276AbjGaMUc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 31 Jul 2023 08:20:32 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960CC19B0
+        for <linux-clk@vger.kernel.org>; Mon, 31 Jul 2023 05:20:16 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe0e34f498so6797481e87.2
+        for <linux-clk@vger.kernel.org>; Mon, 31 Jul 2023 05:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1690805985; x=1691410785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XM+dBkL9BOQB5M0QkPLLYoaZfMRgmlrJZ/IVtD0ioO0=;
-        b=K/ixDBtHAoED1QTZkzrM0HP35wmxU5en+ia0zc1sDJnLq2BhUN1mjgwFGR3x0mhUTm
-         H3OGTNuakXfxocEdqK1GhB3S8ynucvmwby3nWGTgvzmW49oBhpMPPdFAcSMbboxIRnU4
-         qKduZksCoD63Qc6ufiHOWoJc41ELb6Vq9XiC1ggxpI9Ch37s/vd9s1KhlnqneJ39yKbE
-         xvoRMFv7kumu57kjrYbkZp1tjuXo2Te+/Kf/dZlJ8g7PjBW+cB0Rj0SCLXWinfJmVqSV
-         OQMt2XyprtX9qNGZQKMuoaR7LapJai9uasZrHpbx8KCHwCsJpCf1oB9++nilbbY57J6n
-         FIlg==
+        d=linaro.org; s=google; t=1690806014; x=1691410814;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gf3LmmIWrMau5faq7nlMlPKiUzu+qP0dMuprgORcSfE=;
+        b=K0GOcdcUPKkJCrwm9ic7QHRzs26pamIeLtNk5RCHei5D6USQDdlP0KDljYOLhYu6lF
+         DJ8hXefNOSNr3LEO8N2cmvF4IZ4sUQS/NzgOw0aYkJSPXQRy3rtpcyr6hhqrzJqwelRF
+         528mDua7HxjToYrkIgrkhTwRPv0TlthGuWp1Mkk2+Uxbk1hgex/HtBwzOD4qNvNrhJal
+         CBpY0jiu53MiCyXWs1v6xBV1mxUvq83QjdA2wAlxJmCXeXXA6O/6mbzz9pEEHkJ27Nxx
+         nwlYvcr662OVpWcxN+AypwXcFKrrwAyRq6aFVLYprmIijv9yq2hyQPS46Q8pbdrdtHhC
+         j/Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690805985; x=1691410785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XM+dBkL9BOQB5M0QkPLLYoaZfMRgmlrJZ/IVtD0ioO0=;
-        b=C6Cr1VLI0iuqa21UQSiaZK4vTV5Hgej4CnaORXaONVw+dC3glitBppwtbyy7yS022e
-         YFa6kpcRmKZTg4VJZvhCxKmFWZnJ6fKEMYngx5VKkXzhbSdGhSfJq0WYlr4hi0hQIwF1
-         c0z+9XyWYowoMJgU0RwgDxyYsFquEJYI+7S+23BzMY8FxMf9BhwwEI4gGebZkpjj03fT
-         nfSyZB+PnJsiOqtBj55AtUQLjTom2ZyxGSXiCA9DxZomjmg9sB0jERCXEbcdypQFXMrI
-         VWZr3g8bMfofgBo8ryGZOGdsuDSASwkhe6acxCJfBpIAd0lOmJKaAt6S655vcBYv/ZzG
-         2yJw==
-X-Gm-Message-State: ABy/qLZ7QJ9ngBOxriXNpi1XMCPikc35+GBvcs/+86GQEwARdpnln3A9
-        VW/C7hPpOTYG34A/xOxMA8ActQ==
-X-Google-Smtp-Source: APBJJlEctlAU59sp6IeHDQnotTpHuuRt9EWdIcJSmwMi77Aq/AtVjK71uRjSDGZv/d1bBLLm+M5qIw==
-X-Received: by 2002:a7b:ca53:0:b0:3fb:415a:d07 with SMTP id m19-20020a7bca53000000b003fb415a0d07mr7933564wml.36.1690805984930;
-        Mon, 31 Jul 2023 05:19:44 -0700 (PDT)
-Received: from localhost ([212.23.236.67])
-        by smtp.gmail.com with ESMTPSA id x13-20020a05600c21cd00b003fe21c7386esm2247355wmj.45.2023.07.31.05.19.43
+        d=1e100.net; s=20221208; t=1690806014; x=1691410814;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gf3LmmIWrMau5faq7nlMlPKiUzu+qP0dMuprgORcSfE=;
+        b=Y/Uz0sWmfPM6o8eIjG+M6pq5MbpaxUuKmR0icPHx9+0IfEuUwIs0+leWG4KjqCbotf
+         wVEvJfKRQ0HSOwQA+8orCEHrWhs+gXrwZkiR609u4wi4NK6u+/eZsWsUwxXqr1hOsYso
+         DqhbnbGw4c6eZ4hpoh3wZaMoZjRRuVtxwXDuoPW4ijJyYHMrjx5z22AoMQI4sarKAg6/
+         BiiRsGNwxAniuFH53ZcovmFkOfhMn2wuI2mnE4N6fl+4XxYpV1AWxGzzbSewbAaWSP4q
+         FrEKqEL6ravFbCfFT0rjU5d/CJZuJtGEcswtFZxaF3cfd159dQsEGFIp+XrCHQVHN6lw
+         RYvg==
+X-Gm-Message-State: ABy/qLbSw605lLE707KDBTUOMSckNM1WWnBQFSnzr2oRZDAPVkWnQpXB
+        TtuGocwrYVKLmWcBwwMYPFt5zA==
+X-Google-Smtp-Source: APBJJlHK1YJ+ycb2Mi0ZGLtYYsXsm/rpLz0hFe+W+eN1LdFXfUN0jmtDbMkk4kss6l5PSzy/TZI81Q==
+X-Received: by 2002:a05:6512:360a:b0:4fe:de3:9fd1 with SMTP id f10-20020a056512360a00b004fe0de39fd1mr4731653lfs.36.1690806014533;
+        Mon, 31 Jul 2023 05:20:14 -0700 (PDT)
+Received: from [192.168.1.101] (abyk53.neoplus.adsl.tpnet.pl. [83.9.30.53])
+        by smtp.gmail.com with ESMTPSA id u9-20020a056512040900b004fe11366146sm2079096lfk.51.2023.07.31.05.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 05:19:44 -0700 (PDT)
-Date:   Mon, 31 Jul 2023 14:19:43 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
-Cc:     Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH 09/11] ice: implement dpll interface to control cgu
-Message-ID: <ZMem35OUQiQmB9Vd@nanopsycho>
-References: <20230720091903.297066-1-vadim.fedorenko@linux.dev>
- <20230720091903.297066-10-vadim.fedorenko@linux.dev>
- <ZLpuaxMJ+8rWAPwi@nanopsycho>
- <DM6PR11MB46571657F0DF87765DAB32FE9B06A@DM6PR11MB4657.namprd11.prod.outlook.com>
+        Mon, 31 Jul 2023 05:20:13 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/2] Set PCNoC clk always-on, with or without interconnect
+Date:   Mon, 31 Jul 2023 14:20:11 +0200
+Message-Id: <20230731-topic-pcnoc-v1-0-452dd36d11d7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB46571657F0DF87765DAB32FE9B06A@DM6PR11MB4657.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPumx2QC/x2N0QqDMAwAf0XyvIBtHbr9yvChxkwDkpZWx0D89
+ 4U93sFxJ1QuwhWezQmFP1IlqYG7NUBr1IVRZmPwrQ9tHxzuKQthJk2E8+Aesetd8PcOrJhiZZx
+ KVFqt0WPbTObCb/n+F6/xun4pYsrrcgAAAA==
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690806013; l=885;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=DpM74YJFMGMq7VqXTxFkzlshoHNLJraxbS0yzf7ueLo=;
+ b=P3thT/6NZIx2XNQm85ENg0Oe3UkQyRtif7N93V4ggDQwUhQWUuV7SJViO2+qU4A5UC0HyxOtR
+ vKnaGz2QSSrAdzJQeV08VdXp++xFIjKTshmAF4KMIOWDv5du/o3pB+S
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Sat, Jul 29, 2023 at 01:03:59AM CEST, arkadiusz.kubalewski@intel.com wrote:
->>From: Jiri Pirko <jiri@resnulli.us>
->>Sent: Friday, July 21, 2023 1:39 PM
->>
->>Thu, Jul 20, 2023 at 11:19:01AM CEST, vadim.fedorenko@linux.dev wrote:
->>>From: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
->
+The PCNoC clock needs to always have some sort of a vote hanging onto
+it, so long as the AP is alive. Some platforms guarantee that through
+the interconnect driver, while others (that register the PCNoC clk
+with the clock framework) don't, which results in a big kaboom and
+force reboot when trying to suspend that clock.
 
-[...]
+Solve the issue for the latter group.
 
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      clk: qcom: smd-rpm: Add a way to define bus clocks with rate and flags
+      clk: qcom: smd-rpm: Set XO rate and CLK_IS_CRITICAL on PCNoC
 
->>>+static int ice_dpll_cb_lock(struct ice_pf *pf, struct netlink_ext_ack
->>>*extack)
->>>+{
->>>+	int i;
->>>+
->>>+	for (i = 0; i < ICE_DPLL_LOCK_TRIES; i++) {
->>>+		if (!test_bit(ICE_FLAG_DPLL, pf->flags)) {
->>
->>And again, as I already told you, this flag checking is totally
->>pointless. See below my comment to ice_dpll_init()/ice_dpll_deinit().
->>
->
->This is not pointless, will explain below.
->
->>
->>
->
->[...]
->
+ drivers/clk/qcom/clk-smd-rpm.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
+---
+base-commit: ec89391563792edd11d138a853901bce76d11f44
+change-id: 20230731-topic-pcnoc-d819a4713254
 
-[...]
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-
->>>+void ice_dpll_deinit(struct ice_pf *pf)
->>>+{
->>>+	bool cgu = ice_is_feature_supported(pf, ICE_F_CGU);
->>>+
->>>+	if (!test_bit(ICE_FLAG_DPLL, pf->flags))
->>>+		return;
->>>+	clear_bit(ICE_FLAG_DPLL, pf->flags);
->>>+
->>>+	ice_dpll_deinit_pins(pf, cgu);
->>>+	ice_dpll_deinit_dpll(pf, &pf->dplls.pps, cgu);
->>>+	ice_dpll_deinit_dpll(pf, &pf->dplls.eec, cgu);
->>>+	ice_dpll_deinit_info(pf);
->>>+	if (cgu)
->>>+		ice_dpll_deinit_worker(pf);
->>
->>Could you please order the ice_dpll_deinit() to be symmetrical to
->>ice_dpll_init()? Then, you can drop ICE_FLAG_DPLL flag entirely, as the
->>ice_dpll_periodic_work() function is the only reason why you need it
->>currently.
->>
->
->Not true.
->The feature flag is common approach in ice. If the feature was successfully
-
-The fact that something is common does not necessarily mean it is
-correct. 0 value argument.
-
-
->initialized the flag is set. It allows to determine if deinit of the feature
->is required on driver unload.
->
->Right now the check for the flag is not only in kworker but also in each
->callback, if the flag were cleared the data shall be not accessed by callbacks.
-
-Could you please draw me a scenario when this could actually happen?
-It is just a matter of ordering. Unregister dpll device/pins before you
-cleanup the related resources and you don't need this ridiculous flag.
-
-
->I know this is not required, but it helps on loading and unloading the driver,
->thanks to that, spam of pin-get dump is not slowing the driver load/unload.
-
-? Could you plese draw me a scenario how such thing may actually happen?
-
-Thanks!
-
-
->
->>
->>>+	mutex_destroy(&pf->dplls.lock);
->>>+}
-
-
-[...]
