@@ -2,125 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0131768FE8
-	for <lists+linux-clk@lfdr.de>; Mon, 31 Jul 2023 10:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4670769345
+	for <lists+linux-clk@lfdr.de>; Mon, 31 Jul 2023 12:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjGaIUZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 31 Jul 2023 04:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S229669AbjGaKi2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 31 Jul 2023 06:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjGaIT5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 31 Jul 2023 04:19:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A116F19B3
-        for <linux-clk@vger.kernel.org>; Mon, 31 Jul 2023 01:18:07 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        with ESMTP id S229927AbjGaKi0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 31 Jul 2023 06:38:26 -0400
+X-Greylist: delayed 1137 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Jul 2023 03:38:24 PDT
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1359E75;
+        Mon, 31 Jul 2023 03:38:24 -0700 (PDT)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=6590db4e63=fe@dev.tdt.de>)
+        id 1qQPkr-00B9DH-2t; Mon, 31 Jul 2023 12:03:57 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qQO6P-0007Qm-Am; Mon, 31 Jul 2023 10:18:05 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qQO6O-00056Y-7m; Mon, 31 Jul 2023 10:18:04 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qQO6N-009FeO-HY; Mon, 31 Jul 2023 10:18:03 +0200
-Date:   Mon, 31 Jul 2023 10:18:03 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH] clk: versaclock3: Switch to use i2c_driver's probe
- callback
-Message-ID: <20230731081803.vua6hyxhofasvrsm@pengutronix.de>
-References: <20230721071846.111663-1-u.kleine-koenig@pengutronix.de>
+        (envelope-from <fe@dev.tdt.de>)
+        id 1qQPkq-00CHpV-6R; Mon, 31 Jul 2023 12:03:56 +0200
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id B9817240052;
+        Mon, 31 Jul 2023 12:03:54 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 10792240040;
+        Mon, 31 Jul 2023 12:03:54 +0200 (CEST)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id 7D2E121055;
+        Mon, 31 Jul 2023 12:03:53 +0200 (CEST)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     mturquette@baylibre.com, sboyd@kernel.org, yzhu@maxlinear.com,
+        rtanwar@maxlinear.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Eckert.Florian@googlemail.com
+Subject: [PATCH 0/2] clk: mxl: add mxl,control-gate dts property
+Date:   Mon, 31 Jul 2023 12:03:47 +0200
+Message-ID: <20230731100349.184553-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="slme77pfiokahsua"
-Content-Disposition: inline
-In-Reply-To: <20230721071846.111663-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-ID: 151534::1690797836-B1432B19-5003AA54/0/0
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Gate clocks can be controlled either from this cgu clk driver or directly
+from power management driver/daemon. It is dependent on the power
+policy/profile requirements of the end product. To take control of gate c=
+lks
+from this driver.
 
---slme77pfiokahsua
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Until now, the source code had to be changed for this purpose by adding t=
+he
+flag 'GATE_CLK_HW' to the LGM_GATE macro in the source file
+'drivers/clk/x86/clk-lgm.c'.
 
-Hello,
+This can be better handled via the device tree, so that the source no
+longer needs to be changed. For this purpose, a new option
+'mxl,control-gate' is added, which specifies that the gate is controlled
+by this driver.
 
-[Cc: +=3D Wolfram]
+Florian Eckert (2):
+  clk: mxl: add mxl,control-gate dts property
+  dt-bindings: clock: intel,cgu-lgm: add mxl,control-gate option
 
-On Fri, Jul 21, 2023 at 09:18:46AM +0200, Uwe Kleine-K=F6nig wrote:
-> The previous mass switch of clk drivers done in commit 62279db5a323
-> ("clk: Switch i2c drivers back to use .probe()") was based on v6.4-rc1
-> Since then this driver was added which needs to be converted back in the
-> same way before eventually .probe_new() can be dropped from struct
-> i2c_driver.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->=20
-> this driver appeared in next today. It would be great if this patch
-> could be added on top to not interfere with the quest to remove
-> .probe_new directly after v6.6-rc1.
-
-my eventual plan is to send the patch removing .probe_new() around
-v6.6-rc1 with the intention to get it into next early during the merge
-window. So if this patch doesn't make it in before v6.6-rc1, I'd send it
-together with the change dropping .probe_new() for Wolfram to apply as
-in today's next-20230731 there are only two drivers left making use of
-=2Eprobe_new (and the maintainer of the other driver already agreed to fix
-their driver with a patch going in via i2c, too).
-
-So in my order of preference, the options here are:
-
- - patch is applied via clk before v6.6-rc1
- - patch is applied via i2c together with change dropping .probe_new()
-   with a clk maintainer's Ack.
- - patch is ignored and goes in without an Ack via i2c.
-
-My current WIP branch based on v6.5-rc4 is available at
-
-	https://git.pengutronix.de/git/ukl/linux i2c-probe-new
-
-if you want to take a look. (And even if you don't want, it's there :-)
-
-Thanks
-Uwe
+ .../bindings/clock/intel,cgu-lgm.yaml         | 11 +++++++
+ drivers/clk/x86/clk-cgu.c                     | 30 +++++++++++--------
+ 2 files changed, 28 insertions(+), 13 deletions(-)
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+2.30.2
 
---slme77pfiokahsua
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmTHbjoACgkQj4D7WH0S
-/k7HNwf7ByVoN4u5woHpoUxjh2+49Lu2JmYtoUVZJdDhjuF0bEqX+1st0AtWfX8S
-BXrAqfAAL7XsheAeXQ5PaVzMm1kZB7dp4/rQr34a4afoouWIWA/7W704bIi0lXmX
-+xl5EWV3ZwmwOO158vUI/l4nx4HtsVDuLFKUvGiF0edWJi5ekoSBQknHC0Udzv3X
-K+QBYG/6xNc6AmttQL0EOGAR+LVIUMdvd/8qzp0WBhXIhfjvye2HBHZYRZOJKA45
-5f4LLdluBcL4x1TzcwjFUy5m1OpgTEuoaL/z3/fYS3lHr+vY72aB236ZQjgEinK/
-lpeyWd5W1j0L2nHMZQe0ThwPTUT32w==
-=sGMC
------END PGP SIGNATURE-----
-
---slme77pfiokahsua--
