@@ -2,115 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC33E76AE7E
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Aug 2023 11:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0EE76B3E0
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Aug 2023 13:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbjHAJjZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 1 Aug 2023 05:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S234416AbjHALws (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 1 Aug 2023 07:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233180AbjHAJjE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Aug 2023 05:39:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645F844B5;
-        Tue,  1 Aug 2023 02:36:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1A796151A;
-        Tue,  1 Aug 2023 09:36:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB59C433C8;
-        Tue,  1 Aug 2023 09:36:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690882617;
-        bh=bIbnAIV9LSgAjMhFNe8KGtjVPP3OHk1T9jk268LsK2g=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hK3eWABuYlGQAcZLf9jiilYQuXlQlCOSOY8k25Qzu5b4FoeDtlJqZMdD4Zdvoj4BH
-         xUMmVlqi8pkwaqNQTlBtauaWF/xlXj+NMvsxjJlNBqpcdCLk/itpbPFJRa9aO9cSmM
-         QjGPBfNAwLc4xEaBxuXmBWJwWQJ+yBCIwRYHHfwWAccBlvLEOaQQfHOaFOKuI12uOR
-         Sh9vIOPpwuhKsdLm3TzFb2qz7UyeXh40sDZSzfSNoIq+GIwGJbP7E5t+9+kzT2ZkGG
-         snSj1RNcKQHBJlM/JsRSO1T4sMiy6GVwhpniE6n2SLbEqMiUKlDIa8GbVa7dqQV+Rh
-         joaPtNImr0miw==
-Received: (nullmailer pid 966827 invoked by uid 1000);
-        Tue, 01 Aug 2023 09:36:55 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S234421AbjHALwh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Aug 2023 07:52:37 -0400
+Received: from mail.cothiafon.pl (mail.cothiafon.pl [217.61.106.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF281716
+        for <linux-clk@vger.kernel.org>; Tue,  1 Aug 2023 04:52:33 -0700 (PDT)
+Received: by mail.cothiafon.pl (Postfix, from userid 1002)
+        id E2D7F83D4D; Mon, 31 Jul 2023 10:36:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cothiafon.pl; s=mail;
+        t=1690792669; bh=dwoca0X6C9VXklO/zRgFQCPapTk5LFz4tKaENdvy6Po=;
+        h=Date:From:To:Subject:From;
+        b=Wf6kz2sO3YaJIcFeC4B0toZqNjlnK3MMQUxLf/IT13QNK8diLTDqFTWjRFyZRIpmt
+         ftfRMPu/8IovxsAkGrsvxPUGUht6oabEtfsiBf40HLvMX1hvtZQBg1NUthHxcY6jox
+         ytST9Udy9PwpVgpF+hSy3uIMgr0xU0fkd3ITpIESLdMTkXpBBjs8DSsKiDH4Lp2aJy
+         V5cmuQ9HWBrs5HAzaIRYCXAbbSaICtrC7UBWdjkJzt2z+0VHp7P938pRJujChG522v
+         CCLmZq4997sDXbLeMTqRQdKPEHjJ2Vu/Ti6JnYyHzIJOo+02ST9QepmIGxMELzT/p5
+         JGKEewJlCRgrg==
+Received: by mail.cothiafon.pl for <linux-clk@vger.kernel.org>; Mon, 31 Jul 2023 08:35:48 GMT
+Message-ID: <20230731095940-0.1.28.ontz.0.uhef6gp3kc@cothiafon.pl>
+Date:   Mon, 31 Jul 2023 08:35:48 GMT
+From:   =?UTF-8?Q? "Rados=C5=82aw_Grabowski" ?= 
+        <radoslaw.grabowski@cothiafon.pl>
+To:     <linux-clk@vger.kernel.org>
+Subject: W sprawie samochodu
+X-Mailer: mail.cothiafon.pl
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Luo Jie <quic_luoj@quicinc.com>
-Cc:     linux-clk@vger.kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        quic_srichara@quicinc.com, p.zabel@pengutronix.de,
-        konrad.dybcio@linaro.org, conor+dt@kernel.org
-In-Reply-To: <20230801085352.22873-3-quic_luoj@quicinc.com>
-References: <20230801085352.22873-1-quic_luoj@quicinc.com>
- <20230801085352.22873-3-quic_luoj@quicinc.com>
-Message-Id: <169088261501.966799.11880171949914344373.robh@kernel.org>
-Subject: Re: [PATCH 2/3] dt-bindings: clock: add qca8386/qca8084 clock and
- reset definitions
-Date:   Tue, 01 Aug 2023 03:36:55 -0600
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On Tue, 01 Aug 2023 16:53:51 +0800, Luo Jie wrote:
-> QCA8386/QCA8084 includes the clock & reset controller that is
-> accessed by MDIO bus. Two work modes are supported, qca8386 works
-> as switch mode, qca8084 works as PHY mode.
-> 
-> Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
-> ---
->  .../bindings/clock/qcom,nsscc-qca8k.yaml      |  59 ++++++++++
->  include/dt-bindings/clock/qcom,nsscc-qca8k.h  | 102 ++++++++++++++++++
->  include/dt-bindings/reset/qcom,nsscc-qca8k.h  |  76 +++++++++++++
->  3 files changed, 237 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,nsscc-qca8k.h
->  create mode 100644 include/dt-bindings/reset/qcom,nsscc-qca8k.h
-> 
+chcieliby=C5=9Bmy zapewni=C4=87 Pa=C5=84stwu kompleksowe rozwi=C4=85zania=
+, je=C5=9Bli chodzi o system monitoringu GPS.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Precyzyjne monitorowanie pojazd=C3=B3w na mapach cyfrowych, =C5=9Bledzeni=
+e ich parametr=C3=B3w eksploatacyjnych w czasie rzeczywistym oraz kontrol=
+a paliwa to kluczowe funkcjonalno=C5=9Bci naszego systemu.=20
 
-yamllint warnings/errors:
+Organizowanie pracy pracownik=C3=B3w jest dzi=C4=99ki temu prostsze i bar=
+dziej efektywne, a oszcz=C4=99dno=C5=9Bci i optymalizacja w zakresie pono=
+szonych koszt=C3=B3w, maj=C4=85 dla ka=C5=BCdego przedsi=C4=99biorcy ogro=
+mne znaczenie.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dts:22.11-22: Warning (reg_format): /example-0/clock-controller@24:reg: property has invalid length (4 bytes) (#address-cells == 1, #size-cells == 1)
-Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: clock-controller@24: '#power-domain-cells' is a required property
-	from schema $id: http://devicetree.org/schemas/clock/qcom,nsscc-qca8k.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,nsscc-qca8k.example.dtb: clock-controller@24: Unevaluated properties are not allowed ('#clock-cells', '#reset-cells' were unexpected)
-	from schema $id: http://devicetree.org/schemas/clock/qcom,nsscc-qca8k.yaml#
+Dopasujemy nasz=C4=85 ofert=C4=99 do Pa=C5=84stwa oczekiwa=C5=84 i potrze=
+b organizacji. Czy mogliby=C5=9Bmy porozmawia=C4=87 o naszej propozycji?
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230801085352.22873-3-quic_luoj@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Pozdrawiam
+Rados=C5=82aw Grabowski
