@@ -2,80 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30F576D703
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Aug 2023 20:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E88C76D772
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Aug 2023 21:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjHBSnf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 2 Aug 2023 14:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S231355AbjHBTJl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 2 Aug 2023 15:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjHBSnf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Aug 2023 14:43:35 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7B71BC1;
-        Wed,  2 Aug 2023 11:43:34 -0700 (PDT)
-Received: from dslb-094-219-037-101.094.219.pools.vodafone-ip.de ([94.219.37.101] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1qRGoj-0003Eh-48; Wed, 02 Aug 2023 20:43:29 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Arnd Bergmann <arnd@arndb.de>, Abel Vesa <abelvesa@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>, linux-imx@nxp.com,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH v7 2/2] clk: imx25: make __mx25_clocks_init return void
-Date:   Wed,  2 Aug 2023 20:40:46 +0200
-Message-Id: <20230802184046.153394-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230802184046.153394-1-martin@kaiser.cx>
-References: <20230802184046.153394-1-martin@kaiser.cx>
+        with ESMTP id S231269AbjHBTJj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Aug 2023 15:09:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F2326AE;
+        Wed,  2 Aug 2023 12:09:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEA7461A73;
+        Wed,  2 Aug 2023 19:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A35C433C7;
+        Wed,  2 Aug 2023 19:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691003378;
+        bh=YKlsStj3ezOkt0RWaJXuZ7tqMra0EQULwTm0YtT1O1I=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=BxoOGEVgCqbAnkuVPG4r70PXFYVmKk+LgZKjejuZD+9XmICZoqz+vPYJLel0E1B6o
+         q2mW1hNKaAIYNwWyrxVYTzK7rcU09oDYKY2+ZmvszEHpiBNjgQ764DuCtTqngdvIDu
+         JcOID4UUx5AYHu7cZ6qE2Ru4slL1l6zWldrGtIBLXnBU69uYZLRAYIo4FBoHHgdFpl
+         LFA3Ac1Y74LrcMQcnYBnUqpuSYXOeopyFnmvtSyR8hxTB0i1XGEwXXa4UsG8vVPcEb
+         H2v9KUBhuDO1Mf8/6XRLs2Z5HH2H/5U5mEpke4BBwEz7vE7ynvv8UAxKKsnNz6prd/
+         l7VLa+dsQ9gBw==
+Message-ID: <ccd0ea6c0c0165490279a357745b0f71.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230728165923.108589-1-krzysztof.kozlowski@linaro.org>
+References: <20230728165923.108589-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] dt-bindings: clock: xlnx,versal-clk: drop select:false
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org,
+        Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 02 Aug 2023 12:09:36 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The __mx25_clocks_init function always returns 0 and its only
-caller does not check the return value. Let's remove it.
+Quoting Krzysztof Kozlowski (2023-07-28 09:59:23)
+> select:false makes the schema basically ignored and not effective, which
+> is clearly not what we want for a device binding.
+>=20
+> Fixes: 352546805a44 ("dt-bindings: clock: Add bindings for versal clock d=
+river")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
+> ---
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/imx/clk-imx25.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/clk/imx/clk-imx25.c b/drivers/clk/imx/clk-imx25.c
-index bee3da2e21e1..c566be848c2d 100644
---- a/drivers/clk/imx/clk-imx25.c
-+++ b/drivers/clk/imx/clk-imx25.c
-@@ -74,7 +74,7 @@ enum mx25_clks {
- 
- static struct clk *clk[clk_max];
- 
--static int __init __mx25_clocks_init(void __iomem *ccm_base)
-+static void __init __mx25_clocks_init(void __iomem *ccm_base)
- {
- 	BUG_ON(!ccm_base);
- 
-@@ -222,8 +222,6 @@ static int __init __mx25_clocks_init(void __iomem *ccm_base)
- 	imx_register_uart_clocks();
- 
- 	imx_print_silicon_rev("i.MX25", mx25_revision());
--
--	return 0;
- }
- 
- static void __init mx25_clocks_init_dt(struct device_node *np)
--- 
-2.39.2
-
+Applied to clk-next
