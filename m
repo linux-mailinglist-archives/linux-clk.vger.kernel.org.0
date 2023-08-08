@@ -2,39 +2,34 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA20774AE5
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 22:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4871774BDC
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 22:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbjHHUiF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 16:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S233482AbjHHU64 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 16:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbjHHUhv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 16:37:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8686083E2
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 13:06:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24F1862C1A
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 20:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12AD2C433C7;
-        Tue,  8 Aug 2023 20:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691525178;
-        bh=EXXgYeO8+2thyLJnvnLv8j6A+askNI7McKgPFzgsrAI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XuZ9+hENrre4giva7n00N0bFg27pLNhnPyPqDyGlMhYcKysZHD7s+wB5GQ9gKWMhr
-         xLEBZEtxy4Ijq280LlshZ0OQtc5bdOBJaYsmdcRVVjYgwBmCDKYBR3TcdMZV9c8G8L
-         IvwUuNxIeLXI3+ekfhqB1C/LmZKr6JOPykHbiaQvHxJ8f/hfZgIXJ3/W73BAC6hI/X
-         Xg+8ejZndgpq9pr3s9d/dV4IDGbuok/uNo2SrySkFxU60DkqseTlu+lEE0WQusCotG
-         4NUeCjA6QmY4IlkytAP5Gja51o1bFOHrk2BMskSBjBMwWkcdvEcpmhPs0YTxVf8+gn
-         pDR0jFGaIeuUQ==
-Date:   Tue, 8 Aug 2023 13:06:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
+        with ESMTP id S234141AbjHHU6o (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 16:58:44 -0400
+Received: from out-120.mta0.migadu.com (out-120.mta0.migadu.com [91.218.175.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6CB272C
+        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 13:52:03 -0700 (PDT)
+Message-ID: <bcd25b8c-536a-482a-bd79-095bc983baea@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1691527919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0xvoeirahWFZ+3tNj8n9ficPcKAPak4lBFOk6V+FiJU=;
+        b=NPb2ggKevHGdvXHMqS//lDI8x3nQGwGQPb6cUdkEMzTsiejj/VSYBxdNqn5UmY8lHHB/S1
+        +/Ng0nHQnpOnpnsQq0MxS1qC/Oy0q0Zjqge3DvakcnmYHiAHovNty6TNGkAu3NIF7g6E28
+        zQqWf+vcCwqAB400CTa7tQYQGMaWl0E=
+Date:   Tue, 8 Aug 2023 21:51:55 +0100
+MIME-Version: 1.0
+Subject: Re: [PATCH net-next v2 2/9] dpll: spec: Add Netlink spec in YAML
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     Jiri Pirko <jiri@resnulli.us>,
         Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
@@ -46,37 +41,44 @@ Cc:     Jiri Pirko <jiri@resnulli.us>,
         linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         intel-wired-lan@lists.osuosl.org,
         Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next v2 2/9] dpll: spec: Add Netlink spec in YAML
-Message-ID: <20230808130617.5ad74486@kernel.org>
-In-Reply-To: <20230808130327.5638d15b@kernel.org>
 References: <20230804190454.394062-1-vadim.fedorenko@linux.dev>
-        <20230804190454.394062-3-vadim.fedorenko@linux.dev>
-        <ZNCjwfn8MBnx4k6a@nanopsycho>
-        <a7e2f7e1-e36a-2c79-46c3-874550d24575@linux.dev>
-        <20230808130327.5638d15b@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20230804190454.394062-3-vadim.fedorenko@linux.dev>
+ <ZNCjwfn8MBnx4k6a@nanopsycho>
+ <a7e2f7e1-e36a-2c79-46c3-874550d24575@linux.dev>
+ <20230808130327.5638d15b@kernel.org> <20230808130617.5ad74486@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <20230808130617.5ad74486@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 8 Aug 2023 13:03:27 -0700 Jakub Kicinski wrote:
-> >   const struct nla_policy dpll_pin_parent_pin_nl_policy[DPLL_A_PIN_STATE 
-> > + 1] = {
-> >          [DPLL_A_PIN_STATE] = NLA_POLICY_RANGE(NLA_U8, 1, 3),
-> >          [DPLL_A_PIN_ID] = { .type = NLA_U32, },
-> > 
-> > 
-> > The "/* private: */" comment was added to the generator after Simon's
-> > comment. But I'll include this part into the next version.  
+On 08/08/2023 21:06, Jakub Kicinski wrote:
+> On Tue, 8 Aug 2023 13:03:27 -0700 Jakub Kicinski wrote:
+>>>    const struct nla_policy dpll_pin_parent_pin_nl_policy[DPLL_A_PIN_STATE
+>>> + 1] = {
+>>>           [DPLL_A_PIN_STATE] = NLA_POLICY_RANGE(NLA_U8, 1, 3),
+>>>           [DPLL_A_PIN_ID] = { .type = NLA_U32, },
+>>>
+>>>
+>>> The "/* private: */" comment was added to the generator after Simon's
+>>> comment. But I'll include this part into the next version.
+>>
+>> We only added private for enum masks, I'll send a patch for nlattrs.
 > 
-> We only added private for enum masks, I'll send a patch for nlattrs.
+> On closer look these have no kdoc, so the priv markings are not
+> necessary, dropping them sounds right.
 
-On closer look these have no kdoc, so the priv markings are not
-necessary, dropping them sounds right.
+Ok, I'll add the version which is generated by the script with the
+lastest patch, I mean with new line and priv markings.
+
+Thanks.
