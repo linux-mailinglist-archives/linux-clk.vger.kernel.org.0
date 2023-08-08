@@ -2,139 +2,158 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECD6774941
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 21:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB358774904
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 21:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbjHHTur (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 15:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S230127AbjHHTqq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 15:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233253AbjHHTu1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 15:50:27 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B998A283
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 09:56:06 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5230f8da574so3387549a12.3
-        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 09:56:06 -0700 (PDT)
+        with ESMTP id S232631AbjHHTqR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 15:46:17 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6D5497A8
+        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 09:49:21 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-4871396a94fso1742535e0c.1
+        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 09:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691513765; x=1692118565;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WLgWmZDXI+7PA/tCxKdChP7EEm6HakzsKLLishyTPzU=;
-        b=daT6x7usH5yEGyqaACnAp2ybRu712oHW4UBiomFwA4UrlvXR+5DRwqv9+yYoGZQhj+
-         u0u7LxgGkpmNdi/mEKCBPJ/ttEkxCiymuLgBK+ewqByxHTZjiu+oEoADVFlPEZUrz+F1
-         VpYmt/M6jiVQXYK0J2ebZL84x/7IST0Yrd1UaSC0jCly/tbweHki9wSRA28Ex6C9PVTr
-         pv3XvB08IAjsxBofnOlbGIIY2lGak3jkn9qe95ncTuKZHKotSyUSW7bzA22nXHbzjaHO
-         tECG4iw7ToaKR9i4HSt4emiLdv79qTP/lYMHneL2U5AFjw6UXNQnxIiAcuF/2pMBQCz8
-         3uvg==
+        d=gmail.com; s=20221208; t=1691513360; x=1692118160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3sXSwhyaI0ZZPhzdoq7cwPc4m+iIsmlIdeajHxsIfwk=;
+        b=nW+TLeGWt0Joi0cDQEpyv8XpsMZypizJVpWhTBrTsYgmj/UVR5g/dTbUHPYwiVbMWt
+         MPW+GmRsyr9mkDYk+YsMf6wkxTTE0NT02mLsXNw90l/FANK9EMaNm6yUTuc7yOUKcUZk
+         XP2oaBoMFqHZOAruZFDIxRI0jc77Oa6LLpVgfGwL1OW8UFD56sgbc+6MrZJruI76Kao/
+         SUnLWMtlpzCOjhDcmnNUsET8KIwb1lf4N7WI7laBZUWQEhm2zgOCZiuXbLxTRUleYrHA
+         oKGbN8ht+9EVLpHdz+88qXDir8Xa4Fy2SFlcS77ANBYOgF5m6+b/JWPS/HeBttZYYZ4S
+         WdQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691513765; x=1692118565;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1691513360; x=1692118160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WLgWmZDXI+7PA/tCxKdChP7EEm6HakzsKLLishyTPzU=;
-        b=GpdyIpUIuEaOIjov0hO3Z/WeBh4sEr8LjssFQuLQsSgvqrGPo0BZJOX9rmPmhI7gCR
-         6B9Tv7wlbiPrypHXyPlDiQv8JBhO0/fZDfWemP1xnK97pwhP8xm0QgZ+GViNrbuuvbx3
-         vLnK5MY03Evb5VCthq9GVm/wQpGEkK5uYV5brTZt/4bt7fmlP7MZ3qnF65PMxFYnSSMU
-         CUCRGfdaiMxE+Nhi2X4P4e1Z2FFaM4h3nD/3YVtq862M/MYjcz8maqb1nHbSrHtRWffE
-         N7OQL2au/9VlbNnnd/OUASQl2duTNd3fDFVJFZOyNbMZ0Eo9KWlGkMIvFeA8Fkvxpb5a
-         NoOQ==
-X-Gm-Message-State: AOJu0YzB0Hz+OIKI7EyrobHcvPEwsgJfyMiNP3rB81KqyqtlhAAif3LC
-        zrQ5k6vkF411ceP2bqENl1tt4jS4xWnKIvN9Buk=
-X-Google-Smtp-Source: AGHT+IHVBg/DZAg7RmIjwMmvomUbHWRV+0mz038UqS0mW12UPDmdNCW6SKK0tcZPJuO1Ju+eSdr14Q==
-X-Received: by 2002:a05:6512:1185:b0:4fe:45ca:f8e7 with SMTP id g5-20020a056512118500b004fe45caf8e7mr7216190lfr.57.1691495028083;
-        Tue, 08 Aug 2023 04:43:48 -0700 (PDT)
-Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm1861679lfh.57.2023.08.08.04.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 04:43:47 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 08 Aug 2023 13:43:41 +0200
-Subject: [PATCH v3 10/10] clk: qcom: smd-rpm: Move CPUSS_GNoC clock to
- interconnect
+        bh=3sXSwhyaI0ZZPhzdoq7cwPc4m+iIsmlIdeajHxsIfwk=;
+        b=CZwaDT3ThV8Vz50xKZQ6ut2zed59nCakkGqPOB6dvte2VbY9+G3OrSYBR5fDBbvOAy
+         N61J/7dKcaCb4w0v+4JDwRS2OM6B/vp+tC4hrZVuhKPArmKS8ItP+2XEz/nXOfGA6uX1
+         b2d/YW5FH9umlFxsYp2u5+TNT4K43F/ujanXQ10EPzceNr1cSON/BF8h78fAc1WvG3o2
+         05RkSJ079V1xmcFZC4dc46CfM4Wcw1oEIibGcNy7a2dSJXtl3qzaGTGg64EYLvoyGlAk
+         6gdjXEymqwS8Ogn9BS692fv1LCYAgPf5cpVPxBm/nSgqOoNxck050jieLBUjXvg6TrE+
+         A6oA==
+X-Gm-Message-State: AOJu0YwcBJ7jllDCNReQo1ptvM7Wnk9DtU4XOSVa2pUUWOXMiSZPJm+y
+        6k/wdjYWjFX1Wkf8dJMxFn4GxqpjIAa2BBHXzEACdWXc
+X-Google-Smtp-Source: AGHT+IE7W+ulJL3lYpeOm7DsC71eu861ltysH1dTV0waDoEv588kswbzOhxtg2c3V0PA0LppolHnwmuJ0v2isqD32RY=
+X-Received: by 2002:a05:6808:238f:b0:3a3:eab8:8c40 with SMTP id
+ bp15-20020a056808238f00b003a3eab88c40mr16363716oib.54.1691497174996; Tue, 08
+ Aug 2023 05:19:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230726-topic-icc_coeff-v3-10-dee684d6cdd2@linaro.org>
-References: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
-In-Reply-To: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691495013; l=1855;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6rZrHWsPHWWpd+L+pVqcUMQuVU01TmS5LCQGYAT1X0Q=;
- b=jtBpHrfD+ymd4XqtHtbF/noRNPMY58C9Ej/e6oBO74GRvFvp0xnbWwQis4SQSnKJbpvuAezcV
- O1Vfy8GohTlAwg/NRNh5jnTxAmB6T34tNgUqWUBA1EdFDKu7EABgkpv
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230807084744.1184791-1-m.felsch@pengutronix.de> <20230807084744.1184791-2-m.felsch@pengutronix.de>
+In-Reply-To: <20230807084744.1184791-2-m.felsch@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Tue, 8 Aug 2023 07:19:23 -0500
+Message-ID: <CAHCN7xLdwNXXeEi82KN7QWgUqUCeFjxJgkdo0+GujJYo8qLXVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] clk: imx: pll14xx: dynamically configure PLL for 393216000/361267200Hz
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     abelvesa@kernel.org, peng.fan@nxp.com, mturquette@baylibre.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        rasmus.villemoes@prevas.dk, adrian.alonso@nxp.com,
+        a.fatoum@pengutronix.de, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-As it turns out, it's yet another interconnect bus clock. Move it
-there. See [1] for reference.
+On Mon, Aug 7, 2023 at 3:47=E2=80=AFAM Marco Felsch <m.felsch@pengutronix.d=
+e> wrote:
+>
+> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>
+> Since commit b09c68dc57c9 ("clk: imx: pll14xx: Support dynamic rates"),
+> the driver has the ability to dynamically compute PLL parameters to
+> approximate the requested rates. This is not always used, because the
+> logic is as follows:
+>
+>   - Check if the target rate is hardcoded in the frequency table
+>   - Check if varying only kdiv is possible, so switch over is glitch free
+>   - Compute rate dynamically by iterating over pdiv range
+>
+> If we skip the frequency table for the 1443x PLL, we find that the
+> computed values differ to the hardcoded ones. This can be valid if the
+> hardcoded values guarantee for example an earlier lock-in or if the
+> divisors are chosen, so that other important rates are more likely to
+> be reached glitch-free.
+>
+> For rates (393216000 and 361267200, this doesn't seem to be the case:
+> They are only approximated by existing parameters (393215995 and
+> 361267196 Hz, respectively) and they aren't reachable glitch-free from
+> other hardcoded frequencies. Dropping them from the table allows us
+> to lock-in to these frequencies exactly.
+>
+> This is immediately noticeable because they are the assigned-clock-rates
+> for IMX8MN_AUDIO_PLL1 and IMX8MN_AUDIO_PLL2, respectively and a look
+> into clk_summary so far showed that they were a few Hz short of the targe=
+t:
+>
+> imx8mn-board:~# grep audio_pll[12]_out /sys/kernel/debug/clk/clk_summary
+> audio_pll2_out           0        0        0   361267196 0     0  50000  =
+ N
+> audio_pll1_out           1        1        0   393215995 0     0  50000  =
+ Y
+>
+> and afterwards:
+>
+> imx8mn-board:~# grep audio_pll[12]_out /sys/kernel/debug/clk/clk_summary
+> audio_pll2_out           0        0        0   361267200 0     0  50000  =
+ N
+> audio_pll1_out           1        1        0   393216000 0     0  50000  =
+ Y
+>
+> This change is equivalent to adding following hardcoded values:
+>
+>   /*               rate     mdiv  pdiv  sdiv   kdiv */
+>   PLL_1443X_RATE(393216000, 655,    5,    3,  23593),
+>   PLL_1443X_RATE(361267200, 497,   33,    0, -16882),
+>
+> Fixes: 053a4ffe2988 ("clk: imx: imx8mm: fix audio pll setting")
+> Cc: stable@vger.kernel.org # v5.18+
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+> v2:
+> - new patch
+>
+>  drivers/clk/imx/clk-pll14xx.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.=
+c
+> index dc6bc21dff41..0d58d85c375e 100644
+> --- a/drivers/clk/imx/clk-pll14xx.c
+> +++ b/drivers/clk/imx/clk-pll14xx.c
+> @@ -64,8 +64,6 @@ static const struct imx_pll14xx_rate_table imx_pll1443x=
+_tbl[] =3D {
+>         PLL_1443X_RATE(650000000U, 325, 3, 2, 0),
+>         PLL_1443X_RATE(594000000U, 198, 2, 2, 0),
+>         PLL_1443X_RATE(519750000U, 173, 2, 2, 16384),
+> -       PLL_1443X_RATE(393216000U, 262, 2, 3, 9437),
+> -       PLL_1443X_RATE(361267200U, 361, 3, 3, 17511),
 
-[1] https://android.googlesource.com/kernel/msm-extra/devicetree/+/02f8c342b23c20a5cf967df649814be37a08227c%5E%21/#F0
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/clk-smd-rpm.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+Part of me wonders why we need the look-up table at all if the driver
+has been fixed to achieve better rates.  I don't know if there is a
+significant time in calculating the numbers as compared to the time it
+takes to search the table.
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 9b5411932594..4a23f6d3eddd 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -567,6 +567,16 @@ static const struct clk_smd_rpm *sm_qnoc_icc_clks[] = {
- 	&clk_smd_rpm_bus_2_snoc_clk,
- };
- 
-+static const struct clk_smd_rpm *qcm2290_icc_clks[] = {
-+	&clk_smd_rpm_bimc_clk,
-+	&clk_smd_rpm_bus_1_cnoc_clk,
-+	&clk_smd_rpm_mmnrt_clk,
-+	&clk_smd_rpm_mmrt_clk,
-+	&clk_smd_rpm_qup_clk,
-+	&clk_smd_rpm_bus_2_snoc_clk,
-+	&clk_smd_rpm_cpuss_gnoc_clk,
-+};
-+
- static struct clk_smd_rpm *msm8909_clks[] = {
- 	[RPM_SMD_QPIC_CLK]		= &clk_smd_rpm_qpic_clk,
- 	[RPM_SMD_QPIC_CLK_A]		= &clk_smd_rpm_qpic_a_clk,
-@@ -1182,15 +1192,13 @@ static struct clk_smd_rpm *qcm2290_clks[] = {
- 	[RPM_SMD_PKA_A_CLK] = &clk_smd_rpm_pka_a_clk,
- 	[RPM_SMD_BIMC_GPU_CLK] = &clk_smd_rpm_bimc_gpu_clk,
- 	[RPM_SMD_BIMC_GPU_A_CLK] = &clk_smd_rpm_bimc_gpu_a_clk,
--	[RPM_SMD_CPUSS_GNOC_CLK] = &clk_smd_rpm_cpuss_gnoc_clk,
--	[RPM_SMD_CPUSS_GNOC_A_CLK] = &clk_smd_rpm_cpuss_gnoc_a_clk,
- };
- 
- static const struct rpm_smd_clk_desc rpm_clk_qcm2290 = {
- 	.clks = qcm2290_clks,
- 	.num_clks = ARRAY_SIZE(qcm2290_clks),
--	.icc_clks = sm_qnoc_icc_clks,
--	.num_icc_clks = ARRAY_SIZE(sm_qnoc_icc_clks)
-+	.icc_clks = qcm2290_icc_clks,
-+	.num_icc_clks = ARRAY_SIZE(qcm2290_icc_clks)
- };
- 
- static const struct of_device_id rpm_smd_clk_match_table[] = {
-
--- 
-2.41.0
-
+adam
+>  };
+>
+>  struct imx_pll14xx_clk imx_1443x_pll =3D {
+> --
+> 2.39.2
+>
