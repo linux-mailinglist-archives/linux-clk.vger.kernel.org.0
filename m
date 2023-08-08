@@ -2,61 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC4D774388
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 20:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016877746F0
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 21:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjHHSHX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 14:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S234001AbjHHTHo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 15:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235267AbjHHSGr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 14:06:47 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278F5FDEC
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 10:06:49 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-99c10ba30afso9858566b.1
-        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 10:06:49 -0700 (PDT)
+        with ESMTP id S229993AbjHHTHa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 15:07:30 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EA22E7E4
+        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 09:29:20 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe501e0b4cso26130165e9.1
+        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 09:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691514408; x=1692119208;
+        d=linaro.org; s=google; t=1691512139; x=1692116939;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m5cHR9R1zj6+fWN0kfJbhPUfhYqf7kqDHOcaH9ExP6c=;
-        b=fsEA177hsKHTpA69U0DmRpoL42q7QRy59QZbP8lw1XYbpWlnmIdDjQjcdagN0I6hTN
-         1iKdt/isJvKQjuIL7jFbBpmwP6AI5vFopu4kVv+ErQ8f2nvIJpnMopelvqX4byVVo7Tp
-         oetbrlQg5/wa8z9xym2z2ny+eTGhVmf4lpgfmK2VbASRwaJ3xue6KWKd7uDa/2GqxU3R
-         XJtxxSCRRky9RRMVdKUQ3+VqhQoGPyvDtDdcdiGb/fGnZ3DhCEfKW/INFipPdYhewV+U
-         ZhES/9/yBBEis632R0f9z8+Z/oy2QIrLuhHTQ0RH4AI5XVSq0BSoS8KeeJIziFZF0RQ2
-         U1wA==
+        bh=qZQ93ryTVkLJ674HaEi8fy9NL3vC9KyVwveDa7EddrM=;
+        b=ZCCBTApzVd4JP2mN7T7VjfJi/2w+IHTI4xJY9u755LMkbEMbe5pGNdTAz8FJlYvbAF
+         Dus1qQAKDZ8ezNh+uMuLOcN2yN+rPXCZTz+d5lksaAhR0Miz5IlHeJM8XoJ9wYcVOMB8
+         VMl685lKTqbqg+7/gjaA65V3f6raE9GI2n4ekZLop9frh4KUjjL548NiXBttDCUDnFV+
+         Lvr4UiYLNhg7XG+wAONCT2P29eRtnIk5klOb8v4nGoGhOsv8tNoCwRtmifsEU50Z715Z
+         SsHc/IoU3HJP36KKkgJCc9hkhAh83f058OAYSP1xXDaj8OfNwYsIfhaGmmabDkgk4r7O
+         qwzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691514408; x=1692119208;
+        d=1e100.net; s=20221208; t=1691512139; x=1692116939;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m5cHR9R1zj6+fWN0kfJbhPUfhYqf7kqDHOcaH9ExP6c=;
-        b=coIQAzco2os1BZ8qKA06fPOFdUQ8marRul/XAplb/cs+cyMh99QCtBlzYIPC7LzfSk
-         V8biGal8TUmyMklnuUcwO26NRDzR4bz/gg0H8gB2jeCy14VTX27+ULCbfs9lCFYkTrmf
-         LpUgmxaG8wn4V2bJPuw6zv03U/nn3WsAREVb0VEpzlZdNBTdROfZlhOiTTEHIknI/M/J
-         apll3w7dK4gPovKjvy75aLIHCM4vDcqSRWrjvAGQBzf0NqL5xt+776cpohgoe/HFARrc
-         JUr+tTQuGCoiKcN94E7zp04jorUnF7T+joj88qO2vg5AN1/HXvjc2Nd3G2YdPmIe7rns
-         2h/Q==
-X-Gm-Message-State: AOJu0YzVaj4xao+5eMmOgOESW0MG+tQVeCte/ftNEU6ENnABhe6H4IaK
-        JTZ5t1o51QWGqlHY+1ytB7EYh5cSqpdytBICwlU=
-X-Google-Smtp-Source: AGHT+IFa8hs7gdLp6TteRabPqqDMtp2xucJzNgO9gR2weT3XgRWhGg1PX/JaOpY6/dejTFD0ACc/DA==
-X-Received: by 2002:a05:6512:32a4:b0:4fb:fdf1:8b25 with SMTP id q4-20020a05651232a400b004fbfdf18b25mr3031231lfe.24.1691495025312;
-        Tue, 08 Aug 2023 04:43:45 -0700 (PDT)
+        bh=qZQ93ryTVkLJ674HaEi8fy9NL3vC9KyVwveDa7EddrM=;
+        b=Gpw3Th8II6EPlr+J8Y9D7DbDiTZ6OF6d2GAqvEhV5TzRLmKIJAvPo8tkcpYfWnrNXG
+         cCCblIzNGVVdVELJH+qHaH0+LXtOZDhUCynMAw4UJT5T/bCKamjWh7u6BfIwhWyWSX+E
+         q9DBi2MKaZD15foO9kpmKKCQLsw/y6gjS2ccEJlScOSpqNbLEO0F1rML8VGUGuiYsWpu
+         Ku1UNzBTGZ6rfq00JLJFatIrMO43EH2l4zw+FOryO970Y1q3gmJL2ejdWb2OyGkHegxv
+         q4sbevI7fMR3BUvRwSljbtSin1Pd4Bv1CP35kpzN+VkgBzQUBrq9BbGfLYXOU3bgz4lf
+         FxGg==
+X-Gm-Message-State: AOJu0Yy7A56GhkKiPMkH1boKoIHBIqyavDLC8c/4F4Em1mmvZihxAe7F
+        h1sQ/6mGD1TYqcw6/uWwuKimo/rtVgj6HHE9Dug=
+X-Google-Smtp-Source: AGHT+IG9eggqMlJftuNT+UYhqts3d5BpOBl7EQ49aL1HZWMDX+s3HZ44tnUlcpa8asB0W6Zw6ZbjPw==
+X-Received: by 2002:a05:6512:10d2:b0:4fd:d538:b97b with SMTP id k18-20020a05651210d200b004fdd538b97bmr9355921lfg.29.1691495026441;
+        Tue, 08 Aug 2023 04:43:46 -0700 (PDT)
 Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm1861679lfh.57.2023.08.08.04.43.44
+        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm1861679lfh.57.2023.08.08.04.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 04:43:44 -0700 (PDT)
+        Tue, 08 Aug 2023 04:43:46 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 08 Aug 2023 13:43:39 +0200
-Subject: [PATCH v3 08/10] interconnect: qcom: sdm660: Set AB/IB
+Date:   Tue, 08 Aug 2023 13:43:40 +0200
+Subject: [PATCH v3 09/10] interconnect: qcom: msm8996: Set AB/IB
  coefficients
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230726-topic-icc_coeff-v3-8-dee684d6cdd2@linaro.org>
+Message-Id: <20230726-topic-icc_coeff-v3-9-dee684d6cdd2@linaro.org>
 References: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
 In-Reply-To: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -69,15 +69,15 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691495013; l=1519;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691495013; l=1682;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=EjLG3n/q4YI8bbEqplfHVOwV0syrmI4lAF1qcHGTJvw=;
- b=EnNVF/Cr9uzLzEU4BBg3kNfteX8HGav2OxqYe3b702ezBcqQnBiKJXPeKjEEqpkCP0IXg0ZPZ
- 0Il6GgQVQ25CyjPK0/MyGHqxPxzBT36JDWPV8X6rvNGRMAfLmNFuhLu
+ bh=6Ylk54qLtCUKuTX9FA4QTRZGSUqgBkVW+4oTAnkFbFA=;
+ b=G6C3tehG5i+wpYLksQeibNa9TcRRryQx2c1C+PbgLjLNinmWth7Kgiq6h+P+yrqSg+hvkS8hs
+ P/WvsN11oQzB97MrKtKeOynWWxsSz6KKpBWsjH96NjyOnz66wttLu7H
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,45 +91,49 @@ calculations. Fill in the missing coefficients.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/sdm660.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/interconnect/qcom/msm8996.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-index 36962f7bd7bb..7392bebba334 100644
---- a/drivers/interconnect/qcom/sdm660.c
-+++ b/drivers/interconnect/qcom/sdm660.c
-@@ -602,6 +602,7 @@ static struct qcom_icc_node mas_mdp_p0 = {
+diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+index 88683dfa468f..b73566c9b21f 100644
+--- a/drivers/interconnect/qcom/msm8996.c
++++ b/drivers/interconnect/qcom/msm8996.c
+@@ -448,6 +448,7 @@ static struct qcom_icc_node mas_mdp_p0 = {
  	.name = "mas_mdp_p0",
- 	.id = SDM660_MASTER_MDP_P0,
- 	.buswidth = 16,
-+	.ib_coeff = 50,
+ 	.id = MSM8996_MASTER_MDP_PORT0,
+ 	.buswidth = 32,
++	.ib_coeff = 25,
  	.mas_rpm_id = 8,
  	.slv_rpm_id = -1,
  	.qos.ap_owned = true,
-@@ -621,6 +622,7 @@ static struct qcom_icc_node mas_mdp_p1 = {
+@@ -463,6 +464,7 @@ static struct qcom_icc_node mas_mdp_p1 = {
  	.name = "mas_mdp_p1",
- 	.id = SDM660_MASTER_MDP_P1,
- 	.buswidth = 16,
-+	.ib_coeff = 50,
+ 	.id = MSM8996_MASTER_MDP_PORT1,
+ 	.buswidth = 32,
++	.ib_coeff = 25,
  	.mas_rpm_id = 61,
  	.slv_rpm_id = -1,
  	.qos.ap_owned = true,
-@@ -1540,6 +1542,7 @@ static const struct qcom_icc_desc sdm660_bimc = {
- 	.num_nodes = ARRAY_SIZE(sdm660_bimc_nodes),
+@@ -1889,7 +1891,8 @@ static const struct qcom_icc_desc msm8996_bimc = {
+ 	.nodes = bimc_nodes,
+ 	.num_nodes = ARRAY_SIZE(bimc_nodes),
  	.bus_clk_desc = &bimc_clk,
- 	.regmap_cfg = &sdm660_bimc_regmap_config,
-+	.ab_coeff = 153,
+-	.regmap_cfg = &msm8996_bimc_regmap_config
++	.regmap_cfg = &msm8996_bimc_regmap_config,
++	.ab_coeff = 154,
  };
  
- static struct qcom_icc_node * const sdm660_cnoc_nodes[] = {
-@@ -1659,6 +1662,7 @@ static const struct qcom_icc_desc sdm660_mnoc = {
+ static struct qcom_icc_node * const cnoc_nodes[] = {
+@@ -2004,7 +2007,8 @@ static const struct qcom_icc_desc msm8996_mnoc = {
+ 	.bus_clk_desc = &mmaxi_0_clk,
  	.intf_clocks = mm_intf_clocks,
  	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
- 	.regmap_cfg = &sdm660_mnoc_regmap_config,
-+	.ab_coeff = 153,
+-	.regmap_cfg = &msm8996_mnoc_regmap_config
++	.regmap_cfg = &msm8996_mnoc_regmap_config,
++	.ab_coeff = 154,
  };
  
- static struct qcom_icc_node * const sdm660_snoc_nodes[] = {
+ static struct qcom_icc_node * const pnoc_nodes[] = {
 
 -- 
 2.41.0
