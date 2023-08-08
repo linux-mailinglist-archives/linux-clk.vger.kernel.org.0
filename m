@@ -2,61 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA6B774668
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 20:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6788C7744D5
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 20:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbjHHS4G (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 14:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S235873AbjHHS3Z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 14:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbjHHSzl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 14:55:41 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B4F6BD38
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 10:14:19 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fe457ec6e7so9788706e87.3
-        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 10:14:19 -0700 (PDT)
+        with ESMTP id S235870AbjHHS3F (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 14:29:05 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE7C7A95
+        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 10:44:41 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so7857511a12.1
+        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 10:44:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691514857; x=1692119657;
+        d=linaro.org; s=google; t=1691516680; x=1692121480;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TJRcX7l83GzG4nljjiXsSgTVORkCZorOu6CVVdtQF3E=;
-        b=eKcwpt8HJdkX3wZNnK9lL2hw8x8t0S0btrEwmtcJDMEPiVxyCXWP/owW9br/v6Dppu
-         2Yh7sx9uh5d+A2LO5cNKlsLaIOKXLIQbdI/1gyZVO+I/qV6mLKpcG8L3yd73pDSqgvIj
-         NRRhVQMo9vPE9K5JE1CH2GIBXbAMPnfLmFHua3B4DJR5D0o734KYPtRrBwrVlu5viJt6
-         YHNOQO+0O7fJ59EfoFmBdzVb7aY73FvR3L4XhtJuZEzCONNUWB2y/ATmM+fwJeB/wWRB
-         osAa21b/nHffnlrGKBWN5ew37PxCKToqbIrm5cIIFaZdhDuTwkZ2rhQ6HayyLXe+JkBa
-         ZrSQ==
+        bh=dlY5pXEYcBgHeb5qjzLwZeG+1V5JyWmwzq+8kailYB8=;
+        b=q6BQSvBUUyzNzU8BC60uJUdGlgioG4XTeUve9NtaZnGmFx53ImMLhnr5Rzl2+85jvD
+         BtgN2gcjncTkIRwSZz7UI7kat8hl+5Eyc1WD4v7Ukf52j5lpf9Gt1vZF1AlPliN041gs
+         ML8PuWFQQWqRivGwXYLaU6kunSbw/cXxDsASXqCFc+mSIIjEIDYYCs5zAy6mQs2e9mza
+         aQ4SapH8nTpCWX4Wmv1cAWqi7hMd9f1QWwvEkdhTZPb7m+wIH6rpfrWJpYw3Yyselb+v
+         fbvPJEUp5rZcIzK4+a/fQ50VFTHLDAywmEml6mo/Fv1zhFkiNvVKPn40gcNUxlkzrqXE
+         WcbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691514857; x=1692119657;
+        d=1e100.net; s=20221208; t=1691516680; x=1692121480;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TJRcX7l83GzG4nljjiXsSgTVORkCZorOu6CVVdtQF3E=;
-        b=laJwVDo/vRNaYoz6JJH9785gS28OuzaMctC9wToPlIOV3RYHgGulyJnp1nH6/uGyeT
-         jUY0onakmw622VU0pj/E+cfnJBzHvvrr48qa4KC2hGUbLG/40r9/9BRzzj7aHRBVWBtT
-         inekESvsPPIdKD8kJBHMbXXts3V5dapK4g6di9ChM+oqW0Dtcece0qj726NJcZPEByC9
-         git+HckurJPv9IDMNOcsUcB4MEmiztXao3ENr2FwTvVyDo1d3CpC28WAgZ1e3IoKpEFz
-         Wu1aOs8eynLzYgIDT/Ar3xAZjuHrla1id44y72UwixglU0YPiss9j60j8KcQZA1nIjPo
-         ggZw==
-X-Gm-Message-State: AOJu0Yykj5mrU+HcjRCkKjaY9DulHUDozdySHB9aHKww58HlzmIplC3K
-        g1Rel6F/d3SgappDV7Cxbdi0xNnbKDMxewKhKnM=
-X-Google-Smtp-Source: AGHT+IGHUT7VSfmI8VQtBPNaetpOWrfLKOPZbXgUnGq/oqs5MCTMjFVV+jNZ7mtrZHhq6p1BDeKZtQ==
-X-Received: by 2002:a05:6512:39c3:b0:4fb:89e3:5ac6 with SMTP id k3-20020a05651239c300b004fb89e35ac6mr9893926lfu.62.1691487893637;
-        Tue, 08 Aug 2023 02:44:53 -0700 (PDT)
+        bh=dlY5pXEYcBgHeb5qjzLwZeG+1V5JyWmwzq+8kailYB8=;
+        b=G4SergPjt1hlioztNC/XNDgDTFevxOsNiyUZj60jpKIGUnx6cMeGoPYqgMrMjTXwBP
+         9F999bGrN0QXMpPzrlLS754c6KiGEfh9azhI0EQfnqDC/Piz4HcJfBa4EdQvnFjAOb6R
+         JijJiXkqCVkL4D4k9fmRPuX8/aQktVO4hjWSJfffvPRrbhFGDsvNAJhdx15g4nfhv2tz
+         nlfmT784XQR0YE/9DemTXEJd5TZB2uvHNH+Z0hDyZqflIpmY2vnn96gTStRG3h6WZgNa
+         UnFfU24w7YJJR+JT7kgk5ElTHE0E0QTPpp8Evbf0Mcd3wGJbVrQN6GJklhreufyEkAFa
+         VLdg==
+X-Gm-Message-State: AOJu0YyBkp1Z2Z3bUZO9dF7L78BJgKhgOK29IsPk2FqaCSd0E9Zv9Cx1
+        4GpYGxT1Vi3gjaI3IKBV3B3S4SqzJp+5FCpE0k8=
+X-Google-Smtp-Source: AGHT+IHh37iYuUiKI2GbU0AYhtJBCPFDqyHRg6hHZo0rvcAp0zMmu3aywLaX3w+vkrjWoKcJi+lCTw==
+X-Received: by 2002:a05:6512:20c1:b0:4f8:58af:ebd7 with SMTP id u1-20020a05651220c100b004f858afebd7mr6593359lfr.39.1691487897383;
+        Tue, 08 Aug 2023 02:44:57 -0700 (PDT)
 Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id i6-20020a056512006600b004fdba93b92asm1818884lfo.252.2023.08.08.02.44.51
+        by smtp.gmail.com with ESMTPSA id i6-20020a056512006600b004fdba93b92asm1818884lfo.252.2023.08.08.02.44.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 02:44:53 -0700 (PDT)
+        Tue, 08 Aug 2023 02:44:56 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 08 Aug 2023 11:44:43 +0200
-Subject: [PATCH v2 3/6] clk: qcom: gcc-msm8998: Don't check halt bit on
- some branch clks
+Date:   Tue, 08 Aug 2023 11:44:45 +0200
+Subject: [PATCH v2 5/6] clk: qcom: mmcc-msm8998: Fix the SMMU GDSC
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-topic-8998_mmssclk-v2-3-34273e275c51@linaro.org>
+Message-Id: <20230531-topic-8998_mmssclk-v2-5-34273e275c51@linaro.org>
 References: <20230531-topic-8998_mmssclk-v2-0-34273e275c51@linaro.org>
 In-Reply-To: <20230531-topic-8998_mmssclk-v2-0-34273e275c51@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -85,11 +84,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691487885; l=1627;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691487885; l=1105;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=4vcJD39xmmwGxR16do/vEynX3nfOkYLGbzSw65dGFMA=;
- b=t/2b5DxWk6eOZxBSMoG1WvSgfjtXnl9wcFAwd+sra0DiGErD9S3YZpkCbKjr1qwJdtT7FY3gv
- IJZo/StB+T4CsgBs40j0+BPJSYBAKHNwSKgL7MrSPgapI+FCbOr3UJU
+ bh=87zmBNCrKExC5fA2pDw1hJreUEORhjqL4+NYXqa3bgY=;
+ b=VT9trWuRQROU5ByyIvzOsud1+jUCahMFSSwl7lXsHgNEroaV6TNcWL2Qi+2HDnBgH+uqXNQKx
+ XLni2Mv9lxlCRZ/eHiiHKdcIHZUZoGsQGa7E5QjDCIxTVH8MTuWmOw8
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -102,50 +101,38 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Some branch clocks are governed externally and we're only supposed to
-send a request concerning their shutdown, not actually ensure it happens.
+The SMMU GDSC doesn't have to be ALWAYS-ON and shouldn't feature the
+HW_CTRL flag (it's separate from hw_ctrl_addr).  In addition to that,
+it should feature a cxc entry for bimc_smmu_axi_clk and be marked as
+votable.
 
-Use the BRANCH_HALT_SKIP define to skip checking the halt bit.
+Fix all of these issues.
 
-Fixes: db2c7c0a04b1 ("clk: qcom: Add missing msm8998 gcc_bimc_gfx_clk")
-Fixes: b5f5f525c547 ("clk: qcom: Add MSM8998 Global Clock Control (GCC) driver")
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Fixes: d14b15b5931c ("clk: qcom: Add MSM8998 Multimedia Clock Controller (MMCC) driver")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/qcom/gcc-msm8998.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clk/qcom/mmcc-msm8998.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
-index 1ba516a0c0f3..257b27d8eeb6 100644
---- a/drivers/clk/qcom/gcc-msm8998.c
-+++ b/drivers/clk/qcom/gcc-msm8998.c
-@@ -2060,7 +2060,7 @@ static struct clk_branch gcc_gp3_clk = {
+diff --git a/drivers/clk/qcom/mmcc-msm8998.c b/drivers/clk/qcom/mmcc-msm8998.c
+index d0a5440e2291..4fdc41e7d2a8 100644
+--- a/drivers/clk/qcom/mmcc-msm8998.c
++++ b/drivers/clk/qcom/mmcc-msm8998.c
+@@ -2627,11 +2627,13 @@ static struct gdsc camss_cpp_gdsc = {
+ static struct gdsc bimc_smmu_gdsc = {
+ 	.gdscr = 0xe020,
+ 	.gds_hw_ctrl = 0xe024,
++	.cxcs = (unsigned int []){ 0xe008 },
++	.cxc_count = 1,
+ 	.pd = {
+ 		.name = "bimc_smmu",
+ 	},
+ 	.pwrsts = PWRSTS_OFF_ON,
+-	.flags = HW_CTRL | ALWAYS_ON,
++	.flags = VOTABLE,
+ };
  
- static struct clk_branch gcc_bimc_gfx_clk = {
- 	.halt_reg = 0x46040,
--	.halt_check = BRANCH_HALT,
-+	.halt_check = BRANCH_HALT_SKIP,
- 	.clkr = {
- 		.enable_reg = 0x46040,
- 		.enable_mask = BIT(0),
-@@ -2073,7 +2073,7 @@ static struct clk_branch gcc_bimc_gfx_clk = {
- 
- static struct clk_branch gcc_gpu_bimc_gfx_clk = {
- 	.halt_reg = 0x71010,
--	.halt_check = BRANCH_HALT,
-+	.halt_check = BRANCH_HALT_SKIP,
- 	.clkr = {
- 		.enable_reg = 0x71010,
- 		.enable_mask = BIT(0),
-@@ -2099,7 +2099,7 @@ static struct clk_branch gcc_gpu_bimc_gfx_src_clk = {
- 
- static struct clk_branch gcc_gpu_cfg_ahb_clk = {
- 	.halt_reg = 0x71004,
--	.halt_check = BRANCH_HALT,
-+	.halt_check = BRANCH_HALT_SKIP,
- 	.clkr = {
- 		.enable_reg = 0x71004,
- 		.enable_mask = BIT(0),
+ static struct clk_regmap *mmcc_msm8998_clocks[] = {
 
 -- 
 2.41.0
