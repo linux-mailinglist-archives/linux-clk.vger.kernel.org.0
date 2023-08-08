@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D9877400E
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 18:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA08773DEB
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 18:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbjHHQ64 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 12:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S229994AbjHHQYM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 12:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233772AbjHHQ6A (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 12:58:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980C92139
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 08:43:23 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-522ab557632so7746222a12.0
-        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 08:43:23 -0700 (PDT)
+        with ESMTP id S229988AbjHHQWv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 12:22:51 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD0FA262
+        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 08:49:31 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51d95aed33aso7754450a12.3
+        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 08:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691509379; x=1692114179;
+        d=linaro.org; s=google; t=1691509764; x=1692114564;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=R/ysiPNWLR7wpbVD7YtHSC9xvbZhsi6ZL4lXHxj1M6c=;
-        b=IOwLj1mneFAFmJb1bLcT7ug6y77kpUrCnbqRDEGHrgd+gyXFFmyzrJ98AgXGMz1+jI
-         LRODVj2+/9ORKh6sq8ucJOt7XtWAbfcuuMdlUclpL1iEiu55Drxvv2LYLomA6DpclJ59
-         CtWE8zTv05rUBxxHL2HDc/cNNRJ4jBv6FP8SGDzD3niJrZkOx6QqkfxM16aHBud0TwT7
-         j77o/r827lYINM2tnJBiyoXGut0O/XqD5lI6oFVqW5UBD0mwiQMTW3VW7DG1Z9KNRdWb
-         8o7S/pz9ttflbfRzarES2ev16qoWDWxjg5YrXw2yACXy+dholq7ycJzUGbu+YPgH78KH
-         h3dg==
+        bh=qv5+yldfcLl5F50y6SpkVFOO6DSopWazKZ9tTkvj/KI=;
+        b=EC5YJNiEHQkmYQc3V/KXNSGgLb29cn421vprSa31CkbcrnwGZUwMWQGrlAxI7ctdoL
+         WN7AOV8KJzBT1Qrad76bsLlZBxCJzDjPTl03URyFjnoCwclIsybNjF6Pq6NXVnSubk3v
+         SaaJ1sYwYnvZbrprp4MzQ9+46iF6z2dVZfN58OqCOOFp8CJCM5h9JudrbgSHLu0nz0JM
+         u2BziIIJwwisTYC4oOlrnUjA+rH/6WLLG8BkIti8tHd693ChbJgV1fYMJQ7eg3TE1KcV
+         BFtqMrhHhIZC7Op6hB7DeV8oRaU3RPRcKcuaJAcFpTgK7gMf3rrzGhYXPWpzZX9y+zlQ
+         qhyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509379; x=1692114179;
+        d=1e100.net; s=20221208; t=1691509764; x=1692114564;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R/ysiPNWLR7wpbVD7YtHSC9xvbZhsi6ZL4lXHxj1M6c=;
-        b=G8m92k/OJevRX4iR8fNw2mBWramUG/NxcdqlEaJjJpa5tvAZFwWcTQM7jCdRNasIPO
-         mKUp5KD5+9jjzk/6axZXYiMzcH7m/m3vs0YaWrc8A4Blchbz6PTRv9KYuh15xhbqvw8h
-         ZNxjDyUaJZkOzOaBRGq9l2HxPg4laeSh1AoIAnO5wxGHvtXWTMJLfMJWRMbKzsqdVKZV
-         x3wIWK8X2J+tKcD26f5MyXqNk0MimQSGctSu2soaGOfsPP8Z9A+073zDwJ+I6MyzQ1zs
-         5MQ7Pumzbn5m0tASu8bQ0PtAhi+CKcf4lKK+YPkmMtuyILChqp3ssdRHzFBCFMM5XN4h
-         TNgg==
-X-Gm-Message-State: AOJu0YyuIVBsi9bfAWMHx+DjSghCCXnnESeKi4L8k+B7iIqSvT/QFcF2
-        2XyQHj9fn783BJB/FSiNj6K6XvwAb7VI+oOptBU=
-X-Google-Smtp-Source: AGHT+IFQ1+reGKbu7+VQxeellkzInKFEL4NfkTVROJIeIltY/tZlYlFyqdoEIWGGNtTNFwjonuVnVw==
-X-Received: by 2002:a05:6512:2347:b0:4f9:5580:1894 with SMTP id p7-20020a056512234700b004f955801894mr8212298lfu.15.1691483274184;
-        Tue, 08 Aug 2023 01:27:54 -0700 (PDT)
+        bh=qv5+yldfcLl5F50y6SpkVFOO6DSopWazKZ9tTkvj/KI=;
+        b=hjJUSzUZty1Ez5d+kjdZ/IDGNhP1s8+d6mcJbuVE3Pn8Yx9bvPQDeEiAudSj3aldXK
+         Q9XeyBtBsmht8d8E9R2QRw3L0/Er+Qwjaxcesy0vAHW37MWZFu8MY90eZdXv5s0hDS4X
+         OE6HHfY/C1YO0rCsrwRzfMmNFeLUmDJ1b7adPmyh8AB6HNB2aIUHLAmcjBx6e8DqXidr
+         LH9cqX2J3qn+Gk7/61eHHlwI0cDoCa5be+ZLNcFBJ0UrUwP6Y93S79mJTMV817wxsJ0a
+         OVQ7EX3zbP8Q3tpjAizOF/2JFQQ3cc5vV159U1xT/FpHXQuf/0EmVinOtPuhivsC70v/
+         9JXA==
+X-Gm-Message-State: AOJu0YwYrtFkVyLHhyNLOq45EgTwfRMfeTZDf3f/M507ugsUHM//S+sQ
+        6jwFvQJ9FfS6Cxm8mgu0FArm6c/7hZBlNg3ykZ4=
+X-Google-Smtp-Source: AGHT+IE1JwtFdnFB8Qb2FMa0lT19XJl5y0OhOFfz9ix5xSzooJBHWR588byfQs4NsD0XnfPqprVNBg==
+X-Received: by 2002:a05:6512:39d6:b0:4f8:71bf:a259 with SMTP id k22-20020a05651239d600b004f871bfa259mr7889276lfu.67.1691483278062;
+        Tue, 08 Aug 2023 01:27:58 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id s18-20020adfeb12000000b0031779a6b451sm12861246wrn.83.2023.08.08.01.27.52
+        by smtp.gmail.com with ESMTPSA id s18-20020adfeb12000000b0031779a6b451sm12861246wrn.83.2023.08.08.01.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 01:27:53 -0700 (PDT)
+        Tue, 08 Aug 2023 01:27:57 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
@@ -62,9 +62,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH 06/11] clk: samsung: exynos5420: do not define number of clocks in bindings
-Date:   Tue,  8 Aug 2023 10:27:33 +0200
-Message-Id: <20230808082738.122804-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 08/11] clk: samsung: exynos7885: do not define number of clocks in bindings
+Date:   Tue,  8 Aug 2023 10:27:35 +0200
+Message-Id: <20230808082738.122804-9-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230808082738.122804-1-krzysztof.kozlowski@linaro.org>
 References: <20230808082738.122804-1-krzysztof.kozlowski@linaro.org>
@@ -90,32 +90,62 @@ directly.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/clk/samsung/clk-exynos5420.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/clk/samsung/clk-exynos7885.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-index 1e0cbf762408..199843f12ae5 100644
---- a/drivers/clk/samsung/clk-exynos5420.c
-+++ b/drivers/clk/samsung/clk-exynos5420.c
-@@ -139,6 +139,9 @@
- #define SRC_KFC			0x28200
- #define DIV_KFC0		0x28500
+diff --git a/drivers/clk/samsung/clk-exynos7885.c b/drivers/clk/samsung/clk-exynos7885.c
+index 0c6a84764f7a..f7d7427a558b 100644
+--- a/drivers/clk/samsung/clk-exynos7885.c
++++ b/drivers/clk/samsung/clk-exynos7885.c
+@@ -16,6 +16,12 @@
+ #include "clk.h"
+ #include "clk-exynos-arm64.h"
  
 +/* NOTE: Must be equal to the last clock ID increased by one */
-+#define CLKS_NR			(CLK_DOUT_PCLK_DREX1 + 1)
++#define CLKS_NR_TOP			(CLK_GOUT_FSYS_USB30DRD + 1)
++#define CLKS_NR_CORE			(CLK_GOUT_TREX_P_CORE_PCLK_P_CORE + 1)
++#define CLKS_NR_PERI			(CLK_GOUT_WDT1_PCLK + 1)
++#define CLKS_NR_FSYS			(CLK_GOUT_MMC_SDIO_SDCLKIN + 1)
 +
- /* Exynos5x SoC type */
- enum exynos5x_soc {
- 	EXYNOS5420,
-@@ -1587,7 +1590,7 @@ static void __init exynos5x_clk_init(struct device_node *np,
+ /* ---- CMU_TOP ------------------------------------------------------------- */
  
- 	exynos5x_soc = soc;
- 
--	ctx = samsung_clk_init(NULL, reg_base, CLK_NR_CLKS);
-+	ctx = samsung_clk_init(NULL, reg_base, CLKS_NR);
- 	hws = ctx->clk_data.hws;
- 
- 	samsung_clk_of_register_fixed_ext(ctx, exynos5x_fixed_rate_ext_clks,
+ /* Register Offset definitions for CMU_TOP (0x12060000) */
+@@ -333,7 +339,7 @@ static const struct samsung_cmu_info top_cmu_info __initconst = {
+ 	.nr_div_clks		= ARRAY_SIZE(top_div_clks),
+ 	.gate_clks		= top_gate_clks,
+ 	.nr_gate_clks		= ARRAY_SIZE(top_gate_clks),
+-	.nr_clk_ids		= TOP_NR_CLK,
++	.nr_clk_ids		= CLKS_NR_TOP,
+ 	.clk_regs		= top_clk_regs,
+ 	.nr_clk_regs		= ARRAY_SIZE(top_clk_regs),
+ };
+@@ -552,7 +558,7 @@ static const struct samsung_cmu_info peri_cmu_info __initconst = {
+ 	.nr_mux_clks		= ARRAY_SIZE(peri_mux_clks),
+ 	.gate_clks		= peri_gate_clks,
+ 	.nr_gate_clks		= ARRAY_SIZE(peri_gate_clks),
+-	.nr_clk_ids		= PERI_NR_CLK,
++	.nr_clk_ids		= CLKS_NR_PERI,
+ 	.clk_regs		= peri_clk_regs,
+ 	.nr_clk_regs		= ARRAY_SIZE(peri_clk_regs),
+ 	.clk_name		= "dout_peri_bus",
+@@ -661,7 +667,7 @@ static const struct samsung_cmu_info core_cmu_info __initconst = {
+ 	.nr_div_clks		= ARRAY_SIZE(core_div_clks),
+ 	.gate_clks		= core_gate_clks,
+ 	.nr_gate_clks		= ARRAY_SIZE(core_gate_clks),
+-	.nr_clk_ids		= CORE_NR_CLK,
++	.nr_clk_ids		= CLKS_NR_CORE,
+ 	.clk_regs		= core_clk_regs,
+ 	.nr_clk_regs		= ARRAY_SIZE(core_clk_regs),
+ 	.clk_name		= "dout_core_bus",
+@@ -743,7 +749,7 @@ static const struct samsung_cmu_info fsys_cmu_info __initconst = {
+ 	.nr_mux_clks		= ARRAY_SIZE(fsys_mux_clks),
+ 	.gate_clks		= fsys_gate_clks,
+ 	.nr_gate_clks		= ARRAY_SIZE(fsys_gate_clks),
+-	.nr_clk_ids		= FSYS_NR_CLK,
++	.nr_clk_ids		= CLKS_NR_FSYS,
+ 	.clk_regs		= fsys_clk_regs,
+ 	.nr_clk_regs		= ARRAY_SIZE(fsys_clk_regs),
+ 	.clk_name		= "dout_fsys_bus",
 -- 
 2.34.1
 
