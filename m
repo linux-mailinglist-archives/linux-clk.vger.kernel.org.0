@@ -2,77 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC07D774470
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 20:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04AE7744E5
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 20:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235610AbjHHSTY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 14:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
+        id S235699AbjHHSbS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 14:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbjHHSTE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 14:19:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE4885292
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 10:26:52 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-99bcfe28909so815545766b.3
-        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 10:26:52 -0700 (PDT)
+        with ESMTP id S235455AbjHHSbB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 14:31:01 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1986282F9
+        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 10:51:01 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-523225dd110so5986351a12.0
+        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 10:51:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691515610; x=1692120410;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1691517060; x=1692121860;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UyS/L7dLf5HA1aT+dxr0rfvSOnR4w8+8xr/m/2kmCIY=;
-        b=RrY0yBArpEwf2RwAxgi6Xe8/poyE4eqsm9DHfY1+83yiAIrRsu5ymPqBDK+Nz255GZ
-         lfMJpd/f8TcK3NnDWAxYup5O2G3dHWIdMjQanf/KJcHA9WWi0zKQHHTx/HrwilER25q8
-         hUbfnFC1HJXsojXBjmnA1xs2PvqU9RO6b0fH1HCe5X3JzWqhMHY7SWMJB+2+Ib0QjVYJ
-         iU5xzZd6xkPMJ6oUzKJ9uR1Iq2+SCv4fY+U3uRJemyeb9hvw0xm6gUUysXCgCN73Oenb
-         Wb4KOzvvIfwAj2gXnkVvNOfdHXtH5SqUepG9RL3K4nvfYevqUJT9IEQGC7s9Cdy9o5IW
-         q+fA==
+        bh=U/ENPbWDACTq/gT25pwElyGsToVBQemAbfEgTyGefM8=;
+        b=DLisWEkyKLhJdEab7XpNHg0OcI/tDG4n3Llbj0Ahxh4JPs6ccSsan1vcolVvpI7PC7
+         WmnbuLrqMXsdg8DzKhuPY0ZGXewivAImdx0G0zThtlH1vf68GjnapR6yHrxT1buPGorV
+         EpZzjIUtNJSl4ng8AOG91rlk/HI5eS5/UqmdksvcI+i0tz3i25aXg/ISkl6sTnCRQ2/q
+         4gIYn2GbQAtHpva9urNvXRC+nTRERrbSvOhcA2gFKpdWLWJnH2kpwYuouiDR6t60pqVy
+         KK9ZTxb+0j7ZU6nIzbXNbmXSZ3cyxW4CRNgM74SD9cojoPoMfYd0LS2Q3FnOnCHSUrPy
+         LkhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691515610; x=1692120410;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1691517060; x=1692121860;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UyS/L7dLf5HA1aT+dxr0rfvSOnR4w8+8xr/m/2kmCIY=;
-        b=AIu7/t4my95inKrtto1MB5SdZSZy1XcjsERPg2faTv0NuaqI2h4TZlPRVr2xbF+O7E
-         FEHaddAUi4YvBaARn9EExgKHnUTqda9t42ZTlyrdTS6WZda3DSkaLkFSFgH23GIElJpn
-         fDYLSxkRz54LbUVQhTq1dRXaiJdb30Dff9C2yKBCpKfIfNRL9ssZaa/2GTQ8I8yPwf85
-         kFjxiPk40tjj0B0Uvla3ZTFfJqxP+9Uxj5sARO5Lo6IiDKnrbraznJHmemoVSpiDTPMw
-         0NCMBVorl8osq756JoZotlMBikcxS2CmsZzRyK6bLbxgDMrzCR5XRyq35jIxIlDsynEO
-         cyIQ==
-X-Gm-Message-State: AOJu0Yy7soC/8x1jp7N/XPZOBecNLA4BJ57dO8AFF/fI2/M+R6vRAtVI
-        14zDSB1m+IMqbtU+ubH+cOF9T+qqlP/pDV+fFEg=
-X-Google-Smtp-Source: AGHT+IG5ejXw8mSfMpGS3YO2cZNr5f38aIplR/Hy2qVkoP54+cIeF0lk06XFWiAgsKDzR7RqHr3rDA==
-X-Received: by 2002:a2e:904c:0:b0:2b9:4b2b:89d8 with SMTP id n12-20020a2e904c000000b002b94b2b89d8mr7661614ljg.35.1691474242601;
-        Mon, 07 Aug 2023 22:57:22 -0700 (PDT)
+        bh=U/ENPbWDACTq/gT25pwElyGsToVBQemAbfEgTyGefM8=;
+        b=BNmMf9E0jSrRiq8mggo2WbuCCuFsvVx+XVap8W88UA0sRcx6EsSYn4pCtiy+W9cmmT
+         bi1hzq3bEeHIgtthMDnesmJOADvPpXa7tOD18deRfUvQrvB2JGw6i4yiHJ8lrWJYQ3QL
+         Qk/fkADLsG/KNPrRHWEuQe7rVCD9L5OXpJGETaYqJCr4RYMFQD+SEeLvt1qEKlbEUVrV
+         EMBq44K+jDpcZ79edH0C/tS/2uCq/MzN5G3RSB97MFURQjUfLhP4AffCKUaFmqqpUohM
+         ZZhZWfLshifLYAKhyX/vT27NNdNQN47tExu/CQhZKyt8jqpCkhBFXllQHPPQ6PyH2zNd
+         YWEA==
+X-Gm-Message-State: AOJu0YxmdXVgY3sQepMZD/dhDYqbl423nemkSeCP9c7cGZOo3GPheXM4
+        324XeFmiyO8ar/o+lGlWuNkssHVVUEuDrzb1Ur8=
+X-Google-Smtp-Source: AGHT+IH20o5oXu1MzFaME7Vqm8k1vG/h5IULgofIK8nWT0wfuYK0Ryctno9bzeuLujRtR/SQOzZBWA==
+X-Received: by 2002:a17:906:d8:b0:99b:ca5d:1466 with SMTP id 24-20020a17090600d800b0099bca5d1466mr11379531eji.66.1691474329221;
+        Mon, 07 Aug 2023 22:58:49 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id bn10-20020a170906c0ca00b00992b0745548sm6162130ejb.152.2023.08.07.22.57.20
+        by smtp.gmail.com with ESMTPSA id e4-20020a1709062c0400b00982d0563b11sm3463474ejh.197.2023.08.07.22.58.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Aug 2023 22:57:21 -0700 (PDT)
-Message-ID: <d1172ed6-ee3b-83b6-1656-c91e35fbc2df@linaro.org>
-Date:   Tue, 8 Aug 2023 07:57:19 +0200
+        Mon, 07 Aug 2023 22:58:48 -0700 (PDT)
+Message-ID: <9e235de6-972a-84e5-3e09-f0b07b10e28d@linaro.org>
+Date:   Tue, 8 Aug 2023 07:58:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 2/3] dt-bindings: clock: add qca8386/qca8084 clock and
- reset definitions
-To:     Jie Luo <quic_luoj@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        p.zabel@pengutronix.de
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_srichara@quicinc.com
-References: <20230801085352.22873-1-quic_luoj@quicinc.com>
- <20230801085352.22873-3-quic_luoj@quicinc.com>
- <ef996a7e-6eba-4366-c3ea-0d08f2768e98@linaro.org>
- <cf9788f0-a115-5ff9-1195-f4f302551e04@quicinc.com>
+Subject: Re: [PATCH v4 0/8] Initial Marvell PXA1908 support
 Content-Language: en-US
+To:     =?UTF-8?Q?Duje_Mihanovi=c4=87?= <duje.mihanovic@skole.hr>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-hardening@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afaerber@suse.de,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20230807-pxa1908-lkml-v4-0-cb387d73b452@skole.hr>
+ <5723818.DvuYhMxLoT@radijator>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cf9788f0-a115-5ff9-1195-f4f302551e04@quicinc.com>
+In-Reply-To: <5723818.DvuYhMxLoT@radijator>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
@@ -83,44 +95,14 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 08/08/2023 07:19, Jie Luo wrote:
->>> +properties:
->>> +  compatible:
->>> +    const: qcom,nsscc-qca8k
->>
->> SoC name is before IP block names. See:
->> Documentation/devicetree/bindings/arm/qcom-soc.yaml
->>
->> qca8k is not SoC specific. I don't know what you are documenting here,
->> but if this is a SoC, then follow SoC rules.
->>
->> If this is not SoC, it confuses me a bit to use GCC binding.
->>
->> Anyway, this was not tested, as pointed out by bot... Please test the
->> code before sending.
->>
->> Best regards,
->> Krzysztof
->>
+On 07/08/2023 23:02, Duje Mihanović wrote:
+> Patch 8/8 is missing because b4 lost connection to my SMTP server while 
+> sending it. Should I resend the whole series?
 > 
-> Hi Krzysztof,
-> 
-> Thanks for the review comments.
-> qca8383/qca8084 is a network chip that support switch mode and PHY mode,
-> the hardware register is accessed by MDIO bus, which is not a SOC.
-> 
-> But it has the self-contained clock controller system, the clock 
-> framework of qca8386/qca8084 is same as the GCC of ipq platform such as 
-> ipq9574.
+>
 
-OK
-
-> 
-> would you help advise whether we can document it with the compatible
-> "qcom,qca8k-nsscc"?
-
-For example:
-qcom,qca8084-nsscc
+Just send patch 8 manually setting in-reply-to= argument to git
+send-email. b4 maybe also has this option, I don't know.
 
 Best regards,
 Krzysztof
