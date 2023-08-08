@@ -2,117 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BAA77403B
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 19:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1633773E94
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Aug 2023 18:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbjHHRAv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Aug 2023 13:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
+        id S232738AbjHHQct (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Aug 2023 12:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbjHHRAD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 13:00:03 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32D62706
-        for <linux-clk@vger.kernel.org>; Tue,  8 Aug 2023 09:00:28 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99cdb0fd093so312574866b.1
-        for <linux-clk@vger.kernel.org>; Tue, 08 Aug 2023 09:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691510398; x=1692115198;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rq9CGfMIPSDr9ZlL/JERcR7sYpgjvn+r29Kl2qTSWpE=;
-        b=vfo0i+LiAZi38xsroAnRMiOkDYYymf6/ozqTivpl/Lt+lPHwreovDxVnzdePaAudc4
-         111/2k78EMTUEz7t3xmFZqiJVoAY9QgYPCh/RkUg1qe4A1kKDF4tfOzfoxC038Lh9mY9
-         L8mP5XO/NpKZw7D1J/VeIB3yWfzUDFiDO5oC5Jh31kAI0aQDCZ9iidKY1nsvOtESFvvM
-         kjbNMYMIdB7JcwmcRmN/qCNZuVW8oElJGDHokUIINV4u1ZtvE8Gexk3EN9+g0Rfvzwqu
-         cpsbXObTYZ4RtigWrz/5CETPbaUNIeQTR9wWBxkovJlMuO1vi3rSye0DB4d7pS/jEaW6
-         sAJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691510398; x=1692115198;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rq9CGfMIPSDr9ZlL/JERcR7sYpgjvn+r29Kl2qTSWpE=;
-        b=g7ufq8O1dE/Iz4ocT+vAdQmc5tuNnIUB/hYbXqsFKMDNcTzGr+PhX6LkcRloaJOgxV
-         ijtK0W1uT6Nyt6eMPMIMq3Y0FIy3rIPoWsN5j7rMsPToozDhCIUxLxEhCezraosOyVA0
-         YXD7Kp9drRCT+3ukZJDn/fnxwh/17Z79A4n07MvpMsZGhK9/tAWtPZv5kEjvwHh+/swl
-         27/cUTvhVqNxaMxT8DfwifWJ2gm+BJo+RMjLr142/7NzTm2POB/MV1ogUkKX0P+96FZK
-         rUILSm1RNwDEf8frAR1VQFzAKdSUWiBEKWtEAGRdZKBVlfMKuCXsuCZ4ntEBlbiHwafs
-         /iyQ==
-X-Gm-Message-State: AOJu0Yy28TR6B+2WCXzahu76M5GRrN2oilNcmpA9q4Eo+/wvDhK5OJyK
-        OmHp020oAYPo/YcHH3sMy3tqdB4mZuUcDnnDtEQ=
-X-Google-Smtp-Source: AGHT+IHxzkAXBfNJDNcknbZH6tlIYjJNFyXEZDfCnRpxQMJVfuN4V6svYqKu4KC6ef0+KBpYIwyrmA==
-X-Received: by 2002:a2e:9f4b:0:b0:2b9:3db7:322f with SMTP id v11-20020a2e9f4b000000b002b93db7322fmr8508153ljk.18.1691492178941;
-        Tue, 08 Aug 2023 03:56:18 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id o12-20020a05600c378c00b003fd2e89620asm17797634wmr.40.2023.08.08.03.56.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 03:56:18 -0700 (PDT)
-Message-ID: <d7cc1aec-17be-502d-47c1-3163a2766ee4@linaro.org>
-Date:   Tue, 8 Aug 2023 12:56:16 +0200
+        with ESMTP id S232831AbjHHQb0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Aug 2023 12:31:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBAB13968;
+        Tue,  8 Aug 2023 08:51:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B290624AE;
+        Tue,  8 Aug 2023 11:03:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FDFC433C8;
+        Tue,  8 Aug 2023 11:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691492630;
+        bh=A+mqCpN+QuFAcnM1ap+yOp5utSXZlVUNIHG5R4odB6M=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Lik0sr/+SSNBgc79MfJ0720gb9FA9wUR4ajKbE4hlQU6LR65Rua/0DtXWZPnb1DcG
+         O8S9x3mi3rg6f3b/25KTN1yGu+//8gTrvLdJNpL6MBlgN+OL7yD/a5LCCQ7s5wRz+W
+         il/KbU0sOxJm3PI2uS15NacnsFKi4D8/aNvPGNKTSu+f1v7cEoyXzlOm9qUZGjOjBo
+         2XjDDJUpf9x71LBBoQtAEXWcTLpdyF0gxg1ikRhp+ZMePGOLAGme6a9c6PjX0IYCCl
+         sPPm2ZRYpnLlp42kQv2Vr5psLo4DHDAqcZCzE+6CtOX/1phyAG/52byRnUO6ef2GKQ
+         HrZXAh5+GT4WA==
+Message-ID: <4c0dfd1c-2b61-b954-73ad-ac8d4b82487d@kernel.org>
+Date:   Tue, 8 Aug 2023 06:03:47 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 11/11] dt-bindings: clock: samsung: remove define with
- number of clocks
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 4/5] clk: socfpga: agilex: add clock driver for the
+ Agilex5
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230808082738.122804-1-krzysztof.kozlowski@linaro.org>
- <20230808082738.122804-12-krzysztof.kozlowski@linaro.org>
- <20230808-scarcity-sprung-c0c2abc2971f@spud>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230808-scarcity-sprung-c0c2abc2971f@spud>
-Content-Type: text/plain; charset=UTF-8
+To:     niravkumar.l.rabara@intel.com
+Cc:     adrian.ho.yin.ng@intel.com, andrew@lunn.ch, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, netdev@vger.kernel.org,
+        p.zabel@pengutronix.de, richardcochran@gmail.com,
+        robh+dt@kernel.org, sboyd@kernel.org, wen.ping.teh@intel.com
+References: <20230618132235.728641-1-niravkumar.l.rabara@intel.com>
+ <20230801010234.792557-1-niravkumar.l.rabara@intel.com>
+ <20230801010234.792557-5-niravkumar.l.rabara@intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230801010234.792557-5-niravkumar.l.rabara@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 08/08/2023 12:53, Conor Dooley wrote:
-> On Tue, Aug 08, 2023 at 10:27:38AM +0200, Krzysztof Kozlowski wrote:
->> Number of clocks supported by Linux drivers might vary - sometimes we
->> add new clocks, not exposed previously.  Therefore this number of clocks
->> should not be in the bindings, because otherwise we should not change
->> it.
+Hi Stephen/Mike,
+
+On 7/31/23 20:02, niravkumar.l.rabara@intel.com wrote:
+> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 > 
-> This sentence reads super awkwardly, not by any means important to
-> change, but I'd likely word it "Therefore these numbers of clocks should
-> not be in the bindings, as that prevents changing them".
-
-That's better, thanks.
-
+> Add support for Intel's SoCFPGA Agilex5 platform. The clock manager
+> driver for the Agilex5 is very similar to the Agilex platform,we can
+> re-use most of the Agilex clock driver.
 > 
->> Remove it entirely from the bindings, once Linux drivers stopped
->> using them.
+> Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
+> Reviewed-by: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+> ---
+>   drivers/clk/socfpga/clk-agilex.c | 433 ++++++++++++++++++++++++++++++-
+>   1 file changed, 431 insertions(+), 2 deletions(-)
 > 
-> I figure there are no consumers in other projects then? If so,
 
-Difficult to say, nothing known to me. Anyway these are not clock IDs,
-so if anyone actually relied on number of clocks in the bindings, they
-would have trouble in the first place.
+If you're ok with this patch, can I take this through armsoc?
 
-
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-
-Best regards,
-Krzysztof
-
+Dinh
