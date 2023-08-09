@@ -2,61 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFDC776874
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Aug 2023 21:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E6577687A
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Aug 2023 21:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjHITVH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Aug 2023 15:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S233616AbjHITVM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Aug 2023 15:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjHITVG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Aug 2023 15:21:06 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3A92127
-        for <linux-clk@vger.kernel.org>; Wed,  9 Aug 2023 12:20:49 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so3077191fa.0
-        for <linux-clk@vger.kernel.org>; Wed, 09 Aug 2023 12:20:49 -0700 (PDT)
+        with ESMTP id S233626AbjHITVL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Aug 2023 15:21:11 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011FF26B8
+        for <linux-clk@vger.kernel.org>; Wed,  9 Aug 2023 12:20:55 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b9b904bb04so2823671fa.1
+        for <linux-clk@vger.kernel.org>; Wed, 09 Aug 2023 12:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691608830; x=1692213630;
+        d=linaro.org; s=google; t=1691608834; x=1692213634;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mFQ707YTlR2asiZeDkwXq23zTGpUUmFrLAoTxhmG6mY=;
-        b=OPxuvbEuXJUXjzQ89YLv2sBdDf2wZx0cITcGYsNii8MZxxcnyBJ5c8rcGtK4hVNqNi
-         bvgzBFviOD+kPmESZ/f8KkYo1Tv4TXZ49/bRINZspYc17BdlSD05VYIkNxNSlmSS371+
-         jwLhwnJvThpOeD4qf8YunREVa8PM03sXZsgIrD8mGorZpFd6UIYeMzkb5q05orFGHF5r
-         BovPTMhwNsuDP3MLkpcd8kIa1I80udRfhv2g01ZSk0MrTImMoFeaWGt+GN7BmDdbyQTl
-         NsqVezWpl0l/iFlkMcS9J26abIdSn7zpTVTagZSULfvqCxhQkoj5QIzkr/Qur0IJFYVf
-         Pmaw==
+        bh=DE94Q6lf2K2gSTbQ4obZ5qNHgQeup5/EEo7g9MBB54w=;
+        b=hVZmOV05FAUjR8G8bAhpPHpxnHhQ6DhH1iewP44ue5XrvSdFh1IvsOVHkaiJ8DJSlG
+         OzOwcDv+13bnppTHDKixF9LK3nkTDiV+dt1xhzEyEn/hXtWbFalKXwbjBGPTqK7Ue3S8
+         VhYQt8NK97pnxqSmf/IX2GvUWhC0cKQylUtb4hwZV6v8kC75kW3GRNvdZMrY65f6fawZ
+         7C3wht1lSE7lEXy0viadI5LBdxGnHoIQCCj4TOjAruUiluS/U7PGpHbDEAzTBE2EGxXU
+         cjejMJpG/6Fpud7Gbupf9gt48u1dP6b6fYzfGYNA6pQ7TfjjTFSA/AKGBIr86y1dWgRQ
+         RZTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691608830; x=1692213630;
+        d=1e100.net; s=20221208; t=1691608834; x=1692213634;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mFQ707YTlR2asiZeDkwXq23zTGpUUmFrLAoTxhmG6mY=;
-        b=JDJW8ndRxmAn/enneI4JvaA7E5RHspMfrSRCKyRnJM9i3WQn/LWWN8GtngX3dyDGmJ
-         SxtMarQbxzAYanFkoMbx8GOZPd0/WSbptgYWwMPT2BZe0ef5boSHsjkrzm5WBa/l3EV0
-         D0jKOn7hhwrDvkoJfUasXzXXN0A0tZLDGFdePQXQHM0vIHOzan1Dfj7tzr6uM7TESnHX
-         X3gB14DtxfxwfIqJxj8yyiFibCKnCaSbaPPF2LJNZYmcUwX/OAMANeGZ/NMWxs7iCXxE
-         ZphfzBc1COhDPqflDeXb79bTcWh/xHFITK6wQKAqDjDPpsg3LMf5MA5mQp6Wyll8dHsJ
-         PVnQ==
-X-Gm-Message-State: AOJu0YxAjJtiE8O7Txw4tQYsZ9yU/uvPrggI3pzmDu24mfG32iH6sGnY
-        f5gOB4PTtLId0VWBopBJ5GcgVA==
-X-Google-Smtp-Source: AGHT+IGx1WiOqj0jubUGfA3Ryt+VCR2f1eEL3qHMRLstCIQlqiZlZyf0bk+Shq+qIJ3+Bwaqub5OnA==
-X-Received: by 2002:a2e:91c8:0:b0:2b9:514d:64c1 with SMTP id u8-20020a2e91c8000000b002b9514d64c1mr112691ljg.8.1691608829483;
-        Wed, 09 Aug 2023 12:20:29 -0700 (PDT)
+        bh=DE94Q6lf2K2gSTbQ4obZ5qNHgQeup5/EEo7g9MBB54w=;
+        b=B4XvoPHn3KvJL8dZBfbxZDVZCeAe66RrzLqordwt+7/EjjNwfYb9cFnS1PTBSsdVDE
+         956r4txFr2naXIAAZ9RBZkfSIELDn2o7kK2Vf0IItx2woxK2JAf/rkpVTAu7b/2Ozq/z
+         VkG9H5Y7F3LNH/eHraHrO0Nk1qOhRk09y5ljiYt9cEW8c2WO9emGIrOF0ULJWJzG3ZCt
+         T8nxGeObXoyl4C1XcCmgd8Hpbqs/YXorwxnp2uRxiUFCkep9CoHN/cZmiW3OhxYTlz7J
+         tsE+GhUabXUlP7Jv7Acw2yzvftgIsrEv+peY/s3xnAc848oBTX+qudP7iCEiivGe3xx+
+         AlDA==
+X-Gm-Message-State: AOJu0Yw/zr4FJuI0hyNdFZnsIuKf+ItQlBxXmhRxulAtyUjgJ9PRiDQu
+        oEcib43v9wdK5B4yfCu854wF1Q==
+X-Google-Smtp-Source: AGHT+IH91D5GnSETRj0u3DPt3bzPi4croUy1p68YiToywW5aS9a6UlkxNDxyQkW6FnSr1PCZ1vpbrw==
+X-Received: by 2002:a2e:8550:0:b0:2b9:b9c8:99 with SMTP id u16-20020a2e8550000000b002b9b9c80099mr104092ljj.22.1691608834133;
+        Wed, 09 Aug 2023 12:20:34 -0700 (PDT)
 Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id o3-20020a2e9b43000000b002b9ed203af1sm2863218ljj.132.2023.08.09.12.20.26
+        by smtp.gmail.com with ESMTPSA id o3-20020a2e9b43000000b002b9ed203af1sm2863218ljj.132.2023.08.09.12.20.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 12:20:29 -0700 (PDT)
+        Wed, 09 Aug 2023 12:20:33 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 09 Aug 2023 21:20:24 +0200
-Subject: [PATCH v3 1/6] arm64: dts: qcom: msm8998: Drop bus clock reference
- from MMSS SMMU
+Date:   Wed, 09 Aug 2023 21:20:25 +0200
+Subject: [PATCH v3 2/6] arm64: dts: qcom: msm8998: Add missing power domain
+ to MMSS SMMU
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-topic-8998_mmssclk-v3-1-ba1b1fd9ee75@linaro.org>
+Message-Id: <20230531-topic-8998_mmssclk-v3-2-ba1b1fd9ee75@linaro.org>
 References: <20230531-topic-8998_mmssclk-v3-0-ba1b1fd9ee75@linaro.org>
 In-Reply-To: <20230531-topic-8998_mmssclk-v3-0-ba1b1fd9ee75@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -85,15 +85,15 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691608824; l=1046;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691608824; l=906;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=dMjovGWIjyf4UWgt36DKFCmom9ibnuPYDRAv7j4Cf+8=;
- b=0aJhMLANoopT9Wyll4mX1KVx6JDNVknG/kysgc0OBuv4vVfhC4gUTx23xhiPcZ61jRec2O2fQ
- 9NkAHlkn2sqD1DWLMOhTzsIB89GXL0lNqi5IveyKMkOX4DQlv8M6WaN
+ bh=EM5tWZgcQ/PtQiCuUMktQpuJVbPaCBzE0y/oEdPpoBk=;
+ b=DgG5WM7aCnxlKKTKRxJyT1NXqA7+tx0CEHA0dPTjvPgAtp5Ajxf5aVQKXXHPrMj6JtpuzIu7l
+ Adop0zBmFK0CA+8JhrdwrZpDm3sn/DQGCO1GR9TImxjwOVAXckjOEC3
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,34 +102,29 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The MMSS SMMU has been abusingly consuming the exposed RPM interconnect
-clock. Drop it.
+The MMSS SMMU has its own power domain. Attach it so that we can drop
+the "keep it always-on" hack.
 
 Fixes: 05ce21b54423 ("arm64: dts: qcom: msm8998: Configure the multimedia subsystem iommu")
 Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8998.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index a41a34dbcc3c..e40f6461f4fd 100644
+index e40f6461f4fd..39db67211fae 100644
 --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -2743,10 +2743,10 @@ mmss_smmu: iommu@cd00000 {
+@@ -2770,6 +2770,8 @@ mmss_smmu: iommu@cd00000 {
+ 				<GIC_SPI 261 IRQ_TYPE_LEVEL_HIGH>,
+ 				<GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>,
+ 				<GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
++
++			power-domains = <&mmcc BIMC_SMMU_GDSC>;
+ 		};
  
- 			clocks = <&mmcc MNOC_AHB_CLK>,
- 				 <&mmcc BIMC_SMMU_AHB_CLK>,
--				 <&rpmcc RPM_SMD_MMAXI_CLK>,
- 				 <&mmcc BIMC_SMMU_AXI_CLK>;
--			clock-names = "iface-mm", "iface-smmu",
--				      "bus-mm", "bus-smmu";
-+			clock-names = "iface-mm",
-+				      "iface-smmu",
-+				      "bus-smmu";
- 
- 			#global-interrupts = <0>;
- 			interrupts =
+ 		remoteproc_adsp: remoteproc@17300000 {
 
 -- 
 2.41.0
