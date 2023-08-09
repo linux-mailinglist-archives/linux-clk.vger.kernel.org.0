@@ -2,104 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BEFB7754A8
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Aug 2023 10:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DF0775530
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Aug 2023 10:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231698AbjHIIBp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Aug 2023 04:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
+        id S231303AbjHII2R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Aug 2023 04:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjHIIBh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Aug 2023 04:01:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778701BFF;
-        Wed,  9 Aug 2023 01:01:37 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3795piZq024099;
-        Wed, 9 Aug 2023 08:01:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=70SZTvO4eDdQJlq3XrzHQEoTE1pLe0Iq86lajdoq0jc=;
- b=f5PMqvfyZUNIrhxgcXCNi5DKus8WEftA7+gKRaEs7CL7tKZvv0SB7JkIgg6utfeeYhC0
- M0BP2k6sYZfPMtl5dbKpFZV9gqGHLzJvdwnqr7FzXeQQ5/4MhXY6zIo/mWsfQYZb2iq0
- m/IV3w1uZVcNyMkr6faQ6Key6X9a4oTBZpsOKg67P7GqvFqc+uX11avOg8o5tr8LJHWv
- Dw9OwJnV2m29cygpO+elG0dVW91CaH06qag4Re/DrWnZFuIUI2SZb4XVd1XIEKDVw0iW
- hGvSj0PGQDLu3pwKTRDSnj7WVOUISv/2mvEEzbDTeNHDH3EVTVFEWGZWiF2b/ma+mLDf Mw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sbpqs1yje-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Aug 2023 08:01:24 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37981NfS001180
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 9 Aug 2023 08:01:23 GMT
-Received: from akronite-sh-dev02.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 9 Aug 2023 01:01:19 -0700
-From:   Luo Jie <quic_luoj@quicinc.com>
-To:     <andersson@kernel.org>, <agross@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_srichara@quicinc.com>, Luo Jie <quic_luoj@quicinc.com>
-Subject: [PATCH v1 4/4] arm64: defconfig: Enable qca8k nss clock controller
-Date:   Wed, 9 Aug 2023 16:00:47 +0800
-Message-ID: <20230809080047.19877-5-quic_luoj@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230809080047.19877-1-quic_luoj@quicinc.com>
-References: <20230809080047.19877-1-quic_luoj@quicinc.com>
+        with ESMTP id S230361AbjHII2Q (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Aug 2023 04:28:16 -0400
+X-Greylist: delayed 606 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Aug 2023 01:28:16 PDT
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B5A1B6
+        for <linux-clk@vger.kernel.org>; Wed,  9 Aug 2023 01:28:16 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id F211448769; Wed,  9 Aug 2023 08:16:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1691569005;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=CSIJr/LHWQjQT642kPTkDmUh5RrFzxyTJgXF2wMosFGaCZ8uG20uW/YF7dNwYj1Lh
+         inbzcSDIzi/5QWTwpS41ft4lyQvwzNHOqEwrZ7P3LwR5Q0xEFZW7QWezRm4MwSgrMJ
+         rHri64rKEXQ3CMI3Ysvg+zfYRC2gsaG8Jin79GhmIrikloEbeA88VSzxEOKBiTezzU
+         q0T6ZMK4MW9YDygcDzTv+TPOgA5vSXQ5c+Woj4mJ2jVu8AZo2wtsU1iBvCbvgs4ypO
+         3CAF/ICABOmy7Gut4xKTMIPjVIB8KRWJ8uYTVPJUwYzOJ99Ec2TsI8uoHtC0B3wLy+
+         iLcgxZTVlJ8Xw==
+Received: by mail.profitpathwaygo.com for <linux-clk@vger.kernel.org>; Wed,  9 Aug 2023 08:16:11 GMT
+Message-ID: <20230809064500-0.1.10.4sfr.0.tl6d0f5dc8@profitpathwaygo.com>
+Date:   Wed,  9 Aug 2023 08:16:11 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-clk@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: iIzuF0l81Nkq7Ok1dImNotKR1jBOr-C2
-X-Proofpoint-ORIG-GUID: iIzuF0l81Nkq7Ok1dImNotKR1jBOr-C2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-09_06,2023-08-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 mlxlogscore=684 malwarescore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308090070
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable clock controller config for Qualcomm qca8386/qca8084 chip.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index a25d783dfb95..23801799bb0d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1180,6 +1180,7 @@ CONFIG_IPQ_GCC_5332=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
- CONFIG_IPQ_GCC_9574=y
-+CONFIG_IPQ_NSSCC_QCA8K=y
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_MMCC_8994=m
--- 
-2.17.1
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam serdecznie
+Adam Charachuta
