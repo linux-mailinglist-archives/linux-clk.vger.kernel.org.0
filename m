@@ -2,142 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDDE779DAD
-	for <lists+linux-clk@lfdr.de>; Sat, 12 Aug 2023 08:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0A1779EC7
+	for <lists+linux-clk@lfdr.de>; Sat, 12 Aug 2023 12:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjHLGWN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 12 Aug 2023 02:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S234418AbjHLKEF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 12 Aug 2023 06:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjHLGWN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 12 Aug 2023 02:22:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B48919B2
-        for <linux-clk@vger.kernel.org>; Fri, 11 Aug 2023 23:22:12 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe7e1ef45dso4216045e87.1
-        for <linux-clk@vger.kernel.org>; Fri, 11 Aug 2023 23:22:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1691821330; x=1692426130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tIaxLGslRcW1QcwxO7GUCWkC9wgWwk1uDGheKD/YCrw=;
-        b=4PctNgLywMMJCSp6BUcfrAV8WOEPnbG4kVlmHd2WEFjSmqXBcuZ/AfSLxuR4EXNmR0
-         nyhBBFjS8+zL8ucP4+zurnj7NAahlSvniN3ONxIhuWJ9dvgDuArke3IfQT+NN+WfuUUZ
-         CEuniya89+TOZA/kXssDd9PJmlBDK1KJK95gLegPBhP0srsdaJRI6k/9oYkGutLxC4+B
-         Gv9kIZ8yJiQ1ScPq94nDqLgNVp6BZTOJ2yHdCHtyxQs9poN3oI5/f1PY9BBjLxUN3d/C
-         6IMnuaPJcQrwDpiF71wfSivHhhz4qCAUuJ6sN4sQJpZwS12RLCmaUqs11Cp57p36sm1N
-         IbQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691821330; x=1692426130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tIaxLGslRcW1QcwxO7GUCWkC9wgWwk1uDGheKD/YCrw=;
-        b=U62e1nGaqfN4mxJlCUE+I3LURSK8DLVQwbd9wgSBJC5deaoB6hoKiUgDfPgtlXkW/p
-         LlNj9LWuSu/6kvl/10xnmkmWKH1rYgUSa4r6Dtcrf9GkiepbMi11wnPKrec3hrj3evd5
-         cTXBS9XHQRDo6FiOCIM7ypDRXxwwx5xEXtHYZ4G6zwzr/v8q/ZT+Ojm7/FcKdmptExzt
-         rgzkxixkmnR6J0Wl8167PeBfd3gaH6/HyjwOlb/p4VqpknBRm5ZKnLNEsUmhaXyimP0J
-         U2PF43bQSyfkYsAdCx8UL/p72xzzgrUR4+kQ8I8Y87rTZIXUv9XewVauPxpvEVqnyft1
-         oYRw==
-X-Gm-Message-State: AOJu0Yzk4Y0kC7A0VXL+gFpF8S/cOQ0A0dHM+FJJuhUBPsmx4dRXOkQD
-        hL5VUXPfUZnqsqJnqE1nyUuctA==
-X-Google-Smtp-Source: AGHT+IEjyBAvqlEbHIM9xPstbrjCcgXcTfotTEm4wwyq+KYhjkim0j7pUrNecCBDyycYcldKCLSwcA==
-X-Received: by 2002:a05:6512:3da0:b0:4f8:71cc:2b6e with SMTP id k32-20020a0565123da000b004f871cc2b6emr3913300lfv.33.1691821330468;
-        Fri, 11 Aug 2023 23:22:10 -0700 (PDT)
-Received: from localhost ([212.23.236.67])
-        by smtp.gmail.com with ESMTPSA id l26-20020aa7c31a000000b005224d15d3dfsm2883854edq.87.2023.08.11.23.22.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 23:22:09 -0700 (PDT)
-Date:   Sat, 12 Aug 2023 08:22:08 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Milena Olech <milena.olech@intel.com>,
-        Michal Michalik <michal.michalik@intel.com>,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, netdev@vger.kernel.org,
-        linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 0/9] Create common DPLL configuration API
-Message-ID: <ZNclEAXpyAFrhCh5@nanopsycho>
-References: <20230811200340.577359-1-vadim.fedorenko@linux.dev>
+        with ESMTP id S236752AbjHLKEB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 12 Aug 2023 06:04:01 -0400
+Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4162E26A0;
+        Sat, 12 Aug 2023 03:04:01 -0700 (PDT)
+Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+        by mx.skole.hr (mx.skole.hr) with ESMTP id C60F48406F;
+        Sat, 12 Aug 2023 12:03:58 +0200 (CEST)
+From:   =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH v2 0/4] clk: marvell: Move number of clocks to driver
+ source
+Date:   Sat, 12 Aug 2023 12:02:55 +0200
+Message-Id: <20230812-mmp-nr-clks-v2-0-f9271bd7eaa5@skole.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230811200340.577359-1-vadim.fedorenko@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAM9Y12QC/23MQQ7CIBCF4as0s3YMUK3UlfcwXQgdhLSFBgzRN
+ Nxd7Nrl/5L3bZAoOkpwbTaIlF1ywdcQhwa0ffgnoRtrg2CiZZL1uCwr+oh6nhJetGR04h11ykB
+ 9rJGMe+/afahtXXqF+NnxzH/rfydzZHg2rR6VUrJX8pamMNPRRhhKKV/5NMhkpQAAAA==
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1692;
+ i=duje.mihanovic@skole.hr; h=from:subject:message-id;
+ bh=cJRDswR60Gmq60WcoCzCVYt6uob84DCT479ZE1hE9II=;
+ b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBk11jVKQCc8SXUGxEtD639y/2mgmr2NmNH7gm/7
+ DXjCTZA3a+JAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZNdY1QAKCRCaEZ6wQi2W
+ 4SseD/4hfBVKlj4oGiG+fcE8YDmZFgCsUxEoyrQGraYmb7D5hEUbxeRctcpOtfaKjjLM3nG2UxF
+ RwVsuTueEmuo+4tEeIq/axikUxUhkQvBntxGmgZ5FbZ3jklhA+19qt1ufOPSDeNdOfykczMJ2zt
+ ++xtk7M+vuUjmW20pHfilFIyx0owQhU8lopvzHSGPcJRYpvITxJUHgbbKlTBwKLUdjM5nNjtQic
+ iSPuKDOIKOZnDQcqYFjP7VDDcwIcS8mdqD0MS/sVNZcieIvgV2Jj9XsQxz7zxbKDcTlETscqlpo
+ 0nNE6YbDaw1J/ztF9qRCL/fLNIknO0tHZqEZZlzS2SPqpJHBtg8Hr7LvBiKvtB/pzL6o8bb6Bhl
+ gjBx5dayhq0pPX4T8K4wJP0IzmGS81SBKN26Y41MSfsDyjJ27A9lc9aEs/sx8KZWLycR5MUc0Rl
+ sgCxDprhI1pOuGq3bfa2JQdEtY8u1dSaqGcxLAXLKUuWgZuV6encAENQtQHdkyaJupHGeRznEzY
+ cVv3m8ao0mt9ieHu5rmUBbAgeDSWQG4DnfhOdJQ/QX8igk2ISXx2Oo25IImQWe8OGhG4Rej/OzD
+ Ip2Ryd0vdU3owS0VIRQBI6nucQGghl6uK+ihZyo3VTI1uYu04etvlg+D6+3CUErJ91vGqZjhdti
+ 0yYKrL0LALPf8Qg==
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fri, Aug 11, 2023 at 10:03:31PM CEST, vadim.fedorenko@linux.dev wrote:
->Implement common API for DPLL configuration and status reporting.
->The API utilises netlink interface as transport for commands and event
->notifications. This API aims to extend current pin configuration 
->provided by PTP subsystem and make it flexible and easy to cover
->complex configurations.
->
->Netlink interface is based on ynl spec, it allows use of in-kernel
->tools/net/ynl/cli.py application to control the interface with properly
->formated command and json attribute strings. Here are few command
->examples of how it works with `ice` driver on supported NIC:
->
->- dump dpll devices
->$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
->--dump device-get
->[{'clock-id': 282574471561216,
->  'id': 0,
->  'lock-status': 'unlocked',
->  'mode': 'automatic',
->  'module-name': 'ice',
->  'type': 'eec'},
-> {'clock-id': 282574471561216,
->  'id': 1,
->  'lock-status': 'unlocked',
->  'mode': 'automatic',
->  'module-name': 'ice',
->  'type': 'pps'}]
->
->- get single pin info:
->$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
->--do pin-get --json '{"pin-id":2}'
->{'clock-id': 282574471561216,
-> 'module-name': 'ice',
-> 'pin-board-label': 'C827_0-RCLKA',
-> 'pin-dpll-caps': 6,
-> 'pin-frequency': 1953125,
-> 'pin-id': 2,
-> 'pin-parent-device': [{'id': 0,
->                         'pin-direction': 'input',
->                         'pin-prio': 11,
->                         'pin-state': 'selectable'},
->                        {'id': 1,
->                         'pin-direction': 'input',
->                         'pin-prio': 9,
->                         'pin-state': 'selectable'}],
-> 'pin-type': 'mux'}
->
->- set pin's state on dpll:
->$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
->--do pin-set --json '{"pin-id":2, "pin-parent-device":{"id":1, "pin-state":2}}'
->
->- set pin's prio on dpll:
->$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
->--do pin-set --json '{"pin-id":2, "pin-parent-device":{"id":1, "pin-prio":4}}'
->
->- set pin's state on parent pin:
->$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
->--do pin-set --json '{"pin-id":13, \
->                      "pin-parent-pin":{"pin-id":2, "pin-state":1}}'
->
+Hi,
 
-For the record, I'm fine with this patchset version now.
-Please merge and make this jurney to be over. Thanks!
+In v4 of my PXA1908 series, Conor suggested that the NR_CLKS variables
+in dt bindings should be moved to the respective driver source files
+because these are not used by the device trees and so are needlessly
+added to the ABI. This series does that for the rest of the Marvell
+PXA/MMP SoCs.
+
+Link: https://lore.kernel.org/r/20230808-produce-thievish-3ce1b86a114b@spud/
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+Changes in v2:
+- Fix clk-audio.c compile error
+- Reword mmp2 commit to match other commits
+- Link to v1: https://lore.kernel.org/r/20230809-mmp-nr-clks-v1-0-5f3cdbbb89b8@skole.hr
+
+---
+Duje Mihanović (4):
+      clk: mmp2: Move number of clocks to driver source
+      clk: pxa168: Move number of clocks to driver source
+      clk: pxa1928: Move number of clocks to driver source
+      clk: pxa910: Move number of clocks to driver source
+
+ drivers/clk/mmp/clk-audio.c                    | 6 ++++--
+ drivers/clk/mmp/clk-of-mmp2.c                  | 4 +++-
+ drivers/clk/mmp/clk-of-pxa168.c                | 4 +++-
+ drivers/clk/mmp/clk-of-pxa1928.c               | 7 +++++--
+ drivers/clk/mmp/clk-of-pxa910.c                | 4 +++-
+ include/dt-bindings/clock/marvell,mmp2-audio.h | 1 -
+ include/dt-bindings/clock/marvell,mmp2.h       | 1 -
+ include/dt-bindings/clock/marvell,pxa168.h     | 1 -
+ include/dt-bindings/clock/marvell,pxa1928.h    | 3 ---
+ include/dt-bindings/clock/marvell,pxa910.h     | 1 -
+ 10 files changed, 18 insertions(+), 14 deletions(-)
+---
+base-commit: 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
+change-id: 20230809-mmp-nr-clks-7c80e416e6bf
+
+Best regards,
+-- 
+Duje Mihanović <duje.mihanovic@skole.hr>
+
 
