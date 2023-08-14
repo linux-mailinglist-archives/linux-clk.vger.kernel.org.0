@@ -2,57 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B3877B006
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6F677B003
 	for <lists+linux-clk@lfdr.de>; Mon, 14 Aug 2023 05:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbjHNDZX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S232786AbjHNDZX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Sun, 13 Aug 2023 23:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbjHNDZG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 13 Aug 2023 23:25:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8A110;
-        Sun, 13 Aug 2023 20:25:05 -0700 (PDT)
+        with ESMTP id S232753AbjHNDZI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 13 Aug 2023 23:25:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B2110;
+        Sun, 13 Aug 2023 20:25:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7578F62832;
-        Mon, 14 Aug 2023 03:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F30C433C7;
-        Mon, 14 Aug 2023 03:25:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB897628D1;
+        Mon, 14 Aug 2023 03:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F3BC433CC;
+        Mon, 14 Aug 2023 03:25:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691983504;
-        bh=gKHOZmylORMFLWYt4I2LvpB6ViwfXevxOYSIEZR4/WA=;
+        s=k20201202; t=1691983507;
+        bh=U/jcmZcSKyShlCLEetgSKW5TVnEqCfOnHUEXUE/SIhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i63kTG+qO3OsiwYPq9nwNtaeyfB8jFIXUA9thlSON6IQWUFJgRQ437XCEAER/8in7
-         Y1AA0Z1kl/gq252+y/Qn1drKl1n+8AfI95eqMJBcZ267yU4T33Ecys8z4z6p3fpKDi
-         bVfaI+7DL7Aap+78gEiDdWp3Z2uYMPuQ63zOTzEZ4d3Yg3S3z3mY5IHa6PgMba5wdo
-         /K/iTkBT2/RUGDFOmv2vVpf9VKSatqi10fW7xyd7MDDp8Bfv/0Wzj4P38upfn+SwT3
-         YniG9EjF5WkGtoFAkXGisLPU9WmVWAn2Ze5GS8jWGsuJvSg3LnfT5bY0itRVrLvs8z
-         DDsWwViAzh1Cg==
+        b=guor22GyB5T/CkuxuEOTvlnXBfHv5FUNf2wndT+P9NUbBq0+sbUe0Y1eLQeQy/xqG
+         CoNDybfrNPKJzAE1W+eLX0WwOaPxonohdlioj7GIWLRjSSx/cGxmKKNqINRIzHiKi8
+         Y8xq+jKwoHqXcPp7abwuvM/EhUzJxyJKnfofuCOm580Sh9hWsB6VDpyxO6T0qVtL0i
+         nJPVdGkcVrYqds6SWu9EjjVnCUc2Zh74QXp1Y1jBoq2Tdl4QPXBTm+lUnhG2zuvHDQ
+         qT5lu7BfgBVJ57hv5qRUEx7Lugtg21WvAlJm4CgAklTt84phr5TNOZ76nQdd+mw7os
+         i3JDXx7ZE5AWA==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Taniya Das <tdas@codeaurora.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: gcc-sm8450: Use floor ops for SDCC RCGs
-Date:   Sun, 13 Aug 2023 20:27:35 -0700
-Message-ID: <169198364306.2443702.7706860031769913417.b4-ty@kernel.org>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: (subset) [PATCH v2 0/8] MSM8998 clk cleanups and fixups
+Date:   Sun, 13 Aug 2023 20:27:37 -0700
+Message-ID: <169198364304.2443702.15824877092057017483.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230811-topic-8450_clk-v1-1-88031478d548@linaro.org>
-References: <20230811-topic-8450_clk-v1-1-88031478d548@linaro.org>
+In-Reply-To: <20230622-topic-8998clk-v2-0-6222fbc2916b@linaro.org>
+References: <20230622-topic-8998clk-v2-0-6222fbc2916b@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,17 +66,22 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-On Fri, 11 Aug 2023 19:35:53 +0200, Konrad Dybcio wrote:
-> Use the floor ops to prevent warnings like this at suspend exit and boot:
+On Mon, 03 Jul 2023 20:20:04 +0200, Konrad Dybcio wrote:
+> The MSM8998 clock controller drivers have some rough edges around whether
+> and how Linux should touch them, which this series tries to sand down
+> a bit.
 > 
-> mmc0: Card appears overclocked; req 800000 Hz, actual 25000000 Hz
+> MSM8998 maple seems not to explode, please give it a spin on your boards.
 > 
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: gcc-sm8450: Use floor ops for SDCC RCGs
-      commit: a27ac3806b0a0e6954fb5967223b8635242e5b8f
+[7/8] arm64: dts: qcom: msm8998: Use the correct GPLL0 leg for GPUCC
+      commit: 00ada6afea88006187b38bd96b6d1b7d8e3d90cb
+[8/8] arm64: dts: qcom: msm8998: Use the correct GPLL0_DIV leg for MMCC
+      commit: 63f4e4b447c50ba7e5fc3929644d2d152acb6117
 
 Best regards,
 -- 
