@@ -2,100 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCFD77B630
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Aug 2023 12:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA6777B6F6
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Aug 2023 12:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236157AbjHNKMD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Aug 2023 06:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        id S233203AbjHNKlp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Aug 2023 06:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236453AbjHNKLq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Aug 2023 06:11:46 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD52419A5
-        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 03:11:06 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fe4cdb724cso38292135e9.1
-        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 03:11:06 -0700 (PDT)
+        with ESMTP id S235094AbjHNKlc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Aug 2023 06:41:32 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC091BD
+        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 03:41:25 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99c1f6f3884so570140166b.0
+        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 03:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692007865; x=1692612665;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/TcrCIKHTmaelivXm5tJOqwQfnbwJsTfWCqqVzifvaY=;
-        b=qvM6n5R3PsB9N5APOdoqqSc6/Hr6IfuOzXBjrGfMblnQ44KbDdh7i09qhHGRq5Axqt
-         ef7Ij/tziKY/QQ55x69iuS/wccMVrcay+Gp3HJioxj2nRRJXeS/gF2FnWZipbO42nfy6
-         KzxV0UY3i4C3Y17jQpsmpmfRLVggp903zy//kE1UT3xHuC/c8NndFAlkh97H+mlDKxyS
-         u9MBMZSt+4AOZpPCl4GRfCDEkLVF/Ptg7WtC1qEDMDS/bQ7oGKSHlqW+oyQB7Yne1eiq
-         /hXk4Q6vEWvVe0OB2O5D8O2SerYqHsaqctjIlzRqyKB4V0P+UVAKpUXp5JxHWH3dlkfS
-         klVQ==
+        d=sartura.hr; s=sartura; t=1692009684; x=1692614484;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jSw4csycOwpeCvjk1+out8qA4MHRdLgT4XjSRFi9YI4=;
+        b=raD8xCmJS5LggmRmeEcYRS9BpLx62slvvmJlaJmLv3zXqb2NxLl83bXkWTa39H2ai/
+         1K1tAruj0xQezMsnjHOd4AFYg15nI+uP6swbX78Vd/bmydsYxHVV7ZpyD07eZ8bQ3AYm
+         o0xnJE3sTA6YXVuGTOBCa5MW/D5KnrH9mqlKMZMlIbae0Pq8DIduIwtFciGsEIUoiWo+
+         XFxUmKIb1etw6Lavv9dKY72eio1Ke47t9i8ob8kDUkhbwV4QAjINwzE6Bn8ryUGP4l+c
+         xmQuoQDB0DJ1MB61ouBwFf9v43/M/0adbvH/vqz5YpX526T1z0WGGAd+WxnR8A0PMvAg
+         sPhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692007865; x=1692612665;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/TcrCIKHTmaelivXm5tJOqwQfnbwJsTfWCqqVzifvaY=;
-        b=JdowMVpspyRzPd6FoMQl28C8rY4WUoKq2hyS65DdakPbZiCA/X+C7nZoEPIbAWV1TW
-         6/Jc/wxvAfaxA4QCvHgqMoa6SiO+dmdeiv1XUN8M8DJxYJ61eLhhotSH1NNpAD1sUrd1
-         ADWe0zZCYvwi0Oc0nf2rrJZWCcirxpZUERtBYAfpe8Q15sdeD6X+wc6GqqB4rl30Z+Kx
-         0hM1joACP1DKGSa9ad+Hh8ZvF8lQ8OZmDYn72H4B5JHsuTTnOGooxbcf5BvTsb2Ftb6a
-         X3D11j0EMPYoeHtyJOyh3CZWLl4xSq8HkAu4yRNL0vJBp0MshZgnPUR04nOFdF2hhsVk
-         Rwig==
-X-Gm-Message-State: AOJu0YyF/Mmlk1p2IzaNF9F2kEHS8cKIpXXAyW9TrarvsHVYiNvHiHkv
-        AKl5xAL/tSskp+29W1RsVvmMrw==
-X-Google-Smtp-Source: AGHT+IHaKzKqwuHoAPI714LcqSkOGAT5pHN1eCF2DxjAZ0E9BhudZJYx+MSdCGmRUMJmBw9VrK3Qjg==
-X-Received: by 2002:a7b:ce08:0:b0:3fe:19cf:93ca with SMTP id m8-20020a7bce08000000b003fe19cf93camr7297351wmc.8.1692007865250;
-        Mon, 14 Aug 2023 03:11:05 -0700 (PDT)
-Received: from hackbox.lan ([84.232.191.92])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c294500b003fbaade0735sm16750396wmd.19.2023.08.14.03.11.03
+        d=1e100.net; s=20221208; t=1692009684; x=1692614484;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jSw4csycOwpeCvjk1+out8qA4MHRdLgT4XjSRFi9YI4=;
+        b=SqySOvQRIRCPsXxjgtYAcysJ5rY1V0y1zw8QgZOhL8AYRNgI74c/0+viyj0Y8uH/KG
+         wCN/blANVOoY7a8K63QJ4sSwFiRcDhAIFmTElfAyETzaRipwTNCCNCGcpQ6wF+oka1Mp
+         BqGMe6lWYErzf7+a3DC+ZxeWVVddR2rF9UL0aHSKKSGZav8nOs2G7WfDc41zoA6QUIcg
+         R9ShsVNOHszrQDbnTHWTcru71Rs4z7qlYUl004r/XWUQ/tnbzAMYIEr3LCqq5qbGrdEy
+         aslDTTAgywFelhC6Y/y/0tRf9iH17yYDGMrNWgGPA5XT0z1Z0Qqdt77CHxQXwtT8UOsP
+         b6ZQ==
+X-Gm-Message-State: AOJu0YxK+aXEKaHSgfSgbRTvYs6jGtRvtKP/6mMhSleGqLFY6nsSAfmZ
+        Azx4oalVserV7cv9DT3sLnX+kA==
+X-Google-Smtp-Source: AGHT+IHIAdYTWJ7gkjJvy6BoDj+4PyTFlCuCnts+3w0Zi2xdzcmv4DYXC1DwBbhekY/xufKSsoDI0A==
+X-Received: by 2002:a17:907:801f:b0:992:b3a3:81f9 with SMTP id ft31-20020a170907801f00b00992b3a381f9mr6271991ejc.71.1692009684062;
+        Mon, 14 Aug 2023 03:41:24 -0700 (PDT)
+Received: from fedora.. (cpezg-94-253-129-24-cbl.xnet.hr. [94.253.129.24])
+        by smtp.googlemail.com with ESMTPSA id qw4-20020a170906fca400b009934707378fsm5486586ejb.87.2023.08.14.03.41.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 03:11:04 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     abelvesa@kernel.org, peng.fan@nxp.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
+        Mon, 14 Aug 2023 03:41:23 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, shengjiu.wang@gmail.com,
-        Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/2] clk: imx: add audio clock mux driver
-Date:   Mon, 14 Aug 2023 13:10:03 +0300
-Message-Id: <169200755845.527063.15808665958303223878.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <1690260984-25744-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1690260984-25744-1-git-send-email-shengjiu.wang@nxp.com>
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH 1/2] dt-bindings: clock: qcom: ipq4019: add missing networking resets
+Date:   Mon, 14 Aug 2023 12:40:23 +0200
+Message-ID: <20230814104119.96858-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Add bindings for the missing networking resets found in IPQ4019 GCC.
 
-On Tue, 25 Jul 2023 12:56:22 +0800, Shengjiu Wang wrote:
-> The Audio Clock Mux (ACM) is a collection of control registers
-> and multiplexers that are used to route the audio source clocks
-> to the audio peripherals on i.MX8QXP, i.MX8QM, i.MX8DXL
-> 
-> Shengjiu Wang (2):
->   dt-bindings: clock: fsl,imx8-acm: Add audio clock mux support
->   clk: imx: imx8: add audio clock mux driver
-> 
-> [...]
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ include/dt-bindings/clock/qcom,gcc-ipq4019.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Applied, thanks!
-
-[1/2] dt-bindings: clock: fsl,imx8-acm: Add audio clock mux support
-      commit: a70cd8cdf7492006b547f46cc365eed79d331323
-[2/2] clk: imx: imx8: add audio clock mux driver
-      commit: d3a0946d7ac9ad844a196f0f2af696fde6b0728d
-
-Best regards,
+diff --git a/include/dt-bindings/clock/qcom,gcc-ipq4019.h b/include/dt-bindings/clock/qcom,gcc-ipq4019.h
+index 7e8a7be6dcda..fa0587857547 100644
+--- a/include/dt-bindings/clock/qcom,gcc-ipq4019.h
++++ b/include/dt-bindings/clock/qcom,gcc-ipq4019.h
+@@ -165,5 +165,11 @@
+ #define GCC_QDSS_BCR					69
+ #define GCC_MPM_BCR					70
+ #define GCC_SPDM_BCR					71
++#define ESS_MAC1_ARES					72
++#define ESS_MAC2_ARES					73
++#define ESS_MAC3_ARES					74
++#define ESS_MAC4_ARES					75
++#define ESS_MAC5_ARES					76
++#define ESS_PSGMII_ARES					77
+ 
+ #endif
 -- 
-Abel Vesa <abel.vesa@linaro.org>
+2.41.0
+
