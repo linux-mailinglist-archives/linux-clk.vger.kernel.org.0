@@ -2,54 +2,55 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E9D77AFE2
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Aug 2023 05:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B3877B006
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Aug 2023 05:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjHNDLC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 13 Aug 2023 23:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
+        id S232798AbjHNDZX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 13 Aug 2023 23:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjHNDKx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 13 Aug 2023 23:10:53 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B655A9B;
-        Sun, 13 Aug 2023 20:10:51 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6E15824E27D;
-        Mon, 14 Aug 2023 11:10:49 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 14 Aug
- 2023 11:10:49 +0800
-Received: from [192.168.125.128] (183.27.98.20) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 14 Aug
- 2023 11:10:48 +0800
-Message-ID: <cace0094-948b-a4e9-ab63-6fdfb9952b44@starfivetech.com>
-Date:   Mon, 14 Aug 2023 11:06:05 +0800
+        with ESMTP id S232749AbjHNDZG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 13 Aug 2023 23:25:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8A110;
+        Sun, 13 Aug 2023 20:25:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7578F62832;
+        Mon, 14 Aug 2023 03:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F30C433C7;
+        Mon, 14 Aug 2023 03:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691983504;
+        bh=gKHOZmylORMFLWYt4I2LvpB6ViwfXevxOYSIEZR4/WA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i63kTG+qO3OsiwYPq9nwNtaeyfB8jFIXUA9thlSON6IQWUFJgRQ437XCEAER/8in7
+         Y1AA0Z1kl/gq252+y/Qn1drKl1n+8AfI95eqMJBcZ267yU4T33Ecys8z4z6p3fpKDi
+         bVfaI+7DL7Aap+78gEiDdWp3Z2uYMPuQ63zOTzEZ4d3Yg3S3z3mY5IHa6PgMba5wdo
+         /K/iTkBT2/RUGDFOmv2vVpf9VKSatqi10fW7xyd7MDDp8Bfv/0Wzj4P38upfn+SwT3
+         YniG9EjF5WkGtoFAkXGisLPU9WmVWAn2Ze5GS8jWGsuJvSg3LnfT5bY0itRVrLvs8z
+         DDsWwViAzh1Cg==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: qcom: gcc-sm8450: Use floor ops for SDCC RCGs
+Date:   Sun, 13 Aug 2023 20:27:35 -0700
+Message-ID: <169198364306.2443702.7706860031769913417.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230811-topic-8450_clk-v1-1-88031478d548@linaro.org>
+References: <20230811-topic-8450_clk-v1-1-88031478d548@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v1] clk: starfive: jh7110-sys: Set PLL0 rate to 1.5GHz
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Hal Feng" <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230811033631.160912-1-xingyu.wu@starfivetech.com>
- <20230811-jiffy-nebula-a8ea5ef15eee@wendy>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <20230811-jiffy-nebula-a8ea5ef15eee@wendy>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.20]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,40 +59,19 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2023/8/11 14:43, Conor Dooley wrote:
-> On Fri, Aug 11, 2023 at 11:36:31AM +0800, Xingyu Wu wrote:
->> Set PLL0 rate to 1.5GHz.
+
+On Fri, 11 Aug 2023 19:35:53 +0200, Konrad Dybcio wrote:
+> Use the floor ops to prevent warnings like this at suspend exit and boot:
 > 
-> Why are you doing that though?
+> mmc0: Card appears overclocked; req 800000 Hz, actual 25000000 Hz
+> 
+> 
 
-Because the CPU frequency scaling is based on 1.5GHz rate on JH7110 SoC.
-And now the PLL clock driver has been accepted and PLL0 is just 1GHz[1].
-[1] https://github.com/starfive-tech/VisionFive2/issues/55
+Applied, thanks!
 
-We should set the PLL0 rate to a correct rate (1.5GHz) and then
-the CPUfreq will work normally.
+[1/1] clk: qcom: gcc-sm8450: Use floor ops for SDCC RCGs
+      commit: a27ac3806b0a0e6954fb5967223b8635242e5b8f
 
 Best regards,
-Xingyu Wu
-
-> 
-> 
->> Change the parent of cpu_root clock
->> and the divider of cpu_core before setting.
->> 
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
->> 
->> Hi Stephen and Emil,
->> 
->> This patch sets PLL0 rate to 1.5GHz. In order not to affect the cpu 
->> operation, the cpu_root's parent clock should be changed first.
->> And the divider of the cpu_core clock should be set to 2 so they
->> won't crash when setting 1.5GHz without voltage regulation.
->> 
->> This patch is based on linux-next which has merge PLL driver on
->> StarFive JH7110 SoC.
->> 
->> Thanks,
->> Xingyu Wu
-
+-- 
+Bjorn Andersson <andersson@kernel.org>
