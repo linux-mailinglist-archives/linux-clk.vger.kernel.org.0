@@ -2,80 +2,93 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4287C77C660
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Aug 2023 05:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C9C77C6F3
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Aug 2023 07:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbjHODbr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Aug 2023 23:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
+        id S234625AbjHOFPH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 15 Aug 2023 01:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbjHOD3b (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Aug 2023 23:29:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3935E19A3
-        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 20:24:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB3A661383
-        for <linux-clk@vger.kernel.org>; Tue, 15 Aug 2023 03:24:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D622C433C7;
-        Tue, 15 Aug 2023 03:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692069883;
-        bh=3FRPby38WxMTq6IfBU0Tvs25oJJdKuU9MSll+th2OsE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CohmaaG5iOklaCdHt91LUExlKpLVTVneSHhbdnXV20JXzqFrpqlDFmV2mcXlqi/zy
-         0xrSDKaT+EGvXM4vwCw771XsxmZn7pRw7Tl1WTmb/KVsTBM5W7zXZr8NOVy5pNT5gQ
-         eVv2srZ6/3YDU9VH1CZVh2LL3xn/ve/cl7yXOZCacsolZsnXnZFy9XJKky1jK4E6b3
-         WdaqHv/eX0lL/oxtfLyFb32sCE8v4p0riDP8+UWgwM9BTWCJ5JmcvQs7pUDITYXA0F
-         +0QkZKoC6sEPWH073OgEtVWZKzpkEV/meZf8ei7i9M+TaAyYJ4wqtycQWrEd4nCHZc
-         j9Bw7B/xcRTYw==
-Date:   Mon, 14 Aug 2023 20:24:41 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc:     Jiri Pirko <jiri@resnulli.us>,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Milena Olech <milena.olech@intel.com>,
-        Michal Michalik <michal.michalik@intel.com>,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, netdev@vger.kernel.org,
-        linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        intel-wired-lan@lists.osuosl.org, Jiri Pirko <jiri@nvidia.com>
-Subject: Re: [PATCH net-next v4 4/9] dpll: netlink: Add DPLL framework base
- functions
-Message-ID: <20230814202441.349586b4@kernel.org>
-In-Reply-To: <20230811200340.577359-5-vadim.fedorenko@linux.dev>
-References: <20230811200340.577359-1-vadim.fedorenko@linux.dev>
-        <20230811200340.577359-5-vadim.fedorenko@linux.dev>
+        with ESMTP id S234631AbjHOFNN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Aug 2023 01:13:13 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECF910F4
+        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 22:13:03 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-99bf1f632b8so711926966b.1
+        for <linux-clk@vger.kernel.org>; Mon, 14 Aug 2023 22:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692076382; x=1692681182;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DNI6rtrYF1Ybq811JJ87vOIIKiYVPsQ25Sx4UjotkVw=;
+        b=gbW4SSBK1ojxMblUsK5g499ERe7twiF6LRWgbQHzU/vA1ghtMMCyVjUo2EaWwIoba0
+         7zn5k05dEWr1IlsT3WxNxWIYIl4bSPmgbAL81eXgxBLtwA5MfEWRXl9tlBxymFWfSKjY
+         WzIep0GDpzuIwGsA9UvKuh/ir+8z3BQycdJmOHjkc2G2GWBm1XeQ46tENcVRQqY4tTX9
+         EBSz+f/dRQUKJD/yAtmDFYFZ9XjJEbnft0lhBy8WKkF94Ug5M/bpFvn1aHxUKpn2+ImF
+         rkfkoxFJT2NyLQ5ukz3ZzpXvjcjVO1r6GFAPXp042EFaTZIQwEwNHCuE68N1TKHED64P
+         2dDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692076382; x=1692681182;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DNI6rtrYF1Ybq811JJ87vOIIKiYVPsQ25Sx4UjotkVw=;
+        b=SlapDIVmnf3T2NSyFD0ovjfrFM/yEqYwz7o70BN7btPu19ZyaRZC2Wz4uqPLdYPREm
+         mlhx/qC4YwhaIYCgSeJQfQC0M8uArEGFHUjQFDb1BTeyOXYHwvKwyorww+JCtrgnr7Tm
+         PTteiA0sf73+HCok+c/IbummuvONJalaOC+rKHi6s8MsfY4QZDk2HUQACcA4JYy18mvp
+         m76bKYu1pvDtXLiE08C9TBn7smCPNfNKUVgKwjVjAQikyCOCWOlPPJm3jyyS9exPK8eY
+         emHbPRVjLhBgNS6fSOrF2XnUO3FWZkypN2D2KSW7qGrva0zm7WzDj8akkRBczBYbXF/p
+         h/Fg==
+X-Gm-Message-State: AOJu0Yyekjor/kgd+M+k1xsm1vQiIj2lknya/MewkudW1XVXWspWeyAp
+        MjtcCSHuaWq/70pF3H1KgqNTMg==
+X-Google-Smtp-Source: AGHT+IHxSgB//CCtVHdyYiVOgZlxJ2NXYIq1D1nSb6b31RyTYQO+cWLsea219E/beqdlubPkigPEGg==
+X-Received: by 2002:a17:906:8a6c:b0:99c:a93a:432f with SMTP id hy12-20020a1709068a6c00b0099ca93a432fmr9281673ejc.1.1692076381769;
+        Mon, 14 Aug 2023 22:13:01 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id h8-20020a1709062dc800b0099b7276235esm6553566eji.93.2023.08.14.22.13.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 22:13:01 -0700 (PDT)
+Message-ID: <808735b6-d7ee-5223-ef6b-8ec5118e95ac@linaro.org>
+Date:   Tue, 15 Aug 2023 07:12:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 1/2] dt-bindings: clock: qcom: ipq4019: add missing
+ networking resets
+Content-Language: en-US
+To:     Robert Marko <robert.marko@sartura.hr>, andersson@kernel.org,
+        agross@kernel.org, konrad.dybcio@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230814104119.96858-1-robert.marko@sartura.hr>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230814104119.96858-1-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 11 Aug 2023 21:03:35 +0100 Vadim Fedorenko wrote:
-> +	xa_for_each(&pin->dpll_refs, i, ref) {
-> +		const struct dpll_pin_ops *ops = dpll_pin_ops(ref);
-> +		struct dpll_device *dpll = ref->dpll;
-> +
-> +		if (!ops->frequency_set)
-> +			return -EOPNOTSUPP;
-> +		ret = ops->frequency_set(pin, dpll_pin_on_dpll_priv(dpll, pin),
-> +					 dpll, dpll_priv(dpll), freq, extack);
-> +		if (ret)
-> +			return ret;
-> +		__dpll_pin_change_ntf(pin);
-> +	}
+On 14/08/2023 12:40, Robert Marko wrote:
+> Add bindings for the missing networking resets found in IPQ4019 GCC.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  include/dt-bindings/clock/qcom,gcc-ipq4019.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-only one freq is reported in get, AFAICT, so why send a notification
-after each ref is updated?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
