@@ -2,108 +2,141 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27C3784E58
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Aug 2023 03:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503EC784E8B
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Aug 2023 04:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjHWBn1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 22 Aug 2023 21:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S232172AbjHWCL6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 22 Aug 2023 22:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbjHWBn0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Aug 2023 21:43:26 -0400
-X-Greylist: delayed 918 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Aug 2023 18:43:24 PDT
-Received: from symantec4.comsats.net.pk (symantec4.comsats.net.pk [203.124.41.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA9C10D
-        for <linux-clk@vger.kernel.org>; Tue, 22 Aug 2023 18:43:24 -0700 (PDT)
-X-AuditID: cb7c291e-055ff70000002aeb-4e-64e54bbc3faa
-Received: from iesco.comsatshosting.com (iesco.comsatshosting.com [210.56.28.11])
-        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        by symantec4.comsats.net.pk (Symantec Messaging Gateway) with SMTP id 0B.FB.10987.CBB45E46; Wed, 23 Aug 2023 04:58:52 +0500 (PKT)
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns;
-        d=iesco.com.pk; s=default;
-        h=received:content-type:mime-version:content-transfer-encoding
-          :content-description:subject:to:from:date:reply-to;
-        b=QGH9go68Bnbm83SaA+AH7yZCqeCioQNhkplho/Zvu8LkpWJCcY3NmoKnrRnHQLm5H
-          bgK01MPJBcZSIcxJd53P1Cyr5Q9tDZyg7LB8t7HZwtTZI4eBM8iRWGruiwiDeKbyB
-          OXrzhXaLCANJFSS3EVDxEOvRNS4ji/dpGugIkhJ3E=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=iesco.com.pk; s=default;
-        h=reply-to:date:from:to:subject:content-description
-          :content-transfer-encoding:mime-version:content-type;
-        bh=GMzYzcyTxDsE6wX/XHG6MHqAdAiHrhqbmmLQ/TZ1QnQ=;
-        b=hIyJABRPTFhvRaykEs0Ff0CILy6S0WrpHthS3uJeJQypcXYA3sGRMAUZT3E02OMPL
-          hAOO1yBwPrWnGNhHrenH4AIBcQye3Z9YHvSIzOcrb7w5YTijMlS+WqgTw4JXj2/DR
-          zNfBhuneeG0JP+Hr2RFfz//Cb8ZiOxJJ59uEoffNY=
-Received: from [94.156.6.90] (UnknownHost [94.156.6.90]) by iesco.comsatshosting.com with SMTP;
-   Wed, 23 Aug 2023 04:30:59 +0500
-Message-ID: <0B.FB.10987.CBB45E46@symantec4.comsats.net.pk>
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S231438AbjHWCL5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Aug 2023 22:11:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CD2E4A
+        for <linux-clk@vger.kernel.org>; Tue, 22 Aug 2023 19:11:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E85861275
+        for <linux-clk@vger.kernel.org>; Wed, 23 Aug 2023 02:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F2FC433C8;
+        Wed, 23 Aug 2023 02:11:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692756704;
+        bh=bOWWtdMrF6LJFfQBK2OyDOfqMh/CaDEbXH4MQR6WIx8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G/strxObU3F+RipWOvkJ6xnnffkARZQjH0Z3vyUGjNETnFW6R07oUa7NDJSn1yNXK
+         ZmscwhsPWeU/cwMl8VWfAHOsnRWnf+IKuw5RhHg5vCBzfL0IrA2p9Y9xy/WfGM+WXm
+         k+qtph6ry3KA87EExFLcNihAo1uKmOBnsY9rkeO3M/EHt4DhG/ScQZeK7GC2NOUbqN
+         Bi7CWDmv567jULq25ZYlNnHPLqG981FISRLvN5BGNM/2FpBZXRD7PONfr8bkmBcyXQ
+         gJyOiRLOptSsD6C4yBtttIrsw1dHaBzyVTtzBHVMGe3q0qEu1W+rUcuW6WxpSoabfA
+         9nnHUqipQXyEw==
+Date:   Tue, 22 Aug 2023 19:11:43 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Cc:     Jiri Pirko <jiri@resnulli.us>,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@nvidia.com>,
+        Milena Olech <milena.olech@intel.com>,
+        Michal Michalik <michal.michalik@intel.com>,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, netdev@vger.kernel.org,
+        linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next v5 5/9] netdev: expose DPLL pin handle for
+ netdevice
+Message-ID: <20230822191143.119c3d72@kernel.org>
+In-Reply-To: <20230822230037.809114-6-vadim.fedorenko@linux.dev>
+References: <20230822230037.809114-1-vadim.fedorenko@linux.dev>
+        <20230822230037.809114-6-vadim.fedorenko@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re; Interest,
-To:     linux-clk@vger.kernel.org
-From:   "Chen Yun" <pso.chairmanbod@iesco.com.pk>
-Date:   Tue, 22 Aug 2023 16:31:13 -0700
-Reply-To: chnyne@gmail.com
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNLMWRmVeSWpSXmKPExsVyyUKGW3eP99MUg6l/NS0+9txjdWD0+LxJ
-        LoAxissmJTUnsyy1SN8ugStjyboLLAW7mSva+hexNDA+Zupi5OSQEDCRWPvyF2sXIxeHkMAe
-        JomdFyeygSRYBFYzSzxoSgNJsAg8ZJY4enczVFUzo0TPnjVAVRwcvALWEt/25oM0MAvoSdyY
-        OgWsmVdAUOLkzCcsEHFtiWULXzODlDMLqEl87SoBCQsLiEl8mraMHcQWEZCVuHXsJ1grm4C+
-        xIqvzYwQN6hKXLm+FmyMkICUxMYr69kmMPLPQrJtFpJts5Bsm4WwbQEjyypGieLK3ERgoCWb
-        6CXn5xYnlhTr5aWW6BVkb2IEBuHpGk25HYxLLyUeYhTgYFTi4f257kmKEGtiGVDXIUYJDmYl
-        EV7p7w9ThHhTEiurUovy44tKc1KLDzFKc7AoifPaCj1LFhJITyxJzU5NLUgtgskycXBKNTDu
-        9z/Jqm3nJPLm7Edvw/W79y6y1el8V/SMOerJFi+fA6s+/udkPJw0pXhvjel+g7oXj1JXBcte
-        +XFFhs8yYMHOJXMDQzawvpZ00zv33WFBx6Zcy7O77D2+7VPs32jRJKC9wHeet93n0+fWrHvi
-        15MQdDUoSGNKiRxTAuMjBdniVwcc57w8+XauEktxRqKhFnNRcSIAJBb3Tz4CAAA=
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_SBL,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: iesco.com.pk]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [94.156.6.90 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [203.124.41.30 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Re; Interest,
+On Wed, 23 Aug 2023 00:00:33 +0100 Vadim Fedorenko wrote:
+> static int
+>  dpll_msg_add_mode(struct sk_buff *msg, struct dpll_device *dpll,
+> @@ -340,6 +352,7 @@ dpll_cmd_pin_get_one(struct sk_buff *msg, struct dpll_pin *pin,
+>  
+>  	ref = dpll_xa_ref_dpll_first(&pin->dpll_refs);
+>  	ASSERT_NOT_NULL(ref);
+> +
+>  	ret = dpll_msg_add_pin_handle(msg, pin);
+>  	if (ret)
+>  		return ret;
 
-I am interested in discussing the Investment proposal as I explained
-in my previous mail. May you let me know your interest and the
-possibility of a cooperation aimed for mutual interest.
+Chunk out of place
 
-Looking forward to your mail for further discussion.
+> diff --git a/include/linux/dpll.h b/include/linux/dpll.h
+> index 2202310c10cd..9b612038b538 100644
+> --- a/include/linux/dpll.h
+> +++ b/include/linux/dpll.h
+> @@ -101,6 +101,26 @@ struct dpll_pin_properties {
+>  	struct dpll_pin_frequency *freq_supported;
+>  };
+>  
+> +#if IS_ENABLED(CONFIG_DPLL)
+> +
+> +size_t dpll_msg_pin_handle_size(struct dpll_pin *pin);
+> +
+> +int dpll_msg_add_pin_handle(struct sk_buff *msg, struct dpll_pin *pin);
+> +
+> +#else
+> +
+> +static inline size_t dpll_msg_pin_handle_size(struct dpll_pin *pin)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline int dpll_msg_add_pin_handle(struct sk_buff *msg, struct dpll_pin *pin)
+> +{
+> +	return 0;
+> +}
+> +
+> +#endif
 
-Regards
+The only empty line between #if and #endif that's needed is the one
+between the two static inline helpers
 
-------
-Chen Yun - Chairman of CREC
-China Railway Engineering Corporation - CRECG
-China Railway Plaza, No.69 Fuxing Road, Haidian District, Beijing, P.R.
-China
+>  struct dpll_device *
+>  dpll_device_get(u64 clock_id, u32 dev_driver_id, struct module *module);
+>  
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 0896aaa91dd7..36a872774173 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -34,6 +34,7 @@
+>  #include <linux/rculist.h>
+>  #include <linux/workqueue.h>
+>  #include <linux/dynamic_queue_limits.h>
+> +#include <linux/dpll.h>
 
+Please no includes in netdevice.h, it's included in way too many places.
+
+All you need is a forward declaration of struct dpll_pin, AFAICT.
+
+> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+> index ce3117df9cec..2e7df321f345 100644
+> --- a/include/uapi/linux/if_link.h
+> +++ b/include/uapi/linux/if_link.h
+> @@ -377,6 +377,8 @@ enum {
+>  	IFLA_GSO_IPV4_MAX_SIZE,
+>  	IFLA_GRO_IPV4_MAX_SIZE,
+>  
+> +	IFLA_DPLL_PIN,
+> +
+
+No empty lines, no idea who started this trend but let's stop it.
+
+>  	__IFLA_MAX
+>  };
