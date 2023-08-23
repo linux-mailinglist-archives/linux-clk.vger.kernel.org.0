@@ -2,110 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7301A7862A4
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Aug 2023 23:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD69786393
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 00:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbjHWVh1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 23 Aug 2023 17:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S231502AbjHWWs7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 23 Aug 2023 18:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238427AbjHWVgy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Aug 2023 17:36:54 -0400
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61AB10DA;
-        Wed, 23 Aug 2023 14:36:51 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 2CFEE120006;
-        Thu, 24 Aug 2023 00:36:50 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 2CFEE120006
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1692826610;
-        bh=/l6bE+/XrXtEOVGkX/GB5PXGccTEAcvYMkTvkzjC9Do=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-        b=AC9ceuHrbiRHodN9H2wVt5S7KKSyYMsGqnyXXlschSFH0ECfiRqUBCcCtHXpQBgs2
-         960Ld6r7ryhKsrwd0nW7PE9xS2fXpH44VI9lFFcmd7sc8MC8fYaBz++5Jy0t04b2WH
-         AEBfpKK9AkAW357ndj+qsiFmx5+sf9fjg/pVzMAiBU+L3SGJdP7oEoi+Fl3a5w8oSt
-         ewFF7rdXJF+5hmVRijT9iLxHOEGZGft/+FBqARv01VieI1TBklXDXESG55JYnYVx8M
-         0AQFUwzAPAtudFbI5/PoD/FE8EvIFqSMFzpMDUBSeta1+ir4IMxNKKgOceIdpA4qmh
-         ZIzcp8hobXs+g==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233219AbjHWWsh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Aug 2023 18:48:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6687CF1;
+        Wed, 23 Aug 2023 15:48:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Thu, 24 Aug 2023 00:36:50 +0300 (MSK)
-Received: from localhost.localdomain (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 24 Aug 2023 00:36:46 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <conor+dt@kernel.org>
-CC:     <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v2 15/15] dt-bindings: arm: amlogic: add Amlogic AD402 bindings
-Date:   Thu, 24 Aug 2023 00:36:30 +0300
-Message-ID: <20230823213630.12936-16-ddrokosov@sberdevices.ru>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20230823213630.12936-1-ddrokosov@sberdevices.ru>
-References: <20230823213630.12936-1-ddrokosov@sberdevices.ru>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F79563DA3;
+        Wed, 23 Aug 2023 22:48:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8E8C433C8;
+        Wed, 23 Aug 2023 22:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692830914;
+        bh=IhgjCMkYI3n71u3LVYb6mEPmDb3r+oz+bDBe6Sa4pwM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=W2d/MxyJVeSzdKDSMu8I9yhHgONxWP9TYV8bKL8sn/lrtJh0bB3yLl0HjV+9KY55d
+         gtFvaJnlRv1vBufV6zXDPRmbpn8/OL5EWqO2hguiv20Bc+7ZLBhDwp5uS4f0agrsqL
+         KriURdxLxmrPniovEkMeZCUtGpjuKJETr1Ej1qNNCDV7pkPPWy3eg8pA/+R1ZqM7xn
+         MlzADOcR6g38hSi0N6xTlpXaOJLDhNg1LQuDmYq1AhQcpsq5A+3jh2tkHES63PQarY
+         44hGk7yIlEsEFAlNh82IVCB6xo3Ah5oLM7FhqUI+4A90akzkKQSFs+EwmjjnEyxKq/
+         ao6BPxcvcxkKw==
+Message-ID: <fe6fc1b91515cb9a57fef6234cbcf372.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 179413 [Aug 23 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 527 527 5bb611be2ca2baa31d984ccbf4ef4415504fc308, {Tracking_smtp_not_equal_from}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;100.64.160.123:7.1.2;salutedevices.com:7.1.1, FromAlignment: n, {Tracking_smtp_domain_mismatch}, {Tracking_smtp_domain_2level_mismatch}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/08/23 18:49:00 #21688451
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230802064100.15793-1-mike.looijmans@topic.nl>
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.05b2cfbe-0414-4869-b825-034b9be5bf9a@emailsignatures365.codetwo.com> <20230802064100.15793-1-mike.looijmans@topic.nl>
+Subject: Re: [PATCH 1/3] clk: lmk04832: Set missing parent_names for output clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        Mike Looijmans <mike.looijmans@topic.nl>
+To:     Mike Looijmans <mike.looijmans@topic.nl>, linux-clk@vger.kernel.org
+Date:   Wed, 23 Aug 2023 15:48:32 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the compatible for the Amlogic A1 Based AD402 board.
+Quoting Mike Looijmans (2023-08-01 23:40:58)
+> lmk04832_register_clkout forgot to fill in the parent_names, resulting
+> in the error message "Must specify parents if num_parents > 0".
+>=20
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> ---
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- Documentation/devicetree/bindings/arm/amlogic.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
-index 08d59842655c..15880abb7261 100644
---- a/Documentation/devicetree/bindings/arm/amlogic.yaml
-+++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
-@@ -203,6 +203,7 @@ properties:
-         items:
-           - enum:
-               - amlogic,ad401
-+              - amlogic,ad402
-           - const: amlogic,a1
- 
-       - description: Boards with the Amlogic C3 C302X/C308L SoC
--- 
-2.36.0
-
+Applied to clk-next
