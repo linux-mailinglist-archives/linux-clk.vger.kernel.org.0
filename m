@@ -2,83 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B737C786857
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 09:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF7C786ABA
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 10:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjHXHbN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 24 Aug 2023 03:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
+        id S234672AbjHXIwt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 24 Aug 2023 04:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240395AbjHXHa4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 03:30:56 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8131710
-        for <linux-clk@vger.kernel.org>; Thu, 24 Aug 2023 00:30:41 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 37O7UOaI040918;
-        Thu, 24 Aug 2023 15:30:24 +0800 (+08)
-        (envelope-from zhifeng.tang@unisoc.com)
-Received: from SHDLP.spreadtrum.com (shmbx04.spreadtrum.com [10.0.1.214])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RWZRz3YcVz2Q1xTT;
-        Thu, 24 Aug 2023 15:27:59 +0800 (CST)
-Received: from xm9614pcu.spreadtrum.com (10.13.2.29) by shmbx04.spreadtrum.com
- (10.0.1.214) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Thu, 24 Aug
- 2023 15:30:23 +0800
-From:   Zhifeng Tang <zhifeng.tang@unisoc.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhifeng Tang <zhifeng.tang@unisoc.com>,
-        Cixi Geng <cixi.geng1@unisoc.com>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zhifeng Tang <zhifeng.tang23@gmail.com>,
-        Wenming Wu <wenming.wu@unisoc.com>
-Subject: [PATCH V2] clk: sprd: Fix thm_parents incorrect configuration
-Date:   Thu, 24 Aug 2023 15:29:18 +0800
-Message-ID: <20230824072918.7805-1-zhifeng.tang@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S238017AbjHXIwX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 04:52:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E422919A0;
+        Thu, 24 Aug 2023 01:52:15 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37O62MmW021046;
+        Thu, 24 Aug 2023 08:10:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cx+s08Cj0Mu6Wb6EWjkiCwnzR8pat8n2GF6Pj7jxloM=;
+ b=iT/3bF0FFS/89XLAf7FspeRNJn17ynONWKmsv9VQEL+PaKA+/yaTcIfDUkNM0o4APndR
+ CaMxUYIlzn163bdtyAj4aoFBgpJqK6IWSBYSTawZtqtclHcQBmmI3aP08E7KLvwkfU2Z
+ Rrr2AYpTIpwN5tw3bJ+G6rCfa38nTweG0jeJUfGVK01TRTrD7Q5Vuai8GbgzEpB8RVmH
+ dNWK1kB85VJM11wFWlCl6+Aj7vSOc/x6YF9iVWDGVJNni1wXAx6eat0HlsMgCShW2bnG
+ K3sJUwGEXCZzDD0koiUnu7zCW/ZQpqeIe5AX8uH/j8sySuLBlunhISUcVFxkgOQAy8Ko eQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sp1k9g7v8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Aug 2023 08:10:52 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37O8Ap9Z029352
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Aug 2023 08:10:51 GMT
+Received: from [10.253.13.101] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 24 Aug
+ 2023 01:10:15 -0700
+Message-ID: <f3f05dfe-a8eb-6d73-f51d-470104782655@quicinc.com>
+Date:   Thu, 24 Aug 2023 16:10:13 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.13.2.29]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- shmbx04.spreadtrum.com (10.0.1.214)
-X-MAIL: SHSQR01.spreadtrum.com 37O7UOaI040918
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v5 1/4] clk: qcom: branch: Add clk_branch2_mdio_ops
+To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <catalin.marinas@arm.com>,
+        <conor+dt@kernel.org>, <konrad.dybcio@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <p.zabel@pengutronix.de>, <robh+dt@kernel.org>, <will@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_srichara@quicinc.com>
+References: <20230823085031.27252-1-quic_luoj@quicinc.com>
+ <20230823085031.27252-2-quic_luoj@quicinc.com>
+ <2819cf11177d81ab1fcface7e742cf50.sboyd@kernel.org>
+Content-Language: en-US
+From:   Jie Luo <quic_luoj@quicinc.com>
+In-Reply-To: <2819cf11177d81ab1fcface7e742cf50.sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oonPTLbz0wkaJ_1CoqaRcYlSrOzsxEx3
+X-Proofpoint-ORIG-GUID: oonPTLbz0wkaJ_1CoqaRcYlSrOzsxEx3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-24_05,2023-08-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ malwarescore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 spamscore=0 mlxlogscore=980
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2308240066
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The thm*_clk have two clock sources 32k and 250k,excluding 32m.
 
-Fixes: af3bd36573e3 ("clk: sprd: Add clocks support for UMS512")
 
----
-V2: add Fixes tag.
----
-Signed-off-by: Zhifeng Tang <zhifeng.tang@unisoc.com>
----
- drivers/clk/sprd/ums512-clk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 8/24/2023 2:04 AM, Stephen Boyd wrote:
+> Quoting Luo Jie (2023-08-23 01:50:28)
+>> diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
+>> index fc4735f74f0f..5e08c026ca4a 100644
+>> --- a/drivers/clk/qcom/clk-branch.c
+>> +++ b/drivers/clk/qcom/clk-branch.c
+>> @@ -153,3 +153,10 @@ const struct clk_ops clk_branch_simple_ops = {
+>>          .is_enabled = clk_is_enabled_regmap,
+>>   };
+>>   EXPORT_SYMBOL_GPL(clk_branch_simple_ops);
+>> +
+>> +const struct clk_ops clk_branch2_mdio_ops = {
+>> +       .prepare = clk_branch2_enable,
+>> +       .unprepare = clk_branch2_disable,
+>> +       .is_prepared = clk_is_enabled_regmap,
+>> +};
+>> +EXPORT_SYMBOL_GPL(clk_branch2_mdio_ops);
+> 
+> I'd call it clk_branch2_simple_prepare_ops or something like that.
+> There's nothing mdio specific about it.
 
-diff --git a/drivers/clk/sprd/ums512-clk.c b/drivers/clk/sprd/ums512-clk.c
-index fc25bdd85e4e..f43bb10bd5ae 100644
---- a/drivers/clk/sprd/ums512-clk.c
-+++ b/drivers/clk/sprd/ums512-clk.c
-@@ -800,7 +800,7 @@ static SPRD_MUX_CLK_DATA(uart1_clk, "uart1-clk", uart_parents,
- 			 0x250, 0, 3, UMS512_MUX_FLAG);
- 
- static const struct clk_parent_data thm_parents[] = {
--	{ .fw_name = "ext-32m" },
-+	{ .fw_name = "ext-32k" },
- 	{ .hw = &clk_250k.hw  },
- };
- static SPRD_MUX_CLK_DATA(thm0_clk, "thm0-clk", thm_parents,
--- 
-2.17.1
+Thanks Stephen for the proposal.
 
+As for qcom clock controller, only the device accessed by MDIO bus has 
+this kind of ops, the clk_branch2_mdio_ops can also imply that the MDIO
+bus is used for accessing the HW register, i think this is also the 
+reason that Konrad suggested this ops name.
