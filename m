@@ -2,184 +2,282 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E342786A9B
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 10:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F03786AF0
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 11:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjHXIsW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 24 Aug 2023 04:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S236723AbjHXJAY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 24 Aug 2023 05:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240575AbjHXIsF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 04:48:05 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0951BC6
-        for <linux-clk@vger.kernel.org>; Thu, 24 Aug 2023 01:47:38 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4ffa01fc987so761823e87.1
-        for <linux-clk@vger.kernel.org>; Thu, 24 Aug 2023 01:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692866842; x=1693471642;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Luu2mgu5dBhR6s0bCtSFfR5zNZajHF5BW8EWntyR8Zc=;
-        b=QUg6K6RRwKwmJKro0tziz7F+gHcpcXqtWXrEdODclSfX6hERwyWAQ7gi38RTf+Si7y
-         UqEtpQTRWG5L8nzjPmgnc2AsuiCsShq4ze/ZHNTCZ0e1z2p2U9CPTVIylMhvnaHoMLHP
-         VfNXkbDvVcim1WDv8+rEEHZsYHdlJVTln1wcV8xHatpawV6EpozV7h97MdEGXmuLmEJq
-         m2ms1I/TIlDIYqWe6951t9M4mBsCaO325sQMKgC4poip7vheGdnc3n8YqkNSwlbISnLf
-         LqnsDMdzpZKUz2fk5ZErjYJ/xRhNFtSqy04fw4ykl/19rl9npekV3Ce5SF033yxwC9bp
-         aKTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692866842; x=1693471642;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Luu2mgu5dBhR6s0bCtSFfR5zNZajHF5BW8EWntyR8Zc=;
-        b=daUWckEgvYxdl+p5CDLN/XLLJHgYwDtzssIonh5C6gKRGC0Z/O3eNANd6e3s+RaNMU
-         03PxW1b2wEbWEQYO6emH91uz59Z6RiqVvmHXVleseb8LRENgK2S0TLH+Hymo1W0vXvRY
-         CULXedVi9LLbahcl7Ytj5ik9fpy5iviGjw3SsBANXDTZDBZFvPlFZXhoGPaTSGEMGIPK
-         7WRuCNMZ/M+AmDW+3MOIwJXJV30sLc8qjrQOdmCC+8oRYlj0iA2r4CFcWQJhw6cmdHqF
-         wgduzhgCyCbdlRgjJjFH6xfQ3VUWV6oHA93n0Tfw/Qef2YD4MSC4RzriBBWOQ0q7enZW
-         tvsg==
-X-Gm-Message-State: AOJu0Yx77SRDhJ1kx5IVT0NiM645VwWWu8MwNqDYyeRZvPQ9Czk7xiOM
-        T7r4RdU/5MCTQEquqHJSHMWvNQ==
-X-Google-Smtp-Source: AGHT+IFxr2lky/zZxRDrtPoerryLLsp8lOpSvqyqiX9re9sZXlPeGUSvwTTorceGzllqJ3qri5xsvQ==
-X-Received: by 2002:ac2:4f15:0:b0:4ff:8f76:678c with SMTP id k21-20020ac24f15000000b004ff8f76678cmr6695568lfr.1.1692866842361;
-        Thu, 24 Aug 2023 01:47:22 -0700 (PDT)
-Received: from ?IPV6:2a00:f41:4882:ba34:4490:938b:eab4:c5ef? ([2a00:f41:4882:ba34:4490:938b:eab4:c5ef])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05651203cc00b004ff8ee47f2fsm3063805lfp.1.2023.08.24.01.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 01:47:22 -0700 (PDT)
-Message-ID: <868da572-cff1-42b6-9931-06b6a8c73809@linaro.org>
-Date:   Thu, 24 Aug 2023 10:47:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/6] dt-bindings: clock: Add ipq9574 NSSCC clock and reset
- definitions
+        with ESMTP id S240542AbjHXJAH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 05:00:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B66D198E;
+        Thu, 24 Aug 2023 02:00:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692867603; x=1724403603;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=N9NqFv9HCg+ILqOx82a155s5nN53YC3+TS+KD2Guth0=;
+  b=miUJ3KJsNzvBmt+g7U+nwZFRpsXJM2f+3C61bx51HlrmhXIwnSizVLjO
+   W0u4w9OwQl9PPZEFvWoqDqL1TiCLX95N3ENl0PAHn8hZ3iXvLab5cxqHY
+   AqOeT/E7HY9XPyjDp1hX9/+sFlgVIhhXxDSmmZoP8x0UW8bLyPXYeX8Ir
+   p3B9mKmTZY/bOORBZJICPBQPl0zgtI7tpq0VTDvgox3ATXWHZLw3t2T5E
+   4hMqTicih6SUWssCMVS9F608Qe0KH/dCYgDirXyfA/SivxjJdN6RqqmD+
+   QtXDKqmveSHaNgIjdc4FGokkD9vOQ4NWufwirzioBGWwk1dk6h3xU7wo6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="353927763"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="353927763"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 02:00:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="1067748332"
+X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
+   d="scan'208";a="1067748332"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Aug 2023 01:59:59 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 24 Aug 2023 01:59:58 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 24 Aug 2023 01:59:58 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 24 Aug 2023 01:59:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fh2cl1ZfpKw1mh2XobZdHbkjTpLrmFT/jFAF2rht50M2Bkv8HP+xt+Bz5sMtOO3NDTosEmSGGIZIyqHjhostbxTsH+8JnWg8zZGWIbUb5a8fTQLriannFKy7yig6uY+O0vM54RaUthlb+mNS8spSU4ts+oiMYsOlvhiRXSArAilSj6dV0aFSikhQqR4L6QtrLT9reifUC2reKdnHmozECx+bYEkaV752XFDRX+4oYGk6NkGdfBvdEaL9Q4ROorLU0qynC6BS3U9REj4Xna5du2uPMKBGH02S2/icCvTjHXgfvl4SSWDADjXjch7t11h3i+fClZ8C18dvKPd+QxyciA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Lh9jIEvb9ENDslQDt5zl8VIzag5BCEeJl6R1k+sz0xM=;
+ b=RaCwxEjh3oN2SpmfMjPlrwUqBZdPtbqGQO7fX04XjPV4wBCMBorfaw6Hpl9HsrWdBt+GAAwOUB/onNdfcFe9RA6iyDE5Kv3C6yWUTNuZWcy7oY+lPujMieoEINqnoD2D+gdGmeeLZXROItfkBsCVXrVBm6wvmEev1efGkvMq+IJHHuWnYkWm1skKZ0UTAiAl8c3npHB3p/3EJJryg89YNMnYnx9KkivDDBArPf5QUZLhc4UUTkkT6lnztq7i4fprsX2LFs0C76dWqzFJewzmo2s6KXFi+fST2AM9i23J8nZYd7aZy7Ml5jaqcXFI8bpQzFVFcMMm4S7DV93wsRIoMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CH3PR11MB8414.namprd11.prod.outlook.com (2603:10b6:610:17e::19)
+ by DM4PR11MB6335.namprd11.prod.outlook.com (2603:10b6:8:b7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.27; Thu, 24 Aug
+ 2023 08:59:54 +0000
+Received: from CH3PR11MB8414.namprd11.prod.outlook.com
+ ([fe80::ed67:3510:8326:d4d5]) by CH3PR11MB8414.namprd11.prod.outlook.com
+ ([fe80::ed67:3510:8326:d4d5%2]) with mapi id 15.20.6699.022; Thu, 24 Aug 2023
+ 08:59:53 +0000
+From:   "Michalik, Michal" <michal.michalik@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>, poros <poros@redhat.com>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>
+Subject: RE: [PATCH RFC net-next v1 2/2] selftests/dpll: add DPLL system
+ integration selftests
+Thread-Topic: [PATCH RFC net-next v1 2/2] selftests/dpll: add DPLL system
+ integration selftests
+Thread-Index: AQHZ0R7y+sClUTv/akmAx/gH3L3jSa/wjecAgAP0HyCAAMRjgIAD48hA
+Date:   Thu, 24 Aug 2023 08:59:53 +0000
+Message-ID: <CH3PR11MB84149ADA77B4A6FBD4F0C230E31DA@CH3PR11MB8414.namprd11.prod.outlook.com>
+References: <20230817152209.23868-1-michal.michalik@intel.com>
+        <20230817152209.23868-3-michal.michalik@intel.com>
+        <20230818140802.063aae1f@kernel.org>
+        <CH3PR11MB84141E0EDA588B84F7E10F71E31EA@CH3PR11MB8414.namprd11.prod.outlook.com>
+ <20230821141327.1ae35b2e@kernel.org>
+In-Reply-To: <20230821141327.1ae35b2e@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>,
-        Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, richardcochran@gmail.com, arnd@arndb.de,
-        geert+renesas@glider.be, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, rafal@milecki.pl,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
-Cc:     quic_saahtoma@quicinc.com
-References: <20230711093529.18355-1-quic_devipriy@quicinc.com>
- <20230711093529.18355-4-quic_devipriy@quicinc.com>
- <ea229d40-0bce-87e8-edef-72a7f251c051@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <ea229d40-0bce-87e8-edef-72a7f251c051@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR11MB8414:EE_|DM4PR11MB6335:EE_
+x-ms-office365-filtering-correlation-id: df50eb06-fcbe-4bfd-4eda-08dba4807b87
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L5VxV4/MT5QGdL8LbE1HowaOjN/fHVVn8LpVVJaaQg+ztFYLie81qMY5ZHeluOenRFdSb9zghmpEeqKyatarB7nvwe6bnTmTyefYgk5u3m9zgrzNzx2fqLydgWw4LSWOwZLbZM6n2flrPRb8PE7E/SbOam4KbtzSeCO1ia9gmleOrbJsgdT1yZGWPj2ckYx90g17hAyX2jJrrShlptoehYJ5eZRhe1f+R/SOypAdwzSUH1AghfMF/GdhgaZ6G2cc4ajHsPAxt1ZA+/tsjxm4EbQt3d32tzoVr2iyAWyBvHLxhiy+tXuEFWcjmeLUPxj9dxdvsJ9H+JjYEAVFICW/XokyQ+NgiL7fA9QpJFbNKoPjl15QZNXRNpaVLEepWkEBg06SOz9FtzWLiSLQbU6FzXKFI/PTZPz2WbwKsvik0TgtK/ko8vh7+XF9DEOJRUtRzc0R5MVwr0s0Go31Zfhb2Yonq8DwwZX/SyB1OplRCpa+ahJUSNRnwCqG8R/mHdCTszuunEZONF9/7ZJLsH/dN3qxKCXt462mlvJu0gHUxLN9c0g+8Pm5Sm4WZVj1rAE9E69hc+1Cnk9lTPUwNhlN9xQcfc5o0aaMzCYn0MPP01fIVu9rOULiN4A8jV67XO73+mXLTyzKngvVM1HRqg4MGQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB8414.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(346002)(376002)(366004)(39860400002)(84040400005)(451199024)(186009)(1800799009)(64756008)(54906003)(66446008)(66946007)(76116006)(66476007)(66556008)(316002)(6916009)(82960400001)(122000001)(478600001)(55016003)(26005)(38100700002)(38070700005)(71200400001)(41300700001)(86362001)(7696005)(9686003)(6506007)(2906002)(53546011)(966005)(4326008)(8676002)(8936002)(52536014)(5660300002)(7416002)(83380400001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7BngSOGOS6e+HsKD/X36XzdOciFsWFLuUy+Qo5c4AL5g4j6uVeY4qqgEEzNY?=
+ =?us-ascii?Q?csmeat6q3MEVMPYbvKc5kZ0scCCytfQyOI6RbaH4idAmAH1RdAiiXSpF0qUs?=
+ =?us-ascii?Q?Lz0DL5RHwZJA6UE3npxajrFR/h8RhzSGq27pMalIMl5EalPP5MToA0Ixf9X2?=
+ =?us-ascii?Q?TI05/XBrZxjKtZ0fdjVyf5A5S9rfC28bdxD7eqmMRg803ZCosS/VRBrNQOgS?=
+ =?us-ascii?Q?5PjBhUPlm7MqDZVY5V+axUUYWeOpe/B0zT6bOEAbrXNEJ7QJEzbjq5QVFSfF?=
+ =?us-ascii?Q?Qo6/zAVrA9O/pegPqmPvQ5Zx+2+K0ieT8dJcmaUwiBvMV08cNglLsFp95JC1?=
+ =?us-ascii?Q?BgnnuO9gj847tBs/msKGdB/7/Rx8q191MBRWivOmoUi9fO4WpXJld4b5fgnf?=
+ =?us-ascii?Q?sodV8YWtH77ChfAM6M+E5iTXNFXHDpyEo2hA7gckEBAXO5tsOIL+It3YyYZb?=
+ =?us-ascii?Q?+E4dFTPd/cV0h/7HuvAqk3MM84CwAy7AzJDxOyDylLJHIx+dW9RHSYuzPCyw?=
+ =?us-ascii?Q?2JfBuWdLvqPvVMEp7x4xly+SC5fYx4TF5tyrU4Qiw2ta5sHw8DGs+Pla3Tth?=
+ =?us-ascii?Q?0NZiD2mWAk/+1NFQkoSq6t3MLzUxJ6btDgPLK3nCim/eAkzEhjcJpcsWTMFH?=
+ =?us-ascii?Q?oGXUh7UpP5aUk/hBLY94Cexr0ajKIH2SUzylkelEPfy2i7+ZPCFlmiZj9U+Q?=
+ =?us-ascii?Q?YgcG2yD0c9UscjpyLeRKMloM8z8u+M0qMSLny/UO1HjeQ4rwLMBi0OBBMt0E?=
+ =?us-ascii?Q?/ZJL00Q5owF9/uR7KEeBZnUoOXdCfh+1kGR0k6KB5oDf6QxhvJ9kKWYsMSkR?=
+ =?us-ascii?Q?Qwgb3FgUL/gZI3tHsBkEozmZyNIEOLum8gLb+qI7ui2zm++uMTLDLtHnWQ6X?=
+ =?us-ascii?Q?Ft2WFOa/KYKQCUFysNvxvYV0SLymeeYr+w/Gp4ZOgwcvp0WhhTSZHfRjVOhf?=
+ =?us-ascii?Q?YC1ZAWErzlcDJHEBOqfZ8yRt0gp4nuOwQS+mBEJPKpzr03mnQMmrD70deDqP?=
+ =?us-ascii?Q?rJIL4wLHoxaMxJ1zIH2gtYogo9a/Bu05SFJGsq7Ar1p8iYJud948p2kkWK5U?=
+ =?us-ascii?Q?TWclfrDP5C2jRejO4jBKcMppU91i9eDM/njwokxBWlU5zQNDwbhCcfu1YO15?=
+ =?us-ascii?Q?YypBYIcCGY8p+KCcYJEMllImllRQ2NCFt+DPu1CCO4kCsmxUuPuT7Qcq1Bhm?=
+ =?us-ascii?Q?tfKZ3NG7+YrLAGdbGKGpi7nIxbiVUunwIKD0ypQ5xzHDs6ItdHZDIKzOO5y7?=
+ =?us-ascii?Q?T9133yvYeaWH2MPhIes0/DnVxcmJZYZdzhfyZTVxmagog8VBpzmhugnAPpEO?=
+ =?us-ascii?Q?DT0Y97mBvd6tMjQF2ZecIHMhHdMBHSxZjLmWC7EgxnY2GmMOt1IN0VKEO3/J?=
+ =?us-ascii?Q?gKs0wZULtv4cu7U+agzI81M+ASZLha7pOio+e73Dm35UEZGLPRFGbmOpm54J?=
+ =?us-ascii?Q?+qlh4JFsgxILp7z4OZ2e7lrgrWhiuiFgSHP+1W/gx0nEalkOO6AZj2eI1UqQ?=
+ =?us-ascii?Q?oNP59JC77KGeXHRl/LUxxN7zRw97wktdQTJD9iTcIA7UrTkU/HsVyiyWw0fE?=
+ =?us-ascii?Q?XKqIvyGTo+VdcpXvr2GijviVJGX+nLTiFH1BlKEV?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB8414.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df50eb06-fcbe-4bfd-4eda-08dba4807b87
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2023 08:59:53.7765
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ybkKrH3zC2Y6T8mSWgSSwlo5d6xav2p4kmPd12+KbfWBaf/UDCZxdHeNyOVffWKzIWxkAXD5SXLfXejnykSwye7T9YtSDzjUkVgQpRn2MxI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6335
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 24.08.2023 07:18, Kathiravan T wrote:
-> 
-> On 7/11/2023 3:05 PM, Devi Priya wrote:
->> Add NSSCC clock and reset definitions for ipq9574.
->>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->> ---
->>   .../bindings/clock/qcom,ipq9574-nsscc.yaml    |  76 +++++++++
->>   .../dt-bindings/clock/qcom,ipq9574-nsscc.h    | 152 ++++++++++++++++++
->>   .../dt-bindings/reset/qcom,ipq9574-nsscc.h    | 134 +++++++++++++++
->>   3 files changed, 362 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->>   create mode 100644 include/dt-bindings/clock/qcom,ipq9574-nsscc.h
->>   create mode 100644 include/dt-bindings/reset/qcom,ipq9574-nsscc.h
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->> new file mode 100644
->> index 000000000000..1e8754760785
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
->> @@ -0,0 +1,76 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/qcom,ipq9574-nsscc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Networking Sub System Clock & Reset Controller on IPQ9574
->> +
->> +maintainers:
->> +  - Bjorn Andersson <andersson@kernel.org>
->> +  - Anusha Rao <quic_anusha@quicinc.com>
->> +
->> +description: |
->> +  Qualcomm networking sub system clock control module provides the clocks,
->> +  resets and power domains on IPQ9574
->> +
->> +  See also::
->> +    include/dt-bindings/clock/qcom,ipq9574-nsscc.h
->> +    include/dt-bindings/reset/qcom,ipq9574-nsscc.h
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,ipq9574-nsscc
->> +
->> +  clocks:
->> +    items:
->> +      - description: Bias PLL cc clock source
->> +      - description: Bias PLL nss noc clock source
->> +      - description: Bias PLL ubi nc clock source
->> +      - description: GCC GPLL0 out aux clock source
->> +      - description: Uniphy0 GCC Rx clock source
->> +      - description: Uniphy0 GCC Tx clock source
->> +      - description: Uniphy1 GCC Rx clock source
->> +      - description: Uniphy1 GCC Tx clock source
->> +      - description: Uniphy2 GCC Rx clock source
->> +      - description: Uniphy2 GCC Tx clock source
-> 
-> 
-> These are UniphyX *NSS* TX/RX clock source?
-Wouldn't that be "source from GCC"?
+On 21 August 2023 11:13 PM CEST, Jakub Kicinski wrote:
+>=20
+> On Mon, 21 Aug 2023 09:32:56 +0000 Michalik, Michal wrote:
+>> On 18 August 2023 11:08 PM CEST, Jakub Kicinski wrote:
+>> > How fragile do you reckon this setup will be?
+>> > I mean will it work reliably across distros and various VM setups?
+>> > I have tried writing tests based on ynl.py and the C codegen, and
+>> > I can't decide whether the python stuff is easy enough to deploy.
+>> > Much easier to scp over to the test host a binary based on the=20
+>> > C code. But typing tests in python is generally quicker...
+>> > What are your thoughts?
+>> >=20
+>> > Thanks for posting the tests! =20
+>>=20
+>> Hi Jakub,
+>>=20
+>> First of all - everything I'll write is just my opinion. While having
+>> quite a bit Python experience, I can't speak confidently about the
+>> target systems and hardware (architectures) it would be ran against and
+>> what might be possible problems around that. I need your help here.
+>>=20
+>> From my point of view, all we need is a Python 3.7 and access to PyPI
+>> repositories. This version of Python is 5 years old, but if we need
+>> support of even older versions I can rewrite the code not to use
+>> dataclasses[1] so we could go with even older version. Do you think it
+>> is required to support platforms with no Python at all?
+>>=20
+>> Another requirement is the toolchain for building the module, but I
+>> assume if Python is not there in some embedded system - the build tools
+>> are also not there...
+>=20
+> I think the module would need to be merged with netdevsim or some such.
+> The usual process is for module to be part of the normal kernel build
+> and then require appropriate CONFIG_* options to be set.
 
-Konrad
+That is really interesting idea - I was not aware about netdevsim, I need t=
+o
+investigate that possibility. It seems more clean. I've seen other modules =
+in
+tools/testing like test-cipher.c, nfit.c, ndtest.c, cxl.c or bpf_testmod.c =
+so I
+thought it's not too bad to have a separate, clean DPLL module directly in =
+here.
+
+>=20
+> I wonder about Python availability. If anyone who works on embedded
+> knows of Linux platforms which don't have Python - please shout.
+> Hopefully we're good on that side.
+>=20
+> PyPI is a bigger concern, I think pure SW tests are often run in VMs
+> without external connectivity.
+
+Those tests are the DPLL subsystem tests, they are not meant to be deployed
+on every production platform in my humble opinion. Tests which are "availab=
+le on
+most platfroms" are better than no tests at all "on all platforms".
+
+>=20
+>> I've seen other Python pytest code in the kernel repo - that is why I
+>> thought it might be a good idea to propose something like that. Your
+>> idea is also cool - binary is always superior. I am a strong advocate of
+>> taking into consideration not only deployment ease, but also maintenance
+>> and ease of read which might encourage community to help. I also see a
+>> benefit of showing the sample implementation (my tested "dummy module").
+>>=20
+>> My deployment is automatic and does not leave any garbage in the system
+>> after tests (packages are installed into temporary virtual environment).
+>> In case any of the requirements are not met - tests are skipped. I've
+>> tested it both on real HW with some E810T cards installed and on fresh
+>> VM - seems to work fine. But that of course require further verification=
+.
+>> Till now only Arek Kubalewski sucessfully gave those tests a shot.
+>=20
+> Does it work on a read-only file system? People may mount the kernel
+> sources over read-only 9p or nfs.
+>=20
+
+Since it builds a module and creates a temporary virtual environment in /tm=
+p I
+don't think it works for read-only file systems.
+
+>> The biggest concern for me is the requirement of selftests[2]:
+>>   "Don't take too long;"
+>> This approach is reloading the modules few times to check few scenarios.
+>> Also, the DPLL subsystem is being tested against multiple requests - so
+>> it takes some time to finish (not too long but is definitely not instant=
+).
+>=20
+> I think the time constraints are more of a question of practicality.
+> A developer should be able to run the tests as part of their workflow.
+>=20
+
+That makes sense - agree. So Jakub, if I understand correctly we have a few
+different problems to solve here:
+1) how to deploy the module:
+ - now it's separated, we should consider e.g. netdevsim
+2) if we should have those tests a part of selftests
+ - I would remove it from selftests and move it to ./tools/testing
+3) if we should use Python at all:
+ - fast to develop and easy to maintain
+ - might be problematic to deploy (no Python, VMs, embedded, no network etc=
+.)
+=20
+Do I understand our current outcome of the discussion correctly?
+
+>> If you asked me, I would consider those tests to be part of the kernel.
+>> I am not sure if they should be a part of selftests, though. Maybe a
+>> reasonable approach would be to have have my tests being a "thorough
+>> integration tests" and at the same time some limited tests shipped as a
+>> selftests binary? I can also parametrically limit the scope of my tests
+>> to run faster in selftests (e.g. only one scenario) and having possibili=
+ty
+>> to run extensive tests on demand?
+>>=20
+>> Thanks,
+>> M^2
+>>=20
+>> [1] https://docs.python.org/3/library/dataclasses.html
+>> [2] https://www.kernel.org/doc/html/v5.0/dev-tools/kselftest.html
+>
