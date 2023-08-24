@@ -2,89 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD390786729
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 07:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D16F7867FE
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 09:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239820AbjHXF1D (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 24 Aug 2023 01:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S235535AbjHXHAN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 24 Aug 2023 03:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239794AbjHXF0o (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 01:26:44 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25DA198;
-        Wed, 23 Aug 2023 22:26:42 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37O5DI8N026426;
-        Thu, 24 Aug 2023 05:26:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bOgs1mB1zlTdBpD4rupOhWFVyHKEo2JmyL+UiN2aZes=;
- b=TQUoOIZ5MfHqPdB+DNAWASs+1cQmMhkpXO0mvZgV9cl67KnVxqz2mitCEt6IHQ05M5ID
- yAOUVo/yMxtqEVC2EBUPN9oFoQohgWJK001tGSX6bewIsSPyikcSyLs4Q0UWziP8fdEb
- fpzJCB94Lxfpz2YhRYQCjJBzoWxePqZzwEPOjCtB5NTj+tjVaSqGc9gO8CJodU/oGcSn
- 3l2mmlEzuD7H+xpi49Fms70mxRL20+z/PmqgpNsO+IsSfN/kkJwxE4fDSgD4914PxVKy
- Spgr1/6VPumBXpsgyICyIEJORcT5figo1LtnjFJmq6WCjgVyTchK80jqkPC87KyaDGqV jQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3snxtar7fk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 05:26:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37O5Q5fw012926
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 05:26:05 GMT
-Received: from [10.216.48.216] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 23 Aug
- 2023 22:25:54 -0700
-Message-ID: <e07948d3-8766-b932-2eb4-7dc90b894f91@quicinc.com>
-Date:   Thu, 24 Aug 2023 10:55:51 +0530
+        with ESMTP id S237025AbjHXG7t (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 02:59:49 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB63E45
+        for <linux-clk@vger.kernel.org>; Wed, 23 Aug 2023 23:59:45 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31c79850df5so156526f8f.1
+        for <linux-clk@vger.kernel.org>; Wed, 23 Aug 2023 23:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1692860384; x=1693465184;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+xVvlCGex8MTTZYxV9+n6jIh21hrXPC9JzY4cLwH6KA=;
+        b=JA/SlRiSGXLmyf4uxdL8Ezug//3djjbWkWBwFLDDwMEZb8sfx3E/tGZNzckZiddzdY
+         vzZdao/SmZppv1Jwr8TYyz+1EEMuiXtaqhPJ7UsLHabhBVyNQllseyx+wcxHnck5PYfx
+         3hjWgKX243esYSmP+UJ9iPL8O54M2Y1okgV06RTexXMWQJin22ja0auiPFgIJxZxJuaI
+         0qIi2d3hAdKgKRPFYf5Kr6t0K2llnb2ccWk78c7jf4OX2MR20VO/5sXnz2HOzK16yds/
+         PV7MZCBC2Ro5kwyuyRG7lb7ghiiAWapS+FketmqQpxWVxUlSyzuqj3dxhlKM2K9It+vQ
+         2oRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692860384; x=1693465184;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+xVvlCGex8MTTZYxV9+n6jIh21hrXPC9JzY4cLwH6KA=;
+        b=BGnUay9FVEcZVcJT34HQsE9pHFjeRbCwwkVf6Fy7nidZKorDfJUNg2HgyeLivWPoCG
+         043ww3Hse1Olbbt838qVujEuQ8p/8obulhuhXMyZq1K2Jjqxhh2GYZEDaszrijHuKYf0
+         NMhyMieZmPbT/J0OSa/iH8RvIP7/+vYk1T00t2+0vq1jqwHabPX614dZu94h0wjw7Ydk
+         BNGw7IX4LCcJAyUqCgC+MAu55Iuh1rXcGxDmvaBmcNOVaY06Jy897U+nhttABW8CTVxD
+         rpKsl9ObfkzUEZ7tZfCJhjlf2ihpSceABBSVL2oBk651mffsqDSx9hRhK5W+r2WmhOFQ
+         Vzyg==
+X-Gm-Message-State: AOJu0Yyjt6zts5Ti2vIvwFWmt3H6JJpcPYFr8ds3/G09YFaI9WJZE6lP
+        yvZx/mKQqgBrv8D66EXTMGknhQ==
+X-Google-Smtp-Source: AGHT+IHV5h/gWiGqWISIXTEBzuyi+BE2xkRY/zgFh1SxLekzv+sqKnQhfmfoEMGVAG+tjnX0+xWpsg==
+X-Received: by 2002:adf:edca:0:b0:31a:d7fc:28f with SMTP id v10-20020adfedca000000b0031ad7fc028fmr12034332wro.19.1692860384103;
+        Wed, 23 Aug 2023 23:59:44 -0700 (PDT)
+Received: from localhost ([212.23.236.67])
+        by smtp.gmail.com with ESMTPSA id y17-20020adfe6d1000000b003176eab8868sm21246718wrm.82.2023.08.23.23.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Aug 2023 23:59:43 -0700 (PDT)
+Date:   Thu, 24 Aug 2023 08:59:42 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Milena Olech <milena.olech@intel.com>,
+        Michal Michalik <michal.michalik@intel.com>,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, netdev@vger.kernel.org,
+        linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next v6 0/9] Create common DPLL configuration API
+Message-ID: <ZOb/3qbGKS4+6Slu@nanopsycho>
+References: <20230823225242.817957-1-vadim.fedorenko@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 6/6] arm64: defconfig: Build NSS Clock Controller driver
- for IPQ9574
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <richardcochran@gmail.com>,
-        <arnd@arndb.de>, <geert+renesas@glider.be>,
-        <neil.armstrong@linaro.org>, <nfraprado@collabora.com>,
-        <rafal@milecki.pl>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>
-CC:     <quic_saahtoma@quicinc.com>
-References: <20230711093529.18355-1-quic_devipriy@quicinc.com>
- <20230711093529.18355-7-quic_devipriy@quicinc.com>
- <f234891f-c508-20de-6d6b-c7b37f6adb2b@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <f234891f-c508-20de-6d6b-c7b37f6adb2b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: z3CMQHD-4r6G21l9nMmw1F8IcRfDtqOs
-X-Proofpoint-GUID: z3CMQHD-4r6G21l9nMmw1F8IcRfDtqOs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-24_02,2023-08-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 bulkscore=0
- impostorscore=0 clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0
- mlxlogscore=983 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308240043
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230823225242.817957-1-vadim.fedorenko@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,36 +77,74 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Thu, Aug 24, 2023 at 12:52:33AM CEST, vadim.fedorenko@linux.dev wrote:
+>Implement common API for DPLL configuration and status reporting.
+>The API utilises netlink interface as transport for commands and event
+>notifications. This API aims to extend current pin configuration 
+>provided by PTP subsystem and make it flexible and easy to cover
+>complex configurations.
+>
+>Netlink interface is based on ynl spec, it allows use of in-kernel
+>tools/net/ynl/cli.py application to control the interface with properly
+>formated command and json attribute strings. Here are few command
+>examples of how it works with `ice` driver on supported NIC:
+>
+>- dump dpll devices:
+>$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
+>--dump device-get
+>[{'clock-id': 4658613174691613800,
+>  'id': 0,
+>  'lock-status': 'locked-ho-acq',
+>  'mode': 'automatic',
+>  'mode-supported': ['automatic'],
+>  'module-name': 'ice',
+>  'type': 'eec'},
+> {'clock-id': 4658613174691613800,
+>  'id': 1,
+>  'lock-status': 'locked-ho-acq',
+>  'mode': 'automatic',
+>  'mode-supported': ['automatic'],
+>  'module-name': 'ice',
+>  'type': 'pps'}]
+>
+>- get single pin info:
+>$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
+>--do pin-get --json '{"id":2}'
+>{'board-label': 'C827_0-RCLKA',
+> 'clock-id': 4658613174691613800,
+> 'capabilities': 6,
+> 'frequency': 1953125,
+> 'id': 2,
+> 'module-name': 'ice',
+> 'parent-device': [{'direction': 'input',
+>                    'parent-id': 0,
+>                    'prio': 9,
+>                    'state': 'disconnected'},
+>                   {'direction': 'input',
+>                    'parent-id': 1,
+>                    'prio': 9,
+>                    'state': 'disconnected'}],
+> 'type': 'mux'}
+>
+>- set pin's state on dpll:
+>$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
+>--do pin-set --json '{"id":2, "parent-device":{"parent-id":1, "state":2}}'
+>
+>- set pin's prio on dpll:
+>$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
+>--do pin-set --json '{"id":2, "parent-device":{"parent-id":1, "prio":4}}'
+>
+>- set pin's state on parent pin:
+>$ sudo ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/dpll.yaml \
+>--do pin-set --json '{"id":13, "parent-pin":{"parent-id":2, "state":1}}'
+>
+>
+>Changelog:
+>
+>v5 -> v6:
+>- change dpll-caps to pin capabilities and adjust enum accordingly
+>- remove dpll.h from netdevice.h
 
+For the record, I'm fine with this version and my signed-offs stand.
 
-On 7/11/2023 4:18 PM, Dmitry Baryshkov wrote:
-> On 11/07/2023 12:35, Devi Priya wrote:
->> Build Qualcomm IPQ9574 NSSCC driver.
->>
->> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->> ---
->>   arch/arm64/configs/defconfig | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
->> index 9ce0f1554f4d..d10083da2401 100644
->> --- a/arch/arm64/configs/defconfig
->> +++ b/arch/arm64/configs/defconfig
->> @@ -1180,6 +1180,7 @@ CONFIG_IPQ_GCC_5332=y
->>   CONFIG_IPQ_GCC_6018=y
->>   CONFIG_IPQ_GCC_8074=y
->>   CONFIG_IPQ_GCC_9574=y
->> +CONFIG_IPQ_NSSCC_9574=y
-> 
-> Can it work if it is built as a module? This defconfig is used on all 
-> variety of platforms, including even non-Qualcomm ones. We are trying to 
-> limit the built-in drivers list to the crucial-only ones.
-> 
-Sure, got it
-
-Thanks,
-Devi priya
->>   CONFIG_MSM_GCC_8916=y
->>   CONFIG_MSM_GCC_8994=y
->>   CONFIG_MSM_MMCC_8994=m
-> 
+Thanks!
