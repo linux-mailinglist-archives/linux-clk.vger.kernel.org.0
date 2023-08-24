@@ -2,114 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF7C786ABA
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 10:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7DF7869F1
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Aug 2023 10:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbjHXIwt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 24 Aug 2023 04:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S233825AbjHXIZR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 24 Aug 2023 04:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238017AbjHXIwX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 04:52:23 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E422919A0;
-        Thu, 24 Aug 2023 01:52:15 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37O62MmW021046;
-        Thu, 24 Aug 2023 08:10:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cx+s08Cj0Mu6Wb6EWjkiCwnzR8pat8n2GF6Pj7jxloM=;
- b=iT/3bF0FFS/89XLAf7FspeRNJn17ynONWKmsv9VQEL+PaKA+/yaTcIfDUkNM0o4APndR
- CaMxUYIlzn163bdtyAj4aoFBgpJqK6IWSBYSTawZtqtclHcQBmmI3aP08E7KLvwkfU2Z
- Rrr2AYpTIpwN5tw3bJ+G6rCfa38nTweG0jeJUfGVK01TRTrD7Q5Vuai8GbgzEpB8RVmH
- dNWK1kB85VJM11wFWlCl6+Aj7vSOc/x6YF9iVWDGVJNni1wXAx6eat0HlsMgCShW2bnG
- K3sJUwGEXCZzDD0koiUnu7zCW/ZQpqeIe5AX8uH/j8sySuLBlunhISUcVFxkgOQAy8Ko eQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sp1k9g7v8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 08:10:52 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37O8Ap9Z029352
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 08:10:51 GMT
-Received: from [10.253.13.101] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 24 Aug
- 2023 01:10:15 -0700
-Message-ID: <f3f05dfe-a8eb-6d73-f51d-470104782655@quicinc.com>
-Date:   Thu, 24 Aug 2023 16:10:13 +0800
+        with ESMTP id S232438AbjHXIZL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Aug 2023 04:25:11 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA7E21711;
+        Thu, 24 Aug 2023 01:25:08 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.01,195,1684767600"; 
+   d="scan'208";a="173816674"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 24 Aug 2023 17:25:08 +0900
+Received: from localhost.localdomain (unknown [10.226.93.115])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 7E07F4010E05;
+        Thu, 24 Aug 2023 17:25:04 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 0/4] Fix Versa3 clock mapping
+Date:   Thu, 24 Aug 2023 09:24:57 +0100
+Message-Id: <20230824082501.87429-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v5 1/4] clk: qcom: branch: Add clk_branch2_mdio_ops
-To:     Stephen Boyd <sboyd@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <catalin.marinas@arm.com>,
-        <conor+dt@kernel.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <p.zabel@pengutronix.de>, <robh+dt@kernel.org>, <will@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_srichara@quicinc.com>
-References: <20230823085031.27252-1-quic_luoj@quicinc.com>
- <20230823085031.27252-2-quic_luoj@quicinc.com>
- <2819cf11177d81ab1fcface7e742cf50.sboyd@kernel.org>
-Content-Language: en-US
-From:   Jie Luo <quic_luoj@quicinc.com>
-In-Reply-To: <2819cf11177d81ab1fcface7e742cf50.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oonPTLbz0wkaJ_1CoqaRcYlSrOzsxEx3
-X-Proofpoint-ORIG-GUID: oonPTLbz0wkaJ_1CoqaRcYlSrOzsxEx3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-24_05,2023-08-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 spamscore=0 mlxlogscore=980
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2308100000 definitions=main-2308240066
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+According to Table 3. ("Output Source") in the 5P35023 datasheet,
+the output clock mapping should be 0=REF, 1=SE1, 2=SE2, 3=SE3,
+4=DIFF1, 5=DIFF2. But the code uses inverse.
 
+This patch series aims to document clock-output-names in bindings and
+fix the mapping in driver.
 
-On 8/24/2023 2:04 AM, Stephen Boyd wrote:
-> Quoting Luo Jie (2023-08-23 01:50:28)
->> diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
->> index fc4735f74f0f..5e08c026ca4a 100644
->> --- a/drivers/clk/qcom/clk-branch.c
->> +++ b/drivers/clk/qcom/clk-branch.c
->> @@ -153,3 +153,10 @@ const struct clk_ops clk_branch_simple_ops = {
->>          .is_enabled = clk_is_enabled_regmap,
->>   };
->>   EXPORT_SYMBOL_GPL(clk_branch_simple_ops);
->> +
->> +const struct clk_ops clk_branch2_mdio_ops = {
->> +       .prepare = clk_branch2_enable,
->> +       .unprepare = clk_branch2_disable,
->> +       .is_prepared = clk_is_enabled_regmap,
->> +};
->> +EXPORT_SYMBOL_GPL(clk_branch2_mdio_ops);
-> 
-> I'd call it clk_branch2_simple_prepare_ops or something like that.
-> There's nothing mdio specific about it.
+Also added a fix for 64 by 64 division.
 
-Thanks Stephen for the proposal.
+v3->v4:
+ * Dropped clock-output-names as there is no validation for it and people
+   can get it wrong.
+ * Updated commit header, description and example to reflect this change
+ * Retained Ack tag from Conor and Krzysztof as it is trivial change.
+ * Used clamped value for rate calculation in vc3_pll_round_rate().
+v2->v3:
+ * Dropped dts patch and added fix for 64 byte division to this patch
+   series.
+ * Added Rb tag from Geert for patch#3
+ * Added a patch to make vc3_clk_mux enum values depend on vc3_clk enum
+   values.
+v1->v2:
+ * Updated binding commit description to make it clear it fixes
+   "assigned-clock-rates" in the example based on 5P35023 datasheet.
 
-As for qcom clock controller, only the device accessed by MDIO bus has 
-this kind of ops, the clk_branch2_mdio_ops can also imply that the MDIO
-bus is used for accessing the HW register, i think this is also the 
-reason that Konrad suggested this ops name.
+Biju Das (4):
+  dt-bindings: clock: versaclock3: Fix the assigned-clock-rates
+  clk: vc3: Fix 64 by 64 division
+  clk: vc3: Fix output clock mapping
+  clk: vc3: Make vc3_clk_mux enum values based on vc3_clk enum values
+
+ .../bindings/clock/renesas,5p35023.yaml       |  8 +-
+ drivers/clk/clk-versaclock3.c                 | 81 +++++++++----------
+ 2 files changed, 44 insertions(+), 45 deletions(-)
+
+-- 
+2.25.1
+
