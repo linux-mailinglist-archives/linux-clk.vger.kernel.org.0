@@ -2,109 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB9278834C
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Aug 2023 11:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEA178848B
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Aug 2023 12:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244139AbjHYJOh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 25 Aug 2023 05:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S240915AbjHYKQN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 25 Aug 2023 06:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244204AbjHYJOQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Aug 2023 05:14:16 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07A1FC4;
-        Fri, 25 Aug 2023 02:14:13 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37P8SFHK006449;
-        Fri, 25 Aug 2023 09:13:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=YAJKLOsaabW5kcpq5RYHImstw1IHiRUm+nOWUteEFWU=;
- b=oV1PCANjq2TCFJ18JZ4oMReG4OCviFrD408nN2llEKyD5qi79gcSTFNqGMIUeri4xoVa
- ioq6mZ4V2+VlSIsOzJB1VtSDmEh3zFKTYMe6SGoBSbqI/20DvrxMGwvjGjA+ZVCwcvlF
- Qv/+Ywzl8KQ1M8X2+UHw4vuvQAHGulzr4XzqdhcHNSrd1kLIxQ+dvzHwVpIJMGmSG/ag
- PRP2eZC8F3rLhA8CsD8a5GZP0OoZTS9czbkuXpqVd16wwWDrGu0A+oUB+0mvVSunV4H+
- eUe4b1q6m1l1vJkl4rui6CO5t5pAsE10ztW4OM7HX5voiFjhQXMTjeoazUBYWKmoTaf+ UA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3spmny0j1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Aug 2023 09:13:48 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37P9DlM7016025
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Aug 2023 09:13:47 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Fri, 25 Aug 2023 02:13:40 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <andersson@kernel.org>, <agross@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <richardcochran@gmail.com>,
-        <arnd@arndb.de>, <geert+renesas@glider.be>,
-        <nfraprado@collabora.com>, <rafal@milecki.pl>, <peng.fan@nxp.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>
-CC:     <quic_devipriy@quicinc.com>, <quic_saahtoma@quicinc.com>
-Subject: [PATCH V2 7/7] arm64: defconfig: Build NSS Clock Controller driver for IPQ9574
-Date:   Fri, 25 Aug 2023 14:42:34 +0530
-Message-ID: <20230825091234.32713-8-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230825091234.32713-1-quic_devipriy@quicinc.com>
-References: <20230825091234.32713-1-quic_devipriy@quicinc.com>
+        with ESMTP id S244402AbjHYKPm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Aug 2023 06:15:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D0D26BB;
+        Fri, 25 Aug 2023 03:14:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B7661659;
+        Fri, 25 Aug 2023 10:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E1CC433C8;
+        Fri, 25 Aug 2023 10:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692958490;
+        bh=F8oKNVTy6rC98/+pAVZNa2M+atmjLnnbW393Y6FNBxo=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=A8sw7xFVWcXBro5K9uPJOpgpgU7sA3zf9EWvvip2RG0ctsGSI70mxoQyHoBDNaVf/
+         NMTZlY8a3pXOfwJLZjwS6YO/Vhp9A1m5XG9tOSJnRpZbvovGknzdF8MvzalNXFKttE
+         G2TBUN7jNzf0UpoJxCWpTddFNy+ShUOkokH5Vv+cK/ad9fjrimWOtYzuH01UvqJTSM
+         9ZUqZG4fz+8luaaZ5tywnaNWMRdbXznrKlrSG4cpvysgMw4gaNDrsRftoN9iCLuQMi
+         qhkGjZc3UIf3oX8UkwuXG7tnB+/AYOOsW0j8kGmnic/eQKI2jwLvW84bWQYhpQ4Uxb
+         Lbn1BqYsXKFcg==
+Received: (nullmailer pid 2559857 invoked by uid 1000);
+        Fri, 25 Aug 2023 10:14:46 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: y1e0rThRuV1Wce8yboydpfLrhI9JS-I5
-X-Proofpoint-GUID: y1e0rThRuV1Wce8yboydpfLrhI9JS-I5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-25_07,2023-08-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 mlxlogscore=818 impostorscore=0
- bulkscore=0 clxscore=1015 phishscore=0 suspectscore=0 malwarescore=0
- mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308250079
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     rafal@milecki.pl, agross@kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, richardcochran@gmail.com,
+        p.zabel@pengutronix.de, catalin.marinas@arm.com, will@kernel.org,
+        conor+dt@kernel.org, nfraprado@collabora.com,
+        quic_saahtoma@quicinc.com, sboyd@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-clk@vger.kernel.org, arnd@arndb.de,
+        andersson@kernel.org, linux-arm-kernel@lists.infradead.org,
+        peng.fan@nxp.com, netdev@vger.kernel.org, geert+renesas@glider.be
+In-Reply-To: <20230825091234.32713-5-quic_devipriy@quicinc.com>
+References: <20230825091234.32713-1-quic_devipriy@quicinc.com>
+ <20230825091234.32713-5-quic_devipriy@quicinc.com>
+Message-Id: <169295848663.2559800.3580053610150304724.robh@kernel.org>
+Subject: Re: [PATCH V2 4/7] dt-bindings: clock: Add ipq9574 NSSCC clock and
+ reset definitions
+Date:   Fri, 25 Aug 2023 05:14:46 -0500
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Build Qualcomm IPQ9574 NSSCC driver.
 
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- Changes in V2:
-	- Build IPQ9574 NSSCC driver as a module
+On Fri, 25 Aug 2023 14:42:31 +0530, Devi Priya wrote:
+> Add NSSCC clock and reset definitions for ipq9574.
+> 
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  Changes in V2:
+> 	- Referenced gcc.yaml and dropped the duplicate properties from
+> 	  the binding
+> 	- Updated Uniphy clock names
+> 	- Added nssnoc clocks and clock-names
+> 
+>  .../bindings/clock/qcom,ipq9574-nsscc.yaml    | 107 ++++++++++++
+>  .../dt-bindings/clock/qcom,ipq9574-nsscc.h    | 152 ++++++++++++++++++
+>  .../dt-bindings/reset/qcom,ipq9574-nsscc.h    | 134 +++++++++++++++
+>  3 files changed, 393 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,ipq9574-nsscc.h
+>  create mode 100644 include/dt-bindings/reset/qcom,ipq9574-nsscc.h
+> 
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5315789f4868..a6406eef43c8 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1211,6 +1211,7 @@ CONFIG_IPQ_GCC_5018=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
- CONFIG_IPQ_GCC_9574=y
-+CONFIG_IPQ_NSSCC_9574=m
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_GCC_8996=y
--- 
-2.34.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.example.dts:28.26-27 syntax error
+FATAL ERROR: Unable to parse input tree
+make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1500: dt_binding_check] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230825091234.32713-5-quic_devipriy@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
