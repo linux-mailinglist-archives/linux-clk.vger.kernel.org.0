@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0E3789D7A
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Aug 2023 13:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606E6789D8C
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Aug 2023 13:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjH0LvQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S229935AbjH0LvQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Sun, 27 Aug 2023 07:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjH0Luy (ORCPT
+        with ESMTP id S230020AbjH0Luy (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Aug 2023 07:50:54 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171C61B8
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD49CCE
         for <linux-clk@vger.kernel.org>; Sun, 27 Aug 2023 04:50:45 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4ffa248263cso3702963e87.2
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-5008faf4456so3586235e87.3
         for <linux-clk@vger.kernel.org>; Sun, 27 Aug 2023 04:50:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693137043; x=1693741843;
+        d=linaro.org; s=google; t=1693137044; x=1693741844;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8KDBrUFxvk4wsTAEzsTm5KMoDepnn6zKvijV8dmMWVs=;
-        b=eJa3SO1MWfrCt2LNj05Qv9mIV6/g1KqTjVMc9StVLX+7K2UsfVYbvYYPdhjSEC9SEP
-         alDsRDcjK5GAyOf82KiDDT3+eihTCIEQ12wuRf9hxmYtt8ZWrmUyow2BOfyabtieURyS
-         +RBcJF+e+dSWGy6Nyk5/p/rAxvADSvJy1d5G33FFU2PMdNEEq5lccF64BdKWnrd/xEdf
-         Fqz4Wp3g/e2syVC8KfOOLe4tis/g9kYohGasBlah+0RS6aoSSgmIOgbRzpJUc1PcR0ZR
-         8wyawiHd17tJDZZsB5iH30HuhiE/F177dmCfRv3wsa6uln3wTqRcfH0+zYx0CwjOvWT4
-         hCpA==
+        bh=WVZJg+f84R7PJyB3nirGOnHo9z3XpfKQ1Jd83cypp5Q=;
+        b=NJQTBElmk3IK4FkIvFrV4rT9eYc/8Nq9i8SDIPDdGSYQoVp9WVJBR/LwRECek1gfEL
+         jnSTv5hbAszFfK7LIgZ+dAWeLa8bnmbNVGBvEpibohXckdlaJlFX7zrLP3dPxrlVy1CZ
+         b1K5y0Ty60EKc/yk8m7SkqKxATnhHFIyJvR79j2NG980yY7VT226j1Mx6QwptFd6ppeP
+         ojdmmr9wrj34Tc4WR9gshSx8Jdmf+H7bjDrbG7aheiZuJPNpUXXvz+BwBKeMylPMNlf7
+         V4Hw3Bda9NpFnUkj2wS+a6LzzX3Pm1tBpEM+W+KxPkUBY7vj/xDdBJ13n/Bs6eoa/SfB
+         vQ7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693137043; x=1693741843;
+        d=1e100.net; s=20221208; t=1693137044; x=1693741844;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8KDBrUFxvk4wsTAEzsTm5KMoDepnn6zKvijV8dmMWVs=;
-        b=WkbqrBQ4GaJe7qsbp6hcAfRBgElTBKxDYd5MW+J5dJyqPDSLcHdxHuwoEnKLvQqTVq
-         +1yYuxdhtKNZkT2bVjLw7G0GOjqogutsmsIU8/s+2kRoRDuPoIbBWMP2jP1DoG1T4JYg
-         G0QPycwNLv6lLaBkuEhtBvJffRE/XEu+ijvWU3kb9ukiHWTGsnQMlRydm/BIlzTChlQV
-         9k/Xoau6mmqRWC1g/TulRSVwWPvMf0Ge/IEXUEyXPe0h1jHU1vglBl752U5kqpK+c/kI
-         C69zlKE28dEKK4BHxvvsP+xlqM37aHLsi8a6Tsma5AzywIiG1ZfVoQiGGLOUyWnNFVqr
-         cprw==
-X-Gm-Message-State: AOJu0YynxIDQXxg6+oLJxrL4KihNCw555Z19p4T376ajA3BtsNbFPpg0
-        rDzGwndJDl+FJamnsOWHk9Hobw==
-X-Google-Smtp-Source: AGHT+IGxUZBkVrWP6BMePbUZBlujSEAikUvWhsWK+Cf0yxICxoD31Wz1dbr7xzSwVZ0JIHiwR31lcw==
-X-Received: by 2002:a05:6512:3150:b0:500:9734:545a with SMTP id s16-20020a056512315000b005009734545amr7821055lfi.5.1693137043478;
-        Sun, 27 Aug 2023 04:50:43 -0700 (PDT)
+        bh=WVZJg+f84R7PJyB3nirGOnHo9z3XpfKQ1Jd83cypp5Q=;
+        b=KqGYMVkzwFvErsieSpK8fJzhTXsS8dV8K2j3cCtnzU0pzvJj8CrvB4RII7PV+ki0PU
+         Xb1YSteaGtgg3n568YH9qObhXTem7TH6lFM5ox4s/sELiPL0sRsPmScbKf0Iru+BbA7t
+         o7LhC8Emq/d2OJzRanZ3gYyEBaJTzcTxoNhiUH6JsNIPypeb6QHagqnMG0Nc1P1voIt3
+         oDrpVlgvR/mFnrzNNgPMEIbOdnHkGo8ydYmAoMyIxshH6VNXb5HO7VKmNW00kMeXScuD
+         5ENirvRk7S+zqu2t3j0VEzAXw5UBnpsaxkQMNM+0AgqdgjcfHlVML9b/E6P/eqdwje/a
+         oONQ==
+X-Gm-Message-State: AOJu0Yx8/SR5f1AtyBpDmJvjCnIOHOGtkH5WgWt0h5dX2id00FQ19Eej
+        PpqXYyGd0cr90koxlx2moTStfg==
+X-Google-Smtp-Source: AGHT+IFXwNmLKwO0eU+BnV6btdlQbqS9/6m3vHIjGJkMwbt3gumalz1+cSPtBK5eKpvAFd0Xbb39pg==
+X-Received: by 2002:a05:6512:33c1:b0:4ff:a23b:de27 with SMTP id d1-20020a05651233c100b004ffa23bde27mr3461549lfg.50.1693137044233;
+        Sun, 27 Aug 2023 04:50:44 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id a8-20020a19f808000000b004ff9f88b86esm1114770lff.308.2023.08.27.04.50.42
+        by smtp.gmail.com with ESMTPSA id a8-20020a19f808000000b004ff9f88b86esm1114770lff.308.2023.08.27.04.50.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 27 Aug 2023 04:50:43 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
@@ -66,9 +66,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
         Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v4 10/23] ARM: dts: qcom: apq8064-cm-qs600: constraint cpufreq regulators
-Date:   Sun, 27 Aug 2023 14:50:20 +0300
-Message-Id: <20230827115033.935089-11-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 11/23] ARM: dts: qcom: apq8064-ifc6410: constraint cpufreq regulators
+Date:   Sun, 27 Aug 2023 14:50:21 +0300
+Message-Id: <20230827115033.935089-12-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230827115033.935089-1-dmitry.baryshkov@linaro.org>
 References: <20230827115033.935089-1-dmitry.baryshkov@linaro.org>
@@ -76,8 +76,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,17 +86,17 @@ X-Mailing-List: linux-clk@vger.kernel.org
 Add additional constraints to the CPUfreq-related regulators, it is
 better be safe than sorry there.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- .../boot/dts/qcom/qcom-apq8064-cm-qs600.dts    | 18 ++++++++++++++++--
+ .../arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts | 18 ++++++++++++++++--
  1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom/qcom-apq8064-cm-qs600.dts b/arch/arm/boot/dts/qcom/qcom-apq8064-cm-qs600.dts
-index 671d58cc2741..ee071aed9b8d 100644
---- a/arch/arm/boot/dts/qcom/qcom-apq8064-cm-qs600.dts
-+++ b/arch/arm/boot/dts/qcom/qcom-apq8064-cm-qs600.dts
-@@ -116,8 +116,8 @@ pm8921_s1: s1 {
+diff --git a/arch/arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts b/arch/arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts
+index 3078afda37c6..062c9cf4ec77 100644
+--- a/arch/arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts
++++ b/arch/arm/boot/dts/qcom/qcom-apq8064-ifc6410.dts
+@@ -227,8 +227,8 @@ pm8921_s1: s1 {
  		};
  
  		pm8921_s3: s3 {
@@ -108,7 +107,7 @@ index 671d58cc2741..ee071aed9b8d 100644
  			qcom,switch-mode-frequency = <4800000>;
  		};
  
-@@ -157,9 +157,23 @@ pm8921_l23: l23 {
+@@ -274,6 +274,12 @@ pm8921_l23: l23 {
  			bias-pull-down;
  		};
  
@@ -118,10 +117,13 @@ index 671d58cc2741..ee071aed9b8d 100644
 +			bias-pull-down;
 +		};
 +
- 		pm8921_lvs6: lvs6 {
+ 		pm8921_lvs1: lvs1 {
  			bias-pull-down;
  		};
-+
+@@ -282,6 +288,14 @@ pm8921_lvs6: lvs6 {
+ 			bias-pull-down;
+ 		};
+ 
 +		/* HFPLL regulator */
 +		pm8921_lvs7: lvs7 {
 +			regulator-min-microvolt = <1800000>;
@@ -129,9 +131,10 @@ index 671d58cc2741..ee071aed9b8d 100644
 +			regulator-boot-on;
 +			regulator-always-on;
 +		};
- 	};
- };
- 
++
+ 		pm8921_hdmi_switch: hdmi-switch {
+ 			bias-pull-down;
+ 		};
 -- 
 2.39.2
 
