@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AE2789B1E
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Aug 2023 05:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C753789B2D
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Aug 2023 05:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjH0D2j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S229948AbjH0D2j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Sat, 26 Aug 2023 23:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjH0D2K (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 26 Aug 2023 23:28:10 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A81BE
-        for <linux-clk@vger.kernel.org>; Sat, 26 Aug 2023 20:28:07 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-5007abb15e9so3297576e87.0
+        with ESMTP id S229998AbjH0D2L (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 26 Aug 2023 23:28:11 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F2CCC5
+        for <linux-clk@vger.kernel.org>; Sat, 26 Aug 2023 20:28:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-500913779f5so3377305e87.2
         for <linux-clk@vger.kernel.org>; Sat, 26 Aug 2023 20:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693106885; x=1693711685;
+        d=linaro.org; s=google; t=1693106886; x=1693711686;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t3g6MqdL49Zw746Urhy4bMomELw3at37JA0MQmf1GuE=;
-        b=gZk56rsSYpXAtZqre3gL4WDl+llYm5Y/XTTsBsqgcBqBQjzzQaPHSBKjjhoktElCIU
-         YSCz19InOb9kqtX51/vxWYqCwzzwaZX67t4eZNTeLIIhsDhO6XbsSCSE5zSqPwsxB48G
-         qrJG0ZeX6n27VTUZMfVzl3vAtnOzzLnvXBM0YrgmAoQJ/KCr28rxNHnnfzEoKDmzYoq5
-         c7Cel9JOe10uJYXJZfcbmGezlHZapIszYnj5TvIErU0gWnUmgvVVtIS4Oh7kfxtLtE1a
-         fkd63af0itIVNH7bpiM3KTV1KIpYvLjWABP+W+Fn0lh38L7YZxx8Tg05ZI50yhY/d8Z3
-         3tEw==
+        bh=JDcX6nc3xf4NnNrUKfcUNu5SXO4YsMvuQIo9lBU68H8=;
+        b=HR8yZWX1d5bxSySO0g4a67Ipugd3uqpw7d1qrV0rbEt5V0WLp2iS7E+4MRhRclbzYv
+         BfIzctwAb3FsfMgfFxsr+h8k0MxPwdhgr1vBRk4+2OE+NvxIZw6/BPG69ucG3ckp+vRD
+         YAMqzAUwA0z6ptUOfVoT4LTpi2vHJiUIkJ3ivVdyxrQs+Sn+z9RWLfopbAHonlHxwlWm
+         maNv1zx+il5iCar80F422rCkXfn+D1NaY7wiQ7O/SI1Z0G72KwpJC6wFFg9jdKY8CVD3
+         dwMxD7Ky+pQWFjkNyaV7Xf6wyd+ZGbdrAUNTOMjIpC8MfAJg56uSTAE+RA5pLT5lqY53
+         oa8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693106885; x=1693711685;
+        d=1e100.net; s=20221208; t=1693106886; x=1693711686;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=t3g6MqdL49Zw746Urhy4bMomELw3at37JA0MQmf1GuE=;
-        b=iU+phvv4P0CQ8jMM+CVllAnE1H6KWN/NSj4wiHJw1kvRnGB18iP94T7LQyM1/ECd/3
-         hs4lML4P//nwYOWImVrHdy4SwALse6TwOvR5ChJ9QoUdJXnia5o63pHJlI98KshqLp3f
-         AEAhqizO8wXzVqHr5FJkyPcsERPUdCNQz5/ompH5RO51iXFVTzlSWy0iLF2KkCWnH86f
-         EEnNRERNA9r0tg1wZ7KM/j94InY0y9zC17WiSeQFrgphSyHoM1uL5muIqESLMaB2/vSn
-         g/uRtoJYeUvjdp5FrUtf+qzfWtD5zh7Lt/IJTQDT8rpz90dfViyeSzsa0TY8oqkNoW7M
-         NdwA==
-X-Gm-Message-State: AOJu0YxNqUZnOdsEsaywGPYp7DyNYZSsXW2z2nX4NiLNVaNR+uj6v29w
-        1YkTSErhYpPSssBof+//qB8Zpw==
-X-Google-Smtp-Source: AGHT+IFlwxRzeXJbJzLv94IcpMX3D6twL2DPEVf13PUuJa+IErq+Vxh/s+6EYL1dtdv/ufVKhAWDwA==
-X-Received: by 2002:a19:6705:0:b0:4f8:7513:8cb0 with SMTP id b5-20020a196705000000b004f875138cb0mr13589811lfc.2.1693106885517;
-        Sat, 26 Aug 2023 20:28:05 -0700 (PDT)
+        bh=JDcX6nc3xf4NnNrUKfcUNu5SXO4YsMvuQIo9lBU68H8=;
+        b=Z/oZlxj2RdAcYrfMxetK8/bbo3l7bzPUHgR4MSsdq/3LCQL2zIOFZo83PeOlda/CUh
+         M8VidP0oJmcLJksv30rSV8YJP1Pt/uuA4zl4/rullCAeubPCSt8zGo/4V8pWXhW0d0k+
+         /EDUfMQaaxq8KRFDJxCNW2i8RzoTfI/1x/uEIkYbb7Av9s9ByVDKJodkDZaw3XlkvmVQ
+         gFHURSHRCPga9lr2FBG0Fu4lvSDzGGv8T+AOwidqbX/61V4VpFJOwbU0Zr/WXTj5+0Am
+         XQvSY7RX4fOQSY/+eZHPMfj1+dECeurrUljXpWrpcB+m6ZQSXWe842/1Qq2dJO+tlXIw
+         C8WA==
+X-Gm-Message-State: AOJu0YyqRzEuGgB5wRkrzYkp0xAIYQ/0iuHmbQBKwanl2Tji/xKMUuk4
+        ZZSvMNushjJCq22CfH3Xqg/cPA==
+X-Google-Smtp-Source: AGHT+IGux7+fe7WeUPSp78YK1YySxewfhDKbFzq71mjdHBbSG7uE6yCErWRI/u5u/sIYn8TIhYa6wA==
+X-Received: by 2002:a19:9158:0:b0:500:a2d3:3e65 with SMTP id y24-20020a199158000000b00500a2d33e65mr5142697lfj.23.1693106886272;
+        Sat, 26 Aug 2023 20:28:06 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id w7-20020ac254a7000000b004fb99da37e3sm955709lfk.220.2023.08.26.20.28.04
+        by smtp.gmail.com with ESMTPSA id w7-20020ac254a7000000b004fb99da37e3sm955709lfk.220.2023.08.26.20.28.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 26 Aug 2023 20:28:05 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
@@ -65,11 +65,10 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/6] dt-bindings: opp: opp-v2-kryo-cpu: support Qualcomm Krait SoCs
-Date:   Sun, 27 Aug 2023 06:27:58 +0300
-Message-Id: <20230827032803.934819-2-dmitry.baryshkov@linaro.org>
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH v4 2/6] cpufreq: qcom-nvmem: create L2 cache device
+Date:   Sun, 27 Aug 2023 06:27:59 +0300
+Message-Id: <20230827032803.934819-3-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230827032803.934819-1-dmitry.baryshkov@linaro.org>
 References: <20230827032803.934819-1-dmitry.baryshkov@linaro.org>
@@ -84,60 +83,62 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Exted the opp-v2-kryo-cpu.yaml to support defining OPP tables for the
-previous generation of Qualcomm CPUs, 32-bit Krait-based platforms.
+Scaling the frequencies on some of Qualcomm Krait platforms (e.g.
+APQ8064) also requires scaling of the L2 cache frequency. As the
+l2-cache device node is places under /cpus/ path, it is not created by
+default by the OF code. Create corresponding device here.
 
-It makes no sense to use 'operating-points-v2-kryo-cpu' compatibility
-node for the Krait cores. Add support for the Krait-specific
-'operating-points-v2-krait-cpu' compatibility string and the relevant
-opp-microvolt subclasses properties.
-
-The listed opp-supported-hw values are applicable only to msm8996 /
-msm8996pro platforms. Remove the enum as other platforms will use other
-bit values. It makes little sense to list all possible values for all
-the platforms here.
-
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml     | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index bbbad31ae4ca..4e84d06d5ff9 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -26,7 +26,9 @@ description: |
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index 84d7033e5efe..f4c196ba4432 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -22,6 +22,7 @@
+ #include <linux/module.h>
+ #include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
++#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_domain.h>
+ #include <linux/pm_opp.h>
+@@ -377,6 +378,7 @@ static int __init qcom_cpufreq_init(void)
+ {
+ 	struct device_node *np = of_find_node_by_path("/");
+ 	const struct of_device_id *match;
++	unsigned int cpu;
+ 	int ret;
  
- properties:
-   compatible:
--    const: operating-points-v2-kryo-cpu
-+    enum:
-+      - operating-points-v2-krait-cpu
-+      - operating-points-v2-kryo-cpu
+ 	if (!np)
+@@ -387,6 +389,25 @@ static int __init qcom_cpufreq_init(void)
+ 	if (!match)
+ 		return -ENODEV;
  
-   nvmem-cells:
-     description: |
-@@ -63,14 +65,16 @@ patternProperties:
-           5:  MSM8996SG, speedbin 1
-           6:  MSM8996SG, speedbin 2
-           7-31:  unused
--        enum: [0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
--               0x9, 0xd, 0xe, 0xf,
--               0x10, 0x20, 0x30, 0x70]
++	for_each_possible_cpu(cpu) {
++		struct device *dev = get_cpu_device(cpu);
++		struct device_node *cache;
++		struct platform_device *pdev;
 +
-+          Other platforms use bits directly corresponding to speedbin index.
- 
-       clock-latency-ns: true
- 
-       required-opps: true
- 
-+    patternProperties:
-+      '^opp-microvolt-speed[0-9]+-pvs[0-9]+$': true
++		cache = of_find_next_cache_node(dev->of_node);
++		if (!cache)
++			continue;
 +
-     required:
-       - opp-hz
- 
++		if (of_device_is_compatible(cache, "qcom,krait-l2-cache")) {
++			pdev = of_platform_device_create(cache, NULL, NULL);
++			if (IS_ERR(pdev))
++				pr_err("%s: %pe, failed to create L2 cache node\n", __func__, pdev);
++			/* the error is not fatal */
++		}
++
++		of_node_put(cache);
++	}
++
+ 	ret = platform_driver_register(&qcom_cpufreq_driver);
+ 	if (unlikely(ret < 0))
+ 		return ret;
 -- 
 2.39.2
 
