@@ -2,104 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912A578A952
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Aug 2023 11:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F49F78AB41
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Aug 2023 12:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjH1Jv5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Aug 2023 05:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
+        id S231273AbjH1K3l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Aug 2023 06:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjH1Jva (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Aug 2023 05:51:30 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32327118
-        for <linux-clk@vger.kernel.org>; Mon, 28 Aug 2023 02:51:26 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d74a012e613so4144320276.1
-        for <linux-clk@vger.kernel.org>; Mon, 28 Aug 2023 02:51:26 -0700 (PDT)
+        with ESMTP id S231346AbjH1K3V (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Aug 2023 06:29:21 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E81AB;
+        Mon, 28 Aug 2023 03:29:19 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-d77f614243aso2904269276.0;
+        Mon, 28 Aug 2023 03:29:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693216285; x=1693821085;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ij/ixhJNQiAk+bZwLk7P9bcr0ExdcnJdmk1KM+v6qMg=;
-        b=TAtmfieieDUstkl2+NwLV9lHYB8MR8y86Ya+cRhD66lVUKtZ8EmNZF611vDNhycHq6
-         RAG9YCGyf5KRI2LCzKpcq5N51m6B+ww//48yalTSPVEahCsIPhVk5Y7jNkx3TMAAo7hM
-         GNYpIMnakzcKBQGJNk3U3pbrIfiQN2l84gFXQfxRmSgyzJXXh9o+3vFPcoPTLrlLLHjg
-         RCAipHpoEmuhzZRUNUxaCz8elPO177gsFoEn4ez4AXAUpStsLMhgKReoNpT1Ygm5577d
-         lvJ2MrwXuPeEijl1V1cqxfkJjUefkiisNGHGr5Th9UoOIOcgC+I6+JQtSYmsE4FPiAj+
-         m5QA==
+        d=gmail.com; s=20221208; t=1693218558; x=1693823358;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=rfuWXr9RYqSTqpdcnXC8wIF8SIgW9XCso4FybJhi+1f8rlYX3lS9xSfuQ5GS6kGWv6
+         cUqbOF+ILTK56ca6scH5XkOUa6qAh0lGMnhAdT/HjK6VNShySApPGXxTSX1AXDr4b4zW
+         QcLxlz8dRwHlKQ0sboX4/Ux2SC9QNtcuIVudhSTewpVWe0MzdMgHElj+sL6L18gMCBN2
+         ntWHVhDEMYxjrBew11z6qQYrt18Vm9WRNlUEOetv6e6iskK3x83zw4gOarvmxpO1fYjQ
+         wxCZy2KOjvjVFgR6gQ4gjHpwdoEPQ1FKsbfZICoJfC5uSFnA1lEIGCxOnMyhcLiXNK+j
+         fumw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693216285; x=1693821085;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ij/ixhJNQiAk+bZwLk7P9bcr0ExdcnJdmk1KM+v6qMg=;
-        b=ktydSisYweJTAgHAGSwI/EujcCHmF0laIlfIZEjfUn585s9cpC/xNCPn8QF0mGXWbR
-         C8x01ETqV5a3kHxTSUy7LASVFEkiYgkke6q27jleM1iRs/lFtHaZFJL0Z99LNYkWP2W2
-         wSUrl09ymCz8xM0AONR2U/2wJky6xLP5gCA0AZMaxwwSrMwx+QKM836m/Ndl0Vt0BZT9
-         8K7xN0c9ZLtYazR4kXOaVPmELutLiCIoAwKoN9rJCW1F2qBsixB0pe7pqDCsHbPd15/p
-         JpQLiBSKZAUWcT04UX1gvXBhmQSYLdf8GOgno6JO6nv1BJ/nXXQgJSxY6VJg3uGofdMP
-         UatQ==
-X-Gm-Message-State: AOJu0YyQdXJF7Z/FCCttT6lC0lvxkRPNl6HHQA6FEtPRL914LElxHpQ1
-        RoxGIiZhjtYkrIyGi7FTjLsGRQUb/aXAHS/O89xFvw==
-X-Google-Smtp-Source: AGHT+IHMMPGzXX2cW5IcOCKq4arQnF2HZdkyJNgtpKLsJixMwGCtJEqpnV0q+I1Fh+mNln2paZJzihB9mbHFdSX6FLc=
-X-Received: by 2002:a25:ac19:0:b0:d60:b5f2:9824 with SMTP id
- w25-20020a25ac19000000b00d60b5f29824mr23015952ybi.23.1693216285191; Mon, 28
- Aug 2023 02:51:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693218558; x=1693823358;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=AjSrF9zawkQzdKiP1xwm7Kb0crLCoB7G/zBYa8UI6I/i+W95dfNyHd4Z70XPBQvvVA
+         J2ZFF5R9NikdvkR4nkYWXhUlayxDrcXVDhPVkj4in8qhL+EGQIuMJDbh8MSk7Dbsc8Wt
+         BTQUGh/nRSnRVuFMep21KqnL1SxN5YZKQ6s2k3FIKF2ue7KuFNo3RfLOWHhC9Ag5xDSF
+         GudWsJrhOI135mY6huB+CZQYylahHOYdWuMmFns85YZVMMxWe+jY6BqsvZFtOEQrtxcH
+         XpZgwQctzh+PrGfiV34DiusIVxR9CCLKeMDT697jJP+zzXScKGxsYlXbYaj9DijUa9HQ
+         /iKA==
+X-Gm-Message-State: AOJu0YzUF7Oc2bYv58odQGNwDmX7O1G7UoJ4EZmFWuSZCTAnbk4yNEnH
+        pgZKJVLw6LLramTB6bNuLS3Su9VPBvcpjdWDvgg=
+X-Google-Smtp-Source: AGHT+IEYJiSsStK+vCSKjS5iWTldKDDxV5CSkV7Jdpf2lqnjpuhL85UjFgf9YZMcEWHIuk5Y09uEJxtmN5bdN30RQ3I=
+X-Received: by 2002:a25:68d2:0:b0:d77:f613:30ec with SMTP id
+ d201-20020a2568d2000000b00d77f61330ecmr11735576ybc.54.1693218558409; Mon, 28
+ Aug 2023 03:29:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230827032803.934819-1-dmitry.baryshkov@linaro.org> <ccd35516-04e4-4e24-82cb-8502d4694e8b@linaro.org>
-In-Reply-To: <ccd35516-04e4-4e24-82cb-8502d4694e8b@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 28 Aug 2023 12:51:14 +0300
-Message-ID: <CAA8EJpo2HppmyaYtWPxsvpwm4RX+kXQa=3WbByvOpmv7SQah3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] cpufreq: qcom-nvmem: support apq8064 cpufreq scaling
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
+Received: by 2002:a05:7000:5bca:b0:4fc:b2ea:2904 with HTTP; Mon, 28 Aug 2023
+ 03:29:18 -0700 (PDT)
+From:   Itzel Campa <ariadnev95@gmail.com>
+Date:   Mon, 28 Aug 2023 03:29:18 -0700
+Message-ID: <CAOYsRdesXdDWttZv8N80HHu46MiCoq=KDrR6z0R-to4ojt+wiA@mail.gmail.com>
+Subject: 
+To:     francesco@dolcini.it, accessibility@support.whatsapp.com,
+        alexavillegas893@gmail.com, contacto@becasmexico.org,
+        francesco.dolcini@toradex.com, j-luthra@ti.com,
+        lifelinecontactus@mhaofnyc.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, ssantosh@kernel.org, support@whatsapp.com,
+        support@onlyfans.com, titohoto2@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 28 Aug 2023 at 12:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> On 27.08.2023 05:27, Dmitry Baryshkov wrote:
-> > This is a split of APQ8064 cpufreq series, as requested by Viresh. This
-> > series includes only opp and cpufreq parts, with the DT and soc parts
-> > being split to a separate patchset.
-> >
-> > Each core has independent power and frequency control. Additionally the
-> > L2 cache is scaled to follow the CPU frequencies (failure to do so
-> > results in strange semi-random crashes).
-> >
-> > Core voltage is controlled through the SAW2 devices, one for each core.
-> > The L2 has two regulators, vdd-mem and vdd-dig.
-> >
-> No changelog?
 
-Missed it while performing the split.
-
-Changes since v3:
-- Unrolled loops in krait_l2_config_regulators() (Konrad)
-
--- 
-With best wishes
-Dmitry
