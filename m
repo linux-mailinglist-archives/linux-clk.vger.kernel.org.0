@@ -2,60 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DD278CB3E
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Aug 2023 19:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2B178CB5F
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Aug 2023 19:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237384AbjH2R1x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Aug 2023 13:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S232196AbjH2RfU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Aug 2023 13:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238167AbjH2R1o (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Aug 2023 13:27:44 -0400
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C34CC9
-        for <linux-clk@vger.kernel.org>; Tue, 29 Aug 2023 10:27:15 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-50043cf2e29so7221259e87.2
-        for <linux-clk@vger.kernel.org>; Tue, 29 Aug 2023 10:27:15 -0700 (PDT)
+        with ESMTP id S238107AbjH2RfC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Aug 2023 13:35:02 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86ECCDD
+        for <linux-clk@vger.kernel.org>; Tue, 29 Aug 2023 10:34:57 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99c93638322so3537266b.1
+        for <linux-clk@vger.kernel.org>; Tue, 29 Aug 2023 10:34:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693329659; x=1693934459;
+        d=linaro.org; s=google; t=1693330496; x=1693935296;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QBKkSL9t38kSqeftJsbciCM+HglFHnwrbKgwPhleq2o=;
-        b=WOyiTVlnOOUo6lKsyRU0FN0t4Y0sbAF7/1a9l8mU5zGheftOc2fA41+7bCjl3jMHaC
-         SdSdMV2DBKjRnw1tr2HnWisrSnTXsku10i1pwBDD62x096r2AUaZ8gEGrGo3NCJbxgJz
-         zv1axfA/ZNKEESvUiu0gC/krrVKl/kGAJfwbyFwsYFIzEIzVkf/feQ3TBotYPHegFQ8y
-         Fdle+Z4wZCcxfK+3JbdGH9LGAWOKMXY6nXXMQkDr7d51pdunU2ilmTA/HRTXh2s9cmnZ
-         9hm29kl6z4GKDxqVPxPFJ30PJphupOPXQbS5T6+pHdzKUPeEn90N1xu6MxDgkYvi1l12
-         U90Q==
+        bh=ONMdNT0qe15nFMdXWcs/Q8c5HCoTBwiBJLGrnRV1nw0=;
+        b=F3CKPXZIk70OKv6jxWGITpATwBmXaEROBefq+Mf+6vOb0qivc6wDJ7XNDPXKBZdJ8G
+         99JJ2bOpqk953tDk2YLyLLpA1LEqPLLwqIPIlrX/Nw9pUO07Dr8U41oAY5J/XLpFd1wX
+         aBBY3vj+JVLcuEUK9V13jjzskpeAX1TGK8HxPhwYTawQHpVSmxqmCazm008GrtquRpI8
+         AJ0PoEqPacLjR+yxgnG5pZfINr4Ivq9BfvwvPN73cjkBJWQSIWKX9k63a1loEYdNnPgu
+         RnDUS6YpDNNMOxXc+C82Cw1wzr947AutwMg1z54dAH04ejIJOduZQyv1ZKSXDfbaxNyp
+         +kaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693329659; x=1693934459;
+        d=1e100.net; s=20221208; t=1693330496; x=1693935296;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QBKkSL9t38kSqeftJsbciCM+HglFHnwrbKgwPhleq2o=;
-        b=a3+3g3xtpiZlNW+js4/zxpeeYcxkhK9tVvlVq5WNJc0sB4aClzesiauqoKT/jGVEkZ
-         yZCXn7p6sqCrF0kthu3+56WsSVQhZBONuuQYiFx+u/sjQ9cxsEwSLa4IoF1tIQOv6qtj
-         cP/Bps1WxxSFhwigKPcrkuOJwIf5ZBGsBTKmeO3Rr3muFjKXtdRI5x0nqRxdZcRE4in6
-         vmmqYjJe0CqOK24jqos+XSUeUMSRvAIz96XopJ+d9TCA06gFJdtFC+fw1KNSr2MZTU3P
-         0anjLqGuMguW/8cV6DuhFXKHrMYSrKZ+r1glKn07NRuyNbON+EwJQEAUxyLlAJGhX5zD
-         QvyQ==
-X-Gm-Message-State: AOJu0YzrJ6pNKqa9XOIOmLpjfjysvgGEHbJn5iN8nU3Bb4vhjhcqATh3
-        n872+Y8c8slpgerMfk4Hem5ZdA==
-X-Google-Smtp-Source: AGHT+IG/q2ZZ6mJ8wgVf7UkQm2wC4U2oV3GvzNYN1v09DUHmgy8f2+SWpj1f+hhyVjmrfvs8FPGv0Q==
-X-Received: by 2002:ac2:4bd3:0:b0:500:ac3:dd77 with SMTP id o19-20020ac24bd3000000b005000ac3dd77mr9085492lfq.10.1693329658953;
-        Tue, 29 Aug 2023 10:20:58 -0700 (PDT)
+        bh=ONMdNT0qe15nFMdXWcs/Q8c5HCoTBwiBJLGrnRV1nw0=;
+        b=RFvoX2gL3Vow0n2YJ7xXzyFNBSeCBCGA//rM/xR2sICOh1oj9srHeGcBukY2hCtd1C
+         sajq22FDJrIAnbrYYD3fJL9zATySJfBGscteXUYEJZn4kniHIUQaTx3DEEw8js2P995E
+         EuZVq2h6hdSsdGNYLOc+QKfTnIi59WbRQMl7hdfyz1KrZlA4gS5BQ75C4m22fUh4rSPn
+         1DbzXq6Z3OMYhgKPF7dC6HET+z5LZrzMNA6OsOPOTNJh01CrnqyAlvqACY/wEMfvKgSG
+         JVWPkNL2bvmVbcNziVlufJX2aKGyhWLV7agBMePQrX3BpV78kNLLCoFDetJq0hmcij/G
+         mh9g==
+X-Gm-Message-State: AOJu0Yzwh5i/RE6pzZFvK/XhKs9iV1UP9e2vUH7dbTSHgPj4KMYPMj5U
+        j62oBne7KeOdhJ73TTf3tigHDkLgRpTYzZ64GV8=
+X-Google-Smtp-Source: AGHT+IEC28zmPiIgJmKgcQJmlnUeRmPValFdXqSMVRYqh4YR7AT6QaS02hhHQPZGW4brxIj/NspEyA==
+X-Received: by 2002:a17:907:1614:b0:9a5:c2c0:1d0f with SMTP id hb20-20020a170907161400b009a5c2c01d0fmr3407559ejc.12.1693329704763;
+        Tue, 29 Aug 2023 10:21:44 -0700 (PDT)
 Received: from [192.168.0.22] ([77.252.47.196])
-        by smtp.gmail.com with ESMTPSA id l15-20020aa7d94f000000b0052568bf9411sm5797806eds.68.2023.08.29.10.20.57
+        by smtp.gmail.com with ESMTPSA id x18-20020a170906805200b0097073f1ed84sm6161481ejw.4.2023.08.29.10.21.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Aug 2023 10:20:58 -0700 (PDT)
-Message-ID: <d3fa22f6-22e4-3d15-70d1-d64b2c125ad7@linaro.org>
-Date:   Tue, 29 Aug 2023 19:20:56 +0200
+        Tue, 29 Aug 2023 10:21:44 -0700 (PDT)
+Message-ID: <ea386a28-841d-0e76-cb1b-735b630001ba@linaro.org>
+Date:   Tue, 29 Aug 2023 19:21:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 02/31] dt-bindings: gpu: mali-utgard: Add Rockchip RK3128
- compatible
+Subject: Re: [PATCH 03/31] dt-bindings: ASoC: rockchip: Add compatible for
+ RK3128 spdif
 Content-Language: en-US
 To:     Alex Bee <knaerzche@gmail.com>, Heiko Stuebner <heiko@sntech.de>,
         Rob Herring <robh+dt@kernel.org>,
@@ -75,15 +75,15 @@ Cc:     Elaine Zhang <zhangqing@rock-chips.com>,
         dri-devel@lists.freedesktop.org, alsa-devel@alsa-project.org,
         linux-clk@vger.kernel.org, linux-phy@lists.infradead.org
 References: <20230829171647.187787-1-knaerzche@gmail.com>
- <20230829171647.187787-3-knaerzche@gmail.com>
+ <20230829171647.187787-4-knaerzche@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230829171647.187787-3-knaerzche@gmail.com>
+In-Reply-To: <20230829171647.187787-4-knaerzche@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,13 +91,32 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 29/08/2023 19:16, Alex Bee wrote:
-> Rockchip RK312x SoC family has a Mali400 MP2.
-> Add a compatible for it.
+> Add compatible for RK3128's S/PDIF.
 > 
+
+Subject: ASoC: dt-bindings: rockchip,spdif:
+
 > Signed-off-by: Alex Bee <knaerzche@gmail.com>
 > ---
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, you can skip it (please do
+not feel offended by me posting it here - no bad intentions intended).
+If you do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
 
 Best regards,
 Krzysztof
