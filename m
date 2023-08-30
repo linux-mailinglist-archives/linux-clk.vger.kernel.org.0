@@ -2,44 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D35B78D888
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Aug 2023 20:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020C578E176
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Aug 2023 23:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234059AbjH3San (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 30 Aug 2023 14:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
+        id S239596AbjH3Vaq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 30 Aug 2023 17:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344198AbjH3SU4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 30 Aug 2023 14:20:56 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B1A1A4;
-        Wed, 30 Aug 2023 11:20:51 -0700 (PDT)
-Received: from p200300ccff199c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff19:9c00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1qbPo5-003BZM-4z; Wed, 30 Aug 2023 20:20:45 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1qbPo4-003gUL-2e;
-        Wed, 30 Aug 2023 20:20:44 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        bcousson@baylibre.com, tony@atomide.com, mturquette@baylibre.com,
-        sboyd@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v2 5/5] ARM: dts: omap4-embt2ws: enable 32K clock on WLAN
-Date:   Wed, 30 Aug 2023 20:20:38 +0200
-Message-Id: <20230830182038.878265-6-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230830182038.878265-1-andreas@kemnade.info>
-References: <20230830182038.878265-1-andreas@kemnade.info>
+        with ESMTP id S230286AbjH3Vap (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 30 Aug 2023 17:30:45 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E155CC;
+        Wed, 30 Aug 2023 14:30:15 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id A00CC86529;
+        Wed, 30 Aug 2023 21:10:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1693422618;
+        bh=kwozhpbyt9j7/u9kKaoszAizSgLmV78Xsxd3v36CqvU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kHyJPc8WHZlvDAmlFFW1oKG/JNi4AQMyNTJO/uS3anIXcCAA0QMppFBJOQxs+m/Jk
+         utRKASNFBqXFvJuwmJS7JI5RNqi9PrOvOfcWhbaSzd3vYoPA7AS1+tcKoanFRen8W2
+         1pUbn09qSjzf9OHs9vBM8mhp+k1oeH23VsEetfh95odpabDUe4Lu9VVtHky9zldELw
+         RC8MOeztZuAB3QNGy6Kw1UhGyVP7YvbVq2p8YfTXSs/5KE8qcSk0q0u8AC4ErG6Qqe
+         N+JFtQVm/niwRqWzOzMikSUI2ARpBJPDhiVAbMpOOJJnpSGgWpJcn/l8Gg3eYfvgi2
+         w1zdbNlCCFhMQ==
+Message-ID: <d99a1da1-1486-a4e6-c377-87effd3fd1bc@denx.de>
+Date:   Wed, 30 Aug 2023 21:10:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v8 1/2] arm64: dts: imx8mp: Add SAI, SDMA, AudioMIX
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Abel Vesa <abelvesa@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230508114236.8444-1-marex@denx.de>
+ <CAHCN7xJGMkf3MZWK5NqtUxnSTRaZdL-8f3ngUsOUKEdOmdUvXw@mail.gmail.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <CAHCN7xJGMkf3MZWK5NqtUxnSTRaZdL-8f3ngUsOUKEdOmdUvXw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,47 +75,106 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-WLAN did only work if clock was left enabled by the original system,
-so make it fully enable the needed resources itself.
+On 8/30/23 04:44, Adam Ford wrote:
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Hi,
 
-diff --git a/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts b/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts
-index ee86981b2e448..9d2f2d8639496 100644
---- a/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts
-+++ b/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts
-@@ -69,6 +69,12 @@ unknown_supply: unknown-supply {
- 		regulator-name = "unknown";
- 	};
- 
-+	wl12xx_pwrseq: wl12xx-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		clocks = <&twl 1>;
-+		clock-names = "ext_clock";
-+	};
-+
-        /* regulator for wl12xx on sdio2 */
- 	wl12xx_vmmc: wl12xx-vmmc {
- 		pinctrl-names = "default";
-@@ -92,6 +98,7 @@ &i2c1 {
- 	twl: pmic@48 {
- 		compatible = "ti,twl6032";
- 		reg = <0x48>;
-+		#clock-cells = <1>;
- 		/* IRQ# = 7 */
- 		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>; /* IRQ_SYS_1N cascaded to gic */
- 		interrupt-controller;
-@@ -316,6 +323,7 @@ &mmc3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&wl12xx_pins>;
- 	vmmc-supply = <&wl12xx_vmmc>;
-+	mmc-pwrseq = <&wl12xx_pwrseq>;
- 	interrupts-extended = <&wakeupgen GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH
- 			       &omap4_pmx_core 0x12e>;
- 	non-removable;
--- 
-2.39.2
+> I have a question about the clocking for eASRC and PDM.
+> 
+>> +
+>> +                       audio_blk_ctrl: clock-controller@30e20000 {
+>> +                               compatible = "fsl,imx8mp-audio-blk-ctrl";
+>> +                               reg = <0x30e20000 0x10000>;
+>> +                               #clock-cells = <1>;
+>> +                               clocks = <&clk IMX8MP_CLK_AUDIO_ROOT>,
+>> +                                        <&clk IMX8MP_CLK_SAI1>,
+>> +                                        <&clk IMX8MP_CLK_SAI2>,
+>> +                                        <&clk IMX8MP_CLK_SAI3>,
+>> +                                        <&clk IMX8MP_CLK_SAI5>,
+>> +                                        <&clk IMX8MP_CLK_SAI6>,
+>> +                                        <&clk IMX8MP_CLK_SAI7>;
+>> +                               clock-names = "ahb",
+>> +                                             "sai1", "sai2", "sai3",
+>> +                                             "sai5", "sai6", "sai7";
+>> +                               power-domains = <&pgc_audio>;
+>> +                       };
+>> +               };
+>> +
+> 
+> I am trying to plumb in the micfil driver with a PDM microphone on a
+> Plus.  I have SAI3 and SAI5 audio working, but if I try to use the
+> micfil, the PDM clock doesn't get turned on, and the micfil doesn't
+> appear to see anything coming in.  I was curious why the
+> audio_blk_ctrl has clock entries for IMX8MP_CLK_SAIx, but there isn't
+> one for the PDM nor the ASRC clocks.
 
+I only ever needed SAI, so that was what was tested on the EVK .
+
+> I added the MICFIL noted to the
+> 8mp in a previous patch [1], and I am trying to customize the MICFIL
+> node as follows:
+> 
+> &micfil {
+> #sound-dai-cells = <0>;
+> pinctrl-names = "default";
+> pinctrl-0 = <&pinctrl_pdm>;
+> assigned-clocks = <&clk IMX8MP_CLK_PDM>;
+> assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
+> assigned-clock-rates = <196608000>;
+> status = "okay";
+> };
+> 
+> I also noticed in the down-stream kernel, the pdm_ipg_clk and
+> pdm_root_clk are shared gates with separate parents.
+> 
+> The PDM tree of the down-stream kernel looks like this:
+>   audio_pll1_ref_sel                0        0        0    24000000
+>       0     0  50000         Y
+>         audio_pll1                     0        0        0   393216000
+>          0     0  50000         Y
+>            audio_pll1_bypass           0        0        0   393216000
+>          0     0  50000         Y
+>               audio_pll1_out           0        0        0   393216000
+>          0     0  50000         N
+>                  pdm                   0        0        0   196608000
+>          0     0  50000         N
+>                     pdm_root           0        0        0   196608000
+>          0     0  50000         N
+>                        pdm_sel         0        0        0   196608000
+>          0     0  50000         Y
+>                           pdm_root_clk       0        0        0
+> 196608000          0     0  50000         N
+> 
+> The PDM tree of the mainline looks like this:
+> 
+>     audio_pll1_ref_sel                0        0        0    24000000
+>         0     0  50000         Y
+>         audio_pll1                     0        0        0   393216000
+>          0     0  50000         Y
+>            audio_pll1_bypass           0        0        0   393216000
+>          0     0  50000         Y
+>               audio_pll1_out           0        0        0   393216000
+>          0     0  50000         N
+>                  pdm                   0        0        0   196608000
+>          0     0  50000         N
+>                     pdm_root           0        0        0   196608000
+>          0     0  50000         N
+>                        pdm_sel         0        0        0   196608000
+>          0     0  50000         Y
+> 
+> It seems like the "pdm_root_clk" generated by the shared audo-blk
+> down-sream driver is missing from the mainline.  I looked up the clock
+> I referenced when I attempted to enable the miffil, but
+> 'IMX8MP_CLK_AUDIOMIX_PDM_ROOT doesn't appear to be configured in
+> either clk-imx8mp.c or clk-imx8mp-audiomix.c.  Maybe it's obscured by
+> the macros, but it seems like the pdm_sel should somehow have an
+> additional variable for the shared clock and an additional clock like
+> pdm_root_clk assigned with it.
+> 
+> I have similar configurations for Mini and Nano, and both of them are
+> able to record audio, so I think there might be a clock issue
+> somewhere related to the audiomix driver, and not a misconfiguration
+> of the sound-card or the micfil itself.
+
+Shouldn't the micfil be somehow a consumer of the pdm_sel clock , and 
+enable those clock in the driver ?
