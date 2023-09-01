@@ -2,208 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0B27901A3
-	for <lists+linux-clk@lfdr.de>; Fri,  1 Sep 2023 19:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002B37903D2
+	for <lists+linux-clk@lfdr.de>; Sat,  2 Sep 2023 00:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244123AbjIARzk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 1 Sep 2023 13:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S1351102AbjIAWzH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 1 Sep 2023 18:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbjIARzj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 Sep 2023 13:55:39 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FD3E72
-        for <linux-clk@vger.kernel.org>; Fri,  1 Sep 2023 10:55:35 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-5008faf4456so4049067e87.3
-        for <linux-clk@vger.kernel.org>; Fri, 01 Sep 2023 10:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693590933; x=1694195733; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iXwfrkGM7Hz+jCAI0wm9OEdUpgziFLOO3YnjHkqpV2w=;
-        b=xdoz+/a23dmydI3ey5EbohLlk1xVa0PRFwgfEbKyT5yqzWSZpmqKvxzagemM34mJHr
-         BiuPFGWu/VgtvMSiCict3JQAwZZAAmqMX+deq9FXGMmnFTuR1nniieoryYnObZwysVUH
-         E8TY7LxHC/Tm6kXNPq8ennScCZt7NJdGlAJtBeQWjcYjJNbf4Kp4aaO/eCM2nQiS7rhb
-         xs9IHcK/wKzgxe8EY0V8jBIVWhC1vHxvQqdI0XGyuqmy2mQ1lmngVsQsWdb2JtYXPnAE
-         NlP9OorykmSZegjxcCrtl1ToNMnI+k3Ee8pfVxczjiI2AyZ62bLN8pvCguVT/9mchIGo
-         M2rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693590933; x=1694195733;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iXwfrkGM7Hz+jCAI0wm9OEdUpgziFLOO3YnjHkqpV2w=;
-        b=aZRyqPXDdQWT+aHvm9Z/HS9vZ9NR11FmDBC8vMDiQufH0MVc5CAKPbiY1mMgyp9zmC
-         1yYKiwL5ezhVyvzt/cHfaj1pwcmRh3rgt7uRhJqKhQO5P1B/f+mXUh2kZpWCd05gVwJQ
-         GIA1UkT7ztuBnVE457bWnvQgfi/MA1qQoEMU4UWlyyMQ8Cqn5NHGo4G1FrYk0nH8mKMC
-         AIZOjoHXF4tuCmD5PSfds9NnqMv00Z0OocubHnzF6xQ+iMySIeMyAO9OJ89ZXbTsqgBn
-         um07Mw+tochwE3DTziFY/2fn5TrjQbzEzXRXtZrzkHRL0RVJrkNGQe0RhjuvUWvGh8so
-         zZhQ==
-X-Gm-Message-State: AOJu0YyAENBiqhGn5qyhdVHbe2It3TFRkSUy2efpquiEtNGF0UTKg8VB
-        iuFdwX5owXSfsRs6ympcA+sMlQ==
-X-Google-Smtp-Source: AGHT+IEVz6fJWAjbQSaZH9j8buVj8fBa5mtJlorGodbyAE6AeJjp2x4UEgh5FPmAsFJCi5/vrH6s7Q==
-X-Received: by 2002:a05:6512:2016:b0:500:91c1:9642 with SMTP id a22-20020a056512201600b0050091c19642mr1780047lfb.21.1693590933257;
-        Fri, 01 Sep 2023 10:55:33 -0700 (PDT)
-Received: from [192.168.1.101] (abxh154.neoplus.adsl.tpnet.pl. [83.9.1.154])
-        by smtp.gmail.com with ESMTPSA id r1-20020a19ac41000000b004ff748f6f1fsm717827lfc.69.2023.09.01.10.55.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Sep 2023 10:55:32 -0700 (PDT)
-Message-ID: <519259d7-ac6d-409b-a864-071e41f66f70@linaro.org>
-Date:   Fri, 1 Sep 2023 19:55:30 +0200
+        with ESMTP id S1351114AbjIAWzF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 Sep 2023 18:55:05 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A457172A;
+        Fri,  1 Sep 2023 14:06:01 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 8C6488470A;
+        Fri,  1 Sep 2023 23:05:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1693602359;
+        bh=T5ppM+hgDLNOtzXqZpuHfRJkf0h6CLW4GEyZrbv/dZI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BzvfltVXLI3Z/vlBO7Rwzt7Zbe0QRH/NpmA48YQhr1xT/XQ5W+jZIg9t27H4OegZM
+         hpv1/qsIs0Hk/Gtnxuq9VIgEP0WmE/aqSUh6D3i175CYMqi+IcA/OnX1yVLh4Z++Lb
+         ktdIfEp2l+PAJyZMRshn5KzjOXzAxl+a03/qSwnIDdEgPxvCupvMoM8RHg3FI/I/tT
+         4cu6uuTSXrAluCF1n8vSv0On1EETiFwEdmSdb2/6XhgqaBk4uT6gwEfblOjXeA8/YV
+         GzF99kqH8JYhLjCfS/zoDrwEBESaXv3F535rxLBj2WQ1whpaPPuwG+LKIFWeQtLWRB
+         v6R1rLf9jkLBg==
+Message-ID: <4ec813ef-aa0d-655e-3f78-7c669d72551c@denx.de>
+Date:   Fri, 1 Sep 2023 17:47:57 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/15] clk: qcom: gcc-sm6375: Unregister critical clocks
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH V3 1/3] arm64: dts: imx8mp: Add easrc node
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230717-topic-branch_aon_cleanup-v1-0-27784d27a4f4@linaro.org>
- <20230717-topic-branch_aon_cleanup-v1-3-27784d27a4f4@linaro.org>
- <ZLaRtrH85v4kpSvb@hovoldconsulting.com>
- <33a26241-026a-9466-5dd6-e3202b29f57c@linaro.org>
- <ybugl2m7o5cnzj4lv5ksit2rip6yvths5ieo3xlw6cycto2zax@2jimga475z2t>
- <ZLeiM6l6tu6XDzrr@hovoldconsulting.com>
- <cc9e6464-5e47-4044-9785-c57167f0e1c5@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <cc9e6464-5e47-4044-9785-c57167f0e1c5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230831044431.250338-1-aford173@gmail.com>
+ <99204fbf-3246-6124-2e35-bdc353d7e7b6@denx.de>
+ <CAHCN7xJGGSaO949=u2W6jybdE5R1dE8ihdP9wSrCgk5+9=9H6g@mail.gmail.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <CAHCN7xJGGSaO949=u2W6jybdE5R1dE8ihdP9wSrCgk5+9=9H6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 9.08.2023 18:52, Konrad Dybcio wrote:
-> On 19.07.2023 10:43, Johan Hovold wrote:
->> On Tue, Jul 18, 2023 at 09:23:52AM -0700, Bjorn Andersson wrote:
->>> On Tue, Jul 18, 2023 at 03:26:51PM +0200, Konrad Dybcio wrote:
->>>> On 18.07.2023 15:20, Johan Hovold wrote:
->>>>> On Mon, Jul 17, 2023 at 05:19:10PM +0200, Konrad Dybcio wrote:
->>>>>> Some clocks need to be always-on, but we don't really do anything
->>>>>> with them, other than calling enable() once and telling Linux they're
->>>>>> enabled.
->>>>>>
->>>>>> Unregister them to save a couple of bytes and, perhaps more
->>>>>> importantly, allow for runtime suspend of the clock controller device,
->>>>>> as CLK_IS_CRITICAL prevents the latter.
->>>>>
->>>>> But this doesn't sound right. How can you disable a controller which
->>>>> still has clocks enabled?
->>>>>
->>>>> Shouldn't instead these clocks be modelled properly so that they are
->>>>> only enabled when actually needed?
->>>> Hm.. We do have clk_branch2_aon_ops, but something still needs to
->>>> toggle these clocks.
->>>>
+On 9/1/23 13:02, Adam Ford wrote:
+> On Thu, Aug 31, 2023 at 4:52 PM Marek Vasut <marex@denx.de> wrote:
+>>
+>> On 8/31/23 06:44, Adam Ford wrote:
+>>> The i.MX8MP has an asynchronous sample rate converter which seems
+>>> to be the same as what is available on the i.MX8M Nano.
 >>>
->>> Before we started replacing these clocks with static votes, I handled
->>> exactly this problem in the turingcc-qcs404 driver by registering the
->>> ahb clock with a pm_clk_add(). The clock framework will then
->>> automagically keep the clock enabled around operations, but it will also
->>> keep the runtime state active as long as the clock is prepared.
+>>> Signed-off-by: Adam Ford <aford173@gmail.com>
+>>> ---
+>>> V3:  No Change.  The dt-binding update was already accepted into the sound tree, so that patch
+>>>        was dropped from the series
 >>>
->>> As mentioned in an earlier reply today, there's no similarity to this in
->>> the reset or gdsc code, so we'd need to add that in order to rely on
->>> such mechanism.
+>>> V2:  No Change.
+>>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> index 83d907294fbc..3167706d81e1 100644
+>>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+>>> @@ -1459,6 +1459,26 @@ sai7: sai@30c80000 {
+>>>                                        interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
+>>>                                        status = "disabled";
+>>>                                };
+>>> +
+>>> +                             easrc: easrc@30c90000 {
+>>> +                                     compatible = "fsl,imx8mp-easrc", "fsl,imx8mn-easrc";
+>>> +                                     reg = <0x30c90000 0x10000>;
+>>> +                                     interrupts = <GIC_SPI 122 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                                     clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_ASRC_IPG>;
+>>> +                                     clock-names = "mem";
+>>> +                                     dmas = <&sdma2 16 23 0> , <&sdma2 17 23 0>,
+>>> +                                            <&sdma2 18 23 0> , <&sdma2 19 23 0>,
+>>> +                                            <&sdma2 20 23 0> , <&sdma2 21 23 0>,
+>>> +                                            <&sdma2 22 23 0> , <&sdma2 23 23 0>;
+>>> +                                     dma-names = "ctx0_rx", "ctx0_tx",
+>>> +                                                 "ctx1_rx", "ctx1_tx",
+>>> +                                                 "ctx2_rx", "ctx2_tx",
+>>> +                                                 "ctx3_rx", "ctx3_tx";
+>>> +                                     firmware-name = "imx/easrc/easrc-imx8mn.bin";
 >>
->> This reminds me of:
->>
->> 	4cc47e8add63 ("clk: qcom: gdsc: Remove direct runtime PM calls")
->>
->> which recently removed a broken attempt to implement this for gdscs.
->>
->> Just stumbled over GENPD_FLAG_PM_CLK which may provide a way forward at
->> least for genpd (but see below).
->>
->>>> I *think* we could leave a permanent vote in probe() without breaking
->>>> runtime pm! I'll give it a spin bit later..
->>>>
->>>
->>> Modelling the AHB clock in DT and putting a devm_clk_get_enabled() would
->>> properly connect the two, and thereby handle probe order between the two
->>> clock controllers.
->>
->> Yeah, this dependency really should be described eventually.
->>
->>> But it would prevent the power-domain of the parent provider to ever
->>> suspending. Using pm_clk_add() this would at least depend on client
->>> votes.
->>
->> IIUC using pm_clk_add() would also prevent the parent from suspending
->> due to that resume call in clk_prepare().
->>
->> And this mechanism is also used for GENPD_FLAG_PM_CLK...
-> So.. how do we go about solving the issue that this patch tried to
-> address?
-I see things this way:
+>> Should the firmware name really be imx8mn or should it be imx8mp ?
+> 
+> The firmware blobs provided by NXP only has easrc-imx8mn.bin and would
+> be concerned that having a different name might confuse people if they
+> try to go look for it and they only find easrc-imx8mn.bin.  To me,
+> this is no different than the SDMA driver using firmware called
+> sdma-imx7d.bin
 
-- clock controllers (non-gcc) that use magic writes today,
-  they should stay as they are to avoid dramatic spaghetti wrt
-  dt backwards compatibility
+On the other hand, there is "fsl,imx8mp-easrc" compatible string -- to 
+differentiate between IPs in case some difference between the IPs that 
+cannot be predicted so far is found later on.
 
-- clock controllers (non-gcc) that use CLK_IS_CRITICAL are
-  transitioned to magic writes to skip the PM code fluff which
-  prevents shutting down the PDs if any clock is critical and
-  for uniformity with point 1 (as the device trees still don't
-  contain any references to the necessary clocks)
+>> I think the later is better, you can always add a symlink for the
+>> firmware name, and you can discern mx8mn/mp firmwares on the same rootfs
+>> in case that was ever needed in the future.
 
-- new clock controllers are modeled with use of pm_clk and with
-  proper device tree references
-
-FWIW Qualcomm nowadays just keep these clocks always on (answering
-Johan's question - they're either off-from-Linux-POV-not-really-in-
-hardware or these clocks retain the enable bit, I don't know) in
-their shipping downstream kernels, the power leak is probably
-minimal, but if we can avoid it, every nanowatt is to our advantage
-
-Konrad
+Which is what this part of my comment ^ is all about.
