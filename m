@@ -2,121 +2,157 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0359E7903CF
-	for <lists+linux-clk@lfdr.de>; Sat,  2 Sep 2023 00:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC1E7908F4
+	for <lists+linux-clk@lfdr.de>; Sat,  2 Sep 2023 19:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbjIAWzG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 1 Sep 2023 18:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S229890AbjIBRem (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 2 Sep 2023 13:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351109AbjIAWzF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 Sep 2023 18:55:05 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6188A172D;
-        Fri,  1 Sep 2023 14:06:02 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 3E57F86784;
-        Fri,  1 Sep 2023 23:06:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1693602361;
-        bh=9ni6WpCLFXsfPtmtSSKyYdoZ+OPfotsSV4r5eavgMAA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=w3jvVWugIgtBjjHtQNuDByeDxff9KmrcUaUiHLNzOS1O+KedXs3NNSfttnZET8v98
-         4lXYzXBfSeAHbHOD2/R92jn8KUwEdH0pG3cEuc9zy+LhtA7y6f5Y+7s+dHZfFAnxb+
-         sEUAJjRc+MDmIsE6tlZCKxmz71GLzJXaK+EhlUWUT/3EBQBzIDhJlQRt6fXk6hwHaM
-         02q5iDEkNx23fjj3J0/n9N//wXU7ZdJNKAWASDXkWeYFfxHC+vp+hzrG/z2X28Iq+j
-         hSTgqizwNXvvVEYfowTAmYenlgSl472HppFnOpX5jbYTLKXKQ1ScZ5RWrofkdhhTZD
-         Bj8Byno9PAe+g==
-Message-ID: <c14a6e7b-3bfc-2dd9-378e-fb587e3e03e8@denx.de>
-Date:   Fri, 1 Sep 2023 17:49:44 +0200
+        with ESMTP id S229669AbjIBRed (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 2 Sep 2023 13:34:33 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CAAA4;
+        Sat,  2 Sep 2023 10:34:27 -0700 (PDT)
+Received: from [192.168.178.23] (k10064.upc-k.chello.nl [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 7EF76CF376;
+        Sat,  2 Sep 2023 17:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1693676066; bh=4AwTwBIRZzliGYZREHlXp1lG8UPu59oASjiNI3bF69E=;
+        h=From:Date:Subject:To:Cc;
+        b=c/NZHMQW118TC49OMKDBUTT5pzfgJXnGA+hPJBBd8dXvBCG2p5jAKWpwyd839MVrs
+         MEX56NJjEvGXAF8pLYgtvsDUQ4cFekeWREK9cpTxixxKFmBKhdETznERNFI6RP4WMz
+         fSZBPnq6FWyFJS8mA7h41cplQbZ5hb7u/J00l0ME=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Sat, 02 Sep 2023 19:34:23 +0200
+Subject: [PATCH] clk: qcom: mmcc-msm8974: remove ocmemcx_ahb_clk
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH V3 2/3] arm64: dts: imx8mp: Add micfil node
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230902-msm8226-ocmemcx_ahb_clk-remove-v1-1-8124dbde83b9@z3ntu.xyz>
+X-B4-Tracking: v=1; b=H4sIAB5y82QC/x3NQQqDQAxA0atI1g2MUYt6lVJEY6xB48gMiCDev
+ YPLt/n/gihBJUKbXRDk0Kh+S8hfGfDcbz9BHZOBHBWucYQWrSZ6o2cT47Pr56HjdcEg5g/Buhr
+ ZlQXzlBOkyB5k0vMZfL73/QdBLv5VcAAAAA==
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20230831044431.250338-1-aford173@gmail.com>
- <20230831044431.250338-2-aford173@gmail.com>
- <4d700304-3e10-a19b-d3f0-d0a1aec11580@denx.de>
- <CAHCN7xJpug+ap4koX_3w_YTvHF9NC8-2S0f69SsDNY_6T+rcPQ@mail.gmail.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <CAHCN7xJpug+ap4koX_3w_YTvHF9NC8-2S0f69SsDNY_6T+rcPQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mike Turquette <mturquette@linaro.org>
+Cc:     Stephen Boyd <sboyd@codeaurora.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3142; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=4AwTwBIRZzliGYZREHlXp1lG8UPu59oASjiNI3bF69E=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBk83Ihgntx2p7Pa8+ZtqGg0lBSF3+6uCpxhNDkE
+ HWdALklowyJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZPNyIQAKCRBy2EO4nU3X
+ VmMRD/41WapwOh7gw0YxXKz1jni5oxzXtDIBedeyoNFO9qwQcC08VyjBE4qoDJv2liQ4qF71/lI
+ R0767d4pFaZTq+acl1cOi9nqQk7E9uuWOHv3u9FH9kRjC+R9pfDz8N4zaiYlkUFOCQi3Wm3wtE4
+ yVcZ09hiURCB7nhSjRj2rpypLr9HTzyr/Sj5H6tQ8CgWAuw6q0nRjBcgvP3707g/0MyIA+wH7+M
+ hnP3nELVChPMXMhrd+/6US4NYNxAYkvyDiNvHbvnphAQvkQdKSSPeJTrO1H92hc7ZBJquAJpcAq
+ +M42mk4yapK/QsrYBpyB2L9qkCHOfyvhQ5u+0MQI/rdxaSBeYUFKAaFSGj1B83yBxme5fth8se/
+ IcUQVodOGg19X3eJ3Ea7zlQ02cm4A/Mx8SpFi9DRdck+GUcQVOqTvbZ/kklVrplCxUO2ywy7TR0
+ Ip2qewZt4Em2smnEVui8Cu+KfxJnC4oKU4QcYRVPJ03XvmF9FQVimCoRrmb2c8deso9czgwCTK0
+ 6+b0BxTAnUFa6xmVRoBsn9It2QRMVw0P8ecAMQdd/pw2Z9p0OH4oaXRaNMpeVGm4lQv1uOgwnsQ
+ LlWrUuTJ6IydYIg0eZkzSRRIBbdp/62rhrbnP2xUoB68WLcb8uZIX+ecngjvurC8dUG7kFJMP10
+ Pnm3RuTPCcu0VTw==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 9/1/23 13:06, Adam Ford wrote:
-> On Thu, Aug 31, 2023 at 4:53 PM Marek Vasut <marex@denx.de> wrote:
->>
->> On 8/31/23 06:44, Adam Ford wrote:
->>> The i.MX8MP has a micfil controller which is used for interfacing
->>> with a pulse density microphone. Add the node and mark it as
->>> disabled by default.
->>>
->>> Signed-off-by: Adam Ford <aford173@gmail.com>
->>> ---
->>> V3:  The AUDIOMIX_PDM_ROOT doesn't exist and the real clock is
->>>        called IMX8MP_CLK_AUDIOMIX_PDM_SEL, so swap it out.
->>>
->>> V2:  No change
->>>
->>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> index 3167706d81e1..341fd0369ce9 100644
->>> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
->>> @@ -1479,6 +1479,27 @@ easrc: easrc@30c90000 {
->>>                                        fsl,asrc-format = <2>;
->>>                                        status = "disabled";
->>>                                };
->>> +
->>> +                             micfil: audio-controller@30ca0000 {
->>> +                                     compatible = "fsl,imx8mp-micfil";
->>> +                                     reg = <0x30ca0000 0x10000>;
->>> +                                     #sound-dai-cells = <0>;
->>> +                                     interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                                  <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                                  <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>,
->>> +                                                  <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
->>> +                                     clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_PDM_IPG>,
->>> +                                              <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_PDM_SEL>,
->>> +                                              <&clk IMX8MP_AUDIO_PLL1_OUT>,
->>> +                                              <&clk IMX8MP_AUDIO_PLL2_OUT>,
->>> +                                              <&clk IMX8MP_CLK_EXT3>;
->>> +                                     clock-names = "ipg_clk", "ipg_clk_app",
->>> +                                                   "pll8k", "pll11k", "clkext3";
->>> +                                     dmas = <&sdma2 24 25 0x80000000>;
->>> +                                     dma-names = "rx";
->>
->> Is dma-names really required if there is only a single DMA channel in DT ?
-> 
-> I would normally agree with you, the DT binding file shows it's
-> required, and the driver looks like it's searching for a channel name
-> called 'rx'
+According to a commit in the 3.4 vendor kernel sources[0] the
+ocmemcx_ahb_clk clock "is controlled by RPM and should not be touched by
+APPS.".
 
-Maybe something that can be improved both in the driver and bindings ?
+[0] https://git.codelinaro.org/clo/la/kernel/msm/-/commit/37df5f2d91b4d5768b37fcaacaeea958dd683ebc
+
+And indeed, when using MDSS+GPU+OCMEM on MSM8226 and not using
+clk_ignore_unused, when Linux tries to disable the clock the device
+crashes and reboots.
+
+And since there's also no evidence of this clock in msm8974 vendor
+kernel sources, remove the clock for msm8226 and msm8974.
+
+Fixes: d8b212014e69 ("clk: qcom: Add support for MSM8974's multimedia clock controller (MMCC)")
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+ drivers/clk/qcom/mmcc-msm8974.c               | 18 ------------------
+ include/dt-bindings/clock/qcom,mmcc-msm8974.h |  1 -
+ 2 files changed, 19 deletions(-)
+
+diff --git a/drivers/clk/qcom/mmcc-msm8974.c b/drivers/clk/qcom/mmcc-msm8974.c
+index c37524d55d8e..3ce40c80666b 100644
+--- a/drivers/clk/qcom/mmcc-msm8974.c
++++ b/drivers/clk/qcom/mmcc-msm8974.c
+@@ -2171,22 +2171,6 @@ static struct clk_branch mmss_s0_axi_clk = {
+ 	},
+ };
+ 
+-static struct clk_branch ocmemcx_ahb_clk = {
+-	.halt_reg = 0x405c,
+-	.clkr = {
+-		.enable_reg = 0x405c,
+-		.enable_mask = BIT(0),
+-		.hw.init = &(struct clk_init_data){
+-			.name = "ocmemcx_ahb_clk",
+-			.parent_hws = (const struct clk_hw*[]){
+-				&mmss_ahb_clk_src.clkr.hw
+-			},
+-			.num_parents = 1,
+-			.ops = &clk_branch2_ops,
+-		},
+-	},
+-};
+-
+ static struct clk_branch ocmemcx_ocmemnoc_clk = {
+ 	.halt_reg = 0x4058,
+ 	.clkr = {
+@@ -2504,7 +2488,6 @@ static struct clk_regmap *mmcc_msm8226_clocks[] = {
+ 	[MMSS_MMSSNOC_BTO_AHB_CLK] = &mmss_mmssnoc_bto_ahb_clk.clkr,
+ 	[MMSS_MMSSNOC_AXI_CLK] = &mmss_mmssnoc_axi_clk.clkr,
+ 	[MMSS_S0_AXI_CLK] = &mmss_s0_axi_clk.clkr,
+-	[OCMEMCX_AHB_CLK] = &ocmemcx_ahb_clk.clkr,
+ 	[OXILI_GFX3D_CLK] = &oxili_gfx3d_clk.clkr,
+ 	[OXILICX_AHB_CLK] = &oxilicx_ahb_clk.clkr,
+ 	[OXILICX_AXI_CLK] = &oxilicx_axi_clk.clkr,
+@@ -2661,7 +2644,6 @@ static struct clk_regmap *mmcc_msm8974_clocks[] = {
+ 	[MMSS_MMSSNOC_BTO_AHB_CLK] = &mmss_mmssnoc_bto_ahb_clk.clkr,
+ 	[MMSS_MMSSNOC_AXI_CLK] = &mmss_mmssnoc_axi_clk.clkr,
+ 	[MMSS_S0_AXI_CLK] = &mmss_s0_axi_clk.clkr,
+-	[OCMEMCX_AHB_CLK] = &ocmemcx_ahb_clk.clkr,
+ 	[OCMEMCX_OCMEMNOC_CLK] = &ocmemcx_ocmemnoc_clk.clkr,
+ 	[OCMEMNOC_CLK] = &ocmemnoc_clk.clkr,
+ 	[OXILI_GFX3D_CLK] = &oxili_gfx3d_clk.clkr,
+diff --git a/include/dt-bindings/clock/qcom,mmcc-msm8974.h b/include/dt-bindings/clock/qcom,mmcc-msm8974.h
+index a62cb0629a7a..743ee60632eb 100644
+--- a/include/dt-bindings/clock/qcom,mmcc-msm8974.h
++++ b/include/dt-bindings/clock/qcom,mmcc-msm8974.h
+@@ -121,7 +121,6 @@
+ #define MMSS_MMSSNOC_BTO_AHB_CLK			112
+ #define MMSS_MMSSNOC_AXI_CLK				113
+ #define MMSS_S0_AXI_CLK					114
+-#define OCMEMCX_AHB_CLK					115
+ #define OCMEMCX_OCMEMNOC_CLK				116
+ #define OXILI_OCMEMGX_CLK				117
+ #define OCMEMNOC_CLK					118
+
+---
+base-commit: 7c2878be573282a9961c359b806ccf70afe1a6b6
+change-id: 20230902-msm8226-ocmemcx_ahb_clk-remove-85dc043ccf12
+
+Best regards,
+-- 
+Luca Weiss <luca@z3ntu.xyz>
+
