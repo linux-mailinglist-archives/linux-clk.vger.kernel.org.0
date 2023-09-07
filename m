@@ -2,70 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93356797C63
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 20:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC18797B44
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 20:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjIGSxm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Sep 2023 14:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S235933AbjIGSLp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Sep 2023 14:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbjIGSxl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 14:53:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2719B0
-        for <linux-clk@vger.kernel.org>; Thu,  7 Sep 2023 11:52:57 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99bcf2de59cso160461066b.0
-        for <linux-clk@vger.kernel.org>; Thu, 07 Sep 2023 11:52:57 -0700 (PDT)
+        with ESMTP id S232563AbjIGSLo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 14:11:44 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F51FFB
+        for <linux-clk@vger.kernel.org>; Thu,  7 Sep 2023 11:11:12 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401bbfc05fcso14051865e9.3
+        for <linux-clk@vger.kernel.org>; Thu, 07 Sep 2023 11:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694112742; x=1694717542; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1694110270; x=1694715070; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n+7VyO9HJQgcCdV1oziXjEck+bwNvVutHKF259s+mUE=;
-        b=vgCvntVGud2ySWvYdR0gt2K56FBFpnsjCqhvZy05KlDD9+rDphYOzxWronWueVhVy8
-         lVgrW2FluIj9BAgZcDq5FY7oWPHve6nGP57iDtXBtvaxTW5ty0enTQTLNGU7cgg3kv0R
-         XceAEPZGLGWB/xg4ak2GpduQAU0CdJVDokJAuEumamWcN34nAzdtq91AJHJinNBxB+Vo
-         LHlG4VTecEGNbKXrNABdywChLbc6x8PWN83wwE5X2QSYaJ4Pic5pzd6zJm0VmOoyEZ+z
-         X+zMWf5kPhMa5spJm4OA/UX777b6hgFVlnHZgJofP0nJHGrYAZg2mqfdVVpm6mFLx1ZH
-         1VRQ==
+        bh=iFqkMkoGfZBVsH6xnLctgCtMkLPSJTvunrJK9f+Ch00=;
+        b=F8lc9+Iph43ZTwa/qzXQWSSgY2KN6bgf8WCI/Jyk9hEsf5iPymOIhOBy4DQ1knVoeE
+         K1CJQHaCw+wvJm0nqNIAGxUebIKP14pLFR37gqjopQhMruG2splL2r1MAz6XocM8MAWl
+         F5zk9EIXIuVfycfFvzZSppUh/Gr3wZYs+WpS56aTcrUBpeQw+98zxlkaqQn3FGOouNnc
+         fOK+AyZNZG3A17WZkWPCooo66uXXr7CDK1Wy+MK5O6k6kxepwbsn8qjpE5nh9tiwKAde
+         HlOzXNZCsa/1kRDOqYZ9MIXh4nlORd/MOJ4055ByAtxYgsJYAG0vPTT5sWnleN5m6Gyy
+         ZvYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694112742; x=1694717542;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694110270; x=1694715070;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+7VyO9HJQgcCdV1oziXjEck+bwNvVutHKF259s+mUE=;
-        b=ZYzJB6/DSyAyO5VuJpFPeBoG8cFbe4WhN+M+K+HNCByLNLDHuLLQhJhpSl2K/P5YGn
-         s7YafKwiJDRoEf7c5WzhMabmJ9YzbD/fDeWcafTdwN/C4u4o5PKR1ee0XjwfDnumx2QX
-         Xm0JUzdh74vpg2pg50lQKM24qh4dE+tEl0ruUUo9AoU0VJNlOrPCATRdOC4R7GfALpEp
-         9q+Y1gVzp6e4+Jx+6enkiDEtboCMGBRk7wrkIB2QgpDaRmWD1pNFd304mrtNl0o0Nxmm
-         gJPFbwxDn7CeOyI8psxUfzGCzFce1aOnzgIXSCvge5m60jBbxQIx4MgOZYdlGwGPOAHY
-         nyyw==
-X-Gm-Message-State: AOJu0YzuXy3yPX9ETiQjxiTDAo5CrxiI0DX6ed97fUgAqZiXsjsC2djY
-        4QqzwnBWztuVZkPuSo1OT9/p+apM/8iTuTLd21VPlg==
-X-Google-Smtp-Source: AGHT+IH+CwVwCl1iJM6DtJhr1qBDbMzFIn3otLkKPSG2M+l5DaLO/pmOhn61jKGup+8AtmrqTLUZag==
-X-Received: by 2002:a19:7710:0:b0:500:bd75:77d1 with SMTP id s16-20020a197710000000b00500bd7577d1mr3079574lfc.63.1694075519864;
-        Thu, 07 Sep 2023 01:31:59 -0700 (PDT)
+        bh=iFqkMkoGfZBVsH6xnLctgCtMkLPSJTvunrJK9f+Ch00=;
+        b=QHjHZRN9DpoFt6BXfWWMiyeeFzymA6Jvl02Sw/siU6Og2DOKiw1sGLEPbHiQu9vgkk
+         wsFWqOkiy4tQq00ZeS26kblbugi3wH+IWZRcaHntjHTRyTXcfNp9OV+5NyQcdSljMgk7
+         h/Q39SeQDSqZ1Yf5dhqOVifjvbkPTBXg+RyLBVF3pfPlcNKqy9dpwJv7OZJGMraYnq4m
+         Hr4yOY+kkguJffNWRngALM+JTFVk+YH7XBrcnofsiTUfwMokp+ty4AmPrzZ6j+Kw/Oua
+         M5jQoDP0JoSP32cg+Xs0iNDSKSGBlsKsC0H1o5L2t6RqEa5JvBgqt3s8cSkjpjyfmOu4
+         I6hw==
+X-Gm-Message-State: AOJu0YyuwzzN2/LsljLIn08a43QTxHPkD+4iNQw3yCbsTIizjq7JWGsf
+        9ntVCzdEZ01RhAqdTk7vbTbtgRByXAuBB68r9pOyAg==
+X-Google-Smtp-Source: AGHT+IEljEoOCYozVMq6vZdOSyMHU2bfHYQG65/qzWJsAcVKrqUEA7eR1A8YDYnULtC6HoYpPOe74Q==
+X-Received: by 2002:a17:906:5a69:b0:9a1:c3ae:b014 with SMTP id my41-20020a1709065a6900b009a1c3aeb014mr4071131ejc.20.1694077667680;
+        Thu, 07 Sep 2023 02:07:47 -0700 (PDT)
 Received: from [192.168.37.232] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
-        by smtp.gmail.com with ESMTPSA id a9-20020aa7d749000000b005257da6be23sm9555588eds.75.2023.09.07.01.31.56
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709064a8a00b0099ce188be7fsm10093114eju.3.2023.09.07.02.07.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 01:31:59 -0700 (PDT)
-Message-ID: <b0508a69-130d-4b05-9dfc-399e482dc2ae@linaro.org>
-Date:   Thu, 7 Sep 2023 10:31:55 +0200
+        Thu, 07 Sep 2023 02:07:47 -0700 (PDT)
+Message-ID: <6c3b1b45-4322-4582-9009-cda5749570c5@linaro.org>
+Date:   Thu, 7 Sep 2023 11:07:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 04/10] clk: qcom: apss-ipq6018: ipq5332: add safe
- source switch for a53pll
+Subject: Re: [PATCH V2] clk: qcom: clk-alpha-pll: Use determine_rate instead
+ of round_rate
 Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1693996662.git.quic_varada@quicinc.com>
- <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com
+Cc:     quic_saahtoma@quicinc.com
+References: <20230901070041.13463-1-quic_devipriy@quicinc.com>
+ <3fe1655e30d62493a24e1f97ab7bf710.sboyd@kernel.org>
+ <f139041f-452a-46d9-b5af-a5ddef29c705@linaro.org>
+ <69e1945bebd93916e4408fd8a141fdc5.sboyd@kernel.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -102,11 +102,11 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
+In-Reply-To: <69e1945bebd93916e4408fd8a141fdc5.sboyd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -115,113 +115,33 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 7.09.2023 07:21, Varadarajan Narayanan wrote:
-> Stromer Plus PLL found on IPQ53xx doesn't support dynamic
-> frequency scaling. To achieve the same, we need to park the APPS
-> PLL source to GPLL0, re configure the PLL and then switch the
-> source to APSS_PLL_EARLY.
+On 6.09.2023 23:14, Stephen Boyd wrote:
+> Quoting Konrad Dybcio (2023-09-06 00:33:38)
+>> On 5.09.2023 22:40, Stephen Boyd wrote:
+>>> Quoting Devi Priya (2023-09-01 00:00:41)
+>>>> The round_rate() API returns a long value as the errors are reported using
+>>>> negative error codes. This leads to long overflow when the clock rate
+>>>> exceeds 2GHz.As the clock controller treats the clock rate above signed
+>>>> long max as an error, use determine_rate in place of round_rate as the
+>>>> determine_rate API does not possess such limitations.
+>>>
+>>> Does this fix something, or is it preparing for PLLs that run faster
+>>> than 2GHz?
+>> I did some grepping and we already have multiple of these.
+>>
+>> E.g. SM8250 CAMCC PLL2 (zonda) goes (or well, should go) up to 3.6 GHz.
+>>
+>> Today, only stromer PLL uses determine rate, but perhaps all of them
+>> should.
+>>
+>> I would not at all be surprised if many otherwise inexplicable bugs
+>> went away with that change.
 > 
-> To support this, register a clock notifier to get the PRE_RATE
-> and POST_RATE notification. Change the APSS PLL source to GPLL0
-> when PRE_RATE notification is received, then configure the PLL
-> and then change back the source to APSS_PLL_EARLY.
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  drivers/clk/qcom/apss-ipq6018.c | 54 ++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 53 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-> index 4e13a08..ffb6ab5 100644
-> --- a/drivers/clk/qcom/apss-ipq6018.c
-> +++ b/drivers/clk/qcom/apss-ipq6018.c
-> @@ -9,8 +9,11 @@
->  #include <linux/clk-provider.h>
->  #include <linux/regmap.h>
->  #include <linux/module.h>
-> +#include <linux/clk.h>
-> +#include <linux/soc/qcom/smem.h>
->  
->  #include <dt-bindings/clock/qcom,apss-ipq.h>
-> +#include <dt-bindings/arm/qcom,ids.h>
->  
->  #include "common.h"
->  #include "clk-regmap.h"
-> @@ -84,15 +87,64 @@ static const struct qcom_cc_desc apss_ipq6018_desc = {
->  	.num_clks = ARRAY_SIZE(apss_ipq6018_clks),
->  };
->  
-> +static int cpu_clk_notifier_fn(struct notifier_block *nb, unsigned long action,
-> +				void *data)
-> +{
-> +	u8 index;
-> +	int err;
-> +
-> +	if (action == PRE_RATE_CHANGE)
-> +		index = P_GPLL0;
-> +	else if (action == POST_RATE_CHANGE)
-> +		index = P_APSS_PLL_EARLY;
-> +	else
-> +		return 0;
-> +
-> +	err = clk_rcg2_mux_closest_ops.set_parent(&apcs_alias0_clk_src.clkr.hw,
-> +						  index);
-Adding a variable for clk_hw within the apcs_alias0 clock would
-make this easier to digest, I think.
-
-And if we wanna be even less error-prone, you can reference the
-ops of this clock in an indirect way.
-
-> +
-> +	return notifier_from_errno(err);
-> +}
-> +
-> +static struct notifier_block cpu_clk_notifier = {
-> +	.notifier_call = cpu_clk_notifier_fn,
-> +};
-> +
->  static int apss_ipq6018_probe(struct platform_device *pdev)
->  {
->  	struct regmap *regmap;
-> +	u32 soc_id;
-> +	int ret;
-> +
-> +	ret = qcom_smem_get_soc_id(&soc_id);
-> +	if (ret)
-> +		return ret;
->  
->  	regmap = dev_get_regmap(pdev->dev.parent, NULL);
->  	if (!regmap)
->  		return -ENODEV;
->  
-> -	return qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
-> +	ret = qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (soc_id) {
-> +	/*
-> +	 * Only below variants of IPQ53xx support scaling
-> +	 */
-1. /* Keep this in a 1-line comment */
-
-2. why? explain the reasoning in the commit message
+> Are any of those arm32 systems? It would only matter on arm32 systems
+> because sizeof(long) is limited to 32-bits and we don't have negative
+> frequencies.
+Looking deeper, not sure if we have any armv7 chips falling under
+this category, but there are definitely arm64 SoCs that can boot
+arm32 kernels (e.g. 8953).
 
 Konrad
-> +	case QCOM_ID_IPQ5332:
-> +	case QCOM_ID_IPQ5322:
-> +	case QCOM_ID_IPQ5300:
-> +		ret = clk_notifier_register(apcs_alias0_clk_src.clkr.hw.clk,
-> +						&cpu_clk_notifier);
-> +		if (ret)
-> +			return ret;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static struct platform_driver apss_ipq6018_driver = {
