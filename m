@@ -2,146 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC18797B44
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 20:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B78F797EB8
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Sep 2023 00:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbjIGSLp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Sep 2023 14:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
+        id S232576AbjIGWdc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Sep 2023 18:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbjIGSLo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 14:11:44 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F51FFB
-        for <linux-clk@vger.kernel.org>; Thu,  7 Sep 2023 11:11:12 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401bbfc05fcso14051865e9.3
-        for <linux-clk@vger.kernel.org>; Thu, 07 Sep 2023 11:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694110270; x=1694715070; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iFqkMkoGfZBVsH6xnLctgCtMkLPSJTvunrJK9f+Ch00=;
-        b=F8lc9+Iph43ZTwa/qzXQWSSgY2KN6bgf8WCI/Jyk9hEsf5iPymOIhOBy4DQ1knVoeE
-         K1CJQHaCw+wvJm0nqNIAGxUebIKP14pLFR37gqjopQhMruG2splL2r1MAz6XocM8MAWl
-         F5zk9EIXIuVfycfFvzZSppUh/Gr3wZYs+WpS56aTcrUBpeQw+98zxlkaqQn3FGOouNnc
-         fOK+AyZNZG3A17WZkWPCooo66uXXr7CDK1Wy+MK5O6k6kxepwbsn8qjpE5nh9tiwKAde
-         HlOzXNZCsa/1kRDOqYZ9MIXh4nlORd/MOJ4055ByAtxYgsJYAG0vPTT5sWnleN5m6Gyy
-         ZvYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694110270; x=1694715070;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iFqkMkoGfZBVsH6xnLctgCtMkLPSJTvunrJK9f+Ch00=;
-        b=QHjHZRN9DpoFt6BXfWWMiyeeFzymA6Jvl02Sw/siU6Og2DOKiw1sGLEPbHiQu9vgkk
-         wsFWqOkiy4tQq00ZeS26kblbugi3wH+IWZRcaHntjHTRyTXcfNp9OV+5NyQcdSljMgk7
-         h/Q39SeQDSqZ1Yf5dhqOVifjvbkPTBXg+RyLBVF3pfPlcNKqy9dpwJv7OZJGMraYnq4m
-         Hr4yOY+kkguJffNWRngALM+JTFVk+YH7XBrcnofsiTUfwMokp+ty4AmPrzZ6j+Kw/Oua
-         M5jQoDP0JoSP32cg+Xs0iNDSKSGBlsKsC0H1o5L2t6RqEa5JvBgqt3s8cSkjpjyfmOu4
-         I6hw==
-X-Gm-Message-State: AOJu0YyuwzzN2/LsljLIn08a43QTxHPkD+4iNQw3yCbsTIizjq7JWGsf
-        9ntVCzdEZ01RhAqdTk7vbTbtgRByXAuBB68r9pOyAg==
-X-Google-Smtp-Source: AGHT+IEljEoOCYozVMq6vZdOSyMHU2bfHYQG65/qzWJsAcVKrqUEA7eR1A8YDYnULtC6HoYpPOe74Q==
-X-Received: by 2002:a17:906:5a69:b0:9a1:c3ae:b014 with SMTP id my41-20020a1709065a6900b009a1c3aeb014mr4071131ejc.20.1694077667680;
-        Thu, 07 Sep 2023 02:07:47 -0700 (PDT)
-Received: from [192.168.37.232] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709064a8a00b0099ce188be7fsm10093114eju.3.2023.09.07.02.07.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 02:07:47 -0700 (PDT)
-Message-ID: <6c3b1b45-4322-4582-9009-cda5749570c5@linaro.org>
-Date:   Thu, 7 Sep 2023 11:07:45 +0200
+        with ESMTP id S230195AbjIGWdb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 18:33:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643141BC7;
+        Thu,  7 Sep 2023 15:33:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0154FC433C7;
+        Thu,  7 Sep 2023 22:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694126008;
+        bh=11OxPGs4D8TG3RACZZ9X30xzAuDPKXdLvJllCq6fnTo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=A9CB1+8hr6VRvzDP+b4+8UmSv+gg1cQtjVgTQLSreTgDVuN3TsxSV8iw3Neljvbus
+         Kr+EiccofWyyWM/0+UPpajzV8JRcNi2VBidD9cKl74APIVZBj7+9H5kBc9v1VmfJ9D
+         +N0l48ppypPbnTuJ4CRKkhJZgOsPvxe3uUL/A8pdt39iYL2fWlp2q9VkOo5+7SIdaH
+         2E9yAbvowEqBtvye++5wCPbtIeiSLsRtRUeqc4lz9YpQsU+eBTZcbFrwr5L07wcxEL
+         K+H9WVjahsSaoFLQNpO6uhDa4WZoumTTd06OMNvryDVDlty/hOJiyeMAUZrWkKuBp1
+         dEmlOLpRceqbA==
+Message-ID: <fc8023b435f78e02c96fecbe8e7599ee.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] clk: qcom: clk-alpha-pll: Use determine_rate instead
- of round_rate
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com
-Cc:     quic_saahtoma@quicinc.com
-References: <20230901070041.13463-1-quic_devipriy@quicinc.com>
- <3fe1655e30d62493a24e1f97ab7bf710.sboyd@kernel.org>
- <f139041f-452a-46d9-b5af-a5ddef29c705@linaro.org>
- <69e1945bebd93916e4408fd8a141fdc5.sboyd@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <69e1945bebd93916e4408fd8a141fdc5.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAPp5cGTshQJ3aLeLqv=CbaVeg9GnK_k9nsoaWrBKs1dcXzNZow@mail.gmail.com>
+References: <20230822134849.3352329-1-alessandro.carminati@gmail.com> <CAPp5cGTshQJ3aLeLqv=CbaVeg9GnK_k9nsoaWrBKs1dcXzNZow@mail.gmail.com>
+Subject: Re: [PATCH] Sanitize possible_parent_show to Handle Return Value of of_clk_get_parent_name
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Philip Daly <pdaly@redhat.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Alessandro Carminati <alessandro.carminati@gmail.com>
+Date:   Thu, 07 Sep 2023 15:33:25 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 6.09.2023 23:14, Stephen Boyd wrote:
-> Quoting Konrad Dybcio (2023-09-06 00:33:38)
->> On 5.09.2023 22:40, Stephen Boyd wrote:
->>> Quoting Devi Priya (2023-09-01 00:00:41)
->>>> The round_rate() API returns a long value as the errors are reported using
->>>> negative error codes. This leads to long overflow when the clock rate
->>>> exceeds 2GHz.As the clock controller treats the clock rate above signed
->>>> long max as an error, use determine_rate in place of round_rate as the
->>>> determine_rate API does not possess such limitations.
->>>
->>> Does this fix something, or is it preparing for PLLs that run faster
->>> than 2GHz?
->> I did some grepping and we already have multiple of these.
->>
->> E.g. SM8250 CAMCC PLL2 (zonda) goes (or well, should go) up to 3.6 GHz.
->>
->> Today, only stromer PLL uses determine rate, but perhaps all of them
->> should.
->>
->> I would not at all be surprised if many otherwise inexplicable bugs
->> went away with that change.
-> 
-> Are any of those arm32 systems? It would only matter on arm32 systems
-> because sizeof(long) is limited to 32-bits and we don't have negative
-> frequencies.
-Looking deeper, not sure if we have any armv7 chips falling under
-this category, but there are definitely arm64 SoCs that can boot
-arm32 kernels (e.g. 8953).
+Quoting Alessandro Carminati (2023-09-07 07:15:36)
+> this is a gentle ping
+>=20
 
-Konrad
+I couldn't read your email because it was sent to nobody
+(unlisted-recipients). Can you resend with a proper To: line?=20
+
+>=20
+> Il giorno mar 22 ago 2023 alle ore 15:49 Alessandro Carminati
+> <alessandro.carminati@gmail.com> ha scritto:
+> >
+> > In the possible_parent_show function, ensure proper handling of the ret=
+urn
+> > value from of_clk_get_parent_name to prevent potential issues arising f=
+rom
+> > a NULL return.
+> > The current implementation invokes seq_puts directly on the result of
+> > of_clk_get_parent_name without verifying the return value, which can le=
+ad
+> > to kernel panic if the function returns NULL.
+> >
+> > This patch addresses the concern by introducing a check on the return
+> > value of of_clk_get_parent_name. If the return value is not NULL, the
+
+Use of_clk_get_parent_name() to signify that it is a function.
+
+> > function proceeds to call seq_puts, providing the returned value as
+> > argument.
+> > However, if of_clk_get_parent_name returns NULL, the function provides a
+> > static string as argument, avoiding the panic.
+> >
+> > Reported-by: Philip Daly <pdaly@redhat.com>
+> > Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gma=
+il.com>
+> > ---
+
+It needs a Fixes tag.
+
+> >  drivers/clk/clk.c | 11 ++++++-----
+> >  1 file changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > index c249f9791ae8..ab999644e185 100644
+> > --- a/drivers/clk/clk.c
+> > +++ b/drivers/clk/clk.c
+> > @@ -3416,6 +3416,7 @@ static void possible_parent_show(struct seq_file =
+*s, struct clk_core *core,
+> >                                  unsigned int i, char terminator)
+> >  {
+> >         struct clk_core *parent;
+> > +       const char *tmp;
+> >
+> >         /*
+> >          * Go through the following options to fetch a parent's name.
+> > @@ -3436,12 +3437,12 @@ static void possible_parent_show(struct seq_fil=
+e *s, struct clk_core *core,
+> >                 seq_puts(s, core->parents[i].name);
+> >         else if (core->parents[i].fw_name)
+> >                 seq_printf(s, "<%s>(fw)", core->parents[i].fw_name);
+> > -       else if (core->parents[i].index >=3D 0)
+> > -               seq_puts(s,
+> > -                        of_clk_get_parent_name(core->of_node,
+> > -                                               core->parents[i].index)=
+);
+> > -       else
+> > +       else if (core->parents[i].index >=3D 0) {
+> > +               tmp =3D of_clk_get_parent_name(core->of_node, core->par=
+ents[i].index);
+> > +               seq_puts(s, tmp ? tmp : "(none)");
+
+How about using seq_printf("%s", ...) instead? That should print out
+"(null)" in the case that it is NULL, instead of "(none)" and it is a
+one line change.
