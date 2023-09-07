@@ -2,187 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3025C797001
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 07:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281BA7975BB
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 17:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244684AbjIGFYJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Sep 2023 01:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S231961AbjIGPy2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Sep 2023 11:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244872AbjIGFYE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 01:24:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB2F1FC9;
-        Wed,  6 Sep 2023 22:23:32 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3874Ggx8021652;
-        Thu, 7 Sep 2023 05:22:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=q2iwsKr3cin80jQ8HHJ7OlAt+RMB8cVmfy10cePdsKY=;
- b=ZGfQ8flW+f8MWU122UjIQtJx4cflG6Sc/JPO0aIqPrC0qNz2+ysYTmt5ayAtyXh34p4b
- tsHrBpH0xbGXCuAHwo2lPbU5NXJ6rTZf/Li4ZHnya0igym1w9YeuTn0KdT82TgVwdTGn
- /C9br+Ru+qEDEM0VvAnLKOiaW28b1BNwAj+UcuRH6a4OfKvXwJOq07JRXdakCJvS1UB1
- 0nyCEI8IGARsngJGo0/kyObB+J2yLh3mxvpcyhxiW0iaqOO3ui2PVntKfYs3uyzvOpko
- ZKPKenjx9nwPHJ93H6IqfDumfUHC2cMLol3noXNVo0TzpXUHk6gjv4vT6vaWJQx5kkwL yw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sy4bqgeca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 07 Sep 2023 05:22:54 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3875Mrbx000772
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 7 Sep 2023 05:22:53 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 6 Sep 2023 22:22:48 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v1 10/10] arm64: dts: qcom: ipq9574: populate the opp table based on the eFuse
-Date:   Thu, 7 Sep 2023 10:51:45 +0530
-Message-ID: <1512a94f8fe1f8fe22cef2bf8498a6ac27989633.1693996662.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1693996662.git.quic_varada@quicinc.com>
-References: <cover.1693996662.git.quic_varada@quicinc.com>
+        with ESMTP id S242235AbjIGPto (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 11:49:44 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D995265
+        for <linux-clk@vger.kernel.org>; Thu,  7 Sep 2023 08:40:33 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31f737b8b69so559545f8f.3
+        for <linux-clk@vger.kernel.org>; Thu, 07 Sep 2023 08:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694101178; x=1694705978; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KGhxv+wLkUlJTnXgtlH4J46AYd9o45ySTLmRTKlekWI=;
+        b=fvaH5bN4hD4PD0SQVTXGTd8DoCwXRQQgrHxEd12WDZpnopJqqvqIh5N4a3/bPkkMgB
+         JpLHoLwo/spFrcgWL9p5TPRQfAtWw52rWdyUfIAlsvqyA68QXSFKxJTmqJY2C1roYPLu
+         4nYBLg6cF95RPGPFq7NLoHcuOE0C/ZMOoxSNbUp1w9Tuf3mVHYcmhwXK1fj3jkaIhoW/
+         i3EEgECUZGna6xEkZgTSjQQQhMJbHwFzVQXOs0XQHMKeyLkuw3mhzhJnfe2nBdDWSC+1
+         Bms9z9EZkFLqAIHm6OlAwYIxO+hSMXrVWCdPFtop0ozgBGR8yHtB0S/y1pu4TFQzGFa5
+         8uWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694101178; x=1694705978;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KGhxv+wLkUlJTnXgtlH4J46AYd9o45ySTLmRTKlekWI=;
+        b=YhWjgGDWS9Ndm07Bq1eYef4r7t5MrRis+1nwSkWO3GI+kFw0HXvtdctdU+sYr/ylrl
+         KGjsigMxYM6wndfiDhurDqsvgQFDCzRZ+zw+tIujiKO2Kkt7Wol/EJZb4EoTA60hYC6d
+         B7rJAt5UyXmjkbQTr+onGjxYq/k5uRUvsOql6nDwZaqN/SYhxK4+GbI4RHp9Mmhv+E2O
+         vK9mc63nJBNGWML7CU3liZJmcBladgjUHw0WRPhkV3p/tmWErOPXavElLOwkywj9QMha
+         //bN7ZJ9jAXHWqdYUKqgDlpic0aXKQIeOgcVRVunWDcSJxy7NHqu72uoedOl1rc7p6lv
+         ghIw==
+X-Gm-Message-State: AOJu0Ywnrk8IBhalzWUrHtUmeXTlA4LAz6Y01KyeJDdUWXZYBA8ILVIH
+        4M5/YNCamF1wOLePwBygTW9tXfOXKOC5wqV9Cdo=
+X-Google-Smtp-Source: AGHT+IHgZdZSiR//XinTA9Y8E8bS2xBu6CE90k9cVQP1rRMZIv9GSOKD+LJS0NcyLh090bkwtAQy+Q==
+X-Received: by 2002:a17:906:19:b0:9a1:ec3d:8ffe with SMTP id 25-20020a170906001900b009a1ec3d8ffemr4567309eja.18.1694066647510;
+        Wed, 06 Sep 2023 23:04:07 -0700 (PDT)
+Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
+        by smtp.gmail.com with ESMTPSA id qx12-20020a170906fccc00b0099bd86f9248sm9922585ejb.63.2023.09.06.23.04.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 23:04:07 -0700 (PDT)
+Message-ID: <2de8953c-f1c5-3c17-5c95-973ef550bc32@linaro.org>
+Date:   Thu, 7 Sep 2023 08:04:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: D_cf_uKJ-I95oOn9kyVIsEh4yOVukeFj
-X-Proofpoint-ORIG-GUID: D_cf_uKJ-I95oOn9kyVIsEh4yOVukeFj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-06_12,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 malwarescore=0 suspectscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309070045
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v1 08/10] dt-bindings: cpufreq: qcom-cpufreq-nvmem:
+ document IPQ9574
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_kathirav@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <cover.1693996662.git.quic_varada@quicinc.com>
+ <e0f54a4b249f24b10d3dc21a0224718e46ebd158.1693996662.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e0f54a4b249f24b10d3dc21a0224718e46ebd158.1693996662.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-IPQ95xx SoCs have different OPPs available for the CPU based on
-SoC variant. This can be determined from an eFuse register
-present in the silicon.
+On 07/09/2023 07:21, Varadarajan Narayanan wrote:
+> Document IPQ9574 compatible for Qcom NVMEM CPUFreq driver.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Add support to read the eFuse and populate the OPPs based on it.
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 38 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 89edb4b..ad6f1c6 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -106,42 +106,73 @@
- 	};
- 
- 	cpu_opp_table: opp-table-cpu {
--		compatible = "operating-points-v2";
-+		compatible = "operating-points-v2-kryo-cpu";
- 		opp-shared;
-+		nvmem-cells = <&cpu_speed_bin>;
-+		nvmem-cell-names = "speed_bin";
-+
-+		/* Listed all supported CPU frequencies and opp-supported-hw
-+		 * values to select CPU frequencies based on the limits fused.
-+		 * ------------------------------------------------------------
-+		 * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
-+		 *              1.2GHz 1.5GHz 1.8GHz No Limit
-+		 * ------------------------------------------------------------
-+		 * 936000000      1      1      1       1            0xF
-+		 * 1104000000     1      1      1       1            0xF
-+		 * 1200000000     1      0      0       0            0x8
-+		 * 1416000000     0      1      1       1            0x7
-+		 * 1488000000     0      1      0       0            0x4
-+		 * 1800000000     0      0      1       1            0x3
-+		 * 2208000000     0      0      0       1            0x1
-+		 * -----------------------------------------------------------
-+		 */
- 
- 		opp-936000000 {
- 			opp-hz = /bits/ 64 <936000000>;
- 			opp-microvolt = <725000>;
-+			opp-supported-hw = <0xf>;
- 			clock-latency-ns = <200000>;
- 		};
- 
- 		opp-1104000000 {
- 			opp-hz = /bits/ 64 <1104000000>;
- 			opp-microvolt = <787500>;
-+			opp-supported-hw = <0xf>;
-+			clock-latency-ns = <200000>;
-+		};
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <862500>;
-+			opp-supported-hw = <0x8>;
- 			clock-latency-ns = <200000>;
- 		};
- 
- 		opp-1416000000 {
- 			opp-hz = /bits/ 64 <1416000000>;
- 			opp-microvolt = <862500>;
-+			opp-supported-hw = <0x7>;
- 			clock-latency-ns = <200000>;
- 		};
- 
- 		opp-1488000000 {
- 			opp-hz = /bits/ 64 <1488000000>;
- 			opp-microvolt = <925000>;
-+			opp-supported-hw = <0x7>;
- 			clock-latency-ns = <200000>;
- 		};
- 
- 		opp-1800000000 {
- 			opp-hz = /bits/ 64 <1800000000>;
- 			opp-microvolt = <987500>;
-+			opp-supported-hw = <0x3>;
- 			clock-latency-ns = <200000>;
- 		};
- 
- 		opp-2208000000 {
- 			opp-hz = /bits/ 64 <2208000000>;
- 			opp-microvolt = <1062500>;
-+			opp-supported-hw = <0x1>;
- 			clock-latency-ns = <200000>;
- 		};
- 	};
-@@ -223,6 +254,11 @@
- 			reg = <0x000a4000 0x5a1>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+
-+			cpu_speed_bin: cpu_speed_bin@15 {
-+				reg = <0x15 0x2>;
-+				bits = <7 2>;
-+			};
- 		};
- 
- 		cryptobam: dma-controller@704000 {
--- 
-2.7.4
+Best regards,
+Krzysztof
 
