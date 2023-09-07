@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F622797651
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 18:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB4B797960
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Sep 2023 19:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjIGQGJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Sep 2023 12:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S241763AbjIGRMN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Sep 2023 13:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbjIGQFx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 12:05:53 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F6035ACE
-        for <linux-clk@vger.kernel.org>; Thu,  7 Sep 2023 08:56:09 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id ada2fe7eead31-44e8ddf1f1aso1336054137.1
-        for <linux-clk@vger.kernel.org>; Thu, 07 Sep 2023 08:56:09 -0700 (PDT)
+        with ESMTP id S233003AbjIGRMN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Sep 2023 13:12:13 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8531FF9
+        for <linux-clk@vger.kernel.org>; Thu,  7 Sep 2023 10:11:44 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3a5a7e7cd61so609353b6e.0
+        for <linux-clk@vger.kernel.org>; Thu, 07 Sep 2023 10:11:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694102092; x=1694706892; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694106651; x=1694711451; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=40rylBcMTDXR7i4w8TksqV00SNZY2PfZiThjPzEVKjU=;
-        b=gMXev1H9Wao0QnROlRrH0WIiLeSDxttUwjYsJ6VUxbgZkrzipmFRUCOg35buq4rOur
-         Lc+QCdI648qz8NAjg/YomFXOjNLClghlVyZrxQvszv+VxMFtC73iJP0jhA9q6B/3y2r9
-         zwm4UY+vdMTc1XgrwfBQ8y+KwiIBJyVWz08ff2hEaU4cPpit9Rq19NdNF9pnS649NgdT
-         Fg02uCBfFnbBQPabGA4uQbYjdxRZIm5KwJn6ypzW8dMnSlC+U52T3Rn707gPh8oN9WT+
-         lgJkQAQqOoegLEBAkvJtFDXhwbvtkv2rIPz5wOEzrddHsjylbxGRxVISFBCA0QoDOAvl
-         nAGw==
+        bh=9kunx9UxE5AO8Mpt3OIBGhm0UdSfJDTNTDmm1Ca6qzg=;
+        b=mqr6B3gnuWo9hdtRcXy28lJZ6ryediMoOZOZisVWjs9qQtwRKEsixAp+tifgf7ZI59
+         aeP5elib2rQbpRTynWGyk/Hio5k3qLImTs+TzYfBrSEN+6HSsS5AbVjeckyyaTZlICKH
+         A0j03wJ5o6s3p+Q2p6lG2rPinkNTOovWJgz4fo7YQkEaQQ5nTchnvZMVmPof8692ybRI
+         LNH6l/0bs3RbMSwtLJl7670zz2ANeNDlNnKmU+N8DZodY8Tszzv1XNgbzdZ7pfqwFt02
+         lGnjfw+I0ZumjFZLUkMvo/ZrAXyv61axzVjpVsBOxp05AcRqIyNrrXjQIc80o5AAkjP+
+         5Yrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694102092; x=1694706892;
+        d=1e100.net; s=20221208; t=1694106651; x=1694711451;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=40rylBcMTDXR7i4w8TksqV00SNZY2PfZiThjPzEVKjU=;
-        b=MpJCbMJ2cc2No5SyAM9JVknhvcelPMhboho86z5tmZ+wtXQadDknbfpkFQochpjZBH
-         N6ht5WLDSwzBzECNIW4tBP/0TunZADGDXbzqu6gf8A7mw4n7HNlzUO+tbPn9izphssPv
-         lihZrs+2Ib8zTCsUuNgbIZcczH/0C7zNYe5r3pVGX/uylntMdXs3nTzUdvgA0Y8ksEiV
-         use9/p46yXq7Ps4JXgm+AfOYvfP5rwHXMm5iOVKgtOkCyH/2idAhOtsRQWOPmX1sqp+n
-         QOxTDl0tykFmeiLuPMnp+5fgWoimIvMCYBZtrpQkvkqVuInTubmC+zDkbcWY8qToeUZu
-         iIfQ==
-X-Gm-Message-State: AOJu0YzOiwoEloksqjNp/XjYzvMm2gvL/ORpPJzSoeg7jAjbi/4oypc+
-        Q85EGp0wH6m3s9+VO25SienxUPHs9S2XMG8vo8jSsMqGq/HIzUQk
-X-Google-Smtp-Source: AGHT+IETdhddPzANTZg932/q6SiIInI1A+ozTRz+mJHbAWbdsy/mtMdePXNFfT+4SqFLkAAkJW11kVd7upfsHv7Zxng=
-X-Received: by 2002:a25:1e0a:0:b0:d1c:876d:2c7d with SMTP id
- e10-20020a251e0a000000b00d1c876d2c7dmr3250628ybe.13.1694094907900; Thu, 07
- Sep 2023 06:55:07 -0700 (PDT)
+        bh=9kunx9UxE5AO8Mpt3OIBGhm0UdSfJDTNTDmm1Ca6qzg=;
+        b=iCwIEPxjv9DDXib0FlJSVdYATsCQeLIkRGi2MJbikmAx1S9Q+TlEh565uxYKHcI0da
+         CSPAvrvzmNS1Si54QH1YiRUPh926cWxPAO39Pjm7b/tl3pFs8rvqgcaIOS6jyddO8Ohu
+         HC8hvuUyvVAWOM4Id7ZXPO0WetxSUzGrLo4N/b3iRHXMcvIU0ocmvzOv0zEA5PJAtPYp
+         4detmE3+Q6EzjFxvGi6TmKCgaP7qOTMcKMUR9kK1VzFh8AvdvcptYG1wx6kBy8u3y554
+         7+qfrkJ82SBCvZCEYOnYCSvzBovSlFSDpGqAIkIW+XQLD47OIiAZ63Spev5y9w6ds14R
+         lGUw==
+X-Gm-Message-State: AOJu0YyEyrFsoP6ggVZzl38lDpA4kF9mqLwHzRirk6ND6CvMlIXnmctN
+        CzVU2Ee1doOPYIm9f5Xvdkauf/OKCTm4Zobh3BHLY8Bx9k8WQFjc
+X-Google-Smtp-Source: AGHT+IGWwMUs+woCpFuAAwk4rYJhGtyUArweMKLG0DdWWNZXHEqnr826vQ2pJOiYkeGxQTvNpSH7Tmuy50h8QS8fgX8=
+X-Received: by 2002:a5b:f11:0:b0:d80:12f5:cd4d with SMTP id
+ x17-20020a5b0f11000000b00d8012f5cd4dmr156584ybr.18.1694095179083; Thu, 07 Sep
+ 2023 06:59:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1693996662.git.quic_varada@quicinc.com> <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
-In-Reply-To: <5e3c29df2b42cceb8072b00546a78e1b99b2d374.1693996662.git.quic_varada@quicinc.com>
+References: <cover.1693996662.git.quic_varada@quicinc.com> <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
+In-Reply-To: <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 7 Sep 2023 16:54:56 +0300
-Message-ID: <CAA8EJppXxiX7+6nhfKyJYDU0i2pkBzXL5J3EQUapLJXxx3b=HA@mail.gmail.com>
-Subject: Re: [PATCH v1 04/10] clk: qcom: apss-ipq6018: ipq5332: add safe
- source switch for a53pll
+Date:   Thu, 7 Sep 2023 16:59:28 +0300
+Message-ID: <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
+Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
+ table based on the eFuse
 To:     Varadarajan Narayanan <quic_varada@quicinc.com>
 Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
         konrad.dybcio@linaro.org, rafael@kernel.org,
@@ -63,136 +63,102 @@ Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 7 Sept 2023 at 08:22, Varadarajan Narayanan
+On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
 <quic_varada@quicinc.com> wrote:
 >
-> Stromer Plus PLL found on IPQ53xx doesn't support dynamic
-> frequency scaling. To achieve the same, we need to park the APPS
-> PLL source to GPLL0, re configure the PLL and then switch the
-> source to APSS_PLL_EARLY.
+> IPQ53xx have different OPPs available for the CPU based on
+> SoC variant. This can be determined through use of an eFuse
+> register present in the silicon.
 >
-> To support this, register a clock notifier to get the PRE_RATE
-> and POST_RATE notification. Change the APSS PLL source to GPLL0
-> when PRE_RATE notification is received, then configure the PLL
-> and then change back the source to APSS_PLL_EARLY.
-
-This means that we are changing the parents behind the back of CCF,
-which is not great.
-
+> Add support to read the eFuse and populate the OPPs based on it.
 >
 > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
->  drivers/clk/qcom/apss-ipq6018.c | 54 ++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 53 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
+>  1 file changed, 31 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
-> index 4e13a08..ffb6ab5 100644
-> --- a/drivers/clk/qcom/apss-ipq6018.c
-> +++ b/drivers/clk/qcom/apss-ipq6018.c
-> @@ -9,8 +9,11 @@
->  #include <linux/clk-provider.h>
->  #include <linux/regmap.h>
->  #include <linux/module.h>
-> +#include <linux/clk.h>
-> +#include <linux/soc/qcom/smem.h>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index 82761ae..3ca3f34 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -91,11 +91,34 @@
+>         };
 >
->  #include <dt-bindings/clock/qcom,apss-ipq.h>
-> +#include <dt-bindings/arm/qcom,ids.h>
->
->  #include "common.h"
->  #include "clk-regmap.h"
-> @@ -84,15 +87,64 @@ static const struct qcom_cc_desc apss_ipq6018_desc = {
->         .num_clks = ARRAY_SIZE(apss_ipq6018_clks),
->  };
->
-> +static int cpu_clk_notifier_fn(struct notifier_block *nb, unsigned long action,
-> +                               void *data)
-> +{
-> +       u8 index;
-> +       int err;
+>         cpu_opp_table: opp-table-cpu {
+> -               compatible = "operating-points-v2";
+> +               compatible = "operating-points-v2-kryo-cpu";
+>                 opp-shared;
+> +               nvmem-cells = <&cpu_speed_bin>;
+> +               nvmem-cell-names = "speed_bin";
 > +
-> +       if (action == PRE_RATE_CHANGE)
-> +               index = P_GPLL0;
+> +               /*
+> +                * Listed all supported CPU frequencies and opp-supported-hw
+> +                * values to select CPU frequencies based on the limits fused.
+> +                * ------------------------------------------------------------
+> +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
+> +                *              1.0GHz 1.2GHz 1.5GHz No Limit
+> +                * ------------------------------------------------------------
+> +                * 1100000000     1      1      1       1            0xF
+> +                * 1500000000     0      0      1       1            0x3
+> +                * -----------------------------------------------------------
+> +                */
 
-I don't see P_GPLL0 being supported in the ipq6018 driver.
+This can probably go to the commit message instead.
 
-> +       else if (action == POST_RATE_CHANGE)
-> +               index = P_APSS_PLL_EARLY;
+> +
+> +               opp-1100000000 {
+> +                       opp-hz = /bits/ 64 <1100000000>;
 
-You also have to handle ABORT_RATE_CHANGE here.
+But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
 
-> +       else
-> +               return 0;
-> +
-> +       err = clk_rcg2_mux_closest_ops.set_parent(&apcs_alias0_clk_src.clkr.hw,
-> +                                                 index);
-> +
-> +       return notifier_from_errno(err);
-> +}
-> +
-> +static struct notifier_block cpu_clk_notifier = {
-> +       .notifier_call = cpu_clk_notifier_fn,
-> +};
-> +
->  static int apss_ipq6018_probe(struct platform_device *pdev)
->  {
->         struct regmap *regmap;
-> +       u32 soc_id;
-> +       int ret;
-> +
-> +       ret = qcom_smem_get_soc_id(&soc_id);
-> +       if (ret)
-> +               return ret;
+> +                       opp-microvolt = <850000>;
+> +                       opp-supported-hw = <0xF>;
+> +                       clock-latency-ns = <200000>;
+> +               };
 >
->         regmap = dev_get_regmap(pdev->dev.parent, NULL);
->         if (!regmap)
->                 return -ENODEV;
->
-> -       return qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
-> +       ret = qcom_cc_really_probe(pdev, &apss_ipq6018_desc, regmap);
-> +       if (ret)
-> +               return ret;
-> +
-> +       switch (soc_id) {
-> +       /*
-> +        * Only below variants of IPQ53xx support scaling
-> +        */
-> +       case QCOM_ID_IPQ5332:
-> +       case QCOM_ID_IPQ5322:
-> +       case QCOM_ID_IPQ5300:
+> -               opp-1488000000 {
+> -                       opp-hz = /bits/ 64 <1488000000>;
+> +               opp-1500000000 {
+> +                       opp-hz = /bits/ 64 <1500000000>;
 
-Please use compat strings instead of using the soc-id.
+So, 1.488 GHz or 1.5 GHz?
 
-> +               ret = clk_notifier_register(apcs_alias0_clk_src.clkr.hw.clk,
-> +                                               &cpu_clk_notifier);
-> +               if (ret)
-> +                       return ret;
-> +               break;
-> +       default:
-> +               break;
-> +       }
+> +                       opp-microvolt = <950000>;
+
+Which regulator is controlled by this microvolt?
+
+> +                       opp-supported-hw = <0x3>;
+>                         clock-latency-ns = <200000>;
+>                 };
+>         };
+> @@ -150,6 +173,11 @@
+>                         reg = <0x000a4000 0x721>;
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
 > +
-> +       return 0;
->  }
+> +                       cpu_speed_bin: cpu_speed_bin@1d {
+> +                               reg = <0x1d 0x2>;
+> +                               bits = <7 2>;
+> +                       };
+>                 };
 >
->  static struct platform_driver apss_ipq6018_driver = {
+>                 rng: rng@e3000 {
 > --
 > 2.7.4
 >
 
 
---
+-- 
 With best wishes
-
 Dmitry
