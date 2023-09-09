@@ -2,69 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A097999BB
-	for <lists+linux-clk@lfdr.de>; Sat,  9 Sep 2023 18:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFCF7999C4
+	for <lists+linux-clk@lfdr.de>; Sat,  9 Sep 2023 18:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbjIIQZj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 9 Sep 2023 12:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S235178AbjIIQZm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 9 Sep 2023 12:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346724AbjIIQC2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 9 Sep 2023 12:02:28 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 306D713E;
-        Sat,  9 Sep 2023 09:02:24 -0700 (PDT)
+        with ESMTP id S229655AbjIIQU7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 9 Sep 2023 12:20:59 -0400
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF502197;
+        Sat,  9 Sep 2023 09:20:53 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.02,239,1688396400"; 
-   d="scan'208";a="175534154"
+   d="scan'208";a="179256689"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 10 Sep 2023 01:02:23 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 10 Sep 2023 01:20:52 +0900
 Received: from localhost.localdomain (unknown [10.226.92.15])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 62F274019305;
-        Sun, 10 Sep 2023 01:02:21 +0900 (JST)
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 795EB402468A;
+        Sun, 10 Sep 2023 01:20:50 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, Biju Das <biju.das.au@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH] clk: rs9: Use i2c_get_match_data() instead of device_get_match_data()
-Date:   Sat,  9 Sep 2023 17:02:18 +0100
-Message-Id: <20230909160218.33078-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH] clk: si5351: Simplify probe()
+Date:   Sat,  9 Sep 2023 17:20:47 +0100
+Message-Id: <20230909162047.41845-1-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The device_get_match_data(), is to get match data for firmware interfaces
-such as just OF/ACPI. This driver has I2C matching table as well. Use
-i2c_get_match_data() to get match data for I2C, ACPI and DT-based
-matching.
+The driver has an OF match table, still, it uses an ID lookup table for
+retrieving match data. Currently, the driver is working on the
+assumption that an I2C device registered via OF will always match a
+legacy I2C device ID. The correct approach is to have an OF device ID
+table using i2c_get_match_data() if the devices are registered via OF/ID.
+
+Simplify probe() by replacing ID lookup table for retrieving match data
+with i2c_get_match_data().
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/clk/clk-renesas-pcie.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/clk-si5351.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/clk-renesas-pcie.c b/drivers/clk/clk-renesas-pcie.c
-index 7d7b2cb75318..380245f635d6 100644
---- a/drivers/clk/clk-renesas-pcie.c
-+++ b/drivers/clk/clk-renesas-pcie.c
-@@ -298,7 +298,7 @@ static int rs9_probe(struct i2c_client *client)
+diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
+index 00fb9b09e030..afe12d1a9ddc 100644
+--- a/drivers/clk/clk-si5351.c
++++ b/drivers/clk/clk-si5351.c
+@@ -1385,8 +1385,7 @@ MODULE_DEVICE_TABLE(i2c, si5351_i2c_ids);
  
- 	i2c_set_clientdata(client, rs9);
- 	rs9->client = client;
--	rs9->chip_info = device_get_match_data(&client->dev);
-+	rs9->chip_info = i2c_get_match_data(client);
- 	if (!rs9->chip_info)
- 		return -EINVAL;
+ static int si5351_i2c_probe(struct i2c_client *client)
+ {
+-	const struct i2c_device_id *id = i2c_match_id(si5351_i2c_ids, client);
+-	enum si5351_variant variant = (enum si5351_variant)id->driver_data;
++	enum si5351_variant variant;
+ 	struct si5351_platform_data *pdata;
+ 	struct si5351_driver_data *drvdata;
+ 	struct clk_init_data init;
+@@ -1394,6 +1393,7 @@ static int si5351_i2c_probe(struct i2c_client *client)
+ 	u8 num_parents, num_clocks;
+ 	int ret, n;
  
++	variant = (enum si5351_variant)(uintptr_t)i2c_get_match_data(client);
+ 	ret = si5351_dt_parse(client, variant);
+ 	if (ret)
+ 		return ret;
 -- 
 2.25.1
 
