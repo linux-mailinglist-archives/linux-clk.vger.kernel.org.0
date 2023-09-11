@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FC779B4CC
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C099F79B5BC
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355446AbjIKV7l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 17:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        id S1355509AbjIKWAH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 18:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239782AbjIKO2f (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 10:28:35 -0400
+        with ESMTP id S241260AbjIKPFP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 11:05:15 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD6DF0;
-        Mon, 11 Sep 2023 07:28:31 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAA7C433C7;
-        Mon, 11 Sep 2023 14:28:30 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AD8125;
+        Mon, 11 Sep 2023 08:05:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3DAC433C7;
+        Mon, 11 Sep 2023 15:05:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694442510;
-        bh=pyR5PsWEn2NNie5H8Ireh8g+wBNLdMRO0Y1mmp0dnus=;
+        s=korg; t=1694444710;
+        bh=tyMgdI+jcsjOlqKph/FM2gXZQ1CbtHGZQi1NohMGj04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SWJ0IwTjStPsgMN/KQbvAh0+KB+LoHnaVaHxl8eWgEsZKSz2jHJ2MbHqqfJ81Pm//
-         RDivkY68YSRI/5YJdReLAe/vH78FTxaWxzr4Na8geeVluafFQhDc14G/ezKOmbgt5n
-         rQDo3Nso6gt/owljsafGhY2VKnZ1ffHVdjLlu9Io=
+        b=X/S8GemvIAzQ6aQjqD+aLae8zkLEHf0RCTOwmQJU0Iq6Ydon5kkKbcztqCxLr8e26
+         S0O8/bn/npnLNTslfWgUKqnSNWpajf9r7hIamsQ7XxGJnuoBd+VfbcWe6HBNK8WWAC
+         3G30xn0e+sqqPX+avZQFgrvXBB1VNzvrXWzRABns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -31,12 +31,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.4 049/737] clk: fixed-mmio: make COMMON_CLK_FIXED_MMIO depend on HAS_IOMEM
-Date:   Mon, 11 Sep 2023 15:38:28 +0200
-Message-ID: <20230911134651.829658114@linuxfoundation.org>
+Subject: [PATCH 6.1 048/600] clk: fixed-mmio: make COMMON_CLK_FIXED_MMIO depend on HAS_IOMEM
+Date:   Mon, 11 Sep 2023 15:41:21 +0200
+Message-ID: <20230911134635.014049204@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911134650.286315610@linuxfoundation.org>
-References: <20230911134650.286315610@linuxfoundation.org>
+In-Reply-To: <20230911134633.619970489@linuxfoundation.org>
+References: <20230911134633.619970489@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -52,7 +52,7 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-6.4-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -89,10 +89,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 016814e15536a..52dfbae4f361c 100644
+index 5da82f2bdd211..a5dcc7293a836 100644
 --- a/drivers/clk/Kconfig
 +++ b/drivers/clk/Kconfig
-@@ -444,6 +444,7 @@ config COMMON_CLK_BD718XX
+@@ -427,6 +427,7 @@ config COMMON_CLK_BD718XX
  config COMMON_CLK_FIXED_MMIO
  	bool "Clock driver for Memory Mapped Fixed values"
  	depends on COMMON_CLK && OF
