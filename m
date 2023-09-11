@@ -2,48 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A6C79B5CF
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A9979B043
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 01:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbjIKV7r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 17:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S1355478AbjIKWAB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 18:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244435AbjIKUbe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 16:31:34 -0400
+        with ESMTP id S244436AbjIKUcB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 16:32:01 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC17BFB;
-        Mon, 11 Sep 2023 13:31:29 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78406C433C9;
-        Mon, 11 Sep 2023 20:31:29 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03A5FB;
+        Mon, 11 Sep 2023 13:31:56 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA7DC433C7;
+        Mon, 11 Sep 2023 20:31:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694464289;
-        bh=377+1V6Tv6JYTAiugUCOFQVdbsCc62iMLppW1xTy8D4=;
+        s=k20201202; t=1694464316;
+        bh=Y+aT8djXB9CKXwdEp5pmxFPUegbaDESTt4aIlc9PZG4=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=kdLmXHAo+Wg9ksR2yKwxupnfv6klUME4sKSV64I15MtgZ0QilfsPqa87YIAmAypB9
-         T7eNtVWqIgwv1f6oLbhn2cSKf9GDCK6LZ18bfnoV6ASNlkDij9iTtsmz/TXI1hkky4
-         EJEHL2Tasmzl43KnEnPrA1wjb+QmgZTR1W67I49B8ZkcSPhg+eXcN31png0+wett0v
-         w6Y+2RsimXVSOL71iHzDxWyNlMZudKGrvo5R4LSppjatPaaRsMIk4TyXX7lasHtdbb
-         a5aBrJFadJ4Rt/sYoh2cOjPkL+FpRLOCpgb7iBYP0k+/B2G2fUg8lNGF28IUdWmxuw
-         8jHTZYN1i+L2Q==
-Message-ID: <6c6c6564b92a838ecb4325ecd9f768c4.sboyd@kernel.org>
+        b=oAFvnvewGgyc+jUnwhQyLdci5Up5KJPqZBqAV5PdPShdVMrVeGQ//3WHuoHQ9jZxY
+         yLiYPnWd47MFYFVoy95wTburWA6StzdZ2/YtudPBYq/yMwUtttM16Mt3gYt+XzRvH1
+         HD8BWI3FaCevr0x8TTPGwR6A6MmmG2HzP9ermf3L04EQasKe9nyHoKf4ZYD0mmAZi4
+         X9jkSem9YLSd8l6N/TPCjrhBLH3cs7/A/+rGRmkD6A0C7vli5oXXplFy94S7eaxwSA
+         QvJDDkxUyj+Egrm7ZfMQ3A/lWp3kAkuN8iooWGWx6s5zgVxaKd90RWRK6cAl6mBNJS
+         H/g8/la8b1Cdg==
+Message-ID: <92a0a9b6800ce1570a21b0bda42ccf2a.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230824092624.20020-1-zhifeng.tang@unisoc.com>
-References: <20230824092624.20020-1-zhifeng.tang@unisoc.com>
-Subject: Re: [PATCH V2] clk: sprd: Fix thm_parents incorrect configuration
+In-Reply-To: <20230824104812.147775-2-biju.das.jz@bp.renesas.com>
+References: <20230824104812.147775-1-biju.das.jz@bp.renesas.com> <20230824104812.147775-2-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: clock: versaclock3: Add description for #clock-cells property
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhifeng Tang <zhifeng.tang23@gmail.com>,
-        Wenming Wu <wenming.wu@unisoc.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Cixi Geng <cixi.geng1@unisoc.com>,
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Zhifeng Tang <zhifeng.tang@unisoc.com>
-Date:   Mon, 11 Sep 2023 13:31:27 -0700
+        Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 11 Sep 2023 13:31:54 -0700
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -54,13 +58,19 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Zhifeng Tang (2023-08-24 02:26:24)
-> The thm*_clk have two clock sources 32k and 250k,excluding 32m.
+Quoting Biju Das (2023-08-24 03:48:09)
+> Add description for "#clock-cells" property to map indexes to the clock
+> output in the Table 3. ("Output Source") in the 5P35023 datasheet
+> (ie: {REF,SE1,SE2,SE3,DIFF1,DIFF2}. Also update the "assigned-clock-rates"
+> in the example.
 >=20
-> Fixes: af3bd36573e3 ("clk: sprd: Add clocks support for UMS512")
-> Signed-off-by: Zhifeng Tang <zhifeng.tang@unisoc.com>
-> Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> While at it, replace clocks phandle in the example from x1_x2->x1 as
+> X2 is a different 32768 kHz crystal.
+>=20
+> Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 
 Applied to clk-fixes
