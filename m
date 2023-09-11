@@ -2,65 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A883279C3DF
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 05:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD7F79C2DD
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 04:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjILDQ3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 23:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S238802AbjILCbm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 22:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241726AbjILDQF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 23:16:05 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B281410459F
-        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 19:07:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559BEC433C7;
-        Mon, 11 Sep 2023 20:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694465406;
-        bh=2b8SGAE21odM9DkLgO7tG0F/Bh3n74Ew4ALGkLao9HY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=tJTE8spMApaF2UOyoodztKt3ja+TUu1x2pUCSAdXF+otCk4g2xtCKq+kPIlJZa569
-         ltc8Ao7tGX3Uf59oYQO7eFHOxpT2m133eWbCW9dK/GIzx3IJAC+zC8WugLauIYiMvo
-         489fnB9ONdPE9JDTxrC4TcjwH+1b4MIeSaE6YEb4kX28/WwnJKLiddZLsLbSqEeOJ1
-         eUZ4OLIhoExHzlzigD7LgTWIbL8fB3AjHvfDeoGkkewzM8CCNgoL2LG5uiV8GzkLK+
-         Z6mZ/qS+Qpbm6xj+72VOTdsQoUoa5XhY9jTdjTpX7a3pUQqHjjjG6AMfhUR2o5kh8D
-         pmekDETZgM6Xw==
-Message-ID: <9434b9e6b7f60c308df5b1f28edbbe5c.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S239282AbjILCb1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 22:31:27 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21C11224DC;
+        Mon, 11 Sep 2023 18:56:26 -0700 (PDT)
+Received: from p200300ccff36fa001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff36:fa00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1qfpAD-003crG-Gw; Tue, 12 Sep 2023 00:13:49 +0200
+Received: from andi by aktux with local (Exim 4.96)
+        (envelope-from <andreas@kemnade.info>)
+        id 1qfpAC-006ECc-2f;
+        Tue, 12 Sep 2023 00:13:48 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        lee@kernel.org, bcousson@baylibre.com, tony@atomide.com,
+        mturquette@baylibre.com, sboyd@kernel.org, andreas@kemnade.info,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v3 0/5] ARM: omap: omap4-embt2ws: 32K clock for WLAN
+Date:   Tue, 12 Sep 2023 00:13:41 +0200
+Message-Id: <20230911221346.1484543-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230831181656.154750-2-marex@denx.de>
-References: <20230831181656.154750-1-marex@denx.de> <20230831181656.154750-2-marex@denx.de>
-Subject: Re: [PATCH 2/2] clk: si521xx: Fix regmap write accessor
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Marek Vasut <marex@denx.de>,
-        Michael Turquette <mturquette@baylibre.com>
-To:     Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org
-Date:   Mon, 11 Sep 2023 13:50:04 -0700
-User-Agent: alot/0.10
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Marek Vasut (2023-08-31 11:16:56)
-> Rework the write operation such that the Byte Count register is written w=
-ith
-> a single raw i2c write outside of regmap using transfer which does specify
-> the number of bytes to be transfered, one in this case, and which makes t=
-he
-> expected subsequent write transfer look like address+register+data, and t=
-hen
-> make use of this method. Without this change, the Byte Count register wri=
-te
-> in probe() would succeed as it would provide the byte count as part of its
-> write payload, but any subsequent writes would fail due to this Byte Count
-> register programming. Such failing writes happens e.g. during resume, when
-> restoring the regmap content.
->=20
-> Fixes: edc12763a3a2 ("clk: si521xx: Clock driver for Skyworks Si521xx I2C=
- PCIe clock generators")
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
+To have WLAN working properly, enable a 32K clock of the TWL6032.
+In earlier tests, it was still enabled from a previous boot into
+the vendor system.
 
-Applied to clk-fixes
+Changes in V3:
+- maintainer change in binding doc
+- fix references to binding doc
+- additionalProperties: false
+- remove subdevices also from examples until
+  subdevices are referenced/added
+
+Changes in V2:
+- no separate device node for the clock
+- converted toplevel node of TWL
+
+Andreas Kemnade (5):
+  dt-bindings: mfd: convert twl-family.txt to json-schema
+  dt-bindings: mfd: ti,twl: Add clock provider properties
+  mfd: twl-core: Add a clock subdevice for the TWL6032
+  clk: twl: add clock driver for TWL6032
+  ARM: dts: omap4-embt2ws: enable 32K clock on WLAN
+
+ .../bindings/input/twl4030-pwrbutton.txt      |   2 +-
+ .../devicetree/bindings/mfd/ti,twl.yaml       |  67 ++++++
+ .../devicetree/bindings/mfd/twl-family.txt    |  46 ----
+ .../boot/dts/ti/omap/omap4-epson-embt2ws.dts  |   8 +
+ drivers/clk/Kconfig                           |   9 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-twl.c                         | 197 ++++++++++++++++++
+ drivers/mfd/twl-core.c                        |  16 ++
+ 8 files changed, 299 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,twl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/twl-family.txt
+ create mode 100644 drivers/clk/clk-twl.c
+
+-- 
+2.39.2
+
