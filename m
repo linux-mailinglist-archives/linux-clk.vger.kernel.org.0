@@ -2,75 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E270B79BDFA
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C48D79C3C6
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 05:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjIKXTq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 19:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S234561AbjILDLh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 23:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237471AbjIKWxW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 18:53:22 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731325BA9;
-        Mon, 11 Sep 2023 15:15:07 -0700 (PDT)
-Received: from p200300ccff36fa001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff36:fa00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1qfpAD-003crJ-R8; Tue, 12 Sep 2023 00:13:49 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1qfpAD-006ECk-1T;
-        Tue, 12 Sep 2023 00:13:49 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        lee@kernel.org, bcousson@baylibre.com, tony@atomide.com,
-        mturquette@baylibre.com, sboyd@kernel.org, andreas@kemnade.info,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 2/5] dt-bindings: mfd: ti,twl: Add clock provider properties
-Date:   Tue, 12 Sep 2023 00:13:43 +0200
-Message-Id: <20230911221346.1484543-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230911221346.1484543-1-andreas@kemnade.info>
-References: <20230911221346.1484543-1-andreas@kemnade.info>
+        with ESMTP id S242330AbjILDLX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 23:11:23 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D257107C61
+        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 19:07:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DCBC433C8;
+        Mon, 11 Sep 2023 20:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694465390;
+        bh=tXh52zQ3ksnPDe7dwnngV0ivakdoeYJLtl9+Qlj0BVI=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ZTE//uRzsaHf4WlK2aQYcMsNMWgNNYpr0gUOtxgumVKiSoVgX7ShnYXHmsNjVk8Lg
+         sy7kX32cpnzrNcKr0N6tzHtHJIdrQK/OyRO7MC4eqrOXLOQGWXsBjAkx19k7nUMgWF
+         fbrCW96xW+ucbxVb3BYw2phZJKMOTKm4/1Av4+WTH1T8WePvU8Y26aU19cgHGtTQUD
+         FvrKAFl8fUrZJFW2IQtLkHzzMCojFu2VdGaWfR03RcsMs1E+4NHQ1mlVfoRWb6pt5q
+         3hiru/B99g8OkQmY9+4mNh7gQOUI3rGApUxd4gomsq0BPTJwxUAlyT21NE++L6m4iu
+         BE8eFON2TnM6g==
+Message-ID: <9c8519e9bd5e1852fe5a6821918222d3.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230831181656.154750-1-marex@denx.de>
+References: <20230831181656.154750-1-marex@denx.de>
+Subject: Re: [PATCH 1/2] clk: si521xx: Use REGCACHE_FLAT instead of NONE
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>,
+        Michael Turquette <mturquette@baylibre.com>
+To:     Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org
+Date:   Mon, 11 Sep 2023 13:49:47 -0700
+User-Agent: alot/0.10
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Since these devices provide clock outputs, add the corresponding
-property.
+Quoting Marek Vasut (2023-08-31 11:16:55)
+> In order to reload registers into the clock generator on resume using
+> regcache_sync(), it is necessary to select one of the regcache types
+> which are not NONE. Since this device has some 7 registers, use the
+> simplest one, FLAT. The regcache code complains about REGCACHE_NONE
+> being selected and generates a WARNING, this fixes that warning.
+>=20
+> Fixes: edc12763a3a2 ("clk: si521xx: Clock driver for Skyworks Si521xx I2C=
+ PCIe clock generators")
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
----
- Documentation/devicetree/bindings/mfd/ti,twl.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-index f125b254a4b93..c04d57ba22b49 100644
---- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-+++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-@@ -37,6 +37,9 @@ properties:
-   "#interrupt-cells":
-     const: 1
- 
-+  "#clock-cells":
-+    const: 1
-+
- additionalProperties: false
- 
- required:
--- 
-2.39.2
-
+Applied to clk-fixes
