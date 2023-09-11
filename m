@@ -2,45 +2,43 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B928D79BD5D
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1336D79B9CB
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241853AbjIKWAd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 18:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S1355469AbjIKV7z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 17:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244394AbjIKUUd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 16:20:33 -0400
+        with ESMTP id S244397AbjIKUVE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 16:21:04 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7798185;
-        Mon, 11 Sep 2023 13:20:28 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5231EC433C7;
-        Mon, 11 Sep 2023 20:20:28 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7903185
+        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 13:20:59 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657EAC433C8;
+        Mon, 11 Sep 2023 20:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694463628;
-        bh=t+7z6sKacC4bNsdeAQDIrInU1BgKBgiThKa36hekUHM=;
+        s=k20201202; t=1694463659;
+        bh=Zpt/ADcqU/4L7h9zmLe0A8JKBjAGj8NLh4xHKXScM5k=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=vIA7WWczePJi65XG6iZtGohn8yGNCzh3/cU2eYLsksjybLNOvWmnArQt3wxDYNQS1
-         SF5roN/gdpcp9fOyl2dovpcqOthXqzPsJE/+iIqLHcmN4XyeHHr8GvWeIwsIKEnrae
-         zDVZtvLR8zSsL1k51qQl34iQpvhUDrtz30Gxb2sMCseAz6scW40t7Eib2PLwdndVhL
-         SOVxXWFzz6KclxMRfHZLDnIPvt3FU26jgjckhXOESfWfNVPF8XBVBD+mLX1JiZTyzD
-         oF8Jqac4h5svNOooBowUX7LEhi0/AAWpnbKZ7YZ4Uqk2/uWNQif/AEmxemdwOZRSlq
-         6XSJyrR/2ArwA==
-Message-ID: <a1b8a5bcbddc57cb3c62d3d81fdc4c4a.sboyd@kernel.org>
+        b=kj8z6b6hsFWSSTlLgUYT16b/QzAxHGIzgwEQUGxV8euHNiIt1etaeww5BVNJJIW4b
+         cFbv6dNP+Pbr4pe2XdkQBN/liJObpJ43b7G/MbGMGA48AKWDOAWdSy/z5e+tk0o7PP
+         +GBelrEcbbWvhVczPUC5NZgLhVoYKeuLTrsA6jT+jYOT/6OpwmDrYwgyAiloLi/ix1
+         AFLjmqaOgNxUGfXuvOSa6OBF4Y2gVIU6UblQyrB7cD/OQvfkqwfYeDJX9aMGikn0Zy
+         NRQzFD3C3xykbX2ySNEtK01LWG0B8MYmBbr9dEokqzNmpd4m1C8Qg068HKbRgU64/b
+         P1m/FJImRjFtQ==
+Message-ID: <d4b86ce6982c48c3a443ca20872701e5.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230909000703.3478902-1-sboyd@kernel.org>
-References: <20230909000703.3478902-1-sboyd@kernel.org>
-Subject: Re: [PATCH] clk: asm9620: Remove 'hw' local variable that isn't checked
+In-Reply-To: <d47978a09dd0320f9929a19fa3e829608a02b224.1693485415.git.baruch@tkos.co.il>
+References: <d47978a09dd0320f9929a19fa3e829608a02b224.1693485415.git.baruch@tkos.co.il>
+Subject: Re: [PATCH v2] clk: gate: fix comment typo and grammar
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        kernel test robot <lkp@intel.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Date:   Mon, 11 Sep 2023 13:20:26 -0700
+Cc:     linux-clk@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
+        Baruch Siach <baruch@tkos.co.il>
+To:     Baruch Siach <baruch@tkos.co.il>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Mon, 11 Sep 2023 13:20:57 -0700
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -51,25 +49,12 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Stephen Boyd (2023-09-08 17:07:02)
-> The 'hw' pointer local variable in this function became unused after
-> commit f5290d8e4f0c ("clk: asm9260: use parent index to link the
-> reference clock"). Remove it to silence an unused but set variable
-> warning.
+Quoting Baruch Siach (2023-08-31 05:36:55)
+> Change ouput -> output.
 >=20
->  drivers/clk/clk-asm9260.c:258:17: warning: variable 'hw' set but not use=
-d [-Wunused-but-set-variable]
->            struct clk_hw *hw, *pll_hw;
->                           ^
->    1 warning generated.
+> While at it change also grammatically incorrect "it's" to "its".
 >=20
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Fixes: f5290d8e4f0c ("clk: asm9260: use parent index to link the referenc=
-e clock")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202309042014.IWERPl09-lkp@i=
-ntel.com/
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
 
 Applied to clk-next
