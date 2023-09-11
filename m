@@ -2,47 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FBE79AC8C
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 01:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A6C79B5CF
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241260AbjIKWAM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 18:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S236073AbjIKV7r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 17:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244361AbjIKUL4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 16:11:56 -0400
+        with ESMTP id S244435AbjIKUbe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 16:31:34 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF601A7;
-        Mon, 11 Sep 2023 13:11:51 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24984C433C8;
-        Mon, 11 Sep 2023 20:11:51 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC17BFB;
+        Mon, 11 Sep 2023 13:31:29 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78406C433C9;
+        Mon, 11 Sep 2023 20:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694463111;
-        bh=ySOy1ntTpmfk22+fRD8pdPWyjkkC8+f/y/eC+bME0oE=;
+        s=k20201202; t=1694464289;
+        bh=377+1V6Tv6JYTAiugUCOFQVdbsCc62iMLppW1xTy8D4=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=MyPfMJI2SEc+Qk6sOGnLx9KeEb9kCrv+ifG7xCdKi/eQTgJ0CfIo4DzMU7NNUctKb
-         u0aO0ODwRsmRtIYihB0AATXinrSBJhEUKVqykwPfNuvKfmh1RMUG0N+BPEL7nY8yU7
-         vAUzQno0UmXmBpYEIn57u7JKaT+g9JBW63qulumsriu8Oi+Zf9VmwAhuoKlD1RYRi8
-         9PJ3qGQPiOI0D/ysEPTgpCsankGzekBhB/wXPwSrgoAph9He1Fe7/boAgRChMg6iw4
-         wap0FW6tVDyDfWxXo5VsnZ06U3dPBYrsHAFz2Qphhph/OpMS6/fT/+O0cntmYe6QOP
-         ajD+WhJkpwvxQ==
-Message-ID: <92058c25fb11b75ee0a2298a684825e9.sboyd@kernel.org>
+        b=kdLmXHAo+Wg9ksR2yKwxupnfv6klUME4sKSV64I15MtgZ0QilfsPqa87YIAmAypB9
+         T7eNtVWqIgwv1f6oLbhn2cSKf9GDCK6LZ18bfnoV6ASNlkDij9iTtsmz/TXI1hkky4
+         EJEHL2Tasmzl43KnEnPrA1wjb+QmgZTR1W67I49B8ZkcSPhg+eXcN31png0+wett0v
+         w6Y+2RsimXVSOL71iHzDxWyNlMZudKGrvo5R4LSppjatPaaRsMIk4TyXX7lasHtdbb
+         a5aBrJFadJ4Rt/sYoh2cOjPkL+FpRLOCpgb7iBYP0k+/B2G2fUg8lNGF28IUdWmxuw
+         8jHTZYN1i+L2Q==
+Message-ID: <6c6c6564b92a838ecb4325ecd9f768c4.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <5a4805f7-f802-b1ba-9804-59c0fe6c7f26@quicinc.com>
-References: <20230901091823.30242-1-quic_luoj@quicinc.com> <20230901091823.30242-5-quic_luoj@quicinc.com> <27ae3297ad161fd67706db70b402db04.sboyd@kernel.org> <16d09acf-7bdd-04ee-6faf-936c0366df03@quicinc.com> <17681a9f756cc70a190c674c51b90140.sboyd@kernel.org> <5a4805f7-f802-b1ba-9804-59c0fe6c7f26@quicinc.com>
-Subject: Re: [PATCH v6 4/4] clk: qcom: add clock controller driver for qca8386/qca8084
+In-Reply-To: <20230824092624.20020-1-zhifeng.tang@unisoc.com>
+References: <20230824092624.20020-1-zhifeng.tang@unisoc.com>
+Subject: Re: [PATCH V2] clk: sprd: Fix thm_parents incorrect configuration
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_srichara@quicinc.com
-To:     Jie Luo <quic_luoj@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, catalin.marinas@arm.com, conor+dt@kernel.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org, will@kernel.org
-Date:   Mon, 11 Sep 2023 13:11:48 -0700
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhifeng Tang <zhifeng.tang23@gmail.com>,
+        Wenming Wu <wenming.wu@unisoc.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Cixi Geng <cixi.geng1@unisoc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Zhifeng Tang <zhifeng.tang@unisoc.com>
+Date:   Mon, 11 Sep 2023 13:31:27 -0700
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -53,44 +54,13 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Jie Luo (2023-09-08 04:10:35)
+Quoting Zhifeng Tang (2023-08-24 02:26:24)
+> The thm*_clk have two clock sources 32k and 250k,excluding 32m.
 >=20
->=20
-> Yes, the uniphy implements the clock provider that supports changing=20
-> rate, which will be upstream later, and nss_cc_mac5_rx_clk_src is the=20
-> special case, which is only used in the switch device qca8386.
+> Fixes: af3bd36573e3 ("clk: sprd: Add clocks support for UMS512")
+> Signed-off-by: Zhifeng Tang <zhifeng.tang@unisoc.com>
+> Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
 
-Ok great.
-
->=20
-> For the phy device qca8084(uniphy has only 312.5M fix clock which is=20
-> registered by device tree), this clock nss_cc_mac5_rx_clk_src is not used.
->=20
-> The issue for the switch device(qca8386) here is the clock rate of=20
-> parent uniphy can't be changed because of the clock rate requirement of=20
-> branch clock, since the uniphy clock rate is decided by the current=20
-> working interface mode(PHY_INTERFACE_MODE_2500BASEX with 312.5M or=20
-> PHY_INTERFACE_MODE_SGMII with 125M).
-
-Got it.
-
->=20
-> For example, when the uniphy works on PHY_INTERFACE_MODE_2500BASEX, then =
-
-> the parent uniphy clock rate is 312.5M, which is decided by hardware and =
-
-> can't be changed. when a branch clock requires a 25M clock, the parent=20
-> uniphy clock maybe updated to 125M by clock framework if the flag=20
-> CLK_SET_RATE_PARENT is set here, but the actual hardware clock rate of=20
-> uniphy is still 315.5M since the uniphy still works in the interface=20
-> mode PHY_INTERFACE_MODE_2500BASEX.
->=20
-
-If the parent rate can't change because CLK_SET_RATE_PARENT is missing
-and the hardware doesn't allow it, then perhaps instead of having a
-frequency table we should have rcg clk ops for determine_rate that
-simply looks at the parent rates and finds the rate closest to what is
-desired. And for the set_rate clk_op we can have it be simple and just
-program a fixed divider. The benefit is less frequency tables that don't
-do anything and less hard-coding of the frequency. I thought we already
-had those rcg clk_ops but I couldn't find them with a quick glance.
+Applied to clk-fixes
