@@ -2,103 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3728A79B7EF
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B90279BEFD
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355458AbjIKV7n (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 17:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S235948AbjIKWAV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 18:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236073AbjIKJuY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 05:50:24 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D93E4F
-        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 02:50:19 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-40061928e5aso48132115e9.3
-        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 02:50:19 -0700 (PDT)
+        with ESMTP id S243813AbjIKRs1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 13:48:27 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5317EDD
+        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 10:48:21 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6bf2427b947so3101092a34.3
+        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 10:48:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694425818; x=1695030618; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cWlkPQI1Yw2OHhpnK3b6UUH+RFe3hIOhoTtTQ2y5gKM=;
-        b=bxdWuFsCv+gPBYLhDq7IeyMJI3mBwnJE2cot9q471e37BkuoZtHa6NtaxvB5DXvgi6
-         IrCKVebgeg8q2sl11CIpWGKNvJYtWNwhRmXqt+3NGY2CAH4hPlgBkLNgSH5UlyDtFnS1
-         KOTPvoR3RStGy7+RKKt5Xu/129sM+nBwuWArZhLGcZ9/cviZjTnHIeIq6+BQZ7wkqK3w
-         x+uroxGEi2oinrxIVmuIJV3uNBpLcmBM/YkGHAVD+Uci4IgtkUODLU0wPonf7kicbKfX
-         +sgQ6DyAJ0w5HWEYLGZvvWrm1moto8I6ZtGtmOCtDtGtzRKx6ukmhVRZEBKgdI05PJwg
-         gkmQ==
+        d=linaro.org; s=google; t=1694454500; x=1695059300; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hSkF4G7D+DMTQqfN/xQdy5YEnnHg545lD9jlBghqJY=;
+        b=SJ3IedrMGyAg5hY3TlHhr4lWl4IzrzRMKnGpyjz/Zkcbn2VJb9ImNxNt7/oX2FMFMx
+         I/o85qH1yl/ntCTOH2TzAlmeiRN8YFVTYkLbPyG3N8PpVt3Daoq03MD+ADs2yvngnR4u
+         R2eVRvO6skWmZxIUrUhpJsP/YjcwJxNBnV7777fD4x3NvDGqbCNuS5gYsmDGHhiQloX0
+         gRbmGBBmQ5ukeg1V7JHjFR7/RN2iyqx1L02rjhghKyScPT4mgAB+eTcwJe5Fgzk7cEPy
+         LQonJzvwpzm2HCN19Yyr86BG/q6q6/u5pjBUlgLPSUPIuTWtLMTnEhNMKKA2U/PhuGDa
+         HOqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694425818; x=1695030618;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cWlkPQI1Yw2OHhpnK3b6UUH+RFe3hIOhoTtTQ2y5gKM=;
-        b=YA7x1C2ed4CMoh6adNcDvbRrYvzfAy/euDy10NXcHPDToKlqG5jpjrLa5kMJ7G8uqU
-         yAVW5gtLZsU2gQPS0zNCXXkQ9EA40f/wtKjiSyP1xFPu6CXqxYiIZcKRpCSUkLuzfuNU
-         pyjLO8qrosCChZpiOtmfl4ccEH1tR5noaivVY8pfccLGu73HOeEk+3p8L1m3UgIQOw2Q
-         7lv47wT7zVK9nFJBeiiKb1GUqo3cEr04rw7Fzd9p9Xe/DuymMf2+igqedARsSguFNr1U
-         R1JlmcITDu3o55fipKtbzTCPoOdQ2596B2g9jWdDX3riGuRhRUN3Rt3HgWCHgjhhv+2f
-         3xgw==
-X-Gm-Message-State: AOJu0YyDx4nG4uj7a005JUspxvvSSRiiTaNjhfFwFifhn/16jhzhivmj
-        ddgAqW+ZZpAmhgraBhWBWl+miA==
-X-Google-Smtp-Source: AGHT+IHI4A4EOkbJF57yZhPXziUj9HK5tk+YTi+LsfYa3ihobo23dDVK8lc8xP8GO52BwhM5r5OH4Q==
-X-Received: by 2002:a05:600c:2207:b0:401:b6f6:d90c with SMTP id z7-20020a05600c220700b00401b6f6d90cmr8256405wml.35.1694425817657;
-        Mon, 11 Sep 2023 02:50:17 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:daaa:8bc3:eeb7:ce8? ([2a01:e0a:982:cbb0:daaa:8bc3:eeb7:ce8])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05600c260d00b003fe4ca8decdsm12797392wma.31.2023.09.11.02.50.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 02:50:17 -0700 (PDT)
-Message-ID: <fc85d3e4-1266-4173-a21e-b97cc51622ce@linaro.org>
-Date:   Mon, 11 Sep 2023 11:50:16 +0200
+        d=1e100.net; s=20230601; t=1694454500; x=1695059300;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4hSkF4G7D+DMTQqfN/xQdy5YEnnHg545lD9jlBghqJY=;
+        b=pGJaGdt9rlh5LYqnIZ05+J6B3DWa4n0JQeW8pw5rHR0aeB42bpPnjon8k/MlSTFfJs
+         5wH0L+aQ1N2UvRPHoq4xJuumFoJzuU1gSLIEP/A+TAUTIRq2C/WWORzHBKcZkjBR0tgP
+         LAXEf3TX8mRAGxzo9VcRHLVlcJ223sIwL2pGRQYuukzWFQS74eaF/VEAcxZ1dN1D7CuF
+         ynRj809yGlgu1Geh/hG2tEfJSkeNy/zZfakiNFOJ+usbhmUy5/N5305BWgAR8kWhIwjN
+         6LwprtXXkKNOt94klASAJEMvOnXaREjHzuUZo/nY3Gywf2QKPk1F1VcxgMDb/KEW9Lgq
+         qKJg==
+X-Gm-Message-State: AOJu0YwQDNRRCu+26Z0gSwU3t0bB8cDk2fz6c2/HVMU2Stq3XY2pd7ig
+        16zpay46IJisy0b6Mhc8EXrE6Q==
+X-Google-Smtp-Source: AGHT+IHwt6mnDFsT/FZeN9vv3psdxiwo8JNMZ/EaAjjHvHw9cN9CgvQ7wJOofon3lvpxgkdR7aaJqg==
+X-Received: by 2002:a05:6358:4319:b0:13c:dd43:f741 with SMTP id r25-20020a056358431900b0013cdd43f741mr6184850rwc.24.1694454500466;
+        Mon, 11 Sep 2023 10:48:20 -0700 (PDT)
+Received: from maple.home ([142.114.20.193])
+        by smtp.gmail.com with ESMTPSA id h4-20020a0cf204000000b0065160a2c8f0sm3075658qvk.138.2023.09.11.10.48.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 10:48:20 -0700 (PDT)
+From:   Ralph Siemsen <ralph.siemsen@linaro.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Ralph Siemsen <ralph.siemsen@linaro.org>
+Subject: 
+Date:   Mon, 11 Sep 2023 13:46:28 -0400
+Message-Id: <20230911174628.262950-1-ralph.siemsen@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 00/15] arm64: dts: meson: a1: introduce several
- peripheral IPs
-Content-Language: en-US, fr
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, conor+dt@kernel.org
-Cc:     kernel@sberdevices.ru, sdfw_system_team@sberdevices.ru,
-        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230823213630.12936-1-ddrokosov@sberdevices.ru>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <20230823213630.12936-1-ddrokosov@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -107,79 +72,147 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 23/08/2023 23:36, Dmitry Rokosov wrote:
-> This patch series introduces device tree declarations for various
-> peripheral IPs of the A1 SoC family, including clock controllers, EFUSE,
-> USB, SPI Flash Controller, SDIO, and UART_AO:
->      - CLK: A1 SoC has four types on the board, namely PLL, Peripherals,
->        CPU, and Audio, but only Amlogic A1 PLL and Peripherals clock
->        controllers are currently supported.
->      - EFUSE: consists of a 4k bit One Time Programmable (OTP) memory
->        divided into 32 128-bit blocks, and data is accessed using the APB
->        bus through software or the Key-ladder integrated with the EFUSE
->        block.
->      - USB: only one USB 2.0 high-speed port is available in the A1 SoC,
->        supporting both HOST and DEVICE modes for OTG.
->      - SPI Flash Controller: 4-bit QPI/SPI NOR Flash or NAND FLASH
->        controller.
->      - SDIO: for WiFi/IEEE802.11 connection.
->      - UART_AO: for Bluetooth connection.
->      - HWRNG: hardware random generator integrated into SoC.
->      - AO SECURE: board info registers.
-> 
-> The above peripherals are integrated to new AD402 board device tree.
-> 
-> Changes v2 since v1 at [1]:
->      - reorder meson-a1 dtsi includes to keep them sorted
->      - remove extra empty lines
->      - purge the unnecessary 'okay' status
->      - reorder all device tree nodes (existing and new) sorted by 'reg'
->        values
->      - introduce new saradc definition
->      - add hwrng dts node
->      - provide ao secure dts node with board info registers
->      - include all changes to new AD402 board device tree
->      - add AD402 board to bindings
-> 
-> Links:
->      [1] https://lore.kernel.org/all/20230607201641.20982-1-ddrokosov@sberdevices.ru/
-> 
-> Alexey Romanov (3):
->    arm64: dts: meson: a1: enable efuse controller and setup its clk
->    arm64: dts: meson: a1: add hw rng node
->    arm64: dts: meson: a1: add ao secure node
-> 
-> Dmitry Rokosov (8):
->    arm64: dts: meson: a1: reorder includes to keep them sorted
->    arm64: dts: meson: a1: remove extra empty line before reset node
->    arm64: dts: meson: a1: remove the unnecessary 'okay' status pwrc value
->    arm64: dts: meson: a1: reorder gpio_intc node definition
->    arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
->    arm64: dts: meson: a1: support USB controller in OTG mode
->    arm64: dts: introduce Amlogic AD402 reference board based on A113L SoC
->    dt-bindings: arm: amlogic: add Amlogic AD402 bindings
-> 
-> George Stark (1):
->    arm64: dts: meson: a1: add saradc definition
-> 
-> Jan Dakinevich (1):
->    arm64: dts: meson: a1: add eMMC controller and its pins
-> 
-> Martin Kurbanov (1):
->    arm64: dts: meson: a1: introduce SPI Flash Controller
-> 
-> Oleg Lyovin (1):
->    arm64: dts: meson: a1: introduce UART_AO mux definitions
-> 
->   .../devicetree/bindings/arm/amlogic.yaml      |   1 +
->   arch/arm64/boot/dts/amlogic/Makefile          |   1 +
->   .../arm64/boot/dts/amlogic/meson-a1-ad402.dts | 145 ++++++++++++
->   arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 213 +++++++++++++++++-
->   4 files changed, 348 insertions(+), 12 deletions(-)
->   create mode 100644 arch/arm64/boot/dts/amlogic/meson-a1-ad402.dts
-> 
+From 122610b072fcb44c7491eb5b9a59a221967ac99b Mon Sep 17 00:00:00 2001
+From: Ralph Siemsen <ralph.siemsen@linaro.org>
+Date: Mon, 11 Sep 2023 13:30:47 -0400
+Subject: [PATCH] clk: renesas: r9a06g032: fix kerneldoc warning
 
-B4 missed it but I applied this patchset into v6.7/arm64-dt.
+This fixes the following W=1 warning during build:
+> drivers/clk/renesas/r9a06g032-clocks.c:119: warning: Function parameter or member 'dual' not described in 'r9a06g032_clkdesc'
 
-Thanks,
-Neil
+Added documentation for member 'dual'. Also added names for the other
+structures in the same union, with documentation. Adjusted names of
+members within the 'div' structure to avoid duplication.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202309101314.kTRoxND5-lkp@intel.com/
+Signed-off-by: Ralph Siemsen <ralph.siemsen@linaro.org>
+---
+ drivers/clk/renesas/r9a06g032-clocks.c | 64 ++++++++++++++------------
+ 1 file changed, 34 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/clk/renesas/r9a06g032-clocks.c b/drivers/clk/renesas/r9a06g032-clocks.c
+index 55db63c7041a..61296c81f9b5 100644
+--- a/drivers/clk/renesas/r9a06g032-clocks.c
++++ b/drivers/clk/renesas/r9a06g032-clocks.c
+@@ -102,19 +102,22 @@ enum gate_type {
+  * @source:    the ID+1 of the parent clock element.
+  *             Root clock uses ID of ~0 (PARENT_ID);
+  * @gate:      clock enable/disable
+- * @div_min:   smallest permitted clock divider
+- * @div_max:   largest permitted clock divider
+- * @reg:       clock divider register offset, in 32-bit words
+- * @div_table: optional list of fixed clock divider values;
++ * @div:       substructure for clock divider
++ * @div.min:   smallest permitted clock divider
++ * @div.max:   largest permitted clock divider
++ * @div.reg:   clock divider register offset, in 32-bit words
++ * @div.table: optional list of fixed clock divider values;
+  *             must be in ascending order, zero for unused
+- * @div:       divisor for fixed-factor clock
+- * @mul:       multiplier for fixed-factor clock
+- * @group:     UART group, 0=UART0/1/2, 1=UART3/4/5/6/7
+- * @sel:       select either g1/r1 or g2/r2 as clock source
+- * @g1:        1st source gate (clock enable/disable)
+- * @r1:        1st source reset (module reset)
+- * @g2:        2nd source gate (clock enable/disable)
+- * @r2:        2nd source reset (module reset)
++ * @ffc:       substructure for fixed-factor clocks
++ * @ffc.div:   divisor for fixed-factor clock
++ * @ffc.mul:   multiplier for fixed-factor clock
++ * @dual:      substructure for dual clock gates
++ * @dual.group: UART group, 0=UART0/1/2, 1=UART3/4/5/6/7
++ * @dual.sel:  select either g1/r1 or g2/r2 as clock source
++ * @dual.g1:   1st source gate (clock enable/disable)
++ * @dual.r1:   1st source reset (module reset)
++ * @dual.g2:   2nd source gate (clock enable/disable)
++ * @dual.r2:   2nd source reset (module reset)
+  *
+  * Describes a single element in the clock tree hierarchy.
+  * As there are quite a large number of clock elements, this
+@@ -131,13 +134,13 @@ struct r9a06g032_clkdesc {
+ 		struct r9a06g032_gate gate;
+ 		/* type = K_DIV  */
+ 		struct {
+-			unsigned int div_min:10, div_max:10, reg:10;
+-			u16 div_table[4];
+-		};
++			unsigned int min:10, max:10, reg:10;
++			u16 table[4];
++		} div;
+ 		/* type = K_FFC */
+ 		struct {
+ 			u16 div, mul;
+-		};
++		} ffc;
+ 		/* type = K_DUALGATE */
+ 		struct {
+ 			uint16_t group:1;
+@@ -178,26 +181,26 @@ struct r9a06g032_clkdesc {
+ 	.type = K_FFC, \
+ 	.index = R9A06G032_##_idx, \
+ 	.name = _n, \
+-	.div = _div, \
+-	.mul = _mul \
++	.ffc.div = _div, \
++	.ffc.mul = _mul \
+ }
+ #define D_FFC(_idx, _n, _src, _div) { \
+ 	.type = K_FFC, \
+ 	.index = R9A06G032_##_idx, \
+ 	.source = 1 + R9A06G032_##_src, \
+ 	.name = _n, \
+-	.div = _div, \
+-	.mul = 1 \
++	.ffc.div = _div, \
++	.ffc.mul = 1 \
+ }
+ #define D_DIV(_idx, _n, _src, _reg, _min, _max, ...) { \
+ 	.type = K_DIV, \
+ 	.index = R9A06G032_##_idx, \
+ 	.source = 1 + R9A06G032_##_src, \
+ 	.name = _n, \
+-	.reg = _reg, \
+-	.div_min = _min, \
+-	.div_max = _max, \
+-	.div_table = { __VA_ARGS__ } \
++	.div.reg = _reg, \
++	.div.min = _min, \
++	.div.max = _max, \
++	.div.table = { __VA_ARGS__ } \
+ }
+ #define D_UGATE(_idx, _n, _src, _g, _g1, _r1, _g2, _r2) { \
+ 	.type = K_DUALGATE, \
+@@ -1063,14 +1066,14 @@ r9a06g032_register_div(struct r9a06g032_priv *clocks,
+ 
+ 	div->clocks = clocks;
+ 	div->index = desc->index;
+-	div->reg = desc->reg;
++	div->reg = desc->div.reg;
+ 	div->hw.init = &init;
+-	div->min = desc->div_min;
+-	div->max = desc->div_max;
++	div->min = desc->div.min;
++	div->max = desc->div.max;
+ 	/* populate (optional) divider table fixed values */
+ 	for (i = 0; i < ARRAY_SIZE(div->table) &&
+-	     i < ARRAY_SIZE(desc->div_table) && desc->div_table[i]; i++) {
+-		div->table[div->table_size++] = desc->div_table[i];
++	     i < ARRAY_SIZE(desc->div.table) && desc->div.table[i]; i++) {
++		div->table[div->table_size++] = desc->div.table[i];
+ 	}
+ 
+ 	clk = clk_register(NULL, &div->hw);
+@@ -1333,7 +1336,8 @@ static int __init r9a06g032_clocks_probe(struct platform_device *pdev)
+ 		case K_FFC:
+ 			clk = clk_register_fixed_factor(NULL, d->name,
+ 							parent_name, 0,
+-							d->mul, d->div);
++							d->ffc.mul,
++							d->ffc.div);
+ 			break;
+ 		case K_GATE:
+ 			clk = r9a06g032_register_gate(clocks, parent_name, d);
+-- 
+2.25.1
+
