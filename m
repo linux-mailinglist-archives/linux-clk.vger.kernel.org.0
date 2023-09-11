@@ -2,49 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C099F79B5BC
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 02:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C27479B0EC
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Sep 2023 01:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355509AbjIKWAH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Sep 2023 18:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S1355527AbjIKWAb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Sep 2023 18:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241260AbjIKPFP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 11:05:15 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AD8125;
-        Mon, 11 Sep 2023 08:05:10 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3DAC433C7;
-        Mon, 11 Sep 2023 15:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694444710;
-        bh=tyMgdI+jcsjOlqKph/FM2gXZQ1CbtHGZQi1NohMGj04=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X/S8GemvIAzQ6aQjqD+aLae8zkLEHf0RCTOwmQJU0Iq6Ydon5kkKbcztqCxLr8e26
-         S0O8/bn/npnLNTslfWgUKqnSNWpajf9r7hIamsQ7XxGJnuoBd+VfbcWe6HBNK8WWAC
-         3G30xn0e+sqqPX+avZQFgrvXBB1VNzvrXWzRABns=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
-        Baoquan He <bhe@redhat.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 048/600] clk: fixed-mmio: make COMMON_CLK_FIXED_MMIO depend on HAS_IOMEM
-Date:   Mon, 11 Sep 2023 15:41:21 +0200
-Message-ID: <20230911134635.014049204@linuxfoundation.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230911134633.619970489@linuxfoundation.org>
-References: <20230911134633.619970489@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+        with ESMTP id S241853AbjIKPQN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Sep 2023 11:16:13 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF34120
+        for <linux-clk@vger.kernel.org>; Mon, 11 Sep 2023 08:16:08 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qfidk-00069m-CE; Mon, 11 Sep 2023 17:15:52 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qfidj-005a7S-FW; Mon, 11 Sep 2023 17:15:51 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qfidh-000igm-W3; Mon, 11 Sep 2023 17:15:50 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] clk: qcom: cbf-msm8996: Convert to platform remove callback returning void
+Date:   Mon, 11 Sep 2023 17:15:48 +0200
+Message-Id: <20230911151548.672485-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2722; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=bX1MW8+1wZBVxTfQwby6K9/t5il+Vswf92hv70gjQVs=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBk/y8jygiIoFpJ0EtdFbFcr0qZwZUSpJLq25Dus aDm2cqAfMeJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZP8vIwAKCRCPgPtYfRL+ TliuB/9a/6uVl/T7KCMAF5D1v0A6Vv0h/saI88s9Pm9AMmyUUkKhCIANj+hOR94EWXR3IoWsK3B qyaqr8h/NHaWqNyGJFw9jXXwg2STqwtaw6h9XYYeuIZnIhSDA4FdmxWTt2TNxxocw8/DsNcA4nG Br4FRGOA+ENf3+5zq6N307M/rwoV2ypY77qqrvqZ/HH7AofUw/sbpjzjBaTGJROgjZ+SgbVPpNN JQGD9FI7umKXpz5c8FdUrPPmYDQDVaByQmrglOxl24dgT+uQtIIdv46u5K/RsJNrrK6WgQi9+HR ssaMnY2VfxN48sFLykVvmhOeF5sZSiGtTFUyR0qiuZ8IuZZL
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,56 +56,75 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-6.1-stable review patch.  If anyone has any objections, please let me know.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is ignored (apart
+from emitting a warning) and this typically results in resource leaks.
+To improve here there is a quest to make the remove callback return
+void. In the first step of this quest all drivers are converted to
+.remove_new() which already returns void. Eventually after all drivers
+are converted, .remove_new() is renamed to .remove().
 
-------------------
+qcom_msm8996_cbf_icc_remove() returned zero unconditionally. After
+changing this function to return void instead, the driver can be
+converted trivially to use .remove_new().
 
-From: Baoquan He <bhe@redhat.com>
-
-[ Upstream commit e7dd44f4f3166db45248414f5df8f615392de47a ]
-
-On s390 systems (aka mainframes), it has classic channel devices for
-networking and permanent storage that are currently even more common
-than PCI devices. Hence it could have a fully functional s390 kernel
-with CONFIG_PCI=n, then the relevant iomem mapping functions
-[including ioremap(), devm_ioremap(), etc.] are not available.
-
-Here let COMMON_CLK_FIXED_MMIO depend on HAS_IOMEM so that it won't
-be built to cause below compiling error if PCI is unset:
-
-------
-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
-clk-fixed-mmio.c:(.text+0x5e): undefined reference to `of_iomap'
-ld: clk-fixed-mmio.c:(.text+0xba): undefined reference to `iounmap'
-------
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org
-Link: https://lore.kernel.org/r/20230707135852.24292-8-bhe@redhat.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/clk/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/qcom/clk-cbf-8996.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 5da82f2bdd211..a5dcc7293a836 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -427,6 +427,7 @@ config COMMON_CLK_BD718XX
- config COMMON_CLK_FIXED_MMIO
- 	bool "Clock driver for Memory Mapped Fixed values"
- 	depends on COMMON_CLK && OF
-+	depends on HAS_IOMEM
- 	help
- 	  Support for Memory Mapped IO Fixed clocks
+diff --git a/drivers/clk/qcom/clk-cbf-8996.c b/drivers/clk/qcom/clk-cbf-8996.c
+index 53f205a3f183..fe24b4abeab4 100644
+--- a/drivers/clk/qcom/clk-cbf-8996.c
++++ b/drivers/clk/qcom/clk-cbf-8996.c
+@@ -250,13 +250,11 @@ static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev, struct cl
+ 	return 0;
+ }
  
+-static int qcom_msm8996_cbf_icc_remove(struct platform_device *pdev)
++static void qcom_msm8996_cbf_icc_remove(struct platform_device *pdev)
+ {
+ 	struct icc_provider *provider = platform_get_drvdata(pdev);
+ 
+ 	icc_clk_unregister(provider);
+-
+-	return 0;
+ }
+ #define qcom_msm8996_cbf_icc_sync_state icc_sync_state
+ #else
+@@ -266,7 +264,7 @@ static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev,  struct c
+ 
+ 	return 0;
+ }
+-#define qcom_msm8996_cbf_icc_remove(pdev) (0)
++#define qcom_msm8996_cbf_icc_remove(pdev) { }
+ #define qcom_msm8996_cbf_icc_sync_state NULL
+ #endif
+ 
+@@ -340,9 +338,9 @@ static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
+ 	return qcom_msm8996_cbf_icc_register(pdev, &cbf_mux.clkr.hw);
+ }
+ 
+-static int qcom_msm8996_cbf_remove(struct platform_device *pdev)
++static void qcom_msm8996_cbf_remove(struct platform_device *pdev)
+ {
+-	return qcom_msm8996_cbf_icc_remove(pdev);
++	qcom_msm8996_cbf_icc_remove(pdev);
+ }
+ 
+ static const struct of_device_id qcom_msm8996_cbf_match_table[] = {
+@@ -354,7 +352,7 @@ MODULE_DEVICE_TABLE(of, qcom_msm8996_cbf_match_table);
+ 
+ static struct platform_driver qcom_msm8996_cbf_driver = {
+ 	.probe = qcom_msm8996_cbf_probe,
+-	.remove = qcom_msm8996_cbf_remove,
++	.remove_new = qcom_msm8996_cbf_remove,
+ 	.driver = {
+ 		.name = "qcom-msm8996-cbf",
+ 		.of_match_table = qcom_msm8996_cbf_match_table,
+
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
 -- 
 2.40.1
-
-
 
