@@ -2,672 +2,165 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DBE79F338
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Sep 2023 22:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1201179F48A
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Sep 2023 00:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjIMUuq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Sep 2023 16:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
+        id S232924AbjIMWCT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Sep 2023 18:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjIMUuo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Sep 2023 16:50:44 -0400
-Received: from out-224.mta0.migadu.com (out-224.mta0.migadu.com [IPv6:2001:41d0:1004:224b::e0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19CE1BCF
-        for <linux-clk@vger.kernel.org>; Wed, 13 Sep 2023 13:50:39 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1694638238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uHOamZj1UN6WWNFefy6jki51San8Pbi0c5UZeE8Ghww=;
-        b=wfip0sVXe3CqpalCrXZtLBiLeEPXNMgsSarvNkJzDSEi0v8ReLLWXYwjOMFHRWmR/RAwEr
-        UxYTQ6Jv4I+s1WPNkuJVFWruSCpQYcuYdnqtRRIo2ivp3KMogg61Nbk/3pn6NoqSkBvbWM
-        t+z4155alvGACl/bSZezxaRzkL7p3ow=
-From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
-To:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@resnulli.us>,
-        Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Jiri Pirko <jiri@nvidia.com>,
-        Milena Olech <milena.olech@intel.com>,
-        Michal Michalik <michal.michalik@intel.com>,
-        Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, netdev@vger.kernel.org,
-        linux-clk@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        intel-wired-lan@lists.osuosl.org
-Subject: [PATCH net-next v8 9/9] mlx5: Implement SyncE support using DPLL infrastructure
-Date:   Wed, 13 Sep 2023 21:49:43 +0100
-Message-Id: <20230913204943.1051233-10-vadim.fedorenko@linux.dev>
-In-Reply-To: <20230913204943.1051233-1-vadim.fedorenko@linux.dev>
-References: <20230913204943.1051233-1-vadim.fedorenko@linux.dev>
+        with ESMTP id S232884AbjIMWCT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Sep 2023 18:02:19 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2048.outbound.protection.outlook.com [40.107.15.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBC5173A;
+        Wed, 13 Sep 2023 15:02:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RGgwN3bZT2nvdwHiHVQq4qSS3+SZ7wCU3pQIFRhh/gI863gcV7Pmmo5lA6bsCBjd1xBwCy3bGGG4YeONkYqKzR2yGAwPZxhtsuLDQ06maXDpWZVMR/Ja/SXtnX0IMKRyIore121k+JYWnczr94WOLTpe6457Mrgsbp9clE8nVnGMCnupDykpvSth9qP6x9x7wP9Gz3OAMpUJQ9YfkiLATaEDajMJghV8061XkCxb/gqhfy/jIxQaXaOLh5zqSXIGe73lQl/nggIm4lXR4zD6GBf3/JvZL0/IsvnKWzQDnpivtZ4a1N0KK1qrb41R+uRuo7Ued0Xm/zIWR6OpkXp7yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dbMzda2NQ1JzH3Btrwq0WIO/fngxccAjDf6vA+aD57Y=;
+ b=M9ShVZeVp99gxeHh1AMh9ehAOgqF0dX6cUReHZe4yz97CCJIi9fw3lJGZDYqxdvN4EAQQbovojm7VSV2Br0il9rrnFSa8+3Bc4merGYcjFGIT21tkjCUVW5dj4jUmSB84UPs969d5venAh+/HHKdAe4FyBwdUPjZwoP5M5WeHWCNr95GZgYLIPtWUTH9dDyeD2IjFWkEEbldWhICRhZ8QzC6WnvlcCqUNGpdOyXR1ezfhPwEXkHjADY9jIrxoHnXJxAl9FrQr2A+G96aZ43x6bA7tniT5YgztoCnVlpbvtHSbVKXPkbM+YDlDHQU8UhMNwIKfa4vHIHIDd0kQQlHqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dbMzda2NQ1JzH3Btrwq0WIO/fngxccAjDf6vA+aD57Y=;
+ b=TC8iZr1VhrGHm95bqAG4CcF2O1XwG5BB/rUrxc07oCm6IJaFfFSQIx7wq2acfZP556K5xL30S7qPREf95nWrJ1nINwlqc5tYQHAlEvWVYalCTP5Rf0Tp6unV7voseVYslGYICUSZma+AxmM5L6pG+qO2WF1t9xV/HPq0IaiHLGU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Wed, 13 Sep
+ 2023 22:02:11 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::568a:57ee:35b5:e454]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::568a:57ee:35b5:e454%3]) with mapi id 15.20.6792.019; Wed, 13 Sep 2023
+ 22:02:11 +0000
+Date:   Thu, 14 Sep 2023 01:02:06 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-phy@lists.infradead.org,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Camelia Alexandra Groza <camelia.groza@nxp.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        =?utf-8?B?RmVybuKUnMOtbmRleg==?= Rojas <noltari@gmail.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>, Li Yang <leoyang.li@nxp.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v14 00/15] phy: Add support for Lynx 10G SerDes
+Message-ID: <20230913220206.ht66go3bmaqvp2r5@skbuf>
+References: <c2f928d2-25f6-0e31-9ab3-9d585968df1b@seco.com>
+ <20230522150010.q5zndfwcuvrb6pg2@skbuf>
+ <22a28a6f-2c84-a6b1-bb57-a269af34c993@seco.com>
+ <20230610222123.mzmfjx7zfw4nh2lo@skbuf>
+ <c702e2b6-cb0f-4ac9-86fe-a220284d45aa@seco.com>
+ <20230612163353.dwouatvqbuo6h4ea@skbuf>
+ <1dd01fe2-08a8-ec2f-1184-a58b2f55ba85@seco.com>
+ <20230613142754.wr5njtjo4tbloqwu@skbuf>
+ <20230810102631.bvozjer3t67r67iy@skbuf>
+ <b1df425f-1ea4-0465-674c-25f3ed9b73d4@seco.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1df425f-1ea4-0465-674c-25f3ed9b73d4@seco.com>
+X-ClientProxiedBy: AS4P190CA0068.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:656::28) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PA4PR04MB9366:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bc96ce8-4a98-40ee-817c-08dbb4a514a8
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HEY3lbNzjEbtgniOXLgwH2j4j5pY/dzrGVgV5qljbT5Zl9153Ld3eUO+Js5tW2Wzfx0iSY859G0clxJ4Wt/YN0XR0qzeLtc+l9cFc1fZpc1OW7ChCxponvZtKCxzaChMu9izaB3AlkxzGQXChCeGQv1+KMqSBIFf+4cRTZM2vxb4rRJfCWEf+//o3nG2IJyQdrXSrzOSA7RAPFWh0ZpEEMrIjsFKPFqryBgz4hyf9ME+240FSIKfkjozXkOiX3IRDZVeZqjc8oToh7+SlznmUHj9kitLMlDckUe/Ezw23ONFNvnXxBaQecADDQVKMUJIMtYzQDfibu1Bi0daxQFxuAHaDe1RJKmej0R9gHjxmglRkkpRXyfn5dXMZdInuJo0OvWqa2n3yADt0Rltt2gGiTLXsKwq9RJAkYrhz60I3YRwCR+uv+8yY2S76lyEjG4d59PpD+bvhB0pu/awS9oLJM4j5iYkqPqalE+56T3f9asdrFdidrRndhL4YcC65NXhLtLxJxuFQ5lCNjmkOk1ukMgP/DtaXWzfHuR/pNN6QRI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(136003)(376002)(39860400002)(366004)(346002)(396003)(1800799009)(186009)(451199024)(6486002)(6506007)(6512007)(9686003)(6666004)(83380400001)(86362001)(33716001)(38100700002)(1076003)(26005)(44832011)(54906003)(7416002)(66556008)(66476007)(6916009)(41300700001)(316002)(66946007)(2906002)(8936002)(4326008)(8676002)(966005)(478600001)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LabR4Dopp/SGYX9L4Zg4esSLwVUSlGrznrlcezHGiqwvc1bcpWdbfCELqFGX?=
+ =?us-ascii?Q?svWmYyQxVTNauVgxOjfGXNJhEJ4WeOozoShs1AakQaRDH4H55GMkHYDtp/r2?=
+ =?us-ascii?Q?LtgKCujxykT15Oh+rNM7LaRyCvClNJQnChLNV6LQqkALk60LSLgVbpmCreJZ?=
+ =?us-ascii?Q?cBPCYelwWonbuKYZ9EcCNeUOpVjqEPlCxbQjdIV6QClFVbawmwWN2BnqhxYH?=
+ =?us-ascii?Q?g4/uDD6WYxOAl+19FJz+HfBoRVyQdbP6uO46lVaLrR+Pc8+XY/AnwymRENlp?=
+ =?us-ascii?Q?8XFBt7fFb/mq+/dgMW6pv/RqJHoixTGj6CLffV7RxIfuyewc5q1wycMqaFWr?=
+ =?us-ascii?Q?R8yrrV+OfZvU54/h9tU0EBionlIag7UL1umrYKwcFpozC6QyxpVinyYLba+v?=
+ =?us-ascii?Q?XyJy92R4uieaju4cDE2O/DHzW09H78wFNHzC9f6i2pAG5wnQaJl+d7Ew7GG6?=
+ =?us-ascii?Q?T1Afmk45ThcztXvSnan3HoPc2qnkmNbSEZ0pB2lZX/ul1KO/n0otL1hYqHow?=
+ =?us-ascii?Q?1KlxAVjbzP0Un3MvBnS++onyY5IDllTWyyYFeHDM5+gRza2CctB5JyvdcOQI?=
+ =?us-ascii?Q?tzL9wYD8Piuj1RALppQ7YscTzqwsSWGLqmn1lyL8R/AI3XxqqqSfvSXNdMsV?=
+ =?us-ascii?Q?DVHmLC+o52cTv5x4njxqd0s+54jRyVL8Q4YlRSfbEyQYqAj2YUb4zJGQu17I?=
+ =?us-ascii?Q?nv+N7R5K5XB0mQn8N68HnBR8wcaOwAjhSuC8wiZA4urdyHQPFTpP+Npp2EZ/?=
+ =?us-ascii?Q?rOI+ZMAj6peetRvoi0u6Nkgvspspnj5UGA/ucNaLaUWa7aw/PA/fxRC3XGGP?=
+ =?us-ascii?Q?+FLD8J2Wb/X2gTZ1RMwnLeFC3GXblli0stooOLiJM/HK1lM1Wr0cFh88FZoN?=
+ =?us-ascii?Q?46b1nQ+upa0xmf8Mg3g5zeYNvOhfgoPX870KB6m6TQ0s1T17zd+UR29XadEM?=
+ =?us-ascii?Q?gRUMhuhqeutBXYB0uI8+rvjqxE+htSsTBU9lNtwReMfMyzJaaqbLetkG8jLy?=
+ =?us-ascii?Q?yXIG6byIBkq4/rcOXllemSvM6E8YTaOFQa3eQ7+gzj79S7N1ll/Asv/slKSE?=
+ =?us-ascii?Q?Tp4wiEkNc/z/d2xtzgJz0ch3JVpzQj7dT6Mhqo98swx+0A+5G6xf7WiGgsVG?=
+ =?us-ascii?Q?AyyLp8kDFSG+lXxrub0T546Bfv7ofcf9PqhKbljnP0wyXg1udB4C6Q5hqDfa?=
+ =?us-ascii?Q?sdJ3jBDiqRJBigMSZ/etgD/Hi9ALNQ7tXG7Htk9sgj2hI0kbK/vmAStV1d9f?=
+ =?us-ascii?Q?rgHJhVeQwUNgkupJqjrHMBYqaSzKIahNNmQdJavp00r5ZZadHfHTtThvDXPt?=
+ =?us-ascii?Q?lz0fy9OcoDZMoxWejiKIch7WHuqYtCgzV5bWsGxwfmpyM54OgiZBLCa7eARV?=
+ =?us-ascii?Q?WNu79PCJns4sfcWTReZg+NyBs9atg5q8Ey1EIKC8ngLGBIFIJe1uQhM81rbd?=
+ =?us-ascii?Q?fcqJTDp4SS8iww6p0PkswGj5D5f3vB8z+1DH6raHupAwwpJ5aWYcJKCCsrih?=
+ =?us-ascii?Q?MFmfi73mbQMvS2LKjVwia/Cv4LmeeIoWcNmg51xhSdkWqWLkd0bXmZjQcpyo?=
+ =?us-ascii?Q?Yirs2biIjDDS4ytASmiNIcA2RfT6Z6mekh2qIsM2hqSI8NoXSah8dF2DX2rm?=
+ =?us-ascii?Q?IA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bc96ce8-4a98-40ee-817c-08dbb4a514a8
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 22:02:11.4900
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6ofDbZiMr5gOXKhLXWv7w6zOT+zfsWSfmdStNCesBAyo3FsdNy067Tb3OFsAyrDXEQidrS+t5kacqcwn/XIlUA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9366
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Jiri Pirko <jiri@nvidia.com>
+Hi Sean,
 
-Implement SyncE support using newly introduced DPLL support.
-Make sure that each PFs/VFs/SFs probed with appropriate capability
-will spawn a dpll auxiliary device and register appropriate dpll device
-and pin instances.
+On Thu, Aug 10, 2023 at 03:58:36PM -0400, Sean Anderson wrote:
+> I can look into doing this. It will be in my free time, so it will
+> likely be a bit before I can update this series.
 
-Signed-off-by: Jiri Pirko <jiri@nvidia.com>
-Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
----
-v5->v6:
-- rename DPLL_PIN_CAPS_* -> DPLL_PIN_CAPABILITIES_*
+I was expecting you'd ask some clarification questions about the RCW
+override procedure that I've informally described over email, so I guess
+you haven't spent any more time on this.
 
- .../net/ethernet/mellanox/mlx5/core/Kconfig   |   8 +
- .../net/ethernet/mellanox/mlx5/core/Makefile  |   3 +
- drivers/net/ethernet/mellanox/mlx5/core/dev.c |  17 +
- .../net/ethernet/mellanox/mlx5/core/dpll.c    | 432 ++++++++++++++++++
- include/linux/mlx5/driver.h                   |   2 +
- include/linux/mlx5/mlx5_ifc.h                 |  59 ++-
- 6 files changed, 520 insertions(+), 1 deletion(-)
- create mode 100644 drivers/net/ethernet/mellanox/mlx5/core/dpll.c
+I'm letting you know that very soon, I will have to start my work on
+porting the backplane driver posted here:
+https://patchwork.kernel.org/project/netdevbpf/cover/20230817150644.3605105-1-vladimir.oltean@nxp.com/
+to the Lynx 10G SoCs. And for that, I need a SerDes driver as a base :)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/Kconfig b/drivers/net/ethernet/mellanox/mlx5/core/Kconfig
-index c4f4de82e29e..685335832a93 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/Kconfig
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/Kconfig
-@@ -189,3 +189,11 @@ config MLX5_SF_MANAGER
- 	port is managed through devlink.  A subfunction supports RDMA, netdevice
- 	and vdpa device. It is similar to a SRIOV VF but it doesn't require
- 	SRIOV support.
-+
-+config MLX5_DPLL
-+	tristate "Mellanox 5th generation network adapters (ConnectX series) DPLL support"
-+	depends on NETDEVICES && ETHERNET && PCI && MLX5_CORE
-+	select DPLL
-+	help
-+	  DPLL support in Mellanox Technologies ConnectX NICs.
-+
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/Makefile b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
-index 7e94caca4888..c44870b175f9 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/Makefile
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/Makefile
-@@ -128,3 +128,6 @@ mlx5_core-$(CONFIG_MLX5_SF) += sf/vhca_event.o sf/dev/dev.o sf/dev/driver.o irq_
- # SF manager
- #
- mlx5_core-$(CONFIG_MLX5_SF_MANAGER) += sf/cmd.o sf/hw_table.o sf/devlink.o
-+
-+obj-$(CONFIG_MLX5_DPLL) += mlx5_dpll.o
-+mlx5_dpll-y :=	dpll.o
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
-index 7909f378dc93..1fc03480c2ff 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/dev.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
-@@ -206,6 +206,19 @@ static bool is_ib_enabled(struct mlx5_core_dev *dev)
- 	return err ? false : val.vbool;
- }
- 
-+static bool is_dpll_supported(struct mlx5_core_dev *dev)
-+{
-+	if (!IS_ENABLED(CONFIG_MLX5_DPLL))
-+		return false;
-+
-+	if (!MLX5_CAP_MCAM_REG2(dev, synce_registers)) {
-+		mlx5_core_warn(dev, "Missing SyncE capability\n");
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- enum {
- 	MLX5_INTERFACE_PROTOCOL_ETH,
- 	MLX5_INTERFACE_PROTOCOL_ETH_REP,
-@@ -215,6 +228,8 @@ enum {
- 	MLX5_INTERFACE_PROTOCOL_MPIB,
- 
- 	MLX5_INTERFACE_PROTOCOL_VNET,
-+
-+	MLX5_INTERFACE_PROTOCOL_DPLL,
- };
- 
- static const struct mlx5_adev_device {
-@@ -237,6 +252,8 @@ static const struct mlx5_adev_device {
- 					   .is_supported = &is_ib_rep_supported },
- 	[MLX5_INTERFACE_PROTOCOL_MPIB] = { .suffix = "multiport",
- 					   .is_supported = &is_mp_supported },
-+	[MLX5_INTERFACE_PROTOCOL_DPLL] = { .suffix = "dpll",
-+					   .is_supported = &is_dpll_supported },
- };
- 
- int mlx5_adev_idx_alloc(void)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dpll.c b/drivers/net/ethernet/mellanox/mlx5/core/dpll.c
-new file mode 100644
-index 000000000000..74f0c7867120
---- /dev/null
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/dpll.c
-@@ -0,0 +1,432 @@
-+// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
-+/* Copyright (c) 2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved. */
-+
-+#include <linux/dpll.h>
-+#include <linux/mlx5/driver.h>
-+
-+/* This structure represents a reference to DPLL, one is created
-+ * per mdev instance.
-+ */
-+struct mlx5_dpll {
-+	struct dpll_device *dpll;
-+	struct dpll_pin *dpll_pin;
-+	struct mlx5_core_dev *mdev;
-+	struct workqueue_struct *wq;
-+	struct delayed_work work;
-+	struct {
-+		bool valid;
-+		enum dpll_lock_status lock_status;
-+		enum dpll_pin_state pin_state;
-+	} last;
-+	struct notifier_block mdev_nb;
-+	struct net_device *tracking_netdev;
-+};
-+
-+static int mlx5_dpll_clock_id_get(struct mlx5_core_dev *mdev, u64 *clock_id)
-+{
-+	u32 out[MLX5_ST_SZ_DW(msecq_reg)] = {};
-+	u32 in[MLX5_ST_SZ_DW(msecq_reg)] = {};
-+	int err;
-+
-+	err = mlx5_core_access_reg(mdev, in, sizeof(in), out, sizeof(out),
-+				   MLX5_REG_MSECQ, 0, 0);
-+	if (err)
-+		return err;
-+	*clock_id = MLX5_GET64(msecq_reg, out, local_clock_identity);
-+	return 0;
-+}
-+
-+static int
-+mlx5_dpll_synce_status_get(struct mlx5_core_dev *mdev,
-+			   enum mlx5_msees_admin_status *admin_status,
-+			   enum mlx5_msees_oper_status *oper_status,
-+			   bool *ho_acq)
-+{
-+	u32 out[MLX5_ST_SZ_DW(msees_reg)] = {};
-+	u32 in[MLX5_ST_SZ_DW(msees_reg)] = {};
-+	int err;
-+
-+	err = mlx5_core_access_reg(mdev, in, sizeof(in), out, sizeof(out),
-+				   MLX5_REG_MSEES, 0, 0);
-+	if (err)
-+		return err;
-+	if (admin_status)
-+		*admin_status = MLX5_GET(msees_reg, out, admin_status);
-+	*oper_status = MLX5_GET(msees_reg, out, oper_status);
-+	if (ho_acq)
-+		*ho_acq = MLX5_GET(msees_reg, out, ho_acq);
-+	return 0;
-+}
-+
-+static int
-+mlx5_dpll_synce_status_set(struct mlx5_core_dev *mdev,
-+			   enum mlx5_msees_admin_status admin_status)
-+{
-+	u32 out[MLX5_ST_SZ_DW(msees_reg)] = {};
-+	u32 in[MLX5_ST_SZ_DW(msees_reg)] = {};
-+
-+	MLX5_SET(msees_reg, in, field_select,
-+		 MLX5_MSEES_FIELD_SELECT_ENABLE |
-+		 MLX5_MSEES_FIELD_SELECT_ADMIN_STATUS);
-+	MLX5_SET(msees_reg, in, admin_status, admin_status);
-+	return mlx5_core_access_reg(mdev, in, sizeof(in), out, sizeof(out),
-+				    MLX5_REG_MSEES, 0, 1);
-+}
-+
-+static enum dpll_lock_status
-+mlx5_dpll_lock_status_get(enum mlx5_msees_oper_status oper_status, bool ho_acq)
-+{
-+	switch (oper_status) {
-+	case MLX5_MSEES_OPER_STATUS_SELF_TRACK:
-+		fallthrough;
-+	case MLX5_MSEES_OPER_STATUS_OTHER_TRACK:
-+		return ho_acq ? DPLL_LOCK_STATUS_LOCKED_HO_ACQ :
-+				DPLL_LOCK_STATUS_LOCKED;
-+	case MLX5_MSEES_OPER_STATUS_HOLDOVER:
-+		fallthrough;
-+	case MLX5_MSEES_OPER_STATUS_FAIL_HOLDOVER:
-+		return DPLL_LOCK_STATUS_HOLDOVER;
-+	default:
-+		return DPLL_LOCK_STATUS_UNLOCKED;
-+	}
-+}
-+
-+static enum dpll_pin_state
-+mlx5_dpll_pin_state_get(enum mlx5_msees_admin_status admin_status,
-+			enum mlx5_msees_oper_status oper_status)
-+{
-+	return (admin_status == MLX5_MSEES_ADMIN_STATUS_TRACK &&
-+		(oper_status == MLX5_MSEES_OPER_STATUS_SELF_TRACK ||
-+		 oper_status == MLX5_MSEES_OPER_STATUS_OTHER_TRACK)) ?
-+	       DPLL_PIN_STATE_CONNECTED : DPLL_PIN_STATE_DISCONNECTED;
-+}
-+
-+static int mlx5_dpll_device_lock_status_get(const struct dpll_device *dpll,
-+					    void *priv,
-+					    enum dpll_lock_status *status,
-+					    struct netlink_ext_ack *extack)
-+{
-+	enum mlx5_msees_oper_status oper_status;
-+	struct mlx5_dpll *mdpll = priv;
-+	bool ho_acq;
-+	int err;
-+
-+	err = mlx5_dpll_synce_status_get(mdpll->mdev, NULL,
-+					 &oper_status, &ho_acq);
-+	if (err)
-+		return err;
-+
-+	*status = mlx5_dpll_lock_status_get(oper_status, ho_acq);
-+	return 0;
-+}
-+
-+static int mlx5_dpll_device_mode_get(const struct dpll_device *dpll,
-+				     void *priv,
-+				     u32 *mode, struct netlink_ext_ack *extack)
-+{
-+	*mode = DPLL_MODE_MANUAL;
-+	return 0;
-+}
-+
-+static bool mlx5_dpll_device_mode_supported(const struct dpll_device *dpll,
-+					    void *priv,
-+					    enum dpll_mode mode,
-+					    struct netlink_ext_ack *extack)
-+{
-+	return mode == DPLL_MODE_MANUAL;
-+}
-+
-+static const struct dpll_device_ops mlx5_dpll_device_ops = {
-+	.lock_status_get = mlx5_dpll_device_lock_status_get,
-+	.mode_get = mlx5_dpll_device_mode_get,
-+	.mode_supported = mlx5_dpll_device_mode_supported,
-+};
-+
-+static int mlx5_dpll_pin_direction_get(const struct dpll_pin *pin,
-+				       void *pin_priv,
-+				       const struct dpll_device *dpll,
-+				       void *dpll_priv,
-+				       enum dpll_pin_direction *direction,
-+				       struct netlink_ext_ack *extack)
-+{
-+	*direction = DPLL_PIN_DIRECTION_INPUT;
-+	return 0;
-+}
-+
-+static int mlx5_dpll_state_on_dpll_get(const struct dpll_pin *pin,
-+				       void *pin_priv,
-+				       const struct dpll_device *dpll,
-+				       void *dpll_priv,
-+				       enum dpll_pin_state *state,
-+				       struct netlink_ext_ack *extack)
-+{
-+	enum mlx5_msees_admin_status admin_status;
-+	enum mlx5_msees_oper_status oper_status;
-+	struct mlx5_dpll *mdpll = pin_priv;
-+	int err;
-+
-+	err = mlx5_dpll_synce_status_get(mdpll->mdev, &admin_status,
-+					 &oper_status, NULL);
-+	if (err)
-+		return err;
-+	*state = mlx5_dpll_pin_state_get(admin_status, oper_status);
-+	return 0;
-+}
-+
-+static int mlx5_dpll_state_on_dpll_set(const struct dpll_pin *pin,
-+				       void *pin_priv,
-+				       const struct dpll_device *dpll,
-+				       void *dpll_priv,
-+				       enum dpll_pin_state state,
-+				       struct netlink_ext_ack *extack)
-+{
-+	struct mlx5_dpll *mdpll = pin_priv;
-+
-+	return mlx5_dpll_synce_status_set(mdpll->mdev,
-+					  state == DPLL_PIN_STATE_CONNECTED ?
-+					  MLX5_MSEES_ADMIN_STATUS_TRACK :
-+					  MLX5_MSEES_ADMIN_STATUS_FREE_RUNNING);
-+}
-+
-+static const struct dpll_pin_ops mlx5_dpll_pins_ops = {
-+	.direction_get = mlx5_dpll_pin_direction_get,
-+	.state_on_dpll_get = mlx5_dpll_state_on_dpll_get,
-+	.state_on_dpll_set = mlx5_dpll_state_on_dpll_set,
-+};
-+
-+static const struct dpll_pin_properties mlx5_dpll_pin_properties = {
-+	.type = DPLL_PIN_TYPE_SYNCE_ETH_PORT,
-+	.capabilities = DPLL_PIN_CAPABILITIES_STATE_CAN_CHANGE,
-+};
-+
-+#define MLX5_DPLL_PERIODIC_WORK_INTERVAL 500 /* ms */
-+
-+static void mlx5_dpll_periodic_work_queue(struct mlx5_dpll *mdpll)
-+{
-+	queue_delayed_work(mdpll->wq, &mdpll->work,
-+			   msecs_to_jiffies(MLX5_DPLL_PERIODIC_WORK_INTERVAL));
-+}
-+
-+static void mlx5_dpll_periodic_work(struct work_struct *work)
-+{
-+	struct mlx5_dpll *mdpll = container_of(work, struct mlx5_dpll,
-+					       work.work);
-+	enum mlx5_msees_admin_status admin_status;
-+	enum mlx5_msees_oper_status oper_status;
-+	enum dpll_lock_status lock_status;
-+	enum dpll_pin_state pin_state;
-+	bool ho_acq;
-+	int err;
-+
-+	err = mlx5_dpll_synce_status_get(mdpll->mdev, &admin_status,
-+					 &oper_status, &ho_acq);
-+	if (err)
-+		goto err_out;
-+	lock_status = mlx5_dpll_lock_status_get(oper_status, ho_acq);
-+	pin_state = mlx5_dpll_pin_state_get(admin_status, oper_status);
-+
-+	if (!mdpll->last.valid)
-+		goto invalid_out;
-+
-+	if (mdpll->last.lock_status != lock_status)
-+		dpll_device_change_ntf(mdpll->dpll);
-+	if (mdpll->last.pin_state != pin_state)
-+		dpll_pin_change_ntf(mdpll->dpll_pin);
-+
-+invalid_out:
-+	mdpll->last.lock_status = lock_status;
-+	mdpll->last.pin_state = pin_state;
-+	mdpll->last.valid = true;
-+err_out:
-+	mlx5_dpll_periodic_work_queue(mdpll);
-+}
-+
-+static void mlx5_dpll_netdev_dpll_pin_set(struct mlx5_dpll *mdpll,
-+					  struct net_device *netdev)
-+{
-+	if (mdpll->tracking_netdev)
-+		return;
-+	netdev_dpll_pin_set(netdev, mdpll->dpll_pin);
-+	mdpll->tracking_netdev = netdev;
-+}
-+
-+static void mlx5_dpll_netdev_dpll_pin_clear(struct mlx5_dpll *mdpll)
-+{
-+	if (!mdpll->tracking_netdev)
-+		return;
-+	netdev_dpll_pin_clear(mdpll->tracking_netdev);
-+	mdpll->tracking_netdev = NULL;
-+}
-+
-+static int mlx5_dpll_mdev_notifier_event(struct notifier_block *nb,
-+					 unsigned long event, void *data)
-+{
-+	struct mlx5_dpll *mdpll = container_of(nb, struct mlx5_dpll, mdev_nb);
-+	struct net_device *netdev = data;
-+
-+	switch (event) {
-+	case MLX5_DRIVER_EVENT_UPLINK_NETDEV:
-+		if (netdev)
-+			mlx5_dpll_netdev_dpll_pin_set(mdpll, netdev);
-+		else
-+			mlx5_dpll_netdev_dpll_pin_clear(mdpll);
-+		break;
-+	default:
-+		return NOTIFY_DONE;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
-+static void mlx5_dpll_mdev_netdev_track(struct mlx5_dpll *mdpll,
-+					struct mlx5_core_dev *mdev)
-+{
-+	mdpll->mdev_nb.notifier_call = mlx5_dpll_mdev_notifier_event;
-+	mlx5_blocking_notifier_register(mdev, &mdpll->mdev_nb);
-+	mlx5_core_uplink_netdev_event_replay(mdev);
-+}
-+
-+static void mlx5_dpll_mdev_netdev_untrack(struct mlx5_dpll *mdpll,
-+					  struct mlx5_core_dev *mdev)
-+{
-+	mlx5_blocking_notifier_unregister(mdev, &mdpll->mdev_nb);
-+	mlx5_dpll_netdev_dpll_pin_clear(mdpll);
-+}
-+
-+static int mlx5_dpll_probe(struct auxiliary_device *adev,
-+			   const struct auxiliary_device_id *id)
-+{
-+	struct mlx5_adev *edev = container_of(adev, struct mlx5_adev, adev);
-+	struct mlx5_core_dev *mdev = edev->mdev;
-+	struct mlx5_dpll *mdpll;
-+	u64 clock_id;
-+	int err;
-+
-+	err = mlx5_dpll_synce_status_set(mdev,
-+					 MLX5_MSEES_ADMIN_STATUS_FREE_RUNNING);
-+	if (err)
-+		return err;
-+
-+	err = mlx5_dpll_clock_id_get(mdev, &clock_id);
-+	if (err)
-+		return err;
-+
-+	mdpll = kzalloc(sizeof(*mdpll), GFP_KERNEL);
-+	if (!mdpll)
-+		return -ENOMEM;
-+	mdpll->mdev = mdev;
-+	auxiliary_set_drvdata(adev, mdpll);
-+
-+	/* Multiple mdev instances might share one DPLL device. */
-+	mdpll->dpll = dpll_device_get(clock_id, 0, THIS_MODULE);
-+	if (IS_ERR(mdpll->dpll)) {
-+		err = PTR_ERR(mdpll->dpll);
-+		goto err_free_mdpll;
-+	}
-+
-+	err = dpll_device_register(mdpll->dpll, DPLL_TYPE_EEC,
-+				   &mlx5_dpll_device_ops, mdpll);
-+	if (err)
-+		goto err_put_dpll_device;
-+
-+	/* Multiple mdev instances might share one DPLL pin. */
-+	mdpll->dpll_pin = dpll_pin_get(clock_id, mlx5_get_dev_index(mdev),
-+				       THIS_MODULE, &mlx5_dpll_pin_properties);
-+	if (IS_ERR(mdpll->dpll_pin)) {
-+		err = PTR_ERR(mdpll->dpll_pin);
-+		goto err_unregister_dpll_device;
-+	}
-+
-+	err = dpll_pin_register(mdpll->dpll, mdpll->dpll_pin,
-+				&mlx5_dpll_pins_ops, mdpll);
-+	if (err)
-+		goto err_put_dpll_pin;
-+
-+	mdpll->wq = create_singlethread_workqueue("mlx5_dpll");
-+	if (!mdpll->wq) {
-+		err = -ENOMEM;
-+		goto err_unregister_dpll_pin;
-+	}
-+
-+	mlx5_dpll_mdev_netdev_track(mdpll, mdev);
-+
-+	INIT_DELAYED_WORK(&mdpll->work, &mlx5_dpll_periodic_work);
-+	mlx5_dpll_periodic_work_queue(mdpll);
-+
-+	return 0;
-+
-+err_unregister_dpll_pin:
-+	dpll_pin_unregister(mdpll->dpll, mdpll->dpll_pin,
-+			    &mlx5_dpll_pins_ops, mdpll);
-+err_put_dpll_pin:
-+	dpll_pin_put(mdpll->dpll_pin);
-+err_unregister_dpll_device:
-+	dpll_device_unregister(mdpll->dpll, &mlx5_dpll_device_ops, mdpll);
-+err_put_dpll_device:
-+	dpll_device_put(mdpll->dpll);
-+err_free_mdpll:
-+	kfree(mdpll);
-+	return err;
-+}
-+
-+static void mlx5_dpll_remove(struct auxiliary_device *adev)
-+{
-+	struct mlx5_dpll *mdpll = auxiliary_get_drvdata(adev);
-+	struct mlx5_core_dev *mdev = mdpll->mdev;
-+
-+	cancel_delayed_work(&mdpll->work);
-+	mlx5_dpll_mdev_netdev_untrack(mdpll, mdev);
-+	destroy_workqueue(mdpll->wq);
-+	dpll_pin_unregister(mdpll->dpll, mdpll->dpll_pin,
-+			    &mlx5_dpll_pins_ops, mdpll);
-+	dpll_pin_put(mdpll->dpll_pin);
-+	dpll_device_unregister(mdpll->dpll, &mlx5_dpll_device_ops, mdpll);
-+	dpll_device_put(mdpll->dpll);
-+	kfree(mdpll);
-+
-+	mlx5_dpll_synce_status_set(mdev,
-+				   MLX5_MSEES_ADMIN_STATUS_FREE_RUNNING);
-+}
-+
-+static int mlx5_dpll_suspend(struct auxiliary_device *adev, pm_message_t state)
-+{
-+	return 0;
-+}
-+
-+static int mlx5_dpll_resume(struct auxiliary_device *adev)
-+{
-+	return 0;
-+}
-+
-+static const struct auxiliary_device_id mlx5_dpll_id_table[] = {
-+	{ .name = MLX5_ADEV_NAME ".dpll", },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(auxiliary, mlx5_dpll_id_table);
-+
-+static struct auxiliary_driver mlx5_dpll_driver = {
-+	.name = "dpll",
-+	.probe = mlx5_dpll_probe,
-+	.remove = mlx5_dpll_remove,
-+	.suspend = mlx5_dpll_suspend,
-+	.resume = mlx5_dpll_resume,
-+	.id_table = mlx5_dpll_id_table,
-+};
-+
-+static int __init mlx5_dpll_init(void)
-+{
-+	return auxiliary_driver_register(&mlx5_dpll_driver);
-+}
-+
-+static void __exit mlx5_dpll_exit(void)
-+{
-+	auxiliary_driver_unregister(&mlx5_dpll_driver);
-+}
-+
-+module_init(mlx5_dpll_init);
-+module_exit(mlx5_dpll_exit);
-+
-+MODULE_AUTHOR("Jiri Pirko <jiri@nvidia.com>");
-+MODULE_DESCRIPTION("Mellanox 5th generation network adapters (ConnectX series) DPLL driver");
-+MODULE_LICENSE("Dual BSD/GPL");
-diff --git a/include/linux/mlx5/driver.h b/include/linux/mlx5/driver.h
-index 3033bbaeac81..92434814c855 100644
---- a/include/linux/mlx5/driver.h
-+++ b/include/linux/mlx5/driver.h
-@@ -155,6 +155,8 @@ enum {
- 	MLX5_REG_MCC		 = 0x9062,
- 	MLX5_REG_MCDA		 = 0x9063,
- 	MLX5_REG_MCAM		 = 0x907f,
-+	MLX5_REG_MSECQ		 = 0x9155,
-+	MLX5_REG_MSEES		 = 0x9156,
- 	MLX5_REG_MIRC		 = 0x9162,
- 	MLX5_REG_SBCAM		 = 0xB01F,
- 	MLX5_REG_RESOURCE_DUMP   = 0xC000,
-diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
-index fc3db401f8a2..dd8421d021cf 100644
---- a/include/linux/mlx5/mlx5_ifc.h
-+++ b/include/linux/mlx5/mlx5_ifc.h
-@@ -10176,7 +10176,9 @@ struct mlx5_ifc_mcam_access_reg_bits2 {
- 	u8         mirc[0x1];
- 	u8         regs_97_to_96[0x2];
- 
--	u8         regs_95_to_64[0x20];
-+	u8         regs_95_to_87[0x09];
-+	u8         synce_registers[0x2];
-+	u8         regs_84_to_64[0x15];
- 
- 	u8         regs_63_to_32[0x20];
- 
-@@ -12549,4 +12551,59 @@ struct mlx5_ifc_modify_page_track_obj_in_bits {
- 	struct mlx5_ifc_page_track_bits obj_context;
- };
- 
-+struct mlx5_ifc_msecq_reg_bits {
-+	u8         reserved_at_0[0x20];
-+
-+	u8         reserved_at_20[0x12];
-+	u8         network_option[0x2];
-+	u8         local_ssm_code[0x4];
-+	u8         local_enhanced_ssm_code[0x8];
-+
-+	u8         local_clock_identity[0x40];
-+
-+	u8         reserved_at_80[0x180];
-+};
-+
-+enum {
-+	MLX5_MSEES_FIELD_SELECT_ENABLE			= BIT(0),
-+	MLX5_MSEES_FIELD_SELECT_ADMIN_STATUS		= BIT(1),
-+	MLX5_MSEES_FIELD_SELECT_ADMIN_FREQ_MEASURE	= BIT(2),
-+};
-+
-+enum mlx5_msees_admin_status {
-+	MLX5_MSEES_ADMIN_STATUS_FREE_RUNNING		= 0x0,
-+	MLX5_MSEES_ADMIN_STATUS_TRACK			= 0x1,
-+};
-+
-+enum mlx5_msees_oper_status {
-+	MLX5_MSEES_OPER_STATUS_FREE_RUNNING		= 0x0,
-+	MLX5_MSEES_OPER_STATUS_SELF_TRACK		= 0x1,
-+	MLX5_MSEES_OPER_STATUS_OTHER_TRACK		= 0x2,
-+	MLX5_MSEES_OPER_STATUS_HOLDOVER			= 0x3,
-+	MLX5_MSEES_OPER_STATUS_FAIL_HOLDOVER		= 0x4,
-+	MLX5_MSEES_OPER_STATUS_FAIL_FREE_RUNNING	= 0x5,
-+};
-+
-+struct mlx5_ifc_msees_reg_bits {
-+	u8         reserved_at_0[0x8];
-+	u8         local_port[0x8];
-+	u8         pnat[0x2];
-+	u8         lp_msb[0x2];
-+	u8         reserved_at_14[0xc];
-+
-+	u8         field_select[0x20];
-+
-+	u8         admin_status[0x4];
-+	u8         oper_status[0x4];
-+	u8         ho_acq[0x1];
-+	u8         reserved_at_49[0xc];
-+	u8         admin_freq_measure[0x1];
-+	u8         oper_freq_measure[0x1];
-+	u8         failure_reason[0x9];
-+
-+	u8         frequency_diff[0x20];
-+
-+	u8         reserved_at_80[0x180];
-+};
-+
- #endif /* MLX5_IFC_H */
--- 
-2.27.0
+I was wondering how inclined are you to respond positively to the
+feedback that the lynx-10g driver should have a look and feel as close
+as possible to lynx-28g, given that they're very similar.
 
+Because internally within NXP, we do have a version of the lynx-10g
+driver which is contemporary with lynx-28g from mainline, but we didn't
+publish it because protocol changes didn't work (for the same reason
+that they don't work with your driver). With that driver, you can think
+of the feedback about the similar look and feel as being "implicitly applied"
+(being written by the same author), so I'm starting to consider more and
+more seriously the option of basing my work on that instead of your v14
+(on which I'd need to spend extra time to modify the dt-bindings with PCCRs,
+concept of lane groups, concept of PLL CCF driver, etc).
+
+What are your thoughts?
