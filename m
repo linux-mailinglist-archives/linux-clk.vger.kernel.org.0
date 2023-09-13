@@ -2,118 +2,290 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A3679E2B6
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Sep 2023 10:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6991679E3EF
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Sep 2023 11:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239134AbjIMIzk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Sep 2023 04:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S238981AbjIMJkP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Sep 2023 05:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239132AbjIMIzk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Sep 2023 04:55:40 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C972F199E
-        for <linux-clk@vger.kernel.org>; Wed, 13 Sep 2023 01:55:35 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-307d20548adso6644530f8f.0
-        for <linux-clk@vger.kernel.org>; Wed, 13 Sep 2023 01:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694595334; x=1695200134; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3s4XTmZuXvVvkm0V75pftgs9YXVxmixMmIhKraOPVhI=;
-        b=UzS8VAEcinFpI6HSw2/LRpJNhK13qDFwkRBdbLq0CYo54n4xofFgWo+oF0gtkGzKR7
-         QHv6Ogre5NkbuTHjCuE6BlIaqpWi3s3pdh0ArOabtC+EARy80CfPde99aszfTztAFLXN
-         nMfd4pQ+nvJaL88vSRan6Z27A5zvz/XsDh/k3zm10aDRQfiKdHPB6GT59L/0tm+o1qT+
-         jYB04l8Oe2xNIOlu+wwxR/4zP2DNboDwaIj8BgFYXyjC/OJ0vO9dI7d5iRAiffIxY/gf
-         aAbl6OKonhhvKRwo++J2WKoRZuXztXLBd9PdrDoQFBNI+G1+J8YNtBcSazoLQBjUC5Ob
-         lm5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694595334; x=1695200134;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3s4XTmZuXvVvkm0V75pftgs9YXVxmixMmIhKraOPVhI=;
-        b=UFLWYaYWFJREbShT2QTINCUBjDZVyT1UfYFVVoMvAcSTBS15LuA6LmN1RbwuI8a/gO
-         K9zteaWjDg5BGN3IOba/RJDNpnE6nIMO8nygReJQEvlAC5a+I8bTCzW4SuN0lAG5kdRz
-         Qv3YnEWd6alMqHoqK9M/xxCrUo4XS7aKAIowGBBwjvEa9/KsHCZFB2rTkQ9TdUuHYtHN
-         uYsEiuao/Y2mn3Ar98SQ+AF/V9OUDNcMl7JMdwad0OlFK56XcPY85TT1G226aJwSjSN0
-         eHAEUiU4L6vf9PYtFATbS2UHgTR1fXO5PJ46ndPebNcAZWxb6JJ73WjoTtRYSvEapQvX
-         qA/g==
-X-Gm-Message-State: AOJu0Ywsq/V7mBgCQdAZ9cV+Q/AA09J18dFM5QTZRTtBHMU1FgDTZykQ
-        I7pJKtRrnPQApInWYAWrJyiVyg==
-X-Google-Smtp-Source: AGHT+IGN8q/6+xxALx9gUe9stgKotwY8iX0ZO8k2F0PDEZ1P0Uoeo9yl6chJOtzG1X7GSQJV67hvyg==
-X-Received: by 2002:adf:f3cc:0:b0:31a:ea9f:1aa6 with SMTP id g12-20020adff3cc000000b0031aea9f1aa6mr1464200wrp.47.1694595334276;
-        Wed, 13 Sep 2023 01:55:34 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id n15-20020a5d598f000000b0031fba0a746bsm3925446wri.9.2023.09.13.01.55.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 01:55:33 -0700 (PDT)
-Message-ID: <3a65082c-200c-ce59-a662-ecd623dc68b4@linaro.org>
-Date:   Wed, 13 Sep 2023 10:55:30 +0200
+        with ESMTP id S239017AbjIMJkO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Sep 2023 05:40:14 -0400
+Received: from hsmtpd-def.xspmail.jp (hsmtpd-def.xspmail.jp [202.238.198.243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F80199F
+        for <linux-clk@vger.kernel.org>; Wed, 13 Sep 2023 02:40:10 -0700 (PDT)
+X-Country-Code: JP
+Received: from sakura.ysato.name (ik1-413-38519.vs.sakura.ne.jp [153.127.30.23])
+        by hsmtpd-out-1.asahinet.cluster.xspmail.jp (Halon) with ESMTPA
+        id cd8459a2-a307-4c58-8e39-13d8eefa5ff9;
+        Wed, 13 Sep 2023 18:24:04 +0900 (JST)
+Received: from SIOS1075.ysato.name (al128006.dynamic.ppp.asahi-net.or.jp [111.234.128.6])
+        by sakura.ysato.name (Postfix) with ESMTPSA id C8DFF1C0198;
+        Wed, 13 Sep 2023 18:24:03 +0900 (JST)
+From:   Yoshinori Sato <ysato@users.sourceforge.jp>
+To:     linux-sh@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        glaubitz@physik.fu-berlin.de, linux-clk@vger.kernel.org
+Subject: [RFC PATCH v2 10/30] drivers/clk: SH7750 / SH7751 CPG Driver
+Date:   Wed, 13 Sep 2023 18:23:35 +0900
+Message-Id: <a9a3e6f0dfdd1c5d6970d2decffef3c07d93476e.1694596125.git.ysato@users.sourceforge.jp>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <cover.1694596125.git.ysato@users.sourceforge.jp>
+References: <cover.1694596125.git.ysato@users.sourceforge.jp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH V2 6/7] arm64: dts: qcom: ipq9574: Add support for nsscc
- node
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Devi Priya <quic_devipriy@quicinc.com>, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        richardcochran@gmail.com, arnd@arndb.de, geert+renesas@glider.be,
-        nfraprado@collabora.com, rafal@milecki.pl, peng.fan@nxp.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        quic_saahtoma@quicinc.com
-References: <20230825091234.32713-1-quic_devipriy@quicinc.com>
- <20230825091234.32713-7-quic_devipriy@quicinc.com>
- <CAA8EJpo75zWLXuF-HC-Xz+6mvu_S1ET-9gzW=mOq+FjKspDwhw@mail.gmail.com>
- <CAMuHMdXx_b-uubonRH5=Tcxo+ddxg2wXvRNQNjhMrfvSFh0Xcw@mail.gmail.com>
- <daed3270-847e-f4c6-17ad-4d1962ae7d49@linaro.org>
- <CAMuHMdVxykGwyrKKSHBv9AHy4gAeH7DT7caZarbs-F40zz5Jpw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdVxykGwyrKKSHBv9AHy4gAeH7DT7caZarbs-F40zz5Jpw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 13/09/2023 10:38, Geert Uytterhoeven wrote:
-> Hi Krzysztof,
-> 
-> On Wed, Sep 13, 2023 at 10:26 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->> On 13/09/2023 10:23, Geert Uytterhoeven wrote:
->>>>
->>>>> +                       clock-names = "nssnoc_nsscc", "nssnoc_snoc", "nssnoc_snoc_1",
->>>>> +                                     "bias_pll_cc_clk", "bias_pll_nss_noc_clk",
->>>>> +                                     "bias_pll_ubi_nc_clk", "gpll0_out_aux", "uniphy0_nss_rx_clk",
->>>>> +                                     "uniphy0_nss_tx_clk", "uniphy1_nss_rx_clk",
->>>>> +                                     "uniphy1_nss_tx_clk", "uniphy2_nss_rx_clk",
->>>>> +                                     "uniphy2_nss_tx_clk", "xo_board_clk";
->>>>
->>>> You are using clock indices. Please drop clock-names.
->>>
->>> What do you mean by "using clock indices"?
->>> Note that the "clock-names" property is required according to the DT bindings.
->>
->> Indeed, thanks for pointing this out. Probably bindings should be changed.
-> 
-> But what's so great about not having "clock-names"?
-> There are _14_ input clocks.
+Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
+---
+ drivers/clk/renesas/clk-sh7750.c | 236 +++++++++++++++++++++++++++++++
+ 1 file changed, 236 insertions(+)
+ create mode 100644 drivers/clk/renesas/clk-sh7750.c
 
-There is nothing particularly wrong. They are just not used by Linux
-implementation and they confuse people into thinking items are not
-strictly ordered. Thus agreement long time ago for Qualcomm clock
-controllers was to drop the clock-names to avoid that confusion and make
-it explicit.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/clk/renesas/clk-sh7750.c b/drivers/clk/renesas/clk-sh7750.c
+new file mode 100644
+index 000000000000..51f1aecd23dc
+--- /dev/null
++++ b/drivers/clk/renesas/clk-sh7750.c
+@@ -0,0 +1,236 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Renesas SH7750/51 CPG driver
++ *
++ * Copyright 2023 Yoshinori Sato <ysato@users.sourceforge.jp>
++ */
++
++#include <linux/clkdev.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
++#include <linux/io.h>
++#include "clk-shdiv.h"
++#include <dt-bindings/clock/sh7750.h>
++
++static DEFINE_SPINLOCK(clklock);
++
++/* PCLK divide rate selector */
++static const struct clk_div_table pdiv_table[] = {
++	{ .val = 0, .div = 2, },
++	{ .val = 1, .div = 3, },
++	{ .val = 2, .div = 4, },
++	{ .val = 3, .div = 6, },
++	{ .val = 4, .div = 8, },
++	{ }
++};
++
++/* ICLK and BCLK divide rate selector */
++static const struct clk_div_table div_table[] = {
++	{ .val = 0, .div = 1, },
++	{ .val = 1, .div = 2, },
++	{ .val = 2, .div = 3, },
++	{ .val = 3, .div = 4, },
++	{ .val = 4, .div = 6, },
++	{ .val = 5, .div = 8, },
++	{ }
++};
++
++struct cpg_priv {
++	struct clk_hw hw;
++	void __iomem *frqcr;
++	void __iomem *wdt;
++	u32 mode;
++	bool have_div1;
++};
++
++#define to_priv(_hw) container_of(_hw, struct cpg_priv, hw)
++
++#define FRQCR_PLL1EN BIT(10)
++static const int pll1mult[] = { 12, 12, 6, 12, 6, 12, 1};
++
++static unsigned long pll_recalc_rate(struct clk_hw *hw,
++				      unsigned long parent_rate)
++{
++	struct cpg_priv *cpg = to_priv(hw);
++	unsigned long rate = parent_rate;
++	uint16_t frqcr;
++
++	frqcr = ioread16(cpg->frqcr);
++	if (frqcr & FRQCR_PLL1EN) {
++		rate *= pll1mult[cpg->mode];
++		if (cpg->mode < 6 && cpg->have_div1)
++			rate /= 2;
++	}
++	return rate;
++}
++
++static void get_round_rate(struct cpg_priv *cpg,
++			   unsigned long *out, bool *pllen,
++			   unsigned long rate, unsigned long prate)
++{
++	long pllout, res;
++	bool pll;
++
++	if (cpg->mode < 6 && cpg->have_div1)
++		prate /= 2;
++
++	pllout = prate * pll1mult[cpg->mode];
++	if (abs(pllout - rate) > abs(prate - rate)) {
++		res = prate;
++		pll = false;
++	} else {
++		res = pllout;
++		pll = true;
++	}
++	if (out)
++		*out = res;
++	if (pllen)
++		*pllen = pll;
++}
++
++static int pll_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
++{
++	struct cpg_priv *cpg = to_priv(hw);
++
++	get_round_rate(cpg, &req->rate, NULL, req->rate, req->best_parent_rate);
++	return 0;
++}
++
++static int pll_set_rate(struct clk_hw *hw,
++			unsigned long rate, unsigned long prate)
++{
++	struct cpg_priv *cpg = to_priv(hw);
++	bool oldpll, newpll;
++	uint16_t frqcr;
++
++	frqcr = ioread16(cpg->frqcr);
++	get_round_rate(cpg, NULL, &newpll, rate, prate);
++	oldpll = frqcr & FRQCR_PLL1EN;
++	frqcr &= ~FRQCR_PLL1EN;
++
++	if (newpll) {
++		frqcr |= FRQCR_PLL1EN;
++		if (!oldpll) {
++			/* set PLL wakeup delay time */
++			iowrite16(0xa500, cpg->wdt + 4);
++			iowrite16(0xa507, cpg->wdt + 4);
++			iowrite16(0xa507, cpg->wdt + 4);
++			iowrite16(0x5a00, cpg->wdt);
++		}
++	}
++	iowrite16(frqcr, cpg->frqcr);
++
++	/* Test for new PLL state */
++	frqcr = ioread16(cpg->frqcr);
++	oldpll = frqcr & FRQCR_PLL1EN;
++	return !(oldpll == newpll);
++}
++
++static const struct clk_ops pll_ops = {
++	.recalc_rate = pll_recalc_rate,
++	.determine_rate = pll_determine_rate,
++	.set_rate = pll_set_rate,
++};
++
++#define PLLOUT "pllout"
++
++static int __init register_pll(struct device_node *node, struct cpg_priv *cpg)
++{
++	struct clk *clk;
++	const char *clk_name = node->name;
++	const char *parent_name;
++	struct clk_init_data init;
++
++	parent_name = of_clk_get_parent_name(node, 0);
++	init.name = PLLOUT;
++	init.ops = &pll_ops;
++	init.flags = 0;
++	init.parent_names = &parent_name;
++	init.num_parents = 1;
++	cpg->hw.init = &init;
++
++	if (of_clk_hw_register(node, &cpg->hw) < 0) {
++		pr_err("%s: failed to register %s pll clock (%ld)\n",
++		       __func__, clk_name, PTR_ERR(clk));
++		return 0;
++	}
++	of_clk_add_hw_provider(node, of_clk_hw_simple_get, &cpg->hw);
++
++	return 1;
++}
++
++static void __init register_div(struct device_node *node, struct cpg_priv *cpg)
++{
++	static const char * const divout[] = {
++		[SH7750_CPG_FCK] = "fck",
++		[SH7750_CPG_BCK] = "bck",
++		[SH7750_CPG_ICK] = "ick",
++	};
++	struct clk *clk;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(divout); i++) {
++		if (sh_div_clk_register(node, divout[i], PLLOUT,
++					cpg->frqcr, i * 3, 3,
++					(i == 0) ? pdiv_table : div_table,
++					&clklock) < 0)
++			pr_err("%s: failed to register %s div clock (%ld)\n",
++			       __func__, divout[i], PTR_ERR(clk));
++	}
++}
++
++
++static void __init sh7750_cpg_setup(struct device_node *node)
++{
++	unsigned int num_parents;
++	struct cpg_priv *cpg;
++
++	num_parents = of_clk_get_parent_count(node);
++	if (num_parents < 1) {
++		pr_err("%s: no parent found", node->name);
++		return;
++	}
++
++	cpg = kzalloc(sizeof(struct cpg_priv), GFP_KERNEL);
++	if (!cpg) {
++		pr_err("%s: failed to alloc memory", node->name);
++		return;
++	}
++
++	of_property_read_u32_index(node, "renesas,mode", 0, &cpg->mode);
++	if (cpg->mode >= 7) {
++		pr_err("%s: Invalid clock mode setting (%u)\n",
++		       node->name, cpg->mode);
++		goto cpg_free;
++	}
++	cpg->have_div1 = (of_device_is_compatible(node, "renesas,sh7750r-pll-clk") == 0);
++
++	cpg->frqcr = of_iomap(node, 0);
++	if (cpg->frqcr == NULL) {
++		pr_err("%s: failed to map divide register", node->name);
++		goto cpg_free;
++	}
++
++	cpg->wdt = of_iomap(node, 1);
++	if (cpg->wdt == NULL) {
++		pr_err("%s: failed to map watchdog register", node->name);
++		goto unmap_frqcr;
++	}
++
++	if (!register_pll(node, cpg))
++		goto unmap_wdt;
++
++	register_div(node, cpg);
++
++unmap_wdt:
++	iounmap(cpg->wdt);
++unmap_frqcr:
++	iounmap(cpg->frqcr);
++cpg_free:
++	kfree(cpg);
++}
++
++CLK_OF_DECLARE(sh7750_cpg, "renesas,sh7750-cpg",
++	       sh7750_cpg_setup);
+-- 
+2.39.2
 
