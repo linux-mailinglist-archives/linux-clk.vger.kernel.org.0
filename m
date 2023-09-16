@@ -2,45 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD287A2F2B
-	for <lists+linux-clk@lfdr.de>; Sat, 16 Sep 2023 12:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F3D7A3199
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Sep 2023 19:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239018AbjIPKF6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 16 Sep 2023 06:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S231819AbjIPRPa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 16 Sep 2023 13:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbjIPKFe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 16 Sep 2023 06:05:34 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A84CDE;
-        Sat, 16 Sep 2023 03:05:28 -0700 (PDT)
-Received: from p200300ccff1003001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff10:300:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1qhSB1-003pjl-Tb; Sat, 16 Sep 2023 12:05:23 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1qhSB1-006vL4-0d;
-        Sat, 16 Sep 2023 12:05:23 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        lee@kernel.org, bcousson@baylibre.com, tony@atomide.com,
-        mturquette@baylibre.com, sboyd@kernel.org, andreas@kemnade.info,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v4 5/5] ARM: dts: omap4-embt2ws: enable 32K clock on WLAN
-Date:   Sat, 16 Sep 2023 12:05:15 +0200
-Message-Id: <20230916100515.1650336-6-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230916100515.1650336-1-andreas@kemnade.info>
-References: <20230916100515.1650336-1-andreas@kemnade.info>
+        with ESMTP id S229699AbjIPRPE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 16 Sep 2023 13:15:04 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2230018E;
+        Sat, 16 Sep 2023 10:14:59 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-401d6f6b2e0so26613005e9.1;
+        Sat, 16 Sep 2023 10:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1694884497; x=1695489297; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pwVNVtyPzvOH/tkYL9HnHQoBXP1en7ett6SkkJcLNRw=;
+        b=VJNf4SWQgb9AjGwcUSstXXT2qb3dDQhz5qDrAuQVbEQPI862vmOefFCZua6BAOZQ29
+         MZpBiddf3FL3T9JQlrlpp31CwA5vG+zJkkq2irrUDdI3Q7t5l20+xngMEcNhnIQG3TRc
+         cWa68neS6L7weduywwkOwt4siHGhFg1byYr0A9jEfLFCnwMolTJ+U9CdO5H8PH2I3AFQ
+         Vd/ESkN/YFpRQnhHd+39xP1lgzLERxEh6ZGUrkZvXBW4JTgYvj+KfGZWYS4azIuPBtaf
+         0HCT9JgC9gcfHaWM9oin6QYedU+yWxCzoYOvlu7WUEx7N/WOyMM5YbfKKz0dOTskeKlD
+         1xpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694884497; x=1695489297;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pwVNVtyPzvOH/tkYL9HnHQoBXP1en7ett6SkkJcLNRw=;
+        b=K+dOKkzYZYL/qbcR4rwDqXUJ95OBIk0CQSnzOLdU3d1VJttwgbvTAD1aZWcVzB5xqI
+         /X6mcmXBteZXm/NN0T9GTvLBwWGYaI/hg6fgBg/rtEFhYMejenpcEj6eO50rCR1/rLUv
+         QNCLXqZFG8mO5W/+AxT2D8Ppi2fukACzF6yRiEa2649nw+qY7+5A18jj+zJTbwUlvnbl
+         ytglhU4aoPTKDWLI+Z+H0fKgQk8mZBdxtcLVSGM9HdPcTyGSN5kertkCEGDGGc7l178C
+         htXMLxAAoE/0z8tucBFnq3EMJxdEqxhV79bnjlrEGJ7Q0L8RIFYEkrSStqESM/vCIGyl
+         o92Q==
+X-Gm-Message-State: AOJu0Yx5VMosoIAic0h9iCFhoMyksOcMuGkVeoz9REkYGJKRixF6RzKM
+        kzK5iEIeBJVSuE2gL51hrgc=
+X-Google-Smtp-Source: AGHT+IFnnFguUaQbotAYvoYcfnDGoV9RCr3dIgk2DtaFbTSd+bgQ7zbHQzddPeuP9lCgw4H/uv4bCw==
+X-Received: by 2002:a5d:5267:0:b0:31f:c89b:91fc with SMTP id l7-20020a5d5267000000b0031fc89b91fcmr6130430wrc.7.1694884497140;
+        Sat, 16 Sep 2023 10:14:57 -0700 (PDT)
+Received: from localhost.localdomain (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
+        by smtp.googlemail.com with ESMTPSA id w4-20020a5d6804000000b003196e992567sm7712395wru.115.2023.09.16.10.14.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Sep 2023 10:14:56 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v6 0/3] clk: qcom: clk-rcg2: introduce support for multiple conf for same freq
+Date:   Sat, 16 Sep 2023 16:00:43 +0200
+Message-Id: <20230916140046.7878-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,47 +72,57 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-WLAN did only work if clock was left enabled by the original system,
-so make it fully enable the needed resources itself.
+This small series fix a current problem with ipq8074 where the 2 uniphy
+port doesn't work in some corner case with some clk configuration. The
+port to correctly work require a specific frequency, using the wrong one
+results in the port not transmitting data.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+With the current code with a requested freq of 125MHz, the frequency is
+set to 105MHz. This is caused by the fact that there are 2 different
+configuration to set 125MHz and it's always selected the first one that
+results in 105MHz.
 
-diff --git a/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts b/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts
-index ee86981b2e448..9d2f2d8639496 100644
---- a/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts
-+++ b/arch/arm/boot/dts/ti/omap/omap4-epson-embt2ws.dts
-@@ -69,6 +69,12 @@ unknown_supply: unknown-supply {
- 		regulator-name = "unknown";
- 	};
- 
-+	wl12xx_pwrseq: wl12xx-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		clocks = <&twl 1>;
-+		clock-names = "ext_clock";
-+	};
-+
-        /* regulator for wl12xx on sdio2 */
- 	wl12xx_vmmc: wl12xx-vmmc {
- 		pinctrl-names = "default";
-@@ -92,6 +98,7 @@ &i2c1 {
- 	twl: pmic@48 {
- 		compatible = "ti,twl6032";
- 		reg = <0x48>;
-+		#clock-cells = <1>;
- 		/* IRQ# = 7 */
- 		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>; /* IRQ_SYS_1N cascaded to gic */
- 		interrupt-controller;
-@@ -316,6 +323,7 @@ &mmc3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&wl12xx_pins>;
- 	vmmc-supply = <&wl12xx_vmmc>;
-+	mmc-pwrseq = <&wl12xx_pwrseq>;
- 	interrupts-extended = <&wakeupgen GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH
- 			       &omap4_pmx_core 0x12e>;
- 	non-removable;
+In the original QSDK code, the frequency configuration selection is
+different and the CEIL FLOOR logic is not present. Instead it's used a
+BEST approach where the frequency table is checked and then it's checked
+if there are duplicate entry.
+
+This proposed implementation is more specific and introduce an entire new
+set of ops and a specific freq table to support this special configuration.
+
+A union is introduced in rcg2 struct to not duplicate the struct.
+A new set of ops clk_rcg2_fm_ops are introduced to support this new kind
+of frequency table.
+
+Changes v6:
+- Small rework of best_conf selection to mute Sparse warn.
+Changes v5:
+- Rework selection logic with suggestion from Konrad
+- Return -EINVAL and WARN if we fail to find a correct conf
+Changes v4:
+- Drop suggested but wrong re-search patch
+- Move everything to separate ops and struct to not affect current rcg2
+  users.
+Changes v3:
+- Add qcom_find_freq_exact
+- Drop re-search on rcg2_set_rate
+- Rework multiple conf patch to follow new implementation
+Changes v2:
+- Out of RFC
+- Fix compile warning from buildbot related to F redefinition
+
+Christian Marangi (3):
+  clk: qcom: clk-rcg: introduce support for multiple conf for same freq
+  clk: qcom: clk-rcg2: add support for rcg2 freq multi ops
+  clk: qcom: gcc-ipq8074: rework nss_port5/6 clock to multiple conf
+
+ drivers/clk/qcom/clk-rcg.h     |  24 ++++-
+ drivers/clk/qcom/clk-rcg2.c    | 167 +++++++++++++++++++++++++++++++++
+ drivers/clk/qcom/common.c      |  18 ++++
+ drivers/clk/qcom/common.h      |   2 +
+ drivers/clk/qcom/gcc-ipq8074.c | 120 ++++++++++++++---------
+ 5 files changed, 286 insertions(+), 45 deletions(-)
+
 -- 
-2.39.2
+2.40.1
 
