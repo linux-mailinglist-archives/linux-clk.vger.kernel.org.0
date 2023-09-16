@@ -2,98 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B437A211B
-	for <lists+linux-clk@lfdr.de>; Fri, 15 Sep 2023 16:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597D67A2F2A
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Sep 2023 12:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235729AbjIOOed convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Fri, 15 Sep 2023 10:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S239012AbjIPKF5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 16 Sep 2023 06:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235633AbjIOOed (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 Sep 2023 10:34:33 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4271FCE;
-        Fri, 15 Sep 2023 07:34:28 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-59c2ca01f27so563867b3.2;
-        Fri, 15 Sep 2023 07:34:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694788467; x=1695393267;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Bg+/ZlDV5cEjktS5gTZzV6GvE3CfacbspJaXAFuHm8=;
-        b=d6Aop0qV/FY92P92vPrbPg3s28t7atINAVPHB+Cmh22mT+JkB4kcKtLirnOr8S+gYz
-         jBB2qogCy/yD9sUk8pwsGENeLuNpxZnlBzksFuduChnOLAYTCCghlZT7vvQ5fVbK/gNb
-         vFOnaUVAPnkaADrS+zycVYlyPHJjO+tu0l8QwkRm1kps03dW1tCKux52cDpOSNRt2FaH
-         XyWLQuhvuqfGVH7vT0KimmdEcumf4rRA3BUpSqPEdCTDSmy5rZWKBBqyMxPGlZz7rMZh
-         lwhPdgmT2/C/rVgzwJrTyOvyda3gkAkKnvgcPCTB/jajJnKWBkoiYtdn8X4FaevxDf4m
-         7m4A==
-X-Gm-Message-State: AOJu0YxrczgOTFioHVgOxuXDoHEsx1zQqOO5qaAgJ0pmkpSUEbaZLiy4
-        KmiOzPXxsQW0pdMGDiqRyXQRMvBZja31UA==
-X-Google-Smtp-Source: AGHT+IH6EveqHYcx/3C9xqQjrlqRaxedtE9rgp9QsIZ8zCtO0RoS5FOW+cOsuoEwcOqviJEJ61Uplw==
-X-Received: by 2002:a81:d551:0:b0:599:241d:3a31 with SMTP id l17-20020a81d551000000b00599241d3a31mr2021303ywj.43.1694788467430;
-        Fri, 15 Sep 2023 07:34:27 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id j20-20020a819214000000b00598d67585d7sm885341ywg.117.2023.09.15.07.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 07:34:26 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-d7b91422da8so2102804276.2;
-        Fri, 15 Sep 2023 07:34:25 -0700 (PDT)
-X-Received: by 2002:a25:68ce:0:b0:d3c:58ef:ef7b with SMTP id
- d197-20020a2568ce000000b00d3c58efef7bmr1850354ybc.6.1694788465622; Fri, 15
- Sep 2023 07:34:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-38-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20230912045157.177966-38-claudiu.beznea.uj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 15 Sep 2023 16:34:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUVfZednCjMSkJGZX7B+7G6mV33EJ=fpmuqqKuod7U55w@mail.gmail.com>
-Message-ID: <CAMuHMdUVfZednCjMSkJGZX7B+7G6mV33EJ=fpmuqqKuod7U55w@mail.gmail.com>
-Subject: Re: [PATCH 37/37] arm64: defconfig: enable RZ/G3S (R9A08G045) SoC
-To:     Claudiu <claudiu.beznea@tuxon.dev>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        with ESMTP id S238419AbjIPKFe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 16 Sep 2023 06:05:34 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a02:c205:3004:2154::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC048CD6;
+        Sat, 16 Sep 2023 03:05:26 -0700 (PDT)
+Received: from p200300ccff1003001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff10:300:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1qhSAy-003piu-5W; Sat, 16 Sep 2023 12:05:19 +0200
+Received: from andi by aktux with local (Exim 4.96)
+        (envelope-from <andreas@kemnade.info>)
+        id 1qhSAx-006vKf-0y;
+        Sat, 16 Sep 2023 12:05:19 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com,
-        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
-        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, rafal@milecki.pl,
-        wsa+renesas@sang-engineering.com,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        lee@kernel.org, bcousson@baylibre.com, tony@atomide.com,
+        mturquette@baylibre.com, sboyd@kernel.org, andreas@kemnade.info,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v4 0/5] ARM: omap: omap4-embt2ws: 32K clock for WLAN
+Date:   Sat, 16 Sep 2023 12:05:10 +0200
+Message-Id: <20230916100515.1650336-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Enable config flag for Renesas RZ/G3S (R9A08G045) SoC.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+To have WLAN working properly, enable a 32K clock of the TWL6032.
+In earlier tests, it was still enabled from a previous boot into
+the vendor system.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Changes in V4:
+- use dev_err_probe in clk probe()
+- R-by
 
-Gr{oetje,eeting}s,
+Changes in V3:
+- maintainer change in binding doc
+- fix references to binding doc
+- additionalProperties: false
+- remove subdevices also from examples until
+  subdevices are referenced/added
 
-                        Geert
+Changes in V2:
+- no separate device node for the clock
+- converted toplevel node of TWL
+
+Andreas Kemnade (5):
+  dt-bindings: mfd: convert twl-family.txt to json-schema
+  dt-bindings: mfd: ti,twl: Add clock provider properties
+  mfd: twl-core: Add a clock subdevice for the TWL6032
+  clk: twl: add clock driver for TWL6032
+  ARM: dts: omap4-embt2ws: enable 32K clock on WLAN
+
+ .../bindings/input/twl4030-pwrbutton.txt      |   2 +-
+ .../devicetree/bindings/mfd/ti,twl.yaml       |  67 ++++++
+ .../devicetree/bindings/mfd/twl-family.txt    |  46 ----
+ .../boot/dts/ti/omap/omap4-epson-embt2ws.dts  |   8 +
+ drivers/clk/Kconfig                           |   9 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-twl.c                         | 197 ++++++++++++++++++
+ drivers/mfd/twl-core.c                        |  16 ++
+ 8 files changed, 299 insertions(+), 47 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/ti,twl.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/twl-family.txt
+ create mode 100644 drivers/clk/clk-twl.c
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
