@@ -2,121 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22FB7A4318
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Sep 2023 09:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1257A439C
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Sep 2023 09:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239315AbjIRHmr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 Sep 2023 03:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
+        id S239748AbjIRHye (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 Sep 2023 03:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240339AbjIRHmc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Sep 2023 03:42:32 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035FB1AE;
-        Mon, 18 Sep 2023 00:39:39 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="382333083"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="382333083"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 00:39:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="811259953"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="811259953"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 00:39:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-        (envelope-from <andy@kernel.org>)
-        id 1qi8qk-0000000EvwK-3qGW;
-        Mon, 18 Sep 2023 10:39:18 +0300
-Date:   Mon, 18 Sep 2023 10:39:18 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v4 00/42] ep93xx device tree conversion
-Message-ID: <ZQf+pps0Ffsak+BA@smile.fi.intel.com>
-References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
+        with ESMTP id S240463AbjIRHyG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Sep 2023 03:54:06 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E083A9E
+        for <linux-clk@vger.kernel.org>; Mon, 18 Sep 2023 00:50:45 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2c007d6159aso11774451fa.3
+        for <linux-clk@vger.kernel.org>; Mon, 18 Sep 2023 00:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1695023432; x=1695628232; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3y431fp7zImpDWkvcmWfe4LAHrYOVE+zuYJQGH6Vve8=;
+        b=SISV0CS8M5bxkkPkub1VMfMVIDBOE2nLvyt9OK5Yc8nrVfgdWuhLYOV0FuDEVzVBuA
+         3y83V5Fj2s7lqszoHZ/V5ULI7nGf5pqU9hCRz6mXzxrub0WXLerP9+QVWPGbUhCvKq+h
+         XXElYbaAKLNGJ260n5qM3flrj6P7SelcmSCBMAAy5TSpI5YnphYLFqBA790hDM9n0KQG
+         CTgkQvZFbspQuu8HgG2bObtmiCLwn52G9O3D+c13cWV0dYQS4RUaBAnnhBQJeMuC8jAh
+         j972D6N2rUmqCRyNSrUMYSNAQvkfsUT2QIyCl/EhbJSfRsSSB9MKqstiExrEqWgo+6Ps
+         9j7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695023432; x=1695628232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3y431fp7zImpDWkvcmWfe4LAHrYOVE+zuYJQGH6Vve8=;
+        b=avmhr7FNmemN52Ii5X6lEcbF+KCHv2/VoqXlVhCfoUzTClGo4Ps8xQsBUD/joRrqBH
+         jT0UWDm073xpj3xDAfGm0W4UNQGgrPnUdYfYWz6J0xrhvY+PJyWRxftmbqn/XObrUrKJ
+         lpV/30K5E6Pim6+DXr6xRDJk2xaucVga/+AeWwzkNvNN2Kyj9R6379P55g8HS+yjLnJi
+         r6JTHxSy6tRvZ9F+B1mXS/QBZRfl8kCCXt7/2T0ly0qrxOKvM1t4WCJjBbxg/5XYqCVN
+         3BBX/kQzCbeqtTRJhoVHXpPiqb8beVnXqSIQZdhChDiLHD84jek97UDGARH3KcfamQ5F
+         ZRqA==
+X-Gm-Message-State: AOJu0YwYLkWNofPw2taPTyroBAHR68AQDUC5zFcWjPTtnASfSVq1Li2s
+        vCyxG+SmBxcznMXhuh85H6Hawg==
+X-Google-Smtp-Source: AGHT+IGDwTGCqvI7ErFSwd5+9EaU2bhKoinXXuDhfENDvQM6ygOX7ZuQ/7Sf1mEAGjlycsO7Ct0+tg==
+X-Received: by 2002:a2e:9b87:0:b0:2bd:d4d:7fb6 with SMTP id z7-20020a2e9b87000000b002bd0d4d7fb6mr6798737lji.2.1695023431915;
+        Mon, 18 Sep 2023 00:50:31 -0700 (PDT)
+Received: from [192.168.32.2] ([82.78.167.145])
+        by smtp.gmail.com with ESMTPSA id r11-20020a170906350b00b009a5f1d1564dsm5993808eja.126.2023.09.18.00.50.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 00:50:31 -0700 (PDT)
+Message-ID: <701ee3bd-5d16-6b5f-2d34-4a4919c4c532@tuxon.dev>
+Date:   Mon, 18 Sep 2023 10:50:28 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 22/37] clk: renesas: add minimal boot support for RZ/G3S
+ SoC
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, ulf.hansson@linaro.org,
+        linus.walleij@linaro.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, magnus.damm@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
+        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        wsa+renesas@sang-engineering.com,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com>
+ <20230912045157.177966-23-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdUCpbPA3cDjNAq1irvr6z4Jux-5-tVDBuyr6nx_qOQGpg@mail.gmail.com>
+From:   claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdUCpbPA3cDjNAq1irvr6z4Jux-5-tVDBuyr6nx_qOQGpg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 11:10:42AM +0300, Nikita Shubin via B4 Relay wrote:
-> This series aims to convert ep93xx from platform to full device tree support.
+Hi, Geert,
+
+On 15.09.2023 15:52, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
-> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
+> On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> Add minimal clock and reset support for RZ/G3S SoC to be able to boot
+>> Linux from SD Card/eMMC. This includes necessary core clocks for booting
+>> and GIC, SCIF, GPIO, SD0 mod clocks and resets.
+>>
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> Major changes:
-> - drop newline at the end from each YAML files
-> - rename dma and clk bindings headers to match first compatible
-> - shrink SoC exported functions number to only 2
-> - dropped some ep93xx_pata fixes from these series
-> - dropped m48t86 stuff from these series
+> Thanks for your patch!
 > 
-> Bit thanks to Andy Shevchenko for thorough review.
 
-You are welcome!
+[ ... ]
 
-Dunno if you have used --patience when formatted the patches, but I think
-you should, if hadn't, for the next version. It will help a lot in reviewing
-and understanding the changes.
+>> +       CLK_PLL3_DIV2_4,
+>> +       CLK_PLL3_DIV2_8,
+>> +       CLK_PLL3_DIV6,
+>> +       CLK_PLL4,
+>> +       CLK_PLL6,
+>> +       CLK_PLL6_DIV2,
+>> +       CLK_SEL_SDHI0,
+>> +       CLK_SEL_PLL4,
+>> +       CLK_P1_DIV2,
+>> +       CLK_P3_DIV2,
+> 
+> Do you need CLK_P1_DIV2 and CLK_P3_DIV2?
+> I don't see them in Figure 7.3 ("Clock System Diagram (2)").
+> 
 
--- 
-With Best Regards,
-Andy Shevchenko
+P1_DIV2 is clock source for MHU_PCLK or OTFDE_DDR_PCLK.
+P3_DIV2 is clock source for DMAC_PCLK, OTFDE_SPI_PCLK.
+These are expressed in clock list document
+(RZG3S_clock_list_r1.00_20230602.xlsx).
 
+It is true the functionality could be preserved even w/o these 2 clocks but
+I kept them here as I saw them as core clocks even though they are not
+present in the Clock System Diagram from HW manual.
 
+With these, would you prefer to keep these clocks or just remove them?
+
+Thank you,
+Claudiu Beznea
