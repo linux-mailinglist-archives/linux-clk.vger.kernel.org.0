@@ -2,68 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2D37A9A09
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Sep 2023 20:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF0D7A9B3B
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Sep 2023 20:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjIUSfn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Sep 2023 14:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S229737AbjIUS4L (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Sep 2023 14:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjIUSfZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Sep 2023 14:35:25 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4115065BA;
-        Thu, 21 Sep 2023 11:15:22 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-4053c6f0d3dso922945e9.1;
-        Thu, 21 Sep 2023 11:15:22 -0700 (PDT)
+        with ESMTP id S229513AbjIUSzy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Sep 2023 14:55:54 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E63BF13F
+        for <linux-clk@vger.kernel.org>; Thu, 21 Sep 2023 11:40:24 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-32155a45957so1320714f8f.0
+        for <linux-clk@vger.kernel.org>; Thu, 21 Sep 2023 11:40:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695320120; x=1695924920; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695321622; x=1695926422; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VewR6GvnAG1Xb3ny5cXxxfMwVZK0RXHm5eoMUnZrOq4=;
-        b=dNMWu+4wZaZq9t/liVVlkh0RkoNzuzAWg28uiKBteA91wSWenHkvXGatLVu7j1+ApF
-         eUPQZp46d5xh7OGrShzDvxC+G6Z+pszsJybMS5NdD2ICisaGIyU/7KX1yvIrk3HV0sog
-         7MRo/bOwJY2p4nskGEAjjjGDKUBbGGbUU/xZJEDLnADN+GK9vlJzFy/oHiRX944F45Sm
-         tFtMuHeeTvbCPBpwwsCrwJm6N/reheVrojhQGJj08LVI2TAtwwYbmzj165trvrRiyfrk
-         0Afvf0yxBt79AVrhkVLz7XIAtNb5f9poI+I4Tblkk+Re6i+vE7WjfgMYxXa8XkbNjJPb
-         d+Og==
+        bh=tO07y52ihL4jiW+/YSc6o4oy7K98rV4fDYJiTaFp/cc=;
+        b=AFq6lBuMRcdnONo4szVmKjeetk+zN8qEY6PcTEStrEt+1psyc9Dtl227xTdmzSVO0T
+         K+9jGQrSICfDhbk1wGwQTqJ5sEgTGkw9h/gzkD7DfAFOlMt4jHDh1KxL78Z97dqrSlkV
+         sjm/zanMyShFxTzte1fPTCfjueW5deIT+lr2PQMN9Bw2eK4J1ZU/uIz0Ye4GzFEUkIHy
+         ClPf0KV/5J1LsgyL3C0lAzIMYehbHSSIAO2JDtEoR7gj0HsfMQhDtPy0MHoR/SoUBjZ9
+         iaSFHO4YGMgKW0vnwdfSWDWdZuGm7GKBJqcJDWFAmu4PStQh/FFanLtI4RiQFUcwvHXK
+         hRDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695320120; x=1695924920;
+        d=1e100.net; s=20230601; t=1695321622; x=1695926422;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VewR6GvnAG1Xb3ny5cXxxfMwVZK0RXHm5eoMUnZrOq4=;
-        b=v3HyRDiuDSv4UOAOI6b2dJJiQiyLcmxcawoAsFopmfBJIm4CL+TxYZXymZLZgH/8bZ
-         mdEd9nCNQ2HmEtgera8S24ZzcIlLo59AIB/6t+IWhSLSRfKAWP8GiDaJP1Pn2FeaGnH0
-         FtN/H1iPK7WysWNw4baL5T9KjyqMvGkNQz+QzstQwyANyvsfF518wkNETEdPn4yu2qdj
-         4XQze42yzDc301hW8vfMseqXzR8hZx4SRwhAPNnFQwHBsTLdUiNhP+c//qlLda4B5XAZ
-         dqsTZABY+mRMbSW7gAkfSFJbGABejaZQ4d3NFkcHMLn0KqfPVzM1aXL8SJ/Dplxfyb9p
-         4Tug==
-X-Gm-Message-State: AOJu0YxynJVca+OWaTbMFhngqOpLDHk3DpUNVlqMtgGUfTKzqbDbAmnf
-        Xpa8ljMaU95TwpVstx1sgQfE6PG83n4z9Q==
-X-Google-Smtp-Source: AGHT+IFHhXhgBdE5T7SPSfFl/a9nBt06Mtr/0hBhDGBXRf4YMzvsWqLkX0osTD7Hjg49aO3EPR3Lkw==
-X-Received: by 2002:a05:6512:4002:b0:4fe:25bc:71f5 with SMTP id br2-20020a056512400200b004fe25bc71f5mr4995738lfb.11.1695281585731;
-        Thu, 21 Sep 2023 00:33:05 -0700 (PDT)
-Received: from lab.hqhome163.com ([194.183.10.152])
-        by smtp.googlemail.com with ESMTPSA id k22-20020a05600c0b5600b0040523bef620sm1161231wmr.0.2023.09.21.00.33.04
+        bh=tO07y52ihL4jiW+/YSc6o4oy7K98rV4fDYJiTaFp/cc=;
+        b=Ri8+37piY2wxwXgRHbizslRtLE9m6ohXLN96bKBTmGFAaOf/Y6dnW1Os+JgRl4fRtU
+         u6g2RmYoB2rfT9Yz3Wq1rWOnCP30AvBbUewiNH3SHyX4+m5bjrOHrhq0YA57yZTgKRcQ
+         LovIFM0NdP3U3BGZtnkD+n3PMl2QOAfED7/Y5/+t69p6P0CYfQqIifV02ZwtdEtYcDb1
+         nvkVHmVN5uAfdPMPhHlLwZi4J4RrHae6zOv0xxCHwpKAC03NAg+tcZpCXxPc9/iXTQi8
+         8DgXvo1U3YPzfn2dHYpBQuUnElIXWEqhF/FpVb4gPUYy+5MdgWE9wlJum5jxjvi41AnM
+         vUSA==
+X-Gm-Message-State: AOJu0YzxC/Gp4Hl72PGy4wW76vbYY9BzeUN4kzjIWg50dDf+YmwoQaTq
+        acbuQu+OSxFv6mXSxd4YjXch6UPrhOdfRHgzJBt6GQ==
+X-Google-Smtp-Source: AGHT+IGOsPGLaNytNXaesgM8DKeO7lYi8IWldSKE9SkPDnT2UG04FmyFBfLgnPmFbVLicstMGWgsLQ==
+X-Received: by 2002:a17:906:ef8c:b0:9ae:4ba4:7983 with SMTP id ze12-20020a170906ef8c00b009ae4ba47983mr3166503ejb.37.1695289020335;
+        Thu, 21 Sep 2023 02:37:00 -0700 (PDT)
+Received: from hackbox.lan ([86.120.16.169])
+        by smtp.gmail.com with ESMTPSA id zg22-20020a170907249600b009a5f1d15642sm763085ejb.158.2023.09.21.02.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 00:33:05 -0700 (PDT)
-From:   "Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     Alessandro Carminati <alessandro.carminati@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Philip Daly <pdaly@redhat.com>
-Subject: [PATCH v2] clk: Sanitize possible_parent_show to Handle Return Value of of_clk_get_parent_name
-Date:   Thu, 21 Sep 2023 07:32:17 +0000
-Message-Id: <20230921073217.572151-1-alessandro.carminati@gmail.com>
+        Thu, 21 Sep 2023 02:36:59 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] clk: imx: Select MXC_CLK for CLK_IMX8QXP
+Date:   Thu, 21 Sep 2023 12:36:47 +0300
+Message-Id: <20230921093647.3901752-1-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,71 +77,34 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Alessandro Carminati <alessandro.carminati@gmail.com>
+If the i.MX8QXP clock provider is built-in but the MXC_CLK is
+built as module, build fails:
 
-In the possible_parent_show function, ensure proper handling of the return
-value from of_clk_get_parent_name to prevent potential issues arising from
-a NULL return.
-The current implementation invokes seq_puts directly on the result of
-of_clk_get_parent_name without verifying the return value, which can lead
-to kernel panic if the function returns NULL.
+aarch64-linux-ld: drivers/clk/imx/clk-imx8-acm.o: in function `imx8_acm_clk_probe':
+clk-imx8-acm.c:(.text+0x3d0): undefined reference to `imx_check_clk_hws'
 
-This patch addresses the concern by introducing a check on the return
-value of of_clk_get_parent_name. If the return value is not NULL, the
-function proceeds to call seq_puts, providing the returned value as
-argument.
-However, if of_clk_get_parent_name returns NULL, the function provides a
-static string as argument, avoiding the panic.
+Fix that by selecting MXC_CLK in case of CLK_IMX8QXP.
 
-Fixes: 1ccc0ddf046a ("clk: Use seq_puts() in possible_parent_show()")
-Reported-by: Philip Daly <pdaly@redhat.com>
-Signed-off-by: Alessandro Carminati (Red Hat) <alessandro.carminati@gmail.com>
+Fixes: c2cccb6d0b33 ("clk: imx: add imx8qxp clk driver")
+Closes: https://lore.kernel.org/all/8b77219e-b59e-40f1-96f1-980a0b2debcf@infradead.org/
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/clk/clk.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ drivers/clk/imx/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index c249f9791ae8..473563bc7496 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3416,6 +3416,7 @@ static void possible_parent_show(struct seq_file *s, struct clk_core *core,
- 				 unsigned int i, char terminator)
- {
- 	struct clk_core *parent;
-+	const char *name = NULL;
+diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
+index f6b82e0b9703..db3bca5f4ec9 100644
+--- a/drivers/clk/imx/Kconfig
++++ b/drivers/clk/imx/Kconfig
+@@ -96,6 +96,7 @@ config CLK_IMX8QXP
+ 	depends on (ARCH_MXC && ARM64) || COMPILE_TEST
+ 	depends on IMX_SCU && HAVE_ARM_SMCCC
+ 	select MXC_CLK_SCU
++	select MXC_CLK
+ 	help
+ 	  Build the driver for IMX8QXP SCU based clocks.
  
- 	/*
- 	 * Go through the following options to fetch a parent's name.
-@@ -3430,18 +3431,20 @@ static void possible_parent_show(struct seq_file *s, struct clk_core *core,
- 	 * registered (yet).
- 	 */
- 	parent = clk_core_get_parent_by_index(core, i);
--	if (parent)
-+	if (parent) {
- 		seq_puts(s, parent->name);
--	else if (core->parents[i].name)
-+	} else if (core->parents[i].name) {
- 		seq_puts(s, core->parents[i].name);
--	else if (core->parents[i].fw_name)
-+	} else if (core->parents[i].fw_name) {
- 		seq_printf(s, "<%s>(fw)", core->parents[i].fw_name);
--	else if (core->parents[i].index >= 0)
--		seq_puts(s,
--			 of_clk_get_parent_name(core->of_node,
--						core->parents[i].index));
--	else
--		seq_puts(s, "(missing)");
-+	} else {
-+		if (core->parents[i].index >= 0)
-+			name = of_clk_get_parent_name(core->of_node, core->parents[i].index);
-+		if (!name)
-+			name = "(missing)";
-+
-+		seq_puts(s, name);
-+	}
- 
- 	seq_putc(s, terminator);
- }
 -- 
 2.34.1
 
