@@ -2,109 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF0D7A9B3B
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Sep 2023 20:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652807A99A3
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Sep 2023 20:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjIUS4L (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Sep 2023 14:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S230388AbjIUSQm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Thu, 21 Sep 2023 14:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjIUSzy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Sep 2023 14:55:54 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E63BF13F
-        for <linux-clk@vger.kernel.org>; Thu, 21 Sep 2023 11:40:24 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-32155a45957so1320714f8f.0
-        for <linux-clk@vger.kernel.org>; Thu, 21 Sep 2023 11:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695321622; x=1695926422; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tO07y52ihL4jiW+/YSc6o4oy7K98rV4fDYJiTaFp/cc=;
-        b=AFq6lBuMRcdnONo4szVmKjeetk+zN8qEY6PcTEStrEt+1psyc9Dtl227xTdmzSVO0T
-         K+9jGQrSICfDhbk1wGwQTqJ5sEgTGkw9h/gzkD7DfAFOlMt4jHDh1KxL78Z97dqrSlkV
-         sjm/zanMyShFxTzte1fPTCfjueW5deIT+lr2PQMN9Bw2eK4J1ZU/uIz0Ye4GzFEUkIHy
-         ClPf0KV/5J1LsgyL3C0lAzIMYehbHSSIAO2JDtEoR7gj0HsfMQhDtPy0MHoR/SoUBjZ9
-         iaSFHO4YGMgKW0vnwdfSWDWdZuGm7GKBJqcJDWFAmu4PStQh/FFanLtI4RiQFUcwvHXK
-         hRDA==
+        with ESMTP id S230301AbjIUSQ1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Sep 2023 14:16:27 -0400
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17CE5AE2E;
+        Thu, 21 Sep 2023 10:21:40 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-52f9a45b4bdso1423259a12.3;
+        Thu, 21 Sep 2023 10:21:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695321622; x=1695926422;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tO07y52ihL4jiW+/YSc6o4oy7K98rV4fDYJiTaFp/cc=;
-        b=Ri8+37piY2wxwXgRHbizslRtLE9m6ohXLN96bKBTmGFAaOf/Y6dnW1Os+JgRl4fRtU
-         u6g2RmYoB2rfT9Yz3Wq1rWOnCP30AvBbUewiNH3SHyX4+m5bjrOHrhq0YA57yZTgKRcQ
-         LovIFM0NdP3U3BGZtnkD+n3PMl2QOAfED7/Y5/+t69p6P0CYfQqIifV02ZwtdEtYcDb1
-         nvkVHmVN5uAfdPMPhHlLwZi4J4RrHae6zOv0xxCHwpKAC03NAg+tcZpCXxPc9/iXTQi8
-         8DgXvo1U3YPzfn2dHYpBQuUnElIXWEqhF/FpVb4gPUYy+5MdgWE9wlJum5jxjvi41AnM
-         vUSA==
-X-Gm-Message-State: AOJu0YzxC/Gp4Hl72PGy4wW76vbYY9BzeUN4kzjIWg50dDf+YmwoQaTq
-        acbuQu+OSxFv6mXSxd4YjXch6UPrhOdfRHgzJBt6GQ==
-X-Google-Smtp-Source: AGHT+IGOsPGLaNytNXaesgM8DKeO7lYi8IWldSKE9SkPDnT2UG04FmyFBfLgnPmFbVLicstMGWgsLQ==
-X-Received: by 2002:a17:906:ef8c:b0:9ae:4ba4:7983 with SMTP id ze12-20020a170906ef8c00b009ae4ba47983mr3166503ejb.37.1695289020335;
-        Thu, 21 Sep 2023 02:37:00 -0700 (PDT)
-Received: from hackbox.lan ([86.120.16.169])
-        by smtp.gmail.com with ESMTPSA id zg22-20020a170907249600b009a5f1d15642sm763085ejb.158.2023.09.21.02.36.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 02:36:59 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] clk: imx: Select MXC_CLK for CLK_IMX8QXP
-Date:   Thu, 21 Sep 2023 12:36:47 +0300
-Message-Id: <20230921093647.3901752-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1695316899; x=1695921699;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=78TMJJFlsLVACVaST0yD4fr1cOAvW144T6j75QycuXg=;
+        b=BAV30hJkYC7gDJg8tJ5MgmwgAeTItbBEzWUcixCeM/pAGaCgaQ8iMiyn0XLG6VH9AG
+         ATLhbdtVyCC4KBdQdSsCTH0JJXuR7XVOSpV3URxP7TbirqHqYFRHRbBWD7+I3DjzCUZ0
+         iu65ni8UHH5hJfVmugdCvjEeqTP4zFi4RxIie6MPXhe9eTmsLORXD/5wosNIUBMifG9j
+         lSBCLxcxr0nbNY41dJQU3tqmp4sKBbaCaM27tuidbCQzJUwFo7JleTbtt8kmem84QoDV
+         zKqJa3Leqv9IUbhA64LQUI3GFTuCZ4samvzOPMyY2jFjLR5XbI/opUALhieLgtJd7xXY
+         YUKA==
+X-Gm-Message-State: AOJu0Yy11+ifoLtQMj0zsVqtcJIIdGl/qpKcTULNtlXmQqyT9qQ/0DL6
+        JbaLbcnQYqAHQbj57DOkw4bWirx05e9jlYr9
+X-Google-Smtp-Source: AGHT+IH+uBVw292r+sxaKfU8NLmvm5e2Jkc2m0Sb1GJILXn42+85/1qKFwBKoGAB4t0PUKVC9cnpbw==
+X-Received: by 2002:a2e:8098:0:b0:2c0:c6a:eb2f with SMTP id i24-20020a2e8098000000b002c00c6aeb2fmr5027753ljg.1.1695302182923;
+        Thu, 21 Sep 2023 06:16:22 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id p2-20020a2e9a82000000b002c001e57e1asm337469lji.73.2023.09.21.06.16.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 06:16:22 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2c007d6159aso15303351fa.3;
+        Thu, 21 Sep 2023 06:16:22 -0700 (PDT)
+X-Received: by 2002:a05:6512:3987:b0:500:bb99:69a7 with SMTP id
+ j7-20020a056512398700b00500bb9969a7mr6201266lfu.14.1695301737311; Thu, 21 Sep
+ 2023 06:08:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230912045157.177966-1-claudiu.beznea.uj@bp.renesas.com> <20230912045157.177966-29-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20230912045157.177966-29-claudiu.beznea.uj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 21 Sep 2023 15:08:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV5BuPPLkZUDfhjXzq_aQ+LFfEM=eXGT-XjmpxSjSqeJg@mail.gmail.com>
+Message-ID: <CAMuHMdV5BuPPLkZUDfhjXzq_aQ+LFfEM=eXGT-XjmpxSjSqeJg@mail.gmail.com>
+Subject: Re: [PATCH 28/37] pinctrl: renesas: rzg2l: make struct
+ rzg2l_pinctrl_data::dedicated_pins constant
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, quic_bjorande@quicinc.com,
+        arnd@arndb.de, konrad.dybcio@linaro.org, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        wsa+renesas@sang-engineering.com,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-If the i.MX8QXP clock provider is built-in but the MXC_CLK is
-built as module, build fails:
+On Tue, Sep 12, 2023 at 6:53 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> struct rzg2l_pinctrl_data::dedicated_pins is constant thus mark it so.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-aarch64-linux-ld: drivers/clk/imx/clk-imx8-acm.o: in function `imx8_acm_clk_probe':
-clk-imx8-acm.c:(.text+0x3d0): undefined reference to `imx_check_clk_hws'
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-pinctrl-for-v6.7.
 
-Fix that by selecting MXC_CLK in case of CLK_IMX8QXP.
+Gr{oetje,eeting}s,
 
-Fixes: c2cccb6d0b33 ("clk: imx: add imx8qxp clk driver")
-Closes: https://lore.kernel.org/all/8b77219e-b59e-40f1-96f1-980a0b2debcf@infradead.org/
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/clk/imx/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+                        Geert
 
-diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-index f6b82e0b9703..db3bca5f4ec9 100644
---- a/drivers/clk/imx/Kconfig
-+++ b/drivers/clk/imx/Kconfig
-@@ -96,6 +96,7 @@ config CLK_IMX8QXP
- 	depends on (ARCH_MXC && ARM64) || COMPILE_TEST
- 	depends on IMX_SCU && HAVE_ARM_SMCCC
- 	select MXC_CLK_SCU
-+	select MXC_CLK
- 	help
- 	  Build the driver for IMX8QXP SCU based clocks.
- 
--- 
-2.34.1
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
