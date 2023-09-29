@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0887B2BE5
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Sep 2023 07:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF2F7B2BEA
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Sep 2023 07:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbjI2Fne (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Sep 2023 01:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S232757AbjI2Fn6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 29 Sep 2023 01:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbjI2FnK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Sep 2023 01:43:10 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88241FF9
-        for <linux-clk@vger.kernel.org>; Thu, 28 Sep 2023 22:40:13 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9a6190af24aso1802872566b.0
-        for <linux-clk@vger.kernel.org>; Thu, 28 Sep 2023 22:40:13 -0700 (PDT)
+        with ESMTP id S232789AbjI2Fnd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Sep 2023 01:43:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD302100
+        for <linux-clk@vger.kernel.org>; Thu, 28 Sep 2023 22:40:15 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9a6190af24aso1802876166b.0
+        for <linux-clk@vger.kernel.org>; Thu, 28 Sep 2023 22:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1695966012; x=1696570812; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1695966014; x=1696570814; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gxy7hugg4UkryDIMa4s8AtATMA0VYhplDs86iw31hOQ=;
-        b=TriGYrBVLhtzjt/qVuKHXdAC7luqvSOjmTLUQHKBKaYAv5ZX+RzF2/DSL6a/bfyKoa
-         WHIWc4Nue/6Ned/qZxcnv9Vn5LXkvL9lMktBGBGa1f5MFaRKH2SUWZfws4yAxd8uPWb3
-         kXraV8MCxzBlryIVCVTDjtDcVtT9pXBirW5ZYnq7VVjm/ZA4BGndH0Aozf8kSaviXjee
-         Z93gxC32w07nHE66X5VJELXqUsqi7uKCbUb98pTj1VhLyAhlAQrJEfeBwcPmmDL5NcND
-         4u2avJKFpb/JmQMmviPyf9OjKQXQbPzD2jpNNdpMdfVnNKllbHAcVzAFrcYQMAkL5UHE
-         G62g==
+        bh=/cPgz6zkkuP/QvbsAnjGs89IXSWE24BO+d6az/jrPNY=;
+        b=N/fYhnvRLb36lt1eapguKiqxqVYNlsqrv+Ui3l5CPTtLJ7m3pLF6ZOuQnZay2XCm2C
+         QP60ou75tAJXPncyqANmlJBMWwQcRiSHrWsfOMSR5/0/z47BAnxnCGjVmQ4aohQg0yad
+         BAeL2dOfyNn+c3ppwIcDQ0ERlSjRHOyDa+K+ziuTZjb1MY/2AZ15l2abLRJXc0FM1V7x
+         t58L5FiJSUSMU45CQJTwp2+KD+vJIuy24zxFLiclNNmXGibLBhhmEQviuxd5oE4/xUWp
+         v2kw8KWsKJuwmq11vP4u+ACZrQEZjKmwXEXT9adm+pUhbVmDQ5r2cPkBoiJ+0BU+qfAk
+         Eczg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695966012; x=1696570812;
+        d=1e100.net; s=20230601; t=1695966014; x=1696570814;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gxy7hugg4UkryDIMa4s8AtATMA0VYhplDs86iw31hOQ=;
-        b=Z0hX/wq257vuccrlxrxCXFhlvwL1JrVtyub1P1BD0jopLi4HwGQ3pLVUG1gkoLXvhi
-         IhzUCxLFzTveTN5RbKN0xuw+Td5BLkkGvLzE5we4L4u8nigGZswnJtAXHvGJNG2sDKqW
-         B1VgZUrGbiP8wvVq0crbjr7Cn3tqpd+piYggUXXY7DHyM17rQNGO0yGaD0X1e3GFtrAa
-         +l06oppGK4VkWpypkyX/G/AR8ouAJKbCOM6qVQE7oncLlRWoQuhED0nDa+6RFap//+cg
-         7Bt968XjlnHsoCGruknWdhsmpvSkIHS0xNI7i+RwyLypYsFqGaQ9vDTYmc6YX+JWYdbD
-         T9xQ==
-X-Gm-Message-State: AOJu0YyOk9fXILhmiPW47QAmkkTPvL2f4y8c+2KS7oigDQsdDTfL7Ig1
-        gH5SwOsc9jgQCgeM2NfQA9k2/Q==
-X-Google-Smtp-Source: AGHT+IFjdkJ8pv4paZlOJE5w3vxwyMxycLeU7FNfeuTuZ5x96UbobcwdJecd6pVt0Z9PpK2qhSMmPA==
-X-Received: by 2002:a17:906:714a:b0:9b2:baa1:5910 with SMTP id z10-20020a170906714a00b009b2baa15910mr3126522ejj.1.1695966012350;
-        Thu, 28 Sep 2023 22:40:12 -0700 (PDT)
+        bh=/cPgz6zkkuP/QvbsAnjGs89IXSWE24BO+d6az/jrPNY=;
+        b=FI4aMipQRv+9/ZMJm48xKCr4pd5QQXE+MMDKpbVOPgWwL8wxY9/QUMcD86KJK1FS0V
+         hul0pHHVOEZ/qzxAURP9FPEcbetaqVM24CALO/UTbwKw4nsZkLLT4cDq4MP2P1C96K69
+         uIszKllY1Z8aDSqVewc/XwRpXwTUp8HOpw6zHZhXyIIn2EWaKnTmjUWYcGibj1wBv0u3
+         wpsEHhXESFHYJLjDqzWmijngKcNvNbgALZzRaB9cPMTBh9f0nUrV6AFHhpaPH8HTYs0m
+         JVXGSBBdqCjnWnY4ncDTpKascywVjf2uW3w/pHbJIGhiczC+IQqRPFnVXDP4gJEzUfq+
+         8/pw==
+X-Gm-Message-State: AOJu0YwxH5S4sr9n2XBAryATocQPb4JjGC577cN5Rg2tSw21s19n2kKT
+        X5j8PP8IfXgM7NqxOvf5ojXDEw==
+X-Google-Smtp-Source: AGHT+IFpSPh8yayTTchhgUGo5UVhQZBeySgfo2JdyqmupZ/CM1UnRoYelTOunDOQMI3TLbCEj6KiTg==
+X-Received: by 2002:a17:906:10dc:b0:9b2:bb02:a543 with SMTP id v28-20020a17090610dc00b009b2bb02a543mr3227213ejv.74.1695966014250;
+        Thu, 28 Sep 2023 22:40:14 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.177])
-        by smtp.gmail.com with ESMTPSA id z19-20020a1709063ad300b009a1a653770bsm11971992ejd.87.2023.09.28.22.40.10
+        by smtp.gmail.com with ESMTPSA id z19-20020a1709063ad300b009a1a653770bsm11971992ejd.87.2023.09.28.22.40.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 22:40:11 -0700 (PDT)
+        Thu, 28 Sep 2023 22:40:13 -0700 (PDT)
 From:   Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea@bp.renesas.com>
 To:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
@@ -63,9 +63,9 @@ Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 26/28] dt-bindings: arm: renesas: document SMARC Carrier-II EVK
-Date:   Fri, 29 Sep 2023 08:39:13 +0300
-Message-Id: <20230929053915.1530607-27-claudiu.beznea@bp.renesas.com>
+Subject: [PATCH v2 27/28] arm64: dts: renesas: r9a08g045s33-smarc: add initial device tree for RZ/G3S SMARC EVK board
+Date:   Fri, 29 Sep 2023 08:39:14 +0300
+Message-Id: <20230929053915.1530607-28-claudiu.beznea@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
 References: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
@@ -83,38 +83,57 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Document Renesas SMARC Carrier-II EVK board which is based on RZ/G3S
-SMARC SoM. The SMARC Carrier-II EVK consists of RZ/G3S SoM module and
-SMARC Carrier-II carrier board, the SoM module sits on top of carrier
-board.
+Add initial device tree for RZ/G3S SMARC EVK board.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
 
 Changes in v2:
-- this patch is new in v2
+- modified compatible
+- @Geert: I haven't added you Rb tag as I've added
+  "renesas,rzg3s-smarcm" to the compatible list
 
- Documentation/devicetree/bindings/soc/renesas/renesas.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm64/boot/dts/renesas/Makefile            |  2 ++
+ .../boot/dts/renesas/r9a08g045s33-smarc.dts     | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts
 
-diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-index 31d0539bb168..594a7d7a6ee4 100644
---- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-+++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
-@@ -486,6 +486,13 @@ properties:
-           - const: renesas,r9a08g045s33 # PCIe support
-           - const: renesas,r9a08g045
+diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
+index 7114cbbd8713..254983ca56a1 100644
+--- a/arch/arm64/boot/dts/renesas/Makefile
++++ b/arch/arm64/boot/dts/renesas/Makefile
+@@ -86,6 +86,8 @@ dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc-cru-csi-ov5645.dtbo
+ dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc.dtb
+ dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc-cru-csi-ov5645.dtbo
  
-+      - description: RZ SMARC Carrier-II Evaluation Kit
-+        items:
-+          - const: renesas,smarc2-evk # RZ SMARC Carrier-II EVK
-+          - const: renesas,rzg3s-smarcm # RZ/G3S SMARC SoM
-+          - const: renesas,r9a08g045s33 # PCIe support
-+          - const: renesas,r9a08g045
++dtb-$(CONFIG_ARCH_R9A08G045) += r9a08g045s33-smarc.dtb
 +
- additionalProperties: true
+ dtb-$(CONFIG_ARCH_R9A09G011) += r9a09g011-v2mevk2.dtb
  
- ...
+ dtb-$(CONFIG_ARCH_RCAR_GEN3) += draak-ebisu-panel-aa104xd12.dtbo
+diff --git a/arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts b/arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts
+new file mode 100644
+index 000000000000..7d775d10a97e
+--- /dev/null
++++ b/arch/arm64/boot/dts/renesas/r9a08g045s33-smarc.dts
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/*
++ * Device Tree Source for the RZ/G3S SMARC EVK board
++ *
++ * Copyright (C) 2023 Renesas Electronics Corp.
++ */
++
++/dts-v1/;
++
++#include "r9a08g045s33.dtsi"
++#include "rzg3s-smarc-som.dtsi"
++#include "rzg3s-smarc.dtsi"
++
++/ {
++	model = "Renesas SMARC EVK version 2 based on r9a08g045s33";
++	compatible = "renesas,smarc2-evk", "renesas,rzg3s-smarcm", "renesas,r9a08g045s33", "renesas,r9a08g045";
++};
 -- 
 2.39.2
 
