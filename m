@@ -2,74 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04E37B3745
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Sep 2023 17:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B50C7B37F3
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Sep 2023 18:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbjI2PwY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Sep 2023 11:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S233691AbjI2Q3X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 29 Sep 2023 12:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbjI2PwW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Sep 2023 11:52:22 -0400
-X-Greylist: delayed 570 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Sep 2023 08:52:19 PDT
-Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1191A8;
-        Fri, 29 Sep 2023 08:52:18 -0700 (PDT)
-Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-        by mx.skole.hr (mx.skole.hr) with ESMTP id 859A2834C9;
-        Fri, 29 Sep 2023 17:42:54 +0200 (CEST)
-From:   =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Date:   Fri, 29 Sep 2023 17:42:04 +0200
-Subject: [PATCH RESEND v5 8/8] MAINTAINERS: add myself as Marvell PXA1908
- maintainer
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230929-pxa1908-lkml-v5-8-5aa5a1109c5f@skole.hr>
-References: <20230929-pxa1908-lkml-v5-0-5aa5a1109c5f@skole.hr>
-In-Reply-To: <20230929-pxa1908-lkml-v5-0-5aa5a1109c5f@skole.hr>
-To:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
+        with ESMTP id S233773AbjI2Q3W (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Sep 2023 12:29:22 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21789BE;
+        Fri, 29 Sep 2023 09:29:21 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6419C433CB;
+        Fri, 29 Sep 2023 16:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696004960;
+        bh=3OuIUwplRf6LoSMGMWotoN/vi0cekYq75kaAj9KLkqA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Mnb5xyRVvdO7PjqTywGoTioMxj292hD6vYhvRvXD6qDXlfP2Gi1I6DeuHZEcXXIdt
+         sbhrZ9pD/5IgkLU9LVFIRpttqhsYFxQjzZI34QAlMGApiEBw38YM3g1R14iY1haKnd
+         cqUnpD3Q+RZfiT36JsszMVi/LKErxowYXNf3r0bGwAX5BlhSsk7vxXvOaiA9K6WZhg
+         EaRJabGBcyqfxinWUYGkx/1zLmUB5OpSEVVB8eK2ZjQu0rb3CP4ywc8z455V2t0gQD
+         wcU2KJ1EwGDTbQhOW6+cBg2RjV9v35QWJIBG7bB4poLogbsmlpKFVAMUe66bqkSJWH
+         HOw0XqbQ0u4cw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 988DEC395C8;
+        Fri, 29 Sep 2023 16:29:20 +0000 (UTC)
+Subject: Re: [GIT PULL] clk fixes for v6.6-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230929000635.1480419-1-sboyd@kernel.org>
+References: <20230929000635.1480419-1-sboyd@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230929000635.1480419-1-sboyd@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+X-PR-Tracked-Commit-Id: a47b44fbb13f5e7a981b4515dcddc93a321ae89c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: acfdcaeed6e6b954f5b99210b8f05cbc18200945
+Message-Id: <169600496062.31534.13737969081217378263.pr-tracker-bot@kernel.org>
+Date:   Fri, 29 Sep 2023 16:29:20 +0000
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-hardening@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afaerber@suse.de, balejk@matfyz.cz
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=908;
- i=duje.mihanovic@skole.hr; h=from:subject:message-id;
- bh=rZ0/2aarhuZmb4/RBctyFNylsa1DhpMnW4LU8kO7JSQ=;
- b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlFvBzztR/DmN/BrPp8VPfpH2DOR204+B0rFGw0
- yxH1jjmnVKJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZRbwcwAKCRCaEZ6wQi2W
- 4dh5EACFr3lrsSwFYi4yZmCSHNc8n+hfwg/m1pLjQNkjuj2cl1ihInCd0B2fCurTjf1UHjVdSqZ
- bV8FF5OW7H9fzh0QrXZDiyitC3nBgEeeq+/Szn70GDb3zdBTkYXfbbJHWVCw6y6kekEVy8zMutw
- dvSL3Y0S9VqTzdRRtkpEiIp3MkOI39afEYk7eDZsMYFqugLl0gWQItz53w4ySmjQyaFWDi0wjeo
- vY0EFw5mPLyUZyDbwMO+QdTaowOgkRiGJDzY+E0c+21yQvTSpaIYekJXoU7v4t0N1hAbe56naDG
- S5UDfWHZN0A9d6p7PDNQjR6QR9XXhJqBpXka2yCbyl2YFL6L/jB9Vte4enhRDnI1FAKLxWjXSM1
- QbuhjxEBBF4j80VFq2NwhrKWOZggDD2xpwFNCzUv52JsNq5XWuZRTMW6gudVWajfYMf7nWS81Dt
- 5H/m5kxEhD27+VqcLVwWYlqyIc69vupe3xzxVmX0KMbZxp8iq48G8xbLMFY3lDFz3wfbRoHacoC
- 0+F1Ta0SCTK9lcbFmvIz62b9GdIgT8vN1sHxn1Bq7/87j2oJnzwo/Ykohs+z7lScqwvZz4rFHZf
- qHR1q1uTqL26HQQWR9edspD5/K7S7OkNgQYaQCgkztjf0qJuYfBZ3RyUlHEcyuLiE4ukZwXWIA8
- uy19OEOG8k8erug==
-X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
- fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,35 +56,15 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add myself as the maintainer for Marvell PXA1908 SoC support.
+The pull request you sent on Thu, 28 Sep 2023 17:06:34 -0700:
 
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0f966f05fb0d..6f5233f3904b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2299,6 +2299,15 @@ F:	drivers/irqchip/irq-mvebu-*
- F:	drivers/pinctrl/mvebu/
- F:	drivers/rtc/rtc-armada38x.c
- 
-+ARM/Marvell PXA1908 SOC support
-+M:	Duje Mihanović <duje.mihanovic@skole.hr>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+T:	git https://gitlab.com/LegoLivesMatter/linux
-+F:	arch/arm64/boot/dts/marvell/pxa1908*
-+F:	drivers/clk/mmp/clk-of-pxa1908.c
-+F:	include/dt-bindings/clock/marvell,pxa1908.h
-+
- ARM/Mediatek RTC DRIVER
- M:	Eddie Huang <eddie.huang@mediatek.com>
- M:	Sean Wang <sean.wang@mediatek.com>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/acfdcaeed6e6b954f5b99210b8f05cbc18200945
+
+Thank you!
 
 -- 
-2.42.0
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
