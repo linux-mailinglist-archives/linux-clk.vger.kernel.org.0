@@ -2,76 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646887B33D5
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Sep 2023 15:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161DE7B3430
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Sep 2023 16:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbjI2Nj1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Sep 2023 09:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S233044AbjI2OF3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 29 Sep 2023 10:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbjI2NjR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Sep 2023 09:39:17 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250DD269D
-        for <linux-clk@vger.kernel.org>; Fri, 29 Sep 2023 06:39:05 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5345a3dfe3bso9743429a12.3
-        for <linux-clk@vger.kernel.org>; Fri, 29 Sep 2023 06:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695994743; x=1696599543; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QdNtbM8sg5Uv/4iy/PMTp5TjbGaItzuz9a1/F8ZNl8I=;
-        b=dIwD7hUTtN/uX1H3XDBJ0M250A3L6BflRIb94Plhu4s4H1kvLEgcNYhbJcGrtFpw95
-         q9KuUmdYctmK37DEdeI8BU/8+1xPjo+q1OLE4pQyjnhKiyAHp6ofL9jviO98iljmmbkX
-         ncuz9NTxf1Yr/P0zFq6z00eHNe2fDxvp1WCADnh86GBeTOUD7G7+NgzFNiZX833rxYh4
-         9ei2hAxT07B4A7rsiMIZvjF9q0m5X1B/BluhPN18BR7L8pozlYyJ2gZkantPvOF3TQi0
-         1Do0Gy7Tjt4/brjXYLjy0ggsN7tSXfQ5mNFbgY7tjnkDAvIMWATEH67qM9Simq6XNSa+
-         yHbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695994743; x=1696599543;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QdNtbM8sg5Uv/4iy/PMTp5TjbGaItzuz9a1/F8ZNl8I=;
-        b=uFqgg3EUwIGRB0WCjyU5UCB/7uI9NGLFhCxkziYQSjseLswIGdnxCrr+tJrdWOOXcs
-         7j5BGucOXO6ebH+TbBCNz4ZZ8/ENNUbvPNhCMhTHZdZRRNaMGP3WsWp2Lui9c0f77c0C
-         5MxNNg2neYp/h/Z7up7NARsMyg9m1/ppVX1B01aqeW/JtFQWnVp8ZR37hGv/bdiN5msE
-         mLQOvayiJioIAJ1pkqYPjmPVyvzA71ifzEdX6AeV3LY80eGot/wYvbn6CMoljrw1ZsUJ
-         hms9BIzPo2p3R6GpggTi0Bq2k9BA+117M3ivjf0h8GDmeaxDzVFExkrRkg+fLyMs4QZT
-         hQfw==
-X-Gm-Message-State: AOJu0YzCR/+JEY15S9Qxp0OQLSRINmzHai8bcj+bV6Pspak8pn/d6Ohl
-        jM/i8IVHT8q0L/+v5dL/03vhNrNPAMuhKuW1m7w=
-X-Google-Smtp-Source: AGHT+IGpBizH8QZwp7ZPEb3difKlOrS1jonPPKtM6duYEQOku2tgSjMYdiD+m7xCfMaKLJvj2w7g3Q==
-X-Received: by 2002:aa7:c746:0:b0:522:564d:6de with SMTP id c6-20020aa7c746000000b00522564d06demr4285089eds.36.1695994743533;
-        Fri, 29 Sep 2023 06:39:03 -0700 (PDT)
-Received: from [127.0.1.1] (178235177217.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.217])
-        by smtp.gmail.com with ESMTPSA id cx14-20020a05640222ae00b005362bcc089csm2215701edb.67.2023.09.29.06.39.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 06:39:03 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 29 Sep 2023 15:38:53 +0200
-Subject: [PATCH 2/2] clk: qcom: gcc-sc8280xp: Don't keep display AHB clocks
- always-on
+        with ESMTP id S232911AbjI2OF2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Sep 2023 10:05:28 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB59DB;
+        Fri, 29 Sep 2023 07:05:26 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B240C433C8;
+        Fri, 29 Sep 2023 14:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695996326;
+        bh=tP1APH92nLtf8T7YFL28/R3TCbGHTTmTTaQOdd2zGXg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n+MjvEB7dRdldT4nfXOKreJu7PIKU3C48OjQTg0KvQk3mRo9hpdBndfaotDjelmrz
+         Z1egO5FlHG6OVvsd3BnafqoOFhE0h0QZNvpFLP6n+94Jf1XQazF1LkWTdA3UyKhU0A
+         qd4lG4878MDE8laeNABtnDuxRe3Ff36uuKwuzhyis6v6/NG/iyHxbNA1+LDLNDOZ1C
+         /YFAEpW8Ga1ykdO23amVSdTmTf3+91n6fHFGnBIMbJVCnTpKZTfpCXQ1pNwi5aBtmk
+         Fmk1q8yumywIGqYsuRnAqyPjSxgoRB/EZXQbuKWKSrwb/YHUtyDxoTPdaSafzvTquq
+         Dl/OOpTYLWbbA==
+Date:   Fri, 29 Sep 2023 15:05:19 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linus.walleij@linaro.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        magnus.damm@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        quic_bjorande@quicinc.com, konrad.dybcio@linaro.org, arnd@arndb.de,
+        neil.armstrong@linaro.org, prabhakar.mahadev-lad.rj@bp.renesas.com,
+        biju.das.jz@bp.renesas.com, linux-renesas-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 26/28] dt-bindings: arm: renesas: document SMARC
+ Carrier-II EVK
+Message-ID: <20230929-spud-negotiate-40f630d2c0ae@spud>
+References: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
+ <20230929053915.1530607-27-claudiu.beznea@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230929-topic-8280_ahbdisp-v1-2-72bdc38309b9@linaro.org>
-References: <20230929-topic-8280_ahbdisp-v1-0-72bdc38309b9@linaro.org>
-In-Reply-To: <20230929-topic-8280_ahbdisp-v1-0-72bdc38309b9@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.13-dev-0438c
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7a52/xrNV+BUgOSd"
+Content-Disposition: inline
+In-Reply-To: <20230929053915.1530607-27-claudiu.beznea@bp.renesas.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +59,67 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-These clocks are consumed by the dispcc[01] clock controllers, so there's
-no reason to keep them on from gcc probe. Remove that hack.
 
-Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/gcc-sc8280xp.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+--7a52/xrNV+BUgOSd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-index bfb77931e868..bf95f82a3818 100644
---- a/drivers/clk/qcom/gcc-sc8280xp.c
-+++ b/drivers/clk/qcom/gcc-sc8280xp.c
-@@ -7545,18 +7545,16 @@ static int gcc_sc8280xp_probe(struct platform_device *pdev)
- 
- 	/*
- 	 * Keep the clocks always-ON
--	 * GCC_CAMERA_AHB_CLK, GCC_CAMERA_XO_CLK, GCC_DISP_AHB_CLK,
-+	 * GCC_CAMERA_AHB_CLK, GCC_CAMERA_XO_CLK,
- 	 * GCC_DISP_XO_CLK, GCC_GPU_CFG_AHB_CLK, GCC_VIDEO_AHB_CLK,
--	 * GCC_VIDEO_XO_CLK, GCC_DISP1_AHB_CLK, GCC_DISP1_XO_CLK
-+	 * GCC_VIDEO_XO_CLK, GCC_DISP1_XO_CLK
- 	 */
- 	regmap_update_bits(regmap, 0x26004, BIT(0), BIT(0));
- 	regmap_update_bits(regmap, 0x26020, BIT(0), BIT(0));
--	regmap_update_bits(regmap, 0x27004, BIT(0), BIT(0));
- 	regmap_update_bits(regmap, 0x27028, BIT(0), BIT(0));
- 	regmap_update_bits(regmap, 0x71004, BIT(0), BIT(0));
- 	regmap_update_bits(regmap, 0x28004, BIT(0), BIT(0));
- 	regmap_update_bits(regmap, 0x28028, BIT(0), BIT(0));
--	regmap_update_bits(regmap, 0xbb004, BIT(0), BIT(0));
- 	regmap_update_bits(regmap, 0xbb028, BIT(0), BIT(0));
- 
- 	ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks, ARRAY_SIZE(gcc_dfs_clocks));
+On Fri, Sep 29, 2023 at 08:39:13AM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>=20
+> Document Renesas SMARC Carrier-II EVK board which is based on RZ/G3S
+> SMARC SoM. The SMARC Carrier-II EVK consists of RZ/G3S SoM module and
+> SMARC Carrier-II carrier board, the SoM module sits on top of carrier
+> board.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
--- 
-2.39.2
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
+
+> ---
+>=20
+> Changes in v2:
+> - this patch is new in v2
+>=20
+>  Documentation/devicetree/bindings/soc/renesas/renesas.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml b=
+/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> index 31d0539bb168..594a7d7a6ee4 100644
+> --- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> @@ -486,6 +486,13 @@ properties:
+>            - const: renesas,r9a08g045s33 # PCIe support
+>            - const: renesas,r9a08g045
+> =20
+> +      - description: RZ SMARC Carrier-II Evaluation Kit
+> +        items:
+> +          - const: renesas,smarc2-evk # RZ SMARC Carrier-II EVK
+> +          - const: renesas,rzg3s-smarcm # RZ/G3S SMARC SoM
+> +          - const: renesas,r9a08g045s33 # PCIe support
+> +          - const: renesas,r9a08g045
+> +
+>  additionalProperties: true
+> =20
+>  ...
+> --=20
+> 2.39.2
+>=20
+
+--7a52/xrNV+BUgOSd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZRbZnwAKCRB4tDGHoIJi
+0utnAQDDAyM70bskIR+jot5/Uoosxmd3Vo+j0LBWTc2HLt+7tAEAwpX9wgoSxAbO
+QIu3Es/tsf6na3Bwc0oift7ihJBQGgQ=
+=shhc
+-----END PGP SIGNATURE-----
+
+--7a52/xrNV+BUgOSd--
