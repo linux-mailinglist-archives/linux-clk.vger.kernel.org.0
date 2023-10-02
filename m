@@ -2,186 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513527B4EFB
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Oct 2023 11:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631777B4F9F
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Oct 2023 11:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbjJBJYB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Oct 2023 05:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
+        id S236258AbjJBJ4M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Oct 2023 05:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236084AbjJBJXy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Oct 2023 05:23:54 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297179E;
-        Mon,  2 Oct 2023 02:23:51 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-50307acd445so24788970e87.0;
-        Mon, 02 Oct 2023 02:23:51 -0700 (PDT)
+        with ESMTP id S236112AbjJBJ4L (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Oct 2023 05:56:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7BF9F
+        for <linux-clk@vger.kernel.org>; Mon,  2 Oct 2023 02:56:07 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50585357903so804306e87.2
+        for <linux-clk@vger.kernel.org>; Mon, 02 Oct 2023 02:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696238629; x=1696843429; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+WxI5UNOh/sMglL2XmJQroF7LkfgIlgVWztDdlKZGLc=;
-        b=Ty7Gd6qcKHE9K/CCHgTbxFD7iuklgDrsqZ6NnZpvYGaeyYxmZzLcWwS2Y+aIwhLgt4
-         uAe+CjVFI4u4lS52Mw4y9+E1eJO/br9fMHzKFq064155hJeoIWtqYbjQ+BOLpKLFXyNs
-         1fLiXt8R6Zpr7KZussJaHLn8bj/Co+1qvdeJYkCdnHU8JKT4k0JjRuUsm4KIjJcs59Dz
-         xAbzq76HuAuxuDfDaFr7N4irF4QB/3Yap5n21lOTuSOLrBeU9b0taNDtcvsmYfpAdrcc
-         hxbmir8mYXWSlzMIvLxzl9Nz2tlcWz9Ua3DFzfMUiX8TYV+4izhHhIkLYNwGIL698Vk5
-         jbMQ==
+        d=linaro.org; s=google; t=1696240566; x=1696845366; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VI6ALURCYFTZzB2n0KbkvH0CnC/yIlDD9PmeGJooHMM=;
+        b=kMWAElZ1iknV5CgzRu9hpyJO+jTSMH8408YtG+t/fVy0KnKWByRIG4+FGr0D/tX3y/
+         SrBBcw+9CDWoOdXLv0oNnwy66IrlnssODrwmw7THAEbNXzuij75V/YuKG2n4tJYmGofh
+         QR3lbWWcIAmv9tPkPlDazuqRTyeLyIEy5XbNWxKTqfLb3hTv7rBpZq+OFuTeN+ofQgKf
+         764B7Qx+N5XGFwLLGhz3w43c0GUVVeliiGdqoKbm5GI4byHCrtqA195up+IGWv1+/7kB
+         +0+PwNpi/+OVfExZhmRnGZnFJjBxdvsLmiiHqrfqSeB/Cx6BJ4hLGoD20AYNY3mkNa68
+         9yiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696238629; x=1696843429;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+WxI5UNOh/sMglL2XmJQroF7LkfgIlgVWztDdlKZGLc=;
-        b=OmDbJvToDNkavsHj0THFyEH/B6lFnqprsmewDoDqYe+aRJSm2al7qpThVEEQpQcIAD
-         77YYlqqylAyzE1VfTNLoUutPKe3+l92QICJmYoAeh4/gyPopgU2H0ivlL3aTZArYvVN5
-         ioVskTosF7/Gys/7o3Te0CAh9pYm04MCqmDUMtm9wuvVc1F9SSgHOKOMuVieKUjONb+i
-         h7n3HLTQcBL9Gq7RXG3aj1F5oO1jpC5I1i4exrDlsiB7FNKGbn40L2gmeppboVKPgMi+
-         Taf2Qx7932OaVjN/viN5JXMo9jmOjUYZ/adxKE8ftwzGmPIctJzRsjnE7ClW/hs/AbV4
-         kPWQ==
-X-Gm-Message-State: AOJu0YwewG4VxhbKvG515cnrPU4qSjpmwF+FAm1MuWlfl7cW2uCwYW7U
-        pUbAy6q4fNeIYn5wON93nnUY6UbXJok=
-X-Google-Smtp-Source: AGHT+IE7TNaedcvmDzAjGdIITBA+OGMR+LGyhUSgwsbuDpFIgKXquyj34ELFm8dLaLHrZCmqoZ9LJQ==
-X-Received: by 2002:ac2:57c6:0:b0:505:70dd:d594 with SMTP id k6-20020ac257c6000000b0050570ddd594mr5124538lfo.49.1696238629036;
-        Mon, 02 Oct 2023 02:23:49 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id o30-20020a05600c511e00b003fef5e76f2csm6156589wms.0.2023.10.02.02.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 02:23:48 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Mon, 02 Oct 2023 11:23:35 +0200
-Subject: [PATCH RFC 4/4] clk: consider rates when calculating subtree
+        d=1e100.net; s=20230601; t=1696240566; x=1696845366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VI6ALURCYFTZzB2n0KbkvH0CnC/yIlDD9PmeGJooHMM=;
+        b=NVPhCNWrErnb5GSiHMtwbx2YUiK3mcHCyM/ktyJw34PdGBpUtVGcArAogz4U8VqZqu
+         WGn0zYzuLH5v2MFv69AWkTUfn+zbrpXAdDH1D27Cns58B2IPv5DFw0ObXxtbYEHkbzkt
+         PfInZuRS1+KEbUCak1bvJGpNJPPfcV2UZrgR3DKqdhd4SUROqnCX6y3DrmILpQprdCFm
+         zdrLcoCD0dqpaTwuyeyvvTPF8alBodgmrTwdk6AdY37BSjMFJ2eB25n6gPnLNqyEfWvZ
+         /rfQ/RSi15KfwIEmCw9vcjeNkidM3GA89mwJUSkGFpqqZhcpfRURIvvDnBxzyoF1Mztk
+         GVxg==
+X-Gm-Message-State: AOJu0Yws23yH9/0VMt6i/jk6P1Cco2VUo9qhzBHnV5lASGgdC24bYWvq
+        M/+C/pVDoOo4UbEgAp4OVEX96Q==
+X-Google-Smtp-Source: AGHT+IEyPY2VWrXaKI4eQ9fWZwqFimDpZkQ+STvWpRTjmOVGlI4ZzlEncK2E1RdAljpCJEvp4OTGQw==
+X-Received: by 2002:a05:6512:485b:b0:503:3707:66ed with SMTP id ep27-20020a056512485b00b00503370766edmr8580902lfb.34.1696240565714;
+        Mon, 02 Oct 2023 02:56:05 -0700 (PDT)
+Received: from [172.30.204.164] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id f8-20020ac25328000000b004fe37339f8esm4687715lfh.149.2023.10.02.02.56.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Oct 2023 02:56:05 -0700 (PDT)
+Message-ID: <36e790a6-a9e8-bca9-226c-48339fefffb1@linaro.org>
+Date:   Mon, 2 Oct 2023 11:56:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231002-ccf-set-multiple-v1-4-2df5e9eb3738@skidata.com>
-References: <20231002-ccf-set-multiple-v1-0-2df5e9eb3738@skidata.com>
-In-Reply-To: <20231002-ccf-set-multiple-v1-0-2df5e9eb3738@skidata.com>
-To:     Maxime Ripard <mripard@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Frank Oltmanns <frank@oltmanns.dev>,
-        Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2 5/5] arm64: boot: dts: qcom: sc8280xp: Add in CAMCC for
+ sc8280xp
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        andersson@kernel.org, agross@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jonathan@marek.ca, quic_tdas@quicinc.com,
+        vladimir.zapolskiy@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230930134114.1816590-1-bryan.odonoghue@linaro.org>
+ <20230930134114.1816590-6-bryan.odonoghue@linaro.org>
+ <449cd202-a7d8-4d20-3a41-17a3ba1355cb@linaro.org>
+ <ec28c662-8065-4bfc-bd5e-af0b9f3e87ac@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ec28c662-8065-4bfc-bd5e-af0b9f3e87ac@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
 
-With req_rate_tmp and new_rate, we can identify if a clock is changed by
-accident. Additionally, with req_rate, we are able to find out if a
-clock consumer requires a certain rate. This enables us to find
-"unwanted clock changes", meaning a clock is changed although its
-consumer is expecting its current rate. On such a finding, the
-"calculate new rates" process is started again, but this time for the
-affected clock. During every execution of this process, we identify the
-clocks which are required to be changed to get the requested rate. If a
-clock needs to be changed a second time, we found a conflict. There are
-various options to resolve the conflict, but for now we just error out.
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- drivers/clk/clk.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 51 insertions(+), 3 deletions(-)
+On 10/1/23 01:01, Bryan O'Donoghue wrote:
+> On 30/09/2023 17:41, Konrad Dybcio wrote:
+>>
+>>
+>> On 9/30/23 15:41, Bryan O'Donoghue wrote:
+>>> Add in CAMCC for sc8280xp. The sc8280xp Camera Clock Controller looks
+>>> similar to most of the sdmX, smX and now scX controllers.
+>>>
+>>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++++++++++
+>>>   1 file changed, 16 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> index cad59af7ccef..ca43d038578b 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+>>> @@ -8,6 +8,7 @@
+>>>   #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+>>>   #include <dt-bindings/clock/qcom,gpucc-sc8280xp.h>
+>>>   #include <dt-bindings/clock/qcom,rpmh.h>
+>>> +#include <dt-bindings/clock/qcom,sc8280xp-camcc.h>
+>>>   #include <dt-bindings/clock/qcom,sc8280xp-lpasscc.h>
+>>>   #include <dt-bindings/interconnect/qcom,osm-l3.h>
+>>>   #include <dt-bindings/interconnect/qcom,sc8280xp.h>
+>>> @@ -3450,6 +3451,21 @@ usb_1_role_switch: endpoint {
+>>>               };
+>>>           };
+>>> +        camcc: clock-controller@ad00000 {
+>>> +            compatible = "qcom,sc8280xp-camcc";
+>>> +            reg = <0 0x0ad00000 0 0x20000>;
+>>> +            clocks = <&gcc GCC_CAMERA_AHB_CLK>,
+>>> +                 <&rpmhcc RPMH_CXO_CLK>,
+>>> +                 <&rpmhcc RPMH_CXO_CLK_A>,
+>>> +                 <&sleep_clk>;
+>>> +            clock-names = "iface", "bi_tcxo", "bi_tcxo_ao", 
+>>> "sleep_clk";
+>> clock-names is now redundant :)
+>>
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>> Konrad
+> 
+> BTW.
+> 
+> Looking at the block diagram for the Camera, I see why Cam_CC_AHB is 
+> included in this list. Its not called out as a dependency in the clock 
+> tree but when you look at the block diagram you can see it gates the AHB 
+> bus to the CAM_CC block.
+Yep, that's why using is as pm_clk for the clock controller makes sense
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 3e7dd97b71c3..296d0fa510de 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -2145,7 +2145,10 @@ static int __clk_speculate_rates(struct clk_core *core,
- 	return ret;
- }
- 
--static void clk_calc_subtree(struct clk_core *core, unsigned long new_rate,
-+static struct clk_core *clk_calc_new_rates(struct clk_core *core,
-+					   unsigned long rate);
-+
-+static int clk_calc_subtree(struct clk_core *core, unsigned long new_rate,
- 			     struct clk_core *new_parent, u8 p_index)
- {
- 	struct clk_core *child;
-@@ -2160,8 +2163,28 @@ static void clk_calc_subtree(struct clk_core *core, unsigned long new_rate,
- 
- 	hlist_for_each_entry(child, &core->children, child_node) {
- 		child->new_rate = clk_recalc(child, new_rate);
--		clk_calc_subtree(child, child->new_rate, NULL, 0);
-+
-+		/*
-+		 * A new rate of a shared parent clock might clash with a
-+		 * required rate of a sibling. Ensure that the new rates are as
-+		 * close as possible to the required ones. During this process,
-+		 * the shared parent clock is not allowed to be changed again,
-+		 * meaning it should have found the optimal rate already in the
-+		 * initial clk_core_determine_round_nolock().
-+		 */
-+		if (child->req_rate != CLK_RATE_UNSET &&
-+		    child->req_rate != child->new_rate) {
-+			pr_debug("%s: set back to req=%lu\n", child->name,
-+				 child->req_rate);
-+			if (!clk_calc_new_rates(child, child->req_rate))
-+				return -EINVAL;
-+		}
-+
-+		if (clk_calc_subtree(child, child->new_rate, NULL, 0))
-+			return -EINVAL;
- 	}
-+
-+	return 0;
- }
- 
- static void clk_reset_temp_rates(struct clk_core *core)
-@@ -2259,6 +2282,22 @@ static struct clk_core *clk_calc_new_rates(struct clk_core *core,
- out:
- 	/* only set new_rates if we found a valid change path */
- 	if (top) {
-+		/*
-+		 * If req_rate_tmp is set, the current clock is already required
-+		 * to be changed in this run. However, if the new rate is not
-+		 * the same as the temporary required one, the driver did not
-+		 * consider its active rate (which is required by at least one
-+		 * of its descendants from a previous run).
-+		 */
-+		if (core->req_rate_tmp != CLK_RATE_UNSET &&
-+		    core->req_rate_tmp != new_rate) {
-+			pr_warn("%s: %s: conflict: req=%lu new=%lu\n", __func__,
-+				core->name, core->req_rate_tmp, new_rate);
-+			pr_err(".{determine,round}_rate() of %s requires fix\n",
-+			       core->name);
-+			return NULL;
-+		}
-+
- 		/*
- 		 * The current clock is an ancestor of the trigger and therefore
- 		 * is a clock which needs to be changed in this run. Clocks
-@@ -2267,7 +2306,16 @@ static struct clk_core *clk_calc_new_rates(struct clk_core *core,
- 		 * conflicts with req_rate.
- 		 */
- 		core->req_rate_tmp = new_rate;
--		clk_calc_subtree(core, new_rate, parent, p_index);
-+
-+		/*
-+		 * Calculating the subtree potentially leads to a re-entrance
-+		 * into clk_calc_new_rates(). This is required to set accidently
-+		 * changed consumer-required clocks, back to their required
-+		 * rate. This can fail in case of a conflict (shared parent
-+		 * needs to be changed again).
-+		 */
-+		if (clk_calc_subtree(core, new_rate, parent, p_index))
-+			return NULL;
- 	}
- 
- 	return top;
-
--- 
-2.34.1
-
+Konrad
