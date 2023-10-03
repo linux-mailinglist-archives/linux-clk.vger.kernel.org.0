@@ -2,57 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44CA7B68DD
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Oct 2023 14:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBBC7B69CA
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Oct 2023 15:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjJCMUu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Tue, 3 Oct 2023 08:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S232550AbjJCNEj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Oct 2023 09:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjJCMUt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Oct 2023 08:20:49 -0400
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17ABAC;
-        Tue,  3 Oct 2023 05:20:45 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 78D2418688D7;
-        Tue,  3 Oct 2023 15:20:42 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DxCA32iw3j8i; Tue,  3 Oct 2023 15:20:42 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 3536D18688DD;
-        Tue,  3 Oct 2023 15:20:40 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id f3V6pAVsiGZ3; Tue,  3 Oct 2023 15:20:40 +0300 (MSK)
-Received: from new-mail.astralinux.ru (unknown [10.177.185.102])
-        by mail.astralinux.ru (Postfix) with ESMTPS id 8B17E18688EE;
-        Tue,  3 Oct 2023 15:20:38 +0300 (MSK)
-Received: from [10.177.20.58] (unknown [10.177.20.58])
-        by new-mail.astralinux.ru (Postfix) with ESMTPA id 4S0H3B1Rq0zYcnK;
-        Tue,  3 Oct 2023 15:20:38 +0300 (MSK)
-Message-ID: <c31bcd98-cc0a-4edf-945b-f4e22e122b46@astralinux.ru>
-Date:   Tue, 3 Oct 2023 15:20:16 +0300
+        with ESMTP id S232494AbjJCNEi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Oct 2023 09:04:38 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 538BCB4
+        for <linux-clk@vger.kernel.org>; Tue,  3 Oct 2023 06:04:32 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40666aa674fso8756165e9.0
+        for <linux-clk@vger.kernel.org>; Tue, 03 Oct 2023 06:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1696338271; x=1696943071; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=6l4nXBOkljtpuX+G5EH5zp+H5kZ23Sa7wF7kBuzhJ9k=;
+        b=Uh59upzsBfkSimVSNJmwlLIO5Xd/2EguQlNpvi8M3/cJpZFdOYgEy/IaSYwrbbXbmh
+         KTyZaFsIrfF0/e/nXyqjLTJWuSf7FcA599KqhMh4VqDvf+Vq5nmjW5akT+3Eq0KDyqH0
+         90JSqIhzUf4pEIgcageFifVX5bVl7qV4C4dKk+1mErg5lnyOy324fgCKHRwNkCt/2BSV
+         dmOu37kixQcYQnlUUGLFgNlQgXEbhpW6xEqAHaiU3tO5PKQgg9TIsb0P7EOW02xHi56Y
+         bhEpcIcKXPmttTxbILiXWTjwH5F+50wk7UB2HMemcKMj1HG1rxnCtuW9VbvStGPV1FhZ
+         T6zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696338271; x=1696943071;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6l4nXBOkljtpuX+G5EH5zp+H5kZ23Sa7wF7kBuzhJ9k=;
+        b=ogT8RMy/nW0/0AZZRWXDYZy9TM4DvaKX0im3KEccFYZ4Q6G1eeZkYZtlvSRXn815V+
+         Dscbvji8qGUoTJoun8EZK2fC40dhOz2oiTdGK36DWTpdnXsF66sVNsW+6px22Ao+fU2x
+         68pJCvGZsz4PT7Ip90G7ggbtYHbI7dF4s2Nhd+gP+2Z/2Lc1DfPAf8oK3F/V6Yo2UQzA
+         Dtn8oPqVAdXmAx41ex/Rp/KKUe3EPMjqe146psMylyNhyW9VVXUGZDUfgcFJxOZ5uJ22
+         pfUU0kIQc/Bd3nIV2xQD4P9ZyWiJ1w8ilgpyIxOmeGSxVFXRMifzNrBQTf2ei/F0LrU6
+         V/7g==
+X-Gm-Message-State: AOJu0YyIdhzgDLGR1z166JZPAeOH/oBaVCezoMWZMTnBylWq+nL5Urjp
+        gZYM6rZIhSwRAUIiWskMLgfmaA==
+X-Google-Smtp-Source: AGHT+IEKJkPlwmwr8JLiRKpNtbJZn5qHxOt9LVua9L0OtRCZhK4Rc0FALZ8BVV5x976WfIkZ1WQ5zw==
+X-Received: by 2002:a5d:6084:0:b0:323:3ab5:990c with SMTP id w4-20020a5d6084000000b003233ab5990cmr13244084wrt.44.1696338269719;
+        Tue, 03 Oct 2023 06:04:29 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:15bf:5b59:3e24:71fe])
+        by smtp.gmail.com with ESMTPSA id o4-20020adfcf04000000b00326f0ca3566sm1524195wrj.50.2023.10.03.06.04.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 06:04:29 -0700 (PDT)
+References: <20230928063448.3544464-1-xianwei.zhao@amlogic.com>
+ <20230928063448.3544464-4-xianwei.zhao@amlogic.com>
+User-agent: mu4e 1.8.13; emacs 29.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH 3/4] clk: meson: C3: add support for the C3 SoC PLL clock
+Date:   Tue, 03 Oct 2023 14:55:01 +0200
+In-reply-to: <20230928063448.3544464-4-xianwei.zhao@amlogic.com>
+Message-ID: <1jwmw3yi03.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: RuPost Desktop
-Subject: Re: [PATCH] clk: cdce925: change condition in cdce925_clk_round_rate
-Content-Language: ru
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-References: <20230901130359.20561-1-abelova@astralinux.ru>
-From:   =?UTF-8?B?0JDQvdCw0YHRgtCw0YHQuNGPINCb0Y7QsdC40LzQvtCy0LA=?= 
-        <abelova@astralinux.ru>
-In-Reply-To: <20230901130359.20561-1-abelova@astralinux.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,32 +79,626 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-01/09/23 16:03, Anastasia Belova пишет:
+On Thu 28 Sep 2023 at 14:34, Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
 
-Just a friendly reminder.
-
-> To avoid division by zero add check if
-> divider is zero.
+> Add the C3 PLL clock controller driver for the Amlogic C3 SoC family.
 >
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: 19fbbbbcd3a3 ("Add TI CDCE925 I2C controlled clock synthesizer driver")
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 > ---
->   drivers/clk/clk-cdce925.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/clk/meson/Kconfig  |  12 +
+>  drivers/clk/meson/Makefile |   1 +
+>  drivers/clk/meson/c3-pll.c | 510 +++++++++++++++++++++++++++++++++++++
+>  drivers/clk/meson/c3-pll.h |  35 +++
+>  4 files changed, 558 insertions(+)
+>  create mode 100644 drivers/clk/meson/c3-pll.c
+>  create mode 100644 drivers/clk/meson/c3-pll.h
 >
-> diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
-> index 96ac90364847..d903cdc3ad7d 100644
-> --- a/drivers/clk/clk-cdce925.c
-> +++ b/drivers/clk/clk-cdce925.c
-> @@ -441,7 +441,7 @@ static long cdce925_clk_round_rate(struct clk_hw *hw, unsigned long rate,
->   	unsigned long l_parent_rate = *parent_rate;
->   	u16 divider = cdce925_calc_divider(rate, l_parent_rate);
->   
-> -	if (l_parent_rate / divider != rate) {
-> +	if (divider && l_parent_rate / divider != rate) {
->   		l_parent_rate = cdce925_clk_best_parent_rate(hw, rate);
->   		divider = cdce925_calc_divider(rate, l_parent_rate);
->   		*parent_rate = l_parent_rate;
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index c5303e4c1604..76be4bbd2afb 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -128,6 +128,18 @@ config COMMON_CLK_A1_PERIPHERALS
+>  	  device, A1 SoC Family. Say Y if you want A1 Peripherals clock
+>  	  controller to work.
+>  
+> +config COMMON_CLK_C3_PLL
+> +	tristate "Amlogic C3 PLL clock controller"
+> +	default y
+> +	select COMMON_CLK_MESON_REGMAP
+> +	select COMMON_CLK_MESON_PLL
+> +	select COMMON_CLK_MESON_CLKC_UTILS
+> +	help
+> +	  Support for the PLL clock controller on Amlogic C302X and C308L devices,
+> +	  AKA c3. Amlogic C302X and C308L devices include AW402, AW409 and AW419.
+> +	  Say Y if you want the board to work, because PLLs are the parent of most
+> +	  peripherals.
+> +
+>  config COMMON_CLK_G12A
+>  	tristate "G12 and SM1 SoC clock controllers support"
+>  	depends on ARM64
+> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+> index 9ee4b954c896..4420af628b31 100644
+> --- a/drivers/clk/meson/Makefile
+> +++ b/drivers/clk/meson/Makefile
+> @@ -19,6 +19,7 @@ obj-$(CONFIG_COMMON_CLK_AXG) += axg.o axg-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_AXG_AUDIO) += axg-audio.o
+>  obj-$(CONFIG_COMMON_CLK_A1_PLL) += a1-pll.o
+>  obj-$(CONFIG_COMMON_CLK_A1_PERIPHERALS) += a1-peripherals.o
+> +obj-$(CONFIG_COMMON_CLK_C3_PLL) += c3-pll.o
+>  obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
+> diff --git a/drivers/clk/meson/c3-pll.c b/drivers/clk/meson/c3-pll.c
+> new file mode 100644
+> index 000000000000..5244dc19ab6e
+> --- /dev/null
+> +++ b/drivers/clk/meson/c3-pll.c
+> @@ -0,0 +1,510 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Amlogic C3 PLL Controller Driver
+> + *
+> + * Copyright (c) 2023 Amlogic, inc.
+> + * Author: Chuan Liu <chuan.liu@amlogic.com>
+
+If Chuan is Author, shouldn't get his Signed-off-by ?
+Maybe Co-developed-by as well ?
+
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/clk.h>
+> +#include "clk-regmap.h"
+> +#include "clk-pll.h"
+> +#include "c3-pll.h"
+> +#include "meson-clkc-utils.h"
+> +#include <dt-bindings/clock/amlogic,c3-pll-clkc.h>
+> +
+> +#define MEMBER_REG_PARM(_member_name, _reg, _shift, _width)		\
+> +	._member_name = {						\
+> +		.reg_off = _reg,					\
+> +		.shift   = _shift,					\
+> +		.width   = _width,					\
+> +}
+> +
+> +#define __AML_CLK_PLL(_name, _en_reg, _en_shift, _en_width,		\
+> +			_m_reg, _m_shift, _m_width,			\
+> +			_f_reg, _f_shift, _f_width,			\
+> +			_n_reg, _n_shift, _n_width,			\
+> +			_l_reg, _l_shift, _l_width,			\
+> +			_r_reg, _r_shift, _r_width,			\
+> +			_init_reg, _init_reg_cnt, _range, _table,	\
+> +			_dflags, _ops, _pname, _pdata, _phw, _iflags)	\
+> +static struct clk_regmap _name = {					\
+> +	.data = &(struct meson_clk_pll_data){				\
+> +		MEMBER_REG_PARM(en,					\
+> +			_en_reg, _en_shift, _en_width),			\
+> +		MEMBER_REG_PARM(m,					\
+> +			_m_reg, _m_shift, _m_width),			\
+> +		MEMBER_REG_PARM(frac,					\
+> +			_f_reg, _f_shift, _f_width),			\
+> +		MEMBER_REG_PARM(n,					\
+> +			_n_reg, _n_shift, _n_width),			\
+> +		MEMBER_REG_PARM(l,					\
+> +			_l_reg, _l_shift, _l_width),			\
+> +		MEMBER_REG_PARM(rst,					\
+> +			_r_reg, _r_shift, _r_width),			\
+> +		.range = _range,					\
+> +		.table = _table,					\
+> +		.init_regs = _init_reg,					\
+> +		.init_count = _init_reg_cnt,				\
+> +		.flags = _dflags,					\
+> +	},								\
+> +	.hw.init = &(struct clk_init_data){				\
+> +		.name = #_name,						\
+> +		.ops = _ops,						\
+> +		.parent_names = _pname,					\
+> +		.parent_data = _pdata,					\
+> +		.parent_hws = (const struct clk_hw *[]) {_phw},		\
+> +		.num_parents = 1,					\
+> +		.flags = _iflags,					\
+> +	},								\
+> +}
+> +
+> +#define __AML_CLK_MUX(_name, _reg, _mask, _shift, _table, _dflags,	\
+> +			_ops, _pname, _pdata, _phw, _pnub, _iflags)	\
+> +static struct clk_regmap _name = {					\
+> +	.data = &(struct clk_regmap_mux_data){				\
+> +		.offset = _reg,						\
+> +		.mask = _mask,						\
+> +		.shift = _shift,					\
+> +		.table = _table,					\
+> +		.flags = _dflags,					\
+> +	},								\
+> +	.hw.init = &(struct clk_init_data){				\
+> +		.name = #_name,						\
+> +		.ops = _ops,						\
+> +		.parent_names = _pname,					\
+> +		.parent_data = _pdata,					\
+> +		.parent_hws = (const struct clk_hw *[]) { _phw },	\
+> +		.num_parents = _pnub,					\
+> +		.flags = _iflags,					\
+> +	},								\
+> +}
+> +
+> +#define __AML_CLK_DIV(_name, _reg, _shift, _width, _table, _dflags,	\
+> +			_ops, _pname, _pdata, _phw, _iflags)		\
+> +static struct clk_regmap _name = {					\
+> +	.data = &(struct clk_regmap_div_data){				\
+> +		.offset = _reg,						\
+> +		.shift = _shift,					\
+> +		.width = _width,					\
+> +		.table = _table,					\
+> +		.flags = _dflags,					\
+> +	},								\
+> +	.hw.init = &(struct clk_init_data){				\
+> +		.name = #_name,						\
+> +		.ops = _ops,						\
+> +		.parent_names = _pname,					\
+> +		.parent_data = _pdata,					\
+> +		.parent_hws = (const struct clk_hw *[]) { _phw },	\
+> +		.num_parents = 1,					\
+> +		.flags = _iflags,					\
+> +	},								\
+> +}
+> +
+> +#define __AML_CLK_GATE(_name, _reg, _bit, _gflags,			\
+> +			 _ops, _pname, _pdata, _phw, _iflags)		\
+> +static struct clk_regmap _name = {					\
+> +	.data = &(struct clk_regmap_gate_data){				\
+> +		.offset = _reg,						\
+> +		.bit_idx = _bit,					\
+> +		.flags = _gflags,					\
+> +	},								\
+> +	.hw.init = &(struct clk_init_data) {				\
+> +		.name = #_name,						\
+> +		.ops = _ops,						\
+> +		.parent_names = _pname,					\
+> +		.parent_data = _pdata,					\
+> +		.parent_hws = (const struct clk_hw *[]) { _phw },	\
+> +		.num_parents = 1,					\
+> +		.flags = _iflags,					\
+> +	},								\
+> +}
+> +
+> +#define __AML_CLK_FIXED_FACTOR(_name, _mult, _div, _ops,		\
+> +				 _pname, _pdata, _phw, _iflags)		\
+> +	static struct clk_fixed_factor _name = {			\
+> +		.mult = _mult,						\
+> +		.div = _div,						\
+> +		.hw.init = &(struct clk_init_data){			\
+> +		.name = #_name,						\
+> +		.ops = _ops,						\
+> +		.parent_names = _pname,					\
+> +		.parent_data = _pdata,					\
+> +		.parent_hws = (const struct clk_hw *[]) { _phw },	\
+> +		.num_parents = 1,					\
+> +		.flags = _iflags,					\
+> +	},								\
+> +}
+> +
+> +#define AML_CLK_PLL_RW(_name, _en_reg, _en_shift, _en_width,		\
+> +		      _m_reg, _m_shift, _m_width,			\
+> +		      _f_reg, _f_shift, _f_width,			\
+> +		      _n_reg, _n_shift, _n_width,			\
+> +		      _l_reg, _l_shift, _l_width,			\
+> +		      _r_reg, _r_shift, _r_width,			\
+> +		      _init_reg, _init_reg_cnt, _range, _table, _dflags,\
+> +		      _pdata, _iflags)					\
+> +	__AML_CLK_PLL(_name, _en_reg, _en_shift, _en_width,		\
+> +			_m_reg, _m_shift, _m_width,			\
+> +			_f_reg, _f_shift, _f_width,			\
+> +			_n_reg, _n_shift, _n_width,			\
+> +			_l_reg, _l_shift, _l_width,			\
+> +			_r_reg, _r_shift, _r_width,			\
+> +			_init_reg, _init_reg_cnt, _range, _table,	\
+> +			_dflags, &meson_clk_pll_ops,			\
+> +			NULL, _pdata, NULL, _iflags)
+> +
+> +#define AML_CLK_PLL_RO(_name, _en_reg, _en_shift, _en_width,		\
+> +			 _m_reg, _m_shift, _m_width,			\
+> +			 _f_reg, _f_shift, _f_width,			\
+> +			 _n_reg, _n_shift, _n_width,			\
+> +			 _l_reg, _l_shift, _l_width,			\
+> +			 _r_reg, _r_shift, _r_width,			\
+> +			 _init_reg, _init_reg_cnt, _range, _table,	\
+> +			 _dflags, _pdata, _iflags)			\
+> +	__AML_CLK_PLL(_name, _en_reg, _en_shift, _en_width,		\
+> +			_m_reg, _m_shift, _m_width,			\
+> +			_f_reg, _f_shift, _f_width,			\
+> +			_n_reg, _n_shift, _n_width,			\
+> +			_l_reg, _l_shift, _l_width,			\
+> +			_r_reg, _r_shift, _r_width,			\
+> +			_init_reg, _init_reg_cnt, _range, _table,	\
+> +			_dflags, &meson_clk_pll_ro_ops,			\
+> +			NULL, _pdata, NULL, _iflags)
+> +
+> +#define AML_CLK_MUX_RW(_name, _reg, _mask, _shift, _table, _dflags,	\
+> +			 _pdata, _iflags)				\
+> +	__AML_CLK_MUX(_name, _reg, _mask, _shift, _table, _dflags,	\
+> +			&clk_regmap_mux_ops, NULL, _pdata, NULL,	\
+> +			ARRAY_SIZE(_pdata), _iflags)
+> +
+> +#define AML_CLK_DIV_RW(_name, _reg, _shift, _width, _table, _dflags,	\
+> +			 _phw, _iflags)					\
+> +	__AML_CLK_DIV(_name, _reg, _shift, _width, _table, _dflags,	\
+> +			&clk_regmap_divider_ops, NULL, NULL,		\
+> +			       _phw, _iflags)
+> +
+> +#define AML_CLK_DIV_RO(_name, _reg, _shift, _width, _table, _dflags,	\
+> +			 _phw, _iflags)					\
+> +	__AML_CLK_DIV(_name, _reg, _shift, _width, _table, _dflags,	\
+> +			&clk_regmap_divider_ro_ops, NULL, NULL,		\
+> +			_phw, _iflags)
+> +
+> +#define AML_CLK_GATE_RW(_name, _reg, _bit, _dflags, _phw, _iflags)	\
+> +	__AML_CLK_GATE(_name, _reg, _bit, _dflags,			\
+> +			 &clk_regmap_gate_ops, NULL, NULL, _phw,	\
+> +			 _iflags)
+> +
+> +#define AML_CLK_GATE_RO(_name, _reg, _bit, _dflags, _phw, _iflags)	\
+> +	__AML_CLK_GATE(_name, _reg, _bit, _dflags,			\
+> +			 &clk_regmap_gate_ro_ops, NULL, NULL, _phw,	\
+> +			 _iflags)
+> +
+> +#define AML_CLK_FIXED_FACTOR(_name, _mult, _div, _phw, _iflags)	\
+> +	__AML_CLK_FIXED_FACTOR(_name, _mult, _div,			\
+> +				 &clk_fixed_factor_ops, NULL, NULL,	\
+> +				 _phw, _iflags)
+> +
+
+I don't get why all these macro are needed ? I don't see a 10 instances
+of the very same clock that would justify this.
+
+It makes this driver borderline un-reviewable.
+
+Unless you can provide a very reason why it is better like this, please
+have a look a the a1 and s4 controllers and re-submit.
+
+Same goes for patch #4
+
+
+> +static const struct clk_parent_data pll_dco_parent = {
+> +	.fw_name = "pll_in",
+> +};
+> +
+> +static const struct clk_parent_data mclk_pll_dco_parent = {
+> +	.fw_name = "mclk_pll_in",
+> +};
+> +
+> +AML_CLK_PLL_RO(fixed_pll_dco, ANACTRL_FIXPLL_CTRL0, 28, 1,  /* en */
+> +		ANACTRL_FIXPLL_CTRL0, 0,  8,  /* m */
+> +		0, 0,  0,  /* frac */
+> +		ANACTRL_FIXPLL_CTRL0, 16, 5,  /* n */
+> +		ANACTRL_FIXPLL_CTRL0, 31, 1,  /* lock */
+> +		ANACTRL_FIXPLL_CTRL0, 29, 1,  /* rst */
+> +		NULL, 0, NULL, NULL, 0, &pll_dco_parent, 0);
+> +AML_CLK_DIV_RO(fixed_pll, ANACTRL_FIXPLL_CTRL0, 12, 3, NULL,
+> +		 CLK_DIVIDER_POWER_OF_TWO, &fixed_pll_dco.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div40_div, 1, 40, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div40, ANACTRL_FIXPLL_CTRL4, 0, 0, &fclk_div40_div.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div2_div, 1, 2, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div2, ANACTRL_FIXPLL_CTRL4, 24, 0, &fclk_div2_div.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div2p5_div, 2, 5, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div2p5, ANACTRL_FIXPLL_CTRL4, 4, 0, &fclk_div2p5_div.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div3_div, 1, 3, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div3, ANACTRL_FIXPLL_CTRL4, 20, 0, &fclk_div3_div.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div4_div, 1, 4, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div4, ANACTRL_FIXPLL_CTRL4, 21, 0, &fclk_div4_div.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div5_div, 1, 5, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div5, ANACTRL_FIXPLL_CTRL4, 22, 0, &fclk_div5_div.hw, 0);
+> +AML_CLK_FIXED_FACTOR(fclk_div7_div, 1, 7, &fixed_pll.hw, 0);
+> +AML_CLK_GATE_RO(fclk_div7, ANACTRL_FIXPLL_CTRL4, 23, 0, &fclk_div7_div.hw, 0);
+> +
+> +static const struct reg_sequence c3_gp0_init_regs[] = {
+> +	{ .reg = ANACTRL_GP0PLL_CTRL1,	.def = 0x0 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL2,	.def = 0x0 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL3,	.def = 0x48681c00 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL4,  .def = 0x88770290 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL5,  .def = 0x3927200a },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL6,	.def = 0x56540000, .delay_us = 10 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL0,	.def = 0x080304fa },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL0,	.def = 0x380304fa, .delay_us = 10 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL0,	.def = 0X180304fa }
+> +};
+> +
+> +static const struct pll_params_table c3_gp0_pll_params_table[] = {
+> +	PLL_PARAMS(150, 1), /* DCO = 3600M */
+> +	PLL_PARAMS(130, 1), /* DCO = 3120M */
+> +	PLL_PARAMS(192, 1), /* DCO = 4608M */
+> +	PLL_PARAMS(125, 1), /* DCO = 3000M */
+> +	{ /* sentinel */  }
+> +};
+> +
+> +/* The maximum frequency divider supports is 32, not 128(2^7) */
+> +static const struct clk_div_table c3_gp0_pll_od_table[] = {
+> +	{ 0,  1 },
+> +	{ 1,  2 },
+> +	{ 2,  4 },
+> +	{ 3,  8 },
+> +	{ 4, 16 },
+> +	{ 5, 32 },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +AML_CLK_PLL_RW(gp0_pll_dco, ANACTRL_GP0PLL_CTRL0, 28, 1,  /* en */
+> +		ANACTRL_GP0PLL_CTRL0, 0,  9,  /* m */
+> +		ANACTRL_GP0PLL_CTRL1, 0, 19,  /* frac */
+> +		ANACTRL_GP0PLL_CTRL0, 10, 5,  /* n */
+> +		ANACTRL_GP0PLL_CTRL0, 31, 1,  /* lock */
+> +		ANACTRL_GP0PLL_CTRL0, 29, 1,  /* rst */
+> +		c3_gp0_init_regs, ARRAY_SIZE(c3_gp0_init_regs),
+> +		NULL, c3_gp0_pll_params_table, 0,
+> +		&pll_dco_parent, 0);
+> +AML_CLK_DIV_RW(gp0_pll, ANACTRL_GP0PLL_CTRL0, 16, 3,
+> +		c3_gp0_pll_od_table, 0,
+> +		&gp0_pll_dco.hw, CLK_SET_RATE_PARENT);
+> +
+> +static const struct reg_sequence c3_hifi_init_regs[] = {
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL0,	.def = 0x08010496 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL0,	.def = 0x38010496 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL1,	.def = 0x0000ce40 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL2,	.def = 0x00000000 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL3,	.def = 0x6a285c00 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL4, .def = 0x65771290 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL5, .def = 0x3927200a },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL6,	.def = 0x56540000, .delay_us = 50 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL0,	.def = 0x18010496, .delay_us = 20 },
+> +};
+> +
+> +static const struct pll_params_table c3_hifi_pll_params_table[] = {
+> +	PLL_PARAMS(150, 1), /* DCO = 3600M */
+> +	PLL_PARAMS(130, 1), /* DCO = 3120M */
+> +	PLL_PARAMS(192, 1), /* DCO = 4608M */
+> +	PLL_PARAMS(125, 1), /* DCO = 3000M */
+> +	{ /* sentinel */  }
+> +};
+> +
+> +AML_CLK_PLL_RW(hifi_pll_dco, ANACTRL_HIFIPLL_CTRL0, 28, 1,  /* en */
+> +		ANACTRL_HIFIPLL_CTRL0, 0,  8,  /* m */
+> +		ANACTRL_HIFIPLL_CTRL1, 0, 19,  /* frac */
+> +		ANACTRL_HIFIPLL_CTRL0, 10, 5,  /* n */
+> +		ANACTRL_HIFIPLL_CTRL0, 31, 1,  /* lock */
+> +		ANACTRL_HIFIPLL_CTRL0, 29, 1,  /* rst */
+> +		c3_hifi_init_regs, ARRAY_SIZE(c3_hifi_init_regs),
+> +		NULL, c3_hifi_pll_params_table, 0,
+> +		&pll_dco_parent, 0);
+> +AML_CLK_DIV_RW(hifi_pll, ANACTRL_HIFIPLL_CTRL0, 16, 2,
+> +		NULL, CLK_DIVIDER_POWER_OF_TWO,
+> +		&hifi_pll_dco.hw, CLK_SET_RATE_PARENT);
+> +
+> +static const struct reg_sequence c3_mclk_init_regs[] = {
+> +	{ .reg = ANACTRL_MPLL_CTRL0,	.def = 0x20011063 },
+> +	{ .reg = ANACTRL_MPLL_CTRL0,	.def = 0x30011063 },
+> +	{ .reg = ANACTRL_MPLL_CTRL1,	.def = 0x1420500f },
+> +	{ .reg = ANACTRL_MPLL_CTRL2,	.def = 0x00023041 },
+> +	{ .reg = ANACTRL_MPLL_CTRL3,	.def = 0x18180000 },
+> +	{ .reg = ANACTRL_MPLL_CTRL0,	.def = 0x10011063 },
+> +	{ .reg = ANACTRL_MPLL_CTRL2,	.def = 0x00023001 }
+> +};
+> +
+> +static const struct pll_params_table c3_mclk_pll_params_table[] = {
+> +	PLL_PARAMS(99, 1), /* VCO = 2376M */
+> +	{ /* sentinel */  }
+> +};
+> +
+> +static const struct clk_div_table c3_mpll_od_table[] = {
+> +	{ 0,  1 },
+> +	{ 1,  2 },
+> +	{ 2,  4 },
+> +	{ 3,  8 },
+> +	{ 4, 16 },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +AML_CLK_PLL_RW(mclk_pll_dco, ANACTRL_MPLL_CTRL0, 28, 1,  /* en */
+> +		ANACTRL_MPLL_CTRL0, 0,  8,  /* m */
+> +		0, 0, 0,  /* frac */
+> +		ANACTRL_MPLL_CTRL0, 16, 5,  /* n */
+> +		ANACTRL_MPLL_CTRL0, 31, 1,  /* lock */
+> +		ANACTRL_MPLL_CTRL0, 29, 1,  /* rst */
+> +		c3_mclk_init_regs, ARRAY_SIZE(c3_mclk_init_regs),
+> +		NULL, c3_mclk_pll_params_table, 0,
+> +		&mclk_pll_dco_parent, 0);
+> +AML_CLK_DIV_RW(mclk_pll, ANACTRL_MPLL_CTRL0, 12, 3,
+> +		c3_mpll_od_table, 0,
+> +		&mclk_pll_dco.hw, CLK_SET_RATE_PARENT);
+> +AML_CLK_DIV_RW(mclk_pll_clk, ANACTRL_MPLL_CTRL4, 16, 5, NULL,
+> +		CLK_DIVIDER_ONE_BASED | CLK_DIVIDER_ALLOW_ZERO,
+> +		&mclk_pll.hw, CLK_SET_RATE_PARENT);
+> +
+> +static const struct clk_parent_data mclk_parent[] = {
+> +	{ .hw = &mclk_pll_clk.hw },
+> +	{ .fw_name = "mclk_pll_in" },
+> +	{ .hw = &fclk_div40.hw }
+> +};
+> +
+> +AML_CLK_MUX_RW(mclk0_sel, ANACTRL_MPLL_CTRL4, 0x3, 4, NULL, 0,
+> +		mclk_parent, 0);
+> +AML_CLK_GATE_RW(mclk0_sel_out, ANACTRL_MPLL_CTRL4, 1, 0,
+> +		&mclk0_sel.hw, CLK_SET_RATE_PARENT);
+> +AML_CLK_DIV_RW(mclk0_div, ANACTRL_MPLL_CTRL4, 2, 1, NULL, 0,
+> +		&mclk0_sel_out.hw, CLK_SET_RATE_PARENT);
+> +AML_CLK_GATE_RW(mclk0, ANACTRL_MPLL_CTRL4, 0, 0,
+> +		&mclk0_div.hw, CLK_SET_RATE_PARENT);
+> +
+> +AML_CLK_MUX_RW(mclk1_sel, ANACTRL_MPLL_CTRL4, 0x3, 12, NULL, 0,
+> +		mclk_parent, 0);
+> +AML_CLK_GATE_RW(mclk1_sel_out, ANACTRL_MPLL_CTRL4, 9, 0,
+> +		&mclk1_sel.hw, CLK_SET_RATE_PARENT);
+> +AML_CLK_DIV_RW(mclk1_div, ANACTRL_MPLL_CTRL4, 10, 1, NULL, 0,
+> +		&mclk1_sel_out.hw, CLK_SET_RATE_PARENT);
+> +AML_CLK_GATE_RW(mclk1, ANACTRL_MPLL_CTRL4, 8, 0,
+> +		&mclk1_div.hw, CLK_SET_RATE_PARENT);
+> +
+> +static struct clk_hw *c3_pll_hw_clks[] = {
+> +	[CLKID_FIXED_PLL_DCO]	= &fixed_pll_dco.hw,
+> +	[CLKID_FIXED_PLL]	= &fixed_pll.hw,
+> +	[CLKID_FCLK_DIV40_DIV]	= &fclk_div40_div.hw,
+> +	[CLKID_FCLK_DIV40]	= &fclk_div40.hw,
+> +	[CLKID_FCLK_DIV2_DIV]	= &fclk_div2_div.hw,
+> +	[CLKID_FCLK_DIV2]	= &fclk_div2.hw,
+> +	[CLKID_FCLK_DIV2P5_DIV]	= &fclk_div2p5_div.hw,
+> +	[CLKID_FCLK_DIV2P5]	= &fclk_div2p5.hw,
+> +	[CLKID_FCLK_DIV3_DIV]	= &fclk_div3_div.hw,
+> +	[CLKID_FCLK_DIV3]	= &fclk_div3.hw,
+> +	[CLKID_FCLK_DIV4_DIV]	= &fclk_div4_div.hw,
+> +	[CLKID_FCLK_DIV4]	= &fclk_div4.hw,
+> +	[CLKID_FCLK_DIV5_DIV]	= &fclk_div5_div.hw,
+> +	[CLKID_FCLK_DIV5]	= &fclk_div5.hw,
+> +	[CLKID_FCLK_DIV7_DIV]	= &fclk_div7_div.hw,
+> +	[CLKID_FCLK_DIV7]	= &fclk_div7.hw,
+> +	[CLKID_GP0_PLL_DCO]	= &gp0_pll_dco.hw,
+> +	[CLKID_GP0_PLL]		= &gp0_pll.hw,
+> +	[CLKID_HIFI_PLL_DCO]	= &hifi_pll_dco.hw,
+> +	[CLKID_HIFI_PLL]	= &hifi_pll.hw,
+> +	[CLKID_MCLK_PLL_DCO]	= &mclk_pll_dco.hw,
+> +	[CLKID_MCLK_PLL]	= &mclk_pll.hw,
+> +	[CLKID_MCLK_PLL_CLK]	= &mclk_pll_clk.hw,
+> +	[CLKID_MCLK0_SEL]	= &mclk0_sel.hw,
+> +	[CLKID_MCLK0_SEL_OUT]	= &mclk0_sel_out.hw,
+> +	[CLKID_MCLK0_DIV]	= &mclk0_div.hw,
+> +	[CLKID_MCLK0]		= &mclk0.hw,
+> +	[CLKID_MCLK1_SEL]	= &mclk1_sel.hw,
+> +	[CLKID_MCLK1_SEL_OUT]	= &mclk1_sel_out.hw,
+> +	[CLKID_MCLK1_DIV]	= &mclk1_div.hw,
+> +	[CLKID_MCLK1]		= &mclk1.hw
+> +};
+> +
+> +/* Convenience table to populate regmap in .probe */
+> +static struct clk_regmap *const c3_pll_clk_regmaps[] = {
+> +	&fixed_pll_dco,
+> +	&fixed_pll,
+> +	&fclk_div40,
+> +	&fclk_div2,
+> +	&fclk_div2p5,
+> +	&fclk_div3,
+> +	&fclk_div4,
+> +	&fclk_div5,
+> +	&fclk_div7,
+> +	&gp0_pll_dco,
+> +	&gp0_pll,
+> +	&hifi_pll_dco,
+> +	&hifi_pll,
+> +	&mclk_pll_dco,
+> +	&mclk_pll,
+> +	&mclk_pll_clk,
+> +	&mclk0_sel,
+> +	&mclk0_sel_out,
+> +	&mclk0_div,
+> +	&mclk0,
+> +	&mclk1_sel,
+> +	&mclk1_sel_out,
+> +	&mclk1_div,
+> +	&mclk1,
+> +};
+> +
+> +static struct regmap_config clkc_regmap_config = {
+> +	.reg_bits       = 32,
+> +	.val_bits       = 32,
+> +	.reg_stride     = 4,
+> +};
+> +
+> +static struct meson_clk_hw_data c3_pll_clks = {
+> +	.hws = c3_pll_hw_clks,
+> +	.num = ARRAY_SIZE(c3_pll_hw_clks),
+> +};
+> +
+> +static int aml_c3_pll_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct regmap *regmap;
+> +	void __iomem *base;
+> +	int clkid, ret, i;
+> +
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	regmap = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	/* Populate regmap for the regmap backed clocks */
+> +	for (i = 0; i < ARRAY_SIZE(c3_pll_clk_regmaps); i++)
+> +		c3_pll_clk_regmaps[i]->map = regmap;
+> +
+> +	for (clkid = 0; clkid < c3_pll_clks.num; clkid++) {
+> +		/* array might be sparse */
+> +		if (!c3_pll_clks.hws[clkid])
+> +			continue;
+> +
+> +		ret = devm_clk_hw_register(dev, c3_pll_clks.hws[clkid]);
+> +		if (ret) {
+> +			dev_err(dev, "Clock registration failed\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return devm_of_clk_add_hw_provider(dev, meson_clk_hw_get,
+> +					   &c3_pll_clks);
+> +}
+> +
+> +static const struct of_device_id c3_pll_clkc_match_table[] = {
+> +	{
+> +		.compatible = "amlogic,c3-pll-clkc",
+> +	},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, c3_pll_clkc_match_table);
+> +
+> +static struct platform_driver c3_pll_driver = {
+> +	.probe		= aml_c3_pll_probe,
+> +	.driver		= {
+> +		.name	= "c3-pll-clkc",
+> +		.of_match_table = c3_pll_clkc_match_table,
+> +	},
+> +};
+> +
+> +module_platform_driver(c3_pll_driver);
+> +MODULE_AUTHOR("Chuan Liu <chuan.liu@amlogic.com>");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/clk/meson/c3-pll.h b/drivers/clk/meson/c3-pll.h
+> new file mode 100644
+> index 000000000000..92a08196a46f
+> --- /dev/null
+> +++ b/drivers/clk/meson/c3-pll.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR MIT) */
+> +/*
+> + * Copyright (c) 2023 Amlogic, inc.
+> + * Author: Chuan Liu <chuan.liu@amlogic.com>
+> + */
+> +
+> +#ifndef __AML_C3_PLL_H__
+> +#define __AML_C3_PLL_H__
+> +
+> +#define ANACTRL_FIXPLL_CTRL0			0x0040
+> +#define ANACTRL_FIXPLL_CTRL4			0x0050
+> +#define ANACTRL_GP0PLL_CTRL0			0x0080
+> +#define ANACTRL_GP0PLL_CTRL1			0x0084
+> +#define ANACTRL_GP0PLL_CTRL2			0x0088
+> +#define ANACTRL_GP0PLL_CTRL3			0x008c
+> +#define ANACTRL_GP0PLL_CTRL4			0x0090
+> +#define ANACTRL_GP0PLL_CTRL5			0x0094
+> +#define ANACTRL_GP0PLL_CTRL6			0x0098
+> +#define ANACTRL_GP0PLL_STS			0x009c
+> +#define ANACTRL_HIFIPLL_CTRL0			0x0100
+> +#define ANACTRL_HIFIPLL_CTRL1			0x0104
+> +#define ANACTRL_HIFIPLL_CTRL2			0x0108
+> +#define ANACTRL_HIFIPLL_CTRL3			0x010c
+> +#define ANACTRL_HIFIPLL_CTRL4			0x0110
+> +#define ANACTRL_HIFIPLL_CTRL5			0x0114
+> +#define ANACTRL_HIFIPLL_CTRL6			0x0118
+> +#define ANACTRL_HIFIPLL_STS			0x011c
+> +#define ANACTRL_MPLL_CTRL0			0x0180
+> +#define ANACTRL_MPLL_CTRL1			0x0184
+> +#define ANACTRL_MPLL_CTRL2			0x0188
+> +#define ANACTRL_MPLL_CTRL3			0x018c
+> +#define ANACTRL_MPLL_CTRL4			0x0190
+> +#define ANACTRL_MPLL_STS			0x01a4
+> +
+> +#endif  /* __AML_C3_PLL_H__ */
 
