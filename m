@@ -2,63 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1467B793D
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Oct 2023 09:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3787B7922
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Oct 2023 09:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241585AbjJDH6r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Oct 2023 03:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S241516AbjJDHzO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Oct 2023 03:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232790AbjJDH6q (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Oct 2023 03:58:46 -0400
-X-Greylist: delayed 462 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 00:58:43 PDT
-Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271F4A1
-        for <linux-clk@vger.kernel.org>; Wed,  4 Oct 2023 00:58:43 -0700 (PDT)
-Received: by mail.citycodes.pl (Postfix, from userid 1001)
-        id 62E381F5B1; Wed,  4 Oct 2023 09:50:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
-        t=1696405860; bh=mMhfBvhM53FtUQl1P3lyeSY5aDBQYiR8qQBy6YFQHi0=;
-        h=Date:From:To:Subject:From;
-        b=eg6qjYs04eKe7idk4F19mOYB3iVZW9hZm/qK+QES9idGRx4Bm2BvaIKE4MuHo/61T
-         snz5n/m/Bn6DdLeI4XD0kZE92Pny2Nq1gD/83XpuA55/V5DRuCHvBRvlC9LwirQGIE
-         dBTPIEGIe9rO1NLz46ELmwrr793vGVqnI78oMtl51o6QkHaI+4fJILalHp6LLVdFdX
-         466FzIGNLMfl5sMnkRcOzn4iWcNvRSgW5o2/0vJM9JuisnwmcvTT9xUXPOMwRyTTZP
-         TeXGWwzfZizWqIx2NBzQULh4D4lMS1UHdHyFjpuxYTTg54Rr/WbFY9yaoQnJwwYAj4
-         F3Ug3D1gXGcAg==
-Received: by mail.citycodes.pl for <linux-clk@vger.kernel.org>; Wed,  4 Oct 2023 07:50:33 GMT
-Message-ID: <20231004084500-0.1.7v.j1ka.0.o318909s9m@citycodes.pl>
-Date:   Wed,  4 Oct 2023 07:50:33 GMT
-From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
-To:     <linux-clk@vger.kernel.org>
-Subject: =?UTF-8?Q?Rozszerzenie_Programu_M=C3=B3j_Pr=C4=85d_5.0?=
-X-Mailer: mail.citycodes.pl
+        with ESMTP id S232638AbjJDHzN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Oct 2023 03:55:13 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B46A1
+        for <linux-clk@vger.kernel.org>; Wed,  4 Oct 2023 00:55:10 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5334d78c5f6so3136960a12.2
+        for <linux-clk@vger.kernel.org>; Wed, 04 Oct 2023 00:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696406108; x=1697010908; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+8MtHSb/RNsDy2bsyLe9wq+5v559vVDhKA/xX66EHAE=;
+        b=XES2M0O2gCyOGgxitAc4ea2r1Vu+jkOJ3uDfpuU2vCTeo5sFGxFCpP4aBYn5464JlB
+         RwpdH4GMSnDhsWjg0i2MazAIzLLSIEDnULoTNGlS0lb//5PGL1z25/dz8h+/DGZW5ZJM
+         CGPE0+Fgs3t7kwg+gRbffOkL4kNGH4iJh78UQ/Ld0yLz2wkVE7UJZ79JAjqEz+neThDm
+         9F+YN6OH3QWsxxykZUPibY3w0ufFheN669Ad6duJ0Uoa4aaphoQcX7bD/pexXF0g9cHn
+         I6CeGa5hRbt4SWF3ReQHHFHXxV2yvrp5eVfQjdSMUdE28/9FKc36DwRQK6MAYSgA6d7U
+         3RMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696406108; x=1697010908;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+8MtHSb/RNsDy2bsyLe9wq+5v559vVDhKA/xX66EHAE=;
+        b=inG/k5qii0Ruk+WmSoryvXQEkDSYKfhIXE7AoUPUPofdDp8n21koM5WkiCfI3pIg0b
+         Jldac1XRy9iSc6C4fs70l8nX0a+yjLjXA/Dg1x1qEBDqO5wE69jz3tpAVLVmux/J4uUY
+         U0tzOen3u/yUr1cOBQZgHUhkrDBWFnXeYzCotiu2GyHMHfSHGXkATYAsIx4X3KD+v5RP
+         nL5np/ePGxRpQ02Nfc+YvdrH0qPmhMFpP5sNRXZGup1oC38OMXO3izA+NQSMZyD3fR4w
+         Z/EQRCB/Lr1bYsa1Q4SZFMEXV2RPXF1HfPd11UdABekF5B9xOu3584koCE8MQ/8iJE6i
+         7CeA==
+X-Gm-Message-State: AOJu0YwlDiPqs7NANbayvBwGZ/EDY8e+LQMRZpQA3CACCcNvtNO/ouI1
+        ScQGV+QZZ71baAHXdKtLe62YcA==
+X-Google-Smtp-Source: AGHT+IGfixRwO8WxB7/Ghxm+3SUGkv8WpbxAjPmH6yRHcFEJgUYrWUtaRRYzSR9XlDxsqH7Ta68lfw==
+X-Received: by 2002:a50:fb90:0:b0:52e:5b10:23ac with SMTP id e16-20020a50fb90000000b0052e5b1023acmr1305874edq.36.1696406108137;
+        Wed, 04 Oct 2023 00:55:08 -0700 (PDT)
+Received: from linaro.org ([86.123.99.172])
+        by smtp.gmail.com with ESMTPSA id c6-20020a056402100600b005381936efa7sm1982410edu.16.2023.10.04.00.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 00:55:07 -0700 (PDT)
+Date:   Wed, 4 Oct 2023 10:55:05 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Robert Chiras <robert.chiras@nxp.com>,
+        Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Jason Liu <jason.hui.liu@nxp.com>
+Subject: Re: [PATCH 0/7] =?utf-8?B?Y2xr77yaaW14?= =?utf-8?Q?=3A?= misc
+ update/fix for i.MX8
+Message-ID: <ZR0aWSviogXjw+od@linaro.org>
+References: <20230912-imx8-clk-v1-v1-0-69a34bcfcae1@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912-imx8-clk-v1-v1-0-69a34bcfcae1@nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Szanowni Pa=C5=84stwo!
+On 23-09-12 17:18:58, Peng Fan (OSS) wrote:
+> The patchset is to upstream NXP downstream i.MX8 clk misc patches which
+> has been stayed in NXP LTS release for quite some time.
+> 
+> There are a few fixes, but should be fine to put in next tree.
+> 
 
-W ramach nowej edycji programu M=C3=B3j Pr=C4=85d mog=C4=85 otrzyma=C4=87=
- Pa=C5=84stwo dofinansowanie na zakup i monta=C5=BC fotowoltaiki i/lub ma=
-gazynu energii. Maksymalna kwota dofinansowania wynosi 58 tys. z=C5=82.=20
+Whole series LGTM.
 
-Jako firma wyspecjalizowana w tym zakresie zajmiemy si=C4=99 Pa=C5=84stwa=
- wnioskiem o dofinansowanie oraz instalacj=C4=85 i serwisem dopasowanych =
-do Pa=C5=84stwa budynku paneli s=C5=82onecznych.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-B=C4=99d=C4=99 wdzi=C4=99czny za informacj=C4=99 czy s=C4=85 Pa=C5=84stwo=
- zainteresowani.
-
-
-Pozdrawiam,
-Kamil Lasek
+> ---
+> Peng Fan (4):
+>       clk: imx: imx8qm-rsrc: drop VPU_UART/VPUCORE
+>       clk: imx8: remove MLB support
+>       clk: imx: scu: ignore clks not owned by Cortex-A partition
+>       clk: imx: imx8qm/qxp: add more resources to whitelist
+> 
+> Robert Chiras (1):
+>       clk: imx: imx8qxp: Fix elcdif_pll clock
+> 
+> Shenwei Wang (1):
+>       clk: imx: imx8qxp: correct the enet clocks for i.MX8DXL
+> 
+> Viorel Suman (1):
+>       clk: imx: imx8dxl-rsrc: keep sorted in the ascending order
+> 
+>  drivers/clk/imx/clk-imx8-acm.c     |  6 +++---
+>  drivers/clk/imx/clk-imx8dxl-rsrc.c |  3 +--
+>  drivers/clk/imx/clk-imx8qm-rsrc.c  |  5 ++---
+>  drivers/clk/imx/clk-imx8qxp-lpcg.h |  1 -
+>  drivers/clk/imx/clk-imx8qxp-rsrc.c |  4 +++-
+>  drivers/clk/imx/clk-imx8qxp.c      | 13 ++++++++++---
+>  drivers/clk/imx/clk-scu.c          | 20 ++++++++++++++++++++
+>  7 files changed, 39 insertions(+), 13 deletions(-)
+> ---
+> base-commit: cd04b2fab5ee58862674e9bab3cbc8e9a8576845
+> change-id: 20230912-imx8-clk-v1-d2089920a23a
+> 
+> Best regards,
+> -- 
+> Peng Fan <peng.fan@nxp.com>
+> 
