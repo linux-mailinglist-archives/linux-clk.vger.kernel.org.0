@@ -2,153 +2,137 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866827B7FD8
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Oct 2023 14:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138757B7ED8
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Oct 2023 14:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbjJDMxi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Oct 2023 08:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S233214AbjJDMPr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Oct 2023 08:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233133AbjJDMxi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Oct 2023 08:53:38 -0400
-X-Greylist: delayed 2571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 05:53:32 PDT
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3726A9
-        for <linux-clk@vger.kernel.org>; Wed,  4 Oct 2023 05:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Cc:To:Message-Id:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Subject:Date:From:References:In-Reply-To:Reply-To:
-        Content-ID:Content-Description;
-        bh=SmL8ximB3jmibA5ut1EhfI+VT8YUU8o3eptjGal/v/8=; b=dTCUotHndBZzy055HBmkMgW8Jm
-        7PPB9RGNMRO1nXirwbGtECWdOLx0WIetYONPfmMbo90+gSbBQbkAU4U6OInftVy0P+86DMd0UNNly
-        9/wcR5OJXGw2JxBqr22k6IxmiWW7ACc8jiGb0eVPH8hFl3FLWMhVluGG10gb9sU02j3F/uV28vaF2
-        btk3tBNOTKtBBwW6CLfkzY/9D0laZA6oiHTTwi6W11K3CgC2O4OzHQeIEd+iY/ZT60QPgk49RXlbT
-        8frjXUjoEn+a//YGSnkRJUT2jQFAN5aXk9CX4iVzfNVQl+JGjPfM99acVm1zd78AcncjIRuwBH/DJ
-        2B9FUzcg==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
-        id 1qo0i5-0070GG-12;
-        Wed, 04 Oct 2023 14:10:37 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Wed, 04 Oct 2023 14:10:34 +0200
-Subject: [PATCH v2] clk: qcom: smd: Disable unused clocks
+        with ESMTP id S233157AbjJDMPq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Oct 2023 08:15:46 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062E0A1;
+        Wed,  4 Oct 2023 05:15:43 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5859b06509cso1404264a12.2;
+        Wed, 04 Oct 2023 05:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696421742; x=1697026542; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4giBNd39dk0FzKD/nLSuY8CIxKBu7ZMBGsAWAOjFNuQ=;
+        b=j86Zff6+FW5jSkvVhYzXSomqSIzqANHU5ShrQecPnXwiLaJOREx/RtLggwWw9knQ3u
+         OcIaiU9Nl84bDjB/Z3LQ6+vVusTJbtc1Cvv8GR2iqEZa8Nci+BqHRbLSG6W9EwMF588I
+         gd+24Q8Xdwm4MnnMCs6bfy2jy+hkv9+s1kioStKYM0vSHAK1rNF89+UEoIPLxovc83Iu
+         hMorQ9iCxasvfshSTD90ApkgyBeB9wqjryTAq/m0WId9avWumVdmESJFv3NYK7cw0y3d
+         mL4C2MvqjaifDRZo4GKfC3PRDFyrfQnIZ4bNT8TAXEdtLzsDtjSaayRRDFrk4EydXVal
+         YDCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696421742; x=1697026542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4giBNd39dk0FzKD/nLSuY8CIxKBu7ZMBGsAWAOjFNuQ=;
+        b=J+zkHmvO0Hxpb1TO2Blazb8Qh2V7MM88WB1oBCWbaujedIr56mqWWBOW0xMzDn6aY9
+         DcvG5aZkxEnEpIKYWyS6eslfPk3CclE/YGcWj0k2IDR6CKYqPCBc411nt2pedz3WhUnA
+         DmD8HdMI/FTuqA9juxt8rBzo3IR2nKGlONCKJ1riSyq8WAM+2p2ahvXgXrb4S8ZV26ax
+         kN3N0UgSIhRDGcFYvaKZYznuprtASiDY+1Wdy53ApJG6cylkf+cWtznjjxRGnOlZ3G2A
+         QI43FbV2POVfzVUBKnSZKBi4Ss81Faq+Auy/y6OBqdhKh3N6vOVO7XwYrGOT0TMMk/ZQ
+         i6uA==
+X-Gm-Message-State: AOJu0YxMstJWRcgfTPnwUJ6nqCiwLgUky6Fa0uwlepQ5GqpG0q/30AST
+        i5TJYE0pF8a3qHN3DPZ9L2HVop6T/2ds+fYBvjaYhg3k
+X-Google-Smtp-Source: AGHT+IHpGLrw+FW27qMuwyN096JOkfzCeLmiQELADbhINgTOrUv+G+Slf5JmJK26zur239okf9jmcxlor49kJxvS8co=
+X-Received: by 2002:a17:90b:1bc7:b0:26d:4ab3:fe11 with SMTP id
+ oa7-20020a17090b1bc700b0026d4ab3fe11mr1774905pjb.24.1696421742135; Wed, 04
+ Oct 2023 05:15:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231004-clk-qcom-smd-rpm-unused-v2-1-9a5281f324dc@kernkonzept.com>
-X-B4-Tracking: v=1; b=H4sIADlWHWUC/zWNQQ6CMBAAv0L27JLdilI8+Q/jAekCjVBwC8aE8
- HcbE49zmJkNoqiXCJdsA5W3j34KCcwhg6avQyfoXWIwZI5MVGAzPPHVTCPG0aHOI65hjeLwUVa
- OiI2xzJDsWaX1n1/5dk/canKWXqX+94gsl1xQRTZne6rKMzLGReb0vXai/TS4PMgC+/4FA3ZKe
- KcAAAA=
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+References: <20230831044431.250338-1-aford173@gmail.com> <20230831044431.250338-2-aford173@gmail.com>
+ <CAOMZO5DyZJuqYswLYhf1f3zP7Rc1ZhnPfq26dpyU2m5mhvRtVw@mail.gmail.com>
+In-Reply-To: <CAOMZO5DyZJuqYswLYhf1f3zP7Rc1ZhnPfq26dpyU2m5mhvRtVw@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 4 Oct 2023 07:15:30 -0500
+Message-ID: <CAHCN7xLxsKPp2LpeDXg8_63W17Qn28i2y72GfhScSFOLG7Re_A@mail.gmail.com>
+Subject: Re: [PATCH V3 2/3] arm64: dts: imx8mp: Add micfil node
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, marex@denx.de,
+        aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-At the moment, clk-smd-rpm forces all clocks on at probe time (for
-"handoff"). However, it does not make the clk core aware of that.
+On Tue, Oct 3, 2023 at 8:12=E2=80=AFPM Fabio Estevam <festevam@gmail.com> w=
+rote:
+>
+> Hi Adam and devicetree folks,
+>
+> On Thu, Aug 31, 2023 at 1:44=E2=80=AFAM Adam Ford <aford173@gmail.com> wr=
+ote:
+> >
+> > The i.MX8MP has a micfil controller which is used for interfacing
+> > with a pulse density microphone. Add the node and mark it as
+> > disabled by default.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> > V3:  The AUDIOMIX_PDM_ROOT doesn't exist and the real clock is
+> >      called IMX8MP_CLK_AUDIOMIX_PDM_SEL, so swap it out.
+> >
+> > V2:  No change
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boo=
+t/dts/freescale/imx8mp.dtsi
+> > index 3167706d81e1..341fd0369ce9 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > @@ -1479,6 +1479,27 @@ easrc: easrc@30c90000 {
+> >                                         fsl,asrc-format =3D <2>;
+> >                                         status =3D "disabled";
+> >                                 };
+> > +
+> > +                               micfil: audio-controller@30ca0000 {
+> > +                                       compatible =3D "fsl,imx8mp-micf=
+il";
+> > +                                       reg =3D <0x30ca0000 0x10000>;
+> > +                                       #sound-dai-cells =3D <0>;
+>
+> After this patch, the following schema warning is seen:
+>
+> imx8mp-beacon-kit.dtb: audio-controller@30ca0000: '#sound-dai-cells'
+> does not match any of the regexes: 'pinctrl-[0-9]+'
+> from schema $id: http://devicetree.org/schemas/sound/fsl,micfil.yaml#
+>
+> What is the correct way to solve this?
+>
+> - Document #sound-dai-cells in fsl,micfil.yaml as an optional property
+> - Remove #sound-dai-cells from imx8mp.dtsi
+> - Document #sound-dai-cells in fsl,micfil.yaml as a required property
+> and pass #sound-dai-cells to imx8mm/imx8mn/imx83.dtsi?
 
-This means that the clocks stay enabled forever if they are not used
-by anything. We can easily disable them again after bootup has been
-completed, by making the clk core aware of the state. This is
-implemented by returning the current state of the clock in
-is_prepared().
+I am not an expert on yaml, in fact they quite confuse me, but I
+believe the proper solution is likely to document them in the yaml.
+When I built the device tree without the sound-dai-cells, it threw a
+message indicating that it needed to be there when it is configured to
+operate.  I didn't see the schema warning that you noted, but my
+schema could have been out of date.  Looking at the sai nodes and the
+yaml file, it appears that the sound-dai-cells is listed in the yaml.
 
-Checking the SPMI clock registers reveals that this allows the RPM to
-disable unused BB/RF clocks. This reduces the power consumption quite
-significantly and is also needed to allow entering low-power states.
-
-As of commit d6edc31f3a68 ("clk: qcom: smd-rpm: Separate out
-interconnect bus clocks") the interconnect-related clocks are no longer
-managed/exposed by clk-smd-rpm. Also the BI_TCXO_AO clock is now
-critical (and never disabled).
-
-There is still a slight chance that this change will break boot on some
-devices. However, this will be most likely caused by actual mistakes in
-the device tree (where required clocks were not actually specified).
-
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
-Changes in v2:
-- Rebase on latest qcom/for-next, update commit message with other recent
-  related changes
-- Link to v1: https://lore.kernel.org/linux-arm-msm/20200817140908.185976-1-stephan@gerhold.net/
----
-Keeping all unused clocks on makes it very easy to forget to enable
-actually required clocks. [1] is one example of that, where the crypto
-engine worked fine without any clocks. IMHO we should try to get this
-change in sooner than later to avoid introducing more new mistakes.
-
-[1]: https://lore.kernel.org/linux-arm-msm/ZGdLCdSof027mk5u@gerhold.net/
----
- drivers/clk/qcom/clk-smd-rpm.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 0191fc0dd7da..eba650ad7291 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -335,6 +335,13 @@ static void clk_smd_rpm_unprepare(struct clk_hw *hw)
- 	mutex_unlock(&rpm_smd_clk_lock);
- }
- 
-+static int clk_smd_rpm_is_prepared(struct clk_hw *hw)
-+{
-+	struct clk_smd_rpm *r = to_clk_smd_rpm(hw);
-+
-+	return r->enabled;
-+}
-+
- static int clk_smd_rpm_set_rate(struct clk_hw *hw, unsigned long rate,
- 				unsigned long parent_rate)
- {
-@@ -431,6 +438,7 @@ static int clk_smd_rpm_enable_scaling(void)
- static const struct clk_ops clk_smd_rpm_ops = {
- 	.prepare	= clk_smd_rpm_prepare,
- 	.unprepare	= clk_smd_rpm_unprepare,
-+	.is_prepared	= clk_smd_rpm_is_prepared,
- 	.set_rate	= clk_smd_rpm_set_rate,
- 	.round_rate	= clk_smd_rpm_round_rate,
- 	.recalc_rate	= clk_smd_rpm_recalc_rate,
-@@ -439,6 +447,7 @@ static const struct clk_ops clk_smd_rpm_ops = {
- static const struct clk_ops clk_smd_rpm_branch_ops = {
- 	.prepare	= clk_smd_rpm_prepare,
- 	.unprepare	= clk_smd_rpm_unprepare,
-+	.is_prepared	= clk_smd_rpm_is_prepared,
- 	.recalc_rate	= clk_smd_rpm_recalc_rate,
- };
- 
-@@ -1279,6 +1288,9 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
- 		ret = clk_smd_rpm_handoff(rpm_smd_clks[i]);
- 		if (ret)
- 			goto err;
-+
-+		/* During handoff we force all clocks on */
-+		rpm_smd_clks[i]->enabled = true;
- 	}
- 
- 	for (i = 0; i < desc->num_icc_clks; i++) {
-
----
-base-commit: 870b5222204243ee6dbeada9ad1b90cda9ecb4da
-change-id: 20231004-clk-qcom-smd-rpm-unused-b79d00122811
-
-Best regards,
--- 
-Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
-
+adam
