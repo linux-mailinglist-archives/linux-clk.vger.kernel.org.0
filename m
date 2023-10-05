@@ -2,75 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2107B9FC2
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 16:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4707BA0A4
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 16:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjJEOaK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Oct 2023 10:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S235569AbjJEOih (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Oct 2023 10:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbjJEO2b (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 10:28:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73CF1F757;
-        Thu,  5 Oct 2023 02:59:35 -0700 (PDT)
-From:   Benedikt Spranger <b.spranger@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1696499973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3Yg/WhHpaQNIRqvSGsa5f/WE6yXRFzSVBafLf2ZRuh8=;
-        b=WUTzOHOsOUGPF+kaPiD4pPQ0Yxr+DHHn0124BSw+j3ykiDvmrS2iMxSNnoy6/pG3TJOvvJ
-        6/IRDtVFFNYAzIJU0o0WJNHW5tcBUJEW4S8C/fhRa88K2r6OGtYEV1w2s9VjdJjPSWMd9B
-        EeDrUa+5+jFCqFsw/gtKpPrPJCQcWoNIpyYS8oRY/GYhk8Zf+hWOnRg7O77c+97+EjlApg
-        D8qNR0dOCczitxaR2OIBK1tu6ws/78awFm1e9pVzJW6dgbejp5+sKNMWtx88Pl7Sl3Gr7u
-        TNUf/5OWFmPKF8J9MupE5Ek7B0VJjbw2VaJjYqupMCEVEhAJB8RoR4ksp7JtGA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1696499973;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3Yg/WhHpaQNIRqvSGsa5f/WE6yXRFzSVBafLf2ZRuh8=;
-        b=FrVErenItllRBa/Uhu5rymcSxkX7LwQ4Gt7U1rYiYckHVblupsFWLPbKWRVBJgWne0FXao
-        FR/GCqHqk5eIl9BA==
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-clk@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S235943AbjJEOgQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 10:36:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17D434433
+        for <linux-clk@vger.kernel.org>; Thu,  5 Oct 2023 06:58:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AEFE152B;
+        Thu,  5 Oct 2023 03:20:39 -0700 (PDT)
+Received: from pluto (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF0813F5A1;
+        Thu,  5 Oct 2023 03:19:59 -0700 (PDT)
+Date:   Thu, 5 Oct 2023 11:19:57 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
         Michael Turquette <mturquette@baylibre.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 0/1] Broken serial console on Altera Cyclon V board
-Date:   Thu,  5 Oct 2023 11:59:26 +0200
-Message-ID: <20231005095927.12398-1-b.spranger@linutronix.de>
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH] clk: scmi: Free scmi_clk allocated when the clocks with
+ invalid info are skipped
+Message-ID: <ZR6NzUUP2gg3nNiC@pluto>
+References: <20231004193600.66232-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231004193600.66232-1-sudeep.holla@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Wed, Oct 04, 2023 at 08:36:00PM +0100, Sudeep Holla wrote:
+> Add the missing devm_kfree() when we skip the clocks with invalid or
+> missing information from the firmware.
+> 
+
 Hi,
 
-trying to boot e recent Kernel on a Altera Cyclone V based board I
-faced a broken serial console. The "real" baudrate is half of the set
-baudrate i.e. 57600 instead of configured 115200. Traking down the issue
-let to commit 9607beb917df ("clk: socfpga: gate: Add a determine_rate hook").
+LGTM.
 
-Change the determine_rate hook to fix the issue.
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
 
-Regards
-    Benedikt Spranger
+Thanks,
+Cristian
 
-Benedikt Spranger (1):
-  clk: socfpga: gate: Fix of by factor 2 for serial console
-
- drivers/clk/socfpga/clk-gate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
--- 
-2.42.0
-
+> Cc: Cristian Marussi <cristian.marussi@arm.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Fixes: 6d6a1d82eaef ("clk: add support for clocks provided by SCMI")
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/clk/clk-scmi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
+> index 2e1337b511eb..3f525bed9794 100644
+> --- a/drivers/clk/clk-scmi.c
+> +++ b/drivers/clk/clk-scmi.c
+> @@ -232,6 +232,7 @@ static int scmi_clocks_probe(struct scmi_device *sdev)
+>  		sclk->info = scmi_proto_clk_ops->info_get(ph, idx);
+>  		if (!sclk->info) {
+>  			dev_dbg(dev, "invalid clock info for idx %d\n", idx);
+> +			devm_kfree(dev, sclk);
+>  			continue;
+>  		}
+>  
+> -- 
+> 2.42.0
+> 
