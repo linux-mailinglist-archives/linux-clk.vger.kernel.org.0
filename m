@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC267BA41F
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 18:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5CD7BA455
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 18:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237080AbjJEQFA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Oct 2023 12:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
+        id S236901AbjJEQFM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Oct 2023 12:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237128AbjJEQDy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 12:03:54 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2B58720B
-        for <linux-clk@vger.kernel.org>; Thu,  5 Oct 2023 08:57:35 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3248ac76acbso1054098f8f.1
-        for <linux-clk@vger.kernel.org>; Thu, 05 Oct 2023 08:57:35 -0700 (PDT)
+        with ESMTP id S236620AbjJEQD6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 12:03:58 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EB487217
+        for <linux-clk@vger.kernel.org>; Thu,  5 Oct 2023 08:57:37 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3248aa5cf4eso1164116f8f.1
+        for <linux-clk@vger.kernel.org>; Thu, 05 Oct 2023 08:57:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696521454; x=1697126254; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696521455; x=1697126255; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QsPPxazWNR9GZX2GO53uCm+7icHkcSZjslvI+J0YBFw=;
-        b=EwOD+6J0I/hVtzmo8eIP//TELnGESExaG2DEoAn2tjWKiMCMMIPVrJiiT+owqZvMqZ
-         wDp0cCfTPHxrPPNFMXXqSzRZRCWjOvoZX3/pY6WQtJ1avgm9jSYg003W+3KhjqQ0qcpl
-         G3aDWiMUhNAk65oqPqn5wJXi1zCzCW0hq2rCNNAlAB/YmoI81eBr6A3+o3P1pB9+vM/i
-         hWAWgSk4yWoURHpqXER7twOBWQ+FrfhDd7t6/s54VPVZWJVqv5UvIotW86X90K8Kf3MH
-         SWsAguFBJSoYMyR5cNGDaMm9hhp35BOHoBmkJCjbCp5KuFRRNciW2MUVBFdveEXdciwe
-         GP4A==
+        bh=sCRvx18FXBZUIE55KgKCOULc2WUqPQQy1aHNXgrW/y8=;
+        b=Mi3d0w2olglNDWnNu8Yu+exguXEdJJXXYh/tY4f1lyxJLlxBQ6iHRxjhXkxoseGfwU
+         iixAD+/OsQwxtbTTiR/5ha+ecW1STPSDQE0iUYHYOu7uvl0UXB/S7Q3k5ajXyngAVMRB
+         5IJ7ocpcTXH+1V5udWDoTTcJhvtrO0gtRm4c3nHwrnR05soUEQ/fm8TK+HmLODFnDG3W
+         xd8H6fYMOtrmSRNOlfOHAlcrKr2g/m9QLrG9MRI15DsCGmSjnBzeFRqJ4Q2yZ3ni0WIq
+         t9eilC8PsGzY0dmJZgZ5t+7kIDMgkJA4aa5NqT/nvyCVsXYBgV2BFMdKXoVVad9uswKv
+         0Jnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696521454; x=1697126254;
+        d=1e100.net; s=20230601; t=1696521455; x=1697126255;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QsPPxazWNR9GZX2GO53uCm+7icHkcSZjslvI+J0YBFw=;
-        b=KcDgoqVvadHAT61pQs5EBgczZkREEE4UXm41a0rnwBC31i7qoRoOBvIaON2M6Dfcsm
-         T2alHo843LfNrZthcdi9znxWNStXYl7n2AqunXEU2zirZyrOlFERcVzvI/weAPvbAwTd
-         DEul1sYRae1MFpvy8lGy+z4DuCxnfT7P4j1M8sJR7cshxiUr8qvdxcZQlT5qTwIU125P
-         RxmTXScdrn+P/LBCCLqqg7lkZNS99cZoKN7HGEWn5rlWka5b7Ws2mWECnKkbrPxyTe/h
-         5hRV3cZMuZJW3rrNDIdADMHXfMaqIAedPp6DmuPSHjros+/BZ6FeNKFsYN6WFKMF8U1I
-         JI4A==
-X-Gm-Message-State: AOJu0YxwnSoptrus1TIySm3HZD5i6HxnmVrn89EykSNwgSuzXgtsuSfi
-        Et40DKwN0NM21JZEOR7PPIKFWA==
-X-Google-Smtp-Source: AGHT+IHUyJpuQbW68qjMruXib/ii+3Nwgybhtbaupq7BnOuixwUEbyhlm+DL6/M5TMqX57BaO4ziFQ==
-X-Received: by 2002:adf:e406:0:b0:31a:e6c2:7705 with SMTP id g6-20020adfe406000000b0031ae6c27705mr4915179wrm.50.1696521454330;
-        Thu, 05 Oct 2023 08:57:34 -0700 (PDT)
+        bh=sCRvx18FXBZUIE55KgKCOULc2WUqPQQy1aHNXgrW/y8=;
+        b=lwKbqvxQ3ZxSVjPIx6oEL/nou1vM4kB9PeYkxGxUiAUYpDGncgTlYuTv3RclevIx1W
+         kjCXp3cqF7W3TQHIBtWK6EdAWZ4TdZ0jcbkdeAihcOayMp4XIzORGjBQ2hwfxJbaKmIZ
+         c31tXEXRdXNL994wwcWtkmt5A4fYY37MuOxjcxCakr4TSUEJs5BK4lBv6jm1QFQLf1MB
+         0yu9valUqp8TYHgnXapwbZFLSPyCAribsJSw9X597ZC6gkyxwQHFmLf5BlwK7wTM039/
+         mXFUzadOuS14z9ksO1yvVdN1JCY+ibSdf/iqMzh53NNiVaQc4PTGf0xvNfA6B5PmDgZS
+         piHQ==
+X-Gm-Message-State: AOJu0YyRRSW4vrNi5YVN3wVBQ7h+UUrpUbGuAxMLtA/kZAZJPBiaI9I8
+        TASiqPcxsnoR6Cz/JYa10Wx6zw==
+X-Google-Smtp-Source: AGHT+IGXl1CoGjZQDrIr/dGSwn1zWY2LS9ksQvXQhCz9d02zBxSqzFembYLOfI32ScvmkDqICjuDCQ==
+X-Received: by 2002:adf:ec48:0:b0:31f:f99c:600a with SMTP id w8-20020adfec48000000b0031ff99c600amr5234563wrn.46.1696521455682;
+        Thu, 05 Oct 2023 08:57:35 -0700 (PDT)
 Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
-        by smtp.gmail.com with ESMTPSA id t9-20020a5d4609000000b0031f8a59dbeasm2084336wrq.62.2023.10.05.08.57.32
+        by smtp.gmail.com with ESMTPSA id t9-20020a5d4609000000b0031f8a59dbeasm2084336wrq.62.2023.10.05.08.57.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 08:57:33 -0700 (PDT)
+        Thu, 05 Oct 2023 08:57:35 -0700 (PDT)
 From:   Peter Griffin <peter.griffin@linaro.org>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
@@ -62,9 +62,9 @@ Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH 10/21] dt-bindings: clock: gs101: Add cmu_apm clock indices
-Date:   Thu,  5 Oct 2023 16:56:07 +0100
-Message-ID: <20231005155618.700312-11-peter.griffin@linaro.org>
+Subject: [PATCH 11/21] dt-bindings: clock: gs101: Add cmu_misc clock indices
+Date:   Thu,  5 Oct 2023 16:56:08 +0100
+Message-ID: <20231005155618.700312-12-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
 In-Reply-To: <20231005155618.700312-1-peter.griffin@linaro.org>
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
@@ -80,39 +80,33 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-CMU_APM generates clocks for the Active Power Management
-controller. Add clock indices for those muxs, dividers and
-gates.
+CMU_MISC generates clocks for IPs such as Watchdog. Add
+clock indices for the PLLs, Muxes, dividers and gates
+in this clock management unit.
 
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- include/dt-bindings/clock/gs101.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ include/dt-bindings/clock/gs101.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/include/dt-bindings/clock/gs101.h b/include/dt-bindings/clock/gs101.h
-index d1e216a33aeb..d9b8299fcc0b 100644
+index d9b8299fcc0b..7765ba68f734 100644
 --- a/include/dt-bindings/clock/gs101.h
 +++ b/include/dt-bindings/clock/gs101.h
-@@ -201,4 +201,21 @@
- #define CLK_GOUT_BO_BUS			184
- #define CLK_GOUT_CMU_BOOST		185
+@@ -218,4 +218,15 @@
+ #define CLK_APM_PLL_DIV4_APM					13
+ #define CLK_APM_PLL_DIV16_APM					14
  
-+/* CMU_APM */
++/* CMU_MISC */
 +
-+#define CLK_MOUT_APM_FUNC					1
-+#define CLK_MOUT_APM_FUNCSRC					2
-+#define CLK_DOUT_APM_BOOST					3
-+#define CLK_DOUT_APM_USI0_UART					4
-+#define CLK_DOUT_APM_USI0_USI					5
-+#define CLK_DOUT_APM_USI1_UART					6
-+#define CLK_GOUT_APM_FUNC					7
-+#define CLK_GOUT_APM_UID_APBIF_GPIO_ALIVE_IPCLKPORT_PCLK	8
-+#define CLK_GOUT_APM_UID_APBIF_GPIO_FAR_ALIVE_IPCLKPORT_PCLK	9
-+#define CLK_GOUT_APM_UID_APBIF_PMU_ALIVE_IPCLKPORT_PCLK		10
-+#define CLK_GOUT_APM_UID_SYSREG_APM_IPCLKPORT_PCLK		11
-+#define CLK_APM_PLL_DIV2_APM					12
-+#define CLK_APM_PLL_DIV4_APM					13
-+#define CLK_APM_PLL_DIV16_APM					14
++#define CLK_MOUT_MISC_BUS_USER					1
++#define CLK_MOUT_MISC_SSS_USER					2
++#define CLK_DOUT_MISC_BUSP					3
++#define CLK_DOUT_MISC_GIC					4
++#define CLK_GOUT_MISC_PCLK					5
++#define CLK_GOUT_MISC_SYSREG_PCLK				6
++#define CLK_GOUT_MISC_WDT_CLUSTER0				7
++#define CLK_GOUT_MISC_WDT_CLUSTER1				8
 +
  #endif /* _DT_BINDINGS_CLOCK_GOOGLE_GS101_H */
 -- 
