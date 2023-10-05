@@ -2,59 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468127BA065
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 16:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE627B9F2A
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 16:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbjJEOiL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Oct 2023 10:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S231609AbjJEOS3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Oct 2023 10:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234793AbjJEOfQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 10:35:16 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B509025
-        for <linux-clk@vger.kernel.org>; Thu,  5 Oct 2023 01:46:02 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9936b3d0286so133542966b.0
-        for <linux-clk@vger.kernel.org>; Thu, 05 Oct 2023 01:46:02 -0700 (PDT)
+        with ESMTP id S244381AbjJENxU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 09:53:20 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1200A9028
+        for <linux-clk@vger.kernel.org>; Thu,  5 Oct 2023 01:46:23 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5230a22cfd1so1164787a12.1
+        for <linux-clk@vger.kernel.org>; Thu, 05 Oct 2023 01:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696495560; x=1697100360; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696495581; x=1697100381; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LScpV5hGM08eIRFxA4GHcqobAxdRCeg/3UUg0CrFMDM=;
-        b=ME/ya9UnhspQgQQYTmAXd9Yb5KTfy93xinrjM//fbtThItPdvWRBRq5wNhQTCoILwa
-         KnporBDRllta1dVGNLHapUQ1cdPio49aSG2UxNdKM3ChThhZzYMQm2fBSVuvmehbJf+J
-         FgUUHo4cj3TyHcmQVR6FKMY/1EE1VrIKjwgkkyqLJz0AWnauXJ/WYrZrqLI2yw6n1zQM
-         yUuLumLRkUyh9+x5wD0JQYj9Zb5gKps/ibNzicy4aPVKBwfbAAtbVDH4cqXcNLQ8ZDZv
-         yrJWGuag2KUE0/fC/ZJWvPXztG2jayiPz7LFK16KM9QloRsfhMWBi9UXlykk4Cs9Auxa
-         HUAA==
+        bh=xx6pMX6vajCGGHVYJARjc1sv92OuBp5xlvWEy/mgjJ0=;
+        b=awPOzOf2HgzBuYqBkPwRBZQWHYr+5GakHm6FhZQ/cWdJRj0veLDoicSu9MT5nmqNLE
+         i2Ex+hsACBjtIVYB5J24IPGli6czYPQNdLEKIVpmVQEKYR5Bu+L7nzLazfd22M+RKT3N
+         1szNBFAHa8YMyW+8l04UcXpXT8nJHKgaoTZU/cfsFf6YQxNVfQnI0EctYG46ThMNDi7D
+         EVKiLCu6Yz30nxS2AdYruzDy0sL39+i4VZYoPV7F0cnpTUCfG807ZYVqvc0cBiTT0Vj9
+         nGgKMJkfm/lX4q95aNPdes8tkNewJv4TuRvw0dVNaIIgxilslCz5dtYHkG6brPuPYWAJ
+         lWIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696495561; x=1697100361;
+        d=1e100.net; s=20230601; t=1696495581; x=1697100381;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LScpV5hGM08eIRFxA4GHcqobAxdRCeg/3UUg0CrFMDM=;
-        b=ANGPsoJcXqFXD1mrkBqYMcaL0Gsx+beAVITw2xuEjwNncZzqsJUcIGRDMqes5zyTqV
-         VizjPrln1S2FHd49/iO+TEroYBmCGpfMgADHW4KGkMX7ZkC9V6jGL19jaNS6SjkPz/xa
-         rJFJPqmlLq39Wvj/10OwGfZxYIDD7g3DxYyYAvRiard8SPzBV48KcngZRNvOzLFgojAJ
-         w8kM1eJ47cZ8WsHLlqxg3rGF6YTx1FnTUOauYo34YNh42J2MRr2JqkhjSznB15gsQYM6
-         8e+eJFZYQkmM8CMyL8jClKEdo+Ot1tU2s1iTu30Qi2h+ZfOjZQPFiTNPXI/QzbtrZUgx
-         EG/Q==
-X-Gm-Message-State: AOJu0YwLlM4f4o1nN2KUwqm9egUgqX+8uOD0VirWsAVFmV1SH1fK4ujO
-        xBXapFq8LPMaOucsTvbThA6aGA==
-X-Google-Smtp-Source: AGHT+IFHl2AxLloeSIaxlbBH/O/N57e5RP7yy/eAjKzLxjbbFfrW6nUVrIt3wr5Xq/BwoYlc5pU4wQ==
-X-Received: by 2002:a17:907:c205:b0:9a5:c54f:da1c with SMTP id ti5-20020a170907c20500b009a5c54fda1cmr4283360ejc.47.1696495560742;
-        Thu, 05 Oct 2023 01:46:00 -0700 (PDT)
+        bh=xx6pMX6vajCGGHVYJARjc1sv92OuBp5xlvWEy/mgjJ0=;
+        b=kOZoHi/9XBemFEWdNNN/ugtFo5kivzN3ACXICe92ej1l4LOIuVPVbYujpLyjSr3RBW
+         MEsDv7rC4+2wCk4JlMrmfiRnFrcxcrzgk9o0i+r4QYKja2VncZEUlkT5f1Qels/nDuIc
+         1cFJx2E15WkLRtTb+AKQNQiHUQR3WiXflszkTlLzz5XWcEJfxDLdR/p7nsCQvpcjCUKP
+         fY7TQwQ4Ebi7b7GnV4MKOX4UU6kp9DQKPDb+8xEawunweHft4OzGad8MIW5JbJSb9z6v
+         7giCQP2q5WP3HJve+8hTtewn7mzfldHjR6RPTNf8RWqxBY12kpDm4ZUeIMAnhkrvOsoF
+         j0Hw==
+X-Gm-Message-State: AOJu0YxnH/bKjQzlJjOsDdbkeKeHCXivGjSYef4opHZupnUnJxyN+zzb
+        87hZKQSKnrUgvpP4M7Pg0Aqoig==
+X-Google-Smtp-Source: AGHT+IG8qofcD5TDLoKWwiNBio+VXhOka5r86036+jdAUKyFw2HeYKfsnfYmm0WeaiVu13BoEuqmtQ==
+X-Received: by 2002:a17:906:535e:b0:9ad:7471:7374 with SMTP id j30-20020a170906535e00b009ad74717374mr3500535ejo.77.1696495581459;
+        Thu, 05 Oct 2023 01:46:21 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709064a4100b009b65a698c5csm815655ejv.57.2023.10.05.01.45.58
+        by smtp.gmail.com with ESMTPSA id a1-20020a1709064a4100b009b65a698c5csm815655ejv.57.2023.10.05.01.46.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 01:46:00 -0700 (PDT)
-Message-ID: <c8bab893-8935-41bf-adac-1a4223048b34@linaro.org>
-Date:   Thu, 5 Oct 2023 10:45:58 +0200
+        Thu, 05 Oct 2023 01:46:21 -0700 (PDT)
+Message-ID: <7bbf281f-33b0-44c3-9006-43397d6186b0@linaro.org>
+Date:   Thu, 5 Oct 2023 10:46:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] dt-bindings: clock: Use gcc.yaml for common clock
- properties
+Subject: Re: [PATCH v3 2/4] dt-bindings: clock: Add SC8280XP CAMCC
 Content-Language: en-US
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
@@ -66,7 +65,7 @@ To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20231004161853.86382-1-bryan.odonoghue@linaro.org>
- <20231004161853.86382-2-bryan.odonoghue@linaro.org>
+ <20231004161853.86382-3-bryan.odonoghue@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -112,7 +111,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231004161853.86382-2-bryan.odonoghue@linaro.org>
+In-Reply-To: <20231004161853.86382-3-bryan.odonoghue@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -126,8 +125,8 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 04/10/2023 18:18, Bryan O'Donoghue wrote:
-> Various of the camcc bindings are repeated serially. We can use
-> qcom,gcc.yaml to encapsulate the generic repeated patterns.
+> Add device tree bindings for the camera clock controller on
+> Qualcomm SC8280XP platform.
 > 
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
