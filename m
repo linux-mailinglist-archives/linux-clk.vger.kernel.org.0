@@ -2,76 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE497BA264
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 17:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410E27BA16F
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 16:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjJEPdl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Oct 2023 11:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S229764AbjJEOmd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Oct 2023 10:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjJEPc6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 11:32:58 -0400
+        with ESMTP id S231479AbjJEOhv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 10:37:51 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE83D5C6BA;
-        Thu,  5 Oct 2023 07:50:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C61C3278A;
-        Thu,  5 Oct 2023 11:10:42 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E29F497A3;
+        Thu,  5 Oct 2023 07:02:58 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08F8C3278E;
+        Thu,  5 Oct 2023 11:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696504244;
-        bh=81DnpxxdBYZrrUfyjgAJck9Wj4KLJe818fuwhsQR8+Q=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=cWy0RApPbByN09t6pLFrtNEMn3oUnEl+1fgjrYnK0wjnt4TS1k1ixGdjUTaMDd8BZ
-         ts+kdvt4N6Hqac1rifjOJnWqfnekB/dA0edFrP9UTfi9SuqqcDz7Mx2sNESC+FBSLw
-         jmZf1+QT7B1CKM09y6bsEsSYf7N1p8N0qzW40uIeKHWYxj3XcEAODKahrGYBznIAUz
-         Eer+PBcIyx4V4a0hUCuonk17HJDnMdLjSH9LjBLVWILe3IQMttBCAa3qZiekA7Rp2E
-         lHeHvWX5Fbksap9nnNwbrxqVMfT/15s+eE70tc8imu4NHAg85yAgLgouxnoq1NnOcg
-         DwbNARrutJ5Hg==
-From:   Lee Jones <lee@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org
-In-Reply-To: <20230929-leds-maple-v1-0-ba5f9dcb1e75@kernel.org>
-References: <20230929-leds-maple-v1-0-ba5f9dcb1e75@kernel.org>
-Subject: Re: [PATCH 0/4] leds: Convert to use maple tree register cache
-Message-Id: <169650424265.688682.2460798715972634009.b4-ty@kernel.org>
-Date:   Thu, 05 Oct 2023 12:10:42 +0100
+        s=k20201202; t=1696505644;
+        bh=uQCzM5xbAuZl+/32wrxwrBNmw+5LgwY7U9nc7LghN6o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X0ft9yf36AQug4BLX5o8ln8sDmEA79VOqDZe1B3WKxylc0cjhwD8VeW/T9iPtoGN0
+         aP0r2Oy/ylZS+cNPV1HR+qwnj/Chq/JeYm33JfbMbvVxVu1cf/4uRTtLegDwib7EvM
+         66UeHSDD8BQgPGvA9cIE0qDRNj3Wl9poy06t6FFzv4DKh+4JbaA+ZlHB25E5Ed30y/
+         yFlf5KpW/RJJ2PhS0BvyvLR2aD0KsWoSQQiSWqcpkcqhmhGA4LprVP+gkCI1aQa/A/
+         kIMezW0l6WM+lk8PiTiLJrQuQvKmPGPKqrER+QXnmROlFg9xMZ6CZI4Xqpa2CO71N7
+         vfUF4l1FEcl+A==
+Date:   Thu, 5 Oct 2023 13:34:01 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Benedikt Spranger <b.spranger@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: Re: [PATCH 1/1] clk: socfpga: gate: Fix of by factor 2 for serial
+ console
+Message-ID: <qpskbgigcaoyjuhzeguz366cjukv3ij7utlbkra5edhwn6uzh4@bdedm6vs62y5>
+References: <20231005095927.12398-1-b.spranger@linutronix.de>
+ <20231005095927.12398-2-b.spranger@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="prvu7vztqw3jsd37"
+Content-Disposition: inline
+In-Reply-To: <20231005095927.12398-2-b.spranger@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 29 Sep 2023 17:23:34 +0200, Mark Brown wrote:
-> The maple tree register cache is a more modern replacement for the
-> rbtree cache, the underlying data structure is more modern and the
-> surrounding cache implementation makes a number of choices which are
-> more suited to modern systems than those made by rbtree.  This series
-> updates the LED drivers that use the rbtree cache to use the maple tree
-> cache.
-> 
-> [...]
 
-Applied, thanks!
+--prvu7vztqw3jsd37
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[1/4] leds: lm3601x: Convert to use maple tree register cache
-      commit: c2b7575239f5d0925035f3fc3bb155d176abee80
-[2/4] leds: aw200xx: Convert to use maple tree register cache
-      commit: 2aedfe62b4151b0abe35bf022edf18f84817afcd
-[3/4] leds: lm392x: Convert to use maple tree register cache
-      commit: c2ecac98222a23ad8209a71ad5c1e32a8be46392
-[4/4] leds: lp3952: Convert to use maple tree register cache
-      commit: 2997d69d888d6ee7114a89d066889a016448422a
+Hi,
 
---
-Lee Jones [李琼斯]
+On Thu, Oct 05, 2023 at 11:59:27AM +0200, Benedikt Spranger wrote:
+> Commit 9607beb917df ("clk: socfpga: gate: Add a determine_rate hook")
+> introduce a specific determine_rate hook. As a result the calculated
+> clock for the serial IP is off by factor 2 after that i.e. if the system
+> configures a baudrate of 115200 it is set physicaly to 57600.
 
+Where is that factor 2 coming from?
+
+> Change the determine_rate hook to the reparent variant
+> __clk_mux_determine_rate() to fix the issue.
+
+It's also not clear to me why that would fix anything. This patch should
+only make the old behaviour explicit, could you expand a bit on what
+happens?
+
+Thanks!
+Maxime
+
+--prvu7vztqw3jsd37
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZR6fKQAKCRDj7w1vZxhR
+xWkXAP944YltL6lQ6PADz9Gi/tzH2kaECDaV1ZlxH1ROb0heXAD9FYCgSiGiA8Ol
+Q96Bcx34HvhWVd152+c2DCv2VNyF3gw=
+=G/z2
+-----END PGP SIGNATURE-----
+
+--prvu7vztqw3jsd37--
