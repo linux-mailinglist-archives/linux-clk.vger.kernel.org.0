@@ -2,59 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8C07BA6A0
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 18:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234367BA6DF
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 18:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjJEQjn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Oct 2023 12:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S233064AbjJEQnP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Oct 2023 12:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjJEQix (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 12:38:53 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4563584
-        for <linux-clk@vger.kernel.org>; Wed,  4 Oct 2023 21:24:35 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-53447d0241eso860763a12.3
-        for <linux-clk@vger.kernel.org>; Wed, 04 Oct 2023 21:24:35 -0700 (PDT)
+        with ESMTP id S233879AbjJEQlB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 12:41:01 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22EE46B6
+        for <linux-clk@vger.kernel.org>; Wed,  4 Oct 2023 22:04:39 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9ad810be221so97651266b.2
+        for <linux-clk@vger.kernel.org>; Wed, 04 Oct 2023 22:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1696479874; x=1697084674; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1696482278; x=1697087078; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1FDosmr4pTB4y3KlQsf5VlEUdTtkvwPO8SEeca8pbEI=;
-        b=hX0m0BamELUggdQn39+7vtvWTGBxZchWqIskXYXn0EsJhWiMfZG57nQmTBttxulXPY
-         Xp9GzqCPQRHEHQFrus/zUMu0smuaM4t7G5UDobUNAgHoZUpvQN7S7UFluwh367KmRreo
-         DqT8hXm9WcmWoysGWdYnzJaKgSuu3hGmQQeOvEdijxo1Naa3DOsZEXk8s8TxHmPIsEnP
-         ugJPDN4Fc3n8ceZW0Ko8UWenQn82/RHit9ogb2jacfS1BnaysYHyrwrWLEVKLHObJvMP
-         UWtgKtpPaAJgRiPZtcjXOae2bJDRFAwUYEHyfjwZlQ6YzRtDv+fcB6lltK0jxowXi4k0
-         k61A==
+        bh=Pk7xhwaEkFwHhfMjiYSi4Y46b4kEa0zBr986kaxm2TY=;
+        b=Vir067bCwojLHC0ot/HGBLreO2CUq3JuqbLfPY68+RAIiriiKKGHcT2IHpwKzpf/ll
+         iEIVMz9PvFd/6pWp3UaOF2iGUuaGvaH3cSlp8WOOUws/USDfSJOjjsXTSE2yp+PQoMwU
+         FCxbylRVSVoOfisbkeus46hNsfCFwfk5ldPyCJ+HGqzwYwdbQpGkqHm15UhFeI6FYZKW
+         /XAgWORw5WWlAQboFVi6NZWmLKiEFuA4MmrIrrvkNPQpNwXxCBfTC0mdFB2ItY9WxYbb
+         XXMUfL3MDzFIEaHbc15/kKhpeoAXapIx3GQUbqzR+iUbtYxhfbddfoW+kWdgklIHciB6
+         k6hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696479874; x=1697084674;
+        d=1e100.net; s=20230601; t=1696482278; x=1697087078;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1FDosmr4pTB4y3KlQsf5VlEUdTtkvwPO8SEeca8pbEI=;
-        b=gBWfmg9eorwRc/y0hyse71ojXV6xca+oBDZw0S1ee+rafSX21bxtL7nVx9+wvETpRr
-         rCdpl8/ulFt58+hdkfvBhv1lTq4qJD0q09AnLyPwzZFy9geuCwSbNps4R5/q6nfT5PyD
-         WmzA1hi5cUB1vscSma2hpJeele0seEDVW5L0BU4f9ZSC3hPOagGDJEV3N9RO3L3mmlMM
-         Q8Lz1+sN0swj3ry6ZZVo5lisPW3Qie3/mOLy4uSzxHnonwqzRJg5m3PkK3Xqht7Hdoxq
-         rXri1Lk0HgI2LdPj90ll9+fahGZe0nsX4llQX/A0Qna0Xv555qfaj1BJWiImRRaY7pt1
-         aQdw==
-X-Gm-Message-State: AOJu0YyKzr6/Mi1gsYeGsEY+MBhGr8cp+Rs8LvZ/Ej134m4aDrhKH9QA
-        WZNQmmXwRqMhhEXvBerUX3cICw==
-X-Google-Smtp-Source: AGHT+IHa/5RZ0/NvxslXh1L0yV6vSI7aQFJL/Ac85bcm5Do80CLgawrfw75osdtTrQOTg2Bt7hM+iQ==
-X-Received: by 2002:aa7:da83:0:b0:533:d81b:36d5 with SMTP id q3-20020aa7da83000000b00533d81b36d5mr3553479eds.15.1696479873654;
-        Wed, 04 Oct 2023 21:24:33 -0700 (PDT)
+        bh=Pk7xhwaEkFwHhfMjiYSi4Y46b4kEa0zBr986kaxm2TY=;
+        b=Aa3IqMxoZj0x6zrxzacReMtHODc5LQNrNNHDo9smkBLWrsxjhSizRM6gyVuCioNE4i
+         BoLVKVxBA41PhoEtKbrYMQRuG+K8i/HXaZLMRWlfKsECh1u5udk/16kftUHsSSPrBSIy
+         eSOR6Xm8kpxlrS+xhAT//H2HUELvCfDVwrFpXs//d0KqRcRNG6n4ui8VX3iNWRnN/pWY
+         Ueh9b2mNlIKbTv8PGfVB2sW/1bKRGfn7e8eI1ldcfL9UfVe38ibcAiRpbTE7gCd2cLiJ
+         CgjROORoevr+HjPrilfzqmsj9T1D0iA+GUIJ22Es/QqCqBs5uvNtFJ2oGZZ3dpHa4Ivs
+         mXfA==
+X-Gm-Message-State: AOJu0Ywbe/V6q0LJd2pDTPziaYljV37qlJIbytcruGR9k5hNG06oJM2Q
+        DlWoRIHvR6evxQiHs99Ln51DKA==
+X-Google-Smtp-Source: AGHT+IGzJcUaJeonUrdeYzfxApEYs0xmavQL/PnwdaussVLk71huq1WhzcxLhuwdCLhFhyXgP9U4TA==
+X-Received: by 2002:a17:907:2cd7:b0:9b9:4509:d57a with SMTP id hg23-20020a1709072cd700b009b94509d57amr2161870ejc.13.1696482278069;
+        Wed, 04 Oct 2023 22:04:38 -0700 (PDT)
 Received: from [192.168.32.2] ([147.161.130.252])
-        by smtp.gmail.com with ESMTPSA id w25-20020a056402071900b00537fd4abdc5sm388339edx.54.2023.10.04.21.24.31
+        by smtp.gmail.com with ESMTPSA id n2-20020a1709061d0200b009a0955a7ad0sm483292ejh.128.2023.10.04.22.04.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Oct 2023 21:24:33 -0700 (PDT)
-Message-ID: <0d0448c7-c33b-8960-d2ed-0a22e2f7fb3d@tuxon.dev>
-Date:   Thu, 5 Oct 2023 07:24:30 +0300
+        Wed, 04 Oct 2023 22:04:37 -0700 (PDT)
+Message-ID: <45949999-47f5-6811-9709-41abddb18cdf@tuxon.dev>
+Date:   Thu, 5 Oct 2023 08:04:35 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH v2 10/28] clk: renesas: rzg2l: refactor sd mux driver
+Subject: Re: [PATCH v2 11/28] clk: renesas: rzg2l: add a divider clock for
+ RZ/G3S
 Content-Language: en-US
 To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
@@ -69,10 +70,10 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20230929053915.1530607-1-claudiu.beznea@bp.renesas.com>
- <20230929053915.1530607-11-claudiu.beznea@bp.renesas.com>
- <CAMuHMdUJj+h5LfhQXTNkN3Cp2wP62SX6fY3frzytJQBcKXDJJQ@mail.gmail.com>
+ <20230929053915.1530607-12-claudiu.beznea@bp.renesas.com>
+ <CAMuHMdX8wPNr4LsPJR7zk3Ktb8NnqcSMUEjsAURc2NJ_dpiDHw@mail.gmail.com>
 From:   claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAMuHMdUJj+h5LfhQXTNkN3Cp2wP62SX6fY3frzytJQBcKXDJJQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdX8wPNr4LsPJR7zk3Ktb8NnqcSMUEjsAURc2NJ_dpiDHw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,166 +88,340 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Hi, Geert,
 
-On 04.10.2023 14:30, Geert Uytterhoeven wrote:
+On 04.10.2023 15:30, Geert Uytterhoeven wrote:
 > Hi Claudiu,
 > 
 > On Fri, Sep 29, 2023 at 7:39 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
 >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >>
->> Refactor SD MUX driver to be able to reuse the same code on RZ/G3S.
->> RZ/G2{L, UL} has a limitation with regards to switching the clock source
->> for SD MUX (MUX clock source has to be switched to 266MHz before switching
->> b/w 533MHz and 400MHz). This limitation has been introduced as a clock
->> notifier that is registered on platform based initialization data thus the
->> SD MUX code could be reused on RZ/G3S.
->>
->> As both RZ/G2{L, UL} and RZ/G3S has specific bits in specific registers
->> to check if the clock switching has been done, this configuration (register
->> offset, register bits and bits width) is now passed though
->> struct cpg_core_clk::sconf (status configuration) from platform specific
->> initialization code.
->>
->> Along with struct cpg_core_clk::sconf the mux table indices are also
->> passed from platform specific initialization code.
->>
->> Also, mux flags are now passed to DEF_SD_MUX() as they will be later
->> used by RZ/G3S.
+>> Add a divider clock driver for RZ/G3S. This will be used in RZ/G3S
+>> by SDHI, SPI, OCTA, I, I2, I3, P0, P1, P2, P3 core clocks.
+>> The divider has some limitation for SDHI and OCTA clocks:
+>> - SD div cannot be 1 if parent rate is 800MHz
+>> - OCTA div cannot be 1 if parent rate is 400MHz
+>> For these clocks a notifier could be registered from platform specific
+>> clock driver and proper actions are taken before clock rate is changed,
+>> if needed.
 >>
 >> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >> ---
 >>
 >> Changes in v2:
->> - s/indexes/indices in commit description
->> - mentioned in commit description that mux flags can now be passed to
->>   driver though DEF_SD_MUX() macro
->> - removed SoC specific names from macros' names
->> - added spaces after { and before } when initializing arrays
->> - preserved the order of .[gs]set_parent() API definitions for simpler
->>   diff b/w versions
->> - removed SD_MUX_NOTIF macro
+>> - removed DIV_NOTIF macro
 > 
 > Thanks for the update!
 > 
 >> --- a/drivers/clk/renesas/rzg2l-cpg.c
 >> +++ b/drivers/clk/renesas/rzg2l-cpg.c
-> 
->> @@ -142,6 +146,77 @@ static void rzg2l_cpg_del_clk_provider(void *data)
->>         of_clk_del_provider(data);
+>> @@ -91,6 +91,22 @@ struct sd_mux_hw_data {
+>>
+>>  #define to_sd_mux_hw_data(_hw) container_of(_hw, struct sd_mux_hw_data, hw_data)
+>>
+>> +/**
+>> + * struct div_hw_data - divider clock hardware data
+>> + * @hw_data: clock hw data
+>> + * @dtable: pointer to divider table
+>> + * @invalid_rate: invalid rate for divider
+>> + * @width: divider width
+>> + */
+>> +struct div_hw_data {
+>> +       struct clk_hw_data hw_data;
+>> +       const struct clk_div_table *dtable;
+>> +       unsigned long invalid_rate;
+>> +       u32 width;
+>> +};
+>> +
+>> +#define to_div_hw_data(_hw)    container_of(_hw, struct div_hw_data, hw_data)
+>> +
+>>  struct rzg2l_pll5_param {
+>>         u32 pl5_fracin;
+>>         u8 pl5_refdiv;
+>> @@ -200,6 +216,54 @@ int rzg2l_cpg_sd_mux_clk_notifier(struct notifier_block *nb, unsigned long event
+>>         return ret;
 >>  }
 >>
->> +/* Must be called in atomic context. */
->> +static int rzg2l_cpg_wait_clk_update_done(void __iomem *base, u32 conf)
->> +{
->> +       u32 bitmask = GENMASK(GET_WIDTH(conf) - 1, 0) << GET_SHIFT(conf);
->> +       u32 off = GET_REG_OFFSET(conf);
->> +       u32 val;
->> +
->> +       return readl_poll_timeout_atomic(base + off, val, !(val & bitmask), 10, 200);
->> +}
->> +
->> +int rzg2l_cpg_sd_mux_clk_notifier(struct notifier_block *nb, unsigned long event,
->> +                                 void *data)
+>> +int rzg3s_cpg_div_clk_notifier(struct notifier_block *nb, unsigned long event,
+>> +                              void *data)
 >> +{
 >> +       struct clk_notifier_data *cnd = data;
 >> +       struct clk_hw *hw = __clk_get_hw(cnd->clk);
 >> +       struct clk_hw_data *clk_hw_data = to_clk_hw_data(hw);
+>> +       struct div_hw_data *div_hw_data = to_div_hw_data(clk_hw_data);
 >> +       struct rzg2l_cpg_priv *priv = clk_hw_data->priv;
 >> +       u32 off = GET_REG_OFFSET(clk_hw_data->conf);
 >> +       u32 shift = GET_SHIFT(clk_hw_data->conf);
->> +       const u32 clk_src_266 = 3;
+>> +       u32 bitmask = GENMASK(GET_WIDTH(clk_hw_data->conf) - 1, 0);
 >> +       unsigned long flags;
->> +       u32 bitmask;
->> +       int ret;
+>> +       int ret = 0;
+>> +       u32 val;
 >> +
->> +       if (event != PRE_RATE_CHANGE || (cnd->new_rate / MEGA == 266))
+>> +       if (event != PRE_RATE_CHANGE || !div_hw_data->invalid_rate ||
+>> +           div_hw_data->invalid_rate % cnd->new_rate)
 >> +               return 0;
 > 
-> include/linux/clk.h:
-> 
->  * PRE_RATE_CHANGE - called immediately before the clk rate is changed,
->  *     to indicate that the rate change will proceed.  Drivers must
->  *     immediately terminate any operations that will be affected by the
->  *     rate change.  Callbacks may either return NOTIFY_DONE, NOTIFY_OK,
->  *     NOTIFY_STOP or NOTIFY_BAD.
+> NOTIFY_DONE for event != PRE_RATE_CHANGE
+> NOTIFY_OK for the other cases
 
-Indeed I missed these.
+Sure!
 
 > 
 >> +
 >> +       spin_lock_irqsave(&priv->rmw_lock, flags);
 >> +
->> +       /*
->> +        * As per the HW manual, we should not directly switch from 533 MHz to
->> +        * 400 MHz and vice versa. To change the setting from 2’b01 (533 MHz)
->> +        * to 2’b10 (400 MHz) or vice versa, Switch to 2’b11 (266 MHz) first,
->> +        * and then switch to the target setting (2’b01 (533 MHz) or 2’b10
->> +        * (400 MHz)).
->> +        * Setting a value of '0' to the SEL_SDHI0_SET or SEL_SDHI1_SET clock
->> +        * switching register is prohibited.
->> +        * The clock mux has 3 input clocks(533 MHz, 400 MHz, and 266 MHz), and
->> +        * the index to value mapping is done by adding 1 to the index.
->> +        */
->> +       bitmask = (GENMASK(GET_WIDTH(clk_hw_data->conf) - 1, 0) << shift) << 16;
->> +       writel(bitmask | (clk_src_266 << shift), priv->base + off);
+>> +       val = readl(priv->base + off);
+>> +       val >>= shift;
+>> +       val &= bitmask;
 >> +
->> +       /* Wait for the update done. */
->> +       ret = rzg2l_cpg_wait_clk_update_done(priv->base, clk_hw_data->sconf);
+>> +       /*
+>> +        * There are different constraints for the user of this notifiers as follows:
+>> +        * 1/ SD div cannot be 1 (val == 0) if parent rate is 800MHz
+>> +        * 2/ OCTA div cannot be 1 (val == 0) if parent rate is 400MHz
+>> +        * As SD can have only one parent having 800MHz and OCTA div can have
+>> +        * only one parent having 400MHz we took into account the parent rate
+>> +        * at the beginning of function (by checking invalid_rate % new_rate).
+>> +        * Now it is time to check the hardware divider and update it accordingly.
+>> +        */
+>> +       if (!val) {
+>> +               writel(((bitmask << shift) << 16) | BIT(shift), priv->base + off);
+> 
+> Haven't you exchanged the (single) write-enable bit and the (multi-bit)
+> division ratio setting?  According to the docs, the write-enable bit
+> is at 16 + shift, while the division ratio is at shift.
+
+Indeed, I messed this up. Though, I've tested quite some use cases and they
+all worked... I'll review this anyway, thanks for pointing it up.
+
+> 
+> Also, using bitmask as the division ratio means the maximum value
+> that fits in the bitfield, which would be a prohibited setting in case
+> of DIV_OCTA.
+> 
+> Now, looking at rzg3s_div_clk_set_rate() below, perhaps you just wanted
+> to set the ratio to value to 1, but used the wrong size for bitmask?
+
+Yes, the idea was to set a safe divider.
+
+> 
+>> +               /* Wait for the update done. */
+>> +               ret = rzg2l_cpg_wait_clk_update_done(priv->base, clk_hw_data->sconf);
+>> +       }
 >> +
 >> +       spin_unlock_irqrestore(&priv->rmw_lock, flags);
 >> +
 >> +       if (ret)
->> +               dev_err(priv->dev, "failed to switch to safe clk source\n");
+>> +               dev_err(priv->dev, "Failed to downgrade the div\n");
+> 
+> and return NOTIFY_BAD
+
+Sure!
+
+> 
 >> +
 >> +       return ret;
 > 
-> Likewise.
+> NOTIFY_OK
+
+Sure!
+
 > 
 >> +}
-> 
+>> +
+>>  static int rzg2l_register_notifier(struct clk_hw *hw, const struct cpg_core_clk *core,
+>>                                    struct rzg2l_cpg_priv *priv)
+>>  {
+>> @@ -217,6 +281,146 @@ static int rzg2l_register_notifier(struct clk_hw *hw, const struct cpg_core_clk
+>>         return clk_notifier_register(hw->clk, nb);
+>>  }
 >>
->>  static const struct clk_ops rzg2l_cpg_sd_clk_mux_ops = {
->>         .determine_rate = __clk_mux_determine_rate_closest,
->> -       .set_parent     = rzg2l_cpg_sd_clk_mux_set_parent,
->> -       .get_parent     = rzg2l_cpg_sd_clk_mux_get_parent,
->> +       .set_parent     = rzg2l_cpg_sd_mux_clk_set_parent,
->> +       .get_parent     = rzg2l_cpg_sd_mux_clk_get_parent,
+>> +static unsigned long rzg3s_div_clk_recalc_rate(struct clk_hw *hw,
+>> +                                              unsigned long parent_rate)
+>> +{
+>> +       struct clk_hw_data *clk_hw_data = to_clk_hw_data(hw);
+>> +       struct div_hw_data *div_hw_data = to_div_hw_data(clk_hw_data);
+>> +       struct rzg2l_cpg_priv *priv = clk_hw_data->priv;
+>> +       u32 val;
+>> +
+>> +       val = readl(priv->base + GET_REG_OFFSET(clk_hw_data->conf));
+>> +       val >>= GET_SHIFT(clk_hw_data->conf);
+>> +       val &= GENMASK(GET_WIDTH(clk_hw_data->conf) - 1, 0);
+>> +
+>> +       return divider_recalc_rate(hw, parent_rate, val, div_hw_data->dtable,
+>> +                                  CLK_DIVIDER_ROUND_CLOSEST, div_hw_data->width);
+>> +}
+>> +
+>> +static bool rzg3s_div_clk_is_rate_valid(const unsigned long invalid_rate, unsigned long rate)
+>> +{
+>> +       if (invalid_rate && rate >= invalid_rate)
+>> +               return false;
+>> +
+>> +       return true;
+>> +}
+>> +
+>> +static long rzg3s_div_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+>> +                                    unsigned long *parent_rate)
+>> +{
+>> +       struct clk_hw_data *clk_hw_data = to_clk_hw_data(hw);
+>> +       struct div_hw_data *div_hw_data = to_div_hw_data(clk_hw_data);
+>> +       long round_rate;
+>> +
+>> +       round_rate = divider_round_rate(hw, rate, parent_rate, div_hw_data->dtable,
+>> +                                       div_hw_data->width, CLK_DIVIDER_ROUND_CLOSEST);
+>> +
+>> +       if (!rzg3s_div_clk_is_rate_valid(div_hw_data->invalid_rate, round_rate))
+>> +               return -EINVAL;
 > 
-> Please keep the old names, for consistency with
-> __clk_mux_determine_rate_closest() and drivers/clk/clk-mux.c, and to
-> reduce the diff.
-> 
-> Any existing inconsistent use of "clk_mux" vs. "mux_clk" can be resolved
-> later with a separate patch, if anyone cares.
+> Shouldn't this return the closest rate that is actually supported instead?
 
-ok
-
-> 
->> --- a/drivers/clk/renesas/rzg2l-cpg.h
->> +++ b/drivers/clk/renesas/rzg2l-cpg.h
-> 
->> @@ -272,4 +276,6 @@ extern const struct rzg2l_cpg_info r9a07g044_cpg_info;
->>  extern const struct rzg2l_cpg_info r9a07g054_cpg_info;
->>  extern const struct rzg2l_cpg_info r9a09g011_cpg_info;
->>
->> +int rzg2l_cpg_sd_mux_clk_notifier(struct notifier_block *nb, unsigned long event, void *data);
-> 
-> rzg2l_cpg_sd_clk_mux_notifier()?
-
-ok
+The divider_round_rate() already choose it as the closest rate that it is
+actually not supported, thus I chose to just return -EINVAL. I chose it
+this way to use divider_round_rate(). Don't know if there is way around
+this using divider_round_rate() I'll have a look.
 
 > 
 >> +
->>  #endif
+>> +       return round_rate;
+>> +}
 > 
-> The rest LGTM.
+> But please implement .determine_rate() instead of .round_rate() in
+> new drivers.
+
+Indeed, I missed this one.
+
+> 
+>> +
+>> +static int rzg3s_div_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+>> +                                 unsigned long parent_rate)
+>> +{
+>> +       struct clk_hw_data *clk_hw_data = to_clk_hw_data(hw);
+>> +       struct div_hw_data *div_hw_data = to_div_hw_data(clk_hw_data);
+>> +       struct rzg2l_cpg_priv *priv = clk_hw_data->priv;
+>> +       u32 off = GET_REG_OFFSET(clk_hw_data->conf);
+>> +       u32 shift = GET_SHIFT(clk_hw_data->conf);
+>> +       unsigned long flags;
+>> +       u32 bitmask, val;
+>> +       int ret;
+>> +
+>> +       /*
+>> +        * Some dividers cannot support some rates:
+>> +        * - SD div cannot support 800 MHz when parent is @800MHz and div = 1
+>> +        * - OCTA div cannot support 400 MHz when parent is @400MHz and div = 1
+>> +        * Check these scenarios.
+>> +        */
+>> +       if (!rzg3s_div_clk_is_rate_valid(div_hw_data->invalid_rate, rate))
+>> +               return -EINVAL;
+> 
+> Can this actually happen? Wouldn't the notifier have prevented us from
+> getting here?
+
+I remember I added it here as a result of testing. I'll double check it.
+
+> 
+>> +
+>> +       val = divider_get_val(rate, parent_rate, div_hw_data->dtable, div_hw_data->width,
+>> +                             CLK_DIVIDER_ROUND_CLOSEST);
+>> +
+>> +       bitmask = (GENMASK(GET_WIDTH(clk_hw_data->conf) - 1, 0) << shift) << 16;
+> 
+> Is bitmask the (single) write-enable bit?
+> 
+> If yes, that should be BIT(16 + shift), and the variable should be
+> renamed to reflect that.
+> 
+> I guess there should be a general "#define CPG_WEN BIT(16)", then you
+> can simply use
+> 
+>     writel((CPG_WEN | val) << shift, ...);
+
+OK.
+
+> 
+>> +
+>> +       spin_lock_irqsave(&priv->rmw_lock, flags);
+>> +       writel(bitmask | (val << shift), priv->base + off);
+>> +       /* Wait for the update done. */
+>> +       ret = rzg2l_cpg_wait_clk_update_done(priv->base, clk_hw_data->sconf);
+>> +       spin_unlock_irqrestore(&priv->rmw_lock, flags);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static const struct clk_ops rzg3s_div_clk_ops = {
+>> +       .recalc_rate = rzg3s_div_clk_recalc_rate,
+>> +       .round_rate = rzg3s_div_clk_round_rate,
+>> +       .set_rate = rzg3s_div_clk_set_rate,
+>> +};
+>> +
+>> +static struct clk * __init
+>> +rzg3s_cpg_div_clk_register(const struct cpg_core_clk *core, struct clk **clks,
+>> +                          void __iomem *base, struct rzg2l_cpg_priv *priv)
+>> +{
+>> +       struct div_hw_data *div_hw_data;
+>> +       struct clk_init_data init = {};
+>> +       const struct clk_div_table *clkt;
+>> +       struct clk_hw *clk_hw;
+>> +       const struct clk *parent;
+>> +       const char *parent_name;
+>> +       u32 max;
+>> +       int ret;
+>> +
+>> +       parent = clks[core->parent & 0xffff];
+>> +       if (IS_ERR(parent))
+>> +               return ERR_CAST(parent);
+>> +
+>> +       parent_name = __clk_get_name(parent);
+>> +
+>> +       div_hw_data = devm_kzalloc(priv->dev, sizeof(*div_hw_data), GFP_KERNEL);
+>> +       if (!div_hw_data)
+>> +               return ERR_PTR(-ENOMEM);
+>> +
+>> +       init.name = core->name;
+>> +       init.flags = core->flag;
+>> +       init.ops = &rzg3s_div_clk_ops;
+>> +       init.parent_names = &parent_name;
+>> +       init.num_parents = 1;
+>> +
+>> +       /* Get the maximum divider to retrieve div width. */
+>> +       for (clkt = core->dtable; clkt->div; clkt++) {
+>> +               if (max < clkt->div)
+> 
+> "max" is used uninitialized
+
+Yes, you're right.
+
+Thank you for your review,
+Claudiu Beznea
+
+> 
+>> +                       max = clkt->div;
+>> +       }
+>> +
+>> +       div_hw_data->hw_data.priv = priv;
+>> +       div_hw_data->hw_data.conf = core->conf;
+>> +       div_hw_data->hw_data.sconf = core->sconf;
+>> +       div_hw_data->dtable = core->dtable;
+>> +       div_hw_data->invalid_rate = core->invalid_rate;
+>> +       div_hw_data->width = fls(max) - 1;
+> 
+> Isn't that
+>> +
+>> +       clk_hw = &div_hw_data->hw_data.hw;
+>> +       clk_hw->init = &init;
+>> +
+>> +       ret = devm_clk_hw_register(priv->dev, clk_hw);
+>> +       if (ret)
+>> +               return ERR_PTR(ret);
+>> +
+>> +       ret = rzg2l_register_notifier(clk_hw, core, priv);
+>> +       if (ret) {
+>> +               dev_err(priv->dev, "Failed to register notifier for %s\n",
+>> +                       core->name);
+>> +               return ERR_PTR(ret);
+>> +       }
+>> +
+>> +       return clk_hw->clk;
+>> +}
 > 
 > Gr{oetje,eeting}s,
 > 
 >                         Geert
 > 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
