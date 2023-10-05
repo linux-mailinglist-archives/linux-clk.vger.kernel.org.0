@@ -2,82 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E8B7BA661
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 18:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079F47BA429
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Oct 2023 18:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjJEQdo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 Oct 2023 12:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46270 "EHLO
+        id S237364AbjJEQFD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Oct 2023 12:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjJEQck (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 12:32:40 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB93A60B5;
-        Thu,  5 Oct 2023 07:42:24 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395DjE7F021621;
-        Thu, 5 Oct 2023 14:42:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=gA4E+LhvP+QOudqDT1Vi4Udvi1IE4594Djagbj9I1mE=;
- b=lTD6IGZb3zWeeVH33QF8GupBS+4Lg/dsfOdpdAIsKkg34jqIWfZei72FiZEmHEFbR1iI
- o82CDRBQQAA6EWuQllY578mIK2ATNgWfiVOT5reXR5+YfbAbTPBTG+MhUNImkp/c9yly
- lBnSIQbn83TrMMHaslmNWCulUlJgnA5G4zt+sim/QPwwdyY+L8BdWlTCrtGNsc9TjSIp
- JB+q6pftkFphRxm62UY3M51j2GNC5VyQJNJV4eb/JVY5fEpFkoWtOZ3SnTtATt5MnRsY
- SCdDxu20s5cqJ81h8EycmQ6YbdMVizE0N5rPh03zY0cxs5a6rFgO9tP//RbjxPhqtDlC mQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3thg7hsm0p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Oct 2023 14:42:17 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 395EgGNr003904
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 5 Oct 2023 14:42:16 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 5 Oct 2023 07:42:10 -0700
-Date:   Thu, 5 Oct 2023 20:12:06 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <ilia.lin@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_kathirav@quicinc.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v1 07/10] arm64: dts: qcom: ipq5332: populate the opp
- table based on the eFuse
-Message-ID: <20231005144205.GB29795@varda-linux.qualcomm.com>
-References: <cover.1693996662.git.quic_varada@quicinc.com>
- <a6d12e3b253d6a55d85f66979ba8b7d9c9ff6072.1693996662.git.quic_varada@quicinc.com>
- <CAA8EJppNsgUNgwadq9oM0_KyORNR5PBZGVZukN6MzAm2KPzC9g@mail.gmail.com>
- <20231005095744.GA29795@varda-linux.qualcomm.com>
- <CAA8EJpr124fymnbZ1bO=Dbbxavn3Z=1xOPmFRPnfSp-UB3p6OQ@mail.gmail.com>
+        with ESMTP id S236301AbjJEQD1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 Oct 2023 12:03:27 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6962EABC
+        for <linux-clk@vger.kernel.org>; Thu,  5 Oct 2023 08:57:20 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-405505b07dfso14144485e9.0
+        for <linux-clk@vger.kernel.org>; Thu, 05 Oct 2023 08:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696521438; x=1697126238; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SqhZbDetpDSPGH9tcjVMG0XAAmJGH9VuKuWc007JldY=;
+        b=C2C+Q+Z+zRdZDwHDeapXdo/tr43RPhNwc7tIFqGMZxVVjiUfKuH4F6O49xAZmJdg8i
+         4TmDjveEeb6WNz65G8aS0jWgIWzYlZuZ76KlcXhuU91gdXjj925mhndozhRFewv9d1Cy
+         VW/NuGSmi1Dmu6/+sKhpxbvNkWTZwtg9BgP+tgUfN92IwukyO/O10tgy4iv5OToeAgbo
+         gRUFlLgaJQ6dN+7lP1YwCzwWVMfFqY28E1IJpV2qqd3mAIIjGpeve1EqDxSgK0X7eUJN
+         kxSgHua2JAV88cYCLGbJJo6mbSSXy9YfKhuWSbQXgunILom0slO5enDePor61gBbAyW3
+         R6RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696521438; x=1697126238;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SqhZbDetpDSPGH9tcjVMG0XAAmJGH9VuKuWc007JldY=;
+        b=NuxsVZbhIZaS+hJVsf8cLmaRK6u50C7JAlVr/kpp3ygnCf1BFUA1teQmnRW9bcqhe1
+         5sn8s3HFpj0WIlyzjr1kqt8uMK1DHL6+7Hn/DGUYkbCCmdYMoJYHh97WoYW+M7kQeu9A
+         czdoUkwjtq3ePP659xw/GtZHZ3o3W7DnevOaOYvL/DKNQgk/Iy77JPmL47Ua548kVipb
+         Qcxi9cTRzy2ZQZJTKBXxB2GISVqLIcl49UHrAczgkJ127vrB31Jox92ffxxvHtDK/65X
+         kPfOEvd/gTP8mMcuAI8pOqoSqrZ/ecZi38VHt7F2nFUmcwCiAkE6ghUcCAr0p8Cogu0C
+         g+8w==
+X-Gm-Message-State: AOJu0YxdJVTVEtrVJHgi3ZmNHQS5a+ZBJmoEh2cFuGxoiNdJ0aSlCrnK
+        IMESm0bDyzyf3wtZ1hpFswtkmg==
+X-Google-Smtp-Source: AGHT+IG/GeJb2r19mj4jeu5ZFEFUp7ngzuC6ozd49h0DMFGWzzEf3HPXrcm2cFOkZ8TfC72H5BArow==
+X-Received: by 2002:a5d:668c:0:b0:317:6579:2b9f with SMTP id l12-20020a5d668c000000b0031765792b9fmr2534206wru.30.1696521438335;
+        Thu, 05 Oct 2023 08:57:18 -0700 (PDT)
+Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
+        by smtp.gmail.com with ESMTPSA id t9-20020a5d4609000000b0031f8a59dbeasm2084336wrq.62.2023.10.05.08.57.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Oct 2023 08:57:17 -0700 (PDT)
+From:   Peter Griffin <peter.griffin@linaro.org>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        linus.walleij@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com
+Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
+        andre.draszik@linaro.org, semen.protsenko@linaro.org,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH 00/21] Add minimal Tensor/GS101 SoC support and Oriole/Pixel6 board
+Date:   Thu,  5 Oct 2023 16:55:57 +0100
+Message-ID: <20231005155618.700312-1-peter.griffin@linaro.org>
+X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpr124fymnbZ1bO=Dbbxavn3Z=1xOPmFRPnfSp-UB3p6OQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UZ043y7PLOrm6BR2rXvCw8tfzxFtUx0U
-X-Proofpoint-ORIG-GUID: UZ043y7PLOrm6BR2rXvCw8tfzxFtUx0U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310050113
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,92 +77,111 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Oct 05, 2023 at 02:39:43PM +0300, Dmitry Baryshkov wrote:
-> On Thu, 5 Oct 2023 at 12:58, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
-> >
-> > On Thu, Sep 07, 2023 at 04:59:28PM +0300, Dmitry Baryshkov wrote:
-> > > On Thu, 7 Sept 2023 at 08:23, Varadarajan Narayanan
-> > > <quic_varada@quicinc.com> wrote:
-> > > >
-> > > > IPQ53xx have different OPPs available for the CPU based on
-> > > > SoC variant. This can be determined through use of an eFuse
-> > > > register present in the silicon.
-> > > >
-> > > > Add support to read the eFuse and populate the OPPs based on it.
-> > > >
-> > > > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > > ---
-> > > >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 34 +++++++++++++++++++++++++++++++---
-> > > >  1 file changed, 31 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > > index 82761ae..3ca3f34 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> > > > @@ -91,11 +91,34 @@
-> > > >         };
-> > > >
-> > > >         cpu_opp_table: opp-table-cpu {
-> > > > -               compatible = "operating-points-v2";
-> > > > +               compatible = "operating-points-v2-kryo-cpu";
-> > > >                 opp-shared;
-> > > > +               nvmem-cells = <&cpu_speed_bin>;
-> > > > +               nvmem-cell-names = "speed_bin";
-> > > > +
-> > > > +               /*
-> > > > +                * Listed all supported CPU frequencies and opp-supported-hw
-> > > > +                * values to select CPU frequencies based on the limits fused.
-> > > > +                * ------------------------------------------------------------
-> > > > +                * Frequency     BIT3   BIT2   BIT1    BIT0    opp-supported-hw
-> > > > +                *              1.0GHz 1.2GHz 1.5GHz No Limit
-> > > > +                * ------------------------------------------------------------
-> > > > +                * 1100000000     1      1      1       1            0xF
-> > > > +                * 1500000000     0      0      1       1            0x3
-> > > > +                * -----------------------------------------------------------
-> > > > +                */
-> > >
-> > > This can probably go to the commit message instead.
-> >
-> > Ok
-> >
-> > > > +
-> > > > +               opp-1100000000 {
-> > > > +                       opp-hz = /bits/ 64 <1100000000>;
-> > >
-> > > But your table shows 1.0 GHz and 1.2 GHz instead of 1.1 GHz
-> >
-> > Will update it.
-> >
-> > > > +                       opp-microvolt = <850000>;
-> > > > +                       opp-supported-hw = <0xF>;
-> > > > +                       clock-latency-ns = <200000>;
-> > > > +               };
-> > > >
-> > > > -               opp-1488000000 {
-> > > > -                       opp-hz = /bits/ 64 <1488000000>;
-> > > > +               opp-1500000000 {
-> > > > +                       opp-hz = /bits/ 64 <1500000000>;
-> > >
-> > > So, 1.488 GHz or 1.5 GHz?
-> >
-> > 1.5 GHz
-> >
-> > > > +                       opp-microvolt = <950000>;
-> > >
-> > > Which regulator is controlled by this microvolt?
-> >
-> > Based on the SKU, the XBL sets up the regulator to provide 950000uV
-> > on CPUs capable of running 1.5G and 850000uV on other SKUs. Linux
-> > doesn't control it.
->
-> Then why do you need this property here in the first place?
+Hi folks,
 
-I get these errors without this property
+This series adds initial SoC support for the GS101 SoC and also initial board
+support for Pixel 6 phone (Oriole).
 
-[    1.018065] cpu cpu0: opp_parse_microvolt: opp-microvolt missing although OPP managing regulators
-[    1.018074] cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -22
+The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro (raven).
+Currently DT is just added for the gs101 SoC and Oriole.
 
-Thanks
-Varada
+The support added in this series consists of:
+* cpus
+* pinctrl
+* some CCF clock implementation
+* watchdog
+* uart
+* gpio
+
+This is enough to boot through to a busybox initramfs and shell using an upstream
+kernel though :) More platform support will be added over the following weeks
+and months. Currently we boot with clk_ignore_unused parameter but this will be
+updated as more clocks and platform support lands.
+
+For further information on how to build and flash the upstream kernel on your
+Pixel 6, with a prebuilt busybox initramfs please refer to the script and
+README.md here:
+
+https://git.codelinaro.org/linaro/googlelt/pixelscripts
+
+I've also included the dtbo overlay containing board_id and board_rev in this
+series as otherwise the LK bootloader will bootloop if this is not present in
+the dtbo partition. It seems like it would be nicer for the upstream kernel to
+build all the DT required to boot upstream kernel on a production phone rather
+than having to obtain this dtbo from some other place, but if it is a pain point
+then I can remove it.
+
+Many thanks,
+
+Peter.
+
+Peter Griffin (21):
+  dt-bindings: interrupt-controller: Add gs101 interrupt controller
+  dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+  dt-bindings: clock: Add Google gs101 clock management unit bindings
+  dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG
+    compatibles to GS101
+  dt-bindings: watchdog: Document Google gs101 & gs201 watchdog bindings
+  dt-bindings: arm: google: Add bindings for Google ARM platforms
+  dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
+  dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
+  dt-bindings: clock: gs101: Add cmu_top clock indices
+  dt-bindings: clock: gs101: Add cmu_apm clock indices
+  dt-bindings: clock: gs101: Add cmu_misc clock indices
+  clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+  clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
+  clk: samsung: clk-gs101: add CMU_APM support
+  clk: google: gs101: Add support for CMU_MISC clock unit
+  pinctrl: samsung: Add gs101 SoC pinctrl configuration
+  watchdog: s3c2410_wdt: Add support for Google tensor SoCs
+  arm64: dts: google: Add initial Google gs101 SoC support
+  google/gs101: Add dt overlay for oriole board
+  arm64: defconfig: Enable Google Tensor SoC
+  MAINTAINERS: add entry for Google Tensor SoC
+
+ .../devicetree/bindings/arm/google.yaml       |   46 +
+ .../bindings/clock/google,gs101-clock.yaml    |  109 +
+ .../samsung,pinctrl-wakeup-interrupt.yaml     |    2 +
+ .../bindings/pinctrl/samsung,pinctrl.yaml     |    4 +-
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    2 +
+ .../soc/samsung/samsung,exynos-sysreg.yaml    |    7 +
+ .../bindings/watchdog/samsung-wdt.yaml        |   10 +-
+ MAINTAINERS                                   |   11 +
+ arch/arm64/Kconfig.platforms                  |    6 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/google/Makefile           |    7 +
+ arch/arm64/boot/dts/google/gs101-oriole.dts   |   68 +
+ arch/arm64/boot/dts/google/gs101-oriole.dtso  |   21 +
+ arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1134 +++++++++
+ arch/arm64/boot/dts/google/gs101-pinctrl.h    |   17 +
+ arch/arm64/boot/dts/google/gs101.dtsi         |  501 ++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/samsung/Kconfig                   |    9 +
+ drivers/clk/samsung/Makefile                  |    1 +
+ drivers/clk/samsung/clk-gs101.c               | 2171 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |    9 +-
+ drivers/clk/samsung/clk-pll.h                 |    3 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  163 ++
+ drivers/pinctrl/samsung/pinctrl-exynos.c      |   68 +-
+ drivers/pinctrl/samsung/pinctrl-exynos.h      |   44 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |    4 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |   24 +
+ drivers/watchdog/s3c2410_wdt.c                |  116 +-
+ include/dt-bindings/clock/gs101.h             |  232 ++
+ .../dt-bindings/interrupt-controller/gs101.h  |  758 ++++++
+ 30 files changed, 5533 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/google/Makefile
+ create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
+ create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dtso
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
+ create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
+ create mode 100644 drivers/clk/samsung/clk-gs101.c
+ create mode 100644 include/dt-bindings/clock/gs101.h
+ create mode 100644 include/dt-bindings/interrupt-controller/gs101.h
+
+-- 
+2.42.0.582.g8ccd20d70d-goog
+
