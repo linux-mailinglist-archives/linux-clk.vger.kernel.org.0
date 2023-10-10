@@ -2,44 +2,43 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8FF7BF15D
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Oct 2023 05:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBA27BF170
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Oct 2023 05:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441962AbjJJDXW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Oct 2023 23:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S1441992AbjJJD3E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Oct 2023 23:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441969AbjJJDXU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Oct 2023 23:23:20 -0400
+        with ESMTP id S1441968AbjJJD2v (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Oct 2023 23:28:51 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6002A6;
-        Mon,  9 Oct 2023 20:23:19 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40113C433C8;
-        Tue, 10 Oct 2023 03:23:19 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC592;
+        Mon,  9 Oct 2023 20:28:48 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E059C433D9;
+        Tue, 10 Oct 2023 03:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696908199;
-        bh=svOySVpdTq4zrtHC4TrHg5u+BeEE9tyEDYgZhlD3pCQ=;
+        s=k20201202; t=1696908528;
+        bh=9bUg+YT/IF5JON4/jENIBUMkFKuPDwrjXwprsrzaXsA=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=vBaoLD918wWXo8ktHuxu9HLV8XPLWeZoEb4PkV7WLRdsS8dJdPwo2Yl3gu3fDN+Kt
-         KFZuZDqxDW0gri1BStfkikMQssLJYUnxfulQBDJ61h0kzHUlJuM20FLNDhuJpvZaeA
-         ed/gsrgXSImJsZpf41m/rvaL5Sl7zUqwIbpAoRipQsu6UcMu5NnPNexkCE/YVL0S0c
-         rsXf3sabsU3K+wfI/209LMAQhY5FKQV7GW8MSWYo68QgcFV8ylxr9L5cbxJB5075Zj
-         O5huJv1ZaYxt7e0uAx0XfiCVXYRjjWHHBNsJzBCs7WH8m8VayReBpoThm6YWeg2kWE
-         YtTO63l0iHtqw==
-Message-ID: <7be6d0f2101b82f423818a2bb82eee90.sboyd@kernel.org>
+        b=EbldYT9/znJCxBXHQtzBPJelf9KTfk5l254Hs3J9oTbiJ3gXAZtfVZoapsCbHgi8+
+         pqx3vppC5mMnRZjN6t6cDJ24sZdyxFv3upftOakrAdhJgi9iddr/3zPEl2P5s7hZj0
+         p26mMPfTxE7kXNzbWjoP8yZtl9JIkw5KAKnCjqtR8NsCLOjV2+++EAIouncn7ga9u6
+         9stFJITFi1QHdn+JCt3S/1H7y56iRUK/unAxKn4aJLOgMyUEdRQ/J4PazOnqVXIRIV
+         EhOoJkH5YJcSi6LlHVY+arERW28OflH6IqpIBY6WaQXPMQM0JgaiocVeWxClB4KKCv
+         HdBfEtVbzpJ/A==
+Message-ID: <4b02625b2739de551aa931c0244c5f2c.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230912175534.2427862-3-sboyd@kernel.org>
-References: <20230912175534.2427862-1-sboyd@kernel.org> <20230912175534.2427862-3-sboyd@kernel.org>
-Subject: Re: [PATCH 2/2] clk: Parameterize clk_leaf_mux_set_rate_parent
+In-Reply-To: <20230929-clk-rbtree-cdce925-v1-1-a36b459002f7@kernel.org>
+References: <20230929-clk-rbtree-cdce925-v1-1-a36b459002f7@kernel.org>
+Subject: Re: [PATCH] clk: cdce925: Convert to use maple tree register cache
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>,
-        Maxime Ripard <mripard@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Date:   Mon, 09 Oct 2023 20:23:16 -0700
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Mon, 09 Oct 2023 20:28:45 -0700
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -50,17 +49,13 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Stephen Boyd (2023-09-12 10:55:31)
-> Transform the existing clk_leaf_mux_set_rate_parent test into a
-> parameterized test that calls the various determine rate APIs that exist
-> for clk providers. This ensures that whatever determine rate API is used
-> by a clk provider will return the correct parent in the best_parent_hw
-> pointer of the clk_rate_request because clk_rate_requests are forwarded
-> properly.
+Quoting Mark Brown (2023-09-29 05:03:43)
+> The maple tree register cache is based on a much more modern data structu=
+re
+> than the rbtree cache and makes optimisation choices which are probably
+> more appropriate for modern systems than those made by the rbtree cache.
 >=20
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
 
 Applied to clk-next
