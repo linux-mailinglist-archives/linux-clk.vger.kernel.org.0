@@ -2,75 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258C27C4257
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Oct 2023 23:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02127C448F
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Oct 2023 00:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343941AbjJJVWz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 Oct 2023 17:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
+        id S1344118AbjJJWtx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 10 Oct 2023 18:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbjJJVWz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 Oct 2023 17:22:55 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7185698
-        for <linux-clk@vger.kernel.org>; Tue, 10 Oct 2023 14:22:52 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-50567477b29so7992205e87.3
-        for <linux-clk@vger.kernel.org>; Tue, 10 Oct 2023 14:22:52 -0700 (PDT)
+        with ESMTP id S1343944AbjJJWtw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 Oct 2023 18:49:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FF699
+        for <linux-clk@vger.kernel.org>; Tue, 10 Oct 2023 15:49:48 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-405497850dbso57554525e9.0
+        for <linux-clk@vger.kernel.org>; Tue, 10 Oct 2023 15:49:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696972971; x=1697577771; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=06Lp0WCZvxnhJjMgMz9Il1mud7dNhX7GFtXqKwDTNOU=;
-        b=O7GsweDw8taTwVwTmHS/6RspsgTSAnfNstXbzN8qjKdrgwjOt/YGp8RkUs9CNBjHY6
-         qlmD74RaO31GNI9tXsHQUynVh6P25y40Gr131T9t5Zthjemzw/MRUQea+R+L/am+Bkh3
-         JOenPLx+8j2vYtjH4E24aIwGMcFzLM8XYz2uAYzNY7n8UuLij15kZOPgwW74ZgRJy+Qo
-         RP+qnQuExm5isOwTRGpZ+/VpeIyJPSDbhWdfAdl+jsGX6KKBcbOTRMERpAP/yWH25roY
-         INzwbbShwMAaHkmplHYQIF3PcmGxTIYQM8D3zJQ2YYG87arUnpE9Ne6ZyMo4IA0hrmX7
-         Z6/A==
+        d=linaro.org; s=google; t=1696978186; x=1697582986; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sbuVfEELPjWRyHywl2N/5ORyt876lTLvJftRhFQgfeo=;
+        b=JM4hlSBBp34g2CTUMwKf5nkVDCejiCeezGqPfOleGKNaQip2CoJWOlRAxqZLDbjbee
+         etfIyuuaq1lXx1Ry1RJWt/L9QYsmW6GCZN8kS7lfsn/oWqkB0MoVv0Eq9U/ncpeeh8Vl
+         MPLmvnm8RfaRcPOutd87Zj9569KQwn26ofV/w7vJ4hc+wrgd6uFgpxCn1UJaVkB1CxwA
+         DK6iyYpdu/Pzo2WqdyyrbVXv6/8Kn8fnWBtY9MZozH4o/4zTQPnu2dbRFXhwaZAF/uVD
+         XryhBjFjbGlEYdOy6/LyjBINXCdu4yAjZKtc8/+l6xpnKo67UpUWnUIGqTaeyj70X5pQ
+         Wf8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696972971; x=1697577771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=06Lp0WCZvxnhJjMgMz9Il1mud7dNhX7GFtXqKwDTNOU=;
-        b=D/X8o2pzftIWRq8L4NxwytnisFg/TVz5Mma7L89eEEy3O04ovyFjJngTrGnPY1Uf/B
-         rT7RKvXzeqKlWglnr/ad96NGKSxndByyf/l5hzXhfh5k/yp9OReVgTSBuI/CAJNdBzy6
-         VbtokdOeBb42LHuIf5UokzgX5PEP/XikLyrPsGzZmtAg6gbtv7JlE2MGyPlXlyVnsQ1P
-         YohvSXzPYVBP7AlL7f4rD4cBer3DVOwxfhU1qfOEDcd0/U54XFGLsM+pbhyqMyGzR3x3
-         osVl5qzyAxNPN+Bt4534HwWlWsK0gfHqdXqJHisxjD9MrYoYSreecFFJvVMgZUYONvqC
-         i9wQ==
-X-Gm-Message-State: AOJu0YzMNGmr85EgJwQNONnidr1YWWTJKncN6Y1FlB4ZEAsA36tujaDG
-        Lz5W1NbhphoS+NAxFWj9wgR15+SK5eVy7q6cXQ4=
-X-Google-Smtp-Source: AGHT+IGLRPG73kLueeBzDlF9R6wNaWzYlXINqFh4u3TbG++0qrZ4apZnOTWkitSIrQVBa8PRGtRqGQ==
-X-Received: by 2002:a05:6512:e9a:b0:505:6ede:20a9 with SMTP id bi26-20020a0565120e9a00b005056ede20a9mr19273420lfb.65.1696972970108;
-        Tue, 10 Oct 2023 14:22:50 -0700 (PDT)
-Received: from ?IPV6:2a00:f41:8004:ab80:24a8:5e5d:e0b2:5884? ([2a00:f41:8004:ab80:24a8:5e5d:e0b2:5884])
-        by smtp.gmail.com with ESMTPSA id d26-20020ac25eda000000b004fde41a2059sm1954073lfq.305.2023.10.10.14.22.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Oct 2023 14:22:49 -0700 (PDT)
-Message-ID: <a6f0c714-37c7-4df6-96d6-e070a1c75fc3@linaro.org>
-Date:   Tue, 10 Oct 2023 23:22:47 +0200
+        d=1e100.net; s=20230601; t=1696978186; x=1697582986;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sbuVfEELPjWRyHywl2N/5ORyt876lTLvJftRhFQgfeo=;
+        b=p+QrAJCF+T2kSEEojjKvKCnGPhm5N1kXrmW/kdObI/lQM87kxAAi5SZJF5JDURQy7B
+         XgxmaLV39gKrdSxHYT7ZGikxFaJZB/0FXKfDhXii3wkKVDpSBTRZ/Xwvozg/Smb/N0QV
+         00kn/YJU1MKPMhV7ge+3xENCkAQMFS3r83n3zAvW0hsWac17pjH2hOhhurl9ZNbHxCbS
+         +6bCmLXQ0hA4y2UV+hfcwcn3JBvbELpMbD49tdDnVLiUlGYObI1YWgVwNtzepqpjrzE3
+         8O2kk5VVbZZQjUvA8F4CwcCYySAOoAW+h3VC6TmMmFYcwVisclsjR3xbnviUYatzhkLc
+         rMbg==
+X-Gm-Message-State: AOJu0YwOil31kvMBNcXkEQCE3QVMCJLsH+Dn3N0e+9gKOr1+1JhbOa1b
+        +AX8Zz0po9qozrmBhcRmxZ0kPg==
+X-Google-Smtp-Source: AGHT+IHj8gB6UPf+MoFrcYoRWXiVyvEqaR26l4a3qKGlDqPVGTZQ3pdV81svnPyT+nUCQYXJMsPFNQ==
+X-Received: by 2002:a7b:ce89:0:b0:402:f07c:4b48 with SMTP id q9-20020a7bce89000000b00402f07c4b48mr16484655wmj.28.1696978186429;
+        Tue, 10 Oct 2023 15:49:46 -0700 (PDT)
+Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
+        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 15:49:45 -0700 (PDT)
+From:   Peter Griffin <peter.griffin@linaro.org>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        linus.walleij@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com
+Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
+        andre.draszik@linaro.org, semen.protsenko@linaro.org,
+        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-team@android.com, linux-serial@vger.kernel.org
+Subject: [PATCH v2 00/20] Add minimal Tensor/GS101 SoC support and Oriole/Pixel6 board
+Date:   Tue, 10 Oct 2023 23:49:08 +0100
+Message-ID: <20231010224928.2296997-1-peter.griffin@linaro.org>
+X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] clk: qcom: smd: Disable unused clocks
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231004-clk-qcom-smd-rpm-unused-v2-1-9a5281f324dc@kernkonzept.com>
- <bc8fa799-aa64-4b69-97ce-8f1872c8eb11@linaro.org>
- <ZSRfc_w19h-55Bib@gerhold.net>
- <da02414c-a151-464b-8976-d353c6da7b8e@linaro.org>
- <ZSXAY5mbXB7Gbz2x@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZSXAY5mbXB7Gbz2x@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -81,81 +78,141 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi folks,
 
+Firstly, thanks to everyone who reviewed the v1 series! V2 incorporates all
+the review feedback received so far.
 
-On 10/10/23 23:21, Stephan Gerhold wrote:
-> On Tue, Oct 10, 2023 at 10:45:15PM +0200, Konrad Dybcio wrote:
->> On 10/9/23 22:15, Stephan Gerhold wrote:
->>> On Fri, Oct 06, 2023 at 11:08:39PM +0200, Konrad Dybcio wrote:
->>>> On 4.10.2023 14:10, Stephan Gerhold wrote:
->>>>> At the moment, clk-smd-rpm forces all clocks on at probe time (for
->>>>> "handoff"). However, it does not make the clk core aware of that.
->>>>>
->>>>> This means that the clocks stay enabled forever if they are not used
->>>>> by anything. We can easily disable them again after bootup has been
->>>>> completed, by making the clk core aware of the state. This is
->>>>> implemented by returning the current state of the clock in
->>>>> is_prepared().
->>>>>
->>>>> Checking the SPMI clock registers reveals that this allows the RPM to
->>>>> disable unused BB/RF clocks. This reduces the power consumption quite
->>>>> significantly and is also needed to allow entering low-power states.
->>>>>
->>>>> As of commit d6edc31f3a68 ("clk: qcom: smd-rpm: Separate out
->>>>> interconnect bus clocks") the interconnect-related clocks are no longer
->>>>> managed/exposed by clk-smd-rpm. Also the BI_TCXO_AO clock is now
->>>>> critical (and never disabled).
->>>>>
->>>>> There is still a slight chance that this change will break boot on some
->>>>> devices. However, this will be most likely caused by actual mistakes in
->>>>> the device tree (where required clocks were not actually specified).
->>>> Precisely this, and solely as a consequence of the interconnect driver
->>>> not covering all the required clocks (usually named GCC_SOME_NOC_XYZ_CLK,
->>>> but there's quite a lot more).
->>>>
->>>> For platforms without an interconnect driver, breaking stuff this **MOST
->>>> LIKELY** means that Linux uses some hw that isn't voted for (e.g. missing
->>>> crypto clock under scm or something).
->>>>
->>>> For those with an interconnect driver, this will uncover issues that were
->>>> previously hidden because of the smd-rpm interconnect being essentially
->>>> broken for most of its existence. I can smell 660 breaking from however
->>>> many miles you are away from me, but it's "good", as we were relying on
->>>> (board specific) magic..
->>>>
->>>> I've been carrying an equivalent patch in my tree for over half a year now
->>>> and IIRC 8996 was mostly fine. It's also a good idea to test suspend
->>>> (echo mem > /sys/power/state) and wakeup.
->>>>
->>>
->>> I didn't notice any problems on 8916 and 8909 either. :-)
->>>
->>>> For reasons that I don't fully recall, I do have both .is_prepared and
->>>> .is_enabled though..
->>>>
->>>
->>> clk-smd-rpm doesn't have any .enable()/.disable() ops (only .prepare()
->>> and .unprepare()) so I don't think is_enabled is needed. For the unused
->>> clock cleanup in drivers/clk/clk.c (clk_disable_unused()) we just care
->>> about the clk_unprepare_unused_subtree() part. That part is run when the
->>> clock reports true in .is_prepared(). The equivalent for .is_enabled()
->>> would just be a no-op because there are no .enable()/.disable() ops.
->> Oh I found out why :D
->>
->> """
->> The RPM clock enabling state can be found with 'enabled' in struct
->> clk_smd_rpm. Add .is_enabled hook so that clk_summary in debugfs
->> can a correct enabling state for RPM clocks.
->> """
->>
-> 
-> I see, thanks! I think you should see at least the "prepared" state with
-> this patch. I'm not entirely convinced we should implement .is_enabled()
-> if we don't actually do anything on .enable()/.disable().
-> 
-> Anyway, given that the debugfs state is not directly related to the main
-> objective of disabling unused clocks I think that would be better
-> discussed in a separate patch later. :)
-Agreed
+This series adds initial SoC support for the GS101 SoC and also initial board
+support for Pixel 6 phone (Oriole).
 
-Konrad
+The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
+(raven) phones. Currently DT is added for the gs101 SoC and Oriole.
+As you can see from the patches the SoC is based on a Samsung Exynos SoC,
+and therefore lots of the low level Exynos drivers can be re-used.
+
+The support added in this series consists of:
+* cpus
+* pinctrl
+* some CCF implementation
+* watchdog
+* uart
+* gpio
+
+This is enough to boot through to a busybox initramfs and shell using an
+upstream kernel though :) More platform support will be added over the
+following weeks and months.
+
+Note 1: I've removed the dtbo overlay from v2 submission and will re-submit once
+I have appropriate documentation for it.
+
+Note 2: I've left the bootargs in dts with earlycon for now, for two reasons.
+1) The bootloader hangs if bootargs isn't present in the dtb as it tries to
+re-write this with additional bootargs.
+2) there is a issue whereby the full serial console doesn't come up properly
+if earlycon isn't also specified. This issue needs further investigation.
+
+Note 3: In `dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible`
+I tried to narrow the interrupts check to google,gs101-pinctrl but I still see
+a warning:
+gs101-oriole.dtb: pinctrl@174d0000: interrupts: [[0, 0, 4],[..] is too long
+
+If anyone can educate me on what I've done wrong here it would be most
+appreciated!
+
+kind regards,
+
+Peter.
+
+Changes since v1:
+ - Remove irq/gs101.h and replace macros with irq numbers globally
+ - exynos-pmu - keep alphabetical order
+ - add cmu_apm to clock bindings documentation
+ - sysreg bindings - remove superfluous `google,gs101-sysreg`
+ - watchdog bindings - Alphanumerical order, update gs201 comment
+ - samsung,pinctrl.yaml - add new "if:then:else:" to narrow for google SoC
+ - samsung,pinctrl-wakeup-interrupt.yaml - Alphanumerical order
+ - samsung,pinctrl- add google,gs101-wakeup-eint compatible
+ - clk-pll: fixup typos
+ - clk-gs101: fix kernel test robot warnings (add 2 new clocks,dividers,gate)
+ - clk-gs101: fix alphabetical order
+ - clk-gs101: cmu_apm: fixup typo and missing empty entry
+ - clk-gs101: cmu_misc: remove clocks that were being registerred twice
+ - pinctrl: filter sel: rename/reorder variables, add comment for FLTCON bitfield
+ - pinctrl: filter sel: avoid setting reserved bits by loop over FLTCON1 pins as well
+ - pinctrl: gs101: rename bank_type_6/7 structs to be more specific, split from filter
+ - watchdog: s3c2410_wdt: remove dev_info prints
+ - gs101.dtsi/oriole.dts: order by unit node, remove underscores from node name, blank lines
+   add SoC node, split dts and dtsi into separate patches, remove 'DVT' suffix
+ - gs101-oriole.dtso: Remove overlay until board_id is documented properly
+ - Add GS101_PIN_* macros to gs101-pinctrl.h instead of using Exynos ones
+ - gpio-keys: update linux,code to use input-event-code macros
+ - add dedicated gs101-uart compatible
+
+Peter Griffin (20):
+  dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
+  dt-bindings: clock: Add Google gs101 clock management unit bindings
+  dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG
+    compatibles to GS101
+  dt-bindings: watchdog: Document Google gs101 & gs201 watchdog bindings
+  dt-bindings: arm: google: Add bindings for Google ARM platforms
+  dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
+  dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
+  dt-bindings: serial: samsung: Add google-gs101-uart compatible
+  clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+  clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
+  clk: samsung: clk-gs101: add CMU_APM support
+  clk: samsung: clk-gs101: Add support for CMU_MISC clock unit
+  pinctrl: samsung: Add filter selection support for alive banks
+  pinctrl: samsung: Add gs101 SoC pinctrl configuration
+  watchdog: s3c2410_wdt: Add support for Google tensor SoCs
+  tty: serial: samsung: Add gs101 compatible and SoC data
+  arm64: dts: google: Add initial Google gs101 SoC support
+  arm64: dts: google: Add initial Oriole/pixel 6 board support
+  arm64: defconfig: Enable Google Tensor SoC
+  MAINTAINERS: add entry for Google Tensor SoC
+
+ .../devicetree/bindings/arm/google.yaml       |   46 +
+ .../bindings/clock/google,gs101-clock.yaml    |  125 +
+ .../samsung,pinctrl-wakeup-interrupt.yaml     |    2 +
+ .../bindings/pinctrl/samsung,pinctrl.yaml     |   19 +
+ .../bindings/serial/samsung_uart.yaml         |    2 +
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    2 +
+ .../soc/samsung/samsung,exynos-sysreg.yaml    |    6 +
+ .../bindings/watchdog/samsung-wdt.yaml        |   10 +-
+ MAINTAINERS                                   |   10 +
+ arch/arm64/Kconfig.platforms                  |    6 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/google/Makefile           |    4 +
+ arch/arm64/boot/dts/google/gs101-oriole.dts   |   79 +
+ arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1275 ++++++++++
+ arch/arm64/boot/dts/google/gs101-pinctrl.h    |   32 +
+ arch/arm64/boot/dts/google/gs101.dtsi         |  503 ++++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/samsung/Kconfig                   |    9 +
+ drivers/clk/samsung/Makefile                  |    2 +
+ drivers/clk/samsung/clk-gs101.c               | 2164 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |    9 +-
+ drivers/clk/samsung/clk-pll.h                 |    3 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  163 ++
+ drivers/pinctrl/samsung/pinctrl-exynos.c      |   84 +-
+ drivers/pinctrl/samsung/pinctrl-exynos.h      |   41 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |    4 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |   24 +
+ drivers/tty/serial/samsung_tty.c              |   12 +
+ drivers/watchdog/s3c2410_wdt.c                |  104 +-
+ include/dt-bindings/clock/google,gs101.h      |  232 ++
+ 30 files changed, 4961 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/google/Makefile
+ create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
+ create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
+ create mode 100644 drivers/clk/samsung/clk-gs101.c
+ create mode 100644 include/dt-bindings/clock/google,gs101.h
+
+-- 
+2.42.0.609.gbb76f46606-goog
+
