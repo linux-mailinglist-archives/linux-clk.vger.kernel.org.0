@@ -2,72 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143AF7C500C
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Oct 2023 12:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F767C5114
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Oct 2023 13:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345729AbjJKK0H (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Oct 2023 06:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37408 "EHLO
+        id S234754AbjJKLHw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Oct 2023 07:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234261AbjJKK0G (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Oct 2023 06:26:06 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8265B7
-        for <linux-clk@vger.kernel.org>; Wed, 11 Oct 2023 03:26:01 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-40566f8a093so61376565e9.3
-        for <linux-clk@vger.kernel.org>; Wed, 11 Oct 2023 03:26:01 -0700 (PDT)
+        with ESMTP id S1346135AbjJKK2y (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Oct 2023 06:28:54 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE708C9
+        for <linux-clk@vger.kernel.org>; Wed, 11 Oct 2023 03:28:51 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-5041bb9ce51so8456651e87.1
+        for <linux-clk@vger.kernel.org>; Wed, 11 Oct 2023 03:28:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697019960; x=1697624760; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697020130; x=1697624930; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vz9dCTUAJHMkFUSxm9pCk3ylD/I/tndawRxu31ITP+g=;
-        b=NbroL8VydLiF/5U4EpkKQ4StM5WWEKQ35TLnXoAKraN3kIydq9kiZUazLDgb7GXc53
-         ws3SVH8R7oOqfIhjow3dpzQTzGS4NoH97txFgFCCp7TEdTS6TSI20tnxwkMuI+BQzujV
-         ufO1yBUTKCRp7XXzKxpTeEKKyxyZUEstXvB0/Ji2hRz2QmEMGjX3/4Ry0BZMb5lo5IoF
-         D/zBmMwmY1+BryQG9juaGKG3+Y7/iuh1LNk3OmcEOCCQ15mK+aG+X5aXFTbn77JKsaVK
-         u2lem2HO369VCMEBkOyKvgmLQAoPct7EupxjWnR4Lkl+NmNtNjHhcHbMm47pFll9EeDs
-         zHag==
+        bh=Ht5utTuG5wW1wq2rrU2pauj363H+uTmJt1GixQr1DSM=;
+        b=EVRtXE67gk+LC0mXBwljVYzi7ZwnklKR9lIwbViIMLS3LuACZ2Ry91HKub8sBBvcuJ
+         RkRbXaFKh5xJZypm8mBJf53ajuE+YprOBiwkDheoECB3fBFAxDffEIgfC/svXUpyBfPj
+         qfBGh6SeTRH42VEABkdZrlk5pud2VkPC9Z3wbbGwqWg5VJyjGrLq8HWkXltiiObQ83Pm
+         0XA3JuhDADijpZMLFoEQaN7adtiB9nl8nENDKH1k35upik1KfHMPW5Y5kD9uPyk8w0S6
+         mWAxFA6jriXiW3sFn+uYXhdc/QiYGadLly1xxn3kMJsHV1+R3N4AE8Ww0QOVVu8cEurV
+         LPAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697019960; x=1697624760;
+        d=1e100.net; s=20230601; t=1697020130; x=1697624930;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vz9dCTUAJHMkFUSxm9pCk3ylD/I/tndawRxu31ITP+g=;
-        b=IChJSbchT5O8DKiFNTOKgEaq7sR6pD+8J5IqsTkxtRtmDY4fmeYJF8sl2KzCT1PKGY
-         K+h/a9IihDk8g1WZ7nEyLsAlVIslPOPw6tnnXwvQiVNZxuqBq0+nPVtcH4m7/3FF0Nc6
-         kp1MZ0A4npyS+SAKhxuPTb7axUrO9w+I+ZJwP1MDgJtQlVksk/CyuWjhGOFP3dMmRtrO
-         ME0G6ofD5df2tyvfUg0TmO05Qu6xr5w1IJf1tGCDqUJLBl3OxEwtOP1FZEVkTmpezWXj
-         jRkx1K1QCJXuEPn3fNl0+lKIWid4XjT0VrqMFlXPL6IzSI4az0iPTfgMD5NPhu3oevIp
-         G/rg==
-X-Gm-Message-State: AOJu0Yz9SjUdjek4Z5UUlQbr0tbZ1pkRkcxHb18EWDEi4kxsWsFjtfRv
-        1gReRhU6i31gnwrgDMIwP4wM3A==
-X-Google-Smtp-Source: AGHT+IHg9KTXtScFiRCbZ8fBRugfwTlzviYfywyydhnaZBwWrCVCnC/2QxDGezuFnwgYpHW1pqa8WA==
-X-Received: by 2002:adf:ef91:0:b0:31f:f1f4:ca8b with SMTP id d17-20020adfef91000000b0031ff1f4ca8bmr16588499wro.40.1697019960263;
-        Wed, 11 Oct 2023 03:26:00 -0700 (PDT)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id j16-20020adff010000000b0032008f99216sm15058111wro.96.2023.10.11.03.25.58
+        bh=Ht5utTuG5wW1wq2rrU2pauj363H+uTmJt1GixQr1DSM=;
+        b=se48QA3IUJS0teaZrD5mrm6oBsPykEMuQV6qORb52Wu/d9gi0q8aoUrQLsL14jvELk
+         PexmDwEngKWXze/oABefkDPqNnZfreRfkoQfSAft7VzXpBx6AMEx0FoTefeNflmLWhC1
+         uO5BHm9Aw53YBsewkediKJ4Cr6ZjNJoLfEz9lhQh9YvLkRbBHE6SCR7pgMsnzM9AFBGo
+         CxKWLKG7y1gfaespbf3TxirOXtLzZBGMo+4zXTUFtpQ8GuM6dYTVohRPlj4gf2vLxjeb
+         hdUQvXGBC20Uh2M4MYTYKwf1GUCIk/WXePf2WIhsRnnyHPGeetWfauRO5ExDHsRRoJ3H
+         P6Iw==
+X-Gm-Message-State: AOJu0Yz2kdC8gFARmq7YCP/i/uGo4g5/ygtVC/90YO64ld/Z3sdBg+z3
+        VRFnlysB3vgYfeYc+EmqQ/QRJw==
+X-Google-Smtp-Source: AGHT+IF/+tcyWJy167xh1iz46cHV+3zXA/HdYlUn1jZqjis4ijk83UImTqPXKpAuX5ROU8uJiy4E0w==
+X-Received: by 2002:a05:6512:34c8:b0:503:200f:47a9 with SMTP id w8-20020a05651234c800b00503200f47a9mr14500380lfr.15.1697020129912;
+        Wed, 11 Oct 2023 03:28:49 -0700 (PDT)
+Received: from [87.246.221.93] (netpanel-87-246-221-93.pol.akademiki.lublin.pl. [87.246.221.93])
+        by smtp.gmail.com with ESMTPSA id v1-20020a056512096100b0050480e8a676sm2213434lft.268.2023.10.11.03.28.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 03:25:59 -0700 (PDT)
-Message-ID: <10bcb0cc-19db-4914-bbc4-ef79c238a70d@linaro.org>
-Date:   Wed, 11 Oct 2023 11:25:58 +0100
+        Wed, 11 Oct 2023 03:28:49 -0700 (PDT)
+Message-ID: <427980eb-3235-4d63-bb8f-3af06978a3eb@linaro.org>
+Date:   Wed, 11 Oct 2023 12:28:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 4/4] clk: qcom: add clock controller driver for
- qca8386/qca8084
+Subject: Re: [PATCH V2 0/4] Add support for Qualcomm ECPRI clock controller
 Content-Language: en-US
-To:     Luo Jie <quic_luoj@quicinc.com>, andersson@kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_srichara@quicinc.com
-References: <20230923112105.18102-1-quic_luoj@quicinc.com>
- <20230923112105.18102-5-quic_luoj@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230923112105.18102-5-quic_luoj@quicinc.com>
+To:     Imran Shaik <quic_imrashai@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Taniya Das <quic_tdas@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>
+References: <20231011090028.1706653-1-quic_imrashai@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231011090028.1706653-1-quic_imrashai@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,52 +83,25 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 23/09/2023 12:21, Luo Jie wrote:
-> The clock controller driver of qca8386/qca8084 is registered
-> as the MDIO device, the hardware register is accessed by MDIO bus
-> that is normally used to access general PHY device, which is
-> different from the current existed qcom clock controller drivers
-> using ioremap to access hardware clock registers.
 
-"nsscc-qca8k is accessed via an MDIO bus"
 
-> MDIO bus is common utilized by both qca8386/qca8084 and other
-
-commonly
-
-> PHY devices, so the mutex lock mdio_bus->mdio_lock should be
-> used instead of using the mutex lock of remap.
+On 10/11/23 11:00, Imran Shaik wrote:
+> The ECPRI clock controller support for QDU1000 and QRU1000. The clock
+> controller has a special branch which requires an additional memory to
+> be enabled/disabled before the branch ops.
 > 
-> To access the hardware clock registers of qca8386/qca8084, there
-> is special MDIO frame sequence(three MDIO read/write operations)
-> need to be sent to device.
+> Changes since v1:
+>   - Updated the dt-bindings
+>   - Modified mem ops logic as per the review comments
+>   - Update all the hex values to lowercase
+>   - Aligned the clock entries in DT as per the review comment
+> 
+> Previous series:
+> v1 - https://patchwork.kernel.org/project/linux-arm-msm/list/?series=774092
+That link is gone by now, as patchwork is periodically purged.
 
-"there is a special MDIO frame sequence"
+Please use lore links instead.
 
-"which needs to be sent to the device"
+https://lore.kernel.org/linux-arm-msm/20230808051407.647395-1-quic_imrashai@quicinc.com/
 
-the following indentation splat from checkpatch
-
-CHECK: Alignment should match open parenthesis
-#2071: FILE: drivers/clk/qcom/nsscc-qca8k.c:2004:
-+		ret = __mdiobus_write(bus, switch_phy_id, (reg | 
-QCA8K_REG_DATA_UPPER_16_BITS),
-+				upper_16_bits(val));
-
-CHECK: Alignment should match open parenthesis
-#2131: FILE: drivers/clk/qcom/nsscc-qca8k.c:2064:
-+static int qca8k_regmap_update_bits(void *context, unsigned int regaddr,
-+		unsigned int mask, unsigned int value)
-
-total: 0 errors, 1 warnings, 2 checks, 2162 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or 
---fix-inplace.
-
-0004-clk-qcom-add-clock-controller-driver-for-qca8386-qca.patch has 
-style problems, please review.
-
-Once fixed
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Konrad
