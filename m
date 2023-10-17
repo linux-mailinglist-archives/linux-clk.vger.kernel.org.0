@@ -2,74 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6594F7CC49D
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Oct 2023 15:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8062E7CC591
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Oct 2023 16:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235142AbjJQNU1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 Oct 2023 09:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S1344024AbjJQOHG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 Oct 2023 10:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343926AbjJQNUJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Oct 2023 09:20:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB9E192;
-        Tue, 17 Oct 2023 06:20:01 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39H7jblP025029;
-        Tue, 17 Oct 2023 13:19:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=eH9+uGhbmzhLtgVJlATCBifzu779Fbw0JaX2vCy5JFI=;
- b=GnOv4y2OuDgfj2NP/ctliUYxZ9HwJPuEWh0puzimsCmOeMOBz7Wkc6ei8FTYVKKC/whn
- ry8eQFrsGbwOhC2cet0o/dq1PQXG2rOdHLDCLuJh2NIV6jLlF3+b1Xb2xHa6C5z0eGFC
- KoaXprj0bpiZAONMY+xhURGaaFpkfH6+S3asmB6pb/cp2wAKqAmE8nUtW2TWULdRZxKO
- Ds+wH03hM+y5Z3oqG9oBaReaTWuoj7bTl9EnkNBLBpTfFuOG1xepn/6Ys3JGDyaGFsC/
- Bh9uw7fiRQra4dX+0Meuk8mUwNywes9kLDG7SCBBQysggLhBbTLzlTi4z0Ki4X3GTTjq kA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ts9jnt9pk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Oct 2023 13:19:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HDJv2g016670
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Oct 2023 13:19:57 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Tue, 17 Oct 2023 06:19:53 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [RFC 4/8] clk: qcom: gcc-sm8450: Keep usb30 prim gdsc on during runtime suspend
-Date:   Tue, 17 Oct 2023 18:49:44 +0530
-Message-ID: <20231017131944.8356-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+        with ESMTP id S1344006AbjJQOHB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Oct 2023 10:07:01 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C0FF5
+        for <linux-clk@vger.kernel.org>; Tue, 17 Oct 2023 07:06:59 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-4065f29e933so60349095e9.1
+        for <linux-clk@vger.kernel.org>; Tue, 17 Oct 2023 07:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697551618; x=1698156418; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nlwwFMRACSsUlwqNfTsi8M+bx9LmW0A46F96Cg6Qp3E=;
+        b=c31kmMYBsC4MN/h0o5bi+9SdSwiY8T6KWUzMRUxOzo1YqRuYgSGA0foa+rv4xASCMm
+         lF4IiNkBoCc07W2nJ7sIUOj7tqzMbmEHH/mWGaNbjAIdV1N4lJhk2rQhjCm7Nj2H5G7z
+         T0d+wpmXi0kS8RkgI8chUvpadd/N+Ny9gmKXQsdH7xZZc4b6z7xC55JfLEWlT3ICX7qb
+         We1M9Icf4LK3LzYbFc5lqIACVxJ09cPRVx+S6XrL+3ZPPVeCzV0XCBbaL3FYtD7DU5nQ
+         VZmPIZ/bL0a3xe95AXFiIwtsYV7Nj8QexJZaidqvTDuxoHa3OTWTznizhnXZI0t+Nchb
+         4BVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697551618; x=1698156418;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nlwwFMRACSsUlwqNfTsi8M+bx9LmW0A46F96Cg6Qp3E=;
+        b=LyzbTWRT83BeWoNIP1vpkCgeZIqcCSQJPJ85QqxKbBttCk9VIKyFWSFJ+ZQfA/T7iV
+         q8EFdjqMovhMuuK04H+ciHQTKNvMueWrsPfal5O5PXO/mDL227KxjyFLbPXyDbT+ReSa
+         1cfQnxA0Ebp1RWjEX0OHW+dukSer0lK2LQz8AJ/7CO78VFEdu+YaSsgFmtaSHgpQCyGS
+         QUG4A6YYeLMLf96vd11mYD+88s+vzBVTCuELCodXJl5FOvOrDZkpTdILe0UzcA8b2ykn
+         rxCstp/32xkd+w8u4sz02ALPXfioaB+NhfV/DHcVo4WO2CWXwYjmCIGeS4QLlH1JYHXm
+         cTuw==
+X-Gm-Message-State: AOJu0YzPVz4sjelgxJjqQPPnYf3EClNiJ1/7+0tqrDFfzU2yIAvsV94o
+        ZnClaNN9zpg1XZXFcMSDrJs1BA==
+X-Google-Smtp-Source: AGHT+IElkgM7RSL3FOTXdHu+CEAbodkap74uXGoj9xrE4AZmarxqeuWMC6vTAHtVYesdvhJ8Bd8fUQ==
+X-Received: by 2002:a05:600c:5487:b0:401:c338:ab96 with SMTP id iv7-20020a05600c548700b00401c338ab96mr1766952wmb.34.1697551618146;
+        Tue, 17 Oct 2023 07:06:58 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m11-20020a05600c4f4b00b004068def185asm2047137wmq.28.2023.10.17.07.06.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Oct 2023 07:06:57 -0700 (PDT)
+Date:   Tue, 17 Oct 2023 17:06:53 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Maxime Ripard <mripard@kernel.org>, linux-clk@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] clk: at91: remove unnecessary conditions
+Message-ID: <7782b4f1-deed-49dc-8207-b6ea06d7602f@moroto.mountain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: haSFvbWIW5_zdSFiQJc9enXTBRX-G3Ad
-X-Proofpoint-ORIG-GUID: haSFvbWIW5_zdSFiQJc9enXTBRX-G3Ad
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-17_02,2023-10-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 mlxscore=0 clxscore=1011 phishscore=0 adultscore=0
- malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=751 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310170113
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,32 +71,52 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-When runtime suspend happens in host mode, if cable is removed at this
-instant, it triggers a resume where a xhci register access is done when
-gdsc is not on leading to a crash. Keep usb30 prim gdsc as on during
-runtime suspend to avoid this crash.
+This code checks "if (parent_hw)" is non-NULL, but then it has more
+checks if parent_hw is non-NULL on the lines inside the if statement.
+It is a bit confusing.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+For the else statement, keep in mind that at the start of the function
+we checked:
+
+	if (!(parent_name || parent_hw))
+		return ERR_PTR(-EINVAL);
+
+That check ensures that if parent_hw is NULL that means that parent_name
+is non-NULL.  At least one must always be non-NULL.  So here again, the
+checks inside the if statement can be removed.
+
+In the original code, it was a bit confusing and you could easily get
+the impression that "init.num_parents" could be zero.  When we remove
+the unnecessary checking it's more obvious that it's always set to 1.
+
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
-Note: I am not sure if this is the right way or setting GDSC flags to
-PWRSTS_RET_ON is the right approach. So for now made this change to
-keep GDSC during host mode runtime suspend.
+ drivers/clk/at91/clk-utmi.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
- drivers/clk/qcom/gcc-sm8450.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
-index 75635d40a12d..47cde2de93a2 100644
---- a/drivers/clk/qcom/gcc-sm8450.c
-+++ b/drivers/clk/qcom/gcc-sm8450.c
-@@ -2996,6 +2996,7 @@ static struct gdsc usb30_prim_gdsc = {
- 	.gdscr = 0x49004,
- 	.pd = {
- 		.name = "usb30_prim_gdsc",
-+		.flags = GENPD_FLAG_RPM_ALWAYS_ON,
- 	},
- 	.pwrsts = PWRSTS_OFF_ON,
- };
+diff --git a/drivers/clk/at91/clk-utmi.c b/drivers/clk/at91/clk-utmi.c
+index 40c84f5af5e8..b991180beea1 100644
+--- a/drivers/clk/at91/clk-utmi.c
++++ b/drivers/clk/at91/clk-utmi.c
+@@ -161,13 +161,11 @@ at91_clk_register_utmi_internal(struct regmap *regmap_pmc,
+ 
+ 	init.name = name;
+ 	init.ops = ops;
+-	if (parent_hw) {
+-		init.parent_hws = parent_hw ? (const struct clk_hw **)&parent_hw : NULL;
+-		init.num_parents = parent_hw ? 1 : 0;
+-	} else {
+-		init.parent_names = parent_name ? &parent_name : NULL;
+-		init.num_parents = parent_name ? 1 : 0;
+-	}
++	if (parent_hw)
++		init.parent_hws = (const struct clk_hw **)&parent_hw;
++	else
++		init.parent_names = &parent_name;
++	init.num_parents = 1;
+ 	init.flags = flags;
+ 
+ 	utmi->hw.init = &init;
 -- 
-2.42.0
+2.39.2
 
