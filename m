@@ -2,96 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5957D2FD6
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 12:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4337D303E
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 12:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjJWK2U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 Oct 2023 06:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
+        id S229544AbjJWKnY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 Oct 2023 06:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjJWK2T (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 06:28:19 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D45188;
-        Mon, 23 Oct 2023 03:28:17 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCABDC433C7;
-        Mon, 23 Oct 2023 10:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698056896;
-        bh=6EIj0UlrOsSd3FcPrJWS3RVeP62yd7ggwxrvtzIHU48=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uE3S4qhspmjtcgzEY+ko2fxQqWXVXR5QwvaDMyFyqnm1wI4xWMS18QqrNhFxcaQOC
-         Ja67VnzSku3Vmw0t9Q1bd4tbejJYpkfDX88Vli3ioW2OJOEjVpOM8aDFKUkmJD7ORa
-         Jv/fKhxJ0CYNtuRBqGuFyPN93sRDP8rU6quM1IOm4CcB31oVsIKWJ+lFY0xffMX6Y5
-         0f3eB4y2zr3ADL9M0PsqiEOnRMUR1B+LirdfWIWRnMGZsJrYO4uCyjFf7QC74dYcgG
-         ZTHOjU6oVg69yBa8vLzyHWeki+GP/yH7wjjEpoGfasYl9oWypSAjWcBxOn4tAQblHX
-         F70YPqagESIFg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        with ESMTP id S229601AbjJWKnW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 06:43:22 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAACD79;
+        Mon, 23 Oct 2023 03:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1698057799; x=1729593799;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=s8/SX7U8yPav80tb/Tl9Z7BX1cRN8fNUO+aVcBI2Cs0=;
+  b=q51W7A9TSqdmLCs2RJUBJBaB4s4gBToP5R23CtihN2q/pd9zS9zFROme
+   ALSwjL7mncKt8EWJFlUIM/UC+TdLcctEytsQT8Duv7LZnOR7QfxdhV6Zq
+   TKv6XAVVQdgjVyCAit9fDOOYCax5c34WXie+GX9srnQaqacum/1T5YjFs
+   zWawc+CFM5AVMyREbXz1SR8aEb2RdAI7TBMjan56LM6yNNBqWyufCFx96
+   dWS7xNRryBPowLpE/jZP1gi661RNREylCE06gDWd4kPYzoL4NQlaS6ipC
+   KALdiOt+Pw4KTbYkt95hbnuDP3QtMP0Q7oxxEzQN7PJHJyw2r7BQAQDG0
+   w==;
+X-IronPort-AV: E=Sophos;i="6.03,244,1694728800"; 
+   d="scan'208";a="33599171"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 23 Oct 2023 12:43:17 +0200
+Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 06F7B28007F;
+        Mon, 23 Oct 2023 12:43:17 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>, Yu Tu <yu.tu@amlogic.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Jian Hu <jian.hu@amlogic.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] clk: meson: S4: select CONFIG_COMMON_CLK_MESON_CLKC_UTILS
-Date:   Mon, 23 Oct 2023 12:28:02 +0200
-Message-Id: <20231023102810.4001943-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux@ew.tq-group.com
+Subject: Re: [PATCH 4/5] clk: imx: clk-fracn-gppll: Add 477.4MHz config for video pll
+Date:   Mon, 23 Oct 2023 12:43:19 +0200
+Message-ID: <10361180.nUPlyArG6x@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20231020142055.xnxbumcg2o6cfpfl@pengutronix.de>
+References: <20231020130019.665853-1-alexander.stein@ew.tq-group.com> <20231020130019.665853-5-alexander.stein@ew.tq-group.com> <20231020142055.xnxbumcg2o6cfpfl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi Marco,
 
-Without this, the newly added drivers fail to link:
+Am Freitag, 20. Oktober 2023, 16:20:55 CEST schrieb Marco Felsch:
+> Hi Alexander,
+>=20
+> On 23-10-20, Alexander Stein wrote:
+> > Add the 477.4MHz frequency support that will be used by video subsystem
+> > on imx93.
+>=20
+> albeit the change is fine, could we consider adding support to calc the
+> params dynamically?
 
-aarch64-linux-ld: drivers/clk/meson/s4-pll.o: in function `meson_s4_pll_probe':
-s4-pll.c:(.text+0x13c): undefined reference to `meson_clk_hw_get'
-aarch64-linux-ld: drivers/clk/meson/s4-peripherals.o: in function `meson_s4_periphs_probe':
-s4-peripherals.c:(.text+0xb0): undefined reference to `meson_clk_hw_get'
+Agreed, I would prefer that as well: But unfortunately I will not be able t=
+o=20
+add dynamic calculation right now.
 
-Fixes: e787c9c55edad ("clk: meson: S4: add support for Amlogic S4 SoC PLL clock driver")
-Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: fix up both drivers, the first version only addressed the s4-pll one.
----
- drivers/clk/meson/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Best regards,
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-index c5303e4c16043..29ffd14d267b6 100644
---- a/drivers/clk/meson/Kconfig
-+++ b/drivers/clk/meson/Kconfig
-@@ -149,6 +149,7 @@ config COMMON_CLK_S4_PLL
- 	tristate "S4 SoC PLL clock controllers support"
- 	depends on ARM64
- 	default y
-+	select COMMON_CLK_MESON_CLKC_UTILS
- 	select COMMON_CLK_MESON_MPLL
- 	select COMMON_CLK_MESON_PLL
- 	select COMMON_CLK_MESON_REGMAP
-@@ -161,6 +162,7 @@ config COMMON_CLK_S4_PERIPHERALS
- 	tristate "S4 SoC peripherals clock controllers support"
- 	depends on ARM64
- 	default y
-+	select COMMON_CLK_MESON_CLKC_UTILS
- 	select COMMON_CLK_MESON_REGMAP
- 	select COMMON_CLK_MESON_DUALDIV
- 	select COMMON_CLK_MESON_VID_PLL_DIV
--- 
-2.39.2
 
