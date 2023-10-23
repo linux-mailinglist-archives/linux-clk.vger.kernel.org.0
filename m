@@ -2,125 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553627D3B02
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 17:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2349B7D3C2D
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 18:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbjJWPin (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 Oct 2023 11:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44192 "EHLO
+        id S233572AbjJWQTy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 Oct 2023 12:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232020AbjJWPig (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 11:38:36 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315E1102
-        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 08:38:33 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bb9a063f26so50281891fa.2
-        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 08:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698075511; x=1698680311; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i/dkqG7TFqhS22WCtOJCYFAnzbujpg+JGXvYF9Z8Jtw=;
-        b=qWTNjPXBXo02bg2JHbXcWVUvQi6uUlqULZ4dp/6ehrzn3gZJ44BxqzyYbkjS9lZd4m
-         eqJbN3ArmiAJhidSJuggjX7OrQmw9udwlQdfXwmXBN8SzDp5dDGT8abNR+5SYQVxnzAZ
-         oqUThjzYBHxpMftXe04NAbtK5LYRTuIvixecYgfP/FMA1HnZ+ot4WOyBspMQgkXQeMLh
-         PL/lg07mLYfiYU2yXIthAKnICyUXPJ2GXE51iG2Z5rwrt45Wi0u3MkSH51gMoXDPBsfj
-         W6Ql6WuIamK8yeG9fNeLsOgifZuWHl6ORLZwUTNveXbfMYmAe9Z6Yw1xPdGKMuJHob+G
-         mv0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698075511; x=1698680311;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i/dkqG7TFqhS22WCtOJCYFAnzbujpg+JGXvYF9Z8Jtw=;
-        b=Y7VbPsSDPijbJdJdECzvaS718qJbV6GpekaY0QpAq7tWv2yi6cwI3LkMJfwS8ao7lF
-         RLUE8sKk/LQWZeo3ZCQ4mOYazOifJx8OKO/VQ6w9D32c7e2OocYFh+Cw0zgaYojg8yDt
-         y5+tOHbirerTQK5AB/B3ML+dc7e9cTpD1UqO0Y8/LsBIdJrbEZMmCY8bwvowLP8bM84J
-         DG0xHnZbtz5KcZAbKfbNlr0FjQdAtpOHKaZ8COa3tSf3L9slXKSsRsFRum9TUZwDaaL8
-         JuxxC0A87udJ5aoxEfS0piNqS4gc1lIMpXNfIcx21Jsy7923sw765B2h5SRuk2DueIjd
-         9zuw==
-X-Gm-Message-State: AOJu0YxD340O/pdrdlk+JwF2lLzFetZm5FwuTpAopKYiRUHwL7RuqmPW
-        c+n7OJ/5cnWrWBJISG4UBfWqwQ==
-X-Google-Smtp-Source: AGHT+IGngUR8rAtE5PrJsk2wr4hxv06C9qj0fa4jQ7I8UYFXCU2Nwn1OFEnlZtFqOWcVgZkXoUM5mg==
-X-Received: by 2002:a2e:8619:0:b0:2c5:1989:ce1c with SMTP id a25-20020a2e8619000000b002c51989ce1cmr5983085lji.26.1698075511078;
-        Mon, 23 Oct 2023 08:38:31 -0700 (PDT)
-Received: from x13s-linux.nxsw.local ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id f4-20020a5d50c4000000b0032da319a27asm8096929wrt.9.2023.10.23.08.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 08:38:30 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        dmitry.baryshkov@linaro.org, robh+dt@kernel.org,
+        with ESMTP id S233522AbjJWQTp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 12:19:45 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676FFC1;
+        Mon, 23 Oct 2023 09:19:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD0B4C433C9;
+        Mon, 23 Oct 2023 16:19:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698077971;
+        bh=2yoJUFciYjOGBPAKWjjWU0kAwyU1Itk6s1tGuUXNy9A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ocyl6RJle/R2/8cViurxiFrtIssXCSYTIV2gwxm9RYSl/AqO4DKoG4L9vgATnJNep
+         uhjw7AfIAwNGMtAkbKWdqI3z/jYgaL8PcwYjKPe/RTwz3rYmiBBOdVxVgqJkj+FWOK
+         m/kfldvRoSgyBKmas8FxBTX+Xhjy061f+bZI5TA5tlxMCeq3iNAl8+AraL2KHetvSW
+         J0PWb5huCqtK1f72NZc3wHnX4/ebjSosi6RfTsu1Wcd3iCA/l+gp6MpNEZNlW0JbFE
+         SuYiAQz4sSIHBKEUkkLjqBIWhAL8xARYmCOp1KVpghzvHqWUtKKsRCnVdC8uJ0BI01
+         E4P7V+vNfwzrg==
+Date:   Mon, 23 Oct 2023 17:19:26 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Claudiu <claudiu.beznea@tuxon.dev>
+Cc:     tglx@linutronix.de, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jonathan@marek.ca, quic_tdas@quicinc.com,
-        vladimir.zapolskiy@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bryan.odonoghue@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3.1 4/4] arm64: dts: qcom: sc8280xp: Add in CAMCC for sc8280xp
-Date:   Mon, 23 Oct 2023 16:38:21 +0100
-Message-Id: <20231023153821.189331-5-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231023153821.189331-1-bryan.odonoghue@linaro.org>
-References: <20231023153821.189331-1-bryan.odonoghue@linaro.org>
+        geert+renesas@glider.be, magnus.damm@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        prabhakar.mahadev-lad.rj@bp.renesas.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH 1/7] dt-bindings: interrupt-controller:
+ renesas,rzg2l-irqc: document RZ/G3S
+Message-ID: <20231023-snuff-dish-3b9df076a82c@spud>
+References: <20231023102223.1309614-1-claudiu.beznea.uj@bp.renesas.com>
+ <20231023102223.1309614-2-claudiu.beznea.uj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xG0STj7p0zR8eqpn"
+Content-Disposition: inline
+In-Reply-To: <20231023102223.1309614-2-claudiu.beznea.uj@bp.renesas.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add in CAMCC for sc8280xp. The sc8280xp Camera Clock Controller looks
-similar to most of the sdmX, smX and now scX controllers.
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+--xG0STj7p0zR8eqpn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index cad59af7ccef..fafea0f34fd9 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
- #include <dt-bindings/clock/qcom,gpucc-sc8280xp.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,sc8280xp-camcc.h>
- #include <dt-bindings/clock/qcom,sc8280xp-lpasscc.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interconnect/qcom,sc8280xp.h>
-@@ -3450,6 +3451,20 @@ usb_1_role_switch: endpoint {
- 			};
- 		};
- 
-+		camcc: clock-controller@ad00000 {
-+			compatible = "qcom,sc8280xp-camcc";
-+			reg = <0 0x0ad00000 0 0x20000>;
-+			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SC8280XP_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss0: display-subsystem@ae00000 {
- 			compatible = "qcom,sc8280xp-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
--- 
-2.40.1
+On Mon, Oct 23, 2023 at 01:22:17PM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>=20
+> Document RZ/G3S (R9108G045) interrupt controller. This has few extra
+> functionalities compared with RZ/G2UL but the already existing driver
+> could still be used.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> ---
+>  .../bindings/interrupt-controller/renesas,rzg2l-irqc.yaml    | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/renes=
+as,rzg2l-irqc.yaml b/Documentation/devicetree/bindings/interrupt-controller=
+/renesas,rzg2l-irqc.yaml
+> index 2ef3081eaaf3..d3b5aec0a3f7 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2=
+l-irqc.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2=
+l-irqc.yaml
+> @@ -26,6 +26,7 @@ properties:
+>            - renesas,r9a07g043u-irqc   # RZ/G2UL
+>            - renesas,r9a07g044-irqc    # RZ/G2{L,LC}
+>            - renesas,r9a07g054-irqc    # RZ/V2L
+> +          - renesas,r9a08g045-irqc    # RZ/G3S
+>        - const: renesas,rzg2l-irqc
+> =20
+>    '#interrupt-cells':
+> @@ -167,7 +168,9 @@ allOf:
+>        properties:
+>          compatible:
+>            contains:
+> -            const: renesas,r9a07g043u-irqc
+> +            enum:
+> +              - renesas,r9a07g043u-irqc
+> +              - renesas,r9a08g045-irqc
+>      then:
+>        properties:
+>          interrupts:
+> --=20
+> 2.39.2
+>=20
+
+--xG0STj7p0zR8eqpn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTadDgAKCRB4tDGHoIJi
+0nhyAP9SX2WimXDhWIXmlpXodQDFM9Ac9Cx28m1XUil6xBpgaAEA7i4+bh6j8a7g
+pi+v0G2iUHncBtDHx7yE/n+l7wP1MAA=
+=vzkc
+-----END PGP SIGNATURE-----
+
+--xG0STj7p0zR8eqpn--
