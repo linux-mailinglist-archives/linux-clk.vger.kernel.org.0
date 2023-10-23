@@ -2,176 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C437D2FB4
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 12:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE697D2FD9
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 12:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbjJWKX0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 Oct 2023 06:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
+        id S229589AbjJWK21 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 Oct 2023 06:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbjJWKXV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 06:23:21 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E310E3
-        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 03:23:04 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-4084095722aso25503125e9.1
-        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 03:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1698056581; x=1698661381; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8k0EshLjUbr1rifjRs+LM2thRC9AnbfURENQfGj3YpQ=;
-        b=AOfZKPQSAysvBShUn6OhBwZz0U2uqB8/WTZquhn1yeVwbkDOhCZcwky8zXukYKGHd1
-         KwO/Ax1aM4E/WWjGePaaMXoHJbCm9k5t5MOGLzRaRuXcenxLOEvLbzlfF9m6J7VHndIZ
-         unIF19g0XCtbWFO6u86qoiNGD4ibo2hUigGaqfivKjHBo5/V2kBDe2z5Q9WP+xlj411p
-         xXxHzf245VB9nOTcd5xfrTgN9FuDcsdvKEvHMGgNs3RnK/EbLzg5gslsBZYcHPVWrxSe
-         IdJj+iMvy1URciafBG1M/jXM14RCaPj5nYtkjjJZyzyCn/Ex5RUV8+waEEvHp1mCJBg9
-         m01w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698056581; x=1698661381;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8k0EshLjUbr1rifjRs+LM2thRC9AnbfURENQfGj3YpQ=;
-        b=jRBUjGMqFiSipvN/bUK0xNPZYtlXWPZZoZdAbYwEr8MQQBdSu5MhHJFFLlOiF7FAb9
-         BuTuxl3j9XcZhn9Sm1p7rgRoodUOTM+Y9aP0AShFtKiHFPyM+06l2XvpkbIMSFYnCiK9
-         bK6A2BnaUL4m7JuwGHnZ0qnhgOB//q6f4qJ+mImBN15T/TyLeEdZReNkBL6vxeErp3z2
-         G7tyG6XUeoXWIPHjGW+/czdZKBl5vCvYz9Mt0lVPb7vosbU4D/O7JU9AWHKD3w1jWdd8
-         mEnAhK0JIjRZUwBcZwOwrGtH3RMgs8/IckWfPjkW/H18D/Wk6T8Ggu2eQUBdRdYX/vLe
-         hwdg==
-X-Gm-Message-State: AOJu0Yw1pKnAZ/Eu1k8yUmLVYUOzEDibLUrbKSuchyLX1qm94wr9VwK+
-        FO3X6ZeE+9qEpogxgsekn896DQ==
-X-Google-Smtp-Source: AGHT+IG3jAIdQfmC2Z+L5C+d69j5tDElEciqTF1dG/PBhVBTrAoiiDhk1pI0XMhW2i7pOJkPSg/a1Q==
-X-Received: by 2002:a05:600c:354b:b0:3fe:1b4e:c484 with SMTP id i11-20020a05600c354b00b003fe1b4ec484mr6753113wmq.5.1698056581462;
-        Mon, 23 Oct 2023 03:23:01 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.185])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c228100b0040596352951sm13593275wmf.5.2023.10.23.03.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 03:23:01 -0700 (PDT)
-From:   Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To:     tglx@linutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        geert+renesas@glider.be, magnus.damm@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        prabhakar.mahadev-lad.rj@bp.renesas.com
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 7/7] arm64: dts: renesas: r9108g045: add irqc
-Date:   Mon, 23 Oct 2023 13:22:23 +0300
-Message-Id: <20231023102223.1309614-8-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231023102223.1309614-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20231023102223.1309614-1-claudiu.beznea.uj@bp.renesas.com>
+        with ESMTP id S230388AbjJWK2Z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 06:28:25 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7590F188;
+        Mon, 23 Oct 2023 03:28:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 431875C027F;
+        Mon, 23 Oct 2023 06:28:20 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Mon, 23 Oct 2023 06:28:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1698056900; x=1698143300; bh=sl
+        J4gsmLFLLG28yC7DauJDzx27bn8p/IiBTXbBZAE1A=; b=WYniU+v0LQ9c0HRur4
+        W10+/qiyVQOIdiVGnK1R2E9hrNKzDXTSU0hq8J4bC2cnYJcbRpRNlT3wl916l0K4
+        nLX4jRVrk496SlZ+bji5Yq5yeLalUVD2LQFfXoWEXLZ8LZOB3sWINDsnLL2sSQjb
+        fm0lR5U5vj6M2clKJV0L3frCq/MbCPXHccMWGG7jYhnMDGH6T5+xHdisZ2EwQ33I
+        K+FFjwgeGH0zl1BwLsxDV4O0X5oc3VArJB5pkCAUQ7QIgfcPmrJiOmsReHA6a/nW
+        ifN+1Vi/bAS0Os93lQMoRhGy64uVeArjl+Pr6AroKuby3BvukV5QohvhRKvhjk30
+        95SQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1698056900; x=1698143300; bh=slJ4gsmLFLLG2
+        8yC7DauJDzx27bn8p/IiBTXbBZAE1A=; b=sacQjNjjZYyQ7+D6+xGCed3u3mK9m
+        fYqOXgE9b8d8agnZbS8LXNv8upZhEMjYR10qc+lyTNZZPRUJjm6V0tG1SxKG4mPo
+        TWJo3D5sXPCvqpn4ebNxF07vvoB1ee9MnD87npmBLRZIWWSF7xwjdglrsB3Rn67p
+        1iAHv9/xiVxV1ZWCw6zAckjMFCJh5gCQURLS0fA5QEnjRrvD2Ool9bVCyMWc7Hgf
+        tMBUCzFiXQfJv4+VK9kF0r4O0ydFqEbThVcw+EnWzxHNanADToGvT49mmbv3+mRN
+        U73AR3utLMJ9Uisf2jPacZh3IThl41en1CXROoxzDCsX9mMQp0mqfBKTA==
+X-ME-Sender: <xms:w0o2ZfIx46pW4d3RehSADLmlzh_0fOoJMvmJWh5vF2sKDacs8vH1Dw>
+    <xme:w0o2ZTLMqRD4LTUkRLWmj_CbdRag4j4vtUbqONJz1qS6ETJdbwexRIkgJkyvvT1aE
+    kxQneOhygDHYm7It8s>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrkeeigddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:w0o2ZXs1OTcI2ut4t5b9uILfYlpkZ2s13por9jxvYW0yz8DWqSVj5g>
+    <xmx:w0o2ZYazryU-hCtv7BbCpYR4RzbmXfrFnQjiL76hyfr16QFrfFOuWw>
+    <xmx:w0o2ZWaY5dbqra9qlg3RRk2akHz8H20CNpn0HKiE4pzwvNrmLXuQew>
+    <xmx:xEo2ZYCmgkojUBxNcvg6ek0W56J4VA4qCRUxzSGlWYX8OO12_Jlkng>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A5040B60089; Mon, 23 Oct 2023 06:28:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-Id: <d0dfba41-d234-4a1d-b167-08a85ae6724a@app.fastmail.com>
+In-Reply-To: <1jmswds9dn.fsf@starbuckisacylon.baylibre.com>
+References: <20231020132036.1181762-1-arnd@kernel.org>
+ <1jmswds9dn.fsf@starbuckisacylon.baylibre.com>
+Date:   Mon, 23 Oct 2023 12:27:56 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jerome Brunet" <jbrunet@baylibre.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Neil Armstrong" <neil.armstrong@linaro.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Kevin Hilman" <khilman@baylibre.com>, "Yu Tu" <yu.tu@amlogic.com>
+Cc:     "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        "Dmitry Rokosov" <ddrokosov@sberdevices.ru>,
+        "Jian Hu" <jian.hu@amlogic.com>, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: meson: S4: select CONFIG_COMMON_CLK_MESON_CLKC_UTILS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Fri, Oct 20, 2023, at 15:35, Jerome Brunet wrote:
+> On Fri 20 Oct 2023 at 15:19, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> Without this, the newly added driver fails to link:
+>>
+>> aarch64-linux-ld: drivers/clk/meson/s4-pll.o: in function `meson_s4_pll_probe':
+>> s4-pll.c:(.text+0x13c): undefined reference to `meson_clk_hw_get'
+>>
+>> Fixes: e787c9c55edad ("clk: meson: S4: add support for Amlogic S4 SoC PLL clock driver")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>  drivers/clk/meson/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+>> index c5303e4c16043..3c28560b0faba 100644
+>> --- a/drivers/clk/meson/Kconfig
+>> +++ b/drivers/clk/meson/Kconfig
+>> @@ -149,6 +149,7 @@ config COMMON_CLK_S4_PLL
+>>  	tristate "S4 SoC PLL clock controllers support"
+>>  	depends on ARM64
+>>  	default y
+>> +	select COMMON_CLK_MESON_CLKC_UTILS
+>>  	select COMMON_CLK_MESON_MPLL
+>>  	select COMMON_CLK_MESON_PLL
+>>  	select COMMON_CLK_MESON_REGMAP
+>
+> Thx Arnd and sorry about this.
+>
+> Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+>
+> Stephen, do you mind taking this directly ?
 
-Add irqc node and set it as interrupt parent for pin controller.
+I ran into the same bug with drivers/clk/meson/s4-peripherals.c,
+sending a v2 of my patch to fix both at the same time, assuming
+v1 has not been applied yet (it's not in today's linux-next).
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a08g045.dtsi | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-index 6c7b29b69d0e..010bca626855 100644
---- a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
-@@ -96,6 +96,7 @@ pinctrl: pinctrl@11030000 {
- 			#gpio-cells = <2>;
- 			interrupt-controller;
- 			#interrupt-cells = <2>;
-+			interrupt-parent = <&irqc>;
- 			gpio-ranges = <&pinctrl 0 0 152>;
- 			clocks = <&cpg CPG_MOD R9A08G045_GPIO_HCLK>;
- 			power-domains = <&cpg>;
-@@ -104,6 +105,73 @@ pinctrl: pinctrl@11030000 {
- 				 <&cpg R9A08G045_GPIO_SPARE_RESETN>;
- 		};
- 
-+		irqc: interrupt-controller@11050000 {
-+			compatible = "renesas,r9a08g045-irqc", "renesas,rzg2l-irqc";
-+			#interrupt-cells = <2>;
-+			#address-cells = <0>;
-+			interrupt-controller;
-+			reg = <0 0x11050000 0 0x10000>;
-+			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 429 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 431 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 432 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 433 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 434 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 435 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 436 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 437 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 438 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 439 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 440 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 441 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 442 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 443 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "nmi",
-+					  "irq0", "irq1", "irq2", "irq3",
-+					  "irq4", "irq5", "irq6", "irq7",
-+					  "tint0", "tint1", "tint2", "tint3",
-+					  "tint4", "tint5", "tint6", "tint7",
-+					  "tint8", "tint9", "tint10", "tint11",
-+					  "tint12", "tint13", "tint14", "tint15",
-+					  "tint16", "tint17", "tint18", "tint19",
-+					  "tint20", "tint21", "tint22", "tint23",
-+					  "tint24", "tint25", "tint26", "tint27",
-+					  "tint28", "tint29", "tint30", "tint31",
-+					  "bus-err";
-+			clocks = <&cpg CPG_MOD R9A08G045_IA55_CLK>,
-+				 <&cpg CPG_MOD R9A08G045_IA55_PCLK>;
-+			clock-names = "clk", "pclk";
-+			power-domains = <&cpg>;
-+			resets = <&cpg R9A08G045_IA55_RESETN>;
-+		};
-+
- 		sdhi0: mmc@11c00000  {
- 			compatible = "renesas,sdhi-r9a08g045", "renesas,rcar-gen3-sdhi";
- 			reg = <0x0 0x11c00000 0 0x10000>;
--- 
-2.39.2
-
+      Arnd
