@@ -2,53 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD077D2FAC
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 12:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C437D2FB4
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Oct 2023 12:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232798AbjJWKXM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 Oct 2023 06:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S232536AbjJWKX0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 Oct 2023 06:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjJWKXD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 06:23:03 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C36D76
-        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 03:23:00 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4084e49a5e5so26919775e9.3
-        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 03:23:00 -0700 (PDT)
+        with ESMTP id S232913AbjJWKXV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Oct 2023 06:23:21 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E310E3
+        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 03:23:04 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-4084095722aso25503125e9.1
+        for <linux-clk@vger.kernel.org>; Mon, 23 Oct 2023 03:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1698056579; x=1698661379; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1698056581; x=1698661381; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X82FS37MpATKittBab30iZpigNPQeNpIZ7vC4jhKrjE=;
-        b=oIfulWeSARbFBk5Tn2nGzAEftSL4CgvfON24Xo+SOvu/LySpcOe+jLZ6ccebBcYzG9
-         zeEFoIVlVK+fr27H+vdzzdlnU2cEvT4BIm6glYWSBfjoH6ja7oHPryMB0TNRucXhXpEZ
-         N5SqdOcLieansqETjXiOLitCOPaUog/MIzeF078S1i3v6XqNuthw7BXI0EZQGxKH6cjF
-         7VopqMbhfKFkSFBVnDvYnBT5fx00ClgdCsnfSUIjv0/G5631Dj5h5EOzuZPOWOljIhIx
-         MTzG8BbY/F3FyXItqvUDzg8ZQsMD09Iw4wamPYaCtX4XjUY/juadb4b+W/miCsRpvet2
-         9CYA==
+        bh=8k0EshLjUbr1rifjRs+LM2thRC9AnbfURENQfGj3YpQ=;
+        b=AOfZKPQSAysvBShUn6OhBwZz0U2uqB8/WTZquhn1yeVwbkDOhCZcwky8zXukYKGHd1
+         KwO/Ax1aM4E/WWjGePaaMXoHJbCm9k5t5MOGLzRaRuXcenxLOEvLbzlfF9m6J7VHndIZ
+         unIF19g0XCtbWFO6u86qoiNGD4ibo2hUigGaqfivKjHBo5/V2kBDe2z5Q9WP+xlj411p
+         xXxHzf245VB9nOTcd5xfrTgN9FuDcsdvKEvHMGgNs3RnK/EbLzg5gslsBZYcHPVWrxSe
+         IdJj+iMvy1URciafBG1M/jXM14RCaPj5nYtkjjJZyzyCn/Ex5RUV8+waEEvHp1mCJBg9
+         m01w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698056579; x=1698661379;
+        d=1e100.net; s=20230601; t=1698056581; x=1698661381;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=X82FS37MpATKittBab30iZpigNPQeNpIZ7vC4jhKrjE=;
-        b=gH5OTT2ejlJMbWWhEpWiSHwP2VZznsS3xoZJPgo5/yPKZNzflyrco//MMMHVS+tREI
-         43P6VkEPUSfNDORjNZS72QQ0m/dy2fUDqR91Ho/WmnU8GHdmVeWBNGonlH49E+zOBjvW
-         q7J+K5/Igrs8h/N2gHcedIIy3S3eKKDOfZ7jfxc4Rmucbg/4ODPSL/9VVgPvywBDgRgA
-         sd5+GcTe0uliO53k/XuT9EXNYLslm3iRcPkmAwy+MHrehy4lMU6FqQUi0o2TyhHp0+Eq
-         7QGwiP63PL2IUlJAdgH+iqa3MrvVmXcrnsUAL0XYRbTvpQRudGkZzO8SlZ2qW8d5cmKZ
-         MuUw==
-X-Gm-Message-State: AOJu0Yxr+bDPAQWOKV4thwqYp+zVXnQBNe15qGzjBoDzYP+bVf+FKZkK
-        M35C68rKfDMKm+Vezd1iXwCQYw==
-X-Google-Smtp-Source: AGHT+IFljXMqxHrslhD3f5aaczqeFQBtBIQnWV+U2sbvpYvMW9byaeQIqLPtr2IOqZNiNuJ+/np7GA==
-X-Received: by 2002:a05:600c:4f86:b0:408:f9ce:56c5 with SMTP id n6-20020a05600c4f8600b00408f9ce56c5mr3226751wmq.24.1698056579471;
-        Mon, 23 Oct 2023 03:22:59 -0700 (PDT)
+        bh=8k0EshLjUbr1rifjRs+LM2thRC9AnbfURENQfGj3YpQ=;
+        b=jRBUjGMqFiSipvN/bUK0xNPZYtlXWPZZoZdAbYwEr8MQQBdSu5MhHJFFLlOiF7FAb9
+         BuTuxl3j9XcZhn9Sm1p7rgRoodUOTM+Y9aP0AShFtKiHFPyM+06l2XvpkbIMSFYnCiK9
+         bK6A2BnaUL4m7JuwGHnZ0qnhgOB//q6f4qJ+mImBN15T/TyLeEdZReNkBL6vxeErp3z2
+         G7tyG6XUeoXWIPHjGW+/czdZKBl5vCvYz9Mt0lVPb7vosbU4D/O7JU9AWHKD3w1jWdd8
+         mEnAhK0JIjRZUwBcZwOwrGtH3RMgs8/IckWfPjkW/H18D/Wk6T8Ggu2eQUBdRdYX/vLe
+         hwdg==
+X-Gm-Message-State: AOJu0Yw1pKnAZ/Eu1k8yUmLVYUOzEDibLUrbKSuchyLX1qm94wr9VwK+
+        FO3X6ZeE+9qEpogxgsekn896DQ==
+X-Google-Smtp-Source: AGHT+IG3jAIdQfmC2Z+L5C+d69j5tDElEciqTF1dG/PBhVBTrAoiiDhk1pI0XMhW2i7pOJkPSg/a1Q==
+X-Received: by 2002:a05:600c:354b:b0:3fe:1b4e:c484 with SMTP id i11-20020a05600c354b00b003fe1b4ec484mr6753113wmq.5.1698056581462;
+        Mon, 23 Oct 2023 03:23:01 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.185])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c228100b0040596352951sm13593275wmf.5.2023.10.23.03.22.57
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c228100b0040596352951sm13593275wmf.5.2023.10.23.03.22.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 03:22:59 -0700 (PDT)
+        Mon, 23 Oct 2023 03:23:01 -0700 (PDT)
 From:   Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
 To:     tglx@linutronix.de, robh+dt@kernel.org,
@@ -59,9 +59,9 @@ To:     tglx@linutronix.de, robh+dt@kernel.org,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 6/7] irqchip/renesas-rzg2l: use tabs instead of spaces
-Date:   Mon, 23 Oct 2023 13:22:22 +0300
-Message-Id: <20231023102223.1309614-7-claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH 7/7] arm64: dts: renesas: r9108g045: add irqc
+Date:   Mon, 23 Oct 2023 13:22:23 +0300
+Message-Id: <20231023102223.1309614-8-claudiu.beznea.uj@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231023102223.1309614-1-claudiu.beznea.uj@bp.renesas.com>
 References: <20231023102223.1309614-1-claudiu.beznea.uj@bp.renesas.com>
@@ -69,7 +69,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,29 +79,99 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Use tabs instead of spaces in definition of TINT_EXTRACT_HWIRQ()
-and TINT_EXTRACT_GPIOINT() macros.
+Add irqc node and set it as interrupt parent for pin controller.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 ---
- drivers/irqchip/irq-renesas-rzg2l.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/drivers/irqchip/irq-renesas-rzg2l.c b/drivers/irqchip/irq-renesas-rzg2l.c
-index e5e158bf028d..ce50745bba87 100644
---- a/drivers/irqchip/irq-renesas-rzg2l.c
-+++ b/drivers/irqchip/irq-renesas-rzg2l.c
-@@ -56,8 +56,8 @@
- #define IITSR_IITSEL_EDGE_BOTH		3
- #define IITSR_IITSEL_MASK(n)		IITSR_IITSEL((n), 3)
+diff --git a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+index 6c7b29b69d0e..010bca626855 100644
+--- a/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a08g045.dtsi
+@@ -96,6 +96,7 @@ pinctrl: pinctrl@11030000 {
+ 			#gpio-cells = <2>;
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
++			interrupt-parent = <&irqc>;
+ 			gpio-ranges = <&pinctrl 0 0 152>;
+ 			clocks = <&cpg CPG_MOD R9A08G045_GPIO_HCLK>;
+ 			power-domains = <&cpg>;
+@@ -104,6 +105,73 @@ pinctrl: pinctrl@11030000 {
+ 				 <&cpg R9A08G045_GPIO_SPARE_RESETN>;
+ 		};
  
--#define TINT_EXTRACT_HWIRQ(x)           FIELD_GET(GENMASK(15, 0), (x))
--#define TINT_EXTRACT_GPIOINT(x)         FIELD_GET(GENMASK(31, 16), (x))
-+#define TINT_EXTRACT_HWIRQ(x)		FIELD_GET(GENMASK(15, 0), (x))
-+#define TINT_EXTRACT_GPIOINT(x)		FIELD_GET(GENMASK(31, 16), (x))
- 
- /**
-  * struct rzg2l_irqc_reg_cache - register cache
++		irqc: interrupt-controller@11050000 {
++			compatible = "renesas,r9a08g045-irqc", "renesas,rzg2l-irqc";
++			#interrupt-cells = <2>;
++			#address-cells = <0>;
++			interrupt-controller;
++			reg = <0 0x11050000 0 0x10000>;
++			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 429 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 431 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 432 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 433 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 434 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 435 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 436 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 437 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 438 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 439 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 440 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 441 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 442 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 443 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "nmi",
++					  "irq0", "irq1", "irq2", "irq3",
++					  "irq4", "irq5", "irq6", "irq7",
++					  "tint0", "tint1", "tint2", "tint3",
++					  "tint4", "tint5", "tint6", "tint7",
++					  "tint8", "tint9", "tint10", "tint11",
++					  "tint12", "tint13", "tint14", "tint15",
++					  "tint16", "tint17", "tint18", "tint19",
++					  "tint20", "tint21", "tint22", "tint23",
++					  "tint24", "tint25", "tint26", "tint27",
++					  "tint28", "tint29", "tint30", "tint31",
++					  "bus-err";
++			clocks = <&cpg CPG_MOD R9A08G045_IA55_CLK>,
++				 <&cpg CPG_MOD R9A08G045_IA55_PCLK>;
++			clock-names = "clk", "pclk";
++			power-domains = <&cpg>;
++			resets = <&cpg R9A08G045_IA55_RESETN>;
++		};
++
+ 		sdhi0: mmc@11c00000  {
+ 			compatible = "renesas,sdhi-r9a08g045", "renesas,rcar-gen3-sdhi";
+ 			reg = <0x0 0x11c00000 0 0x10000>;
 -- 
 2.39.2
 
