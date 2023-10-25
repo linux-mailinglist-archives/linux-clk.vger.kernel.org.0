@@ -2,164 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3457D632C
-	for <lists+linux-clk@lfdr.de>; Wed, 25 Oct 2023 09:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A02C7D6469
+	for <lists+linux-clk@lfdr.de>; Wed, 25 Oct 2023 10:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233904AbjJYHef (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 25 Oct 2023 03:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S232976AbjJYIDr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 25 Oct 2023 04:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbjJYHdl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 Oct 2023 03:33:41 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD2E171B
-        for <linux-clk@vger.kernel.org>; Wed, 25 Oct 2023 00:33:00 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-507c5249d55so7708922e87.3
-        for <linux-clk@vger.kernel.org>; Wed, 25 Oct 2023 00:33:00 -0700 (PDT)
+        with ESMTP id S231467AbjJYIDq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 Oct 2023 04:03:46 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1931FC1
+        for <linux-clk@vger.kernel.org>; Wed, 25 Oct 2023 01:03:44 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-53df747cfe5so8402616a12.2
+        for <linux-clk@vger.kernel.org>; Wed, 25 Oct 2023 01:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698219178; x=1698823978; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qJrpI5nxU9cuMaUw8OFL5m5bwnYY8HlXt1mNtFEQ7qs=;
-        b=cGwa4yLrax9JCF7uwgvAUwljUxL0RfgOsRMQtcXg+MJGo+CheJCA7T/4ybAoFgAjOf
-         qXio/a+2tQG1g6PSRmBBcXTNGsPqcoxJPNiCLnFxZUwZrAsKhTel60TI7Oy42l2rCuy6
-         WE3wh0Z2S74dDsNBsMrcl4WAN5xJ9CUY5lxzQHrmiDq0YK/hCyrTmRZhLPJWLcLGFtqW
-         bmx3s7Z0QDGMGbEcmP/IcvJEVKFb2moiG9SrCuh4MSPWzK3RYv8ZIT9neR7LKw1X5N5E
-         teg/duO4fOaU6zNzPbhW0NOsw6M4VMYVEXtMJW5hXcF0yHpWE5EkKjfYG1EneXeAiy6K
-         wK/w==
+        d=rasmusvillemoes.dk; s=google; t=1698221022; x=1698825822; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gIO339/qu08wZ2r0nZAHdrWAaLG7qQMU/yUxr7tkE5M=;
+        b=e0ZzUaMxxfxqOktqAu3669tUiw9sla/v26rSS+MpGDGOwQrjn0LZYFPBPKmDYK4oE/
+         bTxSy8koVi9lDuXFAOWfraVyMhZTk3mHuec/HchHBIr13Yj2n3TZTgrNqhtPSxvJb7tW
+         YwylHsr5mC0pKyTRGPA82zGs1VdN8unpTLHPU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698219178; x=1698823978;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qJrpI5nxU9cuMaUw8OFL5m5bwnYY8HlXt1mNtFEQ7qs=;
-        b=OurXafBTs+dSdmyfVcxxpqpvPAhPsfsozkhfL9jeY5lLbyBkCCaZZgJztd5VC/skeR
-         tI0pysvkgZwvKA/ChMEyCIeBijmsEKsSdFlq604NLIaq2TBIS1L+RlchuU1LyA9YYWy2
-         PMdyZSMzYPQiibxbljGc9CDMyACutuUvOI0F6DS6HhEG42n50RoHsVRUESkENzv1G2xi
-         3rPo/e0fm9oSD866LwRnynDhA6EV9wSd5vG9C+I65u50LTVHKb8TtVWnFIrIqweO76TP
-         INonzqOq/xL26WXoF8EtWjXaD/ZYUvn+wfx5wU0nyHhwPM+Eo1wxBJk0Yp9dP7FMWFNi
-         Axuw==
-X-Gm-Message-State: AOJu0Yxp5vtoOODPi5FqrY8t+jf+gaj18xbHS/LIso2pRVjKdGv4ljkv
-        ivJ8SDFaB9Eb58r2LyB9XFlxXg==
-X-Google-Smtp-Source: AGHT+IGQru0I6swlvWecY5IFJ4i/mUG98Dt9NIfG6wTfZk3h2OCz/KTBa6Yk9Xak/rAc3xmwJaSZtg==
-X-Received: by 2002:a05:6512:376c:b0:507:9a66:3577 with SMTP id z12-20020a056512376c00b005079a663577mr8841092lft.5.1698219178262;
-        Wed, 25 Oct 2023 00:32:58 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v18-20020a05600c15d200b004063d8b43e7sm18422239wmf.48.2023.10.25.00.32.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Oct 2023 00:32:57 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 25 Oct 2023 09:32:47 +0200
-Subject: [PATCH 10/10] clk: qcom: rpmh: add clocks for SM8650
+        d=1e100.net; s=20230601; t=1698221022; x=1698825822;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gIO339/qu08wZ2r0nZAHdrWAaLG7qQMU/yUxr7tkE5M=;
+        b=mO73suVuJVnCI5Zn+dqMWpAtcZfhkSiyYjUcb1VE8SOd/KXbwduJxW4ZgHTcCBBtZC
+         2ktjWUNj5H6vKct6d6Ed++NI5hYgX4Pyd4JwbfBElPFHoGCixYBF8+uz2k9aXCbxLYwL
+         AinRkHtG8bTYtpBzkNIyDNwErOBf7yuk3baga6WwERhlpbGPT615aWDM95VnbgPDwX0o
+         xfvOZZMCU5/RM8sjVYH9RhY6JtasJw9Gh28jvAeKnO7gUks+nu+9C4fP5XukO2FGnf9S
+         FjUFlkH1C04e+LHG0FSCY4pPeWtLHVnG18fw97QbJC+/nIESbyWPPango6K91rvmBLTW
+         C3Ug==
+X-Gm-Message-State: AOJu0YzsKe5EdG4/FSmQ8290E8XuBZAfFGcaPnPdVS7xDvXOsz9DbQ9w
+        6eAle+cyxLR4u73qmJgFhX0UMA==
+X-Google-Smtp-Source: AGHT+IGuL+4DT/CjBVDWBBExYrUbj81RoDDX4Wg5tN94RVTHsypVW6kCiRvm3vYugyFNcwMHyzsOGA==
+X-Received: by 2002:a50:d098:0:b0:540:164c:2be1 with SMTP id v24-20020a50d098000000b00540164c2be1mr7734823edd.0.1698221022310;
+        Wed, 25 Oct 2023 01:03:42 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id cw3-20020a056402228300b0053eb69ca1bcsm9021465edb.92.2023.10.25.01.03.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Oct 2023 01:03:42 -0700 (PDT)
+Message-ID: <7ba90240-33ba-4e08-af38-3ec2d40c3837@rasmusvillemoes.dk>
+Date:   Wed, 25 Oct 2023 10:03:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231025-topic-sm8650-upstream-clocks-v1-10-c89b59594caf@linaro.org>
-References: <20231025-topic-sm8650-upstream-clocks-v1-0-c89b59594caf@linaro.org>
-In-Reply-To: <20231025-topic-sm8650-upstream-clocks-v1-0-c89b59594caf@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] math.h: add DIV_ROUND_UP_NO_OVERFLOW
+Content-Language: en-US, da
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2560;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=dzJGDHfO/28v2dj9L1hevUwNj64Z2rtH0Uclrax74CI=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBlOMSdRHggDfIH29o/ZTdDCnof+6DWZi0IbldORgwu
- as+H+ZKJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZTjEnQAKCRB33NvayMhJ0XdVEA
- DPVaHsPGZJOkKLWN/6cGFWw4JvXJc856xk7jR6OBpZKhCCLLbnEGcxZgKoSIxivdYlBeaIhQCXdkHA
- kPTYgavGQ1T61SAv0eh94+109a/AL+I5WjigdR/SkoYBwtgLmeabpfQCpiXttANvcZfKh+ydhQdvkU
- wzokRJh6DDp/wKZ/1dqGH5qMhblm5Yk6a3US1MjRcK7b+Xd/NfzOFMdL1vBnCZgC0SLWCFN2IObHxb
- xQ0ggldzm3+46tFt0mO3ORJtoqvtsSYvxMwM964cw9u6t2Ufb1MvXCBR6xOokbxMjQ3S2lWJCoxnh3
- vyX1gbnr/ei1qKlLLPVG3HVS2Jb+1KK7VsVaIaHNOdqtj/VWoCbdbD+iu1BzOpY3mXQ7c3UFgxS3hl
- rnkhkNy10FYBiCpspIXxIcV+jwRGl1F0fs0IY3olGzw3+zmwlf/tck032XyWPfn5NOPm6GTIkWrkMz
- 7ZRdJKoqbsyTMiCFFm6bRBzL0VcSszJvlrRYKlXmQhV4/t7PkhvcKL/MWkiYVYhekHRTb4cPqacgvD
- wPTLi0eZ0S6GS0xu8BS5FD9/vb8IOlXmpcrWTxGw7K4PHcTsyRR9KO+jqIgfGQ4YFrV4M7e71Qtvkb
- zQwddYTnn6ABsyG/TIKai6eoUlKLw4gmkg+R7OyYrV+NMbsbdAyYv1YcSqeA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+        David Laight <David.Laight@aculab.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>, kernel@collabora.com
+References: <20231024161931.78567-1-sebastian.reichel@collabora.com>
+ <20231024161931.78567-2-sebastian.reichel@collabora.com>
+ <CAHk-=whYDbZ29fx_xeSxtYSjtF8WJkaLjzyB8RN5_Rk9Sh-YyQ@mail.gmail.com>
+ <CAHk-=wjO5ivM6k7iMiThO9JfxH0dhLe=mcC4TQwReU0nBCnWpg@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <CAHk-=wjO5ivM6k7iMiThO9JfxH0dhLe=mcC4TQwReU0nBCnWpg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add RPMH Clocks for the SM8650 platform.
+On 25/10/2023 00.53, Linus Torvalds wrote:
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+> I'm hoping that somebody will go "Linus, you're just being
+> *completely* silly, it's much easier to do XYZ".
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 5d853fd43294..ea175c2dae95 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -372,6 +372,8 @@ DEFINE_CLK_RPMH_VRM(clk3, _a1, "clka3", 1);
- DEFINE_CLK_RPMH_VRM(clk4, _a1, "clka4", 1);
- DEFINE_CLK_RPMH_VRM(clk5, _a1, "clka5", 1);
- 
-+DEFINE_CLK_RPMH_VRM(clk4, _a2, "clka4", 2);
-+DEFINE_CLK_RPMH_VRM(clk5, _a2, "clka5", 2);
- DEFINE_CLK_RPMH_VRM(clk6, _a2, "clka6", 2);
- DEFINE_CLK_RPMH_VRM(clk7, _a2, "clka7", 2);
- DEFINE_CLK_RPMH_VRM(clk8, _a2, "clka8", 2);
-@@ -630,6 +632,32 @@ static const struct clk_rpmh_desc clk_rpmh_sm8550 = {
- 	.num_clks = ARRAY_SIZE(sm8550_rpmh_clocks),
- };
- 
-+static struct clk_hw *sm8650_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div2.hw,
-+	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div2_ao.hw,
-+	[RPMH_LN_BB_CLK1]	= &clk_rpmh_clk6_a2.hw,
-+	[RPMH_LN_BB_CLK1_A]	= &clk_rpmh_clk6_a2_ao.hw,
-+	[RPMH_LN_BB_CLK2]	= &clk_rpmh_clk7_a2.hw,
-+	[RPMH_LN_BB_CLK2_A]	= &clk_rpmh_clk7_a2_ao.hw,
-+	[RPMH_LN_BB_CLK3]	= &clk_rpmh_clk8_a2.hw,
-+	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_clk8_a2_ao.hw,
-+	[RPMH_RF_CLK1]		= &clk_rpmh_clk1_a1.hw,
-+	[RPMH_RF_CLK1_A]	= &clk_rpmh_clk1_a1_ao.hw,
-+	[RPMH_RF_CLK2]		= &clk_rpmh_clk2_a1.hw,
-+	[RPMH_RF_CLK2_A]	= &clk_rpmh_clk2_a1_ao.hw,
-+	/* missing RPMh resource address for clka3 */
-+	[RPMH_RF_CLK4]		= &clk_rpmh_clk4_a2.hw,
-+	[RPMH_RF_CLK4_A]	= &clk_rpmh_clk4_a2_ao.hw,
-+	[RPMH_RF_CLK5]		= &clk_rpmh_clk5_a2.hw,
-+	[RPMH_RF_CLK5_A]	= &clk_rpmh_clk5_a2_ao.hw,
-+	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
-+};
-+
-+static const struct clk_rpmh_desc clk_rpmh_sm8650 = {
-+	.clks = sm8650_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sm8650_rpmh_clocks),
-+};
-+
- static struct clk_hw *sc7280_rpmh_clocks[] = {
- 	[RPMH_CXO_CLK]      = &clk_rpmh_bi_tcxo_div4.hw,
- 	[RPMH_CXO_CLK_A]    = &clk_rpmh_bi_tcxo_div4_ao.hw,
-@@ -837,6 +865,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
- 	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
- 	{ .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
-+	{ .compatible = "qcom,sm8650-rpmh-clk", .data = &clk_rpmh_sm8650},
- 	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
- 	{ }
- };
+I don't have better suggestions, but a few notes:
 
--- 
-2.34.1
+Both the existing and new implementation are simply wrong for negative
+n, because / doesn't do floor(), it does round-towards-0 (I do believe
+that's a bug in the C standard, but not much one can do about that). So
+both the old and new say that dru(-5, 5) == 0, dru(-7, 5) == 0, dru(-10,
+5) == -1. They are correct for dru(-9, 5) == -1 and other "1 mod d" cases.
+
+But the new implementation disagrees with the old for -d+1 < n < 0: The
+old implementation correctly says dru(-3, 5) == 0, but the new gives 1 (!).
+
+Preventing signed types from being used is probably too difficult. But
+it would be nice if we could at least catch a negative _value_ and do
+something sensible. Can we make the build fail for a negative,
+compile-time constant, n? I have no idea what to do for run-time
+negative values - we already don't do the math right, but starting to
+return a positive number for some negative n's really doesn't seem right.
+
+Aside: I don't think uapi/ stuff can include non-uapi/ stuff.
+
+Aside2: do_div(n-1, d); probably doesn't compile :)
+
+Rasmus
 
