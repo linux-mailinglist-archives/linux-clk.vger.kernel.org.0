@@ -2,125 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB257D8153
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Oct 2023 12:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1EDC7D8182
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Oct 2023 13:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbjJZKyE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Oct 2023 06:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S1344699AbjJZLHB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Oct 2023 07:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344712AbjJZKyA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Oct 2023 06:54:00 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719271AE
-        for <linux-clk@vger.kernel.org>; Thu, 26 Oct 2023 03:53:55 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-4083f61322fso6011825e9.1
-        for <linux-clk@vger.kernel.org>; Thu, 26 Oct 2023 03:53:55 -0700 (PDT)
+        with ESMTP id S230105AbjJZLHB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Oct 2023 07:07:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7148C1A7
+        for <linux-clk@vger.kernel.org>; Thu, 26 Oct 2023 04:06:58 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-507bd644a96so1066823e87.3
+        for <linux-clk@vger.kernel.org>; Thu, 26 Oct 2023 04:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698317634; x=1698922434; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i/dkqG7TFqhS22WCtOJCYFAnzbujpg+JGXvYF9Z8Jtw=;
-        b=suyFaL/xKzuUOBIRlxos6yDaCHsSgyEnja4hnRO7Wb0YByWcKsYFqTEIWP1FbpZORr
-         nO7I5pI53f2ggjNXiztGWzyZVbsii5/dooQ6VNRWxU9wf5NJ8x9yJYozT+w53f2kpvJk
-         ffhwOChxBiuAF10H+DuVbuGxWHC8d2YFLDi1vSZxMC2RzvWrrppi0F25sN/tuXcYJpKQ
-         bI1YPMKtSnd1fQqAs2JNEBuDr9EV3xRrk3bDsJj9PW5vewP87iKV72x2OsA7JY6tuFHQ
-         v0ybsjCIaWuxeNSnq1OGw3a6g0TnKnOlJyzL9DG2Jh9BeVp+26ZXj537eL/PygbpzF7j
-         1aMA==
+        d=linaro.org; s=google; t=1698318417; x=1698923217; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=toXNFfzr2zB8FMnlgacjGM+iESEOfHX27uyQ115+fBQ=;
+        b=TN96z3710cpyTAQ6Rb7vg5fw1uiBvBg/oRZW/FNtUR6HIo677vG3qVWnB0INPeRCyO
+         vSWZoZGpCXMd4SV4BCWgueqFFwiE+v0lCnO/gdGpSILDUSSJ3N4zWHYKNawCH8Mq7nVW
+         2wQ0OIIel85rbSq/sOkjkP52URI5V6lVxH2Jq7vTbx4Oq28aweutw4vLkbNdxAhmRj5s
+         fiELeDG23ZG34+a6X7ozL8nqHMwFRQDG3l96Y4t3zb3JT3OnJlhQ80txXqE7fToOKY7U
+         5TiiVCd36OkXp+JwF/My/+ZtBSaMIzt8kvAEConK8tyT053FZfpGBgEtQeLokcxOsJpS
+         4CTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698317634; x=1698922434;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i/dkqG7TFqhS22WCtOJCYFAnzbujpg+JGXvYF9Z8Jtw=;
-        b=nT8oFEoZFmIKW3CkhxjRslaOFulez5GpLAy68LItwLFqQwY7IgO+DRAmu28ARowTaB
-         u1aXf2fv9kafOuAdQmEFqrG2rQULC9pv/C3qV5QqqAvx97jZ+AeAkcDIvlmNbyo/JoqF
-         6wkaMO70cO+YWug8ELlCxMt17WR3qgPMu6ZH6QaIPQSmBfvNpU99OXHOeFUtfHDJwbQv
-         wc+QzizC+GZTphtt+5pfrXz0lJqxVn88vSKkAlUTqzOMncwY8N4PSjkYJ7clIMFiLbV+
-         0zva/rqs2U68skkqShiOTYGZAtUa95E24vwxJbmfl6E2dAEn4SseC4UvqfOm2cR8dlJ8
-         9gEA==
-X-Gm-Message-State: AOJu0YzHLdWZBRANyKQjazoFp6w2FnB1z6PJnE8tKC8JngGUGbPNu1XH
-        fZnt5W7YnRwc2fNaEQS6Oa4ivg==
-X-Google-Smtp-Source: AGHT+IGILeSVmfxEYcvyxYx8c/ToHYzzKbHFTRzMfsA0M6T3gDBJJCkVI8EHXkclA6oZ3lYIhHayXA==
-X-Received: by 2002:a05:600c:468d:b0:409:ca6:d79d with SMTP id p13-20020a05600c468d00b004090ca6d79dmr6542090wmo.18.1698317633936;
-        Thu, 26 Oct 2023 03:53:53 -0700 (PDT)
-Received: from x13s-linux.nxsw.local ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id y9-20020a7bcd89000000b00407efbc4361sm2239465wmj.9.2023.10.26.03.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 03:53:53 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        dmitry.baryshkov@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jonathan@marek.ca, quic_tdas@quicinc.com,
-        vladimir.zapolskiy@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bryan.odonoghue@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH v4 4/4] arm64: dts: qcom: sc8280xp: Add in CAMCC for sc8280xp
-Date:   Thu, 26 Oct 2023 11:53:45 +0100
-Message-Id: <20231026105345.3376-5-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231026105345.3376-1-bryan.odonoghue@linaro.org>
-References: <20231026105345.3376-1-bryan.odonoghue@linaro.org>
+        d=1e100.net; s=20230601; t=1698318417; x=1698923217;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=toXNFfzr2zB8FMnlgacjGM+iESEOfHX27uyQ115+fBQ=;
+        b=QEzi1vWgtFi4BqD1/Ej4ByniLFJOR/JjuYXUedbUPY+ss3Z6vNtB3w0mIW+vgIVoVm
+         aVHR5a3QLwOoApeEkFhO7lfPzC2zZTyHHbpWcc8j7WjDgbl2wByCyXF2Th7wXmktk406
+         eXCOz9OgmrjDSgQwHkZcQHudleHmb1XvXB1Gs8V18aHFmbiwQRsAIpZkbGM+HvF9FjqJ
+         VZ1RiiB08rSnwJKg+1c3wRlsZ1X8t9UhbEGXl/SoJkaNCi72FK9jbvX9SHjpp2ASFmwM
+         PUt2Q5CUle+gsscfwLEyeNqiqGNdyxqQGFAJINcTrAw75sm3LlVIX7c4Tk3sVKYOJeY7
+         qHAQ==
+X-Gm-Message-State: AOJu0Yxc2QSOwbfu08u2arcgrwSdeQuOw1h44z/XUSkL/1rruYNUooai
+        cDpBx72Qu4FICeyyDchbWn1Nkw==
+X-Google-Smtp-Source: AGHT+IF1GzRZLlCAOCTP0Lt45qDT8HQJ8XqHwpM351pN08WUKAOM3A/n2rhSXw93342t0EeqkpEuUw==
+X-Received: by 2002:ac2:485a:0:b0:500:a08e:2fcf with SMTP id 26-20020ac2485a000000b00500a08e2fcfmr11101260lfy.47.1698318416705;
+        Thu, 26 Oct 2023 04:06:56 -0700 (PDT)
+Received: from [172.30.204.123] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056512210900b005079691360csm2978277lfr.49.2023.10.26.04.06.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Oct 2023 04:06:56 -0700 (PDT)
+Message-ID: <8dc48acb-46f0-47fa-bf7f-ee2d09eebcb3@linaro.org>
+Date:   Thu, 26 Oct 2023 13:06:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] clk: qcom: Add Global Clock controller (GCC) driver
+ for SC8380XP
+Content-Language: en-US
+To:     Sibi Sankar <quic_sibis@quicinc.com>, andersson@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     agross@kernel.org, conor+dt@kernel.org, quic_tdas@quicinc.com,
+        quic_rjendra@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, neil.armstrong@linaro.org,
+        abel.vesa@linaro.org, quic_tsoni@quicinc.com
+References: <20231025133320.4720-1-quic_sibis@quicinc.com>
+ <20231025133320.4720-3-quic_sibis@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231025133320.4720-3-quic_sibis@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add in CAMCC for sc8280xp. The sc8280xp Camera Clock Controller looks
-similar to most of the sdmX, smX and now scX controllers.
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index cad59af7ccef..fafea0f34fd9 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
- #include <dt-bindings/clock/qcom,gpucc-sc8280xp.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,sc8280xp-camcc.h>
- #include <dt-bindings/clock/qcom,sc8280xp-lpasscc.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interconnect/qcom,sc8280xp.h>
-@@ -3450,6 +3451,20 @@ usb_1_role_switch: endpoint {
- 			};
- 		};
- 
-+		camcc: clock-controller@ad00000 {
-+			compatible = "qcom,sc8280xp-camcc";
-+			reg = <0 0x0ad00000 0 0x20000>;
-+			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SC8280XP_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss0: display-subsystem@ae00000 {
- 			compatible = "qcom,sc8280xp-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
--- 
-2.40.1
+On 10/25/23 15:33, Sibi Sankar wrote:
+> From: Rajendra Nayak <quic_rjendra@quicinc.com>
+> 
+> Add support for the global clock controller found on SC8380XP
+> based devices.
+> 
+> Co-developed-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+[...]
 
+> +static int gcc_sc8380xp_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap;
+> +	int ret;
+> +
+> +	regmap = qcom_cc_map(pdev, &gcc_sc8380xp_desc);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks,
+> +				       ARRAY_SIZE(gcc_dfs_clocks));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/*
+> +	 * Keep the critical clock always-On
+> +	 * gcc_camera_ahb_clk, gcc_camera_xo_clk, gcc_disp_ahb_clk,
+> +	 * gcc_disp_xo_clk, gcc_gpu_cfg_ahb_clk, gcc_video_ahb_clk,
+> +	 * gcc_video_xo_clk
+> +	 */
+> +	regmap_update_bits(regmap, 0x26004, BIT(0), BIT(0));
+Please inline the clock names, like so:
+
+regmap_update_bits(regmap, 0x26004, BIT(0), BIT(0)); /* gcc_camera_ahb_clk */
+
+LGTM otherwise
+
+Konrad
