@@ -2,134 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25207DAE78
-	for <lists+linux-clk@lfdr.de>; Sun, 29 Oct 2023 22:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865207E0DD8
+	for <lists+linux-clk@lfdr.de>; Sat,  4 Nov 2023 05:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjJ2VQV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 29 Oct 2023 17:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S231530AbjKDE6A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 4 Nov 2023 00:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjJ2VQU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 29 Oct 2023 17:16:20 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B006D97;
-        Sun, 29 Oct 2023 14:16:17 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-53e2308198eso6140038a12.1;
-        Sun, 29 Oct 2023 14:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698614176; x=1699218976; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QvsKzG+rs1HOWlhjYy4OEuq3sm4Ra3HE4ezTkFwDqiM=;
-        b=UhNfIPk+DRSz+HZMRj9wTUobBajfXCb9fxSkPVF7NNMGMaqyHGvqpzdRJ3It1vxF5Q
-         J0G2nmYNstIytW88HHCvsiHg15POckPeedejFb3C2TqK0Si+wzmzYMnFN911hfnAW07x
-         rFyLBWupdGsp6bZ6mmRQBO6b4cuv/tpsazW17oPC5IoLDq7vfLKcj2UxiKJvIGww5EqM
-         r3/fp+cBWQD5Pu2txrtOW+tgGhshjVM/S9gWtcHhah8ABN1s0JrTxZWLQNSw+tBOT1dr
-         npZ7o1CDYJRyOppbWoHWvSVv8QvWYSn3QVKJaDcv9J2yOfYvJSiaBYravFp/ybwT37o5
-         6nlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698614176; x=1699218976;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QvsKzG+rs1HOWlhjYy4OEuq3sm4Ra3HE4ezTkFwDqiM=;
-        b=VkGtGLFRiGM16vuBiPJHcXSxvDesEFpq3HQYrrlH+9crBgu9pBockpyDtDDiaIrzJN
-         TGGfDDy1TuQ7hzSyWz/wU2z1yXDFBYf/B9uoZfIj3mGZ3Q8c7jVBZws3GU+VK0lYZiD3
-         JlrKfXHU6FBFeZnZVozTyMIS2y61cd9hnfnSl7UmCXczspvBtYs3vHAe+HvX11VKibT3
-         LQty4R0kRtt7D9+r+EthvMfw/OTeESGQS+eGHPVGnbISFI2JlwdtxPY6VXpg6lkWgCwO
-         /K+ubk7WBG5EdvpE6v2TUZtkg7AVkUQPfFirstvOrMzDqk5r1ngKd3QadDiC23RoOxeO
-         lpiQ==
-X-Gm-Message-State: AOJu0Yyv/wTK8rlFfl1egKLEiN1pB/2JuYBTt986NXQ2W6Xe3Locc8L4
-        Uvs7RiakrUU9EcjlZYBpfGU=
-X-Google-Smtp-Source: AGHT+IF7sE5EoaLdZ8ZzvjrwxAns0T3bzFyPglhgZ/pN3bXockxACawGbRmYwmhYVlGo9hG2IWqNCw==
-X-Received: by 2002:a17:906:c10e:b0:9c2:a072:78c8 with SMTP id do14-20020a170906c10e00b009c2a07278c8mr6691256ejc.26.1698614175965;
-        Sun, 29 Oct 2023 14:16:15 -0700 (PDT)
-Received: from [192.168.50.244] (83.11.208.51.ipv4.supernova.orange.pl. [83.11.208.51])
-        by smtp.gmail.com with ESMTPSA id rn20-20020a170906d93400b009930308425csm4890885ejb.31.2023.10.29.14.16.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Oct 2023 14:16:15 -0700 (PDT)
-Message-ID: <5bd796c5-3e9a-4aa5-b284-27fb4fc8ea48@gmail.com>
-Date:   Sun, 29 Oct 2023 22:16:14 +0100
+        with ESMTP id S229509AbjKDE6A (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 4 Nov 2023 00:58:00 -0400
+X-Greylist: delayed 4260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Nov 2023 21:57:57 PDT
+Received: from mail.profitpathwaygo.com (mail.profitpathwaygo.com [141.94.21.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D69112
+        for <linux-clk@vger.kernel.org>; Fri,  3 Nov 2023 21:57:57 -0700 (PDT)
+Received: by mail.profitpathwaygo.com (Postfix, from userid 1002)
+        id C9B045635A; Mon, 30 Oct 2023 08:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitpathwaygo.com;
+        s=mail; t=1698655817;
+        bh=qp3Ofokho6Ql+WtI8ZPVilyHYhskXL7fod7u9CWs8W4=;
+        h=Date:From:To:Subject:From;
+        b=DQgLvJMvnxM78ceSV582/GpNt0lhtWM2/GIB6hq3HXYySN5N9Qj/oYkVLsc6drLO2
+         vpyWFg7Q8rMcOAEL0tlpXRckntdmyo/D31LjPAS8qjqTAcpEc9k1Grf29WuUyuCnux
+         CJ0bzr++K6sd1GTRNBRpHqFFNzemNTFQ+J0Pd6uhO7dphTcQnm0Q/Ci5N+R9a6CUpf
+         7q7UpNiQaGObNRrJUMOIGOSlEZyHxHaN7EmeVSZf3NFH/CpkDjL4YGh7x6194jmjDh
+         Z90Nlvw+Ejv52xSPKo+7VedeC2aVdf6lueAY9X9PWmkxyp03pLMkdbtOKF9PKQJn9x
+         Zi+lx77LEZwUg==
+Received: by mail.profitpathwaygo.com for <linux-clk@vger.kernel.org>; Mon, 30 Oct 2023 08:30:28 GMT
+Message-ID: <20231030074500-0.1.2s.154jf.0.dap1q4pghd@profitpathwaygo.com>
+Date:   Mon, 30 Oct 2023 08:30:28 GMT
+From:   "Adam Charachuta" <adam.charachuta@profitpathwaygo.com>
+To:     <linux-clk@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania_?=
+X-Mailer: mail.profitpathwaygo.com
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From:   Artur Weber <aweber.kernel@gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: clock: brcm,kona-ccu: convert to YAML
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZTf0oWfOqnyMEKbF@standask-GA-A55M-S2HP>
- <20231027-bulldog-component-5b84e4660465@spud>
- <ZTzw5c5/MwU3VOBo@standask-GA-A55M-S2HP>
-Content-Language: en-US
-In-Reply-To: <ZTzw5c5/MwU3VOBo@standask-GA-A55M-S2HP>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: profitpathwaygo.com]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [141.94.21.238 listed in bl.score.senderscore.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [141.94.21.238 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: profitpathwaygo.com]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0050]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Dzie=C5=84 dobry,
 
-On 28/10/2023 13:30, Stanislav Jakubek wrote:
-> On Fri, Oct 27, 2023 at 03:47:48PM +0100, Conor Dooley wrote:
->> On Tue, Oct 24, 2023 at 06:45:21PM +0200, Stanislav Jakubek wrote:
->>> Convert Broadcom Kona family clock controller unit (CCU) bindings
->>> to DT schema.
->>
->> I didn't cross-check the clock-output-names, but this conversion mostly
->> looks good to me.
->>
->>> Changes during conversion:
->>>    - remove "dmac" from clock-output-names for brcm,bcm11351-master-ccu,
->>>      it is not used in DT nor the dt-bindings
->>>    - remove "uartb4" from clock-output-names for brcm,bcm21664-slave-ccu,
->>>      it is not used in DT nor the dt-bindings
->>
->> This I'm not sure about - they _were_ documented in the text-form
->> dt-binding, even if they weren't used in the dts. If the clock
->> controller does actually produce these clocks, removing them doesn't
->> make sense to me.
-> 
-> Hi Conor. Looking at downstream, I was not able to find these clocks, though
-> I admit that I'm not familiar enough with the downstream mess to be 100%
-> confident.
-> 
->  From what I can tell, the BCM21664 arch/arm/mach-hawaii/clock.c (e.g. [1])
-> doesn't contain any mention of uartb4, only uartb, uartb2 and uartb3.
-> And similarly, for the BCM281XX arch/arm/mach-capri/clock_capri.c (e.g. [2])
-> I wasn't able to find any mention of dmac, only dmac_mux_apb and dma_axi
-> (though these two don't seem to be supported on mainline yet).
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-I've done some digging in the downstream kernel; for the BCM21664, I'm
-almost certain that the uartb4 clock doesn't exist. Broadcom helpfully
-left in "RDB" files containing the entire register layout of all of the
-components; and even in the RDB for the slave clock manager[1] (used by
-the other uart clocks), there is no uartb4, nor is it mentioned
-anywhere else in the kernel (judging by a quick grep in the kernel
-sources).
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-As for the BCM281XX clocks, there indeed doesn't seem to be an exact
-"dmac" clock but there is a "dmac" clock gate register[2], which is
-used for the dma_axi clock, so perhaps that's what this is referring
-to? Also not 100% certain.
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-Best regards,
-Artur
 
-[1] https://github.com/Samsung-KYLEPROXX/android_kernel_samsung_kyleproxx/blob/cm-14.1/arch/arm/mach-hawaii/include/mach/rdb/brcm_rdb_kps_rst_mgr_reg.h
-[2] https://github.com/surblazer/android_kernel_samsung_galaxys2plus-common/blob/android-7.1/arch/arm/mach-capri/include/mach/rdb/brcm_rdb_kpm_clk_mgr_reg.h#L417-L433
+Pozdrawiam serdecznie
+Adam Charachuta
