@@ -2,74 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BF07DBFF6
-	for <lists+linux-clk@lfdr.de>; Mon, 30 Oct 2023 19:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5C57DC05F
+	for <lists+linux-clk@lfdr.de>; Mon, 30 Oct 2023 20:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjJ3ShL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 30 Oct 2023 14:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
+        id S231728AbjJ3TZw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 30 Oct 2023 15:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjJ3ShK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Oct 2023 14:37:10 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D715AE6
-        for <linux-clk@vger.kernel.org>; Mon, 30 Oct 2023 11:37:06 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-508126afb9bso6709920e87.0
-        for <linux-clk@vger.kernel.org>; Mon, 30 Oct 2023 11:37:06 -0700 (PDT)
+        with ESMTP id S231222AbjJ3Smv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Oct 2023 14:42:51 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5732D9
+        for <linux-clk@vger.kernel.org>; Mon, 30 Oct 2023 11:42:46 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-507bd64814fso6699077e87.1
+        for <linux-clk@vger.kernel.org>; Mon, 30 Oct 2023 11:42:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698691025; x=1699295825; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1698691365; x=1699296165; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cfSK1k3ZG/rc+BzjqSENt980w0V6BZfN5ZlxMLeOyx0=;
-        b=JA/o2gIhVGkkioUjSGqMXgdAFPszilu96nsBlelO//JZ4NjMjJsNkLwww4cv6FcPeP
-         qh0v5OkPjogvIzo89YCDen7irY2BKdylWBramI+ChN+dGZ9B/8sCP27Ti3odl/7fEt9t
-         D5A6gn4v/1M8IbkHr4mpdyNob+7oasN8KNccL/AE23EFMUgPemWvovM3NfHpgjz6KBTT
-         TVRPUWrz128R+q6x1wCtaO0TF9Y5ec1w8Kw5jyvhx7BBERHyTy8JSBkzA1jlnBAmDKbl
-         l3rEuV5BcsXMr1cPxAf5KhhsJ9wDC1eSjd8NKfhj0ErheKWcMskBytgJSxa53jxM7B+h
-         O1uA==
+        bh=JwS8CJS2HdA7L2KwdZuJCSxbmDb03FC3Kv+/WIe4ieY=;
+        b=WxIGKtbWXFCYI5ivU5eIjwGLr0iQVkvI7aAbfCNsAgyq++KauAr95B3+748Ok9i6bd
+         Prq+Ixw9hx9NWw5KjABal4AXaQgDoPIqR1rHzzNPL3X1rd5fTxSVXiYkJyWO55h+yhg/
+         tDKwJ7f5Rm3995u6GIuIIAPcJpeyewR0jabU+mKom/tNkjm254NzgK4B17Ss1UDMejsZ
+         3V8kXGjKsjhbVGa/cFi+e+10a02bubxA9UTCaSkRZt5Pc+KPEPiv9o43XXeiaiT2XxNV
+         WmyJ9Z8HCx6/PjOXTU+vmdEVKXOSfoDRjoxSiPxDqrEQsSgKKHSzyvViCkmY4VfRZy/V
+         vozg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698691025; x=1699295825;
+        d=1e100.net; s=20230601; t=1698691365; x=1699296165;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cfSK1k3ZG/rc+BzjqSENt980w0V6BZfN5ZlxMLeOyx0=;
-        b=hnkH212qWrElacZzAdC17K0T4wA6SZGTm6MWSlTGDvW85tgn5JIMT5/u+dowsN3HU4
-         W+pDs1rj1kjNsHpNXrozV9B2flzEHsexQE3LlHEnt7opLcmPJrzV01YR0T+re+8kZidx
-         y7OThWXywgaa9VTA+tnBQPgrgxLmG89bzKCpj+jWp23kaiUPz2Cf7Ywcs98iZgZNmXJj
-         eQwNVlqpQR6pCFkqepf+32XMLiUxUh0V2TSU02E8pI0oWIEjgohS9nnfHplwfkli5XsS
-         VQ1E5IGXBmhHjwBv4H3dh/eFkDpLElsoRduZg++YmAOY0IjKfwk7oxgBhm+N3nA04kvS
-         bs6Q==
-X-Gm-Message-State: AOJu0Yy3VKi6Ym+hD2dHX4xLQUKB151vRqvykv3VkO3WsfaY36pRLE/f
-        o40skK/3nfptE+/dpBenHDv4pQ==
-X-Google-Smtp-Source: AGHT+IFnX2Ijf2CFFbC8m1DHX4VyRham70K7OmpgYWnk57NDGmiOPBVFirPSCu++MOMyq+fAPdIKyg==
-X-Received: by 2002:a05:6512:618:b0:507:b15d:2ff1 with SMTP id b24-20020a056512061800b00507b15d2ff1mr6418733lfe.38.1698691025033;
-        Mon, 30 Oct 2023 11:37:05 -0700 (PDT)
+        bh=JwS8CJS2HdA7L2KwdZuJCSxbmDb03FC3Kv+/WIe4ieY=;
+        b=Cm/FABS0uBJzzswJIa/MM1m1P4m79JYbT/XaLCslRiK3fDiGe7+fRcWIWSLohdaQsZ
+         G+d/Tb+E6Q2tqmV5efXowzmSDSWIkfC08fhbjaCJWMFJ6JWuIQOWCelU8keVwtYq7MUB
+         SOntvaB5OIcqrwoPKrKRAQYodOo/7IrD7k3ktY6fX7Tl2/QuUzXkiYZi436EWZas3qG3
+         RvyZIG5vtgUXly1AMcvYjLP6gKeshD26Q4vpvGGRm/l/F8hU0lJ2dwQNYKp2QaDDWYoJ
+         USXptX22q5y+UClO5SdQabig3DnXN4eVpfRiUJmZJlEA/RLA1105OB5KjO4dVgEDsFhj
+         Qv8A==
+X-Gm-Message-State: AOJu0YyPD149x9vY1XzniH4FhUNYRfmWn/6TKupOdiFZ7TI/n/7K7oY5
+        CUE+H3T615Wo11tl6uJFtJefAw==
+X-Google-Smtp-Source: AGHT+IFs1SvdKA+y3R0AbD3t9CtVc8ZXEFKCU/X6eYCAWfhtk7OEK2/zil1fF5aDurRg4Z/W4AI5DA==
+X-Received: by 2002:ac2:4db6:0:b0:503:264b:efc9 with SMTP id h22-20020ac24db6000000b00503264befc9mr7219254lfe.18.1698691365005;
+        Mon, 30 Oct 2023 11:42:45 -0700 (PDT)
 Received: from [192.168.133.160] (178235177091.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.91])
-        by smtp.gmail.com with ESMTPSA id x18-20020a056512047200b004fb9c625b4asm1496892lfd.210.2023.10.30.11.37.02
+        by smtp.gmail.com with ESMTPSA id dw24-20020a0565122c9800b00502ae8db086sm1522651lfb.19.2023.10.30.11.42.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 11:37:04 -0700 (PDT)
-Message-ID: <e1b86d64-fe84-48a2-81c9-0f0a101680a9@linaro.org>
-Date:   Mon, 30 Oct 2023 19:37:02 +0100
+        Mon, 30 Oct 2023 11:42:44 -0700 (PDT)
+Message-ID: <f50102e2-4e81-4e07-aa05-5ecce8024eb3@linaro.org>
+Date:   Mon, 30 Oct 2023 19:42:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 10/10] clk: qcom: rpmh: add clocks for SM8650
+Subject: Re: [PATCH 1/8] clk: qcom: ipq5332: drop the few nssnoc clocks
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
         Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <quic_tdas@quicinc.com>
+        Richard Cochran <richardcochran@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20231030-topic-sm8650-upstream-clocks-v2-0-144333e086a2@linaro.org>
- <20231030-topic-sm8650-upstream-clocks-v2-10-144333e086a2@linaro.org>
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231030-ipq5332-nsscc-v1-0-6162a2c65f0a@quicinc.com>
+ <20231030-ipq5332-nsscc-v1-1-6162a2c65f0a@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -106,7 +107,7 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20231030-topic-sm8650-upstream-clocks-v2-10-144333e086a2@linaro.org>
+In-Reply-To: <20231030-ipq5332-nsscc-v1-1-6162a2c65f0a@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -119,13 +120,14 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 30.10.2023 10:57, Neil Armstrong wrote:
-> Add RPMH Clocks for the SM8650 platform.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/clk/qcom/c
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 30.10.2023 10:47, Kathiravan Thirumoorthy wrote:
+> gcc_snoc_nssnoc_clk, gcc_snoc_nssnoc_1_clk, gcc_nssnoc_nsscc_clk are
+> enabled by default and it's RCG is properly configured by bootloader.
+The maskrom or something later on?
+
+
+> Some of the NSS clocks needs these clocks to be enabled. To avoid
+> these clocks being disabled by clock framework, drop these entries.
+Perhaps pm_clk could be an option for you?
 
 Konrad
