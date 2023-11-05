@@ -2,81 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336BD7E1746
-	for <lists+linux-clk@lfdr.de>; Sun,  5 Nov 2023 23:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BA27E1630
+	for <lists+linux-clk@lfdr.de>; Sun,  5 Nov 2023 21:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjKEWBf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 5 Nov 2023 17:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
+        id S229489AbjKEUHH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 5 Nov 2023 15:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjKEWBd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 5 Nov 2023 17:01:33 -0500
-X-Greylist: delayed 5286 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Nov 2023 14:01:31 PST
-Received: from SMTP-HCRC-200.brggroup.vn (unknown [42.112.212.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E93ABF
-        for <linux-clk@vger.kernel.org>; Sun,  5 Nov 2023 14:01:30 -0800 (PST)
-Received: from SMTP-HCRC-200.brggroup.vn (localhost [127.0.0.1])
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTP id 70C5119139;
-        Mon,  6 Nov 2023 01:57:44 +0700 (+07)
-Received: from zimbra.hcrc.vn (unknown [192.168.200.66])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229451AbjKEUHG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 5 Nov 2023 15:07:06 -0500
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D78E1;
+        Sun,  5 Nov 2023 12:07:03 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by SMTP-HCRC-200.brggroup.vn (SMTP-CTTV) with ESMTPS id 6A0D419283;
-        Mon,  6 Nov 2023 01:57:44 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id 056BB1B8253C;
-        Mon,  6 Nov 2023 01:57:46 +0700 (+07)
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dSYwkIM8QENY; Mon,  6 Nov 2023 01:57:45 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.hcrc.vn (Postfix) with ESMTP id C31A81B8252B;
-        Mon,  6 Nov 2023 01:57:45 +0700 (+07)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.hcrc.vn C31A81B8252B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hcrc.vn;
-        s=64D43D38-C7D6-11ED-8EFE-0027945F1BFA; t=1699210665;
-        bh=WOZURJ77pkiMUL2pPLC14ifVPRvyTQIBEQmxuN1ezAA=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=bHesgO+EFhHRGyCW/Fw7GFO8a/2UOW4YlZT39BeiNUt9PxGG63FGMWc0zfdRsI934
-         AUlxCS5lVtUrHJweARTqksiVesvoGbeQhJhAI1uqFY2fwE9EUS+fGWkbK6ROZBti7K
-         d6Xr1oC5AZRa+QUa+tWnZSRLaGWt2On7/lz8AYd1E2h2lb+bdIPqmi8ddKGE+2UZOS
-         1KlYZ05lm4BchDZszP/NQcRhfCGB4TSpUzFF+/rAigJNjs1psj7wIt01LTFA1DJVyi
-         4oziu1nYJgF6ZtqkfwSrJoi+TzVXndPJnwALc1in0kiYdq6MVyW/p9oc7jff/WNDC5
-         KpuwQ7gPPS5sQ==
-X-Virus-Scanned: amavisd-new at hcrc.vn
-Received: from zimbra.hcrc.vn ([127.0.0.1])
-        by localhost (zimbra.hcrc.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id f4lz9EFtdqsi; Mon,  6 Nov 2023 01:57:45 +0700 (+07)
-Received: from [192.168.1.152] (unknown [51.179.100.52])
-        by zimbra.hcrc.vn (Postfix) with ESMTPSA id 721B01B8223A;
-        Mon,  6 Nov 2023 01:57:39 +0700 (+07)
-Content-Type: text/plain; charset="utf-8"
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4SNlr3449Dz9sVN;
+        Sun,  5 Nov 2023 21:06:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1699214819;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aTQFv+jxFsY3X5csA/whB9c77q2hCbYcNxae1TskwzQ=;
+        b=c8MsOHYNKCZq+G4vK28jvelMzuh9vV0bIReZeId4FVGLZrShV70vmH+dn4kmBaLXQweddR
+        0gVPDF0GSXrQwszV3wzR9kSHVy00j53ao+hHWru/h7gzSUO82JnO4H0KtwhWVPH+IC6IR4
+        xCri0Qb2a8dINoLliCPPYRDKwPL4idEBhx1bjGbjZxZPnspfCl7a8Vgxu6z3qyfNJKEew4
+        7PIGcNBmk6tlNiDaSUGpVg01Z7GIYknxmqqcADaH7CuTDBqSUsNPeBFOSQgLdMqCIMRJ3N
+        459olyXiJ7yIx6UXDOTdktTQT1OgDMlpz5hup6A19VHGFCFSJjaLwNbSdnRdKg==
+From:   Marek Vasut <marek.vasut+renesas@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1699214817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aTQFv+jxFsY3X5csA/whB9c77q2hCbYcNxae1TskwzQ=;
+        b=X+55kuiQgnpvrwpqBcNYI9FDdAqRnmhbis7tN9Xo4uWEZOxRJEQaETMHuZTVdoc9DjbLLS
+        MTf1LCx96Kna1fYyHVqzBTp9pFFJICpx5eH4/iIwEKa9TUbEo3snDUMvqTx9+pjZuB5ao0
+        UVPGTN3Vopcu1Jdx9tHXMjJYuwbfjCDvUVy8ck8mIxU+4+QgitHjGLMSxerDP9K9PtSqSw
+        6ll51WSmnlUEjI7AJmsF5yd7A0NPuP/9wtsshtLzEK6zwX9j45o66jroNlZ6pkNe9jzWPC
+        s3DZaRr52qp2Qp5IGvQ8gmgcuH3VFuGtmjBSJ3O1DNLgTiuhxyvURtURxbdtJw==
+To:     linux-clk@vger.kernel.org
+Cc:     Marek Vasut <marek.vasut+renesas@mailbox.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] clk: rs9: Fix DIF OEn bit placement on 9FGV0241
+Date:   Sun,  5 Nov 2023 21:06:15 +0100
+Message-ID: <20231105200642.62792-1-marek.vasut+renesas@mailbox.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?4oKsIDEwMC4wMDAuMDAwPw==?=
-To:     Recipients <ch.31hamnghi@hcrc.vn>
-From:   ch.31hamnghi@hcrc.vn
-Date:   Sun, 05 Nov 2023 19:57:29 +0100
-Reply-To: joliushk@gmail.com
-Message-Id: <20231105185739.721B01B8223A@zimbra.hcrc.vn>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: 7jnrc1r3hg64n4pus16cxxxnohkj5j8e
+X-MBO-RS-ID: a2288b80ca60afe3830
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Goededag,
-Ik ben mevrouw Joanna Liu en een medewerker van Citi Bank Hong Kong.
-Kan ik =E2=82=AC 100.000.000 aan u overmaken? Kan ik je vertrouwen
+On 9FGV0241, the DIF OE0 is BIT(1) and DIF OE1 is BIT(2), on the other
+chips like 9FGV0441 and 9FGV0841 DIF OE0 is BIT(0) and so on. Increment
+the index in BIT() macro instead of the result of BIT() macro to shift
+the bit correctly on 9FGV0241.
 
+Fixes: 603df193ec51 ("clk: rs9: Support device specific dif bit calculation")
+Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+---
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+---
+ drivers/clk/clk-renesas-pcie.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ik wacht op jullie reacties
-Met vriendelijke groeten
-mevrouw Joanna Liu
+diff --git a/drivers/clk/clk-renesas-pcie.c b/drivers/clk/clk-renesas-pcie.c
+index 380245f635d6..6606aba253c5 100644
+--- a/drivers/clk/clk-renesas-pcie.c
++++ b/drivers/clk/clk-renesas-pcie.c
+@@ -163,7 +163,7 @@ static u8 rs9_calc_dif(const struct rs9_driver_data *rs9, int idx)
+ 	enum rs9_model model = rs9->chip_info->model;
+ 
+ 	if (model == RENESAS_9FGV0241)
+-		return BIT(idx) + 1;
++		return BIT(idx + 1);
+ 	else if (model == RENESAS_9FGV0441)
+ 		return BIT(idx);
+ 
+-- 
+2.42.0
 
