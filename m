@@ -2,172 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3447E1C14
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Nov 2023 09:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4677F7E1CA2
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Nov 2023 09:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjKFI0a (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 6 Nov 2023 03:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
+        id S231202AbjKFIuh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 6 Nov 2023 03:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjKFI00 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Nov 2023 03:26:26 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1ABD7A
-        for <linux-clk@vger.kernel.org>; Mon,  6 Nov 2023 00:26:16 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40806e40fccso26379105e9.2
-        for <linux-clk@vger.kernel.org>; Mon, 06 Nov 2023 00:26:16 -0800 (PST)
+        with ESMTP id S230475AbjKFIuh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Nov 2023 03:50:37 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBDCD8
+        for <linux-clk@vger.kernel.org>; Mon,  6 Nov 2023 00:50:32 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-507c5249d55so5441701e87.3
+        for <linux-clk@vger.kernel.org>; Mon, 06 Nov 2023 00:50:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699259174; x=1699863974; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aEO0VgapYU9MBqkEEEkYjC/CxFTpzsKKAvZz9dJ83Vg=;
-        b=oaoq7EtY/e/EIzHn6hNxkW4AEDZSwasWlYlH7UwUWX1Ak9VF0UyFJ4Tq+kgI0UbAg6
-         q3l0X9FtFz/vrEz3sk1wEUqgz/6KFboeo6tmukQ/gIcjuMI3+fksFdr7BlFXCoR7lRrX
-         AF5JK1xK93oD1UpDN3WDGeJpgruPUFC6XuzysC5ynp58G5FUUS9EQ0iI2f8/SZ9tbvo3
-         SmUi/vVUtsRvO8p7ZH+dO1fxV7KUDw7jlFuUdwTu0VH4tR+cP/4cgu4gxQHaMI1QnlhH
-         moZB/Nn+d/T/4lPELmvMle1PibQlZvT/1RbzEIwNYeEEmxw+4UnzvcbzvE/P/qtuy6h1
-         gpNg==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1699260631; x=1699865431; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IvsRfYdBOBRI+2J2urSL+yk+k1mRSeviqg4tt/tKPu4=;
+        b=hO1dO19A4v401DrpNXgLuzSL0P+oB2qcFAqt1L7t9KGJU04IIN5uXcRdXaxpDeko2O
+         mP+hBlE1K1UttF9J2OVmx4oKR4Pmz090OmI/9xOMungGXdWRz35vtI98Dp0iD+PCHlyC
+         ydBpKYlg2lFfthsSxZVSrolqEmHBnYC0j/YT9mIoa0u6T+xlWHEnGxFa2fUgZ2SxJZgw
+         HZq+NcuXuY8z9ZSqVRGEV/ir3PJenUnXKLfCNPabMlqJ/gu87H67aMl51zJJDwIN1Xm0
+         5erkkjT8n2idogH8zfCSn0t85Q/Rwrx+xtSxsZZjMr7Mv3rzsFpQZwdS+ulPua/pe384
+         m/Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699259174; x=1699863974;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aEO0VgapYU9MBqkEEEkYjC/CxFTpzsKKAvZz9dJ83Vg=;
-        b=iULvFt1kedug5ZXimwF4muwugldLhmZLXkoCr1unbrl0i770dx78NOUnmG+X6+7Wa3
-         1bc+JrjAe0lU5C8OMOHjdMKUQZ4gn8P1L386DKZ55AdQR9o6kSjsULzwcZKZvm2S3lkJ
-         H975gThubEmoE96bG+/DCRGAEcSoyxw1QQu1OtWZ7Y2kITbiAKINnKoWsxb/+9fOahus
-         DB6mV7+2LsmBFmREFeVWsdJFNzunqZxkc/Td2ZLMZbFVExVAT+K/wyUmHXzx4qN/D9gM
-         ygwvZUXVyJhT+ivuzCAp59xKDnXhSyqjVYo+PHBIsAkCCXqeBDM7js0CwWKLzKp26NUw
-         35Tg==
-X-Gm-Message-State: AOJu0YztcDcr3+6IMIUsgHGr/DBP6LipNbRSdkARRvD4QPR6Jv9NwuU1
-        uWlg5HYML0HpJgRVEk+gYL98pw==
-X-Google-Smtp-Source: AGHT+IHSMZqsacgVc58+X7fI0lyr5nPFH9OrtO4Vu1oMzTetS+9UttS4rMQ53ODhA8xZNJO+Onu9DA==
-X-Received: by 2002:a05:600c:1c84:b0:401:b504:b6a0 with SMTP id k4-20020a05600c1c8400b00401b504b6a0mr22188872wms.3.1699259174460;
-        Mon, 06 Nov 2023 00:26:14 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id az25-20020a05600c601900b004095874f6d3sm11610663wmb.28.2023.11.06.00.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 00:26:14 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 06 Nov 2023 09:26:04 +0100
-Subject: [PATCH v3 11/11] clk: qcom: rpmh: add clocks for SM8650
+        d=1e100.net; s=20230601; t=1699260631; x=1699865431;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IvsRfYdBOBRI+2J2urSL+yk+k1mRSeviqg4tt/tKPu4=;
+        b=HmprEF5IBxE3RuOwarai1C8eolxynzyqQUmSxBcY5uFKCU4rKQ8DMD4ngXwcoQq8hZ
+         MKADvwzj6ss8BzJ4tHN2j0YsMo+khD+UiYSl9bmuYhuDWUn/wYFDAqALXrCUwLgNt4s8
+         eNPXQuEJzkOjpJE6le96wBiv2YqYhBKtJuY8hXWo0j/9/MhqpcyDfQ1POYBtU3Zgjgiw
+         UDWGpMYF1Qc1XUwAAYf0+mCFw/KzUR0RLMMe4zpxoHsmbUdBwfpog16x8yKrG6NKRZDf
+         ys2Sg14PH2TKxjdLZTf9nkdPi2MMba7w4iLC5MUE2jarm8dwr/aCghJTwP6zMxLYRv2t
+         xwcQ==
+X-Gm-Message-State: AOJu0YwenJ6/R+jP3CXUZ9Ado9F6zAeQ0fVo0RAtTU1ImhEJ12iwQnR3
+        vaY3QgVnTLM+8VGxP2P7z+nuWg==
+X-Google-Smtp-Source: AGHT+IFtG/faO87cJotALJcL+BJ0/q9GgEd4szJRDFIiNksFhPa1PUp3VBl0axOB+aGZEJFN0JWOIQ==
+X-Received: by 2002:ac2:5626:0:b0:507:9ff6:75b6 with SMTP id b6-20020ac25626000000b005079ff675b6mr19451969lff.50.1699260630822;
+        Mon, 06 Nov 2023 00:50:30 -0800 (PST)
+Received: from [192.168.1.172] ([93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id l7-20020a05600c1d0700b00405bbfd5d16sm11521401wms.7.2023.11.06.00.50.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Nov 2023 00:50:30 -0800 (PST)
+Message-ID: <34b7503e-5d1e-4fd2-a909-d7f50e45c8e6@baylibre.com>
+Date:   Mon, 6 Nov 2023 09:50:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/3] clk: mediatek: mt8188-topckgen: Refactor parents
+ for top_dp/edp muxes
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, sboyd@kernel.org
+Cc:     mturquette@baylibre.com, matthias.bgg@gmail.com,
+        wenst@chromium.org, msp@baylibre.com, yangyingliang@huawei.com,
+        u.kleine-koenig@pengutronix.de, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20231103102533.69280-1-angelogioacchino.delregno@collabora.com>
+ <20231103102533.69280-4-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20231103102533.69280-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231106-topic-sm8650-upstream-clocks-v3-11-761a6fadb4c0@linaro.org>
-References: <20231106-topic-sm8650-upstream-clocks-v3-0-761a6fadb4c0@linaro.org>
-In-Reply-To: <20231106-topic-sm8650-upstream-clocks-v3-0-761a6fadb4c0@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2813;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=6WZ59azmOVIohCJtoBUj6hfLckpCnFGk4WmVuUtV9B4=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBlSKMZGsOuCicXaPOYykkThJi9ga22b/FORpgZuhnh
- UHTpJWKJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZUijGQAKCRB33NvayMhJ0d45D/
- wJXJSMV80ToTQ9syAVxmngD1JOS9kYaHc7IcwEyONP0QdcN7pLC5jr6LtKWXb6UyiinZwZJj/jm6aR
- +v670AJ/vUgbmI1nSYj82x0zj58nd8CY0kmP2rqztD0TqcBnrs8tXggefVEW5sMiQG4w0NjJ5gyBAl
- MZjVyO2FL3hgv/w7CmDCbPtBf2V2a46WOlNSwkF6jdDWbtSV7JftZGggxPHHSVKpXdiYSahNtCBl0v
- q5GIuzbAFQmP5f7tdWY73eEzbTZL+sffgMetbFXLXaNVaXcPkb6oJ7+XMpKArYjwaPgOeKKK0PoI8c
- iiMBlNpfNha5lBlLvv9eHnSMf2mVTCHaCy3mjY3jSHY0WO0/q246HvvwV0Q5c28E28twphqrhdV0mU
- Xpc0a7A1qk0KLKGwK/WPHbwDIVB+um9rM4wxAEW07MVs1E+P4crXfySMJ5mCtpGqiPFz6aA5ozoio0
- N2bdQIPy1jpAtDXl+VglurRL9Yd51vjPo8viUq0Tve5iP80u879aCrTv8ca7ioXi4ouRTLc+Z1bxpm
- WtngFJpo9AuebmjO6cdFOSrWjwhYjdDwKRuN1roJNRaC23oNtkbUPNX7ipmgfOH8TxLqKQtAV5Q2/3
- lzx2elo7mxlpy8Bn5Ungeqb68l3BomONLl8No9PpU3nJpTlk/SzM5t9s58hA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add RPMH Clocks for the SM8650 platform.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+On 03/11/2023 11:25, AngeloGioacchino Del Regno wrote:
+> The top_dp and top_edp muxes can be both parented to either TVDPLL1
+> or TVDPLL2, two identically specced PLLs for the specific purpose of
+> giving out pixel clock: this becomes a problem when the MediaTek
+> DisplayPort Interface (DPI) driver tries to set the pixel clock rate.
+> 
+> In the usecase of two simultaneous outputs (using two controllers),
+> it was seen that one of the displays would sometimes display garbled
+> output (if any at all) and this was because:
+>   - top_edp was set to TVDPLL1, outputting X GHz
+>   - top_dp was set to TVDPLL2, outputting Y GHz
+>     - mtk_dpi calls clk_set_rate(top_edp, Z GHz)
+>   - top_dp is switched to TVDPLL1
+>   - TVDPLL1 changes its rate, top_edp outputs the wrong rate.
+>   - eDP display is garbled
+> 
+> To solve this issue, remove all TVDPLL1 parents from `top_dp` and
+> all TVDPLL2 parents from `top_edp`, plus, necessarily switch both
+> clocks to use the new MUX_GATE_CLR_SET_UPD_INDEXED() macro to be
+> able to use the right bit index for the new parents list.
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 5d853fd43294..bb09170600ec 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -372,6 +372,8 @@ DEFINE_CLK_RPMH_VRM(clk3, _a1, "clka3", 1);
- DEFINE_CLK_RPMH_VRM(clk4, _a1, "clka4", 1);
- DEFINE_CLK_RPMH_VRM(clk5, _a1, "clka5", 1);
- 
-+DEFINE_CLK_RPMH_VRM(clk4, _a2, "clka4", 2);
-+DEFINE_CLK_RPMH_VRM(clk5, _a2, "clka5", 2);
- DEFINE_CLK_RPMH_VRM(clk6, _a2, "clka6", 2);
- DEFINE_CLK_RPMH_VRM(clk7, _a2, "clka7", 2);
- DEFINE_CLK_RPMH_VRM(clk8, _a2, "clka8", 2);
-@@ -630,6 +632,37 @@ static const struct clk_rpmh_desc clk_rpmh_sm8550 = {
- 	.num_clks = ARRAY_SIZE(sm8550_rpmh_clocks),
- };
- 
-+static struct clk_hw *sm8650_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div2.hw,
-+	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div2_ao.hw,
-+	[RPMH_LN_BB_CLK1]	= &clk_rpmh_clk6_a2.hw,
-+	[RPMH_LN_BB_CLK1_A]	= &clk_rpmh_clk6_a2_ao.hw,
-+	[RPMH_LN_BB_CLK2]	= &clk_rpmh_clk7_a2.hw,
-+	[RPMH_LN_BB_CLK2_A]	= &clk_rpmh_clk7_a2_ao.hw,
-+	[RPMH_LN_BB_CLK3]	= &clk_rpmh_clk8_a2.hw,
-+	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_clk8_a2_ao.hw,
-+	[RPMH_RF_CLK1]		= &clk_rpmh_clk1_a1.hw,
-+	[RPMH_RF_CLK1_A]	= &clk_rpmh_clk1_a1_ao.hw,
-+	[RPMH_RF_CLK2]		= &clk_rpmh_clk2_a1.hw,
-+	[RPMH_RF_CLK2_A]	= &clk_rpmh_clk2_a1_ao.hw,
-+	/*
-+	 * The clka3 RPMh resource is missing in cmd-db
-+	 * for current platforms, while the clka3 exists
-+	 * on the PMK8550, the clock is unconnected and
-+	 * unused.
-+	 */
-+	[RPMH_RF_CLK4]		= &clk_rpmh_clk4_a2.hw,
-+	[RPMH_RF_CLK4_A]	= &clk_rpmh_clk4_a2_ao.hw,
-+	[RPMH_RF_CLK5]		= &clk_rpmh_clk5_a2.hw,
-+	[RPMH_RF_CLK5_A]	= &clk_rpmh_clk5_a2_ao.hw,
-+	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
-+};
-+
-+static const struct clk_rpmh_desc clk_rpmh_sm8650 = {
-+	.clks = sm8650_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sm8650_rpmh_clocks),
-+};
-+
- static struct clk_hw *sc7280_rpmh_clocks[] = {
- 	[RPMH_CXO_CLK]      = &clk_rpmh_bi_tcxo_div4.hw,
- 	[RPMH_CXO_CLK_A]    = &clk_rpmh_bi_tcxo_div4_ao.hw,
-@@ -837,6 +870,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
- 	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
- 	{ .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
-+	{ .compatible = "qcom,sm8650-rpmh-clk", .data = &clk_rpmh_sm8650},
- 	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
- 	{ }
- };
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
 -- 
-2.34.1
-
+Regards,
+Alexandre
