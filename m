@@ -2,124 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17AC7E1E4E
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Nov 2023 11:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B100E7E1F03
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Nov 2023 11:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjKFKbR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 6 Nov 2023 05:31:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S231414AbjKFK64 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 6 Nov 2023 05:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjKFKbO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Nov 2023 05:31:14 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74634DB;
-        Mon,  6 Nov 2023 02:31:10 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A6ARSi6004882;
-        Mon, 6 Nov 2023 10:31:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=twDtchG+/R75fbDoRiyiuTcAio91V8MdtWGBxzqo184=;
- b=D07PgeBVpBolQjmYk0zbY3NYekOmrizGKvAx5s7Ldj+PocOQ7dJYYM+/cA5hgBJoqagV
- a9CMCfXVsxJYVqXL0F2xAOYTPUSyRWGDyTN9MUIGeTGMqP1PppuO0gLXLUQ6FSBJ/a7v
- GeA2m9QpCSs9Em7cvmutUWspraBWJ2TaIl71jKRBQoE26BbwbOfW0pdWKw46umPpwJsS
- 8Py57JqYxijKSzs3Z+QYiCNZsNqq4JP7JVqhD8BkXKN2E9Pc9U/D5m361mxa47IiBkGb
- zCnbRWQwvfW0O+tndWuHs7XtpEYdRuIk2IqiIeNFWgcleiPpJpvtvZ3fAqTj2/ggzCH8 ZQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u5f523pnn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Nov 2023 10:31:07 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A6AV63n029432
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Nov 2023 10:31:06 GMT
-Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Mon, 6 Nov 2023 02:31:01 -0800
-From:   Imran Shaik <quic_imrashai@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S229799AbjKFK6w (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Nov 2023 05:58:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB8DB0;
+        Mon,  6 Nov 2023 02:58:50 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD3EC433C7;
+        Mon,  6 Nov 2023 10:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699268329;
+        bh=Sg8f81K8kk3/SHGG8dWL3FhrCJtkIiWJ0jEsgKtTGhg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Th/nT6VeS2zk1OlULtw+APVIYXcTssnx5cdpxe9RWD0rBicD+1gbBEBPHnoIJ2JxS
+         y0BaJK13gBKtKqEq76LNJbcJooPSje3Rwa686by63MpTCvKZ9nW0vsP+ImT+OBHxlT
+         /nq79xJlOCrCMBfTp/K2hw05nNLWY9683dIA1GR968Irjlhm1oNjc/Q7Rh5/ujtfpE
+         EJyXp/JtyEqTP9GYp16IRj+3RmdFZfOV5og+MqYW5QDIk7bLhEYHgjdSpFJKPghEE1
+         8DyuRWRhuQF5tpNI71knoBGV9foel4lRcP/XoizdI/dUMengOwxo81jAxXZMKfiSbY
+         cDmyD6XWbes/Q==
+Date:   Mon, 6 Nov 2023 10:58:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Taniya Das <quic_tdas@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
-Subject: [PATCH V3 4/4] arm64: dts: qcom: qdu1000: Add ECPRI clock controller
-Date:   Mon, 6 Nov 2023 16:00:27 +0530
-Message-ID: <20231106103027.3988871-5-quic_imrashai@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231106103027.3988871-1-quic_imrashai@quicinc.com>
-References: <20231106103027.3988871-1-quic_imrashai@quicinc.com>
+        Tony Lindgren <tony@atomide.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Leo Yan <leoy@marvell.com>,
+        Zhangfei Gao <zhangfei.gao@marvell.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Karel Balej <balejk@matfyz.cz>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v7 06/10] ASoC: pxa: Suppress SSPA on ARM64
+Message-ID: <ZUjG5tUrBvm6PDvB@finisterre.sirena.org.uk>
+References: <20231102152033.5511-1-duje.mihanovic@skole.hr>
+ <dc7aaff0-f767-494e-9a3a-40fcacc1674e@sirena.org.uk>
+ <3b4ac48b-e29d-415f-89f1-6d354f18c4a4@arm.com>
+ <4855402.GXAFRqVoOG@radijator>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: y_Pm4sEtqHfa9hXkX1NrQmpPSb5xYcp9
-X-Proofpoint-GUID: y_Pm4sEtqHfa9hXkX1NrQmpPSb5xYcp9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-06_08,2023-11-02_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- priorityscore=1501 bulkscore=0 mlxlogscore=803 phishscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 spamscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310240000 definitions=main-2311060087
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cDAfE28G8f8xdnBg"
+Content-Disposition: inline
+In-Reply-To: <4855402.GXAFRqVoOG@radijator>
+X-Cookie: Save energy:  Drive a smaller shell.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add device node for ECPRI clock controller on qcom QDU1000
-and QRU1000 SoCs.
 
-Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qdu1000.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+--cDAfE28G8f8xdnBg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-index 1c0e5d271e91..1552b5c119bb 100644
---- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-@@ -381,6 +381,20 @@ gcc: clock-controller@80000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		ecpricc: clock-controller@280000 {
-+			compatible = "qcom,qdu1000-ecpricc";
-+			reg = <0x0 0x00280000 0x0 0x31c00>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_ECPRI_CC_GPLL0_CLK_SRC>,
-+				 <&gcc GCC_ECPRI_CC_GPLL1_EVEN_CLK_SRC>,
-+				 <&gcc GCC_ECPRI_CC_GPLL2_EVEN_CLK_SRC>,
-+				 <&gcc GCC_ECPRI_CC_GPLL3_CLK_SRC>,
-+				 <&gcc GCC_ECPRI_CC_GPLL4_CLK_SRC>,
-+				 <&gcc GCC_ECPRI_CC_GPLL5_EVEN_CLK_SRC>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
-+
- 		gpi_dma0: dma-controller@900000  {
- 			compatible = "qcom,qdu1000-gpi-dma", "qcom,sm6350-gpi-dma";
- 			reg = <0x0 0x900000 0x0 0x60000>;
--- 
-2.25.1
+On Fri, Nov 03, 2023 at 05:58:05PM +0100, Duje Mihanovi=C4=87 wrote:
 
+> I just looked at it again and it looks like no code in sound/soc/pxa/* or=
+=20
+> sound/arm/pxa* depends on AACI in any way. Therefore, I believe that to f=
+ix=20
+> this correctly, I would have to remove "select SND_ARM" from sound/soc/px=
+a/
+> Kconfig and optionally move the PXA2xx code out of sound/arm/ and into so=
+und/
+> soc/pxa/. Is this correct? If so, I'd also split that fix into a separate=
+=20
+> series.
+
+There's the pxa-ac97 driver to consider...
+
+--cDAfE28G8f8xdnBg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVIxuUACgkQJNaLcl1U
+h9AeGAf/c2+d+tcgxFoSAkZXFPkCaz/eMgb8h+BgUpxjiuIheHzsxvbKE0zqEpob
+LLb77Y8RJuFjRED+1HDwewAzExBafqDv6jOitYbrJDCL+ERlb72HhaWK7jrSvo9y
+OjupBMTVvmLY0W64K7Vb2NM0T2/OIxrKApBbEMUxxpEagmmM1I09erf7m1Gi0Sfl
+31oZwOnmH810ZaG0mtQuZijawmCMSuEnpl0vjhrQe0D8mSieZRdlT8IdpMVN7sm+
+IZ6qvIh644bG7uf1E9a0QV6eM9ziLMDdId1h4W3hCTssoFesy9wWw6dV2mZiKrat
+/yjpAz05qMaAFLHi45RxQYjqwdAKQw==
+=jjeN
+-----END PGP SIGNATURE-----
+
+--cDAfE28G8f8xdnBg--
