@@ -1,48 +1,48 @@
-Return-Path: <linux-clk+bounces-72-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-75-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 617B87E6943
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 12:11:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 355477E694A
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 12:11:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8E3C281085
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 11:11:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5813D1C20A82
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 11:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86630199A6;
-	Thu,  9 Nov 2023 11:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E4619BB6;
+	Thu,  9 Nov 2023 11:11:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="UUssYuZ7"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Et+kS7cM"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EB4199A2;
-	Thu,  9 Nov 2023 11:11:36 +0000 (UTC)
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434A1272C;
-	Thu,  9 Nov 2023 03:11:35 -0800 (PST)
-X-UUID: bc7357e67ef011eea33bb35ae8d461a2-20231109
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73BC1199B9;
+	Thu,  9 Nov 2023 11:11:41 +0000 (UTC)
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCE92D61;
+	Thu,  9 Nov 2023 03:11:39 -0800 (PST)
+X-UUID: bd923d4a7ef011ee8051498923ad61e6-20231109
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=aZVnc9AgDV6+iECXJWjMTt3cI2AykKcbaOkGhYYgovc=;
-	b=UUssYuZ7OdW0wyoRa5KtaiJW7vCbuOUkzNvRnR06P5zOlmXQSNwBFLGZ3Bmrk2sI2XDLgxHdZ4V4UZlynl5INatRwopXekeeubpd6+J+eUsGA1Y+hdJt4A6UHoc8oXlQuLH1MxV4oTlYyB+cXiG+OY/R/E2FaExOWz7XxvRQg5s=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=38YgUroBcROrgOkebZdSz/tT4DqUofnFmrwkGM5mkFs=;
+	b=Et+kS7cMfjnskR3QcpZpPl0RTqMxlsOQ043dPU/U6tJpHKDjwJF5H6UGXru+dMSw1DE4TC+pi2we6rv5FOy+fDwbFYE1m1nNsaGQNeYccJugsnWc47esoUtpKMNnI9f4TOH4lGaIS8LgA3vOtc8TmFhBULo/yHMjYWbqTr3hXic=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.33,REQID:7a730073-38d0-47c9-a21c-d29f6fba4c6a,IP:0,U
+X-CID-O-INFO: VERSION:1.1.33,REQID:cf029bb7-e18c-4330-afcb-9b6a8af23553,IP:0,U
 	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
 	:release,TS:-5
-X-CID-META: VersionHash:364b77b,CLOUDID:33343495-10ce-4e4b-85c2-c9b5229ff92b,B
+X-CID-META: VersionHash:364b77b,CLOUDID:0b7957fc-4a48-46e2-b946-12f04f20af8c,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
 	DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0
 X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: bc7357e67ef011eea33bb35ae8d461a2-20231109
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: bd923d4a7ef011ee8051498923ad61e6-20231109
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
 	(envelope-from <yu-chang.lee@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 691086791; Thu, 09 Nov 2023 19:11:31 +0800
+	with ESMTP id 319929584; Thu, 09 Nov 2023 19:11:33 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -62,10 +62,12 @@ CC: "Nancy . Lin" <nancy.lin@mediatek.com>, Nathan Lu
 	<linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>, yu-chang.lee
 	<yu-chang.lee@mediatek.com>
-Subject: [RESEND 0/3] Migrate MT8188 VPPSYS 0/1 to mtk-mmsys driver
-Date: Thu, 9 Nov 2023 19:11:19 +0800
-Message-ID: <20231109111122.371-1-yu-chang.lee@mediatek.com>
+Subject: [RESEND 1/3] soc: mediatek: mmsys: Add support for MT8188 VPPSYS
+Date: Thu, 9 Nov 2023 19:11:20 +0800
+Message-ID: <20231109111122.371-2-yu-chang.lee@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20231109111122.371-1-yu-chang.lee@mediatek.com>
+References: <20231109111122.371-1-yu-chang.lee@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -74,40 +76,55 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--0.212400-8.000000
-X-TMASE-MatchedRID: exF9zuYVkeR9PhHWTNJFHbU+IyHhkXf1KFFZAe4nyZ5ZLD9SNJ9sEowR
-	9ju5YZeAtogp0YMuOCEMyw6hMrtYUCY0eULsNBXlngIgpj8eDcAZ1CdBJOsoY9mzcdRxL+xwKra
-	uXd3MZDULlJ6umVKSHkcPSpLzSbqBGSXMELWf9jPNQ6M+1naT9PRAKn4+zi3ZtM3RsT5sQM0lhu
-	QRO7Ihs5S8eRTa3jOvy1YU20+cmhxBLAb/FTpmUnQE0HbT5LEft/yYljnuhl10loENhqV3WW8X3
-	5fYYQgc
+X-TM-AS-Result: No-10--7.284600-8.000000
+X-TMASE-MatchedRID: uVuWzlu52Rk9S3IiQd+eNWNW0DAjL5p++OI6XsK3BWHfUZT83lbkEN6M
+	yUV+2+DZ1uNt11toaXuY15VWej9HL49oUcx9VMLgFEUknJ/kEl4YSQiB0ZTudfoLR4+zsDTtc20
+	lvB2foahXrpfaEp592sEs23TMfRYzaUMui/AN0TDdjZ8lzHONkFZca9RSYo/b
 X-TM-AS-User-Approved-Sender: No
 X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--0.212400-8.000000
+X-TMASE-Result: 10--7.284600-8.000000
 X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP: DFEAF532F7F6EAD651F3B0AE86316EBB29B32302E3EB4D4F7B2831A7D8F3AA302000:8
+X-TM-SNTS-SMTP: 75A0303DAED589ED039FAE00D9BFFA553B1B59B0C7983767A66F03E9A441FF662000:8
 X-MTK: N
 
-Hi,
+Add MT8188 VPPSYS0 and VPPSYS1 driver data.
 
-This series is to reflect VPPSYS' dependency on mtk-mmsys driver for
-mediatek MT8188 platform. The MT8188 VPPSYS 0/1 should be probed 
-from the "mtk-mmsys" driver, which then starts its own clock driver
-as the platform driver.
+Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno angelogioacchino.delregno@collabora.com>
+---
+ drivers/soc/mediatek/mtk-mmsys.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Refer to the suggestion in the following patch
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=796808
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=798392
-
-yu-chang.lee (3):
-  soc: mediatek: mmsys: Add support for MT8188 VPPSYS
-  dt-bindings: clock: mediatek: Remove compatible for MT8188 VPPSYS
-  dt-bindings: arm:mediatek: mmsys: Add VPPSYS compatible for MT8188
-
- .../bindings/arm/mediatek/mediatek,mmsys.yaml        |  2 ++
- .../bindings/clock/mediatek,mt8188-clock.yaml        |  2 --
- drivers/soc/mediatek/mtk-mmsys.c                     | 12 ++++++++++++
- 3 files changed, 14 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
+index 88209102ff3b..1e5239cc5445 100644
+--- a/drivers/soc/mediatek/mtk-mmsys.c
++++ b/drivers/soc/mediatek/mtk-mmsys.c
+@@ -89,6 +89,16 @@ static const struct mtk_mmsys_driver_data mt8188_vdosys0_driver_data = {
+ 	.num_routes = ARRAY_SIZE(mmsys_mt8188_routing_table),
+ };
+ 
++static const struct mtk_mmsys_driver_data mt8188_vppsys0_driver_data = {
++	.clk_driver = "clk-mt8188-vpp0",
++	.is_vppsys = true,
++};
++
++static const struct mtk_mmsys_driver_data mt8188_vppsys1_driver_data = {
++	.clk_driver = "clk-mt8188-vpp1",
++	.is_vppsys = true,
++};
++
+ static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data = {
+ 	.clk_driver = "clk-mt8192-mm",
+ 	.routes = mmsys_mt8192_routing_table,
+@@ -429,6 +439,8 @@ static const struct of_device_id of_match_mtk_mmsys[] = {
+ 	{ .compatible = "mediatek,mt8183-mmsys", .data = &mt8183_mmsys_driver_data },
+ 	{ .compatible = "mediatek,mt8186-mmsys", .data = &mt8186_mmsys_driver_data },
+ 	{ .compatible = "mediatek,mt8188-vdosys0", .data = &mt8188_vdosys0_driver_data },
++	{ .compatible = "mediatek,mt8188-vppsys0", .data = &mt8188_vppsys0_driver_data },
++	{ .compatible = "mediatek,mt8188-vppsys1", .data = &mt8188_vppsys1_driver_data },
+ 	{ .compatible = "mediatek,mt8192-mmsys", .data = &mt8192_mmsys_driver_data },
+ 	/* "mediatek,mt8195-mmsys" compatible is deprecated */
+ 	{ .compatible = "mediatek,mt8195-mmsys", .data = &mt8195_vdosys0_driver_data },
 -- 
 2.18.0
 
