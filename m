@@ -1,52 +1,52 @@
-Return-Path: <linux-clk+bounces-74-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-73-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCEF67E6945
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 12:11:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F62B7E6948
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 12:11:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83B831F222C2
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 11:11:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C310B20D73
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Nov 2023 11:11:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D826199CA;
-	Thu,  9 Nov 2023 11:11:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40DE199BD;
+	Thu,  9 Nov 2023 11:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="pG+8zthk"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="orwuOxKJ"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAA2199B4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62037199B2;
 	Thu,  9 Nov 2023 11:11:40 +0000 (UTC)
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05134272C;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0503D11D;
 	Thu,  9 Nov 2023 03:11:38 -0800 (PST)
-X-UUID: bc3f2ba67ef011ee8051498923ad61e6-20231109
+X-UUID: bc5bf2ea7ef011ee8051498923ad61e6-20231109
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=r/gVQFGVlacPBsIQMNEYYQEGxfnioZXeupCs3lgN+3o=;
-	b=pG+8zthk/+TpggngZC299ExBcyK4yHr3arXvbUMOcSi8fUVWlIuDL8O/WTlN6jiQHdNzJHMZ8aehBsWVuv17DZaVOgXW1jI5qpw8UINs17F9hyu7f5XERbsLKAkabgxo2J1ZjDZaXrDO7o3vZHiTHlDWBZcI+Hajkxjl+mPe+XY=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CrbH5jSvwKEfAicuaeneYJiIQg2KhQyoAfzoj9721xc=;
+	b=orwuOxKJ0Z86lP/wQUkFPkJPVgmayrVjpaOqzVY0zu3waMSxyVvc6zpadbAYDFCrBPfF8Xk+0lt0JVPWhxeZ0wT2WHuUcmtUjDfENT9lROpWyt9PABnfTBS/6DcfbWD3nwY1jte1oNYyXefKO7i0b/jaQkF76WVd8MKEmQqfL5A=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.33,REQID:eea198dd-a890-4121-bbcb-d14aa6c9d1bd,IP:0,U
+X-CID-O-INFO: VERSION:1.1.33,REQID:ae7d1d05-0ce7-4ccd-bdd2-9296a229a37a,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:364b77b,CLOUDID:e87857fc-4a48-46e2-b946-12f04f20af8c,B
+X-CID-META: VersionHash:364b77b,CLOUDID:2e343495-10ce-4e4b-85c2-c9b5229ff92b,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
 	DKR:0,DKP:0,BRR:0,BRE:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: bc3f2ba67ef011ee8051498923ad61e6-20231109
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+X-UUID: bc5bf2ea7ef011ee8051498923ad61e6-20231109
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
 	(envelope-from <yu-chang.lee@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 240022405; Thu, 09 Nov 2023 19:11:31 +0800
+	with ESMTP id 1758212856; Thu, 09 Nov 2023 19:11:31 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 9 Nov 2023 19:11:29 +0800
+ 15.2.1118.26; Thu, 9 Nov 2023 19:11:30 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
  15.2.1118.26 via Frontend Transport; Thu, 9 Nov 2023 19:11:29 +0800
@@ -62,9 +62,9 @@ CC: "Nancy . Lin" <nancy.lin@mediatek.com>, Nathan Lu
 	<linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-mediatek@lists.infradead.org>, yu-chang.lee
 	<yu-chang.lee@mediatek.com>
-Subject: [RESEND 2/3] dt-bindings: clock: mediatek: Remove compatible for MT8188 VPPSYS
-Date: Thu, 9 Nov 2023 19:11:21 +0800
-Message-ID: <20231109111122.371-3-yu-chang.lee@mediatek.com>
+Subject: [RESEND 3/3] dt-bindings: arm:mediatek: mmsys: Add VPPSYS compatible for MT8188
+Date: Thu, 9 Nov 2023 19:11:22 +0800
+Message-ID: <20231109111122.371-4-yu-chang.lee@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20231109111122.371-1-yu-chang.lee@mediatek.com>
 References: <20231109111122.371-1-yu-chang.lee@mediatek.com>
@@ -77,26 +77,26 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Remove VPPSYS0, VPPSYS1 compatible on Mediatek MT8188.
+Add VPPSYS0, VPPSYS1 compatible on Mediatek MT8188.
 
 Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
 ---
- .../devicetree/bindings/clock/mediatek,mt8188-clock.yaml        | 2 --
- 1 file changed, 2 deletions(-)
+ .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml        | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml
-index d7214d97b2ba..860570320545 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt8188-clock.yaml
-@@ -43,8 +43,6 @@ properties:
-       - mediatek,mt8188-vdecsys
-       - mediatek,mt8188-vdecsys-soc
-       - mediatek,mt8188-vencsys
--      - mediatek,mt8188-vppsys0
--      - mediatek,mt8188-vppsys1
-       - mediatek,mt8188-wpesys
-       - mediatek,mt8188-wpesys-vpp0
- 
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+index 536f5a5ebd24..50324248b965 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
+@@ -32,6 +32,8 @@ properties:
+               - mediatek,mt8183-mmsys
+               - mediatek,mt8186-mmsys
+               - mediatek,mt8188-vdosys0
++              - mediatek,mt8188-vppsys0
++              - mediatek,mt8188-vppsys1
+               - mediatek,mt8192-mmsys
+               - mediatek,mt8195-vdosys1
+               - mediatek,mt8195-vppsys0
 -- 
 2.18.0
 
