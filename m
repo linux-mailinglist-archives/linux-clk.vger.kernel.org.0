@@ -1,135 +1,162 @@
-Return-Path: <linux-clk+bounces-92-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-94-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 232D47E76DF
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 02:53:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5913C7E76FC
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 03:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 545BD1C20A44
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 01:53:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9D4AB20FAD
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 02:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65494EA4;
-	Fri, 10 Nov 2023 01:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6170C10F2;
+	Fri, 10 Nov 2023 02:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="olpycT7m"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Io/4z+16"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42DDA47
-	for <linux-clk@vger.kernel.org>; Fri, 10 Nov 2023 01:53:41 +0000 (UTC)
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB9B44BE
-	for <linux-clk@vger.kernel.org>; Thu,  9 Nov 2023 17:53:41 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-280200949c3so1376423a91.0
-        for <linux-clk@vger.kernel.org>; Thu, 09 Nov 2023 17:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699581220; x=1700186020; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qnaT0Z5B52WFIm5oJG7or3ermouAvuswFcl8mKgJ3CY=;
-        b=olpycT7mQN47h0ShOHE/rUMv8r+EnZWGZL0dS1L3fOc6dLknBhWFfcJPjHQOZoAj7V
-         GENzIDKqu6Wl5G7KoFrfBY7HkL5g4vkbPQFH68aVlX73+ckmXv3g4ldirNBNAytTWeWt
-         cLpCyjngvIHIzq8eWNl1SlnvdWDDiqQ9qN4pqFG5j64An7acOjtOQBTs7107FoD5Y5+l
-         9I68yaWqS/IyfHYoPHHf8KDW6Eaj5f2SEXD43Xjaddzx/fZ9bq9YRzKXxfO3QdO61X1W
-         hQVJcNRaULHutGejeWcj7BQx1rQQhnh2m74U/zHrysA3CyvSXtGnp5Udx6mgtDvVvX0e
-         wMDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699581220; x=1700186020;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qnaT0Z5B52WFIm5oJG7or3ermouAvuswFcl8mKgJ3CY=;
-        b=FRJvQUSuYWoqGcTaiqD7oXHdgV2b7LBxXEMK9cBok6iscd6RtvhhIacHVHhBE8HdzE
-         rk/gm1hS/gkGqoP5Wui4wWzsDULqni1uRL4aD3FYYisq7ENQKnNFdq1srn7uMTeX/hM0
-         Ln2ZVmYJlkfrnFpl5sEAfqlItKrqaBQEJare6vP35VcpI0N1amoanRHKfS698htuUat3
-         ShxHNhoziIX0u+kaYrcWBEYAw8Cf93JZK8TUL2Z4ociLff1OzUfdgOwOjnIgwJeHhN9A
-         Y/E6IVG+646S5Ui3PEDTPUKZFJjDnb+KxI72+hoTcHX+6PL/kkT5qdeZnRqHnv38RImu
-         7Mmw==
-X-Gm-Message-State: AOJu0Yz3i2A85u2eMJOB3P4/8QP8F+jOG4ixP30PAFSaC3DicaceHdjS
-	KCiPA1KXmopfL9BivnIRzfgzVjKvn7siFWYteGw7tw==
-X-Google-Smtp-Source: AGHT+IF2CvB03hHPzpzbnXtgNai0HmCRBWMpJ5mKjo/l3DAboCyMcV2DzhG5H1Z8kNHGm3PqfcnZOixlZXvdL1XjSbI=
-X-Received: by 2002:a17:90b:1a91:b0:27d:114e:d4a3 with SMTP id
- ng17-20020a17090b1a9100b0027d114ed4a3mr3203127pjb.14.1699581220612; Thu, 09
- Nov 2023 17:53:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC37C1365;
+	Fri, 10 Nov 2023 02:04:29 +0000 (UTC)
+Received: from mail-m12810.netease.com (mail-m12810.netease.com [103.209.128.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649DB35BB;
+	Thu,  9 Nov 2023 18:04:28 -0800 (PST)
+DKIM-Signature: a=rsa-sha256;
+	b=Io/4z+16nR3bnukEf7bedLDrK5HLBAVIkoX8Y5HSm5Tx/326/puCiIaAtKFOio3CQ1/sOUamDP/thc6dd5XNlWdm7X2WUYVmTG1aO9wXOJbRNFWvXUXFrKII4JiAMg6Q4Q1N0THvE323ncyp/EhRJG23lMCLQH/pXJLPCTP0QVE=;
+	c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=+Cl5UViqOmCSXcarAvoc84bGt8RHhzr6CMWCNBI2ATc=;
+	h=date:mime-version:subject:message-id:from;
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by mail-m11877.qiye.163.com (Hmail) with ESMTPA id E4E4E4001FC;
+	Fri, 10 Nov 2023 10:04:02 +0800 (CST)
+From: Elaine Zhang <zhangqing@rock-chips.com>
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	kever.yang@rock-chips.com,
+	zhangqing@rock-chips.com,
+	heiko@sntech.de,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	huangtao@rock-chips.com,
+	andy.yan@rock-chips.com
+Subject: [PATCH v6 0/3] rockchip: add GATE_LINK
+Date: Fri, 10 Nov 2023 10:03:55 +0800
+Message-Id: <20231110020358.12840-1-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRpDQlZLT09DHUlIS0seSh1VEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSk1PSU5JVUpLS1VKQl
+	kG
+X-HM-Tid: 0a8bb6f8d7452eb3kusne4e4e4001fc
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ODY6MRw*Fzw5Ew0MEBEMPTIp
+	OhFPCi1VSlVKTUJCTkNKQ09IQ0NKVTMWGhIXVQETGhUcChIVHDsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU1JQkM3Bg++
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231109190925.2066-1-semen.protsenko@linaro.org> <3024abdf-e7e1-4063-a0ba-ed415317c200@infradead.org>
-In-Reply-To: <3024abdf-e7e1-4063-a0ba-ed415317c200@infradead.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Thu, 9 Nov 2023 19:53:28 -0600
-Message-ID: <CAPLW+4nKG3D2WmQxWJ=v3_J8y6vz26gLWC2NSSfu5gukgr2RGw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] clk: samsung: Fix kernel-doc comments
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Tomasz Figa <tomasz.figa@gmail.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 9, 2023 at 4:42=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
->
->
->
-> On 11/9/23 11:09, Sam Protsenko wrote:
-> > Fix some issues found in kernel-doc comments in Samsung CCF framework.
-> > It makes scripts/kernel-doc happy, which can be checked with:
-> >
-> >     $ find drivers/clk/samsung/ -name '*.[ch]' -exec \
-> >       scripts/kernel-doc -v -none {} \;
-> >
-> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> > Fixes: ddeac8d968d4 ("clk: samsung: add infrastructure to register cpu =
-clocks")
-> > Fixes: 721c42a351b1 ("clk: samsung: add common clock framework helper f=
-unctions for Samsung platforms")
-> > Fixes: 3ff6e0d8d64d ("clk: samsung: Add support to register rate_table =
-for samsung plls")
-> > ---
-> >  drivers/clk/samsung/clk-cpu.h | 2 +-
-> >  drivers/clk/samsung/clk.h     | 9 ++++++---
-> >  2 files changed, 7 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/clk/samsung/clk-cpu.h b/drivers/clk/samsung/clk-cp=
-u.h
-> > index fc9f67a3b22e..103f64193e42 100644
-> > --- a/drivers/clk/samsung/clk-cpu.h
-> > +++ b/drivers/clk/samsung/clk-cpu.h
-> > @@ -11,7 +11,7 @@
-> >  #include "clk.h"
-> >
-> >  /**
-> > - * struct exynos_cpuclk_data: config data to setup cpu clocks.
-> > + * struct exynos_cpuclk_cfg_data: config data to setup cpu clocks.
->
-> Hm, OK, the ':' separator works. '-' is the documented separator here,
-> but it's not worth updating the patch for that.
->
+Recent Rockchip SoCs have a new hardware block called Native Interface
+Unit (NIU), which gates clocks to devices behind them. These effectively
+need two parent clocks.
+Use GATE_LINK to handle this.
 
-Thanks for reviewing, Randy! As you probably already noticed, I
-updated ':' bits in patch #2. Just wanted to keep this one as minimal
-as possible.
+change in v6:
+Droped the [PATCH v5 3/4]
 
-> >   * @prate: frequency of the primary parent clock (in KHz).
-> >   * @div0: value to be programmed in the div_cpu0 register.
-> >   * @div1: value to be programmed in the div_cpu1 register.
->
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
->
-> thanks.
->
-> --
-> ~Randy
+change in v5:
+[PATCH v5 1/4]: No change
+[PATCH v5 2/4]: Fix the:
+Oct 20 18:25:04 rk3588-evb1 kernel: clk: Disabling unused clocks
+Oct 20 18:25:04 rk3588-evb1 kernel: ------------[ cut here ]------------
+Oct 20 18:25:04 rk3588-evb1 kernel: hclk_rkvenc0 already disabled
+Oct 20 18:25:04 rk3588-evb1 kernel: WARNING: CPU: 4 PID: 1 at drivers/clk/clk.c:1090 clk_core_disable+0x1b0/0x1e0
+Oct 20 18:25:04 rk3588-evb1 kernel: Modules linked in:
+Oct 20 18:25:04 rk3588-evb1 kernel: CPU: 4 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc6-00044-g31c3dbd16ca1 #1120
+Oct 20 18:25:04 rk3588-evb1 kernel: Hardware name: Rockchip RK3588 EVB1 V10 Board (DT)
+Oct 20 18:25:04 rk3588-evb1 kernel: pstate: 604000c9 (nZCv daIF +PAN-UAO -TCO -DIT -SSBS BTYPE=--)
+Oct 20 18:25:04 rk3588-evb1 kernel: pc : clk_core_disable+0x1b0/0x1e0
+Oct 20 18:25:04 rk3588-evb1 kernel: lr : clk_core_disable+0x1b0/0x1e0
+Oct 20 18:25:04 rk3588-evb1 kernel: sp : ffff8000846fbbf0
+Oct 20 18:25:04 rk3588-evb1 kernel: x29: ffff8000846fbbf0 x28:ffff8000833a0008 x27: ffff8000830e0130
+Oct 20 18:25:04 rk3588-evb1 kernel: x26: ffff800082ffcff0 x25:ffff8000830b9be8 x24: ffff800083236100
+Oct 20 18:25:04 rk3588-evb1 kernel: x23: 000000000000104a x22:0000000000000000 x21: ffff800084669000
+Oct 20 18:25:04 rk3588-evb1 kernel: x20: ffff00040087ca00 x19:ffff00040087ca00 x18: ffffffffffffffff
+Oct 20 18:25:04 rk3588-evb1 kernel: x17: ffff80008435d050 x16:ffff80008435cfe0 x15: 0720072007200720
+Oct 20 18:25:04 rk3588-evb1 kernel: x14: 0720072007200720 x13:0720072007200720 x12: 0720072007200720
+Oct 20 18:25:04 rk3588-evb1 kernel: x11: 0720072007200720 x10:ffff800084079890 x9 : ffff800080128a78
+Oct 20 18:25:04 rk3588-evb1 kernel: x8 : 00000000ffffefff x7 :ffff800084079890 x6 : 80000000fffff000
+Oct 20 18:25:04 rk3588-evb1 kernel: x5 : 0000000000000000 x4 :0000000000000000 x3 : 0000000000000000
+Oct 20 18:25:04 rk3588-evb1 kernel: x2 : 0000000000000000 x1 :0000000000000000 x0 : ffff000400a08000
+Oct 20 18:25:04 rk3588-evb1 kernel: Call trace:
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_core_disable+0x1b0/0x1e0
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable+0x38/0x60
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_gate_link_disable+0x2c/0x48
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused_subtree+0x104/0x270
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused_subtree+0x34/0x270
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused_subtree+0x34/0x270
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused_subtree+0x34/0x270
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused_subtree+0x34/0x270
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused_subtree+0x34/0x270
+Oct 20 18:25:04 rk3588-evb1 kernel:  clk_disable_unused+0x54/0x148
+Oct 20 18:25:04 rk3588-evb1 kernel:  do_one_initcall+0x48/0x2a8
+Oct 20 18:25:04 rk3588-evb1 kernel:  kernel_init_freeable+0x1ec/0x3d8
+Oct 20 18:25:04 rk3588-evb1 kernel:  kernel_init+0x2c/0x1f8
+Oct 20 18:25:04 rk3588-evb1 kernel:  ret_from_fork+0x10/0x20
+Oct 20 18:25:04 rk3588-evb1 kernel: ---[ end trace 0000000000000000 ]---
+Oct 20 18:25:04 rk3588-evb1 kernel: ------------[ cut here ]------------
+
+[PATCH v5 3/4]: Rollback to pacth v3.
+[PATCH v5 4/4]: Fix the:
+Oct 20 19:22:37 rk3588-evb1 kernel: pclk_vo0grf clk_register field
+Oct 20 19:22:37 rk3588-evb1 kernel: rockchip_clk_register_branches:failed to register clock pclk_vo0grf: -17
+Oct 20 19:22:37 rk3588-evb1 kernel: pclk_vo1grf clk_register field
+Oct 20 19:22:37 rk3588-evb1 kernel: rockchip_clk_register_branches:failed to register clock pclk_vo1grf: -17
+
+change in v4:
+[PATCH v4 1/4]: No change
+[PATCH v4 2/4]: No change
+[PATCH v4 3/4]: dropping CLK_NR_CLKS,reword commit message
+[PATCH v4 4/4]: No change
+
+change in V3:
+[PATCH v3 1/4]: new, export clk_gate_endisable for PATCH2.
+[PATCH v3 2/4]: reuse clk_gate_endisable and clk_gate_is_enabled.
+                add prepare and unprepare ops.
+[PATCH v3 3/4]: No change
+[PATCH v3 4/4]: reword commit message
+
+change in V2:
+[PATCH v2 1/3]: fix reported warnings
+[PATCH v2 2/3]: Bindings submit independent patches
+[PATCH v2 3/3]: fix reported warnings
+
+Elaine Zhang (3):
+  clk: gate: export clk_gate_endisable
+  clk: rockchip: add support for gate link
+  clk: rockchip: rk3588: Adjust the GATE_LINK parameter
+
+ drivers/clk/clk-gate.c               |   3 +-
+ drivers/clk/rockchip/Makefile        |   1 +
+ drivers/clk/rockchip/clk-gate-link.c | 120 +++++++++++++++++++++++++++
+ drivers/clk/rockchip/clk-rk3588.c    | 114 +++++++++++++------------
+ drivers/clk/rockchip/clk.c           |   7 ++
+ drivers/clk/rockchip/clk.h           |  22 +++++
+ include/linux/clk-provider.h         |   1 +
+ 7 files changed, 212 insertions(+), 56 deletions(-)
+ create mode 100644 drivers/clk/rockchip/clk-gate-link.c
+
+-- 
+2.17.1
+
 
