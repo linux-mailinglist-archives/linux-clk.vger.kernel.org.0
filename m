@@ -1,62 +1,61 @@
-Return-Path: <linux-clk+bounces-131-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-133-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84A937E8035
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 19:08:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3D797E813C
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 19:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08880B20B8D
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 18:07:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33C36B20E9C
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Nov 2023 18:27:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA1623A268;
-	Fri, 10 Nov 2023 18:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D65E3A290;
+	Fri, 10 Nov 2023 18:26:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="osp9Dsib"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8WYCXUe"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B192238DE1;
-	Fri, 10 Nov 2023 18:07:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E96C433CC;
-	Fri, 10 Nov 2023 18:07:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1303A28F;
+	Fri, 10 Nov 2023 18:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D368C433B6;
+	Fri, 10 Nov 2023 18:26:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699639673;
-	bh=PwI1HMfc9Px11Tdj+NXcNTpHBZq5il3Ma/LVyONVjRg=;
+	s=k20201202; t=1699640817;
+	bh=//+1dDG48RxoB34op9WnKpQOYu+pia2AtdgY57qSGLg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=osp9DsibB3jQ/+hYBLD4x+ZLmbK8DShmrosXu7V3XLTAGt+CCQppRvCqC0RUuKl76
-	 w+CtqyYCmBaJlUgB84RCCk8Wx6moRO/0qZAqlIHhRi/8FL9v7rgECe/KF9P+Hq9V6N
-	 L63Pdb+dHcgunih2OyOLPMMpqStmliLveJTVKL36gLi8ekdXeZj6q/oJiEQJGfWqYy
-	 mk/oLWpJiPnGAHL1/0xDn9xsP9YSnuCwEGpy37HAur5gk0zsVoUbhkkrcHaehDFwfp
-	 78HdhQk/WLs2vdMbT30r4AxXWnro9q5opjz+Try3Uen9Y785IjeRibT+QpcXkfS2GZ
-	 eNwKVTfKdx82Q==
-Date: Fri, 10 Nov 2023 18:07:43 +0000
+	b=W8WYCXUex+ppIwdfM0LjitjhzijK6TZXEcSwIebEgQ3GOAO7UnVlxsupaq2VoYLC4
+	 Yh4W3b4VHx4k/zUGzSAZjnA12cuftE6C1Q8t6t7obYTYbI++iZG772pN/nRQm4D3IL
+	 5EZcp501bBGcNE3RIEsVmkN/Xt9POxz2bhJlDh7JuGUZAblW+XJv5k+K0Cs7BTrpY3
+	 GOKcUWNvNzlDkGRLbDrJ+7MtbejwoY2RLY+OQkgp8oq3Evh+5V1EUSQ1F51ukSc+xw
+	 qm3FEyYaBPHHWZ7N3Av1SWXOZrHgnLGmOfT2lh+uV/MRKQtqeY4jLvZwlXlLoiqNk9
+	 PfCie3iJEbl/g==
+Date: Fri, 10 Nov 2023 18:26:47 +0000
 From: Conor Dooley <conor@kernel.org>
-To: zhangqing <zhangqing@rock-chips.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Conor Dooley <conor.dooley@microchip.com>, mturquette@baylibre.com,
-	sboyd@kernel.org, kever.yang@rock-chips.com, heiko@sntech.de,
-	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-	huangtao@rock-chips.com, andy.yan@rock-chips.com,
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v5 3/4] dt-bindings: clock: rk3588: export PCLK_VO1GRF
- clk id
-Message-ID: <20231110-dreamt-revival-5b360472febd@roley>
-References: <20231108061822.4871-1-zhangqing@rock-chips.com>
- <20231108061822.4871-4-zhangqing@rock-chips.com>
- <20231108-donation-uncertain-c4d0f560c420@spud>
- <2e520a06-0ff1-76ef-2a72-ab6663738b45@rock-chips.com>
- <20231109-send-pushchair-45b37551102a@wendy>
- <a11c847c-4f95-ea7b-3497-6ada0586c486@rock-chips.com>
- <dee8031f-d739-442c-988c-3df61d92c0d3@linaro.org>
- <f013df81-670e-37c4-c1a7-e1302352ca20@rock-chips.com>
- <f58c8f3f-7b34-47e7-a33a-bddb6106fec7@linaro.org>
- <53059eca-5c55-6dde-6246-40ed9f2dca91@rock-chips.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jagan Teki <jagan@amarulasolutions.com>,
+	Nicolas Belin <nbelin@baylibre.com>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v8 02/12] dt-bindings: soc: amlogic,meson-gx-hhi-sysctrl:
+ add example covering meson-axg-hhi-sysctrl
+Message-ID: <20231110-mascot-dollhouse-83f691dfa1ce@roley>
+References: <20231109-amlogic-v6-4-upstream-dsi-ccf-vim3-v8-0-81e4aeeda193@linaro.org>
+ <20231109-amlogic-v6-4-upstream-dsi-ccf-vim3-v8-2-81e4aeeda193@linaro.org>
+ <20231109-dictator-hedging-94b0dec505b5@spud>
+ <046062f4-e415-4c3f-a05d-81bef9857649@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -64,80 +63,42 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="OExvhfaQ444Ef20I"
+	protocol="application/pgp-signature"; boundary="5w/g2E24/WOxYVxa"
 Content-Disposition: inline
-In-Reply-To: <53059eca-5c55-6dde-6246-40ed9f2dca91@rock-chips.com>
+In-Reply-To: <046062f4-e415-4c3f-a05d-81bef9857649@linaro.org>
 
 
---OExvhfaQ444Ef20I
-Content-Type: text/plain; charset=utf-8
+--5w/g2E24/WOxYVxa
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-> Ok , I'll drop this change in PATCH V6.
-
-> =E5=BC=A0=E6=99=B4
-> =E7=91=9E=E8=8A=AF=E5=BE=AE=E7=94=B5=E5=AD=90=E8=82=A1=E4=BB=BD=E6=9C=89=
-=E9=99=90=E5=85=AC=E5=8F=B8
-> Rockchip Electronics Co.,Ltd
-> =E5=9C=B0=E5=9D=80=EF=BC=9A=E7=A6=8F=E5=BB=BA=E7=9C=81=E7=A6=8F=E5=B7=9E=
-=E5=B8=82=E9=93=9C=E7=9B=98=E8=B7=AF=E8=BD=AF=E4=BB=B6=E5=A4=A7=E9=81=9389=
-=E5=8F=B7=E8=BD=AF=E4=BB=B6=E5=9B=ADA=E5=8C=BA21=E5=8F=B7=E6=A5=BC
-> Add:No.21 Building, A District, No.89 Software Boulevard Fuzhou, Fujian 3=
-50003, P.R.China
-> Tel:+86-0591-83991906-8601
-> =E9=82=AE=E7=BC=96=EF=BC=9A350003
-> E-mail:elaine.zhang@rock-chips.com
-> *************************************************************************=
-***
-> =E4=BF=9D=E5=AF=86=E6=8F=90=E7=A4=BA=EF=BC=9A=E6=9C=AC=E9=82=AE=E4=BB=B6=
-=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E5=90=AB=E6=9C=89=E6=9C=BA=E5=AF=86=E4=
-=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E5=8F=91=E9=80=81=E7=BB=99=E6=9C=AC=E9=82=
-=AE=E4=BB=B6=E6=89=80=E6=8C=87=E7=89=B9=E5=AE=9A=E6=94=B6=E4=BB=B6=E4=BA=BA=
-=E3=80=82=E8=8B=A5=E9=9D=9E=E8=AF=A5=E7=89=B9=E5=AE=9A=E6=94=B6=E4=BB=B6=E4=
-=BA=BA=EF=BC=8C=E8=AF=B7=E5=8B=BF=E5=A4=8D=E5=88=B6=E3=80=81=E4=BD=BF=E7=94=
-=A8=E6=88=96=E6=8A=AB=E9=9C=B2=E6=9C=AC=E9=82=AE=E4=BB=B6=E7=9A=84=E4=BB=BB=
-=E4=BD=95=E5=86=85=E5=AE=B9=E3=80=82=E8=8B=A5=E8=AF=AF=E6=94=B6=E6=9C=AC=E9=
-=82=AE=E4=BB=B6=EF=BC=8C=E8=AF=B7=E4=BB=8E=E7=B3=BB=E7=BB=9F=E4=B8=AD=E6=B0=
-=B8=E4=B9=85=E6=80=A7=E5=88=A0=E9=99=A4=E6=9C=AC=E9=82=AE=E4=BB=B6=E5=8F=8A=
-=E6=89=80=E6=9C=89=E9=99=84=E4=BB=B6=EF=BC=8C=E5=B9=B6=E4=BB=A5=E5=9B=9E=E5=
-=A4=8D=E9=82=AE=E4=BB=B6=E6=88=96=E5=85=B6=E4=BB=96=E6=96=B9=E5=BC=8F=E5=8D=
-=B3=E5=88=BB=E5=91=8A=E7=9F=A5=E5=8F=91=E4=BB=B6=E4=BA=BA=E3=80=82=E7=A6=8F=
-=E5=B7=9E=E7=91=9E=E8=8A=AF=E5=BE=AE=E7=94=B5=E5=AD=90=E6=9C=89=E9=99=90=E5=
-=85=AC=E5=8F=B8=E6=8B=A5=E6=9C=89=E6=9C=AC=E9=82=AE=E4=BB=B6=E4=BF=A1=E6=81=
-=AF=E7=9A=84=E8=91=97=E4=BD=9C=E6=9D=83=E5=8F=8A=E8=A7=A3=E9=87=8A=E6=9D=83=
-=EF=BC=8C=E7=A6=81=E6=AD=A2=E4=BB=BB=E4=BD=95=E6=9C=AA=E7=BB=8F=E6=8E=88=E6=
-=9D=83=E8=AE=B8=E5=8F=AF=E7=9A=84=E4=BE=B5=E6=9D=83=E8=A1=8C=E4=B8=BA=E3=80=
-=82
+On Fri, Nov 10, 2023 at 08:50:58AM +0100, Neil Armstrong wrote:
+> On 09/11/2023 18:34, Conor Dooley wrote:
+> > On Thu, Nov 09, 2023 at 10:00:03AM +0100, Neil Armstrong wrote:
+> > > Add a thirst example covering the meson-axg-hhi-sysctrl variant and m=
+ore
+> >=20
+> > What on earth is a thirst example? Some sort of "hysterical raisins"
+> > type of thing?
+> >=20
+> > My confusion about that word aside,
+> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
 >=20
-> IMPORTANT NOTICE: This email is from Fuzhou Rockchip Electronics Co., Ltd=
- .The contents of this email and any attachments may contain information th=
-at is privileged, confidential and/or exempt from disclosure under applicab=
-le law and relevant NDA. If you are not the intended recipient, you are her=
-eby notified that any disclosure, copying, distribution, or use of the info=
-rmation is STRICTLY PROHIBITED. Please immediately contact the sender as so=
-on as possible and destroy the material in its entirety in any format. Than=
-k you.
->=20
-> *************************************************************************=
-***
->=20
+> Indeed, I'll fix this bad typo :-)
 
-Please also drop this legal footers.
+TBH, I thought it was intentional!
 
-Thanks,
-Conor.
-
---OExvhfaQ444Ef20I
+--5w/g2E24/WOxYVxa
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZU5xagAKCRB4tDGHoIJi
-0mRqAP4yZmW1RPmA4GZetYj3jVRckaKN7UW79TtmSrKLKPJ7xwD9FbIVjxmE/4yT
-Wbc/0ZnYDI9ffUVgJa9bqOCLpHMNGwk=
-=z8Ye
+iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZU514wAKCRB4tDGHoIJi
+0sAoAQD6Sj0Me4v2FpLbfFQZfZK67SGa5V4LFec/ta5m+t6KBQEA6elLz7R9xNnC
+0qtqNVWQEY1i0Kf4yBRSUOGQOB6qJAA=
+=LCNw
 -----END PGP SIGNATURE-----
 
---OExvhfaQ444Ef20I--
+--5w/g2E24/WOxYVxa--
 
