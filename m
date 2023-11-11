@@ -1,125 +1,134 @@
-Return-Path: <linux-clk+bounces-138-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-140-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA3B57E8AB4
-	for <lists+linux-clk@lfdr.de>; Sat, 11 Nov 2023 12:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DB177E8B7D
+	for <lists+linux-clk@lfdr.de>; Sat, 11 Nov 2023 17:08:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B946B209B2
-	for <lists+linux-clk@lfdr.de>; Sat, 11 Nov 2023 11:39:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07F59B20B29
+	for <lists+linux-clk@lfdr.de>; Sat, 11 Nov 2023 16:08:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F0713FED;
-	Sat, 11 Nov 2023 11:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD1218E1B;
+	Sat, 11 Nov 2023 16:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fWixJ4xz"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="v2N6u4Wj";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="eARE8DLi"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7833A13AF9;
-	Sat, 11 Nov 2023 11:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59854C433C7;
-	Sat, 11 Nov 2023 11:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699702761;
-	bh=rTPhRXHcBu3FdnF5esG7WBKJ0Idng7F9RzrodK0bdSk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fWixJ4xzkM5iuRIeqOxmh8hZZoNu2GuNqAdD7KRNB1cCvDvGjyUZe/TMewqJGtPuB
-	 eBgUD7cHlRFhd5JqBwwSOLW6sBipH5fr6+5nHGyKdoNKMzmVOvbBRmL/W8TkO9ygpp
-	 +sfHhxlFVwRqzIPFthrU9HLS93/y/1Z5YTsJ+COUfLVLqQtVpq7Mu7Pk9pE1Fir5Ho
-	 2DRS8hEEwlcdF88YHtZ3U/XrpvkgmlBWqPzeOpUpLFxr36Z3wRoVvTQ8JByWEl/Ow6
-	 AsDqNaqDviV3LswdZooMJdd1W3rDftp/act6vMBVu/+eXuTxKu5rl9qCjU7/wfNtJl
-	 aH88akbQpAz2A==
-Date: Sat, 11 Nov 2023 11:39:17 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Robin Murphy <robin.murphy@arm.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A5518AE7;
+	Sat, 11 Nov 2023 16:08:30 +0000 (UTC)
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D183A8D;
+	Sat, 11 Nov 2023 08:08:28 -0800 (PST)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4SSLG13vSkz9sl1;
+	Sat, 11 Nov 2023 17:08:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1699718905;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=THFzGgVQc4ntN9P7VC/aZKmxHiRSLWP038efWlg/W8s=;
+	b=v2N6u4WjsWxb+yxEViiAqRNmSJUDI0z5QDtbanChomCNYY6rRGEkRW7zwvSTeeewWh1wsf
+	oGZoyRIJ4zzuhrAmCULe7et/nyUNrb9tdr2pdTwUcnZ1l6kSQAZUYDSBnzC15rljXfCTz8
+	GY3atyyeDSOydXdar9DBUlG/cq8PvmVm23XOkxmU6I4WHPYOF4FfvieiftGXrVoQXlmD2t
+	9cSu92XSotx0NGHpjTXB4a8hESOfeWHkohnk6j3Sl532mpfcr2XkAzBP/t/aeEPfM7cfug
+	2QcubxZ35gSCUVjfZVOw+0BDhpJyK8eNBFu74YEDc/WnnJI8cDW4yLwJBWml8w==
+From: Marek Vasut <marek.vasut+renesas@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1699718903;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=THFzGgVQc4ntN9P7VC/aZKmxHiRSLWP038efWlg/W8s=;
+	b=eARE8DLi/T6veLpspYaRKmvMRxSwvyY858xYgiRjOO75s14bAbR3Bt+inz93QhsoFEFxdm
+	u30/BgHMtENh71T6zI/NDFYvE0gEf0XbLpbdiEXVU7B47XtMa+L6F0jni2o1wy2KG9a0oV
+	Ye5V+TvhgTuQ6O37Z+6UxuQAbGpIzpibcozrkE46/i18ufiKqs3G4Yp4TQw0YKN5kiKqJ8
+	q3n1/LuNH4ln5LYOrBl1xA9er+UVn8w6UowAkf2nJXIEliBXd7WLLuUf8S1aF+2q4hiwM3
+	pe6MNf+2QUXzXlDFEUc0QV3TwZRMWbufPpt4PZaiX46i+BP9fKQTWSXmadRLmg==
+To: linux-clk@vger.kernel.org
+Cc: Marek Vasut <marek.vasut+renesas@mailbox.org>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Tony Lindgren <tony@atomide.com>, Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Leo Yan <leoy@marvell.com>, Zhangfei Gao <zhangfei.gao@marvell.com>,
-	Lubomir Rintel <lkundrak@v3.sk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-hardening@vger.kernel.org,
-	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-	Karel Balej <balejk@matfyz.cz>
-Subject: Re: [PATCH v7 06/10] ASoC: pxa: Suppress SSPA on ARM64
-Message-ID: <ZU9n5Y8DxZt4QYRO@finisterre.sirena.org.uk>
-References: <20231102152033.5511-1-duje.mihanovic@skole.hr>
- <4855402.GXAFRqVoOG@radijator>
- <ZUjG5tUrBvm6PDvB@finisterre.sirena.org.uk>
- <1880732.tdWV9SEqCh@radijator>
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 1/4] dt-bindings: clk: rs9: Add 9FGV0841
+Date: Sat, 11 Nov 2023 17:06:59 +0100
+Message-ID: <20231111160806.32954-1-marek.vasut+renesas@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NMCFkAyahKpkrrIE"
-Content-Disposition: inline
-In-Reply-To: <1880732.tdWV9SEqCh@radijator>
-X-Cookie: Slow day.  Practice crawling.
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-ID: 3d233b5fff2168a1c82
+X-MBO-RS-META: xkah6ukywhykd831kcn4qk9z4kemaddy
 
+This is an 8-channel variant of 9FGV series.
 
---NMCFkAyahKpkrrIE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+---
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+---
+V2: Add AB from Alexander and Conor
+---
+ .../devicetree/bindings/clock/renesas,9series.yaml     | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-On Fri, Nov 10, 2023 at 08:28:56PM +0100, Duje Mihanovi=C4=87 wrote:
-> On Monday, November 6, 2023 11:58:46 AM CET Mark Brown wrote:
-> > On Fri, Nov 03, 2023 at 05:58:05PM +0100, Duje Mihanovi=C4=87 wrote:
+diff --git a/Documentation/devicetree/bindings/clock/renesas,9series.yaml b/Documentation/devicetree/bindings/clock/renesas,9series.yaml
+index 3afdebdb52ad..af6319697b1c 100644
+--- a/Documentation/devicetree/bindings/clock/renesas,9series.yaml
++++ b/Documentation/devicetree/bindings/clock/renesas,9series.yaml
+@@ -21,6 +21,15 @@ description: |
+     1 -- DIF1
+     2 -- DIF2
+     3 -- DIF3
++  - 9FGV0841:
++    0 -- DIF0
++    1 -- DIF1
++    2 -- DIF2
++    3 -- DIF3
++    4 -- DIF4
++    5 -- DIF5
++    6 -- DIF6
++    7 -- DIF7
+ 
+ maintainers:
+   - Marek Vasut <marex@denx.de>
+@@ -30,6 +39,7 @@ properties:
+     enum:
+       - renesas,9fgv0241
+       - renesas,9fgv0441
++      - renesas,9fgv0841
+ 
+   reg:
+     description: I2C device address
+-- 
+2.42.0
 
-> > > this correctly, I would have to remove "select SND_ARM" from sound/so=
-c/
-> pxa/
-> > > Kconfig and optionally move the PXA2xx code out of sound/arm/ and into
-> > > sound/
-> > > soc/pxa/. Is this correct? If so, I'd also split that fix into a sepa=
-rate
-> > > series.
-
-> > There's the pxa-ac97 driver to consider...
-
-> Can you elaborate? As far as I can tell there are 2 drivers named pxa2xx-=
-ac97=20
-> in sound/{arm,soc/pxa} and neither one has any dependency on AACI.=20
-
-They do both share a lot of library code and the one in sound/arm has no
-dependency on ASoC so I don't understand why you're suggesting moving it
-to sound/soc.
-
---NMCFkAyahKpkrrIE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVPZ+AACgkQJNaLcl1U
-h9BwEAf+OEf6qc1xLpzXXgYfgJtHBjpbdnuByW2eet0HjenII7+fsKy2Hh/cvZD+
-EQ4z1dzENCL67nkzK2YyQTegLduY02qVEIe4CYN18yU/g1SbwcDATwcVbWRoNS5S
-yXwGUsBY0Lahsyeuop+P+K4e7z2EDqo9UZyUJi/sUHC4VHzj/ZA+o66k62U/FPxO
-0WAdhTto7vXB4fmHB2zZEVNfihwp3YjFEId17tnp6DfHlldgQTd8Vs7LuANofRuK
-dx3t66n6gWek0MvGYPeCzBCHdTzN2P4iqTHxFRmLUARkA2txeM+uwahng+/XI4SZ
-rpaHK38Iu4+CzjK0b41iz68AEoAzLQ==
-=9Bkd
------END PGP SIGNATURE-----
-
---NMCFkAyahKpkrrIE--
 
