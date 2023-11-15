@@ -1,34 +1,34 @@
-Return-Path: <linux-clk+bounces-229-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-227-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22EB87ECE22
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 20:40:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F2D7ECBD8
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 20:24:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54C071C209C7
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 19:40:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA4AB1F243B8
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 19:24:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FDFB3175C;
-	Wed, 15 Nov 2023 19:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE4533094;
+	Wed, 15 Nov 2023 19:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EyO1398v"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tk2qbJ16"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE353C484;
-	Wed, 15 Nov 2023 19:40:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BFEC433C9;
-	Wed, 15 Nov 2023 19:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEB441223;
+	Wed, 15 Nov 2023 19:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0581C433C8;
+	Wed, 15 Nov 2023 19:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700077236;
-	bh=jrJUT2NshPAfo/GySlB202AiIWyDDakqP7ItitQniHY=;
+	s=korg; t=1700076287;
+	bh=ymMAk+FtJcQoQiK5/K3FJT/IX19sAPWaEV0Y9PIOfJM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EyO1398vqFctDRpJrTW8mwOAxdd9Dq00q8EDzowl2B+Cee94scYtTQYQgiPzYmNL/
-	 Uyt2w5LfvSlVvC4OQCQ0LLwnD2gXhsnx6/0fp/0L2JNmJ3q7x745yIZxCZaBgHcjci
-	 kp2WrfbgXpBdXb97v94RhyqWrKYyGZzHWSYMlrtQ=
+	b=tk2qbJ165dO2+jg0y1MZ1rYAkG/RkgcoCUwooK5XJhNyiklMsIAjBwSE8T7S+ZmGC
+	 b1VutUa2waOKYYaz109XbgGI4ecHnhjmNU4/oA+AAqXUMDMVqy1GZ3lOCKkeWOOemk
+	 QZ1LjomekP2DZ60UVG/SXWbyHSRrg1700/SP6U0o=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Stephen Boyd <sboyd@kernel.org>,
 	linux-clk@vger.kernel.org,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.6 180/603] clk: linux/clk-provider.h: fix kernel-doc warnings and typos
-Date: Wed, 15 Nov 2023 14:12:05 -0500
-Message-ID: <20231115191625.702120178@linuxfoundation.org>
+Subject: [PATCH 6.5 169/550] clk: linux/clk-provider.h: fix kernel-doc warnings and typos
+Date: Wed, 15 Nov 2023 14:12:33 -0500
+Message-ID: <20231115191612.423896623@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231115191613.097702445@linuxfoundation.org>
-References: <20231115191613.097702445@linuxfoundation.org>
+In-Reply-To: <20231115191600.708733204@linuxfoundation.org>
+References: <20231115191600.708733204@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+6.5-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -97,7 +97,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index ec32ec58c59f7..ace3a4ce2fc98 100644
+index 0f0cd01906b4c..ec93fb23372b4 100644
 --- a/include/linux/clk-provider.h
 +++ b/include/linux/clk-provider.h
 @@ -74,7 +74,7 @@ void clk_hw_forward_rate_request(const struct clk_hw *core,
