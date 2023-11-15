@@ -1,34 +1,34 @@
-Return-Path: <linux-clk+bounces-236-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-237-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 406157ED3EC
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 21:55:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C6CA7ED6B0
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 23:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4BA1B20A62
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 20:55:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 515FB1F24D10
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Nov 2023 22:03:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1D943AD9;
-	Wed, 15 Nov 2023 20:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E98446B6;
+	Wed, 15 Nov 2023 22:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jzyBxqnk"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mK/SVaFI"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDB743AD7;
-	Wed, 15 Nov 2023 20:55:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ECB3C4E779;
-	Wed, 15 Nov 2023 20:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1AE45BF7;
+	Wed, 15 Nov 2023 22:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1908CC433C7;
+	Wed, 15 Nov 2023 22:03:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700081721;
-	bh=Tk6FlykPT0C2bataSAvfQ1Zjh2TQCTwcBnUkBaGTQ2o=;
+	s=korg; t=1700085781;
+	bh=uL1Nt0PUkwLKCwgxHRA3279Rm8L3ueA5oqk+cS6d/G4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jzyBxqnkksDOKDS9puquMfdpQL8neQVu/FYmu+YICo8WPtIRR5b6NLdTgLw3I2YH4
-	 M7lg1R3nPQmL+rWLA8cWfmhaLUNeSWDALNsjLu6db5T/gcnfStnhaGBG2XnjLQyihw
-	 OZ/PeMxDwzrFoI7Pizn07xKWaCEfRtTAdrcxiOnQ=
+	b=mK/SVaFIdAzgl6WQf21STSKky5I0CsngDV3AcAoZYvee8fpnhdqa8765hhyHQNE1M
+	 31PsLhmfzVjz1tirMB+O8aZy3K+c+X+ZSiEpJ9SQnW0MptkcTF5UP9MMRL0WCFt3DB
+	 0IADMZup4zaDkUE9maw6l0wN0/fDbiVwy1EIfvao=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,12 +39,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-clk@vger.kernel.org,
 	Sudeep Holla <sudeep.holla@arm.com>,
 	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 085/191] clk: scmi: Free scmi_clk allocated when the clocks with invalid info are skipped
-Date: Wed, 15 Nov 2023 15:46:00 -0500
-Message-ID: <20231115204649.682548269@linuxfoundation.org>
+Subject: [PATCH 5.4 050/119] clk: scmi: Free scmi_clk allocated when the clocks with invalid info are skipped
+Date: Wed, 15 Nov 2023 17:00:40 -0500
+Message-ID: <20231115220134.183355202@linuxfoundation.org>
 X-Mailer: git-send-email 2.42.1
-In-Reply-To: <20231115204644.490636297@linuxfoundation.org>
-References: <20231115204644.490636297@linuxfoundation.org>
+In-Reply-To: <20231115220132.607437515@linuxfoundation.org>
+References: <20231115220132.607437515@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-5.10-stable review patch.  If anyone has any objections, please let me know.
+5.4-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -80,7 +80,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
-index c754dfbb73fd4..c62636fb4aca8 100644
+index e3cdb4a282fea..d68de3773eb10 100644
 --- a/drivers/clk/clk-scmi.c
 +++ b/drivers/clk/clk-scmi.c
 @@ -170,6 +170,7 @@ static int scmi_clocks_probe(struct scmi_device *sdev)
