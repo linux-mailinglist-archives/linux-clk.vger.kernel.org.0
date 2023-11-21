@@ -1,237 +1,150 @@
-Return-Path: <linux-clk+bounces-410-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-412-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D3A67F2FEF
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Nov 2023 14:56:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 207137F30CB
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Nov 2023 15:31:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7F3A1F241C5
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Nov 2023 13:56:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A19D1B21D21
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Nov 2023 14:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0D553808;
-	Tue, 21 Nov 2023 13:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9454754FA2;
+	Tue, 21 Nov 2023 14:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U3t2EdH2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RRqmT+ch"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304E4D6D;
-	Tue, 21 Nov 2023 05:55:53 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40790b0a224so23581065e9.0;
-        Tue, 21 Nov 2023 05:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700574951; x=1701179751; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5CEXNKpyjfsro5F2qODV+l61Asj3Ijt7gGz48Uso34=;
-        b=U3t2EdH2jSG/OvdsBHSSJhGFoAv/ApPokaObCNi5D9Nfifg2Itk9MUMLUsJV9CrwVq
-         BkptBZ7aZerFq0vN7Xo6eeDzp8k7viv1fOh5ifMoHdJ9jI+g6RyN3SoCQJNuXWWWTCaz
-         nqoNm9L6aSixld7LRBZ72qIkFc2N/5P8BClT0XRYxPptqtYE5YDgPgN45LTlaxkzu4xR
-         R/ZdEFwfIC3YscZYeDHxJcXweypamsP1HlZCDJnjCDF1UqUQdw3L/2y7AIqEL5Sm9Sne
-         gkrHLGYguHY0RsGU4wMNj8s1JzZqaRl1r2gG+fXfrbtROkGovuT1nGtO8tpyQ3vlVocq
-         ViVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700574951; x=1701179751;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r5CEXNKpyjfsro5F2qODV+l61Asj3Ijt7gGz48Uso34=;
-        b=r+fx/IecllC6IESCn5QWAod4pRkVFB9/aNGMgKkn8Gl5EVzZG9SPc9l84KBLZeYBFc
-         IOcsljCnMkTvux7ih4TvF198pLIKIfJcHw0LDazMlpwNa+A6gbPPEppW9GfmdD6vqDxS
-         6NUGb7g1t6U68dUwjQ4rzrPjHNCLa+qMAzZ+EdS8NdpAd3R+pykc4cLTz9yFEXHNiVwK
-         s/wh5JLxdrduKAveFLRfvfE0oCa+d6zqQsUqlUTKFuqfbrdBrgVSlNXI1kVP9gad7Ixo
-         FeCdly95gs+svD1dImG5+oeHarcTVXU0Okc61pIIaTl6DO+i5u98ziAtbDOTIkKcqnHE
-         Dalg==
-X-Gm-Message-State: AOJu0Ywp2oljIV20pSJj/R+R6MI5oiMI2iEbeiHzLm+Oyp2Q5Vp/8+1i
-	QVqEr+cIfourGbiU9SPWCxM=
-X-Google-Smtp-Source: AGHT+IFTLe2B5bXxlevVAgaKNB3Xo3WSpTsAxE13jfMNSN5R9F0TwQskofmVrAX3lZ4FXLbEefS2Wg==
-X-Received: by 2002:a05:600c:3154:b0:407:8e85:89ad with SMTP id h20-20020a05600c315400b004078e8589admr8572103wmo.14.1700574951118;
-        Tue, 21 Nov 2023 05:55:51 -0800 (PST)
-Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.gmail.com with ESMTPSA id di11-20020a0560000acb00b00332cbece829sm3701237wrb.59.2023.11.21.05.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 05:55:50 -0800 (PST)
-Message-ID: <655cb6e6.050a0220.35346.e9a2@mx.google.com>
-X-Google-Original-Message-ID: <ZVy25JLIVbXPY/6w@Ansuel-xps.>
-Date: Tue, 21 Nov 2023 14:55:48 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Devi Priya <quic_devipriy@quicinc.com>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] clk: qcom: clk-rcg2: add support for rcg2 freq
- multi ops
-References: <20230916140046.7878-1-ansuelsmth@gmail.com>
- <20230916140046.7878-3-ansuelsmth@gmail.com>
- <419b0e85-5479-30b0-d6a9-b2697d057c55@quicinc.com>
- <655bca09.050a0220.bac1.aa06@mx.google.com>
- <5540adcd-4ba6-53e7-c7fe-b7116e6403ca@quicinc.com>
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA86E90;
+	Tue, 21 Nov 2023 06:31:19 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ALE2LG1024641;
+	Tue, 21 Nov 2023 14:31:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : subject :
+ date : message-id : mime-version : content-type :
+ content-transfer-encoding : to : cc; s=qcppdkim1;
+ bh=mS5lpO1pQal3MndLWJq7JlecLvEPze68AS+UktMGphA=;
+ b=RRqmT+chsmkCLIjqq4O/5Ikar+e3jPjVaq6yLtFmxTK5Sqpade/KR03pLk00DMRIKxkB
+ 3fHA4s7/PZRjQIsySy0nydTZTbyQq5xi5r/PzndkkxisCyMK6JpUqTMaPfl5zERHqeTI
+ KR4gvL+KRJhZiHTaFieap8XHx4WjMV7xoKlYKTyPBZ2WZ/nC8YG9aKq0x5fXhBCHcHGC
+ tREzy1A8++sHSvlFb4EagexpGO4l3YYiIE8B8xAEOLeadiiwO5S6+GQ2LMB3uybBNs3h
+ mr3tu7gyjwiAE5IRM8bH4xr5ufot04Z4GqzjwH7tEI+P9zA/0CUH2ZApEUlxsFHUSnlb dg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ugdxmjknm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Nov 2023 14:31:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ALEV6O0027329
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Nov 2023 14:31:06 GMT
+Received: from hu-kathirav-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 21 Nov 2023 06:31:01 -0800
+From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+Subject: [PATCH v2 0/9] Add NSS clock controller support for Qualcomm
+ IPQ5332
+Date: Tue, 21 Nov 2023 20:00:42 +0530
+Message-ID: <20231121-ipq5332-nsscc-v2-0-a7ff61beab72@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5540adcd-4ba6-53e7-c7fe-b7116e6403ca@quicinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABK/XGUC/3XMQQ7CIBCF4as0sxYDg5DoynuYLsg4tbOQtlCJp
+ uHuYvcu/5e8b4PMSTjDpdsgcZEsU2yBhw5oDPHBSu6tATVao61WMi/OWlQxZyIVONCZjbP65KB
+ 95sSDvHfv1rceJa9T+ux8wd/6TypGaeWNx4Dk3aDDdXkJSaQjTU/oa61fCwFL1qwAAAA=
+To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Kathiravan
+ Thirumoorthy" <quic_kathirav@quicinc.com>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1700577061; l=2190;
+ i=quic_kathirav@quicinc.com; s=20230906; h=from:subject:message-id;
+ bh=V3e9HOo0Prh+0sVYu6OBkKtzBPya9k/mvTsnXsdzeBQ=;
+ b=092KjIA5Vs8qRQVNaXEaZ41a3/A47dax2I/FKKYeXpok7/16wTnAVmhSbhzOXYn2iETsF6T72
+ hnMDTWbjdP8AsPds5oDXvVUYvrNzw0sCeqWnHQv9n0B6K4MYM4lZUJs
+X-Developer-Key: i=quic_kathirav@quicinc.com; a=ed25519;
+ pk=xWsR7pL6ch+vdZ9MoFGEaP61JUaRf0XaZYWztbQsIiM=
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7B7Si-JmLaceIE4wPKn33xd8EEVAOSWw
+X-Proofpoint-ORIG-GUID: 7B7Si-JmLaceIE4wPKn33xd8EEVAOSWw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-21_07,2023-11-21_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 clxscore=1011 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2311060000 definitions=main-2311210114
 
-On Tue, Nov 21, 2023 at 12:01:15PM +0530, Devi Priya wrote:
-> 
-> 
-> On 11/20/2023 11:44 PM, Christian Marangi wrote:
-> > On Mon, Nov 20, 2023 at 03:51:50PM +0530, Devi Priya wrote:
-> > > 
-> > > 
-> > > On 9/16/2023 7:30 PM, Christian Marangi wrote:
-> > > > Some RCG frequency can be reached by multiple configuration.
-> > > > 
-> > > > Add clk_rcg2_fm_ops ops to support these special RCG configurations.
-> > > > 
-> > > > These alternative ops will select the frequency using a CEIL policy.
-> > > > 
-> > > > When the correct frequency is found, the correct config is selected by
-> > > > calculating the final rate (by checking the defined parent and values
-> > > > in the config that is being checked) and deciding based on the one that
-> > > > is less different than the requested one.
-> > > > 
-> > > > These check are skipped if there is just on config for the requested
-> > > > freq.
-> > > > 
-> > > > qcom_find_freq_multi is added to search the freq with the new struct
-> > > > freq_multi_tbl.
-> > > > __clk_rcg2_select_conf is used to select the correct conf by simulating
-> > > > the final clock.
-> > > > If a conf can't be found due to parent not reachable, a WARN is printed
-> > > > and -EINVAL is returned.
-> > > > 
-> > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > > ---
-> > > >    drivers/clk/qcom/clk-rcg.h  |   1 +
-> > > >    drivers/clk/qcom/clk-rcg2.c | 167 ++++++++++++++++++++++++++++++++++++
-> > > >    drivers/clk/qcom/common.c   |  18 ++++
-> > > >    drivers/clk/qcom/common.h   |   2 +
-> > > >    4 files changed, 188 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> > > > index c81458db6ce4..dc9a77965e68 100644
-> > > > --- a/drivers/clk/qcom/clk-rcg.h
-> > > > +++ b/drivers/clk/qcom/clk-rcg.h
-> > > > @@ -190,6 +190,7 @@ struct clk_rcg2_gfx3d {
-> > > >    extern const struct clk_ops clk_rcg2_ops;
-> > > >    extern const struct clk_ops clk_rcg2_floor_ops;
-> > > > +extern const struct clk_ops clk_rcg2_fm_ops;
-> > > >    extern const struct clk_ops clk_rcg2_mux_closest_ops;
-> > > >    extern const struct clk_ops clk_edp_pixel_ops;
-> > > >    extern const struct clk_ops clk_byte_ops;
-> > > > diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> > > > index e22baf3a7112..617e7ff0f6a3 100644
-> > > > --- a/drivers/clk/qcom/clk-rcg2.c
-> > > > +++ b/drivers/clk/qcom/clk-rcg2.c
-> > > > @@ -266,6 +266,116 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
-> > > >    	return 0;
-> > > >    }
-> > > > +static const struct freq_conf *
-> > > > +__clk_rcg2_select_conf(struct clk_hw *hw, const struct freq_multi_tbl *f,
-> > > > +		       unsigned long req_rate)
-> > > > +{
-> > > > +	unsigned long rate_diff, best_rate_diff = ULONG_MAX;
-> > > > +	const struct freq_conf *conf, *best_conf;
-> > > > +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> > > > +	const char *name = clk_hw_get_name(hw);
-> > > > +	unsigned long parent_rate, rate;
-> > > > +	struct clk_hw *p;
-> > > > +	int index, i;
-> > > > +
-> > > > +	/* Init best_conf to the first conf */
-> > > > +	best_conf = f->confs;
-> > > > +
-> > > > +	/* Exit early if only one config is defined */
-> > > > +	if (f->num_confs == 1)
-> > > > +		goto exit;
-> > > > +
-> > > > +	/* Search in each provided config the one that is near the wanted rate */
-> > > > +	for (i = 0, conf = f->confs; i < f->num_confs; i++, conf++) {
-> > > > +		index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
-> > > > +		if (index < 0)
-> > > > +			continue;
-> > > > +
-> > > > +		p = clk_hw_get_parent_by_index(hw, index);
-> > > > +		if (!p)
-> > > > +			continue;
-> > > > +
-> > > > +		parent_rate =  clk_hw_get_rate(p);
-> > > > +		rate = calc_rate(parent_rate, conf->n, conf->m, conf->n, conf->pre_div);
-> > > > +
-> > > > +		if (rate == req_rate) {
-> > > > +			best_conf = conf;
-> > > > +			goto exit;
-> > > > +		}
-> > > > +
-> > > > +		rate_diff = abs(req_rate - rate);
-> > > > +		if (rate_diff < best_rate_diff) {
-> > > > +			best_rate_diff = rate_diff;
-> > > > +			best_conf = conf;
-> > > > +		}
-> > > > +	}
-> > > > +
-> > > > +	/*
-> > > > +	 * Very unlikely. Warn if we couldn't find a correct config
-> > > > +	 * due to parent not found in every config.
-> > > > +	 */
-> > > > +	if (unlikely(i == f->num_confs)) {
-> > > > +		WARN(1, "%s: can't find a configuration for rate %lu.",
-> > > > +		     name, req_rate);
-> > > > +		return ERR_PTR(-EINVAL);
-> > > > +	}
-> > > Hi Christian,
-> > > 
-> > > Thanks a lot for the patch!
-> > > We have incorporated these changes along with the corresponding clock driver
-> > > changes & tested it on IPQ9574 & IPQ5332 targets.
-> > > 
-> > > When setting the clk rate for the nss port clocks, for the requested
-> > > frequency the correct config gets selected and the
-> > > clk rate is set properly.
-> > > We see the WARN getting printed for other frequencies (rate * i where
-> > > i=2 to maxdiv) that is requested by the clk_hw_round_rate function.
-> > > 
-> > > Upon analysis, we see that the for loop in clk_divider_bestdiv iterates
-> > > until the maxdiv value and requests (rate*i) via the clk_hw_round_rate
-> > > API to find the bestdiv and best_parent_rate. For frequencies which are
-> > > multiples of the requested frequency (rate*i where i=2 to maxdiv), it
-> > > seems unlikely to see the WARN being printed.
-> > > 
-> > > Can you please help us understand when the WARN is likely to be printed
-> > > & Looking forward to your suggestions on how this WARN could
-> > > be suppressed in the afore mentioned scenario!
-> > > 
-> > 
-> > Hi,
-> > 
-> > thanks a lot for testing this. Maybe was a small oversight by me.
-> > 
-> > I attached an alternative patch. Can you test it and tell me if the WARN
-> > is still printed? (the WARN must be printed only when the parent is not
-> > found, I don't think it's your case)
-> > 
-> Hi Christian,
-> 
-> WARN does not get printed with the attached patchset.
-> Thanks much!
-> 
+Add bindings, driver and devicetree node for networking sub system clock
+controller on IPQ5332. Some of the nssnoc clocks present in GCC driver is
+enabled by default and its RCG is configured by bootloaders, so enable
+those clocks in driver probe.
 
-Can you also confirm that the code correctly works with your div
-scenario?
+The NSS clock controller driver depends on the below patchset which adds
+support for multiple configurations for same frequency.
+https://lore.kernel.org/linux-arm-msm/20230531222654.25475-1-ansuelsmth@gmail.com/
 
-Would love to have some Tested-by tag to move this further!
+Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+---
+Changes in v2:
+- Change logs are in respective patches
+- Link to v1: https://lore.kernel.org/r/20231030-ipq5332-nsscc-v1-0-6162a2c65f0a@quicinc.com
 
-(since it seems newer SoC after ipq807x will use this implementation
-even more)
+---
+Kathiravan Thirumoorthy (9):
+      clk: qcom: ipq5332: add const qualifier to the clk_init_data structure
+      clk: qcom: ipq5332: enable few nssnoc clocks in driver probe
+      dt-bindings: clock: ipq5332: drop the few nss clocks definition
+      dt-bindings: clock: ipq5332: add definition for GPLL0_OUT_AUX clock
+      clk: qcom: ipq5332: add gpll0_out_aux clock
+      dt-bindings: clock: add Qualcomm IPQ5332 NSSCC clock and reset definitions
+      clk: qcom: add NSS clock Controller driver for Qualcomm IPQ5332
+      arm64: dts: qcom: ipq5332: add support for the NSSCC
+      arm64: defconfig: build NSS Clock Controller driver for Qualcomm IPQ5332
 
+ .../bindings/clock/qcom,ipq5332-nsscc.yaml         |   60 ++
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi              |   28 +
+ arch/arm64/configs/defconfig                       |    1 +
+ drivers/clk/qcom/Kconfig                           |    7 +
+ drivers/clk/qcom/Makefile                          |    1 +
+ drivers/clk/qcom/gcc-ipq5332.c                     |  122 +--
+ drivers/clk/qcom/nsscc-ipq5332.c                   | 1035 ++++++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq5332-gcc.h       |    4 +-
+ include/dt-bindings/clock/qcom,ipq5332-nsscc.h     |   86 ++
+ 9 files changed, 1264 insertions(+), 80 deletions(-)
+---
+base-commit: 07b677953b9dca02928be323e2db853511305fa9
+change-id: 20231030-ipq5332-nsscc-aeac9e153045
+
+Best regards,
 -- 
-	Ansuel
+Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+
 
