@@ -1,116 +1,167 @@
-Return-Path: <linux-clk+bounces-488-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-491-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12C6F7F574B
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Nov 2023 05:06:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDDB17F57CC
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Nov 2023 06:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D07FB21085
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Nov 2023 04:06:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 984A5281683
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Nov 2023 05:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB39E8C0B;
-	Thu, 23 Nov 2023 04:06:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D419B8C16;
+	Thu, 23 Nov 2023 05:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="POwUu8GZ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XSN0bs5/"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096F61726
-	for <linux-clk@vger.kernel.org>; Wed, 22 Nov 2023 20:05:59 -0800 (PST)
-Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-4ac4cd60370so141836e0c.3
-        for <linux-clk@vger.kernel.org>; Wed, 22 Nov 2023 20:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1700712351; x=1701317151; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uB5imdoPod8S9hEhNPZ14DUI1/eZZtU6LRuwv6Kh2nc=;
-        b=POwUu8GZxKXJnLLlAm1XaQIkh9GYni4F4BzkP8ugLdCJL2QH5kwfXtQH2jHLmA4tw6
-         OSj7RSA/tcf1q7tQQpj8zBjm9IngVMO5FFlIgl9hPWIa8P3Vz6/cHuHAo91q8nlHf716
-         FuqaG4zEpUw8tWHpOpJaZ9AY9GVc8iAEB3LLE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700712351; x=1701317151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uB5imdoPod8S9hEhNPZ14DUI1/eZZtU6LRuwv6Kh2nc=;
-        b=PoE0M3TrUWoZ/kPYU5OtSiy86rLt3cudf+mQxa+NVVl9v3uOxM2qxEjjutOBJeqNwa
-         XP30RgRX/HB0SQ4OjgvqAUS15HeXe2k4c4J2GycLaZOydbjZ5avaDI8ZDgRZieydwjSk
-         oRhX6eTFTRIdayYHHo47pEXxqfL6aCH19Vcn83CBPHi741EsscrPnMRLOgSyeEMPhltd
-         is19AN6OmjLbUC7pOE4IIoH+RNCCDULxE0qihdQ2daSdt3NZScLWctbAxMJdatn/8iHu
-         32Wuo3V59eMgq01FUrRaKKroU06mm2FbpyFCzSWCPFlRfVmgDvis8OFh0PzZFn/ySRHp
-         yVCQ==
-X-Gm-Message-State: AOJu0YwcwwG1blvK8ItE1VaXJN2LxAccfPfp/rdFBKdWew6J8HsDADMZ
-	K+aNPB2k7jfuHw+5Oy2nAoDQFCXaJohd1iJhYOafKw==
-X-Google-Smtp-Source: AGHT+IHE/56OM3453p+nEve3nJ0IPaC87PhNUQ5PE8A1xHCZjF4ugjaxEevaSxPir1ypmPncFmYi6Q==
-X-Received: by 2002:a05:6122:2988:b0:4ab:f40f:c50 with SMTP id fn8-20020a056122298800b004abf40f0c50mr5836799vkb.10.1700712351049;
-        Wed, 22 Nov 2023 20:05:51 -0800 (PST)
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
-        by smtp.gmail.com with ESMTPSA id h13-20020ab0134d000000b007abc40a9543sm85568uae.20.2023.11.22.20.05.49
-        for <linux-clk@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 20:05:49 -0800 (PST)
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-4629afba9acso137641137.2
-        for <linux-clk@vger.kernel.org>; Wed, 22 Nov 2023 20:05:49 -0800 (PST)
-X-Received: by 2002:a05:6102:1285:b0:462:a479:79fd with SMTP id
- jc5-20020a056102128500b00462a47979fdmr4441694vsb.23.1700712349221; Wed, 22
- Nov 2023 20:05:49 -0800 (PST)
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2059.outbound.protection.outlook.com [40.107.102.59])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B242CB;
+	Wed, 22 Nov 2023 21:34:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lx6OkiT6SK3JgSL3/47sjXjkmoawNtUcoxZ6ILXrfSAouFiRmdth5SI2dx2LD9gaPgcYbOyWs1PhIPnnWpzZQTUJWAa+PVo8Kf+dVoLqF++rbMfedqDqI+ijSBeJ9w380NmRqdqqN9zMw7/9JjY5gK+nON46s8RtSOXbsrLTQBsBUcPDToGIfWJCYLkbHCFXYEx48Wv+L5PhllP9juAcslTme2MmSAMn5W4b/tB3urj6lkrbQnZE2Yos+cP1GYZk3Y/SVFB2SRdnQu2nrps3p4a6FMh+Pfy+7F67Kg1Otiegfe8klfthE76Fn1unFye67Mpz07pXqM7hrWEB2CKE0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GDFVe9469SI4hiXRWFHtnIlLXHlts3fYpeCuTCmMrE8=;
+ b=WUaFDxtBt4wr03EIVVRZ9Gl1gpR3RwtvvHskhE45xKUHgp8BBUup2P0sqOSpQWnATPFFvXKpqWb+OjPPQaSiMQs5eY/qNDCoL6RJNTui6KnGd4DbggnvXyFWPtfThLcXxgZh4fzkYD+pRneiQWV7k0VCrZaq3X4MzYF6k6bGtSO4hn0bY/ckBb69Lxy+Rt/xCJcL0JQnlSRTtW5a5NhG6H/j2x0hXf2yYvpGfqOkdAuqVAEn7VON6xJsSsAaypim5sKVEwPBJjhd2F2UXrEp98T4GK3ksa8RzAQ6TZZQX3JkIykAjj8J29ZPTStBh3NkxsFqvSr1vZUkQV1xJzYMng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GDFVe9469SI4hiXRWFHtnIlLXHlts3fYpeCuTCmMrE8=;
+ b=XSN0bs5/pqYxEq3NKCuF75MnNg0fvktj+UKBcRFK+D0Dl2sk4wgkYiGtMZUb9BAKdLgncXtPCYZCKi8nzVSjZnwLlnNky6N2jDUvwYRRqmP4YYZlZ8Sm4M+hy8VdIXyQX7Xx6Azjr4qIpU5BacvqcXEfxi9fqDxdom7F0KQPSA0=
+Received: from BL1PR13CA0027.namprd13.prod.outlook.com (2603:10b6:208:256::32)
+ by IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18; Thu, 23 Nov
+ 2023 05:34:13 +0000
+Received: from MN1PEPF0000F0DE.namprd04.prod.outlook.com
+ (2603:10b6:208:256:cafe::1a) by BL1PR13CA0027.outlook.office365.com
+ (2603:10b6:208:256::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.19 via Frontend
+ Transport; Thu, 23 Nov 2023 05:34:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ MN1PEPF0000F0DE.mail.protection.outlook.com (10.167.242.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7025.12 via Frontend Transport; Thu, 23 Nov 2023 05:34:13 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Wed, 22 Nov
+ 2023 23:34:12 -0600
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.34 via Frontend
+ Transport; Wed, 22 Nov 2023 23:34:10 -0600
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC: <git@amd.com>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<conor+dt@kernel.org>, <michal.simek@amd.com>
+Subject: [PATCH] dt-bindings: clock: versal: Make alt_ref optional
+Date: Thu, 23 Nov 2023 11:04:09 +0530
+Message-ID: <20231123053409.10192-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231103102533.69280-1-angelogioacchino.delregno@collabora.com> <20231103102533.69280-4-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20231103102533.69280-4-angelogioacchino.delregno@collabora.com>
-From: Fei Shao <fshao@chromium.org>
-Date: Thu, 23 Nov 2023 12:05:13 +0800
-X-Gmail-Original-Message-ID: <CAC=S1nhL-i7GhP=qRwf+Z_=K2Ee42ZceiPHAuQznsmP2ENXp9g@mail.gmail.com>
-Message-ID: <CAC=S1nhL-i7GhP=qRwf+Z_=K2Ee42ZceiPHAuQznsmP2ENXp9g@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] clk: mediatek: mt8188-topckgen: Refactor parents
- for top_dp/edp muxes
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com, 
-	wenst@chromium.org, msp@baylibre.com, amergnat@baylibre.com, 
-	yangyingliang@huawei.com, u.kleine-koenig@pengutronix.de, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0DE:EE_|IA1PR12MB6434:EE_
+X-MS-Office365-Filtering-Correlation-Id: a909022e-e9b6-44bd-2c9b-08dbebe5d3f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	A2aGreOaQvGARLiVx5W84eknzRmVtlEscHXUpGcMNuqw7WbO7Q2re9n3PVZikO2I5ssjbpVZFkwhz0ImawFrKCmLs3Fq3JMAaYX85eBGs6S1XpRJo6w/NN2L4uGk4kuDqmLE7tjR4yzfmX5nHKMAbNrLBGzlcpwIjV1I+8uzH33VBfNUokGFeVIrMf1S/CxLVMq/tuQ7UkTH5J6YeUbE/mwRVWgpcmeDBm+ADjkRQa2JczVtme5b98Wi16YrFAjdwup7kpA5vHDWVHKScb/lCMJi0LJL8+HNBZbrTTevsv7vgpdbeOiiPKunjWXb8HYIimX3Ii3id+NS3jiHzOLHeGdC6NPa5CkbThz5miUm21vQXBpeUZUe/iAIbXIduZGcfVB9qWA+6Z9lXWLCUsS7wXYxOqqJf+li/14ZLe4YC0kLaYRxMHK2VSjzw2C+5dobm13IKhYNFip4xmtyjGLmQ17lScVdHBqKb5+sVlnXHP/ENg0v/a5YqKiIAj55XbIvpNJ/6r+CJOEVjeRyvT9dxBEYr87GgqGoBAjdaiBTQUSMYNCDtH+yjSNxAfvPfx07DZWFx0pUgxA8Mqk2qwjTst2qfHTrXHYOxGxM9QXbZkhJXCvwPJDVkawIWnUDMzTrL+3uMwM+zKdiRQtvUR5BWHXueuP9Co1JR5ZnZW0QdaQVDuJp4P8qyQg5FepCyK8qZD8S3LznroiS8BiRYOx9zz39rK+Q7gxhZPRUrxJYX96S5RIW3RI56qIkPNCLvVQcAsrpziXteIbDGX5hAgvUjTsmvIlyu/rrlpfP3WMd56kNjkSWLV4Ar8NqDqEnoHyu
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(136003)(39860400002)(376002)(230173577357003)(230273577357003)(230922051799003)(451199024)(186009)(64100799003)(82310400011)(1800799012)(36840700001)(46966006)(40470700004)(40460700003)(5660300002)(41300700001)(44832011)(2906002)(8676002)(356005)(426003)(336012)(81166007)(82740400003)(26005)(86362001)(36756003)(83380400001)(2616005)(1076003)(478600001)(36860700001)(47076005)(8936002)(4326008)(70586007)(110136005)(70206006)(54906003)(316002)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2023 05:34:13.7240
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a909022e-e9b6-44bd-2c9b-08dbebe5d3f2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000F0DE.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6434
 
-On Fri, Nov 3, 2023 at 6:25=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> The top_dp and top_edp muxes can be both parented to either TVDPLL1
-> or TVDPLL2, two identically specced PLLs for the specific purpose of
-> giving out pixel clock: this becomes a problem when the MediaTek
-> DisplayPort Interface (DPI) driver tries to set the pixel clock rate.
->
-> In the usecase of two simultaneous outputs (using two controllers),
-> it was seen that one of the displays would sometimes display garbled
-> output (if any at all) and this was because:
->  - top_edp was set to TVDPLL1, outputting X GHz
->  - top_dp was set to TVDPLL2, outputting Y GHz
->    - mtk_dpi calls clk_set_rate(top_edp, Z GHz)
->  - top_dp is switched to TVDPLL1
->  - TVDPLL1 changes its rate, top_edp outputs the wrong rate.
->  - eDP display is garbled
->
-> To solve this issue, remove all TVDPLL1 parents from `top_dp` and
-> all TVDPLL2 parents from `top_edp`, plus, necessarily switch both
-> clocks to use the new MUX_GATE_CLR_SET_UPD_INDEXED() macro to be
-> able to use the right bit index for the new parents list.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+The alt_ref is present only in Versal-net devices.
+Other versal devices do not have it so lets make alt_ref optional.
+Changing the order of the clock items to have the optional ones at
+the end.
 
-Tested on MT8188 with a Type-C -> DP adapter to an extended display
-Gigabyte M32U.
-The DP output reacts smoothly to resolution switch and refresh rate
-change, and the internal eDP output also never freezes.
+Fixes: 352546805a44 ("dt-bindings: clock: Add bindings for versal clock driver")
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+---
 
-Reviewed-by: Fei Shao <fshao@chromium.org>
-Tested-by: Fei Shao <fshao@chromium.org>
+ .../devicetree/bindings/clock/xlnx,versal-clk.yaml | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+index 1ba687d433b1..746e49383074 100644
+--- a/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+@@ -31,11 +31,11 @@ properties:
+   clocks:
+     description: List of clock specifiers which are external input
+       clocks to the given clock controller.
+-    minItems: 3
++    minItems: 2
+     maxItems: 8
+ 
+   clock-names:
+-    minItems: 3
++    minItems: 2
+     maxItems: 8
+ 
+ required:
+@@ -57,16 +57,18 @@ allOf:
+     then:
+       properties:
+         clocks:
++          minItems: 2
+           items:
+             - description: reference clock
+-            - description: alternate reference clock
+             - description: alternate reference clock for programmable logic
++            - description: alternate reference clock
+ 
+         clock-names:
++          minItems: 2
+           items:
+             - const: ref
+-            - const: alt_ref
+             - const: pl_alt_ref
++            - const: alt_ref
+ 
+   - if:
+       properties:
+@@ -110,8 +112,8 @@ examples:
+         versal_clk: clock-controller {
+           #clock-cells = <1>;
+           compatible = "xlnx,versal-clk";
+-          clocks = <&ref>, <&alt_ref>, <&pl_alt_ref>;
+-          clock-names = "ref", "alt_ref", "pl_alt_ref";
++          clocks = <&ref>,  <&pl_alt_ref>;
++          clock-names = "ref", "pl_alt_ref";
+         };
+       };
+     };
+-- 
+2.17.1
+
 
