@@ -1,150 +1,95 @@
-Return-Path: <linux-clk+bounces-548-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-550-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB01B7F76CF
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 15:45:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EECFF7F7734
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 16:05:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED79D1C211EC
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 14:45:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48F8DB211FF
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 15:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1811CFB7;
-	Fri, 24 Nov 2023 14:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED412E627;
+	Fri, 24 Nov 2023 15:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LA4TZeH2"
+	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="PvbSTSIB"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D8010CA
-	for <linux-clk@vger.kernel.org>; Fri, 24 Nov 2023 06:45:43 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-32deb2809daso1280167f8f.3
-        for <linux-clk@vger.kernel.org>; Fri, 24 Nov 2023 06:45:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700837142; x=1701441942; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+rlwjJ/KXwyxOs4bJrCX4J/yUIaSw0CZF6vSsHNTewU=;
-        b=LA4TZeH2ZekqFR9xp+Ge5LPFqY1KWarHQh6cEOwpHiUSEnHvOBCY1qy7xeH6/RW41Y
-         4P7br1STCpb9+maz+9buOMXSCuA9uaxOc3vH9muFU7piQ9GOF+FqoLcMKzkq6GK+XzPL
-         JuYP5ijTFReTYGV77f4xfXQWtZTkXcPXBSi4cSGY2bYMgjA3RQoVDkowERuRZYUSmRoF
-         iEeD4HSPcJJOROYpIo/pOQUf6hhJ18UDqEy8SE20NG9dS2ShbihCtU5GvLRzBZrbMBUv
-         fVDTCRa0sIliFqDOLw41UUc3kbW2SH3gV+HXhbE+E2HUFOZxjzoDO7apcUe6q0X9TMhx
-         iqLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700837142; x=1701441942;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+rlwjJ/KXwyxOs4bJrCX4J/yUIaSw0CZF6vSsHNTewU=;
-        b=NXESplx3ArRxwh0d2fuTwCAQJbh4Yv0vyrFN+mR0cx99tlPZtKESVEu6gwXN5BMLtH
-         kR0e3ozHplG4xbaK7hmOYeUylaR0vpdHt2Ba1Hxzzbbhutf1iicltmmJXMWDd4uYFXHU
-         /1av3bknpUFMmCnBHvsMWscyJZBT0FB4zvGZBRUKK0OOEqsDxbyChs1S0kpzsELujYl8
-         tDwv8tK/G0pjnCwfdvnQPk8RNTz0ocFMKzMvPQPi37UOjE4EEdO4PYRmL/Zh3mybY6zU
-         cUFixSI4UaXKNaU3NckAqwRe3uc5H71NpM0t4qET/WacNI/XwSvdjExbp+mVbDSzt7Bn
-         69CA==
-X-Gm-Message-State: AOJu0YxdqWBETagb2l/3aZMbzILNFsXdZmHGbXm6pz+cvX55QOAolChd
-	3FwM1TYdKpJpTfUcItkoJxox/A==
-X-Google-Smtp-Source: AGHT+IGlqE3ztd4VccZrqzlaEyl8+aN4JopsoscrrQaRhl6IxnBq4wdAmomOGsmqb5zRiPTC+v5Seg==
-X-Received: by 2002:a05:6000:b4c:b0:332:ca0b:578e with SMTP id dk12-20020a0560000b4c00b00332ca0b578emr2125621wrb.27.1700837141963;
-        Fri, 24 Nov 2023 06:45:41 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4611:6dae:b5a3:b6a4? ([2a01:e0a:982:cbb0:4611:6dae:b5a3:b6a4])
-        by smtp.gmail.com with ESMTPSA id i2-20020adffc02000000b00327de0173f6sm4511051wrr.115.2023.11.24.06.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Nov 2023 06:45:41 -0800 (PST)
-Message-ID: <5e1479e7-a353-4ccb-93eb-a74efc4bdb17@linaro.org>
-Date: Fri, 24 Nov 2023 15:45:40 +0100
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB29519BD;
+	Fri, 24 Nov 2023 07:05:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+	s=s31663417; t=1700838301; x=1701443101; i=frank-w@public-files.de;
+	bh=Ix7kpbSVl/E0T/0d1Pht1rYCZKqw3dVgDyb07vLVcGc=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
+	 References;
+	b=PvbSTSIB4lffJljSG4x3vZo9axQe2k91WFc0HvK06Uksi2okqG7+tSkyoV+MGlHi
+	 qB+NxwOL5rjz/C1NKlxPEBU4JtSY+l6QEUeNAiFun+qWx+A/C6a8HpCi9Yve0BCkW
+	 FRd62tCPZrx93DokOlSHqhy5/ghscbSYDPq/uvmJC0jc5BRS15u4KvDi/Q2drr1kk
+	 qvgomya4GLFbA+omT80QTN7MyzCXaa5gH4g7zjoGEDnBn8qgzpwXV6+j5/wjRHqDN
+	 PHZDE/aS5AcUn7qvi7qsL/5CNZ1vlzAGWFMCx9aDGUmRaQTKTU7GgDTztTGjpnvG/
+	 BR/ekAfiQ+xol7YibA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [80.245.79.113] ([80.245.79.113]) by web-mail.gmx.net
+ (3c-app-gmx-bs48.server.lan [172.19.170.101]) (via HTTP); Fri, 24 Nov 2023
+ 16:05:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v9 11/12] DONOTMERGE: arm64: meson: khadas-vim3l: add DSI
- panel
-Content-Language: en-US, fr
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Jerome Brunet <jbrunet@baylibre.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Jagan Teki <jagan@amarulasolutions.com>, Nicolas Belin
- <nbelin@baylibre.com>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>, Remi Pommarel
- <repk@triplefau.lt>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
- Rob Herring <robh@kernel.org>
-References: <20231124-amlogic-v6-4-upstream-dsi-ccf-vim3-v9-0-95256ed139e6@linaro.org>
- <20231124-amlogic-v6-4-upstream-dsi-ccf-vim3-v9-11-95256ed139e6@linaro.org>
- <bn5tpzvohmgac4m46fruxbi6quja624tm2fefyj7f3ngo3enno@2ueiodd6qxbd>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <bn5tpzvohmgac4m46fruxbi6quja624tm2fefyj7f3ngo3enno@2ueiodd6qxbd>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-ID: <trinity-a9a71294-1396-43e4-9ed5-9ee2914ef093-1700838301802@3c-app-gmx-bs48>
+From: Frank Wunderlich <frank-w@public-files.de>
+To: Corentin LABBE <clabbe@baylibre.com>
+Cc: davem@davemloft.net, heiko@sntech.de, herbert@gondor.apana.org.au,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ p.zabel@pengutronix.de, robh+dt@kernel.org, sboyd@kernel.org,
+ ricardo@pardini.net, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rockchip@lists.infradead.org
+Subject: Aw: Re:  [PATCH 6/6] crypto: rockchip: add rk3588 driver
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 24 Nov 2023 16:05:01 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <ZVtVkACNHTcCjqGp@Red>
+References: <20231107155532.3747113-1-clabbe@baylibre.com>
+ <20231107155532.3747113-7-clabbe@baylibre.com>
+ <trinity-a0ee3146-f23d-4f6c-b29c-5fe446c4d4ad-1699797868421@3c-app-gmx-bs50>
+ <ZVtVkACNHTcCjqGp@Red>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:KZY66OmMPVZRMlmi74pw8ADByftw6rLqB4krhDPt1n6lm6PqszSx4cKvc4cZjMaxiCH9q
+ 9l76vJDnRyCKy+eXbolThC+wwdw4dv1bdU4iTgErQSSMfaGhXdFf9Hw8m2d54Obzs6CpDsrq/18q
+ TEe0LEFYkOe/u47SsG/Cz/fazr5GJSKcscqOCYKIKUI5ZS4Qz2H5T/mWYX/BAwcWhjtWXQ3IyITK
+ gWvtkulcLy4Ksr8Efpa7xkFttn5SYux8Z7cGFDgcF33skBoacgmIdOyvNt6ysMKaEToS9LDLnTZO
+ zw=
+UI-OutboundReport: notjunk:1;M01:P0:nU8MkRQpVF4=;cW5EMDZ6CBFw9FyqPe6KBZB/V18
+ K6E987HH1iAQnNOcy5ZBHGefyE25N6rxX+3pirLkOnU/zCkzodgk9FOxD9Cr1RQOJ9kCBB5OU
+ jUboXEL0DRyXxqDsfqi+UATzF3N2/tp/G4gWip+pFqinf6NKT2XWejdO50yHxVXgc0Af3J+F1
+ Yyz8h5CY0RZKPd0b5Gd23VSlmq+/Widrj5RK8DDKMX3Ak3oAFl2MGRuaFGFbPG+eE8UB3exU/
+ J5W38CPcFE84FhhfxqzfTTr0LrEezSrHh5LDp93NU1UK4ECk6y0qJ+f0iaBMTkv3kIHI+Ohhf
+ XoOWmrQcoaXHHv8IDCUz5B2NhyK1EiUtuK4DEHcksp3BynkMeM2/ymRpEIKNY0ulRuyzJRPm3
+ +orjVtzoZWjdd2CkjhJfF2ah+uPoDp2pd1Z16SvQwmR5SfJMcvgt53OVp+jtSBC8rD314ggIe
+ 902t/NJ/xbV+W/bATfBPqX7Cx6WRmBvHwOng3dgR5Rv0TwPBwhGVzR57K9ZiGspS0M4liI+Q6
+ QSIIBMjJBkamkRUnn3O+G06PooaSgO+99XkvoWNuE6Jv8W/tggIVAanoHtTD8Xy7G9M4ha71F
+ sLwihv1Y8dsoJNQNwXtvU5jsUM4GpCu5fJCT6sGXsVdiVlD/bpKhgyViHDS0jQQmgqklkrrp0
+ 5lRwUv//M/OuJEbtmb5K01CzVlpVt/ik0vohNwuLlOfjMtRiU+Yd5AP5tLXBnrHcWy35cO6yb
+ ItPBMt4lQN8fZGopD7NmXSoIQbY0GHqO8OzCdo6IPY5G1Q0n9QR7v9LEVt6g3JsDKOL/yg8qQ
+ cQQlCI0IDm0t3wNCSzVHhNIA==
 
-Hi,
+Hi
 
-On 24/11/2023 11:52, Maxime Ripard wrote:
-> Hi,
-> 
-> On Fri, Nov 24, 2023 at 09:41:22AM +0100, Neil Armstrong wrote:
->> This add nodes to support the Khadas TS050 panel on the
->> Khadas VIM3 & VIM3L boards.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   .../boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi   |  2 +-
->>   arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi | 74 ++++++++++++++++++++++
->>   .../boot/dts/amlogic/meson-sm1-khadas-vim3l.dts    |  2 +-
->>   3 files changed, 76 insertions(+), 2 deletions(-)
-> 
-> Generally, those kind of patches still have value. Now that we are
-> accepting overlays, could this be converted to one and merged maybe?
+> Gesendet: Montag, 20. November 2023 um 13:48 Uhr
+> Von: "Corentin LABBE" <clabbe@baylibre.com>
 
-Yep I was thinking about that, I'll probably do that,
-some new boards will also need overlays for DSI panels.
+> You are using kcapi-rng but the driver do not support RNG yet. (and probably never if I continue to fail having good results with it).
+> So it is normal values does not change.
 
-I'll probably switch to an overlay on v10.
+which functions does the driver support atm? or how can i test correctly
+(and which kernel options i need for this)?
 
-Neil
-
-> 
-> Maxime
-
+regards Frank
 
