@@ -1,199 +1,255 @@
-Return-Path: <linux-clk+bounces-542-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-539-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DA797F74F5
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 14:27:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D374C7F74C9
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 14:20:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C8AA28189C
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 13:27:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 036DA1C20DA8
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Nov 2023 13:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67F928DD4;
-	Fri, 24 Nov 2023 13:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2715C28DB7;
+	Fri, 24 Nov 2023 13:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pqrs.dk header.i=@pqrs.dk header.b="en/7+/NV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cwW0+E/b"
 X-Original-To: linux-clk@vger.kernel.org
-X-Greylist: delayed 565 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Nov 2023 05:27:32 PST
-Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [IPv6:2001:41d0:1004:224b::b0])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10665199A
-	for <linux-clk@vger.kernel.org>; Fri, 24 Nov 2023 05:27:31 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pqrs.dk; s=key1;
-	t=1700831884;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6Vh2HI7LlXpVzLq5VbBFa/JKlR1pzRd6vBC4WesJT8w=;
-	b=en/7+/NVm9Fo4O4adG2WBHTA6hkVigaqX+uPnGm8qCYVDmWNcSljdLKiVHFEqxXkdJv0ZV
-	dNQFyGOthyu68HAm+4kj1IV3dH3KR6qghLSV0OA6g7+DbnM6gb1DoqsgLE1iLtVp9AV1//
-	vPrjuk1u85oCYxF8k9jLM6KGP8WLeeM5vfTSWE7Enr98Br4nKAjQGaXOIbg6f6agbEZSFk
-	r/p3U7Fqr6/Y4+RRUkfAIX/ItAMHiDoDPbOgG27JllgGvEZXJ5jeEn9irT4ilyO2MXwwlu
-	kBwGlnT1gpDFjYQsy700N5ZaDc4dj52b8abmAgusbADZkYS9vB+z0gdWQtbHkw==
-From: =?utf-8?q?Alvin_=C5=A0ipraga?= <alvin@pqrs.dk>
-Date: Fri, 24 Nov 2023 14:17:44 +0100
-Subject: [PATCH v6 3/3] clk: si5351: allow PLLs to be adjusted without
- reset
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950BC1724;
+	Fri, 24 Nov 2023 05:20:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700832038; x=1732368038;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D6sAom7DCqR1Zyqj6Jdy6bkLwVXib4NKjEjRLqF2SOc=;
+  b=cwW0+E/b/CDSWn2YxcZ3+w3t7cHB9ibez/ry/tuKUxu7XlhCItoK4XAR
+   tQDTwhLJ4fpGa/4dFa1HB+dUyN3/rL8BV3INhkSHcJr4BWDOfyJZj+WgD
+   blQQ+aArXDRzly3mV7rJWR8PS0WP8mAj1yp3rj3/F1BUiY8gKvNthMvj/
+   VSK9DKB2HOrcKIgVAbUTqn7RTg/H7W8eZkAO5Qb6w5m4z4aLYXl0wLXn8
+   KFBitvC1BCgwCl0CQFhxKxZXDU1ff7WWjR0PMWGKke9lFGNEasihhch+y
+   bh9LFXYzD3G6HUaemaeevlBPV0gxmwLyiIoi6c6t7XooGm3cwaNxtrd1P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="456765084"
+X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
+   d="scan'208";a="456765084"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2023 05:20:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10902"; a="767477050"
+X-IronPort-AV: E=Sophos;i="6.04,224,1695711600"; 
+   d="scan'208";a="767477050"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 24 Nov 2023 05:20:09 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r6W6J-0002ng-1e;
+	Fri, 24 Nov 2023 13:20:07 +0000
+Date: Fri, 24 Nov 2023 21:19:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+Subject: Re: [PATCH v2 7/9] clk: qcom: add NSS clock Controller driver for
+ Qualcomm IPQ5332
+Message-ID: <202311241420.9uiff44i-lkp@intel.com>
+References: <20231121-ipq5332-nsscc-v2-7-a7ff61beab72@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231124-alvin-clk-si5351-no-pll-reset-v6-3-69b82311cb90@bang-olufsen.dk>
-References: <20231124-alvin-clk-si5351-no-pll-reset-v6-0-69b82311cb90@bang-olufsen.dk>
-In-Reply-To: <20231124-alvin-clk-si5351-no-pll-reset-v6-0-69b82311cb90@bang-olufsen.dk>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Rabeeh Khoury <rabeeh@solid-run.com>, 
- Jacob Siverskog <jacob@teenage.engineering>, 
- Sergej Sawazki <sergej@taudac.com>, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121-ipq5332-nsscc-v2-7-a7ff61beab72@quicinc.com>
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+Hi Kathiravan,
 
-Introduce a new PLL reset mode flag which controls whether or not to
-reset a PLL after adjusting its rate. The mode can be configured through
-platform data or device tree.
+kernel test robot noticed the following build errors:
 
-Since commit 6dc669a22c77 ("clk: si5351: Add PLL soft reset"), the
-driver unconditionally resets a PLL whenever its rate is adjusted.
-The rationale was that a PLL reset was required to get three outputs
-working at the same time. Before this change, the driver never reset the
-PLLs.
+[auto build test ERROR on 07b677953b9dca02928be323e2db853511305fa9]
 
-Commit b26ff127c52c ("clk: si5351: Apply PLL soft reset before enabling
-the outputs") subsequently introduced an option to reset the PLL when
-enabling a clock output that sourced it. Here, the rationale was that
-this is required to get a deterministic phase relationship between
-multiple output clocks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kathiravan-Thirumoorthy/clk-qcom-ipq5332-add-const-qualifier-to-the-clk_init_data-structure/20231121-223615
+base:   07b677953b9dca02928be323e2db853511305fa9
+patch link:    https://lore.kernel.org/r/20231121-ipq5332-nsscc-v2-7-a7ff61beab72%40quicinc.com
+patch subject: [PATCH v2 7/9] clk: qcom: add NSS clock Controller driver for Qualcomm IPQ5332
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20231124/202311241420.9uiff44i-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231124/202311241420.9uiff44i-lkp@intel.com/reproduce)
 
-This clearly shows that it is useful to reset the PLLs in applications
-where multiple clock outputs are used. However, the Si5351 also allows
-for glitch-free rate adjustment of its PLLs if one avoids resetting the
-PLL. In our audio application where a single Si5351 clock output is used
-to supply a runtime adjustable bit clock, this unconditional PLL reset
-behaviour introduces unwanted glitches in the clock output.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311241420.9uiff44i-lkp@intel.com/
 
-It would appear that the problem being solved in the former commit
-may be solved by using the optional device tree property introduced in
-the latter commit, obviating the need for an unconditional PLL reset
-after rate adjustment. But it's not OK to break the default behaviour of
-the driver, and it cannot be assumed that all device trees are using the
-property introduced in the latter commit. Hence, the new behaviour is
-made opt-in.
+All errors (new ones prefixed by >>):
 
-Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Cc: Rabeeh Khoury <rabeeh@solid-run.com>
-Cc: Jacob Siverskog <jacob@teenage.engineering>
-Cc: Sergej Sawazki <sergej@taudac.com>
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Acked-by: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
----
- drivers/clk/clk-si5351.c             | 47 +++++++++++++++++++++++++++++++++---
- include/linux/platform_data/si5351.h |  2 ++
- 2 files changed, 46 insertions(+), 3 deletions(-)
+>> drivers/clk/qcom/nsscc-ipq5332.c:161:62: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                                                                ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+>> drivers/clk/qcom/nsscc-ipq5332.c:162:2: error: call to undeclared function 'C'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           C(P_UNIPHY0_NSS_RX_CLK, 12.5, 0, 0),
+           ^
+   drivers/clk/qcom/nsscc-ipq5332.c:166:63: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_125[] = {
+                                                                 ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+>> drivers/clk/qcom/nsscc-ipq5332.c:171:64: error: array has incomplete element type 'const struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
+                                                                  ^
+   drivers/clk/qcom/nsscc-ipq5332.c:171:21: note: forward declaration of 'struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
+                       ^
+>> drivers/clk/qcom/nsscc-ipq5332.c:172:2: error: call to undeclared function 'FMS'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           FMS(24000000, P_XO, 1, 0, 0),
+           ^
+>> drivers/clk/qcom/nsscc-ipq5332.c:173:2: error: call to undeclared function 'FM'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           FM(25000000, ftbl_nss_cc_port1_rx_clk_src_25),
+           ^
+>> drivers/clk/qcom/nsscc-ipq5332.c:191:11: error: use of undeclared identifier 'clk_rcg2_fm_ops'; did you mean 'clk_rcg2_ops'?
+                   .ops = &clk_rcg2_fm_ops,
+                           ^~~~~~~~~~~~~~~
+                           clk_rcg2_ops
+   drivers/clk/qcom/clk-rcg.h:170:29: note: 'clk_rcg2_ops' declared here
+   extern const struct clk_ops clk_rcg2_ops;
+                               ^
+   drivers/clk/qcom/nsscc-ipq5332.c:195:62: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_tx_clk_src_25[] = {
+                                                                ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:200:63: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_tx_clk_src_125[] = {
+                                                                 ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:205:64: error: array has incomplete element type 'const struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port1_tx_clk_src[] = {
+                                                                  ^
+   drivers/clk/qcom/nsscc-ipq5332.c:171:21: note: forward declaration of 'struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:225:11: error: use of undeclared identifier 'clk_rcg2_fm_ops'; did you mean 'clk_rcg2_ops'?
+                   .ops = &clk_rcg2_fm_ops,
+                           ^~~~~~~~~~~~~~~
+                           clk_rcg2_ops
+   drivers/clk/qcom/clk-rcg.h:170:29: note: 'clk_rcg2_ops' declared here
+   extern const struct clk_ops clk_rcg2_ops;
+                               ^
+   drivers/clk/qcom/nsscc-ipq5332.c:229:62: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port2_rx_clk_src_25[] = {
+                                                                ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:234:63: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port2_rx_clk_src_125[] = {
+                                                                 ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:239:64: error: array has incomplete element type 'const struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port2_rx_clk_src[] = {
+                                                                  ^
+   drivers/clk/qcom/nsscc-ipq5332.c:171:21: note: forward declaration of 'struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:259:11: error: use of undeclared identifier 'clk_rcg2_fm_ops'; did you mean 'clk_rcg2_ops'?
+                   .ops = &clk_rcg2_fm_ops,
+                           ^~~~~~~~~~~~~~~
+                           clk_rcg2_ops
+   drivers/clk/qcom/clk-rcg.h:170:29: note: 'clk_rcg2_ops' declared here
+   extern const struct clk_ops clk_rcg2_ops;
+                               ^
+   drivers/clk/qcom/nsscc-ipq5332.c:263:62: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port2_tx_clk_src_25[] = {
+                                                                ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:268:63: error: array has incomplete element type 'const struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port2_tx_clk_src_125[] = {
+                                                                 ^
+   drivers/clk/qcom/nsscc-ipq5332.c:161:21: note: forward declaration of 'struct freq_conf'
+   static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:273:64: error: array has incomplete element type 'const struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port2_tx_clk_src[] = {
+                                                                  ^
+   drivers/clk/qcom/nsscc-ipq5332.c:171:21: note: forward declaration of 'struct freq_multi_tbl'
+   static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
+                       ^
+   drivers/clk/qcom/nsscc-ipq5332.c:293:11: error: use of undeclared identifier 'clk_rcg2_fm_ops'; did you mean 'clk_rcg2_ops'?
+                   .ops = &clk_rcg2_fm_ops,
+                           ^~~~~~~~~~~~~~~
+                           clk_rcg2_ops
+   drivers/clk/qcom/clk-rcg.h:170:29: note: 'clk_rcg2_ops' declared here
+   extern const struct clk_ops clk_rcg2_ops;
+                               ^
+   19 errors generated.
 
-diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
-index cbf7cde01157..bed0fe3bfa08 100644
---- a/drivers/clk/clk-si5351.c
-+++ b/drivers/clk/clk-si5351.c
-@@ -506,6 +506,8 @@ static int si5351_pll_set_rate(struct clk_hw *hw, unsigned long rate,
- {
- 	struct si5351_hw_data *hwdata =
- 		container_of(hw, struct si5351_hw_data, hw);
-+	struct si5351_platform_data *pdata =
-+		hwdata->drvdata->client->dev.platform_data;
- 	u8 reg = (hwdata->num == 0) ? SI5351_PLLA_PARAMETERS :
- 		SI5351_PLLB_PARAMETERS;
- 
-@@ -518,9 +520,10 @@ static int si5351_pll_set_rate(struct clk_hw *hw, unsigned long rate,
- 		(hwdata->params.p2 == 0) ? SI5351_CLK_INTEGER_MODE : 0);
- 
- 	/* Do a pll soft reset on the affected pll */
--	si5351_reg_write(hwdata->drvdata, SI5351_PLL_RESET,
--			 hwdata->num == 0 ? SI5351_PLL_RESET_A :
--					    SI5351_PLL_RESET_B);
-+	if (pdata->pll_reset[hwdata->num])
-+		si5351_reg_write(hwdata->drvdata, SI5351_PLL_RESET,
-+				 hwdata->num == 0 ? SI5351_PLL_RESET_A :
-+						    SI5351_PLL_RESET_B);
- 
- 	dev_dbg(&hwdata->drvdata->client->dev,
- 		"%s - %s: p1 = %lu, p2 = %lu, p3 = %lu, parent_rate = %lu, rate = %lu\n",
-@@ -1222,6 +1225,44 @@ static int si5351_dt_parse(struct i2c_client *client,
- 		}
- 	}
- 
-+	/*
-+	 * Parse PLL reset mode. For compatibility with older device trees, the
-+	 * default is to always reset a PLL after setting its rate.
-+	 */
-+	pdata->pll_reset[0] = true;
-+	pdata->pll_reset[1] = true;
-+
-+	of_property_for_each_u32(np, "silabs,pll-reset-mode", prop, p, num) {
-+		if (num >= 2) {
-+			dev_err(&client->dev,
-+				"invalid pll %d on pll-reset-mode prop\n", num);
-+			return -EINVAL;
-+		}
-+
-+		p = of_prop_next_u32(prop, p, &val);
-+		if (!p) {
-+			dev_err(&client->dev,
-+				"missing pll-reset-mode for pll %d\n", num);
-+			return -EINVAL;
-+		}
-+
-+		switch (val) {
-+		case 0:
-+			/* Reset PLL whenever its rate is adjusted */
-+			pdata->pll_reset[num] = true;
-+			break;
-+		case 1:
-+			/* Don't reset PLL whenever its rate is adjusted */
-+			pdata->pll_reset[num] = false;
-+			break;
-+		default:
-+			dev_err(&client->dev,
-+				"invalid pll-reset-mode %d for pll %d\n", val,
-+				num);
-+			return -EINVAL;
-+		}
-+	}
-+
- 	/* per clkout properties */
- 	for_each_child_of_node(np, child) {
- 		if (of_property_read_u32(child, "reg", &num)) {
-diff --git a/include/linux/platform_data/si5351.h b/include/linux/platform_data/si5351.h
-index c71a2dd66143..5f412a615532 100644
---- a/include/linux/platform_data/si5351.h
-+++ b/include/linux/platform_data/si5351.h
-@@ -105,10 +105,12 @@ struct si5351_clkout_config {
-  * @clk_xtal: xtal input clock
-  * @clk_clkin: clkin input clock
-  * @pll_src: array of pll source clock setting
-+ * @pll_reset: array indicating if plls should be reset after setting the rate
-  * @clkout: array of clkout configuration
-  */
- struct si5351_platform_data {
- 	enum si5351_pll_src pll_src[2];
-+	bool pll_reset[2];
- 	struct si5351_clkout_config clkout[8];
- };
- 
+
+vim +161 drivers/clk/qcom/nsscc-ipq5332.c
+
+   160	
+ > 161	static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_25[] = {
+ > 162		C(P_UNIPHY0_NSS_RX_CLK, 12.5, 0, 0),
+   163		C(P_UNIPHY0_NSS_RX_CLK, 5, 0, 0),
+   164	};
+   165	
+   166	static const struct freq_conf ftbl_nss_cc_port1_rx_clk_src_125[] = {
+   167		C(P_UNIPHY0_NSS_RX_CLK, 2.5, 0, 0),
+   168		C(P_UNIPHY0_NSS_RX_CLK, 1, 0, 0),
+   169	};
+   170	
+ > 171	static const struct freq_multi_tbl ftbl_nss_cc_port1_rx_clk_src[] = {
+ > 172		FMS(24000000, P_XO, 1, 0, 0),
+ > 173		FM(25000000, ftbl_nss_cc_port1_rx_clk_src_25),
+   174		FMS(78125000, P_UNIPHY0_NSS_RX_CLK, 4, 0, 0),
+   175		FM(125000000, ftbl_nss_cc_port1_rx_clk_src_125),
+   176		FMS(156250000, P_UNIPHY0_NSS_RX_CLK, 2, 0, 0),
+   177		FMS(312500000, P_UNIPHY0_NSS_RX_CLK, 1, 0, 0),
+   178		{ }
+   179	};
+   180	
+   181	static struct clk_rcg2 nss_cc_port1_rx_clk_src = {
+   182		.cmd_rcgr = 0x450,
+   183		.mnd_width = 0,
+   184		.hid_width = 5,
+   185		.parent_map = nss_cc_parent_map_1,
+   186		.freq_multi_tbl = ftbl_nss_cc_port1_rx_clk_src,
+   187		.clkr.hw.init = &(const struct clk_init_data) {
+   188			.name = "nss_cc_port1_rx_clk_src",
+   189			.parent_data = nss_cc_parent_data_1,
+   190			.num_parents = ARRAY_SIZE(nss_cc_parent_data_1),
+ > 191			.ops = &clk_rcg2_fm_ops,
+   192		},
+   193	};
+   194	
 
 -- 
-2.42.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
