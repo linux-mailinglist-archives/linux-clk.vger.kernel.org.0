@@ -1,58 +1,58 @@
-Return-Path: <linux-clk+bounces-816-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-818-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7BF7803DC3
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Dec 2023 19:57:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7473803DC8
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Dec 2023 19:57:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6165281167
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Dec 2023 18:57:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E70101C20A86
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Dec 2023 18:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DCE2FC42;
-	Mon,  4 Dec 2023 18:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04EFF2FC4E;
+	Mon,  4 Dec 2023 18:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PnzWPAXH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6CsrLkr"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5764A187;
-	Mon,  4 Dec 2023 10:57:32 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6d857f6f1c0so2688823a34.0;
-        Mon, 04 Dec 2023 10:57:32 -0800 (PST)
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A40B10F;
+	Mon,  4 Dec 2023 10:57:33 -0800 (PST)
+Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-58e30de3933so1309475eaf.3;
+        Mon, 04 Dec 2023 10:57:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701716251; x=1702321051; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701716252; x=1702321052; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jS34Td6ydiJu49ocw1zXulx/VuEOGYfI7vU1+EDroQA=;
-        b=PnzWPAXHYt3LeXkZb4OL/l5BerD+0jX/oVOCBsrrVka+XMtK5QjiN4ZxAJc5mAepzJ
-         KwZvwPTDYY1sy0AJ4nWISmyuW9XahSaTdL3o+HJQLLU428shcl4TowHON3AQvrK7rz5A
-         xjKdGKQSJFowU3xCpU0U0JGnptwrbrylBWLEVFi47/ONDs4za2DIVcz3g/V3+Fu0xXPX
-         tdbvp4XXCyC142lmntOebxUlzp7JesGev+pOfWyIaGTqnnnyW8YPS6AZxEfaDz9/ae29
-         JcWGtA0XhKHuKmB8vc+o6oHTBDADs3ysrhsyXW9GorlGMRb7YYfj5dCoj8jAevPsLHgI
-         QPmg==
+        bh=eoHBy2Gq0IKDCcd2s7uyWkrAzEtkWU3lQMiTxxVB74E=;
+        b=M6CsrLkrDBp9ZGNhzcv9WgV+Rt9dqxqqUfW7Rkf38mpLtKinTeWOLBGxHU57453FTl
+         XdkVSzXip1wNwou4zoQaJzAz4RZj8LV/7hxerQPMJDyeEkFG8ObJXWlyWUDecC/9b5MR
+         WsVyMYWRP/rgPOCRuuA6I3nM2kxdwgE6i4o+Sph6mm9NcmfqJd7RUNmRu23so4tqZxoK
+         JPIokhSooADf+es9MB2xn0i4Y12w9DBbNcooA9xyhcZzD5BTk/8F/5tXfi3QcDiRe4ax
+         6qPnx71fZ0BMdsbn/p7J9cOG/Ae4nz3k28e606YzVonqNpVles0r4z8vNsqSv62LHiDi
+         UgIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701716251; x=1702321051;
+        d=1e100.net; s=20230601; t=1701716252; x=1702321052;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jS34Td6ydiJu49ocw1zXulx/VuEOGYfI7vU1+EDroQA=;
-        b=Qub0WqQbs3eJ+xr9jVJVTrJOGNI7+hXrgMe0KY5ZTVIw8fHML6Fo+8l/7GYJbxa9KF
-         IRJH4AiyIEjaL2Lg32d3h6MBOERZ+5kmHI+XcExsMLZUTSXQf7KZVhnh4r367B+rncm6
-         qOmdT7YwNZbjIv8CNm9RcquJBKirpJroInfOLZj5n0pG/bdUf+4oZlxzDkQuCl+0i5tp
-         Z1tq6QsJX/vC6/aWnU90sfKY7k0YlV2+uYoqaWn2tmFbOA2++JzaBIB0phzvGAhVqSD3
-         Td873ceownRtPf34tQa58FzFUQiiE+ukzxdVFgWW0IGNoFdHWe6RMJzjf38RZTc7kn6q
-         9J4w==
-X-Gm-Message-State: AOJu0YwwrBwHfVnz15YEdK+xLceA48WZ9SX7/mEOMKuniUt2ifxK4bu0
-	DR6JbfnbPPSGTMsVw5EXmBv2ty6Hvxc=
-X-Google-Smtp-Source: AGHT+IEUm8NisHgqn3y2rfnvd8YPgGCJGZWYz3Vvoe+MmLVG/2AgljpOpgZvYnOCvaNysMml8E1gGQ==
-X-Received: by 2002:a05:6830:d7:b0:6d8:74e2:5d22 with SMTP id x23-20020a05683000d700b006d874e25d22mr4372548oto.75.1701716251596;
-        Mon, 04 Dec 2023 10:57:31 -0800 (PST)
+        bh=eoHBy2Gq0IKDCcd2s7uyWkrAzEtkWU3lQMiTxxVB74E=;
+        b=pfVTffK+ceIFS/9uDXB5p6LU/vG0zr/TdM0Sxe07BzqB5KUDAT9mqKD+0WoGdja4W+
+         LXRdp27jrYSKASeHT33mL9fgQm5YMm4uaq1S2Iis9VNc1jmPpYPqGd8Q48ygroozCht1
+         ZA/3gvZvZxj6/5XEZfozTqDcPyOwT8kEXGCHtV93VX9ALeI3Maj1bNVfqZqEztGLBmAP
+         mzG25Db7/JcJ5PdGzNCWgFkDUlf0lpcKQpT/+mQq0tzcjdi5BrmXGYy4p+uA16iEn34V
+         7mIkEREMk46hYbz0v54XrzbF0ts7vkfFvZ9DP1UWAinHyuw0OHuMEN1XvmozeJvpk6Zb
+         QPiw==
+X-Gm-Message-State: AOJu0YwlNoAKHYnfF1bdoK9TvwPTaqOx1SBgZhg9zeMYZAFLIcKFTo1K
+	r+DcQEQQx0jLzO+LpRjRZ9E=
+X-Google-Smtp-Source: AGHT+IEEs2z0j7U8AWKdw7TYbGtvp3FdOu8z69zTjkf+zoQXSsSDKlIvpLJQGbT2pjBiBT+1eo+/Ng==
+X-Received: by 2002:a05:6820:2291:b0:58e:2845:d43b with SMTP id ck17-20020a056820229100b0058e2845d43bmr4007944oob.4.1701716252459;
+        Mon, 04 Dec 2023 10:57:32 -0800 (PST)
 Received: from localhost.localdomain ([75.28.21.198])
         by smtp.gmail.com with ESMTPSA id y25-20020a4a2d19000000b00581fc1af0a7sm2073303ooy.28.2023.12.04.10.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 10:57:31 -0800 (PST)
+        Mon, 04 Dec 2023 10:57:32 -0800 (PST)
 From: Chris Morgan <macroalpha82@gmail.com>
 To: linux-rockchip@lists.infradead.org
 Cc: dri-devel@lists.freedesktop.org,
@@ -74,9 +74,9 @@ Cc: dri-devel@lists.freedesktop.org,
 	krzysztof.kozlowski+dt@linaro.org,
 	robh+dt@kernel.org,
 	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH V2 07/10] clk: rockchip: Mark pclk_usb as critical on rk3568
-Date: Mon,  4 Dec 2023 12:57:16 -0600
-Message-Id: <20231204185719.569021-8-macroalpha82@gmail.com>
+Subject: [PATCH V2 08/10] clk: rockchip: rk3568: Add PLL rate for 126.4MHz
+Date: Mon,  4 Dec 2023 12:57:17 -0600
+Message-Id: <20231204185719.569021-9-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231204185719.569021-1-macroalpha82@gmail.com>
 References: <20231204185719.569021-1-macroalpha82@gmail.com>
@@ -90,13 +90,12 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-In the reference manual under "2.8.6 NIU Clock gating reliance"
-it is stated that pclk_usb_niu has a dependency on hclk_usb_niu.
+Add support for a PLL rate of 126.4MHz so that the Powkiddy X55 panel
+can run at a requested 60hz.
 
-While the manual does not state that this is a bi-directional
-relationship it was noted that the sdmmc2 failed to operate for me in
-mmc mode if the pclk_usb was not marked as critical. The parent clock
-of the hclk_sdmmc2 is hclk_usb.
+I have confirmed this rate fits with all the constraints
+listed in the TRM for the VPLL (as an integer PLL) in Part 1 "Chapter
+2 Clock & Reset Unit (CRU)."
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
@@ -104,17 +103,17 @@ Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/clk/rockchip/clk-rk3568.c b/drivers/clk/rockchip/clk-rk3568.c
-index bfbcbb744327..c4fa2375dbfb 100644
+index c4fa2375dbfb..fa408fedf625 100644
 --- a/drivers/clk/rockchip/clk-rk3568.c
 +++ b/drivers/clk/rockchip/clk-rk3568.c
-@@ -1595,6 +1595,7 @@ static const char *const rk3568_cru_critical_clocks[] __initconst = {
- 	"pclk_php",
- 	"hclk_usb",
- 	"hclk_vo",
-+	"pclk_usb",
- };
- 
- static const char *const rk3568_pmucru_critical_clocks[] __initconst = {
+@@ -78,6 +78,7 @@ static struct rockchip_pll_rate_table rk3568_pll_rates[] = {
+ 	RK3036_PLL_RATE(200000000, 1, 100, 3, 4, 1, 0),
+ 	RK3036_PLL_RATE(148500000, 1, 99, 4, 4, 1, 0),
+ 	RK3036_PLL_RATE(135000000, 2, 45, 4, 1, 1, 0),
++	RK3036_PLL_RATE(126400000, 1, 79, 5, 3, 1, 0),
+ 	RK3036_PLL_RATE(119000000, 3, 119, 4, 2, 1, 0),
+ 	RK3036_PLL_RATE(115200000, 1, 24, 5, 1, 1, 0),
+ 	RK3036_PLL_RATE(108000000, 2, 45, 5, 1, 1, 0),
 -- 
 2.34.1
 
