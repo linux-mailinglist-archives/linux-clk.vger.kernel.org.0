@@ -1,153 +1,246 @@
-Return-Path: <linux-clk+bounces-833-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-837-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C11E8049C1
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 07:11:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BF3D804A25
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 07:34:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 957CC281635
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 06:11:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DCB01C20DE8
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 06:34:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 539A3DDA7;
-	Tue,  5 Dec 2023 06:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B50E8D51C;
+	Tue,  5 Dec 2023 06:34:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Hsrl5JsC"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="gVXI29ZW"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22970C9;
-	Mon,  4 Dec 2023 22:10:58 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B55pjCK004087;
-	Tue, 5 Dec 2023 06:10:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=7CWx8C9XE0luytjPVkQBdfbRlLh+RJR/tazhl+w79/0=;
- b=Hsrl5JsCt+DwFVt7oUnzz4z1KVKcpzbJvTjDP330Z0Zi7RaQjCKcg+c9pS4QkVzKO6gm
- vP6J0LsQtRfLAhCaKaUE1TbDD9J6RiFjvXo1HrfC6KhIPRIJyO21aXvCxBLNmWT2dJVk
- lpOjj4krXe/C2FCAcc+Zz7KQdxt/scRy5lpYgDCxyZ3/jnDo+QhEc6AGJvp6AJ2uOhxv
- Jub9XcprMVTxAAPUJdRmWOWvQ1sfvL3TsGhUcH+jROcHp6Vg6NZ46nxRbxJVnMzpWljR
- 7QctLvNvH2I1eRlS6nTPboKuBhQjOYsLfPJUKL9Nk4UUWRSFRGqp98s71xmgpbkBNzfs 7Q== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3usghcsv15-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Dec 2023 06:10:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B56AqhP028873
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 5 Dec 2023 06:10:52 GMT
-Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 4 Dec 2023 22:10:46 -0800
-From: Sibi Sankar <quic_sibis@quicinc.com>
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC: <agross@kernel.org>, <conor+dt@kernel.org>, <quic_tdas@quicinc.com>,
-        <quic_rjendra@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <neil.armstrong@linaro.org>,
-        <abel.vesa@linaro.org>, <quic_tsoni@quicinc.com>,
-        Sibi Sankar
-	<quic_sibis@quicinc.com>
-Subject: [PATCH V3 4/4] clk: qcom: rpmh: Add support for X1E80100 rpmh clocks
-Date: Tue, 5 Dec 2023 11:40:02 +0530
-Message-ID: <20231205061002.30759-5-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231205061002.30759-1-quic_sibis@quicinc.com>
-References: <20231205061002.30759-1-quic_sibis@quicinc.com>
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2058.outbound.protection.outlook.com [40.92.23.58])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B684BCE;
+	Mon,  4 Dec 2023 22:34:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KO0CLC7/fRAPFeMp4Offj7WFClzzxoKcihXVc26y8sz7DCVIRjqo2DOwhBNkcduAzSc2o8NEccWz2W1HnhcPTs2kM9Gq8IyBUP16xyvF1wTBrjhmSlFKzhKrJ8P7ZmI5kLfL0vjTX2UcyRKjB3AXdh3wHpJ6J4fNRDIdFEkPQV4rUY0cPR7aRvoZRlxHErEc30WTaIfqlGFyGULD9Zx4SQya8W1eC912mLDaF/h875AFJ7RA1coZai8T2V3WnLt6LbqvPu1ANv1Bwh0UuvtkyEaSIfRAkvLP5FdrBIMAx4XVIGXersWVpG7z0dUtYwhKL0SzHInfmWzBgwSKW8xZ2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QsA36/WzLy5Bh1MeIsei6q76Rk/kMPrcoxhBlyVrIww=;
+ b=dAStvUuwcZa0wpkJ0UjLiGMMTt/1+Y90rhHA4yPqR3cNVNG4NKr63DEppLM5T8ejPfcZWsMUA87WCMEJewYbm9hhUlo1cNOCJYQ6vnLKHofYjuzwAQ9UcmrH5ezVatgWNI/liyZSo4BjieNQof3JTKExmTl4RFYnyNMWIj5LhVeyGELZlw4mSgXJLKOecl5cRlCPgpv3xBvQjgUl90FAMZfk8u7gIjSsUTfZU2JyyfMRJHQVSZyirYFJP7zz8lurjLEYvw16aaP4V3C/EwkUJkyIr5rpQkPNY6Ow3gOJ+w5xnxsSW5sjgQnknT5CNoBWbMXUS8yZHImGvnlSBWCYLg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QsA36/WzLy5Bh1MeIsei6q76Rk/kMPrcoxhBlyVrIww=;
+ b=gVXI29ZWJH4daZartyMiNXvuaYPSU6qNGHx5AFi7L/kAIxFyY7h+3zpxKHbvGPiCJ8HWt5+ZWedSTpgpAzbC0tSpg08S3Dx8DatvW+F1JxPxnGAOGqVY4JRlZ1cEnY8QbXqPbf1IJLKEqEXi8jRgy0XIm1UEU1XwC0Fq7nbaL/FM3sNnY2kSAmByypp9nl/lsgNv2YzVsq/c3soZyJLZrhU6Wwjwm/9ZAmpn40gT21Ij3bYUgg+H6FKncDdmw1HgYIGa4VqoCpRTm6MnXwrQjJ0XMHDnO38+MalPLGtQE8f4SLzDlWeEo0LGeMT/oPABOOl1H6/h9TLcWWQAQq5NVA==
+Received: from IA1PR20MB4953.namprd20.prod.outlook.com (2603:10b6:208:3af::19)
+ by CH3PR20MB5698.namprd20.prod.outlook.com (2603:10b6:610:14a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Tue, 5 Dec
+ 2023 06:34:40 +0000
+Received: from IA1PR20MB4953.namprd20.prod.outlook.com
+ ([fe80::55b:c350:980:ad8]) by IA1PR20MB4953.namprd20.prod.outlook.com
+ ([fe80::55b:c350:980:ad8%6]) with mapi id 15.20.7046.024; Tue, 5 Dec 2023
+ 06:34:40 +0000
+From: Inochi Amaoto <inochiama@outlook.com>
+To: Chen Wang <unicorn_wang@outlook.com>
+Cc: Inochi Amaoto <inochiama@outlook.com>,
+	Chen Wang <unicornxw@gmail.com>,
+	aou@eecs.berkeley.edu,
+	chao.wei@sophgo.com,
+	conor@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com,
+	palmer@dabbelt.com,
+	paul.walmsley@sifive.com,
+	richardcochran@gmail.com,
+	robh+dt@kernel.org,
+	sboyd@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	haijiao.liu@sophgo.com,
+	xiaoguang.xing@sophgo.com,
+	guoren@kernel.org,
+	jszhang@kernel.org,
+	samuel.holland@sifive.com
+Subject: Re: [PATCH v4 3/4] clk: sophgo: Add SG2042 clock generator driver
+Date: Tue,  5 Dec 2023 14:34:30 +0800
+Message-ID:
+ <IA1PR20MB4953B7BBA12262E0ECAC2B04BB85A@IA1PR20MB4953.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <MA0P287MB033276574107F5031C153DDDFE85A@MA0P287MB0332.INDP287.PROD.OUTLOOK.COM>
+References: <MA0P287MB033276574107F5031C153DDDFE85A@MA0P287MB0332.INDP287.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [6NRc+sQnH3Gt+wuJo5vGZLJAB5G2YDi4Huk0BjiIYOY=]
+X-ClientProxiedBy: TYAPR01CA0184.jpnprd01.prod.outlook.com
+ (2603:1096:404:ba::28) To IA1PR20MB4953.namprd20.prod.outlook.com
+ (2603:10b6:208:3af::19)
+X-Microsoft-Original-Message-ID:
+ <20231205063431.815824-1-inochiama@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cN9Cp6DQdrkiT5QqSn9ls5tWgtNUtqKj
-X-Proofpoint-GUID: cN9Cp6DQdrkiT5QqSn9ls5tWgtNUtqKj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-05_03,2023-12-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- adultscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311060000
- definitions=main-2312050050
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR20MB4953:EE_|CH3PR20MB5698:EE_
+X-MS-Office365-Filtering-Correlation-Id: 245e8579-1866-4af2-8199-08dbf55c41ea
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	ez7JSzYL1QPUzDiwnz7Rp1nOV/aJilVCVOtuVdPM6GuFOms6yCl5+aNg5taCOfUFOF32OsCQWdm9JoFstJdwV6+2Z/duzg65Tkvdec1ZJiiIEr51QRhmPPxCcUCQ2nm2FJnmw34KjOzP7IG5kW9j69xCKk3RXhhMaTPq8Iq2vNehDSgx2lTDCRlz29rLEnhn7prGoiYiOfOGx2AxgzGdITtgZyilNmU3OrH705ImbmbXEy+seWAHoXgp4RkGx3p4MYN8zIwMGWM1n3Wd6sY1mGiLOXLwBPsj3y2uUmRtPqBVM+JWbs9QFgzrimLOyeNuGEbBN9hoWmzNmIETOQyr63DVNnyDA3eGOa00yLKpdtytwzhWtZEKTbD72zZkSYjfU0dL8dD5tFBuZSfE0xcpSKu39iYWYW32QkuEP1I1W/j2zQyVB1QZLnHg5DWgfheDxs6w4ORjXvgBI8vayLV5zmuUsoUHnu9lPCHgFX3O9yM+PjH0fHxygTT1ooeyq8X/FqeO0ZmTfG5JpBrPW025uECyhFJuRniL504zHSzA9MXbRh2KXWIJ2twNs+vUEhik5gHYacubgfJEHHbtc9kyMS0+LgibamHb7OGoiKuShK3gwd6umncroP+UunJTETB+
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?0aX8bHmtri44fLLCbCzR+pGrQ9EbgVXEvlbLfuv8ywm34ve4UbCOsbEuNipr?=
+ =?us-ascii?Q?WndggJSkD8zL4DaPy9xbr1sY9zvuOxdUDsIJe3C6l5zsc6a9vsovYmL40mzh?=
+ =?us-ascii?Q?BqvDtFGOxpBosi07pq+pNIQ5d9vuvo+kDfAuM7l5bo7jL0PNk8wK4k6QQddX?=
+ =?us-ascii?Q?z9sGj3XKS7YzNK3+otS00sY74WEvErxCeV3EIqt0fxloT4HOQ0irBZUhVikW?=
+ =?us-ascii?Q?CzxXNTltibGk3vLYqZKh9gps2vG3+tg2nB4lmsSXM3IEo4VoRsBhhwbNPTqu?=
+ =?us-ascii?Q?6ssmnznnac/pg1DcZBH/HiAsTgEqHDVn9qxyPbIOlvMwP6KgnCdovi8ZDLMT?=
+ =?us-ascii?Q?FePvKR0Ut6r/1ph3ShH4g6ptAKxETc06Squr9P5KKJLIwmoKzU8IOyNlyJbr?=
+ =?us-ascii?Q?BiDZmXPx3W9E2ziE5QkfS6z2k0yUxek7aYmaaiGPxJxQvx80mvbdNOTIREVN?=
+ =?us-ascii?Q?ObTYhlsrTn/RBQkdk+2ekdLTmYWWMuE8ARY7FIFUC/3e2HHuETBAIBgrEK0W?=
+ =?us-ascii?Q?YJ5LMLC2SLHW6uiaErGdmm+NzF1k7DoHevOYgdAPhfl10epHZTCGSXY2Ysv2?=
+ =?us-ascii?Q?yOFofoMvZ+bwWaJp1QHij9SG02utAksyNzSiZ4GwtPrF7g4yUvanuqzCadJE?=
+ =?us-ascii?Q?TTQFpqVTvCZMEG4uTM8O6l2REnT1oZJTZRqbZ3KcNHAVEXLCGR88HYrD4ea+?=
+ =?us-ascii?Q?BAL//dsSzyRysP294hN3xgLJXIMHR4TEbbXtB58GLn36fpj2iI1+o3PlfqJk?=
+ =?us-ascii?Q?RsRY+OmMjzHVTLxIuTh/bFhhlGBXHtQsrHy3JhouA5wt3SyVQzYGvmgLcEBi?=
+ =?us-ascii?Q?q6+Wxa/c/x43y8dsze8nEA4c/Md/E0eysSnoMPvKWElhPB5NZWew9SBgXrd+?=
+ =?us-ascii?Q?bhJaUBU+nSlyYNwvfgqSzjLAJHMPMhjIXIb3b6VZiOXz780y8zgIwrSvpEhL?=
+ =?us-ascii?Q?CgBVGAi29HmJqLUQXwymcVu+zQKLekA6Fa7lAwWQtXdP7ZEHhVlAv3rA970D?=
+ =?us-ascii?Q?1rH3K1zw+ovaxRZdbkq36v5qHUbSKIZo0roAof4OfU3Z0iO4IP5FfFjyFg8S?=
+ =?us-ascii?Q?n7aeTbFN/wgpZrdWe+RdCbgV+oWigZQ2XXItTcnHpRShiWxZM2I29J1mBdhI?=
+ =?us-ascii?Q?AGxy8Z9ChO7WMpKpoBikUIMWmdapuoOVfDVRqOEmr9y4TEItutqlWuV/Bw5e?=
+ =?us-ascii?Q?GN+TeRhPnb26c13EayAgnt3uvangbLrpXbelazuUGReIajLReA/ishFU3mg?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 245e8579-1866-4af2-8199-08dbf55c41ea
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR20MB4953.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2023 06:34:39.9175
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR20MB5698
 
-From: Rajendra Nayak <quic_rjendra@quicinc.com>
+>On 2023/12/5 9:13, Inochi Amaoto wrote:
+>>> From: Chen Wang <unicorn_wang@outlook.com>
+>>>
+>>> Add a driver for the SOPHGO SG2042 clock generator.
+>>>
+>>> Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
+>>> ---
+>>> MAINTAINERS                            |    7 +
+>>> drivers/clk/Kconfig                    |    1 +
+>>> drivers/clk/Makefile                   |    1 +
+>>> drivers/clk/sophgo/Kconfig             |    8 +
+>>> drivers/clk/sophgo/Makefile            |    2 +
+>>> drivers/clk/sophgo/clk-sophgo-sg2042.c | 1371 ++++++++++++++++++++++++
+>>> drivers/clk/sophgo/clk-sophgo-sg2042.h |  226 ++++
+>>> 7 files changed, 1616 insertions(+)
+>>> create mode 100644 drivers/clk/sophgo/Kconfig
+>>> create mode 100644 drivers/clk/sophgo/Makefile
+>>> create mode 100644 drivers/clk/sophgo/clk-sophgo-sg2042.c
+>>> create mode 100644 drivers/clk/sophgo/clk-sophgo-sg2042.h
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 97f51d5ec1cf..c9c75468f2cb 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -20269,6 +20269,13 @@ S:    Maintained
+>>> F:    arch/riscv/boot/dts/sophgo/
+>>> F:    Documentation/devicetree/bindings/riscv/sophgo.yaml
+>>>
+>>> +SOPHGO CLOCK DRIVER
+>>> +M:    Chen Wang <unicorn_wang@outlook.com>
+>>> +S:    Maintained
+>>> +F:    Documentation/devicetree/bindings/clock/sophgo/
+>>> +F:    drivers/clk/sophgo/
+>>> +F:    include/dt-bindings/clock/sophgo,sg2042-clkgen.h
+>>> +
+>>> SOUND
+>>> M:    Jaroslav Kysela <perex@perex.cz>
+>>> M:    Takashi Iwai <tiwai@suse.com>
+>>> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+>>> index c30d0d396f7a..514343934fda 100644
+>>> --- a/drivers/clk/Kconfig
+>>> +++ b/drivers/clk/Kconfig
+>>> @@ -499,6 +499,7 @@ source "drivers/clk/rockchip/Kconfig"
+>>> source "drivers/clk/samsung/Kconfig"
+>>> source "drivers/clk/sifive/Kconfig"
+>>> source "drivers/clk/socfpga/Kconfig"
+>>> +source "drivers/clk/sophgo/Kconfig"
+>>> source "drivers/clk/sprd/Kconfig"
+>>> source "drivers/clk/starfive/Kconfig"
+>>> source "drivers/clk/sunxi/Kconfig"
+>>> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+>>> index ed71f2e0ee36..aa5d2cf0b6a6 100644
+>>> --- a/drivers/clk/Makefile
+>>> +++ b/drivers/clk/Makefile
+>>> @@ -119,6 +119,7 @@ obj-$(CONFIG_ARCH_ROCKCHIP)        += rockchip/
+>>> obj-$(CONFIG_COMMON_CLK_SAMSUNG)    += samsung/
+>>> obj-$(CONFIG_CLK_SIFIVE)        += sifive/
+>>> obj-y                    += socfpga/
+>>> +obj-$(CONFIG_ARCH_SOPHGO)        += sophgo/
+>>> obj-$(CONFIG_PLAT_SPEAR)        += spear/
+>>> obj-y                    += sprd/
+>>> obj-$(CONFIG_ARCH_STI)            += st/
+>>> diff --git a/drivers/clk/sophgo/Kconfig b/drivers/clk/sophgo/Kconfig
+>>> new file mode 100644
+>>> index 000000000000..b0fbe4499870
+>>> --- /dev/null
+>>> +++ b/drivers/clk/sophgo/Kconfig
+>>> @@ -0,0 +1,8 @@
+>>> +# SPDX-License-Identifier: GPL-2.0
+>>> +
+>>> +config CLK_SOPHGO_SG2042
+>>> +    bool "Sophgo SG2042 clock support"
+>>> +    depends on ARCH_SOPHGO || COMPILE_TEST
+>>> +    default ARCH_SOPHGO
+>>> +    help
+>>> +      Say yes here to support the clock controller on the Sophgo SG2042 SoC.
+>> Please add RISCV to its depends. Not all the sophgo SoCs are in the RISC-V
+>> platform, Some are arm chips. It is not good to build this driver
+>> in that arch.
+>ARCH_SOPHGO is only defined in RISC-V arch, so I think RISCV should not be needed as depends.
 
-Adds the RPMH clocks present in X1E80100 SoC
+It needs for the SG200X. which has a arm core. Maybe we should left it now
+and add this in the future.
 
-Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-Co-developed-by: Sibi Sankar <quic_sibis@quicinc.com>
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+>>
+>> Also, the condition ARCH_SOPHGO is duplicate in the Makefile. Please
+>> remove one of them.
+>
+>Don't undestand your question "the condition ARCH_SOPHGO is duplicate in the Makefile ",  I think you are talking about Kconifg, what Makefile are you talking about?
+>
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 5d853fd43294..ce6f4363d2f7 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -372,6 +372,9 @@ DEFINE_CLK_RPMH_VRM(clk3, _a1, "clka3", 1);
- DEFINE_CLK_RPMH_VRM(clk4, _a1, "clka4", 1);
- DEFINE_CLK_RPMH_VRM(clk5, _a1, "clka5", 1);
- 
-+DEFINE_CLK_RPMH_VRM(clk3, _a2, "clka3", 2);
-+DEFINE_CLK_RPMH_VRM(clk4, _a2, "clka4", 2);
-+DEFINE_CLK_RPMH_VRM(clk5, _a2, "clka5", 2);
- DEFINE_CLK_RPMH_VRM(clk6, _a2, "clka6", 2);
- DEFINE_CLK_RPMH_VRM(clk7, _a2, "clka7", 2);
- DEFINE_CLK_RPMH_VRM(clk8, _a2, "clka8", 2);
-@@ -737,6 +740,28 @@ static const struct clk_rpmh_desc clk_rpmh_sm4450 = {
- 	.num_clks = ARRAY_SIZE(sm4450_rpmh_clocks),
- };
- 
-+static struct clk_hw *x1e80100_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div2.hw,
-+	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div2_ao.hw,
-+	[RPMH_LN_BB_CLK1]	= &clk_rpmh_clk6_a2.hw,
-+	[RPMH_LN_BB_CLK1_A]	= &clk_rpmh_clk6_a2_ao.hw,
-+	[RPMH_LN_BB_CLK2]	= &clk_rpmh_clk7_a2.hw,
-+	[RPMH_LN_BB_CLK2_A]	= &clk_rpmh_clk7_a2_ao.hw,
-+	[RPMH_LN_BB_CLK3]	= &clk_rpmh_clk8_a2.hw,
-+	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_clk8_a2_ao.hw,
-+	[RPMH_RF_CLK3]		= &clk_rpmh_clk3_a2.hw,
-+	[RPMH_RF_CLK3_A]	= &clk_rpmh_clk3_a2_ao.hw,
-+	[RPMH_RF_CLK4]		= &clk_rpmh_clk4_a2.hw,
-+	[RPMH_RF_CLK4_A]	= &clk_rpmh_clk4_a2_ao.hw,
-+	[RPMH_RF_CLK5]		= &clk_rpmh_clk5_a2.hw,
-+	[RPMH_RF_CLK5_A]	= &clk_rpmh_clk5_a2_ao.hw,
-+};
-+
-+static const struct clk_rpmh_desc clk_rpmh_x1e80100 = {
-+	.clks = x1e80100_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(x1e80100_rpmh_clocks),
-+};
-+
- static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
- 					 void *data)
- {
-@@ -838,6 +863,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
- 	{ .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
- 	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
-+	{ .compatible = "qcom,x1e80100-rpmh-clk", .data = &clk_rpmh_x1e80100},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, clk_rpmh_match_table);
--- 
-2.17.1
+I mean your change in drivers/clk/Makefile.
 
+>>> diff --git a/drivers/clk/sophgo/Makefile b/drivers/clk/sophgo/Makefile
+>>> new file mode 100644
+>>> index 000000000000..13834cce260c
+>>> --- /dev/null
+>>> +++ b/drivers/clk/sophgo/Makefile
+>>> @@ -0,0 +1,2 @@
+>>> +# SPDX-License-Identifier: GPL-2.0
+>>> +obj-$(CONFIG_CLK_SOPHGO_SG2042)    += clk-sophgo-sg2042.o
+>>> diff --git a/drivers/clk/sophgo/clk-sophgo-sg2042.c b/drivers/clk/sophgo/clk-sophgo-sg2042.c
+>>> new file mode 100644
+>>> index 000000000000..421ebcc7192b
+>>> ......
+>>> +        }
+>>> +
+>>> +#if defined(DEBUG)
+>>> +        pr_info("registered [%d : %s]\n", gate->id, gate->name);
+>>> +#endif
+>> Drop, no need for this.
+>
+>OK, this log should not be needed, I will remove it in next version.
+>
+>
 
