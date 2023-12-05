@@ -1,149 +1,134 @@
-Return-Path: <linux-clk+bounces-914-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-916-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B088056F0
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 15:15:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E460805809
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 15:58:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5638BB20A55
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 14:15:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECEA8B20DBA
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 14:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2B361FD0;
-	Tue,  5 Dec 2023 14:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="nXag0Cwy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E072A67E6C;
+	Tue,  5 Dec 2023 14:57:56 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2071.outbound.protection.outlook.com [40.92.102.71])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB9590;
-	Tue,  5 Dec 2023 06:15:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hx3sGq8IPwkydSA2FdSe7I3h3v+JsmiR5MFNHCE0i8qa8ALc3Pbk7QDpICLtYzx3UOszGPMatu+RYquKTXe6WP18pIR1DmL08wsyIDixCoRXfJ6LOXa3gBjYmmT1kOD/zFXjyTCBB8Agy2u1hAGJLOsPHmbt4HV0FuQfxYNsK6O2zY5DkCyKaqfKO6hgaved6GrQWT7WW1Q+VvSvFlk5yjCns56gqWmnhcXwFRr/tDPfVMihyvqO5JeVIAB6vOVdG+RkVlg6tVn/+ZrEtSRJtVM0PBcO5dLDCDpJRNit4rzWMKYpG8fYfBZy1Huj3aA2s9EKOdRn/UjuxZgsGFdtZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YNRZ+ELRXVW3NXJAzYcXU6HnhsRjgq9NamXsBvgMYPo=;
- b=KgG8I7w8hf2XsylQ+8lxw8w3Hs0LvRWhyDKhZoPMupZetpguxcbHIDdB81OslG/5A3FbmC6pEZLEmv9pNDrODl0PS9oQFw7Tif2p5o5EbA+WKEvDPaFFAFyalOzX0l2qHSEXZ64fwwKSUe9Mxbhs59wE5jc4mlXCGg4ftNzEl/KfFZkirrrQoIur2jzDFfhcErgrNWcMoDaS9ib/z/2/rGK6N71fLlA4quPfnSFPYHyQzLoSChSsLJWZNaFmqinmmCfC4iNmak3YczpOjfvWchTJbKpBrBz3jeZedLTKv6D8DvNtnAO0q4H61PWkWRGmC0Yk0v8KAD5lyYA+gHhXcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YNRZ+ELRXVW3NXJAzYcXU6HnhsRjgq9NamXsBvgMYPo=;
- b=nXag0CwyMSi44TsQCw96KSRzJXNHGGFDHmY9jSJMiAA1EL9jAgUqxB6YwxPVnNsvJI4dp+5Io7L7yWYl/q4gyJGTtBMcwwnztCjMG0F3NlRB6GL4o8PddBiiameq8tMKwjqMeOBEK7AtJ/BEokWBXxGyNvqcgV6OC+RzhyJ9FtEdpdn1SQ/P3VzZDfKNaajJSP0+BFyBT9L6sazHvginj9saRlWPgxqJIpWhO4yo94ClLunPXrsaJCzJqH2nNagRbbmHbJxKcAHrOViwX86xUOfvqiK6JkURy+gkdas7KjL4CqhhqeuVJcA2Pf77J0mDcSwLQTPTKis+cJj/qPA+/g==
-Received: from MA0P287MB0332.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:ab::5) by
- PN0P287MB0426.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:11b::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7046.34; Tue, 5 Dec 2023 14:15:08 +0000
-Received: from MA0P287MB0332.INDP287.PROD.OUTLOOK.COM
- ([fe80::b1a7:eee7:e903:9ef3]) by MA0P287MB0332.INDP287.PROD.OUTLOOK.COM
- ([fe80::b1a7:eee7:e903:9ef3%7]) with mapi id 15.20.7046.034; Tue, 5 Dec 2023
- 14:15:08 +0000
-Message-ID:
- <MA0P287MB0332E148B9F8922E01758A5CFE85A@MA0P287MB0332.INDP287.PROD.OUTLOOK.COM>
-Date: Tue, 5 Dec 2023 22:15:00 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] dt-bindings: clock: sophgo: Add SG2042 bindings
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Chen Wang <unicornxw@gmail.com>, aou@eecs.berkeley.edu, chao.wei@sophgo.com,
- conor@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
- richardcochran@gmail.com, robh+dt@kernel.org, sboyd@kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- haijiao.liu@sophgo.com, xiaoguang.xing@sophgo.com, guoren@kernel.org,
- jszhang@kernel.org, inochiama@outlook.com, samuel.holland@sifive.com
-References: <cover.1701734442.git.unicorn_wang@outlook.com>
- <188cd5e99394f358c0d103b8b95377f32c010161.1701734442.git.unicorn_wang@outlook.com>
- <5412a9a2-38cd-4321-9ee6-b50dd060a08f@linaro.org>
-From: Chen Wang <unicorn_wang@outlook.com>
-In-Reply-To: <5412a9a2-38cd-4321-9ee6-b50dd060a08f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN: [e3bAgTdJYd4P/oTmavykzuHWwXkkq8tn]
-X-ClientProxiedBy: TYCP286CA0098.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b4::19) To MA0P287MB0332.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:ab::5)
-X-Microsoft-Original-Message-ID:
- <9c5deb44-5c48-45ce-af9b-951678cb3056@outlook.com>
+Received: from mail-yb1-f196.google.com (mail-yb1-f196.google.com [209.85.219.196])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F221129;
+	Tue,  5 Dec 2023 06:57:52 -0800 (PST)
+Received: by mail-yb1-f196.google.com with SMTP id 3f1490d57ef6-db3a09e96daso4253926276.3;
+        Tue, 05 Dec 2023 06:57:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701788271; x=1702393071;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2OSy1fkE1VPCMMZW3HW28WvB6VxFaRMTrE1La3jBwPw=;
+        b=H5EsiOalP3wPRYTrmCyX7LM5E6IlxQEl5ZpKo7uk0EnaN1FCXHYBwLP3t2tNe0aS9m
+         DaFQp/om0wB97vG4+Xt00c7JfkCCaP+dqgDlRt+/dQB1vPMWiuLzk8mJ6Rlk++syoBa5
+         xRJQuroejthMcN/RBYGCb3Rim9K9+jMZduxdrUybACWV5rsD3+pmKWjegcuXH0fXA2Wu
+         z8P1RGlOy+dgtlPt99vhS/a0wy8428UNF507D153SjNB3tay1PR48FbVqdD1nJFYdyZc
+         N5Zz7yGtK5SJex4ZppZ8tGOywv6ZTdWwXZeGqA68T2bwjmRpeFRbaSLbmeYVnh7yoSzx
+         WJGg==
+X-Gm-Message-State: AOJu0Yy0nOCHbpCu0qhu7ax/zxs3oBJkkUccKlMzNulBeGMwEXK3ZjXQ
+	0Ig6I/17nVYPnvMOq8iO5+wMFX/w00RVCyGx
+X-Google-Smtp-Source: AGHT+IFLodowK5y27eVR6eQAnJr24kgV1N0rDxhSnfD+dOfoslVZNjUyIGOONG4pfS50TELYBsRXoA==
+X-Received: by 2002:a25:8543:0:b0:db8:357:f032 with SMTP id f3-20020a258543000000b00db80357f032mr3405933ybn.89.1701788271716;
+        Tue, 05 Dec 2023 06:57:51 -0800 (PST)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id p82-20020a254255000000b00db3fdaaa4fasm3155660yba.1.2023.12.05.06.57.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Dec 2023 06:57:51 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5d279bcce64so64342657b3.3;
+        Tue, 05 Dec 2023 06:57:51 -0800 (PST)
+X-Received: by 2002:a05:690c:c9d:b0:5d7:1941:2c27 with SMTP id
+ cm29-20020a05690c0c9d00b005d719412c27mr4909480ywb.84.1701788271024; Tue, 05
+ Dec 2023 06:57:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB0332:EE_|PN0P287MB0426:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20b0a493-7290-41e5-8ad4-08dbf59c95e1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	yqFA0yiry2JvJHOctcRXBxSv4x+B2Nsl25342Ar3i/4pq7RWmnIvC/0mkqXp5bXGx8Kt4+igLdSnqTMTExm83gik9KhaXvcgosJ20Mb9qV3jWZ3YS8g6Qi0DtCGjHO7LB3srD5IrClRAIN9ISpSCLG32fovkdHkhmcY2DUV8BHxaciFH59qGPm3j2sJPOtMEKDg1TDXL1YPV1nP2rK00S1SVEr7eoQqweRwu2qTcnXTVITERUZ0TNMcYOXF0l4Qro880y/BTRA/0HHE3viVnTyGH63HLSkz06rBrODKm5L9w7YmpPbkIHFQHjpkrLxGm7Mz4hKMrEN12J+adp2esY64ssSNANTgCtf/CVTDwrI6Q03NIKyect4tsSr8pJQtZM5cjaYz7W+zIEvS1Idc2bxZF/vSuTkVb4PBtlZ45jiLH1cpYSMWnZ9aBe7I4aO+Lkwwh7ei7iG6FHlJUBF/zlDakkiFRuewdiCAqly+4BaeomJRtXwJf0qlbWU7SiwezAvNndHmbyS8cQp9u3Nq8/Igf+m/Cs/8X85HQgmfvSEMy5BaHGVY/Yo7DbVWPlgop
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SVJCVHgrbXJjQVhmQk9pTnZHcSs3d255ODNLWDV6SHFDc2toNkkvNUEvSEJi?=
- =?utf-8?B?dGdDNThydm1wWHJUMTdGa0VOdWRabTlJNzA0NmFOSWlGVEhLd0NxbHBHa2R6?=
- =?utf-8?B?VnoyYVhjUlN2a3g2OUw3YnN1WnQrK21KL2Z2NTVNTG5OS2hmbWYvOEYxbFV1?=
- =?utf-8?B?TDE5N0EzUWR3MVoveHZDSjNpdWFrbEh1aGZKVEh6YkxqQ3BWU0dtdnZVb2Fa?=
- =?utf-8?B?S0hhM0wvYzAxa3JPMlU3L3c5WENEaGljS0w3VWV0MFJhUHRodmhIaFlVUWRC?=
- =?utf-8?B?WTEya21GTU1wbTVObXcvR1gxZEJkc1h5Z1hzNWFHNE5BKzBVaFY1aVJ3bU5K?=
- =?utf-8?B?R0FWQXpLVUJhbzY0Zk1BcXBRQXNIeFdMVUwvSFpQMkRyTjM1WmQ4ekdDZ3pL?=
- =?utf-8?B?QVZVdTZCS1BIOENZTmlUZ01JKzYyRk9iZFNVRHlzVVZaemlBbVFtdlpzaWhB?=
- =?utf-8?B?MVRpZkFoTzVIVHJaRFhLc1pMZXd0QWg3OFpqdUZDeWtlcEFUeTB1TVpUdDd0?=
- =?utf-8?B?WVVLSk1qcEhoS2dyNEwwTVA3TEx4T1FmNkZwcUx6N0ZCVEh6UWJ6L21BTWQr?=
- =?utf-8?B?VmhJUlFxbTZ2dzR5SWZQU1NxaEI0ck1kbVV3cTVoY2dybk0zZTg0ck9FYXZh?=
- =?utf-8?B?dGtZcFVMQmV5QnRFbi9lWlR5L3I3QkkyQ1NYbXJ5VWVaRWdOUDNLa0ZFN1NQ?=
- =?utf-8?B?SkRVWStrRkxORUtJRGtoL21xWCs4eTJDb05BRWRWL0VweEl1c2FQSFZmb3M5?=
- =?utf-8?B?akxoejByLzlYbEg1cUNjRHJBS281Rm1RVldtOVJLUjlITjVEeGovNU11NjZz?=
- =?utf-8?B?K0FQQ2lTNUlLOVB4YTNkRHBNNHBuRnliaVJBYzVZSDFCRWpNZ2JTNTZwWDN3?=
- =?utf-8?B?bEUwemlzWFpjK3Z0eWxTOTBVQzNIYVJ2bWJHakF2L2NtYXdUdlhpdGNNUjdB?=
- =?utf-8?B?Slc4MWM0ZE5BYk85S05iOTMyTFg1M0R4Nk5nc3lrK0dsTEtNcDhON1RtS3Rr?=
- =?utf-8?B?ODdrTzRvVjNNKzRrSEpzTG5zSlhjTzFpNENSaEVYUzlEYkp6c096ajlad3k2?=
- =?utf-8?B?MWpIQ0JyUmV1eUgxbTBzN2JYa0ZLL2RLYnIyOXVHQXVZYlRNd3B5cXZwSnZl?=
- =?utf-8?B?c1I4VkZHM00yMHVOeFFrWVVQeHVIRGJ1aGkyU2VyWkl4WGNKWTQ2T1dNNWl0?=
- =?utf-8?B?N2Q3d2FyWDdCR0hQWVRlSVlMVytBM0VPT2JJaVM3OHdLbjgrcGt1M20waVBL?=
- =?utf-8?B?RmZlTnYxQmxrRUVBU3gyVVJmc3I1TDQ4d3RYVkhhbkthTSsxWklycEgxdFo0?=
- =?utf-8?B?ZzZKN0lCclNlT2Y5NEkxT1o0OXBia2pHZnp4OUZzT0tqTDNoM01EZ0c2cDRh?=
- =?utf-8?B?Y0poY1BtK3dFWXVFc20vRlFyajZncFBoKy9qcDF5Smh3eDJIUUJOTFZSVFVI?=
- =?utf-8?B?Y3cyV2s0NEZyY0EvSkV3TFQ3c0ljWDZtd3NSRllBRmtQVXVpVGl4cTIwajNO?=
- =?utf-8?B?ZzhkV3V5SllVcm5QeUFjNUpkeWl5WG5MMVJhSXdVN3B2MzJXVlcrT1lhZEJ4?=
- =?utf-8?B?OHU2cWNWaDJjUkxXK3d3YXo4OUZwWUtDS3Z5aWQyRFJPclpSVlBDM3BNRVJB?=
- =?utf-8?Q?OtDfrlevNBU5fjXt3bEAJORYHAYIuij5wFmXRa+LwdQs=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20b0a493-7290-41e5-8ad4-08dbf59c95e1
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB0332.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2023 14:15:08.6041
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB0426
+References: <cover.1701768028.git.ysato@users.sourceforge.jp> <9f1485220fbfaba9b30bf2d9352640f988f35b04.1701768028.git.ysato@users.sourceforge.jp>
+In-Reply-To: <9f1485220fbfaba9b30bf2d9352640f988f35b04.1701768028.git.ysato@users.sourceforge.jp>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 5 Dec 2023 15:57:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWsBOs0Y7CkzhxkMYWWzyBpp1MesiCHc728FoTMNQs+qA@mail.gmail.com>
+Message-ID: <CAMuHMdWsBOs0Y7CkzhxkMYWWzyBpp1MesiCHc728FoTMNQs+qA@mail.gmail.com>
+Subject: Re: [DO NOT MERGE v5 21/37] dt-bindings: serial: renesas,scif: Add scif-sh7751.
+To: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: linux-sh@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Lee Jones <lee@kernel.org>, 
+	Helge Deller <deller@gmx.de>, Heiko Stuebner <heiko@sntech.de>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Chris Morgan <macromorgan@hotmail.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
+	David Rientjes <rientjes@google.com>, Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Guo Ren <guoren@kernel.org>, 
+	Javier Martinez Canillas <javierm@redhat.com>, Azeem Shaikh <azeemshaikh38@gmail.com>, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Bin Meng <bmeng@tinylab.org>, 
+	Max Filippov <jcmvbkbc@gmail.com>, Tom Rix <trix@redhat.com>, 
+	Herve Codina <herve.codina@bootlin.com>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Sam Ravnborg <sam@ravnborg.org>, Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-ide@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-fbdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Sato-san,
 
-On 2023/12/5 16:08, Krzysztof Kozlowski wrote:
-> On 05/12/2023 01:23, Chen Wang wrote:
->> From: Chen Wang <unicorn_wang@outlook.com>
->>
->> Add bindings for the clock generator on the SG2042 RISC-V SoC.
-> ......
->> +      - const: sophgo,sg2042-clkgen
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  system-ctrl:
-> Missing vendor prefix.
+On Tue, Dec 5, 2023 at 10:46=E2=80=AFAM Yoshinori Sato
+<ysato@users.sourceforge.jp> wrote:
+> Add Renesas SH7751 SCIF.
+>
+> Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
 
-hi, Krzysztof,
+Thanks for your patch!
 
-One question: under what circumstances is it necessary to add the vendor 
-prefix when defining a property?
+> --- a/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+> +++ b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
+> @@ -17,6 +17,7 @@ properties:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - renesas,scif-sh7751       # SH7751
 
-Thanks,
+Please preserve alphabetical sort order.
+The actual compatible value LGTM.
 
-Chen
+>                - renesas,scif-r7s72100     # RZ/A1H
+>            - const: renesas,scif           # generic SCIF compatible UART
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
