@@ -1,51 +1,51 @@
-Return-Path: <linux-clk+bounces-861-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-892-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B069F804EBE
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 10:52:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E073804F9E
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 10:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2163DB20BF4
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 09:52:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A6DF281769
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Dec 2023 09:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88E74AF9F;
-	Tue,  5 Dec 2023 09:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 032334B5DB;
+	Tue,  5 Dec 2023 09:59:45 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8189A;
-	Tue,  5 Dec 2023 01:52:38 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258A79E;
+	Tue,  5 Dec 2023 01:59:40 -0800 (PST)
 Received: from i53875b61.versanet.de ([83.135.91.97] helo=phil.lan)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1rAS6K-0006aC-6u; Tue, 05 Dec 2023 10:52:24 +0100
+	id 1rASD8-0006dW-Kj; Tue, 05 Dec 2023 10:59:26 +0100
 From: Heiko Stuebner <heiko@sntech.de>
-To: linux-rockchip@lists.infradead.org,
-	Chris Morgan <macroalpha82@gmail.com>
+To: Chris Morgan <macroalpha82@gmail.com>,
+	linux-rockchip@lists.infradead.org
 Cc: Heiko Stuebner <heiko@sntech.de>,
-	krzysztof.kozlowski+dt@linaro.org,
-	robh+dt@kernel.org,
-	daniel@ffwll.ch,
-	tzimmermann@suse.de,
-	linux-clk@vger.kernel.org,
-	conor+dt@kernel.org,
-	quic_jesszhan@quicinc.com,
-	maarten.lankhorst@linux.intel.com,
-	neil.armstrong@linaro.org,
-	Chris Morgan <macromorgan@hotmail.com>,
-	javierm@redhat.com,
-	sboyd@kernel.org,
 	sam@ravnborg.org,
-	mripard@kernel.org,
-	dri-devel@lists.freedesktop.org,
+	robh+dt@kernel.org,
+	javierm@redhat.com,
+	quic_jesszhan@quicinc.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	daniel@ffwll.ch,
 	devicetree@vger.kernel.org,
-	airlied@gmail.com,
-	mturquette@baylibre.com
+	mripard@kernel.org,
+	sboyd@kernel.org,
+	maarten.lankhorst@linux.intel.com,
+	dri-devel@lists.freedesktop.org,
+	Chris Morgan <macromorgan@hotmail.com>,
+	tzimmermann@suse.de,
+	neil.armstrong@linaro.org,
+	linux-clk@vger.kernel.org,
+	mturquette@baylibre.com,
+	conor+dt@kernel.org,
+	airlied@gmail.com
 Subject: Re: (subset) [PATCH V2 00/10] rockchip: Add Powkiddy X55
-Date: Tue,  5 Dec 2023 10:52:22 +0100
-Message-Id: <170176993501.528247.5450175586364126094.b4-ty@sntech.de>
+Date: Tue,  5 Dec 2023 10:59:24 +0100
+Message-Id: <170177035808.530583.4519890630832587143.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231204185719.569021-1-macroalpha82@gmail.com>
 References: <20231204185719.569021-1-macroalpha82@gmail.com>
@@ -75,10 +75,10 @@ On Mon, 4 Dec 2023 12:57:09 -0600, Chris Morgan wrote:
 
 Applied, thanks!
 
-[07/10] clk: rockchip: Mark pclk_usb as critical on rk3568
-        commit: 721bf080f249ab2adcc4337abe164230bfb8594f
-[08/10] clk: rockchip: rk3568: Add PLL rate for 126.4MHz
-        commit: 685da6972647b486980c0cc8fd6bb5d3863fd6b7
+[09/10] dt-bindings: arm: rockchip: Add Powkiddy X55
+        commit: b7d755653790b5f5497df8bfb146c38beeb33b74
+[10/10] arm64: dts: rockchip: Add Powkiddy X55
+        commit: 009e2d0c224913eb4f44e9c2efe7a15789fc0c18
 
 Best regards,
 -- 
