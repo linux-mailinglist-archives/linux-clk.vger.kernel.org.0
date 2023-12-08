@@ -1,57 +1,58 @@
-Return-Path: <linux-clk+bounces-1039-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1041-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE2A1809871
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Dec 2023 02:13:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA5A3809877
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Dec 2023 02:13:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C2161C20AE6
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Dec 2023 01:13:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94F1D281F97
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Dec 2023 01:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A66C382;
-	Fri,  8 Dec 2023 01:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415DE10E7;
+	Fri,  8 Dec 2023 01:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTgI7d2I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpG7F/Az"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670841708;
-	Thu,  7 Dec 2023 17:13:10 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6d9ac148ca3so1028940a34.0;
-        Thu, 07 Dec 2023 17:13:10 -0800 (PST)
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308581715;
+	Thu,  7 Dec 2023 17:13:39 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1fb0022e6a5so1061332fac.0;
+        Thu, 07 Dec 2023 17:13:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701997989; x=1702602789; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=O9CqMmARklhu+aWShYkB4W+scqzZcjMk/LYLPQHxTpw=;
-        b=NTgI7d2I3C8uvqfvt2ycDIYukTvSDBOsVUWuo94JUP8wZfDsIGCpi/FiYIr7dPP99p
-         o5iVu+50Jd0nFuZKDZ8PYiZ+iPRhWE0QFV8EMPt4V9jjn2YT4zGL8FQwUz7uKWXdG7l3
-         PlKl8Ia+iV9cApKyyAn/WujprouqJg0KjQ4L0aEcA0OiW92NrHHq7Fi1GJi5r4XvbDO3
-         +GLcGOfmQSPb/NO3gBWF3TJjBhRfzD9OUFYTNLrLJOixxXQtCusNauR4ELN6RP6/JsKd
-         LJkC/JH+rDNvHyT9pr3lPN4szmts9Uv1Vt9pNkziED7bi1ljT07x/ZhC7VmGyJm47zX+
-         IDkg==
+        d=gmail.com; s=20230601; t=1701998018; x=1702602818; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Wg3vTVI+KNNtCZ40tO4THN1Rc/sssddRQwHLFYhkAc=;
+        b=RpG7F/Az9K2luoXvevJFQvG/NLppBbh8dFmESqo7wcKp7WirwG20BA2bZEoWboA/rg
+         HWyjgybttLhmGll3ndv3R2oAGB7fUb1Cq2p7uHZtpdWbbjMh7Ap7iljSJy61UjlXGgKU
+         cTlqnACt5RD0zQyQWkNjTw+4JyCx5ccOaWtUdPF0KOz2uztiuUgt7Zf9W2wLgjgxdoAY
+         ZDoOjSjWXhyHU8dvLeUH85lBFi80gK/WeAHCVioUC6I3p/bo8Ugjc7wP5OijiqUb/Oes
+         NCBqDdnHW+uRwJquU0yMrZQXEhksM6vCM8NT0B6MFG/4zo3ANMPZWAFjxSyexba8wn16
+         ewoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701997989; x=1702602789;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O9CqMmARklhu+aWShYkB4W+scqzZcjMk/LYLPQHxTpw=;
-        b=UI9OgkM2RjaFxnb8Kzx+Z3d219MWcE8ofw1ZW3O13LhhU4zdwPInXOj/6imjkcsqrq
-         SWZQBEXykK2ufn1/55GEAHCVPjfdv/F1v0dPme0jfUEeDnUnAXYE9AvqqI9PPnWh8FrX
-         DzSHlxUHCHIjc3NVKGPrmWJ1LalL0D4mBfvgHAlwxijviTt9HoRjQ4Z44byF8a5ENEVx
-         D/cBCyU3seOo5nKHkF1z6+dldiYyYg06CciYFTVXk7+kQvSVPJuoSUvI6YJn+7GWQfn6
-         Mq1vwr9p7si++TNT1TQ8bJKX0taBtP0Mg4pwDr2vk0Kq5z5ol7QwfIXgwP38iuXH8Ij/
-         N4kA==
-X-Gm-Message-State: AOJu0YwHq2kFgwBRSbm1jWw/qqwsKGbHKuza2/M/ovjMrJbJqdWgwLNh
-	HXp3GtFzuL6FbJicWpU3EmY=
-X-Google-Smtp-Source: AGHT+IHj76UivPYn5LBdsNNyN1HlcikxOqd5/9AFXqCLTbYyAnf/YPa+czn5QHTd0NUlupNDAZmDYg==
-X-Received: by 2002:a05:6870:b68b:b0:1fb:3700:ee1b with SMTP id cy11-20020a056870b68b00b001fb3700ee1bmr3537230oab.47.1701997989445;
-        Thu, 07 Dec 2023 17:13:09 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701998018; x=1702602818;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+Wg3vTVI+KNNtCZ40tO4THN1Rc/sssddRQwHLFYhkAc=;
+        b=fzoLIXe22vKb0GkQKp1vk2in34pIy4466t2yDagoDzlIifeyw7kv2jPfRAnGCG4Ql1
+         Jbs5Gy9arVKmf/zRJR4la2XfGPaBL1mbLLqPXEqSJQz8WCPScTt/ACziFawZ28RkbunW
+         zQba6M8LBT4cK+dmIp4q4T5IQEFsMjD57P3jGSAkIO7swp+FAvcaZpe+OEgeIbvZCale
+         lKGObhgPg9ZBzLK4fUhFWRt8pMR2ne/7hK8cz4p+wFnqt7gR62ioyQb0t8OBipeT9oms
+         8pUb2wux2Bpgr13OCyzAfLfnwRBizPF8SpfhyfAu84d4PgwwrOg5EM6am7z4YuBH55FS
+         ebBQ==
+X-Gm-Message-State: AOJu0YxOHjIOEg5p6Lvi1l3ImPL87r0S02ENMjTGs7MAsHAjhjLdN2DK
+	0+VDt02uEb1Xzux3pdv1tMs=
+X-Google-Smtp-Source: AGHT+IHq3XNbApiW/rK14kESG46BbbOrCxC7UErCs/p6jI1ZvS2KI8wrN/V2ZOh5nu1uGZkHDIM5VA==
+X-Received: by 2002:a05:6870:a798:b0:200:4d66:39ce with SMTP id x24-20020a056870a79800b002004d6639cemr19714oao.95.1701998018344;
+        Thu, 07 Dec 2023 17:13:38 -0800 (PST)
 Received: from localhost.localdomain ([122.8.183.87])
-        by smtp.gmail.com with ESMTPSA id pq15-20020a0568709c8f00b001fa24002089sm206570oab.30.2023.12.07.17.13.07
+        by smtp.gmail.com with ESMTPSA id qb7-20020a056871e78700b001fac77ee907sm207493oac.33.2023.12.07.17.13.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 17:13:09 -0800 (PST)
+        Thu, 07 Dec 2023 17:13:38 -0800 (PST)
 From: Chen Wang <unicornxw@gmail.com>
 To: aou@eecs.berkeley.edu,
 	chao.wei@sophgo.com,
@@ -73,11 +74,14 @@ To: aou@eecs.berkeley.edu,
 	jszhang@kernel.org,
 	inochiama@outlook.com,
 	samuel.holland@sifive.com
-Cc: Chen Wang <unicorn_wang@outlook.com>
-Subject: [PATCH v6 0/4] riscv: sophgo: add clock support for sg2042
-Date: Fri,  8 Dec 2023 09:13:00 +0800
-Message-Id: <cover.1701997033.git.unicorn_wang@outlook.com>
+Cc: Chen Wang <unicorn_wang@outlook.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v6 1/4] dt-bindings: soc: sophgo: Add Sophgo system control module
+Date: Fri,  8 Dec 2023 09:13:30 +0800
+Message-Id: <b7d52351a1b68e14bf4b7101c91fe5de929bdca6.1701997033.git.unicorn_wang@outlook.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1701997033.git.unicorn_wang@outlook.com>
+References: <cover.1701997033.git.unicorn_wang@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -88,97 +92,55 @@ Content-Transfer-Encoding: 8bit
 
 From: Chen Wang <unicorn_wang@outlook.com>
 
-This series adds clock controller support for sophgo sg2042.
+Add documentation to describe Sophgo System Controller for SG2042.
 
-Thanks,
-Chen
-
+Signed-off-by: Chen Wang <unicorn_wang@outlook.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-
-Changes in v6:
-  The patch series is based on v6.7-rc1. You can simply review or test the
-  patches at the link [7].
-  - fixed some warnings/errors reported by kernel test robot <lkp@intel.com>.
-
-Changes in v5:
-  The patch series is based on v6.7-rc1. You can simply review or test the
-  patches at the link [6].
-  - dt-bindings: improved yaml, such as:
-    - add vendor prefix for system-ctrl property for clock generator.
-    - Add explanation for system-ctrl property.
-  - move sophgo,sg2042-clkgen.yaml to directly under clock folder.
-  - fixed bugs for driver Makefile/Kconfig
-  - continue cleaning-up debug print for driver code.
-
-Changes in v4:
-  The patch series is based on v6.7-rc1. You can simply review or test the
-  patches at the link [5].
-  - dt-bindings: fixed a dt_binding_check error.
-
-Changes in v3:
-  The patch series is based on v6.7-rc1. You can simply review or test the
-  patches at the link [3].
-  - DTS: don't use syscon but define sg2042 specific system control node. More
-    background info can read [4].
-  - Updating minor issues in dt-bindings as per input from reviews.
-
-Changes in v2:
-  The patch series is based on v6.7-rc1. You can simply review or test the
-  patches at the link [2].
-  - Squashed the patch adding clock definitions with the patch adding the
-    binding for the clock controller.
-  - Updating dt-binding for syscon, remove oneOf for property compatible;
-    define clock controller as child of syscon.
-  - DTS changes: merge sg2042-clock.dtsi into sg2042.dtsi; move clock-frequency
-    property of osc to board devicethree due to the oscillator is outside the
-    SoC.
-  - Fixed some bugs in driver code during testing, including removing warnings
-    for rv32_defconfig.
-  - Updated MAINTAINERS info.
-
-Changes in v1:
-  The patch series is based on v6.7-rc1. You can simply review or test the
-  patches at the link [1].
-
-Link: https://github.com/unicornx/linux-riscv/commits/upstream-sg2042-clock-v1 [1]
-Link: https://github.com/unicornx/linux-riscv/commits/upstream-sg2042-clock-v2 [2]
-Link: https://github.com/unicornx/linux-riscv/commits/upstream-sg2042-clock-v3 [3]
-Link: https://lore.kernel.org/linux-riscv/MA0P287MB03329AE180378E1A2E034374FE82A@MA0P287MB0332.INDP287.PROD.OUTLOOK.COM/ [4]
-Link: https://github.com/unicornx/linux-riscv/commits/upstream-sg2042-clock-v4 [5]
-Link: https://github.com/unicornx/linux-riscv/commits/upstream-sg2042-clock-v5 [6]
-Link: https://github.com/unicornx/linux-riscv/commits/upstream-sg2042-clock-v6 [7]
-
----
-
-Chen Wang (4):
-  dt-bindings: soc: sophgo: Add Sophgo system control module
-  dt-bindings: clock: sophgo: support SG2042
-  clk: sophgo: Add SG2042 clock generator driver
-  riscv: dts: add clock generator for Sophgo SG2042 SoC
-
- .../bindings/clock/sophgo,sg2042-clkgen.yaml  |   53 +
- .../soc/sophgo/sophgo,sg2042-sysctrl.yaml     |   34 +
- MAINTAINERS                                   |    7 +
- .../boot/dts/sophgo/sg2042-milkv-pioneer.dts  |    4 +
- arch/riscv/boot/dts/sophgo/sg2042.dtsi        |   79 +
- drivers/clk/Kconfig                           |    1 +
- drivers/clk/Makefile                          |    1 +
- drivers/clk/sophgo/Kconfig                    |    8 +
- drivers/clk/sophgo/Makefile                   |    2 +
- drivers/clk/sophgo/clk-sophgo-sg2042.c        | 1356 +++++++++++++++++
- drivers/clk/sophgo/clk-sophgo-sg2042.h        |  226 +++
- .../dt-bindings/clock/sophgo,sg2042-clkgen.h  |  169 ++
- 12 files changed, 1940 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/sophgo,sg2042-clkgen.yaml
+ .../soc/sophgo/sophgo,sg2042-sysctrl.yaml     | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/soc/sophgo/sophgo,sg2042-sysctrl.yaml
- create mode 100644 drivers/clk/sophgo/Kconfig
- create mode 100644 drivers/clk/sophgo/Makefile
- create mode 100644 drivers/clk/sophgo/clk-sophgo-sg2042.c
- create mode 100644 drivers/clk/sophgo/clk-sophgo-sg2042.h
- create mode 100644 include/dt-bindings/clock/sophgo,sg2042-clkgen.h
 
-
-base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+diff --git a/Documentation/devicetree/bindings/soc/sophgo/sophgo,sg2042-sysctrl.yaml b/Documentation/devicetree/bindings/soc/sophgo/sophgo,sg2042-sysctrl.yaml
+new file mode 100644
+index 000000000000..1ec1eaa55598
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/sophgo/sophgo,sg2042-sysctrl.yaml
+@@ -0,0 +1,34 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/sophgo/sophgo,sg2042-sysctrl.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sophgo SG2042 SoC system controller
++
++maintainers:
++  - Chen Wang <unicorn_wang@outlook.com>
++
++description:
++  The Sophgo SG2042 SoC system controller provides register information such
++  as offset, mask and shift that can be used by other modules, such as clocks.
++
++properties:
++  compatible:
++    const: sophgo,sg2042-sysctrl
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    system-controller@30010000 {
++        compatible = "sophgo,sg2042-sysctrl";
++        reg = <0x30010000 0x1000>;
++    };
 -- 
 2.25.1
 
