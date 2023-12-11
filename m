@@ -1,137 +1,104 @@
-Return-Path: <linux-clk+bounces-1203-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1205-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B040A80D186
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 17:25:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BA5480D1FD
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 17:36:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 51910B212D2
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 16:25:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB2AFB20EAB
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 16:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808604CDE1;
-	Mon, 11 Dec 2023 16:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923061D535;
+	Mon, 11 Dec 2023 16:36:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nGHbcFT6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oqnSl9xk"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136DEF1
-	for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 08:24:40 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-336166b8143so2132866f8f.3
-        for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 08:24:39 -0800 (PST)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724699E
+	for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 08:36:19 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40b27726369so49503035e9.0
+        for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 08:36:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702311878; x=1702916678; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n0Lj2p0v1sl5yq86/3/9+bEkk8+V18FXO5bRu94y79I=;
-        b=nGHbcFT6lg0K0s/PFutPuG75NBLFQkOtGfSiAksPOOjZhMtytmTNGqfDNNeVZfWzLc
-         oGfe7mKGPA2oLZmwQAP9+oezqbb/25E3tWN9k3nQk6shR/71KjVGdvUb+1Nlxe68e6Jp
-         i9THOoDVb03zOSd1VxsrnzsHJRDnCsve2JW11inwvT/QlBw4juF2PNQjMqeu4ZZdRNE4
-         5Jfzn6PdPjWi2EAK2NMcSvxVSQWA55p2XI/O0BvlMNqVfZ0wwLqcc0L2dGo7FHgAluap
-         JwK2h2mk7n3ZWuhssA8+t1Rt33ul1MlT9yAHY6HeJ7OVImxXAIupa+5mETXbBk9OZmkN
-         yFSA==
+        d=linaro.org; s=google; t=1702312578; x=1702917378; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bK1lX1hwHqRE0qWwNG1aUzZucX1tBAoUd44IP9gaN34=;
+        b=oqnSl9xk2RTxEzD6yma+xPajtnZb4XBh3BBnBDKAKEPUAM2omQ7B1U9RCKM5K+duWl
+         UM7GY0xkGuUFhfqq6TDZF9Wd/vPPLm7fJyGi6DMulMyxoYe4ewT9toCLqRirkW8/CpJD
+         0rWsm57VT/Q7jYcVEnuGfA/8w+bUf9NHJ3mfAwp/I9BP4yIbFx1wKbqgc1WbIPiP4IRz
+         2cnJB+gi8rP6rDaxZFeXnwYfgSJT6Bqh/hDig0vjxnoFJxvo03142EP4R+NSCoWWpc3X
+         9u+WICBhxruqK/9ZGVCkw0qGkSxQ0hH7rZTpkYQX+ZKgk8n07ftc6Y3aZ4yG6qF2Qmcd
+         FG0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702311878; x=1702916678;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n0Lj2p0v1sl5yq86/3/9+bEkk8+V18FXO5bRu94y79I=;
-        b=vNYNTtygi5akkEgSC+4GXqIboZKtUdJ1+B+iCyPa+nyS691rBjGJlz4K4KqnwQVix9
-         ggHcDhgFxeT6TiG+vN4hWFsO8x8/hOYcq/bxM9jUHOgZQkoXqw56k+8KTSbUuaYb/IHd
-         uvMeEs1d739uCa9ML21aO9NFJ8h/iif0yfpsdaxx4d+EMc+XK58d4cMcUgOIyZKpdp8X
-         pN+MBWQRSzUdcL36po/3+qnZgbKqxiod8Z42mL76Q9G67T2jCkVJU8H7ksQjfSkiWtnz
-         zlYI/TBDblhqGROStXTiEHflxjIvqbyJiLPdY171N7m9xvWvgSMCsLk6fmjUTzohy6Kk
-         t4Og==
-X-Gm-Message-State: AOJu0YxIgvmgWSxmLAhFv/pWx4ORG103paxr6aGljPkXGTWVSFIAwv86
-	qe0gNzuukVZoqtC3yANtI6yvkg==
-X-Google-Smtp-Source: AGHT+IEJ1wyxwuNA3PXmuuz2u4iY6o6+Ee5/vHbf2Ow+1e6WSS6WhSW8nRIGDlzcwK4PBfpljzk9Yw==
-X-Received: by 2002:adf:eed2:0:b0:333:295f:1039 with SMTP id a18-20020adfeed2000000b00333295f1039mr2795311wrp.43.1702311878601;
-        Mon, 11 Dec 2023 08:24:38 -0800 (PST)
-Received: from gpeter-l.lan (host-92-29-28-58.as13285.net. [92.29.28.58])
-        by smtp.gmail.com with ESMTPSA id o4-20020a5d58c4000000b0033333bee379sm8923103wrf.107.2023.12.11.08.24.37
+        d=1e100.net; s=20230601; t=1702312578; x=1702917378;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bK1lX1hwHqRE0qWwNG1aUzZucX1tBAoUd44IP9gaN34=;
+        b=SJvxWoXHdwe1Zmy99gUc/CxYTsMBlVAzB5UXa1QzOR95EDeuqW1psDyZ2oM5EsYIZe
+         zVwh1sx6pt5R6BJPe3TXBr8Sb7ozEFxqsXDbJ67e+kqObhr6Atu3ZcnwdAtyfFZWaJ3p
+         xeU7z9x6KMdHJv/IxJ6IQ7GF8ntq1faGiIH3JtFzV8F+c8Nvsgz8sKl38FWW6+Ks+Ac1
+         gpj4qKEQn7MVflKNNCeYLBBTYYlxFxhigwYEX3QH1eSLDwj28hfmXI6a7Ro0+Ep4Y/1e
+         hNXQGb1acrcrnGunZyNMzBEVAIBEIA5BhOQE+KUL3etEBNcwuXyF7q2ErEE2p50DaE04
+         I53w==
+X-Gm-Message-State: AOJu0YzOTbjBbzYBofwz23BandVqNe19IasgstJhrK9/0nHHWoQoqdVV
+	EUZop8ITjpvvLWMw7hzw4R+m3A==
+X-Google-Smtp-Source: AGHT+IHqlghak/z1rUpsIZnKDYLf/Lji2enrhgj53Kac2omQn554ooTGIUHbzfez0RtduglMO9UMiw==
+X-Received: by 2002:a05:600c:510e:b0:40c:67a:b3bc with SMTP id o14-20020a05600c510e00b0040c067ab3bcmr2342567wms.71.1702312577700;
+        Mon, 11 Dec 2023 08:36:17 -0800 (PST)
+Received: from draszik.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id w7-20020a05600c474700b0040c41846919sm7404061wmo.41.2023.12.11.08.36.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 08:24:38 -0800 (PST)
-From: Peter Griffin <peter.griffin@linaro.org>
-To: robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	mturquette@baylibre.com,
-	conor+dt@kernel.org,
-	sboyd@kernel.org,
-	tomasz.figa@gmail.com,
-	s.nawrocki@samsung.com,
-	linus.walleij@linaro.org,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	arnd@arndb.de,
-	olof@lixom.net,
-	gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	cw00.choi@samsung.com,
-	alim.akhtar@samsung.com
-Cc: peter.griffin@linaro.org,
-	tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org,
-	semen.protsenko@linaro.org,
-	saravanak@google.com,
-	willmcvicker@google.com,
-	soc@kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	kernel-team@android.com,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v7 16/16] MAINTAINERS: add entry for Google Tensor SoC
-Date: Mon, 11 Dec 2023 16:23:31 +0000
-Message-ID: <20231211162331.435900-17-peter.griffin@linaro.org>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-In-Reply-To: <20231211162331.435900-1-peter.griffin@linaro.org>
+        Mon, 11 Dec 2023 08:36:17 -0800 (PST)
+Message-ID: <f3299aaf9392aaedf8cca1c4756605b11c59b98f.camel@linaro.org>
+Subject: Re: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix
+ incorrect numbering and DGB suffix
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ conor+dt@kernel.org,  sboyd@kernel.org, tomasz.figa@gmail.com,
+ s.nawrocki@samsung.com,  linus.walleij@linaro.org, wim@linux-watchdog.org,
+ linux@roeck-us.net,  catalin.marinas@arm.com, will@kernel.org,
+ arnd@arndb.de, olof@lixom.net,  gregkh@linuxfoundation.org,
+ jirislaby@kernel.org, cw00.choi@samsung.com,  alim.akhtar@samsung.com
+Cc: tudor.ambarus@linaro.org, semen.protsenko@linaro.org,
+ saravanak@google.com,  willmcvicker@google.com, soc@kernel.org,
+ devicetree@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org,  linux-clk@vger.kernel.org,
+ linux-gpio@vger.kernel.org,  linux-watchdog@vger.kernel.org,
+ kernel-team@android.com,  linux-serial@vger.kernel.org
+Date: Mon, 11 Dec 2023 16:36:15 +0000
+In-Reply-To: <20231211162331.435900-7-peter.griffin@linaro.org>
 References: <20231211162331.435900-1-peter.griffin@linaro.org>
+	 <20231211162331.435900-7-peter.griffin@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.49.2-3 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add maintainers entry for the Google tensor SoC based
-platforms.
+On Mon, 2023-12-11 at 16:23 +0000, Peter Griffin wrote:
+> 166 was skipped by mistake and two clocks:
+> * CLK_MOUT_CMU_HSI0_USBDPDGB
+> * CLK_GOUT_HSI0_USBDPDGB
+>=20
+> Have an incorrect DGB ending instead of DBG.
+>=20
+> This is an ABI break, but as the patch was only applied yesterday this
+> header has never been in an actual release so it seems better to fix
+> this early than ignore it.
+>=20
+> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock manageme=
+nt unit bindings")
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 98f7dd0499f1..b731d6b9876a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8990,6 +8990,16 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
- F:	drivers/firmware/google/
- 
-+GOOGLE TENSOR SoC SUPPORT
-+M:	Peter Griffin <peter.griffin@linaro.org>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-samsung-soc@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-+F:	arch/arm64/boot/dts/exynos/google/
-+F:	drivers/clk/samsung/clk-gs101.c
-+F:	include/dt-bindings/clock/google,clk-gs101.h
-+
- GPD POCKET FAN DRIVER
- M:	Hans de Goede <hdegoede@redhat.com>
- L:	platform-driver-x86@vger.kernel.org
--- 
-2.43.0.472.g3155946c3a-goog
+Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 
 
