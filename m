@@ -1,129 +1,117 @@
-Return-Path: <linux-clk+bounces-1171-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1173-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FB3180C010
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 04:39:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B2B180C44C
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 10:18:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FA321C208FB
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 03:39:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A76021F213B6
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 09:18:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A1F171B7;
-	Mon, 11 Dec 2023 03:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A0321114;
+	Mon, 11 Dec 2023 09:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RdFYcCip"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GLWdKz+4"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37716D43;
-	Sun, 10 Dec 2023 19:38:29 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BB27kGn029249;
-	Mon, 11 Dec 2023 03:38:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:date:subject:mime-version:content-type
-	:content-transfer-encoding:message-id:references:in-reply-to:to
-	:cc; s=qcppdkim1; bh=9NfvdFC2EYrrss4aSEXmAl9jdp0/puQebxdHhbUnyac
-	=; b=RdFYcCipNJgwLzZPVkch4UBAR2M4rfxKfb4MVNVLYA9VpKUxq+yozWhORHK
-	z+d0Lp26LBnvbxD0jyLHlf6Wobx+79osIXuCBVi7fgjrs/ZdL8+Tlf0GiMTDRDaD
-	nQ7sDdlX1bzKJKDoPZuYXyvHP9w/J483CYq0bvS5JvzZpllDvIg+aCmcHT/qJjH2
-	ItCkLdQLtInfC62h0lvdLJ9nvURJpPbbLrKL/kwaCo451szIK4gIUcFM80R0SGJZ
-	eS+fg/3UVSBIEw73PzAuKiGR14OoXXj5Ls6lp4PjUezZYz9ktV8+HRjWWifJfZlt
-	5ZvunAaZo3rLyygj2rQSeiOsAqA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3uvnyva3r6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Dec 2023 03:38:19 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BB3cI4i013230
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Dec 2023 03:38:19 GMT
-Received: from hu-kathirav-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Sun, 10 Dec 2023 19:38:13 -0800
-From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-Date: Mon, 11 Dec 2023 09:07:30 +0530
-Subject: [PATCH v3 8/8] arm64: defconfig: build NSS Clock Controller driver
- for Qualcomm IPQ5332
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3669F5
+	for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 01:18:04 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-67a8a745c43so34099356d6.0
+        for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 01:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702286284; x=1702891084; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/z0fIrgey0ax47ogB/tuo0R84muzHuQ+ydDig5s54Lc=;
+        b=GLWdKz+4fg8mPDx1ELnuojeEe2T/1XyB36ZvIENuMsR3fCl7ln+rr+pUXcPb2VFVbW
+         sPIw76ndiczt/NSqQ6/l81FNJwxsmSQbIzbgsnGG8kdAZndJRpYXnKH/S1Ej99Yu6koY
+         gPYg/BB8EdJL/2JP1yMVLRaRulrNnBlK95L1XMF8SDIdVaQgYQ4I6TScanJ3XCzTsD6M
+         Jgh39J/dsNCzJ7FmG8n7AwVvvQmP1igOzbuEvsKCkXtXO9ydm1bsBxyJ6SaD+Re4u7ac
+         wnwNX6eyjiVT55sw6buh6HQWTPf5k1QiXf4vxFLAXcSkDHdpnzyCoNVYfX6xlPptDYMB
+         SuHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702286284; x=1702891084;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/z0fIrgey0ax47ogB/tuo0R84muzHuQ+ydDig5s54Lc=;
+        b=CprbHJyzsStvbqeS8qb8qleSByt22+Ezz8MKspvnDVDKumBXZRSqrCSoMbh9IN8rxK
+         c65mewehe5YIJqJHYZ+rNK9DpEbMWetpUeUQxI1mAmbmkZE2qIxEVEeQ8t0zm90uaSCo
+         CHPOnjAtCkwV0AGoyo5IeiO1puh8GnwM+O41CpnWbCTx7Xnc38hWqV9nezPsM63cF1cm
+         6IEQo+kPvks9/mS4jhdFW5vR+tBVXTl3Ze1AtX9gtcyKFQR5qDvZg21F8vz1uPz1Lov4
+         4RJTZG7mc0ckjEEUNS05UPXIgF7OuiAuVu/s6lAVorQCZmxI+AtIbR0X5O/DLzXCqy1m
+         RleA==
+X-Gm-Message-State: AOJu0YydzUAO3JOfddi0kzjNmXAji7KDGvibrd5FTpxbKhYTWMpQHjGK
+	xHUsjnSUfF0ylz5hYpEySNzaV80NdjLbo6h5ZGSs5g==
+X-Google-Smtp-Source: AGHT+IF2FD/yZWTaJspuz2ZkGnHtLmu9yc29fMOCKmFWdGSQxO5eLtwgHWeyaAYDFzw+Ks+VHIEsnPYl7wNEw90Fzik=
+X-Received: by 2002:ad4:5dec:0:b0:67a:568e:5b10 with SMTP id
+ jn12-20020ad45dec000000b0067a568e5b10mr7473425qvb.20.1702286284034; Mon, 11
+ Dec 2023 01:18:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231211-ipq5332-nsscc-v3-8-ad13bef9b137@quicinc.com>
-References: <20231211-ipq5332-nsscc-v3-0-ad13bef9b137@quicinc.com>
-In-Reply-To: <20231211-ipq5332-nsscc-v3-0-ad13bef9b137@quicinc.com>
-To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Catalin Marinas
-	<catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Kathiravan
- Thirumoorthy" <quic_kathirav@quicinc.com>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1702265852; l=770;
- i=quic_kathirav@quicinc.com; s=20230906; h=from:subject:message-id;
- bh=Wyt/ZD2zWouzMmJKcqtLO2jKDDDuwiTIji8eQvd5l8U=;
- b=3hLQRYFXCDtmBM/AuWKgfyZWbOdH1wuR/+L6LD7teKTOtSKNdc8aEfnCW9M1QuR0QDqz45wzD
- HCfBuzJ5TrlACluSA5w+U5sZqud2GVu//2kgitNMh3iIlIzMktRrTTf
-X-Developer-Key: i=quic_kathirav@quicinc.com; a=ed25519;
- pk=xWsR7pL6ch+vdZ9MoFGEaP61JUaRf0XaZYWztbQsIiM=
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Wobte5RxnbFxxQdpbZQZASP8Jegg0c2L
-X-Proofpoint-ORIG-GUID: Wobte5RxnbFxxQdpbZQZASP8Jegg0c2L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=771 suspectscore=0 spamscore=0 bulkscore=0 clxscore=1015
- phishscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312110028
+References: <20231209233106.147416-1-peter.griffin@linaro.org>
+ <20231209233106.147416-4-peter.griffin@linaro.org> <c2244932-cb2f-423a-bbe6-9ab2b08b9d63@linaro.org>
+In-Reply-To: <c2244932-cb2f-423a-bbe6-9ab2b08b9d63@linaro.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Mon, 11 Dec 2023 09:17:53 +0000
+Message-ID: <CADrjBPpd5mT6SZyPEgxFGy18pr5Gypcwv7aoG4R978d__Pk3LA@mail.gmail.com>
+Subject: Re: [PATCH v6 03/20] dt-bindings: soc: google: exynos-sysreg: add
+ dedicated SYSREG compatibles to GS101
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
+	semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com, 
+	soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-NSSCC driver is needed to enable the ethernet interfaces and not
-necessary for the bootup of the SoC, hence build it as a module.
+Hi Krzysztof,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, 10 Dec 2023 at 13:49, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 10/12/2023 00:30, Peter Griffin wrote:
+> > GS101 has three different SYSREG controllers, add dedicated
+> > compatibles for them to the documentation.
+> >
+> > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  .../bindings/soc/samsung/samsung,exynos-sysreg.yaml         | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> > index 2de4301a467d..127f4ffde76a 100644
+> > --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> > +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> > @@ -22,6 +22,12 @@ properties:
+> >                - tesla,fsd-fsys1-sysreg
+> >                - tesla,fsd-peric-sysreg
+> >            - const: syscon
+> > +      - items:
+> > +          - enum:
+> > +              - google,gs101-apm-sysreg
+> > +              - google,gs101-peric0-sysreg
+> > +              - google,gs101-peric1-sysreg
+>
+> This should be part of the first enum. No need for new list for every
+> new SoC. I'll fix it while applying.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index be89fa9e6468..a12182cc8cc9 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1229,6 +1229,7 @@ CONFIG_QCOM_CLK_SMD_RPM=y
- CONFIG_QCOM_CLK_RPMH=y
- CONFIG_IPQ_APSS_6018=y
- CONFIG_IPQ_GCC_5332=y
-+CONFIG_IPQ_NSSCC_5332=m
- CONFIG_IPQ_APSS_5018=y
- CONFIG_IPQ_GCC_5018=y
- CONFIG_IPQ_GCC_6018=y
+Noted, thanks!
 
--- 
-2.34.1
-
+Peter
 
