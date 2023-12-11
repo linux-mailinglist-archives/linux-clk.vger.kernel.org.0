@@ -1,227 +1,329 @@
-Return-Path: <linux-clk+bounces-1187-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1189-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2562080CC4B
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 15:00:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03BF180D12C
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 17:24:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEA13280E79
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 14:00:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BFFCB20DF3
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Dec 2023 16:24:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11268482C0;
-	Mon, 11 Dec 2023 14:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9EDE4CB21;
+	Mon, 11 Dec 2023 16:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YGEmrRc1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m0uVrSZB"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [IPv6:2a00:1098:ed:100::25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E33478A;
-	Mon, 11 Dec 2023 05:59:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702303189;
-	bh=dKIWPsl1+iB2/HkzpJsN57Kk1dREJYExJbg+W32xu7M=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=YGEmrRc1jEJzfPPF6dLbd4heZq9uLnyF4pej2TSkPXZLgrVyhmu7OqHPZ/0jcl64t
-	 t+KUNzhJXuzEGlo/xfv9iZqv4eSRp/turrbYd63mibACbd3cUlMGxGwNloE6Hu6C0T
-	 bEHMjdbzd03fJ5iUlhHrIoXhghvM0fKdWDYwx8ZP/a6rGL9ZfdMcTrRlIcWA/nhyXO
-	 KuGhiV+v2xBkPfkLNsGyMnHP5sCnO7G83SFrUJVcRsAl6oF65vdFTBs1JJ0VRyNK+c
-	 /xZ83+DtdN9XTwo39xLwW84zGhdZjBM9iu5shi+/fKdNSZE1Ifpwfp9XkRAc67AnJ6
-	 dt9L3hQiw+9oQ==
-Received: from [IPV6:fd00::2a:39ce] (cola.collaboradmins.com [IPv6:2a01:4f8:1c1c:5717::1])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 70134378110F;
-	Mon, 11 Dec 2023 13:59:47 +0000 (UTC)
-Message-ID: <4fce268c-4ef1-4361-b524-4c9bf9b60370@collabora.com>
-Date: Mon, 11 Dec 2023 14:59:46 +0100
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED6E95
+	for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 08:24:14 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3333a3a599fso3037534f8f.0
+        for <linux-clk@vger.kernel.org>; Mon, 11 Dec 2023 08:24:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702311853; x=1702916653; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/cXq9Za6JktKkUZswxvGGItoZdewy469raLmIqDNRsg=;
+        b=m0uVrSZBEwYdPA0GgqKcEO2/xW6naSQXY98yAo4amNXBpCctSGyqRvF+AEUi9yNOS7
+         ONjjlm5zJjAC4yRxu2lLDESSNMqCjqisDYA1YlrJhC59E40jaoe1jTNmpL4SP0xnlYiM
+         A08CDpj25KWU6tKTZb3pxUzvUWQFs4bsxDQIdRFb5cy6GXS8N50uC5B8lOwaxwrbc/jI
+         bZInJ1gEaavEKE2pvYNM7qFdIkjiWmmG8MY9HNRtvoBH8T51HIJqPWsV6z8BjCxRDjGR
+         zAHn+vTSB+wkakMn35o2S98ol4Ym9/QOWgXL/RHY0SswL8RAtqDm/9yfqajqXqEmHSav
+         BaLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702311853; x=1702916653;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/cXq9Za6JktKkUZswxvGGItoZdewy469raLmIqDNRsg=;
+        b=O04xhIHGTinateNYxYClUiiqQ3g9Yqh5EFPt1t24avl7L2HQCF2WncQgFvAUsBpJ3g
+         +hDbQ3zyF/qntx96uY+g7d8qCUTaA53PhLkc7ZOcIYJCNBz5SgpFAc/j+3V9iUINKCHr
+         speJ+hselyWeGa7ftBIzUGfodj2qAbr4ygDR/45TKH/K8MiK5n69aJ/hHy9C//nC6WDz
+         jxB4zoTIE1X8D2wkPCZ7FTUFziawhN0aePOU5erVoHDpvPfqr40HuI27FvWq9yO+rp5d
+         SkBeJmB9NkNL5Ron1IJNhMCdCZEoVVuT1zJDh9Jm+ow8oc1OYwCG1oCEYitj2rOAWp7J
+         PkbQ==
+X-Gm-Message-State: AOJu0Yyhd4lsknDhD8uQpMuG2I7Le93WBCuqJN+dWxclyCPQQ6XL4AbE
+	aLRmci4X1ZJ0zE5SscOdviQaTQ==
+X-Google-Smtp-Source: AGHT+IHQA45M4mily08i4J1ZnFRpkUa/Y7hitVW64pSlMl5W1Hr/yd6YFlbtw01ie2DCY1JVJsNOxA==
+X-Received: by 2002:adf:fe01:0:b0:333:4169:2ada with SMTP id n1-20020adffe01000000b0033341692adamr2386977wrr.44.1702311852793;
+        Mon, 11 Dec 2023 08:24:12 -0800 (PST)
+Received: from gpeter-l.lan (host-92-29-28-58.as13285.net. [92.29.28.58])
+        by smtp.gmail.com with ESMTPSA id o4-20020a5d58c4000000b0033333bee379sm8923103wrf.107.2023.12.11.08.24.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 08:24:12 -0800 (PST)
+From: Peter Griffin <peter.griffin@linaro.org>
+To: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com,
+	conor+dt@kernel.org,
+	sboyd@kernel.org,
+	tomasz.figa@gmail.com,
+	s.nawrocki@samsung.com,
+	linus.walleij@linaro.org,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	olof@lixom.net,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	cw00.choi@samsung.com,
+	alim.akhtar@samsung.com
+Cc: peter.griffin@linaro.org,
+	tudor.ambarus@linaro.org,
+	andre.draszik@linaro.org,
+	semen.protsenko@linaro.org,
+	saravanak@google.com,
+	willmcvicker@google.com,
+	soc@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	kernel-team@android.com,
+	linux-serial@vger.kernel.org
+Subject: [PATCH v7 00/16] Add minimal Tensor/GS101 SoC support and Oriole/Pixel6 board
+Date: Mon, 11 Dec 2023 16:23:15 +0000
+Message-ID: <20231211162331.435900-1-peter.griffin@linaro.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/4] clk: mediatek: Add pcw_chg_shift control
-To: Daniel Golle <daniel@makrotopia.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Sabrina Dubroca <sd@queasysnail.net>, Jianhui Zhao <zhaojh329@gmail.com>,
- Chen-Yu Tsai <wenst@chromium.org>, "Garmin.Chang"
- <Garmin.Chang@mediatek.com>, Sam Shih <sam.shih@mediatek.com>,
- Markus Schneider-Pargmann <msp@baylibre.com>,
- Alexandre Mergnat <amergnat@baylibre.com>,
- Jiasheng Jiang <jiasheng@iscas.ac.cn>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Frank Wunderlich <frank-w@public-files.de>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Dan Carpenter <dan.carpenter@linaro.org>,
- James Liao <jamesjj.liao@mediatek.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- netdev@vger.kernel.org
-References: <097e82b0d66570763d64be1715517d8b032fcf95.1702158423.git.daniel@makrotopia.org>
- <28c8ccd234ba311591b6db0de131fde36d3ec409.1702158423.git.daniel@makrotopia.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <28c8ccd234ba311591b6db0de131fde36d3ec409.1702158423.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Il 09/12/23 22:56, Daniel Golle ha scritto:
-> From: Sam Shih <sam.shih@mediatek.com>
-> 
-> Introduce pcw_chg_shfit control to replace hardcoded PCW_CHG_MASK macro.
-> This will needed for clocks on the MT7988 SoC.
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
-> v4: always set .pcw_chg_shift if .pcw_chg_reg is used instead of
->      having an if-expression in mtk_pll_set_rate_regs().
-> v3: use git --from ...
-> v2: no changes
-> 
->   drivers/clk/mediatek/clk-mt6779.c            | 1 +
->   drivers/clk/mediatek/clk-mt8183-apmixedsys.c | 1 +
->   drivers/clk/mediatek/clk-mt8188-apmixedsys.c | 1 +
->   drivers/clk/mediatek/clk-mt8192-apmixedsys.c | 1 +
->   drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 1 +
->   drivers/clk/mediatek/clk-mt8365-apmixedsys.c | 1 +
->   drivers/clk/mediatek/clk-pll.c               | 3 +--
->   drivers/clk/mediatek/clk-pll.h               | 2 ++
->   8 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/mediatek/clk-mt6779.c b/drivers/clk/mediatek/clk-mt6779.c
-> index ffedb1fe3c672..e66461f341dd3 100644
-> --- a/drivers/clk/mediatek/clk-mt6779.c
-> +++ b/drivers/clk/mediatek/clk-mt6779.c
-> @@ -1166,6 +1166,7 @@ static const struct mtk_gate apmixed_clks[] = {
->   		.pcw_reg = _pcw_reg,					\
->   		.pcw_shift = _pcw_shift,				\
->   		.pcw_chg_reg = _pcw_chg_reg,				\
-> +		.pcw_chg_shift = PCW_CHG_SHIFT,				\
->   		.div_table = _div_table,				\
->   	}
->   
-> diff --git a/drivers/clk/mediatek/clk-mt8183-apmixedsys.c b/drivers/clk/mediatek/clk-mt8183-apmixedsys.c
-> index 2b261c0e2b61d..184e0cd1dde29 100644
-> --- a/drivers/clk/mediatek/clk-mt8183-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8183-apmixedsys.c
-> @@ -75,6 +75,7 @@ static const struct mtk_gate apmixed_clks[] = {
->   		.pcw_reg = _pcw_reg,					\
->   		.pcw_shift = _pcw_shift,				\
->   		.pcw_chg_reg = _pcw_chg_reg,				\
-> +		.pcw_chg_shift = PCW_CHG_SHIFT,				\
->   		.div_table = _div_table,				\
->   	}
->   
-> diff --git a/drivers/clk/mediatek/clk-mt8188-apmixedsys.c b/drivers/clk/mediatek/clk-mt8188-apmixedsys.c
-> index 41ab4d6896a49..87c5dfa3d1ac4 100644
-> --- a/drivers/clk/mediatek/clk-mt8188-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8188-apmixedsys.c
-> @@ -53,6 +53,7 @@ static const struct mtk_gate apmixed_clks[] = {
->   		.pcw_reg = _pcw_reg,					\
->   		.pcw_shift = _pcw_shift,				\
->   		.pcw_chg_reg = _pcw_chg_reg,				\
-> +		.pcw_chg_shift = PCW_CHG_SHIFT,				\
->   		.en_reg = _en_reg,					\
->   		.pll_en_bit = _pll_en_bit,				\
->   	}
-> diff --git a/drivers/clk/mediatek/clk-mt8192-apmixedsys.c b/drivers/clk/mediatek/clk-mt8192-apmixedsys.c
-> index 3590932acc63a..67bf5ef3f0033 100644
-> --- a/drivers/clk/mediatek/clk-mt8192-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8192-apmixedsys.c
-> @@ -56,6 +56,7 @@ static const struct mtk_gate apmixed_clks[] = {
->   		.pcw_reg = _pcw_reg,					\
->   		.pcw_shift = _pcw_shift,				\
->   		.pcw_chg_reg = _pcw_chg_reg,				\
-> +		.pcw_chg_shift = PCW_CHG_SHIFT,				\
->   		.en_reg = _en_reg,					\
->   		.pll_en_bit = _pll_en_bit,				\
->   	}
-> diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> index 44a4c85a67ef5..ccd6bac7cb1fc 100644
-> --- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> @@ -54,6 +54,7 @@ static const struct mtk_gate apmixed_clks[] = {
->   		.pcw_reg = _pcw_reg,					\
->   		.pcw_shift = _pcw_shift,				\
->   		.pcw_chg_reg = _pcw_chg_reg,				\
-> +		.pcw_chg_shift = PCW_CHG_SHIFT,				\
->   		.en_reg = _en_reg,					\
->   		.pll_en_bit = _pll_en_bit,				\
->   	}
-> diff --git a/drivers/clk/mediatek/clk-mt8365-apmixedsys.c b/drivers/clk/mediatek/clk-mt8365-apmixedsys.c
-> index 9b0bc5daeac06..daddca6db44e7 100644
-> --- a/drivers/clk/mediatek/clk-mt8365-apmixedsys.c
-> +++ b/drivers/clk/mediatek/clk-mt8365-apmixedsys.c
-> @@ -39,6 +39,7 @@
->   		.pcw_reg = _pcw_reg,					\
->   		.pcw_shift = _pcw_shift,				\
->   		.pcw_chg_reg = _pcw_chg_reg,				\
-> +		.pcw_chg_shift = PCW_CHG_SHIFT,				\
->   		.div_table = _div_table,				\
->   	}
->   
-> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
-> index 513ab6b1b3229..139b01ab8d140 100644
-> --- a/drivers/clk/mediatek/clk-pll.c
-> +++ b/drivers/clk/mediatek/clk-pll.c
-> @@ -23,7 +23,6 @@
->   #define CON0_BASE_EN		BIT(0)
->   #define CON0_PWR_ON		BIT(0)
->   #define CON0_ISO_EN		BIT(1)
-> -#define PCW_CHG_MASK		BIT(31)
->   
->   #define AUDPLL_TUNER_EN		BIT(31)
->   
-> @@ -114,7 +113,7 @@ static void mtk_pll_set_rate_regs(struct mtk_clk_pll *pll, u32 pcw,
->   			pll->data->pcw_shift);
->   	val |= pcw << pll->data->pcw_shift;
->   	writel(val, pll->pcw_addr);
-> -	chg = readl(pll->pcw_chg_addr) | PCW_CHG_MASK;
-> +	chg = readl(pll->pcw_chg_addr) | BIT(pll->data->pcw_chg_shift);
->   	writel(chg, pll->pcw_chg_addr);
->   	if (pll->tuner_addr)
->   		writel(val + 1, pll->tuner_addr);
-> diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
-> index f17278ff15d78..84bd8df13e2e5 100644
-> --- a/drivers/clk/mediatek/clk-pll.h
-> +++ b/drivers/clk/mediatek/clk-pll.h
-> @@ -22,6 +22,7 @@ struct mtk_pll_div_table {
->   #define HAVE_RST_BAR	BIT(0)
->   #define PLL_AO		BIT(1)
->   #define POSTDIV_MASK	GENMASK(2, 0)
-> +#define PCW_CHG_SHIFT	31
->   
->   struct mtk_pll_data {
->   	int id;
-> @@ -48,6 +49,7 @@ struct mtk_pll_data {
->   	const char *parent_name;
->   	u32 en_reg;
->   	u8 pll_en_bit; /* Assume 0, indicates BIT(0) by default */
-> +	u8 pcw_chg_shift;
+Hi folks,
 
-Ok this is better - please call this "pcw_chg_bit" (same for the definition).
+This series adds initial SoC support for the GS101 SoC and also initial board
+support for Pixel 6 phone (Oriole).
 
-Also, since it is impossible for PCW_CHG to be 0, please add a sanity check at
-the beginning of function mtk_clk_register_pll_ops(), like so:
+Thankyou to everyone who has reviewed and tested the previous series. Your
+time and effort doing so is much appreciated! If any relevant subsystem
+maintainers can send a acked-by that would be much appreciated. In particular
 
-if (!data->pcw_chg_bit) {
-	pr_warn("Invalid PCW_CHG bit for pll %s", data->name);
-	return ERR_PTR(-EINVAL);
-}
+@RobH: Please can you re-review google.yaml as a ect node was added since you
+gave your previous reviewed-by
 
-...like that, we're fully covered for eventual mistakes during porting (etc).
+@Guenter/Wim: If you're happy, can you send an acked-by for Watchdog changes?
 
-Cheers,
-Angelo
+V7 incorporates the review feedback received so far, and is rebased onto
+linux-next as per Krzysztof request to incorporate all his dt-binding changes
+for exynos. I'm really hoping V7 will be the last series, and we can get this
+series merged this week so it will make it into v6.8 Linux release.
+
+v7 fixes up various cosmetic nits in device tree and drivers regarding
+alphabetical ordering. See below for more verbose details. There is one
+additional patch to fixup some incorrect numbering and spelling typo
+in the google,gs101.h. Also the patches which have already been applied
+have been dropped from the series.
+
+As this series spans multiple subsytems the expectation is that Krzysztof
+will apply the whole series through the Samsung SoC tree. If the relevant
+subsystem maintainers can give a acked-by or reviewed-by on the relevant
+patches that would be most appreciated!
+
+The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
+(raven) phones. Currently DT is added for the gs101 SoC and Oriole.
+As you can see from the patches the SoC is based on a Samsung Exynos SoC,
+and therefore lots of the low level Exynos drivers and bindings can be
+re-used.
+
+The support added in this series consists of:
+* cpus
+* pinctrl
+* CCF implementation of cmu_top, cmu_misc & cmu_apm
+* watchdog
+* USI uart
+* gpio
+
+This is enough to boot through to a busybox initramfs and shell using an
+upstream kernel though :) More platform support will be added over the
+following weeks and months.
+
+For further information on how to build and flash the upstream kernel on your
+Pixel 6, with a prebuilt busybox initramfs please refer to the script and
+README.md here:
+
+https://git.codelinaro.org/linaro/googlelt/pixelscripts
+
+Note: Booting without a dtbo works with some versions of the bootloader
+but crashes on others. Later versions aren't necessarily better. You can
+get the bootloader version with `fastboot getvar version-bootloader`
+Known good bootloader versions are: -
+- slider-1.3-11000330
+- slider-1.2-9152140
+Known to crash without dtbo
+- slider-1.3-10780582
+
+kind regards,
+
+Peter.
+
+lore v6: https://lore.kernel.org/all/25533a7f-326f-48d1-a8a6-e5798bdca4b4@linaro.org/T/
+lore v5: https://lore.kernel.org/all/20231201160925.3136868-1-peter.griffin@linaro.org/T/
+lore v4: https://lore.kernel.org/linux-arm-kernel/20231120212037.911774-1-peter.griffin@linaro.org/T/
+pw   v3: https://patchwork.kernel.org/project/linux-samsung-soc/cover/20231011184823.443959-1-peter.griffin@linaro.org/
+lore v2: https://lore.kernel.org/all/20231010224928.2296997-1-peter.griffin@linaro.org/
+lore v1: https://lore.kernel.org/linux-arm-kernel/20231005155618.700312-1-peter.griffin@linaro.org/
+
+Changes since v6:
+ - Collect up Reviewed-by tags
+ - s3c2410_wdt: alphabetical ordering of compatible (Krzysztof)
+ - pinctrl-samsung: alphabetical ordering of compatible (Krzysztof)
+ - gs101.dtsi: alphabetical node ordering, vendor properties end of node (Krzysztof)
+ - Header guard doesn't match location (Krzysztof)
+ - Fix incorrect numbering and spelling typo in google,gs101 and clk-gs101 (Andre)
+
+Changes since v5:
+ - Collect up Reviewed-by and Tested-by tags
+ - clk-gs101: reorder cmu_top parents in register offset order (Peter)
+ - clk-gs101: Review cmu_top and cmu_misc parents, fix a few typos
+ - clk-gs101: Add more name mangling to shorten DT and Linux clock name strings (Sam)
+ - pinctrl: samsung: Drop support for digital/analog selectable filters (Peter)
+ - Fixup cmu_top yaml example and some nitpicks (Sam)
+ - Fixup some spelling nitpicks in google.yaml (Sam)
+ - samsung,pinctrl-wakeup-interrupt: drop second not required google,gs101-wakeup-eint compatible (Krzysztof)
+ - exynos-usi.yaml: add google,gs101-usi to previous enum (Krzysztof)
+ - s3c2410_wdt: move comment, double whitespace, add BIT macro (Sam)
+
+Changes since v4:
+ - clk-gs101: order cmu_top by register address, fix incorrect mux widths,
+   add missing mux/div/gates (Andre)
+ - google,gs101.h: add missing space in comment (Andre)
+ - ckl-gs101:google,gs101.h add all remaining gates for cmu_misc and cmu_apm
+ - update pmu dt labels (Krzysztof)
+ - Remove uart16 rts/tx gpio definitions (Krzysztof)
+ - Fixup various dts cosmetic nits (using consts, alignments,
+   names) (Sam/Krzysztof)
+ - Add more specific compatibles for arm cpu's and pmu (Sam)
+ - Use address-cells 1 and ranges property for SoC addresses (Sam)
+ - Encapsulate uart node in USI node (Sam)
+ - Remove earlycon from bootargs
+ - s3c2410_wdt: Reword QUIRK_HAS_DBGACK_BIT docs and add comment (Guenter)
+ - s3c2410_wdt: Reorder DBGACK_MASK functionality first, gs101
+   SoC second (Sam/Krzysztof)
+ 
+Changes since v3:
+ - Add reviewed-by and tested-by tags
+ - google,gs101-clock.yaml: move Required to before Allof,
+   enum for cmu*top/misc (Krzysztof)
+ - samsung-wdt.yaml: stick to 80chars (Sam)
+ - google.yaml - remove new line
+ - samsung,pinctrl-wakeup-interrupt: sort alphabetically (RobH)
+ - gs101-oriole.dts: update gpio-keys pinctrl-0 phandle for keys (Stephen)
+ - samsung,exynos-sysreg.yaml - Alphabetical order (RobH)
+ - pinctrl-exynos: update/move comments, slight cosmetic changes (Sam)
+ - samsung_tty.c: update to generic drv_data name/macro (Arnd)
+ - samsung_uart.yaml: make samsung,uart-fifosize required for gs101-uart (Arnd)
+ - pinctrl-exynos: Remove eint irqs from alive pin controller node (Peter/Rob)
+ - Fixup kernel test robot unused const variable warnings
+ - clk-gs101: Update to mout_cmu_eh_bus to CLK_CON_MUX_MUX_CLKCMU_EH_BUS
+   (Chanwoo)
+ - clk-gs101: Update g3aa gout/dout/mout names to g3aa_g3aa for
+   consistency (Chanwoo)
+ - Remove .eint_gpio_init() cb on alive, alive_far, gsacore & gsactrl
+   banks (Sam)
+ - s3c2410_wdt: Drop windowed watchdog mode for now (Peter)
+ - s3c2410_wdt: Separate gs101 SoC support from dbgack feature (Sam)
+ - Move dts to arch/arm64/boot/dts/exynos/google directory (Krzysztof)
+
+Changes since v2:
+ - Fixup pinctrl@174d0000: interrupts: [..] is too long DTC warning (Tudor)
+ - Add missing windowed watchdog code (Guenter)
+ - Fixup UART YAML bindings error (Krzysztof)
+ - gs101.dtsi add missing serial_0 alias (me)
+ - samsung_tty.c: fixup gs101_serial_drv_data so fifosize is obtained from DT
+ 
+Changes since v1:
+ - Remove irq/gs101.h and replace macros with irq numbers globally
+ - exynos-pmu - keep alphabetical order
+ - add cmu_apm to clock bindings documentation
+ - sysreg bindings - remove superfluous `google,gs101-sysreg`
+ - watchdog bindings - Alphanumerical order, update gs201 comment
+ - samsung,pinctrl.yaml - add new "if:then:else:" to narrow for google SoC
+ - samsung,pinctrl-wakeup-interrupt.yaml - Alphanumerical order
+ - samsung,pinctrl- add google,gs101-wakeup-eint compatible
+ - clk-pll: fixup typos
+ - clk-gs101: fix kernel test robot warnings (add 2 new clocks,dividers,gate)
+ - clk-gs101: fix alphabetical order
+ - clk-gs101: cmu_apm: fixup typo and missing empty entry
+ - clk-gs101: cmu_misc: remove clocks that were being registerred twice
+ - pinctrl: filter sel: rename/reorder variables, add comment for FLTCON
+   bitfield
+ - pinctrl: filter sel: avoid setting reserved bits by loop over FLTCON1 pins
+   as well
+ - pinctrl: gs101: rename bank_type_6/7 structs to be more specific,
+   split from filter
+ - watchdog: s3c2410_wdt: remove dev_info prints
+ - gs101.dtsi/oriole.dts: order by unit node, remove underscores from node
+   name, blank lines add SoC node, split dts and dtsi into separate patches,
+   remove 'DVT' suffix
+ - gs101-oriole.dtso: Remove overlay until board_id is documented properly
+ - Add GS101_PIN_* macros to gs101-pinctrl.h instead of using Exynos ones
+ - gpio-keys: update linux,code to use input-event-code macros
+ - add dedicated gs101-uart compatible
+
+Peter Griffin (15):
+  dt-bindings: watchdog: Document Google gs101 watchdog bindings
+  dt-bindings: arm: google: Add bindings for Google ARM platforms
+  dt-bindings: serial: samsung: Add google-gs101-uart compatible
+  dt-bindings: serial: samsung: Make samsung,uart-fifosize a required
+    property
+  dt-bindings: clock: google,gs101: fix incorrect numbering and DGB
+    suffix
+  clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
+  clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support
+  pinctrl: samsung: Add gs101 SoC pinctrl configuration
+  watchdog: s3c2410_wdt: Add support for WTCON register DBGACK_MASK bit
+  watchdog: s3c2410_wdt: Update QUIRK macros to use BIT macro
+  watchdog: s3c2410_wdt: Add support for Google gs101 SoC
+  tty: serial: samsung: Add gs101 compatible and common
+    fifoszdt_serial_drv_data
+  arm64: dts: exynos: google: Add initial Google gs101 SoC support
+  arm64: dts: exynos: google: Add initial Oriole/pixel 6 board support
+  MAINTAINERS: add entry for Google Tensor SoC
+
+Tudor Ambarus (1):
+  dt-bindings: soc: samsung: usi: add google,gs101-usi compatible
+
+ .../devicetree/bindings/arm/google.yaml       |   53 +
+ .../bindings/serial/samsung_uart.yaml         |   11 +
+ .../bindings/soc/samsung/exynos-usi.yaml      |    1 +
+ .../bindings/watchdog/samsung-wdt.yaml        |    8 +-
+ MAINTAINERS                                   |   10 +
+ arch/arm64/boot/dts/exynos/Makefile           |    2 +
+ arch/arm64/boot/dts/exynos/google/Makefile    |    4 +
+ .../boot/dts/exynos/google/gs101-oriole.dts   |  105 +
+ .../boot/dts/exynos/google/gs101-pinctrl.dtsi | 1249 ++++++++
+ .../boot/dts/exynos/google/gs101-pinctrl.h    |   33 +
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi  |  473 ++++
+ drivers/clk/samsung/Makefile                  |    1 +
+ drivers/clk/samsung/clk-gs101.c               | 2512 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |    6 +
+ drivers/clk/samsung/clk-pll.h                 |    3 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  140 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |    2 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |    1 +
+ drivers/tty/serial/samsung_tty.c              |   16 +
+ drivers/watchdog/s3c2410_wdt.c                |   87 +-
+ include/dt-bindings/clock/google,gs101.h      |  118 +-
+ 21 files changed, 4761 insertions(+), 74 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+ create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-pinctrl.h
+ create mode 100644 arch/arm64/boot/dts/exynos/google/gs101.dtsi
+ create mode 100644 drivers/clk/samsung/clk-gs101.c
+
+-- 
+2.43.0.472.g3155946c3a-goog
+
 
