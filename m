@@ -1,152 +1,119 @@
-Return-Path: <linux-clk+bounces-1270-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1276-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35FB380EAF1
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Dec 2023 12:55:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C87E080F492
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Dec 2023 18:27:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66D771C20B94
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Dec 2023 11:55:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7326E1F216A2
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Dec 2023 17:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA9585DF1F;
-	Tue, 12 Dec 2023 11:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D1B7D89B;
+	Tue, 12 Dec 2023 17:27:22 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE13DB
-	for <linux-clk@vger.kernel.org>; Tue, 12 Dec 2023 03:55:05 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E934D9F
+	for <linux-clk@vger.kernel.org>; Tue, 12 Dec 2023 09:27:19 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rD1KL-0007kg-9r; Tue, 12 Dec 2023 12:53:29 +0100
+	id 1rD6X1-0001uM-3O; Tue, 12 Dec 2023 18:26:55 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rD1KH-00FKLk-Ov; Tue, 12 Dec 2023 12:53:25 +0100
+	id 1rD6Ww-00FOPD-7r; Tue, 12 Dec 2023 18:26:50 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rD1KH-001bPz-E7; Tue, 12 Dec 2023 12:53:25 +0100
-Date: Tue, 12 Dec 2023 12:53:25 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: nikita.shubin@maquefel.me
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Lukasz Majewski <lukma@denx.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	id 1rD6Wv-001nbR-TA; Tue, 12 Dec 2023 18:26:49 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Russell King <linux@armlinux.org.uk>
+Cc: linux-clk@vger.kernel.org,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-amlogic@lists.infradead.org,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v6 00/40] ep93xx device tree conversion
-Message-ID: <20231212115325.m4w6cg4ttdispkvm@pengutronix.de>
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Rob Herring <robh@kernel.org>,
+	linux-tegra@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Georgi Djakov <djakov@kernel.org>,
+	kernel@pengutronix.de
+Subject: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
+Date: Tue, 12 Dec 2023 18:26:37 +0100
+Message-ID: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aamqyrxtxz2kjjms"
-Content-Disposition: inline
-In-Reply-To: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1256; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=fuoORCWhYYOP5RXKuGpiS7lr3Z2yTHsOYZlk6CpCKEA=; b=owGbwMvMwMXY3/A7olbonx/jabUkhtSK6WeM9Jn7Sit136VzF7/4ma2nGmm+cYH0TcGD7l/qr yVKuzt0MhqzMDByMciKKbLYN67JtKqSi+xc++8yzCBWJpApDFycAjAR9kYOhtn5K8o/uh43Cy40 8V1Z6qUks+9F+Hz+mPwpC8x2/X3J+dPhJue5kGwr0UQRoQir41eF5Cbfly35tGQV0xdVe61lmYf 6XCb6C8mqch9lc3PV01l46mG7/OMdX49+Kvm5uNTA6t3Ds9cnWj/a7eNx9WW4ioOO8pXgbRkJ+R 5N0UsOt7geZzFR/ODedeTL+/PyEcIv06YKmi+K2anHpJjy1vyL47PCSWLsM+I7p1aG/D1/nXlex t+VibUmv/X6lnxq7OGKm9Z6s/3Qv+6Dd+yPSipG7rLPVq4xS13pJC17v5Ezzp/f7srJGKUwncIl fyLuqUhe4O2/kbC0OFf5kX7ugovH10Ud+5H3oq872CsBAA==
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-
---aamqyrxtxz2kjjms
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hello,
 
-On Tue, Dec 12, 2023 at 11:20:17AM +0300, Nikita Shubin via B4 Relay wrote:
-> No major changes since last version all changes are cometic.
->=20
-> Following patches require attention from Stephen Boyd, as they were conve=
-rted to aux_dev as suggested:
->=20
-> - ARM: ep93xx: add regmap aux_dev
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->=20
-> DMA related patches still require Acked or Reviewed tags.
->=20
-> got approval LGTM from Miquel:
-> - mtd: rawnand: add support for ts72xx
-> Link: https://lore.kernel.org/lkml/20231004103911.2aa65354@xps-13/
->=20
-> new patches:
->=20
-> ARM: ep93xx:  Add terminator to gpiod_lookup_table
->   - fixed terminator in gpiod_lockup_table
->=20
-> So mostly all patches got approval.
->=20
-> Patches should be now formated with '--histogram'
+clk_rate_exclusive_get() returns zero unconditionally. Most users "know"
+that and don't check the return value. This series fixes the four users
+that do error checking on the returned value and then makes function
+return void.
 
-You didn't mention how this should be merged. IIRC for the earlier
-rounds the idea was to merge it all together via arm-soc when all
-necessary agreement is reached. I assume that's still the case here?
+Given that the changes to the drivers are simple and so merge conflicts
+(if any) should be easy to handle, I suggest to merge this complete
+series via the clk tree.
 
 Best regards
 Uwe
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Uwe Kleine-König (5):
+  PM / devfreq: sun8i-a33-mbus: Simplify usage of
+    clk_rate_exclusive_get()
+  drm/meson: Simplify usage of clk_rate_exclusive_get()
+  memory: tegra210-emc: Simplify usage of clk_rate_exclusive_get()
+  memory: tegra30-emc: Simplify usage of clk_rate_exclusive_get()
+  clk: Make clk_rate_exclusive_get() return void
 
---aamqyrxtxz2kjjms
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/clk/clk.c                         |  6 ++----
+ drivers/devfreq/sun8i-a33-mbus.c          | 14 ++------------
+ drivers/gpu/drm/meson/meson_dw_mipi_dsi.c |  8 +-------
+ drivers/memory/tegra/tegra210-emc-core.c  |  6 +-----
+ drivers/memory/tegra/tegra30-emc.c        |  6 +-----
+ include/linux/clk.h                       |  8 +++-----
+ 6 files changed, 10 insertions(+), 38 deletions(-)
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV4SbQACgkQj4D7WH0S
-/k4PhAf9FUkX+fzsz5zB6lrl7lgCvYm5ZVb3B7jDw5VKDO3L/jcpIQBnKW28hqdN
-fjyiqoG4kcqJrqfSN7RxYVHnxPmPMREuU5dkbLnXs4nakNuG6kYOLoWYRW6g7LHA
-2aJAqNPA3r1vRHwgyLaSlwVy4TxsWEJoU/Wa7pnN5VGjjyA22i9iruZRGzbsfSbG
-b4TPtncg2+HG5Z2NtBTY2w2wy/0XOTgO40vcUbW+gfh+ktRpJl5quupeZdYByknj
-l9QU3yt6tCJoKvAXYc2/jykymWajShXD0UJhcLTTYcWnQYEgfLWypFNR4YXJmJGC
-SbVz5vPzsa56pT4BPvsUI7alw9v79g==
-=T2K5
------END PGP SIGNATURE-----
+base-commit: bbd220ce4e29ed55ab079007cff0b550895258eb
+-- 
+2.42.0
 
---aamqyrxtxz2kjjms--
 
