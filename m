@@ -1,42 +1,42 @@
-Return-Path: <linux-clk+bounces-1336-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1341-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA973811D69
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 19:51:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CDFF811D7A
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 19:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1D4B282797
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 18:51:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3748A1F21109
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 18:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6444161FBF;
-	Wed, 13 Dec 2023 18:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7A564CC4;
+	Wed, 13 Dec 2023 18:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MWLfB7DN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GZi1WSye"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [IPv6:2a00:1098:ed:100::25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837F0D5;
-	Wed, 13 Dec 2023 10:51:18 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F2E8;
+	Wed, 13 Dec 2023 10:51:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702493476;
-	bh=UCS+KPsxvcp4BORj2nXaNk+rHiVu0HA6p/TRoZ/FmIA=;
+	s=mail; t=1702493477;
+	bh=N0mIgq8eEj9Yqh5g1KsiM6Na4KJDpVX1RztufTMFpis=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MWLfB7DNmAEZk5yiIGOD6VtQ4pER8tPRkgFLOrOA4h4Pjw28IbewKE/a+2gM/c2Yq
-	 FrnzYLdsYMe9Ak7NSvh2zMzH4o9elDzhR7pwIeVpLYGMUu3RAiyZqCYG5kEA2H5vVw
-	 zMeGdzlUbrUIhjbPCCSWfnqdurEbGBfYQEj/4u7MLSn4fapnnKuTCUeRDg7BO4sUZ8
-	 ntm1DKz0/iBlKwWRig1G2x6qVCYQdvBwQQqTb8mqON0SMHT6TQgjdpmUks34RS4asl
-	 v1V5BsWnVsRw40+2e3P6zxzXOFZ/Qit/kiSR2E0fRfZgAIOZ4GoOluWdXqF21oywNu
-	 jspGazUgVi3cQ==
+	b=GZi1WSyeHXB2ydEQsUbMcKWzsbnMCt4y9afAbUchHFz+FCjKgb4061f/PhPMQgcBn
+	 m6qDka2bvKVRe7jx0Rr/ww+X3Pdw8mjgNgcaFOqfhy8FYCe15MrEOKfe/qlntuojqF
+	 //TMcGHbV1qplJ7oxbjX8viDqPC/IQD3bkQqIP74G9vA1pxpQaq2xhSDsMYxDA/4OB
+	 5gs9HIjde6GNZN7cp1Kt6GgMkxdj6rgI3XrGqzAs6aBcgTEUuAwYTAE6NATc2egzwD
+	 EOaIxpUW+PAV/kPh4oUCDGeBpgpUrmFMR6eTvYIQe2pVZn9cUAnzxlozLdnMaMfbBz
+	 +P5YJSi62m2jg==
 Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id ABFDF378149C;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B4555378149D;
 	Wed, 13 Dec 2023 18:51:16 +0000 (UTC)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 36A64480104; Wed, 13 Dec 2023 19:51:16 +0100 (CET)
+	id 38827480105; Wed, 13 Dec 2023 19:51:16 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Elaine Zhang <zhangqing@rock-chips.com>,
 	Michael Turquette <mturquette@baylibre.com>,
@@ -53,9 +53,9 @@ Cc: Kever Yang <kever.yang@rock-chips.com>,
 	linux-rockchip@lists.infradead.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v7 2/7] dt-bindings: clock: rk3588: drop CLK_NR_CLKS
-Date: Wed, 13 Dec 2023 19:46:47 +0100
-Message-ID: <20231213185114.47565-3-sebastian.reichel@collabora.com>
+Subject: [PATCH v7 3/7] dt-bindings: clock: rk3588: add missing PCLK_VO1GRF
+Date: Wed, 13 Dec 2023 19:46:48 +0100
+Message-ID: <20231213185114.47565-4-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231213185114.47565-1-sebastian.reichel@collabora.com>
 References: <20231213185114.47565-1-sebastian.reichel@collabora.com>
@@ -67,27 +67,26 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-CLK_NR_CLKS should not be part of the binding. Let's drop it, since
-the kernel code no longer uses it either.
+Add PCLK_VO1GRF to complement PCLK_VO0GRF. This will be needed
+for HDMI support.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- include/dt-bindings/clock/rockchip,rk3588-cru.h | 2 --
- 1 file changed, 2 deletions(-)
+ include/dt-bindings/clock/rockchip,rk3588-cru.h | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-index 5790b1391201..7c6f0ec7c979 100644
+index 7c6f0ec7c979..0c7d3ca2d5bc 100644
 --- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
 +++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-@@ -734,8 +734,6 @@
+@@ -733,6 +733,7 @@
+ #define ACLK_AV1_PRE			718
  #define PCLK_AV1_PRE			719
  #define HCLK_SDIO_PRE			720
++#define PCLK_VO1GRF			721
  
--#define CLK_NR_CLKS			(HCLK_SDIO_PRE + 1)
--
  /* scmi-clocks indices */
  
- #define SCMI_CLK_CPUL			0
 -- 
 2.43.0
 
