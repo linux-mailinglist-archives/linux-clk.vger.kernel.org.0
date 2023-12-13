@@ -1,126 +1,112 @@
-Return-Path: <linux-clk+bounces-1335-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1338-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C269A811BB8
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 18:59:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3709E811D6F
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 19:51:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D94B2829BB
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 17:59:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6B371F219A9
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Dec 2023 18:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BA459526;
-	Wed, 13 Dec 2023 17:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C08F65A75;
+	Wed, 13 Dec 2023 18:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="16TInb5m"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D2783;
-	Wed, 13 Dec 2023 09:59:52 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="385419697"
-X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="385419697"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 09:59:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="864707289"
-X-IronPort-AV: E=Sophos;i="6.04,273,1695711600"; 
-   d="scan'208";a="864707289"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 09:59:40 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rDTWB-00000005bJa-0XiK;
-	Wed, 13 Dec 2023 19:59:35 +0200
-Date: Wed, 13 Dec 2023 19:59:34 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Nikita Shubin <nikita.shubin@maquefel.me>
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Lukasz Majewski <lukma@denx.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [IPv6:2a00:1098:ed:100::25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695D6E3;
+	Wed, 13 Dec 2023 10:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702493476;
+	bh=Qqj7VpGSeV2Wlo88nLvyTvvJ8JpXr4kVLj1TvLAJGDI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=16TInb5mDZeVwP0vwLXn1heYC86GUQ8TGTZ6p8e+Yj2YhJ5fKOHaH4NWeOCmEf/PM
+	 EIMxItG7PXnEkS3q3dIfUVBEzW7dlDPzYdm0xr0IPBSv7ZJO2rpPEzgbKNiXWdPD58
+	 AKq58I69L71rpTYUJ3yqpmFogTPjq8DYNbFdKGOP/IPaDCb5D9StfGjpSvmAfdgcrh
+	 H2fdhXkUMG3yUyRNqZjGktjOnppj3ktM5imawcmbQhyyppT2HJQ+zffncMUJdAWQFD
+	 wpYHxun7q8RaxvCFOZssaqahaEQlawDEZYhfdBlTAF33p8lqXruBCC48iXu1ku6K7E
+	 E9NyR5rPsHRfg==
+Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9C54F378149A;
+	Wed, 13 Dec 2023 18:51:16 +0000 (UTC)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id 33B234800CB; Wed, 13 Dec 2023 19:51:16 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Elaine Zhang <zhangqing@rock-chips.com>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-clk@vger.kernel.org
+Cc: Kever Yang <kever.yang@rock-chips.com>,
+	Heiko Stuebner <heiko@sntech.de>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Mark Brown <broonie@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v6 00/40] ep93xx device tree conversion
-Message-ID: <ZXnxBtqbneUMbvwq@smile.fi.intel.com>
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
+	Conor Dooley <conor+dt@kernel.org>,
+	huangtao@rock-chips.com,
+	andy.yan@rock-chips.com,
+	devicetree@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v7 0/7] rockchip: clk: improve GATE_LINK support
+Date: Wed, 13 Dec 2023 19:46:45 +0100
+Message-ID: <20231213185114.47565-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 12, 2023 at 11:20:17AM +0300, Nikita Shubin wrote:
-> No major changes since last version all changes are cometic.
-> 
-> Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
-> 
-> - ARM: ep93xx: add regmap aux_dev
-> - clk: ep93xx: add DT support for Cirrus EP93xx
-> 
-> DMA related patches still require Acked or Reviewed tags.
-> 
-> got approval LGTM from Miquel:
-> - mtd: rawnand: add support for ts72xx
-> Link: https://lore.kernel.org/lkml/20231004103911.2aa65354@xps-13/
-> 
-> new patches:
-> 
-> ARM: ep93xx:  Add terminator to gpiod_lookup_table
->   - fixed terminator in gpiod_lockup_table
-> 
-> So mostly all patches got approval.
-> 
-> Patches should be now formated with '--histogram'
+Hi,
 
-It _feels_ like some tags might be missing.
-In any case I suggest to use `b4` tool to retrieve tags when preparing
-the next version:
+I've send this as v7 for the series from Elaine [0], since it kinds of is. These
+patches are written from scratch, though. There are two parts:
 
-	git checkout -b vXX v6.7-rcX
-	b4 am -slt $MSG_ID_OF_v(XX-1)
-	git am ...
-	git rebase --interactive ... # to address comments
+part 1:
+Elaine's series used to contain patches for the VO1GRF handling, but they were
+dropped at some point because of the CLK_NR_CLKS feedback from the DT
+maintainers. I added some code, that should hopefully fix everyones concerns by
+figuring out the right number at runtime. I also moved the correct handling of
+pclk_vo0grf/pclk_vo1grf before proper handling of GATE_LINK clocks, so that it
+can be merged ASAP. These patches are needed for HDMI RX/TX support on RK3588
+and should not be blocked by the GATE_LINK discussion.
+
+part 2:
+For proper GATE_LINK support I tried implementing the suggestion from Stephen
+Boyd to use clk PM operations by creating MFD dynamically. This required some
+restructuring, since CLK_OF_DECLARE() is called before devices are available.
+All of this can be found in the last patch of this series.
+
+[0] https://lore.kernel.org/linux-clk/20231110020358.12840-1-zhangqing@rock-chips.com/
+
+Greetings,
+
+-- Sebstian
+
+Sebastian Reichel (7):
+  clk: rockchip: rk3588: fix CLK_NR_CLKS usage
+  dt-bindings: clock: rk3588: drop CLK_NR_CLKS
+  dt-bindings: clock: rk3588: add missing PCLK_VO1GRF
+  clk: rockchip: rk3588: fix pclk_vo0grf and pclk_vo1grf
+  clk: rockchip: rk3588: fix indent
+  clk: rockchip: rk3588: use linked clock ID for GATE_LINK
+  clk: rockchip: implement proper GATE_LINK support
+
+ drivers/clk/rockchip/clk-rk3588.c             | 163 ++++++++----------
+ drivers/clk/rockchip/clk.c                    |  85 ++++++++-
+ drivers/clk/rockchip/clk.h                    |  18 ++
+ .../dt-bindings/clock/rockchip,rk3588-cru.h   |   3 +-
+ 4 files changed, 178 insertions(+), 91 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.43.0
 
 
