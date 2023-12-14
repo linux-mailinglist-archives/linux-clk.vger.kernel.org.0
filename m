@@ -1,123 +1,96 @@
-Return-Path: <linux-clk+bounces-1419-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1422-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43AB9812DBB
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 11:53:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35FDF812DF8
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 12:01:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9D28B21435
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 10:53:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A576AB2115C
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 11:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B507A3D978;
-	Thu, 14 Dec 2023 10:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BCD3E468;
+	Thu, 14 Dec 2023 11:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FV+DjVE8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aymJVjGZ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017EED4E
-	for <linux-clk@vger.kernel.org>; Thu, 14 Dec 2023 02:53:04 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40c317723a8so70435085e9.3
-        for <linux-clk@vger.kernel.org>; Thu, 14 Dec 2023 02:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702551183; x=1703155983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4iA5vpao/nlkM+BgS1JES9JQXKEWnmeNI0auTBLc7cY=;
-        b=FV+DjVE8H70sTQH6kRDVqJ3wExPAVdqrMa24gJvMtraeUJisUsqEL1EDAs6Mp2JBDH
-         wokxdMyYpkFz5aI0NdfEdywYYHonlNu5elwoHncMnf7w6VxUXoVfSYUji70EyjLIIC9X
-         5s4ejiA4GXYwzSIlaoNWQxqldQdyL3gZMvq3J/2G9V1BVl0nupXxbO5O6We3VB8zVuTM
-         mp436UXfkCZYP3ZzoHkwwtju0tPsM615UA2EJQLiTWgxvfBbxPjhXVg//UIu49VIdCi0
-         EHNTL2oqGrGKHILl5FrCUHRbHP3NyyGck1KdsJrQ5EAPdv4Suxy+8cvISAKrzyu5Z0H9
-         8wjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702551183; x=1703155983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4iA5vpao/nlkM+BgS1JES9JQXKEWnmeNI0auTBLc7cY=;
-        b=qxCpimB7i2pRFzUt9xFHgV13zlqvU3VrPl9NJI4GKPEHOi/dgN+ywSTsanm3hBf9yO
-         KrlpwElMlkviwE6NiT6e6IBIl+Y9DBHVAw3+N0/+Kpn0FGPbKaahHkSCBqjg4o0aSRVx
-         2gMMJNXzGshjJ51G0KwTBzRMc9M/FpD1RhEoRMQ6Jk8GV8VwUhFwITbZ6woaQ0Q09s88
-         8ikq5AwixWTbdzXIjzRPz9+CazStal2qPWvnakwphB1u45lAkDjTmSMegv10MKmTtarJ
-         1ofYG7nMrwoJFIjaPUK+1okJ1CQhlGCMMSFFcdbOwrXH8Us9QrorBEZk0+9oh7BaUuha
-         WfTw==
-X-Gm-Message-State: AOJu0YwNIoEFUlC7HnDIYvmQVlN9o5sGK7+RYeZj8o/Ye3uj1Gf6pob7
-	ZVczarckUYxpbPvwFjBECwVljg==
-X-Google-Smtp-Source: AGHT+IFhXWtaTCFsSRB/rCN50lEOB2f4DScvINgysd4f+wNUqjxRfR1ruqRktKeZe3CB7TSMb14q8Q==
-X-Received: by 2002:a05:600c:4d0e:b0:40b:5e1e:cf1 with SMTP id u14-20020a05600c4d0e00b0040b5e1e0cf1mr4741397wmp.44.1702551183507;
-        Thu, 14 Dec 2023 02:53:03 -0800 (PST)
-Received: from ta2.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05600c468700b0040c420eda48sm17614854wmo.22.2023.12.14.02.53.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Dec 2023 02:53:02 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: peter.griffin@linaro.org,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	conor+dt@kernel.org,
-	andi.shyti@kernel.org,
-	alim.akhtar@samsung.com,
-	gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	s.nawrocki@samsung.com,
-	tomasz.figa@gmail.com,
-	cw00.choi@samsung.com,
-	arnd@arndb.de,
-	semen.protsenko@linaro.org
-Cc: andre.draszik@linaro.org,
-	saravanak@google.com,
-	willmcvicker@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371253DB98
+	for <linux-clk@vger.kernel.org>; Thu, 14 Dec 2023 11:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC7ECC433C7;
+	Thu, 14 Dec 2023 11:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702551681;
+	bh=yWvb1FzC/LQ0zIM53RNXJVNdCzBlRFmPP4IvR0lED6w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aymJVjGZ0c6Wz8Q/9vkMjqb9E9hqLcaMz4j481/++0UIev0aRRPySnWl/1j04B+mj
+	 Dq++vUTOx5NgqQ+ffd5uv3NhDYtpxjAvu6pb3tih8nN9YnnPI9gcXX1tlvq+HXorqc
+	 cjS9CP43GzjwxnU2uVBRMPBSz6CYXi5GHV0izKwBoOQeKW4GLgarZ7ORyX/1IHvehK
+	 OmvBzKO418z3dIrLO9+ExYGyAowAuJ5+Lhqbgfm/EGvvaiTqL/id3M0H9jhOuKWedO
+	 7uWkY4B6rNwzNXXLiHtAmNfEeb52ZEDKALw6dVebwJ/v1FNpyjf1Hjkh0oWkB9dkAe
+	 AbIdtAqLOkVGA==
+From: Conor Dooley <conor@kernel.org>
+To: linux-riscv@lists.infradead.org
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
 	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH 13/13] arm64: defconfig: make at24 eeprom builtin
-Date: Thu, 14 Dec 2023 10:52:43 +0000
-Message-ID: <20231214105243.3707730-14-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-In-Reply-To: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
-References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] clk: microchip: mpfs-ccc: replace include of asm-generic/errno-base.h
+Date: Thu, 14 Dec 2023 10:59:57 +0000
+Message-Id: <20231214-dipper-earshot-72eef3059961@spud>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1199; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=uthDO4MEgzFI/RKi4V+giwgtXg1nFE5ZOPfmIqVEYHc=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDKlVD7Rr5ubMtU/Uc2Zf+bVZ/Njua47TKsLWcJsL2ueLb H96YsfpjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAExEn5+R4XGtr+2aPxKuz3Jv nAl9wvZTm0nkoOCkpKv/PDrz1Z9WMjH8j/8bee3i9YX/8k/Ni9Pp5GQJKmSsNj4kwPbEIKGopOI oEwA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
-gs101-oriole populates an at24 eeprom on the battery connector.
-Make EEPROM_AT24 builtin.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+As evidenced by the fact that only 2 other drivers include this header,
+it is not a normal thing to do. Including the regular version of this
+header is far more conventional for drivers.
+
+CC: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+--
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: Michael Turquette <mturquette@baylibre.com>
+CC: Stephen Boyd <sboyd@kernel.org>
+CC: linux-riscv@lists.infradead.org
+CC: linux-clk@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
 ---
- arch/arm64/configs/defconfig | 2 +-
+ drivers/clk/microchip/clk-mpfs-ccc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 09fb467303ba..19c1d61382f6 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -276,7 +276,7 @@ CONFIG_QCOM_COINCELL=m
- CONFIG_QCOM_FASTRPC=m
- CONFIG_SRAM=y
- CONFIG_PCI_ENDPOINT_TEST=m
--CONFIG_EEPROM_AT24=m
-+CONFIG_EEPROM_AT24=y
- CONFIG_EEPROM_AT25=m
- CONFIG_UACCE=m
- # CONFIG_SCSI_PROC_FS is not set
+diff --git a/drivers/clk/microchip/clk-mpfs-ccc.c b/drivers/clk/microchip/clk-mpfs-ccc.c
+index bce61c45e967..3a3ea2d142f8 100644
+--- a/drivers/clk/microchip/clk-mpfs-ccc.c
++++ b/drivers/clk/microchip/clk-mpfs-ccc.c
+@@ -4,8 +4,8 @@
+  *
+  * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
+  */
+-#include "asm-generic/errno-base.h"
+ #include <linux/clk-provider.h>
++#include <linux/errno.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
 -- 
-2.43.0.472.g3155946c3a-goog
+2.39.2
 
 
