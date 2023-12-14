@@ -1,94 +1,141 @@
-Return-Path: <linux-clk+bounces-1449-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1451-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB89081355A
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 16:55:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24F7081358E
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 17:01:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68415282D04
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 15:55:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6493282D75
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Dec 2023 16:01:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D635E0AC;
-	Thu, 14 Dec 2023 15:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A005EE77;
+	Thu, 14 Dec 2023 16:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bF/zNNVU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Guk+6gL5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8E85E0A0;
-	Thu, 14 Dec 2023 15:55:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E15FC433C7;
-	Thu, 14 Dec 2023 15:55:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702569316;
-	bh=WYeqYCErkROHKuIRZn/pMD0415jC0WdcK3S4UMGNdjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bF/zNNVUDSEC8MIkmwGiaywCrvo0qBDa6seF/LBNNQJIDSDx1RDK7kxhJWpS+eXjH
-	 KyA2SubRXyuRShSKDkvPIh6mtdQEFOUGSr2XkGeFSFcreOkFb04oBl8Vo4Gcd5Pson
-	 M8aZ52nzmMYIyC9zInCOSB1BSsFKrl2X21HSy+FhoGwtqCFz/ycU2xxzkGxGBwnOCc
-	 q4M/rbJNSdPYF9pORujaImibLYrA4nahCHvrkxMjiw7ZKktj9XfUN0ycrcFSPnyh60
-	 c20tCQxtRw/iPhp5mSqEGCNq+P8BZrgu9gSYbyYJ01TPkdvzEH7QofS4lyLDx/4OxH
-	 7EmugigJSrS1Q==
-Date: Thu, 14 Dec 2023 15:55:11 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-	sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 01/16] dt-bindings: phy: qmp-ufs: Fix PHY clocks
-Message-ID: <20231214-aqueduct-occupy-53b9d650dfc4@spud>
-References: <20231214091101.45713-1-manivannan.sadhasivam@linaro.org>
- <20231214091101.45713-2-manivannan.sadhasivam@linaro.org>
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9636B123
+	for <linux-clk@vger.kernel.org>; Thu, 14 Dec 2023 08:01:23 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-a1e7971db2aso956879966b.3
+        for <linux-clk@vger.kernel.org>; Thu, 14 Dec 2023 08:01:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702569682; x=1703174482; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D+VFIozAF30zEgKKxFDP3drI06z9zzmO3HV6m4SuiwQ=;
+        b=Guk+6gL5FvgbClXZhAqmyYzGq5UH6OfIyUvODkVmFf4vSY3etzuNxe3FtrN7amNL04
+         iJbmutKwh+6hUZ7JmeXeaqXqTI8sdd2Bj6lpYFplcA5aJFuSnWQk0ii/jrfMdbifEcnX
+         MJMuT8B9XAOKq77C1E6lcI3zFiUh/anFfrNMt6sj7FdMIEvtpdw8zM9w7Cwej01TVWFS
+         Et7KTSugVOS4dY8Rwiadpp2X62ezw1yHN9/B1Hp5Ahy2iuMdlah+kQ1BzrZ2OyOZT1Jz
+         TKZF2a7uh/FelkBbsieLNB52aPJZdhETqALxPQYlRgUwfsoUkvo1bDNnlomKJ3QeEuXc
+         HtAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702569682; x=1703174482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+VFIozAF30zEgKKxFDP3drI06z9zzmO3HV6m4SuiwQ=;
+        b=PY7tHYX5XveZkVRpFJrOg3A1as5PSsfuM2RsmHaEYcJ6X1Mlt/RFPhu29sA0v4R5WN
+         3Pbcl1rKBTnNJxOLLY2gEebIY6BPXaYAnyzigXSAZ2xKq9CpJDvzJvK7H83qJ3H5PHvs
+         LPk5rGzxKp9pYo1DfwwyQXhliTOYNmuIi4L6OLTvIGITxf1Pg4LauGkwMRqaZcJTNhOQ
+         l2rwTnEvcFvcUgukZDFIuYNSYHc/t61GNcMnu5Dnu1y9KA4gf+qTFYrm8AYueOa2W8+/
+         O6RHn/67xj6fOLdtPGtBJB2yzWuKBqm2Ta4euf3+xP3O1wybH4Inlf4/MRCk8d09RtDM
+         gOnQ==
+X-Gm-Message-State: AOJu0YzVsyQlR79gXp2kQjSg1WvJC4ClNPHrW/tCu/aMmVu9XiG2gyeC
+	c6gy1BOK8SU3h1deft74cyUj3g==
+X-Google-Smtp-Source: AGHT+IEMYj7NZTyAlbSayhibN+bIajeem6cYXSSO7+k3rveUzLz3uWXFda+obxiUgnN1c1X2yJymPw==
+X-Received: by 2002:a17:907:7ea1:b0:a1e:9d8b:1e7b with SMTP id qb33-20020a1709077ea100b00a1e9d8b1e7bmr6017626ejc.69.1702569682045;
+        Thu, 14 Dec 2023 08:01:22 -0800 (PST)
+Received: from [192.168.2.107] ([79.115.63.202])
+        by smtp.gmail.com with ESMTPSA id ld4-20020a1709079c0400b00a1df88cc7c0sm9445638ejc.182.2023.12.14.08.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Dec 2023 08:01:21 -0800 (PST)
+Message-ID: <f3d61c49-1a46-476c-b7a5-6cc6a06a33ed@linaro.org>
+Date: Thu, 14 Dec 2023 16:01:18 +0000
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="65gDSZnx9nzEjrit"
-Content-Disposition: inline
-In-Reply-To: <20231214091101.45713-2-manivannan.sadhasivam@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/13] clk: samsung: gs101: mark PERIC0 IP TOP gate clock
+ as critical
+Content-Language: en-US
+To: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: peter.griffin@linaro.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+ sboyd@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
+ alim.akhtar@samsung.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+ catalin.marinas@arm.com, will@kernel.org, s.nawrocki@samsung.com,
+ tomasz.figa@gmail.com, cw00.choi@samsung.com, arnd@arndb.de,
+ andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-serial@vger.kernel.org
+References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
+ <20231214105243.3707730-8-tudor.ambarus@linaro.org>
+ <CAPLW+4mNjCbJ+VbKR66DFSkiXHyxdjgvwjN7azxjJQ6UxQikEw@mail.gmail.com>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <CAPLW+4mNjCbJ+VbKR66DFSkiXHyxdjgvwjN7azxjJQ6UxQikEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
---65gDSZnx9nzEjrit
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 02:40:46PM +0530, Manivannan Sadhasivam wrote:
-> All QMP UFS PHYs except MSM8996 require 3 clocks:
->=20
-> * ref - 19.2MHz reference clock from RPMh
-> * ref_aux - Auxiliary reference clock from GCC
-> * qref - QREF clock from GCC or TCSR (since SM8550)
->=20
-> MSM8996 only requires 'ref' and 'qref' clocks. Hence, fix the binding to
-> reflect the actual clock topology.
->=20
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On 12/14/23 15:37, Sam Protsenko wrote:
+> On Thu, Dec 14, 2023 at 4:52 AM Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+>>
+>> Testing USI8 I2C with an eeprom revealed that when the USI8 leaf clock
+>> is disabled it leads to the CMU_TOP PERIC0 IP gate clock disablement,
+>> which then makes the system hang. To prevent this, mark
+>> CLK_GOUT_CMU_PERIC0_IP as critical. Other clocks will be marked
+>> accordingly when tested.
+>>
+>> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+>> ---
+>>  drivers/clk/samsung/clk-gs101.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-gs101.c
+>> index 3d194520b05e..08d80fca9cd6 100644
+>> --- a/drivers/clk/samsung/clk-gs101.c
+>> +++ b/drivers/clk/samsung/clk-gs101.c
+>> @@ -1402,7 +1402,7 @@ static const struct samsung_gate_clock cmu_top_gate_clks[] __initconst = {
+>>              "mout_cmu_peric0_bus", CLK_CON_GAT_GATE_CLKCMU_PERIC0_BUS,
+>>              21, 0, 0),
+>>         GATE(CLK_GOUT_CMU_PERIC0_IP, "gout_cmu_peric0_ip", "mout_cmu_peric0_ip",
+>> -            CLK_CON_GAT_GATE_CLKCMU_PERIC0_IP, 21, 0, 0),
+>> +            CLK_CON_GAT_GATE_CLKCMU_PERIC0_IP, 21, CLK_IS_CRITICAL, 0),
+> 
+> This clock doesn't seem like a leaf clock. It's also not a bus clock.
+> Leaving it always running makes the whole PERIC0 CMU clocked, which
+> usually should be avoided. Is it possible that the system freezes
+> because some other clock (which depends on peric0_ip) gets disabled as
+> a consequence of disabling peric0_ip? Maybe it's some leaf clock which
+> is not implemented yet in the clock driver? Just looks weird to me
+> that the system hangs because of CMU IP clock disablement. It's
+> usually something much more specific.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+The system hang happened when I tested USI8 in I2C configuration with an
+eeprom. After the eeprom is read the leaf gate clock that gets disabled
+is the one on PERIC0 (CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK). I assume
+this leads to the CMU_TOP gate (CLK_CON_GAT_GATE_CLKCMU_PERIC0_IP)
+disablement which makes the system hang. Either marking the CMU_TOP gate
+clock as critical (as I did in this patch) or marking the leaf PERIC0
+gate clock as critical, gets rid of the system hang. Did I choose wrong?
 
-Cheers,
-Conor.
-
---65gDSZnx9nzEjrit
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXslXwAKCRB4tDGHoIJi
-0l7YAQCxHh+VuMFNf8M6bIbeG5yD+E8OPm4XNyqEpRK3LhhWoQEA54PMCR8Cq5ds
-Zn5wnvBY4oYT5Rw7lm6D9DShWy+npgI=
-=u2wx
------END PGP SIGNATURE-----
-
---65gDSZnx9nzEjrit--
+Thanks,
+ta
+> 
+>>         GATE(CLK_GOUT_CMU_PERIC1_BUS, "gout_cmu_peric1_bus",
+>>              "mout_cmu_peric1_bus", CLK_CON_GAT_GATE_CLKCMU_PERIC1_BUS,
+>>              21, 0, 0),
+>> --
+>> 2.43.0.472.g3155946c3a-goog
+>>
 
