@@ -1,37 +1,37 @@
-Return-Path: <linux-clk+bounces-1640-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1641-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1632D816F44
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 14:02:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F17A816F59
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 14:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B6C01C23CAC
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 13:02:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E41E285F44
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 13:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0637F1279AC;
-	Mon, 18 Dec 2023 12:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301581290E0;
+	Mon, 18 Dec 2023 12:47:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fMPmv5J7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="He0q7LYx"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D380812799F;
-	Mon, 18 Dec 2023 12:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683C0C433C7;
-	Mon, 18 Dec 2023 12:47:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3031396E4;
+	Mon, 18 Dec 2023 12:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74E1C433C7;
+	Mon, 18 Dec 2023 12:47:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702903636;
+	s=k20201202; t=1702903649;
 	bh=yfdKqtgUNhva9eueXhUO7jCdMI5f55TNeHU8zKTb9Kw=;
 	h=From:To:Cc:Subject:Date:From;
-	b=fMPmv5J7NflZbej29aGkVEURHxG/eNiMVW34EtM/HI6qeWZ+VwFZvHA9BNWtHlEVV
-	 VB7QiMfKPK/2oeFBQod6CbTBLFC7azuIAXodZMX/4da6kramuZHBnZdBXpDUAsBhMb
-	 AmyVCwJg2IT15FoeIkc7HMlbGMLKor/rX5+DWVM+d5lWcVCBqq88+iEm1R3ss7MMkl
-	 9LiyMjAu4Xhn84+yJVBxwaJKybA9nZM5oiC03BFiMZls+nnIo3XaLVwlTjMWCBDmQx
-	 ZDqOve2to1BuTC3AuZGvU1Uym7yNuS5OmswXNiSZMmycowCaZmVYT/rDKQvlwyVVAj
-	 0st3B2uzqhAIA==
+	b=He0q7LYxzIFuzFAivtX9aZFhTdfO7mtdZwtknDWQt2zidrJXxixEgbv18O3aKT0NR
+	 RGtg4Kqflb3w1vK7rKE0yIPMUT1lWCqN+KIGqDimdDGRqg3w6z1iPuFe5BEukWTZiG
+	 krWSsYMiQYRUgO/d3r92hcEtY1C/9qPvwon/IydIXV78sfNbnH/YkdD5+5foVvWBao
+	 DEoFpQVyA9TN8J7Pf5xR5WJoE62UBHChhOR+RjoJSN3H0KEncECPpceCU391y6dvSs
+	 qncUG4dyg/j+xrsszhHs6s25q5T9gVAUF3+Kox6eCe+n3dh1DxXhaOw/PZEE0Ca+ZO
+	 D3sR8kXut+E2w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -43,9 +43,9 @@ Cc: Weihao Li <cn.liweihao@gmail.com>,
 	linux-clk@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 1/6] clk: rockchip: rk3128: Fix HCLK_OTG gate register
-Date: Mon, 18 Dec 2023 07:47:06 -0500
-Message-ID: <20231218124713.1382373-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 1/6] clk: rockchip: rk3128: Fix HCLK_OTG gate register
+Date: Mon, 18 Dec 2023 07:47:18 -0500
+Message-ID: <20231218124725.1382738-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.302
+X-stable-base: Linux 4.14.333
 Content-Transfer-Encoding: 8bit
 
 From: Weihao Li <cn.liweihao@gmail.com>
