@@ -1,138 +1,138 @@
-Return-Path: <linux-clk+bounces-1642-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1648-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B7BF816FE8
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 14:12:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0836A8170B8
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 14:44:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B98E1F24256
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 13:12:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20E5F1C24324
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Dec 2023 13:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9054372046;
-	Mon, 18 Dec 2023 13:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F073787E;
+	Mon, 18 Dec 2023 13:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oltmanns.dev header.i=@oltmanns.dev header.b="Fl4x0IcJ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E6474E26
-	for <linux-clk@vger.kernel.org>; Mon, 18 Dec 2023 13:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rFDFe-0000yN-MX; Mon, 18 Dec 2023 14:01:42 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rFDFd-00Ghrj-UA; Mon, 18 Dec 2023 14:01:41 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rFDFd-005IgU-Kh; Mon, 18 Dec 2023 14:01:41 +0100
-Date: Mon, 18 Dec 2023 14:01:41 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, 
-	Russell King <linux@armlinux.org.uk>, linux-pwm@vger.kernel.org, 
-	Sean Anderson <sean.anderson@seco.com>, Thierry Reding <thierry.reding@gmail.com>, kernel@pengutronix.de, 
-	Michal Simek <michal.simek@amd.com>, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Maxime Ripard <mripard@kernel.org>
-Subject: Re: [PATCH 1/2] clk: Add a devm variant of clk_rate_exclusive_get()
-Message-ID: <3fhgutm42b6sy6gdydcvflnsjuc2ozjetjbeyoxjvnl2t5q7za@4og2x6gqz5y2>
-References: <cover.1702403904.git.u.kleine-koenig@pengutronix.de>
- <744a6371f94fe96f527eea6e52a600914e6fb6b5.1702403904.git.u.kleine-koenig@pengutronix.de>
- <5391068cdc86b6117920d31a524d934b.sboyd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2B73788D;
+	Mon, 18 Dec 2023 13:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oltmanns.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oltmanns.dev
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Sv16y72qnz9snW;
+	Mon, 18 Dec 2023 14:35:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+	s=MBO0001; t=1702906555;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tos2FwQlFwhzvaXEQTYM8a4T8bK+EoPuJg3G1O90NAc=;
+	b=Fl4x0IcJYh9uwO1wNscgM7PXzen4xdJv0zkHkRoA8bMKdQpP9Yb4evGFvDqNTzWSXpg8kp
+	l4LY/6hwrN3hBJNUTRQqM/2+1saX9qBfPA7U/CqG/RzepxnjiAEzE0ONFvQ7Gy3PMOm39+
+	sXEyC8LMThAkARo0YuQw/AopJy0RtFyIoIdN0P0+rg/1nuUdhrsPAeAf89ghDCLPhLnkVR
+	1CJtSGYpb2O818tAGiEnSEP+RdtGUHXbtnRAv3FTh/84jFw5VH6+HKVUSZ1wqCXDDkh4+0
+	AYmfaLpT2t9iU0jnqeBMHHnabnNgFoUwKCsYuyejIy15q1gpb8KnFPTVHl+gzw==
+From: Frank Oltmanns <frank@oltmanns.dev>
+Subject: [PATCH 0/5] Pinephone video out fixes (flipping between two
+ frames)
+Date: Mon, 18 Dec 2023 14:35:18 +0100
+Message-Id: <20231218-pinephone-pll-fixes-v1-0-e238b6ed6dc1@oltmanns.dev>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3rnggtg3wisreb74"
-Content-Disposition: inline
-In-Reply-To: <5391068cdc86b6117920d31a524d934b.sboyd@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJZKgGUC/x3LQQqAIBBG4avErBtIDYquEi1Cf2sgVBQikO6et
+ Px4vEoFWVBo6Spl3FIkhgbVd2TPPRxgcc2kB22UVjMnCUhnDOB0XezlQeHBWucd9GQwUjtTxh/
+ auG7v+wHb/Xl3ZQAAAA==
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ =?utf-8?q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>, 
+ Purism Kernel Team <kernel@puri.sm>, Ondrej Jirman <megi@xff.cz>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, Frank Oltmanns <frank@oltmanns.dev>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2183; i=frank@oltmanns.dev;
+ h=from:subject:message-id; bh=olgN/dTexxSci4bqC/SYnH4Qe3D2ahceKuSWI8wI15w=;
+ b=owEB7QES/pANAwAIAZppogiUStPHAcsmYgBlgEq04Zmk0Dn4zmQRslaV0ONyjY0uQhR1xoFlA
+ vkMMXKgseaJAbMEAAEIAB0WIQQC/SV7f5DmuaVET5aaaaIIlErTxwUCZYBKtAAKCRCaaaIIlErT
+ xypkC/4vBt6X+ZMcmFfqSZYPKcB1uMlq3fPUGuL3OQ8RVbGGg1oMRwBjyD2inb3eaSeHLBuhwwu
+ uhjngKAE/R2HUtZnnj/0DLJpJ0p2a/tkDgybA6PZQ3y0hfLgMOb5/fv/aRErnxghSnNEFbcUDMB
+ d8C+xiFEougioK35GpWb8LNb3QRdXm0W9+CTdjjVxv50Csy8RI1SeBGwnz1zMtMTZN5RlgeWFG2
+ 1GQU2wQABJEDqbdXg1Lr95BGKVgh3I1K2s5PkvqTBuEOzlfB0yJ6skd+ntb0D0hZqAwIK9WcjUT
+ f/wzbaGMBrShGb6mVtsX2so96vQr8avsXamOb5XO13XTmN6v1QAfoDeXpiYXMYlnf8iPRurj6jk
+ rEzFf6/XrcOUP48rybQOyYCkVw3Ga+TyXTtBN54NWIo8w28TuHGfFs4JtOW93SHQuViDmkDtZqf
+ ARyJ0gEOu59hLRUxYwcPmVf+A5toFaw/UyUJx1lZZ6k5RHoQZwL6H4YtVnHtOA2gxOHzk=
+X-Developer-Key: i=frank@oltmanns.dev; a=openpgp;
+ fpr=02FD257B7F90E6B9A5444F969A69A208944AD3C7
+X-Rspamd-Queue-Id: 4Sv16y72qnz9snW
 
+On some pinephones the video output sometimes freezes (flips between two
+frames) [1]. It seems to be that the reason for this behaviour is that
+PLL-MIPI and PLL-VIDEO0 are operating outside there specified limits.
 
---3rnggtg3wisreb74
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The changes I propose in this patch series consists of two major parts:
+  1. sunxi-ng: Adhere to the following constraints given in the
+     Allwinner A64 Manual:
+      a. PLL-MIPI:
+          * M/N >= 3
+          * (PLL_VIDEO0)/M >= 24MHz
+      b. PLL-VIDEO0:
+          * 8 <= N/M <= 25
 
-[Cc +=3D Maxime]
+  2. Choose a higher clock rate for the ST7703 based XDB599 panel, so
+     that the panel functions with the Allwinner A64 SOC. PLL-MIPI
+     must run between 500 MHz and 1.4 GHz. As PLL-MIPI runs at 6 times
+     the panel's clock rate, we need its clock to be at least 83.333
+     MHz.
 
-Hello Stephen,
+So far, I've tested the patches only on my pinephone. Before the patches
+it would freeze at least every other day. With the patches it has not
+shown this behavior in over a week.
 
-On Sun, Dec 17, 2023 at 04:17:41PM -0800, Stephen Boyd wrote:
-> Quoting Uwe Kleine-K=F6nig (2023-12-12 10:09:42)
-> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> > index af2011c2a93b..78249ca2341c 100644
-> > --- a/drivers/clk/clk.c
-> > +++ b/drivers/clk/clk.c
-> > @@ -937,6 +937,21 @@ void clk_rate_exclusive_get(struct clk *clk)
-> >  }
-> >  EXPORT_SYMBOL_GPL(clk_rate_exclusive_get);
-> > =20
-> > +static void devm_clk_rate_exclusive_put(void *data)
-> > +{
-> > +       struct clk *clk =3D data;
-> > +
-> > +       clk_rate_exclusive_put(clk);
-> > +}
-> > +
-> > +int devm_clk_rate_exclusive_get(struct device *dev, struct clk *clk)
-> > +{
-> > +       clk_rate_exclusive_get(clk);
->=20
-> It seems the other thread wants this to return an error value.
+I very much appreciate your feedback!
 
-The status quo is that clk_rate_exclusive_get() always returns zero.
-Some users do error handling (which is dead code until Maxime reworks
-the call that it might return something non-zero), others just call it
-without checking.
+[1] https://gitlab.com/postmarketOS/pmaports/-/issues/805
 
-If you don't require to add something like:
+Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+---
+Frank Oltmanns (5):
+      clk: sunxi-ng: nkm: Support constraints on m/n ratio and parent rate
+      clk: sunxi-ng: a64: Add constraints on PLL-MIPI's n/m ratio and parent rate
+      clk: sunxi-ng: nm: Support constraints on n/m ratio and parent rate
+      clk: sunxi-ng: a64: Add constraints on PLL-VIDEO0's n/m ratio
+      drm/panel: st7703: Drive XBD599 panel at higher clock rate
 
-	ret =3D clk_rate_exclusive_get(clk);
-	if (ret)
-		return ret;
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c         | 10 ++++++--
+ drivers/clk/sunxi-ng/ccu_nkm.c                | 23 ++++++++++++++++++
+ drivers/clk/sunxi-ng/ccu_nkm.h                |  8 +++++++
+ drivers/clk/sunxi-ng/ccu_nm.c                 | 21 +++++++++++++++--
+ drivers/clk/sunxi-ng/ccu_nm.h                 | 34 +++++++++++++++++++++++++--
+ drivers/gpu/drm/panel/panel-sitronix-st7703.c | 14 +++++------
+ 6 files changed, 97 insertions(+), 13 deletions(-)
+---
+base-commit: d0ac5722dae5f4302bb4ef6df10d0afa718df80b
+change-id: 20231218-pinephone-pll-fixes-0ccdfde273e4
 
-where we currently have just
+Best regards,
+-- 
+Frank Oltmanns <frank@oltmanns.dev>
 
-	clk_rate_exclusive_get(clk);
-
-the patch can just be applied (using git am -3) not even hitting a merge
-conflict without that other series.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---3rnggtg3wisreb74
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmWAQrQACgkQj4D7WH0S
-/k4ciQf/bx+ktF4gQ2yImbs9v+bJkuvbEpmBeKUZ6D0MDv8PrBwZFFKeRrzktdYQ
-5eCujDLMVI1s1GQTAnLTNL/049NAdj/XEU0t4tCzEK92guttASVgW1virlGbLq2G
-yn44JbmPpmwCZgBfp8IvrqE3OLtflatbuwqpfzr9PNkvz+eXBQ4+FYmzGE3jJXYm
-8wT6NM6RyT9f64+bNMZ8+DNX+X0GPa0MRXPa2CpGs4rajnMISvxpTr26MFJ/LEl/
-SgLJkEtebx5VUDUP+PijfJZ8rCA5R/OzjqlpDsgJdu6kx+MOSsccqWBAd+o/YhN5
-lKhdcO48PpW0eKqlyUAd1uSrZNxE+A==
-=A0ib
------END PGP SIGNATURE-----
-
---3rnggtg3wisreb74--
 
