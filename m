@@ -1,116 +1,144 @@
-Return-Path: <linux-clk+bounces-1698-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1700-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 451F4818810
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Dec 2023 13:55:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BE3081885E
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Dec 2023 14:10:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C28AAB248DA
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Dec 2023 12:55:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5C311F231E6
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Dec 2023 13:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A6718638;
-	Tue, 19 Dec 2023 12:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F98D18E39;
+	Tue, 19 Dec 2023 13:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HsSQ14a8"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="YkMd9YAQ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C841B268;
-	Tue, 19 Dec 2023 12:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702990505;
-	bh=P2iu3HxAjX4PHABsZdyr9+nUD7MSsfRwCcOrLhUn4Ao=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HsSQ14a8Oao/Bw4hc5xP3VFQeqS8z+Xf/8ztCqd9FI7N9PIIUPBt7yHeQTMIzE8T3
-	 shsvDXE6yuPaQ1WIlX2QCBkAgV3NIu7epB/d7hxLzll/95KqDiB3HawZ/2PdMLdaVu
-	 Gg5VuXCGTDBGvo7TndZWSL7X1AmETN8NDdmKPw0XguDWSRlf2HQWG5ZpH1+ZInUtzI
-	 1y/EoYISuYl24Gj8PkDSa5jJy9R79AOlSEidb1HPnewwGMPdcrkVcGEL+n1lrcKYjf
-	 M+06ad84c6vKqHwQ8Jaeza2AO2tCj7y+XH7x5/Wr+zrip+jLYtl/hUDemcFp5j/fWT
-	 dQUlZEKpYXo+g==
-Received: from [100.115.223.179] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: cristicc)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BE3DF37813EB;
-	Tue, 19 Dec 2023 12:55:03 +0000 (UTC)
-Message-ID: <5b6d78a6-4515-41c2-b94d-5c7df12dbb2d@collabora.com>
-Date: Tue, 19 Dec 2023 14:55:03 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F8519BD9;
+	Tue, 19 Dec 2023 13:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3BJAp1BU015045;
+	Tue, 19 Dec 2023 14:09:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=3XPfSMe
+	xOVKWq+whcvLdlAIAFwG0ty//S+OEFdiBKgk=; b=YkMd9YAQpyTQ+2dnEGmDKwY
+	WOaUJm/2nB1y9nRMV56NSFa1fV3Vn7/mAegQ5RYmxrKko5yu4T7bMKs+INBYiRBT
+	jNAdGJHVMcFGgsMhNEOT9WyrMPR6kmHwTOE327bVdQV4MpCcFCAIM9awiVXOBUuW
+	VwLq+yBx3nJUnICvNpzeH/kWBaTl1K/VtPbEtTOzAUOBzzbpvkUVvHPYNg8tEBuF
+	X2vCzhHbFB+k3WxTH3tUaK6N70EbspT6Kuhr45VykAICAzK9o7MRxi/iNQf7DQtf
+	zaq4JnFrAYErfBL7gj4oxqufGUvtEb01G11PwIak7iRi3V2hisgWSquQyoZ6gCQ=
+	=
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3v1pb4jdtc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Dec 2023 14:09:20 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6F74C100059;
+	Tue, 19 Dec 2023 14:09:19 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6495A227896;
+	Tue, 19 Dec 2023 14:09:19 +0100 (CET)
+Received: from localhost (10.201.21.240) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 19 Dec
+ 2023 14:09:19 +0100
+From: <gabriel.fernandez@foss.st.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/2] Introduce STM32MP257 clock driver
+Date: Tue, 19 Dec 2023 14:09:07 +0100
+Message-ID: <20231219130909.265091-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/9] dt-bindings: net: starfive,jh7110-dwmac: Drop
- redundant reset description
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Emil Renner Berthing <kernel@esmil.dk>,
- Samin Guo <samin.guo@starfivetech.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Hal Feng <hal.feng@starfivetech.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20231218214451.2345691-1-cristian.ciocaltea@collabora.com>
- <20231218214451.2345691-2-cristian.ciocaltea@collabora.com>
- <92eb5f85-1241-429c-aca9-7a6a17f19ae5@linaro.org>
-From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <92eb5f85-1241-429c-aca9-7a6a17f19ae5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-19_08,2023-12-14_01,2023-05-22_02
 
-On 12/19/23 09:24, Krzysztof Kozlowski wrote:
-> On 18/12/2023 22:44, Cristian Ciocaltea wrote:
->> The reset description items are already provided by the referenced
->> snps,dwmac.yaml schema, hence replace them with the necessary
->> {min,max}Items.
->>
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
->> ---
->>  .../devicetree/bindings/net/starfive,jh7110-dwmac.yaml       | 5 ++---
->>  1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->> index 5e7cfbbebce6..d90cb82c1424 100644
->> --- a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->> @@ -55,9 +55,8 @@ properties:
->>      maxItems: 3
->>  
->>    resets:
->> -    items:
->> -      - description: MAC Reset signal.
->> -      - description: AHB Reset signal.
->> +    minItems: 2
->> +    maxItems: 2
-> 
-> Why changing only resets, but not reset-names?
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Already answered in [1], but also discussed in the context of the 
-next patch.
+v7: base on next-20231219
+  - These patches below are applied to clk-next:
+      clk: stm32mp1: move stm32mp1 clock driver into stm32 directory
+      clk: stm32mp1: use stm32mp13 reset driver
+      dt-bindings: stm32: add clocks and reset binding for stm32mp25
+  - remove unnecessary includes
+  - migrate clock parents to struct clk_parent_data and remove
+    CLK_STM32_XXX() macros  to have a more readble code
+  - use platform device APIs (devm_of_iomap() instead of_iomap())
+  - move content of stm32mp25_rcc_init() to stm32mp25_rcc_clocks_probe()
+  - simply get_clock_deps()
+  - add const to stm32mp25_data struct
+  - remove ck_icn_p_serc clock (will be integrate later with security
+    management)
 
-Thanks,
-Cristian
+v6:
+  - remove useless defines in drivers/clk/stm32/stm32mp25_rcc.h
 
-[1]: https://lore.kernel.org/lkml/0ff7a905-d8f2-401b-a0ff-47947d12ce05@collabora.com/
+v5:
+  - Fix sparse warnings: was not declared. Should it be static?
+    drivers/clk/stm32/clk-stm32mp13.c:1516:29: symbol 'stm32mp13_reset_data'
+    drivers/clk/stm32/clk-stm32mp1.c:2148:29: symbol 'stm32mp1_reset_data'
+    drivers/clk/stm32/clk-stm32mp25.c:1003:5: symbol 'stm32mp25_cpt_gate'
+    drivers/clk/stm32/clk-stm32mp25.c:1005:29: symbol 'stm32mp25_clock_data'
+    drivers/clk/stm32/clk-stm32mp25.c:1011:29: symbol 'stm32mp25_reset_data'
+
+v4:
+  - use GPL-2.0-only OR BSD-2-Clause for clock and reset binding files
+  - use quotes ' for #clock-cells and #reset-cells in YAML documentation
+  - reset binding start now to 0 instead 1
+  - improve management of reset lines that are not managed
+
+v3:
+  - from Rob Herring change clock item description in YAML documentation
+v2:
+  - rework reset binding (use ID witch start from 0)
+  - rework reset driver to manage STM32MP13 / STM32MP15 / STM32MP25
+  - rework YAML documentation
+
+Gabriel Fernandez (2):
+  clk: stm32: introduce clocks for STM32MP257 platform
+  arm64: dts: st: add rcc support in stm32mp251
+
+ arch/arm64/boot/dts/st/stm32mp251.dtsi |   59 +-
+ drivers/clk/stm32/Kconfig              |    7 +
+ drivers/clk/stm32/Makefile             |    1 +
+ drivers/clk/stm32/clk-stm32mp25.c      | 1826 ++++++++++++++++++++++++
+ drivers/clk/stm32/reset-stm32.c        |   59 +-
+ drivers/clk/stm32/reset-stm32.h        |    7 +
+ drivers/clk/stm32/stm32mp25_rcc.h      |  712 +++++++++
+ 7 files changed, 2628 insertions(+), 43 deletions(-)
+ create mode 100644 drivers/clk/stm32/clk-stm32mp25.c
+ create mode 100644 drivers/clk/stm32/stm32mp25_rcc.h
+
+-- 
+2.25.1
+
 
