@@ -1,70 +1,70 @@
-Return-Path: <linux-clk+bounces-1819-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1820-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AF081AF07
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Dec 2023 08:03:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58D7A81AF0A
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Dec 2023 08:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4982D1C20B04
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Dec 2023 07:03:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC4241F23BDB
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Dec 2023 07:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A21ABE62;
-	Thu, 21 Dec 2023 07:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6CEBA57;
+	Thu, 21 Dec 2023 07:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p7iXb+7g"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PtjM9kXh"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344A0BE5D
-	for <linux-clk@vger.kernel.org>; Thu, 21 Dec 2023 07:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41ADE154BB
+	for <linux-clk@vger.kernel.org>; Thu, 21 Dec 2023 07:04:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dbd4608121fso496495276.0
-        for <linux-clk@vger.kernel.org>; Wed, 20 Dec 2023 23:03:16 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-db3fa47c2f7so430995276.0
+        for <linux-clk@vger.kernel.org>; Wed, 20 Dec 2023 23:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703142196; x=1703746996; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703142260; x=1703747060; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPoWLPGRoJ8TAvIq3rSYSVRoLky2Dc/xP/dnXpyq+Us=;
-        b=p7iXb+7gJpq7FyH+kVjU13oWnAQG8uvCwO7I2BJAmdEwKu9RBX00URJPtYOwWnNGLE
-         YgaWTYBlZpk5Dq+GVISIdNPvQK3wSuiy1ot0Lv/7LuhUlPdYtNn3qF8GpRStxwBbxXXY
-         3StcrA55Z2VVrIWeocN9pbWEQ720WddLBV3iSu2x/PGo1Zc9kQ25wHkd+oI7xZZ0WKBa
-         P8MwxTurJBWDDFPIEHKkn47tx9b5hmu19rh7aKNxb3E7cqgaajpP1ogJgqB08IZtMcwg
-         B0AeMXPueKbSUZHJ8CLI/dFtaOl4hUDuHIneBxldnlT8LvY+CPU/gk4tRIdXPW4T18JU
-         7kHg==
+        bh=6wpIhIIkKbfmQDK+4hse4W5EZyzLtZMXzLX3pjH6fvs=;
+        b=PtjM9kXhn6w2otIztfTUBCqRPJcfN3Ru8eED0fcnnGoNO41YbnMEztAOJ+mu73+vTD
+         GCkfhtqT0giKWw+VJWfj3zo7rlymC2J7m8F/xmL7MJYrmkuvIq+QkcjKCRSo6CsWbSrg
+         xE+5w2S+rKIR9saZeVurtIAXZBgy+Xd0GKWRNr0Ew8XgoXr3dVuQQqjh7jzugdEs+Kgu
+         4U3aCPaG/rWP1f+i4OtjZYXXKhsVwIo8cdtmAI2ZWr2mFj5gF65FTduXPVHDDfO4CDGG
+         AZj+NdJ6KXmQrBU2Gdijp+e3Sxniz6By7QH7DNuHz5Hx/P+lZvke1yGLP2bKOFUb3YrI
+         OMuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703142196; x=1703746996;
+        d=1e100.net; s=20230601; t=1703142260; x=1703747060;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lPoWLPGRoJ8TAvIq3rSYSVRoLky2Dc/xP/dnXpyq+Us=;
-        b=eEei6+uLr3CE+jL2krwkgHtUlFT6dU81ZR7cC3hg0lN+evInPNeM3B0+QZomOjE3ek
-         WB2pS3Nxuxig60MRfCB7+ruj0ToSWEwAXzt2By/7lj6iQje5JZc3uDW6+3z2nCPU4HrA
-         KkHGOOGoSoxcAPfa7p7i51q4i32CIrClVy7iA2ruT8w0a1Gd1iGNyvCZROM2C/nGpRMw
-         7jyimdodPtJhByTFLTUmC+x60t08tgSer/2XVINVDM5KWirKYv3qkQcgI5kTveoQEbY9
-         YcX+VhKi3fWs3Ml9inhKcsVA/KDjAnt1WxOa115jg7yxhxwva8IYx+MACHKab4ur8NVk
-         hORg==
-X-Gm-Message-State: AOJu0YyBlupogvy6HTz+Vcpx0zPkRh06sYqKs1aSi5dz/y2BXaRgB3qw
-	NaOAV2yd7zPQSvLVa8JaQEVS/9cCJY95Np4ThJWH7g==
-X-Google-Smtp-Source: AGHT+IE47ttPlc1KbdGexvuAvgW1TXDOsv8bQFFLJoQS4RKAcV1L1htOBKX1GvBebXBNn/zwxaqzOiFyJMcGHWWhFQQ=
-X-Received: by 2002:a25:c510:0:b0:dbd:5bfa:9681 with SMTP id
- v16-20020a25c510000000b00dbd5bfa9681mr713526ybe.37.1703142196127; Wed, 20 Dec
- 2023 23:03:16 -0800 (PST)
+        bh=6wpIhIIkKbfmQDK+4hse4W5EZyzLtZMXzLX3pjH6fvs=;
+        b=J7S+s8xLuRDk8aGgs8+c57SvYVaoglqCcq4P+4+B9zOge8WOSj2UdRX3yA8RfYW4yr
+         JS31WqOHaDA2bncnr3oPVv9T5jpSsBX2LNuNwRgQITOXdCLBlzP1ykw3nfmpgtXYEWei
+         tMcCwGZ+tiidL5lhutGIyiJjZZ7nFSFZ9IGvyTBUhfKVFH63QBkdw3u5pWPc/p+/ZQVx
+         Y3OOGtsxjA46RAe/8Br59lQzxaz17rie7xZ2J3KSCtuPgSymW5yRpNS7LLoL8A5/VcTE
+         vwBtJBw2wuiYf31Fr0eidWJs3nEfjOAicXf9giAr+FbapqHXWgtjhzKIIOyslx/xfAqs
+         t4wQ==
+X-Gm-Message-State: AOJu0YxU/RNGM7MgwodOlg2j4xNV71uuukG8nOMgkPAFE90v5jzbTXQ6
+	/naxMkS71RF6VYC+qmB8X0oNwDbVC/R4sJLiL610Lg==
+X-Google-Smtp-Source: AGHT+IH8VGwOtYOQAD90bjdzKftgC+tg2qjqInOe0HvrTsbZQFMoKJqfRGrCsvOSPtB7DnGgfHXU4QI64uC5WxbFFmE=
+X-Received: by 2002:a25:804e:0:b0:dbd:bf5e:2207 with SMTP id
+ a14-20020a25804e000000b00dbdbf5e2207mr673698ybn.121.1703142260124; Wed, 20
+ Dec 2023 23:04:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220-sa8295p-gpu-v1-0-d8cdf2257f97@quicinc.com> <20231220-sa8295p-gpu-v1-1-d8cdf2257f97@quicinc.com>
-In-Reply-To: <20231220-sa8295p-gpu-v1-1-d8cdf2257f97@quicinc.com>
+References: <20231220-sa8295p-gpu-v1-0-d8cdf2257f97@quicinc.com> <20231220-sa8295p-gpu-v1-3-d8cdf2257f97@quicinc.com>
+In-Reply-To: <20231220-sa8295p-gpu-v1-3-d8cdf2257f97@quicinc.com>
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 21 Dec 2023 09:03:04 +0200
-Message-ID: <CAA8EJprRjRJsV5hPR6mzjgucKa8UEthJd-y573aYJH0P8QRWqw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to GX
+Date: Thu, 21 Dec 2023 09:04:08 +0200
+Message-ID: <CAA8EJpqvo9MMBTT8mMCZRn3+zOmicbe7=sPZLuqU_sAq+Ngd_w@mail.gmail.com>
+Subject: Re: [PATCH 3/8] clk: qcom: gpucc-sc8280xp: Add external supply for GX gdsc
 To: Bjorn Andersson <quic_bjorande@quicinc.com>
 Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
 	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
@@ -79,33 +79,18 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 21 Dec 2023 at 05:51, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
 >
-> In some designs the SoC's VDD_GFX pads are supplied by an external
-> regulator, rather than a power-domain. Allow this to be described in the
-> GPU clock controller binding.
+> On SA8295P and SA8540P the GFX rail is powered by a dedicated external
+> regulator, instead of the rpmh-controlled "gfx.lvl".
+>
+> Define the "vdd-gfx" as the supply regulator for the GDSC, to cause the
+> gdsc logic to look for, and control, this external power supply.
 >
 > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/clock/qcom,gpucc.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> index f369fa34e00c..013ef78d2b31 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> @@ -53,6 +53,9 @@ properties:
->    power-domains:
->      maxItems: 1
->
-> +  vdd-gfx-supply:
-> +    description: Regulator supply for the VDD_GFX pads
-> +
->    '#clock-cells':
->      const: 1
+>  drivers/clk/qcom/gpucc-sc8280xp.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-I think it might be good to restrict this property to a particular
-platform (via if:not:properties:compatible:contains
-then:properties:vdd-gfx-supply:false).
-
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
 With best wishes
