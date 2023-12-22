@@ -1,132 +1,97 @@
-Return-Path: <linux-clk+bounces-1850-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-1856-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DCE181C422
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Dec 2023 05:40:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22D6781C524
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Dec 2023 07:32:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 837521C227CC
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Dec 2023 04:40:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC80C1F2628F
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Dec 2023 06:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911948F6A;
-	Fri, 22 Dec 2023 04:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3B29658;
+	Fri, 22 Dec 2023 06:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ic4YRyAh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="loxT0zeP"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F6E3209;
-	Fri, 22 Dec 2023 04:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BM3xUMm013908;
-	Fri, 22 Dec 2023 04:39:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:date:subject:mime-version:content-type
-	:content-transfer-encoding:message-id:references:in-reply-to:to
-	:cc; s=qcppdkim1; bh=S++rYSCN+Zhvdk7MOdAERLqeroPAteS+ELCWSWqu7Vc
-	=; b=Ic4YRyAhUks5YfROk5Of2hIUmNV2O/peSN2Q+rEYURNE7YZNZj/Q77oglMs
-	TXwqMg6tdAWCdVBeKKsHGoCl+zqmEK4mjpBgjSwmCe1yUv3qTn5H8Co+vPvzqAac
-	hgZToGYvFq47o0iL7j4SFb3A3YWiJEg+wIXQynrGrvniFQVzv4EHjWxeQv3g3WX6
-	2lbMZDHMnDqM3/XK30crxOhlEOshHPK/Y12eKiosJ6VBbGW4CjEN0YYz/rwSkZHP
-	beIM1gr+i3RkRNJUSys9aP554nVYpcHlhhITKLBp/AXWNjmUePmCi/shg3yylw+T
-	A3x9CqMybGl0RLbSDQND0KkvnmA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v4kbwaj1j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Dec 2023 04:39:27 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BM4dQpB020659
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Dec 2023 04:39:26 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 21 Dec
- 2023 20:39:26 -0800
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-Date: Thu, 21 Dec 2023 20:39:29 -0800
-Subject: [PATCH v2 8/8] arm64: defconfig: Enable MAX20411 regulator driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD25F7F7
+	for <linux-clk@vger.kernel.org>; Fri, 22 Dec 2023 06:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dbd5b96b12eso1515728276.2
+        for <linux-clk@vger.kernel.org>; Thu, 21 Dec 2023 22:31:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703226715; x=1703831515; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vCM/h4yYLpqYLQHgVTJ6ZW6j4tyIyXT15IwAZIQWc30=;
+        b=loxT0zePEqx4ohyr82lOWFREUge4iYi39hPYgoWyffbqkKCSBO8E72u5zzCQhw3A7O
+         jBgn+fRYuA0tf2cxP5u/dRpR0LRbFo7tKijvklUGze/hYjB4qPXzWccDM1Cb/688OhUZ
+         dAdEDqAN7gKf9UjgOln5j5Hd0bUZP/V5yGIFkg8iZh94ZcFBrBEhrIeVQJdLeFj9PnTW
+         lWmrbUFBZddO9qYjIKVLOFOr0zvlreQofjt+sIZb769G8ek+DW4455oBkyrrD+rbqiXE
+         WuXh2XSpg5v8XMnQ3UAi1SMLqDamMZvVSxqkSOlLdBxcI1kE4H0qH1dsVIBLgmpso8t8
+         HK7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703226715; x=1703831515;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vCM/h4yYLpqYLQHgVTJ6ZW6j4tyIyXT15IwAZIQWc30=;
+        b=pVmsUIWd/v2MFWVtE6pijUUfyfeEfDdCLIwyB89H7PLno/6DgcFT7AMLQ59mGF1p6q
+         haTiu72puyt6ehtoMC0dTvM5t6g12hqSGeJ0m55AC+T3P9d0aFPlrlFKSQ8hkoo8NTwP
+         SfApl939GXxHTzglgRXEYH4bn8z0lrTOL9mtL+hF6fQbFiEqS3Bmku2MHQ3OeNn7j9gM
+         1EujqtCUxDPj4TKM9JLZeXtGH1vnbPPFcCeEyV/VA91EeUDkoY8/W+QQaj2Rhi29B/wd
+         PViolE592qMvleTMqHrC8dMIiKQ5fuU3cxspCqhp7EG9z6ZRrCBs9ReOVuG3ptXuRt1u
+         RN0w==
+X-Gm-Message-State: AOJu0Yw3HFH+Nrq84GcbVX/N4bVipBzU9/4nSx/OdrzwlFKvea8zcrRY
+	sk7w+7S64N8IZ6fsWbpkaqKdAnitXyKVGzzAdshwwGtfDq9pnA==
+X-Google-Smtp-Source: AGHT+IHWuCHREWIfwkcn+VELqW2vW8cFEReTiA2Ka8sG+C0iAo/h4D1Bm+ZdcD+w9WKZAgevrzb3L60bmxd8fcpm3mA=
+X-Received: by 2002:a25:ae47:0:b0:dbc:ef63:5e1c with SMTP id
+ g7-20020a25ae47000000b00dbcef635e1cmr712464ybe.18.1703226714680; Thu, 21 Dec
+ 2023 22:31:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231220-sa8295p-gpu-v2-8-4763246b72c0@quicinc.com>
-References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
-In-Reply-To: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Ulf Hansson
-	<ulf.hansson@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        "Catalin
- Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Bjorn
- Andersson" <quic_bjorande@quicinc.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1703219963; l=670;
- i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
- bh=unb+KmBC3PDXA2J/s/HHbtUD1oFS0hJ/byKzZ00/Jfw=;
- b=UVpv5+plWWT9lXJQ2PK9AaaX0E2kdoMcFR2NmGjfwfTBE4Jy1nZD3WQv9YwniRalVk3SI0DG4Cvj
- pjrm09lmBZQ+vSXCuEToid6EErvLBGmRC3YiZRowaDCpxjELU6wf
-X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
- pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eRAEMIO5PYu8gwi8SpcGVQzr7ID5gC1L
-X-Proofpoint-ORIG-GUID: eRAEMIO5PYu8gwi8SpcGVQzr7ID5gC1L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxlogscore=786 spamscore=0 impostorscore=0 mlxscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312220029
+References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com> <20231220-sa8295p-gpu-v2-7-4763246b72c0@quicinc.com>
+In-Reply-To: <20231220-sa8295p-gpu-v2-7-4763246b72c0@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Fri, 22 Dec 2023 08:31:43 +0200
+Message-ID: <CAA8EJpqswNNDUj3tJu6qTYN+g7LoG7L5gMgUQvZfb3cxZRnF+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: sa8295p-adp: Enable GPU
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Taniya Das <quic_tdas@quicinc.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Johan Hovold <johan+linaro@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-The Qualcomm SA8295P ADP board uses a max20411 to power the GPU
-subsystem.
+On Fri, 22 Dec 2023 at 06:40, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+>
+> With the necessary support in place for supplying VDD_GFX from the
+> MAX20411 regulator, enable the GPU clock controller, GMU, Adreno SMMU
+> and the GPU on the SA8295P ADP.
+>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ef1061089548..ec94a0c4fd03 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -751,6 +751,7 @@ CONFIG_REGULATOR_HI6421V530=y
- CONFIG_REGULATOR_HI655X=y
- CONFIG_REGULATOR_MAX77620=y
- CONFIG_REGULATOR_MAX8973=y
-+CONFIG_REGULATOR_MAX20411=m
- CONFIG_REGULATOR_MP8859=y
- CONFIG_REGULATOR_MT6315=m
- CONFIG_REGULATOR_MT6357=y
 
 -- 
-2.25.1
-
+With best wishes
+Dmitry
 
