@@ -1,94 +1,159 @@
-Return-Path: <linux-clk+bounces-2363-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2360-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97DE8829BE0
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 14:56:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14736829BA3
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 14:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3D32B24D11
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 13:56:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66200B236E2
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 13:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55BCA48CF2;
-	Wed, 10 Jan 2024 13:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E9348CD9;
+	Wed, 10 Jan 2024 13:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZxskO5+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDED48CCE;
-	Wed, 10 Jan 2024 13:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.astralinux.ru (Postfix) with ESMTP id C7B1B18692DF;
-	Wed, 10 Jan 2024 16:46:34 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-	by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id gVFb5WEP5ieC; Wed, 10 Jan 2024 16:46:34 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.astralinux.ru (Postfix) with ESMTP id 7D93F18692D1;
-	Wed, 10 Jan 2024 16:46:34 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-	by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id lEysMdup5VIp; Wed, 10 Jan 2024 16:46:34 +0300 (MSK)
-Received: from rbta-msk-lt-302690.astralinux.ru (unknown [10.177.234.199])
-	by mail.astralinux.ru (Postfix) with ESMTPSA id 4CE9C18659DD;
-	Wed, 10 Jan 2024 16:46:33 +0300 (MSK)
-From: Alexandra Diupina <adiupina@astralinux.ru>
-To: Nishanth Menon <nm@ti.com>
-Cc: Alexandra Diupina <adiupina@astralinux.ru>,
-	Tero Kristo <kristo@kernel.org>,
-	Santosh Shilimkar <ssantosh@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] clk: keystone: sci-clk: check devm_kmalloc_array() return value
-Date: Wed, 10 Jan 2024 16:46:21 +0300
-Message-Id: <20240110134621.17209-1-adiupina@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1F44A98B;
+	Wed, 10 Jan 2024 13:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5ebca94cf74so37826147b3.0;
+        Wed, 10 Jan 2024 05:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704894474; x=1705499274; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F+Dl/Il2vrbZxDbYc+SRyVGBLpDYXTxt7Tb1vd4cwvQ=;
+        b=TZxskO5+F7i7ifTYtAahV9igz+0F75UmIFJavM8g3O2w79eklotRxdyQn1ynyCCmiK
+         CLifijie7qm4DBswaqrrEuHwfZof8mws3m4v/1jjJyj2O8bPL3A4UMjp1VauWzSfzgyY
+         x/Kb4LJAHJdJHUJ/JPHnELTDJS0QnPVIrVkKfc/VsZoA265dQphwLjfkoD7DH7EEBixn
+         p9rtzP2aSS7oHopeCEUSS9JttrVzCVjHwnELvGszluCVSZKsz9cMWtLzCWSetifcj+co
+         wnHty9fTnU7TrHIXCHmU5pLNFIlI7LOX9cCz5OQhf7CEITfYfn9wCfDZE68umatKF6ax
+         yGWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704894474; x=1705499274;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F+Dl/Il2vrbZxDbYc+SRyVGBLpDYXTxt7Tb1vd4cwvQ=;
+        b=obYMQAK43LLfZiSXbGj0DX4dTma4fqBtPrhGFJtCDBeMK4AJT7eEi4w2zCY/1Ilh76
+         aNKhWmnMr70+VT2L01Z4+2gyHnzi//J9MaCXUKBj5VWbjSDIuMIp7kEWMi6rr8Q+L9jy
+         EqlTzJtw5/FiXmvYvNONH5TNAx5RiNXD+fX/72OVPdv19DkJ9yY6YformEscnSlwtXR8
+         IBlJpKgG/3Y80/k7Os9sGtuPfoKr4Lsf1uPUidSZ2Roo/e5xNAH9ktfdk/DmJT4mf5WL
+         vhMMV/0DpZMd11gyUNC0yoCJ635Rt0GlAKT9DFkgTt9EEUTg5497lvyMt9qFbuwGBEAb
+         pS2w==
+X-Gm-Message-State: AOJu0YzkksytFsTkXdoyRIe1GC8nv7D5nE24tq31QcVw3gXPQ7rvC4kl
+	UDy0vwP9QIuvME/xY6itLHTEQbDhf/8AyN0JfWQ=
+X-Google-Smtp-Source: AGHT+IF5GSh+GAYoRYse0osNDKjpebp3XYF6+cNYz6K9Yfp6hvlCj7DACrSbLrXqYpd5qwBs2GWfV/3aVWO2g9Owgg8=
+X-Received: by 2002:a0d:eb07:0:b0:5f9:25b:398b with SMTP id
+ u7-20020a0deb07000000b005f9025b398bmr855139ywe.52.1704894473970; Wed, 10 Jan
+ 2024 05:47:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20240108135421.684263-1-tmaimon77@gmail.com> <20240108135421.684263-2-tmaimon77@gmail.com>
+ <20240109170830.GA2772086-robh@kernel.org>
+In-Reply-To: <20240109170830.GA2772086-robh@kernel.org>
+From: Tomer Maimon <tmaimon77@gmail.com>
+Date: Wed, 10 Jan 2024 15:47:42 +0200
+Message-ID: <CAP6Zq1jCHVrFfRa6c3DZ4t2aaJTkWukeEkia0AqhzppC0mjbfg@mail.gmail.com>
+Subject: Re: [PATCH v22 1/8] dt-bindings: clock: npcm845: Add reference 25m
+ clock property
+To: Rob Herring <robh@kernel.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, tali.perry1@gmail.com, joel@jms.id.au, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-devm_kmalloc_array() may return NULL, so
-check return value to avoid null pointer
-dereferencing
+Hi Rob,
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Thanks for your comment.
 
-Fixes: 3c13933c6033 ("clk: keystone: sci-clk: add support for dynamically=
- probing clocks")
-Signed-off-by: Alexandra Diupina <adiupina@astralinux.ru>
----
- drivers/clk/keystone/sci-clk.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Tue, 9 Jan 2024 at 19:08, Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Jan 08, 2024 at 03:54:14PM +0200, Tomer Maimon wrote:
+> > The NPCM8XX clock driver uses 25Mhz external clock, therefor adding
+>
+> therefore
+>
+> > refclk property.
+>
+> 'refclk' is not a property.
+>
+> >
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > ---
+> >  .../bindings/clock/nuvoton,npcm845-clk.yaml      | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > index b901ca13cd25..0b642bfce292 100644
+> > --- a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+> > @@ -21,6 +21,14 @@ properties:
+> >    reg:
+> >      maxItems: 1
+> >
+> > +  clocks:
+> > +    items:
+> > +      - description: 25Mhz referance clock
+>
+> reference
+>
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: refclk
+> > +
+> >    '#clock-cells':
+> >      const: 1
+> >      description:
+> > @@ -30,12 +38,20 @@ properties:
+> >  required:
+> >    - compatible
+> >    - reg
+> > +  - clocks
+> > +  - clock-names
+>
+> New required properties are an ABI break. That's fine if you explain why
+> that's okay in the commit msg.
+What do you mean?
+Could I add the new required properties to the required list?
+>
+>
+> >    - '#clock-cells'
+> >
+> >  additionalProperties: false
+> >
+> >  examples:
+> >    - |
+> > +    refclk: refclk-25mhz {
+> > +        compatible = "fixed-clock";
+> > +        #clock-cells = <0>;
+> > +        clock-frequency = <25000000>;
+> > +    };
+>
+> Examples don't need to show providers.
+>
+> > +
+> >      ahb {
+> >          #address-cells = <2>;
+> >          #size-cells = <2>;
+> > --
+> > 2.34.1
+> >
 
-diff --git a/drivers/clk/keystone/sci-clk.c b/drivers/clk/keystone/sci-cl=
-k.c
-index 35fe197dd303..a2fa24e4f88a 100644
---- a/drivers/clk/keystone/sci-clk.c
-+++ b/drivers/clk/keystone/sci-clk.c
-@@ -459,6 +459,9 @@ static int ti_sci_scan_clocks_from_fw(struct sci_clk_=
-provider *provider)
- 			tmp_clks =3D devm_kmalloc_array(dev, max_clks + 64,
- 						      sizeof(sci_clk),
- 						      GFP_KERNEL);
-+			if (!tmp_clks)
-+				return -ENOMEM;
-+
- 			memcpy(tmp_clks, clks, max_clks * sizeof(sci_clk));
- 			if (max_clks)
- 				devm_kfree(dev, clks);
---=20
-2.30.2
+Best regards,
 
+Tomer
 
