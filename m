@@ -1,159 +1,94 @@
-Return-Path: <linux-clk+bounces-2360-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2365-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14736829BA3
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 14:48:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AC3C829C3A
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 15:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66200B236E2
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 13:48:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9313B220ED
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jan 2024 14:15:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91E9348CD9;
-	Wed, 10 Jan 2024 13:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D454A9B0;
+	Wed, 10 Jan 2024 14:13:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZxskO5+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n8rvpcHO"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1F44A98B;
-	Wed, 10 Jan 2024 13:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5ebca94cf74so37826147b3.0;
-        Wed, 10 Jan 2024 05:47:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704894474; x=1705499274; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F+Dl/Il2vrbZxDbYc+SRyVGBLpDYXTxt7Tb1vd4cwvQ=;
-        b=TZxskO5+F7i7ifTYtAahV9igz+0F75UmIFJavM8g3O2w79eklotRxdyQn1ynyCCmiK
-         CLifijie7qm4DBswaqrrEuHwfZof8mws3m4v/1jjJyj2O8bPL3A4UMjp1VauWzSfzgyY
-         x/Kb4LJAHJdJHUJ/JPHnELTDJS0QnPVIrVkKfc/VsZoA265dQphwLjfkoD7DH7EEBixn
-         p9rtzP2aSS7oHopeCEUSS9JttrVzCVjHwnELvGszluCVSZKsz9cMWtLzCWSetifcj+co
-         wnHty9fTnU7TrHIXCHmU5pLNFIlI7LOX9cCz5OQhf7CEITfYfn9wCfDZE68umatKF6ax
-         yGWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704894474; x=1705499274;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F+Dl/Il2vrbZxDbYc+SRyVGBLpDYXTxt7Tb1vd4cwvQ=;
-        b=obYMQAK43LLfZiSXbGj0DX4dTma4fqBtPrhGFJtCDBeMK4AJT7eEi4w2zCY/1Ilh76
-         aNKhWmnMr70+VT2L01Z4+2gyHnzi//J9MaCXUKBj5VWbjSDIuMIp7kEWMi6rr8Q+L9jy
-         EqlTzJtw5/FiXmvYvNONH5TNAx5RiNXD+fX/72OVPdv19DkJ9yY6YformEscnSlwtXR8
-         IBlJpKgG/3Y80/k7Os9sGtuPfoKr4Lsf1uPUidSZ2Roo/e5xNAH9ktfdk/DmJT4mf5WL
-         vhMMV/0DpZMd11gyUNC0yoCJ635Rt0GlAKT9DFkgTt9EEUTg5497lvyMt9qFbuwGBEAb
-         pS2w==
-X-Gm-Message-State: AOJu0YzkksytFsTkXdoyRIe1GC8nv7D5nE24tq31QcVw3gXPQ7rvC4kl
-	UDy0vwP9QIuvME/xY6itLHTEQbDhf/8AyN0JfWQ=
-X-Google-Smtp-Source: AGHT+IF5GSh+GAYoRYse0osNDKjpebp3XYF6+cNYz6K9Yfp6hvlCj7DACrSbLrXqYpd5qwBs2GWfV/3aVWO2g9Owgg8=
-X-Received: by 2002:a0d:eb07:0:b0:5f9:25b:398b with SMTP id
- u7-20020a0deb07000000b005f9025b398bmr855139ywe.52.1704894473970; Wed, 10 Jan
- 2024 05:47:53 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7DC4CDE1;
+	Wed, 10 Jan 2024 14:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04CA2C433F1;
+	Wed, 10 Jan 2024 14:13:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704896000;
+	bh=ubT3JpCdUdX478eUAkGKG4N/VQnjYxl/ajam8KuCzW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n8rvpcHO+s4fz4TNsN/HyfY+EIuzENurVJp3ihv32jRMWh3bE5uRVQ6yn6TDagupv
+	 AK+L8u0WZmOWZeJKFpLzri36x03PmKAbtEsHTGABMWcA5CnL1Yao6Kh6m/kS/F5UFP
+	 IJ5LBTyhV023i+Ds4OxmscnIxA0mja58bmWf7sszIrKcEjtp9A+oki/mICAftF25o0
+	 vc+dOdx+Tk/A7zsoH9ASJXqLKcottwvx0Paqx/QHCtG8hweuQC/p9/0Dh8g2M94KOP
+	 wxOAjGIw5oq+T5OGqRrrs5PeEkdml7/gM4bdYpuQL7KWSZaV4qLlw0tgu/8Z9w4WDG
+	 osLhuF9hoT/0w==
+Date: Wed, 10 Jan 2024 14:13:13 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Chen Wang <unicornxw@gmail.com>
+Cc: aou@eecs.berkeley.edu, chao.wei@sophgo.com,
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+	palmer@dabbelt.com, paul.walmsley@sifive.com,
+	richardcochran@gmail.com, robh+dt@kernel.org, sboyd@kernel.org,
+	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	haijiao.liu@sophgo.com, xiaoguang.xing@sophgo.com,
+	guoren@kernel.org, jszhang@kernel.org, inochiama@outlook.com,
+	samuel.holland@sifive.com, Chen Wang <unicorn_wang@outlook.com>
+Subject: Re: [PATCH v7 4/4] riscv: dts: add clock generator for Sophgo SG2042
+ SoC
+Message-ID: <20240110-sedative-reggae-389839cef8c4@spud>
+References: <cover.1704694903.git.unicorn_wang@outlook.com>
+ <25650372c373b15309cd9f3822306838e556d3c7.1704694903.git.unicorn_wang@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108135421.684263-1-tmaimon77@gmail.com> <20240108135421.684263-2-tmaimon77@gmail.com>
- <20240109170830.GA2772086-robh@kernel.org>
-In-Reply-To: <20240109170830.GA2772086-robh@kernel.org>
-From: Tomer Maimon <tmaimon77@gmail.com>
-Date: Wed, 10 Jan 2024 15:47:42 +0200
-Message-ID: <CAP6Zq1jCHVrFfRa6c3DZ4t2aaJTkWukeEkia0AqhzppC0mjbfg@mail.gmail.com>
-Subject: Re: [PATCH v22 1/8] dt-bindings: clock: npcm845: Add reference 25m
- clock property
-To: Rob Herring <robh@kernel.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, tali.perry1@gmail.com, joel@jms.id.au, 
-	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-	openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="nm/CphfyKzDGNTF4"
+Content-Disposition: inline
+In-Reply-To: <25650372c373b15309cd9f3822306838e556d3c7.1704694903.git.unicorn_wang@outlook.com>
 
-Hi Rob,
 
-Thanks for your comment.
+--nm/CphfyKzDGNTF4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 9 Jan 2024 at 19:08, Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Jan 08, 2024 at 03:54:14PM +0200, Tomer Maimon wrote:
-> > The NPCM8XX clock driver uses 25Mhz external clock, therefor adding
->
-> therefore
->
-> > refclk property.
->
-> 'refclk' is not a property.
->
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-> >  .../bindings/clock/nuvoton,npcm845-clk.yaml      | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
-> > index b901ca13cd25..0b642bfce292 100644
-> > --- a/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
-> > @@ -21,6 +21,14 @@ properties:
-> >    reg:
-> >      maxItems: 1
-> >
-> > +  clocks:
-> > +    items:
-> > +      - description: 25Mhz referance clock
->
-> reference
->
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: refclk
-> > +
-> >    '#clock-cells':
-> >      const: 1
-> >      description:
-> > @@ -30,12 +38,20 @@ properties:
-> >  required:
-> >    - compatible
-> >    - reg
-> > +  - clocks
-> > +  - clock-names
->
-> New required properties are an ABI break. That's fine if you explain why
-> that's okay in the commit msg.
-What do you mean?
-Could I add the new required properties to the required list?
->
->
-> >    - '#clock-cells'
-> >
-> >  additionalProperties: false
-> >
-> >  examples:
-> >    - |
-> > +    refclk: refclk-25mhz {
-> > +        compatible = "fixed-clock";
-> > +        #clock-cells = <0>;
-> > +        clock-frequency = <25000000>;
-> > +    };
->
-> Examples don't need to show providers.
->
-> > +
-> >      ahb {
-> >          #address-cells = <2>;
-> >          #size-cells = <2>;
-> > --
-> > 2.34.1
-> >
+On Mon, Jan 08, 2024 at 02:49:53PM +0800, Chen Wang wrote:
 
-Best regards,
+> +	cgi: oscillator {
+> +		compatible = "fixed-clock";
+> +		clock-output-names = "cgi";
+> +		#clock-cells = <0>;
+> +	};
 
-Tomer
+Where does the name "cgi" come from and what does it mean?
+Clock Generator Input? Does the sg2042 documentation call it that?
+
+Cheers,
+Conor.
+
+--nm/CphfyKzDGNTF4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ6l+QAKCRB4tDGHoIJi
+0qa+AQCAkXm3hnS/5roeUv9wiqA5TkGqnJfy0iNrxNKOnLioewEA+fTdCxQZM2mJ
+WwMBMSTwB4ADTuG2ZWVcgoFa66ptYw4=
+=MhZh
+-----END PGP SIGNATURE-----
+
+--nm/CphfyKzDGNTF4--
 
