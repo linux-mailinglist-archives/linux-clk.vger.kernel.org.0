@@ -1,122 +1,304 @@
-Return-Path: <linux-clk+bounces-2451-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2453-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0320282D5FA
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jan 2024 10:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD32282D68B
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jan 2024 10:59:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9762F1F21DCC
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jan 2024 09:30:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3208C1F233F8
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jan 2024 09:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B630883B;
-	Mon, 15 Jan 2024 09:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA29E568;
+	Mon, 15 Jan 2024 09:59:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="EEdfps8/"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18989F4E3;
-	Mon, 15 Jan 2024 09:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5efb0e180f0so84137307b3.1;
-        Mon, 15 Jan 2024 01:29:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408D6F9CE
+	for <linux-clk@vger.kernel.org>; Mon, 15 Jan 2024 09:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CD70641158
+	for <linux-clk@vger.kernel.org>; Mon, 15 Jan 2024 09:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1705312330;
+	bh=jI+5qM0nAtwQLs5qbWPIA0JCeb2TgRx9NNnpwhxsqJI=;
+	h=From:In-Reply-To:References:Mime-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=EEdfps8/yFcDR1DZ4FnrgMgxoABrzMjXGlIyeEK+JKMcaY7xJ60aIZ+PJCR2hv4WR
+	 dzvH3SppR2H1tcpfXYR/3VVA1VVnTpTpg1DyhlxmLgAOClFgnSdO9TEj8XpnCU052w
+	 M0vvwBTrcyZX2jYgtkoprU5sprQsKqS/wWRXiku37RWIUgrzcVYs+k/AIpgK36oE0j
+	 pXtVnR7SJn47SsnECfltA+3sk6BktY5pW99YC5gyt8f1gTETnWSJrvjtGj+SIT5JPK
+	 VaTTWYLZlTxiEoNPfPR3EobWUoj21qasRxNK6G2NoMlTVO02oHAiyrd0r5RoIoO/68
+	 si6OC3Lbbr6/w==
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-429c5cf9585so60925091cf.1
+        for <linux-clk@vger.kernel.org>; Mon, 15 Jan 2024 01:52:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705310994; x=1705915794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oJZ9RgNzg7VLWUx8YQuwC3dXe057PkvGB0IXNBt0r28=;
-        b=dtfes5M+7LLvHlCbwZEEyxf5Qi3hJR1D3kdnXnKkzzG/eWCbzMvNID54EB2novQQ0+
-         zpfggxrpOp7XhEV9BSuuqt/z4hXnDSpNAfceK9kpN6fMpfdtRrY3XsxvRHfDGunrw3h5
-         GrZOV1tlPU2ufXGtaPhAehbmLmWV9tMiJqb91fIxlWX9nWpkh2TxWr1avfw6NZiBXEry
-         URtSUV/CjwPzgGoTOuoBfV2tc68oNOKay62kwFGwYsZ/GuLHPaGISICOSNOAqrWhmsPQ
-         kC+uRu0EDzqbLs2kZOinC/UwwAfPNs/gwz8ik5zkrAgh4WcJ1jA7r0K11E5Y7IWUOmZu
-         Fd6g==
-X-Gm-Message-State: AOJu0YwP+L+kp2HeVSS2w+Adod0ZZCp8MU4s1DSguDfFsUdQdoDsSYS5
-	aDUa5pTVyV/ut28OKqn0Y3Dd+ziqxjLL8g==
-X-Google-Smtp-Source: AGHT+IHNpy1SfNWdjqyl21eVF7EgjPpYGMelhc9v7045OlQYeXup7+ylWjrrQcklwFuBy1UkQgPi2A==
-X-Received: by 2002:a81:9b0f:0:b0:5e9:d166:2438 with SMTP id s15-20020a819b0f000000b005e9d1662438mr3417304ywg.86.1705310994190;
-        Mon, 15 Jan 2024 01:29:54 -0800 (PST)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id s7-20020a817707000000b005e3f0da06ffsm3843909ywc.34.2024.01.15.01.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jan 2024 01:29:53 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5efb0e180f0so84136827b3.1;
-        Mon, 15 Jan 2024 01:29:53 -0800 (PST)
-X-Received: by 2002:a81:8395:0:b0:5ca:607e:b16e with SMTP id
- t143-20020a818395000000b005ca607eb16emr3313628ywf.0.1705310992678; Mon, 15
- Jan 2024 01:29:52 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705312329; x=1705917129;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jI+5qM0nAtwQLs5qbWPIA0JCeb2TgRx9NNnpwhxsqJI=;
+        b=BqmpHYqfjTD4I/x/YjLHIzyock2lrtySV2mKSju4abyvZORrQfAgp6+/cq2v4LyEM/
+         V7twO6jDfc4f0nDsOj05mQ5NRCAk90WuSgIgYpXFFZK6eqo4tDWPBSOvviwxPZj+eAvI
+         xpn/dpMHfIxOya1Y53j7irsrXfj40mslWr1sMf3BF9NHyz19Fc+Gk5RfkIqv5aN99NE6
+         K5Kv5ytd9Gxk3KOJffs9nWFuD2IFMfyS1K9WIEgC20ChvcRJH8Rs9FDdM+XP9hk0kCsj
+         Iys4bpQzzjHZ3OTJSubE7cQ4s3V0Z05Z7Mgxj+bzOo69soQ1YMnqManzwrZmPB4w6uXJ
+         7g/Q==
+X-Gm-Message-State: AOJu0YxdGBnqGd0BRyTRfU/PItcnpjbVOmpAKZKx04DlAHKZb/PU3U5H
+	PD4bW0NcTbXz6CaItBXbKdIuaiQ64K5R10b/06dZKNFa/TbfaRPUaS2A97oEdMq9Rdcc79fbUGs
+	sp8m+A9MXqyBw4OZebBXT3DyKAKJ+4brJaI40aFkveG+C5KYZ4zVowLI5Fctb
+X-Received: by 2002:a05:622a:4:b0:429:92b7:cba8 with SMTP id x4-20020a05622a000400b0042992b7cba8mr6911274qtw.126.1705312329285;
+        Mon, 15 Jan 2024 01:52:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE/AkHGDi3+QdcHLA4pT8OqYSnCIbpWhNwAV/2HQPH18KFSKj5wXqrL4g77KUUN4x7fOWeNOuL3M+tUhwE0B8k=
+X-Received: by 2002:a05:622a:4:b0:429:92b7:cba8 with SMTP id
+ x4-20020a05622a000400b0042992b7cba8mr6911258qtw.126.1705312328988; Mon, 15
+ Jan 2024 01:52:08 -0800 (PST)
+Received: from 348282803490 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 15 Jan 2024 04:52:08 -0500
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+In-Reply-To: <20240110-clk-th1520-v1-3-8b0682567984@tenstorrent.com>
+References: <20240110-clk-th1520-v1-0-8b0682567984@tenstorrent.com> <20240110-clk-th1520-v1-3-8b0682567984@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1704788539.git.ysato@users.sourceforge.jp> <dbaaf58b50b681cf03bc5ad3eef0a546fe863bca.1704788539.git.ysato@users.sourceforge.jp>
-In-Reply-To: <dbaaf58b50b681cf03bc5ad3eef0a546fe863bca.1704788539.git.ysato@users.sourceforge.jp>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 15 Jan 2024 10:29:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXw=FC5EsYSHw6y2GzT9pNPNEB1iO3DRVmMLjzuPfx8nQ@mail.gmail.com>
-Message-ID: <CAMuHMdXw=FC5EsYSHw6y2GzT9pNPNEB1iO3DRVmMLjzuPfx8nQ@mail.gmail.com>
-Subject: Re: [DO NOT MERGE v6 21/37] dt-bindings: serial: renesas,scif: Add scif-sh7751.
-To: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: linux-sh@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
+Mime-Version: 1.0
+Date: Mon, 15 Jan 2024 04:52:08 -0500
+Message-ID: <CAJM55Z8_nTu__iSvSTbo719SPvtGcd6jKrK=UJ6YwLj1jCk2_w@mail.gmail.com>
+Subject: Re: [PATCH RFC 3/3] clk: thead: add support for T-HEAD TH1520 AP clocks
+To: Drew Fustini <dfustini@tenstorrent.com>, Jisheng Zhang <jszhang@kernel.org>, 
+	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
 	Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Thomas Gleixner <tglx@linutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Lee Jones <lee@kernel.org>, 
-	Helge Deller <deller@gmx.de>, Heiko Stuebner <heiko@sntech.de>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Chris Morgan <macromorgan@hotmail.com>, 
-	Yang Xiwen <forbidden405@foxmail.com>, Sebastian Reichel <sre@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Vlastimil Babka <vbabka@suse.cz>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	David Rientjes <rientjes@google.com>, Baoquan He <bhe@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Azeem Shaikh <azeemshaikh38@gmail.com>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Bin Meng <bmeng@tinylab.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Jacky Huang <ychuang3@nuvoton.com>, 
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Sam Ravnborg <sam@ravnborg.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
-	Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-ide@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-fbdev@vger.kernel.org
+	Yangtao Li <frank.li@vivo.com>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>, Han Gao <gaohan@iscas.ac.cn>, 
+	Xi Ruoyao <xry111@xry111.site>, Robert Nelson <robertcnelson@beagleboard.org>, 
+	Jason Kridner <jkridner@beagleboard.org>, Drew Fustini <drew@tenstorrent.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 9, 2024 at 9:24=E2=80=AFAM Yoshinori Sato
-<ysato@users.sourceforge.jp> wrote:
-> Add Renesas SH7751 SCIF.
+Drew Fustini wrote:
+> From: Jisheng Zhang <jszhang@kernel.org>
 >
-> Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Add support for the AP sub system clock controller in the T-HEAD TH1520.
+> This include CPU, DPU, GMAC and TEE PLLs.
+>
+> Link: https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf
+> Co-developed-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> [rebased on linux-next-20240110]
+> [fixed checkpatch warnings]
+> [corrected npu_clk enable bit and c910_i0_clk reg]
+> [revised commit description]
+> Signed-off-by: Drew Fustini <drew@tenstorrent.org>
+> ---
+>  MAINTAINERS                       |    1 +
+>  drivers/clk/Kconfig               |    1 +
+>  drivers/clk/Makefile              |    1 +
+>  drivers/clk/thead/Kconfig         |   12 +
+>  drivers/clk/thead/Makefile        |    2 +
+>  drivers/clk/thead/clk-th1520-ap.c | 1018 +++++++++++++++++++++++++++++++++++++
+>  6 files changed, 1035 insertions(+)
+>
+...
+> --- /dev/null
+> +++ b/drivers/clk/thead/clk-th1520-ap.c
+> @@ -0,0 +1,1018 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
+> + * Copyright (C) 2023 Vivo Communication Technology Co. Ltd.
+> + *  Authors: Yangtao Li <frank.li@vivo.com>
+> + */
+> +
+> +#include <dt-bindings/clock/thead,th1520-clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/device.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +struct ccu_internal {
+> +	u8	shift;
+> +	u8	width;
+> +};
+> +
+> +struct ccu_div_internal {
+> +	u8	shift;
+> +	u8	width;
+> +	u32	flags;
+> +};
+> +
+> +struct ccu_common {
+> +	struct regmap	*map;
+> +	u16		reg;
+> +	struct clk_hw	hw;
+> +};
+> +
+> +struct ccu_mux {
+> +	struct ccu_internal	mux;
+> +	struct ccu_common	common;
+> +};
+> +
+> +struct ccu_gate {
+> +	u32			enable;
+> +	struct ccu_common	common;
+> +};
+> +
+> +struct ccu_div {
+> +	u32			enable;
+> +	struct ccu_div_internal	div;
+> +	struct ccu_internal	mux;
+> +	struct ccu_common	common;
+> +};
+> +
+> +/*
+> + * struct ccu_mdiv - Definition of an M-D-I-V clock
+> + *
+> + * Clocks based on the formula (parent * M) / (D * I * V)
+> + */
+> +struct ccu_mdiv {
+> +	struct ccu_internal	m;
+> +	struct ccu_internal	d;
+> +	struct ccu_internal	i;
+> +	struct ccu_internal	v;
+> +	struct ccu_common	common;
+> +};
+> [...]
+> +static unsigned long ccu_mdiv_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	struct ccu_mdiv *mdiv = hw_to_ccu_mdiv(hw);
+> +	unsigned long div, rate = parent_rate;
+> +	unsigned int m, d, i, v, val;
+> +
+> +	regmap_read(mdiv->common.map, mdiv->common.reg, &val);
+> +
+> +	m = val >> mdiv->m.shift;
+> +	m &= GENMASK(mdiv->m.width - 1, 0);
+> +
+> +	d = val >> mdiv->d.shift;
+> +	d &= GENMASK(mdiv->d.width - 1, 0);
+> +
+> +	i = val >> mdiv->i.shift;
+> +	i &= GENMASK(mdiv->i.width - 1, 0);
+> +
+> +	v = val >> mdiv->v.shift;
+> +	v &= GENMASK(mdiv->v.width - 1, 0);
+> +
+> +	rate = parent_rate * m;
+> +	div = d * i * v;
+> +	do_div(rate, div);
+> +
+> +	return rate;
+> +}
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi Drew,
 
-Gr{oetje,eeting}s,
+I don't think this is right. There is an input predivider that's not handled
+here, and then the PLL multiplies the input frequency and outputs "Foutvco".
+Then this is followed by a post divider to produce "Foutpostdiv".
+Some clocks derive directly from the "Foutvco" so this should really be
+modelled as two different clocks. Also what's called D and I are the
+postdivider but V is an optional fractional divider.
+All in all I think it should be something like this:
 
-                        Geert
+#define TH1520_PLL_CFG0         0x0
+#define TH1520_PLL_POSTDIV2     GENMASK(26, 24)
+#define TH1520_PLL_POSTDIV1     GENMASK(22, 20)
+#define TH1520_PLL_FBDIV        GENMASK(19, 8)
+#define TH1520_PLL_REFDIV       GENMASK(5, 0)
+#define TH1520_PLL_CFG1         0x4
+#define TH1520_PLL_BYPASS       BIT(30)
+#define TH1520_PLL_RST          BIT(29)
+#define TH1520_PLL_POSTDIVPD    BIT(28)
+#define TH1520_PLL_4PHASEPD     BIT(27)
+#define TH1520_PLL_DACPD        BIT(25)
+#define TH1520_PLL_DSMPD        BIT(24)
+#define TH1520_PLL_FRAC         GENMASK(23, 0)
+#define TH1520_PLL_FRAC_BITS    24
+#define TH1520_PLL_CFG2         0x8
+#define TH1520_PLL_CFG3         0xc
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+static unsigned long th1520_pll_vco_recalc_rate(struct clk_hw *hw,
+                                                unsigned long parent_rate)
+{
+        struct th1520_pll *pll = th1520_pll_from_vco(hw);
+        void __iomem *cfg0reg = pll->base + TH1520_PLL_CFG0;
+        void __iomem *cfg1reg = pll->base + TH1520_PLL_CFG1;
+        unsigned long rate, mul;
+        u32 cfg0, cfg1, div;
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+        scoped_guard(spinlock_irqsave, pll->lock) {
+                cfg0 = readl_relaxed(cfg0reg);
+                cfg1 = readl_relaxed(cfg1reg);
+        }
+
+        mul = FIELD_GET(TH1520_PLL_FBDIV, cfg0);
+        div = FIELD_GET(TH1520_PLL_REFDIV, cfg0);
+        if (!(cfg1 & TH1520_PLL_DSMPD)) {
+                mul <<= TH1520_PLL_FRAC_BITS;
+                mul += FIELD_GET(TH1520_PLL_FRAC, cfg1);
+                div <<= TH1520_PLL_FRAC_BITS;
+        }
+        rate = parent_rate * mul;
+        do_div(rate, div);
+        return rate;
+}
+
+static unsigned long th1520_pll_postdiv_recalc_rate(struct clk_hw *hw,
+                                                    unsigned long parent_rate)
+{
+        struct th1520_pll *pll = th1520_pll_from_postdiv(hw);
+        void __iomem *cfg0reg = pll->base + TH1520_PLL_CFG0;
+        void __iomem *cfg1reg = pll->base + TH1520_PLL_CFG1;
+        unsigned long rate = parent_rate;
+        u32 cfg0, cfg1;
+
+        scoped_guard(spinlock_irqsave, pll->lock) {
+                cfg0 = readl_relaxed(cfg0reg);
+                cfg1 = readl_relaxed(cfg1reg);
+        }
+
+        if (cfg1 & TH1520_PLL_BYPASS)
+                return rate;
+
+        do_div(rate,
+               FIELD_GET(TH1520_PLL_POSTDIV1, cfg0) *
+               FIELD_GET(TH1520_PLL_POSTDIV2, cfg0));
+        return rate;
+}
+
+(Here D = POSTDIV1, I = POSTDIV2 and V = FRAC)
+
+However, have a look at Chen Wang's series at
+
+https://lore.kernel.org/linux-riscv/cdb7aed766aa6411e61ec25a6f1cb22a1aef4a21.1704694903.git.unicorn_wang@outlook.com/
+
+The PLL implementation there is very similar to the TH1520. At first I thought
+it was exactly the same, but on closer inspection it seems like the bitfields
+are arranged a little different unfortunately.
+
+The rest of the clocks in this driver seem to be generic gate and mux
+implementations that should probably be replaced by the versions in Linux
+already. Eg. devm_clk_hw_register_gate*() and devm_clk_hw_register_mux*().
+
+Lastly this only implements the clocks in the AP_SUBSYS memory range, but there
+are also AON_SUBSYS, DDR_SUBSYS, MISC_SUBSYS, VI_SUBSYS, VO_SUBSYS, VP_SUBSYS,
+DSP_SUBSYS and AUDIO_SUBSYS. Upstreaming one of them first in fine, but make
+sure to consider how the others should be added.
+
+/Emil
 
