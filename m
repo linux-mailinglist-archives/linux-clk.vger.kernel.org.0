@@ -1,118 +1,104 @@
-Return-Path: <linux-clk+bounces-2775-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2779-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034F4839AB0
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Jan 2024 21:58:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F5D5839ACC
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Jan 2024 22:05:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35BDF1C283D5
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Jan 2024 20:58:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAE0C285247
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Jan 2024 21:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81BA5690;
-	Tue, 23 Jan 2024 20:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC113CF71;
+	Tue, 23 Jan 2024 21:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j0OSgq+8"
+	dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b="Ve4vV3h8"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80ECF3B199;
-	Tue, 23 Jan 2024 20:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B8D12E7B;
+	Tue, 23 Jan 2024 21:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706043492; cv=none; b=hlAqTtHUDsDsQ94PpfUfQtR/LDG8XXdluCwB3tzHUKMQ0CDLlLFA7eC+H6yDjjcU6I5oEy0AVd5PgrhV7PeXIlTgrSe+jDYbSjF+dZapDByHhutr5Kor8iK28k/bQtGirfYrMrul4nGLidx5QFTQ2JEmdbPJNpbZvII+fi8Xxuw=
+	t=1706043877; cv=none; b=U0jRS9uNs8TYjLFaJgWGqJxTjHaVqHY2j92sEU7G+BLZos5doD9Mf4xTMu5aSZPTrbzCwA4XUnc8+v5Kb4dvVKguxCV0wkRPrbqUPvoQWqUErzaqyCVWt+tpZOmkI+pFszPEbb0NLuVwjnUOuF8WC7n34tLbrB+EeOHCCLk968A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706043492; c=relaxed/simple;
-	bh=+LOWtolt7y+KJAN1QYznwoNgWUtDvoht/BbgXsXbBVI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L7q3JUXahVyhHocbhzO9OybDKsg+bFVoVsMuqLFchg204pdrDECVkVZF8xtXF9oOqDuzotH659gkbxbTYImEzQgvMQYe27a+UNbayT3tCI4uYR3mfuUdeCXN+Bce0oVTa/WPwE7g7og3QTfLUustX6g91czVvK9EnxDdR/0E0Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j0OSgq+8; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40e7065b7bdso56743505e9.3;
-        Tue, 23 Jan 2024 12:58:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706043489; x=1706648289; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+LOWtolt7y+KJAN1QYznwoNgWUtDvoht/BbgXsXbBVI=;
-        b=j0OSgq+86vyTL65C7cnBsPrO8OaMWWHABCMfBpdlMIo7lupehkMF/9DUv+5OmF1On2
-         2TRsILZlXBY7Btdg18RWQ48ogBX1uaBwv4wxYsq2JU6bo39rt3kM0eQrTx+Ryz9zoahH
-         6QHA2UQ+o3LRa7KWIx0RAv+M77sKvmBLGQQoAMRIMskF8ZBGr4Ywzz9dm1VfKLhvhB+l
-         ++Wi8ThZCwiyv9UOLg3om1yfeAs0uU7bI1DBv/0v1GBHBlc+lCwy8l6N2CIGvbS9gOqd
-         2y0pCliGQLk944OS/hAv0jSkcrAJ74pS3o/6kNgL1uObFZ7pf/XcCWJsesebZdJlq+8a
-         ZLgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706043489; x=1706648289;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+LOWtolt7y+KJAN1QYznwoNgWUtDvoht/BbgXsXbBVI=;
-        b=lYmyuamchfGd1qppwGXRh0mvPhLj3btoM3vFvuSgY3MmF2OJ6HBUWKFB/4+Y/UajN4
-         ji/XRpRSa+Gyhw2DvdYJuBnvTYLlW0U3yo0w2ZDvtmBpAxB4H4tWGb9DGLLKYEJvstBz
-         M9kfvF38jmp82zy8IvvNVtDde9HRKVxA2SIfs1ebkxl8SYYNDFsW9K6HkjsJgj5pSoxO
-         zB6N5Bd/rDZMWuMMh2eCQ+KHxRtrs10Gru+9+Z2dHWVgMRcRe3Dbvv05qddVgjnU0pbd
-         /ENRjZ5tXmUqKEq2dqNxev99xSUCERAyX1BGM4zMgjcN4kEBwN+3iGZtn6bVWviwRs38
-         sBLg==
-X-Gm-Message-State: AOJu0YwX1AN8/b37+eqjE+0EHUl/WBlNOe0LIPaUrgDhe3yF7UrmUajU
-	22bookQFZ+5L0fTF4Mm/xGCwvPAJg57ZRgaA3aVsdhL+onvrw1062xxk75Yw
-X-Google-Smtp-Source: AGHT+IHJwJQzACZGeE+ZISr67jPpv8iwqwd1Q++oJrsbIZQfW7cpMZ3Fie62qVDgEKwzt1QwHUZ9hQ==
-X-Received: by 2002:a05:600c:3caa:b0:40e:9ef9:838d with SMTP id bg42-20020a05600c3caa00b0040e9ef9838dmr325295wmb.159.1706043488748;
-        Tue, 23 Jan 2024 12:58:08 -0800 (PST)
-Received: from jernej-laptop.localnet (86-58-14-70.dynamic.telemach.net. [86.58.14.70])
-        by smtp.gmail.com with ESMTPSA id q20-20020a05600c46d400b0040e395cd20bsm47421305wmo.7.2024.01.23.12.58.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 12:58:08 -0800 (PST)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
- Emilio =?ISO-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- linux-clk@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] clk: sunxi: a20-gmac: fix kernel-doc warnings
-Date: Tue, 23 Jan 2024 21:58:07 +0100
-Message-ID: <3464017.QJadu78ljV@jernej-laptop>
-In-Reply-To: <20240121051837.17564-1-rdunlap@infradead.org>
-References: <20240121051837.17564-1-rdunlap@infradead.org>
+	s=arc-20240116; t=1706043877; c=relaxed/simple;
+	bh=CKtMfO6Bfzyox+5EUVJ1yI9kA2uCj8V8lQP91cG1mvA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eJ74qBBhz2uBoZbJqIAcLTp61CvhJMQ+IT+toVYKeFAOoQUdClRpUBndoFRVJYDCpd1UQKcSYLj53x2Fjal1ThY2u23X+xBbhOCwaZiIpW77K/e2OgLYgBX3bV+W0vYwceiblxhwIBlRmBIkJFr8sA0FGTDXvihRv2CsPtcxYDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz; spf=pass smtp.mailfrom=z3ntu.xyz; dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b=Ve4vV3h8; arc=none smtp.client-ip=128.199.32.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=s1;
+	t=1706043866; bh=CKtMfO6Bfzyox+5EUVJ1yI9kA2uCj8V8lQP91cG1mvA=;
+	h=From:Subject:Date:To:Cc;
+	b=Ve4vV3h83HsNyUHx0wDQAQrD/AtjaoMoh+H+4DnOVWwYZFSHaPUhfvPGh1nrM87cn
+	 WwMYzpdGemNdpcw2sgM/Wcjz1TdImDZUjdJ5FmMYe22+NT6cwKi8YRNSMGj6tHqzol
+	 S+5g0UDvr/W+VEYXIOSpoUoSGde7REYzYPF1UcUg=
+From: Luca Weiss <luca@z3ntu.xyz>
+Subject: [PATCH 0/3] Add MDSS_BCR reset for MSM8953
+Date: Tue, 23 Jan 2024 22:03:54 +0100
+Message-Id: <20240123-msm8953-mdss-reset-v1-0-bb8c6d3ce897@z3ntu.xyz>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALopsGUC/x2MQQqAIBAAvxJ7TjDNsL4SHSTX2oMWbkQg/T3pN
+ MxhpgBjJmSYmgIZb2I6UpWubWDdXdpQkK8OSqpedkqLyNGOptIzi4yMlxisltZJHUIwUMMzY6D
+ nn87L+35ar2NRZAAAAA==
+To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Luca Weiss <luca@z3ntu.xyz>, Vladimir Lypak <vladimir.lypak@gmail.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=758; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=CKtMfO6Bfzyox+5EUVJ1yI9kA2uCj8V8lQP91cG1mvA=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBlsCnVCCHHoC3NJac8mzXQRwG4STJPMvdCDV3LN
+ BKhPFfN5m6JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZbAp1QAKCRBy2EO4nU3X
+ VkkxD/48FVfzjdGeBTusDywMmrPM+JjWI6YgcN9Ys473zlgjt7DtSuYr4mM/l7229VHt3LT7/zx
+ MJQG5e+XQPCXa/wYqZ3izEkygl/anbiCglAkCNQu4uoc2ET8KGUyx5qZVbwie+61jMjNG0Gj4C0
+ W5uCWYprbt8Wpi92P2rqVuUPdh/LnSbNL2wIXjuvDMoCIgJKUdAcoyORzIUD6YlETVnRDgP/+3K
+ v/zdH3dfXl+I4OaxXFHpBPIxhIJyR5H1bWX1+maD4wxk1eWyvVVfHgoVlmkrIpNqoIRWM43Uq0O
+ NVbZkME+23RnEOwxetPnuScaxk6GqzvYPlWVk6Oh92xltAqdBSC1fWJqyl1C5HTUqfcaLLJSU3F
+ JS+q4hxku2Kcyt4/f0bXvoTS/WcCLj/9jpCeUPtmQFqgWuHmXUakIuy2bkZ+zSA0xcGa2iHhtHz
+ 77tXDnc4BdaGPdxqJXX373I6HuGkT35er34XYx0RiFpTlkuSJzxK+iuxYE1wHG0q+UJRXqR2Bo4
+ p+6EeDLTY4WYJ/Fp0dPC1g+T7H0C0uyJO/PH5kFeiahlsIU/+dV4WY4UsGxth1YyF914GJfnj2B
+ VYd390Qk0jf55wKU3O/ThS+3dOEPX8YhWV3ZFyQvUtU9XatZ+eQ5n0sy9yto5UahLpeRXCH6yhu
+ HJ+En5+GQYB7f2A==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 
-Dne nedelja, 21. januar 2024 ob 06:18:35 CET je Randy Dunlap napisal(a):
-> Move the function kernel-doc comment to be immediately before the
-> function implementation, then add a function parameter description
-> to prevent kernel-doc warnings:
->=20
-> clk-a20-gmac.c:43: warning: expecting prototype for sun7i_a20_gmac_clk_se=
-tup(). Prototype was for SUN7I_A20_GMAC_GPIT() instead
-> clk-a20-gmac.c:53: warning: Function parameter or struct member 'node' no=
-t described in 'sun7i_a20_gmac_clk_setup'
->=20
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Emilio L=F3pez <emilio@elopez.com.ar>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
+Add the MDSS_BCR reset that is found in the GCC of MSM8953 so we can
+make sure the MDSS gets properly reset before Linux starts using it.
 
-Merged, thanks!
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Vladimir Lypak (3):
+      dt-bindings: clock: gcc-msm8953: add reset for MDSS subsystem
+      clk: qcom: gcc-msm8953: add MDSS_BCR reset
+      arm64: dts: qcom: msm8953: add reset for display subsystem
+
+ arch/arm64/boot/dts/qcom/msm8953.dtsi        | 2 ++
+ drivers/clk/qcom/gcc-msm8953.c               | 1 +
+ include/dt-bindings/clock/qcom,gcc-msm8953.h | 1 +
+ 3 files changed, 4 insertions(+)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240123-msm8953-mdss-reset-68308a03fff5
 
 Best regards,
-Jernej
-
+-- 
+Luca Weiss <luca@z3ntu.xyz>
 
 
