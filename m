@@ -1,46 +1,63 @@
-Return-Path: <linux-clk+bounces-2776-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2781-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0680F839AC1
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Jan 2024 22:04:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B915883A06E
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 05:25:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4635289592
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Jan 2024 21:04:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38FF7B22E76
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 04:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0102943B;
-	Tue, 23 Jan 2024 21:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F4120C134;
+	Wed, 24 Jan 2024 04:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b="VhEfb8xu"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V+MR7BRD"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD231A27A;
-	Tue, 23 Jan 2024 21:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8E346B8;
+	Wed, 24 Jan 2024 04:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706043876; cv=none; b=aUR/XuvdNC7sevQv7OWXd25eV5wMI6GPWmIpbxDEC4wi+NAXgxR4hoatvtWexr+X68zaMZMj2+Xf7TfDNh+g6aX3EGvbFgCE4lGAdXN6TLSFOZOlzbkXt2oI7bdhAs0IGC5uqS3D3hgePWXWTZX3eq80XwOpX/VQf2ko+/Vov/0=
+	t=1706070328; cv=none; b=sD4dKE/qIvuDxbVdPf3uMh6UZ7Tg874ZR3jGoJA1sJ0Y1TGKybhxTn5bW5dtNULEbteIN6XGfmz6KNccXDQhf6/ER4n1sFFiK9wDDI5X+wVX5mVTopy8H7TEhBVuUDFpUmiDgdZnt8Levhu5bWbXCWyVa9rKXrPqz5dJ7N6Ly0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706043876; c=relaxed/simple;
-	bh=iUZ9ff9Sy/VGyfLsHpEtkeYzZrimjw/PLUyxTEaxB+8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=loWzWMLJ+hh6vpKC2OYiCB1/VXpOK3G67ZFMOojgPYhprTvogiG6oDRcUYl1DcCy3rUR6W+e8B2secijNPCWH/0mDZzGiTov31ymfyPcI8TBFWji1Nk3XplEebJJvRBGsxd5wumUUvBSO1irt1+HKnbVaw24oRBpoYg2hZTLR9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz; spf=pass smtp.mailfrom=z3ntu.xyz; dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b=VhEfb8xu; arc=none smtp.client-ip=128.199.32.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=s1;
-	t=1706043867; bh=iUZ9ff9Sy/VGyfLsHpEtkeYzZrimjw/PLUyxTEaxB+8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=VhEfb8xuK6Z+e0ASbBsRCW8WXFX3p/aLRwG3yVVu1N6eWhIG0/9JKrS7F1NBQBOxC
-	 IeWZ+v1tqDX4Yiw2SYzJj1Ez8aN/464YRdXYpfU2meZAZsSV8T15puoTzCdaYuX+2z
-	 zMqQnTjKY5NwCjIHsV9DCYzc0S4o9CYCvokFNr3w=
-From: Luca Weiss <luca@z3ntu.xyz>
-Date: Tue, 23 Jan 2024 22:03:57 +0100
-Subject: [PATCH 3/3] arm64: dts: qcom: msm8953: add reset for display
- subsystem
+	s=arc-20240116; t=1706070328; c=relaxed/simple;
+	bh=JBAvZdygoJumjb+30fjq+Ggh3vYoPDqruBZLxBaFeb4=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=rFekStxZ7/4qt2XUxKPRQDALLGhzMv1o4IBpevoydi0LSZ6t4y55ykz9kzoVXXvgF5CqqdKu0NfNaLdKJSYaMXvcdPV9AzJ49/EfnO/aWeXXJ+di9qIUBYy2zv02uL4LhcY9PxVr0L/oPxPfT7sTW9zgSv6j7/Y2ax0YqP3OFxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=V+MR7BRD; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40O4LAos024273;
+	Wed, 24 Jan 2024 04:25:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:subject:date:message-id:mime-version:content-type
+	:content-transfer-encoding:to:cc; s=qcppdkim1; bh=NZB9SFWt1RCiGp
+	+zofXJB9SXOMyqD2ABPKksWfi6zUE=; b=V+MR7BRDG+pbBdaqUOtCPxg3G2iI/f
+	XJAGuOYoFeJ4W/ivFei6fE6XMH4rnEXjsJ6pJIaqMqooAl4Zc/s/8PHxUoxuxRwr
+	dw3Ur3u4jLl1uDCDIX1ACTmf5KGQrKAtqi7Pp87lnFFhuGBZKg4rDg6AbilLPO6J
+	h5ImDj8zQl2iTfr/mgBKy6GPosZzlE46CviGDxm39pH5eH8OReOp5jiH0bvKLXmq
+	GbIuh60no1oplWEGxcI7O7/IQsDnRUudbW38IMv9tTqpFiQk0IQjCTC+zGK6JWBi
+	4qUuxO7sVcc39XG5C2QHvEvH1LQBPHvyNo/OMTZFih9POfo/eZZjotGQ==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vtmgxgr09-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 04:25:17 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40O4PGOU030407
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 04:25:16 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 23 Jan
+ 2024 20:25:16 -0800
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+Subject: [PATCH v3 0/8] arm64: dts: qcom: sa8295p: Enable GPU
+Date: Tue, 23 Jan 2024 20:25:14 -0800
+Message-ID: <20240123-sa8295p-gpu-v3-0-d5b4474c8f33@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -49,63 +66,104 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240123-msm8953-mdss-reset-v1-3-bb8c6d3ce897@z3ntu.xyz>
-References: <20240123-msm8953-mdss-reset-v1-0-bb8c6d3ce897@z3ntu.xyz>
-In-Reply-To: <20240123-msm8953-mdss-reset-v1-0-bb8c6d3ce897@z3ntu.xyz>
-To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Luca Weiss <luca@z3ntu.xyz>, Vladimir Lypak <vladimir.lypak@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACqRsGUC/32N0Q6CIBhGX6VxHQ1+RLSr3qN1gb+gbIYGyWrOd
+ w+9a2tdnm8751tINMGZSM6HhQSTXHSjzyCOB4K99p2hrs1MgIHgAIxGXUEtJ9pNM5UcpRWFMMI
+ gyUajo6FN0B777Ph5GPI4BWPda7+43jL3Lj7H8N4fE9/W3/HEKaNtha0FkMrW6vKYHTqPJxzvZ
+ Csl+GNDtgtVCijKRgGyb3td1w8IWxMf+wAAAA==
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Johan Hovold
+	<johan+linaro@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Bjorn
+ Andersson" <quic_bjorande@quicinc.com>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Bjorn
+ Andersson" <andersson@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=774; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=2eGHbPBMdO+UgME/Y6wGkZ+t0vRvxXHXtjw6rDrXCQA=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBlsCnY8IywGYM0+ByxpNlLjwe0KF31yb0R24nKo
- 3uRQqntBqiJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZbAp2AAKCRBy2EO4nU3X
- VkT4D/wPDY9u4kI772wMuV+JU85Ok3ODvWBeV65f2Aj5mic3HAOfGFQzvBnED3RY5v68/T5t0iN
- hpHpxQvletMss+auTI4T/PXBF8JsFCfoQY3mn+eGFJQil2NrXrqfhQjeRNGT4b0X1aBtFQ+EQDY
- HU82Mfq2R5GophhKMW0oa0RhCX2w1D2LVcTAg8hU2/ygTKCQ6zK34kkgyJMZAVBmhBocTFu1F49
- IUU2js0Irq4RN2gN1TDiOqDo9uOGLkAh0jLCoSve4YsnmPx67PB8WpkIJS0RGVxOwPtAM7lD2yc
- 0j+0Z8CPikioyLaogYNma9RHo1FliEADpTsmVMDeKCp5fh4ddE4ZO5GAKgCr7ecDWHUb+z+OWNg
- xWVzaq5WiRYo1LFM8BNjlN4+Ko8uQ1MiMG0/N0zEYlvd942mAuD5t9rARfbPbMgXL5WRQuFVb7a
- wjlKLpaduvTnNpyz0KUb4425j3IAj5AL+Eo5dhginLcKUMeaC60S6wVVljPN/nqV1RJgtti5W1A
- 2xc2pEp1E4RYZlpJZ2hAHpH3TRhba0zzoWDpnQXCWA9vIHO1bPQdXJZx/7wT2sM5e25HCF+YQcb
- hXQXRl1Bzr8PaqnxkhUf7I49TnAuis8Kfp6VnyKucUqfiupwurZXgYt1O4AooMO7ZQnmTMuTd+n
- dsEgawnrk5b2QCA==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1706070315; l=2207;
+ i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
+ bh=JBAvZdygoJumjb+30fjq+Ggh3vYoPDqruBZLxBaFeb4=;
+ b=nz1kdPx8aLlo0fDIp0HbexT861uovf4X+FVzQZ7MIfF/1qH1pH6f7svj6tMM6CoaHm2AnKkBx
+ XXwJSONNNRSBJYnCzfWLOKw19wo2662nALMfENAFSOyq4F3gkY1t6/Q
+X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
+ pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: soDsf3vnQ3pUqDz-dx-NrW5fZDJKgYDf
+X-Proofpoint-GUID: soDsf3vnQ3pUqDz-dx-NrW5fZDJKgYDf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-24_01,2024-01-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ malwarescore=0 bulkscore=0 phishscore=0 mlxlogscore=758 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401240029
 
-From: Vladimir Lypak <vladimir.lypak@gmail.com>
+Due to the different PMIC configuration found in the SA8295P platform,
+compared to SC8280XP, the VDD_GFX pads are supplied by an dedicated
+MAX20411 LDO.
 
-With this reset we can avoid situations like IRQ storms from DSI host
-before it even started probing (because boot-loader left DSI IRQs on).
+Support for expressing the regulator supply is added to the binding, the
+support for enabling the parent supply for GX is added, the missing
+gfx.lvl power-domain is dropped, and the DeviceTree is wired up to
+enable the GPU in this configuration.
 
-Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Changes in v3:
+- Removed one unnecessary empty line in DT node
+- Rebased series to v6.8-rc1
+- Link to v2: https://lore.kernel.org/r/20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index ad2f8cf9c966..dcb5c98b793c 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -859,6 +859,8 @@ mdss: display-subsystem@1a00000 {
- 				      "vsync",
- 				      "core";
- 
-+			resets = <&gcc GCC_MDSS_BCR>;
-+
- 			#address-cells = <1>;
- 			#size-cells = <1>;
- 			ranges;
+Changes in v2:
+- Made gpucc binding accept either power-domain or vdd-gfx-supply
+- Updated comment in gdsc_gx_do_nothing_enable()
+- Added a comment for the /delete-property/ power-domains
+- Fixed node and property sort order in dts
+- Switched zap firmware to use mbn file
+- Link to v1: https://lore.kernel.org/r/20231220-sa8295p-gpu-v1-0-d8cdf2257f97@quicinc.com
 
+---
+Bjorn Andersson (8):
+      dt-bindings: clock: qcom: Allow VDD_GFX supply to GX
+      clk: qcom: gdsc: Enable supply reglator in GPU GX handler
+      clk: qcom: gpucc-sc8280xp: Add external supply for GX gdsc
+      soc: qcom: rpmhpd: Drop SA8540P gfx.lvl
+      arm64: dts: qcom: sa8540p: Drop gfx.lvl as power-domain for gpucc
+      arm64: dts: qcom: sa8295p-adp: add max20411
+      arm64: dts: qcom: sa8295p-adp: Enable GPU
+      arm64: defconfig: Enable MAX20411 regulator driver
+
+ .../devicetree/bindings/clock/qcom,gpucc.yaml      | 16 +++++
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts           | 68 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sa8540p.dtsi              |  3 +
+ arch/arm64/configs/defconfig                       |  1 +
+ drivers/clk/qcom/gdsc.c                            | 12 +++-
+ drivers/clk/qcom/gpucc-sc8280xp.c                  |  1 +
+ drivers/pmdomain/qcom/rpmhpd.c                     |  1 -
+ 7 files changed, 99 insertions(+), 3 deletions(-)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20231220-sa8295p-gpu-51c5f343e3ec
+
+Best regards,
 -- 
-2.43.0
+Bjorn Andersson <quic_bjorande@quicinc.com>
 
 
