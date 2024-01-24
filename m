@@ -1,206 +1,163 @@
-Return-Path: <linux-clk+bounces-2822-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2824-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1345783A747
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 11:54:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B8083A87A
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 12:49:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0A6B284670
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 10:54:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5E47B2114F
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 11:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BBFE1A286;
-	Wed, 24 Jan 2024 10:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CBFB5B1FE;
+	Wed, 24 Jan 2024 11:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ZQPhwcOO"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FA3199DC
-	for <linux-clk@vger.kernel.org>; Wed, 24 Jan 2024 10:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D455820B
+	for <linux-clk@vger.kernel.org>; Wed, 24 Jan 2024 11:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706093673; cv=none; b=UYM+Drm1vhil+h/zHaoVWjeDexC8UYAROCRZD73Aw7AQQ4FaKifF4LzkycGn06GATIJJLkV836mECYaTUFxZgD3CE7o0wf+LZpr0yq5JShTjiz6p5wVr/vpJaDa1RlFPl8NJU6y8vBgtNxigwkNXQf5MhvdqBi6gcMfheBQdocY=
+	t=1706096865; cv=none; b=lJMfxQ2X/klhrJV90NQL0K89fnIDAI2YKZ51sp7/zhoYLKNKbHhOtQMZDhPn9PLQhe9WfCnXAMIBFlkD3sC4ZHxa3F9pyaaZGMuAUd2fabUKgRRuAI9aJaScRk0ojs8Pahf6PtLDTX1Cc6YJu3eF7xhmhFK5giTa3vYmTpQfQb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706093673; c=relaxed/simple;
-	bh=lKdiVruIzPpYmtbsDhdv0Tfge2qMRNvAnOAyUZusIqI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LUxieoqwU0Kpxb/43Acy5vZUnvOLJbR1+Tuy6uDEM9z9lfotlOcdoD0hpIM6hFh/EDVPH8GNq3ixAYFCBD5ejD+OuvZVJRK3y7AWhDpPRceOJsUxlz/AnKrflGZhYWbhIOGI95/ctU/gq+lgJ0KjL3nWR+GQK2Th8tWmWseygFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSatc-00013p-UF; Wed, 24 Jan 2024 11:54:16 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSatb-0022P4-5Z; Wed, 24 Jan 2024 11:54:15 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSatb-00086H-0J;
-	Wed, 24 Jan 2024 11:54:15 +0100
-Message-ID: <82bde47d48ec2962d69d9e4edde6d6d96fcbbd65.camel@pengutronix.de>
-Subject: Re: [PATCH v3 09/17] reset: eyeq5: add platform driver
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Gregory
- CLEMENT <gregory.clement@bootlin.com>, Michael Turquette
- <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Linus Walleij
- <linus.walleij@linaro.org>,  =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?=
- <rafal@milecki.pl>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-  linux-gpio@vger.kernel.org
-Date: Wed, 24 Jan 2024 11:54:14 +0100
-In-Reply-To: <20240123-mbly-clk-v3-9-392b010b8281@bootlin.com>
-References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
-	 <20240123-mbly-clk-v3-9-392b010b8281@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1706096865; c=relaxed/simple;
+	bh=dwUFUgXnc97o1JhfPJM4lmSZq785hcoEF4F3egx8Bq4=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=hHx91DHRvhcTqNxZr5FmzasvkjeACreZthdEdGsSzKYZ5ZUwd2MiOBQLfa0lz0bjebqUR8HNu+5CLt1L4BQ/PYFKbB3yg4p1vIsIKdd9w7yBnbcTc+NyMtsHEkazxsKOIiuaM084SjR+A+KEaw6Ei0b3JmUUPmS1iNGOQcSb86M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ZQPhwcOO; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240124114740epoutp01d81413d7b425db7ad393a9c722451d32~tRg42cXOs0196301963epoutp01j
+	for <linux-clk@vger.kernel.org>; Wed, 24 Jan 2024 11:47:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240124114740epoutp01d81413d7b425db7ad393a9c722451d32~tRg42cXOs0196301963epoutp01j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1706096860;
+	bh=FAgkRhdAC59JFAtm6cZa0lcuph+thmUnykW5y5DcQUI=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=ZQPhwcOOfJhIjaSXLhqK2zJoqczs0rv2migJCof/kn3ULLzW8g0KCQYcFiCl24kGr
+	 uQUujZUwy26sFlTqUSfNSSB09LOAnXeUEl5JrqQwmhnA3N3t4owtlU5n8jucRMlSI/
+	 qoZeie0nFR4yq6jC7TUg6KVlsgTyPgUEnJHxS4jQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20240124114740epcas5p13e64a477aeab25808dfb39ee2f01be06~tRg4XzjGz0304803048epcas5p1s;
+	Wed, 24 Jan 2024 11:47:40 +0000 (GMT)
+Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4TKhyy3jbvz4x9Pv; Wed, 24 Jan
+	2024 11:47:38 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	11.D5.19369.AD8F0B56; Wed, 24 Jan 2024 20:47:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240124103850epcas5p48fcb1e92172efd246b8292a294740dd1~tQkx79-pI2047220472epcas5p47;
+	Wed, 24 Jan 2024 10:38:50 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240124103850epsmtrp126601239072c5bb26298f097af4e18d4~tQkx6KDW32198721987epsmtrp1T;
+	Wed, 24 Jan 2024 10:38:50 +0000 (GMT)
+X-AuditID: b6c32a50-c99ff70000004ba9-ff-65b0f8da8882
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	04.6C.08817.9B8E0B56; Wed, 24 Jan 2024 19:38:49 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+	[107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240124103847epsmtip26853ef4be44a9903676df0f3deffbbfd~tQkvY2buE0212502125epsmtip2q;
+	Wed, 24 Jan 2024 10:38:47 +0000 (GMT)
+From: Shradha Todi <shradha.t@samsung.com>
+To: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Cc: mturquette@baylibre.com, sboyd@kernel.org, jingoohan1@gmail.com,
+	lpieralisi@kernel.org, kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+	linux@armlinux.org.uk, m.szyprowski@samsung.com,
+	manivannan.sadhasivam@linaro.org, pankaj.dubey@samsung.com, Shradha Todi
+	<shradha.t@samsung.com>
+Subject: [PATCH v4 0/2] Add helper function to get and enable all bulk
+ clocks
+Date: Wed, 24 Jan 2024 16:08:36 +0530
+Message-Id: <20240124103838.32478-1-shradha.t@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKJsWRmVeSWpSXmKPExsWy7bCmpu6tHxtSDT7cEbN4MG8bm8WSpgyL
+	FV9mslvsfb2V3aKh5zerxabH11gtPvbcY7W4vGsOm8XZecfZLGac38dkcWjqXkaLlj8tLBZr
+	j9xlt7jb0slqcfGUq8WirV/YLf7v2cFu8e/aRhaL3sO1DsIel69dZPZ4f6OV3WPnrLvsHgs2
+	lXpsWtXJ5nHn2h42jydXpjN5bF5S79G3ZRWjx+dNcgFcUdk2GamJKalFCql5yfkpmXnptkre
+	wfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBvKSmUJeaUAoUCEouLlfTtbIryS0tSFTLy
+	i0tslVILUnIKTAr0ihNzi0vz0vXyUkusDA0MjEyBChOyMw7828Ja8JCz4tmrlAbGD+xdjJwc
+	EgImElOamtm6GLk4hAT2MErcOtXNBOF8YpQ48e4wO4TzjVFiVuNTli5GDrCWr1v9IOJ7GSX+
+	fullgXBamSQ+7uoCm8smoCXR+LWLGSQhIrAYaO6OzawgDrPAEyaJJTf+soBUCQv4Szw5uo8V
+	xGYRUJX4ufwzWDevgJXE1O2f2SAulJdYveEA2CQJgbUcEh3Nk6ESLhKf9r9lgrCFJV4d3wL1
+	kpTEy/42KDtdYuXmGcwQdo7Et81LoOrtJQ5cmQP2D7OApsT6XfoQYVmJqafWgZUwC/BJ9P5+
+	AlXOK7FjHoytLPHl7x4WCFtSYt6xy6wQtofEjLfTwGqEBGIlFixuZZ/AKDsLYcMCRsZVjFKp
+	BcW56anJpgWGunmp5fCoSs7P3cQITq9aATsYV2/4q3eIkYmD8RCjBAezkgjvDcl1qUK8KYmV
+	ValF+fFFpTmpxYcYTYGBNpFZSjQ5H5jg80riDU0sDUzMzMxMLI3NDJXEeV+3zk0REkhPLEnN
+	Tk0tSC2C6WPi4JRqYOrwDwhQVk6sj0hu0bSWLltwNcQ+/X3p/ocbemoqnF6+v787SLNI+/XT
+	uYe+7LT5Zm/tI3Wl7LjhsicGy9/1XTv508nvlujUmdH3+TYvFQniV1u9zeXegbDwqFuOb+yO
+	7ebNeqLi0VR7Mq4t4a192Ly3BVrVc3cvcI13n37p8TyB28t1LwWdty+Lm7KkZq5brkCFlEtd
+	fS7Ldwmh4xu4P/VKPXhx9PYb1fNXAnz7sp9NtV4RMWnOSutPkZ51IVcfC7Guk8oy7dO90rz8
+	hvXCj4wZOxvE1X6vfO8lvknni5jwec/N+5ddmXGzw4v36f+vK0WNfL2f9fxrN+t/WXvGePFG
+	jV7937w8Umax7zq5LJRYijMSDbWYi4oTAd8/t8c4BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsWy7bCSvO7OFxtSDS7ssbJ4MG8bm8WSpgyL
+	FV9mslvsfb2V3aKh5zerxabH11gtPvbcY7W4vGsOm8XZecfZLGac38dkcWjqXkaLlj8tLBZr
+	j9xlt7jb0slqcfGUq8WirV/YLf7v2cFu8e/aRhaL3sO1DsIel69dZPZ4f6OV3WPnrLvsHgs2
+	lXpsWtXJ5nHn2h42jydXpjN5bF5S79G3ZRWjx+dNcgFcUVw2Kak5mWWpRfp2CVwZB/5tYS14
+	yFnx7FVKA+MH9i5GDg4JAROJr1v9uhi5OIQEdjNKzH14gqWLkRMoLinx+eI6JghbWGLlv+fs
+	EEXNTBLt/w6wgSTYBLQkGr92MYMkRASWM0r8PPmUCcRhFvjCJDHp4S4mkBXCAr4SJ2+VgjSw
+	CKhK/Fz+mR3E5hWwkpi6/TMbxAZ5idUbDjBPYORZwMiwilEytaA4Nz232LDAKC+1XK84Mbe4
+	NC9dLzk/dxMjOMi1tHYw7ln1Qe8QIxMH4yFGCQ5mJRHeG5LrUoV4UxIrq1KL8uOLSnNSiw8x
+	SnOwKInzfnvdmyIkkJ5YkpqdmlqQWgSTZeLglGpg0s75XbaO4/P+SR94++7fz1pySv3WzRXN
+	99QXM1qFSc4MVfHjv/KDIYWj6sad6F19UrKJf/K2pgRbnrvy5BVXYlX7jcrSCIkVf9wPfdhZ
+	NC0t9PexdfLPHz5fbppvqXxFeIGyoJ/4+80c4eu6GpLXd6wyTPWMYOd9Pbn4u1fx3J/WZad+
+	+gc9eTZvWlDkosQdOrKNG2WnNnhsalrou3nxsp3M9+7YNAWI/uVPOZ11+912xn98+ZrXN+1M
+	M68u/SKzNPnlRg7WWTOyFn29e80p6fgqm2u5Gb+mHPbx5T33nLe6uDZta59p06Rl7QXmUm2m
+	Cwx/Xnjw7njk++W/Pk/YZq11ZZH2waMc+3Vqv12Z+EeJpTgj0VCLuag4EQAt8+rK4QIAAA==
+X-CMS-MailID: 20240124103850epcas5p48fcb1e92172efd246b8292a294740dd1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240124103850epcas5p48fcb1e92172efd246b8292a294740dd1
+References: <CGME20240124103850epcas5p48fcb1e92172efd246b8292a294740dd1@epcas5p4.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-On Di, 2024-01-23 at 19:46 +0100, Th=C3=A9o Lebrun wrote:
-[...]
-> diff --git a/drivers/reset/reset-eyeq5.c b/drivers/reset/reset-eyeq5.c
-> new file mode 100644
-> index 000000000000..2217e42e140b
-> --- /dev/null
-> +++ b/drivers/reset/reset-eyeq5.c
-> @@ -0,0 +1,383 @@
-[...]
+Create a managed API wrapper to get all the bulk clocks and enable them
+as it is a very common practice in many drivers. The second patch uses
+this API to adapt to clk_bulk_* APIs in the exynos driver.
+v1:
+ - https://lore.kernel.org/lkml/20231009062216.6729-1-shradha.t@samsung.com/
+v2:
+ - https://lore.kernel.org/lkml/20231115065621.27014-1-shradha.t@samsung.com/
+ - Addressed Manivannan's comments to improve patch
+v3:
+ - https://lore.kernel.org/all/20240110110115.56270-1-shradha.t@samsung.com/
+ - Took Marek's suggestion to make a common bulk clk wrapper and use it in
+   the exynos driver
+v4:
+ - Addressed Alim and Manivannan's comments
+ - Changed enabled->enable and disabled->disable in function name
+ - Remove num_clks out parameter as it is not required by user
+ - Removed exit callback and used function name directly in release
 
-> +static int eq5r_assert(struct reset_controller_dev *rcdev, unsigned long=
- id)
-> +{
-> +	struct eq5r_private *priv =3D dev_get_drvdata(rcdev->dev);
+Shradha Todi (2):
+  clk: Provide managed helper to get and enable bulk clocks
+  PCI: exynos: Adapt to clk_bulk_* APIs
 
-rcdev is contained in priv, you can just use container_of instead of
-chasing pointers around.
+ drivers/clk/clk-devres.c                | 40 ++++++++++++++++++
+ drivers/pci/controller/dwc/pci-exynos.c | 54 ++-----------------------
+ include/linux/clk.h                     | 24 +++++++++++
+ 3 files changed, 68 insertions(+), 50 deletions(-)
 
-> +	u32 offset =3D id & GENMASK(7, 0);
-> +	u32 domain =3D id >> 8;
-> +	int ret;
-> +
-> +	if (WARN_ON(domain >=3D EQ5R_DOMAIN_COUNT))
-> +		return -EINVAL;
-
-Reset controls with domain >=3D EQ5R_DOMAIN_COUNT are already weeded out
-during request by of_xlate, so this check is not necessary.
-
-> +	dev_dbg(rcdev->dev, "%u-%u: assert request\n", domain, offset);
-> +
-> +	mutex_lock(&priv->mutexes[domain]);
-> +	_eq5r_assert(priv, domain, offset);
-> +	ret =3D _eq5r_busy_wait(priv, rcdev->dev, domain, offset, true);
-> +	mutex_unlock(&priv->mutexes[domain]);
-> +
-> +	return ret;
-
-Consider using guard(mutex)(&priv->mutexes[domain]) from
-linux/cleanup.h to automatically unlock on return.
-
-[...]
-> +static int eq5r_reset(struct reset_controller_dev *rcdev, unsigned long =
-id)
-
-Is this used by anything? If unused, I'd prefer this not to be
-implemented. If it is used, is no delay required between assert and
-deassert by any consumer?
-
-> +{
-> +	struct device *dev =3D rcdev->dev;
-> +	struct eq5r_private *priv =3D dev_get_drvdata(dev);
-> +	u32 offset =3D id & GENMASK(7, 0);
-> +	u32 domain =3D id >> 8;
-> +	int ret;
-> +
-> +	if (WARN_ON(domain >=3D EQ5R_DOMAIN_COUNT))
-> +		return -EINVAL;
-> +
-> +	dev_dbg(dev, "%u-%u: reset request\n", domain, offset);
-> +
-> +	mutex_lock(&priv->mutexes[domain]);
-> +
-> +	_eq5r_assert(priv, domain, offset);
-> +	ret =3D _eq5r_busy_wait(priv, dev, domain, offset, true);
-> +	if (ret) /* don't let an error disappear silently */
-> +		dev_warn(dev, "%u-%u: reset assert failed: %d\n",
-> +			 domain, offset, ret);
-
-Why not return the error though?
-
-> +	_eq5r_deassert(priv, domain, offset);
-> +	ret =3D _eq5r_busy_wait(priv, dev, domain, offset, false);
-> +
-> +	mutex_unlock(&priv->mutexes[domain]);
-> +
-> +	return ret;
-> +}
-[...]
-> +static int eq5r_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev =3D &pdev->dev;
-> +	struct device_node *np =3D dev->of_node;
-> +	struct device_node *parent_np =3D of_get_parent(np);
-> +	struct eq5r_private *priv;
-> +	int ret, i;
-> +
-> +	priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
-
-Using devm_kzalloc() avoids leaking this on error return or driver
-unbind.
-
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	dev_set_drvdata(dev, priv);
-> +
-> +	priv->olb =3D ERR_PTR(-ENODEV);
-> +	if (parent_np) {
-> +		priv->olb =3D syscon_node_to_regmap(parent_np);
-> +		of_node_put(parent_np);
-> +	}
-> +	if (IS_ERR(priv->olb))
-> +		return PTR_ERR(priv->olb);
-> +
-> +	for (i =3D 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		mutex_init(&priv->mutexes[i]);
-> +
-> +	priv->rcdev.ops =3D &eq5r_ops;
-> +	priv->rcdev.owner =3D THIS_MODULE;
-> +	priv->rcdev.dev =3D dev;
-> +	priv->rcdev.of_node =3D np;
-> +	priv->rcdev.of_reset_n_cells =3D 2;
-> +	priv->rcdev.of_xlate =3D eq5r_of_xlate;
-> +
-> +	priv->rcdev.nr_resets =3D 0;
-> +	for (i =3D 0; i < EQ5R_DOMAIN_COUNT; i++)
-> +		priv->rcdev.nr_resets +=3D __builtin_popcount(eq5r_valid_masks[i]);
-> +
-> +	ret =3D reset_controller_register(&priv->rcdev);
-
-Similarly, use devm_reset_controller_register() or disable driver
-unbind with suppress_bind_attrs.
-
-regards
-Philipp
+-- 
+2.17.1
 
 
