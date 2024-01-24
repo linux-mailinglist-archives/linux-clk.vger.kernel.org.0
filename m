@@ -1,323 +1,216 @@
-Return-Path: <linux-clk+bounces-2804-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2801-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39CF083A410
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 09:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B05583A29F
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 08:05:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F24E1C212CE
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 08:23:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 457D41C21A56
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jan 2024 07:05:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E8A17565;
-	Wed, 24 Jan 2024 08:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4004E12E63;
+	Wed, 24 Jan 2024 07:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="EKGpWJEF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PBpEhQrr"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629F017571
-	for <linux-clk@vger.kernel.org>; Wed, 24 Jan 2024 08:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FC914AB3
+	for <linux-clk@vger.kernel.org>; Wed, 24 Jan 2024 07:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706084565; cv=none; b=cppulDXzaUXZ+9C/r9uMTZMZQ9dRnJS1HiAny5xFH3SxAsBDre2/gviHp87L31X7qO/NN8+XehIa5IfxN/WNXaTnR5t5tdFHlQVL6J8gJcVIYPoSgmNcVng4yovvFRiwrX30m6Gp1u9RVS9fRK/dVsYXn4FwnxbydtBRnZCzQ2k=
+	t=1706079944; cv=none; b=fr8ZhqZTO/BorROoEuEsjf2YriMf+zewGWe+FE25N3IoRCWJsw/7SKtygbK8nUXD7jEKLwSCHtxqlPPCUokb79QXw0sUisuew1MmSZK92UgPzJNrGeY135/B0Ji24yzBmlNei/T3bPqaCOAO1omuXou7pKhTOmYZwh9U4n86vXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706084565; c=relaxed/simple;
-	bh=p9xxsKE47BRCCzcGZBCseP1f0ej9KUvrtDS/BG/oTrE=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=WEcFbV7IAYxljNMMZ/f5IFDcO8FVB8dl/astAjpHsv2OSy8lypfbxkAzGBIpK3Oz/KRcvtQKYH/CWksBOxu5p4+8Afie9DqS8anySuGFl7Azg4C/rEesgFqkUKQJ2P/TRULlUkQnOWIMjtJPqHeCb/buUQDfxrrOT3ZK8qAJ3CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=EKGpWJEF; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240124082241epoutp0366c733d8bfba0b9934189fcee4913e64~tOt6Yczh71207012070epoutp036
-	for <linux-clk@vger.kernel.org>; Wed, 24 Jan 2024 08:22:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240124082241epoutp0366c733d8bfba0b9934189fcee4913e64~tOt6Yczh71207012070epoutp036
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1706084561;
-	bh=R5VbhjhJVO8m4BgjCBAU+C1rYvkYBd3wZ2ug5Ml/88E=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=EKGpWJEF0zpSo81OWNqMSljiRQ32fWPfc6KPNlJVyWLiQ56ITJNVmTM44Y3rKFLR+
-	 xN86nOLXqNZU/rnZO1AdgOjfrZkRfMN0tUPOutAXlrkoMBvw3goCQXQdZpU4oR2EPI
-	 TfMVhRN2gu7tbW9RBlJh8vTLyJP4d7XFuBf9fFl0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20240124082241epcas5p1bd3312b6a923e5ba85857413994a2308~tOt55RoXl1857318573epcas5p1J;
-	Wed, 24 Jan 2024 08:22:41 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.174]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4TKcQR2dMcz4x9Pv; Wed, 24 Jan
-	2024 08:22:39 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	C4.B5.19369.FC8C0B56; Wed, 24 Jan 2024 17:22:39 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240124065319epcas5p12681e301fd10a8da9f063f9fc1581d01~tNf4U_fHF0975209752epcas5p1N;
-	Wed, 24 Jan 2024 06:53:19 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240124065319epsmtrp1f32bb73c3b9651595741bfd10bd3be1e~tNf4TOi9i2267022670epsmtrp1a;
-	Wed, 24 Jan 2024 06:53:19 +0000 (GMT)
-X-AuditID: b6c32a50-c99ff70000004ba9-4f-65b0c8cfaa23
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	54.55.08755.FD3B0B56; Wed, 24 Jan 2024 15:53:19 +0900 (KST)
-Received: from FDSFTE462 (unknown [107.122.81.248]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20240124065316epsmtip2581a492f05445697e6023d189fec380a~tNf1tsIX72736927369epsmtip2K;
-	Wed, 24 Jan 2024 06:53:16 +0000 (GMT)
-From: "Shradha Todi" <shradha.t@samsung.com>
-To: "'Manivannan Sadhasivam'" <manivannan.sadhasivam@linaro.org>
-Cc: <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pci@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-samsung-soc@vger.kernel.org>, <mturquette@baylibre.com>,
-	<sboyd@kernel.org>, <jingoohan1@gmail.com>, <lpieralisi@kernel.org>,
-	<kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-	<krzysztof.kozlowski@linaro.org>, <alim.akhtar@samsung.com>,
-	<linux@armlinux.org.uk>, <m.szyprowski@samsung.com>,
-	<pankaj.dubey@samsung.com>
-In-Reply-To: <20240120150303.GB5405@thinkpad>
-Subject: RE: [PATCH v3 1/2] clk: Provide managed helper to get and enable
- bulk clocks
-Date: Wed, 24 Jan 2024 12:23:15 +0530
-Message-ID: <05ea01da4e92$0357d310$0a077930$@samsung.com>
+	s=arc-20240116; t=1706079944; c=relaxed/simple;
+	bh=Zj5tnw4jopb0rTKmkovPBqBq8nwSE/xJiBlkRKTkq6M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=US2AipmguYCsBIfkDAMbXRyNBbZ6I4eG3lphe00L4TH4SfruVCAUUhqnr+9msEriDEPupxbdd9OOdCdbU0kXbHPGHU56tCxqNVgRCoVMPBSGFJdmZzn6t0JcEmW4VeQbo5gD1U7mMpk+vQyOMRUKUlZqLVMktJPr1VVMnINkJ1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PBpEhQrr; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55a86795a3bso5025687a12.1
+        for <linux-clk@vger.kernel.org>; Tue, 23 Jan 2024 23:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706079941; x=1706684741; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cNh642ztM9/JIoi6gRH/DDCNqKXOoK1COb5sZK4/5nY=;
+        b=PBpEhQrrHgi9HZbnr5XsKmpdB6EmsDrwEhXugKSQSvPDEymgxdMb1hzpatiKdvNalY
+         h9LQ2NQLCwQRivcUMRchKwFxTot75840OcR3CxszpH9K3V0utr6vMXaCh4JMC3t5AUFG
+         jr1btrg4RXgEbu9/f/HobYIj7DRMPb752D6ZtLdCf79RuKhB/zpjS53NeyVxwujSPl9Y
+         JIOKRc3sMRMFBNmgBb97OrXh3MQ8MhxqiFrgdE+MEf5XwWaerCBItbdi1XOsWC2c1y9R
+         Q0ds+LouvdV+iOOcuvQYqCHqN3Vqkxd49IZ//D9MM6buxd/UJOI2lH21izgNcvSQFwnp
+         k7Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706079941; x=1706684741;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cNh642ztM9/JIoi6gRH/DDCNqKXOoK1COb5sZK4/5nY=;
+        b=rDauVuGp+a4hkqoPF07kwHNIzE+WBx4Ni//E67hmP7646a30MZhI60bmtw07JZt35n
+         1IkeCUXbOCkZNscCL7Ezj5Is8kF2WSyVzvIb68nVWx8ENox9jGq7QauXD3Mou9zV0PZ2
+         KcMaPDnen2gsg7RSRC/7OyNI6lVXfmMu/gNAQCUJH67LOUmKi2nJWjtmX98OB8g61qY4
+         yGgbICwEq3w5B2WBeShz6ljsON+KELbl5ujSlhru4YdTZGYwEz+Eq+odLT1vUIZ79AXD
+         9bYc/7EXqbEkyEhttGe+uw2ea5U7DGRYaJRk7YckpidOQGiav0ev61wLm3ySgOnuuhIU
+         r11g==
+X-Gm-Message-State: AOJu0YzqQNaCFEE/YwmJxr2Y+IS5o6ukR0jMFt69jVdoARV6meqGJEIN
+	I5nIjdkeY2od3opxB0SVMYI8QeUqvSPGXjFA/BbEQTsAWabHkQ/8IjhByE9ZZLI=
+X-Google-Smtp-Source: AGHT+IE+B/bzZTkN3YO9vqMT1INobm1x/DmdeR4af9NrfWeqRBgmTbxK71v+Fgo6vHAYR38oOWNrKg==
+X-Received: by 2002:a05:6402:1358:b0:55c:ccd4:7cc3 with SMTP id y24-20020a056402135800b0055cccd47cc3mr81823edw.49.1706079940797;
+        Tue, 23 Jan 2024 23:05:40 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.215.66])
+        by smtp.gmail.com with ESMTPSA id ch27-20020a0564021bdb00b0055c4a251205sm2823463edb.90.2024.01.23.23.05.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 23:05:39 -0800 (PST)
+Message-ID: <127fd51b-cd64-4e00-99d6-7be9b79f2dcc@linaro.org>
+Date: Wed, 24 Jan 2024 08:05:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQK3Yhu837gawrdP2S3E1hwP53Jf7wFhoUR7AWI/r/kCQ7XGLK8GH1bw
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBJsWRmVeSWpSXmKPExsWy7bCmuu75ExtSDT53CFk8mLeNzWJJU4bF
-	ii8z2S32vt7KbtHQ85vVYtPja6wWH3vusVpc3jWHzeLsvONsFjPO72OyODR1L6NFy58WFou1
-	R+6yW9xt6WS1uHjK1WLR1i/sFv/37GC3+HdtI4uDkMflaxeZPd7faGX32DnrLrvHgk2lHptW
-	dbJ53Lm2h83jyZXpTB6bl9R79G1ZxejxeZNcAFdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8
-	qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0EtKCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul
-	1IKUnAKTAr3ixNzi0rx0vbzUEitDAwMjU6DChOyMOUvXMhasMKiYtn8bcwPjFPUuRk4OCQET
-	iVMfvjOB2EICexglLu2QgLA/MUrc7zPuYuQCsr8xSkxdv4QdpuHL8pmsEIm9jBIzp3ayQzgv
-	GCUWbZnPCFLFJqAj8eTKH2YQW0TAQaL97ScWkCJmgfvMEhd6z4Pt4xTQlbj6fRMriC0sEC7x
-	88pPMJtFQFVi8tb5YDavgKXEurP/WCBsQYmTM5+A2cwC2hLLFr5mhjhJQeLn02WsEMvcJJ6c
-	bmKGqBGXOPqzhxlksYRAO6fEoQXToX5wkVhx+D0ThC0s8er4Fqi4lMTL/jYoO11i5eYZUAty
-	JL5tXgJVby9x4MocoCM4gBZoSqzfpQ8RlpWYemodE8RePone30+gynkldsyDsZUlvvzdwwJh
-	S0rMO3aZdQKj0iwkr81C8tosJC/MQti2gJFlFaNUakFxbnpqsmmBoW5eajk8xpPzczcxgpO8
-	VsAOxtUb/uodYmTiYDzEKMHBrCTCe0NyXaoQb0piZVVqUX58UWlOavEhRlNggE9klhJNzgfm
-	mbySeEMTSwMTMzMzE0tjM0Mlcd7XrXNThATSE0tSs1NTC1KLYPqYODilGpiydTwcpogvMMz5
-	tF3kyNVdr9jDV35Ie9rGprsqsX/Oaw39bd7thyd/vXze01T66pJ50hKXK5f6rj278mTt2jvi
-	i7zE2VVt63QzP977xZS4TvzS45Rdu8S+7tN/ah1rOe3wTZMbr0Or+S8qx94y0evXT57wOcz2
-	SdlykdIJBzx6yzRN6jWeR56LcYnu6Kxe8qvnRaNgXfkxWcdVPe6Zm/Yfdjnc1xmxMkZMtJql
-	cnpja5raXHvfjGiF4F9cHd53rXkyVY5Wtf3lEA/mujjZ+Plr1jV225o09e5+ntESYa994E79
-	y868KUt+lWkfa49eUe6yZuH2Mt27khMuXk/I5DpzN2Ri9zmxyd3BT9K7OZVYijMSDbWYi4oT
-	AZRMtxZ7BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIIsWRmVeSWpSXmKPExsWy7bCSvO79zRtSDX6uYbV4MG8bm8WSpgyL
-	FV9mslvsfb2V3aKh5zerxabH11gtPvbcY7W4vGsOm8XZecfZLGac38dkcWjqXkaLlj8tLBZr
-	j9xlt7jb0slqcfGUq8WirV/YLf7v2cFu8e/aRhYHIY/L1y4ye7y/0crusXPWXXaPBZtKPTat
-	6mTzuHNtD5vHkyvTmTw2L6n36NuyitHj8ya5AK4oLpuU1JzMstQifbsErozlvf9YCxbpV5zY
-	8ZitgfG/ahcjJ4eEgInEl+UzWbsYuTiEBHYzSuy4+IEFIiEp8fniOiYIW1hi5b/n7BBFzxgl
-	Dp84C5ZgE9CReHLlDzOILSLgINH+9hMLSBGzwEdmic2zf0KNvcMoseraCrAqTgFdiavfN7GC
-	2MICoRIXG9exgdgsAqoSk7fOB4vzClhKrDv7jwXCFpQ4OfMJmM0soC3x9OZTOHvZwtfMEOcp
-	SPx8uowV4go3iSenm5ghasQljv7sYZ7AKDwLyahZSEbNQjJqFpKWBYwsqxglUwuKc9Nziw0L
-	DPNSy/WKE3OLS/PS9ZLzczcxgmNdS3MH4/ZVH/QOMTJxMB5ilOBgVhLhvSG5LlWINyWxsiq1
-	KD++qDQntfgQozQHi5I4r/iL3hQhgfTEktTs1NSC1CKYLBMHp1QDU7eL2yuRM6dUum5fzlP4
-	3+9UVLD55Qr9N43s9ufX31k932J9CGN3+Bppo5Dt/gbsVYtnv7ode/FQ84KFexvmLLNW+sZ0
-	PqrubVyHgtusvq3rAs0CWHYKnc3tXS5flrZ6o75p40Rj2a28smmXJxxs/NHsmTthcmlPVJHd
-	9UeFZ1ZwBy+X37thBjd3vSRb4ZqdKb7HHRucm5/U3lzBXr69KujACsvIzGnFcz48lzAu7RSx
-	3b088zb3knPZZ28ECHxY+endC2n2/ezcUYKvLn27aXVshUN5tsSrp06Gq1kemFz2EJ+VdOD7
-	ywt7+Asyon9OYpt5cOPKOy+3z3nw/H27gejEimLvFdU7QnUjFnSLRCuxFGckGmoxFxUnAgAV
-	H02gZAMAAA==
-X-CMS-MailID: 20240124065319epcas5p12681e301fd10a8da9f063f9fc1581d01
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240110110156epcas5p36bac4093be0fa6eaa501d7eaed4d43d3
-References: <20240110110115.56270-1-shradha.t@samsung.com>
-	<CGME20240110110156epcas5p36bac4093be0fa6eaa501d7eaed4d43d3@epcas5p3.samsung.com>
-	<20240110110115.56270-2-shradha.t@samsung.com>
-	<20240120150303.GB5405@thinkpad>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 08/17] clk: eyeq5: add platform driver
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Linus Walleij <linus.walleij@linaro.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <rafal@milecki.pl>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org
+References: <20240123-mbly-clk-v3-0-392b010b8281@bootlin.com>
+ <20240123-mbly-clk-v3-8-392b010b8281@bootlin.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240123-mbly-clk-v3-8-392b010b8281@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On 23/01/2024 19:46, Théo Lebrun wrote:
+> Add the Mobileye EyeQ5 clock controller driver. It might grow to add
+> support for other platforms from Mobileye.
+> 
+> It handles 10 read-only PLLs derived from the main crystal on board. It
+> exposes a table-based divider clock used for OSPI. Other platform
+> clocks are not configurable and therefore kept as fixed-factor
+> devicetree nodes.
+> 
+> Two PLLs are required early on and are therefore registered at
+> of_clk_init(). Those are pll-cpu for the GIC timer and pll-per for the
+> UARTs.
+> 
+
+
+> +#define OLB_PCSR1_RESET				BIT(0)
+> +#define OLB_PCSR1_SSGC_DIV			GENMASK(4, 1)
+> +/* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
+> +#define OLB_PCSR1_SPREAD			GENMASK(9, 5)
+> +#define OLB_PCSR1_DIS_SSCG			BIT(10)
+> +/* Down-spread or center-spread */
+> +#define OLB_PCSR1_DOWN_SPREAD			BIT(11)
+> +#define OLB_PCSR1_FRAC_IN			GENMASK(31, 12)
+> +
+> +static struct clk_hw_onecell_data *eq5c_clk_data;
+> +static struct regmap *eq5c_olb;
+
+Drop these two. No file-scope regmaps for drivers. Use private container
+structures.
+
+...
+
+> +static void __init eq5c_init(struct device_node *np)
+> +{
+> +	struct device_node *parent_np = of_get_parent(np);
+> +	int i, ret;
+> +
+> +	eq5c_clk_data = kzalloc(struct_size(eq5c_clk_data, hws, EQ5C_NB_CLKS),
+> +				GFP_KERNEL);
+> +	if (!eq5c_clk_data) {
+> +		ret = -ENOMEM;
+> +		goto err;
+> +	}
+> +
+> +	eq5c_clk_data->num = EQ5C_NB_CLKS;
+> +
+> +	/*
+> +	 * Mark all clocks as deferred. We register some now and others at
+> +	 * platform device probe.
+> +	 */
+> +	for (i = 0; i < EQ5C_NB_CLKS; i++)
+> +		eq5c_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+> +
+> +	/*
+> +	 * Currently, if OLB is not available, we log an error, fail init then
+
+How it could be not available? Only with broken initcall ordering. Fix
+your initcall ordering and then simplify all this weird code.
+
+> +	 * fail probe. We might want to change this behavior and assume all
+> +	 * clocks are in bypass mode; this is what is being done in the vendor
+> +	 * driver.
+> +	 *
+> +	 * It is unclear if there are valid situations where the OLB region
+> +	 * would be inaccessible.
 
 
 
-> -----Original Message-----
-> From: Manivannan Sadhasivam <manivannan.sadhasivam=40linaro.org>
-> Sent: 20 January 2024 20:33
-> To: Shradha Todi <shradha.t=40samsung.com>
-> Cc: linux-clk=40vger.kernel.org; linux-kernel=40vger.kernel.org; linux-
-> pci=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; linux-sams=
-ung-
-> soc=40vger.kernel.org; mturquette=40baylibre.com; sboyd=40kernel.org;
-> jingoohan1=40gmail.com; lpieralisi=40kernel.org; kw=40linux.com; robh=40k=
-ernel.org;
-> bhelgaas=40google.com; krzysztof.kozlowski=40linaro.org;
-> alim.akhtar=40samsung.com; linux=40armlinux.org.uk;
-> m.szyprowski=40samsung.com
-> Subject: Re: =5BPATCH v3 1/2=5D clk: Provide managed helper to get and en=
-able bulk
-> clocks
->=20
-> On Wed, Jan 10, 2024 at 04:31:14PM +0530, Shradha Todi wrote:
-> > Provide a managed devm_clk_bulk* wrapper to get and enable all bulk
-> > clocks in order to simplify drivers that keeps all clocks enabled for
-> > the time of driver operation.
-> >
-> > Suggested-by: Marek Szyprowski <m.szyprowski=40samsung.com>
-> > Signed-off-by: Shradha Todi <shradha.t=40samsung.com>
-> > ---
-> >  drivers/clk/clk-devres.c =7C 41
-> ++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/clk.h      =7C 25 ++++++++++++++++++++++++
-> >  2 files changed, 66 insertions(+)
-> >
-> > diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c index
-> > 4fb4fd4b06bd..05b0ff4bc1d4 100644
-> > --- a/drivers/clk/clk-devres.c
-> > +++ b/drivers/clk/clk-devres.c
-> > =40=40 -102,6 +102,7 =40=40
-> EXPORT_SYMBOL_GPL(devm_clk_get_optional_enabled);
-> >  struct clk_bulk_devres =7B
-> >  	struct clk_bulk_data *clks;
-> >  	int num_clks;
-> > +	void (*exit)(int num_clks, const struct clk_bulk_data *clks);
-> >  =7D;
-> >
-> >  static void devm_clk_bulk_release(struct device *dev, void *res) =40=
-=40
-> > -182,6 +183,46 =40=40 int __must_check devm_clk_bulk_get_all(struct dev=
-ice
-> > *dev,  =7D  EXPORT_SYMBOL_GPL(devm_clk_bulk_get_all);
-> >
-> > +static void devm_clk_bulk_release_all_enabled(struct device *dev,
-> > +void *res) =7B
-> > +	struct clk_bulk_devres *devres =3D res;
-> > +
-> > +	if (devres->exit)
-> > +		devres->exit(devres->num_clks, devres->clks);
-> > +
-> > +	clk_bulk_put_all(devres->num_clks, devres->clks); =7D
-> > +
-> > +int __must_check devm_clk_bulk_get_all_enabled(struct device *dev,
-> > +				  struct clk_bulk_data **clks, int *num_clks)
->=20
-> What is the user supposed to do with =22num_clks=22 when you are already =
-handling
-> the enable part?
->=20
+Best regards,
+Krzysztof
 
-Since the initial clk_bulk_get_all was returning the num_clks value, the th=
-ought was to maintain this
-as the user might want to have a check in their driver whether x number of =
-clocks were successfully
-retrieved and enabled.
-
-> > +=7B
-> > +	struct clk_bulk_devres *devres;
-> > +	int ret;
-> > +
-> > +	devres =3D devres_alloc(devm_clk_bulk_release_all_enabled,
-> > +			      sizeof(*devres), GFP_KERNEL);
-> > +	if (=21devres)
-> > +		return -ENOMEM;
-> > +
-> > +	ret =3D clk_bulk_get_all(dev, &devres->clks);
-> > +	if (ret > 0) =7B
-> > +		*clks =3D devres->clks;
-> > +		devres->num_clks =3D ret;
-> > +		*num_clks =3D ret;
-> > +		devres_add(dev, devres);
->=20
-> If you move the statements inside this condition to the end of this funct=
-ion, you
-> could get rid of the exit() callback and directly use
-> clk_bulk_disable_unprepare() in devm_clk_bulk_release_all_enabled().
->=20
-
-Okay=21 I will change this in the next patchset as suggested
-
-> > +	=7D else =7B
-> > +		devres_free(devres);
-> > +		return ret;
-> > +	=7D
-> > +
-> > +	ret =3D clk_bulk_prepare_enable(devres->num_clks, *clks);
-> > +	if (=21ret)
-> > +		devres->exit =3D clk_bulk_disable_unprepare;
->=20
-> Here you can just do clk_bulk_put_all() and devres_free() directly becaus=
-e you
-> know that the driver won't proceed after this error.
->=20
-> - Mani
->=20
-
-Thanks for the review, Mani. Will change this as suggested=21
-
-> > +
-> > +	return ret;
-> > +=7D
-> > +EXPORT_SYMBOL_GPL(devm_clk_bulk_get_all_enabled);
-> > +
-> >  static int devm_clk_match(struct device *dev, void *res, void *data)
-> > =7B
-> >  	struct clk **c =3D res;
-> > diff --git a/include/linux/clk.h b/include/linux/clk.h index
-> > 1ef013324237..bf3e9bee5754 100644
-> > --- a/include/linux/clk.h
-> > +++ b/include/linux/clk.h
-> > =40=40 -438,6 +438,24 =40=40 int __must_check
-> > devm_clk_bulk_get_optional(struct device *dev, int num_clks,  int
-> __must_check devm_clk_bulk_get_all(struct device *dev,
-> >  				       struct clk_bulk_data **clks);
-> >
-> > +/**
-> > + * devm_clk_bulk_get_all_enabled - managed get multiple clk consumers =
-and
-> > + *					enable all clk
-> > + * =40dev: device for clock =22consumer=22
-> > + * =40clks: pointer to the clk_bulk_data table of consumer
-> > + * =40num_clks: out parameter to store the number of clk_bulk_data
-> > + *
-> > + * Returns success (0) or negative errno.
-> > + *
-> > + * This helper function allows drivers to get several clk
-> > + * consumers and enable all of them in one operation with management.
-> > + * The clks will automatically be disabled and freed when the device
-> > + * is unbound.
-> > + */
-> > +
-> > +int __must_check devm_clk_bulk_get_all_enabled(struct device *dev,
-> > +				struct clk_bulk_data **clks, int *num_clks);
-> > +
-> >  /**
-> >   * devm_clk_get - lookup and obtain a managed reference to a clock pro=
-ducer.
-> >   * =40dev: device for clock =22consumer=22
-> > =40=40 -960,6 +978,13 =40=40 static inline int __must_check
-> devm_clk_bulk_get_all(struct device *dev,
-> >  	return 0;
-> >  =7D
-> >
-> > +static inline int __must_check devm_clk_bulk_get_all_enabled(struct de=
-vice
-> *dev,
-> > +				struct clk_bulk_data **clks, int *num_clks) =7B
-> > +
-> > +	return 0;
-> > +=7D
-> > +
-> >  static inline struct clk *devm_get_clk_from_child(struct device *dev,
-> >  				struct device_node *np, const char *con_id)  =7B
-> > --
-> > 2.17.1
-> >
->=20
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D=20=E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D=0D=0A=0D=0A
 
