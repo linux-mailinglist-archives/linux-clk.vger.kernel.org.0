@@ -1,45 +1,45 @@
-Return-Path: <linux-clk+bounces-2895-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2887-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7A4E83C6FC
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 16:35:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6D183C6D7
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 16:35:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 796961F21497
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 15:35:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4858294D8B
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 15:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902327691D;
-	Thu, 25 Jan 2024 15:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82A5973167;
+	Thu, 25 Jan 2024 15:35:03 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A9974E39
-	for <linux-clk@vger.kernel.org>; Thu, 25 Jan 2024 15:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B9D7318B
+	for <linux-clk@vger.kernel.org>; Thu, 25 Jan 2024 15:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706196909; cv=none; b=GzPaGdLGMq5/Zn61zh0IjJsAz9i30UaSa9CIFp+pFe9T5pexGfHhj84DHXWWNUSNsqOKrcmNzsxMHcGvHqpIaW6ainvn7vp9TSwbXmR++j0DJxqyQpKC73uhBy7Rn3LGQM//A3QFv7eAWH3KuBneSgo3tWiuFXpl4NUwxn5NFGM=
+	t=1706196903; cv=none; b=aCVHriz1xJ/KAMsyxd9JdSwmsItvBTW8sq+ltaKRmrgIoKzjmJA94nT8bKcriommswi231HHo1TuAp/lXXydLOhQjDUoxx5F3QVWZ1THeVbRp5nlwbhyeytwkkXjROXjWS70xvPSMLaV7oGWDrsSxlsuDjNGrRx9VSHeGS3KzKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706196909; c=relaxed/simple;
-	bh=sWacTy8fqdpm+liAekvyPvdRGwz5kCdbPHjdVjIHXmg=;
+	s=arc-20240116; t=1706196903; c=relaxed/simple;
+	bh=miU3KgyoRL/DnHsCK7yuQkwQeANobdlCrfj7pCVoidc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J41t8BDaT89/erNb/LVEh67WeKVLa42s0qZuTBgnB+pthM8AkX+lbNZkYfSrIyU7STCV99RtaY3iayyaQu0SZ0QfizZUs+ijPOK27E/PddCTObE5SZItOqEyOXrrs5OgOO6bYKtHd/trCJQJHDfnveCSljlEIEUxQak44ckoT00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
+	 MIME-Version; b=oghqUt5nlUYquk80ZIjXmZy7i4OUYbBcezeFTKZBJ5k7NCLS0F7wYlyeO3VEmAJRMBcTvsmW3elaeoH/6MyH8INzvtZ5skbccFsq+VEN2Byd89RARQGS+pVGYyHw5+ZHR30y0BpwQGgw99xv/MVWdkdmz3IIWryn5ePjNUINlrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:bc9e:fcb8:8aa3:5dc0])
-	by laurent.telenet-ops.be with bizsmtp
-	id f3am2B00858agq2013amNd; Thu, 25 Jan 2024 16:34:57 +0100
+	by albert.telenet-ops.be with bizsmtp
+	id f3am2B00L58agq2063am9W; Thu, 25 Jan 2024 16:34:57 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rT1jo-00GUw9-7Y;
+	id 1rT1jo-00GUwE-8I;
 	Thu, 25 Jan 2024 16:34:46 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rT1kc-00Fs36-6y;
+	id 1rT1kc-00Fs3A-7i;
 	Thu, 25 Jan 2024 16:34:46 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
@@ -63,9 +63,9 @@ Cc: Cong Dang <cong.dang.xn@renesas.com>,
 	linux-pm@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v2 11/15] soc: renesas: Identify R-Car V4M
-Date: Thu, 25 Jan 2024 16:34:39 +0100
-Message-Id: <31e06d055aec1bc70c3e9a02f9268bcfc72b2204.1706194617.git.geert+renesas@glider.be>
+Subject: [PATCH v2 12/15] soc: renesas: rcar-rst: Add support for R-Car V4M
+Date: Thu, 25 Jan 2024 16:34:40 +0100
+Message-Id: <13dc9f014e27db5092b3cc23edddf4b5e01a6645.1706194617.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1706194617.git.geert+renesas@glider.be>
 References: <cover.1706194617.git.geert+renesas@glider.be>
@@ -79,66 +79,33 @@ Content-Transfer-Encoding: 8bit
 
 From: Duy Nguyen <duy.nguyen.rh@renesas.com>
 
-Add support for identifying the R-Car V4M (R8A779H0) SoC.
+Add support for the R-Car V4M (R8A779H0) SoC to the R-Car RST driver.
 
 Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
+Early firmware versions may not enable WDT resets, so you may need to do
+s/rcar_rst_gen4/rcar_rst_v3u/ for testing.
+
 v2:
   - Add Reviewed-by.
-
-Changes compared to the BSP:
-  - Use lower-case hex for literals in C source code.
 ---
- drivers/soc/renesas/Kconfig       | 7 +++++++
- drivers/soc/renesas/renesas-soc.c | 8 ++++++++
- 2 files changed, 15 insertions(+)
+ drivers/soc/renesas/rcar-rst.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 2367385d84b5a17d..1b8a89ad4fd7e7a3 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -282,6 +282,13 @@ config ARCH_R8A779G0
- 	help
- 	  This enables support for the Renesas R-Car V4H SoC.
- 
-+config ARCH_R8A779H0
-+	bool "ARM64 Platform support for R-Car V4M"
-+	select ARCH_RCAR_GEN4
-+	select SYSC_R8A779H0
-+	help
-+	  This enables support for the Renesas R-Car V4M SoC.
-+
- config ARCH_R8A774C0
- 	bool "ARM64 Platform support for RZ/G2E"
- 	select ARCH_RCAR_GEN3
-diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
-index 67de980ec4244c41..083f6580cb5dae00 100644
---- a/drivers/soc/renesas/renesas-soc.c
-+++ b/drivers/soc/renesas/renesas-soc.c
-@@ -271,6 +271,11 @@ static const struct renesas_soc soc_rcar_v4h __initconst __maybe_unused = {
- 	.id	= 0x5c,
+diff --git a/drivers/soc/renesas/rcar-rst.c b/drivers/soc/renesas/rcar-rst.c
+index 98fd97da6cd4330d..7ba02f3a4a4fbb9f 100644
+--- a/drivers/soc/renesas/rcar-rst.c
++++ b/drivers/soc/renesas/rcar-rst.c
+@@ -117,6 +117,7 @@ static const struct of_device_id rcar_rst_matches[] __initconst = {
+ 	{ .compatible = "renesas,r8a779a0-rst", .data = &rcar_rst_v3u },
+ 	{ .compatible = "renesas,r8a779f0-rst", .data = &rcar_rst_gen4 },
+ 	{ .compatible = "renesas,r8a779g0-rst", .data = &rcar_rst_gen4 },
++	{ .compatible = "renesas,r8a779h0-rst", .data = &rcar_rst_gen4 },
+ 	{ /* sentinel */ }
  };
  
-+static const struct renesas_soc soc_rcar_v4m __initconst __maybe_unused = {
-+	.family = &fam_rcar_gen4,
-+	.id     = 0x5d,
-+};
-+
- static const struct renesas_soc soc_shmobile_ag5 __initconst __maybe_unused = {
- 	.family	= &fam_shmobile,
- 	.id	= 0x37,
-@@ -381,6 +386,9 @@ static const struct of_device_id renesas_socs[] __initconst __maybe_unused = {
- #ifdef CONFIG_ARCH_R8A779G0
- 	{ .compatible = "renesas,r8a779g0",	.data = &soc_rcar_v4h },
- #endif
-+#ifdef CONFIG_ARCH_R8A779H0
-+	{ .compatible = "renesas,r8a779h0",	.data = &soc_rcar_v4m },
-+#endif
- #ifdef CONFIG_ARCH_R9A07G043
- #ifdef CONFIG_RISCV
- 	{ .compatible = "renesas,r9a07g043",	.data = &soc_rz_five },
 -- 
 2.34.1
 
