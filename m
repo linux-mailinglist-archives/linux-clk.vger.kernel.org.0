@@ -1,45 +1,45 @@
-Return-Path: <linux-clk+bounces-2886-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2895-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7DFD83C6D5
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 16:35:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7A4E83C6FC
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 16:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26AE01C230E8
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 15:35:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 796961F21497
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Jan 2024 15:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746FA73176;
-	Thu, 25 Jan 2024 15:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902327691D;
+	Thu, 25 Jan 2024 15:35:09 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27E073189
-	for <linux-clk@vger.kernel.org>; Thu, 25 Jan 2024 15:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A9974E39
+	for <linux-clk@vger.kernel.org>; Thu, 25 Jan 2024 15:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706196903; cv=none; b=Bkp/2pEzUSjW0M9xPktRoAKd/6a66I4XfBl4byviTETSWDzof8UMfPvZqx67dJjWxu7mguiPgrNbRFDKoOYP+zRINIzJ++qwazVNEGzri7zU654ppOmk9klONwCtalzDzXi5CPZRp5dF66PVnbe1sAvzI3R1cVjkKt41rSF4NL0=
+	t=1706196909; cv=none; b=GzPaGdLGMq5/Zn61zh0IjJsAz9i30UaSa9CIFp+pFe9T5pexGfHhj84DHXWWNUSNsqOKrcmNzsxMHcGvHqpIaW6ainvn7vp9TSwbXmR++j0DJxqyQpKC73uhBy7Rn3LGQM//A3QFv7eAWH3KuBneSgo3tWiuFXpl4NUwxn5NFGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706196903; c=relaxed/simple;
-	bh=0TGfRaUL8XLmTNfh33ISJohnS5YYx5gYmV4XHl9DlqA=;
+	s=arc-20240116; t=1706196909; c=relaxed/simple;
+	bh=sWacTy8fqdpm+liAekvyPvdRGwz5kCdbPHjdVjIHXmg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dWGd99BISyQoGrVThAvxXSVeJpTnMOoGlQHuoLiPRDcyBAxOkoDtltsJauKTpgS60C0z4CNV0SmnKq8YirUZnm2KBa7UECB5l7qlTWgi7fj9mRjiIX8dzhEUYkDkp0w6g/75LmGGecYgX1cmwfI1kmX1CmyQNmaRABUiPI6rUPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
+	 MIME-Version; b=J41t8BDaT89/erNb/LVEh67WeKVLa42s0qZuTBgnB+pthM8AkX+lbNZkYfSrIyU7STCV99RtaY3iayyaQu0SZ0QfizZUs+ijPOK27E/PddCTObE5SZItOqEyOXrrs5OgOO6bYKtHd/trCJQJHDfnveCSljlEIEUxQak44ckoT00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:bc9e:fcb8:8aa3:5dc0])
-	by baptiste.telenet-ops.be with bizsmtp
-	id f3am2B00458agq2013amrm; Thu, 25 Jan 2024 16:34:57 +0100
+	by laurent.telenet-ops.be with bizsmtp
+	id f3am2B00858agq2013amNd; Thu, 25 Jan 2024 16:34:57 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rT1jo-00GUw6-6m;
+	id 1rT1jo-00GUw9-7Y;
 	Thu, 25 Jan 2024 16:34:46 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rT1kc-00Fs31-6D;
+	id 1rT1kc-00Fs36-6y;
 	Thu, 25 Jan 2024 16:34:46 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
@@ -63,9 +63,9 @@ Cc: Cong Dang <cong.dang.xn@renesas.com>,
 	linux-pm@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH v2 10/15] soc: renesas: Introduce ARCH_RCAR_GEN4
-Date: Thu, 25 Jan 2024 16:34:38 +0100
-Message-Id: <a283913ba7a39ec2dae0ebf9fc2b06096f009511.1706194617.git.geert+renesas@glider.be>
+Subject: [PATCH v2 11/15] soc: renesas: Identify R-Car V4M
+Date: Thu, 25 Jan 2024 16:34:39 +0100
+Message-Id: <31e06d055aec1bc70c3e9a02f9268bcfc72b2204.1706194617.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1706194617.git.geert+renesas@glider.be>
 References: <cover.1706194617.git.geert+renesas@glider.be>
@@ -77,68 +77,68 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, all Kconfig symbols for R-Car Gen4 SoCs select the
-ARCH_RCAR_GEN3 SoC family symbol, which might confuse the casual reader.
+From: Duy Nguyen <duy.nguyen.rh@renesas.com>
 
-Fix this by introducing a new SoC family symbol for R-Car Gen4 SoCs.
-For now this just selects ARCH_RCAR_GEN3, to avoid duplication, and to
-relax dependencies.
+Add support for identifying the R-Car V4M (R8A779H0) SoC.
 
+Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
-Once "[PATCH] i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4"[1]
-has been applied, ARCH_RCAR_GEN4 can stop selecting ARCH_RCAR_GEN3.
-
 v2:
   - Add Reviewed-by.
 
-[1] https://lore.kernel.org/r/bf7b105f7d9728ae5cd9fa99d1cdd278d71e7df2.1704723713.git.geert+renesas@glider.be
+Changes compared to the BSP:
+  - Use lower-case hex for literals in C source code.
 ---
- drivers/soc/renesas/Kconfig | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/soc/renesas/Kconfig       | 7 +++++++
+ drivers/soc/renesas/renesas-soc.c | 8 ++++++++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 1c14be3e46e58ef1..2367385d84b5a17d 100644
+index 2367385d84b5a17d..1b8a89ad4fd7e7a3 100644
 --- a/drivers/soc/renesas/Kconfig
 +++ b/drivers/soc/renesas/Kconfig
-@@ -38,6 +38,10 @@ config ARCH_RCAR_GEN3
- 	select SYS_SUPPORTS_SH_CMT
- 	select SYS_SUPPORTS_SH_TMU
- 
-+config ARCH_RCAR_GEN4
-+	bool
-+	select ARCH_RCAR_GEN3
-+
- config ARCH_RMOBILE
- 	bool
- 	select PM
-@@ -245,7 +249,7 @@ config ARCH_R8A77961
- 
- config ARCH_R8A779F0
- 	bool "ARM64 Platform support for R-Car S4-8"
--	select ARCH_RCAR_GEN3
-+	select ARCH_RCAR_GEN4
- 	select SYSC_R8A779F0
- 	help
- 	  This enables support for the Renesas R-Car S4-8 SoC.
-@@ -266,14 +270,14 @@ config ARCH_R8A77970
- 
- config ARCH_R8A779A0
- 	bool "ARM64 Platform support for R-Car V3U"
--	select ARCH_RCAR_GEN3
-+	select ARCH_RCAR_GEN4
- 	select SYSC_R8A779A0
- 	help
- 	  This enables support for the Renesas R-Car V3U SoC.
- 
- config ARCH_R8A779G0
- 	bool "ARM64 Platform support for R-Car V4H"
--	select ARCH_RCAR_GEN3
-+	select ARCH_RCAR_GEN4
- 	select SYSC_R8A779G0
+@@ -282,6 +282,13 @@ config ARCH_R8A779G0
  	help
  	  This enables support for the Renesas R-Car V4H SoC.
+ 
++config ARCH_R8A779H0
++	bool "ARM64 Platform support for R-Car V4M"
++	select ARCH_RCAR_GEN4
++	select SYSC_R8A779H0
++	help
++	  This enables support for the Renesas R-Car V4M SoC.
++
+ config ARCH_R8A774C0
+ 	bool "ARM64 Platform support for RZ/G2E"
+ 	select ARCH_RCAR_GEN3
+diff --git a/drivers/soc/renesas/renesas-soc.c b/drivers/soc/renesas/renesas-soc.c
+index 67de980ec4244c41..083f6580cb5dae00 100644
+--- a/drivers/soc/renesas/renesas-soc.c
++++ b/drivers/soc/renesas/renesas-soc.c
+@@ -271,6 +271,11 @@ static const struct renesas_soc soc_rcar_v4h __initconst __maybe_unused = {
+ 	.id	= 0x5c,
+ };
+ 
++static const struct renesas_soc soc_rcar_v4m __initconst __maybe_unused = {
++	.family = &fam_rcar_gen4,
++	.id     = 0x5d,
++};
++
+ static const struct renesas_soc soc_shmobile_ag5 __initconst __maybe_unused = {
+ 	.family	= &fam_shmobile,
+ 	.id	= 0x37,
+@@ -381,6 +386,9 @@ static const struct of_device_id renesas_socs[] __initconst __maybe_unused = {
+ #ifdef CONFIG_ARCH_R8A779G0
+ 	{ .compatible = "renesas,r8a779g0",	.data = &soc_rcar_v4h },
+ #endif
++#ifdef CONFIG_ARCH_R8A779H0
++	{ .compatible = "renesas,r8a779h0",	.data = &soc_rcar_v4m },
++#endif
+ #ifdef CONFIG_ARCH_R9A07G043
+ #ifdef CONFIG_RISCV
+ 	{ .compatible = "renesas,r9a07g043",	.data = &soc_rz_five },
 -- 
 2.34.1
 
