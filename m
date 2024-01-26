@@ -1,55 +1,55 @@
-Return-Path: <linux-clk+bounces-2943-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2945-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A4DA83E17D
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 19:29:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62BBF83E181
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 19:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81F63B2168B
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 18:29:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 065FAB247BD
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 18:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B0520B38;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E3220DCD;
 	Fri, 26 Jan 2024 18:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="zrmUiaN0"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="yQ3rQsBW"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C00120B30;
-	Fri, 26 Jan 2024 18:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464EE20B35;
+	Fri, 26 Jan 2024 18:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706293765; cv=none; b=XT8w39DE866IqhMnWGU9TocbMAdiwYYrbRTJRvh19di5DydyON2cQTGjHkJfVm0Ng/6mLNsrPLOLjJC34bcHuFRg7J5f4ExjIEWfECUyvag/4CpAxqPAKD/L0CogajOJWHkaV0ZlceZp/gay7EMUpQQFMLk+8GpCIxTl7kAjNJQ=
+	t=1706293765; cv=none; b=hTlhuU6nyHXD9c9cXBUf+5qSW/WYjTUN1MUH7PHFwrGFseJE0lSfInUos3QafYyGRckdb/KenHYaf6Nopz+mPDsUDRC/2TggkLIbIXkxdXZhcAhCSm5BUhdD5vfdvJDPsrwp76X2RGpnUqumlCnXY/EDJXoXIhKORdKsiqVZm/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706293765; c=relaxed/simple;
-	bh=Q6tqBDARqY1tmw7h3ONBEyqVjEQtqcs0AbMecGzt8c8=;
+	bh=zi8CSQutnIMZvId7S7zSLZKlJz5sGKgoi9p6iA4z0z8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fkqv4HcKZaO9cod+UKMi2e9IWgxn5rL+q1e6744nvtJa0fsOHD1Qd+1qGDJkdLmh9eKTmmtsPSbJitg3FmDUrAL7hih393JQkaQAzOrrQSGG4ZuWm4G52i8NOxI1GMuThKqGtQ8OaVVSF2kDcapGW8OyapnU/JvAxzpO43rQX9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=zrmUiaN0; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=HDtJw+QtE/qKZcQ9UsDr9djBIlGhh1qn3jXsCGTm4DBU2CndK1k/EmMB8LMEbHbJrvXx3FN2BnqNtHmqVKyAgZCpXZK2xhcRYrKovXOpGB3BKCBVc1ZSV2fiqiY+T41aNtz8dchP7Aw9bhR3NUG6vRAm89ZoEBgFdFW4NdHMwtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=yQ3rQsBW; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1706293762;
-	bh=Q6tqBDARqY1tmw7h3ONBEyqVjEQtqcs0AbMecGzt8c8=;
+	bh=zi8CSQutnIMZvId7S7zSLZKlJz5sGKgoi9p6iA4z0z8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=zrmUiaN0+3QUMafC4Dxf9UxwlpS7KK/bIOjvAWI4MeOiP0YcQ5AL1V4c+4ZzTgHGK
-	 qzElfHofjzQOnbQkVCUmo1MgRAkLN+u7XK2rnoG2IaVSC/nHy2KTK+jGtrFuJDfvMw
-	 MEolhDS+37GmDWWKoeybTNSXIo2kLaPVNLyvsAFJZHS8Qr0yfEaq3w4Vfau32rbLEs
-	 hRKdfkiKF0AwPCXIKQaKt2cjbtUylIAxkj8pvguyPH4g6IOmVJcczgbk0ftYdV3vmO
-	 hZWvqvZTe4dcavCyhVPofAaSYXYbCLueDagP3HHk10mLmJCg1OF/9Eefuam1efTwky
-	 1LGatsXtQXV9w==
+	b=yQ3rQsBWvISxScJhJOPVpESu4VPzD7zShKo5XJteBlZty2N50zN6DZaMm3zKdzmEN
+	 ayUub0+Zr+EvG0cLrabWh2Mq8SBx0ZxKTZ9VjJ+prc5jDo3bm+chCscyHXNuPpsbUa
+	 1aqKjYGcm9Hhsbr/3/skLONtUpmJlM7tPrVI008vJqCf0BPKkFWje2gCTtf/9rhgj0
+	 IbprprzNIG/j3W3P4QBmfth4XqmM5w92/o+OFPEOR5CtCiJLCD1MlsE9N7hTSAfGW7
+	 9FtpdBYPUTmluwKUIWT9cePMfArCtD8aZiG6dSx3jZ3ZuOVTuoj6b5XXmO19Szf3ti
+	 wm00G9zKKRjTg==
 Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 034A13782076;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0AFA13782077;
 	Fri, 26 Jan 2024 18:29:22 +0000 (UTC)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 95204480C4F; Fri, 26 Jan 2024 19:29:21 +0100 (CET)
+	id 97560482AC4; Fri, 26 Jan 2024 19:29:21 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Elaine Zhang <zhangqing@rock-chips.com>,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com,
 	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v8 2/7] dt-bindings: clock: rk3588: drop CLK_NR_CLKS
-Date: Fri, 26 Jan 2024 19:18:23 +0100
-Message-ID: <20240126182919.48402-3-sebastian.reichel@collabora.com>
+Subject: [PATCH v8 3/7] dt-bindings: clock: rk3588: add missing PCLK_VO1GRF
+Date: Fri, 26 Jan 2024 19:18:24 +0100
+Message-ID: <20240126182919.48402-4-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240126182919.48402-1-sebastian.reichel@collabora.com>
 References: <20240126182919.48402-1-sebastian.reichel@collabora.com>
@@ -81,28 +81,27 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-CLK_NR_CLKS should not be part of the binding. Let's drop it, since
-the kernel code no longer uses it either.
+Add PCLK_VO1GRF to complement PCLK_VO0GRF. This will be needed
+for HDMI support.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- include/dt-bindings/clock/rockchip,rk3588-cru.h | 2 --
- 1 file changed, 2 deletions(-)
+ include/dt-bindings/clock/rockchip,rk3588-cru.h | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-index 5790b1391201..7c6f0ec7c979 100644
+index 7c6f0ec7c979..0c7d3ca2d5bc 100644
 --- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
 +++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-@@ -734,8 +734,6 @@
+@@ -733,6 +733,7 @@
+ #define ACLK_AV1_PRE			718
  #define PCLK_AV1_PRE			719
  #define HCLK_SDIO_PRE			720
++#define PCLK_VO1GRF			721
  
--#define CLK_NR_CLKS			(HCLK_SDIO_PRE + 1)
--
  /* scmi-clocks indices */
  
- #define SCMI_CLK_CPUL			0
 -- 
 2.43.0
 
