@@ -1,55 +1,55 @@
-Return-Path: <linux-clk+bounces-2945-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-2947-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62BBF83E181
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 19:29:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE2A683E184
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 19:29:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 065FAB247BD
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 18:29:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E14561C21B63
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Jan 2024 18:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3E3220DCD;
-	Fri, 26 Jan 2024 18:29:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E1E20DD6;
+	Fri, 26 Jan 2024 18:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="yQ3rQsBW"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="J7sErgsD"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464EE20B35;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464C3208B4;
 	Fri, 26 Jan 2024 18:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706293765; cv=none; b=hTlhuU6nyHXD9c9cXBUf+5qSW/WYjTUN1MUH7PHFwrGFseJE0lSfInUos3QafYyGRckdb/KenHYaf6Nopz+mPDsUDRC/2TggkLIbIXkxdXZhcAhCSm5BUhdD5vfdvJDPsrwp76X2RGpnUqumlCnXY/EDJXoXIhKORdKsiqVZm/g=
+	t=1706293766; cv=none; b=qn+p6VEuoihQjMdSceXz1PuLBtoXHdubBpBzrnnxFjOF61vdAnKWY3wD3nB0V9PW0Au1DMsOMbqGf7/I5jBjs6kaClo+PkIiwHyiLZJRmBB28EczthL+kjfcjKX3qJVFj6aezWXuHFFw3569dJAInHX8HsY1hoH4RRgMjLuv6BM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706293765; c=relaxed/simple;
-	bh=zi8CSQutnIMZvId7S7zSLZKlJz5sGKgoi9p6iA4z0z8=;
+	s=arc-20240116; t=1706293766; c=relaxed/simple;
+	bh=1tPW8GrHlWUsQEkwO2MnvdVEo7+MHF/Flt6K9BKancg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HDtJw+QtE/qKZcQ9UsDr9djBIlGhh1qn3jXsCGTm4DBU2CndK1k/EmMB8LMEbHbJrvXx3FN2BnqNtHmqVKyAgZCpXZK2xhcRYrKovXOpGB3BKCBVc1ZSV2fiqiY+T41aNtz8dchP7Aw9bhR3NUG6vRAm89ZoEBgFdFW4NdHMwtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=yQ3rQsBW; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=GoG3lL/QhuW37EFpYCXHI9cu7OxGgoKA4QyQE+temX5FvY/E87wFM12SaQwQHBZXsMlruuiZS7uROFKLECID4NJUUawXgEXOFVzaeVJ4Q+vluPCrWp1PMZ+5QqFiWpprWhhrAPYlapgEi60O6mjM6k1/RkWW6ZOg6/ODxzLWZNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=J7sErgsD; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1706293762;
-	bh=zi8CSQutnIMZvId7S7zSLZKlJz5sGKgoi9p6iA4z0z8=;
+	bh=1tPW8GrHlWUsQEkwO2MnvdVEo7+MHF/Flt6K9BKancg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=yQ3rQsBWvISxScJhJOPVpESu4VPzD7zShKo5XJteBlZty2N50zN6DZaMm3zKdzmEN
-	 ayUub0+Zr+EvG0cLrabWh2Mq8SBx0ZxKTZ9VjJ+prc5jDo3bm+chCscyHXNuPpsbUa
-	 1aqKjYGcm9Hhsbr/3/skLONtUpmJlM7tPrVI008vJqCf0BPKkFWje2gCTtf/9rhgj0
-	 IbprprzNIG/j3W3P4QBmfth4XqmM5w92/o+OFPEOR5CtCiJLCD1MlsE9N7hTSAfGW7
-	 9FtpdBYPUTmluwKUIWT9cePMfArCtD8aZiG6dSx3jZ3ZuOVTuoj6b5XXmO19Szf3ti
-	 wm00G9zKKRjTg==
+	b=J7sErgsDAG0h0yxrGrUdIzhEq+mOEVIXb4RQ8p7cV19r8NpajMJ5cNc6PRizL2lMf
+	 BiKPhxZtcot2NyPkjvHAjgye3rEDmDvUstdvCgEOEwg9sz3D4bocZoQpAMKjqzpevi
+	 QEEw1+eU+uMsN+oLj2XQXSs6ND+MXyEe8z724BamplVByXguv/f2xWieBkXzLFfufz
+	 /l3rKkctdUpCzCB/x3cp63rXlh8bMvtna+qBW5TNVzvq25Bxyeq3DC9YVmodtJ8wGo
+	 YzauI3uQMu0MXgV65LaPt+oliZ1SY9deRHYcz9c+w+LfoSjrZ0iPWj3TZgWUl6JUyH
+	 3LZKICTzTnZSQ==
 Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 0AFA13782077;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 18DA43782080;
 	Fri, 26 Jan 2024 18:29:22 +0000 (UTC)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 97560482AC4; Fri, 26 Jan 2024 19:29:21 +0100 (CET)
+	id 992A4482AC5; Fri, 26 Jan 2024 19:29:21 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -65,11 +65,10 @@ Cc: Elaine Zhang <zhangqing@rock-chips.com>,
 	devicetree@vger.kernel.org,
 	linux-rockchip@lists.infradead.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	kernel@collabora.com,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v8 3/7] dt-bindings: clock: rk3588: add missing PCLK_VO1GRF
-Date: Fri, 26 Jan 2024 19:18:24 +0100
-Message-ID: <20240126182919.48402-4-sebastian.reichel@collabora.com>
+	kernel@collabora.com
+Subject: [PATCH v8 4/7] clk: rockchip: rk3588: fix pclk_vo0grf and pclk_vo1grf
+Date: Fri, 26 Jan 2024 19:18:25 +0100
+Message-ID: <20240126182919.48402-5-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240126182919.48402-1-sebastian.reichel@collabora.com>
 References: <20240126182919.48402-1-sebastian.reichel@collabora.com>
@@ -81,27 +80,60 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add PCLK_VO1GRF to complement PCLK_VO0GRF. This will be needed
-for HDMI support.
+Currently pclk_vo1grf is not exposed, but it should be referenced
+from the vo1_grf syscon, which needs it enabled. That syscon is
+required for HDMI RX and TX functionality among other things.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Apart from that pclk_vo0grf and pclk_vo1grf are both linked gates
+and need the VO's hclk enabled in addition to their parent clock.
+
+No Fixes tag has been added, since the logic requiring these clocks
+is not yet upstream anyways.
+
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- include/dt-bindings/clock/rockchip,rk3588-cru.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/rockchip/clk-rk3588.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/include/dt-bindings/clock/rockchip,rk3588-cru.h b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-index 7c6f0ec7c979..0c7d3ca2d5bc 100644
---- a/include/dt-bindings/clock/rockchip,rk3588-cru.h
-+++ b/include/dt-bindings/clock/rockchip,rk3588-cru.h
-@@ -733,6 +733,7 @@
- #define ACLK_AV1_PRE			718
- #define PCLK_AV1_PRE			719
- #define HCLK_SDIO_PRE			720
-+#define PCLK_VO1GRF			721
+diff --git a/drivers/clk/rockchip/clk-rk3588.c b/drivers/clk/rockchip/clk-rk3588.c
+index 0b60ae78f9d8..26330d655159 100644
+--- a/drivers/clk/rockchip/clk-rk3588.c
++++ b/drivers/clk/rockchip/clk-rk3588.c
+@@ -1851,8 +1851,6 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
+ 			RK3588_CLKGATE_CON(56), 0, GFLAGS),
+ 	GATE(PCLK_TRNG0, "pclk_trng0", "pclk_vo0_root", 0,
+ 			RK3588_CLKGATE_CON(56), 1, GFLAGS),
+-	GATE(PCLK_VO0GRF, "pclk_vo0grf", "pclk_vo0_root", CLK_IGNORE_UNUSED,
+-			RK3588_CLKGATE_CON(55), 10, GFLAGS),
+ 	COMPOSITE(CLK_I2S4_8CH_TX_SRC, "clk_i2s4_8ch_tx_src", gpll_aupll_p, 0,
+ 			RK3588_CLKSEL_CON(118), 5, 1, MFLAGS, 0, 5, DFLAGS,
+ 			RK3588_CLKGATE_CON(56), 11, GFLAGS),
+@@ -1998,8 +1996,6 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
+ 			RK3588_CLKGATE_CON(60), 9, GFLAGS),
+ 	GATE(PCLK_TRNG1, "pclk_trng1", "pclk_vo1_root", 0,
+ 			RK3588_CLKGATE_CON(60), 10, GFLAGS),
+-	GATE(0, "pclk_vo1grf", "pclk_vo1_root", CLK_IGNORE_UNUSED,
+-			RK3588_CLKGATE_CON(59), 12, GFLAGS),
+ 	GATE(PCLK_S_EDP0, "pclk_s_edp0", "pclk_vo1_s_root", 0,
+ 			RK3588_CLKGATE_CON(59), 14, GFLAGS),
+ 	GATE(PCLK_S_EDP1, "pclk_s_edp1", "pclk_vo1_s_root", 0,
+@@ -2447,12 +2443,14 @@ static struct rockchip_clk_branch rk3588_clk_branches[] __initdata = {
+ 	GATE_LINK(HCLK_RKVDEC1_PRE, "hclk_rkvdec1_pre", "hclk_rkvdec1_root", "hclk_vdpu_root", 0, RK3588_CLKGATE_CON(41), 4, GFLAGS),
+ 	GATE_LINK(ACLK_RKVDEC1_PRE, "aclk_rkvdec1_pre", "aclk_rkvdec1_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(41), 5, GFLAGS),
+ 	GATE_LINK(ACLK_HDCP0_PRE, "aclk_hdcp0_pre", "aclk_vo0_root", "aclk_vop_low_root", 0, RK3588_CLKGATE_CON(55), 9, GFLAGS),
+-	GATE_LINK(HCLK_VO0, "hclk_vo0", "hclk_vo0_root", "hclk_vop_root", 0, RK3588_CLKGATE_CON(55), 5, GFLAGS),
++	GATE_LINK(HCLK_VO0, "hclk_vo0", "hclk_vo0_root", "hclk_vop_root", RK3588_LINKED_CLK, RK3588_CLKGATE_CON(55), 5, GFLAGS),
+ 	GATE_LINK(ACLK_HDCP1_PRE, "aclk_hdcp1_pre", "aclk_hdcp1_root", "aclk_vo1usb_top_root", 0, RK3588_CLKGATE_CON(59), 6, GFLAGS),
+-	GATE_LINK(HCLK_VO1, "hclk_vo1", "hclk_vo1_root", "hclk_vo1usb_top_root", 0, RK3588_CLKGATE_CON(59), 9, GFLAGS),
++	GATE_LINK(HCLK_VO1, "hclk_vo1", "hclk_vo1_root", "hclk_vo1usb_top_root", RK3588_LINKED_CLK, RK3588_CLKGATE_CON(59), 9, GFLAGS),
+ 	GATE_LINK(ACLK_AV1_PRE, "aclk_av1_pre", "aclk_av1_root", "aclk_vdpu_root", 0, RK3588_CLKGATE_CON(68), 1, GFLAGS),
+ 	GATE_LINK(PCLK_AV1_PRE, "pclk_av1_pre", "pclk_av1_root", "hclk_vdpu_root", 0, RK3588_CLKGATE_CON(68), 4, GFLAGS),
+ 	GATE_LINK(HCLK_SDIO_PRE, "hclk_sdio_pre", "hclk_sdio_root", "hclk_nvm", 0, RK3588_CLKGATE_CON(75), 1, GFLAGS),
++	GATE_LINK(PCLK_VO0GRF, "pclk_vo0grf", "pclk_vo0_root", "hclk_vo0", CLK_IGNORE_UNUSED, RK3588_CLKGATE_CON(55), 10, GFLAGS),
++	GATE_LINK(PCLK_VO1GRF, "pclk_vo1grf", "pclk_vo1_root", "hclk_vo1", CLK_IGNORE_UNUSED, RK3588_CLKGATE_CON(59), 12, GFLAGS),
+ };
  
- /* scmi-clocks indices */
- 
+ static void __init rk3588_clk_init(struct device_node *np)
 -- 
 2.43.0
 
