@@ -1,126 +1,247 @@
-Return-Path: <linux-clk+bounces-3016-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3020-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B61C83FD90
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jan 2024 06:13:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49B3C83FEB2
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Jan 2024 07:55:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C5241F21BE3
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jan 2024 05:13:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EB9D1C21DF2
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Jan 2024 06:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22C0D45011;
-	Mon, 29 Jan 2024 05:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 935474D11F;
+	Mon, 29 Jan 2024 06:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HuJDUIkF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yXCeIgja"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1605DDD5;
-	Mon, 29 Jan 2024 05:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DDA4EB35
+	for <linux-clk@vger.kernel.org>; Mon, 29 Jan 2024 06:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706505155; cv=none; b=jG26JniszCtNBVFmGluekpaJcrJNtASF0RhsIJMyw2csBeKHQfaGkZpZsdYWmP9p1qUK9+OesxECxNAuchEGNDGg/wJP0ynk0i4AaILouKRfhtnYk64r7UNPE1n6n0ZudTciM94gJKOZ894W/aTJ426iHUliqJoxYe+izwGGaTc=
+	t=1706511303; cv=none; b=DWeY56ZNaJVFn4dZwiO/708n/CGA2sl10Ljhcv7Q564hn+sUhF9cMUTGCcMWkDUmDGiQjIWabicJrIZlqd3k1umxkwO6gGxUS66W00fLQb1/XO+4EPEzz2lV0fyFmeT2Xt/tbCuSZ28INCzEB8Iwv6EPBUVFsKEhAu+CCPRU4xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706505155; c=relaxed/simple;
-	bh=Ikg5x3d/f+jULVMCH44rw4+PXLyN4ZWT9A0HMbatL0c=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ufn6JVfoPMxgG9yYhMpEOPIhyIm5PTofSQY7m4a7r7ujqpXApDwNI8Uwck0/igBx72laG7GnHUc5zcdXxkpKWBZL49rX6YBkMByuaAaui4aWWNtvkcsd1WYadezDYPACSYU2eui1ePP5jFwvgjRvyRjLOEZQMMBtrXE0IiLs7II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HuJDUIkF; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40T4P1Ro020025;
-	Mon, 29 Jan 2024 05:12:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=fzQb6bK072ThF6/59Q0ni+RYed6Os6bEI5ulHIPo1LA=; b=Hu
-	JDUIkFPxVp6ue5kerX4vdEXJ4vE64aFUqK3FsGGQ9hS4jK5zYMlVy0wKLO5mP3w5
-	AomfyCyRDDXBqGORMgdP4Z+xvCUoI0DAjo0VegBlDA4cRefpfjNtGxy+oTzEDsWj
-	uiqu9b88mOifYURQB9qQPd3CeP7N3m8+GmSgdIZQGN/91UzS6uugd8eQ76KIl145
-	9UhOcR+I7enD9rZGKL61pau22DOrGLmwpw2OuXQlQ+vfRqf4D6pniu+VrbCBjSqw
-	MvawV7N3PE40L/AtkVabazoqiU6plJJ/kYxiJrBRHEhByHaB5OUmSZrDE65b9UY5
-	2k10Es3pOSrQa4/B82ZQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvt272t9k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Jan 2024 05:12:13 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40T5CDiI021540
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 29 Jan 2024 05:12:13 GMT
-Received: from hu-devipriy-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Sun, 28 Jan 2024 21:12:06 -0800
-From: Devi Priya <quic_devipriy@quicinc.com>
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>, <p.zabel@pengutronix.de>,
-        <richardcochran@gmail.com>, <geert+renesas@glider.be>, <arnd@arndb.de>,
-        <neil.armstrong@linaro.org>, <nfraprado@collabora.com>,
-        <m.szyprowski@samsung.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <quic_devipriy@quicinc.com>
-Subject: [PATCH V3 7/7] arm64: defconfig: Build NSS Clock Controller driver for IPQ9574
-Date: Mon, 29 Jan 2024 10:41:04 +0530
-Message-ID: <20240129051104.1855487-8-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240129051104.1855487-1-quic_devipriy@quicinc.com>
-References: <20240129051104.1855487-1-quic_devipriy@quicinc.com>
+	s=arc-20240116; t=1706511303; c=relaxed/simple;
+	bh=2EPa0U+VukGXPRNbsZYJGUNCbNggov8QmdEi5cf3Kko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qUXn0oomT5oEROwi1XA9h5O/6REez8w0WHEHggQQlcFJUTrU4cyAvaxHpEY3jL+gG2bOxHhs+Dc4F9F7RaweSDpyROGcmZX+61IEVPqnTNOBkvuXBpue01TbxoL/tzZIGaSSNQulk8oOkd9Kzg7SYe5KAum4WtLDKSYVQtMbiG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yXCeIgja; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-42a446cb1baso21383761cf.0
+        for <linux-clk@vger.kernel.org>; Sun, 28 Jan 2024 22:55:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706511300; x=1707116100; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s1hxnPoh6daX0WjU31FuHTB7nYnSeoBVwHLBpFGzZZE=;
+        b=yXCeIgja1BeZkXGrCxSjIQFQTKha3rrK7ldC39PtRrQfCWas1NYafGEkgQ6VaLhZrT
+         ncXNQRL/9U4QNTYdBzsbBSyrKH6IkB1/FPn0JUuKNAe4mtHwnj4fgyw8fvD6ICUuVohP
+         JhTvrUoPVXOUCK+GH8GTv1cmA8npbkz6TcRMIeEq+MewxcStyRMHW6AuYBqY3IrM1kBE
+         pGFi8wckNS7jMO4FPFY9jhO3Kj3l2UMVe7FJsg5tjByPIj+AD3eS8altVt3cZHVcQyOF
+         L3/x9/OEHoFskp6aNg7Q5C5wc7DKLrMGlFdYEoVApo4nlMtWYgQuA8e48EywXFyq1cjO
+         1l9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706511300; x=1707116100;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s1hxnPoh6daX0WjU31FuHTB7nYnSeoBVwHLBpFGzZZE=;
+        b=WzG2NuNI3s4jpG+aH0YM+2znSN76sZxH53tAzVl39kuR8mgk9IJ/4V7NZ7Sqb2A8Zb
+         13PHy9rTSY3kZCTOcKOooLBOjZPMIAFRk4HKXgwGRkwcPn+FzA9qZMuQSocdkwnUgAtw
+         rD7UlXxLXGYz5wOfW5ge4p18YBzpkQkojo37laTlM07s4mgJUXXpUyYAo7nGfCxUmjkt
+         Fs3DGGvjLPCZyF0qP3B5lappoDRZ+vDKiXQmF2NmTsaouKfPhUcBWT5GDIzo94p8768V
+         wZuwGPv6s9vNsEN0ChKvXK9Kx3UoDHErAvVebJOBIqb/7a8AVCK8UHCUWsWrPCn46Amo
+         1gcw==
+X-Gm-Message-State: AOJu0YzltwxQ9u2E58pq25YE2Noc6cLA7sHdCvm9EHbaycG9d1SLlczH
+	ge8bZe0XZucTjIx3rOwS6lQHze6SF++xGgOBhv3fbQwDZllTkeGUNJKAhqGdXQ==
+X-Google-Smtp-Source: AGHT+IHwfQa7OVYQ7eqwRmxrB+cXFuJ+tQWWagggVHZdoSqnHID39moNiRd92Sd4lXHtYQce6W0czA==
+X-Received: by 2002:ac8:7f4c:0:b0:42a:9b63:7828 with SMTP id g12-20020ac87f4c000000b0042a9b637828mr2844845qtk.68.1706511299804;
+        Sun, 28 Jan 2024 22:54:59 -0800 (PST)
+Received: from thinkpad ([117.193.214.109])
+        by smtp.gmail.com with ESMTPSA id cb27-20020a05622a1f9b00b004283695a39bsm1356146qtb.94.2024.01.28.22.54.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jan 2024 22:54:59 -0800 (PST)
+Date: Mon, 29 Jan 2024 12:24:48 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Shradha Todi <shradha.t@samsung.com>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, mturquette@baylibre.com,
+	sboyd@kernel.org, jingoohan1@gmail.com, lpieralisi@kernel.org,
+	kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+	linux@armlinux.org.uk, m.szyprowski@samsung.com,
+	pankaj.dubey@samsung.com
+Subject: Re: [PATCH v4 1/2] clk: Provide managed helper to get and enable
+ bulk clocks
+Message-ID: <20240129065448.GC2971@thinkpad>
+References: <20240124103838.32478-1-shradha.t@samsung.com>
+ <CGME20240124103855epcas5p27400bd95df42f36b9547a4e28aa26f5d@epcas5p2.samsung.com>
+ <20240124103838.32478-2-shradha.t@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8euuNwnrCUEEcQYCFcC8QwIBwD6hIS8g
-X-Proofpoint-ORIG-GUID: 8euuNwnrCUEEcQYCFcC8QwIBwD6hIS8g
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-29_02,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- phishscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=823
- clxscore=1015 spamscore=0 mlxscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401190000 definitions=main-2401290035
+In-Reply-To: <20240124103838.32478-2-shradha.t@samsung.com>
 
-NSSCC driver is needed to enable the ethernet interfaces and not
-necessary for the bootup of the SoC, hence build it as a module.
+On Wed, Jan 24, 2024 at 04:08:37PM +0530, Shradha Todi wrote:
+> Provide a managed devm_clk_bulk* wrapper to get and enable all
+> bulk clocks in order to simplify drivers that keeps all clocks
+> enabled for the time of driver operation.
+> 
+> Suggested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Shradha Todi <shradha.t@samsung.com>
+> ---
+>  drivers/clk/clk-devres.c | 40 ++++++++++++++++++++++++++++++++++++++++
+>  include/linux/clk.h      | 24 ++++++++++++++++++++++++
+>  2 files changed, 64 insertions(+)
+> 
+> diff --git a/drivers/clk/clk-devres.c b/drivers/clk/clk-devres.c
+> index 4fb4fd4b06bd..cbbd2cc339c3 100644
+> --- a/drivers/clk/clk-devres.c
+> +++ b/drivers/clk/clk-devres.c
+> @@ -182,6 +182,46 @@ int __must_check devm_clk_bulk_get_all(struct device *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(devm_clk_bulk_get_all);
+>  
+> +static void devm_clk_bulk_release_all_enable(struct device *dev, void *res)
+> +{
+> +	struct clk_bulk_devres *devres = res;
+> +
+> +	clk_bulk_disable_unprepare(devres->num_clks, devres->clks);
+> +	clk_bulk_put_all(devres->num_clks, devres->clks);
+> +}
+> +
+> +int __must_check devm_clk_bulk_get_all_enable(struct device *dev,
+> +					      struct clk_bulk_data **clks)
+> +{
+> +	struct clk_bulk_devres *devres;
+> +	int ret;
+> +
+> +	devres = devres_alloc(devm_clk_bulk_release_all_enable,
+> +			      sizeof(*devres), GFP_KERNEL);
+> +	if (!devres)
+> +		return -ENOMEM;
+> +
+> +	ret = clk_bulk_get_all(dev, &devres->clks);
+> +	if (ret > 0) {
+> +		*clks = devres->clks;
+> +		devres->num_clks = ret;
+> +	} else {
+> +		devres_free(devres);
+> +		return ret;
+> +	}
 
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- Changes in V3:
-	- No change
+How about:
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+	ret = clk_bulk_get_all(dev, &devres->clks);
+	if (ret <= 0) {
+		devres_free(devres);
+		return ret;
+	}
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index e6cf3e5d63c3..00e7f3112d53 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1255,6 +1255,7 @@ CONFIG_IPQ_GCC_5332=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
- CONFIG_IPQ_GCC_9574=y
-+CONFIG_IPQ_NSSCC_9574=m
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_MMCC_8994=m
- CONFIG_MSM_GCC_8994=y
+	*clks = devres->clks;
+	devres->num_clks = ret;
+
+Even though this patch follows the pattern used by the rest of the APIs in the
+driver, IMO above makes it more readable.
+
+> +
+> +	ret = clk_bulk_prepare_enable(devres->num_clks, *clks);
+> +	if (!ret) {
+> +		devres_add(dev, devres);
+> +	} else {
+> +		clk_bulk_put_all(devres->num_clks, devres->clks);
+> +		devres_free(devres);
+> +	}
+> +
+
+Same as above:
+
+	ret = clk_bulk_prepare_enable(devres->num_clks, *clks);
+	if (ret) {
+		clk_bulk_put_all(devres->num_clks, devres->clks);
+		devres_free(devres);
+		return ret;
+	}
+
+	devres_add(dev, devres);
+
+> +	return ret;
+
+	return 0;
+
+> +}
+> +EXPORT_SYMBOL_GPL(devm_clk_bulk_get_all_enable);
+> +
+>  static int devm_clk_match(struct device *dev, void *res, void *data)
+>  {
+>  	struct clk **c = res;
+> diff --git a/include/linux/clk.h b/include/linux/clk.h
+> index 1ef013324237..a005e709b7bd 100644
+> --- a/include/linux/clk.h
+> +++ b/include/linux/clk.h
+> @@ -438,6 +438,23 @@ int __must_check devm_clk_bulk_get_optional(struct device *dev, int num_clks,
+>  int __must_check devm_clk_bulk_get_all(struct device *dev,
+>  				       struct clk_bulk_data **clks);
+>  
+> +/**
+> + * devm_clk_bulk_get_all_enable - managed get multiple clk consumers and
+> + *				  enable all clks
+
+"Get and enable all clocks of the consumer (managed)"
+
+> + * @dev: device for clock "consumer"
+> + * @clks: pointer to the clk_bulk_data table of consumer
+> + *
+> + * Returns success (0) or negative errno.
+> + *
+> + * This helper function allows drivers to get several clk
+
+"This helper function allows drivers to get all clocks of the consumer and
+enables them..."
+
+- Mani
+
+> + * consumers and enable all of them in one operation with management.
+> + * The clks will automatically be disabled and freed when the device
+> + * is unbound.
+> + */
+> +
+> +int __must_check devm_clk_bulk_get_all_enable(struct device *dev,
+> +					      struct clk_bulk_data **clks);
+> +
+>  /**
+>   * devm_clk_get - lookup and obtain a managed reference to a clock producer.
+>   * @dev: device for clock "consumer"
+> @@ -960,6 +977,13 @@ static inline int __must_check devm_clk_bulk_get_all(struct device *dev,
+>  	return 0;
+>  }
+>  
+> +static inline int __must_check devm_clk_bulk_get_all_enable(struct device *dev,
+> +						struct clk_bulk_data **clks)
+> +{
+> +
+> +	return 0;
+> +}
+> +
+>  static inline struct clk *devm_get_clk_from_child(struct device *dev,
+>  				struct device_node *np, const char *con_id)
+>  {
+> -- 
+> 2.17.1
+> 
+
 -- 
-2.34.1
-
+மணிவண்ணன் சதாசிவம்
 
