@@ -1,66 +1,66 @@
-Return-Path: <linux-clk+bounces-3089-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3092-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49D5D841FBD
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Jan 2024 10:39:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BEE6841FC7
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jan 2024 10:39:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03C5728D2CA
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Jan 2024 09:39:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF79D1F22692
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jan 2024 09:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9EE629EF;
-	Tue, 30 Jan 2024 09:38:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C4B664AB;
+	Tue, 30 Jan 2024 09:38:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JLz4ZCXS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yQCaAXXb"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8F460896
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF8E60B98
 	for <linux-clk@vger.kernel.org>; Tue, 30 Jan 2024 09:38:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706607513; cv=none; b=iSvA9AhQSU0sUiAdE9PFYlFhSQ9DMg6tuQjKeV6v9qLRoV1LglAare36ZL7ZMoTGor5urBXqC8dUWZcdwNmXUhYBGG4TjCodOXB4YWrv5zzMOU5cclkOhosv+EAvCbsNka+6kREqxlzIdS3uTorKC8gxtFs3DjW/5npx4+Ghsk4=
+	t=1706607514; cv=none; b=dYe6o94Vo7z4c+7815zseePfA+3H20ugyV3Bx6u1KFA5KVyMNMzd+81lIkgXcAOsiFxnkSLB+4t7UD6romYpYY0eh23eLGHDf6RE3cAs3ac2VkJoh1caSBb2s3Ls0f/DAMBxeB8jTZBo7UpAOFVRPUlF5vlJGrbtONGlOmMUgZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706607513; c=relaxed/simple;
-	bh=YItbowKTCSpjXbcY9OEx7S8QG6VDMLXlbbJ6Uw2+GDc=;
+	s=arc-20240116; t=1706607514; c=relaxed/simple;
+	bh=KmlVQI5t6vRCllo/cOaAJqkCPGhX9wTEE9PDUFITUjE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RjFWRKJ5q6R8YAsCT0c7J1ZiMQ0Zvl7gbmmwkAne8Hp0ua51RQ4lIHGcYPLSB+I9JK3/w0O7ViMwOfj8EIqYTI5YgqW/1G/uqLQZHdbE7XDNYk+6x+rS4gfc/OF0VvnhpCj1Bo9VO3+plG5z6lN7LsXCIcPm1TGAa/kBHPmjaNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JLz4ZCXS; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version:Content-Type; b=k+mjZqshowwSSrEfUXG5iRqFTvem57775fG/eBPv7HPToqtrBVJ8kudG3GBhGSQKLQTgaQ4Bv78uvUMsWHUVulhA86QE9EPyb0BwU7KTD8f40C93N9fzA4Z/ylyPVcS1FwFlNPdvZYkzv2+Xbq+DLQW2DL+lXbqSh5DCVjr8dLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yQCaAXXb; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55a9008c185so6483789a12.1
-        for <linux-clk@vger.kernel.org>; Tue, 30 Jan 2024 01:38:29 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-55f0b2c79cdso2602720a12.3
+        for <linux-clk@vger.kernel.org>; Tue, 30 Jan 2024 01:38:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706607508; x=1707212308; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706607509; x=1707212309; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RQzBQ4TASuzmiR4SqIUWePUdwbCtW+Gyj+OrWEuWMsY=;
-        b=JLz4ZCXSPKxYF9CqY5APwJC483uDdN9VxtrggxunBRSZv040rHPpx4kyJ1g02cDlT4
-         xS+InF6qncZtJFcajVYBzF//PHSta0AJKd4Zul64vgyKSlY2cbf6uh7d5ObhLTZOsmyd
-         a/V3nIp1nhO+ughVs4EdzNWt+1Fa8v112KCd4EcNqqMPZXSmncFM/1lnEAYCbtVBgv1t
-         rqemo+4HwJhHdVLPSWit86JzL4WRelyqFNg3PYUMGu1tignXkjGIG1wx/fh8EMmSVzs7
-         NxINMBtrrCeqJTJYxZ5eVX/QgTe2tU28nGp9ksN0w2POR/+9Tykm/RCBL7zsuWXIZkk0
-         K8DA==
+        bh=TAQSA+kK9jYgf9iRBFCJiMz1V0l84ZXoobUQ8ktAm0o=;
+        b=yQCaAXXbt9/VBWNTUatbrRUbuxcKR3GlRGwqpgUcaro7C9RK5gO2EC+rtK10qrfVhY
+         vD78PqQ9Qr5UI/IuM+4LgGTS0nQNlxhHF/9M4nBIOTju5ZkfFWnB3fyKYChK3fIESymk
+         uLXevaiAMx06iE6RimyEgqnDX55Nvo/n/9DTOR1p37XOFd605q6O11Ettwe1Q2DFwTVM
+         QLDFgJGIxqqeYTJRxl/FC57aVwun0rPS48NpjoV0IT9u//S7Xt6fQJVUm3kWgfdJdf57
+         3foYMkd3mitmRQbX60dcvQr+00tgMRgS8kDbFrQOz4P1U164Kqlrze3d6Nf2KM24esyF
+         fz4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706607508; x=1707212308;
+        d=1e100.net; s=20230601; t=1706607509; x=1707212309;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RQzBQ4TASuzmiR4SqIUWePUdwbCtW+Gyj+OrWEuWMsY=;
-        b=WHa5vm2J8wNNYmnlB9uGmw33gtrhcuCfJ4meuCNEAmrKAGgqX9A/1YhAVkoN3yQjku
-         ReYnFDDTa+Z4QCwg9yZdjsfBAXEj9pxArIpBP4jf71T3baSTmkcxEt5ZVBkIHHoFI3mq
-         ssDNszEQyX2OuZ5Y2e8nPRyoVsE+K3KajN7VTkW8Jacy/Mm6bbJUKyUGSZoCT3SgTeWh
-         eAQA/1Vsy7uXpBd6OJWMiuvxRCrWCG4GTk5k36+Zn5Jfe6hBqGDgj2ATbNFzNH6Zl7Q0
-         c37KyoYlmNUk4Wiu8bPU2cFLkV5yjZCe0pHxMedIgQ94aA3Io4PumIpMrX1o86eKAmAu
-         4RWA==
-X-Gm-Message-State: AOJu0YzVaMvxzdLC6R73YZBT1ED4SPNXuUR4v+GkdzpW92i31ixl1qDH
-	XyWtn1qro88mkcJsITNAWMZ6R5t59eF+hpjD8ru5N/L1Mae9s/doIUS9Kp67sQI=
-X-Google-Smtp-Source: AGHT+IFTTT2SbZmkNKnDsCZ1HUru53gHa0hRj5NRGgC3qt8zxFK1NYKcOop/xbSK8ch3lSKW2/Vf2g==
-X-Received: by 2002:a05:6402:14d1:b0:55d:43e0:93d9 with SMTP id f17-20020a05640214d100b0055d43e093d9mr777384edx.20.1706607508436;
+        bh=TAQSA+kK9jYgf9iRBFCJiMz1V0l84ZXoobUQ8ktAm0o=;
+        b=iG0Y5v1rIhwrpNvCK5j6x6VOM3wsk68Z9EHlpvGxyd/Mdvj5a61djpOmb87zH6Z2Ze
+         J3nzBHUnMvDhCAAoIzvjeHLs18Pz6gPsXspDU0uS/D3hALIrBk44SWHcFKRVCukv6/2w
+         RDQLbDojqoRr+uIPA2LeoqdmzVvxRPu35KT4o+/fRo8FHFfxuFOHDSRmLcJJlWrPPyEU
+         mMiaxJNayUG6ZTviVkpJ4HDrQDkcuHwUnNhexungAA+ll0jrQflRk89jvpV16ahmn4vB
+         pmJD5qulwUdo5I1t34kVhLPPNrSBHhZ43YPOKjUMzYcHSqZRpwpoyuQULNtAl8Yj9zOu
+         1Izg==
+X-Gm-Message-State: AOJu0YwI3OjvTc0Rco/cZbgY33YaYsR6WsYSsPDj0GdBPeJFtMcLCawx
+	mnU46FKPOHXHXkl43PGkIxvscMGDomJC34PSfgKz3Sz7orrGwFDGZqmWNLvFVL0=
+X-Google-Smtp-Source: AGHT+IF/m5mOArbCMzdGKzrOsjS0gVO6XRzIQWNVZ+HOi84zCHVgcM0i192IppW0vZqT+Xw+n90eTw==
+X-Received: by 2002:aa7:d7c4:0:b0:55f:aa:12a7 with SMTP id e4-20020aa7d7c4000000b0055f00aa12a7mr3320283eds.16.1706607508887;
         Tue, 30 Jan 2024 01:38:28 -0800 (PST)
 Received: from puffmais.c.googlers.com.com (94.189.141.34.bc.googleusercontent.com. [34.141.189.94])
         by smtp.gmail.com with ESMTPSA id q10-20020aa7cc0a000000b0055ef56f4575sm2281225edt.39.2024.01.30.01.38.28
@@ -87,9 +87,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	=?UTF-8?q?Andr=C3=A9=20Draszik?= <andre.draszik@linaro.org>
-Subject: [PATCH v2 3/6] arm64: dts: exynos: gs101: use correct clocks for usi8
-Date: Tue, 30 Jan 2024 09:36:42 +0000
-Message-ID: <20240130093812.1746512-4-andre.draszik@linaro.org>
+Subject: [PATCH v2 4/6] arm64: dts: exynos: gs101: use correct clocks for usi_uart
+Date: Tue, 30 Jan 2024 09:36:43 +0000
+Message-ID: <20240130093812.1746512-5-andre.draszik@linaro.org>
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 In-Reply-To: <20240130093812.1746512-1-andre.draszik@linaro.org>
 References: <20240130093812.1746512-1-andre.draszik@linaro.org>
@@ -102,18 +102,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Wrong pclk clocks have been used in this usi8 instance here. For USI
-and I2C, we need the ipclk and pclk, where pclk is the bus clock.
+Wrong pclk clocks have been used in this usi_uart instance here. For
+USI and UART, we need the ipclk and pclk, where pclk is the bus clock.
 Without it, nothing can work.
 
-It is unclear what exactly is using USI8_USI_CLK, but it is not
+It is unclear what exactly is using USI0_UART_CLK, but it is not
 required for the IP to be operational at this stage, while pclk is.
 This also brings the DT in line with the clock names expected by the
-usi and i2c drivers.
+usi and uart drivers.
 
 Update the DTSI accordingly.
 
-Fixes: 6d44d1a1fb62 ("arm64: dts: exynos: gs101: define USI8 with I2C configuration")
+Fixes: d97b6c902a40 ("arm64: dts: exynos: gs101: update USI UART to use peric0 clocks")
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
@@ -121,34 +121,34 @@ Tested-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
 ---
 v2:
-* add an empty line to commit message
+* fix a typo in and add an empty line to the commit message
 * collect Reviewed-by: Tested-by: tags
 ---
  arch/arm64/boot/dts/exynos/google/gs101.dtsi | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
-index bc251e565be6..e5b665be2d62 100644
+index e5b665be2d62..f93e937d2726 100644
 --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
 +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
-@@ -380,7 +380,7 @@ usi8: usi@109700c0 {
+@@ -410,7 +410,7 @@ usi_uart: usi@10a000c0 {
  			ranges;
  			#address-cells = <1>;
  			#size-cells = <1>;
--			clocks = <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>,
-+			clocks = <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_PCLK_7>,
- 				 <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7>;
+-			clocks = <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI0_UART_CLK>,
++			clocks = <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP1_PCLK_0>,
+ 				 <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP1_IPCLK_0>;
  			clock-names = "pclk", "ipclk";
- 			samsung,sysreg = <&sysreg_peric0 0x101c>;
-@@ -397,7 +397,7 @@ hsi2c_8: i2c@10970000 {
- 				pinctrl-names = "default";
- 				pinctrl-0 = <&hsi2c8_bus>;
- 				clocks = <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7>,
--					 <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>;
-+					 <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_PCLK_7>;
- 				clock-names = "hsi2c", "hsi2c_pclk";
- 				status = "disabled";
- 			};
+ 			samsung,sysreg = <&sysreg_peric0 0x1020>;
+@@ -422,7 +422,7 @@ serial_0: serial@10a00000 {
+ 				reg = <0x10a00000 0xc0>;
+ 				interrupts = <GIC_SPI 634
+ 					      IRQ_TYPE_LEVEL_HIGH 0>;
+-				clocks = <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI0_UART_CLK>,
++				clocks = <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP1_PCLK_0>,
+ 					 <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP1_IPCLK_0>;
+ 				clock-names = "uart", "clk_uart_baud0";
+ 				samsung,uart-fifosize = <256>;
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
