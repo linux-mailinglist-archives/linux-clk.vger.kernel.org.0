@@ -1,148 +1,128 @@
-Return-Path: <linux-clk+bounces-3247-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3244-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 778A9846000
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 19:33:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 791F6845FD2
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 19:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 070F71F2529D
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 18:33:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34BD929A9D2
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 18:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631EA82C9C;
-	Thu,  1 Feb 2024 18:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B140882C63;
+	Thu,  1 Feb 2024 18:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="eGCnhr4H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S0MAZp+7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mxout4.routing.net (mxout4.routing.net [134.0.28.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750EA12FB0E;
-	Thu,  1 Feb 2024 18:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168CE12FB36
+	for <linux-clk@vger.kernel.org>; Thu,  1 Feb 2024 18:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706812370; cv=none; b=AhPwrmwi8I1XpFDi7NeoRDKbjZN3FFEglP9dyIuhgt46kWlV0LPoG6vrT1dusPcxW4THHxBBdEU6Ti5mm8QJVy2bp7qOmlSzn+0oMGWB9r4u435gbdcirrJrO73vQPAKUi8lSqMybMWLTw8qI3QJfh0UTHlIPTKokGZvHCRM7JE=
+	t=1706811879; cv=none; b=Q9mgwcUY+l/9W/8xyC02Hg6y+RYQrXdF+I7r7EmhFfVLKMLwKsP1SglsKXtFHWGJAfJNp/HU9IJH3Lo2+D2Jhsyvd7HdMC+yQW/3uSaiA4VQFg+LuOxKPfIBul2Qcxozau21Wwy9go+Vv8uF9d3U4wj0Mqh5tS23Aa7QnOkMWho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706812370; c=relaxed/simple;
-	bh=wZ9VdrbqGguByilww7f+VjWtMoe0T6OV6lhMCQuXgL4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i/adhRr1z46Nn963iKPJ5rXx4rSA6t2l3WniaLQ2cJJbBq4xsybim4pNP0pwc5GDVzYpyk3bcl4e720cwLniG+0VxS+GGLqtqr8W+zxRtIghVr3BhL4Y50st978Hqhrb0wtR9OlSjJRi9u9rB4550gQk0OMnTsQUfa0eRAtsMLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=eGCnhr4H; arc=none smtp.client-ip=134.0.28.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-	by mxout4.routing.net (Postfix) with ESMTP id B9F2A1007E6;
-	Thu,  1 Feb 2024 18:24:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-	s=20200217; t=1706811857;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jawm/pvTHWX0WYgxucSztSNdUiVaRemAzUoNvh+bK2k=;
-	b=eGCnhr4HzH1KvYXRdshr8/vanq39eYij3BPDTAORTAZcoNqtCFZPijY9q47tbwMmLj9Dxy
-	0tDwX1YB89ZRx6pnDJQHiIN5s7GAyBBDb9uh19MSPpdQnJCj+ZSxaWY+SLar+npGuRJVoM
-	C+BtmDpofNko99cObq8sly+CbGratwo=
-Received: from frank-G5.. (fttx-pool-217.61.148.248.bambit.de [217.61.148.248])
-	by mxbox1.masterlogin.de (Postfix) with ESMTPSA id D30CC40533;
-	Thu,  1 Feb 2024 18:24:16 +0000 (UTC)
-From: Frank Wunderlich <linux@fw-web.de>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Frank Wunderlich <frank-w@public-files.de>,
-	Sam Shih <sam.shih@mediatek.com>,
-	Daniel Golle <daniel@makrotopia.org>,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH v4 2/2] clk: mediatek: add infracfg reset controller for mt7988
-Date: Thu,  1 Feb 2024 19:24:09 +0100
-Message-Id: <20240201182409.39878-3-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240201182409.39878-1-linux@fw-web.de>
-References: <20240201182409.39878-1-linux@fw-web.de>
+	s=arc-20240116; t=1706811879; c=relaxed/simple;
+	bh=WhQ0DzBaMOf2p0BQ0/iyFODtrdWQQm9VRmT+icXLJ58=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hzL6HM6eAJ8RDTakZWHNHuRJlPehWFrNq1EN7lddnpQq4+ZZs4Iegt2hyQa1NzVRLY6ZK7IobhbNWgBTtrUi4K7PSKbEm/L1x8qr3ChqpFgt9c+/gdhDx0fVVBu/5wsvABbtuKJzC7q3Sgdv4kgPzWrdnBgOZ7jsTYSuGnUPUO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S0MAZp+7; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5ce2aada130so1158752a12.1
+        for <linux-clk@vger.kernel.org>; Thu, 01 Feb 2024 10:24:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706811877; x=1707416677; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dUFcyRGjgFCHcU7TELJdpFaJ75t2Lcru3pbZ6VhQGp4=;
+        b=S0MAZp+7aOh8rmNVAxqoRVgiAKNW/vVMV+tbEt2Yy2c8VMttn//g8P3YdS5o6LvPOy
+         S2rkDPirq5BzfIfEdO+NWrXYCACa1RqscRTCB3e9fTlbOM/L0RUXxZL9xsfIOyvbAnN/
+         sEjfVMUwzMTVgFag+ZGWN151m8sXac5+xIMGnWeRqBgkDoXXnL4Dhp3e1CamAdKkYj5/
+         EIh2gs0uJJAg9RT8HbAJSKf7gRg2JvNujcbm/g3SRBgTl04g3R3r0VgSNamxSL49P9pR
+         26RVrW4FZZ5Q60CxiRTnkFKC6gALILZtt44M5g9s2Elnw5PzwgWhfk0aJBxyCDZfo6Pc
+         yh/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706811877; x=1707416677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dUFcyRGjgFCHcU7TELJdpFaJ75t2Lcru3pbZ6VhQGp4=;
+        b=nNuF2xE6H6Y+nuElSrQ42uD6ZZ32gd4RUbvWCssgplMeRnoa2JPJRwoNxUQSxriOFW
+         hskkZVSci49BfzqzMyd5wQrdQ71ErgnAMPuapX+ogYbombicJfGHvVZ8/IbEVqm/oyZI
+         IyHV7/k3MAIUaUFy+0VRIN6rffcbMifCXl4Bd3TKdST5xdKQdm7alUsJsQCiamu6svee
+         vhn2mPhM2MqVNzKeQN2aGHlSzlle8soMdepdEFX8QsyAepo79jKHECp61MqNwN9wrtf3
+         ITbjx9BvYB1vgWITCgNUwz3B00NMUWaMH9F9hBHy+pzgMYFjth51ZYsHHAu0BrogXgXd
+         N1jQ==
+X-Gm-Message-State: AOJu0Yzolb44xV3dqwSSPD+zJZXcn19k/WMmhX5O1imSGAYcPvCvCfFT
+	id4AR5ByA9Twsscv2x7c3PO2rvrNLp7Zbl/VVhiNpSoDQ/DxTH7gSmF1LFDd+qkGiFqpO91Cv/p
+	0IvxIkLxEop4Lb4xmH7lUR9HtWu3QF8xx5kdtHg==
+X-Google-Smtp-Source: AGHT+IEB90qcFx4TY3tpzYId3RpaXO+09NutWYPVOmVFBsoOrpib63SakvoAaXQt2ipdj1IdFncbrNePKi1xEbmWqqY=
+X-Received: by 2002:a05:6a20:46a2:b0:199:cecf:9f5d with SMTP id
+ el34-20020a056a2046a200b00199cecf9f5dmr5277395pzb.29.1706811877389; Thu, 01
+ Feb 2024 10:24:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 55057060-11c3-4130-9e0b-b79a9f6df589
+References: <20240125013858.3986-1-semen.protsenko@linaro.org>
+ <20240125013858.3986-4-semen.protsenko@linaro.org> <170678377409.179918.13077326172475089482.b4-ty@linaro.org>
+ <4c2c425b-3ddd-4484-98cf-3f7768c94e82@linaro.org>
+In-Reply-To: <4c2c425b-3ddd-4484-98cf-3f7768c94e82@linaro.org>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Thu, 1 Feb 2024 12:24:25 -0600
+Message-ID: <CAPLW+4=wsR=V+6vctf0gMzFVg6havL-M0kTDLLwhr-XdfuCD5Q@mail.gmail.com>
+Subject: Re: (subset) [PATCH v2 3/3] arm64: dts: exynos: Add SPI nodes for Exynos850
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	Tomasz Figa <tomasz.figa@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Thu, Feb 1, 2024 at 5:56=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 01/02/2024 11:36, Krzysztof Kozlowski wrote:
+> >
+> > On Wed, 24 Jan 2024 19:38:58 -0600, Sam Protsenko wrote:
+> >> Some USI blocks can be configured as SPI controllers. Add correspondin=
+g
+> >> SPI nodes to Exynos850 SoC device tree.
+> >>
+> >>
+> >
+> > Applied, thanks!
+> >
+> > [3/3] arm64: dts: exynos: Add SPI nodes for Exynos850
+> >       https://git.kernel.org/krzk/linux/c/98473b0d78caa5502b7eee05553ee=
+168f0b0b424
+>
+> And dropped. You did not test it.
+>
 
-Infracfg can also operate as reset controller, add support for it.
+Right. Forgot to re-test it after re-shuffling the clocks. Sorry for
+the hustle, I'll send v3 shortly.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-v4: unchanged
-v3:
-- start with RST0 (LVTS is in RST1)
-- rename reset offset to contain SOC to not collide with constants
-  defined in reset.h
----
- drivers/clk/mediatek/clk-mt7988-infracfg.c | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/drivers/clk/mediatek/clk-mt7988-infracfg.c b/drivers/clk/mediatek/clk-mt7988-infracfg.c
-index 8011ef278bea..449041f8abbc 100644
---- a/drivers/clk/mediatek/clk-mt7988-infracfg.c
-+++ b/drivers/clk/mediatek/clk-mt7988-infracfg.c
-@@ -14,6 +14,10 @@
- #include "clk-gate.h"
- #include "clk-mux.h"
- #include <dt-bindings/clock/mediatek,mt7988-clk.h>
-+#include <dt-bindings/reset/mediatek,mt7988-resets.h>
-+
-+#define	MT7988_INFRA_RST0_SET_OFFSET	0x70
-+#define	MT7988_INFRA_RST1_SET_OFFSET	0x80
- 
- static DEFINE_SPINLOCK(mt7988_clk_lock);
- 
-@@ -249,12 +253,31 @@ static const struct mtk_gate infra_clks[] = {
- 	GATE_INFRA3(CLK_INFRA_133M_PCIE_CK_P3, "infra_133m_pcie_ck_p3", "sysaxi_sel", 31),
- };
- 
-+static u16 infra_rst_ofs[] = {
-+	MT7988_INFRA_RST0_SET_OFFSET,
-+	MT7988_INFRA_RST1_SET_OFFSET,
-+};
-+
-+static u16 infra_idx_map[] = {
-+	[MT7988_INFRA_RST0_PEXTP_MAC_SWRST] = 0 * RST_NR_PER_BANK + 6,
-+	[MT7988_INFRA_RST1_THERM_CTRL_SWRST] = 1 * RST_NR_PER_BANK + 9,
-+};
-+
-+static struct mtk_clk_rst_desc infra_rst_desc = {
-+	.version = MTK_RST_SET_CLR,
-+	.rst_bank_ofs = infra_rst_ofs,
-+	.rst_bank_nr = ARRAY_SIZE(infra_rst_ofs),
-+	.rst_idx_map = infra_idx_map,
-+	.rst_idx_map_nr = ARRAY_SIZE(infra_idx_map),
-+};
-+
- static const struct mtk_clk_desc infra_desc = {
- 	.clks = infra_clks,
- 	.num_clks = ARRAY_SIZE(infra_clks),
- 	.mux_clks = infra_muxes,
- 	.num_mux_clks = ARRAY_SIZE(infra_muxes),
- 	.clk_lock = &mt7988_clk_lock,
-+	.rst_desc = &infra_rst_desc,
- };
- 
- static const struct of_device_id of_match_clk_mt7988_infracfg[] = {
--- 
-2.34.1
-
+> For some time, all Samsung SoCs and its variants are expected not to
+> introduce any new `dtbs_check W=3D1` warnings. Several platforms, like al=
+l
+> ARM64 Samsung SoCs, have already zero warnings, thus for such platforms
+> it is extra easy for the submitter to validate DTS before posting a
+> patch. The patch briefly looks like it is not conforming to this rule.
+> Please confirm that you tested your patch and it does not introduce any
+> new warnings (linux-next is decisive here).
+>
+> Best regards,
+> Krzysztof
+>
 
