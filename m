@@ -1,119 +1,106 @@
-Return-Path: <linux-clk+bounces-3243-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3245-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D5C6845FB4
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 19:20:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9170B845FF9
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 19:32:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB89D1C23BDD
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 18:20:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D6BC2852D6
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Feb 2024 18:32:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8AE212FB27;
-	Thu,  1 Feb 2024 18:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB87A82C97;
+	Thu,  1 Feb 2024 18:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R3VdfipO"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="tt1qRTli"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8373674297;
-	Thu,  1 Feb 2024 18:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED3A7E112;
+	Thu,  1 Feb 2024 18:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706811620; cv=none; b=qvIUv8jpDiWDPBp+z2bYdB+Ws9nuJKGjtSMMqRJASdz6OmCyNKEW0gOBY85ybgV5u0wo7cnyYhA3J2Ya7MoNkm6cnsxPzuBZyp9ieZUTyiEugPEa2sKukscBREPGcyHN5qnbvegVKZEUJzmeA7FKwUQXOy5LAyeJxwnj0p2CmK8=
+	t=1706812339; cv=none; b=EkIA8IukoW/k9xKTkgRyZYFwtKoh3I1zLT/qIrvFS3JDxZ5kNxYUbmrkMUo7NPST8itQR0P8nP7nlCgS0pCoupLogSIMhgNxfeYMPhDrGICzIgcsRlUQzajxICYxIdix7Q5EA7wrsfGUXa768Q0b0aBm9WGqpeHC3ECVZcLlsTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706811620; c=relaxed/simple;
-	bh=hPlLDcArSF1cBikO4rFTlnRitwqEi0aGbatvchQYh/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=biu+m8mUXBEfAIFkiBY1iOnaoGc2XlHWxBhutFUv0q2+qvVXhyA8gXyjNiGTY/Z7fvlMug3YjXF7BVRtn+tQhMPTEivDLqBNcypOWuGhdLHu7siYUKX9nD56UAzJeY4DfrvohpYWrB8TuCIfhINcuvFPH9Hrzf9lgZD1Glz4g0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R3VdfipO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75700C433F1;
-	Thu,  1 Feb 2024 18:20:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706811619;
-	bh=hPlLDcArSF1cBikO4rFTlnRitwqEi0aGbatvchQYh/M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R3VdfipOeSEOruQUNgkJ5igtoy9AihiH0Mmm8DX8nTYaEmEEAWEuJcAxlzC42rjxx
-	 hDU5Oanbc112HkwOM7gmMxyEsVNZS14RtqJ8LWx+ezMoSZT61ESQHfDoOwuSuC8pzn
-	 NKyJ8HCEBRpk8uijKMuApf7/Z6Lum3LE4eEcgpVj8Gpw/lPHn+eBO/qf5b68lPdTOF
-	 EHE0RalG/5HjrfQS0bH4gWJCUE++eg9T0hYYHFDCrKGH/bBfafXShd9YVjKgp0cwgA
-	 kKsNg0QK4updSpPjtzmGxj5jgBc8+QOCuzp68E06AXd3rhLobvNkxNK/p7KLlUQQcy
-	 CY1KJgASLARTw==
-Date: Thu, 1 Feb 2024 18:20:14 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Frank Wunderlich <frank-w@public-files.de>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Frank Wunderlich <linux@fw-web.de>,
-	Michael Turquette <mturquette@baylibre.com>,
+	s=arc-20240116; t=1706812339; c=relaxed/simple;
+	bh=KCztPjFje46tTvFIspE4Yw+0iPrI8st5t4y4xeZHOTM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MpmAklX62L2wf3LdBMAfVfX5MKnFyJ44lKkWkx5rK8Y9TmPghveMBs04LxEOnwmHxzmrfT7csz4UaYvW4KwH4ToPIQX+MXFWgGs22sfI5u+ovnKHhAOzJyO4hMT5rk9qK7IfFqcbvW9mDlqcOfUwrzl58ZNZ70bQEHe7gDLlj90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=tt1qRTli; arc=none smtp.client-ip=134.0.28.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+	by mxout2.routing.net (Postfix) with ESMTP id 15933615E9;
+	Thu,  1 Feb 2024 18:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1706811856;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FM4cDbc05aFm+s5YmM2e5LZAZcaagXIlqsb3avH/P4U=;
+	b=tt1qRTliyFFSUHcMcviRe+VcJNZonpH26E8dcYVWElrfwmBvJGErlNZWu9vcwvtc29m+ld
+	fR5Hj/0LQVl3HMVwY/cVXoz7qP3B5GC5yngrA0SoYtLeEawZL16MajOChDPaxfV48q8kDC
+	8n6YvCFuSVht9AX1E3/QJ/H+Ao8fK7M=
+Received: from frank-G5.. (fttx-pool-217.61.148.248.bambit.de [217.61.148.248])
+	by mxbox1.masterlogin.de (Postfix) with ESMTPSA id F247440533;
+	Thu,  1 Feb 2024 18:24:14 +0000 (UTC)
+From: Frank Wunderlich <linux@fw-web.de>
+To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	Philipp Zabel <p.zabel@pengutronix.de>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Frank Wunderlich <frank-w@public-files.de>,
 	Sam Shih <sam.shih@mediatek.com>,
-	Daniel Golle <daniel@makrotopia.org>, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: Aw: Re:  Re: [PATCH v3 1/2] dt-bindings: reset: mediatek: add
- MT7988 reset IDs
-Message-ID: <20240201-gutless-rising-692b7fa45f65@spud>
-References: <20240117184111.62371-1-linux@fw-web.de>
- <20240117184111.62371-2-linux@fw-web.de>
- <20240118-calcium-krypton-3c787b8d1912@spud>
- <trinity-afc4f48e-65e1-46ee-a78b-1d670cc0f310-1705615200900@3c-app-gmx-bap21>
- <43f946cc-07e1-48c5-9b31-40fc9bc93037@collabora.com>
- <20240119-dupe-obligate-707b3a01b356@spud>
- <0EA6A126-DDC0-4E9F-BEBC-FD018B08CA84@public-files.de>
- <20240201-goes-passable-0ba841d36bc3@wendy>
- <trinity-2aef55db-42e0-4f58-9c43-696311a96eb8-1706797383340@3c-app-gmx-bap28>
+	Daniel Golle <daniel@makrotopia.org>,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH v4 0/2] Add reset controller to mt7988 infracfg
+Date: Thu,  1 Feb 2024 19:24:07 +0100
+Message-Id: <20240201182409.39878-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="W2Ee5I31/3TVyJ4S"
-Content-Disposition: inline
-In-Reply-To: <trinity-2aef55db-42e0-4f58-9c43-696311a96eb8-1706797383340@3c-app-gmx-bap28>
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: c0fd09d3-398d-40e5-b864-847111d8224c
+
+From: Frank Wunderlich <frank-w@public-files.de>
+
+Infracfg on mt7988 supports reset controller function which is
+needed to get lvts thermal working.
+
+changes:
+ v4:
+   - changed commit message of dt-bindings patch to include information
+     about starting from 0 again suggested by Conor Dooley.
+ v3:
+   - start resets on RST0 offset (LVTS is RST1)
+   - rename offset constants with MT7988 prefix (else collision with reset.h)
+ v2:
+   - change value of constant to 0 from 9
+   - add missing SoB and commit-message for binding-patch
 
 
---W2Ee5I31/3TVyJ4S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Frank Wunderlich (2):
+  dt-bindings: reset: mediatek: add MT7988 infracfg reset IDs
+  clk: mediatek: add infracfg reset controller for mt7988
 
-On Thu, Feb 01, 2024 at 03:23:03PM +0100, Frank Wunderlich wrote:
-> > Gesendet: Donnerstag, 01. Februar 2024 um 14:11 Uhr
-> > Von: "Conor Dooley" <conor.dooley@microchip.com>
-> > I suspect I was asking for a commit message that explains why these
-> > numbers don't continue in sequence. With that,
-> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > Cheers,
-> > Conor.
->=20
-> OK, i would add this to commit message:
->=20
-> "Value is starting again from 0 because resets are used in another driver
-> than existing constants."
+ drivers/clk/mediatek/clk-mt7988-infracfg.c    | 23 +++++++++++++++++++
+ .../reset/mediatek,mt7988-resets.h            |  6 +++++
+ 2 files changed, 29 insertions(+)
 
-s/driver/device/ and sure.
+-- 
+2.34.1
 
---W2Ee5I31/3TVyJ4S
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbvg3gAKCRB4tDGHoIJi
-0neOAP41G78/o62ed4G9kWo32xu5055qvUh0jEZVW3ivqp4iXwD/dXNffyuUL2Et
-q3Abdf9njDBMF+vEwjQbZoOQo11BgAs=
-=3tdX
------END PGP SIGNATURE-----
-
---W2Ee5I31/3TVyJ4S--
 
