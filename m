@@ -1,175 +1,186 @@
-Return-Path: <linux-clk+bounces-3287-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3289-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F558498E5
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Feb 2024 12:33:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDDAE849C96
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Feb 2024 15:06:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47FA8280F09
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Feb 2024 11:33:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4602B29164
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Feb 2024 14:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9D518E06;
-	Mon,  5 Feb 2024 11:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48CA724B4A;
+	Mon,  5 Feb 2024 14:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qSWqRmpA"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mOezREo/"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A2818E0F
-	for <linux-clk@vger.kernel.org>; Mon,  5 Feb 2024 11:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A1F23768;
+	Mon,  5 Feb 2024 14:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707132817; cv=none; b=CO1olvP6dNXYkm/dpuQdOCDVD6CrfO/oAX2kXtMBv/u4HZv/7bRG4wXEw+hVk29z9vZYeFaadFAI9bKPFDT2cKM8BbY/pM0CKi8+gwDoDvZ6HIIK24UFH4OX099iN/5m5Dt6hQH+Q7PodhMVOeCmnaJeNxn8pp8rexly5XMQT5s=
+	t=1707141914; cv=none; b=l5b2nc/Eow22bsSHVatH3vHDFoObjktWJFgcDrj0RrCS+c7iAVlZrCltyu3+9p+sK56j1Jq1nXlf1K2QEoqHlxWA6Y/6G0CWIs3pCjbFhqlB3zmyASkzP3gwm2/FTm7/Fo5r4HaK62/CG9wW907l+jhZEnBZba3/gu6iS8AxGfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707132817; c=relaxed/simple;
-	bh=pqHr8ktcWjb7z6YkpH8/0b9yqCF/o9NhA+xa5c+rTns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Iw3H7I9O0jz0BSPigp4pPflIotD3cJfXnVGoz5qHJqN6exUgUlbKgXVFbGMY9jKvQEuH/Q40jVcvtdrDkWC5ra28PvOSreOtSN6OQeJzDM/8w7j4/0wOdvEk5K+ekDk0E7yTQ3ikmMvV5bSiKn6eICHBTXeaQEoKPbPCRr94ZEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qSWqRmpA; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a30f7c9574eso575968866b.0
-        for <linux-clk@vger.kernel.org>; Mon, 05 Feb 2024 03:33:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707132812; x=1707737612; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o4RoA1rH4rB2jaS+AHrZsou+aBL79EHdgTVoMA6pD7E=;
-        b=qSWqRmpAAV3ysP0eoc4GTKQEWXviQk7N/wSa/+WeujTdNfJfwXKUgIai/rFr5hOVhe
-         xeHemWEQGu9MQ/+hkA+jRf+NRHRbmmu8txibA1wBG1UbbNK8AynuW9PZ4R7r6ljNqqop
-         v1NGt/kskHMzVqwv/XP3QAn0aR+RgvyoNdeVpf5/9eUGFTuvXoU6gm+1BLJt05b+vovh
-         kMh/NWlT626RP/4tHiv2QrHGcq7kYDRgWTpsUR4uAYvOCrZNgeMR7GAa219ZduYJoVXB
-         ypgzteh9zBdEGLW2IsaaC1TFxOzjNwom+ZQ6jN4ttr7xM/Hh7zS1b1EyXU+aHh4OeIi3
-         Bd2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707132812; x=1707737612;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4RoA1rH4rB2jaS+AHrZsou+aBL79EHdgTVoMA6pD7E=;
-        b=Se1Vj2FGdbeD8Gt84aI8alrfZlhyIsuegvefZDdwfLGPjNhNHbl5m7fOGqRb9JNSXP
-         uTNDRfKFoGWfGycVnefp2OIYTHt4DquEr9L472RuqtfqX52/8faW0OmniuI4R5DmWLCw
-         L8hFaw4Gb8n7eWvZqhW86PKSUhu1Xqg2tWtEqddreK5wETnqdNoLZ9HPNPwWmzD2rXSu
-         kTrNTwYHRD6LMdtWb4WIx6wXLkNk39KnCwh1hneU1XGryYHrCcjzr0JTR5SJ1nLSzoK6
-         TJG9KlvKj+FnVfJZd+DZdUHgajqlDTCxkuQbicPLg/s5YLYBcOSIvfJKXm3rIOXlY4VF
-         uuiw==
-X-Gm-Message-State: AOJu0YwSXU9ZacBK3IPgSpCTaMmW1ZTRRxnPy3MySQfzrc8Xfeda8gVn
-	rfk8nzsr4p0ShNe7prJ5gUa67z7PdmPCC+fujNv4VtbsIAxridQ0YUsznd87670=
-X-Google-Smtp-Source: AGHT+IECEQfrfiKwnBW6JBBmnfYfx4ll9x/HMfLGeAGA+z1tHhkvEOdqDeipnNcAozA5+TVebA/rUw==
-X-Received: by 2002:a17:906:31d9:b0:a37:2176:251d with SMTP id f25-20020a17090631d900b00a372176251dmr5226974ejf.15.1707132812195;
-        Mon, 05 Feb 2024 03:33:32 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVIKDymKFwpaw0owuIVjaaVHIJEixWT6e2nh/2aI2NxesHM6Fn+jsrih0eFIHj4iw2Q8nSDuTOVNNMTJbcvfaJ4vHgwbFGdQi+SXcneuAkekZomVLErSJNvVfa3xjtpJpx/As4NmOezkfAYHyVFX9I6r2xfVySi1INlVPX4Ill98BCq8z7zJmT5KY8LlOTqWOg87x5QYxnA6IYBR1Uj33oRmG2pYTHr6Attvqd99Z3+H0WsKrP5Xe5nO/RYVBPH7Rb75YSDgvzQ4M5ZttkjblpYJ+5XHJYn4OWSZQBbT2a6qboAZ6C2VSZMx7aaoNakIWL+dX3wy1VRPSRW1S/N8Hg0cYr6UCz0Z4AXrqbz33FftZ5P/1jq3Jj/5gkGzlFMMdhAa//ikgiYLqrt2VwXz8+gHrsePFB6fUt1cuVtiaEB7s+tQjSRjaFuFDQKavEaq/YmOWP077j2SK981wdKKxM+K/x9gbzZ9C59W13cOIEGXbPiGQ==
-Received: from [192.168.159.104] (037008245233.garwolin.vectranet.pl. [37.8.245.233])
-        by smtp.gmail.com with ESMTPSA id g9-20020a170906348900b00a3522154450sm4299604ejb.12.2024.02.05.03.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 03:33:31 -0800 (PST)
-Message-ID: <6fdde54e-12cb-442c-9dea-d1d6cbca340b@linaro.org>
-Date: Mon, 5 Feb 2024 12:33:29 +0100
+	s=arc-20240116; t=1707141914; c=relaxed/simple;
+	bh=4bIEfg7PdUaON+zlchHH8C9f6qqA8dXeOfMbDZuxrhw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rOdsxYSAFPFDKXvWxpO1Xu39IebRqulv7Ghriua0/R95bDm/93/Vv6xLvJUDRf5zX2WVsoJ2i4134AmTNf6Dxo1NVbT0+TUmhSBK6/wXmL6D03nZxUCggtAu2at0lsrZxlDECSGUW3swboT9xdCqBNPTzd1jiqcxC4liK1fdqMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mOezREo/; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 415E50ig023002;
+	Mon, 5 Feb 2024 08:05:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1707141900;
+	bh=tWHCZPGdnVP9n6u5fBWigVBsLLeSsPy8VL0rQblycqY=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=mOezREo/iNM/aeAbvC6SOz5GAuInx3j8MW55bLKM71fM4VJ8t7Nk0HvsZgKAxwML/
+	 Wc+xXyOGBSXbDMZxmE92/1uDO0X9fWFd2dAkEGhGc5H0GgBfAJ0Lx68tWz0/OwGrIa
+	 AwQub8cyiH8ru32LKiG/oFJ6RnenEzWRQU1lRTNE=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 415E50SH032340
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 5 Feb 2024 08:05:00 -0600
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
+ Feb 2024 08:04:59 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 5 Feb 2024 08:04:59 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 415E4xjt050034;
+	Mon, 5 Feb 2024 08:04:59 -0600
+Date: Mon, 5 Feb 2024 08:04:59 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Udit Kumar <u-kumar1@ti.com>
+CC: <kristo@kernel.org>, <ssantosh@kernel.org>, <vigneshr@ti.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v1] clk: keystone: sci-clk: Adding support for non
+ contiguous clocks
+Message-ID: <20240205140459.orjvjqqtiugmyosc@obscurity>
+References: <20240205044557.3340848-1-u-kumar1@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] clk: qcom: gcc-sm8150: Add gcc_parents_0_ao support
-Content-Language: en-US
-To: "Satya Priya Kakitapalli (Temp)" <quic_skakitap@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Ajit Pandey <quic_ajipan@quicinc.com>,
- Imran Shaik <quic_imrashai@quicinc.com>,
- Jagadeesh Kona <quic_jkona@quicinc.com>
-References: <20240123-gcc-ao-support-v1-0-6c18d5310874@quicinc.com>
- <20240123-gcc-ao-support-v1-2-6c18d5310874@quicinc.com>
- <d31a52fc-9073-483d-b84b-1f02a5698a89@linaro.org>
- <77903574-696b-90f9-f136-be5c5d219ba1@quicinc.com>
- <5ae84692-b05d-4a43-aabb-4d2e7d9926d5@linaro.org>
- <04788b2c-a212-b8a2-1124-d904f2f61f5d@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <04788b2c-a212-b8a2-1124-d904f2f61f5d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240205044557.3340848-1-u-kumar1@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 5.02.2024 09:37, Satya Priya Kakitapalli (Temp) wrote:
+On 10:15-20240205, Udit Kumar wrote:
+> Most of clocks and their parents are defined in contiguous range,
+> But in few cases, there is gap in clock numbers[0].
 > 
-> On 1/25/2024 3:25 PM, Konrad Dybcio wrote:
->>
->>
->> On 1/25/24 06:49, Satya Priya Kakitapalli (Temp) wrote:
->>>
->>> On 1/23/2024 11:17 PM, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 1/23/24 17:34, Satya Priya Kakitapalli wrote:
->>>>> Add active_only support for gcc_parents_0, this is needed because
->>>>> some of the clocks under it are critical which would vote on xo
->>>>> blocking the suspend.
->>>>>
->>>>> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
->>>>> ---
->>>>
->>>> Is there a need to keep gcc_cpuss_ahb_clk_src around? Do we do any
->>>> ratesetting on it? Should we ever turn it off?
->>>>
->>>
->>> The branch clocks under gcc_cpuss_ahb_clk_src are critical clocks, which are running at 19.2Mhz causing vote on XO during suspend. As of now no rate setting is happening but this rcg is useful to get the exact rates from debugfs. Hence this change is needed to avoid XO shutdown issues.
->>
->> So, if I underderstood you correctly, this clock serves no purpose other
->> than getting rate?
->>
->> In this case, I'd say we should de-register it from the clock driver and
->> use debugcc [1] (contributions welcome!) for precise measurements.
->>
+> Driver assumes clocks to be in contiguous range, and assigns
+> accordingly.
 > 
-> Although currently there is no rate-setting happening now, its better to keep the rcg modelling as is, considering that it might be needed if some use case arises in future.
+> New firmware started returning error in case of
+> non-available clock id.  Therefore drivers throws error while
+> re-calculate and other functions.
 
-We don't tend to solve imaginary problems, please lay out what it would be
-used for, if at all. Then, we can assess whether it's necessary.
+What changed here? started returning error for what API? also please fix
+up 70 char alignment -> there extra spaces in your commit message.
+> 
+> In this fix, before assigning and adding clock in list,
+> driver checks if given clock is valid or not.
+> 
+> Fixes: 3c13933c6033 ("clk: keystone: sci-clk: add support for dynamically probing clocks")
+> 
+> [0] https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/j7200/clocks.html
+> Section Clocks for NAVSS0_CPTS_0 Device,
+> clock id 12-15 and 18-19 not present
+> 
+> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+> ---
+> Original logs
+> https://gist.github.com/uditkumarti/de4b36b21247fb36725ad909ce4812f6#file-original-logs
+> Line 2630 for error
+> 
+> Logs with fix
+> https://gist.github.com/uditkumarti/de4b36b21247fb36725ad909ce4812f6#file-with-fix
+> Line 2594 
+> 
+>  drivers/clk/keystone/sci-clk.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/clk/keystone/sci-clk.c b/drivers/clk/keystone/sci-clk.c
+> index 35fe197dd303..d417ec018d82 100644
+> --- a/drivers/clk/keystone/sci-clk.c
+> +++ b/drivers/clk/keystone/sci-clk.c
+> @@ -517,6 +517,8 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
+>  	int num_clks = 0;
+>  	int num_parents;
+>  	int clk_id;
+> +	int max_clk_id;
+> +	u64 freq;
+>  	const char * const clk_names[] = {
+>  		"clocks", "assigned-clocks", "assigned-clock-parents", NULL
+>  	};
+> @@ -584,6 +586,7 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
+>  				}
+>  
+>  				clk_id = args.args[1] + 1;
+> +				max_clk_id = clk_id + num_parents;
+>  
+>  				while (num_parents--) {
+>  					sci_clk = devm_kzalloc(dev,
+> @@ -592,11 +595,20 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
+>  					if (!sci_clk)
+>  						return -ENOMEM;
+>  					sci_clk->dev_id = args.args[0];
+> -					sci_clk->clk_id = clk_id++;
+> -					sci_clk->provider = provider;
+> -					list_add_tail(&sci_clk->node, &clks);
+> +					/* check if given clock id is valid by calling get_freq */
+> +					/* loop over max possible ids */
+> +					do {
+> +						sci_clk->clk_id = clk_id++;
+>  
+> -					num_clks++;
+> +						ret = provider->ops->get_freq(provider->sci,
+> +							   sci_clk->dev_id, sci_clk->clk_id, &freq);
+> +					} while (ret != 0 && clk_id < max_clk_id);
 
-Konrad
+take clock ids 0 1 2 3 -> Say 2 is reserved.
+num_parents = 4
+while(num_parents) Loop 1 ->  clk ID 0 is valid, list_add_tail
+while(num_parents) Loop 2 ->  clk ID 1 is valid, list_add_tail
+while(num_parents) Loop 3 ->  clk ID 2 is invalid.. so we scan forward
+	to clk ID 3 -> list_add_tail
+while(num_parents) Loop 4 ->  clk ID 4 is invalid.. but 5 is out of
+	range, so we break off loop. sci_clk is still devm_kzalloced ->
+	but since clk_id > max_clk_id, we jump off loop, and we dont add
+	it to tail. so one extra allocation?
+If we have multiple reserved intermediate ones, then we'd have as many
+allocations that aren't linked? Could we not improve the logic a bit to
+allocate just what is necessary?
+
+> +
+> +					sci_clk->provider = provider;
+> +					if (ret == 0) {
+> +						list_add_tail(&sci_clk->node, &clks);
+> +						num_clks++;
+> +					}
+>  				}
+>  			}
+>  
+> -- 
+> 2.34.1
+> 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
