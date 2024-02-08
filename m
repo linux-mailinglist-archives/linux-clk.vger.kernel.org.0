@@ -1,98 +1,81 @@
-Return-Path: <linux-clk+bounces-3457-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3460-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D495084E127
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Feb 2024 13:48:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5C3084E30F
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Feb 2024 15:24:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CE3428DDC2
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Feb 2024 12:48:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA6DA1C226A4
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Feb 2024 14:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239BB8002D;
-	Thu,  8 Feb 2024 12:44:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B02279DD8;
+	Thu,  8 Feb 2024 14:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="KKJuxj0d"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="l7NiTcyK"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3AD7640B
-	for <linux-clk@vger.kernel.org>; Thu,  8 Feb 2024 12:44:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C4D79934;
+	Thu,  8 Feb 2024 14:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707396265; cv=none; b=qc7uWs2mr7HIHPhGDm8Ye9uGrbv3o2kkSgv9o7UwahpeOTCSB7Hh6eDBvIqdynDtOiGfpyBarFjuasnCFxr62/xqOLEzQ89hb9Pfn0cg7VknHLAQB4OoPA3Loao+4DViSl4riAo90gXRG+oocyfmuT/OFTnQfdkD38+Lb2BqzBY=
+	t=1707402261; cv=none; b=Bd5JucnYlZhUkKKYZ4u6uOUDx/tDlAsjuIsk90C2caZO7G43IoBUkWY95esXH9rx/jzYFZIRhX5bRq3RbcsC9LZsd8Ijel1P9glH1BuYgE3gMeFd2uoLZOpoI+lalZijbgpdrXGVW6CJMp8iArkpZJSTjAjX+vz10fjZID3HNo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707396265; c=relaxed/simple;
-	bh=gRX2x88FqVLUStqN8zuHyneH2upnBTYGjfOVYMyFZ0E=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ikqFNv2jh4168jh+xY0cZ3jPffQO59etB4//BGJPVujJgfTHPOBgVqQr+cpsfVlGwkxyB9YGOQs07lbLOSL/eDp39AwQcSemMMBrmVSJw8jxGqdP8dIXTxGAW0vOFoHcTNsm8whhGS4++Wya6aIsqikQSIa2jWsFELTTQ9TOdWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=KKJuxj0d; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4104dee26bfso905925e9.3
-        for <linux-clk@vger.kernel.org>; Thu, 08 Feb 2024 04:44:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1707396261; x=1708001061; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6yTEa4/lsVRh49barZX5/hHwmF5ODn+0XbIAzs9ib3A=;
-        b=KKJuxj0d3E7VI/zgAkCYq9iS28icvQc3wktVef55AGsDGZgWHKVJe+dQX4GUCCoDGM
-         zONbRMFr4bDbPYkT7u2D+nh2HerfwtkxgrJIirDXYFrAGCa8YX8w73vTeGZZhlmYbwcQ
-         /By6OAPXb3e5wnhInvQc3UEz6coIW8UAo6y/ep0lAf8e8X69GUDiKUEpUe0shoXKD8Rq
-         6OwZkiopObf0sFrH/LbF51tgjI9l8I/JD2TH5aRx2EG5sELqZ2P/76aaX4euJecJ2949
-         QI1i16pl3rEbmCGSI0WYdVlmlULbo3r+auNKFvwtu7gWbUYNIUL26CVnrkIct8HG8fJS
-         yVAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707396261; x=1708001061;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6yTEa4/lsVRh49barZX5/hHwmF5ODn+0XbIAzs9ib3A=;
-        b=Bm3llj5WcyB0tNEgT8X1RV4PAAuylRXWGLyw4ZDEtKt8mwe8LlzebzRZmpL49nF/KZ
-         2RzNJ3Kdvv83pE6LzFipeN+slTrzaWF0TJ8UXauvYfL38MQ/LZxznWYj44Alzy0Zo+nB
-         4mgURsGBG0ppHmcbonrBSsGOomMtApoIpocvPTKAmCKJjoyr6DTVg0E/z5CHXSKE3UFu
-         FeQuleFeNMaXiRFEEwCGFGNcXleMFglZc10uffcx8yCL07Yae758RksRkF01zTIfg8YL
-         Ta59AyX2IemMaWvIer1Kn9ljHCSzrHU0HFcA7H7yjsDfk28ZQTxpNN40RkDFuRAq5+k+
-         aIfw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDTvmY1SwhFxAZ4LZI7sK7YkJmBRcCiNjBX5AaNNChTudnoyDiHQq6IHBtt5+rIvVk6bFkZEu6kOt4D+AtiKqg4fJ9OHVVwY+G
-X-Gm-Message-State: AOJu0Yx188hNnD31zbcuO/vR6YB46PTh5ohCuaZS8tBtUWAykoLk/SEN
-	DSQOEU499sZWMN9qJEMTBz7kDMW3tPnUGB+K+rIwqfDOZ9e8fOHg3r7T9xRHjRY=
-X-Google-Smtp-Source: AGHT+IGANbj1iqOytgIwqTg4Mq/0gpcdPMAp60+0punCG5pjW18WFbjKTwZGb5kh4i/RgdGw5GaHyw==
-X-Received: by 2002:a05:600c:1c9e:b0:40f:c1b7:2556 with SMTP id k30-20020a05600c1c9e00b0040fc1b72556mr7366673wms.11.1707396261396;
-        Thu, 08 Feb 2024 04:44:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW9Sr/LYarYn0Ydw9Z5UndLl0lPc2rf5eImobbDtGEveI/5qBkV4OQYupRBQfDCMJRJ35YozSSMZas9QWzlnjzZVptnk7zkEZazrYTVw86UYlPS3AI0amTEsE6I1FZTTCY+hKtcasM7WBV0CBCiw8LWCK5V8+EBrXoy+b097mnpz/r7tCy6nox9rqP8L6C/nTjqQwSbamMiJThJ8fRRSO1vtaaCazKwu8e2vMsvJBixIu9GxEvggwQmByZNF0Ftcn2PZ+sei2Tg2ED43jC+Pkt/GSwfzj4BqqDpmdcS/ligPgbTVv4N94S7AmYojqC3XPwLYcTPlsGwptui7xpDuKnOfdMoU91UuSuawHavUuKJrBzwPp3Gk8VKSIXbo2O13LQPhV7Rrq5vTtcWY2ksYI7gP3GUlsypZNX08ORpOoYrg0q6+EI8xVUSuGbFdrQeqxp/s1UyKIEqYLsn9o0yOymBeDmq7b0rAXaZJ+wGnPwDdhKPP0W9GZMM1Ow3IYm8P5oq0ulAfZVqpmXZbInU1pEw6JiKqDGpNY1BXjMkk/DzWiFO5eVGwKSTxx5g6mbiqdQ=
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.45])
-        by smtp.gmail.com with ESMTPSA id o13-20020a05600c4fcd00b0041047382b76sm790244wmq.37.2024.02.08.04.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 04:44:20 -0800 (PST)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	magnus.damm@gmail.com,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH 17/17] arm64: dts: renesas: r9a09g011: Update #power-domain-cells = <1>
-Date: Thu,  8 Feb 2024 14:43:00 +0200
-Message-Id: <20240208124300.2740313-18-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240208124300.2740313-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240208124300.2740313-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1707402261; c=relaxed/simple;
+	bh=PK+HEVqFsevHHF+17hPtIOkqwfqfNEdE0CdmS3ZYJZM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AO6hGSeFVfQjUISldtQt2vY4KdE3B3l+rWwf8NVLsPL82diPn8Y5GOyfPdAF8en75qIXIXg78vuTl5lUY0nDau7Ba8Qe53+WxzO7mA0pzJwHl+iJr3Fh8f2891ktA26S0zrAZhMmLU7dls/Ry1twkNtt6v2qRd8V5qELRXsfRMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=l7NiTcyK; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 418B1tSQ014846;
+	Thu, 8 Feb 2024 15:23:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=zaPY/Fi
+	i7n1522i/lEuTYz0M022TA0flX4c6e/PmMDY=; b=l7NiTcyK6dh6lWpohPWOTMd
+	QqV5JdiDrnAQbolPRLgDZYcSWeEcxRlRnQ9peu4mbN6nyX2+degzFIeYcPz25QKD
+	SjD1z71/fXDRdlDk9vSMU+lw+EuTslV/DrjHUDDmoC6JMxK5dzqRWdjv62LeIPMz
+	0MJVAY+RsfbMv2IBNjqy9pwpEkxWWYgSQRlGcKYDPJPs7FlcXhUBAOGsM5jLCyxf
+	L3AFoRVWjCKH7Mi4o886pVsQvyWHwU84an5TsES95DjfNkbdFrzccsoF+/OUVs6C
+	pBSDR5iw7JRVM8Gel5hF4Zq5OXSSX49j0QdDsICyFYDjO8EROKtuXkihsvoJIJg=
+	=
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3w1f63vxa5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 08 Feb 2024 15:23:52 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B5AE3100051;
+	Thu,  8 Feb 2024 15:23:42 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A2DE029B132;
+	Thu,  8 Feb 2024 15:23:42 +0100 (CET)
+Received: from localhost (10.201.21.240) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 8 Feb
+ 2024 15:23:42 +0100
+From: <gabriel.fernandez@foss.st.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/4] Introduce STM32MP257 clock driver
+Date: Thu, 8 Feb 2024 15:22:57 +0100
+Message-ID: <20240208142301.155698-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -100,149 +83,89 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-08_05,2024-02-08_01,2023-05-22_02
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Update CPG #power-domain-cells = <1> and move all the IPs to be part of the
-always on power domain as the driver has been modified to support multiple
-power domains.
+v9: base on next-20240207
+  - update dt binding documentation with v8 modidification on RCC driver
+    (use .index of clk_parent_data struct to define a parent)
+  - rebase patch "arm64: dts: st: add rcc support for STM32MP25"
+     with next-20240207 tag
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi | 28 +++++++++++-----------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+v8:
+  - use .index of clk_parent_data struct to define a parent
+  - remove unnecessary dependency check with SCMI clock driver
+  - convert to platform device APIs
+  - convert to devm_of_clk_add_hw_provider()
+  - convert single value enum to a define
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a09g011.dtsi b/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
-index 50ed66d42a24..74af0f730b89 100644
---- a/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
-@@ -81,7 +81,7 @@ sdhi0: mmc@85000000 {
- 				 <&cpg CPG_MOD R9A09G011_SDI0_ACLK>;
- 			clock-names = "core", "clkh", "cd", "aclk";
- 			resets = <&cpg R9A09G011_SDI0_IXRST>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			status = "disabled";
- 		};
- 
-@@ -97,7 +97,7 @@ sdhi1: mmc@85010000  {
- 				 <&cpg CPG_MOD R9A09G011_SDI1_ACLK>;
- 			clock-names = "core", "clkh", "cd", "aclk";
- 			resets = <&cpg R9A09G011_SDI1_IXRST>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			status = "disabled";
- 		};
- 
-@@ -113,7 +113,7 @@ emmc: mmc@85020000  {
- 				 <&cpg CPG_MOD R9A09G011_EMM_ACLK>;
- 			clock-names = "core", "clkh", "cd", "aclk";
- 			resets = <&cpg R9A09G011_EMM_IXRST>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			status = "disabled";
- 		};
- 
-@@ -129,7 +129,7 @@ usb3drd: usb3drd@85070400 {
- 				 <&cpg CPG_MOD R9A09G011_USB_PCLK>;
- 			clock-names = "axi", "reg";
- 			resets = <&cpg R9A09G011_USB_DRD_RESET>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			ranges;
- 			#address-cells = <2>;
- 			#size-cells = <2>;
-@@ -144,7 +144,7 @@ usb3host: usb@85060000 {
- 					 <&cpg CPG_MOD R9A09G011_USB_PCLK>;
- 				clock-names = "axi", "reg";
- 				resets = <&cpg R9A09G011_USB_ARESETN_H>;
--				power-domains = <&cpg>;
-+				power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 				status = "disabled";
- 			};
- 
-@@ -157,7 +157,7 @@ usb3peri: usb3peri@85070000 {
- 					 <&cpg CPG_MOD R9A09G011_USB_PCLK>;
- 				clock-names = "axi", "reg";
- 				resets = <&cpg R9A09G011_USB_ARESETN_P>;
--				power-domains = <&cpg>;
-+				power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 				status = "disabled";
- 			};
- 		};
-@@ -207,7 +207,7 @@ avb: ethernet@a3300000 {
- 				 <&cpg CPG_MOD R9A09G011_ETH0_GPTP_EXT>;
- 			clock-names = "axi", "chi", "gptp";
- 			resets = <&cpg R9A09G011_ETH0_RST_HW_N>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			status = "disabled";
-@@ -220,7 +220,7 @@ cpg: clock-controller@a3500000 {
- 			clock-names = "extal";
- 			#clock-cells = <2>;
- 			#reset-cells = <1>;
--			#power-domain-cells = <0>;
-+			#power-domain-cells = <1>;
- 		};
- 
- 		pwc: pwc@a3700000 {
-@@ -244,7 +244,7 @@ csi0: spi@a4020000 {
- 				 <&cpg CPG_MOD R9A09G011_CPERI_GRPG_PCLK>;
- 			clock-names = "csiclk", "pclk";
- 			resets = <&cpg R9A09G011_CSI_GPG_PRESETN>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			status = "disabled";
-@@ -258,7 +258,7 @@ csi4: spi@a4020200 {
- 				 <&cpg CPG_MOD R9A09G011_CPERI_GRPH_PCLK>;
- 			clock-names = "csiclk", "pclk";
- 			resets = <&cpg R9A09G011_CSI_GPH_PRESETN>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 			status = "disabled";
-@@ -274,7 +274,7 @@ i2c0: i2c@a4030000 {
- 			interrupt-names = "tia", "tis";
- 			clocks = <&cpg CPG_MOD R9A09G011_IIC_PCLK0>;
- 			resets = <&cpg R9A09G011_IIC_GPA_PRESETN>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			status = "disabled";
- 		};
- 
-@@ -288,7 +288,7 @@ i2c2: i2c@a4030100 {
- 			interrupt-names = "tia", "tis";
- 			clocks = <&cpg CPG_MOD R9A09G011_IIC_PCLK1>;
- 			resets = <&cpg R9A09G011_IIC_GPB_PRESETN>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			status = "disabled";
- 		};
- 
-@@ -311,7 +311,7 @@ wdt0: watchdog@a4050000 {
- 			clock-names = "pclk", "oscclk";
- 			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
- 			resets = <&cpg R9A09G011_WDT0_PRESETN>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			status = "disabled";
- 		};
- 
-@@ -361,7 +361,7 @@ pinctrl: pinctrl@b6250000 {
- 				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cpg CPG_MOD R9A09G011_PFC_PCLK>;
--			power-domains = <&cpg>;
-+			power-domains = <&cpg R9A09G011_PD_ALWAYS_ON>;
- 			resets = <&cpg R9A09G011_PFC_PRESETN>;
- 		};
- 	};
+v7: base on next-20231219
+  - These patches below are applied to clk-next:
+      clk: stm32mp1: move stm32mp1 clock driver into stm32 directory
+      clk: stm32mp1: use stm32mp13 reset driver
+      dt-bindings: stm32: add clocks and reset binding for stm32mp25
+  - remove unnecessary includes
+  - migrate clock parents to struct clk_parent_data and remove
+    CLK_STM32_XXX() macros  to have a more readble code
+  - use platform device APIs (devm_of_iomap() instead of_iomap())
+  - move content of stm32mp25_rcc_init() to stm32mp25_rcc_clocks_probe()
+  - simply get_clock_deps()
+  - add const to stm32mp25_data struct
+  - remove ck_icn_p_serc clock (will be integrate later with security
+    management)
+
+v6:
+  - remove useless defines in drivers/clk/stm32/stm32mp25_rcc.h
+
+v5:
+  - Fix sparse warnings: was not declared. Should it be static?
+    drivers/clk/stm32/clk-stm32mp13.c:1516:29: symbol 'stm32mp13_reset_data'
+    drivers/clk/stm32/clk-stm32mp1.c:2148:29: symbol 'stm32mp1_reset_data'
+    drivers/clk/stm32/clk-stm32mp25.c:1003:5: symbol 'stm32mp25_cpt_gate'
+    drivers/clk/stm32/clk-stm32mp25.c:1005:29: symbol 'stm32mp25_clock_data'
+    drivers/clk/stm32/clk-stm32mp25.c:1011:29: symbol 'stm32mp25_reset_data'
+
+v4:
+  - use GPL-2.0-only OR BSD-2-Clause for clock and reset binding files
+  - use quotes ' for #clock-cells and #reset-cells in YAML documentation
+  - reset binding start now to 0 instead 1
+  - improve management of reset lines that are not managed
+
+v3:
+  - from Rob Herring change clock item description in YAML documentation
+v2:
+  - rework reset binding (use ID witch start from 0)
+  - rework reset driver to manage STM32MP13 / STM32MP15 / STM32MP25
+  - rework YAML documentation
+
+Gabriel Fernandez (4):
+  clk: stm32mp13: use platform device APIs
+  dt-bindings: stm32: update DT bingding for stm32mp25
+  clk: stm32: introduce clocks for STM32MP257 platform
+  arm64: dts: st: add rcc support for STM32MP25
+
+ .../bindings/clock/st,stm32mp25-rcc.yaml      |  171 +-
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |  144 +-
+ arch/arm64/boot/dts/st/stm32mp255.dtsi        |    4 +-
+ drivers/clk/stm32/Kconfig                     |    7 +
+ drivers/clk/stm32/Makefile                    |    1 +
+ drivers/clk/stm32/clk-stm32-core.c            |   11 +-
+ drivers/clk/stm32/clk-stm32mp13.c             |   72 +-
+ drivers/clk/stm32/clk-stm32mp25.c             | 1876 +++++++++++++++++
+ drivers/clk/stm32/reset-stm32.c               |   59 +-
+ drivers/clk/stm32/reset-stm32.h               |    7 +
+ drivers/clk/stm32/stm32mp25_rcc.h             |  712 +++++++
+ 11 files changed, 2922 insertions(+), 142 deletions(-)
+ create mode 100644 drivers/clk/stm32/clk-stm32mp25.c
+ create mode 100644 drivers/clk/stm32/stm32mp25_rcc.h
+
 -- 
-2.39.2
+2.25.1
 
 
