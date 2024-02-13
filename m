@@ -1,249 +1,258 @@
-Return-Path: <linux-clk+bounces-3586-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3583-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B77428532DF
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Feb 2024 15:20:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 091C5853248
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Feb 2024 14:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E8E1281E1D
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Feb 2024 14:20:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D7981C22AD8
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Feb 2024 13:51:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7080057868;
-	Tue, 13 Feb 2024 14:19:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923F95674B;
+	Tue, 13 Feb 2024 13:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="lUjzLLll"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C+QO3Wiw"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8100058137
-	for <linux-clk@vger.kernel.org>; Tue, 13 Feb 2024 14:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B045646E
+	for <linux-clk@vger.kernel.org>; Tue, 13 Feb 2024 13:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707833995; cv=none; b=WqytLtZLCzDqAqRF+BngYYgXbO2iKK7h1YeGS61MbiYrN2IK2Ae6X3iO4I95L6koD0yctWKHmUfLn4e7B3qh/6fHOqXozX00js+2+k5w8r/K/vFiuNegeSvlYJ2aIJtqkNeYp0N4JQZesTHnkbEHx7NUpviwgWbDWtxDxOWEJJw=
+	t=1707832302; cv=none; b=MxnEc8yEtKrShaMJTxa3IQc3v+b80fnbZdSKCLBmOcCN7tGfyy0vfUsN0b4+g1hoKjMEXmJIqqZOi59aiPaGP1xLg2+eOR20FxiDFBDQqZT1VE/237QzerAQPBME2ODHg9qsoy86rT+g1WFsDXQFXSI5krxJuGiFTy/h5VtHzWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707833995; c=relaxed/simple;
-	bh=uQSuDcenC7QtjyHuVyxBlW7jEkPTOEKNuzZhMEq78rI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:Content-Type:
-	 References; b=ctGvd5M7cAl5Kwv2HUpDRlfon5KDN4G9Dt6136y3V2NkYP2lW9/OYzpSazKvX1Z/2K8nY+s+Nu4OpDe5M3iXrd5hXKaWTdNHA8TfkBr7Ci2lsm5pKjdee7b7WofShKmEg3tZjMbLpOgPu2x4zoIrXIcH/pdw2+R1sMiOoTIvrw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=lUjzLLll; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240213141951epoutp0190c5bc474287fd58501278f3e9b93fa9~zcfdz5FVF2297022970epoutp01F
-	for <linux-clk@vger.kernel.org>; Tue, 13 Feb 2024 14:19:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240213141951epoutp0190c5bc474287fd58501278f3e9b93fa9~zcfdz5FVF2297022970epoutp01F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1707833991;
-	bh=6WcEEEJAqHt6H76Re3bajB+WXdTeFoCOJ/3X3ukJOi4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lUjzLLllEbt5hLzMDqZuhBOhCHDvFZXph+4racqD0KdWgvuHD0RsC2LTBcQndyEFR
-	 rw+KBNXnVeylA3IOarUVp2Sslvgj5yjWlOiEvdKyi3quKiUO+wyy3rm4HH7wWSuGIa
-	 4m23HstdWC5kgQhdPZifPTALW0iI2d58IXOJH7K0=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20240213141950epcas5p24bb732a6a445248187071a09f9f76557~zcfdHHhaX1407914079epcas5p21;
-	Tue, 13 Feb 2024 14:19:50 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.182]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4TZ3PJ3zwBz4x9Py; Tue, 13 Feb
-	2024 14:19:48 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	F1.A0.08567.48A7BC56; Tue, 13 Feb 2024 23:19:48 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240213132810epcas5p22316ffa73fd9b86923f3f741c3a9101e~zbyV4N2g70267302673epcas5p2u;
-	Tue, 13 Feb 2024 13:28:10 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240213132810epsmtrp15cf320889fa76294275e2af1a8dc4d1d~zbyV2GciM1855118551epsmtrp1i;
-	Tue, 13 Feb 2024 13:28:10 +0000 (GMT)
-X-AuditID: b6c32a44-617fd70000002177-cb-65cb7a848369
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	DE.94.08817.A6E6BC56; Tue, 13 Feb 2024 22:28:10 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-	[107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240213132807epsmtip18b778dcc9bea4d489adc8ca6108282d4~zbyTGh4kq1216112161epsmtip1T;
-	Tue, 13 Feb 2024 13:28:07 +0000 (GMT)
-From: Shradha Todi <shradha.t@samsung.com>
-To: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Cc: mturquette@baylibre.com, sboyd@kernel.org, jingoohan1@gmail.com,
-	lpieralisi@kernel.org, kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-	linux@armlinux.org.uk, m.szyprowski@samsung.com,
-	manivannan.sadhasivam@linaro.org, pankaj.dubey@samsung.com,
-	gost.dev@samsung.com, Shradha Todi <shradha.t@samsung.com>
-Subject: [PATCH v5 2/2] PCI: exynos: Adapt to clk_bulk_* APIs
-Date: Tue, 13 Feb 2024 18:57:51 +0530
-Message-Id: <20240213132751.46813-3-shradha.t@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240213132751.46813-1-shradha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf0xbVRTHc99rX1si+uhg3tXYdWUyh4G1UuotgpiMmbdoGBlqzIzBF3gC
-	oX2tfa0OFiPIDwcBNsgGdRswkUWKwqBshUFBwhBYzfid8iOCkiGRNZmRITOAYGmL/ve55/s9
-	99xz7r1CXNxBSISZrIkxsrRWTgTw7HePhkcU5PzEKMYmpOjXWjuBGr7IQLN9dzDUuPaVAPW4
-	bwtQbukmH9keuPjoz9IFPprsukag+7VDBLKM9mKo/3IPQAVbBTzUPDAvQPMFxXw07jyB6m+v
-	CdCOo1OAtl1tPFR297PXg6lJ1zhO/TFTKKDuXJkXUNdtZsrWVExQP7scBLU0VY1R7Q2fU+W3
-	mgD12CZNCjiTFZvB0GmMUcawqfq0TDY9Tv5mcsrxlGi1Qhmh1KBX5DKW1jFx8oS3kiLeyNR6
-	epPLPqG1Zk8oieY4+bHXYo16s4mRZeg5U5ycMaRpDSpDJEfrODObHskyphilQvFytMf4YVbG
-	pap1gaFScvb+ox0iF7hCSoBICEkVnP16gygBAUIx2Q1g1WQ1tiuIyVUAl4pzfMI6gMUlw7y9
-	jP7HDr5P6AGwb3AJ+BaFGOwenCJ2XQQZDvP+KsF3hWDyGwDnOtu9KTi5gcHePJu3yD4yDnZt
-	LQp2mUe+ADcsC/guB5IxsK2xFffVOwi/a+3zsoh8FfZ1LHo3guSwEE6ub/pNCXCkeQ3z8T74
-	cOiWwMcSuHKhyM/p0Npu8fu1cL29we+Ph31T1zzNCT2nOwpvdh3zhZ+Hl50tXgtOPg3LNpf8
-	9kDYWbvHoXDtH4d/Lgdg7eAk38cUtK+183xjKQewt7qTfxFIr/xf4joATeAAY+B06UxqtEHJ
-	Mp/+d2+pep0NeF9weEInmKnbjuwHmBD0AyjE5cGBE5ZhRhyYRmfnMEZ9itGsZbh+EO0ZYAUu
-	CUnVe74Aa0pRqjQKlVqtVmmi1Er5s4Huwpo0MZlOm5gshjEwxr08TCiS5GK5h+2uE8lFORfG
-	sZ0fH7FWdc9vK6q68zIuPrN55R3u5AoWF4FdHbVK3UFsfOzYDxW/jOw/+/6saX+jLvLJ6YrG
-	RslA/miO2TYx5/zSuVWWeGSLL8ojB3hzdum0hr50qM2lmSZCT1OVN+oWiuujpGOjNdbEoqiP
-	wyIO2jWnyuuT8xWrQW+PWF2VO2HSLOvVmRBH1g1bd/VTw0PukPNBzpcSnzt07u+mb+d4juCL
-	2WqRrepmSWGwEoZ9NC2JkYS2dLx7ZMKyM32mafnwe6dA5PGVtsLlTS5zla550WkMmx8xff+A
-	eZK//MFDIxmvOzmcfe532b2We89styyW8kStuFvO4zJoZThu5Oh/AW8I3+xKBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLLMWRmVeSWpSXmKPExsWy7bCSnG5W3ulUg+/LeSwezNvGZrGkKcPi
-	5oGdTBYrvsxkt9j7eiu7RUPPb1aLTY+vsVp87LnHanF51xw2i7PzjrNZzDi/j8ni0NS9jBYt
-	f1pYLNYeuctucbelk9Xi4ilXi0Vbv7Bb/N+zg93i37WNLBa9h2sdRDwuX7vI7PH+Riu7x85Z
-	d9k9Fmwq9di0qpPN4861PWweT65MZ/LYvKTeo2/LKkaPz5vkAriiuGxSUnMyy1KL9O0SuDKm
-	TPvGXjBJquLsu/9sDYzXRLsYOTkkBEwkDn3ew9rFyMUhJLCbUeLk/ImsEAlJic8X1zFB2MIS
-	K/89Z4coamaSuND6kgUkwSagJdH4tYsZJCEisJxR4ufJp2AdzAI9zBIHWkNAbGEBW4ldfx6y
-	g9gsAqoSv2bcYwaxeQWsJDau2MAMsUFeYvWGA2A2p4C1xIHtD8GuEAKq2dO+lmkCI98CRoZV
-	jJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBMaKltYNxz6oPeocYmTgYDzFKcDArifBe
-	mnEiVYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvt9e9KUIC6YklqdmpqQWpRTBZJg5OqQamVam5
-	qcfyolSvOiqmLTvzajeraPeV/ayMW1pWaXja/6w8Z65bkeS1vnK2VG3Sw2VBS2WX7T/qk2Mb
-	6WY8Yf2fo61rmref/2J24+uOEuutKYs6f5dJ/Oncn1t2mevx0eBmGXH5GMXsxOVXHM696jM/
-	81NoiWhZnY+3QaTLxM+N09snnHf2Z7mUGbQzvPVK/q8rN3mMNOVPNhbmFr2PzPp1+2yEwhXd
-	ijTbG6nrPesZ66duKa/T7JDyLJeaGvquff4T8/qc1RoiX+52T9ZqPbWn4L/P5u9/3ViqneZU
-	Sbrf8Jlet+DcIs8L7RtDt1xc/ze6uF06/c6sExNPNzQ9XHflp/cVobrpUWbfbLq9Lh5SYinO
-	SDTUYi4qTgQAhx5/0gADAAA=
-X-CMS-MailID: 20240213132810epcas5p22316ffa73fd9b86923f3f741c3a9101e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240213132810epcas5p22316ffa73fd9b86923f3f741c3a9101e
-References: <20240213132751.46813-1-shradha.t@samsung.com>
-	<CGME20240213132810epcas5p22316ffa73fd9b86923f3f741c3a9101e@epcas5p2.samsung.com>
+	s=arc-20240116; t=1707832302; c=relaxed/simple;
+	bh=ELPzkWSUzVULNyET4HM5ayqOigWVWyQToxUGJ8VWf/I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A+hJvvtIBauNBj9cOPrQ2F2LSNIzpGgMyXALkSIx5IfbALiehVBB3/GO/RRNmlPvKJ0nFmq1OkmaNArCE5dcNEvTOnowikhYl0lTkNoNGWLEqmrVLOF2fxJRTsdgsuwHAQKHoV2Sq/TP63pW31hs+xeCWcoij2i0WJ5rAdJQmsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C+QO3Wiw; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc742543119so3645345276.0
+        for <linux-clk@vger.kernel.org>; Tue, 13 Feb 2024 05:51:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707832299; x=1708437099; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gQQuYoa1votx9Y7bY4V9GoK3AVgFfJazZ638lEOHEsI=;
+        b=C+QO3Wiw3OebGafdGOFi6XHBfPdmGR681vwivyKakTs7o6ZHJCBMTiExEhNmuMFgin
+         0QGWO/a6qortwPzsLzWxAlrUQI1VffEL3bc/PTNYV1zitOHtc4BIzdAC/mjPWSdqNRTo
+         RD7utgK7iVQu/vLbijQ3iWjvz18DzluInaJtN3OrGcRNJrM0Q5mR5RIf1PGs6KP+veez
+         jTbwGeckp7Aedj1dQVHWIHWwZZ8CpXeZQpRAofwnPCU+jq/AObGblgT6J1yZtMdtBN4x
+         TTKGzIHidvH+rMtsumBvBz39egyYudnSbHt0M8TxU9DDoQEjRcwODCUXzsTRiX7TvXSP
+         Tocg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707832299; x=1708437099;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gQQuYoa1votx9Y7bY4V9GoK3AVgFfJazZ638lEOHEsI=;
+        b=EK4ZZR4UcFCMx30P7h1eMfhObIDaMPjq/bDD3fxhOBelHLMBmKdZxkLdBn+0Ut4tUk
+         jS5Mea/Kf1fkKxTRzrg15kre9w5daCDk2/2A5iKesTGcJgTc39HqXQqtJwxheHt7+ufQ
+         HO44bBBzeitQw/Yhn0uVTk7Ss5EatB5RF3raz8XFeBeI3Y2U5tZ0W78Y5QOWoIpSQQxX
+         R34ahWfugzKYsuFxVEYqhnsVZiN5+sIk26eP/WDpxzmt1h9pE7DOQBVFt5D3APqEc1Bg
+         EW4i2ihP2nFF/S053qbmHe9SkwghdG0/SDTD8sCXzusK9cTgHHVjAJ2aDcCIMnYCpgE2
+         HrGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUrVkR2YY+Af8VXyFA2QhxBaQku9NYXfr5HIuJzsC9dKH7WmHyNTRSHDqRcd1n5x6cb6z8aY4hhb6Lw8NGSyQ1nPga/LIddRsgg
+X-Gm-Message-State: AOJu0YwItDaaZqvTnaBH5ck5Yy2Fzo2FFVLcIzHlRpRXJIl+mhw4AITD
+	l8l31bxk0iGNLX0mbB+TYGDgQtM6zD39iLWd57fDK8AgcqPCWXTn2g6fOoFWLOY8r8yvLkO10Kw
+	FY9ESm++Bdy6YxNjHU6OXO9Gy/jFzbVr+tZA35A==
+X-Google-Smtp-Source: AGHT+IGkxAkUAhS0VW6ZT+XvBBscFNZwdj7E7NzfFhdTEULlMz7KgWfV59riYkqRihUpD3kgVPu+47sroZlgvXYVqAE=
+X-Received: by 2002:a5b:d08:0:b0:dbf:487b:1fe7 with SMTP id
+ y8-20020a5b0d08000000b00dbf487b1fe7mr6525699ybp.17.1707832298945; Tue, 13 Feb
+ 2024 05:51:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
+ <20240122-gdsc-hwctrl-v4-1-9061e8a7aa07@linaro.org> <tax3c6o5qjegy6tv3zbgrd5rencfvypr3zg7twxfrmdngscp74@n44ei3q63g64>
+ <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
+ <l7icfezpajren25545n4cjtqehhividt5b2dxnxgetdsshc3k3@tdws423qdblk>
+ <CAPDyKFp1vg2+-pHJ_idkdhb_zZUMpq7W17DnCCGj0eTwd4jFbQ@mail.gmail.com> <87b7967f-d8c4-426e-92ed-5a418c702481@quicinc.com>
+In-Reply-To: <87b7967f-d8c4-426e-92ed-5a418c702481@quicinc.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 13 Feb 2024 14:51:02 +0100
+Message-ID: <CAPDyKFqy0osJRTU1mL0Ew_3pnYOe5z20ZWNrew8B6t99UFO0pg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] PM: domains: Allow devices attached to genpd to be
+ managed by HW
+To: Jagadeesh Kona <quic_jkona@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	Len Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Taniya Das <quic_tdas@quicinc.com>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-There is no need to hardcode the clock info in the driver as driver can
-rely on the devicetree to supply the clocks required for the functioning
-of the peripheral. Get rid of the static clock info and obtain the
-platform supplied clocks. All the clocks supplied is obtained and enabled
-using the devm_clk_bulk_get_all_enable() API.
+On Tue, 13 Feb 2024 at 14:10, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>
+>
+>
+> On 2/2/2024 5:59 PM, Ulf Hansson wrote:
+> > On Fri, 2 Feb 2024 at 00:51, Bjorn Andersson <andersson@kernel.org> wrote:
+> >>
+> >> On Wed, Jan 31, 2024 at 01:12:00PM +0100, Ulf Hansson wrote:
+> >>> On Wed, 31 Jan 2024 at 02:09, Bjorn Andersson <andersson@kernel.org> wrote:
+> >>>>
+> >>>> On Mon, Jan 22, 2024 at 10:47:01AM +0200, Abel Vesa wrote:
+> >>>>> From: Ulf Hansson <ulf.hansson@linaro.org>
+> >>>>>
+> >>>>> Some power-domains may be capable of relying on the HW to control the power
+> >>>>> for a device that's hooked up to it. Typically, for these kinds of
+> >>>>> configurations the consumer driver should be able to change the behavior of
+> >>>>> power domain at runtime, control the power domain in SW mode for certain
+> >>>>> configurations and handover the control to HW mode for other usecases.
+> >>>>>
+> >>>>> To allow a consumer driver to change the behaviour of the PM domain for its
+> >>>>> device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
+> >>>>> let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
+> >>>>> which the genpd provider should implement if it can support switching
+> >>>>> between HW controlled mode and SW controlled mode. Similarly, add the
+> >>>>> dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
+> >>>>> its corresponding optional genpd callback, ->get_hwmode_dev(), which the
+> >>>>> genpd provider can also implement for reading back the mode from the
+> >>>>> hardware.
+> >>>>>
+> >>>>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> >>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >>>>> ---
+> >>>>>   drivers/pmdomain/core.c   | 69 +++++++++++++++++++++++++++++++++++++++++++++++
+> >>>>>   include/linux/pm_domain.h | 17 ++++++++++++
+> >>>>>   2 files changed, 86 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> >>>>> index a1f6cba3ae6c..41b6411d0ef5 100644
+> >>>>> --- a/drivers/pmdomain/core.c
+> >>>>> +++ b/drivers/pmdomain/core.c
+> >>>>> @@ -548,6 +548,75 @@ void dev_pm_genpd_synced_poweroff(struct device *dev)
+> >>>>>   }
+> >>>>>   EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+> >>>>>
+> >>>>> +/**
+> >>>>> + * dev_pm_genpd_set_hwmode - Set the HW mode for the device and its PM domain.
+> >>>>
+> >>>> This isn't proper kernel-doc
+> >>>
+> >>> Sorry, I didn't quite get that. What is wrong?
+> >>>
+> >>
+> >> https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
+> >> says that there should be () after the function name, and below there
+> >> should be a Return:
+> >
+> > Thanks for the pointers!
+> >
+> >>
+> >>>>
+> >>>>> + *
+> >>>>> + * @dev: Device for which the HW-mode should be changed.
+> >>>>> + * @enable: Value to set or unset the HW-mode.
+> >>>>> + *
+> >>>>> + * Some PM domains can rely on HW signals to control the power for a device. To
+> >>>>> + * allow a consumer driver to switch the behaviour for its device in runtime,
+> >>>>> + * which may be beneficial from a latency or energy point of view, this function
+> >>>>> + * may be called.
+> >>>>> + *
+> >>>>> + * It is assumed that the users guarantee that the genpd wouldn't be detached
+> >>>>> + * while this routine is getting called.
+> >>>>> + *
+> >>>>> + * Returns 0 on success and negative error values on failures.
+> >>>>> + */
+> >>>>> +int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
+> >>>>> +{
+> >>>>> +     struct generic_pm_domain *genpd;
+> >>>>> +     int ret = 0;
+> >>>>> +
+> >>>>> +     genpd = dev_to_genpd_safe(dev);
+> >>>>> +     if (!genpd)
+> >>>>> +             return -ENODEV;
+> >>>>> +
+> >>>>> +     if (!genpd->set_hwmode_dev)
+> >>>>> +             return -EOPNOTSUPP;
+> >>>>> +
+> >>>>> +     genpd_lock(genpd);
+> >>>>> +
+> >>>>> +     if (dev_gpd_data(dev)->hw_mode == enable)
+> >>>>
+> >>>> Between this and the gdsc patch, the hw_mode state might not match the
+> >>>> hardware state at boot.
+> >>>>
+> >>>> With hw_mode defaulting to false, your first dev_pm_genpd_set_hwmode(,
+> >>>> false) will not bring control to SW - which might be fatal.
+> >>>
+> >>> Right, good point.
+> >>>
+> >>> I think we have two ways to deal with this:
+> >>> 1) If the provider is supporting ->get_hwmode_dev(), we can let
+> >>> genpd_add_device() invoke it to synchronize the state.
+> >>
+> >> I'd suggest that we skip the optimization for now and just let the
+> >> update hit the driver on each call.
+> >
+> > Okay.
+> >
+> >>
+> >>> 2) If the provider doesn't support ->get_hwmode_dev() we need to call
+> >>> ->set_hwmode_dev() to allow an initial state to be set.
+> >>>
+> >>> The question is then, if we need to allow ->get_hwmode_dev() to be
+> >>> optional, if the ->set_hwmode_dev() is supported - or if we can
+> >>> require it. What's your thoughts around this?
+> >>>
+> >>
+> >> Iiuc this resource can be shared between multiple clients, and we're
+> >> in either case returning the shared state. That would mean a client
+> >> acting upon the returned value, is subject to races.
+> >
+> > Not sure I understand this, but I also don't have in-depth knowledge
+> > of how the HW works.
+> >
+> > Isn't the HW mode set on a per device basis?
+> >
+> >>
+> >> I'm therefore inclined to say that we shouldn't have a getter, other
+> >> than for debugging purposes, in which case reading the HW-state or
+> >> failing would be reasonable outcomes.
+> >
+> > If you only want this for debug purposes, it seems better to keep it
+> > closer to the rpmh code, rather than adding generic callbacks to the
+> > genpd interface.
+> >
+> > So to conclude, you think having a ->set_hwmode_dev() callback should
+> > be sufficient and no caching of the current state?
+> >
+> > Abel, what's your thoughts around this?
+> >
+>
+> We believe it is good to have get_hwmode_dev() callback supported from
+> GenPD, since if multiple devices share a GenPD, and if one device moves
+> the GenPD to HW mode, the other device won't be aware of it and second
+> device's dev_gpd_data(dev)->hw_mode will still be false.
+>
+> If we have this dev_pm_genpd_get_hwmode() API supported and if we assign
+> dev_gpd_data(dev)->hw_mode after getting the mode from get_hwmode_dev()
+> callback, consumer drivers can use this API to sync the actual HW mode
+> of the GenPD.
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Signed-off-by: Shradha Todi <shradha.t@samsung.com>
----
- drivers/pci/controller/dwc/pci-exynos.c | 54 ++-----------------------
- 1 file changed, 4 insertions(+), 50 deletions(-)
+Hmm, I thought the HW mode was being set on a per device basis, via
+its PM domain. Did I get that wrong?
 
-diff --git a/drivers/pci/controller/dwc/pci-exynos.c b/drivers/pci/controller/dwc/pci-exynos.c
-index ec5611005566..3234eb5be1fb 100644
---- a/drivers/pci/controller/dwc/pci-exynos.c
-+++ b/drivers/pci/controller/dwc/pci-exynos.c
-@@ -54,43 +54,11 @@
- struct exynos_pcie {
- 	struct dw_pcie			pci;
- 	void __iomem			*elbi_base;
--	struct clk			*clk;
--	struct clk			*bus_clk;
-+	struct clk_bulk_data		*clks;
- 	struct phy			*phy;
- 	struct regulator_bulk_data	supplies[2];
- };
- 
--static int exynos_pcie_init_clk_resources(struct exynos_pcie *ep)
--{
--	struct device *dev = ep->pci.dev;
--	int ret;
--
--	ret = clk_prepare_enable(ep->clk);
--	if (ret) {
--		dev_err(dev, "cannot enable pcie rc clock");
--		return ret;
--	}
--
--	ret = clk_prepare_enable(ep->bus_clk);
--	if (ret) {
--		dev_err(dev, "cannot enable pcie bus clock");
--		goto err_bus_clk;
--	}
--
--	return 0;
--
--err_bus_clk:
--	clk_disable_unprepare(ep->clk);
--
--	return ret;
--}
--
--static void exynos_pcie_deinit_clk_resources(struct exynos_pcie *ep)
--{
--	clk_disable_unprepare(ep->bus_clk);
--	clk_disable_unprepare(ep->clk);
--}
--
- static void exynos_pcie_writel(void __iomem *base, u32 val, u32 reg)
- {
- 	writel(val, base + reg);
-@@ -332,17 +300,9 @@ static int exynos_pcie_probe(struct platform_device *pdev)
- 	if (IS_ERR(ep->elbi_base))
- 		return PTR_ERR(ep->elbi_base);
- 
--	ep->clk = devm_clk_get(dev, "pcie");
--	if (IS_ERR(ep->clk)) {
--		dev_err(dev, "Failed to get pcie rc clock\n");
--		return PTR_ERR(ep->clk);
--	}
--
--	ep->bus_clk = devm_clk_get(dev, "pcie_bus");
--	if (IS_ERR(ep->bus_clk)) {
--		dev_err(dev, "Failed to get pcie bus clock\n");
--		return PTR_ERR(ep->bus_clk);
--	}
-+	ret = devm_clk_bulk_get_all_enable(dev, &ep->clks);
-+	if (ret < 0)
-+		return ret;
- 
- 	ep->supplies[0].supply = "vdd18";
- 	ep->supplies[1].supply = "vdd10";
-@@ -351,10 +311,6 @@ static int exynos_pcie_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = exynos_pcie_init_clk_resources(ep);
--	if (ret)
--		return ret;
--
- 	ret = regulator_bulk_enable(ARRAY_SIZE(ep->supplies), ep->supplies);
- 	if (ret)
- 		return ret;
-@@ -369,7 +325,6 @@ static int exynos_pcie_probe(struct platform_device *pdev)
- 
- fail_probe:
- 	phy_exit(ep->phy);
--	exynos_pcie_deinit_clk_resources(ep);
- 	regulator_bulk_disable(ARRAY_SIZE(ep->supplies), ep->supplies);
- 
- 	return ret;
-@@ -383,7 +338,6 @@ static int __exit exynos_pcie_remove(struct platform_device *pdev)
- 	exynos_pcie_assert_core_reset(ep);
- 	phy_power_off(ep->phy);
- 	phy_exit(ep->phy);
--	exynos_pcie_deinit_clk_resources(ep);
- 	regulator_bulk_disable(ARRAY_SIZE(ep->supplies), ep->supplies);
- 
- 	return 0;
--- 
-2.17.1
+Are you saying there could be multiple devices sharing the same PM
+domain and thus also sharing the same HW mode? In that case, it sure
+sounds like we have synchronization issues to deal with too.
 
+Kind regards
+Uffe
 
