@@ -1,163 +1,113 @@
-Return-Path: <linux-clk+bounces-3668-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3670-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7728857BC2
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Feb 2024 12:34:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0299D857BD3
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Feb 2024 12:38:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAAFF1C21F6B
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Feb 2024 11:34:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 177DC1C21A0D
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Feb 2024 11:38:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2FC77F0D;
-	Fri, 16 Feb 2024 11:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4173877F1C;
+	Fri, 16 Feb 2024 11:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v/MSlNoC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nE6qel9i"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B540374E3C
-	for <linux-clk@vger.kernel.org>; Fri, 16 Feb 2024 11:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1345A768F4;
+	Fri, 16 Feb 2024 11:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708083237; cv=none; b=G0oxc9DqFJBI3w27/sF1LaAEvguDwDOQSwXa3s/khNBM0Gabnq1ONjEuwTYD66/2CKhwhwshz+mBYnq4x4RnPC+7sViNPfQ04kO/i7C1whyxhTSBj2bq+nAvTvxgsCbrkNsYZuZdC/6vLZPsDm5aFx2DKWfLUddSG+QpSIRoH+E=
+	t=1708083475; cv=none; b=Cr2f3WAhDKjZQ5DEBP57fNgoLCl5UT9zX1Tp07apos8o1iccVyjg/VF6JAjDZ00XslrEexj4DDjMkj3eKyq2aqN0ZxyNjG9SOl6/WikN45hwviNVIImoND0vXCZqiOO/CTwc8wS7C/vPRIC7ZWqtBZsqalnkYh73NAGcFcFHJTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708083237; c=relaxed/simple;
-	bh=SPISHpn2Wk7XuuDW0mygRbL3qdnVVMzYr7AU982JFYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y9XNKE+s9Tk9ccvXOGCdocITIrT8+DNF/3aFTyu5cLPTYx4OFotLUpcK1RRqpb7Syw221e07IHm7PXyYMzaCpbu6DvfM+6G1qfj5rJV6r5aGzspltGPooxu4KNNKbd32oVswqpi5z0l9iX7d+8r9BCDdmeDraBoVIAPU/wqZcK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v/MSlNoC; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-299354e5f01so315425a91.1
-        for <linux-clk@vger.kernel.org>; Fri, 16 Feb 2024 03:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708083235; x=1708688035; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DbUuxH8+eQt+V5fPVQ90ScLeG/5OvbXcVZwS4s/Sjn8=;
-        b=v/MSlNoCsibm1VaZDwVCkvYI8EjDjZsFjxnlmCNkHRNnG1fXdKCn2K1AwKY+qzUDmc
-         kyEQrVLfMziBsJHXxs5mgF4TPKjsXyKkqdcT/HkM6SAdIlUd4HL2b+GJ5ABj3IR7LCbk
-         2QsefJnLAq12gC/3NsSMvx4DcDzjn5xVW9gxWKbJZmHReZ3nlVeJXTtr/8BcYz9GySyp
-         I+1fOM7FRATwZzeWxDBXW3eZ88Qbwrc4vOfYf2KrKVivvZB+fJ2NML1gZXzNyJT/bG+8
-         ao5SFa+J/2vXZp/y7+r8b4RKVk/fLa2xhAI5ogbq585eV2oeA5jyOTBpqNHZR2t1SnUK
-         1ZaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708083235; x=1708688035;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DbUuxH8+eQt+V5fPVQ90ScLeG/5OvbXcVZwS4s/Sjn8=;
-        b=DD5+MTmWG3qcntBAEgIjVv3kSQh/jypjcLhrULC/owUwDm1QDNc+lFqdx6YOJAH0dO
-         SNBG9dVR15c6ni0XyATrDfJXyqVfas7Tc8Yf4cQU3Hbc/gwX9goa8Lx/E1ES0c7QIQKa
-         1UnshFtxf2iGW79ukXHgbkSYB7DyRdpXkukWPpsr3Gs5HH5US7FTWH6cwY5fhWaxVIT5
-         1QWBbw/jltcOh76lEkb0otWHZsAcKh1aWnMg3gVv8sAHVLzyOfcMO1SW7+dxa3Ln5Wba
-         Iz8ewHM0qppoFzTuQiA+KsosIB8e+TfA/amLkHOsyM8LuR2PF8mbC9taNWRvdWD1o0nz
-         rXlQ==
-X-Gm-Message-State: AOJu0YzRImA3cUCHU2CGMwmjxJdl34fRi+ZrP6Mm6NcZ6YLDbgmjk0Rk
-	bMkgDDonxO7P4X8yKezReRQ5u8iXsiWEl8iiWk2irG3yPuvTYe4SUG5xqLRYtg==
-X-Google-Smtp-Source: AGHT+IETesKAnay2AGJDq2QBceer8wDdIUIjpemHsRLi2VEq0GJGVXaiWQgru4PSBzIAejutTuKmnw==
-X-Received: by 2002:a17:90a:b385:b0:299:2b9a:88c4 with SMTP id e5-20020a17090ab38500b002992b9a88c4mr3787311pjr.1.1708083234940;
-        Fri, 16 Feb 2024 03:33:54 -0800 (PST)
-Received: from thinkpad ([120.138.12.48])
-        by smtp.gmail.com with ESMTPSA id o8-20020a17090ac08800b00299268defb9sm1946408pjs.41.2024.02.16.03.33.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 03:33:54 -0800 (PST)
-Date: Fri, 16 Feb 2024 17:03:47 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Shradha Todi <shradha.t@samsung.com>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, mturquette@baylibre.com,
-	sboyd@kernel.org, jingoohan1@gmail.com, lpieralisi@kernel.org,
-	kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-	linux@armlinux.org.uk, m.szyprowski@samsung.com,
-	pankaj.dubey@samsung.com, gost.dev@samsung.com
-Subject: Re: [PATCH v5 1/2] clk: Provide managed helper to get and enable
- bulk clocks
-Message-ID: <20240216113347.GG2559@thinkpad>
-References: <20240213132751.46813-1-shradha.t@samsung.com>
- <CGME20240213132806epcas5p43e394aea91c61797a8cc3a901e0cf574@epcas5p4.samsung.com>
- <20240213132751.46813-2-shradha.t@samsung.com>
- <20240216113147.GF2559@thinkpad>
+	s=arc-20240116; t=1708083475; c=relaxed/simple;
+	bh=xQgenU1RuH/1sl6zVXoRINQqPjQc+AObioNdVhirHEo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gpw+aQHdpPsdIxzKVvk1czY5ZbW9P9F+8E9zbmsBltVdKutFDh3x+r2ITztYpFlJxA4/yXyVDZtWIDfuLrVhTOxG0r0MrD7RAmDfX8F/XFvnhYfeFQPDey0yqttNUTQS/KeFuyr50fB8ZNdq71uXtNPY/O8GBSpL+MGbI+MRsv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nE6qel9i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 90B78C433F1;
+	Fri, 16 Feb 2024 11:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708083474;
+	bh=xQgenU1RuH/1sl6zVXoRINQqPjQc+AObioNdVhirHEo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=nE6qel9igDEND7NN6yL/ahcCE4OXVOXTr7PkE6K3heACD2JUsMY8KL1KtPk4Na0Nn
+	 QSGHJsUEc56GYy2cmnFYwjATjTHAJO3aFQX1N2//SWicP6MLQghAbIR4kuidNWBjKo
+	 dAXTjjHKfDVNPIEzum69AIWfNVNUqLl6Dvd3x9rFYMLJp5cA7XhA3BR+tJzpJUJQN0
+	 OgUDnRXPL71DUyi4PlNJlipZUePYl1/xABXyoZpT1pb4Jd/Nl88zN15OVdpgIRo+fR
+	 jSTsHaQkCMTdsLElXvCyeX9bZBEWyFqA9ynOVl/c6GSMicq8tPK9hh1qVnmbNRJuia
+	 a0keoFzX2y3BA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7727DC48260;
+	Fri, 16 Feb 2024 11:37:54 +0000 (UTC)
+From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
+Subject: [PATCH RFC 0/4] clk: hisilicon: add support for Hi3798MV200
+Date: Fri, 16 Feb 2024 19:37:50 +0800
+Message-Id: <20240216-clk-mv200-v1-0-a29ace29e636@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240216113147.GF2559@thinkpad>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA5Jz2UC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDI0Mz3eScbN3cMiMDA93kZIvkxFRjS7PUVAMloPqCotS0zAqwWdFKQW7
+ OSrG1tQBqPn+cYAAAAA==
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Yang Xiwen <forbidden405@outlook.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708083473; l=1516;
+ i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
+ bh=xQgenU1RuH/1sl6zVXoRINQqPjQc+AObioNdVhirHEo=;
+ b=97nMuwfwFk2N77rE/E+Z7xVKb7FuduTDlsPB/TDm/akUScmHkujGzAXrn8iw7+wSwLWbtovKE
+ od9wqcKgyCICPE5pxHE76StiuaspaYhWRMxG4x5xUGGuKp0E+BzuDy1
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
+X-Endpoint-Received:
+ by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: <forbidden405@outlook.com>
 
-On Fri, Feb 16, 2024 at 05:01:47PM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Feb 13, 2024 at 06:57:50PM +0530, Shradha Todi wrote:
-> > Provide a managed devm_clk_bulk* wrapper to get and enable all
-> > bulk clocks in order to simplify drivers that keeps all clocks
-> > enabled for the time of driver operation.
-> > 
-> > Suggested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-> > Signed-off-by: Shradha Todi <shradha.t@samsung.com>
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> - Mani
-> 
-> > ---
-> >  drivers/clk/clk-devres.c | 40 ++++++++++++++++++++++++++++++++++++++++
-> >  include/linux/clk.h      | 23 +++++++++++++++++++++++
-> >  2 files changed, 63 insertions(+)
-> > 
+This SoC is similar to Hi3798CV200 with a few more clocks in CRG module.
 
-[...]
+Note this driver is still ongoing, many clocks are not registered in the
+driver now. Feedback is welcomed, especially from HiSilicon people.
 
-> > diff --git a/include/linux/clk.h b/include/linux/clk.h
-> > index 1ef013324237..85a9330d5a5a 100644
-> > --- a/include/linux/clk.h
-> > +++ b/include/linux/clk.h
-> > @@ -438,6 +438,22 @@ int __must_check devm_clk_bulk_get_optional(struct device *dev, int num_clks,
-> >  int __must_check devm_clk_bulk_get_all(struct device *dev,
-> >  				       struct clk_bulk_data **clks);
-> >  
-> > +/**
-> > + * devm_clk_bulk_get_all_enable - Get and enable all clocks of the consumer (managed)
-> > + * @dev: device for clock "consumer"
-> > + * @clks: pointer to the clk_bulk_data table of consumer
-> > + *
-> > + * Returns success (0) or negative errno.
-> > + *
-> > + * This helper function allows drivers to get all clocks of the
-> > + * consumer and enables them in one operation with management.
-> > + * The clks will automatically be disabled and freed when the device
-> > + * is unbound.
-> > + */
-> > +
-> > +int __must_check devm_clk_bulk_get_all_enable(struct device *dev,
-> > +					      struct clk_bulk_data **clks);
-> > +
-> >  /**
-> >   * devm_clk_get - lookup and obtain a managed reference to a clock producer.
-> >   * @dev: device for clock "consumer"
-> > @@ -960,6 +976,13 @@ static inline int __must_check devm_clk_bulk_get_all(struct device *dev,
-> >  	return 0;
-> >  }
-> >  
-> > +static inline int __must_check devm_clk_bulk_get_all_enable(struct device *dev,
-> > +						struct clk_bulk_data **clks)
-> > +{
-> > +
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+---
+Yang Xiwen (4):
+      dt-binding: clock: histb-clock: Add missing common clock and Hi3798MV200 specific clock definition
+      clk: hisilicon: add CRG driver for Hi3798MV200 SoC
+      dt-binding: clock: merge all hisilicon clock bindings to hisilicon,clock-reset-generator
+      dt-binding: clock: hisilicon,clock-reset-controller: add Hi3798MV200 SoC support
 
-Just noticed this extra newline after sending my r-b tag. Please remove it in
-next iteration.
+ .../devicetree/bindings/clock/hi3660-clock.txt     |  47 ---
+ .../devicetree/bindings/clock/hi3670-clock.txt     |  43 ---
+ .../devicetree/bindings/clock/hi6220-clock.txt     |  52 ---
+ .../devicetree/bindings/clock/hisi-crg.txt         |  50 ---
+ .../clock/hisilicon,clock-reset-generator.yaml     | 175 +++++++++
+ .../clock/hisilicon,hi3559av100-clock.yaml         |  59 ---
+ drivers/clk/hisilicon/Kconfig                      |   8 +
+ drivers/clk/hisilicon/Makefile                     |   1 +
+ drivers/clk/hisilicon/crg-hi3798mv200.c            | 428 +++++++++++++++++++++
+ include/dt-bindings/clock/histb-clock.h            |  21 +
+ 10 files changed, 633 insertions(+), 251 deletions(-)
+---
+base-commit: 8d3dea210042f54b952b481838c1e7dfc4ec751d
+change-id: 20240216-clk-mv200-cc8cae396ee0
 
-- Mani
-
+Best regards,
 -- 
-மணிவண்ணன் சதாசிவம்
+Yang Xiwen <forbidden405@outlook.com>
+
 
