@@ -1,153 +1,115 @@
-Return-Path: <linux-clk+bounces-3752-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3754-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 154438595A2
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Feb 2024 09:29:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C02D3859961
+	for <lists+linux-clk@lfdr.de>; Sun, 18 Feb 2024 21:58:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEC122836F5
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Feb 2024 08:29:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53CB6281284
+	for <lists+linux-clk@lfdr.de>; Sun, 18 Feb 2024 20:58:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C7EF9F0;
-	Sun, 18 Feb 2024 08:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 736217428A;
+	Sun, 18 Feb 2024 20:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oltmanns.dev header.i=@oltmanns.dev header.b="g9lcu2oS"
+	dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b="oJDybTuh"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F65E12E7A;
-	Sun, 18 Feb 2024 08:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E1F8C1A;
+	Sun, 18 Feb 2024 20:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708244981; cv=none; b=L/iYxBbyAvW0MA5HFhIR9d0koAEhsPDaXbyx2j6A34fUzOMUZhz6w+SlzfoflpnlyZrs0Vkzihofsms2epcGGgHPx9cECNxgg3LaBFhxxjxQkLjKLIt5C/c91Jt3aD1jOA/Ht/GYGKzyKpMfB7gToPkGMfWIXb1AIt/zXGsLBeI=
+	t=1708289870; cv=none; b=kp8LQSxUWt1Ywz/TnwNwi2wCGhAfZQESqQmgm5fcsrrEDusfjRJLfbQ/NGd4z5G+Z8SR4sdmG0Ubf+8SovNix6L+KO04Jaak9xgQx5btMiZMfrtoeRtWqT5vMltVFTrzhRPn5ashkDgYZYmbEGtsFJZwznkov8hOPPUX8xpQLl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708244981; c=relaxed/simple;
-	bh=jZcTtCZH0obhcvEN8pLDKD99bxA5SkFp4NpD0xiDXhk=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Fwmn4vptDcQd7QYbqk5tIz8BXCukahjzSJhb1mAYSM4o97UVWQO2s3Oo/OhGa0eYmdFqW9OBzF/SzJcPcfZFgzqfgTNFkrgfg2xageSWiL2WzjYRkR8ziQFZ45ClhqD9JDfL5OA98qCeRy8e7Wv8zBkwulx4OwhJbh3pq7nZAkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oltmanns.dev; spf=pass smtp.mailfrom=oltmanns.dev; dkim=pass (2048-bit key) header.d=oltmanns.dev header.i=@oltmanns.dev header.b=g9lcu2oS; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oltmanns.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oltmanns.dev
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4TczNn46Snz9sTN;
-	Sun, 18 Feb 2024 09:29:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-	s=MBO0001; t=1708244969;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xpPRlAGo3UCIb/pniYUufEMkCBvpDmyH0z7zQJYnmCE=;
-	b=g9lcu2oSUYVaqvRC7RSidQDG9k6eVMXMgQM/7PR0OOg/MKXB924LWdAQtLX/XzWfz4cBeR
-	qs/7vQOhsueqHlu37Mi2duYMpNIvf0V5Hhl93idD1WVskzdbjNxGPtRrBCgciwMpdWxFUL
-	RZqsvJAlxS3C0tceHtmvP8MgSx1EdQnmFHb2t/EQvIJd6Kc/irWNmYaTLnzP5zm3t6c6Kb
-	HMKdzQ6Bg/9IYXfGWVUcdduK3+PQ2Q3gtHOmNjtaWLVR23sxX2bMBtzKGgs21QqHQ9sSFQ
-	tA3GtSzFfZCOC+vw1lwScAneLRvH/L7Cib0kWbLj/blALD5YdXuIymbhi7KYlA==
-References: <20240205-pinephone-pll-fixes-v2-0-96a46a2d8c9b@oltmanns.dev>
- <20240205-pinephone-pll-fixes-v2-3-96a46a2d8c9b@oltmanns.dev>
- <exb2lvjcozak5fayrgyenrd3ntii4jfxgvqork4klyz5pky2aq@dj2zyw5su6pv>
-From: Frank Oltmanns <frank@oltmanns.dev>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Guido
- =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>, Purism Kernel Team
- <kernel@puri.sm>, Ondrej
- Jirman <megi@xff.cz>, Neil Armstrong <neil.armstrong@linaro.org>, Jessica
- Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
- <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter
- <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] clk: sunxi-ng: nkm: Support minimum and maximum
- rate
-In-reply-to: <exb2lvjcozak5fayrgyenrd3ntii4jfxgvqork4klyz5pky2aq@dj2zyw5su6pv>
-Date: Sun, 18 Feb 2024 09:29:15 +0100
-Message-ID: <874je6b2g4.fsf@oltmanns.dev>
+	s=arc-20240116; t=1708289870; c=relaxed/simple;
+	bh=gg9lJWHASR44HHvXtQri1Pkt7A1AFAQRzHCWHX4bYgM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hNy5pVgciaZark2ZBLsvdvwRw1rLt9tBKP0E7GOo7CIHOzW1Ie/neXsYRQlLdXchHbhjMKDTR8zLxRCPFWe3rbPd+s9ybKSXk5piw4jH4KSEcoJJ8krn4a/sHmImksUzhubpT/jVKfm3W2ux/Q4NKHkNUU7EBdQSHZzdT15dbhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz; spf=pass smtp.mailfrom=z3ntu.xyz; dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b=oJDybTuh; arc=none smtp.client-ip=128.199.32.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=s1;
+	t=1708289860; bh=gg9lJWHASR44HHvXtQri1Pkt7A1AFAQRzHCWHX4bYgM=;
+	h=From:Subject:Date:To:Cc;
+	b=oJDybTuhhVGhyT5XClQluwcmUDL/FF/xXG3lQOSlSai9GiaS+IEC1EfF23sufacO2
+	 78ZBmbuolQxwKsgLj1OYTYwvfW1+Hr1X3bsetTcPEziHyBpZRNOLT0YbmlFU8ZrVdb
+	 IDIr19zkxmEfHwJl/TdknQyfVql2QF7c/ae2SHEw=
+From: Luca Weiss <luca@z3ntu.xyz>
+Subject: [PATCH v2 0/3] Convert qcom,hfpll documentation to yaml + related
+ changes
+Date: Sun, 18 Feb 2024 21:57:24 +0100
+Message-Id: <20240218-hfpll-yaml-v2-0-31543e0d6261@z3ntu.xyz>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Rspamd-Queue-Id: 4TczNn46Snz9sTN
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADRv0mUC/22MTQrDIBgFrxK+dS3+RbCr3iNkIYlWwZqgqcQE7
+ 16bdeFtZuDNCUlHpxM8uhOizi65JTSgtw4mq8JLIzc3BoopI23ImtV7VNTbI0mFMLhZ0U/QDmv
+ Uxu1XbBgbW5e2JZarncnP/s1kgjBivZw5V1wTyZ8HC9vnvpcDxlrrF4Ink7WkAAAA
+To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Luca Weiss <luca@z3ntu.xyz>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1221; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=gg9lJWHASR44HHvXtQri1Pkt7A1AFAQRzHCWHX4bYgM=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBl0m82P7odzZSC4lkYhivSeToHEzGiYMYFMiwXf
+ H6x0ie5UNiJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZdJvNgAKCRBy2EO4nU3X
+ Vn1DD/91y0Ipz7kusToi71Np3xBNR2T9HpsJdQpRkPTYRNO5ROlnaepifh4m2UH0IQQXDgcoFXA
+ A7M5zCMSiofbRjE1nITZjMl6WQPyiPVEXoa8IOphLZhMjUYrxaNlz3JVWb7bKZAeOTRD/ZUPjhc
+ Btn+pqHthOyl3QIUn17Uro7fNovfQbkM2rn59qaYaD8gGbLOf2cqip74ojB/Kp38rIdstvYul/9
+ dDNzTevs47Nvzf3ye2aWiytXicjMiCO51M44ccqxGUxGG9LZSfAZh65I0eOCf12ds+8RTmAcpBs
+ SoQPgZkWEQqFT/IOG3H/IpYmNzTpnbPJcZVdvy7+SvNsHb1zCngu/XIy0HOI+QYSQAoAvww5PUo
+ ly8SVUYxdlAx2DiIAjLEKALJrZhoG+JG+olKX8BnrsaB0SMb3KOqOEh767QlTY/vX7hvCmPk7KH
+ YR3MLQFUcOV5KN2JZ4RlS4Rhy04S3XlzR1+qez05fRTtneKTnTx4RZnZlTPWn/MPj8yAYq/TrJT
+ H/43jhMQF4kbx/Pf04rdSzrCqjXlw09dyST8nXKomyn0wpKRb4qIy2f9wyuzn+FYnzosBQKuay0
+ lx4iqmT/yHpIajq7CzyoMS1gGDTrXQCfsxdsq+ajGea+CdRlt8s0BDZj+HkS0zVPqslhpp3FgSX
+ HoOC/jWDlJdoIPA==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 
-Hi Maxime,
+Finally touch the hfpll doc and convert it to yaml, and do some related
+changes along the way.
 
-On 2024-02-08 at 13:16:27 +0100, Maxime Ripard <mripard@kernel.org> wrote:
-> [[PGP Signed Part:Undecided]]
-> On Mon, Feb 05, 2024 at 04:22:26PM +0100, Frank Oltmanns wrote:
->> According to the Allwinner User Manual, the Allwinner A64 requires
->> PLL-MIPI to run at 500MHz-1.4GHz. Add support for that to ccu_nkm.
->>
->> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
->> ---
->>  drivers/clk/sunxi-ng/ccu_nkm.c | 13 +++++++++++++
->>  drivers/clk/sunxi-ng/ccu_nkm.h |  2 ++
->>  2 files changed, 15 insertions(+)
->>
->> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
->> index 1168d894d636..7d135908d6e0 100644
->> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
->> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
->> @@ -181,6 +181,12 @@ static unsigned long ccu_nkm_round_rate(struct ccu_mux_internal *mux,
->>  	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
->>  		rate *= nkm->fixed_post_div;
->>
->> +	if (nkm->min_rate && rate < nkm->min_rate)
->> +		rate = nkm->min_rate;
->> +
->> +	if (nkm->max_rate && rate > nkm->max_rate)
->> +		rate = nkm->max_rate;
->> +
->
-> This is provided by the clock range already. If you call
-> clk_hw_set_rate_range, it should work just fine.
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+- Drop APQ8064/IPQ8064/MSM8960 compatibles (Dmitry)
+- Update example to MSM8974 since IPQ8064 is dropped
+- Clean up dt binding description (Krzysztof)
+- Remove second example in docs (Krzysztof)
+- Try to clear up the text and content around deprecating qcom,hfpll
+- Link to v1: https://lore.kernel.org/r/20231231-hfpll-yaml-v1-0-359d44a4e194@z3ntu.xyz
 
-I have to admit, that I don't know that much about sunxi-ng or the CCF
-and therefore humbly request some guidance.
+---
+Luca Weiss (3):
+      dt-bindings: clock: qcom,hfpll: Convert to YAML
+      clk: qcom: hfpll: Add QCS404-specific compatible
+      arm64: dts: qcom: qcs404: Use qcs404-hfpll compatible for hfpll
 
-I've looked at other examples of clk_hw_set_rate_range() usage and it
-seems there is not a lot of adoption for this functionality even though
-it was already introduced mid-2015. This makes me wonder, why that is.
-
-Anyhow, it seems in all examples I found, clk_hw_set_rate_range() is
-called immediately after registering the clk_hw. So, in the case of
-sunxi-ng, we'd need to do that in sunxi_ccu_probe, which is a common
-function for all sunxi-ng clock types. Correct?
-
-If so, surely, you don't want me to introduce clock type specific code
-to a common function, so I assume you want min_rate and max_rate to
-become members of struct ccu_common. Correct?
-
-If so, since there already are some clock types in sunxi-ng that support
-having a minimum and maximum rate, these clocks should be refactored
-eventually. Correct?
-
-Finally, in sunxi-ng there is a feature of having a fixed_post_div (see,
-e.g., the first to lines of the diff above). It seems to me that CCF
-cannot know about these post_divs, so we'd also need to transfer the
-fixed_post_div to ccu_common and use that when calling
-clk_hw_set_rate_range. Correct?
-
-The fact that you casually dropped the two sentences above and me
-deducing you want a somewhat large refactoring of the functionality for
-sunxi-ng, makes me wonder if I completely misunderstood your request.
+ .../devicetree/bindings/clock/qcom,hfpll.txt       | 63 --------------------
+ .../devicetree/bindings/clock/qcom,hfpll.yaml      | 69 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qcs404.dtsi               |  2 +-
+ drivers/clk/qcom/hfpll.c                           |  6 +-
+ 4 files changed, 74 insertions(+), 66 deletions(-)
+---
+base-commit: 841c35169323cd833294798e58b9bf63fa4fa1de
+change-id: 20231231-hfpll-yaml-9266f012365c
 
 Best regards,
-  Frank
+-- 
+Luca Weiss <luca@z3ntu.xyz>
 
->
-> Maxime
->
-> [[End of PGP Signed Part]]
 
