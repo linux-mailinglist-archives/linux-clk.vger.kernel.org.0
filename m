@@ -1,178 +1,145 @@
-Return-Path: <linux-clk+bounces-3840-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3844-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25BD085B9F3
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 12:09:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBFF885BDB7
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 14:53:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDDC71F23FA0
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 11:09:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 837B6286DDF
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 13:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D5965BA1;
-	Tue, 20 Feb 2024 11:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E886A33F;
+	Tue, 20 Feb 2024 13:53:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="n/TvDHt4"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587FD60EFB
-	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 11:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5270369D1D;
+	Tue, 20 Feb 2024 13:53:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708427381; cv=none; b=u3tmfiNg7FYCPmWW4VkBoUrnt/8ONxaBLZd5b0mi+gACU3hbF9u50xCDnB7i5x+q2+kLGxAA8RVRBVIX6tvDu8F2T3eOqbqkXi2oDJrzGvuxbd5tysi9Bk7zSbezeM+3UW+yDCqdNxqUn7prTm4MbaSPotOIVEFqyFtiq4wUj18=
+	t=1708437188; cv=none; b=bVbCwIuxTZ0yDrQ5xWW6EeOFxT2yA3jikdbKLBjL/1BgR6GLg2ySwRXc1dSj0d0JZHD2l7HZ+vqPeqErUkIkNGYr5GA9C2idaD2xgh4PYqKVgBRdGUw9guFjP0SNdRJTkFOAy1hJ1kPfbVo5Uu2z3TNqdSDd1qcg99bXuFBGy7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708427381; c=relaxed/simple;
-	bh=Ixt9MkhFCznNAN/rmo8nT3NaNHEu0v0dRnwT8KxdfXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSd2ca6gLD+Otens4CNRAp1CyNYhVKD9qaspW42KOPdbsVhXABwKDuDhNDVOOeNT7hAnzD5eWy1yZsVABrFYO+5JwtSASnjhXsu3MEkFS4YA8NpeHrYPkjUviQgY1kPlZZQcExP6qfh9ZJqw7YApDwuOebmBfnbU33q9xS7J7qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E822EFEC;
-	Tue, 20 Feb 2024 03:10:17 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F5C13F762;
-	Tue, 20 Feb 2024 03:09:38 -0800 (PST)
-Date: Tue, 20 Feb 2024 11:09:35 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-clk@vger.kernel.org
-Subject: Re: [bug report] clk: scmi: Allocate CLK operations dynamically
-Message-ID: <ZdSIb9mcarW9-uBX@pluto>
-References: <904dd0c0-cbe4-47e0-a475-9f5352c7eb5c@moroto.mountain>
+	s=arc-20240116; t=1708437188; c=relaxed/simple;
+	bh=heFc3g7/7gfo7I5atrOXHORFAPMkPY7A83Jd6oIvuAc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NnZx4k+94XDDaZQsWW8StcVLAB1BB5qxGXgI0jNUjl+QIWozkWZgi0duX+mqMYADzFSRc/EgrfYdpU67BE+NBCgPFv+/uiL0PeDb+A5tkSbYxbmETw1mWZjnK+emCM6pnXK5kQc7yTFR9twcMIcIq6CaxM3Q/fSAAPlC7rK777g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=n/TvDHt4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41KBjMJq006158;
+	Tue, 20 Feb 2024 13:53:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=Q57xU6q
+	M9jPsPG8qr9iZUr85/xQUrT3sfYvqBxHqQgE=; b=n/TvDHt4E/q3OJ8ugft+xOK
+	D4aFi2L+4TiUacBB9czzAUh6oq1Qkd+FvQksYMSHwNc6BSvHk+GX+xJLikddP0Vc
+	LaPh+ajLn60QxIPmskTjqPa3e73Oc0WrsQ+aov4XueVxaFLbh6dt4mOI1Oos2fA2
+	wwlPrepddXWy4L1sn5/bzBT5cqjUQeQC/hyRLWKYMf2Rrdx8+LFls56pr9LOCGhQ
+	ORyTtWUSvsgfvBP3iys5eTv719WH8RN8w4yumSbB4WcKRUvb5PRG9HvETVesvz5B
+	O6FyAUO12QXACCyIV5ZzbHvZNmUXG9JHTbZZMfskrK4rmi/uzh+iWqV4VXm5dlQ=
+	=
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wct2sgdby-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 13:53:02 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41KDr1Bt026482
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Feb 2024 13:53:01 GMT
+Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 20 Feb 2024 05:52:56 -0800
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>
+CC: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Jagadeesh Kona
+	<quic_jkona@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Ajit Pandey
+	<quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        "Satya
+ Priya Kakitapalli" <quic_skakitap@quicinc.com>
+Subject: [PATCH V2 0/6] Add support for videocc and camcc on SM8650
+Date: Tue, 20 Feb 2024 19:21:15 +0530
+Message-ID: <20240220135121.22578-1-quic_jkona@quicinc.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <904dd0c0-cbe4-47e0-a475-9f5352c7eb5c@moroto.mountain>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MgexlH33WnSoN0_P2teTqo73yqpPq9GM
+X-Proofpoint-ORIG-GUID: MgexlH33WnSoN0_P2teTqo73yqpPq9GM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-20_06,2024-02-20_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 malwarescore=0 adultscore=0
+ spamscore=0 suspectscore=0 mlxscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402200100
 
-On Tue, Feb 20, 2024 at 01:13:21PM +0300, Dan Carpenter wrote:
-> Hello Cristian Marussi,
-> 
-Hi,
+Add support for video and camera clock controllers on Qualcomm SM8650
+platform.
 
-> The patch 11f5b1a48a70: "clk: scmi: Allocate CLK operations
-> dynamically" from Feb 14, 2024 (linux-next), leads to the following
-> Smatch static checker warning:
-> 
-> 	drivers/clk/clk-scmi.c:362 scmi_clocks_probe()
-> 	error: uninitialized symbol 'atomic_threshold'.
-> 
-> drivers/clk/clk-scmi.c
->     307 static int scmi_clocks_probe(struct scmi_device *sdev)
->     308 {
->     309         int idx, count, err;
->     310         unsigned int atomic_threshold;
->     311         bool is_atomic;
->     312         struct clk_hw **hws;
->     313         struct clk_hw_onecell_data *clk_data;
->     314         struct device *dev = &sdev->dev;
->     315         struct device_node *np = dev->of_node;
->     316         const struct scmi_handle *handle = sdev->handle;
->     317         struct scmi_protocol_handle *ph;
->     318 
->     319         if (!handle)
->     320                 return -ENODEV;
->     321 
->     322         scmi_proto_clk_ops =
->     323                 handle->devm_protocol_get(sdev, SCMI_PROTOCOL_CLOCK, &ph);
->     324         if (IS_ERR(scmi_proto_clk_ops))
->     325                 return PTR_ERR(scmi_proto_clk_ops);
->     326 
->     327         count = scmi_proto_clk_ops->count_get(ph);
->     328         if (count < 0) {
->     329                 dev_err(dev, "%pOFn: invalid clock output count\n", np);
->     330                 return -EINVAL;
->     331         }
->     332 
->     333         clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, count),
->     334                                 GFP_KERNEL);
->     335         if (!clk_data)
->     336                 return -ENOMEM;
->     337 
->     338         clk_data->num = count;
->     339         hws = clk_data->hws;
->     340 
->     341         is_atomic = handle->is_transport_atomic(handle, &atomic_threshold);
-> 
-> atomic_threshold is not initialized when is_atomic is false.
->
+Changes in v2:
+ - Updated commit text for videocc dt-bindings patch as Krzysztof suggested
+ - Moved videocc XO clk ares to a separate patch and added fixes tag as per
+   review comments
+ - Inverted the logic in videocc probe to add new SM8650 specific videocc
+   clocks based on SM8650 compatible string as Dmitry suggested
+ - Used module_platform_driver() for SM8650 camcc driver
+ - Updated driver name from cam_cc-sm8650 to camcc-sm8650 as Bryan suggested
+ - Used qcom_branch_set_clk_en() helper to enable clocks in camcc sm8650 probe
+ - Added Krzysztof and Bryan Reviewed-by tags to dt-bindings and camcc patches
+   received in v1
+ - Link to v1: https://lore.kernel.org/linux-kernel/20240206113145.31096-1-quic_jkona@quicinc.com/T/
 
-yes
+Jagadeesh Kona (6):
+  dt-bindings: clock: qcom: Add SM8650 video clock controller
+  clk: qcom: videocc-sm8550: Add support for videocc XO clk ares
+  clk: qcom: videocc-sm8550: Add SM8650 video clock controller
+  dt-bindings: clock: qcom: Add SM8650 camera clock controller
+  clk: qcom: camcc-sm8650: Add SM8650 camera clock controller driver
+  arm64: dts: qcom: sm8650: Add video and camera clock controllers
 
->     342 
->     343         for (idx = 0; idx < count; idx++) {
->     344                 struct scmi_clk *sclk;
->     345                 const struct clk_ops *scmi_ops;
->     346 
->     347                 sclk = devm_kzalloc(dev, sizeof(*sclk), GFP_KERNEL);
->     348                 if (!sclk)
->     349                         return -ENOMEM;
->     350 
->     351                 sclk->info = scmi_proto_clk_ops->info_get(ph, idx);
->     352                 if (!sclk->info) {
->     353                         dev_dbg(dev, "invalid clock info for idx %d\n", idx);
->     354                         devm_kfree(dev, sclk);
->     355                         continue;
->     356                 }
->     357 
->     358                 sclk->id = idx;
->     359                 sclk->ph = ph;
->     360                 sclk->dev = dev;
->     361 
-> --> 362                 scmi_ops = scmi_clk_ops_alloc(sclk, is_atomic, atomic_threshold);
->                                                             ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
-> Here we're passing uninitialized data, but it's only used when
-> is_atomic is true.  This is okay if scmi_clk_ops_alloc() is inlined,
-> but it is considered a bug when it's not inlined.
->
+ .../bindings/clock/qcom,sm8450-camcc.yaml     |    3 +
+ .../bindings/clock/qcom,sm8450-videocc.yaml   |    4 +-
+ arch/arm64/boot/dts/qcom/sm8650.dtsi          |   28 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/camcc-sm8650.c               | 3591 +++++++++++++++++
+ drivers/clk/qcom/videocc-sm8550.c             |  154 +-
+ .../dt-bindings/clock/qcom,sm8450-videocc.h   |    8 +-
+ include/dt-bindings/clock/qcom,sm8650-camcc.h |  195 +
+ 9 files changed, 3986 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/clk/qcom/camcc-sm8650.c
+ create mode 100644 include/dt-bindings/clock/qcom,sm8650-camcc.h
 
-Ok, I will add an explicit initialization to mute smatch but why is it
-this considered a bug only when not inlined, because it cannot verify
-that it is indeed not used when uninitialized ?
+-- 
+2.43.0
 
-Thanks,
-Cristian
-
->     363                 if (!scmi_ops)
->     364                         return -ENOMEM;
->     365 
->     366                 /* Initialize clock parent data. */
->     367                 if (sclk->info->num_parents > 0) {
->     368                         sclk->parent_data = devm_kcalloc(dev, sclk->info->num_parents,
->     369                                                          sizeof(*sclk->parent_data), GFP_KERNEL);
->     370                         if (!sclk->parent_data)
->     371                                 return -ENOMEM;
->     372 
->     373                         for (int i = 0; i < sclk->info->num_parents; i++) {
->     374                                 sclk->parent_data[i].index = sclk->info->parents[i];
->     375                                 sclk->parent_data[i].hw = hws[sclk->info->parents[i]];
->     376                         }
->     377                 }
->     378 
->     379                 err = scmi_clk_ops_init(dev, sclk, scmi_ops);
->     380                 if (err) {
->     381                         dev_err(dev, "failed to register clock %d\n", idx);
->     382                         devm_kfree(dev, sclk->parent_data);
->     383                         devm_kfree(dev, scmi_ops);
->     384                         devm_kfree(dev, sclk);
->     385                         hws[idx] = NULL;
->     386                 } else {
->     387                         dev_dbg(dev, "Registered clock:%s%s\n",
->     388                                 sclk->info->name,
->     389                                 scmi_ops->enable ? " (atomic ops)" : "");
->     390                         hws[idx] = &sclk->hw;
->     391                 }
->     392         }
->     393 
->     394         return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
->     395                                            clk_data);
->     396 }
-> 
-> regards,
-> dan carpenter
 
