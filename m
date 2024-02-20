@@ -1,163 +1,169 @@
-Return-Path: <linux-clk+bounces-3837-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3841-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8971F85B9BF
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 11:59:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0C8D85BA3F
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 12:21:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACF751C21E6C
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 10:59:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6864E283D53
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 11:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE1365BCD;
-	Tue, 20 Feb 2024 10:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B8C3664BC;
+	Tue, 20 Feb 2024 11:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kyCCxx/x"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="DRAYm8BL"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A98657DB
-	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 10:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11D1612D6
+	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 11:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708426777; cv=none; b=tYeP9Z8rZH1ppX+uW135YVTKm2MzuQUjZ0AXhfg6NMhvmYDS1TdEOF3+lIzhgwWABBxpiaHmkLFyKbWBJg6nWBENL8R96quk4hKzCcnPaBpAZykjWCqAPMRXB9rNp/Mkok8dQ8+xeiUbsSmrgG9rEdbTHshv5LfCQR/OWRu1Dn8=
+	t=1708428089; cv=none; b=lBc8da+lIGem+BoFtZZMFvud5AnZcIykDYsDEIH4Fuq+yj5Vpe6LjHEBrknBuzmSVZmuSzNs9s+KwYP7cifQxB3sJM8dB5smWrzFVKu/fXygQrObsiAdlzVqUnyocFtUOuTs/fKDx8O1tfAq659l6JELTQjv2oJE8ZMYalFHYAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708426777; c=relaxed/simple;
-	bh=g6dH5OPPvurQW89iZP3iNgRMNXyt8SpUEaAql9TeqdE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HDvlC2CFeGY8UGpjcsxXoNn0AadwEqMKKN2/28wfY7GfUUjftOv9TU5V5odqaxllb3w67ecORx935QG/a63sZUHV8ulUFnNB5Vjx/gJ5MkEK6siUsA4RZldip6uEofplCmwxPcILwCgS+iEhE7ymcADxIRABu1PT7I2sP1T6Xsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kyCCxx/x; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4126fe50a1cso2715605e9.3
-        for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 02:59:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708426774; x=1709031574; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uF7mgOt/d46QgIPg4uY3jRzW28nws+KnyVyRH9CsNdg=;
-        b=kyCCxx/xu5/fkRG0Jm0Xg62ie/7ylq6r/uc6DkobCwtUCxgf36Pvnl20di8FKYnhVk
-         OFn2jMONjwWhG5rKrs0caQD5FHR9I7nnDijzjNbWFP5RWBd7hMmdsashehiDX8JzQOCD
-         1+P/GzPS6StKd3D5CADCRi2mU8r1ZAdb+6aoYHETcNbFm4oJxpL96iW93xITc3GAvS3l
-         4kJiJKy1bdiZycF9Sxad5XVXBaH1Hc/MNeWrG9lMgyYCZJWbsnZKFR6IFgBKu+hQa51L
-         XutQZ8iDVeH6BLB2fE//W0/F9pC6JHe6bPCEzJWuVPW8Y4lbUP7bRGeNti9bsvGEVPkF
-         WIuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708426774; x=1709031574;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uF7mgOt/d46QgIPg4uY3jRzW28nws+KnyVyRH9CsNdg=;
-        b=cq0ktdoVwp0xAxQLD3eHEsseEXNR6gUz/t99RJhuN/YHM3NJRMM+G+Hjs04nYBcZxy
-         FIeBWeO5OBgpC9uWHmuwAFWcmQo66zqc7qNyhliORMZYLOJgfJWoHx6xiKge4SqFwA6j
-         bxWHCQEjOLdGNqnN+AYJzjO12byC0Cp2FfUs9k8tdHTO3wgWnDD3uusJZXkZxuLZCwgj
-         kSoKqsBfZ2FExvtOE6AETv0RHwFy5OQyfVMTtRtaDfHqTm0xu6M4l+tRiUzQoTHaG/VO
-         oBrku3Yq6mpqqCNx8yt0CQLrI3QXpNC1ejpf82rWLLcHgH11wIxxuMjzVmpzZ1Bxu+Pm
-         6/Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHgI2VFqoDCfF4jzyNaqle2v62juTo0P3k9+vvnz+8MuWVy38OY5RHZJA3idwQSd2wM9azmO6iUDjYjKfo/HQWJWGj9+mdR5dB
-X-Gm-Message-State: AOJu0YzbuaDCjq/y47P1jdpE8dMxihu+dRiRvyJqJ2etN2Y1gozbqAgQ
-	Uu4Hfo1cKNbo5So1LIlowAY9yEt2y66CYqgMiYH+AOBisZXK1TPymGMuEmQQeG8=
-X-Google-Smtp-Source: AGHT+IHY1+cRHKPB0CuniAq91NZoLHR7SQvLrwb80gvuidEDI3lyX01cORfCDqEnSwFbGme8z8FVBQ==
-X-Received: by 2002:a05:600c:470c:b0:412:7058:eaa3 with SMTP id v12-20020a05600c470c00b004127058eaa3mr758048wmo.27.1708426774376;
-        Tue, 20 Feb 2024 02:59:34 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05600c4f9600b00411a6ce0f99sm14439503wmq.24.2024.02.20.02.59.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 02:59:33 -0800 (PST)
-Message-ID: <d2dbbbc2-7ce6-4aca-b9ab-590e4131fed1@linaro.org>
-Date: Tue, 20 Feb 2024 11:59:32 +0100
+	s=arc-20240116; t=1708428089; c=relaxed/simple;
+	bh=tMJxfwCSSr3p+ijPgpOexopN0A0/RTNz2LXt/jouBIg=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=PRgUw7H0AVsIHAFpgY/7cadzpHsgUwz7/t7OIQoN8mG+idyrEVWz9ZhNx1oXv0YRQorko2QL2M6/Y0d1JN0/8ceKmt5hSd8ZTetcXzVJSr1z1cNsC/PmBjVAIOaww3bHQ1bBeSrAGK/FdSRb9zUco6xSymgNyiXA9L3KCsalhcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=DRAYm8BL; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240220112118epoutp045d2f612b959ef79cb19dfdc465d0f4cb~1jkkvA3qa2598125981epoutp04k
+	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 11:21:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240220112118epoutp045d2f612b959ef79cb19dfdc465d0f4cb~1jkkvA3qa2598125981epoutp04k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1708428078;
+	bh=1cWhqeulLVD72A386JFQUZWJu92N4UiwYI/DcEzmtt8=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=DRAYm8BLEzlPkmljiLn6/vofVK2QFZ79msvhsf/8DJ1zztz4oeM6JfWsCOwYpmU4n
+	 +iTFpeXMCFiwsTUZMGtbgs+np4t8WudnLCDXOVyjyGcJ8z/LXlziaB2Bd+B3VlJgL4
+	 x62MbxmFVmIdrUXlXkjf4Mrh+DPghgZ2Q+245sBc=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240220112118epcas5p20e5f933caf48ebe9fd389527410327b9~1jkkQo-0i3136231362epcas5p2z;
+	Tue, 20 Feb 2024 11:21:18 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.177]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4TfH6430w6z4x9Q0; Tue, 20 Feb
+	2024 11:21:16 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	3E.E3.09672.C2B84D56; Tue, 20 Feb 2024 20:21:16 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240220084109epcas5p3dc6b95a0ed69b63e93f4aa0a6fc919fe~1hYvSgQxt0823808238epcas5p33;
+	Tue, 20 Feb 2024 08:41:09 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240220084109epsmtrp2dfee0aa01819adbc0797640442582a6b~1hYvRlQBS1186311863epsmtrp2X;
+	Tue, 20 Feb 2024 08:41:09 +0000 (GMT)
+X-AuditID: b6c32a4b-60bfd700000025c8-e2-65d48b2ccbca
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	0F.7B.07368.5A564D56; Tue, 20 Feb 2024 17:41:09 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+	[107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240220084106epsmtip194af0d0ce4318e40dae18b6a06aa7df0~1hYsoDfGI2979629796epsmtip1j;
+	Tue, 20 Feb 2024 08:41:06 +0000 (GMT)
+From: Shradha Todi <shradha.t@samsung.com>
+To: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Cc: mturquette@baylibre.com, sboyd@kernel.org, jingoohan1@gmail.com,
+	lpieralisi@kernel.org, kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+	linux@armlinux.org.uk, m.szyprowski@samsung.com,
+	manivannan.sadhasivam@linaro.org, pankaj.dubey@samsung.com,
+	gost.dev@samsung.com, Shradha Todi <shradha.t@samsung.com>
+Subject: [PATCH v6 0/2] Add helper function to get and enable all bulk
+ clocks
+Date: Tue, 20 Feb 2024 14:10:44 +0530
+Message-Id: <20240220084046.23786-1-shradha.t@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmlq5O95VUg7d/BC0ezNvGZrGkKcPi
+	5oGdTBYrvsxkt9j7eiu7RUPPb1aLTY+vsVp87LnHanF51xw2i7PzjrNZzDi/j8ni0NS9jBYt
+	f1pYLNYeuctucbelk9Xi4ilXi0Vbv7Bb/N+zg93i37WNLBa9h2sdRDwuX7vI7PH+Riu7x85Z
+	d9k9Fmwq9di0qpPN4861PWweT65MZ/LYvKTeo2/LKkaPz5vkAriism0yUhNTUosUUvOS81My
+	89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgH5TUihLzCkFCgUkFhcr6dvZFOWX
+	lqQqZOQXl9gqpRak5BSYFOgVJ+YWl+al6+WlllgZGhgYmQIVJmRn/H94gqXgAnfF3RvbWRoY
+	j3B2MXJySAiYSDx70MHcxcjFISSwm1Hi28V2KOcTo8S6fTNZIJxvjBKHrr5ghWk51LiVHSKx
+	l1Hi3eOljBBOK5PEtCln2ECq2AS0JBq/doHNEhFYzChxa8dmVhCHWeAXk8S+xk1MIFXCAv4S
+	HbevAlVxcLAIqEqsOZgGEuYVsJKYM3EPC8Q6eYnVGw6ADZIQWMkh8ezHQUaIhItE/+Ql7BC2
+	sMSr41ugbCmJz+/2skHY6RIrN89ghrBzJL5tXsIEYdtLHLgyhwVkL7OApsT6XfoQYVmJqafW
+	gZUwC/BJ9P5+AlXOK7FjHoytLPHlL8xtkhLzjl2GBouHxMlpN8BOEBKIlfh86T/LBEbZWQgb
+	FjAyrmKUTC0ozk1PLTYtMM5LLYdHVXJ+7iZGcKLV8t7B+OjBB71DjEwcjIcYJTiYlUR4Wcqv
+	pArxpiRWVqUW5ccXleakFh9iNAUG2URmKdHkfGCqzyuJNzSxNDAxMzMzsTQ2M1QS533dOjdF
+	SCA9sSQ1OzW1ILUIpo+Jg1OqgWlazLZahROGkwofcT7Y8H7rxR08SnuuVixJWtFs/X71Pqu5
+	u25pLTwSczrKr37DpBrLfr/67edmr+hZl3lezpPxpurq95qfpu9T1lnx9kn9J4ZrD7/tklrX
+	27LDPiblhejqr8kLpqxriDh6UO2l+Ep+l7pLUx1erjhx/WChmOVN/avZipd1+Pa6cOilbbtx
+	+kmhbDFLSjxnwOq4m6FO0fWV5woyFlz9fykz4c1zp/zPVXEV3IYPRN95tfi5cf9b+ulI/orf
+	TFMeRHCu4bNJXHBT80k786u+bVsnLWP6GJ73/nCnyRqedxV3RFkevP+UU3bg1Suj78c+K27u
+	25+gr52ZUNfqHGN3NJe3841EWvU9JZbijERDLeai4kQA2YvRST0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCLMWRmVeSWpSXmKPExsWy7bCSnO7S1CupBkeOs1k8mLeNzWJJU4bF
+	zQM7mSxWfJnJbrH39VZ2i4ae36wWmx5fY7X42HOP1eLyrjlsFmfnATXMOL+PyeLQ1L2MFi1/
+	Wlgs1h65y25xt6WT1eLiKVeLRVu/sFv837OD3eLftY0sFr2Hax1EPC5fu8js8f5GK7vHzll3
+	2T0WbCr12LSqk83jzrU9bB5Prkxn8ti8pN6jb8sqRo/Pm+QCuKK4bFJSczLLUov07RK4Mv4/
+	PMFScIG74u6N7SwNjEc4uxg5OSQETCQONW5l72Lk4hAS2M0o8X/WbVaIhKTE54vrmCBsYYmV
+	/55DFTUzScw9fJ4FJMEmoCXR+LWLGSQhIrCcUeLnyadgHcwCPcwSB1pDQGxhAV+J92fXAjVw
+	cLAIqEqsOZgGEuYVsJKYM3EPC8QCeYnVGw4wT2DkWcDIsIpRMrWgODc9N9mwwDAvtVyvODG3
+	uDQvXS85P3cTIzjgtTR2MN6b/0/vECMTB+MhRgkOZiURXvemC6lCvCmJlVWpRfnxRaU5qcWH
+	GKU5WJTEeQ1nzE4REkhPLEnNTk0tSC2CyTJxcEo1MKXrBS2Qmz2t8cAB34Cpq0xuljGIyX9t
+	8/u8/eS8rK7JC16VrXkR3fWEb51AQSsLL4O/RV6QpsGJjf2sRpIalqxsxW4bAk8xa7Q9Y0v7
+	Leq88gmPnbme3q/Zz9adDql1+nrtpnyFtOOhZ91iSirN/xLuON9TZbT8zf/CaloDq8Gfpq3z
+	myLvSApuzAziuXhqqdBHOUXOLdf2sJR80vHZ3W+yvkFvr03W5USOq2xTs5wflWf5z3KvFvl6
+	z/PGdMXPVYvXtCzfwDWTc5UWz6fahyp1m8otd2qpegTH/XpZsj5glf+UO1f+GhZdEL6fN6tZ
+	0MQxq9OQd7OrsWrFdPUr85qmfj90LC4qhuHIkQhmJZbijERDLeai4kQASN4U4OcCAAA=
+X-CMS-MailID: 20240220084109epcas5p3dc6b95a0ed69b63e93f4aa0a6fc919fe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240220084109epcas5p3dc6b95a0ed69b63e93f4aa0a6fc919fe
+References: <CGME20240220084109epcas5p3dc6b95a0ed69b63e93f4aa0a6fc919fe@epcas5p3.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 3/5] dt-bindings: clock: merge all hisilicon clock
- bindings to hisilicon,clock-reset-generator
-Content-Language: en-US
-To: Yang Xiwen <forbidden405@outlook.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240217-clk-mv200-v2-0-b782e4eb66f7@outlook.com>
- <20240217-clk-mv200-v2-3-b782e4eb66f7@outlook.com>
- <32d0a9c5-6c4b-4d85-bcbe-6192c63ba5fc@linaro.org>
- <SEZPR06MB69598A635C5AB1397348ED3296502@SEZPR06MB6959.apcprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <SEZPR06MB69598A635C5AB1397348ED3296502@SEZPR06MB6959.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 20/02/2024 11:52, Yang Xiwen wrote:
-> On 2/20/2024 6:14 PM, Krzysztof Kozlowski wrote:
->> On 17/02/2024 13:52, Yang Xiwen via B4 Relay wrote:
->>> From: Yang Xiwen <forbidden405@outlook.com>
->>>
->>> We don't need so many separated and duplicated dt-binding files. Merge
->>> them all and convert them to YAML.
->> What was exactly duplicated? You created unspecific, lose binding...
-> 
-> You can take at the drivers at drivers/clk/hisilicon. All of them use 
-> the same sets of APIs to register a few clocks and resets. That's why i 
-> think they should be merged.
+Create a managed API wrapper to get all the bulk clocks and enable them
+as it is a very common practice in many drivers. The second patch uses
+this API to adapt to clk_bulk_* APIs in the exynos driver.
+v1:
+ - https://lore.kernel.org/lkml/20231009062216.6729-1-shradha.t@samsung.com/
+v2:
+ - https://lore.kernel.org/lkml/20231115065621.27014-1-shradha.t@samsung.com/
+ - Addressed Manivannan's comments to improve patch
+v3:
+ - https://lore.kernel.org/all/20240110110115.56270-1-shradha.t@samsung.com/
+ - Took Marek's suggestion to make a common bulk clk wrapper and use it in
+   the exynos driver
+v4:
+ - https://lore.kernel.org/all/20240124103838.32478-1-shradha.t@samsung.com/
+ - Addressed Alim and Manivannan's comments
+ - Changed enabled->enable and disabled->disable in function name
+ - Remove num_clks out parameter as it is not required by user
+ - Removed exit callback and used function name directly in release
+v5:
+ - https://lore.kernel.org/lkml/20240213132751.46813-1-shradha.t@samsung.com/
+ - Rephrased comments for better readability
+v6:
+ - Removed extra new line
 
-Drivers don't really matter for bindings. That's not a valid argument.
+Shradha Todi (2):
+  clk: Provide managed helper to get and enable bulk clocks
+  PCI: exynos: Adapt to clk_bulk_* APIs
 
-Creating invalid combinations and lose bindings is not the answer to
-duplication of few parts.
+ drivers/clk/clk-devres.c                | 40 ++++++++++++++++++
+ drivers/pci/controller/dwc/pci-exynos.c | 54 ++-----------------------
+ include/linux/clk.h                     | 22 ++++++++++
+ 3 files changed, 66 insertions(+), 50 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.17.1
 
 
