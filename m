@@ -1,249 +1,192 @@
-Return-Path: <linux-clk+bounces-3842-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3838-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7C6985BA4D
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 12:22:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ACCA85B9DC
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 12:04:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76F571F2374E
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 11:22:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C2BD1C23025
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Feb 2024 11:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A61067C79;
-	Tue, 20 Feb 2024 11:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F344065BCB;
+	Tue, 20 Feb 2024 11:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NoJ16kJ/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V4VvsFG0"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0786C67C5B
-	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 11:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1346465BA3
+	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 11:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708428094; cv=none; b=YJJe2/pDl072afHSrsgXqsRauLazhaAPLudXExpz+b2jGoOVudfAhETtct3X3DkcRVuWiJ/Ga3LfmcsCrko93RfCUII4ovt8wLZTlnuXOYZND8Gj9PFeSDJmIwEeVWHc2sxi4GM002iGeQ+lbqrXOcJ7GN+/0P9/JGySJDzRfj0=
+	t=1708427079; cv=none; b=t6Bm4n8mBNPMmirwgqixlOZnYMSxP2gADagLeSljvEq4ZdcPDnjOfck1F5F+gcso2E3v+xGstxefC7XVCXuI251QQBvwbXxEoM1hMIjRzC/tcFGbp8smbULdAIEcePtXIS6Ycj5P2dmgWzMJiz1wyVKrpOqSiYLReViwoPRknco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708428094; c=relaxed/simple;
-	bh=uQSuDcenC7QtjyHuVyxBlW7jEkPTOEKNuzZhMEq78rI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:Content-Type:
-	 References; b=kGGcBf+Lf46K4tVswej7LMA6A6Ll63JqnFa0Ws9Bj/W4y4UP8LXQQHxbxNwvoGlPO17ir7NiHUuWIojp1PxVM2oVQR7q77CWD61JaOlML40/SiYXpAW33ogqfnojCPv1vi5MFHaOmf2ehgNydHmdX6O/UfMipXDPAQUAtifiPUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NoJ16kJ/; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240220112131epoutp04e2e2d2d7f0d260a76cf90aaf12c54107~1jkwVDxic2590325903epoutp04Y
-	for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 11:21:31 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240220112131epoutp04e2e2d2d7f0d260a76cf90aaf12c54107~1jkwVDxic2590325903epoutp04Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1708428091;
-	bh=6WcEEEJAqHt6H76Re3bajB+WXdTeFoCOJ/3X3ukJOi4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NoJ16kJ/2Wf/u+qfLviKZqe/TdbFGWbloZIcnE4klF/gPOylGnrlg+w8EPmhEG6/3
-	 cTlsCKwMzJ9PQpaXhnJXG9ztyPz7yqNsnqPnlkD776m/lePf/dvDJ1rr1LX7Fk34Cw
-	 U+p72gFgvDqp9HGtRyJVKNKAYTTMqUpBubiwH0tk=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20240220112130epcas5p1c696cdb51441ce6690ccd0ce05ae5dd0~1jkv0vIQq2879428794epcas5p1s;
-	Tue, 20 Feb 2024 11:21:30 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4TfH6J5jF4z4x9Pt; Tue, 20 Feb
-	2024 11:21:28 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	FB.F3.09672.83B84D56; Tue, 20 Feb 2024 20:21:28 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240220084125epcas5p28c6d886685006800fc26c11918d5d1dd~1hY_Xg-4K1825418254epcas5p20;
-	Tue, 20 Feb 2024 08:41:25 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240220084125epsmtrp1969a5c0f2d6b128c58305a9f6452d154~1hY_WkhMu0876808768epsmtrp1c;
-	Tue, 20 Feb 2024 08:41:25 +0000 (GMT)
-X-AuditID: b6c32a4b-60bfd700000025c8-fe-65d48b381b9a
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D4.C7.08817.5B564D56; Tue, 20 Feb 2024 17:41:25 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-	[107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240220084122epsmtip15bf359fa9d7cb4279eec9634a592a933~1hY7vkWrA2980029800epsmtip19;
-	Tue, 20 Feb 2024 08:41:22 +0000 (GMT)
-From: Shradha Todi <shradha.t@samsung.com>
-To: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Cc: mturquette@baylibre.com, sboyd@kernel.org, jingoohan1@gmail.com,
-	lpieralisi@kernel.org, kw@linux.com, robh@kernel.org, bhelgaas@google.com,
-	krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-	linux@armlinux.org.uk, m.szyprowski@samsung.com,
-	manivannan.sadhasivam@linaro.org, pankaj.dubey@samsung.com,
-	gost.dev@samsung.com, Shradha Todi <shradha.t@samsung.com>
-Subject: [PATCH v6 2/2] PCI: exynos: Adapt to clk_bulk_* APIs
-Date: Tue, 20 Feb 2024 14:10:46 +0530
-Message-Id: <20240220084046.23786-3-shradha.t@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240220084046.23786-1-shradha.t@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0VSbUxTVxjeubftLSDmho/sWAKSK2YDB7YK9aAyNXNwF1lGZrZs+wHc0ZuW
-	UG5rW4YzqHwjCAwIIjKobKtk8jVpwSFfw0qEwHAj1AIbMARD5lgYXwM3JqylsP17zvs8z/vk
-	fc8rxN2aBSJhPKdjNRyjpATOvLsP/F8NRFctrHig6wCa0t8VIEO6Ao1138PQ1ys3CNQ510Kg
-	1Px1PjLOWPloMX+Sj4bbKgVoUN8rQOU/dGHIfK0ToMx/MnmooWeCQBOZuXw01P8m+rJlhUCb
-	Ha0E2rA28VDBg4snPehh6xBO/zGaRdD3KiYIutqYRBtrcwX0uLVDQD+1XMdok+EyXdhcC+hl
-	o0+U80cJxxUsI2M1viwXp5LFc/Iw6szZmDdiQqRiSaAkFB2hfDkmkQ2jTkdGBYbHK22zUb6f
-	MMokWymK0Wqpg68f16iSdKyvQqXVhVGsWqZUB6uDtEyiNomTB3Gs7qhELD4UYhPGJihKy1YJ
-	dYno/OD8piAVWD3zgJMQksFwUz/NywPOQjeyHcDNdgtmJ9zIJQDHBwIcxCqAT17c5u04+grm
-	gUPUCWBltrtDlIXBovblLUJABsC0P/NwO+FBfgXgT60mvv2Bk39jsCvNuJXhTobBxYJ2wo55
-	5H5oMudsRbiSR+H9H+sIR9xeWHen29ZJKHQij8HHNfH2PpDsE8KloVHMXofkaTh55bxD7g5/
-	623etorgs8+yt7Ec3jaV4w6shKsmA+bAJ2C3pZJnb4OT/vCbtoOOsje81t+4JcHJ3bBg/em2
-	3BW26nfwPrjyomN7KXug/uEw34Fp+G32DOZYSiGAyzcbsSLgU/F/RDUAtWAPq9YmylltiPow
-	xyb/92lxqkQj2DrfgDOtYHpqIcgMMCEwAyjEKQ9XXrKFdXOVMZ9eYDWqGE2SktWaQYhtfcW4
-	yDNOZbt/ThcjCQ4VB0ul0uDQw1IJ9bLrXFaVzI2UMzo2gWXVrGbHhwmdRKlYW1nEr48+n11a
-	6jbcqE/I0ZlGqlpkordgbl3FsZGpI7pD+VGd84w40YuwFK0PFFH1PQcGv9eeuETMPg+JGRrb
-	PzJ7Ls0/4701n56L+7jXcudPqcMvtLTGpecZXHaNNJaUPKci12bmijMiX/nLJXZDNFhWslHs
-	svDhz3JkvlVzyW/wCd5354NfSpmo5KVzp1Lun37MBo13+ZWvYZNh61zEcM3Vh1/ELvTcbGjb
-	ndH//q5ZPRdg2NvkIpgOX/A+m0JPvWNQpLQ/ip6JriqMPvmuR46XOeLWaNnas14xWGyUDkut
-	9XVE6pX6y5uN34lxv4aPS5sYL89VakzyUvXv6Q3eI29TPK2CkQTgGi3zLzlS0stHBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSnO7W1CupBuuOiVg8mLeNzWJJU4bF
-	zQM7mSxWfJnJbrH39VZ2i4ae36wWmx5fY7X42HOP1eLyrjlsFmfnHWezmHF+H5PFoal7GS1a
-	/rSwWKw9cpfd4m5LJ6vFxVOuFou2fmG3+L9nB7vFv2sbWSx6D9c6iHhcvnaR2eP9jVZ2j52z
-	7rJ7LNhU6rFpVSebx51re9g8nlyZzuSxeUm9R9+WVYwenzfJBXBFcdmkpOZklqUW6dslcGVM
-	mfaNvWCSVMXZd//ZGhiviXYxcnJICJhInOh9xwhiCwnsZpR4fFoEIi4p8fniOiYIW1hi5b/n
-	7F2MXEA1zUwS6/bsYAZJsAloSTR+7WIGSYgILGeU+HnyKVgHs0APs8SB1hAQW1jAVuJj7252
-	EJtFQFVi86F2FhCbV8BK4uCF1ewQG+QlVm84ADSIg4NTwFri6rJMiIOsJP4/3MU8gZFvASPD
-	KkbJ1ILi3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4PjQ0trBuGfVB71DjEwcjIcYJTiYlUR4
-	3ZsupArxpiRWVqUW5ccXleakFh9ilOZgURLn/fa6N0VIID2xJDU7NbUgtQgmy8TBKdXA1NFv
-	tvDENo2ZO6sZ5K9P9507q6d41+E0K75L7XkvCrVrhfl5hGZOFDYOz1HevrsgLFRDZeW6G74X
-	pyxrviG9iH1l1BKLtcunJHTkvjrr9l3VVyzGOSBkV0fPgs4HIfGNs96/WCPrLclrocP8qXMn
-	l5Z3c2eV7DXJ5emWQWrmf2VZI5+17JKrXbUmUmIO1z4pgVLWDVIHHHZuXLdyg+sM3YYX/y5u
-	kl64f/+211P6LC4E/MtY9a8pj8G6xynpR/TbvWK2/MYp78+tjFa4Nami+LXxV1ctZr4t6z13
-	HwnccenPr8Vic36pMmyLOHdshvCCB5XcG3bMCD0hslv9od25rhb788p2PN1fVhpXdZslKbEU
-	ZyQaajEXFScCAHzCl+P+AgAA
-X-CMS-MailID: 20240220084125epcas5p28c6d886685006800fc26c11918d5d1dd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240220084125epcas5p28c6d886685006800fc26c11918d5d1dd
-References: <20240220084046.23786-1-shradha.t@samsung.com>
-	<CGME20240220084125epcas5p28c6d886685006800fc26c11918d5d1dd@epcas5p2.samsung.com>
+	s=arc-20240116; t=1708427079; c=relaxed/simple;
+	bh=wDvrFsF4EpABPwyh8ywfuGjb9qWMW1yuCO2kiRh4dLs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fZxBytLA2zIgMJZQy7l8F2WN3YvraXtl61wVh8uAcu6m/nrCaAWrnOMLoGMqMKAMpXMMUvHRyHK9U3jQrK24/vq/RV8Ve4/i6mKy4eLcza9eOZdTIAVj4Dx9QGXjyUntFKzQqhuFZlvU8GhYDsjfcFtugzPLC4P90BnP43l+vyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V4VvsFG0; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d0e520362cso53842471fa.2
+        for <linux-clk@vger.kernel.org>; Tue, 20 Feb 2024 03:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708427076; x=1709031876; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NbSygiAeGP6BEwln1frKBLnsOivRpqfkZfCGYmRwuys=;
+        b=V4VvsFG00ZznYjMCnQkSifluLCGbMCtUYfeZ6kRqs8xtksd1S9mxTXKlCXGt8A0KcT
+         3xCjCSe0cRfnw5k5mqzZndWA+nK/9PnFQDdV4LgtlaxhZrip6H2V+8cO9pAFQBDkx368
+         viakFuFraXH2pcR35TQMLoVfa31JDJE8Z+UavRHT0ve5JeGkOcNLE+A5Amk7JLzOFaDl
+         nOPiMZDSAU6AJ0dNqJ9g2JOotOYOjtAmqGAje7nKlEYWD9a1tXj3nzCxeexMvM/zikEb
+         afQSyzyz+sp435GffmAJk5SSEaGU8FwGk8gSdBIbds9X1qFYBqX+gCVkPRl3xWpupj85
+         yUXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708427076; x=1709031876;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NbSygiAeGP6BEwln1frKBLnsOivRpqfkZfCGYmRwuys=;
+        b=wBwBSfPKjGATjvLhfn/6mRtWHe8//fEebfcC8muH8eQD4G5qOn05nLFaNuF8l8q1wN
+         0KTtxoy/6PtrOJaAXBP0Pb/ILJfJzERIjwNjop3elngSEb3NNhcqdCmx816HTALKL33x
+         u7TNEf0XxcH7UbmvoAgtmcRBmao4qyOh8UpOVz/9+MUATzV/u46w53Gk6H/Pxh5IDxGK
+         PyDdaxHkw7RwwXvZ4Vi6Z/mZW0ZBDJnixmAHKOmIN9JKlaukeb9zTmq06vJXSBtSsSXc
+         MTobG9qCxjjqcCg1lJsgfaBFJ0ZF4nIZK1YnSpxB/lncCHQvVfpFj/V16amdOvbrJcxA
+         TJSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVk+09KErFvmaAlRC+ePKRSgHRRRwmij8Sea0+QLGn6WW3NvMluT5gdXIPssyDEAoDvJVsmGE/jXW9CIeQQJm1VAUy6PxT7ClI9
+X-Gm-Message-State: AOJu0YzMBxjjKGU/mIsB83rb3pbNqXZ8AfLdK+Y/Aek3WtCqvWzNhgR3
+	qJV1Ge/DvnL050ldDAy/2UOXBRuYD4DUWQwV+kdL0EPnwGeDCETJPu4+3Cxws0A=
+X-Google-Smtp-Source: AGHT+IGQONEzPBM/dxfA9vAn42RRAyX636D98yzJL/U2/Q8EcAbk6K4xwaa2GHt1Q/DqkBcGdtLDtA==
+X-Received: by 2002:a2e:a686:0:b0:2cd:706a:8ec8 with SMTP id q6-20020a2ea686000000b002cd706a8ec8mr8964202lje.10.1708427076228;
+        Tue, 20 Feb 2024 03:04:36 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id az19-20020adfe193000000b0033d6ff7f9edsm1074787wrb.95.2024.02.20.03.04.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Feb 2024 03:04:35 -0800 (PST)
+Message-ID: <ce515530-428a-4a21-8c56-5a497cc8130a@linaro.org>
+Date: Tue, 20 Feb 2024 12:04:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/16] clk: samsung: Keep register offsets in chip
+ specific structure
+Content-Language: en-US
+To: Sam Protsenko <semen.protsenko@linaro.org>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>,
+ linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20240216223245.12273-1-semen.protsenko@linaro.org>
+ <20240216223245.12273-12-semen.protsenko@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240216223245.12273-12-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-There is no need to hardcode the clock info in the driver as driver can
-rely on the devicetree to supply the clocks required for the functioning
-of the peripheral. Get rid of the static clock info and obtain the
-platform supplied clocks. All the clocks supplied is obtained and enabled
-using the devm_clk_bulk_get_all_enable() API.
+On 16/02/2024 23:32, Sam Protsenko wrote:
+> Abstract CPU clock registers by keeping their offsets in a dedicated
+> chip specific structure to accommodate for oncoming Exynos850 support,
+> which has different offsets for cluster 0 and cluster 1. This rework
+> also makes it possible to use exynos_set_safe_div() for all chips, so
+> exynos5433_set_safe_div() is removed here to reduce the code
+> duplication.
+> 
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Signed-off-by: Shradha Todi <shradha.t@samsung.com>
----
- drivers/pci/controller/dwc/pci-exynos.c | 54 ++-----------------------
- 1 file changed, 4 insertions(+), 50 deletions(-)
+So that's the answer why you could not use flags anymore - you need an
+enum, not a bitmap. Such short explanation should be in previous commits
+justifying moving reg layout to new property.
 
-diff --git a/drivers/pci/controller/dwc/pci-exynos.c b/drivers/pci/controller/dwc/pci-exynos.c
-index ec5611005566..3234eb5be1fb 100644
---- a/drivers/pci/controller/dwc/pci-exynos.c
-+++ b/drivers/pci/controller/dwc/pci-exynos.c
-@@ -54,43 +54,11 @@
- struct exynos_pcie {
- 	struct dw_pcie			pci;
- 	void __iomem			*elbi_base;
--	struct clk			*clk;
--	struct clk			*bus_clk;
-+	struct clk_bulk_data		*clks;
- 	struct phy			*phy;
- 	struct regulator_bulk_data	supplies[2];
- };
- 
--static int exynos_pcie_init_clk_resources(struct exynos_pcie *ep)
--{
--	struct device *dev = ep->pci.dev;
--	int ret;
--
--	ret = clk_prepare_enable(ep->clk);
--	if (ret) {
--		dev_err(dev, "cannot enable pcie rc clock");
--		return ret;
--	}
--
--	ret = clk_prepare_enable(ep->bus_clk);
--	if (ret) {
--		dev_err(dev, "cannot enable pcie bus clock");
--		goto err_bus_clk;
--	}
--
--	return 0;
--
--err_bus_clk:
--	clk_disable_unprepare(ep->clk);
--
--	return ret;
--}
--
--static void exynos_pcie_deinit_clk_resources(struct exynos_pcie *ep)
--{
--	clk_disable_unprepare(ep->bus_clk);
--	clk_disable_unprepare(ep->clk);
--}
--
- static void exynos_pcie_writel(void __iomem *base, u32 val, u32 reg)
- {
- 	writel(val, base + reg);
-@@ -332,17 +300,9 @@ static int exynos_pcie_probe(struct platform_device *pdev)
- 	if (IS_ERR(ep->elbi_base))
- 		return PTR_ERR(ep->elbi_base);
- 
--	ep->clk = devm_clk_get(dev, "pcie");
--	if (IS_ERR(ep->clk)) {
--		dev_err(dev, "Failed to get pcie rc clock\n");
--		return PTR_ERR(ep->clk);
--	}
--
--	ep->bus_clk = devm_clk_get(dev, "pcie_bus");
--	if (IS_ERR(ep->bus_clk)) {
--		dev_err(dev, "Failed to get pcie bus clock\n");
--		return PTR_ERR(ep->bus_clk);
--	}
-+	ret = devm_clk_bulk_get_all_enable(dev, &ep->clks);
-+	if (ret < 0)
-+		return ret;
- 
- 	ep->supplies[0].supply = "vdd18";
- 	ep->supplies[1].supply = "vdd10";
-@@ -351,10 +311,6 @@ static int exynos_pcie_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	ret = exynos_pcie_init_clk_resources(ep);
--	if (ret)
--		return ret;
--
- 	ret = regulator_bulk_enable(ARRAY_SIZE(ep->supplies), ep->supplies);
- 	if (ret)
- 		return ret;
-@@ -369,7 +325,6 @@ static int exynos_pcie_probe(struct platform_device *pdev)
- 
- fail_probe:
- 	phy_exit(ep->phy);
--	exynos_pcie_deinit_clk_resources(ep);
- 	regulator_bulk_disable(ARRAY_SIZE(ep->supplies), ep->supplies);
- 
- 	return ret;
-@@ -383,7 +338,6 @@ static int __exit exynos_pcie_remove(struct platform_device *pdev)
- 	exynos_pcie_assert_core_reset(ep);
- 	phy_power_off(ep->phy);
- 	phy_exit(ep->phy);
--	exynos_pcie_deinit_clk_resources(ep);
- 	regulator_bulk_disable(ARRAY_SIZE(ep->supplies), ep->supplies);
- 
- 	return 0;
--- 
-2.17.1
+> No functional change.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  drivers/clk/samsung/clk-cpu.c | 156 +++++++++++++++++++---------------
+>  1 file changed, 86 insertions(+), 70 deletions(-)
+> 
+> diff --git a/drivers/clk/samsung/clk-cpu.c b/drivers/clk/samsung/clk-cpu.c
+> index 04394d2166c9..744b609c222d 100644
+> --- a/drivers/clk/samsung/clk-cpu.c
+> +++ b/drivers/clk/samsung/clk-cpu.c
+> @@ -44,12 +44,14 @@ typedef int (*exynos_rate_change_fn_t)(struct clk_notifier_data *ndata,
+>  
+>  /**
+>   * struct exynos_cpuclk_chip - Chip specific data for CPU clock
+> + * @regs: register offsets for CPU related clocks
+>   * @pre_rate_cb: callback to run before CPU clock rate change
+>   * @post_rate_cb: callback to run after CPU clock rate change
+>   */
+>  struct exynos_cpuclk_chip {
+> -	exynos_rate_change_fn_t	pre_rate_cb;
+> -	exynos_rate_change_fn_t	post_rate_cb;
+> +	const void				* const regs;
+
+Why this is void?
+
+> +	exynos_rate_change_fn_t			pre_rate_cb;
+> +	exynos_rate_change_fn_t			post_rate_cb;
+>  };
+>  
+
+
+
+Best regards,
+Krzysztof
 
 
