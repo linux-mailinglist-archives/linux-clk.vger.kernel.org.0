@@ -1,52 +1,52 @@
-Return-Path: <linux-clk+bounces-3881-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3885-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A31D85E394
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 17:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 754DF85E583
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 19:22:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDCF21F2253F
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 16:41:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAD801F24434
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 18:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF04839F4;
-	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FCE85299;
+	Wed, 21 Feb 2024 18:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DDGdAfUD"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GXgPn8V2"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C103382D63;
-	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6EE84FD8;
+	Wed, 21 Feb 2024 18:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708533681; cv=none; b=AxQiNFmCGGrQazUyrs9JWFxAm6VpwKr/zqWGFLiAk79KOJ0PujmBt7BiLmmf2AaN5yh3SX+3Kvvv+oOzGzqIWdDJPJRPK4U6glWbYjAThxbImi9GxpDD0H/VEY7NIZJKnLPvTaQ48A/xYDw+t0kR9n8PBYHYgFHRb1MHXPUfP+0=
+	t=1708539737; cv=none; b=kp1YPF/LslHebxwqexeNZCzLX8pQFZ/Qs6oEyWvkahdX0R3AV5WdrgN3+uCOS9aEufLNkzWzHR3N5NYnG3RIKLdoPSXMiAApnbuGhzEa4BgETtgWNWsQvLPrE2M2J2VegB7Y0EnUV/aUzn6ugz3llMTk0f3YQ2qSdr1rWOH8T80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708533681; c=relaxed/simple;
-	bh=6jiMQsziQVT6fOrvLbLmIT+jqUpGKlFvZg9cowyUhmk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sYhNa2wj2ZRjhytNBY7sFfvN5yrxqZGwg1MDERWE8QVcmD8zU0Mhrl6/DLJqWETSn/ygNzjlCr+o4MPOCSday2H74/P6iC3j9HfaTM6XFeW9afAuM5F843AboCAKO6OqGpgBJHgAJ9RfNn/tUZXyGFul0Zwx0wlC+OBmqS309YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DDGdAfUD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8738DC116B1;
-	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708533681;
-	bh=6jiMQsziQVT6fOrvLbLmIT+jqUpGKlFvZg9cowyUhmk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=DDGdAfUDvv6CXPxm8MV7z6D3UN0QsVmf8Q1NeyV83tmWfXgXWklkTK2Tsv6goKDvj
-	 6QU7/rRRmjqHZPELp9O1qe1TjRkpIdroLIclkVQ2bcfRCD76xbe7pfyVSptaFuV5KD
-	 /8rrmDCDU2QhmZdaBviqlfcBfT6JY0vPtQpz7hLP7fuW3lPx58Kp4plBK7eCalKI2n
-	 ZOxFNWSI2CQTYap+rQahBSatR9/2YmXbRi2Y9ghO9Z/qwEUMXQk8OBX4UGYAdzOGRb
-	 3Pnr+6VLXl3CDSBgyxwSZV4mGeJCrca2ESAisbHzcbHUK0hfXM0OJvMpELZhNtc6CI
-	 ygnD8YHmzEHLQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77569C5478B;
-	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
-From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
-Date: Thu, 22 Feb 2024 00:41:11 +0800
-Subject: [PATCH v3 8/8] clk: hisilicon: add CRG driver for Hi3798MV200 SoC
+	s=arc-20240116; t=1708539737; c=relaxed/simple;
+	bh=633I1E2LHcb6ImHJ2+htpqw4h6Bkm0555N9hxRvvXVA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r03CetstfPHjp2CtqiGdSsCuovOxRh1x5TgBSeHK9OqLNAtFIfGMX3HNP8+M9iylMdX9J97QHxS8a6aPiz/6koGTr3++t6FxNwhjO5ueGjJ2bEK+8gdvXP25f1dSxH47qaCP+dITYeRHHaCLzsdQXuFdiIcjxc07Ro4R22/506I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GXgPn8V2; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EE27F1C0008;
+	Wed, 21 Feb 2024 18:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1708539732;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IpJVacaKh6VV2SUgh3k36CE+SCXTY9oO9NzwW+GWlw4=;
+	b=GXgPn8V29n+V5DRd0NScpfGpzzyV+HzmMjfrDgeIGeud9ZSQbXP0bDWj2vEFfcjPrhrSsY
+	CvS4b1qFLMMsjgobGY6J7fd8abiCTTvSJJN38x2uflDdTupvZ3pwDrgJ/IpjfhtcNIKhAG
+	XYThlSBr5lTMBUSUuXvqL3INC+4gJG8MkocIJr8DYvXvsNsIzo6ajNebzuFe45mnT09sdW
+	COreEE5VIrNhLxtr61zSRdwCtzUg9Vxt4ctWKpbhNgTegwMdaFeeW42AT7BL7QunEywXBq
+	3bCVO0QlLjd+0+iDDVHMq0TEMLZOCtRSCrCPcXTv0IhwmveP3rVjPiXD5XY16g==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v7 00/14] Add support for Mobileye EyeQ5 system controller
+Date: Wed, 21 Feb 2024 19:22:08 +0100
+Message-Id: <20240221-mbly-clk-v7-0-31d4ce3630c3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -54,547 +54,260 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240222-clk-mv200-v3-8-f30795b50318@outlook.com>
-References: <20240222-clk-mv200-v3-0-f30795b50318@outlook.com>
-In-Reply-To: <20240222-clk-mv200-v3-0-f30795b50318@outlook.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFA/1mUC/3XQwU7EIBAG4FfZcBYzwwAFT76H8QAUXGK3Ne2mc
+ bPpu0vXmLJWDxyG8P38cGVTHHOc2NPhysY45ykPfRmahwMLR9e/RZ7bMjMBgrAsfvLdhYfunZs
+ mRBWExASGleMfY0z58xb18lrmY57Ow3i5Jc+47n6HIMEWMiMHbrRPiLZpkeKzH4Zzl/vHMJzW1
+ H+Ipwiq1d766P4kAs0vImXpKxFMAn1H1rKz2AoK0VRUFOrKXV5TIANpT+mHSsD6g2YqlKzwgOC
+ NMLinsqKEFZXrG0MLoBBa7WBP1UYF2IqqQhNYGaOKFo3bU11RFBXVhQapk8NkyZC9p8uyfAGc6
+ bReLwIAAA==
+To: Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>, 
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Yang Xiwen <forbidden405@outlook.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708533664; l=18889;
- i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
- bh=/5tubVp4D3o4gm3SuOgYSetmwQOt4vNMUPhcAqZfpwU=;
- b=k0zCNkj9clZ0nbOb1euyA6zdq6nENBEFZd1qxvEoz0F57Y4oORcZs7ehiiAWM8Nxv/dxiTsTk
- czhP/eYWPk3BTf+wKibqUthRZL9QZH9ZhX7GO0aicvmOwaLbAeAjQKx
-X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
- pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
-X-Endpoint-Received:
- by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
-X-Original-From: Yang Xiwen <forbidden405@outlook.com>
-Reply-To: <forbidden405@outlook.com>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-gpio@vger.kernel.org, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Rob Herring <robh@kernel.org>
+X-Mailer: b4 0.13.0
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-From: Yang Xiwen <forbidden405@outlook.com>
+Hi,
 
-Add CRG driver for Hi3798MV200 SoC. CRG(Clock and Reset Generator) module
-generates clock and reset signals used by other module blocks on SoC.
+The goal of this series is to add clk, reset and pinctrl support for the
+Mobileye EyeQ5 platform [0]. Control of those is grouped inside a
+system controller block called "OLB".
 
-Only currently used clocks are added. Clocks without mainline user are omitted.
+About clocks, we replaced the 10 fixed clocks from the initial platform
+support series [0] by 10 read-only fixed-factor PLLs provided by our
+clock driver. We also provide one table-based divider clock for OSPI.
+Two PLLs (for GIC timer & UARTs) are required at of_clk_init() so those
+are registered first, the rest comes at platform device probe.
 
-Notably PLLs are missing due to the lack of PLL driver.
+Resets are split in three domains, all dealt with by the same device.
+They have some behavior differences:
+ - We busy-wait on the first two for hardware LBIST reasons (logic
+   built-in self-test).
+ - Domains 0 & 2 work in a bit-per-reset fashion while domain 1 works in
+   a register-per-reset fashion.
 
-Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+Pin control is about controlling bias, drive strength and muxing. The
+latter allows two functions per pin; the first function is always GPIO
+while the second one is pin-dependent. There exists two banks, both
+handled by a single driver instance. Each pin maps to one pin group.
+That makes pin & group indexes the same, simplifying logic.
+
+The patch adding the system-controller dt-bindings ("dt-bindings: soc:
+mobileye: add EyeQ5 OLB system controller") is dependent on the three
+controllers dt-bindings:
+ - dt-bindings: clock: mobileye,eyeq5-clk: add bindings
+ - dt-bindings: reset: mobileye,eyeq5-reset: add bindings
+ - dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add bindings
+
+The parent is v6.8-rc5 with both [1] and [0] series applied on top. Both
+series are in mips-next [2].
+
+Here is the patch list, split by subsystems:
+
+- clk:
+   [PATCH v7 01/14] clk: fixed-factor: add optional accuracy support
+   [PATCH v7 02/14] clk: fixed-factor: add fwname-based constructor functions
+   [PATCH v7 03/14] dt-bindings: clock: mobileye,eyeq5-clk: add bindings
+   [PATCH v7 07/14] clk: eyeq5: add platform driver, and init routine at of_clk_init()
+- pinctrl:
+   [PATCH v7 05/14] dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add bindings
+   [PATCH v7 09/14] pinctrl: eyeq5: add platform driver
+- reset:
+   [PATCH v7 04/14] dt-bindings: reset: mobileye,eyeq5-reset: add bindings
+   [PATCH v7 08/14] reset: eyeq5: add platform driver
+- MIPS: (note: dependent on the [0] series)
+   [PATCH v7 06/14] dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+   [PATCH v7 10/14] MAINTAINERS: Map OLB files to Mobileye SoCs
+   [PATCH v7 11/14] MIPS: mobileye: eyeq5: add OLB syscon node
+   [PATCH v7 12/14] MIPS: mobileye: eyeq5: use OLB clocks controller node
+   [PATCH v7 13/14] MIPS: mobileye: eyeq5: add OLB reset controller node
+   [PATCH v7 14/14] MIPS: mobileye: eyeq5: add pinctrl node & pinmux function nodes
+
+Thanks all for the previous feedback!
+
+Have a nice day,
+Théo Lebrun
+
+[0]: https://lore.kernel.org/lkml/20240216174227.409400-1-gregory.clement@bootlin.com/
+[1]: https://lore.kernel.org/linux-mips/20240209-regname-v1-0-2125efa016ef@flygoat.com/
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/log/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/clk/hisilicon/Kconfig           |   8 +
- drivers/clk/hisilicon/Makefile          |   1 +
- drivers/clk/hisilicon/crg-hi3798mv200.c | 462 ++++++++++++++++++++++++++++++++
- 3 files changed, 471 insertions(+)
+Changes in v7:
+- pinctrl: use dev_err_probe() and lower first letter of messages.
+- Move all MAINTAINERS changes to a separate patch aimed at the MIPS
+  tree. This means clk/reset/pinctrl can take patches independently.
+- Apply two Reviewed-by: Linus Walleij.
+- Link to v6: https://lore.kernel.org/r/20240212-mbly-clk-v6-0-c46fa1f93839@bootlin.com
 
-diff --git a/drivers/clk/hisilicon/Kconfig b/drivers/clk/hisilicon/Kconfig
-index c1ec75aa4ccd..fab8059240b7 100644
---- a/drivers/clk/hisilicon/Kconfig
-+++ b/drivers/clk/hisilicon/Kconfig
-@@ -45,6 +45,14 @@ config COMMON_CLK_HI3798CV200
- 	help
- 	  Build the clock driver for hi3798cv200.
- 
-+config COMMON_CLK_HI3798MV200
-+	tristate "Hi3798MV200 Clock Driver"
-+	depends on ARCH_HISI || COMPILE_TEST
-+	select RESET_HISI
-+	default ARCH_HISI
-+	help
-+	  Build the clock driver for hi3798mv200.
-+
- config COMMON_CLK_HI6220
- 	bool "Hi6220 Clock Driver"
- 	depends on ARCH_HISI || COMPILE_TEST
-diff --git a/drivers/clk/hisilicon/Makefile b/drivers/clk/hisilicon/Makefile
-index 2978e56cb876..7acb63e909bd 100644
---- a/drivers/clk/hisilicon/Makefile
-+++ b/drivers/clk/hisilicon/Makefile
-@@ -14,6 +14,7 @@ obj-$(CONFIG_COMMON_CLK_HI3559A)	+= clk-hi3559a.o
- obj-$(CONFIG_COMMON_CLK_HI3660) += clk-hi3660.o
- obj-$(CONFIG_COMMON_CLK_HI3670) += clk-hi3670.o
- obj-$(CONFIG_COMMON_CLK_HI3798CV200)	+= crg-hi3798cv200.o
-+obj-$(CONFIG_COMMON_CLK_HI3798MV200)	+= crg-hi3798mv200.o
- obj-$(CONFIG_COMMON_CLK_HI6220)	+= clk-hi6220.o
- obj-$(CONFIG_RESET_HISI)	+= reset.o
- obj-$(CONFIG_STUB_CLK_HI6220)	+= clk-hi6220-stub.o
-diff --git a/drivers/clk/hisilicon/crg-hi3798mv200.c b/drivers/clk/hisilicon/crg-hi3798mv200.c
-new file mode 100644
-index 000000000000..065def955e6a
---- /dev/null
-+++ b/drivers/clk/hisilicon/crg-hi3798mv200.c
-@@ -0,0 +1,462 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Hi3798MV200 Clock and Reset Generator Driver
-+ *
-+ * Copyright (c) 2024 Yang Xiwen <forbidden405@outlook.com>
-+ * Copyright (c) 2016 HiSilicon Technologies Co., Ltd.
-+ */
-+
-+#include <dt-bindings/clock/hisilicon,hi3798mv200-crg.h>
-+#include <dt-bindings/clock/hisilicon,hi3798mv200-sysctrl.h>
-+#include <linux/clk-provider.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include "clk.h"
-+#include "crg.h"
-+#include "reset.h"
-+
-+/* hi3798MV200 core CRG */
-+enum hi3798mv200_crg_inner_clk {
-+	HI3798MV200_FIXED_3M = HI3798MV200_CRG_CLK_COUNT,
-+	HI3798MV200_FIXED_12M,
-+	HI3798MV200_FIXED_24M,
-+	HI3798MV200_FIXED_25M,
-+	HI3798MV200_FIXED_27M,
-+	HI3798MV200_FIXED_48M,
-+	HI3798MV200_FIXED_50M,
-+	HI3798MV200_FIXED_54M,
-+	HI3798MV200_FIXED_60M,
-+	HI3798MV200_FIXED_75M,
-+	HI3798MV200_FIXED_100M,
-+	HI3798MV200_FIXED_125M,
-+	HI3798MV200_FIXED_150M,
-+	HI3798MV200_FIXED_200M,
-+	HI3798MV200_FIXED_250M,
-+	HI3798MV200_FIXED_300M,
-+	HI3798MV200_FIXED_400M,
-+	HI3798MV200_FIXED_450M,
-+	HI3798MV200_MMC_MUX,
-+	HI3798MV200_SDIO0_MUX,
-+	HI3798MV200_SDIO1_MUX,
-+	HI3798MV200_COMBPHY0_MUX,
-+	HI3798MV200_FEMAC_MUX,
-+	HI3798MV200_GMAC_MUX,
-+	HI3798MV200_CRG_NR_CLKS,
-+};
-+
-+static const struct hisi_fixed_rate_clock hi3798mv200_fixed_rate_clks[] = {
-+	{ HI3798MV200_OSC_CLK, "clk_osc", NULL, 0, 24000000, },
-+	{ HI3798MV200_APB_CLK, "clk_apb", NULL, 0, 100000000, },
-+	{ HI3798MV200_AHB_CLK, "clk_ahb", NULL, 0, 200000000, },
-+	{ HI3798MV200_FIXED_3M, "3m", NULL, 0, 3000000, },
-+	{ HI3798MV200_FIXED_12M, "12m", NULL, 0, 12000000, },
-+	{ HI3798MV200_FIXED_24M, "24m", NULL, 0, 24000000, },
-+	{ HI3798MV200_FIXED_25M, "25m", NULL, 0, 25000000, },
-+	{ HI3798MV200_FIXED_27M, "27m", NULL, 0, 27000000, },
-+	{ HI3798MV200_FIXED_48M, "48m", NULL, 0, 48000000, },
-+	{ HI3798MV200_FIXED_50M, "50m", NULL, 0, 50000000, },
-+	{ HI3798MV200_FIXED_54M, "54m", NULL, 0, 54000000, },
-+	{ HI3798MV200_FIXED_60M, "60m", NULL, 0, 60000000, },
-+	{ HI3798MV200_FIXED_75M, "75m", NULL, 0, 75000000, },
-+	{ HI3798MV200_FIXED_100M, "100m", NULL, 0, 100000000, },
-+	{ HI3798MV200_FIXED_125M, "125m", NULL, 0, 125000000, },
-+	{ HI3798MV200_FIXED_150M, "150m", NULL, 0, 150000000, },
-+	{ HI3798MV200_FIXED_200M, "200m", NULL, 0, 200000000, },
-+};
-+
-+static const char *const sdio_mux_p[] = { "100m", "50m", "150m", "25m" };
-+static u32 sdio_mux_table[] = {0, 1, 2, 3};
-+
-+static const char *const mmc_mux_p[] = { "100m", "50m", "25m", "200m", "150m" };
-+static u32 mmc_mux_table[] = {0, 1, 2, 3, 6};
-+
-+static const char *const comphy_mux_p[] = { "25m", "100m"};
-+static const char *const femac_mux_p[] = { "54m", "27m" };
-+static const char *const gmac_mux_p[] = { "125m", "75m" };
-+static const char *const ext_netphy_mux_p[] = { "25m", "50m" };
-+static const char *const mde1_bus_mux_p[] = { "24m", "200m" };
-+static const char *const mde3_bus_mux_p[] = { "24m", "400m" };
-+static u32 mux_table_1bit[] = {0, 1};
-+
-+static const char *const core_bus_mux_p[] = { "24m", "200m", "250m" };
-+static const char *const mde0_bus_mux_p[] = { "24m", "300m", "400m" };
-+static const char *const mde2_bus_mux_p[] = { "24m", "400m", "450m" };
-+static u32 mux_table_2bit_pattern1[] = {0, 1, 2};
-+
-+static struct hisi_mux_clock hi3798mv200_mux_clks[] = {
-+	{ HI3798MV200_CORE_BUS_CLK, "clk_core_bus", core_bus_mux_p, ARRAY_SIZE(core_bus_mux_p),
-+		0, 0x58, 0, 2, 0, mux_table_2bit_pattern1, },
-+	{ HI3798MV200_MDE0_BUS_CLK, "clk_mde0_bus", mde0_bus_mux_p, ARRAY_SIZE(mde0_bus_mux_p),
-+		0, 0x58, 2, 2, 0, mux_table_2bit_pattern1, },
-+	{ HI3798MV200_MDE1_BUS_CLK, "clk_mde1_bus", mde1_bus_mux_p, ARRAY_SIZE(mde1_bus_mux_p),
-+		0, 0x58, 4, 1, 0, mux_table_1bit, },
-+	{ HI3798MV200_MDE2_BUS_CLK, "clk_mde2_bus", mde2_bus_mux_p, ARRAY_SIZE(mde2_bus_mux_p),
-+		0, 0x58, 8, 2, 0, mux_table_2bit_pattern1, },
-+	{ HI3798MV200_MDE3_BUS_CLK, "clk_mde3_bus", mde3_bus_mux_p, ARRAY_SIZE(mde3_bus_mux_p),
-+		0, 0x58, 10, 1, 0, mux_table_1bit, },
-+	{ HI3798MV200_MMC_MUX, "mmc_mux", mmc_mux_p, ARRAY_SIZE(mmc_mux_p),
-+		0, 0xa0, 8, 3, CLK_MUX_ROUND_CLOSEST, mmc_mux_table, },
-+	{ HI3798MV200_COMBPHY0_MUX, "combphy_mux", comphy_mux_p,
-+		ARRAY_SIZE(comphy_mux_p), 0, 0x188, 3, 1, 0, mux_table_1bit, },
-+	{ HI3798MV200_SDIO0_MUX, "sdio0_mux", sdio_mux_p, ARRAY_SIZE(sdio_mux_p),
-+		0, 0x9c, 8, 2, CLK_MUX_ROUND_CLOSEST, sdio_mux_table, },
-+	{ HI3798MV200_SDIO1_MUX, "sdio1_mux", sdio_mux_p, ARRAY_SIZE(sdio_mux_p),
-+		0, 0x28c, 8, 2, CLK_MUX_ROUND_CLOSEST, sdio_mux_table, },
-+	{ HI3798MV200_FEMAC_MUX, "femac_mux", femac_mux_p, ARRAY_SIZE(femac_mux_p),
-+		0, 0xd0, 2, 1, 0, mux_table_1bit, },
-+	{ HI3798MV200_GMAC_MUX, "gmac_mux", gmac_mux_p, ARRAY_SIZE(gmac_mux_p),
-+		0, 0xcc, 7, 1, 0, mux_table_1bit, },
-+	{ HI3798MV200_EXT_NETPHY_CLK, "ext_netphy_mux", ext_netphy_mux_p, ARRAY_SIZE(ext_netphy_mux_p),
-+		0, 0xcc, 6, 1, 0, mux_table_1bit, },
-+};
-+
-+static u32 mmc_phase_regvals[] = {0, 1, 2, 3, 4, 5, 6, 7};
-+static u32 mmc_phase_degrees[] = {0, 45, 90, 135, 180, 225, 270, 315};
-+
-+static struct hisi_phase_clock hi3798mv200_phase_clks[] = {
-+	{ HI3798MV200_SDIO0_SAMPLE_CLK, "sdio0_sample", "clk_sdio0_ciu",
-+		0, 0x9c, 12, 3, mmc_phase_degrees,
-+		mmc_phase_regvals, ARRAY_SIZE(mmc_phase_regvals) },
-+	{ HI3798MV200_SDIO0_DRV_CLK, "sdio0_drive", "clk_sdio0_ciu",
-+		0, 0x9c, 16, 3, mmc_phase_degrees,
-+		mmc_phase_regvals, ARRAY_SIZE(mmc_phase_regvals) },
-+	{ HI3798MV200_SDIO1_SAMPLE_CLK, "sdio1_sample", "clk_sdio1_ciu",
-+		0, 0x28c, 12, 3, mmc_phase_degrees,
-+		mmc_phase_regvals, ARRAY_SIZE(mmc_phase_regvals) },
-+	{ HI3798MV200_SDIO1_DRV_CLK, "sdio1_drive", "clk_sdio1_ciu",
-+		0, 0x28c, 16, 3, mmc_phase_degrees,
-+		mmc_phase_regvals, ARRAY_SIZE(mmc_phase_regvals) },
-+	{ HI3798MV200_MMC_SAMPLE_CLK, "mmc_sample", "clk_mmc_ciu",
-+		0, 0xa0, 12, 3, mmc_phase_degrees,
-+		mmc_phase_regvals, ARRAY_SIZE(mmc_phase_regvals) },
-+	{ HI3798MV200_MMC_DRV_CLK, "mmc_drive", "clk_mmc_ciu",
-+		0, 0xa0, 16, 3, mmc_phase_degrees,
-+		mmc_phase_regvals, ARRAY_SIZE(mmc_phase_regvals) },
-+};
-+
-+static const struct hisi_gate_clock hi3798mv200_gate_clks[] = {
-+	/* UART */
-+	{ HI3798MV200_UART2_CLK, "clk_uart2", "75m",
-+		CLK_SET_RATE_PARENT, 0x68, 4, 0, },
-+	{ HI3798MV200_UART3_CLK, "clk_uart3", "75m",
-+		CLK_SET_RATE_PARENT, 0x68, 6, 0, },
-+	/* I2C */
-+	{ HI3798MV200_I2C0_CLK, "clk_i2c0", "clk_apb",
-+		CLK_SET_RATE_PARENT, 0x6c, 4, 0, },
-+	{ HI3798MV200_I2C1_CLK, "clk_i2c1", "clk_apb",
-+		CLK_SET_RATE_PARENT, 0x6c, 8, 0, },
-+	{ HI3798MV200_I2C2_CLK, "clk_i2c2", "clk_apb",
-+		CLK_SET_RATE_PARENT, 0x6c, 12, 0, },
-+	/* SPI */
-+	{ HI3798MV200_SPI0_CLK, "clk_spi0", "clk_apb",
-+		CLK_SET_RATE_PARENT, 0x70, 0, 0, },
-+	/* SCI */
-+	{ HI3798MV200_SCI0_CLK, "clk_sci0", "clk_apb",
-+		CLK_SET_RATE_PARENT, 0x74, 0, 0, },
-+	{ HI3798MV200_SCI1_CLK, "clk_sci1", "clk_apb",
-+		CLK_SET_RATE_PARENT, 0x74, 2, 0, },
-+	/* SDIO */
-+	{ HI3798MV200_SDIO0_BIU_CLK, "clk_sdio0_biu", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0x9c, 0, 0, },
-+	{ HI3798MV200_SDIO0_CIU_CLK, "clk_sdio0_ciu", "sdio0_mux",
-+		CLK_SET_RATE_PARENT, 0x9c, 1, 0, },
-+	{ HI3798MV200_SDIO1_BIU_CLK, "clk_sdio1_biu", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0x28c, 0, 0, },
-+	{ HI3798MV200_SDIO1_CIU_CLK, "clk_sdio1_ciu", "sdio1_mux",
-+		CLK_SET_RATE_PARENT, 0x28c, 1, 0, },
-+	/* EMMC */
-+	{ HI3798MV200_MMC_BIU_CLK, "clk_mmc_biu", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xa0, 0, 0, },
-+	{ HI3798MV200_MMC_CIU_CLK, "clk_mmc_ciu", "mmc_mux",
-+		CLK_SET_RATE_PARENT, 0xa0, 1, 0, },
-+	/* Ethernet */
-+	{ HI3798MV200_GMAC_CLK, "clk_gmac", "gmac_mux",
-+		CLK_SET_RATE_PARENT, 0xcc, 2, 0, },
-+	{ HI3798MV200_GSF_CLK, "clk_gmacif", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xcc, 0, 0, },
-+	{ HI3798MV200_ETH_CLK, "clk_femac", "femac_mux",
-+		CLK_SET_RATE_PARENT, 0xd0, 1, 0, },
-+	{ HI3798MV200_ETH_BUS_CLK, "clk_femacif", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xd0, 0, 0, },
-+	{ HI3798MV200_FEPHY_CLK, "clk_fephy", "25m",
-+		CLK_SET_RATE_PARENT, 0x388, 0, 0, },
-+	/* COMBPHY */
-+	{ HI3798MV200_COMBPHY_CLK, "clk_combphy", "combphy_mux",
-+		CLK_SET_RATE_PARENT, 0x188, 0, 0, },
-+	/* USB2 */
-+	{ HI3798MV200_USB2_BUS_CLK, "clk_u2_bus", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xb8, 0, 0, },
-+	{ HI3798MV200_USB2_HST_PHY_CLK, "clk_u2_phy", "60m",
-+		CLK_SET_RATE_PARENT, 0xb8, 4, 0, },
-+	{ HI3798MV200_USB2_12M_CLK, "clk_u2_12m", "12m",
-+		CLK_SET_RATE_PARENT, 0xb8, 2, 0 },
-+	{ HI3798MV200_USB2_48M_CLK, "clk_u2_48m", "48m",
-+		CLK_SET_RATE_PARENT, 0xb8, 1, 0 },
-+	{ HI3798MV200_USB2_UTMI0_CLK, "clk_u2_utmi0", "60m",
-+		CLK_SET_RATE_PARENT, 0xb8, 5, 0 },
-+	{ HI3798MV200_USB2_UTMI1_CLK, "clk_u2_utmi1", "60m",
-+		CLK_SET_RATE_PARENT, 0xb8, 6, 0 },
-+	{ HI3798MV200_USB2_OTG_UTMI_CLK, "clk_u2_otg_utmi", "60m",
-+		CLK_SET_RATE_PARENT, 0xb8, 3, 0 },
-+	{ HI3798MV200_USB2_PHY1_REF_CLK, "clk_u2_phy1_ref", "24m",
-+		CLK_SET_RATE_PARENT, 0xbc, 0, 0 },
-+	{ HI3798MV200_USB2_PHY2_REF_CLK, "clk_u2_phy2_ref", "24m",
-+		CLK_SET_RATE_PARENT, 0xbc, 2, 0 },
-+	/* USB3 bus */
-+	{ HI3798MV200_USB3_GM_CLK, "clk_u3_gm", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xb0, 6, 0 },
-+	{ HI3798MV200_USB3_GS_CLK, "clk_u3_gs", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xb0, 5, 0 },
-+	{ HI3798MV200_USB3_BUS_CLK, "clk_u3_bus", "clk_ahb",
-+		CLK_SET_RATE_PARENT, 0xb0, 0, 0 },
-+	/* USB3 ctrl */
-+	{ HI3798MV200_USB3_SUSPEND_CLK, "clk_u3_suspend", NULL,
-+		CLK_SET_RATE_PARENT, 0xb0, 2, 0 },
-+	{ HI3798MV200_USB3_PIPE_CLK, "clk_u3_pipe", NULL,
-+		CLK_SET_RATE_PARENT, 0xb0, 3, 0 },
-+	{ HI3798MV200_USB3_REF_CLK, "clk_u3_ref", "125m",
-+		CLK_SET_RATE_PARENT, 0xb0, 1, 0 },
-+	{ HI3798MV200_USB3_UTMI_CLK, "clk_u3_utmi", "60m",
-+		CLK_SET_RATE_PARENT, 0xb0, 4, 0 },
-+	/* Watchdog */
-+	{ HI3798MV200_WDG0_CLK, "clk_wdg0", "clk_osc",
-+		CLK_SET_RATE_PARENT, 0x178, 0, 0 },
-+};
-+
-+static struct hisi_clock_data *hi3798mv200_clk_register(
-+				struct platform_device *pdev)
-+{
-+	struct hisi_clock_data *clk_data;
-+	int ret;
-+
-+	clk_data = hisi_clk_alloc(pdev, HI3798MV200_CRG_NR_CLKS);
-+	if (!clk_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/* hisi_phase_clock is resource managed */
-+	ret = hisi_clk_register_phase(&pdev->dev,
-+				hi3798mv200_phase_clks,
-+				ARRAY_SIZE(hi3798mv200_phase_clks),
-+				clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = hisi_clk_register_fixed_rate(hi3798mv200_fixed_rate_clks,
-+				     ARRAY_SIZE(hi3798mv200_fixed_rate_clks),
-+				     clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = hisi_clk_register_mux(hi3798mv200_mux_clks,
-+				ARRAY_SIZE(hi3798mv200_mux_clks),
-+				clk_data);
-+	if (ret)
-+		goto unregister_fixed_rate;
-+
-+	ret = hisi_clk_register_gate(hi3798mv200_gate_clks,
-+				ARRAY_SIZE(hi3798mv200_gate_clks),
-+				clk_data);
-+	if (ret)
-+		goto unregister_mux;
-+
-+	ret = of_clk_add_provider(pdev->dev.of_node,
-+			of_clk_src_onecell_get, &clk_data->clk_data);
-+	if (ret)
-+		goto unregister_gate;
-+
-+	return clk_data;
-+
-+unregister_gate:
-+	hisi_clk_unregister_gate(hi3798mv200_gate_clks,
-+				ARRAY_SIZE(hi3798mv200_gate_clks),
-+				clk_data);
-+unregister_mux:
-+	hisi_clk_unregister_mux(hi3798mv200_mux_clks,
-+				ARRAY_SIZE(hi3798mv200_mux_clks),
-+				clk_data);
-+unregister_fixed_rate:
-+	hisi_clk_unregister_fixed_rate(hi3798mv200_fixed_rate_clks,
-+				ARRAY_SIZE(hi3798mv200_fixed_rate_clks),
-+				clk_data);
-+	return ERR_PTR(ret);
-+}
-+
-+static void hi3798mv200_clk_unregister(struct platform_device *pdev)
-+{
-+	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(pdev->dev.of_node);
-+
-+	hisi_clk_unregister_gate(hi3798mv200_gate_clks,
-+				ARRAY_SIZE(hi3798mv200_gate_clks),
-+				crg->clk_data);
-+	hisi_clk_unregister_mux(hi3798mv200_mux_clks,
-+				ARRAY_SIZE(hi3798mv200_mux_clks),
-+				crg->clk_data);
-+	hisi_clk_unregister_fixed_rate(hi3798mv200_fixed_rate_clks,
-+				ARRAY_SIZE(hi3798mv200_fixed_rate_clks),
-+				crg->clk_data);
-+}
-+
-+static const struct hisi_crg_funcs hi3798mv200_crg_funcs = {
-+	.register_clks = hi3798mv200_clk_register,
-+	.unregister_clks = hi3798mv200_clk_unregister,
-+};
-+
-+/* hi3798MV200 sysctrl CRG */
-+
-+enum hi3798mv200_sysctrl_inner_clk {
-+	HI3798MV200_UART0_MUX = HI3798MV200_SYSCTRL_CLK_COUNT,
-+
-+	HI3798MV200_SYSCTRL_NR_CLKS
-+};
-+
-+static const char *const uart0_mux_p[] = { "3m", "75m" };
-+
-+static const char *const mcu_bus_mux_p[] = { "24m", "200m", "6m" };
-+
-+static const struct hisi_mux_clock hi3798mv200_sysctrl_mux_clks[] = {
-+	{ HI3798MV200_UART0_MUX, "uart0_mux", uart0_mux_p, ARRAY_SIZE(uart0_mux_p),
-+		CLK_SET_RATE_PARENT, 0x48, 29, 1, 0, mux_table_1bit, },
-+	{ HI3798MV200_MCU_BUS_CLK, "mcu_bus_mux", mcu_bus_mux_p, ARRAY_SIZE(mcu_bus_mux_p),
-+		CLK_SET_RATE_PARENT, 0x0, 0, 2, 0, mux_table_2bit_pattern1, },
-+};
-+
-+static const struct hisi_gate_clock hi3798mv200_sysctrl_gate_clks[] = {
-+	{ HI3798MV200_MCE_CLK, "clk_mce", "mcu_bus_mux",
-+		CLK_SET_RATE_PARENT, 0x48, 0, 0, },
-+	{ HI3798MV200_IR_CLK, "clk_ir", "clk_osc",
-+		CLK_SET_RATE_PARENT, 0x48, 4, 0, },
-+	{ HI3798MV200_TIMER01_CLK, "clk_timer01", "clk_osc",
-+		CLK_SET_RATE_PARENT, 0x48, 6, 0, },
-+	{ HI3798MV200_UART0_CLK, "clk_uart0", "uart0_mux",
-+		CLK_SET_RATE_PARENT, 0x48, 12, 0, },
-+};
-+
-+static struct hisi_clock_data *hi3798mv200_sysctrl_clk_register(
-+					struct platform_device *pdev)
-+{
-+	struct hisi_clock_data *clk_data;
-+	int ret;
-+
-+	clk_data = hisi_clk_alloc(pdev, HI3798MV200_SYSCTRL_NR_CLKS);
-+	if (!clk_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ret = hisi_clk_register_mux(hi3798mv200_sysctrl_mux_clks,
-+				ARRAY_SIZE(hi3798mv200_sysctrl_mux_clks),
-+				clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = hisi_clk_register_gate(hi3798mv200_sysctrl_gate_clks,
-+				ARRAY_SIZE(hi3798mv200_sysctrl_gate_clks),
-+				clk_data);
-+	if (ret)
-+		goto unregister_mux;
-+
-+	ret = of_clk_add_provider(pdev->dev.of_node,
-+			of_clk_src_onecell_get, &clk_data->clk_data);
-+	if (ret)
-+		goto unregister_gate;
-+
-+	return clk_data;
-+
-+unregister_gate:
-+	hisi_clk_unregister_gate(hi3798mv200_sysctrl_gate_clks,
-+				ARRAY_SIZE(hi3798mv200_sysctrl_gate_clks),
-+				clk_data);
-+unregister_mux:
-+	hisi_clk_unregister_mux(hi3798mv200_sysctrl_mux_clks,
-+				ARRAY_SIZE(hi3798mv200_sysctrl_mux_clks),
-+				clk_data);
-+	return ERR_PTR(ret);
-+}
-+
-+static void hi3798mv200_sysctrl_clk_unregister(struct platform_device *pdev)
-+{
-+	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(pdev->dev.of_node);
-+
-+	hisi_clk_unregister_gate(hi3798mv200_sysctrl_gate_clks,
-+				ARRAY_SIZE(hi3798mv200_sysctrl_gate_clks),
-+				crg->clk_data);
-+	hisi_clk_unregister_mux(hi3798mv200_sysctrl_mux_clks,
-+				ARRAY_SIZE(hi3798mv200_sysctrl_mux_clks),
-+				crg->clk_data);
-+}
-+
-+static const struct hisi_crg_funcs hi3798mv200_sysctrl_funcs = {
-+	.register_clks = hi3798mv200_sysctrl_clk_register,
-+	.unregister_clks = hi3798mv200_sysctrl_clk_unregister,
-+};
-+
-+static const struct of_device_id hi3798mv200_crg_match_table[] = {
-+	{ .compatible = "hisilicon,hi3798mv200-crg",
-+		.data = &hi3798mv200_crg_funcs },
-+	{ .compatible = "hisilicon,hi3798mv200-sysctrl",
-+		.data = &hi3798mv200_sysctrl_funcs },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, hi3798mv200_crg_match_table);
-+
-+static int hi3798mv200_crg_probe(struct platform_device *pdev)
-+{
-+	struct hisi_crg_dev *crg;
-+
-+	crg = devm_kmalloc(&pdev->dev, sizeof(*crg), GFP_KERNEL);
-+	if (!crg)
-+		return -ENOMEM;
-+
-+	crg->funcs = of_device_get_match_data(&pdev->dev);
-+	if (!crg->funcs)
-+		return -ENOENT;
-+
-+	crg->rstc = hisi_reset_init(pdev);
-+	if (!crg->rstc)
-+		return -ENOMEM;
-+
-+	crg->clk_data = crg->funcs->register_clks(pdev);
-+	if (IS_ERR(crg->clk_data)) {
-+		hisi_reset_exit(crg->rstc);
-+		return PTR_ERR(crg->clk_data);
-+	}
-+
-+	platform_set_drvdata(pdev, crg);
-+	return 0;
-+}
-+
-+static int hi3798mv200_crg_remove(struct platform_device *pdev)
-+{
-+	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
-+
-+	hisi_reset_exit(crg->rstc);
-+	crg->funcs->unregister_clks(pdev);
-+	return 0;
-+}
-+
-+static struct platform_driver hi3798mv200_crg_driver = {
-+	.probe          = hi3798mv200_crg_probe,
-+	.remove		= hi3798mv200_crg_remove,
-+	.driver         = {
-+		.name   = "hi3798mv200-crg",
-+		.of_match_table = hi3798mv200_crg_match_table,
-+	},
-+};
-+
-+static int __init hi3798mv200_crg_init(void)
-+{
-+	return platform_driver_register(&hi3798mv200_crg_driver);
-+}
-+core_initcall(hi3798mv200_crg_init);
-+
-+static void __exit hi3798mv200_crg_exit(void)
-+{
-+	platform_driver_unregister(&hi3798mv200_crg_driver);
-+}
-+module_exit(hi3798mv200_crg_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("HiSilicon Hi3798MV200 CRG Driver");
+Changes in v6:
+- bindings/clk: remove minItems in reg.
+- bindings/reset: remove minItems in reg.
+- bindings/syscon: unify quotes (use single quotes everywhere).
+- bindings: apply three Reviewed-By tags from Krzysztof.
+- Rebased onto v6.8-rc5. No related changes. Tested on EyeQ5 hardware.
+- Link to v5: https://lore.kernel.org/r/20240209-mbly-clk-v5-0-f094ee5e918a@bootlin.com
 
+Changes in v5:
+- pinctrl: fix pin/offset distinction, add eq5p_pin_to_offset() helper,
+  rename eq5p_pin_offset_to_bank() to eq5p_pin_to_bank(), rename
+  eq5p_readl_bit() to eq5p_test_bit(), remove old <linux/mfd/syscon.h>
+  include, add defensive check in eq5p_test_bit().
+- dt-bindings/MIPS: OLB example (dt-bindings) and devicetree: fix
+  ordering of nodes and properties, fix register casing.
+- dt-bindings: add pin group node example to OLB dt-bindings.
+- MIPS: squashed "MIPS: mobileye: eyeq5: add reset properties to UARTs"
+  into "MIPS: mobileye: eyeq5: add OLB reset controller node".
+- MIPS: squashed "MIPS: mobileye: eyeq5: add pinctrl properties to UART
+  nodes" into "MIPS: mobileye: eyeq5: add pinctrl node & pinmux
+  function nodes".
+- MIPS: rebased onto V7 of [0], meaning we now introduce the OLB syscon
+  node in DT in this series rather than modifying it.
+- Apply Reviewed-by from Rob onto "dt-bindings: pinctrl:
+  mobileye,eyeq5-pinctrl: add bindings".
+- dt-bindings: Drop "dt-bindings: pinctrl: allow pin controller device
+  without unit address".
+- dt-bindings: I did NOT apply Krzysztof's Reviewed-By trailers from v3
+  as I am not sure he acked the changes made in V4.
+- Link to v4: https://lore.kernel.org/r/20240131-mbly-clk-v4-0-bcd00510d6a0@bootlin.com
+
+Changes in v4:
+- Have the three drivers access MMIO directly rather than through the
+  syscon & regmap.
+- pinctrl: Make the pin controller handle both banks using a single
+  instance.
+- pinctrl/dt-bindings: Add if/else for each function, to strictly define
+  possible functions.
+- clk: Changing to direct MMIO means we can use
+  clk_hw_register_divider_table_parent_hw() for the OSPI table-based
+  divider clock.
+- Use builtin_platform_driver() for platform driver registering instead
+  of manual initcalls.
+- reset: follow Philipp & Krzysztof's feedback:
+  - Use container_of() to get private struct.
+  - Use '_withlock' suffix instead of the underscore prefix.
+  - Use udelay() instead of the non-standard __udelay().
+  - Remove useless checks.
+  - Use mutex guards.
+  - Remove the ->reset() implementation.
+  - Use devres variants for kzalloc() and reset_controller_register().
+- Other small changes following feedback from reviewers. dt-bindings
+  whitespace for pinctrl.yaml, fix pinctrl driver dt-bindings
+  description, improve clk driver commit header, etc.
+- Link to v3: https://lore.kernel.org/r/20240123-mbly-clk-v3-0-392b010b8281@bootlin.com
+
+Changes in v3:
+- Unified the three series into one.
+- clk: split driver into two for clocks registered at of_clk_init() and
+  clocks registered at platform device probe.
+- reset/bindings: drop reset dt-bindings header & add comment in driver
+  to document known valid resets in each domain.
+- pinctrl/bindings: fix pinctrl.yaml to allow non unit addresses for pin
+  controller devices.
+- all/bindings: remove possibility to use `mobileye,olb` phandle to get
+  syscon. All three drivers use their parent node as syscon/regmap.
+- MIPS/bindings: fix bindings for OLB. Have single example in parent,
+  removing all examples in child.
+- all: drop the "probed" logs.
+- Link to v2: https://lore.kernel.org/r/20231227-mbly-clk-v2-0-a05db63c380f@bootlin.com
+
+Changes in v2:
+- Drop [PATCH 1/5] that was taken by Stephen for clk-next.
+- Add accuracy support to fixed-factor that is enabled with a flag.
+  Register prototypes were added to exploit this feature.
+- Add fw_name support to fixed-factor. This allows pointing to parent
+  clocks using the value in `clock-names` in the DT. Register
+  prototypes were added for that.
+- Bindings were modified to be less dumb: a binding was added for OLB
+  and the clock-controller is a child property of it. Removed the
+  possibility of pointing to OLB using a phandle. $nodename is the
+  generic `clock-controller` and not custom `clocks`. Fix dt-bindings
+  examples.
+- Fix commit message for the driver patch. Add details, remove useless
+  fluff.
+- Squash both driver commits together.
+- Declare a platform_driver instead of using CLK_OF_DECLARE_DRIVER. This
+  also means using `dev_*` for logging, removing `pr_fmt`. We add a
+  pointer to device in the private structure.
+- Use fixed-factor instead of fixed-rate for PLLs. We don't grab a
+  reference to the parent clk, instead using newly added fixed-factor
+  register prototypes and fwname.
+- NULL is not an error when registering PLLs anymore.
+- Now checking the return value of of_clk_add_hw_provider for errors.
+- Fix includes.
+- Remove defensive conditional at start of eq5c_pll_parse_registers.
+- Rename clk_hw_to_ospi_priv to clk_to_priv to avoid confusion: it is
+  not part of the clk_hw_* family of symbols.
+- Fix negative returns in eq5c_ospi_div_set_rate. It was a typo
+  highlighted by Stephen Boyd.
+- Declare eq5c_ospi_div_ops as static.
+- In devicetree, move the OLB node prior to the UARTs, as platform
+  device probe scheduling is dependent on devicetree ordering. This is
+  required to declare the driver as a platform driver, else it
+  CLK_OF_DECLARE_DRIVER is required.
+- In device, create a core0-timer-clk fixed clock to feed to the GIC
+  timer. It requires a clock earlier than platform bus type init.
+- Link to v1: https://lore.kernel.org/r/20231218-mbly-clk-v1-0-44ce54108f06@bootlin.com
+
+---
+Théo Lebrun (14):
+      clk: fixed-factor: add optional accuracy support
+      clk: fixed-factor: add fwname-based constructor functions
+      dt-bindings: clock: mobileye,eyeq5-clk: add bindings
+      dt-bindings: reset: mobileye,eyeq5-reset: add bindings
+      dt-bindings: pinctrl: mobileye,eyeq5-pinctrl: add bindings
+      dt-bindings: soc: mobileye: add EyeQ5 OLB system controller
+      clk: eyeq5: add platform driver, and init routine at of_clk_init()
+      reset: eyeq5: add platform driver
+      pinctrl: eyeq5: add platform driver
+      MAINTAINERS: Map OLB files to Mobileye SoCs
+      MIPS: mobileye: eyeq5: add OLB syscon node
+      MIPS: mobileye: eyeq5: use OLB clocks controller node
+      MIPS: mobileye: eyeq5: add OLB reset controller node
+      MIPS: mobileye: eyeq5: add pinctrl node & pinmux function nodes
+
+ .../bindings/clock/mobileye,eyeq5-clk.yaml         |  51 ++
+ .../bindings/pinctrl/mobileye,eyeq5-pinctrl.yaml   | 242 +++++++++
+ .../bindings/reset/mobileye,eyeq5-reset.yaml       |  43 ++
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |  94 ++++
+ MAINTAINERS                                        |   8 +
+ .../{eyeq5-fixed-clocks.dtsi => eyeq5-clocks.dtsi} |  54 +-
+ arch/mips/boot/dts/mobileye/eyeq5-pins.dtsi        | 125 +++++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  42 +-
+ drivers/clk/Kconfig                                |  11 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-eyeq5.c                            | 289 +++++++++++
+ drivers/clk/clk-fixed-factor.c                     | 103 +++-
+ drivers/pinctrl/Kconfig                            |  15 +
+ drivers/pinctrl/Makefile                           |   1 +
+ drivers/pinctrl/pinctrl-eyeq5.c                    | 577 +++++++++++++++++++++
+ drivers/reset/Kconfig                              |  12 +
+ drivers/reset/Makefile                             |   1 +
+ drivers/reset/reset-eyeq5.c                        | 342 ++++++++++++
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  22 +
+ include/linux/clk-provider.h                       |  26 +-
+ 20 files changed, 2003 insertions(+), 56 deletions(-)
+---
+base-commit: 96ba7d34f557251d2416ff93c205003eba3cf3db
+change-id: 20231023-mbly-clk-87ce5c241f08
+
+Best regards,
 -- 
-2.43.0
+Théo Lebrun <theo.lebrun@bootlin.com>
 
 
