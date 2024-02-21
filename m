@@ -1,52 +1,53 @@
-Return-Path: <linux-clk+bounces-3880-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3883-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6700685E393
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 17:41:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC32A85E395
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 17:41:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2331B221DE
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 16:41:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6217E1F22F0B
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Feb 2024 16:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB454839E2;
-	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0412F839FC;
+	Wed, 21 Feb 2024 16:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pxTXyMRz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kNT/6yhp"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E6B8172A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3B282D97;
 	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708533681; cv=none; b=J9V9AA5dkADcDGewghWI05DxVdjvIkSCztVucoZLODFxDEaoXa0DaK/3SJry4eYV5C3sZ0fG0l6cyaazMAmkQQsHPcdbSbg3PW1msZv00KHGFsMLNK1BaWgHJE24j3HGVs4G5vcHLFfhBIRtk7J7UktDNA1Tub+ubaRCgFKQVxQ=
+	t=1708533681; cv=none; b=Z5w3ossWxLNDVIUpsAXMfIn0jwjkVD0hfUOfT6RBI/dsA78+GdJl1F/un+xm8YqNDELmyVQzdxMlv1BHz7NVhFhiJnbROZCd8+cMwbiFD6guwbxNoPBYES0DDgUubtspYaMBTgSYFUKH/ePd9k1JFCvAWwsEga7YRAwM82nCbL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708533681; c=relaxed/simple;
-	bh=iXlnN86FBtHze7pc7TT1EzncHtGJddooON9T6JhruhI=;
+	bh=w3+OCVOg6gitH+bg/hrW+YuNsjWKvSsvmr6SnY+BX9A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l7M6T/n0tzxscOfuIBqRtB0fZ5oCADZ5mFNPHcwdVhdWdoQNdABWzUARfvD3gNdCMWVfTzsiDW51XFv+JUSZg4tsCllhanBwQME1dMzvYProMOZNl5/z7c42HxNYOK4LtGgwou1n1336SWvNcIZEjnDi93XRgzwVb52dHPtT7Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pxTXyMRz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C120C43330;
+	 In-Reply-To:To:Cc; b=Sm+VMICrgKbmWa2g/QeOqEgJ75j+DMx4uOwhef/193LBOLyMxuV33CL+uFLiIaOtRRjCUfPOAN5Tut3A5aXMC2gFq6eb08mrG/A/K9veMh/aJya4CN+5nWd3LfSvPzcHYuWcGl9wNyWbr9sat2tl32NKnCfhUOC8zFEqEqU+jdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kNT/6yhp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 68F02C43143;
 	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1708533681;
-	bh=iXlnN86FBtHze7pc7TT1EzncHtGJddooON9T6JhruhI=;
+	bh=w3+OCVOg6gitH+bg/hrW+YuNsjWKvSsvmr6SnY+BX9A=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=pxTXyMRzHODhCs8m3WPDg1yVwqJx9/JRGrBWLV1vleIAqUZZ7vPvT3Rcuj+6WSZHJ
-	 Nk5ieMU/YYpxeEF5Uwh9KqZDXfZZIrpAerbzkxjJNEvThsGhjyVGYX7DlWoBuWCyvJ
-	 kcsquEhHlEx2MYAmSEmYck9WLdYrfuF6n/VnK3tNrA4k9nPkgKXwdO8OkIYi1Q4HCt
-	 vJEHxvCzGBk6vvFk8B6JIImNVsAgWAr6fahIYOhG24JTaIG2PAbdS6EphTeu5zZSji
-	 ig5l4cX538hFQYkOGaULM/YDl803RDtJ0p7Q12bZYuQ332Kfr7AHLTMOY2XYq+n4mu
-	 c1faigvXrvYzQ==
+	b=kNT/6yhpWGoWq6Cx9lK7RefeIrrkmEj9i08v0tfkqGrq5dDEViLHsbXFm+wQl1fLJ
+	 OiXCUEpxpJhpWMbwjrFElv6WjSdimCCWa44gi+HL/gzVMBfr94zzennQ/TtDLIg23Z
+	 bXZ1HjTc2idcbMZlhT+T70giXWlp1Tptvf0zSaUq8PgWCBlIvkO8WTYABCiBmDoBYb
+	 ZGWCGFHowPMAhZGUwrwVggONMUE5DyPfICbO2840CldtSbT1j3BZfbGLvwb6yU2QND
+	 TrTruJWLNRjMNazwxtZFlgMBHS9xrDvCcDwvuD3D4J9KiJDm6wHO14yHxrzv24J3RZ
+	 AZCgcSp4ciQIg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 453EEC54790;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50324C5478C;
 	Wed, 21 Feb 2024 16:41:21 +0000 (UTC)
 From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
-Date: Thu, 22 Feb 2024 00:41:07 +0800
-Subject: [PATCH v3 4/8] arm64: dts: hisilicon: fix include path
+Date: Thu, 22 Feb 2024 00:41:08 +0800
+Subject: [PATCH v3 5/8] clk: hisilicon: fix include path for
+ crg-hi3798cv200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -55,7 +56,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240222-clk-mv200-v3-4-f30795b50318@outlook.com>
+Message-Id: <20240222-clk-mv200-v3-5-f30795b50318@outlook.com>
 References: <20240222-clk-mv200-v3-0-f30795b50318@outlook.com>
 In-Reply-To: <20240222-clk-mv200-v3-0-f30795b50318@outlook.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -66,11 +67,11 @@ Cc: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Yang Xiwen <forbidden405@outlook.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708533664; l=950;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708533664; l=857;
  i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
- bh=zO+w8jqaXi8Ww2B8vF6SfS+3nCbKAcDggVh4EP/9jpU=;
- b=/zpgyb2aPCEvtAZM8P8wB2YLiMdL3+rPSs9RR8eprCxJZflDp5FlJCGz6DZwBdVesZ59D0bfU
- eLLy8gUqeBYDznG+OfKhtU8+1mxf88705t7+iBjPjQzmdz1c5XsFRgd
+ bh=mym+b8HCE92ettwNUwgVrGSN23Zmo9f3k4P4EePsjQY=;
+ b=HLw89V3skgYuIgXNObji690aUCG4vCg3pPngAlQUefQDRmWgy3nuR0CeMUiJFsI9E0pdBvCbv
+ MAJ4hURdBW4CPWHSz+j7FQKY1CknWA3vYvXXyzz+IPsuxVfVLcABYoT
 X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
  pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
 X-Endpoint-Received:
@@ -80,28 +81,28 @@ Reply-To: <forbidden405@outlook.com>
 
 From: Yang Xiwen <forbidden405@outlook.com>
 
-The generic histb-clock.h header is now deprecated. Fix it by including
-individual binding header files directly instead.
+histb-clock.h is now deprecated. Include hisilicon,hi3798cv200-crg.h and
+hisilicon-sysctrl.h directly instead.
 
 Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
 ---
- arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi | 3 ++-
+ drivers/clk/hisilicon/crg-hi3798cv200.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi b/arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi
-index ed1b5a7a6067..1e6a8a8829b1 100644
---- a/arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi
-+++ b/arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi
+diff --git a/drivers/clk/hisilicon/crg-hi3798cv200.c b/drivers/clk/hisilicon/crg-hi3798cv200.c
+index f651b197e45a..3e26a8f6df36 100644
+--- a/drivers/clk/hisilicon/crg-hi3798cv200.c
++++ b/drivers/clk/hisilicon/crg-hi3798cv200.c
 @@ -5,7 +5,8 @@
-  * Copyright (c) 2016-2017 HiSilicon Technologies Co., Ltd.
+  * Copyright (c) 2016 HiSilicon Technologies Co., Ltd.
   */
  
 -#include <dt-bindings/clock/histb-clock.h>
 +#include <dt-bindings/clock/hisilicon,hi3798cv200-crg.h>
 +#include <dt-bindings/clock/hisilicon,hi3798cv200-sysctrl.h>
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/phy/phy.h>
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
 
 -- 
 2.43.0
