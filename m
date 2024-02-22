@@ -1,185 +1,146 @@
-Return-Path: <linux-clk+bounces-3976-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3979-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 201E5860183
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 19:36:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACF688602CD
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 20:40:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB538286652
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 18:36:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41E421F24A1F
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 19:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 148276AF86;
-	Thu, 22 Feb 2024 18:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4167C6AF8A;
+	Thu, 22 Feb 2024 19:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="vLIompoQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ewFDjOQf"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2099.outbound.protection.outlook.com [40.92.107.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4665491E;
-	Thu, 22 Feb 2024 18:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.107.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708626254; cv=fail; b=A5C/aWBVrAyqngDbksWXUkflnACF7u2PK6y8igO72ddxZqaFqmDVNnUkGixVa7V7mvWut+I3wgbNojlKorX2TCAs3bB/lkcRIfasp3XdOZYHY25CIusVkB22zhIXQCqX7zJCSJag1j+jcOGuYo8IWeBWCB1LLst+ppOzDFeKhuI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708626254; c=relaxed/simple;
-	bh=tSsnxT+BpLyk+TBcNzbSUPnxJz8qBTlvI6ttYltok2w=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=meAR7AdPThDglyifjNUMTmnKuOIbL0LDrN8kK+uh41KxoqlVbVr+JTX/+KTSmrVICViekHDOYtriR0tTeLcjkftDvKoT4Wdz9yWXXd0/T6DfoXqwZ1aJvl3jCacbS00iR5U4BK8v1oiY4AUrv9394DyiHczIN522KAzkIY5uVuw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=vLIompoQ; arc=fail smtp.client-ip=40.92.107.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=URKATWwZaHYOBIHBFGaRoj2k2WcqEmg3uS11qtOBE91JZh4HxhWy2xWEjc8LPJtjukxCYQKV0PaNkM0UXecBp5/nvcrEQlxafQwgQWfy6bKDX6fck6x1d6aC0eapajn6na7A6PB0m/3ehwFv7g7yMQaj23I8Ahoifa8z4OuQb997b/l3xWVp3JJyDaZWuCkyqnpac2VsrE38L20X7OBU3tMP/CAWxogzyXz7FHMaxwXS0VF26K9NWKJx+A5EdJW6pGuLBIzcN0sVJxjcUMZ1V0BXvmdQ+3lw4eiLWOSokgr/FnECPT/Td4v/UCFs0EF1Lo73fMmAu02CZwH2BhSl3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KbL2DM/txEReEw/sxHnD4AGupwDzYzfchNR7e0Vp/iQ=;
- b=QOD1u/HI2I5oh0xoN1wzGMYmnhwC+m11nQUVXrC2POdSlnBBK7W1IwEOQf9WfwmmJjxHO8uD8M0MnjizfTkHr9VaPmKFOTfX/hoOIvI/hryXyz7GpS4WRb70Ie+LC0h6U+5qKVUn08TNO33Omy4cc/m5Qn1tPKQ7lz+c/pHhpnta1gBQjuxv0Z8797NIaI9CAebQ/7X75BT8L2d0JjszEdPUGDxRarGiD14yujFeV8bkxQQCD1VxPM2hnrF2EWBzZxzRbqL6AqVf80wJI2c/ywE3o+aVgi0Y2BrSO4cyFzIJBE+dEFSICKYZTg1XC8P4j/YbER3ZmDFORqRODoIIxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KbL2DM/txEReEw/sxHnD4AGupwDzYzfchNR7e0Vp/iQ=;
- b=vLIompoQcv/M+F99OrsU83gQKpw0wt1fhdh7mcaqZw3RB5nB8hdEDGGY9P73rKaiN+3Z9cveUxzpF78UCym88NYaaxzYypXddWDL78z5KQcYURVw+2juzGp8r8pNhdDNS5jinElXKIzJcFApjLmlHfR8WvL560jVEK285x7yAWBhBShCz1S0h069iGDwRbEfurRxmm7inDbNcc5NfnOcEHRQI5UHyD7xTxB58/L+Gw7yu5nh8uv5APBW/ImjBDOEhUHGGehy0eozaaTc4caaSkCY+najJ1GWDtSD0zJe/QgnQiNCofOjuXdQc0TmrzmtmmEOA591UaHPtauej6tupg==
-Received: from SEZPR06MB6959.apcprd06.prod.outlook.com (2603:1096:101:1ed::14)
- by PUZPR06MB5722.apcprd06.prod.outlook.com (2603:1096:301:f6::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.24; Thu, 22 Feb
- 2024 18:24:08 +0000
-Received: from SEZPR06MB6959.apcprd06.prod.outlook.com
- ([fe80::53da:a8a:83cb:b9ad]) by SEZPR06MB6959.apcprd06.prod.outlook.com
- ([fe80::53da:a8a:83cb:b9ad%4]) with mapi id 15.20.7316.023; Thu, 22 Feb 2024
- 18:24:07 +0000
-Message-ID:
- <SEZPR06MB695992CA81884AE8FF5907AC96562@SEZPR06MB6959.apcprd06.prod.outlook.com>
-Date: Fri, 23 Feb 2024 02:24:04 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/8] ARM: dts: hisilicon: add missing compatibles to
- CRG node
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240222-clk-mv200-v3-0-f30795b50318@outlook.com>
- <20240222-clk-mv200-v3-2-f30795b50318@outlook.com>
- <2085057c-0000-4e0d-a633-c84e939313d6@linaro.org>
- <SEZPR06MB6959274FCF19F70B45589F4196562@SEZPR06MB6959.apcprd06.prod.outlook.com>
- <367ca75b-26f1-49cb-a74a-1222195716ca@linaro.org>
-From: Yang Xiwen <forbidden405@outlook.com>
-In-Reply-To: <367ca75b-26f1-49cb-a74a-1222195716ca@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:
- [u2OpvoSvkd7g+sL18ePrDSPqdRC9dUrzxQaPyzB7XdqzVdVv2ETePskGBPbr/3x/15yri+e3IJ4=]
-X-ClientProxiedBy: TYWPR01CA0018.jpnprd01.prod.outlook.com
- (2603:1096:400:a9::23) To SEZPR06MB6959.apcprd06.prod.outlook.com
- (2603:1096:101:1ed::14)
-X-Microsoft-Original-Message-ID:
- <d939fe44-f18c-4ef2-9249-1a761a12f09d@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB0F548E7;
+	Thu, 22 Feb 2024 19:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708630837; cv=none; b=OLgFwkEsgDAucY/SXnniqhcEo9wRPzp/KE7hEX5bN/Es5yK2Pbj0/QqTa+s2zDZOV3ineK6P7WoZlbgQBnARYsIBDNGM+UUEYiebY/AJ00Wnj6n4MTk8zujWtfUHhlbWgF4rbX9dpcBC9jHeGLNFjV+WcDpgMu0lRi1quB7mE7A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708630837; c=relaxed/simple;
+	bh=aEJwhXImnZlG7CDsaIYX4SI0jp1bWvk6d41It98Jybs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d095gVYuY8Q20GZG3GrSt0MxAX6bH9uG2LaunOH9paQtxZWEUgNvpqQWF1BNK7F3dTX0eKpZBuYQAqAf+yJwH3C3TbGZAJ8QtF0s8ON0i66Nj4NZRi9rKDLwUCccip5zMMMuY61z1FCZZOEJUEDxz9WY+GgM0vNpkoRgVi8Orpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ewFDjOQf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FE4FC433C7;
+	Thu, 22 Feb 2024 19:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708630836;
+	bh=aEJwhXImnZlG7CDsaIYX4SI0jp1bWvk6d41It98Jybs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=ewFDjOQfu9nVhOPbo18S4GilBcFJD5VNt20ofD/5y7zXyaoDAF5xRvkBcvIyCC7Um
+	 P2LBpPETFOvsummu2VB5++nzZpWOSyrMhwc/TxaR8L/IPfmu/pTTInHshqs6k3NeF+
+	 no7Kngci8V+p1QfqfxLM205F3xAUoki/JobL773jxaYg25+l0s/xp+EGgBKzsW9LfZ
+	 V+xWuuITIo52NKC6K3oJBobZp/syqRg29v6K/TaBcu47Nr2V7gSroyeA0MQS79vk25
+	 yCvT773m557lm6RJ8+Rs9af3icfgGGaYQ2NAmjcMGE+nJUmdYmPExiavP5+6Q8QBos
+	 L9hks9BBjdGTg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CDCBC48BF8;
+	Thu, 22 Feb 2024 19:40:36 +0000 (UTC)
+From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
+Subject: [PATCH v4 0/7] clk: hisilicon: add support for Hi3798MV200
+Date: Fri, 23 Feb 2024 03:40:10 +0800
+Message-Id: <20240223-clk-mv200-v4-0-3e37e501d407@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB6959:EE_|PUZPR06MB5722:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8e2e38d-8acc-4b6c-ddca-08dc33d374f8
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	FV6AzZx2LDU+QLgQ36d80Xovf1Btz75GEEw6LCnoHr8w+MHHJOfGdZQl5358CdshzHaODbZMhCXelpTAxs0yZhxLQNMR7ALKkDFAU9pu1gb3XfeAn8MoqynJVe7mRj1RJ/9JNZsPp2fdcciyobsNFq6HIumXo1LaC8s5kn/MMGPgBPnh+4mNl6NesYb6CQvJk2VpnPJTU6/1RREPg1ROHqWw1DpzO0WEhB5FR4GYGgK7CkNZ79bVXX1c54FiAoVgwdcuox/7w1Cruy49cGhjSXK71zigG0ZS+3ptZcCSRGvqHcs4NShd25NokV65ZxDlc2DbCr58dR7cKH/q7t9oB10fOQZcbmTiOusksGbX1a+1V6jgNfgSpmltlMMD5CU0drEmKrdNsfuE2Vm/QISl6Vx0OptOCv/Uy+q39mJiZbV49GCHRuXaDzFyTdMj+Go3csprfAS2oUAu7h447f/MFRfBqDoffvVU/IWgP7/kaPhXFwaEKiO1v46wzPsHsiG5ZxmbQnAuJ5QXUaQviXDuEvVbrJy6JR0qf0XWeDoPWFL3ehLgcaGitjlxIfJra7Ls
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?a2o0U1dQL0Q1OU9KVWsxb1IrNWpjL2lpK215WTMzblpwV2dza2QwaXJ5VnJp?=
- =?utf-8?B?MkRudXF4Rnk1Q01yR2pVaUhXd0xodU84ajFWeTZ6U0xTVzBNTWtUcUNyeDRB?=
- =?utf-8?B?Rm1qaVBhZFNQdHNhSmhiL0t4eUpjcnU5VjAwR0JobERncjU2MitZbzdudVhh?=
- =?utf-8?B?VnFDaWdjU1A1OVNyOEVVMm5ITzNicVNhbGhDOEk3czQ4T1BBaU9HN3lsYW9G?=
- =?utf-8?B?MjBibTIyaEUyWEZnTHVOOERxZTR6Ri9XZi9FNlNCSDFSdFhxa2czV1VLbkp6?=
- =?utf-8?B?dW45Nk1jMjVNa2hDNWxLbEVzTVRhcjMzYVlBRzNXQmczQmVtM0NNNmVIb21o?=
- =?utf-8?B?RFE1ZTRqZFpjZ25iQXcvVGtQclNFT3BFRCtkTUhsY1M2WWk2UUJzS2lMUjgr?=
- =?utf-8?B?R002SUNsWDBia1IvZG05UG95KytNSjY5dmpvdHZVZUloMXRLeHNRRVcvYjJa?=
- =?utf-8?B?QTJPVGg4Z2VUMjNJWTdwa0hMM2NIZDN0UEh4ckU3bWU0WlVaN0VWUzNQTEZ3?=
- =?utf-8?B?cTZYTGVCaVd4RUFSRWdWeDFuWEpnemo0WGhTcFNyS1dpZ1JVMjl1alpVMXBH?=
- =?utf-8?B?YVpIcVN4VThNVWVMSFlTY3c5czZsZkVWL25RUHlhL0NkSEZXWmhydjFyaFhw?=
- =?utf-8?B?REN3RTlGVzVGUTBJaFYzNHZ6RkN6eS9EZlNzNW9XYXd4dFJnUVlHSm41c29K?=
- =?utf-8?B?WmNGRWRyYWU3QThJQ1VnQkJCdm9DQTg0MWFrRE42SVlYVUFzRXgvbzVjK2hI?=
- =?utf-8?B?ZUVqMk5uTWlqNzJreUVQWlNwbi96TmpyQy9kTnEzSTI2UFBjMlhVYjE1Vi9K?=
- =?utf-8?B?NTgybHFnVjVzSlV6bFVLb2t5V013RFRzSmRDd1luaXZDa1d0RU1iUjk1SldH?=
- =?utf-8?B?RG9CTHc0UWluTUNibytNSmhkVW90dnFIYmNnbFVYRjRVVkkxM3ZRaHg0Zjg5?=
- =?utf-8?B?ZUhUbncvckFkYS9ycjdXN2R0dVhSRCtKSUhkWWZHTkdHQkVPd0xRZkRyWm5V?=
- =?utf-8?B?dTlreEhWTGJ0YVN3dFdOSE9mbEgzSmxtMFhyWG43d1NXMklEcDlVK09xSCtM?=
- =?utf-8?B?Q3Q0bmFOUlZlcjRRM1NiYUlNOUZ6YmRteGsxWlV5ZkV1YzJOSzNXQUxDc2xt?=
- =?utf-8?B?SktoNHNYcnVwbDZ1K3VFRDBqdkQ5L3hUN01UbWdGYU9ZK1M3d1FYRVNDMVNt?=
- =?utf-8?B?QTFsaVpzcVFFaFlQeXNORmQyMkF1VGVlV290dDAvSXgvVmI0RXJEMXAzazJr?=
- =?utf-8?B?eVpFZkYwZDJ0RDRCdkNEYUF1UnV4VG5sREdmZmtYTzN1eVBReld1SXZmak9Y?=
- =?utf-8?B?TnM0L1BwZWNNNGxJUjd3RnZOR1A0d0tJa1ZJQkx1alR1akxVbk84VEtsVlNO?=
- =?utf-8?B?bzF2dEoxdDF1eWdHNkxWRUhBTW9FQjBmNWRuUURVdnF0K3VEbXVFNGk5WG5V?=
- =?utf-8?B?bEV2NWRPTFlRcVFySjJobEJ2Ui9YVXlLUjN2emVuTmhjcXlmQUoyZlNqcW5m?=
- =?utf-8?B?NTRqZkJQZWJSM1ljRjZlL2NWUFVCemNkbnNBTnVMT0V2NTdPMHdtT3A1RmRN?=
- =?utf-8?B?QkovcmQ4MjgzRXNEdGdCYUZGMktPKy9CSW9NSnBoSk5aem5mbTRrS044bVU5?=
- =?utf-8?B?Y2NMcmpzVHVPbCtFLzN2UWMyY1dLVEJXVHZSVUJQUERGMzRHOWFTcjVvUHhZ?=
- =?utf-8?B?VVBwdVJwK1h0UVM5QkdFL1NDWmEvMmVMdVBkOS9aQXdGVGpNR1JwREVOVzl1?=
- =?utf-8?Q?upT9Dl3I4fnpkIKvhTikZvW6zFTe4DogCjm7E8S?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8e2e38d-8acc-4b6c-ddca-08dc33d374f8
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB6959.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2024 18:24:07.4979
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB5722
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABqj12UC/23MTQ6CMBCG4auQrq0ZplDAlfcwLkodpOGnpsVGQ
+ 7i7hRVGl99knndmnpwhz07JzBwF440d48gOCdOtGu/EzS1uhoAZYCq57js+BATgWpdakagkEbD
+ 4/3DUmNfWulzjbo2frHtv6ZCu13+VkHLgCiulCSuSQp7tc+qt7Y7aDmztBNzbYm8x2rookTKqp
+ WyKXyt2FnFvRbSNgKLK6xxEWn7bZVk+buBEsBwBAAA=
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Yang Xiwen <forbidden405@outlook.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708630834; l=3178;
+ i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
+ bh=aEJwhXImnZlG7CDsaIYX4SI0jp1bWvk6d41It98Jybs=;
+ b=YqA4nNJSTfz8MeqQJgmJun8HZaAauoycAGFJWjwwixURnZVnFlg2+MRVianFBm/fcLTPkf6lp
+ HbcUiBhCC9pCi8cLOgmwKIH80zVuMFLF365iowbQg2Upp7eAls+Rzn4
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
+X-Endpoint-Received:
+ by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: <forbidden405@outlook.com>
 
-On 2/23/2024 2:18 AM, Krzysztof Kozlowski wrote:
-> On 22/02/2024 19:13, Yang Xiwen wrote:
->> On 2/23/2024 2:08 AM, Krzysztof Kozlowski wrote:
->>> On 21/02/2024 17:41, Yang Xiwen via B4 Relay wrote:
->>>> From: Yang Xiwen <forbidden405@outlook.com>
->>>>
->>>> Add "syscon" and "simple-mfd" compatibles to CRG node due to recent
->>>> binding changes.
->>> Why? You claimed you added them in the bindings because DTS has them. In
->>> DTS you claim reason is: binding has them.
->>>
->>> That's confusing.
->>
->> Because the old txt based binding claimed there should not be a "syscon"
->> and "simple-mfd".
->>
->>
->> But it exists in hi3798cv200.dtsi. And i think it does no harm to be
->> there. So should i do it in two commits?
-> hi3798cv200 is not hi3519, is it? You are adding simple-mfd to one SoC
-> because some other has it? I don't see reason to do that. Er, why?
+This SoC is similar to Hi3798CV200 with a few more clocks in CRG module.
 
+Note this driver is still ongoing, many clocks are not registered in the
+driver now. Feedback is welcomed, especially from HiSilicon people.
 
-I think it's the careless HiSilicon people who simply forgot to add it. 
-CRG core on these SoCs are very similar. They only provided a bunch of 
-clocks and resets. Some register offsets in them are even the same 
-across SoCs. So I'll say all CRG devices are "syscon" and "simple-mfd".
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+---
+Changes in v4:
+- dt-bindings: hisi-crg: add reg and #reset-cells to required, add reset-controller to required for cv200
+- dt-bindings: hisi-crg: do not add "simple-mfd" and "syscon" for hi3519 (Krzysztof Kozlowski)
+- dt-bindings: hi3798mv200: replace spaces with tabs (Krzysztof Kozlowski)
+- dt-bindings: s/DTS/DT_BINDINGS_CLOCK (Krzysztof Kozlowski)
+- Link to v3: https://lore.kernel.org/r/20240222-clk-mv200-v3-0-f30795b50318@outlook.com
 
+Changes in v3:
+- remove RFC (Krzysztof Kozlowski)
+- rearrange patches so dt-binding comes before drivers (Krzysztof Kozlowski)
+- dt-bindings: Remove lots of properties
+- dt-bindings: stop merging all hisi-clock bindings, only convert hisi-crg.txt for now.
+- dt-bindings: remove hisilicon,hisi-sdmmc-dll subnode (Rob Herring, Krzysztof Kozlowski)
+- split histb-clock.h into two files, deprecate this header file
+- fix all users (hi3798cv200.dtsi and hi3798cv200 CRG driver)
+- hi3798mv200-crg: add a few missing clocks
+- Link to v2: https://lore.kernel.org/r/20240217-clk-mv200-v2-0-b782e4eb66f7@outlook.com
 
-In fact, i do have TRM for Hi3519 so i can prove what i said is true.
+Changes in v2:
+- s/dt-binding/dt-bindings in commit logs: (Krzysztof Kozlowski)
+- fix bot error by adding "hisilicon,hisi-sdmmc-dll" to syscon.yaml (Rob Herring)
+- hi3798mv200-crg: assign fixed rate parents to some gates
+- hi3798mv200-crg: s/ETH/FEMAC, add GMAC ctrl clock
+- Link to v1: https://lore.kernel.org/r/20240216-clk-mv200-v1-0-a29ace29e636@outlook.com
 
+---
+Yang Xiwen (7):
+      dt-bindings: clock: convert hisi-crg.txt to YAML
+      dt-bindings: clock: histb-clock: split into two header files
+      arm64: dts: hisilicon: fix include path
+      clk: hisilicon: fix include path for crg-hi3798cv200
+      dt-bindings: clock: hisilicon,clock-reset-controller: add Hi3798MV200 SoC
+      dt-bindings: clock: hisilicon: add clock definitions for Hi3798MV200
+      clk: hisilicon: add CRG driver for Hi3798MV200 SoC
 
->
-> Best regards,
-> Krzysztof
->
+ .../devicetree/bindings/clock/hisi-crg.txt         |  50 ---
+ .../bindings/clock/hisilicon,hisi-crg.yaml         |  76 ++++
+ arch/arm64/boot/dts/hisilicon/hi3798cv200.dtsi     |   3 +-
+ drivers/clk/hisilicon/Kconfig                      |   8 +
+ drivers/clk/hisilicon/Makefile                     |   1 +
+ drivers/clk/hisilicon/crg-hi3798cv200.c            |   3 +-
+ drivers/clk/hisilicon/crg-hi3798mv200.c            | 462 +++++++++++++++++++++
+ .../dt-bindings/clock/hisilicon,hi3798cv200-crg.h  |  62 +++
+ .../clock/hisilicon,hi3798cv200-sysctrl.h          |  17 +
+ .../dt-bindings/clock/hisilicon,hi3798mv200-crg.h  | 150 +++++++
+ .../clock/hisilicon,hi3798mv200-sysctrl.h          |  21 +
+ include/dt-bindings/clock/histb-clock.h            |  70 +---
+ 12 files changed, 810 insertions(+), 113 deletions(-)
+---
+base-commit: 8d3dea210042f54b952b481838c1e7dfc4ec751d
+change-id: 20240216-clk-mv200-cc8cae396ee0
 
+Best regards,
 -- 
-Regards,
-Yang Xiwen
+Yang Xiwen <forbidden405@outlook.com>
 
 
