@@ -1,79 +1,238 @@
-Return-Path: <linux-clk+bounces-3985-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3987-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C814986033A
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 20:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D35588606EC
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Feb 2024 00:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1DA51F2553B
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 19:51:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 389061F213EA
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Feb 2024 23:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFA36AF94;
-	Thu, 22 Feb 2024 19:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98374140373;
+	Thu, 22 Feb 2024 23:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OjQ+j8cr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gtb9elFl"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CF56AF86;
-	Thu, 22 Feb 2024 19:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1282208F;
+	Thu, 22 Feb 2024 23:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708631485; cv=none; b=k+slqZwNzaTjDet3a+uPR4aiDI/8+WBz8rZe7y/MFalpcezCYJQTAUmipWVhcX1zmQw1TGV7ecZZS1x1M+Jhcwsy9c/iOep5lPSDeeoYr+ExOEuuG2buW4DWXAmeSLSu3EPqCHldaUM6S9x3tsFjP/3/5ySwX3ZUgwov7vTria8=
+	t=1708644094; cv=none; b=dNUmuaQ+TF9k2wZCFt0Dz79yLIscOf6HlG6yy1MPV2mxWLwxsBVUm961gSq3sEflxCtj+xgudBWT2t6LDJ+xgqTQ0trjULfyaIKGREKhX9J/zDcps79zA35AIItZm5j2lGHqZmzp/M2qgsPv5En+mi2F57WzmzW0/pVx8ibu00A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708631485; c=relaxed/simple;
-	bh=SzwwYFuLR6ZQog8lwwldYZZygr7tXCbPVaY0n40RI1E=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=dEjlhOZmIVqdOwSRmr/dFOFe4tU5edLcejhxjsbIfEO+cf6T18HVOgH0gFaxlY/uNz+tWS9nY1ypqjlkIenBquKXJ8bLd7DSXTA/LgvTd5nHbpIkAeXrZvnXhAM5/5Uk60Ntmgl0SMMDiKKexVeGJvunUclxrddoa4OHAZ8Q/E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OjQ+j8cr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4B05AC433F1;
-	Thu, 22 Feb 2024 19:51:25 +0000 (UTC)
+	s=arc-20240116; t=1708644094; c=relaxed/simple;
+	bh=/7oDxzaotDMQ2PYxvxhhKnxcodeCvytyBRIpHzW+Yog=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dDCfqb8eOA86bj99TUIJw59yFsZEKN1dTOiiymmwxNgOvAdCldZ6KPQIyPW7/IxkBEIdxbY8JUk2x1EE2bENHN43mNkS9XN8ZyH5m2gPXcaAU8eqteqIm30sD2AG1Sw5B6uTCihnWa0XqFWvlvuq5U46/KqlhdDKWacspZUX1c4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gtb9elFl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF3CC433F1;
+	Thu, 22 Feb 2024 23:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708631485;
-	bh=SzwwYFuLR6ZQog8lwwldYZZygr7tXCbPVaY0n40RI1E=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=OjQ+j8crwhbOIvhblfbJZZYCvT1V29VU84N/6cVuw1eWP1qawTlnAzkeeLIOYTa3Y
-	 ZXrrcGcN9RC/u69FizSgz5NFLnmpsCvdIMJK+HFzGgjlisOsupMXdXSzDgV+UzzEcz
-	 QPKY6LXgUXoiewaivCyUEpD4WbHGlA2j3PfH5egDyckA+VUdLUXecyXoMp7zrPrdPn
-	 4eCFQfwBhKdaiOfT/0iRwYP/2JyRzgGQ08GDNMTk2KIYh+cnnInkkfneVJasQJW06b
-	 kGIGwgttZHFQgVYjB5M4q7NC4ovUNFfoggQATK5V4eg079+v9ueptCkqduBXr6X/RG
-	 nCuTAjVtuWx6Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 372F7C04E32;
-	Thu, 22 Feb 2024 19:51:25 +0000 (UTC)
-Subject: Re: [GIT PULL] clk fixes for v6.8-rc5
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240222064521.2538149-1-sboyd@kernel.org>
-References: <20240222064521.2538149-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240222064521.2538149-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
-X-PR-Tracked-Commit-Id: cc976dbc492c2bf67d8225845b609ea72e292128
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 88953761b94df7dc9bfc46591a8975401689b057
-Message-Id: <170863148520.11658.7094787355205911363.pr-tracker-bot@kernel.org>
-Date: Thu, 22 Feb 2024 19:51:25 +0000
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=k20201202; t=1708644093;
+	bh=/7oDxzaotDMQ2PYxvxhhKnxcodeCvytyBRIpHzW+Yog=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Gtb9elFlw0C4aEVU9bfKXRUwfVwgsRLl1VDgjExetw4rUsO6PHqWUITOD0C0czy/M
+	 gNJ4rn6NoNwiJF5S3bnE7sXKW4vY8DkFfKWLHDJIOG+GDRTJ7vZv2hlLAodZb3O1a+
+	 HJuhgzRwS2Gofu45IBFGFB9akdWh0kV0OCC+YJj87tVmmELVm/inroYIhyA5PWFC1/
+	 ooYrLFpTFexkoWaAZ5Ur6dyia+okjXSViKu31n1NNtCYGK3O3xVMQChYmlt0tK46Qz
+	 dCwtuMytvYnz1IzvlyBBEie3z2WQo5D1uZKMUe1IYSUWr6eWzkUazxXChyHGiPqNCH
+	 LDG66X26HEVyQ==
+Date: Thu, 22 Feb 2024 14:14:11 -0600
+From: Rob Herring <robh@kernel.org>
+To: Yang Xiwen <forbidden405@outlook.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, David Yang <mmyangfl@gmail.com>,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 3/4] dt-binding: clock: merge all hisilicon clock
+ bindings to hisilicon,clock-reset-generator
+Message-ID: <20240222201411.GA3765548-robh@kernel.org>
+References: <20240216-clk-mv200-v1-0-a29ace29e636@outlook.com>
+ <20240216-clk-mv200-v1-3-a29ace29e636@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240216-clk-mv200-v1-3-a29ace29e636@outlook.com>
 
-The pull request you sent on Wed, 21 Feb 2024 22:45:21 -0800:
+On Fri, Feb 16, 2024 at 07:37:53PM +0800, Yang Xiwen wrote:
+> We don't need so many separated and duplicated dt-binding files. Merge
+> them all and convert them to YAML.
+> 
+> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+> ---
+>  .../devicetree/bindings/clock/hi3660-clock.txt     |  47 -------
+>  .../devicetree/bindings/clock/hi3670-clock.txt     |  43 -------
+>  .../devicetree/bindings/clock/hi6220-clock.txt     |  52 --------
+>  .../devicetree/bindings/clock/hisi-crg.txt         |  50 --------
+>  .../clock/hisilicon,clock-reset-generator.yaml     | 139 +++++++++++++++++++++
+>  .../clock/hisilicon,hi3559av100-clock.yaml         |  59 ---------
+>  6 files changed, 139 insertions(+), 251 deletions(-)
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/88953761b94df7dc9bfc46591a8975401689b057
+> diff --git a/Documentation/devicetree/bindings/clock/hisilicon,clock-reset-generator.yaml b/Documentation/devicetree/bindings/clock/hisilicon,clock-reset-generator.yaml
+> new file mode 100644
+> index 000000000000..d37cd892473e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/hisilicon,clock-reset-generator.yaml
+> @@ -0,0 +1,139 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/hisilicon,clock-reset-generator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Hisilicon SOC Clock and Reset Generator (CRG) module
+> +
+> +maintainers:
+> +  - Yang Xiwen <forbidden405@foxmail.com>
+> +
+> +description: |
 
-Thank you!
+Don't need '|' if no formatting. Here and elsewhere.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> +  Hisilicon SOC clock control module which supports the clocks, resets and
+> +  power domains on various SoCs.
+> +
+> +properties:
+> +  compatible:
+> +    minItems: 1
+> +    items:
+> +      - enum:
+> +          - hisilicon,hi3559av100-clock
+> +          - hisilicon,hi3559av100-shub-clock
+> +          - hisilicon,hi3660-crgctrl
+> +          - hisilicon,hi3660-pctrl
+> +          - hisilicon,hi3660-pmuctrl
+> +          - hisilicon,hi3660-sctrl
+> +          - hisilicon,hi3660-iomcu
+> +          - hisilicon,hi3660-stub-clk
+> +          - hisilicon,hi3670-crgctrl
+> +          - hisilicon,hi3670-pctrl
+> +          - hisilicon,hi3670-pmuctrl
+> +          - hisilicon,hi3670-sctrl
+> +          - hisilicon,hi3670-iomcu
+> +          - hisilicon,hi3670-media1-crg
+> +          - hisilicon,hi3670-media2-crg
+> +          - hisilicon,hi6220-acpu-sctrl
+> +          - hisilicon,hi6220-aoctrl
+> +          - hisilicon,hi6220-sysctrl
+> +          - hisilicon,hi6220-mediactrl
+> +          - hisilicon,hi6220-pmctrl
+> +          - hisilicon,hi6220-stub-clk
+> +          - hisilicon,hi3516cv300-crg
+> +          - hisilicon,hi3516cv300-sysctrl
+> +          - hisilicon,hi3519-crg
+> +          - hisilicon,hi3798cv200-crg
+> +          - hisilicon,hi3798cv200-sysctrl
+> +      - const: syscon
+> +      - const: simple-mfd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  '#reset-cells':
+> +    enum: [1, 2]
+> +    description: |
+> +      First cell is reset request register offset.
+> +      Second cell is bit offset in reset request register.
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 1
+> +
+> +  mboxes:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+
+Standard property already has a type. You need to define how many 
+entries and what each one is if more than 1.
+
+> +    description: |
+> +      Phandle to the mailbox for sending msg to MCU
+> +      (See ../mailbox/hisilicon,hi3660-mailbox.txt for more info)
+
+Convert or avoid adding new references to txt bindings.
+
+> +
+> +  mbox-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description: |
+> +      Names of the mailboxes.
+> +
+> +  hisilicon,hi6220-clk-sram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: |
+> +      Phandle to the syscon managing the SoC internal sram
+> +      the driver needs using the sram to pass parameters for frequency change.
+> +
+> +  reset-controller:
+> +    type: object
+> +    description: |
+> +      Reset controller for Hi3798CV200 GMAC module
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          not:
+> +            contains:
+> +              enum:
+> +                - hisilicon,hi3798cv200-crg
+> +    then:
+> +      properties:
+> +        reset-controller: false
+> +  - oneOf:
+> +      - required:
+> +          - hisilicon,hi6220-clk-sram
+> +      - required:
+> +          - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/hi3559av100-clock.h>
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@12010000 {
+> +            compatible = "hisilicon,hi3559av100-clock";
+> +            #clock-cells = <1>;
+> +            #reset-cells = <2>;
+> +            reg = <0x0 0x12010000 0x0 0x10000>;
+> +        };
+> +    };
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/hi3660-clock.h>
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@fff35000 {
+> +            compatible = "hisilicon,hi3660-crgctrl", "syscon";
+> +            reg = <0x0 0xfff35000 0x0 0x1000>;
+> +            #clock-cells = <1>;
+> +        };
+> +    };
 
