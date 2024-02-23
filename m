@@ -1,145 +1,116 @@
-Return-Path: <linux-clk+bounces-3994-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-3996-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D408609F6
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Feb 2024 05:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BADDC860F58
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Feb 2024 11:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7ED9B2214E
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Feb 2024 04:43:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B409B281B3
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Feb 2024 10:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DFA11188;
-	Fri, 23 Feb 2024 04:43:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="b76Xqx/F"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 956BE6089B;
+	Fri, 23 Feb 2024 10:31:06 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191F5C8DE
-	for <linux-clk@vger.kernel.org>; Fri, 23 Feb 2024 04:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4C65DF1E;
+	Fri, 23 Feb 2024 10:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708663433; cv=none; b=NfRSFdUOQ0RcxE5sHPh94lcGns+lHgMlfRO+9UztCIeV6ejfK/EfJq7k+nZ9oeBuuzeUx2wPIOOWnI/MmQZCI0qnD0uZ3OqTWGdo0cqey4HUXbwqS+kPNsSpYaJXc8tpPjoHWtAZciHYBqjgvzuSfyBWhSV1UnMePzg7gE8B5iU=
+	t=1708684266; cv=none; b=VDlowCdedomEvgn0hs6JaOjDPDH9+UB81Pkm6X1Bq9PtzY3HfyCf8pRcOiEXEDJPudf3y8M9SgLIAMwkQWDKACFkbteCKeV63SrQJXndxzhBD6/iZHrxr2n/KfNHjVLwX3IhE/cJ44kmf0JDlf+4lthbdyh9TPmiWrZ2WtzLaXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708663433; c=relaxed/simple;
-	bh=Ca4fxX1YOQIc9IaTljm5TL6Wj+BZP/Dp47VTszaskxg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tiAX+5EIfxuUWzDwO4iQPVtlIY1gSCi/tZgzJxP+arl/+E1joBSV9RKIcQy/OzJaqTiqHsWpDUkv6BS6qYT4qrW/Z+3iwGNeYjU4bHCPI+tb4+xfgpCOGUb82zzqhNBtaYthvsT+R7C8bkRK8AKFQZz9QZRKrJTiTAYoW6pa75g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=b76Xqx/F; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-512aafb3ca8so500646e87.3
-        for <linux-clk@vger.kernel.org>; Thu, 22 Feb 2024 20:43:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1708663430; x=1709268230; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oBx7MOkn9wW9DxztfWR4DG5bZ9dZsBTrKJsnaVTaV5I=;
-        b=b76Xqx/Fd4fzyl8ovMUOV499M5dh2vDT5nCpZ7S7dYHGX5yRGIB7Dkr3rrGhgp/zIJ
-         WQwu+BWTTlA+NcZv01ZT9lwh22qwk5c4suPxymiEYPF7toQomjQIIfLHRhVUOrJGrE2d
-         4J/1k2MZ/HNPPFkuxAiqZf/ZWcU0pCOOLaUxw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708663430; x=1709268230;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oBx7MOkn9wW9DxztfWR4DG5bZ9dZsBTrKJsnaVTaV5I=;
-        b=nXhSzBZCNlHAGU+lYuwfHrs5yrDQyx4BEn1Z9TV2jzKpj28Yb4jJba+WNxYwV4yb0H
-         VB1ioSFSOFn/EB6ul98PmK6rfpU0M9QvP9Ujni4PTiTgnyHdvJmRix/3W5QclSaAnd3Y
-         YNtOBrIKEYprvCUZF4HFiO7b8CbgPtaQQIqOVvNynDeyJEYXHG2RPfpuScrAh7T7MTHG
-         6IOjvVhY1pp1rteAgJ8sSSDhn6AYThF0fMmDGa6HnlZvnEv8JGBHDqCjYCVrSLpZ8TJE
-         OaHWLCmvNvZvq/05Nr0lJPAMmNzxEQrkl59QJS4LwbTaY09LtPw/txsv5bhGyLVJnfSh
-         jBZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWQDInpUbcIOUwxKezMR5/QQ1YSnOaw91XSvqSRyl2x4FcMm8PrY3+Xz/c206OLHhYDzXyMrLt2DaV6tLR4dvnx4fqlZVj6egvA
-X-Gm-Message-State: AOJu0Yx8SRZJsCJbBmijP1SJ8D/p8AlNwrkQbCnsCivHfdDVEbPU4wbA
-	dgNEeho8b9m172dYed2R2SlIyst1eYAhN8Juf3hrUwEXcgS/zcE1YbhmDdAuhhsOeCKM2AE0bCK
-	y32FjGm+MwDOA4GJ3x+yrW16tXPJdDLhv8fK6
-X-Google-Smtp-Source: AGHT+IF5QOowQOFza4xh4jiRjjWLNuX1rVomW/9NM2WmASfwoESsVYQHmb/UIiIOu30QnLkqolbWhZLkQamy3+pnN3M=
-X-Received: by 2002:ac2:5984:0:b0:512:e091:cb1b with SMTP id
- w4-20020ac25984000000b00512e091cb1bmr566669lfn.13.1708663430207; Thu, 22 Feb
- 2024 20:43:50 -0800 (PST)
+	s=arc-20240116; t=1708684266; c=relaxed/simple;
+	bh=D6bO7OzGqUljgDA4twduTq9DME6Aa10LBuM5fRsAoS8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=XicILzr3zEKI+Cp3fafJYyd0bcJ3EWf0+2qGB68OQoSiO9/HDC1M69mNRVRs7XONc1/7BoS/oS0Y+Fh1bbdQrR0jX22Zdgj/G6RcCDakuM3oeTuN1dGnfHOyKCgPg+zC/eBbW3tP5yVVUHzwXnTzaB+qW77qXsV6gHrhsYsYpqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3555B1A1317;
+	Fri, 23 Feb 2024 11:31:03 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F2BC21A132A;
+	Fri, 23 Feb 2024 11:31:02 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 30370183AC0A;
+	Fri, 23 Feb 2024 18:31:01 +0800 (+08)
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
+To: abelvesa@kernel.org,
+	peng.fan@nxp.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-imx@nxp.com,
+	shengjiu.wang@gmail.com,
+	marex@denx.de,
+	m.felsch@pengutronix.de
+Cc: linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: imx: imx8mp: Fix SAI_MCLK_SEL definition
+Date: Fri, 23 Feb 2024 18:15:51 +0800
+Message-Id: <1708683351-8504-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240108081834.408403-1-treapking@chromium.org> <20240108081834.408403-2-treapking@chromium.org>
-In-Reply-To: <20240108081834.408403-2-treapking@chromium.org>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Fri, 23 Feb 2024 12:43:39 +0800
-Message-ID: <CAGXv+5GoAauw77wVXx6SXsSma9zP_A1vXLRo=GH2ptjvY=kLgA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] clk: mediatek: mt8183: Enable need_runtime_pm on mt8183-mfgcfg
-To: Pin-yen Lin <treapking@chromium.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Weiyi Lu <weiyi.lu@mediatek.com>, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 8, 2024 at 4:18=E2=80=AFPM Pin-yen Lin <treapking@chromium.org>=
- wrote:
->
-> mt8183-mfgcfg has a mutual dependency with genpd during the probing
-> stage, so enable need_runtim_pm to prevent a deadlock in the following
-> call stack:
->
-> CPU0:  genpd_lock --> clk_prepare_lock
-> genpd_power_off_work_fn()
->  genpd_lock()
->  generic_pm_domain::power_off()
->     clk_unprepare()
->       clk_prepare_lock()
->
-> CPU1: clk_prepare_lock --> genpd_lock
-> clk_register()
->   __clk_core_init()
->     clk_prepare_lock()
->     clk_pm_runtime_get()
->       genpd_lock()
->
-> Do a runtime PM get at the probe function to make sure clk_register()
-> won't acquire the genpd lock.
->
-> Fixes: acddfc2c261b ("clk: mediatek: Add MT8183 clock support")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+There is SAI1, SAI2, SAI3, SAI5, SAI6, SAI7 existing in this block
+control, the order is discontinuous. The definition of SAI_MCLK_SEL(n)
+is not match with the usage of CLK_SAIn(n).
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+So define SAI##n##_MCLK_SEL separately to fix the issue.
 
-Note that this compliments a patch [1] adding the power domain for the mfgc=
-fg
-clock controller node, which has been floating around for almost 3 years.
+Fixes: 6cd95f7b151c ("clk: imx: imx8mp: Add audiomix block control")
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ drivers/clk/imx/clk-imx8mp-audiomix.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-[1] https://lore.kernel.org/linux-mediatek/20210414073108.3899082-1-ikjn@ch=
-romium.org/
+diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
+index e4300df88f1a..55ed211a5e0b 100644
+--- a/drivers/clk/imx/clk-imx8mp-audiomix.c
++++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
+@@ -18,7 +18,12 @@
+ 
+ #define CLKEN0			0x000
+ #define CLKEN1			0x004
+-#define SAI_MCLK_SEL(n)		(0x300 + 4 * (n))	/* n in 0..5 */
++#define SAI1_MCLK_SEL		0x300
++#define SAI2_MCLK_SEL		0x304
++#define SAI3_MCLK_SEL		0x308
++#define SAI5_MCLK_SEL		0x30C
++#define SAI6_MCLK_SEL		0x310
++#define SAI7_MCLK_SEL		0x314
+ #define PDM_SEL			0x318
+ #define SAI_PLL_GNRL_CTL	0x400
+ 
+@@ -95,13 +100,13 @@ static const struct clk_parent_data clk_imx8mp_audiomix_pll_bypass_sels[] = {
+ 		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1_SEL, {},		\
+ 		clk_imx8mp_audiomix_sai##n##_mclk1_parents,		\
+ 		ARRAY_SIZE(clk_imx8mp_audiomix_sai##n##_mclk1_parents), \
+-		SAI_MCLK_SEL(n), 1, 0					\
++		SAI##n##_MCLK_SEL, 1, 0					\
+ 	}, {								\
+ 		"sai"__stringify(n)"_mclk2_sel",			\
+ 		IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2_SEL, {},		\
+ 		clk_imx8mp_audiomix_sai_mclk2_parents,			\
+ 		ARRAY_SIZE(clk_imx8mp_audiomix_sai_mclk2_parents),	\
+-		SAI_MCLK_SEL(n), 4, 1					\
++		SAI##n##_MCLK_SEL, 4, 1					\
+ 	}, {								\
+ 		"sai"__stringify(n)"_ipg_cg",				\
+ 		IMX8MP_CLK_AUDIOMIX_SAI##n##_IPG,			\
+-- 
+2.34.1
 
-> ---
->
-> (no changes since v1)
->
->  drivers/clk/mediatek/clk-mt8183-mfgcfg.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/clk/mediatek/clk-mt8183-mfgcfg.c b/drivers/clk/media=
-tek/clk-mt8183-mfgcfg.c
-> index ba504e19d420..62d876e150e1 100644
-> --- a/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
-> +++ b/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
-> @@ -29,6 +29,7 @@ static const struct mtk_gate mfg_clks[] =3D {
->  static const struct mtk_clk_desc mfg_desc =3D {
->         .clks =3D mfg_clks,
->         .num_clks =3D ARRAY_SIZE(mfg_clks),
-> +       .need_runtime_pm =3D true,
->  };
->
->  static const struct of_device_id of_match_clk_mt8183_mfg[] =3D {
-> --
-> 2.43.0.472.g3155946c3a-goog
->
 
