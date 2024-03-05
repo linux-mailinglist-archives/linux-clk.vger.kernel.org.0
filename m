@@ -1,169 +1,90 @@
-Return-Path: <linux-clk+bounces-4384-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4386-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB9408721CE
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Mar 2024 15:45:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D66F7872251
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Mar 2024 16:02:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEB5E1C20A25
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Mar 2024 14:45:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12F4D1C20FBC
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Mar 2024 15:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A139486AC2;
-	Tue,  5 Mar 2024 14:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F73A126F23;
+	Tue,  5 Mar 2024 15:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZqacV4E2"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AACD28663A;
-	Tue,  5 Mar 2024 14:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED76126F1C;
+	Tue,  5 Mar 2024 15:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709649916; cv=none; b=W6rU1OV/9xTf4vWoynKus+vDYGJEWZnCCbAt+Xu1QBVBY7Uu+2G5K6cyGZNCNlyhQJLNwWzvogx7GhZFbEvKWdgyyqeLdrSif0csCz9OmEHlrKrmqzvqbEWX+arIcb+/ogIPo7GxjH3ZBxO+rMNpOOjoiPSTKFSMPnCSB5LLgF8=
+	t=1709650935; cv=none; b=eAIiSsbamXfaVJMoae7E1DHDxYCJMBJYTuv9vcF8E8FkBF5cfpC8nmy6N1GQ5MMjpfak/crLPvChiNuXWjEga7bKHrIdqRC6/XiEraSwz/uZkaH/v1KB+KU0E05oBQYj5rXwnKSMlavrJoTOWRaITjVu6h0qViYjdyahuNmih1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709649916; c=relaxed/simple;
-	bh=tetQCxG8iPLLeYy5u22XyaGe6rMdgCMO7OFx8pAFHyU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LXV2Ozq+aQ4m2aJWRAamDLOngCH3SJvvnJhA1Ik7TFNhMIhhhRlcNDfB+HGDpxm/IedHGGFkP9Dqa/nWZb4SAWiBI0fhA2SZnKzVFoS/hAmHJXLRtQauNnyf03h+Gc/A4HDx+kXdErOxKu3MK0OpWdEufsdOeqVK9WGUeZLEKN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6087396e405so55074917b3.0;
-        Tue, 05 Mar 2024 06:45:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709649913; x=1710254713;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9i6CwydHdc4za10aM3u8vcYxRtgXXdjZlKPLkkrrifs=;
-        b=HVBTgNVQjDsv+3ITkjy19c329XBPsWSIANZajwn988IwbqmKlusOmr7LDBTLwCzDDH
-         ptJtyiOZC96plA+gKvbU/jerszX79EzJzcv9YrfBmwwn2V+LlT8NmBKYSIMFGXactFIH
-         d0KebV4ZNuyKvr1moeqdPbRQw+D4v85jKvdcrepjdrmBtotlmyywZN4DFWotOTERII5P
-         HhITtxDYcNlpxBHtXD77voG1lA3vS0UJLv4heMhXyyEtobV3p8J1XjnYCcq3hmga/t/r
-         rppb2MHnPz9EdsdnOPmjVmbR348ZNk6sU7LJ2zS7Urls2RIpyzd5zMmukROKVrWoX2W5
-         MCaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyHTe3E/mlUTXb5OgWrTNx22vfmCa7r4xRqcKJMxBZAyht1gJhATPYrpmHjmeqh9NDmLlbMhJRD7M1QJl1XK0g4i/XXXDC884MQF4A+sXmgjFh72+QTOgN0O19YCHlWEApL7LmT0IytZ7LFWWxVy/z5BD2aK0XqEDXzd3YXk11vppqfw==
-X-Gm-Message-State: AOJu0Ywiy9epuI16FWLtYrl2Sh9Cj7s20jq81vqEY5rQQrP1sECw9T7V
-	cE2lUG7lr81cVP4d0p4SieAkNTPnwdKQLeeR1DpYzxyhRpH0PUCL6AF47rW/pkQ=
-X-Google-Smtp-Source: AGHT+IH2uJ0PB5iGWa3Pxy8t4zIKB0Bssu9oR5KhruM+s+08ReQDS50EYAC9a8nhanR2J7oB4pzi6g==
-X-Received: by 2002:a25:bfd0:0:b0:dcd:9a9b:8d7e with SMTP id q16-20020a25bfd0000000b00dcd9a9b8d7emr1907695ybm.9.1709649913115;
-        Tue, 05 Mar 2024 06:45:13 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id e72-20020a25694b000000b00dc701e0bdbcsm2755061ybc.44.2024.03.05.06.45.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Mar 2024 06:45:11 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6087396e405so55074577b3.0;
-        Tue, 05 Mar 2024 06:45:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVRL+SNdr8xdyNvwp7D+nFHxRex0CEYwGjXqoLdnxqRAXkmlheqVB3h10ThpVzorTNOL2VPd+cBbalXyTarhCg+wuoaRujQRZu6qpGc4DWVCi4umleTO9Rog0/xEjcsTMMCGC1ndpIFOcTj5fHYs3ZaLlX7jSK+QWrMoD9ZAGTWCtFWoQ==
-X-Received: by 2002:a25:aa85:0:b0:dc6:cf8e:8f97 with SMTP id
- t5-20020a25aa85000000b00dc6cf8e8f97mr2212248ybi.27.1709649911607; Tue, 05 Mar
- 2024 06:45:11 -0800 (PST)
+	s=arc-20240116; t=1709650935; c=relaxed/simple;
+	bh=nSWWFkWZffGoNnwURXuRLdlN9U+xWXsWoTFoIqMgRzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lAxYUuBVmWQql+L92EdODiva5deKVTwn9fsX72PJmVAtI+1o0b5LWPnQ2Rp+8/swoPlaiP3D/OYA3FlgzON2OXIdcvT3xyR47oyer6tZ3qkAbZZ6CjanYj7garT7OSy3NFfaJ1iencKPtsVgfEvRv46OaTS1SlS5BhAHN8UXtLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZqacV4E2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4680C433F1;
+	Tue,  5 Mar 2024 15:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709650934;
+	bh=nSWWFkWZffGoNnwURXuRLdlN9U+xWXsWoTFoIqMgRzY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZqacV4E2mAX8m3kka0wAt6DmLzjGVM6T6dyx3YJTi/F6B1PdXEtyvh2xhOdM5hZ+2
+	 NjKyuS5tMldxYOwyzMqTUurifImY7x1ztuV23+TPmycCLZs+RUCCTZMRRpY71TrA41
+	 MHTvmukwB8MI4oerUbbRswcZV/kgsGMhSHeENeny3oR+5y3M9GGF6wofhqrV0HClFU
+	 9wI5H8cn6/nzbjNfSi191lRDVWRv87Dau5c0q4qkgz0BGjsTxu8k1ormRV7GAVR+ld
+	 KUQbiJjaksVsIj6rzdT6/bi/waIC5WVYGICmc4TciR3zzOrLDzXlVpZRFJ9ull2TSF
+	 yZt3Rf0vyGk9A==
+Date: Tue, 5 Mar 2024 09:02:12 -0600
+From: Rob Herring <robh@kernel.org>
+To: Shreeya Patel <shreeya.patel@collabora.com>
+Cc: dmitry.osipenko@collabora.com, heiko@sntech.de,
+	linux-kernel@vger.kernel.org, nelson.costa@synopsys.com,
+	kernel@collabora.com, sboyd@kernel.org, mturquette@baylibre.com,
+	conor+dt@kernel.org, hverkuil@xs4all.nl,
+	linux-arm-kernel@lists.infradead.org,
+	krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
+	p.zabel@pengutronix.de, linux-rockchip@lists.infradead.org,
+	linux-clk@vger.kernel.org, jose.abreu@synopsys.com,
+	devicetree@vger.kernel.org, linux-arm@lists.infradead.org,
+	shawn.wen@rock-chips.com, sebastian.reichel@collabora.com,
+	nicolas.dufresne@collabora.com, mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v2 1/6] dt-bindings: reset: Define reset id used for HDMI
+ Receiver
+Message-ID: <170965093218.3352342.18143623274015359038.robh@kernel.org>
+References: <20240305123648.8847-1-shreeya.patel@collabora.com>
+ <20240305123648.8847-2-shreeya.patel@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240213144638.341509-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240213144638.341509-1-krzysztof.kozlowski@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 5 Mar 2024 15:44:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWw0dteXO2jw4cwGvzKcL6vmnb96C=qgPgUqNDMtF6X0Q@mail.gmail.com>
-Message-ID: <CAMuHMdWw0dteXO2jw4cwGvzKcL6vmnb96C=qgPgUqNDMtF6X0Q@mail.gmail.com>
-Subject: Re: [PATCH] riscv: dts: starfive: replace underscores in node names
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Emil Renner Berthing <kernel@esmil.dk>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240305123648.8847-2-shreeya.patel@collabora.com>
 
-Hi Krzysztof
 
-On Tue, Feb 13, 2024 at 3:48=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Underscores should not be used in node names (dtc with W=3D2 warns about
-> them), so replace them with hyphens.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Tue, 05 Mar 2024 18:06:43 +0530, Shreeya Patel wrote:
+> Add reset id used for HDMI Receiver in RK3588 SoCs
+> 
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> ---
+> Changes in v2 :-
+>   - Move the dt-binding include file changes in a separate patch
+>   - Improve the subject and commit message description
+> 
+>  include/dt-bindings/reset/rockchip,rk3588-cru.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Thanks for your patch, which is now commit f03606470886e781 ("riscv:
-dts: starfive: replace underscores in node names") in v6.8-rc6.
+Acked-by: Rob Herring <robh@kernel.org>
 
-This causes e.g. BeagleV Starlight to hang during boot without any
-output.  Booting with "earlycon" reveals:
-
-    dw-apb-uart 12440000.serial: error -EINVAL: clock rate not defined
-    dw-apb-uart: probe of 12440000.serial failed with error -22
-
-and indeed, p->uartclk =3D 0.
-
-> --- a/arch/riscv/boot/dts/starfive/jh7100.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7100.dtsi
-> @@ -113,28 +113,28 @@ cpu_crit {
->                 };
->         };
->
-> -       osc_sys: osc_sys {
-> +       osc_sys: osc-sys {
->                 compatible =3D "fixed-clock";
->                 #clock-cells =3D <0>;
->                 /* This value must be overridden by the board */
->                 clock-frequency =3D <0>;
->         };
->
-> -       osc_aud: osc_aud {
-> +       osc_aud: osc-aud {
->                 compatible =3D "fixed-clock";
->                 #clock-cells =3D <0>;
->                 /* This value must be overridden by the board */
->                 clock-frequency =3D <0>;
->         };
->
-> -       gmac_rmii_ref: gmac_rmii_ref {
-> +       gmac_rmii_ref: gmac-rmii-ref {
->                 compatible =3D "fixed-clock";
->                 #clock-cells =3D <0>;
->                 /* Should be overridden by the board when needed */
->                 clock-frequency =3D <0>;
->         };
->
-> -       gmac_gr_mii_rxclk: gmac_gr_mii_rxclk {
-> +       gmac_gr_mii_rxclk: gmac-gr-mii-rxclk {
->                 compatible =3D "fixed-clock";
->                 #clock-cells =3D <0>;
->                 /* Should be overridden by the board when needed */
-
-The clock driver relies on the clock names, which are (in the absence
-of clock-output-names properties) identical to the actual node names:
-
-drivers/clk/starfive/clk-starfive-jh7100.c:    parents[i].fw_name =3D "osc_=
-sys";
-drivers/clk/starfive/clk-starfive-jh7100.c:    parents[i].fw_name =3D "osc_=
-aud";
-drivers/clk/starfive/clk-starfive-jh7100.c:    parents[i].fw_name =3D
-"gmac_rmii_ref";
-drivers/clk/starfive/clk-starfive-jh7100.c:    parents[i].fw_name =3D
-"gmac_gr_mii_rxclk";
-
-Hence these clocks can no longer be found, and all children have a
-zero clock rate, causing the breakage.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
