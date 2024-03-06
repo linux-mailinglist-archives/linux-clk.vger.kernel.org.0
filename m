@@ -1,125 +1,112 @@
-Return-Path: <linux-clk+bounces-4409-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4413-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B10A8730C8
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Mar 2024 09:33:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05DF0873472
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Mar 2024 11:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E083A1F287BF
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Mar 2024 08:33:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6A16286885
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Mar 2024 10:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A88D5D735;
-	Wed,  6 Mar 2024 08:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E0K8AJR1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A99C605AF;
+	Wed,  6 Mar 2024 10:39:22 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C502B5D474;
-	Wed,  6 Mar 2024 08:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8D2605A5
+	for <linux-clk@vger.kernel.org>; Wed,  6 Mar 2024 10:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709713985; cv=none; b=TGnNmGXrwohrAQq0iXDEUCTC/S/d7tEyiIn2xOFRbH2dZrtbDNCiS31TTLuEmSpUQdl7VIBSEtQRDwqev3TBnE9+eSxXG2ut/8uHnivRZSUFmIgr6YqMSYic9fzJqzKodhr8kuNisejGKz1GCNWGN5Y7+1w9FeZRaJKcCmLd3H8=
+	t=1709721561; cv=none; b=GuwkA2MMCAiRh+dJEph8nhIWc2KM9yxgBTJxxhromENfzhNBAud2/oKVqh6iXf3wT8BiXQhIGK98QTjBo3oe5ZdCFLDFhtAr2ugOVDXngCQZcO6kA/9YEyDLUMtfXzI7+8j+D/mCECOCQS8nUzTwIm4TFexsFSS7yJ5pJky1od0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709713985; c=relaxed/simple;
-	bh=UnIKCfpRywsmooXz+n9fMtoH0j9SzJw+eCtg2L2wY+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=fSsL9ssLHTbh6IsR7IN/mC+gINnzk1bANDmCWwEOwOnGzmomfM1bbjWtrROjlMA9LK4GjrwSq503JhcSqnG516swQGGfo8PMGHGRb/t0f1fTMZ2I+hgTygS1xVCSARZeYslCz0FvFkSUHSoc1hgHVNn2gwTqVPR07l6L+ov0Vg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=E0K8AJR1; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4266eJpC005782;
-	Wed, 6 Mar 2024 08:32:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=UnIKCfpRywsmooXz+n9fMtoH0j9SzJw+eCtg2L2wY+k=; b=E0
-	K8AJR1jP9x0GVqfJlanI4u24R/W9cCEMcR1sTj6FvajQ5mF/8r2eLfD30vwR+Ujy
-	22g8wnfBBbhlQjlKK7esDLcjvrRd9+6A1U7kZ0DADfzyDcw700EqdtzVw9+vLU1/
-	SOVDfL5Oln6e+BzSsb/bfcq9zjn1IqlxCvTSxKAR6+pAJd36AiLDEJZqru3P64Wg
-	IaxSLbsxLEi6nlxagEPr5i0QA8XHbN6twWsiRuQFJwPSFfEYzJ1sIy68UsuEOUse
-	EylN0R6bluvfsexLDTIXgP0vGCFuoi9o7Rd3EYU+kHLN9uxa8IMS9ai3pBUpnjC+
-	VAYi9VIX9vONXgxR0Z0Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wpke387ny-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Mar 2024 08:32:25 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4268WPLn013366
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 6 Mar 2024 08:32:25 GMT
-Received: from [10.218.19.46] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 6 Mar
- 2024 00:32:19 -0800
-Message-ID: <e98bdda6-3da5-689c-f8fe-7f64131707a8@quicinc.com>
-Date: Wed, 6 Mar 2024 14:02:16 +0530
+	s=arc-20240116; t=1709721561; c=relaxed/simple;
+	bh=4MUt6hck423TY0l6udUqnD/992H0pcYWF5svV3RIgVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kwhWAzuoMElzhztoVpKyV/NOdi60dEI56oKf5NGiE0R3bH33HsPBTQ77RCqMzkC4SrXn4p9QfxRIJvJvr/q3RBPOQz3Z5v2HDQ1CXankrJwEiPGRsstgewpYycCWvkv1QqPrACqA9cmMeCT1okU8EE7sKmAQWuY+RqTtD3Oy1CQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rhofz-0000m8-RA; Wed, 06 Mar 2024 11:39:07 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rhoft-004jAe-EL; Wed, 06 Mar 2024 11:39:01 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rhoft-000d3z-18;
+	Wed, 06 Mar 2024 11:39:01 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-clk@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	Emil Renner Berthing <kernel@esmil.dk>,
+	Hal Feng <hal.feng@starfivetech.com>
+Subject: [PATCH 0/3] clk: Convert to platform remove callback returning void
+Date: Wed,  6 Mar 2024 11:38:54 +0100
+Message-ID: <cover.1709721042.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: Add camera clock controller for
- sm8150
-Content-Language: en-US
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Michael
- Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Abhishek Sahu <absahu@codeaurora.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>
-CC: Stephen Boyd <sboyd@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>,
-        "Imran
- Shaik" <quic_imrashai@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
-References: <20240229-camcc-support-sm8150-v1-0-8c28c6c87990@quicinc.com>
- <20240229-camcc-support-sm8150-v1-5-8c28c6c87990@quicinc.com>
- <6620b011-933e-40cd-98e1-a4d39cc96346@linaro.org>
-From: "Satya Priya Kakitapalli (Temp)" <quic_skakitap@quicinc.com>
-In-Reply-To: <6620b011-933e-40cd-98e1-a4d39cc96346@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1270; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=4MUt6hck423TY0l6udUqnD/992H0pcYWF5svV3RIgVc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBl6Ee/UB5vLZLZqb6idMVZzQ2xweh/hor2HsxEl d2zjGiAG1eJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZehHvwAKCRCPgPtYfRL+ TqnxB/45kO9Pa/MpG9lWp7EANUDjjbEb9oTTR1il5N1FrrpfWZuF2a3A+LNTei2Mih7NsO1db0A coHQmYWb9RXR3uRieKS1hZCfC4V+GEWKSspjgDySOeHTyQH9DI5q80GQAVrZKzkuWz5EKDoyPKv XiUouECTLa5ajqtEpECnup2S9BlHS+VWxz5jfA1KiCu+hZjgRvyG4ry0AFeAu4O6/D5hUBUZiE2 1ctJLugId8vb7qYt1jUWWOVqGT6BwqylrvhWM0ABV1ct1ykkjzQLgLofVSVzyqypuukS+7Erpsz utO1ffE6QrstHs+dFue++kly9L79/NKLOkj7pke6Cs3k7CZS
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O8eQnkyqs70RVInPJby50HT0ZqxhjcdH
-X-Proofpoint-GUID: O8eQnkyqs70RVInPJby50HT0ZqxhjcdH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-03-06_04,2024-03-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 mlxlogscore=901 phishscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2402120000 definitions=main-2403060067
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
+Hello,
 
-On 3/2/2024 9:45 PM, Bryan O'Donoghue wrote:
-> On 29/02/2024 5:38 a.m., Satya Priya Kakitapalli wrote:
->> +            clocks = <&gcc GCC_CAMERA_AHB_CLK>, <&rpmhcc RPMH_CXO_CLK>;
->
-> <&rpmhcc ..> should go on a separate line
->
+this series converts all platform drivers below drivers/clk that were
+introduced after my last clk converstion[1] to struct
+platform_driver::remove_new(). See commit 5c5a7680e67b ("platform:
+Provide a remove callback that returns no value") for an extended
+explanation and the eventual goal.
 
-Okay, I'll fix this in v2.
+All conversations are trivial, because their .remove() callbacks
+returned zero unconditionally.
 
+There are no interdependencies between these patches, so they could be
+picked up individually. But I'd hope that they get picked up all
+together by the clk maintainers.
 
-> ---
-> bod
+Best regards
+Uwe
+
+[1] https://lore.kernel.org/linux-clk/20230312161512.2715500-1-u.kleine-koenig@pengutronix.de/
+
+Uwe Kleine-König (3):
+  clk: imx: imx8-acm: Convert to platform remove callback returning void
+  clk: starfive: jh7110-isp: Convert to platform remove callback returning void
+  clk: starfive: jh7110-vout: Convert to platform remove callback returning void
+
+ drivers/clk/imx/clk-imx8-acm.c                  | 6 ++----
+ drivers/clk/starfive/clk-starfive-jh7110-isp.c  | 6 ++----
+ drivers/clk/starfive/clk-starfive-jh7110-vout.c | 6 ++----
+ 3 files changed, 6 insertions(+), 12 deletions(-)
+
+base-commit: 11afac187274a6177a7ac82997f8691c0f469e41
+-- 
+2.43.0
+
 
