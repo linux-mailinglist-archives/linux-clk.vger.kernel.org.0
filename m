@@ -1,208 +1,157 @@
-Return-Path: <linux-clk+bounces-4423-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4427-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B487587405E
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Mar 2024 20:28:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C7B874614
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Mar 2024 03:24:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C12A281B2F
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Mar 2024 19:28:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB9A41F2233F
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Mar 2024 02:24:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D94B713F430;
-	Wed,  6 Mar 2024 19:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC51C29B0;
+	Thu,  7 Mar 2024 02:24:49 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2118.outbound.protection.partner.outlook.cn [139.219.17.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1342D692E6;
-	Wed,  6 Mar 2024 19:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709753310; cv=none; b=LXC09vLRyXFAxC8sV2TTKedzNUsAmZ6ecRIOcdkAbig7MjOxCXc9iEevIM7rhn7BwlaZS5mYCr7Ammm2ADlYmcw7VGyNWMiXd9NV8f7658foL+RtAH4T/+tpJNWFR3j3F988RuHEsKkKosGvp5uDgxMqWsIrkl9KNos/vcapjf4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709753310; c=relaxed/simple;
-	bh=CDUCX+fLbgrh7BbmfBBqG2J+zTPmFsBzl3wcitwg1ZI=;
-	h=From:In-Reply-To:Content-Type:References:Date:Cc:To:MIME-Version:
-	 Message-ID:Subject; b=Fsuf9ZSu6QAa4T/msAaS9/4HfHOutl0Uc6oK34EZ+0oXsjGasDsY36IBlgTvOrfCj6cLuKUydgX5AqlHc7bc7TXa4h8dNhpzkvi4UnUPj+n8ZUZ40/cMY2NNUtTk2uRGbJeAHIX9byIq8lOw9Xf01sXbjvBLILiRUnqRaJqf/6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Received: from harlem.collaboradmins.com (harlem.collaboradmins.com [IPv6:2a01:4f8:1c0c:5936::1])
-	by madrid.collaboradmins.com (Postfix) with ESMTP id 4A61337820DA;
-	Wed,  6 Mar 2024 19:28:25 +0000 (UTC)
-From: "Shreeya Patel" <shreeya.patel@collabora.com>
-In-Reply-To: <6040170.44csPzL39Z@diego>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999961FBB
+	for <linux-clk@vger.kernel.org>; Thu,  7 Mar 2024 02:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.118
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709778289; cv=fail; b=M/sXR9PFrgWsXY3Yp4eueQ5ypPsnOgd2e1hNU7Wk7ncUrE3U0/gezmMsaebKxDUG5ePUp9/oRtp6BD4/dI9gBppBLanwnTyRF4v3ah242AXEHBIomvksEdOvBic0prYbFc/zfMrUgKvc6MXuSXFtCO/mmi57m2XcvVIQMo7ri1A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709778289; c=relaxed/simple;
+	bh=RlvoR+UATFJ3TmQ0n7NOhGI3r/CvlKBUMUWowgU2ikM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=HS1vmhVlySOUtcCYkuiq0bhj0IgFn73UZQwUi0ZdLt3kn3MSOqFOaADkBOEPHjBgHIPesQKzIlExQHIOD8jbuHn28obF28CINCuANWdPRXtOwrzdVonEltjFS8B9DCdMJZss+xHMcFs6eOAtfPMypKN9ac7UM3lng/Ae2NB4XhA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d8NyFhlbHtOldEfjSl8FYy7H9QU54r3PvqGpCDUKey2OTp6xee10MXNwg/4pwRaNMUAghwQ3dRbq6OyLUdYxLaM9UKsJpP91W0L/KLbnnO3xLVRhiIZ1ArVuJwBnOrqx37oUIhEUlDppR760Ngg3iZ0y3pt/fdoRaulHN6lpKVvea6fl2IjUrDeyFuUJKNZQU4Q1vK8gYDaWjszYyMFIOGbfMOo24XR3jLst9ZmXEDdhcH2U/CS8q0kvQq3JlX+Kp/vmRm4uyS5V+eAxGMr+1bMU53tcqF5BNH+4a54Rg2dXVmwh4Lwlv/5Ql4NwWydQ9CU1wcz/p/b4FOFEIkDBvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RlvoR+UATFJ3TmQ0n7NOhGI3r/CvlKBUMUWowgU2ikM=;
+ b=INoZaTm8LspVxB8LXwShR+ihrj5eG2+MqMNVrhvAG2oGxo71SdSFDk4Y8kNbyXA2mz3nN6qjDrj7B3oqnyIUE0qh6LnQezLSSMLSHySJb6IpTGLDgUi87NMRvVNiN2U4e5bXGNEFuXUzbBiiezK7DFdefwdyuPqSdArPDiifU4DG3HD2SX4V1pkobVw4pl6AmNh2YDtLrCF6vMEI+OIGb8FPyuOklh6j7EfEQOgcKkMSNxHOkDpHRk7rE+kIsREDrEwu5i+e6tDZd2jcKEwP12imo7UZKBDtB2aB0jk+FbQr4nlhZLyqEANHLoQLlAqo6g+eyEKZsdVPfoGjCrTjYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:7::14) by ZQ2PR01MB1308.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:12::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.53; Thu, 7 Mar
+ 2024 01:50:23 +0000
+Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ ([fe80::5de:15b9:3114:4f45]) by ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ ([fe80::5de:15b9:3114:4f45%4]) with mapi id 15.20.7316.051; Thu, 7 Mar 2024
+ 01:50:23 +0000
+From: Hal Feng <hal.feng@starfivetech.com>
+To: =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <u.kleine-koenig@pengutronix.de>,
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+CC: Emil Renner Berthing <kernel@esmil.dk>, "linux-clk@vger.kernel.org"
+	<linux-clk@vger.kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>
+Subject: RE: [PATCH 2/3] clk: starfive: jh7110-isp: Convert to platform remove
+ callback returning void
+Thread-Topic: [PATCH 2/3] clk: starfive: jh7110-isp: Convert to platform
+ remove callback returning void
+Thread-Index: AQHab7KIi49JlSXte0K1B876cClBLrErgmyg
+Date: Thu, 7 Mar 2024 01:50:23 +0000
+Message-ID:
+ <ZQ2PR01MB130763E655905552A6D9E4CBE620A@ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn>
+References: <cover.1709721042.git.u.kleine-koenig@pengutronix.de>
+ <312ec7052c4e327c0b365e167a8e86b406cb7dfa.1709721042.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To:
+ <312ec7052c4e327c0b365e167a8e86b406cb7dfa.1709721042.git.u.kleine-koenig@pengutronix.de>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZQ2PR01MB1307:EE_|ZQ2PR01MB1308:EE_
+x-ms-office365-filtering-correlation-id: dee5c95e-90dd-414a-9ebc-08dc3e48f412
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ fTHZu1MTsE0bSSRnbUBcIP4Zb3oIyMYTIUsxzWp9Q6Xry4KSMKpg4HAhcVWmI7nAELowxotiYRO3PzAemsSbVMkzIEQLYLF5N7q8vcdiJ+lsDu4U+dagRshhvnlGyLrrGeA8Ab7Y1HA93omADFcm95JP5edar9aOkCx1qH/nYt6vFythAsyiXaUSKE7CtsAKtT9QCGSHjiJFiOkKOHBy56jD5jZJ9e7/RI63o1EzqgoKaOTgo4kiVnN+VtyIPyxUViWuSYaXMi4KJ46TEqF3UTiQYKQVXA11vWepqwfSmRG+4fbOb6+2Cnff7X+Kkk33Vi6c2cBRrDX2MBSN7rcZERAszVKZVwKM1YJ4aOSuLEx+74I/RScWbKGTN4le0tiMq3KSoRBslHJMQK89mamUobciOQ27K/tWmLN5HGQbkW1mlnzqUqD6X5MFLsbMVs/b5+MnNszoeSnI5TYaaZA+ye6ezCsAxsUlmQ+eBGMGe0W6iIjVSxm6vHxh59A59ZtD+9woqz2EnVAzhX6OdiquzZA3ldMjs/18Zmi0u6/AdA4GvfkYhWBMOJdKwxm6HUAVvyKOAHDpeBOqBTQ/mb9jqcVmN+BA4SCAdj1bBh9duM1b0oj+vYqG1y1wRCi8F/Nb
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(41320700004)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?eWdvUkx2ME9zMVE3L0FQSUJRVTVFK0hLemljVXMrMmVLYkZUd0M4eldBNWxE?=
+ =?utf-8?B?TWlFSHBkNkIxK2R3MGl4ZGRpSlJTZGwzY1RIQ3hlNCtESXZ4amg0TUczWmhU?=
+ =?utf-8?B?NXhIN0N2YmxoQURqNnYzbzBzRXhPRWxweWZUNTFBK0VyenBtZFc2SEJudzVz?=
+ =?utf-8?B?di92NUZCZldoeGxwbWhwUk0vamxCMElvcW42V1hBTEhmQ0ZjSlQ1Y0FUTHRY?=
+ =?utf-8?B?L2NEVFNGeTJ4ODMwa3lCajBVNTJpdE4wc3VPYS9SMTEwSGNnSUtpYUNwSEpl?=
+ =?utf-8?B?MVN0VUlFN2R5YjJMVUVzbkh1Vmhnc1EzSHhTM0gyK1ZNblA2aHRYWFVkTW9M?=
+ =?utf-8?B?TWY0aFV0SkZsdGpJYi8wS1BndndSQVM2Yjl6S25sSWxFSHJQZnR0R05DNUFS?=
+ =?utf-8?B?aXNxTStQSFlaOW9Pd0x0eXAveVdTNW9YTndNWCtFbEcwczBKNDVNbkQwQVVp?=
+ =?utf-8?B?TjEvR21YaktBV1V4SzRJWFNiTTk0aGliZTM1dlRHNDNtUVMzNGp0bVd0OWFq?=
+ =?utf-8?B?ajREc1NkbTVvUU9NYmVQenNWVUE5U3ZBMFJtQ1kzKzRDK2t6aGp3dDFVNXM5?=
+ =?utf-8?B?Y29QOTRPT2ZhVStDV2NlOVpiR0RQU095WFR2K1FMajQyZ2dPem11SGFuVFJE?=
+ =?utf-8?B?NnFmNUhqVEdOTDhUbUl0UlA3UnJCamdaNTZ5MjI3QzhEQjdXWFJKak5MT3lW?=
+ =?utf-8?B?RmsyV254bEFGOTYrN0NOMlV5MDZsMVF1SUxlWS8xaVBLaFRSTXdTYThZdkdi?=
+ =?utf-8?B?dmZteWJwMHN6SkhramlUQlAwNFBpcjRUcUdCZ0ZaV001YnlBbkZjbkJib0ZI?=
+ =?utf-8?B?RmpmbitpOGhwWGxrWkhjWVJ1SkhsOUlBYkJObzZYSnUybWF6RERoL3VOZGgv?=
+ =?utf-8?B?Z3dsVVRWTG5hSUVNamExb3dJRG1xUktHTDdLUkM5ZlZXYXJNV2dYejM1eVpx?=
+ =?utf-8?B?Qm1rckdjOFAyQlRMeE9talgyM0lKMlVNWmFvU1hhbWpVdk96YmpqQXhxMVZB?=
+ =?utf-8?B?ZXpEWkVhUGhJdC9heDVQYUJkMy81VVZ3VnJpQjZ1UkpCdk1Zc0NjemNMMm9o?=
+ =?utf-8?B?OHhER3hRc1d0aUhaTUdIREhRZThBWEVEYXJhYVVDZ05tbkVFNzVqRGV3SHd0?=
+ =?utf-8?B?YzZxaHhMald5U2R0aFpncStsOEFWdURjcXZWcS9rcHI3SlhobEt3STYxRnps?=
+ =?utf-8?B?amNtZGx6ck02dFN3blZEWE13VmpFSk5OQXJGaEZqdWN1eXZCOXQxY2tNV1Q4?=
+ =?utf-8?B?UmRWMFRKVUdrUVlCS2hybzI2aTBiRjU5WVU1TEo2SUoycU9NN0MzR01pdkpx?=
+ =?utf-8?B?SDN5aTJ2QXNQSnRXMEx5SkFvOFdkRHlJZytpU2hESnVLQVk4L29oQm1rK2VO?=
+ =?utf-8?B?QTNBY2NVMFQ3VGJONGlOZ2ZOUFFVQUJJNm1vUHplVk52MmxDa1F2ZC9TdUt2?=
+ =?utf-8?B?NVVGNzVxbURpS0RIZFk5ekFBdER0QlRaU3RoWE5XUjNpcUI4aStrSnFWRHZB?=
+ =?utf-8?B?NUhHQVpqVnR4M2F4U2hKeWNDOGhWalVFczJ5Wm0zaGM0Qm52YndXTzdkZlJ2?=
+ =?utf-8?B?VG9Ham5HWk8yczd5eU5DRjdDb3JhMVVSZGp0VTF4NzVkR3YzQU5OM0tYRjg4?=
+ =?utf-8?B?bm5kVXRJcWU1Z3BOTXNaTmJoZ0JqOFdyVzBNMm96U1dSTHdYbzBZRVlGMkVG?=
+ =?utf-8?B?UjZZTkcwSW81eTBneVBsc0c1M0NmYUNZcGNGbGdkUXo5UExyRGVxVGFmZFdW?=
+ =?utf-8?B?VkhtUEZ0cWVZRDE0K3pCcTMxM0Z0SlhEdmhwTWo5aE01aGZwZ2FMOW1rZk02?=
+ =?utf-8?B?R3pabVJtVG1hQUZHUWZqWDhzUkphMm1XblRVeExQNTBVSHFKNkc3T0I2OXBF?=
+ =?utf-8?B?L2Vma0hTbElCcWZyNWx5RWdSR2FsenIrZDlJSnNzK1IySXBSamYzTFU1Mzdx?=
+ =?utf-8?B?ZzR3VTIwTWQxQVNxNHBnS1N4cjZVK1hHajdOWUk1bWw3d0VDeTJuYTZvUmJ1?=
+ =?utf-8?B?QitYK3pkOVNuemF5YTJGVE8va1hzUFgzNTRTczFNRmV0RHJzay8rVVJSZFgy?=
+ =?utf-8?B?c1hQYVhnajBJVkhBd2RySWhNWGtLMndOdS9yVkNQaXZFNk9TbDlOaXc0OTNt?=
+ =?utf-8?Q?pgU43lmlmKoW6EyvsErOdHNQd?=
 Content-Type: text/plain; charset="utf-8"
-X-Forward: 127.0.0.1
-References: <20240305123648.8847-1-shreeya.patel@collabora.com>
- <7657358.31r3eYUQgx@diego> <45138-65e76d00-9-580ee380@232156106> <6040170.44csPzL39Z@diego>
-Date: Wed, 06 Mar 2024 19:28:24 +0000
-Cc: mchehab@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de, jose.abreu@synopsys.com, nelson.costa@synopsys.com, dmitry.osipenko@collabora.com, sebastian.reichel@collabora.com, shawn.wen@rock-chips.com, nicolas.dufresne@collabora.com, hverkuil@xs4all.nl, hverkuil-cisco@xs4all.nl, kernel@collabora.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-clk@vger.kernel.org, linux-arm@lists.infradead.org
-To: =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <ca099-65e8c400-33-2b230d40@237921438>
-Subject: =?utf-8?q?Re=3A?= [PATCH v2 4/6] =?utf-8?q?arm64=3A?==?utf-8?q?_dts=3A?=
- =?utf-8?q?_rockchip=3A?= Add device tree support for HDMI RX Controller
-User-Agent: SOGoMail 5.10.0
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-Network-Message-Id: dee5c95e-90dd-414a-9ebc-08dc3e48f412
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2024 01:50:23.2773
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gZ4zpV6l9IxOgOIDGiDGsSGGahzQnV2ySHyNcxNOwl6Z4cDv0XSCooqu0hGq27g150x5m/ufsa1C8IY1ebu5qmZDh/IuUWSC/DfAFa8D8ik=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ2PR01MB1308
 
-On Wednesday, March 06, 2024 01:50 IST, Heiko St=C3=BCbner <heiko@sntec=
-h.de> wrote:
-
-> Hi again :-)
->=20
-> Am Dienstag, 5. M=C3=A4rz 2024, 20:05:02 CET schrieb Shreeya Patel:
-> > On Tuesday, March 05, 2024 19:41 IST, Heiko St=C3=BCbner <heiko@snt=
-ech.de> wrote:
-> > > Am Dienstag, 5. M=C3=A4rz 2024, 13:36:46 CET schrieb Shreeya Pate=
-l:
-> > > > Add device tree support for Synopsys DesignWare HDMI RX
-> > > > Controller.
-> > > >=20
-> > > > Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > > > Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > > > Co-developed-by: Dingxian Wen <shawn.wen@rock-chips.com>
-> > > > Signed-off-by: Dingxian Wen <shawn.wen@rock-chips.com>
-> > > > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> > > > ---
-> > > > Changes in v2 :-
-> > > >   - Fix some of the checkpatch errors and warnings
-> > > >   - Rename resets, vo1-grf and HPD
-> > > >   - Move hdmirx=5Fcma node to the rk3588.dtsi file
-> > > >=20
-> > > >  .../boot/dts/rockchip/rk3588-pinctrl.dtsi     | 41 +++++++++++=
-+++
-> > > >  arch/arm64/boot/dts/rockchip/rk3588.dtsi      | 55 +++++++++++=
-++++++++
-> > > >  2 files changed, 96 insertions(+)
-> > >=20
-> > > > diff --git a/arch/arm64/boot/dts/rockchip/rk3588.dtsi b/arch/ar=
-m64/boot/dts/rockchip/rk3588.dtsi
-> > > > index 5519c1430cb7..8adb98b99701 100644
-> > > > --- a/arch/arm64/boot/dts/rockchip/rk3588.dtsi
-> > > > +++ b/arch/arm64/boot/dts/rockchip/rk3588.dtsi
-> > > > @@ -7,6 +7,24 @@
-> > > >  #include "rk3588-pinctrl.dtsi"
-> > > > =20
-> > > >  / {
-> > > > +	reserved-memory {
-> > > > +		#address-cells =3D <2>;
-> > > > +		#size-cells =3D <2>;
-> > > > +		ranges;
-> > >=20
-> > > add blank line here
-> > >=20
-> > > > +		/*
-> > > > +		 * The 4k HDMI capture controller works only with 32bit
-> > > > +		 * phys addresses and doesn't support IOMMU. HDMI RX CMA
-> > > > +		 * must be reserved below 4GB.
-> > > > +		 */
-> > > > +		hdmirx=5Fcma: hdmirx=5Fcma {
-> > >=20
-> > > phandles use "=5F", but node-names "-"
-> > >=20
-> > > > +			compatible =3D "shared-dma-pool";
-> > > > +			alloc-ranges =3D <0x0 0x0 0x0 0xffffffff>;
-> > > > +			size =3D <0x0 (160 * 0x100000)>; /* 160MiB */
-> > >=20
-> > > The comment above that node, could elaborate where the value of 1=
-60MB
-> > > originates from. I assume it is to hold n-times of 4K frames or w=
-hatever,
-> > > but it would be helpful for people to be able to read that.
-> > >=20
-> >=20
-> > right, we did the following calculation to come up with this value =
-:-
-> > 3840 * 2160 * 4 (bytes/pix) * 2 (frames/buffer) / 1000 / 1000 =3D 6=
-6M
-> > and then we do the 2x times of this value to be on the safer side
-> > and support all practical use-cases.
-> >=20
-> > I'll add some more details to the comment in v3.
->=20
-> thanks, that will be helpful for me and everybody reading the dts lat=
-er on
->=20
-> >=20
-> > >=20
-> > > > +			no-map;
-> > > > +			status =3D "disabled";
-> > > > +		};
-> > > > +	};
-> > > > +
-> > > >  	pcie30=5Fphy=5Fgrf: syscon@fd5b8000 {
-> > > >  		compatible =3D "rockchip,rk3588-pcie3-phy-grf", "syscon";
-> > > >  		reg =3D <0x0 0xfd5b8000 0x0 0x10000>;
-> > > > @@ -85,6 +103,38 @@ i2s10=5F8ch: i2s@fde00000 {
-> > > >  		status =3D "disabled";
-> > > >  	};
-> > > > =20
-> > > > +	hdmi=5Freceiver: hdmi-receiver@fdee0000 {
-> > >=20
-> > > Maybe rename the label to "hdmirx:" ... that way in a board enabl=
-ing the
-> > > cma region, both nodes would stay close to each other?
-> > >=20
-> >=20
-> > Umm we already have receiver in the name so I am not sure if adding=
- rx will be
-> > a good idea. I was trying to keep it consistent with the names used=
- in other device tree files.
-> > In case you still feel otherwise then do let me know, I'll make the=
- change.
->=20
-> I'm somewhat partial to the actual name, I was more getting at simila=
-r
-> names to keep things together.
->=20
-> General sorting rules are that &foo phandles are sorted alphabeticall=
-y
-> in board devicetrees.
->=20
-> So having
->=20
-> &hdmirx {
-> 	status =3D "okay";
-> };
->=20
-> &hdmirx=5Fcma {
-> 	status =3D "okay";
-> };
->=20
-> in the board dt, makes them stay together automatically ;-)
->=20
-> So if it's hdmirx + hdmirx=5Fcma or hdmi=5Freceiver + hdmi=5Freceiver=
-=5Fcma
-> doesn't matter that much, just that they share a common basename.
->=20
->=20
-> I really want to stay away from allowing special rules for things as =
-much
-> as possible, because that becomes a neverending story, so it's
-> alphabetical sorting.
->=20
-> But nothing prevents us from naming phandles in an intelligent way ;-=
-) .
->=20
-
-Makes sense to me, I'll use hdmi=5Freceiver + hdmi=5Freceiver=5Fcma com=
-bination
-to keep it consistent.
-
-Thanks,
-Shreeya Patel
-
->=20
-> Thanks
-> Heiko
->
-
+PiBPbiAwNi4wMy4yNCAxODozOSwgVXdlIEtsZWluZS1Lw7ZuaWcgd3JvdGU6DQo+IA0KPiBUaGUg
+LnJlbW92ZSgpIGNhbGxiYWNrIGZvciBhIHBsYXRmb3JtIGRyaXZlciByZXR1cm5zIGFuIGludCB3
+aGljaCBtYWtlcyBtYW55DQo+IGRyaXZlciBhdXRob3JzIHdyb25nbHkgYXNzdW1lIGl0J3MgcG9z
+c2libGUgdG8gZG8gZXJyb3IgaGFuZGxpbmcgYnkgcmV0dXJuaW5nIGFuDQo+IGVycm9yIGNvZGUu
+IEhvd2V2ZXIgdGhlIHZhbHVlIHJldHVybmVkIGlzIGlnbm9yZWQgKGFwYXJ0IGZyb20gZW1pdHRp
+bmcgYQ0KPiB3YXJuaW5nKSBhbmQgdGhpcyB0eXBpY2FsbHkgcmVzdWx0cyBpbiByZXNvdXJjZSBs
+ZWFrcy4NCj4gDQo+IFRvIGltcHJvdmUgaGVyZSB0aGVyZSBpcyBhIHF1ZXN0IHRvIG1ha2UgdGhl
+IHJlbW92ZSBjYWxsYmFjayByZXR1cm4gdm9pZC4gSW4gdGhlDQo+IGZpcnN0IHN0ZXAgb2YgdGhp
+cyBxdWVzdCBhbGwgZHJpdmVycyBhcmUgY29udmVydGVkIHRvIC5yZW1vdmVfbmV3KCksIHdoaWNo
+IGFscmVhZHkNCj4gcmV0dXJucyB2b2lkLiBFdmVudHVhbGx5IGFmdGVyIGFsbCBkcml2ZXJzIGFy
+ZSBjb252ZXJ0ZWQsIC5yZW1vdmVfbmV3KCkgd2lsbCBiZQ0KPiByZW5hbWVkIHRvIC5yZW1vdmUo
+KS4NCj4gDQo+IFRyaXZpYWxseSBjb252ZXJ0IHRoaXMgZHJpdmVyIGZyb20gYWx3YXlzIHJldHVy
+bmluZyB6ZXJvIGluIHRoZSByZW1vdmUgY2FsbGJhY2sgdG8NCj4gdGhlIHZvaWQgcmV0dXJuaW5n
+IHZhcmlhbnQuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBVd2UgS2xlaW5lLUvDtm5pZyA8dS5rbGVp
+bmUta29lbmlnQHBlbmd1dHJvbml4LmRlPg0KDQpSZXZpZXdlZC1ieTogSGFsIEZlbmcgPGhhbC5m
+ZW5nQHN0YXJmaXZldGVjaC5jb20+DQoNCg==
 
