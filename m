@@ -1,201 +1,126 @@
-Return-Path: <linux-clk+bounces-4502-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4504-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78B55877846
-	for <lists+linux-clk@lfdr.de>; Sun, 10 Mar 2024 20:23:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8289D877954
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Mar 2024 01:33:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C6751C20A8D
-	for <lists+linux-clk@lfdr.de>; Sun, 10 Mar 2024 19:23:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EEA528144F
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Mar 2024 00:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB0E33A1DB;
-	Sun, 10 Mar 2024 19:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE050138C;
+	Mon, 11 Mar 2024 00:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b="Bd00Tvnk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G06A5gyO"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B959B3B190;
-	Sun, 10 Mar 2024 19:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D6A394
+	for <linux-clk@vger.kernel.org>; Mon, 11 Mar 2024 00:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710098558; cv=none; b=p+6U9MDEX3DFT+azFHZf4PYI3ooGL1Rox+F/XVxltbufzjqeJscnNm5w/1Tq0qMl8E5r32r8Hid/5jLJ5rv92yPewp5i/ckwCGIuD5IA3dEkv+NpgPXAljlPsM6cFrPZVz3Y6AafxJhZ3OkkfXjjgIN3S23EyzOitrNEgaH+U5s=
+	t=1710117211; cv=none; b=FLGWbXM5ZbGifcKwmDGMgMMeZnMWf+Do/5rcXHcM0+ixU7B4B85DvnE+qhkHTzkwhQ4KoGuE4YXGdUVk9dlXwPRQ/3/BTjDVzd2zyxfykAlJtsu87ZYYtBxzxpOsyo4QaeSv+yxReOFYKp/UOF1qlIorULHNEyvBu6b6hTGTaNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710098558; c=relaxed/simple;
-	bh=Lc1pMRgsV+StSf5fgFNpvmYafFqXYMKdh+E4JPDHkIM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ncj385EFMGKJ8pqnk1a8GHufesFZnny179iqLCSZ27koV0mrsFD9T0qZWxwlV+We7/4gGTjucEECwkgzbdDf//cH1+Zxcpvuvyd7qZcfqQUO278yOYk4bTZHHBt61KkPN1JYYj2CiDZbs/CQcG+yChJT42uDADnaDiFps+vbXEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b=Bd00Tvnk; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1710098526; x=1710703326; i=j.neuschaefer@gmx.net;
-	bh=Lc1pMRgsV+StSf5fgFNpvmYafFqXYMKdh+E4JPDHkIM=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:
-	 References;
-	b=Bd00TvnksM/H/dFC7U9XfpC05A/9jT7hukPQ2gkucaZ0ksg0dOFrwv+ho/g8rSS7
-	 4MDMbtvRGrIKcfyAzGa1Tp/A+Yj6TwkzaCE6pi1SCHrUERVE9cnDbnSDofxh1al3E
-	 rkl4KhTXRv6hwezrAJ/bp/W9twYdNpH07VCqZ5TmWw9RXdzSOPnssaAuefEoDhOXW
-	 sBLR2ZC16QYBG0t/eJrzegG0mA6OFBBk4NNba2fEpHMCIB/QH0HcNNrOgDvUBW53u
-	 Vwh2K1n3ywZWxNI6WoTKcYhQD1TJTBCmeeLlgyoqoAKDsN4cDvL45LB7LzqrPm5ug
-	 My8FLUILVcDCgItSkA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([78.35.216.168]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MgNh7-1rBBBJ0KLv-00hvec; Sun, 10
- Mar 2024 20:22:06 +0100
-From: =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To: linux-clk@vger.kernel.org,
-	openbmc@lists.ozlabs.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>,
-	Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: [PATCH v10 4/4] ARM: dts: wpcm450: Switch clocks to clock controller
-Date: Sun, 10 Mar 2024 20:21:02 +0100
-Message-ID: <20240310192108.2747084-5-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240310192108.2747084-1-j.neuschaefer@gmx.net>
-References: <20240310192108.2747084-1-j.neuschaefer@gmx.net>
+	s=arc-20240116; t=1710117211; c=relaxed/simple;
+	bh=q3MFamMIr6NFVpUFcDH0jWX4vsZYOAYFx1MyZtEqvyw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=B1PmFHOEgfN4wpDScemMVCmGoMvaEZrRdjhwgHNnXnqzeenaseD8VgqIBPgq7kWVoz2QHa0CUYuy3hJF28RHn4WrrxPRaNG90FSKJQGD29QUfdNOiaee/OhrjMjWNKPHNf4IqX2+Kvvbe0cGNZHSBviRuBzkIU81Nax46t1aonU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G06A5gyO; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33e98610a6dso113395f8f.2
+        for <linux-clk@vger.kernel.org>; Sun, 10 Mar 2024 17:33:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1710117207; x=1710722007; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfyiNRPXIKA0wIGpSVJEarVeJ6YjuAYZ6W8XU9TBWZg=;
+        b=G06A5gyOSWhOCdfOvpciP7O2FLtr30VEiftt/DxtYfV14qmKq7XDpfFAEJnhtoUH2Y
+         RTF8Y1mVo6eMhN6ONniokvzIb7h1tdEIf3+8KAyxdmoD9zlJ81WPOzcJUlsOQup71Llh
+         SO04Nn+77qKjtPZD91xoBFL4CAKgJCaE0phv3vxhmlzck09GpfkZgZSSKOcC2vWGCv9m
+         kCA8HcwikSpbcyQsjPfFCGu3S2jQOJqP/ag1CdcwFCI/DmqS99t5s+i+/sIRDwwCCv97
+         rrx5WeeXQglQznyprjrrFZXIN4sP8MTMvt8x0n96iRW6HWnOvf8wPgXiOmxB9bTnm6wf
+         t2xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710117207; x=1710722007;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mfyiNRPXIKA0wIGpSVJEarVeJ6YjuAYZ6W8XU9TBWZg=;
+        b=ZkZvqDqgUFQ/wEFr1yllxe1oZC83J9907B0FXy82ad9uzJQe8vsV5BbRDLMpMHcqtE
+         y9UIuYNNlXx2CrItGVbIpw9ROcyLW/hZJPnNsOkoMLrnK2oTXnUyw3OZjamTwTxIyEXz
+         SuKXkbcSwsITC8f7LopwRaYUpf1M/AmS/QsKysBdolQnlfrRUy9vJFfQoKWYesyGbgtZ
+         TgNmJUycfHJv5c5RJUij1wm7LiJ+is5ez/YwcmUR/DSkYssFZ9GKeHCXvU0UAjAhbuso
+         51RRxVWmILV/x1N5T62svHDAeGwbKz5daiZzA7z3NQjKm055ZtxNo+oaYRDZGISC5wyd
+         03fg==
+X-Forwarded-Encrypted: i=1; AJvYcCXB1zTFmVOYES74PPG2rXkw3MoRCYtcbV2VluuJLmcEX4LrMjOC4M+ep3cbIpzVT/zxu6QjnIBhEXm4gkUQB/t0p4OjSyve1W4/
+X-Gm-Message-State: AOJu0Yx1hkX1e6uJVTpQN6kWSAwcnGHGIvjlVsYG4840NBR0JKeKRtUs
+	6fYnOXN3inWPXnWNVjkWwCTflZzF86NnOCJ3fIIOYzYvlCjMsXLfUmtA5Ealu8o=
+X-Google-Smtp-Source: AGHT+IFwRUunT+Ya9ZAsaCyFZIIhiHE6ops/oFZR1frJlejjxGjqW5MNXAD/9FWboTVWVIXp+oDlPA==
+X-Received: by 2002:a05:600c:1d86:b0:412:f8c2:869a with SMTP id p6-20020a05600c1d8600b00412f8c2869amr4095684wms.30.1710117207063;
+        Sun, 10 Mar 2024 17:33:27 -0700 (PDT)
+Received: from [127.0.0.1] ([176.61.106.68])
+        by smtp.gmail.com with ESMTPSA id m38-20020a05600c3b2600b00412b6fbb9b5sm13881720wms.8.2024.03.10.17.33.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Mar 2024 17:33:26 -0700 (PDT)
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH 0/2] qcom: clk: camcc: Fix power-domain definitions on
+ x1e80100
+Date: Mon, 11 Mar 2024 00:33:24 +0000
+Message-Id: <20240311-linux-next-camcc-fixes-v1-0-d126ae0b9350@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CZOP/2JyhuYMjvSoJftgiK/2nFIgRon1+neVh/LZn4z7J6VfK+Y
- phi/XYNwa4bSKC6jy9/3KudhpuaCSWhKSnAvYt0goG/vWKXb0E9SIIDCkWj6VF420nX5Wa6
- Np3/bXESt4ZTzvjlR4m8nFawznti+83B1GljuO5cYG8N+gcWJbGj0tbZN83upD3iWlEP/GK
- ZseouWgpoYKKzhSS+0NvQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Z1xVzBzNInU=;NDd8KIAFtG7HWYEYhvWCeKkhzkg
- NR4AV0H13INfVrpjhwXC58BnoZ9BO0Pd7rlvVV7zHg6e4zIaFlWNTJdA/A8f4BgdOfJ9ktPP6
- QqK5ejKFY10a+I4iMJJGejcV3a+SrTO9zpsfDVQb0VIxKK86ASPEPp4fwk7/J7mSkdlH0wK9P
- YtHGsxbGZjEke4jWPANODol+gbw9kss6Ss8tyIHuKSZydKmflu2//O1sBnq4T9+y3Tjlio2dm
- jYY6FOQXaRGW9Zk/gmI09EyJibKgH/5zKrgEU8pO4Hu+8fHK6Qh10Vcps0mJb1oeKj6wFv5ZC
- WNJRGcISk2Eh0Ysk4M1uV7yvsarMCM5fR3n2tzoGXsX+1foHqZXS576AZsrSw5ynFAbCxkggm
- emkpnbcHLc+QWDHu50F3Y1oFMi69XHBxNSJCEgZd2Ir4DCFhURDKNQHKuH0WEnyH29wIxt31X
- X/U4/gwnhWu4tyBhu87sCfy0shO0QoZujirC2qGi8QnjTRCSDOdkB2PW61ReZnKsPIF6Dm0Bw
- tjje3eZeo5GugTsLZ5zwXJhYE4QnOUvd5AC/yz3PHyhQqZJsHrUMHVDJ4hlcknbJmNjEKUExq
- XBGIgii743CONhs6aCeaV/BWGaWzabALOrlBqKYSckZEmYMh+IGWpfmquVmgOMI0ocCybdEcJ
- oyr0KReDfa/BxUOmt6nQEFmWm8CAJZASMSVJJ1ihksLBmQizhCmhwQ3BPRmeZaf1EjH6V45sx
- Vh1dfapk8lzU01ai5YOFjUb3zugW3Kykxay3BYEPcFfTaT0TrYn2NCmIKj6ZSV41iWhdCIn8i
- jcqiGnSqb+Fe8nYJnkuSklRF2KYvU7DayUP18+6ecTTXA=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFRR7mUC/x3LQQqAIBBA0avErBvQMaK6SrQQm2qgLLRCiO6et
+ Hx8/gORg3CErngg8C1Rdp+hywLcYv3MKGM2kKJKGa1wFX8l9JxOdHZzDidJHNHWjSFqdV2Rhjw
+ fgf+Q33543w9RZaGpaAAAAA==
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, 
+ Abel Vesa <abel.vesa@linaro.org>, Rajendra Nayak <quic_rjendra@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+X-Mailer: b4 0.13-dev-26615
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+There are two problems with the upstream camcc implementation at the
+moment which this series addresses.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+1. The camcc block has two power-domains MXC and MMCX however, the yaml
+   description doesn't include MXC.
 
-It's probably best to delay merging of this patch until after the driver
-is merged; I'm including it here for review, and in case someone want's
-to set up a shared branch between the clock and devicetree parts.
+2. The code for the GDSC definitions for x1e80100 camcc fails to list
+   the titan_top_gdsc as the parent GDSC of the other GDSCs.
 
-v10:
-- Reintroducing this patch as part of the clock/reset controller series
-=2D--
- .../arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi | 22 +++++++++----------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+This series addresses both of those bugs. There is currently no upstream
+camcc dtsi for x1e80100 so the yaml change won't affect the ABI.
 
-diff --git a/arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi b/arch/arm/boo=
-t/dts/nuvoton/nuvoton-wpcm450.dtsi
-index 9dfdd8f67319d3..7e3ea8b31151b3 100644
-=2D-- a/arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+Bryan O'Donoghue (2):
+      dt-bindings: clock: qcom: Fix x1e80100 camcc power-domain declaration
+      clk: qcom: camcc-x1e80100: Set titan_top_gdsc as the parent GDSC of subordinate GDSCs
 
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
+ .../bindings/clock/qcom,sm8450-camcc.yaml          | 37 ++++++++++++++++++----
+ drivers/clk/qcom/camcc-x1e80100.c                  |  7 ++++
+ 2 files changed, 38 insertions(+), 6 deletions(-)
+---
+base-commit: 8ffc8b1bbd505e27e2c8439d326b6059c906c9dd
+change-id: 20240310-linux-next-camcc-fixes-a68322916421
 
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -30,13 +31,6 @@ cpu@0 {
- 		};
- 	};
-
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-48mhz {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -70,7 +64,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -81,7 +75,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
-
-@@ -89,14 +83,18 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_TIMER0>,
-+				 <&clk WPCM450_CLK_TIMER1>,
-+				 <&clk WPCM450_CLK_TIMER2>,
-+				 <&clk WPCM450_CLK_TIMER3>,
-+				 <&clk WPCM450_CLK_TIMER4>;
- 		};
-
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
-
- 		aic: interrupt-controller@b8002000 {
-@@ -480,7 +478,7 @@ fiu: spi-controller@c8000000 {
- 			#size-cells =3D <0>;
- 			reg =3D <0xc8000000 0x1000>, <0xc0000000 0x4000000>;
- 			reg-names =3D "control", "memory";
--			clocks =3D <&clk 0>;
-+			clocks =3D <&clk WPCM450_CLK_FIU>;
- 			nuvoton,shm =3D <&shm>;
- 			status =3D "disabled";
- 		};
-=2D-
-2.43.0
+Best regards,
+-- 
+Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
 
