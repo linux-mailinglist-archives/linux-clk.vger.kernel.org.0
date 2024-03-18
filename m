@@ -1,241 +1,132 @@
-Return-Path: <linux-clk+bounces-4707-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4709-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5875687E3D4
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 07:53:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 045EA87E3E9
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 08:11:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88DF51C2081F
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 06:53:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E30D1C20895
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 07:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6140B1CFAD;
-	Mon, 18 Mar 2024 06:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F5621360;
+	Mon, 18 Mar 2024 07:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="bakgQLXM"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7984D1CA89;
-	Mon, 18 Mar 2024 06:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35ECD22069
+	for <linux-clk@vger.kernel.org>; Mon, 18 Mar 2024 07:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710744807; cv=none; b=q+Vs0/rS/4YndAX2eT3WKaMqqhUAwuyYcJ+kLXWwlSUr1/Nnw73xSdQXTk8CaD/RIRFR6CRRkYOjOzw/aJb4jO3BTRHH1SdnMzOIS8ZmHiZnXL6fb+Oegchx9xRrbYBgOk0QS2Ir2QO4vHKKVL+2khmhTsJtliWYoXDgOosju5E=
+	t=1710745896; cv=none; b=fWmVQH0kRn1psgtiqeFcxaiyfT3QiEq3qBBA/OUVlnvMe3tgf7B93KpqoCFZwgkA34osc8ttNgL5fNhLzk0a9g7jQ1uyfZ/gs/gFRVWf8OVk+rTJzDssSIzu68neDUFY2xgRzrYYvSTudCVC7zQzWETKMyA1CA4ezP7tJnm8yY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710744807; c=relaxed/simple;
-	bh=4m/ohYPMa+0mBDHTTy2RJmhezQAAKT1R6j2wsefkv94=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=Y9elhtDZUigP/9U0ZRCkWTKLPGi086z/b0ucz/WnqBamc0HRedUlx3ApYgWgxjWm1nGFI/6itpQnnXwA3wRW65Og+ayX+WL7gO0HDQ2zaWOOcHiRbnl1lKFdKlZvpCVe+aX1uERlP13SQLhmqxbEBhvpPjn7NsS21pM7IVy4yHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9589D1A0BA3;
-	Mon, 18 Mar 2024 07:53:18 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 337111A0580;
-	Mon, 18 Mar 2024 07:53:18 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 77ACD183AC0B;
-	Mon, 18 Mar 2024 14:53:16 +0800 (+08)
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
-To: abelvesa@kernel.org,
-	peng.fan@nxp.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	linux-imx@nxp.com,
-	shengjiu.wang@gmail.com
-Cc: linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: imx: imx8mp: Add pm_runtime support for power saving
-Date: Mon, 18 Mar 2024 14:36:51 +0800
-Message-Id: <1710743811-1698-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+	s=arc-20240116; t=1710745896; c=relaxed/simple;
+	bh=SrururavG+N20uLQV6wSNjtVq09E7FD8xFoRu1t6mQo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Ak5ZRLMDqTr6DRM8drz/UbJRQ8ZrIuwo+4g7W0i4cErsHBVJ+JsvqnssTqQQcpxaqQpWxW54Ph2KfLZewRbCiMPn3q1D7QELwPjvluE0InCZLJsCwSSCebxmo+kLSAUki1LHZX90iGZbEpc3VYPllQlfIrfSOE+fG1N/e9loNcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=bakgQLXM; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56acd06c016so381063a12.3
+        for <linux-clk@vger.kernel.org>; Mon, 18 Mar 2024 00:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1710745892; x=1711350692; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VeRv6wWUGO4049P3j2OySs144lGj+ZeTDqiDzx4NR1w=;
+        b=bakgQLXMLf7k6+t5tJnz60ny6stSr7FlrA8d9sdoTCbIlympuWa+KKZGNCQhVuJ7I8
+         /26gA+tDvfn32iJ7n7k+awVGYd1ExNW3up3VgGVDzBr9YPEPG5ZuxaWD0TRDDb+QV+8N
+         0iSxbBr+m/aGRlUuJZKqsA3i/HVWBd9HbWIN/epfIhW6EvxddHxX3UKqtrGMaqktb00Q
+         v/FoVgq9jsDE94lAx7E1gs1p3wmt8pjrip9nJZDDrpINkt7OrZFUD8/nnUm7c1HyPwmp
+         XOmShVREYwRBqHas3HgYSs76QdUME1dgy+beGUfxcx7EWZzcPkanoRLaUgUoMyEtrc3i
+         D4gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710745892; x=1711350692;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VeRv6wWUGO4049P3j2OySs144lGj+ZeTDqiDzx4NR1w=;
+        b=kuBMRDhYfBTub6fpJAZUw3M4NRzkc7h0PneI0s6JfxkZWbvtZ8ov1VbVDDYtIR6QXi
+         RbjNdkH6NTimXvFFunjjrhkmkMI+SId69xSJFqnIT2lA197EYLHeYGwhuxpeYOrKlhkW
+         FXPUnXYZpN+Tsu+QvbI5lgeoEH5tLaqhP5BgpEqz4G+egHANMrmbLq7QC7m+nK7KJCLY
+         BjbA11FdF2UR1D705Y4k1oR0enD9j+BrWLxHgnrVcPK4ziYevn7W+kDI8gKr7XZKDTW5
+         RFGsPNP+uJ1MHi9hKm7SVAm/W7nZ85Q9oePRUFRahbfWTVg4EKlOegyPT9pfRPgZQ9g8
+         6Y+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUuY0r4zLSz1ufkb60KomnFypW/fM1WdQt8TTGuPc00ZtWVCP9gd38WR2Z1eppDcOH1psRFqxwtenitYEZqs0lR67gdyInCZqlc
+X-Gm-Message-State: AOJu0Yx1POupx5i3d4KxbpHm0NKyj66DipfyltAoZWeYXuKIMFqXL/nX
+	MO8XLQgDr57CnwFJ/EZY+k7ycOhYpZACIEBfvO8MqVJDkGhZsCZ3duhKU+MDb3k=
+X-Google-Smtp-Source: AGHT+IFFvAoRVXiyVVbqmQ6QoDavb++Ps/7SqBBQhgnyqUgmFdd9+pMtZIjKJBie44OQFsvt+LH0CQ==
+X-Received: by 2002:a17:906:ef03:b0:a46:c01d:b595 with SMTP id f3-20020a170906ef0300b00a46c01db595mr1208577ejs.53.1710745892434;
+        Mon, 18 Mar 2024 00:11:32 -0700 (PDT)
+Received: from localhost (046125249120.public.t-mobile.at. [46.125.249.120])
+        by smtp.gmail.com with ESMTPSA id lx9-20020a170906af0900b00a4638693bbfsm4477665ejb.116.2024.03.18.00.11.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Mar 2024 00:11:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 18 Mar 2024 08:11:30 +0100
+Message-Id: <CZWOT0K3AE2F.1BUND7M9Q5RXO@fairphone.com>
+Cc: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/8] dt-bindings: clock: qcom: Add compatible for
+ QCM6490 boards
+From: "Luca Weiss" <luca.weiss@fairphone.com>
+To: "Taniya Das" <quic_tdas@quicinc.com>, "Stephen Boyd" <sboyd@kernel.org>,
+ =?utf-8?q?Michael_Turquette_=C2=A0?= <mturquette@baylibre.com>, "Bjorn
+ Andersson" <andersson@kernel.org>, "Konrad Dybcio"
+ <konrad.dybcio@linaro.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley"
+ <conor+dt@kernel.org>
+X-Mailer: aerc 0.15.2
+References: <20240318053555.20405-1-quic_tdas@quicinc.com>
+ <20240318053555.20405-2-quic_tdas@quicinc.com>
+In-Reply-To: <20240318053555.20405-2-quic_tdas@quicinc.com>
 
-Add pm_runtime support for power saving. In pm runtime suspend
-state the registers will be reseted, so add registers save
-in pm runtime suspend and restore them in pm runtime resume.
+On Mon Mar 18, 2024 at 6:35 AM CET, Taniya Das wrote:
+> Add the new QCM6490 compatible to support the reset functionality for
+> Low Power Audio subsystem.
+>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>  .../devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml       | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscor=
+ecc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.=
+yaml
+> index deee5423d66e..861b41933525 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yam=
+l
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yam=
+l
+> @@ -30,6 +30,7 @@ properties:
+>        - qcom,sc7280-lpassaudiocc
+>        - qcom,sc7280-lpasscorecc
+>        - qcom,sc7280-lpasshm
+> +      - qcom,qcm6490-lpassaudiocc
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- drivers/clk/imx/clk-imx8mp-audiomix.c | 99 ++++++++++++++++++++++++++-
- 1 file changed, 96 insertions(+), 3 deletions(-)
+So QCM6490 and SM7325 and SC7280 with non-CrOS firmware (maybe some WoA
+devices?) are supposed to use qcom,qcm6490-lpassaudiocc then? Is this
+what is intended?
 
-diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
-index 55ed211a5e0b..d2bf53e2aacf 100644
---- a/drivers/clk/imx/clk-imx8mp-audiomix.c
-+++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
-@@ -7,10 +7,12 @@
- 
- #include <linux/clk-provider.h>
- #include <linux/device.h>
-+#include <linux/io.h>
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
- 
- #include <dt-bindings/clock/imx8mp-clock.h>
- 
-@@ -18,6 +20,7 @@
- 
- #define CLKEN0			0x000
- #define CLKEN1			0x004
-+#define EARC			0x200
- #define SAI1_MCLK_SEL		0x300
- #define SAI2_MCLK_SEL		0x304
- #define SAI3_MCLK_SEL		0x308
-@@ -26,6 +29,12 @@
- #define SAI7_MCLK_SEL		0x314
- #define PDM_SEL			0x318
- #define SAI_PLL_GNRL_CTL	0x400
-+#define SAI_PLL_FDIVL_CTL0	0x404
-+#define SAI_PLL_FDIVL_CTL1	0x408
-+#define SAI_PLL_SSCG_CTL	0x40C
-+#define SAI_PLL_MNIT_CTL	0x410
-+#define IPG_LP_CTRL		0x504
-+#define REGS_NUM		16
- 
- #define SAIn_MCLK1_PARENT(n)						\
- static const struct clk_parent_data					\
-@@ -182,13 +191,65 @@ static struct clk_imx8mp_audiomix_sel sels[] = {
- 	CLK_SAIn(7)
- };
- 
-+struct clk_imx8mp_audiomix_regs {
-+	u32 regs_num;
-+	u32 regs_off[];
-+};
-+
-+static const struct clk_imx8mp_audiomix_regs audiomix_regs = {
-+	.regs_num = REGS_NUM,
-+	.regs_off = {
-+		CLKEN0,
-+		CLKEN1,
-+		EARC,
-+		SAI1_MCLK_SEL,
-+		SAI2_MCLK_SEL,
-+		SAI3_MCLK_SEL,
-+		SAI5_MCLK_SEL,
-+		SAI6_MCLK_SEL,
-+		SAI7_MCLK_SEL,
-+		PDM_SEL,
-+		SAI_PLL_GNRL_CTL,
-+		SAI_PLL_FDIVL_CTL0,
-+		SAI_PLL_FDIVL_CTL1,
-+		SAI_PLL_SSCG_CTL,
-+		SAI_PLL_MNIT_CTL,
-+		IPG_LP_CTRL
-+	},
-+};
-+
-+struct clk_imx8mp_audiomix_drvdata {
-+	void __iomem *base;
-+	u32 regs_save[REGS_NUM];
-+};
-+
-+static void clk_imx8mp_audiomix_save_restore(struct device *dev, bool save)
-+{
-+	struct clk_imx8mp_audiomix_drvdata *drvdata = dev_get_drvdata(dev);
-+	void __iomem *base = drvdata->base;
-+	int i;
-+
-+	if (save) {
-+		for (i = 0; i < audiomix_regs.regs_num; i++)
-+			drvdata->regs_save[i] = readl(base + audiomix_regs.regs_off[i]);
-+	} else {
-+		for (i = 0; i < audiomix_regs.regs_num; i++)
-+			writel(drvdata->regs_save[i], base + audiomix_regs.regs_off[i]);
-+	}
-+}
-+
- static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
- {
-+	struct clk_imx8mp_audiomix_drvdata *drvdata;
- 	struct clk_hw_onecell_data *priv;
- 	struct device *dev = &pdev->dev;
- 	void __iomem *base;
- 	struct clk_hw *hw;
--	int i;
-+	int i, ret;
-+
-+	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
-+	if (!drvdata)
-+		return -ENOMEM;
- 
- 	priv = devm_kzalloc(dev,
- 			    struct_size(priv, hws, IMX8MP_CLK_AUDIOMIX_END),
-@@ -202,6 +263,9 @@ static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
-+	drvdata->base = base;
-+	dev_set_drvdata(dev, drvdata);
-+
- 	for (i = 0; i < ARRAY_SIZE(sels); i++) {
- 		if (sels[i].num_parents == 1) {
- 			hw = devm_clk_hw_register_gate_parent_data(dev,
-@@ -257,10 +321,38 @@ static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
- 	if (IS_ERR(hw))
- 		return PTR_ERR(hw);
- 
--	return devm_of_clk_add_hw_provider(&pdev->dev, of_clk_hw_onecell_get,
--					   priv);
-+	ret = devm_of_clk_add_hw_provider(&pdev->dev, of_clk_hw_onecell_get,
-+					  priv);
-+	if (ret)
-+		return ret;
-+
-+	pm_runtime_enable(&pdev->dev);
-+	clk_imx8mp_audiomix_save_restore(&pdev->dev, true);
-+
-+	return 0;
- }
- 
-+static int clk_imx8mp_audiomix_runtime_suspend(struct device *dev)
-+{
-+	clk_imx8mp_audiomix_save_restore(dev, true);
-+
-+	return 0;
-+}
-+
-+static int clk_imx8mp_audiomix_runtime_resume(struct device *dev)
-+{
-+	clk_imx8mp_audiomix_save_restore(dev, false);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops clk_imx8mp_audiomix_pm_ops = {
-+	SET_RUNTIME_PM_OPS(clk_imx8mp_audiomix_runtime_suspend,
-+			   clk_imx8mp_audiomix_runtime_resume, NULL)
-+	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-+				      pm_runtime_force_resume)
-+};
-+
- static const struct of_device_id clk_imx8mp_audiomix_of_match[] = {
- 	{ .compatible = "fsl,imx8mp-audio-blk-ctrl" },
- 	{ /* sentinel */ }
-@@ -272,6 +364,7 @@ static struct platform_driver clk_imx8mp_audiomix_driver = {
- 	.driver = {
- 		.name = "imx8mp-audio-blk-ctrl",
- 		.of_match_table = clk_imx8mp_audiomix_of_match,
-+		.pm = &clk_imx8mp_audiomix_pm_ops,
- 	},
- };
- 
--- 
-2.34.1
+Regards
+Luca
+
+>
+>    power-domains:
+>      maxItems: 1
+> --
+> 2.17.1
 
 
