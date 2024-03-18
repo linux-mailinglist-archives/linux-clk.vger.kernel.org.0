@@ -1,265 +1,191 @@
-Return-Path: <linux-clk+bounces-4731-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4733-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8823C87E690
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 11:00:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ECEB87E78C
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 11:42:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 154DA1F21022
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 10:00:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B42E1C2138B
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Mar 2024 10:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910182D604;
-	Mon, 18 Mar 2024 10:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDBA635F0C;
+	Mon, 18 Mar 2024 10:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Ngikuw+3"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA83D2D042
-	for <linux-clk@vger.kernel.org>; Mon, 18 Mar 2024 10:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FD12E633
+	for <linux-clk@vger.kernel.org>; Mon, 18 Mar 2024 10:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710756022; cv=none; b=AI3RuS7p/8dnwAbmEge18LBH8oRdZ/a5DPPflJ0EU5Sp64IhGcMrcO+qznGfeOtAZ3BgTVsMRGfPdku4GrIcozPpb+22IfFU/c1IJn+rsCRY0x2g10jsUjOiSzWj6lCrnQD3CtL2cNIZ04ZcqIxGpRb5pjcbsXpDmxZjO/JFdgk=
+	t=1710758449; cv=none; b=daHyyFxHMU/Nc/Kms7jvHXpKrX3x5nfiiUAs3EP9Yhfg84DflWIRy8Sy3RoGamPhn7BWi5+fN1uA4Tao9bDbvJu/zc6y4wg6b30d5LwqZy66M5Ry/PNWmK+oYbfoZtUTLKXljDqMgbzCv3+NJD/dlloXTIPiQyENCvF6J/1YnOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710756022; c=relaxed/simple;
-	bh=oHGAUUZInETu3uSOrSDkqyU5Ef2ZqZXmkK2RBU59St4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JEFFdFyk1DJTAuNOBSIC1D3jVYx2cZxTXD3E6QlEFozfAYDwgel5eel/3oSdZ0EEEd3Kfs6M3NpufhXTH1Cib6tRbDyYzmUZrA2RPERZtCVfSawzbWjZ/WwcRttBB7VYQjIwktvfF1fYsywWYMUY4i4LfncIJt2rw3MiBMP+eNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rm9mi-0003u1-8j; Mon, 18 Mar 2024 11:00:00 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rm9mh-0073CL-KT; Mon, 18 Mar 2024 10:59:59 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rm9mh-005SXP-1h;
-	Mon, 18 Mar 2024 10:59:59 +0100
-Date: Mon, 18 Mar 2024 10:59:59 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Peng Fan <peng.fan@nxp.com>
-Cc: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	Abel Vesa <abelvesa@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 0/6] Add support i.MX95 BLK CTL module clock features
-Message-ID: <20240318095959.v5d7qeoci5v2dtkq@pengutronix.de>
-References: <20240314-imx95-blk-ctl-v4-0-d23de23b6ff2@nxp.com>
- <20240317155911.pdc32nsyxcdhs2t7@pengutronix.de>
- <DU0PR04MB941725052D5E3EF78F67A1C5882D2@DU0PR04MB9417.eurprd04.prod.outlook.com>
+	s=arc-20240116; t=1710758449; c=relaxed/simple;
+	bh=i5ixDYb3wbENoImw8j5KKJEmWmhgfjQSVNTIJMv1DhY=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=shPdQ7GthxfsmVL+yY+2hE+jeTjm8fNk2YHbwCA9KNY6jdUTPUqxrh/7AEPJuHgEVsia4K6scZMKkx9zX6JvnyYOhQYhX95+gbA96rkzjIS6MsV61zvFEHcJp7hFDF8bmN3SFuekKau9p4BVJyW653PU34jpU6N1HGuHg+8QOjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Ngikuw+3; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4140a9f25adso9954775e9.2
+        for <linux-clk@vger.kernel.org>; Mon, 18 Mar 2024 03:40:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1710758445; x=1711363245; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=xNzf7P8nz60f5DqiZ1A/ORzVISDkI6sI6tCR2mQw6JE=;
+        b=Ngikuw+3cNJp9rXoQiOJ2p93RAsF34UruLbhm6ntsmzb9jVrQn7uD1aG7Xz6ErKrxy
+         2fPnnQZVHAS6hTNgqCXBwtVIQW2TZ7YlfxjQvLeuIn6xAyind4ZIrh7Z6KU/Gh8JECv6
+         vqjpkfV9IjZ9y0uKxq4tvL6YFKofrlbdB5pfdMLk48d/W1gwtxSacexXTPLG0ZDdIomJ
+         RuJhePL/Fd/mX8gjzjDdV+ZeBKY+JXSXi8uH67e3mW+vx+WLGysWFlZJpETFAgwfUzuJ
+         3s9W6Cz7ufbkn/6/OYUQxQ9NnxJDQs0GL6yzW/11CXrME36NCFesd/wSS2EZt6LVKaAD
+         KSVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710758445; x=1711363245;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xNzf7P8nz60f5DqiZ1A/ORzVISDkI6sI6tCR2mQw6JE=;
+        b=erLl+97WzXODhQ5cllyQVmD61uxMIZe1DKguljgh7f/9kGEWthb97gOL4q1DnqUKH2
+         L7McaMl/Vb74p+LFw/AfIciLU0aEcLcMOWGNuZF5zNP2F1IAtS2B99ffgPYMEMys5/Af
+         DmpJOocRBFqVzrDXgJfKqIB3qLSHVMVt2QwOq4fdaem46WWMfm2Ay+pGYGMPDNilAvjU
+         tMlnWBTQJfov/Bmu+81eFJTFFQaYanZC93qH2E+a437i7DTfbLsUpzbgXvXU4yVCulAj
+         GFTyUFse4u+tXxeLh8dJ8liMAvpTWuGyo0bWuvifDl0ERg92SJKeOATZKixBF+B+rudB
+         632g==
+X-Forwarded-Encrypted: i=1; AJvYcCU7v2mZtg3Ll3QlS9YlU3z3oEBGL+hxBnSiT0OwwkSrOzUI4qwHSnxfwQd6o4sjMLW0g9Wx9ZnXcTWesfDr0vTIcIa9IIEW/Lgf
+X-Gm-Message-State: AOJu0Yzi/ZWHNJxsMqDDQ7Ol9vlJN1n1NVuUWBtxJvw/NM3irD+ifJKW
+	Zkmw5krCIsMPJ+vj6RBm7014JANJ290sacArgZk67oldyedakJeRoSlDlQBFUsg=
+X-Google-Smtp-Source: AGHT+IF2NPmkDgNrJwjlDs0dlEQjbzK0dB/C1p7NsE17fQtvvBPtrHxeI38T1w1hQ953d1PS97HQkQ==
+X-Received: by 2002:a05:600c:4707:b0:414:ca1:6531 with SMTP id v7-20020a05600c470700b004140ca16531mr3050478wmo.41.1710758445095;
+        Mon, 18 Mar 2024 03:40:45 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:e4d5:78c0:18b:ad85])
+        by smtp.gmail.com with ESMTPSA id f19-20020a05600c155300b00414105c4cd9sm2909256wmg.21.2024.03.18.03.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Mar 2024 03:40:44 -0700 (PDT)
+References: <20240314232201.2102178-1-jan.dakinevich@salutedevices.com>
+ <20240314232201.2102178-2-jan.dakinevich@salutedevices.com>
+ <1j8r2jj24k.fsf@starbuckisacylon.baylibre.com>
+ <cbfd9c66-cca5-49f5-9468-43710c48518e@salutedevices.com>
+User-agent: mu4e 1.10.8; emacs 29.2
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>, Neil Armstrong
+ <neil.armstrong@linaro.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Kevin
+ Hilman <khilman@baylibre.com>, Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
+ linux-sound@vger.kernel.org, linux-gpio@vger.kernel.org,
+ kernel@salutedevices.com
+Subject: Re: [PATCH 01/25] clk: meson: a1: restrict an amount of 'hifi_pll'
+ params
+Date: Mon, 18 Mar 2024 11:17:14 +0100
+In-reply-to: <cbfd9c66-cca5-49f5-9468-43710c48518e@salutedevices.com>
+Message-ID: <1jedc7hlg4.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DU0PR04MB941725052D5E3EF78F67A1C5882D2@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain
 
-On 24-03-18, Peng Fan wrote:
-> Hi Marco,
-> 
-> > Subject: Re: [PATCH v4 0/6] Add support i.MX95 BLK CTL module clock
-> > features
-> > 
-> > Hi Peng,
-> > 
-> > thank for the patchset.
-> > 
-> > On 24-03-14, Peng Fan (OSS) wrote:
-> > > i.MX95's several MIXes has BLK CTL module which could be used for clk
-> > > settings, QoS settings, Misc settings for a MIX. This patchset is to
-> > > add the clk feature support, including dt-bindings
-> > 
-> > I have to ask since there is almost no public documentation available yet. The
-> > i.MX95 does have an system-controller for managing pinmux settings and
-> > power-domains, right? 
-> 
-> Yes. 
-> 
-> If this is the case, why not making use of it via the
-> > standard scmi_pm_domain.c driver?
-> 
-> The SCMI firmware not handle the BLK CTL stuff, but blk ctl stuff is
-> a mix of clk, qos, module specific things. It is not good for SCMI firmare
-> to handle it.
 
-Currently most of the blk-ctrl users do use the blk-ctrl as power-domain
-consumer, except for the isi and the audio part. So as I said above the
-scmi_pm_domain.c should be able to supply this. The audio blk-ctrl could
-be abstracted via the clk-scmi.c driver. The ISI is another topic.
+On Sun 17 Mar 2024 at 17:17, Jan Dakinevich <jan.dakinevich@salutedevices.com> wrote:
 
-What you're are going to do here is to put pinctrl etc into SCMI
-firmware and power-control into Linux, which sound to me like an 50/50
-approach and IMHO is rather sub-optimal. To quote your online available
-fact sheet:
+> On 3/15/24 11:58, Jerome Brunet wrote:
+>> 
+>> On Fri 15 Mar 2024 at 02:21, Jan Dakinevich <jan.dakinevich@salutedevices.com> wrote:
+>> 
+>>> Existing values were insufficient to produce accurate clock for audio
+>>> devices. New values are safe and most suitable to produce 48000Hz sample
+>>> rate.
+>> 
+>> The hifi pll is not about 48k only. I see no reason to restrict the PLL
+>> to a single setting.
+>> > You've provided no justification why the PLL driver can't reach the same
+>> setting for 48k. The setting below is just the crude part. the fine
+>> tuning is done done with the frac parameter so I doubt this provides a
+>> more accurate rate.
+>> 
+>
+> You are right, it is not about 48k only. However, there are two issues.
+>
+> First, indeed, I could just extend the range of multipliers to 1..255.
 
-8<----------------------------------------------------------
-ENERGY FLEX ARCHITECTURE
+Why 1..255 ? This is not what I'm pointing out
 
-The i,MX 95 family is designed to be configurable and
-scalable, with multiple heterogenous processing domains.
-This includes an application domain with up to 6 Arm
-Cortex A55 cores, a high-performance real-time domain
-with Arm Cortex M7, and low-power/safety domain with
-Arm Cortex M33, each able to access interfaces including
-CAN-FD, 10GbE networking, PCIe Gen 3 x1 interfaces,
-and accelerators such as V2X, ISP, and VPU.
-8<----------------------------------------------------------
+According to the datasheet - the range is 32 - 64, as currently
+set in the driver.
 
-8<----------------------------------------------------------
-HIGH-PERFORMANCE COMPUTE
-The i.MX 95 family capabilities include a multi-core
-application domain with up to six Arm Cortex®-A55 cores,
-as well as two independent real-time domains for
-safety/low-power, and high-performance real-time use,
-consisting of high-performance Arm Cortex-M7 and
-Arm Cortex-M33 CPUs, combining low-power, real-time,
-and high-performance processing. The i.MX 95 family is
-designed to enable ISO 26262 ASIL-B and SIL-2 IEC 61508
-compliant platforms, with the safety domain serving as
-a critical capability for many automotive and industrial
-applications.
-...
-8<----------------------------------------------------------
+The change you have provided request a multipler of 128/5 = 25,6
+If you put assigned-rate = 614400000 in DT, I see no reason can find the
+same solution on its own.
 
-To me this sound like we can turn of the power/clock of an hardware
-block which was assigned to a core running SIL-2 certified software from
-an non-critical core running Linux if we follow that approach. Also the
-SIL-2 software requires the non-critical software to turn on the power
-of these hardware blocks. Is this correct?
+> But I am unsure if hifi_pll is able to handle whole range of
+> mulptipliers. The value 128 is taken from Amlogic's branch, and I am
+> pretty sure that it works.
 
-Regards,
-  Marco
+>
+> Second, unfortunately frac parameter currently doesn't work. When frac
+> is used enabling of hifi_pll fails in meson_clk_pll_wait_lock(). I see
+> it when try to use 44100Hz and multipliers' range is set to 1..255. So,
+> support of other rates than 48k requires extra effort.
 
-> Regards,
-> Peng.
-> 
-> > 
-> > Regards,
-> >   Marco
-> > 
-> > 
-> > 
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > > Changes in v4:
-> > > - Separate binding doc for each modules, I still keep the syscon as
-> > > node name, because the module is not just for clock
-> > > - Pass dt-schema check
-> > > - Update node compatibles
-> > > - Link to v3:
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore
-> > > .kernel.org%2Fr%2F20240228-imx95-blk-ctl-v3-0-
-> > 40ceba01a211%40nxp.com&d
-> > >
-> > ata=05%7C02%7Cpeng.fan%40nxp.com%7Caad977d7e4f94c750de408dc469
-> > b3952%7C
-> > >
-> > 686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63846287969085566
-> > 1%7CUnknow
-> > >
-> > n%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1ha
-> > WwiLC
-> > >
-> > JXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=M%2B3lDY9BKvW0nHv4mtvi82RA
-> > 9IvYyz72TCbL
-> > > UpiYcG0%3D&reserved=0
-> > >
-> > > Changes in v3:
-> > > - Correct example node compatible string
-> > > - Pass "make ARCH=arm64 DT_CHECKER_FLAGS=-m -j32 dt_binding_check"
-> > > - Link to v2:
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore
-> > > .kernel.org%2Fr%2F20240228-imx95-blk-ctl-v2-0-
-> > ffb7eefb6dcd%40nxp.com&d
-> > >
-> > ata=05%7C02%7Cpeng.fan%40nxp.com%7Caad977d7e4f94c750de408dc469
-> > b3952%7C
-> > >
-> > 686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63846287969086560
-> > 2%7CUnknow
-> > >
-> > n%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1ha
-> > WwiLC
-> > >
-> > JXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=4leg49tKhwUMzvD5wlnvgVc7is%2
-> > FGMNvpYr6A
-> > > %2FAf3OU4%3D&reserved=0
-> > >
-> > > Changes in v2:
-> > > - Correct example node compatible string
-> > > - Link to v1:
-> > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore
-> > > .kernel.org%2Fr%2F20240228-imx95-blk-ctl-v1-0-
-> > 9b5ae3c14d83%40nxp.com&d
-> > >
-> > ata=05%7C02%7Cpeng.fan%40nxp.com%7Caad977d7e4f94c750de408dc469
-> > b3952%7C
-> > >
-> > 686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63846287969087217
-> > 2%7CUnknow
-> > >
-> > n%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1ha
-> > WwiLC
-> > >
-> > JXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=UuD5MVPFgBqwftuXCIXB7SeGyu0
-> > NWPbwY%2Bvy
-> > > ChFLyVA%3D&reserved=0
-> > >
-> > > ---
-> > > Peng Fan (6):
-> > >       dt-bindindgs: clock: nxp: support i.MX95 VPU CSR module
-> > >       dt-bindindgs: clock: nxp: support i.MX95 Camera CSR module
-> > >       dt-bindindgs: clock: nxp: support i.MX95 Display Master CSR module
-> > >       dt-bindindgs: clock: nxp: support i.MX95 LVDS CSR module
-> > >       dt-bindindgs: clock: nxp: support i.MX95 Display CSR module
-> > >       clk: imx: add i.MX95 BLK CTL clk driver
-> > >
-> > >  .../bindings/clock/nxp,imx95-camera-csr.yaml       |  50 +++
-> > >  .../bindings/clock/nxp,imx95-display-csr.yaml      |  50 +++
-> > >  .../clock/nxp,imx95-display-master-csr.yaml        |  62 +++
-> > >  .../bindings/clock/nxp,imx95-lvds-csr.yaml         |  50 +++
-> > >  .../bindings/clock/nxp,imx95-vpu-csr.yaml          |  50 +++
-> > >  drivers/clk/imx/Kconfig                            |   7 +
-> > >  drivers/clk/imx/Makefile                           |   1 +
-> > >  drivers/clk/imx/clk-imx95-blk-ctl.c                | 438 +++++++++++++++++++++
-> > >  include/dt-bindings/clock/nxp,imx95-clock.h        |  32 ++
-> > >  9 files changed, 740 insertions(+)
-> > > ---
-> > > base-commit: c9c32620af65fee2b1ac8390fe1349b33f9d0888
-> > > change-id: 20240228-imx95-blk-ctl-9ef8c1fc4c22
-> > >
-> > > Best regards,
-> > > --
-> > > Peng Fan <peng.fan@nxp.com>
-> > >
-> > >
-> > >
-> 
+Then your change is even more problematic because it certainly does not
+disable frac ... which you say is broken.
+
+That parameter should be removed with a proper comment explaining why
+you are disabling it. That type a limitation / known issue should be
+mentionned in your change.
+
+>
+>>>
+>>> Signed-off-by: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+>>> ---
+>>>  drivers/clk/meson/a1-pll.c | 8 ++++----
+>>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
+>>> index 4325e8a6a3ef..00e06d03445b 100644
+>>> --- a/drivers/clk/meson/a1-pll.c
+>>> +++ b/drivers/clk/meson/a1-pll.c
+>>> @@ -74,9 +74,9 @@ static struct clk_regmap fixed_pll = {
+>>>  	},
+>>>  };
+>>>  
+>>> -static const struct pll_mult_range hifi_pll_mult_range = {
+>>> -	.min = 32,
+>>> -	.max = 64,
+>>> +static const struct pll_params_table hifi_pll_params_table[] = {
+>>> +	PLL_PARAMS(128, 5),
+>>> +	{ },
+>>>  };
+>>>  
+>>>  static const struct reg_sequence hifi_init_regs[] = {
+>>> @@ -124,7 +124,7 @@ static struct clk_regmap hifi_pll = {
+>>>  			.shift   = 6,
+>>>  			.width   = 1,
+>>>  		},
+>>> -		.range = &hifi_pll_mult_range,
+>>> +		.table = hifi_pll_params_table,
+>>>  		.init_regs = hifi_init_regs,
+>>>  		.init_count = ARRAY_SIZE(hifi_init_regs),
+>>>  	},
+>> 
+>> 
+
+
+-- 
+Jerome
 
