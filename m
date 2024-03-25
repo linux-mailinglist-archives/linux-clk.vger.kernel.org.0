@@ -1,148 +1,261 @@
-Return-Path: <linux-clk+bounces-4950-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4954-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDF0488A4ED
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 15:43:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B457C88A514
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 15:47:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AD0F1C3C304
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 14:43:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7E9F1C3283C
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 14:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30FF412F383;
-	Mon, 25 Mar 2024 11:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111421514DF;
+	Mon, 25 Mar 2024 11:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xGpnpF/U"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jFk5ahg1"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9565919D1BD
-	for <linux-clk@vger.kernel.org>; Mon, 25 Mar 2024 10:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDCA14291C
+	for <linux-clk@vger.kernel.org>; Mon, 25 Mar 2024 11:09:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711363971; cv=none; b=Gf9vqH3x29OGr9StYX1fcQPtqJbPL1VF5pdowfZHr6Sfwgr+pyedwn1bAsT2fSIh6L/ofzP+Txns0x4kofOY1V8eRozrEgxwT0DG2uIyysfvk9xYKb9VfUC00wF6FeneOD5xQ7B9YjlgpUmYseafEYbt2E7FbpZi0VgFcD1PR4A=
+	t=1711364997; cv=none; b=kxg801/Pftq6NUYJhNVTU78FhIAeMqsfeUQuxD6D5KopXEh6XuQftPtGMCQ19kiRzeQoawKmkcCnVd49QX6zJBui4rR7f2HiiX7eOiepe2sFqENl2wGSBnl1ncmnO6kAcH9UezHJGhyEwxIchPoohH7sqiPRc4o7HoT853wCGOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711363971; c=relaxed/simple;
-	bh=krCHL+qxAQ4SQ2psaIH85lNezKIzeTKZh1ZNAsaTRY4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ikRr+weryIjceATBoL58QSgbZyYND38tajpFCBqjesh8l2EXDtkSBPfviFZ1/GqgbGKsraqyo/apR/pBEI7cpck6K3Ej/g2KpltwkT8dSdgq14tPNC23kqVMqHn6sHRXgwyDD5hUB/VpKQEWp7sRmEkcUEI1ThNZw7f24aAKuAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xGpnpF/U; arc=none smtp.client-ip=209.85.208.181
+	s=arc-20240116; t=1711364997; c=relaxed/simple;
+	bh=KBXorlioJW7tcwKv3p+L3Oz6+Zcw+uy98uixMdmu0fY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AlEDa7GZodNoGk7Em06d6eVODigtRVkSgqAjG/saYi2d3TEJKBe85+SBUjaWRr41RkxKejPodcZnpCes97P6N196npDk4k56SrdybQ8RrhZUY0Rx/Paa3B9H05fQsawlqzfdkUzTtQWJUhO9EeS9GRG8O6EarJzmuPST++YMtz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jFk5ahg1; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d485886545so73286811fa.2
-        for <linux-clk@vger.kernel.org>; Mon, 25 Mar 2024 03:52:48 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a4a34516955so106668066b.0
+        for <linux-clk@vger.kernel.org>; Mon, 25 Mar 2024 04:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711363967; x=1711968767; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/45gkU1OW/Fa6jqiOKHWiKJTgLo8h9uP7u3dIPIa2Y=;
-        b=xGpnpF/UIQYWQY/gDMIz6KBG+snbPIYjkMDxZrK3B8rFRKledvnifIcno/7ZY2naNc
-         oNTvJcFyuU22bbKFpTbAat4bOnE3EUWH1CvVAWs+cxakG1yod4lTwpnNx6yFfBmT7KLP
-         APQGNjGQdYCdqQrBjTDYAqB3ZB2P+ix5fobRRWoyVCXVOuzzateS7Ep+dPIuxfXdcVBu
-         6mmASZF8vdhe1aQa8QudENDJUtbZGIKaRS3axCItweI9RxlYee7HIlPSzx3Njk7nK5zl
-         PX87ihlyNetTCK5K2Y6ZHTX57Ka6plQR8Gg9dJwd7eS+qXhOkseaWp5ClRTxdbVftJcr
-         bpvQ==
+        d=linaro.org; s=google; t=1711364993; x=1711969793; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QN+HLjErIB7ZWFmsBfwwzGZ1Ru0jHXqoMDEbQQnTksc=;
+        b=jFk5ahg1chGk5spey28Zy8KiEFxla/XItr6HqV0IvM0SBMBFabLMzA3nMpm5IGeoNy
+         AR2VHnRZndvp7yEUjkbWOcXb2xNA3LwJPeRNvR+qGx2IQ/gl4TQIRfLcXDj7+mkx6Hpn
+         MZ1+zFXL3xxL9PgeMXr8tI7yIBT7pxsPEpBPfOu+YUbC4Si/Lh+65bM8xji+Aia8GqH3
+         BX1FxMPHaVkAns8P6Ao2QkDvcWabNSrIzh95OBYbgmP8/men420Z9fTqUTIxYURIp4KX
+         SpYfFB7715oWOCInM2JAIkccdouAv2GbJLpXlvYd2qq8cfjTyui717R1ZsOSsEmc1mt1
+         E0/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711363967; x=1711968767;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B/45gkU1OW/Fa6jqiOKHWiKJTgLo8h9uP7u3dIPIa2Y=;
-        b=D4WVBjd0jXGLz2BszRd3z+4BGSkYzkscJYr9lqbtYQlJdnJHfx+MjGveIQ/ogxe3Wo
-         FobSMaCzkFLXsd6SiXySV8mh0aYD5y3dOxi2yMKIa0/ZlLYSiN/4XxRoZVguLARWczlH
-         QrKl4kKZseSFL3ch7anNkFFqP4zKFAvv1ZOUnbh2v5lHpoI+fMjGVbWN12YDkiPhMLo9
-         hknJ/nCFwOuSiji/WpkY9gj1LYzkFNViMNd+y6o4+dW23F6Qn5IiLuOupe3wVjxI8Bk+
-         D8QBZ2DR5dc+G18ST7MMSDAalaz90AyJsiNPHpgmRBlm9LRobu1doaw1BBn5ZV36u2YN
-         dYOg==
-X-Forwarded-Encrypted: i=1; AJvYcCWrN4LbGfWgh0M9Butu7Cp0DkQTyjYvpm/2k7UNQnedDMXwTV4orLKku+zqhoI1xQXZuqAea87BHow+aaAoSn3xPXZ8qLyclMRd
-X-Gm-Message-State: AOJu0YwgBrQtH1YQfi4yK0t1u1LbJ0weU/a21mk+n28MHECvSuJdyluW
-	8FwzzWs2gU3pAf77qyB/VDk8U9Kb8NnVcAsLjGcEL0rHNlbNKl/S/qjQoPf0tPs=
-X-Google-Smtp-Source: AGHT+IEclAfbiEIquW9pL3ASZRMHbyWd/lIOzT5bu64XepiQ3fVd79XZUHfg0x/tT73njuoHcmQwYA==
-X-Received: by 2002:a05:6512:1590:b0:515:a9d5:aab6 with SMTP id bp16-20020a056512159000b00515a9d5aab6mr3848775lfb.18.1711363966528;
-        Mon, 25 Mar 2024 03:52:46 -0700 (PDT)
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id kj9-20020a170907764900b00a4636d9d28dsm2903246ejc.69.2024.03.25.03.52.45
+        d=1e100.net; s=20230601; t=1711364993; x=1711969793;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QN+HLjErIB7ZWFmsBfwwzGZ1Ru0jHXqoMDEbQQnTksc=;
+        b=I3LQQppeSV2GP/y3bocrG29w8aEcsXIOuE1ysUH4Ljs96P071camDyX3Rabs8MWGvf
+         5K/kLXuIsDB0GDOFyPC4Nu/bvKLCN9qjvoDQLnbh6uDH8zoazh9OBaCs13IlsdGyiICx
+         yKQXEFG5Fm4GlW1cOmqmu+8Mk3Rz20yCSenlC7XsjcTgizqMNRZIqR6B3MuQlAJ8ZAQj
+         K2fw7S/d1LF/OGsc4IxND1PHI4AfW4+WwWNhuRS2yloLVCOglaqFZofpPAHM1x0UtR4/
+         IbkhFeEi13cx9hdilrl4CyjiVokpA3ecgNWyoLU6SruSdAjqKz3NEnMiDke2yr6sBrEC
+         ZFNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUErk8MEpY+zrUQtllJbawUTTJfw9TS2ChgwM5HPzT3/WrVyXn2VqDTA/0XoJ2bJtYN8on9gP7Kv7tpoMiZ/VcIgdB6+hTAjXfv
+X-Gm-Message-State: AOJu0Yyb0COocxJiHv569Gdl9HBW24X+jijyAKMF1kukMZE5J7h4UjWM
+	Whdeqr3bsfeswi1y86WBCPwmc4dDll2Xw0G5wXs9l5JSydmCjBORmXz7DFPgw34=
+X-Google-Smtp-Source: AGHT+IFaR7qqVt/MdAABUA3kVVh+oxwB1NqQMB8RLAx1YVR9BjNNzq7Usn4wKSFbZJXfMpwNi74HwA==
+X-Received: by 2002:a17:906:1ec9:b0:a46:b764:fc81 with SMTP id m9-20020a1709061ec900b00a46b764fc81mr4454449ejj.44.1711364992697;
+        Mon, 25 Mar 2024 04:09:52 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id bw26-20020a170906c1da00b00a4650ec48d0sm2972367ejb.140.2024.03.25.04.09.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Mar 2024 03:52:45 -0700 (PDT)
-Date: Mon, 25 Mar 2024 13:52:42 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Yangyu Chen <cyy@cyyself.name>
-Cc: linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-gpio@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 05/11] riscv: Kconfig.socs: Split ARCH_CANAAN and
- SOC_CANAAN_K210
-Message-ID: <e255a964-27bf-4eb9-8e9a-4f60d1ccd12b@moroto.mountain>
-References: <tencent_F76EB8D731C521C18D5D7C4F8229DAA58E08@qq.com>
- <tencent_F208A26B5338C6E14AC6648730368AF0FD0A@qq.com>
+        Mon, 25 Mar 2024 04:09:52 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v11 0/7] drm/meson: add support for MIPI DSI Display
+Date: Mon, 25 Mar 2024 12:09:46 +0100
+Message-Id: <20240325-amlogic-v6-4-upstream-dsi-ccf-vim3-v11-0-04f55de44604@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_F208A26B5338C6E14AC6648730368AF0FD0A@qq.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHpbAWYC/5XQu27DMAwF0F8JNFeFRL079T+KDrJEJwIcO5ASo
+ 0Xgfy8ToC94cUbe4VySV9awFmzsZXdlFefSyjTSIOXTjqVDHPfIS6aAgQAljAQej8O0L4nPlmt
+ +ObVzxXjkuRWeUs/nclS882hAOpS9joygLjbkXY1jOhA1XoaBwlPFvnzcq9/eaT6Udp7q532TW
+ d/ShzpnzQUHEyBBwAhWvQ5ljHV6nuqe3fzZPG4aMo3FzkWdDV21Mu3jpiWzzxBT8NpoByvT/Zp
+ eqE2mI9NZABn6ZDrwK9P/mFKKsMn0ZHqJOiLmKMP6n+GPCXqTGcgMBuilWaqAdmVK8Y1qAcJsQ
+ qUgNSdhhVPZKCX+qcuyfAE0XgMx5QIAAA==
+To: Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ Nicolas Belin <nbelin@baylibre.com>, 
+ Jagan Teki <jagan@amarulasolutions.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ "Lukas F. Hartmann" <lukas@mntre.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6402;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=KBXorlioJW7tcwKv3p+L3Oz6+Zcw+uy98uixMdmu0fY=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmAVt722X5dHIQQC4applU032j04Zw7+XorMF3Qbg4
+ lVZY1V+JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZgFbewAKCRB33NvayMhJ0amhEA
+ CHY5l5iAzw6SYsHXwnmS/dMpkXI7szeeOZMUTduZgTEp3gRL8+8/i8WCx1GgpmUYunLuvRSwM5RVPh
+ ZmDM1P3ymObD7aglnofB4T9caW92mS+0vH6c8eEwWwG42h6b37HMnZHHjGi43tpiEvLr/6/2cdrm89
+ /qGlUt4wi/GWBJFu6hPBsjvJD+RpKskk1ZwLCAk7sK/m5on1If5Czjz3+IJ3F2bSyKoiCOjiO7hpXc
+ 69vvP+ZheT8IdUiKtpb3mcyGQeo3ksEFoPgYyDfFt3qlv8W5Dw3iHEV4ppTVjjTsxwSwXTmsnjcrZu
+ mBAWk+9+L98tfAuVYti0FAzMI0ZwuRrNn9NMxdEVSDkDnYkCr3e4DjLCTgORiz3/us3uwetR1LDU+q
+ SUionthr1urYCdnjZolaJOJqnqx1JZA1NO74h4k7Sb9WgF4AOkO+vErn3+OOswdm3f3sglXz2/tXMy
+ uYc6HyFtDaXoXtiQAeMP4rQjuVR3sl9DmPKE9Kc3LMQ/QfxNpqBQQ9As5jbGAB910Y3m3bY6h1PJkP
+ 1ywySBeiY0FWU9UFOr+voV/fQsEoU61JRiX1zoii09N5PfmgCRklKYQs8xztKKC+ZVz+esiwrMpVUA
+ 6/PxHtCbgvMNvgVspqhsqn5nenxdh1S7O35NRcnt74SRLcw7l9Bbh7PAyJYg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-On Sat, Mar 23, 2024 at 08:12:17PM +0800, Yangyu Chen wrote:
-> Since SOC_FOO should be deprecated from patch [1], and cleanup for other
-> SoCs is already on the mailing list [2,3,4], we remove the use of
-> SOC_CANAAN and use ARCH_CANAAN for SoCs vendored by Canaan instead from
-> now on. And allows ARCH_CANAAN to be selected for other Canaan SoCs.
-> 
-> Then, since we have Canaan Kendryte K230 with MMU now, the use of
-> SOC_CANAAN is no longer only referred to K210. Thus, we introduce a new
-> symbol SOC_CANAAN_K210 for any conditional code or driver selection
-> specific to the K210, so users will not try to build some K210-specific
-> things when MMU is enabled and see it fails to boot on K210.
-> 
-> [1] https://lore.kernel.org/linux-riscv/20221121221414.109965-1-conor@kernel.org/
-> [2] https://lore.kernel.org/linux-riscv/20240305-praying-clad-c4fbcaa7ed0a@spud/
-> [3] https://lore.kernel.org/linux-riscv/20240305-fled-undrilled-41dc0c46bb29@spud/
-> [4] https://lore.kernel.org/linux-riscv/20240305-stress-earflap-d7ddb8655a4d@spud/
-> 
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> ---
->  arch/riscv/Kconfig.socs                        | 8 +++++---
->  arch/riscv/Makefile                            | 2 +-
->  arch/riscv/configs/nommu_k210_defconfig        | 3 ++-
->  arch/riscv/configs/nommu_k210_sdcard_defconfig | 3 ++-
->  4 files changed, 10 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> index 623de5f8a208..5710aee456ac 100644
-> --- a/arch/riscv/Kconfig.socs
-> +++ b/arch/riscv/Kconfig.socs
-> @@ -72,11 +72,13 @@ config SOC_VIRT
->  	  This enables support for QEMU Virt Machine.
->  
->  config ARCH_CANAAN
-> -	def_bool SOC_CANAAN
-> +	bool "Canaan Kendryte SoC"
-> +	help
-> +	  This enables support for Canaan Kendryte SoC platform hardware.
->  
-> -config SOC_CANAAN
-> +config SOC_CANAAN_K210
+The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a),
+with a custom glue managing the IP resets, clock and data input similar to the DW-HDMI
+glue on the same Amlogic SoCs.
 
-This breaks git bisect, right?  There are references to SOC_CANAAN that
-are get updated later in the patch series.  You can't delete SOC_CANAAN
-and leave the other references dangling.
+This is a follow-up of v5  now the DRM patches are applied, the clk & DT changes
+remains for a full DSI support on G12A & SM1 platforms.
 
-regards,
-dan carpenter
+The DW-MIPI-DSI transceiver + D-PHY are clocked by the GP0 PLL, and the ENCL encoder + VIU
+pixel reader by the VCLK2 clock using the HDMI PLL.
+
+The DW-MIPI-DSI transceiver gets this pixel stream as input clocked with the VCLK2 clock.
+
+An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
+DW-MIPI-DSI transceiver.
+
+The clock setup has been redesigned to use CCF, a common PLL (GP0) and the VCLK2 clock
+path for DSI in preparation of full CCF support and possibly dual display with HDMI.
+
+The change from v5 is that now we use a "VCLK" driver instead of notifier and rely
+on CLK_SET_RATE_GATE to ensure the VCLK gate operation are called.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v11:
+- Rebased on v6.9-rc1
+- Fixed overlay handling/creation
+- Link to v10: https://lore.kernel.org/r/20240205-amlogic-v6-4-upstream-dsi-ccf-vim3-v10-0-dc06073d5330@linaro.org
+
+Changes in v10:
+- Rename regmap_vclk to meson_clk and add _gate for the gate
+- Move COMMON_CLK_MESON_VCLK to following patch
+- Remove CLK_SET_RATE_PARENT from g12a_vclk2_sel, keep it only on mipi_dsi_pxclk_sel
+- Add more info on commit message to specify how clock setup is designed
+- Remove forgotten CLK_IGNORE_UNUSED on g12a_vclk2_input
+- Remove useless CLK_SET_RATE_PARENT on g12a_vclk2_div to stop propagatting rate _after_ vclk2_div
+- Remove invalid CLK_SET_RATE_GATE on g12a_vclk2 since it's not a divider...
+- Drop already applied patches
+- move Khadas TS050 changes as an overlay
+- Link to v9: https://lore.kernel.org/r/20231124-amlogic-v6-4-upstream-dsi-ccf-vim3-v9-0-95256ed139e6@linaro.org
+
+Changes in v9:
+- Colledte reviewed-bys
+- Fixed patches 2 & 4, commit messages and bindings format
+- Link to v8: https://lore.kernel.org/r/20231109-amlogic-v6-4-upstream-dsi-ccf-vim3-v8-0-81e4aeeda193@linaro.org
+
+Changes in v8:
+- Switch vclk clk driver to parm as requested by Jerome
+- Added bindings fixes to amlogic,meson-axg-mipi-pcie-analog & amlogic,g12a-mipi-dphy-analog
+- Fixed DT errors in vim3 example and MNT Reform DT
+- Rebased on next-20231107, successfully tested on VIM3L
+- Link to v7: https://lore.kernel.org/r/20230803-amlogic-v6-4-upstream-dsi-ccf-vim3-v7-0-762219fc5b28@linaro.org
+
+Changes in v7:
+- Added review tags
+- Fixed patch 5 thanks to George
+- Link to v6: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-0-fd2ac9845472@linaro.org
+
+Changes in v6:
+- dropped applied DRM patches
+- dropped clk private prefix patches
+- rebased on top of 20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org
+- re-ordered/cleaned ENCL patches to match clkid public migration
+- Added new "vclk" driver
+- uses vclk driver instead of notifier
+- cleaned VCLK2 clk flags
+- add px_clk gating from DSI driver
+- Link to v5: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org
+
+Changes in v5:
+- Aded PRIV all the G12 internal clk IDS to simplify public exposing
+- Fixed the DSI bindings
+- Fixed the DSI HSYNC/VSYNC polarity handling
+- Fixed the DSI clock setup
+- Fixed the DSI phy timings
+- Dropped components for DSI, only keeping it for HDMI
+- Added MNT Reform 2 CM4 DT
+- Dropped already applied PHY fix
+- Link to v4: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org
+
+Changes from v3 at [3]:
+- switched all clk setup via CCF
+- using single PLL for DSI controller & ENCL encoder
+- added ENCL clocks to CCF
+- make the VCLK2 clocks configuration by CCF
+- fixed probe/bind of DSI controller to work with panels & bridges
+- added bit_clk to controller to it can setup the BIT clock aswell
+- added fix for components unbind
+- added fix for analog phy setup value
+- added TS050 timings fix
+- dropped previous clk control patch
+
+Changes from v2 at [2]:
+- Fixed patch 3
+- Added reviews from Jagan
+- Rebased on v5.19-rc1
+
+Changes from v1 at [1]:
+- fixed DSI host bindings
+- add reviewed-by tags for bindings
+- moved magic values to defines thanks to Martin's searches
+- added proper prefixes to defines
+- moved phy_configure to phy_init() dw-mipi-dsi callback
+- moved phy_on to a new phy_power_on() dw-mipi-dsi callback
+- correctly return phy_init/configure errors to callback returns
+
+[1] https://lore.kernel.org/r/20200907081825.1654-1-narmstrong@baylibre.com
+[2] https://lore.kernel.org/r/20220120083357.1541262-1-narmstrong@baylibre.com
+[3] https://lore.kernel.org/r/20220617072723.1742668-1-narmstrong@baylibre.com
+
+---
+Neil Armstrong (7):
+      dt-bindings: arm: amlogic: Document the MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+      clk: meson: add vclk driver
+      clk: meson: g12a: make VCLK2 and ENCL clock path configurable by CCF
+      drm/meson: gate px_clk when setting rate
+      arm64: meson: g12-common: add the MIPI DSI nodes
+      arm64: meson: khadas-vim3l: add TS050 DSI panel overlay
+      arm64: dts: amlogic: meson-g12b-bananapi-cm4: add support for MNT Reform2 with CM4 adaper
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   5 +
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  70 ++++
+ .../meson-g12b-bananapi-cm4-mnt-reform2.dts        | 384 +++++++++++++++++++++
+ .../boot/dts/amlogic/meson-khadas-vim3-ts050.dtso  | 108 ++++++
+ drivers/clk/meson/Kconfig                          |   5 +
+ drivers/clk/meson/Makefile                         |   1 +
+ drivers/clk/meson/g12a.c                           |  72 ++--
+ drivers/clk/meson/vclk.c                           | 141 ++++++++
+ drivers/clk/meson/vclk.h                           |  51 +++
+ drivers/gpu/drm/meson/meson_dw_mipi_dsi.c          |   7 +
+ 11 files changed, 825 insertions(+), 20 deletions(-)
+---
+base-commit: 4cece764965020c22cff7665b18a012006359095
+change-id: 20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-b8e5217e1f4a
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
 
