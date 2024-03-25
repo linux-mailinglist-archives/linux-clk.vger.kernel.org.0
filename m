@@ -1,156 +1,251 @@
-Return-Path: <linux-clk+bounces-4958-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4960-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF6688A50B
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 15:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9769788A868
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 17:09:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97AC8301ED2
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 14:46:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 030B2321B85
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 16:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C987119DF7E;
-	Mon, 25 Mar 2024 11:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B15913A24B;
+	Mon, 25 Mar 2024 13:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UXek09c6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pyPed3Cw"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4289815664F;
-	Mon, 25 Mar 2024 11:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EBD73DABF7;
+	Mon, 25 Mar 2024 13:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711365061; cv=none; b=kN1aGVkHYg5HU2+M9gKRwBEts5oVM4jzI8yR1nFiveAwS6WgGICS790kkk77l6lTK28b3LBnLT+Xw9+p9hZBYOU/LroUvH5Tm6519aLYbLZzXDuSSN4BLbX68NRc/IsUEbtZmqygT+QnWpiDeUQg22+u0vENn0Ls+eJMDW6ueGM=
+	t=1711374934; cv=none; b=VqLs5io53cMC8/mG34zuFcfd4Q8aRReGxemZtiUZatH1NXHU+PsaN4dVpuwBUPTy107St41AfF3m6ELCt02vGYkl+GeB66q5gWaoFp4lTvHOvclatPyzOhj97pWTIivgzHkvN+Ht44FZy8XwaYRkhUkH36GcLipFDYCR+cRJgLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711365061; c=relaxed/simple;
-	bh=nM8sx42xDx95HRJ1wPccausmC0pYy6OVh8wnJGrVyxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8IjNvAJfNhojIqY+o2/dbekQMsRBSoj9h9eCB7RvoAIDP10QrE+yM+ZSnzZGN9oPcWsq2uSpMBBAQliYiVfW3HhUDwpfFZzS6dO1/cTbCDBx/k13fVjmcE+1TiPLTJnv87k4BkCMokKL+UggBkPvIAeFYD7oMJ1T99PIR3UGFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UXek09c6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3897CC433F1;
-	Mon, 25 Mar 2024 11:10:57 +0000 (UTC)
+	s=arc-20240116; t=1711374934; c=relaxed/simple;
+	bh=/CTXyIhEl1GbZCvu7Z5J8qj1bQmG+Iqgauuw0Et0EzU=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=pzmopXYUt3DW3EU5UGl5OAoQZVyJFRLdcr5yf7Xv+UqdGS54BhSi4eaToowbQ7n4r/kHBtURBma8iTtoLItM2wC/M8rQrtxU/2J7V4A/qjX/gvJdj59UIERtT5qyNTz6E2vdU2NMdZ4rnbp831PIJvY+lfpwhO9iHPAbkp985U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pyPed3Cw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DBFC433F1;
+	Mon, 25 Mar 2024 13:55:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711365060;
-	bh=nM8sx42xDx95HRJ1wPccausmC0pYy6OVh8wnJGrVyxw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UXek09c6cW+G+x6iB1Jv6w5GUQmW9OLkvmUdoL+mdCU1yXcp6oJfVVuTBUC3Q/Cyk
-	 NX3khylkoegm4UxLO1a0/ubyu6hdMd3PDa2CfU6mEA6W8YvYR2h2XJjTTef1YDIHYc
-	 mj7rziUUjF9kvF6abIm7GB1Lkb2WOZcIWmrns4EPMTsA3YoWh8H3yKDJzFLRQ+F2fJ
-	 O4/4Vo2/eaChhs1clAYhDWr1XbaTG0p6zqKNeO9LefMbklD84RICylMiSLMkmnU+CI
-	 C9l6dyDXhurJtzLvruf9J7nlugslgxzuiSkKw2UtQdbuwZ6hPXXVhDMvw0RAyfJQ5A
-	 8tKoT0ncUKN/g==
-Date: Mon, 25 Mar 2024 11:10:55 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Yangyu Chen <cyy@cyyself.name>, linux-riscv@lists.infradead.org,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-gpio@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 05/11] riscv: Kconfig.socs: Split ARCH_CANAAN and
- SOC_CANAAN_K210
-Message-ID: <20240325-slept-collie-9cdb65f2a94c@spud>
-References: <tencent_F76EB8D731C521C18D5D7C4F8229DAA58E08@qq.com>
- <tencent_F208A26B5338C6E14AC6648730368AF0FD0A@qq.com>
- <e255a964-27bf-4eb9-8e9a-4f60d1ccd12b@moroto.mountain>
+	s=k20201202; t=1711374933;
+	bh=/CTXyIhEl1GbZCvu7Z5J8qj1bQmG+Iqgauuw0Et0EzU=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=pyPed3Cwcq00V7CeIL0MBIbc5Lv1eYrjR4NUBivKvOwFC7NeNUkepwHxHuaukVoMt
+	 +RBn5tMN05AJPgGJWmJEDnXhuc20ptvvpBF8Md8Gm5Cxg+ozj8rzCZfZVNydzDqbru
+	 xVfg6B6dqXV4r1Dhpl3gFGgmeIwd2llH8dTCttBH19qyVdMSyAUaBdJqR+V6jSNraA
+	 y7Msb3cI5HQJZUJNAk5XLZldQcEEGwN/HGtuwfujlxmI+117cmiLwyoRD/Y1NBWn6q
+	 gbuA7PAA7P3iHgEMaJDYDaBCH5Jea2hpwmnno+uY+Y5NVLBqElGdjEbBmOS7RyOgdX
+	 WDumwRQe0LNlA==
+Date: Mon, 25 Mar 2024 08:55:32 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wGBS4mUdIPIRsN3V"
-Content-Disposition: inline
-In-Reply-To: <e255a964-27bf-4eb9-8e9a-4f60d1ccd12b@moroto.mountain>
+From: Rob Herring <robh@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: David Airlie <airlied@gmail.com>, linux-amlogic@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ dri-devel@lists.freedesktop.org, Conor Dooley <conor+dt@kernel.org>, 
+ Daniel Vetter <daniel@ffwll.ch>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Nicolas Belin <nbelin@baylibre.com>, "Lukas F. Hartmann" <lukas@mntre.com>, 
+ Maxime Ripard <mripard@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Jagan Teki <jagan@amarulasolutions.com>, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20240325-amlogic-v6-4-upstream-dsi-ccf-vim3-v11-0-04f55de44604@linaro.org>
+References: <20240325-amlogic-v6-4-upstream-dsi-ccf-vim3-v11-0-04f55de44604@linaro.org>
+Message-Id: <171137470605.3264802.15535340477361907465.robh@kernel.org>
+Subject: Re: [PATCH v11 0/7] drm/meson: add support for MIPI DSI Display
 
 
---wGBS4mUdIPIRsN3V
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 25 Mar 2024 12:09:46 +0100, Neil Armstrong wrote:
+> The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a),
+> with a custom glue managing the IP resets, clock and data input similar to the DW-HDMI
+> glue on the same Amlogic SoCs.
+> 
+> This is a follow-up of v5  now the DRM patches are applied, the clk & DT changes
+> remains for a full DSI support on G12A & SM1 platforms.
+> 
+> The DW-MIPI-DSI transceiver + D-PHY are clocked by the GP0 PLL, and the ENCL encoder + VIU
+> pixel reader by the VCLK2 clock using the HDMI PLL.
+> 
+> The DW-MIPI-DSI transceiver gets this pixel stream as input clocked with the VCLK2 clock.
+> 
+> An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
+> DW-MIPI-DSI transceiver.
+> 
+> The clock setup has been redesigned to use CCF, a common PLL (GP0) and the VCLK2 clock
+> path for DSI in preparation of full CCF support and possibly dual display with HDMI.
+> 
+> The change from v5 is that now we use a "VCLK" driver instead of notifier and rely
+> on CLK_SET_RATE_GATE to ensure the VCLK gate operation are called.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+> Changes in v11:
+> - Rebased on v6.9-rc1
+> - Fixed overlay handling/creation
+> - Link to v10: https://lore.kernel.org/r/20240205-amlogic-v6-4-upstream-dsi-ccf-vim3-v10-0-dc06073d5330@linaro.org
+> 
+> Changes in v10:
+> - Rename regmap_vclk to meson_clk and add _gate for the gate
+> - Move COMMON_CLK_MESON_VCLK to following patch
+> - Remove CLK_SET_RATE_PARENT from g12a_vclk2_sel, keep it only on mipi_dsi_pxclk_sel
+> - Add more info on commit message to specify how clock setup is designed
+> - Remove forgotten CLK_IGNORE_UNUSED on g12a_vclk2_input
+> - Remove useless CLK_SET_RATE_PARENT on g12a_vclk2_div to stop propagatting rate _after_ vclk2_div
+> - Remove invalid CLK_SET_RATE_GATE on g12a_vclk2 since it's not a divider...
+> - Drop already applied patches
+> - move Khadas TS050 changes as an overlay
+> - Link to v9: https://lore.kernel.org/r/20231124-amlogic-v6-4-upstream-dsi-ccf-vim3-v9-0-95256ed139e6@linaro.org
+> 
+> Changes in v9:
+> - Colledte reviewed-bys
+> - Fixed patches 2 & 4, commit messages and bindings format
+> - Link to v8: https://lore.kernel.org/r/20231109-amlogic-v6-4-upstream-dsi-ccf-vim3-v8-0-81e4aeeda193@linaro.org
+> 
+> Changes in v8:
+> - Switch vclk clk driver to parm as requested by Jerome
+> - Added bindings fixes to amlogic,meson-axg-mipi-pcie-analog & amlogic,g12a-mipi-dphy-analog
+> - Fixed DT errors in vim3 example and MNT Reform DT
+> - Rebased on next-20231107, successfully tested on VIM3L
+> - Link to v7: https://lore.kernel.org/r/20230803-amlogic-v6-4-upstream-dsi-ccf-vim3-v7-0-762219fc5b28@linaro.org
+> 
+> Changes in v7:
+> - Added review tags
+> - Fixed patch 5 thanks to George
+> - Link to v6: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-0-fd2ac9845472@linaro.org
+> 
+> Changes in v6:
+> - dropped applied DRM patches
+> - dropped clk private prefix patches
+> - rebased on top of 20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org
+> - re-ordered/cleaned ENCL patches to match clkid public migration
+> - Added new "vclk" driver
+> - uses vclk driver instead of notifier
+> - cleaned VCLK2 clk flags
+> - add px_clk gating from DSI driver
+> - Link to v5: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org
+> 
+> Changes in v5:
+> - Aded PRIV all the G12 internal clk IDS to simplify public exposing
+> - Fixed the DSI bindings
+> - Fixed the DSI HSYNC/VSYNC polarity handling
+> - Fixed the DSI clock setup
+> - Fixed the DSI phy timings
+> - Dropped components for DSI, only keeping it for HDMI
+> - Added MNT Reform 2 CM4 DT
+> - Dropped already applied PHY fix
+> - Link to v4: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org
+> 
+> Changes from v3 at [3]:
+> - switched all clk setup via CCF
+> - using single PLL for DSI controller & ENCL encoder
+> - added ENCL clocks to CCF
+> - make the VCLK2 clocks configuration by CCF
+> - fixed probe/bind of DSI controller to work with panels & bridges
+> - added bit_clk to controller to it can setup the BIT clock aswell
+> - added fix for components unbind
+> - added fix for analog phy setup value
+> - added TS050 timings fix
+> - dropped previous clk control patch
+> 
+> Changes from v2 at [2]:
+> - Fixed patch 3
+> - Added reviews from Jagan
+> - Rebased on v5.19-rc1
+> 
+> Changes from v1 at [1]:
+> - fixed DSI host bindings
+> - add reviewed-by tags for bindings
+> - moved magic values to defines thanks to Martin's searches
+> - added proper prefixes to defines
+> - moved phy_configure to phy_init() dw-mipi-dsi callback
+> - moved phy_on to a new phy_power_on() dw-mipi-dsi callback
+> - correctly return phy_init/configure errors to callback returns
+> 
+> [1] https://lore.kernel.org/r/20200907081825.1654-1-narmstrong@baylibre.com
+> [2] https://lore.kernel.org/r/20220120083357.1541262-1-narmstrong@baylibre.com
+> [3] https://lore.kernel.org/r/20220617072723.1742668-1-narmstrong@baylibre.com
+> 
+> ---
+> Neil Armstrong (7):
+>       dt-bindings: arm: amlogic: Document the MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+>       clk: meson: add vclk driver
+>       clk: meson: g12a: make VCLK2 and ENCL clock path configurable by CCF
+>       drm/meson: gate px_clk when setting rate
+>       arm64: meson: g12-common: add the MIPI DSI nodes
+>       arm64: meson: khadas-vim3l: add TS050 DSI panel overlay
+>       arm64: dts: amlogic: meson-g12b-bananapi-cm4: add support for MNT Reform2 with CM4 adaper
+> 
+>  Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+>  arch/arm64/boot/dts/amlogic/Makefile               |   5 +
+>  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  70 ++++
+>  .../meson-g12b-bananapi-cm4-mnt-reform2.dts        | 384 +++++++++++++++++++++
+>  .../boot/dts/amlogic/meson-khadas-vim3-ts050.dtso  | 108 ++++++
+>  drivers/clk/meson/Kconfig                          |   5 +
+>  drivers/clk/meson/Makefile                         |   1 +
+>  drivers/clk/meson/g12a.c                           |  72 ++--
+>  drivers/clk/meson/vclk.c                           | 141 ++++++++
+>  drivers/clk/meson/vclk.h                           |  51 +++
+>  drivers/gpu/drm/meson/meson_dw_mipi_dsi.c          |   7 +
+>  11 files changed, 825 insertions(+), 20 deletions(-)
+> ---
+> base-commit: 4cece764965020c22cff7665b18a012006359095
+> change-id: 20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-b8e5217e1f4a
+> 
+> Best regards,
+> --
+> Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> 
+> 
 
-On Mon, Mar 25, 2024 at 01:52:42PM +0300, Dan Carpenter wrote:
-> On Sat, Mar 23, 2024 at 08:12:17PM +0800, Yangyu Chen wrote:
-> > Since SOC_FOO should be deprecated from patch [1], and cleanup for other
-> > SoCs is already on the mailing list [2,3,4], we remove the use of
-> > SOC_CANAAN and use ARCH_CANAAN for SoCs vendored by Canaan instead from
-> > now on. And allows ARCH_CANAAN to be selected for other Canaan SoCs.
-> >=20
-> > Then, since we have Canaan Kendryte K230 with MMU now, the use of
-> > SOC_CANAAN is no longer only referred to K210. Thus, we introduce a new
-> > symbol SOC_CANAAN_K210 for any conditional code or driver selection
-> > specific to the K210, so users will not try to build some K210-specific
-> > things when MMU is enabled and see it fails to boot on K210.
-> >=20
-> > [1] https://lore.kernel.org/linux-riscv/20221121221414.109965-1-conor@k=
-ernel.org/
-> > [2] https://lore.kernel.org/linux-riscv/20240305-praying-clad-c4fbcaa7e=
-d0a@spud/
-> > [3] https://lore.kernel.org/linux-riscv/20240305-fled-undrilled-41dc0c4=
-6bb29@spud/
-> > [4] https://lore.kernel.org/linux-riscv/20240305-stress-earflap-d7ddb86=
-55a4d@spud/
-> >=20
-> > Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> > ---
-> >  arch/riscv/Kconfig.socs                        | 8 +++++---
-> >  arch/riscv/Makefile                            | 2 +-
-> >  arch/riscv/configs/nommu_k210_defconfig        | 3 ++-
-> >  arch/riscv/configs/nommu_k210_sdcard_defconfig | 3 ++-
-> >  4 files changed, 10 insertions(+), 6 deletions(-)
-> >=20
-> > diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-> > index 623de5f8a208..5710aee456ac 100644
-> > --- a/arch/riscv/Kconfig.socs
-> > +++ b/arch/riscv/Kconfig.socs
-> > @@ -72,11 +72,13 @@ config SOC_VIRT
-> >  	  This enables support for QEMU Virt Machine.
-> > =20
-> >  config ARCH_CANAAN
-> > -	def_bool SOC_CANAAN
-> > +	bool "Canaan Kendryte SoC"
-> > +	help
-> > +	  This enables support for Canaan Kendryte SoC platform hardware.
-> > =20
-> > -config SOC_CANAAN
-> > +config SOC_CANAAN_K210
->=20
-> This breaks git bisect, right?  There are references to SOC_CANAAN that
-> are get updated later in the patch series.  You can't delete SOC_CANAAN
-> and leave the other references dangling.
 
-Right. I thought that I had said to resend the patch from v5 and solicit
-acks to take it via the soc tree [1]. Splitting it out like this means you
-have to introduce a symbol that shadows the original one and then switch
-only once all references have been removed. If this series went into 6.10,
-which it should, the switch would be in 6.11. I think the chances of a
-meaningful conflict are low with the treewide swap so it should be safe
-to do.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
 
 
-1 - https://lore.kernel.org/all/20240320-ideology-pasty-d3aea07cc519@spud/
+New warnings running 'make CHECK_DTBS=y amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dtb' for 20240325-amlogic-v6-4-upstream-dsi-ccf-vim3-v11-0-04f55de44604@linaro.org:
 
---wGBS4mUdIPIRsN3V
-Content-Type: application/pgp-signature; name="signature.asc"
+arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dtb: /soc/bus@ff600000/bus@42000/clock-controller@0: failed to match any schema with compatible: ['amlogic,g12a-audio-clkc']
+arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dtb: /soc/bus@ff600000/bus@42000/audio-controller@744: failed to match any schema with compatible: ['amlogic,g12a-tohdmitx']
+arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dtb: sys-ctrl@0: '#address-cells', '#size-cells', 'ranges' do not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/soc/amlogic/amlogic,meson-gx-hhi-sysctrl.yaml#
+arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dtb: sound: Unevaluated properties are not allowed ('assigned-clock-parents', 'assigned-clock-rates', 'assigned-clocks' were unexpected)
+	from schema $id: http://devicetree.org/schemas/sound/amlogic,axg-sound-card.yaml#
+arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-mnt-reform2.dtb: sound: 'anyOf' conditional failed, one must be fixed:
+	'clocks' is a required property
+	'#clock-cells' is a required property
+	from schema $id: http://devicetree.org/schemas/clock/clock.yaml#
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgFbvwAKCRB4tDGHoIJi
-0uSwAP95G4FiQlISuzAR9Fwa0rZx0NdUZQm9zCWUnZVjAvWBpwD/TRvaSY/ZlNhe
-Uuf98Lvqw1twNosFPzpGll8glXobsQ4=
-=Ztlu
------END PGP SIGNATURE-----
 
---wGBS4mUdIPIRsN3V--
+
+
 
