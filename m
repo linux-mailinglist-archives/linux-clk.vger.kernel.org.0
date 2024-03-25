@@ -1,55 +1,55 @@
-Return-Path: <linux-clk+bounces-4990-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-4993-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B6488B018
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 20:36:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33C8488B01C
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 20:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D22B72E7548
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 19:36:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65BB41C3B110
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Mar 2024 19:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53D921BDCF;
-	Mon, 25 Mar 2024 19:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1549C1CD2C;
+	Mon, 25 Mar 2024 19:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="xGRNemES"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OFuHmFYU"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8331B815;
-	Mon, 25 Mar 2024 19:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850BB1C6B6;
+	Mon, 25 Mar 2024 19:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711395375; cv=none; b=IHFEXwYhpX2V0bTpy6vrdzTDP+fQ91n474b0j+IplygfQhMZrY+3avqWQW0XNJzbc04OV0FmN5Vg88X/P/HHiBUrkJ7R83Kv0guWnX3mTq+Z7DDmgBsbC1XgNvBWPO5YEMPZT0JCcXDPdtQt/rIVvqDCAp6d0YvaIZAW5hpHg2k=
+	t=1711395378; cv=none; b=uiFWtBMPwguEdWeY7/tfgN3OI4+sCujvGetCcinu4P1/rhxiOl1IGIY4ZeHTT2kVgupEqxqOA0BNMH/XrVeoW3m5DcOVOEChILbKAMoT61SqoQ2Oet9KkbNeLsD2nEpYPHzU01IN4Bk/nxp8WalUbyuumqnWXz7AUU4ub7pScpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711395375; c=relaxed/simple;
-	bh=nt9v0s2RYGIxt7Tz/WeZjUBZ7veA0ms2cejOmDNes+o=;
+	s=arc-20240116; t=1711395378; c=relaxed/simple;
+	bh=hAH9JfnF/oWPF5azFrsdH6WoJrOjS9HW0tUPNWlngE0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YKXzDclno8ogXoUDiQmh2MeADlWsWcAd3sXZ+smYPHHsssog+z2lo16xF/Lzuki6DuIyS1go14hGmNHxBAbJunM3Oc82nSOHDSJaDog+NvRZSMcnA31PjtZdUoWBi1VpgTtD+w6vvXosBShvhCg6wOFSSZrKC03DBFegsZyCWTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=xGRNemES; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=QY/w31RADosZy/Va40jYk9oqbukjNycpmZmXrXE3u84OHyxXvLcpUQBf+F/s68Az8B9Ebs70bX76i5bDZljbGDn6QORUo2D/o7odfgaSKn4gEZEmwxLDDGG8J2zFbChB2vpN3LcdLLRWooQA7SZu4Yd+csTtYw9V/KBldQ+Fm7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OFuHmFYU; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711395371;
-	bh=nt9v0s2RYGIxt7Tz/WeZjUBZ7veA0ms2cejOmDNes+o=;
+	s=mail; t=1711395372;
+	bh=hAH9JfnF/oWPF5azFrsdH6WoJrOjS9HW0tUPNWlngE0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=xGRNemESxwFY4ZNY9LOmZQM08s6kfcpJihlJqGBsoB5EO0iWXtG85TsTEbMB3pTiL
-	 lQe/rFCsPIQ3RHmNBGP1H64JiwrCfL29Q3x7KnUmys6vNLcMwH+iwUZ6/ruVi5FW2/
-	 FjwBJDYL7BX0B3wX0gJbNA1r5pzjnQ18yzmJIQZlFFxDSt8ayKd3hexczUCzxHYbTQ
-	 0NCiWuQqmWetsQjEnbBpOeoUe26hy57cL2V4KwtcjJEW3DXG2JZDXo+OjYeIhgE10B
-	 N0Ru94oaRCj3MpXypTRsnZuwq1l2Tm1lSHhSQ+DnL++eSIKVDDQ1glwXVkIs8XYahH
-	 mt35gdLzHK04Q==
+	b=OFuHmFYUyBPH2yLqm5XdUgj7yC4FGz3MdTgTwjcmfSV8X9N1IjH4Oxhe9DiAGk8S2
+	 Izxa7O7BDfBgi/ZSMS020vbSEYTuxkX0WaVLPC1JxBvo2++xXNHYVOjmy6UvzvBu0M
+	 ZHchWs8A2sqpgDgfxq1s6C54PyaXavUa5aUwxBj+5SkBcsl/1rDql2azEKFiqpI5zc
+	 QHdAwbRgGGjJ+1LkItpYCrigxbcBze6MhlE3NuKTlh/y0lv8G9p4tgyR9X8OesmIUM
+	 SNYtj+b/3BxU4zp4Vp52GtkYj3jVCHTePSnhiAJpR2CcRHkSxcVbHQOL2A+QHKVwBw
+	 hTBmBKf4CCAwQ==
 Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 894CB37820F1;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E984337820FC;
 	Mon, 25 Mar 2024 19:36:11 +0000 (UTC)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 1664D4800D1; Mon, 25 Mar 2024 20:36:11 +0100 (CET)
+	id 182D94800D2; Mon, 25 Mar 2024 20:36:11 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Elaine Zhang <zhangqing@rock-chips.com>,
 	linux-rockchip@lists.infradead.org,
 	Sebastian Reichel <sebastian.reichel@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH v9 4/7] clk: rockchip: expose rockchip_clk_set_lookup
-Date: Mon, 25 Mar 2024 20:33:35 +0100
-Message-ID: <20240325193609.237182-5-sebastian.reichel@collabora.com>
+Subject: [PATCH v9 5/7] clk: rockchip: fix error for unknown clocks
+Date: Mon, 25 Mar 2024 20:33:36 +0100
+Message-ID: <20240325193609.237182-6-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240325193609.237182-1-sebastian.reichel@collabora.com>
 References: <20240325193609.237182-1-sebastian.reichel@collabora.com>
@@ -83,93 +83,36 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move rockchip_clk_add_lookup to clk.h, so that it can be used
-by sub-devices with their own driver. These might also have to
-do a lookup, so rename the function to rockchip_clk_set_lookup
-and add a matching rockchip_clk_add_lookup.
+There is a clk == NULL check after the switch to check for
+unsupported clk types. Since clk is re-assigned in a loop,
+this check is useless right now for anything but the first
+round. Let's fix this up by assigning clk = NULL in the
+loop before the switch statement.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/clk/rockchip/clk.c | 14 ++++----------
- drivers/clk/rockchip/clk.h | 12 ++++++++++++
- 2 files changed, 16 insertions(+), 10 deletions(-)
+ drivers/clk/rockchip/clk.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
-index 31b7cc243d82..ef2408f10f39 100644
+index ef2408f10f39..e150bc1fc319 100644
 --- a/drivers/clk/rockchip/clk.c
 +++ b/drivers/clk/rockchip/clk.c
-@@ -197,12 +197,6 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
- 	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
- }
+@@ -444,12 +444,13 @@ void rockchip_clk_register_branches(struct rockchip_clk_provider *ctx,
+ 				    struct rockchip_clk_branch *list,
+ 				    unsigned int nr_clk)
+ {
+-	struct clk *clk = NULL;
++	struct clk *clk;
+ 	unsigned int idx;
+ 	unsigned long flags;
  
--static void rockchip_clk_add_lookup(struct rockchip_clk_provider *ctx,
--				    struct clk *clk, unsigned int id)
--{
--	ctx->clk_data.clks[id] = clk;
--}
--
- static struct clk *rockchip_clk_register_frac_branch(
- 		struct rockchip_clk_provider *ctx, const char *name,
- 		const char *const *parent_names, u8 num_parents,
-@@ -292,7 +286,7 @@ static struct clk *rockchip_clk_register_frac_branch(
- 			return mux_clk;
- 		}
+ 	for (idx = 0; idx < nr_clk; idx++, list++) {
+ 		flags = list->flags;
++		clk = NULL;
  
--		rockchip_clk_add_lookup(ctx, mux_clk, child->id);
-+		rockchip_clk_set_lookup(ctx, mux_clk, child->id);
- 
- 		/* notifier on the fraction divider to catch rate changes */
- 		if (frac->mux_frac_idx >= 0) {
-@@ -424,7 +418,7 @@ void rockchip_clk_register_plls(struct rockchip_clk_provider *ctx,
- 			continue;
- 		}
- 
--		rockchip_clk_add_lookup(ctx, clk, list->id);
-+		rockchip_clk_set_lookup(ctx, clk, list->id);
- 	}
- }
- EXPORT_SYMBOL_GPL(rockchip_clk_register_plls);
-@@ -585,7 +579,7 @@ void rockchip_clk_register_branches(struct rockchip_clk_provider *ctx,
- 			continue;
- 		}
- 
--		rockchip_clk_add_lookup(ctx, clk, list->id);
-+		rockchip_clk_set_lookup(ctx, clk, list->id);
- 	}
- }
- EXPORT_SYMBOL_GPL(rockchip_clk_register_branches);
-@@ -609,7 +603,7 @@ void rockchip_clk_register_armclk(struct rockchip_clk_provider *ctx,
- 		return;
- 	}
- 
--	rockchip_clk_add_lookup(ctx, clk, lookup_id);
-+	rockchip_clk_set_lookup(ctx, clk, lookup_id);
- }
- EXPORT_SYMBOL_GPL(rockchip_clk_register_armclk);
- 
-diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
-index fd3b476dedda..e39392e1c2a2 100644
---- a/drivers/clk/rockchip/clk.h
-+++ b/drivers/clk/rockchip/clk.h
-@@ -969,6 +969,18 @@ struct rockchip_clk_branch {
- #define SGRF_GATE(_id, cname, pname)				\
- 		FACTOR(_id, cname, pname, 0, 1, 1)
- 
-+static inline struct clk *rockchip_clk_get_lookup(struct rockchip_clk_provider *ctx,
-+						  unsigned int id)
-+{
-+	return ctx->clk_data.clks[id];
-+}
-+
-+static inline void rockchip_clk_set_lookup(struct rockchip_clk_provider *ctx,
-+					   struct clk *clk, unsigned int id)
-+{
-+	ctx->clk_data.clks[id] = clk;
-+}
-+
- struct rockchip_clk_provider *rockchip_clk_init(struct device_node *np,
- 			void __iomem *base, unsigned long nr_clks);
- void rockchip_clk_of_add_provider(struct device_node *np,
+ 		/* catch simple muxes */
+ 		switch (list->branch_type) {
 -- 
 2.43.0
 
