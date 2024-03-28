@@ -1,85 +1,73 @@
-Return-Path: <linux-clk+bounces-5116-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5118-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 304A488F21E
-	for <lists+linux-clk@lfdr.de>; Wed, 27 Mar 2024 23:53:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FBB888F458
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Mar 2024 02:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE4C129A434
-	for <lists+linux-clk@lfdr.de>; Wed, 27 Mar 2024 22:53:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10D76B21DBB
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Mar 2024 01:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90340154424;
-	Wed, 27 Mar 2024 22:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C7A22092;
+	Thu, 28 Mar 2024 01:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="caTsXPow"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="IEbJU/cD"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F30153BEF;
-	Wed, 27 Mar 2024 22:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83ED418C22;
+	Thu, 28 Mar 2024 01:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711579989; cv=none; b=MHa87l6ggZAN2xHDP7zmdk/yiGbpJqIUuwYmN4CasIo2nWtF0tC54vCt3kUH8Cw1soZTTanmucJr0EDo90gXrhDHaLfkolmi4tuMY0K0vZHbuV4k1IH61VDitLqhfXBWl525i5YPzgDSojXR7tTgzhciDHwieITUqpzTWC1c+ys=
+	t=1711588201; cv=none; b=O2rRRQfiZy8pO8UUzkYIgTTntLtVP3YXEGsRPw6kaaFggx3H8wZEotREGdQfGVmrslY70KqKqb2IwGrbMpeRneplRtr2UZEQSX3/z0XVvbeoLO8hfPRcZREBPsfte9EYm7eNHk87GAJ89oGzLQ5XuqwnvfGE3MZd9kLc7+cbsGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711579989; c=relaxed/simple;
-	bh=sqhN02+ZEO+ko6LtC5zADXfc7A3LE/qm9zqb38Oaq8A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KCUsicCnHZnEBP7ZNrS525JsHSg+F4RW73x70tLvETcEIzA2DDLmqk0+8plbu1ZDnA4vJsHMmHVDcPFey2P3JwQVmZrjZavotXlNXbdfo9nEDYpyXBB7iVp3n22RqDDL1bo2qJ7H14moCwJi/PqZcUk1phvDVPcsVypQTpZYRNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=caTsXPow; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1711579986;
-	bh=sqhN02+ZEO+ko6LtC5zADXfc7A3LE/qm9zqb38Oaq8A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=caTsXPowXDRb4G9GIbmJvN/vTrUemSmke8KD9L2ybhniat5DqxfWRaB9xxS8PMsWF
-	 9CHi3Njx7ES35Vz8Y168f5r13bkzbMQaGt7IMq+4gpCbA4o+RAgFce9ClMJ9v+LZl7
-	 yXPHmQDfJ49Pxye2SubKl4jKeuOc1ZaHaEFB9viDGuNhAI4wPefPENjO/ZAOrnq90u
-	 6DofX0sKa7feG7JhNW3oJHv6RpGExf65bKu9NEsd5Z4KkQosaq5ZNhwTmOLKcx/KtF
-	 N2j9LPLECVUZK7xjEpq/QASY1Yv0JAx6HaGMyfjY+KB3Syrq2qMk3H8JA6kapuVNzm
-	 A51xkdbtiR7Pg==
-Received: from shreeya.shreeya (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=arc-20240116; t=1711588201; c=relaxed/simple;
+	bh=0wZS6e8223t8HdfHyFmZeurTXj6wd2M5GF+PWgyw1Wo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A8RDCT2hfWZTa0g45J2C9RbCW7oDG27WUM+37ME7/nMAFQKuSsxs41ZwyXB1ZAvZS9vWXdQ+hn1CDNL9asXTgLoddPudg6S2Z4nwnOeit39HkuOrO9LgiL3hx2tFWul0zNMkBw0KZND6tcT4I/RVz5heNox4Rj4DFP6SY2pmiTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=sberdevices.ru; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=IEbJU/cD; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sberdevices.ru
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id A0F2A100013;
+	Thu, 28 Mar 2024 04:09:51 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru A0F2A100013
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1711588191;
+	bh=37MYTDLUrT8ifUqapj/v8ztNZZHrBVw96rI4MOrEYP0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=IEbJU/cDongNfeDDtxTWgEwcSxg/PpC3ocspry+5WSWr7YXAD4N2MxsPMQRVfs28U
+	 dnjWavBnGcH5NIl/hfJ997j0tGaAYUEkYs8HblBvrheS4ULPTpkPcoxnNBmJr04fLE
+	 gdqihwocvPf4crgYZC74fn/qwgx3J5XZ+RNJ2d8ifbBxMg0PFwnpB1AA+z/1SvCjJb
+	 oTDo++uaRaZ3R7PRV3ZUvZ6VxKDBHUJjXHwpXUhBJaCCb8LpQsBJiylRQMyKDyByys
+	 wEMLzLi1RGv7eWzQqzX7nDQz4c2W38cyJ6/lDHueKlNIV2T8K8YvrpC1VbeYyiRQNk
+	 tkITtssp3+2DA==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: shreeya)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id BCE6B3782115;
-	Wed, 27 Mar 2024 22:52:57 +0000 (UTC)
-From: Shreeya Patel <shreeya.patel@collabora.com>
-To: heiko@sntech.de,
-	mchehab@kernel.org,
-	robh@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	p.zabel@pengutronix.de,
-	jose.abreu@synopsys.com,
-	nelson.costa@synopsys.com,
-	dmitry.osipenko@collabora.com,
-	sebastian.reichel@collabora.com,
-	shawn.wen@rock-chips.com,
-	nicolas.dufresne@collabora.com,
-	hverkuil@xs4all.nl,
-	hverkuil-cisco@xs4all.nl
-Cc: kernel@collabora.com,
-	linux-kernel@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-arm@lists.infradead.org,
-	Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH v3 6/6] MAINTAINERS: Add entry for Synopsys DesignWare HDMI RX Driver
-Date: Thu, 28 Mar 2024 04:20:57 +0530
-Message-Id: <20240327225057.672304-7-shreeya.patel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240327225057.672304-1-shreeya.patel@collabora.com>
-References: <20240327225057.672304-1-shreeya.patel@collabora.com>
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Thu, 28 Mar 2024 04:09:51 +0300 (MSK)
+Received: from CAB-WSD-0003115.sberdevices.ru (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 28 Mar 2024 04:09:46 +0300
+From: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+To: Jan Dakinevich <jan.dakinevich@salutedevices.com>, Neil Armstrong
+	<neil.armstrong@linaro.org>, Jerome Brunet <jbrunet@baylibre.com>, Michael
+ Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+	Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl
+	<martin.blumenstingl@googlemail.com>, Philipp Zabel <p.zabel@pengutronix.de>,
+	<linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [RFC PATCH v2 0/5] Add A1 Soc audio clock controller driver
+Date: Thu, 28 Mar 2024 04:08:26 +0300
+Message-ID: <20240328010831.884487-1-jan.dakinevich@salutedevices.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -87,41 +75,68 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 184457 [Mar 27 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: YVDakinevich@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 13 0.3.13 9d58e50253d512f89cb08f71c87c671a2d0a1bca, {Tracking_smtp_not_equal_from}, {Tracking_uf_ne_domains}, sberdevices.ru:5.0.1,7.1.1;lore.kernel.org:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: n, {Tracking_smtp_domain_mismatch}, {Tracking_smtp_domain_2level_mismatch}, {Tracking_sender_alignment_int}, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/03/27 23:57:00
+X-KSMG-LinksScanning: Clean, bases: 2024/03/28 01:00:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/03/28 00:06:00 #24481831
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-Add an entry for Synopsys DesignWare HDMI Receiver Controller
-Driver.
+This series adds support for audio clock and reset controllers on A1 SoC family.
 
-Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
----
-Changes in v3 :-
-  - No change
+Links:
 
-Changes in v2 :-
-  - Add a patch for MAINTAINERS file changes
+ [1] https://lore.kernel.org/lkml/20240314232201.2102178-1-jan.dakinevich@salutedevices.com/
 
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Changes v1 -> v2:
+ - Detached from v1's series (patch 2, 3, 4, 25).
+ - Reuse some of defines from axg-audio;
+ - Split the controller into two memory regions.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3a534e344737..05bbb58c2a41 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21492,6 +21492,14 @@ F:	drivers/net/pcs/pcs-xpcs.c
- F:	drivers/net/pcs/pcs-xpcs.h
- F:	include/linux/pcs/pcs-xpcs.h
- 
-+SYNOPSYS DESIGNWARE HDMI RX CONTROLLER DRIVER
-+M:	Shreeya Patel <shreeya.patel@collabora.com
-+L:	linux-media@vger.kernel.org
-+L:	kernel@collabora.com
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/media/snps,dw-hdmi-rx.yaml
-+F:	drivers/media/platform/synopsys/hdmirx/*
-+
- SYNOPSYS DESIGNWARE I2C DRIVER
- M:	Jarkko Nikula <jarkko.nikula@linux.intel.com>
- R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Jan Dakinevich (5):
+  clk: meson: axg: move reset controller's code to separate module
+  clk: meson: axg: share the audio helper macro
+  dt-bindings: clock: meson: document A1 SoC audio clock controller
+    driver
+  clk: meson: a1: add the audio clock controller driver
+  arm64: dts: meson: a1: add the audio clock controller
+
+ .../bindings/clock/amlogic,a1-audio-clkc.yaml | 141 ++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi     |  48 ++
+ drivers/clk/meson/Kconfig                     |  18 +
+ drivers/clk/meson/Makefile                    |   2 +
+ drivers/clk/meson/a1-audio.c                  | 624 ++++++++++++++++++
+ drivers/clk/meson/a1-audio.h                  |  45 ++
+ drivers/clk/meson/axg-audio.c                 | 233 +------
+ drivers/clk/meson/meson-audio-rstc.c          | 109 +++
+ drivers/clk/meson/meson-audio-rstc.h          |  12 +
+ drivers/clk/meson/meson-audio.h               | 143 ++++
+ .../dt-bindings/clock/amlogic,a1-audio-clkc.h | 122 ++++
+ .../reset/amlogic,meson-a1-audio-reset.h      |  29 +
+ 12 files changed, 1297 insertions(+), 229 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-audio-clkc.yaml
+ create mode 100644 drivers/clk/meson/a1-audio.c
+ create mode 100644 drivers/clk/meson/a1-audio.h
+ create mode 100644 drivers/clk/meson/meson-audio-rstc.c
+ create mode 100644 drivers/clk/meson/meson-audio-rstc.h
+ create mode 100644 drivers/clk/meson/meson-audio.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-audio-clkc.h
+ create mode 100644 include/dt-bindings/reset/amlogic,meson-a1-audio-reset.h
+
 -- 
-2.39.2
+2.34.1
 
 
