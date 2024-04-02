@@ -1,208 +1,178 @@
-Return-Path: <linux-clk+bounces-5332-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5334-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3AD89597C
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 18:18:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5308E895B8F
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 20:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D61B428E658
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 16:18:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5638FB225C2
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 18:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDED14AD24;
-	Tue,  2 Apr 2024 16:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E88215AD86;
+	Tue,  2 Apr 2024 18:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DJDRrDbN"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kn5Xt9iu"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADB8C2E40D;
-	Tue,  2 Apr 2024 16:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E271F15AABF;
+	Tue,  2 Apr 2024 18:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712074696; cv=none; b=ssW2UpaKAMxVibG/lFzb2xTPZuN0h3dn8vD9eOfyaIjoLQh5PSr3zKkH+lKjgsTai3na9d1g1snzNiEVrBzQ+1NFcP1lNpm0ocWM8gRxrflUedG100z2RmswU1h6COAZP2Z1Nb+y0+tAScKMpW1qfseTUJrsAHumRuU3n1nQ9bk=
+	t=1712081829; cv=none; b=TE7NzK6FhBLUvSfnGa2bopc6iUNLcy4v8QBqcTITKFGDuSCFB9gpLRkLe7NgKkqFJWzsyUugc+pyWMTbcMqXe6OwlSU/CL9UnmAXNNgGDkReZbJniyeKUUUsDW5/QsL74hvSB9ksnhZQtNNjsbkbulx7jrGelKPfKIBbh6CXYkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712074696; c=relaxed/simple;
-	bh=tqIuMZfC4MsoHlk9HVhKG/9PpH5oRCBJruwdKEA1VZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iAHGQuxQBJ3/f9rHZtOuEBGHox+yqqQHPgd0QneqeYJvSyXOz425WaxLu8OWTOOfTfslNnZaG2YXfejVohG+V4/FAKolW3qsJomtkIx//xlMGrEyZauwkR1rBgTlK8R2HSH/bEu9vDi/Z0S3DcYe5SvfUE+3FhtZa16VX1bcEwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DJDRrDbN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD868C433C7;
-	Tue,  2 Apr 2024 16:18:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712074696;
-	bh=tqIuMZfC4MsoHlk9HVhKG/9PpH5oRCBJruwdKEA1VZw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DJDRrDbNLGOiNgFd3/HXrhBy/yplIQOUciqf0NwEUhNc72OkVudEPXLgseBuiTuH4
-	 pUA3CN2l7ysl7ggJ34ZEsWQ7OFWB5VHUASq0qWrCkNd/XjeUaXzeyROLPwyqYDErUE
-	 lOBbvSaXwblHk4UiHlCfUmsQFGef9Z/F4EqEYjVhWWnGtfj7ZPnhhvW4I59deE5x2r
-	 cHMZmr3qnkY9FnT16mx1+RdGMgM2zEHDH6ldN2F0WOuCUXUNdLjltPRgEPPmg+6EwU
-	 gDwCDAzmLWBsmutde7WRplqOrZ5LgeqtJUg7wsi5USu3F/XEFULPbLJQqtjrTtZ5Lh
-	 xQPC+Do4UQCfQ==
-Message-ID: <8d21b1bc-9402-41d4-bd81-c521c8a33d2d@kernel.org>
-Date: Tue, 2 Apr 2024 18:18:09 +0200
+	s=arc-20240116; t=1712081829; c=relaxed/simple;
+	bh=07xKeQCKzNOQCfkA5d1xwrsHMqHXlqaCJFE9t4nKSV8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=TEmZPCz/mCdfk34nnZ70Ql3jLLy7RLBOKlLXiguhhWBOZrdl5YUZAk2bVTNW3B5e7v5ZTyfA3QWGCEgfZK4J31IiaWLeD7xt6aefLwoc55sGhYeD+xB2zYmmuIgkHJLvrkW6wyxeJ3jp9u//5GkcewRv9+CdKyT4I4fJlgQ6YYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kn5Xt9iu; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 432HDvhi014233;
+	Tue, 2 Apr 2024 18:17:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=UsrPKT62R/Whd6jvXGqf5hsJfNGi0E/QvkZwPMslTkE=; b=kn
+	5Xt9iuQcK0khLX0Kyzq/PuUrB4wmy+vS8DDm/zioX1IiYE1dhTYZ+sTnb9uZ0W01
+	878MhUu2ppIh44mJTjP6viQlr12b9yxwXD6T5jw1+fKbUyuJCGV97tTn4AgKL5er
+	I444DGSvv26/+6jBwIxLRiWeAXZg2E/Wuhn5JoVpYmW2oL4LmrshhKVOD0Q36/8A
+	4KGJTC+rWPNPClQ31rsR7hymMY/wQVp4wnTSLbj4srEDlNsbQg7QDhXKLPh5M5Un
+	2/SaHf7leje/oI6393QCVu9VAMO8ahyz1lA8gULRlySjlriio99GgERKSFfZO6Bh
+	506PuVQO/hYtF1pPaOLQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3x8h5es5g3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Apr 2024 18:17:03 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 432IH2OR021241
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 2 Apr 2024 18:17:02 GMT
+Received: from [10.216.46.192] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 2 Apr 2024
+ 11:16:55 -0700
+Message-ID: <a268f388-8a2c-c192-02ca-134c057086e2@quicinc.com>
+Date: Tue, 2 Apr 2024 23:46:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] clk: starfive: pll: Fix lower rate of CPUfreq by
- setting PLL0 rate to 1.5GHz
-To: Xingyu Wu <xingyu.wu@starfivetech.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Conor Dooley <conor@kernel.org>,
- Emil Renner Berthing <emil.renner.berthing@canonical.com>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Hal Feng <hal.feng@starfivetech.com>, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20240402090920.11627-1-xingyu.wu@starfivetech.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/7] clk: qcom: Add DISPCC driver support for SM4450
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Vladimir Zapolskiy
+	<vladimir.zapolskiy@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Taniya Das
+	<quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Imran Shaik
+	<quic_imrashai@quicinc.com>,
+        Satya Priya Kakitapalli
+	<quic_skakitap@quicinc.com>
+References: <20240330182817.3272224-1-quic_ajipan@quicinc.com>
+ <20240330182817.3272224-4-quic_ajipan@quicinc.com>
+ <CAA8EJpqZjysw+YE=vKguearf_abSzocvYtMvW9eHAZD-tMKs0g@mail.gmail.com>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240402090920.11627-1-xingyu.wu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+From: Ajit Pandey <quic_ajipan@quicinc.com>
+In-Reply-To: <CAA8EJpqZjysw+YE=vKguearf_abSzocvYtMvW9eHAZD-tMKs0g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ayPKdBqcK1sf3gpvynZn-wmtP2Jo6MON
+X-Proofpoint-ORIG-GUID: ayPKdBqcK1sf3gpvynZn-wmtP2Jo6MON
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-02_12,2024-04-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 clxscore=1011 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2403210001
+ definitions=main-2404020135
 
-On 02/04/2024 11:09, Xingyu Wu wrote:
-> CPUfreq supports 4 cpu frequency loads on 375/500/750/1500MHz.
-> But now PLL0 rate is 1GHz and the cpu frequency loads become
-> 333/500/500/1000MHz in fact.
+
+
+On 3/31/2024 6:58 AM, Dmitry Baryshkov wrote:
+> On Sat, 30 Mar 2024 at 20:29, Ajit Pandey <quic_ajipan@quicinc.com> wrote:
+>>
+>> Add Display Clock Controller (DISPCC) support for SM4450 platform.
+>>
+>> Signed-off-by: Ajit Pandey <quic_ajipan@quicinc.com>
+>> ---
+>>   drivers/clk/qcom/Kconfig         |  10 +
+>>   drivers/clk/qcom/Makefile        |   1 +
+>>   drivers/clk/qcom/dispcc-sm4450.c | 781 +++++++++++++++++++++++++++++++
+>>   3 files changed, 792 insertions(+)
+>>   create mode 100644 drivers/clk/qcom/dispcc-sm4450.c
+>>
 > 
-> So PLL0 rate should be default set to 1.5GHz. But setting the
-> PLL0 rate need certain steps:
+> [skipped]
 > 
-> 1. Change the parent of cpu_root clock to OSC clock.
-> 2. Change the divider of cpu_core if PLL0 rate is higher than
->    1.25GHz before CPUfreq boot.
-> 3. Change the parent of cpu_root clock back to PLL0 clock.
+>> +static int disp_cc_sm4450_probe(struct platform_device *pdev)
+>> +{
+>> +       struct regmap *regmap;
 > 
-> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
-> Fixes: e2c510d6d630 ("riscv: dts: starfive: Add cpu scaling for JH7110 SoC")
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> ---
+> Is there a MMCX power domain on the platform? See how other dispcc
+> drivers handle pm_runtime status.
 > 
-> Hi Stephen and Emil,
+Thanks for review , actually SM4450 doesn't support MMCX power domain 
+pm_rumtime support is not required here.
+>> +
+>> +       regmap = qcom_cc_map(pdev, &disp_cc_sm4450_desc);
+>> +       if (IS_ERR(regmap))
+>> +               return PTR_ERR(regmap);
+>> +
+>> +       clk_lucid_evo_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
+>> +       clk_lucid_evo_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
+>> +
+>> +       /* Keep some clocks always enabled */
+>> +       qcom_branch_set_clk_en(regmap, 0xe070); /* DISP_CC_SLEEP_CLK */
+>> +       qcom_branch_set_clk_en(regmap, 0xe054); /* DISP_CC_XO_CLK */
+>> +
+>> +       return qcom_cc_really_probe(pdev, &disp_cc_sm4450_desc, regmap);
+>> +}
+>> +
+>> +static struct platform_driver disp_cc_sm4450_driver = {
+>> +       .probe = disp_cc_sm4450_probe,
+>> +       .driver = {
+>> +               .name = "dispcc-sm4450",
+>> +               .of_match_table = disp_cc_sm4450_match_table,
+>> +       },
+>> +};
+>> +
+>> +module_platform_driver(disp_cc_sm4450_driver);
+>> +
+>> +MODULE_DESCRIPTION("QTI DISPCC SM4450 Driver");
+>> +MODULE_LICENSE("GPL");
+>> --
+>> 2.25.1
+>>
+>>
 > 
-> This patch fixes the issue about lower rate of CPUfreq[1] by setting PLL0
-> rate to 1.5GHz.
 > 
-> In order not to affect the cpu operation, setting the PLL0 rate need
-> certain steps. The cpu_root's parent clock should be changed first. And
-> the divider of the cpu_core clock should be set to 2 so they won't crash
-> when setting 1.5GHz without voltage regulation. Due to PLL driver boot
-> earlier than SYSCRG driver, cpu_core and cpu_root clocks are using by
-> ioremap(). 
-> 
-> [1]: https://github.com/starfive-tech/VisionFive2/issues/55
-> 
-> Previous patch link:
-> v2: https://lore.kernel.org/all/20230821152915.208366-1-xingyu.wu@starfivetech.com/
-> v1: https://lore.kernel.org/all/20230811033631.160912-1-xingyu.wu@starfivetech.com/
-> 
-> Thanks,
-> Xingyu Wu
-> ---
->  .../jh7110-starfive-visionfive-2.dtsi         |   5 +
->  .../clk/starfive/clk-starfive-jh7110-pll.c    | 102 ++++++++++++++++++
 
-Please do not mix DTS and driver code. That's not really portable. DTS
-is being exported and used in other projects.
-
-...
-
->  
-> @@ -458,6 +535,8 @@ static int jh7110_pll_probe(struct platform_device *pdev)
->  	struct jh7110_pll_priv *priv;
->  	unsigned int idx;
->  	int ret;
-> +	struct device_node *np;
-> +	struct resource res;
->  
->  	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
-> @@ -489,6 +568,29 @@ static int jh7110_pll_probe(struct platform_device *pdev)
->  			return ret;
->  	}
->  
-> +	priv->is_first_set = true;
-> +	np = of_find_compatible_node(NULL, NULL, "starfive,jh7110-syscrg");
-
-Your drivers should not do it. It's fragile, hides true link/dependency.
-Please use phandles.
-
-
-> +	if (!np) {
-> +		ret = PTR_ERR(np);
-> +		dev_err(priv->dev, "failed to get syscrg node\n");
-> +		goto np_put;
-> +	}
-> +
-> +	ret = of_address_to_resource(np, 0, &res);
-> +	if (ret) {
-> +		dev_err(priv->dev, "failed to get syscrg resource\n");
-> +		goto np_put;
-> +	}
-> +
-> +	priv->syscrg_base = ioremap(res.start, resource_size(&res));
-> +	if (!priv->syscrg_base)
-> +		ret = -ENOMEM;
-
-Why are you mapping other device's IO? How are you going to ensure
-synced access to registers?
-
-
-
-Best regards,
-Krzysztof
-
+-- 
+Thanks, and Regards
+Ajit
 
