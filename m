@@ -1,121 +1,171 @@
-Return-Path: <linux-clk+bounces-5314-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5316-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5346A8952FF
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 14:31:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3C158953ED
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 14:54:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E612E1F26175
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 12:31:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73FC028678D
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 12:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A040D58AB0;
-	Tue,  2 Apr 2024 12:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579388062D;
+	Tue,  2 Apr 2024 12:54:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AcFkuFOJ"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="VQopndSg"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E672D78A
-	for <linux-clk@vger.kernel.org>; Tue,  2 Apr 2024 12:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBAC7FBA3;
+	Tue,  2 Apr 2024 12:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712061109; cv=none; b=RKQtYJK6JMmObX8T2Oau+21VKTUpvh31g9NdXH7IfzmZv+JfFEB0oRenka7/KP4NN23uyhFkIeWvssABMl3FZa0mdhp6CzkgXWg9jnLOO7ddHmPzX2ETobkFhXx9qmTpZ7Xv3Vq59esN6Jw9cS1MHeVMA5A/hbV2KCnaXRz/8jE=
+	t=1712062479; cv=none; b=ebMA4+dT6U8tvGheFajGuTdH9YM6NEk2wgH6hH7ay21F4Yu9u5WHztJuaXxnJPExqz7RaqfIbWh3rks1UQsqbGoo402p9lUuS/2wpLqWvewfSPMQW54gnL1qmeQ1QkPPSkzaXYXg+mg+Tjr1CPYGaHI715gylFl1POlK+hldfYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712061109; c=relaxed/simple;
-	bh=p0a8acw+7ULihTf8lE/ghLH059TUPnJn47JiEnYgccM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YgQS+pGB2zEiNtYHM0BrSo7Gbj3TA+NHn9jHiJnDW/AuVJTSZ/Vlp7D9+QxdMEF9Tt9STQcbvio+jm1SfqbxKVWOlqGLtppDpbu+GlALtm4NVM32mdR9J/ZsyIy56aejG2ZZrXgRc/NODcMvsAme2khes4zHIks7iECbKVHZ9GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AcFkuFOJ; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dc74435c428so4878985276.2
-        for <linux-clk@vger.kernel.org>; Tue, 02 Apr 2024 05:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712061107; x=1712665907; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p0a8acw+7ULihTf8lE/ghLH059TUPnJn47JiEnYgccM=;
-        b=AcFkuFOJwh6/OSIC2P6CN+t5N8yM49Tio8HVEsm9NC1HNJCNNVgKc2/Dkb3jTefFL6
-         SeBWPt1GUPkHUPEA9RAVg6Y+DQem3a2hYwXwjdeecWrWv1EQEpH1aiq0vqDRzLrTDWLD
-         1qUj9oYWttSSh3vHU7vuM4JujJOGMQU2euPPH0oeogAB0iOKUCfie3ASXqXjXmrOxYfH
-         zU+INEwdROhwLAR4DP9QoG7ndxdwbChFbCZ1efkgoIr88olR6HnpsCdY87zdd2smTu7N
-         95DuzmryhyQFqmoxoACsUTZSFgUpsaITa1qGf6PmP71lC3NJQ3G4i7kG2ZqihM8JjY2+
-         MWPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712061107; x=1712665907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p0a8acw+7ULihTf8lE/ghLH059TUPnJn47JiEnYgccM=;
-        b=qb41Q9GmVG0XtaKDlURHbcwwKc8xkxlmvBdgLaaR60Tt0aSj8/Y+mvah31fw48yhjd
-         D3rzSfY/oosbgu1UAJ0X2xLo2dENfG1ejm2ws8f6r1OBqCOkl6wRw90A1hZZZgvbbv+Y
-         3H0o4TIFiV8U5wlh78Vpt1uaGnk+ULtgPjvpkj6KwmdH59dMlDawPp1o2rni5OXp03uW
-         m5SZRJxARJiwF0WtjcoaQ53e22BFh4P+cjD4pqLPF4BxRCl2xe/0aSvBTziENyN4Rfjq
-         WHEjXYoyn9+GxvM88wY5Kko5AlzIKRCvfGSTv9R/Zw6lPPaEA4PvX6h5p+fgvuDUdMeE
-         01mg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9EFtRnkICG5RgvJQEb81qIqZZF2Tw96JYk9+0GLWRvd7s8PMKYZcyGA+emLF76YQa1PE2T9765bt/To5C7eNhqBgQB3jw98Xb
-X-Gm-Message-State: AOJu0YzdOPOXpSu4hx8G2qOP0hywUD5tY14D96E6qsR4mT3g1ZFbVS3M
-	4o+xc+i/4gKNeusOAtjg8kislnpC+MiW1ywlL2MphL84MqapBFbH+yPaSHxoPvMNtvRTG92g7uq
-	AGL/ECgnhJpqCLqi9sJM8ZeUursgdf93ZE9YhhQ==
-X-Google-Smtp-Source: AGHT+IE0J84TqRbakQrC6l14h9si7x2di9LmRSJuCIgA2LQ8vJmxYu7A/iE7PWTtStw1Hw8SCsS1GQo4L/akposnPKg=
-X-Received: by 2002:a25:a14a:0:b0:dcb:b3dd:4f95 with SMTP id
- z68-20020a25a14a000000b00dcbb3dd4f95mr10698210ybh.43.1712061107020; Tue, 02
- Apr 2024 05:31:47 -0700 (PDT)
+	s=arc-20240116; t=1712062479; c=relaxed/simple;
+	bh=PK+HEVqFsevHHF+17hPtIOkqwfqfNEdE0CdmS3ZYJZM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PRoc1eofUk/Lei+98N3bjibLlYhRyuxoMzDdKGu+JtW8CrIP5z+uvB0cdctEHXRPs1MmBtKYJrK6Gn6JZOxyeWhbzmOnNKyJ8yf6RZZHVoF+wwvvlAuS64wBk6uEjFGk5y4SwqC27Mb+fyj8UgGdTDSb98KkcKWVxosje4BiCnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=VQopndSg; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 432B9Gre019355;
+	Tue, 2 Apr 2024 14:54:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=zaPY/Fi
+	i7n1522i/lEuTYz0M022TA0flX4c6e/PmMDY=; b=VQopndSg9oLaZb/OAqSajRM
+	iaQYlIZ9YwfwMCHZb+anFPyjlSKHsPFgrTsWsggWm3hUNpyxKEAjc3K3nCByAYqI
+	Pz5JPtXEtGgIm/vlIlLzb7yo45eXXyBew4kswO9e9KG31XhQ1hAmA44xhD6TvDEG
+	h1xreepUvy0/wdBGupmMfBFt6H77DHgFPXdi0LxueDAdHSkkGfjn96RkgeI4UVze
+	Wcli73jinh7Ng1LUJGpty8aJzeuSNdkeI7+5HJvevaCpqg1wCIpWQBtm/O+7BUZw
+	vYPn70moebjo9N2SQBtq9Q2tuUfiOuRaF0IhPilY+vFgKNjiHnlgfNMXLZanTXw=
+	=
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3x691m4hkk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 02 Apr 2024 14:54:11 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id DCA6740044;
+	Tue,  2 Apr 2024 14:54:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 609A621B531;
+	Tue,  2 Apr 2024 14:53:15 +0200 (CEST)
+Received: from localhost (10.201.21.240) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 2 Apr
+ 2024 14:53:15 +0200
+From: <gabriel.fernandez@foss.st.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [RESEND PATCH v9 0/4] Introduce STM32MP257 clock driver
+Date: Tue, 2 Apr 2024 14:53:08 +0200
+Message-ID: <20240402125312.277052-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_F76EB8D731C521C18D5D7C4F8229DAA58E08@qq.com> <tencent_6D10A9C63E3E0F412EED33477B5CDB98C207@qq.com>
-In-Reply-To: <tencent_6D10A9C63E3E0F412EED33477B5CDB98C207@qq.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 2 Apr 2024 14:31:36 +0200
-Message-ID: <CACRpkdY1wpGM7M5QV5rN0M6JMN_yugQJ7CEtnQjzsheD5AT23A@mail.gmail.com>
-Subject: Re: [PATCH v6 08/11] pinctrl: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
-To: Yangyu Chen <cyy@cyyself.name>
-Cc: linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>, 
-	Damien Le Moal <dlemoal@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-gpio@vger.kernel.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-02_06,2024-04-01_01,2023-05-22_02
 
-On Sat, Mar 23, 2024 at 1:13=E2=80=AFPM Yangyu Chen <cyy@cyyself.name> wrot=
-e:
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-> Since SOC_FOO should be deprecated from patch [1], and cleanup for other
-> SoCs is already on the mailing list [2,3,4], we remove the use of
-> SOC_CANAAN and introduced SOC_CANAAN_K210 for K210-specific drivers,
->
-> Thus, we replace its drivers depends on SOC_CANAAN_K210 and default selec=
-t
-> when it has the symbol SOC_CANAAN_K210.
->
-> [1] https://lore.kernel.org/linux-riscv/20221121221414.109965-1-conor@ker=
-nel.org/
-> [2] https://lore.kernel.org/linux-riscv/20240305-praying-clad-c4fbcaa7ed0=
-a@spud/
-> [3] https://lore.kernel.org/linux-riscv/20240305-fled-undrilled-41dc0c46b=
-b29@spud/
-> [4] https://lore.kernel.org/linux-riscv/20240305-stress-earflap-d7ddb8655=
-a4d@spud/
->
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+v9: base on next-20240207
+  - update dt binding documentation with v8 modidification on RCC driver
+    (use .index of clk_parent_data struct to define a parent)
+  - rebase patch "arm64: dts: st: add rcc support for STM32MP25"
+     with next-20240207 tag
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+v8:
+  - use .index of clk_parent_data struct to define a parent
+  - remove unnecessary dependency check with SCMI clock driver
+  - convert to platform device APIs
+  - convert to devm_of_clk_add_hw_provider()
+  - convert single value enum to a define
 
-Is this patch something I can just apply to the pinctrl tree?
+v7: base on next-20231219
+  - These patches below are applied to clk-next:
+      clk: stm32mp1: move stm32mp1 clock driver into stm32 directory
+      clk: stm32mp1: use stm32mp13 reset driver
+      dt-bindings: stm32: add clocks and reset binding for stm32mp25
+  - remove unnecessary includes
+  - migrate clock parents to struct clk_parent_data and remove
+    CLK_STM32_XXX() macros  to have a more readble code
+  - use platform device APIs (devm_of_iomap() instead of_iomap())
+  - move content of stm32mp25_rcc_init() to stm32mp25_rcc_clocks_probe()
+  - simply get_clock_deps()
+  - add const to stm32mp25_data struct
+  - remove ck_icn_p_serc clock (will be integrate later with security
+    management)
 
-Yours,
-Linus Walleij
+v6:
+  - remove useless defines in drivers/clk/stm32/stm32mp25_rcc.h
+
+v5:
+  - Fix sparse warnings: was not declared. Should it be static?
+    drivers/clk/stm32/clk-stm32mp13.c:1516:29: symbol 'stm32mp13_reset_data'
+    drivers/clk/stm32/clk-stm32mp1.c:2148:29: symbol 'stm32mp1_reset_data'
+    drivers/clk/stm32/clk-stm32mp25.c:1003:5: symbol 'stm32mp25_cpt_gate'
+    drivers/clk/stm32/clk-stm32mp25.c:1005:29: symbol 'stm32mp25_clock_data'
+    drivers/clk/stm32/clk-stm32mp25.c:1011:29: symbol 'stm32mp25_reset_data'
+
+v4:
+  - use GPL-2.0-only OR BSD-2-Clause for clock and reset binding files
+  - use quotes ' for #clock-cells and #reset-cells in YAML documentation
+  - reset binding start now to 0 instead 1
+  - improve management of reset lines that are not managed
+
+v3:
+  - from Rob Herring change clock item description in YAML documentation
+v2:
+  - rework reset binding (use ID witch start from 0)
+  - rework reset driver to manage STM32MP13 / STM32MP15 / STM32MP25
+  - rework YAML documentation
+
+Gabriel Fernandez (4):
+  clk: stm32mp13: use platform device APIs
+  dt-bindings: stm32: update DT bingding for stm32mp25
+  clk: stm32: introduce clocks for STM32MP257 platform
+  arm64: dts: st: add rcc support for STM32MP25
+
+ .../bindings/clock/st,stm32mp25-rcc.yaml      |  171 +-
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |  144 +-
+ arch/arm64/boot/dts/st/stm32mp255.dtsi        |    4 +-
+ drivers/clk/stm32/Kconfig                     |    7 +
+ drivers/clk/stm32/Makefile                    |    1 +
+ drivers/clk/stm32/clk-stm32-core.c            |   11 +-
+ drivers/clk/stm32/clk-stm32mp13.c             |   72 +-
+ drivers/clk/stm32/clk-stm32mp25.c             | 1876 +++++++++++++++++
+ drivers/clk/stm32/reset-stm32.c               |   59 +-
+ drivers/clk/stm32/reset-stm32.h               |    7 +
+ drivers/clk/stm32/stm32mp25_rcc.h             |  712 +++++++
+ 11 files changed, 2922 insertions(+), 142 deletions(-)
+ create mode 100644 drivers/clk/stm32/clk-stm32mp25.c
+ create mode 100644 drivers/clk/stm32/stm32mp25_rcc.h
+
+-- 
+2.25.1
+
 
