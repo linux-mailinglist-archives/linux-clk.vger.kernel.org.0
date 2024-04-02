@@ -1,161 +1,433 @@
-Return-Path: <linux-clk+bounces-5324-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5326-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 804FA895779
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 16:51:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87FF48957AE
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 17:03:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AA2B2848EA
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 14:51:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FC1F1F23B87
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Apr 2024 15:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E10B12F370;
-	Tue,  2 Apr 2024 14:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31AE12BF3D;
+	Tue,  2 Apr 2024 15:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ifShd6t0"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="B8qQwwaI"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F628662E
-	for <linux-clk@vger.kernel.org>; Tue,  2 Apr 2024 14:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE3DA138A
+	for <linux-clk@vger.kernel.org>; Tue,  2 Apr 2024 15:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712069379; cv=none; b=hO/fEIeY/jny/4XGQVX9QhdpjY02vQro9tk7ZyKC7nGHfeRL1aB+0RvMSH0WGZao9C38IOk1rJGfDXZmPFk6htkQqSOqrNT/GmTEvWYYePKu6OQbbQCiBYBgs1fIa+7jIOmiOThBS9A15mvOpxBXIhw8oi8r/v7D+m9rjYj7IK8=
+	t=1712070184; cv=none; b=fpPO/4lvPz2m7NB7pHAzqSSw08sA0bLfqZOvjyhgAUMcuPRGYD1Yl2TJkxxrr7UJDd+2+y8fe8VliuXqPqzskheAVnbCNckX2zByftOb6jkaxdGZ2bw+LHNuHqi7B6QBem0ezMbGHJHeIHJME2F1HDgZuDwizoqfNoCMjkqEYqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712069379; c=relaxed/simple;
-	bh=R6qde+iITv8Ux/EKpL1jJjmQD4xhkEmuDaLF7RETwOA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TStQvaQprrb01lEddqRBLO5Z1sBfjkeT+qrX0HaMH63aYtO4MBQlEaRTaa7pILHBzls3IyH+096yPItAqZ+WOgUJJW2DeS/nedRRkwuDztgA7++Xrx064a5okU0zKnaG3QZJSgOh43JmxZ3IZ3/kENnBaW97OonCcv24/43NBNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ifShd6t0; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a4e39f5030dso514749166b.0
-        for <linux-clk@vger.kernel.org>; Tue, 02 Apr 2024 07:49:38 -0700 (PDT)
+	s=arc-20240116; t=1712070184; c=relaxed/simple;
+	bh=t33HnetIuTMNA6mvt1KzZej+sMFrQFQtO1K8CBZPrSc=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=j33aCMD+eKuQMfTjI7R/SOUUoftMRVnwQvan3JHFHPtvwnFBya/v7YD1Fk+dMYfdIZxxDdu0Hx7NeYKEHnRN2/fNXrL78CdcHRv+mcMHeNksId/ECZRwwt2Fi1hCquTkIpCB9BLLnGmOaY+B8FVXIw6rECD5MAddl8ZGhmvVsVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=B8qQwwaI; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3436b096690so550402f8f.1
+        for <linux-clk@vger.kernel.org>; Tue, 02 Apr 2024 08:03:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1712069377; x=1712674177; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qLa+MN3bXJ5HxwNKiIPGEXS1wglnZiuZ2Ea5/Fw6iIM=;
-        b=ifShd6t0t41raE9O8TOLw/bl3gnuNErHtn2VQNJ8lvrgANbupd8YLKj/qr7dRj4kLw
-         N6/STJR+rtB86Xt3BBbD086vMel9IY4Y2vUBwoSV/32NZ8uZExqjwcmCDNkREnC8fvos
-         Lw2H0VSUTij3nL9vPENkzDtH1Hbo1wg3ZIFEknuN2zrFPG7Ilwoakuuwdt/fKhfS69Ju
-         jRm2hX4Jn1lBAO7Fc+3hAG2DFSe+Dzz1vaC07OxsNJMrjga+RJZWB4O6X+Yipqzz1Cwz
-         yn8kmPd4uTgoZSqE2vLW9atyh9iZwsId7Mz/ejQV7yM4GaB7EkOFCtyAGO+6419GcbUs
-         S4nw==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1712070179; x=1712674979; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLh7C2qJ6VxpYlStd0L/XMk/c8rcOEZSbOF06Wx5dco=;
+        b=B8qQwwaIXrxiO+aAI7DmotONMA1oK5ZQZFsevgnBuZPPyGYfdSjN41kd2mqQ+cy5Vj
+         M8Rad7pIHmcntURHsFVGggmvfGO3+vIywIVnvYJ5uvPJjQ7YT46XXKyWwz+u0lGudEdq
+         hCf1zG1XPcCHAfDNr0MvJrV0y0BYA0mfRNyERVIcQ1tyjgXqYNyqWglBELsqypt2jbdm
+         qnEV9G9GfH6iWuQb+aFfdHY9fJUV7UOjMvYDr4G6ZJs3/H0dPk2pz5+i8+a59SunpwA2
+         GbiDrnXgiNScfok8rFBhmazlHwteIKHQNkXJrv6sA3q4r9XlozQkRtqxvJkox7d7wybK
+         uVcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712069377; x=1712674177;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1712070179; x=1712674979;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qLa+MN3bXJ5HxwNKiIPGEXS1wglnZiuZ2Ea5/Fw6iIM=;
-        b=sTSLGVOi0EKWd8/WsDEYTIURHa74qAwCtDADnpkssZ6dZu+gfLii3AX/MxsEcXlPfI
-         EGpHB8rIAesihcbfSC6XnNqE3SuX2KvGU/nl8Cu37an+pwRjQ4bdEJ3GAEA9ByTEHZm0
-         s3YN2jrKVbjcgxhi+1y/upR9VzGrZ/YWVjIlUq7b9JcKXmxJ5vEWGGMqBDw2wvG7suT3
-         cmfP/UPUIx9N54vxl8Sz8cY7rIFu33TLgk1iSFy9jz80C2jZ+Nt93deWqeORoQQJUNda
-         epCkQ7jQV+HUNg5z38SmG0Mw/U6JWsxwRC7800O5TdLRPapDKtUY6Ipk0i/8GKpoKLsV
-         /DEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUerFojb5RoBSWMlAV6r4u26Nm36/lUI3VGlVXyNFVrwn651DYbF+0wRaHtXTQdBXSXINMq25ysI4W1PnNE65xQOo+KqUI8Bz7
-X-Gm-Message-State: AOJu0YyGJMVbJGSyAcbiCSkY066F3o0vjUc8L5NtcIP7HgfINC10UVF2
-	R/q48EmuzU7qR+K64AYHTviUVI1YZxyEKtPgu1UNrH48QYbPjrMgFyp0IdYbjr0=
-X-Google-Smtp-Source: AGHT+IGFYhRDcZm6Ii0rP7m5rmXlrAdHv5FZrzsVIj839wjWmHdgrYaO3ezpyXY/JT7It50aaa5OsA==
-X-Received: by 2002:a17:907:9286:b0:a4e:4e76:5fc7 with SMTP id bw6-20020a170907928600b00a4e4e765fc7mr8881269ejc.65.1712069376618;
-        Tue, 02 Apr 2024 07:49:36 -0700 (PDT)
-Received: from [192.168.92.47] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id q17-20020a1709060e5100b00a4623030893sm6527417eji.126.2024.04.02.07.49.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Apr 2024 07:49:36 -0700 (PDT)
-Message-ID: <0e599137-4a23-40b9-9a22-3c32f795fa1b@linaro.org>
-Date: Tue, 2 Apr 2024 16:49:33 +0200
+        bh=QLh7C2qJ6VxpYlStd0L/XMk/c8rcOEZSbOF06Wx5dco=;
+        b=FMLuvteKUxtQ+6L+AstBMSPZTRwT55vBBqxHSLEZPpJRJS8HLAOIgu8XRNbULEN22i
+         xG1KaLTPeHjZchy1vmcQc8ZX20A/RGyA3RaJ5yl8BcFbVMFExGRIz2I+EOfYp93AQWyL
+         hv8rl2pzFnHhfc8avlNu2O77+foACEVExF0CGZ3KsO7HpD+ZpNkMOb5fTGMVNzcoeK/8
+         pyoRGb/x24xvxbrUrTGjd3SN8m2B0ey1KFeeGUPmRJPBWGaDqdLAlIh4GMrNMyAEPnDc
+         PxR3FrrDW+0Wc7Y/RCGgPg5KyFQjMjGJoyhnQO6fpZ7MkK6PZyWxBn5ZOOVRMdQsa4SJ
+         ON/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWdV7Uj1AjTDGlbhYvAyNogYNmfc9dGtSS27a/770hQ58FE9Ne6nkJdReo3tqSw6t4DaaGLSPd9c0Oatg6S4HAKLxlWGWIwTjPH
+X-Gm-Message-State: AOJu0YwWdNf0alcHQKGXWP9iTrtPvNkTolk8zMzoiLfO7TsbVgUsPXQe
+	0BNRKL1RRrolj2T0ahKggozluUnvTiKXP1IOU/L48xpaMQYPntPM50PblNH4KHw=
+X-Google-Smtp-Source: AGHT+IFSgmTd7GB48ZrNjEll1HvnPHtsZpacbfK6tP4nSa5dMUnTT0fGb12JJu2ZFMMjgqoK6U2wzw==
+X-Received: by 2002:a5d:5886:0:b0:341:d316:3336 with SMTP id n6-20020a5d5886000000b00341d3163336mr15804446wrf.12.1712070178886;
+        Tue, 02 Apr 2024 08:02:58 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:2b3:4f20:7b45:be58])
+        by smtp.gmail.com with ESMTPSA id ay33-20020a05600c1e2100b004156a816048sm5381157wmb.35.2024.04.02.08.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 08:02:58 -0700 (PDT)
+References: <20240328010831.884487-1-jan.dakinevich@salutedevices.com>
+ <20240328010831.884487-2-jan.dakinevich@salutedevices.com>
+User-agent: mu4e 1.10.8; emacs 29.2
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Jan Dakinevich <jan.dakinevich@salutedevices.com>, Stephen Boyd
+ <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, Jerome Brunet
+ <jbrunet@baylibre.com>, Michael  Turquette <mturquette@baylibre.com>, Rob
+  Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>, linux-amlogic@lists.infradead.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH v2 1/5] clk: meson: axg: move reset controller's
+ code to separate module
+Date: Tue, 02 Apr 2024 16:52:38 +0200
+In-reply-to: <20240328010831.884487-2-jan.dakinevich@salutedevices.com>
+Message-ID: <1j7chfiz8e.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/6] interconnect: icc-clk: Remove tristate from
- INTERCONNECT_CLK
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- djakov@kernel.org, quic_anusha@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- kernel test robot <lkp@intel.com>
-References: <20240402103406.3638821-1-quic_varada@quicinc.com>
- <20240402103406.3638821-3-quic_varada@quicinc.com>
- <CAA8EJppyuagb5zkP4LCjjJwConw3mw3iS-+dO7YB01=7-waRTw@mail.gmail.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
- BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
- HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
- TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
- zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
- MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
- t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
- UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
- aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
- kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
- Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
- R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
- BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
- yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
- xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
- 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
- GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
- mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
- x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
- BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
- mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
- Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
- xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
- AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
- 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
- jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
- cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
- jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
- cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
- bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
- YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
- bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
- nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
- izWDgYvmBE8=
-In-Reply-To: <CAA8EJppyuagb5zkP4LCjjJwConw3mw3iS-+dO7YB01=7-waRTw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 2.04.2024 12:39 PM, Dmitry Baryshkov wrote:
-> On Tue, 2 Apr 2024 at 13:34, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
->>
->> drivers/clk/qcom/common.c uses devm_icc_clk_register under
->> IS_ENABLED(CONFIG_INTERCONNECT_CLK). However, in kernel bot
->> random config build test, with the following combination
->>
->>         CONFIG_COMMON_CLK_QCOM=y
->>                 and
->>         CONFIG_INTERCONNECT_CLK=m
->>
->> the following error is seen as devm_icc_clk_register is in a
->> module and being referenced from vmlinux.
->>
->>         powerpc64-linux-ld: drivers/clk/qcom/common.o: in function `qcom_cc_really_probe':
->>         >> common.c:(.text+0x980): undefined reference to `devm_icc_clk_register'
->>
->> Hence, ensure INTERCONNECT_CLK is not selected as a module.
-> 
-> NAK. Please use `depends on INTERCONNECT_CLK || !INTERCONNECT_CLK` in
-> your Kconfig dependencies.
 
-Should icc-clk ever be built as a module? It really seems like it should be
-a part of the core framework.. And dependency management would be easier
+On Thu 28 Mar 2024 at 04:08, Jan Dakinevich <jan.dakinevich@salutedevices.com> wrote:
 
-Konrad
+> This code will by reused by A1 SoC.
+
+Could expand a bit please ?
+
+>
+> Signed-off-by: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+
+In general, I like the idea.
+
+We do have a couple a reset registers lost in middle of clocks and this
+change makes it possible to re-use the code instead duplicating it.
+
+The exported function would be used by audio clock controllers, but the
+module created would be purely about reset.
+
+One may wonder how it ended up in the clock tree, especially since the
+kernel as a reset tree too.
+
+I'm not sure if this should move to the reset framework or if it would
+be an unnecessary churn. Stephen, Philipp, do you have an opinion on
+this ?
+
+> ---
+>  drivers/clk/meson/Kconfig            |   5 ++
+>  drivers/clk/meson/Makefile           |   1 +
+>  drivers/clk/meson/axg-audio.c        |  95 +----------------------
+>  drivers/clk/meson/meson-audio-rstc.c | 109 +++++++++++++++++++++++++++
+>  drivers/clk/meson/meson-audio-rstc.h |  12 +++
+>  5 files changed, 130 insertions(+), 92 deletions(-)
+>  create mode 100644 drivers/clk/meson/meson-audio-rstc.c
+>  create mode 100644 drivers/clk/meson/meson-audio-rstc.h
+>
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index 29ffd14d267b..d6a2fa5f7e88 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -48,6 +48,10 @@ config COMMON_CLK_MESON_CPU_DYNDIV
+>  	tristate
+>  	select COMMON_CLK_MESON_REGMAP
+>  
+> +config COMMON_CLK_MESON_AUDIO_RSTC
+> +	tristate
+> +	select RESET_CONTROLLER
+> +
+>  config COMMON_CLK_MESON8B
+>  	bool "Meson8 SoC Clock controller support"
+>  	depends on ARM
+> @@ -101,6 +105,7 @@ config COMMON_CLK_AXG_AUDIO
+>  	select COMMON_CLK_MESON_PHASE
+>  	select COMMON_CLK_MESON_SCLK_DIV
+>  	select COMMON_CLK_MESON_CLKC_UTILS
+> +	select COMMON_CLK_MESON_AUDIO_RSTC
+>  	select REGMAP_MMIO
+>  	help
+>  	  Support for the audio clock controller on AmLogic A113D devices,
+> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+> index 9ee4b954c896..88d94921a4dc 100644
+> --- a/drivers/clk/meson/Makefile
+> +++ b/drivers/clk/meson/Makefile
+> @@ -12,6 +12,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
+>  obj-$(CONFIG_COMMON_CLK_MESON_REGMAP) += clk-regmap.o
+>  obj-$(CONFIG_COMMON_CLK_MESON_SCLK_DIV) += sclk-div.o
+>  obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
+> +obj-$(CONFIG_COMMON_CLK_MESON_AUDIO_RSTC) += meson-audio-rstc.o
+>  
+>  # Amlogic Clock controllers
+>  
+> diff --git a/drivers/clk/meson/axg-audio.c b/drivers/clk/meson/axg-audio.c
+> index ac3482960903..990203a7ad5c 100644
+> --- a/drivers/clk/meson/axg-audio.c
+> +++ b/drivers/clk/meson/axg-audio.c
+> @@ -12,10 +12,10 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/reset.h>
+> -#include <linux/reset-controller.h>
+>  #include <linux/slab.h>
+>  
+>  #include "meson-clkc-utils.h"
+> +#include "meson-audio-rstc.h"
+>  #include "axg-audio.h"
+>  #include "clk-regmap.h"
+>  #include "clk-phase.h"
+> @@ -1648,84 +1648,6 @@ static struct clk_regmap *const sm1_clk_regmaps[] = {
+>  	&sm1_sysclk_b_en,
+>  };
+>  
+> -struct axg_audio_reset_data {
+> -	struct reset_controller_dev rstc;
+> -	struct regmap *map;
+> -	unsigned int offset;
+> -};
+> -
+> -static void axg_audio_reset_reg_and_bit(struct axg_audio_reset_data *rst,
+> -					unsigned long id,
+> -					unsigned int *reg,
+> -					unsigned int *bit)
+> -{
+> -	unsigned int stride = regmap_get_reg_stride(rst->map);
+> -
+> -	*reg = (id / (stride * BITS_PER_BYTE)) * stride;
+> -	*reg += rst->offset;
+> -	*bit = id % (stride * BITS_PER_BYTE);
+> -}
+> -
+> -static int axg_audio_reset_update(struct reset_controller_dev *rcdev,
+> -				unsigned long id, bool assert)
+> -{
+> -	struct axg_audio_reset_data *rst =
+> -		container_of(rcdev, struct axg_audio_reset_data, rstc);
+> -	unsigned int offset, bit;
+> -
+> -	axg_audio_reset_reg_and_bit(rst, id, &offset, &bit);
+> -
+> -	regmap_update_bits(rst->map, offset, BIT(bit),
+> -			assert ? BIT(bit) : 0);
+> -
+> -	return 0;
+> -}
+> -
+> -static int axg_audio_reset_status(struct reset_controller_dev *rcdev,
+> -				unsigned long id)
+> -{
+> -	struct axg_audio_reset_data *rst =
+> -		container_of(rcdev, struct axg_audio_reset_data, rstc);
+> -	unsigned int val, offset, bit;
+> -
+> -	axg_audio_reset_reg_and_bit(rst, id, &offset, &bit);
+> -
+> -	regmap_read(rst->map, offset, &val);
+> -
+> -	return !!(val & BIT(bit));
+> -}
+> -
+> -static int axg_audio_reset_assert(struct reset_controller_dev *rcdev,
+> -				unsigned long id)
+> -{
+> -	return axg_audio_reset_update(rcdev, id, true);
+> -}
+> -
+> -static int axg_audio_reset_deassert(struct reset_controller_dev *rcdev,
+> -				unsigned long id)
+> -{
+> -	return axg_audio_reset_update(rcdev, id, false);
+> -}
+> -
+> -static int axg_audio_reset_toggle(struct reset_controller_dev *rcdev,
+> -				unsigned long id)
+> -{
+> -	int ret;
+> -
+> -	ret = axg_audio_reset_assert(rcdev, id);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return axg_audio_reset_deassert(rcdev, id);
+> -}
+> -
+> -static const struct reset_control_ops axg_audio_rstc_ops = {
+> -	.assert = axg_audio_reset_assert,
+> -	.deassert = axg_audio_reset_deassert,
+> -	.reset = axg_audio_reset_toggle,
+> -	.status = axg_audio_reset_status,
+> -};
+> -
+>  static const struct regmap_config axg_audio_regmap_cfg = {
+>  	.reg_bits	= 32,
+>  	.val_bits	= 32,
+> @@ -1745,7 +1667,6 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	const struct audioclk_data *data;
+> -	struct axg_audio_reset_data *rst;
+>  	struct regmap *map;
+>  	void __iomem *regs;
+>  	struct clk_hw *hw;
+> @@ -1807,18 +1728,8 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
+>  	if (!data->reset_num)
+>  		return 0;
+>  
+> -	rst = devm_kzalloc(dev, sizeof(*rst), GFP_KERNEL);
+> -	if (!rst)
+> -		return -ENOMEM;
+> -
+> -	rst->map = map;
+> -	rst->offset = data->reset_offset;
+> -	rst->rstc.nr_resets = data->reset_num;
+> -	rst->rstc.ops = &axg_audio_rstc_ops;
+> -	rst->rstc.of_node = dev->of_node;
+> -	rst->rstc.owner = THIS_MODULE;
+> -
+> -	return devm_reset_controller_register(dev, &rst->rstc);
+> +	return meson_audio_rstc_register(dev, map, data->reset_offset,
+> +					 data->reset_num);
+>  }
+>  
+>  static const struct audioclk_data axg_audioclk_data = {
+> diff --git a/drivers/clk/meson/meson-audio-rstc.c b/drivers/clk/meson/meson-audio-rstc.c
+> new file mode 100644
+> index 000000000000..2079d24c40f4
+> --- /dev/null
+> +++ b/drivers/clk/meson/meson-audio-rstc.c
+> @@ -0,0 +1,109 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (c) 2018 BayLibre, SAS.
+> + * Author: Jerome Brunet <jbrunet@baylibre.com>
+> + */
+> +
+> +#include <linux/reset-controller.h>
+> +
+> +#include "meson-audio-rstc.h"
+> +
+> +struct meson_audio_reset_data {
+> +	struct reset_controller_dev rstc;
+> +	struct regmap *map;
+> +	unsigned int offset;
+> +};
+> +
+> +static void meson_audio_reset_reg_and_bit(struct meson_audio_reset_data *rst,
+> +					  unsigned long id,
+> +					  unsigned int *reg,
+> +					  unsigned int *bit)
+> +{
+> +	unsigned int stride = regmap_get_reg_stride(rst->map);
+> +
+> +	*reg = (id / (stride * BITS_PER_BYTE)) * stride;
+> +	*reg += rst->offset;
+> +	*bit = id % (stride * BITS_PER_BYTE);
+> +}
+> +
+> +static int meson_audio_reset_update(struct reset_controller_dev *rcdev,
+> +				    unsigned long id, bool assert)
+> +{
+> +	struct meson_audio_reset_data *rst =
+> +		container_of(rcdev, struct meson_audio_reset_data, rstc);
+> +	unsigned int offset, bit;
+> +
+> +	meson_audio_reset_reg_and_bit(rst, id, &offset, &bit);
+> +
+> +	regmap_update_bits(rst->map, offset, BIT(bit),
+> +			assert ? BIT(bit) : 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int meson_audio_reset_status(struct reset_controller_dev *rcdev,
+> +				    unsigned long id)
+> +{
+> +	struct meson_audio_reset_data *rst =
+> +		container_of(rcdev, struct meson_audio_reset_data, rstc);
+> +	unsigned int val, offset, bit;
+> +
+> +	meson_audio_reset_reg_and_bit(rst, id, &offset, &bit);
+> +
+> +	regmap_read(rst->map, offset, &val);
+> +
+> +	return !!(val & BIT(bit));
+> +}
+> +
+> +static int meson_audio_reset_assert(struct reset_controller_dev *rcdev,
+> +				    unsigned long id)
+> +{
+> +	return meson_audio_reset_update(rcdev, id, true);
+> +}
+> +
+> +static int meson_audio_reset_deassert(struct reset_controller_dev *rcdev,
+> +				      unsigned long id)
+> +{
+> +	return meson_audio_reset_update(rcdev, id, false);
+> +}
+> +
+> +static int meson_audio_reset_toggle(struct reset_controller_dev *rcdev,
+> +				    unsigned long id)
+> +{
+> +	int ret;
+> +
+> +	ret = meson_audio_reset_assert(rcdev, id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return meson_audio_reset_deassert(rcdev, id);
+> +}
+> +
+> +static const struct reset_control_ops meson_audio_rstc_ops = {
+> +	.assert = meson_audio_reset_assert,
+> +	.deassert = meson_audio_reset_deassert,
+> +	.reset = meson_audio_reset_toggle,
+> +	.status = meson_audio_reset_status,
+> +};
+> +
+> +int meson_audio_rstc_register(struct device *dev, struct regmap *map,
+> +			      unsigned int offset, unsigned int num)
+> +{
+> +	struct meson_audio_reset_data *rst;
+> +
+> +	rst = devm_kzalloc(dev, sizeof(*rst), GFP_KERNEL);
+> +	if (!rst)
+> +		return -ENOMEM;
+> +
+> +	rst->map = map;
+> +	rst->offset = offset;
+> +	rst->rstc.nr_resets = num;
+> +	rst->rstc.ops = &meson_audio_rstc_ops;
+> +	rst->rstc.of_node = dev->of_node;
+> +	rst->rstc.owner = THIS_MODULE;
+> +
+> +	return devm_reset_controller_register(dev, &rst->rstc);
+> +}
+> +EXPORT_SYMBOL_GPL(meson_audio_rstc_register);
+> +
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/clk/meson/meson-audio-rstc.h b/drivers/clk/meson/meson-audio-rstc.h
+> new file mode 100644
+> index 000000000000..6b441549de03
+> --- /dev/null
+> +++ b/drivers/clk/meson/meson-audio-rstc.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
+> +
+> +#ifndef __MESON_AUDIO_RSTC_H
+> +#define __MESON_AUDIO_RSTC_H
+> +
+> +#include <linux/device.h>
+> +#include <linux/regmap.h>
+> +
+> +int meson_audio_rstc_register(struct device *dev, struct regmap *map,
+> +			      unsigned int offset, unsigned int num);
+> +
+> +#endif /* __MESON_AUDIO_RSTC_H */
+
+
+-- 
+Jerome
 
