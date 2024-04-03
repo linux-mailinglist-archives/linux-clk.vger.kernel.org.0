@@ -1,232 +1,267 @@
-Return-Path: <linux-clk+bounces-5369-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5360-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC0F889676C
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Apr 2024 10:00:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B27048966FB
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Apr 2024 09:46:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55BA41F28A21
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Apr 2024 08:00:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6A7A1C20EDF
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Apr 2024 07:46:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F9EB5DF0E;
-	Wed,  3 Apr 2024 08:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C195CDDA;
+	Wed,  3 Apr 2024 07:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uWJXGLGT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2109.outbound.protection.partner.outlook.cn [139.219.17.109])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F121BDCF;
-	Wed,  3 Apr 2024 08:00:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.109
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712131220; cv=fail; b=aICZbrCP0iWk8wvtlJog7YwqY3DAfY0W6dR3E9JqsgcjUqRLg1dlG/2vpzLNdHAkGHVOSxXAVbimD+1jdquoj+GWY0fRbRr9QrcENaWBAC93QwRnGgd9ztmYrj48JoYsa/sRWF5iSzosvD1XMH1Yxb+8vkfx3W9LBDH0wfjay6I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712131220; c=relaxed/simple;
-	bh=b2/VYjL8+3n+GjD1ETA75SEdhuxr9kuJQinwlENNJFs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=uvWS0Na7srk4z8zbItsQfI3YgagjBuN3EAzX4neUamcRS1cvXo8Wir9CwroZdAmGlbXCuc2nc10DIkA4JDsJa9rInwCuInivsgFsAIEkIycoh0l0YcwmSZ/frzh/PVEIcY/cS+3yEe/TqLFMaUdAKcntoPDK+fdo6tjlU6hJk9k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cmahqf0E/V9XUsvrM4NCPz5uU+civopkvzH2YTl2muGqxttUJOosPP5ozJ6e/gvECIDFwIID7Ig18vaqILZFjv+gram+8ntXsDMW+QIaRoq/Ls0oWOh4vCH58nM3o9k9Rgc/Ed3gWiuDC3jcwck0P6jn7l4aGz23xWtA0uc53L/7Bl4ad0VG5AgR+WCLGmYs3RkiWqqMdjk64zZ4mZSJjuD8ko9NuTf6GqvAi+cc7P4Awae+ka03sgDk9mgu8uRKrdGkJDZsHPj8eZ8EhztdWGGpbZByZWv495Ss5YWGmu5MAtiLr+FyClfyCpfmBGyRPbbMH9HhD2blbTwA1n3jwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b2/VYjL8+3n+GjD1ETA75SEdhuxr9kuJQinwlENNJFs=;
- b=StBxjoWQ48Zw2oUcARDf4zuyN4E+stv0zXOOAsSVNpzyvtb05SdNjdFB+Ll2dNjcdEMAGfsFaf6h57HE/nbjR0Y0+bNzxbiDdhDHZ1lIKYjnfEFA25HX4BKKRGRjNI6+cN4jI7T93h+c/rClZ4mEeJbvBpoXieXvxGkI/DTAvVKivtS6BLgDmLQLTUDEX2f3h2paE0t29Epb3WgN6XVdXap+4V4MsVJT+AIVd34WPe2TtPbN1si9OzUOMOjVo47HWhybmJdbZpwGnlaE4RSL8/2MaqMtbNzqu3wK08ltLei8SAlm4mHcoH4MVLC2aIxmAfLR8wTTdMdakqJK610gSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:8::10) by NTZPR01MB1114.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:b::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.24; Wed, 3 Apr
- 2024 07:44:36 +0000
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- ([fe80::9a50:2c82:c5d4:2b3d]) by
- NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn ([fe80::9a50:2c82:c5d4:2b3d%4])
- with mapi id 15.20.7409.028; Wed, 3 Apr 2024 07:44:36 +0000
-From: Xingyu Wu <xingyu.wu@starfivetech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Michael Turquette
-	<mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Conor Dooley
-	<conor@kernel.org>, Emil Renner Berthing
-	<emil.renner.berthing@canonical.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Hal Feng
-	<hal.feng@starfivetech.com>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>
-Subject: RE: [PATCH v3] clk: starfive: pll: Fix lower rate of CPUfreq by
- setting PLL0 rate to 1.5GHz
-Thread-Topic: [PATCH v3] clk: starfive: pll: Fix lower rate of CPUfreq by
- setting PLL0 rate to 1.5GHz
-Thread-Index: AQHahN18qtXBKBZlXUquUnYUH2QsmrFVKPiAgACsqfCAAFBPgIAAA5cA
-Date: Wed, 3 Apr 2024 07:44:36 +0000
-Message-ID:
- <NTZPR01MB09566AB865A0266332268DC69F3DA@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
-References: <20240402090920.11627-1-xingyu.wu@starfivetech.com>
- <8d21b1bc-9402-41d4-bd81-c521c8a33d2d@kernel.org>
- <NTZPR01MB095662C4A6FCAEB7B35C48FF9F3DA@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
- <bcf12c0b-d569-4d64-adfb-bad053c182a8@kernel.org>
-In-Reply-To: <bcf12c0b-d569-4d64-adfb-bad053c182a8@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: NTZPR01MB0956:EE_|NTZPR01MB1114:EE_
-x-ms-office365-filtering-correlation-id: 6a8f81e3-fc2f-4b34-4548-08dc53b1e94d
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- Re+irz25jQxh6ToxJivlA2P9uc4YJlXfP9LkfCbSQ0+SasNuwef/PpoME/2PuUL8hMziq2ox+eFcCGe6VqpPJxfjZ+cBwKBuJZm0sIwHjtgADnh9FrEtWIncESA7emXOlH87JrCl6DF9HFKCWCiuOGnD78XQCgr76U5xR0LUV4ImcFYBIi1R47yVE94pY3c+YRwf0l/fn7NCWA2D1bII4iW2uYSHGUoEPs/cFSxtLani7bM69Vt71qMYML6yT6yne5c6fifs6LrBCZEpjEGGoO3KRR3zj/kpgDKxCAKW9l1Rb9CjkFB34jH0C1kL/cQVv4CgaNZ/3hpaKek5rKPVov3uYHFqZIK767t8xusTMDU3sXCf7TB8k6XqroX7xlaOI+nN2TZ5shq3jiO2nlAMukaIlTdAEHUeW5V4bM/Qk16/PWF+BeeQ+1W+h8Yl/aBINXcEfOR2fAddImE5Ue5JCzzIKR6RVAij6EnZAM+gadUwYebIkLaHdrkiTGlOFVXP6G6zwkigNVgPqxRuYSFjJfmL6IcsmjVDPYbT5Ttfsc3td/w9utmGq3fSIA+TTHNAEme51sMcxKxAf0n1gQsMky5LE6EKNkRmhDDFhD3MdPJwcAkcWp/3n1X1HlXfUBep
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(366007)(41320700004)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?QmFoYVpBbUNwY3UyNGNrazdycG5uUnp6anBKOTBGcXFVQVpkNlFXWVREZ1lC?=
- =?utf-8?B?UThnSVVZK1VCSkhCeFJVUW5aVFhnbU5HSHV4b3JVV0hQYThEc3hxSFIrRksx?=
- =?utf-8?B?YngxcTFUMHR6L0lRcEVNcWp0TDlha1gybnJGTW5mbm9wRUdyV1dhTk1rQUVH?=
- =?utf-8?B?bFV2eFh6SldObGo5dUpmQkduTW91RkUzcVpmTG9oMkFXWHNuQkh6V3FNblBH?=
- =?utf-8?B?TWtaSTVKRSswL05vbHRKOTJhNTVkK2x0dU1mYUxOOHAxekdJdVJuZXhIVkhB?=
- =?utf-8?B?UkFFRTRVbFlieHRhdlBEc3dCNllMeVFQNlgyVFJnUHBLcmw0MmpHU3pySi85?=
- =?utf-8?B?bDZjd2xHU2VPSkZoT0lFQ0Z6UkZ1TVp5V0pjSTY2aERGVldRYWJDY2JzUmhm?=
- =?utf-8?B?Mk5jNXM3d3F5cUtpazFoNUhhcTdYYVJLaHdoNXRxNGlmdDErYkpnVDBDWnYr?=
- =?utf-8?B?V0xwTXRCQ0gvRThpYXczaXJnV2taT2l0czhPc3RMU2VQWm9QZmRja0tKQjRp?=
- =?utf-8?B?NFhDWEtSQXZBdk9VVzd6V3pTSHJDanJjU0xjQTBaZW1ZMEZKQnFCM2NjRWIw?=
- =?utf-8?B?QTVSUEczbjl5ejU2WVN3Q0V1RjBWWFJDYnhSWG8wQ09IM1doWFcyNnExUVZF?=
- =?utf-8?B?VUN3TUpKUFlJckNsRDlvMkhQSFlsUnhpd2NzMG04NC84VnJteTJHNEJxdnVL?=
- =?utf-8?B?UmFXbEZpREZMaFdEU0Vvelc5eWZNZGpnazJLTGloYjl5TEpVRzBpWnRpaUxD?=
- =?utf-8?B?ajh3MWpoZjM5dk94NFB3cmJzOEhoMFFxY09KdzZyWjdxZUZkZnNuclRZdXZL?=
- =?utf-8?B?bU9UZ1B1bndYcnlsWXJaK0RIbHM5VGVzSXBsU0ZXWlFMNFArTFFVT3FSQVJw?=
- =?utf-8?B?RDc5bDY0T2ExVWVBZS9uVDhSVU1FRUpGOEdTanBUem0rQlpDVmplT2tQV1oz?=
- =?utf-8?B?VWhBTzRQM1JQeTZEaWJ5Z0ZYNGVDeFFNcitNeFk3T25vT0NpWEVjSUdYOG0x?=
- =?utf-8?B?RjRxby9NMWlxTGpFU1EzdnV3TGx6YmNkVE50VTlaNTNQN0xQTWwwSXJWTmg5?=
- =?utf-8?B?eXdENHl0eW5HcmRQYVlHNHh5TlU5UHVZcGFYNjgwMW84bWVQLzJ1RnFsVkI0?=
- =?utf-8?B?cnpWSUM5MThyTTJDR1JJbG9ZSGZTd056MFVaanh5Wi9JYTBzbWlva2xMd0Nl?=
- =?utf-8?B?dHprK3MwQnFJdEw5akgrQ3h4S1p5SU0xNmFpanFFTDZLYk1ZaWZPK3VHb2s2?=
- =?utf-8?B?dWxnQUxERG1UUkg2YkdxYTRRYTRqMitYNHRvNWFHMHB6RFZqL1ZrVFZRT055?=
- =?utf-8?B?T3owdVNpakRIOGZQOGY0UkZ4Y0NBWnFkYjVzWmRidkZKYkp3cmZjODVkNWtv?=
- =?utf-8?B?dk1YK3ZTOGlMOXo0Q1k5TnVzT2xsVUhDQTNaRU9NRXBWVzNVRExpVGVWWjZB?=
- =?utf-8?B?MUQ0c0xGZzNDN2kvRjJaWVA5SG9DeW1QMmRGUXQxb2E1OEt6c3Jia1E4QWJz?=
- =?utf-8?B?TC9mbVdidjIrUVJlK25zaHdKTTlLOVRSU1pRZHA1L0Q4RjY1aTJNUVZ1TTla?=
- =?utf-8?B?ZHZvWnZRNVdwVGVoUjRrUDQxVlhaaUEwbzViTENzdThiY2VrZVc2ZTUzYTI2?=
- =?utf-8?B?QmFKSTJxdEloMDg4RjZoOWdUR1k5LzQ1MFBLajZyNGFGYitGc2JacnAzTVJ2?=
- =?utf-8?B?M1g0eFRhenpmejFNWHNOQytMcmM3Yk9NS1V2MFM2YzYyL2JJUWQ1RGhPMGEz?=
- =?utf-8?B?UERVUXBXVHFmMXB1VlB6MU5wMk96OC9rQTQvcGxBakljemkzY1R0ajhNcUs2?=
- =?utf-8?B?bHl1RWoxQkczU01KRHZjME5FeDdGdWNNbmRNL2hiSXhBYnBkUlY5UzVPY2dW?=
- =?utf-8?B?S00zZ0hVTnpiYU90QjlnWTZKcXFTRDVxemsxVFZtTlhJa2lQdXlEUVAvcXFY?=
- =?utf-8?B?aFJYUlZmdG1uZS9tTlFJNGhXNE5XQjN0WEVJTzVnVkRSdUlDRHFmL0o1cG5E?=
- =?utf-8?B?TFY4NmZ1TWplT1E2MHg4Y3RlUzFsRjVVU3hmaGptZ2ZtNW01VkxjbnEzb3pY?=
- =?utf-8?B?bVAvM0dmSncxQkRDbi9BN09tUk1yVzh3dDFkc2FkRFpLWTZrdURxNVpxOStF?=
- =?utf-8?Q?3Iun1j9AhUOQSvstHLVnwyhqQ?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18EE7286A6
+	for <linux-clk@vger.kernel.org>; Wed,  3 Apr 2024 07:46:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712130405; cv=none; b=MxUxnv5n9HTntTNethyiqjkT5Tn+85Cix42V1rsief6nBw12GvCiqJFpsF9/F2OUkesMTrwUrvZKxHnoc/qacWvuGXZj2kbGSQv0zy0WsKAduFsF5Qly81f22XlsnV92KK4KDBZZmkGtxXFrHyBMTMhA7eEqchtlymMxSioLO+Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712130405; c=relaxed/simple;
+	bh=aEM9Na1E19MklSmNSuW8iA22W0ERaeQmoCjkiGVlIKE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bAK+4z8q6z5cDjwynKlOE1+uHYKnz6NcmujX0btwl++2RCNf+HK1tWctSH3tJQa0ewJVG69wv7yxZKanz/pzUvHOcH6RrbCDgRewrkh6QuRGh0/3qpOCNmNPCvpz8wA8iCAilNJPA3H38O4FTki9QA7yoNrtPNXkJw8+kQZ/f5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uWJXGLGT; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-34339f01cd2so3653294f8f.2
+        for <linux-clk@vger.kernel.org>; Wed, 03 Apr 2024 00:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1712130401; x=1712735201; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DgA3Xl8NwLbQEb1I2dslsED25sNgXx7L9wZQN4DRB8k=;
+        b=uWJXGLGTfn7fsvKUyPf487emkZur2f3d+rMvthIa5lBxRjJiD1/j4aS36i1W9XCytp
+         hZXRPCqAxSqngMrmJ5BjgbWhavKKevdkauEOfYpfwyDcRQdciUw0En95KzXWgseHLqKn
+         zACUiVVrTvFKOjBlqSZkaG6CJ7Mjrpjt0Dr7oVeBXDcYHrlPZk3gXRyv09duo4d3CDt2
+         rgVOpmIHgt63+LUT0caMh5gAH8eKXTja2UqzeHlvtHzhfF0ocY5Psp+MKDjlW/ff/AFc
+         DWzggnIlPiIjYlzW1GfWQ5cGcBRM3PK6OvL+d/I/BXQ93h8uHVz/FK53pBbkQkd1FQlE
+         t5iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712130401; x=1712735201;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DgA3Xl8NwLbQEb1I2dslsED25sNgXx7L9wZQN4DRB8k=;
+        b=FYhXnJQpAXboaD0LoPjuyrAcCX0o7stQ0bXNGQJEVYAt46MeBAHmU4dXngMg/a/dOU
+         XN0m2P8odT48vUxysvIRR9FWgWPiOA7mhGmkf+GcWYfPmse8n604GOfp0KEB64S6/f/A
+         YYFauJNpmkl2XKczhWgZ9qb09mN8rbp3CWAfYikJcm5fPllaV9zWnua3dShZ9+tZiK4W
+         uCpANMl85jYvmFnqgHJWXBGaZYS9dY2dS6zUI3PrkDJlKvMIgDHZS5S6QQd+xvSXqduW
+         3NSCAOwCeG4Ep7Cdj7mb/5f6SjrvXdKzsaKPjcOwrE2Gqp3+ODrsHfxclquudUfMwHEx
+         Quqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUWTpR+NMzefg3+tokuO8Em63/G1uD8HHrdds0myC34UklaWLMnaUes+MSjvjZ8bnLwN1KS+Q+a9FvGzqYIAr4LUGHYN0GXioZ+
+X-Gm-Message-State: AOJu0YyLytm89MT8DYXyhDq0QJJNyQqSeSuLhfen+bHNZGtuTBzai0uV
+	BFBXD84SADXLXiQJ9d1w+O/5uxAoBM5HPlJcq5k63gD5MqEP5iaQ0S95pbK4hwQ=
+X-Google-Smtp-Source: AGHT+IFMjG1vdNJVFYE8mg1DVFjPhwU9QdLDSDGRH3V0PpqQ6CsUjyghuPq4TXRvvtCJewDiTFEFHQ==
+X-Received: by 2002:a05:6000:1085:b0:343:2d7a:143e with SMTP id y5-20020a056000108500b003432d7a143emr1209096wrw.48.1712130401299;
+        Wed, 03 Apr 2024 00:46:41 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id cc13-20020a5d5c0d000000b00341b8edbe8csm14021282wrb.87.2024.04.03.00.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 00:46:40 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v12 0/7] drm/meson: add support for MIPI DSI Display
+Date: Wed, 03 Apr 2024 09:46:31 +0200
+Message-Id: <20240403-amlogic-v6-4-upstream-dsi-ccf-vim3-v12-0-99ecdfdc87fc@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a8f81e3-fc2f-4b34-4548-08dc53b1e94d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Apr 2024 07:44:36.7969
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UpwxDD6PRE8p1fqLUR/iIHwPu7IqxAbVa61DJWLfa42XUHRMmnpcnU8GcB0MTs6ACV5e5tvpgN4l3q0W7zrh2rIt657CPkzhrxJdyZHyJTs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1114
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFcJDWYC/5XQTW7CMBAF4Ksgr+vKHv+z6j2qLhx7ApZCgmyIW
+ iHu3gGppVU2YTlv8b2ZubCGtWBj282FVZxLK9NIg4SXDUv7OO6Ql0wBAwFKGAk8HoZpVxKfLdf
+ 8fGynivHAcys8pZ7P5aB459GAdCh7HRlBXWzIuxrHtCdqPA8DhceKffm8V79/0Lwv7TTVr/sms
+ 76lT3XOmgsOJkCCgBGsehvKGOv0OtUdu/mzed40ZBqLnYs6G7pqYdrnTUtmnyGm4LXRDhame5h
+ eqFWmI9NZABn6ZDrwC9P/mlKKsMr0ZHqJOiLmKMPyn+GPCXqVGcgMBuilWaqAdmFK8YNqAcKsQ
+ qUgNSdhhVPZKCWWqnyoClaqklShe2Myam2F/qder9dvQqQKljsDAAA=
+To: Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ Jagan Teki <jagan@amarulasolutions.com>, 
+ Nicolas Belin <nbelin@baylibre.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ "Lukas F. Hartmann" <lukas@mntre.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6741;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=aEM9Na1E19MklSmNSuW8iA22W0ERaeQmoCjkiGVlIKE=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmDQlcVdDx00Oh76x+vyFJ924OUDv9Fu9OQ6xIMwoO
+ BO7hsB6JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZg0JXAAKCRB33NvayMhJ0QFfD/
+ 4jQg1fn2MuwLT/8aWKll71dka1V8Rx5Z4p43Xml+QKrzhc4HeZ9sqisCt8I8Nba801A0tD4iPx5B6c
+ gNafEXq/DMQx2QWEplY1vN0bPLyxdLAI15KcZND/4WcObaOBLC2jnIc1E/FTu4T4SfYj2R86ji8Ek6
+ VDiWXok8Z/u6Y3GBPxFF1/MhaRO1ro4bEBRVT2S+w5wr0YXCm5O9izWdFn6UrrjXXjORhwUnFLVxHl
+ EeWRgzbbECAoBpMde9FIxkmWKxoEOyswo6cwrm3QYwc57e5MQkwnpOTVmkKDyuYGn0RPkareYRWGdo
+ wSLivTAi3yLdIbP6tA6N+O00iFRtt0c+BLrf15na3rmF6KA/t/egTthMnw/guEGjZZ8Fz5ECl1vMBH
+ P3Qdr3s4QFT50lMQRU1PZrzRFS5SUf/x1zHRZ0inuM1s8AH1RG6YsN2MrEBKkIr9xw0SwjCchzknbC
+ VPysOXYYo/esWp8PTUnS28ZbgS1j3bw5r2kQTYUTUOf4c4THOZO0mrfU4p4u+fm1kPgW5hy35VMXp5
+ pnsSeIKP+F1IyIU1yTfEXaJF7zzu/JHbxqnSeJSAzyPpqnves9IvrMgVLiXYlTQ5jIPwkkMZ8Nbz5p
+ s+ZKr3rYIojJaluB9ZLX5hL1JMgOZD2hrYYbeg0XFCsF2ZipSmDFUCE04Pkg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-T24gMDMvMDQvMjAyNCAxNToyNCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gDQo+IE9u
-IDAzLzA0LzIwMjQgMDk6MTksIFhpbmd5dSBXdSB3cm90ZToNCj4gPiBPbiAwMy8wNC8yMDI0IDA6
-MTgsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+ID4+DQo+ID4+IE9uIDAyLzA0LzIwMjQg
-MTE6MDksIFhpbmd5dSBXdSB3cm90ZToNCj4gPj4+IENQVWZyZXEgc3VwcG9ydHMgNCBjcHUgZnJl
-cXVlbmN5IGxvYWRzIG9uIDM3NS81MDAvNzUwLzE1MDBNSHouDQo+ID4+PiBCdXQgbm93IFBMTDAg
-cmF0ZSBpcyAxR0h6IGFuZCB0aGUgY3B1IGZyZXF1ZW5jeSBsb2FkcyBiZWNvbWUNCj4gPj4+IDMz
-My81MDAvNTAwLzEwMDBNSHogaW4gZmFjdC4NCj4gPj4+DQo+ID4+PiBTbyBQTEwwIHJhdGUgc2hv
-dWxkIGJlIGRlZmF1bHQgc2V0IHRvIDEuNUdIei4gQnV0IHNldHRpbmcgdGhlDQo+ID4+PiBQTEww
-IHJhdGUgbmVlZCBjZXJ0YWluIHN0ZXBzOg0KPiA+Pj4NCj4gPj4+IDEuIENoYW5nZSB0aGUgcGFy
-ZW50IG9mIGNwdV9yb290IGNsb2NrIHRvIE9TQyBjbG9jay4NCj4gPj4+IDIuIENoYW5nZSB0aGUg
-ZGl2aWRlciBvZiBjcHVfY29yZSBpZiBQTEwwIHJhdGUgaXMgaGlnaGVyIHRoYW4NCj4gPj4+ICAg
-IDEuMjVHSHogYmVmb3JlIENQVWZyZXEgYm9vdC4NCj4gPj4+IDMuIENoYW5nZSB0aGUgcGFyZW50
-IG9mIGNwdV9yb290IGNsb2NrIGJhY2sgdG8gUExMMCBjbG9jay4NCj4gPj4+DQo+ID4+PiBSZXZp
-ZXdlZC1ieTogSGFsIEZlbmcgPGhhbC5mZW5nQHN0YXJmaXZldGVjaC5jb20+DQo+ID4+PiBGaXhl
-czogZTJjNTEwZDZkNjMwICgicmlzY3Y6IGR0czogc3RhcmZpdmU6IEFkZCBjcHUgc2NhbGluZyBm
-b3INCj4gPj4+IEpINzExMA0KPiA+Pj4gU29DIikNCj4gPj4+IFNpZ25lZC1vZmYtYnk6IFhpbmd5
-dSBXdSA8eGluZ3l1Lnd1QHN0YXJmaXZldGVjaC5jb20+DQo+ID4+PiAtLS0NCj4gPj4+DQo+ID4+
-PiBIaSBTdGVwaGVuIGFuZCBFbWlsLA0KPiA+Pj4NCj4gPj4+IFRoaXMgcGF0Y2ggZml4ZXMgdGhl
-IGlzc3VlIGFib3V0IGxvd2VyIHJhdGUgb2YgQ1BVZnJlcVsxXSBieSBzZXR0aW5nDQo+ID4+PiBQ
-TEwwIHJhdGUgdG8gMS41R0h6Lg0KPiA+Pj4NCj4gPj4+IEluIG9yZGVyIG5vdCB0byBhZmZlY3Qg
-dGhlIGNwdSBvcGVyYXRpb24sIHNldHRpbmcgdGhlIFBMTDAgcmF0ZSBuZWVkDQo+ID4+PiBjZXJ0
-YWluIHN0ZXBzLiBUaGUgY3B1X3Jvb3QncyBwYXJlbnQgY2xvY2sgc2hvdWxkIGJlIGNoYW5nZWQg
-Zmlyc3QuDQo+ID4+PiBBbmQgdGhlIGRpdmlkZXIgb2YgdGhlIGNwdV9jb3JlIGNsb2NrIHNob3Vs
-ZCBiZSBzZXQgdG8gMiBzbyB0aGV5DQo+ID4+PiB3b24ndCBjcmFzaCB3aGVuIHNldHRpbmcgMS41
-R0h6IHdpdGhvdXQgdm9sdGFnZSByZWd1bGF0aW9uLiBEdWUgdG8NCj4gPj4+IFBMTCBkcml2ZXIg
-Ym9vdCBlYXJsaWVyIHRoYW4gU1lTQ1JHIGRyaXZlciwgY3B1X2NvcmUgYW5kIGNwdV9yb290DQo+
-ID4+PiBjbG9ja3MgYXJlIHVzaW5nIGJ5IGlvcmVtYXAoKS4NCj4gPj4+DQo+ID4+PiBbMV06IGh0
-dHBzOi8vZ2l0aHViLmNvbS9zdGFyZml2ZS10ZWNoL1Zpc2lvbkZpdmUyL2lzc3Vlcy81NQ0KPiA+
-Pj4NCj4gPj4+IFByZXZpb3VzIHBhdGNoIGxpbms6DQo+ID4+PiB2MjoNCj4gPj4+IGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMDgyMTE1MjkxNS4yMDgzNjYtMS14aW5neXUud3VAc3Rh
-cmZpDQo+ID4+PiB2ZQ0KPiA+Pj4gdGVjaC5jb20vDQo+ID4+PiB2MToNCj4gPj4+IGh0dHBzOi8v
-bG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMDgxMTAzMzYzMS4xNjA5MTItMS14aW5neXUud3VAc3Rh
-cmZpDQo+ID4+PiB2ZQ0KPiA+Pj4gdGVjaC5jb20vDQo+ID4+Pg0KPiA+Pj4gVGhhbmtzLA0KPiA+
-Pj4gWGluZ3l1IFd1DQo+ID4+PiAtLS0NCj4gPj4+ICAuLi4vamg3MTEwLXN0YXJmaXZlLXZpc2lv
-bmZpdmUtMi5kdHNpICAgICAgICAgfCAgIDUgKw0KPiA+Pj4gIC4uLi9jbGsvc3RhcmZpdmUvY2xr
-LXN0YXJmaXZlLWpoNzExMC1wbGwuYyAgICB8IDEwMiArKysrKysrKysrKysrKysrKysNCj4gPj4N
-Cj4gPj4gUGxlYXNlIGRvIG5vdCBtaXggRFRTIGFuZCBkcml2ZXIgY29kZS4gVGhhdCdzIG5vdCBy
-ZWFsbHkgcG9ydGFibGUuDQo+ID4+IERUUyBpcyBiZWluZyBleHBvcnRlZCBhbmQgdXNlZCBpbiBv
-dGhlciBwcm9qZWN0cy4NCj4gPg0KPiA+IE9LLCBJIHdpbGwgc3VibWl0IHRoYXQgaW4gdHdvIHBh
-dGNoZXMuDQo+ID4NCj4gPj4NCj4gPj4gLi4uDQo+ID4+DQo+ID4+Pg0KPiA+Pj4gQEAgLTQ1OCw2
-ICs1MzUsOCBAQCBzdGF0aWMgaW50IGpoNzExMF9wbGxfcHJvYmUoc3RydWN0DQo+ID4+PiBwbGF0
-Zm9ybV9kZXZpY2UNCj4gPj4gKnBkZXYpDQo+ID4+PiAgCXN0cnVjdCBqaDcxMTBfcGxsX3ByaXYg
-KnByaXY7DQo+ID4+PiAgCXVuc2lnbmVkIGludCBpZHg7DQo+ID4+PiAgCWludCByZXQ7DQo+ID4+
-PiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbnA7DQo+ID4+PiArCXN0cnVjdCByZXNvdXJjZSByZXM7
-DQo+ID4+Pg0KPiA+Pj4gIAlwcml2ID0gZGV2bV9remFsbG9jKCZwZGV2LT5kZXYsIHNpemVvZigq
-cHJpdiksIEdGUF9LRVJORUwpOw0KPiA+Pj4gIAlpZiAoIXByaXYpDQo+ID4+PiBAQCAtNDg5LDYg
-KzU2OCwyOSBAQCBzdGF0aWMgaW50IGpoNzExMF9wbGxfcHJvYmUoc3RydWN0DQo+ID4+PiBwbGF0
-Zm9ybV9kZXZpY2UNCj4gPj4gKnBkZXYpDQo+ID4+PiAgCQkJcmV0dXJuIHJldDsNCj4gPj4+ICAJ
-fQ0KPiA+Pj4NCj4gPj4+ICsJcHJpdi0+aXNfZmlyc3Rfc2V0ID0gdHJ1ZTsNCj4gPj4+ICsJbnAg
-PSBvZl9maW5kX2NvbXBhdGlibGVfbm9kZShOVUxMLCBOVUxMLA0KPiA+Pj4gKyJzdGFyZml2ZSxq
-aDcxMTAtc3lzY3JnIik7DQo+ID4+DQo+ID4+IFlvdXIgZHJpdmVycyBzaG91bGQgbm90IGRvIGl0
-LiBJdCdzIGZyYWdpbGUsIGhpZGVzIHRydWUgbGluay9kZXBlbmRlbmN5Lg0KPiA+PiBQbGVhc2Ug
-dXNlIHBoYW5kbGVzLg0KPiA+Pg0KPiA+Pg0KPiA+Pj4gKwlpZiAoIW5wKSB7DQo+ID4+PiArCQly
-ZXQgPSBQVFJfRVJSKG5wKTsNCj4gPj4+ICsJCWRldl9lcnIocHJpdi0+ZGV2LCAiZmFpbGVkIHRv
-IGdldCBzeXNjcmcgbm9kZVxuIik7DQo+ID4+PiArCQlnb3RvIG5wX3B1dDsNCj4gPj4+ICsJfQ0K
-PiA+Pj4gKw0KPiA+Pj4gKwlyZXQgPSBvZl9hZGRyZXNzX3RvX3Jlc291cmNlKG5wLCAwLCAmcmVz
-KTsNCj4gPj4+ICsJaWYgKHJldCkgew0KPiA+Pj4gKwkJZGV2X2Vycihwcml2LT5kZXYsICJmYWls
-ZWQgdG8gZ2V0IHN5c2NyZyByZXNvdXJjZVxuIik7DQo+ID4+PiArCQlnb3RvIG5wX3B1dDsNCj4g
-Pj4+ICsJfQ0KPiA+Pj4gKw0KPiA+Pj4gKwlwcml2LT5zeXNjcmdfYmFzZSA9IGlvcmVtYXAocmVz
-LnN0YXJ0LCByZXNvdXJjZV9zaXplKCZyZXMpKTsNCj4gPj4+ICsJaWYgKCFwcml2LT5zeXNjcmdf
-YmFzZSkNCj4gPj4+ICsJCXJldCA9IC1FTk9NRU07DQo+ID4+DQo+ID4+IFdoeSBhcmUgeW91IG1h
-cHBpbmcgb3RoZXIgZGV2aWNlJ3MgSU8/IEhvdyBhcmUgeW91IGdvaW5nIHRvIGVuc3VyZQ0KPiA+
-PiBzeW5jZWQgYWNjZXNzIHRvIHJlZ2lzdGVycz8NCj4gPg0KPiA+IEJlY2F1c2Ugc2V0dGluZyBQ
-TEwwIHJhdGUgbmVlZCBzcGVjaWZpYyBzdGVwcyBhbmQgdXNlIHRoZSBjbG9ja3Mgb2YgU1lTQ1JH
-Lg0KPiANCj4gVGhhdCdzIG5vdCBhIHJlYXNvbiB0byBtYXAgb3RoZXIgZGV2aWNlJ3MgSU8uIFRo
-YXQgY291bGQgYmUgYSByZWFzb24gZm9yIGhhdmluZw0KPiBzeXNjb24gb3Igc29tZSBvdGhlciBz
-b3J0IG9mIHJlbGF0aW9uc2hpcCwgbGlrZSBjbG9jayBvciByZXNldC4NCj4gDQo+ID4gQnV0IFNZ
-U0NSRyBkcml2ZXIgYWxzbyBuZWVkIFBMTCBjbG9jayB0byBiZSBjbG9jayBzb3VyY2Ugd2hlbiBh
-ZGRpbmcNCj4gPiBjbG9jayBwcm92aWRlcnMuIEkgdHJpZWQgdG8gYWRkIFNZU0NSRyBjbG9ja3Mg
-aW4gJ2Nsb2NrcycgcHJvcGVydHkgaW4NCj4gPiBEVCBhbmQgdXNlDQo+ID4gY2xrX2dldCgpIHRv
-IGdldCB0aGUgY2xvY2tzLiBCdXQgaXQgY291bGQgbm90IHJ1biBhbmQgY3Jhc2guIFNvIEkgdXNl
-DQo+ID4gaW9yZW1hcCgpIGluc3RlYWQuDQo+IA0KPiBTbyBpbnN0ZWFkIG9mIHByb3Blcmx5IG1v
-ZGVsIHRoZSByZWxhdGlvbnNoaXAsIHlvdSBlbnRhbmdsZSB0aGUgZHJpdmVycyBldmVuDQo+IG1v
-cmUuDQo+IA0KPiBQbGVhc2UgY29tZSB3aXRoIGEgcHJvcGVyIGRlc2lnbiBmb3IgdGhpcy4gSSBo
-YXZlIG5vIGNsdWUgYWJvdXQgeW91ciBoYXJkd2FyZSwNCj4gYnV0IHRoYXQgbG9va3MgbGlrZSB5
-b3UgYXJlIGFzeW5jaHJvbm91c2x5IGNvbmZpZ3VyaW5nIHRoZSBzYW1lIGhhcmR3YXJlIGluIHR3
-bw0KPiBkaWZmZXJlbnQgcGxhY2VzLg0KPiANCj4gU29ycnksIHRoYXQncyBwb29yIGNvZGUuDQo+
-IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KDQpIaSBLcnp5c3p0b2YsDQoNCklmIEkg
-dXNlIHRoZSBvbGQgcGF0Y2hbMV0gbGlrZSB2MiBhbmQgc2V0IHRoZSBQTEwwIGRlZmF1bHQgcmF0
-ZSBpbiB0aGUgU1lTQ1JHIGRyaXZlciwNCndpbGwgaXQgYmUgYmV0dGVyPw0KDQpbMV06IGh0dHBz
-Oi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIzMDgyMTE1MjkxNS4yMDgzNjYtMS14aW5neXUud3VA
-c3RhcmZpdmV0ZWNoLmNvbS8NCg0KVGhhbmtzLA0KWGluZ3l1IFd1DQoNCg==
+The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a),
+with a custom glue managing the IP resets, clock and data input similar to the DW-HDMI
+glue on the same Amlogic SoCs.
+
+This is a follow-up of v5 now the DRM patches are applied, the clk & DT changes
+remains for a full DSI support on G12A & SM1 platforms.
+
+The DW-MIPI-DSI transceiver + D-PHY are clocked by the GP0 PLL, and the ENCL encoder + VIU
+pixel reader by the VCLK2 clock using the HDMI PLL.
+
+The DW-MIPI-DSI transceiver gets this pixel stream as input clocked with the VCLK2 clock.
+
+An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
+DW-MIPI-DSI transceiver.
+
+The clock setup has been redesigned to use CCF, a common PLL (GP0) and the VCLK2 clock
+path for DSI in preparation of full CCF support and possibly dual display with HDMI.
+
+The change from v5 is that now we use a "VCLK" driver instead of notifier and rely
+on CLK_SET_RATE_GATE to ensure the VCLK gate operation are called.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v12:
+- fix parameters alignment in patch 2
+- update g12a_mipi_dsi_pxclk_div_table comment with jerome's suggestions
+- fix dtbs overlay build, fix missed v11... thx khadas for reporting it off-list & testing
+- Link to v11: https://lore.kernel.org/r/20240325-amlogic-v6-4-upstream-dsi-ccf-vim3-v11-0-04f55de44604@linaro.org
+
+Changes in v11:
+- Rebased on v6.9-rc1
+- Fixed overlay handling/creation
+- Link to v10: https://lore.kernel.org/r/20240205-amlogic-v6-4-upstream-dsi-ccf-vim3-v10-0-dc06073d5330@linaro.org
+
+Changes in v10:
+- Rename regmap_vclk to meson_clk and add _gate for the gate
+- Move COMMON_CLK_MESON_VCLK to following patch
+- Remove CLK_SET_RATE_PARENT from g12a_vclk2_sel, keep it only on mipi_dsi_pxclk_sel
+- Add more info on commit message to specify how clock setup is designed
+- Remove forgotten CLK_IGNORE_UNUSED on g12a_vclk2_input
+- Remove useless CLK_SET_RATE_PARENT on g12a_vclk2_div to stop propagatting rate _after_ vclk2_div
+- Remove invalid CLK_SET_RATE_GATE on g12a_vclk2 since it's not a divider...
+- Drop already applied patches
+- move Khadas TS050 changes as an overlay
+- Link to v9: https://lore.kernel.org/r/20231124-amlogic-v6-4-upstream-dsi-ccf-vim3-v9-0-95256ed139e6@linaro.org
+
+Changes in v9:
+- Colledte reviewed-bys
+- Fixed patches 2 & 4, commit messages and bindings format
+- Link to v8: https://lore.kernel.org/r/20231109-amlogic-v6-4-upstream-dsi-ccf-vim3-v8-0-81e4aeeda193@linaro.org
+
+Changes in v8:
+- Switch vclk clk driver to parm as requested by Jerome
+- Added bindings fixes to amlogic,meson-axg-mipi-pcie-analog & amlogic,g12a-mipi-dphy-analog
+- Fixed DT errors in vim3 example and MNT Reform DT
+- Rebased on next-20231107, successfully tested on VIM3L
+- Link to v7: https://lore.kernel.org/r/20230803-amlogic-v6-4-upstream-dsi-ccf-vim3-v7-0-762219fc5b28@linaro.org
+
+Changes in v7:
+- Added review tags
+- Fixed patch 5 thanks to George
+- Link to v6: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-0-fd2ac9845472@linaro.org
+
+Changes in v6:
+- dropped applied DRM patches
+- dropped clk private prefix patches
+- rebased on top of 20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org
+- re-ordered/cleaned ENCL patches to match clkid public migration
+- Added new "vclk" driver
+- uses vclk driver instead of notifier
+- cleaned VCLK2 clk flags
+- add px_clk gating from DSI driver
+- Link to v5: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org
+
+Changes in v5:
+- Aded PRIV all the G12 internal clk IDS to simplify public exposing
+- Fixed the DSI bindings
+- Fixed the DSI HSYNC/VSYNC polarity handling
+- Fixed the DSI clock setup
+- Fixed the DSI phy timings
+- Dropped components for DSI, only keeping it for HDMI
+- Added MNT Reform 2 CM4 DT
+- Dropped already applied PHY fix
+- Link to v4: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org
+
+Changes from v3 at [3]:
+- switched all clk setup via CCF
+- using single PLL for DSI controller & ENCL encoder
+- added ENCL clocks to CCF
+- make the VCLK2 clocks configuration by CCF
+- fixed probe/bind of DSI controller to work with panels & bridges
+- added bit_clk to controller to it can setup the BIT clock aswell
+- added fix for components unbind
+- added fix for analog phy setup value
+- added TS050 timings fix
+- dropped previous clk control patch
+
+Changes from v2 at [2]:
+- Fixed patch 3
+- Added reviews from Jagan
+- Rebased on v5.19-rc1
+
+Changes from v1 at [1]:
+- fixed DSI host bindings
+- add reviewed-by tags for bindings
+- moved magic values to defines thanks to Martin's searches
+- added proper prefixes to defines
+- moved phy_configure to phy_init() dw-mipi-dsi callback
+- moved phy_on to a new phy_power_on() dw-mipi-dsi callback
+- correctly return phy_init/configure errors to callback returns
+
+[1] https://lore.kernel.org/r/20200907081825.1654-1-narmstrong@baylibre.com
+[2] https://lore.kernel.org/r/20220120083357.1541262-1-narmstrong@baylibre.com
+[3] https://lore.kernel.org/r/20220617072723.1742668-1-narmstrong@baylibre.com
+
+---
+Neil Armstrong (7):
+      dt-bindings: arm: amlogic: Document the MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+      clk: meson: add vclk driver
+      clk: meson: g12a: make VCLK2 and ENCL clock path configurable by CCF
+      drm/meson: gate px_clk when setting rate
+      arm64: meson: g12-common: add the MIPI DSI nodes
+      arm64: meson: khadas-vim3l: add TS050 DSI panel overlay
+      arm64: dts: amlogic: meson-g12b-bananapi-cm4: add support for MNT Reform2 with CM4 adaper
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   5 +
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  70 ++++
+ .../meson-g12b-bananapi-cm4-mnt-reform2.dts        | 384 +++++++++++++++++++++
+ .../boot/dts/amlogic/meson-khadas-vim3-ts050.dtso  | 108 ++++++
+ drivers/clk/meson/Kconfig                          |   5 +
+ drivers/clk/meson/Makefile                         |   1 +
+ drivers/clk/meson/g12a.c                           |  76 ++--
+ drivers/clk/meson/vclk.c                           | 141 ++++++++
+ drivers/clk/meson/vclk.h                           |  51 +++
+ drivers/gpu/drm/meson/meson_dw_mipi_dsi.c          |   7 +
+ 11 files changed, 829 insertions(+), 20 deletions(-)
+---
+base-commit: 4cece764965020c22cff7665b18a012006359095
+change-id: 20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-b8e5217e1f4a
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
 
