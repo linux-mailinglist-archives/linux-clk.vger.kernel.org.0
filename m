@@ -1,156 +1,116 @@
-Return-Path: <linux-clk+bounces-5579-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5581-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B4D6899F15
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 16:10:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AD2789A1C1
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 17:49:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE22B1C21223
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 14:10:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 286CB1F22177
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 15:49:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CED1716DEDD;
-	Fri,  5 Apr 2024 14:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAB4171072;
+	Fri,  5 Apr 2024 15:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNCLxQV/"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEBF16E895;
-	Fri,  5 Apr 2024 14:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2122E17106D;
+	Fri,  5 Apr 2024 15:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712326215; cv=none; b=YxPX8FTaUr7aEum4zmolp1NXgjHlkYkZKUonLPcF4CAZmIY1Wr0tQWvAh6qDUpCuc3aqdBM4trutLlPMTDecEj71R6fFOVv2lAsvlGazwNUr66huZ8diTeoCmxAO25wjuorRm5xU2MFUhpVfgXu9zYdxYpdL1oYHB1iCywv+FlA=
+	t=1712332137; cv=none; b=Mb5torBwP8WpqbXyQ7fyQ63akeUp8+3d1G6Pv0vcSA+A52ygBr79f2F85y/4P0nc3H0+M1012ZMmXFH4FRuTe0cGcUmDr3M3XQhajc/kFhH1cCrKFJA/vR9TNSqu2mY0HBJL8vDC1lzoeoc8TBzovU4vsRpus6iKgOt4qNPzfc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712326215; c=relaxed/simple;
-	bh=UhWkJrz23rKLc2rFOHT1xk+suq4P0R7Fe6anIWJ5btE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BG8kONHYPMshE2RImnJSk5JlghRwTpzRXRc1GYrmKyNaayno9prR/pQXvG7oNT6SC05XJLF2CF3fz20dl3Pmx7+CnqR7mPMLRd7SGwzolkW7RrSwBbe4owdN0Xe/ajhy17Fi+V/9IIF/XlPeAOUSKL9WLlMh1g1HS3WsBvL4IRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6151d2489b4so24101067b3.0;
-        Fri, 05 Apr 2024 07:10:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712326212; x=1712931012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zo5dazFCTOKvFVcPPNzGvqZjg5emzEStKUearWVqE/4=;
-        b=smdZ4x4tSobCG7/AJB5NXCw4gj5Km1mPaySy2IcZA1wu9jYPko//VYA2ThdRPwanvA
-         MC1Z4Y3VGv4hECxKJs5DjkR9zFKaiZ9agYgKaDxmXlG8YTWDklPv1cyo9TyNpY5HMQ4X
-         elPVHuE4gcC0iqoatpXNO3Cgcx6rcpryFpdjOkRWgmsvI8+f72itOeKWid9q/mszdiDL
-         KbGb2lUXSxvndo2LiNJ0Tjev1lJ2U0AfLVPnbkWKWCgmu/WAV9g5wW8NVPlhzFTBtnLb
-         EaMj5oqSBRQ80ahEs9js7XJCbkMEk4kXQP8IPKM8TRDitOsHpyeANnXCIIYR4MIxXFae
-         BD5g==
-X-Forwarded-Encrypted: i=1; AJvYcCUnEuPbaOhRQLIvz56UXaXLOxm4jTwf7T6UngwMHp0zVfhpgPMHyle0bQilYUihq0RISIyz9Gzetfvw1/KrYIPptj6GLpDJspNfZOZeZVtlTJB//1UhLOt+diBGLCyWnzVMJ/lBYs3i59xFa+fnQDih1wiF+HuaKXFDM51zAs9yC53TfQchHWh5EbdwCtMHY8yLxk058HsQle5SsBRPUDAVK73+YJuIUgfeot4Qmxb5E/Np43Mg/PwCGMqhvGQCWuj0r65axXoptjutoJL39T4UY9CK3qUCHfvn/gGmZE50miEu5vNNFY2T1XvQwYlQtmwDuYaLNM1++keLG8Fd3DytCzu18/wrzrREdDaZzl/HWLwHZ8CyrpU=
-X-Gm-Message-State: AOJu0YwvxaRCIEVT/zVCfalDAmhBHItiMr88lLhGODcta3p0TFh2+iQj
-	CEkjDd7PpAQVHy1jAsq/Dc4UX2ZBZ2yztd0CcKFzfUYRlC3DRRzKgQffP5ZBkno=
-X-Google-Smtp-Source: AGHT+IEP7v2FRtp6YWsKqFOWKu6GX9ebD3Ahe7HH5QN4FxWDZZBjjTw+UOh4HM5EFGxMk02CQuTa9g==
-X-Received: by 2002:a81:6086:0:b0:615:31a9:83c4 with SMTP id u128-20020a816086000000b0061531a983c4mr1461190ywb.6.1712326212430;
-        Fri, 05 Apr 2024 07:10:12 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id g68-20020a81a947000000b00617cf273030sm278771ywh.82.2024.04.05.07.10.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Apr 2024 07:10:12 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dbed0710c74so2090306276.1;
-        Fri, 05 Apr 2024 07:10:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3fJz6nL6cfIkiiG2ayy4RzOL2AldXVQJNoWYlsKDVgAtte9df/fQnzkurcNyjffaQcLcVhA4S1/tqOhyVS2GRh9SMU3sq26i9hekbCg8LNZa2J2H19KcNi+QjtS4guCcvsC6EmAOhRTNph3MwMjcW4zIDz07Z/QtLxLEM44PNeYAzb46Rxb4ly9UgBSzbCmTCXncx3LF1b2/hUCFUppVW/F1GSw94xx9lz9e5W4oDlinEzLdQtblFs+70X5XVeg++4X/Cn2saVSIvQHiLNc3YZm/B0juNwDEmxP/9DnGyNbTLbnNw292Jz7ufjJaDT19U4QMqhLE/udNFZ3IudIG2sCDaTB/GMUU5Fgghru5p6JAvKVqw6i0=
-X-Received: by 2002:a5b:b8f:0:b0:dc6:dd80:430e with SMTP id
- l15-20020a5b0b8f000000b00dc6dd80430emr1385717ybq.27.1712325790915; Fri, 05
- Apr 2024 07:03:10 -0700 (PDT)
+	s=arc-20240116; t=1712332137; c=relaxed/simple;
+	bh=IgoFna4ozbyY4uim9EA58wTZVLELUeO04TswSLteP6s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DzWxP4GQd9O4OIpgLNN3ZAaDloMrUh/XW3kdsdTL9zW+/gJKiFLqFxqTBD1zEZOJPkmE+9lTRVvVCOT3AVaLnQQyDNCoB1oOwAhKnLrgeK+91ZKMSYRI49UcdZeLHj5cdI2bE4XoH5PV01AcNFmrBDqzsAyqWKpBxQXFxIy+ZHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNCLxQV/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBC0C433B1;
+	Fri,  5 Apr 2024 15:48:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712332137;
+	bh=IgoFna4ozbyY4uim9EA58wTZVLELUeO04TswSLteP6s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ZNCLxQV/d9Gm8N9ut19bdF6HDO8Xy+cMGp/jd3klpEHI9GaRqDgTpd+BEyR/Ne7+m
+	 jmzc7s4ds+hI4pRDmzI0bnHMXtYvqA1G171h8rzfmeT0U4Taorij1FLbUgitNeitcj
+	 HvOLoIXoz+qZzCjTnM6FpZeRSfnt/+czJccKjMFVFU/OsSGZ8tP4qz3ATyVApCe6em
+	 sRKC0PXoChZKTfUOybhKGkukVeUuMeOUSif3EmyuqCNJBGtMi3xYqV+GO4gNjnmR/z
+	 ua5epYOwdOisi0YLgiqbbvyai5CxnwUubZrMrUinYnVOwmr730HIb6U1tW4zMnSV8G
+	 pgE01LuYwi7DA==
+From: Conor Dooley <conor@kernel.org>
+To: linux-riscv@lists.infradead.org,
+	Yangyu Chen <cyy@cyyself.name>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	Conor Dooley <conor@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Guo Ren <guoren@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-gpio@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/5] riscv: Kconfig.socs: Deprecate SOC_CANAAN and use SOC_CANAAN_K210 for K210
+Date: Fri,  5 Apr 2024 16:47:36 +0100
+Message-ID: <20240405-revolt-food-4654ca0ac5b4@spud>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <tencent_2E60E33C1F88A090B6B3A332AE528C6B8806@qq.com>
+References: <tencent_2E60E33C1F88A090B6B3A332AE528C6B8806@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1712207606.git.ysato@users.sourceforge.jp> <f3af315d575fbec431bad9bfaf9790450ab31ad9.1712207606.git.ysato@users.sourceforge.jp>
-In-Reply-To: <f3af315d575fbec431bad9bfaf9790450ab31ad9.1712207606.git.ysato@users.sourceforge.jp>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 5 Apr 2024 16:02:59 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU1vhCZ+mCKB27N57N7atLdxSmEUV8RWJf7uiZkfUvG0A@mail.gmail.com>
-Message-ID: <CAMuHMdU1vhCZ+mCKB27N57N7atLdxSmEUV8RWJf7uiZkfUvG0A@mail.gmail.com>
-Subject: Re: [RESEND v7 21/37] dt-bindings: serial: renesas,scif: Add scif-sh7751.
-To: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: linux-sh@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
-	Niklas Cassel <cassel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	Lee Jones <lee@kernel.org>, Helge Deller <deller@gmx.de>, 
-	Heiko Stuebner <heiko.stuebner@cherry.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Rientjes <rientjes@google.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Kefeng Wang <wangkefeng.wang@huawei.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Guo Ren <guoren@kernel.org>, 
-	Azeem Shaikh <azeemshaikh38@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jacky Huang <ychuang3@nuvoton.com>, 
-	Herve Codina <herve.codina@bootlin.com>, 
-	Manikanta Guntupalli <manikanta.guntupalli@amd.com>, Anup Patel <apatel@ventanamicro.com>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Sam Ravnborg <sam@ravnborg.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-ide@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	"Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1455; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=MZ6COhcm44GicWVOSRcaxUS9DaBxroGchNqsbFCZFmg=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDGkCsuIr+IwaOV9x8rQLzjqXWXXzZomHRVWxd3DoOmmNX rPIwJKOUhYGMQ4GWTFFlsTbfS1S6/+47HDueQszh5UJZAgDF6cATGTrbEaGB2F7Vix9F969e0Fx VOaE7aXFhWHTlr8TvT2zZZrlUX6LIEaGlkl2b/7KfJCc8Fm175dm+YW5rlzyWkxLQ7ZzTFKa1fu eEwA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
-Hi Sato-san,
+From: Conor Dooley <conor.dooley@microchip.com>
 
-On Thu, Apr 4, 2024 at 7:15=E2=80=AFAM Yoshinori Sato
-<ysato@users.sourceforge.jp> wrote:
-> Add Renesas SH7751 SCIF.
->
-> Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Fri, 29 Mar 2024 01:03:22 +0800, Yangyu Chen wrote:
+> Since SOC_FOO should be deprecated from patch [1], and cleanup for other
+> SoCs is already in the mailing list [2,3,4], so we deprecate the use of
+> SOC_CANAAN and use ARCH_CANAAN for SoCs vendored by Canaan instead from now
+> on.
+> 
+> However, the K210 SoC is so special for NoMMU and built for loader.bin, if
+> we share the ARCH_CANAAN symbol directly for K210 and other new SoCs which
+> has MMU and no need for loader, it will confuse some users who may try to
+> boot MMU Kernel on K210, but it will fail. Thus, this patch set renamed the
+> original use of SOC_CANAAN to SOC_CANAAN_K210 for K210 SoC, as Damien
+> suggested from the list [5]. Then, it made some adaptations for soc, clk,
+> pinctrl, and reset drivers.
+> 
+> [...]
 
-> --- a/Documentation/devicetree/bindings/serial/renesas,scif.yaml
-> +++ b/Documentation/devicetree/bindings/serial/renesas,scif.yaml
-> @@ -18,6 +18,7 @@ properties:
->        - items:
->            - enum:
->                - renesas,scif-r7s72100     # RZ/A1H
-> +              - renesas,scif-sh7751       # SH7751
->            - const: renesas,scif           # generic SCIF compatible UART
->
->        - items:
+Applied to riscv-dt-for-next, thanks!
 
+[1/5] riscv: Kconfig.socs: Split ARCH_CANAAN and SOC_CANAAN_K210
+      https://git.kernel.org/conor/c/ef10bdf9c3e6
+[2/5] soc: canaan: Deprecate SOC_CANAAN and use SOC_CANAAN_K210 for K210
+      https://git.kernel.org/conor/c/915fb0e31c5b
+[3/5] clk: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
+      https://git.kernel.org/conor/c/8e5b7234ded5
+[4/5] pinctrl: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
+      https://git.kernel.org/conor/c/c1556a9b426e
+[5/5] reset: k210: Deprecate SOC_CANAAN and use SOC_CANAAN_K210
+      https://git.kernel.org/conor/c/68f41105ea07
 
-If this is applied after "[PATCH v2 2/2] dt-bindings: serial:
-renesas,scif: Validate 'interrupts' and 'interrupt-names'"[1], an extra
-"- renesas,scif-sh7751" line should be added to the 4-interrupt section
-(below "- renesas,scif-r7s72100").
+I added another commit at the end, deleting SOC_CANAAN given all the users
+are gone and it is not user-visible:
+	https://git.kernel.org/conor/c/0eea987088a22d73d81e968de7347cdc7e594f72
 
-[1] https://lore.kernel.org/all/20240307114217.34784-3-prabhakar.mahadev-la=
-d.rj@bp.renesas.com/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Thanks,
+Conor.
 
