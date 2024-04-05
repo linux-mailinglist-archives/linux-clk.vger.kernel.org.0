@@ -1,373 +1,131 @@
-Return-Path: <linux-clk+bounces-5568-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-5570-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72A988997A0
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 10:17:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A0A899D06
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 14:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F155E1F229AF
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 08:17:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C09B1C20C27
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Apr 2024 12:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C646E1465BA;
-	Fri,  5 Apr 2024 08:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ub7y1Y+p"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CC216DEBB;
+	Fri,  5 Apr 2024 12:32:12 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B164146594;
-	Fri,  5 Apr 2024 08:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9450316DEA5;
+	Fri,  5 Apr 2024 12:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712305026; cv=none; b=bSoObrM8XwFnPVv6K+rN4b4u4Ez1I0tSqXovhI3ioJzBpXtI7iQUox1K+J4ZQa/6RmUb/Arc75Uu0IduLUhbffWhT/cppqQYwXUiuStZLoFFAsCX9kYr+FYUPk8JDwsjpDTDx2ZXt2Vn6ftP5+6hR2+HVyLCiLtLxAY0J59XxLs=
+	t=1712320332; cv=none; b=oin4xQYxqoesX1p7kEm88v1LcIh7REm/H1Rzpb9u+5UluRhArQVu0C6F+EwJ4U5jRNnSUQA5wFLx+QDL2gItMyysVApvupI2zBKHch2nkVx9Qe3zwHJRr294onE7ngZYvGsvxvzuo7ktMiwi1BHNkjXxsUkwxu4NmzDKUeCOCSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712305026; c=relaxed/simple;
-	bh=kQskCbsP/oHyzSY7rJKANCSHc9bKHugr17JluR87UFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OmNYd++i6UTgrdih1P8EQdGqVJN9mDLetgWFu3rHriVitdj/Kg+JPgjtrDa+q9zlsOqxO8EGpoc/agB6aBpych3NK6wD+OnSFGAdmZ9oTWh+HEJF6LgTDrtmB9AEhCDTet8AZQDgdqEPZvUf/FNz+LSpCZ6ZGyXBO8nz/T0KW3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ub7y1Y+p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969E6C433C7;
-	Fri,  5 Apr 2024 08:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712305026;
-	bh=kQskCbsP/oHyzSY7rJKANCSHc9bKHugr17JluR87UFk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ub7y1Y+pKR34NbpbDK0iWxgLxKbpoEJZ99OJQUGG2uZcj4IlZ8qorHVAsmnIsIs2S
-	 /1KwB89JC5q38tBlzq014CwLylluTFvowAjoRZdxFjzd+SE/eqo2kiF9lmDVKOPtOD
-	 2tDNXJ7oBvZ6vn4Mh5k79LVdQo8ERwpTeTLVqUFf7A/dhUb+rF14M5wThwSv5sNe4B
-	 t1wTs1wzckuSdvwt/5rRJcvjCfGU4hYBHEmz8DZVBrHWVFEBt5WZQAbaHTg/QmJU+Q
-	 rO1mlgn7h/fBT5QoEnqweQNbq+AE/XR/8qN7isUA3FPvSTljqC6fke3i/sL2aPV7EW
-	 JlVMD3lc/eI3w==
-Date: Fri, 5 Apr 2024 10:17:02 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-clk@vger.kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-	linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	nbd@nbd.name, john@phrozen.org, devicetree@vger.kernel.org,
-	dd@embedd.com, catalin.marinas@arm.com, will@kernel.org,
-	upstream@airoha.com, lorenzo.bianconi83@gmail.com
-Subject: Re: [PATCH 4/4] clk: en7523: add EN7581 support
-Message-ID: <Zg-zfiCTIS5zij2w@lore-desk>
-References: <cover.1712160869.git.lorenzo@kernel.org>
- <3aaf638b846ecfdbfc1c903206b7d519d56c9130.1712160869.git.lorenzo@kernel.org>
- <0297a8ab-2f62-4f03-b2ed-87180a47c57c@collabora.com>
+	s=arc-20240116; t=1712320332; c=relaxed/simple;
+	bh=RB1Wd/l8LoElaNdtvFRK6lkrvSeTO+EqCHYvOY2uo9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vcd53BblRdWhkH3/OY2IylBbqdArQoDEDQAU89QBqfVv7YYdWsINkBCHusfKJcP3zgsQdZ2CCr85kOcRGLKq4Aw9se/dtPDwa1lwgpJqEJZXS/2eeMzDv2PUpKSeP7dzunik+V5eB0QO5QZVfX5OsvxsbEI7/fJu/cmUEWwciws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dcc71031680so2104444276.2;
+        Fri, 05 Apr 2024 05:32:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712320328; x=1712925128;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/bPulDFyqKcNHOqZbTas5oGwjflVlb0IvXxADWNRbac=;
+        b=MPlvI2s8USkd0KUwDLyzT+44IipyacqoM3eSrOXEnaE+gq/5eri1jvCAFInTymt60z
+         REU/Xv5JsI4t7qr17Xnw+FIDmUxaLz7gsDwdCATDwL4saADckMYtHthVLdhZjH4WnVkI
+         HNmDc5maAvcDHpP8QIc+gi4SIJ7qQHSvwOpCpAw14M34yvFCdM4lTsL//m/wELHt3DrF
+         xCzxk0tHygg8yKgui6SNjP9VEBw9MCjbiZR9HYwoxG9s1tsg1f3UKX2ja26i2NdU7l6K
+         IF6LPaov4qX7thKBssjGWuISdK8f4InaEyHqbsyt6dnrBeG3EEVVFTShBlccg7+s9F3F
+         AZVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWL5nURRwxemR+6FpvigBrmySRwBvKpTecJEy/+pr7a/EPAndTOjR1HayG/9Cwqlxk1bQHM9EH6lT/rfRGBLnCz1SSwBQ03t9FaEezpmkYkReHuLJhfU93oj3ltN6sRC0VvGpnpDpeqITVL8H3noqnNYVa7xvMWbD8HbQA0geo9wf9XXi30uxCvWsVdrgft6rHgcKw/6kreLrVOWUp0Zj7Ww+cJNduKmoj9PlChpSP6qyq+Yvwt4/i9VTAbDYg1js+vlRnsdYmQaXBe2BEK6VrEXkOIVoX48ghA6ij+LwxKLjzxYsUo9NLl9GydVMZRYi0SIQA0UqQ8fDy/6FdrKGj7Qx59s7lf0Ovu443QwAKZhY05OJRpi2g=
+X-Gm-Message-State: AOJu0YzEmVMQJ17wtrOGRxANtnDxvTZ4n3IIxa58hBJWlw07SqnqyyIe
+	Vhmkx6r/UINMq4po4OpwPVcvZiW/5XlcYCRpEU6lwQK/5/+1wIQOtr6wJq+Az4k=
+X-Google-Smtp-Source: AGHT+IGgevHEpkwMOS5F8pl4dvxc5ZuXVYL1BPsil8rGe3AWrEo/ncgGoEdKh0U9XNWHI/dLAToN5Q==
+X-Received: by 2002:a5b:ac6:0:b0:dc6:d457:ac92 with SMTP id a6-20020a5b0ac6000000b00dc6d457ac92mr984772ybr.31.1712320327715;
+        Fri, 05 Apr 2024 05:32:07 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id h4-20020a25b184000000b00dcf35be9f51sm284055ybj.24.2024.04.05.05.32.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Apr 2024 05:32:07 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6151d2489b4so23214527b3.0;
+        Fri, 05 Apr 2024 05:32:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWCCz7fA2Scgs08FC+THMGTgCJv9gl18fLbu1NXBD3XzOowX1J9JcPetsrnxejSXGejHF+zEgnxKFVCryqhlpXFJLiq8yL9Ok95qeT9dVG16h9hICUfo2sOC80D4xpJv5saikGuc+5vBPGB+DmhdCAI044MiNxsoco8Ipre4i6/Er5NMsFq5TejWgZ2ESX8iTy19C+7OO8WOuJHYlCQwAujhrufjL8tccWpg7TajjzsOoIJty+1t8QPiM4CJwBktcNvAvplAFecd2lTEZ8bE1bpEpqLs9jcitN5ETCzEYTVp5luw4SM0BwiTPXmMp8SZwD8F/oGc02IUWHwYVhgsbMX3G+BhIwkQGWfTox/izi0nC6dt/xETRw=
+X-Received: by 2002:a5b:4ca:0:b0:dcd:19ba:10df with SMTP id
+ u10-20020a5b04ca000000b00dcd19ba10dfmr1040280ybp.56.1712320326217; Fri, 05
+ Apr 2024 05:32:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1WYQnZ6cJ3WK870d"
-Content-Disposition: inline
-In-Reply-To: <0297a8ab-2f62-4f03-b2ed-87180a47c57c@collabora.com>
-
-
---1WYQnZ6cJ3WK870d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1712207606.git.ysato@users.sourceforge.jp> <4ac65d0f311e890c1ca92bf057c70954ec7ac351.1712207606.git.ysato@users.sourceforge.jp>
+In-Reply-To: <4ac65d0f311e890c1ca92bf057c70954ec7ac351.1712207606.git.ysato@users.sourceforge.jp>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 5 Apr 2024 14:31:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXvL0fWGrn+KNDvXcioYnY-=3WmGtcdFkC82L7tL__+wA@mail.gmail.com>
+Message-ID: <CAMuHMdXvL0fWGrn+KNDvXcioYnY-=3WmGtcdFkC82L7tL__+wA@mail.gmail.com>
+Subject: Re: [RESEND v7 09/37] dt-binding: Add compatible SH7750 SoC
+To: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: linux-sh@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
+	Niklas Cassel <cassel@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Magnus Damm <magnus.damm@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	Lee Jones <lee@kernel.org>, Helge Deller <deller@gmx.de>, 
+	Heiko Stuebner <heiko.stuebner@cherry.de>, Shawn Guo <shawnguo@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Rientjes <rientjes@google.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Kefeng Wang <wangkefeng.wang@huawei.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Javier Martinez Canillas <javierm@redhat.com>, Guo Ren <guoren@kernel.org>, 
+	Azeem Shaikh <azeemshaikh38@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jacky Huang <ychuang3@nuvoton.com>, 
+	Herve Codina <herve.codina@bootlin.com>, 
+	Manikanta Guntupalli <manikanta.guntupalli@amd.com>, Anup Patel <apatel@ventanamicro.com>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Sam Ravnborg <sam@ravnborg.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-ide@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-fbdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-> Il 03/04/24 18:20, Lorenzo Bianconi ha scritto:
-> > Introduce EN7581 clock support to clk-en7523 driver.
-> >=20
-> > Tested-by: Zhengping Zhang <zhengping.zhang@airoha.com>
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > ---
-> >   drivers/clk/clk-en7523.c | 130 +++++++++++++++++++++++++++++++++++++--
-> >   1 file changed, 125 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/drivers/clk/clk-en7523.c b/drivers/clk/clk-en7523.c
-> > index c7def87b74c6..51a6c0cc7f58 100644
-> > --- a/drivers/clk/clk-en7523.c
-> > +++ b/drivers/clk/clk-en7523.c
-> > @@ -4,13 +4,16 @@
-> >   #include <linux/clk-provider.h>
-> >   #include <linux/io.h>
-> >   #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >   #include <linux/platform_device.h>
-> >   #include <dt-bindings/clock/en7523-clk.h>
-> >   #define REG_PCI_CONTROL			0x88
-> >   #define   REG_PCI_CONTROL_PERSTOUT	BIT(29)
-> >   #define   REG_PCI_CONTROL_PERSTOUT1	BIT(26)
-> > +#define   REG_PCI_CONTROL_REFCLK_EN0	BIT(23)
-> >   #define   REG_PCI_CONTROL_REFCLK_EN1	BIT(22)
-> > +#define   REG_PCI_CONTROL_PERSTOUT2	BIT(16)
-> >   #define REG_GSW_CLK_DIV_SEL		0x1b4
-> >   #define REG_EMI_CLK_DIV_SEL		0x1b8
-> >   #define REG_BUS_CLK_DIV_SEL		0x1bc
-> > @@ -18,10 +21,25 @@
-> >   #define REG_SPI_CLK_FREQ_SEL		0x1c8
-> >   #define REG_NPU_CLK_DIV_SEL		0x1fc
-> >   #define REG_CRYPTO_CLKSRC		0x200
-> > -#define REG_RESET_CONTROL		0x834
-> > +#define REG_RESET_CONTROL2		0x830
->=20
-> Wait what? The RESET2 register comes before RESET1 ?!?!
->=20
-> Is this a typo? :-)
+On Thu, Apr 4, 2024 at 7:15=E2=80=AFAM Yoshinori Sato
+<ysato@users.sourceforge.jp> wrote:
+> Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
 
-actually not :)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
->=20
-> > +#define   REG_RESET2_CONTROL_PCIE2	BIT(27)
-> > +#define REG_RESET_CONTROL1		0x834
-> >   #define   REG_RESET_CONTROL_PCIEHB	BIT(29)
-> >   #define   REG_RESET_CONTROL_PCIE1	BIT(27)
-> >   #define   REG_RESET_CONTROL_PCIE2	BIT(26)
-> > +/* EN7581 */
-> > +#define REG_PCIE0_MEM			0x00
-> > +#define REG_PCIE0_MEM_MASK		0x04
-> > +#define REG_PCIE1_MEM			0x08
-> > +#define REG_PCIE1_MEM_MASK		0x0c
-> > +#define REG_PCIE2_MEM			0x10
-> > +#define REG_PCIE2_MEM_MASK		0x14
-> > +#define REG_PCIE_RESET_OPEN_DRAIN	0x018c
-> > +#define REG_PCIE_RESET_OPEN_DRAIN_MASK	GENMASK(2, 0)
-> > +#define REG_NP_SCU_PCIC			0x88
-> > +#define REG_NP_SCU_SSTR			0x9c
-> > +#define REG_PCIE_XSI0_SEL_MASK		GENMASK(14, 13)
-> > +#define REG_PCIE_XSI1_SEL_MASK		GENMASK(12, 11)
-> >   struct en_clk_desc {
-> >   	int id;
-> > @@ -207,14 +225,14 @@ static int en7523_pci_prepare(struct clk_hw *hw)
-> >   	usleep_range(1000, 2000);
-> >   	/* Reset to default */
-> > -	val =3D readl(np_base + REG_RESET_CONTROL);
-> > +	val =3D readl(np_base + REG_RESET_CONTROL1);
-> >   	mask =3D REG_RESET_CONTROL_PCIE1 | REG_RESET_CONTROL_PCIE2 |
-> >   	       REG_RESET_CONTROL_PCIEHB;
-> > -	writel(val & ~mask, np_base + REG_RESET_CONTROL);
-> > +	writel(val & ~mask, np_base + REG_RESET_CONTROL1);
-> >   	usleep_range(1000, 2000);
-> > -	writel(val | mask, np_base + REG_RESET_CONTROL);
-> > +	writel(val | mask, np_base + REG_RESET_CONTROL1);
-> >   	msleep(100);
-> > -	writel(val & ~mask, np_base + REG_RESET_CONTROL);
-> > +	writel(val & ~mask, np_base + REG_RESET_CONTROL1);
-> >   	usleep_range(5000, 10000);
-> >   	/* Release device */
-> > @@ -262,6 +280,64 @@ static struct clk_hw *en7523_register_pcie_clk(str=
-uct device *dev,
-> >   	return &cg->hw;
-> >   }
-> > +static int en7581_pci_is_enabled(struct clk_hw *hw)
-> > +{
-> > +	struct en_clk_gate *cg =3D container_of(hw, struct en_clk_gate, hw);
-> > +	u32 val, mask;
-> > +
-> > +	mask =3D REG_PCI_CONTROL_REFCLK_EN0 | REG_PCI_CONTROL_REFCLK_EN1;
-> > +	val =3D readl(cg->base + REG_PCI_CONTROL);
-> > +	return (val & mask) =3D=3D mask;
-> > +}
-> > +
-> > +static int en7581_pci_prepare(struct clk_hw *hw)
-> > +{
-> > +	struct en_clk_gate *cg =3D container_of(hw, struct en_clk_gate, hw);
-> > +	void __iomem *np_base =3D cg->base;
-> > +	u32 val, mask;
-> > +
-> > +	mask =3D REG_RESET_CONTROL_PCIE1 | REG_RESET_CONTROL_PCIE2 |
-> > +	       REG_RESET_CONTROL_PCIEHB;
-> > +	val =3D readl(np_base + REG_RESET_CONTROL1);
-> > +	writel(val & ~mask, np_base + REG_RESET_CONTROL1);
-> > +	val =3D readl(np_base + REG_RESET_CONTROL2);
-> > +	writel(val & ~REG_RESET2_CONTROL_PCIE2, np_base + REG_RESET_CONTROL2);
-> > +	usleep_range(5000, 10000);
-> > +
-> > +	mask =3D REG_PCI_CONTROL_REFCLK_EN0 | REG_PCI_CONTROL_REFCLK_EN1 |
-> > +	       REG_PCI_CONTROL_PERSTOUT1 | REG_PCI_CONTROL_PERSTOUT2 |
-> > +	       REG_PCI_CONTROL_PERSTOUT;
->=20
-> I'm not sure that this is actually something to control in a clock driver=
-=2E..
->=20
-> the right thing to do would be to add a reset controller to this clock dr=
-iver
-> and then assert/deassert reset in the PCIe PHY/MAC driver.
->=20
-> Perhaps REFCLK_EN0/EN1 can be manipulated in a .enable() callback, treati=
-ng
-> this really just as what it appears to really be: a gate clock! (hint: ch=
-eck
-> clk-gate.c)
+Gr{oetje,eeting}s,
 
-ack, I will look into it.
+                        Geert
 
->=20
-> > +	val =3D readl(np_base + REG_PCI_CONTROL);
-> > +	writel(val | mask, np_base + REG_PCI_CONTROL);
-> > +	msleep(250);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void en7581_pci_unprepare(struct clk_hw *hw)
-> > +{
-> > +	struct en_clk_gate *cg =3D container_of(hw, struct en_clk_gate, hw);
-> > +	void __iomem *np_base =3D cg->base;
-> > +	u32 val, mask;
-> > +
-> > +	mask =3D REG_PCI_CONTROL_REFCLK_EN0 | REG_PCI_CONTROL_REFCLK_EN1 |
->=20
-> ...and this should be a clk-gate .disable() callback, I guess :-)
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-ack, I will look into it.
-
->=20
-> > +	       REG_PCI_CONTROL_PERSTOUT1 | REG_PCI_CONTROL_PERSTOUT2 |
-> > +	       REG_PCI_CONTROL_PERSTOUT;
-> > +	val =3D readl(np_base + REG_PCI_CONTROL);
-> > +	writel(val & ~mask, np_base + REG_PCI_CONTROL);
-> > +	usleep_range(1000, 2000);
-> > +
-> > +	mask =3D REG_RESET_CONTROL_PCIE1 | REG_RESET_CONTROL_PCIE2 |
-> > +	       REG_RESET_CONTROL_PCIEHB;
-> > +	val =3D readl(np_base + REG_RESET_CONTROL1);
-> > +	writel(val | mask, np_base + REG_RESET_CONTROL1);
-> > +	mask =3D REG_RESET_CONTROL_PCIE1 | REG_RESET_CONTROL_PCIE2;
-> > +	writel(val | mask, np_base + REG_RESET_CONTROL1);
-> > +	val =3D readl(np_base + REG_RESET_CONTROL2);
-> > +	writel(val | REG_RESET_CONTROL_PCIE2, np_base + REG_RESET_CONTROL2);
-> > +	msleep(100);
-> > +}
-> > +
-> >   static void en7523_register_clocks(struct device *dev, struct clk_hw_=
-onecell_data *clk_data,
-> >   				   void __iomem *base, void __iomem *np_base)
-> >   {
-> > @@ -291,6 +367,37 @@ static void en7523_register_clocks(struct device *=
-dev, struct clk_hw_onecell_dat
-> >   	clk_data->num =3D EN7523_NUM_CLOCKS;
-> >   }
-> > +static int en7581_clk_hw_init(struct platform_device *pdev,
-> > +			      void __iomem *base,
-> > +			      void __iomem *np_base)
-> > +{
-> > +	void __iomem *pb_base;
-> > +	u32 val;
-> > +
-> > +	pb_base =3D devm_platform_ioremap_resource(pdev, 2);
-> > +	if (IS_ERR(pb_base))
-> > +		return PTR_ERR(pb_base);
-> > +
-> > +	val =3D readl(np_base + REG_NP_SCU_SSTR);
-> > +	val &=3D ~(REG_PCIE_XSI0_SEL_MASK | REG_PCIE_XSI1_SEL_MASK);
-> > +	writel(val, np_base + REG_NP_SCU_SSTR);
-> > +	val =3D readl(np_base + REG_NP_SCU_PCIC);
-> > +	writel(val | 3, np_base + REG_NP_SCU_PCIC);
->=20
-> What is 3?
->=20
-> #define SOMETHING 3 ??
-
-actullay I do not know what it means since write in the pcie_ctrl subfield =
-of
-REG_NP_SCU_PCIC but it is a GENMASK(7, 0) and I do not have any more info
-about it.
-
->=20
-> > +
-> > +	writel(0x20000000, pb_base + REG_PCIE0_MEM);
-> > +	writel(0xfc000000, pb_base + REG_PCIE0_MEM_MASK);
-> > +	writel(0x24000000, pb_base + REG_PCIE1_MEM);
-> > +	writel(0xfc000000, pb_base + REG_PCIE1_MEM_MASK);
-> > +	writel(0x28000000, pb_base + REG_PCIE2_MEM);
-> > +	writel(0xfc000000, pb_base + REG_PCIE2_MEM_MASK);
->=20
-> And... this is .. some BIT() and some GENMASK() as far as I understand...
-> do we have any clue about what you're setting to those registers?
-
-same as above, they seems undocumented.
-@airoha folks: any input about them?
-
->=20
-> Can MediaTek/Airoha help with this, please?
->=20
-> #define SOMETHING BIT(29) /* this is 0x20000000 */
-> #define SOME_MASK GENMASK(31, 26) /* this is 0xfc00000 */
->=20
-> > +
-> > +	val =3D readl(base + REG_PCIE_RESET_OPEN_DRAIN);
-> > +	writel(val | REG_PCIE_RESET_OPEN_DRAIN_MASK,
-> > +	       base + REG_PCIE_RESET_OPEN_DRAIN);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static int en7523_clk_probe(struct platform_device *pdev)
-> >   {
-> >   	struct device_node *node =3D pdev->dev.of_node;
-> > @@ -306,6 +413,12 @@ static int en7523_clk_probe(struct platform_device=
- *pdev)
-> >   	if (IS_ERR(np_base))
-> >   		return PTR_ERR(np_base);
-> > +	if (of_device_is_compatible(node, "airoha,en7581-scu")) {
-> > +		r =3D en7581_clk_hw_init(pdev, base, np_base);
-> > +		if (r)
-> > +			return r;
-> > +	}
-> > +
-> >   	clk_data =3D devm_kzalloc(&pdev->dev,
-> >   				struct_size(clk_data, hws, EN7523_NUM_CLOCKS),
-> >   				GFP_KERNEL);
-> > @@ -329,8 +442,15 @@ static const struct clk_ops en7523_pcie_ops =3D {
-> >   	.unprepare =3D en7523_pci_unprepare,
-> >   };
->=20
-> static const struct clk_en7523_pdata en7581_pdata =3D {
-> 	.init =3D en7581_clk_hw_init, /* if (pdata->init) pdata->init(x, y, z) */
-> 	.ops =3D en7581_pcie_ops,
-> };
->=20
-> or, alternatively:
->=20
-> static const struct .... =3D {
-> 	.init =3D ...,
-> 	.ops =3D (const struct clk_ops) {
-> 		.is_enabled =3D en7581_pci_is_enabled,
-> 		.... etc
-> 	}
-
-ack, I will fix it.
-
-Regards,
-Lorenzo
-
-> };
->=20
-> Cheers,
-> Angelo
->=20
-> > +static const struct clk_ops en7581_pcie_ops =3D {
-> > +	.is_enabled =3D en7581_pci_is_enabled,
-> > +	.prepare =3D en7581_pci_prepare,
-> > +	.unprepare =3D en7581_pci_unprepare,
-> > +};
-> > +
-> >   static const struct of_device_id of_match_clk_en7523[] =3D {
-> >   	{ .compatible =3D "airoha,en7523-scu", .data =3D &en7523_pcie_ops },
-> > +	{ .compatible =3D "airoha,en7581-scu", .data =3D &en7581_pcie_ops },
-> >   	{ /* sentinel */ }
-> >   };
->=20
-> -
-
---1WYQnZ6cJ3WK870d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZg+zfgAKCRA6cBh0uS2t
-rEeeAQCU1mJguiAAnl9h/mLdiepwXe+MApNVgH7ZMSH0lyr7lAEAnOZc1GK3p5Zs
-sdp+Zn+7Su6SW2P4NaCCwwro4/yGTQQ=
-=4hwU
------END PGP SIGNATURE-----
-
---1WYQnZ6cJ3WK870d--
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
