@@ -1,110 +1,134 @@
-Return-Path: <linux-clk+bounces-6068-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6070-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFDB98A8250
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Apr 2024 13:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D80108A848B
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Apr 2024 15:28:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EFA11F22C0C
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Apr 2024 11:47:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 787161F2029C
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Apr 2024 13:28:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 419F413CFAF;
-	Wed, 17 Apr 2024 11:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mCpzGYZR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3471422C5;
+	Wed, 17 Apr 2024 13:26:33 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CA513CAB7
-	for <linux-clk@vger.kernel.org>; Wed, 17 Apr 2024 11:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC46413F437
+	for <linux-clk@vger.kernel.org>; Wed, 17 Apr 2024 13:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713354411; cv=none; b=UiJ+onvNIcXlFkxXVlA8W8wYs2TiXFpZ6sJjRwCzEH/SfaUbUAwwFN6XIszXsbq85klMQ4XhJNbi8DCqRsUwhPf6404pWHB7EfhM1cPx8uMv9NVKe9EDfj94ksJIdJFCRSHdnImxoAhFCjoEvF1LOPAbuviIAzXOfzQ+7K3pqjU=
+	t=1713360393; cv=none; b=dcf58yuaK3H92oxWsQgoBizeE/7lAwk9v7AxRcMGywODABC5fV4/nS+GYuV77MO+VTqNfONqrNldUC4gRels2lpIIa9vVoGVIxmyWGsv8NgoRqPt7c0iHA9zO/TJWJyHkLrhQvF864nYFYN7h539M8q4kDwvguMKFPp7lSxI9rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713354411; c=relaxed/simple;
-	bh=fvmf65/P9szpFK2qdaU9n3rF1YNMb7cvoUstdIgrV3o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=euac6mPtBlPFmWWWDXFIQ6oKqt6GsvCBbv3zcWx2pHACRAE7kY1IHXeBRSqpwyptqIOctWh/qjlD4yIvF4DaUUr+iEyplm58poHgHrjJ7Ser87AgLbt5iPrGVdTOu4+bP1P/GuPHRaHkPPeokHTh4ISjgV6Q7AsPr+0M4g3zIco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mCpzGYZR; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-618769020bcso58468137b3.3
-        for <linux-clk@vger.kernel.org>; Wed, 17 Apr 2024 04:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713354407; x=1713959207; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fvmf65/P9szpFK2qdaU9n3rF1YNMb7cvoUstdIgrV3o=;
-        b=mCpzGYZR/46ZQuAau0bSRhR0FD5k7fh4SSEz3Nq7zi0S4UDs+2+/mgG8hbZ2TOEfFa
-         VnuEAxEfiUW5dW8ztwTzgs7fezgt4SmjroWhsc5KCg2ILZ7XrFDUkqJj/kWhLJR9n3cX
-         OAaASPVPTX8pPR4V3iIxqTyRES8TonOBKKbj8Ia9JgBKr6Qo2O9mnQjtJiGDMZl/CoIE
-         l5+oqhw1O3ZLVLkibs1r73NVAeJmC+6UJmoA72qmo1LGEIGNvEbMA71jIQSfnMCbN4Q7
-         Knym4rLCB+h0yYobOKyFaTbBeAhFXbW32Fkuc43l3jarw91MdMvjaNsXaBDxbbL2vQLm
-         KYNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713354407; x=1713959207;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fvmf65/P9szpFK2qdaU9n3rF1YNMb7cvoUstdIgrV3o=;
-        b=djR66qbVeIZOLMaCyiQEnkARXgVE0bpeOvxn10wFSmIZG8bhgQwhdpldCkTxzkGHbt
-         hp+lsHxqqhcI4jv9YkntiyNaXMnfpHJTKA6Y8pwbFdOVHxyHxbaTeDNFDldWPSGG0NUy
-         GqRE0ULl4zVC2VflD//Aop66Y6zrgwNDgwTEN9bN9V+MFg2R50GFsg8aIcTDmAgJ5nNi
-         Djbd4LM6RgpLiUsI07slKwJIQMECF7dfaJt+vfD+pk0HnIk2XQXXGeWh8c87BnJ2GAAG
-         gWB3zn20SGExnwYTcyahdNvyTAkq2GyPKwDPGmKfnWFId0amcmr2eeZXXDLz9cg3I1fy
-         4ybw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+nHJc+AmpGmqrxzhF0ntiiKpJdnLT3AKLSegI5zypTk/4dVzz2rOTYVC1DCd3JEBN+Icxa4ZixER5TmYwj8CsOlwKvaqshILN
-X-Gm-Message-State: AOJu0YzyTnVRSkV2J4Ti8cvcBNQyv7lOK0cEMfJj5ihvY5KCt7Ku5WqC
-	1yp6DHJxEYfWexUo/Zneph3+uP/Ob5W3gBY04p0vz7K387OSLWpBrCwlqk2R+dgaoaiTqZyEPpy
-	EIcZ2A+nmfb79gnavq5sK5qP3pfMenJkaRRhbs3EE5BxU6qiw
-X-Google-Smtp-Source: AGHT+IHaD+oBtxsxurR2xr7+C5Dc/H+UHa4V1Pxg4C+1i8P8lLpLApH2p8YLciARVFNYj0rwHnv7aiDYHF6DmqUMe9U=
-X-Received: by 2002:a0d:cc4d:0:b0:61a:e856:85f1 with SMTP id
- o74-20020a0dcc4d000000b0061ae85685f1mr6294364ywd.13.1713354407196; Wed, 17
- Apr 2024 04:46:47 -0700 (PDT)
+	s=arc-20240116; t=1713360393; c=relaxed/simple;
+	bh=s8ny+TndcIJQgmcNzBMecyd/A5GThSZKfKRvzWKXkgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kpJl7j/7tq5ZS8mTJaqK5gKWLxtwGfkOvlI2Lg9/zykhVryNyEj3PGqk2KuRhTJXmF9EkLiHDKfOdfjsQ13Y889wInfczUIeCqPHJYLe3x2fO5obmzQT9tT8v5GwQXzX0D3EJ+XEGtBNIS/MTf9QBU6eVvUCe592mxb9Yj0RnJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rx5IP-0007GI-7I; Wed, 17 Apr 2024 15:25:53 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rx5IM-00CnkN-Su; Wed, 17 Apr 2024 15:25:50 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rx5IM-002rHj-2Y;
+	Wed, 17 Apr 2024 15:25:50 +0200
+Date: Wed, 17 Apr 2024 15:25:50 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Alexandre Mergnat <amergnat@baylibre.com>, 
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Jitao Shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, dri-devel@lists.freedesktop.org, 
+	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 11/18] dt-bindings: pwm: mediatek,pwm-disp: add
+ power-domains property
+Message-ID: <5vqnkgp77tir5j5cumo62pm2cw4xjabexu7nk3kze4gk4ri5dn@g3pee2beuuco>
+References: <20231023-display-support-v2-0-33ce8864b227@baylibre.com>
+ <20231023-display-support-v2-11-33ce8864b227@baylibre.com>
+ <1db01bd8-0936-40e5-9f1b-7ea34746bef1@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240417-msm8660-mmcc-v1-1-efc9e455268c@herrie.org>
-In-Reply-To: <20240417-msm8660-mmcc-v1-1-efc9e455268c@herrie.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 17 Apr 2024 13:46:36 +0200
-Message-ID: <CACRpkdZYujAGZc04Zk0CdzMvFi9KJB+8z8ADN6+VBgahxxPwUg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: Add qcom MSM8660 MMCC defines
-To: Herman van Hazendonk <github.com@herrie.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2mhwzpvshnycjgzu"
+Content-Disposition: inline
+In-Reply-To: <1db01bd8-0936-40e5-9f1b-7ea34746bef1@collabora.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+
+
+--2mhwzpvshnycjgzu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 17, 2024 at 1:19=E2=80=AFPM Herman van Hazendonk
-<github.com@herrie.org> wrote:
+Hello,
 
-> From: Linus Walleij <linus.walleij@linaro.org>
->
-> The compatible binding for the MSM8660 MMCC already exist
-> but the enumerator defines are missing. Add them.
->
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Herman van Hazendonk <github.com@herrie.org>
+On Wed, Apr 17, 2024 at 12:19:19PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 16/04/24 17:53, Alexandre Mergnat ha scritto:
+> > According to the Mediatek MT8365 datasheet, the display PWM block has
+> > a power domain.
+> >=20
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>=20
+> It's the same for at least MT8195, MT8183 and I think MT8192 as well... so
+> not having that from the beginning is actually a mistake.
+>=20
+> Please add a Fixes tag and resend, after which:
+>=20
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 
-Same question as the other patch here:
-do you have it working on real hardware?
+You mean similar to:
 
-I didn't submit it because I could never test it, and
-for me something was missing (like SAW regulators,
-interconnect or something like that).
+	https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit=
+/?id=3Dfb7c3d8ba039df877886fd457538d8b24ca9c84b
 
-Yours,
-Linus Walleij
+? It seems someone you know well was quicker :-)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--2mhwzpvshnycjgzu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYfzd0ACgkQj4D7WH0S
+/k644QgApZcXCwxXpE1GPvpexO/Vc5AFPTJkm7FRBnwJJkvRZ1ycT6cFchMCCuDk
+54zNsJAXca62uylo+g0umyShBTdJtfK1/jrxOFPvuA+8sdm6j2zXdQGxrq2QozhU
+52gFI/sNHpKkYT/ky/xaUHOpbw/BK8bc/6mkaCoKcZg3aB3U/lJsgIX1x9d/Uqo6
+70f0ssIQn1KRrZj66GjL2o9m9A8aZ5shpR3TTBtnjw1/K6I2aAU7VUX4R5Uda7ol
+bdrw0/GGO0IuYZ+q+F2LLbRTFE2oHy3ZzNQlJ8HBj2e160g1Mo+AQqfqcEwZe8C6
+4qWjBjl/FQQtdEludY7c04KB7u+YSg==
+=3M09
+-----END PGP SIGNATURE-----
+
+--2mhwzpvshnycjgzu--
 
