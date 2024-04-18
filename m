@@ -1,135 +1,140 @@
-Return-Path: <linux-clk+bounces-6106-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6108-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F0C78A9620
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Apr 2024 11:28:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 855CE8A9695
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Apr 2024 11:46:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E747A1F22BC8
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Apr 2024 09:28:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A91BC1C208FC
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Apr 2024 09:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB9216086C;
-	Thu, 18 Apr 2024 09:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982D815B12B;
+	Thu, 18 Apr 2024 09:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="C7OnSNOu"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yEVy/iks"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B1715B993;
-	Thu, 18 Apr 2024 09:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596FC15B109
+	for <linux-clk@vger.kernel.org>; Thu, 18 Apr 2024 09:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713432268; cv=none; b=raWOFQKk1Wsn0uTh3Ia2cf5e2xQlGItOb+Ee4ABLCfDjSthUm/D5aHjyp+w7yGYUe0BzQVshjE94LyZFPD9idayX/o45o8a4TaiwoTQkAvvfAE8DyHbrlaLFTCiZFh6fgLw+pOVshfIMT4o1UYtQHIM9b9/LTvnSc+ZuuPhEjqU=
+	t=1713433579; cv=none; b=JY0TJodXeaOS30mofzu1xA3E01IlxH+wAGi4EnP//vHL+p8lh7JF/VeRLKVEWOrAj1aZDxsvrkDFx8Zi1dHLjLtomN/4XvGuiZ/Hu2Xx5sz9cDAOsrix3GVUOaPseETXHaMbMABk3z8q5EDjP7casF/LoXxP1SK/IDAN3y+EpDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713432268; c=relaxed/simple;
-	bh=T6AypkH3WpV7sX0/al8Y8+9eYsNDm9sgfT2ZqgdoI8k=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cxuUvhu3idUFXrxeEK62CUHee5A3r46MTNUMEuJEyKsoPAqGiyVSIT5O31LAW5c2Lx6UU171wRg6Z+s6w9jsXNbnWnL/IRPhv2A8ya/TcWE0F0HT22/hpZSfeXWl6ywp8z0D6KVobUv2TKjYp2HgtS2nJScTu4IEci/8VlADT04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=C7OnSNOu; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43I8dNaS010824;
-	Thu, 18 Apr 2024 09:24:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=XQz0y87xjJzpSve+PFnGb8Dxx4cy4BCAlvoWDerKyCU=; b=C7
-	OnSNOuJM73wQOp1CutkdQo9X3If1XIHr0z0OghcKyYY/hpER73ov4CMaGM+SGlAN
-	Qc7lgCd7G1YYOfV649oVNcx/eERm6qnZ8ZobC1cwCD6DFOj+pfY5vX/6HDFPHhQW
-	6ryWQXpXztzifkHZoGuoe3bttRrxFU334XfdvIGjnCxrAToKtoJFYfx3SQaXVerh
-	wAFYAn0hfnKpVVAZTAOVf0Ew/4rlK4HZBf5yKYmM4YLCrgY6SVDlou6RQIQwbt8l
-	KadCv6xz8qyOxnceUw9qhe6otRQIIyqajJ5On/GYSgz1jk5BidpxXvxjxYvlFyzX
-	f5mYFW99YQqtqMoYjKvw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xk06n0327-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 09:24:22 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43I9O46s009459
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 09:24:04 GMT
-Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 18 Apr 2024 02:23:59 -0700
-From: Varadarajan Narayanan <quic_varada@quicinc.com>
-To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <quic_varada@quicinc.com>, <dmitry.baryshkov@linaro.org>,
-        <quic_anusha@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH v9 6/6] arm64: dts: qcom: ipq9574: Add icc provider ability to gcc
-Date: Thu, 18 Apr 2024 14:53:05 +0530
-Message-ID: <20240418092305.2337429-7-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240418092305.2337429-1-quic_varada@quicinc.com>
-References: <20240418092305.2337429-1-quic_varada@quicinc.com>
+	s=arc-20240116; t=1713433579; c=relaxed/simple;
+	bh=QR450DPU8OzcEkmYkgjgRjPQF6842rrOEaOvoQ0x5nw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tIBbWzSlkpZREoa/WDULjJDVe1ZjOVmiWdofrmhp/750iBWdd4cKDkAbXYy7DUTQtduq975BGHUTIXc0PgRXbQ5qjrtPSEEoyC1AwzOsb3w9xdcYj5g1mjrjbf8oFSaU1ojr5aT2t4RuxrQ0XUdbAyqhXb3pDny0SFymqNRa78Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yEVy/iks; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-518a3e0d2ecso930996e87.3
+        for <linux-clk@vger.kernel.org>; Thu, 18 Apr 2024 02:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1713433574; x=1714038374; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qHTQNdaixaJmXmKKuqa6bURMHudpKto3SJOTxQWsB1k=;
+        b=yEVy/ikscqdcdfnXKXgDJCcl8t3X4rgcVC9+vfcL4CicX4qkrUshxt7RhSJdVyBCPi
+         AmNz3YwTivc0vAO4OU5EMDYg3XuWmOhtQFgGqNIudn+YXYkUuX/nXr4e024bTJGAOfO9
+         762mJdUbQ1YQiEGyPqygp2Q02Ktsv/NfTrae729jB+6D0EJhvRhEOCISN/gT9i9mX/s2
+         7VSw5sLjRX7gzTyWW5eUwvmrlXGUBeKuXlXrCD6Gdnu9ofp8+1YqiFlVcqLUN+zft0ec
+         hDqfg/WHq/bUcl5i+oBBqLpiwE4zC+ZCppJb3W/cD5Sv3Hz5EYpB+ZoCKK80sShyQTA0
+         w5uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713433574; x=1714038374;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qHTQNdaixaJmXmKKuqa6bURMHudpKto3SJOTxQWsB1k=;
+        b=XxC2RkZ0C7Oq0Mrsfm0aEX9pQ2yVokixntnOYDrfWvKiZ670awtEX9PJiMEA3Cqgv6
+         g5ImDAasqyJnK1WvM+MML9ye9ThFkTmOC4vSlPDQM9u5rlm/JObMaUO7LRIi0AC9ATok
+         C9OM/C8Lho2Ie0I/WNi2g4xnAScHVt4KqKFzmzuk25/tIYUfrPIrWbNYv89swclGyZ1q
+         kISZBw4ob4dbWg3w96EbaKI6Bw68Skpt0xTp/5jR2cb6zSztuALpOnn4vJ233k+eh4Dt
+         6fPhOMGjq9QtcSBYFodAnqAXDmPUw5hZX7zIWnq8DPJIhvR87GFajoxNWYwHqvq6n7rX
+         ivFw==
+X-Forwarded-Encrypted: i=1; AJvYcCWWja7AnEeEgqe3ixw7O4OMkEzCJnfr0d3PQAj/Pa0EXRdzdZ31m2vB8kq49ZFUk2J62XKivns2rqhOkrY7/osrAlJPUmpH1xQ3
+X-Gm-Message-State: AOJu0YxqqPF0nODotzyF52YFx4XBjNsNKm0xLdE0HFlCTkXWIHmGIRx2
+	dlkTWAAWr3BTg3kVVZQJcbtBCFSIMF0aFlknKQgz5sl7Vsp+zo5aq8So+kMIt3Y=
+X-Google-Smtp-Source: AGHT+IFKKdpyMPlE5wECrwePw/LL4UVvAqkEhlLOtaK+0nLQSsDUk8IMg3W91iM2KaJpK31eRkk28Q==
+X-Received: by 2002:a05:6512:ea5:b0:518:e7ed:3c7c with SMTP id bi37-20020a0565120ea500b00518e7ed3c7cmr1799688lfb.14.1713433573769;
+        Thu, 18 Apr 2024 02:46:13 -0700 (PDT)
+Received: from [192.168.1.172] ([93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170906388a00b00a46aba003eesm647759ejd.215.2024.04.18.02.46.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Apr 2024 02:46:13 -0700 (PDT)
+Message-ID: <286945bc-f207-4373-9589-0a9b62df1b36@baylibre.com>
+Date: Thu, 18 Apr 2024 11:46:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/18] dt-bindings: pwm: mediatek,pwm-disp: add
+ compatible for mt8365 SoC
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Jitao Shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, dri-devel@lists.freedesktop.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20231023-display-support-v2-0-33ce8864b227@baylibre.com>
+ <20231023-display-support-v2-12-33ce8864b227@baylibre.com>
+ <vasuzy7cf5x6p5rnrmdrk5z54oncu2yuutupf25h5fgd5y6fpl@mnkf67agw64g>
+Content-Language: en-US
+From: Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <vasuzy7cf5x6p5rnrmdrk5z54oncu2yuutupf25h5fgd5y6fpl@mnkf67agw64g>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: B91TqVD3TfvBU7fVMsw8obO6U3BnMPDM
-X-Proofpoint-GUID: B91TqVD3TfvBU7fVMsw8obO6U3BnMPDM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-18_08,2024-04-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- adultscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2404010003 definitions=main-2404180066
 
-IPQ SoCs dont involve RPM in managing NoC related clocks and
-there is no NoC scaling. Linux itself handles these clocks.
-However, these should not be exposed as just clocks and align
-with other Qualcomm SoCs that handle these clocks from a
-interconnect provider.
+Hi Uwe
 
-Hence include icc provider capability to the gcc node so that
-peripherals can use the interconnect facility to enable these
-clocks.
+On 17/04/2024 10:06, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Tue, Apr 16, 2024 at 05:53:13PM +0200, Alexandre Mergnat wrote:
+>> Add a compatible string for MediaTek Genio 350 MT8365's display PWM
+>> block: this is the same as MT8183.
+>>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> 
+> I already asked in reply to v1 what the merge plan is here. There are
+> changes in my pwm tree to the mediatek,pwm-disp binding already. I don't
+> think they conflict with this patch, but maybe it's still easier to take
+> this via pwm?!
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Sorry, I though the merge strategy wasn't addressed to me because I'm not a maintainer.
+It's fine for me to merge it in the PWM tree.
+IMO, this change [1] shouldn't conflict with this patch.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 7f2e5cbf3bbb..5b3e69379b1f 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -8,6 +8,7 @@
- 
- #include <dt-bindings/clock/qcom,apss-ipq.h>
- #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
-+#include <dt-bindings/interconnect/qcom,ipq9574.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
- #include <dt-bindings/thermal/thermal.h>
-@@ -306,6 +307,7 @@ gcc: clock-controller@1800000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+			#interconnect-cells = <1>;
- 		};
- 
- 		tcsr_mutex: hwlock@1905000 {
+Can you add the "Acked-by: Rob Herring (Arm) <robh@kernel.org>" please if you merge this version ?
+
+Thanks for the review and help.
+
+[1]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git/commit/Documentation/devicetree/bindings/pwm/mediatek,pwm-disp.yaml?h=pwm/for-next&id=fb7c3d8ba039df877886fd457538d8b24ca9c84b
+
 -- 
-2.34.1
-
+Regards,
+Alexandre
 
