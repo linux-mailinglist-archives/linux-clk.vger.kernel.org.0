@@ -1,80 +1,143 @@
-Return-Path: <linux-clk+bounces-6219-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6221-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FF478AC648
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Apr 2024 10:06:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A81B8AC662
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Apr 2024 10:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D28AA1F21681
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Apr 2024 08:06:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2806D1F2100B
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Apr 2024 08:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048A84E1A2;
-	Mon, 22 Apr 2024 08:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D9453812;
+	Mon, 22 Apr 2024 08:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="rNa/imUB"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5298502A3;
-	Mon, 22 Apr 2024 08:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247AF502BD
+	for <linux-clk@vger.kernel.org>; Mon, 22 Apr 2024 08:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713773177; cv=none; b=ZTUSI5MBUBDKh2gIWkkIA7OvSObR8ZsjATsN82N9QBKNO60B7NFYLOxSm6JuM7j9tnEg7Uwvo1S1GWHvtjW8SLZfr28/Z1lKO/v1xly2xVRrmZUvxzEBGNrnNlM8GuMg73+5/aEA2A35In4aLceNvoBSdWCM0DfpvMHztW0eJvM=
+	t=1713773368; cv=none; b=JQDqQgLzhu4YDKpjpOdxC24p2tkc3ougjYyBvhKeeTU4817R/1UUJw+xdo2BM1MfKCvTw/lzsriuR+2nWYcBNqlMJ/5kbsio6oKbqHCv2FSKgGPn5a8axOw3RCATR4F0wSPV+tactWmUfnvRVMQbszksARdE0Qy3RmvW+OJB5JA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713773177; c=relaxed/simple;
-	bh=wq+CiAOkBhbaPfNxLl01fN5pEr+i+/JBNleBv3P9oWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EicESuOJuTJq2WLMUpywXbVQgTI5/7FTfmV1OxkQeaPlKE6q/zf4jdQHSwjCc++hzENofs5jdFGcpgKy0NOKbzOLsO2apgB3eWzEF+gQOL3GVZA0X7Rot2iHC3sey2u7FLGb7DSTQ9yWCWtwiSlTH+9UnnxIT6xBWMXVLW9yD9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B019339;
-	Mon, 22 Apr 2024 01:06:40 -0700 (PDT)
-Received: from bogus (unknown [10.57.84.59])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D86F3F7BD;
-	Mon, 22 Apr 2024 01:06:08 -0700 (PDT)
-Date: Mon, 22 Apr 2024 09:06:06 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Cristian Marussi <cristian.marussi@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org, james.quinlan@broadcom.com,
-	f.fainelli@gmail.com, vincent.guittot@linaro.org,
-	peng.fan@oss.nxp.com, michal.simek@amd.com, quic_sibis@quicinc.com,
-	quic_nkela@quicinc.com, souvik.chakravarty@arm.com,
-	mturquette@baylibre.com
-Subject: Re: [PATCH v3 0/5] Rework SCMI Clock driver clk_ops setup procedure
-Message-ID: <20240422080606.zai2sgr74o3dcasp@bogus>
-References: <20240415163649.895268-1-cristian.marussi@arm.com>
- <6b8e12767fdfaf1ba819896fbd610733.sboyd@kernel.org>
+	s=arc-20240116; t=1713773368; c=relaxed/simple;
+	bh=YIO8cDM25qQNZ4cv/ubwGqUQhUGYfoqZi8Ig4uTr/Sk=;
+	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
+	 MIME-Version:Content-Type; b=p49yXPkyXllh8Ckfs52ycAHGrxMaN6UPOtiW3Zj3CGdZaQBkcmQaI6/JnB0zQMpYfJzZnvR1FRKHM7iSxQq3UqnIGBdsbzrzlTouARxGt+I4J09EDuG8jHoIfR/Nq2pjXzjLXbW12cLkkAYiH27vVW7ImoTbmRaHIP0k/RzROVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=rNa/imUB; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-41a0979b9aeso8626505e9.3
+        for <linux-clk@vger.kernel.org>; Mon, 22 Apr 2024 01:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1713773363; x=1714378163; darn=vger.kernel.org;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=G8Z1W9cBwZwFr+xw5xhgBlfEeDfYZ9v69oNkjrxgbOY=;
+        b=rNa/imUBVTrJ1RpiBMNOyDhyno+kdSij38C3WhN3YthESsBc7q1ejUCThwaSIyEA8M
+         3jxxiiKSuHzbzLHrqIOJJWAY+GLZYruemAFPOpjojPSRZzliDUjTqOrWJLl14cPyHePk
+         y0zxyyM1eq32qzYzgTXxTGfF2twiTDgwY68ri5ImEmreWgaT+FqnLfwRUBtQhFVoteLE
+         PfsH33517L17ISJl/wFOZx34R/HuhIERhKKF2NZb2Kn3NmQnlo9ibqdVcQtqVObrLyqU
+         RjkCJQ7RKfbUgNRsCvh2Jyn3xx0e7g8U8nQJzXTy7sNFmKOgbWWf6elrzMGf8PupZge/
+         69Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713773363; x=1714378163;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G8Z1W9cBwZwFr+xw5xhgBlfEeDfYZ9v69oNkjrxgbOY=;
+        b=fpcZ501xrBc+g+9qwn56GH/yiClw1zU2Cze8cMCr/q3VhqvK2WqBQSUcdg2Up5BeVL
+         B6/ce9/jm5+H3fvcoYvUypQiVfBo+9zzueONAEzoq7XoBNmsDpP9g+JeIFzhv9dPD1LR
+         s9zjaPu51I107A0coSXF7nRPN22kAM10mvmqGbQQNEuvPtZjYqQ3BNjuWtOOlru9HGih
+         u2WifClAowdPHyQ2jeQQ3cGcwzcuos6bTjV02gke+IdjkJs0NpoJ1TVSDfTq8jDdOuaI
+         aGTNeObaJ/z5MNSY9Qt/2DyTbZ3F4X9zyjiz7m0/Hf49/grNjDU89GTjLWDU9cIDnASq
+         bxfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7R9q9QWZ7niCVxkUEp91uEPfFJb3RNFsDVpdruSSBT8VKFKnAN7Am0kXJ2MyUpL+6mx9R89J4gT9/bwshZYMEJ5haqRvdEv1O
+X-Gm-Message-State: AOJu0YwQX6E/QxxSnOuUI1bztFzI1Qs13H3bmo+Hr1CzWlgJ/4VwCoWJ
+	rmg6JWGIlnLfzwU22BhtVG5foDfWe6tzxhLyPRJ020UO+dfsiIt6Ss8Glp7O3Ig=
+X-Google-Smtp-Source: AGHT+IFcBHuQrYYsaNLbUg30qmwUhwRzvle0l0p4jwsnHIaO8PpRDz4ckky8oOJr2gRpkpQzb3NY4A==
+X-Received: by 2002:a05:600c:3587:b0:419:5c4:b430 with SMTP id p7-20020a05600c358700b0041905c4b430mr8846265wmq.14.1713773363290;
+        Mon, 22 Apr 2024 01:09:23 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:a619:ccb0:5f40:262c])
+        by smtp.gmail.com with ESMTPSA id d5-20020a5d6445000000b0034659d971a6sm11274074wrw.26.2024.04.22.01.09.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Apr 2024 01:09:22 -0700 (PDT)
+References: <20240419125812.983409-1-jan.dakinevich@salutedevices.com>
+ <20240419125812.983409-4-jan.dakinevich@salutedevices.com>
+User-agent: mu4e 1.10.8; emacs 29.2
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, Jerome Brunet
+ <jbrunet@baylibre.com>, Michael  Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob  Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor  Dooley <conor+dt@kernel.org>, Kevin
+ Hilman <khilman@baylibre.com>, Martin  Blumenstingl
+ <martin.blumenstingl@googlemail.com>, Philipp Zabel
+ <p.zabel@pengutronix.de>, Jiucheng Xu <jiucheng.xu@amlogic.com>,
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH v3 3/6] clk: meson: axg: introduce AUD_MUX_TABLE()
+ helper macro
+Date: Mon, 22 Apr 2024 10:09:04 +0200
+In-reply-to: <20240419125812.983409-4-jan.dakinevich@salutedevices.com>
+Message-ID: <1jv849akel.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6b8e12767fdfaf1ba819896fbd610733.sboyd@kernel.org>
+Content-Type: text/plain
 
-On Fri, Apr 19, 2024 at 07:08:54PM -0700, Stephen Boyd wrote:
-> Quoting Cristian Marussi (2024-04-15 09:36:44)
-> > Hi,
-> > 
-> > a small series to review how the SCMI Clock driver chooses and sets up the
-> > CLK operations to associate to a clock when registering with CLK framework.
-> 
-> Did you want me to merge this through clk tree?
 
-I am fine either way. You add:
+On Fri 19 Apr 2024 at 15:58, Jan Dakinevich <jan.dakinevich@salutedevices.com> wrote:
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> This macro takes into account ->table property of
+> 'struct clk_regmap_mux_data'.
 
-if you prefer to take it. Or else please provide your ack for me to
-take it via SCMI tree.
+Useless if the interface of controller is fixed.
+
+>
+> Signed-off-by: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+> ---
+>  drivers/clk/meson/meson-audio.h | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/meson/meson-audio.h b/drivers/clk/meson/meson-audio.h
+> index cbcdbd487d4a..1947c6cbf233 100644
+> --- a/drivers/clk/meson/meson-audio.h
+> +++ b/drivers/clk/meson/meson-audio.h
+> @@ -17,9 +17,11 @@
+>  	},								\
+>  }
+>  
+> -#define AUD_MUX(_name, _reg, _mask, _shift, _dflags, _pdata, _iflags) {	\
+> +#define AUD_MUX_TABLE(_name, _reg, _table, _mask, _shift, _dflags,	\
+> +		      _pdata, _iflags) {				\
+>  	.data = &(struct clk_regmap_mux_data){				\
+>  		.offset = (_reg),					\
+> +		.table = (_table),					\
+>  		.mask = (_mask),					\
+>  		.shift = (_shift),					\
+>  		.flags = (_dflags),					\
+> @@ -33,6 +35,10 @@
+>  	},								\
+>  }
+>  
+> +#define AUD_MUX(_name, _reg, _mask, _shift, _dflags, _pdata, _iflags)	\
+> +	AUD_MUX_TABLE(_name, (_reg), NULL, (_mask), (_shift),		\
+> +		      (_dflags), (_pdata), (_iflags))
+> +
+>  #define AUD_DIV(_name, _reg, _shift, _width, _dflags, _pname, _iflags) { \
+>  	.data = &(struct clk_regmap_div_data){				\
+>  		.offset = (_reg),					\
+
 
 -- 
-Regards,
-Sudeep
+Jerome
 
