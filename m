@@ -1,204 +1,140 @@
-Return-Path: <linux-clk+bounces-6317-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6322-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93FB98AFDF2
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 03:40:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B1D8B00F2
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 07:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21FE01F22E2A
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 01:40:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17FC9283658
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 05:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCF217BB9;
-	Wed, 24 Apr 2024 01:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zv0kPoV9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE007154C0F;
+	Wed, 24 Apr 2024 05:25:25 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-sh.amlogic.com (unknown [58.32.228.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98731D2FA
-	for <linux-clk@vger.kernel.org>; Wed, 24 Apr 2024 01:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB2C15445E;
+	Wed, 24 Apr 2024 05:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=58.32.228.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713922777; cv=none; b=t3bgAkZXXPoDUwsHnA0/0Z/GeU5sXHWHUZ18uKRF4ORRY33iy2C8dFzFq+rRGhHUpmojl5GUt17NyY291hLHIliwMjWq92t8MvRxdqEerxaCLQJ+eWcIMV7PyhMpcLun7s70HADAepdxaS4Ime6srsbl/6iJrNlSXPdGVMyS0hg=
+	t=1713936325; cv=none; b=HjozlvTuS/hty5rgjktxUL8zzAPPomNnyxKtdiNJ5u1UIqx3m8K2uM5OkVYbc0JUgVwEWiMxfudkdQ0iz7F2VYgLBexMOX+n+HurYhbhxyVsrOx9w2amjFzvCGeMexDIZgoPZfkk+S3k+/vVvlAY/pU18woGnfTPUvkhPVd/F6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713922777; c=relaxed/simple;
-	bh=zB/5/SiVEaWqGONs3bHHf5u8om8piOX61Ct2vWQ8uzE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=enkamRhj8Mj+dxfK2yeIqXR3lMjD73XKkn7MrnOK0Qf/IC/NezWK9PLqNNilgH7PBrhHT/PQbVUQkLHla9nYIK8OLPBgpMUOejbJa19yzKQK7t6q8WpmR2N5wvyDXwi9NHyPj7uFLQb64kMZ7ZLDxGcvRlS3yxc9h+RJN+00Qf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zv0kPoV9; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-518a56cdc03so7750374e87.1
-        for <linux-clk@vger.kernel.org>; Tue, 23 Apr 2024 18:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713922774; x=1714527574; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+0SAcbh24fRWzetmmLWxyCX4LLEoLPaKUr5EKpApP2Y=;
-        b=zv0kPoV9fCfsVnt7Fw8/DEy+RVskbQdhU5oOWAX3f2cyI+QSa8BCC+uJ/vnK/KC6/u
-         1OYKmtJOBCVtcsGblcqlWiKzFxRDpGBhJqc9B3VAuL9yh1W7LkaZQUFz1mM6MqJCr3aO
-         DL0Kgk4WSEyKH6YcZEf4BQ4jaF0u2MgOk0QVcILoHQxfPbZtoqFN7/1V1z3MsyJzDsjR
-         bPbZpuH0n8BrnMjsv1qdbfMYL+ZMwr74I+CWbS+/ozNOmKTbtYgWs6yLrClOtf6pygXr
-         3mQJ6sk+0GVMfACJNjEBCymHof1JhXE0F7sTaQ8r5d8tvT2wcUgY6ARVYptEJFbKt4ME
-         zhGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713922774; x=1714527574;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+0SAcbh24fRWzetmmLWxyCX4LLEoLPaKUr5EKpApP2Y=;
-        b=exb1Lo6jupPkLGZ5jh5PPuMA2BLHlVzw5ZFRuLh2yrF3P2fQZOVEXsSxf61R/+qEkr
-         qNzytcMy4+9w0y9O0csBu6xKwIEFXFInkVs74Nsjlnpq9uAA5fgL63TYRM73BlexJYle
-         ubvBWJPETlEHaHTc4GH3e15pkKMqBJXGKRFktf2t7yZRlFvNV58ivU+NkgjHgavRGZRx
-         T4gZEozqi6KgQvnbzLp9/0gBokyLDejwTf5SHfk6/dBH1CjuLH9B6SYXyA7hS93yF9Kr
-         kfd63OSuI4vI21TZ5/nAbq95QIegJZHJKBWzGLOLIa/ytVvO54iwrFcomzM5amh3YPSh
-         zM/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUO5NszRlcLe6T99YakfRvYzbfjoikddb8K2rLWR83qTEWmZ+KYnAX2BH1Ybi1vt8nheKG4otUvNyroO1CcTtanaA3UtsCh9jAg
-X-Gm-Message-State: AOJu0YzjjptXLIhRZhkNBu3FPMQYEQPQ5+nfIV5EhIWXTVSey9nEPXa6
-	PAgEgKegKr2d95WRD9dlGVJCtgBXboBN6NvMqy7nofIbzhHzR6FZ9wJkJVYq1zE=
-X-Google-Smtp-Source: AGHT+IGdbQI0R2wOMogLqkeQ21E23IGK/kQjS17BkmhhtGkLD8SfxJi7UWEru7YPXiHAhcrrAeBCJA==
-X-Received: by 2002:a19:6a14:0:b0:513:b062:98c4 with SMTP id u20-20020a196a14000000b00513b06298c4mr556942lfu.11.1713922773840;
-        Tue, 23 Apr 2024 18:39:33 -0700 (PDT)
-Received: from umbar.lan ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id g12-20020a19ac0c000000b0051bb40c7ee7sm308220lfc.185.2024.04.23.18.39.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 18:39:33 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Wed, 24 Apr 2024 04:39:32 +0300
-Subject: [PATCH v2 4/4] clk: qcom: dispcc-sm8650: fix DisplayPort clocks
+	s=arc-20240116; t=1713936325; c=relaxed/simple;
+	bh=QZe4eGpysrGx8fOJIszyYdVuaxeat9XeJ/upJuzcPqw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fNMW43n6WFWT9QRdhMZRffOPO2K91olKoCpbzOQJWpSy3aDFxAHm2nAnTO4GQK/F3/zOXYMGZID5DCvqdrzqVIKFD8+X9cjtyplwcQzwe1u9ZMSkdaunVWJUssQVQUklat5SXfH0wTfzbUnZkPEx1qcbVCYB9XBdq41MTHCifm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; arc=none smtp.client-ip=58.32.228.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
+Received: from droid01-cd.amlogic.com (10.98.11.200) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.6; Wed, 24 Apr 2024
+ 13:10:12 +0800
+From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+To: <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+CC: Neil Armstrong <neil.armstrong@linaro.org>, Jerome Brunet
+	<jbrunet@baylibre.com>, Michael Turquette <mturquette@baylibre.com>, "Stephen
+ Boyd" <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+	Kevin Hilman <khilman@baylibre.com>, Xianwei Zhao <xianwei.zhao@amlogic.com>
+Subject: [PATCH v7 0/5] Add C3 SoC PLLs and Peripheral clock
+Date: Wed, 24 Apr 2024 13:09:23 +0800
+Message-ID: <20240424050928.1997820-1-xianwei.zhao@amlogic.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240424-dispcc-dp-clocks-v2-4-b44038f3fa96@linaro.org>
-References: <20240424-dispcc-dp-clocks-v2-0-b44038f3fa96@linaro.org>
-In-Reply-To: <20240424-dispcc-dp-clocks-v2-0-b44038f3fa96@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@somainline.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3525;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=zB/5/SiVEaWqGONs3bHHf5u8om8piOX61Ct2vWQ8uzE=;
- b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ5pG0iVJnYX9C7JjFph8MF1o3mPiraS88YJd9gsVG52qk
- K62GMdORmMWBkYuBlkxRRafgpapMZuSwz7smFoPM4iVCWQKAxenAEwkZCX7/1otyTk3mlaF3JzJ
- fGxyx7VjP9XqLifanj69kOGU/7vWwvrOPwm+RsU2DN2aM19X8pms3Lj8rMKCs+92+OiHKO0wqej
- 6PtvuqJOQptDGd10HV+ctuNmvKT7xg8ayzPKrefdl20JLGDzF4n4VyhicT//M82nZ1/U/uZXZu8
- 2vRtmt95+z+w/DtBsJOq9VctZ6P30hPE3jQbzkrvzo1D2HP0dbV7dMVxNJXJz24dZtc0fvvnm1G
- /l77azOikVMbvlfobG95dnTx4LBq336rFfZzwy9yfAuwVZtU39GZt3c6keFOTt9/QXe7ZWfWxb7
- 6Z6btNKXeXXl3c5LLnnGc9daiYqtju+u+9Hx8YNRc1kqAA==
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On SM8650 DisplayPort link clocks use frequency tables inherited from
-the vendor kernel, it is not applicable in the upstream kernel. Drop
-frequency tables and use clk_byte2_ops for those clocks.
+The patchset adds support for the peripheral and PLL clock controller
+found on the Amlogic C3 SoC family, such as C302X or C308L.
 
-This fixes frequency selection in the OPP core (which otherwise attempts
-to use invalid 810 KHz as DP link rate), also fixing the following
-message:
-msm-dp-display af54000.displayport-controller: _opp_config_clk_single: failed to set clock rate: -22
+Some clocks are provided by security zones. These clock accessed
+througth SCMI driver in linux, inlcuding DDR_PLL,DDR_PHY, TOP_PLL,  
+USB_PLL, MIPIISP_VOUT, MCLK_PLL, USB_CTRL, ETH_PLL, OSC, SYS_CLK,
+AXI_CLK, CPU_CLK, FIXED_PLL, GP1_PLL, SYS_PLL_DIV16, CPU_CLK_DIV14.
 
-Fixes: 9e939f008338 ("clk: qcom: add the SM8650 Display Clock Controller driver")
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-HDK
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/clk/qcom/dispcc-sm8650.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+Changes since V6 [12]:
+ - Add pad src for rtc clock.
+ - Add SCMI clock controller support, move some clock node in SCMI,such as GP1 PLL DDR USB etc.
+ - Fix some spelling mistake.
+ - Use lower case for bindings and update some input clocks desc.
+ - Update some clock comments.
+ - Delete prefix "AML_" for macro definition.
+ - Addd some clock annotation and some clock flag CRITICAL.
+ - Add maximum for regmap_config.
+ - Delete some unused register definition and unused clock inputs. 
+ - Drop patch subject redundant "bindings". Suggested by Krzysztof.
+ - Not reference header file "clk.h" and replace comment. Suggested by Jerome.
+ - Modify description about board in Kconfig file help item. Suggested by Jerome.
+ - Link to v6: https://lore.kernel.org/all/20231106085554.3237511-1-xianwei.zhao@amlogic.com
 
-diff --git a/drivers/clk/qcom/dispcc-sm8650.c b/drivers/clk/qcom/dispcc-sm8650.c
-index 9539db0d9114..3eb64bcad487 100644
---- a/drivers/clk/qcom/dispcc-sm8650.c
-+++ b/drivers/clk/qcom/dispcc-sm8650.c
-@@ -343,26 +343,17 @@ static struct clk_rcg2 disp_cc_mdss_dptx0_aux_clk_src = {
- 	},
- };
- 
--static const struct freq_tbl ftbl_disp_cc_mdss_dptx0_link_clk_src[] = {
--	F(162000, P_DP0_PHY_PLL_LINK_CLK, 1, 0, 0),
--	F(270000, P_DP0_PHY_PLL_LINK_CLK, 1, 0, 0),
--	F(540000, P_DP0_PHY_PLL_LINK_CLK, 1, 0, 0),
--	F(810000, P_DP0_PHY_PLL_LINK_CLK, 1, 0, 0),
--	{ }
--};
--
- static struct clk_rcg2 disp_cc_mdss_dptx0_link_clk_src = {
- 	.cmd_rcgr = 0x8170,
- 	.mnd_width = 0,
- 	.hid_width = 5,
- 	.parent_map = disp_cc_parent_map_7,
--	.freq_tbl = ftbl_disp_cc_mdss_dptx0_link_clk_src,
- 	.clkr.hw.init = &(const struct clk_init_data) {
- 		.name = "disp_cc_mdss_dptx0_link_clk_src",
- 		.parent_data = disp_cc_parent_data_7,
- 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_7),
- 		.flags = CLK_SET_RATE_PARENT,
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_byte2_ops,
- 	},
- };
- 
-@@ -416,13 +407,12 @@ static struct clk_rcg2 disp_cc_mdss_dptx1_link_clk_src = {
- 	.mnd_width = 0,
- 	.hid_width = 5,
- 	.parent_map = disp_cc_parent_map_3,
--	.freq_tbl = ftbl_disp_cc_mdss_dptx0_link_clk_src,
- 	.clkr.hw.init = &(const struct clk_init_data) {
- 		.name = "disp_cc_mdss_dptx1_link_clk_src",
- 		.parent_data = disp_cc_parent_data_3,
- 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
- 		.flags = CLK_SET_RATE_PARENT,
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_byte2_ops,
- 	},
- };
- 
-@@ -476,13 +466,12 @@ static struct clk_rcg2 disp_cc_mdss_dptx2_link_clk_src = {
- 	.mnd_width = 0,
- 	.hid_width = 5,
- 	.parent_map = disp_cc_parent_map_3,
--	.freq_tbl = ftbl_disp_cc_mdss_dptx0_link_clk_src,
- 	.clkr.hw.init = &(const struct clk_init_data) {
- 		.name = "disp_cc_mdss_dptx2_link_clk_src",
- 		.parent_data = disp_cc_parent_data_3,
- 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
- 		.flags = CLK_SET_RATE_PARENT,
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_byte2_ops,
- 	},
- };
- 
-@@ -536,13 +525,12 @@ static struct clk_rcg2 disp_cc_mdss_dptx3_link_clk_src = {
- 	.mnd_width = 0,
- 	.hid_width = 5,
- 	.parent_map = disp_cc_parent_map_3,
--	.freq_tbl = ftbl_disp_cc_mdss_dptx0_link_clk_src,
- 	.clkr.hw.init = &(const struct clk_init_data) {
- 		.name = "disp_cc_mdss_dptx3_link_clk_src",
- 		.parent_data = disp_cc_parent_data_3,
- 		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
- 		.flags = CLK_SET_RATE_PARENT,
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_byte2_ops,
- 	},
- };
- 
+Changes since V5 [3]:
+ - Fix some typo and modify formart for MARCO. Suggested by Jerome.
+ - Add pad clock for peripheral input clock in bindings.
+ - Add some description for explaining why ddr_dpll_pt_clk and cts_msr_clk are out of tree.
+Changes since V4 [10]:
+ - Change some fw_name of clocks. Suggested by Jerome.
+ - Delete minItem of clocks.
+ - Add CLk_GET_RATE_NOCACHE flags for gp1_pll
+ - Fix some format. and fix width as 8 for mclk_pll_dco.
+ - exchange gate and divder for fclk_50m clock.
+ - add CLK_SET_RATE_PARENT for axi_a_divder & axi_b_divder.
+ - add CLK_IS_CRITICAL for axi_clk
+ - Optimized macro define for pwm clk.
+ - add cts_oscin_clk mux between 24M and 32k
+ - add some missing gate clock, such as ddr_pll.
+Changes since V3 [7]:
+ - Modify Kconfig desc and PLL yaml clk desc.
+ - Fix some format.Suggested by Yixun and Jerome.
+ - Add flag CLK_GET_RATE_NOCACHE for sys_clk.
+ - Optimized macro define for pwm clk.
+ - Use flag CLK_IS_CRITICAL for axi_clk.
+ - Add some description for some clocks.
+ - Use FCLK_50M instead of FCLK_DIV40.
+Changes since V2 [4]:
+ - Modify some format, include clk name & inline, and so on.
+ - Define marco for pwm clock.
+ - Add GP1_PLL clock.
+ - Modify yaml use raw instead of macro.
+Changes since V1 [2]:
+ - Fix errors when check binding by using "make dt_binding_check".
+ - Delete macro definition.
 
+Xianwei Zhao (5):
+  dt-bindings: clock: add Amlogic C3 PLL clock controller
+  dt-bindings: clock: add Amlogic C3 SCMI clock controller support
+  dt-bindings: clock: add Amlogic C3 peripherals clock controller
+  clk: meson: c3: add support for the C3 SoC PLL clock
+  clk: meson: c3: add c3 clock peripherals controller driver
+
+ .../clock/amlogic,c3-peripherals-clkc.yaml    |  120 +
+ .../bindings/clock/amlogic,c3-pll-clkc.yaml   |   59 +
+ drivers/clk/meson/Kconfig                     |   29 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/c3-peripherals.c            | 2366 +++++++++++++++++
+ drivers/clk/meson/c3-pll.c                    |  747 ++++++
+ .../clock/amlogic,c3-peripherals-clkc.h       |  212 ++
+ .../dt-bindings/clock/amlogic,c3-pll-clkc.h   |   40 +
+ .../dt-bindings/clock/amlogic,c3-scmi-clkc.h  |   27 +
+ 9 files changed, 3602 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,c3-peripherals-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,c3-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/c3-peripherals.c
+ create mode 100644 drivers/clk/meson/c3-pll.c
+ create mode 100644 include/dt-bindings/clock/amlogic,c3-peripherals-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,c3-pll-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,c3-scmi-clkc.h
+
+
+base-commit: ba535bce57e71463a86f8b33a0ea88c26e3a6418
 -- 
 2.39.2
 
