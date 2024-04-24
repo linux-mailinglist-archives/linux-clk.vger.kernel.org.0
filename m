@@ -1,110 +1,226 @@
-Return-Path: <linux-clk+bounces-6334-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6336-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5F548B0A6E
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 15:08:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4893D8B0B59
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 15:43:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0423B1C22661
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 13:08:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F004C28897D
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Apr 2024 13:43:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC11915B15A;
-	Wed, 24 Apr 2024 13:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E689E15D5B3;
+	Wed, 24 Apr 2024 13:41:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=BLAIZE.COM header.i=@BLAIZE.COM header.b="cx9rkXbG"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-0063e101.pphosted.com (mx07-0063e101.pphosted.com [205.220.184.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AED615B133;
-	Wed, 24 Apr 2024 13:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713964109; cv=none; b=k/SkUSULbIuS0IAKKfYJRwZLGvCQdzZPWlrrdpJfezPE5hXo82ysRPXQHGwQFBNGJ4oXuzsy6lpx6Kp4kQ/Wjd5Q7SZoMZUJg1K74zBVXjHiqK3wDLtVTXyF7suqSe9sU7zRoVO+hpU8iMbvs3AE6XuagbBYokWndjZLZ+A4EkA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713964109; c=relaxed/simple;
-	bh=3fuD80C0yX/OfK7PbQv1+C5LFnM/rJsnB/YJ4shBc40=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l/FGyAa5lQDJwPR9aocG27/teSBhf3O3JcbyyZ6bkI2epxHSL48leod3AMo7ndbaAx1woOz3vOpR6a4TiJqBh/C70DeK4a4ZLZFvepXC9lME9G1cZqpQVbUPTq8ucaSXTSvA0a2L9/4bT3ydz8dYOD8EpokWLE3CBR/6sP7KZkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-de47485532cso6767279276.3;
-        Wed, 24 Apr 2024 06:08:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713964106; x=1714568906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oJ5BaNcJprdgWoCnp6hifCqMZXethulac/N0JRYezqc=;
-        b=nWqLFOmC0KkPWxirPdqYWwNRPuQT4sFL6ilAkDMLOozpGTH4wqsMP+RSCUxer0ZGtE
-         in5yFLIZyeS+uNTcp9Ej0nzQkAachjTVOTPE8VgIgZpgakXJSQ1AX0Uya04eEBihxcJd
-         QQ+nFZchC/eOkq8qHp/g+sw+WqJx6HxzeKxotHpq1kFEoFsqawfH9cZDxcWtdCeLcsMI
-         sFkxmzzgn9sqNhgpcMh3U0vJA4b40Lm0uEtvWladNHDyKC90n5CTsVyj7Vtt7y88HLrI
-         tpO2JsiopS0ya+sJaNV/Ab/XOIK+ZXLEvWCFlOpPLIjER2lTMo8LlKfg9rMPjxYoEb2I
-         5x1A==
-X-Forwarded-Encrypted: i=1; AJvYcCWny6uf315iyDjREG6Lk5ofvKF7ZKjbCp/tp6MjQqQoG4IB/1Ij8gRt4zEXlfqNp/u8JvSE2IjMfzoE3D4MompvGBz7uBk9l0FC6CpXp3ATVIafsn8WAOwizPrKOn0DeeXo5zWhShr5kW5c1CWhgFq2HpBOoOzX3c7CEYWrepSKg+uZpXViN3WOpOwTVlrSUmB1a4B178OI2GZiIVrMLy0zJttoi33OHwe84W0=
-X-Gm-Message-State: AOJu0YzsDJZCsRZH+WSSuaPnvtoK5njXROv1jnRpQJXfGqYjPHX08w6E
-	LBWKDLSoKki5PwRgvrfL93vCb5rgDgkmrSprGA2vBrfOIU/m+pmnTEPHKKvr
-X-Google-Smtp-Source: AGHT+IHbtuXioDSTdMMCWEC0d6JTra4ZL3MywkCb1c+6NwLJBwwXPHyYQ4s0oOHWjqA/RrDCdDSBMw==
-X-Received: by 2002:a25:9007:0:b0:dc8:5e26:f501 with SMTP id s7-20020a259007000000b00dc85e26f501mr2335788ybl.61.1713964105938;
-        Wed, 24 Apr 2024 06:08:25 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id x3-20020a056902102300b00dcc0cbb0aeesm3054498ybt.27.2024.04.24.06.08.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Apr 2024 06:08:25 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-de56d4bb72bso824676276.2;
-        Wed, 24 Apr 2024 06:08:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU2iKYg8qorvBN+dQENDMcQ3IyKMLOROmOmEWtwZgo3Y6jdAuqlRZ73jNLuhIsXqwx8Sy5O5YQtnPfnALonwje9f8ng/P6TT3xUW5wijT6Ft9NGlyVP+10X2QAgHFxiENl3ih0PuPfunSPIGkWcpu6iG9OHBnTycPcNC5dxHeul0rh5/txtHfLnMiVyZsRiZ3jhV9QcN9ryw1I1HeLQFsl3h3bq7h7BwD6K81s=
-X-Received: by 2002:a25:ab8c:0:b0:de4:7603:e888 with SMTP id
- v12-20020a25ab8c000000b00de47603e888mr2549826ybi.29.1713964105488; Wed, 24
- Apr 2024 06:08:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2690915AABA;
+	Wed, 24 Apr 2024 13:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.184.123
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713966099; cv=fail; b=gYkTDojNk1RIy44B0aQ6M5ivYThHTxqCB2u/ha8vDC3w2muF4xqCkWcACzs7RlZlGxdlhM4Mj7qHiLKt+BA6VlnUKB9es1UL7ux+zY+2oXg5u5eXBzDKrH4JchmZwGGSozeRZYE+isqCNNrlKPLcwExO+84rzE9n73IFrcqzACw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713966099; c=relaxed/simple;
+	bh=2vXApT6bXF5J4WcQzvCQFH06FMqljZYj8ut7yVGnWTY=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=AS+wTWu/N54vLLmE8y4Gi1POWGZLu3qBIkz0Q4Dp1okklRg1Mn0ZkDmKi/2qyCV2Gs6Scd7GvcD+ZW0Z9Um7OkIcf3AlmAKX05A2X7k3MtlwobYnVVL2WU5BDcjl+2UIdc62VrzjVqR3k846RsJu3B1xUURi53NTSWrHEWGmh3g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=blaize.com; spf=pass smtp.mailfrom=blaize.com; dkim=pass (1024-bit key) header.d=BLAIZE.COM header.i=@BLAIZE.COM header.b=cx9rkXbG; arc=fail smtp.client-ip=205.220.184.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=blaize.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=blaize.com
+Received: from pps.filterd (m0247495.ppops.net [127.0.0.1])
+	by mx08-0063e101.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43ODU2k0025893;
+	Wed, 24 Apr 2024 14:31:22 +0100
+Received: from pnzpr01cu001.outbound.protection.outlook.com (mail-centralindiaazlp17011004.outbound.protection.outlook.com [40.93.132.4])
+	by mx08-0063e101.pphosted.com (PPS) with ESMTPS id 3xny4n8uxy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Apr 2024 14:31:22 +0100 (BST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jPD6oKfiUPhmR64Vt7pXZJ44nRiy1xFKvc+ZcxIlzeOTLn/ujJAruVeM+kcSph7zc5zkeLUX+S1+TuwO98PL33w5UNTRiK+CXo4l5TJS3y7pAGACxQfp9NqzMDzzs/CGJ3oW0uhceGQ0OMRgmmOg4Mo4bQpNiGmOBAsx/cV26qSwoM+l5ymnSAeyumcJRJNq102Xfxb8LmKiWk2aaajt9rTQtxaD69wLBg92EK2SpUtutjsKNjo+w/AHF0xY7kAH3VH1Q3h0O2GrFNokOy4i/EI8Mh69MsmuKD+IHEGDDhmma24InaAu7dD/Q3EsEqi6QffS1hVXpX/dy+jJ2b8xrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ucwKQ5VE5ntXGjpks6Z+kaDXGLo6SUjZUxLOfyguQ7U=;
+ b=JvdyGHriOuEnEjm5ZOKGgBcZDexE00oDxTmDEEK5SlqmDAEBm8oHV9raJb0b38R0PUXxw0rMEFSl9PkqZZP2CwGLbvRC+sWWo9kepmZ61MBZHMjgb3pwpFA4V4E4+sd6E4I9a/q2y9Wl3/0H44+la07EPt6IBVKk5ax6+L+r2A9JVhBEVMpUDs4pKSzm01xfOCn8PHDoQCkHh+ri4dNUfV09Bka5h5UK/IqfWVmaX4l+gzb4/a1RelQ4dlKGpEGB92W+/uqmTE3RCODnUdR3W2llIRsn0qYvtZAxTOTGphDyLmM9bCOASJImAeQDnh0XMJ2JYSCKu9tAt8nmer6BlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=blaize.com; dmarc=pass action=none header.from=blaize.com;
+ dkim=pass header.d=blaize.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=BLAIZE.COM;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ucwKQ5VE5ntXGjpks6Z+kaDXGLo6SUjZUxLOfyguQ7U=;
+ b=cx9rkXbGuViP2+003dF2hbpTRAy552PRW8QtWJM3ZcSDBiGU1GsXgCMK4nnZXiPq91tYxP/vHzrj6bQ/8Lfrr0gAiuOU0v0VcLtWmWd3ENlWCT6t3hor1O/q13XzMEcATz6TOGrw0swSdadgKHhd3mI2zPNPpbuMJOVbGGvqkGA=
+Received: from MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:12a::5)
+ by MA0PR01MB6106.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:7a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.22; Wed, 24 Apr
+ 2024 13:31:16 +0000
+Received: from MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::309a:12cf:74a4:5655]) by MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::309a:12cf:74a4:5655%3]) with mapi id 15.20.7472.044; Wed, 24 Apr 2024
+ 13:31:16 +0000
+From: Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>
+To: "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+CC: "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "olof@lixom.net"
+	<olof@lixom.net>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sboyd@kernel.org"
+	<sboyd@kernel.org>,
+        Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>
+Subject: [PATCH v2 0/7] Add support for Blaize BLZP1600 SoC
+Thread-Topic: [PATCH v2 0/7] Add support for Blaize BLZP1600 SoC
+Thread-Index: AQHalkuv7F4NWtOj/EiPWHrSWEetvw==
+Date: Wed, 24 Apr 2024 13:31:16 +0000
+Message-ID: <20240424133032.19056-1-nikolaos.pasaloukos@blaize.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MA0PR01MB10184:EE_|MA0PR01MB6106:EE_
+x-ms-office365-filtering-correlation-id: 854b313a-937f-4885-1af0-08dc6462d190
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: 
+ BCL:0;ARA:13230031|7416005|1800799015|376005|366007|38070700009;
+x-microsoft-antispam-message-info: 
+ =?iso-8859-1?Q?meF1L8uPEURnGA7nxaZxK7g0Ruw1/SOpMVbCbpOIoMQ0ssW4M6N2aOhA53?=
+ =?iso-8859-1?Q?AA/elBPrgFJ6ohCwy9RjBX22K31dg3lsHTuYJXAmxJzHReONFWvZqg3FCs?=
+ =?iso-8859-1?Q?YXq4ldnXkp0IqROiIibitrxtb0EPq1SENRCKnNpoqpKUBysmAs9jJ60S7T?=
+ =?iso-8859-1?Q?3OFzgfMwIhpvOiep01WzRLUCCfLkwE5ZEi8AlqVm05R0lwAIyXxinhHONy?=
+ =?iso-8859-1?Q?AXd0+7XoPUhQUsgd0SeTHF4aMGEb59fsPy16bLVKUAZGhKuW33V060h4cO?=
+ =?iso-8859-1?Q?Zh0VaPZDoZYiUnel0Xstr6jlNFQk1SvNSRYtwEjXN2oym0a6wpZPPli2bC?=
+ =?iso-8859-1?Q?1Gl8VUrEMUTvcWYlsJynR/xM4zsGFydHDpcli1p3tD0NRh7t4S0twLe3X/?=
+ =?iso-8859-1?Q?60b38OfakHFPBRO9SvqhsfzM6UsSH+nadaFaRcaJlmc1FpcJY2QIfObpR1?=
+ =?iso-8859-1?Q?11uIq9PUL9aet+bEKrFV1QQzy2nnzapI0TBGF1s/S/NcrgoaVqivQHHwT+?=
+ =?iso-8859-1?Q?cDE0fj8upSBPJctriwr4jWwB6ay7znGYxmn+DE9242oyRlzA1wMPiul6pt?=
+ =?iso-8859-1?Q?qxGtFAgMXX6lRaTHUZEk5ceRrQhb3gw7xiHF51nS4F+9hgIeY9rwqKODz+?=
+ =?iso-8859-1?Q?pIdeiayWAqAI8vXGMhL+RqXiLTuRmiYYsmPWkR2V6Zj7J6KWydy+1JbIIs?=
+ =?iso-8859-1?Q?sEbjQhx/I/kkqhmEi6tJz8Nq5E0yiGs3V9D/hUBmvJgVXbFuJUY7SekTlU?=
+ =?iso-8859-1?Q?ATOmBuOAzjntoPcOUHHYFHbkZTTrLXoCA4pu5InoFbzXpLFRaNi9C3dDBY?=
+ =?iso-8859-1?Q?jKq52pSeCRYRrxCwi+eWtXZ6wkQ1dJNAYxVF1u73NyMvH7/N0e6WPETDkl?=
+ =?iso-8859-1?Q?xi7/eXVT8O/hLxs54xviKXS5mmr9C3SDACKh45NGptZ+b1IdR6KZEYaILA?=
+ =?iso-8859-1?Q?xfYpZ1afgVkb11VxmK3LX5Pk202oCXYxpit6jBEs5NS3u975Kxe1vQn3QL?=
+ =?iso-8859-1?Q?e+4K8LtVwLgrNbRQzvE448wdLnofQNjqRhX536jv7J/4MO2N3ehzL4KMnx?=
+ =?iso-8859-1?Q?icZ9dP6cN5u8wIsirVmgo54puspLdmqHw0gBGUCkLDfXEQmKJB8hzIVg/o?=
+ =?iso-8859-1?Q?E4dO1Ij/20c553TSqxcwkLUi/JswXQpEJiHB79oOqQgKsTMDtDbUWS59Jc?=
+ =?iso-8859-1?Q?rVNhpNx+MT3/OftegZTSDGa6yufP71ebgRs0wz6L6NgN48yhYJIc/ctvuC?=
+ =?iso-8859-1?Q?xWJDLvejSN4yYg4Z8N6mLfGAyfQbDAX2fV1IgLvc0uY57kOQ0gnLsuEDvo?=
+ =?iso-8859-1?Q?+zwIu53g58CtRfddJlfh4PioLx8VCzMwzd3WbdfgxrNyyQzk0IUW32GXyG?=
+ =?iso-8859-1?Q?u+qrgZuaoigrwux4ykjwuq+fZ3yeQVMA=3D=3D?=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?iso-8859-1?Q?lkwGL7NJi3VgOyi9/rvSFbY3b7URSXv+xAl6DWzELmM9wUYyuZLZKM3MxU?=
+ =?iso-8859-1?Q?1Jo8SzhcCL6koNgPjRGrQ+FDy6ZYscb+dJHj6pi9vD7549rbe2JVgY5eQ3?=
+ =?iso-8859-1?Q?oV6rBSzV6YL/kBu4pOxFlFffGXAxn8zA8Jzus2xuny27bbLqC3MwIjsmcJ?=
+ =?iso-8859-1?Q?OmL+8GJMJhB2bFfSkTjEhpQwevxJJhYsmjg0ajOZJyzkB5TH/Wn/RHqf3r?=
+ =?iso-8859-1?Q?R8VRIHRSSFPFYikl+NU1l6lw0+zQX6Q14rN0+FbQNjtxyKz0YxoDBF0Rkr?=
+ =?iso-8859-1?Q?CrA9K2qhlg9nl1qDOClRjlhSBRyniFh0GqyxIXhx2g4jHSfTc1zssslg4z?=
+ =?iso-8859-1?Q?BupEiMlCVft7FZ28lvLReXBTk3L8sFHO4SIoZVjYhXsPueLb2xLBT+TsHY?=
+ =?iso-8859-1?Q?+Lc60d3mxntIBCSiAznhQkdjgwozh3TiaexszzqudSDtrlVEXlyBMWqbl2?=
+ =?iso-8859-1?Q?dxFVqqUcFGmCup50A84YaPb4Hdfbhj/sfgT7m+7hjdfXN/h7hINnW/yoJI?=
+ =?iso-8859-1?Q?omrtrRazdeiRXjk84gBkRd8gBnnfOjakV8vOqyuQMLkUuHwt6nomz/4NkK?=
+ =?iso-8859-1?Q?Ohb1bTq6/zYxkSds4KjIONn9t9hcEt2FfAq+XaB0eGSY8FZbmIkM3CJ+SF?=
+ =?iso-8859-1?Q?XveIVpWdVes4x9+IvS7VQhkgd4zLoIkVyS77PADm5u+Q999n+WDC0ZJCFZ?=
+ =?iso-8859-1?Q?fsQD3RBJJ3onzGzXG6bn/7h/N2lUdmWP+E3pI5V5d2L48pGIZ/uXR4AQgD?=
+ =?iso-8859-1?Q?3rcWSLNB6719yRRgdbtB2lmj/MReOEuTGSA67G86FzM8PyTZ6vFcEUVSQt?=
+ =?iso-8859-1?Q?K0ZpXGLZAXedH4fazLLowaS/LLV5Ku1ExxoVQc5jXxyRa6mZsfyoGV9Erf?=
+ =?iso-8859-1?Q?JYm1umuA0qWM6GjSRjOvmFZFjL1fTxHzU9vR8XdyYZ/Bq8B6toUjZbHJQ1?=
+ =?iso-8859-1?Q?Ziuipm1byAsHoCH3/wDACKCHrXmub2yBPgLukUpynj+XqnCVF/d+RtOOTu?=
+ =?iso-8859-1?Q?RF1TpCCE1ts0/hoUItFFuYn+dkNWWQHQrNgy80ylkGyCtf60sjx41el3JI?=
+ =?iso-8859-1?Q?5jYKrMW04H71CyQrg+dKlMIcHbFAEMcqrvYgrBMPC6opnTxk8bdQM4uDnC?=
+ =?iso-8859-1?Q?3jUxLCfK/qz5EHHGDTo201obZ70FDRojzVSqPYYp/C58Wk6DQHUAzD3WWK?=
+ =?iso-8859-1?Q?sjXu2mUtDaFH2KmSY01mfENGSdT3vsagLOMSKX++1iFbrtydOPIO95Vnl5?=
+ =?iso-8859-1?Q?zk95ADMGpO7+6d0cqW/4KZcqISY0lhyphM1gS+lmnBSqxlViNZH4tAYNX3?=
+ =?iso-8859-1?Q?qOEW0TeuPjSeVSI0XIyiU2iJQ3eVNa8CEhthXhO/vMQqI++y3WCfgpcWOy?=
+ =?iso-8859-1?Q?z0ykBVZvX82iyM2WnX85V4c8HFU2VwIY4c+ZnqC5UDk+lmhE5RdLzoY1VS?=
+ =?iso-8859-1?Q?h6ByfV3qO5B4S8J/SsjMtC9kLsHXJcmXqWwZL+YolBDifpBhcnCNwdZMxk?=
+ =?iso-8859-1?Q?Nb8IKkn1b5SgOLC2zIdR3/siJkZMVsZXAT4HdGSmNyHlT2sVTbjx45JdpM?=
+ =?iso-8859-1?Q?+BkvrKzTw9LSY/QRa2g437dHcy0Xf9zWajaQBHXi2L8k0DP8Ar3KWGxNzf?=
+ =?iso-8859-1?Q?cjf3+sTV92xE06G5KIbLodZk5l3hoyr1ct1Gw2UHeIaWut4rcFUefNJQ?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <658e6b1b23d5b66646bb830361b8c55ccf797771.1713025170.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <658e6b1b23d5b66646bb830361b8c55ccf797771.1713025170.git.christophe.jaillet@wanadoo.fr>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 24 Apr 2024 15:08:13 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW0G_Sdvq8RTR1y8xRPqCiZi-u_FbbYdbS3g+k9YnFZvQ@mail.gmail.com>
-Message-ID: <CAMuHMdW0G_Sdvq8RTR1y8xRPqCiZi-u_FbbYdbS3g+k9YnFZvQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: r8a7740: Remove an unused field in struct div4_clk
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: blaize.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB10184.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 854b313a-937f-4885-1af0-08dc6462d190
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Apr 2024 13:31:16.5169
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9d1c3c89-8615-4064-88a7-bb1a8537c779
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4RYkQjsVmIxzyljxTwVuvau1hBZQdyWrpu5q+4wxKzirv3bG43IGasWSXzW72wqNDX0R2iq+7oLC4N3XO8sQy0iWTbuU5cix/lRvj6Pz3As=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB6106
+X-Proofpoint-GUID: GGOfK2NLbf-7D9boibhH1zoeNbTpdYX-
+X-Proofpoint-ORIG-GUID: GGOfK2NLbf-7D9boibhH1zoeNbTpdYX-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-24_11,2024-04-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=583 phishscore=0 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.21.0-2404010002
+ definitions=main-2404240046
 
-On Sat, Apr 13, 2024 at 6:19=E2=80=AFPM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
-> In "struct div4_clk", the 'flags' field is unused.
->
-> Remove it and update the 'div4_clks' array accordingly.
->
-> Found with cppcheck, unusedStructMember.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Adds basic support for the Blaize BLZP1600 SoC.
+This SoC contains two cores of Cortex-A53 CPUs, one Blaize
+Graph Streaming Processor (GSP) and several other IPs.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+V2 changes:
+ * Update SoBs.
+ * `make dtbs_check` has no warnings.
+ * Fix dts names and removed dead code.
+ * DTS is separated from anything else.
 
-i.e. will queue in renesas-clk for v6.10.
+Nikolaos Pasaloukos (7):
+  dt-bindings: Add Blaize vendor prefix
+  dt-bindings: arm: blaize: Add Blaize BLZP1600 SoC
+  dt-bindings: reset: Add binding constants for BLZP1600
+  dt-bindings: clock: Add binding constants for BLZP1600
+  arm64: Add Blaize BLZP1600 SoC family
+  arm64: Add initial support for Blaize BLZP1600 CB2
+  arm64: defconfig: Enable ARCH_BLAIZE_BLZP1600
 
-Gr{oetje,eeting}s,
-
-                        Geert
+ .../devicetree/bindings/arm/blaize.yaml       |  40 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/Kconfig.platforms                  |   5 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/blaize/Makefile           |   2 +
+ .../boot/dts/blaize/blaize-blzp1600-cb2.dts   |  84 +++++++
+ .../boot/dts/blaize/blaize-blzp1600-som.dtsi  |  23 ++
+ .../boot/dts/blaize/blaize-blzp1600.dtsi      | 211 ++++++++++++++++++
+ arch/arm64/configs/defconfig                  |   1 +
+ .../dt-bindings/clock/blaize,blzp1600-clk.h   |  77 +++++++
+ .../dt-bindings/reset/blaize,blzp1600-reset.h |  84 +++++++
+ 11 files changed, 530 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/blaize.yaml
+ create mode 100644 arch/arm64/boot/dts/blaize/Makefile
+ create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-cb2.dts
+ create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600-som.dtsi
+ create mode 100644 arch/arm64/boot/dts/blaize/blaize-blzp1600.dtsi
+ create mode 100644 include/dt-bindings/clock/blaize,blzp1600-clk.h
+ create mode 100644 include/dt-bindings/reset/blaize,blzp1600-reset.h
 
 --=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
