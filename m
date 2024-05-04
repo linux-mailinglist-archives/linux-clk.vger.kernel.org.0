@@ -1,159 +1,174 @@
-Return-Path: <linux-clk+bounces-6685-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6687-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3AFD8BBB09
-	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 14:06:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8AE78BBB81
+	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 14:45:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D3161F21FEF
-	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 12:06:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E43DDB21533
+	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 12:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388C5208C4;
-	Sat,  4 May 2024 12:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4238A22611;
+	Sat,  4 May 2024 12:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GOMg4RNE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D5rBCQ7Y"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C262033E
-	for <linux-clk@vger.kernel.org>; Sat,  4 May 2024 12:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2202420DF7
+	for <linux-clk@vger.kernel.org>; Sat,  4 May 2024 12:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714824392; cv=none; b=ux56OgqEPZ4/ynYZ1tNc7eF8WrdrpCS4CLzniAi4X7R+IEk0wK9BbF0Pu71LF1S/FzLVQuIAHTVWmh8j4Ke8gL+uEbnmlcMOreUNLA7QMkyN20hcm6leuJZNkpImolNpl/d2SPfT+lCCs24AZy+dGGZ5zUnjEujJ0B8AzgR3AB8=
+	t=1714826728; cv=none; b=nEsHtvXBVXacbItGfaf/JWNHuftMDwxK2LTLTwM7XT2gjC0cENDJV1tJpRToqY2IA9nIvGWzhv4gwZTEVS1zk0WxxdODSAIcrXlJY8GLfzZ/7YBiXQCdssgy9Of28ek/ngzo+20Mnzi5WpRo9SW8+MOy2FLMlfkRGXnCw/rNwL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714824392; c=relaxed/simple;
-	bh=E4NUlF5VQIe9oFr4HXVzgpyXS9FkO1vWaryQVaiCw78=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bjrKhsjPL3A/fDunpdxeQjFOoQXDXJsHNtefxtOAPp2UDvba+qdoTq53M1VMiGtbaI4UPEJRBjJDuUw7kdBGbTyX68sJ3XqHM0mQKPkSQijPJfm53JV/f4zIKj1C4wWdUhNuA6el9vL5tMJKNzq7cxOYbs5/J+sNYZnwGvArlQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GOMg4RNE; arc=none smtp.client-ip=209.85.208.178
+	s=arc-20240116; t=1714826728; c=relaxed/simple;
+	bh=ga4oIcPdFMozDH6CQXgueKmuB+AGJYrNPk9q8zLxDhk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F/abbDt1uz0WLd2ahLx0IJ9mfMS8k+DOqpsWd9O4bSLxr1Q/eXEC/IiGy+6Vj1dOBpzeuX9sXSg2ZsX8I2fnoYDy+VKj9o6DfJsUtlse6n4+kXAfdMpV2JKj2bHSwInmQpXmOQEBYAL3X27eu1buVvY/BiQ407+I6xKd6iVNAH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D5rBCQ7Y; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2e28d8fb942so5261851fa.1
-        for <linux-clk@vger.kernel.org>; Sat, 04 May 2024 05:06:29 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-41c7ac71996so4744165e9.3
+        for <linux-clk@vger.kernel.org>; Sat, 04 May 2024 05:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714824388; x=1715429188; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LmoUDmEK4doQTcwFVaJWsAEo654TgpusHYo23zS6+4A=;
-        b=GOMg4RNECO7NIaDOAkeA/6t7xQ3eO7ZPlgxPp+q3EYDFwXryN25Xb0tnqFDaQ2sv8X
-         GJQTCv4o/euBDSzeUIp0t1ZccqC9XFZRQ46zVSjkAC1YE+zWniseVqO6zk8NhdEpEe+7
-         JfOI9L62R5vyMaCe7Vhg7fw7g53aaQSJ0KE7DUPtPmwuUyH5EdDSQiZfUY7YmsyoefrC
-         v1rVqjVWfD7ASYAUHU7dO5Ud3zaVcWHhS0EsVjkiuJwY9+28xqA7XSHURxk7BYKD9h14
-         GUDfUzlOwBjYtmyXOxzSM2nrFLkoxa3N6fYE60OTCrDppVH5gynEdpUzmmBbBN2pojNF
-         GgfQ==
+        d=linaro.org; s=google; t=1714826723; x=1715431523; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hQl9kri2DA7gvWk/T5ziKHmH1C/U4ARbgW6hV2wkE9w=;
+        b=D5rBCQ7Yz43WYZRwpVRYpE3vZ1H2pMRCgYESHAAUGNX76kAJxC1ZV6YsM2QXwCg8bJ
+         NiKz4aG/Awkc6q5j9dARygo9x9XybwrKydV8su/O6AD9b6yGkwMPmBTr/sqln7QEKFfl
+         KC75QjL2KrwUbQDRzfavsIc5P2qg2Gchs/pdclK5mzT6Elpq/RJiKco7PPGE6SkEAznx
+         WZSK5BpL3noxTS7mi3FmhlfSjr8HgbDrKjSI1E/VbeBnp8ye/g3gSPwnDD/yHapFS/xQ
+         zC2xicSI94IPBuabnrocsUzU3/eE04a3ZecduOo8BUoYvojRBdpudk0+rqKXFLmKoFcH
+         t5Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714824388; x=1715429188;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1714826723; x=1715431523;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LmoUDmEK4doQTcwFVaJWsAEo654TgpusHYo23zS6+4A=;
-        b=PSviEzMxHXGMTWxHkEAG6elqItxJqnNTAAiek62/umtMbECEnuN9K6WES8RBqFBZXO
-         Lodb2EHxz+pw3DWJebgQhGx3gGyIb6z/3V0QgXHSA78r/Kpxws4LjzcnHkxzAuVY3iYJ
-         2WwVfj7kJp+4IKohEES+LpX/PZ8GAgZ6ZdhFqpBpKntZHdJ9neR3hen97j8olWqftnD1
-         zjT/+1T7GyGm0rBsakGhWY18SomuE4kBKoFYbzBHoU18LhVX7iHW9mkz+zQnNc2FAEHT
-         OCrEoZsVk26X+83K+yLBfCAJvx2wSEzYhRs4SR/Whc7ohPk7ltLlQcB3+OFfAEEwAceE
-         wXKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXVhcU6R9TDYgpa4RWQM7TpJKhw/0o3sgtp64TRQZMkzPXAQfC+uo5q2degbZp+fWeLx/LCQf0FwdU78HA3jS0k0xhu55GWLEXz
-X-Gm-Message-State: AOJu0YypHb68QmEGX4re+hkBhxHt+qt7OMTErnb419lhQkDMMK37iHJE
-	lGvsQIBzEqOKz0p4MF6N0fEUWKh8JV4294ZACMcu5OUjg7tQF8iSKn/Knqg6LHU=
-X-Google-Smtp-Source: AGHT+IH9atE4P8OuHxvPaHIfI65XvGoUqbPNzcEeOie682Vh5NLZSyRG6SsdCDxSBhHt7uZBnRTCaw==
-X-Received: by 2002:a2e:a416:0:b0:2d4:7292:92c0 with SMTP id p22-20020a2ea416000000b002d4729292c0mr3003429ljn.20.1714824388259;
-        Sat, 04 May 2024 05:06:28 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id bd13-20020a05600c1f0d00b0041c012ca327sm9048194wmb.45.2024.05.04.05.06.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 May 2024 05:06:27 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	linux-clk@vger.kernel.org,
-	Sylwester Nawrocki <snawrocki@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] clk: samsung: drivers for v6.10
-Date: Sat,  4 May 2024 14:06:22 +0200
-Message-ID: <20240504120624.6574-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        bh=hQl9kri2DA7gvWk/T5ziKHmH1C/U4ARbgW6hV2wkE9w=;
+        b=iG5/JMhT2+NUeodMkPqzkPgXE86Tfp1zFTHv+yksn1c0x+vmeu9yZ0W7dByIBQio05
+         TbiiDswvk9Bja0MymRwkDXuARwOn4cZJq3VpG4k/xJAOrScvCh+4Lk8oBgYiSjggyG1T
+         x8a5JwMW/fTC7/6mNvu28WtbkEqcdVOwA65105l4xXlsb84UxPLQoaWs8BbfcU4C59LB
+         BttVqS68zJHEuraR+BJh4/hfxQcm8KWmUGocE2pcuo3D7YvN+6EYrKblnoMe9Ur0gPfV
+         FVsB4L35+gNK592GbquVwtfRxOouf1idBig1B59vwPnIf9W+tvCtPiN4YtTVebCdbawR
+         rvhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX491swzjMOyntTQ/iCuFxgDL/u1E8YuyTXrejQaQvIWhiTMcQlNWFWSyfbrLSTOYWlRhP6pIBoRU2GWWkMA5XoJ3626njjOMyI
+X-Gm-Message-State: AOJu0YyYX6ISqT34BiF/k1wiALio+ll4ZgbbgQed8xJAV/a7NK2De8dU
+	VJIGmAwuMxr7jJHmigM+Nw0OWnbZXbJsTYq0KUcQLclzke5YF1XGxqSrf86wxZ4=
+X-Google-Smtp-Source: AGHT+IF1k5IoLYmFSDKuAvssFR9KQYJctJn7T8iOIF8P2hYtIJ9pSdVm/FB22nVk46Us1FWNHO6XLw==
+X-Received: by 2002:a05:600c:4fc3:b0:41a:ff7d:2473 with SMTP id o3-20020a05600c4fc300b0041aff7d2473mr3926844wmq.4.1714826723508;
+        Sat, 04 May 2024 05:45:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.16])
+        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b0041bbec72670sm9171961wmb.39.2024.05.04.05.45.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 May 2024 05:45:22 -0700 (PDT)
+Message-ID: <3951a7ea-b469-42dc-8240-a5c593bc536f@linaro.org>
+Date: Sat, 4 May 2024 14:45:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V3 1/8] dt-bindings: clock: qcom: Fix SM8450 videocc
+ incorrect header file name
+To: Jagadeesh Kona <quic_jkona@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio
+ <konrad.dybcio@linaro.org>,
+ Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Taniya Das <quic_tdas@quicinc.com>,
+ Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+ Ajit Pandey <quic_ajipan@quicinc.com>,
+ Imran Shaik <quic_imrashai@quicinc.com>
+References: <20240430142757.16872-1-quic_jkona@quicinc.com>
+ <20240430142757.16872-2-quic_jkona@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240430142757.16872-2-quic_jkona@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 4cece764965020c22cff7665b18a012006359095:
+On 30/04/2024 16:27, Jagadeesh Kona wrote:
+> Fix incorrect header file name in SM8450 videocc bindings.
+> 
+> Fixes: 1e910b2ba0ed ("dt-bindings: clock: qcom: Add SM8450 video clock controller")
+> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> ---
+>  .../devicetree/bindings/clock/qcom,sm8450-videocc.yaml          | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml
+> index bad8f019a8d3..78a1bb5be878 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml
+> @@ -13,7 +13,7 @@ description: |
+>    Qualcomm video clock control module provides the clocks, resets and power
+>    domains on SM8450.
+>  
+> -  See also:: include/dt-bindings/clock/qcom,videocc-sm8450.h
+> +  See also:: include/dt-bindings/clock/qcom,sm8450-videocc.h
 
-  Linux 6.9-rc1 (2024-03-24 14:10:05 -0700)
+Then also s/::/:/. It was a mistake to introduce it.
 
-are available in the Git repository at:
+Best regards,
+Krzysztof
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-clk-6.10
-
-for you to fetch changes up to 6b32d7474e9b833dc7fadc1b4d4f08af9bd87fde:
-
-  clk: samsung: gs101: mark some apm UASC and XIU clocks critical (2024-05-03 10:34:34 +0200)
-
-----------------------------------------------------------------
-Samsung SoC clock drivers changes for 6.10
-
-1. Allow choice of manual or firmware-driven control over PLLs, needed
-   to fully implement CPU clock controllers on Exynos850.
-
-2. Correct PLL clock IDs on ExynosAutov9.
-
-3. Google GS101:
-   - Propagate certain clock rates to allow setting proper SPI clock
-     rates.
-   - Add HSI0 and HSI2 clock controllers.
-   - Mark certain clocks critical.
-
-4. Convert old S3C64xx clock controller bindings to DT schema.
-
-----------------------------------------------------------------
-André Draszik (3):
-      dt-bindings: clock: google,gs101-clock: add HSI0 clock management unit
-      clk: samsung: gs101: add support for cmu_hsi0
-      clk: samsung: gs101: mark some apm UASC and XIU clocks critical
-
-Jaewon Kim (1):
-      clk: samsung: exynosautov9: fix wrong pll clock id value
-
-Krzysztof Kozlowski (2):
-      dt-bindings: clock: samsung,s3c6400-clock: convert to DT Schema
-      Merge branch 'for-v6.10/clk-gs101-bindings' into next/clk
-
-Peter Griffin (2):
-      dt-bindings: clock: google,gs101-clock: add HSI2 clock management unit
-      clk: samsung: gs101: add support for cmu_hsi2
-
-Sam Protsenko (2):
-      clk: samsung: Implement manual PLL control for ARM64 SoCs
-      clk: samsung: exynos850: Add CMU_CPUCL0 and CMU_CPUCL1
-
-Tudor Ambarus (2):
-      clk: samsung: gs101: propagate PERIC0 USI SPI clock rate
-      clk: samsung: gs101: propagate PERIC1 USI SPI clock rate
-
- .../bindings/clock/google,gs101-clock.yaml         |   55 +-
- .../bindings/clock/samsung,s3c6400-clock.yaml      |   57 +
- .../bindings/clock/samsung,s3c64xx-clock.txt       |   76 --
- drivers/clk/samsung/clk-exynos-arm64.c             |   56 +-
- drivers/clk/samsung/clk-exynos850.c                |  440 ++++++-
- drivers/clk/samsung/clk-exynosautov9.c             |    8 +-
- drivers/clk/samsung/clk-gs101.c                    | 1207 ++++++++++++++++++--
- drivers/clk/samsung/clk.h                          |   15 +-
- include/dt-bindings/clock/google,gs101.h           |  116 ++
- 9 files changed, 1822 insertions(+), 208 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/samsung,s3c6400-clock.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/samsung,s3c64xx-clock.txt
 
