@@ -1,74 +1,86 @@
-Return-Path: <linux-clk+bounces-6681-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6683-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B595F8BBA93
-	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 12:51:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E23E68BBB05
+	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 14:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 086202829F2
-	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 10:51:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32655B217E2
+	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 12:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9726818C31;
-	Sat,  4 May 2024 10:51:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CAF2033E;
+	Sat,  4 May 2024 11:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="T9n2ecnS"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A915258
-	for <linux-clk@vger.kernel.org>; Sat,  4 May 2024 10:51:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4B71CFAF;
+	Sat,  4 May 2024 11:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714819899; cv=none; b=KpKveV5HMWzV35mcbfwrFSe/kOEHVE6Bvqp1BQk1qVYINb0stL1qUfrqpHxMrzq6La8JtgI/HVQrhD3bhlaKxLmKaRWASlvfKJmyrqDSuzxju9hcolF+1YXpQ+kDIfc+CxtA3l1BOIw3njeTpnwJZJSkq4yd2ZmCJZDRQK0mAGI=
+	t=1714823997; cv=none; b=cz3v5Hrk/l/CBkhgsPi7N9cNU+58wSFcBOnfLhNlQsFcloqM/reakPpGfwZ37MGLz18PrGyQvj4J0M3hATgjdNl3y/mjxApWgYarvRGF+A9csqPSEv9rSu/DglmRG6npCOfm3Vi0RzW88JWXIfZ4Re4c25x+VjYBZRm/zzNGjH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714819899; c=relaxed/simple;
-	bh=rBBfWfeMB9bwyhCLVWdWGravL55hqp9MkActYtocjTA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MA6OrKJJrNyDHBNzQVGE3bh3FvthiKNA8i413OSZr/bMoHvorDQif778GapCJ4iHOpL1jtVGF3Ew3i+bsZa5dQkIUbJSnk8ri9rAZ+X/jUiU1BtYXyY9OtOWcy37zf86pLdXJVsfcbq/xQVvMYNjZVjqTU9bCwgs0cVY94SlTIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i53875b5d.versanet.de ([83.135.91.93] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1s3CzN-0001m9-DI; Sat, 04 May 2024 12:51:33 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Lucas Stach <l.stach@pengutronix.de>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	patchwork-lst@pengutronix.de,
-	linux-rockchip@lists.infradead.org,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH] clk: rockchip: rk3568: Add PLL rate for 724 MHz
-Date: Sat,  4 May 2024 12:51:31 +0200
-Message-Id: <171481988028.3538483.628614246241628952.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240503153329.3906030-1-l.stach@pengutronix.de>
-References: <20240503153329.3906030-1-l.stach@pengutronix.de>
+	s=arc-20240116; t=1714823997; c=relaxed/simple;
+	bh=DG6ZzvoZqqNektgKXFqBSa5NBmz3+6SwhK7LJtxeu4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OnwejpS//11rGAR98ksU2hCgOb5DDsJWgKQtMn3BUsfQtMUlrXaO7WLDyLauF2AKejKcWxPzqui00sYJJHpD/ousDxySk2Kf85jpdyziCopWb7vbPZLbfyA7OT97DqjSJQlieTWVuEAV3z3nsqxjeRhZVgUSdhecBmjzC1NMVyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=T9n2ecnS; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 2F9E21FC17;
+	Sat,  4 May 2024 13:59:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1714823993;
+	bh=BtyuWpktl7GPWn+81xg+0EEV0yF0Qh5Wlg6f5xNjC/Y=; h=From:To:Subject;
+	b=T9n2ecnS8JZrSMJDHyRkTkQKySP7F93Esv6GxbTSbhhYgFeP2qRdnvDxREhz+DBhH
+	 5DEx0bgSG1RT1nLowQeWihs9uafMjescIbHcwNrSmjf0O3wM5FbpQ+K7/h35t1dW4e
+	 EQi0qRKahEJpYWFFYC5EQaPJcq1CoA4ehTFWFjV2HbFU/MbPy/ziWNIu1pYFJyHPj8
+	 THJ3cKJOGW5nLF8rD583/llxk1yrmEtni3B7aZcaEIlwBsN7v3mDSb+8IJ0F1RulA9
+	 fkC5vDK7bB3UbOqXZzNPVnheOM0FpYjdj/pMcDbTcyg1MgAGDlAFusScicRz1Pa0vF
+	 i+1+PNhJSNtGQ==
+Date: Sat, 4 May 2024 13:59:51 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: Abel Vesa <abelvesa@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Jacky Bai <ping.bai@nxp.com>,
+	Ye Li <ye.li@nxp.com>, Dong Aisheng <aisheng.dong@nxp.com>,
+	linux-clk@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Abel Vesa <abel.vesa@linaro.org>, Peng Fan <peng.fan@nxp.com>,
+	Shengjiu Wang <shengjiu.wang@nxp.com>
+Subject: Re: [PATCH 08/18] clk: imx: imx8mp-audiomix: remove sdma root clock
+Message-ID: <20240504115951.GB3666@francesco-nb>
+References: <20240504-imx-clk-v1-0-f7915489d58d@nxp.com>
+ <20240504-imx-clk-v1-8-f7915489d58d@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240504-imx-clk-v1-8-f7915489d58d@nxp.com>
 
-On Fri, 3 May 2024 17:33:29 +0200, Lucas Stach wrote:
-> This rate allows to provide a low-jitter 72,4 MHz pixelclock
-> for a custom eDP panel from the VPLL.
+Hello Peng,
+
+On Sat, May 04, 2024 at 08:49:01AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> 
+> There is an issue:
+> SDMA3 can't work without setting AUDIOMIX_CLKEN0[SDMA2] (bit-26) to 1
 
-Applied, thanks!
+Fixes tag, given that this is fixing an issue?
 
-[1/1] clk: rockchip: rk3568: Add PLL rate for 724 MHz
-      commit: f513991b69885025995dcb4ca75d2ee7261e1273
+Francesco
 
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
 
