@@ -1,31 +1,31 @@
-Return-Path: <linux-clk+bounces-6682-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6681-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB6E8BBA94
-	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 12:51:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B595F8BBA93
+	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 12:51:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56A961F21FF2
-	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 10:51:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 086202829F2
+	for <lists+linux-clk@lfdr.de>; Sat,  4 May 2024 10:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E171A29A;
-	Sat,  4 May 2024 10:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9726818C31;
+	Sat,  4 May 2024 10:51:39 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2C45258;
-	Sat,  4 May 2024 10:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A915258
+	for <linux-clk@vger.kernel.org>; Sat,  4 May 2024 10:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714819902; cv=none; b=nxZk9XLBdpSR3sXuqpx8uTuOyG3u3rzKzKLDBfzDVJUvOdGN860aHsP0gqpf2js02FpRWHwzPIOnjgG/EFtLQNEHn6PRO3zHC9FxoAX83/EobocZBmrChjYdlwyDRV5AkzwL67M+MklxNru2wFnewfy5/BHyyiWuOz7GKDX9PRo=
+	t=1714819899; cv=none; b=KpKveV5HMWzV35mcbfwrFSe/kOEHVE6Bvqp1BQk1qVYINb0stL1qUfrqpHxMrzq6La8JtgI/HVQrhD3bhlaKxLmKaRWASlvfKJmyrqDSuzxju9hcolF+1YXpQ+kDIfc+CxtA3l1BOIw3njeTpnwJZJSkq4yd2ZmCJZDRQK0mAGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714819902; c=relaxed/simple;
-	bh=X4Il8DnsZvuxyI5MynZ0dTBzMmmyjgraR9bTmVYz6dE=;
+	s=arc-20240116; t=1714819899; c=relaxed/simple;
+	bh=rBBfWfeMB9bwyhCLVWdWGravL55hqp9MkActYtocjTA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Na4YP6i8FKXVT1+QkTUelDsIF3jz6oU7sQU4gkUtz4o68brzptAy84jkqcwGFvAFaqYcK1Xnk/csr8jvzs3Egc95QcVbypOPhEVYjyvBcwa42K5dHIrrXN3WgDOGH6ZAT6VJF1MKkXl1kDVUt5inQo6wCmKU3JuPUmAWnRxPdHE=
+	 MIME-Version:Content-Type; b=MA6OrKJJrNyDHBNzQVGE3bh3FvthiKNA8i413OSZr/bMoHvorDQif778GapCJ4iHOpL1jtVGF3Ew3i+bsZa5dQkIUbJSnk8ri9rAZ+X/jUiU1BtYXyY9OtOWcy37zf86pLdXJVsfcbq/xQVvMYNjZVjqTU9bCwgs0cVY94SlTIQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
@@ -33,23 +33,21 @@ Received: from i53875b5d.versanet.de ([83.135.91.93] helo=phil.lan)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1s3CzM-0001m9-Ud; Sat, 04 May 2024 12:51:33 +0200
+	id 1s3CzN-0001m9-DI; Sat, 04 May 2024 12:51:33 +0200
 From: Heiko Stuebner <heiko@sntech.de>
-To: Stephen Boyd <sboyd@kernel.org>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Michael Turquette <mturquette@baylibre.com>
+To: Lucas Stach <l.stach@pengutronix.de>
 Cc: Heiko Stuebner <heiko@sntech.de>,
-	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	kernel-janitors@vger.kernel.org,
+	kernel@pengutronix.de,
+	patchwork-lst@pengutronix.de,
 	linux-rockchip@lists.infradead.org,
 	linux-clk@vger.kernel.org
-Subject: Re: [PATCH] clk: rockchip: Remove some unused fields in struct rockchip_mmc_clock
-Date: Sat,  4 May 2024 12:51:30 +0200
-Message-Id: <171481988029.3538483.14745694145472160421.b4-ty@sntech.de>
+Subject: Re: [PATCH] clk: rockchip: rk3568: Add PLL rate for 724 MHz
+Date: Sat,  4 May 2024 12:51:31 +0200
+Message-Id: <171481988028.3538483.628614246241628952.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <410bc0f86c7b9f1c80f8a4e9a2a028a9a6ee1ec0.1713970085.git.christophe.jaillet@wanadoo.fr>
-References: <410bc0f86c7b9f1c80f8a4e9a2a028a9a6ee1ec0.1713970085.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240503153329.3906030-1-l.stach@pengutronix.de>
+References: <20240503153329.3906030-1-l.stach@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -59,18 +57,16 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Wed, 24 Apr 2024 16:48:29 +0200, Christophe JAILLET wrote:
-> In "struct rockchip_mmc_clock", the 'id' field is unused.
-> Remove it.
-> 
-> Found with cppcheck, unusedStructMember.
+On Fri, 3 May 2024 17:33:29 +0200, Lucas Stach wrote:
+> This rate allows to provide a low-jitter 72,4 MHz pixelclock
+> for a custom eDP panel from the VPLL.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] clk: rockchip: Remove some unused fields in struct rockchip_mmc_clock
-      commit: 947b8f2a8b5155f6e9560af07ed65b3cc9aecd75
+[1/1] clk: rockchip: rk3568: Add PLL rate for 724 MHz
+      commit: f513991b69885025995dcb4ca75d2ee7261e1273
 
 Best regards,
 -- 
