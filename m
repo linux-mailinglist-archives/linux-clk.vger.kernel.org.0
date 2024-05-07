@@ -1,168 +1,170 @@
-Return-Path: <linux-clk+bounces-6765-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6767-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCCD78BDBEA
-	for <lists+linux-clk@lfdr.de>; Tue,  7 May 2024 08:53:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E34D78BDC1D
+	for <lists+linux-clk@lfdr.de>; Tue,  7 May 2024 09:09:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36B771F23038
-	for <lists+linux-clk@lfdr.de>; Tue,  7 May 2024 06:53:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FC3D1C22428
+	for <lists+linux-clk@lfdr.de>; Tue,  7 May 2024 07:09:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C528778C86;
-	Tue,  7 May 2024 06:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="iPfbnJGS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EECE13BC1A;
+	Tue,  7 May 2024 07:09:33 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2097.outbound.protection.partner.outlook.cn [139.219.17.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BB278C74
-	for <linux-clk@vger.kernel.org>; Tue,  7 May 2024 06:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715064814; cv=none; b=WHSwEUyCK+cfDX4xJQk5XcUjgDX5K776wODcrWR+59aE5mSsUK31Eaw+peF9iN/+rzj1IT2tLdfISPPaoJZIgwmJfBAMrAXsd8GMToUh0ItoWGLqtJ472X99WT/JGBz9aeQrYRN98qCWPUjxB7361QxmHKyloPFULuqi4UabyLI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715064814; c=relaxed/simple;
-	bh=3RVvsRY1riTPp8sqDGfDnQM5b6i9tEX131EAEMlxZF8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=Ad0dw2NR0IpMQ9bON53D2ygbhk8OSBW1ZuONsQE6DrWqo33NrE/n7grRJPByqkm/imV0aDuW12TNnPDT7lAUolBYh9QN/XTAW5e/MQghlz9NCoVltHFe8t/7LKL8AGxYt3SK1jACF1DdScaNt5t+4Qb3xrk8ejZZ8PCS5piN1mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iPfbnJGS; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240507065330euoutp025b5a40a78a325c0e9a1942a05fc59f7c~NIlujm5OX0205902059euoutp02W
-	for <linux-clk@vger.kernel.org>; Tue,  7 May 2024 06:53:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240507065330euoutp025b5a40a78a325c0e9a1942a05fc59f7c~NIlujm5OX0205902059euoutp02W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1715064810;
-	bh=eGoaR1cIusQXJ8HGszq3XedYwmA8e6M2e4szE7nyD7E=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=iPfbnJGSaoEkBjf8wcCayg0N9yKaEhRwuu9NB0GUfPKerKgrd3a66/s+YmXgXlknd
-	 ajTcQCqmcxmzqWWamu/iHEEM2ODnffvAlZN/Y382SpQ6PL7z2fKQyxWZZ57UUrFcp1
-	 XYtyNh6kJJqeYPEnPqHJePNukErB1+04snA6iZCU=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240507065329eucas1p2bfc600f68aea28788abf5759c5001158~NIluS1qsR2883828838eucas1p2K;
-	Tue,  7 May 2024 06:53:29 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id B8.5A.09620.9EFC9366; Tue,  7
-	May 2024 07:53:29 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240507065329eucas1p1b26d68384a4f076b31223ed099fd3a48~NIltzrzOo0851808518eucas1p1P;
-	Tue,  7 May 2024 06:53:29 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240507065329eusmtrp1729755638095f476e43a6d601f79ef25~NIlty-OXS0674306743eusmtrp1v;
-	Tue,  7 May 2024 06:53:29 +0000 (GMT)
-X-AuditID: cbfec7f5-d31ff70000002594-39-6639cfe9aa01
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 4F.74.09010.9EFC9366; Tue,  7
-	May 2024 07:53:29 +0100 (BST)
-Received: from AMDC4653.digital.local (unknown [106.120.51.32]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240507065328eusmtip2fbe4dfd32b595dafac4fc32829954ab8~NIltMuPbH2367823678eusmtip2m;
-	Tue,  7 May 2024 06:53:28 +0000 (GMT)
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-To: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Krzysztof Kozlowski
-	<krzk@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, Chanwoo Choi
-	<cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, Michael
-	Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH] clk: samsung: Don't register clkdev lookup for the fixed
- rate clocks
-Date: Tue,  7 May 2024 08:53:17 +0200
-Message-Id: <20240507065317.3214186-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3E413BAEF;
+	Tue,  7 May 2024 07:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.97
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715065773; cv=fail; b=bzZI1a6xevjGNiAuCGn5F90XnBPMeDJiRP1Q0GUBswT9utGadVE5nG1Z9WmHn6YCDR1jBm7Fsk/QiCjIxNwsVE2sGw6jJpnE718jJnr5jrCdfYpT7ReRobrGmvrD6F8tG4dSy6mJkuYjxKBoYWWU7JxY5hULe/HQCHZs4GZIUiQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715065773; c=relaxed/simple;
+	bh=qrcgEyYysVmhcc8hsDQZQw/gS5keWzqY7iVOFHv216g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=W+c/K4Jt4YNk92jKMJHpwmnXyLlvua2KJ+d9NVVZTr348j6w2uNWnUjOD+AaC+OiU9LeKq9RyTP8WnIA4QzFPFiP8BYb71Yvvzr7qlCvlpHnsy6xjnapQmjO9ljwAZfQS/Jvla1jTyecJfq60P6ND2uLtdfmWgc2y+C7C+fH/J8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JHc3JTFc+tcfNcVHDi77FRsmm0y8bktVYShbqpu/qPSxYJGJg/7R4najQaQnGBeTbbMrJw7QfmMXY6oXGn8fbb0kx4P62E+6wgC/9bCQi3PIyrD9o17PdoHv7b0dvksiqiitIjy5YhaRynuSqZ1cGWf/wHQMMKoOGl0fQFq2nEgcedGOGwGVHNs7ZvZ+L2+b6rf3LMGLySihOyn2ZKqGUqohPtNZD0btgPOfQchyb8xJhaDrvb/CNehFU4bbEtWOXFf8kYiYuEQgh51cGBPRp3SPMmkzFWvwq1PEoHdzTnHi1rbvcucbHD22o1UOxE409VNFdH6KlyhRtm+OZWGbuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L03T6HL0Dwpy1svDh+d4rMoEWtYmJr7+2sII/xQd740=;
+ b=LhnnXdu+c+aei5ySezisFZ5ijnAWlA8azXIlvecaJYVnGtFtxM+7t58dBPw0dn7XQMuhTcWYZEoVrx0lEEu9Kx8dKbdYDAOsqUJKlAw1X5S7CxiV86Twi67WdIt9pZy28rrtqibHxmrjsHEWUw5quyUz/BFmdsrc8kgCDkon9E3HqXF5LrKdnnR7L21HYgBJEc1qCypcEnoobikjmma/s6rUZ+bz1u4pWmED9naftcw5S5XQc0ySZqJHe9HYYEdLuK/z9DDMxSNR0ZTmtBRLVv6lWHZKZ7ZCCyWjtlfXkNA4StSYz2oewpTahj9Pq2SAr28xB5jA0A8z6WWO0ekCrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:8::10) by NTZPR01MB1034.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:b::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Tue, 7 May
+ 2024 06:53:27 +0000
+Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+ ([fe80::e903:99a6:10b7:304d]) by
+ NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn ([fe80::e903:99a6:10b7:304d%6])
+ with mapi id 15.20.7472.044; Tue, 7 May 2024 06:53:27 +0000
+From: Xingyu Wu <xingyu.wu@starfivetech.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Conor Dooley <conor@kernel.org>,
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Hal Feng <hal.feng@starfivetech.com>,
+	Xingyu Wu <xingyu.wu@starfivetech.com>,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH v5 2/2] riscv: dts: starfive: visionfive-2: Fix lower rate of CPUfreq by setting PLL0 rate to 1.5GHz
+Date: Tue,  7 May 2024 14:53:19 +0800
+Message-Id: <20240507065319.274976-3-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240507065319.274976-1-xingyu.wu@starfivetech.com>
+References: <20240507065319.274976-1-xingyu.wu@starfivetech.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SH0PR01CA0020.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:5::32) To NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:8::10)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBKsWRmVeSWpSXmKPExsWy7djPc7ovz1umGcxaqm3xYN42NovrX56z
-	Wpw/v4Hd4mPPPVaLGef3MVmsPXKX3eLiKVeLw2/aWS3+XdvI4sDp8f5GK7vHplWdbB59W1Yx
-	enzeJBfAEsVlk5Kak1mWWqRvl8CV8WTzdaaC0zwVtx7eZG9gXMPVxcjJISFgIvHi4372LkYu
-	DiGBFYwSew+tZoZwvjBKLN2xhQnC+cwo8f5JOzNMS8uJaVBVyxkl+te1ssC1nJnRyAZSxSZg
-	KNH1tgvMFhFwkNh1bDLYKGaBJUwSK46fYwRJCAuES3xeNgusiEVAVeLk18dMIDavgL3Ejftb
-	2CHWyUvsP3iWGSIuKHFy5hMWEJsZKN68dTbYGRICSzkk/h5vgmpwkZg68xELhC0s8eo4zCAZ
-	idOTe1ggGtoZJRb8vs8E4UxglGh4fosRospa4s65X0AncQCt0JRYv0sfIuwocX3xJbCwhACf
-	xI23ghBH8ElM2jadGSLMK9HRJgRRrSYx6/g6uLUHL1yCBp2HxNPfn8FOExKIlTjev45lAqPC
-	LCSvzULy2iyEGxYwMq9iFE8tLc5NTy02zkst1ytOzC0uzUvXS87P3cQITDyn/x3/uoNxxauP
-	eocYmTgYDzFKcDArifAebTdPE+JNSaysSi3Kjy8qzUktPsQozcGiJM6rmiKfKiSQnliSmp2a
-	WpBaBJNl4uCUamCSPxM70WLXjtlapfri6UYuSsu18q8dOd4QLvp53YVNL0OD9F+sPyr0w3H/
-	+10PtdZMnbx/aUfjiuun938PNEp5tf78CT63q2usfZb/TmzhvnWvTjtusc8yzX+Xv5XMeBR+
-	6ql1kOgyi/0nJx/ZxjpzT5JJk+QGni+6DiF8S+vWByi15V9c9VBsk1PxRzf5R80lzA/SMwL3
-	nsp4Vll+QCZ6p3eSxpLo+KS+7oWbjlj6sd3/33171Wf99T9Yihv+RLh/TLK5V/vQ6kyVvorB
-	TmOlzQfXzOVte7/RcgKzq0MOo8hzqcDnYTfDa7ae+R/07ubSy6d+7I2ukZBQ+LpWbN4S8603
-	a53PxMy5/qHkkJMWixJLcUaioRZzUXEiAJQOl+irAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDLMWRmVeSWpSXmKPExsVy+t/xe7ovz1umGcz6xmPxYN42NovrX56z
-	Wpw/v4Hd4mPPPVaLGef3MVmsPXKX3eLiKVeLw2/aWS3+XdvI4sDp8f5GK7vHplWdbB59W1Yx
-	enzeJBfAEqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRv
-	l6CX8WTzdaaC0zwVtx7eZG9gXMPVxcjJISFgItFyYhoziC0ksJRRYv2jUIi4jMTJaQ2sELaw
-	xJ9rXWxdjFxANZ8YJabNvcAEkmATMJToeguS4OQQEXCSePT5JjtIEbPAKiaJiSd/s4AkhAVC
-	JZ59/gFmswioSpz8+hismVfAXuLG/S3sEBvkJfYfPMsMEReUODnzCVg9M1C8eets5gmMfLOQ
-	pGYhSS1gZFrFKJJaWpybnltspFecmFtcmpeul5yfu4kRGOzbjv3csoNx5auPeocYmTgYDzFK
-	cDArifAebTdPE+JNSaysSi3Kjy8qzUktPsRoCnTfRGYp0eR8YLzllcQbmhmYGpqYWRqYWpoZ
-	K4nzehZ0JAoJpCeWpGanphakFsH0MXFwSjUwRdd/tjN0as0sljARF6xpO/t4Mp+h48IlW0wd
-	0hj4PRSFUiVi5f8tX7Bl0eHI9tA5ykvZ/29Pktb0UTrU73HP/vMk5s5NDNs3OKXX6tv8XzNJ
-	7UDO/iXzPXzLU2o/6Wdwn5r+/DVDXm3knugd+pP1SwuPzvPY3jThivDe8ueaH8/23K3+aFIT
-	mFd6U+P3zMzl1o9MUn59tTGe8tD2S98k1xcdZcsnBm/a+346/8aJP6/eLD6qOE8pgZvzxIzk
-	Tq9bZkp7j7cdzub9wfvc7NGprXu3SahJegYZaxWo//5fEBgl28hibSK1e/KTI2+0UmovpnD8
-	vS0zzWS6c13quz/diZ/1dU84JnS46j7M3DpbiaU4I9FQi7moOBEANh+jkf8CAAA=
-X-CMS-MailID: 20240507065329eucas1p1b26d68384a4f076b31223ed099fd3a48
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240507065329eucas1p1b26d68384a4f076b31223ed099fd3a48
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240507065329eucas1p1b26d68384a4f076b31223ed099fd3a48
-References: <CGME20240507065329eucas1p1b26d68384a4f076b31223ed099fd3a48@eucas1p1.samsung.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: NTZPR01MB0956:EE_|NTZPR01MB1034:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3dd31bc6-e76a-4ca7-16b9-08dc6e626608
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	r/XOblMHQvrjHYj6m+3A38s34+LNYRVZix2I/ITO9LDR+0QM4yXPtKL306oCRMwWL9npteMFf4WhKmxlDv31o46jdGamdlRd6vFZlXZ6JO2arerMbR7BYlD1y5+PRIvNDlMaEXZIS7Nm7hSuVEGPhKPkoqpq6XCedN0eC2OOYWGFjPObdWDPVHYV9sB3KdpsLHqmsGtUdnL1oNOIst1QWkiJlxqXZt9HWfyHQpth35kszt1jo8LMjljbajj0U79c/jfzRxqE7YAgJYRV3bzuggV6hdnt5w+sd8x0bzsJb33CdcqOwjMKYPZMXVj3e7XHdFrnpwKhA8lRFE3zAENAjjGrQMxKhDuvj4uv5pnRQFaBfZajftiesCz+XjNsL0+TQiHSMb3LGepcAyk4aiUUujD5zJmPH+wCnovmdeKIt+VJW5jJ0h9qvZbLJwlpdmSnT77VvbzXaly55Y0C4Aco4ZxuPKaVBExUS9kCrICVLCARdx58ob9/zuF8vrsKVadMwXNnc/DtJqtpKC8n4XLeGBZWeTxUbp2CmusBoiGYagH4RDCCXAa+Ut7H8UEMrtbhCkoshW+jFlk+vkpqjEVunrPHYtMTiUrU3TsW6ORJetL6ge5P/BvbbVzTGpADE2Pv
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(7416005)(41320700004)(1800799015)(366007)(52116005)(38350700005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?qC3CzZeCsgSdQNLEcGc7ww0u8hZYTDTu60YofRufsiKTvkQUd+QEbuV+bnXb?=
+ =?us-ascii?Q?43vZ+tfGm7eg4GNo49B9uBDWfnqiluOrohvhfDAqtpKq3jrtVz/P4rbICaVS?=
+ =?us-ascii?Q?si/O3m5VpNTZhcIWqnUPdRWnF0lIt2KpUg+whQDiHDnTNN4vfbb1sytoiH7y?=
+ =?us-ascii?Q?2ymp5gpWoWRzhpfjirgOxvMQeDI6N22SNk4TYHqTWKUOCWGYTEkiAgAeIgE2?=
+ =?us-ascii?Q?tpLk05elzBVNajhSPvcS3zi58mXAP4O16TwU5btEwW88TxNELweAxNq0tP8k?=
+ =?us-ascii?Q?melrLm557FSeoQWyhG2VUfOtUpNtl1y/Lu/rmIixup2KWdQwyXPwRdpvToVa?=
+ =?us-ascii?Q?P2ldYh22XeLafi9XpEnff/YLcyUkcSH6tVn7/99He4CHE2g4lFWr4J/eCxg6?=
+ =?us-ascii?Q?o2P2orrth0Vor4uKVPgLHxFYfT1Iiw9sEs2yb5cJnHZGd7tXN/DlP9ScizKV?=
+ =?us-ascii?Q?IvAk+wf5inFdvHOJIAXqqYT6kUa9RvMLA/cz4K6uPUv0v4d1IvLNSIoFrlb5?=
+ =?us-ascii?Q?XNjuCon5kTcqHi/9z+ehrZk6f3pJ021PecLExHfliPR0UC9+RAKfy8kJX6UD?=
+ =?us-ascii?Q?f5f16NYPjSNpsHEZMEOR2/a74Fn9EpaVKn/xUlPi163RMqhYRYYhf/1ZOrMU?=
+ =?us-ascii?Q?WXAvUkidAdP1BxjWpHDDvyruN9oJqbOh8noJ4ZxsdZXQrzdqn9IYmScnlGcs?=
+ =?us-ascii?Q?s/599NnmT4Z6MQ7SPq0Ks5ycv7/v1kLLidRGyToE8DhfxwoOpf+oEi0PEoqN?=
+ =?us-ascii?Q?NEIVwGcra4tiDsIM1KJ6upMPuWlHlctMA1F/KBdyCXHkssAX1tvJVHO5Td0i?=
+ =?us-ascii?Q?8v6kXqThycmpTxRJgJbb4i6MOAwoHzJh4UXSCbUS8wqJdJFuJibf09Xr1HMS?=
+ =?us-ascii?Q?amHhwrylw+gRIfMUuwdjni3pvqsOHZN7zDbr1dw7ykCTRNEdZ9SAbAdKBh11?=
+ =?us-ascii?Q?bIxQbxxA+kvZLiHxgQW9ImGzjZIr26ED5CCyz1/DdTBwAH5hM3bvCJNjk/7T?=
+ =?us-ascii?Q?spEX8kmdrdX7VWi7XfXrvyN0Wwz5OQFcUnyQvMad0pKIB+FnYbog5VZON+OB?=
+ =?us-ascii?Q?DteveNHtzxUB3aQUSXJqjdX/X+CVEKQ/p+WclX3ZLR6joBCP8es2dO7C/ZT/?=
+ =?us-ascii?Q?VKacVF75ennGrQsmwEpeiAsUiON7JQK6Trn2tXPavWVYUQKCrUEvf00LBxSz?=
+ =?us-ascii?Q?RICRHUiGkOr0WkP1dqGq9Xy87bb8EbvpzumYw6kIsAqkVUJVQaS5ZLf0ZYXZ?=
+ =?us-ascii?Q?9mcMCDLT3cW3a0B5gFUDrYMuo2oi7Ur5nP4E2SyvPsBpCo1ePyEhDACNNG1j?=
+ =?us-ascii?Q?JTUD5g2u3je9n++OE/DEGCxBn+Oed6GmNyZOpeRZyVIEksPx//68YFM2BJ7T?=
+ =?us-ascii?Q?zm2xIstGI8ElnU+ROSz2qvC6/HcZIiJUD7uIt0qpZG41M2b8mg7boeOozuX2?=
+ =?us-ascii?Q?b0psSLBQ2HLcB93H4BjtSdBJxUJBSqmu+Fsg5giAoY30tI5b92hrV3JLlkcE?=
+ =?us-ascii?Q?ZgTm9YCsIjowwoYNo1iV/JP/K8U76K8kaiBHwdeU7tWM6umocOASAO3Z9H18?=
+ =?us-ascii?Q?wHGsb0HEC047+zLGT1hE5+OrxXIDpoaAXOeR4NM0b2Zpzxic1W5w6D1J4QhR?=
+ =?us-ascii?Q?vw=3D=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3dd31bc6-e76a-4ca7-16b9-08dc6e626608
+X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2024 06:53:27.8158
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t+B65rcOYh0sMM7ll22P6ObTX3ryR+Xg1IkrX6FwNK68rO4/OPQ/KxkgugvewGwhjQwaFnCleb+ULDXy/XeEQQ+gmHM+MEkAixLbseUgdkk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1034
 
-Commit 4d11c62ca8d7 ("clkdev: report over-sized strings when creating
-clkdev entries") revealed that clock lookup is registered for all fixed
-clocks. The mentioned commit added a check if the registered name is not
-too long. This fails for some clocks registered for Exynos542x SoCs family.
-This lookup is a left-over from early common clock framework days, not
-really needed nowadays, so remove it to avoid further issues.
+CPUfreq supports 4 cpu frequency loads on 375/500/750/1500MHz.
+But now PLL0 rate is 1GHz and the cpu frequency loads become
+333/500/500/1000MHz in fact.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+The PLL0 rate should be default set to 1.5GHz and set the
+cpu_core rate to 500MHz in safe.
+
+Fixes: e2c510d6d630 ("riscv: dts: starfive: Add cpu scaling for JH7110 SoC")
+Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 ---
-Here is the fix for the mentioned 4d11c62ca8d7 commit, which fixes
-booting of Exynos542x SoCs:
-https://lore.kernel.org/all/20240507064434.3213933-1-m.szyprowski@samsung.com/
+ .../boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi     | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-This change is independent fix. I've tested it on all Exynos based boards
-I have in my test lab. It would be great if someone could test it on
-s3c64xx and s3c24xx based boards.
----
- drivers/clk/samsung/clk.c | 9 ---------
- 1 file changed, 9 deletions(-)
-
-diff --git a/drivers/clk/samsung/clk.c b/drivers/clk/samsung/clk.c
-index b6701905f254..6342ff411757 100644
---- a/drivers/clk/samsung/clk.c
-+++ b/drivers/clk/samsung/clk.c
-@@ -151,15 +151,6 @@ void __init samsung_clk_register_fixed_rate(struct samsung_clk_provider *ctx,
- 		}
+diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+index 45b58b6f3df8..28981b267de4 100644
+--- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
++++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+@@ -390,6 +390,12 @@ spi_dev0: spi@0 {
+ 	};
+ };
  
- 		samsung_clk_add_lookup(ctx, clk_hw, list->id);
--
--		/*
--		 * Unconditionally add a clock lookup for the fixed rate clocks.
--		 * There are not many of these on any of Samsung platforms.
--		 */
--		ret = clk_hw_register_clkdev(clk_hw, list->name, NULL);
--		if (ret)
--			pr_err("%s: failed to register clock lookup for %s",
--				__func__, list->name);
- 	}
- }
- 
++&syscrg {
++	assigned-clocks = <&syscrg JH7110_SYSCLK_CPU_CORE>,
++			  <&pllclk JH7110_PLLCLK_PLL0_OUT>;
++	assigned-clock-rates = <500000000>, <1500000000>;
++};
++
+ &sysgpio {
+ 	i2c0_pins: i2c0-0 {
+ 		i2c-pins {
 -- 
-2.34.1
+2.25.1
 
 
