@@ -1,96 +1,132 @@
-Return-Path: <linux-clk+bounces-6820-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6823-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00B088BFABE
-	for <lists+linux-clk@lfdr.de>; Wed,  8 May 2024 12:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C25608C0065
+	for <lists+linux-clk@lfdr.de>; Wed,  8 May 2024 16:45:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31A4F1C21BA9
-	for <lists+linux-clk@lfdr.de>; Wed,  8 May 2024 10:17:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F31001C21314
+	for <lists+linux-clk@lfdr.de>; Wed,  8 May 2024 14:45:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 266917BB1B;
-	Wed,  8 May 2024 10:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706F812BE9D;
+	Wed,  8 May 2024 14:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LEvI3jMc"
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="hbJjq/xO"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE0B266AB;
-	Wed,  8 May 2024 10:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658D6127B7D;
+	Wed,  8 May 2024 14:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715163395; cv=none; b=N7Qu9K/ODjpJDc5u2Dl6PlMhyShh4g0M4iVgSKxI5ZTK3ei0+ueMTNtwkdV3kPu37oWA2tJBUgoeAFxlaBdc2BfsxEW2+7pvjKf5eYkT8pdkls2IR64uHkcgFIPcHKUVPRUqvJw25MgAvSjVEmKPxKRXivBlE+ZuUn44CRztXzY=
+	t=1715179420; cv=none; b=HwMKv6FtANBrsja4VeU8yHIeH7xH/fY7dprOSwDqrlMCaz5NZTEwOTdWZmMvIe55yKkj9/uklDaqO6rQVcJlRmtsxn8Hi8OmW7pK8GS7AMYSs6Cck+9mX8kfPcMvMzZiumT5cHGS2v+UophKLh/NFmscovn77D4HVuurRlYqKLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715163395; c=relaxed/simple;
-	bh=lDKRFmsU38/PXRgXibvB1oA37phtjpbswn+NA0WBJC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ailXC+CQkNJqXlxlkholYlWqOrO77C0hS4NgXnoF/QomtThsKIKvGVNJWTM4bhgXqsOYhc9iisylsxipcePlNhOJjw6fSBIZXlLy1Om/NRZNkcXghzpcB2WIzQ47Tc+Y3ALD/FiY2mGvKeDZoh3wFvLx1pA3pljlMA5Alxh3GQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LEvI3jMc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40BADC113CC;
-	Wed,  8 May 2024 10:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715163394;
-	bh=lDKRFmsU38/PXRgXibvB1oA37phtjpbswn+NA0WBJC4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LEvI3jMcjVZPX9orLeR1UAzOEyUKkJH3ly5q/V+9TFhQK+H+rIYzwhLQvJXHNIZNR
-	 poqNHOsPGQGZ1WSYgdFo8DgG36oc+lA+D7jH+X4XdMp3kax4qRP1a26u3Y0xKyVn4K
-	 fyiX42Y5AR79t+vXdu8LOUgbVZ9ylj++0PoqdRmj7Cm8j9WFVnXEB16E010D3cElhp
-	 M6B06V9i+7wJTc4QtbkOm1yI88s4jkVvYNw7hkUQZ/fTkDMqmLOHMwelwI9c4dXD1A
-	 yH0byMmueKxFD9y5o/5ZFc113Tek3AhSLAJW7qtMQtxhLU7UvAp3asUWXiS7dbYq1J
-	 Sx5LG0iTHizwQ==
-Date: Wed, 8 May 2024 06:16:32 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>, mturquette@baylibre.com,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 6/8] clk: Don't hold prepare_lock when
- calling kref_put()
-Message-ID: <ZjtRACHwOpkMHX5g@sashalap>
-References: <20240423110304.1659456-1-sashal@kernel.org>
- <20240423110304.1659456-6-sashal@kernel.org>
- <cc21ff5ddd8fbe07e75fdffd596c0aa1.sboyd@kernel.org>
+	s=arc-20240116; t=1715179420; c=relaxed/simple;
+	bh=gswKs53jkS41oULvg9VhAYsMQyN8wbsdJDS4kbBwULg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Q4CvJQ3uft82cU2eiz2yk+S0fkNpWwkCqIxVlnvJYtIJleqrZof2SzktObuyOreZZJehYXV8kvv2hHaCNM5qj4gS86wbt8ZcTiPbKIlE7RLOcCEvFtcy7t3gG7zL7y2GULerhjRvHwbhyKFELXU2wku5h6GhSosLarbsA0Fe540=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=sberdevices.ru; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=hbJjq/xO; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sberdevices.ru
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id AC99E120008;
+	Wed,  8 May 2024 17:43:30 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru AC99E120008
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1715179410;
+	bh=0jC9OmU53LLfwrewlLDVbsUks0O+ztvJHUVnwfXtnnc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=hbJjq/xOsUZo4lq6NzU+mi2uH0Fa4xKbcDdoVehmhEvqdrge33F1MqIfwMpT6BHNn
+	 X+Dtopb7QTym6SHfQw0FoNwaEeLPBQGxlEaURt3CJv0k9rgqeVN+0dmPVyIlG+7R8v
+	 LJXMLBIlHD+ujEtO6ePzBBa60wVtOr425HQuYQ8/etDlYXpfYZOr0JMDq/b2Sdfl6n
+	 d1EhVyZCaEc6eUlIwpagQ7LQgU86vp9gduMl9dx+6OKWeSEFm6ybvZGD/urqMVeHn7
+	 qK9Xa/w/eqAWjG0Rm0iNWRcKhRqB7Sosi918x3E4NnqSVmGxAO7Cmjuxc+lIggGB3b
+	 ZQMmtnWtYx+VA==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Wed,  8 May 2024 17:43:30 +0300 (MSK)
+Received: from CAB-WSD-0003115.sberdevices.ru (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 8 May 2024 17:43:30 +0300
+From: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+To: Jan Dakinevich <jan.dakinevich@salutedevices.com>, Conor Dooley
+	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>, Jerome Brunet
+	<jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	<linux-amlogic@lists.infradead.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>, Michael Turquette
+	<mturquette@baylibre.com>, Neil Armstrong <neil.armstrong@linaro.org>, Rob
+ Herring <robh+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>
+Subject: [QUESTION] Convert axg-audio-clkc to YAML format
+Date: Wed, 8 May 2024 17:42:56 +0300
+Message-ID: <20240508144259.191843-1-jan.dakinevich@salutedevices.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <cc21ff5ddd8fbe07e75fdffd596c0aa1.sboyd@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 185143 [May 08 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: YVDakinevich@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 19 0.3.19 07c7fa124d1a1dc9662cdc5aace418c06ae99d2b, {Tracking_smtp_not_equal_from}, {Tracking_uf_ne_domains}, {Tracking_bl_eng_cat, c15}, salutedevices.com:7.1.1;lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;smtp.sberdevices.ru:5.0.1,7.1.1;100.64.160.123:7.1.2, FromAlignment: n, {Tracking_smtp_domain_mismatch}, {Tracking_smtp_domain_2level_mismatch}, {Tracking_sender_alignment_int}, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/05/08 13:27:00
+X-KSMG-LinksScanning: Clean, bases: 2024/05/08 13:27:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/05/08 09:52:00 #25122865
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On Tue, Apr 23, 2024 at 12:24:51PM -0700, Stephen Boyd wrote:
->Quoting Sasha Levin (2024-04-23 04:03:01)
->> From: Stephen Boyd <sboyd@kernel.org>
->>
->> [ Upstream commit 6f63af7511e7058f3fa4ad5b8102210741c9f947 ]
->>
->> We don't need to hold the prepare_lock when dropping a ref on a struct
->> clk_core. The release function is only freeing memory and any code with
->> a pointer reference has already unlinked anything pointing to the
->> clk_core. This reduces the holding area of the prepare_lock a bit.
->>
->> Note that we also don't call free_clk() with the prepare_lock held.
->> There isn't any reason to do that.
->
->You'll want the patch before this, 8358a76cfb47 ("clk: Remove
->prepare_lock hold assertion in __clk_release()"), to avoid lockdep
->warnings. And it looks like the problem was reported on v5.15.y so all
->5 patches from the series would need a backport.
->
-> 8358a76cfb47 clk: Remove prepare_lock hold assertion in __clk_release()
-> 6f63af7511e7 clk: Don't hold prepare_lock when calling kref_put()
-> 9d05ae531c2c clk: Initialize struct clk_core kref earlier
-> e581cf5d2162 clk: Get runtime PM before walking tree during disable_unused
-> 9d1e795f754d clk: Get runtime PM before walking tree for clk_summary
+Previously we discussed how to implement dt-schema for audio clock controller in
+Amlogic SoC [1]. Also, there was an earlier attempt to convert to yaml [2].
 
-Ack, looks like its already the case. Thanks!
+Let me remind you that the problem is that only "pclk" clock of this controller.
+Other clocks are optional and they are allowed to be not routed.
+
+I can suggest two approaches how to deal with this. Could you please tell me
+which of them is more correct?
+
+Approach 1: use 'additionalItems' to declare optional clocks.
+Pros: 
+ - it is short and simple;
+ - no need to modify existing DTSIs.
+Cons:
+ - checking works but 'additionalItems' doesn't expect no-boolean value [3]
+ - there is reasoning that all clocks should be specified ragardless if they are
+   used or not [3][4].
+
+Approach 2: assume that all clocks are mandatory and declare all of them.
+Pros:
+ - it is more common and compatible with existing meta-schemas;
+ - may be architecturally it is more correct.
+Cons:
+ - boilerplate in schema and in DTSIs;
+ - requires modification of existing DTSIs.
+
+Links:
+[1] https://lore.kernel.org/lkml/20240419125812.983409-5-jan.dakinevich@salutedevices.com/
+[2] https://lore.kernel.org/linux-devicetree/20230808194811.113087-1-alexander.stein@mailbox.org/
+[3] https://lore.kernel.org/lkml/20240419210949.GA3979121-robh@kernel.org/
+[4] https://lore.kernel.org/lkml/07b1ca57-49a0-4151-99bf-caac053eaa01@kernel.org/
 
 -- 
-Thanks,
-Sasha
+2.34.1
+
 
