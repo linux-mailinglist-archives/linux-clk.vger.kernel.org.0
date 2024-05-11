@@ -1,305 +1,176 @@
-Return-Path: <linux-clk+bounces-6948-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6952-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02D608C2F37
-	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 05:09:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A1288C3013
+	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 09:37:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5C31282653
-	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 03:09:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D3E11C21019
+	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 07:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D912376A;
-	Sat, 11 May 2024 03:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2H2/E7/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1173579EF;
+	Sat, 11 May 2024 07:37:12 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2134.outbound.protection.partner.outlook.cn [139.219.146.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19C021345;
-	Sat, 11 May 2024 03:09:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715396988; cv=none; b=bZReWEv5gZS17o3VZQ/IyLPA5lnZM8b7KDq8fV/bsqEHGNss2YmlgFItieE6tvGkPKwZFGHgR9gAb3Fg3qKTDWuyMcRjG/53oaPmwUUqRQXxjezz22HuGwpHpaUQWDds/EN39nbvFCcLXweU2HYQCVZwY2I95+l7kkStoVUBI5o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715396988; c=relaxed/simple;
-	bh=6foHhr0TW03dqZnZz4QwEWuvDSFW4bvHJil6jrBMqYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TineHVPCYoMoxIIprZjugbGQVUEjctaUosZv1Y5VXyVaqR8bqANeb5K3BAWgSDSEJjOTqsOWBaAuOqszPGs3+HZLfWH9H6YT+OI9GCwqT2kOuIqHdZB/yANoW/SieCn3j2WrqLilWybGT8VSUx+jxL9LEPtGasJBUcSXA8Lqbfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2H2/E7/; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-36c90b7f4c8so12425395ab.2;
-        Fri, 10 May 2024 20:09:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715396986; x=1716001786; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SBy4V17h0PUaZteQlrBkOjrENzi/JrQGSd8HxxR/cEs=;
-        b=D2H2/E7/LCdNVOBodwzjI/AkP7QllTo2OKqin73FLXrzdaZ1MWxN5ochqtIJLiELC5
-         No9UvtPAd8vaJG6RHN4hI/97yxfi7Pk89yaZbKd/e6HrLpML2R9aMDKzVr5ovJOO8ALU
-         9RyXf2RRwzUyIQdoNNu4b9kgG+8wlvkW/QFm2+3eNPNT1nCnFEvDSLzC+1QWfxCAKyvP
-         FIwkm3lRWFC1G1+bTXp5xcGmqBGgIMty8wqlsMrHsQb+JQflYnBnjO4JTB/yND3jpZfW
-         SWJ8muPGf+XxKAm/MDHPMnx09V3au+n9SsKg1bJF03FBKB/CIPJC8WBiDhLxqG8XyroD
-         W2Kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715396986; x=1716001786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SBy4V17h0PUaZteQlrBkOjrENzi/JrQGSd8HxxR/cEs=;
-        b=f8lHPyFVAIWcaQiHmUIsdbbr53P9VZitOBVmFESNpvglFuFSOn9g5SwwMaA1cR6rmE
-         u3Erq80sxzBAQoLB7vE3dCwkKZ/4Xh9NxCLSA3Lqx6uIAHJWouQq/rRGmxUqvfT9F9vT
-         CSqExOl4gBMKD/5Zaxv1G0LSTRI70+hbngjBBC/wqv0kfYI9varwaynd8jUflRyFvXqL
-         mPLs+GY1ty2gAajdI98UhDK416tVnSe+cih8vrzELBD1nXujpZVgqGzLiCGjBbf6u6YD
-         0xZJyM5MKVUjG7kGnu7ftx3JtMAZ1BkdW13b435h8nAWk6DUS+yDR/nS29+x2ne77jut
-         MKqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDMJ8LbcXDIE8FC/32ZxyXefZc1qIGQ6rYdo+qHN1Nzh1XAyK+GrHFPyM4wLv5OfUVBoJ1efWsTlHne4aYshZkP/C7h/6zPwxONEWl3+DiyJWQL2ziL5W5b9nokGNYZPhKNnIie8uq
-X-Gm-Message-State: AOJu0Yx6eVGNkxZY0wucP5qmJYDqQ2RRm0V2bTGR0se3gSlgXi8fRp7v
-	B0PUEh5CscIyAchB5HgJy64ie2twIY2i69UDT6lLPK1zKx6BIrc7sfqZMIeXIH6oIbtD0Mf60W1
-	08MXDQRVBnswQT/bA5VyMYqs3HrHpXXkL
-X-Google-Smtp-Source: AGHT+IFAl8Imeh2Cw6mt8rj29u6mx+HsiO9rMvuNvGJtkcayPcGmWUCclun7KpkAcN/gXqB1rbwV1dvJxtod4qYA7Yw=
-X-Received: by 2002:a05:6e02:1aa7:b0:369:bdb3:4f62 with SMTP id
- e9e14a558f8ab-36cc1465e31mr55488195ab.18.1715396985801; Fri, 10 May 2024
- 20:09:45 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A896EC2ED;
+	Sat, 11 May 2024 07:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.134
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715413032; cv=fail; b=Tirw4RuIGpJyjsfkL3dCf3RTX3jIEkxsiV7SLs4IpCipjRkCumwpL6BzvWJ4JDDvsqZVI9+S/Tu1ZiqCKj2vpclesRu01y2VVCKkI+ij4p9brXquTcnEwAYLJ6JOgzMnTv9B8utwN2SM39eik/SgnDYlFxnAbhL9RSHf7+eoKEM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715413032; c=relaxed/simple;
+	bh=JCFDNBP8NP8wLWIr/ArFvm50MKjshvsYTDVZ86AtkkU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=RUFevTALU3HxjymxjRrqQnWbRWSxfo8p60+jZn3glNG1JNbZXBL/KbCyMYLjl9eIHkpviPbV48i06kbEDvvmmH7y8oIncsWzgua83VdU/k1YYc6xcBZCVyvDTwPi8BftBlOEXZZhsuO9arhl1c7jranvzykgrvyg69MfsOQbQ08=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l7DSXLCv3HF7EKVZRZFN7Lozk1EKBLXObnejh4s/BpVoCSOfFD8hVb9z0+peN1PRNtqwXujF10xzQYGLrbxEFXdtM9W/y+0bPNsxB8Gtst7QCpmadg7E3/VkFFkiigRiYEBfFDzW0WJ11TArMYJNIkFJVcYOxLEerDXOoYtK7ELOUQchX2UFLScrxcED9D345QkVbVUSDb5ohJ4G3fpYrw3jteo+FahELwfSHqA20vu5T+CEKgppv5G73YnWZ6n4CxHSXyGQhR41EWm6feq+N6lxCHjhplYEvcIiwW2LVkMEgnmEKMO0EsCOgyZGJO8FvpsA6tTf0JHTlVaTkbueKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JCFDNBP8NP8wLWIr/ArFvm50MKjshvsYTDVZ86AtkkU=;
+ b=PzJi7dipg56/yODSpAQyubSn/og/ZDU8UBiYMt4Wg9AcW9bQ2z0PgUwfEla62x455hKGVwzUFj9KQyU4RG5uQmMImycQeChVajXntxJ+//dtl7FqzayqaECIgSATE7My83eEGorA5zsYeTVjuWms+egFGS2QgtO2InyVNOJTF0CBO1mMJ51jytozpCq2wzIVXEvwCkIWeUIyARtcV9AxJep7gmmNigmgwOUk+F6HcB1u5SRZnn/7Cs2jViHU0ZZOe6E8oq1i+sizlWc6a+mxHsvWqGmveiFAGfm79zHhjXwJiFwzPDgh1kXui7MM1mwALV6kspp7/5nV4NLZ+39i9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:8::10) by NTZPR01MB1113.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c510:a::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Sat, 11 May
+ 2024 03:02:56 +0000
+Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+ ([fe80::e903:99a6:10b7:304d]) by
+ NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn ([fe80::e903:99a6:10b7:304d%6])
+ with mapi id 15.20.7472.044; Sat, 11 May 2024 03:02:56 +0000
+From: Xingyu Wu <xingyu.wu@starfivetech.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+	<sboyd@kernel.org>, Emil Renner Berthing
+	<emil.renner.berthing@canonical.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Hal Feng <hal.feng@starfivetech.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH v5 0/2] Add notifier for PLL0 clock and set it 1.5GHz on
+Thread-Topic: [PATCH v5 0/2] Add notifier for PLL0 clock and set it 1.5GHz on
+Thread-Index: AQHaoEtCPDK2HwhwXUSWjcDZE/pIQ7GQ+umAgABXAkA=
+Date: Sat, 11 May 2024 03:02:56 +0000
+Message-ID:
+ <NTZPR01MB0956D48361098E8AA4B3930A9FE02@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
+References: <20240507065319.274976-1-xingyu.wu@starfivetech.com>
+ <20240510-unfounded-syrup-d1263d57d05a@spud>
+In-Reply-To: <20240510-unfounded-syrup-d1263d57d05a@spud>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: NTZPR01MB0956:EE_|NTZPR01MB1113:EE_
+x-ms-office365-filtering-correlation-id: 0a7f2ce1-10d1-4a7e-96c6-08dc7166db6a
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ aMrQmWIhWxwcKlwvwU2xvOhfo1zpwD7V1AM4iGsjxyJI5RyPhyqV4wcSDyWVHc2GrVpR4EryD/iEjC1w4egHHM6uz4T5fWQw+OCCBIqDLNlvZSDyV8Gs/Q9MlvTRV9pGAfNKLvOlKhsLfUbiGUe1x89tstIZXInDfwv4TKeZsOL57jxbOIZDfMw03avb2GvSjgEH9yhJNOHvyhbagvyracj43lusIakElpLQX8b64Ah6zwvwf0HcBVQHSuwwYtPXR8nKQz4sUvoTh9sQ8nMEWVTcv5qgg1oqCbft6bTRgBKacxlUdmuBoLOZ8qcwTYiBqv46YtkXij4nTELAVqeGgOLJAX1g4zp3RHsgm0P4lqNCVhwkvBmC/aPxML14hJKLdSOTI6g7xA3zawE6MC1NF/fFKDFKXB5ZrrWMS0ZzPpw9xVSpbPRFQMYoT6YZFzo3ByR8kUEpaqPr7/ZAGaLAOaQwAkly1zEcHT2y0EDNPRRsq96A/zyUeyZ9DoItBeEJpYGakklU4152Iry6SwadWoOXxOdp7E369JCW2tud6mc8/f9YsigvZBocdWbYHokt8/S0GM+XmKHXw26l/yV9yXRdttQME/93cZnwpCxNUVM2ecy912+9Tu2jVga9CXo9
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(41320700004)(366007)(7416005)(1800799015)(38070700009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?/DbM0m6tNMF/YY7c84L8dkem20pVWyQmkgHDjys+10odUupbHTBfXXqR082v?=
+ =?us-ascii?Q?cybqJu0jdPTDcOV0ZpRkmcwpMJ2Zz0XGpdZOjIdVPzcyFuEnQZ4K9jheUptj?=
+ =?us-ascii?Q?zsv6ekgB1OZZO6RtpUAymztgAAFs9CleW38voupMaoMwUHOUgOSQ5MRFHhKK?=
+ =?us-ascii?Q?2GJNfFK+kD5Bf2bcBU5kCH0HUr3qDY33FF1Z417iHrAp92OykJGV37quDCcT?=
+ =?us-ascii?Q?Tjni+fE+Qk7l0bcNjLm1s50kBjBUwpeR4lgWxWlXDHgt04xc4h0mN++bDRBh?=
+ =?us-ascii?Q?mRYVgaA4yYBVqBNWGRI+Ezj4Q/W3q2g20hgdBHcIE2Op0Af6qnyGpYt//1us?=
+ =?us-ascii?Q?mCw/JcoGX3ftoPnSgSX0W68pKX/1TUl58NteTSbGZWMBHDMJfDs+2he0TSVd?=
+ =?us-ascii?Q?oNSItlBBL7Sphx7kOR28SpKFypwaDk1B0Zlw5fhAHONSr005NZzZVz72E4TX?=
+ =?us-ascii?Q?9Krbb0X8oOtWIcATdgcHysKtcJGkhZxs5YgqwVOn3648Kagayj24ANQVQsYr?=
+ =?us-ascii?Q?VC3xwsw2wDhLn+MziKgeHfi2ZrD+z/5zDx7Y652hvC1iMNca2fvPoJUF1xZ1?=
+ =?us-ascii?Q?cSrbeesocqZFt6xSqtGJBNY3nhbaWJOC75rR4R1+M7YOe4+1Sfrpjcp48fTx?=
+ =?us-ascii?Q?lPiCij/40IUW0JyY8h67JsruFJtVeqQ0AcEXKWjyMwvY1PsKu3KxSeF/9clK?=
+ =?us-ascii?Q?DRktjUp593SFtdwH6NWU2h4Ae0rzsXMHSotY37Wr7WAkMf5pNpttGUOuWMtU?=
+ =?us-ascii?Q?BSJQUx0EKPEH9dcJLIESFchWcJxmk5LsfGhcWTcMJnzTXuYLzv9WjL7VHdE5?=
+ =?us-ascii?Q?gHI3NSWWja6229Lu13t4PYIgovgXKpT8P8S9w2rT0joF4NFDQt6GhBX9ZeTf?=
+ =?us-ascii?Q?ynLla6I9Q2JkVAGmTbRvCDjjg4AanahDfXxsI8UYEGD0JdTWMDUaEVmoIpj5?=
+ =?us-ascii?Q?4x63bQ7gbaTNVZKzYXzPlZa+zXLHcJzhGT/LwrAvEmvNGHEJchiSDD/0tspX?=
+ =?us-ascii?Q?PTvkFweEv5Kh77rEMn5Usx6Ixis5fa0xwVeOtz41sz35WCb8Zy2fQg7o9cWY?=
+ =?us-ascii?Q?KczvbciXk1YsAO/fy31CBauPchakE8lrNHSUpUY9s5b/vtHHG0c6dgdVx8mf?=
+ =?us-ascii?Q?6CTlstM+k2UQWRQutJ+tJimHd3mmc0L4hYUXmeE8eZuQkpQogOBeiyLDJKcX?=
+ =?us-ascii?Q?BqgYhl/pqov3rwY945/4jRdZpPqMnEZu+kM8FbmPVfUW2MvNxmFan9txMkYt?=
+ =?us-ascii?Q?axxLHoQHl1OYicAARY4RQ2H4VeCp1jQBxpFahr/I+MPzuTcyjkfOOa1NZIDG?=
+ =?us-ascii?Q?Y86eH4Xz13HDvFQFXIQHraq0mkG7E1RVXYRW7AaWrG3yZ74Kp0jmfYgEo+nJ?=
+ =?us-ascii?Q?kbL9yRY2mQv3pef5uc//bn64g0CSG8BubLzjdXEcI4LtRuDHrOMiAcD3AkgI?=
+ =?us-ascii?Q?ATxVLQoz83uYZPVi/VXq0feu4A5p3pafIJLpoY1GPz3td8s6btr1beyBSXfh?=
+ =?us-ascii?Q?ZdbXnah9IjsNCJb9tqF87+UE5trg9f/qYWcxE8iZQfAyURDzNUaf6jA3tI5I?=
+ =?us-ascii?Q?L6FbVFWM2Gq+TzXlloSabaGP+u5ee/qw/m5W0vl0?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1714966502-27784-1-git-send-email-shengjiu.wang@nxp.com>
- <Zjkftwr4/6KV39sD@lizhi-Precision-Tower-5810> <CAA+D8AN9kFdgojkrR0ORUyrtOW=JOn0AfbXFTJ70RE7JxgA2pA@mail.gmail.com>
- <Zjmi4Qc3C3OYJU5n@lizhi-Precision-Tower-5810> <CAA+D8AMC41oUEWLuHb-f=U9pEzqWYon22McvT4MucYK=ajNuFQ@mail.gmail.com>
- <Zjmn1jRW2E2kpSlI@lizhi-Precision-Tower-5810> <CAA+D8ANuNtaC90fHtGoYiofPTLQHcyCm0p_dcsYTVgT7gsKtMg@mail.gmail.com>
- <Zj5psV6ZIFZ/OPth@lizhi-Precision-Tower-5810>
-In-Reply-To: <Zj5psV6ZIFZ/OPth@lizhi-Precision-Tower-5810>
-From: Shengjiu Wang <shengjiu.wang@gmail.com>
-Date: Sat, 11 May 2024 11:09:34 +0800
-Message-ID: <CAA+D8ANgev0o0Z9HkmOnNuw5hACU7FgCDHFF6sbvXLd6Vd2T3w@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: imx: imx8mp: Add delay after power up
-To: Frank Li <Frank.li@nxp.com>
-Cc: Shengjiu Wang <shengjiu.wang@nxp.com>, abelvesa@kernel.org, peng.fan@nxp.com, 
-	mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
-	imx@lists.linux.dev, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a7f2ce1-10d1-4a7e-96c6-08dc7166db6a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2024 03:02:56.1492
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BX4E6/8rlyJExq4/kQd0xRCVAlcUEBhuB3CvLspPwdrkRZyx0qP87oBHYd57TV379L/JOxbkxz6z3KTfuXkkOuWwXOTUunsQPySbetbLE1o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1113
 
-On Sat, May 11, 2024 at 2:38=E2=80=AFAM Frank Li <Frank.li@nxp.com> wrote:
->
-> On Tue, May 07, 2024 at 04:04:14PM +0800, Shengjiu Wang wrote:
-> > On Tue, May 7, 2024 at 12:02=E2=80=AFPM Frank Li <Frank.li@nxp.com> wro=
-te:
-> > >
-> > > On Tue, May 07, 2024 at 11:44:32AM +0800, Shengjiu Wang wrote:
-> > > > On Tue, May 7, 2024 at 11:41=E2=80=AFAM Frank Li <Frank.li@nxp.com>=
- wrote:
-> > > > >
-> > > > > On Tue, May 07, 2024 at 09:44:19AM +0800, Shengjiu Wang wrote:
-> > > > > > On Tue, May 7, 2024 at 2:22=E2=80=AFAM Frank Li <Frank.li@nxp.c=
-om> wrote:
-> > > > > > >
-> > > > > > > On Mon, May 06, 2024 at 11:35:02AM +0800, Shengjiu Wang wrote=
-:
-> > > > > > > > According to comments in drivers/pmdomain/imx/gpcv2.c:
-> > > > > > > >
-> > > > > > > >       /* request the ADB400 to power up */
-> > > > > > > >       if (domain->bits.hskreq) {
-> > > > > > > >               regmap_update_bits(domain->regmap, domain->re=
-gs->hsk,
-> > > > > > > >                                  domain->bits.hskreq, domai=
-n->bits.hskreq);
-> > > > > > > >
-> > > > > > > >               /*
-> > > > > > > >                * ret =3D regmap_read_poll_timeout(domain->r=
-egmap, domain->regs->hsk, reg_val,
-> > > > > > > >                *                                (reg_val & =
-domain->bits.hskack), 0,
-> > > > > > > >                *                                USEC_PER_MS=
-EC);
-> > > > > > > >                * Technically we need the commented code to =
-wait handshake. But that needs
-> > > > > > > >                * the BLK-CTL module BUS clk-en bit being se=
-t.
-> > > > > > > >                *
-> > > > > > > >                * There is a separate BLK-CTL module and we =
-will have such a driver for it,
-> > > > > > > >                * that driver will set the BUS clk-en bit an=
-d handshake will be triggered
-> > > > > > > >                * automatically there. Just add a delay and =
-suppose the handshake finish
-> > > > > > > >                * after that.
-> > > > > > > >                */
-> > > > > > > >       }
-> > > > > > > >
-> > > > > > > > The BLK-CTL module needs to add delay to wait for a handsha=
-ke request finished
-> > > > > > > > before accessing registers, which is just after the enablin=
-g of the power domain.
-> > > > > > > >
-> > > > > > > > Otherwise there is error:
-> > > > > > > >
-> > > > > > > > [    2.181035] Kernel panic - not syncing: Asynchronous SEr=
-ror Interrupt
-> > > > > > > > [    2.181038] CPU: 1 PID: 48 Comm: kworker/u16:2 Not taint=
-ed 6.9.0-rc5-next-20240424-00003-g21cec88845c6 #171
-> > > > > > > > [    2.181047] Hardware name: NXP i.MX8MPlus EVK board (DT)
-> > > > > > > > [    2.181050] Workqueue: events_unbound deferred_probe_wor=
-k_func
-> > > > > > > > [    2.181064] Call trace:
-> > > > > > > > [...]
-> > > > > > > > [    2.181142]  arm64_serror_panic+0x6c/0x78
-> > > > > > > > [    2.181149]  do_serror+0x3c/0x70
-> > > > > > > > [    2.181157]  el1h_64_error_handler+0x30/0x48
-> > > > > > > > [    2.181164]  el1h_64_error+0x64/0x68
-> > > > > > > > [    2.181171]  clk_imx8mp_audiomix_runtime_resume+0x34/0x4=
-4
-> > > > > > > > [    2.181183]  __genpd_runtime_resume+0x30/0x80
-> > > > > > > > [    2.181195]  genpd_runtime_resume+0x110/0x244
-> > > > > > > > [    2.181205]  __rpm_callback+0x48/0x1d8
-> > > > > > > > [    2.181213]  rpm_callback+0x68/0x74
-> > > > > > > > [    2.181224]  rpm_resume+0x468/0x6c0
-> > > > > > > > [    2.181234]  __pm_runtime_resume+0x50/0x94
-> > > > > > > > [    2.181243]  pm_runtime_get_suppliers+0x60/0x8c
-> > > > > > > > [    2.181258]  __driver_probe_device+0x48/0x12c
-> > > > > > > > [    2.181268]  driver_probe_device+0xd8/0x15c
-> > > > > > > > [    2.181278]  __device_attach_driver+0xb8/0x134
-> > > > > > > > [    2.181290]  bus_for_each_drv+0x84/0xe0
-> > > > > > > > [    2.181302]  __device_attach+0x9c/0x188
-> > > > > > > > [    2.181312]  device_initial_probe+0x14/0x20
-> > > > > > > > [    2.181323]  bus_probe_device+0xac/0xb0
-> > > > > > > > [    2.181334]  deferred_probe_work_func+0x88/0xc0
-> > > > > > > > [    2.181344]  process_one_work+0x150/0x290
-> > > > > > > > [    2.181357]  worker_thread+0x2f8/0x408
-> > > > > > > > [    2.181370]  kthread+0x110/0x114
-> > > > > > > > [    2.181381]  ret_from_fork+0x10/0x20
-> > > > > > > > [    2.181391] SMP: stopping secondary CPUs
-> > > > > > > >
-> > > > > > > > Fixes: 1496dd413b2e ("clk: imx: imx8mp: Add pm_runtime supp=
-ort for power saving")
-> > > > > > > > Reported-by: Francesco Dolcini <francesco@dolcini.it>
-> > > > > > > > Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> > > > > > > > Revewied-by: Peng Fan <peng.fan@nxp.com>
-> > > > > > > > ---
-> > > > > > > > changes in v2:
-> > > > > > > > - reduce size of panic log in commit message
-> > > > > > > >
-> > > > > > > >  drivers/clk/imx/clk-imx8mp-audiomix.c | 7 +++++++
-> > > > > > > >  1 file changed, 7 insertions(+)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/driver=
-s/clk/imx/clk-imx8mp-audiomix.c
-> > > > > > > > index b381d6f784c8..ae2c0f254225 100644
-> > > > > > > > --- a/drivers/clk/imx/clk-imx8mp-audiomix.c
-> > > > > > > > +++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
-> > > > > > > > @@ -6,6 +6,7 @@
-> > > > > > > >   */
-> > > > > > > >
-> > > > > > > >  #include <linux/clk-provider.h>
-> > > > > > > > +#include <linux/delay.h>
-> > > > > > > >  #include <linux/device.h>
-> > > > > > > >  #include <linux/io.h>
-> > > > > > > >  #include <linux/mod_devicetable.h>
-> > > > > > > > @@ -360,6 +361,12 @@ static int clk_imx8mp_audiomix_runtime=
-_suspend(struct device *dev)
-> > > > > > > >
-> > > > > > > >  static int clk_imx8mp_audiomix_runtime_resume(struct devic=
-e *dev)
-> > > > > > > >  {
-> > > > > > > > +     /*
-> > > > > > > > +      * According to the drivers/pmdomain/imx/gpcv2.c
-> > > > > > > > +      * need to wait for handshake request to propagate
-> > > > > > > > +      */
-> > > > > > > > +     udelay(5);
-> > > > > > > > +
-> > > > > > >
-> > > > > > > Did you address the issue I comments at v1?
-> > > > > > > It should not fix at here, I think it should be gpcv2.c to de=
-lay 5us.
-> > > > > >
-> > > > > > Other BLK CTRL drivers already delay 5us in its own drivers, if
-> > > > > > add delay in gpcv2.c, for these drivers, it will delay 10us tot=
-ally.
-> > > > >
-> > > > > We should go forward as correct direction. If udelay should be gp=
-cv2.c,
-> > > > > it should be there and remove other udelay in BLK CTRL drivers gr=
-adually.
-> > > > >
-> > > > With Peng's reply:
-> > > >
-> > > > "No. Because BLK CTRL enable BUS_EN, before enable BUS_EN, udelay d=
-oes
-> > > > not help. For the audiomix, move to gpcv2 would work, but gpcv2 is
-> > > > not only for i.MX8MP audiomix. For mixes, default not enable BUS_EN
-> > > > after power on, the udelay must be in blk ctrl driver."
-> > > >
-> > > > So gpcv2.c is not correct place for all BLK CTRL drivers.
-> > >
-> > > where BLK-CTRL driver source code?
+On 11/05/2024 05:05, Conor Dooley wrote:
+>=20
+> On Tue, May 07, 2024 at 02:53:17PM +0800, Xingyu Wu wrote:
+> > This patch is to add the notifier for PLL0 clock and set the PLL0 rate
+> > to 1.5GHz to fix the lower rate of CPUfreq on the JH7110 SoC.
 > >
-> > drivers/pmdomain/imx/imx8m-blk-ctrl.c
-> > drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-> > drivers/pmdomain/imx/imx93-blk-ctrl.c
->
-> I still think it should put in gpcv2.c. Call power_on/off happen at very
-> low frequency. Even there are additional 5us delay for other BLK-CTRL
-> drivers, it will tiny impact to system performance. It is not worth to ad=
-d
-> additonal software check to disingiush these two cases.
->
-> But correct power on is more important.
->
-> So readl() follow a udelay(5) is more important then additional 5us delay
-> for other BLK-CTRL driver since there are many 5us delay already in gpcv2=
+> > The first patch is to add the notifier for PLL0 clock. Setting the
+> > PLL0 rate need the son clock (cpu_root) to switch its parent clock to
+> > OSC clock and switch it back after setting PLL0 rate. It need to use
+> > the cpu_root clock from SYSCRG and register the notifier in the SYSCRG
+> > driver.
+> >
+> > The second patch is to set cpu_core rate to 500MHz and PLL0 rate to
+> > 1.5GHz to fix the problem about the lower rate of CPUfreq on the
+> > visionfive board. The cpu_core clock rate is set to 500MHz first to
+> > ensure that the cpu frequency will not suddenly become high and the
+> > cpu voltage is not enough to cause a crash when the PLL0 is set to 1.5G=
+Hz.
+> > The cpu voltage and frequency are then adjusted together by CPUfreq.
+>=20
+> Hmm, how does sequencing work here? If we split the patches between trees=
+ it
+> sounds like without the dts patch, the clock tree would (or
+> could) crash, or mainline if the clock changes there before the dts ones =
+do. Am I
+> misunderstanding that?
+
+Oh, I think you misunderstood it. Patch 1 (clock driver patch) does not cau=
+se the
+clock tree crash without the patch 2 (dts patch), and it just provides the =
+correct
+flow of how to change the PLL0 rate. The patch 2 is to set the clock rate o=
+f
+cpu_core and PLL0 rate, which causes the crash without patch 1. Setting cpu=
+_core
+rate is to avoid crashes by insufficient cpu voltage when setting PLL0 rate=
 .
->
 
-I will send another v3 to gpcv2.c.  Let more people to review.
-
-best regards
-Shengjiu Wang
-> Frank
->
-> >
-> > Best regards
-> > Shengjiu Wang
-> > >
-> > > even if put clk_imx8mp_audiomix_runtime_resume(), it need read any
-> > > register before udelay. all regiser read and write is strong ordered.
-> > > when get value from a register, all previous write must be done.
-> > >
-> > > all udelay (5) in gpcv2 may not delay 5us at all.
-> > >
-> > > Frank
-> > > >
-> > > > Best regards
-> > > > Shengjiu Wang
-> > > >
-> > > > > If sometime found 5us is not enough, need change to 6us, we just =
-need
-> > > > > change at one place.
-> > > > >
-> > > > > Frank
-> > > > >
-> > > > > >
-> > > > > > Best regards
-> > > > > > Shengjiu Wang
-> > > > > >
-> > > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > Frank
-> > > > > > >
-> > > > > > > >       clk_imx8mp_audiomix_save_restore(dev, false);
-> > > > > > > >
-> > > > > > > >       return 0;
-> > > > > > > > --
-> > > > > > > > 2.34.1
-> > > > > > > >
+Best regards,
+Xingyu Wu
 
