@@ -1,176 +1,539 @@
-Return-Path: <linux-clk+bounces-6952-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6950-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A1288C3013
-	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 09:37:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AF548C2FDD
+	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 08:36:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D3E11C21019
-	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 07:37:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B2D1F218D1
+	for <lists+linux-clk@lfdr.de>; Sat, 11 May 2024 06:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1173579EF;
-	Sat, 11 May 2024 07:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AD817C8;
+	Sat, 11 May 2024 06:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a7/iHKNE"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2134.outbound.protection.partner.outlook.cn [139.219.146.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A896EC2ED;
-	Sat, 11 May 2024 07:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.134
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715413032; cv=fail; b=Tirw4RuIGpJyjsfkL3dCf3RTX3jIEkxsiV7SLs4IpCipjRkCumwpL6BzvWJ4JDDvsqZVI9+S/Tu1ZiqCKj2vpclesRu01y2VVCKkI+ij4p9brXquTcnEwAYLJ6JOgzMnTv9B8utwN2SM39eik/SgnDYlFxnAbhL9RSHf7+eoKEM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715413032; c=relaxed/simple;
-	bh=JCFDNBP8NP8wLWIr/ArFvm50MKjshvsYTDVZ86AtkkU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=RUFevTALU3HxjymxjRrqQnWbRWSxfo8p60+jZn3glNG1JNbZXBL/KbCyMYLjl9eIHkpviPbV48i06kbEDvvmmH7y8oIncsWzgua83VdU/k1YYc6xcBZCVyvDTwPi8BftBlOEXZZhsuO9arhl1c7jranvzykgrvyg69MfsOQbQ08=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l7DSXLCv3HF7EKVZRZFN7Lozk1EKBLXObnejh4s/BpVoCSOfFD8hVb9z0+peN1PRNtqwXujF10xzQYGLrbxEFXdtM9W/y+0bPNsxB8Gtst7QCpmadg7E3/VkFFkiigRiYEBfFDzW0WJ11TArMYJNIkFJVcYOxLEerDXOoYtK7ELOUQchX2UFLScrxcED9D345QkVbVUSDb5ohJ4G3fpYrw3jteo+FahELwfSHqA20vu5T+CEKgppv5G73YnWZ6n4CxHSXyGQhR41EWm6feq+N6lxCHjhplYEvcIiwW2LVkMEgnmEKMO0EsCOgyZGJO8FvpsA6tTf0JHTlVaTkbueKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JCFDNBP8NP8wLWIr/ArFvm50MKjshvsYTDVZ86AtkkU=;
- b=PzJi7dipg56/yODSpAQyubSn/og/ZDU8UBiYMt4Wg9AcW9bQ2z0PgUwfEla62x455hKGVwzUFj9KQyU4RG5uQmMImycQeChVajXntxJ+//dtl7FqzayqaECIgSATE7My83eEGorA5zsYeTVjuWms+egFGS2QgtO2InyVNOJTF0CBO1mMJ51jytozpCq2wzIVXEvwCkIWeUIyARtcV9AxJep7gmmNigmgwOUk+F6HcB1u5SRZnn/7Cs2jViHU0ZZOe6E8oq1i+sizlWc6a+mxHsvWqGmveiFAGfm79zHhjXwJiFwzPDgh1kXui7MM1mwALV6kspp7/5nV4NLZ+39i9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:8::10) by NTZPR01MB1113.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:a::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Sat, 11 May
- 2024 03:02:56 +0000
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- ([fe80::e903:99a6:10b7:304d]) by
- NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn ([fe80::e903:99a6:10b7:304d%6])
- with mapi id 15.20.7472.044; Sat, 11 May 2024 03:02:56 +0000
-From: Xingyu Wu <xingyu.wu@starfivetech.com>
-To: Conor Dooley <conor@kernel.org>
-CC: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
-	<sboyd@kernel.org>, Emil Renner Berthing
-	<emil.renner.berthing@canonical.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Hal Feng <hal.feng@starfivetech.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v5 0/2] Add notifier for PLL0 clock and set it 1.5GHz on
-Thread-Topic: [PATCH v5 0/2] Add notifier for PLL0 clock and set it 1.5GHz on
-Thread-Index: AQHaoEtCPDK2HwhwXUSWjcDZE/pIQ7GQ+umAgABXAkA=
-Date: Sat, 11 May 2024 03:02:56 +0000
-Message-ID:
- <NTZPR01MB0956D48361098E8AA4B3930A9FE02@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
-References: <20240507065319.274976-1-xingyu.wu@starfivetech.com>
- <20240510-unfounded-syrup-d1263d57d05a@spud>
-In-Reply-To: <20240510-unfounded-syrup-d1263d57d05a@spud>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: NTZPR01MB0956:EE_|NTZPR01MB1113:EE_
-x-ms-office365-filtering-correlation-id: 0a7f2ce1-10d1-4a7e-96c6-08dc7166db6a
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- aMrQmWIhWxwcKlwvwU2xvOhfo1zpwD7V1AM4iGsjxyJI5RyPhyqV4wcSDyWVHc2GrVpR4EryD/iEjC1w4egHHM6uz4T5fWQw+OCCBIqDLNlvZSDyV8Gs/Q9MlvTRV9pGAfNKLvOlKhsLfUbiGUe1x89tstIZXInDfwv4TKeZsOL57jxbOIZDfMw03avb2GvSjgEH9yhJNOHvyhbagvyracj43lusIakElpLQX8b64Ah6zwvwf0HcBVQHSuwwYtPXR8nKQz4sUvoTh9sQ8nMEWVTcv5qgg1oqCbft6bTRgBKacxlUdmuBoLOZ8qcwTYiBqv46YtkXij4nTELAVqeGgOLJAX1g4zp3RHsgm0P4lqNCVhwkvBmC/aPxML14hJKLdSOTI6g7xA3zawE6MC1NF/fFKDFKXB5ZrrWMS0ZzPpw9xVSpbPRFQMYoT6YZFzo3ByR8kUEpaqPr7/ZAGaLAOaQwAkly1zEcHT2y0EDNPRRsq96A/zyUeyZ9DoItBeEJpYGakklU4152Iry6SwadWoOXxOdp7E369JCW2tud6mc8/f9YsigvZBocdWbYHokt8/S0GM+XmKHXw26l/yV9yXRdttQME/93cZnwpCxNUVM2ecy912+9Tu2jVga9CXo9
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(41320700004)(366007)(7416005)(1800799015)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?/DbM0m6tNMF/YY7c84L8dkem20pVWyQmkgHDjys+10odUupbHTBfXXqR082v?=
- =?us-ascii?Q?cybqJu0jdPTDcOV0ZpRkmcwpMJ2Zz0XGpdZOjIdVPzcyFuEnQZ4K9jheUptj?=
- =?us-ascii?Q?zsv6ekgB1OZZO6RtpUAymztgAAFs9CleW38voupMaoMwUHOUgOSQ5MRFHhKK?=
- =?us-ascii?Q?2GJNfFK+kD5Bf2bcBU5kCH0HUr3qDY33FF1Z417iHrAp92OykJGV37quDCcT?=
- =?us-ascii?Q?Tjni+fE+Qk7l0bcNjLm1s50kBjBUwpeR4lgWxWlXDHgt04xc4h0mN++bDRBh?=
- =?us-ascii?Q?mRYVgaA4yYBVqBNWGRI+Ezj4Q/W3q2g20hgdBHcIE2Op0Af6qnyGpYt//1us?=
- =?us-ascii?Q?mCw/JcoGX3ftoPnSgSX0W68pKX/1TUl58NteTSbGZWMBHDMJfDs+2he0TSVd?=
- =?us-ascii?Q?oNSItlBBL7Sphx7kOR28SpKFypwaDk1B0Zlw5fhAHONSr005NZzZVz72E4TX?=
- =?us-ascii?Q?9Krbb0X8oOtWIcATdgcHysKtcJGkhZxs5YgqwVOn3648Kagayj24ANQVQsYr?=
- =?us-ascii?Q?VC3xwsw2wDhLn+MziKgeHfi2ZrD+z/5zDx7Y652hvC1iMNca2fvPoJUF1xZ1?=
- =?us-ascii?Q?cSrbeesocqZFt6xSqtGJBNY3nhbaWJOC75rR4R1+M7YOe4+1Sfrpjcp48fTx?=
- =?us-ascii?Q?lPiCij/40IUW0JyY8h67JsruFJtVeqQ0AcEXKWjyMwvY1PsKu3KxSeF/9clK?=
- =?us-ascii?Q?DRktjUp593SFtdwH6NWU2h4Ae0rzsXMHSotY37Wr7WAkMf5pNpttGUOuWMtU?=
- =?us-ascii?Q?BSJQUx0EKPEH9dcJLIESFchWcJxmk5LsfGhcWTcMJnzTXuYLzv9WjL7VHdE5?=
- =?us-ascii?Q?gHI3NSWWja6229Lu13t4PYIgovgXKpT8P8S9w2rT0joF4NFDQt6GhBX9ZeTf?=
- =?us-ascii?Q?ynLla6I9Q2JkVAGmTbRvCDjjg4AanahDfXxsI8UYEGD0JdTWMDUaEVmoIpj5?=
- =?us-ascii?Q?4x63bQ7gbaTNVZKzYXzPlZa+zXLHcJzhGT/LwrAvEmvNGHEJchiSDD/0tspX?=
- =?us-ascii?Q?PTvkFweEv5Kh77rEMn5Usx6Ixis5fa0xwVeOtz41sz35WCb8Zy2fQg7o9cWY?=
- =?us-ascii?Q?KczvbciXk1YsAO/fy31CBauPchakE8lrNHSUpUY9s5b/vtHHG0c6dgdVx8mf?=
- =?us-ascii?Q?6CTlstM+k2UQWRQutJ+tJimHd3mmc0L4hYUXmeE8eZuQkpQogOBeiyLDJKcX?=
- =?us-ascii?Q?BqgYhl/pqov3rwY945/4jRdZpPqMnEZu+kM8FbmPVfUW2MvNxmFan9txMkYt?=
- =?us-ascii?Q?axxLHoQHl1OYicAARY4RQ2H4VeCp1jQBxpFahr/I+MPzuTcyjkfOOa1NZIDG?=
- =?us-ascii?Q?Y86eH4Xz13HDvFQFXIQHraq0mkG7E1RVXYRW7AaWrG3yZ74Kp0jmfYgEo+nJ?=
- =?us-ascii?Q?kbL9yRY2mQv3pef5uc//bn64g0CSG8BubLzjdXEcI4LtRuDHrOMiAcD3AkgI?=
- =?us-ascii?Q?ATxVLQoz83uYZPVi/VXq0feu4A5p3pafIJLpoY1GPz3td8s6btr1beyBSXfh?=
- =?us-ascii?Q?ZdbXnah9IjsNCJb9tqF87+UE5trg9f/qYWcxE8iZQfAyURDzNUaf6jA3tI5I?=
- =?us-ascii?Q?L6FbVFWM2Gq+TzXlloSabaGP+u5ee/qw/m5W0vl0?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09D7A55
+	for <linux-clk@vger.kernel.org>; Sat, 11 May 2024 06:35:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715409360; cv=none; b=KCh+Qs7ZUnYxn+1f9EZpH4fGqytWQ1DPe1Kzak0kgy2rG1zgecj2XBvEH9WDzWKhuZ9O88QwtTRsI+n7ruh039CsftGxIWMdU05jvj/w3PFuRkjAylsThsQ3k1DeRlzmfUcjwUQQR3vlirV222GP/tGo2ClrEman0W4vmfc+Ycs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715409360; c=relaxed/simple;
+	bh=S2Rizmni55siQoYqWFg3KywGcQ0H1eZ7U1vrbP5TTb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VwLmpdLgW84GMSYDvyFGTvE3Hv64lE/ltJ5ny3GJjnlmN4uB4clIkmUmjgYOMb0Z4OwuIIItWD1oeBZnhUUtuTLovFrGPx5QxMARbcolD6EixsSnOTAih7g7Wt6GgHU+OC3HYq7zL3YpxEqko2Ryu7rmfL7GmI3uXxs3qatZOE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a7/iHKNE; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1ee38966529so26684745ad.1
+        for <linux-clk@vger.kernel.org>; Fri, 10 May 2024 23:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1715409358; x=1716014158; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IqIfpOLwqxPWanvAjHeCvfxgD+z2mm62/kCYisTKI8U=;
+        b=a7/iHKNEcbxOcEgOfNK93UNAWMEUaGcszKOJws5rT744GZousHBXQgqOcE7k9aVtt2
+         I36kGV+1uOUg36TlIA1G36cegFfEJkxqclCFfOp+2NU5F2vOh/lO7hycXRG3rRss6vYg
+         iQjBrjqSPJysWmUYxRrHv2j3tEhoM4sYYqIFP3gTpPWo/SzYQHFWm1WjawNjehpwO73q
+         sDmcVad7MLwLzdutNP2B0l61/CoXXUR2hbRHBkgUzREMhtsYPgRAxL5VuxKgVw8upV8t
+         5/YwcxvyF5o0ik932wB/uBYL8jLLuExdVpxTd7sM7Xr59WSqpieMEKFnYNrvbJjtBsbv
+         zayg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715409358; x=1716014158;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqIfpOLwqxPWanvAjHeCvfxgD+z2mm62/kCYisTKI8U=;
+        b=G/tWijAFViBqH+MT9tLPm2W2ikKHBbMQ+/61kNGXblSuhZEwgBYjCKbbkcVj72fJo7
+         ifq9PTZhVMI7c5tWfsWv22uluFWWk6YIzYHJ2jZa/5fcCAaDu1o147T/bRiaD2tYAB/j
+         E1EN/FpuVX++eY4ivq4tXGLATQ3NvoclwVnlZYsCs/mRLTxl2bUJPsmOo2/NvPHMda+L
+         hf+8pdSQT4goLSxvYr/WCvYdKQhzQzZK8ruxXBliHYdy4Sx6qEEukI5BUAOGBnPdmLT2
+         Wo6whu4tRNXjUobZMGhT9eTyoVriXP/2Afo8+lZ3bAYX/HKfMo+WXjavxWjeJbVVEidu
+         Uu0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXSrTXpH3ly8GO/L+cvWC2MttRXKBt/y5G4M8GQbQsVGETrtALTnsNBIlCBR7zqbTfTJ5p07CbuyzAEbhumvQhu1tP8mpnsH4CS
+X-Gm-Message-State: AOJu0Yz+pEvXG/U/crhyRCYY6lnEnPHfGdxFApEHKvnLOZgb6fdQ6BKm
+	V7UFUX94tDuZyFYBZ1BBmYyA6xipapW5C/0+bOqYKUAKLrWSKulSl+yhyutaDQ==
+X-Google-Smtp-Source: AGHT+IHHyqUI4TfbPefohtbqZ9ixiRB6pTcvG2f7w+LQvX0WdsliXOh0O0HjCpE95r6EWK0cWtHvNA==
+X-Received: by 2002:a17:902:f68f:b0:1e0:9964:76f4 with SMTP id d9443c01a7336-1ef42e6e646mr68429675ad.14.1715409357941;
+        Fri, 10 May 2024 23:35:57 -0700 (PDT)
+Received: from thinkpad ([220.158.156.38])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ef0bad819csm42528305ad.84.2024.05.10.23.35.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 May 2024 23:35:57 -0700 (PDT)
+Date: Sat, 11 May 2024 12:05:50 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: Re: [PATCH v4 RESEND 4/8] PCI: qcom: Switch to
+ devm_clk_bulk_get_all() API to get the clocks from Devicetree
+Message-ID: <20240511063550.GA6672@thinkpad>
+References: <20240501042847.1545145-1-mr.nuke.me@gmail.com>
+ <20240501042847.1545145-5-mr.nuke.me@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a7f2ce1-10d1-4a7e-96c6-08dc7166db6a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2024 03:02:56.1492
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BX4E6/8rlyJExq4/kQd0xRCVAlcUEBhuB3CvLspPwdrkRZyx0qP87oBHYd57TV379L/JOxbkxz6z3KTfuXkkOuWwXOTUunsQPySbetbLE1o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1113
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240501042847.1545145-5-mr.nuke.me@gmail.com>
 
-On 11/05/2024 05:05, Conor Dooley wrote:
->=20
-> On Tue, May 07, 2024 at 02:53:17PM +0800, Xingyu Wu wrote:
-> > This patch is to add the notifier for PLL0 clock and set the PLL0 rate
-> > to 1.5GHz to fix the lower rate of CPUfreq on the JH7110 SoC.
-> >
-> > The first patch is to add the notifier for PLL0 clock. Setting the
-> > PLL0 rate need the son clock (cpu_root) to switch its parent clock to
-> > OSC clock and switch it back after setting PLL0 rate. It need to use
-> > the cpu_root clock from SYSCRG and register the notifier in the SYSCRG
-> > driver.
-> >
-> > The second patch is to set cpu_core rate to 500MHz and PLL0 rate to
-> > 1.5GHz to fix the problem about the lower rate of CPUfreq on the
-> > visionfive board. The cpu_core clock rate is set to 500MHz first to
-> > ensure that the cpu frequency will not suddenly become high and the
-> > cpu voltage is not enough to cause a crash when the PLL0 is set to 1.5G=
-Hz.
-> > The cpu voltage and frequency are then adjusted together by CPUfreq.
->=20
-> Hmm, how does sequencing work here? If we split the patches between trees=
- it
-> sounds like without the dts patch, the clock tree would (or
-> could) crash, or mainline if the clock changes there before the dts ones =
-do. Am I
-> misunderstanding that?
+On Tue, Apr 30, 2024 at 11:28:43PM -0500, Alexandru Gagniuc wrote:
+> From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> There is no need for the device drivers to validate the clocks defined in
+> Devicetree. The validation should be performed by the DT schema and the
+> drivers should just get all the clocks from DT. Right now the driver
+> hardcodes the clock info and validates them against DT which is redundant.
+> 
+> So use devm_clk_bulk_get_all() that just gets all the clocks defined in DT
+> and get rid of all static clocks info from the driver. This simplifies the
+> driver.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
+> [moved clks to struct qcom_pcie to reduce code duplication]
 
-Oh, I think you misunderstood it. Patch 1 (clock driver patch) does not cau=
-se the
-clock tree crash without the patch 2 (dts patch), and it just provides the =
-correct
-flow of how to change the PLL0 rate. The patch 2 is to set the clock rate o=
-f
-cpu_core and PLL0 rate, which causes the crash without patch 1. Setting cpu=
-_core
-rate is to avoid crashes by insufficient cpu voltage when setting PLL0 rate=
-.
+Can you please revert to my original patch? Even though moving the
+devm_clk_bulk_get_all() API to probe saves few LOC, it also makes the resource
+handling code scattered across the driver. So I'd like to keep all the resource
+handling within the get_resources() callback.
 
-Best regards,
-Xingyu Wu
+- Mani
+
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 163 ++++---------------------
+>  1 file changed, 25 insertions(+), 138 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 14772edcf0d3..ea81ff68d433 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -154,58 +154,42 @@
+>  #define QCOM_PCIE_LINK_SPEED_TO_BW(speed) \
+>  		Mbps_to_icc(PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]))
+>  
+> -#define QCOM_PCIE_1_0_0_MAX_CLOCKS		4
+>  struct qcom_pcie_resources_1_0_0 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_1_0_0_MAX_CLOCKS];
+>  	struct reset_control *core;
+>  	struct regulator *vdda;
+>  };
+>  
+> -#define QCOM_PCIE_2_1_0_MAX_CLOCKS		5
+>  #define QCOM_PCIE_2_1_0_MAX_RESETS		6
+>  #define QCOM_PCIE_2_1_0_MAX_SUPPLY		3
+>  struct qcom_pcie_resources_2_1_0 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_1_0_MAX_CLOCKS];
+>  	struct reset_control_bulk_data resets[QCOM_PCIE_2_1_0_MAX_RESETS];
+>  	int num_resets;
+>  	struct regulator_bulk_data supplies[QCOM_PCIE_2_1_0_MAX_SUPPLY];
+>  };
+>  
+> -#define QCOM_PCIE_2_3_2_MAX_CLOCKS		4
+>  #define QCOM_PCIE_2_3_2_MAX_SUPPLY		2
+>  struct qcom_pcie_resources_2_3_2 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_3_2_MAX_CLOCKS];
+>  	struct regulator_bulk_data supplies[QCOM_PCIE_2_3_2_MAX_SUPPLY];
+>  };
+>  
+> -#define QCOM_PCIE_2_3_3_MAX_CLOCKS		5
+>  #define QCOM_PCIE_2_3_3_MAX_RESETS		7
+>  struct qcom_pcie_resources_2_3_3 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_3_3_MAX_CLOCKS];
+>  	struct reset_control_bulk_data rst[QCOM_PCIE_2_3_3_MAX_RESETS];
+>  };
+>  
+> -#define QCOM_PCIE_2_4_0_MAX_CLOCKS		4
+>  #define QCOM_PCIE_2_4_0_MAX_RESETS		12
+>  struct qcom_pcie_resources_2_4_0 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_4_0_MAX_CLOCKS];
+> -	int num_clks;
+>  	struct reset_control_bulk_data resets[QCOM_PCIE_2_4_0_MAX_RESETS];
+>  	int num_resets;
+>  };
+>  
+> -#define QCOM_PCIE_2_7_0_MAX_CLOCKS		15
+>  #define QCOM_PCIE_2_7_0_MAX_SUPPLIES		2
+>  struct qcom_pcie_resources_2_7_0 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_7_0_MAX_CLOCKS];
+> -	int num_clks;
+>  	struct regulator_bulk_data supplies[QCOM_PCIE_2_7_0_MAX_SUPPLIES];
+>  	struct reset_control *rst;
+>  };
+>  
+> -#define QCOM_PCIE_2_9_0_MAX_CLOCKS		5
+>  struct qcom_pcie_resources_2_9_0 {
+> -	struct clk_bulk_data clks[QCOM_PCIE_2_9_0_MAX_CLOCKS];
+>  	struct reset_control *rst;
+>  };
+>  
+> @@ -247,6 +231,8 @@ struct qcom_pcie {
+>  	struct icc_path *icc_mem;
+>  	const struct qcom_pcie_cfg *cfg;
+>  	struct dentry *debugfs;
+> +	struct clk_bulk_data *clks;
+> +	int num_clks;
+>  	bool suspended;
+>  };
+>  
+> @@ -337,22 +323,6 @@ static int qcom_pcie_get_resources_2_1_0(struct qcom_pcie *pcie)
+>  	if (ret)
+>  		return ret;
+>  
+> -	res->clks[0].id = "iface";
+> -	res->clks[1].id = "core";
+> -	res->clks[2].id = "phy";
+> -	res->clks[3].id = "aux";
+> -	res->clks[4].id = "ref";
+> -
+> -	/* iface, core, phy are required */
+> -	ret = devm_clk_bulk_get(dev, 3, res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	/* aux, ref are optional */
+> -	ret = devm_clk_bulk_get_optional(dev, 2, res->clks + 3);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	res->resets[0].id = "pci";
+>  	res->resets[1].id = "axi";
+>  	res->resets[2].id = "ahb";
+> @@ -373,7 +343,7 @@ static void qcom_pcie_deinit_2_1_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_1_0 *res = &pcie->res.v2_1_0;
+>  
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  	reset_control_bulk_assert(res->num_resets, res->resets);
+>  
+>  	writel(1, pcie->parf + PARF_PHY_CTRL);
+> @@ -413,7 +383,6 @@ static int qcom_pcie_init_2_1_0(struct qcom_pcie *pcie)
+>  
+>  static int qcom_pcie_post_init_2_1_0(struct qcom_pcie *pcie)
+>  {
+> -	struct qcom_pcie_resources_2_1_0 *res = &pcie->res.v2_1_0;
+>  	struct dw_pcie *pci = pcie->pci;
+>  	struct device *dev = pci->dev;
+>  	struct device_node *node = dev->of_node;
+> @@ -425,7 +394,7 @@ static int qcom_pcie_post_init_2_1_0(struct qcom_pcie *pcie)
+>  	val &= ~PHY_TEST_PWR_DOWN;
+>  	writel(val, pcie->parf + PARF_PHY_CTRL);
+>  
+> -	ret = clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +	ret = clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -476,21 +445,11 @@ static int qcom_pcie_get_resources_1_0_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_1_0_0 *res = &pcie->res.v1_0_0;
+>  	struct dw_pcie *pci = pcie->pci;
+>  	struct device *dev = pci->dev;
+> -	int ret;
+>  
+>  	res->vdda = devm_regulator_get(dev, "vdda");
+>  	if (IS_ERR(res->vdda))
+>  		return PTR_ERR(res->vdda);
+>  
+> -	res->clks[0].id = "iface";
+> -	res->clks[1].id = "aux";
+> -	res->clks[2].id = "master_bus";
+> -	res->clks[3].id = "slave_bus";
+> -
+> -	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	res->core = devm_reset_control_get_exclusive(dev, "core");
+>  	return PTR_ERR_OR_ZERO(res->core);
+>  }
+> @@ -500,7 +459,7 @@ static void qcom_pcie_deinit_1_0_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_1_0_0 *res = &pcie->res.v1_0_0;
+>  
+>  	reset_control_assert(res->core);
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  	regulator_disable(res->vdda);
+>  }
+>  
+> @@ -517,7 +476,7 @@ static int qcom_pcie_init_1_0_0(struct qcom_pcie *pcie)
+>  		return ret;
+>  	}
+>  
+> -	ret = clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +	ret = clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  	if (ret) {
+>  		dev_err(dev, "cannot prepare/enable clocks\n");
+>  		goto err_assert_reset;
+> @@ -532,7 +491,7 @@ static int qcom_pcie_init_1_0_0(struct qcom_pcie *pcie)
+>  	return 0;
+>  
+>  err_disable_clks:
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  err_assert_reset:
+>  	reset_control_assert(res->core);
+>  
+> @@ -580,15 +539,6 @@ static int qcom_pcie_get_resources_2_3_2(struct qcom_pcie *pcie)
+>  	if (ret)
+>  		return ret;
+>  
+> -	res->clks[0].id = "aux";
+> -	res->clks[1].id = "cfg";
+> -	res->clks[2].id = "bus_master";
+> -	res->clks[3].id = "bus_slave";
+> -
+> -	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	return 0;
+>  }
+>  
+> @@ -596,7 +546,7 @@ static void qcom_pcie_deinit_2_3_2(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_3_2 *res = &pcie->res.v2_3_2;
+>  
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
+>  }
+>  
+> @@ -613,7 +563,7 @@ static int qcom_pcie_init_2_3_2(struct qcom_pcie *pcie)
+>  		return ret;
+>  	}
+>  
+> -	ret = clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +	ret = clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  	if (ret) {
+>  		dev_err(dev, "cannot prepare/enable clocks\n");
+>  		regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
+> @@ -661,18 +611,6 @@ static int qcom_pcie_get_resources_2_4_0(struct qcom_pcie *pcie)
+>  	bool is_ipq = of_device_is_compatible(dev->of_node, "qcom,pcie-ipq4019");
+>  	int ret;
+>  
+> -	res->clks[0].id = "aux";
+> -	res->clks[1].id = "master_bus";
+> -	res->clks[2].id = "slave_bus";
+> -	res->clks[3].id = "iface";
+> -
+> -	/* qcom,pcie-ipq4019 is defined without "iface" */
+> -	res->num_clks = is_ipq ? 3 : 4;
+> -
+> -	ret = devm_clk_bulk_get(dev, res->num_clks, res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	res->resets[0].id = "axi_m";
+>  	res->resets[1].id = "axi_s";
+>  	res->resets[2].id = "axi_m_sticky";
+> @@ -700,7 +638,7 @@ static void qcom_pcie_deinit_2_4_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_2_4_0 *res = &pcie->res.v2_4_0;
+>  
+>  	reset_control_bulk_assert(res->num_resets, res->resets);
+> -	clk_bulk_disable_unprepare(res->num_clks, res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  }
+>  
+>  static int qcom_pcie_init_2_4_0(struct qcom_pcie *pcie)
+> @@ -726,7 +664,7 @@ static int qcom_pcie_init_2_4_0(struct qcom_pcie *pcie)
+>  
+>  	usleep_range(10000, 12000);
+>  
+> -	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+> +	ret = clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  	if (ret) {
+>  		reset_control_bulk_assert(res->num_resets, res->resets);
+>  		return ret;
+> @@ -742,16 +680,6 @@ static int qcom_pcie_get_resources_2_3_3(struct qcom_pcie *pcie)
+>  	struct device *dev = pci->dev;
+>  	int ret;
+>  
+> -	res->clks[0].id = "iface";
+> -	res->clks[1].id = "axi_m";
+> -	res->clks[2].id = "axi_s";
+> -	res->clks[3].id = "ahb";
+> -	res->clks[4].id = "aux";
+> -
+> -	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	res->rst[0].id = "axi_m";
+>  	res->rst[1].id = "axi_s";
+>  	res->rst[2].id = "pipe";
+> @@ -769,9 +697,7 @@ static int qcom_pcie_get_resources_2_3_3(struct qcom_pcie *pcie)
+>  
+>  static void qcom_pcie_deinit_2_3_3(struct qcom_pcie *pcie)
+>  {
+> -	struct qcom_pcie_resources_2_3_3 *res = &pcie->res.v2_3_3;
+> -
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  }
+>  
+>  static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+> @@ -801,7 +727,7 @@ static int qcom_pcie_init_2_3_3(struct qcom_pcie *pcie)
+>  	 */
+>  	usleep_range(2000, 2500);
+>  
+> -	ret = clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +	ret = clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  	if (ret) {
+>  		dev_err(dev, "cannot prepare/enable clocks\n");
+>  		goto err_assert_resets;
+> @@ -862,8 +788,6 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>  	struct dw_pcie *pci = pcie->pci;
+>  	struct device *dev = pci->dev;
+> -	unsigned int num_clks, num_opt_clks;
+> -	unsigned int idx;
+>  	int ret;
+>  
+>  	res->rst = devm_reset_control_array_get_exclusive(dev);
+> @@ -877,37 +801,6 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	if (ret)
+>  		return ret;
+>  
+> -	idx = 0;
+> -	res->clks[idx++].id = "aux";
+> -	res->clks[idx++].id = "cfg";
+> -	res->clks[idx++].id = "bus_master";
+> -	res->clks[idx++].id = "bus_slave";
+> -	res->clks[idx++].id = "slave_q2a";
+> -
+> -	num_clks = idx;
+> -
+> -	ret = devm_clk_bulk_get(dev, num_clks, res->clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+> -	res->clks[idx++].id = "tbu";
+> -	res->clks[idx++].id = "ddrss_sf_tbu";
+> -	res->clks[idx++].id = "aggre0";
+> -	res->clks[idx++].id = "aggre1";
+> -	res->clks[idx++].id = "noc_aggr";
+> -	res->clks[idx++].id = "noc_aggr_4";
+> -	res->clks[idx++].id = "noc_aggr_south_sf";
+> -	res->clks[idx++].id = "cnoc_qx";
+> -	res->clks[idx++].id = "sleep";
+> -	res->clks[idx++].id = "cnoc_sf_axi";
+> -
+> -	num_opt_clks = idx - num_clks;
+> -	res->num_clks = idx;
+> -
+> -	ret = devm_clk_bulk_get_optional(dev, num_opt_clks, res->clks + num_clks);
+> -	if (ret < 0)
+> -		return ret;
+> -
+>  	return 0;
+>  }
+>  
+> @@ -925,7 +818,7 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  		return ret;
+>  	}
+>  
+> -	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+> +	ret = clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  	if (ret < 0)
+>  		goto err_disable_regulators;
+>  
+> @@ -977,7 +870,7 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  
+>  	return 0;
+>  err_disable_clocks:
+> -	clk_bulk_disable_unprepare(res->num_clks, res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  err_disable_regulators:
+>  	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
+>  
+> @@ -1015,7 +908,7 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>  
+> -	clk_bulk_disable_unprepare(res->num_clks, res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  
+>  	regulator_bulk_disable(ARRAY_SIZE(res->supplies), res->supplies);
+>  }
+> @@ -1101,17 +994,6 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
+>  	struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+>  	struct dw_pcie *pci = pcie->pci;
+>  	struct device *dev = pci->dev;
+> -	int ret;
+> -
+> -	res->clks[0].id = "iface";
+> -	res->clks[1].id = "axi_m";
+> -	res->clks[2].id = "axi_s";
+> -	res->clks[3].id = "axi_bridge";
+> -	res->clks[4].id = "rchng";
+> -
+> -	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(res->clks), res->clks);
+> -	if (ret < 0)
+> -		return ret;
+>  
+>  	res->rst = devm_reset_control_array_get_exclusive(dev);
+>  	if (IS_ERR(res->rst))
+> @@ -1122,9 +1004,7 @@ static int qcom_pcie_get_resources_2_9_0(struct qcom_pcie *pcie)
+>  
+>  static void qcom_pcie_deinit_2_9_0(struct qcom_pcie *pcie)
+>  {
+> -	struct qcom_pcie_resources_2_9_0 *res = &pcie->res.v2_9_0;
+> -
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(res->clks), res->clks);
+> +	clk_bulk_disable_unprepare(pcie->num_clks, pcie->clks);
+>  }
+>  
+>  static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+> @@ -1153,7 +1033,7 @@ static int qcom_pcie_init_2_9_0(struct qcom_pcie *pcie)
+>  
+>  	usleep_range(2000, 2500);
+>  
+> -	return clk_bulk_prepare_enable(ARRAY_SIZE(res->clks), res->clks);
+> +	return clk_bulk_prepare_enable(pcie->num_clks, pcie->clks);
+>  }
+>  
+>  static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> @@ -1561,6 +1441,13 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  		goto err_pm_runtime_put;
+>  	}
+>  
+> +	pcie->num_clks = devm_clk_bulk_get_all(dev, &pcie->clks);
+> +	if (pcie->num_clks < 0) {
+> +		ret = pcie->num_clks;
+> +		dev_err(dev, "Failed to get clocks\n");
+> +		goto err_pm_runtime_put;
+> +	}
+> +
+>  	ret = qcom_pcie_icc_init(pcie);
+>  	if (ret)
+>  		goto err_pm_runtime_put;
+> -- 
+> 2.40.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
