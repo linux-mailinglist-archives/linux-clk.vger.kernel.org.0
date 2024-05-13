@@ -1,74 +1,74 @@
-Return-Path: <linux-clk+bounces-6979-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-6983-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A3558C405F
-	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2024 14:04:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 255D98C40D8
+	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2024 14:37:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 158BB280FCD
-	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2024 12:04:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0700282E1A
+	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2024 12:37:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B97F14F10C;
-	Mon, 13 May 2024 12:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1EF14F9C8;
+	Mon, 13 May 2024 12:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="s/3OmJeS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="J7be9N4h"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4214614EC5B
-	for <linux-clk@vger.kernel.org>; Mon, 13 May 2024 12:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760B9433A4
+	for <linux-clk@vger.kernel.org>; Mon, 13 May 2024 12:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715601876; cv=none; b=heiw/94UFWLpmDhunWKjNDP3cePk8TL75lvsxY2yiu16lRhnn9hEGhfEQkDwondoVMHL+UgkAG7uGARW+wA3Nha0sAO9COL9DtafCSXlqJKb/DvNjFaEU/MMTvvmgaRa3BX0WISTprF9ZWmjQ2/iJcJyAmAIpckBEq+g1ZM/y2E=
+	t=1715603849; cv=none; b=G0ESzgaFqV6wwOCylMAFXc/rQxWZ/hGQiozO/132Lyx7+WouYS6uO1afbh2K2HGlzG6kPYKWaCSOh8+UdQbibpJhTaWP36HGDr2eGIcvAzpSzf1MhwQEwrVwwdOS2LwXUHmM+9l4jG5OFt51jr7ruzKYE5qax7ozADbaJ5k+qOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715601876; c=relaxed/simple;
-	bh=5j40C07Qf/yIsZFYFIIXmoDKx9psThMJypiQuPwNDBE=;
+	s=arc-20240116; t=1715603849; c=relaxed/simple;
+	bh=lH2P3VpqXlcWVSGVwRn1kZDQIWe0cm6xyew/RScYB0I=;
 	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=DIbZQu48tdvL8Hx0rL3L0ATMQ/XRuImberUw4sD1MbLHvcKRSh1Zqx1qB8/pwbpIlE9C3Z1/oQqEdFl7INdzgABmvmQWP6EocUQBK0OSyHFtIcj9hE3g1CdICeiFDK5q/TRZq8SHIWqajEQX//bztsqBaagIqVjgahIjdxVjq48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=s/3OmJeS; arc=none smtp.client-ip=209.85.128.45
+	 MIME-Version:Content-Type; b=RQu3ENt63J0GjLgsUeY50VM1lRupWu5Y20TQF0Ktvno04/6LPSR3hyy4R9D2yaYQtDSJNIrGmVwdgCqMlUxnkImmp2AwkLaGH9jqBkT/Ijpm1062xlMY9BkG9HPmO5GjJBXCtvaaZrN13wWUfd0qMWAa59DGJ91fCqhQtNXGnmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=J7be9N4h; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4200ee78f34so14954285e9.3
-        for <linux-clk@vger.kernel.org>; Mon, 13 May 2024 05:04:33 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-420180b5922so6302505e9.2
+        for <linux-clk@vger.kernel.org>; Mon, 13 May 2024 05:37:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715601871; x=1716206671; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715603844; x=1716208644; darn=vger.kernel.org;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=evr7Nj7xKQ7Cd3Ztm3Cf+ORmYJrKhwgikDv0J0g06qQ=;
-        b=s/3OmJeSjthWytt2VGdU4HwVXqvAer28UXexihlo9/1d6uQ8G2VAsyuU26vcXY4vnS
-         thy+3Poe2eV9a9dwjbgy2envd2BBNK+5J12cKqbwrUOwpEghk54Y5cyZXIOtNryeGTBv
-         h0xwPmMYttaJ9On7a+9yFPVRh86W7cUPai2oHQl6iyFRAgYD0KpAAUOxF1k08r2F5y/e
-         VFi7J6H5A7Fy1YRMmNi8qdGy8kDbxVSLFqZ/1Kuag1QipW0ShYYAh/S6CV+iPrLOROBJ
-         KI7Iz5g6yFmO+SkGA0YMAOoY1T0912qKzxowT8tHMmKIrRClBS97P8J9HaER73FnXEMY
-         mRyg==
+        bh=q8zF+CwTJwmT8VWgpfibQL6tO7taDX8lcb6Oh133Ym0=;
+        b=J7be9N4hIo+S02n/EVA6Yhkym/jwFN6zEwIwco6Eu6rge+Ikqaq6wBz39Nh95IqQeB
+         znhl+v0h9i5SIZEuqHzHOKkMpig9DnInFV8ywdoWpiBF6uCi0Icszz0K9rrMg4/hZhaP
+         B+hq4zBtfTo0a8WY7ArfwZnX3EIPdz6r0l5F351HjrF20Rqsuj0C+hK4RMUchG6JWg/N
+         xYjgBfDM58+nVkoHwrfrX+fsbsp5a3s8MIEigePPcBePI5xQiwKtcd5vj/sg/IFswCxb
+         KEzhzNu6ZASLFTmtybwFyoAko4+BtvxojvCZllSrJ9FRUsmlw6TTZZIy772cAgFPcra9
+         WPXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715601872; x=1716206672;
+        d=1e100.net; s=20230601; t=1715603844; x=1716208644;
         h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
          :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=evr7Nj7xKQ7Cd3Ztm3Cf+ORmYJrKhwgikDv0J0g06qQ=;
-        b=vavX7zIMZHVJhqssREuuWkWTkdo2zhhQ7js0GcDbS389d/WJ0p0Uo9cVO7RPHswTy8
-         LwI0Juf+FDoBgNMCSBAPsm4qpIbsETqYtsmHF9PSAw71mKRdj2PS0QJHaY7Q89z/FiRL
-         e0Kv7gPkLMKz6XpqVHWsdbHezaK9RGGOqYLOlFFtUHuwpGukIVHp0VzWPlxMzNeCjlRh
-         bz7HBtFXlNTCexnew+m4dnm45yDE6s5YGidzigCkKPk7MtHy29WHgCRu+7BdbYKd4Fd1
-         RWXwLuwAbwW4VgzNKOdWqJOx1UVujyRgUKqQp8+mZTZvSs5b1tdbLUnolwJTaBDlBpz9
-         oAQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUi5RRT52jbsY0YyoetHiyLAR67nCJhZUszax6JUFhqpK/VrrRlLq3gy3TQTBPiKDkFu2XeXDYt2TeSm36Al0ik1/+7MdwxiNzd
-X-Gm-Message-State: AOJu0YwX7SyErWpqttDfRnonMrYCDocMaqHqf5GB3hwbb39jPXeLrW+m
-	rriwenBRUFNmdBPideV1B3UnMHMfyPULpLZBjjEiLZyOqmO1xh9SIs70n5kHJUE=
-X-Google-Smtp-Source: AGHT+IGnkiii1p31wpEBxYvlhM/aMqmsmiEtQ3NQ+1Qn6f87Nt4y/G9/2KcL8KQaX8/8bf+QvAuVbg==
-X-Received: by 2002:a05:600c:4fcf:b0:420:1585:7a99 with SMTP id 5b1f17b1804b1-42015857b80mr27774355e9.38.1715601871464;
-        Mon, 13 May 2024 05:04:31 -0700 (PDT)
+        bh=q8zF+CwTJwmT8VWgpfibQL6tO7taDX8lcb6Oh133Ym0=;
+        b=KaeixLS45GMJbHmbMh1aX/YGrCNYJxg8M9OPcV3OUMUfMvRoDZLOQP9IGNql+FsPqi
+         XIC1dBzv0nevD6JzzyWYT2851hFotUVOBux6vXjCbYbQJSahy1JbXabtkdgBtSsCh6Fo
+         Bb0UhnDDo+eWaX2JSHTasWuOXUoi1hCqrY0RwGSSXeei/k4K/G2D9oD+9cq137lBJLRJ
+         fb4V1Gu1Feo71Dp9TWdyJp17IN7narVmMUue0egWVI5LLbodwS54OXbOhaVYhVjUiH3M
+         U0+uCRRHbGTD401FG/EzImVH9ET5cUaPq9uFLPCNaY/K8QmyAPTQFwggat21Bzn0q2/a
+         Ijtg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXTzvz15FqCcMpDnFVPbKlfv9xBs3oFY0KFa2XMM9W7KSiGrwjc8YnZjD87g9PohKqgpbPyBkjVyfcI0TVVPAS/HJ4E7QnPCpo
+X-Gm-Message-State: AOJu0YxVbXHjo6qfbmOLJ4HvbEfLfcs/+uOjjPJe6vKWYC7HBBISCg6S
+	7LeUqy+nVRGMrZJiRPGvsHOGyvkUDzzs4G9aAFi1e7c9aWrIchhdpPt93mu/i7E=
+X-Google-Smtp-Source: AGHT+IFsHz1EpicfNBa8SK5EZAZ1T5+dy4IspYfwOFlNMLVrJU9DmGujRx+HhvdOUVgWsVRH7gZz6w==
+X-Received: by 2002:a05:600c:6a14:b0:41b:f577:373 with SMTP id 5b1f17b1804b1-41feaa38e45mr94830085e9.15.1715603843566;
+        Mon, 13 May 2024 05:37:23 -0700 (PDT)
 Received: from localhost ([2a01:e0a:3c5:5fb1:5b77:3e5a:a808:339a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42013c5fa61sm49472435e9.40.2024.05.13.05.04.30
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42015deac1asm37075625e9.17.2024.05.13.05.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 May 2024 05:04:31 -0700 (PDT)
+        Mon, 13 May 2024 05:37:23 -0700 (PDT)
 References: <20240510090933.19464-1-ddrokosov@salutedevices.com>
- <20240510090933.19464-5-ddrokosov@salutedevices.com>
- <20240511-courier-afflicted-e351af5cded2@spud>
+ <20240510090933.19464-3-ddrokosov@salutedevices.com>
+ <20240511-secret-barcode-e25c722ddf1d@spud>
 User-agent: mu4e 1.10.8; emacs 29.2
 From: Jerome Brunet <jbrunet@baylibre.com>
 To: Conor Dooley <conor@kernel.org>
@@ -80,11 +80,11 @@ Cc: Dmitry Rokosov <ddrokosov@salutedevices.com>, neil.armstrong@linaro.org,
  linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 4/7] dt-bindings: clock: meson: a1: peripherals:
- support sys_pll_div16 input
-Date: Mon, 13 May 2024 14:02:21 +0200
-In-reply-to: <20240511-courier-afflicted-e351af5cded2@spud>
-Message-ID: <1jo799zzn5.fsf@starbuckisacylon.baylibre.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: meson: a1: pll: introduce
+ new syspll bindings
+Date: Mon, 13 May 2024 14:04:41 +0200
+In-reply-to: <20240511-secret-barcode-e25c722ddf1d@spud>
+Message-ID: <1jjzjxzy4d.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -94,62 +94,100 @@ MIME-Version: 1.0
 Content-Type: text/plain
 
 
-On Sat 11 May 2024 at 14:03, Conor Dooley <conor@kernel.org> wrote:
+On Sat 11 May 2024 at 14:08, Conor Dooley <conor@kernel.org> wrote:
 
 > [[PGP Signed Part:Undecided]]
-> On Fri, May 10, 2024 at 12:08:56PM +0300, Dmitry Rokosov wrote:
->> The 'sys_pll_div16' input clock is used as one of the sources for the
->> GEN clock.
+> On Fri, May 10, 2024 at 12:08:54PM +0300, Dmitry Rokosov wrote:
+>> The 'syspll' PLL is a general-purpose PLL designed specifically for the
+>> CPU clock. It is capable of producing output frequencies within the
+>> range of 768MHz to 1536MHz.
 >> 
->> Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
+>> The clock source sys_pll_div16, being one of the GEN clock parents,
+>> plays a crucial role and cannot be tagged as "optional". Unfortunately,
+>> it was not implemented earlier due to the cpu clock ctrl driver's
+>> pending status on the TODO list.
 >
-> Provided that this new clock is optional in the driver,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> It's fine to not mark it optional in the binding, but it should be
+> optional in the driver as otherwise backwards compatibility will be
+> broken. Given this is an integral clock driver, sounds like it would
+> quite likely break booting on these devices if the driver doesn't treat
+> syspll_in as optional.
+> A lesson perhaps in describing the hardware entirely, even if the
+> drivers don't make use of all the information yet?
 
-The way CCF works, it is not going to crash if DT does not have this.
-It will be viewed as non-connected input, in a way
+That is nice but it is only possible if/when we have perfect knowledge
+of the HW being implemented. I don't know about you, but I rarely get
+perfect documentation for HW, let alone a public one.
+
+Those things are bound to happen as we implement support for the HW and
+discover how it works, not to mention the mistakes humans will
+inevitably do. If Linux was only supporting perfectly documented HW, it
+would not be supporting much of them I suspect.
+
+Stable API is already hard with ioctl but there, both sides are
+perfectly known. That is a fundamental difference with the 'DT ABI'
+
+Getting it right on day 1, every time - because things are set in stone
+afterwards - is unrealistic. As a maintainer, I do spend a
+disproportionate amount of time checking the bindings submission because
+I know how painful it gets to fix things up down the line.
+
+Unless I missed the simple solution to this problem, we can expect the
+problem keep happening again and again, no matter the number of lessons
+learned.
 
 >
 > Cheers,
 > Conor.
 >
->> ---
->>  .../bindings/clock/amlogic,a1-peripherals-clkc.yaml        | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
 >> 
->> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-peripherals-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-peripherals-clkc.yaml
->> index 6d84cee1bd75..11862746ba44 100644
->> --- a/Documentation/devicetree/bindings/clock/amlogic,a1-peripherals-clkc.yaml
->> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-peripherals-clkc.yaml
->> @@ -30,6 +30,7 @@ properties:
->>        - description: input fixed pll div7
->>        - description: input hifi pll
->>        - description: input oscillator (usually at 24MHz)
->> +      - description: input sys pll div16
+>> Signed-off-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
+>> ---
+>>  .../devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml     | 7 +++++--
+>>  include/dt-bindings/clock/amlogic,a1-pll-clkc.h            | 2 ++
+>>  2 files changed, 7 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>> index a59b188a8bf5..fbba57031278 100644
+>> --- a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>> @@ -26,11 +26,13 @@ properties:
+>>      items:
+>>        - description: input fixpll_in
+>>        - description: input hifipll_in
+>> +      - description: input syspll_in
 >>  
 >>    clock-names:
 >>      items:
->> @@ -39,6 +40,7 @@ properties:
->>        - const: fclk_div7
->>        - const: hifi_pll
->>        - const: xtal
->> +      - const: sys_pll_div16
+>>        - const: fixpll_in
+>>        - const: hifipll_in
+>> +      - const: syspll_in
 >>  
 >>  required:
 >>    - compatible
->> @@ -65,9 +67,10 @@ examples:
->>                       <&clkc_pll CLKID_FCLK_DIV5>,
->>                       <&clkc_pll CLKID_FCLK_DIV7>,
->>                       <&clkc_pll CLKID_HIFI_PLL>,
->> -                     <&xtal>;
->> +                     <&xtal>,
->> +                     <&clkc_pll CLKID_SYS_PLL_DIV16>;
->>              clock-names = "fclk_div2", "fclk_div3",
->>                            "fclk_div5", "fclk_div7",
->> -                          "hifi_pll", "xtal";
->> +                          "hifi_pll", "xtal", "sys_pll_div16";
+>> @@ -53,7 +55,8 @@ examples:
+>>              reg = <0 0x7c80 0 0x18c>;
+>>              #clock-cells = <1>;
+>>              clocks = <&clkc_periphs CLKID_FIXPLL_IN>,
+>> -                     <&clkc_periphs CLKID_HIFIPLL_IN>;
+>> -            clock-names = "fixpll_in", "hifipll_in";
+>> +                     <&clkc_periphs CLKID_HIFIPLL_IN>,
+>> +                     <&clkc_periphs CLKID_SYSPLL_IN>;
+>> +            clock-names = "fixpll_in", "hifipll_in", "syspll_in";
 >>          };
 >>      };
+>> diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+>> index 2b660c0f2c9f..a702d610589c 100644
+>> --- a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+>> +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+>> @@ -21,5 +21,7 @@
+>>  #define CLKID_FCLK_DIV5		8
+>>  #define CLKID_FCLK_DIV7		9
+>>  #define CLKID_HIFI_PLL		10
+>> +#define CLKID_SYS_PLL		11
+>> +#define CLKID_SYS_PLL_DIV16	12
+>>  
+>>  #endif /* __A1_PLL_CLKC_H */
 >> -- 
 >> 2.43.0
 >> 
