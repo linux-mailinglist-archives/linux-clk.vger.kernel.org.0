@@ -1,104 +1,173 @@
-Return-Path: <linux-clk+bounces-7005-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7008-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB4868C4A3E
-	for <lists+linux-clk@lfdr.de>; Tue, 14 May 2024 01:52:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C17028C4AD0
+	for <lists+linux-clk@lfdr.de>; Tue, 14 May 2024 03:15:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECFB51C2106D
-	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2024 23:52:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B149285AC2
+	for <lists+linux-clk@lfdr.de>; Tue, 14 May 2024 01:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CBAB85945;
-	Mon, 13 May 2024 23:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7779AED8;
+	Tue, 14 May 2024 01:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="VUDwdl/9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B8A8b7xH"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.208])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE5184DE3;
-	Mon, 13 May 2024 23:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3133FA93A
+	for <linux-clk@vger.kernel.org>; Tue, 14 May 2024 01:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715644368; cv=none; b=IqeiWFPzVHTYKIQXxt7tJadobZYHfTsGlfDp9ELd5xOVBq8yOr6bZhKwo1v9AOIujimkDl/BeNMmrMOH9o6hqiM4zOAJzjT7WHXpD0lKtN07/bU8KVCxMVTDx1P+af3JC5q52OcNiN9leP0JM/tGEfhpvu3FIrzbB/vZpJ+Dbx8=
+	t=1715649313; cv=none; b=IGb4RY6n5X5mSzJQ5zLk/vZI0hXG1iRfMfITrN+JKDrh5AVuvW8o49HBkW4qem57c3/b/pStwC7hjTbFN1mgtjoEGmurlN+RVzzPNOrk+AdS5L3QmamU7c8XwMDPRukGZAbcsG5co86xhweE1YNPwe2bAiLKLa2Ntkiz8XTMQd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715644368; c=relaxed/simple;
-	bh=CgglF9AYIa374nzIGZ8DrZU9JTTF3trFBwVc5yQ5UBM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Q7UxJNWBTJrQo4hFqB/Y43gelNCmZwcJw1vPb0CAZ9XeWeuC/qNki4g8kr6Mi630CWfEkmKtLEkaKJ1y/9g6uKMmwgM5rqpGH05vjyh+BVlqy65b0piHjc487gMmGQ66d7EXuUh7wVqMBWnlcfterxXwdI45xyvicRPd76ZUNmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=VUDwdl/9; arc=none smtp.client-ip=192.19.144.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 58F82C0000EC;
-	Mon, 13 May 2024 16:52:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 58F82C0000EC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1715644360;
-	bh=CgglF9AYIa374nzIGZ8DrZU9JTTF3trFBwVc5yQ5UBM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VUDwdl/90EA7fYv3NbI8V6ds10mvzUdOK6boeHWdKoCdvxYGhp9TOOON0kJyaLTef
-	 XzDkCEEPjW91dqa+7kD8H0ibulJTsxYcgOQmWwOtV52KqQ2kHg0XS2mdZ2GoAP54A0
-	 kD1vVKAyuxAyhHpo5vGDQgzC0cl+FnGJHnbMiHWQ=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 5696A18041CAC4;
-	Mon, 13 May 2024 16:52:38 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list),
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 3/3] clk: bcm: Make CLK_RASPBERRYPI default to RASPBERRYPI_FIRMWARE
-Date: Mon, 13 May 2024 16:52:34 -0700
-Message-Id: <20240513235234.1474619-4-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240513235234.1474619-1-florian.fainelli@broadcom.com>
-References: <20240513235234.1474619-1-florian.fainelli@broadcom.com>
+	s=arc-20240116; t=1715649313; c=relaxed/simple;
+	bh=X9rJ4eIhwGwFYhM+y7NgLIstnavfTfEL8P5zFiG8V4g=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=egS7a6GhcngVE3oSDdh1ZTmYy83XTX1V3eVG5DaajoIEmj3nqWzZrqwOGObg7/QSbV7WG3oVHXCppwCfINXX1EhZ8MpY9529yKdCVtM9+zWNMA9z+2rjCThj97O8AjW690jMSn+uzy4sCLdSjCX+3WhBDiNqGLNi2AN6fpACnC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B8A8b7xH; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1715649310;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=VaTSK7maH96cyUOzuTwcGlk4eMVZqUirsxqVchpZK9M=;
+	b=B8A8b7xHq1y9+SRWldz3hVnsvZgzISFeh+tJus4b6saQb4LiW334+05oGZVxVPVkfyj2Nm
+	lf3h5tFRSicbP0tiFm5KkWki3MBH9IJExKLSfk7zc/XwU5HlhRUzkKENV2GgpLyt2HCoy8
+	dC0x7uTSCgcTFYpQIO1aDWWHgq89pb8=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-695-iiUdy8-8PHWWazPjfTfyUQ-1; Mon, 13 May 2024 21:09:07 -0400
+X-MC-Unique: iiUdy8-8PHWWazPjfTfyUQ-1
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-61be4601434so101242167b3.3
+        for <linux-clk@vger.kernel.org>; Mon, 13 May 2024 18:09:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715648946; x=1716253746;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VaTSK7maH96cyUOzuTwcGlk4eMVZqUirsxqVchpZK9M=;
+        b=iSBvf4/cX/xMoF+utjVVeqvdX9Yer1ZTSSqaREufI/fc9uXn3i33KlWb3F4AIDjL4U
+         Fn06tAk1IbBkluvfEr2HLZGvK50mr1twfafuRaE9o3INbDdf21ya404Dm3r+mmh+KsuW
+         sjDwKEXNr+3CvA5Uz/l7bzu/eC+isrbGtONLESt1bDaALo/lsmZw7ZDy2E/xY7JSGo9Z
+         9T1ada2+HsflnfqkBE2ljLsAYZf4YZbh3t7TwUodZW4BXL6cLqdQPKdupBMeCrmcpFQ/
+         z2w3CLiilq2RG8445iuOuTRGJTSfW7dafrlt2M+36Y8a88o0YZFsSiXaD0OyJt7rre4/
+         bxIw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3x8PLADDQ+Zhj5oznTIzlfOe+5OUb6ALQ6hIDrVXp2SQtgGjnB+h5hwR9PSFimjxW50wZQeBrEdoxol/wYDN40rbizpyWKpnO
+X-Gm-Message-State: AOJu0YzJIQlSENj+/e0rBQSnhufPtJjaeU5ftbKAthCYV4bkxAP/YMtX
+	+nG8qPfIsAsJfjmdk5X7D+OgSWaXeXwf6Rf6GLtQDqY3Bvlu3YAHoLciZ+12dgb7Qf52Ba4P9I8
+	MdJP/KpnpuzEGa84SQ2opcul7V4lEc4UIPbEnIXuHgR3Dqi9ir5NyJHa5xMs3z/h6+/VvJVa0sY
+	H+q+icv2VarsMS91QQDTNelHjM3vvBINkI
+X-Received: by 2002:a0d:d451:0:b0:620:5182:4790 with SMTP id 00721157ae682-622b014c2a8mr107151327b3.42.1715648946327;
+        Mon, 13 May 2024 18:09:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHIbySwX9BuiEfufQfGqT/Lujt0vSbeE8LkDxNI7EvRLBfkQBIJ3POQ/KzPw64K1QwAyWSEDsc6jUWCFosi75E=
+X-Received: by 2002:a0d:d451:0:b0:620:5182:4790 with SMTP id
+ 00721157ae682-622b014c2a8mr107151237b3.42.1715648946005; Mon, 13 May 2024
+ 18:09:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Nico Pache <npache@redhat.com>
+Date: Mon, 13 May 2024 19:08:40 -0600
+Message-ID: <CAA1CXcBhABB60JG-sT1qRysD1AP+bN=wo=5vwbeTv13Gj72EzA@mail.gmail.com>
+Subject: [Bug Report] Multiple S390x KUNIT clk failures
+To: KUnit Development <kunit-dev@googlegroups.com>, linux-clk@vger.kernel.org, sboyd@kernel.org
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Audra Mitchell <aubaker@redhat.com>, 
+	Donald Zickus <dzickus@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The clock driver is essential in providing clocks for UARTs and other
-peripherals, make it enabled by default.
+Hi,
 
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
- drivers/clk/bcm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+We are seeing a number of the CLK kunit tests failing on S390x. This
+has been occurring for some time now (as early as v6.1). We run these
+tests as modules (without the UML wrappers), and have not seen these
+failures on any other architectures.
 
-diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
-index a972d763eb77..90e7bab851ae 100644
---- a/drivers/clk/bcm/Kconfig
-+++ b/drivers/clk/bcm/Kconfig
-@@ -106,6 +106,7 @@ config CLK_BCM_SR
- config CLK_RASPBERRYPI
- 	tristate "Raspberry Pi firmware based clock support"
- 	depends on RASPBERRYPI_FIRMWARE || (COMPILE_TEST && !RASPBERRYPI_FIRMWARE)
-+	default RASPBERRYPI_FIRMWARE
- 	help
- 	  Enable common clock framework support for Raspberry Pi's firmware
- 	  dependent clocks
--- 
-2.34.1
+The failing tests are:
+
+clk-gate-hiword-test
+------------------------------
+    # clk_gate_test_hiword_enable: EXPECTATION FAILED at
+drivers/clk/clk-gate_test.c:322
+    Expected enable_val == (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))), but
+        enable_val == 33554944 (0x2000200)
+        (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))) == 0 (0x0)
+    not ok 1 clk_gate_test_hiword_enable
+    # clk_gate_test_hiword_disable: ASSERTION FAILED at
+drivers/clk/clk-gate_test.c:339
+    Expected enable_val == (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))), but
+        enable_val == 33554944 (0x2000200)
+        (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))) == 0 (0x0)
+    not ok 2 clk_gate_test_hiword_disable
+
+
+clk-gate-invert-test
+------------------------------
+# clk_gate_test_invert_enable: EXPECTATION FAILED at
+drivers/clk/clk-gate_test.c:249
+    Expected enable_val == (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))), but
+        enable_val == 0 (0x0)
+        (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))) == 32768 (0x8000)
+    # clk_gate_test_invert_enable: EXPECTATION FAILED at
+drivers/clk/clk-gate_test.c:250
+    Expected clk_hw_is_enabled(hw) to be true, but is false
+    not ok 1 clk_gate_test_invert_enable
+    # clk_gate_test_invert_disable: ASSERTION FAILED at
+drivers/clk/clk-gate_test.c:266
+    Expected enable_val == (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))), but
+        enable_val == 0 (0x0)
+        (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))) == 32768 (0x8000)
+    not ok 2 clk_gate_test_invert_disable
+
+
+clk-gate-is_enabled-test
+------------------------------
+    ok 1 clk_gate_test_is_enabled
+    # clk_gate_test_is_disabled: ASSERTION FAILED at
+drivers/clk/clk-gate_test.c:409
+    Expected clk_hw_is_enabled(hw) to be false, but is true
+    not ok 2 clk_gate_test_is_disabled
+    # clk_gate_test_is_enabled_inverted: ASSERTION FAILED at
+drivers/clk/clk-gate_test.c:423
+    Expected hw is not error, but is: -17
+    not ok 3 clk_gate_test_is_enabled_inverted
+    # clk_gate_test_is_disabled_inverted: ASSERTION FAILED at
+drivers/clk/clk-gate_test.c:438
+    Expected hw is not error, but is: -17
+    not ok 4 clk_gate_test_is_disabled_inverted
+
+
+clk-gate-test
+------------------------------
+    ok 1 clk_gate_test_parent_rate
+    # clk_gate_test_enable: EXPECTATION FAILED at
+drivers/clk/clk-gate_test.c:169
+    Expected enable_val == (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))), but
+        enable_val == 32 (0x20)
+        (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))) == 0 (0x0)
+    not ok 2 clk_gate_test_enable
+    # clk_gate_test_disable: ASSERTION FAILED at drivers/clk/clk-gate_test.c:186
+    Expected enable_val == (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))), but
+        enable_val == 32 (0x20)
+        (__u32)__builtin_bswap32((__u32)((
+__u32)(__le32)(ctx->fake_reg))) == 0 (0x0)
+    not ok 3 clk_gate_test_disable
 
 
