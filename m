@@ -1,119 +1,226 @@
-Return-Path: <linux-clk+bounces-7112-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7114-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 090B88C795D
-	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 17:26:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAB8D8C79F1
+	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 18:00:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B8E91C20A88
-	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 15:26:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DB08280EE1
+	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 16:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBD614D705;
-	Thu, 16 May 2024 15:26:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D6E14D457;
+	Thu, 16 May 2024 16:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="niiKBIZn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/fbyDWI"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367D914D2A3;
-	Thu, 16 May 2024 15:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE94114D431;
+	Thu, 16 May 2024 16:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715873177; cv=none; b=pDL1MlDUliS/CBd+PI1KE+4HKQytJhGuC2nT7B1QchU+esRfhA9MioloCMPPm20TmKlhnfjJRtuKQ77CKgMt2FD0qnpkQRHb6KXt9E+Ris1rTp0X2Laox5s5VJgfNRyadt+qCOp1rrc4pwNOIfCMhya2Gk1TgqmiQdkvHeGjnJw=
+	t=1715875200; cv=none; b=ZbZJicmGIDU6H24Akrwd5dmp+kniyHQA4dIOXqH/P3bzNLxHwwRSfP9cQ3e13wF+sQ4ZQ+9YFSfOCisjeHQhcSjLiNDXxusz6AM3dCR8TG2EUsr/iLXzLZyX2xVL56J+aPh15uFayAh9IhaYa3wRFcrXrfqHJDDKrwIkkrIGInI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715873177; c=relaxed/simple;
-	bh=aXqDgEPjwHMD2PFCnGHgOg/xjWQI0U5DZ7CMG6pHtco=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T6lGv7+sxBGKIQ8ZauG3QIOmByixWEEzx2xBjjU8hALRw6CwGo8SiLzQ3Q6c7NEAOsmk5JnDV6PCeJ7B0813O6+B7LDl59Z3oKErSsR2CSsYhznNpOhFvQno0zpRS1J09ukOYAHahpHrBwIPT/aKy9mOzyvopicMIkAhULhLUhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=niiKBIZn; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44GD5XZh009990;
-	Thu, 16 May 2024 17:26:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=VDo9KLS5VfcqruiE4K9r2uLa3efLXIlw/R2YAL6iasM=; b=ni
-	iKBIZnvTl78+xl/TTrU62H2Hbu6SmGhK+S23XJ8pme/OnpxxyMyZViRbbsEB/f9p
-	9puVOvrbZsbomwWe4jFCKQhC/1kMafDn+MuJ/TiOTbCWrjf1MX0m9t82OtX6iMdG
-	HMShfIB2jsiChlhrwE2kx++IvhsapM0iLx3CE/7vpmQEtbZVm5XsLv9KBirCxDmx
-	+L89AMvFQMtaNg0GZiFm9XBYWrF0LRwfdNUO11yZuIT68ZbMdEs3HQe2OdJlZt5n
-	zXXwQ7kVeA1RsRLQwCBp5mzgc4una03MdOlSe8HAirBpGiuUpJN+MtitzuoWPXwT
-	NIsqQPmvjKDUyYtsAlwQ==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y4sxv69p4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 May 2024 17:26:01 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 8F01540045;
-	Thu, 16 May 2024 17:25:57 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B6D34223653;
-	Thu, 16 May 2024 17:24:56 +0200 (CEST)
-Received: from localhost (10.48.87.209) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 16 May
- 2024 17:24:56 +0200
-From: <gabriel.fernandez@foss.st.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        Gabriel Fernandez
-	<gabriel.fernandez@foss.st.com>,
-        Dan Carpenter <dan.carpenter@linaro.or6g>
-CC: <devicetree@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 3/3] arm64: dts: st: enable STM32 access controller for RCC
-Date: Thu, 16 May 2024 17:24:27 +0200
-Message-ID: <20240516152427.692374-4-gabriel.fernandez@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240516152427.692374-1-gabriel.fernandez@foss.st.com>
-References: <20240516152427.692374-1-gabriel.fernandez@foss.st.com>
+	s=arc-20240116; t=1715875200; c=relaxed/simple;
+	bh=4/gi6rbxuk3sno82iZjHcKkwDvcnwcT2fdJHUnfyx4s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KZoamZnhQBa3UWLBvvVmf8JT02PVNYC35ajbKVXwkGqyD8o0oxEx1feXZRmO+ifJRLt2/E62wEM+jG88yE/btRjXxypwvZvnlztHDaroef07+c+80RjRWcK24Fs4l3TcAldRJWhGZSJ5vlvpSHtPHrgIFgbUSo5+P3u/eflEXSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/fbyDWI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A69C113CC;
+	Thu, 16 May 2024 15:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715875200;
+	bh=4/gi6rbxuk3sno82iZjHcKkwDvcnwcT2fdJHUnfyx4s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R/fbyDWIdw/BlYva1qA8M7jHYRc2BbLagdyT8ozD04xSBrvT+rIdFxIBzewHLZPdv
+	 quPuDIZsgxW99btEGdZSwOF8KbLJOmAj8LPZ6u+xgD9DFjlvXVKmuDgrrHq8/ymMjT
+	 cTdubTUXJWz39X5hBYl02/9L8X9pIb+qP8zGRqJccw8GE2vvuJbruEX/roO11P+sEQ
+	 NaxKEhI7MvSmge6pJNXskqLKZfDGqm6OsvGfoHAI+U7yXt2znBlFJqJx7Cu/Ta+lc4
+	 37jH+RcBgG81ULOdluy69/5J+FDB6VXqzcn3Gi2W6RJ+eiqSOAIuFKEO/x+mSm+G6o
+	 5OglkRznj34Tg==
+Date: Thu, 16 May 2024 17:59:56 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-clk@vger.kernel.org, p.zabel@pengutronix.de,
+	mturquette@baylibre.com, sboyd@kernel.org,
+	lorenzo.bianconi83@gmail.com, conor@kernel.org,
+	linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, nbd@nbd.name, john@phrozen.org,
+	dd@embedd.com, catalin.marinas@arm.com, will@kernel.org,
+	upstream@airoha.com
+Subject: Re: [PATCH 2/5] dt-bindings: reset: Add reset definitions for EN7581
+ SoC.
+Message-ID: <ZkYtfJJHIL1z2-vv@lore-desk>
+References: <cover.1715777643.git.lorenzo@kernel.org>
+ <acb6aa6fe473c485605c108e551d6d28ceb27a60.1715777643.git.lorenzo@kernel.org>
+ <b1e0db1a-2bcb-4d11-a386-e395c2946591@collabora.com>
+ <ZkXqoG6xIsrrLyh4@lore-desk>
+ <d6b7aa1e-ce0d-4ea3-9f2d-c256a296dd1f@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-16_07,2024-05-15_01,2023-05-22_02
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="UFOJValw8646IkIF"
+Content-Disposition: inline
+In-Reply-To: <d6b7aa1e-ce0d-4ea3-9f2d-c256a296dd1f@collabora.com>
 
-From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Use an STM32 access controller to filter the registration of clocks.
+--UFOJValw8646IkIF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
----
- arch/arm64/boot/dts/st/stm32mp251.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+> Il 16/05/24 13:14, Lorenzo Bianconi ha scritto:
+> > > Il 15/05/24 14:58, Lorenzo Bianconi ha scritto:
+> > > > Introduce reset binding definitions for reset controller available =
+in
+> > > > the Airoha EN7581 clock module.
+> > > >=20
+> > > > Tested-by: Zhengping Zhang <zhengping.zhang@airoha.com>
+> > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > > ---
+> > > >    .../dt-bindings/reset/airoha,en7581-reset.h   | 66 +++++++++++++=
+++++++
+> > > >    1 file changed, 66 insertions(+)
+> > > >    create mode 100644 include/dt-bindings/reset/airoha,en7581-reset=
+=2Eh
+> > > >=20
+> > > > diff --git a/include/dt-bindings/reset/airoha,en7581-reset.h b/incl=
+ude/dt-bindings/reset/airoha,en7581-reset.h
+> > > > new file mode 100644
+> > > > index 000000000000..1b7ee62ed164
+> > > > --- /dev/null
+> > > > +++ b/include/dt-bindings/reset/airoha,en7581-reset.h
+> > > > @@ -0,0 +1,66 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > +/*
+> > > > + * Copyright (c) 2024 AIROHA Inc
+> > > > + * Author: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > > + */
+> > > > +
+> > > > +#ifndef __DT_BINDINGS_RESET_CONTROLLER_AIROHA_EN7581_H_
+> > > > +#define __DT_BINDINGS_RESET_CONTROLLER_AIROHA_EN7581_H_
+> > > > +
+> > > > +/* RST_CTRL2 */
+> > > > +#define EN7581_XPON_PHY_RST		0
+> > >=20
+> > > ** sarcasm mode on **
+> > >=20
+> > > Count with me: 0... 1... 2...
+> >=20
+> > :)
+> >=20
+> > >=20
+> > > ** sarcasm mode off **
+> > >=20
+> > > There's a jump here, you have a reset index 0 and an index 2,
+> > > but you're missing index 1, that's not right :-)
+> > >=20
+> > > Please fix.
+> >=20
+> > it is because BIT(1) is marked as 'reserved' in the documentation so I =
+skipped it.
+> > Do you prefer to have it in that way?
+> >=20
+>=20
+> This is not my preference, it's rather a requirement for the bindings...
+>=20
+> That's why in the MediaTek reset controller part of the clk driver there =
+is
+> a way to map those numbers (which are always sequential) to actual reset =
+bits
+> in the controller...
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-index dcd0656d67a8..602d02efc202 100644
---- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
-+++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
-@@ -441,6 +441,7 @@ rcc: clock-controller@44200000 {
- 				<&scmi_clk CK_SCMI_TIMG2>,
- 				<&scmi_clk CK_SCMI_PLL3>,
- 				<&clk_dsi_txbyte>;
-+				access-controllers = <&rifsc 156>;
- 		};
- 
- 		exti1: interrupt-controller@44220000 {
--- 
-2.25.1
+ack, fine. I will look into it. Thx for the pointer.
 
+Regards,
+Lorenzo
+
+>=20
+> Cheers!
+>=20
+> > Regards,
+> > Lorenzo
+> >=20
+> > >=20
+> > > Cheers,
+> > > Angelo
+> > >=20
+> > > > +#define EN7581_CPU_TIMER2_RST		2
+> > > > +#define EN7581_HSUART_RST		3
+> > > > +#define EN7581_UART4_RST		4
+> > > > +#define EN7581_UART5_RST		5
+> > > > +#define EN7581_I2C2_RST			6
+> > > > +#define EN7581_XSI_MAC_RST		7
+> > > > +#define EN7581_XSI_PHY_RST		8
+> > > > +#define EN7581_NPU_RST			9
+> > > > +#define EN7581_I2S_RST			10
+> > > > +#define EN7581_TRNG_RST			11
+> > > > +#define EN7581_TRNG_MSTART_RST		12
+> > > > +#define EN7581_DUAL_HSI0_RST		13
+> > > > +#define EN7581_DUAL_HSI1_RST		14
+> > > > +#define EN7581_HSI_RST			15
+> > > > +#define EN7581_DUAL_HSI0_MAC_RST	16
+> > > > +#define EN7581_DUAL_HSI1_MAC_RST	17
+> > > > +#define EN7581_HSI_MAC_RST		18
+> > > > +#define EN7581_WDMA_RST			19
+> > > > +#define EN7581_WOE0_RST			20
+> > > > +#define EN7581_WOE1_RST			21
+> > > > +#define EN7581_HSDMA_RST		22
+> > > > +#define EN7581_TDMA_RST			24
+> > > > +#define EN7581_EMMC_RST			25
+> > > > +#define EN7581_SOE_RST			26
+> > > > +#define EN7581_PCIE2_RST		27
+> > > > +#define EN7581_XFP_MAC_RST		28
+> > > > +#define EN7581_USB_HOST_P1_RST		29
+> > > > +#define EN7581_USB_HOST_P1_U3_PHY_RST	30
+> > > > +/* RST_CTRL1 */
+> > > > +#define EN7581_PCM1_ZSI_ISI_RST		32
+> > > > +#define EN7581_FE_PDMA_RST		33
+> > > > +#define EN7581_FE_QDMA_RST		34
+> > > > +#define EN7581_PCM_SPIWP_RST		36
+> > > > +#define EN7581_CRYPTO_RST		38
+> > > > +#define EN7581_TIMER_RST		40
+> > > > +#define EN7581_PCM1_RST			43
+> > > > +#define EN7581_UART_RST			44
+> > > > +#define EN7581_GPIO_RST			45
+> > > > +#define EN7581_GDMA_RST			46
+> > > > +#define EN7581_I2C_MASTER_RST		48
+> > > > +#define EN7581_PCM2_ZSI_ISI_RST		49
+> > > > +#define EN7581_SFC_RST			50
+> > > > +#define EN7581_UART2_RST		51
+> > > > +#define EN7581_GDMP_RST			52
+> > > > +#define EN7581_FE_RST			53
+> > > > +#define EN7581_USB_HOST_P0_RST		54
+> > > > +#define EN7581_GSW_RST			55
+> > > > +#define EN7581_SFC2_PCM_RST		57
+> > > > +#define EN7581_PCIE0_RST		58
+> > > > +#define EN7581_PCIE1_RST		59
+> > > > +#define EN7581_CPU_TIMER_RST		60
+> > > > +#define EN7581_PCIE_HB_RST		61
+> > > > +#define EN7581_XPON_MAC_RST		63
+> > > > +
+> > > > +#endif /* __DT_BINDINGS_RESET_CONTROLLER_AIROHA_EN7581_H_ */
+> > >=20
+>=20
+
+--UFOJValw8646IkIF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZkYtfAAKCRA6cBh0uS2t
+rGFhAQDAYBya1TZrQ7qULTFv41plUuJk73mvvx61a908F//wDAD/UvJzzr1aPkzR
+5We0gdkRDcqRGucjOeWf3Yen0jl39Qs=
+=Nrb/
+-----END PGP SIGNATURE-----
+
+--UFOJValw8646IkIF--
 
