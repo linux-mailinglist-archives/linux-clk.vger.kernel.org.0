@@ -1,193 +1,132 @@
-Return-Path: <linux-clk+bounces-7099-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7102-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20CA68C7885
-	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 16:37:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E1FC8C78F9
+	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 17:09:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA3592848C9
-	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 14:37:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 614E21C20BC1
+	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2024 15:09:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F344514884E;
-	Thu, 16 May 2024 14:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3717A14D433;
+	Thu, 16 May 2024 15:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="TMtep9Ft"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="tLq3oeZx"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D1B1DFEF;
-	Thu, 16 May 2024 14:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB1F1459F3
+	for <linux-clk@vger.kernel.org>; Thu, 16 May 2024 15:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715870246; cv=none; b=cgGQfaYJtaTTgUgIbQh3reb1SkfuscaPie3bdfuf6LPEPGJMC/YYM3bYWmlFp4vFevdY5/4x3dua0TGFNHgb4jynBWnjA5jMqFSXIM6Z+L6AbHA8zfUHheii9H5XEDpJRcBM8+qVxGARmjxxui5TTaha2HclGXMoxdbe2wttpHo=
+	t=1715872133; cv=none; b=rvTSFfVk7KclZbQlJ1Np4fDaFQdwkeLJRCXcWaKclhLVrVCo4a3jI4uBBYT/wjYxjlaD/FFg6Y1z+detVHr8RNKI2XGZDN1T7BfHF8as02t2QGdwaICjmVaR+7mZH46AsYcfL51a+jiTVX8izkmMG+tnDisU9HY7C0jaWxaJens=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715870246; c=relaxed/simple;
-	bh=o1gMEjFi/WHr2qKAmFjmxfC7395/RL7/fXI1xGCNG40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=APd87ve+uvWbeqOyXxrdtmc7wjjh5EXnNk2vH7rfRqhO/41ZDT9hMoG4xPqGZ1I6rX26pg7sMWrG4/mexsAQmKeOQh8Vm1nP/aEaRvNhgD56Ccziy5zJ7Y4gMP73DV6/0yZCpw/Hsrw91nvtK7NI16J4O7LXBcbrL1c8f6ZynvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=TMtep9Ft; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44GDhYKP005402;
-	Thu, 16 May 2024 16:36:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=3ZOCADbz3OwcSrpGlTG7JoHBwcrSFGYRtD/O02Jz6P8=; b=TM
-	tep9Ft/091Dsf51h3LVxZejBEVKw8E43mdTVikDAwUvcwfA3C869shJ+MPBV36gh
-	bi+N2PWjTaJkMfPfCX3MiKzDca+F8z8/AzKXgf2SmB602osq3OL59phinPzZZcBb
-	tNV7LcgAHv8OZS1xV121KFrxr+ArV5nf6DHBK3J1sOn0bVU+kBaU/+8Bgq79gcLo
-	ESnJnh1l37xWfKU00ErNSC1+Ih8J+GhuFaZGX10U2DWI1stwjyNnViYsXv8XdsQI
-	u3cEBtCaxAkFA7czVIiPoPRMNXolYIuEF7ugpAjpp/tqZWNffHAk3zKE61kR1jZm
-	lVMAavVlaMBbbwDfFhLg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y4symdu0n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 May 2024 16:36:34 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 8DC5940044;
-	Thu, 16 May 2024 16:36:26 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 894BD220B76;
-	Thu, 16 May 2024 16:35:29 +0200 (CEST)
-Received: from [10.48.87.204] (10.48.87.204) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 16 May
- 2024 16:35:28 +0200
-Message-ID: <eb3a2581-efc6-40c3-a7ea-551865017d40@foss.st.com>
-Date: Thu, 16 May 2024 16:35:28 +0200
+	s=arc-20240116; t=1715872133; c=relaxed/simple;
+	bh=we6lbVPR1oC6Gjni/0inzK6tb5qWDsUccHkewq+P1B4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rA+L/gT7tR5LqeB4go2vrd3ipoG2W/nqrIrKXODxyaLV76Eu2O5pwmFYN18JABvInfO8bu6Emnd/Rsfc0d0EjQDXTg36xyC56Df8DgtLYthFOSy9UumGwv4HnvpP6lhgv/Ww0PnZle3cYmWa4qZ6UcJHpFX55vl1xof9FO/1+6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=tLq3oeZx; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2e43c481b53so10197701fa.2
+        for <linux-clk@vger.kernel.org>; Thu, 16 May 2024 08:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1715872128; x=1716476928; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7ioxEy7SZPKbhBowmAqXOs3HJ/6GyUDvxxnPo9F3uNU=;
+        b=tLq3oeZxCaCNzKGURu5K7x5Ai0VxzLyGpn5p2sR0zr8s7gc+2/sM0b5ogjvVDY3vNT
+         xp2y9NhdZRzGWHLuOpiVXM+7EypwGqEHMVjWlh3YzXjGap6Hq86fXuLPOEK/3eKYit+c
+         q+6y4N7gt05tnR8ZitYVsRIb5kgRV3PMtnC2/rhkOroR+AVjt3H9TGjawqCGtHSIuImH
+         lLvJZmU6ExW4vqpUD3ppeQmdj1kvnGkGQG+7sN7kJKS997QKTFBSRsxqWPtI9VCVxDrA
+         rL+qpEXx023uS8v6kT7kwc+kjOrGKgqZwktPQdnva2CG1v4HmTUvRP2GUGZDKqxsSSto
+         ZLsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715872128; x=1716476928;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7ioxEy7SZPKbhBowmAqXOs3HJ/6GyUDvxxnPo9F3uNU=;
+        b=ZIoOufggpjPFGdzXvsAl3FqPMSekY2Tyowx9Wz/+zHfbObb6plDv7JC95UiVCh66NC
+         ZC4ArJV6VFzbr7NpLyBdfQY574zKt7y1DFkoOyuOnPHgoRi70RA+W5Lh+9lU29BHOMlu
+         pBswS5Za8JLgOD6oBmLJi5cOTWoxxhIZVgFeKdRH4XR5DRGhbNatUY3yQHKXh8ia5HXh
+         00FFrSo6aR1TgLilxjTVVwdMNrQM8U4Fg54Nj3hVK3XKI22/Fw+r622Vz0Ou96flJw+Q
+         JCmqjhGRDuN4up02Htsy3RNkls8HiYFrlOIBCAgF9AwcMPsRqKxhCpSdl9IipBGfsr+A
+         AcpA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqWclIw5dFh93db7BkQigk2Ywok665MgLA0j9/fREaWKrpWKBqRmsV4DEXenAzy6NvkFpMCoVLHVK/IKBLhH9GP/3IV4ARz2wW
+X-Gm-Message-State: AOJu0YwrzmLAbQb1lPsKWZMifryTPmBD/0TdtAYyA6tOC+fcduAPUY8n
+	qK9BiZ618GJ96FTeOMFZ+lWFBdp95fssHExyhXbter/FW86esKXzp/tdloallRM=
+X-Google-Smtp-Source: AGHT+IGKctbnPBmcJ2QPLjHUp6edy8mIEVUT9pkFFtdxGM+N329/NRHhlQe7LdHxvECgOEtFtlKB4A==
+X-Received: by 2002:a2e:4a11:0:b0:2e5:8720:50d2 with SMTP id 38308e7fff4ca-2e5891d3b9dmr83515781fa.0.1715872127572;
+        Thu, 16 May 2024 08:08:47 -0700 (PDT)
+Received: from toaster.lan ([2a01:e0a:3c5:5fb1:1fce:7e5a:e201:edd5])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-41f87c25459sm309351725e9.18.2024.05.16.08.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 May 2024 08:08:47 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>,
+	Jan Dakinevich <jan.dakinevich@salutedevices.com>,
+	linux-kernel@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: [RFC PATCH 0/9] reset: amlogic: move reset drivers out of CCF
+Date: Thu, 16 May 2024 17:08:30 +0200
+Message-ID: <20240516150842.705844-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [RFC] clk: stm32mp1: Keep RNG1 clock always running
-To: Marek Vasut <marex@denx.de>, <linux-crypto@vger.kernel.org>
-CC: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Gabriel Fernandez
-	<gabriel.fernandez@foss.st.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Olivia Mackall <olivia@selenic.com>, Rob Herring
-	<robh@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Yang Yingliang
-	<yangyingliang@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20240513220349.183568-1-marex@denx.de>
- <b2d0dfcb-37d6-4375-a4ad-ca96a5339840@foss.st.com>
- <cc6f98eb-f6b2-4a34-a8ed-c0f759fa4c79@denx.de>
- <51951dd4-8e8c-4e67-89f6-6a710022e34f@foss.st.com>
- <3257e8f8-5bb0-4c75-a3a3-e5685b65de2a@denx.de>
- <5b39b5b6-7008-4362-a578-3faab87cd23b@foss.st.com>
- <2eb2b80e-8650-46cf-9d8f-6dd6a884558a@denx.de>
-Content-Language: en-US
-From: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-In-Reply-To: <2eb2b80e-8650-46cf-9d8f-6dd6a884558a@denx.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-16_07,2024-05-15_01,2023-05-22_02
 
+This RFC follows the discussion about having reset driver in the clock tree
+[1]. Ideally those should reside in the reset part of tree.
 
+Also the code of the amlogic reset driver is very similar between the 2 trees
+and could use the same driver code.
 
-On 5/16/24 12:43, Marek Vasut wrote:
-> On 5/16/24 9:42 AM, Gatien CHEVALLIER wrote:
-> 
-> Hi,
-> 
->>>>>> What if you add a trace in a random generation function in random.c?
->>>>>
->>>>> Do you have a function name or line number for me ?
->>>>
->>>> I put a trace in _get_random_bytes() in drivers/char/random.c. I'm not
->>>> 100% sure but this should be the entry point when getting a random 
->>>> number.
->>>
->>> You're right, there is a read attempt right before the hang, and 
->>> __clk_is_enabled() returns 0 in stm32_read_rng() . In fact, it is the 
->>> pm_runtime_get_sync() which is returning -EACCES instead of zero, and 
->>> this is currently not checked so the failure is not detected before 
->>> register access takes place, to register file with clock disabled, 
->>> which triggers a hard hang.
->>>
->>> I'll be sending a patch shortly, thanks for this hint !
->>>
->>
->> Great news, indeed the return code isn't checked. Let's use
->> pm_runtime_resume_and_get().
-> 
-> Yes please.
-> 
-> I will wonder why we get EACCES though, that basically means we are 
-> suspending already. Is it safe to return -errno from rng read function 
-> in that case ?
+This RFC moves the reset driver of audio clock controller of the g12 and
+sm1 SoC family to the reset tree, using the auxiliary bus.
 
-The framework expects a function that can return an error code so I
-don't see why not. Else the framework would have an issue.
+The infrastructure put in place is meant to be generic enough so we may
+eventually also move the reset drivers in the meson8b and aoclk clock
+controllers.
 
-I still haven't figured out what is happening.
+[1] https://lore.kernel.org/linux-clk/e3a85852b911fdf16dd9ae158f42b3ef.sboyd@kernel.org
 
-Could it be that the kernel is getting entropy with hwrng_fillfn()
-like it does periodically to feed the entropy pool and it happens at the
-same time as your pm test sequence?
+Jerome Brunet (9):
+  reset: amlogic: convert driver to regmap
+  reset: amlogic: add driver parameters
+  reset: amlogic: split the device and platform probe
+  reset: amlogic: use reset number instead of register count
+  reset: amlogic: add reset status support
+  reset: amlogic: add toggle reset support
+  reset: amlogic: add auxiliary reset driver support
+  clk: meson: add auxiliary reset helper driver
+  clk: amlogic: axg-audio: use the auxiliary reset driver
 
-FYI, I have been running your script with (echo devices > 
-/sys/power/pm_test) for 5 hours now and haven't been able to reproduce 
-the issue.
+ drivers/clk/meson/Kconfig                     |   6 +
+ drivers/clk/meson/Makefile                    |   1 +
+ drivers/clk/meson/axg-audio.c                 | 108 +--------
+ drivers/clk/meson/meson-clk-rst-aux.c         |  84 +++++++
+ drivers/clk/meson/meson-clk-rst-aux.h         |  14 ++
+ drivers/reset/Kconfig                         |   1 +
+ drivers/reset/reset-meson.c                   | 210 ++++++++++++++----
+ include/soc/amlogic/meson8b-auxiliary-reset.h |  17 ++
+ 8 files changed, 293 insertions(+), 148 deletions(-)
+ create mode 100644 drivers/clk/meson/meson-clk-rst-aux.c
+ create mode 100644 drivers/clk/meson/meson-clk-rst-aux.h
+ create mode 100644 include/soc/amlogic/meson8b-auxiliary-reset.h
 
-> 
->>>>>> After this, I'll try to reproduce the issue.
->>>>>
->>>>> If you have a minute to test it on some ST MP15 board, that would 
->>>>> be real nice. Thanks !
->>>>
->>>> I tried to reproduce the issue you're facing on a STM32MP157C-DK2 no
->>>> SCMI on the 6.9-rc7 kernel tag. I uses OP-TEE and TF-A in the bootchain
->>>> but this should not have an impact here.
->>>>
->>>> How did you manage to test using "echo core > /sys/power/pm_test"?
->>>> In kernel/power/suspend.c, enter_state(). If the pm_test_level is core,
->>>> then an error is fired with the following trace:
->>>> "Unsupported test mode for suspend to idle, please choose 
->>>> none/freezer/devices/platform."
->>>
->>> Could this be firmware related ?
->>>
->>>> I've tried using "echo devices > /sys/power/pm_test" so that I can 
->>>> at least test that the driver is put to sleep then wakes up. I do not
->>>> reproduce your issue.
->>>
->>> Can you try 'processors' ?
->>>
->>
->> Given this:
->> #ifdef CONFIG_PM_DEBUG
->>          if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
->>              pr_warn("Unsupported test mode for suspend to idle
-> 
-> You're supposed to be suspending to 'mem' , not 'idle' . Could that be it ?
-
-Yes you're right, I've been missing that. I do not have "deep" available
-in /sys/power/mem_sleep... not upstreamed yet maybe... Have you coded a
-PSCI service for this in U-Boot?
-
-I'm either missing something or I can't reproduce your setup.
-
-Thanks,
-Gatien
+-- 
+2.43.0
 
 
