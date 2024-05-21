@@ -1,137 +1,261 @@
-Return-Path: <linux-clk+bounces-7216-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7218-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 968728CAC8B
-	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2024 12:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EBEEE8CAF91
+	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2024 15:43:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51DB9282447
-	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2024 10:49:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 748CA283E9B
+	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2024 13:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D7257441A;
-	Tue, 21 May 2024 10:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkCGxQgO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04917EEED;
+	Tue, 21 May 2024 13:43:08 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4682471B3D;
-	Tue, 21 May 2024 10:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 490677F46B;
+	Tue, 21 May 2024 13:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.2.72.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716288570; cv=none; b=na+uFEtBXvCGz3qLzHQFwkAdXLG2/i7Lrus5DITJQ2vCtKuxMYsfCz1V6hQSbgsxR1JWVw/nqI2RN1B+mTWQfrgP+Q5y8jXv7OVW91ndsx+Tk7CDzAOpm4D+QQG6nKoefWofRLvCGGzyH49Rn2v6NYPe3nTzPsUjSYPFSF9YcQU=
+	t=1716298988; cv=none; b=tVMXjhKjIzIzarKsRVNaIW4luU/qaEKOaGgEuRSbVMg5t20akBTvibiMrmLIGg/FTV74WmjHap99eyvoZAdslP3D1FoPZpbmzWu/SwGc/jHkYxA8eNBfgK94qlxLqfPqtUOSYQ98S7JYJ8MeNbRxDFW9XFzgATFty3XQmzjLaks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716288570; c=relaxed/simple;
-	bh=6KPrfDvxePiYqQ+U86QGOtRIQhJqkZNmdPViVsnR34A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J+qe6KnFRARArbjdPJq6cwsPu4NKgl3CAjQWdcMIFU9CGY+8XHaqZNO8pgt/gXlkYq15nQeZhwpCe/TSsA8GurPiUHaNTpUI9y6sxvgnTjj6ku3g5QW6l+I0yHS6qBjeYoJf3HPXRT1cOOS4NkPiZaG7UBt06s6JdqiUOhI4J8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkCGxQgO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9034EC32789;
-	Tue, 21 May 2024 10:49:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716288570;
-	bh=6KPrfDvxePiYqQ+U86QGOtRIQhJqkZNmdPViVsnR34A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QkCGxQgOHgBFCqFIlV4VgKAH9/B6+1F+Do1GmLFKqPl1Igib7uV61Ae3Xkqy7JuLn
-	 3cbFhuqfwf58ScdoX0J9/J8vTCOeD5Kip4AIehMr9L2lnevQxOZmoxk2fSjrTxU0Sa
-	 tZI+VSdqYEFh9l2Sj7pD5AjLcDfoMHzG+2qKUMaW/PT39BqCr39gGKwjCcqVt49d8n
-	 SC/7q0VHuRPRf3/c19Sbj1hHOrIZcEscJEN5EHv30PXm/YrePix9wM+ykthsAxBJcx
-	 RF/IsckJu+5LM+j2eELP6rptO7nE223xSnwXI0IxvSPS7oVyMucBQHmH7pks1gSWcC
-	 tCtE0o/rXxVtA==
-Date: Tue, 21 May 2024 11:49:21 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc: Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Emil Abildgaard Svendsen <EMAS@bang-olufsen.dk>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-	"linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 07/13] ASoC: codecs: add AD24xx codec driver
-Message-ID: <e2ab39b8-55a3-4afe-9832-b1a780b93831@sirena.org.uk>
-References: <20240517-a2b-v1-0-b8647554c67b@bang-olufsen.dk>
- <20240517-a2b-v1-7-b8647554c67b@bang-olufsen.dk>
- <e5782aef-d64d-46f3-ab5c-dc01285e08c2@sirena.org.uk>
- <edv5aqfnb5gdxfmrh5nywnzg3tzfdq27kfvpkhg2t2q2jwf7ej@vjqgiw3ssv3b>
+	s=arc-20240116; t=1716298988; c=relaxed/simple;
+	bh=zjB8v+NoVOfwtkTTGvRVzO2+JLMrRbv6D0wkhQKyrv0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=TR2wMQ+K8g/IQNOkiSYHHM4Kb2qIOhWAXVi4eBowQVgsBTzHF4sjUUhGb0fMeV6fknrwmxVOzILQb3KoZ62svVFjWTPuF1PFHkYvIRvsk9EWXemaTgTFALAvyfosDgDTvPEsfCXNavTrZUIJDAm1JQOK06OWWWI/9YrbIhTgAYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com; spf=pass smtp.mailfrom=mansr.com; arc=none smtp.client-ip=81.2.72.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mansr.com
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+	by unicorn.mansr.com (Postfix) with ESMTPS id 5E1C915362;
+	Tue, 21 May 2024 14:35:47 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+	id 4E7CB219E4D; Tue, 21 May 2024 14:35:47 +0100 (BST)
+From: =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To: Frank Oltmanns <frank@oltmanns.dev>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
+ <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Guido
+ =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>, Purism Kernel Team
+ <kernel@puri.sm>, Ondrej
+ Jirman <megi@xff.cz>, Neil Armstrong <neil.armstrong@linaro.org>, Jessica
+ Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David
+ Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] clk: sunxi-ng: common: Support minimum and
+ maximum rate
+In-Reply-To: <20240310-pinephone-pll-fixes-v4-1-46fc80c83637@oltmanns.dev>
+	(Frank Oltmanns's message of "Sun, 10 Mar 2024 14:21:11 +0100")
+References: <20240310-pinephone-pll-fixes-v4-0-46fc80c83637@oltmanns.dev>
+	<20240310-pinephone-pll-fixes-v4-1-46fc80c83637@oltmanns.dev>
+Date: Tue, 21 May 2024 14:35:47 +0100
+Message-ID: <yw1xo78z8ez0.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.3 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IfNqVr8A6eo57Tqb"
-Content-Disposition: inline
-In-Reply-To: <edv5aqfnb5gdxfmrh5nywnzg3tzfdq27kfvpkhg2t2q2jwf7ej@vjqgiw3ssv3b>
-X-Cookie: Eloquence is logic on fire.
-
-
---IfNqVr8A6eo57Tqb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 21, 2024 at 06:46:21AM +0000, Alvin =C5=A0ipraga wrote:
-> On Fri, May 17, 2024 at 04:03:50PM GMT, Mark Brown wrote:
-> > On Fri, May 17, 2024 at 02:58:05PM +0200, Alvin =C5=A0ipraga wrote:
+Frank Oltmanns <frank@oltmanns.dev> writes:
 
-> > > +static const char *const ad24xx_codec_slot_size_text[] =3D {
-> > > +	"8 bits",  "12 bits", "16 bits", "20 bits",
-> > > +	"24 bits", "28 bits", "32 bits",
-> > > +};
-> >=20
-> > Why is this configured by the user rather than via set_tdm_slot(), and
-> > how would one usefully use this at runtime?
->=20
-> This configures the slot size of A2B data slots, not the slot size on
-> the TDM interface. Typically one would expect it to be the same, so your
-> question is valid. But it is not a strict requirement as far as the A2B
-> bus and hardware is concerned.
->=20
-> To give a concrete example, the TDM interface might run with a TDM slot
-> size of 32 bits, but the PCM data is in reality 24 bits padded to 32
-> bits. In this case, A2B bus bandwidth can be saved by configuring the
-> "{Up,Down}stream Slot Size" kcontrol to "24 bits".
->=20
-> More detailed information can be found in the manual in [1] section 3-22
-> "I2S/TDM Port Programming Concepts", where an analogous example is
-> given.
+> The Allwinner SoC's typically have an upper and lower limit for their
+> clocks' rates. Up until now, support for that has been implemented
+> separately for each clock type.
+>
+> Implement that functionality in the sunxi-ng's common part making use of
+> the CCF rate liming capabilities, so that it is available for all clock
+> types.
+>
+> Suggested-by: Maxime Ripard <mripard@kernel.org>
+> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/clk/sunxi-ng/ccu_common.c | 19 +++++++++++++++++++
+>  drivers/clk/sunxi-ng/ccu_common.h |  3 +++
+>  2 files changed, 22 insertions(+)
 
-That still doesn't sound like something that should be configured
-dynamically by the user.  Based on that description it sounds like it's
-just the sample size so should cope from hw_params.
+This just landed in 6.6 stable, and it broke HDMI output on an A20 based
+device, the clocks ending up all wrong as seen in this diff of
+/sys/kernel/debug/clk/clk_summary:
 
---IfNqVr8A6eo57Tqb
-Content-Type: application/pgp-signature; name="signature.asc"
+@@ -70,16 +71,14 @@
+           apb1-i2c0                  0       0        0        24000000   =
+ 0=20=20=20
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+        pll-gpu                       0       0        0        1200000000 =
+ 0=20=20=20
+-       pll-video1                    3       3        1        159000000  =
+ 0=20=20=20
++       pll-video1                    2       2        1        159000000  =
+ 0=20=20=20
+           hdmi                       1       1        0        39750000   =
+ 0=20=20=20
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+           tcon0-ch1-sclk2            1       1        1        39750000   =
+ 0=20=20=20
+              tcon0-ch1-sclk1         1       1        1        39750000   =
+ 0=20=20=20
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+-          pll-video1-2x              1       1        0        318000000  =
+ 0=20=20=20
++          pll-video1-2x              0       0        0        318000000  =
+ 0=20=20=20
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+-             hdmi-tmds               2       2        0        39750000   =
+ 0=20=20=20
+-                hdmi-ddc             1       1        0        1987500    =
+ 0=20=20=20
+        pll-periph-base               2       2        0        1200000000 =
+ 0=20=20=20
+           mbus                       1       1        0        300000000  =
+ 0=20=20=20
+           pll-periph-sata            0       0        0        100000000  =
+ 0=20=20=20
+@@ -199,7 +198,7 @@
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+           ace                        0       0        0        384000000  =
+ 0=20=20=20
+           ve                         0       0        0        384000000  =
+ 0=20=20=20
+-       pll-video0                    4       4        2        297000000  =
+ 0=20=20=20
++       pll-video0                    5       5        2        297000000  =
+ 0=20=20=20
+           hdmi1                      0       0        0        297000000  =
+ 0=20=20=20
+           tcon1-ch1-sclk2            0       0        0        297000000  =
+ 0=20=20=20
+              tcon1-ch1-sclk1         0       0        0        297000000  =
+ 0=20=20=20
+@@ -222,8 +221,10 @@
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+           de-be0                     1       1        1        297000000  =
+ 0=20=20=20
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+-          pll-video0-2x              0       0        0        594000000  =
+ 0=20=20=20
++          pll-video0-2x              1       1        0        594000000  =
+ 0=20=20=20
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
++             hdmi-tmds               2       2        0        594000000  =
+ 0=20=20=20
++                hdmi-ddc             1       1        0        29700000   =
+ 0=20=20=20
+        pll-audio-base                0       0        0        1500000    =
+ 0=20=20=20
+           pll-audio-8x               0       0        0        3000000    =
+ 0=20=20=20
+              i2s2                    0       0        0        3000000    =
+ 0=20=20=20
 
------BEGIN PGP SIGNATURE-----
+Reverting this commit makes it work again.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmZMfDAACgkQJNaLcl1U
-h9ACLgf9F/4Hlcaz6ms2pQ1jUz65htj1EgnNuZtgs/G5QOQR/dSlJToXp1Fsk0+B
-LX+uL2Bi+Va82Rv/PoN/GXymodv97hPrbFvwmyNHUaDncUXdlZSBVzo0h/3uk9Hf
-P2yvFxZLGkFVMrCxAaA+/C75nwRoftdmd/DbxGCtmcfy9VCO95LVf9jP6pHmAWk6
-JGJ+VUBmwqZZ3NDyFqRvujjpE1uFgWrvgracm1PAujirj0hcYbhXwVpOTxh8HWBL
-1WhXTof/JrHLwVWAWFEE2nuh2ZziHMiq1sWYA6tCxhdtQZSc4z2EJnI+qXJfrd2b
-ZHe0aWB3mYxQ+jN2cq3QGaG2KR7PUA==
-=Woy1
------END PGP SIGNATURE-----
+> diff --git a/drivers/clk/sunxi-ng/ccu_common.c b/drivers/clk/sunxi-ng/ccu=
+_common.c
+> index 8babce55302f..ac0091b4ce24 100644
+> --- a/drivers/clk/sunxi-ng/ccu_common.c
+> +++ b/drivers/clk/sunxi-ng/ccu_common.c
+> @@ -44,6 +44,16 @@ bool ccu_is_better_rate(struct ccu_common *common,
+>  			unsigned long current_rate,
+>  			unsigned long best_rate)
+>  {
+> +	unsigned long min_rate, max_rate;
+> +
+> +	clk_hw_get_rate_range(&common->hw, &min_rate, &max_rate);
+> +
+> +	if (current_rate > max_rate)
+> +		return false;
+> +
+> +	if (current_rate < min_rate)
+> +		return false;
+> +
+>  	if (common->features & CCU_FEATURE_CLOSEST_RATE)
+>  		return abs(current_rate - target_rate) < abs(best_rate - target_rate);
+>
+> @@ -122,6 +132,7 @@ static int sunxi_ccu_probe(struct sunxi_ccu *ccu, str=
+uct device *dev,
+>
+>  	for (i =3D 0; i < desc->hw_clks->num ; i++) {
+>  		struct clk_hw *hw =3D desc->hw_clks->hws[i];
+> +		struct ccu_common *common =3D hw_to_ccu_common(hw);
+>  		const char *name;
+>
+>  		if (!hw)
+> @@ -136,6 +147,14 @@ static int sunxi_ccu_probe(struct sunxi_ccu *ccu, st=
+ruct device *dev,
+>  			pr_err("Couldn't register clock %d - %s\n", i, name);
+>  			goto err_clk_unreg;
+>  		}
+> +
+> +		if (common->max_rate)
+> +			clk_hw_set_rate_range(hw, common->min_rate,
+> +					      common->max_rate);
+> +		else
+> +			WARN(common->min_rate,
+> +			     "No max_rate, ignoring min_rate of clock %d - %s\n",
+> +			     i, name);
+>  	}
+>
+>  	ret =3D of_clk_add_hw_provider(node, of_clk_hw_onecell_get,
+> diff --git a/drivers/clk/sunxi-ng/ccu_common.h b/drivers/clk/sunxi-ng/ccu=
+_common.h
+> index 942a72c09437..329734f8cf42 100644
+> --- a/drivers/clk/sunxi-ng/ccu_common.h
+> +++ b/drivers/clk/sunxi-ng/ccu_common.h
+> @@ -31,6 +31,9 @@ struct ccu_common {
+>  	u16		lock_reg;
+>  	u32		prediv;
+>
+> +	unsigned long	min_rate;
+> +	unsigned long	max_rate;
+> +
+>  	unsigned long	features;
+>  	spinlock_t	*lock;
+>  	struct clk_hw	hw;
+>
+> --=20
+>
+> 2.44.0
+>
 
---IfNqVr8A6eo57Tqb--
+--=20
+M=E5ns Rullg=E5rd
 
