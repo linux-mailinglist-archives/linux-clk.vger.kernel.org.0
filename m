@@ -1,98 +1,139 @@
-Return-Path: <linux-clk+bounces-7415-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7425-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF358D331E
-	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 11:35:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38E078D34C6
+	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 12:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C6391F25D2A
-	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 09:35:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E93B52878E4
+	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 10:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752B616A361;
-	Wed, 29 May 2024 09:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDDB217BB0D;
+	Wed, 29 May 2024 10:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="np0pjepo"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34AA175B1
-	for <linux-clk@vger.kernel.org>; Wed, 29 May 2024 09:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A720117B4FD;
+	Wed, 29 May 2024 10:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716975318; cv=none; b=m49JOgAPRPpAREQjUHo5lX+O4g/gBU/yyjZtcUHUxqMVdREnomoeOTBkDjtD8P1ejxQKVVdZxEPEmy/bZEKqHJf4BsUnZ57hT3enx7fNQtMftD/n6GATY/kHmdJJiHulwqBPFpiWQYe81Qdk9XvwraTyLetJAnD25FTf6I/+i+c=
+	t=1716979475; cv=none; b=dg/etXkMioJ1G2wvihSQX2DiDk2nSqPrJxJI+VoSZvg8/KvkFig50ODURGgXrzmLvjp/U3ZsmS8Jx7IOd9ZgXZkyQm8rnfSUKomdGi43FAg/PK7+yv8Ae1aoT/UnKaC++sLW1diSQDiPpkDJ7k7X0UaAVC3cPT1IbIPF+41qsE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716975318; c=relaxed/simple;
-	bh=WFB0bI6r5CiypcJTxpq9dWxlGs/z1OBp3DMqkSgieUE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=eLHOpy7qBVarXx5NlTiq1QqQLvIv90SX6euRgbXVX+43+dx3jbGTquYYmSr39N/dKxh/nyeCulMPsPX2dG6YzMiPeU2fCksJ5aAF1tV2b3u9XJkYcj70Sn6HGeuEae85Ow742TlSlEUKNXYA0syxNs2BJZssId6B1BXGoaXw5o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1b01:1838:131c:4de4])
-	by andre.telenet-ops.be with bizsmtp
-	id UxbE2C00Y3VPV9V01xbEvx; Wed, 29 May 2024 11:35:15 +0200
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1sCFhI-00GI2U-8c;
-	Wed, 29 May 2024 11:35:14 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1sCFiE-008wVy-Hk;
-	Wed, 29 May 2024 11:35:14 +0200
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Ye Bin <yebin10@huawei.com>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 3/3] clk: renesas: rcar-gen2: Use DEFINE_SPINLOCK() for static spinlock
-Date: Wed, 29 May 2024 11:35:10 +0200
-Message-Id: <8da2c908f00043f05f7e26e3c26400aea0cfe8bc.1716975021.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1716975021.git.geert+renesas@glider.be>
-References: <cover.1716975021.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1716979475; c=relaxed/simple;
+	bh=w2NUtcqQzhKZrCNj5AHZJLY6Ii4aW3hyDn3AwcSEkNk=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=QpXft65zK9FVAyRXvZsnMSi0BgygIxz2T1KGpbEnAd7qaW0No0ykDDeOA6ic6PCRRXCimwQmY+Ro3vXTke6X5QFNTCiY80edWdYu1NnTbajBynSm64hLeQiwUhyounAfSZCfF9n2Sl86vjjwViN8R9ygvoBEnM7em7wsN3lysnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=np0pjepo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07607C32781;
+	Wed, 29 May 2024 10:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716979475;
+	bh=w2NUtcqQzhKZrCNj5AHZJLY6Ii4aW3hyDn3AwcSEkNk=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=np0pjepoSGg+tfmnkzQQQpy493Qf1VV2AL6xy/dHgphxXVYYYXe0eAHbGZmRs0wN+
+	 R1pG03TKfT13mCgnEfGR0W9D+abVpRhZNwJ/ebD3x6wMuoW4xNDqXVVVOgv04v4Ly8
+	 g6Gm7sxj+ao6znk0JoniHcRG9K6XWfNe8N6ri85nFajDUxVb1Y30g9c6M6tJlCPm5n
+	 bvLn2Dol8agheHA5c/GhNvm+F7X73Rwh5BXpHONBEWMzM4HZ2Qm8xa0Iz9AfAlOady
+	 y/vvIn/OGYic0xYR3CpV/3e0ZCgkKK+oxOoqxGtjD4Q7WsKdTrBkuEhg2TZHzLiR/z
+	 OAqoUUfGI46gA==
+Date: Wed, 29 May 2024 05:44:34 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ Anup Patel <apatel@ventanamicro.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, Guo Ren <guoren@kernel.org>, 
+ Kefeng Wang <wangkefeng.wang@huawei.com>, 
+ Maxime Ripard <mripard@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Max Filippov <jcmvbkbc@gmail.com>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Daniel Vetter <daniel@ffwll.ch>, linux-renesas-soc@vger.kernel.org, 
+ Herve Codina <herve.codina@bootlin.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Rich Felker <dalias@libc.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+ linux-clk@vger.kernel.org, Jacky Huang <ychuang3@nuvoton.com>, 
+ devicetree@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Masahiro Yamada <masahiroy@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ Hugo Villeneuve <hvilleneuve@dimonoff.com>, Sam Ravnborg <sam@ravnborg.org>, 
+ linux-fbdev@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ Stephen Boyd <sboyd@kernel.org>, Azeem Shaikh <azeemshaikh38@gmail.com>, 
+ Jiri Slaby <jirislaby@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Arnd Bergmann <arnd@arndb.de>, 
+ Javier Martinez Canillas <javierm@redhat.com>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Heiko Stuebner <heiko.stuebner@cherry.de>, linux-serial@vger.kernel.org, 
+ Guenter Roeck <linux@roeck-us.net>, linux-ide@vger.kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, linux-sh@vger.kernel.org, 
+ Stephen Rothwell <sfr@canb.auug.org.au>, linux-kernel@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, 
+ Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
+ Chris Morgan <macromorgan@hotmail.com>, linux-pci@vger.kernel.org, 
+ David Airlie <airlied@gmail.com>, Damien Le Moal <dlemoal@kernel.org>, 
+ Niklas Cassel <cassel@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
+ Baoquan He <bhe@redhat.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Helge Deller <deller@gmx.de>
+In-Reply-To: <2fb214e148e74fb0acc202543dca8dd8a170a6e6.1716965617.git.ysato@users.sourceforge.jp>
+References: <cover.1716965617.git.ysato@users.sourceforge.jp>
+ <2fb214e148e74fb0acc202543dca8dd8a170a6e6.1716965617.git.ysato@users.sourceforge.jp>
+Message-Id: <171697947326.1106773.218175911484134371.robh@kernel.org>
+Subject: Re: [DO NOT MERGE v8 22/36] dt-bindings: display: smi,sm501: SMI
+ SM501 binding json-schema
 
-A static spinlock can be initialized automatically with
-DEFINE_SPINLOCK() rather than explicitly calling spin_lock_init().
 
-Suggested-by: Ye Bin <yebin10@huawei.com>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/clk/renesas/rcar-gen2-cpg.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Wed, 29 May 2024 17:01:08 +0900, Yoshinori Sato wrote:
+> Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
+> ---
+>  .../bindings/display/smi,sm501.yaml           | 443 ++++++++++++++++++
+>  1 file changed, 443 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/smi,sm501.yaml
+> 
 
-diff --git a/drivers/clk/renesas/rcar-gen2-cpg.c b/drivers/clk/renesas/rcar-gen2-cpg.c
-index edae874fa2b63369..4c3764972bad905f 100644
---- a/drivers/clk/renesas/rcar-gen2-cpg.c
-+++ b/drivers/clk/renesas/rcar-gen2-cpg.c
-@@ -30,7 +30,7 @@
- #define CPG_ADSPCKCR		0x025c
- #define CPG_RCANCKCR		0x0270
- 
--static spinlock_t cpg_lock;
-+static DEFINE_SPINLOCK(cpg_lock);
- 
- /*
-  * Z Clock
-@@ -387,7 +387,5 @@ int __init rcar_gen2_cpg_init(const struct rcar_gen2_cpg_pll_config *config,
- 		cpg_quirks = (uintptr_t)attr->data;
- 	pr_debug("%s: mode = 0x%x quirks = 0x%x\n", __func__, mode, cpg_quirks);
- 
--	spin_lock_init(&cpg_lock);
--
- 	return 0;
- }
--- 
-2.34.1
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/smi,sm501.yaml: crt: Missing additionalProperties/unevaluatedProperties constraint
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/smi,sm501.yaml: panel: Missing additionalProperties/unevaluatedProperties constraint
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/2fb214e148e74fb0acc202543dca8dd8a170a6e6.1716965617.git.ysato@users.sourceforge.jp
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
