@@ -1,107 +1,56 @@
-Return-Path: <linux-clk+bounces-7409-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7416-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A5EC8D305B
-	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 10:11:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE0F8D331F
+	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 11:35:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F9381F2B272
-	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 08:11:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5B34287622
+	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2024 09:35:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE2919DF5E;
-	Wed, 29 May 2024 08:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8992B16A362;
+	Wed, 29 May 2024 09:35:18 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sakura.ysato.name (ik1-413-38519.vs.sakura.ne.jp [153.127.30.23])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AC49199EA5;
-	Wed, 29 May 2024 08:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=153.127.30.23
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EFFC167DAB
+	for <linux-clk@vger.kernel.org>; Wed, 29 May 2024 09:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716969756; cv=none; b=SiUMZmgVgDLrMA7NKmoCecQBX1q8q/qdFZcazP+QLj5y2FMQkZVlvuc9NfPrjuSS+VI5E5rf5kzDcm+/b1ULTqb5gLOEcO4YarcfCynKSb7ru2SDEprPqYXVu9wQyajo4Pwai+aB+mAhPy2DOukHYDZdFRo4FxKdSdMXYXtapXA=
+	t=1716975318; cv=none; b=Nu5/0dy3KO6GFPea88yZHbBcPc6RSAmlbOAgiEsxqT7L7Gd2dGNxebK/G1HKUGJA0zPBAvDidDoT/oICYd/mgGNQA+tRTW/DK9FEbB8yAFDCOQo/nN23R8b72dXKVwdGXw7SL9uZ+Bhybg/w7kdFvC2a91mVUwKMaSlhH63qw0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716969756; c=relaxed/simple;
-	bh=HfCnaCGFqb9NsLZ2tSL9t0qOwxfZXHeNec47VwxbtkU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S6YFfhlc90SFWo0YEcmHD45AKZy+T+cai6K+WFMTtPF6dwHRhsizpU0mact6LjDPg3g8iVcH0j+h6DOeT8XDgddOA4OHmCCRkhn6yDmeL5OFs2JuzoFMupmtgeb8E+/k1La7ejXej5dEy3uJtRJIXMA8y3S0S6b8QQ9MAKaLUfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=users.sourceforge.jp; spf=fail smtp.mailfrom=users.sourceforge.jp; arc=none smtp.client-ip=153.127.30.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=users.sourceforge.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=users.sourceforge.jp
-Received: from SIOS1075.ysato.name (al128006.dynamic.ppp.asahi-net.or.jp [111.234.128.6])
-	by sakura.ysato.name (Postfix) with ESMTPSA id 278291C1083;
-	Wed, 29 May 2024 17:02:33 +0900 (JST)
-From: Yoshinori Sato <ysato@users.sourceforge.jp>
-To: linux-sh@vger.kernel.org
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Lee Jones <lee@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Heiko Stuebner <heiko.stuebner@cherry.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Baoquan He <bhe@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Kefeng Wang <wangkefeng.wang@huawei.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Azeem Shaikh <azeemshaikh38@gmail.com>,
-	Guo Ren <guoren@kernel.org>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Sam Ravnborg <sam@ravnborg.org>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-	linux-ide@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1716975318; c=relaxed/simple;
+	bh=+nWyWXcxlPbba8Z80O0ITtYS6jrHn9b2UjqM7MZQtCE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gLx2WkJrmZ7AD25lsS0RBnrzOFsY4rjfidGgFiuyMnRwqKMfss9QgXUokErG6qPZzg5PB4huNgmCeaO9R9B2XrZ7NrJRoX0YQ7SRRvADK4506vpu9IOG9Rn/zWvYsbbktlUTkP34KKJgX1p3glmqsis0/35ZghsE5cSJ8hKwxZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:1b01:1838:131c:4de4])
+	by baptiste.telenet-ops.be with bizsmtp
+	id UxbE2C00X3VPV9V01xbEnH; Wed, 29 May 2024 11:35:15 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sCFhI-00GI2V-8c;
+	Wed, 29 May 2024 11:35:14 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sCFiE-008wVn-Ew;
+	Wed, 29 May 2024 11:35:14 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Ye Bin <yebin10@huawei.com>,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-pci@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-fbdev@vger.kernel.org
-Subject: [DO NOT MERGE v8 36/36] sh: j2_defconfig: update
-Date: Wed, 29 May 2024 17:01:22 +0900
-Message-Id: <60abd745155c465b775c3c876c0b71f0756d25a6.1716965617.git.ysato@users.sourceforge.jp>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1716965617.git.ysato@users.sourceforge.jp>
-References: <cover.1716965617.git.ysato@users.sourceforge.jp>
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/3] clk: renesas: Lock initialization cleanups
+Date: Wed, 29 May 2024 11:35:07 +0200
+Message-Id: <cover.1716975021.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -110,62 +59,39 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I've changed some symbols related to DeviceTree,
-so let's take care of those changes.
+	Hi all,
 
-Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
----
- arch/sh/configs/j2_defconfig | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+This patch series contains a few spin lock initialization cleanups for
+R-Car Gen2+ clock drivers. It has been tested on a variety of R-Car Gen2+
+systems.
 
-diff --git a/arch/sh/configs/j2_defconfig b/arch/sh/configs/j2_defconfig
-index 2eb81ebe3888..cdc8ed244618 100644
---- a/arch/sh/configs/j2_defconfig
-+++ b/arch/sh/configs/j2_defconfig
-@@ -1,18 +1,15 @@
--CONFIG_SMP=y
- CONFIG_SYSVIPC=y
- CONFIG_POSIX_MQUEUE=y
- CONFIG_NO_HZ=y
- CONFIG_HIGH_RES_TIMERS=y
- CONFIG_CPU_SUBTYPE_J2=y
- CONFIG_MEMORY_START=0x10000000
--CONFIG_MEMORY_SIZE=0x04000000
- CONFIG_CPU_BIG_ENDIAN=y
--CONFIG_SH_DEVICE_TREE=y
--CONFIG_SH_JCORE_SOC=y
-+CONFIG_SH_OF_BOARD=y
- CONFIG_HZ_100=y
-+CONFIG_SMP=y
- CONFIG_CMDLINE_OVERWRITE=y
- CONFIG_CMDLINE="console=ttyUL0 earlycon"
--CONFIG_BINFMT_ELF_FDPIC=y
- CONFIG_BINFMT_FLAT=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -21,7 +18,6 @@ CONFIG_INET=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_NETDEVICES=y
--CONFIG_SERIAL_EARLYCON=y
- CONFIG_SERIAL_UARTLITE=y
- CONFIG_SERIAL_UARTLITE_CONSOLE=y
- CONFIG_I2C=y
-@@ -30,8 +26,6 @@ CONFIG_SPI_JCORE=y
- CONFIG_WATCHDOG=y
- CONFIG_MMC=y
- CONFIG_MMC_SPI=y
--CONFIG_CLKSRC_JCORE_PIT=y
--CONFIG_JCORE_AIC=y
- CONFIG_EXT4_FS=y
- CONFIG_VFAT_FS=y
- CONFIG_FAT_DEFAULT_IOCHARSET="ascii"
-@@ -40,3 +34,4 @@ CONFIG_NLS_DEFAULT="utf8"
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ASCII=y
- CONFIG_NLS_UTF8=y
-+CONFIG_INIT_STACK_NONE=y
+I plan to queued these in renesas-clk for v6.11.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (3):
+  clk: renesas: r8a77970: Use common cpg_lock
+  clk: renesas: cpg-lib: Use DEFINE_SPINLOCK() for global spinlock
+  clk: renesas: rcar-gen2: Use DEFINE_SPINLOCK() for static spinlock
+
+ drivers/clk/renesas/r8a77970-cpg-mssr.c | 5 +----
+ drivers/clk/renesas/rcar-cpg-lib.c      | 2 +-
+ drivers/clk/renesas/rcar-gen2-cpg.c     | 4 +---
+ drivers/clk/renesas/rcar-gen3-cpg.c     | 2 --
+ drivers/clk/renesas/rcar-gen4-cpg.c     | 2 --
+ 5 files changed, 3 insertions(+), 12 deletions(-)
+
 -- 
-2.39.2
+2.34.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
