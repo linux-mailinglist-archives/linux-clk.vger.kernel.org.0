@@ -1,87 +1,100 @@
-Return-Path: <linux-clk+bounces-7545-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7543-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A68168D5F7D
-	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 12:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 381038D5F6E
+	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 12:18:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 594611F2453D
-	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 10:20:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18261F212C4
+	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 10:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6042D155741;
-	Fri, 31 May 2024 10:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F15914C581;
+	Fri, 31 May 2024 10:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bnKYacDX"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="W3yzAljQ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="K0hPWcwb";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="W3yzAljQ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="K0hPWcwb"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46601514F5
-	for <linux-clk@vger.kernel.org>; Fri, 31 May 2024 10:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1288D187554
+	for <linux-clk@vger.kernel.org>; Fri, 31 May 2024 10:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717150820; cv=none; b=sTXmUdYyvBszWnFDa4R/deO3XRedk/OUotZEdw2s8yPKC1X7H/IOvAWFbowxjRVns67CZGHIgxj8OsYrq4ygFrjl7YtGjexKGXCUDgdQwfLxcmBZeExjZ97dz0DMbb4VRToc7FaCXOIsy3tXDwx3dgXFaf9gTcUi4V2KFqKR6As=
+	t=1717150721; cv=none; b=Ez+X6GaZqsnzq8NMX79mk6MxAytSV+pzI4NOvXwsrrAaPGajZxYfD5sBNe/X2oojjNVmsNJHKhooJmob6bVvZx3JZmyJ7VKosWHMLL+v4Css0gvv/pLRgfn6QE7iTZJqbe5bejQJ16AApsV89J7CuGQJHqpccSf81PRZss/+uho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717150820; c=relaxed/simple;
-	bh=oDkCy8oJ2WMeKcy9+Uh0V14y9VWvcEu1F1wyVC5z6LU=;
+	s=arc-20240116; t=1717150721; c=relaxed/simple;
+	bh=nyZFgA47KM+lME/vUptDh6UGwp+ujF5W2QyA1Q1Gd3E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gF1Z60EWAKMI6b6wFlZs2+vHsMbSWH/vDaUQANUIERtUNxq4VxCkxf5RbiEF2CTgEgLJxC1KlJfLvVR9Czd5MxZDV7tP2uiB3LifUSAi0DR7TfqCF1h8nYWvdEUyfY6juwsIYNCsalwXD4CYc1URCkdzdPmhJD5iL0Q0V08tM50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bnKYacDX; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2e724bc46c4so19051471fa.2
-        for <linux-clk@vger.kernel.org>; Fri, 31 May 2024 03:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1717150817; x=1717755617; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJg6C0WVWn0Vp3XGiynuZUYf7BAqZo56bxrIXpikvkk=;
-        b=bnKYacDXhez1MqTGVeWrOL+5JJaLnb9p3zFOqceh0WtJCB67KE92/KGi0vdy89MUVK
-         ZmzcEDKnRN14ckXyJyTzPYQgyX2XFe3+LHsohJq/buvNOHPy/nE2XNtX/Z1JUEGvYIGS
-         7oh6/5mOYKagnty2M4xgdc52j5kiBrOtH3Yq6JGMVrZ975IQNMZn+068G30/TaW6QxQB
-         nZ0YNQg8x+TqoGDO147NneP/+3mS6WvNVddL8ioH9Ieh0flKvavUXII+yNHub0q6CKUd
-         30jYWl8pJ/cVPBCqLflWK61ySmiwe1n/4/WyLUlwaFv5eTnfpIfWhrCZ9NSmd/xVbpIG
-         jzzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717150817; x=1717755617;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZJg6C0WVWn0Vp3XGiynuZUYf7BAqZo56bxrIXpikvkk=;
-        b=L6TutJ+Yzw+QBnLVk1JU4ln9xQ9hoMONxADjAtPFLo2lPpwBxaP/AP4wMyaM+3+51h
-         6yanv83/HYZoIKvIlX0PRa7VzA3cB408PbLnz5jcOgO+XuLlZN/2D36tqcG22Xi/QiMM
-         Ujsy9SfwDaul5IuEcpbefyURjFkzf/LjKTsu/5xKVqjZh8j+EXi9/ozOM+ITA1ryw+Io
-         845zK91L7FKNIyPB8jeoyOOuRHDnZYMss+eqNGynKVn0PxCdZjWLQZAPppTv8SIaihq/
-         B1Lxyle/MLksr1vS/zgX9r9Vojc9tHoKrW6nU1Hmkxkq0LrR93N8NxerUnBIxgdDxeB1
-         cGqg==
-X-Forwarded-Encrypted: i=1; AJvYcCXLgu1I48/NBVBxrewc8jzhUIPegskQ7wBQUCmaUVH9XNl86DqXQxTCneugOVZMM0zQoLyu0IACNeLcOIpU1jF8yzPIkEIHnthM
-X-Gm-Message-State: AOJu0YwL8CKd/77CbMBxsIFVi49rxH5DZD1IBOEQC+md7NX7xd+z7imL
-	aECxs1OE7W9Fu9PZVhJZpLfy7Tadb71znFhzkLQxd0h8AYzCjIIRbJKa2dTFEr8=
-X-Google-Smtp-Source: AGHT+IH3eDhHYffts7P6CotucZIC/1NV5s1KOoULl1yKA9WH7Y4N37DO0QUnBGhOLPU2OlwFm5r/iw==
-X-Received: by 2002:a05:651c:2112:b0:2e9:8374:3820 with SMTP id 38308e7fff4ca-2ea951dfc12mr12587551fa.40.1717150817101;
-        Fri, 31 May 2024 03:20:17 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyyykxt-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::227])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ea91b9d744sm2653711fa.28.2024.05.31.03.20.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 May 2024 03:20:16 -0700 (PDT)
-Date: Fri, 31 May 2024 13:20:15 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Taniya Das <quic_tdas@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] clk: qcom: sc7280: Update the transition delay
- for GDSC
-Message-ID: <3dasezpuum7jnafhciv6atfi6n2tqra3lo3q425s7f36wuoc7i@pguvou37vhpl>
-References: <20240318053555.20405-1-quic_tdas@quicinc.com>
- <20240318053555.20405-5-quic_tdas@quicinc.com>
- <3293d565-ceb6-44f1-8a47-d18e9d0083a5@linaro.org>
- <a671ba20-f000-425f-914f-54a9d65d79c7@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ohBiOlBhoyGrafe+plfnczgqVwkhja0r5WqFmOSqRltMrOH4v7fh8YVvf2QN8GFskhqRyf+uVDRukuc2V5x2oO9Xs1SZk5QKVYwJMbP4VrFAklwZGEPfPhSM+J+LCdp1Uu51Ls9UZRhdds9gV8FXo7UOppumcqkr/kibF3Q0mJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=W3yzAljQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=K0hPWcwb; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=W3yzAljQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=K0hPWcwb; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3BB9621B48;
+	Fri, 31 May 2024 10:18:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717150715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
+	b=W3yzAljQanxV4QstYbb3JnPvXJwcxco1XGZui9EGjedMu1dP2OmaUl/N1HvjFCDoGX3HLa
+	OxtDPJ+qsZFJhbfN/x9siW4p2ChvQkAc+pfJLFP/DiZCiPfcRhp/ZJ+tk4SfDicuN2s+kv
+	Wwq1c6crx1EeSn9vihhmpkXV/n6w6C0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717150715;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
+	b=K0hPWcwbdZkENCe9RfUSzz6hTp+1rHv/VBbTVKgQloROx7wZcFvYA/AHsL2aAHvHGlsJxq
+	XDpfu4nhVfP30cCQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717150715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
+	b=W3yzAljQanxV4QstYbb3JnPvXJwcxco1XGZui9EGjedMu1dP2OmaUl/N1HvjFCDoGX3HLa
+	OxtDPJ+qsZFJhbfN/x9siW4p2ChvQkAc+pfJLFP/DiZCiPfcRhp/ZJ+tk4SfDicuN2s+kv
+	Wwq1c6crx1EeSn9vihhmpkXV/n6w6C0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717150715;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
+	b=K0hPWcwbdZkENCe9RfUSzz6hTp+1rHv/VBbTVKgQloROx7wZcFvYA/AHsL2aAHvHGlsJxq
+	XDpfu4nhVfP30cCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1DF6D137C3;
+	Fri, 31 May 2024 10:18:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id clMcBfujWWZVKwAAD6G6ig
+	(envelope-from <iivanov@suse.de>); Fri, 31 May 2024 10:18:35 +0000
+Date: Fri, 31 May 2024 13:20:51 +0300
+From: "Ivan T. Ivanov" <iivanov@suse.de>
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: sboyd@kernel.org, florian.fainelli@broadcom.com,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Maxime Ripard <maxime@cerno.tech>,
+	Andrea della Porta <andrea.porta@suse.com>
+Subject: Re: [PATCH] clk: bcm: rpi: Add disp clock
+Message-ID: <20240531101813.fronn47dx3ksacq6@localhost.localdomain>
+References: <20240531092730.253484-1-iivanov@suse.de>
+ <4c56e57c-7a4e-4976-a05e-0adf3df13b3f@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -90,41 +103,56 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a671ba20-f000-425f-914f-54a9d65d79c7@quicinc.com>
+In-Reply-To: <4c56e57c-7a4e-4976-a05e-0adf3df13b3f@gmx.net>
+X-Spam-Flag: NO
+X-Spam-Score: -4.04
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.04 / 50.00];
+	BAYES_HAM(-2.74)[98.86%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	FREEMAIL_TO(0.00)[gmx.net];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmx.net];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 
-On Fri, May 31, 2024 at 03:00:40PM +0530, Taniya Das wrote:
-> 
-> 
-> On 3/18/2024 1:23 PM, Krzysztof Kozlowski wrote:
-> > On 18/03/2024 06:35, Taniya Das wrote:
-> > > Update the GDSC default values of GDSC transition delay to avoid the
-> > > issues in the GDSC FSM state.
-> > 
-> > What issues?
-> > 
-> > > 
-> 
-> The GDSC FSM will be stuck and the GDSC will not be able to power on/off.
-> 
-> I will update the patch commit text as well.
-> 
-> > 
-> > Why none of your so called "fixes" are marked as Cc-stable? If they are
-> > real fixes, they should be.
-> > 
-> > > Fixes: fae7617bb142 ("clk: qcom: Add video clock controller driver for SC7280")
-> > > Fixes: 1daec8cfebc2 ("clk: qcom: camcc: Add camera clock controller driver for SC7280")
-> > > Fixes: a3cc092196ef ("clk: qcom: Add Global Clock controller (GCC) driver for SC7280")
-> > > Fixes: 3e0f01d6c7e7 ("clk: qcom: Add graphics clock controller driver for SC7280")
-> > 
-> > No, don't combine separate fixes into one commit.
-> > 
-> 
-> I will remove the fixes tag in the next patch.
+Hi,
 
-The intent was to _split_ the commit into 4 parts.
+On 05-31 11:55, Stefan Wahren wrote:
+> 
+> Hi Ivan,
+> 
+> Am 31.05.24 um 11:27 schrieb Ivan T. Ivanov:
+> > From: Maxime Ripard <maxime@cerno.tech>
+> > 
+> > BCM2712 has an extra clock exposed by the firmware called DISP, and used
+> > by (at least) the HVS. Let's add it to the list of clocks to register in
+> > Linux.
+> > 
+> > Without this new definition driver fails at probe on BCM2712.
+> could you please explain the relation to Andrea's series [1]?
+> 
+> How can this occur, because there is no Raspberry Pi 5 support in Mainline?
 
--- 
-With best wishes
-Dmitry
+I am using few out-of-tree drivers on top of the Andrea's patch-set
+and noticed the failure, so decided to prepare the road for RPi5.
+
+I am not entirely sure what are you asking.
+
+Regards,
+Ivan
+
 
