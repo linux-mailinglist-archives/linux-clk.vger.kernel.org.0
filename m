@@ -1,158 +1,121 @@
-Return-Path: <linux-clk+bounces-7543-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7546-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 381038D5F6E
-	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 12:18:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E4B8D5F95
+	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 12:23:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B18261F212C4
-	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 10:18:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A08A0285891
+	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 10:23:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F15914C581;
-	Fri, 31 May 2024 10:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4DD515217F;
+	Fri, 31 May 2024 10:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="W3yzAljQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="K0hPWcwb";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="W3yzAljQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="K0hPWcwb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dePtKJsj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1288D187554
-	for <linux-clk@vger.kernel.org>; Fri, 31 May 2024 10:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D6015217E;
+	Fri, 31 May 2024 10:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717150721; cv=none; b=Ez+X6GaZqsnzq8NMX79mk6MxAytSV+pzI4NOvXwsrrAaPGajZxYfD5sBNe/X2oojjNVmsNJHKhooJmob6bVvZx3JZmyJ7VKosWHMLL+v4Css0gvv/pLRgfn6QE7iTZJqbe5bejQJ16AApsV89J7CuGQJHqpccSf81PRZss/+uho=
+	t=1717150998; cv=none; b=OiFnLVMS7CatAA2icvn3YDd+xhXZNj0HfJAttrPZIV3C465hLjK2A/52487OrRR2gkRoQOrRV5Q2ylaFnn6qEi4VgW2t8OmONvvsDmmT4mUivfAAbNZmEpVjcsy3MUHcOq/rSEQkzRNcJkBIroukkgt+KUKH4s83SMba2W5EpHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717150721; c=relaxed/simple;
-	bh=nyZFgA47KM+lME/vUptDh6UGwp+ujF5W2QyA1Q1Gd3E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ohBiOlBhoyGrafe+plfnczgqVwkhja0r5WqFmOSqRltMrOH4v7fh8YVvf2QN8GFskhqRyf+uVDRukuc2V5x2oO9Xs1SZk5QKVYwJMbP4VrFAklwZGEPfPhSM+J+LCdp1Uu51Ls9UZRhdds9gV8FXo7UOppumcqkr/kibF3Q0mJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=W3yzAljQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=K0hPWcwb; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=W3yzAljQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=K0hPWcwb; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3BB9621B48;
-	Fri, 31 May 2024 10:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1717150715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
-	b=W3yzAljQanxV4QstYbb3JnPvXJwcxco1XGZui9EGjedMu1dP2OmaUl/N1HvjFCDoGX3HLa
-	OxtDPJ+qsZFJhbfN/x9siW4p2ChvQkAc+pfJLFP/DiZCiPfcRhp/ZJ+tk4SfDicuN2s+kv
-	Wwq1c6crx1EeSn9vihhmpkXV/n6w6C0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1717150715;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
-	b=K0hPWcwbdZkENCe9RfUSzz6hTp+1rHv/VBbTVKgQloROx7wZcFvYA/AHsL2aAHvHGlsJxq
-	XDpfu4nhVfP30cCQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1717150715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
-	b=W3yzAljQanxV4QstYbb3JnPvXJwcxco1XGZui9EGjedMu1dP2OmaUl/N1HvjFCDoGX3HLa
-	OxtDPJ+qsZFJhbfN/x9siW4p2ChvQkAc+pfJLFP/DiZCiPfcRhp/ZJ+tk4SfDicuN2s+kv
-	Wwq1c6crx1EeSn9vihhmpkXV/n6w6C0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1717150715;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IVkWErr7G7OnZmpnWQzy3VUCzm85GJZLYz31yJq8dHY=;
-	b=K0hPWcwbdZkENCe9RfUSzz6hTp+1rHv/VBbTVKgQloROx7wZcFvYA/AHsL2aAHvHGlsJxq
-	XDpfu4nhVfP30cCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1DF6D137C3;
-	Fri, 31 May 2024 10:18:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id clMcBfujWWZVKwAAD6G6ig
-	(envelope-from <iivanov@suse.de>); Fri, 31 May 2024 10:18:35 +0000
-Date: Fri, 31 May 2024 13:20:51 +0300
-From: "Ivan T. Ivanov" <iivanov@suse.de>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: sboyd@kernel.org, florian.fainelli@broadcom.com,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Maxime Ripard <maxime@cerno.tech>,
-	Andrea della Porta <andrea.porta@suse.com>
-Subject: Re: [PATCH] clk: bcm: rpi: Add disp clock
-Message-ID: <20240531101813.fronn47dx3ksacq6@localhost.localdomain>
-References: <20240531092730.253484-1-iivanov@suse.de>
- <4c56e57c-7a4e-4976-a05e-0adf3df13b3f@gmx.net>
+	s=arc-20240116; t=1717150998; c=relaxed/simple;
+	bh=ivY1RK9CsSl4Vu834TA4KZSM7clN9/1U4l63N50ZI58=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oupUQq1mhMlXmZfblJNCnH7SiUQiubBUCrpKN5rMzx6MZyCcX5cR1+4fWlggOejzSnZg4eJIK946UwgMS3G050o3VLUa+UhM5wF8wLNrhQaRxzf5lxRtqUyorAtztZb6Nj9qAiPG2ZFhkkBmeP8ZVZsLqaCHJKzJd8wXoBCGptg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dePtKJsj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44V4gf7L006624;
+	Fri, 31 May 2024 10:23:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=xqHT/lx4BU0YX0wZd/m+cOJU4o4wF7wnQaBAwX7AAmA=; b=de
+	PtKJsjByGK5984q/cvSKmfm4lVfEMoLQlo9VCeYFcG7wJGmv3nLe8R3De83UaLor
+	TLxsNstI5B4zUt8IoaE7iEWd93ijq+YBMHfRfSp4sXZhBNDkHJikc4wps0f4eTYj
+	xOWHNpEctvvR4vDSNyK4HqMJsrBw8458Ijidvbm6/FK+rLiHA0zSAvpie3YLCjsA
+	E8ONSdqekqhj4YSRidY4UgulhdQDDCzmHwOQJwHa2Ri1VZNjzLO5vn5v8mP0cZIe
+	4NE9sVM2x5LMROkOcIbYcVyCxOLblbXf7uqujZKDG7b/ZILvJPnyP9x1Di7Zl+HV
+	JQ3fD/48N7kPVrrei8NA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ye96bmv7n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 May 2024 10:23:13 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44VANChx019243
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 May 2024 10:23:12 GMT
+Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 31 May 2024 03:23:07 -0700
+From: Taniya Das <quic_tdas@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <quic_jkona@quicinc.com>, <quic_imrashai@quicinc.com>,
+        <devicetree@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>
+Subject: [PATCH 0/4] Update LPASS Audio clock driver for QCM6490 board
+Date: Fri, 31 May 2024 15:52:48 +0530
+Message-ID: <20240531102252.26061-1-quic_tdas@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4c56e57c-7a4e-4976-a05e-0adf3df13b3f@gmx.net>
-X-Spam-Flag: NO
-X-Spam-Score: -4.04
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.04 / 50.00];
-	BAYES_HAM(-2.74)[98.86%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FREEMAIL_TO(0.00)[gmx.net];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.net];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xM9yCGNzTfSHpOyjy9JPMWZdXf7d8UMe
+X-Proofpoint-ORIG-GUID: xM9yCGNzTfSHpOyjy9JPMWZdXf7d8UMe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-31_06,2024-05-30_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=752 spamscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2405310077
 
-Hi,
+This series updates the low pass audio clock controller driver for reset
+functionality. The patches are split from the below series.
+https://lore.kernel.org/all/20240318053555.20405-1-quic_tdas@quicinc.com/
 
-On 05-31 11:55, Stefan Wahren wrote:
-> 
-> Hi Ivan,
-> 
-> Am 31.05.24 um 11:27 schrieb Ivan T. Ivanov:
-> > From: Maxime Ripard <maxime@cerno.tech>
-> > 
-> > BCM2712 has an extra clock exposed by the firmware called DISP, and used
-> > by (at least) the HVS. Let's add it to the list of clocks to register in
-> > Linux.
-> > 
-> > Without this new definition driver fails at probe on BCM2712.
-> could you please explain the relation to Andrea's series [1]?
-> 
-> How can this occur, because there is no Raspberry Pi 5 support in Mainline?
+The QCM6490 board requires only the reset functionality from the LPASS
+subsystem. Thus separate out the driver probe to provide the same on the
+QCM6490 boards.
 
-I am using few out-of-tree drivers on top of the Andrea's patch-set
-and noticed the failure, so decided to prepare the road for RPi5.
+Taniya Das (4):
+  dt-bindings: clock: qcom: Add compatible for QCM6490 boards
+  clk: qcom: lpassaudiocc-sc7280: Add support for LPASS resets for
+    QCM6490
+  arm64: dts: qcom: qcm6490-idp: Update protected clocks list
+  arm64: dts: qcom: qcs6490-rb3gen2: Update the LPASS audio node
 
-I am not entirely sure what are you asking.
+ .../clock/qcom,sc7280-lpasscorecc.yaml        |  1 +
+ arch/arm64/boot/dts/qcom/qcm6490-idp.dts      | 28 ++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |  7 ++++-
+ drivers/clk/qcom/lpassaudiocc-sc7280.c        | 28 +++++++++++++++++++
+ 4 files changed, 62 insertions(+), 2 deletions(-)
 
-Regards,
-Ivan
+--
+2.17.1
 
 
