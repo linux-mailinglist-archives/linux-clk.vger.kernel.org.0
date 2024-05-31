@@ -1,213 +1,190 @@
-Return-Path: <linux-clk+bounces-7523-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7525-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5AB48D5DA7
-	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 11:07:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 228DB8D5E2F
+	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 11:27:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A3E1289136
-	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 09:07:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8996C1F29472
+	for <lists+linux-clk@lfdr.de>; Fri, 31 May 2024 09:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B06915664A;
-	Fri, 31 May 2024 09:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A481478C62;
+	Fri, 31 May 2024 09:27:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XQRZ20Gt"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="otjK8zEJ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6aqXqvwU";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xpGW9aGC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="txGgbeyT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971E0156646;
-	Fri, 31 May 2024 09:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61CD7710F
+	for <linux-clk@vger.kernel.org>; Fri, 31 May 2024 09:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717146271; cv=none; b=Jhn/3nrrIdWVNbn73yQlQ+Auq936tfagBrm2Rm257iEkN83F4JyzK0Q2r/iZl/KBncRLvTH8y5/DsFYpRD054fNUdrT4jPbbRT3C07M0wG72n9xGJ10hup32EY7C7NNJhXaEm3ktqERkDkhkQUvceZ4Be4pSBa+8/t03Uum9q+M=
+	t=1717147639; cv=none; b=rRxdtBdhJxuwv2CYKrcaQCaLs+sPkSit3PUEaboe65cxyzEY3tRMPVvWg4B9dwv4cTU/JBCA2RM3cFLeytPuvFLfo98NFCfxuGELz3Ih8kxwATuA/DcFXtPlaVNlkAWYUT3cOvC/CaOHwMvqdeBs3HIliTa9SUbShDkPCCdllkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717146271; c=relaxed/simple;
-	bh=RQ16RDaLTXWQhQODnz91g4g1UZXiWj4A88rkCbB7RZ8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fs0wYddrrHtl0X/0Jj+27Ov3JaUpQV+Zlp05yvlKOMwXu8WEXIpCIWp3kwhzOCT/FLQy/gD13BqLwqRlpNdJA1ClluwQ1bxzYD1k1UGt0Z8Aw48KMPn/C9VysoLVbjijX2cln+I03UN11NSsxACSg9CJjoxL+xlvUyC0aN4C5eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XQRZ20Gt; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44V12Wub003501;
-	Fri, 31 May 2024 09:04:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=4SJuNprWp3vXhTTumfGksTWu
-	F1zW7NLmnaEjDruIw3E=; b=XQRZ20GtCeNQcD9dWYPB0S/YqqHQPbpGASYWnCeX
-	A5Nffq07ro4mZDWOzLTZci8ReOwl6dGArTgf5wyNSswTMwOoo/E+VIX9zBJ/zAkd
-	S/drFVt0V7R1GDamZ07gHGlGIVYUkD2HIFUhO6BhDY/Ta+cZT26fEvjhDLvOzSKY
-	bUTJwoBtDCwFDGuF+97eQG6rFCN7iRLp2HUtTeYw1cFpc+DAQ5xOAr0oKl0DHTvH
-	7HEJsRhbynqof5KcwBABSbdhnAu3fIh6ACL5DuzVJWgQmCRR3kJn4FYzC77/ubQU
-	b8TGciSZllOJxcGRgbYBEDZroZ+gJYarXjxsvia9MV/bOQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yesw5jd4g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 31 May 2024 09:04:25 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44V94Ooo025114
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 31 May 2024 09:04:24 GMT
-Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 31 May 2024 02:04:20 -0700
-From: Taniya Das <quic_tdas@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_jkona@quicinc.com>,
-        Bartosz Golaszewski
-	<bartosz.golaszewski@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Subject: [PATCH 13/13] arm64: dts: qcom: Add support for multimedia clock controllers
-Date: Fri, 31 May 2024 14:32:49 +0530
-Message-ID: <20240531090249.10293-14-quic_tdas@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240531090249.10293-1-quic_tdas@quicinc.com>
-References: <20240531090249.10293-1-quic_tdas@quicinc.com>
+	s=arc-20240116; t=1717147639; c=relaxed/simple;
+	bh=glA0wCl4lQltSrWyYy62EoTfVe8JrGVFKzfyg6qHueg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZtP9VfeynxisZMrBlRpVobuQExLEkqnBlnwIOI2ww2dmMX2l45HfGTVTnY+cXA2U8jTNFNAV5/7MesI8ioIP7o4tEvrU2PR8ALyDBtRXp497PLJXEH1+DDOBRUn6sfgPJJL+onP6xON6MGlPneLLSEdSSL1l1zpTtFHevQDUx4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=otjK8zEJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6aqXqvwU; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xpGW9aGC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=txGgbeyT; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EDFBE1F816;
+	Fri, 31 May 2024 09:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717147636; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=l+YfU9viPrCiXkQE3xw23iUZrKeBoEWHPl6GbE83aTY=;
+	b=otjK8zEJYOsXZs7iU13NOjq6dHWj7HVpe/odLjXAOb8mmUxQHyJQ/p40p+LvVOHc1Z1GZL
+	s9QwdN+3oseOi3anqw6xZsnvC/077wr79jP6GnrBdq1Fa8LvZgLtM6kWcPprxclu9pECo/
+	/ii5v809lQFJtW7sgnIdxk7JN4JdGqA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717147636;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=l+YfU9viPrCiXkQE3xw23iUZrKeBoEWHPl6GbE83aTY=;
+	b=6aqXqvwUEO774rAB+i0PS2aiWhlC1C7L0FwCmtaLfWJdvnZxulHM4w+H8x5G2w0IxK3Mha
+	V2KoSnPDi7xOuPAA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=xpGW9aGC;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=txGgbeyT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1717147635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=l+YfU9viPrCiXkQE3xw23iUZrKeBoEWHPl6GbE83aTY=;
+	b=xpGW9aGC9fyBCASYO6nGYQXnIux//DHqeAJAEePFcHazBK7guNAibYIiOzSdJUfvFnvhy9
+	uqDivi0R7dnwubTnfKpvIVAx5/TkCHlyUz1iMfL9HSWa1yGIrU/JUKD0yp3j2rTF9a1TZ/
+	xaWbDA/h7xUm1f2TckAtlK8sXzd3RfA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1717147635;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=l+YfU9viPrCiXkQE3xw23iUZrKeBoEWHPl6GbE83aTY=;
+	b=txGgbeyTH8gnWqRWmlAw/DBMo/heieqShagZreyL7/XBNYvnJmUEhP1HTkWNpx97eZFAxe
+	MhNI/jT9iPPtzrDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D9092132C2;
+	Fri, 31 May 2024 09:27:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 7xGRNPKXWWYjGwAAD6G6ig
+	(envelope-from <iivanov@suse.de>); Fri, 31 May 2024 09:27:14 +0000
+From: "Ivan T. Ivanov" <iivanov@suse.de>
+To: sboyd@kernel.org
+Cc: florian.fainelli@broadcom.com,
+	wahrenst@gmx.net,
+	linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Maxime Ripard <maxime@cerno.tech>,
+	"Ivan T . Ivanov" <iivanov@suse.de>
+Subject: [PATCH] clk: bcm: rpi: Add disp clock
+Date: Fri, 31 May 2024 12:27:30 +0300
+Message-ID: <20240531092730.253484-1-iivanov@suse.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mioY2dzV0aY_nowP5Im3mC8RMd5YvM8E
-X-Proofpoint-GUID: mioY2dzV0aY_nowP5Im3mC8RMd5YvM8E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-31_05,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 malwarescore=0 impostorscore=0 bulkscore=0
- suspectscore=0 priorityscore=1501 clxscore=1015 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2405310066
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.00 / 50.00];
+	BAYES_HAM(-2.99)[99.95%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FREEMAIL_CC(0.00)[broadcom.com,gmx.net,vger.kernel.org,lists.infradead.org,cerno.tech,suse.de];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:email];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmx.net]
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: EDFBE1F816
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spam-Score: -3.00
 
-Add support for camera, display0, display1 and video clock
-controllers on SA8775P platform. While at it, update the
-sleep_clk frequency.
+From: Maxime Ripard <maxime@cerno.tech>
 
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+BCM2712 has an extra clock exposed by the firmware called DISP, and used
+by (at least) the HVS. Let's add it to the list of clocks to register in
+Linux.
+
+Without this new definition driver fails at probe on BCM2712.
+
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
 ---
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts |  2 +-
- arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 59 +++++++++++++++++++++++
- 2 files changed, 60 insertions(+), 1 deletion(-)
+ drivers/clk/bcm/clk-raspberrypi.c          | 5 +++++
+ include/soc/bcm2835/raspberrypi-firmware.h | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index 26ad05bd3b3f..4684da376565 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -542,7 +542,7 @@
+diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
+index 4d411408e4af..fabd5595e9cd 100644
+--- a/drivers/clk/bcm/clk-raspberrypi.c
++++ b/drivers/clk/bcm/clk-raspberrypi.c
+@@ -34,6 +34,7 @@ static char *rpi_firmware_clk_names[] = {
+ 	[RPI_FIRMWARE_M2MC_CLK_ID]	= "m2mc",
+ 	[RPI_FIRMWARE_PIXEL_BVB_CLK_ID]	= "pixel-bvb",
+ 	[RPI_FIRMWARE_VEC_CLK_ID]	= "vec",
++	[RPI_FIRMWARE_DISP_CLK_ID]	= "disp",
  };
  
- &sleep_clk {
--	clock-frequency = <32764>;
-+	clock-frequency = <32000>;
+ #define RPI_FIRMWARE_STATE_ENABLE_BIT	BIT(0)
+@@ -124,6 +125,10 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
+ 	[RPI_FIRMWARE_VEC_CLK_ID] = {
+ 		.export = true,
+ 	},
++	[RPI_FIRMWARE_DISP_CLK_ID] = {
++		.export = true,
++		.minimize = true,
++	},
  };
  
- &spi16 {
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index eae0de9720b5..7f62738671da 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -6,8 +6,11 @@
- #include <dt-bindings/interconnect/qcom,icc.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,sa8775p-camcc.h>
-+#include <dt-bindings/clock/qcom,sa8775p-dispcc.h>
- #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
- #include <dt-bindings/clock/qcom,sa8775p-gpucc.h>
-+#include <dt-bindings/clock/qcom,sa8775p-videocc.h>
- #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
- #include <dt-bindings/mailbox/qcom-ipcc.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-@@ -2904,6 +2907,47 @@
- 			interrupts = <GIC_SPI 580 IRQ_TYPE_LEVEL_HIGH>;
- 		};
+ /*
+diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+index 73cac8d0287e..e1f87fbfe554 100644
+--- a/include/soc/bcm2835/raspberrypi-firmware.h
++++ b/include/soc/bcm2835/raspberrypi-firmware.h
+@@ -152,6 +152,7 @@ enum rpi_firmware_clk_id {
+ 	RPI_FIRMWARE_M2MC_CLK_ID,
+ 	RPI_FIRMWARE_PIXEL_BVB_CLK_ID,
+ 	RPI_FIRMWARE_VEC_CLK_ID,
++	RPI_FIRMWARE_DISP_CLK_ID,
+ 	RPI_FIRMWARE_NUM_CLK_ID,
+ };
  
-+		videocc: clock-controller@abf0000 {
-+			compatible = "qcom,sa8775p-videocc";
-+			reg = <0x0 0x0abf0000 0x0 0x10000>;
-+			clocks = <&gcc GCC_VIDEO_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		camcc: clock-controller@ade0000 {
-+			compatible = "qcom,sa8775p-camcc";
-+			reg = <0x0 0x0ade0000 0x0 0x20000>;
-+			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		dispcc0: clock-controller@af00000 {
-+			compatible = "qcom,sa8775p-dispcc0";
-+			reg = <0x0 0x0af00000 0x0 0x20000>;
-+			clocks = <&gcc GCC_DISP_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>,
-+				 <0>, <0>, <0>, <0>,
-+				 <0>, <0>, <0>, <0>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
- 			reg = <0x0 0x0b220000 0x0 0x30000>,
-@@ -3424,6 +3468,21 @@
- 			#freq-domain-cells = <1>;
- 		};
- 
-+		dispcc1: clock-controller@22100000 {
-+			compatible = "qcom,sa8775p-dispcc1";
-+			reg = <0x0 0x22100000 0x0 0x20000>;
-+			clocks = <&gcc GCC_DISP_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>,
-+				 <0>, <0>, <0>, <0>,
-+				 <0>, <0>, <0>, <0>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		ethernet1: ethernet@23000000 {
- 			compatible = "qcom,sa8775p-ethqos";
- 			reg = <0x0 0x23000000 0x0 0x10000>,
 -- 
-2.17.1
+2.43.0
 
 
