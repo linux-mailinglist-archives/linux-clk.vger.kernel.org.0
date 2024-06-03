@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-7653-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7655-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3CCF8D8B4F
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Jun 2024 23:08:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D74C8F9F7C
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Jun 2024 23:42:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADF7628CC67
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Jun 2024 21:08:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72E591C2461A
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Jun 2024 21:36:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE56E13B590;
-	Mon,  3 Jun 2024 21:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5075F13C693;
+	Mon,  3 Jun 2024 21:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hID2SJ6H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U00QJour"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B6112DD9B;
-	Mon,  3 Jun 2024 21:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216A213BAFA;
+	Mon,  3 Jun 2024 21:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717448925; cv=none; b=VqDcF4GSh6S7OcvFau29d7rDWbfP3HRkUXGcPe64OV1IqxFZV++a82kAMR07bPUTSyyhnA2vg99OhrqcRL9VPTH/AlAD/m+9eT9to/NjEothiXStlWtSdbXOeBBQkpd0yUqxu2m1d1V4ERhwnR6y9hXMbo9S5KszhRDl5T6De80=
+	t=1717450604; cv=none; b=BsX+a34pRyX4U9LwfpHC8YmlpDCKALG224uH+vQe2ZzdcMLPGav4Et7ght1BA8V67xqYpRXnDAittJgNzJt3sLBnD1LYE5FJJkUA2/FBcNv6XNGjJJ1GEgbN6dXuSez8rmahnAoVOsrgF5RDfWfPr5uE9ox/36ao3tvKrfZdy6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717448925; c=relaxed/simple;
-	bh=EJuKBSp2wJUfZWUbTTL8jcG9qHIZQIVzA4rNmduBoL8=;
+	s=arc-20240116; t=1717450604; c=relaxed/simple;
+	bh=1GajkzrxJWwIATnMlSQb8T/W4Z6Ei4LUQqaYzeUpUoE=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=soVPtUd2Rix7nqeCzbkfU/zhwrRQNruPvzzylsEoMbgsvxnjCO8xiou1H+Wc4Xercsj+M4KExtNsNJDI20cM06+SV4auL7q5lr2fJI646CixYq4zkkgnskpnNw4t5uJ+ZHYJCDzzqDCN2AE9g60XWl7qm0WlJ5clzZzoetD6Ocg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hID2SJ6H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258C3C2BD10;
-	Mon,  3 Jun 2024 21:08:45 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=oT6i2+Yk1hT5MQ6+WEV0FDPaLeMBZ+jFIHk3Ur7ii1qtGoJCuIf6utAz3Zs0/4sfM0Xg2qbGXnOut+dWsMcnU5dmwfXqZfgNeXqDtgsJS4NuglnNhn83EF9C/KkyCUUrU6SY/ekWFVi5Yb+rzixdXZglIxXV/LydjJYwX8t936k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U00QJour; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E41C2BD10;
+	Mon,  3 Jun 2024 21:36:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717448925;
-	bh=EJuKBSp2wJUfZWUbTTL8jcG9qHIZQIVzA4rNmduBoL8=;
+	s=k20201202; t=1717450603;
+	bh=1GajkzrxJWwIATnMlSQb8T/W4Z6Ei4LUQqaYzeUpUoE=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=hID2SJ6HhrZCqhsizIzpCBpGAY53oCgJYBJm7LcVCQhcBJhGBtAR/tQQ0JePZ+Yg1
-	 p0M3vByRv2hU/i1+flIx5q86sDeKmRjmEeskX63XAdzaWiFHvdLkiWU6q7GQbp+eK+
-	 3H0JespnX90kdYLXgScKMN+yex12rVb0ONEPKjb5Dd8pGBQfsfjkSggbfA2Wvu4o3T
-	 ihnLxgskkxQQmH6/CJxwS2RP0PvADwkHZ0P4NzlYD7+VIxkU61uihMrQsIgeL4ms/C
-	 0jtwO5rKkvj9PX+dKLIvZxBlwUIwIzEJrTXEM56SXbTKvs1GBpLe9KQ1CqoP7UBIYZ
-	 yd02l2pQwSRzQ==
-Message-ID: <1d5a854647a80f156494c77b4cf0d4a3.sboyd@kernel.org>
+	b=U00QJour8XN4wwOSFH/cVWjQ0sCcztZR3LUU8kRQD2tKWhpj+ZIWnXfVShtbYerag
+	 XxPA9TeSz6VDHuWdNaLlRgh6ZQUOR5kisfJwtsgXxymhyQIN+FbuOXQb1d8dF5wf1g
+	 qgGPxZUD6JN8eurPq9Ffz+x6D8VLVWBnfWy/SBMoAJsGutlOP2Z89ttvM93fgM8nnK
+	 Sbs+8EDy2VitP04DtcbOArSzcRkd7XmsE0Tn1jQi2kNhll3j516YkT8Xd3UcfyCySs
+	 GY1SZg41dIopeQ++WWQDDGim29SZcfKC1Wj0Vps5qswKxO2tCmJCbbPmkknrDnS43M
+	 ZyY+xAZO97Zfw==
+Message-ID: <c776960ca7b285626366dd7ecba04018.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -50,22 +50,23 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <0cd9b5ffbe986bd7dc4ffb3f13492123432ee2e1.1716975021.git.geert+renesas@glider.be>
-References: <cover.1716975021.git.geert+renesas@glider.be> <0cd9b5ffbe986bd7dc4ffb3f13492123432ee2e1.1716975021.git.geert+renesas@glider.be>
-Subject: Re: [PATCH 1/3] clk: renesas: r8a77970: Use common cpg_lock
+In-Reply-To: <20240529131310.260954-2-gabriel.fernandez@foss.st.com>
+References: <20240529131310.260954-1-gabriel.fernandez@foss.st.com> <20240529131310.260954-2-gabriel.fernandez@foss.st.com>
+Subject: Re: [RESEND PATCH v2 1/3] clk: stm32mp2: use of STM32 access controller
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: Ye Bin <yebin10@huawei.com>, linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>
-Date: Mon, 03 Jun 2024 14:08:43 -0700
+Cc: devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+To: Alexandre Torgue <alexandre.torgue@foss.st.com>, Conor Dooley <conor+dt@kernel.org>, Dan Carpenter <dan.carpenter@linaro.or6g>, Gabriel Fernandez <gabriel.fernandez@foss.st.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Maxime Ripard <mripard@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>
+Date: Mon, 03 Jun 2024 14:36:41 -0700
 User-Agent: alot/0.10
 
-Quoting Geert Uytterhoeven (2024-05-29 02:35:08)
-> R-Car Gen3 Socs use the common CPG/MSSR library functions in
-> rcar-cpg-lib.c, so the R-Car V3M sub-driver can use the common cpg_lock
-> instead of a driver-private lock.
+Quoting gabriel.fernandez@foss.st.com (2024-05-29 06:13:08)
+> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 >=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Use an STM32 access controller to filter the registration of clocks.
+> If a clock is used by the security world, then it must not registered.
+>=20
+> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 > ---
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Applied to clk-next
 
