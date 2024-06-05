@@ -1,48 +1,48 @@
-Return-Path: <linux-clk+bounces-7740-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7742-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A948FC5B8
-	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 10:15:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C18448FC658
+	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 10:30:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D06751C21342
-	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 08:15:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 720CF2855E4
+	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 08:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C6F49626;
-	Wed,  5 Jun 2024 08:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2AA618F2F2;
+	Wed,  5 Jun 2024 08:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBSAVBjB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sHcFCifN"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA8549621;
-	Wed,  5 Jun 2024 08:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EAA618C324;
+	Wed,  5 Jun 2024 08:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717575131; cv=none; b=NBghpLYUP4v614mUMU/grpoOo7TMcrWYFvMcJqlef+/VNwZnClBy50zE419H+Bok5xhTaOLom4/5Roi2RMtwppFqnmd2UtCy310045ec5ceLahr2O4IUhguaPFcHY6UJ+3cZl338xO807kLbaqjyrcVWQs0o9spZ606aZFc2X0s=
+	t=1717575888; cv=none; b=B8ApwWWLr3PGpeR0bBcdkJIe3AXKYfPj8dzlpdZt7v6azcCcMgzfktc0CTZeEIBhe/4e6ULl/2cf/lzt+7hM2WuOLSX91g0sW36GujIQ9NuzZrcwC8SSHHr+g6Lb7/zETs3J4HhqZ50wsrCCmDixMaq+IIHa+7kRKeSDTroH1U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717575131; c=relaxed/simple;
-	bh=3Cu0rGtiUDZ4fe7lgTvZx3NuR8q2z0tMfYhv6hfQR1A=;
+	s=arc-20240116; t=1717575888; c=relaxed/simple;
+	bh=nvygrpCQm6tIoTRBf/JypeEyOilo9fzXmix4PvWBWvU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sJyUT4VN9jrtuTwXr0nZfrwfg9Q9Tu7w4vkFCCPxJ6KfDmCWhf0UWA4G2+oVlb+tGbK58bM7TE728inze2iRrQezZDMrw2N2wJFhtS49/RRe/Bycv7UlguEmb/lNouVRviQwdIptSNUKy01/3b5vKGUYXstdPDLrqYe+H4XWQKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBSAVBjB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB93BC3277B;
-	Wed,  5 Jun 2024 08:12:03 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=EcHF7txWRp7l64r8JECEiX22cYYoT9HJzs996KA5l041FUCHRcAhQBRXJyFNUK4b3TVUwid9j4++RsKZQXZnIZHIeYbDqp9tazxo3PhU+0MM11e/thBZdnVX31DJgeER3F2edpZGNutc+K+eWugPs5TgFgd2PBSLiD2G3vt4Htw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sHcFCifN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9082AC32781;
+	Wed,  5 Jun 2024 08:24:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717575130;
-	bh=3Cu0rGtiUDZ4fe7lgTvZx3NuR8q2z0tMfYhv6hfQR1A=;
+	s=k20201202; t=1717575888;
+	bh=nvygrpCQm6tIoTRBf/JypeEyOilo9fzXmix4PvWBWvU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aBSAVBjBUYdLHnP+vCQwiEZhgY4g/CEfaZniAi4hhhR4+NFSoB02G4s4iKtajQ60E
-	 RFNe2gvjezxf1c9KzEzBS9EI0arIbJezZBqDwXDZcI1ntAFcm1Zybc48OGOS4IJpje
-	 SfpSa0kUUIpSL2Vi3bxvcEvp4NtcEPJfOr6ID0EXADsj5jNnXBIvhxYEAcF//BkTHG
-	 /5yZaQqtO+lWh5XxZk5nH3B9jRtIX90c8834SuL3VtboV0djtrJefvXURKAmWdY7UG
-	 xnrUMTAzLsYqEnbaGEI00FtXIG4mfxiHmKiZpwdviKYmm0kryUzYYrRlpnowiAE3xp
-	 xlCBaTQlVRZuQ==
-Message-ID: <75c27bf0-4cc1-41ec-86ed-5c7f3d38f5d8@kernel.org>
-Date: Wed, 5 Jun 2024 10:12:01 +0200
+	b=sHcFCifNacAkgFK4H9YarCqWvVnI81N2jpCElBnUa8fCtorGwezkBUu8ZoEQl94Rl
+	 qIHDx011cPu+PsKh3AD7RBr/Mh9AR8rKV7qEOEFmlreWg7AVjgq1Gynue2megD3uCF
+	 AjtCdkRZF05gv5DWqSfGpHUoL0ys/LYzn8Uk1v26thnKXExOEIU8ht7hX4EZ3AIyxK
+	 4BSr7XfMXBhcmZ4GVFuWs9fquRzk1CwsdXQxxymA0mrs9+XZDHwBdipg51nS1f9KfJ
+	 ogM1Ov5CTljgWaAt20Uxf09LPfjLVMyJXlkp+GMwHBEm39PnSVulrtHx1KNXug8vDe
+	 4xoKdbhAQ/kHg==
+Message-ID: <6bbcf768-ecaf-4120-9a98-85528a142008@kernel.org>
+Date: Wed, 5 Jun 2024 10:24:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: clock: Add i.MX91 clock support
+Subject: Re: [PATCH v2 2/5] dt-bindings: clock: Add i.MX91 clock definition
 To: Pengfei Li <pengfei.li_1@nxp.com>, Rob Herring <robh@kernel.org>
 Cc: krzk+dt@kernel.org, conor+dt@kernel.org, abelvesa@kernel.org,
  mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
@@ -65,9 +65,9 @@ Cc: krzk+dt@kernel.org, conor+dt@kernel.org, abelvesa@kernel.org,
  linux-clk@vger.kernel.org, imx@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org
 References: <20240530022634.2062084-1-pengfei.li_1@nxp.com>
- <20240530022634.2062084-2-pengfei.li_1@nxp.com>
- <20240604150306.GA596314-robh@kernel.org>
- <ZmD76mp2dPVv6HeA@pengfei-OptiPlex-Tower-Plus-7010>
+ <20240530022634.2062084-3-pengfei.li_1@nxp.com>
+ <20240604150447.GA604729-robh@kernel.org>
+ <ZmEBn2E1FPKiXnMc@pengfei-OptiPlex-Tower-Plus-7010>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,48 +113,51 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <ZmD76mp2dPVv6HeA@pengfei-OptiPlex-Tower-Plus-7010>
+In-Reply-To: <ZmEBn2E1FPKiXnMc@pengfei-OptiPlex-Tower-Plus-7010>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 06/06/2024 01:59, Pengfei Li wrote:
-> On Tue, Jun 04, 2024 at 10:03:06AM -0500, Rob Herring wrote:
->> On Wed, May 29, 2024 at 07:26:30PM -0700, Pengfei Li wrote:
->>> i.MX91 has similar Clock Control Module(CCM) design as i.MX93.
->>> Add a new compatible string for i.MX91.
+On 06/06/2024 02:23, Pengfei Li wrote:
+> On Tue, Jun 04, 2024 at 10:04:47AM -0500, Rob Herring wrote:
+>> On Wed, May 29, 2024 at 07:26:31PM -0700, Pengfei Li wrote:
+>>> i.MX91 is similar with i.MX93, only add few new clock compared to i.MX93.
+>>> Add i.MX91 related clock definition.
 >>>
 >>> Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
 >>> Reviewed-by: Frank Li <Frank.Li@nxp.com>
 >>> ---
->>>  Documentation/devicetree/bindings/clock/imx93-clock.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
+>>>  include/dt-bindings/clock/imx93-clock.h | 7 ++++++-
+>>>  1 file changed, 6 insertions(+), 1 deletion(-)
 >>>
->>> diff --git a/Documentation/devicetree/bindings/clock/imx93-clock.yaml b/Documentation/devicetree/bindings/clock/imx93-clock.yaml
->>> index ccb53c6b96c1..98c0800732ef 100644
->>> --- a/Documentation/devicetree/bindings/clock/imx93-clock.yaml
->>> +++ b/Documentation/devicetree/bindings/clock/imx93-clock.yaml
->>> @@ -16,6 +16,7 @@ description: |
->>>  properties:
->>>    compatible:
->>>      enum:
->>> +      - fsl,imx91-ccm
->>>        - fsl,imx93-ccm
+>>> diff --git a/include/dt-bindings/clock/imx93-clock.h b/include/dt-bindings/clock/imx93-clock.h
+>>> index 787c9e74dc96..ca0785f35a46 100644
+>>> --- a/include/dt-bindings/clock/imx93-clock.h
+>>> +++ b/include/dt-bindings/clock/imx93-clock.h
+>>> @@ -204,6 +204,11 @@
+>>>  #define IMX93_CLK_A55_SEL		199
+>>>  #define IMX93_CLK_A55_CORE		200
+>>>  #define IMX93_CLK_PDM_IPG		201
+>>> -#define IMX93_CLK_END			202
+>>> +#define IMX91_CLK_ENET1_QOS_TSN     202
+>>> +#define IMX91_CLK_ENET_TIMER        203
+>>> +#define IMX91_CLK_ENET2_REGULAR     204
+>>> +#define IMX91_CLK_ENET2_REGULAR_GATE		205
+>>> +#define IMX91_CLK_ENET1_QOS_TSN_GATE		206
+>>> +#define IMX93_CLK_END			207
 >>
->> Should fallback to fsl,imx93-ccm? Being a superset should be ok because 
->> your DT should never use the non-existent clocks. If not, where is the 
->> driver change?
+>> Drop the END define. If it can change, it's not part of the ABI.
 >>
 >> Rob
 >>
 > 
 > Hi Rob Herring,
-> ﻿
-> Due to the different maintainers of the CCM framework and DTS, I have separated 
-> the CCM driver patch and plan to send the DTS patch first before sending the 
-> CCM driver patch. If that's possible, could you help merge this patch first? If 
-> this is not allowed, I can also send out the CCM driver patch at the same time.
+> 
+> The 'IMX93_CLK_END' macro definition is indeed not a certain clock, but it is
+> used in the imx93 ccm driver to indicate the number of clocks. And this macro
+> already existed before this patch, so it may not be able to be deleted.
 
-Binding goes with the driver, not DTS.
+May be. Trust me. Fix your driver first.
+
 
 Best regards,
 Krzysztof
