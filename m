@@ -1,148 +1,206 @@
-Return-Path: <linux-clk+bounces-7747-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7741-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712E58FC82E
-	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 11:43:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E998FC63D
+	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 10:28:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 939FA1C2218D
-	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 09:43:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C760B290FC
+	for <lists+linux-clk@lfdr.de>; Wed,  5 Jun 2024 08:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90823190045;
-	Wed,  5 Jun 2024 09:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E874194147;
+	Wed,  5 Jun 2024 08:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="g+CigWJt"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2040.outbound.protection.outlook.com [40.107.104.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F0518FC95;
-	Wed,  5 Jun 2024 09:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717580575; cv=none; b=kgg55ZrqZOoWWDte8tnweJ7U8vIqNgdLMkgnu/oPTMC4p6ZYea673YfNZg/JOLwSoBh9njglIBxJRb2/XhdEgaezyRmWE97dnz7E+eth/0hMY7U9v1CtrBL3+qRsJ1Y/rcdrTT7M2y+y5o6VULuIFcOz+3mXEZei1+pKskdYL5U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717580575; c=relaxed/simple;
-	bh=bpuw88h7/ULwUncE97Dy+1F31l30KUzHngnfz7u0Tpc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FQ36QZrDxWU65HwDywFQ5IQjiCZMU5740Bw2Ox1R9WdurUFy6+/249Dq1yJ00CLH+EYFV0bsEJ4kVZ/DGW6HWTQ6Ll5m8z3sImVHU4CEU8z99xswybOC81x4K6aGMHV4XNdgnaYZL0Pud7qxONGh9KNmhJaBxWza2mvhAr3aiGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-dfa8427f22dso4837950276.0;
-        Wed, 05 Jun 2024 02:42:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717580572; x=1718185372;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ftRQbH4WicPUfKz854Xb+Om1FETcdEVVljV/Kl9PKnI=;
-        b=jYuP8QDvKvsL1D+fA8KXM4RKotM7Z6uBMljnpu0kHRtTBnaT+oOjYuest54w/BzcS2
-         jKG4xMsMSr30qDb3tjbT2IAAagZz88PodUdCQkSbmU1F2x/ZoactMgJRDNDatp3KYR6H
-         h4mZWdKuGz/TlFQEWcuNmNJccuEdUvbt1s3PEZKqB9x39A3x7jmqpApmA4qMqT03S6JU
-         ZLi1KPGLw32tPXYTb8Va+rGfdKquphLhGJhq0pwnzTkCLsQBJpPTAbPvO7OCHJoSQCSi
-         O4WlOLZM4G2x7XW13idBjD4TSJerpkuCasSaHg6Ir40SzSu+32NnrzcFDB+QHy8pgpvF
-         9BlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNgrCVXKndsGZtG1LizbHoazfV9wcecKtZ3SPR7QhrJA/DsipjA84bNq1BJONaNCbh/aGqRYn8gH3/yVqMQUHo+J0DV9qfuz8cr2KAvqw1NjadWpjQ2Ownk6YcHHEMzf+zEafuf7oPwRStq4F30gMAbLqbEq3ZN0rtDu1zvJAPRQmVRKIr724zc/T3dKZ1phfnJ+NiJFoOYJUiDVOhDglDrtxq90S7
-X-Gm-Message-State: AOJu0YwFkyu/+SemEtYaTqh6b9EQADVORIFH1l+Dl/Na1UBOdVFT4NIu
-	ysfHP2vVc+eE11LcbbogFJ8W4qRcSyIvzBVpBD9y8SwFATWbDpStEcUjxO2q
-X-Google-Smtp-Source: AGHT+IEEpcP0qTLSOLsIdmNVvxBgot+xPcQQOBEurRGYHFnjsCOq1BVn98z6tEw/K0QEMwvSlVlUTg==
-X-Received: by 2002:a25:902:0:b0:dfa:6c81:acd0 with SMTP id 3f1490d57ef6-dfacad25f21mr1814224276.60.1717580572063;
-        Wed, 05 Jun 2024 02:42:52 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-dfa76af2e49sm2448613276.23.2024.06.05.02.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jun 2024 02:42:51 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dfa5b9274feso7170589276.2;
-        Wed, 05 Jun 2024 02:42:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUKpeev8nQQeuuirugjBNac6bAsnnLMOH1KPz7xfd1Jdgo/0AFH6Qllf2PUNeqdQxkPNs+6C+o8SD8bUqxjZr1k2dlU5i2+fBa5Ly5fWm8PzQxb8xX+ugmx9goIw6SrdnBkzBQCfsm/dqQAHWVcuxcnQCLL3AmtRFljMXodaiDqbGlLvW/E38NXtIgnpv+erdcyKRsRK+pKH9thkEyDEDAT/nvZkDji
-X-Received: by 2002:a25:ac09:0:b0:df4:eb0b:8fc with SMTP id
- 3f1490d57ef6-dfacacff985mr2036937276.43.1717580571709; Wed, 05 Jun 2024
- 02:42:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DA6190067;
+	Wed,  5 Jun 2024 08:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717575709; cv=fail; b=UC3Vva2jyd6TZD7NgSUrkLm4Kb/3e2DKrh0dI113El5lOVge3grAa7XnBIWo5KqZbFaY/92bgVwfkodDQV6MfNzNKg01/Hescnn5WXyd0re5KqmpBpoU3Ln5jBx/9SVx6rYYvU9SUYQoHxrMIuJBafXsaZgBhjfN/khKv0NO1fc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717575709; c=relaxed/simple;
+	bh=SOUu4z3JPhJ1W4PFS7A3jVCEZjHGtngjDwLMjoqwkq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=eCOezAMRw0gMgCeCAXfrMfMF4JDmQh2heXpmnDkbhERXZN/b1GkKVoypIw1SnfC5Mjh7U2TfoUWXYqsACMZrhpOVINQqN7YzO6rJNL6+hgqImT3NsYmih5j2eEVQVrJBZB+eE3UYxzmDvbSK4hwxoYOBQbPeaoR7t3NJy2g4kzg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=g+CigWJt; arc=fail smtp.client-ip=40.107.104.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qnj/ctkEDjG6oHwGxdF2iAOE+1zexpnUvyMf57n/7S1iEgB/MHP989mmsnEIkBhXn7MQruassQ0cAB1jWgDnmQVBmWo/WUWdUeuPqDauKjIkCJs9m/g4UFqLP9fXcZ3EhGduzHwKyjdku2DhlnIwhlKRNMcl7doNe3boy6j3LwTzmGgwdc60mpSniUWoOmbOxvOkpKrmd1a5z8F3fmxNFX8zM70EZhPXoBzT9S8t5vTG22JtU1Zn2tHVZMNwz0fAZRiJDJiev50f3UwvWnj+xtOb+5OXKhIa1Nc3Y1hCK1Hiwsg17Ept5nOcnuN6Msq/Ec2hYdc6Xf8/aYm1uIsjEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UfaefXdJqFJsQ2OAbjOVb0JTgPCbYUUYYmkTuFUEWQc=;
+ b=ctfNaXj0/vGaRpdmTLHrXYoUQa4xryV9XeUi43nXO2jSQcHE/pB9A+dwweT/nlPq08qL0VhKBTtY6AfIUJqsIuhWq8sugc7Rj3QGmS0gAW3ZGocGTMYzfot+IQ8n7fpBOicqD5RlHDh69kMMIuKLI33/fCojNle4d+vBdteJ3Cn2iww2OlO2HqacV95nu6PmKqCxhc/31Dty7denDP6s7d7G1sNNygcEbJLeR74V6jF6m2T4FEZrZoXFJdngYrYFV2wDA1CdKzoKCToLf/7KBraii4QF/AE+JROHwgS+CFmpTco9SCatYfGtFYnwUhjRV3mtieAGWmQtl9q4MBXnqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UfaefXdJqFJsQ2OAbjOVb0JTgPCbYUUYYmkTuFUEWQc=;
+ b=g+CigWJt52PaHwywhylBIate3MVQxTK7ITkrKh6UF826nnVoETSzqpUryzXSkTKq5JrTNFm0dSiZOFFZCs7yXZ6sTCpWeUVDr3q1QmnXlz6VqirKBfnEDqAm8C3eFm/2xh91xBfrwxqS/HAsHXughviP3kUtDABXGDj03O5154w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB7065.eurprd04.prod.outlook.com (2603:10a6:10:127::9)
+ by DBBPR04MB7771.eurprd04.prod.outlook.com (2603:10a6:10:1e6::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.31; Wed, 5 Jun
+ 2024 08:21:43 +0000
+Received: from DB8PR04MB7065.eurprd04.prod.outlook.com
+ ([fe80::8af7:8659:9d42:bd84]) by DB8PR04MB7065.eurprd04.prod.outlook.com
+ ([fe80::8af7:8659:9d42:bd84%4]) with mapi id 15.20.7633.021; Wed, 5 Jun 2024
+ 08:21:43 +0000
+Date: Wed, 5 Jun 2024 17:23:59 -0700
+From: Pengfei Li <pengfei.li_1@nxp.com>
+To: Rob Herring <robh@kernel.org>
+Cc: krzk+dt@kernel.org, conor+dt@kernel.org, abelvesa@kernel.org,
+	mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	ping.bai@nxp.com, ye.li@nxp.com, peng.fan@nxp.com,
+	aisheng.dong@nxp.com, frank.li@nxp.com, tharvey@gateworks.com,
+	alexander.stein@ew.tq-group.com, gregor.herburger@ew.tq-group.com,
+	hiago.franco@toradex.com, joao.goncalves@toradex.com,
+	hvilleneuve@dimonoff.com, Markus.Niebel@ew.tq-group.com,
+	m.felsch@pengutronix.de, m.othacehe@gmail.com, bhelgaas@google.com,
+	leoyang.li@nxp.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: clock: Add i.MX91 clock definition
+Message-ID: <ZmEBn2E1FPKiXnMc@pengfei-OptiPlex-Tower-Plus-7010>
+References: <20240530022634.2062084-1-pengfei.li_1@nxp.com>
+ <20240530022634.2062084-3-pengfei.li_1@nxp.com>
+ <20240604150447.GA604729-robh@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240604150447.GA604729-robh@kernel.org>
+X-ClientProxiedBy: SI1PR02CA0058.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::9) To DB8PR04MB7065.eurprd04.prod.outlook.com
+ (2603:10a6:10:127::9)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240524082800.333991-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20240524082800.333991-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdWzrEKFHauJ=6UnsufJjDO3LfJ45eJXx1V72AmVzvsjyw@mail.gmail.com>
-In-Reply-To: <CAMuHMdWzrEKFHauJ=6UnsufJjDO3LfJ45eJXx1V72AmVzvsjyw@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 5 Jun 2024 11:42:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXdFM2u5TjRQZCSiigC=uBk1kz6aW6hYTy5Wa=PCgX7yQ@mail.gmail.com>
-Message-ID: <CAMuHMdXdFM2u5TjRQZCSiigC=uBk1kz6aW6hYTy5Wa=PCgX7yQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: clock: renesas: Document RZ/V2H(P) SoC
- CPG driver
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7065:EE_|DBBPR04MB7771:EE_
+X-MS-Office365-Filtering-Correlation-Id: 17ee2cf5-3637-4dbf-1e65-08dc85388850
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230031|52116005|376005|1800799015|366007|7416005|38350700005;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?quJ3F9IQJ2RKUH8j+Uu567vLv2dNMv8kvZOb5pFO3PM6VFva11uHA9IQnrPF?=
+ =?us-ascii?Q?key1EEDMV9bof2kEW46J0AvmelrKAIT7PJbTauCp58R5lI5SYRANl3rYHo3z?=
+ =?us-ascii?Q?cqlGHrYQZp/B6Mpk+dUPt1dKd3MVf18QshS/tCCYSr3uJo7CukXOQgfvO/xG?=
+ =?us-ascii?Q?hjcdZjcEU7Uh/VTb7I2pIy7OpE2D1uHfIfuV/xgXgSfQp42TajOXYRzRtPe3?=
+ =?us-ascii?Q?4gOM+e9a2Wz5pTapQIMgkj4YSYKnzVuXO2syF4iQ/fmBkvivli/3KcjMyNpJ?=
+ =?us-ascii?Q?XoJb5S45X5xriRDnlFXKvDhdm6zC0XgRX4YnVI/Rcsz/VfQx+oI6YlISu3aS?=
+ =?us-ascii?Q?I3jmxdp/aewVqppNTo5Ho0EGFXBmHIN+AAc4GimBAEJQZgPR4Zd5lupBhHJq?=
+ =?us-ascii?Q?jPS7Zrx9EeWPXnJdrnaTukyyTHhCka5L7Ij0SIvDclkyXaYPqskmgxe8xDKC?=
+ =?us-ascii?Q?aR6um0bTIp/08raw1wJJ4KijI3vEiRRFlksfh5qJCditZff9JS00NPpsq62T?=
+ =?us-ascii?Q?tGcNoon8urNKTz0FmxmuFps2SawL9wxkOxRWR8YTrFXFChcZ8/fYFIWwGj8C?=
+ =?us-ascii?Q?BA2BeeIOBX1BosvEy3CmJUmZZKJuFok3b/6J4PgxkcHmCbsFk/27lvK2CQVN?=
+ =?us-ascii?Q?FImlj40MFQf5o5deRQosC6gCPEmdxGUWFbdnINySao9Py/uctGPdIe0AOUT+?=
+ =?us-ascii?Q?pkST9RM1bFZZ64jjbRwm3bsersmUQT45Ie/mrltg8q+YKnb0o4dKlwYOxvoY?=
+ =?us-ascii?Q?4kX51qT32IIAr/Ucu02QGCvTjVPh3h2Pk+1wY5cIe5oxDZpAN5OlomNlAdmZ?=
+ =?us-ascii?Q?qfUqYbaoDxC+pYthTOAETj2sBTgNNLNAZzeLjAhXqlGZIyqdK3Oy3QrOhi2G?=
+ =?us-ascii?Q?Kqittx8kp9nnu1JSx/zZBFrJy1SuO/OsjE1Pl+V5adv5PPaoA67l33TuSNQo?=
+ =?us-ascii?Q?FByjwJvowJroVV0/7fTAJkHdW212EVBIg7cAFlrhmBK/I/7uvR3bIGG4D4K+?=
+ =?us-ascii?Q?H1WkOQIFEYFW+pc9Q+vL24ZEw45WiEmJDGbX6nF+ihbxgjJM7CfizPddcb9L?=
+ =?us-ascii?Q?AoYEJoVgnsF2zwgvLxUKML0ZQyQuxxBMKO1v3XTfswCArnosTLCNglcwoEmi?=
+ =?us-ascii?Q?ZWwsMCkHIQen58x5+Jt9s4QxdnrHZZudUwINEssJzhyusxeX6rgD+sbCt9y5?=
+ =?us-ascii?Q?3QRez+LFPXFtDvHZSB2+AaXDpfGSlL1/9AmoP4qiGqHYDlgR3W98qW3++XVB?=
+ =?us-ascii?Q?MgXg9SXNIUY9vust+iD3wVF9UdxjK9/RDeyK+NAiCBDb8DCMqB1aeG6FNgue?=
+ =?us-ascii?Q?LaNqB3wYcI7/Tzfdr3/VyNlHATq5bbgsFVTsL3VWih2YMA=3D=3D?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7065.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(52116005)(376005)(1800799015)(366007)(7416005)(38350700005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?hD1uKH2rB3aYIltbEnuUY/o1ZpaUWzTpQ6n+URMJrKrlQ8QILDax6p34RE/D?=
+ =?us-ascii?Q?LxnASRb7S+f/RxTqEnniGnMn1miP9P+oJs5dtuCjULsmj8jisZ1tP8az0izr?=
+ =?us-ascii?Q?72DIaH9vkLpLkT8RMHfzep9ufhnJq89AOypATfuMukJ2n4alX44K5TF5n9kD?=
+ =?us-ascii?Q?DTwefOp7pZ23wvl4/ie+qVVJa2ZXALHnDnzhUcrV0Zmo7yfZ1jAtaYu2Noru?=
+ =?us-ascii?Q?XMA7O1fRmQpU8cwC+fxBF+VkyZ74enIdUX5Xp1p7PW0SvP92DOk+RICiZ19N?=
+ =?us-ascii?Q?qS9tWvvPJHSRXFZQ9DNGWhQVw57ixcT7Tczg6m9ywJPPxnpYiLKRo3kcMgvk?=
+ =?us-ascii?Q?tKPT4Bj3CIirIzR2Ln0gGMKaBqc7zfJD3j9XoFdLx2K2vrBhXsqr1BrgLxk+?=
+ =?us-ascii?Q?z/NfWjWzeeP78uvPJODhDW+UH2EzNr2gokkw/HhqsANoyb+ZB9DWhpsXxnRq?=
+ =?us-ascii?Q?Zmi9mM5TmO9DG6PBiqcYC/S1Q6cB+rvI+NpY+/XMAl64f9y2tqflIzjm0HO7?=
+ =?us-ascii?Q?kKztp98esI4QBGBKBL9HyItKJY8qQNjO3MyOUI2Jg8ElYvlnbZqM5WLwD8zo?=
+ =?us-ascii?Q?ax1nMAa+67zhS8JtJNf08b62C0k9aoZ5f3mGeHaTOoAnq4TKBnID98CdSEuh?=
+ =?us-ascii?Q?bQFW+v5vhiu8HEamGKbSUa1Y4p3oYUySeIAZRsZ37BLF4kSOcRPLX7GvLdem?=
+ =?us-ascii?Q?MQigl1DZokkdbOBqTHNQA2DczCqikyXTf1Va8saj8oQbhb2Lt7393yR84nzb?=
+ =?us-ascii?Q?V05L+80wlFjND6bUjb4ZEhnsO0GigeQtFphLMPWS7lf4Hu8woFBU5DxyqcbA?=
+ =?us-ascii?Q?qRsuDHrc+6fdOd53M34eNWxIURoGqJjstN5S/nh9VujvoucFSSgfZRWMUlhc?=
+ =?us-ascii?Q?+3UF+ksIPRtlzB4IjRqQ8wZ9zo3TY/baFmQHpCO1aN8EQEfoCbMn3UlceFeh?=
+ =?us-ascii?Q?792D2KfpD3ve/tzngFMXIh9eOgT933w24KmCZh5sCjmavKLwnnMxAFXEwR9n?=
+ =?us-ascii?Q?eG66QF23kE6g32BWscydE11RBu32pE5ivmvh75dBqGxXBxo6iUZo3NJ9ihkK?=
+ =?us-ascii?Q?Jdb3hihFvl45gOxm7a6yaQA2HasooWuiyRiuZgMUlkkMNiXuw6E/di8mkX1P?=
+ =?us-ascii?Q?Q+9G7tC0tG7ckulJAIZv8hisF7Nm2ohDOwp1lEiBmQLOm4s+m+fL21ie9n9I?=
+ =?us-ascii?Q?2Oq0LqmSk9gmUVPY7hGYF/SSIegqJGHXHGbV6n3KAwHq7A3523V05nNVIrv6?=
+ =?us-ascii?Q?1TfAKl5J2dRjvnc3AWufR+yRhr08tVD+j/2LJDWKK+SqVCldhAZE6KwcJsJl?=
+ =?us-ascii?Q?D9iqkZ3XiwtTWoWBY5KJNJTzA5EkPHHMQr//eAk0ThpbLHqPRQ0vHEqQdQbk?=
+ =?us-ascii?Q?7xgISOi33npW5PRulwR26Tlngq/4L97nA7fuBuypL/eRcw13mbNhsYmR05tU?=
+ =?us-ascii?Q?J7/1pSjh2ldpBhpoy4yc5XuimmFUBLsb6GI+2lqRLiQnyB1za1rRg1SjOLCZ?=
+ =?us-ascii?Q?Pdyz3qfoiy5Fn48L9svLWPbK1HIyjpw5SpVxX+cnkklIi4dn/NgWt2c7T4Et?=
+ =?us-ascii?Q?5o2fZlrBbbNAq/j7MN3TfVzzPjqTE9xDt7/pjSEc?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17ee2cf5-3637-4dbf-1e65-08dc85388850
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7065.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2024 08:21:43.4409
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3VzA4hfdZSJJFLwPaGlNcd/deSQWPcJMYm/Bg8UK6UvtxlirTjCivFAd46DEXcLwajvbQxZ30/WqDzMMrqHo3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7771
 
-Hi Prabhakar,
+On Tue, Jun 04, 2024 at 10:04:47AM -0500, Rob Herring wrote:
+> On Wed, May 29, 2024 at 07:26:31PM -0700, Pengfei Li wrote:
+> > i.MX91 is similar with i.MX93, only add few new clock compared to i.MX93.
+> > Add i.MX91 related clock definition.
+> > 
+> > Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
+> > Reviewed-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> >  include/dt-bindings/clock/imx93-clock.h | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/dt-bindings/clock/imx93-clock.h b/include/dt-bindings/clock/imx93-clock.h
+> > index 787c9e74dc96..ca0785f35a46 100644
+> > --- a/include/dt-bindings/clock/imx93-clock.h
+> > +++ b/include/dt-bindings/clock/imx93-clock.h
+> > @@ -204,6 +204,11 @@
+> >  #define IMX93_CLK_A55_SEL		199
+> >  #define IMX93_CLK_A55_CORE		200
+> >  #define IMX93_CLK_PDM_IPG		201
+> > -#define IMX93_CLK_END			202
+> > +#define IMX91_CLK_ENET1_QOS_TSN     202
+> > +#define IMX91_CLK_ENET_TIMER        203
+> > +#define IMX91_CLK_ENET2_REGULAR     204
+> > +#define IMX91_CLK_ENET2_REGULAR_GATE		205
+> > +#define IMX91_CLK_ENET1_QOS_TSN_GATE		206
+> > +#define IMX93_CLK_END			207
+> 
+> Drop the END define. If it can change, it's not part of the ABI.
+> 
+> Rob
+> 
 
-On Tue, Jun 4, 2024 at 5:49=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68k=
-.org> wrote:
-> On Fri, May 24, 2024 at 10:29=E2=80=AFAM Prabhakar <prabhakar.csengg@gmai=
-l.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Document the device tree bindings of the Renesas RZ/V2H(P) SoC
-> > Clock Pulse Generator (CPG).
-> >
-> > CPG block handles the below operations:
-> > - Handles the generation and control of clock signals for the IP module=
-s
-> > - The generation and control of resets
-> > - Control over booting
-> > - Low power consumption and the power supply domains
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/clock/renesas,rzv2h-cpg.yaml
-> > +
-> > +  '#clock-cells':
-> > +    description: |
-> > +      - For CPG core clocks, the two clock specifier cells must be "CP=
-G_CORE"
-> > +        and a core clock reference, as defined in
-> > +        <dt-bindings/clock/r9a09g057-cpg.h>,
-> > +      - For module clocks, the two clock specifier cells must be "CPG_=
-MOD" and
-> > +        a module number, as defined in <dt-bindings/clock/r9a09g057-cp=
-g.h>.
-> > +    const: 2
->
-> I understand this will be changed to 1, the clock number?
+Hi Rob Herring,
 
-We typically come up with our own definitions in header files if there
-are no suitable module numbers listed in the hardware documentation.
+The 'IMX93_CLK_END' macro definition is indeed not a certain clock, but it is
+used in the imx93 ccm driver to indicate the number of clocks. And this macro
+already existed before this patch, so it may not be able to be deleted.
 
-For RZ/V2H, you could use a combination (e.g. concatenation) of the
-column (register) and row (bit) numbers from Tables 4.4-14-19
-("Specifications of the CPG_CLKON_m Registers") and Tables 4.4-22-25
-("Specifications of the CPG_RST_m Registers") as the clock resp. reset
-number, like is done on R-Car Gen2+ SoCs (see MOD_CLK_PACK() for
-conversion from sparse to packed module numbers).
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+BR,
+Pengfei Li
 
