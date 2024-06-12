@@ -1,69 +1,70 @@
-Return-Path: <linux-clk+bounces-7961-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-7963-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95333904F50
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2024 11:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B1850904F52
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2024 11:31:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39EEE1F28E93
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2024 09:31:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A2FF1F28FDB
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2024 09:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01AA16DEB6;
-	Wed, 12 Jun 2024 09:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7793816DEBD;
+	Wed, 12 Jun 2024 09:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="KNfACtrh"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="03upkCzZ"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D177C1FB5
-	for <linux-clk@vger.kernel.org>; Wed, 12 Jun 2024 09:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F3D16DEB2
+	for <linux-clk@vger.kernel.org>; Wed, 12 Jun 2024 09:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718184666; cv=none; b=KR4nq/W6+rg9SrXRfs2q2JHqAnkITfWx+JgrFmbjIvlyN4DgeGb+nUbc9+XZZPrTpjNqOW/8vOSNzWt3ZkKdg3uXY5pjplceMZXRcLDV7n/XDiLN8446u10OlZ3cs6Q8yhp6W5gOWLN7RdeTY/XkuM083VIBd5kBGu59b006Ufw=
+	t=1718184668; cv=none; b=LtvXjTdUe75zazBQyhJdmv8Ns3KCtMC3Pd5LlKsdbyCotlrnj6w3g2jstXhlY5xA1SQedzWwkfcJw/ArNFDM3Yz3xvw6tqrUVEEO4/6zLnLTVjUBQlIEWLICpn931e12lt1QawB2M6UCYXpKyKAkSoXuUMYkjBLqXBiQ/YtCSsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718184666; c=relaxed/simple;
-	bh=PoPK6+Z1Gri/U1zYPzd1sjOshfAKmlSdqWfY/MIDs60=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=SLepm42UQX/OosvNjvoUxEPyr8EVemoGB3mo0aJYvqqh2/kDVomW0jCNrjZwURG98oevTAx+QLYaHKqFcnTXFKj4JVFagQFEwtpo6+5QSgWTRZ38jZKxwiMmdLRmn69W2Tg/CnyZKU8IwJmSl9ivdW/8zR0Nrf+i4bMFNMDeUnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=KNfACtrh; arc=none smtp.client-ip=148.163.135.77
+	s=arc-20240116; t=1718184668; c=relaxed/simple;
+	bh=Q7h3YVE7EOL5cpS3L6FvOBUczJpEnYf6NPIGtfreBSw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=dfYtL9ojQ5jIEykIXTSGBftEvV9xIxEskrA8KHCXkUmr+LyysolDFRK1O9sGRdfP+EUe6zWhSi71rnYaR62E+tGjca3hqnqoCHbdhFfhLEB2ACt7Z/jUmWvoEaqaYNwqD1ghk08gHl3HlOXcQ6TfU5/aWT0SOYlTw25Pz1oA0Oc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=03upkCzZ; arc=none smtp.client-ip=148.163.135.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45C2fpWf001670;
-	Wed, 12 Jun 2024 05:30:47 -0400
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45C8OCCc002525;
+	Wed, 12 Jun 2024 05:30:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=DKIM; bh=1d0YkMgSmqfYYsdhcRzP314cfTF
-	3fl2RYSNhflcpgmI=; b=KNfACtrhyf7XBnbJnhct+aYdADH0LkIwLRUVr30k+RV
-	KNMbUk0nSKwDj6FWt01+91nivVW0v7od/nwBQUHspy/b4ls/KezlCy9KKtjOMpl1
-	bsLkWZ9mVj9MgY3wn6ozY8+ujpVoMaYLvn9APXPBsRiCAG7b2niQJBkydWFmRRLS
-	3FZ38d3BcNFV1nJ8GqybW2LztcHQ+UfklhhwVD1djQa006NRMzJQgDvMvY4NoK5Y
-	tNdQ/yxcrCi2LHjqhbuM6+lm/0X9CMm40ZT+xNKqQPbn5fD9GXI6mtQ+1w1rbors
-	D7/zoD1yn3vpEe03PmUMT3jRyyxgauVcX/9LhIWPinQ==
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ymh52xxec-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=eppe8
+	D4NdMkozioT93xDSI5IePEiKMEnonmrMoRuBgw=; b=03upkCzZPQrLiXQiwu6BW
+	u3Ux9JI4i6d4lKuKKXpNohXWRD+DscMikrekVvcTlQG3ZE9rWkfVuxJ93wF0YKfg
+	lCOwgy+jq9DNlWNwVDT2x1Ne9wRv2LjrpLrBuVRyQkRp7vRNrTzhbKBibJYKbMJQ
+	gaTbIXRKJcIViYj11apbPVerJn991nIixg54V3+K5sgAtkqtoaUfTfcDiiYyo/bY
+	mTF0Meip1sDk4ixqND7fKHhKZtLlTkUS+gCkaVBENxMDOU3DsjA7/Xey1bLPnZVQ
+	F89woqyQ11U5UeY3ME9gk9GqguBCUA6coK0MHEtyp6TOX5DSibMkm/+kabIUDdTP
+	Q==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ymm726jxk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 12 Jun 2024 05:30:47 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 45C9UkQt029502
+	Wed, 12 Jun 2024 05:30:49 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 45C9Ums8044551
 	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 12 Jun 2024 05:30:46 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+	Wed, 12 Jun 2024 05:30:48 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 12 Jun
- 2024 05:30:45 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 12 Jun 2024 05:30:45 -0400
+ 2024 05:30:47 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 12 Jun 2024 05:30:47 -0400
 Received: from [127.0.0.1] ([10.44.3.54])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 45C9UcNW006288;
-	Wed, 12 Jun 2024 05:30:40 -0400
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 45C9UcNX006288;
+	Wed, 12 Jun 2024 05:30:43 -0400
 From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Subject: [PATCH 0/2] clk: fix possible use after free
-Date: Wed, 12 Jun 2024 11:34:24 +0200
-Message-ID: <20240612-dev-clk-misc-v1-0-7ad8b58f2ea2@analog.com>
+Date: Wed, 12 Jun 2024 11:34:25 +0200
+Subject: [PATCH 1/2] clk: fix clk not being unlinked from consumers list
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -72,54 +73,64 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAKBraWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDM0ND3ZTUMt3knGzd3MziZN1Ey1QTA8MkI1MDYyMloJaCotS0zAqwcdG
- xtbUAA7uX9V4AAAA=
+Message-ID: <20240612-dev-clk-misc-v1-1-7ad8b58f2ea2@analog.com>
+References: <20240612-dev-clk-misc-v1-0-7ad8b58f2ea2@analog.com>
+In-Reply-To: <20240612-dev-clk-misc-v1-0-7ad8b58f2ea2@analog.com>
 To: <linux-clk@vger.kernel.org>
 CC: Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette
 	<mturquette@baylibre.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718184866; l=630;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718184866; l=1101;
  i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=PoPK6+Z1Gri/U1zYPzd1sjOshfAKmlSdqWfY/MIDs60=;
- b=rxzlRTKBBsr6VfyagKc6TctGKHqYtIjbQq12hRBgOh8Mc7J0wSH8urp2vY4EFWYKBDkh9YyDL
- fASmQlZ4NwiAYH38dyRqjhYkzilRwXcyYISh6QlRVKg3aYAA7KB+Qy0
+ bh=Q7h3YVE7EOL5cpS3L6FvOBUczJpEnYf6NPIGtfreBSw=;
+ b=5F/NAzl5iE0JRv/NB2Aqbp97mjLpCLY36Oqdy7tyq89BA+T/gu7iwUm2cz5KLIeozps6aMV3Z
+ 4hQwMXvNegOA2hLop6nuhZ1o83SDjcXhT2gnUrS8F+Pv1LxDrn4ltQP
 X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
  pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: gTQGkP6SKCSUW3-H4zj4W0q4tRGil9UZ
-X-Proofpoint-GUID: gTQGkP6SKCSUW3-H4zj4W0q4tRGil9UZ
+X-Proofpoint-ORIG-GUID: x-ElXcURBqLsACngxvsuyq4Xht-X09zW
+X-Proofpoint-GUID: x-ElXcURBqLsACngxvsuyq4Xht-X09zW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-12_05,2024-06-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=291 priorityscore=1501 phishscore=0 bulkscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1011 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406120068
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 adultscore=1 impostorscore=0 spamscore=0
+ phishscore=0 clxscore=1015 mlxscore=0 priorityscore=1501 mlxlogscore=719
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406120068
 
-The first patch is fixing a possible use after free in case a clk
-provider is removed before it's consumer (more details on the commit
-message.  
+When a clk_hw is registered we add a struct clk handle to it's
+consumers list. This handle is created in '__clk_register()' per the
+'alloc_clk()' call.
 
-The second patch is a straightforward replacement of the open coded 
+As such, we need to remove this handle when unregistering the
+clk_hw. This can actually lead to a use after free if a provider gets
+removed before a consumer. When removing the consumer, '__clk_put()' is
+called and that will do 'hlist_del(&clk->clks_node)' which will touch in
+already freed memory.
 
-hlist_del(&clk->clks_node) ->  clk_core_unlink_consumer(clk)
-
+Fixes: 1df4046a93e0 ("clk: Combine __clk_get() and __clk_create_clk()")
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
 ---
-Nuno Sá (2):
-      clk: fix clk not being unlinked from consumers list
-      clk: use clk_core_unlink_consumer() helper
+ drivers/clk/clk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/clk/clk.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
----
-base-commit: 5029c56be4bab3bce7db6d9595b0bbd171a5b154
-change-id: 20240611-dev-clk-misc-a9e401b25032
---
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 8cca52be993f..b11beeca7e55 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4606,6 +4606,8 @@ void clk_unregister(struct clk *clk)
+ 	if (clk->core->protect_count)
+ 		pr_warn("%s: unregistering protected clock: %s\n",
+ 					__func__, clk->core->name);
++
++	clk_core_unlink_consumer(clk);
+ 	clk_prepare_unlock();
+ 
+ 	kref_put(&clk->core->ref, __clk_release);
 
-Thanks!
-- Nuno Sá
+-- 
+2.45.2
 
 
