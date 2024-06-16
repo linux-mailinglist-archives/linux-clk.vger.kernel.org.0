@@ -1,197 +1,209 @@
-Return-Path: <linux-clk+bounces-8092-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8094-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFC6A909AAC
-	for <lists+linux-clk@lfdr.de>; Sun, 16 Jun 2024 02:20:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC2E0909B23
+	for <lists+linux-clk@lfdr.de>; Sun, 16 Jun 2024 03:55:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 202951F220B1
-	for <lists+linux-clk@lfdr.de>; Sun, 16 Jun 2024 00:20:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13F95B20C5F
+	for <lists+linux-clk@lfdr.de>; Sun, 16 Jun 2024 01:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53AC419D8B5;
-	Sun, 16 Jun 2024 00:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A14B161936;
+	Sun, 16 Jun 2024 01:55:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QgBw352i"
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="C3BWyRuc"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D441847;
-	Sun, 16 Jun 2024 00:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CF219D89B
+	for <linux-clk@vger.kernel.org>; Sun, 16 Jun 2024 01:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718497210; cv=none; b=frphdvIpauAO0x3G47fK94W6mCnqd1IfM8Bo3scWJQdQuk5fbi2O+0Ym+Ha/vGSSP3/g+ZI7XYXfs/PlYc8ATI64uSHpbSjGqqPnEfhysPMcDT5g2oaB7QDfEY7IXLCieYYF78WYx3az4RKHxDMQRaT8nwZkE+oisSo9zJijXL8=
+	t=1718502924; cv=none; b=OWA6M77hAm1fEDh7QKW+0LAmNM/vW9zo/rT+fQEna4nje9JT6tCoyno7tP79R13kiRpwpFWRDhe56Bo+JY5Mp4u/zcY8c9vE64fkIF3J3CG7dA4MOsLkL0LIVpUf5+yntnY0Ksraq0aglXiaOJPoxhV3IJuw6NjisiPQzD5qCeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718497210; c=relaxed/simple;
-	bh=wwA+OqE2v6eOVsJjxE41uJDGwJ6LUdWs0oez7vI8tJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dHCsYaE80ph1JZiJMGvN61BHrGWFYjEtjjlaxKJSMpHWNlwHt6eJWrjWJUFVPPSULSpCGxWx0AqyCYFd0WgTi8I8F7/2fR4AXcPV3vZQv/m7pfwzhgxVSUKbUbqrWJuTzCMy4R78Jgm70nu8xvvsQhB3p4VRg786Wf15iP7Re+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QgBw352i; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718497208; x=1750033208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wwA+OqE2v6eOVsJjxE41uJDGwJ6LUdWs0oez7vI8tJ0=;
-  b=QgBw352iVT0HwrQRoEottbxGdouw5JMoUF8Pk/fp+exg6Q93X3KYR0GX
-   rVA4Ad2TUcStQTj0MaNxYa95wEPEY5NcVhpM410t/ywwiYHlJI6/htsnW
-   Rq+HQmhEoaseVMKH5MJAXBBISAslLLC3/LtSBiDjksKaN3l4T5gUIhlCR
-   w1wQa2NQLdWS3ANFyK9rQD7ugDWpWtpORVz4MbSH2VF8+C/8yvlyT4x/2
-   E5UeBadZXLxcwrIlele6XZ0Pj8cNvtJcUxBOlos9E8pni6TIo9lDsuFdI
-   Fd5GNVFtLvs8Lv8F8J4WGrIveeZjab+zZaM24uGMQBX9w8V0vykqcD7GU
-   w==;
-X-CSE-ConnectionGUID: tb3RojjaTM6OZ80nMLDBMg==
-X-CSE-MsgGUID: RL2KcAgMQXu0GDuBmibhhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="19145764"
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="19145764"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 17:20:08 -0700
-X-CSE-ConnectionGUID: Dsk+HKVsTIOhZ4M66bYGxg==
-X-CSE-MsgGUID: fZPz2K0uQQih11sk8bAk1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="41529016"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 15 Jun 2024 17:20:05 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIdcn-0000dm-2e;
-	Sun, 16 Jun 2024 00:20:01 +0000
-Date: Sun, 16 Jun 2024 08:19:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Claudiu <claudiu.beznea@tuxon.dev>, geert+renesas@glider.be,
-	mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, lee@kernel.org,
-	alexandre.belloni@bootlin.com, magnus.damm@gmail.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 04/12] clk: renesas: clk-vbattb: Add VBATTB clock driver
-Message-ID: <202406160847.Ns62KOVc-lkp@intel.com>
-References: <20240614071932.1014067-5-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1718502924; c=relaxed/simple;
+	bh=oiQ2U4RKb1Iv2Gx0d/RSo2VuGdZEH1NgOZ9G/UGU3Zs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hPTMLvU/QCLTVJvtA/QiENgwKKa4fuqtVKWtUiRV2jSQOrVCWb0+j2nA8P1p0uMFrnf4VkU9QkMjGHQ7bEbeRIvOgw3Y6txjfaBhd7RD1Onv7dPMkAdrxwggDv/TgO4akNVEyc1RMs3PrpDAYF9PUClu7+IeLbi0OCUc3iDEys0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=C3BWyRuc; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7042cb2abc8so2454849b3a.0
+        for <linux-clk@vger.kernel.org>; Sat, 15 Jun 2024 18:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tenstorrent.com; s=google; t=1718502920; x=1719107720; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vvNH5iGqBZh76l6k5VqaC65fZKHfbumS1HMa6kMl+Ww=;
+        b=C3BWyRucrGFtMrqAXJAkYaqg/nDxuoH6VfunhmOc0wqLfcXmMOp2i3FmK8fUMOE84S
+         Q2mptahdtlnnY7PT0VqBydlJ4hAMCB4vMyFkuLx808K/cId0GnI0jqY+kqYvddY1FV/7
+         BEjMF8N5YM0M6M9n3VsADUqBGQaxWPX3uBaW0NxsgQ3cJ4Dk9Hlptx2uNLoj4sChql2i
+         KgGg2Tuv6OPPqLcpWAkT62x+eu9fchr4tvU7x5fcfEznTKiK/WFYXqz08vzh1knyF1jb
+         mdud0JjuV39Ve6pnDYaS1tdcJheC4l+m/FKipkBJWQsMTY9Fp/AnN4+gEHAbdkiF2VLY
+         SAHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718502920; x=1719107720;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vvNH5iGqBZh76l6k5VqaC65fZKHfbumS1HMa6kMl+Ww=;
+        b=IQCV7A6nqC8o1OBD1r7oyugyv6omqeo+29r0hrbMn3mn/IonhgHwJIEvIuLD1yGsNG
+         G1GxkrpbXLbp2M874GjIJ0+6KJFWQkoxEDvJuI35hk7MtviAE8w5UqsIFTABMffLMGos
+         TmHbOrE5I3Y4v+5QIqoqeKaIomRSrcINK1co7x5qUtnNCyLno8fAgAw3eYxMP00DLHD1
+         I2CZE4nGylWkkEk7nUDOIh6v4dP0l25v6Hsqcg7A6B5I0a6Su+BLGyHyWHzT7Ke6MFFR
+         2YzcTj2Qs9s+6Dh4OxWoSOnIPJ39g7blhoyG/ia5KT3ibKHI6eZoXcQlI8QUHqcjLiD8
+         xBcw==
+X-Forwarded-Encrypted: i=1; AJvYcCXPp4HIH2lwnzTVO7CojdHJN0eGOqRl2UN+U3HWMT8V3vOKHpuWl7FeXFtrwuwo+PlV1qEqBYCcRfqGiAbjgpq64Si8X4UVROJd
+X-Gm-Message-State: AOJu0Yx8s7NfpScTyuzRDfzFkT4AtIoKZO8dHHpy/F/CdMb/8VJ5d5Dw
+	055yK2CcIIJhgN18eKqKqV+BpyzJNoi8ExudciwSyiBDunHfVSYgBoG+9+LcgGU=
+X-Google-Smtp-Source: AGHT+IEm1y8qyu8PaaBUYkyOQbpK7u3h9Hx5y/jGO03i4VxxXa+YdnnEPwOPo/FGFhAGJrxSUEuU/w==
+X-Received: by 2002:a05:6a20:6a0d:b0:1b6:15b2:822 with SMTP id adf61e73a8af0-1bae7f01befmr6559414637.27.1718502920190;
+        Sat, 15 Jun 2024 18:55:20 -0700 (PDT)
+Received: from [127.0.1.1] ([2601:1c2:1802:170:1cea:28dd:2ee0:e8e5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4a769aedbsm8751201a91.43.2024.06.15.18.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jun 2024 18:55:19 -0700 (PDT)
+From: Drew Fustini <dfustini@tenstorrent.com>
+Subject: [PATCH 0/6] clk: thead: Add support for TH1520 AP_SUBSYS clock
+ controller
+Date: Sat, 15 Jun 2024 18:54:29 -0700
+Message-Id: <20240615-th1520-clk-v1-0-3ba4978c4d6b@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240614071932.1014067-5-claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANVFbmYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDM0MT3ZIMQ1MjA93knGzd5BRTC9NEC1ODFLNkJaCGgqLUtMwKsGHRsbW
+ 1AF6JvIFcAAAA
+To: Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, 
+ Fu Wei <wefu@redhat.com>, Yangtao Li <frank.li@vivo.com>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>, 
+ Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Drew Fustini <dfustini@tenstorrent.com>
+X-Mailer: b4 0.12.3
 
-Hi Claudiu,
+This series adds support for the AP sub-system clock controller in the
+T-Head TH1520 [1]. Yangtao Li originally submitted this series in May
+2023 [2]. Jisheng made additional improvements and then passed on the
+work in progress to me.
 
-kernel test robot noticed the following build warnings:
+Changes in v1:
+ - Split th1520_clks into groups for gate, mux, div, pll
+ - Convert gate clocks to devm_clk_hw_register_gate_parent_data()
+ - Convert mux clocks to devm_clk_hw_register_mux_parent_data_table()
+ - Split the PLL recalculation into th1520_pll_vco_recalc_rate() and
+   th1520_pll_postdiv_recalc_rate(). Based on Emil's comments in v1,
+   add logic to handle the fractional portion of feedback divide value
+   when the delta-sigma modulator (DSM) is active.
+ - Drop clock-names from the binding per Stephan to avoid relying on
+   anything other than the cell index when describing clk_parent_data
+   (note: I dropped Rob's Rb because I changed the binding patch)
+ - Rename reg/reg2 to cfg0/cfg1 to match the SoC documentation
+ - Rename struct for pll clocks from ccu_mdiv to ccu_pll
+ - Rebase on v6.10-rc3, remove the dts node reordering patch from v3
+   now that it is in mainline
 
-[auto build test WARNING on geert-renesas-drivers/renesas-clk]
-[also build test WARNING on geert-renesas-devel/next linus/master v6.10-rc3 next-20240613]
-[cannot apply to abelloni/rtc-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Changes in RFC v3 [3]:
+ - Drop redundant new line and unused clk label from the dts example in
+   the DT binding which I failed to fix in v2.
+ - Add patch [4] from Thomas Bonnefille that fixes dts node ordering in
+   th1520.dtsi. Conor has already merged it into riscv-dt-for-next so
+   the dts patches in this series are based on top of that.
+ - Remove fixed uart clock and converted uart DT nodes to use clocks
+   from the clock controller.
+ - Remove fixed apb clock and converted the dma controller and timer DT
+   nodes to use a clock from the clock controller.
+ - Made ccu_disable_helper() and ccu_enable_helper() to static functions
+ - Follow the advice from Stephen Boyd in Yangtao's original series to
+   not use strings for clk tree topology. Created clk_parent_data arrays
+   to be used with CLK_HW_INIT_PARENTS_DATA instead of parent strings.
+ - Rebase on top of v6.9-rc7
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu/clk-renesas-r9a08g045-Add-clock-reset-and-power-domain-support-for-the-VBATTB-IP/20240614-152418
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-clk
-patch link:    https://lore.kernel.org/r/20240614071932.1014067-5-claudiu.beznea.uj%40bp.renesas.com
-patch subject: [PATCH 04/12] clk: renesas: clk-vbattb: Add VBATTB clock driver
-config: mips-randconfig-r122-20240616 (https://download.01.org/0day-ci/archive/20240616/202406160847.Ns62KOVc-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240616/202406160847.Ns62KOVc-lkp@intel.com/reproduce)
+Changes in RFC v2 [5]:
+ - squash the header file patch into the DT schema patch
+ - describe the changes I made to original series in the cover letter
+   instead of the individual patches
+ - fix my typo in my email address
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406160847.Ns62KOVc-lkp@intel.com/
+Changes in RFC v1 [6] from the original series:
+ - corrected the npu_clk enable bit
+ - deduplicated CLK_NPU and CLK_NPU_AXI number in header
+ - fixed c910_i0_clk reg typo
+ - fixed checkpatch and dt_binding_check warnings
+ - rebased on v6.9-rc5
+ - revised commit descriptions
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/clk/renesas/clk-vbattb.c:132:35: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] size @@     got restricted gfp_t @@
-   drivers/clk/renesas/clk-vbattb.c:132:35: sparse:     expected unsigned int [usertype] size
-   drivers/clk/renesas/clk-vbattb.c:132:35: sparse:     got restricted gfp_t
->> drivers/clk/renesas/clk-vbattb.c:132:47: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted gfp_t [usertype] gfp @@     got unsigned int @@
-   drivers/clk/renesas/clk-vbattb.c:132:47: sparse:     expected restricted gfp_t [usertype] gfp
-   drivers/clk/renesas/clk-vbattb.c:132:47: sparse:     got unsigned int
-   drivers/clk/renesas/clk-vbattb.c: note: in included file (through include/linux/mmzone.h, include/linux/gfp.h, include/linux/xarray.h, ...):
-   include/linux/page-flags.h:240:46: sparse: sparse: self-comparison always evaluates to false
-   include/linux/page-flags.h:240:46: sparse: sparse: self-comparison always evaluates to false
+Thank you,
+Drew
 
-vim +132 drivers/clk/renesas/clk-vbattb.c
+[1] https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf
+[2] https://lore.kernel.org/all/20230515054402.27633-1-frank.li@vivo.com/
+[3] https://lore.kernel.org/all/20240506-th1520-clk-v3-0-085a18a23a7f@tenstorrent.com/
+[4] https://lore.kernel.org/all/20240425082138.374445-1-thomas.bonnefille@bootlin.com/
+[5] https://lore.kernel.org/all/20240426-th1520-clk-v2-v2-0-96b829e6fcee@tenstorrent.com/
+[6] https://lore.kernel.org/all/20240110-clk-th1520-v1-0-8b0682567984@tenstorrent.com/
 
-   119	
-   120	static int vbattb_clk_probe(struct platform_device *pdev)
-   121	{
-   122		struct clk_parent_data parent_data = { .fw_name = "vbattb_xtal" };
-   123		struct device_node *np = pdev->dev.of_node;
-   124		struct device *dev = &pdev->dev;
-   125		struct clk_init_data init = {};
-   126		struct vbattb_clk *vbclk;
-   127		u32 load_capacitance;
-   128		struct clk_hw *hw;
-   129		bool bypass;
-   130		int ret;
-   131	
- > 132		vbclk = devm_kzalloc(dev, GFP_KERNEL, sizeof(*vbclk));
-   133		if (!vbclk)
-   134			return -ENOMEM;
-   135	
-   136		vbclk->regmap = syscon_node_to_regmap(np->parent);
-   137		if (IS_ERR(vbclk->regmap))
-   138			return PTR_ERR(vbclk->regmap);
-   139	
-   140		bypass = of_property_read_bool(np, "renesas,vbattb-osc-bypass");
-   141		ret = of_property_read_u32(np, "renesas,vbattb-load-nanofarads", &load_capacitance);
-   142		if (ret)
-   143			return ret;
-   144	
-   145		ret = vbattb_clk_validate_load_capacitance(vbclk, load_capacitance);
-   146		if (ret)
-   147			return ret;
-   148	
-   149		ret = devm_pm_runtime_enable(dev);
-   150		if (ret)
-   151			return ret;
-   152	
-   153		ret = pm_runtime_resume_and_get(dev);
-   154		if (ret)
-   155			return ret;
-   156	
-   157		regmap_update_bits(vbclk->regmap, VBATTB_BKSCCR, VBATTB_BKSCCR_SOSEL,
-   158				   bypass ? VBATTB_BKSCCR_SOSEL : 0);
-   159	
-   160		init.name = "vbattclk";
-   161		init.ops = &vbattb_clk_ops;
-   162		init.parent_data = &parent_data;
-   163		init.num_parents = 1;
-   164		init.flags = 0;
-   165	
-   166		vbclk->hw.init = &init;
-   167		hw = &vbclk->hw;
-   168	
-   169		spin_lock_init(&vbclk->lock);
-   170	
-   171		ret = devm_clk_hw_register(dev, hw);
-   172		if (ret)
-   173			goto rpm_put;
-   174	
-   175		ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, hw);
-   176		if (ret)
-   177			goto rpm_put;
-   178	
-   179		return 0;
-   180	
-   181	rpm_put:
-   182		pm_runtime_put(dev);
-   183		return ret;
-   184	}
-   185	
+To: Jisheng Zhang <jszhang@kernel.org>
+To: Guo Ren <guoren@kernel.org>
+To: Fu Wei <wefu@redhat.com>
+To: Yangtao Li <frank.li@vivo.com>
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+To: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Paul Walmsley <paul.walmsley@sifive.com>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+To: Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-clk@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
+Signed-off-by: Drew Fustini <dfustini@tenstorrent.com>
+---
+Drew Fustini (6):
+      dt-bindings: clock: Document T-Head TH1520 AP_SUBSYS controller
+      clk: thead: Add support for T-Head TH1520 AP_SUBSYS clocks
+      riscv: dts: thead: Add TH1520 AP_SUBSYS clock controller
+      riscv: dts: thead: change TH1520 uart nodes to use clock controller
+      riscv: dts: thead: change TH1520 mmc nodes to use clock controller
+      riscv: dts: thead: update TH1520 dma and timer nodes to use clock controller
+
+ .../bindings/clock/thead,th1520-clk-ap.yaml        |   58 ++
+ MAINTAINERS                                        |    3 +
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts |   12 -
+ .../boot/dts/thead/th1520-lichee-module-4a.dtsi    |   12 -
+ arch/riscv/boot/dts/thead/th1520.dtsi              |   69 +-
+ drivers/clk/Kconfig                                |    1 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/thead/Kconfig                          |   12 +
+ drivers/clk/thead/Makefile                         |    2 +
+ drivers/clk/thead/clk-th1520-ap.c                  | 1086 ++++++++++++++++++++
+ include/dt-bindings/clock/thead,th1520-clk-ap.h    |   96 ++
+ 11 files changed, 1291 insertions(+), 61 deletions(-)
+---
+base-commit: 83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+change-id: 20240614-th1520-clk-cd585a850d6c
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Drew Fustini <dfustini@tenstorrent.com>
+
 
