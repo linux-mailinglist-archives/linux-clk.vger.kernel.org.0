@@ -1,132 +1,210 @@
-Return-Path: <linux-clk+bounces-8222-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8224-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1844D90DBFA
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 20:56:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7866F90DC44
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 21:14:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B969B1F23765
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 18:56:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91C5C1C2282F
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 19:14:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52F6315ECFF;
-	Tue, 18 Jun 2024 18:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F18B15EFA7;
+	Tue, 18 Jun 2024 19:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GeRU7INo"
+	dkim=pass (1024-bit key) header.d=nuvoton.onmicrosoft.com header.i=@nuvoton.onmicrosoft.com header.b="oxHPn7iR"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01rlnn2087.outbound.protection.outlook.com [40.95.110.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3CC15ECD1
-	for <linux-clk@vger.kernel.org>; Tue, 18 Jun 2024 18:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718736962; cv=none; b=bPT9VwNH99kkVld2EXXUyhZ4wS9SgPBUBi/ZXtuzkyMxgkQDQdJJTvtmdddQyET1UrV5tiDmmZ7V8ggIbIodPansITJ20pqai1AftpdMUbN585oNJQId5hcmphdVtagBk1LAyOLX/au0vI6cn/waxGd+hDrSy2ZMW0VceXm46Pc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718736962; c=relaxed/simple;
-	bh=GZ8cNz7HxzJEA3fctUo9rko9xv2fpo9Fak4LOEr1XU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WjABf9Epc0ofnNnS8G5i1bct++gvM/q/oshEtSDq7sniBz/Sor9thw7vgaGurG67LjQSUfoHRqy9BI71on+3xT+dDdQoVb+39WRxaaRs5c/oDghUpdt4JSTTTBruXYSeZIgx5nhnDxKxLf0/x9Qw23IY+aF3EeAV4nKZNcEk+CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GeRU7INo; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ec1e5505abso991031fa.1
-        for <linux-clk@vger.kernel.org>; Tue, 18 Jun 2024 11:56:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E46E1BF50;
+	Tue, 18 Jun 2024 19:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.95.110.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718738074; cv=fail; b=Mp5/F9FecGDPIZAhbMAqYFxm/67T3e1OpYiz4ldVCqAJ/cNBFq0HfS45dPBr3EHxEo1A4eisIKiBg70Ka98NvgMOHBhn8xpJ5uOMJFQ3vEHB3LWDyO0DwEmefoK67mq1VFZERgyNF+Bb6BNcRnLsXDpi9Z+yoFfgW8MO2GkQ6cg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718738074; c=relaxed/simple;
+	bh=5l3pdLD6j41SvSPIj9SqQ8Fhb6SyyRws9o7de6nqEvI=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oeIvXa0nGuERhxkImJX5mhhu5XtD58b87LXngH5xQ8Yi9jTntj/Kw9pRpst7ffwvHN4wbCg/ZDUWogaxVn1GhjfH8A1wpIQ7S72p552Fo2MNLRyg0s0vW7eFP7/ZvVE/Xq1tIQOKqY1LQ+RLbbr4IBQnj2PpHWjWgVZsn5yc5Jo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=none smtp.mailfrom=taln60.nuvoton.co.il; dkim=pass (1024-bit key) header.d=nuvoton.onmicrosoft.com header.i=@nuvoton.onmicrosoft.com header.b=oxHPn7iR; arc=fail smtp.client-ip=40.95.110.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=taln60.nuvoton.co.il
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OF1j/DOebL14HJysyRPOPd9OMO5MU9L/+cUoSgUjsxgON0vB++sgD5YSjfAoZ5eNbiYESawBm0ekxWaZ2341wilqMGozTvGZvIgeRH8fU/9kxw/TyNDZ4qsuefSIHA4jSxp7C3O/iuABZstnUMzXazUUEiPf3OoSY+0kH3t4isgubnCfk+76Qf5sXlSy0ovxPetm5c8JdNY5pFrRkGIHofXP0215z1PU9Dvm4uHMnWoRePdE4Kzlujs3318eoOoKJ+vRxvQGyrdPI7Esq72cT9Pr91oka/DCxYD3Au9mxzPEGH5V4dd7SXBO32w7XKW9EUwkV5mbOqg2HYrj7cHwBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zt1m6WJbUfu9UFYVa/YU4Ed38FbBGZnxRO2M1Aak2t4=;
+ b=B067XVG9cKbk5VEZiwdCgBPzCtCnlRCvRxpAt5DedYQIYLrfvUSfOVuTLGiw4ukT8umfA7K020rP3UBkJ7h281F4L6FxxlLiUe30L6HM4dRwnOQmPeW+/woQ1deo9kjNmTYAKs/6kP0IG8U5Sn5mUkIzSnm0Z789gDObgOU+iJDB0nXOjieqBsEwAeXVTxmEMCPaa+xq+fVSV5qnHhGjmOdn44FjHgSE5DQYsB4aF22JboOIs7X/m3fhyjuezrnxkNnEzKIqEwvB2KHVPVWj04S4zT+5txdeTTvmUDp86i5STu7+pB04rA9i3bP7A2V2LiiLtDfK6TtD5svt6fLwSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none (sender ip is
+ 211.75.126.7) smtp.rcpttodomain=baylibre.com
+ smtp.mailfrom=taln60.nuvoton.co.il; dmarc=fail (p=none sp=quarantine pct=100)
+ action=none header.from=gmail.com; dkim=none (message not signed); arc=none
+ (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718736958; x=1719341758; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YzQHQlKHxgZaRZfXLT1ynkXMYrdCKCTUr57+vqG9rY0=;
-        b=GeRU7INomSFeMNtL8EVDnQzIoAcfn6UJYd5inJkPB/uTioDG3tZY+aL9ES/3jONXhQ
-         M2RgMsLS9L6v9zVuxPtjDo2uwnUvN6acbIaAmgnyL9vMNO9Yv7Ec+a7HSdisdyCo6Hw8
-         ek/T0XJ0VuSDm+O31+Sy7ltYOeJYPFGs7908IhiBw96qdYtaDtMnXVgtDJZxXSy5ssZR
-         ZIrc1jO3QP3Asb1rIDCW5W5MQP629lz19+618mYuqgLBxVRaX7bv5rZpTo45pU8RWqii
-         6C5Sg749OFNPe4BxTDVWKonOE/7HBYSyEbGvfaueQEtwi5ORNuvowcBV7LvQb+39C8Yz
-         TJxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718736958; x=1719341758;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YzQHQlKHxgZaRZfXLT1ynkXMYrdCKCTUr57+vqG9rY0=;
-        b=ax/0oqk6ABdKPE3sU25JBTuZ1RMqvYmJGgWr1IgcCdtLYouUAWgUPIoE5MkQlqcvdL
-         p4rE9clJhgz0DQ6tOAPOFMPo49MTakWHKEJ/wVI9j8ItK0OMRpnjmPOmFDRq78QEvWNz
-         knhm0G6JVIrti+Azq4FBLDwSDgtiYXHJ2Tb+v1/f1tVpKW/JoU/jAMggKkrxorRao9JG
-         P5C3Bv2m1kPf5igtuoUG5jmujv1KZuYKmZ0Qowjknqnsjoc1lhQ0+UTjO+EN2LTH76Ay
-         EpMH69WBQQFjkwTlsSZ+NaXQPCRqdt/pFhPhqVvOhGyXaLpovxHgYnbqdpFT0j9ZKyW7
-         /TEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKIaMFU3Qsb3VLLGk8eqaZo5FsHPVfnL/aVXZB+H4NATTXYcxH+w/PA2hpUT9lDtQk11Ygg2OK9yRXt2iVhTovolnUqx/KCW6n
-X-Gm-Message-State: AOJu0YwLrvbWJlxB1RNPXjtdWf1SOBwwe0jvAL9mc1SgkYqvrTRk2Dnj
-	H81OyFYiJl7H4UAD8P83nukN8ePXRTBin77p2HztzhLWbIj7fJoDNOH+wzwM8dQ=
-X-Google-Smtp-Source: AGHT+IGC5OJR3gZ0AgVkD1dpAKYbvhHSigXJJVNaqgqzU/pJEsxEJFZWPzPeEkSJ7Z7mUZbZszMNQQ==
-X-Received: by 2002:a2e:9257:0:b0:2eb:fcea:2f18 with SMTP id 38308e7fff4ca-2ec3ce7dfdbmr2013211fa.2.1718736958673;
-        Tue, 18 Jun 2024 11:55:58 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ec07126057sm17344181fa.59.2024.06.18.11.55.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 11:55:58 -0700 (PDT)
-Date: Tue, 18 Jun 2024 21:55:56 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Dzmitry Sankouski <dsankouski@gmail.com>, 
-	Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
-	Sam Ravnborg <sam@ravnborg.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	phone-devel@vger.kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v3 02/23] gcc-sdm845: Add rates to the GP clocks
-Message-ID: <lwrz4rvn6ogseea5v6j7plc3yi3xnzo76dvrsl3muat3iswlkb@zmwa3xo3xgw4>
-References: <20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com>
- <20240618-starqltechn_integration_upstream-v3-2-e3f6662017ac@gmail.com>
- <wnf3mfgdm4p4f5wrxdtlx4wccnizdvohc7iiyu5t22eeb67r57@xun3r73hksrg>
- <ad04e203-4244-4cd3-9c9a-fae002962990@linaro.org>
+ d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zt1m6WJbUfu9UFYVa/YU4Ed38FbBGZnxRO2M1Aak2t4=;
+ b=oxHPn7iRCmsg2yYso1bgS1SDUO2OYrS8j9pyEryksdQe4620Ao/+Wg0bf2qI155qz8r0nGpd/ViYOdC+HTo5J84E0IFPRxUiQWFCSTEHRIzuQBSuoHrJ6Gv/S43I/0NvSTr7F7ntWpP5LG+1b803LFRDtx+JqCTvhW1P7OpzLyY=
+Received: from KL1PR01CA0007.apcprd01.prod.exchangelabs.com
+ (2603:1096:820::19) by KL1PR03MB8822.apcprd03.prod.outlook.com
+ (2603:1096:820:144::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.30; Tue, 18 Jun
+ 2024 18:58:26 +0000
+Received: from HK2PEPF00006FAF.apcprd02.prod.outlook.com
+ (2603:1096:820:0:cafe::3e) by KL1PR01CA0007.outlook.office365.com
+ (2603:1096:820::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.32 via Frontend
+ Transport; Tue, 18 Jun 2024 18:58:25 +0000
+X-MS-Exchange-Authentication-Results: spf=none (sender IP is 211.75.126.7)
+ smtp.mailfrom=taln60.nuvoton.co.il; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=gmail.com;
+Received-SPF: None (protection.outlook.com: taln60.nuvoton.co.il does not
+ designate permitted sender hosts)
+Received: from NTHCCAS01.nuvoton.com (211.75.126.7) by
+ HK2PEPF00006FAF.mail.protection.outlook.com (10.167.8.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7677.15 via Frontend Transport; Tue, 18 Jun 2024 18:58:24 +0000
+Received: from NTHCML01A.nuvoton.com (10.1.8.177) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 19 Jun
+ 2024 02:58:23 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01A.nuvoton.com
+ (10.1.8.177) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 19 Jun
+ 2024 02:58:23 +0800
+Received: from taln58.nuvoton.co.il (10.191.1.178) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Wed, 19 Jun 2024 02:58:23 +0800
+Received: from taln60.nuvoton.co.il (taln60 [10.191.1.180])
+	by taln58.nuvoton.co.il (Postfix) with ESMTP id 87C465F633;
+	Tue, 18 Jun 2024 21:58:22 +0300 (IDT)
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+	id 833FBDC0726; Tue, 18 Jun 2024 21:58:22 +0300 (IDT)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: <mturquette@baylibre.com>, <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<tali.perry1@gmail.com>, <joel@jms.id.au>, <venture@google.com>,
+	<yuenn@google.com>, <benjaminfair@google.com>
+CC: <openbmc@lists.ozlabs.org>, <linux-clk@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Tomer Maimon
+	<tmaimon77@gmail.com>
+Subject: [PATCH v25 1/3] dt-bindings: reset: npcm: add clock properties
+Date: Tue, 18 Jun 2024 21:58:17 +0300
+Message-ID: <20240618185819.2155595-2-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240618185819.2155595-1-tmaimon77@gmail.com>
+References: <20240618185819.2155595-1-tmaimon77@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad04e203-4244-4cd3-9c9a-fae002962990@linaro.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NotSetDelaration: True
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK2PEPF00006FAF:EE_|KL1PR03MB8822:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bd16319-27f4-4123-a73b-08dc8fc8a162
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 1
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230037|35950700013|48200799015|7416011|376011|7093399009|82310400023|61400799024|921017|35450700002;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?QegjpYsomvDfUg2woPe25HvDoG6l1gfykYN7jlY3feKWNJXHBATSEeG2Ztnb?=
+ =?us-ascii?Q?vCOBq1ibVEa0jPw1ZYwZCT0a1mipSie8nhvaXGnruMg5Yh/2CGVVq2HTQDNt?=
+ =?us-ascii?Q?HUfHhp7HEed8C6mkjLRGuelZsYvaTyGzNnmM+k3pHgE+LhMzV26jTNu/3d4A?=
+ =?us-ascii?Q?CVFH1H/Wb7y+/nlrzOsJQhHnvVYMx8+U9/AvcutuodjDqLblHztjJgsT+9F5?=
+ =?us-ascii?Q?OTNAjauWVFa7RiDf92bxUaY7YODTXiT9SeVlk+tUZZeNxweHsMN3qScUQgkZ?=
+ =?us-ascii?Q?DPhuow5mCGkmCdGSodvyikVKV3Uo0Xeguc1FA6YvMxP6lyg0xqtjosDIBC9T?=
+ =?us-ascii?Q?aFs+d4UGcC43c+9IOtbo8ECDvPwi0L/vtFyYAxqinwA6plsolP616e9QY6M+?=
+ =?us-ascii?Q?t5RCj+UI/HHk3uJ44E0kXLbDOwYwuRTpE8+8MOTFDw81tdPBhwsXozeJenr7?=
+ =?us-ascii?Q?9C4fB8OwQCA4iXA0lTqzUvaqN2ad1vJuV3vJhVFH2Nwx8BxT4P7xRzpR6fl5?=
+ =?us-ascii?Q?OpEXyyPVKgQ+wRU1jlTLachjh+x+F/dREgnb5eMuMuZIwbiShKzGZJF/OzFD?=
+ =?us-ascii?Q?77bTLRjKguxfq6TscjV2ANg/YYAXmqwojARm3i9p1yIrKts/m8AJGNm7JMXN?=
+ =?us-ascii?Q?8ZJCssn4EHDsEjKw9VqngsPu0H1hxyM+33RV5ol6XqrLB1I/15OlbxoGTwsn?=
+ =?us-ascii?Q?69On8OEyYRd76E3jvcKDoFf89auP+0R3P+VzNJTeiWZZdsQb4k789AmnhsUI?=
+ =?us-ascii?Q?qxcmS0E6cDFMaUmQ5G5bqZjbKpNALHGQvrWsQjICqUwsDHJaVYGecTx/Q+NC?=
+ =?us-ascii?Q?O6F3POCDWjfh/7VJJBjf+lrUqS7n2HaLnom3cEYoVB9QwyuayMmG9SmA9XWF?=
+ =?us-ascii?Q?zsaUcDW1lX3j7vZ/GRY3Pr4+OzGr5k/wghBmWuUSZEqlHoVQIbnWQcrSW8eq?=
+ =?us-ascii?Q?RKL51Z51mbQzKtVKqDeqQNrpHPi4nnV+38mRh/lrfoidhjTzkMew5P4Obq9t?=
+ =?us-ascii?Q?R0v/UusAh7WZSnnhuFx6cmMqwVrjX3AynC9mrR6eULcpZo6JTN11BhTILcmL?=
+ =?us-ascii?Q?ko7Q1OyCuXLjzUj3geVehgLHv377x3zK7IkNfJUrXZxUSau+IDX6N64M+ueo?=
+ =?us-ascii?Q?uIq830TF3/vhgbW4V/RWIUg9AmXj7OGu0mpB4hBqhRLkcLPcAN85okd8vilg?=
+ =?us-ascii?Q?8ZopF5Uo0dPOcBYHOh2q9voMn6nB/4ZBOLZuoOPlfQ8BhEscZPMDWDcoUQcE?=
+ =?us-ascii?Q?RvH9yYxdmjACNcX6+nIvQU8BjNEQlv+w00ELlGGdveXWCs0TBQFDHl8o4RtX?=
+ =?us-ascii?Q?9zO/Xwsv77+iGpuQaeoHLGv6dMZWPJNFk8KbS/GVWkZZYRG2Wco5Tdeb1ksd?=
+ =?us-ascii?Q?pU8QpvTSohAC0NSswUL1VJTA5f+HpUMYxayDtC4q1sjDnscCQ4lxL3kiEZyd?=
+ =?us-ascii?Q?vMMDsWaSnlCBmS2UBoRwZjv/etEd8jZb?=
+X-Forefront-Antispam-Report:
+	CIP:211.75.126.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS01.nuvoton.com;PTR:211-75-126-7.hinet-ip.hinet.net;CAT:NONE;SFS:(13230037)(35950700013)(48200799015)(7416011)(376011)(7093399009)(82310400023)(61400799024)(921017)(35450700002);DIR:OUT;SFP:1022;
+X-OriginatorOrg: nuvoton.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 18:58:24.3127
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bd16319-27f4-4123-a73b-08dc8fc8a162
+X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[211.75.126.7];Helo=[NTHCCAS01.nuvoton.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	HK2PEPF00006FAF.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB8822
 
-On Tue, Jun 18, 2024 at 08:50:52PM GMT, Konrad Dybcio wrote:
-> 
-> 
-> On 6/18/24 19:50, Dmitry Baryshkov wrote:
-> > On Tue, Jun 18, 2024 at 04:59:36PM GMT, Dzmitry Sankouski wrote:
-> > > sdm845 has "General Purpose" clocks that can be muxed to
-> > > SoC pins.
-> > > 
-> > > Those clocks may be used as e.g. PWM sources for external peripherals.
-> > > Add more frequencies to the table for those clocks so it's possible
-> > > for arbitrary peripherals to make use of them.
-> > > 
-> > > See also: bf8bb8eaccf(clk: qcom: gcc-msm8916: Add rates to the GP clocks)
-> > 
-> > Each time I look at the table attached to the GP CLK, I feel that it's
-> > plain wrong. In the end the GPCLK can in theory have arbitrary value
-> > depending on the usecase.
-> > 
-> > Bjorn, Konrad, maybe we should add special clk_ops for GP CLK which
-> > allow more flexibility than a default clk_rcg2_ops?
-> 
-> If we can somehow get max m/n/d values for all possible parents, sure
+This commit adds a 25MHz reference clock and clock-cell properties to
+the NPCM reset document. The addition is necessitated by the integration
+of the NPCM8xx clock auxiliary bus device into the NPCM reset driver.
 
-Calculate them at runtime?
+The inclusion of the NPCM8xx clock properties in the reset document is
+crucial as the reset block also serves as a clock provider for the
+NPCM8xx clock. This enhancement is intended to facilitate the use of the
+NPCM8xx clock driver.
 
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ .../bindings/reset/nuvoton,npcm750-reset.yaml  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+index d82e65e37cc0..72523f1bbc18 100644
+--- a/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
++++ b/Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+@@ -21,6 +21,13 @@ properties:
+   '#reset-cells':
+     const: 2
+ 
++  '#clock-cells':
++    const: 1
++
++  clocks:
++    items:
++      - description: specify external 25MHz reference clock.
++
+   nuvoton,sysgcr:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: a phandle to access GCR registers.
+@@ -39,6 +46,17 @@ required:
+   - '#reset-cells'
+   - nuvoton,sysgcr
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        enum:
++          - nuvoton,npcm845-reset
++then:
++  required:
++    - '#clock-cells'
++    - clocks
++
+ additionalProperties: false
+ 
+ examples:
 -- 
-With best wishes
-Dmitry
+2.34.1
+
 
