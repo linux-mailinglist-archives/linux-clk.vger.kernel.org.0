@@ -1,211 +1,205 @@
-Return-Path: <linux-clk+bounces-8155-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8152-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8ED590C819
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 12:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92A4790C804
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 12:58:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1F561C22B7E
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 10:59:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABA941C21190
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2024 10:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCED81D2A3D;
-	Tue, 18 Jun 2024 09:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC2D1D0551;
+	Tue, 18 Jun 2024 09:33:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MNJEuFqX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lA3cdHof"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C98113B587;
-	Tue, 18 Jun 2024 09:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB86713E8A0;
+	Tue, 18 Jun 2024 09:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718703297; cv=none; b=kHV4JTW7jv/5g2eyCn2fOXVzJTubXxxTCG+ShVU+65hxlLxjWNAfE0PAqyFZ/Tr6xCD7818xCIHcIPPDrjAtbVa4F/LMOEX7pTeJhtfwB2lqrNG06ayxZj8h2gkSnmvR/DeMxgyz46qXoz4LIchTYksctcLjJ1FnYCtU376E1pM=
+	t=1718703213; cv=none; b=PrLQWGBzXDCD9i65BubDuqDF2qyDuUS8wH/7fV3pdYHoTxFphsaNCzr0NHt3JJO5FVj4JyCljVJsih0fASFh7Ljggckpnx6OgJLlkYsoeK5Rnq/T2fpJPKIM1HHR5Ds6wejqZ+GjvHcGhZwCReB6b4raAOnw15Ots+Ln+U95Vlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718703297; c=relaxed/simple;
-	bh=OkAo6EIj92wKJXQtVAueFl/of18+ooI9LN/LRMNUFT8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=NJ3TmB2XfmJvHucysTTgkQiKFrj9qZkRZact6nU1gElA6mLAWU+5MvTlE0a86arBOOP+tMDYzpgwqcI2s5oOtBWFmosBF2SDsbm0QJbV3okzThMOFEb+P63jfdjxBnshE+7taoYfq021KTbEzSC/NrfwmG5JPPUtuGGFzVygCLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MNJEuFqX; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45I37ooU018347;
-	Tue, 18 Jun 2024 09:34:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	4RP1l8jk2w2WRZlbBbGJ4pmrEVkuCZtj4kNaPexCg7c=; b=MNJEuFqXexvu8Qcn
-	AcU/C02rVrb2YHj9yf0YRNXb+ylxfqfLBWrbjnSEUds1vrlQiLZyumCuxNjkTL4r
-	Fhw8osCqP+0uTEGipo+oY6n8mjCgu/nDyVyfgn1kNhWvLlYWWR9eDM0oJkld7eBC
-	wppvTWcWRznHOGRczUUvZQpflLIet9DoMEuKf/zxxnetb4b2t6LaKUDmma9/nUUJ
-	I8FNNwyEpSQc6ORxkS+hKuQU3KJUKXs0mp0o6veNtZpXxFzI1Hwpm7EPUeJ1Qys7
-	vA3c/usOTp1VWJy2CZrIjw4QuDQNF7Vfja1D2X0rYPYp+e0U/Bt6IKY4wVL8l481
-	rJ68XQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yu22grrrh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 09:34:46 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45I9YjTI019073
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Jun 2024 09:34:45 GMT
-Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 18 Jun
- 2024 02:34:36 -0700
-Message-ID: <caedb219-f412-4511-8c92-90e87ca9a0f4@quicinc.com>
-Date: Tue, 18 Jun 2024 15:04:26 +0530
+	s=arc-20240116; t=1718703213; c=relaxed/simple;
+	bh=j3q+EyogCgVnNt16mW7TglpR7ZsBC59ypAKFPs0xJi0=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UVrtIn4dt1+tvTs6y9zXe1xIs+3YYkjin8ZCGb17/ot0tiPSTPcagXr7Ln4qV66A71gFvh2C8A+fZfuIK4Q/eBGfsEp2P6j9NB53DtZkWTh/1GPRON3AEl1uGlTU8islWWpeKPA5Rez4K6qBIpV20P3NVctqIRfFKzHCfO58Fg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lA3cdHof; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-57a44c2ce80so6216656a12.0;
+        Tue, 18 Jun 2024 02:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718703210; x=1719308010; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oKRTOK2bSqh5Z6l772n9bon7J4PO0h3RG9G4nJvBISU=;
+        b=lA3cdHofgiN4fsfYQVRhcYhVwPj7UwDVCsE6FzGQXF31IL1iQY8Fd/ahXZoPxeMMoP
+         YKtqdte3QaDQqou9Q23U454f4SN5leaQQxjsPqzcFJGUdxmJK5HDb+6yUytrB7WklDuC
+         fOCHitP6h3AzSqyUStjEch73u4nq1ELN2ZcVkaCIiejQ1OmEgpMa6Lezv8ZMA82X+YDp
+         AP3igfnu7VQJciv95siW9Iwn5jRd0RSsKMjec795CWjiqTUZ6Qv2yVUIbC92grdgP2sh
+         plKQagy/OH/vDECosbVcRoxj90+gQc+bBwYh7mzozilDNm8uA6UeAF14IFjhrO0KCGHF
+         hvgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718703210; x=1719308010;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oKRTOK2bSqh5Z6l772n9bon7J4PO0h3RG9G4nJvBISU=;
+        b=GXqcOR5N0LGmMdT3UNRtgSekA6LLrDE449Oua+DkVZ8fpvsOlx5VwF/0Udc1Qxx20w
+         FpbUZXJUKUnMmDPZOghWgw4OL5JG4mdBLLMa2JD8IS3bEWlpTUG9GiqeVLXGDm4sJrY4
+         0AMJuZVJOvBY50l/S+Ngq1FAAV70tXovs1SK6wA/M8w/+JEkLBbUMd1PcIQt/jGyQirr
+         CjJO8oCYv7Z8KxpnkCPc21M9h1skmKc4DaN34WTa080X0ggN9PLHfgrZSx8gxTNGuszt
+         ceRnN5x+SPBM2T7zQgNAlf09kzC6nPcFZOnA5phCrgWMbXl5fRlB92Foko+CsfTBhhjv
+         Qdyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVfOYCkXxQIZnhPPR1I1Qva9pYQHmbJJ+DuXIPqJBJanwk3XHiYgkjzb9V2sJk+F/QXISDjROJnrsCPkHK1CXue8JQvwveOzj9sNeGxDJjCrsVrDscFH2AtksW8wFNDqzKf2ZQ2u7KUY2ex8tfAnHQXKFDNG8LmcB8nDO9C41RqLIAuzEkb9AjdELXpzwZZmUXnIKiQqOQ8DvK0gvUBtA==
+X-Gm-Message-State: AOJu0YwiYh7x+yOOcQOaaSoJVtRIYUysADndCb72tw01nQK1v2YU9fJa
+	w71s9MeFkXdq3U55SMY8H+u7E5neTXrvTvlexOiKTG662u/UfnQX
+X-Google-Smtp-Source: AGHT+IEB0BWx8Gj3AqMac+0Q3+79Cqy6S3VtrMg68UFlYb+8zqogyYLFBFzCgacmNDYh6M7QeyxJtw==
+X-Received: by 2002:a50:8746:0:b0:573:5c4f:27a8 with SMTP id 4fb4d7f45d1cf-57cbd8e7144mr8081205a12.35.1718703209873;
+        Tue, 18 Jun 2024 02:33:29 -0700 (PDT)
+Received: from ?IPv6:2003:f6:ef1c:c500:ee59:d953:f148:40ba? (p200300f6ef1cc500ee59d953f14840ba.dip0.t-ipconnect.de. [2003:f6:ef1c:c500:ee59:d953:f148:40ba])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57cb7439606sm7526102a12.90.2024.06.18.02.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jun 2024 02:33:29 -0700 (PDT)
+Message-ID: <d35eea56bfef394717611ac43c4e02cd4c813380.camel@gmail.com>
+Subject: Re: [PATCH v5 2/2] iio: frequency: adf4350: add clk provider
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Antoniu Miclaus <antoniu.miclaus@analog.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, Jonathan Cameron
+ <jic23@kernel.org>,  linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+  linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Date: Tue, 18 Jun 2024 11:37:18 +0200
+In-Reply-To: <20240618082012.4496-2-antoniu.miclaus@analog.com>
+References: <20240618082012.4496-1-antoniu.miclaus@analog.com>
+	 <20240618082012.4496-2-antoniu.miclaus@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 RESEND 5/5] venus: pm_helpers: Use
- dev_pm_genpd_set_hwmode to switch GDSC mode on V6
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Michael
- Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia
-	<quic_vgarodia@quicinc.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Ulf
- Hansson" <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown
-	<len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya
- Kakitapalli" <quic_skakitap@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20240413152013.22307-1-quic_jkona@quicinc.com>
- <20240413152013.22307-6-quic_jkona@quicinc.com>
- <5c78ad52-524b-4ad7-b149-0e7252abc2ee@linaro.org>
- <b96ef82c-4033-43e0-9c1e-347ffb500751@quicinc.com>
- <a522f25f-bb38-4ae1-8f13-8e56934e5ef5@linaro.org>
- <dbd1b86c-7b5f-4b92-ab1f-fecfe1486cfc@quicinc.com>
- <621dbaaa-6b86-45b5-988e-a6d9c39b13d7@linaro.org>
- <d36c1163-a3f0-4034-a430-91986e5bbce8@linaro.org>
- <ef194e5c-f136-4dba-bfe0-2c6439892e34@linaro.org>
- <d2e55523-f8fd-4cbe-909c-57de241107e8@linaro.org>
- <1df48a42-3b4e-4eb4-971b-cd4be001ba27@quicinc.com>
- <93a67151-02fa-4c53-8d6e-0ed1600128bf@quicinc.com>
- <01041302-120b-4f9d-87f2-bd841dcd227a@linaro.org>
-Content-Language: en-US
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <01041302-120b-4f9d-87f2-bd841dcd227a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gt_jisChldo_9sVlyTERCw_uv13ANvua
-X-Proofpoint-GUID: gt_jisChldo_9sVlyTERCw_uv13ANvua
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-18_02,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 priorityscore=1501 spamscore=0 suspectscore=0
- adultscore=0 impostorscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
- definitions=main-2406180070
+
+On Tue, 2024-06-18 at 11:20 +0300, Antoniu Miclaus wrote:
+> Add clk provider feature for the adf4350.
+>=20
+> Even though the driver was sent as an IIO driver in most cases the
+> device is actually seen as a clock provider.
+>=20
+> This patch aims to cover actual usecases requested by users in order to
+> completely control the output frequencies from userspace.
+>=20
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> ---
+
+Hi Antoniu,
+
+For some reason your DT patch is missing (or still did not arrived)... Some
+comments below.
+
+...
+>=20
+> +static int adf4350_clk_register(struct adf4350_state *st)
+> +{
+> +	struct spi_device *spi =3D st->spi;
+> +	struct clk_init_data init;
+> +	struct clk *clk;
+> +	const char *parent_name;
+> +	int ret;
+> +
+> +	if (!device_property_present(&spi->dev, "#clock-cells"))
+> +		return 0;
+> +
+> +	init.name =3D devm_kasprintf(&spi->dev, GFP_KERNEL, "%s-clk",
+> +				=C2=A0=C2=A0 fwnode_get_name(dev_fwnode(&spi->dev)));
+> +	if (!init.name)
+> +		return -ENOMEM;
+> +
+> +	if (device_property_read_string(&spi->dev, "clock-output-names",
+> +					&init.name))
+> +		init.name =3D spi->dev.of_node->name;
+
+So this means the first devm_kasprintf() is useless :). I believe this shou=
+ld be
+=09
+	init.name =3D devm_kasprintf(&spi->dev, GFP_KERNEL, "%s-clk",
+				   fwnode_get_name(dev_fwnode(&spi->dev)));
+	if (!init.name)
+		return -ENOMEM;
 
 
+> +
+> +	parent_name =3D of_clk_get_parent_name(spi->dev.of_node, 0);
+> +	if (!parent_name)
+> +		return -EINVAL;
+> +
+> +	init.ops =3D &adf4350_clk_ops;
+> +	init.parent_names =3D &parent_name;
+> +	init.num_parents =3D 1;
+> +	init.flags =3D CLK_SET_RATE_PARENT;
+> +
+> +	st->hw.init =3D &init;
+> +	clk =3D devm_clk_register(&spi->dev, &st->hw);
+> +	if (IS_ERR(clk))
+> +		return PTR_ERR(clk);
+> +
+> +	ret =3D of_clk_add_provider(spi->dev.of_node, of_clk_src_simple_get,
+> clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	st->clkout =3D clk;
+> +
+> +	return devm_add_action_or_reset(&spi->dev, adf4350_clk_del_provider,
+> st);
+> +}
+> +
+> =C2=A0static struct adf4350_platform_data *adf4350_parse_dt(struct device=
+ *dev)
+> =C2=A0{
+> =C2=A0	struct adf4350_platform_data *pdata;
+> @@ -522,8 +637,6 @@ static int adf4350_probe(struct spi_device *spi)
+> =C2=A0
+> =C2=A0	indio_dev->info =3D &adf4350_info;
+> =C2=A0	indio_dev->modes =3D INDIO_DIRECT_MODE;
+> -	indio_dev->channels =3D &adf4350_chan;
+> -	indio_dev->num_channels =3D 1;
+> =C2=A0
+> =C2=A0	mutex_init(&st->lock);
+> =C2=A0
+> @@ -551,6 +664,18 @@ static int adf4350_probe(struct spi_device *spi)
+> =C2=A0			return ret;
+> =C2=A0	}
+> =C2=A0
+> +	ret =3D adf4350_clk_register(st);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (st->clkout) {
+> +		indio_dev->channels =3D NULL;
+> +		indio_dev->num_channels =3D 0;
+> +	} else {
+> +		indio_dev->channels =3D &adf4350_chan;
+> +		indio_dev->num_channels =3D 1;
+> +	}
 
-On 6/17/2024 3:21 PM, Bryan O'Donoghue wrote:
-> On 17/06/2024 03:31, Jagadeesh Kona wrote:
->>
->>
->> On 5/31/2024 5:26 PM, Jagadeesh Kona wrote:
->>>
->>>
->>> On 5/10/2024 6:31 PM, Bryan O'Donoghue wrote:
->>>> On 01/05/2024 10:14, Bryan O'Donoghue wrote:
->>>>> On 30/04/2024 21:01, Konrad Dybcio wrote:
->>>>>> On 24.04.2024 11:50 AM, Bryan O'Donoghue wrote:
->>>>>>> On 24/04/2024 10:45, Jagadeesh Kona wrote:
->>>>>>>>
->>>>>>>> Thanks Bryan for testing this series. Can you please confirm if 
->>>>>>>> this issue is observed in every run or only seen during the 
->>>>>>>> first run? Also please let me know on which platform this issue 
->>>>>>>> is observed?
->>>>>>>>
->>>>>>>> Thanks,
->>>>>>>> Jagadeesh
->>>>>>>
->>>>>>> rb5/sm8250
->>>>>>>
->>>>>>> My observation was on a previous _boot_ the stuttering was worse. 
->>>>>>> There is in the video capture three times that I count where the 
->>>>>>> video halts briefly, I guess we need to vote or set an OPP so the 
->>>>>>> firmware knows not to power-collapse quite so aggressively.
->>>>>>
->>>>>> We seem to be having some qualcomm-wide variance on perf/pwr usage 
->>>>>> on some
->>>>>> odd boots.. Any chance you could try like 5 times and see if it 
->>>>>> was a fluke?
->>>>>>
->>>>>> Konrad
->>>>>
->>>>> Sure.
->>>>>
->>>>> The first time I tried it, it was much worse.
->>>>>
->>>>> The second time, captured in the video is only noticeable because I 
->>>>> was *looking* for this specific error i.e. I don't think I would 
->>>>> have noticed the error on the second run, had I not seen the first 
->>>>> run.
->>>>>
->>>>> I'll find some time to do 5x with and 5x without.
->>>>>
->>>>> ---
->>>>> bod
->>>>
->>>> ping bod please remember to do this thanks
->>>>
->>>
->>> Hi Bryan, Could you please let me know if you got a chance to check 
->>> the above? Thank you!
->>>
->>
->> Hi Bryan, Kindly can you please help confirm if this is a real issue 
->> or observed as a fluke? so we can go ahead and mainline these changes.
->>
->> Thanks,
->> Jagadeesh
-> 
-> So I'm happier with this patchset when I run gstreamer instead of ffmpeg.
-> 
-> There doesn't appear to be a discernable difference between before/after 
-> on framerate or subjective UX with/without this set.
-> 
-> gst-launch-1.0 -vvv -e filesrc location=sample-5s.mp4 ! qtdemux ! 
-> parsebin ! v4l2h264dec ! autovideosink
-> 
-> Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+nit: The above could be simplied to
+if (!st->clkout) {
+	indio_dev->channels =3D &adf4350_chan;
+	indio_dev->num_channels =3D 1;
+}
 
-Thanks a lot Bryan for helping with the testing.
+- Nuno S=C3=A1
 
-Thanks,
-Jagadeesh
 
