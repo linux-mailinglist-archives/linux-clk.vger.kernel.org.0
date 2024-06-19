@@ -1,114 +1,112 @@
-Return-Path: <linux-clk+bounces-8257-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8262-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D8890F6D4
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Jun 2024 21:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DF5790F829
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Jun 2024 23:04:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 913371C23BE5
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Jun 2024 19:17:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5554E1C21D7B
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Jun 2024 21:04:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39DF8156F37;
-	Wed, 19 Jun 2024 19:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C06615CD57;
+	Wed, 19 Jun 2024 21:03:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="YoJZoIHo";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="ebe4Yjbs"
+	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="tmNyGCWU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F168475;
-	Wed, 19 Jun 2024 19:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588C778C71;
+	Wed, 19 Jun 2024 21:03:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718824663; cv=none; b=MuKNQjGzhfXlWcZsZROg9E9CyOElKvP7ZNR5aWdHmXJeUJ7HKmUSzk+aLOoaJ+dS2NEenmJsZLON7Q71FQeElh9upAOOk1GBOEAXHSfsjXW9OeLHhfZ1WDgjMFOCAhri4+neV70wBjliiizC9F8gYn4VS8L1R30eS8vhz4z59EQ=
+	t=1718830990; cv=none; b=pkNSXqSApwVe3ELDS9tU5dKqUwpXKz0ygsCi+cvNhoVRotAm7k5+w5zLyxZ/cT6bslrQNaBaLWn+Atbyfk1agersBxRChoMzHiqso2Wb97LQfxhUaNd+ZA3KI+3SSmoRSeDqt+m3p1C9e130TPTtq3POY6GDnWM2PvKqWvJWZb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718824663; c=relaxed/simple;
-	bh=uvdix2AUJuTqObCGidaxun+B0yX5VPB9Y32EgkgNK1o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gFpaA6uJxNf5paPIGeAGNvtdWFgvDav2lsLfr0tVO6vI4ZBHFQqJ752gwEmxgPONdV1GtYahcLSfFL/41MByvADCN2ujOzm6wpRFDg1zFIGankTdM+KnG7yRbupydDCvboU+mL4s73P17Eo5my9hYmaGFylPqWJledd2zrD+j0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=YoJZoIHo; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=ebe4Yjbs; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4W4D0D0XHBz9sbf;
-	Wed, 19 Jun 2024 21:17:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1718824652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xSr1Od9WFO6Zpf3tRHQVtZyK7tS6Amel2M2Nf15k1vs=;
-	b=YoJZoIHoEpuOSUdLDSj6buFEgkxpb4GUaQW8g+brwF4RRxuXvKddAttN7SW7O717FpT90L
-	hBoAVMShch+bQaDq4QIEljsk53gJ4ZFD7jsqzO1ngMkZdUEMt/+Z2Z6OmmMWul7MVBkDp0
-	LFoJHQteZevBPksZT8aBz0JvQirFN4jsNQzSwGjYUMEgqf5BIl0221jNJVfQDtQank9Yxw
-	NsgH6E8QWy29dckvin+R5OGKnj54zY+/5UtdBLoN6UhB7GHCo+wZp3Id1hk8J9hnSbPw/6
-	sdRLKkb/6VnNu95Uu/AIJegQ9liNMjytRQNq6ysMeWkO+7uP9uMKs4w197iEMw==
-Message-ID: <43a57696-eb4f-4ae3-970a-cee0640baa17@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1718824650;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xSr1Od9WFO6Zpf3tRHQVtZyK7tS6Amel2M2Nf15k1vs=;
-	b=ebe4YjbsfmY6AZpNIGrFphYDMzqCyh0KhYYlofpgDnXdxFCTe7WvHCogurCVuZw9zvPOnf
-	P9OEokfvQ2ex7W0G29K/TPyP47Q4vtVlDDzrWkEaRgAcmEjpcmiAlkKwoQtCxIeUKXVUuJ
-	1bwyBSkXGqvzu2L6ZSOyerYQuAnPxSSXUuR8ZB041d7Tp9QsqZr3pz49YpGs8mkpIDwwDQ
-	ObC8OPGz0mXJeHCX9pg71RsFJk8Mfbh/otv+eAQoMP0RZylldHGeQkUjqTuuM0KxGbvQsE
-	4ASx3x53PB3HP71lwhArZDRJdImXBGpXPxfbQLY0WeRYajwjfgviEdpfZQNKig==
-Date: Wed, 19 Jun 2024 21:17:28 +0200
+	s=arc-20240116; t=1718830990; c=relaxed/simple;
+	bh=4WOS+AvxaEa+0SC1/3K+gcJiiNNwidC9fY7Pa0VsfD4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HlfVPY5i8xqroYPcvapoMav/bVP/NWiNKpr4d8aLSlPQW9FySmmHGAojkN/j6LmJC6ZzosAIVw6ncjc31uwrQZ+mFENWn53wwSnEFW2ferKFG+zt+YLW1WefnM444l79RYOGOTYfLseLjfXe32CBf9l4HXvDGrC7Nkzp3fVvoAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=tmNyGCWU; arc=none smtp.client-ip=128.199.32.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=lucaweiss.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lucaweiss.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucaweiss.eu; s=s1;
+	t=1718830985; bh=4WOS+AvxaEa+0SC1/3K+gcJiiNNwidC9fY7Pa0VsfD4=;
+	h=From:Subject:Date:To:Cc;
+	b=tmNyGCWUSi/Ht87O3WeKShW3PE4S+TSiz5EBYgYHSWOU536izOOpI6lwZx/HYCezI
+	 5N+/LmMAuGWOVeGns3nLhqSzr1QV5vSoLJLtdtEbMk+9ypAqXN+Zj2oRLZOcq+qhJ7
+	 v6bhOfg6yQIIWpmMp1lv/FCpyjVhgmhl4B4pJd6U=
+From: Luca Weiss <luca@lucaweiss.eu>
+Subject: [PATCH 0/7] Add CPU frequency scaling support for MSM8226
+Date: Wed, 19 Jun 2024 23:02:44 +0200
+Message-Id: <20240619-msm8226-cpufreq-v1-0-85143f5291d1@lucaweiss.eu>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] dt-bindings: clock: rcar-gen2: Remove obsolete header
- files
-To: Conor Dooley <conor@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
- marek.vasut+renesas@mailbox.org
-References: <d4abb688d666be35e99577a25b16958cbb4c3c98.1718796005.git.geert+renesas@glider.be>
- <20240619-explain-sip-97568f8ac726@spud>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <20240619-explain-sip-97568f8ac726@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-MBO-RS-ID: 17c7cdeb49a11f25631
-X-MBO-RS-META: ufzdkouswyfk5rtwey7cc4f3gw9hgh5n
+X-B4-Tracking: v=1; b=H4sIAHRHc2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDM0NL3dziXAsjIzPd5ILStKLUQl1zC4skg6Q0AyNTs0QloK6CotS0zAq
+ widGxtbUA/htYi2EAAAA=
+To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ Jassi Brar <jassisinghbrar@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ Luca Weiss <luca@lucaweiss.eu>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1353; i=luca@lucaweiss.eu;
+ h=from:subject:message-id; bh=4WOS+AvxaEa+0SC1/3K+gcJiiNNwidC9fY7Pa0VsfD4=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBmc0d2S5Un48OGVLTnxHEVLWjPEi8tuzfTqVhk3
+ F5BniAFEdmJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZnNHdgAKCRBy2EO4nU3X
+ VkirD/wK2zGzeK5HkWUxhlhEViNepbpmeZXNM0yaAWRh5qp5J1VsPF7qt/YG8UYLLn1n2i9r76l
+ YxZfKbbp7w0J1CglJVeb6D5KgCZz2Lco60TXgqT20xGjQ9Q8DVFM1cvgg4cLLLgiyyeiYQOtHKD
+ oxGtXPBU1F3x3JfCplEHqJvqmZsBMGPu+9Dzr2sFkx4BAgHUBQe2JDAdlQqc3yiImbkwoYiPjvT
+ 4c9URAAuSx2vTKVbBoWaZ2dUYKcgJwhYZUdF3yTSUji2JZSh7D8Oi/Fx9h5DoDMrvBgZp8/DaQS
+ 0GKrgGGevHiSj5h42ZpZMDKIbo9zyCMBY4XMWAuOFIOuuptK8ZORlLQsqiK9QdCWBogVOuKiqI9
+ zzboC180royI8zhoc+EFDf3jWFnf9n8KLFRLQ5Vu/NU3C4VPYMJ0CQm6togK8WI5waH/hIdmulF
+ 0jcCUaHTP48MRrsIHepg2fD4i1MxQYr8RlzqY8Em4TlUdVIJhAfLdft3jCA7CRFe53VS7zsUb4/
+ +0LD0NZejeJojuJiZ6XrY42sZT3yb5O/XgzVdYB7X8QMnDMvjRast0K0A0FWOwc8D+bpzwnZFki
+ WDGdv4AuFWFKyHFV35G7YtMoW8aMyOlmCToorA440YYZ7ueniV1YK+lYN2bI2h7MRWXySziaq+A
+ MZoGxVrSrbnviLA==
+X-Developer-Key: i=luca@lucaweiss.eu; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 
-On 6/19/24 7:48 PM, Conor Dooley wrote:
-> On Wed, Jun 19, 2024 at 01:22:46PM +0200, Geert Uytterhoeven wrote:
->> The clock definitions in <dt-bindings/clock/r8a779?-clock.h> were
->> superseded by those in <dt-bindings/clock/r8a779?-cpg-mssr.h> a long
->> time ago.
->>
->> The last DTS user of these files was removed in commit 362b334b17943d84
->> ("ARM: dts: r8a7791: Convert to new CPG/MSSR bindings") in v4.15.
->> Driver support for the old bindings was removed in commit
->> 58256143cff7c2e0 ("clk: renesas: Remove R-Car Gen2 legacy DT clock
->> support") in v5.5, so there is no point to keep on carrying these.
->>
->> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> If U-Boot is not using them,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> (and if it is, another task for Marek I guess!)
+Apart from a bunch of bindings updates, add support for the a7pll found
+on the SoC and wire up everything in the dtsi. And finally switch over
+to using apcs via mbox interface to stop using the apcs via syscon.
 
-U-Boot is using upstream DTs on R-Car via OF_UPSTREAM, so whatever 
-happens in Linux also happens in U-Boot since 2024.07 ... with slight 
-sync delay . I don't expect much breakage.
+Only a limited list of CPU frequencies are supported for now, higher
+ones require speedbin support which I plan to work on after this lands.
 
-Thanks for the heads up !
+Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
+---
+Luca Weiss (7):
+      dt-bindings: mailbox: qcom: add compatible for MSM8226 SoC
+      dt-bindings: clock: qcom,a53pll: Allow opp-table subnode
+      dt-bindings: clock: qcom,a53pll: Add msm8226-a7pll compatible
+      clk: qcom: a53-pll: Add MSM8226 a7pll support
+      ARM: dts: qcom: msm8226: Add CPU frequency scaling support
+      ARM: dts: qcom: msm8226: Hook up CPU cooling
+      ARM: dts: qcom: msm8226: Convert APCS usages to mbox interface
+
+ .../devicetree/bindings/clock/qcom,a53pll.yaml     |   4 +
+ .../bindings/mailbox/qcom,apcs-kpss-global.yaml    |   1 +
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           | 134 ++++++++++++++++++++-
+ drivers/clk/qcom/a53-pll.c                         |   1 +
+ 4 files changed, 134 insertions(+), 6 deletions(-)
+---
+base-commit: 0efa3123a1658dbafdace0bfcdcc4f34eebc7f9f
+change-id: 20240619-msm8226-cpufreq-788b0bf0256a
+
+Best regards,
+-- 
+Luca Weiss <luca@lucaweiss.eu>
+
 
