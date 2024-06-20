@@ -1,113 +1,111 @@
-Return-Path: <linux-clk+bounces-8315-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8317-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6CFC91094A
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 17:08:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB1B391095A
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 17:10:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89CE91F219A2
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 15:08:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7C2F281CB6
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 15:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B2B1AF6A9;
-	Thu, 20 Jun 2024 15:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA861AF688;
+	Thu, 20 Jun 2024 15:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V0P6wIfa"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-m49197.qiye.163.com (mail-m49197.qiye.163.com [45.254.49.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BD51AE0B3;
-	Thu, 20 Jun 2024 15:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5567F1AED4E
+	for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2024 15:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718896093; cv=none; b=o4GZDzZZoToKrYS5kaGF7hOazQHOefBIomio1gbq/LO2WviS8XbJo4gK8v1eJ9ZOiIUhWtx4xe/37Lipt3M22mRoqsnbK/DmXjP8s1StsaWhviL1SNDdHjW20xyGoEGdIKDRoNCrDy2ZMsq3MeyZhn4GIzo+NkEyMbTlG+Qdq+Y=
+	t=1718896196; cv=none; b=PB79j3CE/e05VKGqjwCDDCJMpVxi/hPHh3b6+9RuyCVrjp0TzR0FdardU1thfIisU4DU5RRq1B5QhXGBE8cVwG6MOWwOSBJeeFo115AzaHAgPabdJ7Bz6lQ7g24bT2DH4jklC3bRwZ6Ctmt9altcApB+qQVTWjA/3OVnpdn3CGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718896093; c=relaxed/simple;
-	bh=dtZS1nqbMa7AxnJyQXkJh7FKWj9JKPPVoDyNUOyqAEY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=e2nEEunJp1NecyizXgARP3BTxtihN7KkS2qpk2r5yHTdpwx7mCKBL6edm3mlWtK8UHTiBIUjySEFOKc3t/clhzsiZz5RfW9GPxdI2UwfPA/dhmGcmGznM/JYp8m4dmuut1pv7I2diyzObtJ05RX9t1lXFD7QoMQ2Mj8HNg99Fmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=45.254.49.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
-Received: from amadeus-Vostro-3710.lan (unknown [IPV6:240e:3b3:2c01:9890:db34:2f44:25db:ea3c])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id A37A97E01B5;
-	Thu, 20 Jun 2024 23:01:33 +0800 (CST)
-From: Chukun Pan <amadeus@jmu.edu.cn>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Chukun Pan <amadeus@jmu.edu.cn>
-Subject: [PATCH v6 2/2] arm64: dts: qcom: ipq6018: add sdhci node
-Date: Thu, 20 Jun 2024 23:01:22 +0800
-Message-Id: <20240620150122.1406631-3-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240620150122.1406631-1-amadeus@jmu.edu.cn>
-References: <20240620150122.1406631-1-amadeus@jmu.edu.cn>
+	s=arc-20240116; t=1718896196; c=relaxed/simple;
+	bh=mfiwSIjC731sExU1owoEvvO8FCSEVIoCYkKggzTldDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KrNLGu7WDT5BHCyq7vwz74t78viXl/WZ1pgvWL61IxymV6VdMXq/VycIeWIO7lPIot6Ck6j7Vh5q9QzQ54Fov7AgtFlQrWpdy06sHwYunS5/oEqLRTe7g1gDCuKuXMFaWeswcdAgT5fedIKaILEbtdO4kGj1ce8pzRrbOO045Qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V0P6wIfa; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52bc0a9cea4so916917e87.0
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2024 08:09:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1718896193; x=1719500993; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0gK+thIDawbMI8D6X0tNOPUzlxQcTHptuQx1Z2ceRXM=;
+        b=V0P6wIfamtHqFfdSKj+7giMe3rhe9Saloyfx06RP4zZ0dxam+nYkdJLhiYR7zFY5Ie
+         qkHDnkBjV3Qu+1IxADNrakETXBVYpu+Ynzjiu7SwMfGjctAmni9ecnygedl+kMEgFywP
+         p8q42rahO6+xzGYFuQISPWf2Xu4eEEvG2P4HDc7wldGhBPcq13FOI6N/Bg4Xo/zLSu/c
+         6o8bBdsxJDeMwGQFzVEnDN9DjIl2ohosU7qsGOnJgIab1pHMWpCL9JKuVcb/TYMSPBvz
+         LL6B72fExJ34Jn2uT+YyrqVrdUAXJcS7uLZWnF8jmyOe6+cp2mUO5jWmphIaWC6NX8f+
+         VOpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718896193; x=1719500993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0gK+thIDawbMI8D6X0tNOPUzlxQcTHptuQx1Z2ceRXM=;
+        b=xFxYcxHoLSUmtZyn7madma8DXFwdtzKXxdu60UkxusX09ABTuz6D3xJhSGfqcHJulu
+         W6rmcmgB89hjEe2oOPoUv9+2p/p+KgcRVUdZa4U3/jt3aamHmvMTCvjAAMlc5IVo/qB4
+         ixJPXMsdEbZNakXcBpsVkqSvMYSCT+QRQosieEOAq2wTlCQn4k9Xf0OuaNGoabKNxpJ2
+         EpvJSJwnylp2B82d6h36GLg14CIMn3Dc/Q7s9l3zOqwZk4sBXqFG8YWoaKOeXwih5mMa
+         L5A2M/WAUkyW1APy7Lp+PRKjIXg6Y78nWlJf8d+rLS/qyi5qWBSeC8FABf9LmfsgLSQ2
+         VppA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJFMx5hTQsth5ecCeN9NdvEKTzFiAVp/P7u+QRAmT7QgGjP4K9fH6VkvH0naBrHdy5+I6TNb6P6wvLogPZJgy6RsRenf3aft7a
+X-Gm-Message-State: AOJu0Yw2XkuMcpFlxvbXnGY1z1vkf0xrIZHZw19W/rP0YSAI3/GHy9/M
+	vOVpi1i5FdU4p8/84qhrA0cECcRPXw7sVQ7jll50TYYa3na/fEqE8c3AodSaJQc=
+X-Google-Smtp-Source: AGHT+IHZ7VSN2wu7ZM55UCXbxtOpvLmg+Rz6tqxnMXIu8tRVtuNvG3de09teEXUPAPTQMcqu6Cz87A==
+X-Received: by 2002:a05:6512:31d4:b0:52c:c64e:b902 with SMTP id 2adb3069b0e04-52cca1ea264mr1869080e87.27.1718896193490;
+        Thu, 20 Jun 2024 08:09:53 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca2826269sm2091191e87.61.2024.06.20.08.09.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 08:09:53 -0700 (PDT)
+Date: Thu, 20 Jun 2024 18:09:51 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	angelogioacchino.delregno@collabora.com, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org, quic_sibis@quicinc.com, 
+	quic_rjendra@quicinc.com, luca@z3ntu.xyz, abel.vesa@linaro.org, quic_rohiagar@quicinc.com, 
+	danila@jiaxyga.com, otto.pflueger@abscue.de, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH v1 3/7] pmdomain: qcom: rpmpd: Add IPQ9574 power domains
+Message-ID: <jfh2xygjdoapkno2jrt6w7thlylgyp2tk7oaczundhxvi26qel@ahtskgn4v6sp>
+References: <20240620081427.2860066-1-quic_varada@quicinc.com>
+ <20240620081427.2860066-4-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZT0gaVh5ISB1CGB8fHhlIGVYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJT0seQUgZSEFJGEtKQUJDQktBHxlIT0FJHU9PQUlOHxlBHhpIGFlXWRYaDx
-	IVHRRZQVlPS0hVSktJQkNDTVVKS0tVS1kG
-X-HM-Tid: 0a90362ad03103a2kunma37a97e01b5
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mzo6Iww4CzMBAkweOT85PSg4
-	IjpPCT5VSlVKTEpDQ0JOTUJPSU1JVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlP
-	Sx5BSBlIQUkYS0pBQkNCS0EfGUhPQUkdT09BSU4fGUEeGkgYWVdZCAFZQUlNT043Bg++
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240620081427.2860066-4-quic_varada@quicinc.com>
 
-Add node to support mmc controller inside of IPQ6018.
-This controller supports both eMMC and SD cards.
+On Thu, Jun 20, 2024 at 01:44:23PM GMT, Varadarajan Narayanan wrote:
+> Add the APC power domain definitions used in IPQ9574.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 
-Tested with:
-  eMMC (HS200)
-  SD Card (SDR50/SDR104)
+The order of the S-o-B's is wrong. Who is the actual author of the
+patch?
 
-Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
----
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> ---
+>  drivers/pmdomain/qcom/rpmpd.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index 9694140881c6..b3b98f050cfd 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -457,6 +457,25 @@ dwc_1: usb@7000000 {
- 			};
- 		};
- 
-+		sdhc: mmc@7804000 {
-+			compatible = "qcom,ipq6018-sdhci", "qcom,sdhci-msm-v5";
-+			reg = <0x0 0x07804000 0x0 0x1000>,
-+			      <0x0 0x07805000 0x0 0x1000>;
-+			reg-names = "hc", "cqhci";
-+
-+			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "hc_irq", "pwr_irq";
-+
-+			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-+				 <&gcc GCC_SDCC1_APPS_CLK>,
-+				 <&xo>;
-+			clock-names = "iface", "core", "xo";
-+			resets = <&gcc GCC_SDCC1_BCR>;
-+			max-frequency = <192000000>;
-+			status = "disabled";
-+		};
-+
- 		blsp_dma: dma-controller@7884000 {
- 			compatible = "qcom,bam-v1.7.0";
- 			reg = <0x0 0x07884000 0x0 0x2b000>;
+
 -- 
-2.25.1
-
+With best wishes
+Dmitry
 
