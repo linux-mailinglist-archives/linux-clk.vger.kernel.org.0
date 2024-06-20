@@ -1,118 +1,150 @@
-Return-Path: <linux-clk+bounces-8347-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8351-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 504DF911024
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 20:08:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9EBC910FFD
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 20:04:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5789CB2B622
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 17:48:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 070991C24C5E
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2024 18:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46D781BB68E;
-	Thu, 20 Jun 2024 17:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583FD1C2329;
+	Thu, 20 Jun 2024 17:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Jgvr+GaG"
+	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="Z1WAPFAm"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820BB1B4C2A;
-	Thu, 20 Jun 2024 17:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0845D1C2302
+	for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2024 17:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718905155; cv=none; b=tSUm3CXEAqNbXOj0zWw7fHJFaxo3jwSsz4i/dzZuTxJZwIs1ACbOHYYBv7/+k1Qff8iViaFLCL4ZaUIZ2m9DXT0/r2M646iuS/xbOR/iG5gsPA/k6Fn9rhAe7NxXjQlJFcctO6ubrZ7+MwLX4NbTf7gRAoDoJUsFNvruvT7Xt2M=
+	t=1718906284; cv=none; b=BiFiBRA8olBg1j3wrN/EVe5Ma5+1eVwAer12bZ34vLRCKgoxNNE3AkJMMPxB8EsFLZfxD+nV2A0JvjqcPrqQdmrhAfWjxfmjmYpwmEHtnoN1pvWjAB30tzbKt3lMxhDwRPXqGmtdHMjvSo6cK/iVVH/trgNxUn0Rd+UijSzsVGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718905155; c=relaxed/simple;
-	bh=YTk3Lm9Ov1kYYHSEDrF0pg5GItvYrx4G0xmDmP2GC7w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=F7LKZtgjmBN6KyEU3+yV7pbL7AIZ9x0oV8TZRoZMgIMWldu9ZpidOHGytq12nzuQL6YrGXvpGix9mBfxnvSgEQjzDaQNJm1UqqkkVeDQngXPfVNbzkHGdsVywLgZDo7W9UwvLH8c5dF0w6bT96fgFALep65slS0jZuEyzi4h4xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Jgvr+GaG; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 30CA71BF205;
-	Thu, 20 Jun 2024 17:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1718905145;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YTk3Lm9Ov1kYYHSEDrF0pg5GItvYrx4G0xmDmP2GC7w=;
-	b=Jgvr+GaGJcOUHSVi29h34AVdwARGliz2lLi7NaRdFKrRMW2OVjEwlGi3L8MThZEu3T805v
-	rDng0iNK6hr2kv5yfCcrDuvqet1rU0F6RHIICrZ+FAY5fruHVwG9xiFFUh5QsFKO2Z/8sh
-	l2AWBagV0wn7qcQ6W9N2xMoAaC8isPyhTw1oV91bTGtl5LnAFwpdT5e9UbGknSlxpd6a8M
-	9xvtlwark/NwQaNb8iaxcrgKE6VrFPPgNJ+/C5kOKto6NN+HGpNccIU9XpZ7Q7eeA1EW9r
-	dE1FoLrhZrZR+qV5y0n19g5Lv2Iew7X+8NlVwWKsu+T+6aLgzHVSDhQnLo5GRQ==
+	s=arc-20240116; t=1718906284; c=relaxed/simple;
+	bh=57mSqvK5F8icDZvtosz8MW5pSg98mK2P/IkbkOYFjBo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bb9iFGhzjJ/QtTwCJ2XyU86nqALJQVubD5z4yJE5j7Gh/ryhDvOYHoyFOlj9JSSbckPsTjxshcuCPW7UOFWDHO7DpwMoOUkBoeLZW+SXmFpN1IfJt1LD2fAfcFdmA5F+V0pHh3hB0TdEXe6FCEg1NpOQhCkhbbZlKTX2qwUTB/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=Z1WAPFAm; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=timesys.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-57d05e0017aso1482339a12.1
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2024 10:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718906280; x=1719511080; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LLJSsUsQJimHeyehvy4obxzFbfnPiiocs4Of944Xm3I=;
+        b=Z1WAPFAmggyZXgLQQ8xHRVLJyIdVqTm6EFiZQkqU98DYk6IGKMtR0IbCNv8eef7YzJ
+         4U5udbizQMs46zEqIFLLcbKD6EtEnSEv7giK2XYYh7iwjvYnoT/O3BVQt6wbbJy8D2jR
+         WvPVWf5OPR+9R73AdLBwFo6uXDNiyz4Q0GVRQbP4JgqR6vr1DSMg7WEOq3R+k69zaT5i
+         VDWjNunvXVyqv5ZGr2lZ8ZG4qGUrUJEnTdNpG1agdy5Rp1xak0eQNgAdsOXgyqale1hO
+         FHt1JdLhWZ4fm+JxXSREDbBVDzEf+viVWyUTEj8FpRgGHT6Fa0Ul950C885uZOllMtUi
+         WA6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718906280; x=1719511080;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LLJSsUsQJimHeyehvy4obxzFbfnPiiocs4Of944Xm3I=;
+        b=troO5ODzIGkeHpBuHzxXD5TAJBIRz0irUS9TYCOcKH1nsDB1rnAIQjrCqsgBugmg9W
+         uUgjfIDnQH+3JYR2J+z+MnBGcFmA7QGMFB5zBdpAEBlkn8cX3Vpwbny+HgMw+02hBoKN
+         1uCNqUgSeev6hCQIbxQrx/A3vUFzExodbokSLQvA/Rf1ZcCUq2rLGMFCYp5heDbhJMyr
+         zbVWLfSfLxehIyMWGccnJieJrWTQRQdvMUQjVEhPguVsds0PxaUhfMwa75ZjQjgm6dov
+         9cpm/rEXIE7XC0EkQ3JPHIXLaMa92vMuxcSl1luyiZs1Td1IWKfDYn0gbMQXOWs8r5xL
+         nTSw==
+X-Forwarded-Encrypted: i=1; AJvYcCXXyZ6vlpIo1Vhgf+4P4U1+I1lQ8HhhWdIKcNGxcNE3St3809GG+Suqzp/BsUFU0I833doPSwOkb+BpINow4DhX6+CHJFYpG+Ly
+X-Gm-Message-State: AOJu0YwYJw3fpGVH1GmWSbYDIaHXiWHZsc78Q0dCQzIvYybeprldNlAF
+	fXzV449+ayjk/1ktCIh0Dg6ZAskkrMHM/SQevzewguZSZ2aUFaXfmysX4TQIBkA=
+X-Google-Smtp-Source: AGHT+IGXtwYdokrlfBxhK8FxTp2sWYE+r/rA8OXrz8ajsAvjdcVPMUue0BkFzpXPCbEPXWGLdile5Q==
+X-Received: by 2002:a17:907:8025:b0:a6f:147f:7d06 with SMTP id a640c23a62f3a-a6fab7de093mr273780966b.77.1718906280266;
+        Thu, 20 Jun 2024 10:58:00 -0700 (PDT)
+Received: from localhost.localdomain ([91.216.213.152])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f56f42e80sm781370766b.186.2024.06.20.10.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Jun 2024 10:57:59 -0700 (PDT)
+From: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+To: Vinod Koul <vkoul@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"J.M.B. Downing" <jonathan.downing@nautel.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Yangtao Li <frank.li@vivo.com>,
+	Li Zetao <lizetao1@huawei.com>,
+	Chancel Liu <chancel.liu@nxp.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	dmaengine@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	alsa-devel@alsa-project.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-sound@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Cc: Markus Elfring <Markus.Elfring@web.de>
+Subject: [Patch v4 01/10] dt-bindings: dma: pl08x: Add dma-cells description
+Date: Thu, 20 Jun 2024 19:56:32 +0200
+Message-Id: <20240620175657.358273-2-piotr.wojtaszczyk@timesys.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
+References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 20 Jun 2024 19:39:03 +0200
-Message-Id: <D2510PQUKXWM.24TOHQBNTC7Y5@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v2 01/11] dt-bindings: clock: mobileye,eyeq5-clk: drop
- bindings
-Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <linux-gpio@vger.kernel.org>, "Vladimir Kondratiev"
- <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>, "Rob Herring"
- <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzysztof.kozlowski+dt@linaro.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Philipp Zabel" <p.zabel@pengutronix.de>, "Linus
- Walleij" <linus.walleij@linaro.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Lee
- Jones" <lee@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-X-Mailer: aerc 0.17.0
-References: <20240503-mbly-olb-v2-0-95ce5a1e18fe@bootlin.com>
- <20240503-mbly-olb-v2-1-95ce5a1e18fe@bootlin.com>
- <ee278102-f4b8-4ca0-879e-f83cd54efbd0@linaro.org>
- <13ed1865-d702-47b6-b186-d5f060103280@linaro.org>
- <D13I8TFIF77X.2EFWZ14LM2H6N@bootlin.com>
- <fd0228f2-2f41-4194-b804-7a90ea3a6091@linaro.org>
-In-Reply-To: <fd0228f2-2f41-4194-b804-7a90ea3a6091@linaro.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello Krzysztof,
+Recover dma-cells description from the legacy DT binding.
 
-On Tue May 7, 2024 at 5:34 PM CEST, Krzysztof Kozlowski wrote:
-> On 07/05/2024 17:07, Th=C3=A9o Lebrun wrote:
-> > Proposal from Stephen Boyd of using auxiliary devices makes sense, that
-> > could be the future direction of this series. It won't change the
-> > dt-bindings aspect of it, only the driver implementations.
-> >=20
-> > [0]: https://lore.kernel.org/lkml/daa732cb31d947c308513b535930c729.sboy=
-d@kernel.org/
-> > [1]: https://lore.kernel.org/lkml/20240124151405.GA930997-robh@kernel.o=
-rg/
->
-> So after Robs comment above, you still pushed the wrong approach and now
-> you revert it?
+Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+---
+Changes for v4:
+- This patch is new in v4
 
-Yes. The gist of it is that I had misunderstood the messages. Mostly, I
-did not understand how to implement separate Linux driver with the
-desired devicetree structure (no subnode on the syscon for each
-feature). I was missing knowledge about Linux infrastructure allowing
-for that. MFD and auxdevs are two approaches, with auxdevs being
-preferred.
+ Documentation/devicetree/bindings/dma/arm-pl08x.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-The latest revision finally takes those comments into account.
-
-Thanks Krzysztof,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Documentation/devicetree/bindings/dma/arm-pl08x.yaml b/Documentation/devicetree/bindings/dma/arm-pl08x.yaml
+index ab25ae63d2c3..191215d36c85 100644
+--- a/Documentation/devicetree/bindings/dma/arm-pl08x.yaml
++++ b/Documentation/devicetree/bindings/dma/arm-pl08x.yaml
+@@ -52,6 +52,13 @@ properties:
+   clock-names:
+     maxItems: 1
+ 
++  "#dma-cells":
++    const: 2
++    description: |
++      First cell should contain the DMA request,
++      second cell should contain either 1 or 2 depending on
++      which AHB master that is used.
++
+   lli-bus-interface-ahb1:
+     type: boolean
+     description: if AHB master 1 is eligible for fetching LLIs
+-- 
+2.25.1
 
 
