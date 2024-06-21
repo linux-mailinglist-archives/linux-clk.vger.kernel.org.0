@@ -1,128 +1,133 @@
-Return-Path: <linux-clk+bounces-8435-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8451-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 655D39124C8
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 14:08:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F02F9126EE
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 15:45:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE83EB23657
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 12:08:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03D171F2484A
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 13:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF439174EF1;
-	Fri, 21 Jun 2024 12:08:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E1438DE1;
+	Fri, 21 Jun 2024 13:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b="bwNl9B2b"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="L8B9Gp1r"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269C6174EC7
-	for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 12:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A9120335;
+	Fri, 21 Jun 2024 13:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718971697; cv=none; b=KdxSPEVzipNVGZWim0pEkiuRCMg9nGRqqW5YEHtesMVABdU/x+EqMI6R/zFsiL97aDtBDxniUvisvfZTiLEQXOP3WrJ7GnN80wrZjAyQFiLddN8sWtjKPL/1xbEUAPkj5aJn8E9ivuQwe2w3Me6ZxR5NPo6vqlmZ6UrGMLFBC6Y=
+	t=1718977504; cv=none; b=qdLL7FRTIQX8CXZYp0QeT1mrvpvjb346fBGWAO7rR/EoWqEZB2CyWvuQ6la3DN2BSCfgm4mBdDohjx5WWAwGS8tHqFMI042opd3Yax2iyZrAZNjaKSHR62sRI1iukNQthNeFQKYYNJKSBg96WRji2PMXJwW2pHIv1o7WDsyqQLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718971697; c=relaxed/simple;
-	bh=5CsIqk65T8h28pv7LSZHK/r+thMfNFgpmh7VKRl0UWQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QSm61UehE6/0phloIX5YeyhJc4pflZzwnx9OzGex5BM4/JMI4YDvXtysyHPtX2yTBgmUYSC3721B+IVmKvv0xUz38zPe34bCSrwolVy1FinugG34hPcv1+tMTliQAjta2/ksJJkOXDvige6G1tYx8ZIVNWaq2+hB/2YkMN+sigY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com; spf=pass smtp.mailfrom=timesys.com; dkim=pass (2048-bit key) header.d=timesys-com.20230601.gappssmtp.com header.i=@timesys-com.20230601.gappssmtp.com header.b=bwNl9B2b; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=timesys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=timesys.com
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-795502843ccso104041685a.1
-        for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 05:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20230601.gappssmtp.com; s=20230601; t=1718971694; x=1719576494; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5CsIqk65T8h28pv7LSZHK/r+thMfNFgpmh7VKRl0UWQ=;
-        b=bwNl9B2b5uBkts+d4e1DdRjRmxBlNK3fTwlrYckofd8DFZRyHpP+wuYJNoiJFzIY0N
-         6J2XMZlIWqrBJdPaUYzL7AaytwBd2cv+HOibYo5pDM/cXmrBDsHNLJJg2+DNxDbfTG01
-         PGNcSY0E5srlf0xby1j0hw0vKWRgAxMKkG1uK9hQshCVklS2nrHA+8JMmi+OcLH9ExEM
-         76uZVM00QNMp5apgZUS8HFiWsw1t/COUYq6QZDqgb2TK+SDiYiCU5xgaajdsU4GHyF4a
-         TgfV1+fSkkp2MooWuTU1LdWf577gqcZAi+/zsQBwMkDc00qjp1XBC1jfhw4NHZJs/Mg0
-         fn5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718971694; x=1719576494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5CsIqk65T8h28pv7LSZHK/r+thMfNFgpmh7VKRl0UWQ=;
-        b=gMz4Kt6IupYsZxwduQOJoyUNaycdE7bZNqouvq3YhVFUHRqBmxus69KVRfbfVC/qP1
-         zxVeARrrZoTKfNwFClJRVfjdGKeACibSg+YBjglVpqSR4FqXSVB8dijZaLBUG2KHGApa
-         pMzM8n086rxRLV4/gjc+LY84XRgky2PA5FfA9jGR1ot1RRHGSaGZnlyu5M3j7nZnZitI
-         VY7gNdAL9RR6Sj5JRxEroL8aB8BHtIHa87LxhpnMyRsK2azolcZhBY0HuPAxjupityxy
-         QyBTQJhGvzrWdx8U3NBGbXNe+9aLYVf2KU65W7TTtSaJWvOcgVLDZfbNIf4ENnrIxI8O
-         Mj8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXnIvp1VYe8T2SL7+aWHGJBol4tyIj0h4/UDUelpV5cVqkS1iA6Tb4t+p0rZj7azUtQKa+Bxy1WLDdEg/ifr44RKfNQls+K5gRG
-X-Gm-Message-State: AOJu0YwFGwoHI4cKg7lns1Sh/Vyjo39icwZRaOBdeYmAJ5uncfXp8S6C
-	zBL3vPPGpBn0VR0WwliGdjU0LfsuINmCfz578kV+Ir1K7J27UGOSx6vLUE9WPNxUsC05XGJHVj+
-	9/NoqzaP1vHxkULsbpypQpXBPlmQRCrSDnCo2Gw==
-X-Google-Smtp-Source: AGHT+IH9SeiO8vfdoOxDABbDkc1VlJaHvluIQfS8YUVwP2eXorBPvqf3BAKJdJfTNAn0CNJ3/z1faNaXrP6fson02ac=
-X-Received: by 2002:ad4:4245:0:b0:6b0:6629:bdf9 with SMTP id
- 6a1803df08f44-6b501e2c710mr72849356d6.21.1718971694039; Fri, 21 Jun 2024
- 05:08:14 -0700 (PDT)
+	s=arc-20240116; t=1718977504; c=relaxed/simple;
+	bh=WoquWunYmCSL+/95Rrnl6iED+A+KdzoiIUpUW0JykN4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jWogVBkYvtsUW2F7gYb4UMRPZACjHguz53bIlkBIIx2MRBnO+UaZ6jDyD2C5J8KtJn21+kFmaXkA6xxjuMWxDtyzwqeaVgU0to6PhtGN4ZnpYHbf5/VWunO1Mi4ykTyYyCkZ9XCBrlFa91VMmcE6G8MR4dlW5Mw72TojIH1Jw4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=L8B9Gp1r; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45LBel53014651;
+	Fri, 21 Jun 2024 08:14:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=FRa3aI0ad3u7nydsNc44sEFGNZQ
+	hulyTRHX1Q7HOfYY=; b=L8B9Gp1rQuEvKJ70pgMgEIohqQzyUnXFuEishOXEnsx
+	G5dKGv97qbZc/OuF7Ty636rO6Ma19DNRsldTlSI4lG4CfgyQYXihTPG5kqzxnHao
+	U04a+dlR1YD2aXLO9cZg6rR0QFvW9BsGRHu0OwgPxmQganQds8Bi3g8k5PnYKcGs
+	K1DNzFMDD3DEGVqpT7uMtW8tITpdHLVxOFaEV2QDQKtUlMvgXiGYZSGdGCi23jF6
+	I2Ge70brJvm47F0OZY/r9Zz5uSpjnR46Am0Ay6LeHmfv7MvkMd2YZONso5L9qk6p
+	0xdhB+pBHnkRPbAKLZ103YAwCQVHPXXzJJD/YH146Iw==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3yw4yxs5v7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Jun 2024 08:14:23 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 45LCEMf0021835
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 21 Jun 2024 08:14:22 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 21 Jun
+ 2024 08:14:21 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 21 Jun 2024 08:14:21 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.120])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 45LCE6Su032255;
+	Fri, 21 Jun 2024 08:14:08 -0400
+From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lars-Peter Clausen
+	<lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan
+ Cameron <jic23@kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>
+CC: Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Conor Dooley
+	<conor.dooley@microchip.com>
+Subject: [PATCH v6 1/2] dt-bindings: iio: adf4350: add clk provider prop
+Date: Fri, 21 Jun 2024 15:13:58 +0300
+Message-ID: <20240621121403.47912-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240620175657.358273-1-piotr.wojtaszczyk@timesys.com>
- <20240620175657.358273-11-piotr.wojtaszczyk@timesys.com> <jgqhlnysuwajlfxjwetas53jzdk6nnmewead2xzyt3xngwpcvl@xbooed6cwlq4>
-In-Reply-To: <jgqhlnysuwajlfxjwetas53jzdk6nnmewead2xzyt3xngwpcvl@xbooed6cwlq4>
-From: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-Date: Fri, 21 Jun 2024 14:08:03 +0200
-Message-ID: <CAG+cZ04suU53wR5f0PhudgNmkxTRtwEXTS1cWH1o9_rTNM94Cg@mail.gmail.com>
-Subject: Re: [Patch v4 10/10] i2x: pnx: Use threaded irq to fix warning from del_timer_sync()
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	"J.M.B. Downing" <jonathan.downing@nautel.com>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Russell King <linux@armlinux.org.uk>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Arnd Bergmann <arnd@arndb.de>, Yangtao Li <frank.li@vivo.com>, 
-	Li Zetao <lizetao1@huawei.com>, Chancel Liu <chancel.liu@nxp.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-sound@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	Markus Elfring <Markus.Elfring@web.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: q5lCPQa3DyGBp6-UeJoXADohoYHrnZur
+X-Proofpoint-ORIG-GUID: q5lCPQa3DyGBp6-UeJoXADohoYHrnZur
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-21_04,2024-06-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 phishscore=0
+ impostorscore=0 clxscore=1015 mlxlogscore=999 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406210091
 
-Hi Andi,
+Add properties required for providing clock to other consumers.
 
-On Fri, Jun 21, 2024 at 12:57=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org>=
- wrote:
-> On Thu, Jun 20, 2024 at 07:56:41PM GMT, Piotr Wojtaszczyk wrote:
-> > When del_timer_sync() is called in an interrupt context it throws a war=
-ning
-> > because of potential deadlock. Threaded irq handler fixes the potential
-> > problem.
-> >
-> > Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
->
-> did you run into a lockdep splat?
->
-> Anything against using del_timer(), instead? Have you tried?
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+no changes in v6.
+ .../devicetree/bindings/iio/frequency/adi,adf4350.yaml      | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-I didn't get a lockdep splat but console was flooded with warnings from
-https://github.com/torvalds/linux/blob/v6.10-rc4/kernel/time/timer.c#L1655
-In the linux kernel v5.15 I didn't see these warnings.
+diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,adf4350.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,adf4350.yaml
+index 43cbf27114c7..d1d1311332f8 100644
+--- a/Documentation/devicetree/bindings/iio/frequency/adi,adf4350.yaml
++++ b/Documentation/devicetree/bindings/iio/frequency/adi,adf4350.yaml
+@@ -28,6 +28,12 @@ properties:
+   clock-names:
+     const: clkin
+ 
++  '#clock-cells':
++    const: 0
++
++  clock-output-names:
++    maxItems: 1
++
+   gpios:
+     maxItems: 1
+     description: Lock detect GPIO.
+-- 
+2.45.2
 
-I'm not a maintainer of the driver and I didn't do any research on
-what kind of impact
-would have using del_timer() instad. Maybe Vladimir Zapolskiy will know tha=
-t.
-
---=20
-Piotr Wojtaszczyk
-Timesys
 
