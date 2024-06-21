@@ -1,155 +1,295 @@
-Return-Path: <linux-clk+bounces-8458-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8463-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3445F912731
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 16:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A97791287B
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 16:51:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64DE11C23814
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 14:02:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEB021C20DBD
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 14:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BDAB38DE5;
-	Fri, 21 Jun 2024 14:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012292D057;
+	Fri, 21 Jun 2024 14:51:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NTBjE9yM"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="UaXZMKs5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F9D2BB0D
-	for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 14:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28F02940F;
+	Fri, 21 Jun 2024 14:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718978511; cv=none; b=jFMs48lhs7u7TI8bmYuiepUNa4gyHMPi3Ef+bSBjG8jFMDp815r2Kqin7n+H+XYymcrh6xcdoOIXUC8m4gtB5xBm05b0XnYQECqpPBr3UyaEmyYgFeL6I7Wu86kdhUCclOe4bGkwa+ShacdoufnFBtgtcaE6M0p+pNcmihSIVyE=
+	t=1718981470; cv=none; b=rz5yMu6eLK4gri1ncoJ9Usj47Gy3+ALHlWd7smnNfrpmQLw+QtWabTPhw99P13pxqGHdArQ2LDWOsuEH75RtavBlXL/5N5guXmGyF8dTiXPr0PHvE35hKEwQ0qjua0Vt+8hpO0NPl7iI0vYvATObS7W7LRSuWmpkSWOneqaIrQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718978511; c=relaxed/simple;
-	bh=4bDh7sRBhgwG5+mLbZdufXiPUuyeNa+prJH8L8Jmc14=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Uwzq8+7m4H+06VSEwmoPy6vciSjkln72c1FlTMdVbJYc8zcIfftGnfZyWbGUrSxsGb8NuuzvhRLoF9VsWZ+LHW482UvcROoo5oD3s/ZZTNm6yE+UKnYQL0Oi336GNV3AO6QO0ZfFsTQs9coY6le/lWrlocJBkJ4SyVxo7VsolLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NTBjE9yM; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-424720e73e1so17582555e9.1
-        for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 07:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1718978508; x=1719583308; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K0jH/bj7Lqj0At6MAhYLJTdfQCIn+n13kr0wPP2H/nA=;
-        b=NTBjE9yMYFAXdOTkOeSAWQrQrnC7fq00QgetNYOJyQe5irP4ghpn31ZyCqXOvCFL4S
-         ObDXQ8oQj399inUaBSKT2JQNWzYbIkYTCJYDnrTJLk95JPxnUeT9/KP3x0S/S71X6ecR
-         TL5nhbm6wf/AbabOKLDk99RF0w5yteHAWVSLRA7J4gfe5N+uWl6xdKKiBD34xiLD3rmh
-         mIzhm6gYps2TlmZ10JcJiJrilMV9zn8wY0vT+2B+QriiBjz+76CCvkuvIUfzdOTx051J
-         BseMonTLcCvDoXaa+2urq/jrONEvOjLfTWdoFd1J4Q/WFJI8uPot0wvWxCwGcXbHMMTt
-         idyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718978508; x=1719583308;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K0jH/bj7Lqj0At6MAhYLJTdfQCIn+n13kr0wPP2H/nA=;
-        b=hJ29wtdbr/rPU2aCuswubFy4oe8S6nnhkUOkW/1kXXUqC2jTIwPjfb3eyji+61bUO+
-         1EImGRZkK40nAB1Zi8uVASjdwE5Z6o7LFWsQNkGq5zFBq08aOJeYAATWCniAc4OItvDW
-         qCSpbjNMiP19ExKR4NI43hfiIb/gyJ/iQ7aGOsjc6mmkhrCdGeSo6T4Smg4B9FA4T1e8
-         s5y7NNZQtLIvYV1wbLzt4reRLV6i6XKdgAwQBKRaNRIKew8tww2b1HIFuzlTLy1vUlsA
-         imIja4h7Ek+MqRQZo2gWAEAteWXu/jJ4DWy3ufcI6eDMABg1yeevVZ6PNWl/3Pbhfwiq
-         ZrTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9rraVoQjBM/rBKPE0rE5Z8cU0HkYJvkVFQU2pgN9NilcyKPN6os/dA86Y3WqzNotq3fQqC6bYoOMyvhSpFdjvlZGOo+wDmhGP
-X-Gm-Message-State: AOJu0YzTWZ7s7TIXRAfQ4QQ+6NIkuq96xwilirONOaE3oXsT7S/rAVfS
-	2WI6ChL3WJ/P+IDji6Q5HFBz6aV9Fusa+f138Uj2ssJlRcvKXnA1Ka/WfMLi1N8=
-X-Google-Smtp-Source: AGHT+IHQhtN0geVJUd7mOt3RhAhPJ693+WAnvErRVzmUP4NSBKoEdkmKBpU+SGk0NmCnwdouZ1nXNw==
-X-Received: by 2002:a7b:c3cc:0:b0:422:6449:1307 with SMTP id 5b1f17b1804b1-42475296a62mr65318825e9.32.1718978507859;
-        Fri, 21 Jun 2024 07:01:47 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-366383f6722sm1847342f8f.24.2024.06.21.07.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 07:01:47 -0700 (PDT)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Fri, 21 Jun 2024 16:01:18 +0200
-Subject: [PATCH 5/5] clk: qcom: dispcc-sm8650: Update the GDSC wait_val
- fields and flags
+	s=arc-20240116; t=1718981470; c=relaxed/simple;
+	bh=5hLo/NJHRsfeggQDXZtDEA7gdlTNrQ5GceHmTEYUk8k=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TqkdYGsOhMfADhX7WD/ULXYTNASpJ4eyu14sAB1Yj7+bedvmueh6sjP2B8vaDpXjwZ/+6MeXMqBGVZ05rqr7bxrJ5fyIHCEF4mjg1NNsI5uSJAvHQpj3+QNZdxc1azsoJMDhr3y6pHE0bY1uMO2m5geVA4Ap4QMYU3dpQBaQhuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=UaXZMKs5; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45LBfeWg014796;
+	Fri, 21 Jun 2024 08:14:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=MxN1j
+	fBJIKGuR9o5HaLQx0jskf9yOcmAgKNAbFMGh/g=; b=UaXZMKs573U7Hq/tuwhso
+	duyHbSt5xkgv7pFv059imY1WDyMNMAI7527g4TRv8mvO/iUV8k/J+81NneZfTNpV
+	XeH1jg7WeqEDM0HW6kMmb7JX3E/cqbQDkmlIW0TFGfZuZpSmN9t/V9qhGuJjEcRG
+	WXChOHO0prYhAre7hYc+pOHA9Ywx/cj+Sieq1U9NBFzQi2FdLfTfc1Y3gR+IEUYj
+	3wSKvPy+uvJARPnupQBD9FWNVY2lyQQeEEJcHjiqcxSAxWOwXlu5vwaTmhQvbdk1
+	GidOGP1Q1Nx//5UUOGyOY3KQdA7+o1GJpfqovXTRQvQx7hl6FUe+5Kp8mAjTh3uu
+	w==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 3yw4yxs5vc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Jun 2024 08:14:25 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 45LCEO2X021838
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 21 Jun 2024 08:14:24 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 21 Jun
+ 2024 08:14:23 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 21 Jun 2024 08:14:23 -0400
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.120])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 45LCE6Sv032255;
+	Fri, 21 Jun 2024 08:14:16 -0400
+From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lars-Peter Clausen
+	<lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan
+ Cameron <jic23@kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>
+CC: Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH v6 2/2] iio: frequency: adf4350: add clk provider
+Date: Fri, 21 Jun 2024 15:13:59 +0300
+Message-ID: <20240621121403.47912-2-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240621121403.47912-1-antoniu.miclaus@analog.com>
+References: <20240621121403.47912-1-antoniu.miclaus@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240621-topic-sm8650-upstream-fix-dispcc-v1-5-7b297dd9fcc1@linaro.org>
-References: <20240621-topic-sm8650-upstream-fix-dispcc-v1-0-7b297dd9fcc1@linaro.org>
-In-Reply-To: <20240621-topic-sm8650-upstream-fix-dispcc-v1-0-7b297dd9fcc1@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
- Taniya Das <quic_tdas@quicinc.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1354;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=4bDh7sRBhgwG5+mLbZdufXiPUuyeNa+prJH8L8Jmc14=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBmdYfEIJAtyBOt9vpTxJ/ZTkkFM/nBTe1lGqWGLbCc
- PThoYZiJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZnWHxAAKCRB33NvayMhJ0TBwD/
- 9IvnzqHvxjgGHvLWvkLAi1AJlRmMikHj42W+nItBO6zESHJ7quCKgo+LaDBRF7hSMmeoRClh6NVMhw
- SgB+6gjnOlmS0CV7Tl97EnYoKD/xUOmJGUC/arXRZ1G11R1IzYkrlgZutHTTfJ0smtKjHZDIA65iBM
- v5vmo1SgwfGAtWmf2dInYfz7dttvDdwUkFYz3uv83hvXAG9eTrJALX4N3yvNo+SuFlnc1b3dj/jGBk
- Rl7MEYy70gMN0PKwVzC5dptCL6RPTy5UxWaebb3Ww1jwcIQhFdhW6b+YI+Ta3ZNrm1RuOJ8t3hV7Ci
- WuzlEj2tDe/nHSMDNl7/U1xoun0zHIsvGGjfmUmEhqtkLoEuOGdn5KY/63wKG/EBjSq2MFBB8M7EZ4
- gtD/gZ/VITNT9y1O1jLkFulz80l9VqQ5XnhoK7dK9W7Oi1xVL+yaPbamPxlHWE323Q6IUjGPaJRFcm
- HevFMPSiCgXEELadcpKlA4GOMB1GBJqh64zs8g3/1r3pEA8Sox/1FMWXhoEGfMwT4Ly46aplLB/vBG
- Yuvr9LxjbMBdZwm/EuTL/yU85KmITSpUXJ0haWJvmhEA+t99mDfrFyqvbBnQDUIC2YtGfP8Q54jK8X
- JhXXuN9izKXP8deS7RDvmbnitxkZ5vAbflt2c/2achSX2SR4/vqpbum9Vqpg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: C5-Nl98mnm-CxPdry3kMW7wGU8kUzwEg
+X-Proofpoint-ORIG-GUID: C5-Nl98mnm-CxPdry3kMW7wGU8kUzwEg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-21_04,2024-06-21_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 mlxscore=0 phishscore=0
+ impostorscore=0 clxscore=1015 mlxlogscore=999 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2406210091
 
-Update the GDSC wait_val fields and flags as per the default hardware values.
-Add the missing POLL_CFG_GDSCR flag.
+Add clk provider feature for the adf4350.
 
-Fixes: 9e939f008338 ("clk: qcom: add the SM8650 Display Clock Controller driver")
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Even though the driver was sent as an IIO driver in most cases the
+device is actually seen as a clock provider.
+
+This patch aims to cover actual usecases requested by users in order to
+completely control the output frequencies from userspace.
+
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 ---
- drivers/clk/qcom/dispcc-sm8650.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+changes in v6:
+ - rework `init.name` handling.
+ - simplify iio channels initialization.
+ drivers/iio/frequency/adf4350.c | 124 +++++++++++++++++++++++++++++++-
+ 1 file changed, 122 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/dispcc-sm8650.c b/drivers/clk/qcom/dispcc-sm8650.c
-index d88eebb32575..2da3c11b0c3d 100644
---- a/drivers/clk/qcom/dispcc-sm8650.c
-+++ b/drivers/clk/qcom/dispcc-sm8650.c
-@@ -1604,20 +1604,26 @@ static struct clk_branch disp_cc_sleep_clk = {
+diff --git a/drivers/iio/frequency/adf4350.c b/drivers/iio/frequency/adf4350.c
+index 4abf80f75ef5..e13e64a5164c 100644
+--- a/drivers/iio/frequency/adf4350.c
++++ b/drivers/iio/frequency/adf4350.c
+@@ -19,6 +19,7 @@
+ #include <linux/gpio/consumer.h>
+ #include <asm/div64.h>
+ #include <linux/clk.h>
++#include <linux/clk-provider.h>
  
- static struct gdsc mdss_gdsc = {
- 	.gdscr = 0x9000,
-+	.en_rest_wait_val = 0x2,
-+	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xf,
- 	.pd = {
- 		.name = "mdss_gdsc",
- 	},
- 	.pwrsts = PWRSTS_OFF_ON,
--	.flags = HW_CTRL | RETAIN_FF_ENABLE,
-+	.flags = POLL_CFG_GDSCR | HW_CTRL | RETAIN_FF_ENABLE,
+ #include <linux/iio/iio.h>
+ #include <linux/iio/sysfs.h>
+@@ -36,6 +37,9 @@ struct adf4350_state {
+ 	struct gpio_desc		*lock_detect_gpiod;
+ 	struct adf4350_platform_data	*pdata;
+ 	struct clk			*clk;
++	struct clk			*clkout;
++	const char			*clk_out_name;
++	struct clk_hw			hw;
+ 	unsigned long			clkin;
+ 	unsigned long			chspc; /* Channel Spacing */
+ 	unsigned long			fpfd; /* Phase Frequency Detector */
+@@ -61,6 +65,8 @@ struct adf4350_state {
+ 	__be32				val __aligned(IIO_DMA_MINALIGN);
  };
  
- static struct gdsc mdss_int2_gdsc = {
- 	.gdscr = 0xb000,
-+	.en_rest_wait_val = 0x2,
-+	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xf,
- 	.pd = {
- 		.name = "mdss_int2_gdsc",
- 	},
- 	.pwrsts = PWRSTS_OFF_ON,
--	.flags = HW_CTRL | RETAIN_FF_ENABLE,
-+	.flags = POLL_CFG_GDSCR | HW_CTRL | RETAIN_FF_ENABLE,
++#define to_adf4350_state(_hw) container_of(_hw, struct adf4350_state, hw)
++
+ static struct adf4350_platform_data default_pdata = {
+ 	.channel_spacing = 10000,
+ 	.r2_user_settings = ADF4350_REG2_PD_POLARITY_POS |
+@@ -381,6 +387,113 @@ static const struct iio_info adf4350_info = {
+ 	.debugfs_reg_access = &adf4350_reg_access,
  };
  
- static struct clk_regmap *disp_cc_sm8650_clocks[] = {
-
++static void adf4350_clk_del_provider(void *data)
++{
++	struct adf4350_state *st = data;
++
++	of_clk_del_provider(st->spi->dev.of_node);
++}
++
++static unsigned long adf4350_clk_recalc_rate(struct clk_hw *hw,
++					     unsigned long parent_rate)
++{
++	struct adf4350_state *st = to_adf4350_state(hw);
++	unsigned long long tmp;
++
++	tmp = (u64)(st->r0_int * st->r1_mod + st->r0_fract) * st->fpfd;
++	do_div(tmp, st->r1_mod * (1 << st->r4_rf_div_sel));
++
++	return tmp;
++}
++
++static int adf4350_clk_set_rate(struct clk_hw *hw,
++				unsigned long rate,
++				unsigned long parent_rate)
++{
++	struct adf4350_state *st = to_adf4350_state(hw);
++
++	if (parent_rate == 0 || parent_rate > ADF4350_MAX_FREQ_REFIN)
++		return -EINVAL;
++
++	st->clkin = parent_rate;
++
++	return adf4350_set_freq(st, rate);
++}
++
++static int adf4350_clk_prepare(struct clk_hw *hw)
++{
++	struct adf4350_state *st = to_adf4350_state(hw);
++
++	st->regs[ADF4350_REG2] &= ~ADF4350_REG2_POWER_DOWN_EN;
++
++	return adf4350_sync_config(st);
++}
++
++static void adf4350_clk_unprepare(struct clk_hw *hw)
++{
++	struct adf4350_state *st = to_adf4350_state(hw);
++
++	st->regs[ADF4350_REG2] |= ADF4350_REG2_POWER_DOWN_EN;
++
++	adf4350_sync_config(st);
++}
++
++static int adf4350_clk_is_enabled(struct clk_hw *hw)
++{
++	struct adf4350_state *st = to_adf4350_state(hw);
++
++	return (st->regs[ADF4350_REG2] & ADF4350_REG2_POWER_DOWN_EN);
++}
++
++static const struct clk_ops adf4350_clk_ops = {
++	.recalc_rate = adf4350_clk_recalc_rate,
++	.set_rate = adf4350_clk_set_rate,
++	.prepare = adf4350_clk_prepare,
++	.unprepare = adf4350_clk_unprepare,
++	.is_enabled = adf4350_clk_is_enabled,
++};
++
++static int adf4350_clk_register(struct adf4350_state *st)
++{
++	struct spi_device *spi = st->spi;
++	struct clk_init_data init;
++	struct clk *clk;
++	const char *parent_name;
++	int ret;
++
++	if (!device_property_present(&spi->dev, "#clock-cells"))
++		return 0;
++
++	if (device_property_read_string(&spi->dev, "clock-output-names", &init.name)) {
++		init.name = devm_kasprintf(&spi->dev, GFP_KERNEL, "%s-clk",
++					   fwnode_get_name(dev_fwnode(&spi->dev)));
++		if (!init.name)
++			return -ENOMEM;
++	}
++
++	parent_name = of_clk_get_parent_name(spi->dev.of_node, 0);
++	if (!parent_name)
++		return -EINVAL;
++
++	init.ops = &adf4350_clk_ops;
++	init.parent_names = &parent_name;
++	init.num_parents = 1;
++	init.flags = CLK_SET_RATE_PARENT;
++
++	st->hw.init = &init;
++	clk = devm_clk_register(&spi->dev, &st->hw);
++	if (IS_ERR(clk))
++		return PTR_ERR(clk);
++
++	ret = of_clk_add_provider(spi->dev.of_node, of_clk_src_simple_get, clk);
++	if (ret)
++		return ret;
++
++	st->clkout = clk;
++
++	return devm_add_action_or_reset(&spi->dev, adf4350_clk_del_provider, st);
++}
++
+ static struct adf4350_platform_data *adf4350_parse_dt(struct device *dev)
+ {
+ 	struct adf4350_platform_data *pdata;
+@@ -522,8 +635,6 @@ static int adf4350_probe(struct spi_device *spi)
+ 
+ 	indio_dev->info = &adf4350_info;
+ 	indio_dev->modes = INDIO_DIRECT_MODE;
+-	indio_dev->channels = &adf4350_chan;
+-	indio_dev->num_channels = 1;
+ 
+ 	mutex_init(&st->lock);
+ 
+@@ -551,6 +662,15 @@ static int adf4350_probe(struct spi_device *spi)
+ 			return ret;
+ 	}
+ 
++	ret = adf4350_clk_register(st);
++	if (ret)
++		return ret;
++
++	if (!st->clkout) {
++		indio_dev->channels = &adf4350_chan;
++		indio_dev->num_channels = 1;
++	}
++
+ 	ret = devm_add_action_or_reset(&spi->dev, adf4350_power_down, indio_dev);
+ 	if (ret)
+ 		return dev_err_probe(&spi->dev, ret,
 -- 
-2.34.1
+2.45.2
 
 
