@@ -1,218 +1,98 @@
-Return-Path: <linux-clk+bounces-8450-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8452-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F7FB9126B4
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 15:30:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71B99912702
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 15:51:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2EE228A883
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 13:30:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E0971C21ACF
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2024 13:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5219155C99;
-	Fri, 21 Jun 2024 13:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="N1g6+9HU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A83EB65E;
+	Fri, 21 Jun 2024 13:51:48 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311AF155A43
-	for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 13:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBED1C14
+	for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 13:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718976589; cv=none; b=mLzeg7/3S8PpfoFFHMqbtG/ResNpm179s0IqC2DyFPU9S8uo9t6wy7IlEkK5x/7rb7Jhm31SPRx5zW3dq4ifaCFaiKDeVtwSLitNdI1QAmC1nQee5TXT5nngkLQN4veXnFBlQiwlmZiwN1Yf/xMPJwhibim3G95HB2KTPaTfpIs=
+	t=1718977908; cv=none; b=LKJ1ls8o8Myslnnq0i/ulaZbKYqH0eBdo4IltB6SFvat/e5uJc34SkUMy8rMVjoZ4p7f+CJlYiqOLBB2vhMzcxS10s3Xtpiqe5SzHUfEMAGfflBEQf/tRYLkEPiWbPTh6V99lBSZ/B1hb1mstQMW3lTkHcT0U9EeBXOFBEHAn1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718976589; c=relaxed/simple;
-	bh=PrpYvrr+lZj/0Jd3AkYhgkAtqFwGNxKdteDQAdEtqEI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XTEYfKBu+4Ze35JhZJbsOG9NfhXxwZSjnUE4TBa9YExSSeI3q+PRidZJbeaOlY4N8soX/0wuRAdFE1NroB2IofY2v6xqlA5T8PeLDvUkYE9qiixrGTE+xvSMzxEf4Ys8surr/k1amVOXRyM1Ox02P42dIu8IaNpSlkBZQgNgHzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=N1g6+9HU; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a6f85f82ffeso254873866b.0
-        for <linux-clk@vger.kernel.org>; Fri, 21 Jun 2024 06:29:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1718976585; x=1719581385; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=INoRISBtXksAaYyy0JvylhuhhaTC+YBBST6VNRHIR4w=;
-        b=N1g6+9HUkZuIEMIk8r7k57BGHCPOsP5YljHBrK545ZZ3mKktX4GvovEJ/SlifC4k9A
-         P09vg2gjtzqXpCRoDcR12a2v4x+s0DCoYAswrgeXKxLSTje14IHb2+W12wym0mXqxiyd
-         VK4/yzSpSBlrJFTO9LFXGHHH9cECYHw5oOnmoqURPSLqGXrzncyiq7dD4Y+PDZx+3KhM
-         ZtrBJA0y80eDFJTGH12dUg2LBfJITaGauRwQfs7sg4KJwIp1UKA4PBvU7oWAUh8GQLsP
-         WN7ZWyMvfJ4OJSiVXONtFUrcgxP3SB6q/A4I6bGEGrrbrHLOpkqFY29ThVfJoh8LW3ty
-         q3sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718976585; x=1719581385;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=INoRISBtXksAaYyy0JvylhuhhaTC+YBBST6VNRHIR4w=;
-        b=vUVBPHFEbFbkTBq73qF/44Vg6FiFBpDFP6BYgFnSkTCF4UFaSEQX7JVDeHQxouUy+G
-         rewkPTxrnSt/QayBRV4+lUOf+R4xctQamNQ1J+tWdCbYK0/XhAUK5V9Rrb5MU/AOCa3m
-         5Vd5wqanjqOpBgL9O2b16r0tr36uPLApvxChm/8TbTdM7Aeg2KKWSerJ1/XBlf8AgT5W
-         TzEoPN9vOAZfHWGw0iqEftTgind7+o3CWva3prHuZL+zjLzFzvQLSkgXNiMx46O6wj3M
-         nQM3pXsFoo0yOdYRaHtXKOS1dAQEMpFn5+6BhuYozwTfeSR/jMub9j5oKq89xAgZO77o
-         lCpA==
-X-Forwarded-Encrypted: i=1; AJvYcCVXUN92uQst/43zeOZssagm9nSJBd5pYuE7Xd9eoqh9V/GF6eXdZL64OiTZ+i5D7ShKHeSfL3QduPMPcDwiErrj0oDp7Xau6o4y
-X-Gm-Message-State: AOJu0YwbeGeDfob7sWNulJ8aNBgAhfHpyICa/JIT4Sma/YjBAmngyqf/
-	mpN1MGpLF2y4DXuiCf+475EPaCSSpwgpXpg8dDPzZFPU/RsDgn5oFWiiW0jm3HE=
-X-Google-Smtp-Source: AGHT+IFnJLB1bdpPyMNJb5hUtZ8cwpI1DBnsNCd6rt2DmnH3ISK33RmtfNC2TKx7U0ybwxMCRAAz9w==
-X-Received: by 2002:a17:906:f2c3:b0:a6f:15c9:9aa3 with SMTP id a640c23a62f3a-a6fab7d6a99mr477701666b.67.1718976585397;
-        Fri, 21 Jun 2024 06:29:45 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.70])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6fcf42a650sm84492566b.43.2024.06.21.06.29.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jun 2024 06:29:44 -0700 (PDT)
-Message-ID: <e381e1c0-2e23-4734-a55f-cab6c21f8c5b@tuxon.dev>
-Date: Fri, 21 Jun 2024 16:29:41 +0300
+	s=arc-20240116; t=1718977908; c=relaxed/simple;
+	bh=eIw0OrBTZkPMxvDDlPxgQ/eFcPTznxDkkavDnJ7jnO4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SR6P/CXpqkPENT3gcVozEOGy+ceCmWJtkRc8se8gkhqbrYudTBlVLQsuflZTtDYAYWWJwVM6erbVpua/aTL2PNfuCFGXqb1Jprt9AENSA5xZ4bd2W3vX/qgQVJzi4IKIQNvoQgPG6YZUYCG64NMyk+j0Rq23vSUH5AKtOY6WNLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1sKefl-0000ET-Hn; Fri, 21 Jun 2024 15:51:25 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1sKefk-003xIz-Uf; Fri, 21 Jun 2024 15:51:24 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1sKefk-000BnP-2n;
+	Fri, 21 Jun 2024 15:51:24 +0200
+Message-ID: <5744e0de7ee58d6a435e62f5740d921f143f6635.camel@pengutronix.de>
+Subject: Re: [PATCH v8 3/5] reset: imx8mp-audiomix: Add AudioMix Block
+ Control reset driver
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc: Shengjiu Wang <shengjiu.wang@nxp.com>, abelvesa@kernel.org, 
+ peng.fan@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org,  krzk+dt@kernel.org, conor+dt@kernel.org,
+ shawnguo@kernel.org,  s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, marex@denx.de,  linux-clk@vger.kernel.org,
+ imx@lists.linux.dev, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date: Fri, 21 Jun 2024 15:51:24 +0200
+In-Reply-To: <CAA+D8AOzY3EcUayGP+pYeAqQu1y0=8WWngnBriwDwOCwnbcN2A@mail.gmail.com>
+References: <1718350923-21392-1-git-send-email-shengjiu.wang@nxp.com>
+	 <1718350923-21392-4-git-send-email-shengjiu.wang@nxp.com>
+	 <27ea1bf7de6f349426fcd7ddb056a1adfae47c73.camel@pengutronix.de>
+	 <CAA+D8AOzY3EcUayGP+pYeAqQu1y0=8WWngnBriwDwOCwnbcN2A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/12] dt-bindings: i2c: renesas,riic: Document the
- R9A08G045 support
-Content-Language: en-US
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Chris Brandt <Chris.Brandt@renesas.com>,
- "andi.shyti@kernel.org" <andi.shyti@kernel.org>,
- "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
- <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
- "mturquette@baylibre.com" <mturquette@baylibre.com>,
- "sboyd@kernel.org" <sboyd@kernel.org>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>
-Cc: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240621112303.1607621-1-claudiu.beznea.uj@bp.renesas.com>
- <20240621112303.1607621-9-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB11346105D3D3DD46AEF8CD44986C92@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <0bc78e5e-de37-4ff6-ac74-571f615b97f9@tuxon.dev>
- <TY3PR01MB1134602C189C6C63C6187840886C92@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <b5a3ef7c-8509-4065-ab0f-efb5a7e5fcbb@tuxon.dev>
- <TY3PR01MB11346D9CF89F7ED9B6A49C61586C92@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <TY3PR01MB11346D9CF89F7ED9B6A49C61586C92@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
+On Fr, 2024-06-21 at 20:34 +0800, Shengjiu Wang wrote:
+> > I wonder why we map at all. If the parent driver already has iomem
+> > mapped, can't it just pass that in, like JH7110 does?
+>=20
+> Because this is a simple reset driver, just two reset bits,
+> I want to avoid adding a header file for the parent driver and this drive=
+r.
 
+Ok.
 
-On 21.06.2024 16:10, Biju Das wrote:
-> 
-> 
->> -----Original Message-----
->> From: claudiu beznea <claudiu.beznea@tuxon.dev>
->> Sent: Friday, June 21, 2024 2:06 PM
->  Subject: Re: [PATCH 08/12] dt-bindings: i2c: renesas,riic: Document the R9A08G045 support
->>
->>
->>
->> On 21.06.2024 15:56, Biju Das wrote:
->>>
->>> Hi claudiu,
->>>
->>>> -----Original Message-----
->>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
->>>> Sent: Friday, June 21, 2024 1:55 PM
->>>> Subject: Re: [PATCH 08/12] dt-bindings: i2c: renesas,riic: Document
->>>> the R9A08G045 support
->>>>
->>>>
->>>>
->>>> On 21.06.2024 15:34, Biju Das wrote:
->>>>> Hi Claudiu,
->>>>>
->>>>>> -----Original Message-----
->>>>>> From: Claudiu <claudiu.beznea@tuxon.dev>
->>>>>> Sent: Friday, June 21, 2024 12:23 PM
->>>>>> Subject: [PATCH 08/12] dt-bindings: i2c: renesas,riic: Document the
->>>>>> R9A08G045 support
->>>>>>
->>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>>
->>>>>> Document the Renesas RZ/G3S (R9A08G045) RIIC IP. This is compatible
->>>>>> with the version available on Renesas RZ/V2H (R9A09G075). Most of
->>>>>> the IP variants that the RIIC driver is working with supports fast mode plus.
->>>>>> However, it happens that on the same SoC to have IP instatiations
->>>>>> that support fast mode plus as well as IP instantiation that
->>>>>> doesn't support it. For this, introduced the renesas,riic-no-fast- mode-plus property.
->>>>>>
->>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>>> ---
->>>>>>  Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 8
->>>>>> ++++++++
->>>>>>  1 file changed, 8 insertions(+)
->>>>>>
->>>>>> diff --git
->>>>>> a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->>>>>> b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->>>>>> index 91ecf17b7a81..c0964edbca69 100644
->>>>>> --- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
->>>>>> @@ -25,6 +25,10 @@ properties:
->>>>>>                - renesas,riic-r9a07g054  # RZ/V2L
->>>>>>            - const: renesas,riic-rz      # RZ/A or RZ/G2L
->>>>>>
->>>>>> +      - items:
->>>>>> +          - const: renesas,riic-r9a08g045   # RZ/G3S
->>>>>> +          - const: renesas,riic-r9a09g057
->>>>>> +
->>>>>>        - const: renesas,riic-r9a09g057   # RZ/V2H(P)
->>>>>>
->>>>>>    reg:
->>>>>> @@ -66,6 +70,10 @@ properties:
->>>>>>    resets:
->>>>>>      maxItems: 1
->>>>>>
->>>>>> +  renesas,riic-no-fast-mode-plus:
->>>>>> +    description: specifies if fast mode plus is not supported
->>>>>> +    type: Boolean
->>>>>
->>>>> Can't this info, as part of device data?? Based on frequency and
->>>>> device data is enough to derive this info??
->>>>
->>>> We can't rely completely on device data because on RZ/G3S we have 2
->>>> RIIC channels that support fast mode plus and 2 that doesn't support it.
->>>
->>> Can't array of bits for this channels won't help??
->>
->> Can you give an example? I'm not sure I understand how you would prefer me to use the array of
->> bits.
-> 
-> struct riic_of_data {
-> 	u8 regs[RIIC_REG_END];
-> 	u16 fast_mode_info info; /* 1 means fast mode plus supported, starting with channel 0*/
-> };
-> 
-> .info = 0x3, means channel 0 and 1 has fast mode plus supported
-> .info = 0x0, none of the channel supported fast mode plus.
+> Thanks for reviewing.
+>=20
+> By the way: shall I just send a new version for this patch only next time=
+?
 
-If I understand the proposal correctly, a match b/w struct
-riic_of_data::info bit + frequency and the nodes in device tree is still
-needed, right? As the RZ/G3S RIIC channels are using the same compatible.
-W/o a match how I cannot detect in the driver who is, e.g., channel 1 that
-supports FMP w/o hardcoding some RIIC channel data in the driver (e.g. RIIC
-channel address)?
+Yes, this is the only remaining patch for me to pick up, no need to
+resend the patches that were already applied.
 
-Also, for future SoCs that will suffer the same symptom but for different
-channels (and channels with different addresses) the driver will have to be
-adapted to match b/w the channel bit in struct riic_of_data::info and
-channel node from DT.
-
-> 
-> Cheers,
-> Biju
+regards
+Philipp
 
