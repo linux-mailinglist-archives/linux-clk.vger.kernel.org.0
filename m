@@ -1,128 +1,121 @@
-Return-Path: <linux-clk+bounces-8682-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8684-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 391CC9184F9
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 16:56:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F7749185ED
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 17:35:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69CFB1C21A44
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 14:56:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC696284291
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 15:35:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB25D1862B7;
-	Wed, 26 Jun 2024 14:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5988E18C322;
+	Wed, 26 Jun 2024 15:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="t/DqCWrM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EhCUvS4w"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45230186289
-	for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2024 14:55:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D46CA92F;
+	Wed, 26 Jun 2024 15:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719413742; cv=none; b=cEYIlhyr24ub8WQVQIyx7U3voiRkffYXlTxQxUHpWr4alQ36Wnro9OXysiLrURg/T7PLWZD0HqEJNqMkLfAX9w5FiC8FCo/O0snwTSxjcLbpd3Fbxk1kTq/AqLgVrmbvRtTX14l+ULcE3dbShOLhqYeOibNKYYdf5DnZzVQCu2E=
+	t=1719416122; cv=none; b=IpYZIdnrO4F/lMJCF8ur62wXnrTCiRweqX61PqNJKJiHw7xfk1rizH1OkSZJo4p84pDSmuayEeViU87K8O8A+A/CkiFVTUsukUlr5X02gmE2gPMJ8baGE94xjUrt/JGLkqA9t18sBwrPLX/D88eho8qzXrO3D42Vhn2u2w0Wbgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719413742; c=relaxed/simple;
-	bh=FbTNRCWKW+BuxfkEMiJp2eYFRAIAL1si4NRKBdAsVZI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=evAeJ5wRkLKShhTngy/VhnlyfsXCqom+wYrgSIDcTuOodUBLOgDE5Q4pymEOgmhEiUGH9cvbt9BHLsnGmEIW2nCH8QHkJZ1o/BEXi0L9FJBPqtVBdxKbg1PlWU9ZHDNgTMmrBqxJid3Wqu+a7T9GwPwSTZ69+NnCFNE3yMr9lbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=t/DqCWrM; arc=none smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45QDg65f019991;
-	Wed, 26 Jun 2024 10:55:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=uwq+N
-	V8ZY6mO4Cc/095eCF6ern9jxcJPg4S8N2tA/E0=; b=t/DqCWrMhHZrO6ZBMTVvv
-	G28Y/BU63PHUuYGQar7g2AUtP33U2uQjDv0WgHAPe1538BETeXmrVnMfpgyqEElQ
-	eAaKc440jE+tmvi64wqWi4WjgpzzqTExKJZ9V3nfAmdeTw23JYVMrrxYcMo6HBF9
-	p0/XEJNeXZ3Sav2ew2mYG0Prz5Jw6tXKnyQpeGYDReACyNgMVUcy/eNWOBOLLNtx
-	zFoKxH589NoCTfjjAxDpUroixJ7LqH48BJDIgl/aSIPudVLwxPPc1SyAZtUblDjF
-	ckOsa3B9NKJqtPaP9C+8eUXk7PdDNwqEzdgrwfuooSkV4NwCswAyE3TUk3sopaWH
-	Q==
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ywrf3r183-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Jun 2024 10:55:37 -0400 (EDT)
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 45QEta9O025203
-	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 26 Jun 2024 10:55:36 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 26 Jun
- 2024 10:55:35 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 26 Jun 2024 10:55:35 -0400
-Received: from [127.0.0.1] ([10.44.3.56])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 45QEtQfe015943;
-	Wed, 26 Jun 2024 10:55:32 -0400
-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
-Date: Wed, 26 Jun 2024 16:59:18 +0200
-Subject: [PATCH RESEND 2/2] clk: use clk_core_unlink_consumer() helper
+	s=arc-20240116; t=1719416122; c=relaxed/simple;
+	bh=1Kcr3jofdArjh6InWFIdRnfWmP3d7iP++Ac3f1l/fwQ=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=mgQPq54HdBDiZfIN/odhdPoKD59Ae5IYlxUwljDUmThxIZq5GVSteUr1SNaTmXHknAHu3oHX+duJ9XhAfiQy8BI9rieWc1C6YH/m9AUuS0muJ3wd59kl9zhPu7CeI2Ax19Te/Qt4Cz6XJjeacksjoJynVel+CpFFkpe6AWvod7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EhCUvS4w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CE8FC116B1;
+	Wed, 26 Jun 2024 15:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719416121;
+	bh=1Kcr3jofdArjh6InWFIdRnfWmP3d7iP++Ac3f1l/fwQ=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=EhCUvS4wltsz2P5ZyUiB69APAxgoqAtE/IcvwXQdxdEpETk8H013mdfGKcvFUiLdB
+	 giiSdPkNiHIAESerlBkaXWCvQnFBJ9lvZQ9wLkxyPGldmIWeAGLDhA2OiL9ZuwSAHg
+	 c0ezz8n3h1PWIHJQHiPfPA8sJX0lB0B/JXR0LFcTXueub69S9wW/gVrd8az1NrmNgL
+	 XR0AOkUsuBpuPnxlbxi/LWKLD2m3fLp7aVe6Prqhjc8kAYxmjns3zBsnIUTE034xxN
+	 HVx61Vq+ACCaSQ2eMH3Sy076jJVVIvZ/EI2jT0Etk5dJwT/TJFqYwQKpol66llpCGM
+	 vlMxR++QCO5AQ==
+Date: Wed, 26 Jun 2024 09:35:20 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20240626-dev-clk-misc-v1-2-e2975f2abb76@analog.com>
-References: <20240626-dev-clk-misc-v1-0-e2975f2abb76@analog.com>
-In-Reply-To: <20240626-dev-clk-misc-v1-0-e2975f2abb76@analog.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
-	<sboyd@kernel.org>
-CC: <linux-clk@vger.kernel.org>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719413959; l=687;
- i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=FbTNRCWKW+BuxfkEMiJp2eYFRAIAL1si4NRKBdAsVZI=;
- b=nJS+nxms3TQey7GvX+g1GS18Hyojc9jm6JWbgpv966Ag2jIecsaSqNip01HFuWTx1ECNhCCKd
- A6UqvaVf++FDzijoVNnrE+sqO15dNk1I7rCU+emjhJQX9ARwJnpbsfv
-X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
- pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: iKdK7d9LXq_Ya50mZHcOXVNXSK-iEp1h
-X-Proofpoint-GUID: iKdK7d9LXq_Ya50mZHcOXVNXSK-iEp1h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-26_07,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=721 mlxscore=0
- malwarescore=0 phishscore=0 bulkscore=0 priorityscore=1501 suspectscore=0
- spamscore=0 clxscore=1015 adultscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2406140001
- definitions=main-2406260110
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Devi Priya <quic_devipriy@quicinc.com>
+Cc: catalin.marinas@arm.com, u-kumar1@ti.com, 
+ linux-arm-kernel@lists.infradead.org, krzk+dt@kernel.org, 
+ geert+renesas@glider.be, neil.armstrong@linaro.org, nfraprado@collabora.com, 
+ mturquette@baylibre.com, linux-kernel@vger.kernel.org, 
+ dmitry.baryshkov@linaro.org, netdev@vger.kernel.org, 
+ konrad.dybcio@linaro.org, m.szyprowski@samsung.com, arnd@arndb.de, 
+ richardcochran@gmail.com, will@kernel.org, sboyd@kernel.org, 
+ andersson@kernel.org, p.zabel@pengutronix.de, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, conor+dt@kernel.org, 
+ linux-arm-msm@vger.kernel.org
+In-Reply-To: <20240626143302.810632-5-quic_devipriy@quicinc.com>
+References: <20240626143302.810632-1-quic_devipriy@quicinc.com>
+ <20240626143302.810632-5-quic_devipriy@quicinc.com>
+Message-Id: <171941612020.3280624.794530163562164163.robh@kernel.org>
+Subject: Re: [PATCH V5 4/7] dt-bindings: clock: Add ipq9574 NSSCC clock and
+ reset definitions
 
-There is an helper to remove a consumer from the clk provider list.
-Hence, let's use it when releasing a consumer.
 
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
----
- drivers/clk/clk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 26 Jun 2024 20:02:59 +0530, Devi Priya wrote:
+> Add NSSCC clock and reset definitions for ipq9574.
+> 
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Changes in V5:
+> 	- Dropped interconnects and added interconnect-cells to NSS
+> 	  clock provider so that it can be  used as icc provider.
+> 
+>  .../bindings/clock/qcom,ipq9574-nsscc.yaml    |  74 +++++++++
+>  .../dt-bindings/clock/qcom,ipq9574-nsscc.h    | 152 ++++++++++++++++++
+>  .../dt-bindings/reset/qcom,ipq9574-nsscc.h    | 134 +++++++++++++++
+>  3 files changed, 360 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,ipq9574-nsscc.h
+>  create mode 100644 include/dt-bindings/reset/qcom,ipq9574-nsscc.h
+> 
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index b11beeca7e55..ed0731a4b773 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -4764,7 +4764,7 @@ void __clk_put(struct clk *clk)
- 		clk->exclusive_count = 0;
- 	}
- 
--	hlist_del(&clk->clks_node);
-+	clk_core_unlink_consumer(clk);
- 
- 	/* If we had any boundaries on that clock, let's drop them. */
- 	if (clk->min_rate > 0 || clk->max_rate < ULONG_MAX)
+My bot found errors running 'make dt_binding_check' on your patch:
 
--- 
-2.45.2
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.example.dts:26.26-27 syntax error
+FATAL ERROR: Unable to parse input tree
+make[2]: *** [scripts/Makefile.lib:427: Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1430: dt_binding_check] Error 2
+make: *** [Makefile:240: __sub-make] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240626143302.810632-5-quic_devipriy@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
