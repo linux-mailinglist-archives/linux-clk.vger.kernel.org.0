@@ -1,127 +1,154 @@
-Return-Path: <linux-clk+bounces-8671-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8675-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06F4F9183B0
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 16:11:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82C21918459
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 16:35:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BBD41C20D02
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 14:11:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E8D72849A7
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2024 14:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87BC185E56;
-	Wed, 26 Jun 2024 14:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA65E188CCD;
+	Wed, 26 Jun 2024 14:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oJTHQzoj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0741850A4
-	for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2024 14:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA3B187323;
+	Wed, 26 Jun 2024 14:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719411061; cv=none; b=bCQ7N7wgdG1YHzYquQUPT2Vdgz/4Ru4l9ycrykMNLafMGw7e5l/ynnv2Rn6osB8Bd/rFZ4VEMIw0XnYeOHCBy8/BeHNVf7GtmFzjxDWv21eYV0Ms401vR0RrwBvMU9j1nG4JiAxdjyFKTzTToeLbRqk8IjhoLeVr8522HDFHiuc=
+	t=1719412414; cv=none; b=HzVfsq5glpHEzI4xGTz7En7Ep4GkPxhR+bIBFB8+SCvWAv8ISGlnGC6D3JiB2POuWYVWoakLVBH0gdeiZKyY/CwyKJU4EgFqgJS/7OqzMMI8olcDoathYLHwZ3cTMM1dG5exNW5tgH8SZ5mv8bL8BUWluR+jN0Gr5f7u+whjkMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719411061; c=relaxed/simple;
-	bh=WYPpi0PRU/8DfWUsZxGzlqqtmDQV7dcd1f8cYkoIt98=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tagtm21JoW1b25c4WzN5/aV3jb8S5PWE+rtzLmt70JpegXZpIllhFOZtkPB8DuQc/cNMBH1j/wmwcl29ACKESu18F6d43vCg5Zl+0jdJJ5fpjEAAkLmWf+FRK79eTOhWX0SWlepnQAQvhwEnjPaVJ9KUk8V3RT5g85Awbs7zwnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1sMTM5-0003BI-A2; Wed, 26 Jun 2024 16:10:37 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1sMTM4-0059Aa-7G; Wed, 26 Jun 2024 16:10:36 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1sMTM4-000C0z-0S;
-	Wed, 26 Jun 2024 16:10:36 +0200
-Message-ID: <8d7ea409a4e1a6cfcbee7f493c9073b172cc100d.camel@pengutronix.de>
-Subject: Re: [PATCH v3 7/9] reset: eyeq: add platform driver
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: =?ISO-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-  Conor Dooley <conor+dt@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Linus Walleij
- <linus.walleij@linaro.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Lee
- Jones <lee@kernel.org>,  Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-gpio@vger.kernel.org, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
- <gregory.clement@bootlin.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>,  Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Date: Wed, 26 Jun 2024 16:10:36 +0200
-In-Reply-To: <D2A00Y4TJYTS.1RMR2FSNW7KQ2@bootlin.com>
-References: <20240620-mbly-olb-v3-0-5f29f8ca289c@bootlin.com>
-	 <20240620-mbly-olb-v3-7-5f29f8ca289c@bootlin.com>
-	 <e2f129fc42d26cde50e1de0bc80ef0db51b7f693.camel@pengutronix.de>
-	 <D2A00Y4TJYTS.1RMR2FSNW7KQ2@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1719412414; c=relaxed/simple;
+	bh=+53iBaNneJUrnJLXQopSACioG062JSDnqGOyOiIkLoA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JtKWHi3xWP/x0u4IvOKjwmHOkJi7JrGm66vqWOlIDPbLA5E6Mc8fCdgficnu9M+fWtLTWwZ1SGWwKuNzeHlClsS5OvN30BX4CNgr2gdpocR7X02wdtlRXShA4BtZWoQ4KJyjlVKINgXHQ25H0y62PBKaw2xpwTHPTTk1ZPksv7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oJTHQzoj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45QAfODj022641;
+	Wed, 26 Jun 2024 14:33:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=nQIsFrxbQIhS4BAJsQwJzwW+7/FvXlB51hL
+	xw1bN31o=; b=oJTHQzojjOYH4Zfzx126Ph1KVREOS7FdeMOgzUGWZb9+D/TfZrC
+	dtY6ThEda+TNkf06tmgD1jt/nFfqAQJx8KqGxuyIqMkAkARM+7PS5BZDHse8TrZy
+	dWyZUDa6pc/jVIpjD4uKPent5X0p/kLENvlyeoGj7hl4v3MnMPDBc0SyjWnBxjou
+	wKj2dXklTbv/31JxzRI6UrRYLxzzPP7lyv98eHNfvAECk4OOGe8vn/QxNl5Uu/Io
+	v83UrxDCHUqf4XVELVB7HuxOlwe2ZXEvDDY4sES4OKNJw43wnqFu0NVDBy71Nm33
+	kLUlj9yFG73c3vDypmC+75oAh/0gIipH68A==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ywqw9hcgg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Jun 2024 14:33:08 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTP id 45QEUA8O023377;
+	Wed, 26 Jun 2024 14:33:04 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3ywqpkv29c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Jun 2024 14:33:03 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 45QEX3Qf025794;
+	Wed, 26 Jun 2024 14:33:03 GMT
+Received: from hu-devc-blr-u22-a.qualcomm.com (hu-devipriy-blr.qualcomm.com [10.131.37.37])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 45QEX3fr025793
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Jun 2024 14:33:03 +0000
+Received: by hu-devc-blr-u22-a.qualcomm.com (Postfix, from userid 4059087)
+	id 8295340FB3; Wed, 26 Jun 2024 20:03:02 +0530 (+0530)
+From: Devi Priya <quic_devipriy@quicinc.com>
+To: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        konrad.dybcio@linaro.org, catalin.marinas@arm.com, will@kernel.org,
+        p.zabel@pengutronix.de, richardcochran@gmail.com,
+        geert+renesas@glider.be, dmitry.baryshkov@linaro.org,
+        neil.armstrong@linaro.org, arnd@arndb.de, m.szyprowski@samsung.com,
+        nfraprado@collabora.com, u-kumar1@ti.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
+Cc: quic_devipriy@quicinc.com
+Subject: [PATCH V5 0/7] Add NSS clock controller support for IPQ9574
+Date: Wed, 26 Jun 2024 20:02:55 +0530
+Message-Id: <20240626143302.810632-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: bfMj7uiVpEwpqRE50g9WKrvhGYSPU_r0
+X-Proofpoint-GUID: bfMj7uiVpEwpqRE50g9WKrvhGYSPU_r0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-26_07,2024-06-25_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=896 phishscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2406140001 definitions=main-2406260107
 
-Hi Th=C3=A9o,
+Add bindings, driver and devicetree node for networking sub system clock 
+controller on IPQ9574. Also add support for NSS Huayra type alpha PLL and
+add support for gpll0_out_aux clock which serves as the parent for 
+some nss clocks.
 
-On Mi, 2024-06-26 at 15:55 +0200, Th=C3=A9o Lebrun wrote:
-> Hello Philipp,
->=20
-> On Tue Jun 25, 2024 at 11:17 AM CEST, Philipp Zabel wrote:
-> > On Do, 2024-06-20 at 19:30 +0200, Th=C3=A9o Lebrun wrote:
-> > > Add Mobileye EyeQ reset controller driver, for EyeQ5, EyeQ6L and EyeQ=
-6H
-> > > SoCs. Instances belong to a shared register region called OLB and get=
-s
-> > > spawned as auxiliary device to the platform driver for clock.
-> > >=20
-> > > There is one OLB instance for EyeQ5 and EyeQ6L. There are seven OLB
-> > > instances on EyeQ6H; three have a reset controller embedded:
-> > >  - West and east get handled by the same compatible.
-> > >  - Acc (accelerator) is another one.
-> > >=20
-> > > Each instance vary in the number and types of reset domains.
-> > > Instances with single domain expect a single cell, others two.
-> > >=20
-> > > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > > ---
-> > >  MAINTAINERS                |   1 +
-> > >  drivers/reset/Kconfig      |  14 ++
-> > >  drivers/reset/Makefile     |   1 +
-> > >  drivers/reset/reset-eyeq.c | 563 +++++++++++++++++++++++++++++++++++=
-++++++++++
-> >=20
-> > Should this be called reset-eyeq-olb or reset-eyeq5, in case a
-> > different eyeq driver will have to be added in the future?
->=20
-> What about keeping reset-eyeq for the simplicity of it and using
-> reset-eyeq7 for a theoretical future driver that gets used by EyeQ7 and
-> above? Or any other revision.
->=20
-> Else it can be reset-eyeq5. OLB might be a concept that gets reused with
-> different reset blocks inside (meaning reset-eyeq-olb wouldn't
-> distinguish). You tell me if keeping *-eyeq is fine.
+This series depends on the below patch series which adds support for
+Interconnect driver
+https://lore.kernel.org/linux-arm-msm/20240430064214.2030013-1-quic_varada@quicinc.com/
 
-Either is fine by me. I just wanted to make sure this was given some
-consideration after noticing the reset-eyeq5.c remnant in MAINTAINERS.
+Changes in V5:
+	- Detailed change logs are added to the respective patches.
 
-regards
-Philipp
+V4 can be found at:
+https://lore.kernel.org/linux-arm-msm/20240625070536.3043630-1-quic_devipriy@quicinc.com/
+
+V3 can be found at:
+https://lore.kernel.org/linux-arm-msm/20240129051104.1855487-1-quic_devipriy@quicinc.com/
+
+V2 can be found at:
+https://lore.kernel.org/linux-arm-msm/20230825091234.32713-1-quic_devipriy@quicinc.com/
+
+Devi Priya (7):
+  clk: qcom: clk-alpha-pll: Add NSS HUAYRA ALPHA PLL support for ipq9574
+  dt-bindings: clock: gcc-ipq9574: Add definition for GPLL0_OUT_AUX
+  clk: qcom: gcc-ipq9574: Add support for gpll0_out_aux clock
+  dt-bindings: clock: Add ipq9574 NSSCC clock and reset definitions
+  clk: qcom: Add NSS clock Controller driver for IPQ9574
+  arm64: dts: qcom: ipq9574: Add support for nsscc node
+  arm64: defconfig: Build NSS Clock Controller driver for IPQ9574
+
+ .../bindings/clock/qcom,ipq9574-nsscc.yaml    |   74 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         |   41 +
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/qcom/Kconfig                      |    7 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c              |   11 +
+ drivers/clk/qcom/clk-alpha-pll.h              |    1 +
+ drivers/clk/qcom/gcc-ipq9574.c                |   15 +
+ drivers/clk/qcom/nsscc-ipq9574.c              | 3096 +++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  |    1 +
+ .../dt-bindings/clock/qcom,ipq9574-nsscc.h    |  152 +
+ .../dt-bindings/reset/qcom,ipq9574-nsscc.h    |  134 +
+ 12 files changed, 3534 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq9574-nsscc.yaml
+ create mode 100644 drivers/clk/qcom/nsscc-ipq9574.c
+ create mode 100644 include/dt-bindings/clock/qcom,ipq9574-nsscc.h
+ create mode 100644 include/dt-bindings/reset/qcom,ipq9574-nsscc.h
+
+-- 
+2.34.1
+
 
