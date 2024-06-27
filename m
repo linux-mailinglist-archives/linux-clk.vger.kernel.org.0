@@ -1,129 +1,132 @@
-Return-Path: <linux-clk+bounces-8779-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8781-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FE1E91B102
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 22:53:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05BBC91B11D
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 22:59:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BDC02884B4
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 20:53:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 784FAB25170
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 20:59:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA5D19F497;
-	Thu, 27 Jun 2024 20:53:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618C519EEDD;
+	Thu, 27 Jun 2024 20:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X0BQOwDH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwHZsHEU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F6C192B9E;
-	Thu, 27 Jun 2024 20:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FDB14D6EB;
+	Thu, 27 Jun 2024 20:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521595; cv=none; b=IedlNesm8vBtLIFersqc7dcTNqdoIvF3lusDlXveoEybBYoyXptsR+gsKktGEa9WIiSCU82ZTnSBNf8zAVT5eDANCuDtmNvZmbONYF+1l4c2InyVeneSFURIZpPfSz9l4pw6LupDTEXWodWrufgLSFdEOiJUhTgB/d25N57Ii9Q=
+	t=1719521936; cv=none; b=gYM9BcaFYZkZb8kCJXqjwkbVp9eRZUYOgy0NzP72cDO3e/TYx9zpCd7e3AAIqgvkhdsOoN6klFbioHiD8NGZ0QohK8c8522s1BQiNz1Q16MmhoeZVXh/AK4J98peGG2x+Dg12WdP5tYFiBhN5TYh0qAqvN4YGQLgINTtplkSDI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521595; c=relaxed/simple;
-	bh=W4qU4oeYH8KReh4HFuS89zwmi3lZBe4STxOdeUihYWA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RRVhOlxCjSO1+Sz+uUjdGe5hJUUvg/zQ0zTFPsF98TDM8LqUpnf+HR/F4IQM3at+OKBFYgdZiebbPMOVTeLJmb/WYdoBeyXqhT4jwV4+M10xgtQi70l+mRzt59tPB+KsJSYafrSHZG/HsG6Qyaf7gTcP0Nzh7NrgLCU6EkZrAYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X0BQOwDH; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4256742f67fso7549685e9.3;
-        Thu, 27 Jun 2024 13:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719521592; x=1720126392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=orywsiSsHFizGWPRMJO9II17AovA2NvzyC8C3hh8ugk=;
-        b=X0BQOwDHHG39k6a77m68Edx6agg4DCiyndiPoRMrsyBCdsipCA6bibX+Qq6et0dRVy
-         T8o7PeLql5wcT0BZKZcnSzHfAFLQfxnGcpq+XeEE/LkPsHsRVggrkFMW73yKMHKiYS1k
-         lQV2+FVGcnwKrgThmPBEe9UtsDCO8Vg+O9q1F/94RHR75xRA46F4rKtWkM+HHv4U/KYX
-         qBiOB3IHotxsmKRm9GcrpriIzeoPEe2CFVMzHZKkdH16iVmq1G1htAgbQYPIGFWnd48e
-         ga29v5c1b1xn190JewuVlD8CMVqlqqb+uDve+WYanqlv5ilg/0GdLyc7sV9WkpmyCMVF
-         wTaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719521592; x=1720126392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=orywsiSsHFizGWPRMJO9II17AovA2NvzyC8C3hh8ugk=;
-        b=Jn1q2EBcQ1c00xu65+fqzECCw5EZy1eKPqRpsCM2bNzUX5z4OL6R4mwol2XieFjWF2
-         cuJ9Ggn8byeidlt11Sr9A+jTqpuUVqJpU8WTh8habdYc+EbKScCsmjFmGid5WAMRZGoe
-         +k4yWqor1n94FoOh/yiNgKtjHnrDLK8TAH7puMlxVW3Fj1iZ0/ofmqRthIwayAv5QWqu
-         CQqjSJtU7PNBVJlF7HR0szBaHz5NYuDI+Sv125WdU/6NPcwqaybfx3Llw7CWakIl4zG1
-         b/EcxL+c/X6/f8w56r+iogk/bGQatX4YK8Gk+rbaPnSQnrxFih3QlMCEHvQLlnZM2OoO
-         qnaA==
-X-Forwarded-Encrypted: i=1; AJvYcCXnr1sQyFyN8Bqf55TWfkhzPzx4j3o28Z5BqgyyuUUwzzi9WHP66O6DIbYX0w8xIh+eiDz+LLbgXHChsQcoBCTZTpRtiPmxlHbHBiBpsipQ2RApTNJLJGMmsPR+3Yc/6zuhWkLkrNlftzJWFdprJCe+QmZm/Cl5BmcKCDDFMyc1+RopDg==
-X-Gm-Message-State: AOJu0YzmKOmRXX42ycCN23IKN+3qv1VWSIZUGm0L4QHhH3S6M+zbDolH
-	whab3weCgNYvv3w6PKafziFzvf/7x3B8qzwXnpRoZYmA9tJtnubkI0Zc3Q==
-X-Google-Smtp-Source: AGHT+IFFefpf9EmSQzF2ndA0UUf4D0il0rbi4xGB2yByQtpidlfBs2BCPDHayZyQ7ccf43Ee8xQRGQ==
-X-Received: by 2002:a05:600c:42d1:b0:424:ad6d:c2ea with SMTP id 5b1f17b1804b1-424ad6dc5dfmr35864035e9.41.1719521591852;
-        Thu, 27 Jun 2024 13:53:11 -0700 (PDT)
-Received: from localhost.localdomain (93-34-90-105.ip49.fastwebnet.it. [93.34.90.105])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4256b068e93sm7216935e9.24.2024.06.27.13.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 13:53:11 -0700 (PDT)
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Cc: Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 2/2] dt-bindings: clock: mediatek: add syscon compatible for mt7622 pciesys
-Date: Thu, 27 Jun 2024 22:52:57 +0200
-Message-ID: <20240627205309.28742-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240627205309.28742-1-ansuelsmth@gmail.com>
-References: <20240627205309.28742-1-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1719521936; c=relaxed/simple;
+	bh=09WhEq5r3XGQO4dhtl+2n781sC7j21j+wT5LnkW7syo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qo7gtAjAaSmeCTUAUdBMurOvy5p5+A77hNsDERS5hhI6oW6h0G7llUEqeS3xWOzxQX3PVMQgPmGHX1j664t97/qC17gCqpdCciZCjHao/X0dVNjbGHFEsRkMbNsUMmSer4i5clzR3Gh3mNpRBLE9o6D760ha0PZvdvKCpnCivxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwHZsHEU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8F4C2BBFC;
+	Thu, 27 Jun 2024 20:58:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719521935;
+	bh=09WhEq5r3XGQO4dhtl+2n781sC7j21j+wT5LnkW7syo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MwHZsHEU0LBEPFP8V7twQLd5G9kEPs5zqsYN12u2t3VDr91wDlRWlhyb5/4t+AuQB
+	 /Xm8aL3W0R/4YWx9z1iD5RnOG7in9GoIZwzLTjnGlAegoWibC7wnbd6yMPEOf5m49a
+	 VJCiozsORs2fto2A3lZ6hSJL67oVsqb19xz5JVH9DY5rOo+kxF8fVHpWNL2qfnyYU1
+	 ocp4qSxDm6V0SxJV0Re6gy61gQAcWOaWOBCyFUsrU+Epvw4/fhTs8jVBvYlLSbJAdO
+	 TOijowy4xrn0G5gH26e6CDayPMkTcmYGcAPZEf/TgdCOoUUABRJLDwXdy5MFyJrOq6
+	 tc+HtDo8OkBsQ==
+Date: Thu, 27 Jun 2024 14:58:54 -0600
+From: Rob Herring <robh@kernel.org>
+To: Tomer Maimon <tmaimon77@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, mturquette@baylibre.com,
+	sboyd@kernel.org, p.zabel@pengutronix.de,
+	krzysztof.kozlowski+dt@linaro.org, tali.perry1@gmail.com,
+	joel@jms.id.au, venture@google.com, yuenn@google.com,
+	benjaminfair@google.com, oe-kbuild-all@lists.linux.dev,
+	openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v25 1/3] dt-bindings: reset: npcm: add clock properties
+Message-ID: <20240627205854.GA501440-robh@kernel.org>
+References: <20240618185819.2155595-2-tmaimon77@gmail.com>
+ <202406191439.3NcnExKM-lkp@intel.com>
+ <CAP6Zq1h2Sk6H2V-i+PAk_fCy9xdywcYw=w9wT_xcJ2WrqyWbAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP6Zq1h2Sk6H2V-i+PAk_fCy9xdywcYw=w9wT_xcJ2WrqyWbAg@mail.gmail.com>
 
-Add required syscon compatible for mt7622 pciesys. This is required for
-SATA interface as the regs are shared.
+On Thu, Jun 20, 2024 at 10:32:26AM +0300, Tomer Maimon wrote:
+> Hi Rob and Krzysztof,
+> 
+> Could you please review this patch?
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- .../bindings/clock/mediatek,mt7622-pciesys.yaml           | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+I would hope by v25 you'd know you just need to look at DT patchwork to 
+see where you are in the queue. Pinging does nothing to help.
 
-diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7622-pciesys.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7622-pciesys.yaml
-index c77111d10f90..17f0d960c314 100644
---- a/Documentation/devicetree/bindings/clock/mediatek,mt7622-pciesys.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mt7622-pciesys.yaml
-@@ -14,9 +14,11 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - mediatek,mt7622-pciesys
--      - mediatek,mt7629-pciesys
-+    oneOf:
-+      - items:
-+          - const: mediatek,mt7622-pciesys
-+          - const: syscon
-+      - const: mediatek,mt7629-pciesys
- 
-   reg:
-     maxItems: 1
--- 
-2.45.1
+Furthermore, you waited a whole 2 days which isn't much.
 
+> 
+> Thanks,
+> 
+> Tomer
+> 
+> On Wed, 19 Jun 2024 at 09:20, kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi Tomer,
+> >
+> > kernel test robot noticed the following build warnings:
+> >
+> > [auto build test WARNING on clk/clk-next]
+> > [also build test WARNING on linus/master pza/reset/next v6.10-rc4 next-20240618]
+> > [cannot apply to pza/imx-drm/next]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Tomer-Maimon/dt-bindings-reset-npcm-add-clock-properties/20240619-093532
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+> > patch link:    https://lore.kernel.org/r/20240618185819.2155595-2-tmaimon77%40gmail.com
+> > patch subject: [PATCH v25 1/3] dt-bindings: reset: npcm: add clock properties
+> > config: arm64-randconfig-051-20240619 (https://download.01.org/0day-ci/archive/20240619/202406191439.3NcnExKM-lkp@intel.com/config)
+> > compiler: aarch64-linux-gcc (GCC) 13.2.0
+> > dtschema version: 2024.6.dev1+g833054f
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240619/202406191439.3NcnExKM-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202406191439.3NcnExKM-lkp@intel.com/
+> >
+> > dtcheck warnings: (new ones prefixed by >>)
+> >    arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi:63.7-177.5: Warning (simple_bus_reg): /ahb/apb: simple-bus unit address format error, expected "f0000000"
+> >    arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi:50.35-55.5: Warning (unique_unit_address_if_enabled): /ahb/reset-controller@f0801000: duplicate unit-address (also used in node /ahb/clock-controller@f0801000)
+> >    arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dtb: /: memory@0: 'device_type' is a required property
+> >         from schema $id: http://devicetree.org/schemas/memory.yaml#
+> >    arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dtb: system-controller@f0800000: compatible: ['nuvoton,npcm845-gcr', 'syscon'] is too short
+> >         from schema $id: http://devicetree.org/schemas/soc/nuvoton/nuvoton,npcm-gcr.yaml#
+> >    arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dtb: interrupt-controller@dfff9000: 'ppi-partitions' does not match any of the regexes: '^v2m@[0-9a-f]+$', 'pinctrl-[0-9]+'
+> >         from schema $id: http://devicetree.org/schemas/interrupt-controller/arm,gic.yaml#
+> >    arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dtb: ahb: apb:ranges: [[0, 0, 4026531840, 3145728], [4293918720, 0, 4293918720, 90112]] is not of type 'boolean'
+> >         from schema $id: http://devicetree.org/schemas/simple-bus.yaml#
+> > >> arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dtb: reset-controller@f0801000: '#clock-cells' is a required property
+> >         from schema $id: http://devicetree.org/schemas/reset/nuvoton,npcm750-reset.yaml#
+> > >> arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dtb: reset-controller@f0801000: 'clocks' is a required property
+> >         from schema $id: http://devicetree.org/schemas/reset/nuvoton,npcm750-reset.yaml#
+
+While I think things are too noisy for these 0-day reports, this one 
+rightfully shows the ABI break you are causing. You can't add new 
+required properties.
+
+Rob
 
