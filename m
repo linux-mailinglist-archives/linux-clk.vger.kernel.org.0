@@ -1,202 +1,403 @@
-Return-Path: <linux-clk+bounces-8780-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-8777-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4921291B110
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 22:56:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2EBE91B047
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 22:23:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B802A1F232A4
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 20:56:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 118411C216BF
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2024 20:23:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE77119D08E;
-	Thu, 27 Jun 2024 20:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A94C19B5BB;
+	Thu, 27 Jun 2024 20:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nuvoton.onmicrosoft.com header.i=@nuvoton.onmicrosoft.com header.b="V0zMNYqW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MjZyqjio"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01rlnn2043.outbound.protection.outlook.com [40.95.54.43])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D5314D6EB;
-	Thu, 27 Jun 2024 20:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.95.54.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719521759; cv=fail; b=RZPuDi/ANoykT6uBOcGHwQDpVBe2xfKCiUHxqrFaQUyn7TzJW1QRZ8Un5PZvV+A/HTXK9YdX0akJwz7QDCeaPslpa0z1H8CUZPoJsRAAikT4n0f+H8ejAco4WqvgfAg74HYDkzRuF04ztN2CXLj993bYs30eNRpwNvBqIYRpneE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719521759; c=relaxed/simple;
-	bh=405koqkFLItgqfZWzqnAgNocH96nFaeX4lUWVJeXyFg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MNixyestvd5/Mkjszu6rQS6NXwREO9fFqMQaA0Wa/FlrPltGbtXAMR8A8b/m0iezehgftZggVytUDxGoNZwruoBOAYxBndWvAahzxossLD669claCR/e0y6BqcsXExqMXAOKO0y51wOloHyVtmDcE7o+mEvZfY4CcuffE2ubWl8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=none smtp.mailfrom=taln60.nuvoton.co.il; dkim=pass (1024-bit key) header.d=nuvoton.onmicrosoft.com header.i=@nuvoton.onmicrosoft.com header.b=V0zMNYqW; arc=fail smtp.client-ip=40.95.54.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=taln60.nuvoton.co.il
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fCv7STDAIpmQebJwic405gIMu5WBVS7wXWkupGyRztZgxdX6HIwRtzHfJmq92Nnf+y3H4+K1NpwHU6CFdK/can/gedtc6ACGluUcRs/atoaEl4sR26BTdBDTutIuekhMZdm+nBL+m1ILPOXKJZ/ft6EbZBcfu8He9L+zgo+4+9w7u+BwbZkWcnbGQjBQSHBFe5rakEmZ2YfcwMmdL9x1NWIMACZrvGT1XjE6MmeVJ6CjeHV1e84CkgtM8TZZDk9ut1c8Yb9PjHuMdnZcl3aIsHUiD4kwUzx5xjqwgxTopk7fLxEsY3i36Ui2Ocis+nWpTGZ8e4adreftERvRp8BzAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SphcdK9iAYR8pvG763Yp4p1Pc8+L78yo/9jOfl5U3YU=;
- b=EU3UKtxQvw4xHoiUrqZNEfyxwVyacIeZDXrGBT5XRrrQDApjcRiqAa4RlkyyNRV3PQnuVWAi5HMPKpM1SudrzCBYKcgpJfBq9L6rrNwkb1JMgqUAApnSXMtnb/w1HYewIXxZkepjj0ogmboon4Cf6qalOpjHvzZdQ5I0bTtJ3Qqn+6OuKoRSrl2XyKKTl1O8tzMze0kCSfdAktch2Vom9G2NOZt1iYF60U4d4PeagNro+jfU4TyQOz6UmfEk3yhPF4i/II7DgJiMwJP7qh87PfoqrDt9VIVyaEjAC05Mz9iiKFHvbD/3U1IrQRiep0JJXxS4qzHwe5bjM8arp2mmiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 211.75.126.7) smtp.rcpttodomain=gmail.com
- smtp.mailfrom=taln60.nuvoton.co.il; dmarc=fail (p=none sp=quarantine pct=100)
- action=none header.from=gmail.com; dkim=none (message not signed); arc=none
- (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SphcdK9iAYR8pvG763Yp4p1Pc8+L78yo/9jOfl5U3YU=;
- b=V0zMNYqWWCn4459/XAzk6dy4YHas+SEokSe7+Q1w6t+2VeTBf3C+8rPGpZuOkV0kdJxJtfgicqvCy2UDFFtuiocK812Od4H5ngxXKNk+cIgCR5gU2CMZxi2cutA4k0Ar8wwTycLemB5Rii03wvMICPvY1gBpmp+lX5JhN08FkoM=
-Received: from SG2PR02CA0122.apcprd02.prod.outlook.com (2603:1096:4:188::10)
- by KL1PR03MB8775.apcprd03.prod.outlook.com (2603:1096:820:139::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.35; Thu, 27 Jun
- 2024 18:23:22 +0000
-Received: from SG1PEPF000082E7.apcprd02.prod.outlook.com
- (2603:1096:4:188:cafe::1) by SG2PR02CA0122.outlook.office365.com
- (2603:1096:4:188::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.25 via Frontend
- Transport; Thu, 27 Jun 2024 18:23:22 +0000
-X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
- 211.75.126.7) smtp.mailfrom=taln60.nuvoton.co.il; dkim=none (message not
- signed) header.d=none;dmarc=fail action=none header.from=gmail.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of taln60.nuvoton.co.il: DNS Timeout)
-Received: from NTHCCAS01.nuvoton.com (211.75.126.7) by
- SG1PEPF000082E7.mail.protection.outlook.com (10.167.240.10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7677.15 via Frontend Transport; Thu, 27 Jun 2024 18:23:20 +0000
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 28 Jun
- 2024 02:23:20 +0800
-Received: from taln58.nuvoton.co.il (10.191.1.178) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Fri, 28 Jun 2024 02:23:19 +0800
-Received: from taln60.nuvoton.co.il (taln60 [10.191.1.180])
-	by taln58.nuvoton.co.il (Postfix) with ESMTP id EA8AC5F64B;
-	Thu, 27 Jun 2024 21:23:18 +0300 (IDT)
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id DB5D4DC0726; Thu, 27 Jun 2024 21:23:18 +0300 (IDT)
-From: Tomer Maimon <tmaimon77@gmail.com>
-To: <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-	<krzysztof.kozlowski+dt@linaro.org>, <tali.perry1@gmail.com>,
-	<joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-	<benjaminfair@google.com>
-CC: <openbmc@lists.ozlabs.org>, <linux-clk@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Tomer Maimon
-	<tmaimon77@gmail.com>
-Subject: [PATCH v1] dt-bindings: pinctrl: npcm8xx: add missing pin group and mux function
-Date: Thu, 27 Jun 2024 21:23:12 +0300
-Message-ID: <20240627182312.86382-1-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304061BF58;
+	Thu, 27 Jun 2024 20:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719519776; cv=none; b=ncJMz3rkPGOKHJDi5vdLbEC2YZyCdrJPl0ZGPTIvN+HIfUUbS+P0nfhvseAIwn3InUg2TMQ9EXJezNIfEFn+Z6d0f/W9cR9rt6cL0obeISkUCroIF8xdW08gPBamMKwyr3hhb5TydmRImIMjkCofwF9tuCaoUcFo5H2vcs+lnls=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719519776; c=relaxed/simple;
+	bh=giiTTsdZUF21D4ghdF2Pg3NLw3WIQrmPlZao298+PdY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tIvAdLFUG0J93DzIr1Cvu7cs/DJgFkGNOF7g+V9FP4NOqIE+RmTSqIO1YOzCNzNMNNnka6sqgEkBHMYwYY20vgmkZGtvioypZwfOCa3oIWn68x55yZ076tQV3Iuq3zj7Ija89Y/IVbNwomFuIDBTWLbj/R7iZy2XpteHYj5vwRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MjZyqjio; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BCDC2BBFC;
+	Thu, 27 Jun 2024 20:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719519775;
+	bh=giiTTsdZUF21D4ghdF2Pg3NLw3WIQrmPlZao298+PdY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MjZyqjioiEsEy7FlMM01W/axEp0kj0UdS+5c9uAaNglsHmGiHF2IXpacuVUztuwpJ
+	 DeGYGNDpk/nyjkcs3dL7TlxARf1YQp0UWoMqcTvuRbnLVAPfGgzZAjYf7YI9AVYHAO
+	 6sLvMauP8nGbv7wDnCx7ACQHYHpBX5urXHmvFV3ey+ux0NCt2dKPwsQ0z8vsBJmid8
+	 JgjmJ5mBB911oZSmdhY9U3+4zkdCvet85AvK3vMOQh1Ot+UH4f6a8OHS2eMDZRJYHS
+	 CMZ0mgS50odSKWF8KfUB5/13j8joPG2thoBpvYKyBd2auzAOpNVOVygZzp89Bx15Qg
+	 213RFUO8RuMZg==
+Date: Thu, 27 Jun 2024 14:22:54 -0600
+From: Rob Herring <robh@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] dt-bindings: clock: qoriq-clock: convert to yaml
+ format
+Message-ID: <20240627202254.GA454755-robh@kernel.org>
+References: <20240617181410.921090-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NotSetDelaration: True
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG1PEPF000082E7:EE_|KL1PR03MB8775:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9953d63-cce5-4351-4c72-08dc96d6395a
-X-MS-Exchange-SenderADCheck: 2
-X-MS-Exchange-AntiSpam-Relay: 1
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|7416014|35950700016|61400799027|7093399012|48200799018|35450700002;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KT5FMkxVkXtvOM3ctkn6quhzhrjNdJAkxzOIpTmu6WaU79QpNFVRWGsAsyNO?=
- =?us-ascii?Q?Ovu1NXeiNcKXoiKUIUDNrU1Mv24Cbxd2k2Rzku2XCQ7mRhNe9kSfrk3P2k3I?=
- =?us-ascii?Q?7Ra4KJshDgyzpalxDe+xk6lw4teHY/WyE6Rc877Uyd8AAlf2m0eyuhvqfyU+?=
- =?us-ascii?Q?Ixxj4Pfcxe6XVy7t6ZZiZRIiOcMBraATZ2my8NzIDmuI2iI5L9ZPkk6GBTUm?=
- =?us-ascii?Q?+sLZGcy0UDfioQ1Q/gAH3IXpNAxZkmvvI/zvm4avk1C0i+5i/T7LDbmTv2X5?=
- =?us-ascii?Q?Jy7sI2cUUgM/1krOYk0QFBlxUbrtAVXblm63f6ZuaKhq7wy1W29I6qK9QlZJ?=
- =?us-ascii?Q?pf3qKV5JXmJth+SjUcWaQXyBHxqltj20EI/BhBiKahyn476Fs/61RcuKKurW?=
- =?us-ascii?Q?Om+GIJnp/o36dVxRzmtp/raN8XYS3039CRyZ5cQckOwBtjFiWdUAy9AvKDG6?=
- =?us-ascii?Q?3u9nwzGjuBcCswiirHBiqUpcneDrPJ8q1SetDePjhxYsgyCWM/zX+O+HZYxd?=
- =?us-ascii?Q?m5I/HQ1fjwX5drjs7pPETy6DWaKlfjt/QGUUwtvpwade16fX41vVbd4jehHh?=
- =?us-ascii?Q?D+XqnJAKrf7rsUkKxvHZK1nexbzFlxNk9SEyQY2xMZ9dpx6AdIfhipTaaJ59?=
- =?us-ascii?Q?h0N+ize7JsjZImtBBOJdEJQbGoLAG599Ufn5XTM0XlvCuSzhX1nu4XVTGb0k?=
- =?us-ascii?Q?SPg0ZRUxbR/IqXEXcadBak/rqyWrkx5HAvB/0dvnYzE2PXTY2XrtqkedM8NO?=
- =?us-ascii?Q?Pa2r6s4S9Y4LBkg+Vq7p0sjFleGibIopwC0m5urBQ8vxxMO1iNfEcsaA0pHU?=
- =?us-ascii?Q?68RMSrrZF9uBHXpi4xHxsx5Hwy/P1HkekR1IGaECYUtc7Xm1jyONxFCXpHxU?=
- =?us-ascii?Q?XzHenn11QgcLdYxuNOjmDiLH9wFlmt9BRj+M9XVJk5fRZWvLR4LuTRcIZFdj?=
- =?us-ascii?Q?ABHQOWWPxyIx/RYYftxKFAwqF+jFIrlpU0kg8Dpu59SI3upjXnfw7PvRL8Kj?=
- =?us-ascii?Q?PpM9shtv3E84sifcWvKBiRBT1dGAXmocNtyDQd75Ngri0mDTVeBf0QU5rloq?=
- =?us-ascii?Q?2fwyMrQXfJ+FlX6bffrdZSTCL25SBPvOSy1afdkeIGtlLL9Bs22GzCtZyWvy?=
- =?us-ascii?Q?spWwxaIr5m7r/CXBuibjzq2axBMZEC+3HZy69NYOsw3uUBfA2jjmpjH4kkR8?=
- =?us-ascii?Q?Z0UY7Ezf2IXmzirFt6DUQRxCkmxR/WI4P36fRVDoRUyWNbsT8MaqzSWbM3l1?=
- =?us-ascii?Q?bAv09la0GcVadiOng33PRrPBqyZYv576aCTABjx4n1tjrAjiKfT8uzFDdvuQ?=
- =?us-ascii?Q?l7yCzYS3hZwSxyE7XPEGQkzuvrW4Xv/G7UMIb7E9Lo107NjOxPJGz0Z3+FlL?=
- =?us-ascii?Q?EoySxNJlLFeyTiDlyR5ggy6YLHaw+TJ5SAKi6FMxawaaSTmbTyR8YKavh48N?=
- =?us-ascii?Q?LtALBLPLon/0szi2n08bv7vQNmRLaMXTJaFu48KP6NGMNyiIBxO3dA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:211.75.126.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS01.nuvoton.com;PTR:211-75-126-7.hinet-ip.hinet.net;CAT:NONE;SFS:(13230040)(376014)(82310400026)(7416014)(35950700016)(61400799027)(7093399012)(48200799018)(35450700002);DIR:OUT;SFP:1022;
-X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2024 18:23:20.8060
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9953d63-cce5-4351-4c72-08dc96d6395a
-X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[211.75.126.7];Helo=[NTHCCAS01.nuvoton.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG1PEPF000082E7.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB8775
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240617181410.921090-1-Frank.Li@nxp.com>
 
-Add the following missing pin group and mux function:
-smb6b, smb6c, smb6d, smb7b, smb7c, smb7d, bu4, bu4b, bu5, bu5b, bu6,
-gpo187.
+On Mon, Jun 17, 2024 at 02:14:09PM -0400, Frank Li wrote:
+> Convert qoria-clock DT binding to yaml format. Split to two files
+> qoriq-clock.yaml and qoriq-clock-legancy.yaml.
+> 
+> Addtional change:
+> - Remove clock consumer part in example
+> - Fixed example dts error
+> - Deprecated legancy node
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../clock/fsl,qoriq-clock-legacy.yaml         |  84 +++++++
+>  .../bindings/clock/fsl,qoriq-clock.yaml       | 203 +++++++++++++++++
+>  .../devicetree/bindings/clock/qoriq-clock.txt | 212 ------------------
+>  3 files changed, 287 insertions(+), 212 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/fsl,qoriq-clock-legacy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/fsl,qoriq-clock.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/clock/qoriq-clock.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/fsl,qoriq-clock-legacy.yaml b/Documentation/devicetree/bindings/clock/fsl,qoriq-clock-legacy.yaml
+> new file mode 100644
+> index 0000000000000..97b96a1a58254
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/fsl,qoriq-clock-legacy.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/fsl,qoriq-clock-legacy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Legacy Clock Block on Freescale QorIQ Platforms
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +description: |
+> +  These nodes are deprecated.  Kernels should continue to support
+> +  device trees with these nodes, but new device trees should not use them.
+> +
+> +  Most of the bindings are from the common clock binding[1].
+> +  [1] Documentation/devicetree/bindings/clock/clock-bindings.txt
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,qoriq-core-pll-1.0
+> +      - fsl,qoriq-core-pll-2.0
+> +      - fsl,qoriq-core-mux-1.0
+> +      - fsl,qoriq-core-mux-2.0
+> +      - fsl,qoriq-sysclk-1.0
+> +      - fsl,qoriq-sysclk-2.0
+> +      - fsl,qoriq-platform-pll-1.0
+> +      - fsl,qoriq-platform-pll-2.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  clock-output-names:
+> +    minItems: 1
+> +    maxItems: 8
+> +
+> +  '#clock-cells':
+> +    minimum: 0
+> +    maximum: 1
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - fsl,qoriq-sysclk-1.0
+> +              - fsl,qoriq-sysclk-2.0
+> +    then:
+> +      properties:
+> +        '#clock-cells':
+> +          const: 0
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - fsl,qoriq-core-pll-1.0
+> +              - fsl,qoriq-core-pll-2.0
+> +    then:
+> +      properties:
+> +        '#clock-cells':
+> +          const: 1
+> +          description: |
+> +            * 0 - equal to the PLL frequency
+> +            * 1 - equal to the PLL frequency divided by 2
+> +            * 2 - equal to the PLL frequency divided by 4
+> +
+> diff --git a/Documentation/devicetree/bindings/clock/fsl,qoriq-clock.yaml b/Documentation/devicetree/bindings/clock/fsl,qoriq-clock.yaml
+> new file mode 100644
+> index 0000000000000..d641756b04635
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/fsl,qoriq-clock.yaml
+> @@ -0,0 +1,203 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/fsl,qoriq-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Clock Block on Freescale QorIQ Platforms
+> +
+> +maintainers:
+> +  - Frank Li <Frank.Li@nxp.com>
+> +
+> +
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- .../pinctrl/nuvoton,npcm845-pinctrl.yaml      | 22 ++++++++++---------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+Just 1 blank line
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
-index b55d9c316659..f3c3f910a51f 100644
---- a/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/nuvoton,npcm845-pinctrl.yaml
-@@ -85,11 +85,12 @@ patternProperties:
-                   smb2c, smb2b, smb1c, smb1b, smb8, smb9, smb10, smb11, sd1,
-                   sd1pwr, pwm4, pwm5, pwm6, pwm7, pwm8, pwm9, pwm10, pwm11,
-                   mmc8, mmc, mmcwp, mmccd, mmcrst, clkout, serirq, lpcclk,
--                  scipme, smi, smb6, smb7, spi1, faninx, r1, spi3, spi3cs1,
--                  spi3quad, spi3cs2, spi3cs3, nprd_smi, smb0b, smb0c, smb0den,
--                  smb0d, ddc, rg2mdio, wdog1, wdog2, smb12, smb13, spix,
--                  spixcs1, clkreq, hgpio0, hgpio1, hgpio2, hgpio3, hgpio4,
--                  hgpio5, hgpio6, hgpio7 ]
-+                  scipme, smi, smb6, smb6b, smb6c, smb6d, smb7, smb7b, smb7c,
-+                  smb7d, spi1, faninx, r1, spi3, spi3cs1, spi3quad, spi3cs2,
-+	  	  spi3cs3, nprd_smi, smb0b, smb0c, smb0den, smb0d, ddc, rg2mdio,
-+		  wdog1, wdog2, smb12, smb13, spix, spixcs1, clkreq, hgpio0,
-+		  hgpio1, hgpio2, hgpio3, hgpio4, hgpio5, hgpio6, hgpio7, bu4,
-+		  bu4b, bu5, bu5b, bu6, gpo187 ]
- 
-       function:
-         description:
-@@ -109,11 +110,12 @@ patternProperties:
-                 smb2c, smb2b, smb1c, smb1b, smb8, smb9, smb10, smb11, sd1,
-                 sd1pwr, pwm4, pwm5, pwm6, pwm7, pwm8, pwm9, pwm10, pwm11,
-                 mmc8, mmc, mmcwp, mmccd, mmcrst, clkout, serirq, lpcclk,
--                scipme, smi, smb6, smb7, spi1, faninx, r1, spi3, spi3cs1,
--                spi3quad, spi3cs2, spi3cs3, nprd_smi, smb0b, smb0c, smb0den,
--                smb0d, ddc, rg2mdio, wdog1, wdog2, smb12, smb13, spix,
--                spixcs1, clkreq, hgpio0, hgpio1, hgpio2, hgpio3, hgpio4,
--                hgpio5, hgpio6, hgpio7 ]
-+                scipme, smi, smb6, smb6b, smb6c, smb6d, smb7, smb7b, smb7c,
-+                smb7d, spi1, faninx, r1, spi3, spi3cs1, spi3quad, spi3cs2,
-+	  	spi3cs3, nprd_smi, smb0b, smb0c, smb0den, smb0d, ddc, rg2mdio,
-+		wdog1, wdog2, smb12, smb13, spix, spixcs1, clkreq, hgpio0,
-+		hgpio1, hgpio2, hgpio3, hgpio4, hgpio5, hgpio6, hgpio7, bu4,
-+		bu4b, bu5, bu5b, bu6, gpo187 ]
- 
-     dependencies:
-       groups: [ function ]
--- 
-2.34.1
+> +description: |
+> +
 
+drop blank line
+
+> +  Freescale QorIQ chips take primary clocking input from the external
+> +  SYSCLK signal. The SYSCLK input (frequency) is multiplied using
+> +  multiple phase locked loops (PLL) to create a variety of frequencies
+> +  which can then be passed to a variety of internal logic, including
+> +  cores and peripheral IP blocks.
+> +  Please refer to the Reference Manual for details.
+> +
+> +  All references to "1.0" and "2.0" refer to the QorIQ chassis version to
+> +  which the chip complies.
+> +
+> +  Chassis Version    Example Chips
+> +  ---------------    -------------
+> +       1.0      p4080, p5020, p5040
+> +       2.0      t4240, b4860
+> +
+> +  Clock Provider
+> +
+> +  The clockgen node should act as a clock provider, though in older device
+> +  trees the children of the clockgen node are the clock providers.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - fsl,p2041-clockgen
+> +          - fsl,p3041-clockgen
+> +          - fsl,p4080-clockgen
+> +          - fsl,p5020-clockgen
+> +          - fsl,p5040-clockgen
+> +          - fsl,t1023-clockgen
+> +          - fsl,t1024-clockgen
+> +          - fsl,t1040-clockgen
+> +          - fsl,t1042-clockgen
+> +          - fsl,t2080-clockgen
+> +          - fsl,t2081-clockgen
+> +          - fsl,t4240-clockgen
+> +          - fsl,b4420-clockgen
+> +          - fsl,b4860-clockgen
+
+> +          - fsl,ls1012a-clockgen
+> +          - fsl,ls1021a-clockgen
+> +          - fsl,ls1028a-clockgen
+> +          - fsl,ls1043a-clockgen
+> +          - fsl,ls1046a-clockgen
+> +          - fsl,ls1088a-clockgen
+> +          - fsl,ls2080a-clockgen
+> +          - fsl,lx2160a-clockgen
+
+It doesn't look to me like these platforms use this binding.
+
+> +      - enum:
+> +          - fsl,qoriq-clockgen-1.0
+> +          - fsl,qoriq-clockgen-2.0
+
+This allows invalid combinations. You need 2 entries splitting 1.0 and 
+2.0.
+
+> +    minItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ranges: true
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 1
+> +
+> +  '#clock-cells':
+> +    const: 2
+> +    description: |
+> +      The first cell of the clock specifier is the clock type, and the
+> +      second cell is the clock index for the specified type.
+> +
+> +        Type#  Name       Index Cell
+> +        0  sysclk          must be 0
+> +        1  cmux            index (n in CLKCnCSR)
+> +        2  hwaccel         index (n in CLKCGnHWACSR)
+> +        3  fman            0 for fm1, 1 for fm2
+> +        4  platform pll    n=pll/(n+1). For example, when n=1,
+> +                          that means output_freq=PLL_freq/2.
+> +        5  coreclk         must be 0
+> +
+> +  clock-frequency:
+> +    description: Input system clock frequency (SYSCLK)
+> +
+> +  clocks:
+> +    items:
+> +      - description:
+> +          sysclk may be provided as an input clock.  Either clock-frequency
+> +          or clocks must be provided.
+> +      - description:
+> +          A second input clock, called "coreclk", may be provided if
+> +          core PLLs are based on a different input clock from the
+> +          platform PLL.
+> +    minItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: sysclk
+> +      - const: coreclk
+> +
+> +patternProperties:
+> +  '^mux[0-9]@[a-f0-9]+$':
+> +    deprecated: true
+> +    $ref: fsl,qoriq-clock-legacy.yaml
+> +
+> +  '^sysclk+$':
+
+This means 'sysclkkkkkkkkkk' is valid.
+
+> +    deprecated: true
+> +    $ref: fsl,qoriq-clock-legacy.yaml
+> +
+> +  '^pll[0-9]@[a-f0-9]+$':
+> +    deprecated: true
+> +    $ref: fsl,qoriq-clock-legacy.yaml
+> +
+> +  '^platform\-pll@[a-f0-9]+$':
+> +    deprecated: true
+> +    $ref: fsl,qoriq-clock-legacy.yaml
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    /* clock provider example */
+> +    global-utilities@e1000 {
+> +        compatible = "fsl,p5020-clockgen", "fsl,qoriq-clockgen-1.0";
+> +        reg = <0xe1000 0x1000>;
+> +        clock-frequency = <133333333>;
+> +        #clock-cells = <2>;
+> +    };
+> +
+> +  - |
+> +    /* Legacy example */
+> +    global-utilities@e1000 {
+> +        compatible = "fsl,p5020-clockgen", "fsl,qoriq-clockgen-1.0";
+> +        reg = <0xe1000 0x1000>;
+> +        ranges = <0x0 0xe1000 0x1000>;
+> +        clock-frequency = <133333333>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        #clock-cells = <2>;
+> +
+> +        sysclk: sysclk {
+> +            compatible = "fsl,qoriq-sysclk-1.0";
+> +            clock-output-names = "sysclk";
+> +            #clock-cells = <0>;
+> +        };
+> +
+> +        pll0: pll0@800 {
+> +            compatible = "fsl,qoriq-core-pll-1.0";
+> +            reg = <0x800 0x4>;
+> +            #clock-cells = <1>;
+> +            clocks = <&sysclk>;
+> +            clock-output-names = "pll0", "pll0-div2";
+> +        };
+> +
+> +        pll1: pll1@820 {
+> +            compatible = "fsl,qoriq-core-pll-1.0";
+> +            reg = <0x820 0x4>;
+> +            #clock-cells = <1>;
+> +            clocks = <&sysclk>;
+> +            clock-output-names = "pll1", "pll1-div2";
+> +        };
+> +
+> +        mux0: mux0@0 {
+> +            compatible = "fsl,qoriq-core-mux-1.0";
+> +            reg = <0x0 0x4>;
+> +            #clock-cells = <0>;
+> +            clocks = <&pll0 0>, <&pll0 1>, <&pll1 0>, <&pll1 1>;
+> +            clock-names = "pll0", "pll0-div2", "pll1", "pll1-div2";
+> +            clock-output-names = "cmux0";
+> +        };
+> +
+> +        mux1: mux1@20 {
+> +            compatible = "fsl,qoriq-core-mux-1.0";
+> +            reg = <0x20 0x4>;
+> +            #clock-cells = <0>;
+> +            clocks = <&pll0 0>, <&pll0 1>, <&pll1 0>, <&pll1 1>;
+> +            clock-names = "pll0", "pll0-div2", "pll1", "pll1-div2";
+> +            clock-output-names = "cmux1";
+> +        };
+> +
+> +        platform-pll@c00 {
+> +            #clock-cells = <1>;
+> +            reg = <0xc00 0x4>;
+> +            compatible = "fsl,qoriq-platform-pll-1.0";
+> +            clocks = <&sysclk>;
+> +            clock-output-names = "platform-pll", "platform-pll-div2";
+> +        };
+> +    };
 
