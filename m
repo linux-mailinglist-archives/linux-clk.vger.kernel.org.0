@@ -1,182 +1,133 @@
-Return-Path: <linux-clk+bounces-9098-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9123-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98779925FA8
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 14:06:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFE0C926008
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 14:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4492AB352A3
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 11:08:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EC561C2151A
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 12:18:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5AD185095;
-	Wed,  3 Jul 2024 10:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685DD172798;
+	Wed,  3 Jul 2024 12:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=testtoast.com header.i=@testtoast.com header.b="BlPGfyy4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="k6LstXKU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCbVUmnt"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F8B181CE4;
-	Wed,  3 Jul 2024 10:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB9313B5B2;
+	Wed,  3 Jul 2024 12:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720004136; cv=none; b=TBTsH0ge0RVBpA8/jKtYsNtcpFVzcVv0MKiqgGyQ/aF6TeWW3e5H+pH+yvNkij139gMNEhW+iwEtz5mdFVyhOODsrtCZY158eWj5Lq+p8VcqtW2o6ldbSIQAooeu6FbqTK905CEiiUWa4Bmkn8868xZzjqyIzCwwwqQEuqvz9co=
+	t=1720009105; cv=none; b=kaYdWvJLFZH0hyFWDmZKPoaWcfFFxnpFkt0S3wJiR4AKJZf1vOeNZfZc2S5AX4UQGwr6vnZrSXDgqgJ3hO6swwQGseKoh5U7nr8VjD/p8GHSucMRsUUh6Flew54XvhoSPATcJ7lxKF5KgO7FsvkX+wt0ccRSbvv9k3p1j4y/HS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720004136; c=relaxed/simple;
-	bh=HMODOo3A6QjA9V2GBeag+gD9yEIkvn2EhoX47FYjChU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a4PiWG6XikYsFc8BBcf2FjlJPzFBh8Y7cKPhg/bjoyxpdoQZOO1z6w3/V8B+BkiworqDawOXnTqMluJa7ZGGci1o7VrEKeSAJwmG3Drl7LGG+3UPOrmUlrliQdYxYkklJNKoc963mWPpPQ7bFFAOGj4J49ydVhXTLhSVs91vrHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=testtoast.com; spf=pass smtp.mailfrom=testtoast.com; dkim=pass (2048-bit key) header.d=testtoast.com header.i=@testtoast.com header.b=BlPGfyy4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=k6LstXKU; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=testtoast.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=testtoast.com
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-	by mailfout.nyi.internal (Postfix) with ESMTP id CD8C61380623;
-	Wed,  3 Jul 2024 06:55:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 03 Jul 2024 06:55:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=testtoast.com;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1720004133; x=
-	1720090533; bh=o3qVQfKQ/XHL+ZVO+DX1YbTnMylMpiQelndBdWLa+sI=; b=B
-	lPGfyy4ZoX8GowuXA5dD0Lk5ksLAIRgtfwWxR0wSOcnloBJ8oNfuPwF7Wmzh3iBr
-	T1UdEt1yR1Hlvq5I+JzXB3B8f87xdqgqEmGuTxKcSNgKzSJbmdbAjnPYu1ztv2HX
-	Hj7e91bZ55Z8H2RlBeTfi16xOMsE4AeRcjgmwxDYuw+gjyPfx+L91Zj5KjsMuas6
-	JwfAu3xOBpHrwGIxhH/JJ0xXUcbx9jb5k+fGJ7GreDXVrHXW6EOehY55M3LZs76+
-	mDBpTTRYiTS80DIyTxjDcm5FBEEmgz8w9N8b0vFchhQs3A1BuXNa+zIwhDYq7ts6
-	yAFVUZPLZ8d11DvLXWNyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720004133; x=
-	1720090533; bh=o3qVQfKQ/XHL+ZVO+DX1YbTnMylMpiQelndBdWLa+sI=; b=k
-	6LstXKU4Uyn5ehXICrxT85I656gdgUrubHwuZqOp4WP/TCkZXlewHZQOWGxaIf69
-	cmkQXuJQfcqtVlwoz5DZXX0Sf+z37uTiP31dhU40KkaILIKerQGyGXoPDzyM7Arx
-	W7F8t8uELjOi9UJypSJ76AH6O3NufmrsWwd7gAdgZBz+Ov+bI6iP7kcLV/4qJaRw
-	PCHkFIlt4rRPvaCMNFgWVIh/ZNZ3wb7fwIDjPANy4ei9yQWZYJixhmsDV/dAdbEt
-	k/Urr2OIy6+JKqZ+jvt9tlR7wus5EsI5e5AonwVfPKe+PZBwslPHfrr3eUvZkJCD
-	48CKSs1xeRdW1cd2L+GMA==
-X-ME-Sender: <xms:JS6FZkzzx4kGiMiD3b4zZPQ4ByXJoERhyNN8m1J52nAMK6uW2YBEOA>
-    <xme:JS6FZoT7vsi8AyF5M-MPNLjq1QIKnWQrgEpgM80CFM_t0CbAWI2MpIJIFL2FwyKoU
-    Ny1zClglM0jiOKaxQ>
-X-ME-Received: <xmr:JS6FZmUHWlyuR27IgkGv8mRGfjTMjaHtyPBMX0YagA2ou6kj2ICTm-hhoqJh6Z8mzSESA4CJQ-WtQUmhe6g49A033GBgtZyX1Lxc6QhH3Sdxrvd1>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgdeffecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefthigrnhcu
-    hggrlhhklhhinhcuoehrhigrnhesthgvshhtthhorghsthdrtghomheqnecuggftrfgrth
-    htvghrnhepffehieffgedtgfffjeetveegfeekleeileekveeuteffteetudffveegieei
-    heetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprh
-    ihrghnsehtvghsthhtohgrshhtrdgtohhm
-X-ME-Proxy: <xmx:JS6FZihQ-eAHvDSK2hYQrF3GFEavWjgQ8SZu58km5OT22wAsxsiMLg>
-    <xmx:JS6FZmDVTplDlnSZz7DG8Ds3SeiA2lnS3IIYULGw0OhPtnDzZvRtdQ>
-    <xmx:JS6FZjK2q4_7vbSW0qKad792WqOVz_HOeez7jGUuSXBesuaJBxygsA>
-    <xmx:JS6FZtAQgzYjakcLn7ajq4ddfotgjL3u95N6cq8_lRklF3_ziarwBg>
-    <xmx:JS6FZoyjFM53X13NHynRX1V941zF4Z0IniiqZXFFkRO9d3P14CsN7ZIJ>
-Feedback-ID: idc0145fc:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 3 Jul 2024 06:55:27 -0400 (EDT)
-From: Ryan Walklin <ryan@testtoast.com>
-To: Maxime Ripard <mripard@kernel.org>,
+	s=arc-20240116; t=1720009105; c=relaxed/simple;
+	bh=Xz7XmnRcHbAH6WxQfIQCBQ5wwm0Koi8PJNYau32jfTs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RNNMDOBvdjiHMhZLj66w5UNwRWceYeu+8bzgXnjNTMTIflhwOGZANT49CYmnPn1GPtNUY6MWP/wRz08i/0F8+1FSA8gWYUxm7PlPjMqGQHI6EUQrmEeQYKgzQVEk+B/QLKhfVElueJraSzCTmKtWQTUPj78jtnd7oS1OvB1ZDO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCbVUmnt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36F95C32781;
+	Wed,  3 Jul 2024 12:18:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720009104;
+	bh=Xz7XmnRcHbAH6WxQfIQCBQ5wwm0Koi8PJNYau32jfTs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KCbVUmnt6oKYedEVrXZokdmKNt/p56purKTjCPdu0I8notvhvSyIsFOxSIKsFqou5
+	 15hwrXirnYeswH2fOKq4ePLXX/YqLrncJb+P2lL+FSGeV+lT+Ugb7jGGB8N/GemJUs
+	 +s6AUvm4uXUiUubO2m8SRwgfVqiVI3bvHoZti8n9IfR1YWhDri+qAhR2D7CazE1WSi
+	 DYXxisSjZuUy2EQgUJ11OqsC/jJ7WgMnwY5ys4wyKQgby7dbRQmA+Q6M3Sd7ECpY3T
+	 6Yqt2c9ssuH177wbJ9Lx55K8mWXoPJt5OCcSCJr0+WBF71zu9mH49RClhXFAnHdpSc
+	 2Pv2Acp8/4HDQ==
+Date: Wed, 3 Jul 2024 13:18:08 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
 	Chen-Yu Tsai <wens@csie.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
 	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Samuel Holland <samuel@sholland.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Andre Przywara <andre.przywara@arm.com>,
-	Chris Morgan <macroalpha82@gmail.com>,
-	John Watts <contact@jookia.org>,
-	dri-devel@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Ryan Walklin <ryan@testtoast.com>
-Subject: [PATCH v2 03/23] drm: sun4i: de2/de3: call csc setup also for UI layer
-Date: Wed,  3 Jul 2024 22:50:53 +1200
-Message-ID: <20240703105454.41254-4-ryan@testtoast.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240703105454.41254-1-ryan@testtoast.com>
-References: <20240703105454.41254-1-ryan@testtoast.com>
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Richard Leitner <richard.leitner@linux.dev>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-clk@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	patches@opensource.cirrus.com, linux-sound@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 17/20] ASoC: arizona: convert to
+ of_property_for_each_u32_new()
+Message-ID: <7f057c8b-9b76-4e31-a3cf-b82e52618529@sirena.org.uk>
+References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
+ <20240703-of_property_for_each_u32-v1-17-42c1fc0b82aa@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="NvGtanZygkHeLcw1"
+Content-Disposition: inline
+In-Reply-To: <20240703-of_property_for_each_u32-v1-17-42c1fc0b82aa@bootlin.com>
+X-Cookie: There is a fly on your nose.
 
-From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Currently, only VI layer calls CSC setup function. This comes from DE2
-limitation, which doesn't have CSC unit for UI layers. However, DE3 has
-separate CSC units for each layer. This allows display pipeline to make
-output signal in different color spaces. To support both use cases, add
-a call to CSC setup function also in UI layer code. For DE2, this will
-be a no-op, but it will allow DE3 to output signal in multiple formats.
+--NvGtanZygkHeLcw1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Ryan Walklin <ryan@testtoast.com>
----
- drivers/gpu/drm/sun4i/sun8i_csc.c      | 8 +++++---
- drivers/gpu/drm/sun4i/sun8i_ui_layer.c | 6 ++++++
- 2 files changed, 11 insertions(+), 3 deletions(-)
+On Wed, Jul 03, 2024 at 12:37:01PM +0200, Luca Ceresoli wrote:
+> Simplify code using of_property_for_each_u32_new() as the two additional
+> parameters in of_property_for_each_u32() are not used here.
 
-diff --git a/drivers/gpu/drm/sun4i/sun8i_csc.c b/drivers/gpu/drm/sun4i/sun8i_csc.c
-index 0dcbc0866ae82..68d955c63b05b 100644
---- a/drivers/gpu/drm/sun4i/sun8i_csc.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_csc.c
-@@ -209,8 +209,10 @@ void sun8i_csc_set_ccsc(struct sun8i_mixer *mixer, int layer,
- 		return;
- 	}
- 
--	base = ccsc_base[mixer->cfg->ccsc][layer];
-+	if (layer < mixer->cfg->vi_num) {
-+		base = ccsc_base[mixer->cfg->ccsc][layer];
- 
--	sun8i_csc_setup(mixer->engine.regs, base,
--			fmt_type, encoding, range);
-+		sun8i_csc_setup(mixer->engine.regs, base,
-+				fmt_type, encoding, range);
-+	}
- }
-diff --git a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-index ca75ca0835a63..884abe3cf773a 100644
---- a/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_ui_layer.c
-@@ -20,6 +20,7 @@
- #include <drm/drm_gem_dma_helper.h>
- #include <drm/drm_probe_helper.h>
- 
-+#include "sun8i_csc.h"
- #include "sun8i_mixer.h"
- #include "sun8i_ui_layer.h"
- #include "sun8i_ui_scaler.h"
-@@ -184,6 +185,11 @@ static int sun8i_ui_layer_update_formats(struct sun8i_mixer *mixer, int channel,
- 			   SUN8I_MIXER_CHAN_UI_LAYER_ATTR(ch_base, overlay),
- 			   SUN8I_MIXER_CHAN_UI_LAYER_ATTR_FBFMT_MASK, val);
- 
-+	/* Note: encoding and range arguments are ignored for RGB */
-+	sun8i_csc_set_ccsc(mixer, channel, FORMAT_TYPE_RGB,
-+			   DRM_COLOR_YCBCR_BT601,
-+			   DRM_COLOR_YCBCR_FULL_RANGE);
-+
- 	return 0;
- }
- 
--- 
-2.45.2
+Acked-by: Mark Brown <broonie@kernel.org>
 
+--NvGtanZygkHeLcw1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaFQYAACgkQJNaLcl1U
+h9AylQf9G8/SGzOMtUK0KB/AFXzHYIfp3WpSO5hnxcx+E5C7ZK4bjWCUH/uunXlj
+F4Jf8unGlljKf05YliMJQdU+V6rteVrAjhbODBpOyO3KgNcahTjDSsdel5a8kNxy
+xs3TjgeAoSA6aWSldnG9epfMTrso4U2krM6J7EpllETpHMhVEr19Tk/DczdltAFA
+mqPoVSFfTNlYtiXK1/0dRLf9DiwVXVKh0Pg13G8lYTkxUb51nVwvoBAxCQ0kLhYc
+whKK5upczFTpJCDEyHz17yMu3fWXyZaYCDCzPbqLkycwsy6u21KKM5tAvMr8o2Xd
+zlsu2XFciX4F1nPtsj9mR7UcMVjyRw==
+=W6f6
+-----END PGP SIGNATURE-----
+
+--NvGtanZygkHeLcw1--
 
