@@ -1,53 +1,55 @@
-Return-Path: <linux-clk+bounces-9129-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9133-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2703492620F
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 15:46:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EFF8926324
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 16:16:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3D9F28234C
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 13:46:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36D241F22B16
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 14:16:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B81B316F827;
-	Wed,  3 Jul 2024 13:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 942E31822D2;
+	Wed,  3 Jul 2024 14:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RmAxeXt1"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VwLRCtq5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43E11DFEF;
-	Wed,  3 Jul 2024 13:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA0D17DA2E;
+	Wed,  3 Jul 2024 14:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720014379; cv=none; b=GolRq1eEqGmeVJaB0A9uJiCfyPLlsz8QVPI4WmQRvlHB8wvlwherWj5kZpec/aNJnpK3uY0DN+WDXD3BGVR0vGKMvk2rCBKlrgcnhuS9fFlzLDrOVf+jsuv4HqJQLDQ6LE6fadJSKDq0NpkzLjjFfkNSj/tXf3vCMKUZcp5VfzY=
+	t=1720016007; cv=none; b=KmEuXAA+hn2qsWDcoQqXL/1gFfWAI3E3qmvirAiGAs5N91wANxEodR8QNc4SHovzcHOgiKzm6SKC+GcTyeUiqm2XcLmtd5SEslJiy1Y30S6emaTYu1d8kQ1AIIPGarWyWLSY0h+yPflAnbS8PIgsWQfcF3vOrtOabU5w1Ggmc/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720014379; c=relaxed/simple;
-	bh=wClut6NJ7en+dOaJJrDQRSrL91IoDpT4E5xOEQVsuAQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cfQCZkDQDMaSRLIeKu0KpuecD7noXyW7fMMy/AYtj8qixRzJLUsXyQRLRp9/Kb44PhI4SuxlJIQZzYRX/aw73aO2xw0lX+ODBCfg04oG26Xq9bUwFk8bhg0viRAaWMCNCJZMUodYb/9Xl5C3tcrCcDSbtD/BTMCvwQH2c/gkIz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RmAxeXt1; arc=none smtp.client-ip=217.70.183.193
+	s=arc-20240116; t=1720016007; c=relaxed/simple;
+	bh=U6DEP19ygCkPXuQKLLxorLJXfz+rnBG5Pwv8YMdO/Bw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KT3XYjJcEwu2gwCJNewsixCxaW1CrOKy/628S5vEHbupXoYJSJKrHGoDu4leJ3ds24FTGXAsE2G4VTdgMmljjszNHVzeBODPTnD1L6Aofb+ZL6p0lscCKlVOtVJoqe5S22Q+P/i6auu9B4z4XzyaVQ0+weDJkBvUXyaWYZEyzzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VwLRCtq5; arc=none smtp.client-ip=217.70.178.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 98892240012;
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id E2503C6D04;
 	Wed,  3 Jul 2024 13:46:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3BFDC240002;
+	Wed,  3 Jul 2024 13:46:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720014374;
+	t=1720014371;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z7h02AMvUN30AGrEDfAKlMGfOnfZnUqZK8AX9rib+Ug=;
-	b=RmAxeXt1l+lzr/br2ORUM3eYGU4XsI0QX3D3pAdqd3Wii+3QKUgozcbTlFZfVHzgkTCneN
-	A5hovm2kx+f8RoWO0DHebjMEQjINfuzzaji7ckN/CVmbt9A3t/+NSKoKcMKqOK0VUtZS6V
-	TINa4iGi20d96zjm0A4EylTYD4GiVo9LYI+gc4vL+s34WbE3aeDM7g4ub2u3mYpGs72wsG
-	/orKc0ii2EsVIGX5sJbBJorpBsjGNuvpJz9k5cJcGUMLgL6LWYweVkyItuVU1R+2kWf8CD
-	+MOPylN3eZP2CihhjQGUOE5NmXZXQ4xqhpzJSGmskG0rz+n6kE9GC0M6nTqhrg==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SAmBKY6TaaS5jkk7Ij5yPeOvb0Ktt8dFf3y/RyTt1Mk=;
+	b=VwLRCtq57OxU0fIL81TJ2PS+HkQ3vz3Pu7v0mgKdcxXoI+DE6kjBn47ygcKfAwVFZ4xuI3
+	nNC5KFsuvTGXWqSlj6AEvADdDRprmppH6Wp+bd1V8AV/hLdcJyHT41pJMt0ykaAdyDD+vT
+	8n7Wk7a77SKzhMxRjebnhDFGfB26V9fKSdeEsw2ovgOXizY6RFv2xvZpRv4fxxKdKnD8cG
+	RQjTQY1GEdNd6DN9wIMLybhhFfv06OsTF5YvFDmb8B+bA8RGuw8GHjR8fmB2FrpEg3xdym
+	R2mIQ728UiuCltmAdEGnXs/GEiXKZrW0drmDnrFWzkm6F109ASXNfgGjoJxFNw==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 03 Jul 2024 15:46:08 +0200
-Subject: [PATCH v2 4/4] clk: eyeq: add driver
+Subject: [PATCH v2 0/4] Add Mobileye EyeQ clock support
+Date: Wed, 03 Jul 2024 15:46:04 +0200
+Message-Id: <20240703-mbly-clk-v2-0-fe8c6199a579@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -56,9 +58,9 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240703-mbly-clk-v2-4-fe8c6199a579@bootlin.com>
-References: <20240703-mbly-clk-v2-0-fe8c6199a579@bootlin.com>
-In-Reply-To: <20240703-mbly-clk-v2-0-fe8c6199a579@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIABxWhWYC/23MQQ7CIBCF4as0s3YMIKHqynuYLgod7URaDDTEp
+ uHuYtcu/5eXb4NEkSnBtdkgUubEYa6hDg24sZ+fhDzUBiWUFkadcbJ+RedfqJ0h61ppTrqFen9
+ HevBnp+5d7ZHTEuK6y1n+1j9IliiQBitJXajXTt5sCIvn+ejCBF0p5Qt39+ZvogAAAA==
 To: Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -69,867 +71,82 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.15-dev-13183
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add Mobileye EyeQ5, EyeQ6L and EyeQ6H clock controller driver. It is
-both a platform driver and a hook onto of_clk_init() used for clocks
-required early (GIC timer, UARTs).
+This is a new iteration on the Mobileye system-controller series. It
+used to be sent as a single series [0], but has been split in the
+previous revision (see [1], [2], [3], [4]) to faciliate merging.
 
-For some compatible, it is both at the same time. eqc_init() initialises
-early PLLs and stores clock array in a static linked list. It marks
-other clocks as deferred. eqc_probe() retrieves the clock array and
-adds all remaining clocks.
+This series adds a platform driver dealing with read-only PLLs derived
+from the main crystal, and some divider clocks based on those PLLs. It
+also acts at the one instantiating reset and pinctrl auxiliary devices.
 
-It exposes read-only PLLs derived from the main crystal on board. It
-also exposes another type of clocks: divider clocks. They always have
-even divisors and have one PLL as parent.
+One special feature is that some clocks are required before platform
+bus infrastructure is available; we therefore register some clocks at
+the of_clk_init() stage.
 
-This driver also bears the responsability for optional reset and pinctrl
-auxiliary devices. The match data attached to the devicetree node
-compatible indicate if such devices should be created. They all get
-passed a pointer to the start of the OLB region.
+We support EyeQ5, EyeQ6L and EyeQ6H SoCs. The last one is special in
+that there are seven instances of this system-controller. All of those
+handle clocks.
+
+Related series are targeted at reset [5], pinctrl [6] and MIPS [4]. The
+first two are receiving a second version. The last one has no change
+and stays at its V1.
+
+Have a nice day,
+Théo
+
+[0]: https://lore.kernel.org/lkml/20240620-mbly-olb-v3-0-5f29f8ca289c@bootlin.com/
+
+[1]: https://lore.kernel.org/lkml/20240628-mbly-clk-v1-0-edb1e29ea4c1@bootlin.com/
+[2]: https://lore.kernel.org/lkml/20240628-mbly-reset-v1-0-2a8294fd4392@bootlin.com/
+[3]: https://lore.kernel.org/lkml/20240628-mbly-pinctrl-v1-0-c878192d6b0a@bootlin.com/
+[4]: https://lore.kernel.org/lkml/20240628-mbly-mips-v1-0-f53f5e4c422b@bootlin.com/
+
+[5]: https://lore.kernel.org/lkml/20240703-mbly-reset-v2-0-3fe853d78139@bootlin.com/
+[6]: https://lore.kernel.org/lkml/20240703-mbly-pinctrl-v2-0-eab5f69f1b01@bootlin.com/
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/clk/Kconfig    |  12 +
- drivers/clk/Makefile   |   1 +
- drivers/clk/clk-eyeq.c | 789 +++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 802 insertions(+)
+Changes in v2:
+- bindings: take Acked-by: Krzysztof Kozlowski.
+- driver: eqc_auxdev_create(): cast the `void __iomem *base` variable to
+  (void __force *) before putting it in platform_data, to avoid sparse
+  warning.
+- Link to v1: see [1]
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 3e9099504fad..271d55acac0a 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -218,6 +218,18 @@ config COMMON_CLK_EN7523
- 	  This driver provides the fixed clocks and gates present on Airoha
- 	  ARM silicon.
- 
-+config COMMON_CLK_EYEQ
-+	bool "Clock driver for the Mobileye EyeQ platform"
-+	depends on OF || COMPILE_TEST
-+	depends on MACH_EYEQ5 || MACH_EYEQ6H || COMPILE_TEST
-+	select AUXILIARY_BUS
-+	default MACH_EYEQ5 || MACH_EYEQ6H
-+	help
-+	  This driver provides clocks found on Mobileye EyeQ5, EyeQ6L and Eye6H
-+	  SoCs. Controllers live in shared register regions called OLB. Driver
-+	  provides read-only PLLs, derived from the main crystal clock (which
-+	  must be constant). It also exposes some divider clocks.
-+
- config COMMON_CLK_FSL_FLEXSPI
- 	tristate "Clock driver for FlexSPI on Layerscape SoCs"
- 	depends on ARCH_LAYERSCAPE || COMPILE_TEST
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 4abe16c8ccdf..40bc2e48e1ab 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -32,6 +32,7 @@ obj-$(CONFIG_ARCH_CLPS711X)		+= clk-clps711x.o
- obj-$(CONFIG_COMMON_CLK_CS2000_CP)	+= clk-cs2000-cp.o
- obj-$(CONFIG_ARCH_SPARX5)		+= clk-sparx5.o
- obj-$(CONFIG_COMMON_CLK_EN7523)		+= clk-en7523.o
-+obj-$(CONFIG_COMMON_CLK_EYEQ)		+= clk-eyeq.o
- obj-$(CONFIG_COMMON_CLK_FIXED_MMIO)	+= clk-fixed-mmio.o
- obj-$(CONFIG_COMMON_CLK_FSL_FLEXSPI)	+= clk-fsl-flexspi.o
- obj-$(CONFIG_COMMON_CLK_FSL_SAI)	+= clk-fsl-sai.o
-diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
-new file mode 100644
-index 000000000000..8ce7f15e83c9
---- /dev/null
-+++ b/drivers/clk/clk-eyeq.c
-@@ -0,0 +1,789 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * PLL clock driver for the Mobileye EyeQ5, EyeQ6L and EyeQ6H platforms.
-+ *
-+ * This controller handles read-only PLLs, all derived from the same main
-+ * crystal clock. It also exposes divider clocks, those are children to PLLs.
-+ * Parent clock is expected to be constant. This driver's registers live in
-+ * a shared region called OLB. Some PLLs are initialised early by of_clk_init().
-+ *
-+ * We use eqc_ as prefix, as-in "EyeQ Clock", but way shorter.
-+ *
-+ * Copyright (C) 2024 Mobileye Vision Technologies Ltd.
-+ */
-+
-+/*
-+ * Set pr_fmt() for printing from eqc_init().
-+ * It is called at of_clk_init() stage (read: really early).
-+ */
-+#define pr_fmt(fmt) "clk-eyeq: " fmt
-+
-+#include <linux/array_size.h>
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/clk-provider.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/overflow.h>
-+#include <linux/platform_device.h>
-+#include <linux/printk.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
-+
-+#include <dt-bindings/clock/mobileye,eyeq5-clk.h>
-+
-+#define EQC_MAX_DIV_COUNT		4
-+
-+/* In frac mode, it enables fractional noise canceling DAC. Else, no function. */
-+#define PCSR0_DAC_EN			BIT(0)
-+/* Fractional or integer mode */
-+#define PCSR0_DSM_EN			BIT(1)
-+#define PCSR0_PLL_EN			BIT(2)
-+/* All clocks output held at 0 */
-+#define PCSR0_FOUTPOSTDIV_EN		BIT(3)
-+#define PCSR0_POST_DIV1			GENMASK(6, 4)
-+#define PCSR0_POST_DIV2			GENMASK(9, 7)
-+#define PCSR0_REF_DIV			GENMASK(15, 10)
-+#define PCSR0_INTIN			GENMASK(27, 16)
-+#define PCSR0_BYPASS			BIT(28)
-+/* Bits 30..29 are reserved */
-+#define PCSR0_PLL_LOCKED		BIT(31)
-+
-+#define PCSR1_RESET			BIT(0)
-+#define PCSR1_SSGC_DIV			GENMASK(4, 1)
-+/* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
-+#define PCSR1_SPREAD			GENMASK(9, 5)
-+#define PCSR1_DIS_SSCG			BIT(10)
-+/* Down-spread or center-spread */
-+#define PCSR1_DOWN_SPREAD		BIT(11)
-+#define PCSR1_FRAC_IN			GENMASK(31, 12)
-+
-+/*
-+ * Driver might register clock provider from eqc_init() if PLLs are required
-+ * early (before platform bus is ready). Store struct eqc_priv inside linked
-+ * list to pass clock provider from eqc_init() to eqc_probe() and register
-+ * remaining clocks from platform device probe.
-+ *
-+ * Clock provider is NOT created by eqc_init() if no early clock is required.
-+ * Store as linked list because EyeQ6H has multiple clock controller instances.
-+ * Matching is done based on devicetree node pointer.
-+ */
-+static DEFINE_SPINLOCK(eqc_list_slock);
-+static LIST_HEAD(eqc_list);
-+
-+struct eqc_pll {
-+	unsigned int	index;
-+	const char	*name;
-+	unsigned int	reg64;
-+};
-+
-+/*
-+ * Divider clock. Divider is 2*(v+1), with v the register value.
-+ * Min divider is 2, max is 2*(2^width).
-+ */
-+struct eqc_div {
-+	unsigned int	index;
-+	const char	*name;
-+	unsigned int	parent;
-+	unsigned int	reg;
-+	u8		shift;
-+	u8		width;
-+};
-+
-+struct eqc_match_data {
-+	unsigned int		pll_count;
-+	const struct eqc_pll	*plls;
-+
-+	unsigned int		div_count;
-+	const struct eqc_div	*divs;
-+
-+	const char		*reset_auxdev_name;
-+	const char		*pinctrl_auxdev_name;
-+};
-+
-+struct eqc_early_match_data {
-+	unsigned int		early_pll_count;
-+	const struct eqc_pll	*early_plls;
-+	/* Information required to init properly clk HW cells. */
-+	unsigned int		nb_late_clks;
-+};
-+
-+struct eqc_priv {
-+	struct clk_hw_onecell_data	*cells;
-+	const struct eqc_early_match_data *early_data;
-+	const struct eqc_match_data	*data;
-+	void __iomem			*base;
-+	struct device_node		*np;
-+	struct list_head		list;
-+};
-+
-+/*
-+ * Both factors (mult and div) must fit in 32 bits. When an operation overflows,
-+ * this function throws away low bits so that factors still fit in 32 bits.
-+ *
-+ * Precision loss depends on amplitude of mult and div. Worst theorical
-+ * loss is: (UINT_MAX+1) / UINT_MAX - 1 = 2.3e-10.
-+ * This is 1Hz every 4.3GHz.
-+ */
-+static void eqc_pll_downshift_factors(unsigned long *mult, unsigned long *div)
-+{
-+	unsigned long biggest;
-+	unsigned int shift;
-+
-+	/* This function can be removed if mult/div switch to unsigned long. */
-+	static_assert(sizeof_field(struct clk_fixed_factor, mult) == sizeof(unsigned int));
-+	static_assert(sizeof_field(struct clk_fixed_factor, div) == sizeof(unsigned int));
-+
-+	/* No overflow, nothing to be done. */
-+	if (*mult <= UINT_MAX && *div <= UINT_MAX)
-+		return;
-+
-+	/*
-+	 * Compute the shift required to bring the biggest factor into unsigned
-+	 * int range. That is, shift its highest set bit to the unsigned int
-+	 * most significant bit.
-+	 */
-+	biggest = max(*mult, *div);
-+	shift = __fls(biggest) - (BITS_PER_BYTE * sizeof(unsigned int)) + 1;
-+
-+	*mult >>= shift;
-+	*div >>= shift;
-+}
-+
-+static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
-+				   unsigned long *div, unsigned long *acc)
-+{
-+	if (r0 & PCSR0_BYPASS) {
-+		*mult = 1;
-+		*div = 1;
-+		*acc = 0;
-+		return 0;
-+	}
-+
-+	if (!(r0 & PCSR0_PLL_LOCKED))
-+		return -EINVAL;
-+
-+	*mult = FIELD_GET(PCSR0_INTIN, r0);
-+	*div = FIELD_GET(PCSR0_REF_DIV, r0);
-+	if (r0 & PCSR0_FOUTPOSTDIV_EN)
-+		*div *= FIELD_GET(PCSR0_POST_DIV1, r0) * FIELD_GET(PCSR0_POST_DIV2, r0);
-+
-+	/* Fractional mode, in 2^20 (0x100000) parts. */
-+	if (r0 & PCSR0_DSM_EN) {
-+		*div *= 0x100000;
-+		*mult = *mult * 0x100000 + FIELD_GET(PCSR1_FRAC_IN, r1);
-+	}
-+
-+	if (!*mult || !*div)
-+		return -EINVAL;
-+
-+	/* Spread spectrum. */
-+	if (!(r1 & (PCSR1_RESET | PCSR1_DIS_SSCG))) {
-+		/*
-+		 * Spread is 1/1000 parts of frequency, accuracy is half of
-+		 * that. To get accuracy, convert to ppb (parts per billion).
-+		 */
-+		u32 spread = FIELD_GET(PCSR1_SPREAD, r1);
-+
-+		*acc = spread * 500000;
-+		if (r1 & PCSR1_DOWN_SPREAD) {
-+			/*
-+			 * Downspreading: the central frequency is half a
-+			 * spread lower.
-+			 */
-+			*mult *= 2000 - spread;
-+			*div *= 2000;
-+
-+			/*
-+			 * Previous operation might overflow 32 bits. If it
-+			 * does, throw away the least amount of low bits.
-+			 */
-+			eqc_pll_downshift_factors(mult, div);
-+		}
-+	} else {
-+		*acc = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static unsigned int eqc_compute_clock_count(const struct eqc_early_match_data *early_data,
-+					    const struct eqc_match_data *data)
-+{
-+	unsigned int i, nb_clks = 0, sum = 0;
-+
-+	if (early_data) {
-+		sum += early_data->early_pll_count;
-+
-+		for (i = 0; i < early_data->early_pll_count; i++)
-+			if (early_data->early_plls[i].index >= nb_clks)
-+				nb_clks = early_data->early_plls[i].index + 1;
-+	}
-+
-+	if (data) {
-+		sum += data->pll_count + data->div_count;
-+
-+		for (i = 0; i < data->pll_count; i++)
-+			if (data->plls[i].index >= nb_clks)
-+				nb_clks = data->plls[i].index + 1;
-+
-+		for (i = 0; i < data->div_count; i++)
-+			if (data->divs[i].index >= nb_clks)
-+				nb_clks = data->divs[i].index + 1;
-+	}
-+
-+	/* We expect the biggest clock index to be 1 below the clock count. */
-+	WARN_ON(nb_clks != sum);
-+
-+	return nb_clks;
-+}
-+
-+static void eqc_probe_init_plls(struct device *dev, struct eqc_priv *priv)
-+{
-+	const struct eqc_match_data *data = priv->data;
-+	unsigned long mult, div, acc;
-+	const struct eqc_pll *pll;
-+	struct clk_hw *hw;
-+	unsigned int i;
-+	u32 r0, r1;
-+	u64 val;
-+	int ret;
-+
-+	for (i = 0; i < data->pll_count; i++) {
-+		pll = &data->plls[i];
-+
-+		val = readq(priv->base + pll->reg64);
-+		r0 = val;
-+		r1 = val >> 32;
-+
-+		ret = eqc_pll_parse_registers(r0, r1, &mult, &div, &acc);
-+		if (ret) {
-+			dev_warn(dev, "failed parsing state of %s\n", pll->name);
-+			priv->cells->hws[pll->index] = ERR_PTR(ret);
-+			continue;
-+		}
-+
-+		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(dev,
-+				dev->of_node, pll->name, "ref", 0, mult, div, acc);
-+		priv->cells->hws[pll->index] = hw;
-+		if (IS_ERR(hw))
-+			dev_warn(dev, "failed registering %s: %pe\n", pll->name, hw);
-+	}
-+}
-+
-+static void eqc_probe_init_divs(struct platform_device *pdev, struct device *dev,
-+				struct eqc_priv *priv)
-+{
-+	const struct eqc_match_data *data = priv->data;
-+	const struct eqc_div *div;
-+	struct clk_hw *parent;
-+	void __iomem *reg;
-+	struct clk_hw *hw;
-+	unsigned int i;
-+
-+	for (i = 0; i < data->div_count; i++) {
-+		div = &data->divs[i];
-+		reg = priv->base + div->reg;
-+		parent = priv->cells->hws[div->parent];
-+
-+		hw = clk_hw_register_divider_table_parent_hw(dev, div->name,
-+				parent, 0, reg, div->shift, div->width,
-+				CLK_DIVIDER_EVEN_INTEGERS, NULL, NULL);
-+		priv->cells->hws[div->index] = hw;
-+		if (IS_ERR(hw))
-+			dev_warn(dev, "failed registering %s: %pe\n",
-+				 div->name, hw);
-+	}
-+}
-+
-+static void eqc_auxdev_release(struct device *dev)
-+{
-+	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+
-+	kfree(adev);
-+}
-+
-+static void eqc_auxdev_unregister(void *arg)
-+{
-+	struct auxiliary_device *adev = arg;
-+
-+	auxiliary_device_delete(adev);
-+	auxiliary_device_uninit(adev);
-+}
-+
-+static int eqc_auxdev_create(struct device *dev, void __iomem *base,
-+			     const char *name, u32 id)
-+{
-+	struct auxiliary_device *adev;
-+	int ret;
-+
-+	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-+	if (!adev)
-+		return -ENOMEM;
-+
-+	adev->name = name;
-+	adev->dev.parent = dev;
-+	adev->dev.platform_data = (void __force *)base;
-+	adev->dev.release = eqc_auxdev_release;
-+	adev->id = id;
-+
-+	ret = auxiliary_device_init(adev);
-+	if (ret)
-+		return ret;
-+
-+	ret = auxiliary_device_add(adev);
-+	if (ret) {
-+		auxiliary_device_uninit(adev);
-+		return ret;
-+	}
-+
-+	return devm_add_action_or_reset(dev, eqc_auxdev_unregister, adev);
-+}
-+
-+static int eqc_probe(struct platform_device *pdev)
-+{
-+	const struct eqc_match_data *data;
-+	struct device *dev = &pdev->dev;
-+	struct eqc_priv *priv = NULL;
-+	struct eqc_priv *entry;
-+	unsigned int nb_clks;
-+	void __iomem *base;
-+	int ret;
-+
-+	data = device_get_match_data(dev);
-+	if (!data)
-+		return 0; /* No clocks nor auxdevs, we are done. */
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	/* Init optional reset auxiliary device. */
-+	if (data->reset_auxdev_name) {
-+		ret = eqc_auxdev_create(dev, base, data->reset_auxdev_name, 0);
-+		if (ret)
-+			dev_warn(dev, "failed creating auxiliary device %s.%s: %d\n",
-+				 KBUILD_MODNAME, data->reset_auxdev_name, ret);
-+	}
-+
-+	/* Init optional pinctrl auxiliary device. */
-+	if (data->pinctrl_auxdev_name) {
-+		ret = eqc_auxdev_create(dev, base, data->pinctrl_auxdev_name, 0);
-+		if (ret)
-+			dev_warn(dev, "failed creating auxiliary device %s.%s: %d\n",
-+				 KBUILD_MODNAME, data->pinctrl_auxdev_name, ret);
-+	}
-+
-+	if (data->pll_count + data->div_count == 0)
-+		return 0; /* Zero clocks, we are done. */
-+
-+	/* Try retrieving early init private data. */
-+	spin_lock(&eqc_list_slock);
-+	list_for_each_entry(entry, &eqc_list, list) {
-+		if (entry->np == dev->of_node) {
-+			priv = entry;
-+			break;
-+		}
-+	}
-+	spin_unlock(&eqc_list_slock);
-+
-+	if (!priv) {
-+		/* Device did not get init early. Do it now. */
-+
-+		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+		if (!priv)
-+			return -ENOMEM;
-+
-+		priv->np = dev->of_node;
-+
-+		nb_clks = eqc_compute_clock_count(NULL, data);
-+		priv->cells = devm_kzalloc(dev, struct_size(priv->cells, hws, nb_clks),
-+					   GFP_KERNEL);
-+		if (!priv->cells)
-+			return -ENOMEM;
-+
-+		priv->cells->num = nb_clks;
-+	} else {
-+		/*
-+		 * Device got init early. Check clock count.
-+		 *
-+		 * eqc_init() should already know the exact clk count using
-+		 * nb_late_clks field. We ensure computation was right and fix
-+		 * clk cells if not.
-+		 */
-+		nb_clks = eqc_compute_clock_count(priv->early_data, data);
-+		if (WARN_ON(nb_clks != priv->cells->num))
-+			priv->cells->num = nb_clks;
-+	}
-+
-+	priv->base = base;
-+	priv->data = data;
-+
-+	eqc_probe_init_plls(dev, priv);
-+
-+	eqc_probe_init_divs(pdev, dev, priv);
-+
-+	/* Clock provider has not been registered by eqc_init(). Do it now. */
-+	if (!priv->early_data) {
-+		/* When providing a single clock, require no cell. */
-+		if (priv->cells->num == 1)
-+			ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+							  priv->cells->hws[0]);
-+		else
-+			ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-+							  priv->cells);
-+
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct eqc_pll eqc_eyeq5_plls[] = {
-+	{ .index = EQ5C_PLL_VMP,  .name = "pll-vmp",  .reg64 = 0x034 },
-+	{ .index = EQ5C_PLL_PMA,  .name = "pll-pma",  .reg64 = 0x03C },
-+	{ .index = EQ5C_PLL_VDI,  .name = "pll-vdi",  .reg64 = 0x044 },
-+	{ .index = EQ5C_PLL_DDR0, .name = "pll-ddr0", .reg64 = 0x04C },
-+	{ .index = EQ5C_PLL_PCI,  .name = "pll-pci",  .reg64 = 0x054 },
-+	{ .index = EQ5C_PLL_PMAC, .name = "pll-pmac", .reg64 = 0x064 },
-+	{ .index = EQ5C_PLL_MPC,  .name = "pll-mpc",  .reg64 = 0x06C },
-+	{ .index = EQ5C_PLL_DDR1, .name = "pll-ddr1", .reg64 = 0x074 },
-+};
-+
-+static const struct eqc_div eqc_eyeq5_divs[] = {
-+	{
-+		.index = EQ5C_DIV_OSPI,
-+		.name = "div-ospi",
-+		.parent = EQ5C_PLL_PER,
-+		.reg = 0x11C,
-+		.shift = 0,
-+		.width = 4,
-+	},
-+};
-+
-+static const struct eqc_match_data eqc_eyeq5_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq5_plls),
-+	.plls		= eqc_eyeq5_plls,
-+
-+	.div_count	= ARRAY_SIZE(eqc_eyeq5_divs),
-+	.divs		= eqc_eyeq5_divs,
-+
-+	.reset_auxdev_name = "reset",
-+	.pinctrl_auxdev_name = "pinctrl",
-+};
-+
-+static const struct eqc_pll eqc_eyeq6l_plls[] = {
-+	{ .index = EQ6LC_PLL_DDR, .name = "pll-ddr", .reg64 = 0x02C },
-+	{ .index = EQ6LC_PLL_CPU, .name = "pll-cpu", .reg64 = 0x034 }, /* also acc */
-+	{ .index = EQ6LC_PLL_PER, .name = "pll-per", .reg64 = 0x03C },
-+	{ .index = EQ6LC_PLL_VDI, .name = "pll-vdi", .reg64 = 0x044 },
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6l_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq6l_plls),
-+	.plls		= eqc_eyeq6l_plls,
-+
-+	.reset_auxdev_name = "reset",
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6h_west_match_data = {
-+	.reset_auxdev_name = "reset_west",
-+};
-+
-+static const struct eqc_pll eqc_eyeq6h_east_plls[] = {
-+	{ .index = 0, .name = "pll-east", .reg64 = 0x074 },
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6h_east_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_east_plls),
-+	.plls		= eqc_eyeq6h_east_plls,
-+
-+	.reset_auxdev_name = "reset_east",
-+};
-+
-+static const struct eqc_pll eqc_eyeq6h_south_plls[] = {
-+	{ .index = EQ6HC_SOUTH_PLL_VDI,  .name = "pll-vdi",  .reg64 = 0x000 },
-+	{ .index = EQ6HC_SOUTH_PLL_PCIE, .name = "pll-pcie", .reg64 = 0x008 },
-+	{ .index = EQ6HC_SOUTH_PLL_PER,  .name = "pll-per",  .reg64 = 0x010 },
-+	{ .index = EQ6HC_SOUTH_PLL_ISP,  .name = "pll-isp",  .reg64 = 0x018 },
-+};
-+
-+static const struct eqc_div eqc_eyeq6h_south_divs[] = {
-+	{
-+		.index = EQ6HC_SOUTH_DIV_EMMC,
-+		.name = "div-emmc",
-+		.parent = EQ6HC_SOUTH_PLL_PER,
-+		.reg = 0x070,
-+		.shift = 4,
-+		.width = 4,
-+	},
-+	{
-+		.index = EQ6HC_SOUTH_DIV_OSPI_REF,
-+		.name = "div-ospi-ref",
-+		.parent = EQ6HC_SOUTH_PLL_PER,
-+		.reg = 0x090,
-+		.shift = 4,
-+		.width = 4,
-+	},
-+	{
-+		.index = EQ6HC_SOUTH_DIV_OSPI_SYS,
-+		.name = "div-ospi-sys",
-+		.parent = EQ6HC_SOUTH_PLL_PER,
-+		.reg = 0x090,
-+		.shift = 8,
-+		.width = 1,
-+	},
-+	{
-+		.index = EQ6HC_SOUTH_DIV_TSU,
-+		.name = "div-tsu",
-+		.parent = EQ6HC_SOUTH_PLL_PCIE,
-+		.reg = 0x098,
-+		.shift = 4,
-+		.width = 8,
-+	},
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6h_south_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_south_plls),
-+	.plls		= eqc_eyeq6h_south_plls,
-+
-+	.div_count	= ARRAY_SIZE(eqc_eyeq6h_south_divs),
-+	.divs		= eqc_eyeq6h_south_divs,
-+};
-+
-+static const struct eqc_pll eqc_eyeq6h_ddr0_plls[] = {
-+	{ .index = 0, .name = "pll-ddr0", .reg64 = 0x074 },
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6h_ddr0_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_ddr0_plls),
-+	.plls		= eqc_eyeq6h_ddr0_plls,
-+};
-+
-+static const struct eqc_pll eqc_eyeq6h_ddr1_plls[] = {
-+	{ .index = 0, .name = "pll-ddr1", .reg64 = 0x074 },
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6h_ddr1_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_ddr1_plls),
-+	.plls		= eqc_eyeq6h_ddr1_plls,
-+};
-+
-+static const struct eqc_pll eqc_eyeq6h_acc_plls[] = {
-+	{ .index = EQ6HC_ACC_PLL_XNN, .name = "pll-xnn", .reg64 = 0x040 },
-+	{ .index = EQ6HC_ACC_PLL_VMP, .name = "pll-vmp", .reg64 = 0x050 },
-+	{ .index = EQ6HC_ACC_PLL_PMA, .name = "pll-pma", .reg64 = 0x05C },
-+	{ .index = EQ6HC_ACC_PLL_MPC, .name = "pll-mpc", .reg64 = 0x068 },
-+	{ .index = EQ6HC_ACC_PLL_NOC, .name = "pll-noc", .reg64 = 0x070 },
-+};
-+
-+static const struct eqc_match_data eqc_eyeq6h_acc_match_data = {
-+	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_acc_plls),
-+	.plls		= eqc_eyeq6h_acc_plls,
-+
-+	.reset_auxdev_name = "reset_acc",
-+};
-+
-+static const struct of_device_id eqc_match_table[] = {
-+	{ .compatible = "mobileye,eyeq5-olb", .data = &eqc_eyeq5_match_data },
-+	{ .compatible = "mobileye,eyeq6l-olb", .data = &eqc_eyeq6l_match_data },
-+	{ .compatible = "mobileye,eyeq6h-west-olb", .data = &eqc_eyeq6h_west_match_data },
-+	{ .compatible = "mobileye,eyeq6h-east-olb", .data = &eqc_eyeq6h_east_match_data },
-+	{ .compatible = "mobileye,eyeq6h-south-olb", .data = &eqc_eyeq6h_south_match_data },
-+	{ .compatible = "mobileye,eyeq6h-ddr0-olb", .data = &eqc_eyeq6h_ddr0_match_data },
-+	{ .compatible = "mobileye,eyeq6h-ddr1-olb", .data = &eqc_eyeq6h_ddr1_match_data },
-+	{ .compatible = "mobileye,eyeq6h-acc-olb", .data = &eqc_eyeq6h_acc_match_data },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, eqc_match_table);
-+
-+static struct platform_driver eqc_driver = {
-+	.probe = eqc_probe,
-+	.driver = {
-+		.name = "clk-eyeq",
-+		.of_match_table = eqc_match_table,
-+	},
-+};
-+builtin_platform_driver(eqc_driver);
-+
-+/* Required early for GIC timer (pll-cpu) and UARTs (pll-per). */
-+static const struct eqc_pll eqc_eyeq5_early_plls[] = {
-+	{ .index = EQ5C_PLL_CPU, .name = "pll-cpu",  .reg64 = 0x02C },
-+	{ .index = EQ5C_PLL_PER, .name = "pll-per",  .reg64 = 0x05C },
-+};
-+
-+static const struct eqc_early_match_data eqc_eyeq5_early_match_data = {
-+	.early_pll_count	= ARRAY_SIZE(eqc_eyeq5_early_plls),
-+	.early_plls		= eqc_eyeq5_early_plls,
-+	.nb_late_clks = eqc_eyeq5_match_data.pll_count + eqc_eyeq5_match_data.div_count,
-+};
-+
-+/* Required early for GIC timer. */
-+static const struct eqc_pll eqc_eyeq6h_central_early_plls[] = {
-+	{ .index = 0, .name = "pll-cpu", .reg64 = 0x02C },
-+};
-+
-+static const struct eqc_early_match_data eqc_eyeq6h_central_early_match_data = {
-+	.early_pll_count	= ARRAY_SIZE(eqc_eyeq6h_central_early_plls),
-+	.early_plls		= eqc_eyeq6h_central_early_plls,
-+	.nb_late_clks = 0,
-+};
-+
-+/* Required early for UART. */
-+static const struct eqc_pll eqc_eyeq6h_west_early_plls[] = {
-+	{ .index = 0, .name = "pll-west", .reg64 = 0x074 },
-+};
-+
-+static const struct eqc_early_match_data eqc_eyeq6h_west_early_match_data = {
-+	.early_pll_count	= ARRAY_SIZE(eqc_eyeq6h_west_early_plls),
-+	.early_plls		= eqc_eyeq6h_west_early_plls,
-+	.nb_late_clks = 0,
-+};
-+
-+static const struct of_device_id eqc_early_match_table[] = {
-+	{
-+		.compatible = "mobileye,eyeq5-olb",
-+		.data = &eqc_eyeq5_early_match_data,
-+	},
-+	{
-+		.compatible = "mobileye,eyeq6h-central-olb",
-+		.data = &eqc_eyeq6h_central_early_match_data,
-+	},
-+	{
-+		.compatible = "mobileye,eyeq6h-west-olb",
-+		.data = &eqc_eyeq6h_west_early_match_data,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, eqc_early_match_table);
-+
-+static void __init eqc_init(struct device_node *np)
-+{
-+	const struct eqc_early_match_data *early_data;
-+	unsigned int nb_clks = 0;
-+	struct eqc_priv *priv;
-+	void __iomem *base;
-+	unsigned int i;
-+	int ret;
-+
-+	early_data = of_match_node(eqc_early_match_table, np)->data;
-+
-+	/* No reason to early init this clock provider. Delay until probe. */
-+	if (!early_data || early_data->early_pll_count == 0)
-+		return;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
-+
-+	priv->np = np;
-+	priv->early_data = early_data;
-+
-+	nb_clks = early_data->early_pll_count + early_data->nb_late_clks;
-+	priv->cells = kzalloc(struct_size(priv->cells, hws, nb_clks), GFP_KERNEL);
-+	if (!priv->cells) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
-+
-+	priv->cells->num = nb_clks;
-+
-+	/*
-+	 * Mark all clocks as deferred; some are registered here, the rest at
-+	 * platform device probe.
-+	 */
-+	for (i = 0; i < nb_clks; i++)
-+		priv->cells->hws[i] = ERR_PTR(-EPROBE_DEFER);
-+
-+	/* Offsets (reg64) of early PLLs are relative to OLB block. */
-+	base = of_iomap(np, 0);
-+	if (!base) {
-+		ret = -ENODEV;
-+		goto err;
-+	}
-+
-+	for (i = 0; i < early_data->early_pll_count; i++) {
-+		const struct eqc_pll *pll = &early_data->early_plls[i];
-+		unsigned long mult, div, acc;
-+		struct clk_hw *hw;
-+		u32 r0, r1;
-+		u64 val;
-+
-+		val = readq(base + pll->reg64);
-+		r0 = val;
-+		r1 = val >> 32;
-+
-+		ret = eqc_pll_parse_registers(r0, r1, &mult, &div, &acc);
-+		if (ret) {
-+			pr_err("failed parsing state of %s\n", pll->name);
-+			goto err;
-+		}
-+
-+		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(NULL,
-+				np, pll->name, "ref", 0, mult, div, acc);
-+		priv->cells->hws[pll->index] = hw;
-+		if (IS_ERR(hw)) {
-+			pr_err("failed registering %s: %pe\n", pll->name, hw);
-+			ret = PTR_ERR(hw);
-+			goto err;
-+		}
-+	}
-+
-+	/* When providing a single clock, require no cell. */
-+	if (nb_clks == 1)
-+		ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, priv->cells->hws[0]);
-+	else
-+		ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, priv->cells);
-+	if (ret) {
-+		pr_err("failed registering clk provider: %d\n", ret);
-+		goto err;
-+	}
-+
-+	spin_lock(&eqc_list_slock);
-+	list_add_tail(&priv->list, &eqc_list);
-+	spin_unlock(&eqc_list_slock);
-+
-+	return;
-+
-+err:
-+	/*
-+	 * We are doomed. The system will not be able to boot.
-+	 *
-+	 * Let's still try to be good citizens by freeing resources and print
-+	 * a last error message that might help debugging.
-+	 */
-+
-+	if (priv && priv->cells) {
-+		of_clk_del_provider(np);
-+
-+		for (i = 0; i < early_data->early_pll_count; i++) {
-+			const struct eqc_pll *pll = &early_data->early_plls[i];
-+			struct clk_hw *hw = priv->cells->hws[pll->index];
-+
-+			if (!IS_ERR_OR_NULL(hw))
-+				clk_hw_unregister_fixed_factor(hw);
-+		}
-+
-+		kfree(priv->cells);
-+	}
-+
-+	kfree(priv);
-+
-+	pr_err("failed clk init: %d\n", ret);
-+}
-+
-+CLK_OF_DECLARE_DRIVER(eqc_eyeq5, "mobileye,eyeq5-olb", eqc_init);
-+CLK_OF_DECLARE_DRIVER(eqc_eyeq6h_central, "mobileye,eyeq6h-central-olb", eqc_init);
-+CLK_OF_DECLARE_DRIVER(eqc_eyeq6h_west, "mobileye,eyeq6h-west-olb", eqc_init);
+Changes since OLB v3 [0]:
+ - MAINTAINERS: Move changes into a separate commit to avoid merge
+   conflicts. This commit is in the MIPS series [3].
+ - dt-bindings: split include/dt-bindings/ changes into its own commit.
+   It is part of this clk series.
+ - dt-bindings: Take Reviewed-by: Rob Herring. The include/dt-bindings/
+   new commit has NOT inherited from it, just to make sure.
 
+---
+Théo Lebrun (4):
+      Revert "dt-bindings: clock: mobileye,eyeq5-clk: add bindings"
+      dt-bindings: clock: add Mobileye EyeQ6L/EyeQ6H clock indexes
+      clk: divider: Introduce CLK_DIVIDER_EVEN_INTEGERS flag
+      clk: eyeq: add driver
+
+ .../bindings/clock/mobileye,eyeq5-clk.yaml         |  51 --
+ drivers/clk/Kconfig                                |  12 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-divider.c                          |  12 +-
+ drivers/clk/clk-eyeq.c                             | 789 +++++++++++++++++++++
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  21 +
+ include/linux/clk-provider.h                       |  11 +-
+ 7 files changed, 839 insertions(+), 58 deletions(-)
+---
+base-commit: f2661062f16b2de5d7b6a5c42a9a5c96326b8454
+change-id: 20240628-mbly-clk-4c6ebc716347
+
+Best regards,
 -- 
-2.45.2
+Théo Lebrun <theo.lebrun@bootlin.com>
 
 
