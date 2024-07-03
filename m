@@ -1,155 +1,296 @@
-Return-Path: <linux-clk+bounces-9122-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9096-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AFAE925ED5
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 13:41:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D775A925F9E
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 14:05:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C7DA296982
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 11:38:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 097ACB351E4
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2024 11:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB71177980;
-	Wed,  3 Jul 2024 11:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A4F1849F5;
+	Wed,  3 Jul 2024 10:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="OV4gZuIz"
+	dkim=pass (2048-bit key) header.d=testtoast.com header.i=@testtoast.com header.b="W1YVIKEo";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aCUFCV/n"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A3713DDA1
-	for <linux-clk@vger.kernel.org>; Wed,  3 Jul 2024 11:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5F41849D9;
+	Wed,  3 Jul 2024 10:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720006449; cv=none; b=HZn8dQyREgKKJCeek3s1pCiAfKzdV5GSz0PI8ix8MTC2/wII3HK9vkSJlRY6RmCcFYxluQz6pp7DW+knwPUKcTork3OI/ho6sjhed/a1xLNxfSrEmPQRxCSPBYHsAUZHygm/RyNI/5IcpkfyTlKlLlxJc4HwJMdfMh2e5dXTrDQ=
+	t=1720004123; cv=none; b=YRsm1dZgiNiZo9W7m1qLRT42lPcOUO31fasYsUU1lPq+PkoOnBTjZZbYoJ9yKjpK1MgqElTkSwuwIrsFOsGPCR+2LP/3cDULTn2Byg8S+lqJixQ7JnSqUoiLWDsLxnbMfAg18iR/MuCipL0AHfwKkhLLkG57wJrmB6XnqoA3cuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720006449; c=relaxed/simple;
-	bh=FZENwCduhzMR7HNXX0tAbKbkTMhnOf9iriLhVyWT2uM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CoF5gC1LWVmJEnsjyPFhD5yKHAR/8hcLv1MSTu6cxChncyIAgsjtxKp8Xyx3vhKnd/i4iT7+K6ZiP9KAJCck5X1Mi+fz4WUlRvU3v9wTlHfNQB35Q2qvU7WU6p9GXzpeZxHc0Fb50RZJN6QkgP46pg1P+LPiYOzhHHxjpm1vQ6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=OV4gZuIz; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52caebc6137so4817652e87.0
-        for <linux-clk@vger.kernel.org>; Wed, 03 Jul 2024 04:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720006444; x=1720611244; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KGjQIIef8f4D8V2nNTqkl2FTePoqDGpILu519rNKT2M=;
-        b=OV4gZuIzBO4jNQCcCUAkjWPfq8DbpHiadVs7Ug8Lmsv+kTCM4OXFKoq7KluptmDUQo
-         9aGehEpdQPeaHrljMWxc2Z9+i46u+8RbWDiJvOrSX7C3G8SV2Da7g+5ZBEI0ufnaxIjH
-         kJ+9mdSZKvmHIaKXyAUwIjGj9rh2kf6NKRxl6xy2eOraBeleRSrLV14kHaAJaSh7lx52
-         ZLs3YvEgsKJcQgoC62HsecFXE/opvlchPr0fjZVJkN4z+I1bvkaYoEy5mz9iNH4/2UPo
-         0rQHCBL3RAXnzMhA+GLp4ZYSbh+0/0CN2ftt1e8RBYATFDVc+zMN/cLi8XGH6YxpO69Q
-         E6UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720006444; x=1720611244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGjQIIef8f4D8V2nNTqkl2FTePoqDGpILu519rNKT2M=;
-        b=se4qEee2YsUSF8nLXbg/zdLQz8l0OTsWZoyJhUL5s1CRSXQ7Iory3uqQrSm7vTxYc7
-         +GjCe690jt79GM7M948Sr/G2PgYavuYRHLgcHDCFO56ig95M9BpLcO+oT0cKOK6RINZg
-         ySoHhIz6HPWsVUn6rQLsaesh6n7SRN+eebUxT07AMZcVB3mdc2DiO17iw/fnxqeYrwST
-         DhWCBNG4yJeRnBOSvoX2X8CnhLY9rOrufgSRIhBCagfdqFa3/mGVAumHn+uPt2efim/G
-         2BVcI7Ek7LBIkY4mBqJzgxjEsZAiSKiwg/dvcPnRde9zenPxS/VyFsfNJ52gKLxvSQCp
-         NTNg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCxsPRyC5FYYhW6kui7uobpUNNpbFPsb8DTrjq3rO93Ag8TtyryeaIPjaRiGsBzC2JBui+OIagftYoA+cwJOCtvTjNntUXthBg
-X-Gm-Message-State: AOJu0Yw+X3AxTTw5zFcq6pxF4Kvsew/J5D8c+6Uwdw0doutyyKphlceC
-	xkDbKRJGGRi1U/DB2BtJBkQO7kzig9Vqt9NTV0EdNpfFeedMMgvk01vKn2TxlO+2OjlnW/HE0eA
-	lQOO0ZkKN5JnN+YUmWapdfj6DZsGRq2kO7BHjjQ==
-X-Google-Smtp-Source: AGHT+IHvYQvlnz9xSSjxxA0C9+ARDlWBymS0Nc+4OcDhYKcJABqlW19CRkZVdGMg0Rc503nQzevZwF7mryFVzLHp4+k=
-X-Received: by 2002:ac2:4e09:0:b0:52c:d8e9:5d8b with SMTP id
- 2adb3069b0e04-52e826678a3mr7597242e87.25.1720006444010; Wed, 03 Jul 2024
- 04:34:04 -0700 (PDT)
+	s=arc-20240116; t=1720004123; c=relaxed/simple;
+	bh=FNQkMB9Vy8gchDGrztGbLASF5a2DlElfuXaQgCiAvzk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KhHeOPJoU8mVppB7eCe1I8p+5kXEk2CggCTSFPbIuAlkzPPlqgk/VQhHi+FUOzx/ehfBWEzsq/RtZUnpfkCa8tIzzA93yfBerskZ7Td+Da964j0b8bd50JyJFBZaDoxP7X6wlaJbc135mpIDlWDbO+JMVnQle2mQ2GVdzpzyky8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=testtoast.com; spf=pass smtp.mailfrom=testtoast.com; dkim=pass (2048-bit key) header.d=testtoast.com header.i=@testtoast.com header.b=W1YVIKEo; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aCUFCV/n; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=testtoast.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=testtoast.com
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 4D9EE138062D;
+	Wed,  3 Jul 2024 06:55:21 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 03 Jul 2024 06:55:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=testtoast.com;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1720004121; x=
+	1720090521; bh=OUveO/ovvJwQ/MR8P+HDgqgZQMrOUUDSx8/rEWuViNI=; b=W
+	1YVIKEohtrfJgc4r/ClstUOg6/hmDmOMf/beVL4v3sjclsKCOgZD5khRBwCyZC+l
+	qN83V8Rfl4fQLmkjbDdthw3URo18Ap5eF49tRg0u916uJhniQiFITW89QK8/kXUn
+	OqUSaU74ashYgFKX/A7oPugqo3oiKGYy7n1DoJ0rShAvOGo7QtHDo4wIZAMqy8oj
+	sPXskrDZAUQ2xg42uphkSiXcA/mT6mYvG4HIKCW4yAwH+ULizJTU1RJ1a4gxxm45
+	khrC+Pw2upYn5wqzOFt9BEha3gcZ7CVXyvNRa0nxdBYkh4vtp2A/m27mPI5U+aMa
+	orZJkfXULOJn32aNm/juQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1720004121; x=
+	1720090521; bh=OUveO/ovvJwQ/MR8P+HDgqgZQMrOUUDSx8/rEWuViNI=; b=a
+	CUFCV/n/IGLTdGXx1K8A4G9Ei1RB/+LQBglWrN/QuxvW059pyAfdSiYxnR3BFi96
+	m7EJspCJzi8pff6x9WMpRMGLJeoyuW6ZTm9+D9m2zL20YNZG6JrFkYBrZuzOJjPg
+	Ew/o4x6OtineFw6snIe8eH8xcmxmnyZKHu+eXXO+rjgkk4meM5M0yRW5Zlwo0nSf
+	agCZoPeUXsDGY2xzLXWh+CdujreShHsbYmvBaRgP9Ipyjvw/ZPRBI4XbM6fNnZLB
+	2Ux3Fylxpe1/PGPjsovNwMjaMpYltDoNyixRYt1U5BAIujAle6VRSvBa118B3pNO
+	wBD99lDwh9h9vLqlMY43g==
+X-ME-Sender: <xms:GS6FZqrWLLmAFoZW7Tjxk-CwAyglTiKq8L7v42C2gub3Cp48vgCWkQ>
+    <xme:GS6FZoo-orl69fV27sOGrmCcErkJE3H6BfZJ6Od85tsPtdDJNrgS9azPK_BOTC-gm
+    0mI81DgpjhB-JhDpQ>
+X-ME-Received: <xmr:GS6FZvP03BhhmiE9HyqAHMuWZgtaF7wWhL3J3W95BR6mZx6AXxbryWGHzeNUObMNktAziPBOgWBD6Rgb4ylkSrrl4o5MwAHFKEeIBlIhbWDGo9_Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejgdefgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefthigrnhcu
+    hggrlhhklhhinhcuoehrhigrnhesthgvshhtthhorghsthdrtghomheqnecuggftrfgrth
+    htvghrnhepffehieffgedtgfffjeetveegfeekleeileekveeuteffteetudffveegieei
+    heetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprh
+    ihrghnsehtvghsthhtohgrshhtrdgtohhm
+X-ME-Proxy: <xmx:GS6FZp4JDulD-yPXEdVvq3YLTCpln0U_qu9MRciytyEZEvi5G6_71g>
+    <xmx:GS6FZp7QifUANv28CwUKwtGOxBzV2ydlwqlTkFHexdRjw9aljv8Eqw>
+    <xmx:GS6FZphjqjNUSoSS6bZnPHelz-m8YSyU-IAFu6HDvezUQYzQep-yHQ>
+    <xmx:GS6FZj6JxCdBuXobJRnRDefiZ0IEK1-E920XX7SKPpsMGANVDRrQYA>
+    <xmx:GS6FZuqNtDtxJPSyefG_GP2PZX9vz1QGDTR7pFoQ_swhMdQk2v16A1yE>
+Feedback-ID: idc0145fc:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 3 Jul 2024 06:55:15 -0400 (EDT)
+From: Ryan Walklin <ryan@testtoast.com>
+To: Maxime Ripard <mripard@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Andre Przywara <andre.przywara@arm.com>,
+	Chris Morgan <macroalpha82@gmail.com>,
+	John Watts <contact@jookia.org>,
+	dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Ryan Walklin <ryan@testtoast.com>
+Subject: [PATCH v2 01/23] drm: sun4i: de2/de3: Change CSC argument
+Date: Wed,  3 Jul 2024 22:50:51 +1200
+Message-ID: <20240703105454.41254-2-ryan@testtoast.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240703105454.41254-1-ryan@testtoast.com>
+References: <20240703105454.41254-1-ryan@testtoast.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com> <20240703-of_property_for_each_u32-v1-9-42c1fc0b82aa@bootlin.com>
-In-Reply-To: <20240703-of_property_for_each_u32-v1-9-42c1fc0b82aa@bootlin.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 3 Jul 2024 13:33:52 +0200
-Message-ID: <CAMRc=MfjdCxbQfthWXcgz2tC+2_owfx73DBq9LqN_4wFvWwgqA@mail.gmail.com>
-Subject: Re: [PATCH 09/20] gpio: brcmstb: convert to of_property_for_each_u32_new()
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
-	=?UTF-8?Q?Emilio_L=C3=B3pez?= <emilio@elopez.com.ar>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Richard Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-clk@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 3, 2024 at 12:38=E2=80=AFPM Luca Ceresoli <luca.ceresoli@bootli=
-n.com> wrote:
->
-> Simplify code using of_property_for_each_u32_new() as the two additional
-> parameters in of_property_for_each_u32() are not used here.
->
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
->  drivers/gpio/gpio-brcmstb.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-brcmstb.c b/drivers/gpio/gpio-brcmstb.c
-> index 8dce78ea7139..77557bc596cd 100644
-> --- a/drivers/gpio/gpio-brcmstb.c
-> +++ b/drivers/gpio/gpio-brcmstb.c
-> @@ -591,8 +591,6 @@ static int brcmstb_gpio_probe(struct platform_device =
-*pdev)
->         void __iomem *reg_base;
->         struct brcmstb_gpio_priv *priv;
->         struct resource *res;
-> -       struct property *prop;
-> -       const __be32 *p;
->         u32 bank_width;
->         int num_banks =3D 0;
->         int num_gpios =3D 0;
-> @@ -636,8 +634,7 @@ static int brcmstb_gpio_probe(struct platform_device =
-*pdev)
->         flags =3D BGPIOF_BIG_ENDIAN_BYTE_ORDER;
->  #endif
->
-> -       of_property_for_each_u32(np, "brcm,gpio-bank-widths", prop, p,
-> -                       bank_width) {
-> +       of_property_for_each_u32_new(np, "brcm,gpio-bank-widths", bank_wi=
-dth) {
->                 struct brcmstb_gpio_bank *bank;
->                 struct gpio_chip *gc;
->
->
-> --
-> 2.34.1
->
+From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Currently, CSC module takes care only for converting YUV to RGB.
+However, DE3 is more suited to work in YUV color space. Change CSC mode
+argument to format type to be more neutral. New argument only tells
+layer format type and doesn't imply output type.
+
+This commit doesn't make any functional change.
+
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Ryan Walklin <ryan@testtoast.com>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+---
+ drivers/gpu/drm/sun4i/sun8i_csc.c      | 22 +++++++++++-----------
+ drivers/gpu/drm/sun4i/sun8i_csc.h      | 10 +++++-----
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c | 16 ++++++++--------
+ 3 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/gpu/drm/sun4i/sun8i_csc.c b/drivers/gpu/drm/sun4i/sun8i_csc.c
+index 58480d8e4f704..6ebd1c3aa3ab5 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_csc.c
++++ b/drivers/gpu/drm/sun4i/sun8i_csc.c
+@@ -108,7 +108,7 @@ static const u32 yuv2rgb_de3[2][3][12] = {
+ };
+ 
+ static void sun8i_csc_set_coefficients(struct regmap *map, u32 base,
+-				       enum sun8i_csc_mode mode,
++				       enum format_type fmt_type,
+ 				       enum drm_color_encoding encoding,
+ 				       enum drm_color_range range)
+ {
+@@ -118,12 +118,12 @@ static void sun8i_csc_set_coefficients(struct regmap *map, u32 base,
+ 
+ 	table = yuv2rgb[range][encoding];
+ 
+-	switch (mode) {
+-	case SUN8I_CSC_MODE_YUV2RGB:
++	switch (fmt_type) {
++	case FORMAT_TYPE_YUV:
+ 		base_reg = SUN8I_CSC_COEFF(base, 0);
+ 		regmap_bulk_write(map, base_reg, table, 12);
+ 		break;
+-	case SUN8I_CSC_MODE_YVU2RGB:
++	case FORMAT_TYPE_YVU:
+ 		for (i = 0; i < 12; i++) {
+ 			if ((i & 3) == 1)
+ 				base_reg = SUN8I_CSC_COEFF(base, i + 1);
+@@ -141,7 +141,7 @@ static void sun8i_csc_set_coefficients(struct regmap *map, u32 base,
+ }
+ 
+ static void sun8i_de3_ccsc_set_coefficients(struct regmap *map, int layer,
+-					    enum sun8i_csc_mode mode,
++					    enum format_type fmt_type,
+ 					    enum drm_color_encoding encoding,
+ 					    enum drm_color_range range)
+ {
+@@ -151,12 +151,12 @@ static void sun8i_de3_ccsc_set_coefficients(struct regmap *map, int layer,
+ 
+ 	table = yuv2rgb_de3[range][encoding];
+ 
+-	switch (mode) {
+-	case SUN8I_CSC_MODE_YUV2RGB:
++	switch (fmt_type) {
++	case FORMAT_TYPE_YUV:
+ 		addr = SUN50I_MIXER_BLEND_CSC_COEFF(DE3_BLD_BASE, layer, 0);
+ 		regmap_bulk_write(map, addr, table, 12);
+ 		break;
+-	case SUN8I_CSC_MODE_YVU2RGB:
++	case FORMAT_TYPE_YVU:
+ 		for (i = 0; i < 12; i++) {
+ 			if ((i & 3) == 1)
+ 				addr = SUN50I_MIXER_BLEND_CSC_COEFF(DE3_BLD_BASE,
+@@ -206,7 +206,7 @@ static void sun8i_de3_ccsc_enable(struct regmap *map, int layer, bool enable)
+ }
+ 
+ void sun8i_csc_set_ccsc_coefficients(struct sun8i_mixer *mixer, int layer,
+-				     enum sun8i_csc_mode mode,
++				     enum format_type fmt_type,
+ 				     enum drm_color_encoding encoding,
+ 				     enum drm_color_range range)
+ {
+@@ -214,14 +214,14 @@ void sun8i_csc_set_ccsc_coefficients(struct sun8i_mixer *mixer, int layer,
+ 
+ 	if (mixer->cfg->is_de3) {
+ 		sun8i_de3_ccsc_set_coefficients(mixer->engine.regs, layer,
+-						mode, encoding, range);
++						fmt_type, encoding, range);
+ 		return;
+ 	}
+ 
+ 	base = ccsc_base[mixer->cfg->ccsc][layer];
+ 
+ 	sun8i_csc_set_coefficients(mixer->engine.regs, base,
+-				   mode, encoding, range);
++				   fmt_type, encoding, range);
+ }
+ 
+ void sun8i_csc_enable_ccsc(struct sun8i_mixer *mixer, int layer, bool enable)
+diff --git a/drivers/gpu/drm/sun4i/sun8i_csc.h b/drivers/gpu/drm/sun4i/sun8i_csc.h
+index 828b86fd0cabb..7322770f39f03 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_csc.h
++++ b/drivers/gpu/drm/sun4i/sun8i_csc.h
+@@ -22,14 +22,14 @@ struct sun8i_mixer;
+ 
+ #define SUN8I_CSC_CTRL_EN		BIT(0)
+ 
+-enum sun8i_csc_mode {
+-	SUN8I_CSC_MODE_OFF,
+-	SUN8I_CSC_MODE_YUV2RGB,
+-	SUN8I_CSC_MODE_YVU2RGB,
++enum format_type {
++	FORMAT_TYPE_RGB,
++	FORMAT_TYPE_YUV,
++	FORMAT_TYPE_YVU,
+ };
+ 
+ void sun8i_csc_set_ccsc_coefficients(struct sun8i_mixer *mixer, int layer,
+-				     enum sun8i_csc_mode mode,
++				     enum format_type fmt_type,
+ 				     enum drm_color_encoding encoding,
+ 				     enum drm_color_range range);
+ void sun8i_csc_enable_ccsc(struct sun8i_mixer *mixer, int layer, bool enable);
+diff --git a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+index f9c0a56d3a148..76e2d3ec0a78c 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
++++ b/drivers/gpu/drm/sun4i/sun8i_vi_layer.c
+@@ -242,19 +242,19 @@ static int sun8i_vi_layer_update_coord(struct sun8i_mixer *mixer, int channel,
+ 	return 0;
+ }
+ 
+-static u32 sun8i_vi_layer_get_csc_mode(const struct drm_format_info *format)
++static u32 sun8i_vi_layer_get_format_type(const struct drm_format_info *format)
+ {
+ 	if (!format->is_yuv)
+-		return SUN8I_CSC_MODE_OFF;
++		return FORMAT_TYPE_RGB;
+ 
+ 	switch (format->format) {
+ 	case DRM_FORMAT_YVU411:
+ 	case DRM_FORMAT_YVU420:
+ 	case DRM_FORMAT_YVU422:
+ 	case DRM_FORMAT_YVU444:
+-		return SUN8I_CSC_MODE_YVU2RGB;
++		return FORMAT_TYPE_YVU;
+ 	default:
+-		return SUN8I_CSC_MODE_YUV2RGB;
++		return FORMAT_TYPE_YUV;
+ 	}
+ }
+ 
+@@ -262,7 +262,7 @@ static int sun8i_vi_layer_update_formats(struct sun8i_mixer *mixer, int channel,
+ 					 int overlay, struct drm_plane *plane)
+ {
+ 	struct drm_plane_state *state = plane->state;
+-	u32 val, ch_base, csc_mode, hw_fmt;
++	u32 val, ch_base, fmt_type, hw_fmt;
+ 	const struct drm_format_info *fmt;
+ 	int ret;
+ 
+@@ -280,9 +280,9 @@ static int sun8i_vi_layer_update_formats(struct sun8i_mixer *mixer, int channel,
+ 			   SUN8I_MIXER_CHAN_VI_LAYER_ATTR(ch_base, overlay),
+ 			   SUN8I_MIXER_CHAN_VI_LAYER_ATTR_FBFMT_MASK, val);
+ 
+-	csc_mode = sun8i_vi_layer_get_csc_mode(fmt);
+-	if (csc_mode != SUN8I_CSC_MODE_OFF) {
+-		sun8i_csc_set_ccsc_coefficients(mixer, channel, csc_mode,
++	fmt_type = sun8i_vi_layer_get_format_type(fmt);
++	if (fmt_type != FORMAT_TYPE_RGB) {
++		sun8i_csc_set_ccsc_coefficients(mixer, channel, fmt_type,
+ 						state->color_encoding,
+ 						state->color_range);
+ 		sun8i_csc_enable_ccsc(mixer, channel, true);
+-- 
+2.45.2
+
 
