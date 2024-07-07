@@ -1,222 +1,170 @@
-Return-Path: <linux-clk+bounces-9232-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9234-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B40C3929A07
-	for <lists+linux-clk@lfdr.de>; Mon,  8 Jul 2024 00:38:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C36B3929A26
+	for <lists+linux-clk@lfdr.de>; Mon,  8 Jul 2024 01:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 690032812EA
-	for <lists+linux-clk@lfdr.de>; Sun,  7 Jul 2024 22:38:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33330B20D6D
+	for <lists+linux-clk@lfdr.de>; Sun,  7 Jul 2024 23:15:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771AE763EE;
-	Sun,  7 Jul 2024 22:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C07757F3;
+	Sun,  7 Jul 2024 23:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b="hOKbzxsM"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ewPYXFJN"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDFB18059;
-	Sun,  7 Jul 2024 22:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0060873459
+	for <linux-clk@vger.kernel.org>; Sun,  7 Jul 2024 23:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720391862; cv=none; b=pQRvkO0e2pn/kTxklhJsvrXObAN94Y8Lqq0OANUgOHo1g/ckKmcVGO60kCH2tYGjOb9OlVobskoRg+mFabBm5k2kbyIavREplZeszxPgFXhmsDvvD+f5GyL+AaAjBJJLFYslZJ2en38+O7uuKGy+25bC6BpMOj2U+Fhl2nqpzJE=
+	t=1720394097; cv=none; b=bez+b6hH8gvwwAHpshKyY71izGBMrwB1DIXXQrheEoQJ3/IIf9waMzh8SkGJIvQFGqODedWWN/Ga8TnGrZ0jt0WOxHiRhOUEdY+4HhYLVzcpUyOMdfn+sOatP2MLJpQszFUZX9HF7SSijnGN/06PGo954wHT/syTCgpVVkus1Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720391862; c=relaxed/simple;
-	bh=ScRaDhIpV127IN2u4IRMxbcJ62UMUy4jPlUrmCzVMKY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PhxrcX8yq9UKsLbIOiYMH1K6Nu3PQWBkBd2SmrIq6OecKC8sQzxtinE4vw1xfwuaACtnSIulAnNRL1R1dpGrvHMAKjcIwt2wNx8zLZ7nuaSixoT8zHtLisQuwwKWhIPLuSUumzhTbzdzn1ynybCTm/polvp7L24P9Y/VMJ1xhPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b=hOKbzxsM; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1720391853; x=1720996653; i=j.neuschaefer@gmx.net;
-	bh=6OXJA6Op8AyXGG0UDDxLGH3tvgeicFvPJqUw6T5kUbc=;
-	h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=hOKbzxsMT2Z1GyX9OwxlQ+9XPM6+mGdULGj8hltvpSZIL5yXLH2zBvg4GwhmOf6o
-	 XnIrrp8nqWM2ilWx4CxTz7DrbODRIe+cbgQDRkENhwvqXVOg9nmTgSxebylqcEcHs
-	 wcxMWh6KEPe5s3kX2ftcEGBL6CdEIGD46o0GgYjY6/J9XaNBoKQlT6sZFwnyPYuYQ
-	 49AxXuqG+k8rAvr1WRFgxulTOyuWsibZ5WQRUuYQEo6lhF+/KesM7dAisEXw1XgZ/
-	 JUHGPn5P/mIlG4NNlv6syrW4xW2kaznF29zz/tiunP/i+kyNleUJ0wzDkOOqTOJ8l
-	 2UQlsNmcrvc1VoRrTw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([89.0.46.161]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJmGZ-1sfm0i1AwT-00Vjvf; Mon, 08
- Jul 2024 00:37:33 +0200
-From: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Date: Mon, 08 Jul 2024 00:37:19 +0200
-Subject: [PATCH RESEND v12 6/6] ARM: dts: wpcm450: Switch clocks to clock
- controller
+	s=arc-20240116; t=1720394097; c=relaxed/simple;
+	bh=yZFi5pZp1oW2G21fgSpuRhjj3/eB4Licw18NvLGQj9w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=FtI50LXXyh6DgIgHdGqocxdtPu7wCuEKtS1NxXmbJSUkU25bLKPuCf8IbPDtkumqNaoMo8tL07B5eKYDDtF5eOCrwimq/F7Tp1mTmjDyebEb8Qp90JnZUG/1FwvczB0JTDOezANVxE0Hxg0cBKRbqca+S7PIZeC1mCTHr6KF2z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ewPYXFJN; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240707231446epoutp03a1f8a61edcc41a0ae56fb4118f49ab92~gEU6Ct_cL1821618216epoutp03o
+	for <linux-clk@vger.kernel.org>; Sun,  7 Jul 2024 23:14:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240707231446epoutp03a1f8a61edcc41a0ae56fb4118f49ab92~gEU6Ct_cL1821618216epoutp03o
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1720394086;
+	bh=xobr6YQ7biIVxx8NmpBX4wCIJtyvphHRZQs6WlydlXM=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=ewPYXFJNRJXakvseyCbF9fBxdqjokH8pOGhTZmJc8E625CdkXr/qBNdDhnbIzTALx
+	 wuJz9Xnel1C5idT/BbKOohxPShTdjSC0wgbjqIbk1ipHhKyFlgUzbDXEF6p7Wd/NoJ
+	 F0yKfxBirpRAqXcM2c8OMAlEZoHu805l/wsI0Y2g=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+	20240707231445epcas2p4d25d4a8236afdfea8cce9eb73a8c6a36~gEU5gwPzC3192831928epcas2p4g;
+	Sun,  7 Jul 2024 23:14:45 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.99]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4WHNPd4Xs8z4x9Pv; Sun,  7 Jul
+	2024 23:14:45 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+	epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+	EA.35.09485.5612B866; Mon,  8 Jul 2024 08:14:45 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240707231444epcas2p3f30eb5ec7aaef0315e135782b817b6e0~gEU4ab2ey0334303343epcas2p3T;
+	Sun,  7 Jul 2024 23:14:44 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240707231444epsmtrp2b4f63e9f9d3c3e4163111f9a565828f3~gEU4Zp_qu1206812068epsmtrp2r;
+	Sun,  7 Jul 2024 23:14:44 +0000 (GMT)
+X-AuditID: b6c32a46-19bfa7000000250d-f3-668b2165d265
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	2F.A8.18846.4612B866; Mon,  8 Jul 2024 08:14:44 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.60]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240707231444epsmtip1b0fe213ac55b0abf59f9d69b5fd7522b~gEU4M9gYA2495624956epsmtip1e;
+	Sun,  7 Jul 2024 23:14:44 +0000 (GMT)
+From: Sunyeal Hong <sunyeal.hong@samsung.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Sylwester Nawrocki
+	<s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar
+	<alim.akhtar@samsung.com>, Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>
+Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Sunyeal Hong <sunyeal.hong@samsung.com>
+Subject: [PATCH v2 0/4] initial clock support for exynosauto v920 SoC
+Date: Mon,  8 Jul 2024 08:13:27 +0900
+Message-ID: <20240707231331.3433340-1-sunyeal.hong@samsung.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmhW6qYneawdITwhYP5m1js1iz9xyT
+	xfUvz1kt5h85x2px/vwGdotNj6+xWnzsucdqcXnXHDaLGef3MVlcPOVq8X/PDnaLw2/aWS3+
+	XdvIYtG0bD2TA5/H+xut7B6bVnWyeWxeUu/Rt2UVo8fnTXIBrFHZNhmpiSmpRQqpecn5KZl5
+	6bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAdyoplCXmlAKFAhKLi5X07WyK8ktL
+	UhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwNDIxMgQoTsjM+NrYzF0zjrthx/hBLA+MD
+	ji5GTg4JAROJeSePsXQxcnEICexglFi79B4rSEJI4BOjxOX3MhAJIHvfviZmmI7Oy3NZIRI7
+	GSVa92xmh3A+MkpMmf8CaBYHB5uArsSffw4gcRGBPUwSW84vYQJxmAXOMkrcnbOAHWSUsICr
+	xPXmvWA2i4CqxLc9O8FW8ArYS2z92MsCsU5e4uKa52wQcUGJkzOfgMWZgeLNW2czgwyVEGjk
+	kHh7dgYTRIOLxKS7m6FsYYlXx7ewQ9hSEp/f7WWDsPMlJl9/ywTR3MAoce1fN9Rz9hKLzvxk
+	B3mBWUBTYv0ufRBTQkBZ4sgtqL18Eh2H/7JDhHklOtqEIBrVJD5duQw1REbi2IlnzBAlHhLt
+	bzxBTCGBWIlvJ1QmMMrPQvLLLCS/zELYuoCReRWjWGpBcW56arFRgRE8TpPzczcxglOqltsO
+	xilvP+gdYmTiYDzEKMHBrCTCe/pxe5oQb0piZVVqUX58UWlOavEhRlNg6E5klhJNzgcm9byS
+	eEMTSwMTMzNDcyNTA3Mlcd57rXNThATSE0tSs1NTC1KLYPqYODilGphqy6Ybp9xOClu8VX2R
+	aartLwX7rKviN2MNSromBf+aLHwjyp/zbdHk1/fZ5uy6dUxBimn9sTnPX4jJvGiKMU043Fue
+	2lHS2xs98fL2W+vOtzY9uqz5f8/9q3ueswg5Kzteqcs9cUPntoVoiA+395/MP3/2eMRsXJH0
+	JNbxb7XQ7sP9Tz93Whc+Vjv46If6kuNhsXOc7m/tSdzu0qD3+t12WSG2L2EKb7yt7ibvM8ha
+	ZJKjdFqidcaz3kli8az3Dyu7tmlNY3hk3n95k/AKp7kaD66dlHq70C2m40H4jc8XtzzWiXvg
+	ybqy/TZv+pdjX3uufHZeek1zk9wx27vLfu76emb25IQZSzpvr971QXTpFCWW4oxEQy3mouJE
+	ABX/9LwyBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDLMWRmVeSWpSXmKPExsWy7bCSnG6KYneawbXl2hYP5m1js1iz9xyT
+	xfUvz1kt5h85x2px/vwGdotNj6+xWnzsucdqcXnXHDaLGef3MVlcPOVq8X/PDnaLw2/aWS3+
+	XdvIYtG0bD2TA5/H+xut7B6bVnWyeWxeUu/Rt2UVo8fnTXIBrFFcNimpOZllqUX6dglcGR8b
+	25kLpnFX7Dh/iKWB8QFHFyMnh4SAiUTn5bmsXYxcHEIC2xklHj/dzwqRkJHY2PCfHcIWlrjf
+	cgQsLiTwnlHi0NmILkYODjYBXYk//xxAekUEDjFJTPz8lAXEYRa4zChx7O5kZpAGYQFXievN
+	e8EGsQioSnzbsxMszitgL7H1Yy8LxAJ5iYtrnrNBxAUlTs58AhZnBoo3b53NPIGRbxaS1Cwk
+	qQWMTKsYRVMLinPTc5MLDPWKE3OLS/PS9ZLzczcxggNcK2gH47L1f/UOMTJxMB5ilOBgVhLh
+	Pf24PU2INyWxsiq1KD++qDQntfgQozQHi5I4r3JOZ4qQQHpiSWp2ampBahFMlomDU6qByaDx
+	XZje+f+fzz6wNk3zmNu/e6HLy1/awg+Ou/3bYnkyS8ZxyrE75cylz/ntvxZtLmc96WO6MUPl
+	6YfnWnMtVv7+9D/Pedeb91U/7A7Irrt97tFzlmkv5N7w7BPm+2V+OehKiiXjeUaOzZ0BB29b
+	qnUxmvkzSndV9ARamx3y5U7gNzthsXJRU+Tay0YLZpxfYSLKXLbvwSW+WRsKbZfNN69N+ZTa
+	aDfxhIxK0rpw2RLxJbXN8yoeMhzSiLu6Mu/qwaofB7Zf57bJs2jR6/7avJux9/FtyY36Kl4F
+	C08c1Zm2q9+j7+3C9xdkr/AZezyed/Gwxf3mjwuruNg4b86fk+uyM/XN+mc7v/o9KmeM+6jE
+	UpyRaKjFXFScCAAWrRyE3wIAAA==
+X-CMS-MailID: 20240707231444epcas2p3f30eb5ec7aaef0315e135782b817b6e0
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <20240708-wpcm-clk-v12-6-1afac539c37d@gmx.net>
-References: <20240708-wpcm-clk-v12-0-1afac539c37d@gmx.net>
-In-Reply-To: <20240708-wpcm-clk-v12-0-1afac539c37d@gmx.net>
-To: openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, 
- Philipp Zabel <p.zabel@pengutronix.de>, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720391846; l=3443;
- i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
- bh=kTIwYF9CzV7EiefFtPbjPQBui0vN/ls9WsnRdurtK5Q=;
- b=Jvhw7ZM3sg31yGmqSFi0QKOVXKPvvAROu66FWKbLZAcKxN5/88ivEgrnqzKDsxkrK2dQjq4LR
- lEnoN2gxMbPD0tT/H9ln+/BJvKMw6b5dkadiK2UXV3lp778putQyqcj
-X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
- pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Provags-ID: V03:K1:Cfn7sVF9yJmxe/Rug/YHADGQRtYxP4GTFoYDHCfBOqRyejKpixx
- zjWkeIq3n1/umG4CO43FAvpr6GIJze1xiQGuHbMGYU5zWIJLwjXV/asPng+xmkb1EPegY5c
- 4aQjlXfAIPLEVRBx8r+F0XvrqLII4bVOhVsiONVGlouM+qIaDcbs/TR5616GQRMafq/AW4Q
- 22Nng/9LzJ/HWAzviFkmw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Z5q+TLdM1Og=;3GqVIYz92KmRvpvMABWudVwtk9q
- Trycz/qINNm5TyC0kML8Zf3GTSbjjzAlAexwK4fAo3ZBqxsjx1xXXiVesfmw75RBJQhCEIqM9
- 7CgWq7RL8GmNSJLVMnxsICjYOV7kP4tq2VGKFVjlV6l9v2d3qLRG+rNRzwnYhs3VlNkt+jFgD
- 7/iHo3vwzj5Rf9ilLsIrCnVW1efIT+ZTTd0lk0DJl3ZfLEH2HeyQ9SNnerVYpQOv7mEP9tzVo
- ZCowKaNKlDBN7XMmhiKvuPDcOEyNP2GFGv8q72YNLZAZSVVEPohhs7XYM5UqzGdVo/vaRySsm
- 90u235xz97YfCJvbFVRg3WthJnlmfm531/4RrtyzZ4jsA21bt4Nx2lZNWvrLn2d86GEag++v0
- IcSPb3ipgPoO2w5n5sTaPsHAZFUHu8QAMKClY0Ad5Dv7bWNaI56AHFyAzd9OD0sWti3rlaVgi
- 9FdCtbaDhzXudzLpVdZFIPeMRr9bG9f8eAdKaT8z7hmkCN80Q6sMPjUXhW/g+Ya/cpFY2vkPL
- 4XkvU65kWJTEiRv8WrtVcAJYt59hvkQ8PZluRJHt5CBqriWBgJL2gCrpLLxwbSuS9NrVY3Ql7
- XmFLYjfIBtPyP6KAvlirDQOH7nvZZzZ/ZI7CJv13SiLSq3tUGELno5IusnjUD2N1/hywY7rx3
- aUBkF5hoWWckj+UX1y8WIT6fWldMVCAPZMY635NJIEXbIHk+5ToiUMHJLInkxC7dGgj16WvOo
- VMHKDtj+aMW6/FC/f7E5/L++SbwjQY8x6xUOrgUQmaPbmDbQddAohJs5jRinyOtc/LLlekEUr
- +H9kSoOau6s00wfyUGvPCEIjLvJWmwTcczhksqcSjXN4o=
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240707231444epcas2p3f30eb5ec7aaef0315e135782b817b6e0
+References: <CGME20240707231444epcas2p3f30eb5ec7aaef0315e135782b817b6e0@epcas2p3.samsung.com>
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+This patchset adds initial clock driver support for Exynos Auto v920 SoC.
+This driver uses HW Auto Clock gating. So all gate clocks did not register.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+Below CMU blocks are supported in this patchset and remains will be
+implemented later.
 
-It's probably best to delay merging of this patch until after the driver
-is merged; I'm including it here for review, and in case someone wants
-to set up a shared branch between the clock and devicetree parts.
+- CMU_TOP
+- CMU_PERIC0
 
-v12:
-- work around timer-npcm7xx driver issue by providing timer clock separate=
-ly
+Changes in v2:
+ - Fix typo from v209 to v920
+ - Change USI clock to appropriate
+ - Merge headers into binding patches
+ - Change clock-name to the recommended name
 
-v11:
-- no changes
+Sunyeal Hong (4):
+  dt-bindings: clock: add Exynos Auto v920 SoC CMU bindings
+  arm64: dts: exynos: add initial CMU clock nodes in Exynos Auto v920
+  clk: samsung: clk-pll: Add support for pll_531x
+  clk: samsung: add top clock support for Exynos Auto v920 SoC
 
-v10:
-- Reintroducing this patch as part of the clock/reset controller series
-=2D--
- arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi | 32 ++++++++++++++++-----=
------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ .../clock/samsung,exynosautov920-clock.yaml   |  115 ++
+ .../arm64/boot/dts/exynos/exynosautov920.dtsi |   40 +-
+ drivers/clk/samsung/Makefile                  |    1 +
+ drivers/clk/samsung/clk-exynosautov920.c      | 1173 +++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 |   45 +
+ drivers/clk/samsung/clk-pll.h                 |    1 +
+ .../clock/samsung,exynosautov920.h            |  191 +++
+ 7 files changed, 1553 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynosautov920-clock.yaml
+ create mode 100644 drivers/clk/samsung/clk-exynosautov920.c
+ create mode 100644 include/dt-bindings/clock/samsung,exynosautov920.h
 
-diff --git a/arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi b/arch/arm/boo=
-t/dts/nuvoton/nuvoton-wpcm450.dtsi
-index ff153858801ccf..daf4d399ecab4c 100644
-=2D-- a/arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
-
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -30,13 +31,6 @@ cpu@0 {
- 		};
- 	};
-
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-ref {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -44,6 +38,19 @@ refclk: clock-ref {
- 		#clock-cells =3D <0>;
- 	};
-
-+	refclk_div2: clock-refdiv2 {
-+		/*
-+		 * reference oscillator divided by 2, as a workaround because
-+		 * the npcm7xx-timer driver needs its clock earlier than the
-+		 * clk-wpcm450 driver (as a platform driver) can provide it.
-+		 */
-+		compatible =3D "fixed-factor-clock";
-+		clocks =3D <&refclk>;
-+		#clock-cells =3D <0>;
-+		clock-mult =3D <1>;
-+		clock-div =3D <2>;
-+	};
-+
- 	soc {
- 		compatible =3D "simple-bus";
- 		#address-cells =3D <1>;
-@@ -70,7 +77,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -81,7 +88,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
-
-@@ -89,14 +96,15 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&refclk_div2>,
-+				 <&refclk_div2>;
- 		};
-
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
-
- 		aic: interrupt-controller@b8002000 {
-@@ -480,7 +488,7 @@ fiu: spi-controller@c8000000 {
- 			#size-cells =3D <0>;
- 			reg =3D <0xc8000000 0x1000>, <0xc0000000 0x4000000>;
- 			reg-names =3D "control", "memory";
--			clocks =3D <&clk 0>;
-+			clocks =3D <&clk WPCM450_CLK_FIU>;
- 			nuvoton,shm =3D <&shm>;
- 			status =3D "disabled";
- 		};
-
-=2D-
-2.43.0
+-- 
+2.45.2
 
 
