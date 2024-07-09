@@ -1,58 +1,63 @@
-Return-Path: <linux-clk+bounces-9336-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9338-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F14B392B987
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Jul 2024 14:32:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFFF292BBF5
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Jul 2024 15:52:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A5901F2409A
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Jul 2024 12:32:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A007B22C98
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Jul 2024 13:52:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263F715DBB9;
-	Tue,  9 Jul 2024 12:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C9A188CD7;
+	Tue,  9 Jul 2024 13:52:26 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7607C158203;
-	Tue,  9 Jul 2024 12:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7A01891D4;
+	Tue,  9 Jul 2024 13:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720528311; cv=none; b=gFFpE5+U8frQgF5gFPy+SiztGBxEXFCzbJFrpkNKejEtPpU6BVPWylq12InNefCmafib4qLOYVFoViejjjQUyY69ejb7XfpKnI493wPwNazkIJbhm3taac96a0Q5SP/rwdDf/pI6B/t6r5G6KkFjs4NF83I0WAuuwPAinKL70uo=
+	t=1720533146; cv=none; b=uVmhHq/esG19mE7T6zwHNqjnEUEsrVKTgtb/9Fsd3JZ7fmhpjPJg9WWJTkbkCfHgRhysXcxUKefWxq9GULavrCo/woDWKaBu3KZ3t+3g+n7LJG7JDvhbodBfR5s8isO7iOcmZM0LsySi2yTMy9DQJpNd3z4tvRwC+rLDax138bE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720528311; c=relaxed/simple;
-	bh=+q/lfmSkbMx1KbBQRYdQ9l6EhpiAU0lwIrUJmWJac04=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Tmrl6LAriqPW4i2sB77KwD6SVU1tJMD6yBRky/O7mkKDpNTf5UhF2IGQUCr5WXWRgMnoUnwsonqoK/SP//caWAJE1dOky3lWmw0d6fLrclCmi8Q7Fhcc7iqS6fQ/5PA+hIVAJZ+LoY0C6GRdX1cD/wsassn+xIryFswrM+0hVXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e860d18.versanet.de ([94.134.13.24] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sRA0V-00074P-Sp; Tue, 09 Jul 2024 14:31:43 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	quentin.schulz@cherry.de,
+	s=arc-20240116; t=1720533146; c=relaxed/simple;
+	bh=KWREAaBshbHzdY5KUeCwljWRcn8rSKpJkzi9/7oUFjs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Nk8pM9BIQ0ufco8e/GmMhbIAPRaDHxhqb7WOCbaTnN+Tdae7GfFhj12CZ316PvguseBZsbbXTEynvunDAoQUnHpi8lM0kJ8XhbGb0kLiLNL3/hJ8bk5jWV80c5feavUaFRzsPFE28UeP6xhA0tibW5lVsBjkTdSrgv0ruEIM3Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.09,195,1716217200"; 
+   d="scan'208";a="210808043"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 09 Jul 2024 22:52:23 +0900
+Received: from localhost.localdomain (unknown [10.226.92.130])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 687B843DEDAE;
+	Tue,  9 Jul 2024 22:52:18 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: [PATCH 6/6] arm64: dts: rockchip: add pinctrl for clk-generator gpio on rk3588-tiger
-Date: Tue,  9 Jul 2024 14:31:21 +0200
-Message-Id: <20240709123121.1452394-7-heiko@sntech.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240709123121.1452394-1-heiko@sntech.de>
-References: <20240709123121.1452394-1-heiko@sntech.de>
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v2 4/9] clk: renesas: r9a07g043: Add LCDC clock and reset entries
+Date: Tue,  9 Jul 2024 14:51:42 +0100
+Message-ID: <20240709135152.185042-5-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240709135152.185042-1-biju.das.jz@bp.renesas.com>
+References: <20240709135152.185042-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -61,44 +66,68 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Having pinctrl entries defined for used gpios is helpful as it makes
-sure the pin isn't used anywhere else.
+Add LCDC clock and reset entries to CPG driver.
 
-The somewhat similar rk3588-jaguar board has a pinctrl entry already,
-so add the same for rk3588-tiger.
-
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+v1->v2:
+ * No change.
+---
+ drivers/clk/renesas/r9a07g043-cpg.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi
-index 4c5be356fa7fe..fb5f1fa25fb9e 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi
-@@ -56,6 +56,8 @@ pcie_refclk: pcie-clock-generator {
- 		clock-frequency = <100000000>;
- 		clock-output-names = "pcie3_refclk";
- 		enable-gpios = <&gpio4 RK_PB4 GPIO_ACTIVE_HIGH>; /* PCIE30X4_CLKREQN_M1_L */
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pcie30x4_clkreqn_m1_l>;
- 		vdd-supply = <&vcca_3v3_s0>;
- 	};
+diff --git a/drivers/clk/renesas/r9a07g043-cpg.c b/drivers/clk/renesas/r9a07g043-cpg.c
+index 16acc95f3c62..f1ff3b0cb83b 100644
+--- a/drivers/clk/renesas/r9a07g043-cpg.c
++++ b/drivers/clk/renesas/r9a07g043-cpg.c
+@@ -52,6 +52,8 @@ enum clk_ids {
+ 	CLK_PLL5,
+ 	CLK_PLL5_500,
+ 	CLK_PLL5_250,
++	CLK_PLL5_FOUTPOSTDIV,
++	CLK_DSI_DIV,
+ #endif
+ 	CLK_PLL6,
+ 	CLK_PLL6_250,
+@@ -120,6 +122,7 @@ static const struct cpg_core_clk r9a07g043_core_clks[] __initconst = {
+ 	DEF_FIXED(".pll5", CLK_PLL5, CLK_EXTAL, 125, 1),
+ 	DEF_FIXED(".pll5_500", CLK_PLL5_500, CLK_PLL5, 1, 6),
+ 	DEF_FIXED(".pll5_250", CLK_PLL5_250, CLK_PLL5_500, 1, 2),
++	DEF_PLL5_FOUTPOSTDIV(".pll5_foutpostdiv", CLK_PLL5_FOUTPOSTDIV, CLK_EXTAL),
+ #endif
+ 	DEF_FIXED(".pll6", CLK_PLL6, CLK_EXTAL, 125, 6),
+ 	DEF_FIXED(".pll6_250", CLK_PLL6_250, CLK_PLL6, 1, 2),
+@@ -146,6 +149,8 @@ static const struct cpg_core_clk r9a07g043_core_clks[] __initconst = {
+ #ifdef CONFIG_ARM64
+ 	DEF_FIXED("M2", R9A07G043_CLK_M2, CLK_PLL3_533, 1, 2),
+ 	DEF_FIXED("M2_DIV2", CLK_M2_DIV2, R9A07G043_CLK_M2, 1, 2),
++	DEF_DSI_DIV("DSI_DIV", CLK_DSI_DIV, CLK_PLL5_FOUTPOSTDIV, CLK_SET_RATE_PARENT),
++	DEF_FIXED("M3", R9A07G043_CLK_M3, CLK_DSI_DIV, 1, 1),
+ #endif
+ };
  
-@@ -339,6 +341,12 @@ module_led_pin: module-led-pin {
- 		};
- 	};
- 
-+	pcie30x4 {
-+		pcie30x4_clkreqn_m1_l: pcie30x4-clkreqn-m1-l {
-+			rockchip,pins = <4 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
- 	usb3 {
- 		usb3_id: usb3-id {
- 			rockchip,pins =
+@@ -209,6 +214,12 @@ static const struct rzg2l_mod_clk r9a07g043_mod_clks[] = {
+ 				0x564, 2),
+ 	DEF_MOD("cru_aclk",     R9A07G043_CRU_ACLK, R9A07G043_CLK_M0,
+ 				0x564, 3),
++	DEF_COUPLED("lcdc_clka", R9A07G043_LCDC_CLK_A, R9A07G043_CLK_M0,
++				0x56c, 0),
++	DEF_COUPLED("lcdc_clkp", R9A07G043_LCDC_CLK_P, R9A07G043_CLK_ZT,
++				0x56c, 0),
++	DEF_MOD("lcdc_clkd",	R9A07G043_LCDC_CLK_D, R9A07G043_CLK_M3,
++				0x56c, 1),
+ #endif
+ 	DEF_MOD("ssi0_pclk",	R9A07G043_SSI0_PCLK2, R9A07G043_CLK_P0,
+ 				0x570, 0),
+@@ -309,6 +320,7 @@ static const struct rzg2l_reset r9a07g043_resets[] = {
+ 	DEF_RST(R9A07G043_CRU_CMN_RSTB, 0x864, 0),
+ 	DEF_RST(R9A07G043_CRU_PRESETN, 0x864, 1),
+ 	DEF_RST(R9A07G043_CRU_ARESETN, 0x864, 2),
++	DEF_RST(R9A07G043_LCDC_RESET_N, 0x86c, 0),
+ #endif
+ 	DEF_RST(R9A07G043_SSI0_RST_M2_REG, 0x870, 0),
+ 	DEF_RST(R9A07G043_SSI1_RST_M2_REG, 0x870, 1),
 -- 
-2.39.2
+2.43.0
 
 
