@@ -1,139 +1,124 @@
-Return-Path: <linux-clk+bounces-9410-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9420-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6990A92D1F6
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 14:50:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8B692D270
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 15:11:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25B672834E0
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 12:50:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C2091C23901
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 13:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1482190485;
-	Wed, 10 Jul 2024 12:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="U3krA5jB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4474D192B68;
+	Wed, 10 Jul 2024 13:10:57 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263741E4AF;
-	Wed, 10 Jul 2024 12:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223A6192B61
+	for <linux-clk@vger.kernel.org>; Wed, 10 Jul 2024 13:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720615847; cv=none; b=usIbXsf28on+ovkmWvGdq8wsr16OJmq/VUD26FX1Gird08GB7J5xy3WErF3H2/5L45OSWWITWbb+H+84LBS6kUyyeHAAyW+Up5sakeRhkYsfKd5oDd159ezKhxSP4bJrlZWaPktfGiyfFXi1la3B9b1fTSbJnlb04PG1bXySwKI=
+	t=1720617057; cv=none; b=Eu5If83FvNu8Uhzs/TMolpS95Ds4JEy7XdsoUGCqHTDyK5jhilsvoZSEVlm18UY4fqzqYxMdZk/P6i9Npwzt5kb2URDY32vs3I4/rzwIufTqiolYLODROCJ9gIOsHb/HbtFsZOgpQ267NRk6k+WkmlgEeTjXY7ge9E5SkCbMI+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720615847; c=relaxed/simple;
-	bh=sPxM8NaCsBvhlryktLPvPiUn7nj8vj/D3dzAifCOTmE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V2GywiEH1xUDHDnRxwsO5yr/Yo6YaR3nKbhR96kum+HJ9BMIpyZwAEAiXG42MKiziTP5tt7YMqCNMuq9NcLVJOXvwiC5FoWsM1a/D6zNM2dZSFYge9v//JhCr2A80IKZxirU+/+tVTikO95ZLFDxaiyNuFRxzrPw95elN4Q+gag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=U3krA5jB; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720615844;
-	bh=sPxM8NaCsBvhlryktLPvPiUn7nj8vj/D3dzAifCOTmE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U3krA5jBxVGjqTr4jjxuUNvlDgil7oP64q+KUqpJGEUP6+i1DMqZFNTgCHA14mqdx
-	 J5JZfEIQpi5VJYQUy69C3lWEaSVpab/097nZMmDl3ao9akZTBLsGtxcicNpKqehAKT
-	 asRnUAx+ysAr1FMXjKaX82z8pzzBE1tw7CdkqVsUt23rvqLRvO6v17QbYUSw/8ikbL
-	 gY7Cey1BX+s4I/0VkXwIfsQq0nh8Fo0BRiFehRHAQiHXD8MfMa6vZK+H3OMDDGbKn0
-	 knas+p3BJQZTxZK2ijQwlNZb6h37Ivo7P9jbduNRF1bXY8MFZ1QnqO6IagcLKVw99s
-	 vWrQ0q2hu9SCA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 304093780029;
-	Wed, 10 Jul 2024 12:50:43 +0000 (UTC)
-Message-ID: <23369ea1-12d2-4386-a8ac-431620b75e2e@collabora.com>
-Date: Wed, 10 Jul 2024 14:50:42 +0200
+	s=arc-20240116; t=1720617057; c=relaxed/simple;
+	bh=HLh/yn22aSDMr5VgxIVhK70/SBQGcxEryNkctjaaV2w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XKQysVwjlznCDh9vgFIYZseN5iQl4xw5fCdXsrJOUF9pecf2WSOjWvRb500TswOYQWtTcq/ynaGKgGDDxevQY0HDYFt+5OeASDGqSajEAzUQpQhBfl8CMfIlStE52fO9Q1PIOTIfnsj3414lJhqrDJZb1qre/ps86rjH4x+w0ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:2340:18a1:4138:37d2])
+	by laurent.telenet-ops.be with bizsmtp
+	id lpAp2C00B4znMfS01pApEw; Wed, 10 Jul 2024 15:10:50 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sRX5f-001cT3-PC;
+	Wed, 10 Jul 2024 15:10:49 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sRX5t-00CQBa-Ac;
+	Wed, 10 Jul 2024 15:10:49 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 00/14] clk: renesas: rcar-gen4: Fractional PLL improvements
+Date: Wed, 10 Jul 2024 15:10:34 +0200
+Message-Id: <cover.1720616233.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Aw: Re: [PATCH v1 0/4] add syscon requirement for mt7988
-To: Frank Wunderlich <frank-w@public-files.de>
-Cc: Frank Wunderlich <linux@fw-web.de>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Daniel Golle <daniel@makrotopia.org>,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org
-References: <20240709101328.102969-1-linux@fw-web.de>
- <126053ef-3bfb-47c2-aa17-eb1d26d99102@collabora.com>
- <trinity-93a5ed81-b890-4d49-bfec-1bbb1219cb65-1720611282583@3c-app-gmx-bs04>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <trinity-93a5ed81-b890-4d49-bfec-1bbb1219cb65-1720611282583@3c-app-gmx-bs04>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 10/07/24 13:34, Frank Wunderlich ha scritto:
-> Hi
-> 
->> Gesendet: Mittwoch, 10. Juli 2024 um 12:45 Uhr
->> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>
->> Betreff: Re: [PATCH v1 0/4] add syscon requirement for mt7988
->>
->> Il 09/07/24 12:13, Frank Wunderlich ha scritto:
->>> From: Frank Wunderlich <frank-w@public-files.de>
->>>
->>> Some nodes require the syscon fallback at least in u-boot when using
->>> OF_UPSTREAM.
->>>
->>> This is because uboot driver uses syscon_node_to_regmap in mtk_eth.c for
->>> "mediatek,toprgu", "mediatek,xfi_pll" and reset pointing to watchdog-node.
->>>
->>
->> I wonder what's the major blocker here to modify the u-boot driver to take
->> the upstream devicetree as-is, instead of using syscon_node_to_regmap?
-> 
-> in uboot there is no driver for all syscon and to handle parallel access this is done with the syscon fallback.
-> 
-> The syscon uclass is a small driver which is generic and only handle the regmap in global context.
-> 
-> In theory it could be possible that regmap is aquired twice when used from 2+ other drivers...to prevent this without
-> adding the syscon fallback each syscon needs a dedicated driver like in linux which does only syscon stuff (code
-> duplication at its best :) ).
-> 
-> of course i can use regmap_init_mem in the uboot ethernet driver
-> 
-> https://elixir.bootlin.com/u-boot/latest/source/drivers/core/regmap.c#L242
-> 
-> like it's done once for syscon-uclass.
-> 
-> but i will cause issues when a second device tries to access this regmap. So it was be much easier (for me) to add this
-> fallback and not writing 3 device-drivers in uboot doing the exactly same as syscon.
-> 
-> if you have a better idea how to handle it, let me know :)
-> 
+	Hi all,
 
-I see. The problem is that, from your description, it looks like u-boot
-uses that as a kind of workaround for concurrent access to MMIO...
+Currently, almost all PLLs on R-Car Gen4 SoCs are modelled as fixed
+divider clocks, based on the state of the mode pins.  The only exception
+is PLL2 on R-Car V4H, which uses a custom clock driver to support High
+Performance mode on the Cortex-A76 CPU cores.
 
-...looks like a good topic to discuss in the u-boot mailing lists.
+However, the boot loader stack may have changed the actual PLL
+configuration from the default, leading to incorrect clock frequencies.
+A typical sympton is a CPU core running much slower than reported by
+Linux.
 
-Definitely, the TOPRGU and the XFI PLL are not system controllers, so the actual
-"syscon" definition would be wrong for these, that's it.
+This patch series enhances PLL support on R-Car Gen4 support by
+obtaining the actual PLL configuration from the hardware.  As these PLLs
+can be configured for fractional multiplication, an old patch to add
+support fractional multiplication is revived, too.  Of course some
+cleanups are included, too.
 
-Cheers
+Note that struct rcar_gen4_cpg_pll_config still contains the default
+multipliers and dividers for PLL1/2/3/4/6, while they are no longer
+used. Probably they should be removed, too.  Or do you think we should
+retain them for documentation purposes>
 
-> regards Frank
-> 
->> Regards,
->> Angelo
-> 
+Thanks for your comments!
 
+Geert Uytterhoeven (14):
+  clk: renesas: rcar-gen4: Removed unused SSMODE_* definitions
+  clk: renesas: rcar-gen4: Clarify custom PLL clock support
+  clk: renesas: rcar-gen4: Use FIELD_GET()
+  clk: renesas: rcar-gen4: Use defines for common CPG registers
+  clk: renesas: rcar-gen4: Add support for fractional multiplication
+  clk: renesas: rcar-gen4: Add support for variable fractional PLLs
+  clk: renesas: rcar-gen4: Add support for fixed variable PLLs
+  clk: renesas: rcar-gen4: Add support for fractional 9.24 PLLs
+  clk: renesas: r8a779a0: Use defines for PLL control registers
+  clk: renesas: r8a779f0: Model PLL1/2/3/6 as fractional PLLs
+  clk: renesas: r8a779g0: Model PLL1/3/4/6 as fractional PLLs
+  clk: renesas: r8a779h0: Model PLL1/2/3/4/6 as fractional PLLs
+  clk: renesas: rcar-gen4: Remove unused variable PLL2 clock type
+  clk: renesas: rcar-gen4: Remove unused fixed PLL clock types
 
+ drivers/clk/renesas/r8a779a0-cpg-mssr.c |  25 +--
+ drivers/clk/renesas/r8a779f0-cpg-mssr.c |  18 +-
+ drivers/clk/renesas/r8a779g0-cpg-mssr.c |  26 +--
+ drivers/clk/renesas/r8a779h0-cpg-mssr.c |  22 +--
+ drivers/clk/renesas/rcar-gen4-cpg.c     | 209 ++++++++++++++++--------
+ drivers/clk/renesas/rcar-gen4-cpg.h     |  28 +++-
+ 6 files changed, 209 insertions(+), 119 deletions(-)
 
+-- 
+2.34.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
