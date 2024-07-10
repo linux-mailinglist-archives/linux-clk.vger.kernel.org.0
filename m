@@ -1,196 +1,131 @@
-Return-Path: <linux-clk+bounces-9432-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9434-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 079BA92D452
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 16:35:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 794D792D642
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 18:25:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B23B1C23148
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 14:35:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FA792878F5
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jul 2024 16:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D9B1940B3;
-	Wed, 10 Jul 2024 14:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879F9194C6F;
+	Wed, 10 Jul 2024 16:25:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mbxLu5p3"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="WGtZpZHg"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA53193455
-	for <linux-clk@vger.kernel.org>; Wed, 10 Jul 2024 14:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBCC191F8E
+	for <linux-clk@vger.kernel.org>; Wed, 10 Jul 2024 16:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720622120; cv=none; b=STvvryPt2uz9FqVNmWRq4h41fwxFUoaVqmfYpgQNmZ+hgdXKvo8gL8D7FTRejW3GoH4Wmtd+Faa4r7U0Mz3rUilENqxhwJVSh4NKDmLN0Adn7XXcDBQnYtDuVJMSGDD1RRnG+e8+cGBzcwfcDU+g7InkH2tDm2z0TH2EpmiAuG4=
+	t=1720628742; cv=none; b=YCN6s3DZBvNOQy1JS/geZIqV06V1hUPHayA1/CxPZkYNSbeFRAT2uIQIeH86ZxlpUqLUxbrMhmYU+0kvX/U70pr4I4logTDp8ZQJ8orEGKXkifbk9wkhgVe2kqN6nz+j4sVP83rujCsYgm7mUQcpARXJY7+WQMFvXAc99W51N+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720622120; c=relaxed/simple;
-	bh=7ZxJZY6gKoQFwNHdxiPGNOckl89lxdBAnIdeXwRvngo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=mFH03+XEreCRUr2QXhMcbEmfD0iCWXjeiJKc12xUrjXlNnYWv866mWTgE19mBrogkZUCBC9Y+R6BPv3jj5P8Pa8dRW/R6KWmmfdJ0CGhgQs3RIKhC4vUrRn+kT5HkLIAe/6n9HCJetRUjZhKen72Nzlrh1nlkK/OaqLHgWZzJCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mbxLu5p3; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240710143516euoutp01cfc69ef383d23d08d8b6c0c1b2e24391~g4LLgWVMm2586225862euoutp01A
-	for <linux-clk@vger.kernel.org>; Wed, 10 Jul 2024 14:35:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240710143516euoutp01cfc69ef383d23d08d8b6c0c1b2e24391~g4LLgWVMm2586225862euoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1720622116;
-	bh=aEBvXZqhS4HH+bJh8VEk5/tXzC2cbn/RN1jKxc/D+Ts=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=mbxLu5p3EamHhQp5Kew1KujYyRcsL3dho9oglRqdJgqt4zv6rtRO1N8Lr5tIy0bIe
-	 0bl7RjrJkC91tuiS+Q+o9e2Tcv+/LtFtegoSV8mbkXtim8exhI1RgpvxJ9CBzFiWKe
-	 UQt3fvjimOFNmTbFeHBSLZB43rkz6H4Fo9tRrbPE=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240710143516eucas1p105f3f6ae03c7dbfa3024557a3b6be453~g4LLG7kls0056600566eucas1p1v;
-	Wed, 10 Jul 2024 14:35:16 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id A6.5F.09875.32C9E866; Wed, 10
-	Jul 2024 15:35:16 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240710143515eucas1p259fa5a03cb56cc2b3d82d124fb8f1cb1~g4LKpxdnc2890628906eucas1p2-;
-	Wed, 10 Jul 2024 14:35:15 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240710143515eusmtrp2afbfab2c14d5a198be6ade93b7f9dfaa~g4LKpABwN2804928049eusmtrp2v;
-	Wed, 10 Jul 2024 14:35:15 +0000 (GMT)
-X-AuditID: cbfec7f4-9acd8a8000002693-a3-668e9c2375dd
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 71.D7.08810.32C9E866; Wed, 10
-	Jul 2024 15:35:15 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240710143513eusmtip12b69aa17ffc422426b00e9e44f936f53~g4LJAFqBO2253622536eusmtip1i;
-	Wed, 10 Jul 2024 14:35:13 +0000 (GMT)
-Message-ID: <0faacbeb-2ca3-4749-89a8-6dd81621a07d@samsung.com>
-Date: Wed, 10 Jul 2024 16:35:13 +0200
+	s=arc-20240116; t=1720628742; c=relaxed/simple;
+	bh=VDMzQNyBWvaX+LyDfnYeOkaGvtcpUr0lK9oczG4+IGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fxWapTGpy3dY+SKvAyHi4QAiUFxLvAd8cUtQc1PisGTaAIK6slY840eNIUnYOJWWiRmpUx9FUjiKfBFFnlYhUEYDSCRI708YWCzIdIxhmXHKD5igliNKsHY0XoRwOy4fuYtWmRZQ+AtWfs4wHwbie6MXQQbMsmZ+DcC53b/H8Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=WGtZpZHg; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42793fc0a6dso6123715e9.0
+        for <linux-clk@vger.kernel.org>; Wed, 10 Jul 2024 09:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720628737; x=1721233537; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Itoi30as1ngZorM3ajNlP04W8GNqyHTX6dO5FHlioKM=;
+        b=WGtZpZHg58HdTTXE8YKlB9nSMP8md21+j9dJNy8OCM9dfiCC3Ve3dB2du/E7ObhIDA
+         x31ol+LiPu7uyGxzM4rXhlqTG2Cb8qFHGbc6si24XD7t5OOxRV9i/565fCoQO1+E0Zzx
+         o55uv+BIos1YSZCjDv7okJWaUTvPETSim12nKH1w+q4A1ddGopDG91YnW85rJXvAl13k
+         ZyutIGhYRAUKGD0tMjJx+1wCtCRJ+kCwmUa1iMbm0DOWaBKY+3xWVO64zekjsLssTg5z
+         jMNUrqWRyqBlAtI3dlAN7x9lqWXzqJ7zK3MJpyhwNYIKyg0a5XgC4Qy59tMdIINJXtk6
+         RbVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720628737; x=1721233537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Itoi30as1ngZorM3ajNlP04W8GNqyHTX6dO5FHlioKM=;
+        b=nFJmdDy0uyns9ppUnVNX2nd17hAszBhUUtooa44Y1SXYxFsJKLYMtThvA9yaKM1A59
+         qBHXj+i+/1fPUBxYPfqn+K3cj5kEA+M8Q45x1NOww22jNEJWD7hk57iI0k+ThD3zqgB6
+         wjVKJTRAhA5ywtEbIWlxlkficmJ/3JezLJdnh0pGEWv/czRBnzemPkDUcGPYaKZYLIY4
+         FrdA0LKWM9SrulkKrZLHhktrsSAnq+A3vhVT0JYR6mQ1rzIskf+Ew+23dgfrO9rqhkTK
+         oJPcDuJ2nKsF4WTDz0JAsHVjwFYQseHl9/va6tqbY5qyY0pgCth4SbMG0oSl6Ycr9RkR
+         MGdA==
+X-Forwarded-Encrypted: i=1; AJvYcCWPZUIjTCsrYj5gQ+GPjfBamFRLeR/h7ORdmADFk7DUutmGOQi3sNj35nAhiN8NehggQzcKg2KHyYq24/owTzQaY88/IwgsZuWP
+X-Gm-Message-State: AOJu0YwuNG/2Q1oOSDKNhAz7nC/RXSGV5Ju04s0qjTklbFU6V2ZCV+JJ
+	+rfE/a332abelTMe9lX4usyg2b8CxKoKGgTAai8SYOeHSmJGmAc1Gm0EhZw7jr/dt/Tre3vrjdB
+	slzs=
+X-Google-Smtp-Source: AGHT+IE1axe6GsiYtkMrCX2P5tM+A5QO04JhIFS46IYKujHwCFH8Z6rIpT9i8hI5EvL/mtX58GBxMg==
+X-Received: by 2002:a05:600c:3ba9:b0:426:647b:1bf7 with SMTP id 5b1f17b1804b1-426708f151bmr40115925e9.32.1720628737303;
+        Wed, 10 Jul 2024 09:25:37 -0700 (PDT)
+Received: from toaster.lan ([2a01:e0a:3c5:5fb1:1c99:6356:8466:36cf])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4266f6e09e5sm88693815e9.5.2024.07.10.09.25.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jul 2024 09:25:36 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>,
+	Jan Dakinevich <jan.dakinevich@salutedevices.com>,
+	linux-kernel@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH 0/8] reset: amlogic: move audio reset drivers out of CCF
+Date: Wed, 10 Jul 2024 18:25:09 +0200
+Message-ID: <20240710162526.2341399-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] clk: samsung: gs101: don't mark non-essential
- (UART) clocks critical
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, Greg
-	Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
-	<jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Peter Griffin
-	<peter.griffin@linaro.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
-	<sboyd@kernel.org>, Sam Protsenko <semen.protsenko@linaro.org>, Tudor
-	Ambarus <tudor.ambarus@linaro.org>
-Cc: Will McVicker <willmcvicker@google.com>, kernel-team@android.com,
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20240710-gs101-non-essential-clocks-2-v3-2-5dcb8d040d1c@linaro.org>
+X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBKsWRmVeSWpSXmKPExsWy7djPc7oqc/rSDNZuZrJ4MG8bm8WWV5tZ
-	LNbsPcdkcf3Lc1aL+UfOsVo0L17PZvFurozFju0iFi9n3WOz2PT4GqvFx557rBaXd81hs5hx
-	fh+TxZnFvewWF0+5WmyY8Y/F4v+eHewWh9+0s1r8u7aRxeJ5H1DFp1txFqs+/Wd0EPPYtnsb
-	q8f7G63sHgs2lXpsWtXJ5nHn2h42j/1z17B7bF5S79G3ZRWjx+dNcgGcUVw2Kak5mWWpRfp2
-	CVwZMxbMYyo4KVLxcmojewPjXoEuRk4OCQETib+7ljN2MXJxCAmsYJQ4N2MXM4TzhVHiyMQl
-	rBDOZ0aJk3u+ssK0XPx0mB0isZxR4sWXTVD9Hxklll++xQRSxStgJ/HqwnywDhYBVYkdTxey
-	QMQFJU7OfAJmiwrIS9y/NYMdxBYWSJJYcOMV2DoRgWssEp+fPwQ7hFmgjUni4aVWZpAqZgFx
-	iVtP5oNtYBMwlOh628UGYnMKBErcPH0EqkZeonnrbGaIWx9xShw5ZdbFyAFku0isOBgDERaW
-	eHV8CzuELSPxfyfISC4gu51RYsHv+1DOBEaJhue3GCGqrCXunPvFBjKIWUBTYv0ufYiwo8Ts
-	jhcsEPP5JG68FYQ4gU9i0rbpzBBhXomONiGIajWJWcfXwa09eOES8wRGpVlIwTILyZOzkDwz
-	C2HvAkaWVYziqaXFuempxUZ5qeV6xYm5xaV56XrJ+bmbGIGJ8/S/4192MC5/9VHvECMTB+Mh
-	RgkOZiUR3vk3utOEeFMSK6tSi/Lji0pzUosPMUpzsCiJ86qmyKcKCaQnlqRmp6YWpBbBZJk4
-	OKUamBZsi3x6VzJKY4Pgrat10x3u7khV7vJN2fzaPDvK2OGx7AzdvKk3wrrSHq2TrfWYK+So
-	c14z917WhArNNfuSPrw9X+w/fRq37lHxqA/Kr6O/+pfoz/AQ2fA8vuq629/lV6cnXVgTl+gz
-	/WzsdIm8u/sPChVteHztzLnYrQVJkhK6wsJch5qnzlW8nlAmcnzJrMSJrdv6nn3lnnnveJeO
-	dtuxHZ57dxY91bD2kl8Qkxdt9O7Q6/bXns7s29eIT9Rxmf4mYmayX8ev24JxocvX64a7VvCK
-	W87ZO8Nr0ycDvyVGKTk3/J7IcGQq/P0u47VTdrVwkH/NmgNG0c92H93BuuGw8n6BnkvnJX0+
-	LG6dulOJpTgj0VCLuag4EQBlHAcPCwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupileLIzCtJLcpLzFFi42I5/e/4XV3lOX1pBoe7pSwezNvGZrHl1WYW
-	izV7zzFZXP/ynNVi/pFzrBbNi9ezWbybK2OxY7uIxctZ99gsNj2+xmrxseceq8XlXXPYLGac
-	38dkcWZxL7vFxVOuFhtm/GOx+L9nB7vF4TftrBb/rm1ksXjeB1Tx6VacxapP/xkdxDy27d7G
-	6vH+Riu7x4JNpR6bVnWyedy5tofNY//cNewem5fUe/RtWcXo8XmTXABnlJ5NUX5pSapCRn5x
-	ia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7GjAXzmApOilS8nNrI3sC4
-	V6CLkZNDQsBE4uKnw+xdjFwcQgJLGSUu/exkgkjISJyc1sAKYQtL/LnWxQZR9J5R4veDZWBF
-	vAJ2Eq8uzAcrYhFQldjxdCELRFxQ4uTMJ2C2qIC8xP1bM9hBbGGBJIkFN14B1XNwiAjcYJG4
-	agQyk1mgjUni19orrBALXjNK3F30hxmkgVlAXOLWk/lgy9gEDCW63oJcwcnBKRAocfP0Eaga
-	M4murV2MELa8RPPW2cwTGIVmIbljFpJRs5C0zELSsoCRZRWjSGppcW56brGhXnFibnFpXrpe
-	cn7uJkZgoth27OfmHYzzXn3UO8TIxMF4iFGCg1lJhHf+je40Id6UxMqq1KL8+KLSnNTiQ4ym
-	wMCYyCwlmpwPTFV5JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9TBycUg1M
-	+2Vnb+LP3x5z+emhpa9LOHlZ5LyNxBpPzUyMqIn8oFFfPuGB4bqSnbnKIdrPLI+0OERcjF53
-	UC9g79UvShsk/1/flNRSpDbtZe6rH6aPtq0+0XVkg55eBtMnn/hFJlN/cEkkp69y3vkj0XRa
-	vR3rN53LTm4/dkhr1USKOPOxMq23mBhx1+mAx8KG3asiE98Z17F91Z6Yf3p3w5ZIn6VfDRvm
-	rL1X/c6Uc2Jpd8yOol2HA80sn03uDT1qZVKm0e375IVNTpLl7RoNqSTPlGSpXTY3dx6K3pk0
-	0ff2kpy3KcKRxqUdycoutVdivL8GXBZ6vYPPbuVHf+lTb//wu1qn6fdXtj12YP5rKtiZslaJ
-	pTgj0VCLuag4EQAGpS7nnQMAAA==
-X-CMS-MailID: 20240710143515eucas1p259fa5a03cb56cc2b3d82d124fb8f1cb1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240710132933eucas1p1b4367ec7a3938a39e732b3079eff6f32
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240710132933eucas1p1b4367ec7a3938a39e732b3079eff6f32
-References: <20240710-gs101-non-essential-clocks-2-v3-0-5dcb8d040d1c@linaro.org>
-	<CGME20240710132933eucas1p1b4367ec7a3938a39e732b3079eff6f32@eucas1p1.samsung.com>
-	<20240710-gs101-non-essential-clocks-2-v3-2-5dcb8d040d1c@linaro.org>
 
-On 10.07.2024 15:29, André Draszik wrote:
-> The peric0_top1_ipclk_0 and peric0_top1_pclk_0 are the clocks going to
-> peric0/uart_usi, with pclk being the bus clock. Without pclk running,
-> any bus access will hang.
-> Unfortunately, in commit d97b6c902a40 ("arm64: dts: exynos: gs101:
-> update USI UART to use peric0 clocks") the gs101 DT ended up specifying
-> an incorrect pclk in the respective node and instead the two clocks
-> here were marked as critical.
->
-> Since then, the DT has been updated to use the correct clock in
-> commit 21e4e8807bfc ("arm64: dts: exynos: gs101: use correct clocks for
-> usi_uart") and the driver here should be corrected and the work-around
-> removed.
->
-> Note that this commit has the side-effect of causing earlycon to stop
-> to work sometime into the boot for two reasons:
->      * peric0_top1_ipclk_0 requires its parent gout_cmu_peric0_ip to be
->        running, but because earlycon doesn't deal with clocks that
->        parent will be disabled when none of the other drivers that
->        actually deal with clocks correctly require it to be running and
->        the real serial driver (which does deal with clocks) hasn't taken
->        over yet
->      * hand-over between earlycon and serial driver appears to be
->        fragile and clocks get enabled and disabled a few times, which
->        also causes register access to hang while earlycon is still
->        active
-> (A wordier explanation can also be found in [1])
->
-> Nonetheless we shouldn't keep these clocks running unconditionally just
-> for earlycon. Clocks should be disabled where possible. If earlycon is
-> required in the future, e.g. for debug, this commit can simply be
-> reverted (locally!).
->
-> Link: https://lore.kernel.org/all/d45de3b2bb6b48653842cf1f74e58889ed6783ae.camel@linaro.org/ [1]
-> Fixes: 893f133a040b ("clk: samsung: gs101: add support for cmu_peric0")
-> Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+This patchset follows the discussion about having reset driver in the
+clock tree [1]. Ideally those should reside in the reset part of tree.
 
-Frankly speaking I'm not sure that anyone will find this comment and do 
-local reverts before getting angry that earlycon doesn't work for his 
-device and wasting his time.
+Also the code of the amlogic reset driver is very similar between the 2
+trees and could use the same driver code.
 
-I think that it would be much better to check if earlycon is specified 
-in kernel's cmdline and if so, simply mark those problematic clocks 
-critical in this driver. Make this code hidden under 
-IS_ENABLED(CONFIG_SERIAL_EARLYCON) to avoid polluting release builds. 
-Any comments?
+This patchset moves the reset driver of audio clock controller of the
+g12 and sm1 SoC family to the reset tree, using the auxiliary bus.
 
-Best regards
+The infrastructure put in place is meant to be generic enough so we may
+eventually also move the reset drivers in the meson8b and aoclk clock
+controllers.
+
+Change since RFC [2]:
+ * Move the aux registration helper out of clock too.
+
+[1] https://lore.kernel.org/linux-clk/e3a85852b911fdf16dd9ae158f42b3ef.sboyd@kernel.org
+[2] https://lore.kernel.org/linux-clk/20240516150842.705844-1-jbrunet@baylibre.com
+
+Jerome Brunet (8):
+  reset: amlogic: convert driver to regmap
+  reset: amlogic: add driver parameters
+  reset: amlogic: split the device and platform probe
+  reset: amlogic: use reset number instead of register count
+  reset: amlogic: add reset status support
+  reset: amlogic: add toggle reset support
+  reset: amlogic: add auxiliary reset driver support
+  clk: amlogic: axg-audio: use the auxiliary reset driver
+
+ drivers/clk/meson/Kconfig                   |   1 +
+ drivers/clk/meson/axg-audio.c               | 109 +-------
+ drivers/reset/Kconfig                       |   1 +
+ drivers/reset/reset-meson.c                 | 285 ++++++++++++++++----
+ include/soc/amlogic/meson-auxiliary-reset.h |  23 ++
+ 5 files changed, 271 insertions(+), 148 deletions(-)
+ create mode 100644 include/soc/amlogic/meson-auxiliary-reset.h
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.43.0
 
 
