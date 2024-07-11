@@ -1,139 +1,214 @@
-Return-Path: <linux-clk+bounces-9506-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9508-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD63692ECEA
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Jul 2024 18:38:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA88C92ED35
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Jul 2024 18:57:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11DCA1C21E30
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Jul 2024 16:38:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9644D284A71
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Jul 2024 16:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE26516D32E;
-	Thu, 11 Jul 2024 16:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77A516DC33;
+	Thu, 11 Jul 2024 16:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bvhzre32"
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="EXI+/dSs"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0D716B751;
-	Thu, 11 Jul 2024 16:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F09616DC16
+	for <linux-clk@vger.kernel.org>; Thu, 11 Jul 2024 16:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720715936; cv=none; b=btRgliq0LZY6aC1ChccaPIePNc/gol0A5zUPCXL2iV/EY9VXobIT8cCUvCxalJq0O0R8CKwSZ7znTWRB+WPH0c3eVNFCPMT15MwWN5IierHja3V1AAVhfPl8HUNaThJl3I85jdZymTjz2Gm5BiV2+nWGb13xV/xwAGG7+3Ru+WE=
+	t=1720716990; cv=none; b=LPGqwuQE3ih5PpyQO3+4dLjD0gf5VI02c0iCqr1foZFv0nS9NpGoYeCXG4wjdG0wRte9pFLxf39dNRM7FGyTHuC/Ewz7qUkBLsKsZ0kemOQGJ4Q5tvNbwj6d2YKiMx9HEeQY656taI7hw+RYQ0GXLcDdHnfza7XB1rlDeBlSL+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720715936; c=relaxed/simple;
-	bh=UavMyNYF30mligF0aZsTuX6+8r35QoOCy1CLNriVcCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jwhv/cEJD0Gzr0e7E/J/VtDb68l4GhcwnFVifbgs1cOsuZQu5iOGWEEp9VmfVdAAZWj8NaC3tpFAkrGF98sKf36XGQaSpZ2TaciJGIYsJ1L/ryr36yiSVAF4yC4VbISIOQXtQv4zCijLWZ+65XqcAytgkbO7+QggKcc0+jNwk6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bvhzre32; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF90EC116B1;
-	Thu, 11 Jul 2024 16:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720715936;
-	bh=UavMyNYF30mligF0aZsTuX6+8r35QoOCy1CLNriVcCY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bvhzre32EPArcVCo0Eotud0PYlBrGvFWmS7Mnyn9DEMnZSI4rRFdZaHaWG/I3EM2Q
-	 GHvtDsl8jMNtwbFaw2zRkN9IltKzUMMKJmHRcnr6NylGmUa1sEbEiXQKkpP/Zcmg5K
-	 aMwxW4hzbyWxC9pMJ4Fq2GdCgm1NBHQWnawmQeosZAEVjlwGIho2NSRXMjipkSZRDu
-	 TDKXVsBkETA832fccWdFXleBCy8hYramdv5EJY+mIF0jin8Qg+IrbNxthc0Df83Ieg
-	 cBAspqn3HecDX3XkBfQaUFPtNiusvJdcas3yZxm42DTJ3vkzB6hr7T04Tklx/mRoZO
-	 RoQgDqwtrlo6Q==
-Date: Thu, 11 Jul 2024 10:38:55 -0600
-From: Rob Herring <robh@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Frank Wunderlich <frank-w@public-files.de>,
-	Frank Wunderlich <linux@fw-web.de>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Daniel Golle <daniel@makrotopia.org>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org
-Subject: Re: Aw: Re: [PATCH v1 0/4] add syscon requirement for mt7988
-Message-ID: <20240711163855.GA2369577-robh@kernel.org>
-References: <20240709101328.102969-1-linux@fw-web.de>
- <126053ef-3bfb-47c2-aa17-eb1d26d99102@collabora.com>
- <trinity-93a5ed81-b890-4d49-bfec-1bbb1219cb65-1720611282583@3c-app-gmx-bs04>
- <23369ea1-12d2-4386-a8ac-431620b75e2e@collabora.com>
+	s=arc-20240116; t=1720716990; c=relaxed/simple;
+	bh=1pS4EYjsNn3BXZfRuGoxZnqmwVe33N0u3aWOchDQoRA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aJrg4cH7F+Z7YLce/jS5F9TT74ECWRbadbsKAVlseE2AYbzRi59/JGISl+hIg6xFUPp35IXNEDdhdNrVyZ2HtJOOsEzGCGVvQ/FzLpVCuspnHqnP50VI8h6A2rBpKt1UxfRpQpOASietmE+FhnXe60MO0SMwi4VPLYUuEwJ65Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=EXI+/dSs; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-25e31d0a753so593973fac.1
+        for <linux-clk@vger.kernel.org>; Thu, 11 Jul 2024 09:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tenstorrent.com; s=google; t=1720716986; x=1721321786; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uhr3664pgzsPVbVM9TMlydj6PeeipJCxcTuOvriuu8Y=;
+        b=EXI+/dSsqIiCM+fOLkXUYhjI/bqGxiTHfV+4Wj7SxBsiA/guwzXQbbXMppRsYZH/Bx
+         epqq+Grv5EUGMKMdbzffbel2w9P6+wEPu/NUM9CfM6NDwgpLkB4Qb3YBo4QemLOVbSJ8
+         BlsKHrR8YJYwHOWNYj0QrJXTTeR0GSXT0w18jJfFEEjBviraib+c8wVYIWEoJ+Le1PY7
+         y9+By28DTu5yKfCsRXWUrYnT5Ln2DS/ZbM1nMwf6t9ToJOAUSKTokDv8s7ewfHLeRALW
+         jVxP3wUPCoIBZYwOdaOfjQZzCSk+8Qaf6OnJgY5oULLyzbWL4pKi30VD9vNmtTJUvzY8
+         h7jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720716986; x=1721321786;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Uhr3664pgzsPVbVM9TMlydj6PeeipJCxcTuOvriuu8Y=;
+        b=phLmMo+AuseyEf5nyIP/qPUErV8FpCFy/ddPAOZ0rybRyG8WVxbjZn5QkQQGlk991y
+         9evBPEwDmX1HEvrqKYoJRrpQ5yBtHTUCRWH4AflfIVM4vb3eQhgFx4vu+tl3PfZtTB89
+         l8fxpxvXZ4v6jtSD+zkHAIJ6pIfKlY72WvYQUZcavaIYKSuyfH9CM75EoBmOLfXCXcb4
+         eoztEZXowxAsD8YaFPIj3No46KnPRbz34Qo9qxQ6HhWMXTM/Wj5jycWC2JGqVDcIPiOF
+         WpKOC2WItBPJq1RVluq43eu5f51HSi0nTDwMugsS+JVu3riofbx6mQb/wgAbBrlTAtuL
+         llqw==
+X-Forwarded-Encrypted: i=1; AJvYcCXKsu7cdavmjpyg+gYYue8dps01gICRX+3+ouE+rEazK+O+7atDvY6c73HH/wNfnC9StJi7H6oTWtg9xURM6lfUI60U+D2dNnUW
+X-Gm-Message-State: AOJu0YwaHzhcjoMmPBHRBXR6DwX/Hyk/ErClk9oVPMEkxPp9JBmsuTLJ
+	deqTbJsZakeY/lOsmjMiNnsly6REFg8chYPKX1whdYUqQms3EHnCFJuuz4DTLAc=
+X-Google-Smtp-Source: AGHT+IE43ZJH2LFhQTINfIakZgTQfA50ql3uXt7MpIZiMFSUweWWsVGkY82v2L0BWYAP0CjJVvhIyA==
+X-Received: by 2002:a05:6870:c34c:b0:254:96ec:bc44 with SMTP id 586e51a60fabf-25eae88a6d3mr7072740fac.28.1720716986246;
+        Thu, 11 Jul 2024 09:56:26 -0700 (PDT)
+Received: from [127.0.1.1] ([2601:1c2:1802:170:5ee9:fea0:d9de:cee8])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-787089bc5f6sm1360038a12.92.2024.07.11.09.56.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jul 2024 09:56:25 -0700 (PDT)
+From: Drew Fustini <dfustini@tenstorrent.com>
+Subject: [PATCH v3 0/7] clk: thead: Add support for TH1520 AP_SUBSYS clock
+ controller
+Date: Thu, 11 Jul 2024 09:56:18 -0700
+Message-Id: <20240711-th1520-clk-v3-0-6ff17bb318fb@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <23369ea1-12d2-4386-a8ac-431620b75e2e@collabora.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALIOkGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDc0MD3ZIMQ1MjA93knGxdg8QUS3OzVKNEE6NUJaCGgqLUtMwKsGHRsbW
+ 1AH6BLJBcAAAA
+To: Jisheng Zhang <jszhang@kernel.org>, Guo Ren <guoren@kernel.org>, 
+ Fu Wei <wefu@redhat.com>, Yangtao Li <frank.li@vivo.com>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>, 
+ Emil Renner Berthing <emil.renner.berthing@canonical.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Drew Fustini <dfustini@tenstorrent.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720716985; l=5438;
+ i=dfustini@tenstorrent.com; s=20230430; h=from:subject:message-id;
+ bh=1pS4EYjsNn3BXZfRuGoxZnqmwVe33N0u3aWOchDQoRA=;
+ b=uEAXxeZVrDYQjqzTdPCnXigOhQhfpt9gooEApJADDF3FW5O8a32yNOYGEDqxwPmfWFi+XpfXd
+ aobxfmzc/KlABCFDshVCbYzVR+vHfZrdao9pTTGxtkUuNPVtDLJqQMr
+X-Developer-Key: i=dfustini@tenstorrent.com; a=ed25519;
+ pk=p3GKE9XFmjhwAayAHG4U108yag7V8xQVd4zJLdW0g7g=
 
-On Wed, Jul 10, 2024 at 02:50:42PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 10/07/24 13:34, Frank Wunderlich ha scritto:
-> > Hi
-> > 
-> > > Gesendet: Mittwoch, 10. Juli 2024 um 12:45 Uhr
-> > > Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>
-> > > Betreff: Re: [PATCH v1 0/4] add syscon requirement for mt7988
-> > > 
-> > > Il 09/07/24 12:13, Frank Wunderlich ha scritto:
-> > > > From: Frank Wunderlich <frank-w@public-files.de>
-> > > > 
-> > > > Some nodes require the syscon fallback at least in u-boot when using
-> > > > OF_UPSTREAM.
-> > > > 
-> > > > This is because uboot driver uses syscon_node_to_regmap in mtk_eth.c for
-> > > > "mediatek,toprgu", "mediatek,xfi_pll" and reset pointing to watchdog-node.
-> > > > 
-> > > 
-> > > I wonder what's the major blocker here to modify the u-boot driver to take
-> > > the upstream devicetree as-is, instead of using syscon_node_to_regmap?
-> > 
-> > in uboot there is no driver for all syscon and to handle parallel 
-> > access this is done with the syscon fallback.
-> > 
-> > The syscon uclass is a small driver which is generic and only 
-> > handle the regmap in global context.
-> > 
-> > In theory it could be possible that regmap is aquired twice when 
-> > used from 2+ other drivers...to prevent this without
-> > adding the syscon fallback each syscon needs a dedicated driver 
-> > like in linux which does only syscon stuff (code
-> > duplication at its best :) ).
-> > 
-> > of course i can use regmap_init_mem in the uboot ethernet driver
-> > 
-> > https://elixir.bootlin.com/u-boot/latest/source/drivers/core/regmap.c#L242
-> > 
-> > like it's done once for syscon-uclass.
-> > 
-> > but i will cause issues when a second device tries to access this 
-> > regmap. So it was be much easier (for me) to add this
-> > fallback and not writing 3 device-drivers in uboot doing the 
-> > exactly same as syscon.
-> > 
-> > if you have a better idea how to handle it, let me know :)
-> > 
-> 
-> I see. The problem is that, from your description, it looks like u-boot
-> uses that as a kind of workaround for concurrent access to MMIO...
-> 
-> ...looks like a good topic to discuss in the u-boot mailing lists.
-> 
-> Definitely, the TOPRGU and the XFI PLL are not system controllers, so the actual
-> "syscon" definition would be wrong for these, that's it.
+This series adds support for the AP sub-system clock controller in the
+T-Head TH1520 [1]. Yangtao Li originally submitted this series in May
+2023 [2]. Jisheng made additional improvements and then passed on the
+work in progress to me.
 
-While I'd prefer "syscon" never existed in the first place, I don't care 
-too much if it gets added here or not. U-boot's reasoning for wanting it 
-isn't really much better or worse than Linux's. Though if u-boot has 
-multiple drivers using it, seems like an abstraction is missing if Linux 
-doesn't need that.
+Link: https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf [1]
+Link: https://lore.kernel.org/all/20230515054402.27633-1-frank.li@vivo.com/ [2]
 
-Rob
+Changes in v3:
+ - dt-binding patch has been applied to clk-next by Stephen but I'm
+   keeping it in the series for completeness.
+ - move dt-bindings include after linux includes in driver
+ - change rate to u64 in th1520_pll_vco_recalc_rate()
+ - replace do_div() with normal division operation in both
+   th1520_pll_vco_recalc_rate() and th1520_pll_postdiv_recalc_rate()
+ - add static to ccu_mux structs: c910_i0_clk, c910_clk, uart_sclk
+
+Changes in v2: 
+ - Add clock property to the gpio nodes after Conor asked why they were
+   missing. These clock gates correspond to enable bits in PERI_CLK_CFG.
+ - Drop 2 cell address and size properties from the binding example per
+   Conor and add Reviewed-by from from Conor.
+ - Link: https://lore.kernel.org/linux-riscv/20240623-th1520-clk-v2-0-ad8d6432d9fb@tenstorrent.com/ 
+
+Changes in v1:
+ - Split th1520_clks into groups for gate, mux, div, pll
+ - Convert gate clocks to devm_clk_hw_register_gate_parent_data()
+ - Convert mux clocks to devm_clk_hw_register_mux_parent_data_table()
+ - Split the PLL recalculation into th1520_pll_vco_recalc_rate() and
+   th1520_pll_postdiv_recalc_rate(). Based on Emil's comments in v1,
+   add logic to handle the fractional portion of feedback divide value
+   when the delta-sigma modulator (DSM) is active.
+ - Drop clock-names from the binding per Stephan to avoid relying on
+   anything other than the cell index when describing clk_parent_data
+   (note: I dropped Rob's Rb because I changed the binding patch)
+ - Rename reg/reg2 to cfg0/cfg1 to match the SoC documentation
+ - Rename struct for pll clocks from ccu_mdiv to ccu_pll
+ - Rebase on v6.10-rc3, remove the dts node reordering patch from v3
+   now that it is in mainline
+ - Link: https://lore.kernel.org/linux-riscv/20240615-th1520-clk-v1-0-3ba4978c4d6b@tenstorrent.com/
+
+Changes in RFC v3:
+ - Drop redundant new line and unused clk label from the dts example in
+   the DT binding which I failed to fix in v2.
+ - Add patch [4] from Thomas Bonnefille that fixes dts node ordering in
+   th1520.dtsi. Conor has already merged it into riscv-dt-for-next so
+   the dts patches in this series are based on top of that.
+ - Remove fixed uart clock and converted uart DT nodes to use clocks
+   from the clock controller.
+ - Remove fixed apb clock and converted the dma controller and timer DT
+   nodes to use a clock from the clock controller.
+ - Made ccu_disable_helper() and ccu_enable_helper() to static functions
+ - Follow the advice from Stephen Boyd in Yangtao's original series to
+   not use strings for clk tree topology. Created clk_parent_data arrays
+   to be used with CLK_HW_INIT_PARENTS_DATA instead of parent strings.
+ - Rebase on top of v6.9-rc7
+ - Link: https://lore.kernel.org/all/20240506-th1520-clk-v3-0-085a18a23a7f@tenstorrent.com/
+
+Changes in RFC v2:
+ - squash the header file patch into the DT schema patch
+ - describe the changes I made to original series in the cover letter
+   instead of the individual patches
+ - fix my typo in my email address
+ - Link: https://lore.kernel.org/all/20240426-th1520-clk-v2-v2-0-96b829e6fcee@tenstorrent.com/
+
+Changes in RFC v1 compared to the original series:
+ - corrected the npu_clk enable bit
+ - deduplicated CLK_NPU and CLK_NPU_AXI number in header
+ - fixed c910_i0_clk reg typo
+ - fixed checkpatch and dt_binding_check warnings
+ - rebased on v6.9-rc5
+ - revised commit descriptions
+ - Link: https://lore.kernel.org/all/20240110-clk-th1520-v1-0-8b0682567984@tenstorrent.com/
+
+Thank you,
+Drew
+
+---
+Drew Fustini (7):
+      dt-bindings: clock: Document T-Head TH1520 AP_SUBSYS controller
+      clk: thead: Add support for T-Head TH1520 AP_SUBSYS clocks
+      riscv: dts: thead: Add TH1520 AP_SUBSYS clock controller
+      riscv: dts: thead: change TH1520 uart nodes to use clock controller
+      riscv: dts: thead: change TH1520 mmc nodes to use clock controller
+      riscv: dts: thead: update TH1520 dma and timer nodes to use clock controller
+      riscv: dts: thead: add clock to TH1520 gpio nodes
+
+ .../bindings/clock/thead,th1520-clk-ap.yaml        |   53 +
+ MAINTAINERS                                        |    3 +
+ arch/riscv/boot/dts/thead/th1520-beaglev-ahead.dts |   12 -
+ .../boot/dts/thead/th1520-lichee-module-4a.dtsi    |   12 -
+ arch/riscv/boot/dts/thead/th1520.dtsi              |   73 +-
+ drivers/clk/Kconfig                                |    1 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/thead/Kconfig                          |   12 +
+ drivers/clk/thead/Makefile                         |    2 +
+ drivers/clk/thead/clk-th1520-ap.c                  | 1089 ++++++++++++++++++++
+ include/dt-bindings/clock/thead,th1520-clk-ap.h    |   96 ++
+ 11 files changed, 1293 insertions(+), 61 deletions(-)
+---
+base-commit: 256abd8e550ce977b728be79a74e1729438b4948
+change-id: 20240710-th1520-clk-0ad976e2a42e
+
+Best regards,
+-- 
+Drew Fustini <dfustini@tenstorrent.com>
 
 
