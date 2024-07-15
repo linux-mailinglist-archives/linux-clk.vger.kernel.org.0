@@ -1,159 +1,142 @@
-Return-Path: <linux-clk+bounces-9606-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9608-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE6589312C0
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2024 13:04:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3E2B93139A
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2024 14:08:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E9E7283EE2
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2024 11:04:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E3262826FC
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2024 12:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 339341891C3;
-	Mon, 15 Jul 2024 11:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B5D18A93D;
+	Mon, 15 Jul 2024 12:08:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="CZDMmaSm"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587C1188CA4;
-	Mon, 15 Jul 2024 11:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4010518C16E;
+	Mon, 15 Jul 2024 12:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721041457; cv=none; b=RJmcoQopW9tQ7KfBPMt5WG4D1dbH99gnJoUXbEje4cp9ul8C1gkKrk4vd9VVqUZqIlstJLGEx8+JOqrkYA0WsCap62LkZVce97Wlub+Hz7D84EoFdZzmd4y6F1ebUW1KzzBgYK3fym/9K5m/WlznP+NznLsQOEiw+acgB1l/Y50=
+	t=1721045304; cv=none; b=kzUeWub8z5vr4j1Dke2ev7u4ajBxdhxjTuCY1YL20SDnM7EGgGpHtx1z8JndROECtHYHyvgRmivxRxs9UTuOOvZB0WB1C7jEQKgqAnTA98S9fuv2qRk3XB3HEQV4RTIAmNUDfmLymk9Ci/G0jnfiugDbQGSqNUN0Dt3N9bqHh5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721041457; c=relaxed/simple;
-	bh=jQZXPjC9rL31xUb9Is+Qs2L8/C+PL4JdLjc+3vJPBMw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rP1NLoZnlqJSKCTLH+wkb3dsQ86nPD6oFDnIkzk1Org8LPQ/CQgnEwzJ6HMq/TUABZiYpBC/Ndaw+AG6ggVociy9Ah1m+uVeaJJR+cbFd9XLLLs4TbYn3b4Sno89v+f3bbb47DHR9gEJvZ1qIXpPjB0p51WgM1v+ILy3hCBeUsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-Received: from i5e860d09.versanet.de ([94.134.13.9] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sTJV4-0006GM-M0; Mon, 15 Jul 2024 13:04:10 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 3/3] arm64: dts: rockchip: fix the pcie refclock oscillator on Rock 5 ITX
-Date: Mon, 15 Jul 2024 13:02:51 +0200
-Message-Id: <20240715110251.261844-4-heiko@sntech.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240715110251.261844-1-heiko@sntech.de>
-References: <20240715110251.261844-1-heiko@sntech.de>
+	s=arc-20240116; t=1721045304; c=relaxed/simple;
+	bh=eOzKsJZ68Zti0agSsF1k6ZKZakTJy8YwzojJ5tl+3zU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8KOTaszVeCjLb/ONCCNUxspYGNTynhY7wdjBpoT8C5dymqnV4Pitmy6brqq3gT8sVv05ApALRtUFux4cyyb2d9WFX+KZwGTzB7gxw8+KQpHZZJRqg22DaKQbYyxe0nlXMHSzGirWW9kQFwhMrec7qdeQe2F2ztAQX8ErevS9z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=CZDMmaSm; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
+Received: from p-infra-ksmg-sc-msk01.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id 4E3C1100006;
+	Mon, 15 Jul 2024 15:08:14 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 4E3C1100006
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1721045294;
+	bh=5vyLVI9BUcQiXbKOPPF+ePjGPjESIUWqofEKwJ2vX2o=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+	b=CZDMmaSmlR1cR5+XJuk0LCuwSj3cp/3MVs4Oq5Fvave73qp84CMlqkJbhrtoqhI/y
+	 ooCjE+gijiqfKUmTZEF3sRDEiveEl/9bNs5njX4qHU9KAszdw4J5s35csVZaxKCZ0N
+	 Ap8HyT/RfYzx3T0i0Ll91yR67I4JbTYv4Vdpm1mItML1MYRAqJxH6MwaXLLnOowd4Y
+	 H6hGUz4fxXyPzaZ7vthzcUp1qZKvKRu+hQo04m8V9lL1oou3034th9IMoC+bOfIips
+	 rX9dRBKGOoq3Q3jTfG3FhMQtHLaR8DySrz0LSELN/PIk3t112QB7Ruj/TUDXzZTXkP
+	 lq3RnABnT9CSA==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Mon, 15 Jul 2024 15:08:14 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m02.sberdevices.ru
+ (172.16.192.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 15 Jul
+ 2024 15:08:13 +0300
+Date: Mon, 15 Jul 2024 15:08:13 +0300
+From: Dmitry Rokosov <ddrokosov@salutedevices.com>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+CC: Neil Armstrong <neil.armstrong@linaro.org>, Jerome Brunet
+	<jbrunet@baylibre.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
+ Boyd <sboyd@kernel.org>, Kevin Hilman <khilman@baylibre.com>, Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>, Vladimir Zapolskiy
+	<vz@mleia.com>, Bjorn Andersson <andersson@kernel.org>, Chen-Yu Tsai
+	<wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+	<samuel@sholland.org>, Michal Simek <michal.simek@amd.com>,
+	<linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-msm@vger.kernel.org>, <linux-sunxi@lists.linux.dev>
+Subject: Re: [DMARC error][DKIM error] [PATCH 01/10] clk: meson: a1:
+ peripherals: Constify struct regmap_config
+Message-ID: <20240715120813.m74t5y2br6yfhurk@CAB-WSD-L081021>
+References: <20240703-clk-const-regmap-v1-0-7d15a0671d6f@gmail.com>
+ <20240703-clk-const-regmap-v1-1-7d15a0671d6f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240703-clk-const-regmap-v1-1-7d15a0671d6f@gmail.com>
+User-Agent: NeoMutt/20220415
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 186522 [Jul 15 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: ddrokosov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 24 0.3.24 186c4d603b899ccfd4883d230c53f273b80e467f, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:7.1.1,5.0.1;100.64.160.123:7.1.2;salutedevices.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;lists.infradead.org:7.1.1, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2024/07/15 09:24:00
+X-KSMG-LinksScanning: Clean, bases: 2024/07/15 09:25:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/15 05:41:00 #25996221
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-The Rock 5 ITX uses two PCIe controllers to drive both a M.2 slot and its
-SATA controller with 2 lanes each. The supply for the refclk oscillator is
-the same that supplies the M.2 slot, but the SATA controller port is
-supplied by a different rail.
+On Wed, Jul 03, 2024 at 11:50:14AM +0200, Javier Carrasco wrote:
+> `a1_periphs_regmap_cfg` is not modified and can be declared as const to
+> move its data to a read-only section.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-This leads to the effect that if the PCIe30x4 controller for the M.2
-probes first, everything works normally. But if the PCIe30x2 controller
-that is connected to the SATA controller probes first, it will hang on
-the first DBI read as nothing will have enabled the refclock before.
+Reviewed-by: Dmitry Rokosov <ddrokosov@salutedevices.com>
 
-Fix this by describing the clock generator with its supplies so that
-both controllers can reference it as needed.
+> ---
+>  drivers/clk/meson/a1-peripherals.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
+> index 99b5bc450446..728ad13924ad 100644
+> --- a/drivers/clk/meson/a1-peripherals.c
+> +++ b/drivers/clk/meson/a1-peripherals.c
+> @@ -2183,7 +2183,7 @@ static struct clk_regmap *const a1_periphs_regmaps[] = {
+>  	&dmc_sel2,
+>  };
+>  
+> -static struct regmap_config a1_periphs_regmap_cfg = {
+> +static const struct regmap_config a1_periphs_regmap_cfg = {
+>  	.reg_bits   = 32,
+>  	.val_bits   = 32,
+>  	.reg_stride = 4,
+> 
+> -- 
+> 2.40.1
+> 
+> 
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
 
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- .../boot/dts/rockchip/rk3588-rock-5-itx.dts   | 38 ++++++++++++++++++-
- 1 file changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts
-index d0b922b8d67e8..37bc53f2796fc 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts
-@@ -72,6 +72,15 @@ hdd-led2 {
- 		};
- 	};
- 
-+	/* Unnamed voltage oscillator: 100MHz,3.3V,3225 */
-+	pcie30_port0_refclk: pcie30_port1_refclk: pcie-voltage-oscillator {
-+		compatible = "voltage-oscillator";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+		clock-output-names = "pcie30_refclk";
-+		vdd-supply = <&vcc3v3_pi6c_05>;
-+	};
-+
- 	fan0: pwm-fan {
- 		compatible = "pwm-fan";
- 		#cooling-cells = <2>;
-@@ -146,13 +155,14 @@ vcc3v3_lan: vcc3v3_lan_phy2: regulator-vcc3v3-lan {
- 		vin-supply = <&vcc_3v3_s3>;
- 	};
- 
--	vcc3v3_mkey: regulator-vcc3v3-mkey {
-+	/* The PCIE30x4_PWREN_H controls two regulators */
-+	vcc3v3_mkey: vcc3v3_pi6c_05: regulator-vcc3v3-pi6c-05 {
- 		compatible = "regulator-fixed";
- 		enable-active-high;
- 		gpios = <&gpio1 RK_PA4 GPIO_ACTIVE_HIGH>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pcie30x4_pwren_h>;
--		regulator-name = "vcc3v3_mkey";
-+		regulator-name = "vcc3v3_pi6c_05";
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 		startup-delay-us = <5000>;
-@@ -513,6 +523,18 @@ &pcie30phy {
- 
- /* ASMedia ASM1164 Sata controller */
- &pcie3x2 {
-+	/*
-+	 * The board has a "pcie_refclk" oscillator that needs enabling,
-+	 * so add it to the list of clocks.
-+	 */
-+	clocks = <&cru ACLK_PCIE_2L_MSTR>, <&cru ACLK_PCIE_2L_SLV>,
-+		 <&cru ACLK_PCIE_2L_DBI>, <&cru PCLK_PCIE_2L>,
-+		 <&cru CLK_PCIE_AUX1>, <&cru CLK_PCIE2L_PIPE>,
-+		 <&pcie30_port1_refclk>;
-+	clock-names = "aclk_mst", "aclk_slv",
-+		      "aclk_dbi", "pclk",
-+		      "aux", "pipe",
-+		      "ref";
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pcie30x2_perstn_m1_l>;
- 	reset-gpios = <&gpio4 RK_PB0 GPIO_ACTIVE_HIGH>;
-@@ -522,6 +544,18 @@ &pcie3x2 {
- 
- /* M.2 M.key */
- &pcie3x4 {
-+	/*
-+	 * The board has a "pcie_refclk" oscillator that needs enabling,
-+	 * so add it to the list of clocks.
-+	 */
-+	clocks = <&cru ACLK_PCIE_4L_MSTR>, <&cru ACLK_PCIE_4L_SLV>,
-+		 <&cru ACLK_PCIE_4L_DBI>, <&cru PCLK_PCIE_4L>,
-+		 <&cru CLK_PCIE_AUX0>, <&cru CLK_PCIE4L_PIPE>,
-+		 <&pcie30_port0_refclk>;
-+	clock-names = "aclk_mst", "aclk_slv",
-+		      "aclk_dbi", "pclk",
-+		      "aux", "pipe",
-+		      "ref";
- 	num-lanes = <2>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pcie30x4_perstn_m1_l>;
 -- 
-2.39.2
-
+Thank you,
+Dmitry
 
