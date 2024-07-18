@@ -1,70 +1,70 @@
-Return-Path: <linux-clk+bounces-9785-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9787-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AED2934B58
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Jul 2024 11:58:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF632934B5A
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Jul 2024 11:58:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B49E01F24B77
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Jul 2024 09:58:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B4191F21EE7
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Jul 2024 09:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C69E812FF72;
-	Thu, 18 Jul 2024 09:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B690D137903;
+	Thu, 18 Jul 2024 09:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="AWpNlOPf"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="qel0Ge4u"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA15112C7F9
-	for <linux-clk@vger.kernel.org>; Thu, 18 Jul 2024 09:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4C1112D209
+	for <linux-clk@vger.kernel.org>; Thu, 18 Jul 2024 09:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721296690; cv=none; b=eklY2lPbuY2dBOaFSxuZpiJBewx9WMPwkiekZoRFkvVH1tEnB+DNgbUQm8zlj6ABKVqNly76oAKo0hXyMPJiwpRzK6MJIlWX1w30NxK5U/tJXolPcEW+q22mXc5uGI3kp7u4QPxioogE74FWy60tUqiDgeee8ViBvei8/lnS3EU=
+	t=1721296691; cv=none; b=QeG7pI0cBXp9oC+0DMam3cdFRrjuR8F6g7Ljzg1ZAZOUdzE4Gd1yBG3clUuDLCWKaO2Kr2WbeOvu/6vA1or/iExTsTzsTCkJV9HxHGCs8L0GSjrViMuRC9pqyA9XkjH5rffGKZnBc5zwR4ntvgvvnA2omTOsbeOcW6IRL9U7sVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721296690; c=relaxed/simple;
-	bh=5V9s/8uzgo6Nj/XypJWT48nWu3rbfdd76bKMSCUv6fs=;
+	s=arc-20240116; t=1721296691; c=relaxed/simple;
+	bh=sNK4ErMz2o48l417rUcSJGHPTYne7cRpAUMeOaIUetU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AS3ecZ+t09dmxtQ8O1qf5DEqRAvdvJlVB3uwwWW3YmZfZkIE+i975Xp+lUDEIVGsIzIeH2mMfNIUhOC5OQhjL8Qq35bE28Zm+P4zdfGiBa3O+PM7ceqg+LW2GIOaj2l8kt6ap/458UZN4kboyuXrQozXmXfuFBQv2cT6BMjExVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=AWpNlOPf; arc=none smtp.client-ip=209.85.221.54
+	 MIME-Version; b=I3iELTSvpyWOvZU3aCxkyxf38GxyA/90oCaaXvY51Evff/HKfoTHs6jMzLrR4d6Dc/bTORtkx6KlPjZle5KbZMouzIrHk2BcwsALcCksmceAqrKTt3mkNtZ4Y/gOmcOGOqBIDzltp+Iu7uVdPKye2Ad8+Q4DLeILq3xGUdZeyxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=qel0Ge4u; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3685a5e7d3cso260185f8f.1
-        for <linux-clk@vger.kernel.org>; Thu, 18 Jul 2024 02:58:08 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42726d6eca5so1016155e9.1
+        for <linux-clk@vger.kernel.org>; Thu, 18 Jul 2024 02:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1721296687; x=1721901487; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1721296688; x=1721901488; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=anoJ0A/eyMlcq4ZsnQ8nc5h5FKEq9eY7wJHK/pAFmYw=;
-        b=AWpNlOPfqCWv0ZzDdspuvs7tSG5SsQakSyLDj0qhLsG0idP2d8YuLydZ3VssmkMHPx
-         ciEzF5H1LobvYH4CJmctSysFGWFpPxnlkEKcx9MTtl5IoxYwN0L9MTzV4AESJ66C2MMF
-         uhnfWz+lLaIpQMHV1ca+SW/wqTVUVCbdSTnWQmwB1oKdJNkNdWC5/dD7L8TypKhZ4SXS
-         BFFnaiAAvXfJ2nxPT+mw8Wi9FmihnWOpcw4q1woUN1pJ3nkIwkj7QrgsADzmYYMWL+kk
-         VlQbjP0xa9tukHgYk5+D0mL6FxfsKlnyV9KLsm3ppzs8FhLvYKtNi207DxuyjMcnbtsW
-         lvbA==
+        bh=5xcwXqNbcAcoUEX6kCiLZbJmCheMKB1aLHCgp/Pjck8=;
+        b=qel0Ge4uV51zuheVcwRYlER5AW7vuB5cvxDmSFO8wutnk/dW3bnWrxrB6vcoeY1cSk
+         Og38SmBNL7pWVLJY8QuWkzGeOFxunCOYReNssBEQA0E1jr3YTOL9w4MzRxrYIdiH/JtC
+         BohnwYmqqTZcuSHzQH0eiR0l0qaW7+Wf+TzpsraRGPRx8w/2fiRHebZRRXExTUip7/H5
+         /roEVJyFZpEv7WVGW08wKSieFWsMXRR+vPU4i76aceezUcSBBCdYAFcpDcHQrmVpMGCL
+         uQtS1Jl4X0R28Oo75eTPlCAzgF7EbhXqOGyVGhhVCg4YFQylMcxaqWv/ePSR0W5NBiwd
+         UNbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721296687; x=1721901487;
+        d=1e100.net; s=20230601; t=1721296688; x=1721901488;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=anoJ0A/eyMlcq4ZsnQ8nc5h5FKEq9eY7wJHK/pAFmYw=;
-        b=n6kduqEMMi8IF8g+d/80ObhdfZgF8O6paOfrUnUrCw2jXjLF+Hnk0D7e7NPf9Rihgw
-         1SMDHt5GWSsvrLlJ9I2XyCYFMBvd9GQrCthbgjQSQ8GesBXjRXm2ikEjX7QpvacMEReD
-         q6EQmFQ4g+kZw8yd1cbHHlUvDaCk0XPZJ6ieMIXWbTsWAobZpvpwu2NAqY9ETJuFa7eY
-         zt6YBFA7X27bqjcCgStPJrRQsOWCC0xwfK4pNVgecQtZWMXOfPZ9Y08zhw7il218J2LR
-         vydbdN3gKUWoy+kH14qdaBhYZRtiLGsc9/aecYz4IDuXj/2ojVv0TGt/t+M8OU96C685
-         Y1YA==
-X-Forwarded-Encrypted: i=1; AJvYcCUp9wEoj0Hvhx75YxTdF/e/3R+9bmtTXjAd8BoseMvFEHaZB7JHZ/GkxlMBHRmAJh8NZniautvufsmCzvzbQd4VtfMTnPvdyxPC
-X-Gm-Message-State: AOJu0Yz/ZJE+HkO9uSPoGbgHD61yDl8z2eovlgbbFnJ4Oz1BIejpEYZ4
-	3YurNPCzHgXWbywcy9pPQe+sjO6ZszXm/lwmAk1F7w9h3aW+n8R+cb2mpp0nqRg=
-X-Google-Smtp-Source: AGHT+IGAJ2huYI+q7mn5ECdgrCiYMeaEBMdk8eW0Vl4o6RXhiCLf/tX+GMgpIK5T1/Tj+4ER838TOA==
-X-Received: by 2002:a05:6000:44:b0:367:9d2c:9602 with SMTP id ffacd0b85a97d-368316f8052mr4039827f8f.49.1721296687407;
-        Thu, 18 Jul 2024 02:58:07 -0700 (PDT)
+        bh=5xcwXqNbcAcoUEX6kCiLZbJmCheMKB1aLHCgp/Pjck8=;
+        b=hxTrwWPEzkMP/MS1SEJ4ggPhlBLa4VG1KlUdBEovs6uFj/l7/KKc6spl8eG3sCngAs
+         eQ4ZOPWbImWBYv4WYTkIPJNedHyrQMq4SfNwlWxQSMswqakrR++aPnxJ5yk64djwfWj7
+         RlIPKwCBfHY3xweN/+0gDLa3vEIfBTSV7530vyro91pxPwcJAt9bJjpj1tP6p1Pz2hJL
+         wna1DnRxAAWDpmXTQ2gF0NezGxCEWpQHk/xgTJ7hA51ay1Cl9zsGCSdJkhhaeSS4R4Tl
+         eWarTsUkBvUUwX0ohykiCqs2dgSpTHA+Lx9ZxH4s1zfwwXgcOXl8UJEcvdNhIVrDE2T6
+         VGDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX+T0f5v60dfz9qOc0zDYwoIdBY0I+ZCwzTfYRNSrFTmhJDNKcEKrWvRFUbybiBNYXtmZ4bzCtaTvV8rcbfXrBCw+VOO7IfcAMX
+X-Gm-Message-State: AOJu0YyT9n1Zm2DciA36a7/dObI+dDqakQnzCnplmaQduAwk9G6k64bh
+	gPW5272/lu4AtznPrBY8WiLS13uALUiyA2AvRlX5pRwnM/Q4mUVTLBudJ93h4/Y=
+X-Google-Smtp-Source: AGHT+IHUSAbObAZJT7KXYxyHY/CVrKUlSK4TOOFWbep8mWkhqc4o82VXvxTyvmakEMq8v31akCeXEQ==
+X-Received: by 2002:a05:600c:4443:b0:426:686f:cb4c with SMTP id 5b1f17b1804b1-427c2cf6b1emr29425735e9.32.1721296688224;
+        Thu, 18 Jul 2024 02:58:08 -0700 (PDT)
 Received: from toaster.lan ([2a01:e0a:3c5:5fb1:8d37:f44a:c212:e320])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3680dab3be3sm13837155f8f.24.2024.07.18.02.58.06
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3680dab3be3sm13837155f8f.24.2024.07.18.02.58.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 18 Jul 2024 02:58:07 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
@@ -76,9 +76,9 @@ Cc: Jerome Brunet <jbrunet@baylibre.com>,
 	linux-kernel@vger.kernel.org,
 	linux-amlogic@lists.infradead.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v2 5/9] reset: amlogic: use reset number instead of register count
-Date: Thu, 18 Jul 2024 11:57:49 +0200
-Message-ID: <20240718095755.3511992-6-jbrunet@baylibre.com>
+Subject: [PATCH v2 6/9] reset: amlogic: add reset status support
+Date: Thu, 18 Jul 2024 11:57:50 +0200
+Message-ID: <20240718095755.3511992-7-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240718095755.3511992-1-jbrunet@baylibre.com>
 References: <20240718095755.3511992-1-jbrunet@baylibre.com>
@@ -91,64 +91,62 @@ MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 
-The reset driver from audio clock controller may register less
-reset than a register can hold. To avoid making any change while
-switching to auxiliary support, use the number of reset instead of the
-register count to define the bounds of the reset controller.
+Add a callback to check the status of the level reset, as done in
+the reset driver of the audio clock controller.
+
+This is done keep the functionality when the audio reset controller
+get migrated to meson-reset.
 
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/reset/reset-meson.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/reset/reset-meson.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/reset/reset-meson.c b/drivers/reset/reset-meson.c
-index 09b23f320f57..5a5e1c2358b6 100644
+index 5a5e1c2358b6..b3ef1a1c7cf9 100644
 --- a/drivers/reset/reset-meson.c
 +++ b/drivers/reset/reset-meson.c
-@@ -17,7 +17,7 @@
- #include <linux/types.h>
+@@ -57,8 +57,7 @@ static int meson_reset_reset(struct reset_controller_dev *rcdev,
+ static int meson_reset_level(struct reset_controller_dev *rcdev,
+ 			    unsigned long id, bool assert)
+ {
+-	struct meson_reset *data =
+-		container_of(rcdev, struct meson_reset, rcdev);
++	struct meson_reset *data = container_of(rcdev, struct meson_reset, rcdev);
+ 	unsigned int offset, bit;
  
- struct meson_reset_param {
--	unsigned int reg_count;
-+	unsigned int reset_num;
- 	unsigned int reset_offset;
- 	unsigned int level_offset;
- 	bool level_low_reset;
-@@ -88,21 +88,21 @@ static const struct reset_control_ops meson_reset_ops = {
+ 	meson_reset_offset_and_bit(data, id, &offset, &bit);
+@@ -69,6 +68,22 @@ static int meson_reset_level(struct reset_controller_dev *rcdev,
+ 				  BIT(bit), assert ? BIT(bit) : 0);
+ }
+ 
++static int meson_reset_status(struct reset_controller_dev *rcdev,
++			      unsigned long id)
++{
++	struct meson_reset *data =
++		container_of(rcdev, struct meson_reset, rcdev);
++	unsigned int val, offset, bit;
++
++	meson_reset_offset_and_bit(data, id, &offset, &bit);
++	offset += data->param->level_offset;
++
++	regmap_read(data->map, offset, &val);
++	val = !!(BIT(bit) & val);
++
++	return val ^ data->param->level_low_reset;
++}
++
+ static int meson_reset_assert(struct reset_controller_dev *rcdev,
+ 			      unsigned long id)
+ {
+@@ -85,6 +100,7 @@ static const struct reset_control_ops meson_reset_ops = {
+ 	.reset		= meson_reset_reset,
+ 	.assert		= meson_reset_assert,
+ 	.deassert	= meson_reset_deassert,
++	.status		= meson_reset_status,
  };
  
  static const struct meson_reset_param meson8b_param = {
--	.reg_count	= 8,
-+	.reset_num	= 256,
- 	.reset_offset	= 0x0,
- 	.level_offset	= 0x7c,
- 	.level_low_reset = true,
- };
- 
- static const struct meson_reset_param meson_a1_param = {
--	.reg_count	= 3,
-+	.reset_num	= 96,
- 	.reset_offset	= 0x0,
- 	.level_offset	= 0x40,
- 	.level_low_reset = true,
- };
- 
- static const struct meson_reset_param meson_s4_param = {
--	.reg_count	= 6,
-+	.reset_num	= 192,
- 	.reset_offset	= 0x0,
- 	.level_offset	= 0x40,
- 	.level_low_reset = true,
-@@ -149,8 +149,7 @@ static int meson_reset_probe(struct platform_device *pdev)
- 				     "can't init regmap mmio region\n");
- 
- 	data->rcdev.owner = THIS_MODULE;
--	data->rcdev.nr_resets = data->param->reg_count * BITS_PER_BYTE
--		* regmap_config.reg_stride;
-+	data->rcdev.nr_resets = data->param->reset_num;
- 	data->rcdev.ops = &meson_reset_ops;
- 	data->rcdev.of_node = dev->of_node;
- 
 -- 
 2.43.0
 
