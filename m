@@ -1,45 +1,48 @@
-Return-Path: <linux-clk+bounces-9883-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9892-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2730C938E55
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 13:50:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C060F938EA3
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 13:59:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 589A51C20F6B
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 11:50:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44B84B20EB3
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 11:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB8C16D327;
-	Mon, 22 Jul 2024 11:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC0116D33A;
+	Mon, 22 Jul 2024 11:59:20 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F571288B5
-	for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 11:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BCE16D31F
+	for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 11:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721649046; cv=none; b=mTcndHnWLRx7J81r9SQ+k4IKUNwPwvkusBSB8oKa58/XCZGEdcykjG5nDQxR0udqhW55Jm40d/uDF/JzlwzuNES8jkgOcBDPUc/bu7QjI9auBqQhlczhfb/OTBEu3+4BgkyLyLxPZXbBOhTPfDNvc+2idG5HoxnQW2OVQgpAmlE=
+	t=1721649560; cv=none; b=BtV4FPCzWn9vLrnJypp9AEr7UO7gg7QoI60a2TS4ksQjRnB4N918vYZ92QankeDIo2tdQx8f5FBN8vlGxv1I61LiOoJd+Vn1m8NHIf6UpggHu5QnMMZxVbX3JrkT6KF3FGZkgRJATzZ9k2SE5kojNBYAD9Vl6AL2tmWfiXh93yI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721649046; c=relaxed/simple;
-	bh=z17gZ01wDDMdBg4K87TjRj6f7/4kfXUvn2XGiqCD1QY=;
+	s=arc-20240116; t=1721649560; c=relaxed/simple;
+	bh=1JGBM2c2i0taYR3WRvlCq854iuRTAD2V7HF0ASv/PVw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uwLJtxGnOEV4pTtrfHkZtnzW+qkU0n7AJ2kWqEjQJ97BT6KW91PijaVe+xSzGqvLQxDbSB4VFr6MaGnmP7XuuBloTWDPNj3SbAQqWSVSMP4a4Rda0OWTclwNDcu1DSWvDNhdPGX6TS616R/O8k0oBCp4TAehs2fhQrt+WlBAgh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
+	 MIME-Version; b=B73/Q0KBBtnqQsCfmjsabUYNgXVi5IJ33tHY8bclZSud9mxh3yyvQLCAvTgKqwmXp21ToHH2TC6jBL6g9biQVu0RaDk+7vLuDoYx0KW6oXzi1I4GziupcX5ztbQWXCwpiKwGunsxYW8TdfOqzqJUaKSTpAK/yDpLU2VtIGUqa9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4WSJWS2YRPz4x1Pd
+	for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 13:50:44 +0200 (CEST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:173b:9414:53f5:de4c])
-	by xavier.telenet-ops.be with bizsmtp
-	id qbqd2C0021wvoRx01bqd6R; Mon, 22 Jul 2024 13:50:37 +0200
+	by laurent.telenet-ops.be with bizsmtp
+	id qbqd2C0051wvoRx01bqdRA; Mon, 22 Jul 2024 13:50:37 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sVrYY-002zB3-E8;
+	id 1sVrYY-002zB6-En;
 	Mon, 22 Jul 2024 13:50:37 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1sVrYq-0020iS-Tf;
+	id 1sVrYq-0020iX-UQ;
 	Mon, 22 Jul 2024 13:50:36 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
@@ -48,9 +51,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v2 13/15] clk: renesas: rcar-gen4: Remove unused variable PLL2 clock type
-Date: Mon, 22 Jul 2024 13:50:33 +0200
-Message-Id: <8e5564958002351f29435f63de1304fb3b51a725.1721648548.git.geert+renesas@glider.be>
+Subject: [PATCH v2 14/15] clk: renesas: rcar-gen4: Remove unused fixed PLL clock types
+Date: Mon, 22 Jul 2024 13:50:34 +0200
+Message-Id: <c0229eb3518444f61173c6fb83bdcedb058dd079.1721648548.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1721648548.git.geert+renesas@glider.be>
 References: <cover.1721648548.git.geert+renesas@glider.be>
@@ -62,8 +65,8 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The variable PLL2 clock type was superseded by the more generic
-variable fractional 8.25 PLL clock type, and its sole user was converted.
+All users of the fixed default PLL2/3/4/6 clock types have been
+converted to fixed or variable fractional PLL clock types.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
@@ -71,42 +74,63 @@ Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 v2:
   - Add Reviewed-by.
 ---
- drivers/clk/renesas/rcar-gen4-cpg.c | 9 ---------
- drivers/clk/renesas/rcar-gen4-cpg.h | 1 -
- 2 files changed, 10 deletions(-)
+ drivers/clk/renesas/rcar-gen4-cpg.c | 20 --------------------
+ drivers/clk/renesas/rcar-gen4-cpg.h |  4 ----
+ 2 files changed, 24 deletions(-)
 
 diff --git a/drivers/clk/renesas/rcar-gen4-cpg.c b/drivers/clk/renesas/rcar-gen4-cpg.c
-index d3db602d7c5ec617..2a0f520d56b5aa96 100644
+index 2a0f520d56b5aa96..31aa790fd003d45e 100644
 --- a/drivers/clk/renesas/rcar-gen4-cpg.c
 +++ b/drivers/clk/renesas/rcar-gen4-cpg.c
-@@ -440,15 +440,6 @@ struct clk * __init rcar_gen4_cpg_clk_register(struct device *dev,
+@@ -440,31 +440,11 @@ struct clk * __init rcar_gen4_cpg_clk_register(struct device *dev,
  		div = cpg_pll_config->pll1_div;
  		break;
  
--	case CLK_TYPE_GEN4_PLL2_VAR:
--		/*
--		 * PLL2 is implemented as a custom clock, to change the
--		 * multiplier when cpufreq changes between normal and boost
--		 * modes.
--		 */
--		return cpg_pll_clk_register(core->name, __clk_get_name(parent),
--					    base, 2, &cpg_pll_v8_25_clk_ops);
+-	case CLK_TYPE_GEN4_PLL2:
+-		mult = cpg_pll_config->pll2_mult;
+-		div = cpg_pll_config->pll2_div;
+-		break;
 -
- 	case CLK_TYPE_GEN4_PLL2:
- 		mult = cpg_pll_config->pll2_mult;
- 		div = cpg_pll_config->pll2_div;
+-	case CLK_TYPE_GEN4_PLL3:
+-		mult = cpg_pll_config->pll3_mult;
+-		div = cpg_pll_config->pll3_div;
+-		break;
+-
+-	case CLK_TYPE_GEN4_PLL4:
+-		mult = cpg_pll_config->pll4_mult;
+-		div = cpg_pll_config->pll4_div;
+-		break;
+-
+ 	case CLK_TYPE_GEN4_PLL5:
+ 		mult = cpg_pll_config->pll5_mult;
+ 		div = cpg_pll_config->pll5_div;
+ 		break;
+ 
+-	case CLK_TYPE_GEN4_PLL6:
+-		mult = cpg_pll_config->pll6_mult;
+-		div = cpg_pll_config->pll6_div;
+-		break;
+-
+ 	case CLK_TYPE_GEN4_PLL2X_3X:
+ 		value = readl(base + core->offset);
+ 		mult = (FIELD_GET(CPG_PLLxCR_STC, value) + 1) * 2;
 diff --git a/drivers/clk/renesas/rcar-gen4-cpg.h b/drivers/clk/renesas/rcar-gen4-cpg.h
-index 80a455e62cc1321e..2dadacacf3f911e2 100644
+index 2dadacacf3f911e2..fccc3090c7c34b70 100644
 --- a/drivers/clk/renesas/rcar-gen4-cpg.h
 +++ b/drivers/clk/renesas/rcar-gen4-cpg.h
-@@ -13,7 +13,6 @@ enum rcar_gen4_clk_types {
+@@ -12,12 +12,8 @@
+ enum rcar_gen4_clk_types {
  	CLK_TYPE_GEN4_MAIN = CLK_TYPE_CUSTOM,
  	CLK_TYPE_GEN4_PLL1,
- 	CLK_TYPE_GEN4_PLL2,
--	CLK_TYPE_GEN4_PLL2_VAR,
+-	CLK_TYPE_GEN4_PLL2,
  	CLK_TYPE_GEN4_PLL2X_3X,	/* r8a779a0 only */
- 	CLK_TYPE_GEN4_PLL3,
- 	CLK_TYPE_GEN4_PLL4,
+-	CLK_TYPE_GEN4_PLL3,
+-	CLK_TYPE_GEN4_PLL4,
+ 	CLK_TYPE_GEN4_PLL5,
+-	CLK_TYPE_GEN4_PLL6,
+ 	CLK_TYPE_GEN4_PLL_F8_25,	/* Fixed fractional 8.25 PLL */
+ 	CLK_TYPE_GEN4_PLL_V8_25,	/* Variable fractional 8.25 PLL */
+ 	CLK_TYPE_GEN4_PLL_F9_24,	/* Fixed fractional 9.24 PLL */
 -- 
 2.34.1
 
