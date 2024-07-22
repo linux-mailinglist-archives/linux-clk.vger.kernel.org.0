@@ -1,83 +1,58 @@
-Return-Path: <linux-clk+bounces-9882-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-9898-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE992938DC1
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 12:58:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA5A6938EAD
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 13:59:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AAD2B20DCB
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 10:58:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 964621F21DFC
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jul 2024 11:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9027816CD21;
-	Mon, 22 Jul 2024 10:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cphgk2Sn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4575816D4CB;
+	Mon, 22 Jul 2024 11:59:24 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36E016C86A
-	for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 10:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D6A16D312
+	for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 11:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721645876; cv=none; b=brOkfnzcErLB/2DCeF6sPlR/aqUM4qijvGFr6nh1Lm+5Y6ot88Fjs09+JkGpmOMvWV5SKTYU72PlJ7kIAG4ZUNp6LVOFqWDAq/m47wZPeTuFowjESPgxp7iN8XzhtIdemVH2PmPb5ZV5zeTWIlUH+PHWq7m37m9eRkWmlnhiuGs=
+	t=1721649564; cv=none; b=O0jgUS90pHDO7ntVLcx0EihVvAhP/8rt4X2PD/vRUQOd4sPQdUheXo8Od2f+EGkVjek5m1DuGnG5SDwrGjXC1JVKAKePp2mX6zaMDLZBqMEfvT3taO9BRqpjrDHWahKARHatqGaAZk7CYSqH3iVnaXGJM69ZZDNT8ClFp3XYvcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721645876; c=relaxed/simple;
-	bh=OI9ivS0KG2RvRIz9Kdlx0Ag7Wy1NAEIIjtXE0CRf7TE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GDNrRVbmpoM2pUPOvKURKWOn8Jf+LtUfYmSQnyXJ+CD6edRGrYdme8MG41syIC9OP9GVCY+HbsbSLMLLYFmN21+nQoXaeWE5+M8J69VaQdJLJfUQ4BXikc7Xg3jCm8QnSrI8YVS65cEwMwpArEevWSl+kpLjFEzCds2gEGHWdj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cphgk2Sn; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fd9e6189d5so4595355ad.3
-        for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 03:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1721645873; x=1722250673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KlyfwInqQ9SWjZNJvK5iqTVzQocr8JHKV8CHQ/SRg5g=;
-        b=cphgk2Sn8FgSirVCSUkbTISzl778IHcWbKE2JBMnLzeFontkbCOzxGE9hcPHzsWZTx
-         2iHZP2Zc4WOkcodyvtzuj3CSYi2fV+49SE/rNqxPG0VpbqZbAvNyECeueF6cbT9Ozn+F
-         V7eBy67avkyhinp3+iR6nOaLD+1+5uFpQMedKvDpZ4puwiN+6ZBiy1yzBpdjv+1H45Ae
-         Jt9opuzvuEcoLlwtgJZ49A5d1OMck/OO2YsxJ2z3CvBTiTtawZ0/tEWw2X/3ltTByeXH
-         pxFTFENjeVUE3TVE6QEUOz9O4uaacoRz1Iyu1sHEnRf9nqnhRZ8byIJy7Wi10NMk5k6t
-         L2uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721645873; x=1722250673;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KlyfwInqQ9SWjZNJvK5iqTVzQocr8JHKV8CHQ/SRg5g=;
-        b=R/mN8zOSehZuxzkczJ3ww0a9RiPFbWdW87p0HuhcSv8D1kw4+3Q5ycbTo3jDzteHgq
-         mBtpM++zXNgAC6AEWy7SKFCKopeB+PiNYEHrCJDjtQtPWeKNOlFXD8d8JGyUoI4dhOpJ
-         BSaszbuPhsOcmUUcDQVUGFg68090BnEnaNIRkYhDmyQvS7/ux7qKyVG3ioHuKXklzYX4
-         8Mn2H+X5KGUMJ2mhTqy+OE+a9isGJ7vpmZxofn2kXLsafKfI3v0Q0RAll3obNlY737yP
-         +ORNckKDrx6wBE+mtXSlK0wvWdY3lGRiLbQQ5S0qT3eRNNg1SXDFpzgh9hWiyPlGHwhU
-         g57g==
-X-Forwarded-Encrypted: i=1; AJvYcCU7l13m0fGDnJZ4nqgxhg4BCuIcuQduupsuKbldJU6b62G+TW8FWrBXDGn7qQ4yp94hTkJp+0Usf0zhXvL8ZMSTH7g0SaeVnn0M
-X-Gm-Message-State: AOJu0Yzt7ita9mxthzyQkR9RBrAW0SkUtX+P1aZjP1m0LL1keY3/M522
-	nOysgcKND9INpIOuvido4p+8CqH3rXq0C/JZJv4d6Tf5QVeW5r/KnvoRJ/DhCw==
-X-Google-Smtp-Source: AGHT+IGzSZ/AeiRRay9oWlzAsexbnmsYckOBqmIpeLDEUB9QOhiN/310nuLGsNRvsdmRD1v3mLFznw==
-X-Received: by 2002:a05:6a21:670d:b0:1c2:8d2f:65f4 with SMTP id adf61e73a8af0-1c4229a42fbmr5153409637.44.1721645873135;
-        Mon, 22 Jul 2024 03:57:53 -0700 (PDT)
-Received: from localhost.localdomain ([120.60.138.134])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ccf808f050sm6683862a91.45.2024.07.22.03.57.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 03:57:52 -0700 (PDT)
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: andersson@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: linux-arm-msm@vger.kernel.org,
+	s=arc-20240116; t=1721649564; c=relaxed/simple;
+	bh=kUKb0P/kAOE7X/86n/cs1pl3V+fDiAJiredd6AqrnCc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SWa9KN75alMko44axH+krQ9F0sKmzLhowXMEacSkpCP4ZMlAPFWzF1rSBxKZaFGPsUs2/kVZstoNLcyjDs0VkIMfnQE6NtsKEmrVlLZqJtwQZBAJeBS0RZqvt4xrN4J9piEtMVuhGFNM7903Ey0gAEkrHRMdIaRUJ3lv4cAt7RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4WSJWS2lpLz4x0K8
+	for <linux-clk@vger.kernel.org>; Mon, 22 Jul 2024 13:50:44 +0200 (CEST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:173b:9414:53f5:de4c])
+	by michel.telenet-ops.be with bizsmtp
+	id qbqc2C00G1wvoRx06bqcKi; Mon, 22 Jul 2024 13:50:37 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sVrYY-002zAE-3X;
+	Mon, 22 Jul 2024 13:50:36 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sVrYq-0020hT-Gk;
+	Mon, 22 Jul 2024 13:50:36 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	stable@vger.kernel.org
-Subject: [PATCH] clk: qcom: gcc-sm8450: Do not turn off PCIe GDSCs during gdsc_disable()
-Date: Mon, 22 Jul 2024 16:27:33 +0530
-Message-Id: <20240722105733.13040-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 00/15] clk: renesas: rcar-gen4: Fractional PLL improvements
+Date: Mon, 22 Jul 2024 13:50:20 +0200
+Message-Id: <cover.1721648548.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -86,45 +61,71 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With PWRSTS_OFF_ON, PCIe GDSCs are turned off during gdsc_disable(). This
-can happen during scenarios such as system suspend and breaks the resume
-of PCIe controllers from suspend.
+	Hi all,
 
-So use PWRSTS_RET_ON to indicate the GDSC driver to not turn off the GDSCs
-during gdsc_disable() and allow the hardware to transition the GDSCs to
-retention when the parent domain enters low power state during system
-suspend.
+Currently, almost all PLLs on R-Car Gen4 SoCs are modelled as fixed
+divider clocks, based on the state of the mode pins.  The only exception
+is PLL2 on R-Car V4H, which uses a custom clock driver to support High
+Performance mode on the Cortex-A76 CPU cores.
 
-Cc: stable@vger.kernel.org # 5.17
-Fixes: db0c944ee92b ("clk: qcom: Add clock driver for SM8450")
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/clk/qcom/gcc-sm8450.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+However, the boot loader stack may have changed the actual PLL
+configuration from the default, leading to incorrect clock frequencies.
+A typical sympton is a CPU core running much slower than reported by
+Linux.
 
-diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
-index 639a9a955914..c445c271678a 100644
---- a/drivers/clk/qcom/gcc-sm8450.c
-+++ b/drivers/clk/qcom/gcc-sm8450.c
-@@ -2974,7 +2974,7 @@ static struct gdsc pcie_0_gdsc = {
- 	.pd = {
- 		.name = "pcie_0_gdsc",
- 	},
--	.pwrsts = PWRSTS_OFF_ON,
-+	.pwrsts = PWRSTS_RET_ON,
- };
- 
- static struct gdsc pcie_1_gdsc = {
-@@ -2982,7 +2982,7 @@ static struct gdsc pcie_1_gdsc = {
- 	.pd = {
- 		.name = "pcie_1_gdsc",
- 	},
--	.pwrsts = PWRSTS_OFF_ON,
-+	.pwrsts = PWRSTS_RET_ON,
- };
- 
- static struct gdsc ufs_phy_gdsc = {
+This patch series enhances PLL support on R-Car Gen4 support by
+obtaining the actual PLL configuration from the hardware.  As these PLLs
+can be configured for fractional multiplication, an old patch to add
+support fractional multiplication is revived, too.  Of course some
+cleanups are included, too.
+
+Changes compared to v1:
+  - Add Reviewed-by,
+  - Sort register definitions by register offset,
+  - Use mul_u64_u32_shr() and div64_ul() helpers,
+  - New patch "PATCH v2 15/15] clk: renesas: rcar-gen4: Remove unused
+    default PLL2/3/4/6 configs".
+
+I plan to queue this series in renesas-clk-for-v6.12.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (15):
+  clk: renesas: rcar-gen4: Removed unused SSMODE_* definitions
+  clk: renesas: rcar-gen4: Clarify custom PLL clock support
+  clk: renesas: rcar-gen4: Use FIELD_GET()
+  clk: renesas: rcar-gen4: Use defines for common CPG registers
+  clk: renesas: rcar-gen4: Add support for fractional multiplication
+  clk: renesas: rcar-gen4: Add support for variable fractional PLLs
+  clk: renesas: rcar-gen4: Add support for fixed variable PLLs
+  clk: renesas: rcar-gen4: Add support for fractional 9.24 PLLs
+  clk: renesas: r8a779a0: Use defines for PLL control registers
+  clk: renesas: r8a779f0: Model PLL1/2/3/6 as fractional PLLs
+  clk: renesas: r8a779g0: Model PLL1/3/4/6 as fractional PLLs
+  clk: renesas: r8a779h0: Model PLL1/2/3/4/6 as fractional PLLs
+  clk: renesas: rcar-gen4: Remove unused variable PLL2 clock type
+  clk: renesas: rcar-gen4: Remove unused fixed PLL clock types
+  clk: renesas: rcar-gen4: Remove unused default PLL2/3/4/6 configs
+
+ drivers/clk/renesas/r8a779a0-cpg-mssr.c |  35 ++--
+ drivers/clk/renesas/r8a779f0-cpg-mssr.c |  28 ++--
+ drivers/clk/renesas/r8a779g0-cpg-mssr.c |  36 ++--
+ drivers/clk/renesas/r8a779h0-cpg-mssr.c |  32 ++--
+ drivers/clk/renesas/rcar-gen4-cpg.c     | 210 ++++++++++++++++--------
+ drivers/clk/renesas/rcar-gen4-cpg.h     |  36 ++--
+ 6 files changed, 230 insertions(+), 147 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
