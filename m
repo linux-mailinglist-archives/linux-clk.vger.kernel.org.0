@@ -1,72 +1,72 @@
-Return-Path: <linux-clk+bounces-10063-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10065-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0918193DEDC
-	for <lists+linux-clk@lfdr.de>; Sat, 27 Jul 2024 12:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 255F593DEE3
+	for <lists+linux-clk@lfdr.de>; Sat, 27 Jul 2024 12:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B9831F23C73
-	for <lists+linux-clk@lfdr.de>; Sat, 27 Jul 2024 10:52:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D07D41F21834
+	for <lists+linux-clk@lfdr.de>; Sat, 27 Jul 2024 10:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057FF57CB1;
-	Sat, 27 Jul 2024 10:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C45C357CBB;
+	Sat, 27 Jul 2024 10:54:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="khJd4ew+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XLnTApE0"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D9E4A05
-	for <linux-clk@vger.kernel.org>; Sat, 27 Jul 2024 10:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316B54A05
+	for <linux-clk@vger.kernel.org>; Sat, 27 Jul 2024 10:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722077549; cv=none; b=Q0zga62Iev8Cc32NMwiXRO229lOrGKdaiGlC28e6RTPVLMipHOAVg1/X4H0KzLECmLIGrLgi/20nr9U0qpvohvwDSIKxRxl/clijHWV6BAb4Sxh4e9mUKYKcIO9nvD6j8hP1eu1Mw0IhAMUBSliCgkXjIQL9DIvEONKLMLj8H7g=
+	t=1722077684; cv=none; b=TNtNEKI1BaHzhuKHUExlvLCP8+9EdcXnMXoNkg8Ig9G94jM95ZZ1kUaJV0zGlviniCTq6mrKJYuv/EAXnLWGTvB/bjbyEoJu/LJ5upx4hcnPHkJewTzStJSjR2OHq2hAtxwY8pmZFwAnmrRpQUlHlZY6lYl7SykbvcBXk1ZRK0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722077549; c=relaxed/simple;
-	bh=Dq/S3mGmdRihp+JQyrTu5C6qBncgApK9D6D/aPhzwkM=;
+	s=arc-20240116; t=1722077684; c=relaxed/simple;
+	bh=U0cW14hOGmjNsCtNFpSGuYJ8n3+nXLxGtLEJ2RL0COY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LkTl6npP8DyMWeELqLQDjHlkX7x/S/7fKP+oY/7msDh4ErBJVqq7DFGipZcaaDSCc+JQj4DbIxPuoDbe5D8ePn8u1VpNO4RIWz9YivH3wg5RQIdCztgQjU1wavCrbFNVQk07eh7Mo5XGmpI89qV4C6cH3DbsnpBi3HbaFy2S/LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=khJd4ew+; arc=none smtp.client-ip=209.85.167.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lewo1JdhR1JlLWqYw7Yua6sA76g7YpV8ye4ge6xGvR5+Sa9f9VS+oRYssev6VwHPFPTWRXdwj08itvmJM+ykz/NgPk6WsFg4DaS2hqFozfHmWYOnX1/wkgcD6O1G71mopCZ20iz0d28ReqrgMdjDQUtRw7JinfsiD3IDjvnUNhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XLnTApE0; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52ed741fe46so2202589e87.0
-        for <linux-clk@vger.kernel.org>; Sat, 27 Jul 2024 03:52:28 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2f03df8c8cdso20092581fa.1
+        for <linux-clk@vger.kernel.org>; Sat, 27 Jul 2024 03:54:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722077546; x=1722682346; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1722077681; x=1722682481; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M39AnRc/yLkaurruReHwFcUb7PkkGNUB51pOqOiOq28=;
-        b=khJd4ew+Ba8EP6Qj69oPFBo3aWzx/NDEtIu8ZtjExdmwgv+LkbQaBsXo6S/1jD6F5I
-         Absy27nB3L+VRLrCkOVPm7jn3x0veN/0f/fOM4YAhJkmd1saqotFk6L8mkS+1ND5QA7I
-         RBVv96Th0fnI9VLyWc2cccRx5DdrhJhza8s9vWH7/AqZKkTtYh07IPqN1n3dx1aht+8k
-         8X4qAalMadQrBNiwqBZm1BrLlzraN+y+94yoiPZuDITresXTouwhcEt+rPMvCWedF9/q
-         WJBqkPIvHg2+eRzT9GBswUIcNsMaoXZ5vLhsur6jbod8PgRCuowRRRqa5Ewozc7zcjf/
-         vJOg==
+        bh=J1yuXFYSmqGWjRrtoMY+COK/UcsO/9oWsmcjq1KEBC8=;
+        b=XLnTApE0y/bCQ8NJuPQm86EmQeT67kuQdodTVeeQDuGW+OpBrEjeaZtPdEnS0ni0Nl
+         Txc8DMMiEMyYOexf7yr97CKDk5a03RxCVQ3EwEAGtDKqkfIwKKn7W39TSR4IuAO02Af8
+         BkLN2IIh91YW6yDH4z+Stdyu+BQ6AAnMIIfS1yFRjmvNvM4LLpPvTNHSUWRTJBdUcgxD
+         8KpWP8HUHBTdq1rSB6dOrnUNCx63mjEou0hQP08k2PiDbpulVyHfhYT65bHiRLlz16t/
+         q2Uvvf2TV689c6ckfdZL4uu2OTFJN0TjM9EX+at9wGpPjNdnMPc87rBdw/AgGz/aZS5d
+         FfAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722077546; x=1722682346;
+        d=1e100.net; s=20230601; t=1722077681; x=1722682481;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M39AnRc/yLkaurruReHwFcUb7PkkGNUB51pOqOiOq28=;
-        b=DPXmKoQ2YMpS6ZQP8RdB0mrpFBemHiBMSFKE3B1Sl6BeAA59Hc1u/UEd3oSyBXcKuE
-         pMk2pk3bACPh7oBTR3SpVeWmmMrzsj0wgW1pOoLodGLLRI9svw6m4pgCZSls7YN6wfe2
-         Iuh1EY2ejjvRrIuawwwo9FP08U1i5MMsoAr/lySW76c+ZwA86AxcSLvV/apLcOC01CmZ
-         4wB1AlIJDYQrKzmlQZYRdGbKOggzJmfo46yZlbcN4algOestEdXn2WV4URAtjsnzEpli
-         puWpcl4Th/FUW8GwfNcxvdawSPks/b+Z68PwQYdf1qjIT6wjAzzEaPJlYBMDBUFxs+Z5
-         cykw==
-X-Forwarded-Encrypted: i=1; AJvYcCWeztVRfE4/jvADVbyKW6TS+ZxZMpA1fTPLfQxvBjgkMtIEwABGp4JO63aQUpnm7FDdbXwF4RwfAD+wFbSlBVMkQSkN+2Oy4xbU
-X-Gm-Message-State: AOJu0YxksNr0WWRNxHJmtppSyMeJAG1z3Wj4HGIApCIumFw2V5zih0QV
-	A1FRQRspW98h2PJYwz4XJT6Pl6lWgQ9CA83ZT8yzWuxijNj9UH45jQMJHbLNOKk=
-X-Google-Smtp-Source: AGHT+IHEK+Ar+39CmHBEjPmZWaPhpcW/F/KwytZDZLq5IAKrn/S9+eIP36e2PYbbl90Ui4zs/Oh4GQ==
-X-Received: by 2002:ac2:4c87:0:b0:52f:cea6:69db with SMTP id 2adb3069b0e04-5309b2ce8d1mr1305559e87.51.1722077546351;
-        Sat, 27 Jul 2024 03:52:26 -0700 (PDT)
+        bh=J1yuXFYSmqGWjRrtoMY+COK/UcsO/9oWsmcjq1KEBC8=;
+        b=nFMmh01OjI27namIsaH4jg8L2grB7ANtNzAgqnHKzNXA1EhQoZ3HnkpI2EVlVnp7y9
+         9xCCR2WROp7MyUWVl+WgRUY7sVOaZVGcE2yhhe0ARFqaLvb/+HVsgrBte+PB6CDM4ij5
+         8aNc+qmPSFyVlAnSqfrzsDse/k8n01XTglDOj/SKUC6+sWDIcSrV9vNj1hoomYx/viOQ
+         K0at2C/Ce5IcsW1YLMbrYZgr7U9jj9v67dbS/hDxbO2I8P0vgbd+c2x+fDFSt2N7osEy
+         dEBjINfijCgPzhfmfichr/HzW1LjEbbrAWnZ5s1UwW14SqUXXUp1GdmH8ZZfW6ODvInM
+         ldhg==
+X-Forwarded-Encrypted: i=1; AJvYcCVR2yB0jKosAisy9lamRIAp9PnD2CsLQdGlZK+yQftK7MCwMCiJtMWOP1g2gz27+zkYXIRp8810pOuXBn2eeMDZ62ymOrQDTsUC
+X-Gm-Message-State: AOJu0Yyv0n10cDYfl2KGl+QVkAEk+HMucPVcYoEl04ZASLJZWHmI4tQs
+	zzwuFsni+mmBW8DBORcUJqFCG1xpdmXUuV1L71AX7Kh7NCifeLK7d3eFzHMsiP4=
+X-Google-Smtp-Source: AGHT+IHewVs2+keFyyL/KmniuMbAUW+TemAY4yE10PEGk3IoPwlLY5XUVA4Cr7qyLUObAyf9O0VpQg==
+X-Received: by 2002:a2e:321a:0:b0:2f0:1dd6:4430 with SMTP id 38308e7fff4ca-2f12f0cd2f8mr6130941fa.11.1722077681361;
+        Sat, 27 Jul 2024 03:54:41 -0700 (PDT)
 Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5bcfec0sm733378e87.64.2024.07.27.03.52.25
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f03cf0e356sm6554731fa.27.2024.07.27.03.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 03:52:25 -0700 (PDT)
-Date: Sat, 27 Jul 2024 13:52:24 +0300
+        Sat, 27 Jul 2024 03:54:41 -0700 (PDT)
+Date: Sat, 27 Jul 2024 13:54:39 +0300
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
 Cc: Bjorn Andersson <andersson@kernel.org>, 
@@ -76,11 +76,11 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
 	Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
 	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	devicetree@vger.kernel.org
-Subject: Re: [PATCH 4/4] clk: qcom: gcc-sc8180x: Fix the sdcc2 and sdcc4
- clocks freq table
-Message-ID: <ezpxuw2eduh6i4lum2mb2627l7beoi6k4bchngustt6pyhuzmh@hpzfw3jiulud>
+Subject: Re: [PATCH 1/4] clk: qcom: gcc-sc8180x: Register QUPv3 RCGs for DFS
+ on sc8180x
+Message-ID: <g4etw2efnugdsv73ejbbqfxmumy5m3oqzkpeqexzpgzlxsms5r@u62f5jcskqfd>
 References: <20240725-gcc-sc8180x-fixes-v1-0-576a55fe4780@quicinc.com>
- <20240725-gcc-sc8180x-fixes-v1-4-576a55fe4780@quicinc.com>
+ <20240725-gcc-sc8180x-fixes-v1-1-576a55fe4780@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -89,51 +89,22 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240725-gcc-sc8180x-fixes-v1-4-576a55fe4780@quicinc.com>
+In-Reply-To: <20240725-gcc-sc8180x-fixes-v1-1-576a55fe4780@quicinc.com>
 
-On Thu, Jul 25, 2024 at 05:03:14PM GMT, Satya Priya Kakitapalli wrote:
-> Update the frequency tables of gcc_sdcc2_apps_clk and gcc_sdcc4_apps_clk
-> as per the latest frequency plan.
+On Thu, Jul 25, 2024 at 05:03:11PM GMT, Satya Priya Kakitapalli wrote:
+> QUPv3 clocks support DFS, thus register the RCGs which require
+> support for DFS.
+
+From the commit message it is not clear if the patch fixes the issue
+(and thus should have Fixes and possibly cc:stable) or an improvement.
+
 > 
-> Fixes: 4433594bbe5d ("clk: qcom: gcc: Add global clock controller driver for SC8180x")
 > Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-
-Fixes should come first in the series. Also consider following stable
-kernel process. If possible, describe the reason for the changes.
-
-
 > ---
->  drivers/clk/qcom/gcc-sc8180x.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  drivers/clk/qcom/gcc-sc8180x.c | 350 ++++++++++++++++++++++++-----------------
+>  1 file changed, 210 insertions(+), 140 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/gcc-sc8180x.c b/drivers/clk/qcom/gcc-sc8180x.c
-> index f9f3e1254ce1..e85e75792ac3 100644
-> --- a/drivers/clk/qcom/gcc-sc8180x.c
-> +++ b/drivers/clk/qcom/gcc-sc8180x.c
-> @@ -974,7 +974,7 @@ static const struct freq_tbl ftbl_gcc_sdcc2_apps_clk_src[] = {
->  	F(25000000, P_GPLL0_OUT_MAIN, 12, 1, 2),
->  	F(50000000, P_GPLL0_OUT_MAIN, 12, 0, 0),
->  	F(100000000, P_GPLL0_OUT_MAIN, 6, 0, 0),
-> -	F(200000000, P_GPLL0_OUT_MAIN, 3, 0, 0),
-> +	F(202000000, P_GPLL9_OUT_MAIN, 4, 0, 0),
->  	{ }
->  };
->  
-> @@ -997,9 +997,8 @@ static const struct freq_tbl ftbl_gcc_sdcc4_apps_clk_src[] = {
->  	F(400000, P_BI_TCXO, 12, 1, 4),
->  	F(9600000, P_BI_TCXO, 2, 0, 0),
->  	F(19200000, P_BI_TCXO, 1, 0, 0),
-> -	F(37500000, P_GPLL0_OUT_MAIN, 16, 0, 0),
->  	F(50000000, P_GPLL0_OUT_MAIN, 12, 0, 0),
-> -	F(75000000, P_GPLL0_OUT_MAIN, 8, 0, 0),
-> +	F(100000000, P_GPLL0_OUT_MAIN, 6, 0, 0),
->  	{ }
->  };
->  
-> 
-> -- 
-> 2.25.1
-> 
+
 
 -- 
 With best wishes
