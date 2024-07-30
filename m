@@ -1,266 +1,276 @@
-Return-Path: <linux-clk+bounces-10172-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10175-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC0FD940C47
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Jul 2024 10:50:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B08B940F11
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jul 2024 12:26:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B3ABB27F58
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Jul 2024 08:50:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50713283818
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jul 2024 10:26:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB53194C8B;
-	Tue, 30 Jul 2024 08:49:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D4E19D08E;
+	Tue, 30 Jul 2024 10:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="DxCnGbsg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PM/hGoHK"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010061.outbound.protection.outlook.com [52.101.69.61])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8440F194C64;
-	Tue, 30 Jul 2024 08:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722329356; cv=fail; b=lElShC5PcsHUM/0Rq0zk93BzOxIcGnkd77CzS5Zpu+r0fuvhKEJuUaQAhJ9aLVJtAP1US03sgwDTc5RBrznp9bbfRB2tIPZoE6Tq+Dtprk1ouFtDEgogGbRVa3sHMGrvtLPcbvknftMYGeVRZSSQxDMmga5yDlIPt0On4HLuROk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722329356; c=relaxed/simple;
-	bh=5xRTsdrn1Ix/3Mgzo0lry2VgymrmTTFr4xJYfhC4puQ=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=mc4dMzIb1MRIO3WuRAU0O2GeWrC5DJF2jsVYiMFwIcM2B0nQp5rzp3csZyOAyIRwowbcw/VooFBv4c4Q2acONUgcFOsDmIimdjH/2xU3JTHMqEnpwfxxmZwdjlfayjcTv3x1mkcMywHiAiXYyQExKQde/0zyxA0Szqzg+TA5RyA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=DxCnGbsg; arc=fail smtp.client-ip=52.101.69.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=q6g5uvusBkBB7y26xpTv6SaVl7PHiJV4sVvh1QGX7MH+S6KkeJH3lBilXTnnCmbiNB9Juntnm4OnrNpf1JjmU8drjcsHIi4+pnLJt58o34HKqGJpCVn1udkat45E7KnWBNQ3b49Iw6MGxrRX65d4MocjO7B9eQrHvyKcAmnf4G8/Q95VPz4aGeZOIvqdpScuy9h93HhPT1jrFYZbNVIkSEkpwUH6PjAay+p03AchcRnRM5vI0p0t42CEM4/R8b7wnXCJrKMss+dWL8dswZ4tdMbbw+LgEiVkHgC9SOj8iUMTAfB+ySH1MKiWmOOBXJ6HSQK5Bzh+A+YbGEjRBuqWEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xRwnZNctTZuOkS8PGldxochCXwtjTKzp19U8R/f50d8=;
- b=PTBmfNYG8Z3j2b0oQLvhsPqDGo7ZIwB5urJlooTgyEj+5DofLzf7EBwe8PGiPQQFA33/Tb5WQyTxhr+yVeu+LeZL+JOAtcjzSOp5ORxX1urgAxZolb3IHHfyiyfOoWYekEw2naBiSbUkWAuP2ijNQnDC3t1FIi85+fSIxLBg94+AiaB/v4jxQNfObOciJsOGQmhZTp+eCDtcLUHq1OYdzyKJibF6V25Ym/kFEUyjGDVyuDfv0+TQ19GmQJm/zxa/nxjzelv/O68VU1sIiYZwYkesyOD10smSIp06eFFGAT/4gXlb18A467c3cZRCzU+h8UXJHGSvkfijcQ3R7LW91w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xRwnZNctTZuOkS8PGldxochCXwtjTKzp19U8R/f50d8=;
- b=DxCnGbsgjPYfFFSrxfAMifA5Ljl55f/4BbPxDfsblwJwVHwMMBJSueZKQGc35ju77b6uZSnVvgNewuOclqLFRoankUHHqgZrcE1+8W9cDN3bwoRciyBY3qo7dIP0ftUH/I3O5hlaKurGd1aFM+ytCwlwkDzulaV2FxxUzzAKCNKtBVDuseUU3YsjlE4bpaxpQFmqsCPawSiXaeL1pTw6WaJm9HoMc++frLBZx4pSYZbZEbhtgSlnmV4vCSjVSlBPldEklhrT4kHSGssvK9QGHxHTmsqj0TFQgt3Pt6uS6dKdjK4QjxFVRfY2st4qURNsZqKYY3gPnkPY5fThb6fDOg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DB9PR04MB8461.eurprd04.prod.outlook.com (2603:10a6:10:2cf::20)
- by PAXPR04MB9021.eurprd04.prod.outlook.com (2603:10a6:102:217::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.20; Tue, 30 Jul
- 2024 08:49:10 +0000
-Received: from DB9PR04MB8461.eurprd04.prod.outlook.com
- ([fe80::b1b9:faa9:901b:c197]) by DB9PR04MB8461.eurprd04.prod.outlook.com
- ([fe80::b1b9:faa9:901b:c197%5]) with mapi id 15.20.7762.020; Tue, 30 Jul 2024
- 08:49:10 +0000
-From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Tue, 30 Jul 2024 16:57:55 +0800
-Subject: [PATCH v3 2/2] clk: clk-conf: support assigned-clock-rates-u64
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240730-clk-u64-v3-2-4d2b19edaa6e@nxp.com>
-References: <20240730-clk-u64-v3-0-4d2b19edaa6e@nxp.com>
-In-Reply-To: <20240730-clk-u64-v3-0-4d2b19edaa6e@nxp.com>
-To: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722329887; l=2412;
- i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=J5oFMdGnIXFx9n/65+BOh2zj6XyKbv53dEmcaGstyuI=;
- b=UhMJbV25O1exKMZCzyHLn3ZwXPY4PneE5qvA4s5rfAlHmPku0SN4ZeXrFpebYFQ3ELx8DxqKy
- IoUKGqJqU++DUVH/olwIPLPZmu2JkH5IbyyHxMKiAdZZuiQVV8BvWwx
-X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
- pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
-X-ClientProxiedBy: SI2PR02CA0038.apcprd02.prod.outlook.com
- (2603:1096:4:196::22) To DB9PR04MB8461.eurprd04.prod.outlook.com
- (2603:10a6:10:2cf::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5FD19AD81;
+	Tue, 30 Jul 2024 10:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722335171; cv=none; b=PVgPnhLDa/Qheie0dU+nhEaLJ2MIu0qqP1FZDtOe//1JDyMx0XOM7LFv8DM6v/aIL689/BgB9Ov1giP28L9AoykjkC8Dp+8yo9n7zgydKpRxcJrm3DRQ69/gQ6z7m87WUuqa+xdp6YJEuGLFW6HM0mBtHnMJ7sTebKqulJNSjrg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722335171; c=relaxed/simple;
+	bh=esxKEex8+51rNpzxQN3ox5RAsVaCCzTefrB7PLUkUm4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HygVlP7vqVdMF5TGcQ+XhtVcVcBxdPdbMdk6C8ts/Kao9sx5tcnaTM6ByWpJ4s/02wKbprSnr2+0NU4jJf2MrzHuGwQiDgCdafu656qF1ogwcaNjd4YFPiT0PULW1JrAN501+DMawVwD62A40sYMf1XFo9xJW3iLkVe8DRpG2ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PM/hGoHK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6156C4AF0B;
+	Tue, 30 Jul 2024 10:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722335170;
+	bh=esxKEex8+51rNpzxQN3ox5RAsVaCCzTefrB7PLUkUm4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=PM/hGoHKejg7tHswaCVpjDmQs35ugrJEykpaLXYY0TNu/5j85VySr/vPAHQc+FEPg
+	 leoqk/RoT9PJCnN1xLW19Lsn2mc25SJOfBM8KVKU//5RAOYedeUx1Cq67IrxIhq+lH
+	 5VEe27uX3WY+kuvJWToEI4txBUo0KmEkN+X2VfIPveOSMLr5VtkitkYYK1lziXLhX4
+	 +CtYXoJN+8gKesI/jNDEgBD5pCxHDAeAuCCSpG2FErRZPiVFeAeq4do/LjZxFpffhz
+	 mBt8mpS0whL4uA4yOINpu1gYcHrs4N0/BoFvl5J/R0KVXjuCKm13vZpGdlNJbfvXlT
+	 iaTxLXxQCgllA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6E05C3DA49;
+	Tue, 30 Jul 2024 10:26:10 +0000 (UTC)
+From: =?utf-8?q?Duje_Mihanovi=C4=87_via_B4_Relay?= <devnull+duje.mihanovic.skole.hr@kernel.org>
+Subject: [PATCH v11 00/12] Initial Marvell PXA1908 support
+Date: Tue, 30 Jul 2024 12:25:08 +0200
+Message-Id: <20240730-pxa1908-lkml-v11-0-21dbb3e28793@skole.hr>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB8461:EE_|PAXPR04MB9021:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d28519f-a112-4803-4adb-08dcb0747a86
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?K0NEYUFvN25pYjJObVE1ckVyb3lOQnptUWUrWDFlbERWQnNvdjVsRlN6NSt0?=
- =?utf-8?B?d09nMG5QcmxUN3JrOElEMnErZW1iOXY0YU5CZnAwYTZtNTlFTDZaeEZjdW9C?=
- =?utf-8?B?RWdqSzA4SmJwN1hJaHpUMmJiWVBvSmRJQnNrR1FzVkRUSzBDSVRMNnZZMys1?=
- =?utf-8?B?VXcySFZJcHkyQVlOSlZmZVRBbk8za2dCbUpOUjVndkRrUmdGdmRYOW96TGpR?=
- =?utf-8?B?emVLM1J4TlBHQ3J0ejVZYnZvcW10WlJmRDd0Q1kwV3o5cDU3MFN6UE02ZjlY?=
- =?utf-8?B?eG1aRStRKzRkVXQrczMrbk5WdnN1VVVOUGU2cDRRdG14ZGdQOEJjcU01VnZn?=
- =?utf-8?B?UFVTVmszODl5Q1hrTDVvOVF0RWJ5K0lNcDlxaVVFcTdzRXBSY3lndHpHYVJ2?=
- =?utf-8?B?S0ZDaWVid0xwWWx0ZTZpaGpnT1FJUzdXMGNWVDcvbDRVVXREZThKQ2lyb1BS?=
- =?utf-8?B?SzhMSDN3TkRLcW9KYzRPYnR4Mkc1djBaeFMvUUMwMDNKN1NZdXRoMUFxajU3?=
- =?utf-8?B?RkwwdE0zdzN1NE1OT29SdXVxUzhDSXB1ZGZOSmVhQ1o4SmVwVlFGWkREWFQ3?=
- =?utf-8?B?UjJhazM4dVg1TmtuRUM5b1dxZHpSUDZDSlhMVFEyMWI0NDkyTC9uc0Y5Tmxk?=
- =?utf-8?B?ZUZDbUx2OXF1em5mZVk4dmlHM0sxQkZ5dW1FOVZmWXdzWDduZ3hJRXp4YVkz?=
- =?utf-8?B?ZHZVbzYraURsRjN6WnVnV0pFRWhtN3F1NUU2M25WUWNzVGhKUGxiRlBkK2J4?=
- =?utf-8?B?ZWpYWDNlU1ZVRTBXKzM4cEZTdnVpV3lkMTJwYnF4Zkd2KzVTa0p0bk1yL0FU?=
- =?utf-8?B?eHhvMlUwK1NtMUlkU0RTMnQyOW51Q3FuZXhHelV6cDVZWGdxcFBzdmFDZHVq?=
- =?utf-8?B?NjJVMURqL21zdXU3ZHlOR2NETGIxM01hU0RiSGp6V3FUMW14dS9jQU1tZU1X?=
- =?utf-8?B?a1pJaG9TeFNqK251dEwxMTRiajk0QzgvTUxGVmdpMXVtRDRPMlh5aFM1RlRi?=
- =?utf-8?B?Qy8xZCtseTFaeGRzcFpSZzM1V2hjV3c2MU44dkk5NkF5WlNuNHZIK1UreUYz?=
- =?utf-8?B?OS9BaWRkMlB5ckY3Y29kUWZla3R0K3ppK0x3UzR5Y0JJcW9uQWk4dU1XR3Nv?=
- =?utf-8?B?dVBWRXhVbTBza3NiaGNMWDYyUkpya1NBVjNxbVFNUkRBZzM3NkNsYTl6VlVZ?=
- =?utf-8?B?UUVnL2N3bWxsMGEyNUV0NldqZktnRTAzT003VXlPMEZpanFuWGVGVE5FR0p3?=
- =?utf-8?B?UXVyOGhobWdrSUxyTUc5U0dWd3hLQzJaYnJJbWNFVnY0UHlQQTNKWEFhVnMz?=
- =?utf-8?B?ZUYyRUtjdzhRYVlaa0pRTkY5aWtFYkU4bnRlUWVVYUpSMmoxRHNSMWI1dDV0?=
- =?utf-8?B?UHVLZVgyWDI3VmY5cVcrYWs2NjJUakRSWHhQN0RDRDJLWWNpVkJVVkV5OTJr?=
- =?utf-8?B?ck53blBreFlYK1h0RWVINXU2T256aE1YVmNLUWpYN0xDNDBxTmJmUExlZzNj?=
- =?utf-8?B?N3lQVWpiMXNzQkszdTNldkVBNDRGa25wa3kzVnMrVUY2SXUwdkpCc1NXNXcx?=
- =?utf-8?B?dGVtelpKTjlzVUtKK25UUXhIOGZGTWdwOHpNL0FiMnBSczMwd3NLMHlzanRN?=
- =?utf-8?B?S2J6Q3FHdnhQOEwyMXN3M3RYVXk4bWQvRThwSnNYekZRNHlHZjZZVW5JUVlZ?=
- =?utf-8?B?QW5Hc2lubXZFZWtCcVVuMzRidnhabGRRT3RXcnJHRXgvKzE1YTJSZUJZNkdm?=
- =?utf-8?B?Uk04aHVnZGhnTUFjcmUzcUFNVSt1QlZhdXl2Vm9Qakg5dXgrZW1sRXNsRUhu?=
- =?utf-8?B?dHo1WUpUVEFYNVVLbEQ2SUJGbWkvMmowamF4TWtCVHVxdWg1OTlPdnNySmh1?=
- =?utf-8?B?ZnNwNEVWckd3MVMweXVubEVSK0pxcFdyOE5OdzU0ZE9GWWc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8461.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U01sZEhVQ2dtSlZ5TUt5R3lIN2lMRTZoN2hRMEtFVUcxV0hVc1pGWXpzOGlj?=
- =?utf-8?B?VURPaUlXZk1CcHU1WE90d05wMlFxVUFKYWU2dGdLSTlDSXFtTnltelJsd2RF?=
- =?utf-8?B?aEtaWStiREh5bFl6MGpZNWY0OWpzTmpkWkhqOGdMS1NyMDJpV2I3Q3hpYXNX?=
- =?utf-8?B?V0xHN25VQ0pyTTRDVDYwT2JaNFhpR3ZLNmpFdG4vVHRyQkZFWnpHTWpyYzNu?=
- =?utf-8?B?Y3RLcVZZbXZ2ekhKU1Mzb3A5MHJWWTJWbExna0JuSmZkQUFvWG9WWFdnZmdX?=
- =?utf-8?B?b01wZThvOFhjYVc2cHlKMUZ3cHVpUmhUaW0ybG9mWUZLWEJvSVlMWkNQM1NX?=
- =?utf-8?B?V1pqMjRIbG9CdDZhU21tTzVsaWd6NDlJdXpsVFJ6eEJ4V2haL3IwWnIzell5?=
- =?utf-8?B?NVVrc1dpSjNwWVJSOVZwdXhyWDRSVUp0OGRZalZkZGhXeGZQcjVFTGpZVDhE?=
- =?utf-8?B?MXQ0dVJBOXlKYnN6VWxTZlhjK1NIdGZaTXZKLzQ5YlNZZjdOK2k3eXkyRi94?=
- =?utf-8?B?K1ZzK0lQUUFyZHVVdTZEaExFczYwSyszWWNIaGUvQkNORWhSaTRvUm9kaTRh?=
- =?utf-8?B?enExU0hKQ056dGJ0VC9LZDdKTk5QVU05Zk45SDFaTHNFTmxSYnExN3FvYTFI?=
- =?utf-8?B?SGNUdysxN3BmN1dOSktRdW5hcERLdjEybmpVSU9lemtLNktGMmQwNzBYUzl5?=
- =?utf-8?B?dlpjSDU1akNVNGZaVDJoSzgyWHVic1l2NnlsYXhxK2lZazNPcGJWWlZuZWQ5?=
- =?utf-8?B?ZjFFRkkzZXRUS1lFbVpoUnkrekg1b1hkN2NsNktOa3FkK1VXWnhOWEY3K2pW?=
- =?utf-8?B?S3JmZDZHZitLdXpJTjR5RUhrdktoQ3BDU1NyVXgvVkVLcWhVeFQxcG9yMGxS?=
- =?utf-8?B?Q3RBcFpaRDdDVE1ady90NjlicEdnNU9ualZIVUlpY2c5aHlTWDBMRHltQ1hN?=
- =?utf-8?B?M1NvUUZFSFlOWE1nRTNhcW9VekZiLzFidGEzM0I5dHpFT0k5Y05LODRPVGph?=
- =?utf-8?B?YmxpY3pxZWdtV2NCSnQrblo4VGZoT0Yxcm1OT0w3OWhVT251WmNRTHM3NzA4?=
- =?utf-8?B?S1drOHBGUG96VjhpUlZHSjhxNnpjd1BIbzJUd3Z5N2N6RzMxU0pCTHk3Y1lj?=
- =?utf-8?B?L2JzK0ROdUxxVlA1Zld0Smg3bGhLVmxsY0NJSnkzTWg5ZHRYRDE4WnZBK3Fo?=
- =?utf-8?B?ZFZOZDZNZmlpWGJEbUM5bEYzTy9BSFlRM1R4Z0szS3FDSVU5NnJMdVBOSW9h?=
- =?utf-8?B?Z2hiTEtYaFJDbXQxTWJuZTZzZlRueXpiRjcwcndPZlExQ3lNYzQ2LzJNNStE?=
- =?utf-8?B?QS9laC9NTGxybGFGYTB3dzRWYmdZVml1SEJhSHY0REUrRzNkZVBTRG00VHRw?=
- =?utf-8?B?R0FoZzhKZjJrTW1pK0M1RjQ4YUQvdUFSbHcvOWY1NXgxS1RiSDQ2OENFdVN4?=
- =?utf-8?B?ODNHNGdrMmxvNTF3NE0rZVFqNkVqcWRQenpJc1ozbkVQYUNBa1FnSmlSSXBl?=
- =?utf-8?B?dUgveW5yYTZTbFJmdXNodWxIWE5NRGZqZjBsWGxuV3BPK2xLK1Z0eTJKQnhO?=
- =?utf-8?B?d2NSLyswNmxLbCtLQVJibmFHR0taZTVmZUl3Y085UXgwS3lDbTJSM08vbWVw?=
- =?utf-8?B?c2J3RzRWNkhpVEQyaTRzZ09kVnVYV0lkY0tKa3JVa2lzbHRaWUlNak1RQ3Rv?=
- =?utf-8?B?aVJqeWVrT3VRbEp6Y3dyaENDY05qSHdHNWJrNVc2Z09zaVJhK3AwaC91NURS?=
- =?utf-8?B?c3doRGU4Qzg3NXE0WWdjSksrK29TL0M3bVNiRkZWbFJLZDgxVk9sWmlJWG9i?=
- =?utf-8?B?ZFFNUzc1RjdxMDVtWk1GVmdBZXJJTkp1VVIwM1JhS1l4RExEcjRDK0M0R291?=
- =?utf-8?B?czEyeUlFVkRxenFCZUFJT0E1eFArbjY3ZEk1dUdVNURzek9wejN2MkpYZGVT?=
- =?utf-8?B?T1k3NS9EUVN6RjM3MmMyWS9kaFJ1YWN5c2s0V3BlQzhKMG9xc0hnVjFnOGQz?=
- =?utf-8?B?NlVILzNhODdkQ0hwYmVnQURIM1N4a1BEc3EvYk1QcGYzZmdxVDkxTnZlYWha?=
- =?utf-8?B?R0F0UTg3Qmo2dWVqTEJCQkVmN0lmL1QzZEhwczBXK2pBUDhvaVgrWTN3N2ZI?=
- =?utf-8?Q?sEknnfUAhw+QPo0TG62FY7F5H?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d28519f-a112-4803-4adb-08dcb0747a86
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8461.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 08:49:10.0435
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: n9EvV2wZNOEYInmB4c/W+ONFQOpm6RLefn4+HVFcM4bJqkSMSwyq46znbaj/6jPEK3izFNYAsX5dy5oKH4h0wg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9021
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIS/qGYC/4XRy07DMBAF0F+pssbRPPzsiv9ALBzHpqaPVAlER
+ VX/HbdSaTALljPSub7ynJspjjlOzXp1bsY45ykPhzIgPq2asPGHtyhyXxYNATFYYHE8eXRgxW6
+ 73wltGaLtvVTBNIUcx5jy6Zb38lrmTZ4+hvHrFj/zdXsPkr+DZhYgbJQ2Bc8GnHuetsMutpuxu
+ ebM9LCGDGpy4FoNjAJF//ke230ubYc5hwriEiIhgKSWULH6T8plXVPVlaVu6Nia3nAnFVVWLSx
+ SZVWxXvUKHZsYWVZW/1gEhMrqYjtKERxJCMlW1t6tBPxjbbEpeqOtV06a+l33sBLqzq5YUh6Ao
+ +WgU/3LsMBU37Y0AcE69KlTVmJaHvdyuXwDvK6FCoUCAAA=
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Tony Lindgren <tony@atomide.com>, 
+ Haojian Zhuang <haojian.zhuang@linaro.org>, 
+ =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+ Lubomir Rintel <lkundrak@v3.sk>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+ Karel Balej <balejk@matfyz.cz>, David Wronek <david@mainlining.org>, 
+ linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7782;
+ i=duje.mihanovic@skole.hr; s=20240706; h=from:subject:message-id;
+ bh=esxKEex8+51rNpzxQN3ox5RAsVaCCzTefrB7PLUkUm4=;
+ b=owGbwMvMwCW21nBykGv/WmbG02pJDGkr9m/WOmZcOSHwk5IB1+9Lqv1vOHd/Lv70+EXZUtafy
+ TrubyabdJSyMIhxMciKKbLk/ne8xvtZZOv27GUGMHNYmUCGMHBxCsBEdBMYGWa0evcIHu84HBhb
+ 2Wb7lKHBldH6+OSsifYsaTGVSsWLahgZHm6ceT9+S538hScxiaIHlA7e+D1vH//KSDUze9VbTa8
+ vcwIA
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=6DFF41D60DF314B5B76BA630AD319352458FAD03
+X-Endpoint-Received: by B4 Relay for duje.mihanovic@skole.hr/20240706 with
+ auth_id=191
+X-Original-From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Reply-To: duje.mihanovic@skole.hr
 
-From: Peng Fan <peng.fan@nxp.com>
+Hello,
 
-i.MX95 System Management Control Firmware(SCMI) manages the clock
-function, it exposes PLL VCO which could support up to 5GHz rate that
-exceeds UINT32_MAX. So add assigned-clock-rates-u64 support
-to set rate that exceeds UINT32_MAX.
+This series adds initial support for the Marvell PXA1908 SoC and
+"samsung,coreprimevelte", a smartphone using the SoC.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+USB works and the phone can boot a rootfs from an SD card, but there are
+some warnings in the dmesg:
+
+During SMP initialization:
+[    0.006519] CPU features: SANITY CHECK: Unexpected variation in SYS_CNTFRQ_EL0. Boot CPU: 0x000000018cba80, CPU1: 0x00000000000000
+[    0.006542] CPU features: Unsupported CPU feature variation detected.
+[    0.006589] CPU1: Booted secondary processor 0x0000000001 [0x410fd032]
+[    0.010710] Detected VIPT I-cache on CPU2
+[    0.010716] CPU features: SANITY CHECK: Unexpected variation in SYS_CNTFRQ_EL0. Boot CPU: 0x000000018cba80, CPU2: 0x00000000000000
+[    0.010758] CPU2: Booted secondary processor 0x0000000002 [0x410fd032]
+[    0.014849] Detected VIPT I-cache on CPU3
+[    0.014855] CPU features: SANITY CHECK: Unexpected variation in SYS_CNTFRQ_EL0. Boot CPU: 0x000000018cba80, CPU3: 0x00000000000000
+[    0.014895] CPU3: Booted secondary processor 0x0000000003 [0x410fd032]
+
+SMMU probing fails:
+[    0.101798] arm-smmu c0010000.iommu: probing hardware configuration...
+[    0.101809] arm-smmu c0010000.iommu: SMMUv1 with:
+[    0.101816] arm-smmu c0010000.iommu:         no translation support!
+
+A 3.14 based Marvell tree is available on GitHub
+acorn-marvell/brillo_pxa_kernel, and a Samsung one on GitHub
+CoderCharmander/g361f-kernel.
+
+Andreas Färber attempted to upstream support for this SoC in 2017:
+https://lore.kernel.org/lkml/20170222022929.10540-1-afaerber@suse.de/
+
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+
+Changes in v11:
+- Rebase on v6.11-rc1 (conflict with DTS Makefile), no changes
+- Link to v10: https://lore.kernel.org/r/20240424-pxa1908-lkml-v10-0-36cdfb5841f9@skole.hr
+
+Changes in v10:
+- Update trailers
+- Rebase on v6.9-rc5
+- Clock driver changes:
+  - Add a couple of forgotten clocks in APBC
+    - The clocks are thermal_clk, ipc_clk, ssp0_clk, ssp2_clk and swjtag
+    - The IDs and register offsets were already present, but I forgot to
+      actually register them
+  - Split each controller block into own file
+  - Drop unneeded -of in clock driver filenames
+  - Simplify struct pxa1908_clk_unit
+  - Convert to platform driver
+  - Add module metadata
+- DTS changes:
+  - Properly name pinctrl nodes
+  - Drop pinctrl #size-cells, #address-cells, ranges and #gpio-size-cells
+  - Fix pinctrl input-schmitt configuration
+- Link to v9: https://lore.kernel.org/20240402-pxa1908-lkml-v9-0-25a003e83c6f@skole.hr
+
+Changes in v9:
+- Update trailers and rebase on v6.9-rc2, no changes
+- Link to v8: https://lore.kernel.org/20240110-pxa1908-lkml-v8-0-fea768a59474@skole.hr
+
+Changes in v8:
+- Drop SSPA patch
+- Drop broken-cd from eMMC node
+- Specify S-Boot hardcoded initramfs location in device tree
+- Add ARM PMU node
+- Correct inverted modem memory base and size
+- Update trailers
+- Rebase on next-20240110
+- Link to v7: https://lore.kernel.org/20231102-pxa1908-lkml-v7-0-cabb1a0cb52b@skole.hr
+  and https://lore.kernel.org/20231102152033.5511-1-duje.mihanovic@skole.hr
+
+Changes in v7:
+- Suppress SND_MMP_SOC_SSPA on ARM64
+- Update trailers
+- Rebase on v6.6-rc7
+- Link to v6: https://lore.kernel.org/r/20231010-pxa1908-lkml-v6-0-b2fe09240cf8@skole.hr
+
+Changes in v6:
+- Address maintainer comments:
+  - Add "marvell,pxa1908-padconf" binding to pinctrl-single driver
+- Drop GPIO patch as it's been pulled
+- Update trailers
+- Rebase on v6.6-rc5
+- Link to v5: https://lore.kernel.org/r/20230812-pxa1908-lkml-v5-0-a5d51937ee34@skole.hr
+
+Changes in v5:
+- Address maintainer comments:
+  - Move *_NR_CLKS to clock driver from dt binding file
+- Allocate correct number of clocks for each block instead of blindly
+  allocating 50 for each
+- Link to v4: https://lore.kernel.org/r/20230807-pxa1908-lkml-v4-0-cb387d73b452@skole.hr
+
+Changes in v4:
+- Address maintainer comments:
+  - Relicense clock binding file to BSD-2
+- Add pinctrl-names to SD card node
+- Add vgic registers to GIC node
+- Rebase on v6.5-rc5
+- Link to v3: https://lore.kernel.org/r/20230804-pxa1908-lkml-v3-0-8e48fca37099@skole.hr
+
+Changes in v3:
+- Address maintainer comments:
+  - Drop GPIO dynamic allocation patch
+  - Move clock register offsets into driver (instead of bindings file)
+  - Add missing Tested-by trailer to u32_fract patch
+  - Move SoC binding to arm/mrvl/mrvl.yaml
+- Add serial0 alias and stdout-path to board dts to enable UART
+  debugging
+- Rebase on v6.5-rc4
+- Link to v2: https://lore.kernel.org/r/20230727162909.6031-1-duje.mihanovic@skole.hr
+
+Changes in v2:
+- Remove earlycon patch as it's been merged into tty-next
+- Address maintainer comments:
+  - Clarify GPIO regressions on older PXA platforms
+  - Add Fixes tag to commit disabling GPIO pinctrl calls for this SoC
+  - Add missing includes to clock driver
+  - Clock driver uses HZ_PER_MHZ, u32_fract and GENMASK
+  - Dual license clock bindings
+  - Change clock IDs to decimal
+  - Fix underscores in dt node names
+  - Move chosen node to top of board dts
+  - Clean up documentation
+  - Reorder commits
+  - Drop pxa,rev-id
+- Rename muic-i2c to i2c-muic
+- Reword some commits
+- Move framebuffer node to chosen
+- Add aliases for mmc nodes
+- Rebase on v6.5-rc3
+- Link to v1: https://lore.kernel.org/r/20230721210042.21535-1-duje.mihanovic@skole.hr
+
 ---
- drivers/clk/clk-conf.c | 42 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 37 insertions(+), 5 deletions(-)
+Andy Shevchenko (1):
+      clk: mmp: Switch to use struct u32_fract instead of custom one
 
-diff --git a/drivers/clk/clk-conf.c b/drivers/clk/clk-conf.c
-index 058420562020..684e0c0738b3 100644
---- a/drivers/clk/clk-conf.c
-+++ b/drivers/clk/clk-conf.c
-@@ -81,11 +81,44 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
- static int __set_clk_rates(struct device_node *node, bool clk_supplier)
- {
- 	struct of_phandle_args clkspec;
--	int rc, index = 0;
-+	int rc, count, index;
- 	struct clk *clk;
--	u32 rate;
-+	u32 *rates __free(kfree);
-+	bool rate_64 = false;
-+
-+	count = of_property_count_u64_elems(node, "assigned-clock-rates-u64");
-+	if (count <= 0) {
-+		count = of_property_count_u32_elems(node, "assigned-clock-rates");
-+		if (count <= 0)
-+			return 0;
-+
-+		rates = kcalloc(count, sizeof(u32), GFP_KERNEL);
-+		if (!rates)
-+			return -ENOMEM;
-+		rc = of_property_read_variable_u32_array(node,
-+							 "assigned-clock-rates",
-+							 rates,
-+							 1, count);
-+	} else {
-+		rates = kcalloc(count, sizeof(u64), GFP_KERNEL);
-+		if (!rates)
-+			return -ENOMEM;
-+		rc = of_property_read_variable_u64_array(node,
-+							 "assigned-clock-rates-u64",
-+							 (u64 *)rates,
-+							 1, count);
-+		rate_64 = true;
-+	}
-+
-+
-+	for (index = 0; index < count; index++) {
-+		unsigned long rate;
-+
-+		if (rate_64)
-+			rate = ((u64 *)rates)[index];
-+		else
-+			rate = rates[index];
- 
--	of_property_for_each_u32(node, "assigned-clock-rates", rate) {
- 		if (rate) {
- 			rc = of_parse_phandle_with_args(node, "assigned-clocks",
- 					"#clock-cells",	index, &clkspec);
-@@ -112,12 +145,11 @@ static int __set_clk_rates(struct device_node *node, bool clk_supplier)
- 
- 			rc = clk_set_rate(clk, rate);
- 			if (rc < 0)
--				pr_err("clk: couldn't set %s clk rate to %u (%d), current rate: %lu\n",
-+				pr_err("clk: couldn't set %s clk rate to %lu (%d), current rate: %lu\n",
- 				       __clk_get_name(clk), rate, rc,
- 				       clk_get_rate(clk));
- 			clk_put(clk);
- 		}
--		index++;
- 	}
- 	return 0;
- }
+Duje Mihanović (11):
+      dt-bindings: pinctrl: pinctrl-single: add marvell,pxa1908-padconf compatible
+      pinctrl: single: add marvell,pxa1908-padconf compatible
+      dt-bindings: clock: Add Marvell PXA1908 clock bindings
+      clk: mmp: Add Marvell PXA1908 APBC driver
+      clk: mmp: Add Marvell PXA1908 APBCP driver
+      clk: mmp: Add Marvell PXA1908 APMU driver
+      clk: mmp: Add Marvell PXA1908 MPMU driver
+      dt-bindings: marvell: Document PXA1908 SoC
+      arm64: Kconfig.platforms: Add config for Marvell PXA1908 platform
+      arm64: dts: Add DTS for Marvell PXA1908 and samsung,coreprimevelte
+      MAINTAINERS: add myself as Marvell PXA1908 maintainer
 
+ .../devicetree/bindings/arm/mrvl/mrvl.yaml         |   5 +
+ .../devicetree/bindings/clock/marvell,pxa1908.yaml |  48 +++
+ .../bindings/pinctrl/pinctrl-single.yaml           |   4 +
+ MAINTAINERS                                        |   9 +
+ arch/arm64/Kconfig.platforms                       |   8 +
+ arch/arm64/boot/dts/marvell/Makefile               |   3 +
+ .../dts/marvell/pxa1908-samsung-coreprimevelte.dts | 328 +++++++++++++++++++++
+ arch/arm64/boot/dts/marvell/pxa1908.dtsi           | 300 +++++++++++++++++++
+ drivers/clk/mmp/Makefile                           |   2 +-
+ drivers/clk/mmp/clk-frac.c                         |  57 ++--
+ drivers/clk/mmp/clk-of-mmp2.c                      |  26 +-
+ drivers/clk/mmp/clk-of-pxa168.c                    |   4 +-
+ drivers/clk/mmp/clk-of-pxa1928.c                   |   6 +-
+ drivers/clk/mmp/clk-of-pxa910.c                    |   4 +-
+ drivers/clk/mmp/clk-pxa1908-apbc.c                 | 131 ++++++++
+ drivers/clk/mmp/clk-pxa1908-apbcp.c                |  84 ++++++
+ drivers/clk/mmp/clk-pxa1908-apmu.c                 | 123 ++++++++
+ drivers/clk/mmp/clk-pxa1908-mpmu.c                 | 112 +++++++
+ drivers/clk/mmp/clk.h                              |  10 +-
+ drivers/pinctrl/pinctrl-single.c                   |   1 +
+ include/dt-bindings/clock/marvell,pxa1908.h        |  88 ++++++
+ 21 files changed, 1296 insertions(+), 57 deletions(-)
+---
+base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+change-id: 20230803-pxa1908-lkml-6830e8da45c7
+
+Best regards,
 -- 
-2.37.1
+Duje Mihanović <duje.mihanovic@skole.hr>
+
 
 
