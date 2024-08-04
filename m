@@ -1,180 +1,113 @@
-Return-Path: <linux-clk+bounces-10374-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10378-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AD50946E26
-	for <lists+linux-clk@lfdr.de>; Sun,  4 Aug 2024 11:54:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46408946EA0
+	for <lists+linux-clk@lfdr.de>; Sun,  4 Aug 2024 14:27:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C4641C21004
-	for <lists+linux-clk@lfdr.de>; Sun,  4 Aug 2024 09:54:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC4692814D0
+	for <lists+linux-clk@lfdr.de>; Sun,  4 Aug 2024 12:27:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6232374C;
-	Sun,  4 Aug 2024 09:54:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F910381B8;
+	Sun,  4 Aug 2024 12:27:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4WnfH/P"
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="UJl/I8Wq"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6982263A;
-	Sun,  4 Aug 2024 09:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF17A2D7B8
+	for <linux-clk@vger.kernel.org>; Sun,  4 Aug 2024 12:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722765244; cv=none; b=COJU+N8lCr5ZErytYv6sXj2agzqWDyr49/HdoDPEZzzmgi9GgX/xP19wWhDrhGo7yy0iai53/yfpGPi8hqlvO1RGoXPjoD0klWtgri7AtXB7v2SfPqOFCG2yZ80eMYwljyTDiHTuYhWzWrV5EWXSCLI/CqAK/gPGREXKiDkswlw=
+	t=1722774468; cv=none; b=TF9JjgmaoGTOnPNYXh6sBbRdEAKbk+EysHbLbARC2PCGa2yHI8p0W2VDHY1t0PljjbxeQW2XSdbMzd2H6n8xOHrAa+5ySHQI0bZExt7xLaVQKtjC/Me+c8AJ7cNhLE4+bU+C8DwFyKn8hY9uVtKmgQro4Xa9Zm0EcGAnYA2X2q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722765244; c=relaxed/simple;
-	bh=BnS7gc5IM1P2KzQ6X3kpI2RwIV3Tqg5zNIJrzqh5mTI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HWN8Bw+3aQptbGpJWfggWq+hAA2vV818CM3TTsYMAR/PzwMzZVXYXthCT18J3UXUgGOI2EMqqoFX/W/ZVwuWIg0PTD86WBC8NlMiZSfPAUl4FteIokq7zqAU+RUl+e2cnWUfkXwz0j4tuA5+0s4z+aV8ugPMPBTeTbC7eOg2cac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4WnfH/P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54748C32786;
-	Sun,  4 Aug 2024 09:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722765243;
-	bh=BnS7gc5IM1P2KzQ6X3kpI2RwIV3Tqg5zNIJrzqh5mTI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Z4WnfH/PV37thgVd/FDIJ3w2ImKK81UThkorv4hdWQf59T9U0C9yT0nSv27c8AGrn
-	 NixC2s7ZGS9tBXimaiOsGa5XIdMjwDIka6v+T78G1esVD0+vSwyPZOy3qvXd5mzfMB
-	 UBjNzd3kNVpDHpirjK60r0Jc+iTSpdHagsik3gXP1zTJzLHIcB8O5tn2ihkciOHVq0
-	 svRhejCpkca6a/OJoT5sm/2xc7D1tgns7HRQx3UXSdmGkSyLnpvFaZe9l7Ye28r8kR
-	 20cIop9YreXPjiywYxqti0+RrWaZs6vTqybIm/hfvd+dVUAIWnQbfghFoqpxnjoR8c
-	 iG5LTKM4SWBBA==
-Message-ID: <1600ee06-ac19-436f-8229-1bb44b29c683@kernel.org>
-Date: Sun, 4 Aug 2024 11:53:57 +0200
+	s=arc-20240116; t=1722774468; c=relaxed/simple;
+	bh=6nEw/qsql7GLNQtUnK0NN5bFtdT4n8J/chPAeQ3SDis=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WDaJ05AhFrwlm3ud4zPdhAiLTgnJLjgFvYkiErGCovYjRwV8e8S3hOjYn4Cg8VQmthu6K56Lz07MM95+ASIlQ6HSEscieOCuB5ddL6kUFgMSbh4T75vl/imX/jN0Nm8ntvsinG1/UHe1EAYV01TOnIE/GM3jZODVLN1R6SdVlwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=UJl/I8Wq; arc=none smtp.client-ip=185.70.40.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1722774458; x=1723033658;
+	bh=HbxeQuACBzRlKisgDmzJ5BbLdirFZhGLjMA7Twqonsk=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=UJl/I8WqNeQcEXjHYTm8zbJB1Lxqqfymir1PJbQOmn4mcEpVd0D/UTjLpyLtVN+0/
+	 P/J1kRxdkekL2+GmvDTSqKJZunpvHUo1XqsAZb/R5huTS8L3AJZd7hPqR2rbB9Egrg
+	 1QeRKm6WAmo97DL68h4LxHhTnapQh27FVx7hPrn3uvGmuahu8AQd7O/+f6KGwCYQrS
+	 BAWPj8HYUT5Y1zxmqulb3q1LWDwbrgFtUf56Hp3Sf58h1otXjKB52EqIw/R2p5Gil3
+	 9Bobn24vJ/VFw7sPAXFO4oSqjS3UCD74X3Y1TsAITbL3nol+hK/aJDGj00J4fcINCR
+	 PTkNmtA/IEKag==
+Date: Sun, 04 Aug 2024 12:27:32 +0000
+To: Harry Austen <hpausten@protonmail.com>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Michal Simek <michal.simek@amd.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Harry Austen <hpausten@protonmail.com>
+Cc: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>, Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/9] clk: clocking-wizard: use newer clk_hw API
+Message-ID: <D374KN1NZT6O.3P6C0M5FEHJ6F@protonmail.com>
+In-Reply-To: <20240803105702.9621-3-hpausten@protonmail.com>
+References: <20240803105702.9621-1-hpausten@protonmail.com> <20240803105702.9621-3-hpausten@protonmail.com>
+Feedback-ID: 53116287:user:proton
+X-Pm-Message-ID: 9a5e5ed345d8ed34ebabf1020072b0c79d4d664c
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] clk: rockchip: Add dt-binding header for rk3576
-To: Detlev Casanova <detlev.casanova@collabora.com>,
- linux-kernel@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Elaine Zhang <zhangqing@rock-chips.com>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, kernel@collabora.com,
- Sugar Zhang <sugar.zhang@rock-chips.com>
-References: <20240802214053.433493-1-detlev.casanova@collabora.com>
- <20240802214053.433493-3-detlev.casanova@collabora.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240802214053.433493-3-detlev.casanova@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 02/08/2024 23:35, Detlev Casanova wrote:
-> From: Elaine Zhang <zhangqing@rock-chips.com>
-> 
-> Add the dt-bindings header for the rk3576, that gets shared between
-> the clock controller and the clock references in the dts.
-> 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
-> [rebased, separate clocks and resets]
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-
-
+On Sat Aug 3, 2024 at 11:57 AM BST, Harry Austen wrote:
+> Utilise clock provider API with struct clk_hw instances instead of the
+> consumer-side struct clk.
+>
+> Signed-off-by: Harry Austen <hpausten@protonmail.com>
 > ---
->  .../dt-bindings/clock/rockchip,rk3576-cru.h   | 589 ++++++++++++++++++
->  .../dt-bindings/reset/rockchip,rk3576-cru.h   | 484 ++++++++++++++
->  2 files changed, 1073 insertions(+)
->  create mode 100644 include/dt-bindings/clock/rockchip,rk3576-cru.h
->  create mode 100644 include/dt-bindings/reset/rockchip,rk3576-cru.h
+> v1 -> v2:
+> - Move onecell data to end of struct for single allocation
+> - Just move to clk_hw API. Move devres transition to subsequent patch
+>
+>  drivers/clk/xilinx/clk-xlnx-clock-wizard.c | 77 +++++++++++-----------
+>  1 file changed, 40 insertions(+), 37 deletions(-)
+>
+> diff --git a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c b/drivers/clk/xil=
+inx/clk-xlnx-clock-wizard.c
+> index 0ca045849ea3e..ccaf30c2d9481 100644
+> --- a/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
+> +++ b/drivers/clk/xilinx/clk-xlnx-clock-wizard.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of.h>
+>  #include <linux/math64.h>
+>  #include <linux/module.h>
+> +#include <linux/overflow.h>
+>  #include <linux/err.h>
+>  #include <linux/iopoll.h>
+> =20
+> @@ -121,26 +122,24 @@ enum clk_wzrd_int_clks {
+>  /**
+>   * struct clk_wzrd - Clock wizard private data structure
+>   *
+> - * @clk_data:=09=09Clock data
+> + * @clk_data:=09=09Output clock data
 
-These are bindings. Must be squashed with previous patch.
+Realised I probably should have moved this doc comment to the bottom too,
+which also resulted in me putting the new `adev` parameter documentation in
+a weird location in patch 6. Will fix in v3.
 
-> 
-> diff --git a/include/dt-bindings/clock/rockchip,rk3576-cru.h b/include/dt-bindings/clock/rockchip,rk3576-cru.h
-> new file mode 100644
-> index 0000000000000..14b54543d1a11
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/rockchip,rk3576-cru.h
-> @@ -0,0 +1,589 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-
-Weird license. Why not using recommended one?
-
-> +/*
-> + * Copyright (c) 2023 Rockchip Electronics Co. Ltd.
-> + * Author: Elaine Zhang <zhangqing@rock-chips.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_ROCKCHIP_RK3576_H
-> +#define _DT_BINDINGS_CLK_ROCKCHIP_RK3576_H
-> +
-> +/* cru-clocks indices */
-> +
-> +/* cru plls */
-> +#define PLL_BPLL			1
-> +#define PLL_LPLL			3
-> +#define PLL_VPLL			4
-> +#define PLL_AUPLL			5
-> +#define PLL_CPLL			6
-> +#define PLL_GPLL			7
-> +#define PLL_PPLL			9
-
-Nope, indices start from 1 and are incremented continuously.
-
-
-
-Best regards,
-Krzysztof
+>   * @nb:=09=09=09Notifier block
+>   * @base:=09=09Memory base
+>   * @clk_in1:=09=09Handle to input clock 'clk_in1'
+>   * @axi_clk:=09=09Handle to input clock 's_axi_aclk'
+>   * @clks_internal:=09Internal clocks
+> - * @clkout:=09=09Output clocks
+>   * @speed_grade:=09Speed grade of the device
+>   * @suspended:=09=09Flag indicating power state of the device
+>   */
+>  struct clk_wzrd {
 
 
