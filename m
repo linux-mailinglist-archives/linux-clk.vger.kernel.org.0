@@ -1,72 +1,72 @@
-Return-Path: <linux-clk+bounces-10504-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10507-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96BBB94BAEA
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 12:28:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7289294BAEF
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 12:28:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A4591F232D0
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 10:28:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26D8B2855E7
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 10:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AEF418A939;
-	Thu,  8 Aug 2024 10:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2A518B47D;
+	Thu,  8 Aug 2024 10:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Ax7RODOk"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="w9kpg5+z"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C622E18A6B1
-	for <linux-clk@vger.kernel.org>; Thu,  8 Aug 2024 10:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF3618A6D6
+	for <linux-clk@vger.kernel.org>; Thu,  8 Aug 2024 10:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723112887; cv=none; b=dtnzEAVKyA6+riybrGtSXlz6Av+W5CtdCquSNHpUxvTorYR1C4qafI00rfNkWQi6QUvpDvoch8x0DuweoRo2ewZaXwNZFoRBs4DEAFGD0PpqvFwrGXhNgeIv+H3m76CuqAgi+X5HoH9Y7j5jzuXS1/U0tEY/bnz52+7LhACaZ/Q=
+	t=1723112888; cv=none; b=VKJ6t/K5BSsfouZHPP3rdJkH8IyuIzsFUrQ97drl1DtVwnaQ6au2hUGSyKK/WFRRk5kYLy1j81ZqCr594iuMB1afgbbLRQi53omj7iSpYyuhGdmmXYzrz47fCN+JjoGf54JNbiw/I1+nR4YNEgVfhlhsZv5WXAu168ckByb1Pc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723112887; c=relaxed/simple;
-	bh=mX97e01MPkA2KLIL7hS96bYzDDAlkGTLJdClNcccIkg=;
+	s=arc-20240116; t=1723112888; c=relaxed/simple;
+	bh=QSWG+r3Q0UIT+KgY1i3jfYrp1y6wAWuw6wMU7KYNqvM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=prq6yA7Zi2m4MIu7zeZA0TGHC1GtqJFATA8tqvvPuXdDjQq1fYKc+ytGjmkHcypi3bevCYrU0rRAfLohTSqK3ImseIQJU8448L6MDKwFNqmPSrljR3iIU6uEcrcOQ9E/ndCwbRa/yZFcIw1Q2iM5LODs4BAOderMG3GDhFp9eO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Ax7RODOk; arc=none smtp.client-ip=209.85.128.43
+	 MIME-Version; b=dqY8L/WAuIA+yrJq6uTf4G474l1shW3i/kxzPj7OFEN5p4KkcKEMr1UWFOTJ9eZRciUCD/SJRivKGIz2b1OzvNgYTyhDfnN8f8NHMHqHMesFs2tTkR3CKfbMNXInLA24CVr9M+QSkq4opvIcAwO+kNNbxdtrEABpbI4HYUFYLKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=w9kpg5+z; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-427fc97a88cso5933715e9.0
-        for <linux-clk@vger.kernel.org>; Thu, 08 Aug 2024 03:28:05 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-368712acb8dso449339f8f.2
+        for <linux-clk@vger.kernel.org>; Thu, 08 Aug 2024 03:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1723112884; x=1723717684; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1723112885; x=1723717685; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pr0Cx+l93ievhcSqcQh58PvVUEHk0s6N+Y0wdAmtxHg=;
-        b=Ax7RODOkK2i3nuVWANl+CpYAiF+gF6VPqi2N+evFanfdJ5HyorfP2PCgOdId521bQC
-         eK071sFqPcIukys0eTjWRmibgQ30I/X9lorXtI6pOcsZ8zc5ZTBpImR9W8NX5MY9LzKq
-         5KrfXoXP67JZOMMDMFHn7+KOhUFlZp1YRmRQQuPWC1/Cq+GyxRz4sb2rtFP2k8AaV2Fe
-         aNk1uMVb0v9LkaLrzTXyfiQRXgcPDx4MjhcZ49DPhwkQ4OSld2x40k8GscnVoZHm/WPI
-         ufSlUvB7xoEXaRY693CJuH5z0UXTLjtBQTVQJnjX0Y8PpVBoFbiVuqsr6muOE7zx8RUM
-         Humg==
+        bh=cPYzDSfyZeo+xZ43EsOSaQrJlRNd4kYLYsIOWeBqO/s=;
+        b=w9kpg5+zHyEZm6QLmPA+jRtvjlFWB73KKW30gbO8cyQxSE3vNR65uWu2jONonveNnD
+         SyVg23rTODLDrPLq3oh+X6JipYObIREM0mGt6dHc9andA95FQgzcecRYJrC6qWonoJja
+         BKlkMOBLNIbzoi05bdXhrTEQ1Lb7g6KeckW+nFfWqnXjUTEVuP/G+FzCcY21RceCImwV
+         KHnP/DQZS1/Y9w2TInsXYhaE2qc2rwEjU7ejNgy+4c8Q0cKJRg8Ega2QW7RLpy+yONo2
+         6kvPwIaOijsptX4Xx+7DFtLR2i4WK09KWtWJwFjHl4oz4uizDz/mzSENuxJXeunRKrZX
+         HIUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723112884; x=1723717684;
+        d=1e100.net; s=20230601; t=1723112885; x=1723717685;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pr0Cx+l93ievhcSqcQh58PvVUEHk0s6N+Y0wdAmtxHg=;
-        b=oR24f+RA595S+35LHz4AWx3BmJDu3+LhXpL7c3X/oBLd8UZ8BQjQY0u3gQCCk8ciZ4
-         TqGukNN8foADibvvM84gq4xw0tnuncj6+c3MKdeGSk2oro198yc5tcRXkN7PTCMOpO+z
-         MkBuiF4xnSpf95aOHlWtXcd5Vu6Ai2mLRrYWKh7hAMkNgSWcS+L0pePHehoJ3M6pzIV1
-         DMZ8ai6SmrjqqiTNgnc18WeFsU78/nAlpOTLgY5e7TjagTBlTg83G0CZ3eb73CXYYopk
-         XjKKYkTQEeQyNf3OuiF+6r+lTp/pDb0ZP5XliJi8kKB4gBdEJe6UcbpxNj6mnH/2ji1V
-         1png==
-X-Forwarded-Encrypted: i=1; AJvYcCX0FU2lVqSaf6j7UjzJ6OSsjJZLP9GKpJ0ThUkgv5LvsiG+KF0Pg67afPYFnWwZfahydcU7E5HlNMeh+/HqDNPQAIal3i93eLfC
-X-Gm-Message-State: AOJu0YwkGpr7bTj1BNud4dI037Nb1nCX5p//oav2xUbik1K1ACets8DB
-	5+xuzcScZq1sK/SiD4nmEcBOuMWeNOKPreCqyeQVr64DEzBdBWsJcg0A+YOJ+Lw=
-X-Google-Smtp-Source: AGHT+IH6euXTuyAeaO2rodq608/hHNhqkkeHwCHczxlGWUhhgunMEiXRlBHFZXboJ9LIxTbuP/bp9A==
-X-Received: by 2002:a5d:64c5:0:b0:36b:a3f1:6333 with SMTP id ffacd0b85a97d-36d27554ae8mr1047306f8f.24.1723112884204;
-        Thu, 08 Aug 2024 03:28:04 -0700 (PDT)
+        bh=cPYzDSfyZeo+xZ43EsOSaQrJlRNd4kYLYsIOWeBqO/s=;
+        b=AmPsLxyWA5YZadctZSqI6m/T7rgFJUVVTTQiC0r2TmlnUBlWwHujK53IbisVgSygva
+         eDS64pH51ao+8nwunFYK57kBBNNfUkANQGg/A8OFm9jR6nzYmnKgDzWYul+bB7kMtQX6
+         WMFE7gu/GHzcREpQYlsylqXUqi8/tjw9Ft2ogrIsA6CgD6AD1pr6esUIRuT7vbo3eOuP
+         fntBeRpFtxTNO7q7OP+nt/wRWwk7NNgbR+PWUONt8h3zsEx/O3gxD7angHYVa9vyOS5s
+         4T9WTYyGmaaO/r1a4o1Kssw5gaJIqn/UlyTcLPCFTFeMlFCCcG8hy/NOxhJuBdavCPrT
+         SYeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ8eJmQfWJ8R0RH77mh6mtJCgugXOs6BtJ4Ercn71SoLxLx7Yxq9Ok/tqfmy18RzbV8aaIQcYmiU4As1sucev3SdPsPrGTZ5Do
+X-Gm-Message-State: AOJu0YyhZf4NAX88DRKZsy/lBf6DE6qJrW9J0a9xpxyEuY6tDCRQ+NS3
+	pfUI72sQCr366tSGsRFRqR/R+vtg2IPoqF1DTEvQUa2CNocPo2hmD65TpO5CMXY=
+X-Google-Smtp-Source: AGHT+IEvuEQLxY5NIcMxDxzPylcOhqHiALm1zbKzM1rXD702BA4RHo40fITpoOTHXRDRu8mJI7TSYg==
+X-Received: by 2002:a5d:588d:0:b0:368:4e38:a349 with SMTP id ffacd0b85a97d-36d274e0773mr1313790f8f.22.1723112885055;
+        Thu, 08 Aug 2024 03:28:05 -0700 (PDT)
 Received: from toaster.lan ([2a01:e0a:3c5:5fb1:ae7:4e79:8821:15db])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-36d27208c98sm1454596f8f.75.2024.08.08.03.28.03
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-36d27208c98sm1454596f8f.75.2024.08.08.03.28.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 03:28:03 -0700 (PDT)
+        Thu, 08 Aug 2024 03:28:04 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
 To: Philipp Zabel <p.zabel@pengutronix.de>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -75,9 +75,9 @@ Cc: Jerome Brunet <jbrunet@baylibre.com>,
 	linux-kernel@vger.kernel.org,
 	linux-amlogic@lists.infradead.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH v3 4/9] reset: amlogic: add driver parameters
-Date: Thu,  8 Aug 2024 12:27:34 +0200
-Message-ID: <20240808102742.4095904-5-jbrunet@baylibre.com>
+Subject: [PATCH v3 5/9] reset: amlogic: use reset number instead of register count
+Date: Thu,  8 Aug 2024 12:27:35 +0200
+Message-ID: <20240808102742.4095904-6-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240808102742.4095904-1-jbrunet@baylibre.com>
 References: <20240808102742.4095904-1-jbrunet@baylibre.com>
@@ -90,74 +90,64 @@ MIME-Version: 1.0
 X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 
-To allow using the same driver for the main reset controller and the
-auxiliary ones embedded in the clock controllers, allow to customise
-the reset offset, same as the level offset. Also add an option to make
-the level reset active low or high.
+The reset driver from audio clock controller may register less
+reset than a register can hold. To avoid making any change while
+switching to auxiliary support, use the number of reset instead of the
+register count to define the bounds of the reset controller.
 
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/reset/reset-meson.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/reset/reset-meson.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/reset/reset-meson.c b/drivers/reset/reset-meson.c
-index 460ad2f8360f..8addd100e601 100644
+index 8addd100e601..5b6f934c0265 100644
 --- a/drivers/reset/reset-meson.c
 +++ b/drivers/reset/reset-meson.c
-@@ -18,7 +18,9 @@
+@@ -17,7 +17,7 @@
+ #include <linux/types.h>
  
  struct meson_reset_param {
- 	unsigned int reg_count;
-+	unsigned int reset_offset;
+-	unsigned int reg_count;
++	unsigned int reset_num;
+ 	unsigned int reset_offset;
  	unsigned int level_offset;
-+	bool level_low_reset;
+ 	bool level_low_reset;
+@@ -87,21 +87,21 @@ static const struct reset_control_ops meson_reset_ops = {
  };
  
- struct meson_reset {
-@@ -46,6 +48,7 @@ static int meson_reset_reset(struct reset_controller_dev *rcdev,
- 	unsigned int offset, bit;
- 
- 	meson_reset_offset_and_bit(data, id, &offset, &bit);
-+	offset += data->param->reset_offset;
- 
- 	return regmap_write(data->map, offset, BIT(bit));
- }
-@@ -59,9 +62,10 @@ static int meson_reset_level(struct reset_controller_dev *rcdev,
- 
- 	meson_reset_offset_and_bit(data, id, &offset, &bit);
- 	offset += data->param->level_offset;
-+	assert ^= data->param->level_low_reset;
- 
- 	return regmap_update_bits(data->map, offset,
--				  BIT(bit), assert ? 0 : BIT(bit));
-+				  BIT(bit), assert ? BIT(bit) : 0);
- }
- 
- static int meson_reset_assert(struct reset_controller_dev *rcdev,
-@@ -84,17 +88,23 @@ static const struct reset_control_ops meson_reset_ops = {
- 
  static const struct meson_reset_param meson8b_param = {
- 	.reg_count	= 8,
-+	.reset_offset	= 0x0,
+-	.reg_count	= 8,
++	.reset_num	= 256,
+ 	.reset_offset	= 0x0,
  	.level_offset	= 0x7c,
-+	.level_low_reset = true,
+ 	.level_low_reset = true,
  };
  
  static const struct meson_reset_param meson_a1_param = {
- 	.reg_count	= 3,
-+	.reset_offset	= 0x0,
+-	.reg_count	= 3,
++	.reset_num	= 96,
+ 	.reset_offset	= 0x0,
  	.level_offset	= 0x40,
-+	.level_low_reset = true,
+ 	.level_low_reset = true,
  };
  
  static const struct meson_reset_param meson_s4_param = {
- 	.reg_count	= 6,
-+	.reset_offset	= 0x0,
+-	.reg_count	= 6,
++	.reset_num	= 192,
+ 	.reset_offset	= 0x0,
  	.level_offset	= 0x40,
-+	.level_low_reset = true,
- };
+ 	.level_low_reset = true,
+@@ -148,8 +148,7 @@ static int meson_reset_probe(struct platform_device *pdev)
+ 				     "can't init regmap mmio region\n");
  
- static const struct of_device_id meson_reset_dt_ids[] = {
+ 	data->rcdev.owner = THIS_MODULE;
+-	data->rcdev.nr_resets = data->param->reg_count * BITS_PER_BYTE
+-		* regmap_config.reg_stride;
++	data->rcdev.nr_resets = data->param->reset_num;
+ 	data->rcdev.ops = &meson_reset_ops;
+ 	data->rcdev.of_node = dev->of_node;
+ 
 -- 
 2.43.0
 
