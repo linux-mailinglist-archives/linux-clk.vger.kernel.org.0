@@ -1,126 +1,163 @@
-Return-Path: <linux-clk+bounces-10501-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10506-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D900F94BAB4
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 12:18:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBB3694BAEE
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 12:28:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 856031F224D3
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 10:18:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 281D0B22A2D
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 10:28:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1F2E189F37;
-	Thu,  8 Aug 2024 10:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E74EA18A957;
+	Thu,  8 Aug 2024 10:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlhpvES3"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="2Jvz5Ldy"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A4F146A7B;
-	Thu,  8 Aug 2024 10:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4DC184526
+	for <linux-clk@vger.kernel.org>; Thu,  8 Aug 2024 10:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723112287; cv=none; b=NcTvyKKnAc1ocTaeKcGgtqq4dNPkdDqT6+FqYgGQU/87sDmvv0ffE/y2+5QMtkR1WtOheJF5eCOaDUfIvOLopr+cK6L9+AY21m+mZFJJY5FJHDx3B5u4aBHWp2fFfB2QovgAJYBYqpMmrhgG/KnkASGqLklYOPCyVJ9yoEOibXw=
+	t=1723112887; cv=none; b=nJ6RHqkhbS8H2xShgDc3R7zbHggdcN+/wG68dQzO5VSc1BfSwKvZn5P2XziC8MuySsbR9aUFKYf0GSYspcCzdJGi4XETHQ8GJVG8/N1Z58mUSioZBy0P8+NWv+ESPMAuyOa0v6XLv/YPJuNUtiGVkZq2xb0C11NsXL4Tsn+Ju/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723112287; c=relaxed/simple;
-	bh=pigixNO7SHM2QIybCQQlCTYoltdngF67O1aW6vGADgU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=oCAHkNWEWCz2wQVXf52nBR2dUURKQmZ6ZbsHE3zDCUTsoKvoYzM99fuRhJhS52hAK0rZeqK14DI4qb+3cXC2Gml6dMQq14J3Dz1bnbMcVHiNncCYq+bYYW9vg1uJDnnSd+J6UCh/EsjEc5srPwW4ztVi7e8HgffsJoTzwKPHiUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlhpvES3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73669C32782;
-	Thu,  8 Aug 2024 10:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723112286;
-	bh=pigixNO7SHM2QIybCQQlCTYoltdngF67O1aW6vGADgU=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=dlhpvES3J+VVfARpyG1ivpPUKtOrX0S97DlmXXvtOJWoGAiFBDQBymtSnvLItitIn
-	 X6MG+51xV+xSJgqXcVbII24jjmher2CdCvfHQ3NEhawCitZOR27qa6j/Zz1tiBm8iD
-	 s3Ria/BlpWiuMgOBltVnazC0wl5Toul2CWgFiYem4n7Gp0sMZ+8xM9ao+TEurj3A5R
-	 PEWnidaA1PaeU0uvExzu4uvjTMuqgf4lpfvsgocuELlCxKJEBvwFtyAX0yd3fCTW3Q
-	 x9xgCwugY7eZE/CpiO/1CYzqNXoAHw1kFBuFzPM3ACJjpDMdeWlioF70STC+/XwUnZ
-	 58SpgW1vmICeA==
-Message-ID: <b089c9e5-8640-47f3-a6a3-8919b610f49d@kernel.org>
-Date: Thu, 8 Aug 2024 12:18:00 +0200
+	s=arc-20240116; t=1723112887; c=relaxed/simple;
+	bh=RjKRijCG2ufoLvhnl64EG+OgM1h0OplxHuh1Hk2SVQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=btcKxg+yn0y6WTw29EYlA+GnUHLXSPzEwSF+hraKthE3bdsXehrD9Dz8UuKrpUvkZgCpfWOK7jitR6y929JK/22HEPZc8LHtH2sV+N5KgTk6jAduKkyoLiz2frQTNtktm7GKm3ojwg9di7xLIYYgi3ha2mcsRbORgiMgPAMxCjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=2Jvz5Ldy; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3686b285969so432414f8f.0
+        for <linux-clk@vger.kernel.org>; Thu, 08 Aug 2024 03:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1723112882; x=1723717682; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ZND/cy3Z516ACCTnpV9ofYo6+loCngOYmYnistIhps=;
+        b=2Jvz5Ldy4QvL8rMY3UJ3Wk/jjwZ9CDwhFZZrMI73AzTfS8XjnBO9GgnUyBrZNA+r37
+         mnOJoW4Vw0mEpfdUmVJ6v9sK8RvVWZIgJhCMrfLsYn1+Lc5MjCNApG19Fa9UkJB7Ld9d
+         l6a4BV5966nSgiMTfVyoqICxYhQJfnRGvOo1cUYXmed0wsusKgzYJOhkF33YCicowZsB
+         owHezrz11MM3FRqT4TG9x3DbxpZketh21xqy5EiVWTddCXNRlpi00Y0aa2KDkrrm7Jnb
+         rCUMQSTKz9QOBUInCC9OuVG3qFXeH5q7edKzTXUBmdfgFxoqg8HFltAF1yco4af/7/Db
+         3gHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723112882; x=1723717682;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+ZND/cy3Z516ACCTnpV9ofYo6+loCngOYmYnistIhps=;
+        b=tfzhCs6XyRhr8DywnGcGaIx/t3JP2/TKDA7JsH8uI2SXCK0Cb6+U5z6YGNRYNxK7go
+         VE5C68Gdhz7wzfaa4Fkdnak4zZegaJbCCM3KWeC+TJR51n3SDo4LwU1WUL1ebWE4kBIw
+         z4HVScEE0Odn4yVXrWJP0858XAXQBvP4mjXy8mGd1BIKQZdBVd/u8N+C9Jq15l8wATYx
+         IZcQIuMZkLjY5jlTSkQBZoQFTBuQTRx5AD6bPD/E2Nm/n75zGNiQcjqi7R3ft+ehBVb0
+         6Bg0BBqQI9LLTAO/iPXJk5MKs+NSmdm3GgdFOV0I8BX6zAAj5mfymWiqLe8+4LPlL7XK
+         nReA==
+X-Forwarded-Encrypted: i=1; AJvYcCWc1v+Tv9S8wJ4iUUoIK6NeHvCf7VZt9sGRA3iNtAlOgTHom4xmAyBHolwpLXyK7CwX+awTxP4b1cu94p6FdNIyIu/7dtYrzsXh
+X-Gm-Message-State: AOJu0YzUi0RLCfj8qMDHBLqeUei835w+UNcqcK4qbLTpVPbuwvpE6UbD
+	bnW7llzmqWT/ngbsM2LfIwHM6/uC4RZyn99E1QhGHLh15S07B7JG+HMoi1pfhUQ=
+X-Google-Smtp-Source: AGHT+IFYU2RQPPg/KjZXn7ZtFuIvQu6nUFhl4ghGOJZsi+bsUJSY3bvLQMS3+wd7ad+9LDIv7FuIKA==
+X-Received: by 2002:a5d:550f:0:b0:367:4383:d9b4 with SMTP id ffacd0b85a97d-36d2757674emr1085501f8f.56.1723112881342;
+        Thu, 08 Aug 2024 03:28:01 -0700 (PDT)
+Received: from toaster.lan ([2a01:e0a:3c5:5fb1:ae7:4e79:8821:15db])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-36d27208c98sm1454596f8f.75.2024.08.08.03.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Aug 2024 03:28:00 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Philipp Zabel <p.zabel@pengutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>,
+	linux-kernel@vger.kernel.org,
+	linux-amlogic@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH v3 0/9] reset: amlogic: move audio reset drivers out of CCF
+Date: Thu,  8 Aug 2024 12:27:30 +0200
+Message-ID: <20240808102742.4095904-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] dt-bindings: clock: Add AST2700 clock bindings
-To: Ryan Chen <ryan_chen@aspeedtech.com>, Lee Jones <lee@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20240808075937.2756733-1-ryan_chen@aspeedtech.com>
- <20240808075937.2756733-5-ryan_chen@aspeedtech.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240808075937.2756733-5-ryan_chen@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 
-On 08/08/2024 09:59, Ryan Chen wrote:
-> Add dt bindings for AST2700 clock controller
-> 
-> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+This patchset follows the discussion about having reset driver in the
+clock tree [1]. Ideally those should reside in the reset part of tree.
 
-NAK, that's wrong on so many levels. There are no bindings here!
+Also the code of the amlogic reset driver is very similar between the 2
+trees and could use the same driver code.
 
-You ignored previous feedback given to Assped.
+This patcheset alignes the reset drivers present in the reset and clock
+then adds support for the reset driver of audio clock controller found in
+the g12 and sm1 SoC family to the reset tree, using the auxiliary bus.
 
-Best regards,
-Krzysztof
+The infrastructure put in place is meant to be generic enough so we may
+eventually also move the reset drivers in the meson8b and aoclk clock
+controllers.
+
+This was tested on sm1 vim3l and gxl aml-s905x-cc.
+
+Changes since v2 [4]:
+ * Fix undefined read access of the reset register
+ * Fix Kconfig symbol description
+
+Changes since v1 [3]:
+ * Fixes formatting errors reported by Stephen.
+ * Changed parameters type to unsigned
+ * Fix usage of ops passed as parameters, previously ignored.
+ * Return 0 instead of an error if reset support is absent
+   to properly decouple from the clock and have a weak
+   dependency
+ * Split the platform and auxiliary modules in 2 distinct modules
+   to fix the COMPILE_TEST error reported by ktest robot.
+
+Change since RFC [2]:
+ * Move the aux registration helper out of clock too.
+
+[1] https://lore.kernel.org/linux-clk/e3a85852b911fdf16dd9ae158f42b3ef.sboyd@kernel.org
+[2] https://lore.kernel.org/linux-clk/20240516150842.705844-1-jbrunet@baylibre.com
+[3] https://lore.kernel.org/linux-clk/20240710162526.2341399-1-jbrunet@baylibre.com
+[4] https://lore.kernel.org/linux-clk/20240718095755.3511992-1-jbrunet@baylibre.com
+
+Jerome Brunet (9):
+  reset: amlogic: convert driver to regmap
+  reset: amlogic: use generic data matching function
+  reset: amlogic: make parameters unsigned
+  reset: amlogic: add driver parameters
+  reset: amlogic: use reset number instead of register count
+  reset: amlogic: add reset status support
+  reset: amlogic: move drivers to a dedicated directory
+  reset: amlogic: split the device core and platform probe
+  reset: amlogic: add auxiliary reset driver support
+
+ drivers/reset/Kconfig                         |  15 +-
+ drivers/reset/Makefile                        |   3 +-
+ drivers/reset/amlogic/Kconfig                 |  27 ++++
+ drivers/reset/amlogic/Makefile                |   4 +
+ .../{ => amlogic}/reset-meson-audio-arb.c     |   0
+ drivers/reset/amlogic/reset-meson-aux.c       | 136 ++++++++++++++++
+ drivers/reset/amlogic/reset-meson-core.c      | 139 ++++++++++++++++
+ drivers/reset/amlogic/reset-meson-pltf.c      |  95 +++++++++++
+ drivers/reset/amlogic/reset-meson.h           |  28 ++++
+ drivers/reset/reset-meson.c                   | 153 ------------------
+ include/soc/amlogic/meson-auxiliary-reset.h   |  23 +++
+ 11 files changed, 454 insertions(+), 169 deletions(-)
+ create mode 100644 drivers/reset/amlogic/Kconfig
+ create mode 100644 drivers/reset/amlogic/Makefile
+ rename drivers/reset/{ => amlogic}/reset-meson-audio-arb.c (100%)
+ create mode 100644 drivers/reset/amlogic/reset-meson-aux.c
+ create mode 100644 drivers/reset/amlogic/reset-meson-core.c
+ create mode 100644 drivers/reset/amlogic/reset-meson-pltf.c
+ create mode 100644 drivers/reset/amlogic/reset-meson.h
+ delete mode 100644 drivers/reset/reset-meson.c
+ create mode 100644 include/soc/amlogic/meson-auxiliary-reset.h
+
+-- 
+2.43.0
 
 
