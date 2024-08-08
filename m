@@ -1,145 +1,185 @@
-Return-Path: <linux-clk+bounces-10512-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10497-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B12E94BBAA
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 12:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 45AE794BA9E
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 12:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2ECB1F21381
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 10:52:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD3FA1F2136F
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 10:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9030018A6CD;
-	Thu,  8 Aug 2024 10:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9AC189F4B;
+	Thu,  8 Aug 2024 10:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="lOFMqpMR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="USu59iT5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sonic310-19.consmr.mail.sg3.yahoo.com (sonic310-19.consmr.mail.sg3.yahoo.com [106.10.244.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEAD918A6AB
-	for <linux-clk@vger.kernel.org>; Thu,  8 Aug 2024 10:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=106.10.244.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85C5189F3B;
+	Thu,  8 Aug 2024 10:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723114353; cv=none; b=j4zi1wkCgdE8nQtMKQc4qmXWS09rMbB1p1/RkTOXmEAGpU6OEFWmn9o9vrWP+LA2Ya1Q7PZEzwoUAzYS/pmBBqbKBg8f1JvplyMjMNlm7D74nnBQncr6GQ9qi1L2KITp2Gcvj2ddCW4IIUvgAEq7b5QROM7aPM3jQmrkvYHtkP8=
+	t=1723112096; cv=none; b=sg5mTVsDRqCcJ2njrIDHCZ7xQlM0rD9rL7Ai3TFmlwetxsgTBylT9hSMJlQg05dFSw5xD1H6QEpzmfx5bBq6Zh3Y8+q9VRZmue9l6k+zdPAqPLrp+kghybj0pnQaDW903H8zCdA+NIgpIcruZutqecA8NTpcDbqUDbztRl1zbZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723114353; c=relaxed/simple;
-	bh=a0/nCekGh2WgXi/OWW+jnX8eQoFJmjmVu1/ImqeeH+s=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sy0yj5YrzTBDTyapLB8/S/Kuq3OrX1mBkuW6e/zIFGuGPcUl/+ohq8Fk2EsceSVTSPutwycDq4LYklEqBrXuh7BtU3HlFn4At2R+FPifxmUYc4BINUVzeNfCTwT+RCN/rhaKlDpCCj8lVmzB9RbYKM31AQn2ngdBsWrCE3QxxEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=lOFMqpMR; arc=none smtp.client-ip=106.10.244.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1723114349; bh=YtGze27uA3MUcvh4sOOHW30uM5jDuuNft8Y//6DQec0=; h=Subject:From:To:Cc:Date:In-Reply-To:References:From:Subject:Reply-To; b=lOFMqpMRQvMXckWKG3NE1ARkAaWnburNXPNLsut93n87GgIrUAKB4gAJtgCqCr1BanlDh746mcqwe52/UVUA8n5AuF4KhAxjBHha0fkAOY5I2769wU5IodUcTCK5jzOmuMUzaGnPBX1cICzxwzuIiSzHvYhLoawsTVP/ccnkS9ixFxcjOL/L01hHj0lz9sOF+z5a42JFpUfWibGZOyQZayZSkQxTc38XQDHYuy69sSrLqhDK5YNVy+flJT4jAg5IZTJk5vBonRzHD2KFoK87whXfpp//y4+Jl+RBp9brrVj/Xd0yyYcBeNUxtaAo+OYg5XBf1B2tjOl0rNY0kZSDTQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1723114349; bh=oIFhxAFsR0gAzPweONGEnE1VlcM1uGhaWCfDVjkQdIV=; h=X-Sonic-MF:Subject:From:To:Date:From:Subject; b=PYJ2qdNq3ICeSf9bshU0zB09ETCO0yftsIGhDKyCg78yLjl2I/072bvIWZh1ygAuuZtN116RTu3pqTYTZFchNQ9YBAQ7KkrAcw8XPW/dsbNZMRtf0/+1lEdQxfKrsZ5/k5s52yq9TqLILzwxZM32W5ayDCYYzfFDm4ZJ4siuVjWqA87oQiCNblHOEc0fe+CXiRwJcOJ2jELyMjrC48Oz+twjQJQ67hRg/qsHK6f9hv6PcQEYZZoXBDWwS24/FbxVLjxin99Y2cHNUHKcw1UMycaT+OUhnBVmIsCizVnsTdNBbsI9Pq+kbGriHJ/HvTdbNskoqyrxCwy5y/U37gWkjw==
-X-YMail-OSG: Acv03P4VM1nfFzFd5SEBTrFKqCrnVrsLs2sVPTOSCCQaRZLUzFp1RQuZWd85GGh
- yNE1_TODgTXt.wxb6u9miWaYlhXWdoo41sf5eQbr5XtYAfAXeZu6RCqF8F0ZXK6y7TyOw6BcRw27
- LbTOevK1lsWIrmSJOx7_e8LepP5ffRr00YR6WEcbBp1urLQ6aVHZZ5RA4pW52mNQeXXkahEA3j7p
- 0Y3afMoHwOPi6f8hjEkzfaQLHvGmouNuRpXn.ocRYSzM73po5D9Rkpozy43lQQXelTbpQFLfc.s7
- k1WKiAepxeZxFXbfV67wAfFPhz9iTbu2NQbgyEHBWTittyJC2esBiMGwBC6T3lFkHVgAveP4_q3K
- VttDqUFndYytMmSkYNH6itsacdC52REDNUOIlfwgioXqrmJ9HF3J7ApV7cuigDiKJRHRFcECx3PA
- p_xzpNr3ACnZoAoGzz1P6sf6Fpa.OeNDkzLgz4ZhoG9VDHT8cbIPCafZ3uTmzaTIo0DZY5gTsn8h
- v_2dfhbKOIly5eTg2ADamrORtz4NIlnPYKspZHNZsO0cgqrs7zjR_pUnXPFo5INqtWo4BJgJ8SVZ
- 3ufgtvxiuKyJ1gEerPTsdIaoZtlrZjHgW4uwCaLhTknVzJEv39xDbJjCfwdLbo6XXH1MBTd74ol_
- My4LGpab9LSQcTfV2IQfOmwHusEL0RCaqcbMMLDzGdCgYrTJD3wqQjH8x6KANQSsV.yq3fukbudP
- 3MRpV4hOA2QaybSo8.._IBu8w5FLyefHLEZTRMrmyNeYR3jdw2.mr1QrflnbCSFwVd0ssbpDsYGk
- 1WZjGhqdT_QoNZUlgAukzmTcqMm_gZNnGY0UdPrOlAuFmwIMdayEyaKpeTGV0LY.IssddRpnDTEV
- 0oWVilqXWQHBDcZUqrHvTgOdEN3wyZvlq9PNqQM7nivd2D9n85l3w97MMQgPO9Ci6kUlvrRWmg_M
- WqYOTqq5GAKWcFhjxZpxXWQQGhfb74D1Eap5zo29Qfngs3ry7n9oJDTaxPAlMVMRiJqqDnhIlUBD
- jNiJPMOwX.eOIZM0UZBjdSITYXpZRvyQIx6vcCDOaxaTAQVPTSKAkE0i05I.be4mMK5aQYJOXHVF
- .HiHtJvKsYx0xkZkPiIOLGXkxwsZRwal550UOyYI.Dk5LiAYw05qkyE0eaujONqcx7fzMgYELRn9
- PwTo.r0aAggcpqx4sea96q_xpbxbUb4BOgu2_4sjbFltstHcJKQd5UAScbyOaNt0LuU.gJMSGhEK
- _mbE7dysiAYZcF95indzXu_738mrj3G_ivz8RQUvUp44Jn.8m58_wkiEw4WLb8rVBdQa8ha5FpIx
- xFFNx22xSkRHRLTDsKLW7BChW8JD87GOBDkkPahey1xYSSQuScKt4hOicjGLWzwlhJ41GAK_qJ1r
- elVSxxdXF8jZk1tRViMhx.nCugoDcLVqEQTqk7e7F4vXGz.Kxvo0NB_2CoM3YwZa7gHz1pKqRG7G
- ABQksBJZmM.i7RhVjG6gEneOmn6VFx6BB2W7QvLbQrP0PgKrpVjFx67_aK3Ebrb8vYiXNqqyTjxg
- xKKpeEh4UwpAVT8TgNp0Eref..Ogfok.gRIecmUh_POfy2XHUGH7K5LL9u1Us71kcofWxc6pNAph
- XmowtCkStNU26nw0Jyneg7f_hzOhSO6hqBww2XSG_getonFjL2hlQypcVarHwbetUJtCPGes4jGL
- du.LzeyRYg7gBneOpAOmw6d9rsl3vu6dYBmefRgy.HZQKS3_5m4HuXMTHGXNrxy_h8RsbTM.pZPF
- yQJE4WaInPugdiClVPcqJkhuxR9_gsVDkRpt5BEtuHww9DwL6xWgXf3Pvcr9LQxaYwaht4w11d99
- OTzsUXYdjdcOH_.5ALg4upfOWvQpzJf0uSf8hh9ZKZ1N800NPFw3AIaWYEY3bTJDJHoLalUERz7f
- i3JaRJ0.YcARAeEt0_hzBqOmjro34zkbxaqFFDVaGK8KkG4t8wQbUB0o2QV5Igzc2fFfCeyFHVIs
- w3g1KVitzYFegJEwB.rbxPv2FCQNBCr49NPDDm7a6IZCiS4_K2O0qPFNP6sF6ZhPDvGgXlIwCYaJ
- 4d10w0_71jYfjHryCnPOxcUF6xsNn2rKN6XhzEW7d2.mDtV4UxBr9kRgftjF_KltYoFyde.0PgXG
- mXW1jeBY0xIl2_Rl0x_69FWU768PrH2ZkXxxR1ul.VCC0ceX5JcTXvZ3CZppSmwTwdmMiw5OOQtD
- qyOWfpITvDCOoNYNgCOoyMRyKa4hLk79mTTLfDG5iDjeR6cwlNtjweadXvr3dXQ--
-X-Sonic-MF: <kwangson@yahoo.com>
-X-Sonic-ID: 4ce2f831-bb3d-44da-a703-607e492cf863
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.sg3.yahoo.com with HTTP; Thu, 8 Aug 2024 10:52:29 +0000
-Received: by hermes--production-sg3-fc85cddf6-kzxtv (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 719bc7da6e47d6736d4c9dcb1b1f957f;
-          Thu, 08 Aug 2024 09:51:37 +0000 (UTC)
-Message-ID: <48be93dc376d115d93b9d79f157e31d7cfedea15.camel@yahoo.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: clock: exynosautov9: add dpum clock
-From: Kwanghoon Son <kwangson@yahoo.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Kwanghoon Son
- <k.son@samsung.com>,  s.nawrocki@samsung.com, cw00.choi@samsung.com,
- alim.akhtar@samsung.com,  mturquette@baylibre.com, sboyd@kernel.org,
- robh@kernel.org, conor+dt@kernel.org,  tomasz.figa@gmail.com
-Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date: Thu, 08 Aug 2024 18:51:34 +0900
-In-Reply-To: <1a7db82e-72ee-496c-a501-54c7dd05cd41@kernel.org>
-References: <20240730111535.135301-1-k.son@samsung.com>
-	 <CGME20240730111628epcas1p1148cf2853a9d2fc6decbd4ce50f23715@epcas1p1.samsung.com>
-	 <20240730111535.135301-2-k.son@samsung.com>
-	 <1a7db82e-72ee-496c-a501-54c7dd05cd41@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1723112096; c=relaxed/simple;
+	bh=dh7oDQEDvsFMBMEJeKdrDyxS2nNFjJ1jhncBVJEXWvk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Mpzj62S3tU7lj5BnPyeF5TuI2qrZO+aRpqTHJosnOlwYBVxho8DwLSB8sIJfhXiMQiJDf0RjbIzxDnK83QaSzkb6CrIEqdczsoql+L2d6kB2pBVFOlsg9Z4cjrd3ZeKccFNpeegL8KOTTNVM53SJKurxpTHUQ4VKVqkg5V3ExQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=USu59iT5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D9C0C32782;
+	Thu,  8 Aug 2024 10:14:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723112096;
+	bh=dh7oDQEDvsFMBMEJeKdrDyxS2nNFjJ1jhncBVJEXWvk=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=USu59iT5F9bjAZLxN8x+aiv+4UKzeBd2i+ZhhGw+oH0+Kn4qHjFChEeicybHlMdaN
+	 MsMracGpQZfygEFueqj0mKdIFqMrxg8NizjxFIc6/tsI77RmYrj1kKfI1afeNEBXyY
+	 B0T6qyjJWnOv0QzTV7hMJUKcaGc1awYv+UaaA6I/fXpt1uGbPl/9GEDuoB3QWMu0k4
+	 eS2rDePBvD9t88VjUtXq6ouWGINWyDsxt2tHkx9eEsR4E94ql4V+mqQHoPxkWbCowx
+	 KgU4EU0HYo6Ui380nNSHSf/3kwfISVPnQ271X+gzmF4Hw3S4Y3sQP+q57l5RjaFYeN
+	 G7LgzByd6nY2w==
+Message-ID: <2f27285e-6aa5-4e42-b361-224d8d164113@kernel.org>
+Date: Thu, 8 Aug 2024 12:14:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: WebService/1.1.22544 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: mfd: aspeed: support for AST2700
+To: Ryan Chen <ryan_chen@aspeedtech.com>, Lee Jones <lee@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org
+References: <20240808075937.2756733-1-ryan_chen@aspeedtech.com>
+ <20240808075937.2756733-2-ryan_chen@aspeedtech.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240808075937.2756733-2-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2024-08-08 at 09:57 +0200, Krzysztof Kozlowski wrote:
-> On 30/07/2024 13:15, Kwanghoon Son wrote:
-> > Add dpum clock definitions and compatibles.
-> >=20
-> > Signed-off-by: Kwanghoon Son <k.son@samsung.com>
-> > ---
-> >  .../clock/samsung,exynosautov9-clock.yaml     | 19 +++++++++++++++++++
-> >  .../dt-bindings/clock/samsung,exynosautov9.h  | 11 +++++++++++
-> >  2 files changed, 30 insertions(+)
->=20
-> > +
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          items:
-> > +            - description: External reference clock (26 MHz)
-> > +            - description: CMU_DPUM bus clock (from CMU_TOP)
-> > +
-> > +        clock-names:
-> > +          items:
-> > +            - const: oscclk
-> > +            - const: dout_clkcmu_dpum_bus
->=20
-> We need to stop calling input clocks by full name. Rob already pointed
-> it out for GS101 and we fixed the approach there. This binding already
-> uses above syntax, but I think we can start with proper approach even if
-> it leads to inconsistency. So please come with description of this clock
-> (not clock name - see GS101) and name, e.g. "bus".
+On 08/08/2024 09:59, Ryan Chen wrote:
+> Add compatible support for AST2700 clk, reset, pinctrl, silicon-id
+> and example for AST2700 scu.
+> 
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> ---
+>  .../bindings/mfd/aspeed,ast2x00-scu.yaml      | 31 +++++++++++++++++--
+>  1 file changed, 29 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml b/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
+> index 86ee69c0f45b..c0965f08ae8c 100644
+> --- a/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
+> @@ -21,6 +21,8 @@ properties:
+>            - aspeed,ast2400-scu
+>            - aspeed,ast2500-scu
+>            - aspeed,ast2600-scu
+> +          - aspeed,ast2700-scu0
+> +          - aspeed,ast2700-scu1
 
-True. I'll look over GS101 more and work in v3.
+What are the differences between these two?
 
->=20
-> BTW, in the future, please ping after two weeks or better even: relax,
-> and help out by reviewing other patches on the mailing lists in order to
-> relieve the burden of maintainers and move your patches higher up the lis=
-t.
+>        - const: syscon
+>        - const: simple-mfd
+>  
+> @@ -30,10 +32,12 @@ properties:
+>    ranges: true
+>  
+>    '#address-cells':
+> -    const: 1
+> +    minimum: 1
+> +    maximum: 2
+>  
+>    '#size-cells':
+> -    const: 1
+> +    minimum: 1
+> +    maximum: 2
+>  
+>    '#clock-cells':
+>      const: 1
+> @@ -56,6 +60,8 @@ patternProperties:
+>              - aspeed,ast2400-pinctrl
+>              - aspeed,ast2500-pinctrl
+>              - aspeed,ast2600-pinctrl
+> +            - aspeed,ast2700-soc0-pinctrl
+> +            - aspeed,ast2700-soc1-pinctrl
+>  
+>      required:
+>        - compatible
+> @@ -76,6 +82,7 @@ patternProperties:
+>                - aspeed,ast2400-silicon-id
+>                - aspeed,ast2500-silicon-id
+>                - aspeed,ast2600-silicon-id
+> +              - aspeed,ast2700-silicon-id
+>            - const: aspeed,silicon-id
+>  
+>        reg:
+> @@ -115,4 +122,24 @@ examples:
+>              reg = <0x7c 0x4>, <0x150 0x8>;
+>          };
+>      };
+> +  - |
+> +    soc0 {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
 
-I'll keep in mind.
-Thanks for advice.
+That's the same example as previous, right? The drop, no need.
 
-Kwang.
-
->=20
-> Best regards,
-> Krzysztof
->=20
+Best regards,
+Krzysztof
 
 
