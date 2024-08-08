@@ -1,218 +1,137 @@
-Return-Path: <linux-clk+bounces-10561-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10563-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4CCA94BFFD
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 16:44:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C3DC94C031
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 16:50:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED5E61F277B0
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 14:44:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C4D3B26B64
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2024 14:50:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CFCF191472;
-	Thu,  8 Aug 2024 14:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798C819049C;
+	Thu,  8 Aug 2024 14:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hv2lfC8G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vr6YBJlU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A027118F2C0
-	for <linux-clk@vger.kernel.org>; Thu,  8 Aug 2024 14:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4729118E034;
+	Thu,  8 Aug 2024 14:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723128182; cv=none; b=l78E+5Pi1hEiXw1sYsR9o+nP9zHfmolglOOBLYJvsQot8kWY0GfMUFFus9No9dS3G874bTeZb3Jf/w10ooDRZlha6URx1YyJv//GInCGMW5XodJ+RRxTBcZl6wTJ7AKCjDj/LX5q/Jm3b2dX2GVh9lFRjTcFmNHKOh2372Iy+Lc=
+	t=1723128349; cv=none; b=sDwO8zgd52E5irlsvj0QBK11REFSeiWPvxrV7h6SUBB7ApyLzt3cVn98lu4MxwNIxqv6FCrI82wkI7xukYfdQQZ+mRhNCw26i06g/eqHr9qxRViXLgoFHhp8Syxh/o2LJgASdpd2ihaw1n5+AB+P+UexcJGwJOXT4g+Ut4Z3kY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723128182; c=relaxed/simple;
-	bh=nXzI2w3ThoiSRcRj8fOXuTW+n6yOdH+9/0PqUvo2i28=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NB2jlvbXXbrROJq4QoKsymCQSRlv4wwiN0z1OGbBmFsR5eEo/atms6lTE4bnuFSdCwugbfMxmfUr7WmjkC4ANLSq4ADPEDsMNs0A9yYrTkHTC8qBLoeR/RyjMfVPE7sAKzqQebjlVVmeqqGo8oHmjZn3bW0LLG32CDQcd1M/4Ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hv2lfC8G; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5af6a1afa63so1183359a12.0
-        for <linux-clk@vger.kernel.org>; Thu, 08 Aug 2024 07:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723128178; x=1723732978; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g4eCyKnwzwhvgvotyhGHB+vsH3GCQ4YaY3HQS5YaZiA=;
-        b=hv2lfC8GPDvHKbCqcIwGJEJojnr8ll21jubKjS+FIjcE08d7VoI8t3+rPF3VhYuM1C
-         YtlXejnCFiIB+sT1fs/jaJkkJ/OtbV6iiZxCR95HKG3ZCefKEa3QOd0hGJEQ/1V6Ud/v
-         S8zIU8lW6B7Nt57vTOEGfvD1DrCA2gIjjhdDwztuYjZYEH7IQeWZu4IZJ17kERMxQvf9
-         rlnUuxcOREEg/ZFukOLRFo07LWgNZChWk2aWvBUd6hFH/paFbcowt8YzmUz/qTTjRn9J
-         LqehT7fryJ7B8eXZtEces9cgXxCcaimh/OcnSMdXuC3m5EE6R2zMB2We9FYfKh2kZqNR
-         wFMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723128178; x=1723732978;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g4eCyKnwzwhvgvotyhGHB+vsH3GCQ4YaY3HQS5YaZiA=;
-        b=swxuEu/OB5JuPSnvSC8ocxc/iMklNSuiTmMXM+yz3nJTMQ56xjrLdfg1eB5HxvuRFF
-         BSwXvrECfC6yzdnP6llVj4cetiWCQsDANsCTeHolXwoSHna92iHbRTB7zjLesbIawSmD
-         1wt6/8DAjPYN6VLQvRXo3kv/qiCaM4LKYzSzzzB+eN9WvdCKt+yAy/oVxiQ1OZP2l7Z0
-         Y00aR8eQidDZc9c92cNeAB/2P9Z7vwCMDJNK9SLPX94ReawnX8xEx/XBykuMRoGq9NsI
-         zf3/TS9fWqesBr0X0Re71fDDA5xVLUN16P0t2f8DeuOPEFr1+I7KemsS5Wu6mGkjzSJl
-         wUPA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+HDc31MyuT5Ulu7e1+2A9oA4Dwp7Q7EhqZiVPfohaLgUKTCXYfRWuI7XFUGrWtXzpgGUaEisuhC2194FSEYeuxxsN+LzlCTLQ
-X-Gm-Message-State: AOJu0YxClku1U5xMOysbEqqihaWCLAn5eJtgiwLP/876jrLpRp4mj6T4
-	hfe8/Rr09zM2xXMfQCupZGMh5y4pMhf0aar6gSPDW6M8uRwJcQJ2uHTpz7Qg72o=
-X-Google-Smtp-Source: AGHT+IHqbohN5vuse2tZu05wgsB0D/3481cW3wuuO9L9OkxukplhEORcbJpoFFUAYLw6KR5UnB87lg==
-X-Received: by 2002:a17:907:da6:b0:a7a:c106:3640 with SMTP id a640c23a62f3a-a8090eff092mr152706366b.66.1723128177570;
-        Thu, 08 Aug 2024 07:42:57 -0700 (PDT)
-Received: from puffmais.c.googlers.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9e80e04sm759298966b.175.2024.08.08.07.42.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 07:42:57 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Thu, 08 Aug 2024 15:43:01 +0100
-Subject: [PATCH v6 20/20] clk: imx: drop imx_register_uart_clocks()
+	s=arc-20240116; t=1723128349; c=relaxed/simple;
+	bh=OAP7qipXG5UOuc9kNII+/P+BLWo3SVeG/J1A9fG278M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cUKtfktOlisYKMa5A3R13Xz+5IrAfZRMX4u78lzV6U+ZoWHa3a4i42FWPUgOMuJLAbomUhPQNQWcpuZZlN4mLA+Jh+7S56HkB6zp2Zruu8oGD0h7VWQG/i/aB5ddLOQXvaTrh9WqdV5Ljoqf02adQ2XaBT2S7NGz58HZ4NQJd2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vr6YBJlU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FAE0C32782;
+	Thu,  8 Aug 2024 14:45:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723128348;
+	bh=OAP7qipXG5UOuc9kNII+/P+BLWo3SVeG/J1A9fG278M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Vr6YBJlU0L3DMW6rOG1RTmdBgKr5FJn7+K8rxHfj3254H4pdXyzYtAus98hhSOhjb
+	 V/TAiGCTjyM/suF58TaR/7Rq+39mA3yPRNKd0LOT6j2+bS2iEF4PTZQJe8AHoL2gt2
+	 C6o1sxYy9bxh2GZL+aG7ygjLRAUSAhsr9c7brCQygiCLTns3UTb60MLIjnRDQn5RHf
+	 uH/RvDFIEo7BY6YQkKh2pXGfHiw2vQYHnLKGd0X9BsprIqxrWqpFV39ps+tFFM2FLq
+	 UUF8/6FtsadKExZ4nhJ5RH0r6aaI/mvEP1kZFv3+48PgOaYDFwIhQEgjYOOtTzNEzy
+	 0Jf6vrsWYUepw==
+Message-ID: <1d5b1666-4ced-45e6-bea4-50a33530a12c@kernel.org>
+Date: Thu, 8 Aug 2024 16:45:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240808-gs101-non-essential-clocks-2-v6-20-e91c537acedc@linaro.org>
-References: <20240808-gs101-non-essential-clocks-2-v6-0-e91c537acedc@linaro.org>
-In-Reply-To: <20240808-gs101-non-essential-clocks-2-v6-0-e91c537acedc@linaro.org>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Peter Griffin <peter.griffin@linaro.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Sam Protsenko <semen.protsenko@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, Abel Vesa <abelvesa@kernel.org>, 
- Peng Fan <peng.fan@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>
-Cc: Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- imx@lists.linux.dev, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.13.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: Add common PLL node for IPQ9574 SoC
+To: Luo Jie <quic_luoj@quicinc.com>, Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, quic_kkumarcs@quicinc.com,
+ quic_suruchia@quicinc.com, quic_pavir@quicinc.com, quic_linchen@quicinc.com,
+ quic_leiwei@quicinc.com
+References: <20240808-qcom_ipq_cmnpll-v1-0-b0631dcbf785@quicinc.com>
+ <20240808-qcom_ipq_cmnpll-v1-4-b0631dcbf785@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240808-qcom_ipq_cmnpll-v1-4-b0631dcbf785@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-There are no users of this anymore in the tree and the clk core
-implements something similar now, we can remove
-imx_register_uart_clocks().
+On 08/08/2024 16:03, Luo Jie wrote:
 
-Do so.
+>  
+>  /dts-v1/;
+> @@ -167,3 +167,7 @@ &usb3 {
+>  &xo_board_clk {
+>  	clock-frequency = <24000000>;
+>  };
+> +
+> +&cmn_pll_ref_clk {
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- drivers/clk/imx/clk.c | 72 ---------------------------------------------------
- drivers/clk/imx/clk.h |  7 -----
- 2 files changed, 79 deletions(-)
+Please follow DTS coding style.
 
-diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
-index df83bd939492..5f998e56a4ed 100644
---- a/drivers/clk/imx/clk.c
-+++ b/drivers/clk/imx/clk.c
-@@ -154,77 +154,5 @@ void imx_cscmr1_fixup(u32 *val)
- 	return;
- }
- 
--#ifndef MODULE
--
--static bool imx_keep_uart_clocks;
--static int imx_enabled_uart_clocks;
--static struct clk **imx_uart_clocks;
--
--static int __init imx_keep_uart_clocks_param(char *str)
--{
--	imx_keep_uart_clocks = 1;
--
--	return 0;
--}
--__setup_param("earlycon", imx_keep_uart_earlycon,
--	      imx_keep_uart_clocks_param, 0);
--__setup_param("earlyprintk", imx_keep_uart_earlyprintk,
--	      imx_keep_uart_clocks_param, 0);
--
--void imx_register_uart_clocks(void)
--{
--	unsigned int num __maybe_unused;
--
--	imx_enabled_uart_clocks = 0;
--
--/* i.MX boards use device trees now.  For build tests without CONFIG_OF, do nothing */
--#ifdef CONFIG_OF
--	if (imx_keep_uart_clocks) {
--		int i;
--
--		num = of_clk_get_parent_count(of_stdout);
--		if (!num)
--			return;
--
--		if (!of_stdout)
--			return;
--
--		imx_uart_clocks = kcalloc(num, sizeof(struct clk *), GFP_KERNEL);
--		if (!imx_uart_clocks)
--			return;
--
--		for (i = 0; i < num; i++) {
--			imx_uart_clocks[imx_enabled_uart_clocks] = of_clk_get(of_stdout, i);
--
--			/* Stop if there are no more of_stdout references */
--			if (IS_ERR(imx_uart_clocks[imx_enabled_uart_clocks]))
--				return;
--
--			/* Only enable the clock if it's not NULL */
--			if (imx_uart_clocks[imx_enabled_uart_clocks])
--				clk_prepare_enable(imx_uart_clocks[imx_enabled_uart_clocks++]);
--		}
--	}
--#endif
--}
--
--static int __init imx_clk_disable_uart(void)
--{
--	if (imx_keep_uart_clocks && imx_enabled_uart_clocks) {
--		int i;
--
--		for (i = 0; i < imx_enabled_uart_clocks; i++) {
--			clk_disable_unprepare(imx_uart_clocks[i]);
--			clk_put(imx_uart_clocks[i]);
--		}
--	}
--
--	kfree(imx_uart_clocks);
--
--	return 0;
--}
--late_initcall_sync(imx_clk_disable_uart);
--#endif
--
- MODULE_DESCRIPTION("Common clock support for NXP i.MX SoC family");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
-index aa5202f284f3..314730f848f7 100644
---- a/drivers/clk/imx/clk.h
-+++ b/drivers/clk/imx/clk.h
-@@ -11,13 +11,6 @@ extern bool mcore_booted;
- 
- void imx_check_clocks(struct clk *clks[], unsigned int count);
- void imx_check_clk_hws(struct clk_hw *clks[], unsigned int count);
--#ifndef MODULE
--void imx_register_uart_clocks(void);
--#else
--static inline void imx_register_uart_clocks(void)
--{
--}
--#endif
- void imx_mmdc_mask_handshake(void __iomem *ccm_base, unsigned int chn);
- void imx_unregister_hw_clocks(struct clk_hw *hws[], unsigned int count);
- 
+> +	clock-frequency = <48000000>;
+> +};
 
--- 
-2.46.0.rc2.264.g509ed76dc8-goog
+
+
+Best regards,
+Krzysztof
 
 
