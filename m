@@ -1,113 +1,115 @@
-Return-Path: <linux-clk+bounces-10670-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10672-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AC4951B39
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Aug 2024 14:55:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA413951B40
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Aug 2024 14:56:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3D0CB23039
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Aug 2024 12:55:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4C381C231F3
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Aug 2024 12:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B685C1B1410;
-	Wed, 14 Aug 2024 12:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803CE1B142B;
+	Wed, 14 Aug 2024 12:56:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bn3JPS5+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cnBOg54u"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C931B0124;
-	Wed, 14 Aug 2024 12:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D400A1B142A;
+	Wed, 14 Aug 2024 12:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723640120; cv=none; b=UJBsCsJ6J5b1hbSlA5buOH3HJ9EC3Z+OYn+wJh5COlfv8n8sCggf3rfxsF+cEB8CmdgGRAdMNc8SIIrKwndOezhf5OLiVPU+BD2HB4VKfWFdzAujBI5MCRI/aB1eg2ZXYvwFX+DkS81xZYKeKqaSNjHFrThVFU9X8OJ9lZCptvM=
+	t=1723640163; cv=none; b=ubqQSsAWZCWS8HASZ0lox/mYjfA03exZLpoWsYgt0ThI+IceeT+jLa3H+sVvtRm50lW/+Aj3WlOgjqzhTU/Cu632AbMk1Uxnm9ZyoV550M6g6qabMRzDfzk9vQfwwDoub9ODIiQZk0kzNbBFW+V6QdnPPXfeomScCL34mL+RE+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723640120; c=relaxed/simple;
-	bh=APdEsDB4uRUfTA63O96E6T6zEAl1Dq01I03zQVCsNlk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EyarU71VGveYY6zWM5GMuLYic0GfS5rlgJmanX8x7ESoZWJAIbfUFY0g4tl1DAPj3E+mVYaSxDAdyu/2+BydlW20VXH3bqHtzYyen9RF/w77ClHRgTwCRb4c+G7x8iDJfPQXi0mce9ydBYHZoUgMW3OJ+jEUAUuNyeoUilyYEeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bn3JPS5+; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1723640163; c=relaxed/simple;
+	bh=KqRnxgjYWajhIUPo+HXdCS6BLSaBY1bMw/iNKPudTQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ryoumwCHzqlQlvOV8FRqaqiLPKce7TxF0HeAJY20XA2eJgxnQRk8rlQfZZDfWZL/GHl2b5yGxAdujixAukELN725u6rNI0GV+vQ5Q4bmqd19gSj11E9XtsZHX8xiWX6y6wstHVCucopyENEB9Hf7ll0Nh7gVYIEFq1zOXQqRBqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cnBOg54u; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723640119; x=1755176119;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=APdEsDB4uRUfTA63O96E6T6zEAl1Dq01I03zQVCsNlk=;
-  b=bn3JPS5+xBWAuD5lmSujE/dFbOxKXLmWPeSVCpNqQWq9aEIqeocOxcuj
-   c2xYFVfaEiUKqzHCXB9HhvFD52m+PK24MYoCKqPG0CXh4hkmwUQZM+ZEz
-   otfXfqII7i/kvWTIbAYexLrlYIF3VY+uAohYEqFYX8i+9604YMUapEcCU
-   HjQHKB5vY+5sxF6goluuKjn9ZdIjtqJN+mFlk4HHpblq2zufKMO6FBw/d
-   cqJTvXC4JLjkvsFPuvWXhwfYNKyBA0SP7r/CDibazi7DRXYm1vWdJJbv2
-   cKzkoBT0jFRAxtF6VNwYE+1bcio6v857XW8KMLV9OZrVDXEfM/9IaocgO
-   g==;
-X-CSE-ConnectionGUID: bL3J6qLXSXaNuDhosYILDA==
-X-CSE-MsgGUID: OJ9dsxevTKei3n4wjSK/Sw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="22010671"
+  t=1723640162; x=1755176162;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KqRnxgjYWajhIUPo+HXdCS6BLSaBY1bMw/iNKPudTQQ=;
+  b=cnBOg54uwLey30CadE8aeK0eUDsb7EKBPDBE0B3MyRDNBThPynL405RB
+   r1O6VS/zhp47Wbsx5tPsAAUB6Aoi7+LfSYEsUb63ypo7eHIHXsIf9Df3I
+   zvB4f2kThFICOt3PM6i3f731RKup+QgxNo2M6IhQb7I9sALRAJ/EO7lzO
+   BGrdYs5yv1pSwnUHYGZpMQqnHDiPSrSJTdTL/XYJpWug93ZArR0rpgB4B
+   DCthZ3uZo/Su4EFWyeOro+VT+usAA3TKuhDM6kBVO5hnuwEMA0dxg5cbD
+   jBNn+G43So9A6ltxWuSKxh5xWrqTdC9hxiJOffagnELUNGnIdzUJ9Vtzz
+   A==;
+X-CSE-ConnectionGUID: zx0Xf6E4TniMFBuk7+Y9Lw==
+X-CSE-MsgGUID: 0XMSJg7VTpSvk53xq5RXpw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="21725300"
 X-IronPort-AV: E=Sophos;i="6.10,145,1719903600"; 
-   d="scan'208";a="22010671"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 05:55:17 -0700
-X-CSE-ConnectionGUID: tYGueyiRSOmWo/oRDpCZoQ==
-X-CSE-MsgGUID: WpwGN25MQM+gY6nt7vThPw==
+   d="scan'208";a="21725300"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 05:56:00 -0700
+X-CSE-ConnectionGUID: jLMItZHBQeaIFjD2BpAPlg==
+X-CSE-MsgGUID: k3SJaDUqS9ql6Jm0wEayyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,145,1719903600"; 
-   d="scan'208";a="89804224"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Aug 2024 05:55:15 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id E0C012FB; Wed, 14 Aug 2024 15:55:13 +0300 (EEST)
+   d="scan'208";a="58969860"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 05:55:57 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1seDXd-0000000FBQD-1z8u;
+	Wed, 14 Aug 2024 15:55:53 +0300
+Date: Wed, 14 Aug 2024 15:55:53 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
 	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH v2 2/2] clk: visconti: Switch to use kmemdup_array()
-Date: Wed, 14 Aug 2024 15:54:08 +0300
-Message-ID: <20240814125513.2637955-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20240814125513.2637955-1-andriy.shevchenko@linux.intel.com>
-References: <20240814125513.2637955-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 0/4] clk: Switch to use kmemdup_array()
+Message-ID: <ZrypWaon4yIdzyx1@smile.fi.intel.com>
+References: <20240606161028.2986587-1-andriy.shevchenko@linux.intel.com>
+ <ZrsbXMVy1Dsi4UZe@smile.fi.intel.com>
+ <2478bc8a787d07cd3e412b6ee4400669.sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2478bc8a787d07cd3e412b6ee4400669.sboyd@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Let the kmemdup_array() take care about multiplication and possible
-overflows.
+On Tue, Aug 13, 2024 at 05:01:50PM -0700, Stephen Boyd wrote:
+> Quoting Andy Shevchenko (2024-08-13 01:37:48)
+> > On Thu, Jun 06, 2024 at 07:09:30PM +0300, Andy Shevchenko wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/clk/visconti/pll.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+...
 
-diff --git a/drivers/clk/visconti/pll.c b/drivers/clk/visconti/pll.c
-index e9cd80e085dc..3f929cf8dd2f 100644
---- a/drivers/clk/visconti/pll.c
-+++ b/drivers/clk/visconti/pll.c
-@@ -262,9 +262,9 @@ static struct clk_hw *visconti_register_pll(struct visconti_pll_provider *ctx,
- 	for (len = 0; rate_table[len].rate != 0; )
- 		len++;
- 	pll->rate_count = len;
--	pll->rate_table = kmemdup(rate_table,
--				  pll->rate_count * sizeof(struct visconti_pll_rate_table),
--				  GFP_KERNEL);
-+	pll->rate_table = kmemdup_array(rate_table,
-+					pll->rate_count, sizeof(*pll->rate_table),
-+					GFP_KERNEL);
- 	WARN(!pll->rate_table, "%s: could not allocate rate table for %s\n", __func__, name);
- 
- 	init.ops = &visconti_pll_ops;
+> > >   clk: mmp: Switch to use kmemdup_array()
+> > 
+> > >   clk: visconti: Switch to use kmemdup_array()
+> 
+> I have them all as "changes requested" so please resend.
+
+Done (Message-Id: 20240814125513.2637955-1-andriy.shevchenko@linux.intel.com).
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+With Best Regards,
+Andy Shevchenko
+
 
 
