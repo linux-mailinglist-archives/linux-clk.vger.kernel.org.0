@@ -1,90 +1,173 @@
-Return-Path: <linux-clk+bounces-10701-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10703-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E219527AC
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2024 03:54:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC486952931
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2024 08:07:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65FD12816C8
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2024 01:54:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27E5B1F22684
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2024 06:07:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1FA1878;
-	Thu, 15 Aug 2024 01:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE00176AAE;
+	Thu, 15 Aug 2024 06:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7xiJc69"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jw8F5GOk"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA042566;
-	Thu, 15 Aug 2024 01:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C335038DC8;
+	Thu, 15 Aug 2024 06:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723686861; cv=none; b=VMdxI1FaCYN1G3hXfvUI/MWHR+xjeQJoyCgHjawhsPjRG7XuFA7eGVGAAK5DQqeyTJGzP19DdEchdj9Q7yalzSeT2qFEglM6HYSDBXw+ZlDURYgo168bw4IpPnreIpfmp2Y03NBXT8BWlb1EQdLnFE0QWb5uDsjpWn5mZ0vDH7c=
+	t=1723702053; cv=none; b=li1bssKb3+JcpY+g/kgB/h2Y0eiLkHhOGtqrp4W6kFasrKPqWbnd5ZRboP2Nreq1P0vDOp6sxQheQK+SjAZf7Ig2t+ocFswrlXEgX1UNJivnVSjCsOqw7sVaKluwYhnR45/2wfFVUlEmoibMshRYoMOaLx2kE0crzp2MzPAs7ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723686861; c=relaxed/simple;
-	bh=d3sfWeHxva1JfLaQJzj6iXdO0zdjlM4Noz+FAhMcASs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eTvbx7aaOK+6ycmS91fBGBpwmy93gJDnre3v+4a/eFGNfzh/1CSiD3QXUUWZ8LdwunRZLgSO4O+4k2VMNUepY9SSYdjsGLN3WVa4oYFBqBNNvSewEgmXC1YZYLiXLq1wH8Wn3J1S2PSTqSynL7rW2WelQP1TfsTTQtpgkjkr8X8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7xiJc69; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556D2C116B1;
-	Thu, 15 Aug 2024 01:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723686861;
-	bh=d3sfWeHxva1JfLaQJzj6iXdO0zdjlM4Noz+FAhMcASs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y7xiJc69pPg//0RljRGwFYP8X81e64inreUMz39L86yVktJHUJbOeLMM/2ehlgi8z
-	 RF5K7uJIuIrqfQfl1dqQOpiVu/qPQQHjqlL/uOrkuMX3fus8IwO91qxMFWoGUFabI4
-	 SSLmTeOaZ3NKpD/zKbrYnAayIvMPfyfu35MapAhS92W+Y5gnRHR7svAA/IrMMjA6pF
-	 2Qx0a2EE76eCm0ded6rMMZa/Kwf/QV3X0sXcgxCk9Tzr+Fr/NaiIw951dJSO9vOy1q
-	 hOqntWDHNggZZ1MaCnskAyNZ7BnXyrbK+0NWIY+AjLT1x1sRTRPBnc7xAw6HvbjQQ6
-	 i4XSuiTO+LPXw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Abel Vesa <abel.vesa@linaro.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: gcc-x1e80100: Fix USB 0 and 1 PHY GDSC pwrsts flags
-Date: Wed, 14 Aug 2024 18:58:37 -0700
-Message-ID: <172368711404.4025076.14228696784117021827.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240801-x1e80100-clk-gcc-fix-usb-phy-gdscs-pwrsts-v1-1-8df016768a0f@linaro.org>
-References: <20240801-x1e80100-clk-gcc-fix-usb-phy-gdscs-pwrsts-v1-1-8df016768a0f@linaro.org>
+	s=arc-20240116; t=1723702053; c=relaxed/simple;
+	bh=PFJbY9QxyJb7XD4KnUPRq++45YKSxQjoOOINOoNW/1s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QQ3JoEDSdqSpxv5lK+GStpKhZG5MLXoQW4opXXOFDji9hkH0ztIpfTaNMGSeT+jPEijIMIpTTcDQj1Wq+PuWolWo1qkMh2a0BRCzFMbPTG2Qz/wIeFtbQlhvVvR0FI/MYYs7UHIgRiuIFV9dJBw6J43Ion7ybZIum46PFZNd2LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jw8F5GOk; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2f189a2a841so5518021fa.3;
+        Wed, 14 Aug 2024 23:07:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723702049; x=1724306849; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UN5Jya+bU5edlI+PXQKJHx7XpQB+ZJik6Qvqm1dVNgw=;
+        b=Jw8F5GOkfgWjeW6DQmy2OZe7sVH+mK4iQeQKXuO8QLk4mU2OS+f7rFLhCXFSlcDfui
+         o08uQQbBRPRHOgMDIsmSTGYiYibMuYm6AZSn10D8mB/uU2J03nDDOWOPTfsZNuIqy1PD
+         HaVa1YoJdU0WuLabdKD5Bjx3lOCo/ESFEaU+7KAxH+nPMVyrPJO3tDe9MdkIag8ckGtY
+         tVSSh4N8kWOsX2dgpO5YFIhTbF/hQ/Cfg6QtKYtqIUW2LwSMFe5ZM9pW9XQ65lYmar9c
+         rtHJyk1rbIpdmIcIOIe43mQUCrFyI4xgpDtbD9UV8OBPQ7DP/z60CdFJ8uAMsJfXXDjA
+         /QKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723702049; x=1724306849;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UN5Jya+bU5edlI+PXQKJHx7XpQB+ZJik6Qvqm1dVNgw=;
+        b=eik6cXyLmyYRvr6j0bi7lnIIvjAwM9/kSMsLvo0sAyQytDTfMWivEEoRJ3WHBVsFzo
+         JrJAPRs+7z1hDR2Up7Ua5qLVCkZcbCnakabAeRhqy42WfLV3RiRU7jCOzhWsK2fw2sat
+         Vim/9hQrLDhyHAiSux57VSdP1L/oTspb4ExKVGSD/K2szCQtl+eiilggtNXAxEudo/Le
+         r1tN5rq5uX2rR7Cp0E1MrHhGSJNQ0nAfNW36c4x02TOtWNJXRE5x7hMtpATfK4PeW8FQ
+         9jCZMw027wIbrXKV9ENBkgUQhV/3bFLtXMA4Mb5GMb/f834QoRScSntMPpaRbcPiNSeC
+         KtCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEJ/rtwt+uRRRTboRyZtbK8X87+CVT7iEA5+0/zBg0DgV8IfOqTgChc8kBqwGv6lSoZQy1L7995gzAZnnOfK8JXBqDdw87S8h+fxTOXRhSXoqB7N/xCinSfotSKknfJn23uYf37G43
+X-Gm-Message-State: AOJu0YxE/GhqrjVa+10YocHYfXy0CLqZi0dEZtVW6zo6arg8kSm/Nm54
+	/AW22d21seZBLOBHA2Sue8nYE1fqHdVQEUg5uMRHB7j6cHSJ6k/f
+X-Google-Smtp-Source: AGHT+IG6OfSRhlLQ72gK8wu3bsFy8k8fYy6wk5RgBRZ4o44OVQdUrPFDC6xwajVvEPZa7Dehfmzd5w==
+X-Received: by 2002:a2e:3003:0:b0:2ef:2685:177d with SMTP id 38308e7fff4ca-2f3aa1f1bb2mr31167161fa.20.1723702048207;
+        Wed, 14 Aug 2024 23:07:28 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f3b748dd43sm999051fa.49.2024.08.14.23.07.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Aug 2024 23:07:27 -0700 (PDT)
+Message-ID: <22f3c925-309f-4ebe-a481-2553cfa71c0c@gmail.com>
+Date: Thu, 15 Aug 2024 09:07:25 +0300
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/3] clk: bd718x7: Enable the possibility to mark the
+ clock as critical
+To: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, Marek Vasut <marex@denx.de>
+References: <20220605165703.1565234-1-michael@amarulasolutions.com>
+ <20220605165703.1565234-3-michael@amarulasolutions.com>
+ <5f34b6d6-c2dd-44f9-c1bc-fe1deb336334@gmail.com>
+ <CAOf5uwm3p5AJXL9w7hQtqz05hDpQ_-CQArm0z6kAehj7OxK1Mw@mail.gmail.com>
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <CAOf5uwm3p5AJXL9w7hQtqz05hDpQ_-CQArm0z6kAehj7OxK1Mw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-
-On Thu, 01 Aug 2024 13:21:07 +0300, Abel Vesa wrote:
-> Allowing these GDSCs to collapse makes the QMP combo PHYs lose their
-> configuration on machine suspend. Currently, the QMP combo PHY driver
-> doesn't reinitialise the HW on resume. Under such conditions, the USB
-> SuperSpeed support is broken. To avoid this, mark the pwrsts flags with
-> RET_ON. This is in line with USB 2 PHY GDSC config.
+On 8/14/24 19:00, Michael Nazzareno Trimarchi wrote:
+> Hi Stephen
 > 
+> On Mon, Jun 6, 2022 at 7:26 AM Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>>
+>> Hi Michael,
+>>
+>> On 6/5/22 19:57, Michael Trimarchi wrote:
+>>> If the clock is used to generate the osc_32k, we need to mark
+>>> as critical. clock-critical has no binding description at the moment
+>>> but it's defined in linux kernel
+>>>
+>>> bd71847: pmic@4b {
+>>> ...
+>>>        rohm,reset-snvs-powered;
+>>>
+>>>        #clock-cells = <0>;
+>>>        clock-critical = <1>;
+>>>        clocks = <&osc_32k 0>;
+>>>        clock-output-names = "clk-32k-out";
+>>> ...
+>>> }
+>>>
+>>> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+>>> ---
+>>>    drivers/clk/clk-bd718x7.c | 4 ++++
+>>
+>> //snip
+>>
+>>> @@ -100,6 +101,9 @@ static int bd71837_clk_probe(struct platform_device *pdev)
+>>>
+>>>        parent_clk = of_clk_get_parent_name(parent->of_node, 0);
+>>>
+>>> +     of_clk_detect_critical(dev->of_node, 0, &flags);
+>>
+>> Purely judging the kerneldoc for of_clk_detect_critical - you may have
+>> hard time getting this accepted.
+>>
+>> I think you're working on a very valid problem though. Maybe you could
+>> see if you could align your effort with Marek?
+>>
+>> https://lore.kernel.org/all/20220517235919.200375-1-marex@denx.de/T/#m52d6d0831bf43d5f293e35cb27f3021f278d0564
+>>
 > 
-> [...]
+> Old thread but same problem. Is there any way to make this acceptable?
+> any suggestion?
 
-Applied, thanks!
+Hi Michael. I'm not sure what is the correct way but I think there are a 
+few tricks people have used to fix (or paper over) the problem. One was 
+suggested by Sebastian:
 
-[1/1] clk: qcom: gcc-x1e80100: Fix USB 0 and 1 PHY GDSC pwrsts flags
-      commit: f4c16a7cdbd2edecdb854f2ce0ef07c6263c5379
+https://lore.kernel.org/all/20220913152140.iikckob5h3ecagfi@mercury.elektranox.org/
 
-Best regards,
+No one shouted for implementing this fix though.
+
+It also seems to me that there is a way to 'make things work' by 
+modelling the clock dependencies in the DT in certain way, AND having 
+correct drivers enabled. This understanding came just by reading mails 
+Marek sent in this discussion:
+
+https://lore.kernel.org/all/20220924174603.458956-1-marex@denx.de/
+
+I've not tested any of this myself - but I hope you can use these as 
+pointers to a solution that works for you...
+
+Yours,
+	-- Matti
+
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
 
