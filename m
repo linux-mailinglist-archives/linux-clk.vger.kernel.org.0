@@ -1,65 +1,63 @@
-Return-Path: <linux-clk+bounces-10751-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10752-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC37B9541DA
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2024 08:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A960F95445D
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2024 10:32:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64B7F1F217FF
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2024 06:35:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D3431F276EA
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2024 08:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FC013A87E;
-	Fri, 16 Aug 2024 06:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D103112D75C;
+	Fri, 16 Aug 2024 08:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bXYczgzT"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jnWlfPhn"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E48913B59E;
-	Fri, 16 Aug 2024 06:33:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDB943AD5;
+	Fri, 16 Aug 2024 08:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723790040; cv=none; b=tsce/ZCSPY2sOD6csEcYb23OsR6glf6R0StouLH1th8sZ2AtfpOZK3dDQNpHaBAHm/ZFg/BAdfpiOnxj2wWZYvspUwT3QNYR8boMdO9Xw3btnjmF015HHCGvSQET4g7WzGkuutVPfuIPKxp7kOrWHcsyMLxpU+B9gIMrSo4LuQA=
+	t=1723797165; cv=none; b=lbiargIBKkgmisN2v4yLbtD7yD9oKphrLabWNm66lVFNr9bQHJ4mlyHHIjugEyZiGjDcA/r0ebUQwDvBIXIw/VRKpyaXQJGYZqvuZxtwfko6we1PxujTguOzRjO1pzD1occMFmFQOBgDdnZis4MHoxwGOISDQHpVqm46Oi1KyQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723790040; c=relaxed/simple;
-	bh=Ry8LysIbqlQoi1mRmXMzeNFeGaLwOTh7Xm7n6+szFzA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=ahp5MrZc+M4XgCu0VD47y7xiSM8nrseDVLMCgpKqmq/NV+mjCaFoonZe4Jb1TWm0WmHbmToi0kVasF++6Halt6DJDzJ8qE3P6HE/RlfDy2z4SoOuIUXpZKBUnMmt8gXq6/ufQ3mRmmDvxSFBBXXCduHRCPk5uks859ASNhrd3fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bXYczgzT; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1723797165; c=relaxed/simple;
+	bh=dn0kPdWXDA50GaTSPIW0c9Rso8lEypHSwBpq/lMPwqo=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=YVdFOgwBaNeN4Oc3f0gUkHaTaDw/Y3Km2zxY8Q+01eQC+RUGhKZrBW0PP87KY3nnk4kiRbQghoGLJ6MbNIurvyhD+Hl21xJQLpBpCzCjS1/8emoiXGoMDbU/H2iEu4JLUZ8qUTxgpck+/24kmfHDQU/Z1TAjC+9K0Lg1zxkAZj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jnWlfPhn; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FNFkYZ000366;
-	Fri, 16 Aug 2024 06:33:56 GMT
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47G7jv5k016994;
+	Fri, 16 Aug 2024 08:32:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	K0eFNX//xIzz4GsFRB/BZYSW99mtDWDTVpD20AHM3lg=; b=bXYczgzTjvh/ezQN
-	IoerFYgta/sg5zNWx7jNKkIClZ9zGIQ15xQEDQZRkpSw8NzVJjofO3ZOkq1cWMXP
-	Rilgqeu/Gy206Q/hgomr6Rdpp3vAfp2vX6IHJi0B+yVJhjhIVpgfPZ5RVorYEm3Z
-	jgulEueGg7YuDbqkn/My8szn4svUFpP5o+yatN6wq2tOYpV87LGiM8DjhuCzKBxi
-	81gPVxFk7/OBRN+BecmqG6MGJjRt9NdL+ndYvHlE4sIcRAiZ7PC5bHvRtBo92UsT
-	gAeMEiGhJ6BYSMZ/W2I0NOpZtoG5+1JVmcGrbeWk9YF6e114gqYtmRK+yOLpbxSu
-	J0C2tA==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41134eku5c-1
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=rjxRZ/+ITKgUYzcnPr8m6E
+	jKxZsi7LjrQiKekFtZrBA=; b=jnWlfPhnyWkKtkyx8fIoRjt5HsVF6h9rOzLpC9
+	tT1lyJbtLsPINB37be4e5hcqfx2Jn1w8Gr5SahIqfQJqGm23U2ozodmbjv6VasJO
+	lwIgwzeB1M0AIsbTp1jtahFH/xRdABgtG1pJ75yiOkqTcmF4mIzbdWIEYtRXwLmd
+	9xLS74evYQiO/+bNgwC3X7nDCNGEJZ0/lFYFSmCC+5hfk8DAe6UGpQTaUopXvlhR
+	cAky3+OEvtwHbqtYFVDPvAYT84CUFau0tvvn1dI/nSgU/2XHu1XkuoQ66qf8RzCl
+	9/fBWxiwk/C9r3QHgdUzCPfn698kJllctThOjCuVnH8o6a5w==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 410kywpsx6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 06:33:55 +0000 (GMT)
+	Fri, 16 Aug 2024 08:32:40 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47G6Xs84016357
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47G8Wdr6015177
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 06:33:54 GMT
+	Fri, 16 Aug 2024 08:32:39 GMT
 Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 15 Aug 2024 23:33:50 -0700
+ 15.2.1544.9; Fri, 16 Aug 2024 01:32:35 -0700
 From: Taniya Das <quic_tdas@quicinc.com>
-Date: Fri, 16 Aug 2024 12:01:50 +0530
-Subject: [PATCH v4 8/8] arm64: dts: qcom: Add support for multimedia clock
- controllers
+Subject: [PATCH v2 0/5] Update LPASS Audio clock driver for QCM6490 board
+Date: Fri, 16 Aug 2024 14:02:09 +0530
+Message-ID: <20240816-qcm6490-lpass-reset-v1-0-a11f33cad3c5@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -68,9 +66,9 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240816-sa8775p-mm-v3-v1-8-77d53c3c0cef@quicinc.com>
-References: <20240816-sa8775p-mm-v3-v1-0-77d53c3c0cef@quicinc.com>
-In-Reply-To: <20240816-sa8775p-mm-v3-v1-0-77d53c3c0cef@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAIkOv2YC/yWNwQqDMBBEf0X23IUkBIn9leIh2LFdaK3uqhTEf
+ zfo8c3wZjYyqMDoXm2kWMXkNxTwt4q6dx5eYHkWpuBCdMnXPHXfOjaOP2M2Y4VhZjQ5JZd99H2
+ gYo6KXv7n6oPWQO2VKaalHMxX0e77AX+Wbkx+AAAA
 To: Bjorn Andersson <andersson@kernel.org>,
         Michael Turquette
 	<mturquette@baylibre.com>,
@@ -79,10 +77,8 @@ To: Bjorn Andersson <andersson@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley
 	<conor+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Bartosz
- Golaszewski" <bartosz.golaszewski@linaro.org>,
-        <quic_imrashai@quicinc.com>, <quic_jkona@quicinc.com>
+        Konrad Dybcio <konradybcio@kernel.org>, <quic_imrashai@quicinc.com>,
+        <quic_jkona@quicinc.com>
 CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Taniya Das
@@ -92,102 +88,57 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nhJwJuwTjfY4VZcOuPSplc6gb5CsGLTF
-X-Proofpoint-GUID: nhJwJuwTjfY4VZcOuPSplc6gb5CsGLTF
+X-Proofpoint-ORIG-GUID: yh0d_C2DIzxEQANOrDa51Rjm8E4rAItF
+X-Proofpoint-GUID: yh0d_C2DIzxEQANOrDa51Rjm8E4rAItF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-15_18,2024-08-15_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 clxscore=1015 mlxscore=0 spamscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408160045
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ impostorscore=0 mlxscore=0 phishscore=0 malwarescore=0 clxscore=1011
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408160061
 
-Add support for video, camera, display0 and display1 clock
-controllers on SA8775P platform.
+This series updates the low pass audio clock controller driver for reset
+functionality. The patches are split from the below series.
+https://lore.kernel.org/all/20240318053555.20405-1-quic_tdas@quicinc.com/
+
+The QCM6490 board requires only the reset functionality from the LPASS
+subsystem. Thus separate out the driver probe to provide the same on the
+QCM6490 boards.
+
+[v2]:
+Changes in [v2] compared to [v1]:
+ - Updated the lpass_audio_cc_sc7280 probe to get the match_data for both SC7280 and QCM6490.
+ - Separate regmap for resets [Konrad]
+ - Split the lpassaudiocc compatible and GCC protected clocks list changes. [Dmitry]
+ - Link to V1: https://lore.kernel.org/all/20240531102252.26061-1-quic_tdas@quicinc.com/T/
+
+[v1]
+  - Add a separate platform driver for QCM6490 resets.
+  - Add device tree changes for protected clocks for GCC and LPASS AudioCC
+    compatible update.
 
 Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sa8775p.dtsi | 57 +++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+Taniya Das (5):
+      dt-bindings: clock: qcom: Add compatible for QCM6490 boards
+      clk: qcom: lpassaudiocc-sc7280: Add support for LPASS resets for QCM6490
+      arm64: dts: qcom: qcm6490-idp: Update protected clocks list
+      arm64: dts: qcom: qcm6490-idp: Update the LPASS audio node
+      arm64: dts: qcom: qcs6490-rb3gen2: Update the LPASS audio node
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index 23f1b2e5e624..93be4683a31f 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -2911,6 +2911,47 @@ llcc: system-cache-controller@9200000 {
- 			interrupts = <GIC_SPI 580 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		videocc: clock-controller@abf0000 {
-+			compatible = "qcom,sa8775p-videocc";
-+			reg = <0x0 0x0abf0000 0x0 0x10000>;
-+			clocks = <&gcc GCC_VIDEO_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		camcc: clock-controller@ade0000 {
-+			compatible = "qcom,sa8775p-camcc";
-+			reg = <0x0 0x0ade0000 0x0 0x20000>;
-+			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		dispcc0: clock-controller@af00000 {
-+			compatible = "qcom,sa8775p-dispcc0";
-+			reg = <0x0 0x0af00000 0x0 0x20000>;
-+			clocks = <&gcc GCC_DISP_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>,
-+				 <0>, <0>, <0>, <0>,
-+				 <0>, <0>, <0>, <0>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
- 			reg = <0x0 0x0b220000 0x0 0x30000>,
-@@ -3445,6 +3486,22 @@ cpufreq_hw: cpufreq@18591000 {
- 			#freq-domain-cells = <1>;
- 		};
- 
-+		dispcc1: clock-controller@22100000 {
-+			compatible = "qcom,sa8775p-dispcc1";
-+			reg = <0x0 0x22100000 0x0 0x20000>;
-+			clocks = <&gcc GCC_DISP_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>,
-+				 <0>, <0>, <0>, <0>,
-+				 <0>, <0>, <0>, <0>;
-+			power-domains = <&rpmhpd SA8775P_MMCX>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+			status = "disabled";
-+		};
-+
- 		ethernet1: ethernet@23000000 {
- 			compatible = "qcom,sa8775p-ethqos";
- 			reg = <0x0 0x23000000 0x0 0x10000>,
+ .../bindings/clock/qcom,sc7280-lpasscorecc.yaml    |  1 +
+ arch/arm64/boot/dts/qcom/qcm6490-idp.dts           | 28 +++++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts       |  5 ++++
+ drivers/clk/qcom/lpassaudiocc-sc7280.c             | 23 ++++++++++++++----
+ 4 files changed, 52 insertions(+), 5 deletions(-)
+---
+base-commit: 367b5c3d53e57d51a5878816804652963da90950
+change-id: 20240816-qcm6490-lpass-reset-e9a880a141f2
 
+Best regards,
 -- 
-2.45.2
+Taniya Das <quic_tdas@quicinc.com>
 
 
