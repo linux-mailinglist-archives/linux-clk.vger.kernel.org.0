@@ -1,109 +1,170 @@
-Return-Path: <linux-clk+bounces-10945-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10947-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 961839587F5
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Aug 2024 15:29:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8163295886F
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Aug 2024 16:04:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24C75B24128
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Aug 2024 13:29:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A560C1C20D01
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Aug 2024 14:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 713A81922E2;
-	Tue, 20 Aug 2024 13:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 391121917F3;
+	Tue, 20 Aug 2024 14:03:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="PRIIenkp"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GbRX5UBW"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112951922D4;
-	Tue, 20 Aug 2024 13:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B4C18CBEF;
+	Tue, 20 Aug 2024 14:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724160465; cv=none; b=ikCMHAoS3xH5S7hzTPSLRREzPjQZFyyKZwEOd40ol8a1K2nTG1zA4WiCkC4rv9Os/PEa1OOCUMrL09zn0+bofVhmwFXSQlOkPgbfknZDffhas7mUIPhZ5uVX1DQpLFX3fXbp5zHRpHkEVNkIvey+TXLyOLuEShEtpN2s6BBxOLI=
+	t=1724162618; cv=none; b=tnJwcpZMoKryMp9WOsNDC9ysf1h53cIiSGFFJX8IttfPIp7zJ3xrFEsHr9j79jSeQztL1B0SSXwcMqmYvLAC/J5RIhui2piKHTo9OPP/LSS/aNcxOE1yVWS01X8ASMlgZylrkUDettBgUFBO1TNtRx/2KGOCqF4s35PVPRbir4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724160465; c=relaxed/simple;
-	bh=hz3RzcXSp8C+lSShIolLGyjnUumMNWDXWqmvHVrL+pU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YUOWQ6HOJEtlBt5rpWY+0brz2gdhOmAWK/2NJaLJg4DzT0IPXib7ETRSHbMqYQue+eC6rbagfAByxxJqoE9EXWyNAyG8ctmUffNNNrs8yyl7sSN36AIuEQEzkKWs3UFSeLfMokD+b1E9aOVXnqJe8FgA6/yo4noPPujgwy4mxAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=PRIIenkp; arc=none smtp.client-ip=217.92.40.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DFFCA1487C87;
-	Tue, 20 Aug 2024 15:27:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1724160458; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding; bh=PCgOO1pDrOpwZlB5bNP2nFUn2U1YS3vBwTENcvdvGqc=;
-	b=PRIIenkpiA/BzaDGYlkixkxD6Y4j7zmqlahg0ShcVd7leunmMSzKK9j2tPBOWW4TKzWF4B
-	cnoDVlpL5FVGwVONrXTlrqJPzbZTxTatUobnUZRGLt4cNEEozvuRV9Nw3ds4jZm7y/R7pb
-	noE2GbWRZhH7a9eWQJyNaM4Y/+feO9KTP+DPPtMu8+2oSKD21hkNmX9E0zkGj1L3x8Tvm+
-	95HUTPbmUfA8bgOBInK+vq3ox+JPhBw1aRTdrbwuqWGEHiGejy4gMeOKtiSisnY4zzEp0E
-	WPgIMjKA4TsR/1Ihe04fxXOZpzY3Tlt5INun0RCHqrDQweGf7/b2f0ZvsS1Ofg==
-From: Alexander Dahl <ada@thorsis.com>
-To: linux-clk@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ARM: dts: microchip: sam9x60: Fix rtc/rtt clock parent
-Date: Tue, 20 Aug 2024 15:27:30 +0200
-Message-Id: <20240820132730.357347-1-ada@thorsis.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1724162618; c=relaxed/simple;
+	bh=jQGdfxXTbGQZfGa+WoKEiVUem9j6PKBwEzejObXRoao=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=LhQ25U2K19+/vNFE0WP2wfAXh22ugO01Wx/gmqK46j0wIZV3Vgp/iOZo3Q//3aaEAstyaVCRCtlchYgSWfmGptwBQ5kX52GfWTVTyt/7755hsy/6kncnHHO8oLXQbACPHuvssYOsJmv81OVXf8Yk2JGiCQiYendyBeAMHPPvrBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GbRX5UBW; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47K72t3L024590;
+	Tue, 20 Aug 2024 14:03:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=q5qobbkC9viyAMfapqJr7C
+	RkzyUJZ7gLLOYj+uaqwms=; b=GbRX5UBWLsT6gXpI96ikUKYAyuIatCMRj+abhy
+	8outY0P0nSYN7TtYFOYxtHqRczrDaygjOq+wJldohsvTXOYFiMp/0+KYfiPJ5M/D
+	xRfPOx7qyi+k/voSVOI+LXQPTcmaJ6Mj+nb6Xf/TZdGmdh4AmAM+L64lNWr11MFA
+	9nof7s7y77wvHVtk6kbmCBrfiXZTgSwfLo2QqAwrBTRBwGlDGFyOdhCNW1npZQmf
+	NTKbmtWz9Aa7DEkZWXRfMG4t398phV7wPHJpFzzmqiq7537XIMdslbPYjc0ZesG1
+	QZ+GmQthfY5Ta0E1iTxIoWP43d0KBn456zqOUCoFVQuiVRiA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414pdms80x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Aug 2024 14:03:18 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47KE3Goi012697
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Aug 2024 14:03:16 GMT
+Received: from nsssdc-sh01-lnx.ap.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 20 Aug 2024 07:03:12 -0700
+From: Luo Jie <quic_luoj@quicinc.com>
+Subject: [PATCH v2 0/4] Add CMN PLL clock controller driver for IPQ9574
+Date: Tue, 20 Aug 2024 22:02:41 +0800
+Message-ID: <20240820-qcom_ipq_cmnpll-v2-0-b000dd335280@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAGixGYC/3WNQQ6CMBREr0L+2pq2iEVW3sMQYj9FfgItbZVoS
+ O9uZe/yTWbebBBNIBOhKTYIZqVIzmaQhwJwvNuHYdRnBsnlide8Zh7d3NHiO5ztMk1MoRDiomX
+ FSwV5tQQz0Hs33trMI8WnC5/9YBW/9L9rFYwzzc+l6FEPqq6u/kVIFo+5CG1K6QsFiUZ+sAAAA
+ A==
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon
+	<will@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <quic_kkumarcs@quicinc.com>,
+        <quic_suruchia@quicinc.com>, <quic_pavir@quicinc.com>,
+        <quic_linchen@quicinc.com>, <quic_leiwei@quicinc.com>,
+        <bartosz.golaszewski@linaro.org>, <srinivas.kandagatla@linaro.org>,
+        Luo Jie
+	<quic_luoj@quicinc.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724162591; l=2478;
+ i=quic_luoj@quicinc.com; s=20240808; h=from:subject:message-id;
+ bh=jQGdfxXTbGQZfGa+WoKEiVUem9j6PKBwEzejObXRoao=;
+ b=lEPNUl97QlQEaQ5swcjGTJntTFMhDASyrJ0ey+/CL1GGdBooepo9u+7G6st647gxJYLfH1N16
+ dcM2bxLIIb3BHuP2r/NEJLTlrPlH0YsWL1o0ZV1dVP1XUQ+dM3kq31x
+X-Developer-Key: i=quic_luoj@quicinc.com; a=ed25519;
+ pk=P81jeEL23FcOkZtXZXeDDiPwIwgAHVZFASJV12w3U6w=
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -ErsyDwS0fwk0zEprdCbN2HIwE956-Wu
+X-Proofpoint-GUID: -ErsyDwS0fwk0zEprdCbN2HIwE956-Wu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-20_09,2024-08-19_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408200104
 
-The RTC and RTT peripherals use the "timing domain slow clock (TD_SLCK),
-sourced from the 32.768 kHz crystal oscillator.
+The CMN PLL clock controller in Qualcomm IPQ chipsets provides
+the clocks to the networking hardware blocks that are internal or
+external to the SoC. This driver configures the CMN PLL clock
+controller to enable the output clocks to such networking hardware
+blocks. These networking blocks include the internal PPE (Packet
+Process Engine), external connected Ethernet PHY, or external switch.
+ 
+The controller expects the input reference clock from the internal
+Wi-Fi block acting as the clock source. The output clocks supplied
+by the controller are fixed rate clocks.
 
-(The Monitoring domain slow clock (MD_SLCK) is sourced from an internal
-RC oscillator which is most probably not precise enough for real time
-clock purposes.)
+The CMN PLL hardware block does not include any other function other
+than enabling the clocks to the networking hardware blocks.
 
-Fixes: 1e5f532c2737 ("ARM: dts: at91: sam9x60: add device tree for soc and board")
-Fixes: 5f6b33f46346 ("ARM: dts: sam9x60: add rtt")
-Signed-off-by: Alexander Dahl <ada@thorsis.com>
+The driver is being enabled to support IPQ9574 SoC initially, and
+will be extended for other SoCs.
+
+Signed-off-by: Luo Jie <quic_luoj@quicinc.com>
 ---
- arch/arm/boot/dts/microchip/sam9x60.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+- Rename the dt-binding file with the compatible.
+- Remove property 'clock-output-names' from dt-bindings and define
+  names in the driver. Add qcom,ipq-cmn-pll.h to export the output
+  clock specifier.
+- Alphanumeric ordering of 'cmn_pll_ref_clk' node in DTS.
+- Fix allmodconfig error reported by test robot.
+- Replace usage of "common" to "CMN" to match the name with the
+  hardware specification.
+- Clarify in commit message on scope of CMN PLL function.
 
-diff --git a/arch/arm/boot/dts/microchip/sam9x60.dtsi b/arch/arm/boot/dts/microchip/sam9x60.dtsi
-index 291540e5d81e..d077afd5024d 100644
---- a/arch/arm/boot/dts/microchip/sam9x60.dtsi
-+++ b/arch/arm/boot/dts/microchip/sam9x60.dtsi
-@@ -1312,7 +1312,7 @@ rtt: rtc@fffffe20 {
- 				compatible = "microchip,sam9x60-rtt", "atmel,at91sam9260-rtt";
- 				reg = <0xfffffe20 0x20>;
- 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
--				clocks = <&clk32k 0>;
-+				clocks = <&clk32k 1>;
- 			};
- 
- 			pit: timer@fffffe40 {
-@@ -1338,7 +1338,7 @@ rtc: rtc@fffffea8 {
- 				compatible = "microchip,sam9x60-rtc", "atmel,at91sam9x5-rtc";
- 				reg = <0xfffffea8 0x100>;
- 				interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
--				clocks = <&clk32k 0>;
-+				clocks = <&clk32k 1>;
- 			};
- 
- 			watchdog: watchdog@ffffff80 {
+- Link to v1: https://lore.kernel.org/r/20240808-qcom_ipq_cmnpll-v1-0-b0631dcbf785@quicinc.com
 
-base-commit: 47ac09b91befbb6a235ab620c32af719f8208399
+---
+Luo Jie (4):
+      dt-bindings: clock: qcom: Add CMN PLL clock controller for IPQ SoC
+      clk: qcom: Add CMN PLL clock controller driver for IPQ SoC
+      arm64: defconfig: Enable Qualcomm IPQ CMN PLL clock controller
+      arm64: dts: qcom: Add CMN PLL node for IPQ9574 SoC
+
+ .../bindings/clock/qcom,ipq9574-cmn-pll.yaml       |  70 +++++++
+ arch/arm64/boot/dts/qcom/ipq9574-rdp-common.dtsi   |   6 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  17 +-
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/clk/qcom/Kconfig                           |  10 +
+ drivers/clk/qcom/Makefile                          |   1 +
+ drivers/clk/qcom/clk-ipq-cmn-pll.c                 | 227 +++++++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq-cmn-pll.h       |  15 ++
+ 8 files changed, 345 insertions(+), 2 deletions(-)
+---
+base-commit: 222a3380f92b8791d4eeedf7cd750513ff428adf
+change-id: 20240808-qcom_ipq_cmnpll-7c1119b25037
+
+Best regards,
 -- 
-2.39.2
+Luo Jie <quic_luoj@quicinc.com>
 
 
