@@ -1,387 +1,190 @@
-Return-Path: <linux-clk+bounces-10997-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10988-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F772959AEC
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 13:57:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205B7959B44
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 14:07:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44D6F1C2030A
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 11:57:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26F2BB24855
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 11:59:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C72B1A2849;
-	Wed, 21 Aug 2024 11:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2G/y1bM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD8D1B81CF;
+	Wed, 21 Aug 2024 08:45:11 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034E9188A3C;
-	Wed, 21 Aug 2024 11:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A1E1A7AD3;
+	Wed, 21 Aug 2024 08:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724240788; cv=none; b=islA0Q9oKOsE6H1129XSpOIRAdJpjLYxxcbHxZ6TaA7pDop9HNISQOtMRH6QnTre3kEGyULWP4XTq22e/8yvOFNjGTzmNm+XTfVS9Se5yp6Hxotnr0kSNfA/6EgqKsDaetgtvNbg0DEyoCCYeP0agYXdG/ar/rupkukQj3mPiMk=
+	t=1724229910; cv=none; b=AFN8xyMi1gAK6iTED0ys3iYCL5VwOT//AUFVJM8m1AYGLjpjpL1BvVjaUqiFdDV7yvkgiSR33VokpIXXmK+bFlfeXqECm2vZLpttjyyILErpL4bUqVcK67af6Wr21x9HlJSoHcZiUDrAAG+b3uwJNTB14ykcFLhpbzpBdSTXP2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724240788; c=relaxed/simple;
-	bh=WMV4dGFtHRsMdGbR2t0cIKkZrN1IsuFG4Za9AEuHTRw=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mi8ZrWtkbxyQmyokHMhJksVvq82bXYlkO/NVrmA3+E0//6SOkGmQMJ5aZh8Q9FmKIh+Y3XRFW7MoXYxYmSuBBgBr9Xb1xSAw1HODi+MP35O2vgkfRtg7DnxfL6xaXZwlTvJAAYfezphFnNpVC0+v2lV9p31PgziL3wdyLHS6YfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2G/y1bM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184C6C32782;
-	Wed, 21 Aug 2024 11:46:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724240787;
-	bh=WMV4dGFtHRsMdGbR2t0cIKkZrN1IsuFG4Za9AEuHTRw=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=r2G/y1bMyDsrn/29xVktY1F46ZX1ZKor91MvYUGiPhlQ/pwuxV/1c0wTvT/ylUDSl
-	 9BBy09XZgbyDNor2+WyK9oOQnPkY1FnNhRDAC6ClFaSePQbYyB0hR1qhuKTYz8qBnq
-	 qHmWeJA15MJL4rrye2JVqnFiqwSxoOARKEJguvzTt/4DcztdtbMDtH0iw+64DttJhM
-	 foLuSUPDleQWrjJJ2RCjOthIiqGyvwQKmJ9ZIgzJbnyZgyoAIVa0ULthwUi5P1G0Zm
-	 9degnT1bf3Ag7E4hmIx8Xod4j73NrXI0hOWM/pG2Rp5IAWDefxO+mmif2NIN0txw7t
-	 gRzupXR5uo6LA==
-Date: Wed, 21 Aug 2024 12:46:18 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH 01/11] dt-bindings: clock: Add RaspberryPi RP1 clock
- bindings
-Message-ID: <20240821-exception-nearby-5adeaaf0178b@spud>
+	s=arc-20240116; t=1724229910; c=relaxed/simple;
+	bh=qRHRsbmRDvbIyXABIKEaaMk2OJDVFBz9OKDrgIfMiu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r3biBuTbnIJ9HOTWy7PEz/7zZyMc3AEluwi87dIMqj8dFkUUHy0cxYTjCLMju+Gcp8DIStXjRm511xtNX+uz2Bm6j9CjHs/gaa0DCby15R2hBPoRBA2ZaDHrmM89O9AnbOdQgDZEJXpHPMsNplRSpK+UaKCl/MtpkCeBlupFrZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-371b015572cso3204713f8f.1;
+        Wed, 21 Aug 2024 01:45:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724229907; x=1724834707;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vebzIfVKrkPnVYzJ3Le9GL91uwlzLYfp0d5U/T68YJ8=;
+        b=J9CA4uoE/YT9/AZxTlnI+pmt2zYPS3W1dhDlINf+KxB0RBWgNFInfHqHkX1ZS2BLSS
+         9ztY65Fr7S4lydew2zKtcnQvdTEka7VuPEfzNGnVLHb3+1FrjzsiRFasa2cxKSDFt4/6
+         YCPrw0SmDNTc6nhTcxmaMZqKzDBQYQ/E3eczAz7brbw85tWTvMroswFpVy7fTaBtR8Fg
+         6QL8LJpMqXPhV4AlGSMM4eztCDGFz9M3YlxiH7YGtyWUvfJQa7srZu8gFNH4PMEfUw0V
+         K3Ylz2BQO7XxoIYddwB9vNpD5rVF+odfPJg7cecmCRYSOrH63eVBFjy7q3WpZ1/3+DNZ
+         eRSw==
+X-Forwarded-Encrypted: i=1; AJvYcCUAI3BFNf3uGHGFfqJ9EmO64X33kUghtBRHFvgjbA+AkdR95tW53cZ3nFWKzR2iEJCNcT33VEufYF5crw==@vger.kernel.org, AJvYcCUxsGkNP/TuaEITT3adrnMw/cXHyp22dQRNiSyf1HHVnMLg+GEhEYuCQ/l8AeoQ5APDNsedTo22yE+o8g==@vger.kernel.org, AJvYcCVHydiGf0JifPRQ9kpawhDbuHskil+7wCnlKlFcVbVspIpXOhCXm9ML3xBTKPCEEx9ezG0AQOcJ5HRx@vger.kernel.org, AJvYcCXM9huIo4KQInkJg9ZyxY/xIUz3Z2tt070ns8NEABsaEcw5hfn3oFa2+o5dP70bE2oLuSy81ImpkyCV@vger.kernel.org, AJvYcCXQa4Hgr8T84YFM4vfN3i6UT+Pc5flDCrczSstt7qsNsPQd+SqNOx5cXXf1t2GebNvK/5NcVpGFnfv2@vger.kernel.org, AJvYcCXQx8tBiI/UHvMoD5BkvK8H/P+R9o0t0y/x+kiFhyCtNkLM9IUGlX/Ht8ZApt6mC8IrlkIVfCEjbX2m5lWn@vger.kernel.org, AJvYcCXeXBZbI//vmDntaBBKLMDlROIJWdGZyTvJGye+1AdHJGrBkVD2xOhbOUE3M0ESTUdG1/lWWedZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqlnZbctpPZM9cbIg1GIaMH4xRdQEGenNc7Zb4J6QGlZj6atwT
+	LDDrl/OsGF6ruIxwOiDIvuAeMnkYpapiX60VnCI6XEbizEjFHCNj
+X-Google-Smtp-Source: AGHT+IHKaaVpmQDW4zkcKLIQEKPER5kx2Q85aw0jAdWSxY/jqDtMu5zXmXnjno2J10fTqpaZgDn8NQ==
+X-Received: by 2002:a5d:5f56:0:b0:368:3f6a:1dea with SMTP id ffacd0b85a97d-372fd57f1eamr1516016f8f.6.1724229907231;
+        Wed, 21 Aug 2024 01:45:07 -0700 (PDT)
+Received: from krzk-bin ([178.197.215.209])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42abed90ef7sm17385485e9.9.2024.08.21.01.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 01:45:06 -0700 (PDT)
+Date: Wed, 21 Aug 2024 10:45:03 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Andrea della Porta <andrea.porta@suse.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>
+Subject: Re: [PATCH 07/11] pinctrl: rp1: Implement RaspberryPi RP1 gpio
+ support
+Message-ID: <l4xijmtxz5i5kkkd5tt25ls33drnnhxp26r42lab5ev343e4zh@ctknkjzbpwqz>
 References: <cover.1724159867.git.andrea.porta@suse.com>
- <8d7dd7ca5da41f2a96e3ef4e2e3f29fd0d71906a.1724159867.git.andrea.porta@suse.com>
- <20240820-baritone-delegate-5711f7a0bc76@spud>
- <ZsTfoC3aKLdmFPCL@apocalypse>
+ <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="eD3kkNo53rLLXBRC"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZsTfoC3aKLdmFPCL@apocalypse>
+In-Reply-To: <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
 
+On Tue, Aug 20, 2024 at 04:36:09PM +0200, Andrea della Porta wrote:
+> The RP1 is an MFD supporting a gpio controller and /pinmux/pinctrl.
+> Add minimum support for the gpio only portion. The driver is in
+> pinctrl folder since upcoming patches will add the pinmux/pinctrl
+> support where the gpio part can be seen as an addition.
+> 
+> Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
+> ---
+>  MAINTAINERS                   |   1 +
+>  drivers/pinctrl/Kconfig       |  10 +
+>  drivers/pinctrl/Makefile      |   1 +
+>  drivers/pinctrl/pinctrl-rp1.c | 719 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 731 insertions(+)
+>  create mode 100644 drivers/pinctrl/pinctrl-rp1.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 4ce7b049d67e..67f460c36ea1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19122,6 +19122,7 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+>  F:	Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+>  F:	drivers/clk/clk-rp1.c
+> +F:	drivers/pinctrl/pinctrl-rp1.c
+>  F:	include/dt-bindings/clock/rp1.h
+>  F:	include/dt-bindings/misc/rp1.h
+>  
+> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> index 7e4f93a3bc7a..18bb1a8bd102 100644
+> --- a/drivers/pinctrl/Kconfig
+> +++ b/drivers/pinctrl/Kconfig
+> @@ -565,6 +565,16 @@ config PINCTRL_MLXBF3
+>  	  each pin. This driver can also be built as a module called
+>  	  pinctrl-mlxbf3.
+>  
+> +config PINCTRL_RP1
+> +	bool "Pinctrl driver for RP1"
+> +	select PINMUX
+> +	select PINCONF
+> +	select GENERIC_PINCONF
+> +	select GPIOLIB_IRQCHIP
+> +	help
+> +	  Enable the gpio and pinctrl/mux  driver for RaspberryPi RP1
+> +	  multi function device. 
+> +
+>  source "drivers/pinctrl/actions/Kconfig"
+>  source "drivers/pinctrl/aspeed/Kconfig"
+>  source "drivers/pinctrl/bcm/Kconfig"
+> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+> index cc809669405a..f1ca23b563f6 100644
+> --- a/drivers/pinctrl/Makefile
+> +++ b/drivers/pinctrl/Makefile
+> @@ -45,6 +45,7 @@ obj-$(CONFIG_PINCTRL_PIC32)	+= pinctrl-pic32.o
+>  obj-$(CONFIG_PINCTRL_PISTACHIO)	+= pinctrl-pistachio.o
+>  obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
+>  obj-$(CONFIG_PINCTRL_ROCKCHIP)	+= pinctrl-rockchip.o
+> +obj-$(CONFIG_PINCTRL_RP1)       += pinctrl-rp1.o
+>  obj-$(CONFIG_PINCTRL_SCMI)	+= pinctrl-scmi.o
+>  obj-$(CONFIG_PINCTRL_SINGLE)	+= pinctrl-single.o
+>  obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
+> diff --git a/drivers/pinctrl/pinctrl-rp1.c b/drivers/pinctrl/pinctrl-rp1.c
+> new file mode 100644
+> index 000000000000..c035d2014505
+> --- /dev/null
+> +++ b/drivers/pinctrl/pinctrl-rp1.c
+> @@ -0,0 +1,719 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for Raspberry Pi RP1 GPIO unit
+> + *
+> + * Copyright (C) 2023 Raspberry Pi Ltd.
+> + *
+> + * This driver is inspired by:
+> + * pinctrl-bcm2835.c, please see original file for copyright information
+> + */
+> +
+> +#include <linux/bitmap.h>
+> +#include <linux/bitops.h>
+> +#include <linux/bug.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/io.h>
+> +#include <linux/irq.h>
+> +#include <linux/irqdesc.h>
+> +#include <linux/init.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/types.h>
 
---eD3kkNo53rLLXBRC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Half of these headers are not used. Drop them.
 
-On Tue, Aug 20, 2024 at 08:25:36PM +0200, Andrea della Porta wrote:
-> Hi Conor,
->=20
-> On 17:19 Tue 20 Aug     , Conor Dooley wrote:
-> > On Tue, Aug 20, 2024 at 04:36:03PM +0200, Andrea della Porta wrote:
-> > > Add device tree bindings for the clock generator found in RP1 multi
-> > > function device, and relative entries in MAINTAINERS file.
-> > >=20
-> > > Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
-> > > ---
-> > >  .../clock/raspberrypi,rp1-clocks.yaml         | 87 +++++++++++++++++=
-++
-> > >  MAINTAINERS                                   |  6 ++
-> > >  include/dt-bindings/clock/rp1.h               | 56 ++++++++++++
-> > >  3 files changed, 149 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/clock/raspberry=
-pi,rp1-clocks.yaml
-> > >  create mode 100644 include/dt-bindings/clock/rp1.h
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/clock/raspberrypi,rp1-=
-clocks.yaml b/Documentation/devicetree/bindings/clock/raspberrypi,rp1-clock=
-s.yaml
-> > > new file mode 100644
-> > > index 000000000000..b27db86d0572
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.=
-yaml
-> > > @@ -0,0 +1,87 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/clock/raspberrypi,rp1-clocks.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: RaspberryPi RP1 clock generator
-> > > +
-> > > +maintainers:
-> > > +  - Andrea della Porta <andrea.porta@suse.com>
-> > > +
-> > > +description: |
-> > > +  The RP1 contains a clock generator designed as three PLLs (CORE, A=
-UDIO,
-> > > +  VIDEO), and each PLL output can be programmed though dividers to g=
-enerate
-> > > +  the clocks to drive the sub-peripherals embedded inside the chipse=
-t.
-> > > +
-> > > +  Link to datasheet:
-> > > +  https://datasheets.raspberrypi.com/rp1/rp1-peripherals.pdf
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: raspberrypi,rp1-clocks
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  '#clock-cells':
-> > > +    description:
-> > > +      The index in the assigned-clocks is mapped to the output clock=
- as per
-> > > +      definitions in dt-bindings/clock/rp1.h.
-> > > +    const: 1
-> > > +
-> > > +  clocks:
-> > > +    maxItems: 1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - '#clock-cells'
-> > > +  - clocks
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/clock/rp1.h>
-> > > +
-> > > +    rp1 {
-> > > +        #address-cells =3D <2>;
-> > > +        #size-cells =3D <2>;
-> > > +
-> > > +        rp1_clocks: clocks@18000 {
-> >=20
-> > The unit address does not match the reg property. I'm surprised that
-> > dtc doesn't complain about that.
->=20
-> Agreed. I'll update the address with the reg value in the next release
->=20
-> >=20
-> > > +            compatible =3D "raspberrypi,rp1-clocks";
-> > > +            reg =3D <0xc0 0x40018000 0x0 0x10038>;
-> >=20
-> > This is a rather oddly specific size. It leads me to wonder if this
-> > region is inside some sort of syscon area?
->=20
-> >From downstream source code and RP1 datasheet it seems that the last add=
-ressable
-> register is at 0xc040028014 while the range exposed through teh devicetre=
-e ends
-> up at 0xc040028038, so it seems more of a little safe margin. I wouldn't =
-say it
-> is a syscon area since those register are quite specific for video clock
-> generation and not to be intended to be shared among different peripheral=
-s.
-> Anyway, the next register aperture is at 0xc040030000 so I would say we c=
-an=20
-> extend the clock mapped register like the following:
->=20
-> reg =3D <0xc0 0x40018000 0x0 0x18000>;
->=20
-> if you think it is more readable.
+Best regards,
+Krzysztof
 
-I don't care=20
-> > > +            #clock-cells =3D <1>;
-> > > +            clocks =3D <&clk_xosc>;
-> > > +
-> > > +            assigned-clocks =3D <&rp1_clocks RP1_PLL_SYS_CORE>,
->=20
-> > FWIW, I don't think any of these assigned clocks are helpful for the
-> > example. That said, why do you need to configure all of these assigned
-> > clocks via devicetree when this node is the provider of them?
->=20
-> Not sure to understand what you mean here, the example is there just to
-> show how to compile the dt node, maybe you're referring to the fact that
-> the consumer should setup the clock freq?
-
-I suppose, yeah. I don't think a particular configuration is relevant
-for the example binding, but simultaneously don't get why you are
-assigning the rate for clocks used by audio devices or ethernet in the
-clock provider node.
-
-> Consider that the rp1-clocks
-> is coupled to the peripherals contained in the same RP1 chip so there is
-> not much point in letting the peripherals set the clock to their leisure.
-
-How is that any different to the many other SoCs in the kernel?
-
-> > > +                              <&rp1_clocks RP1_PLL_AUDIO_CORE>,
-> > > +                              /* RP1_PLL_VIDEO_CORE and dividers are=
- now managed by VEC,DPI drivers */
-> >=20
-> > Comments like this also do not seem relevant to the binding.
->=20
-> Agreed, will drop in the next release.
->=20
-> >=20
-> >=20
-> > Cheers,
-> > Conor.
-> >
->=20
-> Many thanks,
-> Andrea
-> =20
-> >=20
-> > > +                              <&rp1_clocks RP1_PLL_SYS>,
-> > > +                              <&rp1_clocks RP1_PLL_SYS_SEC>,
-> > > +                              <&rp1_clocks RP1_PLL_AUDIO>,
-> > > +                              <&rp1_clocks RP1_PLL_AUDIO_SEC>,
-> > > +                              <&rp1_clocks RP1_CLK_SYS>,
-> > > +                              <&rp1_clocks RP1_PLL_SYS_PRI_PH>,
-> > > +                              /* RP1_CLK_SLOW_SYS is used for the fr=
-equency counter (FC0) */
-> > > +                              <&rp1_clocks RP1_CLK_SLOW_SYS>,
-> > > +                              <&rp1_clocks RP1_CLK_SDIO_TIMER>,
-> > > +                              <&rp1_clocks RP1_CLK_SDIO_ALT_SRC>,
-> > > +                              <&rp1_clocks RP1_CLK_ETH_TSU>;
-> > > +
-> > > +            assigned-clock-rates =3D <1000000000>, // RP1_PLL_SYS_CO=
-RE
-> > > +                                   <1536000000>, // RP1_PLL_AUDIO_CO=
-RE
-> > > +                                   <200000000>,  // RP1_PLL_SYS
-> > > +                                   <125000000>,  // RP1_PLL_SYS_SEC
-> > > +                                   <61440000>,   // RP1_PLL_AUDIO
-> > > +                                   <192000000>,  // RP1_PLL_AUDIO_SEC
-> > > +                                   <200000000>,  // RP1_CLK_SYS
-> > > +                                   <100000000>,  // RP1_PLL_SYS_PRI_=
-PH
-> > > +                                   /* Must match the XOSC frequency =
-*/
-> > > +                                   <50000000>, // RP1_CLK_SLOW_SYS
-> > > +                                   <1000000>, // RP1_CLK_SDIO_TIMER
-> > > +                                   <200000000>, // RP1_CLK_SDIO_ALT_=
-SRC
-> > > +                                   <50000000>; // RP1_CLK_ETH_TSU
-> > > +        };
-> > > +    };
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 42decde38320..6e7db9bce278 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -19116,6 +19116,12 @@ F:	Documentation/devicetree/bindings/media/r=
-aspberrypi,pispbe.yaml
-> > >  F:	drivers/media/platform/raspberrypi/pisp_be/
-> > >  F:	include/uapi/linux/media/raspberrypi/
-> > > =20
-> > > +RASPBERRY PI RP1 PCI DRIVER
-> > > +M:	Andrea della Porta <andrea.porta@suse.com>
-> > > +S:	Maintained
-> > > +F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.ya=
-ml
-> > > +F:	include/dt-bindings/clock/rp1.h
-> > > +
-> > >  RC-CORE / LIRC FRAMEWORK
-> > >  M:	Sean Young <sean@mess.org>
-> > >  L:	linux-media@vger.kernel.org
-> > > diff --git a/include/dt-bindings/clock/rp1.h b/include/dt-bindings/cl=
-ock/rp1.h
-> > > new file mode 100644
-> > > index 000000000000..1ed67b8a5229
-> > > --- /dev/null
-> > > +++ b/include/dt-bindings/clock/rp1.h
-> > > @@ -0,0 +1,56 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
-> > > +/*
-> > > + * Copyright (C) 2021 Raspberry Pi Ltd.
-> > > + */
-> > > +
-> > > +#define RP1_PLL_SYS_CORE		0
-> > > +#define RP1_PLL_AUDIO_CORE		1
-> > > +#define RP1_PLL_VIDEO_CORE		2
-> > > +
-> > > +#define RP1_PLL_SYS			3
-> > > +#define RP1_PLL_AUDIO			4
-> > > +#define RP1_PLL_VIDEO			5
-> > > +
-> > > +#define RP1_PLL_SYS_PRI_PH		6
-> > > +#define RP1_PLL_SYS_SEC_PH		7
-> > > +#define RP1_PLL_AUDIO_PRI_PH		8
-> > > +
-> > > +#define RP1_PLL_SYS_SEC			9
-> > > +#define RP1_PLL_AUDIO_SEC		10
-> > > +#define RP1_PLL_VIDEO_SEC		11
-> > > +
-> > > +#define RP1_CLK_SYS			12
-> > > +#define RP1_CLK_SLOW_SYS		13
-> > > +#define RP1_CLK_DMA			14
-> > > +#define RP1_CLK_UART			15
-> > > +#define RP1_CLK_ETH			16
-> > > +#define RP1_CLK_PWM0			17
-> > > +#define RP1_CLK_PWM1			18
-> > > +#define RP1_CLK_AUDIO_IN		19
-> > > +#define RP1_CLK_AUDIO_OUT		20
-> > > +#define RP1_CLK_I2S			21
-> > > +#define RP1_CLK_MIPI0_CFG		22
-> > > +#define RP1_CLK_MIPI1_CFG		23
-> > > +#define RP1_CLK_PCIE_AUX		24
-> > > +#define RP1_CLK_USBH0_MICROFRAME	25
-> > > +#define RP1_CLK_USBH1_MICROFRAME	26
-> > > +#define RP1_CLK_USBH0_SUSPEND		27
-> > > +#define RP1_CLK_USBH1_SUSPEND		28
-> > > +#define RP1_CLK_ETH_TSU			29
-> > > +#define RP1_CLK_ADC			30
-> > > +#define RP1_CLK_SDIO_TIMER		31
-> > > +#define RP1_CLK_SDIO_ALT_SRC		32
-> > > +#define RP1_CLK_GP0			33
-> > > +#define RP1_CLK_GP1			34
-> > > +#define RP1_CLK_GP2			35
-> > > +#define RP1_CLK_GP3			36
-> > > +#define RP1_CLK_GP4			37
-> > > +#define RP1_CLK_GP5			38
-> > > +#define RP1_CLK_VEC			39
-> > > +#define RP1_CLK_DPI			40
-> > > +#define RP1_CLK_MIPI0_DPI		41
-> > > +#define RP1_CLK_MIPI1_DPI		42
-> > > +
-> > > +/* Extra PLL output channels - RP1B0 only */
-> > > +#define RP1_PLL_VIDEO_PRI_PH		43
-> > > +#define RP1_PLL_AUDIO_TERN		44
-> > > --=20
-> > > 2.35.3
-> > >=20
->=20
->=20
-
---eD3kkNo53rLLXBRC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsXTdgAKCRB4tDGHoIJi
-0kLKAQC535sjoiTm1nVjrfWgTOd6n9yLyJcuMXMSBYYjbBLvdAD+PDOHUfTtzjNr
-QMANmxNh/c4BZ8btKjAD28A7nvtqGAU=
-=945/
------END PGP SIGNATURE-----
-
---eD3kkNo53rLLXBRC--
 
