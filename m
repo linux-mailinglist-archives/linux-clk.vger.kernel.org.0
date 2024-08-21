@@ -1,128 +1,120 @@
-Return-Path: <linux-clk+bounces-10994-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10996-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37EA9959A2B
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 13:36:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F13C959ABD
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 13:52:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEA2C282958
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 11:36:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B28CAB23C24
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 11:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427B31BAEC1;
-	Wed, 21 Aug 2024 11:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59AD71B5EDD;
+	Wed, 21 Aug 2024 11:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="YmOGDdOg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ttied4kT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A57E1B81B2;
-	Wed, 21 Aug 2024 10:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E0C1A7AC3
+	for <linux-clk@vger.kernel.org>; Wed, 21 Aug 2024 11:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724238001; cv=none; b=eWj2I3TsIYbZN0qUkfROI+iQZZChG881d27clGMeg6JClU41Hnb4zZ+c76hjhx7b2ZRnJ0zkUd9FZNNamISdBnZnWjY5CPzWtxiB1UNcBXhSi5FBZpwxILoBPQmvtyB3gQIRLaBQBi5Eanx+kpjl4NPGfbg4W2yEUNohCmLseb0=
+	t=1724239743; cv=none; b=ncAH0ghcZooCEYdhiHUPWlBie6gn1dNRBJnWv0rsK28yHb5SaxpMDAYLjkpYTH6I1GMNhJjBf4VD3vPkxBCKrukWITV/LDcdlR/QPGRaoyV2RBu0Y0AKSCwqV89nVZUryy9bpNsc5nkzEp6NOOqb74+V6nuw/pkK0hjtPkYr6+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724238001; c=relaxed/simple;
-	bh=+tqmoTa1quo78lh0ER4UFgZxylnStwrnOjZvqTlhY5k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jSlQOfNSLrtHh3xjKoXrnCofSlN15SiB0ejXuzoOPHQ0Ig5H5t9B7MnjN4ICdeSD3sCERK3TEeXy6zqv1cUAcFd3MJgyWTG/1ZVlP4FyhrKkhVs8dXpfPuNC4HS7IHj57NsrJEis0raY6qCjAqeY1y/252ZpCAUqpIFdjoc+AlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=YmOGDdOg; arc=none smtp.client-ip=217.92.40.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D8D5B1483DED;
-	Wed, 21 Aug 2024 12:59:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1724237997; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=f3c3Rb0MaGLfvzOor2+zbB5i0hEP30uww3c4MW+lsbw=;
-	b=YmOGDdOgxWvh/GWC/OCxBEmVYsKO3lJkNsRx3guhWR1wIDL1qcFGNbGznSRMKndM1od4RH
-	SYnWCBbfaXD2k3JeMbj7dDMWL+4w48QEdz1GyFdd4A5j5w8qj2PU0sqwDZFZkl+7W4R3R6
-	dn0SDIUkNJ1RbW2wmTQ9JCNQZHKHrj5IzvExaqyT++6suwhJX3rsvRq+DAAxQhKehlS1Un
-	2dcVNNj9a5/5SfJQvOGzNZCwu5AX7L+sfxGPHJJnIzxTp8xnV68f7pw83ATU4ibQPqQATT
-	eX55ep9Gll/Mk++jVEPZcoyM5RrV+Y6Zn1I7dZFfNx7zxVlrzPLQMU554RMn6Q==
-From: Alexander Dahl <ada@thorsis.com>
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: Christian Melki <christian.melki@t2data.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Microchip (AT91) SoC support),
-	linux-kernel@vger.kernel.org (open list),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
-Subject: [PATCH v1 09/12] clk: at91: sam9x60: Allow enabling main_rc_osc through DT
-Date: Wed, 21 Aug 2024 12:59:40 +0200
-Message-Id: <20240821105943.230281-10-ada@thorsis.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240821105943.230281-1-ada@thorsis.com>
-References: <20240821105943.230281-1-ada@thorsis.com>
+	s=arc-20240116; t=1724239743; c=relaxed/simple;
+	bh=M0Ooxo685v1POc7S1dTi/xgY7XnRXJDx1Ns73h4LP4A=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=KKwM0oiSEhdfCtxsVfWDRYcDa1QngQ4p7fUcOr5fn3jKqMkwxvJC2Ninha3g99Q/s7fvNJ73oNJa2xbnJaNuTWrF4muv3u8xRfxA4fSY18iDj1gdtq5Cft0N/EZq6+/+qeVv0Cj6pm7DiCd1R7gSqkWFbqyuGRhUbLaaK+s+KKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ttied4kT; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42802ddfaa6so9121545e9.1
+        for <linux-clk@vger.kernel.org>; Wed, 21 Aug 2024 04:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724239738; x=1724844538; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2U98PhHfsQe7q0eoibYZl509/CH1f8+DFvvWpqdj0Cg=;
+        b=Ttied4kT1+lfu/pbXW2WlALfx6LV1sZxy96Ei1ukPpSUXEaWyBAq/2oWLRBz4qj1rx
+         mBb9uUiQWMid7rTeCJljTvdNWzxmNasgQsZCaZCOcnfKdBm8R007hNSuacD1c2pt8XkS
+         q94dYBYrOHHQ82fSbvmvouUAMC2sBa1MkrYAyq1sRTdm5rPgXms2KsiG3D+Zd1vHKUjs
+         1YlcLlFIjYnOzZJIVhBF+SQBHEl/ESSpAidq/2cPPbK+rsrqhpGORhJoc/5VxU55Y1FZ
+         SKV78G5jueEci5fc8ExB4d6ECKnOwNNWRGhpfjwsH78cpk7P7uc7Bt/U5+rKQry/nK8d
+         9miA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724239738; x=1724844538;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2U98PhHfsQe7q0eoibYZl509/CH1f8+DFvvWpqdj0Cg=;
+        b=fRLOwH85T9tVlZDAW7Q9LAgME5Nj9SVHEkhgl+erw9tXXw+WGWWKFqnUpPJRkvLLR8
+         wELiaVmh4wOFGIR0gU7nykT7JO7u1wqiM6jSNBbTxbk5OKIeRXxf3AE5rhpM/fLJoGoW
+         A/fWCcGjO7g8iBg/ULhb3BPBMeu2YkzTjiVqDQ2iQOwFgeI3VEqiEz6Nz3Ntcg21de5X
+         7wjBWqZ70cHVRmIqdUeLWlU154scn5I9UWxvgHtE0tZW5gU0lG9j2PxVQW5JR0p/9m3S
+         o15vUBsjzqTMREjmsPHhazzzjFhy0mTOnJKI9UshSckVYEHj2WvfZUpnLTnoVMvBx446
+         fBGg==
+X-Forwarded-Encrypted: i=1; AJvYcCU03wAA+TujpClRIku4FFsGcifQbtgPf5KKDgsPQ1CnsbDJrsoRZKjw3Tojl7yTgf1pzLj9bnixFio=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9ny0DSdvqp/BNnCmmWLZZYGVoQvNi2LmVurYzyKFJCBKC6OsA
+	HcixdODU7fq53Md+qoxvx98QBZSTy1ARASHvNlyEHnjUhRf1o1uAJw7K0F8FzSUKJMpqGxcAFUs
+	Z
+X-Google-Smtp-Source: AGHT+IEIuQbc89lIhEz/EoJLwbR+11BG8ia7GTtZCJ5M/PeGK9/JE2t6rDDT3qG5CyMk8VcRiLyGDg==
+X-Received: by 2002:a05:6000:154d:b0:362:4aac:8697 with SMTP id ffacd0b85a97d-372fd4d1195mr817938f8f.0.1724239738366;
+        Wed, 21 Aug 2024 04:28:58 -0700 (PDT)
+Received: from [127.0.1.1] ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37189897926sm15446926f8f.87.2024.08.21.04.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 04:28:57 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, David Virag <virag.david003@gmail.com>
+Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240816175034.769628-1-virag.david003@gmail.com>
+References: <20240816175034.769628-1-virag.david003@gmail.com>
+Subject: Re: [PATCH v3 0/2] Add USB clocks to Exynos7885
+Message-Id: <172423973629.252925.10167794996873239462.b4-ty@linaro.org>
+Date: Wed, 21 Aug 2024 13:28:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.1
 
-SAM9X60 Datasheet (DS60001579G) Section "23.4 Product Dependencies"
-says:
 
-    "The OTPC is clocked through the Power Management Controller (PMC).
-    The user must power on the main RC oscillator and enable the
-    peripheral clock of the OTPC prior to reading or writing the OTP
-    memory."
+On Fri, 16 Aug 2024 19:50:30 +0200, David Virag wrote:
+> This set of patches adds the clocks necessary for USB on the Exynos7885
+> SoC.
+> 
+> Earlier versions of the set also contained some fixes for issues with
+> the existing driver/bindings, which have been applied now.
+> 
+> Changes in v2:
+> - Split from full patchset.
+> - Added Cc-stable tags and fixes tag to update CLKS_NR_FSYS patch
+> - Blank line fixes
+> 
+> [...]
 
-The code for enabling/disabling that clock is already present, it was
-just not possible to hook into DT anymore, after at91 clk devicetree
-binding rework back in 2018 for kernel v4.19.
+Applied, thanks!
 
-Signed-off-by: Alexander Dahl <ada@thorsis.com>
----
- drivers/clk/at91/sam9x60.c       | 3 ++-
- include/dt-bindings/clock/at91.h | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+[1/2] clk: samsung: clk-pll: Add support for pll_1418x
+      https://git.kernel.org/krzk/linux/c/4e39e5b84361924006f4d7cf81e049a2793079a6
+[2/2] clk: samsung: exynos7885: Add USB related clocks to CMU_FSYS
+      https://git.kernel.org/krzk/linux/c/011a9de99793c3a2ee612ff3e0ce293dcbea6df0
 
-diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
-index e309cbf3cb9a..4d5ee20b8fc4 100644
---- a/drivers/clk/at91/sam9x60.c
-+++ b/drivers/clk/at91/sam9x60.c
-@@ -207,7 +207,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sam9x60_pmc = pmc_data_allocate(PMC_PLLACK + 1,
-+	sam9x60_pmc = pmc_data_allocate(PMC_MAIN_RC + 1,
- 					nck(sam9x60_systemck),
- 					nck(sam9x60_periphck),
- 					nck(sam9x60_gck), 8);
-@@ -218,6 +218,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
- 					   50000000);
- 	if (IS_ERR(hw))
- 		goto err_free;
-+	sam9x60_pmc->chws[PMC_MAIN_RC] = hw;
- 
- 	hw = at91_clk_register_main_osc(regmap, "main_osc", mainxtal_name, NULL, 0);
- 	if (IS_ERR(hw))
-diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-index 3e3972a814c1..f957625cb3ac 100644
---- a/include/dt-bindings/clock/at91.h
-+++ b/include/dt-bindings/clock/at91.h
-@@ -25,6 +25,7 @@
- #define PMC_PLLBCK		8
- #define PMC_AUDIOPLLCK		9
- #define PMC_AUDIOPINCK		10
-+#define PMC_MAIN_RC		11
- 
- /* SAMA7G5 */
- #define PMC_CPUPLL		(PMC_MAIN + 1)
+Best regards,
 -- 
-2.39.2
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
