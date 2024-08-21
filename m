@@ -1,190 +1,262 @@
-Return-Path: <linux-clk+bounces-10988-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-10998-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 205B7959B44
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 14:07:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9CFB959B40
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 14:06:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26F2BB24855
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 11:59:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A4761C21B2C
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Aug 2024 12:06:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD8D1B81CF;
-	Wed, 21 Aug 2024 08:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8ED1531C1;
+	Wed, 21 Aug 2024 12:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EjMZn57m"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A1E1A7AD3;
-	Wed, 21 Aug 2024 08:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544C51D1312;
+	Wed, 21 Aug 2024 12:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724229910; cv=none; b=AFN8xyMi1gAK6iTED0ys3iYCL5VwOT//AUFVJM8m1AYGLjpjpL1BvVjaUqiFdDV7yvkgiSR33VokpIXXmK+bFlfeXqECm2vZLpttjyyILErpL4bUqVcK67af6Wr21x9HlJSoHcZiUDrAAG+b3uwJNTB14ykcFLhpbzpBdSTXP2k=
+	t=1724241999; cv=none; b=W3b04C5FCG7dEY6I5R7ZSF+uIkOlILw/oSp0DfI1946oxUiPJSaSWQByftux0KYLhS45tmlYhthE0xEKiDqTUh+fDMGKCDruRSCq6d6rAcC0klIreN7RCMPTUss2zbP2+CY6UUfGuKt5v1BnR52mCnCk8jEaJxFOtBRTigiygyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724229910; c=relaxed/simple;
-	bh=qRHRsbmRDvbIyXABIKEaaMk2OJDVFBz9OKDrgIfMiu0=;
+	s=arc-20240116; t=1724241999; c=relaxed/simple;
+	bh=Kj8uuOcm4JlYZ678mI6tf+JnYFcP0xeBPYn2L2P0sNk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r3biBuTbnIJ9HOTWy7PEz/7zZyMc3AEluwi87dIMqj8dFkUUHy0cxYTjCLMju+Gcp8DIStXjRm511xtNX+uz2Bm6j9CjHs/gaa0DCby15R2hBPoRBA2ZaDHrmM89O9AnbOdQgDZEJXpHPMsNplRSpK+UaKCl/MtpkCeBlupFrZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-371b015572cso3204713f8f.1;
-        Wed, 21 Aug 2024 01:45:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724229907; x=1724834707;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vebzIfVKrkPnVYzJ3Le9GL91uwlzLYfp0d5U/T68YJ8=;
-        b=J9CA4uoE/YT9/AZxTlnI+pmt2zYPS3W1dhDlINf+KxB0RBWgNFInfHqHkX1ZS2BLSS
-         9ztY65Fr7S4lydew2zKtcnQvdTEka7VuPEfzNGnVLHb3+1FrjzsiRFasa2cxKSDFt4/6
-         YCPrw0SmDNTc6nhTcxmaMZqKzDBQYQ/E3eczAz7brbw85tWTvMroswFpVy7fTaBtR8Fg
-         6QL8LJpMqXPhV4AlGSMM4eztCDGFz9M3YlxiH7YGtyWUvfJQa7srZu8gFNH4PMEfUw0V
-         K3Ylz2BQO7XxoIYddwB9vNpD5rVF+odfPJg7cecmCRYSOrH63eVBFjy7q3WpZ1/3+DNZ
-         eRSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUAI3BFNf3uGHGFfqJ9EmO64X33kUghtBRHFvgjbA+AkdR95tW53cZ3nFWKzR2iEJCNcT33VEufYF5crw==@vger.kernel.org, AJvYcCUxsGkNP/TuaEITT3adrnMw/cXHyp22dQRNiSyf1HHVnMLg+GEhEYuCQ/l8AeoQ5APDNsedTo22yE+o8g==@vger.kernel.org, AJvYcCVHydiGf0JifPRQ9kpawhDbuHskil+7wCnlKlFcVbVspIpXOhCXm9ML3xBTKPCEEx9ezG0AQOcJ5HRx@vger.kernel.org, AJvYcCXM9huIo4KQInkJg9ZyxY/xIUz3Z2tt070ns8NEABsaEcw5hfn3oFa2+o5dP70bE2oLuSy81ImpkyCV@vger.kernel.org, AJvYcCXQa4Hgr8T84YFM4vfN3i6UT+Pc5flDCrczSstt7qsNsPQd+SqNOx5cXXf1t2GebNvK/5NcVpGFnfv2@vger.kernel.org, AJvYcCXQx8tBiI/UHvMoD5BkvK8H/P+R9o0t0y/x+kiFhyCtNkLM9IUGlX/Ht8ZApt6mC8IrlkIVfCEjbX2m5lWn@vger.kernel.org, AJvYcCXeXBZbI//vmDntaBBKLMDlROIJWdGZyTvJGye+1AdHJGrBkVD2xOhbOUE3M0ESTUdG1/lWWedZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqlnZbctpPZM9cbIg1GIaMH4xRdQEGenNc7Zb4J6QGlZj6atwT
-	LDDrl/OsGF6ruIxwOiDIvuAeMnkYpapiX60VnCI6XEbizEjFHCNj
-X-Google-Smtp-Source: AGHT+IHKaaVpmQDW4zkcKLIQEKPER5kx2Q85aw0jAdWSxY/jqDtMu5zXmXnjno2J10fTqpaZgDn8NQ==
-X-Received: by 2002:a5d:5f56:0:b0:368:3f6a:1dea with SMTP id ffacd0b85a97d-372fd57f1eamr1516016f8f.6.1724229907231;
-        Wed, 21 Aug 2024 01:45:07 -0700 (PDT)
-Received: from krzk-bin ([178.197.215.209])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42abed90ef7sm17385485e9.9.2024.08.21.01.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2024 01:45:06 -0700 (PDT)
-Date: Wed, 21 Aug 2024 10:45:03 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Andrea della Porta <andrea.porta@suse.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BkeOHUxeAJFKQaQz7OKQ9mWHSxviZFPN50UqQdVwqBUzKsX+7Q/4F0+yE4Wd40fEmvxv2hSmy3sj4hcpQF3597pLFTOk44m/Wvi+xOSpO/P3mgS8PKfNJhqZfff++ETaU0Az08EoXvBRalmzMoH/QQDA09zkDbqzCYJxgnDBqEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EjMZn57m; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724241997; x=1755777997;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kj8uuOcm4JlYZ678mI6tf+JnYFcP0xeBPYn2L2P0sNk=;
+  b=EjMZn57mqDXy0ANe3z82TFgsNtNb79VTYk+M61Qtg84eD2eO8nfXhyHu
+   Ir8JTKJBGbxFw2eSEYxkp4JG0aed/FbOPM6xe9m1SMcyxXXpwMcuxpPAW
+   YpF1/qSBhTevCi0IkOyCYOFSDg+f4sj1WhfNDO5cgyiNLiAkLtYpdjtrL
+   S08ArQ4zPeeUtO0d476zSsJ+VUlMA27HPdV2JCQord8te8p3vI2uMSwYF
+   JyWvBeQwzzTyuA3/tZAbm2d22jw0FPPPE4buwUb8HD+rgh0BklNbj+sBy
+   D4Wk8rlnL8QPrKog8mUzjLNOhowtK6mvVyohy5WzR/tdUYsCxbD/L72vb
+   g==;
+X-CSE-ConnectionGUID: dYPZxy1YQLeJNqL5k0trSA==
+X-CSE-MsgGUID: M76MaHF4Sr2DiU/97wDbPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="22759914"
+X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
+   d="scan'208";a="22759914"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 05:06:36 -0700
+X-CSE-ConnectionGUID: 4EbM2F/MQ76zX1yOg/4iXg==
+X-CSE-MsgGUID: xKFjc2FlQsOqtXBuL8aw5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
+   d="scan'208";a="61825276"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 21 Aug 2024 05:06:30 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgk6d-000BKM-08;
+	Wed, 21 Aug 2024 12:06:27 +0000
+Date: Wed, 21 Aug 2024 20:06:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrea della Porta <andrea.porta@suse.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <helgaas@kernel.org>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
 Subject: Re: [PATCH 07/11] pinctrl: rp1: Implement RaspberryPi RP1 gpio
  support
-Message-ID: <l4xijmtxz5i5kkkd5tt25ls33drnnhxp26r42lab5ev343e4zh@ctknkjzbpwqz>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
+Message-ID: <202408211907.cUrf3RpN-lkp@intel.com>
+References: <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta@suse.com>
 
-On Tue, Aug 20, 2024 at 04:36:09PM +0200, Andrea della Porta wrote:
-> The RP1 is an MFD supporting a gpio controller and /pinmux/pinctrl.
-> Add minimum support for the gpio only portion. The driver is in
-> pinctrl folder since upcoming patches will add the pinmux/pinctrl
-> support where the gpio part can be seen as an addition.
-> 
-> Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
-> ---
->  MAINTAINERS                   |   1 +
->  drivers/pinctrl/Kconfig       |  10 +
->  drivers/pinctrl/Makefile      |   1 +
->  drivers/pinctrl/pinctrl-rp1.c | 719 ++++++++++++++++++++++++++++++++++
->  4 files changed, 731 insertions(+)
->  create mode 100644 drivers/pinctrl/pinctrl-rp1.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4ce7b049d67e..67f460c36ea1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19122,6 +19122,7 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
->  F:	Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
->  F:	drivers/clk/clk-rp1.c
-> +F:	drivers/pinctrl/pinctrl-rp1.c
->  F:	include/dt-bindings/clock/rp1.h
->  F:	include/dt-bindings/misc/rp1.h
->  
-> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-> index 7e4f93a3bc7a..18bb1a8bd102 100644
-> --- a/drivers/pinctrl/Kconfig
-> +++ b/drivers/pinctrl/Kconfig
-> @@ -565,6 +565,16 @@ config PINCTRL_MLXBF3
->  	  each pin. This driver can also be built as a module called
->  	  pinctrl-mlxbf3.
->  
-> +config PINCTRL_RP1
-> +	bool "Pinctrl driver for RP1"
-> +	select PINMUX
-> +	select PINCONF
-> +	select GENERIC_PINCONF
-> +	select GPIOLIB_IRQCHIP
-> +	help
-> +	  Enable the gpio and pinctrl/mux  driver for RaspberryPi RP1
-> +	  multi function device. 
-> +
->  source "drivers/pinctrl/actions/Kconfig"
->  source "drivers/pinctrl/aspeed/Kconfig"
->  source "drivers/pinctrl/bcm/Kconfig"
-> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-> index cc809669405a..f1ca23b563f6 100644
-> --- a/drivers/pinctrl/Makefile
-> +++ b/drivers/pinctrl/Makefile
-> @@ -45,6 +45,7 @@ obj-$(CONFIG_PINCTRL_PIC32)	+= pinctrl-pic32.o
->  obj-$(CONFIG_PINCTRL_PISTACHIO)	+= pinctrl-pistachio.o
->  obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
->  obj-$(CONFIG_PINCTRL_ROCKCHIP)	+= pinctrl-rockchip.o
-> +obj-$(CONFIG_PINCTRL_RP1)       += pinctrl-rp1.o
->  obj-$(CONFIG_PINCTRL_SCMI)	+= pinctrl-scmi.o
->  obj-$(CONFIG_PINCTRL_SINGLE)	+= pinctrl-single.o
->  obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
-> diff --git a/drivers/pinctrl/pinctrl-rp1.c b/drivers/pinctrl/pinctrl-rp1.c
-> new file mode 100644
-> index 000000000000..c035d2014505
-> --- /dev/null
-> +++ b/drivers/pinctrl/pinctrl-rp1.c
-> @@ -0,0 +1,719 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for Raspberry Pi RP1 GPIO unit
-> + *
-> + * Copyright (C) 2023 Raspberry Pi Ltd.
-> + *
-> + * This driver is inspired by:
-> + * pinctrl-bcm2835.c, please see original file for copyright information
-> + */
-> +
-> +#include <linux/bitmap.h>
-> +#include <linux/bitops.h>
-> +#include <linux/bug.h>
-> +#include <linux/delay.h>
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/io.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdesc.h>
-> +#include <linux/init.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of.h>
-> +#include <linux/of_irq.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/types.h>
+Hi Andrea,
 
-Half of these headers are not used. Drop them.
+kernel test robot noticed the following build errors:
 
-Best regards,
-Krzysztof
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on robh/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.11-rc4 next-20240821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrea-della-Porta/dt-bindings-clock-Add-RaspberryPi-RP1-clock-bindings/20240821-023901
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/eb39a5f3cefff2a1240a18a255dac090af16f223.1724159867.git.andrea.porta%40suse.com
+patch subject: [PATCH 07/11] pinctrl: rp1: Implement RaspberryPi RP1 gpio support
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20240821/202408211907.cUrf3RpN-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408211907.cUrf3RpN-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408211907.cUrf3RpN-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/pinctrl/pinctrl-rp1.c: In function 'rp1_get_fsel':
+>> drivers/pinctrl/pinctrl-rp1.c:237:22: error: implicit declaration of function 'FIELD_GET'; did you mean 'FIELD_SET'? [-Werror=implicit-function-declaration]
+     237 |         u32 oeover = FIELD_GET(RP1_GPIO_CTRL_OEOVER_MASK, ctrl);
+         |                      ^~~~~~~~~
+         |                      FIELD_SET
+   drivers/pinctrl/pinctrl-rp1.c: In function 'rp1_set_fsel':
+>> drivers/pinctrl/pinctrl-rp1.c:146:25: error: implicit declaration of function 'FIELD_PREP'; did you mean 'FIELD_SET'? [-Werror=implicit-function-declaration]
+     146 |                 _reg |= FIELD_PREP((_mask), (_val));    \
+         |                         ^~~~~~~~~~
+   drivers/pinctrl/pinctrl-rp1.c:257:17: note: in expansion of macro 'FIELD_SET'
+     257 |                 FIELD_SET(ctrl, RP1_GPIO_CTRL_OEOVER_MASK, RP1_OEOVER_DISABLE);
+         |                 ^~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +237 drivers/pinctrl/pinctrl-rp1.c
+
+   136	
+   137	#define RP1_PAD_DRIVE_2MA		0x00000000
+   138	#define RP1_PAD_DRIVE_4MA		BIT(4)
+   139	#define RP1_PAD_DRIVE_8MA		BIT(5)
+   140	#define RP1_PAD_DRIVE_12MA		(RP1_PAD_DRIVE_4MA | \
+   141						RP1_PAD_DRIVE_8MA)
+   142	
+   143	#define FIELD_SET(_reg, _mask, _val)			\
+   144		({						\
+   145			_reg &= ~(_mask);				\
+ > 146			_reg |= FIELD_PREP((_mask), (_val));	\
+   147		})
+   148	
+   149	#define FUNC(f) \
+   150		[func_##f] = #f
+   151	
+   152	struct rp1_iobank_desc {
+   153		int min_gpio;
+   154		int num_gpios;
+   155		int gpio_offset;
+   156		int inte_offset;
+   157		int ints_offset;
+   158		int rio_offset;
+   159		int pads_offset;
+   160	};
+   161	
+   162	struct rp1_pin_info {
+   163		u8 num;
+   164		u8 bank;
+   165		u8 offset;
+   166		u8 fsel;
+   167		u8 irq_type;
+   168	
+   169		void __iomem *gpio;
+   170		void __iomem *rio;
+   171		void __iomem *inte;
+   172		void __iomem *ints;
+   173		void __iomem *pad;
+   174	};
+   175	
+   176	struct rp1_pinctrl {
+   177		struct device *dev;
+   178		void __iomem *gpio_base;
+   179		void __iomem *rio_base;
+   180		void __iomem *pads_base;
+   181		int irq[RP1_NUM_BANKS];
+   182		struct rp1_pin_info pins[RP1_NUM_GPIOS];
+   183	
+   184		struct pinctrl_dev *pctl_dev;
+   185		struct gpio_chip gpio_chip;
+   186		struct pinctrl_gpio_range gpio_range;
+   187	
+   188		raw_spinlock_t irq_lock[RP1_NUM_BANKS];
+   189	};
+   190	
+   191	const struct rp1_iobank_desc rp1_iobanks[RP1_NUM_BANKS] = {
+   192		/*         gpio   inte    ints     rio    pads */
+   193		{  0, 28, 0x0000, 0x011c, 0x0124, 0x0000, 0x0004 },
+   194		{ 28,  6, 0x4000, 0x411c, 0x4124, 0x4000, 0x4004 },
+   195		{ 34, 20, 0x8000, 0x811c, 0x8124, 0x8000, 0x8004 },
+   196	};
+   197	
+   198	static int rp1_pinconf_set(struct rp1_pin_info *pin,
+   199				   unsigned int offset, unsigned long *configs,
+   200				   unsigned int num_configs);
+   201	
+   202	static struct rp1_pin_info *rp1_get_pin(struct gpio_chip *chip,
+   203						unsigned int offset)
+   204	{
+   205		struct rp1_pinctrl *pc = gpiochip_get_data(chip);
+   206	
+   207		if (pc && offset < RP1_NUM_GPIOS)
+   208			return &pc->pins[offset];
+   209		return NULL;
+   210	}
+   211	
+   212	static void rp1_pad_update(struct rp1_pin_info *pin, u32 clr, u32 set)
+   213	{
+   214		u32 padctrl = readl(pin->pad);
+   215	
+   216		padctrl &= ~clr;
+   217		padctrl |= set;
+   218	
+   219		writel(padctrl, pin->pad);
+   220	}
+   221	
+   222	static void rp1_input_enable(struct rp1_pin_info *pin, int value)
+   223	{
+   224		rp1_pad_update(pin, RP1_PAD_IN_ENABLE_MASK,
+   225			       value ? RP1_PAD_IN_ENABLE_MASK : 0);
+   226	}
+   227	
+   228	static void rp1_output_enable(struct rp1_pin_info *pin, int value)
+   229	{
+   230		rp1_pad_update(pin, RP1_PAD_OUT_DISABLE_MASK,
+   231			       value ? 0 : RP1_PAD_OUT_DISABLE_MASK);
+   232	}
+   233	
+   234	static u32 rp1_get_fsel(struct rp1_pin_info *pin)
+   235	{
+   236		u32 ctrl = readl(pin->gpio + RP1_GPIO_CTRL);
+ > 237		u32 oeover = FIELD_GET(RP1_GPIO_CTRL_OEOVER_MASK, ctrl);
+   238		u32 fsel = FIELD_GET(RP1_GPIO_CTRL_FUNCSEL_MASK, ctrl);
+   239	
+   240		if (oeover != RP1_OEOVER_PERI || fsel >= RP1_FSEL_COUNT)
+   241			fsel = RP1_FSEL_NONE;
+   242	
+   243		return fsel;
+   244	}
+   245	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
