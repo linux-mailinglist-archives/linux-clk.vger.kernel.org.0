@@ -1,97 +1,123 @@
-Return-Path: <linux-clk+bounces-11086-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11088-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEE1895BF46
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2024 22:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BDD095C340
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 04:29:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AD461C22566
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2024 20:00:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 822211C224FB
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 02:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07A81D0DED;
-	Thu, 22 Aug 2024 19:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E45F2BAE8;
+	Fri, 23 Aug 2024 02:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="dD6kJZJG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VoLIvhjl"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D6B1D0DD4;
-	Thu, 22 Aug 2024 19:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A43C27269;
+	Fri, 23 Aug 2024 02:29:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724356798; cv=none; b=Gm6zI00WXPy4CLTicPtvW/ZgMzwS+aSj6cemCQzmEJD3HeAyB/gnrCHYCGsw/5KdArfqZ8NMqw3VP19P1XYX7TsExzXBEf5MomMc3p3/Nub0Wcpf8roatSn91EGJF8kJ0NX8uWIP3X2IBMrBJyqvVkhKslhect7JSb4hGXCEpX4=
+	t=1724380160; cv=none; b=TwoiieTVBAenhZPhOUe7F5WyLDbs1CAyrNCFYJwHUUjAHZIXQqrbnWBEOWZ0cRSFaWtura4+T6Rs7obOi8Oq3xB1BqURvuNsqRq9mydpJOqgfchZYSSCiKBfMQQIVUCh7QSjPFjUVauwDXwmyB//FODHG3IH9T3NX8lCMBvntnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724356798; c=relaxed/simple;
-	bh=jBkO5qhBZE1Eo4ADj3N6Ul4IbW+ARljKSut5JJfQXGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uA2NZl2HEMr3YFqkZp0oh2ZwO4gPnZL32iNJFLikpy26SEZpChAPov9e65Qa5HVKrcMJtc1JQkA6/lfAVpKetc1wZoa01K+i/uXosPfLRzeiN3bg7Q3JXg9PQ5g6aP+C3YitJ+m62dsn6psnwgVYZz5D85Dvzd0Si4JW+DScmIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=dD6kJZJG; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=tFNNGh/KNaC2hf6KXw1cxUc96BM6VzspMmCt769Gxoc=; b=dD6kJZJGzqIgGioQoFYODjBUKd
-	uzPvqUSTJSUIcLJeswYLjuoVlXeARDWNVD2fuTEssEzlQG3VehSzROgPJdtvEkgMr5Wh8Ql/x3b9s
-	KMUR+qaDW2GP+x0gk06zkHZt5UsUM8nYjdOxzUK0WT5Org9rH3zfPunzPaQ8Q39PWtxA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1shDyI-005SvH-5a; Thu, 22 Aug 2024 21:59:50 +0200
-Date: Thu, 22 Aug 2024 21:59:50 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Imran Shaik <quic_imrashai@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Ajit Pandey <quic_ajipan@quicinc.com>,
-	Taniya Das <quic_tdas@quicinc.com>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] clk: qcom: Add support for Global Clock
- Controller on QCS8300
-Message-ID: <bf5b7607-a8fc-49e3-8cf7-8ef4b30ba542@lunn.ch>
-References: <20240822-qcs8300-gcc-v2-0-b310dfa70ad8@quicinc.com>
- <20240822-qcs8300-gcc-v2-2-b310dfa70ad8@quicinc.com>
+	s=arc-20240116; t=1724380160; c=relaxed/simple;
+	bh=YS7E0HAr61srZxZYh8jsHirXK/krzpEqZNEfQ+EuQlw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qUokfAKl9j6EjtWwGm1tEisdrBnDOzdvwwucsZjCGeaggp+R9giLZAaHKFVakJsCJsauGbDgk7O08249zIqkOwy5CIA75B78wLIlcukntodwfZhMVXdhUIZPbnaOrjdbYJtjgorbjDfXyBZvCfx5TXgQv+R1wu4BmaRoE3vpgk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VoLIvhjl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0074AC4AF09;
+	Fri, 23 Aug 2024 02:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724380160;
+	bh=YS7E0HAr61srZxZYh8jsHirXK/krzpEqZNEfQ+EuQlw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=VoLIvhjllRXlyVr3KxLyuKf+1QS14zzx3Dl03Zq1QPLpDlB81yNam5QbN8bMlkxlR
+	 8DYnT5DxC4tKUWW0sodL4Yl8Tat+K9rZrEJzUhVcTWNQke4imJeQwarlEQY6WG0xHW
+	 mfVDy5nvlSYGW3e0QRF8IyNKqeJy90rsJw6Qr5guVKCLak+2gukG/3eoO5z9GVSQBT
+	 kuXnpP7hJSjyB2v0gwtu8q0hfyPCTvAvPpKAn8PL2SI4onJLVVMM7ppUdRupGVQe2P
+	 t2BRDKjiJOSd/NvfIrt9Qerv7abW7KLi0VYd1NC/4kzivTBnaf3UQ0Oj7dNCVku4Cf
+	 VsPhUSbpVMh1A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD482C5321E;
+	Fri, 23 Aug 2024 02:29:19 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH v3 0/3] add some node for amlogic c3
+Date: Fri, 23 Aug 2024 10:29:16 +0800
+Message-Id: <20240823-c3_add_node-v3-0-3648376037f4@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240822-qcs8300-gcc-v2-2-b310dfa70ad8@quicinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP3zx2YC/23MSwqDMBSF4a1Ixk25eaBpR91HKRKTGw1UI0kJL
+ eLeGx1V6PAc+P6FJIweE7lWC4mYffJhKkOcKmIGPfVIvS2bcOASFNTUiFZb207BIpUctGguTDm
+ mSBFzROffe+3+KHvw6RXiZ49ntr3/O5lRoAYsSiYkqwW/6fEZem/OJoxkK2X+ozkcNS9aOSsc1
+ F3TGTzqdV2/WH4rQOYAAAA=
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Chuan Liu <chuan.liu@amlogic.com>, 
+ Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724380157; l=1332;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=YS7E0HAr61srZxZYh8jsHirXK/krzpEqZNEfQ+EuQlw=;
+ b=rJ1KyhYO+6cuH76Vvojb68o3/JNzMHApeeDi7nPitNh/mOklbsz0OpsV++GEcrvtTIs36A1jz
+ J4dHiQjt7uXAiCCNUw56VBIMjgNSeCPwn4M9rsQFGpyiFkcaNUAzf6p
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
 
-> +static int gcc_qcs8300_probe(struct platform_device *pdev)
-> +{
-> +	struct regmap *regmap;
-> +	int ret;
-> +
-> +	regmap = qcom_cc_map(pdev, &gcc_qcs8300_desc);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks,
-> +				       ARRAY_SIZE(gcc_dfs_clocks));
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Keep some clocks always enabled */
+Add some node for board AW409 and support board C308l AW419.
 
-Sorry, but you need to explain why. Why cannot the camera driver
-enable these clocks when it loads? Why cannot the display driver
-enable these clocks when it loads.
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Changes in v3:
+- Change clkc_periphs node to the first.
+- Link to v2: https://lore.kernel.org/r/20240820-c3_add_node-v2-0-8fd3f06b7bce@amlogic.com
 
-	Andrew
+Changes in v2:
+- Delete unused sdio node in board level dts.
+- Add the description of modifying the binding in commit msg.
+- Add the reason why some node property fileds place at board level in commit msg.
+- Link to v1: https://lore.kernel.org/r/20240806-c3_add_node-v1-0-c0de41341632@amlogic.com
+
+---
+Xianwei Zhao (3):
+      dt-bindings: clock: fix C3 PLL input parameter
+      arm64: dts: amlogic: add some device nodes for C3
+      arm64: dts: amlogic: add C3 AW419 board
+
+ .../bindings/clock/amlogic,c3-pll-clkc.yaml        |   7 +-
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../boot/dts/amlogic/amlogic-c3-c302x-aw409.dts    | 233 ++++++++++
+ .../boot/dts/amlogic/amlogic-c3-c308l-aw419.dts    | 262 +++++++++++
+ arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        | 488 ++++++++++++++++++++-
+ 5 files changed, 988 insertions(+), 3 deletions(-)
+---
+base-commit: 7a5d2ce79d1fc8535a6f10e51011ae9671bd86e8
+change-id: 20240806-c3_add_node-420a37918f18
+
+Best regards,
+-- 
+Xianwei Zhao <xianwei.zhao@amlogic.com>
+
+
 
