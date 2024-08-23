@@ -1,125 +1,114 @@
-Return-Path: <linux-clk+bounces-11143-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11145-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A85795D82A
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 22:56:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E83C95D987
+	for <lists+linux-clk@lfdr.de>; Sat, 24 Aug 2024 01:13:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E73B1F238FF
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 20:56:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFAD52833AF
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 23:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5918D1C8FA1;
-	Fri, 23 Aug 2024 20:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE36A1C8FD5;
+	Fri, 23 Aug 2024 23:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XvBQSMqU"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YG6Xbge+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114A61C8255;
-	Fri, 23 Aug 2024 20:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A311C8FCD;
+	Fri, 23 Aug 2024 23:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724446540; cv=none; b=f7v3U+RgozUIKiSJvbkAB5Wo8ZVyJCS5wk6FL8LMHFQnrNO1eHY8q8DyZjDNHI61Oz9dI0bcz0vEqfOUCiX8Q0UpanyZlje0WyxpnO3e2qVL5/PRllRLgvOnWObpyeJ9b0OHotvaSMV22IiwbP6U28S+N1LrNB3fiAEo1/6Bv/w=
+	t=1724454792; cv=none; b=NhK8EeQ5izxyDBbCT5BgDNrSI6Q81WOCnctl2n5e4VCP2AFgpxgtD84ZM2uweAbQDopy8r2k+lLBZJO66EL9zcwlVtf80y6Y3ie7lTXycvBg0MMXkKIN+2Czmlx2TADEc13FvTjzx1IGnV2g+s/Bv6qc+Z/5BAzsg7Ykijtdmp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724446540; c=relaxed/simple;
-	bh=Q3+HmYt/G3Au0niSNa/DgxrSc5e1rXQMjT5sZsxkC6k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qi72sruBA1ryWecxbaRyRiqXHar54Vah0OJIomGCFGh7N+SQ6WKRQ5SP3Rj1vg/R5V0ME5OCivOnEpExzeN1o49WTAgMgIPTuZJuXt0K9a+NRXAkew7IzOogaS3KSj3vV+kz1uMYxK6nzytLjeo4zltPuO+N+xFYFemxuxTb+NU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XvBQSMqU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DC580C4DE06;
-	Fri, 23 Aug 2024 20:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724446539;
-	bh=Q3+HmYt/G3Au0niSNa/DgxrSc5e1rXQMjT5sZsxkC6k=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=XvBQSMqU1e7ef3C8uU+tS2nJk/ECWMx5tGp040hyDzvCwQBoLunK+w9N39JZNswI8
-	 SSdDf0595/SF0it02f1TuVrXivw9KePWXfpt0WQjJugHLCIz2tf2ccKwLULN3soyMA
-	 IonTfGVxUSvmqr1bEwnxC2k9gYYeUJHJsVbOeVXw8S+u0MfZcW/axJa9MRi2YfWc4Q
-	 gGjZGB+y2/FhD9kkFSUpCl3AHEMTkCuCvaDsemjKLuSN2Yvn4YiWqFoJiRTSOoNSAf
-	 KpwH7WuMA5g43VfJTyz1S637B6iQEE7WacemNb6MbtmS4ZQlwP+XwkYoP+cCUOSd6v
-	 p6P4pS5bkLi7g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4818C5472F;
-	Fri, 23 Aug 2024 20:55:39 +0000 (UTC)
-From: =?utf-8?q?Duje_Mihanovi=C4=87_via_B4_Relay?= <devnull+duje.mihanovic.skole.hr@kernel.org>
-Date: Fri, 23 Aug 2024 22:54:47 +0200
-Subject: [PATCH v12 12/12] MAINTAINERS: add myself as Marvell PXA1908
- maintainer
+	s=arc-20240116; t=1724454792; c=relaxed/simple;
+	bh=cZb5bENC2/V22FAm8H6EPE8XYq7AE9WeNFGzS39Z234=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=cfdfYsFZlnAb39mSdSdAUXYDIsmuERplwWoufprywXhvLd4PX7Q10GPCjK8EQnMskDciuMN+OHeAKuCWDMaBt7XIwUEZFOAkELKEfVSy0T1QJB3AWuJjj2FNrS9WYWLrWNHqID7eQ9QQU52XB/9+hhhF1V1qaiqpNqooj55bEeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=YG6Xbge+; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NBU0K1007716;
+	Fri, 23 Aug 2024 23:13:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	98ojfFnRqT6OFd+DsmKj4oWIC/lf/udM01Zdlqh5I+s=; b=YG6Xbge+NssyG6iK
+	wvN8ZM9+VVl9mkoaN+1V7dBg9BP4JJ1rjGf8O6val93XqsGyHgRwQ3y6Zd+FcllP
+	9ROMBKdL33ebT2wvVXqjdDwZzPRYLOr+8ZrnB1elk/cfj0flXBkp1zzjLPKqfudj
+	FUA5EiDVnlUcAel9KCApWmbASfOHcC0ss5qAgMdi9wLoPYTtQ+zGBrn6PB8ivcdZ
+	ku0wBcF/XStMlaXW/sNmUWLVvUeObokNDiTOitMAt/ZtE4OTSdTaAX88ETKeD1U9
+	STiA6GUTQgaqOlX/6YjVYXy4txlVP4rMuJFHMmvhJYx+QWapQ9jUpcmFDDknbH+2
+	W8aPxQ==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 414pe5vpct-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Aug 2024 23:13:06 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47NND54L008923
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Aug 2024 23:13:05 GMT
+Received: from [10.251.44.135] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 23 Aug
+ 2024 16:13:03 -0700
+Message-ID: <1893aa81-89f0-459e-b5b5-9973014ed1e6@quicinc.com>
+Date: Sat, 24 Aug 2024 02:13:00 +0300
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240823-pxa1908-lkml-v12-12-cc3ada51beb0@skole.hr>
-References: <20240823-pxa1908-lkml-v12-0-cc3ada51beb0@skole.hr>
-In-Reply-To: <20240823-pxa1908-lkml-v12-0-cc3ada51beb0@skole.hr>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
- Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- Tony Lindgren <tony@atomide.com>, 
- Haojian Zhuang <haojian.zhuang@linaro.org>, 
- =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
- Lubomir Rintel <lkundrak@v3.sk>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
- Karel Balej <balejk@matfyz.cz>, David Wronek <david@mainlining.org>, 
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=906;
- i=duje.mihanovic@skole.hr; s=20240706; h=from:subject:message-id;
- bh=GovpMCIQGsNWiqbFciJR2Sc0Ur3raxOrVfpbnASZsI0=;
- b=owGbwMvMwCW21nBykGv/WmbG02pJDGknvmtOrQsqVdn/eNOL6UtM38WnnF06LSylxs74TY+Zk
- /MLo0UVHaUsDGJcDLJiiiy5/x2v8X4W2bo9e5kBzBxWJpAhDFycAjAR5VWMDF+Fr/W0cn4+lPPI
- Uab+fHTsIt2zZgz9t86z6nFxOK0uusvwizlo+fYjB/3Zpdj5D8SaqDX/blqV+7tOwe4d256288v
- OswIA
-X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
- fpr=6DFF41D60DF314B5B76BA630AD319352458FAD03
-X-Endpoint-Received: by B4 Relay for duje.mihanovic@skole.hr/20240706 with
- auth_id=191
-X-Original-From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Reply-To: duje.mihanovic@skole.hr
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] clk: qcom: gdsc: Add a flag to skip setting power
+ collapse bits
+To: Stephen Boyd <sboyd@kernel.org>, <andersson@kernel.org>,
+        <quic_mdtipton@quicinc.com>, <quic_viveka@quicinc.com>
+CC: <mturquette@baylibre.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240813120015.3242787-1-quic_c_gdjako@quicinc.com>
+ <496d7baf4c0e7e83c54f57edf789eafc.sboyd@kernel.org>
+Content-Language: en-US
+From: Georgi Djakov <quic_c_gdjako@quicinc.com>
+In-Reply-To: <496d7baf4c0e7e83c54f57edf789eafc.sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: jTbEoyWWRZbzrpcJAgb-ATPzJXdRbxl2
+X-Proofpoint-GUID: jTbEoyWWRZbzrpcJAgb-ATPzJXdRbxl2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-23_16,2024-08-23_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 clxscore=1011 spamscore=0 mlxlogscore=503 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408230170
 
-From: Duje Mihanović <duje.mihanovic@skole.hr>
+On 8/17/2024 12:48 AM, Stephen Boyd wrote:
+> Quoting Georgi Djakov (2024-08-13 05:00:15)
+>> The sdm845 platforms have a hardware issue that requires keeping
+>> some of the MMNOC GDSCs in SW collapse mode (which is the power-on
+>> default). But if some driver tries to use these GDSCs and the mode
+>> is updated because of runtime pm calls, we may get a board hang.
+>> Introduce a flag to skip any updates to the power collapse settings
+>> for the impacted GDSCs to avoid unexpected board hangs.
+> 
+> Can you add a Fixes tag? And does this need to go to stable kernels?
 
-Add myself as the maintainer for Marvell PXA1908 SoC support.
+These GDSCs got a user in v6.11-rc1 and there is currently a workaround
+in place to avoid the hang, but this patch is the proper way to handle
+it. Getting it into either fixes or next is both fine. There is no need
+to backport it, as these GDSCs are not used on older kernels.
 
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f328373463b0..33752c63bd5a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2481,6 +2481,15 @@ F:	drivers/irqchip/irq-mvebu-*
- F:	drivers/pinctrl/mvebu/
- F:	drivers/rtc/rtc-armada38x.c
- 
-+ARM/Marvell PXA1908 SOC support
-+M:	Duje Mihanović <duje.mihanovic@skole.hr>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Maintained
-+T:	git https://gitlab.com/LegoLivesMatter/linux
-+F:	arch/arm64/boot/dts/marvell/pxa1908*
-+F:	drivers/clk/mmp/clk-pxa1908*.c
-+F:	include/dt-bindings/clock/marvell,pxa1908.h
-+
- ARM/Mediatek RTC DRIVER
- M:	Eddie Huang <eddie.huang@mediatek.com>
- M:	Sean Wang <sean.wang@mediatek.com>
-
--- 
-2.46.0
-
-
+Thanks,
+Georgi
 
