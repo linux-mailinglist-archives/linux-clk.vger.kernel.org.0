@@ -1,143 +1,150 @@
-Return-Path: <linux-clk+bounces-11118-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11120-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C78E895D133
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 17:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26A7B95D17D
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 17:34:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715511F24357
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 15:16:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C320B1F2386E
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 15:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707881891AE;
-	Fri, 23 Aug 2024 15:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA376188A21;
+	Fri, 23 Aug 2024 15:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZUF8uYZk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gnA3+tSe"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96BF51586D3;
-	Fri, 23 Aug 2024 15:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0251188920;
+	Fri, 23 Aug 2024 15:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724426190; cv=none; b=Wg984V4Gyq8mozL5hRiU2t4QXmWpPDAHAhADASssdsTDMti+zmRJfnIHBViClP8L2PH2Gu2bte8TAAct4X+6PylBc+LRJOywJmoZNi/7nNgSI2pFibmBu1GaVJVQ9GudKOW0PwIHewpx57TZhuhxmovz7/swQ5f+ahrXFSxbKzc=
+	t=1724427276; cv=none; b=Wb0Z+WsjbCfBx71bXSyllbqqdQUAViO9iSzxrQG2lkS/SeCvDVNh0NVrKtryUJOceol+3453+DmQ/Er1m//Yi4XcFzcfZYzcyFZlAnqc7+9rKXTyUi3RDGQhcj4If86LM/AVVQzyjjILQBTL/1eXuUMlR21aNE0h5NBnmzQtW0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724426190; c=relaxed/simple;
-	bh=KIGu8KPJ4wD+6srlXDln8w2+UkY+JiFysbcZeTtgnv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gZFGrcJSKbUB8ILvZWM2dEnB8vNJiDsrKyYMV6FrXjbhYkSpPVXhWQ5Cz54PraAcvMYhbnIv29sdxJ0hMc+80OCeJpws5g26kANabVS8eo4JKWOhjkxRYzO4lvywPCIkV4nlUILItVemm78rYZqhnVNep/pRUGaPC1oZVLir8/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZUF8uYZk; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NEAcxe010554;
-	Fri, 23 Aug 2024 15:16:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	SYvZ/8Nyxyzj5yWb8bM+vn9zItFjjNckEx4h1QlisZY=; b=ZUF8uYZkHaA+IR6L
-	/+fj+sBks8hP24xc3pnhkUzzY0C5lDvWtGPuXe4ktToS+2kJVu72cYRKlT/ezTlf
-	JPzADCCSptRZ55qxMCSS3h6+E1e/anR936vYH20+24nc9m2T3qO0IMTRotbQTYml
-	TseiI5av2xDy0uqVAp9VPhahjlRp3GgIp8BG1CKqxPo7QPVVf9xBzOH3lPZLQ6mk
-	m+2DDAoGgpR8vHjU1s55VHqWqaowl6r4CSB7IBN4rV0NEepuVXMALT6rM5ih79vt
-	Xgr6EgCH2Wa9iMY1lduWV3spLvS3J1BROB/RuMmVYGI0jAIEnIav1EFzpXtYyLgN
-	ldc7TQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 416mnm9nkp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 15:16:11 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47NFG9mb006227
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 15:16:09 GMT
-Received: from [10.253.73.208] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 23 Aug
- 2024 08:15:55 -0700
-Message-ID: <1b8f9678-a51d-4088-a475-2818200c9ba5@quicinc.com>
-Date: Fri, 23 Aug 2024 23:15:50 +0800
+	s=arc-20240116; t=1724427276; c=relaxed/simple;
+	bh=7Vr6P3VkT/qk39oMWJkJ0VkShl1bY6v2wyuJA+/bppk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gdtZXz6upCORljKVw+ZaSvhajVDAAkC8xN2umfVeVoWtAPNK8YOfV7uETfxDrjpPyPr/CX+ZKkIrERfbtakgB32mjkza75xFur+Lf5CcdgMKTD5qAKZrim80u7bjayde+GY4X/9lZcmyzi66F3pecU8j3NTvE2c4eUpBcMRmzOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gnA3+tSe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B63C4AF0B;
+	Fri, 23 Aug 2024 15:34:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724427276;
+	bh=7Vr6P3VkT/qk39oMWJkJ0VkShl1bY6v2wyuJA+/bppk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gnA3+tSeMJ2IqGzesp7ePQLpRBg9Li+oDYImoDYiPhNTA+eVILkWR+4jGhLlHTRts
+	 /0+XSmqDpvj0cwITX0AkaeIxQYak7NOMMZnLHz91QvjXkl7G5r0ceFAVPJO2YH2n4N
+	 GMfEM8HfwCHkJSrxZic9Mmju9hFEQinWKEmR0Mfy4YuYitLgcPgMrC7TCz4U6qnZph
+	 a1bU5Vw1trjyxoxW6umQRnt9YelvTjbpdNtpT9KmeHM5+Jf2E2BpwSsiznwUfN2IzM
+	 UHreZyuuwaq81y8OAYIuoKRuEcfxs/OEzmL+cX7IP8vpc1bTGayBRft9AO7GiW/ajB
+	 dFTIwLEJwgrWw==
+Date: Fri, 23 Aug 2024 16:34:32 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc: Hal Feng <hal.feng@starfivetech.com>,
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v6] clk: starfive: jh7110-sys: Fix lower rate of CPUfreq
+ by setting PLL0 rate to 1.5GHz
+Message-ID: <20240823-able-subtype-4e9a2049c114@spud>
+References: <20240603020607.25122-1-xingyu.wu@starfivetech.com>
+ <CAJM55Z-_sOvRnaa8BuGcupsUksaK=tuTbTmF=AtzmzkCo7y5jA@mail.gmail.com>
+ <NTZPR01MB09563DBA6F76281EB06914859FB92@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
+ <20240818-flip-excusably-c89021683d20@spud>
+ <ZQ2PR01MB13073EF3BD7A64F2C098AA8FE6882@ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn>
+ <NTZPR01MB0956ABB5D9B0D087E085EF8B9F882@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: qcom: Add CMN PLL clock
- controller for IPQ SoC
-To: Ziyang Huang <hzyitc@outlook.com>, <krzk@kernel.org>
-CC: <andersson@kernel.org>, <bartosz.golaszewski@linaro.org>,
-        <catalin.marinas@arm.com>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <konradybcio@kernel.org>,
-        <krzk+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
-        <quic_kkumarcs@quicinc.com>, <quic_leiwei@quicinc.com>,
-        <quic_linchen@quicinc.com>, <quic_pavir@quicinc.com>,
-        <quic_suruchia@quicinc.com>, <robh@kernel.org>, <sboyd@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <will@kernel.org>
-References: <be2eae05-6deb-49fb-94ce-cb5e3a5bd1ba@kernel.org>
- <TYZPR01MB5556648ABB617F62EF865A61C98F2@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
-Content-Language: en-US
-From: Jie Luo <quic_luoj@quicinc.com>
-In-Reply-To: <TYZPR01MB5556648ABB617F62EF865A61C98F2@TYZPR01MB5556.apcprd01.prod.exchangelabs.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: K4Q6lYm8ZVTcohq6w0ryIrSbqByZAhAY
-X-Proofpoint-GUID: K4Q6lYm8ZVTcohq6w0ryIrSbqByZAhAY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-23_11,2024-08-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1011
- mlxlogscore=747 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408230113
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="gaJrXFVHKEWAo6Pd"
+Content-Disposition: inline
+In-Reply-To: <NTZPR01MB0956ABB5D9B0D087E085EF8B9F882@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
 
 
+--gaJrXFVHKEWAo6Pd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 8/23/2024 12:12 AM, Ziyang Huang wrote:
->> Yes, I double checked again with our hardware team and the
->> documentation. CMN is just a short form of "common" with no additional
->> information in the guide.
-> 
-> Hi luo jie,
-> 
-> I'm a free developer who was trying to add the ethernet support for
-> IPQ5018[1]. And I'm also trying to write the same driver in the V2 patch.
-> 
-> When I was trying to write this driver, I was also confused about the
-> 'CMN' whcih I can't find any description.
-> 
-> But finally in WiFI documents, I found the same word explained as
-> 'Component'. There may be different. But I think this is a better
-> explanation than 'common'. So I named this driver to
-> QCOM_ETH_CMN (Qualcomm Ethernet Component Driver).
+On Fri, Aug 23, 2024 at 08:34:55AM +0000, Xingyu Wu wrote:
+> On 23.08.24 11:42, Hal Feng wrote:
+> > > > >
+> > > > > I'm still not a fan of hardcoding cpu frequencies in the driver.
+> > > > > You've added the notifiers exactly so that we can use the standard
+> > > > > device
+> > > tree settings for this.
+> > > > >
+> > > > > In other words I much prefer v5 of this patchset.
+> > > > >
+> > > > > /Emil
+> > > > >
+> > > >
+> > > > Thanks, Emil.
+> > > >
+> > > > Hi Conor, what do you think about this issue?
+> > >
+> > > Apologies for the delay replying, I didn't realise there was a
+> > > question here directed at me. My only real thought on the patchset is
+> > > that what is done should not cause problems when the same devicetree
+> > > is used for both U-Boot and for the kernel. As long as that's
+> > > satisfied, I don't mind how you choose to implement it.
+> >=20
+> > Actually VF2 U-Boot can run at 1.5GHz. It will work if the PMIC sets th=
+e CPU
+> > power supply voltage to 1.04V. The reason why we run VF2 U-Boot at 1.0G=
+Hz is
+> > that the default voltage supplied by the PMIC is 0.9V which only suppor=
+ts JH7110
+> > cores running at 1.0GHz.
+> >=20
+> > So v5 of this patchset won't cause problems if the VF2 U-Boot makes some
+> > changes to support running at 1.5GHz. And I will make these changes whe=
+n I
+> > implement OF_UPSTREAM for VF2 U-Boot.
+> >=20
+> > BTW, if v5 is applied, the patch 2 of v5 should be rebased on the new m=
+ainline
+> > since jh7110-common.dtsi has been created.
+> >=20
+>=20
+> Good news. Thanks Hal.
+>=20
+> Hi Conor,=20
+>=20
+> According to Hal, U-Boot can also run 1.5G so that the dts from kernel
+> can be used on the U-Boot and could not cause any problems. So the way of
+> Patch v5[1] works which Emil agreed.
+> [1]: https://lore.kernel.org/all/20240507065319.274976-1-xingyu.wu@starfi=
+vetech.com/
+>=20
+> If you agree, I will submit a new patchset soon and modify it for the new=
+ jh7110-common.dtsi.
 
-Hi Ziyang,
+That's great, thanks for working on it guys.
 
-We have confirmed from our SoC team that 'CMN' is used as a short
-form of "common" for the CMN PLL block in the documentation. The
-'component' reference that you may have found in the Wi-Fi document
-should not apply to this Ethernet specific CMN PLL block. This CMN
-PLL block provides a similar function on all IPQ SoCs including
-IPQ5018.
+Cheers,
+Conor.
 
-Also, note that while this driver is initially enabled for IPQ9574
-SoC, we plan to extend it to other SoC later once the driver is
-accepted. Similarly we suggest enabling the IPQ5018 support for
-CMN PLL on top of this driver.
+--gaJrXFVHKEWAo6Pd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Hope this can help something.
-> 
-> [1] https://lore.kernel.org/all/TYZPR01MB55563BD6A2B78402E4BB44D4C9762@TYZPR01MB5556.apcprd01.prod.exchangelabs.com/
-> 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsisCAAKCRB4tDGHoIJi
+0pjsAQDeAipeLg6CA9GMChrk2MgvUa9f281/mf0Gu4TZozoPBAEA/ryiJbJMX/OO
+Tw8+CwZ5FG5D+MBqZstxClLUoqYD5Qk=
+=4qCZ
+-----END PGP SIGNATURE-----
+
+--gaJrXFVHKEWAo6Pd--
 
