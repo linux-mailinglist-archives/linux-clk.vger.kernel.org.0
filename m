@@ -1,49 +1,61 @@
-Return-Path: <linux-clk+bounces-11093-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11095-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0748C95C5A9
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 08:41:46 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1B4A95C656
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 09:15:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B10731F23E88
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 06:41:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D25FB235B0
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Aug 2024 07:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD63F1311AC;
-	Fri, 23 Aug 2024 06:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C53F12C484;
+	Fri, 23 Aug 2024 07:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dC+ig9bo"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942DF7FBA2;
-	Fri, 23 Aug 2024 06:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3943E1F94D;
+	Fri, 23 Aug 2024 07:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724395285; cv=none; b=trilMAEYjN8NmikI3914alO9KvvivYyV93rUyDkx3uJeeCcyjPm9Cc85/xddVUHxAk3CqpnL0iiAe1sBzWkqzVvkr9WGUpHQ67O7TityToSajVetoB9X71tDMFEJIGRIrTGOeC5V1//clfOJrXkJZn/7cIRSRZuXVzxYfYJbkxA=
+	t=1724397329; cv=none; b=mG9Ko7wk8hMs7P6PLpeMAhP9deF3WWkYXX9qpyKfKaCLBblD/g6dmTUy9WwD2tmaCrNdaaBpZRv8oP3W2PkL3pM6UqmZfvDyu96Tv1EXXH16ySlV3l8VvCVM4wbEM7n7RVBg9bs10AZrvFOTJXI7E+R+UcgzwFgmPBTyP8FSYgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724395285; c=relaxed/simple;
-	bh=+G4UWcZ+rFXzcdTpfTj594hqIonRj/8dfrcMjb5dDAA=;
+	s=arc-20240116; t=1724397329; c=relaxed/simple;
+	bh=QyCcTe4msHaqfiC+96ztmrrkM0zY+X6wSGRlFtH4bMA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aQRf4eYbtYnnSHd9Ao1+wMaJ0+WVeY92uYM5ZWLImgxq4fnLJM+V7WnbLgjDQLEzEpLFapUdFcfb1awQokdSioASXk+ELwtihJIGKwWUrHUXL+5feCoo9f7BZgSQftFnQWp6hxMrf8tuVYYccZQ3bo5zBphG35wbBrUc35vjFwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1595BC4AF09;
-	Fri, 23 Aug 2024 06:41:19 +0000 (UTC)
-Date: Fri, 23 Aug 2024 08:41:16 +0200
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jerome Brunet <jbrunet@baylibre.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chuan Liu <chuan.liu@amlogic.com>, Kevin Hilman <khilman@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: clock: fix C3 PLL input parameter
-Message-ID: <5hghvuv2hy4l2ofve4ghb3nhvg76pwpilulznzja25hurxxwcp@2idkyyomv5w5>
-References: <20240823-c3_add_node-v3-0-3648376037f4@amlogic.com>
- <20240823-c3_add_node-v3-1-3648376037f4@amlogic.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OLggVc43/16bPdGmYysfZ+DxlVoVWTmECsN5ClHlRfvp2CsHnxuIKZVMX3CVWamanlGUOvYPKOSZ0itw+ThjaUG4nk4s8IU7C2HtWwyipo+/MogtouaIE2v9i57WjXiOL89bSdkfKi4aYx39gu8LCdYZXBTuk3ifDi/h5gsK8EI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dC+ig9bo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FAF3C32786;
+	Fri, 23 Aug 2024 07:15:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724397328;
+	bh=QyCcTe4msHaqfiC+96ztmrrkM0zY+X6wSGRlFtH4bMA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dC+ig9bokeCIZz28A0VmS4yeNf9cfatW193Y0Y6P+XjjwWqYnUP7uxfgrYQreE0ND
+	 tAAuhIQlXAsN3FodGpST0dAaCW8DrXSS2fHC71e5u2q/nFLpnWySM3gBd04s0b/bLt
+	 obNkVD9H2j1o2HRB8PLz7/S9Hy87OqunqWzEJAfj/+nfMTbrDW4hQNBlvGK3/HRO5q
+	 BM9cnqQhYBMiY0B3T4R6FRJ3matftWnbE4N6P+bb3e+Ddqemmx755xTWiF2s4Ynhxu
+	 +BqC2Nf02HzPBSxtitUsKfYeiyXBUD5R5jVqqBWTaby/Aw+Df5uAn3GJbUjLowKy0I
+	 fVVwLeOq9FA7A==
+Date: Fri, 23 Aug 2024 09:15:20 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Sunyeal Hong <sunyeal.hong@samsung.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/4] arm64: dts: exynos: add initial CMU clock nodes
+ in ExynosAuto v920
+Message-ID: <bailwkwaxw27rtzgvjkapmmhjwearm7pjlstzc52qr4dgbaxsk@unpiayefy4py>
+References: <20240821232652.1077701-1-sunyeal.hong@samsung.com>
+ <CGME20240821232656epcas2p2fa72bd9565570c26616aaa640d75eef3@epcas2p2.samsung.com>
+ <20240821232652.1077701-3-sunyeal.hong@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -52,20 +64,20 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240823-c3_add_node-v3-1-3648376037f4@amlogic.com>
+In-Reply-To: <20240821232652.1077701-3-sunyeal.hong@samsung.com>
 
-On Fri, Aug 23, 2024 at 10:29:17AM +0800, Xianwei Zhao wrote:
-> Add C3 PLL controller input clock parameters "fix".
+On Thu, Aug 22, 2024 at 08:26:50AM +0900, Sunyeal Hong wrote:
+> Add cmu_top, cmu_peric0 clock nodes and
+> switch USI clocks instead of dummy fixed-rate-clock.
 > 
-> The clock named "fix" was initially implemented in PLL clock controller driver.
-> However, some registers required secure zone access, so we moved it to
-> the secure zone (BL31) and accessed it through SCMI. Since the PLL clock
-> driver needs to use this clock, the "fix" clock is used as an input source.
-> We updated the driver but forgot to modify the binding accordingly,
+> Signed-off-by: Sunyeal Hong <sunyeal.hong@samsung.com>
+> ---
+>  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 40 +++++++++++++------
+>  1 file changed, 27 insertions(+), 13 deletions(-)
 
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+In the future, please remember about correct order of patches. Nothing
+can depend on the DTS, thus DTS is always the last. No need to resend
+for that.
 
 Best regards,
 Krzysztof
