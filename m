@@ -1,179 +1,148 @@
-Return-Path: <linux-clk+bounces-11216-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11219-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E077A9600C3
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 07:04:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 682C8960181
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 08:24:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97208283400
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 05:04:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CC9AB20BF9
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 06:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5AE416426;
-	Tue, 27 Aug 2024 05:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPg11gFe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640DF7344C;
+	Tue, 27 Aug 2024 06:24:02 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2126.outbound.protection.partner.outlook.cn [139.219.17.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5DF4C92;
-	Tue, 27 Aug 2024 05:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724735051; cv=none; b=s6h4CJrbuExsIRWaIy430yO0giaka1do3IHTl2G89lpV1eOvYmoZ62icXBFQHEM+rpzC8bF6CVfo44ig4XkaK7I7aZ0Dp+5O2Ju88sOeave7h5UkOie4OuzR1I+iWGXqbMNmtJWLp/5vIhOs0EEDNPlSwXsSG0mmXHWIxTDIfuI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724735051; c=relaxed/simple;
-	bh=GO0zNOW/uhkO9YPbWUQ7p2nEfAJZKu25c78aYjvnEXc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f5g93hrUFViIJ9Y6RZFXQp1Cmq1CR9AZ7VUbsMu3JEFVjHOBEL87kgn40m7l3kW2cJQ0PubYpivBtz39iioUTyCh3Jj+Fb8lrCDCOb91p7VTYvyGZDeuB06vjPLSvH6ziLnBhOovLGHeDHBNZ4SZjY/CAMuT09bmdmK8JPxyeTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPg11gFe; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2020ac89cabso45033085ad.1;
-        Mon, 26 Aug 2024 22:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724735049; x=1725339849; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=pS15vPEb/TE1/EitqKs+W/XYfjN7muJ2TfqmqJCODDk=;
-        b=FPg11gFej/wmvaQYP+Mnnxn7wXxtw8yGC1ue6iVTDVg3AFpKkwi5RzFpuQxeuN+GEw
-         VXp0/uiGWZDueVH0F+Ed9lHlMp5ZaznnGZreoeK5puuq99PM/Egg/P7IenqPHCe8Hk6s
-         Fx8NTswrBu5j9XE/W51rNaYej2xjtPtVzNoE65GxEkbjNxhBxou52PKViVDQwb1Pi5fx
-         x5GjpFfUD7eR3mLqDn3PRknKwjr3YMwIjbscoqx4ycobSSvfv4y0Z/LtcgtxrYX2vFhM
-         P7+l6JC84O2VkV6cXOHT4ljKOc9wQ6seo0/X8/gRoJwoijsIa/XrWh8OD57kgfGzq8cP
-         5J9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724735049; x=1725339849;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pS15vPEb/TE1/EitqKs+W/XYfjN7muJ2TfqmqJCODDk=;
-        b=uaAP3k8eiTwOsUwa65lj66XM8Jh2SkZ6QRuglpzxTafA7Uz5Y/vjEQSv6VD360lOwB
-         Ftv7fzJ1eeJFqRvkDyJHALcw4/bSjGCh1Mph5eYg/SihzEMhmnyrQnZ2fAXBaj48/e7d
-         ZbGrB272ChEfwlVFgi8x8903dQFrbiTdPcF2ycgVnYzXKiFhm6DTRK3kK3PqCmZP5krA
-         X3xLLUQw0ARl+CBPwHxD78EXcod9v9I5SsV6lcd2VNIckZWLxVcbs+MBp5yqFKt3CtaA
-         n1ahAhrzaO/RBmyq6wty4QGCHJbcIoS0Nrp6ZtlOEaYlFAaVi46jUv+1Ms3rbR5ZnQHh
-         hYvw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6LD0KOS2/Xs8pgUzQ2+JKiHMPvnD3TcF1+H/TIsM8ADmMnE/6O+C+ngE4dpbhT5oKqsHYLxEvsuM=@vger.kernel.org, AJvYcCVdVO/K5fzTTr0yF6DJ3bi7A1zERlGGblYQa72cJU77UbnTz+Tifzc1+Z1EgD7Iccpr16monMIj8VGdhWlB@vger.kernel.org, AJvYcCW42uNGLJ6Xq2vnKWvEQ0bOO3SHQq5gP5lHIEFC3sQs30Ky83+OuhkPKn+m2+pHvDFw1x7SuN+W8iE=@vger.kernel.org, AJvYcCXyPdeTqHSedKEqqgU8wzBVda85P907D4zofBXJesqeIh81O+w5nQxx1EQkgEBWoT1Y9rDPrzBPwxdl5avKz18=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMuRag1hlhqF+80gU1gH2CMzZCvNxaM2SGzUQ+PpnQlBBKUw1w
-	ZE92C7bBtVZB1n4Ek28QtCiXp25MG60ejiTP9xQ5+0esZ87nEdLT
-X-Google-Smtp-Source: AGHT+IHYMlAJ7cseyBWWV3t9xPn+jhmKSnw0GVJdJSMZSjCeZH9bI3KDUJ3ytLkyMDvyWzQWl2op4Q==
-X-Received: by 2002:a17:902:ec83:b0:202:883:bef with SMTP id d9443c01a7336-2039e4ab20bmr100966045ad.30.1724735049361;
-        Mon, 26 Aug 2024 22:04:09 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855dbf57sm75480025ad.147.2024.08.26.22.04.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Aug 2024 22:04:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ee11fea3-3e77-4870-837a-ef6147ac2bf0@roeck-us.net>
-Date: Mon, 26 Aug 2024 22:04:06 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A67BA49;
+	Tue, 27 Aug 2024 06:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.126
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724739842; cv=fail; b=mlLZic5qKSiSRQ2CyYmVMwWMFBm65Ha6cYpoLe0SeqlNsy+om9p6ZYUjbJAfaaMLriEm09gOE2VVMdgl/cL/cRuWKAnhFoP3XKl0L9UlVpcBOLOO/ronwMrWQV6xG8ovRNfyaQym7esOtvPlnpZnqSNfYRFLzn2ob43bvKoG+VU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724739842; c=relaxed/simple;
+	bh=RPZAEY5F1xU5T9HfvbV2s2LrK5S2Dp2IQA50MebOMWs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=n5Gvyynu66DWCWP+g0Ci82U+R+k1oprKuRyV6RZQtRV84xtDXXY4YkV8HV1MaKtbP4z6hgG1THbRPWaDDhgxUxT5vf/v2sQ1GRNbeLuf3n2FkEsGZ6vLxkNRE9xuwW6qScsWi3Urcm3ksfrqle3IFL2z/4+KWOh4JyHnQnEFigo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.126
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VEgv70wZUt5pv62gphX7kuWntENxYVMK18KOXI7Tl6TTUl9Z92qALVBx5JJKxlSywiccrtfGG1yYPhKbs5qELf9BJWoXbkh7GlvnNfOhX+KB+dnUO5IqQNJnSklzNmcBaKaRC5y51J+P+fYaDA6CiKFhmPWz58nzs0spAP0afJzF0SitHyZwBX9VtfY+uFaHbrpqmvxjsT/BPrPKdPJrrvUQj10VMe8TZzsLg0wmQzeQeLy7sV/Fh7ToBzOdXBDwJ42x7g4hs69hlhcb28ZNX7IIHWdjgSiHsG4N5FK1mrpzrQZhy8q9uNFfVZqwyA8bwOCZBGgzova5nvGVv10hSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RPZAEY5F1xU5T9HfvbV2s2LrK5S2Dp2IQA50MebOMWs=;
+ b=J3q8HvtelMcJYqHSVlkUvldgJI8rIrR6m/roEp1XrTVKwQDgI0VomV4oanfRP2mDhzMKyjKfth0JaA3555l2wJtFCnlEMyNBZqtvjVpsHuV/7Od9FnNMD1IOPsShJXGVW7WcQGKCexcJEU/6fuk2OuhGCAtDjDy7hKNViw3dXN63iuda3ooxnwGLYEKok3e+fPtlvvUwQ9re4JqdNrzvAvugqpy9V1ZYklXn3Cj69FD2jdNLHb9MZEo+JjuMLWa2pOtt0euY4AzN/S21VgefonOqY0iE1ylMkPsTTUovzVRMh9P2i8g8rmYsttnQLgageOijuVIL6PDXoLvXijmq8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:7::14) by ZQ2PR01MB1305.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:6::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.36; Tue, 27 Aug
+ 2024 05:49:36 +0000
+Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ ([fe80::5a83:8682:b030:e46b]) by
+ ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn ([fe80::5a83:8682:b030:e46b%3])
+ with mapi id 15.20.7784.035; Tue, 27 Aug 2024 05:49:36 +0000
+From: Hal Feng <hal.feng@starfivetech.com>
+To: Xingyu Wu <xingyu.wu@starfivetech.com>, Michael Turquette
+	<mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Conor Dooley
+	<conor@kernel.org>, Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v7 1/2] clk: starfive: jh7110-sys: Add notifier for PLL0
+ clock
+Thread-Topic: [PATCH v7 1/2] clk: starfive: jh7110-sys: Add notifier for PLL0
+ clock
+Thread-Index: AQHa946Z6AJ9JnQFGUeQ1w+Pg1unp7I6mVsQ
+Date: Tue, 27 Aug 2024 05:49:36 +0000
+Message-ID:
+ <ZQ2PR01MB13074B9722255366B9C8F946E6942@ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn>
+References: <20240826080430.179788-1-xingyu.wu@starfivetech.com>
+ <20240826080430.179788-2-xingyu.wu@starfivetech.com>
+In-Reply-To: <20240826080430.179788-2-xingyu.wu@starfivetech.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZQ2PR01MB1307:EE_|ZQ2PR01MB1305:EE_
+x-ms-office365-filtering-correlation-id: 12da1b6d-5913-43a6-55c2-08dcc65c0888
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ 9lgi1pj7cZ87aLQKAdh+yslTLV/oGY8rXUKynDOwVFEOYN8O+jY3HPeeRyBzTRWqS7n/FsJdIvla3+aGTcH2sYLiaIPSI/9QWucPvKkRZ83/6T2QN0KF+Zbhei6fckjwvET6aRls168tMtdJrxrFnvToMxIFj3ZNy2Ukkr/T142gfECaoH4NKa2Pmn8bEwSk39rGlAfYizH7xOJCQwoFfe5if9/UH26Dyv9oecvLHxgp/Aqnc3kGVjDxgarlvJLDs4eOQaPF3Sif0py1EltDvJZqtygQVEm8U0ju0bfJSbCuT+sEh6nFeEXvIA0f+jV4XJ+6fgKMuf464UL448M4Vgy6NaGgE8UrEE0462mAGy8Enb0rXErI+QLPJkAfWoVTLlLpqfi//3e2mgIpmr0Crzqfo9po0isgu1G4t1zb8B06TANH/NAc1cMHZr0e3akvVhP1iEkZelzHXbNtXOlkHv5qmLQA4wH7ydeKMAKxLU7lzQ2bkmlsw86GUVKetnuNu7pRkKsD/ctzuGnF+Dh1XTDu2JZqriqqcKvTyEDw0/vIRQMmoTjAdLLXaurno1C2xMlVNfQ/+4EOP5eIfSlVcjOa3vVFr+ek2/iMN6eUwzPYZWCJCOS0S5THw0zh1KzZ
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?/FlVFNfCSawYcyBqhaUYrxQjPBZfShMD4yVxNUnMCg7LoaxSBDMB3sIbRYZN?=
+ =?us-ascii?Q?esieWCAPtr+PMSfUHN8HizGVd0FwRnb874PrmsoxJovGkC4WthGOEZOWRgBL?=
+ =?us-ascii?Q?OZRgl9y2oM+LAxHB4ZHxUauYNdeh5LHrjFbwxpEUdUoKbNv8k9ajEzLjK84t?=
+ =?us-ascii?Q?RgaCtDOgX+aozjCg11naJDLI6Wii8Thtbw+W+eMUb4zZMwBKlNSSg+0jpaAq?=
+ =?us-ascii?Q?l3m5A2cxDn21Vg0MqJDltwNpuMB8iRc+HqogjEG7Ic5lumxhOQk3lj08cz5d?=
+ =?us-ascii?Q?UvORWwAyxgCnCTph+zgNADcmcHHOoEhLAhVz1oskBurZ2eHrwozQzk4Zvnpe?=
+ =?us-ascii?Q?THqahDgradUVH/T9Fm3Einq4joxDlHg7xzYCbLTDp0UnzV23emisTNOYjOEH?=
+ =?us-ascii?Q?DRHk5q2q5baOzqx3+8e3YljQzgfHwKM6Tezlv508/UdW7Sx1AD5mE5mxkOos?=
+ =?us-ascii?Q?5aeLVsfOgEPi+KA6Vv3K/nUSvdHJyR0ZaRgzRtSsZWU+iAAFAgbaZyki+f5+?=
+ =?us-ascii?Q?Y3dcDTIrAs5zzWqF31IOS1rydqqEi/LJ7R/5jES5zqSvsLnCpxPim/TrC1Ql?=
+ =?us-ascii?Q?L7/2H+mFBpnxULgE7ioUC38dazjKSWuOM2b/9id4RTmozJgk5In5l/YsSH9t?=
+ =?us-ascii?Q?eD9tyijXBysfbGGk1PEwaSuS2pU/7HMnZoFi8zm64uYlbuR+ZlTkTsV19kf4?=
+ =?us-ascii?Q?b8USow+aDcKnCNZD614WtH5f4IYbYMx6uG8tmUsh6iBxNVMMsM8zf7ZruZh5?=
+ =?us-ascii?Q?BKoH6ZFTEkaoik8feqNBcr3dKI+Cb6KynNFKVm31xLJiOGHQkLZN7+wt0jQr?=
+ =?us-ascii?Q?DPwvxNpBTDyDutbCyXPGfambzLbpuAO+cGD9EU5uU2UTtQ6PPl/SvTM8wTLC?=
+ =?us-ascii?Q?MRTa4Lbai/s+OVPPZj3qVkCYI4fAc747hHyGeI2QjiStnNPMJ4/3D7X3HcqJ?=
+ =?us-ascii?Q?f/FovHmQ8Az/L6+cy8n8D4JH/8aVqVNWu+GD/9afw2VpcQmYMQIy7xT1+/NK?=
+ =?us-ascii?Q?LsGSIqOSIchs+ZRDBq4wC6uWjlhogg5IOUB3V0l/H2TXooVuR9UmOeXgNiGn?=
+ =?us-ascii?Q?NiyWEi8z6/v+3xqU6Hg80+8wkHQuXN41CSQ6nHE/DlYoBrLVXRzeZJU0TESy?=
+ =?us-ascii?Q?crhD3EzegPZ9Id5Q7H0kdHaj/bll6jFBWgAbibkIQ1gawn/jBSOC9zR1/26d?=
+ =?us-ascii?Q?NjL1DLjy9ke9GcwwtiMZUWSkgLkFexU3vnbz8eJXrwuOZYur6dBnkOYpE2vS?=
+ =?us-ascii?Q?iyKV6DmojfbvYd4WUjP1Otv2laEPwbZJFEvEhCntGcs5y67SlClG7O0QQrqq?=
+ =?us-ascii?Q?f1923L21BBc6FzzrDS+SRrgX+SMCNoK+axPAF3466cGulc1Lc4C7nrN5iouy?=
+ =?us-ascii?Q?tTEHI6IM41kYTDdt7+b9UFRCzX9DzJM0cjlBtXM88D804B06gOeP9q6PUm+8?=
+ =?us-ascii?Q?wnfJUpxhPPYZ2a2G0jswOdTt3R2m/61pO5rNGwAbNWa+UMAKGrD1ByH/JM/M?=
+ =?us-ascii?Q?4PcuLLlRRMYOvMNDY0pyQsjedYVp4HMEi9xedj3Ty2mo2jXXdHqdaZq4V4ED?=
+ =?us-ascii?Q?+Kibzl/0lh5fAWOrRyihPks7Q/9QtCFAeDg2Uz7L?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] watchdog: rzg2l_wdt: Power on the watchdog domain in
- the restart handler
-To: Claudiu <claudiu.beznea@tuxon.dev>, geert+renesas@glider.be,
- mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org,
- ulf.hansson@linaro.org
-Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240826152529.2080248-1-claudiu.beznea.uj@bp.renesas.com>
- <20240826152529.2080248-4-claudiu.beznea.uj@bp.renesas.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240826152529.2080248-4-claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12da1b6d-5913-43a6-55c2-08dcc65c0888
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2024 05:49:36.2060
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7c3xM5PIUNSWTzBypM6DdZk3c00DFrboBnnrepavB5XQbVLNMII5XNvxqTFfbCFhgXtOrjR/OrXbHey5JehhdltcJZWwr5fUElgB1XpVU30=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ2PR01MB1305
 
-On 8/26/24 08:25, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> On RZ/G3S the watchdog can be part of a software-controlled PM domain. In
-> this case, the watchdog device need to be powered on in
-> struct watchdog_ops::restart API. This can be done though
-> pm_runtime_resume_and_get() API if the watchdog PM domain and watchdog
-> device are marked as IRQ safe. We mark the watchdog PM domain as IRQ safe
-> with GENPD_FLAG_IRQ_SAFE when the watchdog PM domain is registered and the
-> watchdog device though pm_runtime_irq_safe().
-> 
-> Before commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-> context'") pm_runtime_get_sync() was used in watchdog restart handler
-> (which is similar to pm_runtime_resume_and_get() except the later one
-> handles the runtime resume errors).
-> 
-> Commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-> context'") dropped the pm_runtime_get_sync() and replaced it with
-> clk_prepare_enable() to avoid invalid wait context due to genpd_lock()
-> in genpd_runtime_resume() being called from atomic context. But
-> clk_prepare_enable() doesn't fit for this either (as reported by
-> Ulf Hansson) as clk_prepare() can also sleep (it just not throw invalid
-> wait context warning as it is not written for this).
-> 
-> Because the watchdog device is marked now as IRQ safe (though this patch)
-> the irq_safe_dev_in_sleep_domain() call from genpd_runtime_resume() returns
-> 1 for devices not registering an IRQ safe PM domain for watchdog (as the
-> watchdog device is IRQ safe, PM domain is not and watchdog PM domain is
-> always-on), this being the case of RZ/G2 devices that uses this driver,
-> we can now drop also the clk_prepare_enable() calls in restart handler and
-> rely on pm_runtime_resume_and_get().
-> 
-> Thus, drop clk_prepare_enable() and use pm_runtime_resume_and_get() in
-> watchdog restart handler.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> On 26.08.24 16:04, Xingyu Wu wrote:
+> Add notifier function for PLL0 clock. In the function, the cpu_root clock=
+ should
+> be operated by saving its current parent and setting a new safe parent (o=
+sc
+> clock) before setting the PLL0 clock rate. After setting PLL0 rate, it sh=
+ould be
+> switched back to the original parent clock.
+>=20
+> Fixes: e2c510d6d630 ("riscv: dts: starfive: Add cpu scaling for JH7110 So=
+C")
+> Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
 
 
