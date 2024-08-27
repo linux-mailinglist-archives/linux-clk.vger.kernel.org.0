@@ -1,77 +1,102 @@
-Return-Path: <linux-clk+bounces-11269-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11271-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E2189617D8
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 21:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E3D9961854
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 22:08:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 616871C237A3
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 19:12:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4083D1C23032
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2024 20:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B8F61D3626;
-	Tue, 27 Aug 2024 19:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1201D2F45;
+	Tue, 27 Aug 2024 20:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvoac/7E"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="FO43gIRl"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C06B1D2F6A;
-	Tue, 27 Aug 2024 19:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B0742EAE6;
+	Tue, 27 Aug 2024 20:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724785920; cv=none; b=OK53wNOiuSIF+6sh77ZlBcDXsdT52m/D0PZ3lw8l5qdhVtXZ8x/1nPIdYeRmQ8yrU4TO57DjdZxghuK3dkCa6fiYHFkmJLp8NOG3o2+1xXRLb3QVHqhc0dYH28S0xzlKwzZUK3+Uzui+ywt0FjpOOKHCmSySaR8jMzakArM0tI0=
+	t=1724789316; cv=none; b=Jtl/7YOaCCO+k0AYk0r4SFaM/FzVcXvUXh+tatDX80X4q7fgYMnmA+O7UXPHfXYkHBpVBWQ8Kot4HaOCkl//iLIcYmzm318Ld6H+5PT0IyY2hmRSLGWgYfNbGi/uGHd+JGd6ety9IQOhsdtirtE1d0Fbek3Bj1i4zBvA+DRlOsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724785920; c=relaxed/simple;
-	bh=Gd4PQjjdZLiFuRj4/aa/Rk20+vM/4Yx2uCwANEq7Uco=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=dyiOnk6iHKUIrukJA/+wVfypTuaKVxbznAzv6OjOh8zGe8AWVoG9XoWkg4U3O1nwVBbb/HBS9/6G5SgccfawlYxQ26lnqko+OHv7HQf6buWmEkKJgDTTbP/kleDHEQGFyUfrXdoW1GUi4osNeOniItxpLVGsHJAO0sBqQa0aReo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvoac/7E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ADAC4AF54;
-	Tue, 27 Aug 2024 19:11:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724785919;
-	bh=Gd4PQjjdZLiFuRj4/aa/Rk20+vM/4Yx2uCwANEq7Uco=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=lvoac/7EzDXRdcRwaoDg8pXOB6bLbo+cpOjMNJMIaRkHxAxB/DbsA8gXuA/ZVQ5Cu
-	 zV7dhvq36LM9k/dm0dHa4HawSAUNjHFnQqTJlkWdA4HY2bYfGOUUa0Z6NbM+v3FwzS
-	 DIk31KzgM1LbS7lCzaVlzpxVK3qfg/R6datIRRvF7aUqgkBiufKCYgS1XjiffW/+QO
-	 F08BCnwIdgxAwlhb+FGMGboKGoJSH+DLFIHhtapTZvOjs1Tv20gwMj9d3m8B9ztPe6
-	 Dqa+9cG49ammqCQuuouzMTQJySJ2mNPtR2ojW6R1bN4AMKayUOpeFc86hKMRhPElvE
-	 wPKG5Vug7iiZg==
-Message-ID: <e45b7cef58f910e05a77d3309b9230d3.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1724789316; c=relaxed/simple;
+	bh=RVrdDN9Tyh7WCtixWnieltPq0wOo2Fo5P+6+skiGUuY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=M2wM/NwufxV5a46znmtkBLes3xWkuKfDCsFcz0bLB5BfkqoQrv2295/SvpinVJBDD4WZ5ZJMMESPZX21t1Zj4FOYGjC9v/y3GAXZ550xTilOhBiFRnp/NV29BSAvD6w1KVjQpW8GR4K9OAgdx/UWl7MEzGc/IlXXi82Zgx7YsHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=FO43gIRl; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1724789290; x=1725394090; i=markus.elfring@web.de;
+	bh=m2bnqP0azyyJIJfrx8N/GoNEEILIi2RttBG+GZKNrvA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=FO43gIRlPK3viR+8FvRc2gxKidFfV9fj2huiFmdyu8SrMIxuVozNOa6OS+P21uDR
+	 HFuzqPp9msOqau+xGPBXOzKEYAFLE/Qu+qyj5N4AnApmAB7TVmo85QpP4PTX0+9A0
+	 1NNPPogz86sq6tuG7tfWbbSIorlh3J7rndzQC5vIGGNWRLCVLs6wtqMQ7vOxxH86o
+	 llzn7fxpV7oOCIf79mfHtBgFDPN9GadpgaIiTZvkkxw52MPsjzHG5iU5fV+3CJDdc
+	 hwrJO796ChzwaLhIV65I3Khg9iEDOYNtE7nRPtDyLAwW5ZYgwcW3nxD7Hb2bP2vZ0
+	 vzM7DNuQOXd6hblaGw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MUCz1-1sZzwX2lVr-00ITpR; Tue, 27
+ Aug 2024 22:08:10 +0200
+Message-ID: <abd2fd90-7ff3-48df-ad6d-64796000059f@web.de>
+Date: Tue, 27 Aug 2024 22:08:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, opensource.kernel@vivo.com,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Yan Zhen <yanzhen@vivo.com>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <9ce5d7b09b5358c9190d8a999d79de23.sboyd@kernel.org>
+Subject: Re: [PATCH v3] clk: qcom: Fix error checking for
+ devm_clk_hw_get_clk()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <9ce5d7b09b5358c9190d8a999d79de23.sboyd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240806145601.1184337-1-peng.fan@oss.nxp.com>
-References: <20240806145601.1184337-1-peng.fan@oss.nxp.com>
-Subject: Re: [PATCH V3] clk: scmi: add is_prepared hook
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, d-gole@ti.com, Peng Fan <peng.fan@nxp.com>
-To: Peng Fan (OSS) <peng.fan@oss.nxp.com>, cristian.marussi@arm.com, linux-clk@vger.kernel.org, mturquette@baylibre.com, sudeep.holla@arm.com
-Date: Tue, 27 Aug 2024 12:11:57 -0700
-User-Agent: alot/0.10
+X-Provags-ID: V03:K1:8CDQWoGneOrPi3wjoxxsmEAuim5JjvaBBWaVQPM3uSU/olYBLAQ
+ FgbUkF1nYaQ1t9z8GN99vli1fdt8ov54tKml6Khdd1T4BADIA5oaB4bHNUUS1T2mHAy2X4x
+ XcP2kq5T52vwdks+SFGcZUKslaKCqMEpOF8jcZNJW3iKuUpJgs8BuZj6XgS8flPazjeE3NS
+ pYlhqjLsQ263LNF6sEFyw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:jfeVxQjqUVQ=;OiCjB/Nyl5VxCTn38djVbFJJsgT
+ 4Bz8lpg8axuLGbC574zd2BUVeKNeSkypi5fsN8ql3gTmWg25N8l4P2WvuihVzAP06JFvYbAtJ
+ U14gEpVWhZhUop9YqL4kTJo/a/Q3IQPgWxV7mwkTEZdFq2mHJInaBVS3Ji9jwQnqMpYhgDuMh
+ D6lm47QDe03D95wUUoFQKd4wsGrjAXbsRz65Qv5wPgY6wP6/FJpaDam7T27LDLy1eN8xtt//W
+ vlieOLtZyA1EYu6QU2tpenqFqly+Ak/xoIgPCLZjJIr1hJxa8I9AIp/OhYrT7bhIqK3vxKE5s
+ k4XCbA1YrT7/7KgIzVTkZLPmkbkxEzy8Hg2oeX5vAUdBluhHcUMSyXDRayF7y2p5xLafWM3Jd
+ yUSkCK2Mu+HRPjD0PSQc9l5ZfBdwhkM8b/lcjHitCoC+5q7Lx0io70c6KCp0AuVpiyK2LV4Zs
+ pXkjixmHNAl6O380VnEtJx4AkiAhey9uvL/N82bDweFftH3glHFWY9GtglsFDIISyp/AFyqbA
+ +K6fGavQ1KdFd+nKuK8moTTx++IxXaQD4/Tt1xnqhecg3vYk5VVZlFsc6wL/siEMlRocNXtqR
+ JT+XY59lHyELuaSgNQdTd6yRwjZCnBy4KhOik6LYeRYg+AuTnqddCtk6Vjz/LqRpBDMlPEjG4
+ eyc3C/yl6Yj5+U8ed9VGEtWpVlBDz+FXSn8l4RRUKRgPOQJSsaWuVPDwxhY7F8b1uemg2b2Nu
+ 1Uz3nma80Cwwl/gTsffWkv+rDRutYtxpSgX3WzYDkwurQO0wnwjMPTywJBTLq08zBpca20Eag
+ K044vcUM69YLBU5gJYCB3DEQ==
 
-Quoting Peng Fan (OSS) (2024-08-06 07:56:01)
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> Some clocks maybe default enabled by hardware. For clocks that don't
-> have users, that will be left in hardware default state, because prepare
-> count and enable count is zero,if there is no is_prepared hook to get
-> the hardware state. So add is_prepared hook to detect the hardware
-> state. Then when disabling the unused clocks, they can be simply
-> turned OFF to save power during kernel boot.
->=20
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
+> > The devm_clk_hw_get_clk() function returns error pointers.
+> > It never returns NULL.  Update the check accordingly.
+>
+> It can return NULL if the 'hw' pointer passed in is NULL.
 
-Applied to clk-next
+How does this view fit to a published function implementation?
+https://elixir.bootlin.com/linux/v6.11-rc5/source/drivers/clk/clk.c#L4703
+
+Regards,
+Markus
 
