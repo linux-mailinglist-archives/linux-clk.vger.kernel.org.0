@@ -1,75 +1,68 @@
-Return-Path: <linux-clk+bounces-11451-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11455-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A60F964BDB
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 18:43:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F7B7964C94
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 19:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D37F3B22A74
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 16:43:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 496C91F226F7
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 17:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740401B5806;
-	Thu, 29 Aug 2024 16:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 289101B5ED0;
+	Thu, 29 Aug 2024 17:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="DmgY2XiA"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qjva+bfR"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288A21B531B;
-	Thu, 29 Aug 2024 16:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1628F1B5EBE;
+	Thu, 29 Aug 2024 17:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724949795; cv=none; b=bpumWXi/vKgeTWDY9Gv/AhN8a/qoV+aeFu72Z96YYBOiZ2CEZOUeaLvi71HPGzjRS1GAMy+s/k4IfGh68H/M4G0rkiUMkNt1MaRcxezD/z4uQOUQ+NMJCDeDaXcallx2l3Toezi2Qcs4TN/lhuvlHDt9kjsJrMLWUrAmfDy1xSA=
+	t=1724951099; cv=none; b=AZkzbgvisnXa5MXRIXF4j2TZrDjUg+4rf6jm/mLE4e8asqxtMnWiM0otP2CB3PuUFgiB3ZFyH4UUvJQMbTtb85EerTr66e1VvCUsLj5VkyJhf89b4UkfPMfrGSxvC4MMuJ+ey56JBn+IsaefOZokBQrvyRiZQE9Uw3oSIFPaIRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724949795; c=relaxed/simple;
-	bh=SOPsnkhwPhbTqIhL+AfAja6IVOaQyvZoZM6IJCh1A80=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TW8jAgHD5DnXGl5scMKGB00EPU9pkLkf67YlIly9nX0skuQIHVReBFhC4CTxipYoQuIiTFi9gwQrE8x/j5NYUuTmzTrDTgYqAnaQhL/cgyXxdUbTnzU+xrM/tw4uTyApMw9DdMpeNpPc1KtVh6pwoaFVV12xfxL1O7VL0DITP4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=DmgY2XiA; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1724949794; x=1756485794;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SOPsnkhwPhbTqIhL+AfAja6IVOaQyvZoZM6IJCh1A80=;
-  b=DmgY2XiAQhoXG1mtW1bjEGcLOfZLfsG9Nc476DDkqXPZqIieYXv2pSmT
-   MbbNe4L3adTtziJd5F/TJstUmsGhWJPIcLZhC131cqtmDiHHmz03RyOw9
-   ryn5wNo1FZaCj0gqgMi8E0B4z/I7zXMORSiud1fBdpdMgET5rzMGGeR3H
-   3MKAuRT1S0Yctme5ZXvHNnSMk1g4w3BZoIo7cdgv/8zBliYaW5+RdVR5o
-   MPMswkOOucfyXOGeLDTw+63DCnbSCM4GlrmZxMdcJ0cKhZw3t973mrjBF
-   4yDHXw36TMNkBF1rsu+TzpOeTYzufZvAAgfxcFbz0f3HZ3V4iWYswEFK/
-   w==;
-X-CSE-ConnectionGUID: isCbYj0aQvu8z3ziIW0jJQ==
-X-CSE-MsgGUID: CE2geJv7Sk+v0FgbadjtoQ==
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="262007773"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Aug 2024 09:43:13 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 29 Aug 2024 09:42:51 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Thu, 29 Aug 2024 09:42:51 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <mturquette@baylibre.com>, <sboyd@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>
-CC: <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 3/3] clk: at91: clk-sam9x60-pll: increase maximum amount of plls
-Date: Thu, 29 Aug 2024 09:42:27 -0700
-Message-ID: <cd134c8d9e68c79b798e91f8cce427169b9e6184.1724948760.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1724948760.git.Ryan.Wanner@microchip.com>
-References: <cover.1724948760.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1724951099; c=relaxed/simple;
+	bh=jC0Ih0RsWMxQyauAHR0Kk/LIzSjf9fHkPJzL1gcEs/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h4Bi0ekUheUWaTGbPMUJMxlFjznjGoid8aNuvriOh84UdKx6kimzMCnRWaBeMJrwq/OIyiJ0T8dlvVULNSfJb+803T8MhHFOYr8muTjDwXKzWgCUTy9n0bU6O3daNm4adK29KgyFBG2GCJeM9E0MQx/kgGHl2LmuKcu0ThbloLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qjva+bfR; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1724950781;
+	bh=jC0Ih0RsWMxQyauAHR0Kk/LIzSjf9fHkPJzL1gcEs/o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qjva+bfRaR2i1mVhXNcWL2ScQvPvnOTkY9MvzONRULs1NpMZmNWRXu2RGEmpLRIt0
+	 bpPkZgNFdx47KvXY1T6AHQEWAxCsMhjWGESYyMEV8OF5McFsvusMO7Wl1G37i7CWxY
+	 pkC8zQ3mKwt1pvT7eDbAMd7LVYu6nvVOptaEFi9IH6PPBMBFR4vgPJC+8oNbxYI6sG
+	 zKWj0qTebohaWOaUy7aIPGlqnDJ/lMKypB8Wy/5xM0aQSmmvuxWSerz6lbW+ac64W3
+	 LbwSXZV91XK2r571XiznugbwwxT3qvbaxmsdCLqZ+RsJYdEEtCWNOvhQYzfka1oEqO
+	 BgbgRCaM1XfBA==
+Received: from jupiter.universe (dyndsl-091-248-213-095.ewe-ip-backbone.de [91.248.213.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2015617E0E81;
+	Thu, 29 Aug 2024 18:59:41 +0200 (CEST)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id CAB754800A4; Thu, 29 Aug 2024 18:59:40 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v1 1/1] dt-bindings: clock: remove assigned-clock* from rk3588 cru binding
+Date: Thu, 29 Aug 2024 18:58:05 +0200
+Message-ID: <20240829165933.55926-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -77,32 +70,33 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+These properties are automatically taken over from the common clock
+schema:
 
-Increase maximum amount of PLLs to 9 to support SAMA7D65 SoC PLL
-requirements.
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/clock/clock.yaml
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/clk/at91/clk-sam9x60-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/clock/rockchip,rk3588-cru.yaml        | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-sam9x60-pll.c b/drivers/clk/at91/clk-sam9x60-pll.c
-index fda041102224..cefd9948e103 100644
---- a/drivers/clk/at91/clk-sam9x60-pll.c
-+++ b/drivers/clk/at91/clk-sam9x60-pll.c
-@@ -23,7 +23,7 @@
- #define UPLL_DIV		2
- #define PLL_MUL_MAX		(FIELD_GET(PMC_PLL_CTRL1_MUL_MSK, UINT_MAX) + 1)
+diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+index 74cd3f3f229a..4ff175c4992b 100644
+--- a/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
++++ b/Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+@@ -42,10 +42,6 @@ properties:
+       - const: xin24m
+       - const: xin32k
  
--#define PLL_MAX_ID		7
-+#define PLL_MAX_ID		9
- 
- struct sam9x60_pll_core {
- 	struct regmap *regmap;
+-  assigned-clocks: true
+-
+-  assigned-clock-rates: true
+-
+   rockchip,grf:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: >
 -- 
-2.43.0
+2.45.2
 
 
