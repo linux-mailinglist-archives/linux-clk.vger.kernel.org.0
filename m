@@ -1,85 +1,65 @@
-Return-Path: <linux-clk+bounces-11417-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11419-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F21964053
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 11:37:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FE5196406E
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 11:42:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0CE4B25772
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 09:37:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C289E1C20E68
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2024 09:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E42418CC1E;
-	Thu, 29 Aug 2024 09:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A647D1917D4;
+	Thu, 29 Aug 2024 09:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="cWz55Bm4"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="DFmwZCx1"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699D818E76B;
-	Thu, 29 Aug 2024 09:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B0818E036;
+	Thu, 29 Aug 2024 09:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724924226; cv=none; b=umy+bBlYiD54sd37mGye/xOU6jBImTMhg5ivnjEkVpSYddFEUtcp8AWJtjds851fFHmCJFeMjWqkOZ8wYfR/9kxUThf4CoJ5M0n9A66ktjRN3g9Rd/5dcLXk06PQEZJxFkibP/cEKLldQJ6jjYPCu9IQcynW86VfeUGay35jkbU=
+	t=1724924379; cv=none; b=a8JP1+qKVGDRl28FvFV47HG0U2tlskmPnZvCbgihxSvPse/38EZo0RP2O07WAsYQVwftBeNL1fbRdqDenriTBMOsk60cF9ei2vqzt9AU3Yyx3Ab16gX/dG4VsnnXANSB9vbiokhTwOuF9YZC84Lkiy9zGTA/cH23YhP1zlZPne4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724924226; c=relaxed/simple;
-	bh=c8/tk7ME/v3aIAukzMKnWe7ZhTpA+2uAjbdEdQVWFuc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BtDY5f1NTHTOHZkGU9BTToTCe3tzhjjvFaP7tfv8NE1aXFCK2UIu/0NzOcjPisDzLVhFMAetWDkIkpTxl5Ie4lVAh7yz9pM3qPPldnU90aVGp/M5dolcH8+Hm/cUxogxTI9TOAcacOVC+sAW3D+KK5TcJ+yMucq2+j7FGfZUGzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=cWz55Bm4; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=OpJRCqvJUgPhUkiazewk4fbcOXCM86KxZfljMMe7Uig=; b=cWz55Bm4M9U8thKk6gSuu/A07u
-	w2RVOJ013+1Kl+2mN92amgwPyNv6DoHWbFMmIxsZBP6gZ4J1uvArpAd5fypGxjzlVNfTWiTna0BCC
-	cFnGoL60SdlGm94Z5GnX561yMyUMBLbfsjazgIVAEGx7lKSqwOd9hNYmXilpmnXwhlPEifqkmOjqG
-	cDB/5kyeq8xDoIoGzOijhl3Qh/M6oTn1YtFqLsVAtCdW1SF4ZdqJ9EVPYIiE1xDkUMBBocuqQHAbw
-	Otlg+VZvaNgdisNklffp57T4hSRYt5ksZ+v6jxy85IHGmMDfMRpI/OduwFB1Dwt7AQArmEHL7PKGe
-	4kQJjWWQ==;
-Received: from i5e861916.versanet.de ([94.134.25.22] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sjbaI-0002nq-3Y; Thu, 29 Aug 2024 11:36:54 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Elaine Zhang <zhangqing@rock-chips.com>,
-	devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	patches@opensource.cirrus.com,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Rob Herring <robh@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	linux-kernel@vger.kernel.org,
-	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-rockchip@lists.infradead.org,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Subject: Re: (subset) [PATCH 1/5] dt-bindings: clock: baikal,bt1-ccu-div: add top-level constraints
-Date: Thu, 29 Aug 2024 11:36:49 +0200
-Message-ID: <172492351369.1695089.4051009745081865137.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org>
-References: <20240818173014.122073-1-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1724924379; c=relaxed/simple;
+	bh=hrHUu0ZRrqD5KoBgpyEKKMKlyY9ehUbHrr9kTIRjzNA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=E3j5Kn85hMbBKJPb6+/T6qwqaKPWJs6+cyCQlBufgT9gqaCvOw9MlyVAiuEXpU8Q3ARHdZPlewAkLgzVHjK3Lzc5oUZyKHtCVFn37TYCs34pPpncq48S7U8whnjd+RGHRYwDAYCHDUPJbeZPiNvZraqOubxGEzTMCnxU6q8UDLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=DFmwZCx1; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1724924376; x=1756460376;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=hrHUu0ZRrqD5KoBgpyEKKMKlyY9ehUbHrr9kTIRjzNA=;
+  b=DFmwZCx1LId+l2xtCDoAVC0p8UkFAz6TNlN0EQwhbFqiHsf+AnnGUGXb
+   h+VJmynZn+3chCLbS/LOtHTIiyNRU4WNdo+KT7+d7dm+pb9/Is7P7POqy
+   7gdQ/mtPGqnoniNEZNs/9A7w2H/dZv6wv9P1+gCGur1zsy+cQiieuJDO3
+   YW9JGMvDal+E5sXeZ4eNuL1qIiU8a7cYOTGp65+9sTYXEdEXsRPsD5ACy
+   QQFu+6WkPHgx6ZUjovQTX/w2Q9Gd4j0pXNc3+fQkvFVi//uej2J6r+0ps
+   XeVwZQrEoAfxCH/pCcBoa/7UsuTgSmc5xWaGwXerwmp6o7gQFNg3PSyUu
+   g==;
+X-CSE-ConnectionGUID: C4CQGHEMRhSj+xpfm1WZ3Q==
+X-CSE-MsgGUID: NEKhYblqRSefQIMq+UjhfQ==
+X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
+   d="scan'208";a="198477619"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Aug 2024 02:39:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 29 Aug 2024 02:39:06 -0700
+Received: from che-lt-i70843lx.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Thu, 29 Aug 2024 02:39:02 -0700
+From: Dharma Balasubiramani <dharma.b@microchip.com>
+Date: Thu, 29 Aug 2024 15:08:45 +0530
+Subject: [PATCH] dt-bindings: clock: Add SAMA7D65 PMC compatible string
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -87,22 +67,64 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240829-sama7d65-next-v1-1-53d4e50b550d@microchip.com>
+X-B4-Tracking: v=1; b=H4sIAKRB0GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDCyNL3eLE3ETzFDNT3bzUihLdREvDFAMLyyRTs0RjJaCegqLUtMwKsHn
+ RsbW1AOaBZEZfAAAA
+To: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+	<sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nicolas Ferre
+	<nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+CC: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Dharma Balasubiramani <dharma.b@microchip.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724924341; l=1360;
+ i=dharma.b@microchip.com; s=20240209; h=from:subject:message-id;
+ bh=hrHUu0ZRrqD5KoBgpyEKKMKlyY9ehUbHrr9kTIRjzNA=;
+ b=2eKvo5Wj/F/YuULzOi9SIV0jrtgMiAidWgQI/FTRLTRct3C0xrk0ULAuxsWMqElgl1+tdnP8B
+ LwmTYA2jw6eCl81XJI7ylQwYDUtApjxzPXFn/q8i/T4wGydN88Vs1xq
+X-Developer-Key: i=dharma.b@microchip.com; a=ed25519;
+ pk=kCq31LcpLAe9HDfIz9ZJ1U7T+osjOi7OZSbe0gqtyQ4=
 
-On Sun, 18 Aug 2024 19:30:10 +0200, Krzysztof Kozlowski wrote:
-> Properties with variable number of items per each device are expected to
-> have widest constraints in top-level "properties:" block and further
-> customized (narrowed) in "if:then:".  Add missing top-level constraints
-> for clocks and clock-names.
-> 
-> 
+Add the `microchip,sama7d65-pmc` compatible string to the existing binding,
+since the SAMA7D65 PMC shares the same properties and clock requirements
+as the SAMA7G5.
 
-Applied, thanks!
+Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+---
+ Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[4/5] dt-bindings: clock: rockchip,rk3588-cru: drop unneeded assigned-clocks
-      commit: 3529dc29fe65672ad9aeab9499fee901d0010901
+diff --git a/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
+index c9eb60776b4d..885d47dd5724 100644
+--- a/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
++++ b/Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
+@@ -43,6 +43,7 @@ properties:
+               - atmel,sama5d4-pmc
+               - microchip,sam9x60-pmc
+               - microchip,sam9x7-pmc
++              - microchip,sama7d65-pmc
+               - microchip,sama7g5-pmc
+           - const: syscon
+ 
+@@ -90,6 +91,7 @@ allOf:
+             enum:
+               - microchip,sam9x60-pmc
+               - microchip,sam9x7-pmc
++              - microchip,sama7d65-pmc
+               - microchip,sama7g5-pmc
+     then:
+       properties:
+
+---
+base-commit: b18bbfc14a38b5234e09c2adcf713e38063a7e6e
+change-id: 20240829-sama7d65-next-a91d089b56a3
 
 Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+Dharma Balasubiramani <dharma.b@microchip.com>
+
 
