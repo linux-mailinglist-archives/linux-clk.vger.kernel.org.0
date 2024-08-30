@@ -1,163 +1,127 @@
-Return-Path: <linux-clk+bounces-11467-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11469-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634169656D1
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2024 07:21:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A761C9656E0
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2024 07:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 876B91C21645
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2024 05:21:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BA061F24B86
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2024 05:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5975314D71D;
-	Fri, 30 Aug 2024 05:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0AB14D71D;
+	Fri, 30 Aug 2024 05:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GsFkRnyD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AOiQYwtU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8961482E2
-	for <linux-clk@vger.kernel.org>; Fri, 30 Aug 2024 05:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353CB142624;
+	Fri, 30 Aug 2024 05:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724995270; cv=none; b=e1uOa9XTpkEyEBOmPMg59BqEL7zQlBonWf+OJ7uglnbMgqOXqdiOEKtAAYBn7/SwpiNr7nehoCkOA7tKpb8t0nLYDfJTlnv2SWdjqZV1EPL/tp8qkq5Y6Y3lhjqgz56G99a82SBU4did89zmu+uo6eAsjnU8CwkAulGkbJgpv7I=
+	t=1724995571; cv=none; b=HHU1g3BgimmgBjRHdJPaXsrKVNv7DNhGqtL4OKS+IFTVtKLlGhMrH23FW6KX9p+7oD2mIHBAn3l73NnZ6MJ3G4PzGirhI/2PVhoa8eS/qSXjH7At+CMLzRT48zy1VR023X0EBkZUhXPg9raeD4+uMXJVoeCX8Ewd94edCvfIWaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724995270; c=relaxed/simple;
-	bh=jtf7PV5qM5aW2ZTufnYu/xPa7oOq40+0/uQGqTwb61k=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OFFhU0xJZRV4eCgHEThZyeENKue6fv+0Rre73WCSG/E78T5cdIoKQaqy+ucncfxmTo1Md798OZPbEBdZWfQzKWCvT/yG4uMh2L3jRCst21JoKKo7oiXHK0AGXrnUbRYhZ2mWNmDH3RrQFa23AEYS2MKV4fNwu46GDOvfUdHBR+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GsFkRnyD; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8684c31c60so167062466b.3
-        for <linux-clk@vger.kernel.org>; Thu, 29 Aug 2024 22:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1724995267; x=1725600067; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GExFSIDcR+m296qL0+T8lfbyMBHXGvoOKDeyXebihgs=;
-        b=GsFkRnyDx48N26VCklfdB2GSObBJ3t8yj/CrliklVlkfQn3wrBQGaceW/ki3DjbDcx
-         1A3SybfgZCfcPvhsmS37VUfaCM3IXhnu9xeLOSbPRek9Y3wiv1/Q7Zomq95opPya7Uzo
-         0Zh2qm1famEmU79YhHqopS24/5GvaxxjrTk3cNsN1S9ZLIJkdCKo5dMgfL1OgAbUNXnn
-         LqGDntT2J7eVsAiBd1mP6ZWrSKUdbakMlSganQZbjRZjS2M1+WXhEIAi3MZBhp5nl3vW
-         wO8JZ9JlJ38w1TEGMjk53Tjkiv31euGaL2Nuuzv9NjbTCzOsu/RMJOo/4/8fuq1B4rno
-         ouBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724995267; x=1725600067;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GExFSIDcR+m296qL0+T8lfbyMBHXGvoOKDeyXebihgs=;
-        b=f5TZ6Ocnk6XCIanTAzWkqb5R7MbUE9gcqOq2x0bBIU8Pz18oerQCipWNWybBwB4Xyu
-         tM82ugvfPlUmKndbBasSpd6htv+mKQf+2uzSXSwqGmYZ5kvWhbTzkASifeQAbB+DqjEf
-         h6/PyFDgM810pe6a/yijsv+FwErASE/c9BH63Qi9mVHLSyBEsDjYUkjteMVL47EpVNPQ
-         Rh47rx9fNuh7eS4CXlR/N116lFuccfVhFl7X3ZNAebo8B7FUEqfzrZXlzw0/SZQEcGPy
-         MO+0smMgyylNtozPXvulbLLSteYyaU77lH2r3iqpb8TUM4H1Bz75U420RLWl5bRiTdK4
-         4zCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVzWjVyeHem+8bfgXnW+O15w05UVx9abN3WeeYTSwi6vvogqsf6foNSuSWhzXtyV8EUXqWxOjHDlbw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0vjDCXI3IaZ05Yk9dKg2iZG85tdItW0uZAkbwYKi7X7QVxGo7
-	PH5AS8S9sUvomjpr1FFuW8mUKiuQvJQKmRY/ARm93aOrZ+b7szD7G2hWRzEYb+U=
-X-Google-Smtp-Source: AGHT+IF7+hVzizb5h2RAOKpmPeEAucZHJJ8SE3J6cbyAO0CAecmSuqQGdIsglF6MfVFAtKQonNztKg==
-X-Received: by 2002:a17:907:7da8:b0:a86:8b7b:7880 with SMTP id a640c23a62f3a-a897fad50fdmr358086866b.63.1724995265995;
-        Thu, 29 Aug 2024 22:21:05 -0700 (PDT)
-Received: from localhost (host-80-182-198-72.retail.telecomitalia.it. [80.182.198.72])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8988ff4233sm166746966b.25.2024.08.29.22.21.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 22:21:05 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Fri, 30 Aug 2024 07:21:12 +0200
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-	Lee Jones <lee@kernel.org>, Stefan Wahren <wahrenst@gmx.net>
-Subject: Re: [PATCH 00/11] Add support for RaspberryPi RP1 PCI device using a
- DT overlay
-Message-ID: <ZtFWyAX_7OR5yYDS@apocalypse>
-References: <cover.1724159867.git.andrea.porta@suse.com>
- <14990d25-40a2-46c0-bf94-25800f379a30@kernel.org>
- <Zsb_ZeczWd-gQ5po@apocalypse>
- <45a41ed9-2e42-4fd5-a1d5-35de93ce0512@lunn.ch>
- <ZtBjMpMGtA4WfDij@apocalypse>
- <e6e6c230-370f-4b04-8cb7-4158dd51efdc@lunn.ch>
+	s=arc-20240116; t=1724995571; c=relaxed/simple;
+	bh=IUuuhUvQU5dAs9RfLllL5/UhHvsk0Yi/7MPZkoNINGU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iyltuK2yYY827NhzhQMpUAT0D3a6/+zjg7/i/AxRw7rt5RdgEfDwPw7GFcmoMaC/nVU47/8otF25eEncIhFcfYGp6ENEzChw2rfqdEbU1MYpcrnAyEZqWPZ1L6lhniEgJ3A6H/LIUT11WKtwpvMSXcp7IdBRCGc9o8oXvMgjJr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AOiQYwtU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A22F9C4CEC4;
+	Fri, 30 Aug 2024 05:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724995570;
+	bh=IUuuhUvQU5dAs9RfLllL5/UhHvsk0Yi/7MPZkoNINGU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=AOiQYwtU5ROHw/29+znc/nI5KWgAkGNODK0Kha4LZrRpbxJhRDNTaY63eTqK0YBjB
+	 Ugc+5cPwCBoT5JUHJp3sPqdda7m1dVc7OWUoy8ShoXlh9qMbpuNGxE1qQe8UhV1r6X
+	 hWtKgritlMjEPrqJfTWrZrRrrQ3ZqeVMqSjg8lRig2/3veTQr8ajxwrAQ9it2mh2v1
+	 Jbic5sTOCqDbBDRg9xp65Mfab+6zs6Gb7cURtJufcQbeqjZ2Az3WyZq5DwTfldKEEJ
+	 Zo90XhuAjAXRwtCgv1yOnhHSdiVVdJuK+vRFv/tlBAZLhCYLlGBXQc6sP9MIlGi4ZC
+	 7dH1KcsLKtLfg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92985C83F0B;
+	Fri, 30 Aug 2024 05:26:10 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH v4 0/3] add some node for amlogic c3
+Date: Fri, 30 Aug 2024 13:26:07 +0800
+Message-Id: <20240830-c3_add_node-v4-0-b56c0511e9dc@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6e6c230-370f-4b04-8cb7-4158dd51efdc@lunn.ch>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO9X0WYC/23MSwrCMBSF4a2UjI3c5IYkOnIfIiXNow1oI6kUp
+ XTvph216PAc+P6JDD5HP5BzNZHsxzjE1JchDhWxnelbT6Mrm3DgAjRIarE2ztV9cp4KDgbVien
+ ANCnimX2I77V2vZXdxeGV8meNj2x5/3dGRoFacF4wFEwiv5jHPbXRHm16kKU08o3msNe8aB0cB
+ pCNaqz/1bjVuNdYNEqhUUlAFcRez/P8BfntYJokAQAA
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Chuan Liu <chuan.liu@amlogic.com>, 
+ Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724995568; l=1482;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=IUuuhUvQU5dAs9RfLllL5/UhHvsk0Yi/7MPZkoNINGU=;
+ b=sLy0R/VKRQWb9D1RVwxovgKBbzbGnPv1YWx1+E11zczo1cNy8ZD6jpFK6l5WzoTjbI5OQygfm
+ QAX524CQKMWA0RIYMr9i5PP5x2Bu9LYWa4nq91OfJi6wqYKNtQDAxGA
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
 
-Hi Andrew,
+Add some node for board AW409 and support board C308l AW419.
 
-On 15:04 Thu 29 Aug     , Andrew Lunn wrote:
-> > > > WARNING: externs should be avoided in .c files
-> > > > #331: FILE: drivers/misc/rp1/rp1-pci.c:58:
-> > > > +extern char __dtbo_rp1_pci_begin[];
-> > > > 
-> > > > True, but in this case we don't have a symbol that should be exported to other
-> > > > translation units, it just needs to be referenced inside the driver and
-> > > > consumed locally. Hence it would be better to place the extern in .c file.
-> > >  
-> > > Did you try making it static.
-> > 
-> > The dtso is compiled into an obj and linked with the driver which is in
-> > a different transaltion unit. I'm not aware on other ways to include that
-> > symbol without declaring it extern (the exception being some hackery 
-> > trick that compile the dtso into a .c file to be included into the driver
-> > main source file). 
-> > Or probably I'm not seeing what you are proposing, could you please elaborate
-> > on that?
-> 
-> Sorry, i jumped to the wrong conclusion. Often it is missing static
-> keyword which causes warnings. However, you say it needs to be global
-> scope.
-> 
-> Reading the warning again:
-> 
-> > > > WARNING: externs should be avoided in .c files
-> 
-> It is wanting you to put it in a .h file, which then gets
-> included by the two users.
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Changes in v4:
+- Adjust the format of commit message.
+- Link to v3: https://lore.kernel.org/r/20240823-c3_add_node-v3-0-3648376037f4@amlogic.com
 
-On a second thought, are you really sure we want to proceed with the header file?
-After all the only line in it would be the extern declaration and the only one to
-include it would be rp1-dev.c. Moreover, an header file would convey the false
-premise that you can include it and use that symbol while in fact it should be
-only used inside the driver.
-OTOH, not creating that header file will continue to trigger the warning...
+Changes in v3:
+- Change clkc_periphs node to the first.
+- Link to v2: https://lore.kernel.org/r/20240820-c3_add_node-v2-0-8fd3f06b7bce@amlogic.com
 
-Many thanks,
-Andrea
+Changes in v2:
+- Delete unused sdio node in board level dts.
+- Add the description of modifying the binding in commit msg.
+- Add the reason why some node property fileds place at board level in commit msg.
+- Link to v1: https://lore.kernel.org/r/20240806-c3_add_node-v1-0-c0de41341632@amlogic.com
 
-> 
-> 	Andrew
+---
+Xianwei Zhao (3):
+      dt-bindings: clock: fix C3 PLL input parameter
+      arm64: dts: amlogic: add some device nodes for C3
+      arm64: dts: amlogic: add C3 AW419 board
+
+ .../bindings/clock/amlogic,c3-pll-clkc.yaml        |   7 +-
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../boot/dts/amlogic/amlogic-c3-c302x-aw409.dts    | 233 ++++++++++
+ .../boot/dts/amlogic/amlogic-c3-c308l-aw419.dts    | 262 +++++++++++
+ arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi        | 488 ++++++++++++++++++++-
+ 5 files changed, 988 insertions(+), 3 deletions(-)
+---
+base-commit: 7a5d2ce79d1fc8535a6f10e51011ae9671bd86e8
+change-id: 20240806-c3_add_node-420a37918f18
+
+Best regards,
+-- 
+Xianwei Zhao <xianwei.zhao@amlogic.com>
+
+
 
