@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-11537-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11539-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4048A966C2A
-	for <lists+linux-clk@lfdr.de>; Sat, 31 Aug 2024 00:16:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FB43966C42
+	for <lists+linux-clk@lfdr.de>; Sat, 31 Aug 2024 00:24:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF8DF2850ED
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2024 22:16:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46A261F21484
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2024 22:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78F01C1ACE;
-	Fri, 30 Aug 2024 22:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD99C1C2308;
+	Fri, 30 Aug 2024 22:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M71grJzl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oYxrm/Nm"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1741BDAB1;
-	Fri, 30 Aug 2024 22:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E731C1ADD;
+	Fri, 30 Aug 2024 22:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725056180; cv=none; b=JvbdUddawi0m6Lnur9vmffniFNE1D8uOVHFgagBb2pC+srnppZ7wqduarar72tNi3ODbrsbKRaom//RxHUf/4zyshRAxmjNXVCq3jfsULPh7XFyl+MQRQkwxWUwBsq/Gz9qmA9PiUHJ3ztDsVeM2gr77/CRbsnxWd58lcJx+Ld8=
+	t=1725056661; cv=none; b=lgcYUr+PmFCE4Iajus0qJUHyDx3b4xd3Wuvuu0RiGruonI+DdowUyA+gnX+ttaVfQ8hpwpTLGIaHxfKeqwXGPbj87ys7LMGrIQF7y1Gw6aAaU+X6w5jax7Q7PqgNRaBCMAh1l9X1fFqRZeEWRtjH3rRBV/5QmDNIj2fiZB60A58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725056180; c=relaxed/simple;
-	bh=fJOk64w1KvNsgFSNifgZViqLAi1eNKi+j0BhblwmrqI=;
+	s=arc-20240116; t=1725056661; c=relaxed/simple;
+	bh=tWP459tjU7LJnpj72if5jNzojTE3v+xzK/7UHnew5Po=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:To:Date; b=dSkeA3tF2v+r8/wXl7Zr6iQ2EZThmKvFyXSWXGyqEXCNCr2xsY4aFsbAWG1i7JllT6aPQZehoAXxJ5WYAOJFKp00I+x2qyV++Tp0qrRlgGYjnitrRmWRYYvNwizqFKjG55hTzPaoUl9mPz3pdbNd4flLnkrowEioY4zXQW3Rf4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M71grJzl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2966AC4CEC2;
-	Fri, 30 Aug 2024 22:16:20 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=OYHmDNIB4a9u+V06SexJWTg3RfpMXej1LmPj6YKtcTThPwYkyHKpyAGkDiEkQ4RjkYnMQVbg0PwabcU+MbcEW4caPuUQvjJSRspQveS0f2a9L37D2vak4gH+eEWsH+z0eysc60QY+jBgj6xlvplsioY+F9mHxX7Z94IWp+uRxQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oYxrm/Nm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283C9C4CEC2;
+	Fri, 30 Aug 2024 22:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725056180;
-	bh=fJOk64w1KvNsgFSNifgZViqLAi1eNKi+j0BhblwmrqI=;
-	h=In-Reply-To:References:Subject:From:To:Date:From;
-	b=M71grJzlvDD6cLtOVpcRPMqiP3ECPrxcF6jYFTtWUOZYK2zIxVVnixshiJ/zCiqU0
-	 HGNwMPngVcz3Cxkt5qRTeLfER3GJScGke3fhsK+eQwPWJa4lzZEdI0pxwgak+e3Pdi
-	 DUk+1AEFZ7ds7SlcKDm3YeDFgOVb72p50fn2HAzr4Of7uONRlzlrZ48aPAykaP7CsZ
-	 G6ZBalQyGL5+OpO9l7XEGqbx27MtkJ6qBivaU1/djv5FJYti9h58Lrhhy8Xn0k/Orq
-	 m9L/ofkc3+rmzH1SyDr0iGe4vNrZuSaOXePM/e4DhXUnHA8t6JhTFgS96MlL6N4Pge
-	 8c3BWK9Y0ebKQ==
-Message-ID: <45c7cf75876c5822f8c51f05375af507.sboyd@kernel.org>
+	s=k20201202; t=1725056661;
+	bh=tWP459tjU7LJnpj72if5jNzojTE3v+xzK/7UHnew5Po=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=oYxrm/NmgImPQzJHr75X/xK20n+JKF4sHrKYO+yw+OCg7F+YD0W5UiNHViN9id+H7
+	 xUTxUrL8PfoisNFAjePH4JebEMf4VbdofvQB+OpV8q7/UC3qItx7JLtUhTi3bMhy0C
+	 V2vgaL7d2xNmfZtvy7RsV44OCLm0t7/3FwpdZc8nd17dOvdjGdzBhl+LH+KrcV2sY4
+	 rb0S9y1RSO8sQIxogl1pvBFmWMZtD+4rzcQrdfC5vUu4C5fubXSLxLUAXNIsTYT3K0
+	 tCLFY3nCZGlHF/wsQOgl5ONFzUv5XQ3vPMv+AvjS3K5bUV+Hh4k2vIpNljOGldFbtT
+	 z/l1MscwAjobw==
+Message-ID: <04944b77ce6327ba5f4ec96348a9cda2.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -50,55 +50,66 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <OS8PR06MB7541BFDC6D2E490ECDAE085CF2972@OS8PR06MB7541.apcprd06.prod.outlook.com>
-References: <20240828062740.1614744-1-ryan_chen@aspeedtech.com> <20240828062740.1614744-4-ryan_chen@aspeedtech.com> <61c8234139fcd2b27610ef18e9d9fbf7.sboyd@kernel.org> <OS8PR06MB7541F12972412AE565A93287F2962@OS8PR06MB7541.apcprd06.prod.outlook.com> <3569ef6d81adc41330c4002752ba3aa9.sboyd@kernel.org> <OS8PR06MB7541BFDC6D2E490ECDAE085CF2972@OS8PR06MB7541.apcprd06.prod.outlook.com>
-Subject: RE: [PATCH v2 3/3] clk: aspeed: add AST2700 clk driver
+In-Reply-To: <7736d0d0-634d-403d-b70f-f33b7402456c@quicinc.com>
+References: <20240827-qcom_ipq_cmnpll-v3-0-8e009cece8b2@quicinc.com> <20240827-qcom_ipq_cmnpll-v3-2-8e009cece8b2@quicinc.com> <d7b374670eb2f6d442f351106ab1221a.sboyd@kernel.org> <7f4d41a0-b1b9-4b63-8590-63f4fcf1a359@quicinc.com> <7736d0d0-634d-403d-b70f-f33b7402456c@quicinc.com>
+Subject: Re: [PATCH v3 2/4] clk: qcom: Add CMN PLL clock controller driver for IPQ SoC
 From: Stephen Boyd <sboyd@kernel.org>
-To: Ryan Chen <ryan_chen@aspeedtech.com>, andrew@codeconstruct.com.au, conor+dt@kernel.org, devicetree@vger.kernel.org, joel@jms.id.au, krzk+dt@kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, mturquette@baylibre.com, p.zabel@pengutronix.de, robh@kernel.org
-Date: Fri, 30 Aug 2024 15:16:18 -0700
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, quic_kkumarcs@quicinc.com, quic_suruchia@quicinc.com, quic_pavir@quicinc.com, quic_linchen@quicinc.com, quic_leiwei@quicinc.com, bartosz.golaszewski@linaro.org, srinivas.kandagatla@linaro.org
+To: Bjorn Andersson <andersson@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley <conor+dt@kernel.org>, Jie Luo <quic_luoj@quicinc.com>, Konrad Dybcio <konradybcio@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, Will Deacon <will@kernel.org>
+Date: Fri, 30 Aug 2024 15:24:19 -0700
 User-Agent: alot/0.10
 
-Quoting Ryan Chen (2024-08-30 00:50:21)
-> > Subject: RE: [PATCH v2 3/3] clk: aspeed: add AST2700 clk driver
-> >=20
-> > Quoting Ryan Chen (2024-08-29 00:09:12)
-> > > > Subject: Re: [PATCH v2 3/3] clk: aspeed: add AST2700 clk driver
-> > > >
-> > > > Quoting Ryan Chen (2024-08-27 23:27:40)
-> > > > > a/drivers/clk/clk-ast2700.c b/drivers/clk/clk-ast2700.c new file
-> > > > > mode
-> > > > > 100644 index 000000000000..7e0466e73980
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/clk/clk-ast2700.c
-> > > > > @@ -0,0 +1,1198 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > +/*
-> > > > > + * Copyright (c) 2024 ASPEED Technology Inc.
-> > > > > + * Author: Ryan Chen <ryan_chen@aspeedtech.com>  */
-> > > > > +
-> > > > > +#include <linux/bits.h>
-> > > > > +#include <linux/clk-provider.h>
-> > > > [...]
-> > > > > +
-> > > > > +struct ast2700_reset {
-> > > > > +       void __iomem *base;
-> > > > > +       struct ast2700_reset_signal const *signal;
-> > > > > +       struct reset_controller_dev rcdev; };
-> > > >
-> > > > Please move the reset controller to the drivers/reset directory by
-> > > > means of using an auxiliary device. There are some existing examples
-> > > > in there if you grep for auxiliary_device in drivers/reset to help =
-guide.
-> > >
-> > > Do you mean to have another reset controller driver?
-> > > If yes, I may need syscon for remap two drivers.
-> >=20
-> > Yes. A syscon is not necessary to do that.
-> Thanks for point out auxiliary device.
-> Since our SoC reset and clock share the same register region.
-> Your recommend will use clk auxiliary_device_add for reset driver am I ri=
-ght?
+Quoting Jie Luo (2024-08-30 09:14:28)
+> Hi Stephen,
+> Please find below a minor update to my earlier message on clk_ops usage.
 
-Yes. Either the clk or the reset driver can be a platform driver and the
-other an auxiliary driver.
+Ok. Next time you can trim the reply to save me time.
+
+> On 8/28/2024 1:44 PM, Jie Luo wrote:
+> > On 8/28/2024 7:50 AM, Stephen Boyd wrote:
+> >> Quoting Luo Jie (2024-08-27 05:46:00)
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case 48000000:
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 val |=3D FIELD_PREP(CMN_PLL_REFCLK_INDEX, 7);
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 break;
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case 50000000:
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 val |=3D FIELD_PREP(CMN_PLL_REFCLK_INDEX, 8);
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 break;
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case 96000000:
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 val |=3D FIELD_PREP(CMN_PLL_REFCLK_INDEX, 7);
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 val &=3D ~CMN_PLL_REFCLK_DIV;
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 val |=3D FIELD_PREP(CMN_PLL_REFCLK_DIV, 2);
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 break;
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 default:
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 return -EINVAL;
+> >>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> >>
+> >> Why isn't this done with struct clk_ops::set_rate() or clk_ops::init()?
+> >=20
+> > OK, I will move this code into the clk_ops::init().
+>=20
+> This code is expected to be executed once for initializing the CMN PLL
+> to enable output clocks, and requires the parent clock rate to be
+> available. However the parent clock rate is not available in the
+> clk_ops::init(). Hence clk_ops::set_rate() seems to be the right option
+> for this. Please let us know if this approach is fine. Thanks.
+
+Sure. It actually sounds like the PLL has a mux to select different
+reference clks. Is that right? If so, it seems like there should be
+multiple 'clocks' for the DT property and many parents possible. If
+that's the case then it should be possible to have something like
+
+	clocks =3D <0>, <&refclk>, <0>;
+
+in the DT node and then have clk_set_rate() from the consumer actually
+set the parent index in hardware. If that's all static then it can be
+done with assigned-clock-parents or assigned-clock-rates.
 
