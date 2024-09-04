@@ -1,87 +1,116 @@
-Return-Path: <linux-clk+bounces-11733-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11737-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5BB496C19D
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Sep 2024 17:01:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FADB96C331
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Sep 2024 17:59:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24BB21C21E7A
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Sep 2024 15:01:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24E081F2810A
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Sep 2024 15:59:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4203A1DEFE5;
-	Wed,  4 Sep 2024 15:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9511E1E4119;
+	Wed,  4 Sep 2024 15:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rdxVIRuM"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="0WBcAg8h"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F531DEFE3;
-	Wed,  4 Sep 2024 15:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C551DEFDA;
+	Wed,  4 Sep 2024 15:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725462047; cv=none; b=Ru8kUeFuk9nHsx0LCAE8Z10/FQAKRu2N+9KkvnvMvw3LUV76h1p2SunDCNVEqOYOxwLPYMMGb6jE3ZHACKlbyoygDUNNxMdyjMtJu2o54vlQybSGR3KrJvTAj2FPADxg4Sdix6XKKxfYn5/BocmWXQMVrFa+8Yq5pUxQvQzqQfM=
+	t=1725465373; cv=none; b=Ee1pFObCkjUMF4IulB27FWt84Qv1BTg4a0Wk5U/SrgBl+ITJ5Q7VuXW8iM4M4a6fRD4abnbr08HD/gY+siMWgpz/hrmj2V50OB4EG/O5mpx3AoCYQmvdnB2ZJn+aElUfYDZ3KcBXwxi0gEUoigDuHAeLf/Qdo0Nyn8AFC76EZoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725462047; c=relaxed/simple;
-	bh=uCWg2e4zYQIoF7w5tR8wMPbjGFXaUs+fGVW/n+kzH/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QeqnWUZlceMh90ZYjcw2CSDwjk7B4vxWo7gmIJriQg1s+s+NUWMzRAvcIzXQamfFhJBSwumF1iDcI9ZBr5jukpZhzf/MprOTAQhlTv5yzJ2d5u4kOqrUosoLusZHWP27TC/JXfWD/64rnvPfPJN3iBwikTexUxGANnMeBv1rAe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rdxVIRuM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED51C4CECB;
-	Wed,  4 Sep 2024 15:00:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725462046;
-	bh=uCWg2e4zYQIoF7w5tR8wMPbjGFXaUs+fGVW/n+kzH/E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rdxVIRuMGs5EnXW1Ylpf0/4r1TvmJXq6kxrqwToArZgo+7pEElzmhCJp1ttLyqldQ
-	 I6gay62Pb53rUUoF4WHUnq2XoMUUU2+nqZ2LhmKTuqWDoitg09G9r8bTCJoI69PE1F
-	 CWOWGvycglNw32/8gwnc+tjuuzNMwI6x5wIHepOOS8UDe2P5+fB8MMTr8G6JMYiZ21
-	 YHsjsWrHYc1t1LYuVRKEdA8kN6XsBIxtDtXXR6A5O5EFSoBppb3wACiO21C/AEQAgL
-	 E/ohuHVVIJW+DKDgaNtE0DeCLRUD2f/w2dtkjWtjn4UpThMy0WEuX5gqoUSLnLEw4q
-	 qqH5dyR/kfI8A==
-Date: Wed, 4 Sep 2024 10:00:45 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: linux-clk@vger.kernel.org, lorenzo.bianconi83@gmail.com,
-	devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Philipp Zabel <p.zabel@pengutronix.de>, ansuelsmth@gmail.com,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, upstream@airoha.com,
-	angelogioacchino.delregno@collabora.com,
-	Felix Fietkau <nbd@nbd.name>,
-	Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v2 1/7] dt-bindings: clock: airoha: Update reg mapping
- for EN7581 SoC.
-Message-ID: <172546204488.2561174.6649654649913061182.robh@kernel.org>
-References: <20240903-clk-en7581-syscon-v2-0-86fbe2fc15c3@kernel.org>
- <20240903-clk-en7581-syscon-v2-1-86fbe2fc15c3@kernel.org>
+	s=arc-20240116; t=1725465373; c=relaxed/simple;
+	bh=Tw80biEmlc7MhNm0KldhbZux/hsIdgselZFFWjggA+E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kmGFQCk6AEs9sit8f7kXP1Qj3lzrZyZ7WH+ijzE+ydcqosRBW+Uqvp0tRVl6G3HQmUiyvn4WnLMHqojswVrEXVVm47aypYyBZnn9/zvls+oJ2SCOPS54gTyXoauJ1YXPouRQxQoTjM5D8N2RP0l6s7WcslI10pe06rtd68kY2Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=0WBcAg8h; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1725465371; x=1757001371;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Tw80biEmlc7MhNm0KldhbZux/hsIdgselZFFWjggA+E=;
+  b=0WBcAg8h2H3146yZtpTBYv9PMFWPQFPBA/PrHntpj+SRPTeY4ebPuK0E
+   Nf9zM/hwv5WsZGWcYRR5/47IWY8gI4CDzHMhs5AaizfIwIMmxWwNDRydK
+   bHoC9MRhL/sDNFqfu97J5qce64XuhdJsS6HjhL+mTPOXCZahQmQ5mY31a
+   +svtFaMUIWXjbTwQ38b5bQfc0AMlyyf/+oF0RE5ptwXTh0dTlQ0NnieDC
+   IixOcK6gV1OzzLWva9LBOH11NKxMBTzbH+r/K9oVHMAslq6jQ3K0x7YVc
+   KoDPJ9HN2h21DPNh9+y4w6o242LNpdTBRBQnbKpq61D4wrX7huTusxaA3
+   w==;
+X-CSE-ConnectionGUID: Zt8KU6Y2SmuNhR5My1yuzQ==
+X-CSE-MsgGUID: K6B+fxm4SZ66HsY6SdA+Ew==
+X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
+   d="scan'208";a="198747136"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Sep 2024 08:56:10 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 4 Sep 2024 08:55:17 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Wed, 4 Sep 2024 08:55:17 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>
+CC: <varshini.rajendran@microchip.com>, <linux-kernel@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, "Ryan
+ Wanner" <Ryan.Wanner@microchip.com>
+Subject: [PATCH v2 0/3]clk: at91: add sama7d65 clock support
+Date: Wed, 4 Sep 2024 08:54:10 -0700
+Message-ID: <cover.1725392645.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240903-clk-en7581-syscon-v2-1-86fbe2fc15c3@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
+
+Hello,
+
+This series adds clock support for the SAMA7D65 SoC. There are also
+changes to the master clock driver and PLL driver in order to account for
+the increased amount of clocks being supported in this new SoC.
+
+Trying to account for all the updates happening in this system, this
+patch set is based off of the most recent updates to at91-next branch.
+
+Changes in v2:
+- Correct PLL ID from PLL_ID_IMG to PLL_ID_GPU in the description.
+- Adjust master clock description to match amount of master clocks 0-9.
+- Correct bad spacing and bad alignment.
+- Remove double variable definition.
+- Add missing kfree() at end of function.
+- Reorganize clk and pll driver changes in patch set.
 
 
-On Tue, 03 Sep 2024 23:39:45 +0200, Lorenzo Bianconi wrote:
-> clk-en7523 driver for EN7581 SoC is mapping all the scu memory region
-> while it is configuring the chip-scu one via a syscon. Update the reg
-> mapping definition for this device. This patch does not introduce any
-> backward incompatibility since the dts for EN7581 SoC is not upstream
-> yet.
-> 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  .../bindings/clock/airoha,en7523-scu.yaml          | 23 ++++++++--------------
->  1 file changed, 8 insertions(+), 15 deletions(-)
-> 
+Ryan Wanner (3):
+  clk: at91: clk-master: increase maximum number of clocks
+  clk: at91: clk-sam9x60-pll: increase maximum amount of plls
+  clk: at91: sama7d65: add sama7d65 pmc driver
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+ drivers/clk/at91/Makefile          |    1 +
+ drivers/clk/at91/clk-master.c      |    2 +-
+ drivers/clk/at91/clk-sam9x60-pll.c |    2 +-
+ drivers/clk/at91/pmc.c             |    1 +
+ drivers/clk/at91/sama7d65.c        | 1373 ++++++++++++++++++++++++++++
+ 5 files changed, 1377 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/clk/at91/sama7d65.c
+
+-- 
+2.43.0
 
 
