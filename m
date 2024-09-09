@@ -1,52 +1,52 @@
-Return-Path: <linux-clk+bounces-11849-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11852-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B23D79714E2
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2024 12:09:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE6599714E5
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2024 12:09:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC72A1C22F30
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2024 10:09:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A407C1F23E14
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2024 10:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B562D1B3B0F;
-	Mon,  9 Sep 2024 10:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0431B3F22;
+	Mon,  9 Sep 2024 10:09:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpiYI1LE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxQNulY8"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90316DF58;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4BE21B3F12;
 	Mon,  9 Sep 2024 10:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725876557; cv=none; b=FbW93uh/sjc8WVzDc4d8OFr6oFHjT6yc69+R7FUXe8z+Bjqw8txOmtEJTq07jcEZcIB3E3ZsJTvXkzVB3Sw5hbUm4zXfql7SWcwyrsz9E/j2RopX/K8TyDCpNe0j3tCVaMMMobdSrKiD1VHNijFdwlBfF00RVUoyVS0urS9T+84=
+	t=1725876558; cv=none; b=XFmCKFCpU8fr2UAEMNRyJGrA57pUYm+VdwAbQPxmyOsv1Q/lhnsnVHB1SNmC5n9mbm7Rm5vzk3miOjAlGMIu7GHcr4emjbhG2MBHiGZhYzfhP5OVqcfILFzIL/OYx7QkOfnfyj3JhhddLh92Vnq2ww6/vPTtgBigBVEVqHrrW50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725876557; c=relaxed/simple;
-	bh=wNROTOGwTrtcI0H20f0EmINCmCNdwFiZLjQMJFcLHU0=;
+	s=arc-20240116; t=1725876558; c=relaxed/simple;
+	bh=uCQdKOYsTP4hrdyMRlGaCSGI01VPRdBPeBN372SaHDQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HfXMH4X2+C7tjhXYaKhNHXG4umqn4LejkpMHvbXixfWombaWeBBjJP0g6i39JZnMycVqLmoZh1peHFrM+b0P+qIygMp+mfatRVHxv+4bMBe/n0mai8x3cCb+Daynp6mbuS6h+foIleXLldhQrjHudhd6+pCvQUr1CifWKQCG12k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpiYI1LE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6A638C4CECB;
+	 In-Reply-To:To:Cc; b=EGkZ9JGACnbDpMo+dt5K7jbcCyIs/ePD7MOADD4rTM3BJgCfoZOfA90F4Es2Zrv5LJutUdh+Epafx+HDDfS16QzjZGWDREKEm0kdbvPxRANhvYx6nv+1VMbgXA9rogjWlOhSihTBKCSWA2+5XUmQLefxBfA/wzMmdT0OPSlvQm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxQNulY8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 754F1C4CECC;
 	Mon,  9 Sep 2024 10:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1725876557;
-	bh=wNROTOGwTrtcI0H20f0EmINCmCNdwFiZLjQMJFcLHU0=;
+	bh=uCQdKOYsTP4hrdyMRlGaCSGI01VPRdBPeBN372SaHDQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gpiYI1LEY/2NHjn7vKGGHqTn5IIYP40L/Emxy8Ltkz1ktpF9M83Xausz4RkMPJ3nk
-	 7wm/RhYdoooo4Uposni120xm+xloKvICJbyJ3IOVzixIvtbe2LKRKOnK3o9/VVTHFX
-	 cFZKliUsKLg/q5aSHymagdVrWm70X6btCPpbm9LrkhXJmlzqQHmvCV3JWt5twrpyCh
-	 8JrgcFM7DTgo8y++L3LP0cIlYTNVFVp7ErJvXODUMPHrVggdeC6BPsxm0N0hCQgqqM
-	 SJ71RUlfjPFw5sEMpy2QorM+NUxjBZaXBtrfNrjOCniWW3DXjG9Ewwm3freOhHdcsv
-	 qjWRQNgnKfXEQ==
+	b=PxQNulY87u5/JVzGFlANjQm8D2poWanBScahXoiT27qgfOSZJACpHGAKBue0+w106
+	 4bjqgF5BjlV+hBr7D1a8vUjB5I2azY+QXIoT/hLJtFkutf5Qb2lRJT4KfiW2JKhCLY
+	 Rri+qgrEymZw3p9Sdtt9qJK4RXI39CwQKAkrdfZKF5P5E/ysSGC1swIFqBwmgfG0pG
+	 6uQ3NbcnaeEhN0Go1fhycNqQMx4em+pr3AdPY4YcbU3hbPAw8CtdgBqs9tdEBkVg60
+	 szsJB+W7ocdADklMsXVdCzUDnQ6fI3flmLP+TqyXxbhq4asqNqQ2HPMenrBhxTDJMa
+	 cEvKwA1aNWOOw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE36ECE57A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67BFAECE584;
 	Mon,  9 Sep 2024 10:09:17 +0000 (UTC)
 From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
-Date: Mon, 09 Sep 2024 18:08:57 +0800
-Subject: [PATCH v3 2/3] clk: meson: c3: pll: fix frac maximum value for
+Date: Mon, 09 Sep 2024 18:08:58 +0800
+Subject: [PATCH v3 3/3] clk: meson: s4: pll: fix frac maximum value for
  hifi_pll
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240909-fix_clk-v3-2-a6d8f6333c04@amlogic.com>
+Message-Id: <20240909-fix_clk-v3-3-a6d8f6333c04@amlogic.com>
 References: <20240909-fix_clk-v3-0-a6d8f6333c04@amlogic.com>
 In-Reply-To: <20240909-fix_clk-v3-0-a6d8f6333c04@amlogic.com>
 To: Neil Armstrong <neil.armstrong@linaro.org>, 
@@ -68,11 +68,11 @@ Cc: linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
  Chuan Liu <chuan.liu@amlogic.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725876555; l=770;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725876555; l=793;
  i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=I33Vhd+oqJKtNl4x++Y8xPKvaKodnZowE3DBu//z/PA=;
- b=sUDSMpQF9WTheM2ifxOy7eEX8CY4oBwIkOs0u9IEtYYRpSvEcQ5GG9sxdrCKUWqGbm9QBL96f
- zfj8XzUBaAOC1ifMGVa+iIc+WFvmq83fhWx6zjlCWHOclqLVsF5v7WT
+ bh=0Clx6bfIj6hxSYsk/ARky+mR6oBy1RRrZhsjk6VQ2QA=;
+ b=kW8tt0TPN5U0gdUFRbA8YWbIIehLdHdhtzws/z4AezrasCh7v4VlykiQ5tI84OkY62bcGPxlT
+ z/4cFfsxf5RDwcO6cTBms1LwgLJBDWjner2BfweVSBII5r+prmbwmco
 X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
  pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
 X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
@@ -82,27 +82,27 @@ Reply-To: chuan.liu@amlogic.com
 
 From: Chuan Liu <chuan.liu@amlogic.com>
 
-The fractional denominator of C3's hifi_pll fractional multiplier is
+The fractional denominator of S4's hifi_pll fractional multiplier is
 fixed to 100000.
 
-Fixes: 8a9a129dc565 ("clk: meson: c3: add support for the C3 SoC PLL clock")
+Fixes: 80344f4c1a1e ("clk: meson: s4: pll: hifi_pll support fractional multiplier")
 Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
 ---
- drivers/clk/meson/c3-pll.c | 1 +
+ drivers/clk/meson/s4-pll.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/meson/c3-pll.c b/drivers/clk/meson/c3-pll.c
-index 32bd2ed9d304..35fda31a19e2 100644
---- a/drivers/clk/meson/c3-pll.c
-+++ b/drivers/clk/meson/c3-pll.c
-@@ -361,6 +361,7 @@ static struct clk_regmap hifi_pll_dco = {
- 		.range = &c3_gp0_pll_mult_range,
- 		.init_regs = c3_hifi_init_regs,
- 		.init_count = ARRAY_SIZE(c3_hifi_init_regs),
+diff --git a/drivers/clk/meson/s4-pll.c b/drivers/clk/meson/s4-pll.c
+index a97e19057b05..9697f6577e06 100644
+--- a/drivers/clk/meson/s4-pll.c
++++ b/drivers/clk/meson/s4-pll.c
+@@ -371,6 +371,7 @@ static struct clk_regmap s4_hifi_pll_dco = {
+ 		.range = &s4_gp0_pll_mult_range,
+ 		.init_regs = s4_hifi_init_regs,
+ 		.init_count = ARRAY_SIZE(s4_hifi_init_regs),
 +		.frac_max = 100000,
+ 		.flags = CLK_MESON_PLL_ROUND_CLOSEST,
  	},
- 	.hw.init = &(struct clk_init_data) {
- 		.name = "hifi_pll_dco",
+ 	.hw.init = &(struct clk_init_data){
 
 -- 
 2.42.0
