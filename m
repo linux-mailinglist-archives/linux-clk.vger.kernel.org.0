@@ -1,153 +1,101 @@
-Return-Path: <linux-clk+bounces-11878-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11880-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45CD9973063
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2024 12:01:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E58CA973848
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2024 15:08:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C681D1F242C1
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2024 10:01:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E6AF28611B
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2024 13:08:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A33218C932;
-	Tue, 10 Sep 2024 09:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gDEaBBBa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A182F19259F;
+	Tue, 10 Sep 2024 13:08:14 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx.astralinux.ru (mx.astralinux.ru [89.232.161.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0B118C32B
-	for <linux-clk@vger.kernel.org>; Tue, 10 Sep 2024 09:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707A8192591;
+	Tue, 10 Sep 2024 13:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.232.161.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725962380; cv=none; b=anjO6Qg3qKs/Ar++dNrdW6sLPN6i+n/DMTmd3gag/1Tj5nhTU0K6RfA3GA+rquh5n4/n/PqSGhCFC0ntakWN/Z43aEoqgSYbKMkfnfutMhGLItCZ/6ww4G3pXQDQVAW67TAgoQKvcSBPcgfGpb9OkQvNlETH3w2aDuaxxF9Z1P8=
+	t=1725973694; cv=none; b=JJ43xYwIiruKcCBdTdbfkkJYDa+SbrQnbIRkL2Ih4I4kSw4GaMMHKdd3E2WgkjH98BcZMVPw8NMdnOpisNEnMylCAFQkM8vSuc/wjGOSpUYDiLN2hKaFnVePIE3oZaX2xxRN3sXyJD0onKVDlsjIJqQi+L/gcRtGAP5gz7iDwzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725962380; c=relaxed/simple;
-	bh=cPN+c5d1qbghZwAgbLbBKbGa0droBLNlCAHDEF+wklI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sicK/L2CXiQ9BsNCDkix0Js3II9f23rD6REjDCJx7dm2UXsoMNOr3C+cs5MyV7WMP3nAX/2gZ+gCjdSJYwGE7efui4g5z17MwGu2PHFQyNnTT0GCprhl2TEfnDz1+bs1DpwYbyRuCKOrkoqrLYC5uacB2UW/iZvZhTpFUUo0lUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gDEaBBBa; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-374c7d14191so3510187f8f.0
-        for <linux-clk@vger.kernel.org>; Tue, 10 Sep 2024 02:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1725962375; x=1726567175; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OxZS7VLlvlNcdBPu4dATlqzqCH0SG09iCapcqr1ry4w=;
-        b=gDEaBBBaUoUF56F+rRo9PuyFWwCDXHMu9g8K4zUwzDGwMpXycdSh6VN8oSHKoKmQDX
-         CBycD7ciOZ1IR/0FyHTBJwSQFgwXanXz3ol8xbl5RK83QGEK0N3oWqobPdcp8bRdgAsN
-         zJRHd79Wx0r0r8VkECdsWZb8CG0MTWwIVMwwCsEcAmeXjwPTxuTluhZM7GsBiOTSBwrj
-         GicQeuUF2tjHfHAcuM2wfkPOGx4ZbqH0giOqp7i7zEgqh4hK1Pa1zjBQx5YIUhcLJEEI
-         cCWTNWPXEUubsUXMUR3rMj8TS/LnZJsaKYVFX+QI/MiP7LRzRAcFnOJ6btWsJUUwXo6H
-         JbkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725962375; x=1726567175;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OxZS7VLlvlNcdBPu4dATlqzqCH0SG09iCapcqr1ry4w=;
-        b=sm9R27CkxFVGHT6AfOJSzbXdpbofKHerVrt5Gu6o+WJmwLkcKL04/iDETcwgU4ajcR
-         kZPCWl7R8jIamTDRjejCXwBqTid2/HIt5A+ktQ4d+fmXc9YaZpqmg9K0X6+EtKo0Abok
-         RNAtL/83iJ6gU6Ynhne4iu/f4ndx0gd+Igyo18affYdTjVa7lZ9ox9aL4M0/vXC3RJno
-         ukkPD7Rehcq8Xsd04DZbWNUQju49HJYYHM/+ThUwrb2XWzLXqSI0/ME3qd8Ucx+llGev
-         ivDMUmNde61Cgzi78Mmn7EqpWb32PFFZotdW7lylXxazFEn842BaK+uwvJel+6qCv/8p
-         MJkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWr+/yECOG9mxhgiUVmIUNHTyKfJRVWK4E8gilFH2fW00Iz6Fn4vUYDHfxVY8w6wrPGHHtWxQOhYOY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMZ2Qv280LPvGIup4Z8RlByQff+knaSBeObTR1VC1jIlIDwETh
-	YRYWgdgmcbAh7+uo46YYdumn+ofnWrXc+yoKNpuBhGFa4cF1GhZMXomoXMncwuo=
-X-Google-Smtp-Source: AGHT+IEtmAPvqyyaWuRoKy32eCJyGneGNTbPJN2tRd224P8AECPcesi7ike/qTX7P5GRwYiq+pSdJw==
-X-Received: by 2002:a5d:46ca:0:b0:374:c3e4:d6e3 with SMTP id ffacd0b85a97d-378a89fd45fmr1331874f8f.5.1725962375253;
-        Tue, 10 Sep 2024 02:59:35 -0700 (PDT)
-Received: from localhost (p5dc68d3d.dip0.t-ipconnect.de. [93.198.141.61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3789564a072sm8465192f8f.2.2024.09.10.02.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 02:59:34 -0700 (PDT)
-Date: Tue, 10 Sep 2024 11:59:33 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: dmitry.baryshkov@linaro.org, Sebastian Reichel <sre@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <quic_jesszhan@quicinc.com>, Sam Ravnborg <sam@ravnborg.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-pwm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH v4 27/28] gcc-sdm845: Add general purpose clock ops
-Message-ID: <uevafpb6r7rfutiqrm5asfvv7zfxcb3acrlxqpispele5er52x@eegonpzqlm7j>
-References: <20240719-starqltechn_integration_upstream-v4-0-a7f644821941@gmail.com>
- <20240719-starqltechn_integration_upstream-v4-27-a7f644821941@gmail.com>
+	s=arc-20240116; t=1725973694; c=relaxed/simple;
+	bh=Vs8uPQD8E8pfCVKCE//Lvg56Q9HeLbsiEAOnX6MpK30=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jdHYXzEp+R6ERU8x5UHEQzyqjIEuPw3Rrz3LxX89nbY+LASutyL4u4UrzxPqQCV3M1vt3QmjhQCHAI+pjxIRfF9jdDC4Sc/0UYv02An5G4T8m0fNQNaKrZcKZv+8asoMJcPJSOxLJOahyJ8vuGv6L6ge98rwK2JsJnq9oCcEzoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=89.232.161.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+Received: from [10.177.185.109] (helo=new-mail.astralinux.ru)
+	by mx.astralinux.ru with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <abelova@astralinux.ru>)
+	id 1so0Zg-00BeTL-5I; Tue, 10 Sep 2024 16:06:28 +0300
+Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.58])
+	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4X33s62D3YzkWZc;
+	Tue, 10 Sep 2024 16:07:38 +0300 (MSK)
+From: Anastasia Belova <abelova@astralinux.ru>
+To: Michael Turquette <mturquette@baylibre.com>
+Cc: Anastasia Belova <abelova@astralinux.ru>,
+	Stephen Boyd <sboyd@kernel.org>,
+	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/ACTIONS SEMI ARCHITECTURE),
+	linux-actions@lists.infradead.org (moderated list:ARM/ACTIONS SEMI ARCHITECTURE),
+	linux-kernel@vger.kernel.org (open list),
+	lvc-project@linuxtesting.org,
+	stable@vger.kernel.org
+Subject: [PATCH] clk: actions: prevent overflow in owl_pll_recalc_rate
+Date: Tue, 10 Sep 2024 16:06:40 +0300
+Message-Id: <20240910130640.20631-1-abelova@astralinux.ru>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="d2rlzxmgwshy2k4w"
-Content-Disposition: inline
-In-Reply-To: <20240719-starqltechn_integration_upstream-v4-27-a7f644821941@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-DrWeb-SpamScore: 0
+X-DrWeb-SpamState: legit
+X-DrWeb-SpamDetail: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgtddvucetufdoteggodetrfcurfhrohhfihhlvgemucfftfghgfeunecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeetnhgrshhtrghsihgruceuvghlohhvrgcuoegrsggvlhhovhgrsegrshhtrhgrlhhinhhugidrrhhuqeenucggtffrrghtthgvrhhnpeffvddvueehvedvgfeivdeuvdduteeulefgfeehieffgfehtedutdfgveefvdeiheenucffohhmrghinheplhhinhhugihtvghsthhinhhgrdhorhhgnecukfhppedutddrudejjedrvddtrdehkeenucfrrghrrghmpehhvghloheprhgsthgrqdhmshhkqdhlthdquddtiedtiedvrdgrshhtrhgrlhhinhhugidrrhhupdhinhgvthepuddtrddujeejrddvtddrheekmeehudejjeeipdhmrghilhhfrhhomheprggsvghlohhvrgesrghsthhrrghlihhnuhigrdhruhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepmhhtuhhrqhhuvghtthgvsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhopegrsggvlhhovhgrsegrshhtrhgrlhhinhhugidrrhhupdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghfrggvrhgsvghrsehsuhhsvgdruggvpdhrtghpthhtohepmhgrnhhivhgrnhhnrghnrdhsrgguhhgrshhivhgrmh
+ eslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqtghlkhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghtihhonhhssehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhvtgdqphhrohhjvggttheslhhinhhugihtvghsthhinhhgrdhorhhgpdhrtghpthhtohepshhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhgnecuffhrrdghvggsucetnhhtihhsphgrmhemucenucfvrghgshem
+X-DrWeb-SpamVersion: Dr.Web Antispam 1.0.7.202406240#1725964328#02
+X-AntiVirus: Checked by Dr.Web [MailD: 11.1.19.2307031128, SE: 11.1.12.2210241838, Core engine: 7.00.65.05230, Virus records: 12167416, Updated: 2024-Sep-10 10:50:50 UTC]
 
+In case of OWL S900 SoC clock driver there are cases
+where bfreq = 24000000, shift = 0. If value read from
+CMU_COREPLL or CMU_DDRPLL to val is big enough, an
+overflow may occur.
 
---d2rlzxmgwshy2k4w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add explicit casting to prevent it.
 
-Hello,
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-On Fri, Jul 19, 2024 at 03:55:04PM +0300, Dzmitry Sankouski wrote:
-> SDM845 has "General Purpose" clocks that can be muxed to
-> SoC pins to clock various external devices.
-> Those clocks may be used as e.g. PWM sources for external peripherals.
->=20
-> GPCLK can in theory have arbitrary value depending on the use case, so
-> the concept of frequency tables, used in rcg2 clock driver, is not
-> efficient, because it allows only defined frequencies.
->=20
-> Introduce clk_rcg2_gp_ops, which automatically calculate clock
-> mnd values for arbitrary clock rate.
->=20
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
->  drivers/clk/qcom/clk-rcg.h    |   1 +
->  drivers/clk/qcom/clk-rcg2.c   | 162 ++++++++++++++++++++++++++++++++++++=
-++++--
->  drivers/clk/qcom/gcc-sdm845.c |  19 ++---
->  drivers/pwm/pwm-clk.c         |   5 ++
+Fixes: 2792c37e94c8 ("clk: actions: Add pll clock support")
+Cc: <stable@vger.kernel.org> 
+Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+---
+ drivers/clk/actions/owl-pll.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't understand why a change to some qcom clk implementation detail
-needs a change to drivers/pwm/pwm-clk.c in the same commit. I guess if
-the change to drivers/pwm/pwm-clk.c is needed it should better go into a
-separate patch with an appropriate commit log?!
+diff --git a/drivers/clk/actions/owl-pll.c b/drivers/clk/actions/owl-pll.c
+index 155f313986b4..fa17567665ec 100644
+--- a/drivers/clk/actions/owl-pll.c
++++ b/drivers/clk/actions/owl-pll.c
+@@ -104,7 +104,7 @@ static unsigned long owl_pll_recalc_rate(struct clk_hw *hw,
+ 	val = val >> pll_hw->shift;
+ 	val &= mul_mask(pll_hw);
+ 
+-	return pll_hw->bfreq * val;
++	return (unsigned long)pll_hw->bfreq * val;
+ }
+ 
+ static int owl_pll_is_enabled(struct clk_hw *hw)
+-- 
+2.30.2
 
-Best regards
-Uwe
-
---d2rlzxmgwshy2k4w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmbgGIIACgkQj4D7WH0S
-/k7x2AgAluuv/f/FtpsMhu/tAKjHUOr1Y+1vUefo+pFCKzhUDjMyHMtIz8by9GsE
-1pZ9fiw/to0h6iyEctQmMN3sqoMqkEwL4aKMYb9WOopkDgY36I7oAWjXs4mio6Ed
-DPguLwTovw/p+OJMmgb/ndu5GNyQCb9AsmjekXGIx4ZVDJPX3pc8v/DX5HQj2y3x
-sCi8NmmXABsckLz42oxrky2ZGcNmFddqBJxJdgjVcXfa5BEetdtLnUhmtmhiKyJy
-g1rWCprL53Lj1ZWKLdQgu6yiNCQK9LS45ETRzHX8idzAODnagfx6by+X58QljgMg
-i72ZlH212j1K035K3UHJar7Lo0D7FQ==
-=xssr
------END PGP SIGNATURE-----
-
---d2rlzxmgwshy2k4w--
 
