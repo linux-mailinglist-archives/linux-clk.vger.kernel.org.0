@@ -1,329 +1,357 @@
-Return-Path: <linux-clk+bounces-11965-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11990-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE291977C96
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 11:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48B509781D1
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 15:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CAA9284DB6
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 09:54:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08D0A2822E0
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 13:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68E171D6DC8;
-	Fri, 13 Sep 2024 09:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A8A1E0B73;
+	Fri, 13 Sep 2024 13:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="KZylecuH"
+	dkim=pass (1024-bit key) header.d=nuvoton.onmicrosoft.com header.i=@nuvoton.onmicrosoft.com header.b="f2qyPwqK"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01rlnn2087.outbound.protection.outlook.com [40.95.54.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF391BF80A;
-	Fri, 13 Sep 2024 09:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.135.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18941E008D;
+	Fri, 13 Sep 2024 13:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.95.54.87
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726221283; cv=fail; b=FwJIPQGZ6QOU4536GgttFw7kmQYoxffOFb9Q+TWyj5ehkDyCuQXd4RiKQqNoF5WfseOyyGfyVfEBApmBHG2Uz7ychjetHLvCqxF/rGU8AG8/Zn0BUfYAccJ/deVFVFXEGQQ3gNdqCOnvUJp7CvMdgkHv+r8aLXCufNwEtODY+Ko=
+	t=1726235683; cv=fail; b=rrYT/ivBLUNdgt3XAY0f2sEDBGBjL1I0KriHgKDmgfCpHXxmwTky3dhsmvcxRrUDPjIVK0MtkFAms5eilE/VFF7n2IkU8kc2NIl2YLFlfjnSHimXHNK/BdFYjiSKdMDamOwsSvR2JiLZ7vk7r9KQ+hhW1Bcv3OQv8TIRsfWQaGI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726221283; c=relaxed/simple;
-	bh=c3tvKjBYKJSzoVgaMBOvHzsCfkw0j5xH3fa1L9qgjeA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Rl3l8UOZz2/IvkQtjiy9oFZzeLkorPn3dyUXbeXorJUcAGcYUlYZYQOea4GYYJ4DGGm7dQDyXIg5GtbMnb6jtLaFhFc+qCGRrDP/TTiKdjP/ZeSdBSeooWMelu1WZ6x+usVVDtaj+Q09Qscc+FRYmkZuGgUYFkm4OYtVFiHlLPE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=KZylecuH; arc=fail smtp.client-ip=148.163.135.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48D4blLg031903;
-	Fri, 13 Sep 2024 05:54:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=DKIM; bh=1PQxN
-	IqEoZxaxHrAZqnX3Rz72GcuSI9dsVQkCus7nX0=; b=KZylecuH+cXUJ6lq8aLjg
-	jTqLt7/Vq3KkcRc69cLdwtt2CX0cKpHxLdiIQgt03mT6GbdPZLVmwoIPgefdHJU/
-	DdsBzWJ2HGQnZJksPOsYDYQ5NLvLw3/O18Eo13XA0mIM0zykV5g0ZtRy401O2uko
-	ot+/Ne7+iiSxNjBTf//tIivZMeVQP+L2wGFhd+AX+chbwsx3crQLkEdqasmCHxYK
-	IKGruZ5C1DPanAf/39cmd93XQ4GXKrMopDS1v5HfrG/OE3b9ZmeMrGyzbso9X9kt
-	9Dj+SmKG0gdUgoAOyL62bzD6pf9zbv7Aw51E1SxgnR9mEG0AP1AOGnCpwBogIdQ+
-	w==
-Received: from bn1pr04cu002.outbound.protection.outlook.com (mail-eastus2azlp17010005.outbound.protection.outlook.com [40.93.12.5])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 41gyh1rghh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Sep 2024 05:54:09 -0400 (EDT)
+	s=arc-20240116; t=1726235683; c=relaxed/simple;
+	bh=HxtHT+lh7P+mu0HZBa+yw8sq3aLSyvtXJfmRiQaQIJY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QFGuigpPmDKKdLa280ZJegfr0grWFpWnYqrAmdOyfvXjqUklmlBgIAaW64wPo9w3ZfyTa4ntvaXboNy4NcsuxG6so/cTTsmewJP0Eg+AUbvD924RYNmkTz/yfTsEczSIqqHE8zCsjkKeinbmiQL518Webj3sia80Bz8ucj5LMkw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=none smtp.mailfrom=taln60.nuvoton.co.il; dkim=pass (1024-bit key) header.d=nuvoton.onmicrosoft.com header.i=@nuvoton.onmicrosoft.com header.b=f2qyPwqK; arc=fail smtp.client-ip=40.95.54.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=taln60.nuvoton.co.il
+Received: from SG2PR03MB6730.apcprd03.prod.outlook.com (2603:1096:4:1d5::9) by
+ SEZPR03MB8382.apcprd03.prod.outlook.com (2603:1096:101:21f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7962.19; Fri, 13 Sep 2024 06:17:53 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QXOBeznUymiYJi69yh0Q33Bbq3936m/6q0cqmAWoxSq8cznS5EoX+JUPXBrDFhcCogRQHwFFbhBEOCZGov9Ldutmn0fRICVcgGs2XVHVPdTssCFNu75iynFDM9HYh6USaLIcQAl7vGSugTkLHsO/1aEeD9dbqhOQ8YrRyvOPqabLYfdukEVxhVVgnbkb6wveaP/TG1RqolrV8pbRpfj0OsAPKjqfPfqpbhvHuIgC33636IqzLa2DZ/KncLVR2yAWYmq6e5QMMq2jGr7fbzwYR4r5VA9/yhvMVtH8aUC/zcVojK9uw8LLKSh/nLyVCPHgsu86epq+93VnDycTDt+rjw==
+ b=elCyHkojbI/z9NcyxaWvw8xrMfofl77yOQ1o3IvJBE2iN88EOkZoVK8l/tAYYoebVC41RSRZb8VVFJtrrFiWFGDbKptEJm3Wy8s5Hp0pzPQ0QidY6qaPGo32KCNRukP+Qp9BXVr6iyCfjsGAy3w8MqTq3EcxmYYjMwPjt70mvYIz3u5bN/IlYXkwLmL1lWkDG2I5aPVP8rklC7iHEKOmBpNNTEkhBzr0GbTY+QvkxWSEFG0L3QiZ7FHUOJ6S4puwas6oe/GBTDdCOj9uyzq9nilpl0C/UiBXSgTJ0PGWS8M6GcWBHO8DtP8B5b4ONDKn/FyjBekuWZsNRRlVObDfuQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1PQxNIqEoZxaxHrAZqnX3Rz72GcuSI9dsVQkCus7nX0=;
- b=f3Z8O4ZXqlGQ8h3RYJLJscZAJEXM6GxCVSC3hFt3sevvw/2x+EdYWc1PJm/+i3PksNvrUwISx3+2l/708K13xpybRODP1L8fmnCXxRs2oG/IGZy2hCr5htcJ3OEDmnsO1u0ig3Uw5l56pXGzeTIWvfEYrfYejCBCqYn7u4vYynLCiFvQLJcn7weyslmqx38wrHwdXYrTIx2lyznuCbm4G8NLuO/70NSn0OFi7DwDBkBTs/hcuB3EFTQ2Gg62Cxv4BxCUpMDGldVx6LDO79YDg0KGN1jsI5BQFte9/xX4MJWsfc4sl6jxd5BzCoRigJG4GsQ0kKQLV/+Hs/b+i7m3vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analog.com; dmarc=pass action=none header.from=analog.com;
- dkim=pass header.d=analog.com; arc=none
-Received: from CH2PR03MB5285.namprd03.prod.outlook.com (2603:10b6:610:9c::14)
- by SA2PR03MB5883.namprd03.prod.outlook.com (2603:10b6:806:f9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.21; Fri, 13 Sep
- 2024 09:54:05 +0000
-Received: from CH2PR03MB5285.namprd03.prod.outlook.com
- ([fe80::a7b3:6227:4270:bab1]) by CH2PR03MB5285.namprd03.prod.outlook.com
- ([fe80::a7b3:6227:4270:bab1%5]) with mapi id 15.20.7962.016; Fri, 13 Sep 2024
- 09:54:05 +0000
-From: "Artamonovs, Arturs" <Arturs.Artamonovs@analog.com>
-To: Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
-        Philipp
- Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Agarwal,
- Utsav" <Utsav.Agarwal@analog.com>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij
-	<linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas
- Gleixner <tglx@linutronix.de>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>, Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org"
-	<soc@kernel.org>
-CC: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM"
-	<linux-gpio@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org"
-	<linux-i2c@vger.kernel.org>,
-        "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>,
-        Linux Factory <adsp-linux@analog.com>,
-        Nathan
- Barrett-Morrison <nathan.morrison@timesys.com>
-Subject: RE: [PATCH 01/21] arm64: Add ADI ADSP-SC598 SoC
-Thread-Topic: [PATCH 01/21] arm64: Add ADI ADSP-SC598 SoC
-Thread-Index: AQHbBUBwXHcWLnWt40+s3dG2z6X81LJVX+cAgAATRYA=
-Date: Fri, 13 Sep 2024 09:54:05 +0000
-Message-ID:
- <CH2PR03MB5285D1CFC6043B9EA446AFBC82652@CH2PR03MB5285.namprd03.prod.outlook.com>
-References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
- <20240912-test-v1-1-458fa57c8ccf@analog.com>
- <0929c49e-d906-4885-8e4f-b380358ec6c6@app.fastmail.com>
-In-Reply-To: <0929c49e-d906-4885-8e4f-b380358ec6c6@app.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR03MB5285:EE_|SA2PR03MB5883:EE_
-x-ms-office365-filtering-correlation-id: 7da34558-a025-4643-c0a6-08dcd3da00f8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018|921020;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?1LtKaSQBLoJvzn+AXEPE9O7Yx8CDFGN65DQPxyYav9r5UhJMsNMR7BVovGqc?=
- =?us-ascii?Q?gdKXYBiJQMy6OCyOFwdRbe6m5b53kg3ULAcCqV8U09MKG/WwBQCTgGsNapom?=
- =?us-ascii?Q?pQ09OnyrIY3EAQXb5c57bqwHxrZNY4w9Ke1JEbLhi5H0XJUvmezX7Vji/27y?=
- =?us-ascii?Q?GorOW3PmDoVF4k8wWCLktB1yzbGrFhfY1pYvlNDLIIL2a3MhsBEH/UIp/M9E?=
- =?us-ascii?Q?EKqoVRzSURErsVjFZ2W+aY0ydVvkN2ZXiCnCERHrzj7L1bO7bSqJGnHzY32s?=
- =?us-ascii?Q?B5sRORzTN3TCKAhxzenLwAxwxtpEl2ZLL6CKS7ut/q4258Q5kEBGHelM8SZa?=
- =?us-ascii?Q?1gtxTkeIgkReDUstQ8LhMu2JEk0PgZO7xE3H/ij4fi7de+qdu0YdF3lxqTqy?=
- =?us-ascii?Q?dzUVxcfHtp1rOQ3KqOFpmoxaOF1NhNJV1ySKstbF1ZFmtHUuKfOzJSULznMi?=
- =?us-ascii?Q?SKNMWwRCjMANiLZldiDO3qYVb5qkzFaLDpft2bkDJnZzt5sI99ShNCdeFghC?=
- =?us-ascii?Q?T1Zcbvwr17Dv6CVNlp+xeDNRZUZCoau2IU55dACvUuZ/aZOUqdO9kP8PkWvE?=
- =?us-ascii?Q?bFpFT/gIQFM2MjKqv7JUmv4eVce0ivD15UDemUY4a+iMB293DOX/O1s8b78g?=
- =?us-ascii?Q?tvLu8oLU8P1jBbiN4VP3x0A9PIWzBe/byAOJEZdSBuDPPALFVKwvdsC+PaDR?=
- =?us-ascii?Q?yVlReeQH8rFho3zabA0/U40VrpmgivCF4197EOHd2GOlAW9fpG+VxeKlUZ4V?=
- =?us-ascii?Q?GLuetOOR4Elscbt0mcOS1FwtFmCv4RxkD1MdYenldd8K5Bex/1Bc6+1O/Ct+?=
- =?us-ascii?Q?fStbarcjAUU03nG2z3TcT1AcXX+msbYCDs/1C5L+uyWL3O/O9j6NqENrUDWc?=
- =?us-ascii?Q?/S1VDWQmkHd0JOVtx4jv3iaZOkR3bQQAUYUXNMvMvhw7RqTMLVj+sHYO1ITB?=
- =?us-ascii?Q?NklUb6I+uRYzSU4Lq+6WLEwqfE1NRk3xNwZF+ksEVGd89XenXeUGgYDGk3B5?=
- =?us-ascii?Q?V0cZPzgRqZrEaAzQVIXXObzS9/hGH2KFW89XVPOL4+e/XNCm/BdswCya6IUd?=
- =?us-ascii?Q?S9PB8FYFIEifX10UrGj2QhhCfgwhjFGbQmcVHwTtQljv5UQgLhQeTn97jWcm?=
- =?us-ascii?Q?aBA7q2bGIFY73GcKciNTWmGcPlyh/bAR+5+YkiWEkpHKKCtctMm7KyN1DtVX?=
- =?us-ascii?Q?zR3ueet5cnPttCba7GSu52mHxINHZec6LfAGxT5wTCfHAw49tRgma/rCIwgD?=
- =?us-ascii?Q?TcZa4R50RJJ05PqvlKeDV2mt89ePBvu1cyspQ72NNAz95DNQYjzgxDwmnW/o?=
- =?us-ascii?Q?zdfo1KBDvYamVTb1pqY3gYEdFetErHiBNfq9RGJtZ7uokHk7cK36nHt0x893?=
- =?us-ascii?Q?IQ4UgY8LEnfQ9HifohfiDjQqvUw3+1iLtEBPyFZSv9HK7DOJumX0935dzNL6?=
- =?us-ascii?Q?mKhwbxTTY+o=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR03MB5285.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Ix0a+JnEOzXdDTcll3fiGOhaivGJIZlMUky/ebLQtwfJklDuQj+nU2mwgbLc?=
- =?us-ascii?Q?8OMO1vtOfAlsqJnTFMRMrARuRkrCit8EJ8l25guXa0fo0a8SCAugo35hwAoT?=
- =?us-ascii?Q?zwfdwqZgCNmoqkgl1vA/LC2RrRLybBYbY2xsJC8eMDz0cV3E2Vfl0ePw+z7Q?=
- =?us-ascii?Q?1zNglx+ZY5n3AOUwQr2iS1T/qi7CnUmImkAh7oltLZxSCjjQMJ5i10qMWar7?=
- =?us-ascii?Q?lpOAFehP2voxp6o1b2ccNVVcWAEY44y8vlrJTkIplKQbZbqfNhh6Jn3B92q4?=
- =?us-ascii?Q?wprd7YZBwpViRz9HrMxCNxUtvSMRO6PXAsiW6hkVbS2r5Ak36B1jnt8zPV4y?=
- =?us-ascii?Q?9s83HtEobnmzdbLCtsYbgzOlOBTDALhnS6e1AB172WVcLIXmb8xU+nZWKnd4?=
- =?us-ascii?Q?DAR56kTVSmxdtLRiYwia5W+X05WD8lRZ8xpq3MY3aUBRvl5tNjo9rPuREDl9?=
- =?us-ascii?Q?E7sFXC1rqTlnd3zN/FlettbxUVn8q30xpv3rKi8VafqK/lidp36JrlyEq4H3?=
- =?us-ascii?Q?EPlw3p5iLfxyCBjUMCZ3K5l43ODAAwmS5s0q1tLUyb2/zWZ/xD+sbmbGc6It?=
- =?us-ascii?Q?pa67uK5J+jsABlSNU9Iy3MRRMOHZW4hL6o5xWWIMR9kMmxTwpugSWVO3tJcM?=
- =?us-ascii?Q?Pn3aos1EkUvUuq0JNW516Lc2JHeBc+XpCJsIDW9Y/fUy1r3lt6gZaRMXrwK6?=
- =?us-ascii?Q?psXKt16/4032d9eNbKPIP05J+JUqccO0cXOphi2PlyZBW5A3RwpNmvHz+r3J?=
- =?us-ascii?Q?BTV6+1SftopxU+oTflZLUeiePe96ftO+oq2XlcQcbCdaLIsaQTyZ7z74ro++?=
- =?us-ascii?Q?mOJwU/BpTEZotzz2gj+idoa2HgqeBYwIPCFUD0R5PAhEYwJPIc56iMxWzzjA?=
- =?us-ascii?Q?WIo2BiIAMYoLD+g5xbgG5QGeM8WQR2neC0HmRadhvyXnbslosW3Hb6tjtNuH?=
- =?us-ascii?Q?p/XNddV6KLVc2lUY+MSJDq75e3FYWCdBfZlxfmtpPgXP/hdS266KTT7zPIC/?=
- =?us-ascii?Q?S0PCEd1a01bxxcHoZGqBlGIk5bMnmVLx1uB54kPOsMr5vfR8bPpuE7BJ+xru?=
- =?us-ascii?Q?akQfkmxxowgZGyZ6d1XaL8QyhUeHijV0D7dADdBNEZadw3c7sBxtqBngLNS6?=
- =?us-ascii?Q?rynG/yJNHId1/3ha0+SiKsvnPoir/ydYa5zaYvf1/ZLmhNSpKT8+bz/M1LQv?=
- =?us-ascii?Q?y8vxvMLvyehJxG/emiSEDRc/6EK1rb4waZROZXhlw6aFwnliHhfXQWmST2c7?=
- =?us-ascii?Q?gLBvABNFFgYZ/RXNuMz5k2a3m8qswlVZSkrSBkrfZskE+RZPVI6Co5mc9IIP?=
- =?us-ascii?Q?WKIseWHy1Q3TMhzHg0MezeFiwlE2cFpuB+5X2Z3Frc+5XXoq3O4Nk6Xu0qQE?=
- =?us-ascii?Q?TBJ2uZCVZH6W9l5Qyc5VTJWCWO7YhQKTIDKoCkipD5W7pLLPf9NdsevKg72+?=
- =?us-ascii?Q?qR7227VaKXz7GmU9xuNd9VhZoSzls1uwhONhg5dwcUN58zabAwts/O2r8HF1?=
- =?us-ascii?Q?L7R26Zd/0BVTbjUa+UcBTfjmGW3YSgx5zUwcCtyolf4pksW5+5tgD1tUzdQU?=
- =?us-ascii?Q?SlhewUmrfkmC39RGt5cE+grBmfF1fLaROO3K3UJpI3o89t9k19rlYhP63Abk?=
- =?us-ascii?Q?eg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=VpMR6qv6JfKvXmGBithJY0XJ7ElRCqqOb8zsavege9c=;
+ b=j2BFOJTHAgemVXGxB02U4zSrFJC0gC3n3vukS/4F1IMChPQX/r2sbEsVBUZJQa1XZ3dUcKFtaC1z4pYMCkQ1MSLQngoL6cAbyw+Q7HLO/phTfsARH+lQaZVXj7j66Zk2tPmfd9sVJWsvQFqVnX37396uv+l4iE9B86lZ8QX/plUqP+q06tTb/EUHUHbVOu+xlX0E8vf2h/hjtD6LOGntDLRpsEzYBtOji2YHI1qM2YXoM8ZQknM0jb8A0wg2F6G1CAZ4cifuwTmMvisW/J55kVk0EPKW9DCtH5WDJsPyvi2OwzdAXqygsQWe3IxdwntgqGDPHswVVI+tCkKt7SAZGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none (sender ip is
+ 211.75.126.7) smtp.rcpttodomain=baylibre.com
+ smtp.mailfrom=taln60.nuvoton.co.il; dmarc=fail (p=none sp=quarantine pct=100)
+ action=none header.from=gmail.com; dkim=none (message not signed); arc=none
+ (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VpMR6qv6JfKvXmGBithJY0XJ7ElRCqqOb8zsavege9c=;
+ b=f2qyPwqK7BM4Ut8qDt0F/hwFMJFNqeNwIqnkFXdN3gFJJ8UG0231XNiqZmOmJ0wTDw6of6JeisO2ovG/EdGL9NQWc+IL+Cm2IONwrr0dSyQleCmuB5dZ48glOrF2C9zMldN4Wi2JbzuMDEGU6Ms69+ssMfajwLhbOW6PRAtP2Dw=
+Received: from SI2P153CA0015.APCP153.PROD.OUTLOOK.COM (2603:1096:4:140::21) by
+ SG2PR03MB6730.apcprd03.prod.outlook.com (2603:1096:4:1d5::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7939.23; Thu, 12 Sep 2024 19:10:46 +0000
+Received: from SG1PEPF000082E1.apcprd02.prod.outlook.com
+ (2603:1096:4:140:cafe::3e) by SI2P153CA0015.outlook.office365.com
+ (2603:1096:4:140::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.9 via Frontend
+ Transport; Thu, 12 Sep 2024 19:10:46 +0000
+X-MS-Exchange-Authentication-Results: spf=none (sender IP is 211.75.126.7)
+ smtp.mailfrom=taln60.nuvoton.co.il; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=gmail.com;
+Received-SPF: None (protection.outlook.com: taln60.nuvoton.co.il does not
+ designate permitted sender hosts)
+Received: from NTHCCAS01.nuvoton.com (211.75.126.7) by
+ SG1PEPF000082E1.mail.protection.outlook.com (10.167.240.4) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7918.13 via Frontend Transport; Thu, 12 Sep 2024 19:10:46 +0000
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 13 Sep
+ 2024 03:10:41 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 13 Sep
+ 2024 03:10:41 +0800
+Received: from taln58.nuvoton.co.il (10.191.1.178) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Fri, 13 Sep 2024 03:10:40 +0800
+Received: from taln60.nuvoton.co.il (taln60 [10.191.1.180])
+	by taln58.nuvoton.co.il (Postfix) with ESMTP id 15EED5F5B8;
+	Thu, 12 Sep 2024 22:10:40 +0300 (IDT)
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+	id 021B3DC0800; Thu, 12 Sep 2024 22:10:39 +0300 (IDT)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: <mturquette@baylibre.com>, <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<tali.perry1@gmail.com>, <joel@jms.id.au>, <venture@google.com>,
+	<yuenn@google.com>, <benjaminfair@google.com>
+CC: <openbmc@lists.ozlabs.org>, <linux-clk@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Tomer Maimon
+	<tmaimon77@gmail.com>
+Subject: [PATCH v28 0/3] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date: Thu, 12 Sep 2024 22:10:35 +0300
+Message-ID: <20240912191038.981105-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR03MB5285.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7da34558-a025-4643-c0a6-08dcd3da00f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Sep 2024 09:54:05.2235
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-NotSetDelaration: True
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+	SG1PEPF000082E1:EE_|SG2PR03MB6730:EE_|SEZPR03MB8382:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0daf0209-f5dd-4059-ac57-08dcd35e9b47
+X-MS-Exchange-SenderADCheck: 2
+X-MS-Exchange-AntiSpam-Relay: 1
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|35950700016|48200799018|82310400026|7093399012|7416014|376014|61400799027|921020|35450700002;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?OEdCM3YwS2tHU2swckdmSS85NC9Wc1FpMUswK09UTGRSTit5czBIcjcyTXBp?=
+ =?utf-8?B?Njc3TDFGblF2di9Pd3NpY3FoN01Jb2V0bCsydWE1WXh1YnZIV0Q2RDJtSzJN?=
+ =?utf-8?B?V0dsWFFzV3dIUThLOHZiT2NSVThTaWh1bEN1blpRQ2FnRHNEMDJPaVh5NEFF?=
+ =?utf-8?B?STVCcjJUWGhHNG9TbWNPM2t6cDFMeVphQXpPOEZvMEE2K1FFY0lCVFZqZmhS?=
+ =?utf-8?B?NkQrSExNT1NBRXUrMEhEaTBCNFh1VFFOejFjOEUyR3Y0T00yRmZ6S3hnUFVU?=
+ =?utf-8?B?elBDZHZqanAvcmN2TFp6dnNQdVBtSEh5NVBuYVBJcmNkU09DZE9ZVTc4eFhZ?=
+ =?utf-8?B?akVHdTZLN1I5WnJiOFQ1a01uZDhDVFE2YTd6MzFPUGtlTEx5c1dWOENTNDd4?=
+ =?utf-8?B?NGNhclU4RFFSeE5zOVc3R3daMGxtQk96cVpJVythQnNxc3IxVjRtWDk4MEFK?=
+ =?utf-8?B?T3VZQ0puSnB6UE85dUIyaWc2WCt4Vlh3UHRmRUdxSzgrZ1JXWWgvVGRCdzEv?=
+ =?utf-8?B?T3d4VzNiaDBkZHI3dC9wcXIxbFBNcWhJYVZJd0hpK0w3UTRTSzBNUWM4Smtm?=
+ =?utf-8?B?YnViZE93dWJZcXFVNmMrczVvb2g2VThiS2NxU1FZTERmQm1NSVNra3hQUVAy?=
+ =?utf-8?B?UEdFVVBjVDgwVU5sQ1ZnZEVQTE8yUUZLZUlTSmx2akljcm9uUUxXZFN6aVYz?=
+ =?utf-8?B?dllPV1NyZllzVCt2cmg1Vkxtano2YTFnRllQa0E5cHBrMEpjZ0srYll2UThx?=
+ =?utf-8?B?Z0VlRG9PR3BhUWtZNWRnSHBuYUJWZXBDd21yQ3ZWek4xSFRuTnVRb3VTMDFW?=
+ =?utf-8?B?Ny9lZGFwVFFIRlVDNFFKenFZZU9PcU5KL0kwWU85OSthUWp2TFpjM21TS1ZU?=
+ =?utf-8?B?Uy8wd3pqVDBKZDZmZk1sNG1pNXk5ZkJheUNUcDJNRnlIWmpzbkxrTXV5Ympt?=
+ =?utf-8?B?Y3BDVUovTjFNWldWbVZGdzZTeDB5NHJ6RHZKdDM2SExjTlowSlExeEloVXYz?=
+ =?utf-8?B?Q00rR2Q0WVlNL1NUZTBxWmdjYW9sMlBRbzlDZGhvUC9hZG1RWjJ6V3RyaURs?=
+ =?utf-8?B?ODZaWFQvTUUrc3F1RG9pZlpVR1RaZmVNMlptSVRGdkdVSzR3TFV3SktzdC81?=
+ =?utf-8?B?N3VxeHdTK1VKbFFKcHJIYjJxR1M3OE9rMUZRdFZNeStmUEN1UXVxZFhuUjRH?=
+ =?utf-8?B?RmlDUGI2eW5BTXh4RDNHVDZCUFp5dGdBSHp6QWtEbHJzTUN1YnN2MzNYd082?=
+ =?utf-8?B?VmRiVWpOV2w0bForb3pYenptc24zS2tEcVNVUnQzM1JEeWNuNEJyUlJqb0Js?=
+ =?utf-8?B?TlNvWXBFa2xwRkZLSFkvRDNrZnQxeGk5UHJtcWtEc2dxNWpNUlMzdXlDZ1M3?=
+ =?utf-8?B?YmgxZzQyUWlTNHlReWhWNmFkODlrRXM2bUZOLzFEVjY2d3hYL3NrZEkwa2JU?=
+ =?utf-8?B?c0M5OTZtZzZTRlc2UWVBMnRGK1FpZzlmQTByeFBuRVVtaW5Tb1BpL2kvOGty?=
+ =?utf-8?B?ekt6K2hYTlFiVzZQUWlGeG80cEJDR1h4b2o3SjhSa01BOG81S3lkYUJBTHg4?=
+ =?utf-8?B?YUN5d2h5NXFWWkxBMUF1WmMxN1pKbHp3Z2NCN2c4S1BzS3pjVnBMQUtWQThX?=
+ =?utf-8?B?SWdIcE1Nb2tnK3JlWGpkV3VyRVoyWWdNMkMrTXN4V0owUTlxcEFZNjczcHUw?=
+ =?utf-8?B?TStnQnc1c0JMRStQL3N0ZCtNdmdvUnIrWjI0VkhOS0VlUEN4UnlORGEvdGta?=
+ =?utf-8?B?a1VlQkhFSnVkUVZSUkdiTWk2NVNXMkRyN3kyM0xMcHF1WjVYamNORWhsRmVL?=
+ =?utf-8?B?Smk0YUcxY2dXSHpkQ1B0STRyMzhjNE5qL1A4dC8wb2JZNGh1b09MSEhoeXVR?=
+ =?utf-8?B?Mk5UajZ5S01lcm9iM0c4SlJ4cThheVFXT0pIaVlNL3ZGUDRIT1p2SDlHa2J5?=
+ =?utf-8?B?dDVMamIySmNGUzlrTFM2bXdlODFNV0QwUkllcUJ5TUQ4eHBzS1BoYVI2akly?=
+ =?utf-8?Q?n2ZbCe4ibLDShw0UisRotjb3QwiEec=3D?=
+X-Forefront-Antispam-Report:
+ CIP:211.75.126.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS01.nuvoton.com;PTR:211-75-126-7.hinet-ip.hinet.net;CAT:NONE;SFS:(13230040)(35950700016)(48200799018)(82310400026)(7093399012)(7416014)(376014)(61400799027)(921020)(35450700002);DIR:OUT;SFP:1022;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2024 19:10:46.4226
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0QG5iO3q2LVO4RZeSm1fHHOyedYkQUMfWiOgSk0M8Ejib3KPjMYycMUffXihNICcQHNPFowuFmMTlziFqTcb9vG/voXcy72yWD3SHvW4U+I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR03MB5883
-X-Proofpoint-ORIG-GUID: hXTLHIeFfi4DeN8lJ4ukOoqR7jte1OC5
-X-Proofpoint-GUID: hXTLHIeFfi4DeN8lJ4ukOoqR7jte1OC5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409130069
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0daf0209-f5dd-4059-ac57-08dcd35e9b47
+X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[211.75.126.7];Helo=[NTHCCAS01.nuvoton.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+ SG1PEPF000082E1.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR03MB6730
+X-OriginatorOrg: nuvoton.com
 
+This patchset adds clock support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family.
 
+The NPCM8xx clock controller is created using the auxiliary device framework
+and set up in the npcm reset driver since the NPCM8xx clock is using the
+same register region.
 
-> -----Original Message-----
-> From: Arnd Bergmann <arnd@arndb.de>
-> Sent: Friday, September 13, 2024 9:16 AM
-> To: Artamonovs, Arturs <Arturs.Artamonovs@analog.com>; Catalin Marinas
-> <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>; Greg Malysa
-> <greg.malysa@timesys.com>; Philipp Zabel <p.zabel@pengutronix.de>; Rob
-> Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Cono=
-r
-> Dooley <conor+dt@kernel.org>; Agarwal, Utsav <Utsav.Agarwal@analog.com>;
-> Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
-> <sboyd@kernel.org>; Linus Walleij <linus.walleij@linaro.org>; Bartosz
-> Golaszewski <brgl@bgdev.pl>; Thomas Gleixner <tglx@linutronix.de>; Andi S=
-hyti
-> <andi.shyti@kernel.org>; Greg Kroah-Hartman <gregkh@linuxfoundation.org>;
-> Jiri Slaby <jirislaby@kernel.org>; Olof Johansson <olof@lixom.net>;
-> soc@kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-clk@vger.kernel.org; open list:GPIO
-> SUBSYSTEM <linux-gpio@vger.kernel.org>; linux-i2c@vger.kernel.org; linux-
-> serial@vger.kernel.org; Linux Factory <adsp-linux@analog.com>; Nathan Bar=
-rett-
-> Morrison <nathan.morrison@timesys.com>
-> Subject: Re: [PATCH 01/21] arm64: Add ADI ADSP-SC598 SoC
->=20
-> [External]
->=20
-> On Thu, Sep 12, 2024, at 18:24, Arturs Artamonovs via B4 Relay wrote:
-> > From: Arturs Artamonovs <arturs.artamonovs@analog.com>
-> >
-> > Add ADSP-SC598 platform.
-> >
->=20
-> > --- a/arch/arm64/Kconfig.platforms
-> > +++ b/arch/arm64/Kconfig.platforms
-> > @@ -292,6 +292,19 @@ config ARCH_ROCKCHIP
-> >  	  This enables support for the ARMv8 based Rockchip chipsets,
-> >  	  like the RK3368.
-> >
-> > +config ARCH_SC59X_64
-> > +	bool "ADI 64-bit SC59X Platforms"
-> > +	select TIMER_OF
-> > +	select GPIOLIB
-> > +	select PINCTRL
-> > +	select COMMON_CLK_ADI_SC598
-> > +	select PINCTRL_ADSP
-> > +	select ADI_ADSP_IRQ
-> > +	select COUNTER
->=20
-> You can remove the 'select' statements above and just
-> make your drivers 'default ARCH_SC59X_64'.
->=20
-> It may also help to pick a more generic name for the platform
-> in case someone wants to add support for SC57x/SC58x later,
-> assuming these use some of the same drivers,.
->=20
-> The Kconfig change can normally go into the same patch
-> as the MAINTAINERS file update, but should be separate
-> from any of the drivers.
->=20
+This patchset cover letter is based from the initial support for NPCM8xx BMC to
+keep tracking the version history.
 
-Hi, yes future plan is too add other platforms  like
-SC57x/SC58x and SC594. Drivers are compatible.=20
+This patchset was tested on the Arbel NPCM8XX evaluation board.
 
-> > --- /dev/null
-> > +++ b/drivers/soc/adi/Makefile
-> > @@ -0,0 +1,5 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +# todo modularize; already depends on CONFIG_ARCH_SC59X_64 though
-> > +
-> > +obj-y +=3D system.o
-> > diff --git a/drivers/soc/adi/system.c b/drivers/soc/adi/system.c
->=20
-> I'm confused about the purpose of this driver. Please
-> split this out into a separate patch and add a detailed
-> description of how it is actually being used, since it
-> does not interact with any of the normal subsystems.
->=20
+All patches have been reviewed by the maintainers, 
+the clock driver can be applied :-)
 
-Hi, yes we cleaned this driver as much as possible, will
-make effort to remove it.=20
+Addressed comments from:
+Philipp Zabel: https://www.spinics.net/lists/linux-clk/msg103946.html
 
-> > diff --git a/include/linux/soc/adi/adsp-gpio-port.h
-> > b/include/linux/soc/adi/adsp-gpio-port.h
->=20
-> > --- /dev/null
-> > +++ b/include/linux/soc/adi/cpu.h
->=20
-> > --- /dev/null
-> > +++ b/include/linux/soc/adi/rcu.h
-> > @@ -0,0 +1,55 @@
->=20
-> > diff --git a/include/linux/soc/adi/sc59x.h
-> > b/include/linux/soc/adi/sc59x.h
->=20
-> > --- /dev/null
-> > +++ b/include/linux/soc/adi/sc59x.h
->=20
-> I don't see these files being included in the driver you add
-> here, maybe they got added by accident here?
->=20
+Changes since version 27:
+ - Use inline function in container_of.
+ - fix missing return in the probe function.
+ 
+No Changes in version 26:
+ 
+Changes since version 25:
+ - Add select AUXILIARY_BUS to npcm_reset kconfig.
+ - Include <linux/auxiliary_bus.h> and <linux/slab.h> in reset and clock driver.
+ 
+Changes since version 24:
+ - Keep clock npcm8xx dt-binding to avoid ABI break.
+ - Fix kfree parameter.
+ - Correct reference.
+ - Modify commit message.
+ 
+Changes since version 23:
+ - NPCM8xx clock controller using the auxiliary device framework.
+ - Add NPCM8xx clock controller aux device registration support in npcm reset driver.
+ - Remove unused nuvoton,npcm845 clk bindings.
+ - Remove all string #define 
+ 
+Changes since version 22:
+ - Modify commit message to explain broken ABI in dt-binding
+ - Using regmap parenet regmap memory therefore remove use of npcm8xx rst-clock patch.
+ - Leave npcm7xx rst node as is
+ 
+Changes since version 21:
+ - Since using regmap instead of ioremap replace reg to syscon 
+   property in dt-bindings and dts.
+ - Add reference clock property to the dt-bindings and dts.
+ - Using .index instead of .name in clk_parent_data structures.
+ - Using string where any macros are used once.
 
-Should be used in reset driver its removed during rebase, will fix that=20
-In next series.=20
+Changes since version 20:
+ - Using regmap instead of ioremap.
+   the clock and reset modules are sharing the same memory region 
+   and cause failure when using devm_platform_ioremap_resource
+   function, this version uses regmap to handle shared 
+   reset and clock memory region, in case it is approved I will
+   modify the reset driver to use the regmap as well.
+ - Using clk_hw instead of clk_parent_data structre.
+ - Divider clock definition to one line
 
->        Arnd
+Changes since version 19:
+ - Remove unnecessary free command.
+ - Defining pr_fmt().
+ - Using dev_err_probe.
+ - Return zero in the end of the probe function.
+
+Changes since version 18:
+ - NPCM8XX clock driver did not changed from version 18 only build and tested under kernel 6.6-rc1.
+
+Changes since version 17:
+ - NPCM8XX clock driver did not changed from version 17 only build and tested under kernel 6.5-rc3.
+
+Changes since version 16:
+ - NPCM8XX clock driver
+	- Using devm_kzalloc instead kzalloc.
+	- Remove unnecessary parenthesis.
+	- Modify incorrect spelling.
+
+Changes since version 15:
+ - NPCM8XX clock driver
+	- Remove unused regs parameter from npcm8xx_pll_data structure.
+	- Using index and clk_hw parameters to set the clock parent in the clock structures.
+
+Changes since version 14:
+ - NPCM8XX clock driver
+	- Remove unnecessary register definitions.
+	- Remove the internal reference clock, instead use the external DT reference clock.
+	- rearrange the driver.
+	- using .names parameter in DT to define clock (refclk).
+
+Changes since version 13:
+ - NPCM8XX clock driver
+	- Remove unnecessary definitions and add module.h define
+	- Use in clk_parent_data struct.fw_name and .name.
+	- Add module_exit function.
+	- Add const to divider clock names.
+	- Add MODULE_DESCRIPTION and MODULE_LICENSE
+
+Changes since version 12:
+ - NPCM8XX clock driver
+	- Use clk_parent_data in mux and div clock structure.
+	- Add const to mux tables.
+	- Using devm_clk_hw_register_fixed_rate function.
+	- use only .name clk_parent_data instead .name and .fw_name.
+	- Modify mask values in mux clocks. 
+
+Changes since version 11:
+ - NPCM8XX clock driver
+	- Modify Kconfig help.
+	- Modify loop variable to unsigned int.
+
+Changes since version 11:
+ - NPCM8XX clock driver
+	- Modify Kconfig help.
+	- Modify loop variable to unsigned int.
+
+Changes since version 10:
+ - NPCM8XX clock driver
+	- Fix const warning.
+
+Changes since version 9:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Using clk_parent_data instead of parent_name
+	- using devm_ioremap instead of ioremap. deeply sorry, I know we had
+	 a long discussion on what should the driver use, from other examples 
+	 (also in other clock drivers) I see the combination of 
+	 platform_get_resource and devm_ioremap are commonly used and it answer
+	 the reset and clock needs.
+
+Changes since version 8:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Add space before and aftre '{' '}'.
+	- Handle devm_of_clk_add_hw_provider function error.
+
+Changes since version 7:
+ - NPCM8XX clock driver
+	- The clock and reset registers using the same memory region, 
+	  due to it the clock driver should claim the ioremap directly 
+	  without checking the memory region.
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+
+Changes since version 2:
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+
+Tomer Maimon (3):
+  dt-bindings: reset: npcm: add clock properties
+  reset: npcm: register npcm8xx clock auxiliary bus device
+  clk: npcm8xx: add clock controller
+
+ .../bindings/reset/nuvoton,npcm750-reset.yaml |  18 +
+ drivers/clk/Kconfig                           |   8 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 430 ++++++++++++++++++
+ drivers/reset/Kconfig                         |   1 +
+ drivers/reset/reset-npcm.c                    |  78 +++-
+ include/soc/nuvoton/clock-npcm8xx.h           |  18 +
+ 7 files changed, 552 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/soc/nuvoton/clock-npcm8xx.h
+
+-- 
+2.34.1
+
 
