@@ -1,266 +1,189 @@
-Return-Path: <linux-clk+bounces-11911-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11913-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E15976D96
-	for <lists+linux-clk@lfdr.de>; Thu, 12 Sep 2024 17:20:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C38CD977040
+	for <lists+linux-clk@lfdr.de>; Thu, 12 Sep 2024 20:20:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92EA1287D9F
-	for <lists+linux-clk@lfdr.de>; Thu, 12 Sep 2024 15:20:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A2531F231D0
+	for <lists+linux-clk@lfdr.de>; Thu, 12 Sep 2024 18:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4643D994;
-	Thu, 12 Sep 2024 15:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752FE1BFDEA;
+	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPsmgtEM"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2009619F435
-	for <linux-clk@vger.kernel.org>; Thu, 12 Sep 2024 15:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D08156F44;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726154344; cv=none; b=PfTnmwZAPuk22A0a4Qe98EjR4L6wUKc7vxosucSe3vNteONuqn8UJMQylhZ8w7TTKz34wEL394Twzbt/pIbljMODQUL6q2gPiyiNrKxh2QxlRl743oarIP5WeWALwrLxQWzWiQUQV7V/vePdFi2t6ItxNmRP0/N3hH86tyz660M=
+	t=1726165215; cv=none; b=ZNEKBiFfRkqaizsiQhkCCdLOm7UASt4bPtmFUpLoid63ZK3HA7xYs0wC4pvuixtx0TX7J9JUmo7NGcgfReionkTjrfh4JmBUhC0xLgMnczuiFUZq5GsBvKZDbOYF/obEGzgR2fg+w0olCGyYqGtZxu9ccsjUr2yATV2C/wtXA7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726154344; c=relaxed/simple;
-	bh=OsLJojm96pMS4IXnyVQSRLVdKdQHtsLTw4J4pA0PcfU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KnVEZQwXN8Fj3sGBEEGvnNIOTRMVJcsG/eM/acH0kgWCBMpfsc98WBbsI9FAHeRysYt2JVDH13MLIGCJjEBDs1/7UfLGa9W88/3+PmVvJ0IGCYlyrjDypr6ky3G9y3pSQLWzUSfly2/UvE2Wn3LLQAw9E+YD/UkebMa2Cd8Nlfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1solae-0001q5-UB; Thu, 12 Sep 2024 17:18:36 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1solad-007PUI-AE; Thu, 12 Sep 2024 17:18:35 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1solad-000BWk-0l;
-	Thu, 12 Sep 2024 17:18:35 +0200
-Message-ID: <d003cb854f9aea30c7d26b4d2b7f50cf467bf225.camel@pengutronix.de>
-Subject: Re: [PATCH RESEND v27 2/3] reset: npcm: register npcm8xx clock
- auxiliary bus device
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Tomer Maimon <tmaimon77@gmail.com>, mturquette@baylibre.com, 
- sboyd@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
- tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
- yuenn@google.com,  benjaminfair@google.com
-Cc: openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Date: Thu, 12 Sep 2024 17:18:35 +0200
-In-Reply-To: <20240815150255.3996258-3-tmaimon77@gmail.com>
-References: <20240815150255.3996258-1-tmaimon77@gmail.com>
-	 <20240815150255.3996258-3-tmaimon77@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1726165215; c=relaxed/simple;
+	bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IjQ4CC9l+6npKfeG9EA6qDO0rYNXR+VP71G/IbfS2rQ+MbBjVBIc0X5Mdb19EyUEO/mlV3O9U1vJQxYhjBydjEG0MnT7rWGNeXgTwoYyI6Ta7V17qhdSdbponnvU9R782VRkDhMxDmKjNcAQzRO2dVOYrv5u75n7fT08u5lKtxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPsmgtEM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1314C4CEC3;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726165214;
+	bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+	h=From:Subject:Date:List-Id:To:Cc:Reply-To:From;
+	b=CPsmgtEMMAtyNjuTtYzJv2ymvFQzEQ0PP4IxrBdr25a91/xfA+vLhNsSL+sUbEenZ
+	 pnswG6UKzPGA3YNk0qQSUQCjyTyrSSHYiRpO5q6F/kJ4uTcf4RAHSqE1IviTh391YH
+	 LKwVAYm+pHsrWoYTohF3ihvZtSMZZl2stoW3B9u1nAmd+ymbmPPmHRjZ2ixy5YTA5g
+	 29/F5vNMp75kXNPU1jh5NV0QUUrwuLjW4nf/0ah2QpS+z28d2jKOzGh8ljkpwWfo+Z
+	 okGMUadVfBH17b24RjwzDTPHAc88HGbAbD3zk/VmYj0a/3gErJdJXm9vc/gOPciRmZ
+	 DM5sYzwjSuwLg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9552CEED61F;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
+Subject: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
+Date: Thu, 12 Sep 2024 19:24:45 +0100
+Message-Id: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO0x42YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSwNL3ZLU4hJdi9Rk0zRzs7RUsxQjJaDSgqLUtMwKsDHRsbW1ACfUB0l
+ WAAAA
+X-Change-ID: 20240909-test-8ec5f76fe6d2
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Utsav Agarwal <Utsav.Agarwal@analog.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>, 
+ Andi Shyti <andi.shyti@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ linux-serial@vger.kernel.org, 
+ Arturs Artamonovs <arturs.artamonovs@analog.com>, adsp-linux@analog.com, 
+ Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
+ Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+X-Mailer: b4 0.15-dev-7be4f
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=5160;
+ i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
+ bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+ b=zbt6V9124O55F0SjvPefnGSMeoqnQ6n0nQAX5r5d9ePtZmwiyfZElo/Gxg9IU9a3CrDXAI7ll
+ FFhs3bUdzCqBvTjA8ZWx3jPfHROQJaT88gsBroCxlNiuQ/0z7ZsVUF8
+X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
+ pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
+X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
+ with auth_id=206
+X-Original-From: Arturs Artamonovs <arturs.artamonovs@analog.com>
+Reply-To: arturs.artamonovs@analog.com
 
-On Do, 2024-08-15 at 18:02 +0300, Tomer Maimon wrote:
-> Add NPCM8xx clock controller auxiliary bus device registration.
->=20
-> The NPCM8xx clock controller is registered as an aux device because the
-> reset and the clock controller share the same register region.
->=20
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> Tested-by: Benjamin Fair <benjaminfair@google.com>
-> ---
->  drivers/reset/Kconfig               |  1 +
->  drivers/reset/reset-npcm.c          | 74 ++++++++++++++++++++++++++++-
->  include/soc/nuvoton/clock-npcm8xx.h | 16 +++++++
->  3 files changed, 90 insertions(+), 1 deletion(-)
->  create mode 100755 include/soc/nuvoton/clock-npcm8xx.h
->=20
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index 67bce340a87e..c6bf5275cca2 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -157,6 +157,7 @@ config RESET_MESON_AUDIO_ARB
->  config RESET_NPCM
->  	bool "NPCM BMC Reset Driver" if COMPILE_TEST
->  	default ARCH_NPCM
-> +	select AUXILIARY_BUS
->  	help
->  	  This enables the reset controller driver for Nuvoton NPCM
->  	  BMC SoCs.
-> diff --git a/drivers/reset/reset-npcm.c b/drivers/reset/reset-npcm.c
-> index 8935ef95a2d1..aa68b947226a 100644
-> --- a/drivers/reset/reset-npcm.c
-> +++ b/drivers/reset/reset-npcm.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  // Copyright (c) 2019 Nuvoton Technology corporation.
-> =20
-> +#include <linux/auxiliary_bus.h>
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/io.h>
-> @@ -10,11 +11,14 @@
->  #include <linux/property.h>
->  #include <linux/reboot.h>
->  #include <linux/reset-controller.h>
-> +#include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/regmap.h>
->  #include <linux/of_address.h>
-> =20
-> +#include <soc/nuvoton/clock-npcm8xx.h>
-> +
->  /* NPCM7xx GCR registers */
->  #define NPCM_MDLR_OFFSET	0x7C
->  #define NPCM7XX_MDLR_USBD0	BIT(9)
-> @@ -89,6 +93,7 @@ struct npcm_rc_data {
->  	const struct npcm_reset_info *info;
->  	struct regmap *gcr_regmap;
->  	u32 sw_reset_number;
-> +	struct device *dev;
->  	void __iomem *base;
->  	spinlock_t lock;
->  };
-> @@ -372,6 +377,67 @@ static const struct reset_control_ops npcm_rc_ops =
-=3D {
->  	.status		=3D npcm_rc_status,
->  };
-> =20
-> +static void npcm_clock_unregister_adev(void *_adev)
-> +{
-> +	struct auxiliary_device *adev =3D _adev;
-> +
-> +	auxiliary_device_delete(adev);
-> +	auxiliary_device_uninit(adev);
-> +}
-> +
-> +static void npcm_clock_adev_release(struct device *dev)
-> +{
-> +	struct auxiliary_device *adev =3D to_auxiliary_dev(dev);
-> +	struct npcm_clock_adev *rdev =3D to_npcm_clock_adev(adev);
-> +
-> +	kfree(rdev);
-> +}
-> +
-> +static struct auxiliary_device *npcm_clock_adev_alloc(struct npcm_rc_dat=
-a *rst_data, char *clk_name)
-> +{
-> +	struct npcm_clock_adev *rdev;
-> +	struct auxiliary_device *adev;
-> +	int ret;
-> +
-> +	rdev =3D kzalloc(sizeof(*rdev), GFP_KERNEL);
-> +	if (!rdev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	rdev->base =3D rst_data->base;
-> +
-> +	adev =3D &rdev->adev;
-> +	adev->name =3D clk_name;
-> +	adev->dev.parent =3D rst_data->dev;
-> +	adev->dev.release =3D npcm_clock_adev_release;
-> +	adev->id =3D 555u;
-> +
-> +	ret =3D auxiliary_device_init(adev);
-> +	if (ret) {
-> +		kfree(rdev);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	return adev;
-> +}
-> +
-> +static int npcm8xx_clock_controller_register(struct npcm_rc_data *rst_da=
-ta, char *clk_name)
-> +{
-> +	struct auxiliary_device *adev;
-> +	int ret;
-> +
-> +	adev =3D npcm_clock_adev_alloc(rst_data, clk_name);
-> +	if (IS_ERR(adev))
-> +		return PTR_ERR(adev);
-> +
-> +	ret =3D auxiliary_device_add(adev);
-> +	if (ret) {
-> +		auxiliary_device_uninit(adev);
-> +		return ret;
-> +	}
-> +
-> +	return devm_add_action_or_reset(rst_data->dev, npcm_clock_unregister_ad=
-ev, adev);
-> +}
-> +
->  static int npcm_rc_probe(struct platform_device *pdev)
->  {
->  	struct npcm_rc_data *rc;
-> @@ -392,6 +458,7 @@ static int npcm_rc_probe(struct platform_device *pdev=
-)
->  	rc->rcdev.of_node =3D pdev->dev.of_node;
->  	rc->rcdev.of_reset_n_cells =3D 2;
->  	rc->rcdev.of_xlate =3D npcm_reset_xlate;
-> +	rc->dev =3D &pdev->dev;
-> =20
->  	ret =3D devm_reset_controller_register(&pdev->dev, &rc->rcdev);
->  	if (ret) {
-> @@ -413,7 +480,12 @@ static int npcm_rc_probe(struct platform_device *pde=
-v)
->  		}
->  	}
-> =20
-> -	return ret;
-> +	switch (rc->info->bmc_id) {
-> +	case BMC_NPCM8XX:
+This set of patches based on ADI fork of Linux Kerenl that support family of ADSP-SC5xx
+SoC's and used by customers for some time . Patch series contains minimal set
+of changes to add ADSP-SC598 support to upstream kernel. This series include
+UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on EV-SC598-SOM
+board into serial shell and able to reset the board. Current SOM board
+requires I2C expander to enable UART output.
 
-Here ret is ignored, which may be the return value from
-register_restart_handler() above.
+UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
+ADSP-SC5xx related bug fixes and improvments.
 
-> +		return npcm8xx_clock_controller_register(rc, "clk-npcm8xx");
-> +	default:
-> +		return ret;
-> +	}
->  }
-> =20
->  static struct platform_driver npcm_rc_driver =3D {
-> diff --git a/include/soc/nuvoton/clock-npcm8xx.h b/include/soc/nuvoton/cl=
-ock-npcm8xx.h
-> new file mode 100755
-> index 000000000000..139130e98c51
-> --- /dev/null
-> +++ b/include/soc/nuvoton/clock-npcm8xx.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __SOC_NPCM8XX_CLOCK_H
-> +#define __SOC_NPCM8XX_CLOCK_H
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/container_of.h>
-> +
-> +struct npcm_clock_adev {
-> +	void __iomem *base;
-> +	struct auxiliary_device adev;
-> +};
-> +
-> +#define to_npcm_clock_adev(_adev) \
-> +	container_of((_adev), struct npcm_clock_adev, adev)
+Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
+---
+Arturs Artamonovs (21):
+      arm64: Add ADI ADSP-SC598 SoC
+      reset: Add driver for ADI ADSP-SC5xx reset controller
+      dt-bindigs: arm64: adi,sc598 bindings
+      dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC bindings
+      clock:Add driver for ADI ADSP-SC5xx PLL
+      include: dt-binding: clock: add adi clock header file
+      clock: Add driver for ADI ADSP-SC5xx clock
+      dt-bindings: clock: adi,sc5xx-clocks: add bindings
+      gpio: add driver for ADI ADSP-SC5xx platform
+      dt-bindings: gpio: adi,adsp-port-gpio: add bindings
+      irqchip: Add irqchip for ADI ADSP-SC5xx platform
+      dt-bindings: irqchip: adi,adsp-pint: add binding
+      pinctrl: Add drivers for ADI ADSP-SC5xx platform
+      dt-bindings: pinctrl: adi,adsp-pinctrl: add bindings
+      i2c: Add driver for ADI ADSP-SC5xx platforms
+      dt-bindings: i2c: add i2c/twi driver documentation
+      serial: adi,uart: Add driver for ADI ADSP-SC5xx
+      dt-bindings: serial: adi,uart4: add adi,uart4 driver documentation
+      arm64: dts: adi: sc598: add device tree
+      arm64: defconfig: sc598 add minimal changes
+      MAINTAINERS: add adi sc5xx maintainers
 
-Could you make this an inline function instead?
+ .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  |   24 +
+ .../bindings/clock/adi,sc5xx-clocks.yaml           |   65 ++
+ .../bindings/gpio/adi,adsp-port-gpio.yaml          |   69 ++
+ Documentation/devicetree/bindings/i2c/adi,twi.yaml |   71 ++
+ .../interrupt-controller/adi,adsp-pint.yaml        |   51 +
+ .../bindings/pinctrl/adi,adsp-pinctrl.yaml         |   83 ++
+ .../devicetree/bindings/serial/adi,uart.yaml       |   85 ++
+ .../bindings/soc/adi/adi,reset-controller.yaml     |   38 +
+ MAINTAINERS                                        |   22 +
+ arch/arm64/Kconfig.platforms                       |   13 +
+ arch/arm64/boot/dts/Makefile                       |    1 +
+ arch/arm64/boot/dts/adi/Makefile                   |    2 +
+ arch/arm64/boot/dts/adi/sc598-som-ezkit.dts        |   14 +
+ arch/arm64/boot/dts/adi/sc598-som.dtsi             |   58 ++
+ arch/arm64/boot/dts/adi/sc59x-64.dtsi              |  367 +++++++
+ arch/arm64/configs/defconfig                       |    6 +
+ drivers/clk/Kconfig                                |    9 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/adi/Makefile                           |    4 +
+ drivers/clk/adi/clk-adi-pll.c                      |  151 +++
+ drivers/clk/adi/clk-adi-sc598.c                    |  329 ++++++
+ drivers/clk/adi/clk.h                              |   99 ++
+ drivers/gpio/Kconfig                               |    8 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-adi-adsp-port.c                  |  145 +++
+ drivers/i2c/busses/Kconfig                         |   17 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-adi-twi.c                   |  940 ++++++++++++++++++
+ drivers/irqchip/Kconfig                            |    9 +
+ drivers/irqchip/Makefile                           |    2 +
+ drivers/irqchip/irq-adi-adsp.c                     |  310 ++++++
+ drivers/pinctrl/Kconfig                            |   12 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/pinctrl-adsp.c                     |  919 +++++++++++++++++
+ drivers/reset/Makefile                             |    1 +
+ drivers/soc/Makefile                               |    1 +
+ drivers/soc/adi/Makefile                           |    5 +
+ drivers/soc/adi/system.c                           |  257 +++++
+ drivers/tty/serial/Kconfig                         |   19 +-
+ drivers/tty/serial/Makefile                        |    1 +
+ drivers/tty/serial/adi_uart.c                      | 1045 ++++++++++++++++++++
+ include/dt-bindings/clock/adi-sc5xx-clock.h        |   93 ++
+ include/dt-bindings/pinctrl/adi-adsp.h             |   19 +
+ include/linux/soc/adi/adsp-gpio-port.h             |   85 ++
+ include/linux/soc/adi/cpu.h                        |  107 ++
+ include/linux/soc/adi/rcu.h                        |   55 ++
+ include/linux/soc/adi/sc59x.h                      |  147 +++
+ include/linux/soc/adi/system_config.h              |   65 ++
+ include/uapi/linux/serial_core.h                   |    3 +
+ 49 files changed, 5829 insertions(+), 1 deletion(-)
+---
+base-commit: da3ea35007d0af457a0afc87e84fddaebc4e0b63
+change-id: 20240909-test-8ec5f76fe6d2
 
-With those two issues addressed,
+Best regards,
+-- 
+Arturs Artamonovs <arturs.artamonovs@analog.com>
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-regards
-Philipp
 
