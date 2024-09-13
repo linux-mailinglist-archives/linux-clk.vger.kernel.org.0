@@ -1,100 +1,135 @@
-Return-Path: <linux-clk+bounces-12027-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12032-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5297797869A
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 19:23:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7DC897881E
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 20:47:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9132F1C20905
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 17:23:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 595FFB212ED
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 18:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185C68172A;
-	Fri, 13 Sep 2024 17:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3A3139566;
+	Fri, 13 Sep 2024 18:47:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m75UqRQW"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BOBGXJJt"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A8C80BEC;
-	Fri, 13 Sep 2024 17:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D20983CD6;
+	Fri, 13 Sep 2024 18:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726248208; cv=none; b=iN8QlpjB+t5rWtkqol/v+gJ0w4VDmSLpOixXUjyjlJz+9DyrbwDTvVSrsQgH3kW2K9L6IIpOF65deGhEScuhS9wQ/1GotIVdsquZuVRys28FijUB1RcZnUxW3IANL7T5bROulyOkih3jW4FYvqtgGRDmdrBaCuHDDkwhzZ7YkoY=
+	t=1726253251; cv=none; b=Y6vwrGkFrxi6/9J++X391ZS0dDrdjp+6mUdj6d8h8gvD3LpodXFKgOl8GOx74GLAV8Yivh3f8xjYg4+cbKytCWHBcEecL9UfYVGhO/HXDNoyIFtuQT4ZJ4Doj/KctHTjihd2dF5htdhiTDL2yTc+t/I/iZiiQ/Qe0mJEqLAvzzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726248208; c=relaxed/simple;
-	bh=fuW1xLrho8ZyDrDvp5KKZrf25rnUr95/sDyzrJYGWrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FVXhg/umsH4XX/b87qHwrR3U5sre92tKoSMOyEVAb1QydF3Llnv4RFQeCEj74yrr1rvrpyL9NL138Q+iCyjpz+exRE0ydCZNnF8GTQzO9SrCWER7qMkXsu05MLkmNwAwG2Wb1e5YDQwMJgNnbmBVVQ31wcHEOiWwkg7jGvoaJgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m75UqRQW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1B5C4CEC0;
-	Fri, 13 Sep 2024 17:23:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726248207;
-	bh=fuW1xLrho8ZyDrDvp5KKZrf25rnUr95/sDyzrJYGWrU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m75UqRQWWxQp01qjARhuOIj1koH4iP0Z/IzXhjrfwrdVTmM7CT0ME4vGilO1Pk9s/
-	 l7wq7xQnweGsXOIUNv8beN6zhA5shqaBX8YOpa3Kcwsi7KgLxRZIOBqodDugM1D/sk
-	 VhmrsY86lrWyOOqKUg9pM9kRVx4zMHGP6eryiHfQazuud15bQMJ1a4n0sXXn307sia
-	 onR5LtCFt1XiPTtFyYwWJrCyXEt9Y5V9qsbseC+2qCTtg/ThpPioUyVGjaBw1Bmoi5
-	 TRrweKQW8xVX9MN5+vU1TMDbwQ3zU1FoFy4Veflw9w+WLB1GY6QIxhF0WG4VJGKSqi
-	 nihueE8U/RYbw==
-Date: Fri, 13 Sep 2024 18:23:22 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jan Dakinevich <jan.dakinevich@salutedevices.com>
-Cc: Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH v4 3/5] dt-bindings: clock: axg-audio: document A1
- SoC audio clock controller driver
-Message-ID: <20240913-drainpipe-retrial-0167665f605f@spud>
-References: <20240913121152.817575-1-jan.dakinevich@salutedevices.com>
- <20240913121152.817575-4-jan.dakinevich@salutedevices.com>
+	s=arc-20240116; t=1726253251; c=relaxed/simple;
+	bh=jvKTyXUXSeaOuAM6Yckn9QohtrKa/1nx14lGNJN/9Ps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HCyAp/UAsc3HGgLkDfH7WQBYzG9nao617Fkm2cHava8ac9v8eTXuRsfRnIUgQf0Qx1ITi64knOTcKAHKp+JwZbSFTIhKmyxr+1cDjZ894Lglk4X/kIcpFBPkrH9y/N9+xwodQQRR+LEnXKTZfYe0M0QFvk20UUv3jQiA0qKd9/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BOBGXJJt; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1726253242;
+	bh=jvKTyXUXSeaOuAM6Yckn9QohtrKa/1nx14lGNJN/9Ps=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BOBGXJJt2Az41sRT3JLfenCMdYI23odSFRt1CGHfE+VDlQxWnmX9o7xf82imS2tfy
+	 rrob0NEPdNKnPHP4MOecuD7TC/k8iDaxHRgH8RRGtvmH8CcwvLxDh5v1hAa4sC5oD5
+	 yjfUO1ySOFXv+DswyWXWM178Qz0I/BEp9EsLxMF5jMcJvJ4HRvObIuU5BIoMISkib8
+	 xUjb+sNbBRHGxX8J5wpkq67da4J3iD0P0Tu/PDR0SRM/PAbfq2dNsGY7IphkQOEu6P
+	 6VIdnKrfzyY+uoe4dV7dD0Ty2OBq86ko32dJVqeuMrApmbzt0jYer8WJl5f8SeNZ8R
+	 ALpVUub95xzaA==
+Received: from jupiter.universe (dyndsl-091-248-214-164.ewe-ip-backbone.de [91.248.214.164])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2A85D17E360F;
+	Fri, 13 Sep 2024 20:47:22 +0200 (CEST)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id DA04C4800EA; Fri, 13 Sep 2024 20:47:21 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-clk@vger.kernel.org
+Cc: Elaine Zhang <zhangqing@rock-chips.com>,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	huangtao@rock-chips.com,
+	andy.yan@rock-chips.com,
+	Michal Tomek <mtdev79b@gmail.com>,
+	Ilya K <me@0upti.me>,
+	Chad LeClair <leclair@gmail.com>,
+	devicetree@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v10 0/5] rockchip: clk: add GATE_LINK support
+Date: Fri, 13 Sep 2024 20:45:40 +0200
+Message-ID: <20240913184720.57381-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="jIzR0wEIk82J930S"
-Content-Disposition: inline
-In-Reply-To: <20240913121152.817575-4-jan.dakinevich@salutedevices.com>
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
---jIzR0wEIk82J930S
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This implements proper GATE_LINK support following the suggestion from Stephen
+Boyd to use clk PM operations by creating MFD dynamically. This required some
+restructuring, since CLK_OF_DECLARE() is called before devices are available.
 
-On Fri, Sep 13, 2024 at 03:11:50PM +0300, Jan Dakinevich wrote:
-> Add device tree bindings for A1 SoC audio clock and reset controllers.
->=20
-> Signed-off-by: Jan Dakinevich <jan.dakinevich@salutedevices.com>
+Apart from improved power consumption, this fixes the runtime errors from the
+pmdomain driver (failed to set idle on domain '%s').
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Changes since PATCHv9:
+ * https://lore.kernel.org/linux-rockchip/20240325193609.237182-1-sebastian.reichel@collabora.com/
+ * drop patches 1 & 5 (merged)
+ * keep reporting ENOENT for missing clocks after CRU has been fully initialized
+ * drop module remove support for the linked gate clock driver
 
---jIzR0wEIk82J930S
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes since PATCHv8:
+ * https://lore.kernel.org/linux-rockchip/20240126182919.48402-1-sebastian.reichel@collabora.com/
+ * rebased to v6.9-rc1
+ * dropped all merged patches (i.e. all but the last one)
+ * rewrote and split the final patch
+   - should be easier to review
+   - properly calls pm_clk_suspend/pm_clk_resume
+   - now works on Orange Pi
 
------BEGIN PGP SIGNATURE-----
+Changes since PATCHv7:
+ * https://lore.kernel.org/all/20231213185114.47565-1-sebastian.reichel@collabora.com/
+ * rebased to v6.8-rc1
+ * Collected Reviewed-by/Acked-by from Krzysztof Kozlowski for DT binding patches
+ * support nr_clk=0 in rockchip_clk_find_max_clk_id() for smatch
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZuR1CgAKCRB4tDGHoIJi
-0pvFAP9kr7mdO9xRNEDwdDAwPHjyoLrlCTzOaiy+CSVAUFoI3QEAvZcerXPm4xol
-wOmsRIFe78YlrZGiXEc6w5Rk4pTHPgE=
-=Vt66
------END PGP SIGNATURE-----
+Greetings,
 
---jIzR0wEIk82J930S--
+-- Sebstian
+
+Sebastian Reichel (5):
+  clk: rockchip: support clocks registered late
+  clk: rockchip: rk3588: register GATE_LINK later
+  clk: rockchip: expose rockchip_clk_set_lookup
+  clk: rockchip: implement linked gate clock support
+  clk: rockchip: rk3588: drop RK3588_LINKED_CLK
+
+ drivers/clk/rockchip/Makefile     |   1 +
+ drivers/clk/rockchip/clk-rk3588.c | 116 ++++++++++++++++++------------
+ drivers/clk/rockchip/clk.c        | 101 ++++++++++++++++++++++----
+ drivers/clk/rockchip/clk.h        |  40 +++++++++++
+ drivers/clk/rockchip/gate-link.c  |  85 ++++++++++++++++++++++
+ 5 files changed, 285 insertions(+), 58 deletions(-)
+ create mode 100644 drivers/clk/rockchip/gate-link.c
+
+-- 
+2.45.2
+
 
