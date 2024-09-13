@@ -1,162 +1,146 @@
-Return-Path: <linux-clk+bounces-11957-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-11960-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB4F5977ADA
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 10:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 89F50977B3D
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 10:38:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5DD51C24516
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 08:21:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3C4B1C215DC
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2024 08:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C171D6C47;
-	Fri, 13 Sep 2024 08:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71ED1D6DB9;
+	Fri, 13 Sep 2024 08:37:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kbGjOGVL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UJw/Imul"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Lld+Rusj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2389B187334;
-	Fri, 13 Sep 2024 08:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A3E1D6C4C;
+	Fri, 13 Sep 2024 08:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726215674; cv=none; b=SYlC5JNAtHvWrSUA9i0Iin1c3A34bbBtU3m94vmc/ARR083PchOc8HfU9lNlFkzw/nkbbTJxXOoblbRUeZfVMWeYZoUv5RL0Rnal0vM/adkY+HaJYEukNSHqkXcPfSBtpuEIWn/Pcwk97v69VrDDD0S2X0VUdzJ1xmEUGxWndQw=
+	t=1726216674; cv=none; b=qkSh48X/k255PNIAhSso8/VsheCpj8ZzK/hYFDBdJmCTJtuqb2vqTpWYNP+Hu1KA51AKZJWDbz23QdP8D/TBtKuZmC8FqkPryADQENAinz8BSVcK06a5JKxpceFeTF5HEEDiuswlh7k7BALj9bMLZiC1Kc8aL33Ltdm5s5+QGfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726215674; c=relaxed/simple;
-	bh=L6SHO/ASOpunCv90PNvWAR9ZJ3Yg7qSgEQqod3nc69o=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=kZR+WmhbzysGxOR5C+DnanjrzzpimxJZ9Gi95oMol/fjtrAV7OTgOtzymW/ZKFkFZucGI7rvceK1av9VoWfu/XL0+qNV2x15fbVeg50W+HyXZ0U1MagRaPlqqo1OEE1SNRXSjpko1i1fwczl3YeekpXOy7+qon/DcWU/OnKQkJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kbGjOGVL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UJw/Imul; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 3BEE11380105;
-	Fri, 13 Sep 2024 04:21:12 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 13 Sep 2024 04:21:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1726215672;
-	 x=1726302072; bh=/y3Vva3fvwuIn0WsxTO61vMjrXBBZReSc8alqn8Lbu0=; b=
-	kbGjOGVLyhT5AcUPXyJX/gVgfzeBdBZ2k6n4152IS8zOQWEG8okL0/yZvqNsD7IH
-	KeEdZQsdgQvMFXh8G5fPdXJVjYYpt/r9ZDRYic+Uctjb/U0k732HbRI7X8yvPLI+
-	KA0QTRD3W+eLOGOjrHWXDKrp2SnbGrZ8yN1tWRSwhMm3sRG5ZS5/TuR1RvNXddjr
-	6JF8Ygk9qzotzdtnhTSo9RfcrDqv/kr0Iw/yMnpPKg6qruwwTWDSoOMyhR6WRnEI
-	kyK/JbR+DQseHUzuvppS7WMQWEZmE0yzjY9iNJG2Ff1RWEjsAdauGsVSWeIeu6uP
-	0gSzrn0meL79F4MxiO7v3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726215672; x=
-	1726302072; bh=/y3Vva3fvwuIn0WsxTO61vMjrXBBZReSc8alqn8Lbu0=; b=U
-	Jw/ImulLkS2wu4z1qp6wWly45JBZEkJuLLDmbKcDG0nWZGIlUAgwrGJYiLe8Z60C
-	3VtBC1QbG4ZeF55S0fhcihHjbOfCEpnwMQFYrHhST1V0CtvV9Bv08QZAB+Rkfyr3
-	yPK7Klm8vuhWzr3A/8mI39horA5ad1kFHt8EuT6VbkdPDRvNLyFs7tE/XiQQSt1p
-	8WpEQsWU3k8QqVwgi0o9FtdH4NhaM5spI8YSTjdi4xF4if8PouuYUDlkThAtt9zm
-	JTgBI6YPGoQrUsV4CFopPzrP+AAF2x+Pt/ez6rA1g3P3kfuVoydiE49DmvDATo//
-	k7fhco4CuXNTMGGy8zRdA==
-X-ME-Sender: <xms:9_XjZkCgRF1iZ3oAoW_L2qCOTEgHS1CA0drG3I40ibgQypxTDxmL7g>
-    <xme:9_XjZmjXJ-GnfS05ap6o1adziZXxATnbClI1jk6qFcD-M-RvsLSW5juxF5iIqoNba
-    1CeXwr8KCium99e9vA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejjedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdek
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehuthhsrghvrdgrghgrrhifrghlse
-    grnhgrlhhoghdrtghomhdprhgtphhtthhopegrughsphdqlhhinhhugiesrghnrghlohhg
-    rdgtohhmpdhrtghpthhtoheprghrthhurhhsrdgrrhhtrghmohhnohhvshesrghnrghloh
-    hgrdgtohhmpdhrtghpthhtoheptggrthgrlhhinhdrmhgrrhhinhgrshesrghrmhdrtgho
-    mhdprhgtphhtthhopehmthhurhhquhgvthhtvgessggrhihlihgsrhgvrdgtohhmpdhrtg
-    hpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrnhguihdrshhhhiht
-    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehjihhrihhslhgrsgihsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:9_XjZnl_vmTywlXfkHR0twrf-enV-y09jiqCQeMwODnswumrK-6X3A>
-    <xmx:9_XjZqxoEsIEsVLIsYlhqQ-mt8H6rV36MJQcBo1C4ZM9e6QCI1rl1g>
-    <xmx:9_XjZpTdtA4MGmDRMOmLLr4rmkQm_CSyR4BvlBkPZKavzFpOOgHeqQ>
-    <xmx:9_XjZlbsa9-hb7lXV4CQ-NFPblDP5Kdg1qdOJl13hfzfuBdnoffAVw>
-    <xmx:-PXjZhz8OH7XK6wXp5Q8Bo4xNSvBSow_1uq2TlBonecaO179HGuFosWU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 885EE222006F; Fri, 13 Sep 2024 04:21:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1726216674; c=relaxed/simple;
+	bh=LhqzbbeJPDFDX1us0PqKZch9ACqhnfXgoQdeEpyIkeE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A3ViWobc/W2v0dkeCY9ek9wlCCTUFVi1Lh+kSsy0IODO5eXz1ULc+UIHMlkshHzvvgmJ/78JcCRpDBWDhfdLVuudmfklcKK0zcJYvdF2jCw3fhp5qei9v7UHTif70kfrxpWk9MI5r5AG0OKlyRbhgf3gcbPkFdBuVSR5Db+pHgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Lld+Rusj; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48CMBb7v018913;
+	Fri, 13 Sep 2024 08:37:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Pds7CggsUh1Rn6FKGi339ydI1uZXqwenFix
+	dciKo4T4=; b=Lld+RusjUiG9krtmKEH5WPHJkLGULVSh59rk3FmZ+Q3a1PX0b7s
+	7a7hZPRgLu4zGwtuSloUVMkCcpVJGA2VQ0g/n/x2xciHG5RbOjVfb1UaWlhFcyxC
+	56oNfZNefSpzxs8DsftteHCbBzm2KVS/PeHbwAdbsiaDsN/a86PAfbT2YBECCsUH
+	7G4CpLr4PjeN/rW2BuJyTCFq2r6bTvMUak3FKXo4RWAvshUj2foB5/1K+xI9SRqW
+	tCkutiI9ZYTHPaablSDzoBXYPOtWYteQRuhcjCbCbvPDHEjwTQsqeaOTpYCOyewm
+	Wjxd3WMpUfYGNJUKLbXDTZ21gPNOopVFWzQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41j6gn4b9k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 08:37:27 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 48D7n725006336;
+	Fri, 13 Sep 2024 08:37:26 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 41kwufrfe7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 08:37:26 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48D8Y5eu005428;
+	Fri, 13 Sep 2024 08:37:26 GMT
+Received: from hu-devc-lv-u22-c.qualcomm.com (hu-qianyu-lv.qualcomm.com [10.81.25.114])
+	by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 48D8bPng010338
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 08:37:26 +0000
+Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 4098150)
+	id 9FB6954F; Fri, 13 Sep 2024 01:37:25 -0700 (PDT)
+From: Qiang Yu <quic_qianyu@quicinc.com>
+To: manivannan.sadhasivam@linaro.org, vkoul@kernel.org, kishon@kernel.org,
+        robh@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, abel.vesa@linaro.org, quic_msarkar@quicinc.com,
+        quic_devipriy@quicinc.com
+Cc: dmitry.baryshkov@linaro.org, kw@linux.com, lpieralisi@kernel.org,
+        neil.armstrong@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Qiang Yu <quic_qianyu@quicinc.com>
+Subject: [PATCH v2 0/5] Add support for PCIe3 on x1e80100
+Date: Fri, 13 Sep 2024 01:37:19 -0700
+Message-Id: <20240913083724.1217691-1-quic_qianyu@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 13 Sep 2024 08:20:41 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: arturs.artamonovs@analog.com, "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Greg Malysa" <greg.malysa@timesys.com>,
- "Philipp Zabel" <p.zabel@pengutronix.de>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Utsav Agarwal" <Utsav.Agarwal@analog.com>,
- "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Andi Shyti" <andi.shyti@kernel.org>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jiri Slaby" <jirislaby@kernel.org>, "Olof Johansson" <olof@lixom.net>,
- soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
- adsp-linux@analog.com,
- "Nathan Barrett-Morrison" <nathan.morrison@timesys.com>
-Message-Id: <2ad02a70-8926-45db-8ab5-503ec1e65552@app.fastmail.com>
-In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
-References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
-Subject: Re: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: btvZkKFNgB4xeuw285RWP8WZ9UwYZqrk
+X-Proofpoint-GUID: btvZkKFNgB4xeuw285RWP8WZ9UwYZqrk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ clxscore=1015 phishscore=0 mlxlogscore=932 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409130059
 
-On Thu, Sep 12, 2024, at 18:24, Arturs Artamonovs via B4 Relay wrote:
-> This set of patches based on ADI fork of Linux Kerenl that support 
-> family of ADSP-SC5xx
-> SoC's and used by customers for some time . Patch series contains 
-> minimal set
-> of changes to add ADSP-SC598 support to upstream kernel. This series 
-> include
-> UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on 
-> EV-SC598-SOM
-> board into serial shell and able to reset the board. Current SOM board
-> requires I2C expander to enable UART output.
->
-> UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
-> ADSP-SC5xx related bug fixes and improvments.
->
-> Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
+This series add support for PCIe3 on x1e80100.
 
-Hi Arturs,
+PCIe3 needs additional set of clocks, regulators and new set of PCIe QMP
+PHY configuration compare other PCIe instances on x1e80100. Hence add
+required resource configuration and usage for PCIe3.
 
-Thanks for your submission. I've done a first pass of a review
-now, but the drivers will all need a more detailed review from
-the subsystem maintainers as well.
+v2->v1:
+1. Squash [PATCH 1/8], [PATCH 2/8],[PATCH 3/8] into one patch and make the
+   indentation consistent.
+2. Put dts patch at the end of the patchset.
+3. Put dt-binding patch at the first of the patchset.
+4. Add a new patch where opp-table is added in dt-binding to avoid dtbs
+   checking error.
+5. Remove GCC_PCIE_3_AUX_CLK, RPMH_CXO_CLK, put in TCSR_PCIE_8L_CLKREF_EN
+   as ref.
+6. Remove lane_broadcasting.
+7. Add 64 bit bar, Remove GCC_PCIE_3_PIPE_CLK_SRC, 
+   GCC_CFG_NOC_PCIE_ANOC_SOUTH_AHB_CLK is changed to
+   GCC_CFG_NOC_PCIE_ANOC_NORTH_AHB_CLK.
+8. Add Reviewed-by tag.
+9. Remove [PATCH 7/8], [PATCH 8/8].
 
-For the drivers/soc and include/linux/soc portions, I need
-to do second review round when you have added a description
-about what these are used for, ideally I would hope that most
-of those can disappear from the final series when the required
-bits are moved into other drivers.
+Qiang Yu (5):
+  dt-bindings: phy: qcom,sc8280xp-qmp-pcie-phy: Document the X1E80100
+    QMP PCIe PHY Gen4 x8
+  dt-bindings: PCI: qcom: Add OPP table for X1E80100
+  phy: qcom: qmp: Add phy register and clk setting for x1e80100 PCIe3
+  clk: qcom: gcc-x1e80100: Fix halt_check for pipediv2 clocks
+  arm64: dts: qcom: x1e80100: Add support for PCIe3 on x1e80100
 
-I commented on one of the bindings about the compatible
-string, but later saw that the same issue is present in all
-of the bindings, which each need a more specific identifier
-for a particular piece of hardware they are compatible with.
+ .../bindings/pci/qcom,pcie-x1e80100.yaml      |   4 +
+ .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       |   3 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi        | 202 ++++++++++++++++-
+ drivers/clk/qcom/gcc-x1e80100.c               |  10 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 211 ++++++++++++++++++
+ .../qualcomm/phy-qcom-qmp-pcs-pcie-v6_30.h    |  25 +++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6_30.h |  19 ++
+ 7 files changed, 468 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_30.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6_30.h
 
-        Arnd
+-- 
+2.34.1
+
 
