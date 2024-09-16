@@ -1,153 +1,138 @@
-Return-Path: <linux-clk+bounces-12114-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12117-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB663979EB9
-	for <lists+linux-clk@lfdr.de>; Mon, 16 Sep 2024 11:50:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADE3A979EEA
+	for <lists+linux-clk@lfdr.de>; Mon, 16 Sep 2024 12:07:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFF381C22E69
-	for <lists+linux-clk@lfdr.de>; Mon, 16 Sep 2024 09:50:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DF75281C2F
+	for <lists+linux-clk@lfdr.de>; Mon, 16 Sep 2024 10:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8588414E2C2;
-	Mon, 16 Sep 2024 09:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A1614B087;
+	Mon, 16 Sep 2024 10:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="piRD7OgD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PEce7qQz"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEECC14B967;
-	Mon, 16 Sep 2024 09:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F934965B;
+	Mon, 16 Sep 2024 10:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726480233; cv=none; b=tXa6ofZF8eYhAOYvkvq0TRDl8kTtTdo5GL2emsTUlnSeygowRUHtNvCXV+grVVSC5ShEuZCXQuqOo5k7EQH4owly14PkefWzxmNxu45cFpLUo+B5uP0wvLm689lnVTa0EFbz1beuPYW1wH+eRtRhwByk56w4hxmmLW7sAqaf2uM=
+	t=1726481220; cv=none; b=QqMsjMro88XMwuz6GfFD40i2d1ETMU09s0I74t/uE1aWijWcElpnPbkEgGg06w2mkxNuaB7Cnj2u+Fi76D0thcXx55/RGIY4eYRiVNIU4VwCXpGrHNLy5muLX1onmMrKioSP8CF++1Y5vdayqIoMn2G/L+YvfE+Ftyj6bi+Rbd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726480233; c=relaxed/simple;
-	bh=H6Nu1y3r53qFCPxeekFdxSYffwC7CBXCt9G5Ob+GsR0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=jGiIhSAmQFxy4SyCZ3xqPxoHFLGoyYfjedV480gGy3pxR8K0lRQZ5Wd6zJZKV9vhqZ8qYlKxz9X4/ubqZ5nL5RduoJel5EyH7LvfDYM9YRnue9qR317SFt35VFb9Mh0TDG9bnC6jfEiLanWICTMhM8Ij4w1ctPOKrWOoCsc/okI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=piRD7OgD; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1726480233; x=1758016233;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=H6Nu1y3r53qFCPxeekFdxSYffwC7CBXCt9G5Ob+GsR0=;
-  b=piRD7OgD2eHxSDDdPXgV3tXO9haKac/LksPjHTPgEkuofH1kOJajOZfy
-   SYONLQdOz4KpILVhRInfkxfVsrEMQftHB2ftyhg9ZhsvA1W8CSHtbRAG/
-   kBzeoZBQlJCk4q0h/7Qdhi/DMXV9e2Y/Bh/k51X7DxNoUmL94knT20txh
-   YZD2d8UI9r80Evg3c0MAHKu3js7L05FWq/ZVAMNw/dLtBQDjhHRxbbFI8
-   g8SfeUsLe56CMHksRbcTyHbFP2rSvwTn1e1EmKGqQjUNmgFyzrngB/n4b
-   r4eqT5NJhhNJV/KX4o31h7+RzyQhYg/2SLQuKSzxweTfI/cfw8nWKv7yw
-   Q==;
-X-CSE-ConnectionGUID: As66prBtTYKW6R/VrMccAw==
-X-CSE-MsgGUID: J4pw1vvcTTqwz1VwMuEp6Q==
-X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="262821349"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Sep 2024 02:50:29 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 16 Sep 2024 02:50:23 -0700
-Received: from DEN-DL-M70577.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Mon, 16 Sep 2024 02:50:21 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Mon, 16 Sep 2024 11:49:22 +0200
-Subject: [PATCH 4/4] clk: lan966x: add support for lan969x SoC clock driver
+	s=arc-20240116; t=1726481220; c=relaxed/simple;
+	bh=WKkLu9wfALhg/L0cGpegTCJTJzWhfFCyZsiBVX4rlmo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=pONLKl/M9C85ygCOjJNuYg55HPANUogZfmqPk8JDuk23nLk28ID1i8EqvfEm4oWDbeh/fD6hYpOTvcY93wK8ZCWLnCaJ8mpQWFIbr8752Z2ptUIF0a7+m5OjGzKxExSAkpD1BOBUkFTHxI9xanF2uuQKIIxUD60dtYp05sCUf+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PEce7qQz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BCECC4CEC4;
+	Mon, 16 Sep 2024 10:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726481220;
+	bh=WKkLu9wfALhg/L0cGpegTCJTJzWhfFCyZsiBVX4rlmo=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=PEce7qQzDsH5xl2TAhS/mYdVc8rQwjANOC88fG9MYQxhNPOY2F2gSE8KMUflwzbjc
+	 nv3y9s7U+M/QI3DH0yUvWe++jqFgPd1jlGazXzhFOu+aGu9eco/oAzry2l2etA5F9t
+	 mTDr27MD8JpCRcx7HSvlffoCF+q+zFtGWsGB/sCZU3J0Fx2ngdXhg/QYqMwSANpH8c
+	 xz9UiLHwnJReI2hTRxi1QLQPJSq+7WcFR8p6iPGYk1wGQp0dCqxv0IQ6VRkFcgf/BI
+	 GUcgNjrwjn+kxGnqnotEbMdWOY0uG84KIdpcJlJQO5Y+bSXMXQ+sipIuPb+qM4NERx
+	 +HzQIiPu9xO0g==
+Message-ID: <b9bf19af-0c3c-4622-9124-a66d9df649b2@kernel.org>
+Date: Mon, 16 Sep 2024 12:06:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/4] dt-bindings: Add AST2700 bindings
+To: Ryan Chen <ryan_chen@aspeedtech.com>, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ joel@jms.id.au, andrew@codeconstruct.com.au, p.zabel@pengutronix.de,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org
+References: <20240916091039.3584505-1-ryan_chen@aspeedtech.com>
+ <20240916091039.3584505-3-ryan_chen@aspeedtech.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240916091039.3584505-3-ryan_chen@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240916-lan969x-clock-v1-4-0e150336074d@microchip.com>
-References: <20240916-lan969x-clock-v1-0-0e150336074d@microchip.com>
-In-Reply-To: <20240916-lan969x-clock-v1-0-0e150336074d@microchip.com>
-To: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
-	<sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Kavyasree Kotagiri
-	<kavyasree.kotagiri@microchip.com>, Steen Hegelund
-	<Steen.Hegelund@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>
-CC: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-X-Mailer: b4 0.14-dev
 
-Add support for the lan969x SoC clock driver in the existing lan966x
-driver. The lan969x clock controller contains 3 PLLs - cpu_clk, ddr_clk
-and sys_clk (same as lan966x) which generates and supplies the clock to
-various peripherals within the SoC.
+On 16/09/2024 11:10, Ryan Chen wrote:
+> Add reset, clock dt bindings for AST2700.
+> 
+> Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> ---
+>  .../dt-bindings/clock/aspeed,ast2700-clk.h    | 163 ++++++++++++++++++
+>  .../dt-bindings/reset/aspeed,ast2700-reset.h  | 124 +++++++++++++
+>  2 files changed, 287 insertions(+)
 
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- drivers/clk/clk-lan966x.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+This is supposed to be part of the commit adding these bindings. You got
+this comment already, didn't you?
 
-diff --git a/drivers/clk/clk-lan966x.c b/drivers/clk/clk-lan966x.c
-index b25330159446..9b928e4a1c62 100644
---- a/drivers/clk/clk-lan966x.c
-+++ b/drivers/clk/clk-lan966x.c
-@@ -31,6 +31,13 @@ static const char * const lan966x_clk_names[] = {
- 	"flexcom4", "timer1", "usb_refclk",
- };
- 
-+static const char * const lan969x_clk_names[] = {
-+	"qspi0", "qspi2", "sdmmc0", "sdmmc1",
-+	"mcan0", "mcan1", "flexcom0",
-+	"flexcom1", "flexcom2", "flexcom3",
-+	"timer1", "usb_refclk",
-+};
-+
- struct lan966x_gck {
- 	struct clk_hw hw;
- 	void __iomem *reg;
-@@ -61,6 +68,13 @@ static const struct clk_gate_soc_desc lan966x_clk_gate_desc[] = {
- 	{ }
- };
- 
-+static const struct clk_gate_soc_desc lan969x_clk_gate_desc[] = {
-+	{ "usb_drd", 10 },
-+	{ "mcramc", 9 },
-+	{ "hmatrix", 8 },
-+	{ }
-+};
-+
- struct lan966x_match_data {
- 	char *name;
- 	const char * const *clk_name;
-@@ -77,6 +91,14 @@ static struct lan966x_match_data lan966x_desc = {
- 	.num_generic_clks = 14,
- };
- 
-+static struct lan966x_match_data lan969x_desc = {
-+	.name = "lan969x",
-+	.clk_name = lan969x_clk_names,
-+	.clk_gate_desc = lan969x_clk_gate_desc,
-+	.num_total_clks = 15,
-+	.num_generic_clks = 12,
-+};
-+
- static DEFINE_SPINLOCK(clk_gate_lock);
- static void __iomem *base;
- 
-@@ -282,6 +304,7 @@ static int lan966x_clk_probe(struct platform_device *pdev)
- 
- static const struct of_device_id lan966x_clk_dt_ids[] = {
- 	{ .compatible = "microchip,lan966x-gck", .data = &lan966x_desc },
-+	{ .compatible = "microchip,lan9691-gck", .data = &lan969x_desc },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, lan966x_clk_dt_ids);
+>  create mode 100644 include/dt-bindings/clock/aspeed,ast2700-clk.h
+>  create mode 100644 include/dt-bindings/reset/aspeed,ast2700-reset.h
+> 
+> diff --git a/include/dt-bindings/clock/aspeed,ast2700-clk.h b/include/dt-bindings/clock/aspeed,ast2700-clk.h
+> new file mode 100644
+> index 000000000000..63021af3caf5
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/aspeed,ast2700-clk.h
 
--- 
-2.34.1
+Use compatible as filename.
+
+
+Best regards,
+Krzysztof
 
 
