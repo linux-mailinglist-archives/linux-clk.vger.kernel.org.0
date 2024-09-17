@@ -1,120 +1,143 @@
-Return-Path: <linux-clk+bounces-12144-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12148-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42B7897AC74
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Sep 2024 09:54:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A8797AED7
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Sep 2024 12:34:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 760C11C211D6
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Sep 2024 07:54:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4239D1F21EDB
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Sep 2024 10:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D7D14A4D6;
-	Tue, 17 Sep 2024 07:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B57C9172BCC;
+	Tue, 17 Sep 2024 10:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=t-argos.ru header.i=@t-argos.ru header.b="RfYUSAnf"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LAijLutj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx1.t-argos.ru (mx1.t-argos.ru [109.73.34.58])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE38F847B;
-	Tue, 17 Sep 2024 07:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.73.34.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9ED31714D8
+	for <linux-clk@vger.kernel.org>; Tue, 17 Sep 2024 10:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726559671; cv=none; b=sTKSddbCyrgOBjDpvzhtafI0ss5qCSqDVdMipD6QXUbDeLTzGZu97c+lj1YXkGzxWFhc17yM47TgIUPXkigKkzQyCJYleMEvEWtYjh3n2A1rMtvf2eCLQcpHCrGjlGugY/IolH/AL0Gw4d24omUWn3bopHH0qq0iAH7xfzMTkoc=
+	t=1726569219; cv=none; b=J4UEkqbjwghofHInXP2uCGWR6uO1py1Q8jIxmKguVQOf8KXzlCnX5WkFC6iuy4PzzxSq87y9O12l1es3jsvv4i3kM+fbGRjWWGpNGfQzjWOEmDAK+ZUqVEOZr42rwPLEojYbBD1OpXh3rnYr8KdbgiNDKmdMp+Ul7k9nS6paWdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726559671; c=relaxed/simple;
-	bh=RyH+uVE9CwEOnk1OEb9c/htXe6YY24cQGkNL/8j3HJg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fIAwZF1BuP4bSQZ0tlTkUdyATQ69Cq/0DRP1MwUZdOMmuQI29aGLPo33FNjG/czdsBSDFDSz1sAL9z9zUZ1Zvivd8qRtORDPJdJsYkydrK2oqSilxoLVD9wIo98qWmMHOIXbWlW47Dy9utzYlpSm0jJjy6rZyCDyXzxfLOs8r1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=t-argos.ru; spf=pass smtp.mailfrom=t-argos.ru; dkim=pass (2048-bit key) header.d=t-argos.ru header.i=@t-argos.ru header.b=RfYUSAnf; arc=none smtp.client-ip=109.73.34.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=t-argos.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=t-argos.ru
-Received: from mx1.t-argos.ru (localhost [127.0.0.1])
-	by mx1.t-argos.ru (Postfix) with ESMTP id 1862E100002;
-	Tue, 17 Sep 2024 10:54:09 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=t-argos.ru; s=mail;
-	t=1726559649; bh=gnnqirEGVQIaeAPSXoxwkTNiA3zJLHnpp4lImQKsAlI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	b=RfYUSAnfq/2jOhdAIGKG8Rl3PD2rqjkgFFjsePr2LC3F7tqfbqipyMSqH3gUz8rA4
-	 kky2ZdhSaqyEEzPX6M5Uv1xM5BgGtRVuWtTI1Wjj+6w0HvlrqLlghsD9Y5LgJDfkqp
-	 EsXnR2PtCJmHsnVc6yv0sfDz3LGbo/ewjEBsawgmwg3ZEI+mc56yb9Sv8UWZJLYnq5
-	 JQ6rr7KvmTuaoWz/Lb4DYZvndWpTKUThd+pxQUXME9M9rX7mV9VHyQH+pJAV94yFdR
-	 KUy105EP+K7v0g1HD1z3HwI8Tm6UChPo2J/0ozGPDWYSG3heoPH5Ouu5lG33yhgzdM
-	 SIaQj5ByHbxQQ==
-Received: from mx1.t-argos.ru.ru (mail.t-argos.ru [172.17.13.212])
-	by mx1.t-argos.ru (Postfix) with ESMTP;
-	Tue, 17 Sep 2024 10:53:26 +0300 (MSK)
-Received: from Comp.ta.t-argos.ru (172.17.44.124) by ta-mail-02
- (172.17.13.212) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 17 Sep
- 2024 10:53:06 +0300
-From: Aleksandr Mishin <amishin@t-argos.ru>
-To: Maxime Ripard <mripard@kernel.org>
-CC: Aleksandr Mishin <amishin@t-argos.ru>, Michael Turquette
-	<mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
-	<linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<lvc-project@linuxtesting.org>
-Subject: [PATCH] clk: si5341: Prevent division by zero in si5341_output_clk_determine_rate()
-Date: Tue, 17 Sep 2024 10:52:50 +0300
-Message-ID: <20240917075250.19333-1-amishin@t-argos.ru>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1726569219; c=relaxed/simple;
+	bh=wFmEbMkEzlPbuPfC3c+tamOfbSHUUHjpQhPX+5Sufk4=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=FM0zpCxVMYgagvgnCVM7+stBXsHRTAxNmiZ6fq9NZifj2RmxCuY+afK3Rhva8MJ8Yxe5FibSJjaQptz9lFLwSizqdq3daJadfM2CZ3Vr53RVFcdI2ZrUcxRVnHeVFLV626RtTOm/vCbg2uiPrk4cYJpW4lumoOJoBLygytn5n1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LAijLutj; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20240917103336epoutp0320ba96fd0974994bc30f8a6eaa90d3e3~2AY3vd_x42195521955epoutp03x
+	for <linux-clk@vger.kernel.org>; Tue, 17 Sep 2024 10:33:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20240917103336epoutp0320ba96fd0974994bc30f8a6eaa90d3e3~2AY3vd_x42195521955epoutp03x
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1726569216;
+	bh=Z8XYZZkTSZ22gWjKptOQjy8umR+ZxclxkelN6v3Qikw=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=LAijLutjLXKR8DViUUoLkZ9vv/wAv2GvnpFo9LSsC7yM/4D0xwYWtw5hE1PQR+o98
+	 P9DPovB8ruPzXzsof0LkJSWstKm6hNwyjHE1+6ZKOgeZIhedqaYA7KZAjp2dlKOjZy
+	 1tijW4qqp2Q0+dAIy5lr4GOVc3ZY2axxtf0j88So=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240917103335epcas5p2cf85f5a01fc6bf3f89680578a5eeb20e~2AY3NwuEy0999909999epcas5p2K;
+	Tue, 17 Sep 2024 10:33:35 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4X7J6648ggz4x9Q1; Tue, 17 Sep
+	2024 10:33:34 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	4A.62.09642.EFA59E66; Tue, 17 Sep 2024 19:33:34 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240917094449epcas5p37c2593fe8f181d6b19a9a1b290488186~1-uSGk5B40143801438epcas5p3f;
+	Tue, 17 Sep 2024 09:44:49 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240917094449epsmtrp1bb162bc53ff618ec8adf7de9ef6a63a5~1-uSFyhsc2430324303epsmtrp1C;
+	Tue, 17 Sep 2024 09:44:49 +0000 (GMT)
+X-AuditID: b6c32a4b-613ff700000025aa-8c-66e95afe8497
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	FD.DE.08456.19F49E66; Tue, 17 Sep 2024 18:44:49 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+	[107.109.115.53]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240917094447epsmtip154016eeee7cee221e30b04bc64588fbc~1-uQCUFtP2146621466epsmtip1S;
+	Tue, 17 Sep 2024 09:44:47 +0000 (GMT)
+From: Inbaraj E <inbaraj.e@samsung.com>
+To: krzk@kernel.org, s.nawrocki@samsung.com, cw00.choi@samsung.com,
+	alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org, robh@kernel.org, conor+dt@kernel.org,
+	devicetree@vger.kernel.org
+Cc: pankaj.dubey@samsung.com, gost.dev@samsung.com, Inbaraj E
+	<inbaraj.e@samsung.com>
+Subject: [PATCH 0/2] clk: samsung: remove number of clocks from bindings
+Date: Tue, 17 Sep 2024 15:13:53 +0530
+Message-Id: <20240917094355.37887-1-inbaraj.e@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOKsWRmVeSWpSXmKPExsWy7bCmlu6/qJdpBrMvyFg8mLeNzWLN3nNM
+	Fte/PGe1mH/kHKvFzQM7mSzu/pnEZnH+/AZ2i48991gtLu+aw2Yx4/w+JouLp1wtFm39wm7x
+	f88OdovDb9pZLf5d28jiwO/x/kYru8emVZ1sHn1bVjF6fN4kF8ASlW2TkZqYklqkkJqXnJ+S
+	mZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SokkJZYk4pUCggsbhYSd/Opii/
+	tCRVISO/uMRWKbUgJafApECvODG3uDQvXS8vtcTK0MDAyBSoMCE7Y8uip8wFm5krtj/cyd7A
+	eJWpi5GTQ0LAROLLwr8sXYxcHEICuxklrj0/zAjhfGKU+NO0mRnC+cYosfTbeXaYlovbbkK1
+	7GWUeH76NCuE08okMeXQFhaQKjYBdYkN3d/ZQBIiAmuYJFbPPsEKkmAWCJc4N/0imC0s4CHR
+	83EZG4jNIqAqsfrRLbCreAWsJJY/2cQCsU5eYvWGA2B3SAjcY5fY9nUWI0TCRWLd+SusELaw
+	xKvjW6Duk5J42d8GZftI7J/zC6o+Q+LY9uVQ9fYSB67MAVrAAXSQpsT6XfoQYVmJqafWMUHc
+	ySfR+/sJNJR4JXbMg7GVJWYeuc8GYUtK7Ly8E+pOD4mNlzvAxgsJxEpcnXecbQKj7CyEDQsY
+	GVcxSqYWFOempxabFhjnpZbDoyo5P3cTIzgFannvYHz04IPeIUYmDsZDjBIczEoivLa/n6YJ
+	8aYkVlalFuXHF5XmpBYfYjQFhtlEZinR5HxgEs4riTc0sTQwMTMzM7E0NjNUEud93To3RUgg
+	PbEkNTs1tSC1CKaPiYNTqoGpWU/vHm+88WeBO0u966Zyi61MXc22SnWfVnvs0o/9fzgcpbwq
+	5VXWRz/4HayomHfOsW2b3c1TPyTVH103yyy8uWVD0v+SDxbrGhVsGAsYF0p2/ipyXLwh7dKc
+	ojV/I34lxVzvPCW5uJup+8flYxeYDvzumGlWoHunf5vzK8dzF/dwlHNavEz0+/8qvHWflbCD
+	/fFP6UdN9itvZGA8tuD4YdWZYSX3v7z4fcB01saZaXP+X+nYMPm2ZcbW1N1WV/UeX127qCdI
+	LfMZa+svkfDd/5J9xXiUXzFEWYR4zTZuWjUnrScpedLNFc3Fv74umdKjMru9PfPm9r2801yn
+	P16w91pjSNS55sgGLe12r0lWSizFGYmGWsxFxYkAlAW5SQoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrELMWRmVeSWpSXmKPExsWy7bCSnO5E/5dpBsfOKVg8mLeNzWLN3nNM
+	Fte/PGe1mH/kHKvFzQM7mSzu/pnEZnH+/AZ2i48991gtLu+aw2Yx4/w+JouLp1wtFm39wm7x
+	f88OdovDb9pZLf5d28jiwO/x/kYru8emVZ1sHn1bVjF6fN4kF8ASxWWTkpqTWZZapG+XwJWx
+	ZdFT5oLNzBXbH+5kb2C8ytTFyMkhIWAicXHbTZYuRi4OIYHdjBKfZ0yFSkhKzP49nR3CFpZY
+	+e85O0RRM5PE0msdbCAJNgF1iQ3d39lAEiICu5gkpi/ezgiSYBaIlPjRvhWsW1jAQ6Ln4zKw
+	BhYBVYnVj26BbeAVsJJY/mQTC8QGeYnVGw4wT2DkWcDIsIpRMrWgODc9t9iwwCgvtVyvODG3
+	uDQvXS85P3cTIzgYtbR2MO5Z9UHvECMTB+MhRgkOZiURXtvfT9OEeFMSK6tSi/Lji0pzUosP
+	MUpzsCiJ83573ZsiJJCeWJKanZpakFoEk2Xi4JRqYOo99LAnW1DwS07rxefZ65NdTGSvBzRp
+	7VuStCF7Xc6UD6Vn8wWfHnC9d8+jYqO0/Zyee5V6jIuOWnMzmTQZrkp4p8S3JIYj/OCibrnH
+	5cGz1wpyXl1y2iHoY+gR99P/nYIu9TKdm1HpPyEiP71dfYa+ZtxZxY11LyK4zr8MOF0rszsg
+	gfN0ru6x2IREhffPVtonl39RK7uzbN79sxdjT3PUMsUde1Kqqeq6TFBd5plmzUH+2SuEK1+Z
+	mKx+osKu+bKHWSGl5tHee/Nm35m97PXkK5Eleip3nj7s/M5W6bqkaXX3J4HlHHqLZqblWHzk
+	fvm4yiLpQ3tmzQcz1UXKlg6zJr4wmvLplEqHn0eTjBJLcUaioRZzUXEiAMiCGxq1AgAA
+X-CMS-MailID: 20240917094449epcas5p37c2593fe8f181d6b19a9a1b290488186
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240917094449epcas5p37c2593fe8f181d6b19a9a1b290488186
+References: <CGME20240917094449epcas5p37c2593fe8f181d6b19a9a1b290488186@epcas5p3.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ta-mail-02.ta.t-argos.ru (172.17.13.212) To ta-mail-02
- (172.17.13.212)
-X-KSMG-Rule-ID: 1
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 187786 [Sep 17 2024]
-X-KSMG-AntiSpam-Version: 6.1.1.5
-X-KSMG-AntiSpam-Envelope-From: amishin@t-argos.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 34 0.3.34 8a1fac695d5606478feba790382a59668a4f0039, {Tracking_from_domain_doesnt_match_to}, mx1.t-argos.ru.ru:7.1.1;t-argos.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1, FromAlignment: s
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2024/09/17 06:34:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2024/09/17 06:27:00 #26601446
-X-KSMG-AntiVirus-Status: Clean, skipped
 
-In si5341_output_clk_determine_rate() division by zero is possible if the
-following conditions are met:
-- rate > (parent_rate / 2);
-- (parent_rate / 2) is not multiple of rate;
-- CLK_SET_RATE_PARENT flag is not set.
+This patch series moves number of clock from dt-binding to driver for FSD
+SoC.
 
-Add zero value check to prevent division by zero.
+Inbaraj E (2):
+  clk: samsung: fsd: do not define number of clocks in bindings
+  dt-bindings: clock: samsung: remove define with number of clocks for
+    FSD
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+ drivers/clk/samsung/clk-fsd.c       | 23 ++++++++++++++++-------
+ include/dt-bindings/clock/fsd-clk.h |  7 -------
+ 2 files changed, 16 insertions(+), 14 deletions(-)
 
-Fixes: 61c34af50c5f ("clk: si5341: Switch to determine_rate")
-Signed-off-by: Aleksandr Mishin <amishin@t-argos.ru>
----
- drivers/clk/clk-si5341.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index 6e8dd7387cfd..d0d68a5bba74 100644
---- a/drivers/clk/clk-si5341.c
-+++ b/drivers/clk/clk-si5341.c
-@@ -855,7 +855,7 @@ static int si5341_output_clk_determine_rate(struct clk_hw *hw,
- 	} else {
- 		/* We cannot change our parent's rate, report what we can do */
- 		r /= rate;
--		rate = req->best_parent_rate / (r << 1);
-+		rate = (r << 1) ? req->best_parent_rate / (r << 1) : 0;
- 	}
- 
- 	req->rate = rate;
 -- 
-2.30.2
+2.17.1
 
 
