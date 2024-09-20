@@ -1,63 +1,63 @@
-Return-Path: <linux-clk+bounces-12252-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12254-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A17497D661
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 15:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E7697D667
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 15:43:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FCC0B22363
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 13:42:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D51B23852
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 13:43:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E3317BB3D;
-	Fri, 20 Sep 2024 13:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731C017C7A3;
+	Fri, 20 Sep 2024 13:42:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="WIT7j+3+"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="gVA677OT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CDB17BB0F;
-	Fri, 20 Sep 2024 13:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647F517ADF1;
+	Fri, 20 Sep 2024 13:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726839751; cv=none; b=ZP8OqMYdI5vEWVJgAusBspuC84jaXx+XsExxTHK3rrddu5ApIk5+CtnbkLj5WkEnC+4/YYCGWsNRUfgbiTTQdon4J5PokafCnhR4oJhnsMyroszx58PU+Xlo3x7vvfNK7JDT7A/kdlrtUrYqc1ktww6p0pfOylUYnMPjypRbpTQ=
+	t=1726839756; cv=none; b=gEwrKA6IHUe76kUvS1mABVHZBcg3YcA41mz1pPaJttsg9Zh+/EWlSkAicZdZiw/sQwZpD7kq+RV1otHm9yciB8/4FPmkU3gy7pl81GlbNCPGOrSWONgc95bKVmEyFyAj9Zrk3YaVv+yOEkknP3wFNdTpBPwY8l2WpCcyxfBqTLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726839751; c=relaxed/simple;
-	bh=rO+DFtjnNoakem7Mt3wC/njZfsI8NcL1HUeldA3qdks=;
+	s=arc-20240116; t=1726839756; c=relaxed/simple;
+	bh=FDiilQosAni9DEpJkTSUVoRswhKHk5VTZ02m7RWCIH0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Efas3yKzzIa2VnTN43FAbYGBoYjTTUt2V8b+03pPzxaP+UF/yxdBL3irANgyFh1mohH9giDAcYVcixOyIjm3XoABAdEG7Uc1ppgki5gJY1pNxbYaws55udan6Zm0waivec7Ratpc/Wb+tvj0LdV4WkhkI4OX8sd2pld83K+C1rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=WIT7j+3+; arc=none smtp.client-ip=210.61.82.184
+	 MIME-Version:Content-Type; b=VR1qGkSO0MyL71XVip60Fq48xIms87cCjdcHCV1JQJpnkr4fyqAZS8qvCSbSISuKnfOioWgysWujET8zsgTzci+Dj7RYDTQTPZOg0hJNRGmZHI/i/mHg7N9im4Q31IfyqNELPJu2uSL+vlEms7N8heA66qtbqKUPGE2mPggA3sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=gVA677OT; arc=none smtp.client-ip=60.244.123.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2a97a084775611ef8b96093e013ec31c-20240920
+X-UUID: 2b71c476775611efb66947d174671e26-20240920
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=MarHWvPhnrRmZZ0mB9cLT4wuW+YFOfVdbYWu9RkLw6U=;
-	b=WIT7j+3+5Qtm2JB7vxxF5MpHQ6wEdNFV5sIWTImJqn/MHnBa4mCfo8iNYYaH1F9WbglQfMZquwrV+2fvi6jC1hUb12+m2dIXBVcxuJuXVUGy8p/YZVL12J0Z+ukvTajHh4l7OjQCtHDKDb/6Uryl5an6VRewfsjaHUKhpUgpcvE=;
+	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xAwibddJXVFpQUpjf1IuUnHdwc51z/1PEBeF4qdcOP0=;
+	b=gVA677OTK5sRWHZpN/ErCVPJuFKbyZh/gnT8DXaSZ1Syx84GPSgdKAmjt7OKQDFDK1SuPSPotpgj7sWXcS+3GqkNteg3geDBOoHTJxQdl2j2VKRDJ9048tfQYk83dKHaGGS6EkwYoXUH25PPcoJhj9I+TFf/dIltKguBqSxKJ/4=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:f0b21068-757b-455d-aa41-3590e8039bd1,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6dc6a47,CLOUDID:aeb94e9e-8e9a-4ac1-b510-390a86b53c0a,B
+X-CID-O-INFO: VERSION:1.1.41,REQID:c86658c3-1c58-42ae-8c42-efcff3ad609f,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6dc6a47,CLOUDID:dbbe82d0-7921-4900-88a1-3aef019a55ce,B
 	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
 	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
 	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
 X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2a97a084775611ef8b96093e013ec31c-20240920
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
+X-UUID: 2b71c476775611efb66947d174671e26-20240920
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
 	(envelope-from <pablo.sun@mediatek.com>)
 	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 374313643; Fri, 20 Sep 2024 21:42:23 +0800
+	with ESMTP id 1269181255; Fri, 20 Sep 2024 21:42:25 +0800
 Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
  MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 20 Sep 2024 06:42:22 -0700
+ 15.2.1118.26; Fri, 20 Sep 2024 06:42:23 -0700
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 20 Sep 2024 21:42:22 +0800
+ 15.2.1118.26 via Frontend Transport; Fri, 20 Sep 2024 21:42:23 +0800
 From: Pablo Sun <pablo.sun@mediatek.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
@@ -68,9 +68,9 @@ To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
 	<linux-clk@vger.kernel.org>, Pablo Sun <pablo.sun@mediatek.com>
-Subject: [PATCH 3/5] nvmem: mtk-efuse: Enable postprocess for mt8188 GPU speed binning
-Date: Fri, 20 Sep 2024 21:41:09 +0800
-Message-ID: <20240920134111.19744-4-pablo.sun@mediatek.com>
+Subject: [PATCH 4/5] arm64: dts: mediatek: mt8188: Add efuse for GPU speed binning
+Date: Fri, 20 Sep 2024 21:41:10 +0800
+Message-ID: <20240920134111.19744-5-pablo.sun@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20240920134111.19744-1-pablo.sun@mediatek.com>
 References: <20240920134111.19744-1-pablo.sun@mediatek.com>
@@ -83,41 +83,43 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK: N
 
-Similar to mt8186, the efuse data for mt8188's GPU speed binning
-requires post-process to convert the bit field format expected
-by the OPP table.
+The OPP table of mt8188 GPU contains duplicated frequencies
+for different speed bins.
 
-Since mt8188 efuse is not compatible to mt8186, add a new compatible
-entry for mt8188 and enable postprocess.
+In order to support OPP table, we need to provide the speed bin info
+in the efuse data so the GPU driver could properly set the
+supported hardware speed bin.
 
 Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
 ---
- drivers/nvmem/mtk-efuse.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8188.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/nvmem/mtk-efuse.c b/drivers/nvmem/mtk-efuse.c
-index 9caf04667341..4984145025bb 100644
---- a/drivers/nvmem/mtk-efuse.c
-+++ b/drivers/nvmem/mtk-efuse.c
-@@ -105,6 +105,10 @@ static const struct mtk_efuse_pdata mtk_mt8186_efuse_pdata = {
- 	.uses_post_processing = true,
- };
- 
-+static const struct mtk_efuse_pdata mtk_mt8188_efuse_pdata = {
-+	.uses_post_processing = true,
-+};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8188.dtsi b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+index 02a5bb4dbd1f..129edaf33704 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8188.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8188.dtsi
+@@ -1752,6 +1752,11 @@ efuse: efuse@11f20000 {
+ 			lvts_efuse_data1: lvts1-calib@1ac {
+ 				reg = <0x1ac 0x40>;
+ 			};
 +
- static const struct mtk_efuse_pdata mtk_efuse_pdata = {
- 	.uses_post_processing = false,
- };
-@@ -112,6 +116,7 @@ static const struct mtk_efuse_pdata mtk_efuse_pdata = {
- static const struct of_device_id mtk_efuse_of_match[] = {
- 	{ .compatible = "mediatek,mt8173-efuse", .data = &mtk_efuse_pdata },
- 	{ .compatible = "mediatek,mt8186-efuse", .data = &mtk_mt8186_efuse_pdata },
-+	{ .compatible = "mediatek,mt8188-efuse", .data = &mtk_mt8188_efuse_pdata },
- 	{ .compatible = "mediatek,efuse", .data = &mtk_efuse_pdata },
- 	{/* sentinel */},
- };
++			gpu_speedbin: gpu-speedbin@580 {
++				reg = <0x581 0x1>;
++				bits = <0 3>;
++			};
+ 		};
+ 
+ 		gpu: gpu@13000000 {
+@@ -1763,6 +1768,8 @@ gpu: gpu@13000000 {
+ 				     <GIC_SPI 382 IRQ_TYPE_LEVEL_HIGH 0>,
+ 				     <GIC_SPI 381 IRQ_TYPE_LEVEL_HIGH 0>;
+ 			interrupt-names = "job", "mmu", "gpu";
++			nvmem-cells = <&gpu_speedbin>;
++			nvmem-cell-names = "speed-bin";
+ 			operating-points-v2 = <&gpu_opp_table>;
+ 			power-domains = <&spm MT8188_POWER_DOMAIN_MFG2>,
+ 					<&spm MT8188_POWER_DOMAIN_MFG3>,
 -- 
 2.45.2
 
