@@ -1,141 +1,120 @@
-Return-Path: <linux-clk+bounces-12228-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12231-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 814AC97D250
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 10:16:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539E697D434
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 12:32:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A61D01C222B2
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 08:16:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07097284152
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Sep 2024 10:32:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6487C762EB;
-	Fri, 20 Sep 2024 08:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E8013AA3E;
+	Fri, 20 Sep 2024 10:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NocuYjic"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kE1Os6Gl"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA066F307;
-	Fri, 20 Sep 2024 08:16:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E1051BC46;
+	Fri, 20 Sep 2024 10:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726820176; cv=none; b=PtQ3pr3idbnnAPyKI+4qkncDkwYrUX4eE5EvZZxManp2xj+YBIw7jiiRwW2cCGfH46YMge3uDYQ3CvxX5NkHa/9qDw/KGHsEgD16hWqmAktCqbPsNXqeyDHN+3b3gbAYX32Lg7d/yNzrUSrTwrIslKYjf8p6hGvyLmdDkCggJ+c=
+	t=1726828335; cv=none; b=ptoT+7snyAwgZp07aT677yg9iQXKlqhscNO92d5YP9DvvC7ePZbyoMkm9PP+T+WnlKycFwkMWggfjGNWqpR8/gG3uCID14bknISLSAL1on+cJR2QNtMMFHj4DQAsLeIiZDLPrNH3vKeSNVe/IpdTKJnSOKYANniR7makkLxfF0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726820176; c=relaxed/simple;
-	bh=KFoyhl3w36LgJKQF6XlNX6jdkTChd706ofq02msKEhg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tXDtVrdkDaVhzvkPFjHLvaoUkymwpUIAFaUtwth/6WC3GwkcNKy8YLdHvPLn9j6MjNz3LemYzrnSnenxI/7JxXrpKTgyKxR2ky8Wu7BX+kGzhvB6k7+savUpp1LjgqG6BbqElwpAY7hTPlogRPbz7ztrYBwu9eUpsCo5CE1lRlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NocuYjic; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F233DC4CED8;
-	Fri, 20 Sep 2024 08:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726820176;
-	bh=KFoyhl3w36LgJKQF6XlNX6jdkTChd706ofq02msKEhg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=NocuYjicviiHW9dkiMF1PZAPN+bOKTEV8Q/8GI/dVG4rWnrBzWMf3t/lahZSH2iy7
-	 VS/32v06yE9EdLx9H+qpjXgD3j98icutMRSmYJxWIk85Pt8iQAthT+CWUIjI7/oeBQ
-	 HmOHaCYWHWq5g9tESqP6uXE178bzI2/SQ64wVwrp3DZpR8aSO00L/oe7MZLmBOnetu
-	 70buGgFLqBcdp4uaKx936hjQ4eCFNBEh/TGCfpaz2K7mPh9sl+eTtJ4DlYazqihHCb
-	 byhDbV1jXYdfjjNeDFKzW719lTG0gIK5EwsC7C5QAl2xRROoWpeZDr1VbXUFc0ja6N
-	 CzHJQS+MNsn1g==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E90D9CF58E5;
-	Fri, 20 Sep 2024 08:16:15 +0000 (UTC)
-From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
-Date: Fri, 20 Sep 2024 16:16:16 +0800
-Subject: [PATCH 6/6] clk: meson: s4: Delete the spinlock from the MPLL
+	s=arc-20240116; t=1726828335; c=relaxed/simple;
+	bh=QFzruwUB5mDp1IbVvvLIMHWezj5sHK08Q71q6P+wdjg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=BDAwdPGCg3smQQo4ig3tlKEl6XFocwEqipDH1YmaEpYlYiZmchYGofeXs8oF0qx14V3WmNRL49+lD1KG/TpJhD/Ut+kWw6XmA6UI2AGShBWfX1Dhr5ViGZYkyHSSrsu0VY8sQbvHByFeJZ5lJkiFEdqvdiqb/6kwqnltqMCRQZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kE1Os6Gl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48K84Yjq005788;
+	Fri, 20 Sep 2024 10:32:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	eWR+Ld9pcV0LdcC1SWmp8s/9godB2fW5sczBXNzXy9k=; b=kE1Os6Gl4F21v2hr
+	e29w7PmN4JAI7PK9y9flHO9vFN9VQxAAzjIEJRY31QMy+2tdpHNO5YvbusyPWPwP
+	hLUP4aRD+UVr23SbHnk1n4xSRkAB+0df+IEIrBFok6hf+9IygUm5p/wD0gVjsJR3
+	ICLciloeZqM82no2j3wEGAwtYHrFN6rEcR6/1aj26oFZBPQouQxOEVvZDxY3s2Gi
+	epww0Pmq95tRggC1k/S8vjNe3V/HUSFQVp2Xc7Qwth89Mn4w1mhjHF3xUCVgdcw8
+	FjteJMBNu7aNDzEzVpdZ2CEdgaqhATIB4ItHxkyaarYX7V9fiSdfGKAtF6YZqK0K
+	/YElOQ==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4jj0t61-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Sep 2024 10:32:10 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48KAW8w9025479
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Sep 2024 10:32:08 GMT
+Received: from [10.217.216.152] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 20 Sep
+ 2024 03:32:04 -0700
+Message-ID: <0515c7c9-6eb9-4b2d-9b63-6e7f935f1a6a@quicinc.com>
+Date: Fri, 20 Sep 2024 16:02:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: clock: qcom-rpmhcc: Add RPMHCC bindings
+ for QCS615
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen
+ Boyd" <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ajit Pandey
+	<quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        "Jagadeesh Kona" <quic_jkona@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240919-qcs615-clock-driver-v1-0-51c0cc92e3a2@quicinc.com>
+ <20240919-qcs615-clock-driver-v1-1-51c0cc92e3a2@quicinc.com>
+ <96e54706-3e49-4d78-8edc-fa3a66215a1c@kernel.org>
+Content-Language: en-US
+From: Taniya Das <quic_tdas@quicinc.com>
+In-Reply-To: <96e54706-3e49-4d78-8edc-fa3a66215a1c@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240920-mpll_spinlock-v1-6-5249a9a7e2b7@amlogic.com>
-References: <20240920-mpll_spinlock-v1-0-5249a9a7e2b7@amlogic.com>
-In-Reply-To: <20240920-mpll_spinlock-v1-0-5249a9a7e2b7@amlogic.com>
-To: Neil Armstrong <neil.armstrong@linaro.org>, 
- Jerome Brunet <jbrunet@baylibre.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Chuan Liu <chuan.liu@amlogic.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1726820174; l=1660;
- i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
- bh=kO2S9WluZnKsZu8WbD08FCxRfFkq+Y8JsWEudLTTuJE=;
- b=XoCk+GChXy9oiDtXd6sz8adYDgdcRqK51hXoqH8GCDNNc/qoUkYn7Gv9MKWO5M+QWeYQuOBUM
- L6QxNxGTq4kCsmICSgdLYk2oDQPdZiwAsiVXPVaK4uYGyhXIAE4IDFG
-X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
- pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
-X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
- auth_id=203
-X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
-Reply-To: chuan.liu@amlogic.com
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Wuh2_7G_lvQW5wERe4tlLyr6Pp7s8suS
+X-Proofpoint-GUID: Wuh2_7G_lvQW5wERe4tlLyr6Pp7s8suS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 phishscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 mlxscore=0
+ mlxlogscore=675 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409200075
 
-From: Chuan Liu <chuan.liu@amlogic.com>
 
-It is meaningless to define a spinlock in the struct meson_clk_mpll_data.
 
-Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
----
- drivers/clk/meson/s4-pll.c | 6 ------
- 1 file changed, 6 deletions(-)
+On 9/19/2024 5:49 PM, Krzysztof Kozlowski wrote:
+>>         - qcom,qdu1000-rpmh-clk
+>> +      - qcom,qcs615-rpmh-clk
+> This goes before qdu, keep alphabetical order please.
 
-diff --git a/drivers/clk/meson/s4-pll.c b/drivers/clk/meson/s4-pll.c
-index 9697f6577e06..d8e621e79428 100644
---- a/drivers/clk/meson/s4-pll.c
-+++ b/drivers/clk/meson/s4-pll.c
-@@ -17,8 +17,6 @@
- #include "meson-clkc-utils.h"
- #include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
- 
--static DEFINE_SPINLOCK(meson_clk_lock);
--
- /*
-  * These clock are a fixed value (fixed_pll is 2GHz) that is initialized by ROMcode.
-  * The chip was changed fixed pll for security reasons. Fixed PLL registers are not writable
-@@ -547,7 +545,6 @@ static struct clk_regmap s4_mpll0_div = {
- 			.shift   = 29,
- 			.width	 = 1,
- 		},
--		.lock = &meson_clk_lock,
- 		.init_regs = s4_mpll0_init_regs,
- 		.init_count = ARRAY_SIZE(s4_mpll0_init_regs),
- 	},
-@@ -601,7 +598,6 @@ static struct clk_regmap s4_mpll1_div = {
- 			.shift   = 29,
- 			.width	 = 1,
- 		},
--		.lock = &meson_clk_lock,
- 		.init_regs = s4_mpll1_init_regs,
- 		.init_count = ARRAY_SIZE(s4_mpll1_init_regs),
- 	},
-@@ -655,7 +651,6 @@ static struct clk_regmap s4_mpll2_div = {
- 			.shift   = 29,
- 			.width	 = 1,
- 		},
--		.lock = &meson_clk_lock,
- 		.init_regs = s4_mpll2_init_regs,
- 		.init_count = ARRAY_SIZE(s4_mpll2_init_regs),
- 	},
-@@ -709,7 +704,6 @@ static struct clk_regmap s4_mpll3_div = {
- 			.shift   = 29,
- 			.width	 = 1,
- 		},
--		.lock = &meson_clk_lock,
- 		.init_regs = s4_mpll3_init_regs,
- 		.init_count = ARRAY_SIZE(s4_mpll3_init_regs),
- 	},
+Yes, definitely my bad to miss in both the files.
 
 -- 
-2.42.0
-
-
+Thanks & Regards,
+Taniya Das.
 
