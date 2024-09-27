@@ -1,186 +1,119 @@
-Return-Path: <linux-clk+bounces-12450-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12452-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CFC998827E
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Sep 2024 12:31:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 354B8988285
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Sep 2024 12:32:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BFCDB24351
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Sep 2024 10:31:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5B8D1F2286B
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Sep 2024 10:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D8EE1BD01D;
-	Fri, 27 Sep 2024 10:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035BE18952C;
+	Fri, 27 Sep 2024 10:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="sdHECydX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PGVNDkIL"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DBB01BC9FE;
-	Fri, 27 Sep 2024 10:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A1D13698F
+	for <linux-clk@vger.kernel.org>; Fri, 27 Sep 2024 10:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727433065; cv=none; b=nxdQ3xEEIG1ghu3JyqmFKnO2x7rvnJMhxyi1UNjupicF5lTTasy7yg+/szNW5E3J8t2OG0wnwI+qpNRcPyECZ+D+jkaWMQLpzGgjI/WfyXUkkZGUVVvsD1wbzZVgbZDo09oXhBeg9wsjJHcWPI48/0heWPrSb/F8g5VkqGaPSbo=
+	t=1727433140; cv=none; b=V+Batt8u+LzF73pIkmNZAOirNiaTXgYKvIhUDVuxQftDenXvoFbz5OWoDX89f2ShEdHd3G0mmC7Zf1XlpiTSiz0azigaYQqlI87sr6xVx5hyNAPa6+de/clM5oRcYl/b3O63D6SWn7vXFivWKKKw1AhLzEXRV5pw8i985hiFc3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727433065; c=relaxed/simple;
-	bh=KaWPXepJuehfSjJcLHhJ8i3X/9cBCKdeHAGOKeUpX4M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OPiIRThK/t+6OUoHbnUv2VAfI5TLJ/wViDkto9ku3j05LUUQZ7OVTD0k/wnVcPVV5htmZkCFf07F+KyFUpJbjg2tiRPdfCzhCRaKX3lMzYlXGkXCJFA9roCOUp6Ea965s+i/qsSPjFSraML0Oopqv4YgHFnzs27iUpemg44rWi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=sdHECydX; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 96177c2a7cbb11ef8b96093e013ec31c-20240927
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=7pX6Bx2UDow/yH3v2m2llMgyTYlhfmP3tKJ6OGoPnUw=;
-	b=sdHECydXUPxJbzrcVaSLHNJ3nJrQxaRYBjHSiskm9Xk7X3yfiSe7iJBOnu4c+QPoyHIzkOcX4+lxISQPPDoi2I3HLvM5fg0QwIDsBqrNN2cLMDDpMMp+ujT6bBPMY8gneP82ZYeHVSDfzSn5h5Zj2s41AbOHZa2vgN4oLrYhw5c=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:62755ebe-8a4e-4c01-8092-ae3462cbcac8,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:6dc6a47,CLOUDID:c2de5a18-b42d-49a6-94d2-a75fa0df01d2,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
-X-UUID: 96177c2a7cbb11ef8b96093e013ec31c-20240927
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-	(envelope-from <pablo.sun@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 740005951; Fri, 27 Sep 2024 18:30:59 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 27 Sep 2024 03:30:57 -0700
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 27 Sep 2024 18:30:57 +0800
-From: Pablo Sun <pablo.sun@mediatek.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Michael Turquette
-	<mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Srinivas
- Kandagatla <srinivas.kandagatla@linaro.org>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<linux-clk@vger.kernel.org>, Pablo Sun <pablo.sun@mediatek.com>
-Subject: [PATCH v2 6/6] arm64: dts: mediatek: mt8390-genio-700-evk: Enable Mali GPU
-Date: Fri, 27 Sep 2024 18:30:05 +0800
-Message-ID: <20240927103005.17605-7-pablo.sun@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240927103005.17605-1-pablo.sun@mediatek.com>
-References: <20240927103005.17605-1-pablo.sun@mediatek.com>
+	s=arc-20240116; t=1727433140; c=relaxed/simple;
+	bh=VpBNp249YzpZXC9Rky5huhq6sb6/jAcrlMwbud4eelw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dQcjNcmbcj1MtrNXql7xgch0Yv2eKor6AB0kGUvRGgKRJQxxTu+rtZyZM/pO0a4V2/eo13uU1d+ejwEQLGw9J3bEjSqXlb7AdSY0ChvWkYKRpLPg7Viomi+LLOwhErI/61/iM90btOTByVEtNzR3/oghXZOOrDG9dHsPJUTT5co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PGVNDkIL; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f8c439bc1dso1202611fa.2
+        for <linux-clk@vger.kernel.org>; Fri, 27 Sep 2024 03:32:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727433136; x=1728037936; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OrSvEBMT63eFKBOH/M9CK7Cc9dzPCKyHIsn8PR3V8co=;
+        b=PGVNDkILwM8JGOC4US6aEYRU1JRSuX682QuDqca4HbFhaKfonBQgjkdqGnzp84B6lk
+         Sv4vqXVNhZDF+QhXMC3iIRLmFYPHWmQbru2SoZ0IrETAGr4dsIIOtrQ8d5w6QzwPVpH0
+         Jl6P+1c4horo/TWfMdsL1LxrIlzVkAOtc8JyHujCOaMFqnFw7AvMwHfpe0gerkUrKa+/
+         olGHz4RFWweGzmaqkOf56KQhUe024yShNSXsjmSLmEnGzkM9g0EmwVxDIZqWmuG/drE5
+         2cdUq1mkeXH7gLLyNW3A1Qc3Jhh+qqM7jeiVSQO3ogHtpIX38uolhpXTQloK288/wr4b
+         rq4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727433136; x=1728037936;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OrSvEBMT63eFKBOH/M9CK7Cc9dzPCKyHIsn8PR3V8co=;
+        b=CJ94mRH6STZozG98NzE3zTcTDHjlqpTqbuYQ+FzxYorvmdu7fLUVSiUgf+StttJ012
+         ceXxhRj2hEaLNy+1oBtLIcKL0X1TJArr58X/YQtW6uKDWNeiT8siOKOWLDE3r7HqFjJk
+         clUzeMVP2tiuJq9p2+h3HePtVaVIYHn771vOFR8ooKjafekdp/L9L3tdUBrqNixjwZfJ
+         EilYA4ySrOK/v5IbXanobRwYTqxKspmWf8cARH4tLy+1NVeJO0W8I2q059Kt3J9a8JqC
+         XopUNBYu06BKJAU7DA/8hjJw9VAmfS7y9TYOF5PsObYQgOIRueMZtJAqrNahNEyhDQiI
+         gqWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcT2y1MxDI8g4azKqUWgdNV+lInmao4pf4kh3IRJIO79dON4kQX+b85ZPg6fLbkAxpbpqfinTIBkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUkffCdsEVh9TD+M0a3eslp513rEuVVMzgk2ckflF/Zh+Hx7AG
+	58iE3Tx5YikcU+6Bqdi/Q11Epv1GdboRoj/KHeXsRLL6GjxbMD3DIFZzKehs2Yo=
+X-Google-Smtp-Source: AGHT+IGcdmN2CX08WxP43TGUcVs80qumV8LOKvPfnAtO/+6Y5H5nrPaYJjWrIlkM9WODMBJ1MMd2rg==
+X-Received: by 2002:a05:651c:54c:b0:2f7:5c23:98fd with SMTP id 38308e7fff4ca-2f9d41c1bc0mr5341211fa.12.1727433136151;
+        Fri, 27 Sep 2024 03:32:16 -0700 (PDT)
+Received: from localhost.localdomain (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5389fd5e333sm259724e87.76.2024.09.27.03.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2024 03:32:14 -0700 (PDT)
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Jagadeesh Kona <quic_jkona@quicinc.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH 0/3] arm: qcom: sm8550: Change camcc power domain from  MMCX to MXC
+Date: Fri, 27 Sep 2024 13:32:09 +0300
+Message-ID: <20240927103212.4154273-1-vladimir.zapolskiy@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Transfer-Encoding: 8bit
 
-Configure GPU regulator supplies and enable GPU for GENIO 700 EVK.
+The problem is trivial to reproduce and the fix is trivial to verify,
+it's sufficient to enable SM8550 camera clock controller and a CCI
+controller, for instance on SM8550-QRD CCI0 or CCI1 can be enabled:
 
-The GPU in MT8390 & MT8188 has two power inputs: "DVDD_GPU" and
-"DVDD_SRAM_GPU". In Genio 700 EVK, DVDD_GPU is supplied by
-mt6359_vproc2_buck_reg, and DVDD_SRAM_GPU is supplied by
-mt6359_vsram_others_ldo_reg.
+    &cci0 {
+	status = "okay";
+    };
 
-According to section 5.2 "Recommended Operating Conditions" in
-MT8390 IoT Application Processor Datasheet v1.9, The recommended
-operating voltage ranges are:
+I made a special effort to check that the power domain in SM8550 camcc
+is sufficient to be replaced, and Titan and other provided GDSCs can
+be turned on/off, if the clock controller is disconneced from MMCX and
+MMCX is off according to /sys/kernel/debug/pm_genpd/pm_genpd_summary.
 
-- DVDD_GPU: min 0.55V, max 0.86V, typical 0.75V
-- DVDD_SRAM_GPU: min 0.71V, max 0.92V, typical 0.85V
+Vladimir Zapolskiy (3):
+  arm64: dts: qcom: sm8550: Change camcc power domain from MMCX to MXC
+  dt-bindings: clock: qcom,sm8450-camcc: do not restrict power domain to MMCX
+  dt-bindings: clock: qcom,sm8450-camcc: generalize title and description
 
-To further optimize power saving, we couple DVDD_SRAM_GPU to
-DVDD_GPU according to the following relation:
+ .../devicetree/bindings/clock/qcom,sm8450-camcc.yaml      | 8 ++++----
+ arch/arm64/boot/dts/qcom/sm8550.dtsi                      | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-- For opp-880000000 or lower frequency, keep 0.75V
-- For opp-915000000 and higher, DVDD_SRAM_GPU should follow
-  DVDD_GPU. The exact voltage for DVDD_GPU should be decided by
-  speed binning.
 
-This rule is derived from the OPP table in the link.
-
-In addition, set the voltage spread to 6250 uV, the step size of
-'ldo_vsram_others' regulator of mt6359, otherwise the regulator
-set_voltage operation fails.
-
-Link: https://gitlab.com/mediatek/aiot/rity/meta-mediatek-bsp/-/blob/eedd6aedd4b0cfc0ee79b9c9b9650dfa73cf87f6/recipes-kernel/dtbo/mt8390/gpu-mali.dts
-Signed-off-by: Pablo Sun <pablo.sun@mediatek.com>
-Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../dts/mediatek/mt8390-genio-700-evk.dts     | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dts b/arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dts
-index 1474bef7e754..0a6c9871b41e 100644
---- a/arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dts
-@@ -190,6 +190,11 @@ usb_p2_vbus: regulator-10 {
- 	};
- };
- 
-+&gpu {
-+	mali-supply = <&mt6359_vproc2_buck_reg>;
-+	status = "okay";
-+};
-+
- &i2c0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&i2c0_pins>;
-@@ -253,6 +258,14 @@ &i2c6 {
- 	status = "okay";
- };
- 
-+&mfg0 {
-+	domain-supply = <&mt6359_vproc2_buck_reg>;
-+};
-+
-+&mfg1 {
-+	domain-supply = <&mt6359_vsram_others_ldo_reg>;
-+};
-+
- &mmc0 {
- 	status = "okay";
- 	pinctrl-names = "default", "state_uhs";
-@@ -314,6 +327,15 @@ &mt6359_vpa_buck_reg {
- 	regulator-max-microvolt = <3100000>;
- };
- 
-+&mt6359_vproc2_buck_reg {
-+	/* The name "vgpu" is required by mtk-regulator-coupler */
-+	regulator-name = "vgpu";
-+	regulator-min-microvolt = <550000>;
-+	regulator-max-microvolt = <800000>;
-+	regulator-coupled-with = <&mt6359_vsram_others_ldo_reg>;
-+	regulator-coupled-max-spread = <6250>;
-+};
-+
- &mt6359_vpu_buck_reg {
- 	regulator-always-on;
- };
-@@ -326,6 +348,15 @@ &mt6359_vsim1_ldo_reg {
- 	regulator-enable-ramp-delay = <480>;
- };
- 
-+&mt6359_vsram_others_ldo_reg {
-+	/* The name "vsram_gpu" is required by mtk-regulator-coupler */
-+	regulator-name = "vsram_gpu";
-+	regulator-min-microvolt = <750000>;
-+	regulator-max-microvolt = <800000>;
-+	regulator-coupled-with = <&mt6359_vproc2_buck_reg>;
-+	regulator-coupled-max-spread = <6250>;
-+};
-+
- &mt6359_vufs_ldo_reg {
- 	regulator-always-on;
- };
+base-commit: 11a299a7933e03c83818b431e6a1c53ad387423d
 -- 
 2.45.2
 
