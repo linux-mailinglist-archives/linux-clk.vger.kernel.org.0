@@ -1,168 +1,142 @@
-Return-Path: <linux-clk+bounces-12481-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12483-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96866989208
-	for <lists+linux-clk@lfdr.de>; Sun, 29 Sep 2024 01:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EA78989332
+	for <lists+linux-clk@lfdr.de>; Sun, 29 Sep 2024 08:10:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 560CE2833E5
-	for <lists+linux-clk@lfdr.de>; Sat, 28 Sep 2024 23:45:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D27D284C38
+	for <lists+linux-clk@lfdr.de>; Sun, 29 Sep 2024 06:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AEF7188006;
-	Sat, 28 Sep 2024 23:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EACB130A54;
+	Sun, 29 Sep 2024 06:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WUz9WOzS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMvI8bvP"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FD0188591;
-	Sat, 28 Sep 2024 23:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7695F47F53;
+	Sun, 29 Sep 2024 06:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727567108; cv=none; b=l7i2wmVrjBtg1fSVNlg5F2R8jWiogOYjuqA4x6sSzZbU2OdREtoEv6chj+j6r9m997Cj3E2IW2vEhRK3Cf2ny78rEUbMrHqdxrcDLXR5BZRqJOfCf6RbQuyw07PfuSg0/WjZfT33Bz90pmBtz8TyrBHBmiNFH4i3nTlSIVgLpVE=
+	t=1727590228; cv=none; b=WLJlwFIp8+ie/4ohu9Rhs12r4j+vZ8+JpQO/uz8z6aIHlDQZLaWv+mMkGPDVkE8Tq7bF2Xm/Fx1p6+wScteEPE3MroBf8wOQV/f/KWt2kknuzTRsi6dq2PHPxfdj9TZ6RYuw1k1vp7GTa0xNGOG3bUQcWRjzjUTTrEctU/Yz4gQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727567108; c=relaxed/simple;
-	bh=sRtstZyamgTFvaWC2HT26A4k0j5wMsLi6ZRHUYxbr60=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gq/ovcUS3hfP3H8/2Tyx3PDRKsMcBtiVIbrL/DglB/3enY5SuhW5JBwmDvQ5faq1DTg05MwYVFtn5BBUviJZMZIL3+L6I8ntDWPYlRv8uwkDv0t0sSyRJWccr3FxG5PHUpSIM+ICDwUVDZZP0R9shmGtetyFiqhD5A8unCY03J0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WUz9WOzS; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727567105; x=1759103105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sRtstZyamgTFvaWC2HT26A4k0j5wMsLi6ZRHUYxbr60=;
-  b=WUz9WOzS9BIiTZaBhzFoKkMMG/TsnKudIYjOh2mR4/md1N5M8LaXKb5t
-   ANUq+yHIz6gFLnDr0coIjKyz1KJXtk5K9N31SQRgh630IBhYg9gEl31i8
-   PIi0u1QiqZycWyO0s/3bFuN4UL0YQZ5HbJsE47omIAj3+yx62NFHOoytK
-   LwDiRS7hXuwIx5DJBB2UzWDDR/Ga8xs9U4++yTPtCh1krdUV5/6dNUmA2
-   jv3v4ztuNte0hCyLfZmfuEmCql++KfVSYNlInGxGZsuWwfYez1pfb8qDU
-   UQ8++1y1i1EkcYDCuOTA+Azn7xorB12gZ7Q4lz3hLh6Ua5lTb9T0Hw+Kn
-   A==;
-X-CSE-ConnectionGUID: kk6aZLPNRA+8fOw/uON2EQ==
-X-CSE-MsgGUID: eoV/FNreT2WdoU8Npx1U+Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="26192343"
-X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="26192343"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 16:45:05 -0700
-X-CSE-ConnectionGUID: KI4+d7XNS7iUtlrv57V2gg==
-X-CSE-MsgGUID: LwqmGFfYR5CYkeryjZ8msQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="103705533"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 28 Sep 2024 16:45:02 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1suh7U-000Nkv-22;
-	Sat, 28 Sep 2024 23:45:00 +0000
-Date: Sun, 29 Sep 2024 07:44:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: Re: [PATCH v5 2/2] gcc-sdm845: Add general purpose clock ops
-Message-ID: <202409290702.jlF0XWJZ-lkp@intel.com>
-References: <20240617-starqltechn_integration_upstream-v5-2-761795ea5084@gmail.com>
+	s=arc-20240116; t=1727590228; c=relaxed/simple;
+	bh=VuF+6B8clsCESzRY45mjWVDnp0roeP9EanMgzGgHiWE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nBYV9jFpp6W0YaraYDnu1KJDcHfoCzUuecfzGzdUFzjODwEwOZB+fBvd9AxuoYAENHH1UIZ4OcKsyo8A3AApB5PnJ21W9xKDg2rZ8hjPhUsfdf1kHqqJ8m7OcFxVFXMYEVgZHvOYqd9BXESbovbhr6T9PD7D4wa2v2uXoQQiB9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMvI8bvP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C1419C4CEC5;
+	Sun, 29 Sep 2024 06:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727590227;
+	bh=VuF+6B8clsCESzRY45mjWVDnp0roeP9EanMgzGgHiWE=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=PMvI8bvPOh99P0uhs1qw02qI/4fAiG+OaPeubI6weUSf7yES471ck+AnnR9LmruEZ
+	 YCYeBHzXZ2pPvRu7YSY7svBrXGAUf5wBT7bdtfhfvAWuAdI52KN7zaEVAl2hrkz0AX
+	 VhuxAKvcOK1j7935S1vzvVNXWIYDfL9um59N9pc6LIlseZWGLBHJ1jGXeaDrmgzumU
+	 PFtqe1oFUzmFFYAo6J8kTq3so1uJqc7UjU1HxIq76Wa5MVP6mpRK/WsKH1N+GKmnNm
+	 LPbshINP3VSGxN2nD3kh2shDro1j1VG5GL3T89dxojjimjeb8zyzhUWP3UpbHP0LDV
+	 DBAbnsJ8FW2Jg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF78ECF6498;
+	Sun, 29 Sep 2024 06:10:27 +0000 (UTC)
+From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Subject: [PATCH 0/2] clk: Fix issues related to CLK_IGNORE_UNUSED failures
+ and amlogic glitch free mux
+Date: Sun, 29 Sep 2024 14:10:04 +0800
+Message-Id: <20240929-fix_glitch_free-v1-0-22f9c36b7edf@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240617-starqltechn_integration_upstream-v5-2-761795ea5084@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADzv+GYC/x2MQQqAIBAAvxJ7TtCtg/aVCAlbdSEsNCII/550H
+ JiZFwplpgJT90KmmwsfqYHqO3BxTYEEb40BJY7SoBGeHxt2vly0PhMJNNJpbXBwg4JWnZma8h/
+ npdYP3BY0HWEAAAA=
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ Chuan Liu <chuan.liu@amlogic.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727590225; l=2225;
+ i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=VuF+6B8clsCESzRY45mjWVDnp0roeP9EanMgzGgHiWE=;
+ b=uv2V//H+abP/S3Lw1qAz+VmyJFzrQupRRNbZVAZLVVbSOXL4PGoneT4nrv9LXoR4p9o9RDGqB
+ VeQpA48RrjADXJl+sHwiniuTizO/DMQ0PwSjqDVVZVEBJLoBCahwUM5
+X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
+ pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
+X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
+ auth_id=203
+X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
+Reply-To: chuan.liu@amlogic.com
 
-Hi Dzmitry,
+If CLK_OPS_PARENT_ENABLE is configured for clock,
+clk_core_disable_unprepare() is called in clk_disable_unused_subtree().
+Even clocks that are configured with CLK_IGNORE_UNUSED are disabled,
+resulting in the failure of CLK_IGNORE_UNUSED.
 
-kernel test robot noticed the following build warnings:
+To ensure that amlogic glitch free mux can switch clock channels
+properly, add flag CLK_OPS_PARENT_ENABLE to glitch free mux. The issue
+that CLK_OPS_PARENT_ENABLE in CCF causes CLK_IGNORE_UNUSED to fail is
+also exposed.
 
-[auto build test WARNING on 92fc9636d1471b7f68bfee70c776f7f77e747b97]
+glitch free mux channel switchover failure issue(Test vpu_clk on S4):
+step 1:
+$ cat /sys/kernel/debug/clk/vpu/clk_parent 
+vpu_0
+$ cat /sys/kernel/debug/clk/vpu_0/clk_rate 
+399999994
+$ cat /sys/kernel/debug/clk/vpu_1/clk_rate 
+666666656
+$ echo 1 > /sys/kernel/debug/clk/vpu/clk_prepare_enable 
+$ cat /sys/kernel/debug/meson-clk-msr/clks/cts_vpu_clk
+399987500       +/-12500Hz
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dzmitry-Sankouski/clk-qcom-clk-rcg2-document-calc_rate-function/20240926-184051
-base:   92fc9636d1471b7f68bfee70c776f7f77e747b97
-patch link:    https://lore.kernel.org/r/20240617-starqltechn_integration_upstream-v5-2-761795ea5084%40gmail.com
-patch subject: [PATCH v5 2/2] gcc-sdm845: Add general purpose clock ops
-config: i386-buildonly-randconfig-006-20240929 (https://download.01.org/0day-ci/archive/20240929/202409290702.jlF0XWJZ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290702.jlF0XWJZ-lkp@intel.com/reproduce)
+step 2:
+$ echo 0 > /sys/kernel/debug/clk/vpu/clk_prepare_enable 
+$ echo 1 > /sys/kernel/debug/clk/vpu/clk_parent 
+$ cat /sys/kernel/debug/clk/vpu/clk_parent 
+vpu_1
+$ cat /sys/kernel/debug/clk/vpu/clk_rate 
+666666656
+$ echo 1 > /sys/kernel/debug/clk/vpu/clk_prepare_enable 
+$ cat /sys/kernel/debug/meson-clk-msr/clks/cts_vpu_clk
+0       +/-3125Hz
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409290702.jlF0XWJZ-lkp@intel.com/
+In step2, vpu_0 is disabled, and the vpu is not switched to vpu_1. At
+this time, the vpu is still connected to vpu_0 and vpu_0 is disabled at
+this time, resulting in the clk-measure not measuring the clock.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+---
+Chuan Liu (2):
+      clk: Fix the CLK_IGNORE_UNUSED failure issue
+      clk: meson: Fix glitch free mux related issues
 
->> drivers/clk/qcom/clk-rcg2.c:431:13: warning: variable 'count' set but not used [-Wunused-but-set-variable]
-     431 |         int i = 2, count = 0;
-         |                    ^
-   1 warning generated.
+ drivers/clk/clk.c                  | 67 ++++++++++++++++++++++++++++++++++++--
+ drivers/clk/meson/a1-peripherals.c | 12 +++----
+ drivers/clk/meson/axg.c            | 16 +++++----
+ drivers/clk/meson/c3-peripherals.c |  6 ++--
+ drivers/clk/meson/g12a.c           | 18 ++++++----
+ drivers/clk/meson/gxbb.c           | 18 ++++++----
+ drivers/clk/meson/s4-peripherals.c | 32 +++++++++---------
+ 7 files changed, 122 insertions(+), 47 deletions(-)
+---
+base-commit: e736da1956cf0880a02ec5023f3487eea7611b5f
+change-id: 20240929-fix_glitch_free-290c88923c31
 
-
-vim +/count +431 drivers/clk/qcom/clk-rcg2.c
-
-   427	
-   428	static void clk_rcg2_calc_mnd(u64 parent_rate, u64 rate, struct freq_tbl *f,
-   429				unsigned int mnd_max, unsigned int pre_div_max)
-   430	{
- > 431		int i = 2, count = 0;
-   432		unsigned int pre_div = 1;
-   433		unsigned long rates_gcd, scaled_parent_rate;
-   434		u16 m, n = 1, n_candidate = 1, n_max;
-   435	
-   436		rates_gcd = gcd(parent_rate, rate);
-   437		m = div64_u64(rate, rates_gcd);
-   438		scaled_parent_rate = div64_u64(parent_rate, rates_gcd);
-   439		while (scaled_parent_rate > (mnd_max + m) * pre_div_max) {
-   440			// we're exceeding divisor's range, trying lower scale.
-   441			if (m > 1) {
-   442				m--;
-   443				scaled_parent_rate = mult_frac(scaled_parent_rate, m, (m + 1));
-   444			} else {
-   445				f->n = mnd_max + m;
-   446				f->pre_div = pre_div_max;
-   447				f->m = m;
-   448			}
-   449		}
-   450	
-   451		n_max = m + mnd_max;
-   452	
-   453		while (scaled_parent_rate > 1) {
-   454			while (scaled_parent_rate % i == 0) {
-   455				n_candidate *= i;
-   456				if (n_candidate < n_max)
-   457					n = n_candidate;
-   458				else if (pre_div * i < pre_div_max)
-   459					pre_div *= i;
-   460				else
-   461					clk_rcg2_split_div(i, &pre_div, &n, pre_div_max);
-   462	
-   463				scaled_parent_rate /= i;
-   464			}
-   465			i++;
-   466			count++;
-   467		}
-   468	
-   469		f->m = m;
-   470		f->n = n;
-   471		f->pre_div = pre_div > 1 ? pre_div : 0;
-   472	}
-   473	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Chuan Liu <chuan.liu@amlogic.com>
+
+
 
