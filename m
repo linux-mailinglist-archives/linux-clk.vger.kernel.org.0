@@ -1,154 +1,86 @@
-Return-Path: <linux-clk+bounces-12663-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12667-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA41B98D1B3
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Oct 2024 12:51:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9880698D1FC
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Oct 2024 13:08:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CDEA2862BA
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Oct 2024 10:51:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D87F9B24642
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Oct 2024 11:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4761206969;
-	Wed,  2 Oct 2024 10:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB30120011A;
+	Wed,  2 Oct 2024 11:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ghbvx+80"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="LXCEtMkx"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B8D1E7669;
-	Wed,  2 Oct 2024 10:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C342A1EBFFB;
+	Wed,  2 Oct 2024 11:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727866145; cv=none; b=j/PddaUsqUmnWoMoViz0CDpfNSx1SHXOUBLhPVWTZlyr+ITJGfCn7M+nKiK+V1HCowN6dOx9rFL+g/DUG1EAQ2uB6955Z+XTDLUtkyOHBzu/ZViMiBWfsQMki3pq7cFifGWARbG5QMNA6k764liYDl1bbMoF0Hifh9JC2LNPbII=
+	t=1727867259; cv=none; b=qAaKlrDewBJIeJAD97gEhnajxuYe03I+HVR1iith/OneQelfQu/j8+qkSDJhRpOPf3XvgLPZdC9vbDcazhpn+ZGcP2+7yGmU7Qgb1IukPAoxo7hqtCFO962LMOrnkr7NR/shTUYkPEGNBSgE5G2RyQi+/2ahnK0LUaigQ1PLogM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727866145; c=relaxed/simple;
-	bh=qu+RgAvMKGG6eHj1nt3ZqKEHLWp1YZIU8I35f+U8nJ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=afS8raPgacB4Kd4qmwjiE/hy8i9/clyRR9FBJAxaht2m3j9cAOlDyopz5ljnjJEAU7utOKZNuel0po44jGcGzf9+qoeBBu3TSdRyX0k+Vfhp+v5HOabZDmESDQb8hHSzleae9pwiBwySQPVbqQpunu4jDsZCZtX84Dv6PGs0/dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ghbvx+80; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C795C4CEC5;
-	Wed,  2 Oct 2024 10:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727866145;
-	bh=qu+RgAvMKGG6eHj1nt3ZqKEHLWp1YZIU8I35f+U8nJ8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ghbvx+80TtOagxSSx1YVAs9g9hcuxHcr6yLQqp1K5nKrFCl5BE+jQkcvY5Em4LizZ
-	 7TTfyi8Q1r8TcaULi1V78umAH2v2xFGVp7jizdudRRavh7XzSIkt004SYipWNHZHTG
-	 pxNRE7mWBPtSb/DiMBEpYpprx67f+1uZNjJslUZoh3KB5JI0Hz93sHd6cZOtd39/dr
-	 N0siEYxDw/yM27ljqrztpfd7ToSWiyXYdOFd/hCQndIOngs9/gPohQHUsRnCFoWhjf
-	 JjcCU7SDodapmr53g0FNnpZGRx65eKcYekP7qv3pXRoyKT/12Id4B5vvAi77tXDQIK
-	 yXLSJFNQtwPlQ==
-From: Conor Dooley <conor@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	pierre-henry.moussay@microchip.com,
-	valentina.fernandezalanis@microchip.com,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Lee Jones <lee@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Jerome Brunet <jbrunet@baylibre.com>,
+	s=arc-20240116; t=1727867259; c=relaxed/simple;
+	bh=vB9vI6WRzdRxXmbdZXI9Iwk/JIrxAnatd2u6aYQNlCE=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=LXt1lsHiNwX1nF7M6jhaAxwqDpfxqFd2PNkpSXxYn86c/AK4WI2WpnIa6K7YfxlBQ2HGv2v0CB+JPqenUCuIGRyRPkBPrjfvrYk4bQmH+LHTRz06p6fNli4OBmUTZcIwHDuqo2A0lpGBggDgz6N7qPJHY2a6MTFOeQGQoqFePS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=LXCEtMkx; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=j4JZqMGLjPIlJYiU7SXMyC/1ARZVOo0mx0L4xwVNZ9E=; b=LXCEtMkxFUmFHXHZW+9MJS/Z4O
+	fLAQ+iXjrA9oougpjYjO9nYj8wbG5B7kZR3pVbD0d39B//HPtTEPciV8hUjIoC37QZCXAM3n+L5/P
+	Eh+hlWlz8ed6VfWUSgfPbGfbxUFypZdarvvBzRewNOTJ56fuVFZYzzPhWIDsJLdPvnk2g3vjfXS5/
+	WvRt3tXA62UCl6RBuAT72z1yG/8xmdvnaI3npaWewUZtbeY93egu8qZwdNPjwsF1O4QioSlXRpKHF
+	It8ksHXvi+HWTgYD/PfQzOU0JYdDN/4XpPT5IRJapYeqEmZ5wjIdp1tPC6jrCiWcQ1bWBNSbPMa2S
+	ns4ZanQA==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Stephen Boyd <sboyd@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
 	Kevin Hilman <khilman@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-riscv@lists.infradead.org,
 	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 11/11] riscv: dts: microchip: convert clock and reset to use syscon
-Date: Wed,  2 Oct 2024 11:48:09 +0100
-Message-ID: <20241002-porous-mangy-4634b6556202@spud>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241002-private-unequal-33cfa6101338@spud>
-References: <20241002-private-unequal-33cfa6101338@spud>
+	linux-kernel@vger.kernel.org,
+	Lee Jones <lee@kernel.org>,
+	linux-omap@vger.kernel.org,
+	Roger Quadros <rogerq@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v2 0/3] mfd: twl: Add clock for TWL6030
+Date: Wed,  2 Oct 2024 13:07:15 +0200
+Message-Id: <20241002110718.528337-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.5
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2218; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=BB4R12hb6JJv+m+wU7R6gaxBtVYrpHfMfCCdOaNVhVc=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDGl/VR7pXuTMmWI1dz5P/0rJRftzznEdb7XzW3u7THfu9 qnVD5otO0pZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjCRZ7sY/nC3+v6yfXGLZ+6S xrl5LvOFDT+JsHXWS37dPPtXKdesKB9GhrsvP9jds1yvfTTPX+HuMX/n3LNWxs83TzT3zGQWk8t 5xw8A
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Previously the clock support for only implemented for TWL6032 so add
+it also for the TWL6030. There are devices out there where especially
+WLAN only works if these clocks are enabled by some patched U-Boot.
+This allows to explicitly specify the clock requirements.
 
-The "subblock" clocks and reset registers on PolarFire SoC are located
-in the mss-top-sysreg region, alongside pinctrl and interrupt control
-functionality. Re-write the devicetree to describe the sys explicitly,
-as its own node, rather than as a region of the clock node.
-Correspondingly, the phandles to the reset controller must be updated to
-the new provider. The drivers will continue to support the old way of
-doing things.
+Andreas Kemnade (3):
+  mfd: twl-core: Add a clock subdevice for the TWL6030
+  clk: twl: remove is_prepared
+  clk: twl: add TWL6030 support
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/boot/dts/microchip/mpfs.dtsi | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/clk/Kconfig    |  2 +-
+ drivers/clk/clk-twl.c  | 71 +++++++++++++++++++++++++-----------------
+ drivers/mfd/twl-core.c | 32 +++++++++++++------
+ 3 files changed, 65 insertions(+), 40 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-index f8a45e4f00a0d..08aa4fe03fd30 100644
---- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -251,11 +251,9 @@ pdma: dma-controller@3000000 {
- 			#dma-cells = <1>;
- 		};
- 
--		clkcfg: clkcfg@20002000 {
--			compatible = "microchip,mpfs-clkcfg";
--			reg = <0x0 0x20002000 0x0 0x1000>, <0x0 0x3E001000 0x0 0x1000>;
--			clocks = <&refclk>;
--			#clock-cells = <1>;
-+		mss_top_sysreg: syscon@20002000 {
-+			compatible = "microchip,mpfs-mss-top-sysreg", "syscon", "simple-mfd";
-+			reg = <0x0 0x20002000 0x0 0x1000>;
- 			#reset-cells = <1>;
- 		};
- 
-@@ -452,7 +450,7 @@ mac0: ethernet@20110000 {
- 			local-mac-address = [00 00 00 00 00 00];
- 			clocks = <&clkcfg CLK_MAC0>, <&clkcfg CLK_AHB>;
- 			clock-names = "pclk", "hclk";
--			resets = <&clkcfg CLK_MAC0>;
-+			resets = <&mss_top_sysreg CLK_MAC0>;
- 			status = "disabled";
- 		};
- 
-@@ -466,7 +464,7 @@ mac1: ethernet@20112000 {
- 			local-mac-address = [00 00 00 00 00 00];
- 			clocks = <&clkcfg CLK_MAC1>, <&clkcfg CLK_AHB>;
- 			clock-names = "pclk", "hclk";
--			resets = <&clkcfg CLK_MAC1>;
-+			resets = <&mss_top_sysreg CLK_MAC1>;
- 			status = "disabled";
- 		};
- 
-@@ -550,5 +548,12 @@ syscontroller_qspi: spi@37020100 {
- 			clocks = <&scbclk>;
- 			status = "disabled";
- 		};
-+
-+		clkcfg: clkcfg@3e001000 {
-+			compatible = "microchip,mpfs-clkcfg";
-+			reg = <0x0 0x3e001000 0x0 0x1000>;
-+			clocks = <&refclk>;
-+			#clock-cells = <1>;
-+		};
- 	};
- };
 -- 
-2.45.2
+2.39.5
 
 
