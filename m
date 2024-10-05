@@ -1,256 +1,96 @@
-Return-Path: <linux-clk+bounces-12771-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12773-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332B099156D
-	for <lists+linux-clk@lfdr.de>; Sat,  5 Oct 2024 10:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D8B89916DB
+	for <lists+linux-clk@lfdr.de>; Sat,  5 Oct 2024 14:47:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E73A1282905
-	for <lists+linux-clk@lfdr.de>; Sat,  5 Oct 2024 08:57:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B75E0282947
+	for <lists+linux-clk@lfdr.de>; Sat,  5 Oct 2024 12:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921FA7C6E6;
-	Sat,  5 Oct 2024 08:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3EE714F10E;
+	Sat,  5 Oct 2024 12:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="bc7f31KM"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="2AviVhhE"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE40384D3E
-	for <linux-clk@vger.kernel.org>; Sat,  5 Oct 2024 08:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B2714AD20;
+	Sat,  5 Oct 2024 12:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728118652; cv=none; b=It2Z82haEny+6y30Nlh0cRPqljpzRa3I0ihLWHChbF0kT40VVBRsp199dBEqx6543pzsOvCGGITkkJeD6nhmshuFVcc3j0Hh6rG8TrPbHaQEugQn1z+Vv6W05n7GEqcy2pXxFzycXyKjZeNYphBQ35xRgtqfDzNjrfpT9j9jV58=
+	t=1728132445; cv=none; b=tNGGiMzDqC3Wbaeqh6Z6gp+vEFSBCkrlwXvgA3NX+XmBfVJs6ukkJUo/LYa83V3ZhPJ6p1DNHy2ArnyuwdvSZRj6mx7B5OIXa3q5kuyuA1mYPa6B4gNMCWpOjApuq9x6umXPb9UCN3cg9yQ4atjVDjzT/D9mQM8j5XqGNX8joEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728118652; c=relaxed/simple;
-	bh=OObl/UyuFTAd1nMb6WKlWlyjc57t3qQdMV4ahGdPYiQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jDu3p4sPZm5H+1BHgWBbTH1r3BNTSksqTth1odNQg7YyUfRWGoCPQW9nYNM08GZLBIIEVRMrJguDGBdF6wDXpbQBhDrKyxiJq8takA0OVOOAdeygRPQ8aPXt7+UM3u5NluvA5mum4iLz0F3EWo0nbaqgGjWGcdf97cJE0Oj70x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=bc7f31KM; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e262c652f99so2465240276.0
-        for <linux-clk@vger.kernel.org>; Sat, 05 Oct 2024 01:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1728118650; x=1728723450; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vfgT2yflkbkyl0YVzv5lFdOMwbcuqZBZZgYThVVHyBM=;
-        b=bc7f31KMIhJEEZ92mXUz5ytfrZ+lxj9Da9w6uG1s8NLO8RIzXH1jmmB0Emp/kefLY8
-         wB1ooqkoWV6Ys+GT0NFoFn15ks4eN/qT3JDH6GxxPsE3fPQaQznIkAFsi/sGya0hfomf
-         /3vA7KFpXyBl6OmJ7OgpCNiWG7f2/BCPRZtWE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728118650; x=1728723450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vfgT2yflkbkyl0YVzv5lFdOMwbcuqZBZZgYThVVHyBM=;
-        b=S9USb1GXAexFPxIId9NZZUsWdi36cCuEUQt9IGsd/VebPJoqqxJRrigdbIBpjRo+IU
-         Tm4SfoWpRZaQv0qUtubbUsDgXSG+TI4+eTgawCdjfznNTwuGR9EQzLDVl9ZLE/H8t9Du
-         ImHYnTHIFwTieNp/pjbeiOhBN0cTYtKCt1ZSb/eTn3e62u9Pos+zazAFaZWKkc3cIYvC
-         z8P58CW+uOIh3jTCD2skm3X1144Q4CmJYu2Rs6t71oCIcxLH5znhb3SkFd/ToPVGOsUo
-         KaqWotepXexXtBiyj7BQv4dp9f3B0QDpv+w2CtejeL/BC+CkxXWoeSPDULrem1V2cB71
-         wzjg==
-X-Forwarded-Encrypted: i=1; AJvYcCXTYz7pScvT58F7RZgO3QqyNgVHB/ZrbKjvgTbgHA6m2ACob+QkxVR9W/qCwrV8/1ntbZN7xgNK/+E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcBnbyVE5irlTL2XSxPhSdSX98rQXRh2rPSIhjFZRveQW+OToj
-	rQZHqp9hKSP+kPY+SmV3dfR7kYFVB8jVIGgYloBRSjKd4mOAE1AzR4cDVZcvmukZOBOogXg54xs
-	I/lmFrxe1qVab+UtccbwmZIqYB8FcVqPhnJ8GsA==
-X-Google-Smtp-Source: AGHT+IHyPDWXx3rPyEtAvD2Z65J7MaAjnomS2UWEjzzTksih/UuIR2EN+kxrUyqv86Cb6CkAyA0Fg72wiOEqiF+4buA=
-X-Received: by 2002:a05:6902:2e0a:b0:e28:75c6:6d55 with SMTP id
- 3f1490d57ef6-e28936d4176mr4929636276.16.1728118649704; Sat, 05 Oct 2024
- 01:57:29 -0700 (PDT)
+	s=arc-20240116; t=1728132445; c=relaxed/simple;
+	bh=mFx+U4GcSDdopKlqlzwtHYpyI1W1kasBQAt42bd2ZM8=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=sEpewdukSJXtLIdOo/VvRyM9UKDhHZYO2FWO7gBskagdeyXRzqH+pTwNCLHQX8No2Q5V8G8A7iZiEy/gvqPWdbEBZ4mezgBXz5Yv50kx72dnUDgP/EemSAWL7LroF5D0lfvn3FbCYZ3eGL3KY43pOBs/7Rgg6wVPAHoo2gKoY50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=2AviVhhE; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=tzKgvh+pT+/ApAb95UUjz/MFj8CO1vRHstRCj/wa6Eo=; b=2AviVhhEc9I43avvEvSd9FJFUO
+	mvL3BzJ+JvAsGEDvIMfXqnYgDMSWzSQY1Y28KKzOdtBhzH2t7Vgg762dlXA0rfxBscYOBLGvnshln
+	m9QsHiKiZV2pjb3a97ulNmNjALdEwgAJ8GmbAop52z7BrnBNdz4w6h75URUFMAYdRaknyw2HMh5JV
+	vrrtlul2pm+Ko6qjF9Nm1+aG1tjUPIncogUV/YrEb28nPVTOprnB/0jCwHOrahjsI6Y5KHqmUwDq4
+	NRCwyedP380M1ag50xOfXl06hqtF7H2ajH1BwxrAaL957cMDVX1HCdQ/Ix0Va/WP06fFBx6qK2Zjn
+	dKkF/0Yg==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Tony Lindgren <tony@atomide.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Lee Jones <lee@kernel.org>,
+	Roger Quadros <rogerq@kernel.org>,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kevin Hilman <khilman@baylibre.com>,
+	linux-omap@vger.kernel.org,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH v3 0/3] mfd: twl: Add clock for TWL6030
+Date: Sat,  5 Oct 2024 14:47:03 +0200
+Message-Id: <20241005124706.601393-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.5
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240928083804.1073942-1-dario.binacchi@amarulasolutions.com>
- <20240928083804.1073942-2-dario.binacchi@amarulasolutions.com>
- <566859c1-a397-4465-987e-0682b07a703e@kernel.org> <CABGWkvqqg-PGAZTCz=MMLRx5F93jaN_=z8zJt1sDd3PHXd80PQ@mail.gmail.com>
- <6c3e6071-822f-4230-b76b-276330de07ef@kernel.org> <CABGWkvrU507BHoP94Y7fEyFr=chuuy3o=oBHtuWRvwTw3GnxXw@mail.gmail.com>
- <82db5037-bbd3-4005-bde9-02df1bf4c475@kernel.org>
-In-Reply-To: <82db5037-bbd3-4005-bde9-02df1bf4c475@kernel.org>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Sat, 5 Oct 2024 10:57:18 +0200
-Message-ID: <CABGWkvqXZ+YAvo-AtUy+Ftdu0xxXKuhOwcSTwO5Fv6D3yzttNg@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: clock: imx8m-anatop: support spread
- spectrum clocking
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com, 
-	Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Peng Fan <peng.fan@nxp.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 3, 2024 at 12:46=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 01/10/2024 08:29, Dario Binacchi wrote:
-> > On Mon, Sep 30, 2024 at 8:45=E2=80=AFAM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> >>
-> >> On 29/09/2024 22:00, Dario Binacchi wrote:
-> >>>>
-> >>>>
-> >>>>> +  properties:
-> >>>>> +    compatible:
-> >>>>> +      contains:
-> >>>>> +        enum:
-> >>>>> +          - fsl,imx8mm-anatop
-> >>>>> +
-> >>>>> +then:
-> >>>>> +  properties:
-> >>>>> +    fsl,ssc-clocks:
-> >>>>
-> >>>> Nope. Properties must be defined in top-level.
-> >>>>
-> >>>>> +      $ref: /schemas/types.yaml#/definitions/phandle-array
-> >>>>> +      description:
-> >>>>> +        The phandles to the PLLs with spread spectrum clock genera=
-tion
-> >>>>> +        hardware capability.
-> >>>>
-> >>>> These should be clocks.
-> >>>
-> >>> Sorry, but I can't understand what you're asking me.
-> >>> Could you kindly explain it to me in more detail?
-> >>
-> >> You added new property instead of using existing one for this purpose:
-> >> 'clocks'.
-> >
-> >>
-> >>
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>
-> >
-> > I added this new property specifically for managing spread-spectrum.
-> > Indeed, not all clocks/PLLs
-> > managed by the node/peripheral support spread-spectrum, and the added
-> > properties specify
-> > parameters for enabling and tuning SSC for each individual PLL based
-> > on the index of each list.
-> > If I were to use the 'clocks' property and add a clock to this list
-> > that does not support SSC, IMHO
-> > the pairings would be less clear.
->
-> You duplicate property with argument "pairings shall match". Well, I am
-> not happy with the duplication. Clocks have specific order, thus it is
-> explicit which one needs tuning. Your other properties can match them as
-> well, just index from clocks is offset...
+Previously the clock support for only implemented for TWL6032 so add
+it also for the TWL6030. There are devices out there where especially
+WLAN only works if these clocks are enabled by some patched U-Boot.
+This allows to explicitly specify the clock requirements.
 
-Just to check if I understood correctly what you are suggesting before
-submitting version 3 of the patch.
-Something, for example, like:
+Changes in V3:
+- use type enum in driver_data and twl_clock_info
+- revert back to store device instead of platform_device
 
-clocks =3D <&clk, IMX8MP_AUDIO_PLL1>,  <&clk, IMX8MP_AUDIO_PLL2>, <&clk
-IMX8MP_VIDEO_PLL1>;
-fsl,ssc-modfreq-hz =3D <0, 3517>, <2, 6818>;
+Changes in V2:
+- cleanup some defines
+- no separate ops for 6030
+- remove is_prepared()
+- update Kconfig
 
-Where the spread spectrum is enabled only for AUDIO_PLL1 and VIDEO_PLL1 and
-not for IMX8MP_AUDIO_PLL2.
+Andreas Kemnade (3):
+  mfd: twl-core: Add a clock subdevice for the TWL6030
+  clk: twl: remove is_prepared
+  clk: twl: add TWL6030 support
 
-Is this what you meant?
+ drivers/clk/Kconfig    |  2 +-
+ drivers/clk/clk-twl.c  | 69 ++++++++++++++++++++++++++----------------
+ drivers/mfd/twl-core.c | 32 ++++++++++++++------
+ 3 files changed, 66 insertions(+), 37 deletions(-)
 
-Thanks and regards,
-Dario
+-- 
+2.39.5
 
->
->
-> >
-> > AFAIK the confusion arises from the fact that this node, which is a
-> > clock controller, was used only
-> > to export its base address, but perhaps it should have also exported
-> > its clocks, which the other
-> > clock controller does, as shown in:
-> > Documentation/devicetree/bindings/clock/imx8m-clock.yaml.
->
-> You use it as clocks, so I don't understand this comment.
->
-> > If I consider its 'compatible' entries:
-> > - 'fsl,imx8mm-ccm' -> drivers/clk/imx/clk-imx8mm.c
-> > - 'fsl,imx8mn-ccm' -> drivers/clk/imx/clk-imx8mn.c
-> > - 'fsl,imx8mp-ccm' -> drivers/clk/imx/clk-imx8mp.c
-> > the probe function, triggered by fsl,imx8m{m,n,p}-ccm (and not
-> > fsl,imx8m{m,n,p}-anatop),
-> > retrieves the anatop node solely to get its base address, also
-> > registering its clocks, which
-> > I would have expected to be registered by another driver, specifically
-> > the one for anatop:
-> >
-> > static int imx8mn_clocks_probe(struct platform_device *pdev)
-> > {
-> > struct device *dev =3D &pdev->dev;
-> > struct device_node *np =3D dev->of_node;
-> > void __iomem *base;
-> > struct imx_pll14xx_ssc pll1443x_ssc;
-> > int ret;
-> >
-> > clk_hw_data =3D devm_kzalloc(dev, struct_size(clk_hw_data, hws,
-> >                            IMX8MN_CLK_END), GFP_KERNEL);
-> > if (WARN_ON(!clk_hw_data))
-> >     return -ENOMEM;
-> >
-> > clk_hw_data->num =3D IMX8MN_CLK_END;
-> > hws =3D clk_hw_data->hws;
-> >
-> > hws[IMX8MN_CLK_DUMMY] =3D imx_clk_hw_fixed("dummy", 0);
-> > hws[IMX8MN_CLK_24M] =3D imx_get_clk_hw_by_name(np, "osc_24m");
-> > hws[IMX8MN_CLK_32K] =3D imx_get_clk_hw_by_name(np, "osc_32k");
-> > hws[IMX8MN_CLK_EXT1] =3D imx_get_clk_hw_by_name(np, "clk_ext1");
-> > hws[IMX8MN_CLK_EXT2] =3D imx_get_clk_hw_by_name(np, "clk_ext2");
-> > hws[IMX8MN_CLK_EXT3] =3D imx_get_clk_hw_by_name(np, "clk_ext3");
-> > hws[IMX8MN_CLK_EXT4] =3D imx_get_clk_hw_by_name(np, "clk_ext4");
-> >
-> > np =3D of_find_compatible_node(NULL, NULL, "fsl,imx8mn-anatop");
-> > base =3D devm_of_iomap(dev, np, 0, NULL);
-> > of_node_put(np);
-> > if (WARN_ON(IS_ERR(base))) {
-> >     ret =3D PTR_ERR(base);
-> >     goto unregister_hws;
-> > }
-> >
-> > hws[IMX8MN_AUDIO_PLL1_REF_SEL] =3D imx_clk_hw_mux("audio_pll1_ref_sel",
-> > base + 0x0, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-> > hws[IMX8MN_AUDIO_PLL2_REF_SEL] =3D imx_clk_hw_mux("audio_pll2_ref_sel",
-> > base + 0x14, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
-> > hws[IMX8MN_VIDEO_PLL_REF_SEL] =3D imx_clk_hw_mux("video_pll_ref_sel",
-> > base + 0x28, 0, 2, pll_ref_sels, ARRAY_SIZE(pll_ref_sels));
->
-> Sorry, I am not going to dwell into drivers code. We talk here about
-> bindings and new properties.
->
-> Best regards,
-> Krzysztof
->
-
-
---=20
-
-Dario Binacchi
-
-Senior Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
 
