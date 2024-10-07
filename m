@@ -1,251 +1,169 @@
-Return-Path: <linux-clk+bounces-12845-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12847-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFB4C993077
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Oct 2024 17:04:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7491499314D
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Oct 2024 17:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C697B25A2E
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Oct 2024 15:04:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A34B01C235D9
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Oct 2024 15:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5DB21D9325;
-	Mon,  7 Oct 2024 15:02:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CADDF1D89F0;
+	Mon,  7 Oct 2024 15:34:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="H9N73oNT"
+	dkim=pass (2048-bit key) header.d=getgoogleoff.me header.i=@getgoogleoff.me header.b="XUSdbYE/"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085161D8E1D
-	for <linux-clk@vger.kernel.org>; Mon,  7 Oct 2024 15:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0285125B9;
+	Mon,  7 Oct 2024 15:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728313371; cv=none; b=dV1STcNHoRbTbEGfsDtf/djoZepesBWBOetg64jWt1/ejFY3lOBr9v7TJpTmsxHLuXelMMR/U4V+CEgmZMaKFKAzos253NAzDFh9Nd7Bg3UU4uqw3zyD8h7hbbl6h9IlT74jBycpCLi6oEqIgMLEYMoejZL64FuqRWanQ+kzcvQ=
+	t=1728315277; cv=none; b=hxxKPK3jcIBHJ/pBzLalPLuDZZ1xC+meLvsgyfPROH+JuMfCE60btEunMdkSoI1o+KoqdOn/U/i//aPK7EkI4rmx7LFNSFqBWGFxA2Djz3IBZP7nF+/62+3aS6s2po70PJBIyOIcnThqUDbWVsOGOlq8iiKxO72+B7zJHHLY/RM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728313371; c=relaxed/simple;
-	bh=YFgBzb5t13jGsblwPz4zuJTL9xNOUthC3CzWh+2YRRI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TvTDLljQjn9WVL6KCFdTTZ7a6SVeL/oj5Sd9Ug+YX55gS6OhVZlBKX9rRRriXM2Kn809VTrLXXKHdQBxWXXUsFpDy+7oz+aXDEaLSSoR7+SVGyFoAJ28f2Gjgrcbz4h1IMsL9QQ6pgWug/Lqd+v6MqmrpPl+v+09/VyvwCqHDsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=H9N73oNT; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6d6891012d5so36728887b3.2
-        for <linux-clk@vger.kernel.org>; Mon, 07 Oct 2024 08:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1728313369; x=1728918169; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lRXc+qYMpiIpv9iclqrXM3fuvSnpa1ayC+j4HSUgcBA=;
-        b=H9N73oNTNPU06BDaJnnsNshXrwH+uyEuXIlUEnv35yoggdhGgmClD5zYQh5i1nkjE/
-         BUgvR3w8e6Ldwq+/M2T4AJTezzJJcWHYkb/vomQwGPNw60ulw5YUABsQVEedZMGk7GgS
-         lUgFwjg7e1s4kNceEWNmU8iV+3oQW8DOqRVqk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728313369; x=1728918169;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lRXc+qYMpiIpv9iclqrXM3fuvSnpa1ayC+j4HSUgcBA=;
-        b=Lp6fIwSKl7fSE36RM59VKeRd+wFYXQKuxh3+31AcYD0jDWB3f/4tsgzTGNLVl6V24B
-         RILtpMlGR/vhPU8VhAi8EsL3MVDLOxnil6zx14K7a5JZaKXAGCDWFELawZQkM8m17kHh
-         4Qt0qalvlNQK9ZFnglBeD+s3tj3UipXDqaq6wmHMEbiWeibcB0z8N+uF/Tk7f1rv4rbO
-         oCRV8o8KpxI9lbsfBexkVDClQ9knxL4UVcOsg6pmvsegyqOLnndMW4/xi/5ws3pmhn7p
-         pzNObqQW3IhlxwO0zcgsLRZcrwP1WZLBTzLN6klshub+wHploc8JCHL1MHyLnzQullvF
-         r8pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVcIdHAUpIXXnI4Nf4TV3ioOMAZDswy7+wWW1+QWCSOD8GMdYGKwsqAujJI8rvy/2uQKmOpGFB6FYA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUhy5if6OBPPc7P2I2QoHt5kGCS3zCZvzbiarHb44VYqV7kLht
-	TDcQBTuMc1I2ZFKRWa5EEqNl7nR6ijmxNzcNgXs6sd/um8d2pE4l+peH37m3oYnLZMWOqE/swPN
-	px9pw94DUobGQL5kYGDh26CIM//R0vyP17S+FWA==
-X-Google-Smtp-Source: AGHT+IFnJ2aAEnjxDoEAR+k68meuDnN2C3jBt7oao/8Qh8myzaggBhO3fqphRnV4wGyuGqlBgzoWmwVTMtQEKqFZHbA=
-X-Received: by 2002:a05:690c:660b:b0:6e2:b263:1052 with SMTP id
- 00721157ae682-6e2c6fdd536mr92120257b3.6.1728313368916; Mon, 07 Oct 2024
- 08:02:48 -0700 (PDT)
+	s=arc-20240116; t=1728315277; c=relaxed/simple;
+	bh=8GMwkqkKcW/+VQjyMBni5YMGJslvG+i9TFyetnJVeSA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=SW8NlfUCaT3rsh15V3/IH4Z56gPl9SLoTfg0PnJ5jYW7vcgKBTiyv5JKIRD3iv+loXHbPPXW9z8K7xUiTfjPejvZlZ8kT9RLmzK6wGlxQ+lx9YbSk2WcbufxUGXusItRc/gmE5E5mZfekHJrSLzCxJx88S2g9BKO+tvzHrack3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=getgoogleoff.me; spf=pass smtp.mailfrom=getgoogleoff.me; dkim=pass (2048-bit key) header.d=getgoogleoff.me header.i=@getgoogleoff.me header.b=XUSdbYE/; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=getgoogleoff.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=getgoogleoff.me
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 74B5023E90;
+	Mon,  7 Oct 2024 17:34:25 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PL0UiTgmvZOa; Mon,  7 Oct 2024 17:34:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=getgoogleoff.me;
+	s=mail; t=1728315264;
+	bh=8GMwkqkKcW/+VQjyMBni5YMGJslvG+i9TFyetnJVeSA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=XUSdbYE/h5uP5gRvyn0Unu7VpQoMCF9S24mcv3HBGtKTFqQj6mOdKfGOwzspgEcmH
+	 lvbWGCw6OTmYwoa7UHHpU2SN/nSFiiNHjHY4vODlcYCRKziMFv1ioVgLYvh3W+nHOt
+	 1UoZgRdrmJoephEK+/kHXZOnO0fkzFoaxEj3lRiFy6yC6F2mULxDkrqp/D6nUTG6fC
+	 FHfk9X7WJR1OLph5OmdoYkhdSVrHOTNqTMlB/boIfVNOqL3iT1cKvIQwXv65QZJ2cB
+	 UJBFQ4RMJ5No3xUdcTD5jQKiPNpJd+x1ZoieAQpIlX++LrFMmvxZ5GTAKS/DLTh8fn
+	 7H8RRtcpH6KYg==
+From: Karl Chan <exxxxkc@getgoogleoff.me>
+To: linus.walleij@linaro.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] pinctrl: qcom: ipq5018: allow it to be bulid on arm32
+Date: Mon,  7 Oct 2024 23:32:52 +0800
+Message-ID: <20241007153252.31449-1-exxxxkc@getgoogleoff.me>
+In-Reply-To: <CACRpkdZnBBAEgHZ=HShwvaXaN-6icC5hzwHqDNWWy_PKJDh+Fw@mail.gmail.com>
+References: <CACRpkdZnBBAEgHZ=HShwvaXaN-6icC5hzwHqDNWWy_PKJDh+Fw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240928083804.1073942-1-dario.binacchi@amarulasolutions.com>
- <20240928083804.1073942-2-dario.binacchi@amarulasolutions.com>
- <566859c1-a397-4465-987e-0682b07a703e@kernel.org> <CABGWkvqqg-PGAZTCz=MMLRx5F93jaN_=z8zJt1sDd3PHXd80PQ@mail.gmail.com>
- <6c3e6071-822f-4230-b76b-276330de07ef@kernel.org> <CABGWkvrU507BHoP94Y7fEyFr=chuuy3o=oBHtuWRvwTw3GnxXw@mail.gmail.com>
- <82db5037-bbd3-4005-bde9-02df1bf4c475@kernel.org> <CABGWkvqXZ+YAvo-AtUy+Ftdu0xxXKuhOwcSTwO5Fv6D3yzttNg@mail.gmail.com>
- <b847ccb1-1eb8-4119-8612-212804cb50d8@kernel.org>
-In-Reply-To: <b847ccb1-1eb8-4119-8612-212804cb50d8@kernel.org>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Mon, 7 Oct 2024 17:02:37 +0200
-Message-ID: <CABGWkvqkmo9O-O1taR651W4xo=yqar=p71e0LKqRte2CGZ2Z8w@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: clock: imx8m-anatop: support spread
- spectrum clocking
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-amarula@amarulasolutions.com, 
-	Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Peng Fan <peng.fan@nxp.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Oct 6, 2024 at 3:13=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On 05/10/2024 10:57, Dario Binacchi wrote:
-> > On Thu, Oct 3, 2024 at 12:46=E2=80=AFPM Krzysztof Kozlowski <krzk@kerne=
-l.org> wrote:
-> >>
-> >> On 01/10/2024 08:29, Dario Binacchi wrote:
-> >>> On Mon, Sep 30, 2024 at 8:45=E2=80=AFAM Krzysztof Kozlowski <krzk@ker=
-nel.org> wrote:
-> >>>>
-> >>>> On 29/09/2024 22:00, Dario Binacchi wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>>> +  properties:
-> >>>>>>> +    compatible:
-> >>>>>>> +      contains:
-> >>>>>>> +        enum:
-> >>>>>>> +          - fsl,imx8mm-anatop
-> >>>>>>> +
-> >>>>>>> +then:
-> >>>>>>> +  properties:
-> >>>>>>> +    fsl,ssc-clocks:
-> >>>>>>
-> >>>>>> Nope. Properties must be defined in top-level.
-> >>>>>>
-> >>>>>>> +      $ref: /schemas/types.yaml#/definitions/phandle-array
-> >>>>>>> +      description:
-> >>>>>>> +        The phandles to the PLLs with spread spectrum clock gene=
-ration
-> >>>>>>> +        hardware capability.
-> >>>>>>
-> >>>>>> These should be clocks.
-> >>>>>
-> >>>>> Sorry, but I can't understand what you're asking me.
-> >>>>> Could you kindly explain it to me in more detail?
-> >>>>
-> >>>> You added new property instead of using existing one for this purpos=
-e:
-> >>>> 'clocks'.
-> >>>
-> >>>>
-> >>>>
-> >>>>
-> >>>> Best regards,
-> >>>> Krzysztof
-> >>>>
-> >>>
-> >>> I added this new property specifically for managing spread-spectrum.
-> >>> Indeed, not all clocks/PLLs
-> >>> managed by the node/peripheral support spread-spectrum, and the added
-> >>> properties specify
-> >>> parameters for enabling and tuning SSC for each individual PLL based
-> >>> on the index of each list.
-> >>> If I were to use the 'clocks' property and add a clock to this list
-> >>> that does not support SSC, IMHO
-> >>> the pairings would be less clear.
-> >>
-> >> You duplicate property with argument "pairings shall match". Well, I a=
-m
-> >> not happy with the duplication. Clocks have specific order, thus it is
-> >> explicit which one needs tuning. Your other properties can match them =
-as
-> >> well, just index from clocks is offset...
-> >
-> > Just to check if I understood correctly what you are suggesting before
-> > submitting version 3 of the patch.
-> > Something, for example, like:
-> >
-> > clocks =3D <&clk, IMX8MP_AUDIO_PLL1>,  <&clk, IMX8MP_AUDIO_PLL2>, <&clk
-> > IMX8MP_VIDEO_PLL1>;
-> > fsl,ssc-modfreq-hz =3D <0, 3517>, <2, 6818>;
->
-> Hm, what is 0? If clock index, then no, it's redundant. The first item
-> in cannot point to other clock.
->
-> Also, what exactly are you setting here
-
-I am enabling and configuring the spread spectrum.
-
-Normal clock: Without spread spectrum, the clock signal has a fixed and
-repetitive frequency (e.g., 100 MHz). This frequency generates an
-electromagnetic
-signal concentrated on a single frequency, and if strong enough, it can dis=
-turb
-other devices.
-
-Spread spectrum:  With spread spectrum, the clock frequency is
-slightly "modulated,"
-meaning it oscillates around a central value. For example, if the base
-frequency is 100 MHz,
-the clock might vary between 99.5 MHz and 100.5 MHz in a cyclic manner. Thi=
-s
-small variation spreads the energy over a wider range of frequencies
-(from 99.5 to 100.5 MHz),
-reducing the intensity of the signal at any one frequency.
-
-> and why assigned-clock-rates are
-> not working?
-
-The traditional clock properties, such as clocks,
-assigned-clocks-rates, etc retain their usual
-meaning even when spread spectrum is applied. However, to implement
-the spread spectrum
-mechanism in a circuit with a PLL (Phase-Locked Loop), additional
-specific parameters are
-introduced to properly configure the frequency modulation:
-
- - Modulation frequency: i. e. fsl,ssc-modfreq-hz
- - Modulation rate: i.e.  fsl,ssc-modrate-percent
- - Modulation type:  i. e. fsl,ssc-modmethod (center-spread, down-spread)
-
-Additionally, it should be noted that not all anatop PLLs are equipped
-with circuitry for spread
-spectrum, but only a small subset of them. This is the reason why I
-introduced the property
-"fsl, ssc-clocks".
-
-This is another commit [1] on enabling spread spectrum that I
-implemented some time ago for
-the am335x. The most evident difference is that in that case the node
-was a clock node and not
-a clock controller, as in the case of anatop. The parameters are also
-not exactly the same, but
-that depends on the platform.
-
-[1] 4a8bc2644ef0cbf8e ("dt-bindings: ti: dpll: add spread spectrum support"=
-)
-
-Thanks and regards,
-Dario
-
->
-> Best regards,
-> Krzysztof
->
-
-
---=20
-
-Dario Binacchi
-
-Senior Embedded Linux Developer
-
-dario.binacchi@amarulasolutions.com
-
-__________________________________
-
-
-Amarula Solutions SRL
-
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-
-T. +39 042 243 5310
-info@amarulasolutions.com
-
-www.amarulasolutions.com
+=0DCBT U-Boot ver: 3.2.08  ([IPQ5018].[SPF11.3].[CSU2])=0D
+=0D=0D
+=0DDRAM:  smem ram ptable found: ver: 1 len: 4=0D
+=0D512 MiB=0D
+=0DNAND:  QPIC controller support serial NAND=0D
+=0DID =3D 22c822c8=0D
+=0DVendor =3D c8=0D
+=0DDevice =3D 22=0D
+=0DSerial Nand Device Found With ID : 0xc8 0x22=0D
+=0DSerial NAND device Manufacturer:GD5F2GQ5REYIH=0D
+=0DDevice Size:256 MiB, Page size:2048, Spare Size:64, ECC:4-bit=0D
+=0DSF: Unsupported flash IDs: manuf 00, jedec 0000, ext_jedec 0000=0D
+=0Dipq_spi: SPI Flash not found (bus/cs/speed/mode) =3D (0/0/48000000/0)=0D
+=0D256 MiB=0D
+=0DMMC:   sdhci: Node Not found, skipping initialization=0D
+=0D=0D
+=0DPCI Link Intialized=0D
+=0DPCI1 is not defined in the device tree=0D
+=0DIn:    serial@78AF000=0D
+=0DOut:   serial@78AF000=0D
+=0DErr:   serial@78AF000=0D
+=0Dmachid: 8040001=0D
+=0Deth0 MAC Address from ART is not valid=0D
+=0Deth1 MAC Address from ART is not valid=0D
+=0D=0D
+=0DUpdating boot_count ... done=0D
+=0D=0D
+=0DSaving Environment to NAND...=0D
+=0DErasing NAND...=0D
+=0D=0DErasing at 0x5c0000 --  25% complete.=0DErasing at 0x5e0000 --  50% c=
+omplete.=0DErasing at 0x600000 --  75% complete.=0DErasing at 0x620000 -- 1=
+00% complete.=0D
+=0DWriting to NAND... OK=0D
+=0DHit any key to stop autoboot:  3 =08=08=08 2 =08=08=08 1 =08=08=08 0 =0D
+=0Dstarting USB...=0D
+=0DUSB0:   Register 2000140 NbrPorts 2=0D
+=0DStarting the controller=0D
+=0DUSB XHCI 1.10=0D
+=0Dscanning bus 0 for devices... 2 USB Device(s) found=0D
+=0Dreading boot-image.itb=0D
+=0D16048071 bytes read in 8855 ms (1.7 MiB/s)=0D
+=0D## Loading kernel from FIT Image at 44000000 ...=0D
+=0D   Using 'standard' configuration=0D
+=0D   Trying 'kernel' kernel subimage=0D
+=0D     Description:  Kernel=0D
+=0D     Type:         Kernel Image=0D
+=0D     Compression:  uncompressed=0D
+=0D     Data Start:   0x440000a8=0D
+=0D     Data Size:    8249289 Bytes =3D 7.9 MiB=0D
+=0D     Architecture: AArch64=0D
+=0D     OS:           Linux=0D
+=0D     Load Address: 0x41208000=0D
+=0D     Entry Point:  0x41208000=0D
+=0D   Verifying Hash Integrity ... OK=0D
+=0D## Loading ramdisk from FIT Image at 44000000 ...=0D
+=0D   Using 'standard' configuration=0D
+=0D   Trying 'initrd' ramdisk subimage=0D
+=0D     Description:  Initramfs image=0D
+=0D     Type:         RAMDisk Image=0D
+=0D     Compression:  Unknown Compression=0D
+=0D     Data Start:   0x447ec43c=0D
+=0D     Data Size:    7738968 Bytes =3D 7.4 MiB=0D
+=0D     Architecture: AArch64=0D
+=0D     OS:           Linux=0D
+=0D     Load Address: unavailable=0D
+=0D     Entry Point:  unavailable=0D
+=0D   Verifying Hash Integrity ... OK=0D
+=0D## Loading fdt from FIT Image at 44000000 ...=0D
+=0D   Using 'standard' configuration=0D
+=0D   Trying 'fdt' fdt subimage=0D
+=0D     Description:  DTB=0D
+=0D     Type:         Flat Device Tree=0D
+=0D     Compression:  uncompressed=0D
+=0D     Data Start:   0x447de10c=0D
+=0D     Data Size:    58042 Bytes =3D 56.7 KiB=0D
+=0D     Architecture: AArch64=0D
+=0D   Verifying Hash Integrity ... OK=0D
+=0D   Booting using the fdt blob at 0x447de10c=0D
+=0D   Loading Kernel Image ... OK=0D
+=0D   Loading Ramdisk to 4a0c0000, end 4a821658 ... OK=0D
+=0D   Loading Device Tree to 4a0ae000, end 4a0bf2b9 ... OK=0D
+=0Dfdt_fixup_qpic: QPIC: unable to find node '/soc/qpic-nand@79b0000'=0D
+=0DCould not find PCI in device tree=0D
+=0DUsing machid 0x8040001 from environment=0D
+=0D=0D
+=0DStarting kernel ...=0D
+=0D=0D
+=0Dundefined instruction=0D
+=0Dpc : [<41208004>]	   lr : [<4a921f8f>]=0D
+=0Dreloc pc : [<41208004>]	   lr : [<4a921f8f>]=0D
+=0Dsp : 4a822838  ip : 00000001	 fp : 00000000=0D
+=0Dr10: 4a83b914  r9 : 4a822ea0	 r8 : 00000000=0D
+=0Dr7 : 00000000  r6 : 41208000	 r5 : 4a97d848  r4 : 00000000=0D
+=0Dr3 : 644d5241  r2 : 4a0ae000	 r1 : 08040001  r0 : 00000000=0D
+=0DFlags: nzCV  IRQs off  FIQs off  Mode SVC_32=0D
+=0DResetting CPU ...=0D
+=0D=0D
+=0Dresetting ...=0D
+=0D
 
