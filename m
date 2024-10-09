@@ -1,112 +1,180 @@
-Return-Path: <linux-clk+bounces-12959-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12964-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EED0996457
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 11:02:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FC7A9964B8
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 11:17:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E751281829
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 09:02:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EABDF1F23214
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 09:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B61F118A6DD;
-	Wed,  9 Oct 2024 09:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FFBE18E351;
+	Wed,  9 Oct 2024 09:16:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="Uhrm+oI+"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QJgQbH7b"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07671166F00;
-	Wed,  9 Oct 2024 09:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41ACD18E046;
+	Wed,  9 Oct 2024 09:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728464526; cv=none; b=DqGiWdYaWsARClssfP68Zt2g4HxQVXyKRb7AQGf9vqLK8RQahkhUcJVkz5fGEZtdpgZkLsvT+TB8mKOGlZ1ayW+lPDoEt4pgR6qDzXcdF3QH40kvKk8VG6C4lkGwOUZ/3Zj83mQPUDqLYgyWcGymKxiHb4IJUWIBdtnmR524fqM=
+	t=1728465363; cv=none; b=a7ecrBhzJZBQukJork9dND6LnA9cq6QQCAq4y+oKLq06C52z9m5fuOOHu2snT4FPaf5Qdt6PqZL2v36xzrqWU8mEPLJcsn/KdurfE09FAjBaZe7A/hGLNGXM7ji9RzBc8eKRaLIKCOzosrhHGPwPeFXexjq6QUGmokC90Q6HCCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728464526; c=relaxed/simple;
-	bh=ESDpBhZRaGB14XgN7tzB2HQ8mkUIV3izuk6EsszNpc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ls/7t40Hg/y4txaFVcmgxuJUbp2NVwoPNyux9z5L9wKI83WR4eaT95a3kApEjUUUzHslE9VKmJOpIQe0o27x7wPr+nLgtHTQsYszV8EtQxgKsfW5ZhFpOlnFuv0lDB4Gg4Xn+enNrVhTKFgTIWIMyF67vU9rztZOXsP2XzjIB+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=Uhrm+oI+; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from fpc (unknown [10.10.165.14])
-	by mail.ispras.ru (Postfix) with ESMTPSA id F41F440B2786;
-	Wed,  9 Oct 2024 09:01:54 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru F41F440B2786
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1728464515;
-	bh=0tBlbvTpMjEqfjlFsN9StBxwVE8haftHBQAgLVgyA/g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Uhrm+oI+Y9xZzVZUh7+xdeLE6G2fr5xo3ziwvAT9SJePQNWwM2b1WgS1I95IB6+Yp
-	 9pUT/TbEC+igKD/12/XK08TTI5RK+0TXTL2AyZfi+CkpAVqXX7dplqhELc0cHWn8bG
-	 lMfGEU1mrp51lxkAC4luddzLdLYE8ai5Z1+k5k1E=
-Date: Wed, 9 Oct 2024 12:01:51 +0300
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Stephen Boyd <sboyd@kernel.org>, lvc-project@linuxtesting.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [lvc-project] [PATCH v3] clk: mvebu: Prevent division by zero in
- clk_double_div_recalc_rate()
-Message-ID: <20241009-29749473966747300f3d1d3b-pchelkin@ispras.ru>
-References: <20240917132201.17513-1-adiupina@astralinux.ru>
- <af7dc028ced22413210701a5e2e05990.sboyd@kernel.org>
- <d05d9ebd-f954-482b-878b-9dcb422821a8@astralinux.ru>
- <c2250a7cd0e2af5077ade91279567c3b.sboyd@kernel.org>
- <a79dda0a-258d-4567-b473-44aabe81b649@lunn.ch>
+	s=arc-20240116; t=1728465363; c=relaxed/simple;
+	bh=opxJ2aOB2oIa/CWrtNiGXE7b43eLH7kbUrTa+DZGOV8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BcmvU3LiYY7cFYyoIsIVlfePh0c42ipFK0VN0mYUkjR20rlB7VOLmYZpr6+dhziAf6ieEYnpjYRNNOgniktL0jTxi2EIsBWQ6I6Bvbk02vTaW2dacf70fqQ+RqF280qreF0njdNuyxkTXp1BcQEkVXCCl29yeFXzoLpp1vLQ+Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QJgQbH7b; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498KxGBV017894;
+	Wed, 9 Oct 2024 09:15:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=vzhURKChvezdZpmhgThjYVmBFudRlgG2R51
+	0GJ3VdZc=; b=QJgQbH7bsoyedlI8Hx7sM/YyY/+YwljYv2D87MldGHtmaEnWJ8x
+	ETBju73YF/S37BipEJQQzTQwcEQmvtpTaU2wAxMqOSqpa0SsRJR7y9SrCm5Ewli9
+	qiunVN2mGx/OjLSiRw/+hpy++u4+7Cwl//5bDGFpM73kujcFCikF951XV6+uoaxn
+	Q2tcfXu3AH8bSPnqyWqJ4kAtry2T76ADH1fZ7+yeZKsQs6Fi5E9HeOE+zB9e6GUO
+	keJTsM54K9WxkWckLBShbiXttzf7faRkv8j/gkIdrCYH5rRlN6pwO9oIZ1WRjyKp
+	d1tG/SWnLZ/tByS07TCX8SJ1d0RGm7zdn4g==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 425c8qshs5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 09:15:44 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 4999DLPq021519;
+	Wed, 9 Oct 2024 09:15:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 425cdvw4qh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 09:15:43 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 499986pS005784;
+	Wed, 9 Oct 2024 09:15:42 GMT
+Received: from hu-devc-lv-u22-c.qualcomm.com (hu-qianyu-lv.qualcomm.com [10.81.25.114])
+	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 4999Fgax027290
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 09:15:42 +0000
+Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 4098150)
+	id 3E2FA656; Wed,  9 Oct 2024 02:15:42 -0700 (PDT)
+From: Qiang Yu <quic_qianyu@quicinc.com>
+To: manivannan.sadhasivam@linaro.org, vkoul@kernel.org, kishon@kernel.org,
+        robh@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, abel.vesa@linaro.org, quic_msarkar@quicinc.com,
+        quic_devipriy@quicinc.com
+Cc: dmitry.baryshkov@linaro.org, kw@linux.com, lpieralisi@kernel.org,
+        neil.armstrong@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, Qiang Yu <quic_qianyu@quicinc.com>
+Subject: [PATCH v5 0/7] Add support for PCIe3 on x1e80100
+Date: Wed,  9 Oct 2024 02:15:33 -0700
+Message-Id: <20241009091540.1446-1-quic_qianyu@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a79dda0a-258d-4567-b473-44aabe81b649@lunn.ch>
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IX8ETymgN41G1ksExYyE5s0qwLe-t8kL
+X-Proofpoint-ORIG-GUID: IX8ETymgN41G1ksExYyE5s0qwLe-t8kL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=911 malwarescore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0 clxscore=1011
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2410090060
 
-Hi Andrew,
+This series add support for PCIe3 on x1e80100.
 
-On Tue, 08. Oct 23:58, Andrew Lunn wrote:
-> On Mon, Oct 07, 2024 at 03:56:29PM -0700, Stephen Boyd wrote:
-> > Quoting Alexandra Diupina (2024-09-24 06:14:44)
-> > > >> diff --git a/drivers/clk/mvebu/armada-37xx-periph.c b/drivers/clk/mvebu/armada-37xx-periph.c
-> > > >> index 8701a58a5804..b32c6d4d7ee5 100644
-> > > >> --- a/drivers/clk/mvebu/armada-37xx-periph.c
-> > > >> +++ b/drivers/clk/mvebu/armada-37xx-periph.c
-> > > >> @@ -343,7 +343,12 @@ static unsigned long clk_double_div_recalc_rate(struct clk_hw *hw,
-> > > >>          div = get_div(double_div->reg1, double_div->shift1);
-> > > >>          div *= get_div(double_div->reg2, double_div->shift2);
-> > > >>   
-> > > >> -       return DIV_ROUND_UP_ULL((u64)parent_rate, div);
-> > > >> +       if (!div) {
-> > > >> +               pr_err("Can't recalculate the rate of clock %s\n", hw->init->name);
-> > > > hw->init is set to NULL after registration (see clk_register() code). If
-> > > > div is 0 what does the hardware do?
-> > > 
-> > > Thanks for noticing the error. Yes, hw->init is set to zero,
-> > > I will replace that code with clk_hw_get_name(hw).
-> > > If the value of div is 0, should I return 0 as stated in the
-> > > comment for .recalc_rate (in struct clk_ops) or should I
-> > > return parent_rate as in some other similar rate recalculation
-> > > functions (in some other drivers)?
-> > 
-> > It depends on what the hardware does. Does the hardware pass on the
-> > parent rate if the divider is zero? If so, then return parent_rate. Or
-> > does it turn off completely? If so, return zero.
-> 
-> I don't think anybody knows what the hardware does in this
-> condition. I also suspect it has never happened, or if it has, nobody
-> has complained.
-> 
-> I would say, let is divide by 0, so there is an obvious kernel stack
-> trace and hopefully a report of the issue. It can then be investigated
-> in a way we can then find out what the hardware actually is doing.
+PCIe3 needs additional set of clocks, regulators and new set of PCIe QMP
+PHY configuration compare other PCIe instances on x1e80100. Hence add
+required resource configuration and usage for PCIe3.
 
-Is it worth adding some kind of WARN assertions? Or actually just leave it
-for now as is?
+v4->v5:
+1. Add Reviewed-by tag
+2. Expand and clarify usage of txz/rxz in commit message
+3. Add comments that txz/rxz must be programmed before tx/rx
+4. Change the sort order for phy register tbls
+5. Use the order defined in struct qmp_phy_cfg_tbls for phy register tbls
+   presented in x1e80100_qmp_gen4x8_pciephy_cfg
+6. Add Fixes and CC stable tag
+7. Fix ops for SC8280X and X1E80100
+8. Document global interrupt in bindings
+9. Link to v4: https://lore.kernel.org/all/20240924101444.3933828-1-quic_qianyu@quicinc.com/
+
+v3->v4:
+1. Reword commit msg of [PATCH v3 5/6]
+2. Drop opp-table property from qcom,pcie-sm8450.yaml
+3. Add Reviewed-by tag
+4. Link to v3: https://lore.kernel.org/all/20240923125713.3411487-1-quic_qianyu@quicinc.com/
+
+v2->v3:
+1. Use 'Gen 4 x8' in commit msg
+2. Move opp-table property to qcom,pcie-common.yaml
+3. Add Reviewed-by tag
+4. Add global interrupt and use GIC_SPI for the parent interrupt specifier
+5. Use 0x0 in reg property and use pcie@ for pcie3 device node
+6. Show different IP version v6.30 in commit msg
+7. Add logic in controller driver to have new ops for x1e80100
+8. Link to v2: https://lore.kernel.org/all/20240913083724.1217691-1-quic_qianyu@quicinc.com/
+
+v2->v1:
+1. Squash [PATCH 1/8], [PATCH 2/8],[PATCH 3/8] into one patch and make the
+   indentation consistent.
+2. Put dts patch at the end of the patchset.
+3. Put dt-binding patch at the first of the patchset.
+4. Add a new patch where opp-table is added in dt-binding to avoid dtbs
+   checking error.
+5. Remove GCC_PCIE_3_AUX_CLK, RPMH_CXO_CLK, put in TCSR_PCIE_8L_CLKREF_EN
+   as ref.
+6. Remove lane_broadcasting.
+7. Add 64 bit bar, Remove GCC_PCIE_3_PIPE_CLK_SRC, 
+   GCC_CFG_NOC_PCIE_ANOC_SOUTH_AHB_CLK is changed to
+   GCC_CFG_NOC_PCIE_ANOC_NORTH_AHB_CLK.
+8. Add Reviewed-by tag.
+9. Remove [PATCH 7/8], [PATCH 8/8].
+10. Link to v1: https://lore.kernel.org/all/20240827063631.3932971-1-quic_qianyu@quicinc.com/ 
+
+Qiang Yu (7):
+  dt-bindings: phy: qcom,sc8280xp-qmp-pcie-phy: Document the X1E80100
+    QMP PCIe PHY Gen4 x8
+  dt-bindings: PCI: qcom: Move OPP table to qcom,pcie-common.yaml
+  dt-bindings: PCI: qcom,pcie-x1e80100: Add 'global' interrupt
+  phy: qcom: qmp: Add phy register and clk setting for x1e80100 PCIe3
+  clk: qcom: gcc-x1e80100: Fix halt_check for pipediv2 clocks
+  PCI: qcom: Fix the ops for X1E80100 and SC8280X family SoC
+  arm64: dts: qcom: x1e80100: Add support for PCIe3 on x1e80100
+
+ .../bindings/pci/qcom,pcie-common.yaml        |   4 +
+ .../bindings/pci/qcom,pcie-sm8450.yaml        |   4 -
+ .../bindings/pci/qcom,pcie-x1e80100.yaml      |  10 +-
+ .../phy/qcom,sc8280xp-qmp-pcie-phy.yaml       |   3 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi        | 204 ++++++++++++++++-
+ drivers/clk/qcom/gcc-x1e80100.c               |  10 +-
+ drivers/pci/controller/dwc/pcie-qcom.c        |  14 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      | 214 ++++++++++++++++++
+ .../qualcomm/phy-qcom-qmp-pcs-pcie-v6_30.h    |  25 ++
+ drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6_30.h |  19 ++
+ 10 files changed, 491 insertions(+), 16 deletions(-)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-pcie-v6_30.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-v6_30.h
+
+-- 
+2.34.1
+
 
