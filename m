@@ -1,89 +1,138 @@
-Return-Path: <linux-clk+bounces-12941-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12944-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 998D9995FDF
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 08:36:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92EE0996107
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 09:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F4A01F2447D
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 06:36:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C50771C21B31
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 07:39:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693F516631C;
-	Wed,  9 Oct 2024 06:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE86417E473;
+	Wed,  9 Oct 2024 07:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Bd8c4SpO"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087FD15B0FE
-	for <linux-clk@vger.kernel.org>; Wed,  9 Oct 2024 06:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F72E84E18;
+	Wed,  9 Oct 2024 07:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728455814; cv=none; b=rPcecAvKctM9DOXiQGtctGwKCKAay1ftxK3RI8LELkUpm2PZC+ujZRWb2gDZmTQdOttNSAjNdpoI+zegTEXZUlah0EQpGEMMHEr9pAs4hrS2jRB4nJjPgr9wxOi2ZmXHBDMGN/7yFGO7KOPO52h7DNYjJ2D0LGDpUcw3W2hGTJE=
+	t=1728459552; cv=none; b=JW4Ps1yKb81QZCNF8Bp1YMIIeGAqQnvfAP++yU7yN8nXaaJawJCThUh87VcgcJc+8mGL1qcGrbJflwb/4kYutrEqG1RhZHUyFS5U+GBBtRCiacNXKKhvm8Nn32NEuAZ34IprIg3kkhM4yEsFvl82+Nx5Pmjm9Tn624f0DkZCEpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728455814; c=relaxed/simple;
-	bh=8fd4Mcz9d/Dg4W389ZyHJuBMUL0wE2AvyQGU3KncKZU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M4ZxwO5DGVdQf+b5XbC/mmaWHruib4lL046F9S2v7QE4lPggZq8MaBv/Tr/0anW4MHwkAr4VeR62WMBZdBCD4dUn7HkLBu1jsSTINiYi8VMXI7SFg+q6pOV9+ph99TzO5iL+pETmvJCNfDe6fIiNpOEpkSKvfCn+4a+WnJo7kqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XNjmW2F3zzpWXX;
-	Wed,  9 Oct 2024 14:34:51 +0800 (CST)
-Received: from kwepemf500003.china.huawei.com (unknown [7.202.181.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id 248921800DE;
-	Wed,  9 Oct 2024 14:36:51 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemf500003.china.huawei.com
- (7.202.181.241) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 9 Oct
- 2024 14:36:50 +0800
-From: Zhang Zekun <zhangzekun11@huawei.com>
-To: <abelvesa@kernel.org>, <peng.fan@nxp.com>, <mturquette@baylibre.com>,
-	<sboyd@kernel.org>, <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-	<dinguyen@kernel.org>, <linux-clk@vger.kernel.org>
-CC: <chenjun102@huawei.com>, <zhangzekun11@huawei.com>
-Subject: [PATCH 4/4] clk: socfpga: clk-pll: Fix the use of uninitialized variable
-Date: Wed, 9 Oct 2024 14:32:29 +0800
-Message-ID: <20241009063229.121258-5-zhangzekun11@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20241009063229.121258-1-zhangzekun11@huawei.com>
-References: <20241009063229.121258-1-zhangzekun11@huawei.com>
+	s=arc-20240116; t=1728459552; c=relaxed/simple;
+	bh=BOTh+SM9Mx8xc69ATKWV5J5h+ivzwBN4pcInFOnwbBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ZIE6dRJBsnfcXhpK9GzpQQaHDebbbzFrnIDyAXiz9sdpxLB5RUk8BvJLQZ5jjKodEgV8Sicdq1zEJiNljmder7QMEjB+qbf57WGnGg9ZfTU/tfOyNMQdkkIMHX62nJ7o8OcVdlIEurPu+lG5+YCxRifgk87Cyj9v2EZ4wN9iUHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Bd8c4SpO; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4995C0hO001017;
+	Wed, 9 Oct 2024 07:38:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	an3ZLA/8YORWgwvKtRb94EOa+uQ0Kp7b3RNblvUzcAg=; b=Bd8c4SpOBxhV6/zm
+	tvGKNKZBTLtbFGnLF+F0Tu6WyDfCXosUHJHwau0XdOrIHdT0dF3+vrQAPIMeM+54
+	n90PmC1zBxpRVO2HaJlwkJYKHgNnTlGhQucYAi8xPLfXCnr563ELlxvYXZd91fke
+	eVdMzy5pRI9nbh5koPYAZafJjO1+UxK6tCptxbRDc5TAzuecYH3T1G5Lw71Np9jS
+	xgnYlSc0twvqNMxkWlDUR5Js9Rk71NlCukXH3FD8wCaqDTAo5jTcLpsHXnKogfVm
+	qMKO9DH1uitYc/45aQpvXXtk/Kbi6jM3h6t3w7x2wtW2/u8FNQ2xWuLA1lKVKCm2
+	l9Agxg==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 424wgs3xg5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 07:38:46 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4997cjAL003184
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 9 Oct 2024 07:38:45 GMT
+Received: from [10.152.195.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 9 Oct 2024
+ 00:38:37 -0700
+Message-ID: <158872a1-abcf-472f-bfa7-3f330d3c56e4@quicinc.com>
+Date: Wed, 9 Oct 2024 13:08:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemf500003.china.huawei.com (7.202.181.241)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V5 7/7] arm64: defconfig: Build NSS Clock Controller
+ driver for IPQ9574
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Devi Priya <quic_devipriy@quicinc.com>, <andersson@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <konrad.dybcio@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <richardcochran@gmail.com>, <geert+renesas@glider.be>,
+        <neil.armstrong@linaro.org>, <arnd@arndb.de>,
+        <m.szyprowski@samsung.com>, <nfraprado@collabora.com>,
+        <u-kumar1@ti.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <konraddybico@kernel.org>
+References: <20240626143302.810632-1-quic_devipriy@quicinc.com>
+ <20240626143302.810632-8-quic_devipriy@quicinc.com>
+ <rlqrgopsormclb7indayxgv54cnb3ukitfoed62rep3r6dn6qh@cllnbscbcidx>
+ <134665ba-8516-4bca-9a56-9a5bbfa71705@quicinc.com>
+ <kfmn6pixbrhaagll56z3ug7bfqrp6f47rd4m6qo6bidu3dfcew@r26q6aabut54>
+Content-Language: en-US
+From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <kfmn6pixbrhaagll56z3ug7bfqrp6f47rd4m6qo6bidu3dfcew@r26q6aabut54>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: AGt1Lo6XjnbRb7phW0j0UD9H90UE21tj
+X-Proofpoint-ORIG-GUID: AGt1Lo6XjnbRb7phW0j0UD9H90UE21tj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=772
+ suspectscore=0 impostorscore=0 bulkscore=0 clxscore=1011 adultscore=0
+ spamscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410090049
 
-The of_property_read_u32() can fail and leave the variable uninitialized,
-which will then be used. Return before using the uninitialized variable.
 
-Fixes: 97259e99bdc9 ("clk: socfpga: split clk code")
-Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
----
- drivers/clk/socfpga/clk-pll.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/socfpga/clk-pll.c b/drivers/clk/socfpga/clk-pll.c
-index 9dcc1b2d2cc0..9c3ce45cb907 100644
---- a/drivers/clk/socfpga/clk-pll.c
-+++ b/drivers/clk/socfpga/clk-pll.c
-@@ -82,7 +82,8 @@ static void __init __socfpga_pll_init(struct device_node *node,
- 	struct device_node *clkmgr_np;
- 	int rc;
- 
--	of_property_read_u32(node, "reg", &reg);
-+	if (of_property_read_u32(node, "reg", &reg))
-+		return;
- 
- 	pll_clk = kzalloc(sizeof(*pll_clk), GFP_KERNEL);
- 	if (WARN_ON(!pll_clk))
--- 
-2.17.1
+On 10/6/2024 10:13 PM, Dmitry Baryshkov wrote:
+> On Fri, Oct 04, 2024 at 01:26:27PM GMT, Manikanta Mylavarapu wrote:
+>>
+>>
+>> On 6/26/2024 11:44 PM, Dmitry Baryshkov wrote:
+>>> On Wed, Jun 26, 2024 at 08:03:02PM GMT, Devi Priya wrote:
+>>>> NSSCC driver is needed to enable the ethernet interfaces and not
+>>>> necessary for the bootup of the SoC, hence build it as a module.
+>>>
+>>> It is used on this-and-that device.
+>>>
+>>
+>> Hi Dmitry,
+>>
+>> Sorry for the delayed response.
+>>
+>> NSSCC driver is needed to enable the ethernet interfaces present
+>> in RDP433 based on IPQ9574. Since this is not necessary for bootup
+>> enabling it as a module.
+> 
+> Commit message, please.
+> 
+Hi Dmitry,
 
+Okay, sure.
+
+Thanks & Regards,
+Manikanta.
 
