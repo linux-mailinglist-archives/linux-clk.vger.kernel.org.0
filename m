@@ -1,125 +1,124 @@
-Return-Path: <linux-clk+bounces-12971-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-12973-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CDE99673C
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 12:28:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0FC5996900
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 13:40:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA5A21F20FB1
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 10:28:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D51E287064
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2024 11:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BB018DF93;
-	Wed,  9 Oct 2024 10:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9B9191F71;
+	Wed,  9 Oct 2024 11:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="fyywunHH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MPAgVwKW"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6370718D650
-	for <linux-clk@vger.kernel.org>; Wed,  9 Oct 2024 10:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3253A1925AF
+	for <linux-clk@vger.kernel.org>; Wed,  9 Oct 2024 11:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728469678; cv=none; b=RBvCriPo78Bq0gC/x+IWPVICAF6GkEILjXWuD4Ufi21SAsyn2A0zPMfYAhOORBJzhsj77Sp41CgckXzP+B48ZjHzi7DVKwR0mJ3WHnRz9IX0bu8JhKH/yrooISdD59rVhv2U70f1VLoBgySoN8XU/0bJ7WDqtFgpKP+jNhBxUiM=
+	t=1728474044; cv=none; b=WcBum+jpYMxq0soGA7YTXNeN2uPRrHCafff5wIPV/+8VXPUoGpEOklUgsA3RAviWvLfNN4Vzg7iZ42QdzhmBlufjv4Ujo7E0k2lskC3/hap92YJBQsg4dsxK1uMoSjPYlSAtxtZG+/BrRFfJADWZx6vCpxIPEjt0XlwoTIOBrnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728469678; c=relaxed/simple;
-	bh=EnCse8YQGWK+UOsMAVUKFCn0pNdVUtbErZAVwAb4M7o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Kl1D8rFkEpX04ATjBpNgCB3HIA9fIkF3ABM5X7ZZiAHorICfdN/Oae+SI6PrnMNa/DN3MqkOLThGWYlEuKwgxw9o2coZjuNPGXSlFjazQzEY36Zp/9pDX/ItNcc5UaHgqTvsolRNEzCl0JmGlRV5B212JvsxzNNv4PPLlJYg1BI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=fyywunHH; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from isaac-ThinkPad-T16-Gen-2.local (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F5ED2EC;
-	Wed,  9 Oct 2024 12:26:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1728469577;
-	bh=EnCse8YQGWK+UOsMAVUKFCn0pNdVUtbErZAVwAb4M7o=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=fyywunHHJy5Dmgz+1GjjIGC426Fwy3djtZFyEH03Wvr7VVVvVD8vIMLUCz4lcDx7r
-	 NaDV+NWTmntZDf+y8ckK5E9/J6vl8pv6wk7WD+hLNRf4NQ+2lexNMKfVU8Vrwm6Mqp
-	 hox6oi5uPqDeTt3BZGnNSULQvsezEeQ83Y51TCqg=
-Message-ID: <8a78fcf2f1da1d4b8ca3446e8378517a71bf1e51.camel@ideasonboard.com>
-Subject: Re: [PATCH 2/2] drm: bridge: ldb: Configure LDB clock in .mode_set
-From: Isaac Scott <isaac.scott@ideasonboard.com>
-To: Marek Vasut <marex@denx.de>, dri-devel@lists.freedesktop.org
-Cc: Abel Vesa <abelvesa@kernel.org>, Andrzej Hajda
- <andrzej.hajda@intel.com>,  David Airlie <airlied@gmail.com>, Fabio Estevam
- <festevam@gmail.com>, Jernej Skrabec	 <jernej.skrabec@gmail.com>, Jonas
- Karlman <jonas@kwiboo.se>, Laurent Pinchart	
- <Laurent.pinchart@ideasonboard.com>, Maarten Lankhorst	
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, Neil Armstrong
- <neil.armstrong@linaro.org>, Peng Fan <peng.fan@nxp.com>,  Pengutronix
- Kernel Team	 <kernel@pengutronix.de>, Robert Foss <rfoss@kernel.org>,
- Sascha Hauer	 <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- Simona Vetter	 <simona@ffwll.ch>, Stephen Boyd <sboyd@kernel.org>, Thomas
- Zimmermann	 <tzimmermann@suse.de>, imx@lists.linux.dev,
- kernel@dh-electronics.com, 	linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org
-Date: Wed, 09 Oct 2024 11:27:50 +0100
-In-Reply-To: <20241008223846.337162-2-marex@denx.de>
+	s=arc-20240116; t=1728474044; c=relaxed/simple;
+	bh=h9qy1eidkzqAdVQtLG/tBIVtqvb9J31253seEKXBubQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fDf4A7AqdUP7m+Axo3RW+pbQQL1Q6Nas6qUxLjODoGuzhrSfg+k+UhjmUEtefZRgOOyxDoZQhRASqJbNRaZQ6G+XtNayU1O+tBXSGGidHfsvOpCZ4PWRM2zcNxbNcy5HAmgUy0pLTmpnPBR0aHUOjyt5dOqvD4FD7CvokXZSm7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MPAgVwKW; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a9977360f9fso220781666b.0
+        for <linux-clk@vger.kernel.org>; Wed, 09 Oct 2024 04:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728474040; x=1729078840; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3tPa6oC3GkVBQqXt9lYWOj5WcXfTZQll2lZKEeta0s=;
+        b=MPAgVwKW5OdGMNIz0IQy4IkKXELdRqcgOUUIvdpn6Pz25biWzx5nkkqKsm8yNiw/LH
+         Yf6pv2dNUygWT4JStC8l5ctlNjXQHEgoS+Fm7woL/1Z5sL9GEmeXKXctCWxNmXOjRM1h
+         Jv8f5gW0QhDIG4nwMFXi5RE91NjetnQUq1ZPy/O0FhLSQdGZ9IpDrWELrR9Hqp/XrVpy
+         yGfA6cL3UxPrDXIsRxCMc4g0fMf57CNxA/UnTV9upkhcOYPJvZGwQ4T34RbStBm/6TYr
+         ZxcZKUFrmjQ6SN6N69R//qSHvATy1bmkKhJUqH2PWXWvmZfesZLzj4jSZI3LZQMrTVd+
+         kt6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728474040; x=1729078840;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n3tPa6oC3GkVBQqXt9lYWOj5WcXfTZQll2lZKEeta0s=;
+        b=khEsr58aLsSXHJjJK4N51h1AfuwkOQFcOr44DQx1P/qqQKopyO+/rqK+bCEXJQBJha
+         X0DlyiIDCc0ueejN1L+7XeH5SxYPGlHYXcrz+ZxZ2fuMJXp8+AuC42M9nQIyO18WUzEp
+         Nj5xQrEIkQ953DPPeakxdTiEJDHMeRmKSBJt3ev5HD/BRy8iy73QNj+YaLz7oOPJPueY
+         IzpeIrNTmNnfkWjFJX6dpikcT4F7R4W82XQxFSSqU+KBuw5aXEtVR4jsqj0G/NwUzh2E
+         13X7QpXulWci7tGYLSewylVRtzj0Q5RhUwzAQCKl3/X7aYnDEiSTLvavEURG/vBgKK/q
+         hQvg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1jUSR05v7Ra1n+Tzj2/uS/idtbvifWbo8aMqbZlnedbUHelq/XnoFUnKOhc7LDcMxsQDh12/jNgc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7TSVUIJWKiINgS7OvCdcqV9O7CRW7PqkhMcB/ed3cJxxE4CF0
+	mz8JUXbbirnGK74DCOduUjMFsa9TorQp36X60gCeK+SHRzTWovigWScNHOX27s0=
+X-Google-Smtp-Source: AGHT+IHzp7sGsoG0E3MlQedOjt1RQsHdAF3ZWTsO4nfIOk1uH4nyTFSaTS2XpHphmCpbogKsgsVUTg==
+X-Received: by 2002:a17:907:e89:b0:a99:3f4e:6de8 with SMTP id a640c23a62f3a-a998d3832e7mr182256566b.64.1728474040413;
+        Wed, 09 Oct 2024 04:40:40 -0700 (PDT)
+Received: from linaro.org ([82.77.84.93])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a994a8da5d3sm495547966b.134.2024.10.09.04.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 04:40:40 -0700 (PDT)
+Date: Wed, 9 Oct 2024 14:40:37 +0300
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Marek Vasut <marex@denx.de>
+Cc: dri-devel@lists.freedesktop.org, Abel Vesa <abelvesa@kernel.org>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	David Airlie <airlied@gmail.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Isaac Scott <isaac.scott@ideasonboard.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Robert Foss <rfoss@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>, Simona Vetter <simona@ffwll.ch>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, imx@lists.linux.dev,
+	kernel@dh-electronics.com, linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: Re: [PATCH 1/2] clk: imx: clk-imx8mp: Allow LDB serializer clock
+ reconfigure parent rate
+Message-ID: <ZwZrtajvhpq50QPH@linaro.org>
 References: <20241008223846.337162-1-marex@denx.de>
-	 <20241008223846.337162-2-marex@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.0 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008223846.337162-1-marex@denx.de>
 
-On Wed, 2024-10-09 at 00:38 +0200, Marek Vasut wrote:
-> The LDB serializer clock operate at either x7 or x14 rate of the
-> input
-> LCDIFv3 scanout engine clock. Make sure the serializer clock and
-> their
-> upstream Video PLL are configured early in .mode_set to the x7 or x14
-> rate of pixel clock, before LCDIFv3 .atomic_enable is called which
-> would
-> configure the Video PLL to low x1 rate, which is unusable.
->=20
-> With this patch in place, the clock tree is correctly configured. The
-> example below is for a 71.1 MHz pixel clock panel, the LDB serializer
-> clock is then 497.7 MHz:
-
-Awesome! Thank you for this, this seems to fix the regression and the
-patches work as expected. I have tested both patches on v6.12-rc2 and
-the display works well.
-
-For both patches,=20
-
-Tested-by: Isaac Scott <isaac.scott@ideasonboard.com>
->=20
-> video_pll1_ref_sel=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 =
-1 0=C2=A0 24000000 0 0 50000
-> =C2=A0=C2=A0 video_pll1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 1 0 497700000 0 0 50000
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 video_pll1_bypass=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 =
-1 0 497700000 0 0 50000
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 video_pll1_out=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 2 2 0 497700000 0 0 50000
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media_=
-ldb=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 1 0 497700000 0 0 50000
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 media_ldb_root_clk=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1 1 0 4=
-97700000 0 0 50000
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 media_=
-disp2_pix=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 1 1 0=C2=A0 71100000 0 0 50000
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 media_disp2_pix_root_clk 1 1 0=C2=A0 71100000 0 0 50000
->=20
+On 24-10-09 00:38:19, Marek Vasut wrote:
+> The media_ldb_root_clk supply LDB serializer. These clock are usually
+> shared with the LCDIFv3 pixel clock and supplied by the Video PLL on
+> i.MX8MP, but the LDB clock run at either x7 or x14 rate of the LCDIFv3
+> pixel clock. Allow the LDB to reconfigure Video PLL as needed, as that
+> results in accurate serializer clock.
+> 
 > Signed-off-by: Marek Vasut <marex@denx.de>
+
+Any fixes tag needed ?
+
+Otherwise, LGTM:
+
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+
 > ---
 > Cc: Abel Vesa <abelvesa@kernel.org>
 > Cc: Andrzej Hajda <andrzej.hajda@intel.com>
@@ -147,42 +146,23 @@ disp2_pix=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
 > Cc: linux-arm-kernel@lists.infradead.org
 > Cc: linux-clk@vger.kernel.org
 > ---
-> =C2=A0drivers/gpu/drm/bridge/fsl-ldb.c | 11 +++++++++++
-> =C2=A01 file changed, 11 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/bridge/fsl-ldb.c
-> b/drivers/gpu/drm/bridge/fsl-ldb.c
-> index 0e4bac7dd04ff..a3a31467fcc85 100644
-> --- a/drivers/gpu/drm/bridge/fsl-ldb.c
-> +++ b/drivers/gpu/drm/bridge/fsl-ldb.c
-> @@ -278,6 +278,16 @@ fsl_ldb_mode_valid(struct drm_bridge *bridge,
-> =C2=A0	return MODE_OK;
-> =C2=A0}
-> =C2=A0
-> +static void fsl_ldb_mode_set(struct drm_bridge *bridge,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct drm_display_mode *m=
-ode,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct drm_display_mode *a=
-dj)
-> +{
-> +	struct fsl_ldb *fsl_ldb =3D to_fsl_ldb(bridge);
-> +	unsigned long requested_link_freq =3D
-> fsl_ldb_link_frequency(fsl_ldb, mode->clock);
-> +
-> +	clk_set_rate(fsl_ldb->clk, requested_link_freq);
-> +}
-> +
-> =C2=A0static const struct drm_bridge_funcs funcs =3D {
-> =C2=A0	.attach =3D fsl_ldb_attach,
-> =C2=A0	.atomic_enable =3D fsl_ldb_atomic_enable,
-> @@ -287,6 +297,7 @@ static const struct drm_bridge_funcs funcs =3D {
-> =C2=A0	.atomic_get_input_bus_fmts =3D
-> fsl_ldb_atomic_get_input_bus_fmts,
-> =C2=A0	.atomic_reset =3D drm_atomic_helper_bridge_reset,
-> =C2=A0	.mode_valid =3D fsl_ldb_mode_valid,
-> +	.mode_set =3D fsl_ldb_mode_set,
-> =C2=A0};
-> =C2=A0
-> =C2=A0static int fsl_ldb_probe(struct platform_device *pdev)
-
+>  drivers/clk/imx/clk-imx8mp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index 516dbd170c8a3..2e61d340b8ab7 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -611,7 +611,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MP_CLK_MEDIA_MIPI_PHY1_REF] = imx8m_clk_hw_composite("media_mipi_phy1_ref", imx8mp_media_mipi_phy1_ref_sels, ccm_base + 0xbd80);
+>  	hws[IMX8MP_CLK_MEDIA_DISP1_PIX] = imx8m_clk_hw_composite_bus_flags("media_disp1_pix", imx8mp_media_disp_pix_sels, ccm_base + 0xbe00, CLK_SET_RATE_PARENT);
+>  	hws[IMX8MP_CLK_MEDIA_CAM2_PIX] = imx8m_clk_hw_composite("media_cam2_pix", imx8mp_media_cam2_pix_sels, ccm_base + 0xbe80);
+> -	hws[IMX8MP_CLK_MEDIA_LDB] = imx8m_clk_hw_composite("media_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00);
+> +	hws[IMX8MP_CLK_MEDIA_LDB] = imx8m_clk_hw_composite_bus_flags("media_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00, CLK_SET_RATE_PARENT);
+>  	hws[IMX8MP_CLK_MEMREPAIR] = imx8m_clk_hw_composite_critical("mem_repair", imx8mp_memrepair_sels, ccm_base + 0xbf80);
+>  	hws[IMX8MP_CLK_MEDIA_MIPI_TEST_BYTE] = imx8m_clk_hw_composite("media_mipi_test_byte", imx8mp_media_mipi_test_byte_sels, ccm_base + 0xc100);
+>  	hws[IMX8MP_CLK_ECSPI3] = imx8m_clk_hw_composite("ecspi3", imx8mp_ecspi3_sels, ccm_base + 0xc180);
+> -- 
+> 2.45.2
+> 
 
