@@ -1,171 +1,95 @@
-Return-Path: <linux-clk+bounces-13168-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13170-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FAF299DC66
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 04:46:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF97599DFFB
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 09:57:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1C87B2189A
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 02:46:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CCDE1F21588
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 07:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF64E167271;
-	Tue, 15 Oct 2024 02:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="T46TAodU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1CD1AE005;
+	Tue, 15 Oct 2024 07:57:43 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D735C6AB8;
-	Tue, 15 Oct 2024 02:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276951ABEB8;
+	Tue, 15 Oct 2024 07:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728960400; cv=none; b=kM1jDnlNoMHd7mio+1czPEc96lgCzKZRopgk4d6nBPLsN1m3PwN4IWNzs31JtisUGHl8LOUitywgwZGcmp81OSIoXzS3O5OhDcnElnHd5gH3xL1mIHujFrxCC7h7E/L9X59iRlXBQdRNtbzfM+kFw5yeFa3ZVX2IvBSV1mozxx0=
+	t=1728979063; cv=none; b=dkokxHBNbHHAYtjjgCXkzgJEIdPpFicW0bM/aHFQtCrUjsrxnXGqzFmCE4uKNZ2L3T36YSvGpQnri+hVgzh1URoiDtfLV+X17E5DsSozWa/iyClXlxpDfUTnRSLvr4PzZRT8wrnx/G23yLEMP4wrKV1r93doQdq8UXASMtJMCPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728960400; c=relaxed/simple;
-	bh=hb/tXU639KZVM7PWEVuCMASmkvuahxNCAt+oTq3QPNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=U7yr+CNSVEH3f/sgMEcWWErFMsHhjf50ldRiJq2oyRJdsMUHkFCP8/rqZh6YXv+lEyB84UNlH5sEr0oyRqQ3E6CGoXk3NMa+Kxct1pvcH4/OlUwv8B13XnJhSOh550XJKMZmohDjKi5doteavcjGhK08G4zCK+6rgdXz7JyUvto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=T46TAodU; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49F1pLdg028934;
-	Tue, 15 Oct 2024 02:46:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	pbEGIR5/6gy6kLcA5WidgDGnLnhumHi9DVqfOYna3Nk=; b=T46TAodUUVjBk9FV
-	lN+2YsTYwPAP8uHgd3/C+l+dGKcGfqVj6wQdQ5mxpAsTOSw7cZYyICXKGxjjf7VG
-	kAX1sjF2fbkvN1Dclq7q1bdhd54VoW/zvEjx/bWrpprmFprdOP6NIGRro3xAtpRt
-	jX0oDHghoS90XNPDhgQAJPZosbibbDkMnhyvgLm1OitWmyT2RAzBTdQnkTxPk11d
-	DZWTvgyJNcQrUJ6HCcVW6EMEVyUrt5DxPbEdPpNWSt09y+rggeqvjraAvlLuIN8x
-	eCj7S2Hlw4Ix0142SJlS0gqlotvAftKOmd7Bq5UC7gWmsa6KWuDkuC39Tu6bnPSr
-	Wy5U5g==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4292evhwcm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 02:46:24 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49F2kNHt003772
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 02:46:23 GMT
-Received: from [10.239.29.179] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 14 Oct
- 2024 19:46:17 -0700
-Message-ID: <28567b77-9d0c-421a-8c2e-88a310a20704@quicinc.com>
-Date: Tue, 15 Oct 2024 10:46:15 +0800
+	s=arc-20240116; t=1728979063; c=relaxed/simple;
+	bh=gJbvZ4ihg9NU9ggA0FMT/mLb35qajlrUSUmtskjYl1Y=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=msGeUBkKAThw5KuJ6Egb78/b28v1LapVlsp39pSj/FzmQLBWiUZrtncAmVwsboM0PRVfYgkcS5sA/JczZev8vjUtkYsFandfGPxJid2e0ar8GykNm+1cXgFVhyujg9a5xP7giRHi5XmDpJ3pwNDIPaOUANxNHa1G+cBitETJVPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 707E0200C6D;
+	Tue, 15 Oct 2024 09:57:35 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3B0DE2005A4;
+	Tue, 15 Oct 2024 09:57:35 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 2D503183DC03;
+	Tue, 15 Oct 2024 15:57:33 +0800 (+08)
+From: Richard Zhu <hongxing.zhu@nxp.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	abelvesa@kernel.org,
+	peng.fan@nxp.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	festevam@gmail.com
+Cc: hongxing.zhu@nxp.com,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	imx@lists.linux.dev,
+	kernel@pengutronix.de
+Subject: [PATCH v5 0/2] Add one clock gate for i.MX95 HSIO block
+Date: Tue, 15 Oct 2024 15:34:02 +0800
+Message-Id: <1728977644-8207-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 6/8] PCI: qcom: Fix the ops for SC8280X family SoC
-To: Bjorn Helgaas <helgaas@kernel.org>
-CC: <manivannan.sadhasivam@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>, <abel.vesa@linaro.org>,
-        <quic_msarkar@quicinc.com>, <quic_devipriy@quicinc.com>,
-        <dmitry.baryshkov@linaro.org>, <kw@linux.com>, <lpieralisi@kernel.org>,
-        <neil.armstrong@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, Johan Hovold <johan+linaro@kernel.org>
-References: <20241014171807.GA612411@bhelgaas>
-Content-Language: en-US
-From: Qiang Yu <quic_qianyu@quicinc.com>
-In-Reply-To: <20241014171807.GA612411@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3wDoqdW48Ll3OwwhzQMMW2xvx-lvC8Qx
-X-Proofpoint-ORIG-GUID: 3wDoqdW48Ll3OwwhzQMMW2xvx-lvC8Qx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxscore=0 impostorscore=0
- suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2410150017
 
+REF_EN (Bit6) of LFAST_IO_REG control i.MX95 PCIe REF clock out
+enable/disable.
+Add one clock gate for i.MX95 HSIO block to support PCIe REF clock
+out gate.
 
-On 10/15/2024 1:18 AM, Bjorn Helgaas wrote:
-> [+cc Johan; if you tag a commit with Fixes:, please cc the author of
-> that commit!]
->
-> On Fri, Oct 11, 2024 at 03:41:40AM -0700, Qiang Yu wrote:
->> On SC8280X family SoC, PCIe controllers are connected to SMMUv3, hence
->> they don't need the config_sid() callback in ops_1_9_0 struct. Fix it by
->> introducing a new ops struct, namely ops_1_21_0, so that BDF2SID mapping
->> won't be configured during init.
-> Can you make the subject line say something specific about what this
-> patch does?  "Fix the ops" really doesn't include any useful
-> information.
-Sure, will directly say Remove BDF2SID mapping config for SC8280XP in 
-subject.
->
-> Based on the Fixes: below, this has to do with ASPM, so the subject
-> line (and the commit log) should probably say something about ASPM.
->
-> I don't see the connection between your mention of SMMUv3 and ASPM.
-> Are there two logical changes here that should be two separate
-> patches?
-This patch is to remove config_sid callback for sc8280x as it
-supports SMMUv3.
+v5 changes:
+- Rebase to v6.12-rc3.
 
-This patch is not related to ASPM. Look like using
-70574511f3f ("PCI: qcom: Add support for SC8280XP")
-in Fixes tag is better. Sorry for the confusion.
+v4 changes:
+- Correct typo in commit message of #2 patch.
 
-Thanks,
-Qiang
->> Fixes: d1997c987814 ("PCI: qcom: Disable ASPM L0s for sc8280xp, sa8540p and sa8295p")
->> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
->> ---
->>   drivers/pci/controller/dwc/pcie-qcom.c | 12 +++++++++++-
->>   1 file changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
->> index 88a98be930e3..468bd4242e61 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> @@ -1367,6 +1367,16 @@ static const struct qcom_pcie_ops ops_2_9_0 = {
->>   	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
->>   };
->>   
->> +/* Qcom IP rev.: 1.21.0 */
->> +static const struct qcom_pcie_ops ops_1_21_0 = {
->> +	.get_resources = qcom_pcie_get_resources_2_7_0,
->> +	.init = qcom_pcie_init_2_7_0,
->> +	.post_init = qcom_pcie_post_init_2_7_0,
->> +	.host_post_init = qcom_pcie_host_post_init_2_7_0,
->> +	.deinit = qcom_pcie_deinit_2_7_0,
->> +	.ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
->> +};
->> +
->>   static const struct qcom_pcie_cfg cfg_1_0_0 = {
->>   	.ops = &ops_1_0_0,
->>   };
->> @@ -1405,7 +1415,7 @@ static const struct qcom_pcie_cfg cfg_2_9_0 = {
->>   };
->>   
->>   static const struct qcom_pcie_cfg cfg_sc8280xp = {
->> -	.ops = &ops_1_9_0,
->> +	.ops = &ops_1_21_0,
->>   	.no_l0s = true,
->>   };
->>   
->> -- 
->> 2.34.1
->>
+v3 changes:
+- Squash first two dt-binding patches into one.
+- Add Krzysztof's Acked-by tag, and Frank's Reviewed-by tag.
+
+v2 changes:
+- Correct the compatible entries by alphabetical order
+- Include all necessary To/Cc entried reminderd by Krzysztof.
+Thanks.
+
+[PATCH v5 1/2] dt-bindings: clock: nxp,imx95-blk-ctl: Add compatible
+[PATCH v5 2/2] clk: imx95-blk-ctl: Add one clock gate for HSIO block
+
+Documentation/devicetree/bindings/clock/nxp,imx95-blk-ctl.yaml |  5 +++--
+drivers/clk/imx/clk-imx95-blk-ctl.c                            | 20 ++++++++++++++++++++
+2 files changed, 23 insertions(+), 2 deletions(-)
 
