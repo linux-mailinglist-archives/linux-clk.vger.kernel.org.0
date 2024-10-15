@@ -1,125 +1,231 @@
-Return-Path: <linux-clk+bounces-13172-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13169-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A33199E001
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 09:58:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8425499DF9C
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 09:48:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BDC01C219B6
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 07:58:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A87621C21892
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Oct 2024 07:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44AB1C8FCE;
-	Tue, 15 Oct 2024 07:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6796E1AE863;
+	Tue, 15 Oct 2024 07:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dy+ck6S7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1D91C0DE2;
-	Tue, 15 Oct 2024 07:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFA11ADFE9
+	for <linux-clk@vger.kernel.org>; Tue, 15 Oct 2024 07:47:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728979067; cv=none; b=hT1Urzv9AyIF9Ds9mWZ0MNwdVa9yWNc6QtiMJq03wgqiT/1RFrGVbjHuAkdGTc/a6HGDS6hiXv1RpGjOFLrqqJ7yJj8ewdUE7GIvFmFb+gMojqfqUaZ6toT9t4Iwjxl20CgZ9HLPDptrphJ1AX3yqjje+USfeW7alPX34Nlhj00=
+	t=1728978459; cv=none; b=hUzGFSPkRG0kn+xMDpDlGfVOgLS0Z3AmvoUrVxgaTwxTvyPvumq4mSQoM6zsYld9vzl+kty1oTy44rEbwRRXB86iii+XCKmIzsDUHD4lYWwu9HAEBhmmpwz9/xPfE4TKxNkPWZv+P2T5hMVt39M7f/GLEEQFZv6NXApESYFMurw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728979067; c=relaxed/simple;
-	bh=+W7tmOplPpwq8DoVsxdIHh6sDNgpjkPfm6+bC2x1s7Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=OeyTNLLiXHDVxeVI4bQgPAeeW3AX1MXW0/nO5o/9Mv+9OI11+1nWfxL9iEeYa5Qlpb3B6SW+G0ZQWpf+bjHeohi7OTS/fI8JJIo5dg2WRYCCMYNOhAT8oqqDE9OKq1L47qaBw3TpSd57K3tmjtLPG4ERwhbvSqiho4y4tdrQG8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 74D5E2001C1;
-	Tue, 15 Oct 2024 09:57:38 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 33BA620055E;
-	Tue, 15 Oct 2024 09:57:38 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 33C5B183DC03;
-	Tue, 15 Oct 2024 15:57:36 +0800 (+08)
-From: Richard Zhu <hongxing.zhu@nxp.com>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	abelvesa@kernel.org,
-	peng.fan@nxp.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	festevam@gmail.com
-Cc: hongxing.zhu@nxp.com,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	imx@lists.linux.dev,
-	kernel@pengutronix.de
-Subject: [PATCH v5 2/2] clk: imx95-blk-ctl: Add one clock gate for HSIO block
-Date: Tue, 15 Oct 2024 15:34:04 +0800
-Message-Id: <1728977644-8207-3-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1728977644-8207-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1728977644-8207-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+	s=arc-20240116; t=1728978459; c=relaxed/simple;
+	bh=D6bs8AhbvZ1hhOwFTkRYuSj0EUYlQBuMG38nrex0/Q0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nggdf5xIeI4VYsJ/WeNqJPaxxmMYm7VLwyQpiM3rNiiPQuq1rxIKuBeigxyYH/RzgjBT5qaniBDXI2471tvgoe0JZ4dIjOmS5vI+9a660YAVuCyMgDP1hdTZyd5go/GCgAZXid6vysIC0o7xzWS+SyRXloLsI90SVUNa1i9waF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dy+ck6S7; arc=none smtp.client-ip=209.85.222.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-84fc00f455bso1197843241.2
+        for <linux-clk@vger.kernel.org>; Tue, 15 Oct 2024 00:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728978456; x=1729583256; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1JMqOkw9Vt25iJpUnQeg9aOLmHsYLQqSKR1jmOnHY8=;
+        b=dy+ck6S77AEaMfrkQxeRbZs2rPuckWAXcBu13OOeVfxxo8vN5bYbA0Kjvcdk31iCDT
+         wvQw/HuYtY0jGwbsjCY1DLF9QRmMOvIHZfha/V3x3tJ2aG0YGSaUZ/CFrFaQJlSlJv8K
+         1m4qYJWX2Nt9bWpSw11d28I5XvKKjd18K0AkbLmsZtGHVQnaSTuLBGBpMcHrrc0BwaA1
+         ei1JvBR0134PW58y4teKUkmIeJfVQGkPoX7NAg0pn7H7q2eO5oYz/ctfpoLLbar1ATZr
+         TQYqhpG5kubMlHIqACUUYy2FqgIGQq1zI4jgfgz4ldhbv1xAHRueVVtQWlry8oTyM2Eh
+         qBxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728978456; x=1729583256;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F1JMqOkw9Vt25iJpUnQeg9aOLmHsYLQqSKR1jmOnHY8=;
+        b=gDG0iAHwE/dGinandp1NJx3mziv/U//ZP4KHeM3nPgPkLhLULJh9JFGa/PkG/UFsRD
+         FbBnzlSoDHlw0fBJCbsnRjpryjP4/O59LBfSlAHfMchY5tvIIfx5QXoYktv9TaWwRDF1
+         QDH7CGxOfTLMxL4YBHRhz7Foig6bLvaxFrChZ1x6r4BVgOFTo0p42/Qeu4IowDt5UGFn
+         0+Jyc0nrsyq6WuMzwzw8I7qv3XPdval4rwNuDrGQjqtv5dfmC/aeCsgfcnOeogId375k
+         taM5zWhPH3GpCwnJUpSa3Bb9vJN7LeVtE/R1OaHSJnVD2YbYYHEm4Al+Yx0C764cqdoN
+         WPRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXufg5D5o1ah+eU6I/kIVJznyPxGOa8JSaIxT3Mli6aL2aEGTgnEFsPuzEH0cEyy3OZV4aGygSxDPo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyC+MGz0mXt9gi7i9Au0YlBBU8dfjkTFy+d0eCRIWdQl+yXJyD/
+	UTOJUOSlv6GzS7h3zx7ef+G3GWBF//QYzPBIjsxDWCo+s/p/XpUE/v4kDRPGsTerdnDmgWRhyCl
+	QpO1B0Rhe+sOYeCC+/LweDXSEJa9VZRkxxN23oQ==
+X-Google-Smtp-Source: AGHT+IGdVCcCuUjhI+WseBShaKTMvVroRB+xVABD2EDZXIOC+Dkk/mBw6Vsr9hWqTFsvCcMpmLqrHD58pwpk6UgsWFA=
+X-Received: by 2002:a05:6102:d87:b0:4a3:d8ab:8938 with SMTP id
+ ada2fe7eead31-4a475f4cdd3mr5869905137.12.1728978456286; Tue, 15 Oct 2024
+ 00:47:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20241014141217.941104064@linuxfoundation.org>
+In-Reply-To: <20241014141217.941104064@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 15 Oct 2024 13:17:24 +0530
+Message-ID: <CA+G9fYv7K3-4M0unzJz_AGG1kySTkDYMaqXXgCFisd2j0iPCEg@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/798] 6.1.113-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, allen.lkml@gmail.com, 
+	broonie@kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>, Lee Jones <lee@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, linux-clk <linux-clk@vger.kernel.org>, 
+	Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 
-CREF_EN (Bit6) of LFAST_IO_REG control i.MX95 PCIe REF clock out
-enable/disable.
+On Mon, 14 Oct 2024 at 20:20, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.113 release.
+> There are 798 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Oct 2024 14:09:57 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.113-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Add compatible string "nxp,imx95-hsio-blk-ctl" to support PCIe REF clock
-out gate.
+As others reported,
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/clk/imx/clk-imx95-blk-ctl.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+The arm build broke on the stable-rc linux-6.1.y branch due to
+following build warnings / errors.
 
-diff --git a/drivers/clk/imx/clk-imx95-blk-ctl.c b/drivers/clk/imx/clk-imx95-blk-ctl.c
-index 19a62da74be4..25974947ad0c 100644
---- a/drivers/clk/imx/clk-imx95-blk-ctl.c
-+++ b/drivers/clk/imx/clk-imx95-blk-ctl.c
-@@ -277,6 +277,25 @@ static const struct imx95_blk_ctl_dev_data netcmix_dev_data = {
- 	.clk_reg_offset = 0,
- };
- 
-+static const struct imx95_blk_ctl_clk_dev_data hsio_blk_ctl_clk_dev_data[] = {
-+	[0] = {
-+		.name = "hsio_blk_ctl_clk",
-+		.parent_names = (const char *[]){ "hsio_pll", },
-+		.num_parents = 1,
-+		.reg = 0,
-+		.bit_idx = 6,
-+		.bit_width = 1,
-+		.type = CLK_GATE,
-+		.flags = CLK_SET_RATE_PARENT,
-+	}
-+};
-+
-+static const struct imx95_blk_ctl_dev_data hsio_blk_ctl_dev_data = {
-+	.num_clks = 1,
-+	.clk_dev_data = hsio_blk_ctl_clk_dev_data,
-+	.clk_reg_offset = 0,
-+};
-+
- static int imx95_bc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -447,6 +466,7 @@ static const struct of_device_id imx95_bc_of_match[] = {
- 	{ .compatible = "nxp,imx95-display-master-csr", },
- 	{ .compatible = "nxp,imx95-lvds-csr", .data = &lvds_csr_dev_data },
- 	{ .compatible = "nxp,imx95-display-csr", .data = &dispmix_csr_dev_data },
-+	{ .compatible = "nxp,imx95-hsio-blk-ctl", .data = &hsio_blk_ctl_dev_data },
- 	{ .compatible = "nxp,imx95-vpu-csr", .data = &vpublk_dev_data },
- 	{ .compatible = "nxp,imx95-netcmix-blk-ctrl", .data = &netcmix_dev_data},
- 	{ /* Sentinel */ },
--- 
-2.37.1
+First seen on v6.1.112-799-gc060104c065d
+  GOOD: v6.1.112
+  BAD: v6.1.112-799-gc060104c065d
 
+The bisection pointed to,
+  clk: imx6ul: add ethernet refclock mux support
+    [ Upstream commit 4e197ee880c24ecb63f7fe17449b3653bc64b03c ]
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+List of regressions,
+* arm, build
+  - clang-19-allmodconfig
+  - clang-19-defconfig
+  - clang-19-imx_v6_v7_defconfig
+  - clang-19-lkftconfig
+  - clang-19-lkftconfig-no-kselftest-frag
+  - clang-nightly-defconfig
+  - clang-nightly-imx_v6_v7_defconfig
+  - clang-nightly-lkftconfig
+  - clang-nightly-lkftconfig-kselftest
+  - gcc-13-allmodconfig
+  - gcc-13-defconfig
+  - gcc-13-imx_v6_v7_defconfig
+  - gcc-13-lkftconfig
+  - gcc-13-lkftconfig-debug
+  - gcc-13-lkftconfig-debug-kmemleak
+  - gcc-13-lkftconfig-kasan
+  - gcc-13-lkftconfig-kselftest
+  - gcc-13-lkftconfig-kunit
+  - gcc-13-lkftconfig-libgpiod
+  - gcc-13-lkftconfig-no-kselftest-frag
+  - gcc-13-lkftconfig-perf
+  - gcc-13-lkftconfig-rcutorture
+  - gcc-8-defconfig
+  - gcc-8-imx_v6_v7_defconfig
+
+
+Build log:
+---------
+drivers/clk/imx/clk-imx6ul.c:489:41: error: implicit declaration of
+function 'imx_obtain_fixed_of_clock'; did you mean
+'imx_obtain_fixed_clock'? [-Werror=implicit-function-declaration]
+  489 |         hws[IMX6UL_CLK_ENET1_REF_PAD] =
+imx_obtain_fixed_of_clock(ccm_node, "enet1_ref_pad", 0);
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                         imx_obtain_fixed_clock
+drivers/clk/imx/clk-imx6ul.c:489:39: warning: assignment to 'struct
+clk_hw *' from 'int' makes pointer from integer without a cast
+[-Wint-conversion]
+  489 |         hws[IMX6UL_CLK_ENET1_REF_PAD] =
+imx_obtain_fixed_of_clock(ccm_node, "enet1_ref_pad", 0);
+      |                                       ^
+drivers/clk/imx/clk-imx6ul.c:491:41: error: implicit declaration of
+function 'imx_clk_gpr_mux'; did you mean 'imx_clk_hw_mux'?
+[-Werror=implicit-function-declaration]
+  491 |         hws[IMX6UL_CLK_ENET1_REF_SEL] =
+imx_clk_gpr_mux("enet1_ref_sel", "fsl,imx6ul-iomuxc-gpr",
+      |                                         ^~~~~~~~~~~~~~~
+      |                                         imx_clk_hw_mux
+drivers/clk/imx/clk-imx6ul.c:491:39: warning: assignment to 'struct
+clk_hw *' from 'int' makes pointer from integer without a cast
+[-Wint-conversion]
+  491 |         hws[IMX6UL_CLK_ENET1_REF_SEL] =
+imx_clk_gpr_mux("enet1_ref_sel", "fsl,imx6ul-iomuxc-gpr",
+      |                                       ^
+drivers/clk/imx/clk-imx6ul.c:494:39: warning: assignment to 'struct
+clk_hw *' from 'int' makes pointer from integer without a cast
+[-Wint-conversion]
+  494 |         hws[IMX6UL_CLK_ENET2_REF_PAD] =
+imx_obtain_fixed_of_clock(ccm_node, "enet2_ref_pad", 0);
+      |                                       ^
+drivers/clk/imx/clk-imx6ul.c:496:39: warning: assignment to 'struct
+clk_hw *' from 'int' makes pointer from integer without a cast
+[-Wint-conversion]
+  496 |         hws[IMX6UL_CLK_ENET2_REF_SEL] =
+imx_clk_gpr_mux("enet2_ref_sel", "fsl,imx6ul-iomuxc-gpr",
+      |                                       ^
+drivers/clk/imx/clk-imx6ul.c:548:9: error: too few arguments to
+function 'imx_register_uart_clocks'
+  548 |         imx_register_uart_clocks();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/clk/imx/clk-imx6ul.c:19:
+drivers/clk/imx/clk.h:15:6: note: declared here
+   15 | void imx_register_uart_clocks(unsigned int clk_count);
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+
+
+Build log link,
+-------------
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.112-799-gc060104c065d/testrun/25432777/suite/build/test/gcc-13-defconfig/log
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2nQwgipt3iHSCkBuMSKQIhwr95q/
+
+metadata:
+----
+  git describe: v6.1.112-799-gc060104c065d
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+  git sha: c060104c065dc2884e301155e32dd955e6bb45b5
+  kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2nQwgipt3iHSCkBuMSKQIhwr95q/config
+  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2nQwgipt3iHSCkBuMSKQIhwr95q/
+  toolchain: clang-19 and gcc-13
+  config: defconfig
+  arch: arm
+
+Steps to reproduce:
+-------
+# tuxmake --runtime podman --target-arch arm --toolchain gcc-13
+--kconfig defconfig
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 
