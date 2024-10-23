@@ -1,70 +1,74 @@
-Return-Path: <linux-clk+bounces-13618-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13620-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 952009ACDD9
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39E7D9ACDD8
 	for <lists+linux-clk@lfdr.de>; Wed, 23 Oct 2024 17:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A92DB2791F
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Oct 2024 15:01:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F5D11C258EB
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Oct 2024 15:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDD71CC89E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359D71CF7AB;
 	Wed, 23 Oct 2024 14:53:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="wyvLctWb"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="ZqmAqHqq"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC4B1C727F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBEE1C6886;
 	Wed, 23 Oct 2024 14:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729695197; cv=none; b=X/U7KrBT27505jw+B1ldU75hrSA7YcIT6e3b78DCHer5ECdgGM47X2jEO/tI0pZ2YPXXlbfymzYClBNPH4r8v3CzIthd63SoOVj8Imc2joOde1aCEV5AaKdO9iw5QkjlbGicZeqORYkW73AF3Bbjv4awO6mMZJ3+nCatFY+yWh8=
+	t=1729695197; cv=none; b=oWAMJ5Vh88GmqNFXdFJIR5xMtrRnWNJTqVDBwlvp+LtITrmQ2Y0VHrghu1SVPW/tj6s+H9nLuaci03aU81FcmSxbL/niToRexf2f5sOps6nX9i7bKyp6kJa1YR6gIZyDnhPKDmH63DwpfWu6mrxbDIFn1dSaCmqaLxiVL5Tb4+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729695197; c=relaxed/simple;
-	bh=8wT9D25QJ1yv6sYGUjWqC5VHGbdqfKlgnLpVnMzRCeA=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=A3e2xFFHPbA9m4ZlpRuvtmqHO6WqSchJfDkB2HyotO0xLgDxCFNeUNZIyD/itKV9G+jwvnk3Ptr7kwvCgot/Ox0HEO4DNRi/BMeZsvHIa/Zv5kYS8u77mylTz+7gTeR5L4qSdmdwLCR1X46tkGRqDM0SoNHXtrLqKjEXs6ldHXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=wyvLctWb; arc=none smtp.client-ip=148.163.135.77
+	bh=jcoVhTeiNKgBu1aR77LhfBqpwO0tnvNIDveD9ZBC8/g=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=a5jKJvNiSwGgKjIFBPMhMgsXINiMrMrbG95j1OqhQ4fvUFo7x8XLGyO6dflOWocVyuhO5F/Umbi2CN/jv0r2altBAduhvp3UQ+g6/uOodXd2W2PlRdlHOrxgvTlgr8Z6sb9RoR39nT54q5/5j+qI80ZihaHi3NySsy1j+rt9aRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=ZqmAqHqq; arc=none smtp.client-ip=148.163.135.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=analog.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49NDrTjQ015015;
-	Wed, 23 Oct 2024 10:52:54 -0400
+	by mx0a-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49NDsM8W014209;
+	Wed, 23 Oct 2024 10:52:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=DKIM; bh=0nfH7bLly1nDLmzv7jSarI9lMXj
-	hfAjcsFjjt5bQMac=; b=wyvLctWb0ZXGgjQpv1yFzqjgmfOwS3hKtPUZl0HnDWh
-	bQTopSsUcGx+Owzk4MBu3Pt7g37uQERaX0xzuQEFL405LnUe/IX7b0IL46EWXVpK
-	G2Mbscc/C7aRcadTKqWK32vwrrgd+UCM0vVrE8JugbygA1ojjiT3F1DHIEzZEkpJ
-	G+qnccOL7THZlDcQNMEnzP0t6xZHt8wcmyKMDbpbsWuY2yjvEp0XMMey/q62TqVk
-	1wrl6ulY7WVg8YiMlaaiuamRJ+0EdIkobYIaILs93nmg02V88F36yW1b1WgjLiku
-	GE4QU7IUCvhybod4l7QKlnRBfZCQVD9U4E+CAQGzR7A==
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 42em30veap-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=DKIM; bh=7qeWp
+	/3ZbIuOEcKtgUG17xtjDW6XGbKUp2ZN2Pp4wdU=; b=ZqmAqHqqHTeV5L2xeSssg
+	Ks3UgzhQR3MLCfuNvytbFC5stpFC2RU/L4WL+kR6r5d+IpwVyr3h/QOtupekNEpN
+	IDJ6uSr2d1KeP7Gb9K6akcqthmoux59QDg9ZdFOMHxzolU/DLbiqkhaZeK4KEW7n
+	mRTC4ry0rQdDT8jpx1pjXslA4ITsHPDAVatwRCtE1/zWxb8EJaOUDFCHk37RNcX3
+	1x1mqQhDkOmi+pXFkgmP63ckFFvbeuz2zj+nTiI0M3tbKDVJAkosslp41T05utKO
+	KwUMBGpE3Z0Guk7ZDqqE+xD9ca3ObCf7E8ZK9Tcl+SrjgkDZ/UcfQLTwhcX9ECh5
+	Q==
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+	by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 42em30veay-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 23 Oct 2024 10:52:53 -0400 (EDT)
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 49NEqqmg034025
+	Wed, 23 Oct 2024 10:52:55 -0400 (EDT)
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+	by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 49NEqsFe006220
 	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 23 Oct 2024 10:52:52 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 23 Oct
- 2024 10:52:52 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 23 Oct 2024 10:52:52 -0400
+	Wed, 23 Oct 2024 10:52:54 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 23 Oct 2024 10:52:53 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 23 Oct 2024 10:52:53 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 23 Oct 2024 10:52:53 -0400
 Received: from [127.0.0.1] ([10.44.3.54])
-	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 49NEqewW002884;
-	Wed, 23 Oct 2024 10:52:43 -0400
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 49NEqewX002884;
+	Wed, 23 Oct 2024 10:52:48 -0400
 From: Nuno Sa <nuno.sa@analog.com>
-Subject: [PATCH 0/2] clk: clk-axi-clkgen: make sure to enable the AXI bus
- clock
-Date: Wed, 23 Oct 2024 16:56:53 +0200
-Message-ID: <20241023-axi-clkgen-fix-axiclk-v1-0-980a42ba51c3@analog.com>
+Date: Wed, 23 Oct 2024 16:56:54 +0200
+Subject: [PATCH 1/2] dt-bindings: clock: axi-clkgen: include AXI clk
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -72,11 +76,10 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIALUOGWcC/x3MQQqAMAxE0atI1gaa4kK9iriobaxBqdKCCOLdj
- S4fn5kbCmfhAn11Q+ZTiuxJQXUFfnEpMkpQgzW2IWMJ3SXotzVywlmujyoMFFoz+aljJtDtkVn
- r/zuMz/MCDObCEGcAAAA=
-X-Change-ID: 20241021-axi-clkgen-fix-axiclk-d1d80bcb9ee1
+Content-Transfer-Encoding: 7bit
+Message-ID: <20241023-axi-clkgen-fix-axiclk-v1-1-980a42ba51c3@analog.com>
+References: <20241023-axi-clkgen-fix-axiclk-v1-0-980a42ba51c3@analog.com>
+In-Reply-To: <20241023-axi-clkgen-fix-axiclk-v1-0-980a42ba51c3@analog.com>
 To: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>
 CC: Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd
@@ -87,46 +90,78 @@ CC: Michael Turquette <mturquette@baylibre.com>,
         Lars-Peter Clausen
 	<lars@metafoo.de>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1729695419; l=800;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1729695419; l=2003;
  i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
- bh=8wT9D25QJ1yv6sYGUjWqC5VHGbdqfKlgnLpVnMzRCeA=;
- b=t2aucuPOkASlB9VMReo4lrVlbIqN2hNpzJmuLFM2DbLLvcl5JudgA1+fQyhCob5t78MIHh5Zn
- uRsCRyZr0YqDhqyRjnO8NHgsA2d2prgqb7WvXJQmGaPtbLN9Cl1z/Gi
+ bh=jcoVhTeiNKgBu1aR77LhfBqpwO0tnvNIDveD9ZBC8/g=;
+ b=9JgADfv4yO/ALTiqMNvyXLdMjiyPY5V8TFBySFiattSeS2r/J9YZQ5SFjM7QxC0+sJTJkGlSf
+ gtyIy2v+JyQAi6SHu87hMfTjxsLul9Q+k0F5HvFXSdf36UXPW1Tmwu5
 X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
  pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: 0tGcTahSFpeW5V7lppmJeGo3umP-lSKM
-X-Proofpoint-ORIG-GUID: 0tGcTahSFpeW5V7lppmJeGo3umP-lSKM
+X-Proofpoint-GUID: XK763ArH2IOPqIjkG-V-oltp3H1WC0qv
+X-Proofpoint-ORIG-GUID: XK763ArH2IOPqIjkG-V-oltp3H1WC0qv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=789 bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 clxscore=1011 spamscore=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501 mlxscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2409260000 definitions=main-2410230090
 
 In order to access the registers of the HW, we need to make sure that
-the AXI bus clock is enabled.
+the AXI bus clock is enabled. Hence let's increase the number of clocks
+by one.
 
 In order to keep backward compatibility, the new axi clock must be the
-last phandle in clocks. On top of that, it's not an actual parent of
-the axi-clkgen that needs to be set on struct clk_init_data.
+last phandle in the array. To make the intent clear, a non mandatory
+clock-names property is also being added.
 
+Fixes: 0e646c52cf0e ("clk: Add axi-clkgen driver")
+Signed-off-by: Nuno Sa <nuno.sa@analog.com>
 ---
-Nuno Sa (2):
-      dt-bindings: clock: axi-clkgen: include AXI clk
-      clk: clk-axi-clkgen: make sure to enable the AXI bus clock
+ .../devicetree/bindings/clock/adi,axi-clkgen.yaml   | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
- .../devicetree/bindings/clock/adi,axi-clkgen.yaml  | 21 ++++++++++---
- drivers/clk/clk-axi-clkgen.c                       | 35 +++++++++++++++++++++-
- 2 files changed, 51 insertions(+), 5 deletions(-)
----
-base-commit: 94be1620fb60ea542170779915917443cda9bba7
-change-id: 20241021-axi-clkgen-fix-axiclk-d1d80bcb9ee1
---
+diff --git a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
+index 5e942bccf27787d7029f76fc1a284232fb7f279d..f5f80e61c119b8a68cb6e7a26ed275764f8d200f 100644
+--- a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
++++ b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
+@@ -26,9 +26,21 @@ properties:
+     description:
+       Specifies the reference clock(s) from which the output frequency is
+       derived. This must either reference one clock if only the first clock
+-      input is connected or two if both clock inputs are connected.
+-    minItems: 1
+-    maxItems: 2
++      input is connected or two if both clock inputs are connected. The last
++      clock is the AXI bus clock that needs to be enabled so we can access the
++      core registers.
++    minItems: 2
++    maxItems: 3
++
++  clock-names:
++    oneOf:
++      - items:
++          - const: clkin1
++          - const: s_axi_aclk
++      - items:
++          - const: clkin1
++          - const: clkin2
++          - const: s_axi_aclk
+ 
+   '#clock-cells':
+     const: 0
+@@ -50,5 +62,6 @@ examples:
+       compatible = "adi,axi-clkgen-2.00.a";
+       #clock-cells = <0>;
+       reg = <0xff000000 0x1000>;
+-      clocks = <&osc 1>;
++      clocks = <&osc 1>, <&clkc 15>;
++      clock-names = "clkin1", "s_axi_aclk";
+     };
 
-Thanks!
-- Nuno Sá
+-- 
+2.47.0
 
 
