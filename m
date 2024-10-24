@@ -1,123 +1,143 @@
-Return-Path: <linux-clk+bounces-13724-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13730-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72BBA9AEEB6
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Oct 2024 19:53:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 334BC9AEF85
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Oct 2024 20:16:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1910B21BF8
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Oct 2024 17:53:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC29328274C
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Oct 2024 18:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504111FC7F6;
-	Thu, 24 Oct 2024 17:53:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438732003DC;
+	Thu, 24 Oct 2024 18:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OZ2gebQa"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CNfxlxBJ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7101F76A4;
-	Thu, 24 Oct 2024 17:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81911ABEC5;
+	Thu, 24 Oct 2024 18:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729792422; cv=none; b=o36PlpDEcnlR2AgA2U8RFuBg46snF7L0HwFfj3AVtLN1AjYVTlIkzZbFDbGTG8lVx4JJPMAhhFTmUdIfNJg92WfZ9N5qOrdPKsw2bR6/gKtIqSrr9iGTahQ8NWYWtoS3wRJVw57ZuDExbQQqleA9//i9R0Q64tV1JZvcE7RW64w=
+	t=1729793788; cv=none; b=V53SGc48lNAjnFpeQv1WU/GbpqQxHm8Edwd08PM2fcsxvoN0XabH5wYH0/OtAzH7thVLpnJnFV+dFnsr+oSgKj7R+TM+vJfV14RbS8u8uUP0lvIPjOrdloiZM/jyxa7RmY3OK6TFIqq1zRvmuY5rCvFzxswKd9L8F/aAnir9x/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729792422; c=relaxed/simple;
-	bh=gVdBWZgjEzErTQcLG35kNcui/iuWPZZ4OQiyX08vqhY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Qf6igAhHTh6bwuvoxTgK2P+DjH4BC5XWTnC/FF31Ob2mciQk4ookWd2WkhvovKgEVDAj54KJyynK6X6e0t+9KhIhmvV/0BJUPq+N+dwAlJ0dof0Jj19RbydIQbhsBP/vsDhUvy9hzqYHM/MSjyTMvQIEpxHkU3G7P0OXKP17IXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OZ2gebQa; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O9X2xb018730;
-	Thu, 24 Oct 2024 17:53:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	1i2ZXNwjEcPtLkLQKb7CxSRAKZ/hfhZMiMaFS6mOGpQ=; b=OZ2gebQauWdyEHHP
-	8xZYh/BWLIgle3S8v6vNi/edwqwbPjJ/M+WEDYkmgVPJWf8FbXsY/u0SYedgbh2+
-	FWQlm48hoVr/kr7uQEqxfoMlKzmrMqtB1NXEja6Kt0c5oR91dKCrdOp2V+nldarq
-	Us82f27ERqEWKRXH1VpEHe7a5PYQiLccdEaTZrMig0AzQjwyHRDh5U3Rz4IUvwVS
-	XdTdg7m8G3hC5xbf+NZHIjwPOGniOotQ8lDxz3lECb4jGlTrEGJZMBoFJrOmtplQ
-	b2cA9xkG4HhvYOWLhhvV/mOD+jKJCO9CF0ywNC0GuYO2Uv+7VXU3Dum4GAN3Ih/Y
-	ZJeOIg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em66ej1u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 17:53:27 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49OHrRdf029277
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 17:53:27 GMT
-Received: from [10.216.42.109] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 24 Oct
- 2024 10:53:23 -0700
-Message-ID: <1b6b8585-4e7a-4ac3-85c6-bb6dafc147ac@quicinc.com>
-Date: Thu, 24 Oct 2024 23:23:20 +0530
+	s=arc-20240116; t=1729793788; c=relaxed/simple;
+	bh=e8Qe84wNa3ak4bpxn+ExVY7B/6mI6kx1FcZfyj9rIzY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jzC51Q3v9eqmSPbtKSKw+VDCPvmKfWL8mOI73NH/3XWDX87vq3q7GU9DuIJvPmE/vBXv0/5Q1v3Zym6w3cf+xjfdpwfvTj1+YFIEUQ/QsVduCl2nQRfCysyMRaWXfnzfc4gT27+w0vAeTQp3cnWu8ajdQdDgJHCBXcdb3r5pU08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CNfxlxBJ; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1729793783;
+	bh=e8Qe84wNa3ak4bpxn+ExVY7B/6mI6kx1FcZfyj9rIzY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=CNfxlxBJtIsSFWqFhQHXlYlf8RlNdxl4S/eewIBQLExECvNXSjWWZD/WXR6YLwchv
+	 qMpkqupH4xtvobsuWDyNcoSH9KEKt83e0DZ6BV6O8yxZoD8Vqbw4xR9TFuVpgumokR
+	 PpuNkqimAyazplqTN1TCCZ+iky/MrbswkBxVrW94gh5KzPsdIBF+JtFJ6nP7jDAS+O
+	 tHHmlCmsulZ1IuaWhN3baqSo13/OXkqURYw/o/uQuI9AUpMMXFMjUUDvjZR69Wd2WV
+	 444sCUkaTvIr15lq6i4/2CXZhZVFZFxP6fXdu6pmba8UAKx3dEZQjC3Q+XAyGoZA8I
+	 2v+uWhABuPcsA==
+Received: from jupiter.universe (dyndsl-091-248-214-110.ewe-ip-backbone.de [91.248.214.110])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id F332617E36CB;
+	Thu, 24 Oct 2024 20:16:22 +0200 (CEST)
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id A2F374800EA; Thu, 24 Oct 2024 20:16:22 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Heiko Stuebner <heiko@sntech.de>,
+	linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	huangtao@rock-chips.com,
+	andy.yan@rock-chips.com,
+	Michal Tomek <mtdev79b@gmail.com>,
+	Ilya K <me@0upti.me>,
+	Chad LeClair <leclair@gmail.com>,
+	devicetree@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v11 0/5] rockchip: clk: add GATE_LINK support
+Date: Thu, 24 Oct 2024 20:15:27 +0200
+Message-ID: <20241024181621.210509-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] arm64: defconfig: Enable sa8775p clock controllers
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Catalin Marinas
-	<catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        "Imran Shaik" <quic_imrashai@quicinc.com>,
-        Jagadeesh Kona
-	<quic_jkona@quicinc.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20241022-defconfig_sa8775p_clock_controllers-v1-1-cb399b0342c8@quicinc.com>
- <glhmky5r3rd44hmnxgtgeelqp426fdsh7w2fqpuusz2ek6eauw@sfptftzsilix>
-Content-Language: en-US
-From: Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <glhmky5r3rd44hmnxgtgeelqp426fdsh7w2fqpuusz2ek6eauw@sfptftzsilix>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VSzStdRTRqwzeI_PgqhInfsFWFqLStKP
-X-Proofpoint-GUID: VSzStdRTRqwzeI_PgqhInfsFWFqLStKP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 phishscore=0 impostorscore=0 malwarescore=0 mlxlogscore=527
- suspectscore=0 clxscore=1015 mlxscore=0 bulkscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410240147
+Content-Transfer-Encoding: 8bit
 
+Hi,
 
+This implements proper GATE_LINK support following the suggestion from Stephen
+Boyd to use clk PM operations by creating MFD dynamically. This required some
+restructuring, since CLK_OF_DECLARE() is called before devices are available.
 
-On 10/22/2024 3:33 PM, Dmitry Baryshkov wrote:
-> On Tue, Oct 22, 2024 at 01:36:38PM +0530, Taniya Das wrote:
->> Enable the SA8775P video, camera and display clock controllers to enable
->> the video, camera and display functionalities on Qualcomm QCS9100.
-> 
-> Please mention the board / device rather than a platform.
-> 
+Apart from improved power consumption, this fixes the runtime errors from the
+pmdomain driver (failed to set idle on domain '%s'). Last but not least it is
+a first step towards reducing usage of CLK_OF_DECLARE_DRIVER() registered
+clocks, which should only be used for early clocks needed for the system
+timer (see this talk from LPC: https://www.youtube.com/watch?v=dofbbVuIAPk ).
 
-Will update in the next patch.
+Changes since PATCHv10:
+ * https://lore.kernel.org/linux-rockchip/20240913184720.57381-1-sebastian.reichel@collabora.com/
+ * rebased to v6.12-rc1
+ * make struct platform_driver static
 
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   arch/arm64/configs/defconfig | 3 +++
->>   1 file changed, 3 insertions(+)
-> 
+Changes since PATCHv9:
+ * https://lore.kernel.org/linux-rockchip/20240325193609.237182-1-sebastian.reichel@collabora.com/
+ * drop patches 1 & 5 (merged)
+ * keep reporting ENOENT for missing clocks after CRU has been fully initialized
+ * drop module remove support for the linked gate clock driver
+
+Changes since PATCHv8:
+ * https://lore.kernel.org/linux-rockchip/20240126182919.48402-1-sebastian.reichel@collabora.com/
+ * rebased to v6.9-rc1
+ * dropped all merged patches (i.e. all but the last one)
+ * rewrote and split the final patch
+   - should be easier to review
+   - properly calls pm_clk_suspend/pm_clk_resume
+   - now works on Orange Pi
+
+Changes since PATCHv7:
+ * https://lore.kernel.org/all/20231213185114.47565-1-sebastian.reichel@collabora.com/
+ * rebased to v6.8-rc1
+ * Collected Reviewed-by/Acked-by from Krzysztof Kozlowski for DT binding patches
+ * support nr_clk=0 in rockchip_clk_find_max_clk_id() for smatch
+
+Greetings,
+
+-- Sebstian
+
+Sebastian Reichel (5):
+  clk: rockchip: support clocks registered late
+  clk: rockchip: rk3588: register GATE_LINK later
+  clk: rockchip: expose rockchip_clk_set_lookup
+  clk: rockchip: implement linked gate clock support
+  clk: rockchip: rk3588: drop RK3588_LINKED_CLK
+
+ drivers/clk/rockchip/Makefile     |   1 +
+ drivers/clk/rockchip/clk-rk3588.c | 116 ++++++++++++++++++------------
+ drivers/clk/rockchip/clk.c        | 101 ++++++++++++++++++++++----
+ drivers/clk/rockchip/clk.h        |  40 +++++++++++
+ drivers/clk/rockchip/gate-link.c  |  85 ++++++++++++++++++++++
+ 5 files changed, 285 insertions(+), 58 deletions(-)
+ create mode 100644 drivers/clk/rockchip/gate-link.c
 
 -- 
-Thanks & Regards,
-Taniya Das.
+2.45.2
+
 
