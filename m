@@ -1,37 +1,37 @@
-Return-Path: <linux-clk+bounces-13789-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13790-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 497949B080C
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 17:24:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D5099B0822
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 17:26:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA63C1F21AAC
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 15:24:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8F821F207C4
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 15:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2DA9158DDC;
-	Fri, 25 Oct 2024 15:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E354187874;
+	Fri, 25 Oct 2024 15:23:54 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7415821A4DE;
-	Fri, 25 Oct 2024 15:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399A721A4BB;
+	Fri, 25 Oct 2024 15:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729869678; cv=none; b=Mi7fxdVK8lRcljSRyYFpsBQl5awwQqV6C8NXzCrKoYcAxMDsHDRaVuVdM7DFxEk9ucq9KM9Ly/1eIkOpmMUstgGhTc8XlMCaNackVClgR7Hpq48r3J/VzW85dei50euelwYS3nqmXjxEIbWIFE8JRAs5K7JbbJVBoFAMHZNeU+M=
+	t=1729869834; cv=none; b=NaFBNwM1PlS8nEAo1dPoBJMwkWEe/RyvO1yyLCDqlgtl0HsvM0QLeuJ2tIX42/WaNXghvS4WKThicskL6wZ/OkY8X613gsaVjTaTd6DxVAwu0V7seuyai0lySu1glqhtnkaTNTLsrkmX7XBXK+YcJyiortG6ta3pMdO2kw+IaDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729869678; c=relaxed/simple;
-	bh=e5U0U0Jx+3rxRT0k6XN01ajEY0mjjd9cbDBSKldKw5M=;
+	s=arc-20240116; t=1729869834; c=relaxed/simple;
+	bh=dIwMHp9HLZB0G055X6LQiQ1e+P+bKkT0n16pdqucO/E=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=JKHyN/9aWVntYMilvb4S8Hc2qc92JT6rsWWJ9/E24MjH4Wu6Eu+6hg4NKS44yDu2epvu0J3U43ZPhza5YqLJIDY2el3mogAuZXrzMYvlFGdAUNrG1Tq3BgjlMa05byZHj51m9CAKw86u5Dj1CmTvNrjG3rFiewd2MQQgngDiCqo=
+	 MIME-Version:Content-Type; b=RcunLfdhCEDe8nD/J/ukoBzPnE/+nMomNul9b751xjIIihgkZDl88+dxkMNM9QfVDvtpUMR8sUEjJDrKZFx5OHfJWUecoI6vf+WuK4CgTtGBf9yqQc3WOn/x+KKIo+zUjmOjYlM/syemHTmHNy+P8H5dQHY4VHAejGsMiM+XY8A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B83C4CEC3;
-	Fri, 25 Oct 2024 15:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECAE7C4CEC3;
+	Fri, 25 Oct 2024 15:23:53 +0000 (UTC)
 Received: from wens.tw (localhost [127.0.0.1])
-	by wens.tw (Postfix) with ESMTP id 466CB5F870;
-	Fri, 25 Oct 2024 23:21:15 +0800 (CST)
+	by wens.tw (Postfix) with ESMTP id C11375FC74;
+	Fri, 25 Oct 2024 23:23:51 +0800 (CST)
 From: Chen-Yu Tsai <wens@csie.org>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
  Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
@@ -46,8 +46,8 @@ In-Reply-To: <20241023075917.186835-1-ryan@testtoast.com>
 References: <20241023075917.186835-1-ryan@testtoast.com>
 Subject: Re: (subset) [PATCH v3 0/7] ASoC: add Allwinner H616 audio codec
  support
-Message-Id: <172986967525.723095.17341687251793477251.b4-ty@csie.org>
-Date: Fri, 25 Oct 2024 23:21:15 +0800
+Message-Id: <172986983176.724831.16448231120068380568.b4-ty@csie.org>
+Date: Fri, 25 Oct 2024 23:23:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -72,10 +72,12 @@ On Wed, 23 Oct 2024 20:56:56 +1300, Ryan Walklin wrote:
 > 
 > [...]
 
-Applied to clk-for-6.13 in git@github.com:linux-sunxi/linux-sunxi.git, thanks!
+Applied to dt-for-6.13 in git@github.com:linux-sunxi/linux-sunxi.git, thanks!
 
-[1/7] clk: sunxi-ng: h616: Add sigma-delta modulation settings for audio PLL
-      commit: d0c322b6e4bff8cc0e40ee4983bf2ab1f7f680f0
+[6/7] arm64: dts: allwinner: h616: Add audio codec node
+      commit: 3eef85034c96f61b54809e24d4b7f29a336701ae
+[7/7] arm64: dts: allwinner: h313/h616/h618/h700: Enable audio codec for all supported boards
+      commit: 86a8f1aef9702f730c824aa96ae24ffa1b401988
 
 Best regards,
 -- 
