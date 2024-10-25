@@ -1,76 +1,75 @@
-Return-Path: <linux-clk+bounces-13826-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13827-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75ABA9B0B74
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 19:26:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F09059B0B77
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 19:26:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D80F1F24D47
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 17:26:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F186B2300C
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 17:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3726F22CC59;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895AD22CC6C;
 	Fri, 25 Oct 2024 17:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="QkROaNsk"
+	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="T41xgAoi"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BA822ADA6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FA122ADBE
 	for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 17:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729876598; cv=none; b=hrSQwMQsGxBnIf4KtXBagwpxGpgQ+439uuMfd4b/sL7Uykmhsd5h0/rD7P5lVxBPRyZOr823ScwTu5UzctX8L5wn82/fPsjYLIr9ir5l329j1sEcJqEEXJJxqQWa273c+1eOITUHshZmpQdd4+MkYoW+Yi22TIAlW0X0jKNpSs0=
+	t=1729876599; cv=none; b=s/ZSvX0xrD/+Xcumre5loWdFOWIcDTTc52zmghcttD8VDBupFnvUX2OdIQX59zWJRyWsiMbWYyiHtV1ff5dO/ZYTY7sepAKWxEgh/g4SOMvm9krlc7io3TS4vQ67jzu5URBvO5w5Zu02J4AeFwOR3V+n5vKo2qbtKGN3K2Mpqbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729876598; c=relaxed/simple;
-	bh=gDetkg9bcTzrR7O835LrIsBPAY/4zF75oSJMNh2My2Y=;
+	s=arc-20240116; t=1729876599; c=relaxed/simple;
+	bh=dgB9TDqOjPHC53NYjTeAKDgaQq5QKMSxepqaspF/csI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NdpRQn98d8BHRxO2rvqCUvgfMajG6lb8O5FNlBcymIZHa4DbMqIP8yEGp0zaDNbKUdE/PboKT3Mp8eDe06JUgjZ9DQMPsYDFMTTTQLAto7qm2FOm1U4SCRZQw3MtWAQ6u7B9rIWA4WTgx8VQu95GWeaK6LTmlaA5LFXhZj2YHHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=QkROaNsk; arc=none smtp.client-ip=209.85.221.53
+	 In-Reply-To:To:Cc; b=ByiQMSIvy6PuF3Zs90S7CLpSR0X5cIx3dKzPEo9io+88cQYhjo+P0FoGZIMbTdA9f5fLg7ol1Jo1tWZ4gjncYMBwNcgnQ39ufzxxioyfcsN6hZMqg95IAPsNUIssSvyh4unCnCdwpgd24qtV4CtvfXGvC94qbVgp8zCPqR3SrWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=T41xgAoi; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-37d4a5ecc44so1446033f8f.2
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d70df0b1aso1770671f8f.3
         for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 10:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1729876592; x=1730481392; darn=vger.kernel.org;
+        d=raspberrypi.com; s=google; t=1729876593; x=1730481393; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yUMbW8c4fnS4xc6t+S+xmsFii0Nh8WSEhqluNBn7tHo=;
-        b=QkROaNsk7CrE2+ZJ9WwKDE+K172he2S2K1jv/3GHo7jFJIkcLwtK31dPp3dLDSQT1e
-         0qdc3/XkpTfYBDQKX7d0lsD3L1gGH6csAMO0SqU0EtFS3HRg4APiCBp+KU53W1nTAY27
-         eZfClYZnvjLxbrWJZs57VP/zgqU3OD4X8lFHZ/isn4qgRPWm/YRLAYyBFhF8tISR8qSu
-         +o9ssVYqaHJcOAW09eZP2uIgmXFiWJH2u5/OZbbcBwT+nHyuV3Oiw8UN+PRmCFWgkkJa
-         jiSkBxL72vsaKnmXksuiCkLMfaPMpFHk31i/2fFJ9vpKKfwUH9T3UL9wOPPrBAHP8jqQ
-         79tw==
+        bh=k+NR5LKr4OxeWQLlNj8flZMDifFbPCFEGLf/3iSNdew=;
+        b=T41xgAoiYjYRG2N0x87OEJB+S31juJxn6G+S//lU9tdYfEjy/tTmCFzAYtgNiI9b69
+         Uk3Sok50qteYAYGjcy5syzXCi6NAxM+1wrcG/FuiSrm4v88Bx92DjjrbvPUAmNeKDBqm
+         rVwU/7fAtV8TqbQhclQXxnJmoWqPnb7rkSA5Zqh7vJqplG3s/e4GtNen2iJkTvxuVC/Y
+         RVUx+TsxLJ2BLAh2wRe7a3wqeJNfx25bB6OSF+YSiqoHJ56vXpA1wORCG886l6G45gP1
+         bwbxxCQbIfFIHlmCHZ2PG0AgbfbyuogSQ+wRCBCg3HlxMFGrWa1mxJ40w/iAPbMaLfUi
+         3TEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729876592; x=1730481392;
+        d=1e100.net; s=20230601; t=1729876593; x=1730481393;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yUMbW8c4fnS4xc6t+S+xmsFii0Nh8WSEhqluNBn7tHo=;
-        b=wjbWIvExK0SkZ89PQ4y9irZ3vKPXXqWLEqbotAGm+X983Yip8/05KdN+dU3ZUL8UTU
-         Bm6iaNkXvHFuuyKEXosfYKd5CUxvxQZHY6DbzmKoQC2WGACieEfj1vLoP2Xb2MhAimDk
-         vlLKTyAOMOrlahAuIL8Cz21dYt7SyP8g41N+IeOdv7gZlK1qyWvuiCQFKcwikx5eGbuT
-         VQk735crn1tIlZMP2+2fKQ0O8iG8G/wZh341NHyuY9qSD9iEWMSKY/mza+ZpjV1QOGaY
-         4lIqJkoAww5myb9NlFD+j6p+CG3GY/M8vmXzmKqfC4Fh7uBBuqNIly2w4RRL6FayZUyy
-         Gbqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpUrXZ6YUb3dGq7CLsjVryLu9AFHjAtXe7ul4w9JbnUcAtvCTHatpF8EpIbmh9/8uMmpNgSNELvOo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywn3bh3DmTllySegLoV5Yxgx2ZYyb1kK5+gggILZVAYktOaZsxX
-	iodKL6iLgvgRzQBi1PYwXV3ZM1KjS+D6qv6cO1qR7gw8N0NHwd5+qXYoN8eBt2w=
-X-Google-Smtp-Source: AGHT+IGlWiJn7Ozkgg+McXgEdyvgzuVLywKtK/tT5oVLgmb42gKrNvsGZclRa3uCRrKPuzJCn2aCmA==
-X-Received: by 2002:adf:9bd4:0:b0:37d:4e74:687 with SMTP id ffacd0b85a97d-380611e1392mr111275f8f.41.1729876592186;
-        Fri, 25 Oct 2024 10:16:32 -0700 (PDT)
+        bh=k+NR5LKr4OxeWQLlNj8flZMDifFbPCFEGLf/3iSNdew=;
+        b=o/DLHSqe74wae3ks6OAhy7IWXAeeS9CjT7uz4qIbzqZ6T3bigyrQ0vXJwd1/T0HAwR
+         vTJHjtGKFVebRGqjic5u5IkGfVkMAm+6H2+8FRuNtnvMwJx8UlbK9eSPNXgm9pziGbR6
+         etheCRDYvUsrMG4z4lVCShwcLdkYDdKADQmBrkUp8CbwieFr/upNlSWcLlh2lKLZmSNh
+         IqTXYHMvMS7D6Onr5JX1tg3IoHL+Enzyvy24EAnrYY712RIC7nqFk1tldeuzEzIlGAAB
+         nVR/HgXc7DcFn1ECYruf0x89b4yanUuzSumKq6Xukd452lT1t4Wu8gDmdQkPoH+oEVR8
+         q1kg==
+X-Forwarded-Encrypted: i=1; AJvYcCX+Q15L7rryf4A014DWxFwKio/buYHY62xDJ17GKZUuRvh2HCgXOY/H5rWYio+unVftfcf1JATrJSs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIe6I17OAE6JjRtAvcB3rs4l7hnpPhre+MTLvPv0nH6N0xDNw/
+	O0KZKq4KAKO2SDw9rO62EBahuGe4WINBKzkUPHEtIZZYkkf67QPaPpZCMQqIfUw=
+X-Google-Smtp-Source: AGHT+IHe5tCoSz92UO987eOIzi01b4rnj6tRANtMPS83mpXtoleIp32yTkc1Cq0CRABNQvTNNn9/Eg==
+X-Received: by 2002:a5d:63cf:0:b0:37c:d57d:71cd with SMTP id ffacd0b85a97d-380611ff862mr97480f8f.52.1729876593018;
+        Fri, 25 Oct 2024 10:16:33 -0700 (PDT)
 Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38058b91f50sm2013649f8f.94.2024.10.25.10.16.31
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38058b91f50sm2013649f8f.94.2024.10.25.10.16.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 10:16:31 -0700 (PDT)
+        Fri, 25 Oct 2024 10:16:32 -0700 (PDT)
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Fri, 25 Oct 2024 18:16:03 +0100
-Subject: [PATCH v2 32/36] clk: bcm: rpi: Create helper to retrieve private
- data
+Date: Fri, 25 Oct 2024 18:16:04 +0100
+Subject: [PATCH v2 33/36] clk: bcm: rpi: Add disp clock
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -79,7 +78,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241025-drm-vc4-2712-support-v2-32-35efa83c8fc0@raspberrypi.com>
+Message-Id: <20241025-drm-vc4-2712-support-v2-33-35efa83c8fc0@raspberrypi.com>
 References: <20241025-drm-vc4-2712-support-v2-0-35efa83c8fc0@raspberrypi.com>
 In-Reply-To: <20241025-drm-vc4-2712-support-v2-0-35efa83c8fc0@raspberrypi.com>
 To: Maxime Ripard <mripard@kernel.org>, 
@@ -105,74 +104,52 @@ X-Mailer: b4 0.14.1
 
 From: Maxime Ripard <mripard@kernel.org>
 
-The RaspberryPi firmware clocks driver uses in several instances a
-container_of to retrieve the struct raspberrypi_clk_data from a pointer
-to struct clk_hw. Let's create a small function to avoid duplicating it
-all over the place.
+BCM2712 has an extra clock exposed by the firmware called DISP, and used
+by (at least) the HVS. Let's add it to the list of clocks to register in
+Linux.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 ---
- drivers/clk/bcm/clk-raspberrypi.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/clk/bcm/clk-raspberrypi.c          | 5 +++++
+ include/soc/bcm2835/raspberrypi-firmware.h | 1 +
+ 2 files changed, 6 insertions(+)
 
 diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index 9f716b2223ae..b12d86720207 100644
+index b12d86720207..0e1fe3759530 100644
 --- a/drivers/clk/bcm/clk-raspberrypi.c
 +++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -56,6 +56,12 @@ struct raspberrypi_clk_data {
- 	struct raspberrypi_clk *rpi;
+@@ -34,6 +34,7 @@ static char *rpi_firmware_clk_names[] = {
+ 	[RPI_FIRMWARE_M2MC_CLK_ID]	= "m2mc",
+ 	[RPI_FIRMWARE_PIXEL_BVB_CLK_ID]	= "pixel-bvb",
+ 	[RPI_FIRMWARE_VEC_CLK_ID]	= "vec",
++	[RPI_FIRMWARE_DISP_CLK_ID]	= "disp",
  };
  
-+static inline
-+const struct raspberrypi_clk_data *clk_hw_to_data(const struct clk_hw *hw)
-+{
-+	return container_of(hw, struct raspberrypi_clk_data, hw);
-+}
-+
- struct raspberrypi_clk_variant {
- 	bool		export;
- 	char		*clkdev;
-@@ -176,8 +182,7 @@ static int raspberrypi_clock_property(struct rpi_firmware *firmware,
+ #define RPI_FIRMWARE_STATE_ENABLE_BIT	BIT(0)
+@@ -139,6 +140,10 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
+ 		.export = true,
+ 		.minimize = true,
+ 	},
++	[RPI_FIRMWARE_DISP_CLK_ID] = {
++		.export = true,
++		.minimize = true,
++	},
+ };
  
- static int raspberrypi_fw_is_prepared(struct clk_hw *hw)
- {
--	struct raspberrypi_clk_data *data =
--		container_of(hw, struct raspberrypi_clk_data, hw);
-+	const struct raspberrypi_clk_data *data = clk_hw_to_data(hw);
- 	struct raspberrypi_clk *rpi = data->rpi;
- 	u32 val = 0;
- 	int ret;
-@@ -194,8 +199,7 @@ static int raspberrypi_fw_is_prepared(struct clk_hw *hw)
- static unsigned long raspberrypi_fw_get_rate(struct clk_hw *hw,
- 					     unsigned long parent_rate)
- {
--	struct raspberrypi_clk_data *data =
--		container_of(hw, struct raspberrypi_clk_data, hw);
-+	const struct raspberrypi_clk_data *data = clk_hw_to_data(hw);
- 	struct raspberrypi_clk *rpi = data->rpi;
- 	u32 val = 0;
- 	int ret;
-@@ -211,8 +215,7 @@ static unsigned long raspberrypi_fw_get_rate(struct clk_hw *hw,
- static int raspberrypi_fw_set_rate(struct clk_hw *hw, unsigned long rate,
- 				   unsigned long parent_rate)
- {
--	struct raspberrypi_clk_data *data =
--		container_of(hw, struct raspberrypi_clk_data, hw);
-+	const struct raspberrypi_clk_data *data = clk_hw_to_data(hw);
- 	struct raspberrypi_clk *rpi = data->rpi;
- 	u32 _rate = rate;
- 	int ret;
-@@ -229,8 +232,7 @@ static int raspberrypi_fw_set_rate(struct clk_hw *hw, unsigned long rate,
- static int raspberrypi_fw_dumb_determine_rate(struct clk_hw *hw,
- 					      struct clk_rate_request *req)
- {
--	struct raspberrypi_clk_data *data =
--		container_of(hw, struct raspberrypi_clk_data, hw);
-+	const struct raspberrypi_clk_data *data = clk_hw_to_data(hw);
- 	struct raspberrypi_clk_variant *variant = data->variant;
+ /*
+diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+index 73cac8d0287e..e1f87fbfe554 100644
+--- a/include/soc/bcm2835/raspberrypi-firmware.h
++++ b/include/soc/bcm2835/raspberrypi-firmware.h
+@@ -152,6 +152,7 @@ enum rpi_firmware_clk_id {
+ 	RPI_FIRMWARE_M2MC_CLK_ID,
+ 	RPI_FIRMWARE_PIXEL_BVB_CLK_ID,
+ 	RPI_FIRMWARE_VEC_CLK_ID,
++	RPI_FIRMWARE_DISP_CLK_ID,
+ 	RPI_FIRMWARE_NUM_CLK_ID,
+ };
  
- 	/*
 
 -- 
 2.34.1
