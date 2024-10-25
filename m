@@ -1,176 +1,127 @@
-Return-Path: <linux-clk+bounces-13829-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13831-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9870B9B0B81
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 19:27:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5AE69B0D19
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 20:22:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C16D286138
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 17:27:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6869C1F253B9
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Oct 2024 18:22:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E339230893;
-	Fri, 25 Oct 2024 17:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1373520BB50;
+	Fri, 25 Oct 2024 18:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b="Gx05/4Ot"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IRbI2otm"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE1E217679
-	for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 17:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFE21FB899
+	for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 18:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729876601; cv=none; b=WZzW8m+TX803aeMtwrSLyQvyYYtNhSkfsG6Iba+JpOlNVBinD6VdxRPMDaKKrzGIt52KqZYX9iAm3Tqw4HpoGUSM2wTDAls1fLvqZVsfDJkRDJv8fM2huhiVkeQV0a0vS4P1trlwUp78m1AaGtntoDk0qVDnUq2mOnRP40EVaF0=
+	t=1729880563; cv=none; b=l7kWZ+1FJyAcESnBbJKSBK/zPbSAnLsoTuem89tdc6Lxtt568biOdX+4iVuLsYLYSIfFnmub9xXOV4+85dESNyNls08dS4H5zIencEhhY3X+qSGlzbJWCCBszc34VQaNHr5jXyvxRPLhAr7wT9xlf3UhNzt66yWThriwrKf3gS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729876601; c=relaxed/simple;
-	bh=YzyDLNl8va/xJl47EHT+vId7czfsGNnbHYHobDKQTlg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GhlPe9icOhKKs6xR8gUpN6X8oO6b3LZ4rBEzIZ2R9zS+Z2HxP1FXSB6gqtpwuwPUV2XXZRWE1JNCH+Mza7KJRyfsKc643NODjSGjyoH1+U4PfHhunNOh4TNTV8xuNY07RG7gFRhSL8Y1Hkjp2tZZ7tgrAl7aSnkWQNF+MdZVGe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com; spf=pass smtp.mailfrom=raspberrypi.com; dkim=pass (2048-bit key) header.d=raspberrypi.com header.i=@raspberrypi.com header.b=Gx05/4Ot; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=raspberrypi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=raspberrypi.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-37d4821e6b4so1429763f8f.3
-        for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 10:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1729876596; x=1730481396; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SOV7jAWhbFwwjw/OJ7O7LtE/DWvJ9qhDH2QMAsU+FWw=;
-        b=Gx05/4OtPlxFfZSmKt5wry6KA1iBI3l2cM58HJsFS0sukwTmrSbjdiR6BRbnpnuM2Y
-         VjLk5MbiZ/ITHNJDC2ezGMsCqCHORpMAiUGUx7bOQhTY7Oa+/7UGZpJQ7lbXUH2JOfvF
-         ycTW+8iwckQCqtTbdCLp7P4ogreh1MH7IcFTqA/wQLMmNDgbU3r29A2dq1RuPZ1CCqzj
-         qxe9jAlSU2JNraQPIh5aQ1CUOGWtGxqZr1KyjEtvTeRKN4d/ThyTkjypysckrC+SnZ2E
-         cW/YNjThFtZnFftpG1D5DnftzxJP5RJFDAeh12k9CEVd+V3LsolACACs3O4xIqIMSIa/
-         bbVw==
+	s=arc-20240116; t=1729880563; c=relaxed/simple;
+	bh=VVN0PdcmBPQfjoc1MTt87iX++qvbvC4L0wHPDemjHy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IlYY6OnwiQYjuDKwbzJQ3Trfp6Hkm0exj7giahpeS//zD6F5E+xXT/PY0xRcE8wEWSrW4RZYWA3zgZJL8M5HO5ZFlkWS4d8wSLmEzmLPC62BO2IEQuqjk3kHxWK85BeGRzBPb5F/ymVZKxXmslNSU4MXmrfeTMeior52MSqKBuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IRbI2otm; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49PDggol028792
+	for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 18:22:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	VVN0PdcmBPQfjoc1MTt87iX++qvbvC4L0wHPDemjHy8=; b=IRbI2otmkiWV9Q9B
+	9x8aLfekuffre+yqorP4enPhLFiv83I3ZNfDpWeai6qHKM8pxGbPxb5lONV+gtFY
+	+bFGuKSJx+Rx6P6TA77fs919SJV+MfOOypD1Teov+O4tv2NUuBZJr0t+1z+EH5+r
+	BexsZhwH38JC8vixAIsqNA6LRdLxuJ+2cETL+VnLiepK4KxT2cmH3kfO567XJEct
+	jt9Qi3zJ568g3guSDhBYJ80kkFxTBmZ1SZeeYqw3gklXT7jKPY5A04ZEci2i+0hu
+	0Ceb+yRhdOgPdhqxyqIGRUTEf0uDvDCGYU/J3J4Rq5Qr5VtgOg1CIeTuUSfkDceE
+	ELF+vg==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42fdtxnw4g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 18:22:40 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6cbd0a3f253so4270796d6.3
+        for <linux-clk@vger.kernel.org>; Fri, 25 Oct 2024 11:22:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729876596; x=1730481396;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SOV7jAWhbFwwjw/OJ7O7LtE/DWvJ9qhDH2QMAsU+FWw=;
-        b=td9mraZhkU5RirIYXJNwKWsepZAOEjgpdrqRINc25ZU+JeswZ3jMtIVUCTRuIagzPa
-         vq2747wXfx2FK49AeuW6nee4S1SEqUnvK49nOiL77ME01vwrFi3cs03Uy5ko1rNZD4U1
-         gmTQ5SEjkayJKQXay+UGeYGHPtJeCn7WKbb0Bo4QL6tlAH+mgJzz2HLASM75f56OtppV
-         obEGYToGlSCmLLFMr8f6dsRS0/olTM+OGAGKx6ykf+nc1IJoJppnlqq83klXBbaVAqqq
-         wWCPzWtYcuMsvE+Z02F4ow+4kcx68dQ2b2X9UqJ1vYvVMZh8Q+/bOogrA2n9vo1o1E17
-         x3qA==
-X-Forwarded-Encrypted: i=1; AJvYcCWJOcphXMjtNb+fAZNC1LURcL/U/IeUNFr58eGldZCkuL5hK/E34gvEaZyDI2XDgHy8rsl43avrYrY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQPtDcx5sKqVH3+KlJfpqZ0TaodAQmcyyYwCcdzZCwOLJ1/ifa
-	3/v4g3MI40kTFh8c9DAaIxuQzLIdwYOi21bJ5McYqCbLC3U7fayqqoQJWRMQGuA=
-X-Google-Smtp-Source: AGHT+IHM4SY0KfVAQSpJ1+ccDJ+C4lsK7yh/l9hYanouQQltriHwErlFPV65caR05fmBTRpW7n50vQ==
-X-Received: by 2002:a05:6000:e42:b0:37c:cec2:23c6 with SMTP id ffacd0b85a97d-38061208e5dmr101866f8f.57.1729876596081;
-        Fri, 25 Oct 2024 10:16:36 -0700 (PDT)
-Received: from [127.0.1.1] ([2a00:1098:3142:e::8])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38058b91f50sm2013649f8f.94.2024.10.25.10.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 10:16:35 -0700 (PDT)
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date: Fri, 25 Oct 2024 18:16:07 +0100
-Subject: [PATCH v2 36/36] arm64: dts: broadcom: Add DT for D-step version
- of BCM2712
+        d=1e100.net; s=20230601; t=1729880558; x=1730485358;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VVN0PdcmBPQfjoc1MTt87iX++qvbvC4L0wHPDemjHy8=;
+        b=V4zQUsUPc1bMYjO/xIn41I5DB+pP8XdtZQJAEZSbLshJUb9EcEk598KNEwwQfS6RA6
+         C2E0IVHemH0CFOJasYRVCZQCzd6xf7Uxdlg/nPfaS3toc7m5Y1fO7dBJkC1oHr924/Fp
+         OQEYVsFbC0Tjxv3eV5MJe1j26WG2bV/LkgwcQcCoZiy1ihoD6NdiEkXAe79penhrOaFw
+         qjXy/Qw7t1VAhXlMyY3FFywzMu+akwCeJc10VE8Yxc4tEMoltIzhFLR+5orH1ASfjnv2
+         yg02gxwM0PzEDiXshx+cjOHov1O1IsAgDJEX3S4Ja/ZO7hEl+4l+MTfS3lCcEuKqqm5i
+         jaiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkm1Ja6o1Ine7hj1SHidTBQFZ+sGJadct/k7r8rxMy8q5c1uZDrV2oupsG/34G4Hrc4vT093zX/ok=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznJ00QUU2+LtZoK+w9KesRNIHuzz0cJxRF6Rqh3g1VIXdet2Sf
+	bQAWEOE1GbIdiPd88FrWfa2qfuPhXYi8LGmX8FvlQbSmkwjnYFzO9DreZX1sQAEfql8Tr2vuQ6j
+	qrsGgebQtsRS2Xk/CAiB21iXYG9y7TMHR0JnERTCrcEt73WhnMaRxxgEIi2U=
+X-Received: by 2002:ad4:5768:0:b0:6c5:1267:a821 with SMTP id 6a1803df08f44-6d18568ee91mr2660176d6.4.1729880558534;
+        Fri, 25 Oct 2024 11:22:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IErYETrz5z+JTzJDS/w6aa74JBTcFF+3fs+FeslWWgXc2PFwmJ7slZ9PvjLEovXl/4iUj0HKA==
+X-Received: by 2002:ad4:5768:0:b0:6c5:1267:a821 with SMTP id 6a1803df08f44-6d18568ee91mr2660006d6.4.1729880558262;
+        Fri, 25 Oct 2024 11:22:38 -0700 (PDT)
+Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b3a084ae4sm95214166b.197.2024.10.25.11.22.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Oct 2024 11:22:37 -0700 (PDT)
+Message-ID: <070ebd3e-f521-4592-ac7f-277c294e73f9@oss.qualcomm.com>
+Date: Fri, 25 Oct 2024 20:22:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/11] clk: qcom: rpmh: add support for SAR2130P
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241025-sar2130p-clocks-v3-0-48f1842fd156@linaro.org>
+ <20241025-sar2130p-clocks-v3-7-48f1842fd156@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241025-sar2130p-clocks-v3-7-48f1842fd156@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241025-drm-vc4-2712-support-v2-36-35efa83c8fc0@raspberrypi.com>
-References: <20241025-drm-vc4-2712-support-v2-0-35efa83c8fc0@raspberrypi.com>
-In-Reply-To: <20241025-drm-vc4-2712-support-v2-0-35efa83c8fc0@raspberrypi.com>
-To: Maxime Ripard <mripard@kernel.org>, 
- =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
- Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>
-X-Mailer: b4 0.14.1
+X-Proofpoint-GUID: dLGPJKemXNDlfOcchJQacYO82pWJ7_22
+X-Proofpoint-ORIG-GUID: dLGPJKemXNDlfOcchJQacYO82pWJ7_22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 mlxlogscore=740
+ priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410250140
 
-The D-Step has some minor variations in the hardware, so needs
-matching changes to DT.
+On 25.10.2024 5:03 PM, Dmitry Baryshkov wrote:
+> Define clocks as supported by the RPMh on the SAR2130P platform. It
+> seems that on this platform RPMh models only CXO clock.
 
-Add a new DTS file that modifies the existing (C-step) devicetree.
+This commit message is no longer up to date
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
----
- arch/arm64/boot/dts/broadcom/Makefile              |  1 +
- arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts | 37 ++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index 92565e9781ad..3d0efb93b06d 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
- 			      bcm2711-rpi-4-b.dtb \
- 			      bcm2711-rpi-cm4-io.dtb \
- 			      bcm2712-rpi-5-b.dtb \
-+			      bcm2712-d-rpi-5-b.dtb \
- 			      bcm2837-rpi-3-a-plus.dtb \
- 			      bcm2837-rpi-3-b.dtb \
- 			      bcm2837-rpi-3-b-plus.dtb \
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts b/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts
-new file mode 100644
-index 000000000000..7de24d60bcd1
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/dts-v1/;
-+
-+#include "bcm2712-rpi-5-b.dts"
-+
-+&gio_aon {
-+	brcm,gpio-bank-widths = <15 6>;
-+
-+	gpio-line-names =
-+		"RP1_SDA", // AON_GPIO_00
-+		"RP1_SCL", // AON_GPIO_01
-+		"RP1_RUN", // AON_GPIO_02
-+		"SD_IOVDD_SEL", // AON_GPIO_03
-+		"SD_PWR_ON", // AON_GPIO_04
-+		"SD_CDET_N", // AON_GPIO_05
-+		"SD_FLG_N", // AON_GPIO_06
-+		"", // AON_GPIO_07
-+		"2712_WAKE", // AON_GPIO_08
-+		"2712_STAT_LED", // AON_GPIO_09
-+		"", // AON_GPIO_10
-+		"", // AON_GPIO_11
-+		"PMIC_INT", // AON_GPIO_12
-+		"UART_TX_FS", // AON_GPIO_13
-+		"UART_RX_FS", // AON_GPIO_14
-+		"", // AON_GPIO_15
-+		"", // AON_GPIO_16
-+
-+		// Pad bank0 out to 32 entries
-+		"", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
-+
-+		"HDMI0_SCL", // AON_SGPIO_00
-+		"HDMI0_SDA", // AON_SGPIO_01
-+		"HDMI1_SCL", // AON_SGPIO_02
-+		"HDMI1_SDA", // AON_SGPIO_03
-+		"PMIC_SCL", // AON_SGPIO_04
-+		"PMIC_SDA"; // AON_SGPIO_05
-+};
-
--- 
-2.34.1
-
+Konrad
 
