@@ -1,673 +1,95 @@
-Return-Path: <linux-clk+bounces-13859-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-13861-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D8059B1987
-	for <lists+linux-clk@lfdr.de>; Sat, 26 Oct 2024 17:49:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2DE39B19A7
+	for <lists+linux-clk@lfdr.de>; Sat, 26 Oct 2024 17:54:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C9EC1C20C48
-	for <lists+linux-clk@lfdr.de>; Sat, 26 Oct 2024 15:49:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EC91B21A37
+	for <lists+linux-clk@lfdr.de>; Sat, 26 Oct 2024 15:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DE9C1DA2FD;
-	Sat, 26 Oct 2024 15:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9252D13B2A8;
+	Sat, 26 Oct 2024 15:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v9DfP18U"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="INVacg0Z"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7431D9688
-	for <linux-clk@vger.kernel.org>; Sat, 26 Oct 2024 15:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E380243172
+	for <linux-clk@vger.kernel.org>; Sat, 26 Oct 2024 15:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729957649; cv=none; b=CjBjEWWeVOZNlD1JKQEtzrnu1ZYe6H6aJH2VLMrDIf16d08nXK3YahQoTD8RUZhZLDso87oizXVUqyqqGmtxXZmLgG489vvMyxnEYDZu6kQZvELHSAby00REeQyr5Ad+3aqpBziRNehQCRysVYsHx59M3TdOMHIum+g7SuXPsp8=
+	t=1729958041; cv=none; b=QDdHd/Es4jzDvY10C+YQkIWssPdIvYE31c5sCz9x7BfhQaRoSJtj1ezTr12zwaffNlhN0RwHmdIebQ+J7KxatTXdi9D8JkU6qeqVsX6y5urIlsWibgbMUejiJPi79oI0enVOm4WqXQ6pqk86Mn7J28nqNHQy37iEnHjXA7rpOrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729957649; c=relaxed/simple;
-	bh=OIwivcEmms/RiYvRKS6a5BbzOR582S903YsWbbGK00c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XHL0c3kSZPjn21PmmokP9HthuYn1np2ODYCTFqfFQfHksXFAfUm63WyBeY6YJSeRxw9Beqkdpv0w5HJ7TPbYhjv/Q83/lik2WFPIv7MtzLF6VN8ppFberQCRD1YQtfdxCMM7WoSbX+JtEWifVv4Gbm78JuXMhCC+Ued3C362quA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=v9DfP18U; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-539f72c913aso3818550e87.1
-        for <linux-clk@vger.kernel.org>; Sat, 26 Oct 2024 08:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729957644; x=1730562444; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GzCy0S9O1o+dncbxhCc6FXPTS7r2JcJPH1XnGftO8Rc=;
-        b=v9DfP18UtTOwk9WLtxwA7hzWMmCjqQJ8DICYFj061GXJbgoQl0LPf85seIq7MhPP1q
-         hERzicz14wRzYMVvG2ShSIeAUh5yYH7JMcPTeEUVMbEKP/RJtpGgHmyFDhRwhAJCBIuf
-         SVU0jmWS4nc3oDy1EV8VRMTFoHcvQYNHvRNr1w2h3YnchauedlWeY50FZgkXBtRcyClu
-         R5wQFk2FLGezPnid+NEApfLqRHEgDOwXOybyMK+aSerDhhP7VD+ignn2O3+27yb3zD/L
-         dk2ErMqR0/GuOQu2FuOf+yDvzHMthCDEdUVvUGLcGLPQYrgfiCgTHDHJXM4PY/2GUzFD
-         Gn2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729957644; x=1730562444;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GzCy0S9O1o+dncbxhCc6FXPTS7r2JcJPH1XnGftO8Rc=;
-        b=Kr4rmvuKL1VeGlmWSKvTQmj01zXpPzeJSspUU9ykvQ1Q8YvL2pUdLjxlEtzkA2l6WH
-         DakIbcksSOHBpnSIvY2VK7fQZyVU2U4Xj7e5K0sWzyHOrDYqK3HX18d/u8zSsTyEKqQv
-         KOI+tfnqzHqNnoPTvhGGi4ekXH7d5/oAvv6aDmuUAa9nkvHG5OUjkhyWaRweshruTdSG
-         WgxIs5egM/mBrFYE/UbD6QIhpnGjm0U+eQlMdoyRak2f6AZXwCHy9eAHJPeN3km+T7Ae
-         oGuuwq4Rafcp6IuW2863e44YHmghpQGQhKmdfK/tLPj/xpvInOrhUP9dXL5lyf6iojOW
-         n9dA==
-X-Forwarded-Encrypted: i=1; AJvYcCXs91Pe8A3z7goyC4d8BBqnoL06vD6gPHxYZfthdF2EN8fo9HRp31NkxaJ5WiqmVxYHGWqg3JimJMs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV5d7lTdwJ5VwA/Lafn2a66EjFIL5jLACJZakdMyDeG/WnEW86
-	bR9AihzRmZMaVNYoaZgeOQxGbbAh+JLaWWGHk9PWtzM+53o7LyardihdY+cKIKU=
-X-Google-Smtp-Source: AGHT+IFgSSpFInLDCeeRyCC9egLrQitXrepYhUqEyTAC09DPEW/VgnMt7QzMUwYD5GVudI1KHHPCYw==
-X-Received: by 2002:a05:6512:b27:b0:539:fc31:fc9b with SMTP id 2adb3069b0e04-53b348ee3d1mr1216404e87.34.1729957644011;
-        Sat, 26 Oct 2024 08:47:24 -0700 (PDT)
-Received: from [127.0.1.1] (2001-14ba-a0c3-3a00-70b-e6fc-b322-6a1b.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:70b:e6fc:b322:6a1b])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e1c7cf4sm532188e87.184.2024.10.26.08.47.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Oct 2024 08:47:23 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sat, 26 Oct 2024 18:47:09 +0300
-Subject: [PATCH v4 11/11] clk: qcom: add SAR2130P GPU Clock Controller
- support
+	s=arc-20240116; t=1729958041; c=relaxed/simple;
+	bh=X4FrbSoyY3nl2u9HVc4ER9FQGO1gtD9pEGPdPZRliTM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bDt4r5uMWHF+ZMunHzo7m5a+L7Wk0B664Df9X90S20rk1y5WKAwDVH5a4YDeXbpOpCAvlmMUVcQe2SYD2lulKn8TBjh+6KB7Mw4wOG5M2x/84AnKOfYnUzGrxbHtowW1S/wXqeb7Y/8hXLAKJs8woIPtBj9p/qiYYTfXEOUJMes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=INVacg0Z; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729958034;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=s1YWqkMnBtrc9mboMzUV/AKv/C9CTZRcvX8zL+thI+w=;
+	b=INVacg0Z0r9fQ06HVo8JITG0U8zRvnfEjZWymSfk/5qTJ88H8Qm46NYb5bb26jnh5+7EfA
+	q8IPnsG/Hw12pFQJ1Qu4vJhrlXMhHk6kjPKXOSTHP1RYZ4sOXZS2opYxJVZR9Wbn04+AMv
+	leloHx83XOHYKl8R0moSC8BQ5Xf7ZVI=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Dinh Nguyen <dinguyen@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] clk: socfpga: arria10: Optimize local variables in clk_pll_recalc_rate()
+Date: Sat, 26 Oct 2024 17:53:04 +0200
+Message-ID: <20241026155304.159716-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241026-sar2130p-clocks-v4-11-37100d40fadc@linaro.org>
-References: <20241026-sar2130p-clocks-v4-0-37100d40fadc@linaro.org>
-In-Reply-To: <20241026-sar2130p-clocks-v4-0-37100d40fadc@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=15878;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=0yBBilK2IS2kHAQ22Aavz62Y0H+bW+P6ui8CLW5p9Yg=;
- b=owEBbQKS/ZANAwAKARTbcu2+gGW4AcsmYgBnHQ75lrulI0M8/wdlWRAEs0rVN/zNfxN6X/OP1
- LEv8SP4qbKJAjMEAAEKAB0WIQRdB85SOKWMgfgVe+4U23LtvoBluAUCZx0O+QAKCRAU23LtvoBl
- uFRjEACWdpUeoYPmdbM+DUspCLhP1PvxT4XY6Dzuq1/nOENTONpJ0Gq+GtVXH7NL2M0DedDyBgO
- GQ+RnRXVEKuGtsmRp5NcxeSAbB6I+PhQx/ruQpO9koAV3rr6Ey2qFpff54DTcPU/Hcc17C/scnB
- kHeg/XqJtSIAhYfLvBY2keABHE6MsAu2RQe2QzOHYx+94W/bwlxo8lDgao/GZ/xxRfmecui6Vrq
- ouwbvfbNFlPdbjXlUKeh86skgXmZf98QWFiHm4X/ehWWACyzGIpeUPlPVBQYx5VoAAvkTmqeGHl
- clhyPIHlFjwTAyD95ka1eF0w40bVbmHseYZTgj9HOa/Ds21h7vxfW370Y3OSpzAcw+uPClHtViT
- Hsce4SeqY9Rg05SNRkxia6IR/zF29jJzr00q1ei7+3KgSo3rW4f5EmXPl0emv8MDgGGEnHtv9sA
- 9ZNgEHngdRiR2sNCTI83GfvprXAe43mdKvw5MQ1Q+pCWA17mZVu0v29XV1TlHHpbKA0x8z0pPzc
- iw6m2cyoa5SIZHXEXJ/N//293A5w13IgRPCPFTUtniegy5OOdeqwMgPiIQ+dUPvgW+lCa2Gr8+I
- jD0orh1DL3mCd2JivAX+Asz5Rn7QOWJUsTt5nOA7QqvKTSE50lX7VfcvHhqn7lfoe8sqxfVu/F+
- 5h5CfEwq2z3sijw==
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Since readl() returns a u32, the local variable reg can also have the
+data type u32. Furthermore, divf and divq are derived from reg and can
+also be a u32.
 
-Add support for the GPU Clock Controller as used on the SAR2130P and
-SAR1130P platforms.
+Since do_div() casts the divisor to u32 anyway, changing the data type
+of divq to u32 also removes the following Coccinelle/coccicheck warning
+reported by do_div.cocci:
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+  WARNING: do_div() does a 64-by-32 division, please consider using div64_ul instead
+
+Compile-tested only.
+
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 ---
- drivers/clk/qcom/Kconfig          |   9 +
- drivers/clk/qcom/Makefile         |   1 +
- drivers/clk/qcom/gpucc-sar2130p.c | 503 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 513 insertions(+)
+ drivers/clk/socfpga/clk-pll-a10.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 77a4139d222ec7dea87d63b24896324973e4838b..678b1ebd9785be066fc202dd7865a6c6ff342465 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -574,6 +574,15 @@ config SAR_GCC_2130P
- 	  Say Y if you want to use peripheral devices such as UART, SPI,
- 	  I2C, USB, SDCC, etc.
+diff --git a/drivers/clk/socfpga/clk-pll-a10.c b/drivers/clk/socfpga/clk-pll-a10.c
+index b028f25c658a..62eed964c3d0 100644
+--- a/drivers/clk/socfpga/clk-pll-a10.c
++++ b/drivers/clk/socfpga/clk-pll-a10.c
+@@ -35,7 +35,7 @@ static unsigned long clk_pll_recalc_rate(struct clk_hw *hwclk,
+ 					 unsigned long parent_rate)
+ {
+ 	struct socfpga_pll *socfpgaclk = to_socfpga_clk(hwclk);
+-	unsigned long divf, divq, reg;
++	u32 divf, divq, reg;
+ 	unsigned long long vco_freq;
  
-+config SAR_GPUCC_2130P
-+	tristate "SAR2130P Graphics clock controller"
-+	select QCOM_GDSC
-+	select SAR_GCC_2130P
-+	help
-+	  Support for the graphics clock controller on SAR2130P devices.
-+	  Say Y if you want to support graphics controller devices and
-+	  functionality such as 3D graphics.
-+
- config SC_GCC_7180
- 	tristate "SC7180 Global Clock Controller"
- 	select QCOM_GDSC
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index 992192ea231c0b10fe81982c175302a6b782e2fd..c581e65f173c81aafe385a53ea8a5c07a4c3e32e 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SA_GCC_8775P) += gcc-sa8775p.o
- obj-$(CONFIG_SA_GPUCC_8775P) += gpucc-sa8775p.o
- obj-$(CONFIG_SA_VIDEOCC_8775P) += videocc-sa8775p.o
- obj-$(CONFIG_SAR_GCC_2130P) += gcc-sar2130p.o
-+obj-$(CONFIG_SAR_GPUCC_2130P) += gpucc-sar2130p.o
- obj-$(CONFIG_SC_GCC_7180) += gcc-sc7180.o
- obj-$(CONFIG_SC_GCC_7280) += gcc-sc7280.o
- obj-$(CONFIG_SC_GCC_8180X) += gcc-sc8180x.o
-diff --git a/drivers/clk/qcom/gpucc-sar2130p.c b/drivers/clk/qcom/gpucc-sar2130p.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..61be63fc30fd5d45a16197bc4b9110c787ec4110
---- /dev/null
-+++ b/drivers/clk/qcom/gpucc-sar2130p.c
-@@ -0,0 +1,503 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2021, Qualcomm Innovation Center, Inc. All rights reserved.
-+ * Copyright (c) 2024, Linaro Limited
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/qcom,sar2130p-gpucc.h>
-+#include <dt-bindings/reset/qcom,sar2130p-gpucc.h>
-+
-+#include "clk-alpha-pll.h"
-+#include "clk-branch.h"
-+#include "clk-rcg.h"
-+#include "common.h"
-+#include "gdsc.h"
-+#include "reset.h"
-+
-+enum {
-+	DT_BI_TCXO,
-+	DT_GPLL0_OUT_MAIN,
-+	DT_GPLL0_OUT_MAIN_DIV,
-+};
-+
-+enum {
-+	P_BI_TCXO,
-+	P_GPLL0_OUT_MAIN,
-+	P_GPLL0_OUT_MAIN_DIV,
-+	P_GPU_CC_PLL0_OUT_MAIN,
-+	P_GPU_CC_PLL1_OUT_MAIN,
-+};
-+
-+static const struct pll_vco lucid_ole_vco[] = {
-+	{ 249600000, 2000000000, 0 },
-+};
-+
-+/* 470MHz Configuration */
-+static const struct alpha_pll_config gpu_cc_pll0_config = {
-+	.l = 0x18,
-+	.alpha = 0x7aaa,
-+	.config_ctl_val = 0x20485699,
-+	.config_ctl_hi_val = 0x00182261,
-+	.config_ctl_hi1_val = 0x82aa299c,
-+	.test_ctl_val = 0x00000000,
-+	.test_ctl_hi_val = 0x00000003,
-+	.test_ctl_hi1_val = 0x00009000,
-+	.test_ctl_hi2_val = 0x00000034,
-+	.user_ctl_val = 0x00000000,
-+	.user_ctl_hi_val = 0x00000005,
-+};
-+
-+static struct clk_alpha_pll gpu_cc_pll0 = {
-+	.offset = 0x0,
-+	.vco_table = lucid_ole_vco,
-+	.num_vco = ARRAY_SIZE(lucid_ole_vco),
-+	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
-+	.clkr = {
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_pll0",
-+			.parent_data = &(const struct clk_parent_data) {
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_alpha_pll_lucid_evo_ops,
-+		},
-+	},
-+};
-+
-+/* 440MHz Configuration */
-+static const struct alpha_pll_config gpu_cc_pll1_config = {
-+	.l = 0x16,
-+	.alpha = 0xeaaa,
-+	.config_ctl_val = 0x20485699,
-+	.config_ctl_hi_val = 0x00182261,
-+	.config_ctl_hi1_val = 0x82aa299c,
-+	.test_ctl_val = 0x00000000,
-+	.test_ctl_hi_val = 0x00000003,
-+	.test_ctl_hi1_val = 0x00009000,
-+	.test_ctl_hi2_val = 0x00000034,
-+	.user_ctl_val = 0x00000000,
-+	.user_ctl_hi_val = 0x00000005,
-+};
-+
-+static struct clk_alpha_pll gpu_cc_pll1 = {
-+	.offset = 0x1000,
-+	.vco_table = lucid_ole_vco,
-+	.num_vco = ARRAY_SIZE(lucid_ole_vco),
-+	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_OLE],
-+	.clkr = {
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_pll1",
-+			.parent_data = &(const struct clk_parent_data) {
-+				.index = DT_BI_TCXO,
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_alpha_pll_lucid_evo_ops,
-+		},
-+	},
-+};
-+
-+static const struct parent_map gpu_cc_parent_map_0[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_GPLL0_OUT_MAIN, 5 },
-+	{ P_GPLL0_OUT_MAIN_DIV, 6 },
-+};
-+
-+static const struct clk_parent_data gpu_cc_parent_data_0[] = {
-+	{ .index = DT_BI_TCXO },
-+	{ .index = DT_GPLL0_OUT_MAIN },
-+	{ .index = DT_GPLL0_OUT_MAIN_DIV },
-+};
-+
-+static const struct parent_map gpu_cc_parent_map_1[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_GPU_CC_PLL0_OUT_MAIN, 1 },
-+	{ P_GPU_CC_PLL1_OUT_MAIN, 3 },
-+	{ P_GPLL0_OUT_MAIN, 5 },
-+	{ P_GPLL0_OUT_MAIN_DIV, 6 },
-+};
-+
-+static const struct clk_parent_data gpu_cc_parent_data_1[] = {
-+	{ .index = DT_BI_TCXO },
-+	{ .hw = &gpu_cc_pll0.clkr.hw },
-+	{ .hw = &gpu_cc_pll1.clkr.hw },
-+	{ .index = DT_GPLL0_OUT_MAIN },
-+	{ .index = DT_GPLL0_OUT_MAIN_DIV },
-+};
-+
-+static const struct parent_map gpu_cc_parent_map_2[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_GPU_CC_PLL1_OUT_MAIN, 3 },
-+	{ P_GPLL0_OUT_MAIN, 5 },
-+	{ P_GPLL0_OUT_MAIN_DIV, 6 },
-+};
-+
-+static const struct clk_parent_data gpu_cc_parent_data_2[] = {
-+	{ .index = DT_BI_TCXO },
-+	{ .hw = &gpu_cc_pll1.clkr.hw },
-+	{ .index = DT_GPLL0_OUT_MAIN },
-+	{ .index = DT_GPLL0_OUT_MAIN_DIV },
-+};
-+
-+static const struct freq_tbl ftbl_gpu_cc_ff_clk_src[] = {
-+	F(200000000, P_GPLL0_OUT_MAIN, 3, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 gpu_cc_ff_clk_src = {
-+	.cmd_rcgr = 0x9474,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = gpu_cc_parent_map_0,
-+	.freq_tbl = ftbl_gpu_cc_ff_clk_src,
-+	.clkr.hw.init = &(const struct clk_init_data) {
-+		.name = "gpu_cc_ff_clk_src",
-+		.parent_data = gpu_cc_parent_data_0,
-+		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_0),
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_gpu_cc_gmu_clk_src[] = {
-+	F(19200000, P_BI_TCXO, 1, 0, 0),
-+	F(220000000, P_GPU_CC_PLL1_OUT_MAIN, 2, 0, 0),
-+	F(550000000, P_GPU_CC_PLL1_OUT_MAIN, 2, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 gpu_cc_gmu_clk_src = {
-+	.cmd_rcgr = 0x9318,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = gpu_cc_parent_map_1,
-+	.freq_tbl = ftbl_gpu_cc_gmu_clk_src,
-+	.clkr.hw.init = &(const struct clk_init_data) {
-+		.name = "gpu_cc_gmu_clk_src",
-+		.parent_data = gpu_cc_parent_data_1,
-+		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_1),
-+		.flags = CLK_SET_RATE_PARENT,
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static struct clk_rcg2 gpu_cc_hub_clk_src = {
-+	.cmd_rcgr = 0x93ec,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = gpu_cc_parent_map_2,
-+	.freq_tbl = ftbl_gpu_cc_ff_clk_src,
-+	.clkr.hw.init = &(const struct clk_init_data) {
-+		.name = "gpu_cc_hub_clk_src",
-+		.parent_data = gpu_cc_parent_data_2,
-+		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_2),
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_ahb_clk = {
-+	.halt_reg = 0x911c,
-+	.halt_check = BRANCH_HALT_DELAY,
-+	.clkr = {
-+		.enable_reg = 0x911c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_ahb_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_hub_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_crc_ahb_clk = {
-+	.halt_reg = 0x9120,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x9120,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_crc_ahb_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_hub_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_cx_ff_clk = {
-+	.halt_reg = 0x914c,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x914c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_cx_ff_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_ff_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_cx_gmu_clk = {
-+	.halt_reg = 0x913c,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x913c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_cx_gmu_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_gmu_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_aon_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_cxo_aon_clk = {
-+	.halt_reg = 0x9004,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x9004,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_cxo_aon_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_cxo_clk = {
-+	.halt_reg = 0x9144,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x9144,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_cxo_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_gx_gmu_clk = {
-+	.halt_reg = 0x90bc,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x90bc,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_gx_gmu_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_gmu_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_hub_aon_clk = {
-+	.halt_reg = 0x93e8,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x93e8,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_hub_aon_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_hub_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_aon_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_hub_cx_int_clk = {
-+	.halt_reg = 0x9148,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x9148,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_hub_cx_int_clk",
-+			.parent_hws = (const struct clk_hw*[]) {
-+				&gpu_cc_hub_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_aon_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_memnoc_gfx_clk = {
-+	.halt_reg = 0x9150,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x9150,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_memnoc_gfx_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_hlos1_vote_gpu_smmu_clk = {
-+	.halt_reg = 0x7000,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x7000,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_hlos1_vote_gpu_smmu_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch gpu_cc_sleep_clk = {
-+	.halt_reg = 0x9134,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x9134,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data) {
-+			.name = "gpu_cc_sleep_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct gdsc gpu_cx_gdsc = {
-+	.gdscr = 0x9108,
-+	.gds_hw_ctrl = 0x953c,
-+	.clk_dis_wait_val = 8,
-+	.pd = {
-+		.name = "gpu_cx_gdsc",
-+	},
-+	.pwrsts = PWRSTS_OFF_ON,
-+	.flags = VOTABLE | RETAIN_FF_ENABLE,
-+};
-+
-+static struct gdsc gpu_gx_gdsc = {
-+	.gdscr = 0x905c,
-+	.clamp_io_ctrl = 0x9504,
-+	.resets = (unsigned int []){ GPUCC_GPU_CC_GX_BCR,
-+				     GPUCC_GPU_CC_ACD_BCR,
-+				     GPUCC_GPU_CC_GX_ACD_IROOT_BCR },
-+	.reset_count = 3,
-+	.pd = {
-+		.name = "gpu_gx_gdsc",
-+		.power_on = gdsc_gx_do_nothing_enable,
-+	},
-+	.pwrsts = PWRSTS_OFF_ON,
-+	.flags = CLAMP_IO | AON_RESET | SW_RESET,
-+};
-+
-+static struct clk_regmap *gpu_cc_sar2130p_clocks[] = {
-+	[GPU_CC_AHB_CLK] = &gpu_cc_ahb_clk.clkr,
-+	[GPU_CC_CRC_AHB_CLK] = &gpu_cc_crc_ahb_clk.clkr,
-+	[GPU_CC_CX_FF_CLK] = &gpu_cc_cx_ff_clk.clkr,
-+	[GPU_CC_CX_GMU_CLK] = &gpu_cc_cx_gmu_clk.clkr,
-+	[GPU_CC_CXO_AON_CLK] = &gpu_cc_cxo_aon_clk.clkr,
-+	[GPU_CC_CXO_CLK] = &gpu_cc_cxo_clk.clkr,
-+	[GPU_CC_FF_CLK_SRC] = &gpu_cc_ff_clk_src.clkr,
-+	[GPU_CC_GMU_CLK_SRC] = &gpu_cc_gmu_clk_src.clkr,
-+	[GPU_CC_GX_GMU_CLK] = &gpu_cc_gx_gmu_clk.clkr,
-+	[GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK] = &gpu_cc_hlos1_vote_gpu_smmu_clk.clkr,
-+	[GPU_CC_HUB_AON_CLK] = &gpu_cc_hub_aon_clk.clkr,
-+	[GPU_CC_HUB_CLK_SRC] = &gpu_cc_hub_clk_src.clkr,
-+	[GPU_CC_HUB_CX_INT_CLK] = &gpu_cc_hub_cx_int_clk.clkr,
-+	[GPU_CC_MEMNOC_GFX_CLK] = &gpu_cc_memnoc_gfx_clk.clkr,
-+	[GPU_CC_PLL0] = &gpu_cc_pll0.clkr,
-+	[GPU_CC_PLL1] = &gpu_cc_pll1.clkr,
-+	[GPU_CC_SLEEP_CLK] = &gpu_cc_sleep_clk.clkr,
-+};
-+
-+static const struct qcom_reset_map gpu_cc_sar2130p_resets[] = {
-+	[GPUCC_GPU_CC_ACD_BCR] = { 0x9358 },
-+	[GPUCC_GPU_CC_GX_ACD_IROOT_BCR] = { 0x958c },
-+	[GPUCC_GPU_CC_GX_BCR] = { 0x9058 },
-+};
-+
-+static struct gdsc *gpu_cc_sar2130p_gdscs[] = {
-+	[GPU_CX_GDSC] = &gpu_cx_gdsc,
-+	[GPU_GX_GDSC] = &gpu_gx_gdsc,
-+};
-+
-+static const struct regmap_config gpu_cc_sar2130p_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0xa000,
-+	.fast_io = true,
-+};
-+
-+static const struct qcom_cc_desc gpu_cc_sar2130p_desc = {
-+	.config = &gpu_cc_sar2130p_regmap_config,
-+	.clks = gpu_cc_sar2130p_clocks,
-+	.num_clks = ARRAY_SIZE(gpu_cc_sar2130p_clocks),
-+	.resets = gpu_cc_sar2130p_resets,
-+	.num_resets = ARRAY_SIZE(gpu_cc_sar2130p_resets),
-+	.gdscs = gpu_cc_sar2130p_gdscs,
-+	.num_gdscs = ARRAY_SIZE(gpu_cc_sar2130p_gdscs),
-+};
-+
-+static const struct of_device_id gpu_cc_sar2130p_match_table[] = {
-+	{ .compatible = "qcom,sar2130p-gpucc" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, gpu_cc_sar2130p_match_table);
-+
-+static int gpu_cc_sar2130p_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct regmap *regmap;
-+	int ret;
-+
-+	regmap = qcom_cc_map(pdev, &gpu_cc_sar2130p_desc);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap), "Couldn't map GPU_CC\n");
-+
-+	clk_lucid_ole_pll_configure(&gpu_cc_pll0, regmap, &gpu_cc_pll0_config);
-+	clk_lucid_ole_pll_configure(&gpu_cc_pll1, regmap, &gpu_cc_pll1_config);
-+
-+	/* Keep some clocks always-on */
-+	qcom_branch_set_clk_en(regmap, 0x900c); /* GPU_CC_DEMET_CLK */
-+
-+	return qcom_cc_really_probe(dev, &gpu_cc_sar2130p_desc, regmap);
-+}
-+
-+static struct platform_driver gpu_cc_sar2130p_driver = {
-+	.probe = gpu_cc_sar2130p_probe,
-+	.driver = {
-+		.name = "gpu_cc-sar2130p",
-+		.of_match_table = gpu_cc_sar2130p_match_table,
-+	},
-+};
-+module_platform_driver(gpu_cc_sar2130p_driver);
-+
-+MODULE_DESCRIPTION("QTI GPU_CC SAR2130P Driver");
-+MODULE_LICENSE("GPL");
-
+ 	/* read VCO1 reg for numerator and denominator */
 -- 
-2.39.5
+2.47.0
 
 
