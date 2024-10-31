@@ -1,290 +1,138 @@
-Return-Path: <linux-clk+bounces-14098-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14100-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3184D9B7F48
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 16:54:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8175E9B80C0
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 18:00:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5BFC28259F
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 15:54:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C87F1F21419
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 17:00:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236C91C7B64;
-	Thu, 31 Oct 2024 15:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346811990AE;
+	Thu, 31 Oct 2024 17:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WatHdMoG"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="rn8W7ok+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4B41BBBFE;
-	Thu, 31 Oct 2024 15:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D58526AD0
+	for <linux-clk@vger.kernel.org>; Thu, 31 Oct 2024 17:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730389992; cv=none; b=OO9j16r/jYInLI4y7nIEnKeDNWLtN+jWPXrmLwR2kzQMpMHuTqNLBDYMep+Gs3XTOS/fraW64bgUH7E3xfZKy+/Ho0feD77gMpLqU/FdGoIEp/zfwiheaD+2OcVKfJUSPZw/DQRvVWSsuz5NUYStDrI7r9HfbyLKe/PlLX9REww=
+	t=1730394033; cv=none; b=Z8QFCzNjRqSI2fItr6m059nQlXJIHEYCFPvzjnY5vggu37pUJ+yZ59pwl1hZpxwmzvs9uERwKQzJ1QdjJRKueryaEXQj15Jq/GHDAPFr5885modfN2XZF3vzHOiS3wNKrJ7/52kJr5HDwJkXfrsCzfBL9ydBu9hh73vu5msA568=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730389992; c=relaxed/simple;
-	bh=164AvxpBW24lmZ5bza1gILy+9Z0x/iue+c4IgUxIOFc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZqbSMXuHvadY5RuZiMDupQhVqlLswsyrT2xBQUJN4qqonLtQsRFGlS2ysKL1yBrAQ6+BZNnynu0SlaPEAWWctYSwklaIW+xaitKWBaVFhaW+zZr6DGzznlKmtdP3jdQDacDIvrwUka4bK6ls1Vp9a1G3eRhkReGs/bFfVF0kSDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WatHdMoG; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 868D11C0013;
-	Thu, 31 Oct 2024 15:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730389985;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dNYxA9PoraKNMZJ+/mQFXcEzKQ9APotFg7LB3yegiRc=;
-	b=WatHdMoGNqWDyT/YrFtn7rOlSUilSNy5U+dCRtVlZRDIbiPA4b7hUWRI/86ILF5JCnoNMo
-	gJ4VINXBS2wQkX25w5B5QInCoVztSEM5hwATAPXy6pS6UvT9Nw2dtE0yWOX3wDQl7dXnZL
-	lA+R7fddw/Zwv80mJntbVLeU/X8HfgiJ91vB9X9lO8oVBD1fQ6cndjBqJMeuwhaiL317S6
-	L0BK2fF9yKHJk/K+GGfrWm/H+WGssUJ/KTt0aqmj4VWm0ia0vJqBAGl6dtQR+BPrPdH8x4
-	mSWtZmz7QnLQ9k2/MzS2KG7xApWFiuB4rSBcbAsqMMiWqjCCYzcPdWoxxFM6eA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 31 Oct 2024 16:53:03 +0100
-Subject: [PATCH 13/13] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove
- fixed clocks
+	s=arc-20240116; t=1730394033; c=relaxed/simple;
+	bh=+PAOFwsgnSghgLjjAyebEJJRF/OgGK6zoG47VW+z0IQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T1LSI/Py+BZq37BBWMXg1s6QSrYVNdU12kAe4SCrkYH47RdRQ5OG+ol5BDKG+DBKHh2QRRtIv4Ui4CIWtNcGDNK3Ff2wnnFz5Ejg17WzqaszXCtyEPr1jN+frJbvirhQRrcd9czI6Rvqb9J03bWkBPjSvHcr9ighwb3fCzM0eZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=rn8W7ok+; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id F077C892B4;
+	Thu, 31 Oct 2024 18:00:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1730394029;
+	bh=92Sy6UDwL/ps4AVz4KDD4tlQVW8dKGo+enny9ATdi/Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rn8W7ok+xoK/3atYWX260xLtWpY/OFjHeu/yW3HPUiFltXynjdWPNf/Rg9h+vsvav
+	 xfc2acyIVryKtFo1x5VRFubzNzIyhS5WvDcu39HMjJbHd66Ml0vEZs4aGYB/tknE8P
+	 kOrZ/deOA6DZcwNOW/haFyf+0JjGCnvMJdEYvKBUEu1KDl6VLYAQXXp266dweOZlcx
+	 1wNbiFp6NP2RJZSfL6pfFcT8SoAEppYFMytU3O1UzZLq1PN4Yv1Dr8wF1Gf4ji9V5C
+	 ks3SjAyULhhP++L3DvYeTC60xGfn0T2OLlnBK35kKJdOepu1vTGmkWfQqa+N76JDfq
+	 lZdkMjKp8B+sw==
+From: Marek Vasut <marex@denx.de>
+To: linux-clk@vger.kernel.org
+Cc: Marek Vasut <marex@denx.de>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] clk: zynqmp: Work around broken DT GPU node
+Date: Thu, 31 Oct 2024 17:59:33 +0100
+Message-ID: <20241031170015.55243-1-marex@denx.de>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241031-mbly-clk-v1-13-89d8b28e3006@bootlin.com>
-References: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
-In-Reply-To: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: theo.lebrun@bootlin.com
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-Change the declaration of clocks: remove all fixed clocks and declare
-system-controllers (OLB) as clock providers.
+The ZynqMP DT GPU node clock description is wrong and does not represent
+the hardware correctly, it only describes BUS and PP0 clock, while it is
+missing PP1 clock. That means PP1 clock can never be enabled when the GPU
+should be used, which leads to expected GPU hang even with simple basic
+tests like kmscube.
 
-Remove eyeq6h-fixed-clocks.dtsi and move the crystal clock to the main
-eyeq6h.dtsi file.
+Since Xilinx does use generated DTs on ZynqMP, the current broken DT
+implementation has to be supported. Add a workaround for this breakage
+into the clock driver, in case of PP0 enablement attempt, enable PP1
+as well and vice versa. This way, the GPU does work and does not hang
+because one of its pixel pipeline clock are not enabled.
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     | 52 ---------------
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi            | 73 ++++++++++++++++++++--
- 2 files changed, 69 insertions(+), 56 deletions(-)
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Michal Simek <michal.simek@amd.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-clk@vger.kernel.org
+---
+ drivers/clk/zynqmp/clk-gate-zynqmp.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi
-deleted file mode 100644
-index 5fa99e06fde7e8f4942aafe5f6064e2c6f7d83fd..0000000000000000000000000000000000000000
---- a/arch/mips/boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi
-+++ /dev/null
-@@ -1,52 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
--/*
-- * Copyright 2023 Mobileye Vision Technologies Ltd.
-- */
--
--#include <dt-bindings/clock/mobileye,eyeq5-clk.h>
--
--/ {
--	xtal: clock-30000000 {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <30000000>;
--	};
--
--	pll_west: clock-2000000000-west {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <2000000000>;
--	};
--
--	pll_cpu: clock-2000000000-cpu {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <2000000000>;
--	};
--
--	/* pll-cpu derivatives */
--	occ_cpu: clock-2000000000-occ-cpu {
--		compatible = "fixed-factor-clock";
--		clocks = <&pll_cpu>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--
--	/* pll-west derivatives */
--	occ_periph_w: clock-200000000 {
--		compatible = "fixed-factor-clock";
--		clocks = <&pll_west>;
--		#clock-cells = <0>;
--		clock-div = <10>;
--		clock-mult = <1>;
--	};
--	uart_clk: clock-200000000-uart {
--		compatible = "fixed-factor-clock";
--		clocks = <&occ_periph_w>;
--		#clock-cells = <0>;
--		clock-div = <1>;
--		clock-mult = <1>;
--	};
--
--};
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-index 1db3c3cda2e395025075387bcb66ea0737fd37f6..4a1a43f351d39625b520a16d035cacd2e29d157c 100644
---- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-@@ -5,7 +5,7 @@
+diff --git a/drivers/clk/zynqmp/clk-gate-zynqmp.c b/drivers/clk/zynqmp/clk-gate-zynqmp.c
+index b89e557371984..b013aa33e7abb 100644
+--- a/drivers/clk/zynqmp/clk-gate-zynqmp.c
++++ b/drivers/clk/zynqmp/clk-gate-zynqmp.c
+@@ -7,6 +7,7 @@
+  * Gated clock implementation
+  */
  
- #include <dt-bindings/interrupt-controller/mips-gic.h>
++#include <dt-bindings/clock/xlnx-zynqmp-clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/slab.h>
+ #include "clk-zynqmp.h"
+@@ -38,7 +39,13 @@ static int zynqmp_clk_gate_enable(struct clk_hw *hw)
+ 	u32 clk_id = gate->clk_id;
+ 	int ret;
  
--#include "eyeq6h-fixed-clocks.dtsi"
-+#include <dt-bindings/clock/mobileye,eyeq5-clk.h>
+-	ret = zynqmp_pm_clock_enable(clk_id);
++	if (clk_id == GPU_PP0_REF || clk_id == GPU_PP1_REF) {
++		ret = zynqmp_pm_clock_enable(GPU_PP0_REF);
++		if (!ret)
++			ret = zynqmp_pm_clock_enable(GPU_PP1_REF);
++	} else {
++		ret = zynqmp_pm_clock_enable(clk_id);
++	}
  
- / {
- 	#address-cells = <2>;
-@@ -17,7 +17,7 @@ cpu@0 {
- 			device_type = "cpu";
- 			compatible = "img,i6500";
- 			reg = <0>;
--			clocks = <&occ_cpu>;
-+			clocks = <&olb_central EQ6HC_CENTRAL_CPU_OCC>;
- 		};
- 	};
+ 	if (ret)
+ 		pr_debug("%s() clock enable failed for %s (id %d), ret = %d\n",
+@@ -58,7 +65,13 @@ static void zynqmp_clk_gate_disable(struct clk_hw *hw)
+ 	u32 clk_id = gate->clk_id;
+ 	int ret;
  
-@@ -32,19 +32,42 @@ cpu_intc: interrupt-controller {
- 		#interrupt-cells = <1>;
- 	};
+-	ret = zynqmp_pm_clock_disable(clk_id);
++	if (clk_id == GPU_PP0_REF || clk_id == GPU_PP1_REF) {
++		ret = zynqmp_pm_clock_disable(GPU_PP1_REF);
++		if (!ret)
++			ret = zynqmp_pm_clock_disable(GPU_PP0_REF);
++	} else {
++		ret = zynqmp_pm_clock_disable(clk_id);
++	}
  
-+	xtal: clock-30000000 {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <30000000>;
-+	};
-+
- 	soc: soc {
- 		compatible = "simple-bus";
- 		#address-cells = <2>;
- 		#size-cells = <2>;
- 		ranges;
- 
-+		olb_acc: system-controller@d2003000 {
-+			compatible = "mobileye,eyeq6h-acc-olb", "syscon";
-+			reg = <0x0 0xd2003000 0x0 0x1000>;
-+			#reset-cells = <1>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
-+		olb_central: system-controller@d3100000 {
-+			compatible = "mobileye,eyeq6h-central-olb", "syscon";
-+			reg = <0x0 0xd3100000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
- 		uart0: serial@d3331000 {
- 			compatible = "arm,pl011", "arm,primecell";
- 			reg = <0 0xd3331000 0x0 0x1000>;
- 			reg-io-width = <4>;
- 			interrupt-parent = <&gic>;
- 			interrupts = <GIC_SHARED 43 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&occ_periph_w>, <&occ_periph_w>;
-+			clocks = <&olb_west EQ6HC_WEST_PER_UART>, <&olb_west EQ6HC_WEST_PER_OCC>;
- 			clock-names = "uartclk", "apb_pclk";
- 		};
- 
-@@ -56,6 +79,15 @@ pinctrl_west: pinctrl@d3337000 {
- 			pinctrl-single,function-mask = <0xffff>;
- 		};
- 
-+		olb_west: system-controller@d3338000 {
-+			compatible = "mobileye,eyeq6h-west-olb", "syscon";
-+			reg = <0x0 0xd3338000 0x0 0x1000>;
-+			#reset-cells = <1>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
- 		pinctrl_east: pinctrl@d3357000 {
- 			compatible = "pinctrl-single";
- 			reg = <0x0 0xd3357000 0x0 0xb0>;
-@@ -64,6 +96,23 @@ pinctrl_east: pinctrl@d3357000 {
- 			pinctrl-single,function-mask = <0xffff>;
- 		};
- 
-+		olb_east: system-controller@d3358000 {
-+			compatible = "mobileye,eyeq6h-east-olb", "syscon";
-+			reg = <0x0 0xd3358000 0x0 0x1000>;
-+			#reset-cells = <1>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
-+		olb_south: system-controller@d8013000 {
-+			compatible = "mobileye,eyeq6h-south-olb", "syscon";
-+			reg = <0x0 0xd8013000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
- 		pinctrl_south: pinctrl@d8014000 {
- 			compatible = "pinctrl-single";
- 			reg = <0x0 0xd8014000 0x0 0xf8>;
-@@ -72,6 +121,22 @@ pinctrl_south: pinctrl@d8014000 {
- 			pinctrl-single,function-mask = <0xffff>;
- 		};
- 
-+		olb_ddr0: system-controller@e4080000 {
-+			compatible = "mobileye,eyeq6h-ddr0-olb", "syscon";
-+			reg = <0x0 0xe4080000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
-+		olb_ddr1: system-controller@e4081000 {
-+			compatible = "mobileye,eyeq6h-ddr1-olb", "syscon";
-+			reg = <0x0 0xe4081000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&xtal>;
-+			clock-names = "ref";
-+		};
-+
- 		gic: interrupt-controller@f0920000 {
- 			compatible = "mti,gic";
- 			reg = <0x0 0xf0920000 0x0 0x20000>;
-@@ -89,7 +154,7 @@ gic: interrupt-controller@f0920000 {
- 			timer {
- 				compatible = "mti,gic-timer";
- 				interrupts = <GIC_LOCAL 1 IRQ_TYPE_NONE>;
--				clocks = <&occ_cpu>;
-+				clocks = <&olb_central EQ6HC_CENTRAL_CPU_OCC>;
- 			};
- 		};
- 	};
-
+ 	if (ret)
+ 		pr_debug("%s() clock disable failed for %s (id %d), ret = %d\n",
 -- 
-2.47.0
+2.45.2
 
 
