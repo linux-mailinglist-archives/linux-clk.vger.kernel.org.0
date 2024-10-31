@@ -1,122 +1,202 @@
-Return-Path: <linux-clk+bounces-14085-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14087-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7C09B7EB3
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 16:42:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C5F29B7F1D
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 16:53:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 861AD1F21D13
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 15:42:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AB4B281B0C
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Oct 2024 15:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1068819FA64;
-	Thu, 31 Oct 2024 15:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6B1E1A705B;
+	Thu, 31 Oct 2024 15:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vCYasxwU"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Rtj5Cvxz"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055DC19EED7
-	for <linux-clk@vger.kernel.org>; Thu, 31 Oct 2024 15:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0F21A08BC;
+	Thu, 31 Oct 2024 15:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730389335; cv=none; b=gQam5dekX96z6koUk2y59v28nGHeBD+ri6dmROHU+dBfU8j7yxYPBRI+uEAa2+loAAlQgTQl+vmlEX1ta2fSZ3hZ1Uplx/8/LJEK4RlSAYsvwF3Q+w0HvmAzMowPQi3JHDqExiJ81mIFKNZRaVRVQrgvOfvpkDNY9vjMUfiZayA=
+	t=1730389986; cv=none; b=JgQFeH2h7nf2CVNtULlPKtqg6h9GbwtAKHq7rTvE+2VmGrdbvOS71n6FNbZGj4LU0a2eDZFVA1dMzZu6piBXfvncXQxMJLXLvanMtnSxwz6nSXXTN/3LgI2YXaJk16f0wgCMYLYUxPa7dRQo+awU1JqAUNtRmg7/BtRNl1hH4JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730389335; c=relaxed/simple;
-	bh=JkgK1XkJW2hRAO/3wvVIqQgsdkjCn1te84JbhY3/XQo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CpO0siicBBSaxCzcZvsivgUT08J+1Oxo92HbhCAgChTKshbyDehuue2OG/FnrZgZPz7RoChAiUcKrJ+uPAw/tjxpol1yYzq08r1Sy7yhMZOP8gdphxydFmk72hivcD5UtbJlpjpDp5253rg0BJiXFt2DRoeyiZngWjV+8Zjc5Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vCYasxwU; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-37d55f0cf85so803578f8f.3
-        for <linux-clk@vger.kernel.org>; Thu, 31 Oct 2024 08:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730389331; x=1730994131; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VPdLvxvLtEzCHGDZQcWi4oCr/ZFs9WLInCDjjUo5WR0=;
-        b=vCYasxwUgnluJH79euxcpRTm8lfKcZwFWnqQOc0hpnTyhc7J2jzY6ob+vocoz2SOuG
-         8u2rfm/6qaE2IsvLTy7E8dF90yZVwBiyr3EMmtdZJjC/n566Sma51PVGR3kLt2f0AHcA
-         Wt/EeRgAyGQ8U9F45dUrzJROhIHUXCPMi2WLfTL8e5skNfsHPr8GXtq61heKkESFCrlT
-         4ZoYLqqf86eC3jjh8aI8B5l5qGe+j1uUgr9JmlIHEn4SPcNgDm6vnQcTH329jvE+IjVy
-         65z203gjphe8/p7ZWXycxxJIEfOQPxFHEuzxnDmy1rs4bPPrrw3c87Gt2bOY+naigyK/
-         O0jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730389331; x=1730994131;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPdLvxvLtEzCHGDZQcWi4oCr/ZFs9WLInCDjjUo5WR0=;
-        b=LZGEkBvM2ADAksf8eq5DJcY4wVa56MKqduz1niwekX5px6U00Qd1Ak0fWDYi7wORyQ
-         iWH38zn9hDo36gYj7lRG4L6esUOTHpbl5h20j5asAR2LbIapD7jgkG3dS4dVKMgjRClE
-         5KZAHg4q+5mVZJyrdztTQzGq8ebV3jBOCDbxVsDNWAb+FRGH5/gAYIzD0j84XXmjhBxM
-         bXmoam3E7YVH3HXIziWiLPpbNVtPNkzdCjiR3wQ7vuiOx381qvb7lls75SMLNqCNF2TA
-         WsVPMmw/P2QSClZu+vnMm6rpmpHOVDQau2JlCYq6HtL92hvV3DgUFMOl430LVrEOgwbF
-         exag==
-X-Forwarded-Encrypted: i=1; AJvYcCVkrUmwv9jdCDQZ9FO7IwwcnkKBXss9jqYPlhUUUDdbxZ3/YDmtuGDjSheyeHn7LFWsrFzIwrlbWJA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwokMvsO3PxBRoGCZqYkRctlJXZHi56bkwp6Z163ajRtc0m5WUx
-	e2hRn5n2xWTAiYE19RCiYr/53WNq8NsMCJweCCcy+4atfTn2ITPHOkCO9jcPv1qLAKutQf/q8yX
-	g5lA=
-X-Google-Smtp-Source: AGHT+IEcjtd5WA/gsEHXNVUi1WTv2rYb/VysvkPiR/8zIUj5oeWb8lvj6Ww3iOFNkRJJFWFHNdTcqg==
-X-Received: by 2002:a5d:64a8:0:b0:37d:46e3:4e88 with SMTP id ffacd0b85a97d-381be7654c6mr3679580f8f.9.1730389331386;
-        Thu, 31 Oct 2024 08:42:11 -0700 (PDT)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c113e856sm2478023f8f.87.2024.10.31.08.42.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Oct 2024 08:42:10 -0700 (PDT)
-Message-ID: <b054116e-c6a4-48c3-8162-571d653788a4@linaro.org>
-Date: Thu, 31 Oct 2024 15:42:09 +0000
+	s=arc-20240116; t=1730389986; c=relaxed/simple;
+	bh=N830fVWifhGbcBBF89ZXJ7M4a+ROGpe3UDtbyB5q86M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hcXYfC2gstsYCpu3pZtESAEEYHhbe8eFyL633enGod0g1Qezo8u2Stq9gRKgitneXhW1iTT7ZR6quwGO8Mj3MZrZfuoBAKRQjM9/5/RaxB9BkkcQhQ/lRn20tC/RSu0m9jGXgDkcbIIS2T91HK34X+xOcImtWGqCk6NCm+Zkz+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Rtj5Cvxz; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 25C8B1C000A;
+	Thu, 31 Oct 2024 15:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1730389975;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cD7mOQi0O8DNIiJK2VQkN3iQGCMRlI3qOZoMIXSbWvw=;
+	b=Rtj5Cvxz36AnsVkCFlb4MRNYB7q8Soi6mUnk9GhLvpPSDKBmTqVlaCoOjijSTEkLwo+S0F
+	UKTK1LUQUddBuG9P/sJbQ0JGQTQ21We/IQqXfjqIgb7TjWIXC7g0PKl6yDKxOhN1AyDKBq
+	oh7U+6GTb1ms5598eT6xcRufgyWGTiERT/4/YJFycZ5x3OmW/bmCYKz5HkYG2vu7gl6mjT
+	yqZ0lkSngG9WHkY1a6Yozlon68IRKfg1DoaAj8Bk5abQ4fl90IuIjkl4IAJM2owtUvJFSO
+	qE0GtsiFO+doaKFQzkqBonoNzYT0L+0pVF4MQq78/15kJoF5Kz/9S/x63koVqA==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH 00/13] Usable clocks on Mobileye EyeQ5 & EyeQ6H
+Date: Thu, 31 Oct 2024 16:52:50 +0100
+Message-Id: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/5] dt-bindings: media: camss: Add qcom,sdm670-camss
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Richard Acayan <mailingradian@gmail.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-media@vger.kernel.org
-References: <20241011023724.614584-7-mailingradian@gmail.com>
- <20241011023724.614584-9-mailingradian@gmail.com>
- <785c82d5-549d-454b-86bf-a00a39e6f521@linaro.org>
- <jcqgsgp4ivbokn545sy2rvfllm3vnygfpbufxagotuicacfmgd@v2hlnohlwzdf>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <jcqgsgp4ivbokn545sy2rvfllm3vnygfpbufxagotuicacfmgd@v2hlnohlwzdf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANKnI2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDA2MD3dyknErd5Jxs3UQLc/M0Y3NL49QkIyWg8oKi1LTMCrBR0bG1tQD
+ VCv/qWgAAAA==
+X-Change-ID: 20241030-mbly-clk-a877f3793eb2
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On 11/10/2024 15:29, Krzysztof Kozlowski wrote:
-> How do you imagine writing drivers and request items by order (not by
-> name) if the order is different in each flavor?
+Now that clk-eyeq is in the clk-next tree, we can add the small(-ish)
+details required to make the platform work fully. The work is mostly
+about updating devicetrees to rely on the system-controller nodes as
+clock providers.
 
-I don't think I'd be much in favour of relying on declaration order in 
-the dts, favouring names to find resources instead, tbh.
+--
 
-The 8250 has regs that sort by address and name in the same order. For 
-8280xp we preferred sort by address and you're right the interrupt 
-sorting isn't consistent.
+Things we do:
 
-However the latest applied dts for CAMSS is sort by address/irq not sort 
-by reg-name irq-name.
+ - In EyeQ5 devicetrees, remove all fixed-factor clocks that are derived
+   from clk-eyeq PLLs. We expose those directly from clk-eyeq (using
+   match data info). This is simpler to reason about.
 
-Unless its a NAK from yourself and Rob, that would certainly be my 
-preference for any _new_ additions subsequent.
+   [PATCH 02/13] dt-bindings: clock: eyeq: add Mobileye EyeQ5 core clocks
+   [PATCH 03/13] dt-bindings: clock: eyeq: add Mobileye EyeQ5 peripheral clocks
+   [PATCH 06/13] clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
+   [PATCH 08/13] clk: eyeq: add fixed factor clocks infrastructure
+   [PATCH 09/13] clk: eyeq: add EyeQ5 fixed factor clocks
+   [PATCH 12/13] MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
 
+ - EyeQ6H devicetrees used fixed-clocks and didn't have
+   system-controllers defined. Remove all that and define our syscons.
+
+   [PATCH 04/13] dt-bindings: clock: eyeq: add Mobileye EyeQ6H central clocks
+   [PATCH 05/13] dt-bindings: clock: eyeq: add Mobileye EyeQ6H west clocks
+   [PATCH 10/13] clk: eyeq: add EyeQ6H central fixed factor clocks
+   [PATCH 11/13] clk: eyeq: add EyeQ6H west fixed factor clocks
+   [PATCH 13/13] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
+
+ - Our bindings used to say that some compatibles require a clock cell
+   (those that expose multiple clocks) and others do not. Remove that
+   subtlety and enforce a clock cell for everyone.
+
+   The goal is to make it easier to add clocks to compatibles that
+   previously exposed a single one. It happens for two compatibles in
+   this patch series (EyeQ6H central and west).
+
+   This is a "revert". I had been advised in the initial patch that the
+   behavior was a bad idea. I 100% agree with those comments.
+
+   [PATCH 01/13] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+   [PATCH 07/13] clk: eyeq: require clock index with phandle in all cases
+
+--
+
+In which tree patches should go:
+
+ - clk:
+   [PATCH 02/13] dt-bindings: clock: eyeq: add Mobileye EyeQ5 core clocks
+   [PATCH 03/13] dt-bindings: clock: eyeq: add Mobileye EyeQ5 peripheral clocks
+   [PATCH 04/13] dt-bindings: clock: eyeq: add Mobileye EyeQ6H central clocks
+   [PATCH 05/13] dt-bindings: clock: eyeq: add Mobileye EyeQ6H west clocks
+   [PATCH 06/13] clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
+   [PATCH 07/13] clk: eyeq: require clock index with phandle in all cases
+   [PATCH 08/13] clk: eyeq: add fixed factor clocks infrastructure
+   [PATCH 09/13] clk: eyeq: add EyeQ5 fixed factor clocks
+   [PATCH 10/13] clk: eyeq: add EyeQ6H central fixed factor clocks
+   [PATCH 11/13] clk: eyeq: add EyeQ6H west fixed factor clocks
+
+ - MIPS:
+   [PATCH 01/13] dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+   [PATCH 12/13] MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
+   [PATCH 13/13] MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
+
+Reasoning: we need the clock indexes from dt-bindings headers to avoid
+breaking the driver build, so patches 2-5 must go in clk-next.
+
+Note about devicetree patches 12-13: other patches on the same
+devicetrees are in the mailing-lists, with which I expect conflicts.
+All should be straight-forward to resolve.
+
+--
+
+Question: I am a bit afraid about the process for clocks in the future.
+Say we want to add I2C on EyeQ5 [0]. Steps will be:
+ - The dt-bindings headers will get a new offset.
+ - The clk-eyeq driver will get its private clocks indexes updated.
+ - Then the clocks will be accessible from devicetree.
+
+Those are somewhat unrelated to a series that is enabling I2C on a
+platform. Should I expose the few clocks I already know we'll be
+needing soon enough (I2C, SPI, EMMC)? The rest, I am unsure about the
+structure and I'd prefer not exposing them.
+
+Thanks,
+Have a nice day,
+Théo
+
+[0]: https://lore.kernel.org/all/20241009-mbly-i2c-v3-0-e7fd13bcf1c4@bootlin.com/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
-bod
+Théo Lebrun (13):
+      dt-bindings: soc: mobileye: set `#clock-cells = <1>` for all compatibles
+      dt-bindings: clock: eyeq: add Mobileye EyeQ5 core clocks
+      dt-bindings: clock: eyeq: add Mobileye EyeQ5 peripheral clocks
+      dt-bindings: clock: eyeq: add Mobileye EyeQ6H central clocks
+      dt-bindings: clock: eyeq: add Mobileye EyeQ6H west clocks
+      clk: fixed-factor: add clk_hw_register_fixed_factor_index() function
+      clk: eyeq: require clock index with phandle in all cases
+      clk: eyeq: add fixed factor clocks infrastructure
+      clk: eyeq: add EyeQ5 fixed factor clocks
+      clk: eyeq: add EyeQ6H central fixed factor clocks
+      clk: eyeq: add EyeQ6H west fixed factor clocks
+      MIPS: mobileye: eyeq5: use OLB as provider for fixed factor clocks
+      MIPS: mobileye: eyeq6h: add OLB nodes OLB and remove fixed clocks
+
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |  24 +-
+ arch/mips/boot/dts/mobileye/eyeq5-clocks.dtsi      | 270 ---------------------
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  30 ++-
+ .../boot/dts/mobileye/eyeq6h-fixed-clocks.dtsi     |  52 ----
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  73 +++++-
+ drivers/clk/clk-eyeq.c                             | 204 ++++++++++++++--
+ drivers/clk/clk-fixed-factor.c                     |  11 +
+ include/dt-bindings/clock/mobileye,eyeq5-clk.h     |  17 ++
+ include/linux/clk-provider.h                       |   3 +
+ 9 files changed, 307 insertions(+), 377 deletions(-)
+---
+base-commit: 11713909beb7debd3d466a6dc302a33d91298be0
+change-id: 20241030-mbly-clk-a877f3793eb2
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
