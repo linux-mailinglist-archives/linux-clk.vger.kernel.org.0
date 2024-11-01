@@ -1,93 +1,83 @@
-Return-Path: <linux-clk+bounces-14107-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14109-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C87AB9B8858
-	for <lists+linux-clk@lfdr.de>; Fri,  1 Nov 2024 02:23:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEF079B8999
+	for <lists+linux-clk@lfdr.de>; Fri,  1 Nov 2024 04:09:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A685B2245F
-	for <lists+linux-clk@lfdr.de>; Fri,  1 Nov 2024 01:23:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6520D1F22ACB
+	for <lists+linux-clk@lfdr.de>; Fri,  1 Nov 2024 03:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11A5137742;
-	Fri,  1 Nov 2024 01:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BCF13F42F;
+	Fri,  1 Nov 2024 03:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PZXFQY+n"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Y7CPeVHT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1BF753368
-	for <linux-clk@vger.kernel.org>; Fri,  1 Nov 2024 01:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F254C79;
+	Fri,  1 Nov 2024 03:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730424182; cv=none; b=lhAZTBXTs9jiBUWSjpxHNTz/406qewdfBqLay1FhThUryeMbec5k1xzl0ptq6h+JpbU4rsApwrPeH0jQQYrVnU5WmzkqZrPqy9ttTkGBsA3yXionoSKbDQyB9OVxXjwU7AA6bWooB6IQ7u2b1YmDC0S9fccJwsCTCIdqd/4UzF8=
+	t=1730430562; cv=none; b=S58VgQGQF0ShSyKha6ib9bW2gcmq5xE2y44hsaJx4hcR+Wg66njniw0BZUfAqHMAgJ6y5Kzi3srwSdJgrI5ug9nTtgFSRRLRSw3n/PdWWQGZSDR7/YN7jr7EK27fAwVJaLY92EOnHQeIfM8TONHsz1mFV4cS1fc5hJjKSj/yE5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730424182; c=relaxed/simple;
-	bh=elGVOqEqBXSN04+uVRWcq0gO8Yb65PX1oVNXx6Cxivo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=adHNrd1To6dA8CyziwHOW4AOybofGosNN7Hfs8dTmK8wWvNDst927JB7zFI81F22pGAQkQO/kn/VPMBYwLNbsIXmIlDeO7hXRZaMBY4CNw8F+XAO0+oGt293kSTO+pJst+Bp4dyzV5E44x7ETkQfHPPlHLgLJbj44UprbbPYiPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PZXFQY+n; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d3ecad390so1653607f8f.1
-        for <linux-clk@vger.kernel.org>; Thu, 31 Oct 2024 18:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730424173; x=1731028973; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gWMomMxtacvJ4sOZNR5yx4C6TBNkoG2Q0q3PqLoenP4=;
-        b=PZXFQY+nBDeQVFuroHUArKR+Yne8JKZsQxlZQpAyYTDJDD++w/N+rFYPVtiwia8z4Y
-         r+cT2oo4hoG0otY2IxyUkmq0AQZug/FSlNcrp6yhBjZ0ipOxwMG776w8B41Jafae2mLu
-         Ht1ySGBZ4WJHshnVHGapHuSAFqAGfiY/gqg7c4n4raRw76lcNKasSDyrBl2nnrXELT3Q
-         3/7pDaGcXDnvlTOlRwXtpUFFdLtFuxZq//PztKgo7BMpbx95DHq9L9ON3C7uNbYzU6dS
-         KfYSsnAVrdBlNv3jT4BBOH10Vbl/oryg8etZthbMKWyjQiphkBYuCl80LoJIABXJkONG
-         S/3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730424173; x=1731028973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gWMomMxtacvJ4sOZNR5yx4C6TBNkoG2Q0q3PqLoenP4=;
-        b=xAGcuoip2MlRUc8tjvRExhuLwzmsHCw/Z8XSq90gv8ABcPuyzCymePPaGnsPA0mXe/
-         96Ud1w1NkDx6hOQkU21GCqDb9p/mVOCCS+WfaB9WC2z3dMP7A/hXRL/aqQfCiGeD1syD
-         +qrVZqIndEx1kmJMe8p2MvJn0p3g+VyohFFlKTugQErq35/JLFhpm6seVyFDcaofYNKy
-         Ymt5TONbqL7aQpv7/5tgIorIsS37Os4Tf85s8ytb5Ob2ebOCeRbGCZgCPewJZVKkWBYK
-         AAsWWw8pOous/1fWrQmD7r+3VpK48UjnYzgJJPRn42yX0t/H49YyUUfBl4Y/wX/Jcbdm
-         GRWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUUtqTsIWFeIE7OiBiRbPY/PP7G4JOV5gJlckkzZUxYMRkOBaG1OH4y7SfFwFowBiJrrpUjL2JQ43Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyo+pblIVehkrh2s8s2VY/IZr/MvPz3Io+LK8vShOzSqly0iqLR
-	RIohRxp2EYBldrLlFWjLF92mxHmQs+6XBCGNgQfs38T9gm/xQ+IR9E6Ds2I0Wx8=
-X-Google-Smtp-Source: AGHT+IFuL9Q07yTcsOaTlM9yCAi2Sq10Vfal5nmkc6A5s4iCIddgdM5+DCgpbmtvZDvAH4IhvlctSw==
-X-Received: by 2002:a5d:47c5:0:b0:37c:cc7c:761c with SMTP id ffacd0b85a97d-381c130731fmr3735779f8f.3.1730424173123;
-        Thu, 31 Oct 2024 18:22:53 -0700 (PDT)
-Received: from localhost.localdomain ([2.222.231.247])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c116ad3fsm3501622f8f.95.2024.10.31.18.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2024 18:22:52 -0700 (PDT)
-From: Alexey Klimov <alexey.klimov@linaro.org>
-To: konradybcio@kernel.org,
-	konrad.dybcio@oss.qualcomm.com,
-	andersson@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	krzk+dt@kernel.org
-Cc: robh@kernel.org,
-	conor+dt@kernel.org,
-	srinivas.kandagatla@linaro.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	dmitry.baryshkov@linaro.org
-Subject: [PATCH v2 2/2] clk: qcom: Add SM6115 LPASSCC
-Date: Fri,  1 Nov 2024 01:22:47 +0000
-Message-ID: <20241101012247.216825-3-alexey.klimov@linaro.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241101012247.216825-1-alexey.klimov@linaro.org>
-References: <20241101012247.216825-1-alexey.klimov@linaro.org>
+	s=arc-20240116; t=1730430562; c=relaxed/simple;
+	bh=Jt3ci2BG6wCeTi9u1JvKT8sz76i5YQW3mooxIrCeEHM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WheI/cxsXtKnvX+qSUO7090AE5/b8e1fZEtx5+auSog1/GxMyyjl3zjTnDPV0oPuE8YFPkkuJ+Nwl+ZhWd50WpnftffJMz+wJuwuG7CSP34g5EWc5SBHxd7hqiWOzlkmFYFbgqPSXYfkXIw4YMxXdKHuY/haARxSqvz95AyD58c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Y7CPeVHT; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A11h0ZV009582;
+	Fri, 1 Nov 2024 03:09:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=1t5Vw4D11RFv2UJphxxylQgWXk9PBbdkbH+
+	Ov4onbvw=; b=Y7CPeVHTJ8VU/qq7T3ePU/e6Jbp+dcnBMNHUhxPL0A8LDGMmYyW
+	aGmmQn9UJbSpONSV0+b3gskI3zgSuTU1APr018oVAJCdwbzFrI/6jFsXBhqOM+ZS
+	O+IldNeyWCBkiWMSzKcIp1DiUgRzj69ZO5V/1jxTmOCysC/n+7M+saTOe90wX8VC
+	UN4w4lbnRZ66sKIPuPU5COBY5kvypV8kcAvUHpMx2rmsaaM+YuyfpAV43paB6kX3
+	rO62p37TrFz2TRXkiFYe+h2P6JkIqHBFMvnkhrswBit9QaXfkPSS2GVMKuh07AQZ
+	4AA8TmDkiAUIC6wD3vejo0818WRARacZ9bw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42kjm1dyqx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Nov 2024 03:09:07 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A13967d007979;
+	Fri, 1 Nov 2024 03:09:06 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 42khwpyumj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Nov 2024 03:09:06 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 4A137UOe005970;
+	Fri, 1 Nov 2024 03:09:05 GMT
+Received: from hu-devc-lv-u22-c.qualcomm.com (hu-qianyu-lv.qualcomm.com [10.81.25.114])
+	by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 4A1395r5007961
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 Nov 2024 03:09:05 +0000
+Received: by hu-devc-lv-u22-c.qualcomm.com (Postfix, from userid 4098150)
+	id 1633765D; Thu, 31 Oct 2024 20:09:05 -0700 (PDT)
+From: Qiang Yu <quic_qianyu@quicinc.com>
+To: manivannan.sadhasivam@linaro.org, vkoul@kernel.org, kishon@kernel.org,
+        robh@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, abel.vesa@linaro.org, quic_msarkar@quicinc.com,
+        quic_devipriy@quicinc.com
+Cc: dmitry.baryshkov@linaro.org, kw@linux.com, lpieralisi@kernel.org,
+        neil.armstrong@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, johan+linaro@kernel.org,
+        Qiang Yu <quic_qianyu@quicinc.com>
+Subject: [PATCH v8 0/5] Add support for PCIe3 on x1e80100
+Date: Thu, 31 Oct 2024 20:08:57 -0700
+Message-Id: <20241101030902.579789-1-quic_qianyu@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -95,152 +85,109 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9mRq5dBWInlCED2qd9g3EoKZVPRIRGhH
+X-Proofpoint-ORIG-GUID: 9mRq5dBWInlCED2qd9g3EoKZVPRIRGhH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 spamscore=0 suspectscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411010021
 
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
+This series add support for PCIe3 on x1e80100.
 
-SM6115 (and its derivatives or similar SoCs) has an LPASS clock
-controller block which provides audio-related resets.
+PCIe3 needs additional set of clocks, regulators and new set of PCIe QMP
+PHY configuration compare other PCIe instances on x1e80100. Hence add
+required resource configuration and usage for PCIe3.
 
-Add the required code to support them.
+v7->v8:
+1. Add Reviewed-by tags
+2. Rephrase commit message and remove Fix tags
+3. Add Synopsis IP revision and put ops_1_21_0 after ops_1_9_0.
+4. Remove  [PATCH v7 1/7] and [PATCH v7 4/7] as they were applied
+5. Link to v7: https://lore.kernel.org/all/20241017030412.265000-1-quic_qianyu@quicinc.com/
 
-Cc: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-[alexey.klimov] fixed compilation errors after rebase,
-slightly changed the commit message
-Signed-off-by: Alexey Klimov <alexey.klimov@linaro.org>
----
- drivers/clk/qcom/Kconfig          |  9 ++++
- drivers/clk/qcom/Makefile         |  1 +
- drivers/clk/qcom/lpasscc-sm6115.c | 85 +++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 drivers/clk/qcom/lpasscc-sm6115.c
+v6->v7:
+1. Add Acked-by and Reviewed-by tags
+2. Use 70574511f3f ("PCI: qcom: Add support for SC8280XP") in Fixes tag
+3. Keep minItem of interrupt as 8 in buindings
+4. Reword commit msg 
+5. Remove [PATCH v6 5/8] clk: qcom: gcc-x1e80100: Fix halt_check for
+   pipediv2 clocks as it was applied
+6. Link to v6: https://lore.kernel.org/linux-pci/20241011104142.1181773-1-quic_qianyu@quicinc.com/
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 953589e07c59..26021166e329 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -1193,6 +1193,15 @@ config SM_GPUCC_8650
- 	  Say Y if you want to support graphics controller devices and
- 	  functionality such as 3D graphics.
- 
-+config SM_LPASSCC_6115
-+	tristate "SM6115 Low Power Audio Subsystem (LPASS) Clock Controller"
-+	depends on ARM64 || COMPILE_TEST
-+	select SM_GCC_6115
-+	help
-+	  Support for the LPASS clock controller on SM6115 devices.
-+	  Say Y if you want to toggle LPASS-adjacent resets within
-+	  this clock controller to reset the LPASS subsystem.
-+
- config SM_TCSRCC_8550
- 	tristate "SM8550 TCSR Clock Controller"
- 	depends on ARM64 || COMPILE_TEST
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index fac4b9b61e55..784434febd4c 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -150,6 +150,7 @@ obj-$(CONFIG_SM_GPUCC_8350) += gpucc-sm8350.o
- obj-$(CONFIG_SM_GPUCC_8450) += gpucc-sm8450.o
- obj-$(CONFIG_SM_GPUCC_8550) += gpucc-sm8550.o
- obj-$(CONFIG_SM_GPUCC_8650) += gpucc-sm8650.o
-+obj-$(CONFIG_SM_LPASSCC_6115) += lpasscc-sm6115.o
- obj-$(CONFIG_SM_TCSRCC_8550) += tcsrcc-sm8550.o
- obj-$(CONFIG_SM_TCSRCC_8650) += tcsrcc-sm8650.o
- obj-$(CONFIG_SM_VIDEOCC_7150) += videocc-sm7150.o
-diff --git a/drivers/clk/qcom/lpasscc-sm6115.c b/drivers/clk/qcom/lpasscc-sm6115.c
-new file mode 100644
-index 000000000000..8ffdab71b948
---- /dev/null
-+++ b/drivers/clk/qcom/lpasscc-sm6115.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022, 2023 Linaro Limited
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/qcom,sm6115-lpasscc.h>
-+
-+#include "common.h"
-+#include "reset.h"
-+
-+static const struct qcom_reset_map lpass_audiocc_sm6115_resets[] = {
-+	[LPASS_AUDIO_SWR_RX_CGCR] =  { .reg = 0x98, .bit = 1, .udelay = 500 },
-+};
-+
-+static struct regmap_config lpass_audiocc_sm6115_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.name = "lpass-audio-csr",
-+	.max_register = 0x1000,
-+};
-+
-+static const struct qcom_cc_desc lpass_audiocc_sm6115_reset_desc = {
-+	.config = &lpass_audiocc_sm6115_regmap_config,
-+	.resets = lpass_audiocc_sm6115_resets,
-+	.num_resets = ARRAY_SIZE(lpass_audiocc_sm6115_resets),
-+};
-+
-+static const struct qcom_reset_map lpasscc_sm6115_resets[] = {
-+	[LPASS_SWR_TX_CONFIG_CGCR] = { .reg = 0x100, .bit = 1, .udelay = 500 },
-+};
-+
-+static struct regmap_config lpasscc_sm6115_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.name = "lpass-tcsr",
-+	.max_register = 0x1000,
-+};
-+
-+static const struct qcom_cc_desc lpasscc_sm6115_reset_desc = {
-+	.config = &lpasscc_sm6115_regmap_config,
-+	.resets = lpasscc_sm6115_resets,
-+	.num_resets = ARRAY_SIZE(lpasscc_sm6115_resets),
-+};
-+
-+static const struct of_device_id lpasscc_sm6115_match_table[] = {
-+	{
-+		.compatible = "qcom,sm6115-lpassaudiocc",
-+		.data = &lpass_audiocc_sm6115_reset_desc,
-+	}, {
-+		.compatible = "qcom,sm6115-lpasscc",
-+		.data = &lpasscc_sm6115_reset_desc,
-+	},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, lpasscc_sm6115_match_table);
-+
-+static int lpasscc_sm6115_probe(struct platform_device *pdev)
-+{
-+	const struct qcom_cc_desc *desc = of_device_get_match_data(&pdev->dev);
-+
-+	return qcom_cc_probe_by_index(pdev, 0, desc);
-+}
-+
-+static struct platform_driver lpasscc_sm6115_driver = {
-+	.probe = lpasscc_sm6115_probe,
-+	.driver = {
-+		.name = "lpasscc-sm6115",
-+		.of_match_table = lpasscc_sm6115_match_table,
-+	},
-+};
-+
-+module_platform_driver(lpasscc_sm6115_driver);
-+
-+MODULE_DESCRIPTION("QTI LPASSCC SM6115 Driver");
-+MODULE_LICENSE("GPL");
+v5->v6:
+1. Add Fixes tag
+2. Split [PATCH v5 6/7] into two patches
+3. Reword commit msg
+4. Link to v5: https://lore.kernel.org/linux-pci/20241009091540.1446-1-quic_qianyu@quicinc.com/
+
+v4->v5:
+1. Add Reviewed-by tag
+2. Expand and clarify usage of txz/rxz in commit message
+3. Add comments that txz/rxz must be programmed before tx/rx
+4. Change the sort order for phy register tbls
+5. Use the order defined in struct qmp_phy_cfg_tbls for phy register tbls
+   presented in x1e80100_qmp_gen4x8_pciephy_cfg
+6. Add Fixes and CC stable tag
+7. Fix ops for SC8280X and X1E80100
+8. Document global interrupt in bindings
+9. Link to v4: https://lore.kernel.org/all/20240924101444.3933828-1-quic_qianyu@quicinc.com/
+
+v3->v4:
+1. Reword commit msg of [PATCH v3 5/6]
+2. Drop opp-table property from qcom,pcie-sm8450.yaml
+3. Add Reviewed-by tag
+4. Link to v3: https://lore.kernel.org/all/20240923125713.3411487-1-quic_qianyu@quicinc.com/
+
+v2->v3:
+1. Use 'Gen 4 x8' in commit msg
+2. Move opp-table property to qcom,pcie-common.yaml
+3. Add Reviewed-by tag
+4. Add global interrupt and use GIC_SPI for the parent interrupt specifier
+5. Use 0x0 in reg property and use pcie@ for pcie3 device node
+6. Show different IP version v6.30 in commit msg
+7. Add logic in controller driver to have new ops for x1e80100
+8. Link to v2: https://lore.kernel.org/all/20240913083724.1217691-1-quic_qianyu@quicinc.com/
+
+v2->v1:
+1. Squash [PATCH 1/8], [PATCH 2/8],[PATCH 3/8] into one patch and make the
+   indentation consistent.
+2. Put dts patch at the end of the patchset.
+3. Put dt-binding patch at the first of the patchset.
+4. Add a new patch where opp-table is added in dt-binding to avoid dtbs
+   checking error.
+5. Remove GCC_PCIE_3_AUX_CLK, RPMH_CXO_CLK, put in TCSR_PCIE_8L_CLKREF_EN
+   as ref.
+6. Remove lane_broadcasting.
+7. Add 64 bit bar, Remove GCC_PCIE_3_PIPE_CLK_SRC, 
+   GCC_CFG_NOC_PCIE_ANOC_SOUTH_AHB_CLK is changed to
+   GCC_CFG_NOC_PCIE_ANOC_NORTH_AHB_CLK.
+8. Add Reviewed-by tag.
+9. Remove [PATCH 7/8], [PATCH 8/8].
+10. Link to v1: https://lore.kernel.org/all/20240827063631.3932971-1-quic_qianyu@quicinc.com/ 
+
+Qiang Yu (5):
+  dt-bindings: PCI: qcom: Move OPP table to qcom,pcie-common.yaml
+  dt-bindings: PCI: qcom,pcie-x1e80100: Add 'global' interrupt
+  PCI: qcom: Remove BDF2SID mapping config for SC8280X family SoC
+  PCI: qcom: Disable ASPM L0s for X1E80100
+  arm64: dts: qcom: x1e80100: Add support for PCIe3 on x1e80100
+
+ .../bindings/pci/qcom,pcie-common.yaml        |   4 +
+ .../bindings/pci/qcom,pcie-sm8450.yaml        |   4 -
+ .../bindings/pci/qcom,pcie-x1e80100.yaml      |   9 +-
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi        | 204 +++++++++++++++++-
+ drivers/pci/controller/dwc/pcie-qcom.c        |  14 +-
+ 5 files changed, 225 insertions(+), 10 deletions(-)
+
 -- 
-2.45.2
+2.34.1
 
 
