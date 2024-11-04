@@ -1,125 +1,106 @@
-Return-Path: <linux-clk+bounces-14187-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14201-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D7D09BBA86
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Nov 2024 17:46:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0259BBD9C
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Nov 2024 20:03:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6B621C2152C
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Nov 2024 16:46:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EEF81C21811
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Nov 2024 19:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4692C1C07FC;
-	Mon,  4 Nov 2024 16:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8310F1C3052;
+	Mon,  4 Nov 2024 19:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JOk2/8JC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mr4xnJjN"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC7942056;
-	Mon,  4 Nov 2024 16:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517A7E552;
+	Mon,  4 Nov 2024 19:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730738776; cv=none; b=BqjnYqe+6SDzG/g8GWE3MZueshi+blsW/7X/u5iq1xpQMPFUoPzlUpUJsQmv5ZX2UganNvjxM0L0j2xHMEBzcpNlHWCV/wtsLsPb0VBRiakOMMlYQUXhCAJ0PA13fPrKk8GYdgKtJa6eFP0Hd62WnV9uYnnSUdv5m90c3Lk0XqE=
+	t=1730746997; cv=none; b=qMXtUYNfQpuJg8bDQWG/A6C9qeoNzt+WzFsK20RnmX3nd2RbtjuuwItdUpg68YmThenIGIPm0aw9zc3snLYLKFZgclB5ErZTgbKLLCrcDyAVe4e23oNpZSrZj8+M8q4oPEszRh3HgFaVdQm0m0yZJCuBom/JGbaN8jB8zVOehDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730738776; c=relaxed/simple;
-	bh=DGrRE7TUEKaaDw37a+FHzO+nzWDrspEHgHtffr+CQGI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=bpErXFlOIvo4oKq6erRnBzMl9h+myHoOzldg1KTUu8TZQo37Zw+0H/YXP9kAtmGTnwvKbMgNQLNfAxv0/e/RpI1Qn0jjTsS9WDa2FtbRjEnzkMxV20lFeB0jPOtKw4vTujlm1kPr97e+0Z1BkJ+yFhPjkRGP+h52YN/c1AO86bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JOk2/8JC; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C8C3E2000D;
-	Mon,  4 Nov 2024 16:46:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1730738771;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TK/3OnrOZfeWPKLNUkcYsUToqQO4kgM2GP8iJaKUbjY=;
-	b=JOk2/8JCqilJlJUfCvY4uRlTxlIp9ji8Qy1ngcdkwnygCzCyejzCgVMiRSaTFs9FFJDn8L
-	zV1x+ih0Gkk/qUZCv5sdT61fI1vEU+O/BjB73mPc8uoRCyM9KgaYdurfjD9fOSxMTWO90C
-	celi03gusvUFIczQAXKPUpoHig5vrFrnmhHY0OZVffXsEEsSrjJrxzoUUqvBSOdaYebHxF
-	vA3a1Fyno2B1Jd+fU6PRBwiydlj8yI4eAk6TdghaZfng6k3eDH/odGft/I/7lBgEQnAZgV
-	psQ0M2X/GNgV6qIjy3UOBxDnghEGd39eq45MFbMKvfkweDnJCvYd6olMILoDPw==
+	s=arc-20240116; t=1730746997; c=relaxed/simple;
+	bh=3r1E4jlJB4SLcbXZTrwJvyUumCnga/Bf9P2eoxkAa1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kp0HhCEMWAXOJn9H7sYHbIJN+NB3Q+QQPROyHQ0vkWNgfbz5l2+a5sjWStrDud3J1fGRmIoELwFbf8bMf6keExS36IejaITKkmfxKivI+mmZhUafsTDrMSVgCPSYlnL72LhCcXaMYbv+/219fzbBBKsy/i54v46WI5GPFGApWoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mr4xnJjN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D69DC4CED0;
+	Mon,  4 Nov 2024 19:03:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730746996;
+	bh=3r1E4jlJB4SLcbXZTrwJvyUumCnga/Bf9P2eoxkAa1g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Mr4xnJjNlzjgQEcOHb/8xwXRzqZFAhsVuBIKZ2Clp6ZbOR6fkLm/drcc0ImyQ4ObG
+	 N78GCyjslMDBjxJhwyZ28Oqwzp6SGzU+J1TiTkBHbt+Dx4AWUR+wwwDlDuwlAz6o/M
+	 nL2u6pT20zkxEejTkM6OWVJfRen0JOHSdrzIgiZ3DqsJlPGLUIBXmrVCNgnF17UYQR
+	 IrEpfpclIOPlWZNMEO3NAuYD7ZU8mnGcjPNQFwbQ5EUeqzJZV4CGkNBUHRrtL/wTeD
+	 YLirdsTapUiet/BNrNvkuq9J1pzE6qykIXQb8BKL23dQnd5Y0s7PdN0zKnVUYnWv3B
+	 qtYPoFpqDn4Ew==
+Date: Mon, 4 Nov 2024 19:03:12 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-actions@lists.infradead.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: clock: actions,owl-cmu: convert to YAML
+Message-ID: <20241104-lend-lark-ab46a268213a@spud>
+References: <20241104153108.3053932-1-ivo.ivanov.ivanov1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 Nov 2024 17:46:10 +0100
-Message-Id: <D5DJOUV9NPY4.22MIOBKLAYGA3@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 01/13] dt-bindings: soc: mobileye: set `#clock-cells =
- <1>` for all compatibles
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
- <sboyd@kernel.org>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Rob Herring" <robh@kernel.org>
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241031-mbly-clk-v1-0-89d8b28e3006@bootlin.com>
- <20241031-mbly-clk-v1-1-89d8b28e3006@bootlin.com>
- <20241104153727.GA192461-robh@kernel.org>
-In-Reply-To: <20241104153727.GA192461-robh@kernel.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="XOrBdxecZKGerwZn"
+Content-Disposition: inline
+In-Reply-To: <20241104153108.3053932-1-ivo.ivanov.ivanov1@gmail.com>
 
-On Mon Nov 4, 2024 at 4:37 PM CET, Rob Herring wrote:
-> On Thu, Oct 31, 2024 at 04:52:51PM +0100, Th=C3=A9o Lebrun wrote:
-> > Some compatibles expose a single clock. For those, we used to let them
-> > using `#clock-cells =3D <0>` (ie <&olb> reference rather than <&olb 0>)=
-.
-> >=20
-> > Switch away from that: enforce a cell for all compatibles. This is more
-> > straight forward, and avoids devicetree changes whenever a compatible
-> > goes from exposing a single clock to multiple ones.
->
-> Your reasoning is flawed. Changing #clock-cells is an ABI break. So you=
-=20
-> should only be changing this if it was just wrong. And if it's not wrong=
-=20
-> in some cases, you shouldn't be changing those. The h/w either has 1=20
-> clock or multiple and #clocks-cells should match.
 
-I see your reasoning, and I agree that changing #clock-cells is an ABI
-break. However, there are two things to take into account:
+--XOrBdxecZKGerwZn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- - We do not (yet?) have an omniscient view of the hardware. We do not
-   know what every single register in those memory regions do.
+On Mon, Nov 04, 2024 at 05:31:08PM +0200, Ivaylo Ivanov wrote:
+> +    soc {
 
-   Some clocks might be lurking in the shadows, especially as we don't
-   support many HW capabilities yet.
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
 
- - The earlier the better. If we discover later down the road that,
-   indeed, some more clocks were hiding, we'll have to do an ABI break.
+FWIW, you could drop these two if...
 
-   At that point, some people might actually be using the platform.
-   Seeing what we currently have supported upstream versus the amount
-   of HW blocks available in the SoC, I cannot imagine anyone using the
-   platform with an upstream kernel.
+> +        cmu: clock-controller@e0160000 {
+> +          compatible = "actions,s900-cmu";
+> +          reg = <0x0 0xe0160000 0x0 0x1000>;
 
-So the choice is:
- - potential ABI break in the future, once people use the platform, or,
- - guaranteed ABI break now, when no one is using it.
+...you dropped the 0x0s from here.
 
-I pick option two! Do you agree with the thought process?
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks Rob,
+Cheers,
+Conor.
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--XOrBdxecZKGerwZn
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZykacAAKCRB4tDGHoIJi
+0n0GAPkBL2R9XB/l1IMWxiCtryHJhv5Az3c5Ns/wRAlZQqj2eQEA9fvaT5wEeqmS
+HYIA2tKZf7xhQTbA+sdSQZ6HO3Qfzws=
+=xDDY
+-----END PGP SIGNATURE-----
+
+--XOrBdxecZKGerwZn--
 
