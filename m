@@ -1,151 +1,167 @@
-Return-Path: <linux-clk+bounces-14407-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14412-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA159C1968
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 10:42:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDE959C19B7
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 10:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EE441C248D7
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 09:42:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E00A41C23009
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 09:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 904E81E1A20;
-	Fri,  8 Nov 2024 09:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E08A1E22FA;
+	Fri,  8 Nov 2024 09:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XjsxMEUD"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="DX1HwiBR"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F8D1E104F
-	for <linux-clk@vger.kernel.org>; Fri,  8 Nov 2024 09:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2C91E1C19
+	for <linux-clk@vger.kernel.org>; Fri,  8 Nov 2024 09:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731058963; cv=none; b=H+U7hqsw2Y8WMCJhRx04IWL4q6LQ1G2UuK9hROT7M6nGHQxQVzf2xcrylScOcP7+O++ytcGZ4stt2vRcN+7yy++aMvpk3UBIR1NxOz32VxZfqCOFj/HNrQzaIksf905Jk1CuQGSj093lvah/8FgkzCrFcT6GFpCwYbCheN0hN9k=
+	t=1731059957; cv=none; b=aNDJK5k6KfsjZdyw4k3/v4BqHeiCyaZMXVgJlXZx61Vp/gQb2pfWC9c1eJvdflGF63uuNBrHmevowPdHTQ43TtmI3rFBlxDTj/96NZZhZ0ADOPjrClMofpZjaq8juEQ38UuykTglga+ywYh5vGp5p35sJg27V72m5Arn+l0GsrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731058963; c=relaxed/simple;
-	bh=jWCpeLpkpA4YVoOMmIryFg1kg6ULL3RS7k8t4Z+C5X0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C9+IGg0b7HcQ6BZ2wkZuzDB36HZUmPgFvIaQ6hNkr5oHDuBXm0+LCkoDNfBsCbmpZyluJaYg0SgFoK2/sJ2ydN1li/zmjDPRTfDEnt/DoA2D7psJ9mO4N7A6ltWDHAVpX5GbTsAbRp1Y7nK6Um7C0cxK3dauAe2ILFjHqNBKU8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XjsxMEUD; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a9a977d6cc7so123965366b.3
-        for <linux-clk@vger.kernel.org>; Fri, 08 Nov 2024 01:42:41 -0800 (PST)
+	s=arc-20240116; t=1731059957; c=relaxed/simple;
+	bh=favIJ0RU0Z1kVo0+cj+p8TtzOVJuzqN1053K+zk2H3E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QXJEYqwqqEed/ZwO9O+LAQXCFeEJFmTCRzQitTPjnS6w1OdexCluBd7lyLAZPiaGj2iPOkF2bvDv9+sEMSxdLOQil/DwZryokrrqRqZj6mqxf8aVRi3O/2vLeKmroL4O/2yhQ/Scdj8csqmBsp80Y3AXG5mi//1jHTlpKX0qDkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=DX1HwiBR; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4316f3d3c21so15881125e9.3
+        for <linux-clk@vger.kernel.org>; Fri, 08 Nov 2024 01:59:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1731058960; x=1731663760; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=edr4i5ZXuzi2MqMxkWzTe9XDLfbB9N2JCAr3MU/xkAQ=;
-        b=XjsxMEUDqEb1kHr9AkagNQx5u2lwagjt/7ONveGX2cqk+r+rycFE2LMvLotScBZMJd
-         i+nGW5KDjEZfUSi/QK2DMDE3RaPhjhD86um97CHc7AgB4mKCxFjMMon/jyUN6QCEdMIU
-         VTg4eGayln8OWM/+fXKlP8e9WcnCvpJvX/weLzn5PiaFOUP7JO7VO+rOt7QRhPE5i/xs
-         i+J6TdMx3YJ3PH4CHd4OFnYiXUYefhUO6KhQ4rxIQRcRoJ5wYhca+8f8+bzYemqcshIl
-         2/f1efcp2Zlloxx6TcQuOzNswbWdmkB3IpqbzfCgAv0fR+7PYUFAa6guIPA0P4bcUsSc
-         /J2A==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1731059953; x=1731664753; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eTIHfF+UH1Xa7DK8o/xh7XL9H7nZTNldWgZ8nJ8rQE0=;
+        b=DX1HwiBRwhGXitdHvqQR2GUb0yuMG/hW9E7sDsDJVkq3IAvNfBcNnBSonDnMckfvp9
+         iQLsC5m0tzIgXMKscNxxSL5AJ1yFVz9k1wllbwVMg0yRzYPvh801Xv/f7OIGVJEltItM
+         fUj7cOCqZ+q/X7wp1ansYdELaBTjzNMFmL41fbIZR5dPbgo9rJKZn+qSBS7En1ozX/WV
+         avczIqxECniiFbpCuFgBJrXURyEu7HB/lpQIJLPoW6p4WqaaMHvQOoWVR0+M/UGwOrxA
+         zRk8mGkhHr0e/HXZ3fxU0R6UxTPMLcHcrmTlCFqwvDGnkVqwpxqLArI9nt7NJyvCs4fO
+         n9EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731058960; x=1731663760;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=edr4i5ZXuzi2MqMxkWzTe9XDLfbB9N2JCAr3MU/xkAQ=;
-        b=kORduby7NWo95xIgjirdEihd31d7P9tZNfBlhADRfW2LQfoWDAU0HuKDZy9ku2QYiy
-         46LnOUq+5gcMlG/zPt5rCSt8ZA5DhvgWtX83tQ0Zp/OGdu9ph80OBRm8pIcjiC2D4osA
-         7zwSYl5KTGJYGWwl3dqaTTP2Kr/mb2FagY0i8p11z7GqM9GvFaqrSPNI3bKMVws7hpfd
-         NJqlx/4obaGTjQH9a3SlOhacr0L0d6FFTc5orvyfSzDjN1UCAlFI7NrWimyDYukwR6Dc
-         K1WR4JChVplPF0/7JUHrT+6eAI3GPm/1cRW8A1Dl9hhedh2etg4VM6uHWACh6SB8AcHy
-         8+4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUATqDpJCz8VemO/8RL/qXDtKEefzBsq8gLMUhgW7co6a2SV1GQmyyIEG46QYfgX6eOuNpEGkLIcUc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx6m/zcVCRpgp3BvsOGFPp1rDk2McljfjY11gRsYmnPidR0nZZ
-	prP6DYIkNWsu6xSlOpdJXL1fk3ze/kbOPf46Ink7kR6TCHMX+8yzPn6WV5oU4uI=
-X-Google-Smtp-Source: AGHT+IGmVFg6dGCdJ94MvP+GtpTJm4h6Vp+aWc3AX4E8KZIkMCx5imWZRQaFghSdUOFYkB1RH36WSQ==
-X-Received: by 2002:a05:6402:3510:b0:5c9:34b4:69a8 with SMTP id 4fb4d7f45d1cf-5cf0a2fb6f9mr2077935a12.6.1731058959540;
-        Fri, 08 Nov 2024 01:42:39 -0800 (PST)
-Received: from localhost (host-79-35-211-193.retail.telecomitalia.it. [79.35.211.193])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03c4ed68sm1765328a12.63.2024.11.08.01.42.39
+        d=1e100.net; s=20230601; t=1731059953; x=1731664753;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eTIHfF+UH1Xa7DK8o/xh7XL9H7nZTNldWgZ8nJ8rQE0=;
+        b=ao9FRv8LCUwVdtpr3diRlNkn79drP3SzTD3R0L9wZIUQcqQe746fCSDMfi/4YMq6iZ
+         ssPnXkRK4koetq0GxADGnRxvdXTpZ6wkcAeMtKHj9MmYFjGqHnnt2UAIIAHzO+QJTIOH
+         2JdiFh8Ta28iMVAQCZ+U+XYIuQZj0U61ELyggCTNzN8t2guya9DD4ow4bTQFKDxG3HPF
+         63kDlLkVuoJ/r0aH4Rr0xLf+rGc945YQkzvZ7CJeikKEJq6euFrHsYaQ5Q11CIeJfb/C
+         98teyyUKanyba3s8QOQgXcWRJdl3G55ebHAr2Sj8R4eo9ZjIbmma7+WZX99Gu4UXOQac
+         apdg==
+X-Forwarded-Encrypted: i=1; AJvYcCURQVnTDLG2bjjf0G1KZViGXzk7PZSDH0Xpym5DVncsIM18bnzNsQV4LQ6XHp5jGIFUhmwuIZtRbAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxud+A6zuDAM5tiAICga+mT/bf8ZcF2CKIroRBQnkUKuKLpvaRD
+	wdkq1tM7CS+VBgC8uzDqY+Yy/X5JLefnpJFu+Gdrf9gAX74LOyK1jy3UCfoLc9A=
+X-Google-Smtp-Source: AGHT+IE52uNEd1M4kmQsGgrrxZ5e+HBgRbQ6hYCN5h70Y/Y7u6ZLc+ouQ9mgPck15oFzZ/AUamay2Q==
+X-Received: by 2002:a05:600c:4f87:b0:431:5ed4:7e7d with SMTP id 5b1f17b1804b1-432b7508053mr18099615e9.18.1731059953350;
+        Fri, 08 Nov 2024 01:59:13 -0800 (PST)
+Received: from localhost ([2a01:e0a:3c5:5fb1:ecfd:9f8d:62a3:6ba8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b0530599sm58205685e9.1.2024.11.08.01.59.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 01:42:39 -0800 (PST)
-From: Andrea della Porta <andrea.porta@suse.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof Wilczynski <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Saravana Kannan <saravanak@google.com>,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Andrew Lunn <andrew@lunn.ch>
-Cc: Andrea della Porta <andrea.porta@suse.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] PCI: of_property: Assign PCI instead of CPU bus address to dynamic PCI nodes
-Date: Fri,  8 Nov 2024 10:42:56 +0100
-Message-ID: <20241108094256.28933-1-andrea.porta@suse.com>
-X-Mailer: git-send-email 2.44.0
+        Fri, 08 Nov 2024 01:59:12 -0800 (PST)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Chuan Liu <chuan.liu@amlogic.com>
+Cc: Stephen Boyd <sboyd@kernel.org>,  Neil Armstrong
+ <neil.armstrong@linaro.org>,  Kevin Hilman <khilman@baylibre.com>,  Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>,
+  linux-clk@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-amlogic@lists.infradead.org,  linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH] clk: core: refine disable unused clocks
+In-Reply-To: <85aae140-5c9b-4ff9-a522-549009f62601@amlogic.com> (Chuan Liu's
+	message of "Fri, 8 Nov 2024 17:23:53 +0800")
+References: <1jcykltj7g.fsf@starbuckisacylon.baylibre.com>
+	<20241004133953.494445-1-jbrunet@baylibre.com>
+	<07594a59-c999-4592-84b8-4e163d3edba4@amlogic.com>
+	<1jttci2k8k.fsf@starbuckisacylon.baylibre.com>
+	<85aae140-5c9b-4ff9-a522-549009f62601@amlogic.com>
+Date: Fri, 08 Nov 2024 10:59:12 +0100
+Message-ID: <1jcyj62gi7.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-When populating "ranges" property for a PCI bridge or endpoint,
-of_pci_prop_ranges() incorrectly use the CPU bus address of the resource.
-In such PCI nodes, the window should instead be in PCI address space. Call
-pci_bus_address() on the resource in order to obtain the PCI bus
-address.
+On Fri 08 Nov 2024 at 17:23, Chuan Liu <chuan.liu@amlogic.com> wrote:
 
-Fixes: 407d1a51921e ("PCI: Create device tree node for bridge")
-Cc: stable@vger.kernel.org
-Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Tested-by: Herve Codina <herve.codina@bootlin.com>
----
-This patch, originally preparatory for a bigger patchset (see [1]), has
-been splitted in a standalone one for better management and because it
-contains a bugfix which is probably of interest to stable branch.
+>>>> -       if (core->flags & CLK_IGNORE_UNUSED)
+>>>> +       /*
+>>>> +        * If the parent is disabled but the gate is open, we should sanitize
+>>>> +        * the situation. This will avoid an unexpected enable of the clock as
+>>>> +        * soon as the parent is enabled, without control of CCF.
+>>>> +        *
+>>>> +        * Doing so is not possible with a CLK_OPS_PARENT_ENABLE clock without
+>>>> +        * forcefully enabling a whole part of the subtree.  Just let the
+>>>> +        * situation resolve it self on the first enable of the clock
+>>>> +        */
+>>>> +       if (!parent_enabled && (core->flags & CLK_OPS_PARENT_ENABLE))
+>
+> At first, I couldn't grasp the logic behind the 'return' here. Now it's
+> clear. This approach is equivalent to completely giving up on
+> handling clocks with CLK_OPS_PARENT_ENABLE feature in
+> clk_disable_unused_subtree().
+>
 
- drivers/pci/of_property.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No. It's handled correctly as long as the tree is in coherent state.
 
-diff --git a/drivers/pci/of_property.c b/drivers/pci/of_property.c
-index 5a0b98e69795..886c236e5de6 100644
---- a/drivers/pci/of_property.c
-+++ b/drivers/pci/of_property.c
-@@ -126,7 +126,7 @@ static int of_pci_prop_ranges(struct pci_dev *pdev, struct of_changeset *ocs,
- 		if (of_pci_get_addr_flags(&res[j], &flags))
- 			continue;
- 
--		val64 = res[j].start;
-+		val64 = pci_bus_address(pdev, &res[j] - pdev->resource);
- 		of_pci_set_address(pdev, rp[i].parent_addr, val64, 0, flags,
- 				   false);
- 		if (pci_is_bridge(pdev)) {
+What is not done anymore is fixing up an inconsistent tree, by this I
+mean: A clock with CLK_OPS_PARENT_ENABLE, which report enabled from its
+own registers but has its parent disabled.
+
+In that particular case, clk_disable_unused_subtree() won't be turning on
+everything to properly disable that one clock. That is the root cause of
+the problem you reported initially. The clock is disabled anyway.
+
+Every other case are properly handled (at least I think).
+
+>>>>                   goto unlock_out;
+>>>>
+>>>>           /*
+>>>> @@ -1516,8 +1545,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
+>>>>
+>>>>    unlock_out:
+>>>>           clk_enable_unlock(flags);
+>>>> -       if (core->flags & CLK_OPS_PARENT_ENABLE)
+>>>> -               clk_core_disable_unprepare(core->parent);
+>>>> +       return (core->flags & CLK_IGNORE_UNUSED) && enabled;
+>>>>    }
+>>>>
+>>>>    static bool clk_ignore_unused __initdata;
+>>>> @@ -1550,16 +1578,16 @@ static int __init clk_disable_unused(void)
+>>>>           clk_prepare_lock();
+>>>>
+>>>>           hlist_for_each_entry(core, &clk_root_list, child_node)
+>>>> -               clk_disable_unused_subtree(core);
+>>>> +               clk_disable_unused_subtree(core, true);
+>>>>
+>>>>           hlist_for_each_entry(core, &clk_orphan_list, child_node)
+>>>> -               clk_disable_unused_subtree(core);
+>>>> +               clk_disable_unused_subtree(core, true);
+>>>>
+>>>>           hlist_for_each_entry(core, &clk_root_list, child_node)
+>>>> -               clk_unprepare_unused_subtree(core);
+>>>> +               clk_unprepare_unused_subtree(core, true);
+>>>>
+>>>>           hlist_for_each_entry(core, &clk_orphan_list, child_node)
+>>>> -               clk_unprepare_unused_subtree(core);
+>>>> +               clk_unprepare_unused_subtree(core, true);
+>>>>
+>>>>           clk_prepare_unlock();
+>>>>
+>>>> --
+>>>> 2.45.2
+>>>>
+>> --
+>> Jerome
+
 -- 
-2.35.3
-
+Jerome
 
