@@ -1,212 +1,116 @@
-Return-Path: <linux-clk+bounces-14453-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14455-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A1EB9C1BB1
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 11:58:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C8709C1C1B
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 12:24:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 735CEB2605B
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 10:58:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03194B21772
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Nov 2024 11:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D619D1E5722;
-	Fri,  8 Nov 2024 10:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91F691E47A2;
+	Fri,  8 Nov 2024 11:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taXXCwSk"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="REkWowVA"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9154E1E47B1;
-	Fri,  8 Nov 2024 10:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886671DE8A8
+	for <linux-clk@vger.kernel.org>; Fri,  8 Nov 2024 11:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731063448; cv=none; b=bZhOsh2xzlPb9rMDZxTPs4IVPDzeYJQIdAj5Q8fiNGSFl//y2b0Dc+c8Evn/XOwOPiZuOc7zgOdmmsD09VyIb+ApL18kpBvNYaOTuJDsEmEPGQ8/D9aYYCoKRKbix146suXDJsx1FzSQsgdJ3xs8N80bpdjZoddfBUlaoog9LJU=
+	t=1731065043; cv=none; b=cIBswiA4rT0OU4JToCRmUOUdL0O7wKJcD7l4svmf/GYnWFOjJ7+YmcG1EBDPJkpCpZG6eujeCtdPL/yiKmAZHmKrRsKiKMbbbYwhqpykLUJiRlhyH863SOIOn9s96xd/TMUgTaVzunyqMbijkrt+QqlV1XgVGhFSRlhdjC2Ha5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731063448; c=relaxed/simple;
-	bh=nSKeP6CGVnbkOcjL45x796X6zEZ+6MU3W7LAshyiAl0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nW2yUQHwzQdqL39AzwX5NIZBh/HqifY5j24ABpuwWzEGgbIKIDE29ISeINU7tUMO8K9xYqc6+GNQvgyTblmrIk/p/jJhyWLareT/y3xEsdja0WpIjegYpgtY5iKhJwQZDA1a+nlMtrjDcyFz8F5JREKCAp86N2YjmVW2d2jtrIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taXXCwSk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73495C4CECD;
-	Fri,  8 Nov 2024 10:57:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731063448;
-	bh=nSKeP6CGVnbkOcjL45x796X6zEZ+6MU3W7LAshyiAl0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=taXXCwSk7If23gLZMvrLibGG0PzweX8z96AMnWqWNkxkmxDkOE5jSwFXL53RjM0qH
-	 R7FD4+cof4x+T9IwnHo+TRscHzvBJJMLRIa7D+gnW4J6W9mEEye2PQy5QVDwcn13Vx
-	 xwZKlihJJ41um9JI/3Gf5zMplkAXkno3fxFH4TUDjnpAT1LBz2VeahdrAms+lrxvaa
-	 XztlC29/Xr/UQbjmIpX30KapZDzd00Nb+jMO4x7jZEBf4PGyTiHpQ2HsoocBMOQJck
-	 5Ns8xKmZQJfoniZJCP8U5+fdorK/2u7mhn09kXmTEJZH9v6Fu++CoLL2obH94UzNne
-	 NVXL16SCg8YcQ==
-Message-ID: <530f4a8e-b71a-4db1-a2cc-df1fcfa132ec@kernel.org>
-Date: Fri, 8 Nov 2024 11:57:22 +0100
+	s=arc-20240116; t=1731065043; c=relaxed/simple;
+	bh=mAPRkq8mcGAitqZ2NJPZs4WYcWRS92IxYDvqOFLptL8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CwW8eaA/UJHVfs+aziA508DcQhTUnCienVxLNMvPVyczYlCWe+/R/TyP/F91/FtmtlsW4XrWrrpEZeLABkaSjBEvUEadXnS/FtrcUtdXN8AcmlDUUsp90Y8FlsUXk02fOKmYsmVYWIbEtQ2Q3nKHpeZmTu4Cex8AvnyLv3BTbQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=REkWowVA; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37d538fe5f2so1380013f8f.2
+        for <linux-clk@vger.kernel.org>; Fri, 08 Nov 2024 03:24:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1731065039; x=1731669839; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1w6RpVPZFLgX8W7zDDIW9Bt9wUWPJmCNFHj/06iwgR0=;
+        b=REkWowVAGXFPJsLao/LHIOwLWbc7bC1/om4qfzn8elqIvx1CDGor+LfsvAEKRs5ONp
+         HrLWQ41Pz+FCFIPno/G61I3/QOMTCYiVD5rkxsDx0n62c/ta/f2UdmqML50ZeBeBTCmn
+         2GpB5OxxRnkhUEhutTzAEVpKHO6JdeKfsIuvIzmoyRsy379tSkAtIibOJNk4Uq6Nfsxk
+         iUl7TEhWSKGOAHZUG9Jttwe9R6VMP80E0rQSK/68Szo9bhKXOAnMvsPQlEX8uNKn4wz6
+         c8fZSfxOxGNpM7V1/XgTDRR2f6fsCuqYFSFx5Wk/qmsLyYNsIHnXi2PEGVxI2aUSVGK0
+         x3dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731065039; x=1731669839;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1w6RpVPZFLgX8W7zDDIW9Bt9wUWPJmCNFHj/06iwgR0=;
+        b=ckM24kkRI0PsR3GegGoyBztJ0LksiJvddtyVtF5gQJ34+d7rBJwBEJodh0fUENLyWb
+         AT8VRrjdC2oJF/oMD8cUVwy3hfdo7WFcpPJitgBWRwQH+3q/YfWgNHz6XtBtbZtUZb0L
+         lySiN9W1CDn30dy12kMn/gOlb5A+QB1xdge8DNZYEpjCW5paGaG+MBH46/N3p9aK9hf/
+         FqhmwhDcJFnNjKk+r2hlBiImP0gsYNvJLvXb2RMZxGXCcF83hZkfSBvAuLr5Bpl4B6C5
+         Eed3aV6euHbMC8+AC66J306XwW6anXopXPcZ3DzHuVDsHvGg/rRoyQCbPQNwWy9JC2UO
+         Byxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWdImzEzQhHJK04VsMuexYJRg0ZJ4f7zd4BLUq1GEo2tkCzUMw++QyhG8YDo8XUB4zsn4U3cjQ/cck=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEgH82LO4X71TN6gm3d/g7IWJt7+2YGq4lYj5+dbdUKzs38B1j
+	9b7+UMW3Y84gaC1JLeR/39rUcduCOn3St0jMyJF5Z1rHNU5s6+2DMXWPFBQVwqk=
+X-Google-Smtp-Source: AGHT+IE2dTZAM2eNBdyoJ0vYP2310xH3HRvixP7wsdVyd9U7THrSH3mKlvans7ZEtSce5JJp+KGjDg==
+X-Received: by 2002:a5d:6daf:0:b0:371:8eb3:603a with SMTP id ffacd0b85a97d-381f17253e1mr2103427f8f.27.1731065038785;
+        Fri, 08 Nov 2024 03:23:58 -0800 (PST)
+Received: from fedora.. (cpe-188-129-46-99.dynamic.amis.hr. [188.129.46.99])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-381ed970e18sm4281443f8f.10.2024.11.08.03.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2024 03:23:58 -0800 (PST)
+From: Robert Marko <robert.marko@sartura.hr>
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	lee@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: luka.perkov@sartura.hr,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH 1/3] clk: lan966x: make it selectable for ARCH_LAN969X
+Date: Fri,  8 Nov 2024 12:22:34 +0100
+Message-ID: <20241108112355.20251-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/8] serial: sh-sci: Check if TX data was written to
- device in .tx_empty()
-To: Claudiu <claudiu.beznea@tuxon.dev>, geert+renesas@glider.be,
- magnus.damm@gmail.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- gregkh@linuxfoundation.org, p.zabel@pengutronix.de, g.liakhovetski@gmx.de,
- lethal@linux-sh.org
-Cc: linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-serial@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, stable@vger.kernel.org
-References: <20241108100513.2814957-1-claudiu.beznea.uj@bp.renesas.com>
- <20241108100513.2814957-3-claudiu.beznea.uj@bp.renesas.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <20241108100513.2814957-3-claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 08. 11. 24, 11:05, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> On the Renesas RZ/G3S, when doing suspend to RAM, the uart_suspend_port()
-> is called. The uart_suspend_port() calls 3 times the
-> struct uart_port::ops::tx_empty() before shutting down the port.
-> 
-> According to the documentation, the struct uart_port::ops::tx_empty()
-> API tests whether the transmitter FIFO and shifter for the port is
-> empty.
-> 
-> The Renesas RZ/G3S SCIFA IP reports the number of data units stored in the
-> transmit FIFO through the FDR (FIFO Data Count Register). The data units
-> in the FIFOs are written in the shift register and transmitted from there.
-> The TEND bit in the Serial Status Register reports if the data was
-> transmitted from the shift register.
-> 
-> In the previous code, in the tx_empty() API implemented by the sh-sci
-> driver, it is considered that the TX is empty if the hardware reports the
-> TEND bit set and the number of data units in the FIFO is zero.
-> 
-> According to the HW manual, the TEND bit has the following meaning:
-> 
-> 0: Transmission is in the waiting state or in progress.
-> 1: Transmission is completed.
-> 
-> It has been noticed that when opening the serial device w/o using it and
-> then switch to a power saving mode, the tx_empty() call in the
-> uart_port_suspend() function fails, leading to the "Unable to drain
-> transmitter" message being printed on the console. This is because the
-> TEND=0 if nothing has been transmitted and the FIFOs are empty. As the
-> TEND=0 has double meaning (waiting state, in progress) we can't
-> determined the scenario described above.
-> 
-> Add a software workaround for this. This sets a variable if any data has
-> been sent on the serial console (when using PIO) or if the DMA callback has
-> been called (meaning something has been transmitted).
-> 
-> Fixes: 73a19e4c0301 ("serial: sh-sci: Add DMA support.")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
-> 
-> Changes in v2:
-> - use bool type instead of atomic_t
-> 
->   drivers/tty/serial/sh-sci.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-> index 136e0c257af1..65514d37bfe2 100644
-> --- a/drivers/tty/serial/sh-sci.c
-> +++ b/drivers/tty/serial/sh-sci.c
-> @@ -157,6 +157,7 @@ struct sci_port {
->   
->   	bool has_rtscts;
->   	bool autorts;
-> +	bool first_time_tx;
+LAN969x uses the same LAN966x clock driver so make it selectable for
+ARCH_LAN969X.
 
-This is a misnomer. It suggests to be set only during the first TX. What 
-about ::did_tx, ::performed_tx, ::transmitted, or alike?
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ drivers/clk/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> @@ -885,6 +887,7 @@ static void sci_transmit_chars(struct uart_port *port)
->   		}
->   
->   		sci_serial_out(port, SCxTDR, c);
-> +		s->first_time_tx = true;
->   
->   		port->icount.tx++;
->   	} while (--count > 0);
-> @@ -1241,6 +1244,8 @@ static void sci_dma_tx_complete(void *arg)
->   	if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
->   		uart_write_wakeup(port);
->   
-> +	s->first_time_tx = true;
-
-This is too late IMO. The first in-flight dma won't be accounted in 
-sci_tx_empty(). From DMA submit up to now.
-
-> @@ -2076,6 +2081,10 @@ static unsigned int sci_tx_empty(struct uart_port *port)
->   {
->   	unsigned short status = sci_serial_in(port, SCxSR);
->   	unsigned short in_tx_fifo = sci_txfill(port);
-> +	struct sci_port *s = to_sci_port(port);
-> +
-> +	if (!s->first_time_tx)
-> +		return TIOCSER_TEMT;
-
-So perhaps check if there is a TX DMA running here too?
-
->   
->   	return (status & SCxSR_TEND(port)) && !in_tx_fifo ? TIOCSER_TEMT : 0;
->   }
-
-thanks,
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index ef709327cba1..713573b6c86c 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -270,7 +270,7 @@ config COMMON_CLK_LAN966X
+ 	tristate "Generic Clock Controller driver for LAN966X SoC"
+ 	depends on HAS_IOMEM
+ 	depends on OF
+-	depends on SOC_LAN966 || COMPILE_TEST
++	depends on SOC_LAN966 || ARCH_LAN969X || COMPILE_TEST
+ 	help
+ 	  This driver provides support for Generic Clock Controller(GCK) on
+ 	  LAN966X SoC. GCK generates and supplies clock to various peripherals
 -- 
-js
-suse labs
+2.47.0
+
 
