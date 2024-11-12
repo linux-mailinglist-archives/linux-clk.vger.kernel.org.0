@@ -1,87 +1,84 @@
-Return-Path: <linux-clk+bounces-14589-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14591-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA499C52C3
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2024 11:08:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F055A9C54A9
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2024 11:48:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7AB328390E
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2024 10:08:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1166AB259B6
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2024 10:20:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FDBF213EF0;
-	Tue, 12 Nov 2024 10:06:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1FA21265F;
+	Tue, 12 Nov 2024 10:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="OmWAJm/i"
+	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="N+3f/Sbs"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2119.outbound.protection.outlook.com [40.107.255.119])
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sg2apc01on2135.outbound.protection.outlook.com [40.107.215.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935812101AF;
-	Tue, 12 Nov 2024 10:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F9C20EA2D;
+	Tue, 12 Nov 2024 10:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.215.135
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731406008; cv=fail; b=OOOyyUFbOgiyxLKjaF8uSq1B4MIrVJHEDRhjY9CPZzd4QV23o4f9tPPyUpzmvnLR8UypNqZSJiKNJMPWYqSt0XessaHD0cbgFsoJ12Q3AeSFexpq+8Tnp1ZrOpRHmqhWhigTuNGepV6gwDewEiOfD/aV4+SZEePEdhO3LeSDmDY=
+	t=1731406647; cv=fail; b=jR8FNCPN4aXfzQQJF79XyPq74eqXiLZcDCNxbVg0AO4LzPvnUGaBmrk6XGoXDOmq/SUXVXPAO45+1SruPS6oZOEwBQRdikFc4U+2RpHzqI+eYkHZFuD7RmYhcu7j1DRCzrqHcZiRCcq9op3sVv+oi+8G+bw1Qs75e6T2CQDrAQ0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731406008; c=relaxed/simple;
-	bh=xIPCWtbROZERStWbY1B7faFG+QJDJe975PCmQUZowx4=;
+	s=arc-20240116; t=1731406647; c=relaxed/simple;
+	bh=CnaBf+fZEg6YZKDNJ88dfjH03Qaflsg+oeV/9pQmGnM=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Fzt4cmFgZy6tZmRnq8n3jvcB3C7n0ZCpRUAy6ci6g9y4CFi+q3Z1RJw0w7UHx6GRwZB0w+uj2aAZwwEiGH0fSYnBtuZuNH0iKzVCVenIck1R1sidd2VTM5oNlNC44TTOIkgufn6bHpQIdWbriAGBTwZ5HxKsVwziR5BMqD51wOo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=OmWAJm/i; arc=fail smtp.client-ip=40.107.255.119
+	 Content-Type:MIME-Version; b=SKQgJVqI7BbdrQD5nlsu/sWQ3kM4ddyz6MB7j73NJxqjYsMuopv7mCs52CoU7MNcJYViu2+QGdcaxIkPhD7K41EeMaqCKgHU3a0wDZzWvzIy0hrUteKu5OsDb1zE6R7mE8+nZJlfl7wRdv+tNydU5jRPYlOYi2xsEhSJjgsuJlk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=N+3f/Sbs; arc=fail smtp.client-ip=40.107.215.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EN8noqVtqRz2Am9asJco8QKcHHHKVPnN3SZ4yHx6AyF0itGGWiNqnZK52citPWgOVHbjQY7ztzc/3i4S1OwHzo2M9lQFyEtX5uXtQs9P7CTcKIfJIjvHGU1d91ditb/ZNq62eMaUQEUOscGIcevDagBAW4jSOCCWJC7iXQHsRMHCkr+9P4WllEI2z/ttRUZ5OowPH0WKT375/JOJRuoHhJF4EC8tUa7Mx2SIDRacHo7YWFzGESNkhtUUNFrb7QJBFt9Pm3X3D9zJn0CRE2WqG/swTiudviJ/YmTSyeayK5EQI/rTww9xzV099WA/XbR1eEKVspKXQVcwIZCiJKXONw==
+ b=hW/dkvmSxxQquVFt9qX9cIgKibujcSsAvTMD+qc61Lc9dEkF8LPU+SSKwchdwJeAd80+u91qwxsfpLJ2nUInWHuhrAIh7IZaqe+W5b7mC3PY56oOU9F1ceghfuhJGIhIqoY39/sKRp8z7A5Rr8saxPerPiM4x7V39aZA8uXl6uU5UR0hmmklDh4RWgMTwtva8AC831KunDHFwkk9hMh876P7o0CAS0iwNhen5nttdwQ1V2kzOZZRCU7jBRm2Wtsanb9UN5qaZ4Ly5Fo3JaACnj7TgJr7JSYe3FvxJuqOKI0utKqSztzS+uoc9hF8S0JxlqJil9KIcpQMw6tMy03lEA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ElOw7rmGWaS5t8u48irYFRYWBGV9o3J3e6tEOyR9Xdk=;
- b=tvrSBw9gL9pVvpZNjL4efOgbQ1lW3T0lPXpytl8myY+Ld6KNYindHXnccZpoRCpgF5MLILHW264ZL9ze/TApLafj/Y0zV3HZdiJ4nuPB6n/kn85mhGto4CrXTG07egh0o0aLoJmAxKMyT13gcb+JZofqy4WoWnUu2pNcK89fElf09XOsiBF6rRLEr8SxIPrO/XBw8rWPjkT6oS29w8/tc1XU3bf/OZOvGJTk7JBqDXo8PE6qBuI40a27aXWLCRJKQhKWlUJZq1hnRQ7NP7UTaC3ghW6h4su+c8GeIbGt1FqB/zUBzW9jYfokBh9sWY8pTIYu+LQOmQx1/hapMqHNvg==
+ bh=dlpYBojbHJHPbG3DwycboMAbXpRXbaZ47cWYZml1k0g=;
+ b=EQdloAGfwmOtrAYEmWdQdZEOxlT3tUpFzRvcM79SP2yrD5VE05hEqvNnUQy2jXW7fEJhGdcst8SKXL8m2nP3i8hWvWll2A844/tow/hHECw6si6YS4a6T7lUU3wEXnHLynm4lR/nCfzlRL38aACX02oahDDOOk58cQr+cnxeAAsCex0Lj1eJUFi65YlX0sqw2u3gwXr5Rfsff/IWyzTFhyiuwjwu+1nvkMsqL83oidI9r89+Dy8ws5rJ0XSYY85b8IskqfCvgVCtvmQOFsxd3I/Lv4ds3/PWg0CTrbIe49v+aTtPtvdLgkA7PIZwfEs0ma+Wfb5E778eCKfmiDCVmQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
  dkim=pass header.d=amlogic.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ElOw7rmGWaS5t8u48irYFRYWBGV9o3J3e6tEOyR9Xdk=;
- b=OmWAJm/iXEPSeFkWhEYsjDE/ONbZpj1jgIenbUeJd7jPUimiu7RBGwwMCvSs+zNCKpYCd/1pZuVAghGN2JmTAOU971/HojzscwQ1mBo+AxF8K2H2eQun/gQPPyj5CgtraFIJT0/IFCXlmjCPUO4PbzWIAWZ7h8MPezGneTfYRMtKF2snzKmz3IXxHg0ilj2i8DEz64p2op44kPWtPe9J2qHiR01STYEEE1lSHELzbdoN20SSlgCZgErDZTZATwXMFWtmu7kt2qZxdiLkoH41uuYObYi3k15zGY2UvMvrdA6J8DG242gmgDidkZXccfgPCBvyyQBgqYozKLmQGpho1w==
+ bh=dlpYBojbHJHPbG3DwycboMAbXpRXbaZ47cWYZml1k0g=;
+ b=N+3f/SbsJNvdJuCAnFaPU8z5gzxdkA/fKxNJzCDSl1UmOLQANTrn6QIuyCH7i4wzF4a7fUa4wX4sYEP2CjjKEt49BMzNJedooTq2YkofwYKenPPrDvuLcai1C/A+YfXAKsM23yhKtiHQssYhEy221u6/GRFyWOQeQ6CuFQUSvFKqoce6cHAiE+rd5emOSJ/p8eie3bJj7PsEso557gM/6U8BSnoCBjEtUfDdxVPpC9cOtd537W4/0MEtnCee5rk3feNDszqrIL6a/UBhFUJxPCsfSclvSePZsKc3KPrdjPt0+YC4JNR7xPATnP+jNhdaT8eVaWBO9tbnRROMvur9SQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amlogic.com;
 Received: from SI2PR03MB5786.apcprd03.prod.outlook.com (2603:1096:4:150::10)
- by SEYPR03MB7892.apcprd03.prod.outlook.com (2603:1096:101:166::9) with
+ by TYZPR03MB8587.apcprd03.prod.outlook.com (2603:1096:405:b6::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.25; Tue, 12 Nov
- 2024 10:06:38 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.27; Tue, 12 Nov
+ 2024 10:17:20 +0000
 Received: from SI2PR03MB5786.apcprd03.prod.outlook.com
  ([fe80::3f37:cacc:420b:9b86]) by SI2PR03MB5786.apcprd03.prod.outlook.com
  ([fe80::3f37:cacc:420b:9b86%3]) with mapi id 15.20.8137.027; Tue, 12 Nov 2024
- 10:06:38 +0000
-Message-ID: <f8c3b6e7-2f5d-493e-8254-2a27623f0d2e@amlogic.com>
-Date: Tue, 12 Nov 2024 18:05:58 +0800
+ 10:17:20 +0000
+Message-ID: <e13bc132-fc90-4378-852b-1ff45a6872b9@amlogic.com>
+Date: Tue, 12 Nov 2024 18:16:40 +0800
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] clk: core: refine disable unused clocks
-To: Jerome Brunet <jbrunet@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>,
+Subject: Re: [PATCH] clk: meson: Fix children of ro_clk may be tampered with
+To: Jerome Brunet <jbrunet@baylibre.com>,
+ Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Kevin Hilman <khilman@baylibre.com>,
  Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <1jcykltj7g.fsf@starbuckisacylon.baylibre.com>
- <20241004133953.494445-1-jbrunet@baylibre.com>
- <07594a59-c999-4592-84b8-4e163d3edba4@amlogic.com>
- <1jttci2k8k.fsf@starbuckisacylon.baylibre.com>
- <85aae140-5c9b-4ff9-a522-549009f62601@amlogic.com>
- <1jcyj62gi7.fsf@starbuckisacylon.baylibre.com>
- <5eb12197-330c-4f55-82f7-d13ea458ba43@amlogic.com>
- <1j4j4c3l2n.fsf@starbuckisacylon.baylibre.com>
+ Jian Hu <jian.hu@amlogic.com>, Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+ Yu Tu <yu.tu@amlogic.com>, linux-amlogic@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20241111-fix_childclk_of_roclk_has_been_tampered_with-v1-1-f8c1b6ffdcb0@amlogic.com>
+ <1jr07g25da.fsf@starbuckisacylon.baylibre.com>
 From: Chuan Liu <chuan.liu@amlogic.com>
-In-Reply-To: <1j4j4c3l2n.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <1jr07g25da.fsf@starbuckisacylon.baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR01CA0002.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::21) To SI2PR03MB5786.apcprd03.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR01CA0007.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::11) To SI2PR03MB5786.apcprd03.prod.outlook.com
  (2603:1096:4:150::10)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -90,207 +87,506 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR03MB5786:EE_|SEYPR03MB7892:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66480c75-284c-4ca5-5189-08dd0301b267
+X-MS-TrafficTypeDiagnostic: SI2PR03MB5786:EE_|TYZPR03MB8587:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15370f9e-63ef-41b4-5150-08dd03033133
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|366016|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UjhwRGRqbjdXeXJvUDJlVEM2MjdVNVVoRStUVml6eVcybWJKWWdFWWZmaTdF?=
- =?utf-8?B?YzNxQXBUeFBsOXlXdGVUUkZQS2g2eDN5NWZoSkM1MXBkZERUaVhhNjY1M1hS?=
- =?utf-8?B?SVg0cE42OHVpQ1NDSjhEQXVkdHcxUWY5ZnFYdzdxMWhLM2hvSkVKT1FIUTNi?=
- =?utf-8?B?cklVL01xVm1jN0xCWWJJU2dsYzNxU0ZYeG4xYlowVzRzR2xOcmZoRndReXow?=
- =?utf-8?B?cEwvZjJ3ZHpuc1dJamRmb1RwMGJVWTYwOWQ5REd6RVhYN3ByVk9JSDYwcTVk?=
- =?utf-8?B?bWJ3YWUyYU9QdXVKZWY3ODJpRDBxZjlYVlI0U1J2M0lxeVpyVStGT3VDbEk2?=
- =?utf-8?B?QW9NK01Nd2lhbm5ZdnIvS1dFaUNqZjdDZGk5My9jZTVPZFZ3VmJSdXJMUU41?=
- =?utf-8?B?b3I2d2czNHpQeFFudmluQXZJSG8rMUw5ZXVNaDUzWEpNZmhIYnBKM1dhcllY?=
- =?utf-8?B?cTM4UnRyVGpubjkvV0dsZGV5SjlHQnRrZ0NQdDdhSGdoT3c3MVdITERXSXht?=
- =?utf-8?B?TFNuZTRiMUpMbmprY1pGd1lqalVIbWs1RUhHeXRrOTZsTFJTWFR6bWNrMGRs?=
- =?utf-8?B?ZXFiVDlVSEdJRStkRVAveStiaWZiczNUL1c2SW9HRllzcGVqKzJqaWdUMHFy?=
- =?utf-8?B?U1A5YmZDQVpxbEp3U092UkJjV2tRY251WENCd0F2ai94aWFndDRPVzZOL0pU?=
- =?utf-8?B?NFI3MlpaWXNNMUQvNm1qYW5XV2hqVGFxNnZmUXFiakdCVTR1eGlEbkszTk1i?=
- =?utf-8?B?U1hwQ05SZys2bVlPTlhaZW5XcFdOWnNQK010WU14bUJSZjBTOFhPa0pabUF3?=
- =?utf-8?B?bmJweHNOenhMMnY0V1Yvdld3ekx3TjFIRzArSVE5MVZHS2RnTkdhemt3aU83?=
- =?utf-8?B?UU9iZlIvM21pK0lBaVVkWUFxUGgzd1lqNFBEYm1aMGYzZnV6NFJHZHNVS3Q1?=
- =?utf-8?B?Nnc3TUk3cDN3YzZINGdkRmJ3cjNTRlBncWFLT0RoZ2hpdjc3QlRpL1ovZWRT?=
- =?utf-8?B?dVc3TXVUWUJVc3NFTTgrTHkrbHJVUTNwallJa1IwaWZoNSthWGhqZGxKTFg4?=
- =?utf-8?B?dVY3SGp4dGFWWGdIaGlNL3ZPZ0FYdnR0UnN3U0tERm5LMElKTVUvc3R5N0pX?=
- =?utf-8?B?S0J4VzFwS2pNQmdRL1pBb1oxcGRaekFyRmdTdTVlUU9GNkc5MjExQitRN09M?=
- =?utf-8?B?aWpad3pMK1ZPNDZlVzhNbTd5VTljWDd2Um5rcUxpR044VjVUc0dFOXBEQWFx?=
- =?utf-8?B?ZWNCVGQ3MXIwTERTUUJ1YkhXRkZxaHV5NzFURjA5djhuN2x6QnMreHg3aHBD?=
- =?utf-8?B?bHRjMEtMcFQwRVFSR2NFdUJoZHJncjdtQ29weTNmUllVU1ZsWGQ1UytoeVky?=
- =?utf-8?B?QzJaejRnbFZIWjJpSUtuRENNbksybEJNRzA1TmRHNEZFYUp4TzNYM1NRK3BJ?=
- =?utf-8?B?eWRIMDVSMkpJNjlqMEhPY1BSeDVLMWlHa0M0bEpUQ2VXMmJ2akwvb2xTLzFw?=
- =?utf-8?B?K0FnQzNlQ09FazNRellsNjBBdE1TMnhMZ0FOeTRKeDlTUGZHaGFvY0ROVW1h?=
- =?utf-8?B?UDJvblAxTUdYV2NJcjdsYUVpZWJTamJOYjVOcTBmM0lyWnZQZ3lycnJXV2dN?=
- =?utf-8?B?OHQ0cWgxU05RK3hXTmw2b3FUZ1ZzdFpaOXE3YTRZckxMYnp3Y0hBS0k5OVBs?=
- =?utf-8?B?K0UxdjZzendVSFBKSUkzaGdSbE4xaWNPR2Z5RWluUklCeVRuaGZYbEl5WGNU?=
- =?utf-8?Q?cciV+gvX4FOPcJjLchrv1ARMP4myCtjZtvG/dL2?=
+	=?utf-8?B?eG1Fa0NZTXFQVVdEd2Z1cFpkRlVZL0JPbnNEdFJ5ZHZBN3JyYy9ERFZEejdq?=
+ =?utf-8?B?ajhJMXZ4cjVITlpxRm9XLy9ZMXVDR0NSZlVPbnBBRE05N1VEUmFuU1l1YXpD?=
+ =?utf-8?B?YUZLZ2FoQWNZVmg5Ulk3R2ZoajdVN2VycUFGUHRVNVlwWWdoeDZZd29iQ2tT?=
+ =?utf-8?B?L2JCMEs5VWE0UDBxZ3pWdmRjcFlVbW1DWHF6NGVuZE1uT0x6ZHYyTEhxckV6?=
+ =?utf-8?B?Z0daNU5QcFhWRWNleUdiM2dLRStVTEdybFYxbDNDeklldWI2eTc0RzdXNHdH?=
+ =?utf-8?B?cE12UTJidlFTWGdBTFRZS2FhY3J0dHdnQjMwRGorVmc2N1ZPbkJqb24rZm5O?=
+ =?utf-8?B?am1kNWttUWc3amhqZ0k4WE5ySG9SK0JpZ2ZZaFRqOHdYUzhsYXgyckswcGE0?=
+ =?utf-8?B?QVZ6c0JVZVloR1J1LzVEZmc0ZUM3RXQzTVhSUUd0alphV0QxY0JtNUhZdTFK?=
+ =?utf-8?B?aFR5dVprWEJpbzlKQnorWFhZQWtVendYZ3R3WTNpQmtVZXJZeUZEY1BZMll1?=
+ =?utf-8?B?ekZGeFdvVWNzeUt0Z0NHYXhwUFYzQ01VTVJIRTB5bzRzMU9KT3NwbG1ZbWJ0?=
+ =?utf-8?B?YlV0NW55SUxXSXlXd1p0bHQ5dU55bW9tY3VsYy9WODVTK1NMSHUzdEdVYTlx?=
+ =?utf-8?B?dFcwQzBDTWFyOE15LzRzWnhRb3NVbWdvU3dOT1hFam41amNnWXZMYk9KNjQz?=
+ =?utf-8?B?c2NhVjMzbnJhWlVnVzJFSHZ4dW1IeFhnV1NpUTBrTjF4WW94UUhSWHlKcUNM?=
+ =?utf-8?B?TEg4UXNaRE1aZHlTL0NpNkw0T29YLzFnK3lkMTE0Z3VFclBXVVBTUFhjSlBl?=
+ =?utf-8?B?bEVsaG02enhhZnFoMzNsbzludmFUUmE4LzNRVENCQzArTnNDMFRqZk5kMjl0?=
+ =?utf-8?B?Q3BkMk93Z0lzWjRzeXd6bGhmbk02Z0tSa3YzYkxIRENDUXpWMXkxS2RFb1JR?=
+ =?utf-8?B?bzRzMHVDMXBSWmluTXdCMDlNdS9rOGlTM3ZweCtWTHdhbUs3enk2b2Y4UVV5?=
+ =?utf-8?B?SGRucUhJMVhvNVYxYnJUSXhqRW1LWTdmSnZoZHV6NmFyd3RqdFllQ2ZBNjBJ?=
+ =?utf-8?B?WXozazM4bEthUUp4aTBLOFlxdTNwTmp0VjAzRG9WSVlRT04yeUtWOHZHZ3dh?=
+ =?utf-8?B?QjRLQjQ0UDcvMnZ4Q2Z2a1ZTd3IvRTBEdFcvdWlmWm5yeHFmYmN0SnNHWkww?=
+ =?utf-8?B?UnhndE9oTzZ1VDRQWEhKR3R6S0g2UU1OVzNmZFN1eG14Mm4xdmNnVC9nejJF?=
+ =?utf-8?B?R3RxV2VGVm82TWk5TWY2T1RydnRKOUZyYm8waERqRkJTWWNkZE44UGNwYTBS?=
+ =?utf-8?B?Zzh3VVFCRmdTN2hvcndRU1dPRElMeG1jdklvUEUvZkkweEtpRk9STXpxYlU2?=
+ =?utf-8?B?SWZpUTJvVFlCSWFJK3FMWVdNdkZuZmtCVTB3V3NzY2s4ZVJKNWN0TFZZQzd3?=
+ =?utf-8?B?ZnNDd3dvRkkzYy96TkhIZHVneW1rOGpjdlNwL0JJR0c4Z3B3QUtjL01EamEw?=
+ =?utf-8?B?dHdwL3hRQjNsbjdqMy9ZdjFSR1psWXN4dWdEdnB1Vklsa1ArcDRudkZyRWli?=
+ =?utf-8?B?dG1Ed0EzVGNjeDRQVFZ6alNwdkpsMkFlcTNndUZnUVlacnYzNStRa1dQRElU?=
+ =?utf-8?B?ZkxxZGtqV0lTNDZ3L1pZSVdRMnpXaUs5UUxJby9TNUwwZXZ2MDVwQkFaMXl5?=
+ =?utf-8?B?emtBMzVQRVZyd0ZhMTF1M2tUZGF4ektzV2xJVE94SE5SZmNDUTdIT2hiRzZ1?=
+ =?utf-8?Q?HJGm5kQDtgjQXBUoSOZYC/rfJ0qmdcp63zRYxBB?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB5786.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB5786.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YmZ3OTZlMW5uSVFrNjF0eEdtdkZxakRWRmU1SEowcmp5ZkhJT2x3N05obXd4?=
- =?utf-8?B?YzlPLzdaYnB1UW1ybkhqUUpHbzJtWXIxUnNXZDZKR3A5N0Jham1LNXZpemVO?=
- =?utf-8?B?cnpsR053dzJYVlBFQW5SQVVSTnNCOGxURkpaYlcySURRRHJncEZ1cUpVVXY0?=
- =?utf-8?B?WXg1ZzcyQ294ZFdsM016ZENSbEh6T2ZRblArRk5WRytZVHBTNjVpaFpVNXk0?=
- =?utf-8?B?TDB1RzNBdVovTW03K3BabS8xY0tIRFhFcjJWWG9relp1K0d5OE5BZCtFaWVm?=
- =?utf-8?B?dUpydVlzdFBZVWtOb1IrbDdLeXFWNEpMV01JZG9GdHdqTlZJWG5xS1dRMEE0?=
- =?utf-8?B?bFc0U1c3aVczUzRrNk9DdXhZRmFEemw2NndLSTY1NXp6RTMzVWM0b0c2eVd4?=
- =?utf-8?B?L3pkMTFWMXBkSWowNUZxT2FncTU2d2Izd3Z4cnJYM1hucVpGN3N0UjBNM2li?=
- =?utf-8?B?T25jeWQrNkxDTmRTTUpSYUpxaVZpOG94RHdnVUdtYVp6WEo3V3N3YVBIOW44?=
- =?utf-8?B?RW83SWJ3aFRWa1lPUWQ3R2g4Z1pZWWFvbUkyR1VFajRtV0hHRXZlV2pIcnd3?=
- =?utf-8?B?T1VzbjhzdExnRVNlT3FKRWFnaTZ2NTc4emUwRDdOdHR4c1BYYUV1Q21rbEtu?=
- =?utf-8?B?SUFFODQ4aml1WGxDNVp1alpzL1N5UmJhUTZOWDdvMzBsSXViNkR5eGN2WnZK?=
- =?utf-8?B?UmFMQit1RUdwRzVaVlNYd094YTk5SzlmUGcvNDZUeDFRdWtLVHVXUVllMkdt?=
- =?utf-8?B?dk96UVdBMkx0RXZORVZ1Szl0TFFFakpWRlh2MlNpaXhHaDZGUC85Mk9sYzY4?=
- =?utf-8?B?UHRjNG82Tlk0WG1wbnNEd2ErS3lCN1NUZDZiSDJIenBxbUNEbmxLRytMYktq?=
- =?utf-8?B?WTRqL2x3YzFyQ1N0Uk5mZkJlNStTQWVFeVg1WmJRZmp0TDZtMUxwa2dpWVRV?=
- =?utf-8?B?ZHdLcFoza09ldVhvRUQ2MGVTUUUyd2twNllSUWtRdnRhQUZSRmwxcjdyODF1?=
- =?utf-8?B?V2NVVCt6aHowSnBqZkg1cG56SzkyRFNKZ0pqQ05RMXpHQnY0ZW5rNjN3V1Qx?=
- =?utf-8?B?NG02K0N2U3ZSY3U4cGNBK3M0VFJrL1NMVkM3Z05WcTJVZndhSmZFazlYL1gy?=
- =?utf-8?B?RXRkQ3FlRlJMM2w1SnBYWVdacG1saDlkQ1pVbGZwME5jbFZJNWd3bmFZalZ3?=
- =?utf-8?B?QlM5aldNa2YwamdFNFFVMWVxMklUKzNJakxWdVo2a01hWURhbEdjZWNhQ3Bw?=
- =?utf-8?B?TU92Vy82cU1mSzFJRll3Q1lNTTh0Zjl0KytHbXlKL3I3dmJva0VqdXlRSE9v?=
- =?utf-8?B?N0JaWStBNTFJTXpHbk9FVTUvN2t4MlV0S2ZPd3BJZ0NXRlYyczZJUG9xb0xU?=
- =?utf-8?B?YmE5TUw2NXlja3ZjUkoybjVseS9lK3NWSXVHbGpTb3F2aEp5eHQwUVFWRHdS?=
- =?utf-8?B?eEs0b2ZFZ1Z2UzE3eGRKUUpOOWlrRVpBZUF4WXRwZ3dnMFQrSlVpQVNuQ1Ix?=
- =?utf-8?B?bndVZ1g4YzRnOHpjU3ROMmUrRmx5d2xwQUc5eFJtRHRmaVllV0NtbUdnRURQ?=
- =?utf-8?B?bFVsNW1ybjg1RDFKMXdaTkR4eVcxQm0vdUpCZ25zb1QrdzlOOVNWcC80aWds?=
- =?utf-8?B?UFhZY2pxZnBNZnBkNlZoeUpFRVJyK2pZT1VkUDNzUWpCRmZob0N0UzV3R2FG?=
- =?utf-8?B?b1NLdUFFQ042S01PV25rSldrSlUvT1VjVGlia0EyMjE5dldENUVFT29kaEc0?=
- =?utf-8?B?SmZ0SUNMeElETE9CVUd4K1YxSmQ0NFpDeXpESzVoMldWTkh5ak1oaENjTU0v?=
- =?utf-8?B?ZTk5djhLUDRNb01jemR2K3NWTTRPTk1QaXBTcjRUMWlTV0pqdHhVNXBjUFl6?=
- =?utf-8?B?TVpGT0p6Q0ZyVGZFWnJxeEhvMnJkU0xrV1d3cEQ2U2xmdzBES3JGQTFxekVX?=
- =?utf-8?B?NkpjTDJwT211aTk3UmtpUXRpdms5ZjdycCsyM2w2Rm8rc2ExYjJhL3RDNmpy?=
- =?utf-8?B?amtrQ1U1N3Z2RENJRERXRjBFQi9iS1NzUjNhZzZWK3RFUGw4cjM3SGN5dFZQ?=
- =?utf-8?B?ZnZEL1MvSDlxWldOQWd0QS9KK1YzWUpHVzhZSnhJUXJ3alZaYmJGalkyRmFK?=
- =?utf-8?Q?K2n0angc3NXoDi7P+9iHBQM9L?=
+	=?utf-8?B?enVmTUR4S1hmYUtwditRQWt2K3J5OXlCeGhxVmV4bkNXZWU5L1dhQUwyakRB?=
+ =?utf-8?B?Qjg0RjljWXZDNk9TS2JWbWRuTlY0Tmd1K3BwcFVqaWtuT2t2THd4N05BWmdl?=
+ =?utf-8?B?TTRrK3ZsYytMY2RCQTJacVBFUzRWeFB1Rlc5WHl1Zm9aMHVpOXo3YjJoNitV?=
+ =?utf-8?B?MmZSbllpNjA4NW5yZEgrOTkyWVV1V2V0MnFPdExCRVkrNHhGQmx5TzlleTVM?=
+ =?utf-8?B?VDk0OUFWMDBObTBIcWNVQ3NvZzBndVdsSE5CVStUYnRSeWpSSFl5OHEwVzhh?=
+ =?utf-8?B?a2oraXFiV1djMHgxdEM3NWJ4OWxiTnN4eEl1OUJyU0MrdE9nZmE0blBHUDE2?=
+ =?utf-8?B?cytaaGp4aklJVFhuNHFYQTQzOEtTVlNlSXBBaHpYanI0SEtNaS9ndTJYLzVR?=
+ =?utf-8?B?eVJFZjZtT0FCZVBlNWZoRTF6SHhzNWJESzVSWkNTOWlvZ1dSZmJHckVZeklJ?=
+ =?utf-8?B?TzNQd3RzSEY2YUQ0OFlkVmJxY0hhUTlma2ZXSzFEU0tTaXVwcW12TVRGN0Zv?=
+ =?utf-8?B?NW1iZStLL3JTV280MGh1V2czRmc1SFh4dld6VTB0OUhlbWNnT082MjdZR1Bv?=
+ =?utf-8?B?ZWlNbWc5NE5EU2lrUXJYTFdvWFFXWFRCdXdtMjBwQU5LRmNXUWI1RERxaG5u?=
+ =?utf-8?B?Z2tOeTk0VFdqOThKcWk5eEwvYWR3dEE0M0JBM2JDZW9XdlhKeUNrMWJtM0Jm?=
+ =?utf-8?B?WlJKRjdKOFZlYUtHb3dWU1FmVk15SnI0TmhUNEo2SWVTeWdPaGRqMFRBQTNh?=
+ =?utf-8?B?TGlFNjVhSGVhUko2YXROUEl3WFpLQmJZVnZiMFNXVTQ2QzNBVnpSa1l5MzJw?=
+ =?utf-8?B?VWdQalgvVFcydE5WZHc0ODl6eXE0eTJqL2czNER3R0tnSHQ5a1plWXpCUmNX?=
+ =?utf-8?B?akc0T2xiZjZ2dkphczVLVG0rZldnQUxNdGI1T2Rwcmp5N1h4aTdZQlBveUlT?=
+ =?utf-8?B?RVMvbGNjT3lXV3RtRjE2R09WdGVzT2txZks5MWpzdUN1ZUM3KzdHYUZIZXBK?=
+ =?utf-8?B?dE9ycTQ1blBLR013anFXSkNBWTdsbGd6WE9kblkxdXBQNWpRV2pSOHhnaFlC?=
+ =?utf-8?B?aVc2cEZGSGRvQU93TnBPeEZJbWpHWE1kanpLMmpSK1Z6OUluSWF5VmNQS01S?=
+ =?utf-8?B?UHU1bDVGSlg2a3F6dHpNaUYrcWRFT1FBbE1jZERyMnVLMHBwbUMxSXZhcTZy?=
+ =?utf-8?B?QVkwUjVuRWdJY2J5UjNmeDhoMWdJaTlLb0QrOVNFdVFaQTJENG9WY2ZCM0gz?=
+ =?utf-8?B?ejN5VjA3bEpEVFh0RWtIMkRuS1BQRkZhbHRwRExqRUtWQzNSNjN1TVo1U3hR?=
+ =?utf-8?B?d05KTmRueHRFNC9xTjZhWGJNbVVwVGcvWkdBMml5dmxZdi9jUFpuelJCNVlB?=
+ =?utf-8?B?S2lMd3IvWm1aQmtKSFUxVjBFU1lHT3ViWERya0tKT0pFVzQzQ2R6NVExKzVF?=
+ =?utf-8?B?bDhHdXlmV1c0MXZCSnNORldNc1lidTFlcFdta2E1MnJzTVMvWXF2N2xQNVVC?=
+ =?utf-8?B?R1FpWHkwMHRTR3AzRjBseUNFbysxdW9hS0pINlczblVJYlNzNjhJOWpQSWI3?=
+ =?utf-8?B?Y3NSZ2JFWTFmYS95R2FYOXBpelQxWlNxUlNEL2p3c2tRZDN3eHQzMmEwU3p5?=
+ =?utf-8?B?K3BWbXFUR0NZUTFVQW5LU0lVMW1GZ1hBMzFDTUVVaFMxTGkxdzZXajJqdWR1?=
+ =?utf-8?B?dDJNVFppekthTFJlSnF3VEU5K2ZweWIrT05rdTVDT1RseURZM1hSK0w5WERl?=
+ =?utf-8?B?ZFJ1bkprWTF5cTVtSHJlY2hlT3FTbjdOZjJpZE80OWdXaGF1dDN6U3B5QnBt?=
+ =?utf-8?B?Ti9ZSlRFQlYzKzUra1V2bFNSSTA2SS9ZOXJGQldKZ0JWak9Nb3NjaWNRQmtZ?=
+ =?utf-8?B?bWh2VGQ5VHc0eGxXMHJRb28yT1REaThYQTBDT0kvV0svZUluZHpjblNXYVZn?=
+ =?utf-8?B?VHVHT2U0MTlBQzNQRmRVVlNOeDVnOUQ2YXBwNFBlY1o1RXpkZ2lROTVtaU9H?=
+ =?utf-8?B?R3BVMGx3NXFBc2JVRG8vRTd6QStjOTJseGMvdWJLMGxYczFZaXkwOFQyT0ty?=
+ =?utf-8?B?eU45Y0VTNEZGaFpWZFF1WXdwT0pRbGZrN2ZyMTI3dFJvQ3RFQlNaWmFSWjRR?=
+ =?utf-8?Q?gPQSnv4EGS2OgleUhvR0GYgNV?=
 X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66480c75-284c-4ca5-5189-08dd0301b267
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15370f9e-63ef-41b4-5150-08dd03033133
 X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB5786.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2024 10:06:38.0999
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2024 10:17:20.3867
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iwXPwkSUxe7PQTjsdkP+jwNWs+E8nW7MMxQZz3Iu4FePoCYdoReAAjEHhxiTWQHFL4wLuMjClxIeHKxV2Cf7Ww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR03MB7892
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7JhAtY/UeiHZQyfDNb7iTJuQ/XopHX0F2z5qMEBaYolf8jIdXv+DpM+0hnRPj1m+6PSAVoC/vFYW6plOy1ZiNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB8587
 
 
-On 11/12/2024 4:36 PM, Jerome Brunet wrote:
+On 11/12/2024 5:01 PM, Jerome Brunet wrote:
 > [ EXTERNAL EMAIL ]
 >
-> On Fri 08 Nov 2024 at 19:49, Chuan Liu <chuan.liu@amlogic.com> wrote:
+> On Mon 11 Nov 2024 at 17:37, Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org> wrote:
 >
->> On 11/8/2024 5:59 PM, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On Fri 08 Nov 2024 at 17:23, Chuan Liu <chuan.liu@amlogic.com> wrote:
->>>
->>>>>>> -       if (core->flags & CLK_IGNORE_UNUSED)
->>>>>>> +       /*
->>>>>>> +        * If the parent is disabled but the gate is open, we should sanitize
->>>>>>> +        * the situation. This will avoid an unexpected enable of the clock as
->>>>>>> +        * soon as the parent is enabled, without control of CCF.
->>>>>>> +        *
->>>>>>> +        * Doing so is not possible with a CLK_OPS_PARENT_ENABLE clock without
->>>>>>> +        * forcefully enabling a whole part of the subtree.  Just let the
->>>>>>> +        * situation resolve it self on the first enable of the clock
->>>>>>> +        */
->>>>>>> +       if (!parent_enabled && (core->flags & CLK_OPS_PARENT_ENABLE))
->>>> At first, I couldn't grasp the logic behind the 'return' here. Now it's
->>>> clear. This approach is equivalent to completely giving up on
->>>> handling clocks with CLK_OPS_PARENT_ENABLE feature in
->>>> clk_disable_unused_subtree().
-
-Referring to the situation of 'clk_c' below, combined with your
-previous explanation:
-
-* Knowing the parent status allows to safely disable clocks with
-   CLK_OPS_PARENT_ENABLE when the parent is enabled. Otherwise it means
-   that, while the clock is not gated it is effectively disabled. Turning on
-   the parents to sanitize the sitation would bring back our initial
-   problem, so just let it sanitize itself when the clock gets used.
-
-Do you mean 'clk_c' cases should be sanitized before clk_disable_unused()
-(such as during driver probe(), etc.)? Dropped in clk_disable_unused_subtree()?
-This is actually my biggest confusion.🙁
-
->>>>
->>> No. It's handled correctly as long as the tree is in coherent state.
->>>
->>> What is not done anymore is fixing up an inconsistent tree, by this I
->>> mean: A clock with CLK_OPS_PARENT_ENABLE, which report enabled from its
->>> own registers but has its parent disabled.
->>>
->>> In that particular case, clk_disable_unused_subtree() won't be turning on
->>> everything to properly disable that one clock. That is the root cause of
->>> the problem you reported initially. The clock is disabled anyway.
->>>
->>> Every other case are properly handled (at least I think).
->> name              en_sts            flags
->> clk_a                1          CLK_IGNORE_UNUSED
->>      clk_b            0                0
->>          clk_c        1         CLK_OPS_PARENT_ENABLE
+>> From: Chuan Liu <chuan.liu@amlogic.com>
 >>
->> Based on the above case:
->> 1. When 'clk_c' is configured with CLK_OPS_PARENT_ENABLE, disabling
->> 'clk_c' requires enabling 'clk_b' first (disabling 'clk_c' before
->> disabling 'clk_b'). How can to ensure that during the period of
->> disabling 'clk_c', 'clk_b' remains enabled?
-> That's perfect example of incoherent state.
-> How can 'clk_c' be enabled if its parent is disable. That makes no
-> sense, so there is no point enabling a whole subtree for this IMO.
+>> When setting the rate of a clock using clk_regmap_divider_ro_ops, the
+>> rate of its children may be tampered with.
+>>
+>> Fixes: 84af914404db ("clk: meson: a1: add Amlogic A1 Peripherals clock controller driver")
+>> Fixes: 87173557d2f6 ("clk: meson: clk-pll: remove od parameters")
+>> Fixes: 085a4ea93d54 ("clk: meson: g12a: add peripheral clock controller")
+>> Fixes: 64aa7008e957 ("clk: meson: add a driver for the Meson8/8b/8m2 DDR clock controller")
+>> Fixes: 57b55c76aaf1 ("clk: meson: S4: add support for Amlogic S4 SoC peripheral clock controller")
+>> Fixes: e787c9c55eda ("clk: meson: S4: add support for Amlogic S4 SoC PLL clock driver")
+> Think about stable trying to pick up this ...
 >
->> 2. 'clk_c' is not configured with CLK_IGNORE_UNUSED, it should be
->> disabled later. However, here it goes to a 'goto' statement and then
->> return 'false', ultimately resulting in 'clk_c' not being disabled?
-> We've discussed that 2 times already. This discussion is going in
-> circles now.
+>> Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+>> ---
+>> Background: During the execution of clk_set_rate(), the function
+>> clk_core_round_rate_nolock() is called to calculate the matching rate
+>> and save it to 'core->new_rate'. At the same time, it recalculates and
+>> updates its 'child->newrate'. Finally, clk_change_rate() is called to
+>> set all 'new_rates'.
+>>
+>> In clk_regmap_divider_ro_ops, there is an implementation of
+>> 'determine_rate'. If a clock (name as 'ro_divider') that references
+>> clk_regmap_divider_ro_ops is not configured with CLK_DIVIDER_READ_ONLY,
+>> it will result in the calculation of an incorrect core->new_rate and
+>> potentially tamper with child->newrate, ultimately leading to the
+>> corruption of the rate for 'ro_divider's' children.
+> A slitghtly more simple way to put it, is that ro_ops have the regular
+> determine_rate function, so it can actually alter the rate.
 >
->>>>>>>                     goto unlock_out;
->>>>>>>
->>>>>>>             /*
->>>>>>> @@ -1516,8 +1545,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
->>>>>>>
->>>>>>>      unlock_out:
->>>>>>>             clk_enable_unlock(flags);
->>>>>>> -       if (core->flags & CLK_OPS_PARENT_ENABLE)
->>>>>>> -               clk_core_disable_unprepare(core->parent);
->>>>>>> +       return (core->flags & CLK_IGNORE_UNUSED) && enabled;
->>>>>>>      }
->>>>>>>
->>>>>>>      static bool clk_ignore_unused __initdata;
->>>>>>> @@ -1550,16 +1578,16 @@ static int __init clk_disable_unused(void)
->>>>>>>             clk_prepare_lock();
->>>>>>>
->>>>>>>             hlist_for_each_entry(core, &clk_root_list, child_node)
->>>>>>> -               clk_disable_unused_subtree(core);
->>>>>>> +               clk_disable_unused_subtree(core, true);
->>>>>>>
->>>>>>>             hlist_for_each_entry(core, &clk_orphan_list, child_node)
->>>>>>> -               clk_disable_unused_subtree(core);
->>>>>>> +               clk_disable_unused_subtree(core, true);
->>>>>>>
->>>>>>>             hlist_for_each_entry(core, &clk_root_list, child_node)
->>>>>>> -               clk_unprepare_unused_subtree(core);
->>>>>>> +               clk_unprepare_unused_subtree(core, true);
->>>>>>>
->>>>>>>             hlist_for_each_entry(core, &clk_orphan_list, child_node)
->>>>>>> -               clk_unprepare_unused_subtree(core);
->>>>>>> +               clk_unprepare_unused_subtree(core, true);
->>>>>>>
->>>>>>>             clk_prepare_unlock();
->>>>>>>
->>>>>>> --
->>>>>>> 2.45.2
->>>>>>>
->>>>> --
->>>>> Jerome
->>> --
->>> Jerome
+> That should be in the commit description, not where it will be dropped.
+>
+> Requiring the flag in addition to ro_ops in redundant.
+> Plus, it is not the platform that should be fixed but the divider
+> driver.
+>
+> Just put the content of the CLK_DIVIDER_READ_ONLY if clause into a
+> function, clk_regmap_div_ro_determine_rate(), and use it
+> - directly for ro_ops
+> - under if clause for regular ops.
+
+The approach of adding clk_regmap_div_ro_determine_rate() will be
+inconsistent with the style in clk-divider.c in CCF, and
+CLK_DIVIDER_READ_ONLY will also become meaningless for our driver.
+Do we need to maintain the style of clk-divider.c in CCF?
+
+>
+>> ---
+>>   drivers/clk/meson/a1-peripherals.c |  2 ++
+>>   drivers/clk/meson/axg.c            |  5 +++--
+>>   drivers/clk/meson/g12a.c           | 23 ++++++++++++++---------
+>>   drivers/clk/meson/gxbb.c           | 18 ++++++++++--------
+>>   drivers/clk/meson/meson8-ddr.c     |  2 +-
+>>   drivers/clk/meson/meson8b.c        |  4 +++-
+>>   drivers/clk/meson/s4-peripherals.c |  2 ++
+>>   drivers/clk/meson/s4-pll.c         |  2 +-
+>>   8 files changed, 36 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
+>> index 7aa6abb2eb1f..eedf7c2bf970 100644
+>> --- a/drivers/clk/meson/a1-peripherals.c
+>> +++ b/drivers/clk/meson/a1-peripherals.c
+>> @@ -266,6 +266,7 @@ static struct clk_regmap sys_b_div = {
+>>                .offset = SYS_CLK_CTRL0,
+>>                .shift = 16,
+>>                .width = 10,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "sys_b_div",
+>> @@ -314,6 +315,7 @@ static struct clk_regmap sys_a_div = {
+>>                .offset = SYS_CLK_CTRL0,
+>>                .shift = 0,
+>>                .width = 10,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "sys_a_div",
+>> diff --git a/drivers/clk/meson/axg.c b/drivers/clk/meson/axg.c
+>> index 1b08daf579b2..eb86c4d10046 100644
+>> --- a/drivers/clk/meson/axg.c
+>> +++ b/drivers/clk/meson/axg.c
+>> @@ -71,7 +71,7 @@ static struct clk_regmap axg_fixed_pll = {
+>>                .offset = HHI_MPLL_CNTL,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "fixed_pll",
+>> @@ -130,7 +130,7 @@ static struct clk_regmap axg_sys_pll = {
+>>                .offset = HHI_SYS_PLL_CNTL,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "sys_pll",
+>> @@ -471,6 +471,7 @@ static struct clk_regmap axg_mpll_prediv = {
+>>                .offset = HHI_MPLL_CNTL5,
+>>                .shift = 12,
+>>                .width = 1,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "mpll_prediv",
+>> diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+>> index d3539fe9f7af..c7c9fdfd021f 100644
+>> --- a/drivers/clk/meson/g12a.c
+>> +++ b/drivers/clk/meson/g12a.c
+>> @@ -76,7 +76,7 @@ static struct clk_regmap g12a_fixed_pll = {
+>>                .offset = HHI_FIX_PLL_CNTL0,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "fixed_pll",
+>> @@ -443,6 +443,7 @@ static struct clk_regmap g12a_cpu_clk_mux1_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL0,
+>>                .shift = 20,
+>>                .width = 6,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "cpu_clk_dyn1_div",
+>> @@ -627,6 +628,7 @@ static struct clk_regmap g12b_cpub_clk_mux1_div = {
+>>                .offset = HHI_SYS_CPUB_CLK_CNTL,
+>>                .shift = 20,
+>>                .width = 6,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "cpub_clk_dyn1_div",
+>> @@ -746,6 +748,7 @@ static struct clk_regmap sm1_dsu_clk_mux0_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL5,
+>>                .shift = 4,
+>>                .width = 6,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "dsu_clk_dyn0_div",
+>> @@ -781,6 +784,7 @@ static struct clk_regmap sm1_dsu_clk_mux1_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL5,
+>>                .shift = 20,
+>>                .width = 6,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "dsu_clk_dyn1_div",
+>> @@ -1198,7 +1202,7 @@ static struct clk_regmap g12a_cpu_clk_apb_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL1,
+>>                .shift = 3,
+>>                .width = 3,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "cpu_clk_apb_div",
+>> @@ -1232,7 +1236,7 @@ static struct clk_regmap g12a_cpu_clk_atb_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL1,
+>>                .shift = 6,
+>>                .width = 3,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "cpu_clk_atb_div",
+>> @@ -1266,7 +1270,7 @@ static struct clk_regmap g12a_cpu_clk_axi_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL1,
+>>                .shift = 9,
+>>                .width = 3,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "cpu_clk_axi_div",
+>> @@ -1300,7 +1304,7 @@ static struct clk_regmap g12a_cpu_clk_trace_div = {
+>>                .offset = HHI_SYS_CPU_CLK_CNTL1,
+>>                .shift = 20,
+>>                .width = 3,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "cpu_clk_trace_div",
+>> @@ -1736,7 +1740,7 @@ static struct clk_regmap sm1_gp1_pll = {
+>>                .shift = 16,
+>>                .width = 3,
+>>                .flags = (CLK_DIVIDER_POWER_OF_TWO |
+>> -                       CLK_DIVIDER_ROUND_CLOSEST),
+>> +                       CLK_DIVIDER_ROUND_CLOSEST | CLK_DIVIDER_READ_ONLY),
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "gp1_pll",
+>> @@ -1999,7 +2003,7 @@ static struct clk_regmap g12a_hdmi_pll_od = {
+>>                .offset = HHI_HDMI_PLL_CNTL0,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll_od",
+>> @@ -2017,7 +2021,7 @@ static struct clk_regmap g12a_hdmi_pll_od2 = {
+>>                .offset = HHI_HDMI_PLL_CNTL0,
+>>                .shift = 18,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll_od2",
+>> @@ -2035,7 +2039,7 @@ static struct clk_regmap g12a_hdmi_pll = {
+>>                .offset = HHI_HDMI_PLL_CNTL0,
+>>                .shift = 20,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll",
+>> @@ -4048,6 +4052,7 @@ static struct clk_regmap g12a_ts_div = {
+>>                .offset = HHI_TS_CLK_CNTL,
+>>                .shift = 0,
+>>                .width = 8,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "ts_div",
+>> diff --git a/drivers/clk/meson/gxbb.c b/drivers/clk/meson/gxbb.c
+>> index 262c318edbd5..e2b419100e0c 100644
+>> --- a/drivers/clk/meson/gxbb.c
+>> +++ b/drivers/clk/meson/gxbb.c
+>> @@ -131,7 +131,7 @@ static struct clk_regmap gxbb_fixed_pll = {
+>>                .offset = HHI_MPLL_CNTL,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "fixed_pll",
+>> @@ -267,7 +267,7 @@ static struct clk_regmap gxbb_hdmi_pll_od = {
+>>                .offset = HHI_HDMI_PLL_CNTL2,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll_od",
+>> @@ -285,7 +285,7 @@ static struct clk_regmap gxbb_hdmi_pll_od2 = {
+>>                .offset = HHI_HDMI_PLL_CNTL2,
+>>                .shift = 22,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll_od2",
+>> @@ -303,7 +303,7 @@ static struct clk_regmap gxbb_hdmi_pll = {
+>>                .offset = HHI_HDMI_PLL_CNTL2,
+>>                .shift = 18,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll",
+>> @@ -321,7 +321,7 @@ static struct clk_regmap gxl_hdmi_pll_od = {
+>>                .offset = HHI_HDMI_PLL_CNTL + 8,
+>>                .shift = 21,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll_od",
+>> @@ -339,7 +339,7 @@ static struct clk_regmap gxl_hdmi_pll_od2 = {
+>>                .offset = HHI_HDMI_PLL_CNTL + 8,
+>>                .shift = 23,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll_od2",
+>> @@ -357,7 +357,7 @@ static struct clk_regmap gxl_hdmi_pll = {
+>>                .offset = HHI_HDMI_PLL_CNTL + 8,
+>>                .shift = 19,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "hdmi_pll",
+>> @@ -413,7 +413,7 @@ static struct clk_regmap gxbb_sys_pll = {
+>>                .offset = HHI_SYS_PLL_CNTL,
+>>                .shift = 10,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "sys_pll",
+>> @@ -703,6 +703,7 @@ static struct clk_regmap gxbb_mpll_prediv = {
+>>                .offset = HHI_MPLL_CNTL5,
+>>                .shift = 12,
+>>                .width = 1,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "mpll_prediv",
+>> @@ -911,6 +912,7 @@ static struct clk_regmap gxbb_mpeg_clk_div = {
+>>                .offset = HHI_MPEG_CLK_CNTL,
+>>                .shift = 0,
+>>                .width = 7,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "mpeg_clk_div",
+>> diff --git a/drivers/clk/meson/meson8-ddr.c b/drivers/clk/meson/meson8-ddr.c
+>> index 4b73ea244b63..950f323072fb 100644
+>> --- a/drivers/clk/meson/meson8-ddr.c
+>> +++ b/drivers/clk/meson/meson8-ddr.c
+>> @@ -65,7 +65,7 @@ static struct clk_regmap meson8_ddr_pll = {
+>>                .offset = AM_DDR_PLL_CNTL,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "ddr_pll",
+>> diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
+>> index e4b474c5f86c..4dba11c0ab7e 100644
+>> --- a/drivers/clk/meson/meson8b.c
+>> +++ b/drivers/clk/meson/meson8b.c
+>> @@ -104,7 +104,7 @@ static struct clk_regmap meson8b_fixed_pll = {
+>>                .offset = HHI_MPLL_CNTL,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "fixed_pll",
+>> @@ -457,6 +457,7 @@ static struct clk_regmap meson8b_mpll_prediv = {
+>>                .offset = HHI_MPLL_CNTL5,
+>>                .shift = 12,
+>>                .width = 1,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "mpll_prediv",
+>> @@ -635,6 +636,7 @@ static struct clk_regmap meson8b_mpeg_clk_div = {
+>>                .offset = HHI_MPEG_CLK_CNTL,
+>>                .shift = 0,
+>>                .width = 7,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "mpeg_clk_div",
+>> diff --git a/drivers/clk/meson/s4-peripherals.c b/drivers/clk/meson/s4-peripherals.c
+>> index c930cf0614a0..470431355e25 100644
+>> --- a/drivers/clk/meson/s4-peripherals.c
+>> +++ b/drivers/clk/meson/s4-peripherals.c
+>> @@ -175,6 +175,7 @@ static struct clk_regmap s4_sysclk_b_div = {
+>>                .offset = CLKCTRL_SYS_CLK_CTRL0,
+>>                .shift = 16,
+>>                .width = 10,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "sysclk_b_div",
+>> @@ -221,6 +222,7 @@ static struct clk_regmap s4_sysclk_a_div = {
+>>                .offset = CLKCTRL_SYS_CLK_CTRL0,
+>>                .shift = 0,
+>>                .width = 10,
+>> +             .flags = CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "sysclk_a_div",
+>> diff --git a/drivers/clk/meson/s4-pll.c b/drivers/clk/meson/s4-pll.c
+>> index d8e621e79428..5dc051afc06a 100644
+>> --- a/drivers/clk/meson/s4-pll.c
+>> +++ b/drivers/clk/meson/s4-pll.c
+>> @@ -72,7 +72,7 @@ static struct clk_regmap s4_fixed_pll = {
+>>                .offset = ANACTRL_FIXPLL_CTRL0,
+>>                .shift = 16,
+>>                .width = 2,
+>> -             .flags = CLK_DIVIDER_POWER_OF_TWO,
+>> +             .flags = CLK_DIVIDER_POWER_OF_TWO | CLK_DIVIDER_READ_ONLY,
+>>        },
+>>        .hw.init = &(struct clk_init_data){
+>>                .name = "fixed_pll",
+>>
+>> ---
+>> base-commit: 664988eb47dd2d6ae1d9e4188ec91832562f8f26
+>> change-id: 20241111-fix_childclk_of_roclk_has_been_tampered_with-61dbcc623746
+>>
+>> Best regards,
 > --
 > Jerome
 
