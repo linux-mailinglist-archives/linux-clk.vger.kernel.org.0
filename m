@@ -1,275 +1,206 @@
-Return-Path: <linux-clk+bounces-14609-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14612-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A7AB9C65BC
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2024 01:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98CB69C6614
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2024 01:34:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44C9CB3A807
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2024 23:05:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB80BB2626C
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2024 00:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22EF421C17C;
-	Tue, 12 Nov 2024 23:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C596FC5;
+	Wed, 13 Nov 2024 00:34:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="MRfpB8Xd"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="WOFdqqwS"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19010007.outbound.protection.outlook.com [52.103.68.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91C8219C8A;
-	Tue, 12 Nov 2024 23:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731452694; cv=none; b=tBqwd18x9gaTL2st1PC4VE9KELzqsILyVVb4INoObkDPzUyvnQOasgTJcvQv28cTYEcmZ3WwDViJQIbtXRyEsVjnuLZGcPdj87FZsKJxo6hQH1cmf4ZAJAbKjy/ilJ9Hq2WnUPeThcvygutD+a6hF6w4GnoZUuZj6mRfgPf2v0Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731452694; c=relaxed/simple;
-	bh=YR5F62nzTkm61DF6L9OZv0/1q2kDXISugNqaQYKb2YQ=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OQtQ9v+gk5+5MWTO6Lw0w0xF4zPf5xH81nw/aUVLayuuE5AQTbhPExvmfkdlZppnBsZf3lqZnkhXOUmgE6a/MNFuY9TFDGnx2WVAQ/OXi5tAE+1xfw6vG4SwgqLnX5Fqkm0uVq4zU4M2F2F49x8wSixr+CYAGahnnYCHvYHqlOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=sberdevices.ru; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=MRfpB8Xd; arc=none smtp.client-ip=45.89.224.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sberdevices.ru
-Received: from p-infra-ksmg-sc-msk02.sberdevices.ru (localhost [127.0.0.1])
-	by mx1.sberdevices.ru (Postfix) with ESMTP id 04BCD12000C;
-	Wed, 13 Nov 2024 02:04:50 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 04BCD12000C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
-	s=mail; t=1731452690;
-	bh=kPV/BnBSZwkzP1CAXcGTb/b489Qh5Q8Y01cLz+m8DDY=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
-	b=MRfpB8XdXJK8bRXK4NnkJk2RYcKoM9dPPJBoov+fpnyY6rc+EFcqgCctpjHo68Iar
-	 RbMH6LPaEZP9FDCMwzfTY2/ga9uYRM1tlVmN+9MwfT64Kgfy1/BcAa6E7jdcmwGeBX
-	 PuH/+dtT/xxTYlzuYggnhAx2DR/HVpMq7i2gsFwReV8acpWjQ8SgBNXl7qGbOzMWqk
-	 OVKL9PmlK2esYxGIiuM1Z4g4LOPp/kDxtQgzLP+wm74P1Vgubil3xuWt48TrBwVQis
-	 QxLW8m360fA87APCWW17icXme/suwXcdKHVrFSZw65hQ3qGxgKeNmF4oQ8BO5fzX5N
-	 slmJwuhM2+xSw==
-Received: from smtp.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by mx1.sberdevices.ru (Postfix) with ESMTPS;
-	Wed, 13 Nov 2024 02:04:49 +0300 (MSK)
-From: Jan Dakinevich <jan.dakinevich@salutedevices.com>
-To: Jan Dakinevich <jan.dakinevich@salutedevices.com>, Conor Dooley
-	<conor+dt@kernel.org>, <devicetree@vger.kernel.org>, Jerome Brunet
-	<jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, <linux-amlogic@lists.infradead.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Martin Blumenstingl
-	<martin.blumenstingl@googlemail.com>, Michael Turquette
-	<mturquette@baylibre.com>, Neil Armstrong <neil.armstrong@linaro.org>, "Rob
- Herring" <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH v5 2/3] dt-bindings: clock: axg-audio: document A1 SoC audio clock controller driver
-Date: Wed, 13 Nov 2024 02:04:42 +0300
-Message-ID: <20241112230443.1406460-3-jan.dakinevich@salutedevices.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241112230443.1406460-1-jan.dakinevich@salutedevices.com>
-References: <20241112230443.1406460-1-jan.dakinevich@salutedevices.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3364430;
+	Wed, 13 Nov 2024 00:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.68.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731458046; cv=fail; b=thLkOSMDskNutlAflMvssnvGLwTaDMY38p09H9Ja6z4CM75xlC5IyoGok8efYcyPKPVp1yufs6b2nCNMnwAdmDA+WgoMiinasOW9HYseuqGztSIpxBJhoWVt2eVla6P0tX9SfLKiTtVjB2GKVab2MMSkyZpvARi9CMU8Ei8Qe6k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731458046; c=relaxed/simple;
+	bh=dMP9gigajsqZ8cQa8SkOJghLyQmiv8KGWanT+puKaw0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=VWfwrmg/VpeahI/dan7Vkf2Pn4dPvqzSiQ1X/IG26EWYe4htnWzDFQYEeemZPSTw5eexZAYun9Dub/YDISBqMyTNnWHvFkD43+t0Z3aEOtZqSDmFoN15AHlxCr491h3AycRmhl+nPDtL6AFDAWjcSC/jhjZAj3FP4nDFcHKf9ow=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=WOFdqqwS; arc=fail smtp.client-ip=52.103.68.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pHoNGkpNUukZ4vvd+VoNsSrhqAGAX1CseiTRbJdL0m24cke1eLoHZXLzMbrvpiGcwuy4+qTO8VmQu2QfWaOSz5bVJPlh2XDUlu6qfUnOvHN/Y3x/lZBVupV4LOtNbFef+RRELTxMuF4OTrac+TSo6QT2O+Wt3a5MTmmoXNKVR25I1idXRjM6v4HmB+rEZjtMPVbjloyrUagO6oqd7Ac/n2L1RQHUP4M51BunGlLlc6CRdTKexDEhMeo/iTSgT9Ay/UE0T0RHj6OHzLThxpKNiXZ8vZuKB6Pv6Al0RCNzYmxUQXPXfOCdXAnitVsQWJg3wqdAs2kB/gISaYa2h4WozA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t7S4gF+PHiiTv9XIyVOfGCba6QOianYlIQwqPJyjjcc=;
+ b=OyxK0VGVyeYGlFWmsTfWFZ87Doj7FcpDcXfB2yRYXhiTESYJspQc5ADcp2Jknp7Irf5dt4oHY56EbRnNEJukNLg9Ct4u0FOWA6KitWvVratBanykMsoYCkcq7JRqeSd4it8cKcQqCK+MoIPYm9mVrGKgu8aI0B3cLriSWOMLg4BYZEhhfAkdL/8mxW6anNWpkWZ6S2tanb2ec7L+40e29PWUeH5Vy6zOkNkjY4WBKKXKi4PekmafsysAxrud95KqCaO7RZjJUKjYFBqyuDJC364Exo/FBlX/u90UCMpyCANJQRuNMXT8JFkCY4KZzmhugYgyf0Dvy7cYKpvyqLop1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t7S4gF+PHiiTv9XIyVOfGCba6QOianYlIQwqPJyjjcc=;
+ b=WOFdqqwSRxetIPvegJH0VYafzpHV6WBq/W7+C9Sw9fmhbgjT2DAYYwfRxnPWv7OQlOe1KRUddAv8UtoXGd2/IcVNfL0VBJ3y/ph8ZURhogyF+IZQxHQM8QtVEh4L/9U/QMv51dxKNI+O+/nx/VGOUhMIAtFjHHJx82O3P9yD6GQxiHtB0t6VmZ0YqTrIa0uQCPrxekwYbHDZ9nQ8W/08OjTY23kzz2G4iMNBdYFbc0lvLqLA9/kFi8NbBCol57JEmbTXS07wApZfNmw9gG/V06IPtIefOtHnwkihfZfUnQDDB10z+0Zeg2Mv05vwGMKPT6Y0ofpgKufUkKvsQC2+4w==
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
+ by PN0P287MB1201.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:190::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.29; Wed, 13 Nov
+ 2024 00:33:56 +0000
+Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ ([fe80::a94:ad0a:9071:806c%3]) with mapi id 15.20.8137.027; Wed, 13 Nov 2024
+ 00:33:56 +0000
+Message-ID:
+ <MA0P287MB2822EBB6FE58EB4C3BFB7BC7FE5A2@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+Date: Wed, 13 Nov 2024 08:33:54 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] clk:sophgo:clk-cv18xx-pll
+To: Ragavendra <ragavendra.bn@gmail.com>, mturquette@baylibre.com,
+ sboyd@kernel.org, inochiama@outlook.com
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241112225832.3518658-1-ragavendra.bn@gmail.com>
+From: Chen Wang <unicorn_wang@outlook.com>
+In-Reply-To: <20241112225832.3518658-1-ragavendra.bn@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI1PR02CA0008.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::14) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:138::5)
+X-Microsoft-Original-Message-ID:
+ <4b29601c-38f0-4aa1-9011-2393f174e452@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: p-i-exch-a-m2.sberdevices.ru (172.24.196.120) To
- p-i-exch-a-m1.sberdevices.ru (172.24.196.116)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 189131 [Nov 12 2024]
-X-KSMG-AntiSpam-Version: 6.1.1.7
-X-KSMG-AntiSpam-Envelope-From: YVDakinevich@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 41 0.3.41 623e98d5198769c015c72f45fabbb9f77bdb702b, {Tracking_smtp_not_equal_from}, salutedevices.com:7.1.1;127.0.0.199:7.1.2;smtp.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:7.1.1,5.0.1, {Tracking_smtp_domain_mismatch}, {Tracking_smtp_domain_2level_mismatch}, {Tracking_sender_alignment_int}, {Tracking_white_helo}, FromAlignment: n
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/11/12 21:10:00 #26864167
-X-KSMG-AntiVirus-Status: Clean, skipped
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN0P287MB1201:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3273cd8-dc4f-4b76-489f-08dd037adb75
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|15080799006|7092599003|8060799006|5072599009|19110799003|461199028|6090799003|1602099012|10035399004|440099028|3412199025|4302099013;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SVFUWjRLR3Y2TC83OURHczQ0TEhEaWUwTDZ5UWNGUUNZUmRWWGJnM3Y1RkNp?=
+ =?utf-8?B?UGl6NDQvWXA3MXZZNFZWNjhxSXhyN2Z5cDNWaExGZzA2Sk5VWW41L1Y2Nmlu?=
+ =?utf-8?B?VmpzV3NXZHprdEtQV1RhSStsUkVpNnpKQlVPdE9haklPcmRrZVBnYmxmRlV0?=
+ =?utf-8?B?Wkc4dW9paFAveWdMYUlocFZ4Y1hSUUc4alNQdkNLbzJCSkFFNVhZbHJPdnFW?=
+ =?utf-8?B?QlNqQ3J2eW1rNWRVRUZxUmI5aWk4dE9JeFpVN2RoNjRUdzZIWnhhclpXdUlo?=
+ =?utf-8?B?TCs0ZWFsZTZDb2hjazNERlFkYUcwa2pLenE0QzZ6NTIzdmQ5cThDZk5lbTdN?=
+ =?utf-8?B?RUVtV3NWbFh6OXU3dWlZWHlYeDd5ODBRTCtvVzY3SjVUa0xUVjRBUWZOZVJX?=
+ =?utf-8?B?eTgrNU9DTHNwR2NtOG9vUVRkaVN0NWRLVElMVVhtbk0wZlNsRzVPV0M0VFRY?=
+ =?utf-8?B?blozaENGd0ZPZFcvRlBKQi8rZjdOZEtpL3I1VnUzbzU5aFVQUUhYcVM0MkJ4?=
+ =?utf-8?B?cTAvMkhCUWdPR29mMEF1VXpvTDN2ekRyOXlKeVc1WXpMbnE0WHd4VzEwMGZp?=
+ =?utf-8?B?aEN5d09TWnZ1VGdQVDZseUpRVGdSZVRwSVpBSWJaRkxsWUFjQ1V5OGV2NHRs?=
+ =?utf-8?B?MUxVVUtRQmxCeEpzTnF1SUF0R3VwaVB4SjhVQnVvU1p0SEhyWHE5RmFnQWlJ?=
+ =?utf-8?B?Q0twQ1RRR091aDlGcUIyb293NlExUVlGaHNPSlZNUkRROVB5YWNnUHphdkJl?=
+ =?utf-8?B?Zkp5VWpsOWZNanZESllUb3VlQVBFMmVBajduTDNaVXdKMDFvTkZQSWcyUUda?=
+ =?utf-8?B?OVR3SXRqVkhKVFlhaVZNUnNsUzdOTDZQZ1BuaVB6NllDZzQwSlgrRlZEaVhO?=
+ =?utf-8?B?UWJyRndLK21TL3RYZWtJUnNmYW12K21TL2VrOHFZTlJEdzM3T2VkZm43d1hN?=
+ =?utf-8?B?N1kzYWpRQ2czcWthMDRkN2djWVUxcGIrQVNnR2gyNzRZaDl1RmFYWHRKTTNS?=
+ =?utf-8?B?K3VzcTJQaHVmRWtrVWszNFZ0WkNVMzFVVS9HQ2srZlRkcXFrVndQeWx2aHhD?=
+ =?utf-8?B?WGNEREFCczZJTFA0MjBoTUxLelZKZ29mcGxTaWZ2ZWEyTDNNQkF6cWwzOXk0?=
+ =?utf-8?B?RUdWb1VXOTk1MzFoRUxnRzBjdUtSRmlacUk3TzlZNHRFQ3h6TTJMWHpmMUJp?=
+ =?utf-8?B?MXJvWDVLZC9sNHptUW54amZhcGxDSEEzSXBqYlhEeXpGZytldmwzdzF3YXdW?=
+ =?utf-8?B?cFFzYUM4dHNBZWFoOWZWdldSMERQSFo2bDRHZXM0d010K1Q5NFVhMHpWaXRT?=
+ =?utf-8?B?MWYzbVBLYzVvcDk2ZkxyVWJFY1U5bUtJVkE1cUIrK2R2cnczK016VzdzT1c5?=
+ =?utf-8?B?cDJKUjhkZ0xTSWxGUWtRaFdSLy9rV2lpcXlpdUtzUVJubnZxOU9wVkVkN2FX?=
+ =?utf-8?B?R2hKTkczN05jcXp2b2xvRDl6blU3aitLNXpQRk8xTjNnV0NFR3haRU5ML3dP?=
+ =?utf-8?B?WEptWFFYd2ZibGpGNWxXSUNDQlhXcmRpaFJlTGJFL0NxaXhScDZqeldKelQy?=
+ =?utf-8?B?RGVHWVVOUk9TeWNsNWJ3ekpzQ1E3UUdtMmQvWm5kMzNjRUIxUVRFVlZLMUpZ?=
+ =?utf-8?Q?QaosOOa/KeNxUhQGVgP+BDGdI++/pLtyASceLqBG61aE=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RW1zaHkxajFGZDdwQm5DK1NJVHNLMDhpQXNYcW1RdHB0MUE5QW9MQ05SemRw?=
+ =?utf-8?B?dXhXOGYwczVpZDdyNGNiT0xCSzBMNithdGVYRWt0a2I3R0RqanlHTFBDMTJK?=
+ =?utf-8?B?VkV0a3hxNTMvS2p0Tm1LZDJNd3grM0VnNGtmL0djenFISFpYV2VUV1g0Rk54?=
+ =?utf-8?B?dkhjekJSTWdBRHNNUjhPMUFUeFFIbFFGdHhUWUZuV28zWFVycVRpcjJOMVJM?=
+ =?utf-8?B?MFF4QTlpQW1SOUNYOUdrcUJwWWdWbjFRMk5UN21TY3g2ZTdCRXAyNzBWV215?=
+ =?utf-8?B?VVVyb29EVk82cEdNTTJydUtyRHQ5L0pZSzZtWk1UbUt4OEZpN24yMUpVT0c2?=
+ =?utf-8?B?ZHBuRFFRTm1ZNXUyc05WRDNSY1pRUmV0cjNYUTdSSlM3ZGF3QWdDdVFPcEp5?=
+ =?utf-8?B?cHRLWGVNbTc4VDg5MjBubFRDNHJTenVGTUhvUWN0Q1NuWE9qL0gwRStjM2Vn?=
+ =?utf-8?B?cjBicWw5T2pNMjFCUGc0aVkybUxzRXEybktmQThYRklDTjB0cll5dDJQbDFh?=
+ =?utf-8?B?NU5tRmVsclBmcmxkaHg5bnRXeENGdzdvUkVhMllibG5xaVBMUUxMOFRQOHox?=
+ =?utf-8?B?MUVObVRIbjZsMHNhYXhCdzVOdTExbExobFhUdmJEcHRZb2o2S2ZBT0lEdU9q?=
+ =?utf-8?B?ejlXQytzaHpCMU1uSzBVSmJvc1ErMVJWRzNRdUlKS25lOFR5dHVuZHl2em1q?=
+ =?utf-8?B?VEtEdzdISEV5b3NKaXdWT0djS3gyU0V5amdLME40YkJQMTd4WmdPMkRJbWFp?=
+ =?utf-8?B?QkFjSEtUc2tYZkxNNTczVHVmNzhUd1lMR0kvOWNQSUhnVnEzQ3BtYmg0cWdw?=
+ =?utf-8?B?NDhSMTQrcVhJT2JwODRWMkE3Mk9HaEkybVg4cmgyVVQ0OGlHSitXNzNIdHdv?=
+ =?utf-8?B?WXBmY0c5bXNPYjBaQm5BZnpaNkZtV2lGUnFjZ252ejZvTCszVzAzeWRDSDND?=
+ =?utf-8?B?akZLVU81eWc5NHdTbEh1MHE1b3FWMU41Sm5hVXpLVmFrcFFUMGVxWE1IMm5V?=
+ =?utf-8?B?dVFDVHlKK2d3aWU0S2VEc3FsZmxlb3dzcnJTUEh4NE54L0lYekNQbG5KRzRU?=
+ =?utf-8?B?YTdjUkJBSWdnTjNEemtTdmJKcEFPUDB6WGJQVGhSZHJ2UDV1WFJKMDdhbWIr?=
+ =?utf-8?B?RGpVRkFwVHEwWk1KMjFMbHpuM0xONFZHUERFenJOY3NoK3JCTkVmN0puL2FS?=
+ =?utf-8?B?VS9KYUdFYTVZRlY3ZUhqdUduMFpKaDFJVlY2ays5MkdmQTVxVVdab2lyZWVx?=
+ =?utf-8?B?Y2ZIOXlST2h4RFJOZlFXbEkzdG0zT01XeWZEZXZvRmREOWVnRHZzRHFFc1dG?=
+ =?utf-8?B?UlJjdXA0ckJNWTdwVjNpUXZqNzNuS2ZwYUNFRmdGcDcxZll1NFRIVjU1c21k?=
+ =?utf-8?B?c1R6TjhEWkJBYzkwSXZNQXVvTFcrQkZhbkI0anpOWmlvdGJmcU04aDVmODI2?=
+ =?utf-8?B?YlBIOW9naUJidVRBcExxS2lxUHRJUlFmQlBIK1BHZ3YvTXM4YkhDeFFMY0R6?=
+ =?utf-8?B?OXByaG1BY1JNZEk0eks2MEhnV0VIeDFxVmY0cUVrMVkwclRUeFY0MVZBRlJp?=
+ =?utf-8?B?S2RSa3VlOUNkS24rUUg1QnJoWDNkcWw5SHliT1NmZytDSkpNdXV1WGQxVVNy?=
+ =?utf-8?B?ZmdYc1pnZnV6ekw5aHErSXk1aTBueFBEMHNUdlBxaW1sL3cxc0VOSVBmV2Vj?=
+ =?utf-8?Q?NUBHfKIklHDyzQZgtzyP?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3273cd8-dc4f-4b76-489f-08dd037adb75
+X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2024 00:33:56.4439
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1201
 
-Add device tree bindings for A1 SoC audio clock and reset controllers.
+Pleas improve the patch title and just write "fix..." instead of listing 
+the file name changed.
 
-Signed-off-by: Jan Dakinevich <jan.dakinevich@salutedevices.com>
----
- .../clock/amlogic,axg-audio-clkc.yaml         |   4 +
- .../dt-bindings/clock/amlogic,a1-audio-clkc.h | 139 ++++++++++++++++++
- 2 files changed, 143 insertions(+)
- create mode 100644 include/dt-bindings/clock/amlogic,a1-audio-clkc.h
+On 2024/11/13 6:58, Ragavendra wrote:
+> Initializing the val variable of type u32 as it was not initialized.
+>
+Please add "Fixes" tag here, see 
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html.
+> Signed-off-by: Ragavendra Nagraj <ragavendra.bn@gmail.com>
+> ---
+>   drivers/clk/sophgo/clk-cv18xx-pll.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/sophgo/clk-cv18xx-pll.c b/drivers/clk/sophgo/clk-cv18xx-pll.c
+> index 29e24098bf5f..04a0419cab4e 100644
+> --- a/drivers/clk/sophgo/clk-cv18xx-pll.c
+> +++ b/drivers/clk/sophgo/clk-cv18xx-pll.c
+> @@ -87,7 +87,7 @@ static int ipll_find_rate(const struct cv1800_clk_pll_limit *limit,
+>   
+>   static int ipll_determine_rate(struct clk_hw *hw, struct clk_rate_request *req)
+>   {
+> -	u32 val;
+> +	u32 val = 0;
+>   	struct cv1800_clk_pll *pll = hw_to_cv1800_clk_pll(hw);
+>   
+>   	return ipll_find_rate(pll->pll_limit, req->best_parent_rate,
 
-diff --git a/Documentation/devicetree/bindings/clock/amlogic,axg-audio-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,axg-audio-clkc.yaml
-index fd7982dd4cea..10202b749001 100644
---- a/Documentation/devicetree/bindings/clock/amlogic,axg-audio-clkc.yaml
-+++ b/Documentation/devicetree/bindings/clock/amlogic,axg-audio-clkc.yaml
-@@ -18,6 +18,8 @@ description:
- properties:
-   compatible:
-     enum:
-+      - amlogic,a1-audio-clkc
-+      - amlogic,a1-audio-vad-clkc
-       - amlogic,axg-audio-clkc
-       - amlogic,g12a-audio-clkc
-       - amlogic,sm1-audio-clkc
-@@ -114,6 +116,8 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - amlogic,a1-audio-clkc
-+              - amlogic,a1-audio-vad-clkc
-               - amlogic,g12a-audio-clkc
-               - amlogic,sm1-audio-clkc
-     then:
-diff --git a/include/dt-bindings/clock/amlogic,a1-audio-clkc.h b/include/dt-bindings/clock/amlogic,a1-audio-clkc.h
-new file mode 100644
-index 000000000000..78e7a432d439
---- /dev/null
-+++ b/include/dt-bindings/clock/amlogic,a1-audio-clkc.h
-@@ -0,0 +1,139 @@
-+/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-+/*
-+ * Copyright (c) 2024, SaluteDevices. All Rights Reserved.
-+ *
-+ * Author: Jan Dakinevich <jan.dakinevich@salutedevices.com>
-+ */
-+
-+#ifndef __A1_AUDIO_CLKC_BINDINGS_H
-+#define __A1_AUDIO_CLKC_BINDINGS_H
-+
-+#define AUD_CLKID_DDR_ARB			1
-+#define AUD_CLKID_TDMIN_A			2
-+#define AUD_CLKID_TDMIN_B			3
-+#define AUD_CLKID_TDMIN_LB			4
-+#define AUD_CLKID_LOOPBACK			5
-+#define AUD_CLKID_TDMOUT_A			6
-+#define AUD_CLKID_TDMOUT_B			7
-+#define AUD_CLKID_FRDDR_A			8
-+#define AUD_CLKID_FRDDR_B			9
-+#define AUD_CLKID_TODDR_A			10
-+#define AUD_CLKID_TODDR_B			11
-+#define AUD_CLKID_SPDIFIN			12
-+#define AUD_CLKID_RESAMPLE			13
-+#define AUD_CLKID_EQDRC				14
-+#define AUD_CLKID_LOCKER			15
-+#define AUD_CLKID_MST_A_MCLK_SEL		16
-+#define AUD_CLKID_MST_A_MCLK_DIV		17
-+#define AUD_CLKID_MST_A_MCLK			18
-+#define AUD_CLKID_MST_B_MCLK_SEL		19
-+#define AUD_CLKID_MST_B_MCLK_DIV		20
-+#define AUD_CLKID_MST_B_MCLK			21
-+#define AUD_CLKID_MST_C_MCLK_SEL		22
-+#define AUD_CLKID_MST_C_MCLK_DIV		23
-+#define AUD_CLKID_MST_C_MCLK			24
-+#define AUD_CLKID_MST_D_MCLK_SEL		25
-+#define AUD_CLKID_MST_D_MCLK_DIV		26
-+#define AUD_CLKID_MST_D_MCLK			27
-+#define AUD_CLKID_MST_A_SCLK_PRE_EN		28
-+#define AUD_CLKID_MST_A_SCLK_DIV		29
-+#define AUD_CLKID_MST_A_SCLK_POST_EN		30
-+#define AUD_CLKID_MST_A_SCLK			31
-+#define AUD_CLKID_MST_B_SCLK_PRE_EN		32
-+#define AUD_CLKID_MST_B_SCLK_DIV		33
-+#define AUD_CLKID_MST_B_SCLK_POST_EN		34
-+#define AUD_CLKID_MST_B_SCLK			35
-+#define AUD_CLKID_MST_C_SCLK_PRE_EN		36
-+#define AUD_CLKID_MST_C_SCLK_DIV		37
-+#define AUD_CLKID_MST_C_SCLK_POST_EN		38
-+#define AUD_CLKID_MST_C_SCLK			39
-+#define AUD_CLKID_MST_D_SCLK_PRE_EN		40
-+#define AUD_CLKID_MST_D_SCLK_DIV		41
-+#define AUD_CLKID_MST_D_SCLK_POST_EN		42
-+#define AUD_CLKID_MST_D_SCLK			43
-+#define AUD_CLKID_MST_A_LRCLK_DIV		44
-+#define AUD_CLKID_MST_A_LRCLK			45
-+#define AUD_CLKID_MST_B_LRCLK_DIV		46
-+#define AUD_CLKID_MST_B_LRCLK			47
-+#define AUD_CLKID_MST_C_LRCLK_DIV		48
-+#define AUD_CLKID_MST_C_LRCLK			49
-+#define AUD_CLKID_MST_D_LRCLK_DIV		50
-+#define AUD_CLKID_MST_D_LRCLK			51
-+#define AUD_CLKID_TDMIN_A_SCLK_SEL		52
-+#define AUD_CLKID_TDMIN_A_SCLK_PRE_EN		53
-+#define AUD_CLKID_TDMIN_A_SCLK_POST_EN		54
-+#define AUD_CLKID_TDMIN_A_SCLK			55
-+#define AUD_CLKID_TDMIN_A_LRCLK			56
-+#define AUD_CLKID_TDMIN_B_SCLK_SEL		57
-+#define AUD_CLKID_TDMIN_B_SCLK_PRE_EN		58
-+#define AUD_CLKID_TDMIN_B_SCLK_POST_EN		59
-+#define AUD_CLKID_TDMIN_B_SCLK			60
-+#define AUD_CLKID_TDMIN_B_LRCLK			61
-+#define AUD_CLKID_TDMIN_LB_SCLK_SEL		62
-+#define AUD_CLKID_TDMIN_LB_SCLK_PRE_EN		63
-+#define AUD_CLKID_TDMIN_LB_SCLK_POST_EN		64
-+#define AUD_CLKID_TDMIN_LB_SCLK			65
-+#define AUD_CLKID_TDMIN_LB_LRCLK		66
-+#define AUD_CLKID_TDMOUT_A_SCLK_SEL		67
-+#define AUD_CLKID_TDMOUT_A_SCLK_PRE_EN		68
-+#define AUD_CLKID_TDMOUT_A_SCLK_POST_EN		69
-+#define AUD_CLKID_TDMOUT_A_SCLK			70
-+#define AUD_CLKID_TDMOUT_A_LRCLK		71
-+#define AUD_CLKID_TDMOUT_B_SCLK_SEL		72
-+#define AUD_CLKID_TDMOUT_B_SCLK_PRE_EN		73
-+#define AUD_CLKID_TDMOUT_B_SCLK_POST_EN		74
-+#define AUD_CLKID_TDMOUT_B_SCLK			75
-+#define AUD_CLKID_TDMOUT_B_LRCLK		76
-+#define AUD_CLKID_SPDIFIN_CLK_SEL		77
-+#define AUD_CLKID_SPDIFIN_CLK_DIV		78
-+#define AUD_CLKID_SPDIFIN_CLK			79
-+#define AUD_CLKID_RESAMPLE_CLK_SEL		80
-+#define AUD_CLKID_RESAMPLE_CLK_DIV		81
-+#define AUD_CLKID_RESAMPLE_CLK			82
-+#define AUD_CLKID_EQDRC_CLK_SEL			83
-+#define AUD_CLKID_EQDRC_CLK_DIV			84
-+#define AUD_CLKID_EQDRC_CLK			85
-+#define AUD_CLKID_LOCKER_IN_CLK_SEL		86
-+#define AUD_CLKID_LOCKER_IN_CLK_DIV		87
-+#define AUD_CLKID_LOCKER_IN_CLK			88
-+#define AUD_CLKID_LOCKER_OUT_CLK_SEL		89
-+#define AUD_CLKID_LOCKER_OUT_CLK_DIV		90
-+#define AUD_CLKID_LOCKER_OUT_CLK		91
-+
-+#define AUD_VAD_CLKID_CLK81			1
-+#define AUD_VAD_CLKID_SYSCLK_A_DIV		2
-+#define AUD_VAD_CLKID_SYSCLK_A			3
-+#define AUD_VAD_CLKID_SYSCLK_B_DIV		4
-+#define AUD_VAD_CLKID_SYSCLK_B			5
-+#define AUD_VAD_CLKID_SYSCLK			6
-+#define AUD_VAD_CLKID_DDR_ARB			7
-+#define AUD_VAD_CLKID_PDM			8
-+#define AUD_VAD_CLKID_TDMIN_VAD			9
-+#define AUD_VAD_CLKID_TODDR_VAD			10
-+#define AUD_VAD_CLKID_TOVAD			11
-+#define AUD_VAD_CLKID_TOAUDIOTOP		12
-+#define AUD_VAD_CLKID_MST_VAD_MCLK_SEL		13
-+#define AUD_VAD_CLKID_MST_VAD_MCLK_DIV		14
-+#define AUD_VAD_CLKID_MST_VAD_MCLK		15
-+#define AUD_VAD_CLKID_MST_VAD_SCLK_PRE_EN	16
-+#define AUD_VAD_CLKID_MST_VAD_SCLK_DIV		17
-+#define AUD_VAD_CLKID_MST_VAD_SCLK_POST_EN	18
-+#define AUD_VAD_CLKID_MST_VAD_SCLK		19
-+#define AUD_VAD_CLKID_MST_VAD_LRCLK_DIV		20
-+#define AUD_VAD_CLKID_MST_VAD_LRCLK		21
-+#define AUD_VAD_CLKID_TDMIN_VAD_SCLK_SEL	22
-+#define AUD_VAD_CLKID_TDMIN_VAD_SCLK_PRE_EN	23
-+#define AUD_VAD_CLKID_TDMIN_VAD_SCLK_POST_EN	24
-+#define AUD_VAD_CLKID_TDMIN_VAD_SCLK		25
-+#define AUD_VAD_CLKID_TDMIN_VAD_LRCLK		26
-+#define AUD_VAD_CLKID_PDM_DCLK_SEL		27
-+#define AUD_VAD_CLKID_PDM_DCLK_DIV		28
-+#define AUD_VAD_CLKID_PDM_DCLK			29
-+#define AUD_VAD_CLKID_PDM_SYSCLK_SEL		30
-+#define AUD_VAD_CLKID_PDM_SYSCLK_DIV		31
-+#define AUD_VAD_CLKID_PDM_SYSCLK		32
-+#define AUD_VAD_CLKID_VAD_CLK_SEL		33
-+#define AUD_VAD_CLKID_VAD_CLK_DIV		34
-+#define AUD_VAD_CLKID_VAD_CLK			35
-+
-+#endif /* __A1_AUDIO_CLKC_BINDINGS_H */
--- 
-2.34.1
+I looked at ipll_find_rate() and found that the parameters 
+"rate"/"value" are both input and output parameters, which is really a 
+place that needs to be treated with caution.
+
+Seems this patch change is correct, otherwise the value of "detected" in 
+the function will be random after calling ipll_find_rate here.  Actually 
+I suggest adding some comments for ipll_find_rate() to emphasize it. 
+Otherwise, it is easy to think that "rate" and "value" are only output 
+parameters at first glance.
+
+But I raised a question here: In ipll_find_rate(), do we really need to 
+make "detected" depend on the value of external input? Inochi, can you 
+please comment on this, due to you are the author of this code.
+
+Reviewed-by: Chen Wang <unicorn_wang@outlook.com>
+
+Thanks,
+
+Chen
 
 
