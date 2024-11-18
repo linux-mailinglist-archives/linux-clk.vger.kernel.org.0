@@ -1,342 +1,206 @@
-Return-Path: <linux-clk+bounces-14816-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14818-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5DE89D14B0
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2024 16:47:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 149499D1890
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2024 19:55:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39FEB1F224A9
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2024 15:47:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E0501F24DEE
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2024 18:55:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4475945005;
-	Mon, 18 Nov 2024 15:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33371E1301;
+	Mon, 18 Nov 2024 18:55:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MSjNA0Cm"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XjusmFc2"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C781DFFB;
-	Mon, 18 Nov 2024 15:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E5C3BBF2;
+	Mon, 18 Nov 2024 18:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731944816; cv=none; b=QM8N7GzwktYMGr4sZrZImLUDK4AcV1Dp4+aTPFVsgt8ZNr7pzmpw7GEBz5sA97hZaBVmYD4nYV//qCpAGgeYsuSrgP41cR5Ob061fknsskir7Uqf+gAtne31qOai+Rlmn4SmXADg3zwa6FIVLS+Q2qD+OzXh4AaJpLfXI2hf3z4=
+	t=1731956115; cv=none; b=LXeskcyfdoCk7lxV0G/dTDqKonrl6WGB3DxsrvwNF2xmGSkrYWrGe4fOoHusDf9J3NmVvIEl21CqJ5zDMWoueS1+i330PZu4cnP3fRtYYIWuxpCMKkgY16f14DQ66gHGcdA9Q/N8Q7xvutipdgFeLoeFQ0gk5r659Q2uAJ2Cld8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731944816; c=relaxed/simple;
-	bh=WNrW3/tULqjb523vUE87ymlM/sk1V7Tb/5c1zihqYyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pvUjouTGW7b1o3vvAOUWvg1yigSq2LG+4z1ZWyaGeGDwParrpHqqbRSv4CTwlMCddOuwJ0NaS1js0VslyO1/jN2YbChbHyFQqPdtrn/OwvciGUcgRdHyZGR74/k8X4ewjosTLnoprUOX6FYBw8eB2yT2hGRTrEwaiGAP/wxD5rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MSjNA0Cm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31DF6C4CECC;
-	Mon, 18 Nov 2024 15:46:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731944815;
-	bh=WNrW3/tULqjb523vUE87ymlM/sk1V7Tb/5c1zihqYyw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MSjNA0CmOxIZoRtLJcZ5I7vUdO3vz2wIU4ysjd2XFfrR2YjNGsDwNpnbbj518aWgH
-	 gSL1rEJJOOj+AlnzV2DNLcykNbAochaKGB6OGrpUC5T7aXuynP7si7x4OIbj92Luvk
-	 Xc5eeu1YSZaMbnB4iuSPCHtXkOa/8sdokBKnGtuZLcI0avEzfuZGIxkrCZSTUEzhNU
-	 kLe5/lRuuQbNEHLj+mjjZy+Ja2jAkCRwPRC37ikTtz8uuBfX0bDvzsANSVTjg/r/tU
-	 eNTmLkpLX3CnZad2EebkuKSgYkAObZWRFKgyHuvejhLNhpa030KjM/Ph3nI1ApJxqp
-	 a6WCLedyKIPkw==
-Date: Mon, 18 Nov 2024 16:46:53 +0100
-From: Maxime Ripard <mripard@kernel.org>
-To: Liu Ying <victor.liu@nxp.com>
-Cc: Marek Vasut <marex@denx.de>, dri-devel@lists.freedesktop.org, 
-	Abel Vesa <abelvesa@kernel.org>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	David Airlie <airlied@gmail.com>, Fabio Estevam <festevam@gmail.com>, 
-	Isaac Scott <isaac.scott@ideasonboard.com>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Peng Fan <peng.fan@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Robert Foss <rfoss@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, Simona Vetter <simona@ffwll.ch>, 
-	Stephen Boyd <sboyd@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, imx@lists.linux.dev, 
-	kernel@dh-electronics.com, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 1/2] clk: imx: clk-imx8mp: Allow LDB serializer clock
- reconfigure parent rate
-Message-ID: <20241118-sceptical-mastodon-of-pizza-df93de@houat>
-References: <20241008223846.337162-1-marex@denx.de>
- <dbede671-c97b-4ad7-8a54-f1b381fea082@nxp.com>
- <00ffd38c-b01a-40cd-9130-19c35a387ca0@denx.de>
- <819380c3-d13f-4989-b305-388fc60d30e4@nxp.com>
- <d99e0021-3253-4312-9b50-6031ae0f8d8e@denx.de>
- <d1307426-9a86-4356-93b8-9a10c8369ad8@nxp.com>
- <20241022-quirky-ubiquitous-hamster-11dca5@houat>
- <47d92ae0-c71a-4c18-9ad7-432c0f70a31f@nxp.com>
+	s=arc-20240116; t=1731956115; c=relaxed/simple;
+	bh=vkDwkubs4wI12O/WB7HNRk5g9Va10+lT4y1VsDgTgpk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HwIM5jBz1rjquvd7ZTJFEwU5zkuFAYs402iih+R9bCpDQKjfRdkC7U8we6wOjP7dXHYbkAzyG/iR+IYTfwC/rJ2NG8pSq95k/8G5vP1/6EEI4Ni1QdfRO162VOyNYEe/YTTZhJyvw1vHPIhj5TQh9tP6DfMBzjL/kPfXOLS4410=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XjusmFc2; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AIGGlrg031040;
+	Mon, 18 Nov 2024 18:55:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	s2BUYrr5aczH1Jz/fKXz+KFmy2W0PTLebONE4a4Z1yk=; b=XjusmFc2lGjL8Hw0
+	lqcK421pMa6yjv3cITkSBS0vXUdCF1PrNpk6t60IFGcu58x7JTRQ+EfGOQK6Xn9m
+	PTsBgZmY816Rd5IPuy08+Sy4EUl6PArZhiF1OKcpnDdKNV142AqYE7XGnXBh8FyE
+	gveKYsrcKXQSIQ7o2Jbi+nEzgxa6VmVGcnRnOxGbx8Av0BpsgQKnipRUfqFBeKwj
+	g6UzdDExNctGHHr44DI4gzgsO82bfyO62RLuO5msQZl+feNlueqsfK3tuCy2C9/r
+	LoJiTdkZLniEGFkBJTyxGePWgDH0Mn4jxYjAjOdZINfNp4w4EO2bHhJV1mNH59YC
+	4Hx/Fg==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y90bvb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Nov 2024 18:55:07 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AIIt6nQ010089
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Nov 2024 18:55:06 GMT
+Received: from [10.71.108.63] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 18 Nov
+ 2024 10:53:23 -0800
+Message-ID: <8d3c2efd-b6c3-4b01-ae01-78460f4e9f26@quicinc.com>
+Date: Mon, 18 Nov 2024 10:53:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="daaqffk3kobrz3nx"
-Content-Disposition: inline
-In-Reply-To: <47d92ae0-c71a-4c18-9ad7-432c0f70a31f@nxp.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/7] clk: qcom: rpmh: Add support for SM8750 rpmh
+ clocks
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala
+	<quic_satyap@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+References: <20241112002807.2804021-1-quic_molvera@quicinc.com>
+ <20241112002807.2804021-3-quic_molvera@quicinc.com>
+ <5pgwerxhqhyr2u47grqzgzvvng4rojzq4gozil7vy37bew5pqj@wt676vfjs7bg>
+Content-Language: en-US
+From: Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <5pgwerxhqhyr2u47grqzgzvvng4rojzq4gozil7vy37bew5pqj@wt676vfjs7bg>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: x7H4gC5FBWbnjFVmrT1XC2jv_VGTmafe
+X-Proofpoint-ORIG-GUID: x7H4gC5FBWbnjFVmrT1XC2jv_VGTmafe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411180155
 
 
---daaqffk3kobrz3nx
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/2] clk: imx: clk-imx8mp: Allow LDB serializer clock
- reconfigure parent rate
-MIME-Version: 1.0
 
-On Thu, Oct 31, 2024 at 10:35:27AM +0800, Liu Ying wrote:
-> Hi Maxime,
->=20
-> On 10/22/2024, Maxime Ripard wrote:
-> > On Tue, Oct 22, 2024 at 02:13:57PM +0800, Liu Ying wrote:
-> >> On 10/13/2024, Marek Vasut wrote:
-> >>> On 10/11/24 8:18 AM, Liu Ying wrote:
-> >>>> On 10/11/2024, Marek Vasut wrote:
-> >>>>> On 10/10/24 7:22 AM, Liu Ying wrote:
-> >>>>>> On 10/09/2024, Marek Vasut wrote:
-> >>>>>>> The media_ldb_root_clk supply LDB serializer. These clock are usu=
-ally
-> >>>>>>> shared with the LCDIFv3 pixel clock and supplied by the Video PLL=
- on
-> >>>>>>> i.MX8MP, but the LDB clock run at either x7 or x14 rate of the LC=
-DIFv3
-> >>>>>>> pixel clock. Allow the LDB to reconfigure Video PLL as needed, as=
- that
-> >>>>>>> results in accurate serializer clock.
-> >>>>>>>
-> >>>>>>> Signed-off-by: Marek Vasut <marex@denx.de>
-> >>>>>>> ---
-> >>>>>>> Cc: Abel Vesa <abelvesa@kernel.org>
-> >>>>>>> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> >>>>>>> Cc: David Airlie <airlied@gmail.com>
-> >>>>>>> Cc: Fabio Estevam <festevam@gmail.com>
-> >>>>>>> Cc: Isaac Scott <isaac.scott@ideasonboard.com>
-> >>>>>>> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> >>>>>>> Cc: Jonas Karlman <jonas@kwiboo.se>
-> >>>>>>> Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-> >>>>>>> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> >>>>>>> Cc: Maxime Ripard <mripard@kernel.org>
-> >>>>>>> Cc: Michael Turquette <mturquette@baylibre.com>
-> >>>>>>> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> >>>>>>> Cc: Peng Fan <peng.fan@nxp.com>
-> >>>>>>> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> >>>>>>> Cc: Robert Foss <rfoss@kernel.org>
-> >>>>>>> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> >>>>>>> Cc: Shawn Guo <shawnguo@kernel.org>
-> >>>>>>> Cc: Simona Vetter <simona@ffwll.ch>
-> >>>>>>> Cc: Stephen Boyd <sboyd@kernel.org>
-> >>>>>>> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> >>>>>>> Cc: dri-devel@lists.freedesktop.org
-> >>>>>>> Cc: imx@lists.linux.dev
-> >>>>>>> Cc: kernel@dh-electronics.com
-> >>>>>>> Cc: linux-arm-kernel@lists.infradead.org
-> >>>>>>> Cc: linux-clk@vger.kernel.org
-> >>>>>>> ---
-> >>>>>>> =A0=A0 drivers/clk/imx/clk-imx8mp.c | 2 +-
-> >>>>>>> =A0=A0 1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>>>>
-> >>>>>>> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-i=
-mx8mp.c
-> >>>>>>> index 516dbd170c8a3..2e61d340b8ab7 100644
-> >>>>>>> --- a/drivers/clk/imx/clk-imx8mp.c
-> >>>>>>> +++ b/drivers/clk/imx/clk-imx8mp.c
-> >>>>>>> @@ -611,7 +611,7 @@ static int imx8mp_clocks_probe(struct platfor=
-m_device *pdev)
-> >>>>>>> =A0=A0=A0=A0=A0=A0 hws[IMX8MP_CLK_MEDIA_MIPI_PHY1_REF] =3D imx8m_=
-clk_hw_composite("media_mipi_phy1_ref", imx8mp_media_mipi_phy1_ref_sels, cc=
-m_base + 0xbd80);
-> >>>>>>> =A0=A0=A0=A0=A0=A0 hws[IMX8MP_CLK_MEDIA_DISP1_PIX] =3D imx8m_clk_=
-hw_composite_bus_flags("media_disp1_pix", imx8mp_media_disp_pix_sels, ccm_b=
-ase + 0xbe00, CLK_SET_RATE_PARENT);
-> >>>>>>> =A0=A0=A0=A0=A0=A0 hws[IMX8MP_CLK_MEDIA_CAM2_PIX] =3D imx8m_clk_h=
-w_composite("media_cam2_pix", imx8mp_media_cam2_pix_sels, ccm_base + 0xbe80=
-);
-> >>>>>>> -=A0=A0=A0 hws[IMX8MP_CLK_MEDIA_LDB] =3D imx8m_clk_hw_composite("=
-media_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00);
-> >>>>>>> +=A0=A0=A0 hws[IMX8MP_CLK_MEDIA_LDB] =3D imx8m_clk_hw_composite_b=
-us_flags("media_ldb", imx8mp_media_ldb_sels, ccm_base + 0xbf00, CLK_SET_RAT=
-E_PARENT);
-> >>>>>>
-> >>>>>> This patch would cause the below in-flight LDB bridge driver
-> >>>>>> patch[1] fail to do display mode validation upon display modes
-> >>>>>> read from LVDS to HDMI converter IT6263's DDC I2C bus.
-> >>>>>
-> >>>>> Why ?
-> >>>>
-> >>>> Mode validation is affected only for dual LVDS link mode.
-> >>>> For single LVDS link mode, this patch does open more display
-> >>>> modes read from the DDC I2C bus.=A0 The reason behind is that
-> >>>> LVDS serial clock rate/pixel clock rate =3D 3.5 for dual LVDS
-> >>>> link mode, while it's 7 for single LVDS link mode.
-> >>>>
-> >>>> In my system, "video_pll1" clock rate is assigned to 1.0395GHz
-> >>>> in imx8mp.dtsi.=A0 For 1920x1080-60.00Hz with 148.5MHz pixel
-> >>>> clock rate, "media_ldb" clock rate is 519.75MHz and
-> >>>> "media_disp2_pix" clock rate is 148.5MHz, which is fine for
-> >>>> dual LVDS link mode(x3.5).=A0 For newly opened up 1920x1080-59.94Hz
-> >>>> with 148.352MHz pixel clock rate, "video_pll1" clock rate will
-> >>>> be changed to 519.232MHz, "media_ldb" clock rate is 519.232MHz
-> >>>> and "media_disp2_pix" clock rate is wrongly set to 519.232MHz
-> >>>> too because "media_disp2_pix" clock cannot handle the 3.5
-> >>>> division ratio from "video_pll1_out" clock running at
-> >>>> 519.232MHz.=A0 See the below clk_summary.
-> >>>
-> >>> Shouldn't this patch help exactly with that ?
-> >>
-> >> No, it doesn't help but only makes clk_round_rate() called in
-> >> LDB driver's .mode_valid() against 148.352MHz return 148.352MHz
-> >> which allows the unexpected 1920x1080-59.94Hz display mode.
-> >>
-> >>>
-> >>> It should allow you to set video_pll1_out to whatever is necessary by=
- LDB first, fixate that frequency, and the LCDIFv3 would then be forced to =
-use /7 divider from faster Video PLL1 , right ?
-> >>
-> >> Yes, it allows that for single-link LVDS use cases.
-> >> And, __no__, for dual-link LVDS use cases because the
-> >> video_pll1_out clock rate needs to be 2x the LVDS serial clock
-> >> rate.=20
-> >>
-> >>>
-> >>>> =A0=A0=A0=A0 video_pll1_ref_sel=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0 24=
-000000=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=A0=A0=
-=A0=A0 Y=A0=A0=A0=A0=A0 deviceless=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 no_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0 video_pll1=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0 519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 500=
-00=A0=A0=A0=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0 deviceless=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 no_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 video_pll1_bypass=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
- 519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=A0=A0=
-=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 deviceless=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 no_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 video_pll1_out=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 2=A0=A0=A0=A0=A0=A0 2=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0 519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=
-=A0=A0=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 deviceless=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 no_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 media_ldb=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=
-=A0=A0=A0=A0=A0 519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 =
-50000=A0=A0=A0=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 d=
-eviceless=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 no=
-_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 media_ldb_=
-root_clk 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0 =
-519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=A0=A0=
-=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 32ec00=
-00.blk-ctrl:bridge@5c=A0=A0=A0=A0 ldb
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 deviceless=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 no_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 media_disp1_pix=A0=
-=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=
-=A0 129808000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=A0=
-=A0=A0=A0 N=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 deviceless=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 no_connecti=
-on_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 media_disp=
-1_pix_root_clk 0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0 129808000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=
-=A0=A0=A0=A0 N=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
-32e80000.display-controller=A0=A0=A0=A0 pix
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 32ec0000.blk-ctrl=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 disp1
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 deviceless=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 no_connection_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 media_disp2_pix=A0=
-=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=
-=A0 519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=A0=
-=A0=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 deviceless=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 no_connecti=
-on_id
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 media_disp=
-2_pix_root_clk 1=A0=A0=A0=A0=A0=A0 1=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0 519232000=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0 50000=A0=
-=A0=A0=A0=A0 Y=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 =
-32e90000.display-controller=A0=A0=A0=A0 pix
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 32ec0000.blk-ctrl=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 disp2
-> >>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 deviceless=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 no_connection_id
-> >>>>
-> >>>> Single LVDS link mode is not affected because "media_disp2_pix"
-> >>>> clock can handle the 7 division ratio.
-> >>>>
-> >>>> To support the dual LVDS link mode, "video_pll1" clock rate needs
-> >>>> to be x2 "media_ldb" clock rate so that "media_disp2_pix" clock
-> >>>> can use 7 division ratio to achieve the /3.5 clock rate comparing
-> >>>> to "media_ldb" clock rate.=A0 However, "video_pll1" is not seen by
-> >>>> LDB driver thus not directly controlled by it.=A0 This is another
-> >>>> reason why assigning a reasonable "video_pll1" clock rate in DT
-> >>>> makes sense.
-> >>>
-> >>> I agree that _right_now_, the DT clock assignment is the only option.
-> >>> I would like to see that DT part disappear and instead would prefer i=
-f the LDB/LCDIF could figure out the clock tree configuration themselves.
-> >>
-> >> I think we'll live with the assigned clock rate in DT, because the
-> >> i.MX8MP LDB and Samsung MIPI DSI display pipelines need to share a
-> >> video PLL, like I mentioned in comments for patch 2.
-> >=20
-> > Guys. There's 4 different discussions that look to be on the same topic,
-> > and doing workarounds in the DT, DRM driver and clock driver for
-> > something that looks like a broken clock.
->=20
-> This is a bit complicated, because it is related to i.MX8MP MIPI DSI/
-> LVDS/HDMI, i.MX93 MIPI DSI/LVDS/parallel display pipelines.  Even
-> i.MX6SX LVDS display pipeline is a bit related, since i.MX8MP/i.MX93/
-> i.MX6SX LDBs share the same fsl-ldb.c driver.
->=20
-> >=20
-> > Could we have *somewhere* a proper description of what the problem is
-> > exactly, so we can review it? Because at the moment, it's certainly not
-> > helping.
->=20
-> Can you please suggest a place where this could happen?
+On 11/15/2024 7:31 AM, Dmitry Baryshkov wrote:
+> On Mon, Nov 11, 2024 at 04:28:02PM -0800, Melody Olvera wrote:
+>> From: Taniya Das <quic_tdas@quicinc.com>
+>>
+>> Add the RPMH clocks present in SM8750 SoC and fix the match table to
+>> sort it alphabetically.
+>>
+>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>   drivers/clk/qcom/clk-rpmh.c | 28 +++++++++++++++++++++++++++-
+>>   1 file changed, 27 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+>> index eefc322ce367..a3b381e34e48 100644
+>> --- a/drivers/clk/qcom/clk-rpmh.c
+>> +++ b/drivers/clk/qcom/clk-rpmh.c
+>> @@ -368,6 +368,10 @@ DEFINE_CLK_RPMH_VRM(rf_clk2, _d, "rfclkd2", 1);
+>>   DEFINE_CLK_RPMH_VRM(rf_clk3, _d, "rfclkd3", 1);
+>>   DEFINE_CLK_RPMH_VRM(rf_clk4, _d, "rfclkd4", 1);
+>>   
+>> +DEFINE_CLK_RPMH_VRM(rf_clk3, _a2, "rfclka3", 2);
+>> +DEFINE_CLK_RPMH_VRM(rf_clk4, _a2, "rfclka4", 2);
+>> +DEFINE_CLK_RPMH_VRM(rf_clk5, _a2, "rfclka5", 2);
+> Are the two last clocks defined "for the future platforms"?
 
-Here, by mail will be good. Worst case scenario using a ascii art.
+I'm unsure; I'll let Taniya comment.
 
-Maxime
+>
+>> +
+>>   DEFINE_CLK_RPMH_VRM(clk1, _a1, "clka1", 1);
+>>   DEFINE_CLK_RPMH_VRM(clk2, _a1, "clka2", 1);
+>>   DEFINE_CLK_RPMH_VRM(clk3, _a1, "clka3", 1);
+>> @@ -807,6 +811,27 @@ static const struct clk_rpmh_desc clk_rpmh_x1e80100 = {
+>>   	.num_clks = ARRAY_SIZE(x1e80100_rpmh_clocks),
+>>   };
+>>   
+>> +static struct clk_hw *sm8750_rpmh_clocks[] = {
+>> +	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div2.hw,
+>> +	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div2_ao.hw,
+>> +	[RPMH_LN_BB_CLK1]	= &clk_rpmh_clk6_a2.hw,
+>> +	[RPMH_LN_BB_CLK1_A]	= &clk_rpmh_clk6_a2_ao.hw,
+>> +	[RPMH_LN_BB_CLK3]	= &clk_rpmh_clk8_a2.hw,
+>> +	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_clk8_a2_ao.hw,
+>> +	[RPMH_RF_CLK1]		= &clk_rpmh_rf_clk1_a.hw,
+>> +	[RPMH_RF_CLK1_A]	= &clk_rpmh_rf_clk1_a_ao.hw,
+>> +	[RPMH_RF_CLK2]		= &clk_rpmh_rf_clk2_a.hw,
+>> +	[RPMH_RF_CLK2_A]	= &clk_rpmh_rf_clk2_a_ao.hw,
+>> +	[RPMH_RF_CLK3]		= &clk_rpmh_rf_clk3_a2.hw,
+>> +	[RPMH_RF_CLK3_A]	= &clk_rpmh_rf_clk3_a2_ao.hw,
+>> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>> +};
+>> +
+>> +static const struct clk_rpmh_desc clk_rpmh_sm8750 = {
+>> +	.clks = sm8750_rpmh_clocks,
+>> +	.num_clks = ARRAY_SIZE(sm8750_rpmh_clocks),
+>> +};
+>> +
+>>   static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
+>>   					 void *data)
+>>   {
+>> @@ -894,6 +919,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
+>>   	{ .compatible = "qcom,sa8775p-rpmh-clk", .data = &clk_rpmh_sa8775p},
+>>   	{ .compatible = "qcom,sar2130p-rpmh-clk", .data = &clk_rpmh_sar2130p},
+>>   	{ .compatible = "qcom,sc7180-rpmh-clk", .data = &clk_rpmh_sc7180},
+>> +	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
+>>   	{ .compatible = "qcom,sc8180x-rpmh-clk", .data = &clk_rpmh_sc8180x},
+>>   	{ .compatible = "qcom,sc8280xp-rpmh-clk", .data = &clk_rpmh_sc8280xp},
+>>   	{ .compatible = "qcom,sdm845-rpmh-clk", .data = &clk_rpmh_sdm845},
+>> @@ -909,7 +935,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
+>>   	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
+>>   	{ .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
+>>   	{ .compatible = "qcom,sm8650-rpmh-clk", .data = &clk_rpmh_sm8650},
+>> -	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
+> Please don't mix fixes and actual code. I'd suggest splitting sc7280
+> move to the separate commit.
 
---daaqffk3kobrz3nx
-Content-Type: application/pgp-signature; name="signature.asc"
+Bryan O'Donoghue requested we sort these as part of this patch. I don't 
+feel strongly either way,
+but clear guidance here would be appreciated.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Melody
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZzthbAAKCRAnX84Zoj2+
-drubAYDnfOPHEbUtSBuKsSW0gwIdqyDhobohzo9e8ywlQGt8/ZdxHagqLzmAANjC
-lfvXD8YBfiUmQk9afkVIWM8Lk15XjzxrIrfcAhwZuqOrsIwH11sfRr3+lczF7pKs
-0ats6CZJoQ==
-=5w/N
------END PGP SIGNATURE-----
+>
+>> +	{ .compatible = "qcom,sm8750-rpmh-clk", .data = &clk_rpmh_sm8750},
+>>   	{ .compatible = "qcom,x1e80100-rpmh-clk", .data = &clk_rpmh_x1e80100},
+>>   	{ }
+>>   };
+>> -- 
+>> 2.46.1
+>>
 
---daaqffk3kobrz3nx--
 
