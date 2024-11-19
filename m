@@ -1,139 +1,119 @@
-Return-Path: <linux-clk+bounces-14850-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-14852-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C85989D26E2
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Nov 2024 14:30:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C669D2738
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Nov 2024 14:46:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C41F1F23B12
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Nov 2024 13:30:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 914B81F22DB8
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Nov 2024 13:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E91191CDFC3;
-	Tue, 19 Nov 2024 13:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D0E1CCB3B;
+	Tue, 19 Nov 2024 13:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="imSx+Khd"
+	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="mvPt7nOJ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2123E1CC170;
-	Tue, 19 Nov 2024 13:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD1D1CC156
+	for <linux-clk@vger.kernel.org>; Tue, 19 Nov 2024 13:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732023013; cv=none; b=gp0Hm/pwKUOmUv8U8WByemsR+XGoEDwLtl/nqK6qyS/iUxgovRnusQcBLILMEsziPll/2CAtkV31iGeckPfHRiX9BwVZNcuG5gp+SRoKN2XkvRIl6Kt4zudGk/Pb+hsavEbn2Lgoc6HNL3wsPveeVT7juQeXbWC1xSr7ln7ie/E=
+	t=1732023968; cv=none; b=U6GiHVfAbWdSlIyQkJvN3/dSWZvkHQRMNWYMdVCcXNDsWbLwgFROVH9UO1hf5d5v26sb44A2Q1/SV0XbwvmhoiftNEsRPja2TzubREwJnzH0fqcWmquRRyIr0PJ6ayWk92gyagLpBo4RDhEI2PEDMMMbdMgQV0WAjuASruhvYc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732023013; c=relaxed/simple;
-	bh=b+L9qbqGVR11JrLNz1yjtill0U5wtaM7q9wIn2S8mnw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DmLM50KKnwhaGcLvzd5kTj2hReXRB4bRVgklwwdRIJfzlENEjdXDcoRw8wIlAipq23kCTeg0388oukedHrSrJSFvxzksZBrLFjQqPYzMJ/NAPztLR9BK2ug6L9rEG6x+plSkwVesNW9g8ABZjso42SfP+oMoUItbfoh68s8ro+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=imSx+Khd; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=m/2ZD36wJW8eluwjHkCBxTv9qiyzz866KACmcI1qvBI=; b=imSx+KhdtyMNcGkm3iyHvcyggu
-	EMyEs4Jr8bF2o8lQtJU7npMjZB1euyc8RWkEbplSBlaQrgOQ+7XvxmyvwE2RU1/+k6UkRWsA4PHC7
-	kisi8cYA1WCEP88uiw2mGPLs4SGCNN2FLbmWLoNfH7RrYPTGQ3p+bcWyvPLTsXVlgE6S7g9H+2C1d
-	K9Yo8/Uh1RG1lu4K41gYl6yM8/PpOB4+jmpYrz411M7+utDHh0/yfwSlgM5H+2slnpAlBTJEJ8jh4
-	Nx0sf5FRfWEO7DEWXN/VaLttUVw+bQdfJXHAX9FrkedFrxdhbLK6HydZIGmtPGGRlF0TcYeupOdOO
-	IT56mhew==;
-Received: from i53875a30.versanet.de ([83.135.90.48] helo=localhost.localdomain)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1tDOIp-0006z1-Gn; Tue, 19 Nov 2024 14:29:59 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: srinivas.kandagatla@linaro.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	detlev.casanova@collabora.com,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	sebastian.reichel@collabora.com
-Subject: [PATCH 5/5] arm64: dts: rockchip: add rk3576 otp node
-Date: Tue, 19 Nov 2024 14:29:16 +0100
-Message-ID: <20241119132916.1057797-6-heiko@sntech.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241119132916.1057797-1-heiko@sntech.de>
-References: <20241119132916.1057797-1-heiko@sntech.de>
+	s=arc-20240116; t=1732023968; c=relaxed/simple;
+	bh=ZCTkqrkfjT0tCxtMd7n0BWeKeUKQr3zuUDfYHPwEMFM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=jrMmEtC+tI0Pih8mK70V5iL3LvAQcCH1d0fg9RcmByxqmRh2A4482xi8rIwpuJsGPsG3/HXtDqGS0zFo8D7/5QlE4UPRW83Qz4PTZrS0ZqiXvAwmR61ZLZvGWHVAIXBRmdSwpq28dHJlvUgNzreYgl37qXI8qhOUaEoBN01BdTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=mvPt7nOJ; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
+	t=1732023962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TgHwPslSk2PRB/eadtEYqufFZbDdiWqg5iGoDx9N5MM=;
+	b=mvPt7nOJuK3tOZcE4Bh2ETmJE+u3r9PIbXv2ZOOtdFtnCHgF1fXJGMedBs/rdegph8oNS7
+	qajfOuU28XVbYTVDoR3zvtqvORg+vLN/A7k3IJdo60Uapz5BM3aFwP1eM0byxfsr7hMw+I
+	LkrB9h+q14nLcv7qsdMCWadW5YOpqLe8T27HMggN5+Nrh4HaUMDL8YP5ju/RXDtBLHD/gx
+	ZqDSBBovznuJWLtwi/A0egtShz4lTdIXGgIqrmH/ycppiOtecpsuqy+IVB56vpFUPRXyZX
+	+KpzxQE45YzQKj4KNgB9A8e2muSN02xkN2griSTwhvYy23k/3G2wEZn6TrnXLw==
+Content-Type: multipart/signed;
+ boundary=79d65ceca52770ce73e14ecdf58ae1ec71b511c9b7ca1d91c45705b1ce2e;
+ micalg=pgp-sha256; protocol="application/pgp-signature"
+Date: Tue, 19 Nov 2024 14:45:53 +0100
+Message-Id: <D5Q78ZOX5SE0.2SCB8FEGY7EFA@cknow.org>
+Cc: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+ <detlev.casanova@collabora.com>, <devicetree@vger.kernel.org>,
+ <linux-arm-kernel@lists.infradead.org>,
+ <linux-rockchip@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+ <linux-clk@vger.kernel.org>, <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH 1/5] clk: rockchip: rk3576: define clk_otp_phy_g
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Diederik de Haas" <didi.debian@cknow.org>
+To: "Heiko Stuebner" <heiko@sntech.de>, <srinivas.kandagatla@linaro.org>
+References: <20241119132916.1057797-1-heiko@sntech.de>
+ <20241119132916.1057797-2-heiko@sntech.de>
+In-Reply-To: <20241119132916.1057797-2-heiko@sntech.de>
+X-Migadu-Flow: FLOW_OUT
 
-This adds the otp node to the rk3576 soc devicetree including the
-individual fields we know about.
+--79d65ceca52770ce73e14ecdf58ae1ec71b511c9b7ca1d91c45705b1ce2e
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- arch/arm64/boot/dts/rockchip/rk3576.dtsi | 39 ++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+On Tue Nov 19, 2024 at 2:29 PM CET, Heiko Stuebner wrote:
+> The phy clock of the OTP block is also present, but was not defined
+> so far. Though its clk-id already existed, so just define its location.
+>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  drivers/clk/rockchip/clk-rk3576.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/clk/rockchip/clk-rk3576.c b/drivers/clk/rockchip/clk=
+-rk3576.c
+> index 595e010341f7..029939a98416 100644
+> --- a/drivers/clk/rockchip/clk-rk3576.c
+> +++ b/drivers/clk/rockchip/clk-rk3576.c
+> @@ -541,6 +541,8 @@ static struct rockchip_clk_branch rk3576_clk_branches=
+[] __initdata =3D {
+>  			RK3576_CLKGATE_CON(5), 14, GFLAGS),
+>  	GATE(CLK_OTPC_AUTO_RD_G, "clk_otpc_auto_rd_g", "xin24m", 0,
+>  			RK3576_CLKGATE_CON(5), 15, GFLAGS),
+> +	GATE(CLK_OTP_PHY_G, "clk_otp_phy_g", "xin24m", 0,
+> +			RK3588_CLKGATE_CON(6), 0, GFLAGS),
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-index 436232ffe4d1..c70c9dcfad82 100644
---- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-@@ -1149,6 +1149,45 @@ sdhci: mmc@2a330000 {
- 			status = "disabled";
- 		};
- 
-+		otp: otp@2a580000 {
-+			compatible = "rockchip,rk3576-otp";
-+			reg = <0x0 0x2a580000 0x0 0x400>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			clocks = <&cru CLK_OTPC_NS>, <&cru PCLK_OTPC_NS>,
-+				 <&cru CLK_OTP_PHY_G>;
-+			clock-names = "otp", "apb_pclk", "phy";
-+			resets = <&cru SRST_OTPC_NS>, <&cru SRST_P_OTPC_NS>;
-+			reset-names = "otp", "apb";
-+
-+			/* Data cells */
-+			cpu_code: cpu-code@2 {
-+				reg = <0x02 0x2>;
-+			};
-+			otp_cpu_version: cpu-version@5 {
-+				reg = <0x05 0x1>;
-+				bits = <3 3>;
-+			};
-+			otp_id: id@a {
-+				reg = <0x0a 0x10>;
-+			};
-+			cpub_leakage: cpub-leakage@1e {
-+				reg = <0x1e 0x1>;
-+			};
-+			cpul_leakage: cpul-leakage@1f {
-+				reg = <0x1f 0x1>;
-+			};
-+			npu_leakage: npu-leakage@20 {
-+				reg = <0x20 0x1>;
-+			};
-+			gpu_leakage: gpu-leakage@21 {
-+				reg = <0x21 0x1>;
-+			};
-+			log_leakage: log-leakage@22 {
-+				reg = <0x22 0x1>;
-+			};
-+		};
-+
- 		gic: interrupt-controller@2a701000 {
- 			compatible = "arm,gic-400";
- 			reg = <0x0 0x2a701000 0 0x10000>,
--- 
-2.45.2
+RK3588?=20
 
+Cheers,
+  Diederik
+
+>  	COMPOSITE(CLK_MIPI_CAMERAOUT_M0, "clk_mipi_cameraout_m0", mux_24m_spll_=
+gpll_cpll_p, 0,
+>  			RK3576_CLKSEL_CON(38), 8, 2, MFLAGS, 0, 8, DFLAGS,
+>  			RK3576_CLKGATE_CON(6), 3, GFLAGS),
+
+
+--79d65ceca52770ce73e14ecdf58ae1ec71b511c9b7ca1d91c45705b1ce2e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZzyWlAAKCRDXblvOeH7b
+bgO3AQCaEVGABu4FsN0146ULiB2lKOrKXkI8R3DKOrAFLEGfMwD/TJpSfxGr5g9P
+Ytl5DRMSV+Y12kJDJHBNFt8sVM5NpAo=
+=Z0zZ
+-----END PGP SIGNATURE-----
+
+--79d65ceca52770ce73e14ecdf58ae1ec71b511c9b7ca1d91c45705b1ce2e--
 
