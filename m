@@ -1,48 +1,49 @@
-Return-Path: <linux-clk+bounces-15153-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15155-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AA0D9DEB73
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 18:07:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A46EC9DEB7F
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 18:12:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1893281989
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 17:07:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B716282233
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 17:12:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76FCB155359;
-	Fri, 29 Nov 2024 17:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7654D155741;
+	Fri, 29 Nov 2024 17:12:02 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
+Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2562C18C;
-	Fri, 29 Nov 2024 17:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.53.165.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25A21474A7;
+	Fri, 29 Nov 2024 17:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.53.165.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732900045; cv=none; b=gi6Z8GJx7yE56xvpUg4v3MhXrhx924khCoo5CCn6p4uarNlGQl9FMn+aJM3cLO1J/S13ONII/YWn3LtAoN+zyvGgb4ifS76ZZ7TNvQ/6LgHhqD5fPUMFy79ypk4vA61CJyXGYKSVUtX1XrVFOkZ39hDP1SgaexuGA67bj00tEJk=
+	t=1732900322; cv=none; b=V3/+PulsUiPq23pH2euOxnYVBkV05bdywnjmMUDB4YZYEhZbNOLVCGpjuDh6naUCSW/3IGK3LTwNUN3NG7SopTGwVNnB9mto1ROq0O5DAgcK/AZeapuYvv/foNXthYHY+oFQLJlCloaiDh+NIt3jKB9n+aMitYZi5C74rVn4dVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732900045; c=relaxed/simple;
-	bh=NOE2eDrnm/P6MIh27gYZlbptNqTwu9iKUqkjPMlM6yQ=;
+	s=arc-20240116; t=1732900322; c=relaxed/simple;
+	bh=KGeMQGiTPCgEMm9g59gyJzcFXolJGUf0NVmUDKeuuqY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OMOMV/o/KcywPhtJOx1LNwY/Q3XJMIU93mDxCBPsgNy59ShxWqEJI+/OU5QOh/5Dlb901L06areqKj93Rwcb7Y3SLp8h6CUA+L9rxR9pBX0I55egiaaJ+kBB3srFGftt6jwfwyVLq+blWMhPF/4F3L+QhfAfubxqq0xpGH6eHWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=skole.hr; spf=pass smtp.mailfrom=skole.hr; arc=none smtp.client-ip=161.53.165.185
+	 MIME-Version:Content-Type; b=FYMJGCmEwTc104pkxPgwGUYhwP4LZSGB2WKqt/ZYL/dkLteeJlg1fcfCQkZcHcEL2abTwfyQwOVNO0ddi6oOyeiaLVZvEAOoHibpqCxpZPCaEHUKnX/CTbXGe9vm3UoseT/04SsvzXYvnkl5BadEkLO4mRfc6REsBPAWnzP+J+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=skole.hr; spf=pass smtp.mailfrom=skole.hr; arc=none smtp.client-ip=161.53.165.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=skole.hr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=skole.hr
-Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-	by mx.skole.hr (mx.skole.hr) with ESMTP id 300DA82170;
-	Fri, 29 Nov 2024 18:07:20 +0100 (CET)
+Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+	by mx.skole.hr (mx.skole.hr) with ESMTP id 263A88347B;
+	Fri, 29 Nov 2024 18:05:59 +0100 (CET)
 From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje.mihanovic@skole.hr>
 To: Dan Carpenter <dan.carpenter@linaro.org>
 Cc: Michael Turquette <mturquette@baylibre.com>,
  Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 Subject:
- Re: [PATCH next] clk: mmp: pxa1908-apbc: Fix NULL vs IS_ERR() check in probe
-Date: Fri, 29 Nov 2024 18:05:37 +0100
-Message-ID: <2352491.ElGaqSPkdT@radijator>
-In-Reply-To: <d7078eb7-a7d6-4753-b453-8fce15245c34@stanley.mountain>
-References: <d7078eb7-a7d6-4753-b453-8fce15245c34@stanley.mountain>
+ Re: [PATCH next] clk: mmp: pxa1908-mpmu: Fix a NULL vs IS_ERR() check in
+ probe()
+Date: Fri, 29 Nov 2024 18:05:01 +0100
+Message-ID: <12564811.O9o76ZdvQC@radijator>
+In-Reply-To: <5b3b963d-ecae-4819-be47-d82e8a58e64b@stanley.mountain>
+References: <5b3b963d-ecae-4819-be47-d82e8a58e64b@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -66,12 +67,12 @@ Autocrypt: addr=duje.mihanovic@skole.hr;
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 
-On Wednesday 20 November 2024 18:18:38 Central European Standard Time Dan=20
+On Wednesday 20 November 2024 18:18:50 Central European Standard Time Dan=20
 Carpenter wrote:
 > The devm_kzalloc() function returns NULL on error, not error pointers.
-> Fix the check.
+> Update the check to match.
 >=20
-> Fixes: 51ce55919273 ("clk: mmp: Add Marvell PXA1908 APBC driver")
+> Fixes: ebac87cdd230 ("clk: mmp: Add Marvell PXA1908 MPMU driver")
 > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 > ---
 
