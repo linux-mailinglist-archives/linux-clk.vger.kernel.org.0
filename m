@@ -1,80 +1,80 @@
-Return-Path: <linux-clk+bounces-15154-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15157-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC3009DEB7C
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 18:11:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ACC99DEBDE
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 18:50:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 783332823CF
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 17:11:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE7FFB21A1E
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2024 17:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A66119C54D;
-	Fri, 29 Nov 2024 17:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A5C19F40B;
+	Fri, 29 Nov 2024 17:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bDOwkwrp"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GT7W9T1u"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE23C155741
-	for <linux-clk@vger.kernel.org>; Fri, 29 Nov 2024 17:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E5F1A08C4
+	for <linux-clk@vger.kernel.org>; Fri, 29 Nov 2024 17:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732900285; cv=none; b=CaHedRAyVBypY1/+xLGyL0q14YlfvJ4ddUxQmpz9Hc7jIT6N4PjtVoRrK59UvkKTgI6QzyzSM1LEzWOk23GQZFdbOt+XkKpcLXBwYUrsM7YzsZ5YpGiCnYqf9oI5fbjWpybSsolN/Q755sbsuMPKdHZtjyc5cQcq1BpzIR+5njc=
+	t=1732902631; cv=none; b=M+Y+iANRtYEe2/6wR6bHmC3FyGbkWCDDYHS6r7/k7r05vakAZDS44fsZNYzRvMOphvcsU5xcXSE2uF/+gT+hRgsFo5/NXHiM50eWhRyXITxZnV5w5NUUCiT36HQjF9DzmRl50nDqVQqBPGtmEe5sJLoA+KW6A++5StjhoPzhl04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732900285; c=relaxed/simple;
-	bh=u4VeqDNvTWRAhnRMPvx5ZxHgDaIe1hpfxIJoqfWrVgE=;
+	s=arc-20240116; t=1732902631; c=relaxed/simple;
+	bh=8ImrQXCJjXUd91H2/9i3Z8wuNRacPGJigWYHLmK2W1I=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cnQGshmNccKuX8V3SoQXakPV3+tJZN2yzuHEtdS7qjqyoHYcPXf3ggz0iP8THDsxTJwNACG28HMY5nRry+IFW7aGDOlRuWBbrYFAOGK4Maw652TumXvWLrIfsQDoRGlX8MyR6IxGCaDm2cIzJE8k6S3WBwel6NLyZ90Zn8PEVkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bDOwkwrp; arc=none smtp.client-ip=209.85.167.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=jvp2BCOxWZp+YQ830xndGMUD9rUuxFsIYi16D3RK8hl77cDY4VQggN5NXixh9sf0BYHRyyzNcM0Fjm7FSscN5dlllucnMYFLDZ8MqOwT/oDjN2shIurZ2/+uR+xaHDxOn4sZ9g8Gym2b7bPJIafNnVTYEHzRPeEB8xzg67chfC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GT7W9T1u; arc=none smtp.client-ip=209.85.218.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53de035ea13so2173322e87.0
-        for <linux-clk@vger.kernel.org>; Fri, 29 Nov 2024 09:11:22 -0800 (PST)
+Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-aa531a70416so122662366b.0
+        for <linux-clk@vger.kernel.org>; Fri, 29 Nov 2024 09:50:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1732900281; x=1733505081; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1732902628; x=1733507428; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKStJ4JMYm6/f7jAdkMonmjOHy/XStYH3AHNh9QPw+k=;
-        b=bDOwkwrp57+hdJuQM2yuTXFuR2uJQz4KquU51t8PIHqO8eQiDyD9aQNlzcorNorPaT
-         xp7YOLadRHiHqNeLg9IJY6J/ulFR/j/syM1NdPODXmEbzVOl5mUR/WOlAKf2q/W7pRWF
-         OVISodhH2VoKdzyWp6LX1fXe+h47Uvf/jzI/K4qJMK0C/xvuS5ytvS7xf5oYa3VTLyd7
-         VWtiSLzoTH2KjPpjC534rVGaPgyoky1fRIlQrXwp05orw95J08DpqUP7G6xtWuVpeMBw
-         wDC8XOyxR1Qfs1jSuK0KTWCb5rsWjIdgrxuwVXnYBHN2hXoRrC0USPiYqn3iDJLpFYf4
-         VHpg==
+        bh=PqZrAfjye64ZhMw5Co4hhbixNEOQJOzDdw3eUKG3fbQ=;
+        b=GT7W9T1ukkeXC48tyZU/KQTWNbKY9O39uvVW0jyGsneTTdwIWHe2s0CvdUB0yaNIw3
+         Z9X1SYjXH9C8H7RI3dJdkTwYs4xQMQjdkj2LmZz7hYAgS6pH1tawBNpmWlRRw3F09TSL
+         QH+e0alGomOwptCbrYWGTEqqlTgNgCIvF5IX1bwCeBvt7HmNs15UH0dh8ChYyv0hFrup
+         luUmNlS41MKVZRs0H50dbLiA4F57degpX8ujNliwnC73Ip2deV5vxdHr0xNNd5EP459u
+         SJYzjgxHw3OzPH/mYuGtnpH43NZcco9mAR+gD7gttSdmorJ+qx2/dfl/UnORJHRvJUei
+         qMKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732900281; x=1733505081;
+        d=1e100.net; s=20230601; t=1732902628; x=1733507428;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wKStJ4JMYm6/f7jAdkMonmjOHy/XStYH3AHNh9QPw+k=;
-        b=cVZOZXL6F9uOgb9UefXRvkVqGpMCCXkaa54alKa1Su1//xb3UnRfcfIzy6AYAtTfUh
-         +dEv3hVoX4xn+w8cB4kwk4j0kk35kC94CprIcQuIZRU2Xc83CWJyxwSQ6vsQ4CP6cWhe
-         bMRA8NwopoTIAWcL1kDJ4Z5++GGgWQU+Hgtoauukxa2hT5bj1BSBTYtEk6aSqjSNK7IV
-         e+y5PlzvSg+hhCyWY08nZmc0mxqnrDJ64YYV8lISA2N7mAxjeBDyHeDMXR/uCs1rsQqb
-         nqqYLPzuTMoihw6kBbJNF721ZH5LH36MJIQ16cjkDnn7JVtoF0zD7/Re7SA12H9sM4YL
-         v2ww==
-X-Forwarded-Encrypted: i=1; AJvYcCVzM1W+gbLzIk+NuvI0eUh+9JTI2t5qfO1FQK4ZmCK56Qi8FHMBmlRmtY637hlywq4GHbCIEvt/Xx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD67xv7mH78Xhu1HduGUoMkqNWe6gTkbr2FqKvVnK8Itk4gemY
-	uvEGpm28acZU/NVs4wtYB8Tr2/yPVcqpta9si/CjfTMDoKcLTm1wbxdU2v8LztA=
-X-Gm-Gg: ASbGnctkdovqTyKnJx6mCC0Os93ms/b9AyYDc3VnCxWTe/yY80ZFctXgK2Oh12TqRhL
-	ZR5p7YpNhhyxfLrCt65JckqkeEFZED/Pr71rp2H+FG1KhhKatHunboIKSo4ZbIPQ7/coWvwJ4pG
-	tUzAQ3wxLQKRXzGX5VY9nJauVZazHrrGWUiUxj7hkLw/4Wp2ZdV3daIaDde729qZjBls+fosmuP
-	lJy/0dTntYldeczHg4i03GK1UYRFldzx/4ot6s8KTXz3C8xDK7TEzj7e3qT4rDQPVi59xEQ06qd
-	ginC8yTjhz7/6QzoUT+o
-X-Google-Smtp-Source: AGHT+IHZ3oTCh7gVSsmHhrZ3fiOp7cXkhyrNMHuydkCIk2tz2qxDfVIno+QP7oK2bTxacMEqt16MJg==
-X-Received: by 2002:a05:6512:39d2:b0:53d:ec9a:138f with SMTP id 2adb3069b0e04-53df0112687mr8431697e87.57.1732900280754;
-        Fri, 29 Nov 2024 09:11:20 -0800 (PST)
+        bh=PqZrAfjye64ZhMw5Co4hhbixNEOQJOzDdw3eUKG3fbQ=;
+        b=mczLfEnapIMzRW29UdiS+rLA/ySF5UJzIgQH1Mn9eljKMnOeJVhOu9jST/K2+KGvxp
+         6/RRaaa4O1SQC+yMhBwTd19Av0QfxZXUw2SmvjD5hUbf18PFbl7Drurhvt3WvofIDhBo
+         vnkKcrO5nXwZwJo+o7LM9epJD74ofxGL3kc/FxpoV+n8EyNlckkSCNC4GY96ugTPJlTw
+         ea+NtTxbHU7h00PhP/pMSfOe0Qf2NDY3Kbpgls41x23g9lnHr2JmUwAsZd9pbHMKcnLx
+         3lRZXv1OfD5AU3n7kmHT1EGSENQ5QdUc9pzQ/rrLKdZdoX08Qqk3wF6IqXIY1zU25UJh
+         Wf4g==
+X-Forwarded-Encrypted: i=1; AJvYcCV/uMTAKkG/YvY2lRSkOJTO4NCF4PwEEjSI5m0frg3hSA6z82CyRCu6Qpo+4DCTaamXZpOqpwkIkBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ6Q55W+a/3FLr2Cct8udDpc+zHYFKEF5psyFxm+oWEsYTkIlL
+	foY4GWsM9taCsMPtORUAcRt9jATLvNA+KetzIwGk8yIR7OxBL7myEDmVmGHYRXQ=
+X-Gm-Gg: ASbGncuEX3ePmeURmM2fXA2iXlRR9kIrUbIfx7V4CNWoPdcnNyJFpt23KB3YFImJS8k
+	f/OfZ4LbY5ugcTrPxrcX195zQbCXakQS2f71uAyhkG+yLp9GiZ7ITqT5diye6ncnpaUD7vobkIa
+	wrHmS0LfBFBqIU5a73mratrKYVOTS0oWF8tOP1BU1F3CXh72RsxS3RmXvk18khrZPMkEyt2oOtL
+	aPPVyBX2lpR7D/M2vFJbWBJ/KPUZvviFzKb0t20TQHw5Zf4gUYjko0knQVKCmNi2pdVaJurPN3+
+	w64eha7WBPz4+JLvLR/L
+X-Google-Smtp-Source: AGHT+IF7i5rs2I/Z8Do8qBVzOITzII4lxVZ5lVsk4D6hBN3DGyS3RbzWkQK53YgfV1EgQ7zK28Pzig==
+X-Received: by 2002:a05:6402:13d3:b0:5d0:224b:d4c1 with SMTP id 4fb4d7f45d1cf-5d080c53c5dmr12990539a12.25.1732902627665;
+        Fri, 29 Nov 2024 09:50:27 -0800 (PST)
 Received: from localhost (host-79-49-220-127.retail.telecomitalia.it. [79.49.220.127])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5998e63a2sm192130166b.113.2024.11.29.09.11.20
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d0b264f0d2sm996856a12.72.2024.11.29.09.50.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 09:11:20 -0800 (PST)
+        Fri, 29 Nov 2024 09:50:27 -0800 (PST)
 From: Andrea della Porta <andrea.porta@suse.com>
 X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Fri, 29 Nov 2024 18:11:53 +0100
-To: Krzysztof Kozlowski <krzk@kernel.org>
+Date: Fri, 29 Nov 2024 18:51:00 +0100
+To: Stefan Wahren <wahrenst@gmx.net>
 Cc: Andrea della Porta <andrea.porta@suse.com>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -98,17 +98,16 @@ Cc: Andrea della Porta <andrea.porta@suse.com>,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Stefan Wahren <wahrenst@gmx.net>,
 	Herve Codina <herve.codina@bootlin.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Andrew Lunn <andrew@lunn.ch>
 Subject: Re: [PATCH v4 02/10] dt-bindings: pinctrl: Add RaspberryPi RP1
  gpio/pinctrl/pinmux bindings
-Message-ID: <Z0n12a6irbXQomdD@apocalypse>
+Message-ID: <Z0n_BA8ZRU3ghE7Z@apocalypse>
 References: <cover.1732444746.git.andrea.porta@suse.com>
  <9b83c5ee8345e4fe26e942f343305fdddc01c59f.1732444746.git.andrea.porta@suse.com>
- <4ufubysv62v7aq53qfzxmup5agmqypdvemd24vm6eentph46qq@3kveluud3zd3>
+ <e0595933-d503-492d-ae29-aa3afe90b279@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -117,12 +116,72 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4ufubysv62v7aq53qfzxmup5agmqypdvemd24vm6eentph46qq@3kveluud3zd3>
+In-Reply-To: <e0595933-d503-492d-ae29-aa3afe90b279@gmx.net>
 
-Hi Krzysztof,
+Hi Stephan,
 
-On 08:55 Wed 27 Nov     , Krzysztof Kozlowski wrote:
-> On Sun, Nov 24, 2024 at 11:51:39AM +0100, Andrea della Porta wrote:
+On 19:12 Mon 25 Nov     , Stefan Wahren wrote:
+> Hi Andrea,
+> 
+> Am 24.11.24 um 11:51 schrieb Andrea della Porta:
+> > Add device tree bindings for the gpio/pin/mux controller that is part of
+> > the RP1 multi function device, and relative entries in MAINTAINERS file.
+> > 
+> > Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
+> > ---
+> >   .../pinctrl/raspberrypi,rp1-gpio.yaml         | 193 ++++++++++++++++++
+> >   MAINTAINERS                                   |   2 +
+> >   2 files changed, 195 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml b/Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+> > new file mode 100644
+> > index 000000000000..21923d39c1bc
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+> > @@ -0,0 +1,193 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/pinctrl/raspberrypi,rp1-gpio.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: RaspberryPi RP1 GPIO/Pinconf/Pinmux Controller submodule
+> > +
+> > +maintainers:
+> > +  - Andrea della Porta <andrea.porta@suse.com>
+> > +
+> > +description:
+> > +  The RP1 chipset is a Multi Function Device containing, among other
+> > +  sub-peripherals, a gpio/pinconf/mux controller whose 54 pins are grouped
+> > +  into 3 banks.
+> > +  It works also as an interrupt controller for those gpios.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: raspberrypi,rp1-gpio
+> > +
+> > +  reg:
+> > +    maxItems: 3
+> > +    description: One reg specifier for each one of the 3 pin banks.
+> > +
+> > +  '#gpio-cells':
+> > +    description: The first cell is the pin number and the second cell is used
+> > +      to specify the flags (see include/dt-bindings/gpio/gpio.h).
+> > +    const: 2
+> > +
+> > +  gpio-controller: true
+> > +
+> > +  gpio-ranges:
+> > +    maxItems: 1
+> > +
+> > +  gpio-line-names:
+> > +    maxItems: 54
+> > +
+> > +  interrupts:
+> > +    maxItems: 3
+> > +    description: One interrupt specifier for each one of the 3 pin banks.
+> > +
 > > +  '#interrupt-cells':
 > > +    description:
 > > +      Specifies the Bank number [0, 1, 2] and Flags as defined in
@@ -158,24 +217,145 @@ On 08:55 Wed 27 Nov     , Krzysztof Kozlowski wrote:
 > > +          subnode.
 > > +        items:
 > > +          pattern: "^gpio([0-9]|[1-5][0-9])$"
+> > +
+> > +      function:
+> > +        enum: [ alt0, alt1, alt2, alt3, alt4, gpio, alt6, alt7, alt8, none,
+> > +                aaud, dcd0, dpi, dsi0_te_ext, dsi1_te_ext, dsr0, dtr0, gpclk0,
+> > +                gpclk1, gpclk2, gpclk3, gpclk4, gpclk5, i2c0, i2c1, i2c2, i2c3,
+> > +                i2c4, i2c5, i2c6, i2s0, i2s1, i2s2, ir, mic, pcie_clkreq_n,
+> > +                pio, proc_rio, pwm0, pwm1, ri0, sd0, sd1, spi0, spi1, spi2,
+> > +                spi3, spi4, spi5, spi6, spi7, spi8, uart0, uart1, uart2, uart3,
+> > +                uart4, uart5, vbus0, vbus1, vbus2, vbus3 ]
+> > +
+> > +        description:
+> > +          Specify the alternative function to be configured for the specified
+> > +          pins.
+> > +
+> > +      bias-disable: true
+> > +      bias-pull-down: true
+> > +      bias-pull-up: true
+> > +      slew-rate:
+> > +        description: 0 is slow slew rate, 1 is fast slew rate
+> > +        enum: [ 0, 1 ]
+> > +      drive-strength:
+> > +        enum: [ 2, 4, 8, 12 ]
+> according to the driver in patch 4 the following should also be
+> supported by the hardware:
 > 
-> You have 54 GPIOs, so up to 53.
+> input-enable, input-schmitt-enable, output-enable, output-low, output-high
 
-Ack.
-
-> 
-> Use also consistent quotes, either ' or ".
-
-Ack.
-
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+You are right, added.
 
 Many thanks,
 Andrea
 
-> 
-> Best regards,
-> Krzysztof
+> > +
+> > +    additionalProperties: false
+> > +
+> > +allOf:
+> > +  - $ref: pinctrl.yaml#
+> > +
+> > +required:
+> > +  - reg
+> > +  - compatible
+> > +  - '#gpio-cells'
+> > +  - gpio-controller
+> > +  - interrupts
+> > +  - '#interrupt-cells'
+> > +  - interrupt-controller
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +
+> > +    rp1 {
+> > +        #address-cells = <2>;
+> > +        #size-cells = <2>;
+> > +
+> > +        rp1_gpio: pinctrl@c0400d0000 {
+> > +            reg = <0xc0 0x400d0000  0x0 0xc000>,
+> > +                  <0xc0 0x400e0000  0x0 0xc000>,
+> > +                  <0xc0 0x400f0000  0x0 0xc000>;
+> > +            compatible = "raspberrypi,rp1-gpio";
+> > +            gpio-controller;
+> > +            #gpio-cells = <2>;
+> > +            interrupt-controller;
+> > +            #interrupt-cells = <2>;
+> > +            interrupts = <0 IRQ_TYPE_LEVEL_HIGH>,
+> > +                         <1 IRQ_TYPE_LEVEL_HIGH>,
+> > +                         <2 IRQ_TYPE_LEVEL_HIGH>;
+> > +            gpio-line-names =
+> > +                   "ID_SDA", // GPIO0
+> > +                   "ID_SCL", // GPIO1
+> > +                   "GPIO2", "GPIO3", "GPIO4", "GPIO5", "GPIO6",
+> > +                   "GPIO7", "GPIO8", "GPIO9", "GPIO10", "GPIO11",
+> > +                   "GPIO12", "GPIO13", "GPIO14", "GPIO15", "GPIO16",
+> > +                   "GPIO17", "GPIO18", "GPIO19", "GPIO20", "GPIO21",
+> > +                   "GPIO22", "GPIO23", "GPIO24", "GPIO25", "GPIO26",
+> > +                   "GPIO27",
+> > +                   "PCIE_RP1_WAKE", // GPIO28
+> > +                   "FAN_TACH", // GPIO29
+> > +                   "HOST_SDA", // GPIO30
+> > +                   "HOST_SCL", // GPIO31
+> > +                   "ETH_RST_N", // GPIO32
+> > +                   "", // GPIO33
+> > +                   "CD0_IO0_MICCLK", // GPIO34
+> > +                   "CD0_IO0_MICDAT0", // GPIO35
+> > +                   "RP1_PCIE_CLKREQ_N", // GPIO36
+> > +                   "", // GPIO37
+> > +                   "CD0_SDA", // GPIO38
+> > +                   "CD0_SCL", // GPIO39
+> > +                   "CD1_SDA", // GPIO40
+> > +                   "CD1_SCL", // GPIO41
+> > +                   "USB_VBUS_EN", // GPIO42
+> > +                   "USB_OC_N", // GPIO43
+> > +                   "RP1_STAT_LED", // GPIO44
+> > +                   "FAN_PWM", // GPIO45
+> > +                   "CD1_IO0_MICCLK", // GPIO46
+> > +                   "2712_WAKE", // GPIO47
+> > +                   "CD1_IO1_MICDAT1", // GPIO48
+> > +                   "EN_MAX_USB_CUR", // GPIO49
+> > +                   "", // GPIO50
+> > +                   "", // GPIO51
+> > +                   "", // GPIO52
+> > +                   ""; // GPIO53
+> > +
+> > +            rp1-i2s0-default-state {
+> > +                function = "i2s0";
+> > +                pins = "gpio18", "gpio19", "gpio20", "gpio21";
+> > +                bias-disable;
+> > +            };
+> > +
+> > +            rp1-uart0-default-state {
+> > +                txd-pins {
+> > +                    function = "uart0";
+> > +                    pins = "gpio14";
+> > +                    bias-disable;
+> > +                };
+> > +
+> > +                rxd-pins {
+> > +                    function = "uart0";
+> > +                    pins = "gpio15";
+> > +                    bias-pull-up;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 75a66e3e34c9..c55d12550246 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -19384,7 +19384,9 @@ RASPBERRY PI RP1 PCI DRIVER
+> >   M:	Andrea della Porta <andrea.porta@suse.com>
+> >   S:	Maintained
+> >   F:	Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
+> > +F:	Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
+> >   F:	include/dt-bindings/clock/rp1.h
+> > +F:	include/dt-bindings/misc/rp1.h
+> > 
+> >   RC-CORE / LIRC FRAMEWORK
+> >   M:	Sean Young <sean@mess.org>
 > 
 
