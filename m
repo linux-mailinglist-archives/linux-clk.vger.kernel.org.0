@@ -1,138 +1,189 @@
-Return-Path: <linux-clk+bounces-15207-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15209-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EAE99E01ED
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Dec 2024 13:19:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45E3C9E0504
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Dec 2024 15:32:18 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 012C1B3400C
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Dec 2024 12:17:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC727165F04
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Dec 2024 14:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 681F6209F26;
-	Mon,  2 Dec 2024 12:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B6C204093;
+	Mon,  2 Dec 2024 14:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BvhJpLxO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ewY7/zbV"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7537A209691
-	for <linux-clk@vger.kernel.org>; Mon,  2 Dec 2024 12:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C402036EB
+	for <linux-clk@vger.kernel.org>; Mon,  2 Dec 2024 14:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733141468; cv=none; b=F8jvZ2NhBPsQgg9fp/6SARTpQrnJPT0CtrJFtYn6vk7wRq/btf0Jxf3aMagonIIYzN3M9Tj/5uGRihe1i0hHhtdX7wRlBjFI6sDAlcgh/9nMpFohQSmIx7n8TOlK1v5NApK97SCeFX8Fjl7OGhDYQ+pmzSP7WOzr5ql0RO0b7Bw=
+	t=1733149746; cv=none; b=IxaMcRLopGqq0/3YgvOM4VwOVJmxyTt3u9Lm+bvSttbcc5NIOr6sW+FlNcn4ToW1DNOqC3A8OGOLSPRHjOgwO6+b53rEpslGqNe1HUgFKJBP0zoqBnyBmlGI6+ujtZ+gyhtdoLp5eMPnAw4KMBEJ1IzYhuK3M73KeB9IUgpXF0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733141468; c=relaxed/simple;
-	bh=h6VpcuSndvt5gb/Lu3I7A7ng3nwMLL1ZD7IPVdwY++s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IHLMBedshvouWldrea7i8TWqc0nsZLveQv48FhOo86NXtStO5iGPenrKZZtD528M/akf/m2q9QL44QfZ5zQzeCVj1E8J/UL+Hh/fizrmm1KA6VJpKk0s1dE/cJN4D3aVP+3qr/ar95Spw9E4K/+24xDFs+GSz0oUMfsQZDQsz+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BvhJpLxO; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1733149746; c=relaxed/simple;
+	bh=wlRI2OT+rw+dkTzxhV2YE6EaBFnDzidyVxfTdeJxCaU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XZM+99KCW5CK9sUDYepz6gaglXeeYzfOB0JlHMXbAzprqbXg32hcy3ZYeuGU4CtvOPX7TM0jXUhCxpefNl7EyA7l7gRasVOjWO/KjsExtzoMfe9lHkgSgxRiUg8Gy/3lE8fvQYG/LsQ4pbr9vPMmgy891mDnWRLCEGhgZxYJFlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ewY7/zbV; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53de579f775so5662750e87.2
-        for <linux-clk@vger.kernel.org>; Mon, 02 Dec 2024 04:11:06 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-385ed7f6605so730378f8f.3
+        for <linux-clk@vger.kernel.org>; Mon, 02 Dec 2024 06:29:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733141465; x=1733746265; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQXENZQVJNQwnHrGpO9XimeeddczjCL8gDUobO6Gaic=;
-        b=BvhJpLxOWGf4z5LOJu1sLGJhk7b7mAU0wz2VVtmyrflK28Be8nX9jWEishs4RSSvEh
-         y9ZhnI4D5D8xSo4A+K/sZxrtaV0lwMeKpRnMkHN7rxwZt+dZukd59uj1Ou3m+YllaFC1
-         s2TpnZd+CCPmmSD/4QG4tn94qfjgw5U5CvzdjvPM2YYHBVJSNfY7GnuViEqx2nIEKRhy
-         DLopHQ3fu3aknKtwk0nSO9dzv7ZIy+A0RarB0Y0P2HydFFtI0rQc/dOxxHigxj7tE9gU
-         csAlkcXihu8R/dsOrk4P0kbHFI2GYueABRf1rQ2s2GQKqLZmrW9tEiHhY2lPC532nMhp
-         MeBw==
+        d=linaro.org; s=google; t=1733149742; x=1733754542; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oqc50eNxXUAqEFVmJyEUgH5BLlmcgcNvNFQIb4r4jyE=;
+        b=ewY7/zbVVpHL1TlXvdyPSb7QDzLf49TkbToBS848ZhYHhZ6uBz3gdvyfPWxDBifWl+
+         353Exkn69k2cjpTOfzq4QSSCa7/B7hxY9D0Ifs3FOinqE8U7LACKOoDNqHg+KH7NRxms
+         0hMLzso+AxPP4xBnYUcYB5jG0AADP0btsHpxIZilnhHUHTISUTWNvXnYtAqFj9MxPJtD
+         RiowDqjNYJQYTwNkC66X+2H+MlJqcGBkA/WYbPtW84Tg0rOyhxGX0bNVvr5qXtVnN97A
+         itcG2+DwfdIFEW5f4wpbTiNn1JvVc9DJqx0iME5L9k+cnUpQ8vUMLvQTeXG8gPfYSkfV
+         sU0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733141465; x=1733746265;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yQXENZQVJNQwnHrGpO9XimeeddczjCL8gDUobO6Gaic=;
-        b=q4vdaeHm17tbRx+Ny6lXVpj6MsB5HJpoes0J/e0PWVL2S6Bqx0jgOmgZhZRmV4nkIX
-         AFnCGFVJ/PXAW0/YFdLu+P/8ZK3YQdjuFA0d4GUA2rprZkQc0JRR9Ds1U9cbqWZXOFTL
-         imZHvaBem4UVy4+3vHg76yFHfVg/e7g+5Gm1/iphSMAU0CJ8fBPEaONrQ6T6fZC4Y1H6
-         m9Yfa0Iqaq1PBGq15cqXvogR9XLCSsGv97uAL/pmn86/YCYNLeMZb9ZcWPahOy+H0jkH
-         a+s4I2DPDBVmO91hEd8CN2W2GB+PBvOLHZOrnQjNuC/oSzsUlx9eYvcTbOoc+vxUx4Z5
-         xdxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdo+n4LZzXp2if+IwL3nzk+H/5iUXv8z6yEDEG1ARW0IXKA3AnjtRpjqDPirWEz32WWrsAuDYUXM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2sDjbVtzKHOzP/KUcTpNo7xWJruFbObHKXSWILNMT+IvLqQm2
-	pXqxbNC1rXmYuMNwLuPg5uKr4M19+yfJtR7wkja+QFGq2F1QuSM5yy4JqvPCaJs=
-X-Gm-Gg: ASbGncu2ot5jCbkhKE6pmh+9Z3IFKEHDR+PcPBJwHMzao3+FjyYxBDtAn/OKqHUwATV
-	NYpLakrM4RCSapYOi9YZJgDRwQAnLaPdMMPBaeUM00yh77F5pgQyvtB7zBAN4Y2qaEf4Cb59vuZ
-	iMd6S4MxngcwH+2w6+9ufYilYLDmXy5l27IToDOLLY0dQkBkPwS5c4fhST8aF6qOVKKxthM9o4M
-	v81SAy9HxGOn6DeJFi6+opGAs2f+1Y1vQXt6ZkXfsGOhJcUV+cABNf8sj8/cjijqSSg4DuZCvV3
-	8RLnzUuBTPAyAzjw90NMve/Tde2TSQ==
-X-Google-Smtp-Source: AGHT+IEzRcIhzwnknvixHamvE9vlf/Jqh7zUcscNKtxe89RF9mRI+5Y0+FdqdzWwutifP0uXEZ5FAQ==
-X-Received: by 2002:a05:6512:1247:b0:53d:deb5:3376 with SMTP id 2adb3069b0e04-53df010b17bmr16440685e87.40.1733141464583;
-        Mon, 02 Dec 2024 04:11:04 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53df64968d6sm1416507e87.200.2024.12.02.04.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 04:11:03 -0800 (PST)
-Date: Mon, 2 Dec 2024 14:11:00 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Taniya Das <quic_tdas@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Abhishek Sahu <absahu@codeaurora.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ajit Pandey <quic_ajipan@quicinc.com>, Imran Shaik <quic_imrashai@quicinc.com>, 
-	Jagadeesh Kona <quic_jkona@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Gabor Juhos <j4g8y7@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH v3 00/11] Add support for videocc, camcc, dispcc and
- gpucc on Qualcomm QCS615 platform
-Message-ID: <urlb2pn3cezyx7e6fxxf4j7psmf37amshnlzu7buixp6sxkrgy@mg4zljxn5s3v>
-References: <20241108-qcs615-mm-clockcontroller-v3-0-7d3b2d235fdf@quicinc.com>
- <a4f6ojknv3hats4rwmdg5mw2rxhx7kq4u6axybdawak54crn5s@xnjbl7zno42s>
- <bfabfba2-6688-4461-83d6-b6f4c86b08ab@quicinc.com>
+        d=1e100.net; s=20230601; t=1733149742; x=1733754542;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oqc50eNxXUAqEFVmJyEUgH5BLlmcgcNvNFQIb4r4jyE=;
+        b=XGJKH3uORI+8u9cxj/3gGPxev+a9kKSRrok0OiL2wshn3vWic0hfBZfpca/JDb67Lu
+         6721nl9fznFC8vGvwJohdJW8OqbhKhjXVikc+8bhQ8bvMnZmfKPItBOKOGN6HGFNt2JD
+         t91YcVXm4dX/DZoYatNJKt9G9UzCWrlsF1Kr321QESbnasxplR6nKq1UdkjOrCWfoYv0
+         tljwz5DkGPW8so4M/SUc0r3s3OFvUBdF6ew3PSfzsW/9Q58ByOTIS0D06X1Yjorh3pxm
+         KtzTqBFAT4ayvRWATh+ljGnHRbEXuGEUd9kAXwQH3r7VvsLpR0HMj0lrAP5ZnWlv1nW4
+         VVwg==
+X-Forwarded-Encrypted: i=1; AJvYcCURg4ALnAtG631VL6GawpGbcsfyTOxBAwYGOO58PHH7l5ydR3O4h/mEho9kwNFzA4Azgdvek/N2Nxs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx94QyA6epLrXr5W0TTfuR2OV5Xt2B6p313Jm4cwDJTiTGu+0ft
+	44pBvuBsunUXJMRG1tGNQuOs7Dg+dhCsPkh47WC+H6QTx6ReJvze/bWFvAk9t6M=
+X-Gm-Gg: ASbGncth/PZakq2zeAO1t0TXBXq3Hke6KF3+FEA6fww3aWGepyjaliYglT0oIKFFzaM
+	nbg6UmlLUxk5oJacBaeR2VK0xfHCJa2Z+RpsPGaMxrHevyiTyaeP+a1FYmZQr/iqrHt3/sl9xmn
+	n6rYtuDXZNsiyhgyHa2ZH4htMFhdUtRxYtkhp235NSeyzsLUxYb89f+UIRcnK0rtNSKRf+ASGVF
+	KXPmiIOdHsC4J3jtkVrxknGQO0pZCT5h6OGsbpEm1uClx0j7ncNC7O9tMuf6R0=
+X-Google-Smtp-Source: AGHT+IHBqpOA5WusxHmAizK11N8tj+m+7ZyOd54zDM1M4eEtwjJnc+y1fKMouKLmUy05ESmk1DPYLw==
+X-Received: by 2002:a5d:6c62:0:b0:385:f1f2:13ae with SMTP id ffacd0b85a97d-385f1f21692mr3253536f8f.41.1733149741845;
+        Mon, 02 Dec 2024 06:29:01 -0800 (PST)
+Received: from [192.168.0.40] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385e9fda2f6sm5698820f8f.107.2024.12.02.06.29.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2024 06:29:01 -0800 (PST)
+Message-ID: <84744442-73e4-49c0-a54f-1530093fb27b@linaro.org>
+Date: Mon, 2 Dec 2024 14:29:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bfabfba2-6688-4461-83d6-b6f4c86b08ab@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/3] clk: qcom: Support attaching GDSCs to multiple
+ parents
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241129-b4-linux-next-24-11-18-clock-multiple-power-domains-v6-0-24486a608b86@linaro.org>
+ <20241129-b4-linux-next-24-11-18-clock-multiple-power-domains-v6-3-24486a608b86@linaro.org>
+ <7slvjokv5xcwdpoa77vtg5ihkmgsok5arz2aw2f3wfh4hffkzu@rep6qmkqy2ro>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <7slvjokv5xcwdpoa77vtg5ihkmgsok5arz2aw2f3wfh4hffkzu@rep6qmkqy2ro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Dec 02, 2024 at 01:09:12PM +0530, Taniya Das wrote:
+On 02/12/2024 03:58, Bjorn Andersson wrote:
+> On Fri, Nov 29, 2024 at 01:06:49PM +0000, Bryan O'Donoghue wrote:
+>> When a clock-controller has multiple power-domains we need to attach
+>> parent GDSCs in that clock-controller as subdomains of each of the
+>> power-domains.
 > 
+> I envision a fair number of current and future readers will wonder why
+> this is... Why do we _need_ to perform this attachment?
 > 
-> On 12/2/2024 9:55 AM, Bjorn Andersson wrote:
-> > On Fri, Nov 08, 2024 at 09:39:17AM +0530, Taniya Das wrote:
-> > > Add support for multimedia clock controllers on Qualcomm QCS615 platform.
-> > > Update the defconfig to enable these clock controllers.
-> > > 
-> > > Global clock controller support
-> > > https://lore.kernel.org/all/20241022-qcs615-clock-driver-v4-0-3d716ad0d987@quicinc.com/
-> > > 
-> > > Signed-off-by: Taniya Das<quic_tdas@quicinc.com>
-> > Dropping this series from my queue, due to lack of response from author.
-> > 
-> > Taniya, please answer questions/feedback from Dmitry, Vladimir and
-> > Bryan, and repose as necessary.
+>>
+>> Testing on the x1e80100 reference shows that both power-domains need to be
+>> switched on for the GDSCs in the clock-controller to work.
 > 
-> Sure, Bjorn, I had a dependency on the GCC patch.
+> You're making a completely generic change, but are referring here to
+> some specific (probably camera) case.
 > 
-> https://lore.kernel.org/all/20241022-qcs615-clock-driver-v4-0-3d716ad0d987@quicinc.com/
+>> Some open
+>> questions remain.
+>>
+>> 1. Should there be a hirearchy of power-domains in the clock-controller.
 > 
-> I will fix the comments once the Global clock controller patch is picked.
+> Your TITAN_TOP patches is already an example of such hierarchy, so I
+> don't think that's an open question.
+> 
+>> 2. If there should be no hirearchy should the parent GDSC inside the
+>>     clock-controller attach to each power-domain in the clock-controller.
+> 
+> I suspect that the TITAN_TOP gives you this impression that there is a
+> "parent GDSC"; that's generally not the case - but the mechanism
+> introduced by the patch is still needed.
+> 
+>> 3. If there are multiple parent GDSCs in a clock-controller do we attach
+>>     those top-level GDSCs to each controller power-domain.
+>> 4. Finally should performance-states be applied equally across those
+>>     power-domains.
+>>
+>> It may be if we see more clock-controllers with multiple power-domains that
+>> some mixture of these questions will need to be implemented for specific
+>> hardware.
+> 
+> GPUCC has always been an example of this and there are several other
+> examples in multimedia, which we've just ignored. And even for GCC you
+> have a mix of voltage requirements cast across CX and MX.
+> 
+>> Right now the approach taken here is to attach the
+>> clock-controller GDSC parent to each clock-controller power-domain.
+>>
+> 
+> What is "the clock-controller GDSC parent"? Perhaps I'm just parsing
+> this incorrectly?
 
-I think this makes a good generic feedback (I observe the antipattern in
-other engineer's behaviour too): please try responding to the comment
-after receiving it, not just before getting back to the series.
+> Perhaps we can use the naming from the API and say "each GDSC is put in
+> the subdomain of all power-domains of the clock-controller"?
 
-For this particular case: there is no need to wait on GCC. Please stop
-using the external dt-bindings header and use <&gcc_foo_clock> instead.
-This is just an example, not a c&p from the platform's DT.
+OK
 
+> 
+> I'm not convinced that the propagation of set_performance_state has been
+> adequately been understood.
+> 
+> But, in general, I'm not against the idea of starting off by voting on
+> all rails, mentioning that it's likely that in some cases more effective
+> propagation of votes can be made and then leave this as a future
+> exercise.
+> 
+> I would like to see 1-2 use cases beyond camcc being exposed to this
+> though.
 
--- 
-With best wishes
-Dmitry
+I'm not sure we have one on x1e - GPUCC maybe, I think you mentioned that.
+
+                 gpucc: clock-controller@3d90000 {
+                         compatible = "qcom,x1e80100-gpucc";
+                         reg = <0 0x03d90000 0 0xa000>;
+                         clocks = <&bi_tcxo_div2>,
+                                  <&gcc GCC_GPU_GPLL0_CPH_CLK_SRC>,
+                                  <&gcc GCC_GPU_GPLL0_DIV_CPH_CLK_SRC>;
+                         #clock-cells = <1>;
+                         #reset-cells = <1>;
+                         #power-domain-cells = <1>;
+                 };
+
+I can look around for a list of power-domains = <>; for this block.
+
+I suspect though they are already on as they aren't list.
+
+Do you want examples in the commit log or dtsi changes to accompany ?
+
+---
+bod
 
