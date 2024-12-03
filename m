@@ -1,108 +1,115 @@
-Return-Path: <linux-clk+bounces-15310-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15298-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5379E25C3
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 17:04:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD6BD9E296A
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 18:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ED9028898B
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 16:04:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B084B80641
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 15:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5043F1F76BF;
-	Tue,  3 Dec 2024 16:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A3A51F7071;
+	Tue,  3 Dec 2024 15:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grFFN0kd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BibNDSdI"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F7823CE;
-	Tue,  3 Dec 2024 16:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363E71F130F;
+	Tue,  3 Dec 2024 15:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733241883; cv=none; b=A2s0wI6irk2LoflisA81ZeszBpjedIsZwbzj5w2RNC0L3WYUR4uEjfZj76uMKjTrseXSLML0n9LwQZH23o+CBvch19YLvz9Q40/WPTSMNOABGLyAEpLXxprA0TCxnmp0Xzm/yBxCN/hykpSmwtX78dr/AYc7oO7qJKiBpQjBH7c=
+	t=1733239518; cv=none; b=nUIU4k4Ppfsoyp21z/EnVWbCNTgD3C9q1IHAKrMMz3Y9PXMCEkT6wScsCDgU3Hw0yXvjdfoMpMLXcHEKwGP2RdtDq4jsRcheacVKakXOq1UAvqiRJfto7Ju0W4e9NmqqUgfoqLr787VrWDsqvkNWWxpIWE229OjmqOGH8hRdjuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733241883; c=relaxed/simple;
-	bh=nRqnMdmSdkD8myJJwIC7IooohtKniiu1ECEsFhV/dGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OSo4lkVOyUewEaxy+EPkbMg8/WeBSil2c1F/KQwy3cbygBTd4QXauiWNb2L/VgvEEv6OG9ehwhZBZ25pruEwvALUENJ2Y8A9m+WBU2dodu33HfMyhuu5NLtiI9EITAaeP6/v2D0hg/bZMKREdYh/iYXaH8yEf4g6ExghExh/3dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grFFN0kd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 926C5C4CECF;
-	Tue,  3 Dec 2024 16:04:38 +0000 (UTC)
+	s=arc-20240116; t=1733239518; c=relaxed/simple;
+	bh=X/PwEvQP5tU0vB8EoXqX3xfn/sW++pmyf4vXD3OCWfI=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=tshxSQneNN1nR7nRnCitHxhsqPnf6L7NCIp0Z5D5IJzP/ydu/jty1E+7TDERC0WSvuU0uzjyv1xsM9rs00l5pgRlmED+gx4NSIwR3y3vHFws9q/RNH3YY5aNBTxrROmqf8jVrL1qNlP8kmF4fKdsNe5Dn3YYZqtu+j8FcslO30o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BibNDSdI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D98C4CECF;
+	Tue,  3 Dec 2024 15:25:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733241882;
-	bh=nRqnMdmSdkD8myJJwIC7IooohtKniiu1ECEsFhV/dGM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=grFFN0kd9NcI2IDb79VQgisVVmIZ3ospPp8STXIwI/dRKnZZM6Oa2PEtAvExVhLwF
-	 nfi51IgAai4Eeh8kfjv5EDKSnMCgcEgafbAieFnxwmTmOxoVzYWzD49tpVxF/YqXDv
-	 BxUrjaegzNIIuBD2VbFq5egWBd90hlS8DxP3r1vfAJ5LZqh0vg5pHq4KAGufjRI30t
-	 IktpNDUXVG1PUzEIj1KCKIAMevhHnte7xgwXYH27x0SOslc+bgDibmn66pzu4rj3lk
-	 cqBZsNsYTXf5J8eU5IQttGEyiHCPj94CpmXn3k2PqCN2y80HUBQEttQNWtmInuy54P
-	 34pVDr7hTDntw==
-Date: Tue, 3 Dec 2024 16:04:36 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: prabhakar.mahadev-lad.rj@bp.renesas.com, jic23@kernel.org,
-	lars@metafoo.de, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
-	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 11/14] dt-bindings: iio: adc: renesas,rzg2l-adc: Document
- RZ/G3S SoC
-Message-ID: <20241203-germproof-trustless-2dac494108c5@spud>
-References: <20241203111314.2420473-1-claudiu.beznea.uj@bp.renesas.com>
- <20241203111314.2420473-12-claudiu.beznea.uj@bp.renesas.com>
+	s=k20201202; t=1733239518;
+	bh=X/PwEvQP5tU0vB8EoXqX3xfn/sW++pmyf4vXD3OCWfI=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=BibNDSdIxD5dJNes1vJ7140QWABbcfK++KnAHPuRH34JJyltkmOovhdFy1ythpMcf
+	 Jgt+X0vAfjdECQevLJNkTTtUM9aIJAefQRcN5aRk2mOXcIzItQZYV+TYYf9kHkbMsN
+	 JB43bQz718szORF+xGZB1wrbaN6402z/7dJ/e1OMHJI4QMRkr2M/Wup8ldZAAW0bHL
+	 arhJtg9HrfmdBNiCy15xVrQcxPODNLdMDZXsFOpjw4CqjZyn88aCXAoj1G/CVJOTCa
+	 OLhJ7kNSWUAGXTiDqyC6R2x/C0ATmOvC9ytIP2sxvUPXMX5LD7v2D0pMT91r9TTHee
+	 kco2TN/wiPeGg==
+Date: Tue, 03 Dec 2024 09:25:16 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Z1zHaRpyP0LEy9hx"
-Content-Disposition: inline
-In-Reply-To: <20241203111314.2420473-12-claudiu.beznea.uj@bp.renesas.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: m.szyprowski@samsung.com, frank.binns@imgtec.com, 
+ linux-kernel@vger.kernel.org, maarten.lankhorst@linux.intel.com, 
+ paul.walmsley@sifive.com, jszhang@kernel.org, 
+ linux-riscv@lists.infradead.org, ulf.hansson@linaro.org, 
+ mturquette@baylibre.com, wefu@redhat.com, conor+dt@kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, 
+ airlied@gmail.com, aou@eecs.berkeley.edu, matt.coster@imgtec.com, 
+ guoren@kernel.org, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ sboyd@kernel.org, simona@ffwll.ch, drew@pdp7.com, krzk+dt@kernel.org, 
+ jassisinghbrar@gmail.com, mripard@kernel.org, palmer@dabbelt.com, 
+ tzimmermann@suse.de
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <20241203134137.2114847-9-m.wilczynski@samsung.com>
+References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
+ <CGME20241203134159eucas1p1eafefef0dfe7f2b6343a639733012bcf@eucas1p1.samsung.com>
+ <20241203134137.2114847-9-m.wilczynski@samsung.com>
+Message-Id: <173323951617.1836905.12806289628083482638.robh@kernel.org>
+Subject: Re: [RFC PATCH v1 08/14] dt-bindings: power: thead,th1520: Add
+ support for power domains
 
 
---Z1zHaRpyP0LEy9hx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 03 Dec 2024 14:41:31 +0100, Michal Wilczynski wrote:
+> Add power domain support to the Thead TH1520 clock controller bindings.
+> This enables devices to specify their power domain dependencies,
+> improving power management for components like the GPU.
+> 
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  .../bindings/power/thead,th1520-power.yaml    | 52 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/thead,th1520-power.yaml
+> 
 
-On Tue, Dec 03, 2024 at 01:13:11PM +0200, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->=20
-> Document the ADC IP available on the RZ/G3S SoC. The ADC IP on the RZ/G3S
-> differs slightly from the one found on the RZ/G2L. The identified
-> differences are as follows:
-> - different number of channels (one being used for temperature conversion=
-);
->   consequently, various registers differ; the temperature channel
->   support was not available for the RZ/G2L variant; the #io-channel-cells
->   property was added to be able to request the temperature channel from
->   the thermal driver
-> - different default sampling periods
-> - the RZ/G3S variant lacks the ADVIC register.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+yamllint warnings/errors:
 
---Z1zHaRpyP0LEy9hx
-Content-Type: application/pgp-signature; name="signature.asc"
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/thead,th1520-power.example.dtb: vosys@ffef528000: compatible: ['syscon'] is too short
+	from schema $id: http://devicetree.org/schemas/mfd/syscon-common.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/thead,th1520-power.example.dtb: vosys@ffef528000: reg: [[255, 4015161344], [0, 4096]] is too long
+	from schema $id: http://devicetree.org/schemas/mfd/syscon-common.yaml#
 
------BEGIN PGP SIGNATURE-----
+doc reference errors (make refcheckdocs):
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ08sFAAKCRB4tDGHoIJi
-0p+tAPwMh8zI0++xx3R2Zh80mJF7DF27Po96tIFFzd/ioaoymgD8DJ9ST9OY9m32
-j+UiLN0r0ajtiqSmAPs/ES5YKbkVkww=
-=s+EO
------END PGP SIGNATURE-----
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241203134137.2114847-9-m.wilczynski@samsung.com
 
---Z1zHaRpyP0LEy9hx--
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
