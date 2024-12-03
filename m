@@ -1,139 +1,152 @@
-Return-Path: <linux-clk+bounces-15314-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15316-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 025849E2A64
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 19:07:42 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCDDE160672
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 18:07:38 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95D521F8901;
-	Tue,  3 Dec 2024 18:07:40 +0000 (UTC)
-X-Original-To: linux-clk@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 930AB9E2D03
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 21:26:55 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9A31E868;
-	Tue,  3 Dec 2024 18:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACA67B25F69
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 19:30:15 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BE81FE46F;
+	Tue,  3 Dec 2024 19:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rEOSSMAw"
+X-Original-To: linux-clk@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B705F1F8910;
+	Tue,  3 Dec 2024 19:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733249260; cv=none; b=rfYZZk+CgQLa6ars5mZW9yoS+TrIqkeWV9IKsXWHXst1qfl5WU+36DWYFQ3Rq5j8dmNDZAM/yuzmuZN5NRiKCAr0jBKUZJdlb7Y3+9aejoPArk+8GdKKWkmQL+drmBgQeambvgbsGeRTYk1mcxvmoZsvpVuBnKmGBb4G7XWmRjw=
+	t=1733254210; cv=none; b=dRwIZKPPemSgMvPXrsk98QcH+TtqxGI2YgLCb9u4UwMkx1O2QQmeE+F5C3XAuIanWJk5CPKPfWmHsz1gU/Yw981po7wyn9OUN+Fzfg3GbeWYgymbxw+8G/bty9nR+IlFr75DZ/uwP5w2eY7FAKk6s/nDHU7LBQV1F97d0VUygsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733249260; c=relaxed/simple;
-	bh=dqztknOIkm8ntS9wy+GQNN8ohu1VudzQqaeaZ2cvWb4=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i/nkJ0re27qWWXI8a3nA+wfSjtn3tZ1H7D07A0Xerp94J6nPisPT4YsiJ4ABAJY3I4t0lyC5KBFcBNK9q75c9nLIjCPyXCNtIFzaMtv2kZQQI1TAPXQE98Uh7O869qHDCjz0w1ZFZP7drIsDjTckoLxRYKYm7dw0AqD4C1EXfFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Y2pR80KFJz6K6XW;
-	Wed,  4 Dec 2024 02:03:00 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id D7E5F140B63;
-	Wed,  4 Dec 2024 02:07:12 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 3 Dec
- 2024 19:07:12 +0100
-Date: Tue, 3 Dec 2024 18:07:10 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Paul Barker <paul.barker.ct@bp.renesas.com>
-CC: Claudiu <claudiu.beznea@tuxon.dev>,
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, <jic23@kernel.org>,
-	<lars@metafoo.de>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <geert+renesas@glider.be>, <magnus.damm@gmail.com>,
-	<mturquette@baylibre.com>, <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-	<linux-iio@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-clk@vger.kernel.org>, Claudiu Beznea
-	<claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 06/14] iio: adc: rzg2l_adc: Simplify the locking scheme
- in rzg2l_adc_read_raw()
-Message-ID: <20241203180710.0000204d@huawei.com>
-In-Reply-To: <6f627195-6c55-4687-b6b6-7fb791d13819@bp.renesas.com>
-References: <20241203111314.2420473-1-claudiu.beznea.uj@bp.renesas.com>
-	<20241203111314.2420473-7-claudiu.beznea.uj@bp.renesas.com>
-	<6f627195-6c55-4687-b6b6-7fb791d13819@bp.renesas.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1733254210; c=relaxed/simple;
+	bh=2K+i1S/3sf74gdv4NXTCEB0ZkasLUdboMLKU7Q6QF+A=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=ekvC1lDLFht7kGFWCUwNNBr+fTwPH7mC10Z1a91jafKpMCo5Vi5WjykIdiMs+6ocoPSNoOTDHNtNUIRn4M/iOCKZeYIYkJzg3+FfdL65JwigSalijp+LqJmzqIBeamNXjOYbO0wmzbLKwKkh7G/nUTw73VQauYIpOCMVOJ4R7gI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rEOSSMAw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15598C4CECF;
+	Tue,  3 Dec 2024 19:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733254210;
+	bh=2K+i1S/3sf74gdv4NXTCEB0ZkasLUdboMLKU7Q6QF+A=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=rEOSSMAw4aRVIFfjkZ/b9s5WQsVAdJl8UqHu4CEvzDgMSq+RMuqTHTq8lEghwGUKz
+	 bO/TpYbMyqWPDII5AOo6Y+XjPIF4RAWz7fHDNUjOirbOKvSIMZ/jKH5esQ+11WelbV
+	 UnYzdUOIDRvWH/Gqhmb9IPBkGk5/VTlkc9794+uD/RzQ5I2HZTDWg/WQJTIiZl/UJb
+	 yuOJf+zJOreYn2LK12Fh9NTPEhONJdWfdERUoESArOvdsDoJg7vLwjt5hQXygmHvLI
+	 2zVSBEvJ3JpWm0xgNVM+25l7YjenhetnbxAs0bpmGBFsirgmULEBQvbGItgCnGVxY6
+	 wihVM8k+X4Uhw==
+Message-ID: <afa086b0b30ab5b810178f92fac96837.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500009.china.huawei.com (7.191.174.84) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241203092151.izcsgzqep4imbcwe@thinkpad>
+References: <20241202100621.29209-1-johan+linaro@kernel.org> <3fd004add188460bf2bdd1a718387c7f.sboyd@kernel.org> <Z07AXbQvvZwI8Ki6@hovoldconsulting.com> <20241203092151.izcsgzqep4imbcwe@thinkpad>
+Subject: Re: [PATCH] Revert "clk: Fix invalid execution of clk_set_rate"
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, Johan Hovold <johan+linaro@kernel.org>, Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, regressions@lists.linux.dev, Aishwarya TCV <aishwarya.tcv@arm.com>, Chuan Liu <chuan.liu@amlogic.com>, Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org
+To: Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Date: Tue, 03 Dec 2024 11:30:07 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-On Tue, 3 Dec 2024 13:03:29 +0000
-Paul Barker <paul.barker.ct@bp.renesas.com> wrote:
+Quoting Manivannan Sadhasivam (2024-12-03 01:21:51)
+> On Tue, Dec 03, 2024 at 09:25:01AM +0100, Johan Hovold wrote:
+> > [ +CC: Viresh and Sudeep ]
+> >=20
+> > On Mon, Dec 02, 2024 at 05:20:06PM -0800, Stephen Boyd wrote:
+> > > Quoting Johan Hovold (2024-12-02 02:06:21)
+> > > > This reverts commit 25f1c96a0e841013647d788d4598e364e5c2ebb7.
+> > > >=20
+> > > > The offending commit results in errors like
+> > > >=20
+> > > >         cpu cpu0: _opp_config_clk_single: failed to set clock rate:=
+ -22
+> > > >=20
+> > > > spamming the logs on the Lenovo ThinkPad X13s and other Qualcomm
+> > > > machines when cpufreq tries to update the CPUFreq HW Engine clocks.
+> > > >=20
+> > > > As mentioned in commit 4370232c727b ("cpufreq: qcom-hw: Add CPU clo=
+ck
+> > > > provider support"):
+> > > >=20
+> > > >         [T]he frequency supplied by the driver is the actual freque=
+ncy
+> > > >         that comes out of the EPSS/OSM block after the DCVS operati=
+on.
+> > > >         This frequency is not same as what the CPUFreq framework ha=
+s set
+> > > >         but it is the one that gets supplied to the CPUs after
+> > > >         throttling by LMh.
+> > > >=20
+> > > > which seems to suggest that the driver relies on the previous behav=
+iour
+> > > > of clk_set_rate().
+> > >=20
+> > > I don't understand why a clk provider is needed there. Is anyone look=
+ing
+> > > into the real problem?
+> >=20
+> > I mentioned this to Mani yesterday, but I'm not sure if he has had time
+> > to look into it yet. And I forgot to CC Viresh who was involved in
+> > implementing this. There is comment of his in the thread where this
+> > feature was added:
+> >=20
+> >       Most likely no one will ever do clk_set_rate() on this new
+> >       clock, which is fine, though OPP core will likely do
+> >       clk_get_rate() here.
+> >=20
+> > which may suggest that some underlying assumption has changed. [1]
+> >=20
 
-> Hi Claudiu,
-> 
-> On 03/12/2024 11:13, Claudiu wrote:
-> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> > 
-> > Simplify the locking scheme in rzg2l_adc_read_raw() by saving the converted
-> > value only if the rzg2l_adc_conversion() returns success. The approach
-> > simplifies the addition of thermal sensor support (that will be done in the
-> > next commits). The downside is that the ret variable need to be checked
-> > twice.
-> > 
-> > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> > ---
-> >  drivers/iio/adc/rzg2l_adc.c | 9 +++------
-> >  1 file changed, 3 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/iio/adc/rzg2l_adc.c b/drivers/iio/adc/rzg2l_adc.c
-> > index 62932f9295b6..eed2944bd98d 100644
-> > --- a/drivers/iio/adc/rzg2l_adc.c
-> > +++ b/drivers/iio/adc/rzg2l_adc.c
-> > @@ -227,14 +227,11 @@ static int rzg2l_adc_read_raw(struct iio_dev *indio_dev,
-> >  		mutex_lock(&adc->lock);
-> >  		ch = chan->channel & RZG2L_ADC_CHN_MASK;
-> >  		ret = rzg2l_adc_conversion(indio_dev, adc, ch);
-> > -		if (ret) {
-> > -			mutex_unlock(&adc->lock);
-> > -			return ret;
-> > -		}
-> > -		*val = adc->last_val[ch];
-> > +		if (!ret)
-> > +			*val = adc->last_val[ch];
-> >  		mutex_unlock(&adc->lock);
-> >  
-> > -		return IIO_VAL_INT;
-> > +		return ret ? ret : IIO_VAL_INT;  
-> 
-> It would be maybe slightly neater to use:
-> 
-> 	if (!ret) {
-> 		*val = adc->last_val[ch];
-> 		ret = IIO_VAL_INT;
-> 	}
-> 	mutex_unlock(&adc->lock);
-> 
-> 	return ret;
-> 
-Better I think to use {} for scope and
-guard(mutex)()
-...
-if (ret)
-	return ret;
+Yikes.
 
-*val = adc->last_val[ch];
+>=20
+> I just looked into the issue this morning. The commit that triggered the =
+errors
+> seem to be doing the right thing (although the commit message was a bit h=
+ard to
+> understand), but the problem is this check which gets triggered now:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
+rivers/clk/clk.c?h=3Dv6.13-rc1#n2319
+>=20
+> Since the qcom-cpufreq* clocks doesn't have parents now (they should've b=
+een
+> defined anyway) and there is no CLK_SET_RATE_PARENT flag set, the check r=
+eturns
+> NULL for the 'top' clock. Then clk_core_set_rate_nolock() returns -EINVAL,
+> causing the reported error.
+>=20
+> But I don't quite understand why clk_core_set_rate_nolock() fails if ther=
+e is no
+> parent or CLK_SET_RATE_PARENT is not set. The API is supposed to set the =
+rate of
+> the passed clock irrespective of the parent. Propagating the rate change =
+to
+> parent is not strictly needed and doesn't make sense if the parent is a f=
+ixed
+> clock like XO.
 
-Where possible keeping the error path as the out of line element is
-easier to follow on basis that is most common pattern so what a reviewers
-eye is 'trained' to see.
+The recalc_rate clk_op is telling the framework that the clk is at a
+different rate than is requested by the clk consumer _and_ than what the
+framework thinks the clk is currently running at. The clk_set_rate()
+call is going to attempt to satisfy that request, and because there
+isn't a determine_rate/round_rate clk_op it assumes the clk can't change
+rate so it looks to see if there's a parent that can be changed to
+satisfy the rate. There isn't a parent either, so the clk_set_rate()
+call fails because the rate can't be achieved on this clk.
 
-Jonathan
-
-> Thanks,
-> 
-
+It may work to have a determine_rate clk_op that is like the recalc_rate
+one that says "this rate you requested is going to turn into whatever
+the hardware is running at" by simply returning the rate that the clk is
+running at.
 
