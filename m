@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-15327-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15320-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE52F9E2D62
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 21:41:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B07E09E2DD2
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 22:08:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72447283DEF
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 20:41:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74199B62475
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 20:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346CA208997;
-	Tue,  3 Dec 2024 20:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37623207A2D;
+	Tue,  3 Dec 2024 20:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZbD5cB+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A7WGIX/n"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38F22040BB;
-	Tue,  3 Dec 2024 20:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D7218B463;
+	Tue,  3 Dec 2024 20:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733258435; cv=none; b=LWX6ZKLwnT3uK2CTTW0PEyJqnaZxe5O/JdG/CGdBL9/+oUehpvxyEoeY7BPb89n/TG4Pmwc4+/ywvo4LmhiNSnEtm5CHJXa96k/LzUXWpeaEp1yxIH6EVYvv1aGIfMGHdJezsTWSnRT5lpNJBIbw3APMEvvd9GRMRA8OdzkTPeY=
+	t=1733256089; cv=none; b=D1aAyeevn6q9txa5tPbmvkmhZIeJJs+jakeiPGLYKzek9Wukjw8+n4ykckLOwJ1E7HNNfdka/waNF8JZcGlC5uAbtvWqDy52mlOETdrzV2hpT5L52cplELzRbNeBRysyIVUhWuanwHvJjAMHHmhxLejrhTu/XQFmhi+5bOZOljk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733258435; c=relaxed/simple;
-	bh=4UjsiC0KsWowBXHcrV7nZu5jRThZpr9xrSV3uf9AHMY=;
+	s=arc-20240116; t=1733256089; c=relaxed/simple;
+	bh=CqBcec4clUB3I390AHgG8GmJXShlQhvwgA2jlWGLdhs=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=MPbCBBiEmspyPDOc5V7NIvqoW+cJze/A1Kpffr1sXJ7A92OUsI8mX7gDaMgTGpuvZOtHTAcYVcrRO5pVXZr+C/d/f+f5/DnbcJfYhyc2XjWnOjLZKpgL25sZ8dM4LkGFfId3/d2Nf7wzDo5iVx/UMCGJqwBMaGE4gVv2J+YTjVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZbD5cB+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58FBFC4CECF;
-	Tue,  3 Dec 2024 20:40:34 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=Io2da6VP18GOsxf4MudzDdH3VlWZHDEIrRzloCFOr0oabPyShYtTbLyfDr7XLS/qboLG9Ms8NqZg3RreYWiktYIf21RRXHP2vaahDY8N5Y4mCt8HT8E4Q6WCQeVSNKtBJOo/7Sgvs3+bqpcP/SDkrlA0L0RzkFQozqmZudrlWI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A7WGIX/n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6629C4CECF;
+	Tue,  3 Dec 2024 20:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733258434;
-	bh=4UjsiC0KsWowBXHcrV7nZu5jRThZpr9xrSV3uf9AHMY=;
+	s=k20201202; t=1733256088;
+	bh=CqBcec4clUB3I390AHgG8GmJXShlQhvwgA2jlWGLdhs=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=jZbD5cB+8cM095ogWta+4NF5rrGHNyBhea4lomQM43bAe6yABlDfcBYrnNi1biFp/
-	 YU01SFTTaCuEf7yRX102QK1LMjnUlK4W7XdvR3m1DFL2b+mltLTCveVTd4h+9EWX74
-	 uADzl9CJNHLdocs3bt/4VEogA6aLuG/H1+zJiUsnhHp3jM3iOfpRdpYSx/clEjUKt4
-	 0WLEhyZl72QMs5JJFv1QEIq6FzQz463EpnLWsjXp2t8d3vq80LTnImUVlJQ6ET8boQ
-	 e83xR84FZ547Wz2dmicOwaSjwrfa50SdptnQHe/GWx28Z5Wm70sderqhxnwSowWALh
-	 C+YGurMCYJ2TA==
-Message-ID: <0c17fbef1e4dd692e2459255af0b4ace.sboyd@kernel.org>
+	b=A7WGIX/nYTlbMHIZerrnQTUlB8wRA1L5sB52fF+GQvkm5xIfbgmtNtwglPZF48lWR
+	 bsmmEfYpMnd1AlCY5ejoVmpi3cg6A9Vu5RVc5EXW7/RACLPr4mmHd6RfSxXWE8bU0g
+	 AP6IyqycSaEgkxEjw8HHqmsijh8aWu8EleNFD8OBzPJwGy9Mfp3PuhDCZpK9T8al4X
+	 JS9rBiuHziQJPJy6dN1aFINbtWtUqbB669solAxwi6nJ+YOFg+XFxHvldynuwqTyjf
+	 NGVSZ2pyWKtGV6pHojdWLcQQkCigrxy62LoRmsCFNhoO4JA+RochnwtRMQHrXR5RXZ
+	 lCYUeenJUUnlw==
+Message-ID: <1f183372e51ffb790c630ef31ae4e7a4.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -50,25 +50,22 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAPY8ntD7tf6+PXKdWe8_KjCiPoemR0RQDiaHHndtjutOLGbR1w@mail.gmail.com>
-References: <20241023-drm-vc4-2712-support-v1-0-1cc2d5594907@raspberrypi.com> <CAPY8ntBM=34pTiQ=t-CjtYEE5Ax6D=EtiY-sLT1keUkUMXuLeA@mail.gmail.com> <20241122-orthodox-mantis-of-reading-2dcdcf@houat> <13cfb66b-f904-4720-8829-a6d9db85aaa5@broadcom.com> <CAPY8ntD7tf6+PXKdWe8_KjCiPoemR0RQDiaHHndtjutOLGbR1w@mail.gmail.com>
-Subject: Re: [PATCH 00/37] drm/vc4: Add support for BCM2712 / Pi5 display hardware
+In-Reply-To: <5b3b963d-ecae-4819-be47-d82e8a58e64b@stanley.mountain>
+References: <5b3b963d-ecae-4819-be47-d82e8a58e64b@stanley.mountain>
+Subject: Re: [PATCH next] clk: mmp: pxa1908-mpmu: Fix a NULL vs IS_ERR() check in probe()
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>, =?utf-8?q?Ma=C3=ADra?= Canal <mcanal@igalia.com>, Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Michael Turquette <mturquette@baylibre.com>, Javier Martinez Canillas <javierm@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Stefan Wahren <wahrenst@gmx.net>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
-To: Dave Stevenson <dave.stevenson@raspberrypi.com>, Florian Fainelli <florian.fainelli@broadcom.com>
-Date: Tue, 03 Dec 2024 12:40:32 -0800
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+To: Dan Carpenter <dan.carpenter@linaro.org>, Duje =?utf-8?q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Date: Tue, 03 Dec 2024 12:01:26 -0800
 User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-Quoting Dave Stevenson (2024-11-27 06:43:38)
+Quoting Dan Carpenter (2024-11-20 09:18:50)
+> The devm_kzalloc() function returns NULL on error, not error pointers.
+> Update the check to match.
 >=20
-> V2 includes fixing Maxime's comment on "[PATCH 31/37] clk: bcm: rpi:
-> Allow cpufreq driver to also adjust gpu clocks" that Stephen also
-> commented on.
->=20
-> Stephen: Sorry, maintaining newbie, particularly for clocks. I see in
-> linux-clk patchwork they are marked as "Awaiting Upstream". What, if
-> anything, do I need to do on those?
+> Fixes: ebac87cdd230 ("clk: mmp: Add Marvell PXA1908 MPMU driver")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
 
-I wasn't expecting to take the patches. If you want me to do so please
-resend the clk patches and I'll apply them for the next merge window..
+Applied to clk-next
 
