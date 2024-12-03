@@ -1,138 +1,71 @@
-Return-Path: <linux-clk+bounces-15319-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15321-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC5DD9E2CA3
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 21:05:26 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DDC59E2DBA
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 21:58:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A41D516275B
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 20:05:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3BE50B628E8
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 20:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06A6204F92;
-	Tue,  3 Dec 2024 20:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919D21B0F09;
+	Tue,  3 Dec 2024 20:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QLBUnj3q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uLvnkmC1"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85F420E003;
-	Tue,  3 Dec 2024 20:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E3E18DF81;
+	Tue,  3 Dec 2024 20:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733256056; cv=none; b=A0aK8tO5qsmdh5EJC8Xnehufn/rRcLBMNb+vzplTu7NUAbnS3y86LJo1KEkjFqboQE1ERjOsHWQl5V3k9gwuh5kmuZdkuGQgJMQ04I9xnRYcHUC3vmhdpEpFvnedPVK2qTMhcMIkcq4jKadNQB9oKSj1hgrnoDpgLD0bIXBVTak=
+	t=1733256133; cv=none; b=UPFI/KjRxYCWtiK/K+zs5zJo1KZ5nmZtThCqPMZYdebSXppySmbCOAOGIixgtoxRT7bZWf3qlDH2lfJ7JmPO8y763nK7hM7z/skZ3/K0Ct92l7aEMauysLatctmo20WE1d7wDk1IRD3rQmzfvyoj/VfeJgw0GnNd0MWDK0PbWVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733256056; c=relaxed/simple;
-	bh=g2jAFt9E6cPrLkzxjZNZdLFCazRG7f3JsLV0zDlhSZA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jqkRvnz27/uT02HMSmjSJ4xckG/jlhzR/FhWWWDO7iVKRX//NHq5Eqdr09+sKlLE2s++rYCHcRWmAM2z3FdWpewVjvXpqBopjnh7L9X1GNX0iNCpn6f4N+QdyyM2givjdS4wFwZhgAHLMGXGYBtnRhWIALKn/8uuxb/y46bYYyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QLBUnj3q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC630C4CECF;
-	Tue,  3 Dec 2024 20:00:51 +0000 (UTC)
+	s=arc-20240116; t=1733256133; c=relaxed/simple;
+	bh=1Uhxmz8Q4PeGU4DkHt6IvzRq8f6gvaqLNxjeSg6wdvU=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=ivUvwDIjhT9bnrgjg8bybU+7U38MZsQ8Y/3p9Toxp6wmh+Gpe/AV3qkf+qMUrlR+n2SVooasZoEikl1LKiJXmIOFfNZrD2+kMaBb38/3mOCscj39ECIi8uHl+lJqkMm/J+aGAQ0WT1tSBgMewJ2J9jlleoBHJtCpSj1wMUwaAmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uLvnkmC1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D600AC4CECF;
+	Tue,  3 Dec 2024 20:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733256056;
-	bh=g2jAFt9E6cPrLkzxjZNZdLFCazRG7f3JsLV0zDlhSZA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QLBUnj3qLYHyh6+AEXIwE59KTq454t7fNSF4nUQzKVg4DPu/rbypW3lWsJxPXzy3T
-	 d/uIKnYP+U5YwgVvpPE+yOA5123tkQYmkhAZZlP/K4YceHEohpb3LSymnVBd+qAWt3
-	 cyDR5JV/vUHySt4TyHmARK1pHsgKmyw/iVp1rEgzzw02TvPpd2AV+dxySNkt7ZZuME
-	 mkrl2PjKBJ89u1qQWztXA1Ln/KAQ+S0CSQyOSZS783DJfj7HnjAcVR9e9VQZJdEVro
-	 /AUa4brl9XBaQK6HS59yWwhAVOwdIPc8NrUz6+kXGgxU+EVWu67E8PdIraJBp2nRBK
-	 dj/nCDw+5OKLA==
-Date: Tue, 3 Dec 2024 20:00:46 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: prabhakar.mahadev-lad.rj@bp.renesas.com, lars@metafoo.de,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com,
- sboyd@kernel.org, p.zabel@pengutronix.de, linux-iio@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, Claudiu Beznea
- <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH 07/14] iio: adc: rzg2l_adc: Enable runtime PM
- autosuspend support
-Message-ID: <20241203200046.0dfb784a@jic23-huawei>
-In-Reply-To: <20241203111314.2420473-8-claudiu.beznea.uj@bp.renesas.com>
-References: <20241203111314.2420473-1-claudiu.beznea.uj@bp.renesas.com>
-	<20241203111314.2420473-8-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=k20201202; t=1733256133;
+	bh=1Uhxmz8Q4PeGU4DkHt6IvzRq8f6gvaqLNxjeSg6wdvU=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=uLvnkmC15YZP1c4uRWZ2WIQwTv9XQ10lWXx49Za9AmTdxuLWlWRaEII7/XM11JfCI
+	 mNmqH3vB15+yxybA7qNQyzHbaBLmpRXGrNQW7YAU4IHLPjOGdtArb0SXU57vDIZD/Y
+	 N5WnDJT9+0iNGmuZhHR7bwb/43KVlMbJDTkbW+K2GLkiKHFzaO0XZg+E1QdP2UoN3M
+	 43tkLAfuyiKlhx2TlIZWA2m46DqGlyKR+FUCpnnkchlC0nWTe38jIS2q13euvemL2c
+	 lGopdM3iwLvlzVpA0WXBxcU3KzmDxY+4Oob54+pmkuwcz50x5TMHwfOxJHCuT1J3bj
+	 R/RieY5QKEYig==
+Message-ID: <6e7c6886943dfdc77008a382bf316aeb.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <6155067d-aed5-4799-9e14-6dff7be1cb3a@stanley.mountain>
+References: <6155067d-aed5-4799-9e14-6dff7be1cb3a@stanley.mountain>
+Subject: Re: [PATCH next] clk: mmp: pxa1908-apbcp: Fix a NULL vs IS_ERR() bug in probe
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+To: Dan Carpenter <dan.carpenter@linaro.org>, Duje =?utf-8?q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Date: Tue, 03 Dec 2024 12:02:10 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-On Tue,  3 Dec 2024 13:13:07 +0200
-Claudiu <claudiu.beznea@tuxon.dev> wrote:
-
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> Enable runtime PM autosuspend support for the rzg2l_adc driver. With this
-> change, consecutive conversion requests will no longer cause the device to
-> be runtime-enabled/disabled after each request. Instead, the device will
-> transition based on the delay configured by the user.
-> 
-> This approach reduces the frequency of hardware register access during
-> runtime PM suspend/resume cycles, thereby saving CPU cycles. The default
-> autosuspend delay is set to zero to maintain the previous driver behavior.
-
-Unless you have a weird user who is polling slow enough to not trigger
-autosuspend with a non zero period, but is still saving power I'm not convinced
-anyone will notice if you just enable this for a sensible autosuspend delay.
-There will of course be a small increase in power usage for each read but
-hopefully that is trivial.
-
-So I'd not go with a default of 0, though what value makes sense depends
-on the likely usecase + how much power is saved by going to sleep.
-
-If you really want to keep 0 I don't mind that much, just seems odd!
-
-Jonathan
-
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Quoting Dan Carpenter (2024-11-20 09:18:44)
+> The devm_kzalloc() function doesn't return error pointers, it returns
+> NULL on error.  Update the check to match.
+>=20
+> Fixes: a89233dbd4df ("clk: mmp: Add Marvell PXA1908 APBCP driver")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 > ---
->  drivers/iio/adc/rzg2l_adc.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/rzg2l_adc.c b/drivers/iio/adc/rzg2l_adc.c
-> index eed2944bd98d..fda8b42ded81 100644
-> --- a/drivers/iio/adc/rzg2l_adc.c
-> +++ b/drivers/iio/adc/rzg2l_adc.c
-> @@ -207,7 +207,8 @@ static int rzg2l_adc_conversion(struct iio_dev *indio_dev, struct rzg2l_adc *adc
->  	rzg2l_adc_start_stop(adc, false);
->  
->  rpm_put:
-> -	pm_runtime_put_sync(dev);
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	return ret;
->  }
->  
-> @@ -372,7 +373,8 @@ static int rzg2l_adc_hw_init(struct device *dev, struct rzg2l_adc *adc)
->  	rzg2l_adc_writel(adc, RZG2L_ADM(3), reg);
->  
->  exit_hw_init:
-> -	pm_runtime_put_sync(dev);
-> +	pm_runtime_mark_last_busy(dev);
-> +	pm_runtime_put_autosuspend(dev);
->  	return ret;
->  }
->  
-> @@ -412,6 +414,9 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
->  		return PTR_ERR(adc->presetn);
->  	}
->  
-> +	/* Default 0 for power saving. Can be overridden via sysfs. */
-> +	pm_runtime_set_autosuspend_delay(dev, 0);
-> +	pm_runtime_use_autosuspend(dev);
->  	ret = devm_pm_runtime_enable(dev);
->  	if (ret)
->  		return ret;
 
+Applied to clk-next
 
