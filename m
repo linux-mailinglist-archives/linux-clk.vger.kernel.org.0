@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-15320-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15326-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B07E09E2DD2
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 22:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D27279E2E5D
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 22:46:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 74199B62475
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 20:06:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3718FB29A85
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 20:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37623207A2D;
-	Tue,  3 Dec 2024 20:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA9D2036E9;
+	Tue,  3 Dec 2024 20:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A7WGIX/n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pT74FNcN"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D7218B463;
-	Tue,  3 Dec 2024 20:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821AC143759;
+	Tue,  3 Dec 2024 20:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733256089; cv=none; b=D1aAyeevn6q9txa5tPbmvkmhZIeJJs+jakeiPGLYKzek9Wukjw8+n4ykckLOwJ1E7HNNfdka/waNF8JZcGlC5uAbtvWqDy52mlOETdrzV2hpT5L52cplELzRbNeBRysyIVUhWuanwHvJjAMHHmhxLejrhTu/XQFmhi+5bOZOljk=
+	t=1733257315; cv=none; b=KS2i4uJY40VRMMFtWH9yO0LGjhippg9XTjBxJSTVXKug3N0lU41quPcfqxmQiaAYDqfITWY8t7yp24yZ7vz6Q0rlfTEg95CbOK08lPm8RUCiNixj9BJ1rx7eNWbWvg3UqkhppRDtMsIGJOOC9Bt7CvnK7T+ikMI6JzDKBAjQOT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733256089; c=relaxed/simple;
-	bh=CqBcec4clUB3I390AHgG8GmJXShlQhvwgA2jlWGLdhs=;
+	s=arc-20240116; t=1733257315; c=relaxed/simple;
+	bh=XvHonDC5Zqxszw1JDIsgXnXHPmUro0m9SxjIASwNeoY=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=Io2da6VP18GOsxf4MudzDdH3VlWZHDEIrRzloCFOr0oabPyShYtTbLyfDr7XLS/qboLG9Ms8NqZg3RreYWiktYIf21RRXHP2vaahDY8N5Y4mCt8HT8E4Q6WCQeVSNKtBJOo/7Sgvs3+bqpcP/SDkrlA0L0RzkFQozqmZudrlWI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A7WGIX/n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6629C4CECF;
-	Tue,  3 Dec 2024 20:01:28 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=eZorv0o6JTnSpQpv3llOqvNeTRufxp0AyeC0aEA45gjjymG+2HbHW37AR8B1idfqhTPg6snSroJkLqIDgnp71YMHvoI7COkUKhiG4W2fqmoHNIdKzlXkZYK0ZWozAksECWq2v5EbVhJJWbuPLyXAPpX+aVzQdejD20Hf+AohjAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pT74FNcN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8D9C4CED6;
+	Tue,  3 Dec 2024 20:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733256088;
-	bh=CqBcec4clUB3I390AHgG8GmJXShlQhvwgA2jlWGLdhs=;
+	s=k20201202; t=1733257315;
+	bh=XvHonDC5Zqxszw1JDIsgXnXHPmUro0m9SxjIASwNeoY=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=A7WGIX/nYTlbMHIZerrnQTUlB8wRA1L5sB52fF+GQvkm5xIfbgmtNtwglPZF48lWR
-	 bsmmEfYpMnd1AlCY5ejoVmpi3cg6A9Vu5RVc5EXW7/RACLPr4mmHd6RfSxXWE8bU0g
-	 AP6IyqycSaEgkxEjw8HHqmsijh8aWu8EleNFD8OBzPJwGy9Mfp3PuhDCZpK9T8al4X
-	 JS9rBiuHziQJPJy6dN1aFINbtWtUqbB669solAxwi6nJ+YOFg+XFxHvldynuwqTyjf
-	 NGVSZ2pyWKtGV6pHojdWLcQQkCigrxy62LoRmsCFNhoO4JA+RochnwtRMQHrXR5RXZ
-	 lCYUeenJUUnlw==
-Message-ID: <1f183372e51ffb790c630ef31ae4e7a4.sboyd@kernel.org>
+	b=pT74FNcNxVkwjB2rO21AYzErpMozWgTU1hTUGLgG4jrT/AT9oTopc+JJA2k5xCnPc
+	 QRhKyQxHvSPCH9GpGhlq199vQsqESY27KWU5qxMGQOZuYkYI6IhjUtkNwDS4HyQ9mg
+	 iR4NqZ9P7ie3R4/an+2UTmtdLM03G3KE6WPfJxbFMZZk8L6QE7NdFyiBazL+LkBUn8
+	 kL9Jx5YT/23Q/+LN2eiZech0HVdiXU9QuDAE0Sa+F93HRf3f9x9bz/k8sk/gwOTAHc
+	 hirQL9oa7nLkeOG62oyKY7AWwzd/zUnMna4NaWvrFHLS4nLM2hfZatzqVh9ga+JlSi
+	 E5MB+w+PEzKGA==
+Message-ID: <c9556de589e289cb1d278d41014791a6.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -50,22 +50,60 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <5b3b963d-ecae-4819-be47-d82e8a58e64b@stanley.mountain>
-References: <5b3b963d-ecae-4819-be47-d82e8a58e64b@stanley.mountain>
-Subject: Re: [PATCH next] clk: mmp: pxa1908-mpmu: Fix a NULL vs IS_ERR() check in probe()
+In-Reply-To: <0f07300a-8b32-4d3e-a447-b3fe3cf1ca81@app.fastmail.com>
+References: <20241127-clk-audio-fix-rst-missing-v1-1-9f9d0ab98fce@baylibre.com> <f8de4a2a-776f-4c10-b75e-e845bcc38dde@app.fastmail.com> <1j4j3r32ld.fsf@starbuckisacylon.baylibre.com> <306b0b30-5a32-4c7c-86b4-57d50e2307e8@app.fastmail.com> <1jy1131kxz.fsf@starbuckisacylon.baylibre.com> <c06317c6-b2b2-4b6d-96e4-0c2cfc6846de@app.fastmail.com> <1jplmf1jqa.fsf@starbuckisacylon.baylibre.com> <ce67e512-a15b-4482-8194-b917096f4eeb@app.fastmail.com> <df0a53ee859e450d84e81547099f5f36.sboyd@kernel.org> <0f07300a-8b32-4d3e-a447-b3fe3cf1ca81@app.fastmail.com>
+Subject: Re: [PATCH] clk: amlogic: axg-audio: select RESET_MESON_AUX
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-To: Dan Carpenter <dan.carpenter@linaro.org>, Duje =?utf-8?q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Date: Tue, 03 Dec 2024 12:01:26 -0800
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>, Jerome Brunet <jbrunet@baylibre.com>
+Date: Tue, 03 Dec 2024 12:21:52 -0800
 User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-Quoting Dan Carpenter (2024-11-20 09:18:50)
-> The devm_kzalloc() function returns NULL on error, not error pointers.
-> Update the check to match.
+Quoting Arnd Bergmann (2024-12-03 04:43:03)
+> On Tue, Dec 3, 2024, at 03:53, Stephen Boyd wrote:
+> > Quoting Arnd Bergmann (2024-11-28 07:34:46)
+> >> On Thu, Nov 28, 2024, at 16:06, Jerome Brunet wrote:
+> >> Stephen, can you please take a look here and see if you
+> >> have a better idea for either decoupling the two drivers
+> >> enough to avoid the link time dependency, or to reintegrate
+> >> the reset controller code into the clk driver and avoid
+> >> the complexity?
+> >
+> > I think the best approach is to add the reset auxilary device with a
+> > function that creates the auxiliary device directly by string name and
+> > does nothing else. Maybe we can have some helper in the auxiliary
+> > layer that does that all for us, because it's quite a bit of boiler
+> > plate that we need to write over and over again. Something like:
+> >
+> >   int devm_auxiliary_device_create(struct device *parent, const char *n=
+ame)
+> >
+> > that does the whole kzalloc() + ida dance that
+> > devm_meson_rst_aux_register() is doing today and wraps it all up so that
+> > the device is removed when the parent driver unbinds. Then this clk
+> > driver can register the reset device with a single call and not need to
+> > do anything besides select AUXILIARY_BUS. The regmap can be acquired
+> > from the parent device in the auxiliary driver probe with
+> > dev_get_regmap(adev->parent).
 >=20
-> Fixes: ebac87cdd230 ("clk: mmp: Add Marvell PXA1908 MPMU driver")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
+> I like the idea. Two questions about the interface:
+>=20
+>  - should there be a 'void *platform_data' argument anyway?
+>    Even if this can be looked up from the parent, it seems
+>    useful enough
 
-Applied to clk-next
+Sure. Probably that can be added as some variant like
+devm_auxiliary_device_create_pdata() when/if it's needed.
+
+>=20
+>  - What is the scope of the 'ida' number? My impression was
+>    this should be local to one parent device, but I don't
+>    know how the number is used in the end, so maybe a global
+>    number allocator is sufficient.
+>=20
+
+From what I can tell it's only used for the device name and not for
+driver matching. That's probably to make it so we don't get conflicts in
+sysfs with devices because they all share the same bus. I'd guess that a
+global allocator is sufficient.
 
