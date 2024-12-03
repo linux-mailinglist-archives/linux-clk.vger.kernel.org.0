@@ -1,131 +1,145 @@
-Return-Path: <linux-clk+bounces-15297-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15300-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C5EA9E286F
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 18:00:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4F2E9E23FB
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 16:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DF80B45341
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 14:29:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A27528766F
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 15:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139541F667F;
-	Tue,  3 Dec 2024 14:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40E721FBE9B;
+	Tue,  3 Dec 2024 15:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iZJPW67s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YvHU+quh"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AFA1F4734;
-	Tue,  3 Dec 2024 14:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2151F755B;
+	Tue,  3 Dec 2024 15:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733236169; cv=none; b=d9v5pQgq4o5791yO+zKKi0+lhtp2OrcCCZtj69UJn3vYuDBfPbdCozuyaf6cEupb0z9pNh3Mob/8oZKcpkJ0dd+Y8gNkSrG++omiuZkDMyq06i8JIRdUe/saP3K8J7bPabKbm/gzgqbuRR7fsndk0HvVLmngbF7scPQg6ufODFY=
+	t=1733240513; cv=none; b=kKFW0wl88ysJFbRsLX0bJK7DUpQdkKTbRmNwC1s2RbygGg65rCx5RQE8pokCBp6nVtlAHAHJcj67jKOSbP38SVJ6fAsYuxpYToF1T4/YjBEuNNFTVIRQJTPaSKXo/4j2qT/Nl3eaewmLpzU4FcCL1HIzYxTTYQSFMDgqTVUAFDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733236169; c=relaxed/simple;
-	bh=+1CVOITrMSDAYxuRxJhKLu3y9hJjrRexlXC+t+7zD5I=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O7lYQU1XgW0TmsnPTZ0O3Cs6qNl6v48fMgVNrtEw1Nz5+1Qu51Z2oBco44Y/aGmH0NrKBp/1IOnImwa02sEyaK0JxcctqLo9ydeUC8D+aHa5uf19qtjSKB3zNd8ai0ejAnJdMHqHaEbWmd0H7VDTXq8507QYLJuvmPdgpawfwAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iZJPW67s; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7f4325168c8so2831807a12.1;
-        Tue, 03 Dec 2024 06:29:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733236167; x=1733840967; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rBUrhM/S9IzUIm28LQHezLCLEm0yncdwfMQ+zgKk9w=;
-        b=iZJPW67sqlMd5niVueyWet7xxQrytAOvaqL9oPewCGDX2YEpbk2L+hfcEVCk8NjsLs
-         gSuEtcdqj4MVBlgctWyxzahv2t1xJFsC0GXL3xcWEMpvVRH7cBYoEVBQSqCdC8cFM/HE
-         dxwzm4Jz+EZ2LtysklO/b0Wkdscah5F403npLKRZQnT6ivNz0MKfwI7ElIBhWwY4KWgb
-         MbLcHPsd6acL30rEwZfdEq2YOteHlnTR8J8uzRYLbTLyRf2zu/wLQ6jRSj+gOXzzW6hz
-         l1tkiyIFKqnIX/5XQjMmh8MxbvhKejWuCo0mHRNecddBByse6bEvkCbliwj3SZMixWjm
-         GfTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733236167; x=1733840967;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/rBUrhM/S9IzUIm28LQHezLCLEm0yncdwfMQ+zgKk9w=;
-        b=edLHtbraG8rtjRgxUrLZaU4n5k9/B3jadUJ5plbxdmitGqFvBcEZ2IPBONYOfj4Uu+
-         iBQoCQmbouUCjje602mB/JzaLa77P8iI8QBlk98j1NmNrN/JraTODhmhTa5Cxcxg2nG+
-         lsvZD9EUCU920CmU5Cn+QZg4AmoHMFnpwB1tLs65Bt/64Aa5oRa7seEU1ZHs9D3RGDUN
-         EidZ9dc93bffv/I7tkMaCA0KcjxkOTpbiR2TYgGoVpHh3ma2nQK3QCA4uI9WblwQ+0lL
-         8BpN/DS2kynEs76p9qZU+6khC6loRToiiCCFPgU21xGoC8Ej4mbp57QuxFK3On7aHjX5
-         CfNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUwblDr2/RA6mL2wGDRjoVA++eJDZD2k/H/mfAkbg5tK1eQke/comn4qRtgWwzL3amiwLhuOFdWgo/nLpY0JsxJ@vger.kernel.org, AJvYcCXKmZpNXkAgpM791fLqWvkNgZ00hYU00kRe+uX8seb/o0Q3YxzIxC7DLeUnxe4gPZB15K5MqESfBFM=@vger.kernel.org, AJvYcCXwDYxv7OPqKLDoCftFsagAhdq1riQSYvpAPa8A2iB/iJg0Jp0uwGPr8grrzVv4wQkzQPkU7vDiQeo714Ae@vger.kernel.org
-X-Gm-Message-State: AOJu0YznCGm1MFP96XU/T+lYkub7RQUNh4hr+C9ZowaxSpsr6R1o+Bf5
-	isKT50jjHbcTM8R79TIeN+tEbrbAKPul3V0zFuUiO/h9HUKZHthz
-X-Gm-Gg: ASbGncvdJmEmgdt+vMsfIwTb62T1Ov5MSkjREybVkiiPcXLmb/8BJnV17u6PhczMCVP
-	bXKXQnsRxT+UdTyZwasyHPLY+vXlk9AqqvkmdnDj4zHQSus+Y7CpV/yvpAE5mfDFffLHm5/eB0t
-	XOzkdubkDc90NZGdPqJFg3yBij2eu+HUrFr578nebGqPvl4NLv7Eg0PSY971CxxvM5uzLq9peIu
-	0Zkr8GEGJSkG1+W1+MrdRCYUfZgGQD0sl+ZiTQwaqyoMoxpHbRr4w==
-X-Google-Smtp-Source: AGHT+IHibrNLVHQ7rrCzz9uaAV9eg7OPrWMwQf2AeMxgrpZAGjFmIN7k1DxTtndv45YSoU/1pBIShA==
-X-Received: by 2002:a05:6a20:7f83:b0:1e0:d8b2:1c9e with SMTP id adf61e73a8af0-1e1653f1061mr3671929637.30.1733236166315;
-        Tue, 03 Dec 2024 06:29:26 -0800 (PST)
-Received: from ubuntuxuelab.. ([58.246.183.50])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725418482a7sm10494545b3a.190.2024.12.03.06.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 06:29:26 -0800 (PST)
-From: Haoyu Li <lihaoyu499@gmail.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Cc: stable@vger.kernel.org,
-	Haoyu Li <lihaoyu499@gmail.com>
-Subject: [PATCH] drivers: clk: clk-en7523.c: Initialize num before accessing hws in en7523_register_clocks
-Date: Tue,  3 Dec 2024 22:29:15 +0800
-Message-Id: <20241203142915.345523-1-lihaoyu499@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1733240513; c=relaxed/simple;
+	bh=VyAdMxSYG+cl45PhOpWPbrnYSr+SfukqYZMo12P6x78=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y5FyychLDhCGB2EYtX6PtZypPzE07UAJ5KLY3XJi+fmCS+MVyHO7BttZjo1gGaLp4+8Eqmw0MzYUFAVPuf+Is1rPZE5pSFZ9Jsg/AJ4NuiaTb7M/PulTcu5bN4IGcGi4mNKPKjsM5TdIlGEfDDhpHPRuLnz/NvZz/GfVEWQ4Fpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YvHU+quh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0B7C4CED6;
+	Tue,  3 Dec 2024 15:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733240512;
+	bh=VyAdMxSYG+cl45PhOpWPbrnYSr+SfukqYZMo12P6x78=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YvHU+quh/Q3xeeBQ3KUKeCqM8UWiDuQYe0SqnXFhj94mQ2T3rM2ELnQXjJJburTcH
+	 B8ngd0ILz4lRv5abztXP4x37jqbg4U/yqVxdNL2ib9d7/+Z62VHW998vYIawPO5MhG
+	 9Zty7IDG05pIHd3RiuWBGfzwaOgaJbxH87GmdkblKHN1J38XTnYP5qvN9CNNtBYvqR
+	 ETouzXeRIkebGiJhpSSAG6ICCt7jdCPKwM+R5O47ZNao8NhZe4yPYkaO+nZKg4HcVn
+	 CER1WGmX2q38uOrTf78XbytTRdE2NNt65a9NkL46lgYQeRFziUWG+eem9zMoCExiVe
+	 PQ/9uIc1eU4Yw==
+Message-ID: <1954a13a-6102-45cd-a8a4-0aa8939b7e0e@kernel.org>
+Date: Tue, 3 Dec 2024 16:41:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 02/14] dt-bindings: clock: thead,th1520: Rename
+ header file
+To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ frank.binns@imgtec.com, matt.coster@imgtec.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
+ airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org,
+ jszhang@kernel.org, m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
+ <CGME20241203134151eucas1p18edf7fb37cd8f30983a559d7481f560b@eucas1p1.samsung.com>
+ <20241203134137.2114847-3-m.wilczynski@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241203134137.2114847-3-m.wilczynski@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-With the new __counted_by annocation in clk_hw_onecell_data, the "num"
-struct member must be set before accessing the "hws" array. Failing to
-do so will trigger a runtime warning when enabling CONFIG_UBSAN_BOUNDS
-and CONFIG_FORTIFY_SOURCE.
+On 03/12/2024 14:41, Michal Wilczynski wrote:
+> As support for clocks from new subsystems is being added to the T-Head
+> TH1520 SoC, the header file name should reflect this broader scope. The
 
-Fixes: f316cdff8d67 ("clk: Annotate struct clk_hw_onecell_data with __counted_by")
+No, there is no such rule, so "should" is not appropriate.
 
-Signed-off-by: Haoyu Li <lihaoyu499@gmail.com>
----
- drivers/clk/clk-en7523.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/clk-en7523.c b/drivers/clk/clk-en7523.c
-index e52c5460e927..61d95ead5ec4 100644
---- a/drivers/clk/clk-en7523.c
-+++ b/drivers/clk/clk-en7523.c
-@@ -503,6 +503,8 @@ static void en7523_register_clocks(struct device *dev, struct clk_hw_onecell_dat
- 	u32 rate;
- 	int i;
- 
-+	clk_data->num = EN7523_NUM_CLOCKS;
-+
- 	for (i = 0; i < ARRAY_SIZE(en7523_base_clks); i++) {
- 		const struct en_clk_desc *desc = &en7523_base_clks[i];
- 		u32 reg = desc->div_reg ? desc->div_reg : desc->base_reg;
-@@ -524,8 +526,6 @@ static void en7523_register_clocks(struct device *dev, struct clk_hw_onecell_dat
- 
- 	hw = en7523_register_pcie_clk(dev, np_base);
- 	clk_data->hws[EN7523_CLK_PCIE] = hw;
--
--	clk_data->num = EN7523_NUM_CLOCKS;
- }
- 
- static int en7523_clk_hw_init(struct platform_device *pdev,
--- 
-2.34.1
+> existing header file 'thead,th1520-clk-ap.h' includes the '-ap' suffix,
+> indicating it's specific to the Application Processor (AP) subsystem.
+> 
+> Rename the header file to 'thead,th1520-clk.h' to generalize it for all
+> subsystems.  Update all references to this header file accordingly.
+> 
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  .../devicetree/bindings/clock/thead,th1520-clk-ap.yaml        | 4 ++--
+>  .../devicetree/bindings/mailbox/thead,th1520-mbox.yaml        | 2 +-
+>  MAINTAINERS                                                   | 2 +-
+>  arch/riscv/boot/dts/thead/th1520.dtsi                         | 2 +-
+>  drivers/clk/thead/clk-th1520.h                                | 2 +-
+>  .../clock/{thead,th1520-clk-ap.h => thead,th1520-clk.h}       | 0
 
+Don't mix driver, bindings and DTS. See checkpatch warning. Don't rename
+files just because you prefer other names.
+
+Best regards,
+Krzysztof
 
