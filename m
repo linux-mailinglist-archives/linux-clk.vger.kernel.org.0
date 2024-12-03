@@ -1,111 +1,142 @@
-Return-Path: <linux-clk+bounces-15239-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15241-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ED469E166F
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 09:58:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 440549E162D
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 09:48:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BB6BB30EF7
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 08:43:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 092BB281F40
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 08:48:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3715D1ABEB1;
-	Tue,  3 Dec 2024 08:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E601D517B;
+	Tue,  3 Dec 2024 08:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="t9brO18N"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [195.16.41.108])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2211DDC39;
-	Tue,  3 Dec 2024 08:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.16.41.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 851321BD50C;
+	Tue,  3 Dec 2024 08:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733215428; cv=none; b=j9gsWw+vfTgFfjVR2wn0k6ctaBF59vYPhUf4U/KPPWJ9GRlgbtN85E+LG/PrUAbKO1QKWkgugzpumvLUP34V/hcDgvQYLZ1ZqF6SNlH5thied2OTgzTAWF9xoZv7CkVlEe61FmDds4ckcIgV3fPY9v0LcifcL7mevj9MMBA0iN4=
+	t=1733215720; cv=none; b=CtHW+OKVm4g1kP09DNnsl1A+FhygfENif4KxbQrEP5Pt/gZA+PuM7pcI5lASCWmWagim8/J+WKfLQ0JeGQVeynVyQQGE3LQeDK+2bDhK4jtyRF0aql3yfgAxHzPEyACceihCGD9UQgukLprccbogtbvXF3Ii4uFzVYVcXibkns8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733215428; c=relaxed/simple;
-	bh=jeXNRj5gqwqoLLCuPCrhuzvU5etRv7agVADjw5vEYb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VSVlmmpj+LPcJ8mn8y+5h/Ex3oyyFO9+QAoSJmlWKDRdJ4YUNackYTbVFqSoANqOFUL/aoM8m0hyvoVz+/hI6PicoOwFJWHO3y7prN7U6AqBbnv3i6X2K0fXjXgGBBcZU0CZ5+yj7wyLseCLTrgkh+BVnqQZnd4z+ZVQfYL9KJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=195.16.41.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
-	by mail-gw02.astralinux.ru (Postfix) with ESMTP id 92B261F9D9;
-	Tue,  3 Dec 2024 11:43:33 +0300 (MSK)
-Received: from new-mail.astralinux.ru (gca-yc-ruca-srv-mail05.astralinux.ru [10.177.185.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
-	Tue,  3 Dec 2024 11:43:32 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.58])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4Y2Z1Z4RlKz1c0sD;
-	Tue,  3 Dec 2024 11:43:30 +0300 (MSK)
-From: Anastasia Belova <abelova@astralinux.ru>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Anastasia Belova <abelova@astralinux.ru>,
+	s=arc-20240116; t=1733215720; c=relaxed/simple;
+	bh=0OpAzWPuoryPxuF28/pNqAjWqcvclJtIH5b6VDVvfN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=um5pyVf9PoAwRII8IK1pGV6aR79deiXO3G0LqjmkqOmJqTaCbyL3dRqmiS+u0MyjUnGlTWmtCeUFwItbbyEAGThQQy6IziUB38vexfi4eNkAQEaX4GEJiJT22u6WEr+0kxmnwfC229SwxHnuj8NuiXthsvLJgUcqMza+2v6imNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=t9brO18N; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 785328DB;
+	Tue,  3 Dec 2024 09:48:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1733215688;
+	bh=0OpAzWPuoryPxuF28/pNqAjWqcvclJtIH5b6VDVvfN0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t9brO18N9dPcCEATfgU02ojolfRs6YqdOaDkiWn8yJNW2atTCM8O/g2Vpd3wQepmp
+	 ump13EAQaDL8jKuuK21ZroYB2mMypvk/OS1PrO0EwnKrj05YkBaLle8XTBOoR9iEnd
+	 NepGOJeAQW124EcLase6euLcGdjJmhfO/N3nS0BI=
+Date: Tue, 3 Dec 2024 10:48:24 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	David Dai <daidavid1@codeaurora.org>,
-	linux-arm-msm@vger.kernel.org,
+	Stephen Boyd <sboyd@kernel.org>, LUU HOAI <hoai.luu.ub@renesas.com>,
+	Jagan Teki <jagan@amarulasolutions.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] clk: qcom: clk-rpmh: prevent integer overflow in recalc_rate
-Date: Tue,  3 Dec 2024 11:42:31 +0300
-Message-Id: <20241203084231.6001-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH 4/9] drm/rcar-du: dsi: Fix PHY lock bit check
+Message-ID: <20241203084824.GG10736@pendragon.ideasonboard.com>
+References: <20241203-rcar-gh-dsi-v1-0-738ae1a95d2a@ideasonboard.com>
+ <20241203-rcar-gh-dsi-v1-4-738ae1a95d2a@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Envelope-From: abelova@astralinux.ru
-X-KSMG-AntiSpam-Info: LuaCore: 44 0.3.44 5149b91aab9eaefa5f6630aab0c7a7210c633ab6, {Tracking_internal2}, {Tracking_from_domain_doesnt_match_to}, astralinux.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;new-mail.astralinux.ru:7.1.1, FromAlignment: s
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 189567 [Dec 03 2024]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.7
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2024/12/03 00:44:00 #26930054
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241203-rcar-gh-dsi-v1-4-738ae1a95d2a@ideasonboard.com>
 
-aggr_state and unit fields are u32. The result of their
-multiplication may not fit in this type.
+Hi Tomi,
 
-Add explicit casting to prevent overflow.
+Thank you for the patch.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Tue, Dec 03, 2024 at 10:01:38AM +0200, Tomi Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> 
+> The driver checks for bit 16 (using CLOCKSET1_LOCK define) in CLOCKSET1
+> register when waiting for the PPI clock. However, the right bit to check
+> is bit 17 (CLOCKSET1_LOCK_PHY define). Not only that, but there's
+> nothing in the documents for bit 16 for V3U nor V4H.
+> 
+> So, fix the check to use bit 17, and drop the define for bit 16.
+> 
+> Fixes: 155358310f01 ("drm: rcar-du: Add R-Car DSI driver")
+> Fixes: 11696c5e8924 ("drm: Place Renesas drivers in a separate dir")
 
-Fixes: 04053f4d23a4 ("clk: qcom: clk-rpmh: Add IPA clock support")
-Cc: stable@vger.kernel.org # 5.4+
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- drivers/clk/qcom/clk-rpmh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should this have CC: stable ?
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index eefc322ce367..e6c33010cfbf 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -329,7 +329,7 @@ static unsigned long clk_rpmh_bcm_recalc_rate(struct clk_hw *hw,
- {
- 	struct clk_rpmh *c = to_clk_rpmh(hw);
- 
--	return c->aggr_state * c->unit;
-+	return (unsigned long)c->aggr_state * c->unit;
- }
- 
- static const struct clk_ops clk_rpmh_bcm_ops = {
+> Signed-off-by: Tomi Valkeiben <tomi.valkeinen+renesas@ideasonboard.com>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> ---
+>  drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c      | 2 +-
+>  drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi_regs.h | 1 -
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c b/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c
+> index 2dba7c5ffd2c..92f4261305bd 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c
+> @@ -587,7 +587,7 @@ static int rcar_mipi_dsi_startup(struct rcar_mipi_dsi *dsi,
+>  	for (timeout = 10; timeout > 0; --timeout) {
+>  		if ((rcar_mipi_dsi_read(dsi, PPICLSR) & PPICLSR_STPST) &&
+>  		    (rcar_mipi_dsi_read(dsi, PPIDLSR) & PPIDLSR_STPST) &&
+> -		    (rcar_mipi_dsi_read(dsi, CLOCKSET1) & CLOCKSET1_LOCK))
+> +		    (rcar_mipi_dsi_read(dsi, CLOCKSET1) & CLOCKSET1_LOCK_PHY))
+>  			break;
+>  
+>  		usleep_range(1000, 2000);
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi_regs.h b/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi_regs.h
+> index f8114d11f2d1..a6b276f1d6ee 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi_regs.h
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi_regs.h
+> @@ -142,7 +142,6 @@
+>  
+>  #define CLOCKSET1			0x101c
+>  #define CLOCKSET1_LOCK_PHY		(1 << 17)
+> -#define CLOCKSET1_LOCK			(1 << 16)
+>  #define CLOCKSET1_CLKSEL		(1 << 8)
+>  #define CLOCKSET1_CLKINSEL_EXTAL	(0 << 2)
+>  #define CLOCKSET1_CLKINSEL_DIG		(1 << 2)
+
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart
 
