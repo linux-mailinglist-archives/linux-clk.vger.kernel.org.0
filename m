@@ -1,61 +1,62 @@
-Return-Path: <linux-clk+bounces-15253-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15255-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2C39E1A03
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 11:55:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4EEA9E1A0B
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 11:55:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 822A9166A30
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 10:55:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95BDC166AA5
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 10:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550091E284B;
-	Tue,  3 Dec 2024 10:55:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A361E2856;
+	Tue,  3 Dec 2024 10:55:51 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06DD1E2842;
-	Tue,  3 Dec 2024 10:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98EC1E284A;
+	Tue,  3 Dec 2024 10:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733223337; cv=none; b=oQ1IBAnNNteIfYI07FtTWsOpjXDivjUFYnMh6bGKB3/UlFn0wJdRgMFpxat2Hns+iEMRquZ3zfQYxG83hYxBNNz83rIns6r0rGI2A1UDbEZq9jZhyFK7UTXAhT8IqYEsEhsE0Ly9a9yeothDHMz39kSc0sxZ8CR1+QIWpSQ2bxw=
+	t=1733223351; cv=none; b=Iog8UDY9bCor3ePaWBoRA86bjgAKBz0G/jem4ci5SyA2XA1emlTDPpIpSbafc5i/dtz2Db/ULu4GnowLvFV1AeEmXCMUB0MG1/2XmmYcHlFoO29OzHlXtPvzJ/WzZ6JfSlLdx9ib+V7ki/NT/lakcp9qHnm8mH6stBjd6wOZpwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733223337; c=relaxed/simple;
-	bh=Vim/J6LsT0PZqvwl3u3LqVeBurE46EnszYLQJTsBeYI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YdoZ/nbHnHbAzpzrKsUgkP83shfkMfxYM31JBRb2cfPmglviOTyIikTIvc7M1lH5bbNCjl+0nGxHk3fxNM2DUlgf+b4KJIdxtFMS/pRmOrp9b4dgvGHVBsB933fOUV9AnpcqPrDPNUPTjTDqAOoT3HMVb1muwjeZSKMmUhooL9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+	s=arc-20240116; t=1733223351; c=relaxed/simple;
+	bh=il5uQxRRwe3m1cW8/aVHsvKrWXrxpCQj0vVq+9VUl88=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=siRdRtgfXIzlXYmKDCYjJr5QKAMQWuvlYV3/gU/zkltX9FnbpgVzNNTE0J4ekE6GV+VUZOR1c54hvb5YYAXaSX8YFUz4jJhA/MZ4V3b/yBRg85bAQ36CVPNLcljNHzxWCW4o4aRyHgc6H7/xWx8CDToBLVSfEUGUcsnZrETt9OA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: oIfldQERQbeRmEyV1GqSrQ==
-X-CSE-MsgGUID: /IvVzJx4SSCo1h/wlQm+3g==
+X-CSE-ConnectionGUID: r4vTt+CxSIOfAhlqah7OKQ==
+X-CSE-MsgGUID: YrcfNOrUQZ6zR4nofdf4Ig==
 X-IronPort-AV: E=Sophos;i="6.12,204,1728918000"; 
-   d="scan'208";a="230754377"
+   d="scan'208";a="226779505"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 03 Dec 2024 19:50:26 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 03 Dec 2024 19:50:40 +0900
 Received: from localhost.localdomain (unknown [10.226.93.2])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id EC5C14003ED9;
-	Tue,  3 Dec 2024 19:50:07 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 9A6DA4003FA4;
+	Tue,  3 Dec 2024 19:50:24 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
+To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Magnus Damm <magnus.damm@gmail.com>,
-	linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 00/13] Add support for Renesas RZ/G3E SoC and SMARC-EVK platform
-Date: Tue,  3 Dec 2024 10:49:27 +0000
-Message-ID: <20241203105005.103927-1-biju.das.jz@bp.renesas.com>
+	devicetree@vger.kernel.org,
+	Biju Das <biju.das.au@gmail.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 04/13] dt-bindings: clock: renesas: Document RZ/G3E SoC CPG
+Date: Tue,  3 Dec 2024 10:49:31 +0000
+Message-ID: <20241203105005.103927-5-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241203105005.103927-1-biju.das.jz@bp.renesas.com>
+References: <20241203105005.103927-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -64,87 +65,91 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+Document the device tree bindings for the Renesas RZ/G3E SoC
+Clock Pulse Generator (CPG).
 
-This patch series adds initial support for the Renesas RZ/G3E SoC and
-RZ/G3E SMARC EVK platform. The RZ/G3E device is a general-purpose
-microprocessor with a quad-core CA-55, single core CM-33, Ethos-U55 NPU
-, Mali-G52 3-D Graphics and other peripherals.
+Also define constants for the core clocks of the RZ/G3E SoC.
 
-Support for below list of blocks added on SoC DTSI (r9a09g047.dtsi):
- - EXT CLKs
- - 4X CA55
- - SCIF
- - CPG
- - GIC
- - ARMv8 Timer
-
-This adds also support for the RZ/G3E SMARC EVK board
-(r9a09g047e57-smarc.dts) and enable the following peripheral:
- - SCIF
-
-This patch series depend upon [1]
-[1] https://lore.kernel.org/all/20241202203916.48668-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-
-Note:
- This patch series gives a linux prompt with initramfs. Later there is a
-plan to add support for SoC Identification using SYSC driver and
-pin controller.
-
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
 v1->v2:
- * Collected tags.
- * Fixed typo "CORE_CLK*"->"CORECLK*" to match with hardware manual in the
-   clk bindings.
- * Added MSTOP data for RZ/V2H CRU IP.
- * Fixed typo clock->clk in error path of rzv2h_cpg_register_mod_clk().
- * Added OPP table support for frequency scaling.
-
-Biju Das (13):
-  dt-bindings: serial: renesas: Document RZ/G3E (r9a09g047) scif
-  dt-bindings: soc: renesas: Document Renesas RZ/G3E SoC variants
-  dt-bindings: soc: renesas: Document RZ/G3E SMARC SoM and Carrier-II
-    EVK
-  dt-bindings: clock: renesas: Document RZ/G3E SoC CPG
-  soc: renesas: Add RZ/G3E (R9A09G047) config option
-  clk: renesas: Add support for RZ/G3E SoC
-  clk: renesas: rzv2h-cpg: Add MSTOP support
-  clk: renesas: r9a09g047: Add CA55 core clocks
-  arm64: dts: renesas: Add initial DTSI for RZ/G3E SoC
-  arm64: dts: renesas: r9a09g047: Add OPP table
-  arm64: dts: renesas: Add initial support for RZ/G3E SMARC SoM
-  arm64: dts: renesas: Add initial device tree for RZ/G3E SMARC EVK
-    board
-  arm64: defconfig: Enable R9A09G047 SoC
-
- .../bindings/clock/renesas,rzv2h-cpg.yaml     |  15 +-
- .../bindings/serial/renesas,scif.yaml         |   5 +
- .../bindings/soc/renesas/renesas.yaml         |  17 ++
- arch/arm64/boot/dts/renesas/Makefile          |   2 +
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi    | 185 ++++++++++++++++++
- arch/arm64/boot/dts/renesas/r9a09g047e37.dtsi |  18 ++
- .../boot/dts/renesas/r9a09g047e57-smarc.dts   |  18 ++
- arch/arm64/boot/dts/renesas/r9a09g047e57.dtsi |  13 ++
- .../boot/dts/renesas/renesas-smarc2.dtsi      |  24 +++
- .../boot/dts/renesas/rzg3e-smarc-som.dtsi     |  28 +++
- arch/arm64/configs/defconfig                  |   1 +
- drivers/clk/renesas/Kconfig                   |   7 +-
- drivers/clk/renesas/Makefile                  |   1 +
- drivers/clk/renesas/r9a09g047-cpg.c           | 116 +++++++++++
- drivers/clk/renesas/r9a09g057-cpg.c           | 153 ++++++++++-----
- drivers/clk/renesas/rzv2h-cpg.c               |  98 +++++++++-
- drivers/clk/renesas/rzv2h-cpg.h               |  27 ++-
- drivers/soc/renesas/Kconfig                   |   5 +
- .../dt-bindings/clock/renesas,r9a09g047-cpg.h |  21 ++
- 19 files changed, 686 insertions(+), 68 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047e37.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047e57-smarc.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a09g047e57.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/renesas-smarc2.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg3e-smarc-som.dtsi
- create mode 100644 drivers/clk/renesas/r9a09g047-cpg.c
+ * Added Ack from Conor Dooley.
+ * Fixed typo "CORE_CLK*"->"CORECLK*" to match with hardware manual.
+---
+ .../bindings/clock/renesas,rzv2h-cpg.yaml     | 15 +++++++------
+ .../dt-bindings/clock/renesas,r9a09g047-cpg.h | 21 +++++++++++++++++++
+ 2 files changed, 30 insertions(+), 6 deletions(-)
  create mode 100644 include/dt-bindings/clock/renesas,r9a09g047-cpg.h
 
+diff --git a/Documentation/devicetree/bindings/clock/renesas,rzv2h-cpg.yaml b/Documentation/devicetree/bindings/clock/renesas,rzv2h-cpg.yaml
+index 926c503bed1f..c3fe76abd549 100644
+--- a/Documentation/devicetree/bindings/clock/renesas,rzv2h-cpg.yaml
++++ b/Documentation/devicetree/bindings/clock/renesas,rzv2h-cpg.yaml
+@@ -4,19 +4,22 @@
+ $id: http://devicetree.org/schemas/clock/renesas,rzv2h-cpg.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Renesas RZ/V2H(P) Clock Pulse Generator (CPG)
++title: Renesas RZ/{G3E,V2H(P)} Clock Pulse Generator (CPG)
+ 
+ maintainers:
+   - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+ 
+ description:
+-  On Renesas RZ/V2H(P) SoCs, the CPG (Clock Pulse Generator) handles generation
+-  and control of clock signals for the IP modules, generation and control of resets,
+-  and control over booting, low power consumption and power supply domains.
++  On Renesas RZ/{G3E,V2H(P)} SoCs, the CPG (Clock Pulse Generator) handles
++  generation and control of clock signals for the IP modules, generation and
++  control of resets, and control over booting, low power consumption and power
++  supply domains.
+ 
+ properties:
+   compatible:
+-    const: renesas,r9a09g057-cpg
++    enum:
++      - renesas,r9a09g047-cpg # RZ/G3E
++      - renesas,r9a09g057-cpg # RZ/V2H
+ 
+   reg:
+     maxItems: 1
+@@ -37,7 +40,7 @@ properties:
+     description: |
+       - For CPG core clocks, the two clock specifier cells must be "CPG_CORE"
+         and a core clock reference, as defined in
+-        <dt-bindings/clock/renesas,r9a09g057-cpg.h>,
++        <dt-bindings/clock/renesas,r9a09g0*-cpg.h>,
+       - For module clocks, the two clock specifier cells must be "CPG_MOD" and
+         a module number.  The module number is calculated as the CLKON register
+         offset index multiplied by 16, plus the actual bit in the register
+diff --git a/include/dt-bindings/clock/renesas,r9a09g047-cpg.h b/include/dt-bindings/clock/renesas,r9a09g047-cpg.h
+new file mode 100644
+index 000000000000..1d031bf6bf03
+--- /dev/null
++++ b/include/dt-bindings/clock/renesas,r9a09g047-cpg.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++ *
++ * Copyright (C) 2024 Renesas Electronics Corp.
++ */
++#ifndef __DT_BINDINGS_CLOCK_RENESAS_R9A09G047_CPG_H__
++#define __DT_BINDINGS_CLOCK_RENESAS_R9A09G047_CPG_H__
++
++#include <dt-bindings/clock/renesas-cpg-mssr.h>
++
++/* Core Clock list */
++#define R9A09G047_SYS_0_PCLK			0
++#define R9A09G047_CA55_0_CORECLK0		1
++#define R9A09G047_CA55_0_CORECLK1		2
++#define R9A09G047_CA55_0_CORECLK2		3
++#define R9A09G047_CA55_0_CORECLK3		4
++#define R9A09G047_CA55_0_PERIPHCLK		5
++#define R9A09G047_CM33_CLK0			6
++#define R9A09G047_CST_0_SWCLKTCK		7
++#define R9A09G047_IOTOP_0_SHCLK			8
++
++#endif /* __DT_BINDINGS_CLOCK_RENESAS_R9A09G047_CPG_H__ */
 -- 
 2.43.0
 
