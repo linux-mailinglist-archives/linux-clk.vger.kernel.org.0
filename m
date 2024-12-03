@@ -1,86 +1,57 @@
-Return-Path: <linux-clk+bounces-15256-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15254-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B24869E1A12
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 11:57:23 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CE879E1AB8
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 12:18:34 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72A64166B07
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 10:57:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06A5EB28F87
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Dec 2024 10:55:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4401E32CB;
-	Tue,  3 Dec 2024 10:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s6xWprSd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B155D1E2852;
+	Tue,  3 Dec 2024 10:55:42 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8111E32B6
-	for <linux-clk@vger.kernel.org>; Tue,  3 Dec 2024 10:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656D81E284D
+	for <linux-clk@vger.kernel.org>; Tue,  3 Dec 2024 10:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733223436; cv=none; b=EteHr7Ou2If+sz8qCUGk70Cu1zHQGTXy9B1grKA57n0qymrfxt74qBlD+r5hFNEPyHdbpxOGgYHuTSPeUn8xD9tLy0Dq4RON7YtETz1/pO4lZpFDa4brOJh4F06vt7hdDBoQ93UNjvtdKYmU9azcxvoBN9pKLfR88Rw+XBd0xpY=
+	t=1733223342; cv=none; b=kI9Qct8Ihyq/ysrJ823DVHzjK0s5xD8zE3a82qnvF9Oq8Q+wLFRSVbrogbSFdDBE/PqK5a6VyE5t34p9ejbAiV6eRa2zzCIrvncJIiWnMXfqQRCMoGvre8rs8H2TDKl/QWGD3ikeL92ttR1OgASkV746dLlHWyyvhPMKJinpl9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733223436; c=relaxed/simple;
-	bh=svpFmIZ0E3MMSYhhbVkeiDatcfDY3UNV1PY9/Sw8tAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iLjmEqTrkhOvWW9sKfj46s1Gssr3esLK296zms9gLxSELnpA2ZKitR9z4bJHphc3ovbJ7hNIOFRj3gSOQFEELqzGmqShOskCD5uLs7KrKF6mF5RjKCEF7Mg99/WZEKMRRD/vMjv4rLRJNK5Tai2IgWzOTWCQbZT3uhw4iNkxx70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s6xWprSd; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-434a7cef2e3so5228565e9.1
-        for <linux-clk@vger.kernel.org>; Tue, 03 Dec 2024 02:57:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733223432; x=1733828232; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fKVFXpi7ykIfpDkplW+mwjJ/AO2M9Jc/QclNAewzA/s=;
-        b=s6xWprSdjG/1ksEqbFpj48ldWrt8eAzufgFwfttxVYeMv3qEENJlzhzbOTkveuALo9
-         FMKvaxnswBISpZql1Df8Jr8ZfR1BMhg9pX1umMkRtSAACSmfAgyx1TcKdcfSleak50oN
-         w7yvX03cNTwT8xV+7MueV4jYcInkAkM8E7ZooCJwi5H+P/44m5VA4i+i021BrAc0LYlf
-         9ag6kxKGb0j7gQoQPbnB2nBOXICRJ4F0K1lVRm5jys3tK9cs00jxH1xve83CFPp9hNrK
-         uQq3Mv50UGJmS23z8UZ/GoHDDZAUWBZlSeYOtQ8f/XNlimt2I10oEJ2M/s+SbqZkWLty
-         uGlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733223432; x=1733828232;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fKVFXpi7ykIfpDkplW+mwjJ/AO2M9Jc/QclNAewzA/s=;
-        b=aiQ/W/xFM6EzxKb89YZ5pBgO2WvEYUe5TrdciIlMhw1zBWdnIy+3HdI8VyqHM9hoJh
-         c9nya5ZQWLwdmQRnUSugb2lfKtysZxoB2TJasxcrgvaJW73PYrWVrJD1xtfLRFVFEKg6
-         DglTPh3cfo/VBpkAPCXGcbRyAi/aGYys0gJUnOioQ0G9/cAqrN4g3DdacllPEBbUmQAs
-         +VA4DiO36KQu4BsTfmNE6UviM0RcOv9EO2ngO+AKG27lrXxGMKCMPPRwNr2ZTziCh7DT
-         wPOfPfhYWqGx1G0dj1tmfEOH7vrAcMVqcE9BFXT8NzkAqoyFpaA0iq7F9eyhSCkced+r
-         wvwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUXkSWkLtHUDKon4HGTghsFEieiiIwLtp9qtqx0doeKJA5iGFWqLeN5n739N9g+dJfyQEO5rbPmtbU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmCZgD/4ycUYUZpTwnMHxgE07a1fbS5aDYlHJEfNPiL09pj0yt
-	m1p1OkNr2sCKodfgG9hsFB/WYYKEirm/YrJ+gVZgqBXf2TYJX3OGpWrMrcpwm6g=
-X-Gm-Gg: ASbGncuVvYBIgF4YPah3T7Bx5YFCUCpci217d9Xi21QaYmPUoxuZUBvGgJhgxt2Ykb5
-	/+6p42MGK3by51+xas54hbOl9/tZYiqCwUSkc6OSXUiDVQlOaoPnFh7uU5FUoqlncdpfzNSW+RA
-	/AcSSwwUzEemsmWsZDZ6Dbl/wyW9gsidvwGv8qx8s9JbXwycxl/RU2ITqofEtXe5PVbRmH0NdMk
-	MpbWp0S7Q6DjBM3DQ/KovOHpXyjkl8QkSnlijwObKoSlTogWFlX1oDCbpURbq8=
-X-Google-Smtp-Source: AGHT+IF3RQrgYMQBUra5s134a/+wlrVH2ULAv0GR1su1FJVR4zaGyhGAAM2BSPOn9K8bQ44CQ81cEw==
-X-Received: by 2002:a05:600c:350a:b0:434:9dcb:2f85 with SMTP id 5b1f17b1804b1-434d16dcadfmr5083215e9.0.1733223432292;
-        Tue, 03 Dec 2024 02:57:12 -0800 (PST)
-Received: from krzk-bin.. ([178.197.218.23])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7d1a90sm215809515e9.32.2024.12.03.02.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 02:57:11 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
+	s=arc-20240116; t=1733223342; c=relaxed/simple;
+	bh=NOKM2UpdCNSi2gyPVHv1gixskHLBUwR5J8wLX1RY8TM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Z8sWrdh9UNmIApBDl7yWmDfR7UGy4NPF4lYLgGRkQpoyL4a8X7dXfw766GlrFY/MQA5tR1l/Ad1xsZELoi8s+eWDdoqFi+zkdBw63WmaQ790Hx/IndMj0p6ui20bgHzDZvtBo+1yB7sA0C4pKvv9cp5n3Dbx7oWAkTyvcSqQGlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: vrqcGaudRGufhS7gClPoxg==
+X-CSE-MsgGUID: umWYNNlSSeiB7hoO6QC4/g==
+X-IronPort-AV: E=Sophos;i="6.12,204,1728918000"; 
+   d="scan'208";a="230754398"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 03 Dec 2024 19:50:37 +0900
+Received: from localhost.localdomain (unknown [10.226.93.2])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 653C040015FF;
+	Tue,  3 Dec 2024 19:50:34 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] clk: qcom: clk-alpha-pll: Do not use random stack value for recalc rate
-Date: Tue,  3 Dec 2024 11:57:07 +0100
-Message-ID: <20241203105707.34996-1-krzysztof.kozlowski@linaro.org>
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v2 07/13] clk: renesas: rzv2h-cpg: Add MSTOP support
+Date: Tue,  3 Dec 2024 10:49:34 +0000
+Message-ID: <20241203105005.103927-8-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241203105005.103927-1-biju.das.jz@bp.renesas.com>
+References: <20241203105005.103927-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -89,138 +60,436 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If regmap_read() fails, random stack value was used in calculating new
-frequency in recalc_rate() callbacks.  Such failure is really not
-expected as these are all MMIO reads, however code should be here
-correct and bail out.  This also avoids possible warning on
-uninitialized value.
+Add bus MSTOP support for RZ/{V2H, G3E}. For some module clocks, there
+are no MSTOP bits and the sequence ordering for mstop and clock on
+is different compared to the RZ/G2L family.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
+v1->v2:
+ * This patch has dependency on [1]
+ * Added MSTOP data for RZ/V2H CRU IP.
+ * Fixed typo clock->clk in error path of rzv2h_cpg_register_mod_clk()
 
-Changes in v2:
-1. Three more regmap_read() failure checks (Stephen)
+
+[1] https://lore.kernel.org/all/20241202203916.48668-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 ---
- drivers/clk/qcom/clk-alpha-pll.c | 52 ++++++++++++++++++++++----------
- 1 file changed, 36 insertions(+), 16 deletions(-)
+ drivers/clk/renesas/r9a09g047-cpg.c |   6 +-
+ drivers/clk/renesas/r9a09g057-cpg.c | 153 ++++++++++++++++++----------
+ drivers/clk/renesas/rzv2h-cpg.c     |  92 ++++++++++++++++-
+ drivers/clk/renesas/rzv2h-cpg.h     |  26 +++--
+ 4 files changed, 214 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index 5e9217ea3760..00d3659ea212 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -682,14 +682,19 @@ clk_alpha_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	u32 alpha_width = pll_alpha_width(pll);
+diff --git a/drivers/clk/renesas/r9a09g047-cpg.c b/drivers/clk/renesas/r9a09g047-cpg.c
+index 5d7611cee9bc..ab63a7e7e480 100644
+--- a/drivers/clk/renesas/r9a09g047-cpg.c
++++ b/drivers/clk/renesas/r9a09g047-cpg.c
+@@ -69,8 +69,10 @@ static const struct cpg_core_clk r9a09g047_core_clks[] __initconst = {
+ };
  
--	regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l);
-+	if (regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l))
-+		return 0;
+ static const struct rzv2h_mod_clk r9a09g047_mod_clks[] __initconst = {
+-	DEF_MOD_CRITICAL("gic_0_gicclk",	CLK_PLLDTY_ACPU_DIV4, 1, 3, 0, 19),
+-	DEF_MOD("scif_0_clk_pck",		CLK_PLLCM33_DIV16, 8, 15, 4, 15),
++	DEF_MOD_CRITICAL("gic_0_gicclk",	CLK_PLLDTY_ACPU_DIV4, 1, 3, 0, 19,
++						BUS_MSTOP(3, BIT(5))),
++	DEF_MOD("scif_0_clk_pck",		CLK_PLLCM33_DIV16, 8, 15, 4, 15,
++						BUS_MSTOP(3, BIT(14))),
+ };
+ 
+ static const struct rzv2h_reset r9a09g047_resets[] __initconst = {
+diff --git a/drivers/clk/renesas/r9a09g057-cpg.c b/drivers/clk/renesas/r9a09g057-cpg.c
+index 5aa9710aa402..5539fdb13d57 100644
+--- a/drivers/clk/renesas/r9a09g057-cpg.c
++++ b/drivers/clk/renesas/r9a09g057-cpg.c
+@@ -115,57 +115,108 @@ static const struct cpg_core_clk r9a09g057_core_clks[] __initconst = {
+ };
+ 
+ static const struct rzv2h_mod_clk r9a09g057_mod_clks[] __initconst = {
+-	DEF_MOD_CRITICAL("icu_0_pclk_i",	CLK_PLLCM33_DIV16, 0, 5, 0, 5),
+-	DEF_MOD("gtm_0_pclk",			CLK_PLLCM33_DIV16, 4, 3, 2, 3),
+-	DEF_MOD("gtm_1_pclk",			CLK_PLLCM33_DIV16, 4, 4, 2, 4),
+-	DEF_MOD("gtm_2_pclk",			CLK_PLLCLN_DIV16, 4, 5, 2, 5),
+-	DEF_MOD("gtm_3_pclk",			CLK_PLLCLN_DIV16, 4, 6, 2, 6),
+-	DEF_MOD("gtm_4_pclk",			CLK_PLLCLN_DIV16, 4, 7, 2, 7),
+-	DEF_MOD("gtm_5_pclk",			CLK_PLLCLN_DIV16, 4, 8, 2, 8),
+-	DEF_MOD("gtm_6_pclk",			CLK_PLLCLN_DIV16, 4, 9, 2, 9),
+-	DEF_MOD("gtm_7_pclk",			CLK_PLLCLN_DIV16, 4, 10, 2, 10),
+-	DEF_MOD("wdt_0_clkp",			CLK_PLLCM33_DIV16, 4, 11, 2, 11),
+-	DEF_MOD("wdt_0_clk_loco",		CLK_QEXTAL, 4, 12, 2, 12),
+-	DEF_MOD("wdt_1_clkp",			CLK_PLLCLN_DIV16, 4, 13, 2, 13),
+-	DEF_MOD("wdt_1_clk_loco",		CLK_QEXTAL, 4, 14, 2, 14),
+-	DEF_MOD("wdt_2_clkp",			CLK_PLLCLN_DIV16, 4, 15, 2, 15),
+-	DEF_MOD("wdt_2_clk_loco",		CLK_QEXTAL, 5, 0, 2, 16),
+-	DEF_MOD("wdt_3_clkp",			CLK_PLLCLN_DIV16, 5, 1, 2, 17),
+-	DEF_MOD("wdt_3_clk_loco",		CLK_QEXTAL, 5, 2, 2, 18),
+-	DEF_MOD("scif_0_clk_pck",		CLK_PLLCM33_DIV16, 8, 15, 4, 15),
+-	DEF_MOD("riic_8_ckm",			CLK_PLLCM33_DIV16, 9, 3, 4, 19),
+-	DEF_MOD("riic_0_ckm",			CLK_PLLCLN_DIV16, 9, 4, 4, 20),
+-	DEF_MOD("riic_1_ckm",			CLK_PLLCLN_DIV16, 9, 5, 4, 21),
+-	DEF_MOD("riic_2_ckm",			CLK_PLLCLN_DIV16, 9, 6, 4, 22),
+-	DEF_MOD("riic_3_ckm",			CLK_PLLCLN_DIV16, 9, 7, 4, 23),
+-	DEF_MOD("riic_4_ckm",			CLK_PLLCLN_DIV16, 9, 8, 4, 24),
+-	DEF_MOD("riic_5_ckm",			CLK_PLLCLN_DIV16, 9, 9, 4, 25),
+-	DEF_MOD("riic_6_ckm",			CLK_PLLCLN_DIV16, 9, 10, 4, 26),
+-	DEF_MOD("riic_7_ckm",			CLK_PLLCLN_DIV16, 9, 11, 4, 27),
+-	DEF_MOD("sdhi_0_imclk",			CLK_PLLCLN_DIV8, 10, 3, 5, 3),
+-	DEF_MOD("sdhi_0_imclk2",		CLK_PLLCLN_DIV8, 10, 4, 5, 4),
+-	DEF_MOD("sdhi_0_clk_hs",		CLK_PLLCLN_DIV2, 10, 5, 5, 5),
+-	DEF_MOD("sdhi_0_aclk",			CLK_PLLDTY_ACPU_DIV4, 10, 6, 5, 6),
+-	DEF_MOD("sdhi_1_imclk",			CLK_PLLCLN_DIV8, 10, 7, 5, 7),
+-	DEF_MOD("sdhi_1_imclk2",		CLK_PLLCLN_DIV8, 10, 8, 5, 8),
+-	DEF_MOD("sdhi_1_clk_hs",		CLK_PLLCLN_DIV2, 10, 9, 5, 9),
+-	DEF_MOD("sdhi_1_aclk",			CLK_PLLDTY_ACPU_DIV4, 10, 10, 5, 10),
+-	DEF_MOD("sdhi_2_imclk",			CLK_PLLCLN_DIV8, 10, 11, 5, 11),
+-	DEF_MOD("sdhi_2_imclk2",		CLK_PLLCLN_DIV8, 10, 12, 5, 12),
+-	DEF_MOD("sdhi_2_clk_hs",		CLK_PLLCLN_DIV2, 10, 13, 5, 13),
+-	DEF_MOD("sdhi_2_aclk",			CLK_PLLDTY_ACPU_DIV4, 10, 14, 5, 14),
+-	DEF_MOD("cru_0_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 2, 6, 18),
+-	DEF_MOD_NO_PM("cru_0_vclk",		CLK_PLLVDO_CRU0, 13, 3, 6, 19),
+-	DEF_MOD("cru_0_pclk",			CLK_PLLDTY_DIV16, 13, 4, 6, 20),
+-	DEF_MOD("cru_1_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 5, 6, 21),
+-	DEF_MOD_NO_PM("cru_1_vclk",		CLK_PLLVDO_CRU1, 13, 6, 6, 22),
+-	DEF_MOD("cru_1_pclk",			CLK_PLLDTY_DIV16, 13, 7, 6, 23),
+-	DEF_MOD("cru_2_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 8, 6, 24),
+-	DEF_MOD_NO_PM("cru_2_vclk",		CLK_PLLVDO_CRU2, 13, 9, 6, 25),
+-	DEF_MOD("cru_2_pclk",			CLK_PLLDTY_DIV16, 13, 10, 6, 26),
+-	DEF_MOD("cru_3_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 11, 6, 27),
+-	DEF_MOD_NO_PM("cru_3_vclk",		CLK_PLLVDO_CRU3, 13, 12, 6, 28),
+-	DEF_MOD("cru_3_pclk",			CLK_PLLDTY_DIV16, 13, 13, 6, 29),
++	DEF_MOD_CRITICAL("icu_0_pclk_i",	CLK_PLLCM33_DIV16, 0, 5, 0, 5,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("gtm_0_pclk",			CLK_PLLCM33_DIV16, 4, 3, 2, 3,
++						BUS_MSTOP(5, BIT(10))),
++	DEF_MOD("gtm_1_pclk",			CLK_PLLCM33_DIV16, 4, 4, 2, 4,
++						BUS_MSTOP(5, BIT(11))),
++	DEF_MOD("gtm_2_pclk",			CLK_PLLCLN_DIV16, 4, 5, 2, 5,
++						BUS_MSTOP(2, BIT(13))),
++	DEF_MOD("gtm_3_pclk",			CLK_PLLCLN_DIV16, 4, 6, 2, 6,
++						BUS_MSTOP(2, BIT(14))),
++	DEF_MOD("gtm_4_pclk",			CLK_PLLCLN_DIV16, 4, 7, 2, 7,
++						BUS_MSTOP(11, BIT(13))),
++	DEF_MOD("gtm_5_pclk",			CLK_PLLCLN_DIV16, 4, 8, 2, 8,
++						BUS_MSTOP(11, BIT(14))),
++	DEF_MOD("gtm_6_pclk",			CLK_PLLCLN_DIV16, 4, 9, 2, 9,
++						BUS_MSTOP(11, BIT(15))),
++	DEF_MOD("gtm_7_pclk",			CLK_PLLCLN_DIV16, 4, 10, 2, 10,
++						BUS_MSTOP(12, BIT(0))),
++	DEF_MOD("wdt_0_clkp",			CLK_PLLCM33_DIV16, 4, 11, 2, 11,
++						BUS_MSTOP(3, BIT(10))),
++	DEF_MOD("wdt_0_clk_loco",		CLK_QEXTAL, 4, 12, 2, 12,
++						BUS_MSTOP(3, BIT(10))),
++	DEF_MOD("wdt_1_clkp",			CLK_PLLCLN_DIV16, 4, 13, 2, 13,
++						BUS_MSTOP(1, BIT(0))),
++	DEF_MOD("wdt_1_clk_loco",		CLK_QEXTAL, 4, 14, 2, 14,
++						BUS_MSTOP(1, BIT(0))),
++	DEF_MOD("wdt_2_clkp",			CLK_PLLCLN_DIV16, 4, 15, 2, 15,
++						BUS_MSTOP(5, BIT(12))),
++	DEF_MOD("wdt_2_clk_loco",		CLK_QEXTAL, 5, 0, 2, 16,
++						BUS_MSTOP(5, BIT(12))),
++	DEF_MOD("wdt_3_clkp",			CLK_PLLCLN_DIV16, 5, 1, 2, 17,
++						BUS_MSTOP(5, BIT(13))),
++	DEF_MOD("wdt_3_clk_loco",		CLK_QEXTAL, 5, 2, 2, 18,
++						BUS_MSTOP(5, BIT(13))),
++	DEF_MOD("scif_0_clk_pck",		CLK_PLLCM33_DIV16, 8, 15, 4, 15,
++						BUS_MSTOP(3, BIT(14))),
++	DEF_MOD("riic_8_ckm",			CLK_PLLCM33_DIV16, 9, 3, 4, 19,
++						BUS_MSTOP(3, BIT(13))),
++	DEF_MOD("riic_0_ckm",			CLK_PLLCLN_DIV16, 9, 4, 4, 20,
++						BUS_MSTOP(1, BIT(1))),
++	DEF_MOD("riic_1_ckm",			CLK_PLLCLN_DIV16, 9, 5, 4, 21,
++						BUS_MSTOP(1, BIT(2))),
++	DEF_MOD("riic_2_ckm",			CLK_PLLCLN_DIV16, 9, 6, 4, 22,
++						BUS_MSTOP(1, BIT(3))),
++	DEF_MOD("riic_3_ckm",			CLK_PLLCLN_DIV16, 9, 7, 4, 23,
++						BUS_MSTOP(1, BIT(4))),
++	DEF_MOD("riic_4_ckm",			CLK_PLLCLN_DIV16, 9, 8, 4, 24,
++						BUS_MSTOP(1, BIT(5))),
++	DEF_MOD("riic_5_ckm",			CLK_PLLCLN_DIV16, 9, 9, 4, 25,
++						BUS_MSTOP(1, BIT(6))),
++	DEF_MOD("riic_6_ckm",			CLK_PLLCLN_DIV16, 9, 10, 4, 26,
++						BUS_MSTOP(1, BIT(7))),
++	DEF_MOD("riic_7_ckm",			CLK_PLLCLN_DIV16, 9, 11, 4, 27,
++						BUS_MSTOP(1, BIT(8))),
++	DEF_MOD("sdhi_0_imclk",			CLK_PLLCLN_DIV8, 10, 3, 5, 3,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_0_imclk2",		CLK_PLLCLN_DIV8, 10, 4, 5, 4,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_0_clk_hs",		CLK_PLLCLN_DIV2, 10, 5, 5, 5,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_0_aclk",			CLK_PLLDTY_ACPU_DIV4, 10, 6, 5, 6,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_1_imclk",			CLK_PLLCLN_DIV8, 10, 7, 5, 7,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_1_imclk2",		CLK_PLLCLN_DIV8, 10, 8, 5, 8,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_1_clk_hs",		CLK_PLLCLN_DIV2, 10, 9, 5, 9,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_1_aclk",			CLK_PLLDTY_ACPU_DIV4, 10, 10, 5, 10,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_2_imclk",			CLK_PLLCLN_DIV8, 10, 11, 5, 11,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_2_imclk2",		CLK_PLLCLN_DIV8, 10, 12, 5, 12,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_2_clk_hs",		CLK_PLLCLN_DIV2, 10, 13, 5, 13,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("sdhi_2_aclk",			CLK_PLLDTY_ACPU_DIV4, 10, 14, 5, 14,
++						BUS_MSTOP_NO_DATA),
++	DEF_MOD("cru_0_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 2, 6, 18,
++						BUS_MSTOP(9, BIT(4))),
++	DEF_MOD_NO_PM("cru_0_vclk",		CLK_PLLVDO_CRU0, 13, 3, 6, 19,
++						BUS_MSTOP(9, BIT(4))),
++	DEF_MOD("cru_0_pclk",			CLK_PLLDTY_DIV16, 13, 4, 6, 20,
++						BUS_MSTOP(9, BIT(4))),
++	DEF_MOD("cru_1_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 5, 6, 21,
++						BUS_MSTOP(9, BIT(5))),
++	DEF_MOD_NO_PM("cru_1_vclk",		CLK_PLLVDO_CRU1, 13, 6, 6, 22,
++						BUS_MSTOP(9, BIT(5))),
++	DEF_MOD("cru_1_pclk",			CLK_PLLDTY_DIV16, 13, 7, 6, 23,
++						BUS_MSTOP(9, BIT(5))),
++	DEF_MOD("cru_2_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 8, 6, 24,
++						BUS_MSTOP(9, BIT(6))),
++	DEF_MOD_NO_PM("cru_2_vclk",		CLK_PLLVDO_CRU2, 13, 9, 6, 25,
++						BUS_MSTOP(9, BIT(6))),
++	DEF_MOD("cru_2_pclk",			CLK_PLLDTY_DIV16, 13, 10, 6, 26,
++						BUS_MSTOP(9, BIT(6))),
++	DEF_MOD("cru_3_aclk",			CLK_PLLDTY_ACPU_DIV2, 13, 11, 6, 27,
++						BUS_MSTOP(9, BIT(7))),
++	DEF_MOD_NO_PM("cru_3_vclk",		CLK_PLLVDO_CRU3, 13, 12, 6, 28,
++						BUS_MSTOP(9, BIT(7))),
++	DEF_MOD("cru_3_pclk",			CLK_PLLDTY_DIV16, 13, 13, 6, 29,
++						BUS_MSTOP(9, BIT(7))),
+ };
+ 
+ static const struct rzv2h_reset r9a09g057_resets[] __initconst = {
+diff --git a/drivers/clk/renesas/rzv2h-cpg.c b/drivers/clk/renesas/rzv2h-cpg.c
+index ef26e7760a88..fb5221faabea 100644
+--- a/drivers/clk/renesas/rzv2h-cpg.c
++++ b/drivers/clk/renesas/rzv2h-cpg.c
+@@ -23,6 +23,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_clock.h>
+ #include <linux/pm_domain.h>
++#include <linux/refcount.h>
+ #include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/renesas-cpg-mssr.h>
+@@ -83,6 +84,11 @@ struct rzv2h_cpg_priv {
+ 
+ #define rcdev_to_priv(x)	container_of(x, struct rzv2h_cpg_priv, rcdev)
+ 
++struct rzv2h_mstop {
++	u32 data;
++	refcount_t ref_cnt;
++};
 +
-+	if (regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &ctl))
-+		return 0;
- 
--	regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &ctl);
- 	if (ctl & PLL_ALPHA_EN) {
--		regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL(pll), &low);
-+		if (regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL(pll), &low))
-+			return 0;
- 		if (alpha_width > 32) {
--			regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL_U(pll),
--				    &high);
-+			if (regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL_U(pll),
-+					&high))
-+				return 0;
- 			a = (u64)high << 32 | low;
- 		} else {
- 			a = low & GENMASK(alpha_width - 1, 0);
-@@ -915,8 +920,11 @@ alpha_pll_huayra_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	u32 l, alpha = 0, ctl, alpha_m, alpha_n;
- 
--	regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l);
--	regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &ctl);
-+	if (regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l))
-+		return 0;
-+
-+	if (regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &ctl))
-+		return 0;
- 
- 	if (ctl & PLL_ALPHA_EN) {
- 		regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL(pll), &alpha);
-@@ -1110,8 +1118,11 @@ clk_trion_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	u32 l, frac, alpha_width = pll_alpha_width(pll);
- 
--	regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l);
--	regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL(pll), &frac);
-+	if (regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l))
-+		return 0;
-+
-+	if (regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL(pll), &frac))
-+		return 0;
- 
- 	return alpha_pll_calc_rate(parent_rate, l, frac, alpha_width);
+ struct pll_clk {
+ 	struct rzv2h_cpg_priv *priv;
+ 	void __iomem *base;
+@@ -97,6 +103,7 @@ struct pll_clk {
+  * struct mod_clock - Module clock
+  *
+  * @priv: CPG private data
++ * @mstop: handle to cpg bus mstop data
+  * @hw: handle between common and hardware-specific interfaces
+  * @no_pm: flag to indicate PM is not supported
+  * @on_index: register offset
+@@ -106,6 +113,7 @@ struct pll_clk {
+  */
+ struct mod_clock {
+ 	struct rzv2h_cpg_priv *priv;
++	struct rzv2h_mstop *mstop;
+ 	struct clk_hw hw;
+ 	bool no_pm;
+ 	u8 on_index;
+@@ -433,6 +441,38 @@ rzv2h_cpg_register_core_clk(const struct cpg_core_clk *core,
+ 		core->name, PTR_ERR(clk));
  }
-@@ -1169,7 +1180,8 @@ clk_alpha_pll_postdiv_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
- 	u32 ctl;
  
--	regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &ctl);
-+	if (regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &ctl))
-+		return 0;
- 
- 	ctl >>= PLL_POST_DIV_SHIFT;
- 	ctl &= PLL_POST_DIV_MASK(pll);
-@@ -1385,8 +1397,11 @@ static unsigned long alpha_pll_fabia_recalc_rate(struct clk_hw *hw,
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	u32 l, frac, alpha_width = pll_alpha_width(pll);
- 
--	regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l);
--	regmap_read(pll->clkr.regmap, PLL_FRAC(pll), &frac);
-+	if (regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l))
-+		return 0;
++static void rzv2h_mod_clock_mstop_enable(struct rzv2h_cpg_priv *priv,
++					 struct mod_clock *clock)
++{
++	unsigned long flags;
++	u32 val;
 +
-+	if (regmap_read(pll->clkr.regmap, PLL_FRAC(pll), &frac))
-+		return 0;
- 
- 	return alpha_pll_calc_rate(parent_rate, l, frac, alpha_width);
- }
-@@ -1536,7 +1551,8 @@ clk_trion_pll_postdiv_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	struct regmap *regmap = pll->clkr.regmap;
- 	u32 i, div = 1, val;
- 
--	regmap_read(regmap, PLL_USER_CTL(pll), &val);
-+	if (regmap_read(regmap, PLL_USER_CTL(pll), &val))
-+		return 0;
- 
- 	val >>= pll->post_div_shift;
- 	val &= PLL_POST_DIV_MASK(pll);
-@@ -2457,9 +2473,12 @@ static unsigned long alpha_pll_lucid_evo_recalc_rate(struct clk_hw *hw,
- 	struct regmap *regmap = pll->clkr.regmap;
- 	u32 l, frac;
- 
--	regmap_read(regmap, PLL_L_VAL(pll), &l);
-+	if (regmap_read(regmap, PLL_L_VAL(pll), &l))
-+		return 0;
- 	l &= LUCID_EVO_PLL_L_VAL_MASK;
--	regmap_read(regmap, PLL_ALPHA_VAL(pll), &frac);
++	spin_lock_irqsave(&priv->rmw_lock, flags);
++	if (!refcount_read(&clock->mstop->ref_cnt)) {
++		val = BUS_MSTOP_VAL(clock->mstop->data) << 16;
++		writel(val, priv->base + BUS_MSTOP_OFF(clock->mstop->data));
++		refcount_set(&clock->mstop->ref_cnt, 1);
++	} else {
++		refcount_inc(&clock->mstop->ref_cnt);
++	}
++	spin_unlock_irqrestore(&priv->rmw_lock, flags);
++}
 +
-+	if (regmap_read(regmap, PLL_ALPHA_VAL(pll), &frac))
-+		return 0;
++static void rzv2h_mod_clock_mstop_disable(struct rzv2h_cpg_priv *priv,
++					  struct mod_clock *clock)
++{
++	unsigned long flags;
++	u32 val;
++
++	spin_lock_irqsave(&priv->rmw_lock, flags);
++	if (refcount_dec_and_test(&clock->mstop->ref_cnt)) {
++		val = BUS_MSTOP_VAL(clock->mstop->data) << 16 |
++			BUS_MSTOP_VAL(clock->mstop->data);
++		writel(val, priv->base + BUS_MSTOP_OFF(clock->mstop->data));
++	}
++	spin_unlock_irqrestore(&priv->rmw_lock, flags);
++}
++
+ static int rzv2h_mod_clock_endisable(struct clk_hw *hw, bool enable)
+ {
+ 	struct mod_clock *clock = to_mod_clock(hw);
+@@ -447,10 +487,16 @@ static int rzv2h_mod_clock_endisable(struct clk_hw *hw, bool enable)
+ 		enable ? "ON" : "OFF");
  
- 	return alpha_pll_calc_rate(parent_rate, l, frac, pll_alpha_width(pll));
- }
-@@ -2534,7 +2553,8 @@ static unsigned long clk_rivian_evo_pll_recalc_rate(struct clk_hw *hw,
- 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
- 	u32 l;
+ 	value = bitmask << 16;
+-	if (enable)
++	if (enable) {
+ 		value |= bitmask;
+-
+-	writel(value, priv->base + reg);
++		writel(value, priv->base + reg);
++		if (clock->mstop)
++			rzv2h_mod_clock_mstop_enable(priv, clock);
++	} else {
++		if (clock->mstop)
++			rzv2h_mod_clock_mstop_disable(priv, clock);
++		writel(value, priv->base + reg);
++	}
  
--	regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l);
-+	if (regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l))
-+		return 0;
+ 	if (!enable || clock->mon_index < 0)
+ 		return 0;
+@@ -500,6 +546,38 @@ static const struct clk_ops rzv2h_mod_clock_ops = {
+ 	.is_enabled = rzv2h_mod_clock_is_enabled,
+ };
  
- 	return parent_rate * l;
- }
++static struct rzv2h_mstop
++*rzv2h_cpg_get_mstop(struct rzv2h_cpg_priv *priv, u32 mstop_data)
++{
++	struct rzv2h_mstop *mstop;
++	unsigned int i;
++
++	for (i = 0; i < priv->num_mod_clks; i++) {
++		struct mod_clock *clk;
++		struct clk_hw *hw;
++
++		if (priv->clks[priv->num_core_clks + i] == ERR_PTR(-ENOENT))
++			continue;
++
++		hw = __clk_get_hw(priv->clks[priv->num_core_clks + i]);
++		clk = to_mod_clock(hw);
++		if (!clk->mstop)
++			continue;
++
++		if (clk->mstop->data == mstop_data)
++			return clk->mstop;
++	}
++
++	mstop = devm_kzalloc(priv->dev, sizeof(*mstop), GFP_KERNEL);
++	if (!mstop)
++		return NULL;
++
++	mstop->data = mstop_data;
++	refcount_set(&mstop->ref_cnt, 0);
++
++	return mstop;
++}
++
+ static void __init
+ rzv2h_cpg_register_mod_clk(const struct rzv2h_mod_clk *mod,
+ 			   struct rzv2h_cpg_priv *priv)
+@@ -555,6 +633,14 @@ rzv2h_cpg_register_mod_clk(const struct rzv2h_mod_clk *mod,
+ 
+ 	priv->clks[id] = clock->hw.clk;
+ 
++	if (mod->mstop_data != BUS_MSTOP_NO_DATA) {
++		clock->mstop = rzv2h_cpg_get_mstop(priv, mod->mstop_data);
++		if (!clock->mstop) {
++			clk = ERR_PTR(-ENOMEM);
++			goto fail;
++		}
++	}
++
+ 	return;
+ 
+ fail:
+diff --git a/drivers/clk/renesas/rzv2h-cpg.h b/drivers/clk/renesas/rzv2h-cpg.h
+index 1e5bf1eb65a4..8c94a02d5147 100644
+--- a/drivers/clk/renesas/rzv2h-cpg.h
++++ b/drivers/clk/renesas/rzv2h-cpg.h
+@@ -35,6 +35,7 @@ struct ddiv {
+ #define CPG_CDDIV1		(0x404)
+ #define CPG_CDDIV3		(0x40C)
+ #define CPG_CDDIV4		(0x410)
++#define CPG_BUS_1_MSTOP		(0xd00)
+ 
+ #define CDDIV0_DIVCTL2	DDIV_PACK(CPG_CDDIV0, 8, 3, 2)
+ #define CDDIV1_DIVCTL0	DDIV_PACK(CPG_CDDIV1, 0, 2, 4)
+@@ -46,6 +47,14 @@ struct ddiv {
+ #define CDDIV4_DIVCTL1	DDIV_PACK(CPG_CDDIV4, 4, 1, 17)
+ #define CDDIV4_DIVCTL2	DDIV_PACK(CPG_CDDIV4, 8, 1, 18)
+ 
++#define CPG_BUS_MSTOP_START	(CPG_BUS_1_MSTOP - 4)
++#define CPG_BUS_MSTOP(x)	(CPG_BUS_MSTOP_START + (x) * 4)
++
++#define BUS_MSTOP(index, mask)	((CPG_BUS_MSTOP(index) & 0xffff) << 16 | (mask))
++#define BUS_MSTOP_OFF(val)	(((val) >> 16) & 0xffff)
++#define BUS_MSTOP_VAL(val)	((val) & 0xffff)
++#define BUS_MSTOP_NO_DATA	GENMASK(31, 0)
++
+ /**
+  * Definitions of CPG Core Clocks
+  *
+@@ -104,6 +113,7 @@ enum clk_types {
+  * struct rzv2h_mod_clk - Module Clocks definitions
+  *
+  * @name: handle between common and hardware-specific interfaces
++ * @mstop_data: packed data mstop register offset and mask
+  * @parent: id of parent clock
+  * @critical: flag to indicate the clock is critical
+  * @no_pm: flag to indicate PM is not supported
+@@ -114,6 +124,7 @@ enum clk_types {
+  */
+ struct rzv2h_mod_clk {
+ 	const char *name;
++	u32 mstop_data;
+ 	u16 parent;
+ 	bool critical;
+ 	bool no_pm;
+@@ -123,9 +134,10 @@ struct rzv2h_mod_clk {
+ 	u8 mon_bit;
+ };
+ 
+-#define DEF_MOD_BASE(_name, _parent, _critical, _no_pm, _onindex, _onbit, _monindex, _monbit) \
++#define DEF_MOD_BASE(_name, _mstop, _parent, _critical, _no_pm, _onindex, _onbit, _monindex, _monbit) \
+ 	{ \
+ 		.name = (_name), \
++		.mstop_data = (_mstop), \
+ 		.parent = (_parent), \
+ 		.critical = (_critical), \
+ 		.no_pm = (_no_pm), \
+@@ -135,14 +147,14 @@ struct rzv2h_mod_clk {
+ 		.mon_bit = (_monbit), \
+ 	}
+ 
+-#define DEF_MOD(_name, _parent, _onindex, _onbit, _monindex, _monbit)		\
+-	DEF_MOD_BASE(_name, _parent, false, false, _onindex, _onbit, _monindex, _monbit)
++#define DEF_MOD(_name, _parent, _onindex, _onbit, _monindex, _monbit, _mstop) \
++	DEF_MOD_BASE(_name, _mstop, _parent, false, false, _onindex, _onbit, _monindex, _monbit)
+ 
+-#define DEF_MOD_CRITICAL(_name, _parent, _onindex, _onbit, _monindex, _monbit)	\
+-	DEF_MOD_BASE(_name, _parent, true, false, _onindex, _onbit, _monindex, _monbit)
++#define DEF_MOD_CRITICAL(_name, _parent, _onindex, _onbit, _monindex, _monbit, _mstop) \
++	DEF_MOD_BASE(_name, _mstop, _parent, true, false, _onindex, _onbit, _monindex, _monbit)
+ 
+-#define DEF_MOD_NO_PM(_name, _parent, _onindex, _onbit, _monindex, _monbit)		\
+-	DEF_MOD_BASE(_name, _parent, false, true, _onindex, _onbit, _monindex, _monbit)
++#define DEF_MOD_NO_PM(_name, _parent, _onindex, _onbit, _monindex, _monbit, _mstop) \
++	DEF_MOD_BASE(_name, _mstop, _parent, false, true, _onindex, _onbit, _monindex, _monbit)
+ 
+ /**
+  * struct rzv2h_reset - Reset definitions
 -- 
 2.43.0
 
