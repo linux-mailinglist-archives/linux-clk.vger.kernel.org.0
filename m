@@ -1,169 +1,111 @@
-Return-Path: <linux-clk+bounces-15380-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15383-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 033599E44CF
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 20:38:45 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCE2E166210
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 19:38:41 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E593F202C3B;
-	Wed,  4 Dec 2024 19:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JcPz/vYA"
-X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 651D59E45BB
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 21:30:53 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279501F540A;
-	Wed,  4 Dec 2024 19:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DC8EB2931B
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 20:05:22 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B0E1C3BF5;
+	Wed,  4 Dec 2024 20:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q6W5Bzkj"
+X-Original-To: linux-clk@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E8DC1A8F79;
+	Wed,  4 Dec 2024 20:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733341068; cv=none; b=RAq177Kyco/Sg/Ab956PLduR4R5cTpTzzOMeGDGk9w0eykySRDa9YUipn01zKeEItRzklfuMPDY4u+qSqvkhsnixj/sAEZ/34uiEUL/MCZaZXWZYcf5yZDt0q4GcZ0oxdL90DSxAs9MyV9J+wgwP4Bid7mAQOl8aEdR5wPHhFb4=
+	t=1733342718; cv=none; b=mi3DEQRS75Hcwj5O3C87vEGYUjRZa/2+9mkrCxjYttjweVogt7M202EJ7DzKDDPlPsv7u+IpGbAXQZ7+o8rMCuiT0G7pFCMlaOKdXCDjC5sFe7hxGtlXN74ZAGyDFPUkB9Qv+Re0BUbTxYxq0YWm/cMyIEaajMyUjxxImOzHWHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733341068; c=relaxed/simple;
-	bh=gZ07YdL8YR89AQ1pkLtEVxOY0cvmmLaP8+IsEdybwsU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=FTR2prvWdZxGXjLH6VP5jr3IqdgwCg7+8KNmtK94Vg9Bd7WiJPrqD7SAFTffaPu/UX9sLbXvRam767u+uIZaLAlWZw7d81zWh7Nty7fWjZla9URqzyUdcPVAkA3wOV0rYg5cgLfX7/LIasfYUZtyqvSvnHUjc8iJpE6UjMidwRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JcPz/vYA; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4G7bNg030963;
-	Wed, 4 Dec 2024 19:37:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zPCXmqMiSiAftVrIeuSeVwSPk5JNmkYmP1w+3VC+J88=; b=JcPz/vYAsKr9RpBB
-	Sx6TMCO5ZaRAgKxoeKp5MtApoe7blKLasDHoiu+svz6xT2YahQh/mZ9vYUp/8gqj
-	IUarNNref93a2Z1CZuIBUtlyGKKvOVPdFo5BR4mMjztB9SgBgqRbYBIZ97PFoC+m
-	t7a9H7XMTG6vV88iANHA/lTntmaROAbVXRDfqnYT/81tg+mCMIN29ejVISEB2oCc
-	jW0e/qeJB0cbNhZ9TzySwFr/OQoPbYBfnfnEgCDue+8BzdH8xC5xcojxw9ISl6AI
-	LZ6LmDyeOhpHUr/q25+Xl8CDOYCEA+hsnREvVB/gwPDz2Eh62ArEY5qq/ZOH/TMu
-	t01DYA==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 439w90wav2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Dec 2024 19:37:42 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B4Jbf5u004439
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Dec 2024 19:37:41 GMT
-Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 4 Dec 2024 11:37:40 -0800
-From: Melody Olvera <quic_molvera@quicinc.com>
-Date: Wed, 4 Dec 2024 11:37:19 -0800
-Subject: [PATCH v3 7/8] dt-bindings: clock: qcom: Document the SM8750 TCSR
- Clock Controller
+	s=arc-20240116; t=1733342718; c=relaxed/simple;
+	bh=RldED8HMCKySelxt0TW6GW/GL2Ep4PQFNk69MJ3zo1Q=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=JvFXsLIfrGPi/pawVSn2e2CbZIJPgO7zj0PR4rhPh2izAmmxb/PLKd5eYLSxcA1qVA4RT3pI2JFOGq2og9tX7Mh4+XMT6lQ8JipL1d/qpzr58Cdu5xRKXLpb7ZflteSjBzNoz5DIVwq6NskyYQhrU4xIoTdySDIsM3zxB+Fc0T4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q6W5Bzkj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F38E5C4CECD;
+	Wed,  4 Dec 2024 20:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733342717;
+	bh=RldED8HMCKySelxt0TW6GW/GL2Ep4PQFNk69MJ3zo1Q=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=q6W5BzkjvXaHTIrnZTdGD5iCwNNhaZN7gMTJBXt+HRzr29Z5/0WmVdr+g1CES8myA
+	 +q712arDusrNfXCgjpVAYXHdiYMfkQXKHqnSbKpAgis9/s7oY/zKWz67tc/1eStlFd
+	 A276u4hxM3e9zNyp2hDsfkIpvTCWQB7An+sYPJ3qz8GcVOvPPk5+3r98KXm58QxA4y
+	 DelmbPkfLUV9+eJshoeBO6HMu88EgXilXtU45V47pWiGHFhjn1PYrTjabDqg04/BeY
+	 cOuTi45bsVVavblkC9rWBptE19kaBJ8XUBcfEWJYUcSJUWWZsDpJID7CnIKF9draQA
+	 w8w5IyC/lQAlw==
+Message-ID: <4e87e30244204b4e71f9b0f630171a40.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20241204-sm8750_master_clks-v3-7-1a8f31a53a86@quicinc.com>
-References: <20241204-sm8750_master_clks-v3-0-1a8f31a53a86@quicinc.com>
-In-Reply-To: <20241204-sm8750_master_clks-v3-0-1a8f31a53a86@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Melody Olvera
-	<quic_molvera@quicinc.com>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733341058; l=2005;
- i=quic_molvera@quicinc.com; s=20241204; h=from:subject:message-id;
- bh=ySYPgeVBwlX6fAJgBZVf8FK/j8AMPcK1DVz9NNfgaSs=;
- b=zmSQIF7H9jW7r4O5gFvjtVG/PPhD1q2X7mmG2/FEK5Hwt1Oi3Y+pUIA4pSgApwKKlFuR+qiLS
- ymZC0mJ5i9vDFIOCfK8xaAe0PmsNqWCBMZF6gDPmhWFr0eKGf7BAbWO
-X-Developer-Key: i=quic_molvera@quicinc.com; a=ed25519;
- pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: aaXGufzUCgnbHnsa9Aauj5PFSEWIcuAP
-X-Proofpoint-GUID: aaXGufzUCgnbHnsa9Aauj5PFSEWIcuAP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxscore=0
- spamscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412040150
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1jfrn3l615.fsf@starbuckisacylon.baylibre.com>
+References: <20241127-clk-audio-fix-rst-missing-v1-1-9f9d0ab98fce@baylibre.com> <306b0b30-5a32-4c7c-86b4-57d50e2307e8@app.fastmail.com> <1jy1131kxz.fsf@starbuckisacylon.baylibre.com> <c06317c6-b2b2-4b6d-96e4-0c2cfc6846de@app.fastmail.com> <1jplmf1jqa.fsf@starbuckisacylon.baylibre.com> <ce67e512-a15b-4482-8194-b917096f4eeb@app.fastmail.com> <df0a53ee859e450d84e81547099f5f36.sboyd@kernel.org> <1jr06pkof6.fsf@starbuckisacylon.baylibre.com> <37b656cc8272552ba07c93c5a9a59641.sboyd@kernel.org> <1jfrn3l615.fsf@starbuckisacylon.baylibre.com>
+Subject: Re: [PATCH] clk: amlogic: axg-audio: select RESET_MESON_AUX
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Date: Wed, 04 Dec 2024 12:05:14 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-From: Taniya Das <quic_tdas@quicinc.com>
+Quoting Jerome Brunet (2024-12-04 09:19:50)
+> On Tue 03 Dec 2024 at 12:15, Stephen Boyd <sboyd@kernel.org> wrote:
+>=20
+> > Quoting Jerome Brunet (2024-12-03 03:15:41)
+> >> On Mon 02 Dec 2024 at 18:53, Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> > Is the half finished migration a problem for this cycle? I was intending
+> > to send the revert later this week and try again next cycle.
+>=20
+> Not really, with the fix you applied. There is just code present in
+> reset that should not be used in its current form. I'd prefer to
+> sanitise the situation sooner rather than later.
 
-Add bindings documentation for the SM8750 Clock Controller.
+Alright. Let's just sort it out in the next few weeks for the next merge
+window then. Maybe you can just do it once then and get auxiliary bus
+maintainers to ack the patch so you can merge the helper locally and use
+it in the amlogic clk tree.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
----
- .../devicetree/bindings/clock/qcom,sm8550-tcsr.yaml       |  2 ++
- include/dt-bindings/clock/qcom,sm8750-tcsr.h              | 15 +++++++++++++++
- 2 files changed, 17 insertions(+)
+> >
+> > Sure. You can make devm_meson_clk_rst_aux_register() use the same
+> > signature as I proposed above so that it's a one line patch later. And
+> > definitely drop the imply RESET_MESON and depends on REGMAP part. Maybe
+> > you can put it in the clkc-utils file?
+>=20
+> Sure. Few things I'd like to clarify
+>=20
+> * I tend think like Arnd, platform data will be needed eventually. Not
+>   sure having 2 functions, one with the param, one without is really
+>   worth it. We could just pass NULL when it is not needed. It is not
+>   uncommon. Would it be acceptable ? (for the generic helper, the
+>   temporary solution does not need that for sure)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
-index 3b546deb514af2ffe35d80337335509e8f6a559d..f3afbb25e8682de83fb16acaa35448545f77ce77 100644
---- a/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
-@@ -16,6 +16,7 @@ description: |
-   See also:
-   - include/dt-bindings/clock/qcom,sm8550-tcsr.h
-   - include/dt-bindings/clock/qcom,sm8650-tcsr.h
-+  - include/dt-bindings/clock/qcom,sm8750-tcsr.h
- 
- properties:
-   compatible:
-@@ -24,6 +25,7 @@ properties:
-           - qcom,sar2130p-tcsr
-           - qcom,sm8550-tcsr
-           - qcom,sm8650-tcsr
-+          - qcom,sm8750-tcsr
-           - qcom,x1e80100-tcsr
-       - const: syscon
- 
-diff --git a/include/dt-bindings/clock/qcom,sm8750-tcsr.h b/include/dt-bindings/clock/qcom,sm8750-tcsr.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..1c502ac7c7f40807f930583301e9b7b73ebea477
---- /dev/null
-+++ b/include/dt-bindings/clock/qcom,sm8750-tcsr.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLK_QCOM_TCSR_CC_SM8750_H
-+#define _DT_BINDINGS_CLK_QCOM_TCSR_CC_SM8750_H
-+
-+/* TCSR_CC clocks */
-+#define TCSR_PCIE_0_CLKREF_EN				0
-+#define TCSR_UFS_CLKREF_EN				1
-+#define TCSR_USB2_CLKREF_EN				2
-+#define TCSR_USB3_CLKREF_EN				3
-+
-+#endif
+I'll defer to the maintainers there. I don't feel strongly.
 
--- 
-2.46.1
+>=20
+> * You mean (meson-)clkc-utils.c ? I could but that would add dependency on
+>   the auxiliary_bus for clock controllers that don't need it. It is a
+>   minor problem really that I could just ignore.
+>   I'd rather keep this helper separate if possible.
 
+Ok, no worries.
+
+>=20
+> * Why drop 'imply RESET_MESON_AUX' ? I would still like the
+>   COMMON_CLK_AXG_AUDIO to 'strongly suggest' RESET_MESON_AUX, with
+>   dependency problem sorted out.
+
+Because eventually you'll lose this Kconfig. I guess you'll want to add
+that to the driver Kconfig option to maintain "strongly suggested".
 
