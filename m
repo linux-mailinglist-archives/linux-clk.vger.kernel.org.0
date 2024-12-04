@@ -1,96 +1,306 @@
-Return-Path: <linux-clk+bounces-15386-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15381-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D2C39E4593
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 21:22:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 322C9163D8F
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 20:22:51 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DBE71F5402;
-	Wed,  4 Dec 2024 20:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ii4Df9ET"
-X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B24C9E4683
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 22:21:24 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8741C3BF5;
-	Wed,  4 Dec 2024 20:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D6ABB85F61
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 19:39:02 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8DF52066C3;
+	Wed,  4 Dec 2024 19:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OHLzHYi1"
+X-Original-To: linux-clk@vger.kernel.org
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85AD1F542E;
+	Wed,  4 Dec 2024 19:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733343770; cv=none; b=MCoPm1HoSO+Q+9GJ2uQxWHX8ARS6azDr/Nl42svDkuMbFPzuMopVWM3y/773cNrxfqaTXwuCnTkc+yQ20KRvK3tkZrxmmBwgNdbi5+DR1l3jl7GvbHfcc5TyNQlT4K8fXLXEdM6xd7MmcEH7he7ldeniJovp7dL92nZDr6cLORc=
+	t=1733341069; cv=none; b=oBWLOfgBJC2o6TnSfLrNQby8FnizVXrrLa6XuAt3GSyOWz7yerGb8TVQ2ATpAP5m0M/GfNLW5XGhcrTfPTqb0ovXy56iCmXbzHxwSzF8MbxcF4RStsRleLkWxzALjFWkn/ZkikXo/zhIAT3xb0yBuUPzPBeVwgitpUZBJlXvNqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733343770; c=relaxed/simple;
-	bh=0trD3xgMuTcQ522NBjE3lOKrUeCloP+XOtSvdc704e8=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=QW84uhxvmFtc2BRmyq4ASOcY32CBRpySdg5Ub3hzxxppDBYmUyRZGtUrUN4TEm6fmJRQCmVhqTXr36T+8dQ2A56Ta9FUxNKkKgbLT1uDdkfW0NmYVAxWV5F3kL5SASAI8twjp0rdqrLyx6MJsPdSWgWKLOU4q9bM6jy49FtDBzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ii4Df9ET; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5556C4CECD;
-	Wed,  4 Dec 2024 20:22:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733343769;
-	bh=0trD3xgMuTcQ522NBjE3lOKrUeCloP+XOtSvdc704e8=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=Ii4Df9ETJjJlTt+OFI6XJ4qtn4c1zLT2QMdivBw/V6WxCbffn+5GnT/x9V0jfnriG
-	 Ckj+ctFI030Oqp5kY2Ttv0zR6kOW749IuqszjgSBILW1RheoF2Qa5KYC5gQAeHkeYY
-	 60YmmVLwIiVObrU/sYeTsQfk677+TlpgqBD3deYZ0bMgchJ8BxteVjNdjA/02aIGEH
-	 dFzHP0jZ+vrXV/0LwSRwq4WXz2bREIb3pdAc/V4tfUOzKq/PcbQEXs5+DxByl0mhPX
-	 DX69u3WXwSYfdZICNYAciKuIOrB+b/3OnAnc+F9VlSw4N7qgQRppPV9nKXsxdcxBle
-	 T2bU/8iVNzqkQ==
-Message-ID: <d15dc75cb5d0346bb56c58d4a933cf7e.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733341069; c=relaxed/simple;
+	bh=CiSIivOF0SenvLo9mr9UCQ+JX+6/FMXQ17YaFb6MhK8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=QmDZJAbuQENHgLi7u/jQS+EgeO/ylW/QcR4/3e1y2Tno2cDPuE1qDLRDL6/qQ+FVdGjEGrKwqfKfXQa0nsiPUuKqrfuGRS7jd8riYj0q0uq0pT0gDgc+IDP/Kcc2ls0G1fSeHKPLNqeFNuo3Nwp1mCyIkx7Q/84/C0ulARDohCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OHLzHYi1; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4DiaE7001101;
+	Wed, 4 Dec 2024 19:37:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	tWkNrpVCxzsyCfSSYlFxCTmamh0LRc0TJAtq403NQGU=; b=OHLzHYi1y+opRKsR
+	00i4c/d9tjuOikd4/ZmlCs8Ccz43a5PuypZuRdF91L+xVk7W7n2EMkiuIwl2gjxv
+	ICsUc+jB+/6lB1thImRCAvFPCif2z1xZZaPvU9SebuBFf9/lmOMe/joyHoEyuZ74
+	0MYg1WWr847nutKmyaRRb0VqJawSEbQS7q1xHZjftjAZNm5VdyHqCqS4atHl7pc8
+	DRhiyKsPAYZmNo/9Tfi4TjqIm8rOn73PtJnrsmpfeu0IBbb2C3w8y6Xb2hbpero4
+	LfJpZzEsC68JaK/Ha8hZXD5vHRhzfp5lVAa42wYksARwuFMa+L8i0miGV8AsSajR
+	noAV9w==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 439trbnpgw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Dec 2024 19:37:41 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B4JbfEp022116
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Dec 2024 19:37:41 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 4 Dec 2024 11:37:40 -0800
+From: Melody Olvera <quic_molvera@quicinc.com>
+Date: Wed, 4 Dec 2024 11:37:20 -0800
+Subject: [PATCH v3 8/8] clk: qcom: Add TCSR clock driver for SM8750
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1b05b11b2a8287c0ff4b6bdd079988c7.sboyd@kernel.org>
-References: <20241203134137.2114847-1-m.wilczynski@samsung.com> <CGME20241203134155eucas1p1e90c71c4f8eb5da41d2cc8a500f54dc7@eucas1p1.samsung.com> <20241203134137.2114847-6-m.wilczynski@samsung.com> <f21ffd12-167b-4d10-9017-33041ec322b0@kernel.org> <07bfb02a-1df3-4a03-83bb-d7edc540739d@samsung.com> <1b05b11b2a8287c0ff4b6bdd079988c7.sboyd@kernel.org>
-Subject: Re: [RFC PATCH v1 05/14] dt-bindings: clock: thead,th1520: Add support for Video Output subsystem
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-To: Krzysztof Kozlowski <krzk@kernel.org>, Michal Wilczynski <m.wilczynski@samsung.com>, airlied@gmail.com, aou@eecs.berkeley.edu, conor+dt@kernel.org, drew@pdp7.com, frank.binns@imgtec.com, guoren@kernel.org, jassisinghbrar@gmail.com, jszhang@kernel.org, krzk+dt@kernel.org, m.szyprowski@samsung.com, maarten.lankhorst@linux.intel.com, matt.coster@imgtec.com, mripard@kernel.org, mturquette@baylibre.com, palmer@dabbelt.com, paul.walmsley@sifive.com, robh@kernel.org, simona@ffwll.ch, tzimmermann@suse.de, ulf.hansson@linaro.org, wefu@redhat.com
-Date: Wed, 04 Dec 2024 12:22:47 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20241204-sm8750_master_clks-v3-8-1a8f31a53a86@quicinc.com>
+References: <20241204-sm8750_master_clks-v3-0-1a8f31a53a86@quicinc.com>
+In-Reply-To: <20241204-sm8750_master_clks-v3-0-1a8f31a53a86@quicinc.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733341058; l=5873;
+ i=quic_molvera@quicinc.com; s=20241204; h=from:subject:message-id;
+ bh=1Mp+WlHTxiM3PsgMyVlzQAdVtkDxYE8FHogcGVcpFv8=;
+ b=S7dIL9SDZsHvAJsGGxtZhALocnPxf/JQz9CVC5Jrf67j1xhS3N/m0Py+YLZq1gj+vy8hxBJab
+ IbKKKENbxIaALKxLXqTsm4Slw/2zO7d/cd1SuTt2kOxfABkDV/4HYWB
+X-Developer-Key: i=quic_molvera@quicinc.com; a=ed25519;
+ pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oE5aW6lD0DKBAL2pc-HN4DaorEGja3Fb
+X-Proofpoint-ORIG-GUID: oE5aW6lD0DKBAL2pc-HN4DaorEGja3Fb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=845 mlxscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 phishscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412040150
 
-Quoting Stephen Boyd (2024-12-04 12:21:11)
-> Quoting Michal Wilczynski (2024-12-04 02:11:26)
-> >=20
-> > To address this, I'll specify the 'reg' property in each node to define
-> > the address ranges explicitly fragmenting the address space for the VOS=
-YS
-> > manually.
-> >=20
-> > vosys_clk: clock-controller@ffef528050 {
-> >         compatible =3D "thead,th1520-clk-vo";
-> >         reg =3D <0xff 0xef528050 0x0 0x8>;
-> >         #clock-cells =3D <1>;
-> > };
-> >=20
-> > pd: power-domain@ffef528000 {
-> >         compatible =3D "thead,th1520-pd";
-> >         reg =3D <0xff 0xef528000 0x0 0x8>;
-> >         #power-domain-cells =3D <1>;
-> > };
->=20
-> You should have one node:
->=20
->     clock-controller@ffef528000 {
->       compatible =3D "thead,th1520-vo";
->       reg =3D <0xff 0xef528050 0x0 0x1a04>;
+From: Taniya Das <quic_tdas@quicinc.com>
 
-Apologies for the typo. Here's the correct line:
+The TCSR clock controller found on SM8750 provides refclks
+for PCIE, USB and UFS. Add clock driver for it.
 
-	reg =3D <0xff 0xef528000 0x0 0x1a04>;
+Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+---
+ drivers/clk/qcom/Kconfig         |   8 +++
+ drivers/clk/qcom/Makefile        |   1 +
+ drivers/clk/qcom/tcsrcc-sm8750.c | 141 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 150 insertions(+)
 
->       #clock-cells =3D <1>;
->       #power-domain-cells =3D <1>;
->     };
->
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index 26bfb607235bf3689744532e4f7c087606846b12..2ec9be21ff678e3343cccafa85801aa68805f440 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -1255,6 +1255,14 @@ config SM_TCSRCC_8650
+ 	  Support for the TCSR clock controller on SM8650 devices.
+ 	  Say Y if you want to use peripheral devices such as SD/UFS.
+ 
++config SM_TCSRCC_8750
++	tristate "SM8750 TCSR Clock Controller"
++	depends on ARM64 || COMPILE_TEST
++	select QCOM_GDSC
++	help
++	  Support for the TCSR clock controller on SM8750 devices.
++	  Say Y if you want to use peripheral devices such as UFS/USB/PCIe.
++
+ config SA_VIDEOCC_8775P
+ 	tristate "SA8775P Video Clock Controller"
+ 	depends on ARM64 || COMPILE_TEST
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index 1875018d1100f57a475d9cf6b2a267a7a87680be..28e45316627afed09b76ffe4a8ad727ced455347 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -157,6 +157,7 @@ obj-$(CONFIG_SM_GPUCC_8550) += gpucc-sm8550.o
+ obj-$(CONFIG_SM_GPUCC_8650) += gpucc-sm8650.o
+ obj-$(CONFIG_SM_TCSRCC_8550) += tcsrcc-sm8550.o
+ obj-$(CONFIG_SM_TCSRCC_8650) += tcsrcc-sm8650.o
++obj-$(CONFIG_SM_TCSRCC_8750) += tcsrcc-sm8750.o
+ obj-$(CONFIG_SM_VIDEOCC_7150) += videocc-sm7150.o
+ obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
+ obj-$(CONFIG_SM_VIDEOCC_8250) += videocc-sm8250.o
+diff --git a/drivers/clk/qcom/tcsrcc-sm8750.c b/drivers/clk/qcom/tcsrcc-sm8750.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..242e320986ef6a54d6bb1a8996d822eda461789b
+--- /dev/null
++++ b/drivers/clk/qcom/tcsrcc-sm8750.c
+@@ -0,0 +1,141 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/*
++ * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#include <linux/clk-provider.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
++#include <dt-bindings/clock/qcom,sm8750-tcsr.h>
++
++#include "clk-branch.h"
++#include "clk-regmap.h"
++#include "clk-regmap-divider.h"
++#include "clk-regmap-mux.h"
++#include "common.h"
++
++enum {
++	DT_BI_TCXO_PAD,
++};
++
++static struct clk_branch tcsr_pcie_0_clkref_en = {
++	.halt_reg = 0x0,
++	.halt_check = BRANCH_HALT_DELAY,
++	.clkr = {
++		.enable_reg = 0x0,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data) {
++			.name = "tcsr_pcie_0_clkref_en",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch tcsr_ufs_clkref_en = {
++	.halt_reg = 0x1000,
++	.halt_check = BRANCH_HALT_DELAY,
++	.clkr = {
++		.enable_reg = 0x1000,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data) {
++			.name = "tcsr_ufs_clkref_en",
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_BI_TCXO_PAD,
++			},
++			.num_parents = 1,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch tcsr_usb2_clkref_en = {
++	.halt_reg = 0x2000,
++	.halt_check = BRANCH_HALT_DELAY,
++	.clkr = {
++		.enable_reg = 0x2000,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data) {
++			.name = "tcsr_usb2_clkref_en",
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_BI_TCXO_PAD,
++			},
++			.num_parents = 1,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch tcsr_usb3_clkref_en = {
++	.halt_reg = 0x3000,
++	.halt_check = BRANCH_HALT_DELAY,
++	.clkr = {
++		.enable_reg = 0x3000,
++		.enable_mask = BIT(0),
++		.hw.init = &(const struct clk_init_data) {
++			.name = "tcsr_usb3_clkref_en",
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_BI_TCXO_PAD,
++			},
++			.num_parents = 1,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_regmap *tcsr_cc_sm8750_clocks[] = {
++	[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
++	[TCSR_UFS_CLKREF_EN] = &tcsr_ufs_clkref_en.clkr,
++	[TCSR_USB2_CLKREF_EN] = &tcsr_usb2_clkref_en.clkr,
++	[TCSR_USB3_CLKREF_EN] = &tcsr_usb3_clkref_en.clkr,
++};
++
++static const struct regmap_config tcsr_cc_sm8750_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x3000,
++	.fast_io = true,
++};
++
++static const struct qcom_cc_desc tcsr_cc_sm8750_desc = {
++	.config = &tcsr_cc_sm8750_regmap_config,
++	.clks = tcsr_cc_sm8750_clocks,
++	.num_clks = ARRAY_SIZE(tcsr_cc_sm8750_clocks),
++};
++
++static const struct of_device_id tcsr_cc_sm8750_match_table[] = {
++	{ .compatible = "qcom,sm8750-tcsr" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, tcsr_cc_sm8750_match_table);
++
++static int tcsr_cc_sm8750_probe(struct platform_device *pdev)
++{
++	return qcom_cc_probe(pdev, &tcsr_cc_sm8750_desc);
++}
++
++static struct platform_driver tcsr_cc_sm8750_driver = {
++	.probe = tcsr_cc_sm8750_probe,
++	.driver = {
++		.name = "tcsr_cc-sm8750",
++		.of_match_table = tcsr_cc_sm8750_match_table,
++	},
++};
++
++static int __init tcsr_cc_sm8750_init(void)
++{
++	return platform_driver_register(&tcsr_cc_sm8750_driver);
++}
++subsys_initcall(tcsr_cc_sm8750_init);
++
++static void __exit tcsr_cc_sm8750_exit(void)
++{
++	platform_driver_unregister(&tcsr_cc_sm8750_driver);
++}
++module_exit(tcsr_cc_sm8750_exit);
++
++MODULE_DESCRIPTION("QTI TCSR_CC SM8750 Driver");
++MODULE_LICENSE("GPL");
+
+-- 
+2.46.1
+
 
