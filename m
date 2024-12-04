@@ -1,215 +1,638 @@
-Return-Path: <linux-clk+bounces-15351-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15353-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F4689E37A9
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 11:37:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3425A9E3831
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 12:04:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25AE8169691
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 10:37:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 035E2161FC8
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 11:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216BC1B412E;
-	Wed,  4 Dec 2024 10:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7B5E1B21BA;
+	Wed,  4 Dec 2024 11:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="niQgSedU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Zr+W4TVh"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03A0189915
-	for <linux-clk@vger.kernel.org>; Wed,  4 Dec 2024 10:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77E41B0F2E
+	for <linux-clk@vger.kernel.org>; Wed,  4 Dec 2024 11:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733308495; cv=none; b=huWBo8LeR+X/3FzR8w8VKnzj4qrH2EowHjG4FmyXRtQDvvaR3tKo9/UYrbJQOYUFyXVct67Sg7vRkmTNHj8FGv+2yu4hoera7nfIBuoaupigjYXSHnUJjLKKsrQ/fNcWeAbA69WfTkN0JL/pe+B118Ri0KM50iEoCErzW7mrgdI=
+	t=1733310239; cv=none; b=Di7nAG5KOaWC124Xwv07Jk73g4GO3oE3bursU2PUNG/O2AjB07WAGSjruUCCXqH39eqbnWNarhmyDilx1TI+SmN94J6h+0lX0L2bDQ5H8uTHh76Oc0DAZ5OquibzahW8ITeODo4DGvqcRB6zn7eOytANP4RkbjHtbe6QZObeMSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733308495; c=relaxed/simple;
-	bh=ThPPkK3Bt2gs0BoLGsQNUcJDtqUraUqu6Ng+2ewBOuo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=KLlCgtrJnVa/N0om//8EYyAA0HI5/JqQrRMaHpQUXFHUlwiFApmSZ62butVtmmT7XWWi1bUOKF2r595MSTP/teAoSROldyVsuE+uQ9YAQBRCpRynTxQuu4n88bYAPJC/znvCoPDgLKIwcgURkRwqCNx/ujv1t2olqYo/0B6/g9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=niQgSedU; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20241204103451euoutp0106dd41d04edac85072ed011c3dbf2201~N8uOffwz_0268302683euoutp01k
-	for <linux-clk@vger.kernel.org>; Wed,  4 Dec 2024 10:34:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20241204103451euoutp0106dd41d04edac85072ed011c3dbf2201~N8uOffwz_0268302683euoutp01k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1733308491;
-	bh=+l4e4Tyx2I1+OfNbhG6k6rLroWYsZg5fA2FLlIaEGO8=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=niQgSedUrpFLE7LRUETDJiXrPBx5Jjiz5Q9jVIw3QZ5AwXbr3ZUog4id/+OC9tbwR
-	 uQwpLQRVGX/SHJKoatTqiJCnSBDFsWzAjUuKLBHo7GHN79gp9Mmu2hlXuqqY2fpsvm
-	 39T7fBgG5HSeP2pQ43MRkUyoPAFj8rUekSLTzDM4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20241204103448eucas1p2787f6ba041d5859d798f8a0fe36e5869~N8uL0vWCQ1075110751eucas1p2M;
-	Wed,  4 Dec 2024 10:34:48 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id A0.27.20821.84030576; Wed,  4
-	Dec 2024 10:34:48 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20241204103447eucas1p1290a8da81821da986015bef31ccf0e3c~N8uLKQQUG1362813628eucas1p1r;
-	Wed,  4 Dec 2024 10:34:47 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241204103447eusmtrp2cae4b6f1f36a5e73397910cd66cdf731~N8uLJMXGw1364613646eusmtrp2t;
-	Wed,  4 Dec 2024 10:34:47 +0000 (GMT)
-X-AuditID: cbfec7f2-b09c370000005155-fe-675030486f50
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 0E.BB.19654.74030576; Wed,  4
-	Dec 2024 10:34:47 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20241204103446eusmtip11cf57501b24c5ce7d747834870a33315~N8uJ2BqPW0744207442eusmtip1a;
-	Wed,  4 Dec 2024 10:34:46 +0000 (GMT)
-Message-ID: <17df9341-e299-40bb-81ae-f4c7296d73ac@samsung.com>
-Date: Wed, 4 Dec 2024 11:34:45 +0100
+	s=arc-20240116; t=1733310239; c=relaxed/simple;
+	bh=HwQULjtZoCnIZhnviTpDylo0k0BrxR0OmasICKiucVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O50Rvf6VsZmumgifIfawvYUHTPr/sIFHQyN1/eeLA4B8LWFBSkdlC08YndvrjrL0Sdrwu/AfbNLWGKgr1doTl7PLWNd8meaYnuJYnKXLkgYzE9h7f9+82Yyvm5pWnBUToJGLKUMltQMBcX4NKzGwETGlBb+RIOysdd14ifXGbUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Zr+W4TVh; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-434a0300d4cso5934295e9.3
+        for <linux-clk@vger.kernel.org>; Wed, 04 Dec 2024 03:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733310234; x=1733915034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pEtsPx1N9q/msevZzeL8uie551bRgE5h4Ujcp6NpSeo=;
+        b=Zr+W4TVh1jDEWSyqU0E2HPafB3yGh+rCl8fh1+hTLIdCBPHvf+11OC4Kl5dLqhyhdL
+         F1s9VG7AUvYdcVHH1mMGKrC4fS92gvRQGEtZITpUMdPDal/wmWCPNgQ9FN3vhsjHvE/k
+         AS9g+aX+Lrwe5EFX72edZFFwQt+NoSx7T+FKlWIYdrrt8oYzjAUk8kMfoUbJWZzkHLSZ
+         uiaLHn58rEjeLRKWn56ftt753p4eg6aCr0hEMG1NFFwF3XVcYtEgXxCuJkAI6yMFDe0R
+         z8ZGS663MnSUaqbj3uIrk1rTN0OCWz5O33HfJUh/YDC70584XqJgCXQl3/8lMZHb3vKB
+         UJ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733310234; x=1733915034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pEtsPx1N9q/msevZzeL8uie551bRgE5h4Ujcp6NpSeo=;
+        b=K5Q89iagAJFD+JDqsZEz3v5P8eGg/bDc5Wi0Lx/cr55+WFQooomxJkG/SRXfydbLKn
+         shTiWQVxVB1G0G5MigCqSLSttrNjfgQCVhBVXu0G+E4aaj4zAJPMV+9F1SgKVwLxsJhC
+         TuhzAF+fghyZHqbzYhqvCgorXAQhWUEvaEPye37eZ8qHa5/MFGg+bggJaFFd/09wOXpv
+         4G8jkJC6H0tT7sVLXFJxdgWqlXpp0zdn9GOLTcRCJuU26/S549x/72GGaqOy4HF1OViX
+         DErmtKnfL8MsL7KCIfZPJxOkMyOKq1+AvreRfV5EqVNlh8zgIBmLPhEJSwygC2+Ja7H0
+         o9bA==
+X-Forwarded-Encrypted: i=1; AJvYcCW12Ii0UPhcPUGgSdkJmHenEwZbuCWZhNCoQ5rcnxLDtXOP90MUC1zno0tW/eARHae431HrDhPky0A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8I9xHoFApT4mctKkGEbtnXu+fE0MxafqHJTp9U7Y60AjgYC6f
+	TupswZxEhVwpwe0fnU0Q4eRQoG2jvsL6ISXbUCny7v4YI66bcSskv13Qgm+wWE0=
+X-Gm-Gg: ASbGncv5XXGVzk1q1nxmXy1LqwR2tJqGCaOcjJD3RK7Pvr1u826rhKjM2YMAaDLpYbs
+	bgSwsQEBEXGb6Jn8Y5N4aDKTcn6deZU2wrn++b+L82UEFHV6dEtQJ93qSrrqhKcgICmezGM0ZKb
+	7m00s7FCVeyE8gJ+rzNVNr/ArZp97bzFW8ZAx7ty5UG1CoU/OPSDZivhOWWlp4GGLNttgELGXmg
+	ZZ5/IAaXaUt8LoMX/b/RMprtH/DFAbpc3L0XRg9vBIaJqRLagnoQxumkaqNOxum
+X-Google-Smtp-Source: AGHT+IF2Bul51lXYvpNGLu37H17FnxzETxdYp547y3amX+SfMaaNXNCLoRYGjnL49oQMT3OUagPHSA==
+X-Received: by 2002:a05:600c:a07:b0:42c:aeee:80a with SMTP id 5b1f17b1804b1-434d11c7b9dmr19696715e9.7.1733310234134;
+        Wed, 04 Dec 2024 03:03:54 -0800 (PST)
+Received: from krzk-bin.. ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434d52a6aa9sm20445875e9.33.2024.12.04.03.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 03:03:53 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Bjorn Andersson <andersson@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] clk: qcom: Drop unused header includes
+Date: Wed,  4 Dec 2024 12:03:47 +0100
+Message-ID: <20241204110348.100841-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 13/14] riscv: dts: Introduce power domain node
- with simple-bus compatible
-To: Krzysztof Kozlowski <krzk@kernel.org>, mturquette@baylibre.com,
-	sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	frank.binns@imgtec.com, matt.coster@imgtec.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
-	airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org,
-	jszhang@kernel.org, m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <9b75bc06-2a28-4c16-8e2b-90f824f7f79f@kernel.org>
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxjGc+693FtK6i6FjRPKhjbqhM0C0y0nmTFKht7plqAzTkjc1oy7
-	goNiWnCbOkVgDKEQcBi2FikiswRhfLOWFVlaQhFYmSAgFRA3PqwDS6UaRcFRLm7893s/zvO+
-	z5vDw4W/kf68OHkSq5BL48Ukn2hqf2LdzIRGykILCwnUMViKocanagpVtlgxpG2zeqDR3gYM
-	3XjoINEvE39S6G7LGQINlF+gUFp7NYns6lES9fTUUMipGvVAfc1FJJrLaQOoaS6dRFVtIxS6
-	6GwkUJm+GaCMs5c90PXOCGTvU+EoQ/0Sem7UU2hxoJZAmvutFGqYzvdAlqqPUXprAbHjVcZx
-	8zuKmbbbCcac6aKYlkclBGNQj1CMytANmLqKsyQzPGAkmeJr+5jb2RaMqS87zaRXtWOM42o/
-	yeQ2VACmN22QYuq7TkR6R/O3xbDxccdYRcj2z/ixw/n51NH+V77uzAlPAQZhFvDkQXorbF5w
-	EFmAzxPS5QA6OswYF7gAnC45Q3LBHIAL2iyPF0++r7lEuFlI6wDsnvyEa5oB8GqnGbgLAno7
-	TBkswtxM0Ovh5Zw7GJf3htd+Gl9+/DIdCG/bfqTc7EN/Aa3TRuAW8qULCPi4tAV3F3D6VwA7
-	ugUc+0HbuHZZiKTfgmM67fJGnkvDJjLSMa4nEKY1anC3EKT/4MNUzf0lD7yl4D04mUtzDnzg
-	PUsDxXEAfG7gNCGdCMcaH+Acn4QGlWWF34XD1vllGZwOgtXNIVx6JzTdGMM59TXw5ow3t8Ea
-	eK6pcCUtgJkZK5feCM+rcv4bai1vwvKAWL3qKOpVHtWrvKj/n1sCiArgxyYrE2SsMkzOfiVR
-	ShOUyXKZ5PPEhDqw9L+7Fi0P9ODCPafEBDAeMAHIw8W+gv1vRMqEghjpN8dZReKniuR4VmkC
-	Ih4h9hNsiAlkhbRMmsR+ybJHWcWLKsbz9E/BNGtPHyYLiwcroxxvjxzhRWvG+tcNhn14ULAr
-	fMelqFvG2oX5Ge/wLQGS3N3PNMWWouy4U2al0EUaNpTeUYrq19rvnkg2TlHOpLnAlCsx62d2
-	NpuGrlQeqXk0tMlLFHqovriosLog9dRj0Lfb1v/zROytzOzyLVZzmmeDLejZ3pI83WuVXnsj
-	giW2YP1+L/zJlP5Y42amurd2q8/TqbzFvyt0hz6qfF2Hr0s9f2D6uGzW/2H8NtX7Q3SF9EDZ
-	fJ7zr+vmtoN73gyV/+OaDZuM3hQlAnPqD3b5iuS6i++IZ0/WHdaJkgP0feO/72F7vnX5au2t
-	o3muH7pmtRE6m3+IM2hATChjpWHBuEIp/RevMK9jTgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAKsWRmVeSWpSXmKPExsVy+t/xu7ruBgHpBq3XRS1OXF/EZLH19yx2
-	izV7zzFZzD9yjtXi3qUtTBZXvr5ns1j39AK7xYu9jSwW11bMZbdoPraezeLlrHtsFufPb2C3
-	+Nhzj9Xi8q45bBafe48wWmz73MJmsfbIXXaLhR+3slgs2bGL0aKtcxmrxcVTrhYvL/cwW7TN
-	4rf4v2cHu8W/axtZLGa/289useXNRFaL42vDLVr2T2FxkPV4f6OV3ePNy5csHoc7vrB77P22
-	gMVj56y77B49O88wemxa1cnmcefaHjaPeScDPe53H2fy2Lyk3qNl7TEmj/f7rrJ59G1Zxehx
-	qfk6u8fm09UBglF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZll
-	qUX6dgl6GXcmTmQvuCpWcarXqYFxp1AXIyeHhICJRPuGxSxdjFwcQgJLGSW+PvrCBJGQkbjW
-	/ZIFwhaW+HOtiw2i6DWjxI5pjWAJXgE7iYbrc8AaWARUJJb1PmSCiAtKnJz5BKxGVEBe4v6t
-	GewgtrBAmsT0LW+YQAaJCExhkVj96B8ziMMssJ1RYsPMqYwQK/4xSrw6uooNpIVZQFzi1pP5
-	YGPZBIwkHiyfzwpicwKtftrWAhTnAKpRl1g/TwiiXF6ieets5gmMQrOQHDILyaRZCB2zkHQs
-	YGRZxSiSWlqcm55bbKRXnJhbXJqXrpecn7uJEZi0th37uWUH48pXH/UOMTJxMB5ilOBgVhLh
-	DdIOSBfiTUmsrEotyo8vKs1JLT7EaAoMjInMUqLJ+cC0mVcSb2hmYGpoYmZpYGppZqwkzst2
-	5XyakEB6YklqdmpqQWoRTB8TB6dUA9Omyf9PFs306Fn62kAy+BOLoUpJnqbZmRzrxB/yn4N8
-	InJWFNytqhBdli2bsEI+PPpmWviHH7czDjTcjQptmulfNE/9ldGMn4bnxZN9j0uvO863SnXP
-	7Wlb57wsfZOV171aaanMJK3vi6SKGaKr0zpW9/Fsy/8iUJ1xdq1MkKeGwbsIhyqn7yWr115y
-	me8hKHj+1oaEdy6N8oqCC+a2iTZZCv49FdW0jT1u2cngmx93TT7ftudNJtvXrduFzgtJ5scs
-	Nkh6bnxg8sVfOppXtus6XUnPX5gvlfrfSC/pqE/9opctF5sfB/zpvTtp3/cbdqWPHPS+unAw
-	HMz/cSHX1+yIwo0LvySNtFadVkwUb1FiKc5INNRiLipOBAAdHNKv4wMAAA==
-X-CMS-MailID: 20241204103447eucas1p1290a8da81821da986015bef31ccf0e3c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20241203134206eucas1p10ca2d7bb12afbd082d5f8a9ad85f94bd
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20241203134206eucas1p10ca2d7bb12afbd082d5f8a9ad85f94bd
-References: <20241203134137.2114847-1-m.wilczynski@samsung.com>
-	<CGME20241203134206eucas1p10ca2d7bb12afbd082d5f8a9ad85f94bd@eucas1p1.samsung.com>
-	<20241203134137.2114847-14-m.wilczynski@samsung.com>
-	<9b75bc06-2a28-4c16-8e2b-90f824f7f79f@kernel.org>
 
+Drivers should include only headers they use so drop:
+1. of.h and of_address.h: When no OF call is used (of_device_id is
+   coming from mod_devicetable.h).
+2. clk.h, property.h and reset-controller.h: No calls to clock consumer
+   or reset framework, no fwnode/property calls.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/clk/qcom/camcc-sa8775p.c      | 1 -
+ drivers/clk/qcom/camcc-sc7180.c       | 1 -
+ drivers/clk/qcom/camcc-sc7280.c       | 1 -
+ drivers/clk/qcom/camcc-sm4450.c       | 1 -
+ drivers/clk/qcom/camcc-sm7150.c       | 1 -
+ drivers/clk/qcom/camcc-sm8150.c       | 1 -
+ drivers/clk/qcom/camcc-sm8250.c       | 1 -
+ drivers/clk/qcom/dispcc-qcm2290.c     | 1 -
+ drivers/clk/qcom/dispcc-sc8280xp.c    | 2 --
+ drivers/clk/qcom/dispcc-sdm845.c      | 1 -
+ drivers/clk/qcom/dispcc-sm4450.c      | 1 -
+ drivers/clk/qcom/dispcc-sm6115.c      | 1 -
+ drivers/clk/qcom/dispcc-sm7150.c      | 1 -
+ drivers/clk/qcom/dispcc-sm8250.c      | 1 -
+ drivers/clk/qcom/dispcc-sm8450.c      | 2 --
+ drivers/clk/qcom/dispcc-sm8550.c      | 2 --
+ drivers/clk/qcom/dispcc-sm8750.c      | 2 --
+ drivers/clk/qcom/dispcc0-sa8775p.c    | 1 -
+ drivers/clk/qcom/dispcc1-sa8775p.c    | 1 -
+ drivers/clk/qcom/gcc-msm8960.c        | 1 -
+ drivers/clk/qcom/gcc-msm8974.c        | 1 -
+ drivers/clk/qcom/gpucc-msm8998.c      | 2 --
+ drivers/clk/qcom/gpucc-sdm660.c       | 4 +---
+ drivers/clk/qcom/gpucc-sm4450.c       | 1 -
+ drivers/clk/qcom/gpucc-sm8350.c       | 1 -
+ drivers/clk/qcom/kpss-xcc.c           | 1 -
+ drivers/clk/qcom/krait-cc.c           | 1 -
+ drivers/clk/qcom/lpasscc-sdm845.c     | 1 -
+ drivers/clk/qcom/lpasscorecc-sc7180.c | 1 -
+ drivers/clk/qcom/lpasscorecc-sc7280.c | 1 -
+ drivers/clk/qcom/mmcc-apq8084.c       | 1 -
+ drivers/clk/qcom/mmcc-msm8960.c       | 3 ---
+ drivers/clk/qcom/mmcc-msm8974.c       | 1 -
+ drivers/clk/qcom/mmcc-msm8994.c       | 2 --
+ drivers/clk/qcom/mmcc-msm8996.c       | 3 ---
+ drivers/clk/qcom/mmcc-msm8998.c       | 2 --
+ drivers/clk/qcom/mmcc-sdm660.c        | 5 -----
+ 37 files changed, 1 insertion(+), 54 deletions(-)
 
-On 12/3/24 16:52, Krzysztof Kozlowski wrote:
-> On 03/12/2024 14:41, Michal Wilczynski wrote:
->> The DRM Imagination GPU requires a power-domain driver, but the driver
->> for "thead,th1520-aon" is not yet available. To ensure that the 'aon'
->> node and its child 'pd' node are properly recognized and probed by the
->> kernel, add "simple-bus" to the compatible property of the 'aon' node.
->>
->> This change allows the kernel to treat the 'aon' node as a simple bus,
->> enabling the child nodes to be probed and initialized independently. It
->> ensures that the power domain can be managed appropriately until the
->> specific AON driver is developed.
->>
->> This commit introduces some errors while running dtbs_check, as the aon
->> doesn't have the dt-bindings yet.
->>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->> ---
->>  arch/riscv/boot/dts/thead/th1520.dtsi | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
->> index 39d39059160d..58f93ad3eb6e 100644
->> --- a/arch/riscv/boot/dts/thead/th1520.dtsi
->> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
->> @@ -6,6 +6,7 @@
->>  
->>  #include <dt-bindings/interrupt-controller/irq.h>
->>  #include <dt-bindings/clock/thead,th1520-clk.h>
->> +#include <dt-bindings/power/thead,th1520-power.h>
->>  
->>  / {
->>  	compatible = "thead,th1520";
->> @@ -229,6 +230,16 @@ stmmac_axi_config: stmmac-axi-config {
->>  		snps,blen = <0 0 64 32 0 0 0>;
->>  	};
->>  
->> +	aon {
->> +		compatible = "thead,th1520-aon", "simple-bus";
-> 
-> 1. No, that's not a bus.
+diff --git a/drivers/clk/qcom/camcc-sa8775p.c b/drivers/clk/qcom/camcc-sa8775p.c
+index c04801a5af35..1df86da41940 100644
+--- a/drivers/clk/qcom/camcc-sa8775p.c
++++ b/drivers/clk/qcom/camcc-sa8775p.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/clk/qcom/camcc-sc7180.c b/drivers/clk/qcom/camcc-sc7180.c
+index 10e924cd533d..a69b70ab1a70 100644
+--- a/drivers/clk/qcom/camcc-sc7180.c
++++ b/drivers/clk/qcom/camcc-sc7180.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_clock.h>
+ #include <linux/pm_runtime.h>
+diff --git a/drivers/clk/qcom/camcc-sc7280.c b/drivers/clk/qcom/camcc-sc7280.c
+index accd257632df..5a9992a5b5ba 100644
+--- a/drivers/clk/qcom/camcc-sc7280.c
++++ b/drivers/clk/qcom/camcc-sc7280.c
+@@ -8,7 +8,6 @@
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/camcc-sm4450.c b/drivers/clk/qcom/camcc-sm4450.c
+index f8503ced3d05..e51590d89a3c 100644
+--- a/drivers/clk/qcom/camcc-sm4450.c
++++ b/drivers/clk/qcom/camcc-sm4450.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/camcc-sm7150.c b/drivers/clk/qcom/camcc-sm7150.c
+index 39033a6bb616..4a3baf5d8e85 100644
+--- a/drivers/clk/qcom/camcc-sm7150.c
++++ b/drivers/clk/qcom/camcc-sm7150.c
+@@ -7,7 +7,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/camcc-sm8150.c b/drivers/clk/qcom/camcc-sm8150.c
+index bb3009818ad7..ed96dcb885b3 100644
+--- a/drivers/clk/qcom/camcc-sm8150.c
++++ b/drivers/clk/qcom/camcc-sm8150.c
+@@ -8,7 +8,6 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/of.h>
+ #include <linux/regmap.h>
+ #include <linux/pm_runtime.h>
+ 
+diff --git a/drivers/clk/qcom/camcc-sm8250.c b/drivers/clk/qcom/camcc-sm8250.c
+index 34d2f17520dc..dcbc6c354e5a 100644
+--- a/drivers/clk/qcom/camcc-sm8250.c
++++ b/drivers/clk/qcom/camcc-sm8250.c
+@@ -7,7 +7,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,camcc-sm8250.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-qcm2290.c b/drivers/clk/qcom/dispcc-qcm2290.c
+index 449ffea2295d..bf0ff76e0745 100644
+--- a/drivers/clk/qcom/dispcc-qcm2290.c
++++ b/drivers/clk/qcom/dispcc-qcm2290.c
+@@ -7,7 +7,6 @@
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sc8280xp.c b/drivers/clk/qcom/dispcc-sc8280xp.c
+index f1ca9ae0b33f..0a810fc847ce 100644
+--- a/drivers/clk/qcom/dispcc-sc8280xp.c
++++ b/drivers/clk/qcom/dispcc-sc8280xp.c
+@@ -7,11 +7,9 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/pm_clock.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,dispcc-sc8280xp.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sdm845.c b/drivers/clk/qcom/dispcc-sdm845.c
+index e6139e8f74dc..94079c54333f 100644
+--- a/drivers/clk/qcom/dispcc-sdm845.c
++++ b/drivers/clk/qcom/dispcc-sdm845.c
+@@ -7,7 +7,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,dispcc-sdm845.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sm4450.c b/drivers/clk/qcom/dispcc-sm4450.c
+index 98ba016bc57f..465725f9bfeb 100644
+--- a/drivers/clk/qcom/dispcc-sm4450.c
++++ b/drivers/clk/qcom/dispcc-sm4450.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sm6115.c b/drivers/clk/qcom/dispcc-sm6115.c
+index 939887f82ecc..5790253e7d89 100644
+--- a/drivers/clk/qcom/dispcc-sm6115.c
++++ b/drivers/clk/qcom/dispcc-sm6115.c
+@@ -8,7 +8,6 @@
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sm7150.c b/drivers/clk/qcom/dispcc-sm7150.c
+index d32bd7df1433..bdfff246ed3f 100644
+--- a/drivers/clk/qcom/dispcc-sm7150.c
++++ b/drivers/clk/qcom/dispcc-sm7150.c
+@@ -8,7 +8,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
+index 884bbd3fb305..1f48e79acfac 100644
+--- a/drivers/clk/qcom/dispcc-sm8250.c
++++ b/drivers/clk/qcom/dispcc-sm8250.c
+@@ -8,7 +8,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,dispcc-sm8250.h>
+ 
+diff --git a/drivers/clk/qcom/dispcc-sm8450.c b/drivers/clk/qcom/dispcc-sm8450.c
+index a1f183e6c636..96987d8445cb 100644
+--- a/drivers/clk/qcom/dispcc-sm8450.c
++++ b/drivers/clk/qcom/dispcc-sm8450.c
+@@ -4,12 +4,10 @@
+  * Copyright (c) 2022, Linaro Ltd.
+  */
+ 
+-#include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/pm_runtime.h>
+diff --git a/drivers/clk/qcom/dispcc-sm8550.c b/drivers/clk/qcom/dispcc-sm8550.c
+index e41d4104d770..4c5feb96ae53 100644
+--- a/drivers/clk/qcom/dispcc-sm8550.c
++++ b/drivers/clk/qcom/dispcc-sm8550.c
+@@ -4,12 +4,10 @@
+  * Copyright (c) 2023, Linaro Ltd.
+  */
+ 
+-#include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/pm_runtime.h>
+diff --git a/drivers/clk/qcom/dispcc-sm8750.c b/drivers/clk/qcom/dispcc-sm8750.c
+index ff64ff93c4db..a085a9e67f3b 100644
+--- a/drivers/clk/qcom/dispcc-sm8750.c
++++ b/drivers/clk/qcom/dispcc-sm8750.c
+@@ -4,12 +4,10 @@
+  * Copyright (c) 2023-2024, Linaro Ltd.
+  */
+ 
+-#include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/pm_runtime.h>
+diff --git a/drivers/clk/qcom/dispcc0-sa8775p.c b/drivers/clk/qcom/dispcc0-sa8775p.c
+index 6e399b5f1383..bf9de92a5dd2 100644
+--- a/drivers/clk/qcom/dispcc0-sa8775p.c
++++ b/drivers/clk/qcom/dispcc0-sa8775p.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/clk/qcom/dispcc1-sa8775p.c b/drivers/clk/qcom/dispcc1-sa8775p.c
+index 30ccea59415a..cd2f2eb7ffb4 100644
+--- a/drivers/clk/qcom/dispcc1-sa8775p.c
++++ b/drivers/clk/qcom/dispcc1-sa8775p.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/clk/qcom/gcc-msm8960.c b/drivers/clk/qcom/gcc-msm8960.c
+index 9ddce11db6df..c2e4fa5d63ad 100644
+--- a/drivers/clk/qcom/gcc-msm8960.c
++++ b/drivers/clk/qcom/gcc-msm8960.c
+@@ -7,7 +7,6 @@
+ #include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+diff --git a/drivers/clk/qcom/gcc-msm8974.c b/drivers/clk/qcom/gcc-msm8974.c
+index b32e66714951..92ad35cfb75e 100644
+--- a/drivers/clk/qcom/gcc-msm8974.c
++++ b/drivers/clk/qcom/gcc-msm8974.c
+@@ -7,7 +7,6 @@
+ #include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/clk-provider.h>
+diff --git a/drivers/clk/qcom/gpucc-msm8998.c b/drivers/clk/qcom/gpucc-msm8998.c
+index 9efeab2691ba..066793e47f79 100644
+--- a/drivers/clk/qcom/gpucc-msm8998.c
++++ b/drivers/clk/qcom/gpucc-msm8998.c
+@@ -8,10 +8,8 @@
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,gpucc-msm8998.h>
+ 
+diff --git a/drivers/clk/qcom/gpucc-sdm660.c b/drivers/clk/qcom/gpucc-sdm660.c
+index 3ae1b80e38d9..6d37b3d8d1a4 100644
+--- a/drivers/clk/qcom/gpucc-sdm660.c
++++ b/drivers/clk/qcom/gpucc-sdm660.c
+@@ -6,15 +6,13 @@
+  */
+ 
+ #include <linux/bitops.h>
+-#include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/of.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
++
+ #include <dt-bindings/clock/qcom,gpucc-sdm660.h>
+ 
+ #include "clk-alpha-pll.h"
+diff --git a/drivers/clk/qcom/gpucc-sm4450.c b/drivers/clk/qcom/gpucc-sm4450.c
+index a14d0bb031ac..34c7ba0c7d55 100644
+--- a/drivers/clk/qcom/gpucc-sm4450.c
++++ b/drivers/clk/qcom/gpucc-sm4450.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/gpucc-sm8350.c b/drivers/clk/qcom/gpucc-sm8350.c
+index f3b6bdc24485..6d2660bdd825 100644
+--- a/drivers/clk/qcom/gpucc-sm8350.c
++++ b/drivers/clk/qcom/gpucc-sm8350.c
+@@ -9,7 +9,6 @@
+ #include <linux/err.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/clk/qcom/kpss-xcc.c b/drivers/clk/qcom/kpss-xcc.c
+index e7cfa8d22044..97bfb21a5e5e 100644
+--- a/drivers/clk/qcom/kpss-xcc.c
++++ b/drivers/clk/qcom/kpss-xcc.c
+@@ -5,7 +5,6 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
+index ae325f4e1047..f29d6dd1f3ac 100644
+--- a/drivers/clk/qcom/krait-cc.c
++++ b/drivers/clk/qcom/krait-cc.c
+@@ -5,7 +5,6 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+diff --git a/drivers/clk/qcom/lpasscc-sdm845.c b/drivers/clk/qcom/lpasscc-sdm845.c
+index 7040da952728..5c1ea75f9ba8 100644
+--- a/drivers/clk/qcom/lpasscc-sdm845.c
++++ b/drivers/clk/qcom/lpasscc-sdm845.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+-#include <linux/of_address.h>
+ #include <linux/regmap.h>
+ 
+ #include <dt-bindings/clock/qcom,lpass-sdm845.h>
+diff --git a/drivers/clk/qcom/lpasscorecc-sc7180.c b/drivers/clk/qcom/lpasscorecc-sc7180.c
+index 726c6378752f..605516d03993 100644
+--- a/drivers/clk/qcom/lpasscorecc-sc7180.c
++++ b/drivers/clk/qcom/lpasscorecc-sc7180.c
+@@ -9,7 +9,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_clock.h>
+ #include <linux/pm_runtime.h>
+-#include <linux/of.h>
+ #include <linux/regmap.h>
+ 
+ #include <dt-bindings/clock/qcom,lpasscorecc-sc7180.h>
+diff --git a/drivers/clk/qcom/lpasscorecc-sc7280.c b/drivers/clk/qcom/lpasscorecc-sc7280.c
+index b0888cd2460b..56882c202376 100644
+--- a/drivers/clk/qcom/lpasscorecc-sc7280.c
++++ b/drivers/clk/qcom/lpasscorecc-sc7280.c
+@@ -6,7 +6,6 @@
+ #include <linux/clk-provider.h>
+ #include <linux/err.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_clock.h>
+ #include <linux/pm_runtime.h>
+diff --git a/drivers/clk/qcom/mmcc-apq8084.c b/drivers/clk/qcom/mmcc-apq8084.c
+index cc03722596a4..3affa525b875 100644
+--- a/drivers/clk/qcom/mmcc-apq8084.c
++++ b/drivers/clk/qcom/mmcc-apq8084.c
+@@ -8,7 +8,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,mmcc-apq8084.h>
+ #include <dt-bindings/reset/qcom,mmcc-apq8084.h>
+diff --git a/drivers/clk/qcom/mmcc-msm8960.c b/drivers/clk/qcom/mmcc-msm8960.c
+index 3f41249c5ae4..c0adb2b86718 100644
+--- a/drivers/clk/qcom/mmcc-msm8960.c
++++ b/drivers/clk/qcom/mmcc-msm8960.c
+@@ -8,13 +8,10 @@
+ #include <linux/err.h>
+ #include <linux/delay.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/clk.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,mmcc-msm8960.h>
+ #include <dt-bindings/reset/qcom,mmcc-msm8960.h>
+diff --git a/drivers/clk/qcom/mmcc-msm8974.c b/drivers/clk/qcom/mmcc-msm8974.c
+index 169e85f60550..f2e802cf6afc 100644
+--- a/drivers/clk/qcom/mmcc-msm8974.c
++++ b/drivers/clk/qcom/mmcc-msm8974.c
+@@ -11,7 +11,6 @@
+ #include <linux/of.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,mmcc-msm8974.h>
+ #include <dt-bindings/reset/qcom,mmcc-msm8974.h>
+diff --git a/drivers/clk/qcom/mmcc-msm8994.c b/drivers/clk/qcom/mmcc-msm8994.c
+index f70d080bf51c..0a273630e852 100644
+--- a/drivers/clk/qcom/mmcc-msm8994.c
++++ b/drivers/clk/qcom/mmcc-msm8994.c
+@@ -11,8 +11,6 @@
+ #include <linux/of.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+-#include <linux/clk.h>
+ 
+ #include <dt-bindings/clock/qcom,mmcc-msm8994.h>
+ 
+diff --git a/drivers/clk/qcom/mmcc-msm8996.c b/drivers/clk/qcom/mmcc-msm8996.c
+index a742f848e4ee..3426e3dde924 100644
+--- a/drivers/clk/qcom/mmcc-msm8996.c
++++ b/drivers/clk/qcom/mmcc-msm8996.c
+@@ -8,11 +8,8 @@
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+-#include <linux/clk.h>
+ 
+ #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
+ 
+diff --git a/drivers/clk/qcom/mmcc-msm8998.c b/drivers/clk/qcom/mmcc-msm8998.c
+index 5738445a8656..5c37be700fa7 100644
+--- a/drivers/clk/qcom/mmcc-msm8998.c
++++ b/drivers/clk/qcom/mmcc-msm8998.c
+@@ -8,10 +8,8 @@
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+ 
+ #include <dt-bindings/clock/qcom,mmcc-msm8998.h>
+ 
+diff --git a/drivers/clk/qcom/mmcc-sdm660.c b/drivers/clk/qcom/mmcc-sdm660.c
+index 98ba5b4518fb..b3beeabe39ed 100644
+--- a/drivers/clk/qcom/mmcc-sdm660.c
++++ b/drivers/clk/qcom/mmcc-sdm660.c
+@@ -9,14 +9,9 @@
+ #include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/platform_device.h>
+-#include <linux/property.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+-#include <linux/reset-controller.h>
+-#include <linux/clk.h>
+-
+ 
+ #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
+ 
+-- 
+2.43.0
 
-I understand that using "simple-bus" for the 'aon' node was not
-appropriate. Since the 'aon' node isn't needed for testing this
-patchset, I will remove it and move the power-domain device tree node to
-the SoC. Future changes to the 'aon' node will be handled in a separate
-patchset.
-
-> 2. Please run scripts/checkpatch.pl and fix reported warnings. Then
-> please run `scripts/checkpatch.pl --strict` and (probably) fix more
-> warnings. Some warnings can be ignored, especially from --strict run,
-> but the code here looks like it needs a fix. Feel free to get in touch
-> if the warning is not clear.
-> 
-> Sorry, this patchset is not ready, unless by RFC you meant - do not
-> review, because it is not ready. Then it is fine. But then *clearly
-> express* this in cover letter, so we know what you expect from us (and I
-> would not waste my time to go through all this).
-
-My intention with this patchset was to gather feedback on the overall
-direction of the changes. I understand that clearer communication in the
-cover letter would have been beneficial. Moving forward, I will ensure
-that the patch's readiness and expectations are explicitly stated.
-
-Thanks a lot for your review.
-Michał
-
-> 
-> Best regards,
-> Krzysztof
-> 
 
