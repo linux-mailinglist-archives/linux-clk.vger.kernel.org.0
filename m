@@ -1,63 +1,62 @@
-Return-Path: <linux-clk+bounces-15361-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15364-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51E999E439A
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 19:43:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17C099E40C5
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 18:12:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47F88B62FDE
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 17:03:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77E76286F7D
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 17:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132272185AD;
-	Wed,  4 Dec 2024 16:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C18182066FF;
+	Wed,  4 Dec 2024 17:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oupCBwGT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URnYcJ4e"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D876D21858F;
-	Wed,  4 Dec 2024 16:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9639F2066FB;
+	Wed,  4 Dec 2024 17:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331516; cv=none; b=ZLHKjNGd22EBZ7bTt2+41W4nWmpxCyxLL+Joyv6GJm4KV/69s0BkUDOiTtd5xiNNrieS8JsuoVWdlxN4WuUvoNvyjNberAq+eTQs/RTE6/XKaK/CSjY7G7H4OIJNu8HN7AzN4JLdsxN25AXl9rRDy0NkEltmVH0XSqDkuzwTKVw=
+	t=1733331625; cv=none; b=nnD1gPDG/Y+nzThAaaFvFzfqWuQ2r8xrkJ5BwkXf5LHi94OiIp2p/S8e7TtLd5+/8chqc3DYvLnEKxd4r+rU5u6t3N5tnd/gPzUyjC7HXABASKxm/qt6SOBgnAs35XP3Ayzzfpo+oLQdxwQclqq6q+egddt1tm4tLBjZ8O66G+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331516; c=relaxed/simple;
-	bh=xwgudsxGIo94rntV7Ii8BArBcCp9b9lcNfpvcnRWsHw=;
+	s=arc-20240116; t=1733331625; c=relaxed/simple;
+	bh=4wZ7mgbg3QsWwyRiCe6fx32xJMPPe2OYSz0Oxrbzf14=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FPDwKaq6bzeFlL0GGsPIG3zQGUhJOI4pTJ1neAIgzljEakVCJFq05l5Wz9ToPfo/ytRDkD6gWEJD7Bzrx1M2V7lb+PYcoVhxLXttvlzsejmQh/rDXfkluIuKvEYuBT9+An7c49oU1fSXIOX54srw/8T/9SepPwLQLrX3X57vLb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oupCBwGT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACBCC4CED6;
-	Wed,  4 Dec 2024 16:58:34 +0000 (UTC)
+	 MIME-Version; b=PIbb0blirHmLpSFB2uy4iEvn5ymTizwCcHFhsm+8x7MrEHRVATK5EnLy4leYRqYVuMzpor2KraekTve36UsoK8SoquVW4S3qmYgUXPAtoq4brad28HMwBTfZj3XgkNfETnvZXMPeTqKHT4nFxBhGhr6bg4GE3J7d1S8zNkqQYdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URnYcJ4e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 261D8C4CECD;
+	Wed,  4 Dec 2024 17:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331515;
-	bh=xwgudsxGIo94rntV7Ii8BArBcCp9b9lcNfpvcnRWsHw=;
+	s=k20201202; t=1733331625;
+	bh=4wZ7mgbg3QsWwyRiCe6fx32xJMPPe2OYSz0Oxrbzf14=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oupCBwGT5zzTOgC8oDg2u/3ki2tN9wzSYe0an5z/oHyvoR+kbQ1HCLYOBe559Hfb2
-	 5T2KNHXT3pfqM5UVFAn6IRcUuEobqhh1X4LXAs7cyn19BvpGDz7dQwaFIUEe/qYZYV
-	 nFAlIyd2woaBqIVfdPUqupacTlzVefiwwrSnpEQ5R9q0ujK6M/busmkbIVH7T4WwQs
-	 zlM3Upz2Lu1o/11gxCgdj3j9rKNm+HKoIeK4TlSZBbcxj2u9rZ3+CeOHZ/I2tOjRde
-	 VJ0s8YiAjnI3oMQodymSKMBv4ftJ0/HVEIMfU73MGwSollm9oq8weukrsech6X0FkS
-	 WNZLOIF8wP/oQ==
+	b=URnYcJ4eGF20bRoIcTwNjaBb2U8i5w1lXtChHXTsfEJ2ItQ56O1qpIM7Mqp9DE3+7
+	 Hdzd4QXYPakiu68oh3YTWSyD0rSCh+SejMSVV5CU5YznIEmkgmZD0KAUbo0XBjddnq
+	 s3FZwJCV66G7X/sk35uEoETLrgFKhHLr4LJQFGUdOFweENx/QlHEonWwnp2Uqky8rg
+	 MYOxozHESx/BfVu1qhFy+VXC5IYMq66vwFUBJedwLNvtzubiNQ/Ns0Ur2FX0m1qEwf
+	 JFOLIittHr4E7GoYth8b/0GB5YZEqkms5xt+VpAkCnOIHjuAgPq2ze44BkgQ7iAX1E
+	 VqNvVrKxqLAxw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	mturquette@baylibre.com,
 	sboyd@kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 22/36] clk: qcom: tcsrcc-sm8550: add SAR2130P support
-Date: Wed,  4 Dec 2024 10:45:38 -0500
-Message-ID: <20241204154626.2211476-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 19/33] clk: qcom: rcg2: add clk_rcg2_shared_floor_ops
+Date: Wed,  4 Dec 2024 10:47:32 -0500
+Message-ID: <20241204154817.2212455-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
-References: <20241204154626.2211476-1-sashal@kernel.org>
+In-Reply-To: <20241204154817.2212455-1-sashal@kernel.org>
+References: <20241204154817.2212455-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -66,76 +65,120 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit d2e0a043530b9d6f37a8de8f05e0725667aba0a6 ]
+[ Upstream commit aec8c0e28ce4a1f89fd82fcc06a5cc73147e9817 ]
 
-The SAR2130P platform has the same TCSR Clock Controller as the SM8550,
-except for the lack of the UFS clocks. Extend the SM8550 TCSRCC driver
-to support SAR2130P.
+Generally SDCC clocks use clk_rcg2_floor_ops, however on SAR2130P
+platform it's recommended to use rcg2_shared_ops for all Root Clock
+Generators to park them instead of disabling. Implement a mix of those,
+clk_rcg2_shared_floor_ops.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20241027-sar2130p-clocks-v5-9-ecad2a1432ba@linaro.org
+Link: https://lore.kernel.org/r/20241027-sar2130p-clocks-v5-6-ecad2a1432ba@linaro.org
 Signed-off-by: Bjorn Andersson <andersson@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/tcsrcc-sm8550.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/clk-rcg.h  |  1 +
+ drivers/clk/qcom/clk-rcg2.c | 48 +++++++++++++++++++++++++++++++++----
+ 2 files changed, 44 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/qcom/tcsrcc-sm8550.c b/drivers/clk/qcom/tcsrcc-sm8550.c
-index e5e8f2e82b949..41d73f92a000a 100644
---- a/drivers/clk/qcom/tcsrcc-sm8550.c
-+++ b/drivers/clk/qcom/tcsrcc-sm8550.c
-@@ -129,6 +129,13 @@ static struct clk_branch tcsr_usb3_clkref_en = {
- 	},
- };
+diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+index 8e0f3372dc7a8..80f1f4fcd52a6 100644
+--- a/drivers/clk/qcom/clk-rcg.h
++++ b/drivers/clk/qcom/clk-rcg.h
+@@ -198,6 +198,7 @@ extern const struct clk_ops clk_byte2_ops;
+ extern const struct clk_ops clk_pixel_ops;
+ extern const struct clk_ops clk_gfx3d_ops;
+ extern const struct clk_ops clk_rcg2_shared_ops;
++extern const struct clk_ops clk_rcg2_shared_floor_ops;
+ extern const struct clk_ops clk_rcg2_shared_no_init_park_ops;
+ extern const struct clk_ops clk_dp_ops;
  
-+static struct clk_regmap *tcsr_cc_sar2130p_clocks[] = {
-+	[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
-+	[TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
-+	[TCSR_USB2_CLKREF_EN] = &tcsr_usb2_clkref_en.clkr,
-+	[TCSR_USB3_CLKREF_EN] = &tcsr_usb3_clkref_en.clkr,
-+};
-+
- static struct clk_regmap *tcsr_cc_sm8550_clocks[] = {
- 	[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
- 	[TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
-@@ -146,6 +153,12 @@ static const struct regmap_config tcsr_cc_sm8550_regmap_config = {
- 	.fast_io = true,
- };
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index bf26c5448f006..bf6406f5279a4 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -1186,15 +1186,23 @@ clk_rcg2_shared_force_enable_clear(struct clk_hw *hw, const struct freq_tbl *f)
+ 	return clk_rcg2_clear_force_enable(hw);
+ }
  
-+static const struct qcom_cc_desc tcsr_cc_sar2130p_desc = {
-+	.config = &tcsr_cc_sm8550_regmap_config,
-+	.clks = tcsr_cc_sar2130p_clocks,
-+	.num_clks = ARRAY_SIZE(tcsr_cc_sar2130p_clocks),
-+};
-+
- static const struct qcom_cc_desc tcsr_cc_sm8550_desc = {
- 	.config = &tcsr_cc_sm8550_regmap_config,
- 	.clks = tcsr_cc_sm8550_clocks,
-@@ -153,7 +166,8 @@ static const struct qcom_cc_desc tcsr_cc_sm8550_desc = {
- };
- 
- static const struct of_device_id tcsr_cc_sm8550_match_table[] = {
--	{ .compatible = "qcom,sm8550-tcsr" },
-+	{ .compatible = "qcom,sar2130p-tcsr", .data = &tcsr_cc_sar2130p_desc },
-+	{ .compatible = "qcom,sm8550-tcsr", .data = &tcsr_cc_sm8550_desc },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, tcsr_cc_sm8550_match_table);
-@@ -162,7 +176,7 @@ static int tcsr_cc_sm8550_probe(struct platform_device *pdev)
+-static int clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
+-				    unsigned long parent_rate)
++static int __clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
++				      unsigned long parent_rate,
++				      enum freq_policy policy)
  {
- 	struct regmap *regmap;
+ 	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+ 	const struct freq_tbl *f;
  
--	regmap = qcom_cc_map(pdev, &tcsr_cc_sm8550_desc);
-+	regmap = qcom_cc_map(pdev, of_device_get_match_data(&pdev->dev));
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
+-	f = qcom_find_freq(rcg->freq_tbl, rate);
+-	if (!f)
++	switch (policy) {
++	case FLOOR:
++		f = qcom_find_freq_floor(rcg->freq_tbl, rate);
++		break;
++	case CEIL:
++		f = qcom_find_freq(rcg->freq_tbl, rate);
++		break;
++	default:
+ 		return -EINVAL;
++	}
  
+ 	/*
+ 	 * In case clock is disabled, update the M, N and D registers, cache
+@@ -1207,10 +1215,28 @@ static int clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	return clk_rcg2_shared_force_enable_clear(hw, f);
+ }
+ 
++static int clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
++				    unsigned long parent_rate)
++{
++	return __clk_rcg2_shared_set_rate(hw, rate, parent_rate, CEIL);
++}
++
+ static int clk_rcg2_shared_set_rate_and_parent(struct clk_hw *hw,
+ 		unsigned long rate, unsigned long parent_rate, u8 index)
+ {
+-	return clk_rcg2_shared_set_rate(hw, rate, parent_rate);
++	return __clk_rcg2_shared_set_rate(hw, rate, parent_rate, CEIL);
++}
++
++static int clk_rcg2_shared_set_floor_rate(struct clk_hw *hw, unsigned long rate,
++					  unsigned long parent_rate)
++{
++	return __clk_rcg2_shared_set_rate(hw, rate, parent_rate, FLOOR);
++}
++
++static int clk_rcg2_shared_set_floor_rate_and_parent(struct clk_hw *hw,
++		unsigned long rate, unsigned long parent_rate, u8 index)
++{
++	return __clk_rcg2_shared_set_rate(hw, rate, parent_rate, FLOOR);
+ }
+ 
+ static int clk_rcg2_shared_enable(struct clk_hw *hw)
+@@ -1348,6 +1374,18 @@ const struct clk_ops clk_rcg2_shared_ops = {
+ };
+ EXPORT_SYMBOL_GPL(clk_rcg2_shared_ops);
+ 
++const struct clk_ops clk_rcg2_shared_floor_ops = {
++	.enable = clk_rcg2_shared_enable,
++	.disable = clk_rcg2_shared_disable,
++	.get_parent = clk_rcg2_shared_get_parent,
++	.set_parent = clk_rcg2_shared_set_parent,
++	.recalc_rate = clk_rcg2_shared_recalc_rate,
++	.determine_rate = clk_rcg2_determine_floor_rate,
++	.set_rate = clk_rcg2_shared_set_floor_rate,
++	.set_rate_and_parent = clk_rcg2_shared_set_floor_rate_and_parent,
++};
++EXPORT_SYMBOL_GPL(clk_rcg2_shared_floor_ops);
++
+ static int clk_rcg2_shared_no_init_park(struct clk_hw *hw)
+ {
+ 	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
 -- 
 2.43.0
 
