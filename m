@@ -1,60 +1,61 @@
-Return-Path: <linux-clk+bounces-15360-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15362-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72FF19E4067
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 18:03:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D89949E4070
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 18:03:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26D2A281190
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 17:03:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6472D2805F6
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 17:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A51218594;
-	Wed,  4 Dec 2024 16:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D38C521C177;
+	Wed,  4 Dec 2024 16:58:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABqfxQbU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PS9dOT2Z"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF0520DD79;
-	Wed,  4 Dec 2024 16:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76F721C16F;
+	Wed,  4 Dec 2024 16:58:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331514; cv=none; b=YmjvBiFeelXF+1fUIYFNWBnJxuJJ8RBjGPCWo7I2b14sgSliOyzY9AhY1EEshRRN4GlYoIORx4pxdik+6fCLW+fYCVguzUFE7P2Dj7oYlfKlcVE6tPXNKHQORda0+rpI4tsotrbqW7rl8t/wD3t7BRvX4+4qXGciQGApqhspSPY=
+	t=1733331517; cv=none; b=eo+6PHeDYPAfMIeyDiNWdrtO/ac19ICvAIfGZUjQOBJCBoukKkEDuZOMNqLY0uAUGgofNY7hDKjbG/xcQchJwesV4C3IKiNTkaczCdvuhS8FBW+EKFrZWlxwkovUn8ml8IEtjCFDH3iuKKUi9+8lTSUDIN/8NtP/ux/RTGrnvko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331514; c=relaxed/simple;
-	bh=axShVKXOsnz07874C/bFAsuhymkcO9z5xZA24IAp8mE=;
+	s=arc-20240116; t=1733331517; c=relaxed/simple;
+	bh=WXIbVvxTlJvBoUek1MnVbfGc5Mt4uhb2gkV11zvU4pY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QtEcxS1pTBfMrBxQUkRddo8+/pcylSjt41oCQZ4BDHvYHY9d+5kOpdNx/ggbfx3Dg5dVcFhRwab87yFsfY49jmCaGQDSR2tAWHN3E+XuX+2AW/ZQ8r8+Cjg0YPtvGJUYA1j27udr1SZWkezsZVqTUDB+g+RNJbZmRzEZZsqmwOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABqfxQbU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03FECC4CEDF;
-	Wed,  4 Dec 2024 16:58:32 +0000 (UTC)
+	 MIME-Version; b=TIKZA0HgJZYRAo7ocTm7MWxX8jXDaY/2+omFQaCwYDAP2MfCP5lc6UwYicTKRFGdhtQCxBgYZvLkmr+TCHy57V5Ftf6VritegoOn+5wZPKtyCdrVxN4nLsZuDcGsFTEtrQzjM4ayS8Ucrf8W1RYd/gLgoBIUEgeZDGCprWolOlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PS9dOT2Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55B45C4CECD;
+	Wed,  4 Dec 2024 16:58:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331514;
-	bh=axShVKXOsnz07874C/bFAsuhymkcO9z5xZA24IAp8mE=;
+	s=k20201202; t=1733331517;
+	bh=WXIbVvxTlJvBoUek1MnVbfGc5Mt4uhb2gkV11zvU4pY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ABqfxQbUlmxAtqYRT+FT9sDsNxBWtz/SLq05+DEcp9hIKCXwli+mhnfhGpUcAnxT3
-	 z2jlcUVIclEQHinG6GCyve0RZENckEfhD7k7pC4UNxDrEEMamaKtHUXUzMQcPQSzx5
-	 PxH24aO4JMMTcbIM+hMD8v3IlcGSLZllH7Q7OtfCrbsxYwoq4WsKVeUmcodtkOBasA
-	 IrxkxGh4dvu9c3/s9QWjnrgNQb/387h/xpMQo8WDdhrlY5shQ89tHK5wd905wALkaY
-	 PoleVXw1r7+DI/6SYdf1HOgv3EyFdl6iPg4kHCr/NyBaClt5sbL7xsDb/agT0uTCq2
-	 OOPFifUHQqPqA==
+	b=PS9dOT2ZL5zzNspKIt2JxUy0Gbp9Akg0AMxi3orX5UKWCJiVOzRYD0IgGH4MgA9Y0
+	 X/a77Je+7LVxjTegs6U/+ZUrq9yIdBmreuu1EQB3NE0TIK0R0GLE8sKEhF20sQer71
+	 knWoEeaUKEaXctiUq7Qgzw4Rd4Dqeo7w5rBL2hn0JQVLSpfWunPc1qA+A09amtSFgg
+	 uopWEd82NzYj/0EzCjyooXVS+MVZmj+iIsrxb0CF8aO5bVLF4LSgLbaYo23m9Hz62L
+	 NIombaMKV8B0ACLwKzPT9LwQaC7OES2jo4qZC4xZlU0RPDRDNMrCqPB/IqDHTL3U69
+	 xZEmUS/lY53+A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Taniya Das <quic_tdas@quicinc.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	mturquette@baylibre.com,
 	sboyd@kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 21/36] clk: qcom: rpmh: add support for SAR2130P
-Date: Wed,  4 Dec 2024 10:45:37 -0500
-Message-ID: <20241204154626.2211476-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 23/36] clk: qcom: dispcc-sm8550: enable support for SAR2130P
+Date: Wed,  4 Dec 2024 10:45:39 -0500
+Message-ID: <20241204154626.2211476-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
 References: <20241204154626.2211476-1-sashal@kernel.org>
@@ -71,52 +72,97 @@ Content-Transfer-Encoding: 8bit
 
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 2cc88de6261f01ebd4e2a3b4e29681fe87d0c089 ]
+[ Upstream commit 1335c7eb7012f23dc073b8ae4ffcfc1f6e69cfb3 ]
 
-Define clocks as supported by the RPMh on the SAR2130P platform. The
-msm-5.10 kernel declares just the CXO clock, the RF_CLK1 clock was added
-following recommendation from Taniya Das.
+The display clock controller on SAR2130P is very close to the clock
+controller on SM8550 (and SM8650). Reuse existing driver to add support
+for the controller on SAR2130P.
 
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Taniya Das <quic_tdas@quicinc.com>
-Link: https://lore.kernel.org/r/20241027-sar2130p-clocks-v5-7-ecad2a1432ba@linaro.org
+Link: https://lore.kernel.org/r/20241027-sar2130p-clocks-v5-10-ecad2a1432ba@linaro.org
 Signed-off-by: Bjorn Andersson <andersson@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/clk-rpmh.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/clk/qcom/Kconfig         |  4 ++--
+ drivers/clk/qcom/dispcc-sm8550.c | 18 ++++++++++++++++--
+ 2 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 4acde937114af..eefc322ce3679 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -389,6 +389,18 @@ DEFINE_CLK_RPMH_BCM(ipa, "IP0");
- DEFINE_CLK_RPMH_BCM(pka, "PKA0");
- DEFINE_CLK_RPMH_BCM(qpic_clk, "QP0");
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index a3e2a09e2105b..46a6cdee65e5d 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -959,10 +959,10 @@ config SM_DISPCC_8450
+ config SM_DISPCC_8550
+ 	tristate "SM8550 Display Clock Controller"
+ 	depends on ARM64 || COMPILE_TEST
+-	depends on SM_GCC_8550 || SM_GCC_8650
++	depends on SM_GCC_8550 || SM_GCC_8650 || SAR_GCC_2130P
+ 	help
+ 	  Support for the display clock controller on Qualcomm Technologies, Inc
+-	  SM8550 or SM8650 devices.
++	  SAR2130P, SM8550 or SM8650 devices.
+ 	  Say Y if you want to support display devices and functionality such as
+ 	  splash screen.
  
-+static struct clk_hw *sar2130p_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div1.hw,
-+	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div1_ao.hw,
-+	[RPMH_RF_CLK1]		= &clk_rpmh_rf_clk1_a.hw,
-+	[RPMH_RF_CLK1_A]	= &clk_rpmh_rf_clk1_a_ao.hw,
+diff --git a/drivers/clk/qcom/dispcc-sm8550.c b/drivers/clk/qcom/dispcc-sm8550.c
+index 7f9021ca0ecb0..e41d4104d7702 100644
+--- a/drivers/clk/qcom/dispcc-sm8550.c
++++ b/drivers/clk/qcom/dispcc-sm8550.c
+@@ -75,7 +75,7 @@ static struct pll_vco lucid_ole_vco[] = {
+ 	{ 249600000, 2000000000, 0 },
+ };
+ 
+-static const struct alpha_pll_config disp_cc_pll0_config = {
++static struct alpha_pll_config disp_cc_pll0_config = {
+ 	.l = 0xd,
+ 	.alpha = 0x6492,
+ 	.config_ctl_val = 0x20485699,
+@@ -106,7 +106,7 @@ static struct clk_alpha_pll disp_cc_pll0 = {
+ 	},
+ };
+ 
+-static const struct alpha_pll_config disp_cc_pll1_config = {
++static struct alpha_pll_config disp_cc_pll1_config = {
+ 	.l = 0x1f,
+ 	.alpha = 0x4000,
+ 	.config_ctl_val = 0x20485699,
+@@ -594,6 +594,13 @@ static const struct freq_tbl ftbl_disp_cc_mdss_mdp_clk_src[] = {
+ 	{ }
+ };
+ 
++static const struct freq_tbl ftbl_disp_cc_mdss_mdp_clk_src_sar2130p[] = {
++	F(200000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
++	F(325000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
++	F(514000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
++	{ }
 +};
 +
-+static const struct clk_rpmh_desc clk_rpmh_sar2130p = {
-+	.clks = sar2130p_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sar2130p_rpmh_clocks),
-+};
-+
- static struct clk_hw *sdm845_rpmh_clocks[] = {
- 	[RPMH_CXO_CLK]		= &clk_rpmh_bi_tcxo_div2.hw,
- 	[RPMH_CXO_CLK_A]	= &clk_rpmh_bi_tcxo_div2_ao.hw,
-@@ -880,6 +892,7 @@ static int clk_rpmh_probe(struct platform_device *pdev)
- static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,qdu1000-rpmh-clk", .data = &clk_rpmh_qdu1000},
- 	{ .compatible = "qcom,sa8775p-rpmh-clk", .data = &clk_rpmh_sa8775p},
-+	{ .compatible = "qcom,sar2130p-rpmh-clk", .data = &clk_rpmh_sar2130p},
- 	{ .compatible = "qcom,sc7180-rpmh-clk", .data = &clk_rpmh_sc7180},
- 	{ .compatible = "qcom,sc8180x-rpmh-clk", .data = &clk_rpmh_sc8180x},
- 	{ .compatible = "qcom,sc8280xp-rpmh-clk", .data = &clk_rpmh_sc8280xp},
+ static const struct freq_tbl ftbl_disp_cc_mdss_mdp_clk_src_sm8650[] = {
+ 	F(19200000, P_BI_TCXO, 1, 0, 0),
+ 	F(85714286, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
+@@ -1750,6 +1757,7 @@ static struct qcom_cc_desc disp_cc_sm8550_desc = {
+ };
+ 
+ static const struct of_device_id disp_cc_sm8550_match_table[] = {
++	{ .compatible = "qcom,sar2130p-dispcc" },
+ 	{ .compatible = "qcom,sm8550-dispcc" },
+ 	{ .compatible = "qcom,sm8650-dispcc" },
+ 	{ }
+@@ -1780,6 +1788,12 @@ static int disp_cc_sm8550_probe(struct platform_device *pdev)
+ 		disp_cc_mdss_mdp_clk_src.freq_tbl = ftbl_disp_cc_mdss_mdp_clk_src_sm8650;
+ 		disp_cc_mdss_dptx1_usb_router_link_intf_clk.clkr.hw.init->parent_hws[0] =
+ 			&disp_cc_mdss_dptx1_link_div_clk_src.clkr.hw;
++	} else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sar2130p-dispcc")) {
++		disp_cc_pll0_config.l = 0x1f;
++		disp_cc_pll0_config.alpha = 0x4000;
++		disp_cc_pll0_config.user_ctl_val = 0x1;
++		disp_cc_pll1_config.user_ctl_val = 0x1;
++		disp_cc_mdss_mdp_clk_src.freq_tbl = ftbl_disp_cc_mdss_mdp_clk_src_sar2130p;
+ 	}
+ 
+ 	clk_lucid_ole_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
 -- 
 2.43.0
 
