@@ -1,116 +1,142 @@
-Return-Path: <linux-clk+bounces-15358-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15361-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC4869E3FFF
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 17:44:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51E999E439A
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 19:43:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67297281C6F
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 16:44:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47F88B62FDE
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 17:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 530C120C498;
-	Wed,  4 Dec 2024 16:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 132272185AD;
+	Wed,  4 Dec 2024 16:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pt9V/SIM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oupCBwGT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808F1433C4;
-	Wed,  4 Dec 2024 16:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D876D21858F;
+	Wed,  4 Dec 2024 16:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733330671; cv=none; b=OFOQK6sv07s2islB+ftDmQf4LyvTCO5Gw0RzlqBl47e/X0zvY2m3qD1xsrj0YkI0vOcXbM6D2ecpYbTK50Jr8Qjh/dKqGYBSnviAk9P1M9jUXhEWU8aNpJN9KWAJnE3nZgMNPvfYJm1XU/bEDd7lGJTu0enfS8+lV+JHFQiXMqw=
+	t=1733331516; cv=none; b=ZLHKjNGd22EBZ7bTt2+41W4nWmpxCyxLL+Joyv6GJm4KV/69s0BkUDOiTtd5xiNNrieS8JsuoVWdlxN4WuUvoNvyjNberAq+eTQs/RTE6/XKaK/CSjY7G7H4OIJNu8HN7AzN4JLdsxN25AXl9rRDy0NkEltmVH0XSqDkuzwTKVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733330671; c=relaxed/simple;
-	bh=2f5XonaelA3mjOVwjimASfcGBRCwJeItUFo/UzcLIs8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OtY7sKxBShEdbGxTnnGoolvUG6uyxBjFHWFd8AmVx0wyseZik8a7NDB3aCfy+5NuwLbrk3ejN69Ka7rUgRqzUxHzHQ8j6splqUqMma++z3QzpnUgdFhXgFdu+rvtc23vioqoAW7dd2ADLcW6fncWzjFWRvYioJUNBtewn6Ejv/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pt9V/SIM; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4DwBE3031913;
-	Wed, 4 Dec 2024 16:44:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	8XuEB6fL8smqpeJlR0UGp/sqUDXqOcOq79XmbRvYVL4=; b=pt9V/SIMLJjZIO/t
-	g3/xAI/BnKnh270xE699DgsYWM/ILEHUuLNfEbxXFjHWZtOM6IT11Unk39/QFBmR
-	42BHugfdVTm9sCXYMDdqxfs1lBtUD6yqSnI2L8WKVI1XXG1/I+cBPwLxvpvonbQq
-	CwlrnOKniyH4+RLV65ftDQpZHu2KLu+etQ6CFWVYKi7xFekFUzSjb/MWoZXXR1lA
-	GpOflkEi5G5VCIgMtsMqj/pnl+iO1rnDnF7uFNc0gyoJcXUXPR+PMY70xAw6KUgI
-	jSIRKA4/1XmGSVMtayjXZ+xUICAjxW9vwU7aCwqO+LahdKLM1t9uaJ83HskT2Z8+
-	zJ6pdQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 439trbn8n4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 04 Dec 2024 16:44:23 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B4GiN9l029017
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 4 Dec 2024 16:44:23 GMT
-Received: from [10.216.58.11] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 4 Dec 2024
- 08:44:20 -0800
-Message-ID: <f9e93864-f99f-449f-affb-d513ab5476a7@quicinc.com>
-Date: Wed, 4 Dec 2024 22:14:17 +0530
+	s=arc-20240116; t=1733331516; c=relaxed/simple;
+	bh=xwgudsxGIo94rntV7Ii8BArBcCp9b9lcNfpvcnRWsHw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FPDwKaq6bzeFlL0GGsPIG3zQGUhJOI4pTJ1neAIgzljEakVCJFq05l5Wz9ToPfo/ytRDkD6gWEJD7Bzrx1M2V7lb+PYcoVhxLXttvlzsejmQh/rDXfkluIuKvEYuBT9+An7c49oU1fSXIOX54srw/8T/9SepPwLQLrX3X57vLb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oupCBwGT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACBCC4CED6;
+	Wed,  4 Dec 2024 16:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733331515;
+	bh=xwgudsxGIo94rntV7Ii8BArBcCp9b9lcNfpvcnRWsHw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=oupCBwGT5zzTOgC8oDg2u/3ki2tN9wzSYe0an5z/oHyvoR+kbQ1HCLYOBe559Hfb2
+	 5T2KNHXT3pfqM5UVFAn6IRcUuEobqhh1X4LXAs7cyn19BvpGDz7dQwaFIUEe/qYZYV
+	 nFAlIyd2woaBqIVfdPUqupacTlzVefiwwrSnpEQ5R9q0ujK6M/busmkbIVH7T4WwQs
+	 zlM3Upz2Lu1o/11gxCgdj3j9rKNm+HKoIeK4TlSZBbcxj2u9rZ3+CeOHZ/I2tOjRde
+	 VJ0s8YiAjnI3oMQodymSKMBv4ftJ0/HVEIMfU73MGwSollm9oq8weukrsech6X0FkS
+	 WNZLOIF8wP/oQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 22/36] clk: qcom: tcsrcc-sm8550: add SAR2130P support
+Date: Wed,  4 Dec 2024 10:45:38 -0500
+Message-ID: <20241204154626.2211476-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
+References: <20241204154626.2211476-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] clk: qcom: Include missing header includes
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen
- Boyd <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20241204110348.100841-1-krzysztof.kozlowski@linaro.org>
- <20241204110348.100841-2-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From: Taniya Das <quic_tdas@quicinc.com>
-In-Reply-To: <20241204110348.100841-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jFrPrecSLt-fyMPqgXtXq-yfArBtW1kp
-X-Proofpoint-ORIG-GUID: jFrPrecSLt-fyMPqgXtXq-yfArBtW1kp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=673 mlxscore=0
- suspectscore=0 spamscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- clxscore=1015 phishscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412040127
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.1
+Content-Transfer-Encoding: 8bit
 
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
+[ Upstream commit d2e0a043530b9d6f37a8de8f05e0725667aba0a6 ]
 
-On 12/4/2024 4:33 PM, Krzysztof Kozlowski wrote:
-> Include mod_devicetable.h for the 'struct of_device_id' and
-> clk-provider.h for the 'struct clk_hw'.
-> 
-> Signed-off-by: Krzysztof Kozlowski<krzysztof.kozlowski@linaro.org>
-> ---
->   drivers/clk/qcom/camcc-sc7180.c    | 1 +
->   drivers/clk/qcom/camcc-sc7280.c    | 1 +
->   drivers/clk/qcom/camcc-sdm845.c    | 1 +
->   drivers/clk/qcom/camcc-sm6350.c    | 1 +
+The SAR2130P platform has the same TCSR Clock Controller as the SM8550,
+except for the lack of the UFS clocks. Extend the SM8550 TCSRCC driver
+to support SAR2130P.
 
-Reviewed-by: Taniya Das <quic_tdas@quicinc.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20241027-sar2130p-clocks-v5-9-ecad2a1432ba@linaro.org
+Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/clk/qcom/tcsrcc-sm8550.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/clk/qcom/tcsrcc-sm8550.c b/drivers/clk/qcom/tcsrcc-sm8550.c
+index e5e8f2e82b949..41d73f92a000a 100644
+--- a/drivers/clk/qcom/tcsrcc-sm8550.c
++++ b/drivers/clk/qcom/tcsrcc-sm8550.c
+@@ -129,6 +129,13 @@ static struct clk_branch tcsr_usb3_clkref_en = {
+ 	},
+ };
+ 
++static struct clk_regmap *tcsr_cc_sar2130p_clocks[] = {
++	[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
++	[TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
++	[TCSR_USB2_CLKREF_EN] = &tcsr_usb2_clkref_en.clkr,
++	[TCSR_USB3_CLKREF_EN] = &tcsr_usb3_clkref_en.clkr,
++};
++
+ static struct clk_regmap *tcsr_cc_sm8550_clocks[] = {
+ 	[TCSR_PCIE_0_CLKREF_EN] = &tcsr_pcie_0_clkref_en.clkr,
+ 	[TCSR_PCIE_1_CLKREF_EN] = &tcsr_pcie_1_clkref_en.clkr,
+@@ -146,6 +153,12 @@ static const struct regmap_config tcsr_cc_sm8550_regmap_config = {
+ 	.fast_io = true,
+ };
+ 
++static const struct qcom_cc_desc tcsr_cc_sar2130p_desc = {
++	.config = &tcsr_cc_sm8550_regmap_config,
++	.clks = tcsr_cc_sar2130p_clocks,
++	.num_clks = ARRAY_SIZE(tcsr_cc_sar2130p_clocks),
++};
++
+ static const struct qcom_cc_desc tcsr_cc_sm8550_desc = {
+ 	.config = &tcsr_cc_sm8550_regmap_config,
+ 	.clks = tcsr_cc_sm8550_clocks,
+@@ -153,7 +166,8 @@ static const struct qcom_cc_desc tcsr_cc_sm8550_desc = {
+ };
+ 
+ static const struct of_device_id tcsr_cc_sm8550_match_table[] = {
+-	{ .compatible = "qcom,sm8550-tcsr" },
++	{ .compatible = "qcom,sar2130p-tcsr", .data = &tcsr_cc_sar2130p_desc },
++	{ .compatible = "qcom,sm8550-tcsr", .data = &tcsr_cc_sm8550_desc },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, tcsr_cc_sm8550_match_table);
+@@ -162,7 +176,7 @@ static int tcsr_cc_sm8550_probe(struct platform_device *pdev)
+ {
+ 	struct regmap *regmap;
+ 
+-	regmap = qcom_cc_map(pdev, &tcsr_cc_sm8550_desc);
++	regmap = qcom_cc_map(pdev, of_device_get_match_data(&pdev->dev));
+ 	if (IS_ERR(regmap))
+ 		return PTR_ERR(regmap);
+ 
 -- 
-Thanks & Regards,
-Taniya Das.
+2.43.0
+
 
