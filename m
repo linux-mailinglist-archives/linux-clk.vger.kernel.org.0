@@ -1,173 +1,171 @@
-Return-Path: <linux-clk+bounces-15373-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15377-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F2B9E447B
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 20:21:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 166AA9E44C5
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 20:38:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9135328454C
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 19:21:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5F2928294B
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2024 19:38:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AADC01A8F9A;
-	Wed,  4 Dec 2024 19:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7D61F03FE;
+	Wed,  4 Dec 2024 19:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="laWfwfby"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479AE24B26;
-	Wed,  4 Dec 2024 19:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450F51C3C1F;
+	Wed,  4 Dec 2024 19:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733340064; cv=none; b=GJtllBfIO7+uNqSOwXikrJc7pb0uN9SjxtwNSCLQ4Cc3x9itg/Q/rulR+Et912AEQDnjetfRtFGtCpmeUM+KGLhXENySUzq2ByU6yP54fxuTGtHebgBk2+Z2+uoesbAGsG5YFb+Q/MAYkemmM5OUTv1TSY7YkY2ilCNW82VI8QE=
+	t=1733341066; cv=none; b=H5fAmQhB3RmMSR54DOwDC5uCAWJYeuTlrrMNqOkN6lvxNN24ZCDgiI98v6BAVn+XgAMKcEpSbX7OKtuiLCx3F+Lrkd1d1cC/p6FUxmqvlmCE+eZac+alntN9S6+Tg9vPQQ8unou1sWWC8wsypBB1JI5QfkxMYqaWLLO6NyWsEYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733340064; c=relaxed/simple;
-	bh=rYhegL9//2A2bkxLAO5La3avhpkdVv+Y03oZNvQdDP4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bc6zr5E7Oi7fiXFSE4iASTjfoGtsEfOoKzES0DHnClSFtpiw6hKNa7+CU3j7Ua5QbMHJ01uk24+4iiN+FNj3BwGJACOzP9hjd1lViOCALq6F3xGjX2FY1ad3vGtCGHdcbomEFeBfGAGoOCKh0JT9Px/TevFNFsPgyra60malhfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4afab735b6cso19566137.1;
-        Wed, 04 Dec 2024 11:21:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733340059; x=1733944859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=inT4fZZhlTH1i9AqeiQIOnUqbVGNn3i6ScA8tNJSX0o=;
-        b=rrkn7jUWaqqnkKTtqBrX2IvTkz2PXyTF6diWFK/ct9Y/JCkB9aGR4NxsDm9N1tjhWH
-         LK/5vYPXyj+H9d2rFS7c9OnD3i2vb/Utc6YbNbxo/hne5ZoB2os3AT7huJEQaz1UK90y
-         Plvb+/JrJIOSNoQ5ITLetg7kXXJrOdcRCiLdbTMZgCwkwCmuVe1fX9ONszOzBJKsYgfJ
-         oDGE/2V9mK4F7uauuhmLm0U/zkLHXTa6yf4M0+aYMSQLrncR04/0gCmfB7nkCeZohelt
-         DYZOB5XuWcTJEkHMPv3qiwB7bv9+dQnVxyC/MAPOiMp3oC/7pNWl3Fv6d2p2bRlADbPX
-         DI3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUXPoLigzQVvMSJvZvtbyCTlnGX0n6x2+jHvE9ZHqM+WtVLYBf2F0PSmB1fy54gTbuw42EycCeDdL6I@vger.kernel.org, AJvYcCVYOvfRoh4+L2p2C608m268ImPoyUHN9BOBntDnicmP6YDKM5i+qfobTTrJCBHEOPNtXRuzY1wqzax+PnPS@vger.kernel.org, AJvYcCWNWEPbx+4YvN6NVpCRio1/h9/h9X7joyDkxdnCtmXNyDeDmrd50ffFQUgxYPlJniFL2fqBpyTQ2540@vger.kernel.org, AJvYcCWn4nV109sYQJVkhMIr4yhccoDMOLyVOW2P2UvV8JkAOGwaxX962wSv3clAF0VZXl7xmiJcbeKh9JE72DeFlbmClXI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUf8ZUjpNXEpQhBMpqjIdMFOwdBRgbR6Yhat04VYhRCovp3pw/
-	qLAQ9jcOQkZ546naGU0W5GXWDtkLS+LdtF5aEbRG7BGGWK+XrMszz+LZh1dY
-X-Gm-Gg: ASbGncu3p6Wu1R6PTbBHvAyr24hB4aDkf32XNPwAVmsAl2rSjqwmkKLzMQEQxZXyEvy
-	kIqZLA3LQbyr3UnFwkaLMKNCwUWjiOggeZ4a8FAr/WYeC8f4/edBseopk2WeCneaLcVQjUwsyUY
-	OYMvqBV+Go4oml8RxTn7X9si6iLdmBGcvJLXlSLll0YbvrqxwHTGHWnHP+tvznavfg/W7kJ4ioa
-	/ygag2fDG4WKipwzRFwW1yqYX64ZKTrEFySCkqXCWoIrtC6AOl6Akq9eJHj9q0O0y8p+Snbp31i
-	SbTrcpVOCZKV
-X-Google-Smtp-Source: AGHT+IEEIZ8CorMuYzHXaNNDh4cSOaq176oWOIGGNawbSdY8MvMyxV6s4iJqrQL2TWN1aWVXKhUqVw==
-X-Received: by 2002:a05:6102:3f53:b0:4ad:de0b:fe11 with SMTP id ada2fe7eead31-4af97375fe1mr11646918137.17.1733340059620;
-        Wed, 04 Dec 2024 11:20:59 -0800 (PST)
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4af9d9d123bsm514620137.5.2024.12.04.11.20.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2024 11:20:57 -0800 (PST)
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-4af4575ec4cso15593137.2;
-        Wed, 04 Dec 2024 11:20:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUPrrvZ8v+6dfnyZKo4pWLdfNW7h7MV8OuCzV8XtjwuFLEIBpoLITAVB3ZJWfjQR0z0okdEjvuz5ftd@vger.kernel.org, AJvYcCUZpo6TKX9cgxUAGbf0KOQlo9+u19Rh00BlwO0lDQuhA47/hCX6lrvHiTjw6GVJJIr50SSIQTIlxHkFW04V@vger.kernel.org, AJvYcCUkj812aZHMW674kbnLGjZBDuAdh0pphw11QDE7UHj2EI67e+TlnwqbuaC/MiJonr0DBF80ZOY9luqPY1o2aowmuQ0=@vger.kernel.org, AJvYcCUz/hv9SWDFCfR44n6VBDZHTfDxnwjdXN651PuDbPGARcZitfpb9WyiFrcPko2iWUwdsf6+gyqyoi1D@vger.kernel.org
-X-Received: by 2002:a05:6102:3054:b0:4a4:8d45:6839 with SMTP id
- ada2fe7eead31-4af97268516mr11708144137.13.1733340056024; Wed, 04 Dec 2024
- 11:20:56 -0800 (PST)
+	s=arc-20240116; t=1733341066; c=relaxed/simple;
+	bh=i+aZQ7pNxIDERryH/wFzRNbRnyQtHrSyce+j8Y50dIg=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=sBAsqjIJWKeUDMKf0DTk/1xIPsKzdm/0qWvrymGQTYYP1ph7m4nYXn+uxgKEMUzy1TY4oi+xsnx3VmutQI+4pejdqZU2ap9keMUcq0Q4F7FoKXmnIxVzxe3fkAYEqko+u7JCQvy1uq10bCRBWS3BEkP6f1D3n2TYL5ITn5ot8ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=laWfwfby; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B4GIM4n024065;
+	Wed, 4 Dec 2024 19:37:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=WODLAJk42mCopfvblmGFF0
+	a+uKhmx6oZsPEUVFz6sf4=; b=laWfwfbyidozToeyWNEjOKJfn2wZqmO6D8MxB7
+	U60LjPkLzFgCDdRD75j3BrOhOEHS6zA8X847vFTFsWekgQBM3obiKmMj3pJyVDtN
+	YszHxtbe8V7pubUDGTDl9zax2Df6rDXu2MjlzhT0DLdRNJAm7EN2LhKPFMBv3Wgu
+	Qs2cHCvEWQqjb8Ru13R8L8WOxL7Iex5x3R15hgu7cF3yJlqayf5eJW2sYhu5fP8j
+	nBusB0FtIGSmSFPKZUkPNMS+IQbOH+1fg6GbjxVs4fHOBmY5LXCnulUqDns5OHVy
+	o0cOKX/Fph+oMhGK2j2WWN77m2VundSEkGSHXYSk4bYhdnnw==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 439vnywa55-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Dec 2024 19:37:40 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B4JbcRu018548
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Dec 2024 19:37:38 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 4 Dec 2024 11:37:38 -0800
+From: Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v3 0/8] clks: qcom: Introduce clks for SM8750
+Date: Wed, 4 Dec 2024 11:37:12 -0800
+Message-ID: <20241204-sm8750_master_clks-v3-0-1a8f31a53a86@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241203-rcar-gh-dsi-v1-0-738ae1a95d2a@ideasonboard.com>
- <20241203-rcar-gh-dsi-v1-8-738ae1a95d2a@ideasonboard.com> <20241203093703.GL10736@pendragon.ideasonboard.com>
- <b9a07779-34c3-496f-ac04-d7f6e1e61d82@ideasonboard.com>
-In-Reply-To: <b9a07779-34c3-496f-ac04-d7f6e1e61d82@ideasonboard.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 4 Dec 2024 20:20:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWa0frtVLJcoz7QRe=ZHa24K9MxyV5-_Ce4AUJo+LDEGA@mail.gmail.com>
-Message-ID: <CAMuHMdWa0frtVLJcoz7QRe=ZHa24K9MxyV5-_Ce4AUJo+LDEGA@mail.gmail.com>
-Subject: Re: [PATCH 8/9] arm64: dts: renesas: r8a779h0: Add display support
-To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, LUU HOAI <hoai.luu.ub@renesas.com>, 
-	Jagan Teki <jagan@amarulasolutions.com>, Sam Ravnborg <sam@ravnborg.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, dri-devel@lists.freedesktop.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
-	=?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGivUGcC/x3MSQqAMAxA0atI1hbaWutwFZHiEDU40ogI4t0tL
+ t/i/wcYPSFDGT3g8SKmfQtI4gi6qdlGFNQHg5baKC2N4DXPUunWhk/0rltmFqgtqrYwyrYWQnh
+ 4HOj+p1X9vh/WEIhYZAAAAA==
+X-Change-ID: 20241204-sm8750_master_clks-e26e1b9416b6
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski@linaro.org>,
+        Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733341058; l=2688;
+ i=quic_molvera@quicinc.com; s=20241204; h=from:subject:message-id;
+ bh=i+aZQ7pNxIDERryH/wFzRNbRnyQtHrSyce+j8Y50dIg=;
+ b=QwcFbbYsS8LA0xZJAZIsFCpZ7jST7othk6TOAjTJ/uMuX2e9gs+KzOv7hB7peOknsZJmbEC26
+ PpinNazyYoJDqRSOF2eGbjwg3UZdb5cn4TtdYm+j2AijV1U0vTfkiim
+X-Developer-Key: i=quic_molvera@quicinc.com; a=ed25519;
+ pk=1DGLp3zVYsHAWipMaNZZTHR321e8xK52C9vuAoeca5c=
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AmkfZW5UH2N_JiB5e295RQaxQX-6sCIO
+X-Proofpoint-GUID: AmkfZW5UH2N_JiB5e295RQaxQX-6sCIO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ mlxlogscore=640 bulkscore=0 impostorscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412040150
 
-Hi Tomi,
+Add GCC, RPMH, and TCSR clocks for the SM8750 SoC.
 
-On Wed, Dec 4, 2024 at 5:04=E2=80=AFPM Tomi Valkeinen
-<tomi.valkeinen@ideasonboard.com> wrote:
-> On 03/12/2024 11:37, Laurent Pinchart wrote:
-> > On Tue, Dec 03, 2024 at 10:01:42AM +0200, Tomi Valkeinen wrote:
-> >> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> >>
-> >> Add the device nodes for supporting DU and DSI.
-> >>
-> >> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com=
->
-> >> ---
-> >>   arch/arm64/boot/dts/renesas/r8a779h0.dtsi | 77 +++++++++++++++++++++=
-++++++++++
-> >>   1 file changed, 77 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/renesas/r8a779h0.dtsi b/arch/arm64/bo=
-ot/dts/renesas/r8a779h0.dtsi
-> >> index 12d8be3fd579..82df6ee98afb 100644
-> >> --- a/arch/arm64/boot/dts/renesas/r8a779h0.dtsi
-> >> +++ b/arch/arm64/boot/dts/renesas/r8a779h0.dtsi
-> >> @@ -1828,6 +1828,54 @@ csi41isp1: endpoint {
-> >>                      };
-> >>              };
-> >>
-> >> +            fcpvd0: fcp@fea10000 {
-> >> +                    compatible =3D "renesas,fcpv";
-> >> +                    reg =3D <0 0xfea10000 0 0x200>;
-> >> +                    clocks =3D <&cpg CPG_MOD 508>;
-> >> +                    power-domains =3D <&sysc R8A779H0_PD_C4>;
-> >> +                    resets =3D <&cpg 508>;
-> >> +            };
-> >> +
-> >> +            vspd0: vsp@fea20000 {
-> >> +                    compatible =3D "renesas,vsp2";
-> >> +                    reg =3D <0 0xfea20000 0 0x8000>;
-> >> +                    interrupts =3D <GIC_SPI 546 IRQ_TYPE_LEVEL_HIGH>;
-> >
-> > The documentation lists this interrupt as being LevelSensitive and
-> > Negative. I wouldn't expect the VSP to work at all with a wrong polarit=
-y
-> > in DT, so the level may get inverted somewhere.
->
-> Indeed... It's the same for V4H. And it also has IRQ_TYPE_LEVEL_HIGH in
-> the dts. I tried changing it to LOW on V4H, but:
->
-> genirq: Setting trigger mode 8 for irq 91 failed
-> vsp1 fea20000.vsp: failed to request IRQ
->
-> I didn't dig further yet.
+The Qualcomm Technologies, Inc. SM8750 SoC is the latest in the line of
+consumer mobile device SoCs. See more at:
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/images/company/news-media/media-center/press-kits/snapdragon-summit-2024/day-1/documents/Snapdragon8EliteProductBrief.pdf
 
-Yeah, I don't think the GIC supports anything but IRQ_TYPE_LEVEL_HIGH.
-Which brings us to the two ISP nodes on R-Car V4H and V4M, both using
-IRQ_TYPE_LEVEL_LOW.
-Niklas: looks like drivers/media/platform/renesas/rcar-isp.c doesn't
-actually use the IRQ, so I guess that's how this could slip in?
+Changes in V3:
+- removed unused rfclka4 and rfclka5 from clk-rpmh [Dmitry]
+- split the SC7280 match table to a new commit [Dmitry]
+- There are bindings difference between SM8650 and SM8750, so bring back
+  the v1 binding https://patchwork.kernel.org/project/linux-clk/patch/20241021230359.2632414-5-quic_molvera@quicinc.com/
+  and fix the unused bindings.
+- Update the DT indexes as per the GCC bindings
+- Use the qcom_cc_probe() instead of qcom_cc_really_probe() for TCSRCC [Dmitry]
 
-Gr{oetje,eeting}s,
+Changes in V2:
+- removed unneeded rpmh macros, bcm ops
+- renamed CXO_PAD to CXO
+- ordered rpmh compatibles in alpha order
+- reordered clk_alpha_pll regs
+- removed redundant bindings for sm8750
+- revised gcc driver for pcie 0
 
-                        Geert
+Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+---
+Taniya Das (8):
+      dt-bindings: clock: qcom-rpmhcc: Add RPMHCC for SM8750
+      clk: qcom: rpmh: Sort the match table alphabetically
+      clk: qcom: rpmh: Add support for SM8750 rpmh clocks
+      clk: qcom: clk-alpha-pll: Add support for controlling Taycan PLLs
+      dt-bindings: clock: qcom: Add SM8750 GCC
+      clk: qcom: Add support for GCC on SM8750
+      dt-bindings: clock: qcom: Document the SM8750 TCSR Clock Controller
+      clk: qcom: Add TCSR clock driver for SM8750
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+ .../devicetree/bindings/clock/qcom,rpmhcc.yaml     |    1 +
+ .../bindings/clock/qcom,sm8550-tcsr.yaml           |    2 +
+ .../devicetree/bindings/clock/qcom,sm8750-gcc.yaml |   62 +
+ drivers/clk/qcom/Kconfig                           |   17 +
+ drivers/clk/qcom/Makefile                          |    2 +
+ drivers/clk/qcom/clk-alpha-pll.c                   |   14 +
+ drivers/clk/qcom/clk-alpha-pll.h                   |    7 +
+ drivers/clk/qcom/clk-rpmh.c                        |   26 +-
+ drivers/clk/qcom/gcc-sm8750.c                      | 3274 ++++++++++++++++++++
+ drivers/clk/qcom/tcsrcc-sm8750.c                   |  141 +
+ include/dt-bindings/clock/qcom,sm8750-gcc.h        |  226 ++
+ include/dt-bindings/clock/qcom,sm8750-tcsr.h       |   15 +
+ 12 files changed, 3786 insertions(+), 1 deletion(-)
+---
+base-commit: bcf2acd8f64b0a5783deeeb5fd70c6163ec5acd7
+change-id: 20241204-sm8750_master_clks-e26e1b9416b6
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Best regards,
+-- 
+Melody Olvera <quic_molvera@quicinc.com>
+
 
