@@ -1,108 +1,164 @@
-Return-Path: <linux-clk+bounces-15450-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15452-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AA0A9E5E41
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 19:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE029E5E9C
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 20:09:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0846428793D
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 18:30:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 754C22821DA
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 19:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB55229B15;
-	Thu,  5 Dec 2024 18:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0C322256F;
+	Thu,  5 Dec 2024 19:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="KrHN/yPJ"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="J5d21sTy"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EDA229B00
-	for <linux-clk@vger.kernel.org>; Thu,  5 Dec 2024 18:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC55E2EB1F;
+	Thu,  5 Dec 2024 19:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733423435; cv=none; b=X8wdCUhs3lO7dW+YhBEP+3RGcxRkzY2G33GHP4zyicA4cGzvvIoYrYZjM1myGgUJoUSUdbYLXrPDtZU92USGpEQ2PDaiU5OCSVVDy9WQBb4riSd3jDbHGgDI43GTc83MZnecWC7aCkJZwxtcoTcIMBQHmk9WeL8PDjvrWU21FYM=
+	t=1733425744; cv=none; b=JXb2adB0B+NWjZlm2jnRI+zhkoPB8mOETS9W/U6M4ClywfSsaGKKZviGnQUiMqBpOCBbaYfasx/3vBC5PFXmlpI0wmVjPnhuDU4W+1yZ5Uby0X9cAHKRrpymGWtASQs5YbQcmZYBE8fSkImCFJV9YUna3yHxc7X85qziv+ua8DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733423435; c=relaxed/simple;
-	bh=ywTNg8/5ZwIso+ek5/ibrNAeaXrGW5XPSv4RyxxTzdo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A7zYd23kFxusiUyQPQN3RLW3ipjaBysJBVxOXXI+Q6v0s7i02ifIw1GXvsbBGYYiZ1r2uwkjtlUeClO3tP1VA1BPDOh+UM4sfkA9CSG23v2ZcHxZrH4UfrxewczTMH/kys6wqgDBnqRgiTbjmnRt1lku9gw7vylXTea7suQGGRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=KrHN/yPJ; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
-	s=key1; t=1733423431;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9Amz6hL2pw8x/SHWoLqNvQ1TRgfepZkFsNEB+hKs1uI=;
-	b=KrHN/yPJZSIGemVuk010y1lAmWFREJjim9GC88LZepf3syOICcGH1lwV2+d+liZUYU6mtI
-	J9WvE0qk+AvAflHJAfFNHXJkXVGvpN6AwgQLPVDb5QsyXMFiPCor473fBmUUOd3R53L3l/
-	dX46Q8Te1EsaIItsGRbMhdedNF3HB1bEtYRcvW3Hqy6PMc9ojq9P38vLdTAlK+wPeVUosM
-	DC5NIGw0yPnsKQxXDBDXMHC8tfpU3Ge2RQB+XKEII0fuAh/Pk/K2P1oyoMhQ/tT0GIqgcY
-	w9SFpXN4acLzqINjZy9Da6T3+2ADrn6SB4v8FQHCk1oONC1juK10YdCWrs+7XA==
-From: Val Packett <val@packett.cool>
-To: 
-Cc: Val Packett <val@packett.cool>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
+	s=arc-20240116; t=1733425744; c=relaxed/simple;
+	bh=gpyryQqORDmiyuSyg34TV+1Hz4lJ6aOHkXIhXH1UvaY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O6D8ul+olTt/hrvwY8CJQ/idEP94MRV7RDuS5noGvn9TQ5IAST7FoKgEWaeO05vhRzLSz4larNpSFYu8tqanQas20UATYkHPAyYb6IRZ5lQZHckCxfDaucOxSzQNkdCnXqkN+DEXwL3KA4jMb1eap2ekSUxqMniKZxSwsfo6E9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=J5d21sTy; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8E4D22B3;
+	Thu,  5 Dec 2024 20:08:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1733425708;
+	bh=gpyryQqORDmiyuSyg34TV+1Hz4lJ6aOHkXIhXH1UvaY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J5d21sTyqWYtne2btLeGlY1CvIrEv7DHDVcS364svFlwB9+7EiQNSI6iIBrZ21WyG
+	 Ob1ml8pP59fUOML9CA0STJECUiKv9HFqhTg7C5UTdUk/BCLRWW9S+u9Ls4sGWMpu5d
+	 LK4KFPdds/1YnQAkArRQpPPJt0nEjvDPkblkbkiE=
+Date: Thu, 5 Dec 2024 21:08:45 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, LUU HOAI <hoai.luu.ub@renesas.com>,
+	Jagan Teki <jagan@amarulasolutions.com>,
+	Sam Ravnborg <sam@ravnborg.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH v2 2/2] clk: rockchip: use PCLK_CIF0/1 clock IDs on RK3066
-Date: Thu,  5 Dec 2024 15:29:36 -0300
-Message-ID: <20241205182954.5346-2-val@packett.cool>
-In-Reply-To: <20241205182954.5346-1-val@packett.cool>
-References: <20241205182954.5346-1-val@packett.cool>
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Subject: Re: [PATCH v2 07/10] drm/rcar-du: Add support for r8a779h0
+Message-ID: <20241205190845.GE21014@pendragon.ideasonboard.com>
+References: <20241205-rcar-gh-dsi-v2-0-42471851df86@ideasonboard.com>
+ <20241205-rcar-gh-dsi-v2-7-42471851df86@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241205-rcar-gh-dsi-v2-7-42471851df86@ideasonboard.com>
 
-RK3066 has two "CIF" video capture interface blocks, reference the
-newly added IDs for their PCLK clocks.
+Hi Tomi,
 
-Signed-off-by: Val Packett <val@packett.cool>
----
- drivers/clk/rockchip/clk-rk3188.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you for the patch.
 
-diff --git a/drivers/clk/rockchip/clk-rk3188.c b/drivers/clk/rockchip/clk-rk3188.c
-index 684233e72105..81e94b338d0f 100644
---- a/drivers/clk/rockchip/clk-rk3188.c
-+++ b/drivers/clk/rockchip/clk-rk3188.c
-@@ -344,7 +344,7 @@ static struct rockchip_clk_branch common_clk_branches[] __initdata = {
- 
- 	GATE(0, "pclkin_cif0", "ext_cif0", 0,
- 			RK2928_CLKGATE_CON(3), 3, GFLAGS),
--	INVERTER(0, "pclk_cif0", "pclkin_cif0",
-+	INVERTER(PCLK_CIF0, "pclk_cif0", "pclkin_cif0",
- 			RK2928_CLKSEL_CON(30), 8, IFLAGS),
- 
- 	FACTOR(0, "xin12m", "xin24m", 0, 1, 2),
-@@ -602,7 +602,7 @@ static struct rockchip_clk_branch rk3066a_clk_branches[] __initdata = {
- 
- 	GATE(0, "pclkin_cif1", "ext_cif1", 0,
- 			RK2928_CLKGATE_CON(3), 4, GFLAGS),
--	INVERTER(0, "pclk_cif1", "pclkin_cif1",
-+	INVERTER(PCLK_CIF1, "pclk_cif1", "pclkin_cif1",
- 			RK2928_CLKSEL_CON(30), 12, IFLAGS),
- 
- 	COMPOSITE(0, "aclk_gpu_src", mux_pll_src_cpll_gpll_p, 0,
+On Thu, Dec 05, 2024 at 03:45:02PM +0200, Tomi Valkeinen wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> 
+> Add support for r8a779h0. It is very similar to r8a779g0, but has only
+> one output.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
+> ---
+>  drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c   | 18 ++++++++++++++++++
+>  drivers/gpu/drm/renesas/rcar-du/rcar_du_group.c |  4 +++-
+>  2 files changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c
+> index fb719d9aff10..7858e10839f2 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c
+> @@ -545,6 +545,23 @@ static const struct rcar_du_device_info rcar_du_r8a779g0_info = {
+>  	.dsi_clk_mask =  BIT(1) | BIT(0),
+>  };
+>  
+> +static const struct rcar_du_device_info rcar_du_r8a779h0_info = {
+> +	.gen = 4,
+> +	.features = RCAR_DU_FEATURE_CRTC_IRQ
+> +		  | RCAR_DU_FEATURE_VSP1_SOURCE
+> +		  | RCAR_DU_FEATURE_NO_BLENDING,
+> +	.channels_mask = BIT(0),
+> +	.routes = {
+> +		/* R8A779H0 has one MIPI DSI output. */
+> +		[RCAR_DU_OUTPUT_DSI0] = {
+> +			.possible_crtcs = BIT(0),
+> +			.port = 0,
+> +		},
+> +	},
+> +	.num_rpf = 5,
+> +	.dsi_clk_mask = BIT(0),
+> +};
+> +
+>  static const struct of_device_id rcar_du_of_table[] = {
+>  	{ .compatible = "renesas,du-r8a7742", .data = &rcar_du_r8a7790_info },
+>  	{ .compatible = "renesas,du-r8a7743", .data = &rzg1_du_r8a7743_info },
+> @@ -571,6 +588,7 @@ static const struct of_device_id rcar_du_of_table[] = {
+>  	{ .compatible = "renesas,du-r8a77995", .data = &rcar_du_r8a7799x_info },
+>  	{ .compatible = "renesas,du-r8a779a0", .data = &rcar_du_r8a779a0_info },
+>  	{ .compatible = "renesas,du-r8a779g0", .data = &rcar_du_r8a779g0_info },
+> +	{ .compatible = "renesas,du-r8a779h0", .data = &rcar_du_r8a779h0_info },
+>  	{ }
+>  };
+>  
+> diff --git a/drivers/gpu/drm/renesas/rcar-du/rcar_du_group.c b/drivers/gpu/drm/renesas/rcar-du/rcar_du_group.c
+> index 0fbf6abbde6e..b9ae6cc43702 100644
+> --- a/drivers/gpu/drm/renesas/rcar-du/rcar_du_group.c
+> +++ b/drivers/gpu/drm/renesas/rcar-du/rcar_du_group.c
+> @@ -107,10 +107,12 @@ static void rcar_du_group_setup_didsr(struct rcar_du_group *rgrp)
+>  		 */
+>  		rcrtc = rcdu->crtcs;
+>  		num_crtcs = rcdu->num_crtcs;
+> -	} else if (rcdu->info->gen >= 3 && rgrp->num_crtcs > 1) {
+> +	} else if ((rcdu->info->gen == 3 && rgrp->num_crtcs > 1) ||
+> +		   rcdu->info->gen == 4) {
+>  		/*
+>  		 * On Gen3 dot clocks are setup through per-group registers,
+>  		 * only available when the group has two channels.
+> +		 * On Gen4 the registers are there for single channel too.
+>  		 */
+>  		rcrtc = &rcdu->crtcs[rgrp->index * 2];
+>  		num_crtcs = rgrp->num_crtcs;
+> 
+
 -- 
-2.47.1
+Regards,
 
+Laurent Pinchart
 
