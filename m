@@ -1,47 +1,49 @@
-Return-Path: <linux-clk+bounces-15451-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15450-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5325D9E5E42
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 19:30:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7B1916D56F
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 18:30:43 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E202C22B8CC;
-	Thu,  5 Dec 2024 18:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="AUey5L7y"
-X-Original-To: linux-clk@vger.kernel.org
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AA0A9E5E41
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 19:30:39 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AF422B8BE
-	for <linux-clk@vger.kernel.org>; Thu,  5 Dec 2024 18:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0846428793D
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2024 18:30:36 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB55229B15;
+	Thu,  5 Dec 2024 18:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="KrHN/yPJ"
+X-Original-To: linux-clk@vger.kernel.org
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EDA229B00
+	for <linux-clk@vger.kernel.org>; Thu,  5 Dec 2024 18:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733423439; cv=none; b=iUsLAnIvbJx+LIhuLCPBdmOhih6N894ZR9Tgqsr+p7I/r6fLsdgWXitzjO4/i5FqEX5EdQ4wrZeJeguTfxbDjRgNl6yEJ/S4Yxqg+wOaEARglOSRYRzPvN/kB7Vukxiif9eGt7x3EkN1Zpv/mjz001D4kK/Dl+xW+y48M+a8cNk=
+	t=1733423435; cv=none; b=X8wdCUhs3lO7dW+YhBEP+3RGcxRkzY2G33GHP4zyicA4cGzvvIoYrYZjM1myGgUJoUSUdbYLXrPDtZU92USGpEQ2PDaiU5OCSVVDy9WQBb4riSd3jDbHGgDI43GTc83MZnecWC7aCkJZwxtcoTcIMBQHmk9WeL8PDjvrWU21FYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733423439; c=relaxed/simple;
-	bh=95quPXrAdfbDuqBjcmZ22F56YQwBFE7UqCbzf8JmLlQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AwAzi8GHHnJC11Dl1JBtfZA4qmw5sqvOFn3wetMHfkxoY+BqoL31eOIOc87RK58kYdhjjKKJHbVMXAy5RHGoltMGd6RmPEX3lYgEq+bzD+anabcYds710I8TDkeKZA2Qet6Wrd7QD+Z5HSqyKnNYGHtxkYeGQewpAopHu0JXARg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=AUey5L7y; arc=none smtp.client-ip=91.218.175.178
+	s=arc-20240116; t=1733423435; c=relaxed/simple;
+	bh=ywTNg8/5ZwIso+ek5/ibrNAeaXrGW5XPSv4RyxxTzdo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A7zYd23kFxusiUyQPQN3RLW3ipjaBysJBVxOXXI+Q6v0s7i02ifIw1GXvsbBGYYiZ1r2uwkjtlUeClO3tP1VA1BPDOh+UM4sfkA9CSG23v2ZcHxZrH4UfrxewczTMH/kys6wqgDBnqRgiTbjmnRt1lku9gw7vylXTea7suQGGRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=KrHN/yPJ; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
-	s=key1; t=1733423425;
+	s=key1; t=1733423431;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TkFcQWL7xs7GRrweqW2QeL14ugcBYgGFOAcV+eRKS1o=;
-	b=AUey5L7yyC5O5EmErxvxqKQAIN6CbvGyk2w5kVwJeC7t2tWMHbAr3lE4XgHzWBRLqBaNDK
-	RvbF0I6c69aNMkXECJ+gTu93x9duEeog1AdxrgbKabazA+XmG5R+snMPrmY6ZtwW9G3b5j
-	3n/AVqLM3RCex7PP7zNFaKjJeXFobhDCE+NaUuCev5v5S0NM6ngv9qax+r7vs0LZgQm46Q
-	p4q4OgzVFhBCDzSuzc5s7M+zRIXbunAoFUJ2POBa5wbEcx0Z5vk/8oBJprKTlPkRk25DcV
-	g54vr7nvD3jdCkG78ZXQQjLogMil3goZZBAS5V8cPsrh/rAV4f/xqq4P61uLoA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9Amz6hL2pw8x/SHWoLqNvQ1TRgfepZkFsNEB+hKs1uI=;
+	b=KrHN/yPJZSIGemVuk010y1lAmWFREJjim9GC88LZepf3syOICcGH1lwV2+d+liZUYU6mtI
+	J9WvE0qk+AvAflHJAfFNHXJkXVGvpN6AwgQLPVDb5QsyXMFiPCor473fBmUUOd3R53L3l/
+	dX46Q8Te1EsaIItsGRbMhdedNF3HB1bEtYRcvW3Hqy6PMc9ojq9P38vLdTAlK+wPeVUosM
+	DC5NIGw0yPnsKQxXDBDXMHC8tfpU3Ge2RQB+XKEII0fuAh/Pk/K2P1oyoMhQ/tT0GIqgcY
+	w9SFpXN4acLzqINjZy9Da6T3+2ADrn6SB4v8FQHCk1oONC1juK10YdCWrs+7XA==
 From: Val Packett <val@packett.cool>
 To: 
 Cc: Val Packett <val@packett.cool>,
@@ -56,9 +58,11 @@ Cc: Val Packett <val@packett.cool>,
 	linux-rockchip@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: clock: rk3188-common: add PCLK_CIF0/PCLK_CIF1
-Date: Thu,  5 Dec 2024 15:29:35 -0300
-Message-ID: <20241205182954.5346-1-val@packett.cool>
+Subject: [PATCH v2 2/2] clk: rockchip: use PCLK_CIF0/1 clock IDs on RK3066
+Date: Thu,  5 Dec 2024 15:29:36 -0300
+Message-ID: <20241205182954.5346-2-val@packett.cool>
+In-Reply-To: <20241205182954.5346-1-val@packett.cool>
+References: <20241205182954.5346-1-val@packett.cool>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -68,31 +72,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add missing clock IDs for the CIF (Camera InterFace) blocks
-on the RK3188/RK3066.
+RK3066 has two "CIF" video capture interface blocks, reference the
+newly added IDs for their PCLK clocks.
 
 Signed-off-by: Val Packett <val@packett.cool>
 ---
+ drivers/clk/rockchip/clk-rk3188.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2: split dt-bindings into separate patch
-    (oops, thought that only applies to actual yaml and not headers)
-
- include/dt-bindings/clock/rk3188-cru-common.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/include/dt-bindings/clock/rk3188-cru-common.h b/include/dt-bindings/clock/rk3188-cru-common.h
-index 01e14ab252a7..dd988cc9d582 100644
---- a/include/dt-bindings/clock/rk3188-cru-common.h
-+++ b/include/dt-bindings/clock/rk3188-cru-common.h
-@@ -103,6 +103,8 @@
- #define PCLK_PERI		351
- #define PCLK_DDRUPCTL		352
- #define PCLK_PUBL		353
-+#define PCLK_CIF0		354
-+#define PCLK_CIF1		355
+diff --git a/drivers/clk/rockchip/clk-rk3188.c b/drivers/clk/rockchip/clk-rk3188.c
+index 684233e72105..81e94b338d0f 100644
+--- a/drivers/clk/rockchip/clk-rk3188.c
++++ b/drivers/clk/rockchip/clk-rk3188.c
+@@ -344,7 +344,7 @@ static struct rockchip_clk_branch common_clk_branches[] __initdata = {
  
- /* hclk gates */
- #define HCLK_SDMMC		448
+ 	GATE(0, "pclkin_cif0", "ext_cif0", 0,
+ 			RK2928_CLKGATE_CON(3), 3, GFLAGS),
+-	INVERTER(0, "pclk_cif0", "pclkin_cif0",
++	INVERTER(PCLK_CIF0, "pclk_cif0", "pclkin_cif0",
+ 			RK2928_CLKSEL_CON(30), 8, IFLAGS),
+ 
+ 	FACTOR(0, "xin12m", "xin24m", 0, 1, 2),
+@@ -602,7 +602,7 @@ static struct rockchip_clk_branch rk3066a_clk_branches[] __initdata = {
+ 
+ 	GATE(0, "pclkin_cif1", "ext_cif1", 0,
+ 			RK2928_CLKGATE_CON(3), 4, GFLAGS),
+-	INVERTER(0, "pclk_cif1", "pclkin_cif1",
++	INVERTER(PCLK_CIF1, "pclk_cif1", "pclkin_cif1",
+ 			RK2928_CLKSEL_CON(30), 12, IFLAGS),
+ 
+ 	COMPOSITE(0, "aclk_gpu_src", mux_pll_src_cpll_gpll_p, 0,
 -- 
 2.47.1
 
