@@ -1,144 +1,119 @@
-Return-Path: <linux-clk+bounces-15505-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15507-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 618599E719F
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 15:58:12 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 887849E7595
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 17:17:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35EEF166DCF
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 14:58:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A0F4289FF3
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 16:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E318A1FF7D1;
-	Fri,  6 Dec 2024 14:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBF620FAA7;
+	Fri,  6 Dec 2024 16:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mentallysanemainliners.org header.i=@mentallysanemainliners.org header.b="clMCC+Y+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+Received: from out-02.smtp.spacemail.com (out-02.smtp.spacemail.com [63.250.43.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DAF14AD29;
-	Fri,  6 Dec 2024 14:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A618D20D501;
+	Fri,  6 Dec 2024 16:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733497089; cv=none; b=IJ9R1Kg5TRy0XahCqImUVE7oMSXQjxcltQs+o0m97IAgxneakmCIZ7F7/0AbfiZ72QQo6q2DbAsqOVybH9w7vKRGaQtDVIYqxkvNN9pDlOkZTUlL2c64kA1thVkJCrDCNghApRBB8bZYLqGBb0Wgc+8wOJ2YnEdjByDzHEFiZ5A=
+	t=1733501641; cv=none; b=oSVB6DV8vNDlNInOAqzL0wol8OtlJZFcXjjKHxPMlOAUBzsxyimzX92NQp1jEF+IzhygOpkeByrIBrjbvXmgSZUpgeAjqnxxwxMHbWE0esgQcCwyizAa96KOzXdLbcR82yBCs0TlCldNAPFXZr4aNPrDDkTDmRlXBWbHLLUPWZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733497089; c=relaxed/simple;
-	bh=dNzs88DXm0DsW0ColNww97VGrXRlHHoDcjWPBTgdGB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I1w2mTCD0xIVNzgZ4fsRXmPZSlSd9eRVvk7FpXcfqmcTVydscPv3nl7MMB8jfUd7AW0/JNLAQP8J3SCHx8i/3jKjH/aNW3A6Wry4z8yk8brgfPVyX8f4TswGeViSQsiJYON4MwpfMCe4yJL3U0mlD/Kwes+A0vaKocU7trMBki8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-51529df6202so600311e0c.3;
-        Fri, 06 Dec 2024 06:58:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733497084; x=1734101884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGs26nf32J7IWFe5gQzebo3VoEYybxmOCRS8t1bpYOQ=;
-        b=VdADRObJPDQFH70UmMe1Socn/2R1PMpMY8T8Ilq1NDFCI+mDCnD5AYfVkC8kNUUCxi
-         b8bu/uJGymJs5LgyYKaMpXVUMSFujAaVqgN43eUs3N2e6acnH3FqISissO/UJXNpEiOQ
-         dO32cQYzPgkSMeS4jtZbkeGWSI8qsb/YgZh7hmA/dJJMADZdyzGEIKJsbovNRauYuMOm
-         LHdNjA9VwYESQhqG69pZuRmk3YH3EcqDa++iU5Kp0CwVDQtVx3HgMU4eUz9tNdkN8bd8
-         UC8hnO21ZW0AbUeqaFYGxg302Jl4csfRxsRzwrs/Emx9Lv5dwu8d9X4rpeplNBxLQY5k
-         T+mw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4XXmj8DBo0Phj9q8Hwzn6v1+TMfBwLEHjv4iPAIZ5IDsahiN7OQitdFwRIr1fkrDOxbESAy1Z4mwT@vger.kernel.org, AJvYcCUAHQ/SyuPPXgGuskrbv4qws5bHTAZ9TFF5zsihfsG2kwj8vJkRNlr174JCkzcrLLLjJ450X7QwAKxkc259fw/RBtE=@vger.kernel.org, AJvYcCW9NcXK8QCR40bpONcOgMDVLJvjXXXtSV6b5gzSCEko/6rBYN4WfwMRcj6qv6HXQbKCoaY6dYKz7wGoJxnC@vger.kernel.org, AJvYcCWO4AP+r+k/y3OQiZJ2UiwneiIWXmHMx4TL0HYddsIOUWLxecBcXJ/4TUhThVhWFuupzecQBfFF1ivBMGQ0@vger.kernel.org, AJvYcCWVYQThLgRg8U6B1qfAbNcDiMBXAnS4bWe6YJ1jMH4yRv/ZqoBPQXtwcrqa0PEg+pcs8O9N89dvCcdh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9Nty19rZk7qBTxgs+9cWElBsYSOCv31NM4t1GQWObdE9mNi34
-	2U+GDGoaAhEtcKWm3G5q4O3vV0BvqCe8acSY2DPsh04YmKkaYznJuEjMG0+V
-X-Gm-Gg: ASbGncs4//jfU8ZaH6pf7iFeaenkySTgMvBB+8EdVwJXuto5EpQUGyJw0ihjmaP90dw
-	2oH+ZipeONKuMFYOUJihOVFri2HBptWn//wn1Ldqz2eyCQsQKkgAovM+6DYRxla6BgYFL38dw8d
-	lKF45H4e2QaMLbcQyjDbJK8BVEJUpVyBstzAxKKDLHrBe+u9n1MATIfPdBfzvcYEE/Z/5hAAYRB
-	pxNZSt4UoTZOWhnaH9MsdkL9Ebtll/fy3XHSfTcmuUMXlE5M4hICxKQj+DbeJGd9/M1GWvDdukM
-	3rihoa+zfsv1yZ4c
-X-Google-Smtp-Source: AGHT+IGBnN9xSt2JyOO6oL5msc6O1e0S7Sai6fx1X5GsLtKd5puVckXOjGJoBmWJE7WmWO+MpxB7DQ==
-X-Received: by 2002:a05:6122:458f:b0:50d:56ee:b9d1 with SMTP id 71dfb90a1353d-515fcafc734mr3116130e0c.12.1733497083732;
-        Fri, 06 Dec 2024 06:58:03 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-515eae16d19sm318366e0c.7.2024.12.06.06.58.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2024 06:58:03 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5152a869d10so640314e0c.1;
-        Fri, 06 Dec 2024 06:58:02 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV5dO8N1SOPn9JxHeAGpUyuVJu3VhuDe9dgMLYQTGmzjbBh8ToRCPcHKo8PXc+30eVw0YtwbmxY/hZt@vger.kernel.org, AJvYcCVCF1Tg/C3zwvFC/tNjTOPhMgz6lv0T8gJa0uUnhbO9ZxPpE+5JaqoTAzOcpDnPoPsaqtilC2VPAlGysA6M9SdecqE=@vger.kernel.org, AJvYcCVH6vW5WjBMrEGwLvW0WGtUv4y0+C3bkcqpjnFSMXQzwYtbiIyZdYgDXAscM3SI5/DGqnMEjKFYf6IHt7g8@vger.kernel.org, AJvYcCWH0hPGClDcB44PSnTQLhsLLwQUwUrJfKX4jGd3Iy9uQzOSRSg3QpKZ8i7IJO1GvK7jOPssLfOJnq/X@vger.kernel.org, AJvYcCWksRyzGxqEDAVI8ym6m8sUDiF0O5NZuk778qPP5iDoT39Fpp6tMPR2V3Zg7/l8ks9+qNwPLeIqT44Ir5xD@vger.kernel.org
-X-Received: by 2002:a05:6122:2804:b0:515:3bb5:5625 with SMTP id
- 71dfb90a1353d-515fcae7824mr3399476e0c.10.1733497082367; Fri, 06 Dec 2024
- 06:58:02 -0800 (PST)
+	s=arc-20240116; t=1733501641; c=relaxed/simple;
+	bh=C8ZUvyDK/liK+O5PSjiupnuJWNIGEJ028E5VI/EvwKI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NakBtG+Iy3s0S2JNpwjCUgWEDoeIaF8AoIhWZz50KsHJRGSEyCzCTnenGO7elBsqWcyTQDRQ9ugZgIurASV4Av3pFDu6Dbi0M3moGMruRIZsfWbDY5qIaMPp8m6eXmOy16u4IjSN+6sCwTIu0kMvzu3ng86W7ZU6tmnIn1olhzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org; spf=pass smtp.mailfrom=mentallysanemainliners.org; dkim=pass (2048-bit key) header.d=mentallysanemainliners.org header.i=@mentallysanemainliners.org header.b=clMCC+Y+; arc=none smtp.client-ip=63.250.43.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mentallysanemainliners.org
+Received: from prod-lbout-phx.jellyfish.systems (unknown [198.177.122.3])
+	by smtp.spacemail.com (Postfix) with ESMTPA id 4Y4bsr4hzpz4wRg;
+	Fri, 06 Dec 2024 16:13:52 +0000 (UTC)
+Received: from [127.0.1.1] (83.21.102.241.ipv4.supernova.orange.pl [83.21.102.241])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4Y4bsh4khYz2x99;
+	Fri,  6 Dec 2024 16:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=mentallysanemainliners.org; s=spacemail; t=1733501627;
+	bh=C8ZUvyDK/liK+O5PSjiupnuJWNIGEJ028E5VI/EvwKI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=clMCC+Y+efcXfWO23YnMIGTg/lvJB9blKRbyCZDOq6MEpVSv8sdveXU2MU6RX4xrM
+	 yl9Bc5THfSZE/Ppa2qoMMO9QVj25rRoMw1GT4KLrpAEOzmCoEq0TWLak33Io9mr9r7
+	 1whf1EAojBTx4+xoAjfeQI6Xdeb8GCii9b3t8liK3uNitorW9Ww4RG2ykNuCY4Hs+y
+	 sKmchK/DgFyRXUDo9kTwdgxH7NXnIVk+zdfAGLTP88+WVGhv/IO6C/X3mPYIR5EKYy
+	 kk4G9pBnQvU/wDNeAuAOHLsSfR4O2XZNhFSHML5ua/HcY12w0ZcSZN3y3tPmxXAuea
+	 wHj0eEWevO81g==
+From: Igor Belwon <igor.belwon@mentallysanemainliners.org>
+Subject: [PATCH v2 0/3] clk: samsung: Introduce Exynos990 clock support
+Date: Fri, 06 Dec 2024 17:12:17 +0100
+Message-Id: <20241206-exynos990-cmu-v2-0-4666ff0a099b@mentallysanemainliners.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241115134401.3893008-1-claudiu.beznea.uj@bp.renesas.com> <20241115134401.3893008-6-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20241115134401.3893008-6-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 6 Dec 2024 15:57:50 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUaMZB0Dmc70DXTPnNu=Vp0p6K3w0A9y53B2OmrR6MeFg@mail.gmail.com>
-Message-ID: <CAMuHMdUaMZB0Dmc70DXTPnNu=Vp0p6K3w0A9y53B2OmrR6MeFg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/8] arm64: dts: renesas: rzg3s-smarc: Fix the debug
- serial alias
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: geert+renesas@glider.be, magnus.damm@gmail.com, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	p.zabel@pengutronix.de, lethal@linux-sh.org, g.liakhovetski@gmx.de, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-serial@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGEiU2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHQUlJIzE
+ vPSU3UzU4B8JSMDIxNDIwMz3dSKyrz8YktLA93k3FJdU4vElERTA1OzxBRTJaCegqLUtMwKsHn
+ RsbW1AGylCihfAAAA
+X-Change-ID: 20241206-exynos990-cmu-58ada5056ad5
+To: Krzysztof Kozlowski <krzk@kernel.org>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Igor Belwon <igor.belwon@mentallysanemainliners.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733501552; l=1306;
+ i=igor.belwon@mentallysanemainliners.org; s=20241206;
+ h=from:subject:message-id; bh=C8ZUvyDK/liK+O5PSjiupnuJWNIGEJ028E5VI/EvwKI=;
+ b=XJ05RlLwlH1Hp9sM1jYNxcMvMmBVTe36X4bmaOuUeArZSJK1Jk5wAk46F0i8DqhlW7y1Ar9to
+ Qx8oWcNT9ieDKhbzXF3L5xeHxtfPUPTZkH9QCsYM3N4IEwR0opuY3qS
+X-Developer-Key: i=igor.belwon@mentallysanemainliners.org; a=ed25519;
+ pk=qKAuSTWKTaGQM0vwBxV0p6hPKMN4vh0CwZ+bozrG5lY=
 
-Hi Claudiu,
+Hi all,
 
-On Fri, Nov 15, 2024 at 2:50=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> The debug serial of the RZ/G3S is SCIF0 which is routed on the Renesas
-> RZ SMARC Carrier II board on the SER3_UART. Use serial3 alias for it for
-> better hardware description. Along with it, the chosen properties were
-> moved to the device tree corresponding to the RZ SMARC Carrier II board.
->
-> Fixes: adb4f0c5699c ("arm64: dts: renesas: Add initial support for RZ/G3S=
- SMARC SoM")
-> Fixes: d1ae4200bb26 ("arm64: dts: renesas: Add initial device tree for RZ=
- SMARC Carrier-II Board")
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+This patchset adds support for the Clock Management Unit found in the
+Exynos990 SoC. This CMU allows for clocking peripherals such as USB, UFS,
+MCT, et cetera.
 
-Thanks for your patch!
+Currently there are two blocks implemented, CMU_TOP which
+generates clocks for other blocks, and CMU_HSI0, which generates clocks
+for USB. More blocks will be added (hopefully soon), like HSI1 for UFS.
 
-> --- a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-> @@ -43,11 +43,6 @@ aliases {
->  #endif
->         };
->
-> -       chosen {
-> -               bootargs =3D "ignore_loglevel";
+Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
+---
+Igor Belwon (3):
+      dt-bindings: clock: Add Exynos990 SoC CMU bindings
+      clk: samsung: clk-pll: Add support for pll_{0717x, 0718x, 0732x}
+      clk: samsung: Introduce Exynos990 clock controller driver
 
-I'd say please keep bootargs here, but as you don't support using the
-SoM without the carrier board, I guess it's fine to keep it together
-with stdout-path.
+ .../bindings/clock/samsung,exynos990-clock.yaml    |  120 ++
+ drivers/clk/samsung/Makefile                       |    1 +
+ drivers/clk/samsung/clk-exynos990.c                | 1343 ++++++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                      |   14 +-
+ drivers/clk/samsung/clk-pll.h                      |    3 +
+ include/dt-bindings/clock/samsung,exynos990.h      |  236 ++++
+ 6 files changed, 1715 insertions(+), 2 deletions(-)
+---
+base-commit: ebe1b11614e079c5e366ce9bd3c8f44ca0fbcc1b
+change-id: 20241206-exynos990-cmu-58ada5056ad5
 
-> -               stdout-path =3D "serial0:115200n8";
-> -       };
+Best regards,
+-- 
+Igor Belwon <igor.belwon@mentallysanemainliners.org>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.14.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
