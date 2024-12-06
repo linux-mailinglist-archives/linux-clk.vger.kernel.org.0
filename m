@@ -1,141 +1,159 @@
-Return-Path: <linux-clk+bounces-15463-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15465-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98DF39E69B5
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 10:07:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5906F18869DA
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 09:07:35 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA42F1FC116;
-	Fri,  6 Dec 2024 09:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="XQrZYdbF";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="rm6Ic1fZ"
-X-Original-To: linux-clk@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E01B9E6A38
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 10:33:41 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A793F1FBC95;
-	Fri,  6 Dec 2024 09:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AA532842F8
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Dec 2024 09:33:40 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CBA1EF0A5;
+	Fri,  6 Dec 2024 09:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="EoRQVrwV"
+X-Original-To: linux-clk@vger.kernel.org
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B72C1BD9E4;
+	Fri,  6 Dec 2024 09:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733475958; cv=none; b=Pb0CJ7ht1OHIWKC2J1bpyJ20vMSuosLQ6F4mLXAj5PruqgkwJmtIH+Mz4LGy0ZvGefKOn+u5IgBaKF05wxHMm3RGLsB7Zyiu2pyrai7D8xuwK/ZWYB4o//0vzIf2PhVcXkkMD8xaPZ7lARN0UlhgMsNTepvGlrVgwJP4AdgxyLs=
+	t=1733477611; cv=none; b=hdYHCLhB22ODVF/SLkeGhh76QOwbVBwpmYtveNN7nKLdq9J5CXqsB1BeGGA2j8TswEyAMZmhme2t0IA4/eLz2Pk43gND5Ag585a8WGO4N/w23YEKqxv2VS3AeEBgJqbdPRRrmaSSQ9WhfEYxiRlQj7wF9qj6Lvim1SQXRv26zh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733475958; c=relaxed/simple;
-	bh=KMel/fejqC4xHakZdeJNDBt2c9vzHF+RSzfWeo+L2f4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HP4uODHHI7luhRmkAhCwL/udRqSchtHlaRCnzP1EE5bQzEbksMp4Zh13XN0Kp43EvN3FM4MUhYv7w2JX4qVpLvkprgCWQCKVokljhqAbwpl8LmCqjOtJNm/WPoWfJB6qhUuKlMQO01IczICPaRfIDmkZacWZlF3M0tykVXTB5ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=XQrZYdbF; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=rm6Ic1fZ reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1733475955; x=1765011955;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=+YIfUdq9OR5ROGXG2tbL8UIVwnPsC3GbJ9XOwhsQXWg=;
-  b=XQrZYdbFlWsGLJJhXiiFFWev/2VLCcnhEuUQmOEtaFne4CpThmxe7DRu
-   nU9I1WjrbITAKedMIVVzEdq+pN92AASFR4+wXwLcyxgBzRpD5lduuCvrp
-   oBMBeqHqJutde9Y+ochMdM5IGPhCUxQO+rf2JdxWfQOtI90o1egFT6zFP
-   aR58KCOHFgY4Tn8KofoEl6zwSLG6/di9jHC2FcHQe7sVvGtXoa1uq9zSz
-   tDhcly6fHP+ZTdN24ev5HZ5E///jCdJm+iGBcgpHNsRJg+jJjkcXISGfi
-   jtSOgAOtSqFGRPJlzwMo+xmlT9lZSY722TnVenThUJDU8Sv/jUMsPXx79
-   Q==;
-X-CSE-ConnectionGUID: oVbENiJ4R3iM76QGjQUZbw==
-X-CSE-MsgGUID: YnhpYHKDRjOcgqB0ukZk4Q==
-X-IronPort-AV: E=Sophos;i="6.12,213,1728943200"; 
-   d="scan'208";a="40449387"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 06 Dec 2024 10:05:52 +0100
-X-CheckPoint: {6752BE70-2-1E10F2A5-CC0651E5}
-X-MAIL-CPID: 313663F2906B776E37CF64B963F0996B_4
-X-Control-Analysis: str=0001.0A682F17.6752BE70.0064,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 786FF163AD6;
-	Fri,  6 Dec 2024 10:05:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1733475947;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+YIfUdq9OR5ROGXG2tbL8UIVwnPsC3GbJ9XOwhsQXWg=;
-	b=rm6Ic1fZRlZmgzFL/7eQp1nhcTTvMsgpS9iWRkPgv1JDg/Ns2sYSxwQf/bZezXw447Kzki
-	1F8E5iNQtQQbMxiZPX1HgsO/xVUJLzMbprmisfvvnxy+2IE3Ubw4alQO5wjgMiWiPN8r9U
-	3hajrS3sEQPb7Z4c2fierSy9XjVNo0tcxmvxEK02C3JH64DEFXpwM9IO/hCGLtLn/Zn4PC
-	oVc8aRcUXK2gVwX3wqAwKgNiTKpoVzktaroRC6jt/6uBW6jFdRiM8bdXxNmtzDAF19mGzV
-	2vPwZLMeb/8y6NyicmynZBd6CT2hydwBNuzmMTPw/NdQ7VbJgOlePcy5WxCNpg==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Pengfei Li <pengfei.li_1@nxp.com>, "open list:NXP i.MX CLOCK DRIVERS" <linux-clk@vger.kernel.org>, "open list:NXP i.MX CLOCK DRIVERS" <imx@lists.linux.dev>, "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Subject: Re: [PATCH] clk: imx: Enable IMX93_CLK_LVDS_GATE only for i.MX93
-Date: Fri, 06 Dec 2024 10:05:46 +0100
-Message-ID: <4615625.LvFx2qVVIh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20241203130530.1206526-1-peng.fan@oss.nxp.com>
-References: <20241203130530.1206526-1-peng.fan@oss.nxp.com>
+	s=arc-20240116; t=1733477611; c=relaxed/simple;
+	bh=kJ+kCSC3s5A9h0v99LF+tl5qDYYIgHG+gOREB+KG41U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W/U1sWid3PpnULn7ASUnnE1Qny1cfb50UyRRXHHZDj/NvbGJJryMgWJgn4/cX24VhTyLpY24/dUj5QLORHlUcBjuIMEBohRflsuLm2iMeBWbtUhxDCkC2ap2A2bgSrIvy29vEP9tslRBgZMY3gS0AHbNxW4u7r0aZ4td2LqM3GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=EoRQVrwV; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [127.0.1.1] (91-157-155-49.elisa-laajakaista.fi [91.157.155.49])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2C793641;
+	Fri,  6 Dec 2024 10:32:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1733477569;
+	bh=kJ+kCSC3s5A9h0v99LF+tl5qDYYIgHG+gOREB+KG41U=;
+	h=From:Subject:Date:To:Cc:From;
+	b=EoRQVrwVQKYsmaG/gQPfrXgdXhVyAokW6dDn7GKIXlRTKrWwiexLMVPDQLDhTCe1I
+	 rI8QzlNuOwVQzjL7/H2FxJVb6MkCj8RUp+de5Ca6EZL1XjmdPekl2XV15NNd3w9SVv
+	 e9Wb5Cdqhs9gKgLQRWN4brGrjxXzLiWyuGWoLdOI=
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v3 00/10] drm: Add DSI/DP support for Renesas r8a779h0 V4M
+ and grey-hawk board
+Date: Fri, 06 Dec 2024 11:32:33 +0200
+Message-Id: <20241206-rcar-gh-dsi-v3-0-d74c2166fa15@ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALHEUmcC/23MQQ7CIBCF4asY1mKAFktdeQ/jYoRpOwuLGQzRN
+ L27tG5s4vJ/yfsmkZAJkzjtJsGYKVEcS1T7nfADjD1KCqWFUabWSjnJHlj2gwyJZOuV7mxABO9
+ EeTwYO3qt2uVaeqD0jPxe8ayX9esYVW2crKWSTeUANbQ2GDhTQEhxvEXgcPDxLhYum1/CbglTi
+ NrUjXZWh84d/xDzPH8AYzTF6/AAAAA=
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+ Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, LUU HOAI <hoai.luu.ub@renesas.com>, 
+ Jagan Teki <jagan@amarulasolutions.com>, Sam Ravnborg <sam@ravnborg.org>, 
+ Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, 
+ linux-clk@vger.kernel.org, 
+ Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
+ stable@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2499;
+ i=tomi.valkeinen@ideasonboard.com; h=from:subject:message-id;
+ bh=kJ+kCSC3s5A9h0v99LF+tl5qDYYIgHG+gOREB+KG41U=;
+ b=owEBbQKS/ZANAwAIAfo9qoy8lh71AcsmYgBnUsTVfwGNZGG7KG9JClvLjKj6lIgTWnNApNAaX
+ Zm92rResoKJAjMEAAEIAB0WIQTEOAw+ll79gQef86f6PaqMvJYe9QUCZ1LE1QAKCRD6PaqMvJYe
+ 9TMdEACJRYIkG5zi1lN2zs4kEskoSapB1bxCIYUhHspPtILgF1QJ0dm903CBYz7n9Koz9quhQ+o
+ W/cma3U8xdm9x6oOKAoy0jHMVm1Io5p8NxsxzSKhKeTOfMCdxux8gOPoHwKt8362gNIvoJGf6YK
+ 1RijWu27ucJB66MuLbrEGRp/96cJBfdCrRr60YhChFzhMFDr8UBdP9N3lG+VLG+2227UWo41nBi
+ C4whHHmvHaRsLbJu7dhducmGmxMb5ZLcKdTBCFTGrdQSJzqgrwtwTheia75Fe2+/EKua/rgdLAU
+ krAmR/cheAh/JoWLeb8BPUG/uY+CjvvaGMJGfbevDmzIFHvvEoLubQcyVx0u1GCTIzydY5RjWeg
+ CoauUFwGF6x5rEBZnXAtu1POdigQ/BIy1iJGSvQj9y8+RxSQqJe+YKFn4jkLJt/Q0+F7EEjDXTu
+ cA4iqItUl8cvC9Ee4qYC9n8dZ4yi7rgfPJwfCjC+CaTxqeG6aLm5S1UOnfRD3DEAM81n++qZmd8
+ Z1kUwSVwGa9Y5ybx4krsg7OOmg0+QE0DqEuu0VZ96SeZNQ0H43h49sv3FCQapFCrwSBZTVaC6wx
+ 20TA7Gd+FekPfRr3chCm+mlo60QfRaYUS9aIQ7c2Gz/AaMJFBqJjl5hEhmpRYbOKHMJ557O8hS2
+ AwwvLkwniNNkwdw==
+X-Developer-Key: i=tomi.valkeinen@ideasonboard.com; a=openpgp;
+ fpr=C4380C3E965EFD81079FF3A7FA3DAA8CBC961EF5
 
-Am Dienstag, 3. Dezember 2024, 14:05:29 CET schrieb Peng Fan (OSS):
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> Enable the LVDS gate only for i.MX93, because i.MX91 does not support
-> LVDS.
->=20
-> Fixes: a27bfff88dd2 ("clk: imx: add i.MX91 clk")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/clk/imx/clk-imx93.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
-> index 58a516dd385b..a0d2972ba9cd 100644
-> --- a/drivers/clk/imx/clk-imx93.c
-> +++ b/drivers/clk/imx/clk-imx93.c
-> @@ -239,7 +239,7 @@ static const struct imx93_clk_ccgr {
->  	{ IMX93_CLK_SAI3_IPG,		"sai3_ipg_clk", "bus_wakeup_root",	0x94c0, 0, &s=
-hare_count_sai3},
->  	{ IMX93_CLK_MIPI_CSI_GATE,	"mipi_csi",	"media_apb_root",	0x9580, },
->  	{ IMX93_CLK_MIPI_DSI_GATE,	"mipi_dsi",	"media_apb_root",	0x95c0, },
+Add everything needed to support the DSI output on Renesas r8a779h0
+(V4M) SoC, and the DP output (via sn65dsi86 DSI to DP bridge) on the
+Renesas grey-hawk board.
 
-mipi_csi and mipi_dsi are also only PLAT_IMX93.
+Overall the DSI and the board design is almost identical to Renesas
+r8a779g0 and white-hawk board.
 
-> -	{ IMX93_CLK_LVDS_GATE,		"lvds",		"media_ldb_root",	0x9600, },
-> +	{ IMX93_CLK_LVDS_GATE,		"lvds",		"media_ldb_root",	0x9600, 0, NULL, PLA=
-T_IMX93 },
->  	{ IMX93_CLK_LCDIF_GATE,		"lcdif",	"media_apb_root",	0x9640, },
->  	{ IMX93_CLK_PXP_GATE,		"pxp",		"media_apb_root",	0x9680, },
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+---
+Changes in v3:
+- Update "Write DPTSR only if there are more than one crtc" patch to
+  "Write DPTSR only if the second source exists"
+- Add Laurent's Rb
+- Link to v2: https://lore.kernel.org/r/20241205-rcar-gh-dsi-v2-0-42471851df86@ideasonboard.com
 
-pxp is also only PLAT_IMX93.
+Changes in v2:
+- Add the DT binding with a new conditional block, so that we can set
+  only the port@0 as required
+- Drop port@1 from r8a779h0.dtsi (there's no port@1)
+- Add a new patch to write DPTSR only if num_crtcs > 1
+- Drop RCAR_DU_FEATURE_NO_DPTSR (not needed anymore)
+- Add Cc: stable to the fix, and move it as first patch
+- Added the tags from reviews
+- Link to v1: https://lore.kernel.org/r/20241203-rcar-gh-dsi-v1-0-738ae1a95d2a@ideasonboard.com
 
->  	{ IMX93_CLK_ISI_GATE,		"isi",		"media_apb_root",	0x96c0, },
->=20
+---
+Tomi Valkeinen (10):
+      drm/rcar-du: dsi: Fix PHY lock bit check
+      drm/rcar-du: Write DPTSR only if the second source exists
+      dt-bindings: display: bridge: renesas,dsi-csi2-tx: Add r8a779h0
+      dt-bindings: display: renesas,du: Add r8a779h0
+      clk: renesas: r8a779h0: Add display clocks
+      drm/rcar-du: dsi: Add r8a779h0 support
+      drm/rcar-du: Add support for r8a779h0
+      arm64: dts: renesas: gray-hawk-single: Fix indentation
+      arm64: dts: renesas: r8a779h0: Add display support
+      arm64: dts: renesas: gray-hawk-single: Add DisplayPort support
 
-Not visible in this diff, but also only PLAT_IMX93:
-* flexio1
-* flexio2
-* cm33
-
-An most probably also mu*_a and mu*_b, even though they are listed in
-i.MX91 RM, but AFAIK this SoC lacks MU.
+ .../display/bridge/renesas,dsi-csi2-tx.yaml        |   1 +
+ .../devicetree/bindings/display/renesas,du.yaml    |  52 ++++++++-
+ .../boot/dts/renesas/r8a779h0-gray-hawk-single.dts | 119 ++++++++++++++++++---
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi          |  73 +++++++++++++
+ drivers/clk/renesas/r8a779h0-cpg-mssr.c            |   4 +
+ drivers/gpu/drm/renesas/rcar-du/rcar_du_drv.c      |  18 ++++
+ drivers/gpu/drm/renesas/rcar-du/rcar_du_group.c    |  24 +++--
+ drivers/gpu/drm/renesas/rcar-du/rcar_mipi_dsi.c    |   4 +-
+ .../gpu/drm/renesas/rcar-du/rcar_mipi_dsi_regs.h   |   1 -
+ 9 files changed, 272 insertions(+), 24 deletions(-)
+---
+base-commit: adc218676eef25575469234709c2d87185ca223a
+change-id: 20241008-rcar-gh-dsi-9c01f5deeac8
 
 Best regards,
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+-- 
+Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 
 
