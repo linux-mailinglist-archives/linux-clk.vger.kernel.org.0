@@ -1,149 +1,217 @@
-Return-Path: <linux-clk+bounces-15670-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15672-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 805829EB640
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Dec 2024 17:25:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA1599EB688
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Dec 2024 17:34:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9160165009
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Dec 2024 16:25:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2026018869B4
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Dec 2024 16:34:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537AA1BDABE;
-	Tue, 10 Dec 2024 16:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="yurxfwQ7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45673207DFA;
+	Tue, 10 Dec 2024 16:34:39 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C08223DEAD
-	for <linux-clk@vger.kernel.org>; Tue, 10 Dec 2024 16:25:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074821BDABE;
+	Tue, 10 Dec 2024 16:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733847951; cv=none; b=llfobnQ+mC90lPsbdtzlwE1piu4S4DrZTlI7jtFGVsIXzFoG4Kpi8AqXOyxdPRw1ag/PaszokWtiO4GPrADtkuGw8d57Mcv75agpS+b1IOWZ9mHV8p1Jqg4o/ReoX0HCIxspV7/Tuw6hiW18I4QzdiOP9mxF54U7ZPHFIPTBMKQ=
+	t=1733848479; cv=none; b=of+24aWYusTShIW34oSk+5OyrFcLmuqoiAXN802wJhfMl/ne3qh4vbefsMYyyDU78zVZANZexmYwavIa6o6W/0tPj/g0JZHkFPvaMITlVCJrSh9QaLv+2axCv3yUWgLjC25AccDH19BbUNp7LroPdSgZUJc9Tz9X42EHZ9Qa26M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733847951; c=relaxed/simple;
-	bh=lNDEl1jFraHMx+yjBlSG6hrmLnmDOXsjaHrVuUlWP5I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Am8efpiL6pHd/ToaRIn0RF/ZA5bvnLLzYZ/VIphPwKlNOtB21m3jad2dtwi8tKphaMKgVdSuJ0OHUZzTHLVwmMxabih1MNJfQe1dAPdNxxT3o/bUT5BBd4xl0lf/TUqnK3B+69PAW7hnGF8IJeeOIdIocHfziIrJ67bJU4zUvF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=yurxfwQ7; arc=none smtp.client-ip=149.28.215.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: Content-Type: In-Reply-To: From: References:
- Cc: To: Subject: MIME-Version: Date: Message-ID; q=dns/txt;
- s=fe-e1b5cab7be; t=1733847942;
- bh=Rfks6ZTiwp1kxRzHwe4qrzjZlR1gfefb3q3lO/fYtDA=;
- b=yurxfwQ7unIjEb47s7vUlZ5nmET+d0VFLe6GN+5yltcPCDp55mdq2yk34tDlbS1JKKK26E+6Q
- BuA01kE/9Q2TbpPFlrERXB1zdYKsJMIxjHKT11m/ehftMhBLy3ywdXesujxDSIlMk4auO5xK/IX
- IoihvM5L/pGdCuFof4QVP2sKMBuQ7TALx9EzorM+fdc9WgSrMpoJXwXqQRXGPUV3qEp0e5MjGAL
- GOwHoJVAXmn1NpbS9KXfk3et5WGdZ8iCMmm70veO9F+NN55Q+rfvPYdC652EjICEVx1lejT3FQm
- K64+FyWCPm6yF+6fHKu4ptB2KpLyvQWFpgssZ/GmBhXA==
-Message-ID: <304fd668-0e61-4f5e-a12c-36fd7e54ab6e@kwiboo.se>
-Date: Tue, 10 Dec 2024 17:25:34 +0100
+	s=arc-20240116; t=1733848479; c=relaxed/simple;
+	bh=8oUMzl2noqWq2bIVEK+AvaPrz95JB6raIVV1Ny91o9Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HsAQStkwE8o3vo8dpcuLokV0B2PjwXTODntOeVHFtM2sgWaI/g9Mdcxi8T3yFh4KzB4bPq5Nmwud1ha1az2yV4DhEbYqwmgE4TjpZZ8nIkkwrfmf6bzyPMTPd6/yhoHKIkHcyse1Id0G42PJZ6bxrqgUoUcm+lQKYHqb0QOXJPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6d89a727a19so59526026d6.0;
+        Tue, 10 Dec 2024 08:34:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733848475; x=1734453275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K2e3X6khm/ThbDpkGIJYPkvaVuIBT8ySpR+1a5iCbjI=;
+        b=MYVB0K1ssYffAtyXHvRgxT/CvMWW6zsi2C9OoWvMZ9bm5tPrdfMzp+IagEEdeXJJZc
+         kgAk59fgP/Pl12m2lha+YoJjQZdNPT9y8A3iPCRPethdtEJPVKKkSOpB3m4oPvt9i0Lm
+         JAaaNmRqCS9kdn7mHwyUmKksD2MulSrkXdkpCANox2gZz10CTV4rddNr4AcAtx++QTFh
+         T3UShPJr2+3mAL1xFkJ+KBTMDxyFubE3n0i9Zgbr/S2bGsfcQOL0JoKDdGnUzLKf5eI9
+         Ry4Z5RJDvjL4rIZooIB6fV9fgZUy1EyoI7CiyCnv7kKh3SwV/J+l+Kkqxd6zugfj9dnE
+         1KLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDBXrbAJpZhk10YKQPn1SMGOAdTR/yyORxWwjZAw4JMhvHWhTOoBok1JZh71fiEENxAoftzM37qZcc@vger.kernel.org, AJvYcCVjmKIXnqUboW5nbwjFuVUGp5KFYZn5HTlRTDWeakTe0qU8HHuXiqTCYs4vJpkDb1IFmqqwsuJ7DdC/@vger.kernel.org, AJvYcCWA9nWNYjRcGRhWMFwz/FvXXE/50O7gZ7DbbApGcsjjL9CRe2+oiK3SeQ88S6PLoL9rpOHllA3jHmQPF/0LOXgOVDM=@vger.kernel.org, AJvYcCWxx9lRwLzYV2VEwAkS4hJibIJ1v67IcgHtTz4jGdMS0jOkwk7/xVf7NDam9bye7B1BziDzvwQg1tOBZsiV@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqZa7LUBFdxaFTAgR0l4IhkjMlaa3XJw3MHZKfWRwstlIgkzyM
+	PqqHeXtc+0OD0dce7z51lVksGF/EUrzYxbe3dLiwk6KXgWxMYm5sCg2XVPwf
+X-Gm-Gg: ASbGncuVpmHEbo8qIMrOkUt1LGKCDN9hgCUOPBw6W2FsHxmk+13L2cfTc9yG9/LYW+x
+	hRnlV8VixsEkiXytvTtDGuwbpNYIXmP5B/Q3z9pESiq1dUgduWbAzhzZ25/sdUNvpXn5vAeQ+W3
+	cWFu/DZSb6l7JbXprDI71mKirsaUmU5C7jUG8HDdy2uSS1N3V9tkkhXb2+WMM9YRtpLm2o3XlYS
+	wGBf0HlzZ0mxCazyvr6gdbFguooiKz4inNsBAhEyI5tMUSwQeGytmtutJU23QNnQe8aCQDQ+RFf
+	WexpZnq4vzXA6Xn/5Ydj
+X-Google-Smtp-Source: AGHT+IG1Ue+1HIJRSBFHga3/ZRErZkvm2zSIAIxJ5GBXJiPGAkWaj7g2IqJd+OnPvJ78l5QnD+I1TA==
+X-Received: by 2002:a05:6214:300c:b0:6d8:8f81:e2ec with SMTP id 6a1803df08f44-6d9212c7cdamr60484086d6.12.1733848475254;
+        Tue, 10 Dec 2024 08:34:35 -0800 (PST)
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com. [209.85.222.175])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d8da6b7854sm61384336d6.68.2024.12.10.08.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Dec 2024 08:34:35 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7b6c6fb409eso250171685a.1;
+        Tue, 10 Dec 2024 08:34:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUkfsFjERpgXEMIouHRPAYmSVyhROWvKoF9jRlUyu/bm+hQ21VPEVsevbPSoPgfQTWenq/AscCmJoAw@vger.kernel.org, AJvYcCV0SXGLa4iK5Ab+8QRcuRPcszYaKG09W/H5AH7y7jvSgG1y5Q/ebeqjQNopksv/FdTHMOZOM21jMBt5YOl1@vger.kernel.org, AJvYcCV7R1nAoAJSCdXR4dgMXGzb2aJfO00HSfzaNSN0uBO4NJ/VqJLE7jvWErRbG5IqkSJqSvk3Wt+Pt51r@vger.kernel.org, AJvYcCXFLLtc8qeTIB6bpkudKUC3WppjqAjCd8xXyS6NWlc3p3qLvqhfAZ0Hah4z071wmb4+iMJ6PV1CfT69ruGNu4fPd1M=@vger.kernel.org
+X-Received: by 2002:a05:620a:1a85:b0:7b6:cef9:4f10 with SMTP id
+ af79cd13be357-7b6de6bf952mr762749985a.3.1733848474648; Tue, 10 Dec 2024
+ 08:34:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] clk: rockchip: fix wrong clk_ref_usb3otg parent for
- rk3328
-To: Peter Geis <pgwipeout@gmail.com>, Dragan Simic <dsimic@manjaro.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, Elaine Zhang
- <zhangqing@rock-chips.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rockchip@lists.infradead.org
-References: <20241210013010.81257-1-pgwipeout@gmail.com>
- <20241210013010.81257-3-pgwipeout@gmail.com>
- <0d11705121f29ccfb7cfa342505a6e35@manjaro.org>
- <CAMdYzYqJLK6oJHCUVztth6mtJsYrRQSPzNYpR-ZmR7rNprZXfg@mail.gmail.com>
-Content-Language: en-US
-From: Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <CAMdYzYqJLK6oJHCUVztth6mtJsYrRQSPzNYpR-ZmR7rNprZXfg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Report-Abuse-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-ForwardEmail-Version: 0.4.40
-X-ForwardEmail-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 149.28.215.223
-X-ForwardEmail-ID: 67586b83ce9f514b1380d1a4
+References: <20241206-rcar-gh-dsi-v3-0-d74c2166fa15@ideasonboard.com> <20241206-rcar-gh-dsi-v3-10-d74c2166fa15@ideasonboard.com>
+In-Reply-To: <20241206-rcar-gh-dsi-v3-10-d74c2166fa15@ideasonboard.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 10 Dec 2024 17:34:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXMt74okJjqinLwrVmf5hZFm7YQkE5s3u2F9AOTWk+zXQ@mail.gmail.com>
+Message-ID: <CAMuHMdXMt74okJjqinLwrVmf5hZFm7YQkE5s3u2F9AOTWk+zXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 10/10] arm64: dts: renesas: gray-hawk-single: Add
+ DisplayPort support
+To: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	LUU HOAI <hoai.luu.ub@renesas.com>, Jagan Teki <jagan@amarulasolutions.com>, 
+	Sam Ravnborg <sam@ravnborg.org>, Biju Das <biju.das.jz@bp.renesas.com>, 
+	dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-clk@vger.kernel.org, 
+	Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-12-10 14:27, Peter Geis wrote:
-> On Tue, Dec 10, 2024 at 4:44 AM Dragan Simic <dsimic@manjaro.org> wrote:
->>
->> Hello Peter,
->>
->> On 2024-12-10 02:30, Peter Geis wrote:
->>> Correct the clk_ref_usb3otg parent to fix clock control for the usb3
->>> controller on rk3328. Verified against the rk3328 trm and usb3 clock
->>> tree
->>> documentation.
->>>
->>> Fixes: fe3511ad8a1c ("clk: rockchip: add clock controller for rk3328")
->>> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
->>> ---
->>>
->>>  drivers/clk/rockchip/clk-rk3328.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/clk/rockchip/clk-rk3328.c
->>> b/drivers/clk/rockchip/clk-rk3328.c
->>> index 3bb87b27b662..cf60fcf2fa5c 100644
->>> --- a/drivers/clk/rockchip/clk-rk3328.c
->>> +++ b/drivers/clk/rockchip/clk-rk3328.c
->>> @@ -201,7 +201,7 @@ PNAME(mux_aclk_peri_pre_p)        = { "cpll_peri",
->>>                                   "gpll_peri",
->>>                                   "hdmiphy_peri" };
->>>  PNAME(mux_ref_usb3otg_src_p) = { "xin24m",
->>> -                                 "clk_usb3otg_ref" };
->>> +                                 "clk_ref_usb3otg_src" };
->>>  PNAME(mux_xin24m_32k_p)              = { "xin24m",
->>>                                   "clk_rtc32k" };
->>>  PNAME(mux_mac2io_src_p)              = { "clk_mac2io_src",
->>
->> Sorry, but I was unable to verify this in the part 1 of the
->> RK3328 TRM, in both versions 1.1 and 1.2, which is all I have
->> when it comes to the RK3328 TRM.  Is that maybe described in
->> the part 2, which I've been unable to locate for years?
->>
->> Moreover, the downstream kernel source from Rockchip does it
->> the way [1] it's currently done in the mainline kernel, which
->> makes me confused a bit?  Could you, please, provide more
->> details about the two references you mentioned in the patch
->> description, or maybe even you could provide the links to
->> those two references?
->>
->> [1]
->> https://raw.githubusercontent.com/rockchip-linux/kernel/refs/heads/develop-4.4/drivers/clk/rockchip/clk-rk3328.c
-> 
-> It is unfortunate the TRM doesn't include the clock maps, because they
-> are extremely helpful when one can acquire them. It also doesn't help
-> that the TRM register definition only referred to this as "pll". I was
-> sent specifically the usb3 phy clock map for my work on the driver,
-> which had the location of each switch and divider along with the
-> register and bit that controlled it. That combined with the TRM
-> register map allowed me to find this error.
+Hi Tomi,
 
-I can also confirm that the changes in this patch matches Fig. 3-8
-RK3228H Clock Architecture Diagram 7 for the USB3OTG block.
+On Fri, Dec 6, 2024 at 10:33=E2=80=AFAM Tomi Valkeinen
+<tomi.valkeinen@ideasonboard.com> wrote:
+> From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>
+> Add support for the mini DP output on the Gray Hawk board.
+>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-                                    XIN24M -\
-                                             S45_8 - ref_clk_usb3otg
-S45_7 (2PLL) / G4_9 / S45_0 (DivFree 1~64) -/
+Thanks for your patch!
 
-Regards,
-Jonas
+> --- a/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
+> +++ b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
+> @@ -269,6 +314,51 @@ eeprom@53 {
+>         };
+>  };
+>
+> +&i2c1 {
+> +       pinctrl-0 =3D <&i2c1_pins>;
+> +       pinctrl-names =3D "default";
+> +
+> +       status =3D "okay";
+> +       clock-frequency =3D <400000>;
+> +
+> +       bridge@2c {
 
-> 
-> Thanks!
-> Peter
-> 
+Missing:
 
+        pinctrl-0 =3D <&irq0_pins>;
+        pinctrl-names =3D "default";
+
+> +               compatible =3D "ti,sn65dsi86";
+> +               reg =3D <0x2c>;
+> +
+> +               clocks =3D <&sn65dsi86_refclk>;
+> +               clock-names =3D "refclk";
+> +
+> +               interrupt-parent =3D <&intc_ex>;
+> +               interrupts =3D <0 IRQ_TYPE_LEVEL_HIGH>;
+
+interrupts-extended =3D ...
+
+> +
+> +               enable-gpios =3D <&gpio1 26 GPIO_ACTIVE_HIGH>;
+> +
+> +               vccio-supply =3D <&reg_1p8v>;
+> +               vpll-supply =3D <&reg_1p8v>;
+> +               vcca-supply =3D <&reg_1p2v>;
+> +               vcc-supply =3D <&reg_1p2v>;
+> +
+> +               ports {
+> +                       #address-cells =3D <1>;
+> +                       #size-cells =3D <0>;
+> +
+> +                       port@0 {
+> +                               reg =3D <0>;
+> +                               sn65dsi86_in0: endpoint {
+> +                                       remote-endpoint =3D <&dsi0_out>;
+> +                               };
+> +                       };
+> +
+> +                       port@1 {
+> +                               reg =3D <1>;
+> +                               sn65dsi86_out0: endpoint {
+> +                                       remote-endpoint =3D <&mini_dp_con=
+_in>;
+> +                               };
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+>  &i2c3 {
+>         pinctrl-0 =3D <&i2c3_pins>;
+>         pinctrl-names =3D "default";
+> @@ -361,6 +451,11 @@ i2c0_pins: i2c0 {
+>                 function =3D "i2c0";
+>         };
+>
+> +       i2c1_pins: i2c1 {
+> +               groups =3D "i2c1";
+> +               function =3D "i2c1";
+> +       };
+> +
+>         i2c3_pins: i2c3 {
+>                 groups =3D "i2c3";
+>                 function =3D "i2c3";
+
+Missing:
+
+        irq0_pins: irq0 {
+                groups =3D "intc_ex_irq0_a";
+                function =3D "intc_ex";
+        };
+
+I'll fix that up while applying.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.14.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
