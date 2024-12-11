@@ -1,142 +1,109 @@
-Return-Path: <linux-clk+bounces-15723-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15725-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D54289EC0C2
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 01:30:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72C0E9EC0D0
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 01:33:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30D8518821E0
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 00:30:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2447E164017
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 00:33:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F5833CA;
-	Wed, 11 Dec 2024 00:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3301A18EAD;
+	Wed, 11 Dec 2024 00:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfwugTo1"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="pW2Xwt8U"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657F2AD5E;
-	Wed, 11 Dec 2024 00:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F274B65C;
+	Wed, 11 Dec 2024 00:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733877049; cv=none; b=H+oSi6c3+Tro7m5lu08nfP47sqzK90ScY9tuDemkTdVeAgPNEh2xqSv1vxvdEZhBMNhY0b6OeBgbnXHxA1I8lG4UL9+WcxPXXFcvoGjIOcwdlqscxPOYFoO1Q1RGvTJ54f9uBeRcwRksC24icws/lDAhQrlPylNUTt3FNqN3aGM=
+	t=1733877180; cv=none; b=SMlSUXwCZUSYuCguqzRaEe+r4tEvukZRy1VyOYzD0xiDL18qFgyK0BKQpJtYCePDSvmeN9hnivIA/H3b/E51qMD2AKvLeuAA787zi/EqFy6AkjzfJhuV7d5+hqSxzcQ+cR9rA3oLYewN4imRFvdAdktigp4Fh+ywNRkOenC+N5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733877049; c=relaxed/simple;
-	bh=zfnL3T4fjWRklKZ7QwDKYimyih0yvUm1HdG4fl8TH2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=maYFK7nmop1ZFk2lFnhDDr59qMZ2e+ikd16UYtee47cg3EtLi4+GDoS+N7MWVDntDioGmcabWeBDg7tN7Z20PCcrS8vYmVpIRH0bi+rLvtKZLMHouMoe7qO8Q25Wr7fEl+l7+K50Zpipyq5YsqCDBCO2dKA5zYO1chUJw3uG2co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfwugTo1; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7b6ed0de64aso2162485a.0;
-        Tue, 10 Dec 2024 16:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733877047; x=1734481847; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8G/UOeJH2Z5HF5N1QDZ/736SvvRIiY1q2rQowPJk9I4=;
-        b=jfwugTo1R6G6d6K7WjiRT2Os8C2J0et0NAQxzt5lb+U6CwzNnT8Zmv8y0ikavZqhUI
-         GWEFpxomxr5Y7b1VSpzDg9+3valw51QqQAVnhAua/wUNITh5XDfxv9ApNqokRvgIxMgK
-         k42svmKd8tLXXgGkwaFH+n6v7hy+LXZgK1SRGbhcfTk/1uamn8ioJgLow2t/OjN6IbVo
-         6nsbgXnHve3Spm7fI39oi4QEQ4+DFGhyr41EZom1RYhjrwVwMTVfU2Nid2Wv1fFiZKHg
-         4MG8BhS6TpnXXAXAEEgtLnE8jU36EXZsNlnCnDaJF9//RpWRKj8UACOfirDKobJ7gzt+
-         ztVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733877047; x=1734481847;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8G/UOeJH2Z5HF5N1QDZ/736SvvRIiY1q2rQowPJk9I4=;
-        b=fy/+ljSJTLVV4ss/ordS7pJCXryEqhmHypz3LUBulGk8cNisceWzm2Nj5xmQnfZWE1
-         b2ZK05HNVEVfBRGLbPRtTELoWJFdgbNnEJ929zu0e4in3UXx+gZZv5UydfJEjdSMLmTN
-         PhMC1pMXFb3x9hyk+0R6H60X/9ZLUzT2ps079BBPi+Zx2id0ZuTWFrz9S4MS4NbuBJCG
-         B01pPfAgKcBMJH2cBTcz/aUsSQ1raITrEZjDQd4T8U527OUj8GqQqpjPPRkBh+JJXyh6
-         zDY9iO7nsdmXb3NXedd3bx9UfpGpHWMACQpx0uHNzWTRInUod6JfYu+ElS7zS/2xOGUf
-         17/w==
-X-Forwarded-Encrypted: i=1; AJvYcCViUapANMFhvdBupmr+f1bbu23TwPKJfeXa5Ri7TYjtcoqpxqgTpO5GgmEi1b38dn2prGqiKwGmCoEXv1pOQQ==@vger.kernel.org, AJvYcCW/0DLWOxZUv5JhObPIk/aCeixouaN9mBobKMv/Qt81iIhLHzkRAGSe0ErOEIUAELeizuCoji1gYlmT@vger.kernel.org, AJvYcCXCKtP/eorJixunlg2AsMeDzIiHW231m2MkAgwGoyZc4ptNfN0Z8/o2mv4rtdNCkSMpOpmsVurJSUNHT4w=@vger.kernel.org, AJvYcCXqVNJ07HBeWJEdLfK7L/ROimH73Ke+iw63vVbnIO6VqTgRCSEBwouNFNwQWin8oGLzeCQycr95Yuu0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKeZd+mZmQZrfHvCySRW9VVlqTFvHSxgQglWAr+IgPBsn/EKSw
-	nLsLgpDiNkOazUlZwGM9OHBh02LVNQZt/CF1CWKGxQCuIp6VKi24
-X-Gm-Gg: ASbGncv5lH6cKKhxKCtIzXjDbDtGRbpURjuFyV+qUqpSLxHKcywwXMDhHBsf4JewNF4
-	yKNxtfcqBq7jfofkF3tEgz50BRnhc0wPCdfn5yxi/BAvOvXXlMBh65eQOd/6TExs7uCOaekqgkP
-	T4TTs/2kS8pV96FzcZ6U2QjgOt86xblasYhJGGeUtJ8+tb+h//gjzJimu52Dlx4F2qWFi0mQKej
-	EpO8xxrab3E6bivmPuVde8VPdFjewByD7ALajV8Yg==
-X-Google-Smtp-Source: AGHT+IGJjTwiDSy9y0Z/4YUAm05vyvap6CL7ctnNDpSLs0/ro7VuqA8lXU6SvI3JB8AkwPkgMsbX7g==
-X-Received: by 2002:a05:620a:4594:b0:7b6:cb3c:cb81 with SMTP id af79cd13be357-7b6ebc6e5a3mr131819485a.18.1733877047280;
-        Tue, 10 Dec 2024 16:30:47 -0800 (PST)
-Received: from localhost ([2607:fea8:52a3:d200::6d3f])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b6dcd91ce6sm154812985a.127.2024.12.10.16.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2024 16:30:46 -0800 (PST)
-Date: Tue, 10 Dec 2024 19:30:45 -0500
-From: Richard Acayan <mailingradian@gmail.com>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>,
-	Todor Tomov <todor.too@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: Re: [PATCH v7 5/5] arm64: dts: qcom: sdm670: add camss and cci
-Message-ID: <Z1jdNaeoictuCK7N@radian>
-References: <20241210233534.614520-7-mailingradian@gmail.com>
- <20241210233534.614520-12-mailingradian@gmail.com>
- <fe8dbb4e-9d0e-4ecf-874b-be9225ae1487@linaro.org>
+	s=arc-20240116; t=1733877180; c=relaxed/simple;
+	bh=9yYVZMNVBdNSUyhC6kASDVQ6VMxYiDkOkwUU5Y78yDc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PpOQsP+Ry10c/0/Mh/YMWpZ/2T5w6Jr+Ghnli8E6DDGodhshf7RoUeCVstLFpTrFmrr5y7snS01x8F6DkJZnWTzcOkeMJDb7UDOwyLQeS51oqdpMpY3LeXBDuy4OI5JKz9S7vpZuOIeA72yQlReRUJEWpLx2AgZxtuPIuKKy80U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=pW2Xwt8U; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BA6pe4E001359;
+	Tue, 10 Dec 2024 18:32:42 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=PODMain02222019; bh=hEEx+kkUoxYbwM/f
+	EbVFHB1hmnVMaLBAaYLiE9rppmc=; b=pW2Xwt8UAgXkxd2Cz/xtxD2Fz61CwD8n
+	RwYHxCokxbNcpcWfHSAUGA42/kTrwa1mWmS0TtdQBTK5uq6YC0hX+BR9YfWFYh4M
+	sHCWBOhljg2ixq4D2C1XltH6H5sdUV8CwmdYUtI4btwYAeuZm2O+ifmmBKXMXV9n
+	f8vWSNU+HJRygWIrcJvAVP3l7Smf39cOFTh6fDpP9IWcBvdqcbzvrz/wErwkxvM+
+	AQVlTdkhAOZGH3Y5R6rdndrTVPL5urs3Ikn6poo5qhuuz1di/XO7w7HDGkyIaRpx
+	YS28VopBUrQ5+SfKsB4jj9Mr5ukLGz207wMjtzo9A8eNtHRp8KvIjg==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 43cmn248d4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Dec 2024 18:32:42 -0600 (CST)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.13; Wed, 11 Dec
+ 2024 00:32:40 +0000
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.13 via Frontend Transport; Wed, 11 Dec 2024 00:32:40 +0000
+Received: from paulha.crystal.cirrus.com (paulha.ad.cirrus.com [141.131.145.123])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 24D69822542;
+	Wed, 11 Dec 2024 00:32:39 +0000 (UTC)
+From: Paul Handrigan <paulha@opensource.cirrus.com>
+To: <mturquette@baylibre.com>, <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: Paul Handrigan <paulha@opensource.cirrus.com>
+Subject: [PATCH 0/2] Cirrus Logic CS2600 clock device
+Date: Tue, 10 Dec 2024 18:32:34 -0600
+Message-ID: <20241211003236.2523604-1-paulha@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe8dbb4e-9d0e-4ecf-874b-be9225ae1487@linaro.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: IZav4Ho1Vw_LjLX9Q5Vem441pRIpVdZL
+X-Proofpoint-ORIG-GUID: IZav4Ho1Vw_LjLX9Q5Vem441pRIpVdZL
+X-Proofpoint-Spam-Reason: safe
 
-On Tue, Dec 10, 2024 at 11:49:20PM +0000, Bryan O'Donoghue wrote:
-> On 10/12/2024 23:35, Richard Acayan wrote:
-> > +			clocks = <&gcc GCC_CAMERA_AHB_CLK>,
-> > +				 <&gcc GCC_CAMERA_AXI_CLK>,
-> > +				 <&camcc CAM_CC_SOC_AHB_CLK>,
-> > +				 <&camcc CAM_CC_CAMNOC_AXI_CLK>,
-> > +				 <&camcc CAM_CC_CPAS_AHB_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CSID_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CSID_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CSID_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY0_CLK>,
-> > +				 <&camcc CAM_CC_CSI0PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY1_CLK>,
-> > +				 <&camcc CAM_CC_CSI1PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_CSIPHY2_CLK>,
-> > +				 <&camcc CAM_CC_CSI2PHYTIMER_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_AXI_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CLK>,
-> > +				 <&camcc CAM_CC_IFE_0_CPHY_RX_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_AXI_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CLK>,
-> > +				 <&camcc CAM_CC_IFE_1_CPHY_RX_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CLK>,
-> > +				 <&camcc CAM_CC_IFE_LITE_CPHY_RX_CLK>;
-> > +			clock-names = "gcc_camera_ahb",
-> > +				      "gcc_camera_axi",
-> > +				      "soc_ahb",
-> > +				      "camnoc_axi",
-> > +				      "cpas_ahb",
-> 
-> I think you sorted the regs, interrupts but forgot the clocks ?
+This patch set provides Common Clock Framework support for the latest
+Cirrus Logic clocking device, the CS2600.
 
-Do you mean the first three clocks placed first? The order was suggested
-by Vladimir in [1], but I can undo it.
+This device has two input clocks and three output clocks.  One of the
+input clocks, the REFCLK, can be a constant reference clock input, a
+crystal reference input, or not available and use the internal clock.
+The second input is the CLK_IN digital clock input.
 
-[1] https://lore.kernel.org/r/40cd7a52-1c60-40dc-aee6-730b5247b216@linaro.org
+The three clock outputs are CLK_OUT, BCLK_OUT, and FSYNC_OUT.
 
-> 
-> ---
-> bod
+Paul Handrigan (2):
+  dt-binding: clock: cs2600: Add support for the CS2600
+  clk: cs2600: Add Fractional-N clock driver
+
+ .../bindings/clock/cirrus,cs2600.yaml         |   78 ++
+ drivers/clk/Kconfig                           |    9 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/clk-cs2600.c                      | 1152 +++++++++++++++++
+ drivers/clk/clk-cs2600.h                      |  176 +++
+ include/dt-bindings/clock/cirrus,cs2600.h     |   23 +
+ 6 files changed, 1439 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/cirrus,cs2600.yaml
+ create mode 100644 drivers/clk/clk-cs2600.c
+ create mode 100644 drivers/clk/clk-cs2600.h
+ create mode 100644 include/dt-bindings/clock/cirrus,cs2600.h
+
+-- 
+2.34.1
+
 
