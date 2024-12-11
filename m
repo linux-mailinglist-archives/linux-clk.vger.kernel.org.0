@@ -1,189 +1,143 @@
-Return-Path: <linux-clk+bounces-15762-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15769-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 648F69ED2EE
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 18:00:12 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A2CE9ED3EC
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 18:46:26 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1740E168627
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 17:00:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D57D2282976
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2024 17:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62FA21DAC80;
-	Wed, 11 Dec 2024 17:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCA01FF1C6;
+	Wed, 11 Dec 2024 17:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="RkFTJSix"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SiAKsZet"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABDA1DE3A9
-	for <linux-clk@vger.kernel.org>; Wed, 11 Dec 2024 17:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4DD1DE880;
+	Wed, 11 Dec 2024 17:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733936404; cv=none; b=bb8jKEeXyqyrM+WApXDkjhCV3aQ5KH97cNudpA81ddnrVecc6mdFN7pV44ydOQezxLWB2okHuDxVDh8hc+u3bDaqF2jClaT0vRRT+FVpPJVk73QN4nL6rfd9DvQXSq7HK33rnyJZrCf+PL0gbceY/+DWF5+tzh20L2Oh73mdTHo=
+	t=1733939175; cv=none; b=DKQ32fEbgbkkM7ZrPgy23iew7MyFaH/bfKq290YbposrFS3553lhHRlpl07FX3hgpyRaI0irXrLqx8VEjI0hweIxbvoTRQ6jljKnTBLJffpui+GQ10P6WyAM34vkUOn9voSfYLeWT5yCgYpZnWpWm0oKvHpZIu/vjUwqsCRl7w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733936404; c=relaxed/simple;
-	bh=IZxCC/20iwP/7bKPshvoeShLuu3TwAqQL3G2CrRUJqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OBJe8TmUTB0Ka4uXIxaozr7b8jLM/prNlA6HdIKer3feWJYYf5d4d0uQGAiyv6oVAKC2B7UgvR6DZCleuGsTY2N4nD5pEo/CJ5f2odQmbaOiPrG0EXM+wpKjyS05wLcM2WIVcK6J02i+l0uwyCpVf0zm7OEVY2NUnGz2FaalwZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=RkFTJSix; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21654fdd5daso32945195ad.1
-        for <linux-clk@vger.kernel.org>; Wed, 11 Dec 2024 09:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tenstorrent.com; s=google; t=1733936402; x=1734541202; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcWqO7y57cWM6CWwmLstYLccTGjvJS+PAY2Pr1FYpjA=;
-        b=RkFTJSixL7Tf0fU5HCVAKDkLBsLl45b1Mi8zY0oxvMZcDu/BqNUaEVtQyfg+mPsgTG
-         Jx41LgdeDDNf6Xop73cLHuY+fQTI0h2M9apZVCtRu7pq+glKn+rA547GsoZi7e6tJSbt
-         y290IDRucG5vFtgVi1VtCNW+VsfMD3V4NLPr1jb9wP09zFhkj1cA8Fk6OTj4Yf+9UznT
-         Pc03CCMQ7fLT91pgPRwUhyaK98ERTP4OIjES9lGb2djEemDDXGGJregYFCRknJrQc7eX
-         nEUvPs8ToukG+OWRSinZBlK0Qx7uV954oz3VQ0LyIL00Aykgz9tFZQNTK7kTo7vSZ49e
-         KbOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733936402; x=1734541202;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZcWqO7y57cWM6CWwmLstYLccTGjvJS+PAY2Pr1FYpjA=;
-        b=cTnZ1e6vi7JWdILIUlAm/Z/vFa6JRcitGhCq3pRla6q5QTVvKNmUPKfl+EcHxa9Jam
-         RfC8nvV9/y/7Rhc00dRNQMB/Jz2J1B6oHTPvPJdzCBfZYpNZYqL9h+aXlqGcVln+IVeO
-         vKOt7dlvXmqdWBgilildalw2+HdM6if1x+A0QOatgC64uJCFQfVJVGAqOYgz6Cu95qO0
-         joaunSTLvaTDFcIJ9P7n6Ezg810WgE3ILub7H8QU+RtDAO/WRdrkFtJeeHv0hW+BFLLA
-         bYquF/QpK/TsHHFZmlf5ogqkNM7wBmxrntFmIXBtvXFusWzLIwGns+2M/dvPRcyUNEap
-         ZraA==
-X-Forwarded-Encrypted: i=1; AJvYcCWP2Kmb8PpQ2Lf3o/F656N+0BQ0uXR05X8CZ5KXLXwQsLfsFHNM24GD3EP7iBRsvoaDdhPZCwlteII=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCrXVs9EgRe9c1b/uCuly1Q0Si+pmdIEMW7PokHX+5RWpB2M0D
-	jX/h3/8LrC467gLLY8dPUk/Ucy3MpDPXHqJodxIEOXNyKYfimrBuCr5gEiJlwz8=
-X-Gm-Gg: ASbGncsn/1MmbdGGGWzMAs2tLn1VbHF5hdgciMcR+nDKivDv406bib5YmcnXgsbrEM2
-	CmnSKSDK8gylJ8lyNXwsPG1//rKvyqfaErx1/mMbYTPMhMgx1+8tdznJaBmieGY1phVeCQpz8Ry
-	V5URVaph/AL0HDUKjFEOBDrkTq/ZSM2sHe0shPcTy5CJCqxeDL+b/TrareZfeyA4GRnti+BolJ2
-	J4pEnfv9VQWJqCwRpofSYsWHV4Uts/Lj4lpJEu8s618X17BGuBtKZK9MaEtwxwpTZ8wCcT4xVm2
-	SA==
-X-Google-Smtp-Source: AGHT+IHKMDJy+8aMTo0L9V3kptUu4ExSspBRWYnaTTDSkbDRcqUrBQ6wSExEs1ilCcg4ibGX1mWAlw==
-X-Received: by 2002:a17:902:e74d:b0:216:4b66:1f1f with SMTP id d9443c01a7336-2178aee74e6mr7394085ad.54.1733936401569;
-        Wed, 11 Dec 2024 09:00:01 -0800 (PST)
-Received: from x1 (75-164-218-15.ptld.qwest.net. [75.164.218.15])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2166ef8b8d7sm35272785ad.67.2024.12.11.09.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 09:00:01 -0800 (PST)
-Date: Wed, 11 Dec 2024 08:59:59 -0800
-From: Drew Fustini <dfustini@tenstorrent.com>
-To: bigunclemax@gmail.com
-Cc: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Yangtao Li <frank.li@vivo.com>,
-	Jisheng Zhang <jszhang@kernel.org>, linux-riscv@lists.infradead.org,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: thead: Fix TH1520 emmc and shdci clock rate
-Message-ID: <Z1nFD5XHGzhYMVXj@x1>
-References: <20241210083029.92620-1-bigunclemax@gmail.com>
+	s=arc-20240116; t=1733939175; c=relaxed/simple;
+	bh=vOVt9wIICb4stJ86oXlAZKMSYQkw7EDhkwpdVdVl2AY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ERt9TdatKQwRPrdNATLq6O5AKfxilzqk+KmUfNl12PuD4ULvfMSGKoZbJFn90bAI1gB6x/vIxxpwcTM5wz+XbaoPgyP0OGuhP/cQ6ycNZD5CnCUybaURBAElEeNMYWPwzlrM9mWLEIBEw90PbwkV1L+uOOrOwmx6h1sb1NMVUeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SiAKsZet; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23BF1C4CED2;
+	Wed, 11 Dec 2024 17:46:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733939175;
+	bh=vOVt9wIICb4stJ86oXlAZKMSYQkw7EDhkwpdVdVl2AY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=SiAKsZetgCXQ5lTUnNEl+W5N8Nj8MZABFwAJcICPIpy8XTo0mT7K5XK3HkCZY1XVs
+	 Lr/rH8CTvmoGmUcgv528aOdr5gyWeacRr6KwVn8VElZz48MpuAj+c3A73RRpQ0D6rM
+	 qLfah4JEaxW3+FPEFZleXd1RZQdIv/mwsAQob8KaRdyyELb0+ggro3L72VXUw3Hzq2
+	 qURHfIpkVCZOO5nT2+MpQ8v/FX5jGtXxY5LJCscpA+Y+Zrd1Q/3CP0Y5vEWxzTnx0i
+	 mUW4l/8VZDCSnKIzFCUuqhUUBh9B5XWGg6MF4Cu3DOe6jnO3RsdXTfuHqfuXHTNi5K
+	 os89zKR5XwUIw==
+From: Mark Brown <broonie@kernel.org>
+To: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org, 
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ biju.das.jz@bp.renesas.com, prabhakar.mahadev-lad.rj@bp.renesas.com, 
+ lgirdwood@gmail.com, magnus.damm@gmail.com, linus.walleij@linaro.org, 
+ perex@perex.cz, tiwai@suse.com, p.zabel@pengutronix.de, 
+ Claudiu <claudiu.beznea@tuxon.dev>
+Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-sound@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20241113133540.2005850-1-claudiu.beznea.uj@bp.renesas.com>
+References: <20241113133540.2005850-1-claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: (subset) [PATCH v3 00/25] Add audio support for the Renesas
+ RZ/G3S SoC
+Message-Id: <173393917085.1376442.1457625888835465190.b4-ty@kernel.org>
+Date: Wed, 11 Dec 2024 17:46:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241210083029.92620-1-bigunclemax@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-9b746
 
-On Tue, Dec 10, 2024 at 11:30:27AM +0300, bigunclemax@gmail.com wrote:
-> From: Maksim Kiselev <bigunclemax@gmail.com>
+On Wed, 13 Nov 2024 15:35:15 +0200, Claudiu wrote:
+> Series enables the audio support for the Renesas RZ/G3S
+> SoC along with runtime PM and suspend to RAM.
 > 
-> In accordance with LicheePi 4A BSP the clock that comes to emmc/sdhci
-> is 198Mhz which is got through frequency division of source clock
-> VIDEO PLL by 4 [1].
+> Patches:
+> -    01/25 - add clock, reset and power domain support
+> - 02-04/25 - update versaclock3 clock generator driver to support the
+>              5L35023 hardware variant; versaclock3 provides clocks for
+>              the audio devices (SSIF, DA7212 codec)
+> -    05/25 - add pin control support for audio
+> - 06-20/25 - add SSIF support for the RZ/G3S SoC; fixes and cleanups
+>              were also included
+> - 21-25/25 - add device tree support
 > 
-> But now the AP_SUBSYS driver sets the CLK EMMC SDIO to the same
-> frequency as the VIDEO PLL, equal to 792 MHz. This causes emmc/sdhci
-> to work 4 times slower.
-> 
-> Let's fix this issue by adding fixed factor clock that divides
-> VIDEO PLL by 4 for emmc/sdhci.
-> 
-> Link: https://github.com/revyos/thead-kernel/blob/7563179071a314f41cdcdbfd8cf6e101e73707f3/drivers/clk/thead/clk-light-fm.c#L454
-> 
-> Fixes: ae81b69fd2b1 ("clk: thead: Add support for T-Head TH1520 AP_SUBSYS clocks")
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> ---
->  drivers/clk/thead/clk-th1520-ap.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/clk-th1520-ap.c
-> index 17e32ae08720..1015fab95251 100644
-> --- a/drivers/clk/thead/clk-th1520-ap.c
-> +++ b/drivers/clk/thead/clk-th1520-ap.c
-> @@ -779,6 +779,13 @@ static struct ccu_div dpu1_clk = {
->  	},
->  };
->  
-> +static CLK_FIXED_FACTOR_HW(emmc_sdio_ref_clk, "emmc-sdio-ref",
-> +			   &video_pll_clk.common.hw, 4, 1, 0);
-> +
-> +static const struct clk_parent_data emmc_sdio_ref_clk_pd[] = {
-> +	{ .hw = &emmc_sdio_ref_clk.hw },
-> +};
-> +
->  static CCU_GATE(CLK_BROM, brom_clk, "brom", ahb2_cpusys_hclk_pd, 0x100, BIT(4), 0);
->  static CCU_GATE(CLK_BMU, bmu_clk, "bmu", axi4_cpusys2_aclk_pd, 0x100, BIT(5), 0);
->  static CCU_GATE(CLK_AON2CPU_A2X, aon2cpu_a2x_clk, "aon2cpu-a2x", axi4_cpusys2_aclk_pd,
-> @@ -798,7 +805,7 @@ static CCU_GATE(CLK_PERISYS_APB4_HCLK, perisys_apb4_hclk, "perisys-apb4-hclk", p
->  		0x150, BIT(12), 0);
->  static CCU_GATE(CLK_NPU_AXI, npu_axi_clk, "npu-axi", axi_aclk_pd, 0x1c8, BIT(5), 0);
->  static CCU_GATE(CLK_CPU2VP, cpu2vp_clk, "cpu2vp", axi_aclk_pd, 0x1e0, BIT(13), 0);
-> -static CCU_GATE(CLK_EMMC_SDIO, emmc_sdio_clk, "emmc-sdio", video_pll_clk_pd, 0x204, BIT(30), 0);
-> +static CCU_GATE(CLK_EMMC_SDIO, emmc_sdio_clk, "emmc-sdio", emmc_sdio_ref_clk_pd, 0x204, BIT(30), 0);
->  static CCU_GATE(CLK_GMAC1, gmac1_clk, "gmac1", gmac_pll_clk_pd, 0x204, BIT(26), 0);
->  static CCU_GATE(CLK_PADCTRL1, padctrl1_clk, "padctrl1", perisys_apb_pclk_pd, 0x204, BIT(24), 0);
->  static CCU_GATE(CLK_DSMART, dsmart_clk, "dsmart", perisys_apb_pclk_pd, 0x204, BIT(23), 0);
-> @@ -1059,6 +1066,10 @@ static int th1520_clk_probe(struct platform_device *pdev)
->  		return ret;
->  	priv->hws[CLK_PLL_GMAC_100M] = &gmac_pll_clk_100m.hw;
->  
-> +	ret = devm_clk_hw_register(dev, &emmc_sdio_ref_clk.hw);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, priv);
->  	if (ret)
->  		return ret;
-> -- 
-> 2.45.2
-> 
+> [...]
 
-Reviewed-by: Drew Fustini <dfustini@tenstorrent.com>
+Applied to
 
-Thanks for fixing this. Reads are over 3 times faster now.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-6.13-rc1:
+Thanks!
 
-  debian@lpi4amain:~$ dd bs=1M count=512 if=/dev/zero of=zero_512M.bin oflag=direct
-  512+0 records in
-  512+0 records out
-  536870912 bytes (537 MB, 512 MiB) copied, 11.8457 s, 45.3 MB/s
+[06/25] ASoC: renesas: rz-ssi: Terminate all the DMA transactions
+        commit: 541011dc2d7c4c82523706f726f422a5e23cc86f
+[07/25] ASoC: renesas: rz-ssi: Use only the proper amount of dividers
+        commit: 55c209cd4318c701e6e88e0b2512a0f12dd02a7d
+[08/25] ASoC: renesas: rz-ssi: Fix typo on SSI_RATES macro comment
+        commit: 100c6b22d6c70adabdf45dcb346d7d853bff6a30
+[09/25] ASoC: renesas: rz-ssi: Remove pdev member of struct rz_ssi_priv
+        commit: a73710a25808a585a2bf0a8325eb16fd6a2f370c
+[10/25] ASoC: renesas: rz-ssi: Remove the rz_ssi_get_dai() function
+        commit: dec61e16e72db196e8dc1daf7f7022fd98e6d921
+[11/25] ASoC: renesas: rz-ssi: Remove the first argument of rz_ssi_stream_is_play()
+        commit: 109e60866f11c7db8f720f01b0bda3105c47b463
+[12/25] ASoC: renesas: rz-ssi: Use readl_poll_timeout_atomic()
+        commit: 4bf77dfa3308b7cfda29d9c4ead1dc32f1ceefa9
+[13/25] ASoC: renesas: rz-ssi: Use temporary variable for struct device
+        commit: 403366d2a43eb7c911c6cddf1d7882e429d1212d
+[14/25] ASoC: renesas: rz-ssi: Use goto label names that specify their actions
+        commit: f0c155c9da7536ab33687b5207eb21e704122a56
+[15/25] ASoC: renesas: rz-ssi: Rely on the ASoC subsystem to runtime resume/suspend the SSI
+        commit: e8fcf25f562891d5c0734d4f49c44bb6aa72bc15
+[16/25] ASoC: renesas: rz-ssi: Enable runtime PM autosuspend support
+        commit: cf3a79e4f826fc680fd7bfef7c427e2cc6023bc3
+[17/25] ASoC: renesas: rz-ssi: Add runtime PM support
+        commit: 3888672495fcaee98b90196c0a899b1c2eb57d5b
+[18/25] ASoC: renesas: rz-ssi: Issue software reset in hw_params API
+        commit: fc2a31affb22394d1d74d3ecc86b5c68da33d52a
+[19/25] ASoC: renesas: rz-ssi: Add suspend to RAM support
+        commit: 1fc778f7c833aeb13041adc06f016f1a2dff7350
+[20/25] ASoC: dt-bindings: renesas,rz-ssi: Document the Renesas RZ/G3S SoC
+        commit: 699a9733a354d74482ae4d4304acdbb0c0318a23
 
-  debian@lpi4amain:~$ dd bs=1M if=zero_512M.bin iflag=direct of=/dev/null
-  512+0 records in
-  512+0 records out
-  536870912 bytes (537 MB, 512 MiB) copied, 6.60576 s, 81.3 MB/s
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-6.13-rc1 with patch:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-  debian@lpi4amain:~$ dd bs=1M count=512 if=/dev/zero of=zero_512M.bin oflag=direct
-  512+0 records in
-  512+0 records out
-  536870912 bytes (537 MB, 512 MiB) copied, 11.5359 s, 46.5 MB/s
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-  debian@lpi4amain:~$ dd bs=1M if=zero_512M.bin iflag=direct of=/dev/null
-  512+0 records in
-  512+0 records out
-  536870912 bytes (537 MB, 512 MiB) copied, 2.03638 s, 264 MB/s
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
--Drew
+Thanks,
+Mark
+
 
