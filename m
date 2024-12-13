@@ -1,224 +1,136 @@
-Return-Path: <linux-clk+bounces-15798-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-15800-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 015369F0A27
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Dec 2024 11:55:33 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E0E4188B7E2
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Dec 2024 10:55:33 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 095B91C3BF5;
-	Fri, 13 Dec 2024 10:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGl3GROS"
-X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C53D9F0A3B
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Dec 2024 11:58:42 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A4A1C3BEB;
-	Fri, 13 Dec 2024 10:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D796284812
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Dec 2024 10:58:41 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 868CD1CD1EA;
+	Fri, 13 Dec 2024 10:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="MZZz5WS5"
+X-Original-To: linux-clk@vger.kernel.org
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F9D1C3BFA;
+	Fri, 13 Dec 2024 10:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734087328; cv=none; b=rbog/J1YulD1KwsDZ33N+1y+IJSjIA98vnjEwaQXHYuEK+aw0HITwNFWThofH4fjc7FJ1CfctM0R8i8xbOWu0+Y/jcmJiBLUZu4Pwtlgeri5d7K+lzvbC+9YKMXNk9BEXAv73JeYZ8Coejeqh4RxBJXBr/OcTgNDn5oABoNeVNk=
+	t=1734087511; cv=none; b=tqukZI9t2lkXtW6w6WUZYL4l2hyK4jaTY1n9RIRM/RoK43Y7GGMs246ZWe/v7UWZm7TDgdPXb58c/2YZvepLmlBt2sa89tCUqHigW2W+L82gu4NVtoFu/S7xlWM1MtLFdw6SThNqglHZCevyBmz/yMvLpwCjO6bGZloBR+fpvFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734087328; c=relaxed/simple;
-	bh=/sIQNiCyvCJV1BU0yujr3/A2B9wAu1BGuwyBU4noC2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dtydaH76Zg622wTzBVB4WMbcpeFmJ877EofKmW7MIO1ZD7q27firWZrezFG8v3KU+37x5GutZSxFdleT7gk6JmB0P4HVsTvJ+ZF53/VexYpsp46MyI0HXIVSdQHao5MeFuAbWYVuOeERmdMn8nXmDop2y4WyoLShWdFeuJRUFyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGl3GROS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADCECC4CED0;
-	Fri, 13 Dec 2024 10:55:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734087326;
-	bh=/sIQNiCyvCJV1BU0yujr3/A2B9wAu1BGuwyBU4noC2U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gGl3GROSZcllCztHrgYMNvJ+Ez+9jaWvrE0TcBxsMc3at1ozAWYkDyT7Cr3AP+615
-	 G5svGg75KGrSqcJrBgMFtdjqUD9FLjOLKF6K3P9mT+uYYsPNnxqtzyG+XZfgeFjZHr
-	 IlVigeckSfCcmoyMzYvt4EcMHKDCW2r8mo/Gygwniiuj28Go8LSL0plhXT8CwnyDFR
-	 Cyh8RP7qLYfP2joQoaYh/oKuLjP3J8IsmECgvF69CcLUanJE4Y94jDhR599d7cQpXj
-	 HfDIm4Gq8B7cZ5r4He81i5vT161LKmcQXi+JScrV6yZAOv/2Wb9LPPqS/bi+qBo4Pp
-	 SVZgHaXJsAH3A==
-Date: Fri, 13 Dec 2024 11:55:22 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Paul Handrigan <paulha@opensource.cirrus.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, linux-clk@vger.kernel.org, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-binding: clock: cs2600: Add support for the CS2600
-Message-ID: <gofhuzpxqm4fmusebwkjbgblffk5ail27mtgdk4vpwjvyhipcw@2ep6gpgjkgwl>
-References: <20241211003236.2523604-1-paulha@opensource.cirrus.com>
- <20241211003236.2523604-2-paulha@opensource.cirrus.com>
+	s=arc-20240116; t=1734087511; c=relaxed/simple;
+	bh=HWh7XQAfjpleYvEbQWBToxRpz6B4DGMiGKyWAHMvkEk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OIw7fvKqDmeeDYtn1PZSyJBxbU33aHVskac+SoC4/LmirGz9xFU8H57sZphwbGjxu5CNLs8WOeijHYUqMcKjLXe+kuP9c6RAgsa8qSbroZECtuRCrv1u5AvJ91uM9228YNf4xk3zEEPDQbCbS2HKlr5CGkPagU8rJdqqAhfLJHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=MZZz5WS5; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BDAgW8n028137;
+	Fri, 13 Dec 2024 10:58:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=EL2zgQNi2brQ93p+642ETV
+	oKYDg+LvyikR/EipbfhE0=; b=MZZz5WS5a0VFq3prGTxE7L61sJlK1m2kncINHX
+	JxCnf6MTQartfEJ2KsiSQpUYTr0e6nGQmc7IjKz6Ds8J5ou/UtP3rgZ8+q+f9Kod
+	j54WUDhmSw1X65F8CiZ51isqPWpq9ZDNOGUA2PhZSCmbpTZdR+dvQ7Z2Ly4Q0DMD
+	zDW8pXCRjSB6DnIpRzEPxP1hwGGOw6iTXDQArmIQDVeAhlGgeStUAD9lJwYiRrPh
+	yM7MMRVgCsvHeNflehllEdd1RG3DtnUWUyq146wtOV8BG2sDUNkpt9GM3t6IhWuh
+	OzuD2ls1xFoLdu1F3yNkmE0sNJ1eBHlKLYMKsqmY5y2w4Qzg==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43fxw4ucfr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Dec 2024 10:58:25 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BDAwPIj010024
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Dec 2024 10:58:25 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 13 Dec 2024 02:58:21 -0800
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <djakov@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v1 1/2] dt-bindings: interconnect: Add Qualcomm IPQ5424 support
+Date: Fri, 13 Dec 2024 16:28:07 +0530
+Message-ID: <20241213105808.674620-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241211003236.2523604-2-paulha@opensource.cirrus.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -q-sjxQTV_aq8yZyJU_ImvVNcJLx_kpD
+X-Proofpoint-GUID: -q-sjxQTV_aq8yZyJU_ImvVNcJLx_kpD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 clxscore=1015 phishscore=0 spamscore=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412130075
 
-On Tue, Dec 10, 2024 at 06:32:35PM -0600, Paul Handrigan wrote:
-> Add device tree support for the Cirrus Logic CS2600 clock
-> device.
-> 
-> Signed-off-by: Paul Handrigan <paulha@opensource.cirrus.com>
-> ---
->  .../bindings/clock/cirrus,cs2600.yaml         | 78 +++++++++++++++++++
->  include/dt-bindings/clock/cirrus,cs2600.h     | 23 ++++++
->  2 files changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/cirrus,cs2600.yaml
->  create mode 100644 include/dt-bindings/clock/cirrus,cs2600.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2600.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2600.yaml
-> new file mode 100644
-> index 000000000000..ed23f347f382
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/cirrus,cs2600.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/cirrus,cs2600.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus Logic Fractional-N Clock Synthesizer & Clock Multiplier
-> +
-> +maintainers:
-> +  - Paul Handrigan <paulha@opensource.cirrus.com>
-> +  - patches@opensource.cirrus.com>
-> +
-> +description: |
+Add master/slave ids for Qualcomm IPQ5424 Network-On-Chip
+interfaces. This will be used by the gcc-ipq5424 driver
+for providing interconnect services using the icc-clk framework.
 
-Do not need '|' unless you need to preserve formatting.
+Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+---
+ .../dt-bindings/interconnect/qcom,ipq5424.h   | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 include/dt-bindings/interconnect/qcom,ipq5424.h
 
-> +  The CS2600 is a system-clocking device that enables frequency synthesis and
-> +  clock generation from a stable timing reference clock. The device can generate
-> +  low-jitter clocks from a noisy clock reference at frequencies as low as 50 Hz.
+diff --git a/include/dt-bindings/interconnect/qcom,ipq5424.h b/include/dt-bindings/interconnect/qcom,ipq5424.h
+new file mode 100644
+index 000000000000..a770356112ee
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,ipq5424.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++#ifndef INTERCONNECT_QCOM_IPQ5424_H
++#define INTERCONNECT_QCOM_IPQ5424_H
++
++#define MASTER_ANOC_PCIE0		0
++#define SLAVE_ANOC_PCIE0		1
++#define MASTER_CNOC_PCIE0		2
++#define SLAVE_CNOC_PCIE0		3
++#define MASTER_ANOC_PCIE1		4
++#define SLAVE_ANOC_PCIE1		5
++#define MASTER_CNOC_PCIE1		6
++#define SLAVE_CNOC_PCIE1		7
++#define MASTER_ANOC_PCIE2		8
++#define SLAVE_ANOC_PCIE2		9
++#define MASTER_CNOC_PCIE2		10
++#define SLAVE_CNOC_PCIE2		11
++#define MASTER_ANOC_PCIE3		12
++#define SLAVE_ANOC_PCIE3		13
++#define MASTER_CNOC_PCIE3		14
++#define SLAVE_CNOC_PCIE3		15
++#define MASTER_CNOC_USB			16
++#define SLAVE_CNOC_USB			17
++
++#endif /* INTERCONNECT_QCOM_IPQ5424_H */
 
-Be sure these are wrapped at 80 (looks like 81).
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cirrus,cs2600
-> +
-> +  clocks:
-> +    description:
-> +      Common clock binding for XTI/REF_CLK, CLK_IN
-
-Just drop description, kind of obvious from the clock-names. If you want
-to keep it, then rather list the items with description per each item.
-
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ref_clk
-
-s/ref_clk/ref/
-(or xti)
-
-"clk" is just obvious.
-
-> +      - const: clk_in
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vdd-supply:
-> +    description: Power Supply
-> +
-> +  cirrus,aux-output-source:
-> +    description:
-> +      Specifies the function of the auxiliary clock output pin
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum:
-> +      - 0 # CS2600_AUX_OUTPUT_FREQ_UNLOCK: Frequency unlock notification
-> +      - 1 # CS2600_AUX_OUTPUT_PHASE_UNLOCK: Phase unlock notification
-> +      - 2 # CS2600_AUX_OUTPUT_NO_CLKIN: CLK_IN is not available
-
-I don't get the meanings - how clock output could be clock is not
-available? clk_in is a required property, so it cannot be unavailable.
-
-
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/cirrus,cs2600.h>
-> +
-> +    i2c@0 {
-
-i2c {
-
-> +      reg = <0x0 0x100>;
-
-Drop reg
-
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      clock-controller@2c {
-> +        #clock-cells = <1>;
-> +        compatible = "cirrus,cs2600";
-> +        reg = <0x2c>;
-> +        clocks = <&xtl_clk>, <&sync_clock>;
-> +        clock-names = "ref_clk", "clk_in";
-> +        vdd-supply = <&vreg>;
-> +      };
-> +    };
-> diff --git a/include/dt-bindings/clock/cirrus,cs2600.h b/include/dt-bindings/clock/cirrus,cs2600.h
-> new file mode 100644
-> index 000000000000..673b4b4cb1f4
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/cirrus,cs2600.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: (GPL-2.0 OR MIT) */
-> +/*
-> + * Copyright (c) 2024 Cirrus Logic, Inc. and
-> + *		      Cirrus Logic International Simiconductor Ltd.
-> + *
-> + * Author: Paul Handrigan <paulha@opensource.cirrus.com>
-> + *
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_CIRRUS_CS2600_H
-> +#define _DT_BINDINGS_CLK_CIRRUS_CS2600_H
-> +
-> +/* CS2600 Clock Outputs  */
-> +#define CS2600_CLK_OUTPUT		0
-
-Drop "OUTPUT". These are names of the clocks.
-
-> +#define CS2600_BCLK_OUTPUT		1
-> +#define CS2600_FSYNC_OUTPUT		2
-> +
-> +/* CS2600 Auxiliary Output */
-> +#define CS2600_AUX_OUTPUT_FREQ_UNLOCK	0
-> +#define CS2600_AUX_OUTPUT_PHASE_UNLOCK	1
-> +#define CS2600_AUX_OUTPUT_NO_CLKIN	2
-
-Not sure what are these, but feel like some register values. Otherwise,
-why these are exactly bindings? What part of driver do they bind?
-
-Best regards,
-Krzysztof
+base-commit: 3e42dc9229c5950e84b1ed705f94ed75ed208228
+-- 
+2.34.1
 
 
