@@ -1,154 +1,133 @@
-Return-Path: <linux-clk+bounces-16095-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16096-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 564A09F901D
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 11:22:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C83349F9025
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 11:25:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B28A918910AF
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 10:22:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32BC1164563
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 10:25:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC0D1C07F8;
-	Fri, 20 Dec 2024 10:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817A31C07D8;
+	Fri, 20 Dec 2024 10:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="oyBlyPnz"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="JrGd/jOE"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266B01BFDEC
-	for <linux-clk@vger.kernel.org>; Fri, 20 Dec 2024 10:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA741C07C6
+	for <linux-clk@vger.kernel.org>; Fri, 20 Dec 2024 10:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734690119; cv=none; b=l26unf/Xfuie8Gg2/PWCIaCIAHYUlw9qzJwU8c3rmEPdNX5sLWNpVqcHAgYlFh4PERwtCldf5l4u4kXfxawtxhHyT3X81wspStIzGKoWYBuUjakG1ShQNJq7GD+bN29t3oGnCZ1deKNn4qgzQz4SE7GpqGatURas+Z/peEiqfBs=
+	t=1734690351; cv=none; b=b2fTP2S6edfxgsoirqOTg9MHHB2v7o81pGPSMc9DM4LBhn2KaGnBq1ea/oBb3weDCKsWrc6IkLkv3oJII5vdLO+PmTc4ULp3S2qV2XTIIzpvca87GqCjnaeXBaGYow1D8/vj72IcKPcV+cP3cQKkJFalBmV6q8kHabpN4YHsDlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734690119; c=relaxed/simple;
-	bh=pVZaHkvdqKRcNvk4Ntas94k1G/NPGK94bJRewixfG+k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=RL8hFE7BuBZPbmNucaM4D6xxEQEfPSM286iOfWjPQ+ya7ZskyoN4RXqbQlWu6drGRYTVJanxhwXup5bezbq4KYfDG7+QcP9p6eevhHBWtZN2AL6BWcv4zoNmO+bWkhV5CDDpIOileQTbT8y/BqEqdJzo7lRNqpEYPwHm1rSpVc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=oyBlyPnz; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-436341f575fso18317115e9.1
-        for <linux-clk@vger.kernel.org>; Fri, 20 Dec 2024 02:21:56 -0800 (PST)
+	s=arc-20240116; t=1734690351; c=relaxed/simple;
+	bh=Pxn7QMrh2zuVgh1mpm3H2Yh7TIOIErliMvP1+xrWdOU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=g+IMDgrQ+XVW2/mGGn/knjo6Houjm2h2VBNxOHgtIicIjZUdtDsb40d6a8mfEMIoohZ9pGxyTLx8DXcvmJxtoXeTfqSh/DVzlUpwgqgCL7gIaCU7bporxC+z4/1DZIab9CajdZ/8OmOhW26Vo33LFook49AHUwWSJVr8qVlkUCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=JrGd/jOE; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43621d27adeso11874455e9.2
+        for <linux-clk@vger.kernel.org>; Fri, 20 Dec 2024 02:25:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1734690115; x=1735294915; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8hT9t7+Z62cNmrY6P7S0u2gAF6V0+KPuKWiIzoB2HDA=;
-        b=oyBlyPnzeKJYDd4OWJNJM6YKL02Scnrfx/MfJ5fST24BNntTFcYkihK8/A9oCYzklk
-         houHOctIEdk0Kxmra28t3u8sPcrt8WlSUZq0lsilg/HsQAVxdQhTilpGsp5cVMsg4Mkv
-         VXH5bzfPdU8KJhCmFgMfMWqWTlmtkKydbchEocH+nTDBw2KcGu9xgKXrdXJpenHJuntm
-         ZbBeUkqDATWNBqVt65HjvcZujqSz9OLDE1lCATJwgI+H5dsp+grMIVT1F/IOpd/yk5V7
-         Mqt6Yu0SNNxU4YxMI91sbCd7MamIOdjb9VsfDPLRR57f1DeJ3ljFAy1aQO6TcA3J4Zul
-         8noA==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1734690347; x=1735295147; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArM8tPrv2uh4KdQHEvgTbozMB6b4jdDuY+KtgYWF/fI=;
+        b=JrGd/jOEPIGlgMoUndbAbUfMLtjX2SUQkdYHNelignq8Gs/jWfRwVTK4XPztm3w9n3
+         0hAWtLvIlNV4Tr7n0SPoLqezTGzdWNLPZBtfm9hO1KZxAgtQMjAdkPIWkJOrZ7L1gam6
+         pOlVD0+9BBIKpTK3E8PrHIZzT6c6NYHDXdkP9X/n/3UuyRkLMM2dIbJU3wi2Oe+0Bo3U
+         QoQt5LFoej0AhPe4OtTb+u9dIHVkCMVVAk7AEIKexoSItzkai3Tn05zYGIQcOUjaQJKz
+         Pz4Hmw8xshVF2vp2Q402Z121W5wkrW8W2viGWcGYSnqxSCkVT+bA3Ck/4Udr+3NUJ1WG
+         b/Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734690115; x=1735294915;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8hT9t7+Z62cNmrY6P7S0u2gAF6V0+KPuKWiIzoB2HDA=;
-        b=odN9cZJ+9a41tc6F/YV0KYZAHnSC7VZpv+yDto5BIf2FPa2HpXV0I3rS/dBohqe11+
-         IK1OoQqwkNgG8ky4bGCSBsvKyMKNF0TEcLqwurtBhJNJaPzASY0lJudAwKIwT3FBa1ND
-         ouI7Dxzcugf1DV/pLsYQGh6L/qLfplh9lyLNXHCBv8QPDbtIMnVIpiZTe9Y9srGu2aTh
-         j9/MQjOpPXw8fzIH7g1VWssUPWwMzNCCcEAxQDmCYNiGSgPd22gxjJ8+hzjqAJaXmSiq
-         lA6kcmnKTDyHMNMsDbrSqD3P8hTIkMhs2HImKcdBduQ1nnvtY+Ih0nmzwPtrjwNgUd3a
-         oYyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+ANNntzpXjq0wBBgrkQikAu+IsC6I0mKJVErz3Wp64VNrcyjyieAdBKT+ZsvbCHpKnL/tQXjsUgQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ/TQPO5kcMy7VMoBcQvInliNiAQPHFWOuSy++dcZwVtdkNNqn
-	/8aElGayfinnPmu77ItfCpKyU0dw5aF5IBKYa0aCEf4dW0+T2XQwKnmehohl/gtq1RIQl9q0rUZ
-	y8PY=
-X-Gm-Gg: ASbGncsqbNgbViODTEw5mAkPEpCxyC2gxBMJ/2KZRZc6RnaapfBUhwfu8dGtXuDqmIM
-	r55s1FxTE2Q3pXMItxpeG6sj7eABmY0aLoW5HKY1ioqpxWhNrf//nNvn7TT/BJq3qUxqCGR84Lo
-	84ZAuVeyEvM5MgiKkDSCEzhwkCbNx61vzrcIjzljc4MenWnN/9UfaPGZrzi9QCsIWOAFQAmgddI
-	zXoevTauEFqNS8VJzsxenyAqRfAayKo1SxBKWMX998Y/xW7RCxqU26E/9d76VNuaWIVfll/po/G
-	WGkiiNYqzYygSpfTky6VkPD42g==
-X-Google-Smtp-Source: AGHT+IGfJzQyjs0tcbRlEOFSR6IiZW6L1coftNmeUL8VBSiDokEXLJGOVBXvHFoRemCYvC2ySUKHhg==
-X-Received: by 2002:a05:600c:a0a:b0:434:a04d:1670 with SMTP id 5b1f17b1804b1-436678f5775mr22693545e9.0.1734690115475;
-        Fri, 20 Dec 2024 02:21:55 -0800 (PST)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b119d7sm75380985e9.20.2024.12.20.02.21.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Dec 2024 02:21:55 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734690347; x=1735295147;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ArM8tPrv2uh4KdQHEvgTbozMB6b4jdDuY+KtgYWF/fI=;
+        b=TfWJmtiCKZMMQC30BbCJS3kw9K6CyeozhPqo+0LUOkqcoplkbLjdHkylO7MnQz2KKE
+         YxjP6BCn+noI0q0Uc4zvVxvTr7+/kwS7XgkE9EGhorTdxHDbkU6qVj+O36LmK4m7uzAy
+         kcKd3G2+GoMlXq74nXwWi0CzumS7MFbNew1b9nb8LB9QeAwWDsmcdnn+k1PV4qdtJPSc
+         ClhqdKEOvubtEEaCUzUGoNBDKHycbn/LQmmB9TRVPKzuhy9a8G3xVCnK9f8f2ochMjjA
+         9tmXhYNCu6ofa+zVrtkaaDTWdbYEZcx+8w6ZKQ6VjOIuE13A3HKAb1Q781r9QBlk9lXq
+         FLBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWlIqBxQ6NAqpNYqvRFBI/7Kl5ouyWzh2s/NH9zYphFwpOYDSMCaYbWXqU5DXhVkeXzWElZ4zxNO/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzR6Jc5hibMQbHXBBYEgR8J+goorB+Enwr3INinhOAkVe5SpVc6
+	ngM6qZ0nCTcbpSJUcQysuEw57DdOK4pcWI0dEtdTuKndYib27aJ0OBi16M4wt+Y=
+X-Gm-Gg: ASbGnctOx5Qe/+b/pcIPYjUEyQpC2OfAcZmKcXHYL9cxFGsQMcjmbhWmP6B+1Shh82+
+	tiEprCzjy1gNVl00rL8bVH+AzkV2WioPGKrWPtkaXcBYpyb9eThxc8sM1WIAGO0PmwlzGvaImWu
+	dC4RHBBJYAeTDeoEK6nMirBquXaTzrsISpfR45zi+SBG8u50haZAxesXrPh6gGHvRZ+SygwI8yq
+	m6Ad8nzjvVtaEwKH3SNvqvRm+GRId/aHNKbV3YJ8RLC2P0lr7Dd+Vo8ASm/lIDQOyfLzb0=
+X-Google-Smtp-Source: AGHT+IGeDU6I3JVYEfSem+J2xV0n2Yi6xG+7TAsB45iwjjwGCMNga20LBdZ8QfC+b384/f/a7wLSjA==
+X-Received: by 2002:a5d:6d07:0:b0:385:edb7:69ba with SMTP id ffacd0b85a97d-38a221f2dd7mr2392065f8f.1.1734690346496;
+        Fri, 20 Dec 2024 02:25:46 -0800 (PST)
+Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:c000:46df:1e3e:983f])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38a1c89e2b0sm3752071f8f.82.2024.12.20.02.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2024 02:25:46 -0800 (PST)
+From: Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH 0/2] clk: amlogic: gxbb: 32k clock fixes
+Date: Fri, 20 Dec 2024 11:25:35 +0100
+Message-Id: <20241220-amlogic-clk-gxbb-32k-fixes-v1-0-baca56ecf2db@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 20 Dec 2024 11:21:54 +0100
-Message-Id: <D6GGBPC4V5XV.YU8Z2KASBH07@fairphone.com>
-Subject: Re: [PATCH 1/2] clk: qcom: gcc-sm6350: Add missing parent_map for
- two clocks
-From: "Luca Weiss" <luca.weiss@fairphone.com>
-To: "Konrad Dybcio" <konrad.dybcio@oss.qualcomm.com>, "Bjorn Andersson"
- <andersson@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
- "Stephen Boyd" <sboyd@kernel.org>, "AngeloGioacchino Del Regno"
- <angelogioacchino.delregno@somainline.org>, "Konrad Dybcio"
- <konradybcio@kernel.org>
-Cc: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
- <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241220-sm6350-parent_map-v1-0-64f3d04cb2eb@fairphone.com>
- <20241220-sm6350-parent_map-v1-1-64f3d04cb2eb@fairphone.com>
- <e909ac59-b2d6-4626-8d4e-8279a691f98a@oss.qualcomm.com>
-In-Reply-To: <e909ac59-b2d6-4626-8d4e-8279a691f98a@oss.qualcomm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB9GZWcC/x2MWwqAIBAArxL73UKtBtlVoo+0zZbsgUIE0d2TP
+ odh5oHEUThBVzwQ+ZIkx56hLgtwy7h7RpkyA1Wka6IKxy0cXhy6sKK/rUVFK85yc0KjW2Vt08y
+ tNpAHZ+Rf5L4f3vcDFiBzjmwAAAA=
+X-Change-ID: 20241220-amlogic-clk-gxbb-32k-fixes-9483bb55f849
+To: Neil Armstrong <neil.armstrong@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Jerome Brunet <jbrunet@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=613; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=Pxn7QMrh2zuVgh1mpm3H2Yh7TIOIErliMvP1+xrWdOU=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnZUYmb2J+gSyLdTpK/sPBj8t4x//U4xeaezkCp
+ /ZLXARVyCuJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ2VGJgAKCRDm/A8cN/La
+ hSLdD/9Kgjb7cIL/hb3jwTRyvjkgd/W7LkpK8NCMvuA85C3F+hQDQeMyrQZWvvJfR+4N/DNpT1j
+ tRqAZHv5pHo1vqPdKxn7CbLquoFZmaAqyjFrmb7sWcOtTCTMHsopVtVEcxaGcvgRN9GiOR+t7l/
+ MDIKskgOhs6OKDvMTv2UHir6XvHDpJxHXk+YoX4WhWVyhVMzRUUBOUHWp17LoXP2CJhpKcWOrca
+ ViNaFH+oI1syRkM+3RMuVySnyMlrKQOUD9qvxKRzOdDUv5JdiVvciHZ1Fal0Bs7j97e14Kt8fwv
+ T76UZtZ5CTTJ41IJdQ5LhgeEdnyp/x+Pnf+118AWQAonf2igoJTG/jUI1je1A/YDBo0d04Wza7P
+ co6KEJhWARwtybHrTt5oxVLHRMJYjpAA53M409YhVvngU00gdN+e5YHCtxmIWKCb/04ncE1/QRs
+ dOLjHfqDlIlx32dBdovOqcvbroEJ1PQHpTMry9Q53W1o1Q8fyq6Fl2exWuTab45qr0NGQMrdIqh
+ yr2XdHkcUxK4Z/4gvNUExaNbYjOuz69JY7nGuq70m2Cbt1CzS133ift2Is9BcDXPQkeDZ1jxf7S
+ 5+fRqOMkdInSvmY/12eomvPJL6MO7wOdV7GzbmcWg5qwpi/dZyTzbM+eATC0qwN1hGTffyr73FC
+ yTDuQaEp4JqosAw==
+X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
+ fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-On Fri Dec 20, 2024 at 10:42 AM CET, Konrad Dybcio wrote:
-> On 20.12.2024 10:03 AM, Luca Weiss wrote:
-> > If a clk_rcg2 has a parent, it should also have parent_map defined,
->
->                       ^
->                         freq_tbl
+This patchset provides 2 fixes for 32k clock of the gxbb SoC family.
+The problems were minor enough to have no real world consequences but still
+need fixing.
 
-I was basing this on that part of the clk-rcg2.c, so for every parent
-there also needs to be a parent_map specified.
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+Jerome Brunet (2):
+      clk: amlogic: gxbb: drop incorrect flag on 32k clock
+      clk: amlogic: gxbb: drop non existing 32k clock parent
 
-    int num_parents =3D clk_hw_get_num_parents(hw);
-    [...]
-    for (i =3D 0; i < num_parents; i++)
-        if (cfg =3D=3D rcg->parent_map[i].cfg)
-            [...]
+ drivers/clk/meson/gxbb.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+---
+base-commit: 1909d0d351ed98fdb9f5cbe377213ba0154bf2e0
+change-id: 20241220-amlogic-clk-gxbb-32k-fixes-9483bb55f849
 
-Should I still change the commit message? I guess there's no clk_rcg2
-without a parent at all?
-
-I guess I could reword it like that also or something?
-
-  A clk_rcg2 needs to have a parent_map entry for every parent it has,
-  otherwise [...]
-
-Regards
-Luca
-
->
-> > otherwise we'll get a NULL pointer dereference when calling clk_set_rat=
-e
-> > like the following:
-> >=20
-> >   [    3.388105] Call trace:
-> >   [    3.390664]  qcom_find_src_index+0x3c/0x70 (P)
-> >   [    3.395301]  qcom_find_src_index+0x1c/0x70 (L)
-> >   [    3.399934]  _freq_tbl_determine_rate+0x48/0x100
-> >   [    3.404753]  clk_rcg2_determine_rate+0x1c/0x28
-> >   [    3.409387]  clk_core_determine_round_nolock+0x58/0xe4
-> >   [    3.421414]  clk_core_round_rate_nolock+0x48/0xfc
-> >   [    3.432974]  clk_core_round_rate_nolock+0xd0/0xfc
-> >   [    3.444483]  clk_core_set_rate_nolock+0x8c/0x300
-> >   [    3.455886]  clk_set_rate+0x38/0x14c
-> >=20
-> > Add the parent_map property for two clocks where it's missing and also
-> > un-inline the parent_data as well to keep the matching parent_map and
-> > parent_data together.
->
-> The patch looks good otherwise
->
-> Konrad
+Best regards,
+-- 
+Jerome
 
 
