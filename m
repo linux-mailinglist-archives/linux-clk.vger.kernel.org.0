@@ -1,252 +1,183 @@
-Return-Path: <linux-clk+bounces-16118-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16120-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C289F9861
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 18:43:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 601439F9B59
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 22:09:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A599A1634E2
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 17:42:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 45C00188CDE1
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2024 21:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F2E42236F7;
-	Fri, 20 Dec 2024 17:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BD9522258B;
+	Fri, 20 Dec 2024 21:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="g4iTOmc3"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="pUhAl04i"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196C122259D
-	for <linux-clk@vger.kernel.org>; Fri, 20 Dec 2024 17:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210586FC5;
+	Fri, 20 Dec 2024 21:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734715077; cv=none; b=jRyEv1DKbdIZ838/TEJptG/K+pL/gzBi5p7KgbmemWIBQs+iPL4xL17Zv2v1yZbGS/hC55HL4GBP56sElHXg3FNCA3ncMAb9EIGJU77T0KN3cqR2S27X4WIOo2w4deaMElpfLoxgy4Tb2oXFAZkjYcF7FNPmAOnIu3HOpd023Aw=
+	t=1734728950; cv=none; b=UdfOHHXSl5hk3/V7xP+D6wBy/jZbvzOJbDEoP2l7F/GrDtiVMnF1onD23uly7ygW+dABWFgQ7LZWHkIgGURLkMBv5fJC/PPRK3uyv3K/nnOt6oWLeOZ6Cqcc4rD7+N/cq7aNpFevOBHtbxwcw4FDryo2UpLCCNVZGyBhJmWTyt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734715077; c=relaxed/simple;
-	bh=tvh8JlfNuT44ThrGDFE2JBh8kT+71CwmF8GtX4Rjbzo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E07hkiwAb8WwDVHU9X19BhigSeEmrvzdSXgLbO5159w90pjpFdloBcGF7qsfgI/sPuwL7+2sVZF1cQ/aC+Hy0pbme/vPcPntVzQJhxIbPdDsAXAY2sKAZ/2GzHYrnmrZOWkSoscXG2G4/J0vZct2Hb6EFpEJEhLQM3GqPfZVHpg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=g4iTOmc3; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3862d161947so1122530f8f.3
-        for <linux-clk@vger.kernel.org>; Fri, 20 Dec 2024 09:17:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1734715073; x=1735319873; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cgs5QNP7O8iugv52YTWDU3oFoGi5v9FMjpGDuCdwf+k=;
-        b=g4iTOmc33QswFgGUlUrOh+hQZzkLu7WXh5TTeWMaMzalyzbwm3XIox34bup61rshxe
-         JzkITmuhk4Z7b1Kzy76GLbaDbTkcEHNR9PchSLog+Z7yFPXDC8VUNgeGB5xm8EV1c/nK
-         qlrQipH58Ta9MADXL8WyLO1zErXw04AFMvUfluR/iHXf2WEZjskmOnH4MMVgVsfGohrN
-         l3ky6Kbv2p5fpwDFH8fH9La79pSw1MZsoNcznXPEbHRrJZtRb69MwNFvcxlr/SQ7MXv0
-         9OlUQqiJEMIoGgjsV2V5yJaTBeE4xuSLRFhBII2xTH6vehwm5i/pqSzoLWWjx4pncPy+
-         7voQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734715073; x=1735319873;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cgs5QNP7O8iugv52YTWDU3oFoGi5v9FMjpGDuCdwf+k=;
-        b=bPIzis6TWOmGrzuj95wzgVtxwYaFmz3T9oLAObrNdyUnsjpv6N4eETiHPA8zEUUbso
-         qlf/3CcVpObKO9n6SKChOLiqezBRojGVCpZpZOIeeJUR0Ycw7FhC8vV9LLGUgBaO7duc
-         eFigAxfobkFd4Q7jqnpIyiL9hix38jHD8qtg0U2mph3ycruOJTMPikgRxNqlYjO13soS
-         BURAo1mjCPPleednn/yVolLo5sNVGcptmlK/XKJAadgd+wCRExSLbDFHGOUkWwxplxcW
-         O65Q1NqKkg5j1SQMF6DPuSnB8c5EoDm8iMqDLSKY5ylodJVpAxHKgWNiRMweIPzdkkqZ
-         DUpQ==
-X-Gm-Message-State: AOJu0YyLpCjKEUfPETfDVcYewO91IwORpV7/AhN4ZMonKqcJ8sVTSM9G
-	7s2AOLjbS99gYGlEknssBr8L5Eme5LAfoLCf/g4FmiN3HUASYOgwnq36yZHfyWQ=
-X-Gm-Gg: ASbGnctnWE9jGot8tULABF0tkOD5CXFLxG0OA6SAKwJGxJggX02CeaJfOxTr6Wc57cw
-	TThqQ+Agq6U42v2g4DTrMMaheCthLRQW4JIKehyWIKOl4APq7ELN0aXbm4dWJhO2izrI3a89KOV
-	qlGV76TVo1E+SaRGTWPSQoTDhiNUibM/M2A8uyBGgy4kyuC6xIjbv03+Hr2RRfqSSy9nGRc1GrL
-	ArQcgvPmBx8KxwFXuMpTgTOV8JPBToAE2o4aKD0sBmHNdnfIyV2/r1xLssOxspgCEj+XWc=
-X-Google-Smtp-Source: AGHT+IGYlzQLR4J9adpke1hx6AAFsWeyzGPiUR+SyMcWO2IVMtoisGzuqWJuHjjRKM9zNCOgImfvIw==
-X-Received: by 2002:a5d:598f:0:b0:386:424e:32d5 with SMTP id ffacd0b85a97d-38a221ea939mr4106400f8f.14.1734715073465;
-        Fri, 20 Dec 2024 09:17:53 -0800 (PST)
-Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:c000:46df:1e3e:983f])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38a1c8add5asm4432847f8f.107.2024.12.20.09.17.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 09:17:53 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Fri, 20 Dec 2024 18:17:44 +0100
-Subject: [PATCH 3/3] clk: amlogic: s4: remove unused data
+	s=arc-20240116; t=1734728950; c=relaxed/simple;
+	bh=nE6YFhVjyTujE1Nlg54ekW39b7dkaLBnkl31Ltnu8vA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R6lUImRP9qLT6xnD9SIhmQtZmHcM2FWZxsjATVbEMU8QJH83s3uhY7YqUnhncpR2YJAcVxXzl3jskONoCCHSYuFoA9LEb2yvpCCG9RGpzyawBYeGC+RW2GP8/7yFf2PGql06sskHC8jW74rk9UnX4dhGFuN5ApGhLwjqzyxDnDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=pUhAl04i; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1734728948; x=1766264948;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nE6YFhVjyTujE1Nlg54ekW39b7dkaLBnkl31Ltnu8vA=;
+  b=pUhAl04i8ugm6WPq6e1Y4hhf5j8pS3WjD9C2r1ZxGc+nt8TUrkfwVDGx
+   h5PGDqihbZN2oaEYr3t5wLnV/mqdQeWY844Tkdck2hzNAhrfF6ORvkNZX
+   A0muvKjohwz9dEO4KmmzL/A2xhxxWinBMbk24AtK7i/ob0rqLSVgoHNxk
+   RpTxJdQjqXnq/l64NFQ3Z9y3+7NW3jmCdn2lnUYaoEFDABHNSLN63dxH7
+   SXqFF6Hvkn4r8AGgYqLMyREEhc1+CieCPUx3zzFsPnWXx/1gxEOXBAkK6
+   ihti9oXdhwVribw+Pnephc3XsI0iBeW++PXTEvYxzdX8ddkBDQuyaj/+w
+   w==;
+X-CSE-ConnectionGUID: 6Xn2bQedQHqhtDmL7ky2MQ==
+X-CSE-MsgGUID: VUI4tufrSvmW3ANDm79iKQ==
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="203274638"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 14:09:06 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 20 Dec 2024 14:08:42 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Fri, 20 Dec 2024 14:08:42 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<arnd@arndb.de>
+CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
+	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+	<linux-mmc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>, Ryan Wanner
+	<Ryan.Wanner@microchip.com>
+Subject: [PATCH v4 00/13]  Add support for SAMA7D65
+Date: Fri, 20 Dec 2024 14:07:01 -0700
+Message-ID: <cover.1734723585.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241220-amlogic-clk-drop-clk-regmap-tables-v1-3-96dd657cbfbd@baylibre.com>
-References: <20241220-amlogic-clk-drop-clk-regmap-tables-v1-0-96dd657cbfbd@baylibre.com>
-In-Reply-To: <20241220-amlogic-clk-drop-clk-regmap-tables-v1-0-96dd657cbfbd@baylibre.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- Jerome Brunet <jbrunet@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3977; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=tvh8JlfNuT44ThrGDFE2JBh8kT+71CwmF8GtX4Rjbzo=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnZaa8huQnimyWNluiyiI+CqSpsbYXDeVZSFdL+
- Ho18RI74oqJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ2WmvAAKCRDm/A8cN/La
- haBXD/9AGOS2JTSDO6JJiE8kB1oiX8eb7GTQH3ESwZO99Ez7orpE9CFgr4umREPh6u+yUUQIIsi
- VuJW6e5VJoBA4G6Ueh9SC9IFQF/u5FsG2KGWz18UCo+u7mCL8A+OSt6yZunQtV3uMplGPy9+O+p
- q52jusn0iNnjqVM3gtuBYcl85n4c0FkUhdqpac0rsedIl5KdIrCKe3d6ks05QGYab+exnrWQMNa
- 31zoRaSJ7JL2ljimtgjMjYloq4h9XlsrTII/JK1kbHCePAuajq7RLrRNjfri3OQJglSUNekRorz
- PFAjLgfdfFTeIa7f/jshO04/RaSMl6jUcSJNLGLxvJ4M24v5jUPmNeDL7HL0UFpcmk7PA25QOi8
- c+Kqfd5GPduZ6s4SI1Dp6THKlPH+n+CuVDTvwk18mnvOvjPSCJMNFIJByEkWmx3rWcW9nJ5SKWh
- XyzvmHaUg2p5jOm77UHUnE2TqR8lAtQ1IFPnM+hcTrJc9FRHyDnSFKZetihmgnUNOoRGf8p2b3W
- VHjgPcvpUykOmIJAQOdUjYUVxDxtQdSOs038LZq5BSpTggX7zsAmXu5Bhr4Iw5MGapneO/VDUhr
- WVxqUruSDsT6SyNc/ABvI4PSj+nQmwKsZRrEbhsz2GKyOVCugml60Kf+thdSZg87fW8MVPj9B3a
- xJKiAoUM1rwzd7w==
-X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
- fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Following the removal of the big clk_regmap clock table from the
-s4-peripherals clock controller driver, it appears some clocks are unused,
-which means these are not exported or even registered.
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-In all likelihood, these clocks have not been tested. Remove the unused
-clocks for now. These can added back later when they have been properly
-tested.
+This series adds support for the SAMA7D65 SoC.
 
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- drivers/clk/meson/s4-peripherals.c | 112 -------------------------------------
- 1 file changed, 112 deletions(-)
+V2 of this series [1].
+V3 of this series [2].
 
-diff --git a/drivers/clk/meson/s4-peripherals.c b/drivers/clk/meson/s4-peripherals.c
-index 91c7b10c2b68c626dd1d6164ea855370aae71485..72b990fc0de8e4e2c83d0fc3b4c6e3fc1fc96367 100644
---- a/drivers/clk/meson/s4-peripherals.c
-+++ b/drivers/clk/meson/s4-peripherals.c
-@@ -3129,118 +3129,6 @@ static struct clk_regmap s4_gen_clk = {
- 	},
- };
- 
--static const struct clk_parent_data s4_adc_extclk_in_parent_data[]  = {
--	{ .fw_name = "xtal", },
--	{ .fw_name = "fclk_div4", },
--	{ .fw_name = "fclk_div3", },
--	{ .fw_name = "fclk_div5", },
--	{ .fw_name = "fclk_div7", },
--	{ .fw_name = "mpll2", },
--	{ .fw_name = "gp0_pll", },
--	{ .fw_name = "hifi_pll", },
--};
--
--static struct clk_regmap s4_adc_extclk_in_mux = {
--	.data = &(struct clk_regmap_mux_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.mask = 0x7,
--		.shift = 25,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "adc_extclk_in_mux",
--		.ops = &clk_regmap_mux_ops,
--		.parent_data = s4_adc_extclk_in_parent_data,
--		.num_parents = ARRAY_SIZE(s4_adc_extclk_in_parent_data),
--		.flags = 0,
--	},
--};
--
--static struct clk_regmap s4_adc_extclk_in_div = {
--	.data = &(struct clk_regmap_div_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.shift = 16,
--		.width = 7,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "adc_extclk_in_div",
--		.ops = &clk_regmap_divider_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_adc_extclk_in_mux.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_adc_extclk_in_gate = {
--	.data = &(struct clk_regmap_gate_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.bit_idx = 24,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "adc_extclk_in",
--		.ops = &clk_regmap_gate_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_adc_extclk_in_div.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_demod_core_clk_mux = {
--	.data = &(struct clk_regmap_mux_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.mask = 0x3,
--		.shift = 9,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "demod_core_clk_mux",
--		.ops = &clk_regmap_mux_ops,
--		.parent_data = (const struct clk_parent_data []) {
--			{ .fw_name = "xtal", },
--			{ .fw_name = "fclk_div7", },
--			{ .fw_name = "fclk_div4", },
--			{ .hw = &s4_adc_extclk_in_gate.hw }
--		},
--		.num_parents = 4,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_demod_core_clk_div = {
--	.data = &(struct clk_regmap_div_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.shift = 0,
--		.width = 7,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "demod_core_clk_div",
--		.ops = &clk_regmap_divider_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_demod_core_clk_mux.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_demod_core_clk_gate = {
--	.data = &(struct clk_regmap_gate_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.bit_idx = 8,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "demod_core_clk",
--		.ops = &clk_regmap_gate_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_demod_core_clk_div.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
- #define MESON_GATE(_name, _reg, _bit) \
- 	MESON_PCLK(_name, _reg, _bit, &s4_sys_clk.hw)
- 
+For the pinctrl and pit64 timers those will have DTB warnings due to
+those bindings not being in the .yaml format.
+
+Changes v1->v2:
+- V1 set was sent incorrectly as multiple seprate patches v2 took all
+  those patches and put them in 1 thread.
+
+Changes v2->v3:
+- Correct the patch order to follow correct practice.
+- Correct flexcom dt-binding commit messge to reflect the changes in the
+  coding style.
+- Add missing SoB tags to patches.
+- Moved export clocks to DT patch to be included with the clock binding
+  patch.
+- Separate Kconfig changes and defconfig changes into different patches
+  and removed unused Kconfig params.
+- Correct confusing SoB and Co-developed chain.
+- Removed unsued nodes in DTSI file and sorted includes
+  alphanumerically.
+- Fix incorrect dts formatting.
+- Separate dts and pinmux changes into two patches.
+- Combine PLL and MCK changes into core clock driver patch.
+- Correct formatting in main clock driver.
+- MMC dt-binding changes are applied for next so have been removed from
+  the set [3].
+
+Changes v3->v4:
+- Collect all tags from maintainers.
+- Correct compile error on 11/13 and correct location of vendor specific
+  properties.
+- Add USB and UTMI selections to 12/13 to prevent compile errors due to
+  functions in the clock driver that use the USB clock system.
+- Add "microchip,sama7g5-pinctrl" compatible string as a fall back in
+  9/13.
+- Add missing kfree() to 8/13 to correctly handle error case.
+- Replace bad spacing with correct tab formatting on 7/13.
+
+1) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#m9691b4d58b62f36f6cbac1d06883c985766c2c0d
+2) https://lore.kernel.org/linux-arm-kernel/cover.1733505542.git.Ryan.Wanner@microchip.com/T/#m3b52978236907198f727424e69ef21c8898e95c8
+3) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#mccf6521c07e74e1c7dc61b09ae0ebdbbdde73a28
+
+
+Dharma Balasubiramani (6):
+  dt-bindings: mfd: atmel,sama5d2-flexcom: add
+    microchip,sama7d65-flexcom
+  dt-bindings: atmel-sysreg: add sama7d65 RAM and PIT
+  dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
+  dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+  dt-bindings: clocks: atmel,at91sam9x5-sckc: add sama7d65
+  dt-bindings: clock: Add SAMA7D65 PMC compatible string
+
+Romain Sioen (2):
+  dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
+  ARM: dts: microchip: add support for sama7d65_curiosity board
+
+Ryan Wanner (5):
+  clk: at91: sama7d65: add sama7d65 pmc driver
+  ARM: dts: microchip: add sama7d65 SoC DT
+  ARM: dts: at91: Add sama7d65 pinmux
+  ARM: configs: at91: sama7: add new SoC config
+  ARM: at91: add new SoC sama7d65
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |    7 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt |   14 +-
+ .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    2 +
+ .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    1 +
+ .../bindings/mfd/atmel,sama5d2-flexcom.yaml   |    9 +-
+ .../pinctrl/atmel,at91-pio4-pinctrl.txt       |    1 +
+ .../bindings/serial/atmel,at91-usart.yaml     |    1 +
+ arch/arm/boot/dts/microchip/Makefile          |    3 +
+ .../dts/microchip/at91-sama7d65_curiosity.dts |   89 ++
+ .../arm/boot/dts/microchip/sama7d65-pinfunc.h |  947 ++++++++++++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     |  145 ++
+ arch/arm/configs/multi_v7_defconfig           |    1 +
+ arch/arm/configs/sama7_defconfig              |    1 +
+ arch/arm/mach-at91/Kconfig                    |   11 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-master.c                 |    2 +-
+ drivers/clk/at91/clk-sam9x60-pll.c            |    2 +-
+ drivers/clk/at91/pmc.c                        |    1 +
+ drivers/clk/at91/sama7d65.c                   | 1375 +++++++++++++++++
+ include/dt-bindings/clock/at91.h              |    4 +
+ 20 files changed, 2604 insertions(+), 13 deletions(-)
+ create mode 100644 arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+ create mode 100644 arch/arm/boot/dts/microchip/sama7d65-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/microchip/sama7d65.dtsi
+ create mode 100644 drivers/clk/at91/sama7d65.c
 
 -- 
-2.45.2
+2.43.0
 
 
