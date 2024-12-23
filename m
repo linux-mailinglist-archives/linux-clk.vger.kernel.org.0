@@ -1,208 +1,337 @@
-Return-Path: <linux-clk+bounces-16191-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16193-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39AAC9FAE69
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 13:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BAB79FAE73
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 13:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E92F37A19F6
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 12:52:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99C147A1A02
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 12:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E0B1AF4EA;
-	Mon, 23 Dec 2024 12:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DA851AB6CC;
+	Mon, 23 Dec 2024 12:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQnF78F2"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Imq8Fepx"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775291AF0D7;
-	Mon, 23 Dec 2024 12:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2709E1917D8
+	for <linux-clk@vger.kernel.org>; Mon, 23 Dec 2024 12:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734958345; cv=none; b=JHYf6wbDkkGJiyQuEU4A8P9IP+M7OTacNrPbto8NrR9wn6QO9lR1RoYE13aHaUCqSNk9xjKZUAOW5j00oY+n/V/JcI4zlMdsqqAuNTN1thFkhA+SeV3X5l8h62doyE3PQ7mz1a7aeB7M6dFPtYny32SHqTIeDZ0cEGtnBFGl7X0=
+	t=1734958573; cv=none; b=aAEC13bff5wcqXylC/OXb096LuSPhcES1fszptdoxs+teCO7Kj43PjeSH8TBADJ65S4pGL48ilCd3XVhEIGmWSgCcx5eVuwSH6e6LYZubJKwGePioiPE6BDqXZSjVZmu7gDYt2ZRz5RhHSY8U29fUH7Mvf2FR/LJQp/rbe5f7YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734958345; c=relaxed/simple;
-	bh=+8D8SlRfiYR49SiB0XGLOf0ALVRXlm15ZoXTvUHq3ig=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=u0RhK0o50FARq7lDRr4gVEaizbORd3Hs93hH4N8kwhqBC6U2SYqSaEi1kEhf2wY3PKwIPTqsMG+O7TlF595xJ1oqDjyuzbC/Wvi7CaDzSD1bqrckRszMEK7c4JWlZzW54z4e1lkRZu20Z/YXEmmpmoJ+V3TLvXw4srGPOttmzoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQnF78F2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FC5C4CED3;
-	Mon, 23 Dec 2024 12:52:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734958345;
-	bh=+8D8SlRfiYR49SiB0XGLOf0ALVRXlm15ZoXTvUHq3ig=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=IQnF78F2w5JZ8M6A2xVWwZ8aaVMX6GFDiA13MufuH3bT4+wGCt+8UiOrMv30KmDgB
-	 I9P4yg0/LW2q8Mt51cvYq7nlXLJhMwr+uvdMmwHpC4dFRSq88BaYQzeQo0oz7Qjet7
-	 Gxh8klWNmuBQKY96nOmKeD00hHM5Fmt8kZWDRUIP+Fyg5SL3bpvEAxFKRsvEqKNS76
-	 O6TWs6/1/oZmMl5aL1VBhoxNKy2NBYDKoKbQ7dgxUoWshgR7rXA9KxT0E00h7/4EM3
-	 72QaZDMEwMGWYIKlvXKWYtgIongb97h+A8XEdXeLU/xb91LBK/cuHqez2isz/Ynjpo
-	 e0p5fFdS6+7cA==
-Date: Mon, 23 Dec 2024 06:52:23 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1734958573; c=relaxed/simple;
+	bh=nzGpYm16W6t/jydYYWmUKC6+fLtPD4QlhqcFEWxG3sk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=kJt/uAsBdUf60xGfIuMoBNfSIQGbkZzb5jqliIywiY0YDLT90/hsgBq6/8lLOIYkpSLK8k0IaO94ichQwuIinQA8CrAlCP2DsLjAcdwh35Hqo9AfdZFfo3TSnLgdUToAajHlW5UBcnyWjjFARLMahNEswr+kUKweP5ftoH4VBTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Imq8Fepx; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241223125601euoutp02acb40e68d0b199d764fc6d6faefb71d5~Tz56vQcIh0908209082euoutp02k
+	for <linux-clk@vger.kernel.org>; Mon, 23 Dec 2024 12:56:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241223125601euoutp02acb40e68d0b199d764fc6d6faefb71d5~Tz56vQcIh0908209082euoutp02k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1734958561;
+	bh=UhPbBshaH9K2wFltoCcg30MyK99ker1KdL3KSY1jdcc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=Imq8FepxE3Yaf/kVjQDr+0wEiYyk8tNRrFmL21zJ4yDs8HUZxvVaddH/XnZJOJj7p
+	 ZwgXoK1JhgyrDru0Au2zdwD5P8QDP6MMOHm5S83EJHMdDsMvm0lguSOPgg/5skllyO
+	 nhRK6HAxW2yazjwQmMjWSVjvbNKgiR6RRy6jK+Dc=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20241223125601eucas1p2a3df702c4852e92e10c819c4d3bd81ea~Tz56HUSS82931129311eucas1p22;
+	Mon, 23 Dec 2024 12:56:01 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges1new.samsung.com (EUCPMTA) with SMTP id B3.B6.20821.1ED59676; Mon, 23
+	Dec 2024 12:56:01 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20241223125600eucas1p22d9257e92c798e9f4346a76d1d0fc73d~Tz55iDd9c2931129311eucas1p21;
+	Mon, 23 Dec 2024 12:56:00 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20241223125600eusmtrp1ebc5062f3bd82552da4056bfa96ac831~Tz55hAbLV2051220512eusmtrp1E;
+	Mon, 23 Dec 2024 12:56:00 +0000 (GMT)
+X-AuditID: cbfec7f2-b09c370000005155-5c-67695de1efca
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id CE.63.19654.0ED59676; Mon, 23
+	Dec 2024 12:56:00 +0000 (GMT)
+Received: from AMDC4942.home (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241223125559eusmtip27305bd8634eacf7d0c51fb5c97de798f~Tz54Gg5hk3248532485eusmtip2Z;
+	Mon, 23 Dec 2024 12:55:59 +0000 (GMT)
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+	m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
+	<m.wilczynski@samsung.com>
+Subject: [RFC PATCH v2 00/19] Enable drm/imagination BXM-4-64 Support for
+ LicheePi 4A
+Date: Mon, 23 Dec 2024 13:55:34 +0100
+Message-Id: <20241223125553.3527812-1-m.wilczynski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: mturquette@baylibre.com, nicolas.ferre@microchip.com, 
- mihai.sain@microchip.com, linux-kernel@vger.kernel.org, krzk+dt@kernel.org, 
- linux-clk@vger.kernel.org, varshini.rajendran@microchip.com, 
- linux-arm-kernel@lists.infradead.org, dharma.b@microchip.com, 
- linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
- claudiu.beznea@tuxon.dev, alexandre.belloni@bootlin.com, 
- romain.sioen@microchip.com, linux-mmc@vger.kernel.org, conor+dt@kernel.org, 
- arnd@arndb.de, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, 
- sboyd@kernel.org
-To: Ryan.Wanner@microchip.com
-In-Reply-To: <cover.1734723585.git.Ryan.Wanner@microchip.com>
-References: <cover.1734723585.git.Ryan.Wanner@microchip.com>
-Message-Id: <173495825174.503813.17076508226289513016.robh@kernel.org>
-Subject: Re: [PATCH v4 00/13]  Add support for SAMA7D65
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1CTdRzH+T7Ps+cZuxs+TtIvRJo75PwBE7rqvkmilNWD4hlnxVV6NeU5
+	4Bo/boMsjYRjG0iDZQnixg8xGhw/JOc2gQNhOAElJ4MEM1moCGIQ8UtNhGI8WP73+rw/vz/3
+	4eMiC+nNj41PYuXxUpmYFBCW1r/tAbf2xkYH3jaSqL33FIbMMzoKVTXaMVRss/OQs8uEoV+m
+	x0h0+m4nhe41phGop7yQQumtNSQa1jlJNK5x8lB3fQGJJrNtAFkmlSSqtvVRqGa6GEMl42YC
+	ldbWA6Q+YuAhx+W3UJ+znUDD3RocqXVL0D8NtRSa6zlDIP2fTRQyjRzlobbqSKRsOkZsXcmM
+	XVdRzMjwMMFcyJyimMYHJwmmTtdHMZq6nwFjrDhCMjd7Gkim6FIE8/s3bRhztvQwo6xuxRjt
+	bCAzdv4ayeSYKgDTld5LvSv6SPB6FCuL/ZyVbwz5VBDjaL4LEtN3fqGvslKpIHdLFnDnQ/pl
+	OJRzBbhYRJcDaLj9AcdTAFZmbM8CgnmeBHAuMxV7mqDSVlKcowxAZfEAxhkjANqqyheiSPol
+	2F9WzHM5PGkVAVUX04DLwOkhAC0DBaQrahkdCQ1nrAtM0Gvg1NDIAgvpLTBt9BHB9VsFm6xX
+	cE5fCi+dGFjQ8Xk93azHXUUh/aMA6vKcgEvYBruuKkmOl8H7bSaKYx/Y8b1msWgC7DdP4Bx/
+	Bes0bYscDG/aH8/n8ucbrIM19Rs5ORQ2PXhEuWRIe8Dro0u5ETzgd5bjOCcLYaZaxEX7wVxN
+	9n9N7eWWxcsxcODyBMmddy8sGhzHvwUv6p5ZTPfMYrr/ZzgJ8Aqwgk1WxEWziqB49oBEIY1T
+	JMdHS/YnxBnB/Gt3zLVN1ILC++OSFoDxQQuAfFzsKWwRxUaLhFHSLw+y8oRP5MkyVtECnucT
+	4hXCNVGrWBEdLU1iP2PZRFb+1Ivx3b1Tsf2Gd6z+P+zLiLkwt952tkCzdubro4eKHC1i06+F
+	rX6msYgNAa9tXZc3uC13R3tgf7g2p6sqSf9+fXz/HzAmZXeQ32Z9ipf11VPOkPzcss789sFQ
+	rT+9KePxNV9fT599T5Icbm67Eq46SkJ2DO90zp77eDKMbr7xsBmqwr3CUw6WTrs37OatzlI+
+	t5mfYfnrjsHjEAzrO6+4dbE3snOSeEWF//beTxUJwQceRoZ4Bx8eK4zYMxe0/O03nqhlG96s
+	9IHabuu5QK9NbkbLjZSY2Y7sF/YYJaMBHaf9Q02Vy+/11/jnrAwrQSUy3yXHpvJz76y2CGe0
+	SolOlbf9Q3PiWrX6hHRUTChipEHrcblC+i+16caASQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCKsWRmVeSWpSXmKPExsVy+t/xe7oPYjPTDabdlbY4cX0Rk8XW37PY
+	LdbsPcdkMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYXFsxl92i+dh6NouXs+6xWXzsucdq
+	cXnXHDaLz71HGC22fW5hs1h75C67xfqv85ksFn7cymKxZMcuRou2zmWsFhdPuVrcvXeCxeLl
+	5R5mi7ZZ/Bb/9+xgt/h3bSOLxex3+9kttryZyGpxfG24Rcv+KSwOch7vb7Sye7x5+ZLF43DH
+	F3aPvd8WsHjsnHWX3aNn5xlGj02rOtk87lzbw+Yx72Sgx/3u40wem5fUe7SsPcbk0f/XwOP9
+	vqtsHn1bVjF6XGq+zh4gFKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
+	k5Kak1mWWqRvl6CXcfHAU8aCZt+K2WsOsjcwTrXvYuTkkBAwkWjtX83excjFISSwlFHi/MR5
+	LBAJGYlr3S+hbGGJP9e62CCKXjFKzO3awgiSYBMwkniwfD4riC0isJhFYu++SpAiZoG3jBLX
+	Z24E6xYWCJV4v20vG4jNIqAq8eX5GzCbV8BeovHtD6gN8hL7D55lhogLSpyc+QQozgE0SF1i
+	/TwhkDAzUEnz1tnMExj5ZyGpmoVQNQtJ1QJG5lWMIqmlxbnpucVGesWJucWleel6yfm5mxiB
+	yWXbsZ9bdjCufPVR7xAjEwfjIUYJDmYlEd5DQpnpQrwpiZVVqUX58UWlOanFhxhNga6eyCwl
+	mpwPTG95JfGGZgamhiZmlgamlmbGSuK8bFfOpwkJpCeWpGanphakFsH0MXFwSjUwqdSrTppk
+	/jdnZcjLKZo84nM1O/o5NlyUnpUodl/kxKmtF3mdy7+d/bjljWlpkUOE6cnsRKa2GYkWM7YJ
+	T3BPPyJde6s0uSJgravCHMkI++vSeS+c7tXpx1evnMOq+dw1tvbyI63mS7uLr6bduTTn6Zqm
+	vmOZc3Wu9k2PFxF/V975oeNAV01ZfE0d+zzxWM3VZ3W/c3rWlXtxvdYD+qX3WcLey3MfsIru
+	WfaiNq2B03Ci2w2hlpWGSqpx+/SqJCeXFn/K/rBU9vxJc+v8xqTvL56eqZme9+0M56wNURrq
+	RoKVc57Y1ORVrHm1+lr8qctXfzzd7hxvM+2OTyfXc/7T83/qPNBfdeCiRIr7CWElluKMREMt
+	5qLiRAB+Otw7twMAAA==
+X-CMS-MailID: 20241223125600eucas1p22d9257e92c798e9f4346a76d1d0fc73d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20241223125600eucas1p22d9257e92c798e9f4346a76d1d0fc73d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20241223125600eucas1p22d9257e92c798e9f4346a76d1d0fc73d
+References: <CGME20241223125600eucas1p22d9257e92c798e9f4346a76d1d0fc73d@eucas1p2.samsung.com>
 
+The LicheePi 4A board, featuring the T-HEAD TH1520 SoC, includes an Imagination
+Technologies BXM-4-64 GPU. Initial support for this GPU was provided through a
+downstream driver [1]. Recently, efforts have been made to upstream support for
+the Rogue family GPUs, which the BXM-4-64 is part of [2].
 
-On Fri, 20 Dec 2024 14:07:01 -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> This series adds support for the SAMA7D65 SoC.
-> 
-> V2 of this series [1].
-> V3 of this series [2].
-> 
-> For the pinctrl and pit64 timers those will have DTB warnings due to
-> those bindings not being in the .yaml format.
-> 
-> Changes v1->v2:
-> - V1 set was sent incorrectly as multiple seprate patches v2 took all
->   those patches and put them in 1 thread.
-> 
-> Changes v2->v3:
-> - Correct the patch order to follow correct practice.
-> - Correct flexcom dt-binding commit messge to reflect the changes in the
->   coding style.
-> - Add missing SoB tags to patches.
-> - Moved export clocks to DT patch to be included with the clock binding
->   patch.
-> - Separate Kconfig changes and defconfig changes into different patches
->   and removed unused Kconfig params.
-> - Correct confusing SoB and Co-developed chain.
-> - Removed unsued nodes in DTSI file and sorted includes
->   alphanumerically.
-> - Fix incorrect dts formatting.
-> - Separate dts and pinmux changes into two patches.
-> - Combine PLL and MCK changes into core clock driver patch.
-> - Correct formatting in main clock driver.
-> - MMC dt-binding changes are applied for next so have been removed from
->   the set [3].
-> 
-> Changes v3->v4:
-> - Collect all tags from maintainers.
-> - Correct compile error on 11/13 and correct location of vendor specific
->   properties.
-> - Add USB and UTMI selections to 12/13 to prevent compile errors due to
->   functions in the clock driver that use the USB clock system.
-> - Add "microchip,sama7g5-pinctrl" compatible string as a fall back in
->   9/13.
-> - Add missing kfree() to 8/13 to correctly handle error case.
-> - Replace bad spacing with correct tab formatting on 7/13.
-> 
-> 1) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#m9691b4d58b62f36f6cbac1d06883c985766c2c0d
-> 2) https://lore.kernel.org/linux-arm-kernel/cover.1733505542.git.Ryan.Wanner@microchip.com/T/#m3b52978236907198f727424e69ef21c8898e95c8
-> 3) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#mccf6521c07e74e1c7dc61b09ae0ebdbbdde73a28
-> 
-> 
-> Dharma Balasubiramani (6):
->   dt-bindings: mfd: atmel,sama5d2-flexcom: add
->     microchip,sama7d65-flexcom
->   dt-bindings: atmel-sysreg: add sama7d65 RAM and PIT
->   dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
->   dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
->   dt-bindings: clocks: atmel,at91sam9x5-sckc: add sama7d65
->   dt-bindings: clock: Add SAMA7D65 PMC compatible string
-> 
-> Romain Sioen (2):
->   dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
->   ARM: dts: microchip: add support for sama7d65_curiosity board
-> 
-> Ryan Wanner (5):
->   clk: at91: sama7d65: add sama7d65 pmc driver
->   ARM: dts: microchip: add sama7d65 SoC DT
->   ARM: dts: at91: Add sama7d65 pinmux
->   ARM: configs: at91: sama7: add new SoC config
->   ARM: at91: add new SoC sama7d65
-> 
->  .../devicetree/bindings/arm/atmel-at91.yaml   |    7 +
->  .../devicetree/bindings/arm/atmel-sysregs.txt |   14 +-
->  .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    2 +
->  .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    1 +
->  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   |    9 +-
->  .../pinctrl/atmel,at91-pio4-pinctrl.txt       |    1 +
->  .../bindings/serial/atmel,at91-usart.yaml     |    1 +
->  arch/arm/boot/dts/microchip/Makefile          |    3 +
->  .../dts/microchip/at91-sama7d65_curiosity.dts |   89 ++
->  .../arm/boot/dts/microchip/sama7d65-pinfunc.h |  947 ++++++++++++
->  arch/arm/boot/dts/microchip/sama7d65.dtsi     |  145 ++
->  arch/arm/configs/multi_v7_defconfig           |    1 +
->  arch/arm/configs/sama7_defconfig              |    1 +
->  arch/arm/mach-at91/Kconfig                    |   11 +
->  drivers/clk/at91/Makefile                     |    1 +
->  drivers/clk/at91/clk-master.c                 |    2 +-
->  drivers/clk/at91/clk-sam9x60-pll.c            |    2 +-
->  drivers/clk/at91/pmc.c                        |    1 +
->  drivers/clk/at91/sama7d65.c                   | 1375 +++++++++++++++++
->  include/dt-bindings/clock/at91.h              |    4 +
->  20 files changed, 2604 insertions(+), 13 deletions(-)
->  create mode 100644 arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
->  create mode 100644 arch/arm/boot/dts/microchip/sama7d65-pinfunc.h
->  create mode 100644 arch/arm/boot/dts/microchip/sama7d65.dtsi
->  create mode 100644 drivers/clk/at91/sama7d65.c
-> 
-> --
-> 2.43.0
-> 
-> 
-> 
+While the initial upstream driver focused on the AXE-1-16 GPU, newer patches
+have introduced support for the BXS-4-64 GPU [3]. The modern upstream
+drm/imagination driver is expected to support the BXM-4-64 as well [4][5]. As
+this support is being developed, it's crucial to upstream the necessary glue
+code including clock and power-domain drivers so they're ready for integration
+with the drm/imagination driver.
 
+Recent Progress:
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+Firmware Improvements:
+Since August, the vendor has provided updated firmware
+[6][7] that correctly initiates the firmware for the BXM-4-64.
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+Mesa Driver Testing:
+The vendor-supplied Mesa driver [8] partially works with Vulkan examples, such
+as rendering a triangle using Sascha Willems' Vulkan samples [9]. Although the
+triangle isn't rendered correctly (only the blue background appears), shader
+job submissions function properly, and IOCTL calls are correctly invoked.  For
+testing, we used the following resources:
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+Kernel Source: Custom kernel with necessary modifications [10].
+Mesa Driver: Vendor-provided Mesa implementation [11].
 
-  pip3 install dtschema --upgrade
+Dependencies:
+Testing required a functional Display Processing Unit (DPU) and HDMI driver,
+which are currently not upstreamed. Efforts are underway to upstream the DPU
+DC8200 driver used in StarFive boards [12], which is the same DPU used on the
+LicheePi 4A. Once the DPU and HDMI drivers are upstreamed, GPU support can be
+fully upstream.
 
+Testing Status:
+This series has been tested by performing a probe-only operation, confirming
+that the firmware begins execution. The probe function initiates firmware
+execution and waits for the firmware to flip a specific status bit.
 
-New warnings running 'make CHECK_DTBS=y microchip/at91-sama7d65_curiosity.dtb' for cover.1734723585.git.Ryan.Wanner@microchip.com:
+[   12.637880] powervr ffef400000.gpu: [drm] loaded firmware powervr/rogue_36.52.104.182_v1.fw
+[   12.648979] powervr ffef400000.gpu: [drm] FW version v1.0 (build 6645434 OS)
+[   12.678906] [drm] Initialized powervr 1.0.0 for ffef400000.gpu on minor 0
 
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/pinctrl@e0014000: failed to match any schema with compatible: ['microchip,sama7d65-pinctrl', 'microchip,sama7g5-pinctrl']
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/pinctrl@e0014000: failed to match any schema with compatible: ['microchip,sama7d65-pinctrl', 'microchip,sama7g5-pinctrl']
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: mmc@e1208000: compatible: 'oneOf' conditional failed, one must be fixed:
-	['microchip,sama7d65-sdhci', 'microchip,sam9x60-sdhci'] is too long
-	'microchip,sama7d65-sdhci' is not one of ['atmel,sama5d2-sdhci', 'microchip,sam9x60-sdhci']
-	'microchip,sama7d65-sdhci' is not one of ['microchip,sam9x7-sdhci', 'microchip,sama7g5-sdhci']
-	from schema $id: http://devicetree.org/schemas/mmc/atmel,sama5d2-sdhci.yaml#
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: mmc@e1208000: Unevaluated properties are not allowed ('compatible' was unexpected)
-	from schema $id: http://devicetree.org/schemas/mmc/atmel,sama5d2-sdhci.yaml#
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/mmc@e1208000: failed to match any schema with compatible: ['microchip,sama7d65-sdhci', 'microchip,sam9x60-sdhci']
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1800000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1800000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1804000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1804000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+Power Management:
+Full power management capabilities require implementing the T-HEAD SoC AON
+protocol messaging via the hardware mailbox. Support for the mailbox was merged
+in kernel 6.13 [13], and the AON protocol implementation is part of this
+series, since v2. Therefore this series support full power management
+capabilities for the GPU driver.
 
+Thanks Krzysztof and Stephen for taking the time to review the last revision !
+Your guidance and the direction was very helpful.
 
+v2:
 
+Removed AP_SUBSYS clock refactoring commits (1-6):
+ - instead of refactoring, I opted to extend the current driver and its
+   associated device tree node to include support for a second address space.
 
+Expanded patchset scope to fully support power management capabilities:
+ - introduced a new firmware driver to manage power-related operations.
+ - rewrote the power-domain driver to function alongside the firmware driver.
+   These nodes in the device tree lack direct address spaces, despite
+   representing HW blocks. Control is achieved via firmware protocol messages
+   transmitted through a mailbox to the E902 core.
+
+Implemented a reset controller for the TH1520 SoC:
+ - developed a reset controller driver for the TH1520 to manage reset
+   sequences.
+ - updated the drm/imagination driver to act as a reset controller consumer.
+   While this patchset is focused on the LPI4A board, the reset controller is
+   designed to be useful for other boards, such as the BPI-3F, which also require
+   a reset sequence after power-up.
+
+Updated dt-bindings:
+ - added new dt-bindings for power, reset, and firmware nodes.
+ - updated the powervr dt-binding to include reset support and new compatibles.
+ - ran dtbs_check and dt_binding_check to ensure compliance.
+
+Addressed code quality:
+ - resolved all checkpatch issues using --strict, except for the call to
+   devm_clk_hw_register_gate_parent_data().  The current implementation remains
+   preferable in this context, and clang-format aligns with this choice.
+
+Also included the mailbox device tree commit, already queued for 6.14 [14] for
+completeness.
+
+References:
+
+[1] Downstream Driver Source:
+    https://gitlab.freedesktop.org/frankbinns/powervr/-/blob/cb1929932095649a24f051b9cfdd2cd2ceab35cb/drivers/gpu/drm/img-rogue/Kconfig
+
+[2] Initial Upstream Driver Series:
+    https://lore.kernel.org/all/cover.1700668843.git.donald.robson@imgtec.com/
+
+[3] BXS-4-64 GPU Support Patches:
+    https://lore.kernel.org/all/20241105-sets-bxs-4-64-patch-v1-v1-0-4ed30e865892@imgtec.com/
+
+[4] Firmware Issue Discussion 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/1
+
+[5] Firmware Issue Discussion 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/2
+
+[6] Firmware Update Commit 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/6ac2247e9a1d1837af495fb6d0fbd6f35547c2d1
+
+[7] Firmware Update Commit 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/efbebc90f25adb2b2e1499e3cc24ea3f3c3e4f4c
+
+[8] Vendor-Provided Mesa Driver:
+    https://gitlab.freedesktop.org/imagination/mesa/-/tree/dev/devinfo
+
+[9] Sascha Willems' Vulkan Samples:     https://github.com/SaschaWillems/Vulkan
+
+[10] Test Kernel Source:
+    https://github.com/mwilczy/linux/tree/2_December_reference_linux_kernel_imagination
+
+[11] Test Mesa Driver:
+    https://github.com/mwilczy/mesa-reference
+
+[12] DPU DC8200 Driver Upstream Attempt:
+    https://lore.kernel.org/all/20241120061848.196754-1-keith.zhao@starfivetech.com/
+
+[13] Pull request kernel 6.13 for mailbox
+    https://lore.kernel.org/all/CABb+yY33qnivK-PzqpSMgmtbFid4nS8wcNvP7wED9DXrYAyLKg@mail.gmail.com/
+
+[14] Mailbox commit queued for 6.14
+    https://lore.kernel.org/all/20241104100734.1276116-4-m.wilczynski@samsung.com/
+
+Michal Wilczynski (19):
+  dt-bindings: clock: Add VO subsystem clocks and update address
+    requirements
+  clk: thead: Add clock support for VO subsystem in T-Head TH1520 SoC
+  dt-bindings: power: thead,th1520: Add support for power domains
+  dt-bindings: firmware: thead,th1520: Add support for firmware node
+  firmware: thead: Add AON firmware protocol driver
+  soc: thead: power-domain: Add power-domain driver for TH1520
+  riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+  dt-bindings: reset: Add T-HEAD TH1520 SoC Reset Controller
+  reset: thead: Add TH1520 reset controller driver
+  drm/imagination: Add reset controller support for GPU initialization
+  dt-bindings: gpu: Add 'resets' property for GPU initialization
+  dt-bindings: gpu: Add compatibles for T-HEAD TH1520 GPU
+  drm/imagination: Add support for IMG BXM-4-64 GPU
+  drm/imagination: Enable PowerVR driver for RISC-V
+  riscv: dts: thead: Extend device tree clk with VO reg
+  riscv: dts: thead: Add mailbox node
+  riscv: dts: thead: Introduce power domain nodes with aon firmware
+  riscv: dts: thead: Introduce reset controller node
+  riscv: dts: thead: Add GPU node to TH1520 device tree
+
+ .../bindings/clock/thead,th1520-clk-ap.yaml   |  15 +-
+ .../bindings/firmware/thead,th1520-aon.yaml   |  59 +++++
+ .../bindings/gpu/img,powervr-rogue.yaml       |  38 +++-
+ .../bindings/power/thead,th1520-power.yaml    |  42 ++++
+ .../bindings/reset/thead,th1520-reset.yaml    |  45 ++++
+ MAINTAINERS                                   |   8 +
+ arch/riscv/Kconfig.socs                       |   1 +
+ arch/riscv/boot/dts/thead/th1520.dtsi         |  54 ++++-
+ drivers/clk/thead/clk-th1520-ap.c             | 160 ++++++++++++--
+ drivers/firmware/Kconfig                      |   9 +
+ drivers/firmware/Makefile                     |   1 +
+ drivers/firmware/thead,th1520-aon.c           | 203 ++++++++++++++++++
+ drivers/gpu/drm/imagination/Kconfig           |   2 +-
+ drivers/gpu/drm/imagination/pvr_device.c      |  21 ++
+ drivers/gpu/drm/imagination/pvr_device.h      |   9 +
+ drivers/gpu/drm/imagination/pvr_drv.c         |   1 +
+ drivers/gpu/drm/imagination/pvr_power.c       |  15 +-
+ drivers/pmdomain/Kconfig                      |   1 +
+ drivers/pmdomain/Makefile                     |   1 +
+ drivers/pmdomain/thead/Kconfig                |  12 ++
+ drivers/pmdomain/thead/Makefile               |   2 +
+ drivers/pmdomain/thead/th1520-pm-domains.c    | 181 ++++++++++++++++
+ drivers/reset/Kconfig                         |  10 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-th1520.c                  | 151 +++++++++++++
+ .../dt-bindings/clock/thead,th1520-clk-ap.h   |  33 +++
+ .../dt-bindings/power/thead,th1520-power.h    |  18 ++
+ .../dt-bindings/reset/thead,th1520-reset.h    |  13 ++
+ .../linux/firmware/thead/thead,th1520-aon.h   | 186 ++++++++++++++++
+ 29 files changed, 1266 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/thead,th1520-power.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/thead,th1520-reset.yaml
+ create mode 100644 drivers/firmware/thead,th1520-aon.c
+ create mode 100644 drivers/pmdomain/thead/Kconfig
+ create mode 100644 drivers/pmdomain/thead/Makefile
+ create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+ create mode 100644 drivers/reset/reset-th1520.c
+ create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+ create mode 100644 include/dt-bindings/reset/thead,th1520-reset.h
+ create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
+
+-- 
+2.34.1
 
 
