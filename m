@@ -1,181 +1,108 @@
-Return-Path: <linux-clk+bounces-16212-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16198-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 042D29FAEC3
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 14:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADBF09FAE85
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 13:57:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C87EB1609FA
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 13:01:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32C2816365C
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Dec 2024 12:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036F81D6DD8;
-	Mon, 23 Dec 2024 12:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97AC1B3942;
+	Mon, 23 Dec 2024 12:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Qy7qhplv"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PnZjejza"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8DC1CDA09
-	for <linux-clk@vger.kernel.org>; Mon, 23 Dec 2024 12:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569B01AF0C5;
+	Mon, 23 Dec 2024 12:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734958591; cv=none; b=E+IkjCi/coTjYAsh3pbtTsaBOuQc0lgDdPq39Ptr0e2J8fEgUGnO4jKJkGNxHT22pqCrQoEb5JAWWq7GUfhstXO++HxEq7nr5kMKN4qU7AKcnPV02LYFvqYBje5hV8+5KpnPdU030MXOf3TeVYJqd9DOO98CqNySqlrUR4n66uw=
+	t=1734958578; cv=none; b=VTpJidqVxAfa7LRkqhj7cQX/txa+C5swNhzkfk3KHhiIut6A5RRJa6Myl0mXTnRVVaaRrunhILS8VDVq4NIBnlXopjVR0+hfEWoWv91/96FjkLwAQtZKhiMHoua8mvwUo6/X/YDvFCCB1STow8LaClZPM/War32hA4GwcPgGU64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734958591; c=relaxed/simple;
-	bh=LMH2xhH9U8ImMNvg8PXT82OEB9ZpzVFvFNFhXPgi86Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=fBaO3tZBkuQQqDKyw9HMBWdzthBzFiMJvd8bX+/Cqjl3jHNBLVClg540HnYOKByzVJLvMaOmBngtLBKV8aKJw3iIdoqjy+U6C6UgtqqOq/mw9mEYnCj606sT6oxfNszhgBYvDThK0msuqqe6Le8Bqr0H7USKCbyEcD7J8JaqJmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Qy7qhplv; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241223125628euoutp0237ee6aadc9300f66402e314230977b7d~Tz6TFgwZx1017710177euoutp02z
-	for <linux-clk@vger.kernel.org>; Mon, 23 Dec 2024 12:56:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241223125628euoutp0237ee6aadc9300f66402e314230977b7d~Tz6TFgwZx1017710177euoutp02z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1734958588;
-	bh=79TKUoIgn5bsQ0j4gX4SnusAyqeYKBaYJkTOM5ztHhw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Qy7qhplvvhy7XBQyZfmJDDK9BM60Euvr0eMOYDw6BVnRU1vpFu5p9xp3kHyyV1MuW
-	 oA6PA6TCLFT6vb6jVmYae5DIp8Ws8CGk8bM7CKRU13JrcYItwVHk9Trt9JOVGDa7bw
-	 KRgJl/p/MsvrmekPT4Na5ZNQhZCs5jXlxptcCtkI=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20241223125627eucas1p262a100ead365c8854aaa8bab38b07e6c~Tz6SsSmLJ1252912529eucas1p2P;
-	Mon, 23 Dec 2024 12:56:27 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id DE.1C.20409.BFD59676; Mon, 23
-	Dec 2024 12:56:27 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20241223125626eucas1p137d01dbee3cb24c38c0d4aa46404c7d5~Tz6SEPV3B2314123141eucas1p1f;
-	Mon, 23 Dec 2024 12:56:26 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20241223125626eusmtrp1f31182f393cfee7c832a3275f530abe8~Tz6SDDCA72098220982eusmtrp1G;
-	Mon, 23 Dec 2024 12:56:26 +0000 (GMT)
-X-AuditID: cbfec7f4-c0df970000004fb9-0b-67695dfb6f83
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id FA.04.19920.AFD59676; Mon, 23
-	Dec 2024 12:56:26 +0000 (GMT)
-Received: from AMDC4942.home (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241223125625eusmtip2a5b953119c092d80f04961ad00fc292f~Tz6QszX0j2641026410eusmtip2o;
-	Mon, 23 Dec 2024 12:56:25 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
-	m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
-	<m.wilczynski@samsung.com>
-Subject: [RFC PATCH v2 19/19] riscv: dts: thead: Add GPU node to TH1520
- device tree
-Date: Mon, 23 Dec 2024 13:55:53 +0100
-Message-Id: <20241223125553.3527812-20-m.wilczynski@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241223125553.3527812-1-m.wilczynski@samsung.com>
+	s=arc-20240116; t=1734958578; c=relaxed/simple;
+	bh=IM1Q6HaiaXg6oZNGDXEIctOQsVVBIkBbPK450fxHLa4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=how5I0m5HRMkfqQJA1WeKg5THTzI9YT/bf/WhU0xvBM7KSwMLjI1AQ+SlfOsN+nexfdPTUbp2IyDYOhWM1Jv4iFWNnKGANdnfOo4K92EG4deTMwKh+mHTPa90aiBnuevAxacGAQs0Z/plkpGnkIWRDm1sb46uZMz+ZwHcC64ezE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PnZjejza; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1734958573;
+	bh=IM1Q6HaiaXg6oZNGDXEIctOQsVVBIkBbPK450fxHLa4=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=PnZjejzaQNnQKGcHj69QdnLjjYL1KWDohfW64b6PdhFvI8Jef1P+1jMFXi6aoy87O
+	 QZN2t/CpxI7TrlVDF0XKymLi2VwstnAqSiG+c6utZIjP0w42MQDuiqyGQ405qxBs2c
+	 AP+yTne24M6ncM6uTwMMDti0Eo7auSn5RbsqTpyt8VV3YNNHDKDOH3fYkSBqLBEO6I
+	 TgndOBH1RP7S/jlh5bgr0yUgnR7cYS4ckWtIO0QRBlswHEHutgzzpO25flxd2Zco7P
+	 yhvSI41OQxRDXL9qZr19qTkV9cOqS1/gZclAOKMk0nE56ep3fqyamFo1Q9K/rNAbf4
+	 nm/jcVdC/o+mg==
+Received: from [192.168.1.90] (unknown [84.232.140.38])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8869D17E3750;
+	Mon, 23 Dec 2024 13:56:12 +0100 (CET)
+Message-ID: <19eca5c3-cedb-4c5f-9b70-9c25c8387414@collabora.com>
+Date: Mon, 23 Dec 2024 14:56:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf1CTdRi/7/u+e9+X2ebr8PJ7mpIr7OwHIpV9u0rmCfXecRdEaV0cxa69
-	ty35oZtkeVxKMG7AQEESGSAQxI8JkTAW7IAFEcOsmZhIBAM7iiCQ2ABBwcV4pfzv8/k8n+f5
-	PM/dQ+OSb8jNtDr+KKeJl8dKSSFh6V50PHM3Wq0M/PtPKeq58QWGmu4aKVTb5sBQSZdDgJy9
-	Zgz9MjdNoq/++JlCf7UlE6ivuphCKd31JBo3Okk0Y3AK0DVrEYncWV0AWdypJKrrGqJQ/VwJ
-	hspmmghU0WwFKC29UoCu/hCKhpw9BBq/ZsBRmnE98rQ2U+he30UCFd6yUcg8mSNA9rq3Uaot
-	j5BtY6f7dRQ7OT5OsN/pZym2bb6UYFuMQxRraPkRsA2mdJId7Gsl2fOX3mCHM+0Y21hxgk2t
-	68bYU8uB7HT7dZLNNpsA25tyg4qQvCt8WcHFqj/iNLv2xghV+oYa8rBH+LFtYRQ7CZboDOBD
-	Q+Y5WL5UJsgAQlrCVAM4PmAheTILYM2Um+KJG8CUcznkWku+ca1QBaDDdQXnySSArvZi3Osi
-	mSA4UlWyOngjoyOg7vtk4CU4MwagZbRodZYvcwDaqvMpLyYYf5hdPLzaLWJkcObrsxif5wdt
-	HT+t6j4rem1GP+A9G+ClglHCi/EVT0pT4eoakKkTQt1E6f3mENhi0wEe+8IJu5ni8SPw8hkD
-	weMEONLkwnmcBFsM9vv4JTjouLOyKL0SsBPWW3fx8j444M6jvDJkxLB/agO/ghjmWvJxXhZB
-	fZqEd++Anxuy/gt1VFsw3sLCjvMRp8F24wO3GB+4xfh/bCnATWATl6iNU3LaoHjuWIBWHqdN
-	jFcGfJAQ1wBWfvvyPftsM6iamAnoBBgNOgGkcelGUadErZSIFPJPjnOahPc1ibGcthNsoQnp
-	JpG/wo+TMEr5Ue4Qxx3mNGtVjPbZfBIzX4hsd1lHf9/yyrehN9veuz2j+E3cGCJWmzIXzn6Z
-	XHvhQ1n0PEOFKawDvbvljSdeKEtPHjK59ohU4rFI4bO3VMJ3staFl4zkjAmeL4oVSLYJPl2K
-	cciqqgdVN3utIQqXfjnpqufQZ7pCsmDrm7X0Dk9FQF5QlFh1p3Ii7VXnqXC/8JrWqfhBfc/p
-	vRHSrWG+jz/2RFy73/7gA1nlx0ZiogKlT8msR6bt2HISWlzn7rn+cOXBMqJgPvKiK7hheN9B
-	07nQNGXpkejbg6P+0tdH5j0RvwbXxTy907XfcuXRtxLxofXZ+iVxbtRrHXP/ZFYuHDdLhC/u
-	aex+aDF1u6081xYbJiW0KvnuJ3GNVv4vFJVQf0oEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGKsWRmVeSWpSXmKPExsVy+t/xe7q/YjPTDTbOM7E4cX0Rk8XW37PY
-	LdbsPcdkMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYXFsxl92i+dh6NouXs+6xWXzsucdq
-	cXnXHDaLz71HGC22fW5hs1h75C67xfqv85ksFn7cymKxZMcuRou2zmWsFhdPuVrcvXeCxeLl
-	5R5mi7ZZ/Bb/9+xgt/h3bSOLxex3+9kttryZyGpxfG24Rcv+KSwOch7vb7Sye7x5+ZLF43DH
-	F3aPvd8WsHjsnHWX3aNn5xlGj02rOtk87lzbw+Yx72Sgx/3u40wem5fUe7SsPcbk0f/XwOP9
-	vqtsHn1bVjF6XGq+zh4gFKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
-	k5Kak1mWWqRvl6CX0bFpJVvBf66K/T+eMDUw/uHoYuTkkBAwkZg+6zN7FyMXh5DAUkaJvV+v
-	sUIkZCSudb9kgbCFJf5c62KDKHrFKNH5fgNYgk3ASOLB8vlgDSICi1kk9u6rBCliFnjLKHF9
-	5kawImGBYInZZ36xg9gsAqoSfXPvM4PYvAIOEh83TGOC2CAvsf/gWbA4J1B8TdcNRhBbSMBe
-	4t+pD2wQ9YISJ2c+AZvJDFTfvHU28wRGgVlIUrOQpBYwMq1iFEktLc5Nzy021CtOzC0uzUvX
-	S87P3cQITDDbjv3cvINx3quPeocYmTgYDzFKcDArifAeEspMF+JNSaysSi3Kjy8qzUktPsRo
-	CnT3RGYp0eR8YIrLK4k3NDMwNTQxszQwtTQzVhLndbt8Pk1IID2xJDU7NbUgtQimj4mDU6qB
-	qe2GXUtiUrSczt1ZnGcv8i5ce2Tzi2cJTTEWdzsP8pV+3TZx5SeuFO225svvDpzmEZnz3emL
-	XVfi6SWTA6aoyHTHTlm/Y2/1/69XZMUNYi97H5n8oFZlHfeqH9quv9wtTwcVy3huV+eO2D/j
-	pcGLXJnqtzeOHeIo4jK48fH3z/x5p1YeV9T6xGl6S8lwWqD1ZtVvu2ZsU+zLXCi/vMWSM8Re
-	v1RPR7H9AXeGzZqkMD5d2cZH+14Kykxa6lqx68WPbcz9ybYtQm98uOpzhf4Gsvqq7ly8oFdC
-	ekNpfTWHJZtArcWV7nnPTyl9/Vpu9HNOm3blDOXcP+LJ7bU+H4/IzFm0x72St/vRt+0/vB7c
-	VGIpzkg01GIuKk4EAO7N0Ve5AwAA
-X-CMS-MailID: 20241223125626eucas1p137d01dbee3cb24c38c0d4aa46404c7d5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20241223125626eucas1p137d01dbee3cb24c38c0d4aa46404c7d5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20241223125626eucas1p137d01dbee3cb24c38c0d4aa46404c7d5
-References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
-	<CGME20241223125626eucas1p137d01dbee3cb24c38c0d4aa46404c7d5@eucas1p1.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/3] PCI: exynos: Switch to
+ devm_clk_bulk_get_all_enabled()
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To: Bjorn Helgaas <bhelgaas@google.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Jingoo Han <jingoohan1@gmail.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?=
+ <kw@linux.com>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: kernel@collabora.com, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-pci@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org
+References: <20241217-clk_bulk_ena_fix-v5-0-aafbbb245155@collabora.com>
+ <20241217-clk_bulk_ena_fix-v5-2-aafbbb245155@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20241217-clk_bulk_ena_fix-v5-2-aafbbb245155@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add a device tree node for the IMG BXM-4-64 GPU present in the T-HEAD
-TH1520 SoC used by the Lichee Pi 4A board. This node enables support for
-the GPU using the drm/imagination driver.
+Hi Bjorn,
 
-By adding this node, the kernel can recognize and initialize the GPU,
-providing graphics acceleration capabilities on the Lichee Pi 4A and
-other boards based on the TH1520 SoC.
+On 12/17/24 11:41 PM, Cristian Ciocaltea wrote:
+> The helper devm_clk_bulk_get_all_enable() missed to return the number of
+> clocks stored in the clk_bulk_data table referenced by the clks
+> argument and, therefore, will be dropped.
+> 
+> Use the newly introduced devm_clk_bulk_get_all_enabled() variant
+> instead, which is consistent with devm_clk_bulk_get_all() in terms of
+> the returned value:
+> 
+>  > 0 if one or more clocks have been stored
+>  = 0 if there are no clocks
+>  < 0 if an error occurred
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
----
- arch/riscv/boot/dts/thead/th1520.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+In case you missed the previous requests, we need your ack on this patch
+so that Stephen can apply the entire series to the clk tree and drop the
+obsolete helper.
 
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-index c6fe2ea3197d..7e4b97f9e1b5 100644
---- a/arch/riscv/boot/dts/thead/th1520.dtsi
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -506,6 +506,19 @@ clk: clock-controller@ffef010000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		gpu: gpu@ffef400000 {
-+			compatible = "thead,th1520-gpu", "img,img-bxm";
-+			reg = <0xff 0xef400000 0x0 0x100000>;
-+			interrupt-parent = <&plic>;
-+			interrupts = <102 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk CLK_GPU_CORE>,
-+				 <&clk CLK_GPU_CFG_ACLK>;
-+			clock-names = "core", "sys";
-+			power-domains = <&pd TH1520_AON_GPU_PD>;
-+			resets = <&rst TH1520_RESET_ID_GPU>;
-+			reset-names = "gpu";
-+		};
-+
- 		rst: reset-controller@ffef528000 {
- 			compatible = "thead,th1520-reset";
- 			reg = <0xff 0xef528000 0x0 0x4f>;
--- 
-2.34.1
-
+Thanks,
+Cristian
 
