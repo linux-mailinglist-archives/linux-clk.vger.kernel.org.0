@@ -1,127 +1,170 @@
-Return-Path: <linux-clk+bounces-16245-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16250-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACC559FB81B
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2024 02:01:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59B979FB8D3
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2024 04:08:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 388207A1F31
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2024 01:01:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3856164238
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2024 03:07:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A4A137E;
-	Tue, 24 Dec 2024 01:01:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F98742049;
+	Tue, 24 Dec 2024 03:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gGXs7UIc"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="Q4Whlff6"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129F51C27
-	for <linux-clk@vger.kernel.org>; Tue, 24 Dec 2024 01:01:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03C317996
+	for <linux-clk@vger.kernel.org>; Tue, 24 Dec 2024 03:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735002079; cv=none; b=gpVum2Xk+mAv+8FiZzK5BvwSOBK3wS1O6wSnPblHfgaC5STePMNmuV2m4dnPnsxrhQKW0KEiJYE6BcdolwRGk+S26FUxyRDpesA2Y+E7RBtTFg7oi6Mrf7xP37mRylHUhrnec9o81QhJsC7OSP7iH+ZjwqrWHjtkVKjd2nTdgao=
+	t=1735009674; cv=none; b=cCAeQnlkjWlI6CPpGaJINRrlGQ1tU1L2KFeO7xJXYpv4mlkTO+RS3OFA8WToYax6qhIzbzZutB82bPXpNOCwifPoJtdSuhaYvXudYHVMZR1fJ3Lh/0RW7h+JRkedcqXG3On8ZaCP9FMSweKXEp3KGwL1oPg0fR1t9vHwT0AVgR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735002079; c=relaxed/simple;
-	bh=VTjBZDdASugD3kswoxr2ITUXWzGkQEVuNdaujYNYdJ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HMYKiQSrqqEN19UhNN7EXL8t9K1RkB/ZueY7+KLyQ5F26qMp8H5WYNGkhAjgQk5TgG93zgyzqOgFosZ6OZq8xy/gM3LjlCo+CeO2f8MW3t6BzoRM6uRys6MLS2OEkZP+0XaoIObFUUhIUYHn+3bO4TEyLBOshOowcIyEJIh+vvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gGXs7UIc; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43618283d48so34811395e9.1
-        for <linux-clk@vger.kernel.org>; Mon, 23 Dec 2024 17:01:16 -0800 (PST)
+	s=arc-20240116; t=1735009674; c=relaxed/simple;
+	bh=InG9yypQ9Imh/JUNwbwOd45TykNKtiV+/PWRRUnCjZk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oj1FiP7ua7k9wssh6R4yc/y1hGMb7aP7qV+Zyru2ExLyza3aY3Lvj+zYlRL8tNw647QXPq6giVgVgrtt4jbzzcYZJQZ/4rTwQmalZwUD+aMkQpzmh+Nkphrtv/uacXRDBff/SuGdL4RZG52H15E9HqM5bzvPz2kAXew2OthWx4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=Q4Whlff6; arc=none smtp.client-ip=209.85.166.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-844d67eb693so385281539f.3
+        for <linux-clk@vger.kernel.org>; Mon, 23 Dec 2024 19:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735002075; x=1735606875; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kp86hapJwh9BF1daX3h02Pa8dcZyvAyCiDhiANA3Zk4=;
-        b=gGXs7UIcQQnNSONsqK7b/XO5mjKdmgCvH4kpXA0qxLl2AEoy2kSOC+6gy35SIXLWYK
-         mPjVEXu+SroAFJqRRbhoJNq5U/x27yq+RCKkl0R3Zw/O0UmD9dh3Qy7cJJPh4MwapHPB
-         UNhmB4guhPqK7A8vj5rmyCWyGtS0C0pS6xMwno0NmzPcSJUVuHRPd2YuNmrGB9h2JK9i
-         yJsPUZVgLyZ0uyIU/nlRQm4JPtOK1fkbr1Y3H35oKx+dEDod7HnSEJ9yB/Xwmz9jdLvI
-         LTBc+1KHrEddhlpLxhgtuLiDt0HGoJQqKfhAOJdTTvPOTFTGF98F+kxRHXYdxObs0gBr
-         Vumw==
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1735009672; x=1735614472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MCGvf1sK2UK6+mlC2GdD8ZGpaisHOo2mW9F63kmNJXo=;
+        b=Q4Whlff678yOyBGf6DU4u9w6l+ON5RFwMs3GqIIO2dIbZvW2ofaEODcfNSLjK9ZO/8
+         ceirHSmy6DHyrftcIcQOWW0Qvk43AL9tpQPtTRQL0TWklC0gxxzLCkR5rzqpaNaGorz+
+         kObJcMlWk5r/Zc8AbY0BLLHn4ClqwiHcWCs2EQfLjUfedDkvomlUQYx/kJpRPeuuM0sF
+         aR/w919EDxkHaTJNFnHWOc6x7GYhrvp/5SqGu6A9zFzp1BE3bdg+rrO+DU20R1Fgi6fG
+         V35LC+zTPICR8y07FLtiD8EQXw/yQ/RT0sp1XWkSaA2VACuQFvZ9DojXd8tejnGn/JJp
+         tB3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735002075; x=1735606875;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kp86hapJwh9BF1daX3h02Pa8dcZyvAyCiDhiANA3Zk4=;
-        b=LMooyxTWQX6weVVob4HxRI1Kew7VdEXTT0Uq0MGepxtDzwC8YP6l11O1obFi5iObFl
-         MdTpU1nrm6zQ4PG/CFIyJvsXI9+H2pb3F/afdbePC4s8TxC4IdiLxYiLpZKeHiDblwQb
-         4CjcRZV1rBVewmlGSIw4B6z2L1zobf82Zo8WtuJJQZ869ayu3CBcAfOEIa3udd20m54a
-         coovOBy9R6t5JHK8Jz9Tv6rxj7TK6xDvppADYcODGOqwKxpPlblhu+jUt0oP57hfAnn1
-         8cx4TT5O8dD46Hiis+Mj2TCRMRKOoT5Nese/ouOdHknZtNe0beFiXTjS+L6Wgi2JqQac
-         TnDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjK+71VR/1h5fqFz/8Ph7n7lEO5oJUHBPvnCarGpzRkADEgqxpT1mc87/Ej3MX3ZPOJaQitn6tx0s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8CreoompticVKuA53MYVxB2QaaEXK0NN2I7g+AYXOyVWUJQol
-	V4G6z88znO2R4zE0/G0OKCQoR9aENcPi/jZgG2aSmNkwCMaZUkcdoYSXBx+hP18=
-X-Gm-Gg: ASbGncsUvdmIMak8TN6Dut8Qta1zjLgmIfqN0nlPWl7eBpG8mGyxZo8w0Vry0PVl6vj
-	U3rTfJD9MfomuwFvr2/MI7uy/CDTf/qAW5bQcrpspyrjkLhVm3B9DNoWsTDHkjdFvoT6WBiJMHG
-	P2xIZwBK7wi2w0LDsVDrusKFeLoSOJH5hZPAfDcYzwoYXsiMt358yX+Iy1qTDCsBsfKEa4ilsdC
-	Q76bPF3fkoPV8mExZB0W6l38g81Tn6dOmZB8GbD/+29L+kfyPbCpmomzIK70aG73oWk8A==
-X-Google-Smtp-Source: AGHT+IFgDGmqmDPhyXR4nLgbVh7DgOs3lG+VS/8qN+gUc2mvLbY5Wmdth9OkKBZSOAeArY7B/KdHJw==
-X-Received: by 2002:a05:6000:4022:b0:385:e879:45cc with SMTP id ffacd0b85a97d-38a221faa63mr12093565f8f.19.1735002075172;
-        Mon, 23 Dec 2024 17:01:15 -0800 (PST)
-Received: from [192.168.0.34] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c829235sm12506493f8f.15.2024.12.23.17.01.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Dec 2024 17:01:13 -0800 (PST)
-Message-ID: <1de7bfd7-0bd0-4e14-b52a-ed6e3bb7a09c@linaro.org>
-Date: Tue, 24 Dec 2024 01:01:11 +0000
+        d=1e100.net; s=20230601; t=1735009672; x=1735614472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MCGvf1sK2UK6+mlC2GdD8ZGpaisHOo2mW9F63kmNJXo=;
+        b=GJNsEr6Gxi0Gu+1HKdGmD5EgvB71VvtJAelZPvmjePZMTAa2WQbT2z3EzUTZHhl5xQ
+         KWFnU8jyepABPSJo9MgNccreqxTJ9svQxtd0X00NfDC/n7SJ9lx66W4pJAmMRUXVjwQM
+         M8uipPeTPIZFqWhguTP8Zv2vWI24LfmFCJYRljjx+YnH2y3HABeJRLqYRUEgCKiWnQLl
+         U6oVx04GLytVZjqsX3twrPSH0RvWkIQ0VZ15omgWaINIEs5n/QDoPN/LU17burUZYBne
+         Tn5uAimmuUnnkTaux2cSI2gmoCOJSzuGVbPGOInAjAh2ovZMv8OjZtQXIPMWyUQA6O4k
+         my2w==
+X-Forwarded-Encrypted: i=1; AJvYcCW9MpBGPw6gNhWncoJPCGnLKkTzy3rO7ws1poehUWF4N04QVYXiYkDjs3HIqK/ZfVYl6jtVjQE4Wo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEP7XRx4sS5vwfXdDZQaSBqOcHTVzuDplwzzbVjTGzWvPdrTGG
+	3wikgs0G63QCMB5wXcLzxbVUdLRorZ+vACAWXk+Fbuq/PY3lNtN+78Vx5TyeFpJLf+4U7WthHni
+	yyvzPQ6vDBdejdKN3snwqkjUrFSX4i6tq2vB0eA==
+X-Gm-Gg: ASbGncsPBHQEfq70anKI4hYKrO72IFpTuFqeQD78YCIP9jCD9lrKww8whXd5ScFoUIX
+	ieAwOhwKfTcJEcLre6f8KmOMhSoNKINe6Wp00gjxC
+X-Google-Smtp-Source: AGHT+IESeLQDngUv9XeyadvfXJX/o5ptn+fUq1pwDN5RxkHnom78SMZJoHAwT/GCPME6gOfPJ9XBAS33rEOarEHZH5Y=
+X-Received: by 2002:a05:6e02:b24:b0:3ab:1b7a:5932 with SMTP id
+ e9e14a558f8ab-3c2d514f756mr118213445ab.18.1735009671734; Mon, 23 Dec 2024
+ 19:07:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/5] media: qcom: camss: add support for SDM670 camss
-To: Richard Acayan <mailingradian@gmail.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-media@vger.kernel.org
-Cc: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-References: <20241218231729.270137-7-mailingradian@gmail.com>
- <20241218231729.270137-10-mailingradian@gmail.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20241218231729.270137-10-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241216084817.373131-1-apatel@ventanamicro.com>
+ <20241216084817.373131-3-apatel@ventanamicro.com> <ZQZPR01MB097924AF0A246677CCA17CDF8A03A@ZQZPR01MB0979.CHNPR01.prod.partner.outlook.cn>
+In-Reply-To: <ZQZPR01MB097924AF0A246677CCA17CDF8A03A@ZQZPR01MB0979.CHNPR01.prod.partner.outlook.cn>
+From: Anup Patel <anup@brainfault.org>
+Date: Tue, 24 Dec 2024 08:37:39 +0530
+X-Gm-Features: AbW1kvbK1Ge7yIHB59I44qUzyMXdhtcYAtj6nRedcxDEk_JvPGB-pTTor0edyOk
+Message-ID: <CAAhSdy3n5HrYUUcA8QRUU96kCzFn8zkAZL+LQ7Up6Bk+68-cFQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/8] dt-bindings: mailbox: Add bindings for RPMI
+ shared memory transport
+To: Leyfoon Tan <leyfoon.tan@starfivetech.com>
+Cc: Anup Patel <apatel@ventanamicro.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Sunil V L <sunilvl@ventanamicro.com>, 
+	Rahul Pathak <rpathak@ventanamicro.com>, Atish Patra <atishp@atishpatra.org>, 
+	Andrew Jones <ajones@ventanamicro.com>, 
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 18/12/2024 23:17, Richard Acayan wrote:
-> +		.clock = { "soc_ahb", "cpas_ahb",
-> +				"csiphy0", "csiphy0_timer" },
+On Tue, Dec 24, 2024 at 7:49=E2=80=AFAM Leyfoon Tan
+<leyfoon.tan@starfivetech.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Anup Patel <apatel@ventanamicro.com>
+> > Sent: Monday, December 16, 2024 4:48 PM
+> > To: Michael Turquette <mturquette@baylibre.com>; Stephen Boyd
+> > <sboyd@kernel.org>; Rob Herring <robh@kernel.org>; Krzysztof Kozlowski
+> > <krzk+dt@kernel.org>; Conor Dooley <conor+dt@kernel.org>; Jassi Brar
+> > <jassisinghbrar@gmail.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>; Paul Walmsley
+> > <paul.walmsley@sifive.com>; Sunil V L <sunilvl@ventanamicro.com>; Rahul
+> > Pathak <rpathak@ventanamicro.com>; Leyfoon Tan
+> > <leyfoon.tan@starfivetech.com>; Atish Patra <atishp@atishpatra.org>;
+> > Andrew Jones <ajones@ventanamicro.com>; Anup Patel
+> > <anup@brainfault.org>; linux-clk@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-riscv@lists.infradead.org; linux-
+> > kernel@vger.kernel.org; Anup Patel <apatel@ventanamicro.com>
+> > Subject: [RFC PATCH 2/8] dt-bindings: mailbox: Add bindings for RPMI sh=
+ared
+> > memory transport
+> >
+> [...]
+>
+> > +
+> > +examples:
+> > +  - |
+> > +    // Example 1 (RPMI shared memory with only 2 queues):
+> > +    mailbox@10080000 {
+> > +        compatible =3D "riscv,rpmi-shmem-mbox";
+> > +        reg =3D <0x00 0x10080000 0x00 0x10000>,
+> > +              <0x00 0x10090000 0x00 0x10000>,
+> > +              <0x00 0x100a0000 0x00 0x4>;
+> > +        reg-names =3D "a2p-req", "p2a-ack", "db-reg";
+> > +        msi-parent =3D <&imsic_mlevel>;
+> > +        riscv,slot-size =3D <64>;
+> > +        #mbox-cells =3D <1>;
+> > +    };
+> > +  - |
+> > +    // Example 2 (RPMI shared memory with only 4 queues):
+> > +    mailbox@10001000 {
+> > +        compatible =3D "riscv,rpmi-shmem-mbox";
+> > +        reg =3D <0x00 0x10001000 0x00 0x800>,
+> > +              <0x00 0x10001800 0x00 0x800>,
+> > +              <0x00 0x10002000 0x00 0x800>,
+> > +              <0x00 0x10002800 0x00 0x800>,
+> > +              <0x00 0x10003000 0x00 0x4>;
+> > +        reg-names =3D "a2p-req", "p2a-ack", "db-reg";
+>
+> reg has 5 entries, missing 2 reg-names?
 
-Broken indentation here and in several other places - please fix.
+copy-paste error, thanks for catching.
 
-Also you should rebase on media-staging as a 3way merge is required ATM.
+Regards,
+Anup
 
-media-stage     git://linuxtv.org/media_stage.git (fetch)
-
-Other than that, this looks good.
-
-Once you've addressed the above add.
-
-git am /tmp/\[PATCH\ v9\ 3_5\]\ media:\ qcom:\ camss:\ add\ support\ 
-for\ SDM670\ camss\ -\ Richard\ Acayan\ \<mailingradian@gmail.com\>\ -\ 
-2024-12-18\ 2317.eml -3
-Applying: media: qcom: camss: add support for SDM670 camss
-Using index info to reconstruct a base tree...
-M       drivers/media/platform/qcom/camss/camss.c
-Falling back to patching base and 3-way merge...
-Auto-merging drivers/media/platform/qcom/camss/camss.c
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>
+> > +        msi-parent =3D <&imsic_mlevel>;
+> > +        riscv,slot-size =3D <64>;
+> > +        riscv,db-mask =3D <0x00008000>;
+> > +        riscv,db-value =3D <0x00008000>;
+> > +        #mbox-cells =3D <1>;
+> > +    };
+> > --
+> > 2.43.0
+>
+> Regards
+> Ley Foon
 
