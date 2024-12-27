@@ -1,68 +1,96 @@
-Return-Path: <linux-clk+bounces-16343-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16346-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D208C9FD3B5
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Dec 2024 12:12:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6997E9FD433
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Dec 2024 13:46:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E38E3A2B15
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Dec 2024 11:12:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 146B01609CC
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Dec 2024 12:46:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D815A1F541E;
-	Fri, 27 Dec 2024 11:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E2A16F27E;
+	Fri, 27 Dec 2024 12:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="PytkC0E6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q//aZnUz"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503771F37C1
-	for <linux-clk@vger.kernel.org>; Fri, 27 Dec 2024 11:09:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39B0155741
+	for <linux-clk@vger.kernel.org>; Fri, 27 Dec 2024 12:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735297787; cv=none; b=YE3gT4AaeSLVBnFCiEM+yPkcHjlrQLKh1KwofPaEKVpF7TAM6SL7uxouA5KzAhZFVUhjblHPLa/8OMWUWzAyOiG3uYOedeCpAVR0Natiz9kJ1ZPjK9RR8iR+Jpq9QPvR5eImd8+nCWWMwT42WTPiy4A9DHbQUs2JLuBY8CrvOBM=
+	t=1735303606; cv=none; b=aJR02xe3EMlf8V0g5izyFeuICZEAmqQboMJBB396tplQlw/1XSrGjxxJTdOHobzuSQYimWki9VFx6BMPkJYU5SxctUyvukaQ4KbHZQwOcbBGY5UyOd2glIOH448w5iJ7zuj8qBWP8EkLB3b0iEHiCElD4uNatzWUFwDtPWZ20ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735297787; c=relaxed/simple;
-	bh=qvS7+D/RTyyMg86CwtqbsAA+5EMqHdzQTTB53paC81Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BLZYHnh3ut/CBuKlje5HXILM9NBKCB49uTKl9r87w+xsy6OVjpqfkTu41YQLc2kxW7caoA8u4oVE7Y4D7S3h2MuOOPT7tfs2Mde4BWMk8Kq76gJ5XkmIp0YtwVU34r0hREAvZXljX82+1rDCUOQxxwqSTlM7ZJ4osxt6DuQUuPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=PytkC0E6; arc=none smtp.client-ip=35.89.44.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
-Received: from eig-obgw-5009a.ext.cloudfilter.net ([10.0.29.176])
-	by cmsmtp with ESMTPS
-	id QpHxtFjnTumtXR8DytzkQa; Fri, 27 Dec 2024 11:09:46 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-	by cmsmtp with ESMTPS
-	id R8Dvt6kFJlDL5R8DwtSalg; Fri, 27 Dec 2024 11:09:45 +0000
-X-Authority-Analysis: v=2.4 cv=LLtgQoW9 c=1 sm=1 tr=0 ts=676e8af9
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=IkcTkHD0fZMA:10 a=RZcAm9yDv7YA:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8
- a=iM3t8g1HjrKnZeAfta4A:9 a=QEXdDO2ut3YA:10 a=rsP06fVo5MYu2ilr0aT5:22
- a=ZCPYImcxYIQFgLOT52_G:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-	; s=default; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:Sender:
-	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
-	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=pGwPFK3xv/ptVPYpkqFPS9qGRy0Y0xu/iUwb0C9nXWg=; b=PytkC0E6+h8OO95GAaBDa6ToD/
-	X6RQBgyIH8yLV5owVMFw3iqDdsFtQ7HAhgXvnn++80/oOj9h12a7UwDVencs83+1ur5aknYnBbHfo
-	IlFfdbs9vOr14mDdckmSR3ntnnAZ39LJPqK9lC9zqTQ61W7VwgBb2fhR4dR/yqC4cBYD6L/VpumJT
-	bNXGByvvB0699BiYZg3Pq5nTJvZRms0xAAKqpyaFTYsQiwMDZS6p93PnIOLAOY9v21vNFe3extze8
-	/a7mKuI+Y37MesfcysEOGPf2nUBXtjkITvlJqeP9HiOAjVoEXo2OmIrM9S6dUT+v1OzkqfB4blkEA
-	K48J1JSA==;
-Received: from [122.165.245.213] (port=50828 helo=[127.0.1.1])
-	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <parthiban@linumiz.com>)
-	id 1tR8Do-000bEK-38;
-	Fri, 27 Dec 2024 16:39:37 +0530
-From: Parthiban Nallathambi <parthiban@linumiz.com>
-Date: Fri, 27 Dec 2024 16:38:03 +0530
-Subject: [PATCH 16/22] clk: sunxi-ng: sun8i-de2: Add support for a100/a133
+	s=arc-20240116; t=1735303606; c=relaxed/simple;
+	bh=IX1Pbb9e9j1HoYmbUCLz0vmxGQOa9VaE8MApR1YCGOs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FH7v0EkB308EZf+E+5I1yQ+XlBmWalb5fiK+hF3VubZ99Q6CEBkrybO24d6g2zwRcZ3sVS5DeuLrFVG86I7AszpYSa9toBDMa0TSxJ6ysgM31liFJhRUrVxIC6/RwkdLer1dGN9QyloYlECn0vty9+eh/XGaoRqq6p7KcLdV8i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q//aZnUz; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-386329da1d9so3254987f8f.1
+        for <linux-clk@vger.kernel.org>; Fri, 27 Dec 2024 04:46:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1735303603; x=1735908403; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qAr5MJyxW4tliQqtSvIibq4rtO0kf94wwATw2mUtoLU=;
+        b=Q//aZnUzV9muSqLahVP7KhXETYk0BL1wsxA07GNo2UvpcQxPO6r0XnJdXvb2qn4Fke
+         yEzIQAa5LjNnFltmBm1i5xAObm5VHoDm+a+SKcV7gk+zc9DvJrTyDnAETXRhIqK1K0/S
+         9B30svSQ9XIc57Wyfa7f4ATPOTFFEbJO9c8kPeZl2BMLI8tyxnxfIfQpmHwP5B0fuB2f
+         tZaOXyPIh64XlspQrvUNP3Y7xg7IGdzJhUZPxpHExKqetgkNecrvoX117OaEmrLRPfle
+         dLU5Q32knnc+QzddMkLjnfjCZPR4YAIq5QQhH2/GNsvEjpk0W0Ug/wvggu2b7pneCfx1
+         YoRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735303603; x=1735908403;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qAr5MJyxW4tliQqtSvIibq4rtO0kf94wwATw2mUtoLU=;
+        b=tcUVi37AYdcaDO2e6mnXrZakR41I3f03zjqH7fpxkcf3twI9Vf8xTr2pCJPM+8ThNS
+         +PSbC0BsP15b07ysovJ2Gx/LtyuMCjqVCH9Cgds0r2rhLOo48ZX4dBz/+Cu96q4VMuDm
+         JUcMiB1/MFuc9/0IojFnmxKZednLiZ8gzg63OvpRvtuB6Tusp8XOESeKy3qpnVegNVpa
+         QYYcPmAeEQVGjy2D62i6vKOooZJ5PPWwMcD2pTV/eCyH38QipvJTTabhCfCRtpzUK6eQ
+         t+QDJXwTpbG5pIHiPK5L2NvhZZGFfO0JTqPZWpgb+2N5E3tsXC1buZdsLiWjaUScRQKZ
+         PpnQ==
+X-Gm-Message-State: AOJu0YzZ85nEHSH34Tj3hhzJYWGZzkxTSdrAPYR1oKf9GFefOAtPjPEF
+	7uwSfsnQxruj9d840x+kY4l1coCx9QxuKmA9rhmIx5zki5fUJbGChK7SLpfZIKRcMLsaOdsvPFR
+	Q
+X-Gm-Gg: ASbGncufc3bSrPcpj+55f7OW60r6N1s39XDOcbHpRlYH3WuGyHdI1LiE46FYWk3ZD0f
+	jEKO1kbdJ+yudcyTTqEcFBU5gq/KX2ErPcDgLrH41rUUDaUrmeKgwPS0QsMD7XrmRg+6aOwnqkf
+	7wL5jBh5wPAcE1/nkxu3QNfmcde9V3cFP6JzLCTeEac6eAVYNrjGHcabyWUQbEqR2e4qO1BEqfc
+	+td+/pTwI9O6re41BAd27NB2/PMcOwRpU6rciOJsbqMozvmVDsmvrEJ
+X-Google-Smtp-Source: AGHT+IFOSyN6MsRY52PNGIySqb8jJ3jiAJ8ipn+mH7OpC8pga8Vo0BdkKK7utvCX05gXYmLza6GGZg==
+X-Received: by 2002:a5d:584d:0:b0:385:e0d6:fb73 with SMTP id ffacd0b85a97d-38a221fa9cdmr21953130f8f.15.1735303603117;
+        Fri, 27 Dec 2024 04:46:43 -0800 (PST)
+Received: from hackbox.lan ([82.76.168.176])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b11495sm297172905e9.19.2024.12.27.04.46.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Dec 2024 04:46:42 -0800 (PST)
+From: Abel Vesa <abel.vesa@linaro.org>
+To: linux-clk@vger.kernel.org,
+	Marek Vasut <marex@denx.de>
+Cc: Abel Vesa <abelvesa@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] clk: imx8mp: Fix clkout1/2 support
+Date: Fri, 27 Dec 2024 14:45:59 +0200
+Message-Id: <173530350106.4140483.17403614068290152779.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241112013718.333771-1-marex@denx.de>
+References: <20241112013718.333771-1-marex@denx.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -70,88 +98,25 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241227-a133-display-support-v1-16-13b52f71fb14@linumiz.com>
-References: <20241227-a133-display-support-v1-0-13b52f71fb14@linumiz.com>
-In-Reply-To: <20241227-a133-display-support-v1-0-13b52f71fb14@linumiz.com>
-To: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, Maxime Ripard <mripard@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Linus Walleij <linus.walleij@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>
-Cc: iommu@lists.linux.dev, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-phy@lists.infradead.org, 
- Parthiban Nallathambi <parthiban@linumiz.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1735297689; l=1043;
- i=parthiban@linumiz.com; s=20241125; h=from:subject:message-id;
- bh=qvS7+D/RTyyMg86CwtqbsAA+5EMqHdzQTTB53paC81Y=;
- b=XNyGVAs9WW8vlM4qOOilUjJeSmld8IS3muoSSmNHF7R0BNHYwWiLQzsMYl1WyxP5KH08pxwbs
- XX/zJxP3xkCCWn9sKa9YqO1pD/IsNIo4ZzA57+3OXY2mrliF2tLuPq7
-X-Developer-Key: i=parthiban@linumiz.com; a=ed25519;
- pk=PrcMZ/nwnHbeXNFUFUS833wF3DAX4hziDHEbBp1eNb8=
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1tR8Do-000bEK-38
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([127.0.1.1]) [122.165.245.213]:50828
-X-Source-Auth: parthiban@linumiz.com
-X-Email-Count: 482
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDTTunbJ0x+nTZ7vkQJRUAQ5F69kpv/yC/PhpGSqyPTn3vFSuFtED9BwKLuEhNzHDBsoiw3+J/YPc2/U2K8TW9ISGjuruFg0Umsvrl+hmS3VjHLc1Rz3
- EZQsSCwDafcH428Y/irzS54bshVvlwd6Upa5wGeoAjDbZ0MAYPLv5o7lUotQpWwrZ6hlUNFQQzDbk/KPDSNnADYvkKfqJnstU6A=
+Content-Transfer-Encoding: 8bit
 
-Display clock uses 1 mixer without rotation support is same
-as v3s. There is also a hidden independent display engine
-with independent tcon_top available in A100/A133 bin (based
-on vendor BSP).
 
-Add new compatible for A100/A133 to accommodate the future changes
-for the independent DE.
+On Tue, 12 Nov 2024 02:36:54 +0100, Marek Vasut wrote:
+> The CLKOUTn may be fed from PLL1/2/3, but the PLL1/2/3 has to be enabled
+> first by setting PLL_CLKE bit 11 in CCM_ANALOG_SYS_PLLn_GEN_CTRL register.
+> The CCM_ANALOG_SYS_PLLn_GEN_CTRL bit 11 is modeled by plln_out clock. Fix
+> the clock tree and place the clkout1/2 under plln_sel instead of plain plln
+> to let the clock subsystem correctly control the bit 11 and enable the PLL
+> in case the CLKOUTn is supplied by PLL1/2/3.
+> 
+> [...]
 
-Signed-off-by: Parthiban Nallathambi <parthiban@linumiz.com>
----
- drivers/clk/sunxi-ng/ccu-sun8i-de2.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Applied, thanks!
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-de2.c b/drivers/clk/sunxi-ng/ccu-sun8i-de2.c
-index 3e28c32050e0..067820ab704d 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-de2.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-de2.c
-@@ -342,6 +342,10 @@ static const struct of_device_id sunxi_de2_clk_ids[] = {
- 		.compatible = "allwinner,sun50i-a64-de2-clk",
- 		.data = &sun50i_a64_de2_clk_desc,
- 	},
-+	{
-+		.compatible = "allwinner,sun50i-a100-de2-clk",
-+		.data = &sun8i_v3s_de2_clk_desc,
-+	},
- 	{
- 		.compatible = "allwinner,sun50i-h5-de2-clk",
- 		.data = &sun50i_h5_de2_clk_desc,
+[1/1] clk: imx8mp: Fix clkout1/2 support
+      commit: a9b7c84d22fb1687d63ca2a386773015cf59436b
 
+Best regards,
 -- 
-2.39.5
-
+Abel Vesa <abel.vesa@linaro.org>
 
