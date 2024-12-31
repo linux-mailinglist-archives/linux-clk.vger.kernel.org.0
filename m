@@ -1,140 +1,92 @@
-Return-Path: <linux-clk+bounces-16491-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16495-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 031C79FEC1C
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 02:23:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C2F69FED2C
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 07:16:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEF837A14EB
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 01:22:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39CDA162223
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 06:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D5B523A;
-	Tue, 31 Dec 2024 01:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oju9zuw9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9286C165F09;
+	Tue, 31 Dec 2024 06:16:09 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-sh.amlogic.com (unknown [58.32.228.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22887FD;
-	Tue, 31 Dec 2024 01:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D5D10F9;
+	Tue, 31 Dec 2024 06:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=58.32.228.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735608178; cv=none; b=QyegpTE1eXFopqG9hM/jkfMl97ZwdXSnGznv7KHcWiYlN/JLGBz7jlafQ69djseKsLOgtFN5x7w4HCgyNXBboe98gSrf0mXQZCe2XRWHkie/v5qdfXdl+Z1DiNvoWli/PLGuwyLZg8advAVMiglqPHPbP87rq/bkhN4k4NyAXSg=
+	t=1735625769; cv=none; b=MdzmBvC5+V45cXe8S8bD/EvXCU0cL/BqAwi1e38Pw8L4GQWf7ffnc1k2Cr1XO/eRYSSu4zLuq3911ftk9uH8cRn5PbmOLDH8ojeOFgWglneqguGCxJmjdDTDavPkVqM9xlcLVg3OJTSl4t6cnal3hAzcjr5L/OaVFDdkcIcw9Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735608178; c=relaxed/simple;
-	bh=6/KQluQbR5WRrJVNS61IDNDVMHTHXFHLqi2YBMMnL7E=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=VnPwWWIpaUe5DClkEOjPnauxjK5ztXpbr9E2y4e6gG8F8fpUV3ziEohJ4l1G3latZTbJ2DZaR9xlQonEB/9DBL1yjYL6znaf1WtNOsjHLICdRwiM02qOUKT+yrewOEIfCvHsabANtqigrj/UoqbfwzXRgJS4/5d/F6ozKdqciaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oju9zuw9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF35C4CED0;
-	Tue, 31 Dec 2024 01:22:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735608178;
-	bh=6/KQluQbR5WRrJVNS61IDNDVMHTHXFHLqi2YBMMnL7E=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=oju9zuw93COQ2rtTWFexnlWlteo1qU+an7SDYhpN9lzLpkLGgo5z4z6HmMHI+bY4T
-	 AcNBdMMO6hRDqzEYbdPkM68RbTixFlRKGd5saCzCVCktXMmFI0LiBjwCBpzLnrJmDc
-	 Lc/vHXyiaEEL8MqCD7tTwXPMMasfZMkvt/tIkfHwzL1N3MIZvY6W4zcpnzAD6YXE4t
-	 LFcjaV+VocNNiz7a8gt0Ygu+zF+CGmDIZ94+7McZa3FKWU/CbsNawe08UgTZunef2P
-	 MgxvtyUYJCqNL5cVj5Be9T2f6g7tM19jhtxnPUIYdaAZmT9zO0Upt3fYXRPXjJEAu/
-	 cHOXrbzPgahww==
-Message-ID: <c80a9fcd3fbe99c77c2cef1c241e8610.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1735625769; c=relaxed/simple;
+	bh=iA6It8tuCHaIX5ztfjwkGUtuhq3cqw4YnmFJV2bHc4c=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=A4Rz+HPiZFfnkNQrHADiYGVJOYFGvId/uvdC8ECaYNxcHsb0PoNJ0qyS/0h/fDYq19QCxz8WEOi4w2hFxsGjrPFJCAgifu4XaFC4TcLEMHDPDaZq1FFKZPNpcXoJfbD4umanxP70ifmVmiHE54EWE5RMPjrnljk7J5ISuQoMKMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; arc=none smtp.client-ip=58.32.228.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
+Received: from rd03-sz.software.amlogic (10.28.11.121) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.39; Tue, 31 Dec 2024
+ 14:00:50 +0800
+From: Jian Hu <jian.hu@amlogic.com>
+To: Jerome Brunet <jbrunet@baylibre.com>, Xianwei Zhao
+	<xianwei.zhao@amlogic.com>, Chuan Liu <chuan.liu@amlogic.com>, Neil Armstrong
+	<neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, "Stephen
+ Boyd" <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+	"Dmitry Rokosov" <ddrokosov@sberdevices.ru>, robh+dt <robh+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>
+CC: Jian Hu <jian.hu@amlogic.com>, devicetree <devicetree@vger.kernel.org>,
+	linux-clk <linux-clk@vger.kernel.org>, linux-amlogic
+	<linux-amlogic@lists.infradead.org>, linux-kernel
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 0/5] add support for T7 family clock controller
+Date: Tue, 31 Dec 2024 14:00:42 +0800
+Message-ID: <20241231060047.2298871-1-jian.hu@amlogic.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <87bjx2tf3y.fsf@bootlin.com>
-References: <20241121-ge-ian-debug-imx8-clk-tree-v1-0-0f1b722588fe@bootlin.com> <20241121-ge-ian-debug-imx8-clk-tree-v1-4-0f1b722588fe@bootlin.com> <20241217-brown-wapiti-of-promotion-e3bec6@houat> <87bjx2tf3y.fsf@bootlin.com>
-Subject: Re: [PATCH 4/5] clk: Add flag to prevent frequency changes when walking subtrees
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, Michael Turquette <mturquette@baylibre.com>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Ying Liu <victor.liu@nxp.com>, Marek Vasut <marex@denx.de>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, linux-clk@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, Abel Vesa <abel.vesa@linaro.org>, Herve Codina <herve.codina@bootlin.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Ian Ray <ian.ray@ge.com>
-To: Maxime Ripard <mripard@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Mon, 30 Dec 2024 17:22:56 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Quoting Miquel Raynal (2024-12-23 10:43:13)
-> Hi Maxime,
->=20
-> On 17/12/2024 at 13:47:53 +01, Maxime Ripard <mripard@redhat.com> wrote:
->=20
-> > On Thu, Nov 21, 2024 at 06:41:14PM +0100, Miquel Raynal wrote:
-> >> There are mainly two ways to change a clock frequency.
-> >
-> > There's much more than that :)
->=20
-> "mainly"
->=20
-> Or maybe I should have added "on purpose".
->=20
-> >
-> > Off the top of my head, setting/clearing a min/max rate and changing the
-> > parent might also result in a rate change.
-> >
-> > And then, the firmware might get involved too.
-> >
-> >> The active way requires calling ->set_rate() in order to ask "on
-> >> purpose" for a frequency change. Otherwise, a clock can passively see
-> >> its frequency being updated depending on upstream clock frequency
-> >> changes. In most cases it is fine to just accept the new upstream
-> >> frequency - which by definition will have an impact on downstream
-> >> frequencies if we do not recalculate internal divisors. But there are
-> >> cases where, upon an upstream frequency change, we would like to
-> >> maintain a specific rate.
-> >
-> > Why is clk_set_rate_exclusive not enough?
->=20
-> I am trying to protect these rate changes from subtree walks, I don't
-> see where setting an exclusive rate would have an effect? But I might be
-> overlooking something, definitely.
->=20
-> ...
->=20
-> >> @@ -2272,7 +2271,13 @@ static void clk_calc_subtree(struct clk_core *c=
-ore)
-> >>  {
-> >>      struct clk_core *child;
-> >> =20
-> >> -    core->new_rate =3D clk_recalc(core, core->parent->new_rate);
-> >> +    if (core->flags & CLK_NO_RATE_CHANGE_DURING_PROPAGATION) {
-> >> +            core->new_rate =3D clk_determine(core, core->rate);
-> >> +            if (!core->new_rate)
-> >> +                    core->new_rate =3D clk_recalc(core, core->parent-=
->new_rate);
-> >> +    } else {
-> >> +            core->new_rate =3D clk_recalc(core, core->parent->new_rat=
-e);
-> >> +    }
-> >
-> > Sorry, it's not clear to me how it works. How will the parent clocks
-> > will get notified to adjust their dividers in that scenario? Also, what
-> > if they can't?
->=20
-> The idea is: if the flag is set, instead of accepting the new upstream
-> rate and recalculate the downstream rate based on a previously set
-> divider value, we change our divider value to match the same frequency
-> as before. But if we cannot, then we just keep the old way.
->=20
+It intrduces three clock controller: 
+- scmi clock controller, these clocks are managed by the SCP and handled through SCMI;
+- PLL clock controller;
+- peripheral clock controller.
 
-The exclusive rate code could support this if it doesn't already do so.
-If you call clk_set_rate_exclusive(child, <constant rate>) followed by
-clk_set_rate(parent, <new rate>) the core code should try to keep the
-child at the constant rate, or fail the clk_set_rate() call on the
-parent. It should be possible to confirm this with some KUnit tests for
-clk_set_rate_exclusive(). Similarly, if another child, child_B, of the
-parent changes the parent rate, we should speculate the new rate of the
-child_A that's protected and fail if we can't maintain the rate. We need
-to start generating a list of clks that we operate a rate change on to
-support this though, because right now we rely on the stack to track the
-clks that we change the rate of.
+Jian Hu (5):
+  dt-bindings: clock: add Amlogic T7 PLL clock controller
+  dt-bindings: clock: add Amlogic T7 SCMI clock controller
+  dt-bindings: clock: add Amlogic T7 peripherals clock controller
+  clk: meson: t7: add support for the T7 SoC PLL clock
+  clk: meson: t7: add t7 clock peripherals controller driver
 
-Initially we thought that we could do this with clk notifiers. That may
-work here, but I suspect it will be clunky to get working because clk
-notifiers operate on struct clk.
+ .../clock/amlogic,t7-peripherals-clkc.yaml    |  111 +
+ .../bindings/clock/amlogic,t7-pll-clkc.yaml   |  115 +
+ drivers/clk/meson/Kconfig                     |   27 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/t7-peripherals.c            | 2319 +++++++++++++++++
+ drivers/clk/meson/t7-pll.c                    | 1192 +++++++++
+ .../clock/amlogic,t7-peripherals-clkc.h       |  231 ++
+ .../dt-bindings/clock/amlogic,t7-pll-clkc.h   |   57 +
+ include/dt-bindings/clock/amlogic,t7-scmi.h   |   48 +
+ 9 files changed, 4102 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,t7-peripherals-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,t7-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/t7-peripherals.c
+ create mode 100644 drivers/clk/meson/t7-pll.c
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-peripherals-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-pll-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-scmi.h
+
+-- 
+2.47.1
+
 
