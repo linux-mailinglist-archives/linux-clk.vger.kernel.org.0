@@ -1,142 +1,144 @@
-Return-Path: <linux-clk+bounces-16514-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16518-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 991BB9FF081
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 17:10:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB54C9FF168
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 20:03:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61EA4161FB8
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 16:10:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3A733A3169
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Dec 2024 19:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47BF19D8BB;
-	Tue, 31 Dec 2024 16:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB36618FC80;
+	Tue, 31 Dec 2024 19:03:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="cPOydt6V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GBVFPsx5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE85C18787A;
-	Tue, 31 Dec 2024 16:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0F7189916
+	for <linux-clk@vger.kernel.org>; Tue, 31 Dec 2024 19:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735661401; cv=none; b=cv0UD46DzrIxQTC+L4e6k0sYDLULud4TH4clToUgsW0kNziBK7pFi739XNMyttonMXQewRvKf5KzuFj1lgHXqRR390Zr7QsPHnvH95b3J+oszmYFB8yuKO9xSvf9vHD3EInAu+bs899JPfzlD8S4pjSQQpfw/i2Sd2KjzGdEgVo=
+	t=1735671824; cv=none; b=AnMuSMDeNwDepay/Fk2X9P2BIwbSNUkY2SM+T3y+rKBXZy3xrQMVAT2F3BSK+RHF8T+b/bGciFLPb10YN/kl3V+I6/bkFDzjUToOGuoJV+YgDfTDROQi0+0E2zxFEIppo+RomCZbRE5oQ14b4lXYahoXGmNTs6zkCnqQq4xh3/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735661401; c=relaxed/simple;
-	bh=Tb5xNZgfV4q7JGNfFQeVkpw+/siizt8XCXnKM1G/eyQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tyXMta7KaWEg/km3bsNfPLBeRbVvE83Cymw3XJuY4N/ON8E57xR67NF2E+KnBD6hZzUpvofJhfdKpqhsuBPjmUL32CgM92HjpowRg9EWvUf4hB6ZpDQSlphCZ+CQ9VqjV9k3PdUVidhbIx2auJepqOIhxALsBsew8EftT90acxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=cPOydt6V; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [192.168.30.162] (254C25E0.nat.pool.telekom.hu [37.76.37.224])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 2B886E484F;
-	Tue, 31 Dec 2024 16:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1735660878;
+	s=arc-20240116; t=1735671824; c=relaxed/simple;
+	bh=hGtZBU3Z3whGzmH/7CDGTmQQIyKDEqSx3P97I06QxQ0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=speVp9vyCHc3/6XWsSZszE48yFdP29ehrTEqf1hs+8tjqSztBUeWP0pcwHBTXzvgWH7zyS5GBMQXb+YDbVB1THrO8zK794uR4SPZpKk3C0W2oL8SFF6FgheTwbHZ4qXFjalYw2kOBi2eRdz3/qCJpNpJKJ2Fgd7Bu3FFoAkJKbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GBVFPsx5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1735671821;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/2e0rChM1U0ZS5e2rmenSOYMmW3o7RqX8ZqmpmV3JLM=;
-	b=cPOydt6VBlG26PAEV+mRLVWNNqeBDT/blXuapnCyWkzA7BnYtDVmnm3zEaT96M1zJCnsDB
-	aqhYDfA/sU+vzWLWUlp29KWpFlzNRslgDjKeGSLz2okUaWmw6EEE5cSZwDcWw9ReA50oIS
-	O1f2B/MfuWXZGgY4+A41c5lXp6ce5OrTD2wzPD+wFf1suoN/W+Hz3ANuAsK11z+pK94KW2
-	zOYQOyUrF3XpNAPHXLoIORN0IpWBJ/A1tfi7NJk8OA4FPPXIAYBbRgh2cndkkgkYElOdYb
-	buQgZDw8ktn2fEMLJnIMLQLcQC099I9gg4vdYCFlLgYaDmCQdhXjvPpCixSgSA==
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Tue, 31 Dec 2024 17:00:52 +0100
-Subject: [PATCH 4/4] clk: qcom: smd-rpm: Add clocks for MSM8940
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+5xWAUF+fycztH/1bkPrUC8z4WpEalfNEkRojaFt17A=;
+	b=GBVFPsx5dV8bjb16jWu8+0pEizg3KwVQPUyqGsqDYPOEa/SoeqPiZZHwFIfdhkx0qMoLcn
+	vgP+hAe8GhiuWwOhtoeEg62S0lLfPMfvtJM0W9JnJJGnal1jUSXCcFFKQdKxO65pPulraj
+	HZayL1W7ClYFn0PflTefolI0woel8Sk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-102-a04Reek2PnW2hDV_slOBLA-1; Tue, 31 Dec 2024 14:03:40 -0500
+X-MC-Unique: a04Reek2PnW2hDV_slOBLA-1
+X-Mimecast-MFC-AGG-ID: a04Reek2PnW2hDV_slOBLA
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43619b135bcso55186805e9.1
+        for <linux-clk@vger.kernel.org>; Tue, 31 Dec 2024 11:03:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735671819; x=1736276619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+5xWAUF+fycztH/1bkPrUC8z4WpEalfNEkRojaFt17A=;
+        b=bi5zD9nH7cQGxzqSaa4PUrTDnNpfrrvmx+hqzO9UZFWrCp411UXzPDh5LtpbOC4WI9
+         wyLd9P5E8wKe43WHEP+yz+gDHMb+4wGqZPToFi1xWOAMu8lqzXjm1Wb1DUbs8XCGwCwp
+         Y5I4SkQXF8/kmDmOB2L1lK+fIwMjiFCPsUILPv1Eggduh7KmMyr6eI9og/U+oPWh58w+
+         OEG27VPOU0/B8XusikMeNEMpjsfjgOqfuz0GGyYlV3p3c8nlBJVMKYEhx9J4s/zbPksU
+         pOT1pylXdNm1NqrLsnV9xlEkiIiqBoZPGGBAm8txWsrfEzTjp2WLNZ5SQTBfECRIPG6I
+         LiyA==
+X-Gm-Message-State: AOJu0YzQJ6GH/4zF4nprHRv/hvi/sz3Wck/l+c1ocCPkfCK3Km3hFq2U
+	B90AMSrUUlP4/ONt7ugLD9s0g2KUJCjvXmzUoG0JeP5T9bLwzQQrUYqZwgfk3M2CBaHHR40ZOcE
+	8oWsLYm1/dNNf1x0d6V6IVU/i7cI4tTrQBZj7BOuuI0N+TVWZg6T6al4isDYQt1iG6nCbHdluWn
+	FXbhi3BccEhHBmOoh/4KPT9mr5Pa8OM1JZPClidqvOmIo=
+X-Gm-Gg: ASbGncuHqNzPq0JNLGQHAQd7tPvbDhvhdOdQ//5ClhB0huNKrESnEkCvtdfrRczfK6F
+	hT2q8tImAkJ/sPmSNaaZx/m6vKVHO75m+bp3swnY2+KThXD70seiSJ450gL/PXfJBhnw/JwRVu+
+	6YFvpoiQ20CK9cBXg9swIMFNQLcq4LHGNKAsJTBvYI6zp8NLGKoa4SxBusll+V4zdpY4GZW2Dz/
+	gBNuWyy7GbhNbbZwlOVBQHKleHkOv/aNNseac0Obj+vGwx5rhHXL27HCD3wuIVFQzn60RJD1k6Q
+X-Received: by 2002:a05:600c:1d1d:b0:431:5044:e388 with SMTP id 5b1f17b1804b1-43668b5e172mr323373255e9.22.1735671818909;
+        Tue, 31 Dec 2024 11:03:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHwu7VHUjCze1BiN8/L4Xx9WF41kXaJ0+tvzbxOl+oLjN2qBl4D9Qlq0vZZh56pugMVJl3/Mg==
+X-Received: by 2002:a05:600c:1d1d:b0:431:5044:e388 with SMTP id 5b1f17b1804b1-43668b5e172mr323372965e9.22.1735671818462;
+        Tue, 31 Dec 2024 11:03:38 -0800 (PST)
+Received: from localhost (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436611ea487sm394711105e9.8.2024.12.31.11.03.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Dec 2024 11:03:38 -0800 (PST)
+From: Lubomir Rintel <lrintel@redhat.com>
+X-Google-Original-From: Lubomir Rintel <lkundrak@v3.sk>
+To: linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Lubomir Rintel <lkundrak@v3.sk>,
+	stable@vger.kernel.org
+Subject: [PATCH] clk: mmp2: call pm_genpd_init() only after genpd.name is set
+Date: Tue, 31 Dec 2024 20:03:35 +0100
+Message-ID: <20241231190336.423172-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241231-rpmcc-v1-4-1212df9b2042@mainlining.org>
-References: <20241231-rpmcc-v1-0-1212df9b2042@mainlining.org>
-In-Reply-To: <20241231-rpmcc-v1-0-1212df9b2042@mainlining.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
- Daniil Titov <daniilt971@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1735660873; l=2678;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=oCtbuZ2QCL4y+u0jLxZuuers8d8cXcJBkL/AYKhA5/M=;
- b=ylNJQRzEJcojoD+cfYlwTAsciBOTI5gaYp17oI01JIfddRSZwWB7eSWXtPa80FnRRbT8LHiou
- R48/VcDSnUoAerpDg1jPx+ptznxWY1K0JSqEXOWnOXzsZRGQoRQDJeb
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-From: Daniil Titov <daniilt971@gmail.com>
+Setting the genpd's struct device's name with dev_set_name() is
+happening within pm_genpd_init(). If it remains NULL, things can blow up
+later, such as when crafting the devfs hierarchy for the power domain:
 
-MSM8940 has mostly the same rpm clocks as MSM8953, but lacks RF_CLK3.
+  8<--- cut here --- [please do not actually cut, you'll ruin your display]
+  Unable to handle kernel NULL pointer dereference at virtual address 00000000 when read
+  ...
+  Call trace:
+   strlen from start_creating+0x90/0x138
+   start_creating from debugfs_create_dir+0x20/0x178
+   debugfs_create_dir from genpd_debug_add.part.0+0x4c/0x144
+   genpd_debug_add.part.0 from genpd_debug_init+0x74/0x90
+   genpd_debug_init from do_one_initcall+0x5c/0x244
+   do_one_initcall from kernel_init_freeable+0x19c/0x1f4
+   kernel_init_freeable from kernel_init+0x1c/0x12c
+   kernel_init from ret_from_fork+0x14/0x28
 
-Signed-off-by: Daniil Titov <daniilt971@gmail.com>
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+Bisecting tracks this crash back to commit 899f44531fe6 ("pmdomain: core:
+Add GENPD_FLAG_DEV_NAME_FW flag"), which exchanges use of genpd->name
+with dev_name(&genpd->dev) in genpd_debug_add.part().
+
+Fixes: 899f44531fe6 ("pmdomain: core: Add GENPD_FLAG_DEV_NAME_FW flag")
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Cc: stable@vger.kernel.org # v6.12+
 ---
- drivers/clk/qcom/clk-smd-rpm.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/clk/mmp/pwr-island.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index b2992ee20cc3109daaeda22542faec5e61de0168..7b91610f08914278173dfd2fe93b0463bf3e23eb 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -726,6 +726,34 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8937 = {
- 	.num_icc_clks = ARRAY_SIZE(bimc_pcnoc_snoc_smmnoc_icc_clks),
- };
+diff --git a/drivers/clk/mmp/pwr-island.c b/drivers/clk/mmp/pwr-island.c
+index edaa2433a472..eaf5d2c5e593 100644
+--- a/drivers/clk/mmp/pwr-island.c
++++ b/drivers/clk/mmp/pwr-island.c
+@@ -106,10 +106,10 @@ struct generic_pm_domain *mmp_pm_domain_register(const char *name,
+ 	pm_domain->flags = flags;
+ 	pm_domain->lock = lock;
  
-+static struct clk_smd_rpm *msm8940_clks[] = {
-+	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
-+	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
-+	[RPM_SMD_IPA_CLK]		= &clk_smd_rpm_ipa_clk,
-+	[RPM_SMD_IPA_A_CLK]		= &clk_smd_rpm_ipa_a_clk,
-+	[RPM_SMD_QDSS_CLK]		= &clk_smd_rpm_qdss_clk,
-+	[RPM_SMD_QDSS_A_CLK]		= &clk_smd_rpm_qdss_a_clk,
-+	[RPM_SMD_BB_CLK1]		= &clk_smd_rpm_bb_clk1,
-+	[RPM_SMD_BB_CLK1_A]		= &clk_smd_rpm_bb_clk1_a,
-+	[RPM_SMD_BB_CLK2]		= &clk_smd_rpm_bb_clk2,
-+	[RPM_SMD_BB_CLK2_A]		= &clk_smd_rpm_bb_clk2_a,
-+	[RPM_SMD_RF_CLK2]		= &clk_smd_rpm_rf_clk2,
-+	[RPM_SMD_RF_CLK2_A]		= &clk_smd_rpm_rf_clk2_a,
-+	[RPM_SMD_DIV_CLK2]		= &clk_smd_rpm_div_clk2,
-+	[RPM_SMD_DIV_A_CLK2]		= &clk_smd_rpm_div_clk2_a,
-+	[RPM_SMD_BB_CLK1_PIN]		= &clk_smd_rpm_bb_clk1_pin,
-+	[RPM_SMD_BB_CLK1_A_PIN]		= &clk_smd_rpm_bb_clk1_a_pin,
-+	[RPM_SMD_BB_CLK2_PIN]		= &clk_smd_rpm_bb_clk2_pin,
-+	[RPM_SMD_BB_CLK2_A_PIN]		= &clk_smd_rpm_bb_clk2_a_pin,
-+};
-+
-+static const struct rpm_smd_clk_desc rpm_clk_msm8940 = {
-+	.clks = msm8940_clks,
-+	.num_clks = ARRAY_SIZE(msm8940_clks),
-+	.icc_clks = bimc_pcnoc_snoc_smmnoc_icc_clks,
-+	.num_icc_clks = ARRAY_SIZE(bimc_pcnoc_snoc_smmnoc_icc_clks),
-+};
-+
- static struct clk_smd_rpm *msm8974_clks[] = {
- 	[RPM_SMD_XO_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo,
- 	[RPM_SMD_XO_A_CLK_SRC]		= &clk_smd_rpm_branch_bi_tcxo_a,
-@@ -1243,6 +1271,7 @@ static const struct of_device_id rpm_smd_clk_match_table[] = {
- 	{ .compatible = "qcom,rpmcc-msm8917", .data = &rpm_clk_msm8917 },
- 	{ .compatible = "qcom,rpmcc-msm8936", .data = &rpm_clk_msm8936 },
- 	{ .compatible = "qcom,rpmcc-msm8937", .data = &rpm_clk_msm8937 },
-+	{ .compatible = "qcom,rpmcc-msm8940", .data = &rpm_clk_msm8940 },
- 	{ .compatible = "qcom,rpmcc-msm8953", .data = &rpm_clk_msm8953 },
- 	{ .compatible = "qcom,rpmcc-msm8974", .data = &rpm_clk_msm8974 },
- 	{ .compatible = "qcom,rpmcc-msm8976", .data = &rpm_clk_msm8976 },
-
+-	pm_genpd_init(&pm_domain->genpd, NULL, true);
+ 	pm_domain->genpd.name = name;
+ 	pm_domain->genpd.power_on = mmp_pm_domain_power_on;
+ 	pm_domain->genpd.power_off = mmp_pm_domain_power_off;
++	pm_genpd_init(&pm_domain->genpd, NULL, true);
+ 
+ 	return &pm_domain->genpd;
+ }
 -- 
 2.47.1
 
