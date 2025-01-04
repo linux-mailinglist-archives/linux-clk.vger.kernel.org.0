@@ -1,76 +1,76 @@
-Return-Path: <linux-clk+bounces-16630-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16632-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF904A012F6
-	for <lists+linux-clk@lfdr.de>; Sat,  4 Jan 2025 08:40:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F3F4A012FB
+	for <lists+linux-clk@lfdr.de>; Sat,  4 Jan 2025 08:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E5583A4530
-	for <lists+linux-clk@lfdr.de>; Sat,  4 Jan 2025 07:40:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C2E81884C2D
+	for <lists+linux-clk@lfdr.de>; Sat,  4 Jan 2025 07:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3521C15443F;
-	Sat,  4 Jan 2025 07:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CDA15CD55;
+	Sat,  4 Jan 2025 07:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JAOG3q90"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JJvidv+9"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA4914A0A4;
-	Sat,  4 Jan 2025 07:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6A8152787;
+	Sat,  4 Jan 2025 07:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735976446; cv=none; b=iF1bbCB6BxpWFw9JDSztVgjvH49QSLiHwUyud6X9ny2XblPpH89RFlMGidfCEGEWBMSfHkUCVwlNE9Q22EPkX5vrPiXf0/caLMWhS8qKs0P+LheeonVrssJDBk3K172WQQX45riw3AoXMpfSbniL61AYfkg06kX0ZWojH5fGV58=
+	t=1735976447; cv=none; b=QpzylGlHa2IX/4tPCwWZTrqEO3knOD/r2KlopKfrIBfEzstwNDTX37D/Gg8ASVKPFi/u1T3e0QwyMBJ77xzc4S2jSnAKcnn6UYdzrLrb80AebS7fmonFAmqM2OVKlZTolFdjOC0WQczpi0n7b8+LB+qXIGOQJq49+GeRy71PStg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735976446; c=relaxed/simple;
-	bh=RfLscubGTBY69+mRUuhbjHJSwn0LVQ7XlGs0ZPQCMek=;
+	s=arc-20240116; t=1735976447; c=relaxed/simple;
+	bh=TbcHVKRkFJB98fhajLRM7Bw4MBvD1k0xqRdfdhNbxgE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nI/9DouNYV8F+BzfI7l38M47ILgrDWeD/jRjrqBdmNdYFaSh1145T8IdmIwc4RqyuAwcwWae2fX/aXYaLeKMJCjNV8wtZ59VOTWRIT743Qf75jFP1hvrDeCEPJ761YmuuGiQX99HbIyr9aqgkGej/6PKdHOR6kZTFrEmc2Z55SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JAOG3q90; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=Lv2sFUWGVjWqnHs4JW+X0jo+UCco/+MlOSaGUn24/BvvZzHGyA17Qktq8QZ+GLU7VBrp14czGOq+OUj7tMxljhpCYCiCT2Skh2r4hiwmVId243R+YosJPPFaI1S6Q0Esrk5GOZ4ZngZVVLwe+c0W/TMy4YMi4ZLgvWE2qAKDG6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JJvidv+9; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2167141dfa1so177661985ad.1;
-        Fri, 03 Jan 2025 23:40:44 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21675fd60feso238879725ad.2;
+        Fri, 03 Jan 2025 23:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735976444; x=1736581244; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735976445; x=1736581245; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q0utCftucvwNjjKL9gp7cLeehqJP0aygJTF/mR/QXhE=;
-        b=JAOG3q90/G2r+waI/ZAI5ZcNVFCGBYsHFk24bHBguB6kbRkntHToMFdH0jFFcKFUlG
-         cf160Aab93yVijLuxmMupFdWA4zv/aJUQ/2QrZOXnr6Mfa+PVxY2rO1kb8hAaT/Yac6z
-         mG1Ju+ONit0n31cMBkLHk24CI2mQqloZ0kQZxYBqvjL+7LGlcGmYGa6aqNoGS9reGNZn
-         s1D1KGG5qOyhslCN1B3AxiG6bst/wmiCENuz4906Fj+CBbB+Rp4v1cKTs4q0RBjRB99O
-         7Mch1gLTQ5qzAEtX8rKzKVxL23g6Iqst5iNjqiShD/l4Q3zJp7g6utX3Xw0lQKub3MqN
-         YIvA==
+        bh=gI4bkaQLizbo3HOuEzTTJL5LyowGuTN5RlRxoRNNOp8=;
+        b=JJvidv+97EO30+raYoo0BTcPOZd1dLMkJr5Dg8MVqgM6avHsqAlS8hHKdQT68pcsVA
+         bCEy9wRo5SlZTmr/cqslFkHB2qZUXjY/yEUeqTXpKBo7B80m34tVC+Kw1b0Q6SzVNtZP
+         E36sdXmnz0bMCX2Lj3beyKXRbRlfNrbKQrvLxzEVIQEeQVqp+CQdMKHYCnF3Js3IkYQy
+         6PODgVr4bgPfraiW4Yyj92sNKqWZ1eFP17aNmOfdIHOT/R2GOFkq94ELvuJ17C9n2GHT
+         MhRqGXLs5eHkah/SCKl9uRHAbmkd7di7D83TzqMT9pWIqgc2ACH3tkkL6/N2DgYCwS6D
+         6a9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735976444; x=1736581244;
+        d=1e100.net; s=20230601; t=1735976445; x=1736581245;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q0utCftucvwNjjKL9gp7cLeehqJP0aygJTF/mR/QXhE=;
-        b=WXniGKRJZ9ZCCtN22ER74522umSRcA8JcSeOgHSQdMssRqqYJhhchQZnBztROqE2Ek
-         760Yt3XamPNG2I55U2H4BGhPNJZjuEmETRQUL4V5T/60h0xQq95h1xDr6yAIw7Y7dLvb
-         BlhUF8LRm+/wx/2qiTGE+4ozJR8tn8EbARYzoVp6TD/5viRezW8kZL8dFtqHHMj9GxiZ
-         +cvIImoPy51LeyWRFyPSdvJCVu024crTDscGnky0Qkjt/x0gNNFlmUVaKhb1PgP/SuMI
-         RgI+9L45OWbG9iwQ59ba1zbsqsS0sbBlcz1E807iniIrChSifTgGO/FEz9/xAjDj2NK/
-         14Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjWJm+kznHDm2VF9qKzHInSClJ5fC/JQWUNNUOv22PNGhKMaBWifKiHRxSm6RrIcdWrR4uMwTi25O8WbiD@vger.kernel.org, AJvYcCV3LvxJ6peVnNfDdiaOTEzoQ8iwiCcG8bh05ka92hVuz4H+UAyWF2YlFs2C4XHMelMNA2mD1yPmDl16@vger.kernel.org, AJvYcCVxGd0vTcb+9AU6W3NNt2U7SNXsRqiiP9qhgiOdfVOzSVrYxr4M8mvW9+0yQpbZEzQdFuSL0ZxONAyR@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoqqkAbar5amAGcvAHQMm09taxZVt1ojyOG4mOpPrZ5DRXt6jy
-	nhDfkYWgri5cx014eX2hE+E8LwyC39euQMI8wg1vI5o9K4FOMTwS
-X-Gm-Gg: ASbGnctq2bGHupSrKnLQibJy2vWCpX/wOAF0BnSgmw8W3LGACXT1qrdnDd7Eywqueec
-	V2hjwJ3E9qtHMd4D4usdY8nCK1q3nmqb0xZA3Q6lKu+1hoggrNzc+vTl0/ZF267LXiHhy/wSPR7
-	O14ep45as+O5nnjhwBnBNa0X2ViXDzG1xJ9jgDPNaELtfPh08Pnk2D2jB9do+slo0aPSniN7TUW
-	ZuOx/p7zfTfzVt5LqZYFFA0TihDcyH9DZ4yNNqwjuAaMbZeEw==
-X-Google-Smtp-Source: AGHT+IG16aEsUt31gOxPdEHIOiEhly+PPdwAHUbVPWapyCabc4BBxAcFCsLxS2WeCaHdQrCno+H+/g==
-X-Received: by 2002:a17:902:c408:b0:215:758c:52e8 with SMTP id d9443c01a7336-219e6cd83eamr662739295ad.12.1735976443882;
-        Fri, 03 Jan 2025 23:40:43 -0800 (PST)
+        bh=gI4bkaQLizbo3HOuEzTTJL5LyowGuTN5RlRxoRNNOp8=;
+        b=wk5sbYamaGD7Zws/aJJQXjt9mKqiuK6wAPOFZiiRdFh5KblCXy9hlpLUrQG5m+hXMw
+         odFPw1Ms3y0ZBi1fOjNQ7kb26V5sdAvesw2aqnps5zVr9U1KUwbrLB2BlAGMUkW+uijt
+         7v2/L+i82vVW6RvUd2rYaZ4YsQoN3TS8TvNR1WH+7T3v+Mi/aQRmgGwYiHjan/QajI9c
+         D8w1rxwxxUDIif/K2fVekWf5paZgIuYesWY/5TPQQz2AUP5+7d2ruEVKz87t57y76bOs
+         MIA5wJyD5ruF1qvRLdPG9+KiKxQ3kMbjBj9ee5bLPDKo65t6ie6ZwvDvDeM3CK4zMUcy
+         3LJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFbfNmYjcVeH4dpWaIZ5+vPVFsze7XSLsT9xjvzViNGykBvJHjLKf4uwXv4zJTUXFwizSzgTFfAZ1x@vger.kernel.org, AJvYcCVTT8V3cnYg5qEsIzV1aPIvdQVNc7xlUn6FOp3WfGbcZjhwFBBDN2M9eiHYmcsJu4BJg9nLtosDg3zr@vger.kernel.org, AJvYcCW+0o5iN17yn0FOxbtwucIdn5dYfhleGybpO18dOVYCeWEFDqej42ZYhZnmSm51QDxJU2YsAc/0oyWQhFte@vger.kernel.org
+X-Gm-Message-State: AOJu0YzosbWp1NvzgxmdYzSCGihajlOfkVNg2zm3KIZRjo0VX/vpq/bM
+	h8+cZVb6/n+KrFfjdkLuj5xYRH8K9J/5HXhsayZSUwugkpvCQZI5
+X-Gm-Gg: ASbGncu/iQHGL5HAkNhty0RpYkKO5KhIVD3bauW+BQtiKw09yvCqhZ7Zv7gpoI2jpMc
+	scq5nQ6DqD50uRv98eQUdpf+4NSNh50akhek9wUNDDizraLqvRqjw9RHMvX2gxN4ANoZIyPzChW
+	owVAWl8cUHK616k6zzOrUt2HJmFlzldFICfC1fp4nscitvkdr00EeUkEjrwoJwTLEJRVrtRJ5Xh
+	6Iuz0jT/ZM3rnET3+R7ClQouANlioqAziDQPtFSWpx8C7BFnw==
+X-Google-Smtp-Source: AGHT+IG0CS21q53dEVGA2oPLK2te0e5w/JAMFEKzZxo/+YczSEWdTkdKuJD2Fisbi6FzS2oAnAex1Q==
+X-Received: by 2002:a17:903:32d0:b0:216:6c77:7bbb with SMTP id d9443c01a7336-219e6e9fb45mr689469915ad.17.1735976444999;
+        Fri, 03 Jan 2025 23:40:44 -0800 (PST)
 Received: from anarsoul-xps15.lan ([2604:3d08:7780:1ca9::398])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca02b34sm256562565ad.252.2025.01.03.23.40.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca02b34sm256562565ad.252.2025.01.03.23.40.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2025 23:40:43 -0800 (PST)
+        Fri, 03 Jan 2025 23:40:44 -0800 (PST)
 From: Vasily Khoruzhick <anarsoul@gmail.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -91,9 +91,9 @@ Cc: Vasily Khoruzhick <anarsoul@gmail.com>,
 	Dragan Simic <dsimic@manjaro.org>,
 	Frank Oltmanns <frank@oltmanns.dev>,
 	Stuart Gathman <stuart@gathman.org>
-Subject: [PATCH v2 1/4] dt-bindings: clock: sunxi: Export PLL_VIDEO_2X and PLL_MIPI
-Date: Fri,  3 Jan 2025 23:36:57 -0800
-Message-ID: <20250104074035.1611136-2-anarsoul@gmail.com>
+Subject: [PATCH v2 2/4] clk: sunxi-ng: a64: drop redundant CLK_PLL_VIDEO0_2X and CLK_PLL_MIPI
+Date: Fri,  3 Jan 2025 23:36:58 -0800
+Message-ID: <20250104074035.1611136-3-anarsoul@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250104074035.1611136-1-anarsoul@gmail.com>
 References: <20250104074035.1611136-1-anarsoul@gmail.com>
@@ -105,33 +105,39 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Export PLL_VIDEO_2X and PLL_MIPI, these will be used to explicitly
-select TCON0 clock parent in dts
+Drop redundant CLK_PLL_VIDEO0_2X and CLK_PLL.MIPI. These are now
+defined in dt-bindings/clock/sun50i-a64-ccu.h
 
 Fixes: ca1170b69968 ("clk: sunxi-ng: a64: force select PLL_MIPI in TCON0 mux")
 Reviewed-by: Dragan Simic <dsimic@manjaro.org>
 Reviewed-by: Chen-Yu Tsai <wens@csie.org>
-Tested-by: Frank Oltmanns <frank@oltmanns.dev> # on PinePhone
-Tested-by: Stuart Gathman <stuart@gathman.org> # on OG Pinebook
+Tested-by: Frank Oltmanns <frank@oltmanns.dev> # on pinephone
+Tested-by: Stuart Gathman <stuart@gathman.org> # on OG pinebook
 Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
 ---
- include/dt-bindings/clock/sun50i-a64-ccu.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/include/dt-bindings/clock/sun50i-a64-ccu.h b/include/dt-bindings/clock/sun50i-a64-ccu.h
-index 175892189e9d..4f220ea7a23c 100644
---- a/include/dt-bindings/clock/sun50i-a64-ccu.h
-+++ b/include/dt-bindings/clock/sun50i-a64-ccu.h
-@@ -44,7 +44,9 @@
- #define _DT_BINDINGS_CLK_SUN50I_A64_H_
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+index a8c11c0b4e06..dfba88a5ad0f 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.h
+@@ -21,7 +21,6 @@
  
- #define CLK_PLL_VIDEO0		7
-+#define CLK_PLL_VIDEO0_2X	8
- #define CLK_PLL_PERIPH0		11
-+#define CLK_PLL_MIPI		17
+ /* PLL_VIDEO0 exported for HDMI PHY */
  
- #define CLK_CPUX		21
- #define CLK_BUS_MIPI_DSI	28
+-#define CLK_PLL_VIDEO0_2X		8
+ #define CLK_PLL_VE			9
+ #define CLK_PLL_DDR0			10
+ 
+@@ -32,7 +31,6 @@
+ #define CLK_PLL_PERIPH1_2X		14
+ #define CLK_PLL_VIDEO1			15
+ #define CLK_PLL_GPU			16
+-#define CLK_PLL_MIPI			17
+ #define CLK_PLL_HSIC			18
+ #define CLK_PLL_DE			19
+ #define CLK_PLL_DDR1			20
 -- 
 2.47.1
 
