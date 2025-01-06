@@ -1,30 +1,31 @@
-Return-Path: <linux-clk+bounces-16693-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16696-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 177D9A027CC
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 15:23:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89FEDA027D4
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 15:23:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A8F37A2ABB
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 14:22:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A96417A0285
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 14:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0CDC1DE8BE;
-	Mon,  6 Jan 2025 14:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84881DF972;
+	Mon,  6 Jan 2025 14:22:03 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5861DED5C
-	for <linux-clk@vger.kernel.org>; Mon,  6 Jan 2025 14:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADFD1DF256
+	for <linux-clk@vger.kernel.org>; Mon,  6 Jan 2025 14:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736173316; cv=none; b=ABKumY8PrizHcE9dDs/srbBm+i078nlu9TqlhO4yTM3tjbP8AjJNJF2pAXRCU53ZPe2/Nxz8QtLm9evCf+BRjlaRh+Jfz/h2ps8X5ZBhvihhuL+mZ/fMH/t16m1mYpqQ2H8xH7MQt++sGIT1FjHU7m9X33WFkSr7Qqh0PfjbDUQ=
+	t=1736173323; cv=none; b=ZfXz6iHgM/o59LoXuGf6Uqq/jwUta98EaU0SIhsAL/l6C6WY9IEPyQVdvd3sCNo0fenGuUgtCM+xXp8sO8+toR4J7wvws6+R0/NU0sUXKy7IUMOvTJ9cwPdv2n/mybGFFxBFir1YbNqd+eTdE6S9VLB05Mra2bI2M9cXI7W8kSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736173316; c=relaxed/simple;
-	bh=xcOlt17kbS/hooga72EcRdOwoFWUICJQLQUKjRdnAsE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=b1rTkMGeOz39h9OKP4zba3T/nm3h6WLx7i0pU2hmK/fAtohRrpc+W9hM59Lp5Otb0/6MWB6aYzW+346oTJONQQModZezx+RDTGivgime1nrfcZ5iQ11xd5Um1WeNTAKY+pDA7D9Nhrzvm4udhv5iF46hPxEmL88bvPUvuPGEnOI=
+	s=arc-20240116; t=1736173323; c=relaxed/simple;
+	bh=xsMNSiLsehQAQ6W+aIzNgv4jCYm8TLEXlYSXaxkaEpI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LDoT4TVO+72iDSrii2lk1ZSGEN8RxwXLn6r0B+0eb6RZnCcl1QtqrDAHgwAByUJWHdh+lBbMeAIPjbz1VUlaOu2V3TrRFLz4ads822lo+V1XHFZIRluw+PgFgDa3RYtnzGdbckODX4CcHubFDgZxkd+fUR61AiMvO9gQO/63dmU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,23 +33,22 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnzF-0003vQ-E1; Mon, 06 Jan 2025 15:21:45 +0100
+	id 1tUnzF-0003vP-E4; Mon, 06 Jan 2025 15:21:45 +0100
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnzE-007BQz-0G;
+	id 1tUnzE-007BR0-0G;
 	Mon, 06 Jan 2025 15:21:44 +0100
 Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
 	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnzE-008rLw-2V;
+	id 1tUnzE-008rLw-2W;
 	Mon, 06 Jan 2025 15:21:44 +0100
 From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: [PATCH v2 0/6] arm64: dts: freescale: imx8mp-skov: switch to
- nominal drive mode
-Date: Mon, 06 Jan 2025 15:21:41 +0100
-Message-Id: <20250106-imx8m-clk-v2-0-6aaeadac65fe@pengutronix.de>
+Date: Mon, 06 Jan 2025 15:21:42 +0100
+Subject: [PATCH v2 1/6] dt-bindings: clock: imx8m: document
+ nominal/overdrive properties
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -57,11 +57,9 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPXme2cC/03M0QqDIBTG8VeJcz1HulDb1d5jdCF6rMOWhTZpR
- O8+Fwx2+f/4+G2QMBImuFYbRMyUaAolxKkCO5jQIyNXGkQtGi64YjSuemT2+WBtI5WSF+et01D
- +c0RP62Hdu9IDpWWK74PO/Lv+lPZPyZzVzHrjvam1ckbeZgz9a4lToPXsELp93z+udY/cpwAAA
- A==
-X-Change-ID: 20241217-imx8m-clk-9467763dfcd8
+Message-Id: <20250106-imx8m-clk-v2-1-6aaeadac65fe@pengutronix.de>
+References: <20250106-imx8m-clk-v2-0-6aaeadac65fe@pengutronix.de>
+In-Reply-To: <20250106-imx8m-clk-v2-0-6aaeadac65fe@pengutronix.de>
 To: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
  Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -81,57 +79,71 @@ X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-Unlike the i.MX8MM and i.MX8MN SoCs added earlier, the imx8mp.dtsi
-configures some clocks at frequencies that are only validated for
-overdrive mode, i.e., when VDD_SOC is 950 mV.
+The imx8m-clock.yaml binding covers the clock controller inside all
+of the i.MX8M Q/M/N/P SoCs. All of them have in common that they
+support two operating modes: nominal and overdrive mode.
 
-For the Skov i.MX8MP board, we want to run the SoC at the lower voltage of
-850 mV though to reduce heat generation and power usage. For this to work,
-clock rates need to adhere to the limits of the nominal drive mode.
+While the overdrive mode allows for higher frequencies for many IPs,
+the nominal mode needs a lower SoC voltage, thereby reducing
+heat generation and power usage.
 
-This is done by this series: A new imx8mp-nominal.dtsi reconfigures
-the imx8mp.dtsi clock tree to be compatible with nominal mode, an adaptation
-to the Linux clock driver makes it sanity check the actual clock rates against
-the SoC operating mode's constraints and finally the Skov DT makes use
-of it.
+As increasing clock rates beyond the maximum permitted by the supplied
+SoC voltage can lead to difficult to debug issues, device tree consumers
+would benefit from knowing what mode is active to enforce the clock rate
+limits that come with it.
 
-Actual configuration of the VDD_SOC rail continues to happen prior to Linux
-as well as PLL configuration that needs to happen earlier than the kernel
-running. See the corresponding barebox patch series[1] for details.
-Note that the barebox series didn't yet include VDD_SOC reconfiguration
-to 850mV, that would follow once the kernel changes have been merged.
+To facilitate this, extend the clock controller bindings with two mutually
+exclusive optional properties. Allowing for absence of both properties is
+needed, because there is no default suitable for all boards:
 
-[1]: https://lore.kernel.org/barebox/20240503103717.1370636-1-a.fatoum@pengutronix.de/
+For i.MX8M Mini and Nano, the kernel SoC DTSIs has assigned-clock-rates
+that are all achievable in nominal mode. For i.MX8MP, there are some
+rates only validated for overdrive mode.
 
+But even for the i.MX8M Mini/Nano boards, we don't know what rates they
+may configure at runtime, so it has not been possible so far to infer from
+just the device tree what the mode is.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
-Changes in v2:
-- Explain in Patch 1/6 why two properties are added instead of one
-  (Conor)
-- Collect Conor's Acked-by
-- Collect Peng's Reviewed-by
-- Link to v1: https://lore.kernel.org/r/20241219-imx8m-clk-v1-0-cfaffa087da6@pengutronix.de
+ Documentation/devicetree/bindings/clock/imx8m-clock.yaml | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
----
-Ahmad Fatoum (6):
-      dt-bindings: clock: imx8m: document nominal/overdrive properties
-      arm64: dts: imx8mp: Add optional nominal drive mode DTSI
-      arm64: dts: imx8mp: add fsl,nominal-mode property into nominal.dtsi
-      arm64: dts: freescale: imx8mp-skov: fix LDB clock rate configuration
-      arm64: dts: freescale: imx8mp-skov: operate SoC in nominal mode
-      clk: imx8mp: inform CCF of maximum frequency of clocks
+diff --git a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
+index c643d4a814786a1fc7e559140fe58911990f71bb..a6ae5257ef531f3fa8506d515d202f5b7842c4fa 100644
+--- a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
+@@ -43,6 +43,14 @@ properties:
+       ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8m-clock.h
+       for the full list of i.MX8M clock IDs.
+ 
++  fsl,nominal-mode:
++    description: Set if SoC is operated in nominal mode
++    $ref: /schemas/types.yaml#/definitions/flag
++
++  fsl,overdrive-mode:
++    description: Set if SoC is operated in overdrive mode
++    $ref: /schemas/types.yaml#/definitions/flag
++
+ required:
+   - compatible
+   - reg
+@@ -95,6 +103,12 @@ allOf:
+             - const: clk_ext2
+             - const: clk_ext3
+             - const: clk_ext4
++  - if:
++      required:
++        - fsl,overdrive-mode
++    then:
++      properties:
++        fsl,nominal-mode: false
+ 
+ additionalProperties: false
+ 
 
- .../devicetree/bindings/clock/imx8m-clock.yaml     |  14 ++
- arch/arm64/boot/dts/freescale/imx8mp-nominal.dtsi  |  64 +++++++++
- .../arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi |   5 +-
- .../freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts  |  19 +--
- drivers/clk/imx/clk-imx8mp.c                       | 147 +++++++++++++++++++++
- 5 files changed, 233 insertions(+), 16 deletions(-)
----
-base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
-change-id: 20241217-imx8m-clk-9467763dfcd8
-
-Best regards,
 -- 
-Ahmad Fatoum <a.fatoum@pengutronix.de>
+2.39.5
 
 
