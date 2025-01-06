@@ -1,275 +1,231 @@
-Return-Path: <linux-clk+bounces-16697-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16699-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F03DA027D5
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 15:23:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A965A02828
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 15:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60C757A26AE
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 14:23:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E2C6161EDE
+	for <lists+linux-clk@lfdr.de>; Mon,  6 Jan 2025 14:36:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 174641DDC34;
-	Mon,  6 Jan 2025 14:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF561DC9AD;
+	Mon,  6 Jan 2025 14:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gnHWbTvu"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1552E1DF742
-	for <linux-clk@vger.kernel.org>; Mon,  6 Jan 2025 14:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2B2182D2
+	for <linux-clk@vger.kernel.org>; Mon,  6 Jan 2025 14:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736173325; cv=none; b=jnZvOGmq+zlrrGvs6q5CTjB2ww27le9aPjkhOx/Y8HH7X0heeBSw+63L5MItrhEpQ6kL9jYT0gq3H1gE5Lp2od1F64EBqxFrfVxSiOLzik+IhtzX37wxSYk6z34ucDft4dfrbtF7uyagdYImvWZqXPoZKhtpjVkKPNCTQ60y0GA=
+	t=1736174201; cv=none; b=oaJZxh+r3X4V4IyfzsJyX0qakHBsyyt0xuyVT8yTbbW79zPTog8bLhlynijUK1N3m0Jbb0gDx/NOGeRTkZVZGEk43c/iR9s5iCzi4SfgHVjavK5mKCeXU5msp9hGTHt/ma5yYKrKM8g37UJGKrW2gu6lcpq1Fl/rCF0Ws8mtTQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736173325; c=relaxed/simple;
-	bh=O9zfW8BxmqwS6cY1frP7uXAEuWM3O4pUg/Mz8ljqiF4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u0whw8MbLW7K0mFBRF6zWk4t6tGyAozevb3BBrAWkG8euBHkIWdSOxpgNH2cGvNZJlpNQogiyjJCWSTIvmwEDgFTRBNOMRLyBqljJNqHTOYk5IL7zAN342N4UiKVNv0Kg+aghKe5OTMC/97E0t83LtXLtLtTT3ZP0EI4bUkxvmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnzF-0003vV-CM; Mon, 06 Jan 2025 15:21:45 +0100
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnzE-007BR5-0U;
-	Mon, 06 Jan 2025 15:21:44 +0100
-Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
-	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnzE-008rLw-2b;
-	Mon, 06 Jan 2025 15:21:44 +0100
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Date: Mon, 06 Jan 2025 15:21:47 +0100
-Subject: [PATCH v2 6/6] clk: imx8mp: inform CCF of maximum frequency of
- clocks
+	s=arc-20240116; t=1736174201; c=relaxed/simple;
+	bh=ZSqQEYHxQ445ycJU7lyhqN/qpjOmoRsXlbym7bsnDbY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8f4ZExRK9zFDVvbRH7YqexA8K7bBj6RufqzrqKeF7M0KDE+GG5dRJZki/sF+JiG/xRw0wxKl297czYIq2oitx72V9hIRlL6q0EQFoIrZvDa0vCXCQgOb7CiUrTU+by2bUyE9moa16n2ipRa6afPV06Z5/5VEMvg6vCcNKti0QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gnHWbTvu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736174199;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h5hcIYBd2cFpQ/iFdFgXHOmNme6Kj/cPc06DAfBxeQY=;
+	b=gnHWbTvuYwB73wuZpc2v+QyMuD1BisfdTGAb0IYRlfFeUd78jneoerh8mTXOJ1JuH+3oZf
+	tPHE1OKvqHZq4RzUtcyy01oRU6NZhfLt2w3FEOUuOnuxFmxZNU+uMV+Ovhm7Z51s2wFjgU
+	KovJMLbHGvgMwHKeXTGTmb37wx8xa3Y=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-529-6D57vI7xN5C6txEc8byxtQ-1; Mon, 06 Jan 2025 09:36:37 -0500
+X-MC-Unique: 6D57vI7xN5C6txEc8byxtQ-1
+X-Mimecast-MFC-AGG-ID: 6D57vI7xN5C6txEc8byxtQ
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43582d49dacso98886985e9.2
+        for <linux-clk@vger.kernel.org>; Mon, 06 Jan 2025 06:36:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736174195; x=1736778995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h5hcIYBd2cFpQ/iFdFgXHOmNme6Kj/cPc06DAfBxeQY=;
+        b=VGCxTAr3vOnElQ/VrvFeVfPILTeg6hT/1lm7o+G97L/56cHzGyw2wwY73BI9AYhewV
+         NcnQhXpgKck+E2kqBLPb2YwRaABp0yADXZDDVEXylkVoORCJST/5IVAyWNYtwu2aw7Ol
+         iVgbNTLMCuAdu5fTNtyCkbhweY3bAO2FbJKivXX3zEM2v+QOwEMYhqn/POvw5xsI4fJg
+         X8Dt88OZbJu8C1m+WuOCapWsBOZIceK75fqJnB8v6UKuMIrOSVhEU2beJ5wRHAwAdWKc
+         r26IBeDUMNKjkC05qB4tHRGHW5XjKytS0l8p6+gIGzGvpNnzOwzE5cPhYDjTRZfbHjpq
+         CJAg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3Bf9rbZREJJ2E3+dAB90xOYaGoKbSjq8jxDCMr273EqJ4aSHPrq20Z1AgGoDARvnnTMsN5QXHlIA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHzQO05k9fTRp2dIcWmc/YhDthuc0P3tjSxMThRpc9zOgQCxdy
+	SBf/woVNtCE1ARZewVzcu7aOiSY4+TdIixBzOftnIqRoP51yJTw8tZyQEE9YiUHDm1zsVVwOWAF
+	0/P3Em+LRUNoViZwloHvH2DPaXytYmYNWyfaqSlK6cOtq74W7LBmErjxg3A==
+X-Gm-Gg: ASbGncsFg9cvL68gddbYjzScW3/52phDIFlpU5HkmT0R+KEFCrKF6xsrl2oPbstbO7X
+	7NHhy+hpvOgn6IweZw7RzcEVPF83EH2ktor2bNtE0Kz7EY8dFHb21RKzXxgpxHvo6a9oIHumHB9
+	AbAum1hBWfYTSoUxMZ4X8IvG5BfQVaXbz2c4xuIinzFc/fSBjG+Lb/qcGhfF7/iqCO9fA60LYZc
+	/3RliZ9UCo/ScqRXVgi5xhJBCVzEWGc
+X-Received: by 2002:a05:600c:1990:b0:435:294:f1c8 with SMTP id 5b1f17b1804b1-43668b93834mr397724175e9.28.1736174195191;
+        Mon, 06 Jan 2025 06:36:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH0zUq0wMUNH4AGrWwr5yK1Wt7AJ8lyLbtSAp+NItR7fypEguExnUJqnsC50MI52YtRVFYQdg==
+X-Received: by 2002:a05:600c:1990:b0:435:294:f1c8 with SMTP id 5b1f17b1804b1-43668b93834mr397723965e9.28.1736174194695;
+        Mon, 06 Jan 2025 06:36:34 -0800 (PST)
+Received: from localhost ([2a01:e0a:b25:f902::ff])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43661218f43sm573410285e9.19.2025.01.06.06.36.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 06:36:34 -0800 (PST)
+Date: Mon, 6 Jan 2025 15:36:33 +0100
+From: Maxime Ripard <mripard@redhat.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Ying Liu <victor.liu@nxp.com>, Marek Vasut <marex@denx.de>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, linux-clk@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	Abel Vesa <abel.vesa@linaro.org>, Herve Codina <herve.codina@bootlin.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Ian Ray <ian.ray@ge.com>
+Subject: Re: [PATCH 4/5] clk: Add flag to prevent frequency changes when
+ walking subtrees
+Message-ID: <20250106-fabulous-tapir-of-acceptance-c4e3e7@houat>
+References: <20241121-ge-ian-debug-imx8-clk-tree-v1-0-0f1b722588fe@bootlin.com>
+ <20241121-ge-ian-debug-imx8-clk-tree-v1-4-0f1b722588fe@bootlin.com>
+ <20241217-brown-wapiti-of-promotion-e3bec6@houat>
+ <87bjx2tf3y.fsf@bootlin.com>
+ <c80a9fcd3fbe99c77c2cef1c241e8610.sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250106-imx8m-clk-v2-6-6aaeadac65fe@pengutronix.de>
-References: <20250106-imx8m-clk-v2-0-6aaeadac65fe@pengutronix.de>
-In-Reply-To: <20250106-imx8m-clk-v2-0-6aaeadac65fe@pengutronix.de>
-To: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Abel Vesa <abel.vesa@linaro.org>, 
- Marek Vasut <marex@denx.de>
-Cc: linux-clk@vger.kernel.org, imx@lists.linux.dev, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="l2x26wlw7urnozbm"
+Content-Disposition: inline
+In-Reply-To: <c80a9fcd3fbe99c77c2cef1c241e8610.sboyd@kernel.org>
 
-The IMX8MPCEC datasheet lists maximum frequencies allowed for different
-modules. Some of these limits are universal, but some depend on
-whether the SoC is operating in nominal or in overdrive mode.
 
-The imx8mp.dtsi currently assumes overdrive mode and configures some
-clocks in accordance with this. Boards wishing to make use of nominal
-mode will need to override some of the clock rates manually.
+--l2x26wlw7urnozbm
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 4/5] clk: Add flag to prevent frequency changes when
+ walking subtrees
+MIME-Version: 1.0
 
-As operating the clocks outside of their allowed range can lead to
-difficult to debug issues, it makes sense to register the maximum rates
-allowed in the driver, so the CCF can take them into account.
+On Mon, Dec 30, 2024 at 05:22:56PM -0800, Stephen Boyd wrote:
+> Quoting Miquel Raynal (2024-12-23 10:43:13)
+> > Hi Maxime,
+> >=20
+> > On 17/12/2024 at 13:47:53 +01, Maxime Ripard <mripard@redhat.com> wrote:
+> >=20
+> > > On Thu, Nov 21, 2024 at 06:41:14PM +0100, Miquel Raynal wrote:
+> > >> There are mainly two ways to change a clock frequency.
+> > >
+> > > There's much more than that :)
+> >=20
+> > "mainly"
+> >=20
+> > Or maybe I should have added "on purpose".
+> >=20
+> > >
+> > > Off the top of my head, setting/clearing a min/max rate and changing =
+the
+> > > parent might also result in a rate change.
+> > >
+> > > And then, the firmware might get involved too.
+> > >
+> > >> The active way requires calling ->set_rate() in order to ask "on
+> > >> purpose" for a frequency change. Otherwise, a clock can passively see
+> > >> its frequency being updated depending on upstream clock frequency
+> > >> changes. In most cases it is fine to just accept the new upstream
+> > >> frequency - which by definition will have an impact on downstream
+> > >> frequencies if we do not recalculate internal divisors. But there are
+> > >> cases where, upon an upstream frequency change, we would like to
+> > >> maintain a specific rate.
+> > >
+> > > Why is clk_set_rate_exclusive not enough?
+> >=20
+> > I am trying to protect these rate changes from subtree walks, I don't
+> > see where setting an exclusive rate would have an effect? But I might be
+> > overlooking something, definitely.
+> >=20
+> > ...
+> >=20
+> > >> @@ -2272,7 +2271,13 @@ static void clk_calc_subtree(struct clk_core =
+*core)
+> > >>  {
+> > >>      struct clk_core *child;
+> > >> =20
+> > >> -    core->new_rate =3D clk_recalc(core, core->parent->new_rate);
+> > >> +    if (core->flags & CLK_NO_RATE_CHANGE_DURING_PROPAGATION) {
+> > >> +            core->new_rate =3D clk_determine(core, core->rate);
+> > >> +            if (!core->new_rate)
+> > >> +                    core->new_rate =3D clk_recalc(core, core->paren=
+t->new_rate);
+> > >> +    } else {
+> > >> +            core->new_rate =3D clk_recalc(core, core->parent->new_r=
+ate);
+> > >> +    }
+> > >
+> > > Sorry, it's not clear to me how it works. How will the parent clocks
+> > > will get notified to adjust their dividers in that scenario? Also, wh=
+at
+> > > if they can't?
+> >=20
+> > The idea is: if the flag is set, instead of accepting the new upstream
+> > rate and recalculate the downstream rate based on a previously set
+> > divider value, we change our divider value to match the same frequency
+> > as before. But if we cannot, then we just keep the old way.
+> >=20
+>=20
+> The exclusive rate code could support this if it doesn't already do so.
+> If you call clk_set_rate_exclusive(child, <constant rate>) followed by
+> clk_set_rate(parent, <new rate>) the core code should try to keep the
+> child at the constant rate, or fail the clk_set_rate() call on the
+> parent. It should be possible to confirm this with some KUnit tests for
+> clk_set_rate_exclusive(). Similarly, if another child, child_B, of the
+> parent changes the parent rate, we should speculate the new rate of the
+> child_A that's protected and fail if we can't maintain the rate. We need
+> to start generating a list of clks that we operate a rate change on to
+> support this though, because right now we rely on the stack to track the
+> clks that we change the rate of.
+>=20
+> Initially we thought that we could do this with clk notifiers. That may
+> work here, but I suspect it will be clunky to get working because clk
+> notifiers operate on struct clk.
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
- drivers/clk/imx/clk-imx8mp.c | 147 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 147 insertions(+)
+I think notifiers are great for customers, but not really adequate for
+the clock drivers tree. Indeed, you can only react to a (sub)tree
+configuration using notifiers, but you can't affect it to try something
+new that would be a better fit.
 
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index 516dbd170c8a356f293621b371b9ef9b9bec90a4..3b06990b73adcb2e4807f91a8983ad35068572a7 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -8,6 +8,7 @@
- #include <linux/err.h>
- #include <linux/io.h>
- #include <linux/module.h>
-+#include <linux/units.h>
- #include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-@@ -405,6 +406,145 @@ static const char * const imx8mp_clkout_sels[] = {"audio_pll1_out", "audio_pll2_
- static struct clk_hw **hws;
- static struct clk_hw_onecell_data *clk_hw_data;
- 
-+struct imx8mp_clock_constraints {
-+	int clkid;
-+	u32 maxrate;
-+};
-+
-+/*
-+ * Below tables are taken from IMX8MPCEC Rev. 2.1, 07/2023
-+ * Table 13. Maximum frequency of modules.
-+ * Probable typos fixed are marked with a comment.
-+ */
-+static const struct imx8mp_clock_constraints imx8mp_clock_common_constraints[] = {
-+	{ IMX8MP_CLK_A53_DIV,             1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ENET_AXI,             266666667 }, /* Datasheet claims 266MHz */
-+	{ IMX8MP_CLK_NAND_USDHC_BUS,       266666667 }, /* Datasheet claims 266MHz */
-+	{ IMX8MP_CLK_MEDIA_APB,            200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_HDMI_APB,             133333333 }, /* Datasheet claims 133MHz */
-+	{ IMX8MP_CLK_ML_AXI,               800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_AHB,                  133333333 },
-+	{ IMX8MP_CLK_IPG_ROOT,              66666667 },
-+	{ IMX8MP_CLK_AUDIO_AHB,            400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_DISP2_PIX,      170 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_DRAM_ALT,             666666667 },
-+	{ IMX8MP_CLK_DRAM_APB,             200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_CAN1,                  80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_CAN2,                  80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_PCIE_AUX,              10 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_I2C5,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_I2C6,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_SAI1,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_SAI2,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_SAI3,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_SAI5,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_SAI6,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_ENET_QOS,             125 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ENET_QOS_TIMER,       200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ENET_REF,             125 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ENET_TIMER,           125 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ENET_PHY_REF,         125 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_NAND,                 500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_QSPI,                 400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_USDHC1,               400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_USDHC2,               400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_I2C1,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_I2C2,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_I2C3,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_I2C4,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_UART1,                 80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_UART2,                 80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_UART3,                 80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_UART4,                 80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ECSPI1,                80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ECSPI2,                80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_PWM1,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_PWM2,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_PWM3,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_PWM4,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_GPT1,                 100 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPT2,                 100 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPT3,                 100 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPT4,                 100 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPT5,                 100 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPT6,                 100 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_WDOG,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_IPP_DO_CLKO1,         200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_IPP_DO_CLKO2,         200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_HDMI_REF_266M,        266 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_USDHC3,               400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_MIPI_PHY1_REF,  300 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_DISP1_PIX,      250 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_CAM2_PIX,       277 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_LDB,            595 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_MIPI_TEST_BYTE, 200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ECSPI3,                80 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_PDM,                  200 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_SAI7,                  66666667 }, /* Datasheet claims 66MHz */
-+	{ IMX8MP_CLK_MAIN_AXI,             400 * HZ_PER_MHZ },
-+	{ /* sentinel */ },
-+};
-+
-+static const struct imx8mp_clock_constraints imx8mp_clock_nominal_constraints[] = {
-+	{ IMX8MP_CLK_M7_CORE,           600 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ML_CORE,           800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU3D_CORE,        800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU3D_SHADER_CORE, 800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU2D_CORE,        800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_AUDIO_AXI_SRC,     600 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_HSIO_AXI,          400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_ISP,         400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_BUS,           600 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_AXI,         400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_HDMI_AXI,          400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU_AXI,           600 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU_AHB,           300 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_NOC,               800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_NOC_IO,            600 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ML_AHB,            300 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_G1,            600 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_G2,            500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_CAM1_PIX,    400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_VC8000E,       400 * HZ_PER_MHZ }, /* Datasheet claims 500MHz */
-+	{ IMX8MP_CLK_DRAM_CORE,         800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GIC,               400 * HZ_PER_MHZ },
-+	{ /* sentinel */ },
-+};
-+
-+static const struct imx8mp_clock_constraints imx8mp_clock_overdrive_constraints[] = {
-+	{ IMX8MP_CLK_M7_CORE,            800 * HZ_PER_MHZ},
-+	{ IMX8MP_CLK_ML_CORE,           1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU3D_CORE,        1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU3D_SHADER_CORE, 1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU2D_CORE,        1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_AUDIO_AXI_SRC,      800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_HSIO_AXI,           500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_ISP,          500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_BUS,            800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_AXI,          500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_HDMI_AXI,           500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU_AXI,            800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GPU_AHB,            400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_NOC,               1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_NOC_IO,             800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_ML_AHB,             400 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_G1,             800 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_G2,             700 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_MEDIA_CAM1_PIX,     500 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_VPU_VC8000E,        500 * HZ_PER_MHZ }, /* Datasheet claims 400MHz */
-+	{ IMX8MP_CLK_DRAM_CORE,         1000 * HZ_PER_MHZ },
-+	{ IMX8MP_CLK_GIC,                500 * HZ_PER_MHZ },
-+	{ /* sentinel */ },
-+};
-+
-+static void imx8mp_clocks_apply_constraints(const struct imx8mp_clock_constraints constraints[])
-+{
-+	const struct imx8mp_clock_constraints *constr;
-+
-+	for (constr = constraints; constr->clkid; constr++)
-+		clk_hw_set_rate_range(hws[constr->clkid], 0, constr->maxrate);
-+}
-+
- static int imx8mp_clocks_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -714,6 +854,13 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 
- 	imx_check_clk_hws(hws, IMX8MP_CLK_END);
- 
-+	imx8mp_clocks_apply_constraints(imx8mp_clock_common_constraints);
-+
-+	if (of_property_read_bool(np, "fsl,nominal-mode"))
-+		imx8mp_clocks_apply_constraints(imx8mp_clock_nominal_constraints);
-+	else if (of_property_read_bool(np, "fsl,overdrive-mode"))
-+		imx8mp_clocks_apply_constraints(imx8mp_clock_overdrive_constraints);
-+
- 	err = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
- 	if (err < 0) {
- 		dev_err(dev, "failed to register hws for i.MX8MP\n");
+Like, if we have a PLL A, with two child clocks that are dividers. B is
+initially (exclusively) set to freq X, and then you want to set C to 2X.
 
--- 
-2.39.5
+The best thing to do is to set A to 2X, and double B's divider. It's
+simple enough, but we have no way to try to negociate that at the
+moment.
+
+Maxime
+
+--l2x26wlw7urnozbm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCZ3vqbQAKCRAnX84Zoj2+
+duj7AYDidThds1LFflb8OweKnRrNPu4M0tpfbKNRxlViGeUwfGeosS89X8zOl5WP
+yBs8cfoBf3W2e/SASrJLpQctBMdyN2XKiw8Hpa9n9cLwlnq7mQteUYczwt9dWEyp
+r6A1YHUBOw==
+=VbDO
+-----END PGP SIGNATURE-----
+
+--l2x26wlw7urnozbm--
 
 
