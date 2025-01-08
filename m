@@ -1,150 +1,130 @@
-Return-Path: <linux-clk+bounces-16817-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16820-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 945A4A05AC2
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 12:57:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DA07A05ACD
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 12:58:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E35F3A739B
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 11:57:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5075B166BE8
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 11:58:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BDB1F9F47;
-	Wed,  8 Jan 2025 11:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31521F8F17;
+	Wed,  8 Jan 2025 11:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b="B/MA0g5l"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="dS67wEdo"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E2E1F9A9C;
-	Wed,  8 Jan 2025 11:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.94
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736337258; cv=pass; b=aDnosSOqt3xs9bYLvYwbuT6FffZzXX1AYBpGCnFZLav/NcFY4f5EyNrj1Ifz2zJccRfHWxe1qSTl/7JyyxdxjS/EloP8PWbFuH5JebZmEf+Xl0qgn9dq4i7gz/OMmcC1Rm+OKuVXrAqA5Mbig3fad3OjpX0qec830p7ZbEyz1QI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736337258; c=relaxed/simple;
-	bh=ZqRrM1yZnQ1N5A78AqBZL3bbuLbEX8zJinAI2+vwIWc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cnCV3sUVxOQAl/9OpijKs9aOPfKD5auQrAVxLu3cu3KZdt8xf+Yh94ex+YCaomXVDiRjfFe+mFfd/+Oghg4ec8WsE2m5nfbMg7opdVWHOfukdjJGPC9lWzBurv/gIsdCvbL5ML1Li6S1ihR8m0q6gN9sNZY4U/FopLRdJkCEFI4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b=B/MA0g5l; arc=pass smtp.client-ip=136.143.188.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1736337232; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=l6U1q6x8U7EL6nF2EM9PGATKWn9Hn6g+G2PkOor6lhncGRFxKUv3Rea6/mE0BXJdbWosLuKoCgoFUGYO5NYwCDjHfCYVrR2ptwGvtAuB+vSrD6GmVowvzdJoE+GQR8vtIrT//3wqMb9TA8s8Khehpm3+9bMbVuH22ZhvOKflJZI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1736337232; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=9MOQQP/x77Ro5ASLfJZTxTTeYz6fqTSvvH80KDtJdi0=; 
-	b=F9QEWUDAKA2219RVPlYRHhephbc7uURT6yXQ8XgBTxwGBI4YS2SBGVLDhPyHPJgpdkmrUhCKvP8tj/r1jRlMfgPfu/nrsArZ1gVoYl1nEqw7joV55oeQPkmCDIEt2+qZieV1tm1KIgvlDO/Qbf3+otVoYK1w4Ii2p1R9jY8UWj8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=kingxukai@zohomail.com;
-	dmarc=pass header.from=<kingxukai@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736337232;
-	s=zm2022; d=zohomail.com; i=kingxukai@zohomail.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Feedback-ID:Reply-To;
-	bh=9MOQQP/x77Ro5ASLfJZTxTTeYz6fqTSvvH80KDtJdi0=;
-	b=B/MA0g5ln5uMmjGF7E2gjbw/S89H7ykLsQsfWKbH4mOS/zbvcM8PdeB3jMeTT8hB
-	iPnsHMZs+MtOeQQa4rElgp9cI/yUHwa1eVmG3onVsLEg4A8fAnXnk4Fzdz26SVfr1Nf
-	WfiHDLpd9Tph2KQDUj5kMuy0BZDoAIhQcxLPICQk=
-Received: by mx.zohomail.com with SMTPS id 1736337229252744.266655262139;
-	Wed, 8 Jan 2025 03:53:49 -0800 (PST)
-From: Xukai Wang <kingxukai@zohomail.com>
-Date: Wed, 08 Jan 2025 19:53:09 +0800
-Subject: [PATCH v2 3/3] riscv: dts: canaan: Add clock initial support for
- K230
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1EF1F8ADB;
+	Wed,  8 Jan 2025 11:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736337421; cv=none; b=qiDWS656u+Itr+Ik3diXH+LTl/SJKpW1N7C1QNJqfc/D1H3LqGnxwWkrQeWS5Q3Qt5GpPC4f2aUY8n5cSbrE1e003UcLqhiFzT4gbBKwFY70CtcEGOIxNiisgEqlBwOGMS3lTXicTEW38P2VbCiAWy+DbVEvlQu7UfFbqnqMTaQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736337421; c=relaxed/simple;
+	bh=5tK6T5BnxOGB8HNkuG5gnenqtrDCvmYdb2Y6OFf9yXI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IC5eEt9kM24tLvvwnVb4rBL29YLNCmGm6BqW48rkhaOxSopNWWhpn+BT1nHwa7CZRmXnqiIE+iceR1Use7Nj40AzNkbm34+cB2I6+oH6xPJ5pWhFWdmW4LOz++NjT7cCVkBJWYvXSwv+ejBSy89ezB3LuaT7Zpzm/4Ff8pIZveA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=dS67wEdo; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id AF3D625C32;
+	Wed,  8 Jan 2025 12:56:58 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7STX7QO0Ro6w; Wed,  8 Jan 2025 12:56:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1736337417; bh=5tK6T5BnxOGB8HNkuG5gnenqtrDCvmYdb2Y6OFf9yXI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=dS67wEdo9Xd9+EPbZHqPmuiPPKjnsk/abCj9X6pJGxK0aY4Ewgh5bpApkWMPK/sHz
+	 lPDdsm2UDA6m0MugYuWB/o33inUlCLstXAiS4ZH6Zpi2bFFNLWpSMD7CpUFsalC2IW
+	 PaVjXcIPNs9fXSWtSt0E+Kpfb4MSiUJUtxozAu1N0SNmuxMHprefb0zCv0Y9zj+mTG
+	 WkuzW1qIVJCYgnaPig+0TOMSe4NRwIJsbRAKIrYKNyB82HxGWhL6+myYIAATOhG0Xl
+	 QVPy52GK984Qh8aNroXOEx4MhQd861Lq/wJfyG54BL/Mjc46+qHlTCxTb+8jFz8dis
+	 4aVXjh5G5Wdrg==
+Date: Wed, 8 Jan 2025 11:56:45 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] Support clock and reset unit of Rockchip RK3528
+Message-ID: <Z35n_YBSAxWN-4DV@pie>
+References: <20250108114605.1960-2-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-b4-k230-clk-v2-3-27b30a2ca52d@zohomail.com>
-References: <20250108-b4-k230-clk-v2-0-27b30a2ca52d@zohomail.com>
-In-Reply-To: <20250108-b4-k230-clk-v2-0-27b30a2ca52d@zohomail.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- Troy Mitchell <TroyMitchell988@gmail.com>
-X-Mailer: b4 0.14.2
-Feedback-ID: rr0801122729d553ffee6ecc653487f0c300001cfe0f65fe2f8bfc0304a76fbe9dfb9188971166a3ef3405d4:zu08011227396fd034eaf7abaafa2fed2f00007bab21554136d08197aee20d8d5a21bed38a865ac3a19bea0b:rf0801122db74e152dab4a477b9dbefb890000f5633fa80c33c0456521d4c8b41b9de48b2293072df2333d8a2855f56c38ee:ZohoMail
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250108114605.1960-2-ziyao@disroot.org>
 
-This patch provides basic support for the K230 clock, which does not
-cover all clocks.
+On Wed, Jan 08, 2025 at 11:46:01AM +0000, Yao Zi wrote:
+> Similar to previous Rockchip SoCs, reset controller on RK3528 shares
+> MMIO region with clock controller, combined as CRU. They're represented
+> as a single node in dt.
+> 
+> For the reset controller, only bindings are included in this series
+> because it's hard to test the reset controller without support for some
+> peripherals (e.g. pinctrl). I'd like to first make dt and basic
+> peripherals available, then submit the driver.
+> 
+> This is tested on Radxa E20C board. With some out-of-tree drivers, I've
+> successfully brouhgt up UART, pinctrl/gpio and I2C. A clock dump could
+> be obtained from [1].
+> 
+> [1]: https://gist.github.com/ziyao233/032961d1eebeecb9a41fea2d690e8351
 
-The clock tree of the K230 SoC consists of OSC24M,
-PLLs and sysclk.
+Oops, I forgot to attach the changelog. Sorry for the inconvenience and
+please refer to this,
 
-Co-developed-by: Troy Mitchell <TroyMitchell988@gmail.com>
-Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
-Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
----
- arch/riscv/boot/dts/canaan/k230.dtsi | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+- dt-binding changes
+  - relicense binding headers as GPL-2.0-only OR MIT
+  - use gapless integers starting from 0 for binding IDs
+  - make input clocks essential, add corresponding description
+  - rename the input clock that is generated by phy module as "gmac0"
+  - style fixes
+- driver changes
+  - format in the common Rockchip driver style
+  - drop initializing code of the reset controller, as it'll not be
+    supported in this series
 
-diff --git a/arch/riscv/boot/dts/canaan/k230.dtsi b/arch/riscv/boot/dts/canaan/k230.dtsi
-index 95c1a3d8fb1192e30113d96d3e96329545bc6ae7..c407471af3daac154e0fbdd377d57ea3ff4698e1 100644
---- a/arch/riscv/boot/dts/canaan/k230.dtsi
-+++ b/arch/riscv/boot/dts/canaan/k230.dtsi
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2024 Yangyu Chen <cyy@cyyself.name>
-  */
- 
-+#include <dt-bindings/clock/k230-clk.h>
- #include <dt-bindings/interrupt-controller/irq.h>
- 
- /dts-v1/;
-@@ -65,6 +66,13 @@ apb_clk: apb-clk-clock {
- 		#clock-cells = <0>;
- 	};
- 
-+	osc24m: clock-24m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <24000000>;
-+		clock-output-names = "osc24m";
-+	};
-+
- 	soc {
- 		compatible = "simple-bus";
- 		interrupt-parent = <&plic>;
-@@ -138,5 +146,24 @@ uart4: serial@91404000 {
- 			reg-shift = <2>;
- 			status = "disabled";
- 		};
-+
-+		sysclk: clock-controller@91100000 {
-+			compatible = "canaan,k230-clk";
-+			reg = <0x0 0x91102000 0x0 0x1000>, <0x0 0x91100000 0x0 0x1000>;
-+			clocks = <&osc24m>;
-+			#clock-cells = <1>;
-+			clock-output-names =
-+			"CPU0_ACLK", "CPU0_PLIC", "CPU0_NOC_DDRCP4", "CPU0_PCLK",
-+			"PMU_PCLK", "HS_HCLK_HIGN_SRC", "HS_HCLK_HIGN_GATE",
-+			"HS_HCLK_SRC", "HS_SD0_HS_AHB_GAT", "HS_SD1_HS_AHB_GAT",
-+			"HS_SSI1_HS_AHB_GA", "HS_SSI2_HS_AHB_GA", "HS_USB0_HS_AHB_GA",
-+			"HS_USB1_HS_AHB_GA", "HS_SSI0_AXI", "HS_SSI1", "HS_SSI2",
-+			"HS_QSPI_AXI_SRC", "HS_SSI1_ACLK_GATE", "HS_SSI2_ACLK_GATE",
-+			"HS_SD_CARD_SRC", "HS_SD0_CARD_TX", "HS_SD1_CARD_TX",
-+			"HS_SD_AXI_SRC", "HS_SD0_AXI_GATE", "HS_SD1_AXI_GATE",
-+			"HS_SD0_BASE_GATE", "HS_SD1_BASE_GATE", "HS_OSPI_SRC",
-+			"HS_USB_REF_51M", "HS_SD_TIMER_SRC", "HS_SD0_TIMER_GATE",
-+			"HS_SD1_TIMER_GATE", "HS_USB0_REFERENCE", "HS_USB1_REFERENCE";
-+		};
- 	};
- };
-
--- 
-2.34.1
-
+> 
+> Yao Zi (5):
+>   dt-bindings: clock: Document clock and reset unit of RK3528
+>   clk: rockchip: Add PLL flag ROCKCHIP_PLL_FIXED_MODE
+>   clk: rockchip: Add clock controller driver for RK3528 SoC
+>   arm64: dts: rockchip: Add clock generators for RK3528 SoC
+>   arm64: dts: rockchip: Add UART clocks for RK3528 SoC
+> 
+>  .../bindings/clock/rockchip,rk3528-cru.yaml   |   67 +
+>  arch/arm64/boot/dts/rockchip/rk3528.dtsi      |   68 +-
+>  drivers/clk/rockchip/Kconfig                  |    7 +
+>  drivers/clk/rockchip/Makefile                 |    1 +
+>  drivers/clk/rockchip/clk-pll.c                |   10 +-
+>  drivers/clk/rockchip/clk-rk3528.c             | 1114 +++++++++++++++++
+>  drivers/clk/rockchip/clk.h                    |   22 +
+>  .../dt-bindings/clock/rockchip,rk3528-cru.h   |  453 +++++++
+>  .../dt-bindings/reset/rockchip,rk3528-cru.h   |  241 ++++
+>  9 files changed, 1978 insertions(+), 5 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+>  create mode 100644 drivers/clk/rockchip/clk-rk3528.c
+>  create mode 100644 include/dt-bindings/clock/rockchip,rk3528-cru.h
+>  create mode 100644 include/dt-bindings/reset/rockchip,rk3528-cru.h
+> 
+> -- 
+> 2.47.1
+> 
 
