@@ -1,85 +1,52 @@
-Return-Path: <linux-clk+bounces-16796-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16807-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6566DA056F7
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 10:36:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1366BA05774
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 10:55:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19DD11888DEE
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 09:36:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13CAF7A17E3
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 09:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30111F2C50;
-	Wed,  8 Jan 2025 09:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aAcIDx+c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C68E1F709B;
+	Wed,  8 Jan 2025 09:55:40 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-sh.amlogic.com (unknown [58.32.228.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C441F03F1;
-	Wed,  8 Jan 2025 09:36:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933A61F63E3;
+	Wed,  8 Jan 2025 09:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=58.32.228.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736329002; cv=none; b=FfOPyLbJ0aw/JMBWLbqRejOu5Oh/ljWvkAEw0JIPWbsOa7NLZ5HdURElJfRsacwlUPP9X+FheXSkZDex83IVvuwm/JXXUXDQfklS/L3wGc0Mk+Afp0Gq995UyU3jrs0uqMMpcX9JgfTy9ZTT6EqrfiZ1oVRPxZT87rriuhIUeQI=
+	t=1736330140; cv=none; b=uf5bHnzD5pC6fzhb0keeZlJ+qKBuZfGzU5jmo9gRCQPOPjfT7Gpq6pfZKuMGeO47Fwb7L6y5dRuLs0Fw/FwBhbErUSvsiQLBZZIcwmmYpWP4wf/VV7omc9gAg2ekXrXEVzEVeyBi45UXgoeEah3w3S5OCRNSPAKrBPx6ekyuXh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736329002; c=relaxed/simple;
-	bh=rL+51DfZqr9UBehcBoLMSIU4hNBv1dguHoopQ4OLK2U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GCb0ycgFon6GaRjMP+LYR/Em9bkp8KvZ4MB3gdgBt9GT2LlHbNKQqWyju3DUnAeyFOoiEk76he6o1vox5ZKkBZxpAhmNA2rLL1uX6FIdlTxaLB49YrB48DMMjLAn36d1XmnXY5H1D0uYL0+gNKf1TPmxQRwNNgrqJ40AGVXUel8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aAcIDx+c; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4361c705434so119204175e9.3;
-        Wed, 08 Jan 2025 01:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736328999; x=1736933799; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HDYeYW/u6fNVia6QTTE+7W+qMbdwhM6JEbCTl7sDDhs=;
-        b=aAcIDx+cONyry0oUrZo//FdJwADR5ir69Y8NE9LK7/h0fEGdbA2iOOmLN5skADCBm0
-         GEYM3xt5Am5ZNTniGaf0ZIx3rDshplIbXNKkA3ob09VkcdgnVhR0f5h/23OdQOyebrBZ
-         2qVfW/GxyR/sZFFoxfSRljKf2d/h3NrftNDQS2fqeCgx051kWZKibWOv+q3nw3X2ASh8
-         EzfCu/25ElbStDbDU1+Bc+UBlSbqJRd/6Xo/MASCMsYZXMaP0dmfDcZ9yUgXAEKF8mIZ
-         JE7BvnybCvwF3c/25fGu4DVzhvF9cjNsQzy+Yu9QuuqbxgNTOoEuXHk3R05nYZ9U0f7I
-         8O2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736328999; x=1736933799;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HDYeYW/u6fNVia6QTTE+7W+qMbdwhM6JEbCTl7sDDhs=;
-        b=iKS6rpbgwPc20uJokOVOc/6YWATk1yGTJ00878aKV6YzxQjx/ijLgqLomGaV1eMOBY
-         5usZZnVcGPfu0Jw4NlUQUwub5dNEkztM6IT5JxVEDxVm3AqP9nOOr4kgx7mRYV2GS1Bh
-         P7k1UEyPiJpAD7OeApARocp6GzhXskrjL+O4pxK/qgkTSrlo9IFs3eU62m3JgF5mQU3N
-         0Zed8vutIuenBeWKDL50tHKuE0x3fonZdYb2cP6UOn9VaneGY3+jbhP9NMCZxVVsky09
-         ExlOOx0FN1xLqF1rIoO85eMTNc8t3Ha6gyQY0QCBOAiFI9iY1g2ql6gmq/vrJa7q+mcW
-         +olQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDMPtUkvzP2XnEBLaDQdXPbHxLuJilB/xQujD51ed/9X4tZFNEyEyBtPvrm3TRoL8uQVLwNPid0ccZCdw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFVj64gqeqZX28cHA1yqXHh0/zvAcp35ADwXDK7voHSeqKgjrj
-	hZkTu3foCyrARLUcQ75AdDYJ7GeJXV2i8Oy/h3SITDfVnbH7h2Icln8/IA==
-X-Gm-Gg: ASbGncsfMaNAVRhWQiFPMbZaxMfAjUMpbUKIskPkZd57U4nOEmsjWKYuUdMxuutVtIN
-	b/jOdBO5biIZt0vyDH1Wz6S5WHdLJZoaDb7g5zIPTkOYIsRAvbDqOIZicP7FB/spxdY5upjgN+B
-	A9odcbgJkYDoF/AcXq2JVjORc1Yp99bZduy7Gh1vmi0yDpO1S8EOrbLKIaEjl2DudRLYJNB64ae
-	C/JCP3QNoAHYTzljzkdWMc6AOgmZ27HHuBFiUqwUANAjiCxGPTHUfWO4xKloSEemOProAWzJC7c
-	p/aHTsUgSKKwOaNaAkGg3yfZxKJStA+pfx7GNdERnhK1VY7M6w==
-X-Google-Smtp-Source: AGHT+IH2CA6F7jiyHIbISYAeLSuelfbnnvpf2WyKr3Ji8mNG9dXQiz/PtdE9rZIknPfANBPLojlIbg==
-X-Received: by 2002:a05:6000:1a8c:b0:382:6f3:a20f with SMTP id ffacd0b85a97d-38a872f6f9amr1570878f8f.11.1736328998731;
-        Wed, 08 Jan 2025 01:36:38 -0800 (PST)
-Received: from localhost.localdomain (199.red-88-11-183.dynamicip.rima-tde.net. [88.11.183.199])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c89e219sm53161715f8f.84.2025.01.08.01.36.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 01:36:37 -0800 (PST)
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To: linux-clk@vger.kernel.org
-Cc: sboyd@kernel.org,
-	mturquette@baylibre.com,
-	linux-kernel@vger.kernel.org,
-	yangshiji66@outlook.com
-Subject: [PATCH] clk: ralink: mtmips: remove duplicated 'xtal' clock for Ralink SoC RT3883
-Date: Wed,  8 Jan 2025 10:36:36 +0100
-Message-Id: <20250108093636.265033-1-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1736330140; c=relaxed/simple;
+	bh=5spmVVgRAeG3CJm5Rz+zOc5mQdu90lpzu3wLhl7iYuA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SSbyPy2a3JZxhv78BvIDfN7W7vfvtllATzTH2e4TrRVUFresrS3Pb0mijz9t/PZX0Y4c4dgtrU5ICJpE5z3+G/Pgm0VhRV9dmorgS2MxOeluhaheYEj1FgnotLkYZ+OOHzqhuTMvmCu0JPfxhm7miZeD1glwjg9U/LeY+/byDzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; arc=none smtp.client-ip=58.32.228.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
+Received: from rd03-sz.software.amlogic (10.28.11.121) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.39; Wed, 8 Jan 2025
+ 17:40:27 +0800
+From: Jian Hu <jian.hu@amlogic.com>
+To: Jerome Brunet <jbrunet@baylibre.com>, Xianwei Zhao
+	<xianwei.zhao@amlogic.com>, Chuan Liu <chuan.liu@amlogic.com>, Neil Armstrong
+	<neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, "Stephen
+ Boyd" <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+	"Dmitry Rokosov" <ddrokosov@sberdevices.ru>, robh+dt <robh+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>
+CC: Jian Hu <jian.hu@amlogic.com>, devicetree <devicetree@vger.kernel.org>,
+	linux-clk <linux-clk@vger.kernel.org>, linux-amlogic
+	<linux-amlogic@lists.infradead.org>, linux-kernel
+	<linux-kernel@vger.kernel.org>, linux-arm-kernel
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v2 0/5] add support for T7 family clock controller
+Date: Wed, 8 Jan 2025 17:40:20 +0800
+Message-ID: <20250108094025.2664201-1-jian.hu@amlogic.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -87,30 +54,47 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Ralink SoC RT3883 has already 'xtal' defined as a base clock so there is no
-need to redefine it again in fixed clocks section. Hence, remove the duplicate
-one from there.
+It introduces three clock controllers:
+- scmi clock controller, these clocks are managed by the SCP and handled through SCMI;
+- PLL clock controller;
+- peripheral clock controller.
 
-Fixes: d34db686a3d7 ("clk: ralink: mtmips: fix clocks probe order in oldest ralink SoCs")
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/clk/ralink/clk-mtmips.c | 1 -
- 1 file changed, 1 deletion(-)
+Changes v2 since v1 at [1]:
+- add CLK_MESON import 
+- add const for clkc_regmao_config in pll driver
+- fix eth_rmii_sel parent
+- update T7 PLL YAML file
 
-diff --git a/drivers/clk/ralink/clk-mtmips.c b/drivers/clk/ralink/clk-mtmips.c
-index 76285fbbdeaa..4b5d8b741e4e 100644
---- a/drivers/clk/ralink/clk-mtmips.c
-+++ b/drivers/clk/ralink/clk-mtmips.c
-@@ -264,7 +264,6 @@ static int mtmips_register_pherip_clocks(struct device_node *np,
- 	}
- 
- static struct mtmips_clk_fixed rt3883_fixed_clocks[] = {
--	CLK_FIXED("xtal", NULL, 40000000),
- 	CLK_FIXED("periph", "xtal", 40000000)
- };
- 
+[1]: https://lore.kernel.org/r/20241231060047.2298871-6-jian.hu%40amlogic.com
+
+Jian Hu (5):
+  dt-bindings: clock: add Amlogic T7 PLL clock controller
+  dt-bindings: clock: add Amlogic T7 SCMI clock controller
+  dt-bindings: clock: add Amlogic T7 peripherals clock controller
+  clk: meson: t7: add support for the T7 SoC PLL clock
+  clk: meson: t7: add t7 clock peripherals controller driver
+
+ .../clock/amlogic,t7-peripherals-clkc.yaml    |  111 +
+ .../bindings/clock/amlogic,t7-pll-clkc.yaml   |  103 +
+ drivers/clk/meson/Kconfig                     |   27 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/t7-peripherals.c            | 2323 +++++++++++++++++
+ drivers/clk/meson/t7-pll.c                    | 1193 +++++++++
+ .../clock/amlogic,t7-peripherals-clkc.h       |  231 ++
+ .../dt-bindings/clock/amlogic,t7-pll-clkc.h   |   57 +
+ include/dt-bindings/clock/amlogic,t7-scmi.h   |   48 +
+ 9 files changed, 4095 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,t7-peripherals-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,t7-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/t7-peripherals.c
+ create mode 100644 drivers/clk/meson/t7-pll.c
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-peripherals-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-pll-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,t7-scmi.h
+
 -- 
-2.25.1
+2.47.1
 
 
