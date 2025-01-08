@@ -1,109 +1,112 @@
-Return-Path: <linux-clk+bounces-16806-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16818-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6381AA05765
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 10:51:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 141C4A05AC0
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 12:57:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FED87A2AB7
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 09:51:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFED31887F40
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jan 2025 11:57:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0BC91F2C5E;
-	Wed,  8 Jan 2025 09:51:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F0421FBC8C;
+	Wed,  8 Jan 2025 11:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itGVqydC"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="TznitHww"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988901A2395;
-	Wed,  8 Jan 2025 09:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF641E0DDC;
+	Wed,  8 Jan 2025 11:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736329874; cv=none; b=OmXB46wcSEtnNKtzSYoHvm8RVtHuZGKPZ3v+16iVKJdbufj00n9Rn9v3puN+8F/ZeFC5ZPFszz7/gQGcj9rtRAxKvdm/vCDVAWhgEH1bMB+RIXC1LurJ5JR0DlrA/N209tZIq01wOWuAvR/L1yt8QGi2L7RlAkdGYgZfObC5TwE=
+	t=1736337349; cv=none; b=R5cwiWPBtpFbfQsTPywRJ1mBysmND1v0n0EQr6QYV3Kt7U8g2D4WHNer88ZrwELZY9YnKOCBhdXwgEb1cBetAm+za3kJKWmgvZGS14Px5TliTyXOun25q+xbIIAPGrShusPbst3+Mphz1zRNvFl9a+54gPcE4VuAzrJbtZdCnwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736329874; c=relaxed/simple;
-	bh=hPN4D7FTStknqbjGuFANLoFGFT58qAH7862kTNVFYwA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JRGK2RPxznWf3fkVnnwtHVjblW1Qol/khlyTMtq3sFkflvf91gL0QDBo2Zj3oMGnj/7/CIdBYHAuHnH0V8E8C3UhfSpDj1SjSmGnTQV7nRjdp85/wCpr3CBlZ0fDzxnmAlh6MkUTVQMdV3OwahpR8SR9sT1BqTQaAlqQqU6UsSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itGVqydC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1328C4CEE0;
-	Wed,  8 Jan 2025 09:51:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736329874;
-	bh=hPN4D7FTStknqbjGuFANLoFGFT58qAH7862kTNVFYwA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=itGVqydCr2lYckymqpdNsd6/HKnE9ZZQ5cRpX4UWKzJExf7kJ3/FnMZcLeLcg2jtu
-	 j/QDKg8BsRqnEqa/DioRev+WvSQ9CrzButK5VYMEx68n1K2ETitduLva/aFxYHvSvq
-	 Kvdae98yeostOtMyFmIdk2DAUCyRKjEE5yxPNAzcCDeNX4rVuWYuEpQv26Q7yjs5lo
-	 uIPw/f6ZhNFnHmSwB0IEjqto4PVUYFiNtyPjok4Flu/sRsh9c+2pD409pmT6XLqbsW
-	 JqsjYEFgDiQglzmUwUrT6e/uYYWKa79moUak+9pJvKoHuiyr62dORkWBDr9nhPVb0k
-	 IeTBMmBgMgC6A==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Wed, 08 Jan 2025 10:50:44 +0100
-Subject: [PATCH v6 5/5] PCI: mediatek-gen3: rely on msleep() in
- mtk_pcie_en7581_power_up()
+	s=arc-20240116; t=1736337349; c=relaxed/simple;
+	bh=d8i3e95o3rWAn73rKvyELQujij+rsxIOx8XWtH3VseA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YiY6bq6IKLi30JQuAJWPg1Sz6If7TGXKs9yqHN/SnhrHFOpUcwrCxc9K72D0/aPw0Kar697J4LsUBmRnm70trSWsrUvzA7/6E10L2Gg2wsH00d8K5Xtt3UT2d28FxhnItrOsW3voEf2GJDeZmTy9NlrGHLP0HysiHiMgIOqo4WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=TznitHww; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 17E3325BA2;
+	Wed,  8 Jan 2025 12:46:57 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 62j2bRBfL7xo; Wed,  8 Jan 2025 12:46:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1736336810; bh=d8i3e95o3rWAn73rKvyELQujij+rsxIOx8XWtH3VseA=;
+	h=From:To:Cc:Subject:Date;
+	b=TznitHwwVV+ARyAEY8k4gEocPC/w5PG9WCk6+gvqlcmtb0SmbADj4bdPaiggilc1o
+	 mR2DjlwJ1fJq9M4TsnRTMTjSCXWl8IlL4V5lbwuMrkVzIb5lmRPgNW9SeVkp9XreDz
+	 nqkNSj6cbwuoTb32flBVk2mz9yJB5sGDdGO3GGI1N7leEFdkNi0bodmcRvjzSvfRqo
+	 XlxR5saFyx0h+dX0U2LCQJuHGkk4FBmnajM8WcVoffxnyEDwCgMbB+Mq9+gL8uXw+/
+	 PRKJWkNV994o+clr4DUgDoXiRBIEDKfEDNALCWPkIQvOSTawFDt/x1zWEx8m7Z2oWr
+	 OoSQa0NTftC2g==
+From: Yao Zi <ziyao@disroot.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Yao Zi <ziyao@disroot.org>
+Subject: [PATCH v2 0/5] Support clock and reset unit of Rockchip RK3528
+Date: Wed,  8 Jan 2025 11:46:01 +0000
+Message-ID: <20250108114605.1960-2-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-pcie-en7581-fixes-v6-5-21ac939a3b9b@kernel.org>
-References: <20250108-pcie-en7581-fixes-v6-0-21ac939a3b9b@kernel.org>
-In-Reply-To: <20250108-pcie-en7581-fixes-v6-0-21ac939a3b9b@kernel.org>
-To: Ryder Lee <ryder.lee@mediatek.com>, 
- Jianjun Wang <jianjun.wang@mediatek.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>
-Cc: linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
- Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
 
-Since mtk_pcie_en7581_power_up() runs in non-atomic context, rely on
-msleep() routine instead of mdelay().
+Similar to previous Rockchip SoCs, reset controller on RK3528 shares
+MMIO region with clock controller, combined as CRU. They're represented
+as a single node in dt.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+For the reset controller, only bindings are included in this series
+because it's hard to test the reset controller without support for some
+peripherals (e.g. pinctrl). I'd like to first make dt and basic
+peripherals available, then submit the driver.
 
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index 01e0b53cc1f22fc4b9270a2eb6a55e8948ba2f8b..aa511965eb914f7e58e78194491ca7a23790b99d 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -923,7 +923,7 @@ static int mtk_pcie_en7581_power_up(struct mtk_gen3_pcie *pcie)
- 	reset_control_assert(pcie->mac_reset);
- 
- 	/* Wait for the time needed to complete the reset lines assert. */
--	mdelay(PCIE_EN7581_RESET_TIME_MS);
-+	msleep(PCIE_EN7581_RESET_TIME_MS);
- 
- 	/*
- 	 * Unlike the other MediaTek Gen3 controllers, the Airoha EN7581
-@@ -951,7 +951,7 @@ static int mtk_pcie_en7581_power_up(struct mtk_gen3_pcie *pcie)
- 	 * Wait for the time needed to complete the bulk de-assert above.
- 	 * This time is specific for EN7581 SoC.
- 	 */
--	mdelay(PCIE_EN7581_RESET_TIME_MS);
-+	msleep(PCIE_EN7581_RESET_TIME_MS);
- 
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
+This is tested on Radxa E20C board. With some out-of-tree drivers, I've
+successfully brouhgt up UART, pinctrl/gpio and I2C. A clock dump could
+be obtained from [1].
+
+[1]: https://gist.github.com/ziyao233/032961d1eebeecb9a41fea2d690e8351
+
+Yao Zi (5):
+  dt-bindings: clock: Document clock and reset unit of RK3528
+  clk: rockchip: Add PLL flag ROCKCHIP_PLL_FIXED_MODE
+  clk: rockchip: Add clock controller driver for RK3528 SoC
+  arm64: dts: rockchip: Add clock generators for RK3528 SoC
+  arm64: dts: rockchip: Add UART clocks for RK3528 SoC
+
+ .../bindings/clock/rockchip,rk3528-cru.yaml   |   67 +
+ arch/arm64/boot/dts/rockchip/rk3528.dtsi      |   68 +-
+ drivers/clk/rockchip/Kconfig                  |    7 +
+ drivers/clk/rockchip/Makefile                 |    1 +
+ drivers/clk/rockchip/clk-pll.c                |   10 +-
+ drivers/clk/rockchip/clk-rk3528.c             | 1114 +++++++++++++++++
+ drivers/clk/rockchip/clk.h                    |   22 +
+ .../dt-bindings/clock/rockchip,rk3528-cru.h   |  453 +++++++
+ .../dt-bindings/reset/rockchip,rk3528-cru.h   |  241 ++++
+ 9 files changed, 1978 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+ create mode 100644 drivers/clk/rockchip/clk-rk3528.c
+ create mode 100644 include/dt-bindings/clock/rockchip,rk3528-cru.h
+ create mode 100644 include/dt-bindings/reset/rockchip,rk3528-cru.h
 
 -- 
 2.47.1
