@@ -1,142 +1,159 @@
-Return-Path: <linux-clk+bounces-16831-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16833-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85A2EA06BD8
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 04:07:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37FA1A0707A
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 09:59:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CE3116690F
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 03:07:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F36301886F72
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 08:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A828E77102;
-	Thu,  9 Jan 2025 03:06:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7114020408E;
+	Thu,  9 Jan 2025 08:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FYy9DMMz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Wb4YXfsQ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AFFDDDC;
-	Thu,  9 Jan 2025 03:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0491FDA;
+	Thu,  9 Jan 2025 08:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736392019; cv=none; b=nHM4iCSa+G5U6fNHDwph1r3GjLzKjxoCoof9wiv3rouwkHHZjVZ1DA/HYsB3r/DC7Po3tdy4cQj3k3jRDEDnsJZYe3Totbl9ay83P3RP6q7CS1hVIjDH/+GJt/nrs3Ui2QLjhTizlNyuBV9XIx5V0PdmK5W7eHuV8oO8rSw7yO4=
+	t=1736413179; cv=none; b=lGSF/IYxCNuXSq1L2X3LyCKGM5GG6gNbI0Li75451u4hk54kgvH8N2oviJUDYtvVF6+lJUPqqydmo/vU4lIFwJKaYTnPrni1Ltrdl/7MA5dh2rdSK8ym1MZFWUgid95IB+vBuYIa/hKR551iwvVIzNMzAHfol02AM7FXEhyZTmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736392019; c=relaxed/simple;
-	bh=j0oUpGZRketH66aLGlOqEratqE7lE81u3b79GqES3KA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NOTZRI/VVEHQVrr6PYWnx5ZAJrx3Moy3GGQfqauYuAmxguLRGvGBkiLzURZEG+pA/qScy0wfJ6Yhs77eiKbE5zoJUoDU4kBNb4/TJ/SvkVfStZleiJi1O7uE72hS2bqPwQVBGu4N00tfgQYItXflmkjfHip5vYZ6tcUZUHvm8AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FYy9DMMz; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d3f65844deso591320a12.0;
-        Wed, 08 Jan 2025 19:06:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736392016; x=1736996816; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xcvguVZbOYQiUlHNff8pHH80HFCIQo3zkHLK6WxRevg=;
-        b=FYy9DMMzXtlfLdXsDKRiMRlBhUqAWjdpasalQlZb+iQTFqE1/XKaHAC0w7vPoxY5EC
-         0qO+KaXhlkMvjCmMJKE81ms8VipkawEbQ2PKJK0+htIxP4MNqxyEprQe2hE6mA+QwL5a
-         h/fsEXJBjZhO/NoaIagPe5pitcwlZUU0HNI627lwl6dbvMiBsSULUlgisS3WseUNQsei
-         6Yihp7pWvhrbOotRZllXfQJs1j9nvF0wbrBoliklRCaCnf9j0BB566YceK745dTmPlSk
-         fAa3ok4mG8nfT2F73Q5IJfjsAMb/GtK8+hQKC9v/SJnN9DtZ4GLDCQ7dZcUvu9zA/DF0
-         /mfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736392016; x=1736996816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xcvguVZbOYQiUlHNff8pHH80HFCIQo3zkHLK6WxRevg=;
-        b=sCQVEmfvzV2kdJtEuzK4IZGkAkJhF4So5TQBNv+mnlp4rvXNC8iN+51wqmAlCE1o4G
-         NDLDdYqkeSyNtI17GjCh2eegSsKq+KZ3P7LDIL6ffS6p9TNZQLfULRM1ZuTV05Jtfzku
-         eqGFKTBk7oFc9eByZVWcizV6fsZuby+G4T/YA+3v9v0nUIKNW3F5OOWQa4GZ5pFbgxge
-         RBEmQPRbK7/XGyzfzfLEv1SrHPnMp84a2cYPlsq5JsmX63/hPemNlt9GgvjlO7D5+j52
-         ffi0bv87LDyl3KpnOsl5YFzv0UoPqrakmBrgn7H8uaDIj+194AvW6UocwkQKATRaIYPO
-         4PtA==
-X-Forwarded-Encrypted: i=1; AJvYcCU9z81rsn4HmVays93Hvv+bF8Ykxez0gEAoHxAEWr9NXqhOcfU6vZZPt3NPVEEq4jbr5lOd1iHm@vger.kernel.org, AJvYcCUklQH+vhGtPfCFalf7yIZltyWA3jqdVIUNutUJAeh+MIn5hBrZ9yAYb4CWmpK7q861nIAzUEBzQp8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDI8km+8CsM2tYh/8TZTNuYrwHanf0nHWTXJRvEUKvqW7krwmJ
-	sdVsS6RmtMkAD/dd6DNxunc0i8niWjbutdbZKLS2O++/8HGgDtf8VO4uYGUcQ1FLn3P0Ch2XM8f
-	KrjsnOZVfWAGWLMzLpOxrzv9Q2YI=
-X-Gm-Gg: ASbGncuJMhIuyYyVZoyT1DdzhgeQmHqn2ksesY5PABFKk7DYlKgncWiHQyIO7T0DnJo
-	m83YAhx60R+ZFfves/dfS0j9VsyP1lTja8/4=
-X-Google-Smtp-Source: AGHT+IGfqqtzl5vrGSo7HJcvcyDWUl65drgIH6Vv3pEl7FUmKO18JawV8JUiNayrLTBBFixjVFqVA3LHLEdBoEk5SxU=
-X-Received: by 2002:a05:6402:13c6:b0:5d2:7270:6124 with SMTP id
- 4fb4d7f45d1cf-5d972e484a3mr4167328a12.23.1736392016040; Wed, 08 Jan 2025
- 19:06:56 -0800 (PST)
+	s=arc-20240116; t=1736413179; c=relaxed/simple;
+	bh=KS1VjAxRQg3CRRKtln5ixibrNRlGZhqRwsa8jyFa/xs=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=o5/q+b3Cc9pvmYUn5ajpFXrsoR6uSre53ZThNbCPaVKfLrw4VkXoaThSK7oi/mtS1DHCXcfiGpbunHUVd/hZXm4yX+iY1kqB2vYF91eqXkLJKhkpNCsIX5AQWlwYQ8FCqGTg9yAs/87obfxnSPfoiYJ9h+Wm7yuMbBuqBRuC8/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Wb4YXfsQ; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5098wbf1007216;
+	Thu, 9 Jan 2025 08:59:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=rz/rmzpthgZXQlGx2R90n1
+	ahxgvYFOkuOwt4caxMvG8=; b=Wb4YXfsQj6XLCvdaA0+Zxy+6BO94F6aAzxcG68
+	UQXNAbUpNCMPmWi7NyzPSu4LJdFPChNClkBYV8V86LBdt0iOGbgSR8kz74/f5QcH
+	x55ij5EZLKygwUTzfBEMv4/C1kHq+d+/Qa6kfnRaDWfp72qfOVa/edaz4Kyz/O22
+	Se71x92ZsZOA8dazgAI+ntcMDe2oDkNW9IwKkfdrXT7nuhoJM4uHUyIxhJ4Qr/iq
+	GJi7x3kRNrW1i7t8Ra9K0v8PV9iAjEr234n23oeHjKB62Ggtlu8EYUHSxADDhhpN
+	IoYsgRWJo7Zyea46EmZSgSU+91Nthw6simG3jiiqWeNo1o1g==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 442bdxg02e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 09 Jan 2025 08:59:33 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5098xXpA021014
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 9 Jan 2025 08:59:33 GMT
+Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 9 Jan 2025 00:59:27 -0800
+From: Imran Shaik <quic_imrashai@quicinc.com>
+Subject: [PATCH v4 0/6] Add support for GPUCC, CAMCC and VIDEOCC on
+ Qualcomm QCS8300 platform
+Date: Thu, 9 Jan 2025 14:27:43 +0530
+Message-ID: <20250109-qcs8300-mm-patches-new-v4-0-63e8ac268b02@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241225060600.3094154-1-zhoubinbin@loongson.cn>
- <526d7ad1f0b299145ab676900f81ba1a.sboyd@kernel.org> <CAMpQs4+i11DVGhdinMrE41HkC8hhD11P0BLeOaK5yW8QXUMX-Q@mail.gmail.com>
- <0757e78b02165aca65465d4e96eb6e92.sboyd@kernel.org>
-In-Reply-To: <0757e78b02165aca65465d4e96eb6e92.sboyd@kernel.org>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Thu, 9 Jan 2025 11:06:43 +0800
-X-Gm-Features: AbW1kvb-fi80aY0XoQiHcrnDQm4aLOeDclKMtkIp68GA6Jq64FhC6QCWI27RyFE
-Message-ID: <CAMpQs4+pcqCUxXyg64_bzdi=3K-kb4mvKG7vM-yqcaoWO=TiLA@mail.gmail.com>
-Subject: Re: [PATCH] clk: clk-loongson2: Fix the number count of clk provider
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Michael Turquette <mturquette@baylibre.com>, Yinbo Zhu <zhuyinbo@loongson.cn>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, linux-clk@vger.kernel.org, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIePf2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyTHQUlJIzE
+ vPSU3UzU4B8JSMDI1MDQwNL3cLkYgtjAwPd3FzdgsSS5IzUYt281HLdJEPzJGOLJEszQwsLJaD
+ mgqLUtMwKsMHRsbW1AAEu851oAAAA
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>
+CC: Ajit Pandey <quic_ajipan@quicinc.com>, Taniya Das <quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli
+	<quic_skakitap@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>,
+        Vladimir Zapolskiy
+	<vladimir.zapolskiy@linaro.org>
+X-Mailer: b4 0.14.1
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OHSX5XI_OUj0Rf86w9TRAJH964xXsfFo
+X-Proofpoint-ORIG-GUID: OHSX5XI_OUj0Rf86w9TRAJH964xXsfFo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501090073
 
-Hi Stephen:
+This patch series add support for GPUCC, CAMCC and VIDEOCC on Qualcomm
+QCS8300 platform.
 
-Thanks for your comments.
+Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+---
+Changes in v4:
+- Updated the commit text as per the comment from Bjorn.
+- Fixed the CamCC QDSS clock offset.
+- Link to v3: https://lore.kernel.org/all/20241024-qcs8300-mm-patches-v2-0-76c905060d0a@quicinc.com/
 
-On Thu, Jan 9, 2025 at 3:20=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wrot=
-e:
->
-> Quoting Binbin Zhou (2025-01-07 17:41:43)
-> > On Wed, Jan 8, 2025 at 5:25=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> =
-wrote:
-> > > Quoting Binbin Zhou (2024-12-24 22:05:59)
-> > > > diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson=
-2.c
-> > > > index 6bf51d5a49a1..b1b2038acd0b 100644
-> > > > --- a/drivers/clk/clk-loongson2.c
-> > > > +++ b/drivers/clk/clk-loongson2.c
-> > > > @@ -294,7 +294,7 @@ static int loongson2_clk_probe(struct platform_=
-device *pdev)
-> > > >                 return -EINVAL;
-> > > >
-> > > >         for (p =3D data; p->name; p++)
-> > > > -               clks_num++;
-> > > > +               clks_num =3D max(clks_num, p->id + 1);
-> > >
-> > > NULL is a valid clk. Either fill the onecell data with -ENOENT error
-> > > pointers, or stop using it and implement a custom version of
-> > > of_clk_hw_onecell_get() that doesn't allow invalid clks to be request=
-ed
-> > > from this provider.
-> >
-> > Emm...
-> > Just in case, how about setting all items to ERR_PTR(-ENOENT) before
-> > assigning them.
-> > This is shown below:
-> >
-> >                while (--clk_num >=3D 0)
-> >                          clp->clk_data.hws[clk_num] =3D ERR_PTR(-ENOENT=
-);
->
-> Or something like:
->
->         memset_p(&clk->clk_data.hws, ERR_PTR(-ENOENT), clk_num);
+Changes in v3:
+- Added new GPUCC and CAMCC binding headers for QCS8300 as per the review comments
+- Updated the new bindings header files for GPUCC and CAMCC drivers. 
+- Added the R-By tags received in v2.
+- Link to v2: https://lore.kernel.org/r/20241024-qcs8300-mm-patches-v2-0-76c905060d0a@quicinc.com
 
-Indeed, it looks better and cleaner.
-I'll update in V2 soon.
+Changes in v2:
+- Updated commit text details in bindings patches as per the review comments.
+- Sorted the compatible order and updated comment in VideoCC driver patch as per the review comments.
+- Added the R-By tags received in V1.
+- Link to v1: https://lore.kernel.org/r/20241018-qcs8300-mm-patches-v1-0-859095e0776c@quicinc.com
 
---
-Thanks.
-Binbin
+Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+
+---
+Imran Shaik (6):
+      dt-bindings: clock: qcom: Add GPU clocks for QCS8300
+      clk: qcom: Add support for GPU Clock Controller on QCS8300
+      dt-bindings: clock: qcom: Add CAMCC clocks for QCS8300
+      clk: qcom: Add support for Camera Clock Controller on QCS8300
+      dt-bindings: clock: qcom: Add QCS8300 video clock controller
+      clk: qcom: Add support for Video Clock Controller on QCS8300
+
+ .../devicetree/bindings/clock/qcom,gpucc.yaml      |   3 +
+ .../bindings/clock/qcom,sa8775p-camcc.yaml         |   6 +-
+ .../bindings/clock/qcom,sa8775p-videocc.yaml       |   1 +
+ drivers/clk/qcom/camcc-sa8775p.c                   | 103 ++++++++++++++++++++-
+ drivers/clk/qcom/gpucc-sa8775p.c                   |  49 +++++++++-
+ drivers/clk/qcom/videocc-sa8775p.c                 |   8 ++
+ include/dt-bindings/clock/qcom,qcs8300-camcc.h     |  16 ++++
+ include/dt-bindings/clock/qcom,qcs8300-gpucc.h     |  17 ++++
+ 8 files changed, 196 insertions(+), 7 deletions(-)
+---
+base-commit: 4b90165c7d1173e0f65538d25aa718ec7ecdd5d6
+change-id: 20250109-qcs8300-mm-patches-new-b17b38b96188
+
+Best regards,
+-- 
+Imran Shaik <quic_imrashai@quicinc.com>
+
 
