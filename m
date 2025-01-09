@@ -1,149 +1,142 @@
-Return-Path: <linux-clk+bounces-16839-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16832-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86213A07091
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 10:01:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4031CA07076
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 09:59:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D1AC188A3DA
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 09:01:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D7A23A7859
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 08:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4F9215F6B;
-	Thu,  9 Jan 2025 09:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 908512040BC;
+	Thu,  9 Jan 2025 08:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IRHmR80l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C4GWE1do"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0576215F65;
-	Thu,  9 Jan 2025 09:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6313B1FDA;
+	Thu,  9 Jan 2025 08:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736413206; cv=none; b=sz0ajlAg/GANIG0a4B5W+dScnEvbuwBOyoyRoZKQ/qAMrMpRHw98Hk1/bazbGsp55Xnl50FRi4aX26fRtWIgMHNqQ5001LH4G6KdMZDVuEHKC3xYNdPsK0o1MGFcpM1EwI4cyOmT1z0K+0/luCiaRBCjhqE5/kLOdMDe3l1JzrE=
+	t=1736413170; cv=none; b=V1yWl1GRNfWocE6CvDPu+chXgHV5XIW0yVEpKEF6JzsSiv2O3KczyiSp/LjudjzxN2D4nSlR4nVrrbubKtSG0Ct7lsGrK26sWTvJ37KO/TIrmRZKmDryxZWrqEErOU2FGX47jC1ACjggg8PbOSfFytVmAWxe6r4JDe4z0ToU5OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736413206; c=relaxed/simple;
-	bh=mkSfCc3RbGrAxpsLap3a4bZqY4bEP7216doYt78iWXg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=lIHsXDje11tM6EkQMb3YWVU6oPHdeGx63gtnQxXmOVcoBElKebi5dNtqhE0p8VUuP49KplyW+9zN4KlIPeWfaDLW1MRLkYiRh2ENOdVMBcSZ/FPTF2C6zEO71fU3TmDCtE3tVBlKHb3/Y1Q6oMsX4TqvTyEaAq4FFDhKRrsnNXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IRHmR80l; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5096qTfR009780;
-	Thu, 9 Jan 2025 09:00:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	BVB5kU4owkWssLro8FAZQoVPbNyoFfkeWGX2HuijLew=; b=IRHmR80l7xj7KtMW
-	8uIBy9v7+N6CFqWrXbIevrUUbSE4ALVb0BgThniJbJ4VocL5LCypirKaiyTHGQ0w
-	2Y40CCSvsile9bVavg+004IsewZD7njR6RtJS5UaN5XkG8rrxbHlGtXBChkYRTJQ
-	jIx4pgQ1MBajp0ps/kzmYriRKuMth+xtlk5OBXSqH/EC318pvWaJM+nmfJE77JX8
-	3k7vToDHptSURJI6L/pEHba0hjxHkbCF9/DryVCAizrTAVQig/tqRYED0jkygu8H
-	lndHnYrnZPRMUkT8utvdCH3yMSuM7oNpCVM2b/VuLhl1ebKYiVQONO0a9HnxlKtY
-	de+k+Q==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4429jt89tc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 09 Jan 2025 09:00:01 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 509900DQ021748
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 9 Jan 2025 09:00:00 GMT
-Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 9 Jan 2025 00:59:55 -0800
-From: Imran Shaik <quic_imrashai@quicinc.com>
-Date: Thu, 9 Jan 2025 14:27:49 +0530
-Subject: [PATCH v4 6/6] clk: qcom: Add support for Video Clock Controller
- on QCS8300
+	s=arc-20240116; t=1736413170; c=relaxed/simple;
+	bh=Sc6QqQz2Zq7wQpvdnuknqWgjeROXiIqNNUloa9EIDdw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ec6erFJkm1sVGM2Ox5cVjOWiJByEAJd6k9CHRTD8ZRwbzX5pWFXlo0F4KI55YOzvpBU197sl5UrIxTdXiD/oXnUfVuDCsxrwyC29PTj/d+4ZRvXIa/M0JfnUpVx+LxrJkeE4E4bNwX5LiTUOJNv7unHqzBqhBLlbPCza7LEKF6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C4GWE1do; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AB2C4CED2;
+	Thu,  9 Jan 2025 08:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736413169;
+	bh=Sc6QqQz2Zq7wQpvdnuknqWgjeROXiIqNNUloa9EIDdw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=C4GWE1do+W6PEulta2FXq7gYIj/EGTO+4e7I2toDxA7xnsKq6EU7na3HIPE1VXXHT
+	 Z0KM7wy2o4Erjau/dW7Q2vTJndt2xh5KvOZQd9iLmByDbqMOK4HTZdmX28MGc/oE5o
+	 pADlHWwHxJ/hqOw2CQBEXJaNERc3qmLyIRThwzH4F0pzQwztlw9J5o1otiW23iiajP
+	 UWuqEPXmERGhZV+eQVjswDBebe9VKKrlTH++8af1Awh7PinxRpB5gTr8zUPoNqQdGT
+	 sS7V1Rosc640tAxbQZ32ChWw344dnIq1/z6WvMZv9d9SxcIZKUAV0zeA4mpkmNSXms
+	 Vb71gJUtkH4RQ==
+Date: Thu, 9 Jan 2025 09:59:25 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Yao Zi <ziyao@disroot.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: clock: Document clock and reset unit
+ of RK3528
+Message-ID: <tep74dy3oc6y2wwhp6bthv6brhkge7cojzrtj6x53lvtsws4g5@areqtyxhyayq>
+References: <20250108114605.1960-2-ziyao@disroot.org>
+ <20250108114605.1960-3-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250109-qcs8300-mm-patches-new-v4-6-63e8ac268b02@quicinc.com>
-References: <20250109-qcs8300-mm-patches-new-v4-0-63e8ac268b02@quicinc.com>
-In-Reply-To: <20250109-qcs8300-mm-patches-new-v4-0-63e8ac268b02@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>
-CC: Ajit Pandey <quic_ajipan@quicinc.com>, Taniya Das <quic_tdas@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli
-	<quic_skakitap@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.14.1
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: TpOJorPFlMGkdNgtvvjlyb8EMLuyAiB2
-X-Proofpoint-GUID: TpOJorPFlMGkdNgtvvjlyb8EMLuyAiB2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 impostorscore=0 adultscore=0 suspectscore=0
- phishscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501090073
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250108114605.1960-3-ziyao@disroot.org>
 
-The QCS8300 Video clock controller is a derivative of SA8775P, but has a
-minor difference. Hence add support for QCS8300 Video clock controller by
-extending the SA8775P VideoCC.
+On Wed, Jan 08, 2025 at 11:46:02AM +0000, Yao Zi wrote:
+> There are two types of clocks in RK3528 SoC, CRU-managed and
+> SCMI-managed. Independent IDs are assigned to them.
+> 
+> For the reset part, differing from previous Rockchip SoCs and
+> downstream bindings which embeds register offsets into the IDs, gapless
+> numbers starting from zero are used.
+> 
+> Signed-off-by: Yao Zi <ziyao@disroot.org>
+> ---
+>  .../bindings/clock/rockchip,rk3528-cru.yaml   |  67 +++
+>  .../dt-bindings/clock/rockchip,rk3528-cru.h   | 453 ++++++++++++++++++
+>  .../dt-bindings/reset/rockchip,rk3528-cru.h   | 241 ++++++++++
+>  3 files changed, 761 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+>  create mode 100644 include/dt-bindings/clock/rockchip,rk3528-cru.h
+>  create mode 100644 include/dt-bindings/reset/rockchip,rk3528-cru.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+> new file mode 100644
+> index 000000000000..19dbda858172
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/rockchip,rk3528-cru.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip RK3528 Clock and Reset Controller
+> +
+> +maintainers:
+> +  - Yao Zi <ziyao@disroot.org>
+> +
+> +description: |
+> +  The RK3528 clock controller generates the clock and also implements a reset
+> +  controller for SoC peripherals. For example, it provides SCLK_UART0 and
+> +  PCLK_UART0 as well as SRST_P_UART0 and SRST_S_UART0 for the first UART
+> +  module.
+> +  Each clock is assigned an identifier, consumer nodes can use it to specify
+> +  the clock. All available clock and reset IDs are defined in dt-binding
+> +  headers.
+> +
+> +properties:
+> +  compatible:
+> +    const: rockchip,rk3528-cru
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  assigned-clocks: true
+> +
+> +  assigned-clock-rates: true
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
----
- drivers/clk/qcom/videocc-sa8775p.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Drop both, totally redundant.
 
-diff --git a/drivers/clk/qcom/videocc-sa8775p.c b/drivers/clk/qcom/videocc-sa8775p.c
-index bf5de411fd5d..db492984fd7d 100644
---- a/drivers/clk/qcom/videocc-sa8775p.c
-+++ b/drivers/clk/qcom/videocc-sa8775p.c
-@@ -523,6 +523,7 @@ static struct qcom_cc_desc video_cc_sa8775p_desc = {
- };
- 
- static const struct of_device_id video_cc_sa8775p_match_table[] = {
-+	{ .compatible = "qcom,qcs8300-videocc" },
- 	{ .compatible = "qcom,sa8775p-videocc" },
- 	{ }
- };
-@@ -550,6 +551,13 @@ static int video_cc_sa8775p_probe(struct platform_device *pdev)
- 	clk_lucid_evo_pll_configure(&video_pll0, regmap, &video_pll0_config);
- 	clk_lucid_evo_pll_configure(&video_pll1, regmap, &video_pll1_config);
- 
-+	/*
-+	 * Set mvs0c clock divider to div-3 to make the mvs0 and
-+	 * mvs0c clocks to run at the same frequency on QCS8300
-+	 */
-+	if (of_device_is_compatible(pdev->dev.of_node, "qcom,qcs8300-videocc"))
-+		regmap_write(regmap, video_cc_mvs0c_div2_div_clk_src.reg, 2);
-+
- 	/* Keep some clocks always enabled */
- 	qcom_branch_set_clk_en(regmap, 0x80ec); /* VIDEO_CC_AHB_CLK */
- 	qcom_branch_set_clk_en(regmap, 0x8144); /* VIDEO_CC_SLEEP_CLK */
+> +
+> +  clocks:
+> +    items:
+> +      - description: External 24MHz oscillator clock
+> +      - description: 50MHz clock generated by PHY module
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xin24m
+> +      - const: gmac0
 
--- 
-2.25.1
+gmac
+(unless you have gmac1 here as well but then please add it now)
+
+Best regards,
+Krzysztof
 
 
