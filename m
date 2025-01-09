@@ -1,133 +1,162 @@
-Return-Path: <linux-clk+bounces-16845-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16847-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04FA2A07100
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 10:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77B17A0714D
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 10:19:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 174CF7A108E
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 09:09:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3F757A423D
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jan 2025 09:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1C121518A;
-	Thu,  9 Jan 2025 09:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3692921578D;
+	Thu,  9 Jan 2025 09:16:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WflDN4Nq"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="S35kHxXn"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F7A214A6D;
-	Thu,  9 Jan 2025 09:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43B5215789;
+	Thu,  9 Jan 2025 09:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736413794; cv=none; b=YyX+slW8rLQHDBmWY8GxI+N3M1/tWDyG9Inbe0ex2OkrdUP1WdKWjmSMvo6EDYOqkTkjyHUTGK0v5ZJJiq25xqpLn6MbCbDbsATz2nB/FAl5Zk1PSYjxs/J8E1Cih/nMj7qEINSfdRGqKkrdPirYsexUmkm/+j6exIbvInsq7Y8=
+	t=1736414191; cv=none; b=p7lahVao1XTh7Qp1bDnUFIgsXluJZeFXlCUCBVYeJRjmUAHln3Z53EUZqaapjscnHgiTaPNX31M85dUIXRfeeZ7SvafvWXc014oDZnuzJbut4JoeK4iKE4x1TlD9beycMNWvpMn7Kx0siyP9T/C+ojAivV8DLAdOpeXZeMm0zjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736413794; c=relaxed/simple;
-	bh=KL2iAg/uEyClQDiAdgHhgwp3Z+anv1P0HGVi20lgT+Y=;
+	s=arc-20240116; t=1736414191; c=relaxed/simple;
+	bh=0xssGUaTU/N9kw20xJoCUInNv2QQ7gksj+PFGnZRZQM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rH6ibJfF0zcXpIhfvU157w3YiVBQy07qZqC0ZsuwGiNiqdBmFsDTeF9nkLTkMSFhTtt1NyiokIuBSbCGM0bVZynpGwybqITyzs6gLMrMsw8qBxpnHKP624/q0xU21pYro0v7fzQIDwUbM1DRBoh+j5Eaevpu1xSzMeqEhcocsh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WflDN4Nq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85008C4CEE3;
-	Thu,  9 Jan 2025 09:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736413794;
-	bh=KL2iAg/uEyClQDiAdgHhgwp3Z+anv1P0HGVi20lgT+Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WflDN4Nq4cXrmp4uPAoYzqk4UXbJses9w4LuKM1Deqf0GGuXoCtpgreOBXaFzbjQh
-	 vBX4cz18tPfO3ViwBQLWF2Dv9QxtcabcAE5gpCVKpyAuolLKdYPBcY20ARunEXYiBc
-	 KpvGpu/GBgy0Fz8Hy4JPYxL3o9iAf3YAHFUhGZtlk8qEd6Ygg0yNJFjnL59pM0sKsL
-	 BAI6WYiFmSlygmfklrsFkl4dMaE1z1373Z32ACEaFoD+QsjuHQHkPXB6Y9ZWK//v8/
-	 amJikE0EN7K3FYkeT/UJei94Z6j6NIgTia0LfLAeq5eLFgFpwqIONhSdalDYzXFY6g
-	 JbtJzLLaCXpWg==
-Date: Thu, 9 Jan 2025 10:09:51 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Xukai Wang <kingxukai@zohomail.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Troy Mitchell <TroyMitchell988@gmail.com>
-Subject: Re: [PATCH v2 3/3] riscv: dts: canaan: Add clock initial support for
- K230
-Message-ID: <ebj26gfkaypgtvi7o2ab3mfvcgc7yk4scdoxroftlp7lnx3xix@p3nnfiva3hdm>
-References: <20250108-b4-k230-clk-v2-0-27b30a2ca52d@zohomail.com>
- <20250108-b4-k230-clk-v2-3-27b30a2ca52d@zohomail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aWCE0+pQMJb2qw0qaLQ/ZyuSJHkxXkZKmwyDAdcnzMj2mZh0pnFy1M2UowGuL4r5YtkCGRGvL2n6d1lr0yH2whI+UfG3T694yKqXkITtEj4VFxn2C5meu2/U8Nt12EY5bz5e708wGPSyNK/h9gC6VRbM3IHfHs/b7CnxyMsXt5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=S35kHxXn; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id A52F725B74;
+	Thu,  9 Jan 2025 10:16:25 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id drfea6D4_RPN; Thu,  9 Jan 2025 10:16:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1736414181; bh=0xssGUaTU/N9kw20xJoCUInNv2QQ7gksj+PFGnZRZQM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=S35kHxXn7ZtR1jTBLNzkbBHuUJlmcfM/5tc6JCxr6jxGws/4//S75oR1ea4UmP5jy
+	 p+grjNMpyscc9x0l292GmqIFCBu+I/9c+7iOrhPkjO9cLduPwaLrv8/Cs9mP6j3QRA
+	 iZYVVvGYw5yUEVMa9S08jVZv4AmE2HfNm622oBJxFHnRt3C/Fx98/Q5WtOMxuZe9Ck
+	 qp+0arF1FlKvR5Bkd2iNeU7S+ANO4tzABcIyRrKK+A1688UYSl7+5h7zsM3aLJvTx0
+	 7UlzM+80DltqU+Hy14nrXlcuQ/wkbtA/2r8wJiIRMI0/QCB0gyCCjduGhMfaLFfUvF
+	 5/N4VHDKyij3g==
+Date: Thu, 9 Jan 2025 09:16:12 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: clock: Document clock and reset unit
+ of RK3528
+Message-ID: <Z3-T3JwcsW0xYKvk@pie>
+References: <20250108114605.1960-2-ziyao@disroot.org>
+ <20250108114605.1960-3-ziyao@disroot.org>
+ <tep74dy3oc6y2wwhp6bthv6brhkge7cojzrtj6x53lvtsws4g5@areqtyxhyayq>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250108-b4-k230-clk-v2-3-27b30a2ca52d@zohomail.com>
+In-Reply-To: <tep74dy3oc6y2wwhp6bthv6brhkge7cojzrtj6x53lvtsws4g5@areqtyxhyayq>
 
-On Wed, Jan 08, 2025 at 07:53:09PM +0800, Xukai Wang wrote:
-> This patch provides basic support for the K230 clock, which does not
-> cover all clocks.
+On Thu, Jan 09, 2025 at 09:59:25AM +0100, Krzysztof Kozlowski wrote:
+> On Wed, Jan 08, 2025 at 11:46:02AM +0000, Yao Zi wrote:
+> > There are two types of clocks in RK3528 SoC, CRU-managed and
+> > SCMI-managed. Independent IDs are assigned to them.
+> > 
+> > For the reset part, differing from previous Rockchip SoCs and
+> > downstream bindings which embeds register offsets into the IDs, gapless
+> > numbers starting from zero are used.
+> > 
+> > Signed-off-by: Yao Zi <ziyao@disroot.org>
+> > ---
+> >  .../bindings/clock/rockchip,rk3528-cru.yaml   |  67 +++
+> >  .../dt-bindings/clock/rockchip,rk3528-cru.h   | 453 ++++++++++++++++++
+> >  .../dt-bindings/reset/rockchip,rk3528-cru.h   | 241 ++++++++++
+> >  3 files changed, 761 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+> >  create mode 100644 include/dt-bindings/clock/rockchip,rk3528-cru.h
+> >  create mode 100644 include/dt-bindings/reset/rockchip,rk3528-cru.h
+> > 
+> > diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+> > new file mode 100644
+> > index 000000000000..19dbda858172
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3528-cru.yaml
+> > @@ -0,0 +1,67 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/rockchip,rk3528-cru.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Rockchip RK3528 Clock and Reset Controller
+> > +
+> > +maintainers:
+> > +  - Yao Zi <ziyao@disroot.org>
+> > +
+> > +description: |
+> > +  The RK3528 clock controller generates the clock and also implements a reset
+> > +  controller for SoC peripherals. For example, it provides SCLK_UART0 and
+> > +  PCLK_UART0 as well as SRST_P_UART0 and SRST_S_UART0 for the first UART
+> > +  module.
+> > +  Each clock is assigned an identifier, consumer nodes can use it to specify
+> > +  the clock. All available clock and reset IDs are defined in dt-binding
+> > +  headers.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: rockchip,rk3528-cru
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  assigned-clocks: true
+> > +
+> > +  assigned-clock-rates: true
 > 
-> The clock tree of the K230 SoC consists of OSC24M,
-> PLLs and sysclk.
+> Drop both, totally redundant.
+
+Okay, will fix in next version.
+
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: External 24MHz oscillator clock
+> > +      - description: 50MHz clock generated by PHY module
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: xin24m
+> > +      - const: gmac0
 > 
-> Co-developed-by: Troy Mitchell <TroyMitchell988@gmail.com>
-> Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
-> Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
-> ---
->  arch/riscv/boot/dts/canaan/k230.dtsi | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
+> gmac
+> (unless you have gmac1 here as well but then please add it now)
+
+RK3528 comes with two onchip gmacs. This input clock is only used for
+the first one and I think keeping the number would give the reader an
+extra hint. What do you think about it?
+
 > 
-> diff --git a/arch/riscv/boot/dts/canaan/k230.dtsi b/arch/riscv/boot/dts/canaan/k230.dtsi
-> index 95c1a3d8fb1192e30113d96d3e96329545bc6ae7..c407471af3daac154e0fbdd377d57ea3ff4698e1 100644
-> --- a/arch/riscv/boot/dts/canaan/k230.dtsi
-> +++ b/arch/riscv/boot/dts/canaan/k230.dtsi
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2024 Yangyu Chen <cyy@cyyself.name>
->   */
->  
-> +#include <dt-bindings/clock/k230-clk.h>
->  #include <dt-bindings/interrupt-controller/irq.h>
->  
->  /dts-v1/;
-> @@ -65,6 +66,13 @@ apb_clk: apb-clk-clock {
->  		#clock-cells = <0>;
->  	};
->  
-> +	osc24m: clock-24m {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <24000000>;
-> +		clock-output-names = "osc24m";
-> +	};
-> +
->  	soc {
->  		compatible = "simple-bus";
->  		interrupt-parent = <&plic>;
-> @@ -138,5 +146,24 @@ uart4: serial@91404000 {
->  			reg-shift = <2>;
->  			status = "disabled";
->  		};
-> +
-> +		sysclk: clock-controller@91100000 {
+> Best regards,
+> Krzysztof
+> 
 
-Does not look like placed in correct order.
-
-> +			compatible = "canaan,k230-clk";
-> +			reg = <0x0 0x91102000 0x0 0x1000>, <0x0 0x91100000 0x0 0x1000>;
-> +			clocks = <&osc24m>;
-> +			#clock-cells = <1>;
-> +			clock-output-names =
-
-Unnecessary blank line
-
-> +			"CPU0_ACLK", "CPU0_PLIC", "CPU0_NOC_DDRCP4", "CPU0_PCLK",
-
-Messed indentation/alignment. See DTS coding style.
-
-Best regards,
-Krzysztof
-
+Thanks,
+Yao Zi
 
