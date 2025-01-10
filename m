@@ -1,125 +1,131 @@
-Return-Path: <linux-clk+bounces-16871-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16873-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1424FA08F59
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Jan 2025 12:29:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 160DCA08FAB
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Jan 2025 12:47:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F7F116A9EF
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Jan 2025 11:29:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C3243A265D
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Jan 2025 11:47:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F097B20B215;
-	Fri, 10 Jan 2025 11:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AAD620B80D;
+	Fri, 10 Jan 2025 11:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b="JrDYpn1G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nt+1w4Ui"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-pp-o92.zoho.com (sender4-pp-o92.zoho.com [136.143.188.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D62205ABA;
-	Fri, 10 Jan 2025 11:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.92
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736508533; cv=pass; b=lqDo0JDLg3U8QW6ZfQc4PQCSwG4FjL1mClKOCaXj59Q+vFvYVjs0XzAiSBoyDDLxyL8DTEM3KXbi/lnvaUDiy5eBJrl/TvJerQLvemSPLd9Tgb7orJge2z5mDbfnhtuEjIPiEm5XSLkE5Ft+lSwZhQ7+yN2hRFzwWIg8Xc78S4o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736508533; c=relaxed/simple;
-	bh=tGMWP22lRZiF4apXgcb505FMdg6oFsqiueeDoZ6ayTw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BxcDSMvfxVrBFdPSkZBHDsz2YIU7WW+19W0MxfzS3G16BJqZXUHLOfplKQ5NplfZ/hlLbUXtZhXcKp/jZ6GwUXpgWJq6R1LuDndZBgT7h/S+BcgPEoJOTZ4J5G/hPpBt39uGJNwAPG0quVB5YBhxEVpaPTaNiT86223BqVBiPKI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b=JrDYpn1G; arc=pass smtp.client-ip=136.143.188.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1736508520; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=HOsZMRubUSsrTtq3uc4mGcMRc+Gx2Why+/bdWNpqiEgMpsP2Ew0urbMMdTEqP52S1ZsQ2nLTDF+wwmD7PDc0zPNjoUEIdYvoN4yQDOctTBguelQItIrrfPnNEFLk/tV3wvLQlhgwSzamA7jlwZneOXLgSHcHqVW0kupcbjFYNPY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1736508520; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=XHW0skSs3z9DAkFAXG0k1p6sJGwaFKMr+xHEcjQkUDs=; 
-	b=d2Bm5Yn/FZgbUkTijCqIh5zyYFYoe+3pnRLwtsFO08fbrSJiVzNa2L3EecyBMZJC4sg7OhFCuSXRizB7cHFRQ0r02Rq5K6wqqRFUnFjpTOowIJCpNa6p+tTl7UtCbMlTPvPKuzOwx3RXrtok9vOETi9Yzrg6Dhdu44OlysbmsSM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=kingxukai@zohomail.com;
-	dmarc=pass header.from=<kingxukai@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736508520;
-	s=zm2022; d=zohomail.com; i=kingxukai@zohomail.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
-	bh=XHW0skSs3z9DAkFAXG0k1p6sJGwaFKMr+xHEcjQkUDs=;
-	b=JrDYpn1GZtOtp6yhVlp0v3+kEZdRX1Uhq7D4JEj4kMCnXCWulhoIi2ndiOp7qPsG
-	Jp2LHWZO/WNJNhJVnJVGrV/fLbdwPd6VqXCJGXOnKrfTjFdTEtjeJTzTc+oWCUyoykG
-	UdQ1342QT0A2P1H2hbTJB61o6D0lGnTTH9GLCynk=
-Received: by mx.zohomail.com with SMTPS id 1736508517025335.50238890288267;
-	Fri, 10 Jan 2025 03:28:37 -0800 (PST)
-Message-ID: <a5f8fd53-2519-441d-8931-31cb9aa2eba0@zohomail.com>
-Date: Fri, 10 Jan 2025 19:28:23 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AC420B216;
+	Fri, 10 Jan 2025 11:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736509669; cv=none; b=JB0knQ0u2e6E2FkNfhz3Wt97HemU2VNT8RQg73+hdwX5ALvZYZKo4bKTTz5DMNsyl5ZLnqkd9AaFY/3f9e9/qBxhcUjoBMCxDhYFp+TQvZnLcLAo+o2EXfnbLrEKZ3CQPdkh2FmSxUzgwzZPnSTq7fNN8AtJxj/6yPzE7MzTs4A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736509669; c=relaxed/simple;
+	bh=CQAk7BNs7sCcSti/FzDNut5RqmprsFJZKhzVyPEixDU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Cgw2O7RMIn474InFJ/1h598mi9tA7wuRlC9vT10XvopS5C/28sc27osvuNPfwRZmPTJ5qMp0Sf1/4GEBIIOiZIiepb8kaQ8U2gZmYeB+AlKerEbGZXQ6TMDSwezCUv/MCgCZliRj7CzIp0xivnn9B+p34k0rwUQbYoeyQTZ1LJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nt+1w4Ui; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CF165C4CED6;
+	Fri, 10 Jan 2025 11:47:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736509668;
+	bh=CQAk7BNs7sCcSti/FzDNut5RqmprsFJZKhzVyPEixDU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Nt+1w4UiOGGEC1mOSrGRgzmfuadvNrhrXBd78+pbJKlDh41KrxdgGldXfI6CtHPDg
+	 yfJ6YlI81AYIvcce7pBV7Dxp7Ii4s/YTdKpNbQ3tuuqkNy7IZDdfAZ0AaCRr22UI0E
+	 3vg7tqFqwR2riQKGCp3UAZMBjjMjGWHFWDsw5vW800O2R9QBeOlW2T37BjdEliBkb2
+	 clrus4Ko0Z2kCR3hMK2F8mBwn3ZRaYmE/GzRrLDqzAyjbXoWguk/QazAz1AMRE0b8d
+	 /Qs+BBFkpYEhdQdKDtZycMUPcNIwv+EU1XABOm9w7/NQf5qsh/75mMLl3YkU21T2GN
+	 aCxnmoXsifG1w==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC6BE77188;
+	Fri, 10 Jan 2025 11:47:48 +0000 (UTC)
+From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Subject: [PATCH 0/2] clk: amlogic: Limit the rate boundaries of clk_hw
+Date: Fri, 10 Jan 2025 19:47:09 +0800
+Message-Id: <20250110-limit-rate-range-of-clk-v1-0-dd618adc4aa8@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: clock: Add bindings for Canaan K230
- clock controller
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- Troy Mitchell <TroyMitchell988@gmail.com>
-References: <20250108-b4-k230-clk-v2-0-27b30a2ca52d@zohomail.com>
- <20250108-b4-k230-clk-v2-1-27b30a2ca52d@zohomail.com>
- <nvfvyy7vajbskfn542lxbvfkxuhasmnyni2uudy3cdybzlddiu@u46fcydzgxsw>
-Content-Language: en-US
-From: Xukai Wang <kingxukai@zohomail.com>
-In-Reply-To: <nvfvyy7vajbskfn542lxbvfkxuhasmnyni2uudy3cdybzlddiu@u46fcydzgxsw>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Feedback-ID: rr0801122709f634376509b2493cc2e97200001096a1de42159b5406b81eaba735507eb9a8d3bb1521ea2f3c:zu08011227444e24f6f4ad2d26b942796c000060cbfad896ead820a72bac243b820dd7b4ea8ff2fada4817c6:rf0801122c7f5264423e9b8c4dfdda28080000ba302a89ede9433c226f7a94c3dcf4cc1662c260caa3fa6865a3335b41cb:ZohoMail
-X-ZohoMailClient: External
+X-B4-Tracking: v=1; b=H4sIAL0IgWcC/x2MSwqAMAwFr1KyNtAWWsGriAutUYNf2iKCeHejm
+ 4FheO+GRJEpQaVuiHRy4n0TMYWCMLXbSMi9OFhtnTZG48IrZ4xtJsHX9wHDMqM33vpQdr4PDmR
+ 9RBr4+p/r5nleLUKm2GkAAAA=
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ Chuan Liu <chuan.liu@amlogic.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736509666; l=1897;
+ i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=CQAk7BNs7sCcSti/FzDNut5RqmprsFJZKhzVyPEixDU=;
+ b=K/a3PUYWKhuKUwR/mV8m0LWvJiDK+kJ4UGtfSAsu+LGb3ueehwFWJ7GnAvwTTf5lm2umeQD+w
+ D3z32mIAdFNBggglBhIP2ZH8UbCXQ6YSwbkdCwNXoahb14mEEDXtE84
+X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
+ pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
+X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
+ auth_id=203
+X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
+Reply-To: chuan.liu@amlogic.com
 
+The following figure shows a rough hardware connection block diagram
+between "clk_hw" and "clk_consumer". The frequency of the clock is
+affected by the following two situations:
+1. The hardware limitations of "clk_hw" itself. For instance, the
+effective output frequency range of some PLL designs is 3G to 6G.
+2. The timing constraints for the electrical "line" between "clk_hw" and
+"clk_consumer". Timing constraints are applied to each clock network
+within the chip, which limits the maximum frequency of the "line".
 
+   ________             ________________
+  |        |   line    |                |
+  | clk_hw |-----+---->| clk_consumer 1 |
+  |________|     |     |________________|
+                 |
+		 |            ...
+                 |      ________________
+		 |     |                |
+		 +---->| clk_consumer n |
+		       |________________|
 
-On 2025/1/9 17:02, Krzysztof Kozlowski wrote:
-> On Wed, Jan 08, 2025 at 07:53:07PM +0800, Xukai Wang wrote:
->> +properties:
->> +  compatible:
->> +    const: canaan,k230-clk
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  reg:
->> +    items:
->> +      - description: PLL control registers.
->> +      - description: Sysclk control registers.
->> +
->> +  '#clock-cells':
->> +    const: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
-> 
-> If there is going to be any new version, then keep the same order in
-> required: as in properties:
-> 
-> In any case:
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-Thank you for the review and your suggestions.
+The frequency boundaries specified for clk_hw in the patch are the
+combined frequency boundaries of "clk_hw" and "line", just like the
+frequency boundaries obtained after clk_core_get_boundaries() combines
+each clks_node.
 
-I will ensure that the order of `required:` matches the order in 
-`properties:` in any future versions of the patch.
+The min_rate/max_rate of the clk_hw can be described in a less strict
+way as follows:
+* min_rate = max("clk_hw", "line");
+* max_rate = min("clk_hw", "line");
 
-> Best regards,
-> Krzysztof
-> 
+Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+---
+Chuan Liu (2):
+      clk: Add initialize the rate boundaries of the clk provider
+      clk: amlogic: c3: Limit the rate boundaries of clk_hw
+
+ drivers/clk/clk.c                  |  4 ++--
+ drivers/clk/meson/c3-peripherals.c | 21 +++++++++++++++++++++
+ drivers/clk/meson/c3-pll.c         |  4 ++++
+ include/linux/clk-provider.h       |  4 ++++
+ 4 files changed, 31 insertions(+), 2 deletions(-)
+---
+base-commit: 1e1fd26ed4ca05cc1f0e5857918da4dd54967f7d
+change-id: 20250110-limit-rate-range-of-clk-61626c7b6dc5
+
+Best regards,
+-- 
+Chuan Liu <chuan.liu@amlogic.com>
+
 
 
