@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-17022-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17023-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D592EA0C5F7
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2025 00:55:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAD22A0C5FA
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2025 00:55:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E69A3A6741
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 23:55:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5517169A7A
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 23:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF0CA1FA16C;
-	Mon, 13 Jan 2025 23:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D6651FA17E;
+	Mon, 13 Jan 2025 23:55:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jeFtTiAp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9G+aond"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6571F9F5B;
-	Mon, 13 Jan 2025 23:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C7E1F9F5B;
+	Mon, 13 Jan 2025 23:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736812524; cv=none; b=VrZ/oLSKtTygX0RpufJjRsV8qDlWu9t5eCO+OmrPqeiYb+abagXndZOHvUsVSgDj6RnrUlQVIlP7/vLbR0YfJ6FitxrB1C4jbj45BcNWg1E9my/2FXAgXyeUSOBFZircl9NV4CHo9PCgGma4zsJ615QZ24fWEUKtq3+aMkfneGI=
+	t=1736812538; cv=none; b=nTaOl8V6b3pznHaV/DIvyKUqlBWgRPP/K9txq9zjVTtN7yrKaRzonRd4b1sNCveyOjTj/tNh7gXfhCHB5Fv62iqkzjaozj5LdgHaoNdHPxCf3vDZzQAsGU9jqjLL9xbboVjbe75/aKxZadmPD7MX7dMRi0jJ9TJD9JOzEg3U4A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736812524; c=relaxed/simple;
-	bh=v1csAdUw/fdWRFie4RNTDFlFTYVZvNDOmzZv0AR/6f8=;
+	s=arc-20240116; t=1736812538; c=relaxed/simple;
+	bh=vJ2bG1drkXXn9fntaj3EwZfrWNAknw640XGGFFJhblg=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=O8rhnoAvw1bfdNG3+s2qZmYVo0N2e5ULJT3MRLRJNF4fWvHNG1xuNtp7dFHQwTKA5YfpzPLK68NC6fWzRt+lKB0AR7lVO+jCBllaXsL3r3o65m5/a+wCkXBIi9HRRCIxu8VfV9XtDXJS850KmPdp7CRdiahH9S3T/0qKx/Tdz7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jeFtTiAp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00432C4CED6;
-	Mon, 13 Jan 2025 23:55:23 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=A/JH8aM31kMVLjEEKTnPiVmQS9sBpdE4INO9nbhy1JfMJdjcUMie66gXaDgkEzQZ2GeBPbdmLUXu6e59LOvl11E2T2Tb9CeIJApn/BleUS4ms3+JZM7g8m4LJEtmaxtLJsavoolMnI9vanAQjIfoNAkmwh3Ys7bRzmxLszR4Bnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9G+aond; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B1AC4CED6;
+	Mon, 13 Jan 2025 23:55:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736812524;
-	bh=v1csAdUw/fdWRFie4RNTDFlFTYVZvNDOmzZv0AR/6f8=;
+	s=k20201202; t=1736812538;
+	bh=vJ2bG1drkXXn9fntaj3EwZfrWNAknw640XGGFFJhblg=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=jeFtTiApE6ROXPKIorxkyGPTgWBZWV0JWInqszQ+YG1xNzF9F+mJbpLd6m4C7S5pL
-	 onYdE6guZOHA87jbg0vBbqpkN1XXXdFs02R0+Lg64RFcobhBcOc1uM6F8teTkJysLH
-	 qYOVNdgTU3uv2ImogXK1mIn1vZY2KkIwIZC6i3MFbJ0p+TLD8WKwbTRGqentLqIotn
-	 ijXqLk1fAGrIMnK13SvnWWolff7+Hx0bgmbJSDBzOwUXy37OMKPK/UJxeWg2x4Amee
-	 0cUI+yQDkdqyoLQS2UonZCK7iMYxKuUUxx5rIZ0eLA+o3d0X0WmZXXYxK3dbmwFxps
-	 sSMvNRf4qlDDA==
-Message-ID: <70be46762bbf28b87ed63369420b7392.sboyd@kernel.org>
+	b=Y9G+aondbzT4XWEJcZuLcbiTM0FGCcOPZqCU8knhLEbLZqte6O8+s0n60H7VFUaZp
+	 1hCZpOSNesW2Q/YhU5Sj/YnmkMHzrw6uaYOX44Iiu7OEl/4sqcnSjc5HhQV+aCTArT
+	 5TzHX5cmvvgAtNNNDUsNujDGnCwJl9isBh/Vwe4QC/PZ5ZXcV8yM2oFN7mRj3yWxk3
+	 4UthNb6TVo18ehGLGlRGSu/Mqu57z+ONHtePEJVlKAkHFPZ3x7KzCxOoxKhcbUx6fv
+	 8CnU6XwJJWE8P4N7LarRcGkFdlTPQpPhheJ8ZMapgWoD2psoJydOpU8NPqTghdXZGB
+	 doOZaEATgbDig==
+Message-ID: <422ee3f09935e7365a9cfc633df780ba.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -50,21 +50,20 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250113231030.6735-4-ansuelsmth@gmail.com>
-References: <20250113231030.6735-1-ansuelsmth@gmail.com> <20250113231030.6735-4-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v6 3/4] dt-bindings: clock: add ID for eMMC for EN7581
+In-Reply-To: <20250113231030.6735-5-ansuelsmth@gmail.com>
+References: <20250113231030.6735-1-ansuelsmth@gmail.com> <20250113231030.6735-5-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v6 4/4] clk: en7523: Add clock for eMMC for EN7581
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: Christian Marangi <ansuelsmth@gmail.com>, Conor Dooley <conor.dooley@microchip.com>
+Cc: Christian Marangi <ansuelsmth@gmail.com>
 To: Christian Marangi <ansuelsmth@gmail.com>, Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, upstream@airoha.com
-Date: Mon, 13 Jan 2025 15:55:20 -0800
+Date: Mon, 13 Jan 2025 15:55:35 -0800
 User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-Quoting Christian Marangi (2025-01-13 15:10:04)
-> Add ID for eMMC for EN7581. This is to control clock selection of eMMC
-> between 200MHz and 150MHz.
+Quoting Christian Marangi (2025-01-13 15:10:05)
+> Add clock for eMMC for EN7581. This is used to give info of the current
+> eMMC source clock and to switch it from 200MHz or 150MHz.
 >=20
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
 
 Applied to clk-next
