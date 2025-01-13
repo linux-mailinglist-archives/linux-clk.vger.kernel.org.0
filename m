@@ -1,282 +1,124 @@
-Return-Path: <linux-clk+bounces-16994-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16996-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1036DA0C10F
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 20:12:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 486ACA0C29D
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 21:31:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4CEA1885010
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 19:12:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59EA8167262
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 20:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78AF11C54B2;
-	Mon, 13 Jan 2025 19:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E08231D1724;
+	Mon, 13 Jan 2025 20:31:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HN9yx449"
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="AJz1q7x+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504A31C3C15;
-	Mon, 13 Jan 2025 19:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D5418871F
+	for <linux-clk@vger.kernel.org>; Mon, 13 Jan 2025 20:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736795544; cv=none; b=fRY92vLEISjO/IUicq73I7zQsCAzLyHbzOjDknp30TrxAFZfqjV+VnzVgQfhSKMYgQoQbb3xSWayGF7mFn048PhW9xQlyQyDhyjkO+Ij39IC6MIRZ68QKvoEYFU8HByqIpnxnESez5T5PchRp61c2myfNq4VOsUZ+ne2JC5S17Q=
+	t=1736800294; cv=none; b=PKst9cESVnvySQQB6HXJMK2TQdk0nqRL+1r51lGn87VfXZYi9aYEMDRRdoaTMBxuzOxrlR7U8mhI41ZdJEEllchZJEIj5UfQ2IjOnY9A+wmnzZzu0PCU24M0GFvZ24niQ+Llqm9rdaSE5t3DPHqpYJfK4tDGfFxEveWmgVG5s8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736795544; c=relaxed/simple;
-	bh=jCOB8aOzNhWI9qttXZRifzoIBgrVVWf/a92tgmgzrwA=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=rmbOQvx6UefPFGFd7SXJo0zbBAonO9uYUWFYHjmHGv9J1AFAdfEDPZ5jlp26XrLvITxQZmtU57vsJca/fbpRvj9/QLXP12M6ZwZoI5B9mf146JcQi3gfC7LtaibpepmhvmaZ9KGqLAuB513V7NulQNjRiuWXAoalj4ZNS80deEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HN9yx449; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61D3C4CED6;
-	Mon, 13 Jan 2025 19:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736795543;
-	bh=jCOB8aOzNhWI9qttXZRifzoIBgrVVWf/a92tgmgzrwA=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=HN9yx449EQxLOrNAvGNn9irfi+2rJJpk/6PEosDIO9CBH0RbAVxhy/bbpQAosnOQr
-	 4MiPb0aHyqbI1zpSxlNAaXGyoCXDa+Hjcs4ktJCbLdMFu2J8vVXwxohYLbmvOsCalo
-	 FjBuU9eSfrclmjBtKLK9Ozt/L0rSH3d/6br0mPUECpe7T2gL8EuVbfBf909TQO2qy4
-	 cvJlaBttOtm/f/7jwbEaB9AF37wPfx+MpPnUgAs6ob9Wf6byI0uuxgTIu5KmVU+hfA
-	 Mtna0ceEensBP7JFfcgHmsUphBAecSY65k4195gqUYk8CWXtx3uo7flhZKKo9wJZiD
-	 PnURzcV80O2yQ==
-Message-ID: <9cc9071129187fbc1498ec25fb1c985d.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1736800294; c=relaxed/simple;
+	bh=x4+nb9/PGNUsK/89p1ygaH+gSdVhGarf3xtoVnn866Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Kw/ho5sK+cGILTIIZfoawcucoaiwf1w1Gt7F9e2QW88Ean4/PRUe+gLcUYpx8RkEAyOEKhsf7V072QVC9Ta5WGl6iBxvJ4vd/F+e/vZ96kdRndrBGGf78jtQVsctbcbC1KXypJXx2zG3CIpagZt1HmNwMlRqtwGx8ffTqv6Pbu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=AJz1q7x+; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2163b0c09afso86495435ad.0
+        for <linux-clk@vger.kernel.org>; Mon, 13 Jan 2025 12:31:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tenstorrent.com; s=google; t=1736800291; x=1737405091; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HCZFWXIAcGGHQ2KfGyCUAdwCjbNuy+/7pP/Yd0hTD5A=;
+        b=AJz1q7x+KDxq9/EZtCfXNCxYAH2Ecaju4g10Z+qJOG9HhpTFhOvuNdaExBCqxnHlcj
+         2WyIBaeqbF+cyeDwrf490nWw2eefJVVSzBTWmvkt7JOXwAHirZUU28PLKPIXf5mLvkcq
+         E2blywkeszcnXRe+tpJuDFDnL334z7XrC6twfU9jG4sau3QaDtQtuD50J88JwfApR0mH
+         8xqd3+o97y6kPEZS3lnZgI7AaykpEyR1rhyahTwcgYAyOu7OdSvX5EudhHYHfISzs3EW
+         E/YUSBq+MOiVnGujMZhe9mQMBN/IdvUPkeNUk5upkcTynAa3Q3z0aepnjmrIguJUIc3t
+         b75g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736800291; x=1737405091;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HCZFWXIAcGGHQ2KfGyCUAdwCjbNuy+/7pP/Yd0hTD5A=;
+        b=wy5afPo8HpIao1bAft7WxlaqikWRltIWgOwLuHKMP6O49MriH6lr45OPy36iRjjbco
+         LUQBZce0EHAimKyH01v7gxHUOICBGdwj0RkePUdqaCz0dcfT9ybaZbHBKkLShs4btZ7G
+         Ewn7A3H6hpF08YkZpyV5hJz3SbdAuZNUik17trwJQMH3kyscqKZSfQ6J+PFL3kF8cJB6
+         2co6L7ULbva3szaeNP9d4QQI3DoHVfPV+tpDrMpbEmu47UsLBrTiE2lROWMlaKkhrrLb
+         mheud4RGM/25SAjUjIp1fKferr7gKvBR05CaLlC5DIQI9+Ouq2Qczp+z2VUh4C+qfMQG
+         UMIA==
+X-Forwarded-Encrypted: i=1; AJvYcCVa/RKavHbyCKTJtwOXzUEtzSJPtufwwX6VkY6at9/Q8N/CzHXF6zRomnI2Df1uxRCWuwj2ZGO5ulU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqDKdTaaQfN+jTQ3PpqEmo+J9+tvUoRXAdMlxMAgacgNs9jbFG
+	A3DJR0GIpK7u6eYkEUFVzQP2Eb7Jx8UGEI9QPUOxapko5CjD9iFlyhz9MkAX/WA=
+X-Gm-Gg: ASbGncsKhnS/JiCwnymGZWdoUucEUPMmM4j2BSrZ4GDfi1RZRBCEOiSL3MtPnUSi7tc
+	Y3pGaZ9Rcbqs6Tclh82Sp4bioHyzVEDJx1riX4zUrnhULEy2lmDHIhWaBDZujCy8069pJupDsGJ
+	HcZo0KKxt233uCtnqzEtUtsla0YiLJGxnJASWFV4d/iNEDH8hTcXB5ljJxPyR732WNhW594QvpR
+	7J5mRIfEd6BkpSGsLcUgJMDPCb1aC3HcK5L5M9ZzpE1V9VWKjeGiEBKUfyiQGWBvglDLoB4p05v
+	oez4T8zlFbqfcQm+
+X-Google-Smtp-Source: AGHT+IFQnzVNSYDK2Ipv9ojWat3P1YUOAsFZ5wRMmF2E5BfK38xPBdomxpf2eBseMH/qh/uRMcoZGQ==
+X-Received: by 2002:a17:90b:2b8b:b0:2ee:d824:b594 with SMTP id 98e67ed59e1d1-2f548f761d7mr28582443a91.31.1736800291267;
+        Mon, 13 Jan 2025 12:31:31 -0800 (PST)
+Received: from [127.0.1.1] (75-164-218-15.ptld.qwest.net. [75.164.218.15])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f54a2ad3b7sm10514811a91.31.2025.01.13.12.31.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 12:31:30 -0800 (PST)
+From: Drew Fustini <dfustini@tenstorrent.com>
+Subject: [PATCH RESEND 0/2] clk: thead: Fix TH1520 boot dependency on
+ clk_ignore_unused
+Date: Mon, 13 Jan 2025 12:31:23 -0800
+Message-Id: <20250113-th1520-clk_ignore_unused-v1-0-0b08fb813438@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250109211908.1553072-5-dario.binacchi@amarulasolutions.com>
-References: <20250109211908.1553072-1-dario.binacchi@amarulasolutions.com> <20250109211908.1553072-5-dario.binacchi@amarulasolutions.com>
-Subject: Re: [PATCH v2 4/4] clk: stm32f4: support spread spectrum clock generation
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-amarula@amarulasolutions.com, Dario Binacchi <dario.binacchi@amarulasolutions.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, Michael Turquette <mturquette@baylibre.com>, linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>, linux-kernel@vger.kernel.org
-Date: Mon, 13 Jan 2025 11:12:21 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABt4hWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDIyNz3ZIMQ1MjA93knOz4zPS8/KLU+NK80uLUFF1joySjFAOj1JRUYws
+ loPaCotS0zAqw0dFKQa7Brn4uSrG1tQA/Fvx7cgAAAA==
+To: Drew Fustini <drew@pdp7.com>, Guo Ren <guoren@kernel.org>, 
+ Fu Wei <wefu@redhat.com>, Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Jisheng Zhang <jszhang@kernel.org>, 
+ Yangtao Li <frank.li@vivo.com>
+Cc: linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Drew Fustini <dfustini@tenstorrent.com>
+X-Mailer: b4 0.14.1
 
-Quoting Dario Binacchi (2025-01-09 13:18:31)
-> diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
-> index db1c56c8d54f..6c80c0dbb0a3 100644
-> --- a/drivers/clk/clk-stm32f4.c
-> +++ b/drivers/clk/clk-stm32f4.c
-> @@ -35,6 +35,7 @@
->  #define STM32F4_RCC_APB2ENR            0x44
->  #define STM32F4_RCC_BDCR               0x70
->  #define STM32F4_RCC_CSR                        0x74
-> +#define STM32F4_RCC_SSCGR              0x80
->  #define STM32F4_RCC_PLLI2SCFGR         0x84
->  #define STM32F4_RCC_PLLSAICFGR         0x88
->  #define STM32F4_RCC_DCKCFGR            0x8c
-> @@ -42,6 +43,12 @@
-> =20
->  #define STM32F4_RCC_PLLCFGR_N_MASK     GENMASK(14, 6)
-> =20
-> +#define STM32F4_RCC_SSCGR_SSCGEN       BIT(31)
-> +#define STM32F4_RCC_SSCGR_SPREADSEL    BIT(30)
-> +#define STM32F4_RCC_SSCGR_RESERVED_MASK        GENMASK(29, 28)
-> +#define STM32F4_RCC_SSCGR_INCSTEP_MASK GENMASK(27, 13)
-> +#define STM32F4_RCC_SSCGR_MODPER_MASK  GENMASK(12, 0)
-> +
->  #define NONE -1
->  #define NO_IDX  NONE
->  #define NO_MUX  NONE
-> @@ -512,6 +519,17 @@ static const struct clk_div_table pll_divr_table[] =
-=3D {
->         { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 0 }
->  };
-> =20
-> +enum stm32f4_pll_ssc_mod_type {
-> +       STM32F4_PLL_SSC_CENTER_SPREAD,
-> +       STM32F4_PLL_SSC_DOWN_SPREAD,
-> +};
-> +
-> +struct stm32f4_pll_ssc {
-> +       unsigned int mod_freq;
-> +       unsigned int mod_depth;
-> +       enum stm32f4_pll_ssc_mod_type mod_type;
-> +};
-> +
->  struct stm32f4_pll {
->         spinlock_t *lock;
->         struct  clk_gate gate;
-> @@ -519,6 +537,8 @@ struct stm32f4_pll {
->         u8 bit_rdy_idx;
->         u8 status;
->         u8 n_start;
-> +       bool ssc_enable;
-> +       struct stm32f4_pll_ssc ssc_conf;
->  };
-> =20
->  #define to_stm32f4_pll(_gate) container_of(_gate, struct stm32f4_pll, ga=
-te)
-> @@ -541,6 +561,7 @@ struct stm32f4_vco_data {
->         u8 offset;
->         u8 bit_idx;
->         u8 bit_rdy_idx;
-> +       bool sscg;
->  };
-> =20
->  static const struct stm32f4_vco_data  vco_data[] =3D {
-> @@ -661,6 +682,34 @@ static long stm32f4_pll_round_rate(struct clk_hw *hw=
-, unsigned long rate,
->         return *prate * n;
->  }
-> =20
-> +static void stm32f4_pll_set_ssc(struct clk_hw *hw, unsigned long parent_=
-rate,
-> +                               unsigned int ndiv)
-> +{
-> +       struct clk_gate *gate =3D to_clk_gate(hw);
-> +       struct stm32f4_pll *pll =3D to_stm32f4_pll(gate);
-> +       struct stm32f4_pll_ssc *ssc =3D &pll->ssc_conf;
-> +       u32 modeper, incstep;
-> +       u32 sscgr;
-> +
-> +       sscgr =3D readl(base + STM32F4_RCC_SSCGR);
-> +       /* reserved field must be kept at reset value */
-> +       sscgr &=3D STM32F4_RCC_SSCGR_RESERVED_MASK;
-> +
-> +       modeper =3D DIV_ROUND_CLOSEST(parent_rate, 4 * ssc->mod_freq);
-> +       incstep =3D DIV_ROUND_CLOSEST(((1 << 15) - 1) * ssc->mod_depth * =
-ndiv,
-> +                                   5 * 10000 * modeper);
-> +       sscgr |=3D STM32F4_RCC_SSCGR_SSCGEN |
-> +               FIELD_PREP(STM32F4_RCC_SSCGR_INCSTEP_MASK, incstep) |
-> +               FIELD_PREP(STM32F4_RCC_SSCGR_MODPER_MASK, modeper);
-> +
-> +       if (ssc->mod_type)
-> +               sscgr |=3D STM32F4_RCC_SSCGR_SPREADSEL;
-> +
-> +       pr_debug("%s: pll: %s: modeper: %d, incstep: %d, sscgr: 0x%08x\n",
-> +                __func__, clk_hw_get_name(hw), modeper, incstep, sscgr);
+Add the CLK_IGNORE_UNUSED flag to apb_pclk, cpu2peri_x2h_clk,
+perisys_apb2_hclk and perisys_apb3_hclk. Without this flag, the boot
+hangs after "clk: Disabling unused clocks" unless clk_ignore_unused
+is in the kernel cmdline.
 
-Do we need to keep all this pr_debug()? It's tested code right?
+In order to allow individual clk gates to specify their own flags,
+the call to devm_clk_hw_register_gate_parent_data() is changeed to
+actually pass the clk flags instead of just 0.
 
-> +       writel(sscgr, base + STM32F4_RCC_SSCGR);
-> +}
-> +
->  static int stm32f4_pll_set_rate(struct clk_hw *hw, unsigned long rate,
->                                 unsigned long parent_rate)
->  {
-> @@ -683,6 +732,9 @@ static int stm32f4_pll_set_rate(struct clk_hw *hw, un=
-signed long rate,
-> =20
->         writel(val, base + pll->offset);
-> =20
-> +       if (pll->ssc_enable)
-> +               stm32f4_pll_set_ssc(hw, parent_rate, n);
-> +
->         if (pll_state)
->                 stm32f4_pll_enable(hw);
-> =20
-> @@ -788,6 +840,87 @@ static struct clk_hw *clk_register_pll_div(const cha=
-r *name,
->         return hw;
->  }
-> =20
-> +static int stm32f4_pll_init_ssc(struct clk_hw *hw, struct stm32f4_pll_ss=
-c *conf)
+This series is based on linux-next.
 
-__init
+Signed-off-by: Drew Fustini <dfustini@tenstorrent.com>
+---
+Drew Fustini (2):
+      clk: thead: Fix clk gate registration to pass flags
+      clk: thead: Add CLK_IGNORE_UNUSED to fix TH1520 boot
 
-const conf?
+ drivers/clk/thead/clk-th1520-ap.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+---
+base-commit: 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
+change-id: 20241227-th1520-clk_ignore_unused-32b2d02ede38
 
-> +{
-> +       struct clk_gate *gate =3D to_clk_gate(hw);
-> +       struct stm32f4_pll *pll =3D to_stm32f4_pll(gate);
-> +       struct clk_hw *parent;
-> +       unsigned long parent_rate;
-> +       int pll_state;
-> +       unsigned long n, val;
-> +
-> +       parent =3D clk_hw_get_parent(hw);
-> +       if (!parent) {
-> +               pr_err("%s: failed to get clock parent\n", __func__);
-> +               return -ENODEV;
-> +       }
-> +
-> +       parent_rate =3D clk_hw_get_rate(parent);
-> +
-> +       pll->ssc_enable =3D true;
-> +       memcpy(&pll->ssc_conf, conf, sizeof(pll->ssc_conf));
-> +
-> +       pll_state =3D stm32f4_pll_is_enabled(hw);
-> +
-> +       if (pll_state)
-> +               stm32f4_pll_disable(hw);
-> +
-> +       val =3D readl(base + pll->offset);
-> +       n =3D FIELD_GET(STM32F4_RCC_PLLCFGR_N_MASK, val);
-> +
-> +       pr_debug("%s: pll: %s, parent: %s, parent-rate: %lu, n: %lu\n",
-> +                __func__, clk_hw_get_name(hw), clk_hw_get_name(parent),
-> +                parent_rate, n);
-> +
-> +       stm32f4_pll_set_ssc(hw, parent_rate, n);
-> +
-> +       if (pll_state)
-> +               stm32f4_pll_enable(hw);
-> +
-> +       return 0;
-> +}
-> +
-> +static int stm32f4_pll_ssc_parse_dt(struct device_node *np,
+Best regards,
+-- 
+Drew Fustini <dfustini@tenstorrent.com>
 
-__init
-
-> +                                   struct stm32f4_pll_ssc *conf)
-> +{
-> +       int ret;
-> +       const char *s;
-> +
-> +       if (!conf)
-> +               return -EINVAL;
-> +
-> +       ret =3D of_property_read_u32(np, "st,ssc-modfreq-hz", &conf->mod_=
-freq);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D of_property_read_u32(np, "st,ssc-moddepth-permyriad",
-> +                                  &conf->mod_depth);
-> +       if (ret) {
-> +               pr_err("%pOF: missing st,ssc-moddepth-permyriad\n", np);
-> +               return ret;
-> +       }
-> +
-> +       ret =3D of_property_read_string(np, "st,ssc-modmethod", &s);
-> +       if (ret) {
-> +               pr_err("%pOF: missing st,ssc-modmethod\n", np);
-> +               return ret;
-> +       }
-> +
-> +       if (!strcmp(s, "down-spread")) {
-> +               conf->mod_type =3D STM32F4_PLL_SSC_DOWN_SPREAD;
-> +       } else if (!strcmp(s, "center-spread")) {
-> +               conf->mod_type =3D STM32F4_PLL_SSC_CENTER_SPREAD;
-> +       } else {
-> +               pr_err("%pOF: wrong value (%s) for fsl,ssc-modmethod\n", =
-np, s);
-> +               return -EINVAL;
-> +       }
-
-Can you use match_string() like fwnode_property_match_property_string()
-does?
-
-> +
-> +       pr_debug("%pOF: SSCG settings: mod_freq: %d, mod_depth: %d mod_me=
-thod: %s [%d]\n",
-> +                np, conf->mod_freq, conf->mod_depth, s, conf->mod_type);
-> +
-> +       return 0;
-> +}
-> +
->  static struct clk_hw *stm32f4_rcc_register_pll(const char *pllsrc,
->                 const struct stm32f4_pll_data *data,  spinlock_t *lock)
->  {
 
