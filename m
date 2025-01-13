@@ -1,180 +1,144 @@
-Return-Path: <linux-clk+bounces-16947-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-16950-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0FE8A0B78F
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 13:58:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4845FA0B877
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 14:44:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E12061647F5
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 12:58:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B3203A6C93
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2025 13:44:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133BE230D3D;
-	Mon, 13 Jan 2025 12:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZOioZPJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089F223DE8A;
+	Mon, 13 Jan 2025 13:43:15 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C81222CF12;
-	Mon, 13 Jan 2025 12:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FAA23ED62
+	for <linux-clk@vger.kernel.org>; Mon, 13 Jan 2025 13:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736773099; cv=none; b=fB1djkjP5kr5I6OxdTBV7o0RW4/qmMYfhkpuAxk1vmP+Sfs1k2KFtsuYCGR+ouy3ANzFoYm2xMP8tQ6qlOuqhyTsm1QIwf3+c0sPSFARCYJNMfE+EFG/1bA120E+NCoFK9XQegzAkE6u7QI09b3IFssfZcRKUh7hHsNKpRoHX7s=
+	t=1736775794; cv=none; b=bb9d+suUPaR2cTdRTh9p4ITrHj2c2aFgjkdHY2nxtAfvV1uQa2RDAkvpqAdq4EcdA57CfCyMGoEdHX0+a3/Duda6gkVVk8RFAIUzqvbfizPUm+oNnU7AeYIuCtK2wga5zgsSnbj3uaMgVKFPDSUH2BSVxBPTIRK6VvDfLYNUXAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736773099; c=relaxed/simple;
-	bh=tcumvyjiejZ/BdHDNnVeU0Z6orCqX6HbP/D+1e96bQg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dxiZ8OmOkH4poSBWbzojcY1yFpn4Iy7XTfWYkkkcDGy0iXEemQGDTImJymMG5XxNYJNMxs/ah9uSsVDJKLiq4FbQyYqYbTq5gX85b8VjJvpF67wO6cRKdXK3Jpd99k42BKEiaY/mCagpVmkzUJM8zYoImNIcahBUrOFMiVQmhQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZOioZPJ; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2ee74291415so5588007a91.3;
-        Mon, 13 Jan 2025 04:58:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736773097; x=1737377897; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9QooocJRhLcAF0GXLTHuzDSLGBsFud6OPFDJ1oZ4p7I=;
-        b=IZOioZPJXtdUzrur4K0YBFU8nWFLh2+j+Pl5cbCk419pdNyipLPhfdRxqEtqhBamiV
-         AV3o30Hnn4b0JQIyWS1CGZJs5O2W2b5GyYSisPdq2rRZoXXkWmXvJvVDHSKU8Q7+8w/a
-         5XqrP++e/ajmYwdGFLOoGFE118QwRhUEU9r4Xu6wJ9U4PDb+KnKmjXiwWbs4ZURCVtyL
-         uIzfz+NVDinDguBSKrzvSfc131OS7miZ4XaHnA0odXHH0KEde1/ZDCj471Sfw1FFBpr3
-         EArVK595G2LeO423jah4TQiuGxa2BgnAZiTVd05A+55MYqe23ls/vYTDqTDCHIEEXKOA
-         jCeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736773097; x=1737377897;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9QooocJRhLcAF0GXLTHuzDSLGBsFud6OPFDJ1oZ4p7I=;
-        b=jDMQY2K+5qs8oRxvHjAGbi/wy1h+ZBTt/vzpgyATaT5E7QysIDI8k6u51r/F0SEHdV
-         oiB/zg1zCJStYYGrUNyBbow9T7BRcqFjwkHrlGwdUFT3UdF5589c3AhN3BgA/ok/8tUY
-         fkstlnXQZ/QiBk0iym/scI49DgPE6GRq6liKia9JsK1phsOAr4umpJapYNcZ9DbBZdh8
-         Zdi8I4KWe5IZ6ND7YWgDFZmpDJKvs9T7vc+1jqAug5HJdZvvpmzqfpQC+KXHI1XHLDxN
-         zS7hUf+xbYcKQNyOVwyb7SWNRr1sSl8tr/gKTYCK3kPbGChN+GT+USpFs1dKR+gJyaSM
-         wOrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbLqqqHEGuj3Ma6BQViK/SP9nfxBEWto7cqq6pEsuOS/l/r5YQEs7NgYqJWCH0s1PPCnhURo9KXr4uf38=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9ST0RrSs4PRkbnWuMakepQaICFrZL4FDQHSdD/JTUd5tnZXyd
-	q5mf8o3QmhkEXT4tlOTNrw8RZgPKjBtKu+kFdLLgEM4E+03ue8qGO8sVnWSkbV/41TJsESs7ggC
-	UFaP4QAZpodIin043MHGtlk10l9I=
-X-Gm-Gg: ASbGncuxtH9yNb0EfC14EylX0m2SfoYEU+zHeRVDgyAQYRcQlxVYdfCLrS5RmNMcMzj
-	BKu0dhpU9jeLQFWj359ZG72ZeVfdbu5bZu6Px
-X-Google-Smtp-Source: AGHT+IHNmEymTs/8QaQXL/HKKd/cAq3hMCuCB8IfB+cQvjzR1Z/cmVgLXqVpP6y7UCO8xhGtLxy0isHJo5PzxgZ9Qe4=
-X-Received: by 2002:a17:90b:520e:b0:2ee:9d65:65a7 with SMTP id
- 98e67ed59e1d1-2f548f447b8mr29690471a91.29.1736773096824; Mon, 13 Jan 2025
- 04:58:16 -0800 (PST)
+	s=arc-20240116; t=1736775794; c=relaxed/simple;
+	bh=dDgjCsArEUnKjcCMTMQscbgA5YD7IqjDgsb8HJ/MzLU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JTpVG3pfIPlALbTsDsMTKvta0PQ0DCCMV8RK1alwmAXjxi0PXnRuYna0DYSlrB5DCeRom/LXX5EaE0Qy4JJlO9KhzdqEfQk400fAfCEw93DBd+LsUHD4Iy5GQpLA6h1LW5OACQytFVSEWoKi40wfTje+hEA8RB2YJaIeB3aiwmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tXKib-0002oy-Dh; Mon, 13 Jan 2025 14:43:01 +0100
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tXKia-000Ghu-1M;
+	Mon, 13 Jan 2025 14:43:00 +0100
+Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
+	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tXKib-00GZFh-1p;
+	Mon, 13 Jan 2025 14:43:00 +0100
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH v3 0/6] arm64: dts: freescale: imx8mp-skov: switch to
+ nominal drive mode
+Date: Mon, 13 Jan 2025 14:42:50 +0100
+Message-Id: <20250113-imx8m-clk-v3-0-0d6e9bdeaa4e@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250113082818.345939-1-sergio.paracuellos@gmail.com>
- <ebb32bec-3fd4-4129-ab5d-d519b10c4405@kernel.org> <CAMhs-H9ysdJ9nUuStWJpRqTzm-09ZS5TMdhWgKMZx+JZdo6teQ@mail.gmail.com>
- <ec255edc-adcd-4c18-8f9c-209298f2bbff@kernel.org> <CAMhs-H9Osx__jBoxqAW1zWO4Q+nMymVfiWe_-ZSzp92Jht+JTg@mail.gmail.com>
- <cf9732b1-fd09-454e-bfd7-bef55b234175@kernel.org>
-In-Reply-To: <cf9732b1-fd09-454e-bfd7-bef55b234175@kernel.org>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Mon, 13 Jan 2025 13:58:05 +0100
-X-Gm-Features: AbW1kvZItoAEzVBlkDRcpTJEXcH5M5uK9NlkZ_6e5W8kXSjRnSstzXdFaxYrbxk
-Message-ID: <CAMhs-H_6QTptfFsSEh7PKy8Fnoem1ph4j=mwT_23=J=adDDT8w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: add clock definitions for Ralink SoCs
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	yangshiji66@outlook.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFoYhWcC/2WMywqDMBQFf0WybkoSNdGu+h+li0tyo6H1QWKDR
+ fz3RkEQupzDmVlIQO8wkFu2EI/RBTf0CfJLRnQLfYPUmcREMFFwwRV13Vx1VL9ftC6kUjI3Vpu
+ KpP/o0bp5bz2eiVsXpsF/93Tk23pU6lMlcsqotmAtsEoZkPcR++Yz+aF389Ug2VJRHHrJOJNnX
+ SRdAiAY0LK0+Kev6/oDL4II0uYAAAA=
+X-Change-ID: 20241217-imx8m-clk-9467763dfcd8
+To: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Abel Vesa <abel.vesa@linaro.org>, 
+ Marek Vasut <marex@denx.de>
+Cc: linux-clk@vger.kernel.org, imx@lists.linux.dev, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+X-Mailer: b4 0.14.2
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-On Mon, Jan 13, 2025 at 1:37=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 13/01/2025 13:29, Sergio Paracuellos wrote:
-> >>>
-> >>>> 2. What is the point of this? We do not add constants when there are=
- no
-> >>>> users. Commit msg explains here nothing.
-> >>>
-> >>> All of the old ralink SoCs' dts files which are in the tree are not
-> >>> properly updated. I expect to have them updated somewhere in time
-> >>> merging real base stuff from openwrt dts [0] files. Not having this
-> >>> header with definitions makes very hard to update dts and then
-> >>> checking the driver code becomes a need to see the indexes for the
-> >>> clocks to properly setup a consumer node. Because of this, this file
-> >>> is added here.
-> >>
-> >> Still there is no point without the users. I do not see any reason why
-> >> this cannot be combined with fixing driver to use the header. Not
-> >> combining is an indication this is not a binding in the first place.
-> >
-> > Driver uses a bunch of arrays for the clocks (base, fixed, factor and
-> > peripheral) and they are registered consecutively in order just using
-> > the ARRAY_SIZE macro for any of them. Thus, the direct application of
-> > these definitions would be for dts consumer nodes, not the driver
-> > itself.
->
-> So what do you constants here fix? Driver can still reorganize arrays
-> breaking everything. If defining headers for proper ABI, then use that
-> ABI to make everything build-time testable and visible. That's why this
-> is not supposed to be a separate patch from users.
+Unlike the i.MX8MM and i.MX8MN SoCs added earlier, the imx8mp.dtsi
+configures some clocks at frequencies that are only validated for
+overdrive mode, i.e., when VDD_SOC is 950 mV.
 
-I understand your point and agree that the driver can do that, but the
-idea as this driver maintainer is not to do that :).
-Is adding something like the following in the binding itself with the
-header addition a possible way to go?
+For the Skov i.MX8MP board, we want to run the SoC at the lower voltage of
+850 mV though to reduce heat generation and power usage. For this to work,
+clock rates need to adhere to the limits of the nominal drive mode.
 
---- a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-+++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-@@ -18,6 +18,12 @@ description: |
-   These SoCs have an XTAL from where the cpu clock is
-   provided as well as derived clocks for the bus and the peripherals.
+This is done by this series: A new imx8mp-nominal.dtsi reconfigures
+the imx8mp.dtsi clock tree to be compatible with nominal mode, an adaptation
+to the Linux clock driver makes it sanity check the actual clock rates against
+the SoC operating mode's constraints and finally the Skov DT makes use
+of it.
 
-+  Each clock is assigned an identifier and client nodes use this identifie=
-r
-+  to specify the clock which they consume.
-+
-+  All these identifiers could be found in:
-+  [1]: <include/dt-bindings/clock/mediatek,mtmips-sysc.h>.
-+
- properties:
-   compatible:
-     items:
-@@ -38,7 +44,8 @@ properties:
+Actual configuration of the VDD_SOC rail continues to happen prior to Linux
+as well as PLL configuration that needs to happen earlier than the kernel
+running. See the corresponding barebox patch series[1] for details.
+Note that the barebox series didn't yet include VDD_SOC reconfiguration
+to 850mV, that would follow once the kernel changes have been merged.
 
-   '#clock-cells':
-     description:
--      The first cell indicates the clock number.
-+      The first cell indicates the clock number, see [1] for available
-+      clocks.
-     const: 1
+[1]: https://lore.kernel.org/barebox/20240503103717.1370636-1-a.fatoum@pengutronix.de/
 
-@@ -56,6 +63,8 @@ additionalProperties: false
+---
+Changes in v3:
+- change boolean mode properties to string property, so it's possible to
+  override in overlays (Frank).
+- Dropped Conor's Ack again due to aforementioned binding change.
+- make struct imx8mp_clock_constraints::clkid unsigned (Stephen)
+- Remove comma after sentinel member (Stephen)
+- Link to v2: https://lore.kernel.org/r/20250106-imx8m-clk-v2-0-6aaeadac65fe@pengutronix.de
 
- examples:
-   - |
-+    #include <dt-bindings/clock/mediatek,mtmips-sysc.h>
-+
-     syscon@0 {
-       compatible =3D "ralink,rt5350-sysc", "syscon";
-       reg =3D <0x0 0x100>;
+Changes in v2:
+- Explain in Patch 1/6 why two properties are added instead of one
+  (Conor)
+- Collect Conor's Acked-by
+- Collect Peng's Reviewed-by
+- Link to v1: https://lore.kernel.org/r/20241219-imx8m-clk-v1-0-cfaffa087da6@pengutronix.de
 
-I don't like the idea of changing the driver code for using these
-constants since I do believe that it would make code uglier and less
-maintainable. I just wanted to make things easier for the device tree
-consumer nodes. So if adding this header is not a possibility with the
-changes in the yaml file I will forget about this addition and this
-patch.
+---
+Ahmad Fatoum (6):
+      dt-bindings: clock: imx8m: document nominal/overdrive properties
+      arm64: dts: imx8mp: Add optional nominal drive mode DTSI
+      arm64: dts: imx8mp: add fsl,nominal-mode property into nominal.dtsi
+      arm64: dts: freescale: imx8mp-skov: fix LDB clock rate configuration
+      arm64: dts: freescale: imx8mp-skov: operate SoC in nominal mode
+      clk: imx8mp: inform CCF of maximum frequency of clocks
 
->
-> Best regards,
-> Krzysztof
-
-Thanks a lot for clarifications.
+ .../devicetree/bindings/clock/imx8m-clock.yaml     |  11 ++
+ arch/arm64/boot/dts/freescale/imx8mp-nominal.dtsi  |  64 +++++++++
+ .../arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi |   5 +-
+ .../freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts  |  19 +--
+ drivers/clk/imx/clk-imx8mp.c                       | 151 +++++++++++++++++++++
+ 5 files changed, 234 insertions(+), 16 deletions(-)
+---
+base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+change-id: 20241217-imx8m-clk-9467763dfcd8
 
 Best regards,
-    Sergio Paracuellos
+-- 
+Ahmad Fatoum <a.fatoum@pengutronix.de>
+
 
