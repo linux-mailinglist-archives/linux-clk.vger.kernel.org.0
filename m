@@ -1,135 +1,107 @@
-Return-Path: <linux-clk+bounces-17051-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17053-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5921DA10721
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2025 13:53:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36C44A1073B
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2025 14:01:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67259164EBB
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2025 12:53:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 357F818873A0
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2025 13:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7137A22DC5A;
-	Tue, 14 Jan 2025 12:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VRRCVYCC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F282F2A;
+	Tue, 14 Jan 2025 13:00:51 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91027236A85;
-	Tue, 14 Jan 2025 12:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F09B20F98E
+	for <linux-clk@vger.kernel.org>; Tue, 14 Jan 2025 13:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736859198; cv=none; b=UibDOVLgsPnJaZlv+RP7P28iZ9owptW3keoPQWRAXBLYI+XNBBi6osdYGjsn9medL4Re8QhTh/PmhFzCzLZxB5dv4klieOQctBuIykYhUauGqgq9bLrdxlWlZcYr1aHDUq926LLx64GhiK1I8syNNp3eX20gWv+dpqPvImRpDxA=
+	t=1736859651; cv=none; b=Xi8rDdJf6X9iraKdWQXbmsizTET0+BlERlFahztweyEMvIWOP1C10KYimYFFI/aZ6J6vN75etwWQ5WqxsmXrQh92rloxHruEisrhVVsA3MpQw58NnCs0sz3S1z7Itc+0U0UgY7CJ6nnYr17UoR9WwPYU9M3Ok9zbGBR9gyx1QxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736859198; c=relaxed/simple;
-	bh=c4/hILBrFjjcIwY2WJ+4Y19FRIoTpjKzIsfIQB+t6GA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JcjEoEBH4KHIp6t2Udge4cV4SdarCE62ualMGojc/1EPb19Mr5msItEzHAh4FwCa4nhuj1pAASqLB9nXjXuTfuUsAeQohAglpfyfHcIImlM1ISRTZ8n+PhshpGgAh0aU2P3iwW9mD69/q+swst0V0szF5NbnIIMNfr1ate8VSvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VRRCVYCC; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso7712864a12.0;
-        Tue, 14 Jan 2025 04:53:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736859195; x=1737463995; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=58YRhhAWOxecN/NnS0PaSbopKQHlTjf7bl863HnP150=;
-        b=VRRCVYCCe6E7qCBJ4TSTEl02T0tNYDcdLP9I6bebQfVg7tnaflrogL40c2XwZP1Jev
-         N5lelpwXHwTf8TeHpUlCIbh4V3J8Ay8yydm/w7bBmq/WldyAd7hwxbe/hmupRiKnUh1Y
-         ijiQaDTAnRttny+VFxhtqIwfDh3yRzeAVFznHL35jjVuEWmgbsFnZFpw25a1BVGSPon/
-         WI0eHGFI12LB9Xk0dP128SiIOOCNUQOi6yo1gDP4nYOMDbKF04QesCuqPlOr/f88h8+u
-         mwiXK2RAjV08UcFX7UadImof39R6Wz1YTjTdsIbJkiTbZgvcf6hoY0bi6Lti5BhDtHVW
-         S7vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736859195; x=1737463995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=58YRhhAWOxecN/NnS0PaSbopKQHlTjf7bl863HnP150=;
-        b=ke/3mfi93yuKKfOp2tL3H74mQsBszOTamCMVKtfEV05vYZMIvMwVkpDexekFvw4FUH
-         VEGxgh6hv5yECcmfgcHXzap1QAZF8m+9MUmDMxidLZgrfPhPElR15zMl1HhQcopDOxJZ
-         LBcCT/ZiFiZGQaHIFIiZu3Dst3qO75KA8eG6iYCDP4AVzppU62wkQhQ1SSCiQ7QMFYGs
-         ghjBbbLTX7l3u4rhH3xzX2/ENz+HFozpbwTskBr9ojecG5zhqMle7KXVvERKnIbQbdw7
-         dRlDnnED2ooFwcyXjo89HiP+hwI27l4BSVtIzPbtNG5XFPyl5n95l9e+mbTMclL72QTu
-         bZFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZQVBGPIQU+EH6xjEW/Pp+BisMszx0K72eXGCqlMUjtfjniB/nwkxUzXrFaiFrLTowTjbvDFN42Uo=@vger.kernel.org, AJvYcCWNqX6t0EERtHYReKpU5ZfYE5gozSeCPPISH+bqgReBRTlWV98u+7ISBz06K9/UX//cON/rBrf/@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyio0I83P+HF3eHeEDw+88kcR2w9tkk4FmQUYu7n0VaktkQGj+5
-	Dn+PKH2F3tCYVHr5oialdIa38zJux4QtFnEc90uNqA/X5LOsiiyKCBQG5zyRglnygvqVAUNoYVv
-	+4n/QQbrJuBhnArUi1UpAxx2nwxg=
-X-Gm-Gg: ASbGnctAADi0UpXxiQlsra5W46qamzrHKykO4UdM5UKLMYyOxKYYWq/VesoGdZfLFoD
-	QKzlJjQ4pXLTKsuo6opKGLuCSndWPIKgi4z2K
-X-Google-Smtp-Source: AGHT+IFAeT9rGs81+ma7oWrKwp7nETfmX0fYNUxmNBFROFMZRbXo6MVJ9ClUknjW12+94gVEobaY+33Njkg+dB2ZDoE=
-X-Received: by 2002:a05:6402:530f:b0:5d1:2377:5af3 with SMTP id
- 4fb4d7f45d1cf-5d972e00027mr56882740a12.5.1736859194633; Tue, 14 Jan 2025
- 04:53:14 -0800 (PST)
+	s=arc-20240116; t=1736859651; c=relaxed/simple;
+	bh=yMrXbRHBuHLDzGbkQ+aBJGEDRUkKX70cPVF8pNqzhWQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o1nAHtALA0PgiLb2h1CD4WEZGq7gTlFmJ81CNe1CNGd8Tl+9V18ChkUqQDeoteT5f05+DQSW0Wq2kYyH/iHNkPFIcc0bZ1OLnX6EDoQvG8T5jvLXr8l6lHe95CO8FEBA2hjj54WBoxgOSIbgz9gexb0kM1HbrgkApRR4A6vOKKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.68.63])
+	by gateway (Coremail) with SMTP id _____8AxLOL9X4ZnETdjAA--.2160S3;
+	Tue, 14 Jan 2025 21:00:45 +0800 (CST)
+Received: from localhost.localdomain (unknown [223.64.68.63])
+	by front1 (Coremail) with SMTP id qMiowMAx7+X6X4ZnhBwiAA--.3371S2;
+	Tue, 14 Jan 2025 21:00:43 +0800 (CST)
+From: Binbin Zhou <zhoubinbin@loongson.cn>
+To: Binbin Zhou <zhoubb.aaron@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	linux-clk@vger.kernel.org,
+	Xuerui Wang <kernel@xen0n.name>,
+	loongarch@lists.linux.dev,
+	Binbin Zhou <zhoubinbin@loongson.cn>
+Subject: [PATCH v3 0/2] clk: clk-loongson2: Fix two small issues
+Date: Tue, 14 Jan 2025 21:00:27 +0800
+Message-ID: <cover.1736856470.git.zhoubinbin@loongson.cn>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109113004.2473331-1-zhoubinbin@loongson.cn> <ba25dfc40e9ae91205d61c838e368490.sboyd@kernel.org>
-In-Reply-To: <ba25dfc40e9ae91205d61c838e368490.sboyd@kernel.org>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Tue, 14 Jan 2025 20:53:02 +0800
-X-Gm-Features: AbW1kva3LJGk4s8ei_nQCIk6VVREFoQwacKX90JhAswxvfIX_CoApACaTyLPiaE
-Message-ID: <CAMpQs4JixuJOQyK1wXBX+Y_j27Cng0wBiX3NBpHmD_7byUtzmA@mail.gmail.com>
-Subject: Re: [PATCH v2] clk: clk-loongson2: Fix the number count of clk provider
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Michael Turquette <mturquette@baylibre.com>, Yinbo Zhu <zhuyinbo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, linux-clk@vger.kernel.org, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, stable@vger.kernel.org, 
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAx7+X6X4ZnhBwiAA--.3371S2
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWruF18uw18urWxKr1rGFW7GFX_yoWfWFb_ua
+	4xtF1xGr4kJr43G3WjgFn29ryS9rWqvw1rC3W7trW2q34ftrn8trZ7Gry3uFn3uF48Canx
+	Way8Crn3Z3s3uosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
+	oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F4
+	0EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_
+	Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI4
+	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
+	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20E
+	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+	AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
 
-On Tue, Jan 14, 2025 at 2:50=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
-te:
->
-> Quoting Binbin Zhou (2025-01-09 03:30:04)
-> > diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
-> > index 6bf51d5a49a1..9c240a2308f5 100644
-> > --- a/drivers/clk/clk-loongson2.c
-> > +++ b/drivers/clk/clk-loongson2.c
-> > @@ -294,7 +294,7 @@ static int loongson2_clk_probe(struct platform_devi=
-ce *pdev)
-> >                 return -EINVAL;
-> >
-> >         for (p =3D data; p->name; p++)
-> > -               clks_num++;
-> > +               clks_num =3D max(clks_num, p->id + 1);
-> >
-> >         clp =3D devm_kzalloc(dev, struct_size(clp, clk_data.hws, clks_n=
-um),
-> >                            GFP_KERNEL);
-> > @@ -309,6 +309,9 @@ static int loongson2_clk_probe(struct platform_devi=
-ce *pdev)
-> >         clp->clk_data.num =3D clks_num;
-> >         clp->dev =3D dev;
-> >
-> > +       /* Avoid returning NULL for unused id */
-> > +       memset_p((void **)&clp->clk_data.hws, ERR_PTR(-ENOENT), clks_nu=
-m);
->
-> This looks wrong. It's already an array of pointers, i.e. the type is
-> 'struct clk_hw *[]' or 'struct clk_hw **' so we shouldn't need to take
-> the address of it. Should it be
->
->         memset_p((void **)clkp->clk_data.hws, ERR_PTR(-ENOENT), clks_num)=
-;
+V3:
+patch(2/2):
+- Correct the array of pointers address;
+- Collect both patches together.
 
-I'm very sorry, it was a cheap clerical error and I'll fix it right away.
->
-> ? It's unfortunate that we have to cast here, but I guess this is the
-> best way we can indicate that the type should be an array of pointers.
+Link to V2:
+https://lore.kernel.org/all/20250109113004.2473331-1-zhoubinbin@loongson.cn
+https://lore.kernel.org/all/20241225060600.3094154-2-zhoubinbin@loongson.cn
 
---=20
-Thanks.
-Binbin
+V2:
+patch(2/2):
+- Add Gustavo A. R. Silva to cc list;
+- Populate the onecell data with -ENOENT error pointers to avoid
+  returning NULL, for it is a valid clock.
+
+Link to V1:
+https://lore.kernel.org/all/20241225060600.3094154-1-zhoubinbin@loongson.cn/
+
+Binbin Zhou (2):
+  clk: clk-loongson2: Switch to use
+    devm_clk_hw_register_fixed_rate_parent_data()
+  clk: clk-loongson2: Fix the number count of clk provider
+
+ drivers/clk/clk-loongson2.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+
+base-commit: 590a094e7bd2e5a10c392f13cd86489e1eb3ac86
+-- 
+2.43.5
+
 
