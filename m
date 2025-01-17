@@ -1,271 +1,181 @@
-Return-Path: <linux-clk+bounces-17188-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17190-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C5BDA15304
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Jan 2025 16:43:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56E27A15353
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Jan 2025 16:59:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5E561889E30
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Jan 2025 15:43:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F12168838
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Jan 2025 15:59:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14BA19AD93;
-	Fri, 17 Jan 2025 15:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC1C19CC31;
+	Fri, 17 Jan 2025 15:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MJPnLu31"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87331714D0;
-	Fri, 17 Jan 2025 15:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E566199FA4
+	for <linux-clk@vger.kernel.org>; Fri, 17 Jan 2025 15:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737128604; cv=none; b=gRh0wq1FYYlxwmdjx998MYK2G+9DXs81xAYGfPBmQ/cxoCkAeIjk1hNcrT4o6G8/AbxJd99jKnjSVbzxCLkjJpj4NgMm5YvZwqJOL8c+j41UYNkjonIe5QrLUade4BkQib9BICLnfj4HyL+6ZNmqKU4y8vRNGGoUmT/Ik4qDGwE=
+	t=1737129539; cv=none; b=PoJSTNJD7lJjzN/NEorwrpkZO7U6hOoD4beSvIdnfe9c2olXSgq4WCKwP2ba12makWxrURa4RWl0iQ/Q3NZ31wdzXBkK3aCViFFzVPAb1eVtKdiuvpgSXz5uHPQ/+ILMX/8j1HMcB1Td/gyvD0Ni0AYsJ1yHfJR/jepHC9l5uD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737128604; c=relaxed/simple;
-	bh=diVDJTYn1VVxEIzS+6ZugT9gK4hpBvjWk2xOKJug5a8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XH4S8YDZ4GQNabtPnimOJ8tyEI53Tz3FV+ksCqDjSyqOsDbXwrhhiV5Zk0ylc3IopOjAA/r510R+p+zAkioGTmjFBXsfpfUt2F9m5zixui3Ibih8lm9SpJZNM3CeKm9tsxWuysHi2aarVwBxVjmVkn8QFJjd8+YxODHtuXDs3o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53f757134cdso2272289e87.2;
-        Fri, 17 Jan 2025 07:43:21 -0800 (PST)
+	s=arc-20240116; t=1737129539; c=relaxed/simple;
+	bh=5GBtK/Zufm73VK+pUpHd8niOXTdAdy+WcFTCquXSAPQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KFh1ICbuicqAVJDUWj+IEcknQtsmbrkb+TczmQb04LWrKf8QQlE6jPY1iVT7Wiqkl20xJf8Qw1gRhBLyTSdqJO21foHQDs5J9lR62DPiQVkf/OIOJg3ODwXinf8HMYNDkrfGDIi0U7LWvjKQYkn7Seaw9sK2zdXwQ2yOYVKD4UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MJPnLu31; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3862b40a6e0so1402197f8f.0
+        for <linux-clk@vger.kernel.org>; Fri, 17 Jan 2025 07:58:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1737129534; x=1737734334; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9g6Vyc9mOB7lyi/aQRjsa7BERTyMx1iof60RQwC2Xw0=;
+        b=MJPnLu319Df7x1n7p3HSMxvO7n6Y3Kshfx/Gus/ta8uvuXAJTX3hxOqv3HMe+1Ob9Z
+         FURmeXvhW+z8EBwp4ytVQ5pyuTCLzDuPi4XFhyx2JK+c2UxY3iPNRVytqhsC1yqLW5fQ
+         T4dEs4paKUUEwl30M8GBxJ2cHMJPUWjFgflfLR8DOJJjNZVaSj6ZO/9sjEOHVHkOITIh
+         pKG9pCcHBXvDf7dX/SXCriv6jGKtJY25ThTIJUk3wvyyC9onoOXbUnmitimP9sJjpfyf
+         VHdgywAx8HoljpAuKGdGkcDEWTzXk+VqxBnpMrVQUoMRBRkwDTKg5W4r6YENVYU2AV4p
+         MBtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737128599; x=1737733399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H2N+AWy70jywn4CRmdsXKEKKnKrL7LoujnGhrXs380U=;
-        b=v4f7M/mHzG4CL5VP9F1F60A9+N9Deb0XthLSNhTL+bgZABS1weOVcuPhtkn+5yjXVW
-         3YEiBl+20PzAgMgngghZX8eYMtBQKry8QnmRQ6ybbJlDdOA2HyLzOb54Rf9RQpssJ0e+
-         fHteHraTi1sZ2TfNz4TSEy5zUa2In0nCQMDmHGi9TmFarU/mqIFhRgukxE+uNJIoZFOg
-         G4W2fpMA2ec23B/zL18Y8p2wrGvA57raUEvl5IJOE1+DHJ4WleAuKaLfxBCBhlUpj4xe
-         G3bzNpC0xJ4ShIU7bIxZmN80KgAPMoYOBp8hrpZ0xzb4MEKYfWZit8L6x9ZDhURX4D5k
-         DClA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtXIOhlhltqf1Oi6SN1VLDjd1Ob1N5rxqM1QCYF0zPLvdpxIVwWrU70Ipp4N7DJDlf8V+eVOquoJVy@vger.kernel.org, AJvYcCVbxvVysUzADL/Ok2UAR0HQK4lwqRgSuk0rqjjOeIhDBzp0KE/i2qWeKePnjgCCJ6zg1K8k0pUd0Mo=@vger.kernel.org, AJvYcCWHRaA5Ol/mttZwj+hzjRPEfbHWQ7P+vv79b+HzYhinwey1P6ek3eeJwsmQ7FUB1DWwjg1AUCv++a4xsg==@vger.kernel.org, AJvYcCWlAET/TQPvNfajHBoyEJXVUCnCk3SJAhJ+niSXYMa91mGe9df5EjXNfKTeyt1+WvPY0dNc4k1Q60SW@vger.kernel.org, AJvYcCXcO3Fx7uJbXquu7oIu8mM+QonZz6duzkwV3UW6yuNrnodz7y8wdeNKlqTL2qv+LDUXm77NIWjt47qXDKLR@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYVDDyP3IL64NnEUXhUGS3/IEJveh0NNfBbAmaS6AccZ+QtwdO
-	ilQZFk9sDALhzx22AwCi3qlVWHq3O+cw0cgBpJsE2br7qQlBALwFGhR8Pj7m
-X-Gm-Gg: ASbGnctgZTF6xOiXC0ks+Y/CuGtee2nZBu58QRLD7cMiAmE+KLitxP+maIQjKbmmlsS
-	OKFCosS/WpCQTxYk+VRiBUgXyJc30Dq+ywLKIAT9gy0SGLIO9pdByB/tjMylAr26HyFvymx7zfJ
-	bnzcSgOxcW1aSTKU0znYp6hWAMzBqPjB1Ywmp/2F3KnbrPkU+Pg78kwVasMDtZlRxeVMZMSunUH
-	lboo0IiYl4bLGlzOQB/Y0jh8RZMjEgjYENMugLoUU93NLkgsht1PV3zCkARJJj7FjY4bRiKAnNR
-	Qsd9RJZBXXAi4Q==
-X-Google-Smtp-Source: AGHT+IHvet8QBclfRRC43ZI8zq7VauYdw8ALXG5svVg9olwvAipZr0lc5joyvUZl02xfI9DqUu62xA==
-X-Received: by 2002:a05:6512:1084:b0:542:29b6:9c26 with SMTP id 2adb3069b0e04-5439c27d0c5mr1181858e87.47.1737128598796;
-        Fri, 17 Jan 2025 07:43:18 -0800 (PST)
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5439af79d92sm398724e87.258.2025.01.17.07.43.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jan 2025 07:43:17 -0800 (PST)
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3003d7ca01cso23032151fa.0;
-        Fri, 17 Jan 2025 07:43:17 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUuQw9mQ7S/lD+wl0SGVtK3JqkVvTOpnRGRv5WUx8svNdUPytYL9hc13rkS8xydVOjn9fDqU0OjS3zO@vger.kernel.org, AJvYcCV8gzDlr9dGd9qd5mojxz2Ts5D+ul9qqGA82yKkHxNVvU8hvKqqES84eJkIV9/bGJ/XF6Ap6Vl9tPedU4xV@vger.kernel.org, AJvYcCWwbnKKUBM8bfYeMo5Cw9gnSTXhEbWsF3bA5weivUTQljKL+1x4rmh9ujPCFxYgj5QR6BFp20QckD/v3A==@vger.kernel.org, AJvYcCXcMwrWdtQ5n9CC32KPj5OoVZZnFIXt6ddNjvIX80WqEoCKZ43pcTXa5gvX8co/WXz9tLUHUkbLG8mV@vger.kernel.org, AJvYcCXfMPe0Plk343NFrv6TyNieD25vsCx7FcCauc0wyzc9t+7mBka2d4y7jBBfepHDCQ40xIB/FJ88s0s=@vger.kernel.org
-X-Received: by 2002:a05:651c:2c7:b0:2fb:58b1:3731 with SMTP id
- 38308e7fff4ca-3072ca60bd0mr8406481fa.6.1737128597473; Fri, 17 Jan 2025
- 07:43:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737129534; x=1737734334;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9g6Vyc9mOB7lyi/aQRjsa7BERTyMx1iof60RQwC2Xw0=;
+        b=CpPIcBUNk0qi3m+8xEHYNaTfCFa8Q2RuzY++nzgnV3DOMZMoSs/+COgjplML6tZYPn
+         93W7PnP3934ZftIr34YHVVLXwPgt0gH+cgx2vp/dLqM0imvd2QgA+00G6icZ5tXwvcDR
+         ebQ9aO+xGqS3YpqulCn03nJ0nMqwI5qZy2c1Nw5KDxgIRlaoLSx+Q1+BLzf1oBduOAZb
+         LEtqdPfnh06ImFBcyZ1wBAeE/a+PeYZeWakp38RClzOT3f72Zbkakgu0gLXlFQ8rh/c/
+         xqpkAouYI8bg6HW2ywIKRfXH/BXxvCjoIJNhpBr6VTTXRkv+Mv3VcvgUBO3hKsAUxj/h
+         SjuA==
+X-Gm-Message-State: AOJu0YzYYV7owLOC1IMkl/4K3rEhPHI/7tIgPFTAazDx1rerq2fjmQIC
+	w6fddKFdH3nseJN2ECCfilRMwJubHuyPTtzxRDc1Eh1o3v0Y0gW+OgnLSTIOvHI=
+X-Gm-Gg: ASbGncsy4BgbaiOwUaMOY4dn94srvK0s4lgXiMbYUM/9k6jy09PS47w782dIcf3d0DB
+	tJBLjpkgqfnvnCUsa89S3ogE0NaUuZR4PxYxnTHaii7YMugcMPW8dnKIA0/EmI/sRE4SyWnGnop
+	sF2tbZzACk2Udnrt/0u7FQ7/Fsb3d6/aRUjAvvfbCS7MP0gDblbS4Qn/O0xt/h/mQ1ZdRiS1b5O
+	iO5Iz29LoF2LvvPRDSVYNySRR9APlgaXjdOIQ6LFIsQLEcsztDAxBqnuZUevb5Vd+O+1es=
+X-Google-Smtp-Source: AGHT+IEFctnhDoaU9MlqplgOMTYAM82vSV45AUZja9u72PfPs4/igV3EGZ+h0AvIYK+a+WQ9znx4wQ==
+X-Received: by 2002:a5d:5f8c:0:b0:385:ef2f:92ad with SMTP id ffacd0b85a97d-38bf564d5e7mr3579724f8f.10.1737129533948;
+        Fri, 17 Jan 2025 07:58:53 -0800 (PST)
+Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:b019:599d:2d51:f3c7])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-437c7528076sm99382195e9.25.2025.01.17.07.58.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2025 07:58:53 -0800 (PST)
+From: Jerome Brunet <jbrunet@baylibre.com>
+Subject: [PATCH v2 0/4] clk: amlogic: drop clk_regmap tables
+Date: Fri, 17 Jan 2025 16:58:29 +0100
+Message-Id: <20250117-amlogic-clk-drop-clk-regmap-tables-v2-0-d1f77cb0773e@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-4-szemzo.andras@gmail.com> <20250114141954.2785879a@donnerap.manchester.arm.com>
- <CACRpkda0nx3SQtdjmXdCEbVJSWM10TM=p-6JbDjbiYcOSF5PxQ@mail.gmail.com>
- <20250115152635.1b89e7f4@donnerap.manchester.arm.com> <CACRpkdYVTedEon0X-izvaDTGF6yRhD2s=Z6NEM=zBf4vD-T0Pg@mail.gmail.com>
-In-Reply-To: <CACRpkdYVTedEon0X-izvaDTGF6yRhD2s=Z6NEM=zBf4vD-T0Pg@mail.gmail.com>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Fri, 17 Jan 2025 23:43:05 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64sNfytUPbyBFjiZCU+jLkXOH1r9iH=Z_E0PjwVxkMCWg@mail.gmail.com>
-X-Gm-Features: AbW1kvbzoziWjm4-jxBgu7nAEK51uWx6aYENBjR409HEBu5PP3az-MNoew5mtV4
-Message-ID: <CAGb2v64sNfytUPbyBFjiZCU+jLkXOH1r9iH=Z_E0PjwVxkMCWg@mail.gmail.com>
-Subject: Re: [PATCH 03/12] pinctrl: sunxi: add driver for Allwinner V853.
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Andre Przywara <andre.przywara@arm.com>, Andras Szemzo <szemzo.andras@gmail.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Maxime Ripard <mripard@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACV+imcC/5WNTQ6CMBBGr0K6dgytFtSV9zAs+jPAxELJlBAJ4
+ e5WbuDue9/ivU0kZMIkHsUmGBdKFMcM6lQI15uxQyCfWahSXaVSJZghxI4cuPAGz3E6BmM3mAl
+ mYwMmkDfUrtW1uuhKZNHE2NLniLyazD2lOfJ6NBf5e//SLxJKuFfeV7p2trX+ac0ayDKeXRxEs
+ +/7F+6SzzTXAAAA
+X-Change-ID: 20241220-amlogic-clk-drop-clk-regmap-tables-18e5cf572356
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ Jerome Brunet <jbrunet@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3163; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=5GBtK/Zufm73VK+pUpHd8niOXTdAdy+WcFTCquXSAPQ=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnin44kKraKDYPejH2n7CpehSMnuaRgAfHt2jiF
+ VRluJQV/haJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ4p+OAAKCRDm/A8cN/La
+ hUAmD/9ervITo4Mtbw0X+1dsHMEeAK0MuNr7/AUtzXrn+UneQnOMd2wUL5CBYI2AiUrAjlmwLX+
+ sUibYfTZwQ3MAgJ/HfDaAE9j12xOvRRfUuZWZVtR8/OmgbKGp3N390VEInxxXQFW8lyoqGCi8a2
+ Pg60h4jUq51hu3c169X6IHmEm1Q2ILokgQ7V40UJjAndaOckZALQXjBJGaD67T6rdLm0fK35+OA
+ EmqPYYz1Ih27N3R3n7wEfxIW89oTWewHzc6ITqZQsVnvwyVUC7jHn8CsZyPtsH3Co4PFQ9wkYr2
+ U0sLKsxHBQFzdzDFBz7AnIUO6hH4DZ9bWASttBcCmt9hW/xgwwSSkmj23v3SsuUU/vgsVI1A0vi
+ e1i5ZYJpi6sm+Z8yUE15+SEYA5IKBE/RfNdwNYQPdOC/omsFWLbF2dR3hRDTV+x+2hwpAw5q3i4
+ 7kZk+b+RJbsbeSAxsXSEu8TzCPtdbu8FWfXOwoI8PbWWjTqxDYD7eyyuSVPbn5yvO7VvYiS0N1k
+ ddJM2nCbBH3igOzA3CYEVH2y2i59ob/T+HAgUG5qoO9BDwBrLZb+7HM0RqB3GbDS4b2v1ilePoV
+ JE6er0pTarMGAq+Pz1+mrnt8VNBuhOvFEqPDye+b0Hvw8WcGPfxvcVEX+YLRbbTpPCboPwXAgsL
+ IeEf1U8GFpubr0w==
+X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
+ fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-On Thu, Jan 16, 2025 at 5:34=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> Hi Andre,
->
-> some nice talk here, actually the following is just opinions, I will
-> be likely happy with whatever approach is taken eventually.
->
-> On Wed, Jan 15, 2025 at 4:26=E2=80=AFPM Andre Przywara <andre.przywara@ar=
-m.com> wrote:
->
-> > > pio: pinctrl@1c20800 {
-> > >                         compatible =3D "allwinner,sun8i-r40-pinctrl";
-> > > (...)
-> > >                         i2c0_pins: i2c0-pins {
-> > >                                 pins =3D "PB0", "PB1";
-> > >                                 function =3D "i2c0";
-> > >                         };
-> > >
-> > > abstract, strings, nice. The driver handles the particulars.
-> >
-> > What bugs me about this it that this has quite some seemingly redundant
-> > information (Who would have thought that the i2c0 pins use function
-> > "i2c0"?), but misses out on the actual 4 bits(!) of information.
->
-> the pins in this example are called PB0 and PB1 though. The designation
-> on the package. And often pins actually named "i2c0_1" "i2c0_2" are
-> for that primary function, but muxable to a few other functions,
-> at least GPIO in most cases. So it's just some name for the pin
-> really.
+This patchset removes the needs for clk_regmap tables in each clock
+controller driver. Those were used to populate regmap with in the regmap
+based clocks.
 
-No. Allwinner actually names their pins like this, kind of like Rockchip
-which provides standardized names such as "GPIO0_B2", but unlike MediaTek
-which just names the pins after their designated primary function such as
-"EINT22" or "TDM_BCLK". The ball names are a separate thing.
+This saves memory and ease maintenance a bit.
 
-Even though the pin names seem a bit random, there's actually a grouping
-logic underneath:
+This is the 1st step in a series of rework of Amlogic clocks, to clean-up,
+increase code re-use and ease future maintenance.
 
-- PC pins are always for the bootable internal storage (NAND, SPI-NOR, eMMC=
-)
-- PF pins are always the external SD card / debug UART / JTAG
+Changes in v2:
+- Add clk_hw_get_of_node and kunit tests for the new helpers
+- Split patch adding the .init() and the dropping the table
+- Drop devres based solution and something temporary but simple
+  while a more generic solution to hook controller init is discussed.
+- Link to v1: https://lore.kernel.org/r/20241220-amlogic-clk-drop-clk-regmap-tables-v1-0-96dd657cbfbd@baylibre.com
 
-> > > That is like so because we are designing for users which are
-> > > let's say customization engineers. If these engineers jump from
-> > > project to project matching function strings to group strings will
-> > > be a common way to set up pins, and easy to understand and
-> > > grasp, and it makes the DTS very readable.
-> >
-> > That's an interesting view, and I see the point of it being easy to rea=
-d,
-> > but this is partly because it doesn't convey too much actual informatio=
-n,
-> > does it, as it requires another lookup or two.
-> > And the pinctrl group nodes are actually in the .dtsi file, which are
-> > typically written once during the initial SoC enablement, and new board
-> > .dts files normally just reference the existing pingroup nodes. So anyo=
-ne
-> > dealing with just a new board is not bothered by this.
->
-> You have a point, and when working with a system the application
-> engineer often finds bugs in the pin control driver, and has to go
-> and fix the actual driver and then all the information hiding and
-> simplification is moot.
->
-> This can become an expensive lesson for the current attempts
-> to push pin control into firmware where the configuration is
-> mostly "dead simple" (and just using strings) - the bugs will be
-> in the firmware instead, and impossible or really hard to fix.
->
-> > Also in my experience most people have no problems in understanding the
-> > concept of pinmuxing and that there is a selector number, also where to
-> > find this.
->
-> Yeah the ambition with the strings was to avoid forcing application
-> engineers to know all about that. If they do, they are then
-> developing the driver, not just using it.
->
-> > > Mediatek and STM32 made a compromise by using pinmux
-> > > and adding some macros to define them so it looks more
-> > > pleasant:
-> > >
-> > >       i2c0_pins_a: i2c0-default {
-> > >                 pins-i2c0 {
-> > >                         pinmux =3D <MT7623_PIN_75_SDA0_FUNC_SDA0>,
-> > >                                  <MT7623_PIN_76_SCL0_FUNC_SCL0>;
-> >
-> > Well, I don't really get why they don't use the (MTK_PIN_NO(75) | 1)
-> > definition directly, seems to be more telling to me?
->
-> That's what STM32 does as well and it's usable.
->
-> But of course it drives a truck through the initial ambition that pins
-> on all systems be configured the same way, with strings. So now
-> there are some families of drivers all "necessarily different" which
-> is not so nice for people jumping between different SoCs, but
-> very compelling for people focusing on just one SoC.
->
-> Well, unless this way of doing things becomes so prevalent that
-> it's the new black.
->
-> > So the plan for sunxi would be: <SUNXI_PINMUX(PORTC, 23, MUX_1)>, ...
-> > And this would not be really "opaque", since it has a fixed known mappi=
-ng:
-> >         (port << 16) | (pin << 8) | (mux << 0))
-> > I find this both technically elegant, because it combines all the
-> > information into just one compact cell, but also readable by outsiders,
-> > thanks to the macro.
->
-> And a new standard, to add to the other standards, so that
-> is my problem as maintainer. It makes sense on its own, and it
-> complicates the bigger picture.
->
-> > My main arguments against the current (string-based) approach:
-> > - They require the mapping table to be in every DT user, so not only th=
-e
-> >   Linux kernel, but also U-Boot, FreeBSD, you name it...
->
-> That's true.
->
-> This comes from the DT ambition to describe hardware and config,
-> but not *define* hardware, i.e. to stop device tree to turn into
-> Verilog or SystemC, which is what will happen if we take the
-> 1:1 reflection of hardware to device tree too far.
->
-> I don't think anyone really knows where to cut the line.
->
-> > - The tables are getting quite large, and they pollute the single image
-> >   Linux kernel, with tons of very specific information for a number of =
-very
-> >   pitiful Allwinner SoCs. At the moment the tally is at 145KB of code+d=
-ata
-> >   for the existing arm64 SoCs, with the newer SoCs ever growing (H616 a=
-lone
-> >   is 27KB, A523 would be quite larger even, I guess 40K). The new A523
-> >   specific pinctrl support adds 872 Bytes.
->
-> This is a generic problem though, look at GPU drivers.
->
-> The community (especially Android) seem set on fixing this by using
-> modules.
->
-> > - Most of the mappings are untested at pinctrl driver commit time, sinc=
-e we
-> >   don't have the device drivers ready yet - by a margin. The new approa=
-ch
-> >   would add the pinmux values when we need them and can test them.
->
-> I like this argument the best.
->
-> However this also reads "upfront firmware to handle pin control is a
-> dead end" yet there are people dedicatedly working on exactly that.
-> (Not that its' the Allwinner developers' problem...)
->
-> > - The comments in the table give away that something is not quite right=
-:
-> >                   SUNXI_FUNCTION(0x2, "i2c0")),         /* SDA */
-> >   This is just a comment, so has no relevance for the code, but it's no=
-t
-> >   meant for humans either. Yet we try to make this correct and maintain
-> >   it. Odd.
->
-> So i2c0 is SDA and i2c1 is SCL or something?
-> It seems common, but yeah it can be confusing.
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+Jerome Brunet (4):
+      clk: add a clk_hw helpers to get the clock device or device_node
+      clk: amlogic: get regmap with clk_regmap_init
+      clk: amlogic: drop clk_regmap tables
+      clk: amlogic: s4: remove unused data
 
-No. i2c0 is the actual peripheral that gets muxed in. The SDA / SCL
-comments are simply denoting which signal from the peripheral this
-pin & mux value carry.
+ drivers/clk/Makefile                    |   1 +
+ drivers/clk/clk.c                       |  33 +++
+ drivers/clk/clk_test.c                  | 116 +++++++--
+ drivers/clk/kunit_clk_dummy_device.dtso |  10 +
+ drivers/clk/meson/Kconfig               |   1 +
+ drivers/clk/meson/a1-peripherals.c      | 163 +-----------
+ drivers/clk/meson/a1-pll.c              |  16 +-
+ drivers/clk/meson/axg-aoclk.c           |  22 --
+ drivers/clk/meson/axg-audio.c           | 433 --------------------------------
+ drivers/clk/meson/axg.c                 | 131 ----------
+ drivers/clk/meson/c3-peripherals.c      | 210 +---------------
+ drivers/clk/meson/c3-pll.c              |  32 +--
+ drivers/clk/meson/clk-cpu-dyndiv.c      |   1 +
+ drivers/clk/meson/clk-dualdiv.c         |   2 +
+ drivers/clk/meson/clk-mpll.c            |   6 +
+ drivers/clk/meson/clk-phase.c           |  11 +
+ drivers/clk/meson/clk-pll.c             |   7 +
+ drivers/clk/meson/clk-regmap.c          |  49 ++++
+ drivers/clk/meson/clk-regmap.h          |   4 +
+ drivers/clk/meson/g12a-aoclk.c          |  34 ---
+ drivers/clk/meson/g12a.c                | 261 -------------------
+ drivers/clk/meson/gxbb-aoclk.c          |  19 --
+ drivers/clk/meson/gxbb.c                | 393 -----------------------------
+ drivers/clk/meson/meson-aoclk.c         |   5 +-
+ drivers/clk/meson/meson-aoclk.h         |   2 -
+ drivers/clk/meson/meson-eeclk.c         |   4 -
+ drivers/clk/meson/meson-eeclk.h         |   2 -
+ drivers/clk/meson/meson8-ddr.c          |   9 -
+ drivers/clk/meson/meson8b.c             | 200 ---------------
+ drivers/clk/meson/s4-peripherals.c      | 341 -------------------------
+ drivers/clk/meson/s4-pll.c              |  31 ---
+ drivers/clk/meson/sclk-div.c            |   5 +
+ drivers/clk/meson/vclk.c                |   2 +
+ drivers/clk/meson/vid-pll-div.c         |   1 +
+ include/linux/clk-provider.h            |   2 +
+ 35 files changed, 239 insertions(+), 2320 deletions(-)
+---
+base-commit: 1909d0d351ed98fdb9f5cbe377213ba0154bf2e0
+change-id: 20241220-amlogic-clk-drop-clk-regmap-tables-18e5cf572356
+
+Best regards,
+-- 
+Jerome
+
 
