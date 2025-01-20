@@ -1,253 +1,356 @@
-Return-Path: <linux-clk+bounces-17275-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17278-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3436A17125
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2025 18:17:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F686A1713A
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2025 18:21:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76F1318839E4
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2025 17:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C79D3A2822
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2025 17:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 446C61EE006;
-	Mon, 20 Jan 2025 17:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D97F16F841;
+	Mon, 20 Jan 2025 17:21:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="a1+bkqTt"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="E5iybvAC"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BFD1E2613
-	for <linux-clk@vger.kernel.org>; Mon, 20 Jan 2025 17:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66B317E4
+	for <linux-clk@vger.kernel.org>; Mon, 20 Jan 2025 17:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737393412; cv=none; b=e7JtDjT6WArIq8qgqwZE+n947qaD/3cIYP5rR7CGqE4amcfk7eH9TVJtkrqs18k8Qky5PgrX8VvIPcPz3NSZkU4JkP8TdUgaEyCULvmSk2A694rXEjr6StafO4R/RjCnCivOk1ustAPgfecItNOGUKRXqZRoZ5eQi+fNxnhgvi0=
+	t=1737393686; cv=none; b=PTO5rFotaiOLL6zXQduTqU9kZe5pUnWxFxTMMiMfBEBq6oVkrdTdTg2Aa+u4FczVipw+30b5O5RveZTwRhPMrLt5h83Kuae9p6lAY4RiOfKR8KDEJcDHQrIznjhuQDOZ0NOwB5cxQS8vVqpYoR8xepLfL8aleoeP6+csZCm5/Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737393412; c=relaxed/simple;
-	bh=J7Y6Fp4+iqMqIfQq3Hnn537f1r3kZcJaD4ddKCmmXtk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oJ5IPuMAGzJcxUSAvatkJzNF1Vfn+zbEoEopeTt3KqQR6dO9X67PS/Ae+jS628SMVXbFLw236lnERiX4YV3KdmbxhO+7m63400rVZXVGooKfkDL5a1vqLrSmhKvBkAdKfomJ98RamqR6in8tPdpz231FA75qKnS2hWlGEK0AfYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=a1+bkqTt; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43622267b2eso47109505e9.0
-        for <linux-clk@vger.kernel.org>; Mon, 20 Jan 2025 09:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1737393408; x=1737998208; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zy0IE3lDkOJmEZbfzxIyV3pw1iHxHTRFthowgi2frig=;
-        b=a1+bkqTtj0BkOWpnaxbenAzOfORO+1wUH8NsJC1gqvFAuIhU3Ule7B/ByIg9uUZQW5
-         BgGG5a51GYQq4XySisQaJRUf7qN/EgAMiga6J2AW7PrVufdTqK36nCSPkv1iFwS/POHM
-         GbFuhuIQ3029PSKz2f91meCIZ9z9NL8g0LL69H/stSOhstZPArV4QTNyLnmj09qn83Fe
-         +2LDCUMfm3IZrjP0EtvXNi8avM9BOEsyHnMANZwPJDVZ5bqcKVg2CXx8O00hSqat3/k1
-         ce0Z0pxdZUnYg9p/Ln4BDYdpKMN2iEH9EyvuqGuZNWGrQ74uL5TUDmXGP6O0zOJB96W3
-         3E3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737393408; x=1737998208;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zy0IE3lDkOJmEZbfzxIyV3pw1iHxHTRFthowgi2frig=;
-        b=NeXutXbZ+gxJKPg2/7/WQQJirelkWUdULnTW/eYK5TfDNukF/qHJaCQyfXUMjhsDVF
-         7QpFH77vbZmyT9eQTp7NLMjxKXntNhepC0xMazeT9NdYEQgbGkvpRB2LyNRLs+Mc5XTX
-         v01dCUwyJu0dJmgUQdw1QElLyCDiRoMuXVxOHLitFKHySLElWGFb5/0ZrcZS/YwTKYbP
-         HquT/RY4IpA6XMimWdR4rXoud0rh6lWk0vsJvGYq19+NgAsQ7Q1Lno2f/EQo8FJw3QTa
-         2LZ+uZa+ubosi++DhpykBP6sSbRDAM1pS1TGF4Kpz7pjqJECtMS9r7JkhX0/3D7n970u
-         5eqg==
-X-Gm-Message-State: AOJu0YxCzEjg34FJxL7AtSpCei412oVI9gvQTjPF07LIdY9AvhImSQEy
-	GtFo+tJJgVgjq9knC7qFRt1ZhZXxL5gUd5VgRsaflIKUHiog/bNW04aQTFfkZmo=
-X-Gm-Gg: ASbGncvqkKoRal/6CVps+M7oH4pZkUtj8KiGkb8ZF5wJAMYT32YErrrrcAA2uHAVuD4
-	8Yw/rwLRjeK1BxU0cB4Vi2AGX1guufcOvT6Frwb3il7XcIIPaIVR53uFSXqH2s0E1ZV6j64J+yR
-	R5cTlcdEk+d/wTnL3ae7sP+qhjI9iRyIpE43LCZt1xhuCE8D7EgfpkGMNkDAnjpl4Xzm0LP1LOG
-	wiZYTfh8FmBMxbnUzDHx97oxQqW6CGaVjVpIqW8iC/E6fqHuKYvEz2In+Wl1EINiUzmXGPnH+U4
-	93azyxKV
-X-Google-Smtp-Source: AGHT+IFY5DPWP40kn2YE2hfzn5IShoB+jBqP5C8IE7mj9UvjFLQNXC7FFM6GCKi20FV/1FQ4AsYs8w==
-X-Received: by 2002:a05:600c:1f8c:b0:436:fb02:e90 with SMTP id 5b1f17b1804b1-438913cdaa8mr152617415e9.10.1737393408342;
-        Mon, 20 Jan 2025 09:16:48 -0800 (PST)
-Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:66cc:1b13:f78a:5738])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-437c75298adsm208629865e9.30.2025.01.20.09.16.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 09:16:47 -0800 (PST)
-From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Mon, 20 Jan 2025 18:15:33 +0100
-Subject: [PATCH v3 4/4] clk: amlogic: s4: remove unused data
+	s=arc-20240116; t=1737393686; c=relaxed/simple;
+	bh=Ud20VHkJpi3l5/XEfD6nO/DAcTQKwiRDoVrbjyo9UTE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=I5X2XyiQuMyPoCerppiJ7D4FUPLC3ceBFEAQEwrIR0N91J5M3UOAKnSvvR/G3ewOfdBh4GCf+U2GAEqB3TkCXyREq8astMLAlvX5+Z/T+5VMNlXZGYklseHL1RMLI5iWkuRD16prfd4NtllpyBIJmfYGPFeR6ztZ784wU5jSMmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=E5iybvAC; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250120172121euoutp02400afe70d4fa618d7e863756922cadd8~cdlk-0tI-1371113711euoutp02P
+	for <linux-clk@vger.kernel.org>; Mon, 20 Jan 2025 17:21:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250120172121euoutp02400afe70d4fa618d7e863756922cadd8~cdlk-0tI-1371113711euoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1737393681;
+	bh=Gu0ryus9vacA2pmkAa3obmDZ851U5NSNS0NtIwrsbLc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=E5iybvACkBvBialI4zwVvlq2pw2QNQVQ1xpJGAnNwCm8QC00c+z0c0cBdLmCQ6qLY
+	 sNCEMX/eDrM754floOERSXYKSy+aSwm6wVgmIhvLB5U86rJlMAvRTIJjAKC6RWCALb
+	 DkGge4M/dpDhPheVpMl6NERvLj/AJnu5I1aOwlq4=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20250120172120eucas1p1d54044b1448bb62b0c471ec5105c2061~cdljpKmHh0933109331eucas1p1T;
+	Mon, 20 Jan 2025 17:21:20 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 8B.66.20409.0168E876; Mon, 20
+	Jan 2025 17:21:20 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250120172119eucas1p135434171194546bc2df259bfd21458e1~cdliiL3Yz0726407264eucas1p14;
+	Mon, 20 Jan 2025 17:21:19 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250120172119eusmtrp2f503c9eb5ec1b72007f092dece1c70b1~cdlifRrjW0490804908eusmtrp2W;
+	Mon, 20 Jan 2025 17:21:19 +0000 (GMT)
+X-AuditID: cbfec7f4-c0df970000004fb9-b7-678e8610a188
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id C1.95.19654.F068E876; Mon, 20
+	Jan 2025 17:21:19 +0000 (GMT)
+Received: from AMDC4942.home (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250120172117eusmtip10b15c9741da2f0da703f2030601a9b3d~cdlhFFrLC1308113081eusmtip1X;
+	Mon, 20 Jan 2025 17:21:17 +0000 (GMT)
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+	m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
+	<m.wilczynski@samsung.com>
+Subject: [RFC v3 00/18] Enable drm/imagination BXM-4-64 Support for LicheePi
+ 4A
+Date: Mon, 20 Jan 2025 18:20:53 +0100
+Message-Id: <20250120172111.3492708-1-m.wilczynski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf1CTZRzved937/u6E3odcDyYREeSp3cgkkdPYUJnde8f3Rn/WFeXMvR1
+	Wmzo5si47kC3gcyBBJY0iAFHMElAJhuDmBABAy1UZoO7ZIBRyI/40QYFnCPYi+V/3+/n+/l8
+	P5/vcw+NixrIrfRJ2RlOLhOnhJNCwtK9dCeSycqTRF/MDkY9AxUYMq/oKXTN1ochQ2efALn6
+	GzF0f2GWRHW/36XQI9s5AjmN31BI1V1Pogm9i0TzOpcAOVpKSOTO7QTI4laTqLZziEL1CwYM
+	lc+bCVRpbQEoK6dKgO7degsNuXoINOHQ4ShL/yxabbVSyOtsIFDxTBuFGqe/ECB77XtI3XaZ
+	SHienR3UUOz0xATB/njBQ7G2xTKCbdYPUayu+SfAmmpySPaBs5VkS3sT2eGLdoy9UZnBqmu7
+	MfbS42h29uYvJJvXWAPYftUA9a7oA+G+Y1zKyTROvnt/kvDE44LkU97EszPzxzPB+QNasImG
+	zF6oVRcItEBIixgjgN9lN200HgCXa/uJdZaIcQM4VJH+ROFZXSJ5UjWAmSsGkidNA9iZ6xOQ
+	TAwcqTb4NgUyGgJqus6B9QZnxgG0jJWsKWg6gEmES9XSdQHBRMA/6oZ9Yj8mHk7NOAW8Wxhs
+	++FnnMe3wN6vx3wcfA1XmYtxnlMuhN/qBOsrIfMmbKkP5eEAOGlvpPh6G1xtNmB8nQpHzH9t
+	SD+HzTr7Rh0HH/Qt+5LhzE5Y37Kbh9+Ao9fyAb/dHw7+uYUP4A8LLFdwHvaDF7JEPPsl+KUu
+	9z/TPqNlw5SFiwOTAv6hPoJdiw48H7ygf+os/VNn6f/PUAbwGhDMKRVSCaeIkXGfRinEUoVS
+	Jok6mio1gbVffdtr91hB9eR8VAfAaNABII2HB/oFzekkIr9j4s/SOXnqEbkyhVN0gOdoIjzY
+	r6JNIxExEvEZ7hOOO8XJn0wxetPWTCw0ed+uzdseJhRlVrSnt0/nub2EIyQ11njElO+1BWzP
+	OGBS3ShnCU34/sLkud6/P3xV9tuYtqkzOunFmQVNWpo25uyl9tOKe8nNX4UtvBbR1F1YGDne
+	FZcmKb7zUBFXGXpdhQ6tOMtG5iI9d3uydYEZlPpW0FVp5dtZr1gbokvNtvNB77ur0n4VlRQ+
+	8zq2WbZjuW5v3zuyuhDPcES+1kNMXb/aj39883BBIZeTF6s+yOwMPK5UmoxgdBS21ugHI5K8
+	3y876aSV+8P/aA6HpZRc0cf7W0JS5NrL5aMuR+mOl3NtRaFs7B6l0FpUdfDoo6l8lnDHuhIz
+	E5Txp293jYcTihPiPbtwuUL8LwHHMmhEBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xu7r8bX3pBt+/slicuL6IyWLr71ns
+	Fmv2nmOymH/kHKvFvUtbmCyufH3PZrHu6QV2ixd7G1ksrq2Yy27RfGw9m8XLWffYLD723GO1
+	uLxrDpvF594jjBbbPrewWaw9cpfdYv3X+UwWCz9uZbFYsmMXo0Vb5zJWi4unXC3u3jvBYvHy
+	cg+zRdssfov/e3awW/y7tpHFYva7/ewWW95MZLU4vjbcomX/FBYHOY/3N1rZPd68fMnicbjj
+	C7vH3m8LWDx2zrrL7tGz8wyjx6ZVnWwed67tYfOYdzLQ4373cSaPzUvqPVrWHmPy6P9r4PF+
+	31U2j74tqxg9LjVfZw8QitKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rez
+	SUnNySxLLdK3S9DL+DspqeBfYMW7j2kNjE3OXYycHBICJhJf/v9k62Lk4hASWMoosfzzJ1aI
+	hIzEte6XLBC2sMSfa11QRa8YJbbu2AFWxCZgJPFg+XwwW0RgMYvE3n2VIEXMAm8ZJa7P3AjW
+	LSzgL9GxrZcRxGYRUJV4tu4+WJxXwF7i9btrUNvkJfYfPMsMEReUODnzCVANB9AgdYn184RA
+	wsxAJc1bZzNPYOSfhaRqFkLVLCRVCxiZVzGKpJYW56bnFhvpFSfmFpfmpesl5+duYgQmlm3H
+	fm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeEU/9KQL8aYkVlalFuXHF5XmpBYfYjQFunois5Rocj4w
+	teWVxBuaGZgamphZGphamhkrifOyXTmfJiSQnliSmp2aWpBaBNPHxMEp1cAUEps3z/rrnKkP
+	D89uO3vt/6+NNfxMOu/FJOue8TG3rN3oqrCD+S4Xo/sy3Rd1x3exMWu/nVAvbtIt6yLhendH
+	d9OBEwei5mk7CpdXJV+ILw1ffUyi/eGW6/2iIlPa2yeuur9macr2nv1nNQTEj56KsvtZMVW/
+	7t4LO/bM2etbGRbIr12l9r7wx5/7Z0UFVnNZHmSY4nruxcWI15ceuH3o/cxsf7irokTVe18W
+	f9e3m5Us/isUTJft/39EcKHCjw2ZE/6WrzutVbjG//3RX0Vx3zJSQ8ofvFqd3WFVd+Ly3jUf
+	BCpX5suaKyb26hhfDGBcsSPvjnhkrZpBtm2ut7Fz+ekYheD+h7dmaEd1zv6rxFKckWioxVxU
+	nAgAC5gIxbUDAAA=
+X-CMS-MailID: 20250120172119eucas1p135434171194546bc2df259bfd21458e1
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250120-amlogic-clk-drop-clk-regmap-tables-v3-4-126244146947@baylibre.com>
-References: <20250120-amlogic-clk-drop-clk-regmap-tables-v3-0-126244146947@baylibre.com>
-In-Reply-To: <20250120-amlogic-clk-drop-clk-regmap-tables-v3-0-126244146947@baylibre.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
- Kevin Hilman <khilman@baylibre.com>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- Jerome Brunet <jbrunet@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3973; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=J7Y6Fp4+iqMqIfQq3Hnn537f1r3kZcJaD4ddKCmmXtk=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnjoT64OhzMylXK7S80fv+A6bFKs/lGqharlcVS
- tH/hOFeOB6JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ46E+gAKCRDm/A8cN/La
- hW37EACoX2ZfZnDa/X38DZwOqeh8ZuhGamXjGCNbVY/Z/WfrR249u2iiH9j/R/Psui7oR1mA9Ld
- X42+U3Hn6T+JnjBI+EDHXbrWvJ4Rfhlty4X//QmgkRRJcrLXtMC0q39qIScOV2Y3aL7U8HRVKrk
- p1YJFwoZv3CLgTzbjOPhdBu3a7v3K/4bXx8mMOaqjHo23AkxHeWbQ18OwC+XNCGv5p2u/ZbsmHn
- rKiOgy2fkpxpp6D6nptKau7C0ip4FycM2q/vEle0ECO5MMNiHUcmS4kH1Q9WlkGoG8wo+Oo0pLJ
- fjhKa/qo51vCTBIgoVALhsxCCul22x95Uk+vRcUX833T4XXhr7FID+3Jwi89OnGbawYPfStl0wO
- so6HWxgoco3l/gmUCGEvRx9DBOcQ0Ykb4CZPsSYoGUcKLsmrsrrqFxbaGP8s8WEUotr1/W5dott
- HVdMsSX5QVdjw8Z0Ap1ubUm3sRwq85Fx8clqUHQ+eZgs/LVXk2GgX29SI7yAHVjViy+pqcIL6B8
- fEs2fnOU19zKnW+kq+yA8hjuTYTodoURRq6SIBoYeYD+9fd8M5toULw85BQGNy+flXIPgG9u6XZ
- XO+emPEYYzXC2BZceW7kchSb2kV8W8gZ2X0SoFtAD7VMMSov6Hr1Hjrmqz6aE+oFgHan8FTg6Hz
- 4UAkYQMvR7xlk9A==
-X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
- fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
+X-RootMTR: 20250120172119eucas1p135434171194546bc2df259bfd21458e1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20250120172119eucas1p135434171194546bc2df259bfd21458e1
+References: <CGME20250120172119eucas1p135434171194546bc2df259bfd21458e1@eucas1p1.samsung.com>
 
-Following the removal of the clk_regmap clock table from the s4-peripherals
-clock controller driver, it appears some clocks are unused, which means
-these are not exported or even registered.
+The LicheePi 4A board, featuring the T-HEAD TH1520 SoC, includes an Imagination
+Technologies BXM-4-64 GPU. Initial support for this GPU was provided through a
+downstream driver [1]. Recently, efforts have been made to upstream support for
+the Rogue family GPUs, which the BXM-4-64 is part of [2].
 
-In all likelihood, these clocks have not been tested. Remove the unused
-clocks for now. These can added back later when they have been properly
-tested.
+While the initial upstream driver focused on the AXE-1-16 GPU, newer patches
+have introduced support for the BXS-4-64 GPU [3]. The modern upstream
+drm/imagination driver is expected to support the BXM-4-64 as well [4][5]. As
+this support is being developed, it's crucial to upstream the necessary glue
+code including clock and power-domain drivers so they're ready for integration
+with the drm/imagination driver.
 
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- drivers/clk/meson/s4-peripherals.c | 112 -------------------------------------
- 1 file changed, 112 deletions(-)
+Recent Progress:
 
-diff --git a/drivers/clk/meson/s4-peripherals.c b/drivers/clk/meson/s4-peripherals.c
-index 6a736e32e0ed8e2e8a37fbea94f9c5a90ea95fa6..853053b5f0689399a0224d263c30a985df6e1652 100644
---- a/drivers/clk/meson/s4-peripherals.c
-+++ b/drivers/clk/meson/s4-peripherals.c
-@@ -3129,118 +3129,6 @@ static struct clk_regmap s4_gen_clk = {
- 	},
- };
- 
--static const struct clk_parent_data s4_adc_extclk_in_parent_data[]  = {
--	{ .fw_name = "xtal", },
--	{ .fw_name = "fclk_div4", },
--	{ .fw_name = "fclk_div3", },
--	{ .fw_name = "fclk_div5", },
--	{ .fw_name = "fclk_div7", },
--	{ .fw_name = "mpll2", },
--	{ .fw_name = "gp0_pll", },
--	{ .fw_name = "hifi_pll", },
--};
--
--static struct clk_regmap s4_adc_extclk_in_mux = {
--	.data = &(struct clk_regmap_mux_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.mask = 0x7,
--		.shift = 25,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "adc_extclk_in_mux",
--		.ops = &clk_regmap_mux_ops,
--		.parent_data = s4_adc_extclk_in_parent_data,
--		.num_parents = ARRAY_SIZE(s4_adc_extclk_in_parent_data),
--		.flags = 0,
--	},
--};
--
--static struct clk_regmap s4_adc_extclk_in_div = {
--	.data = &(struct clk_regmap_div_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.shift = 16,
--		.width = 7,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "adc_extclk_in_div",
--		.ops = &clk_regmap_divider_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_adc_extclk_in_mux.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_adc_extclk_in_gate = {
--	.data = &(struct clk_regmap_gate_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.bit_idx = 24,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "adc_extclk_in",
--		.ops = &clk_regmap_gate_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_adc_extclk_in_div.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_demod_core_clk_mux = {
--	.data = &(struct clk_regmap_mux_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.mask = 0x3,
--		.shift = 9,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "demod_core_clk_mux",
--		.ops = &clk_regmap_mux_ops,
--		.parent_data = (const struct clk_parent_data []) {
--			{ .fw_name = "xtal", },
--			{ .fw_name = "fclk_div7", },
--			{ .fw_name = "fclk_div4", },
--			{ .hw = &s4_adc_extclk_in_gate.hw }
--		},
--		.num_parents = 4,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_demod_core_clk_div = {
--	.data = &(struct clk_regmap_div_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.shift = 0,
--		.width = 7,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "demod_core_clk_div",
--		.ops = &clk_regmap_divider_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_demod_core_clk_mux.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
--static struct clk_regmap s4_demod_core_clk_gate = {
--	.data = &(struct clk_regmap_gate_data) {
--		.offset = CLKCTRL_DEMOD_CLK_CTRL,
--		.bit_idx = 8,
--	},
--	.hw.init = &(struct clk_init_data){
--		.name = "demod_core_clk",
--		.ops = &clk_regmap_gate_ops,
--		.parent_hws = (const struct clk_hw *[]) {
--			&s4_demod_core_clk_div.hw
--		},
--		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
--	},
--};
--
- #define MESON_GATE(_name, _reg, _bit) \
- 	MESON_PCLK(_name, _reg, _bit, &s4_sys_clk.hw)
- 
+Firmware Improvements:
+Since August, the vendor has provided updated firmware
+[6][7] that correctly initiates the firmware for the BXM-4-64.
+
+Mesa Driver Testing:
+The vendor-supplied Mesa driver [8] partially works with Vulkan examples, such
+as rendering a triangle using Sascha Willems' Vulkan samples [9]. Although the
+triangle isn't rendered correctly (only the blue background appears), shader
+job submissions function properly, and IOCTL calls are correctly invoked.  For
+testing, we used the following resources:
+
+Kernel Source: Custom kernel with necessary modifications [10].
+Mesa Driver: Vendor-provided Mesa implementation [11].
+
+Dependencies:
+Testing required a functional Display Processing Unit (DPU) and HDMI driver,
+which are currently not upstreamed. Efforts are underway to upstream the DPU
+DC8200 driver used in StarFive boards [12], which is the same DPU used on the
+LicheePi 4A. Once the DPU and HDMI drivers are upstreamed, GPU support can be
+fully upstream.
+
+Testing Status:
+This series has been tested by performing a probe-only operation, confirming
+that the firmware begins execution. The probe function initiates firmware
+execution and waits for the firmware to flip a specific status bit.
+
+[   12.637880] powervr ffef400000.gpu: [drm] loaded firmware powervr/rogue_36.52.104.182_v1.fw
+[   12.648979] powervr ffef400000.gpu: [drm] FW version v1.0 (build 6645434 OS)
+[   12.678906] [drm] Initialized powervr 1.0.0 for ffef400000.gpu on minor 0
+
+Power Management:
+Full power management capabilities require implementing the T-HEAD SoC AON
+protocol messaging via the hardware mailbox. Support for the mailbox was merged
+in kernel 6.13 [13], and the AON protocol implementation is part of this
+series, since v2. Therefore this series support full power management
+capabilities for the GPU driver.
+
+Thanks Krzysztof and Stephen for taking the time to review the last revision !
+Your guidance and the direction was very helpful.
+
+Since the merge window just started I'm going to keep the RFC prefix for the
+v3 revision.
+
+v3:
+
+Device Tree Changes:
+ - consolidated device tree representation by merging aon and power-domain nodes
+   while maintaining separate drivers internally
+ - power-domain driver is now instantiated from within the aon driver
+ - updated img,powervr-rogue.yaml to use allOf and oneOf for better schema
+   organization
+
+AP Clock Driver Improvements:
+ - reworked driver to support multiple clock controllers through .compatible
+   and .data instead of using multiple address spaces in dt-binding. This change
+   allows to re-use the driver code for multiple clock controllers.
+
+Code Quality and Documentation:
+ - fixed optional module dependencies in Kconfig
+ - added kernel-doc comments for all exported functions
+ - implemented th1520_aon_remove() to properly clean up mailbox channel
+   resources
+ - removed unnecessary of.h header in multiple drivers
+ - refactored reset driver to use zero cells
+
+v2:
+
+Removed AP_SUBSYS clock refactoring commits (1-6):
+ - instead of refactoring, I opted to extend the current driver and its
+   associated device tree node to include support for a second address space.
+
+Expanded patchset scope to fully support power management capabilities:
+ - introduced a new firmware driver to manage power-related operations.
+ - rewrote the power-domain driver to function alongside the firmware driver.
+   These nodes in the device tree lack direct address spaces, despite
+   representing HW blocks. Control is achieved via firmware protocol messages
+   transmitted through a mailbox to the E902 core.
+
+Implemented a reset controller for the TH1520 SoC:
+ - developed a reset controller driver for the TH1520 to manage reset
+   sequences.
+ - updated the drm/imagination driver to act as a reset controller consumer.
+   While this patchset is focused on the LPI4A board, the reset controller is
+   designed to be useful for other boards, such as the BPI-3F, which also require
+   a reset sequence after power-up.
+
+Updated dt-bindings:
+ - added new dt-bindings for power, reset, and firmware nodes.
+ - updated the powervr dt-binding to include reset support and new compatibles.
+ - ran dtbs_check and dt_binding_check to ensure compliance.
+
+Addressed code quality:
+ - resolved all checkpatch issues using --strict, except for the call to
+   devm_clk_hw_register_gate_parent_data().  The current implementation remains
+   preferable in this context, and clang-format aligns with this choice.
+
+Also included the mailbox device tree commit, already queued for 6.14 [14] for
+completeness.
+
+References:
+
+[1] Downstream Driver Source:
+    https://gitlab.freedesktop.org/frankbinns/powervr/-/blob/cb1929932095649a24f051b9cfdd2cd2ceab35cb/drivers/gpu/drm/img-rogue/Kconfig
+
+[2] Initial Upstream Driver Series:
+    https://lore.kernel.org/all/cover.1700668843.git.donald.robson@imgtec.com/
+
+[3] BXS-4-64 GPU Support Patches:
+    https://lore.kernel.org/all/20241105-sets-bxs-4-64-patch-v1-v1-0-4ed30e865892@imgtec.com/
+
+[4] Firmware Issue Discussion 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/1
+
+[5] Firmware Issue Discussion 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/2
+
+[6] Firmware Update Commit 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/6ac2247e9a1d1837af495fb6d0fbd6f35547c2d1
+
+[7] Firmware Update Commit 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/efbebc90f25adb2b2e1499e3cc24ea3f3c3e4f4c
+
+[8] Vendor-Provided Mesa Driver:
+    https://gitlab.freedesktop.org/imagination/mesa/-/tree/dev/devinfo
+
+[9] Sascha Willems' Vulkan Samples:     https://github.com/SaschaWillems/Vulkan
+
+[10] Test Kernel Source:
+    https://github.com/mwilczy/linux/tree/2_December_reference_linux_kernel_imagination
+
+[11] Test Mesa Driver:
+    https://github.com/mwilczy/mesa-reference
+
+[12] DPU DC8200 Driver Upstream Attempt:
+    https://lore.kernel.org/all/20241120061848.196754-1-keith.zhao@starfivetech.com/
+
+[13] Pull request kernel 6.13 for mailbox
+    https://lore.kernel.org/all/CABb+yY33qnivK-PzqpSMgmtbFid4nS8wcNvP7wED9DXrYAyLKg@mail.gmail.com/
+
+[14] Mailbox commit queued for 6.14
+    https://lore.kernel.org/all/20241104100734.1276116-4-m.wilczynski@samsung.com/
+
+Michal Wilczynski (18):
+  dt-bindings: clock: Add VO subsystem clock controller support
+  clk: thead: Add clock support for VO subsystem in T-Head TH1520 SoC
+  dt-bindings: firmware: thead,th1520: Add support for firmware node
+  firmware: thead: Add AON firmware protocol driver
+  pmdomain: thead: Add power-domain driver for TH1520
+  riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+  dt-bindings: reset: Add T-HEAD TH1520 SoC Reset Controller
+  reset: thead: Add TH1520 reset controller driver
+  drm/imagination: Add reset controller support for GPU initialization
+  dt-bindings: gpu: Add 'resets' property for GPU initialization
+  dt-bindings: gpu: Add compatibles for T-HEAD TH1520 GPU
+  drm/imagination: Add support for IMG BXM-4-64 GPU
+  drm/imagination: Enable PowerVR driver for RISC-V
+  riscv: dts: thead: Add device tree VO clock controller
+  riscv: dts: thead: Add mailbox node
+  riscv: dts: thead: Introduce power domain nodes with aon firmware
+  riscv: dts: thead: Introduce reset controller node
+  riscv: dts: thead: Add GPU node to TH1520 device tree
+
+ .../bindings/clock/thead,th1520-clk-ap.yaml   |  16 +-
+ .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+ .../bindings/gpu/img,powervr-rogue.yaml       |  58 +++-
+ .../bindings/reset/thead,th1520-reset.yaml    |  44 +++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/Kconfig.socs                       |   1 +
+ arch/riscv/boot/dts/thead/th1520.dtsi         |  49 ++++
+ drivers/clk/thead/clk-th1520-ap.c             | 197 +++++++++++--
+ drivers/firmware/Kconfig                      |   9 +
+ drivers/firmware/Makefile                     |   1 +
+ drivers/firmware/thead,th1520-aon.c           | 271 ++++++++++++++++++
+ drivers/gpu/drm/imagination/Kconfig           |   2 +-
+ drivers/gpu/drm/imagination/pvr_device.c      |  21 ++
+ drivers/gpu/drm/imagination/pvr_device.h      |   9 +
+ drivers/gpu/drm/imagination/pvr_drv.c         |   1 +
+ drivers/gpu/drm/imagination/pvr_power.c       |  15 +-
+ drivers/pmdomain/Kconfig                      |   1 +
+ drivers/pmdomain/Makefile                     |   1 +
+ drivers/pmdomain/thead/Kconfig                |  12 +
+ drivers/pmdomain/thead/Makefile               |   2 +
+ drivers/pmdomain/thead/th1520-pm-domains.c    | 174 +++++++++++
+ drivers/reset/Kconfig                         |  10 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-th1520.c                  | 144 ++++++++++
+ .../dt-bindings/clock/thead,th1520-clk-ap.h   |  33 +++
+ .../dt-bindings/firmware/thead,th1520-aon.h   |  18 ++
+ .../linux/firmware/thead/thead,th1520-aon.h   | 186 ++++++++++++
+ 27 files changed, 1293 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/thead,th1520-reset.yaml
+ create mode 100644 drivers/firmware/thead,th1520-aon.c
+ create mode 100644 drivers/pmdomain/thead/Kconfig
+ create mode 100644 drivers/pmdomain/thead/Makefile
+ create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+ create mode 100644 drivers/reset/reset-th1520.c
+ create mode 100644 include/dt-bindings/firmware/thead,th1520-aon.h
+ create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
 
 -- 
-2.45.2
+2.34.1
 
 
