@@ -1,56 +1,48 @@
-Return-Path: <linux-clk+bounces-17395-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17393-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FFCDA1B84D
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 16:02:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB57A1B7FF
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 15:42:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FA6E169270
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 15:02:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 061B2161E3C
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 14:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086A5433A4;
-	Fri, 24 Jan 2025 15:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A830139597;
+	Fri, 24 Jan 2025 14:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="grsCwhtr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jB94F4fb"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE2A78F57
-	for <linux-clk@vger.kernel.org>; Fri, 24 Jan 2025 15:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1338D4EB48
+	for <linux-clk@vger.kernel.org>; Fri, 24 Jan 2025 14:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737730958; cv=none; b=gXN8ZgaSq4xnZS59WMvOcNLgYsqNgIGmUN93Rt+f6j+8nrp+qCwLIMTPe+nJdrlfFk10x7J+fC3V0Figm+2iXMFgWbGf8xv2eNz584V4R7YaX+Cuu7R2i7SzwBG2WxUTSCydMXYx/Fk0lebwY0Ga0BaVeoyCZulTUooB4LF3pWA=
+	t=1737729766; cv=none; b=azIRK1i/NghhddpwyGl5VbXrRZfL7Sp6cjQVWYttnYWenjz6Fk4PJEQZu2HmHgIify426PuEyNhDbk+L49vt5RWgYkTp8R7MnnuF4YcQi49Ecwy50nKC8F0YA+DtcNzWwNk9UAuvu1UBEqywq1ibWNOWw7UrWxyuyrXVA6qZWZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737730958; c=relaxed/simple;
-	bh=DOW7ZQCoyBFfJmoCI5MTQFFq9YjIfjcsUIXQyLyB98w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gVfq817lrepdPy3QNVYVptEpyhQndzZpfb+Xmlai/ZbzGuCWuWw5ozRC5Qm/7iFB2FG3iDQe5m8DljtHepeI3tzT4uzryxThkduMO1ZCUmMWmtllGCDHWSMwkQtI8U1XT9rahFscbXQi9iQdHYWKCJqMMUfvwhI+/rFjtQ70nLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=grsCwhtr; arc=none smtp.client-ip=149.28.215.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: Content-Type: In-Reply-To: From: References:
- Cc: To: Subject: MIME-Version: Date: Message-ID; q=dns/txt;
- s=fe-e1b5cab7be; t=1737730956;
- bh=MsYLWrXefMP5m34iCp3jAP9mKY5iNXf4rWORER2MwmY=;
- b=grsCwhtrDfyUZT6VOFPQs1Wz+mLNXKJM9ogR10hjYtJfqQMQa7NyKaC/kFghHLntlbk1ZHyUW
- 4yJXRHal6lUhDXPWFQZ3wyF0p64N4JXnOFjMvo6sxlWL2HrJsSIcmFUyD0M8iwcFoPwWe/SE5yb
- 5y2eyQ7jw63ZnQK96g8JpCFIbRTzJtdMURzrlk8A89ZHGvevKLa8NZsbo2flpDXh4O3rQIHkqhy
- OSkc3CJjpzI5CxlUqjWpkpNe3dX1fdZK/1NHvaJwkUY1MImdBADJ/Ht3520EgInY8D6iDWzIT96
- HgBfKjSAlYPY5fqEdFoEdQeEuY8OYlExMKX1HsCwWvZA==
-X-Forward-Email-ID: 6793a67f3e07d3fa850557b4
-X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 149.28.215.223
-X-Forward-Email-Version: 0.4.40
-X-Forward-Email-Website: https://forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Report-Abuse-To: abuse@forwardemail.net
-Message-ID: <d95d317c-5f6e-42bd-94a9-e1a6c7685e2f@kwiboo.se>
-Date: Fri, 24 Jan 2025 15:40:56 +0100
+	s=arc-20240116; t=1737729766; c=relaxed/simple;
+	bh=+heYfxFaXMWMl6DmoLqKKM0GoFAT4wvGdui/rnZq37w=;
+	h=Message-ID:Date:MIME-Version:Subject:References:From:To:Cc:
+	 In-Reply-To:Content-Type; b=Q2+FqwxvUmBSupbA4HtHA7VZc4eGrOsUiZkkQzYQnDVWWDPprwN5MTkpE+zJShagJOc53cc2PZ3yW//z8h5Yh2bp8MUxO3o3RLvI977g52LFzREFGNEG8BUp8NApSnrBYNIRfAcNMPtWkVjdbncorju7kJkVGyVBgEq0LnvFfgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jB94F4fb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4DD5C4CED2;
+	Fri, 24 Jan 2025 14:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737729765;
+	bh=+heYfxFaXMWMl6DmoLqKKM0GoFAT4wvGdui/rnZq37w=;
+	h=Date:Subject:References:From:To:Cc:In-Reply-To:From;
+	b=jB94F4fbPvFH3GZQYra3jbliafpIjHodBNf0yr1TcBWE5cPAUpV1p7hXP2yTgnQnE
+	 wGqDJJB9j83WtYYKcxV82AzdN7Rp6TozBujFq0B0zXtXOVjltJ1HyoGIRVKrnVywJI
+	 othNll7f6kOVDLq2RAHx0MFSGp6PWLVvxss5QQsYgox0X2nrs1w2XwBFPDAqs/EU2R
+	 KNfp816IZ5uTsYWkyLXun6e3M83xwGNGW12lcys4dkUAbqFd/pQE1KBK76Fk6Nt7Jf
+	 hAasbXkMCBb+ox6xtAQ0mjSOIn985Y2mwCEusdh2yX9DcCNu6jqonmzAmY0E0ENEgV
+	 RFK7rVgCFWZFg==
+Message-ID: <d385e871-f33f-4133-8347-3f108f8a6736@kernel.org>
+Date: Fri, 24 Jan 2025 15:42:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -58,67 +50,107 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] Revert "clk: rockchip: Set parent rate for
- DCLK_VOP clock on RK3228"
-To: Elaine Zhang <zhangqing@rock-chips.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, kever.yang@rock-chips.com,
- heiko@sntech.de, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, huangtao@rock-chips.com,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20250124064619.13893-1-zhangqing@rock-chips.com>
- <20250124064619.13893-2-zhangqing@rock-chips.com>
+Subject: Fwd: [devicetree-org/dt-schema] schemas: introduce
+ assigned-clock-sscs (PR #154)
+References: <devicetree-org/dt-schema/pull/154@github.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <20250124064619.13893-2-zhangqing@rock-chips.com>
+To: Stephen Boyd <sboyd@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>,
+ "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <devicetree-org/dt-schema/pull/154@github.com>
+X-Forwarded-Message-Id: <devicetree-org/dt-schema/pull/154@github.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Elaine,
+Hi Stephen and Michael,
 
-On 2025-01-24 07:46, Elaine Zhang wrote:
-> This reverts commit 1d34b9757523c1ad547bd6d040381f62d74a3189.
-> 
-> RK3228 Only GPLL and CPLL, GPLL is a common clock, does not allow
-> dclk_vop to change its frequency, CPLL is used by GMAC,
-> if dclk_vop use CLK_SET_RATE_PARENT and CLK_SET_RATE_NO_REPARENT flags will
-> affect the GMAC function.
+Just FYI, below is a foward of pull request for dtschema for bindings
+adding spread spectrum to clocks. As Clock framework maintainers this
+might be relevant to you.
 
-Please explain how CPLL and GPLL is affected by this? According to TRM
-the hdmiphy is default parent (reset value), this is also how similar
-clock is defined for RK3328.
 
-  vop_pll_sel  
-  Control vop clock PLL source selection.  
-  1'b0: select hdmiphy pll clock (reset value)
-  1'b1: select vop dclk
+-------- Forwarded Message --------
+Subject: [devicetree-org/dt-schema] schemas: introduce
+assigned-clock-sscs (PR #154)
+Date: Fri, 24 Jan 2025 04:31:30 -0800
+From: Peng Fan <notifications@github.com>
+Reply-To: devicetree-org/dt-schema
+<reply+ACPRLI5YLXX27TFZX2P7NVOFT5USFEVBNHHKO4ZXHM@reply.github.com>
+To: devicetree-org/dt-schema <dt-schema@noreply.github.com>
+CC: Subscribed <subscribed@noreply.github.com>
 
-Maybe the dclk_vop name is causing confusion, or am I missing something?
+To support spread spectrum clock, introduce assigned-clock-sscs, it is
+an uint32-matrix with format multiple elements of below
+&lt;modfreq spreadpercentage modmethod&gt;, &lt;...&gt;
+You can view, comment on, or merge this pull request online at:
 
-Regards,
-Jonas
+  https://github.com/devicetree-org/dt-schema/pull/154
 
-> 
-> If the client application does not use GMAC and CPLL is free, make this
-> change on the local branch.
-> 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> ---
->  drivers/clk/rockchip/clk-rk3228.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/rockchip/clk-rk3228.c b/drivers/clk/rockchip/clk-rk3228.c
-> index ed602c27b624..9c0284607766 100644
-> --- a/drivers/clk/rockchip/clk-rk3228.c
-> +++ b/drivers/clk/rockchip/clk-rk3228.c
-> @@ -409,7 +409,7 @@ static struct rockchip_clk_branch rk3228_clk_branches[] __initdata = {
->  			RK2928_CLKSEL_CON(29), 0, 3, DFLAGS),
->  	DIV(0, "sclk_vop_pre", "sclk_vop_src", 0,
->  			RK2928_CLKSEL_CON(27), 8, 8, DFLAGS),
-> -	MUX(DCLK_VOP, "dclk_vop", mux_dclk_vop_p, CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT,
-> +	MUX(DCLK_VOP, "dclk_vop", mux_dclk_vop_p, 0,
->  			RK2928_CLKSEL_CON(27), 1, 1, MFLAGS),
->  
->  	FACTOR(0, "xin12m", "xin24m", 0, 1, 2),
+-- Commit Summary --
+
+  * schemas: introduce assigned-clock-sscs
+
+-- File Changes --
+
+    M dtschema/fixups.py (1)
+    M dtschema/meta-schemas/clocks.yaml (3)
+    M dtschema/schemas/clock/clock.yaml (10)
+
+-- Patch Links --
+
+https://github.com/devicetree-org/dt-schema/pull/154.patch
+https://github.com/devicetree-org/dt-schema/pull/154.diff
+
+-- 
+Reply to this email directly or view it on GitHub:
+https://github.com/devicetree-org/dt-schema/pull/154
+You are receiving this because you are subscribed to this thread.
+
+Message ID: &lt;devicetree-org/dt-schema/pull/154@github.com&gt;
 
 
