@@ -1,126 +1,230 @@
-Return-Path: <linux-clk+bounces-17394-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17396-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71B6AA1B823
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 15:47:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D2A3A1BB77
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 18:31:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27F35188F324
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 14:47:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CF973A406F
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2025 17:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136E713C81B;
-	Fri, 24 Jan 2025 14:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45C4919E975;
+	Fri, 24 Jan 2025 17:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b="SGYY3MWT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQvRZcd4"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8D4146596
-	for <linux-clk@vger.kernel.org>; Fri, 24 Jan 2025 14:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183183224;
+	Fri, 24 Jan 2025 17:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737730041; cv=none; b=aXIa8LdQOdC/4nQNpIBVqyE/zcE6uarVWx40CikbTs5tYURn+PjYFst/bMjR+Llh9mMBH+vkLy3BFX9aBNzUiQxxg6CR2LJCbIazMZ30fDwSdp4mli2dqmGFIyvie3L4ON/n5tveuCJHncHXb3XJG7Yjkpv9REkuWO65MNQKqag=
+	t=1737739900; cv=none; b=DK0F8ihR3cY3wwWd3rfA2fpD/UUIagFi11DhexUUnJsIrpa05bIAW+HUo/J+7Wy44UepWiqecEDRdqQ5ho+KsNufNMB+ws0hvEmwtlxPbkVYhvO1vmkv/xjQFZDVGKCiEct6iniVSRmiVL+pa4FVRsy9BiE248WETC2WJSwoaKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737730041; c=relaxed/simple;
-	bh=eTaf9HW41uxqE2CPS5NCpTxA6jYnk9XYAKcaAuJgBMc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UcsZCO0AyZTXweOhokhTxBJEg8ytMa7bbzVofRnwZBIIwCgER9cJCZxxo77nXHb5GHW/D9tFslftOZvLciTnfAoFUQ9VUtnBM3qVt20Rtt8ElKA2RrrOusy8v9555hwEFU25iu0WGk3jpR8xiz8AK6fNom6vHAuAcbkrx8bp6iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se; dkim=pass (2048-bit key) header.d=kwiboo.se header.i=@kwiboo.se header.b=SGYY3MWT; arc=none smtp.client-ip=149.28.215.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kwiboo.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.kwiboo.se
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
- h=Content-Transfer-Encoding: Content-Type: In-Reply-To: From: References:
- Cc: To: Subject: MIME-Version: Date: Message-ID; q=dns/txt;
- s=fe-e1b5cab7be; t=1737730039;
- bh=bWc4eegiqIRik/oWmiPzWCZlgXnb9uJU2PJU56uMGgM=;
- b=SGYY3MWTQ1XEwbNFVhymOC1zL+LU3faK1Xb/b4Jy6SkwV9B2sUhuwqCaecUGIYN2M9iOQKRke
- y03vU2CIc15/BNSrDsyVEoSoHwtdkl3kRPYEG0Iola5dYnbS2v09b7Ekj55lnDYPuNwnnT/alZO
- uUV+79OUvRHO/OuNKQo6ylsrWKLveBZlNFaMZGhnyYZapbIxeM/sw5LnSOFd+Xx5+v71dOmWDk3
- hveefviQAD7FpLqdTWggeAAR3VnKu+VBhm2MStXd8m45jnfxlj+1byaYXme/0TktGoZvMZTc7gw
- 16IXYrPvx+di79zD0GDTYVBrrBc3R5DVyPaNMEhRDFjw==
-X-Forward-Email-ID: 6793a7ea3e07d3fa85055a37
-X-Forward-Email-Sender: rfc822; jonas@kwiboo.se, smtp.forwardemail.net,
- 149.28.215.223
-X-Forward-Email-Version: 0.4.40
-X-Forward-Email-Website: https://forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Report-Abuse-To: abuse@forwardemail.net
-Message-ID: <cae9cb0a-1500-4fbc-bbf4-a6266549bcb9@kwiboo.se>
-Date: Fri, 24 Jan 2025 15:47:00 +0100
+	s=arc-20240116; t=1737739900; c=relaxed/simple;
+	bh=hgo5Gm6nDhGIQgSJHFT/RmxBxdtq+iVJ5SoDgdrUDWI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eoqJ/ETibhlqkSpLrhoMtMswl0obWYmShYra9QLc8UuPOVd/PaoS/trzvUO4j8OU9cYk3cSitDkHSt6ZM2YKt54gt/9zXcfO2+aVm/OkDI/amh3GbMvk+1Xc/p28KyngyjBqzQpp/L1xyzVB1HB5/oslFn2RD+OhR7mnGcDulI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQvRZcd4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE7DC4CED2;
+	Fri, 24 Jan 2025 17:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737739899;
+	bh=hgo5Gm6nDhGIQgSJHFT/RmxBxdtq+iVJ5SoDgdrUDWI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hQvRZcd4e2GNQdo7p0U4OCCfPvGv6YOcR/Ps8DznEY6RoRrIRB/osheeIqYU+O+0B
+	 9EGwizhOSWwtVXT53fP3XGQeR05fXIKdOkbPDIQPh6yLWIhqhSSSWR//PK5LRWv5vR
+	 CubAIK9WJR+q0+wPXdUfkkTDnJQk8Xcb5vv7eZf6D+7a6m1opDV2Z7oeVjPT3UCqOV
+	 7ZQfxwNyvo76Z1kH6z5oMzCBHC8AFM/RFpTbpspC5qC2AzCvbGnMIm3UHEpnAHpaAG
+	 DY0WtlHXROP9+injXE/p8n9p914ERjlxe9yPN0/Ldm4qh9RNalYVmFIhQxmke/TjQI
+	 VwOJNjGPP9Iyw==
+Date: Fri, 24 Jan 2025 17:31:33 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Friday Yang =?utf-8?B?KOadqOmYsyk=?= <Friday.Yang@mediatek.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"mturquette@baylibre.com" <mturquette@baylibre.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	Garmin Chang =?utf-8?B?KOW8teWutumKmCk=?= <Garmin.Chang@mediatek.com>,
+	"sboyd@kernel.org" <sboyd@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	Yong Wu =?utf-8?B?KOWQtOWLhyk=?= <Yong.Wu@mediatek.com>,
+	"robh@kernel.org" <robh@kernel.org>,
+	Project_Global_Chrome_Upstream_Group <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: clock: mediatek: Add SMI LARBs reset
+ for MT8188
+Message-ID: <20250124-aide-feisty-821cf9cf1382@spud>
+References: <20250121065045.13514-1-friday.yang@mediatek.com>
+ <20250121065045.13514-2-friday.yang@mediatek.com>
+ <20250121-violet-widely-df3567b085a4@spud>
+ <2bfb6c05a3471e54f51c06895709853661e82c9a.camel@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/3] arm64: dts: rockchip: Increase VOP clk rate on
- RK3328
-To: Elaine Zhang <zhangqing@rock-chips.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, kever.yang@rock-chips.com,
- heiko@sntech.de, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-kernel@vger.kernel.org, huangtao@rock-chips.com,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20250124064619.13893-1-zhangqing@rock-chips.com>
- <20250124064619.13893-4-zhangqing@rock-chips.com>
-Content-Language: en-US
-From: Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <20250124064619.13893-4-zhangqing@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="D7rLUrhVT1Wjp55T"
+Content-Disposition: inline
+In-Reply-To: <2bfb6c05a3471e54f51c06895709853661e82c9a.camel@mediatek.com>
 
-Hi Elaine,
 
-On 2025-01-24 07:46, Elaine Zhang wrote:
-> The VOP on RK3328 needs to run at a higher rate in order to produce
-> a proper 3840x2160 signal.
-> Change to use 300MHz for VIO clk and 400MHz for VOP clk.
+--D7rLUrhVT1Wjp55T
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It is probably better to merge this change and the prior revert into a
-single patch with a Fixes-tag for the commit 0f2ddb128fa2 ("arm64: dts:
-rockchip: Increase VOP clk rate on RK3328") to ensure this change get
-backported correctly.
+On Wed, Jan 22, 2025 at 07:40:12AM +0000, Friday Yang (=E6=9D=A8=E9=98=B3) =
+wrote:
+> On Tue, 2025-01-21 at 17:30 +0000, Conor Dooley wrote:
+> > On Tue, Jan 21, 2025 at 02:50:40PM +0800, Friday Yang wrote:
+> > > SMI LARBs require reset functions when applying clamp operations.
+> > > Add '#reset-cells' for the clock controller located in image,
+> > > camera
+> > > and IPE subsystems.
+> >=20
+> > A new required property is an abi break, please explain why this is
+> > required.
 
-Regards,
-Jonas
+You never answered this part. From a quick check, looks like the change
+you made will cause probe failures if the resets are not present? Maybe
+I misread the driver code in my quick skim - but that is the implication
+of a new required property, so I didn't dig super far.
 
-> 
-> Fixes: 4b6764f200f2 ("Revert "arm64: dts: rockchip: Increase VOP clk
-> rate on RK3328"")
-> 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3328.dtsi | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-> index f3ef8cbfbdae..0c905f411e92 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-> @@ -842,7 +842,8 @@
->  			<&cru ACLK_BUS_PRE>, <&cru HCLK_BUS_PRE>,
->  			<&cru PCLK_BUS_PRE>, <&cru ACLK_PERI_PRE>,
->  			<&cru HCLK_PERI>, <&cru PCLK_PERI>,
-> -			<&cru SCLK_RTC32K>;
-> +			<&cru SCLK_RTC32K>, <&cru ACLK_VIO_PRE>,
-> +			<&cru ACLK_VOP_PRE>;
->  		assigned-clock-parents =
->  			<&cru HDMIPHY>, <&cru PLL_APLL>,
->  			<&cru PLL_GPLL>, <&xin24m>,
-> @@ -863,7 +864,8 @@
->  			<150000000>, <75000000>,
->  			<75000000>, <150000000>,
->  			<75000000>, <75000000>,
-> -			<32768>;
-> +			<32768>, <300000000>,
-> +			<400000000>;
->  	};
->  
->  	usb2phy_grf: syscon@ff450000 {
+Adding new properties that break a driver is not really acceptable, so I
+hope I made a mistake there.
 
+> What are "SMI LARBs"? Why did things previously work
+> > without
+> > acting as a reset controller?
+> >=20
+>=20
+> The background can refer to the discussion in the following link:
+>=20
+> https://lore.kernel.org/all/CAFGrd9qZhObQXvm2_abqaX83xMLqxjQETB2=3DwXpobD=
+WU1CnvkA@mail.gmail.com/
+>=20
+> https://lore.kernel.org/all/CAPDyKFpokXV2gJDgowbixTvOH_5VL3B5H8eyhP+KJ5Fa=
+sm2rFg@mail.gmail.com/
+> SMI clamp and reset operations should be implemented in SMI driver
+> instead of PM driver.
+
+So the answer to how it worked previously was that nothing actually used
+this multimedia interface?
+
+Your commit message needs to explain why a new required property is okay
+and why it was not there before.
+
+Thanks,
+Conor.
+
+>=20
+> I previously added the SMI reset control driver. However, the
+> reviewer's comments are correct, these functions have already
+> been implemented in the clock control driver. There is no need
+> to submit duplicate code.=20
+>=20
+> https://lore.kernel.org/lkml/20241120063305.8135-2-friday.yang@mediatek.c=
+om/
+>=20
+> https://lore.kernel.org/lkml/20241120063305.8135-3-friday.yang@mediatek.c=
+om/
+>=20
+>=20
+> On the MediaTek platform, the SMI block diagram like this:
+>=20
+>                 DRAM
+>                  |
+>             EMI(External Memory Interface)
+>                  |  |
+>           MediaTek IOMMU(Input Output Memory Management Unit)
+>                  |  |
+>              SMI-Common(Smart Multimedia Interface Common)
+>                  |
+>          +----------------+------------------+
+>          |                |                  |
+>          |                |                  |
+>          |                |                  |
+>          |                |                  |
+>          |                |                  |
+>        larb0       SMI-Sub-Common0     SMI-Sub-Common1
+>                    |      |     |      |             |
+>                   larb1  larb2 larb3  larb7       larb9
+>=20
+> The SMI-Common connects with SMI LARBs and IOMMU. The maximum LARBs
+> number that connects with a SMI-Common is 8. If the engines number is
+> over 8, sometimes we use a SMI-Sub-Common which is nearly same with
+> SMI-Common. It supports up to 8 input and 1 output(SMI-Common has 2
+> output).
+>=20
+> > >=20
+> > > Signed-off-by: Friday Yang <friday.yang@mediatek.com>
+> > > ---
+> > >  .../bindings/clock/mediatek,mt8188-clock.yaml | 21
+> > > +++++++++++++++++++
+> > >  1 file changed, 21 insertions(+)
+> > >=20
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/clock/mediatek,mt8188-
+> > > clock.yaml
+> > > b/Documentation/devicetree/bindings/clock/mediatek,mt8188-
+> > > clock.yaml
+> > > index 860570320545..2985c8c717d7 100644
+> > > --- a/Documentation/devicetree/bindings/clock/mediatek,mt8188-
+> > > clock.yaml
+> > > +++ b/Documentation/devicetree/bindings/clock/mediatek,mt8188-
+> > > clock.yaml
+> > > @@ -57,6 +57,27 @@ required:
+> > >    - reg
+> > >    - '#clock-cells'
+> > >=20
+> > > +allOf:
+> > > +  - if:
+> > > +      properties:
+> > > +        compatible:
+> > > +          contains:
+> > > +            enum:
+> > > +              - mediatek,mt8188-camsys-rawa
+> > > +              - mediatek,mt8188-camsys-rawb
+> > > +              - mediatek,mt8188-camsys-yuva
+> > > +              - mediatek,mt8188-camsys-yuvb
+> > > +              - mediatek,mt8188-imgsys-wpe1
+> > > +              - mediatek,mt8188-imgsys-wpe2
+> > > +              - mediatek,mt8188-imgsys-wpe3
+> > > +              - mediatek,mt8188-imgsys1-dip-nr
+> > > +              - mediatek,mt8188-imgsys1-dip-top
+> > > +              - mediatek,mt8188-ipesys
+> > > +
+> > > +    then:
+> > > +      required:
+> > > +        - '#reset-cells'
+> > > +
+> > >  additionalProperties: false
+> > >=20
+> > >  examples:
+> > > --
+> > > 2.46.0
+> > >=20
+
+--D7rLUrhVT1Wjp55T
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ5POdQAKCRB4tDGHoIJi
+0i5YAP9Dx5bXus4xwjvaYC4iLzVHrcUXsxmP4pUtVR6hWDrycwD9GKZ11XB4OJbc
+HOrve7a/fbLIiPLQfLUBCD2A5m4nbQ8=
+=oF2i
+-----END PGP SIGNATURE-----
+
+--D7rLUrhVT1Wjp55T--
 
