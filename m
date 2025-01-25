@@ -1,38 +1,38 @@
-Return-Path: <linux-clk+bounces-17402-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17404-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41E73A1C00F
-	for <lists+linux-clk@lfdr.de>; Sat, 25 Jan 2025 02:16:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81701A1C028
+	for <lists+linux-clk@lfdr.de>; Sat, 25 Jan 2025 02:21:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47F5C1887808
-	for <lists+linux-clk@lfdr.de>; Sat, 25 Jan 2025 01:16:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 944021889EC8
+	for <lists+linux-clk@lfdr.de>; Sat, 25 Jan 2025 01:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F084F1E98E7;
-	Sat, 25 Jan 2025 01:16:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C20301E98E8;
+	Sat, 25 Jan 2025 01:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Iw6uicYd"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="YGQQjOr7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-m3274.qiye.163.com (mail-m3274.qiye.163.com [220.197.32.74])
+Received: from mail-m3270.qiye.163.com (mail-m3270.qiye.163.com [220.197.32.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A715CA4E;
-	Sat, 25 Jan 2025 01:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2061DB65C;
+	Sat, 25 Jan 2025 01:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737767763; cv=none; b=nkodhdlXgGrii011QBBWYi4XXnCKbqhSZ3Munbd3eTNABdI5UdQbZIFabstzF+a83tp/8oIXjEfENv6MbI/qO0SHVwjTa8gfKWgq34EanvvGTQ0FHOM/bd6hNMyJA3jk30PfcIDvNyJfU0f9c9S3jwLlcOJbNcDiDingUNFsJvs=
+	t=1737768072; cv=none; b=HqqBYVIDDt7472Fdlj0DYyEIQRUsQVov1G6g1UIS+2osaJHJcSGlKA/1iykZdirI6fNFEh12nGmFM3nuw6dsMTA8i7ZqTtb+/+S5pEDSoFt4gBsoENdfhjA4OPHtA6mrZlEeh2I84WBlQfdO1+0dkR7AXJGeQ7z/zRA9F60co/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737767763; c=relaxed/simple;
-	bh=3H2NXxzNhtHz1pn8RjeWts6HoCuy7SY7y74pu7mHgss=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=X33aQVx5aMUtSyZj4ic4RA/q95wrBvGqV+2KGdv5z5r5+V8pM7UVaU8FqLsGOQS50WGmFPZKMp9pocctOAdftgA80FpHk1qZGEPSNCE/bkcB+jPD9htLQtdLr195jevgsJ3A2ecr5925J6Ir5PmsEkC2Tj0wtFE/UuloLOOMEw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Iw6uicYd; arc=none smtp.client-ip=220.197.32.74
+	s=arc-20240116; t=1737768072; c=relaxed/simple;
+	bh=N1uixOxGZRAZZqFVwdJShOU51m15WFrLEtUuSOiBRiU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=GlpGQD3+pAxNMuGcdiUuVUcUvBKT6s9wlDloul3Kdfhn568ddarkV0/w3OM5EddOIJxDg0P7sHxO/PkcD927w0gVpFMEkrbJp+UZ1XSp2lod7Msa+2IEJRh46J8/AlPERCKg2GkOiw648jcvD5Vhs9/EdFPaKcZ+0lADsnZRnt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=YGQQjOr7; arc=none smtp.client-ip=220.197.32.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 9a2d132a;
-	Sat, 25 Jan 2025 09:15:50 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 9a2d132f;
+	Sat, 25 Jan 2025 09:15:52 +0800 (GMT+08:00)
 From: Elaine Zhang <zhangqing@rock-chips.com>
 To: mturquette@baylibre.com,
 	sboyd@kernel.org,
@@ -48,24 +48,24 @@ Cc: linux-clk@vger.kernel.org,
 	huangtao@rock-chips.com,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/3] Revert "clk: rockchip: Set parent rate for DCLK_VOP clock on RK3228"
-Date: Sat, 25 Jan 2025 09:15:43 +0800
-Message-Id: <20250125011545.15547-2-zhangqing@rock-chips.com>
+Subject: [PATCH v2 2/3] Revert "arm64: dts: rockchip: Increase VOP clk rate on RK3328"
+Date: Sat, 25 Jan 2025 09:15:44 +0800
+Message-Id: <20250125011545.15547-3-zhangqing@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250125011545.15547-1-zhangqing@rock-chips.com>
 References: <20250125011545.15547-1-zhangqing@rock-chips.com>
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQxpNGlZMHR9NTx9DT0keGkNWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0
-	1VSktLVUtZBg++
-X-HM-Tid: 0a949b078cc903a3kunm9a2d132a
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGR5OHVZJGR9IHk1OTR9NTEJWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a949b07922703a3kunm9a2d132f
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ODI6ASo5FzIJPBoVDSMCPRxD
-	KiNPFBdVSlVKTEhMTE1MTE5JSkpCVTMWGhIXVQETGhUcChIVHDsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpJSUM3Bg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N0k6Dxw*LjIXNBoLDSMKPRUw
+	IksKCTJVSlVKTEhMTE1MTE5ITkpJVTMWGhIXVQETGhUcChIVHDsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpLTUo3Bg++
 DKIM-Signature:a=rsa-sha256;
-	b=Iw6uicYdSrfMTm+P4sIGI8p9s3WIGo8zs6TyvqIH7GzyWRaUNlqfaZ7l0ddwcbcPtA7MhxWMqX87oq3B5fLkya8y2q5IxqJ9i0x/ogFJdEOzR7V3xM95vFITAj6X9wPEbGAIM5GNd+n8oXXinhAfioFWCNaeb1uiveIgHWAX2bo=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=/anGkf2igP9SKOSzCFL/ChT8CaIIzLztcOi6KLOhh+8=;
+	b=YGQQjOr7ey6VOa/L58cxEdtV8JlgR6SsYj9LwimXFQY6K2lC06Z4vFJTkyjmKJDzfjgDPACM0GU4TYtrVQ6wgM4ybTbd7nj71CVuMfjtA1FFpROwi78hZfvwjd5RSvBQuS5c0pG/J7T6Fi3kSSCf1dqjlhG3RZztMWGzTQ8d7ZA=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=GbYBNys9Cs3StkfVLRUbOG4+n5LSGeTknUJSAePxf0s=;
 	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -73,34 +73,34 @@ List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 
-This reverts commit 1d34b9757523c1ad547bd6d040381f62d74a3189.
+This reverts commit 0f2ddb128fa20f8441d903285632f2c69e90fae1.
 
-RK3228 Only GPLL and CPLL, GPLL is a common clock, does not allow
-dclk_vop to change its frequency, CPLL is used by GMAC,
-if dclk_vop use CLK_SET_RATE_PARENT and CLK_SET_RATE_NO_REPARENT flags will
-affect the GMAC function.
+Before changing the PLL frequency, in order to avoid overclocking the
+child clock, set the child clock to a large div first, and then set the
+CLK as required after the PLL is set.
 
-If the client application does not use GMAC and CPLL is free, make this
-change on the local branch.
+Fixes: 0f2ddb128fa2 ("arm64: dts: rockchip: Increase VOP clk rate on RK3328")
 
 Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
 ---
- drivers/clk/rockchip/clk-rk3228.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/rockchip/clk-rk3228.c b/drivers/clk/rockchip/clk-rk3228.c
-index ed602c27b624..9c0284607766 100644
---- a/drivers/clk/rockchip/clk-rk3228.c
-+++ b/drivers/clk/rockchip/clk-rk3228.c
-@@ -409,7 +409,7 @@ static struct rockchip_clk_branch rk3228_clk_branches[] __initdata = {
- 			RK2928_CLKSEL_CON(29), 0, 3, DFLAGS),
- 	DIV(0, "sclk_vop_pre", "sclk_vop_src", 0,
- 			RK2928_CLKSEL_CON(27), 8, 8, DFLAGS),
--	MUX(DCLK_VOP, "dclk_vop", mux_dclk_vop_p, CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT,
-+	MUX(DCLK_VOP, "dclk_vop", mux_dclk_vop_p, 0,
- 			RK2928_CLKSEL_CON(27), 1, 1, MFLAGS),
- 
- 	FACTOR(0, "xin12m", "xin24m", 0, 1, 2),
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+index 7d992c3c01ce..f3ef8cbfbdae 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
+@@ -852,8 +852,8 @@
+ 			<0>, <24000000>,
+ 			<24000000>, <24000000>,
+ 			<15000000>, <15000000>,
+-			<300000000>, <100000000>,
+-			<400000000>, <100000000>,
++			<100000000>, <100000000>,
++			<100000000>, <100000000>,
+ 			<50000000>, <100000000>,
+ 			<100000000>, <100000000>,
+ 			<50000000>, <50000000>,
 -- 
 2.17.1
 
