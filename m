@@ -1,140 +1,153 @@
-Return-Path: <linux-clk+bounces-17470-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17472-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B99CA209C9
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Jan 2025 12:38:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 890F0A209D9
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Jan 2025 12:40:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5B703A87CC
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Jan 2025 11:38:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1C0318880E2
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Jan 2025 11:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1B81A0BCA;
-	Tue, 28 Jan 2025 11:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F0181A0BCA;
+	Tue, 28 Jan 2025 11:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JcjtIjhB"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ob2tBffy"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474D41A0728
-	for <linux-clk@vger.kernel.org>; Tue, 28 Jan 2025 11:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D39F1A08A0;
+	Tue, 28 Jan 2025 11:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738064292; cv=none; b=Pj+UULbDfcAJPIdw51vxS0Q3DIru8Rc3Z1YdlDx3/pExlOf/XujWQ2OSKIJNOVH6A5uOPiT/Nu/EzU1E6PaloxgXE2Rwn1NjKzmeoOJNenSWzNipbfgkpMbjcbunMFbnIdwyMARgVAzSTPm4t3dxuRSmt1lbXjh5rB1MQuX+AVw=
+	t=1738064416; cv=none; b=FNxH+gWV/SLUic/dE7h/CWC+98lY3BmmezU/Pi0mOFHkkg3kiWq//4ambEzpS3XQND3h4kmFrPj39+diy31KB2AHD6fwCJjtwl98/KX/2L3wMc+8Mf6KSQcLc7XDEx41DMCHUuL/U8BdEvlA2Ww1wj6c3MpcbQ5csoRCvNeSUUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738064292; c=relaxed/simple;
-	bh=0BgJYAFmIfhKmUiJdaRGDiHPwseznBuyo9kvKgzoZC4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z44ZUdXYz1VUAAFRGrEtgLuNboEGWiYvUU9CxKnC4v7yLXzci3pdbrHadEE4gUeucWDrlX8wfSgdT3HaJiAw/L3sDPlI/Kr2YnLdUFCWZuYy+MWX46Ohil862gFwcA/beE6PDfPBidaewBYLfGr5jyCYwzKNmYQprCzAcVNeXQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JcjtIjhB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50S1s34l032090
-	for <linux-clk@vger.kernel.org>; Tue, 28 Jan 2025 11:38:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	6g2echZ7j23XTXqq2EVMBCfIeLtHvBBfpj4T6nbNFPw=; b=JcjtIjhB+rwU6PJZ
-	on49s2BRQJb1L6kyZYUCWxsPP1DR4Lwniz2tu6Ypqnrkkr+pHt+fkr/IwmBL7iFE
-	2AnT2IT2E4jU2N09jA2iCIURWMullinXOL4x1uSTTqttG/W9CMf4y+Q1b7q5h2/Y
-	8Zcli1tBEZw+6OK/CZzpZi6g2Y3HY/TM+w0UssSDWMibNrTrx1MtFZvE2QCBWPjN
-	fQMMrOhXBGcLYv7Q0W27AlFc/dH4aPYK+qx2TN6NZ4Q3i0sWCx5QLtbIJlevORq8
-	6ifAG+V7gzK0Cibr6ajfn7cPgZlp3I7XM0Tfr52t/9KAN3UnAAnj7LDDWc7i+qz4
-	MruBCw==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44enyq12s2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Tue, 28 Jan 2025 11:38:10 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-467a437e5feso15237101cf.0
-        for <linux-clk@vger.kernel.org>; Tue, 28 Jan 2025 03:38:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738064289; x=1738669089;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6g2echZ7j23XTXqq2EVMBCfIeLtHvBBfpj4T6nbNFPw=;
-        b=blUxmMwKBH2Q78TSYib85ObEq+8uPP56umDjbqu7a+EMoXwW6htKwBCxXA60Kp1Pdq
-         tecKul+shfd3MO2w3PGp/f3fr2Wi/QTozKhdZwi44l62LI9ktQKNqbrP5V1103ZCqjoj
-         W45sN1fwHvqnAja+KkSspPnMRV8kpDfK7Uj93zSmJlJ8Cn7Jz551d1IUk0rToSOmSwao
-         GFpspcaKq15su96cUdpPkcuPyiHoguSTN6MTJMK3RCPvN2+WDWdYHlNfQeCNtwZTGYfK
-         TIJ21jyZSscjyc4Hzi+6d5aeQ1Xb4ZRkC0aTYKSDVcjymwFD5Tq9rR5475hC5KgOH4p3
-         QArw==
-X-Forwarded-Encrypted: i=1; AJvYcCVZc9Tt6xW7MSc/3EJ7IDv0W2XvxjdzLZdMK1X6LjHFkkjxZg7WfuzS6TOY4mmjf/j+mPg8AcUbYHE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdLOkw7MqI8yBPhPOmnZHcE3ffMArJ7ft+JnGHq7iEBUmWmzVP
-	F2pGx3pfkwEYMmOi66esPu4AoMwfx7NH8f/9ji3QnwgLrWrdYtOyIU5PUigmE1///K06Uzo6vJH
-	m1DTB4CP2LCFSFqUAIRyDbv+IMHQxB9SydEGTQK9mtNtx7wcCuKlfssDuexU=
-X-Gm-Gg: ASbGnct0eAqj7d1OoZ8hRWcHwNwKuP1iv6PUa+5J7/ruxXG59DbDlLXMFX6PQrxMpLv
-	XiEjzcQzmqL+6Bn44M+TNvH9KomERAAqLpSiCEKRu1T+X0HDRpPLETvW7aSodSvJCj45azlwK7a
-	W9WyH88MjIINNApAisUCgoP1kfS2yY8qNeREX1Tsg6JyuMK+ao2WKYmTuI3o9SwCoa5LhE6HsTD
-	EOW2XP81KvUBeUWWO8ExvX4OHIW0S2gDOAMz7OSJuB8eKGy+5Ad9EgSp1q/895JE4fByQFpgPBb
-	MMWOcIK+yNXlialIA1vttYZwi3UX0xjXabZrvmxb4Y0/aQxrBcj646ftEgU=
-X-Received: by 2002:a05:622a:608a:b0:46e:12fc:500f with SMTP id d75a77b69052e-46e12fc506cmr246727361cf.0.1738064289113;
-        Tue, 28 Jan 2025 03:38:09 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFCf2Y9aDvZCCSYPHZnq/Vme37o1Wy6pWQCZOXgJJV7jmJIX4dtvvrEwoqFnFZJe5GemRYcBA==
-X-Received: by 2002:a05:622a:608a:b0:46e:12fc:500f with SMTP id d75a77b69052e-46e12fc506cmr246727201cf.0.1738064288803;
-        Tue, 28 Jan 2025 03:38:08 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6760fc485sm764439766b.160.2025.01.28.03.38.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jan 2025 03:38:08 -0800 (PST)
-Message-ID: <772b211d-ca23-4810-8d92-a67892da4fbf@oss.qualcomm.com>
-Date: Tue, 28 Jan 2025 12:38:05 +0100
+	s=arc-20240116; t=1738064416; c=relaxed/simple;
+	bh=DeZ6DWszU6EXJ0pzU8UHnmvtpqC04ROJsGshnLIxVnQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=o5YEBExK29FVCN1fb2QSHmfCQBB634oa9P3ar1HLrUZFXz8ECsw1NltbLjN4ZTe+CPtX+cwFaaS8zhPFtC6Ybh8NIuQsbsOzQPQ80jAf7hH5kozVwfY2PJJ1PkQ8RlyKjtIAG1dzEuTTMaukl4gIh6+CdVdiX25kbr6lNlI4Xpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ob2tBffy; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50RMrTnf032637;
+	Tue, 28 Jan 2025 11:40:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=9G5cXrLKuXwsCCeFFeDmuR
+	TMcJ5IEQXqUgUVfwhbOtg=; b=ob2tBffy9Fyi8Zk6gny2Sb+XOeQWdKVe4CUpIb
+	zkScAWMuBU1S2zIHwlDdSFutCmku9r0/mKXJ95FAno05uM+lvzA9pHxf4RF6SSWS
+	PmNcgfxMoavSyP7BmsLkWkHbXs80nkOtQhmwqTo9iCLuIeFoJZQODhsuCGcvuxQK
+	A9B7CP6R5Wp0VzjvMfyunQYFFEe+eNrtLornlmAolNiRZLbx6hqrA0MlLSFCtVhx
+	pc8uEWGz1XIc6yHuGCvVZmxsUYEWQSyGKakADt8M+7z65+xvBRmRKReyBaLheT7y
+	smcS3s42Xac+MlA6iWTdRCMh8jJcYzXrCGSsRgxbHAN07L8w==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ekb89bhq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Jan 2025 11:40:11 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50SBeA2m030148
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Jan 2025 11:40:10 GMT
+Received: from hu-ajipan-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 28 Jan 2025 03:40:07 -0800
+From: Ajit Pandey <quic_ajipan@quicinc.com>
+Date: Tue, 28 Jan 2025 17:08:35 +0530
+Subject: [PATCH] clk: qcom: clk-branch: Fix invert halt status bit check
+ for votable clocks
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: ipq5424: Add PCIe PHYs and
- controller nodes
-To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, andersson@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, lpieralisi@kernel.org,
-        kw@linux.com, manivannan.sadhasivam@linaro.org, bhelgaas@google.com,
-        konradybcio@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20250125035920.2651972-1-quic_mmanikan@quicinc.com>
- <20250125035920.2651972-4-quic_mmanikan@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250125035920.2651972-4-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: -mmdOnEnugvTWujxo-rfBC1zW_zgrlMd
-X-Proofpoint-GUID: -mmdOnEnugvTWujxo-rfBC1zW_zgrlMd
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20250128-push_fix-v1-1-fafec6747881@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIALrBmGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDQyML3YLS4oz4tMwKXUNj41TTVONkE1MjSyWg8oKiVKAw2Kjo2NpaAIk
+ bMo1aAAAA
+X-Change-ID: 20250128-push_fix-133e5e3c4529
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Imran Shaik
+	<quic_imrashai@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli
+	<quic_skakitap@quicinc.com>,
+        <stable@vger.kernel.org>
+X-Mailer: b4 0.15-dev-33ea6
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kej9iebGeY_PSqdf9Np2OCXyC7uiij4h
+X-Proofpoint-ORIG-GUID: kej9iebGeY_PSqdf9Np2OCXyC7uiij4h
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-28_04,2025-01-27_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- phishscore=0 spamscore=0 bulkscore=0 adultscore=0 suspectscore=0
- mlxlogscore=663 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501280090
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ clxscore=1011 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 malwarescore=0 mlxlogscore=756 suspectscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501280090
 
-On 25.01.2025 4:59 AM, Manikanta Mylavarapu wrote:
-> Add PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
-> found on IPQ5424 platform. The PCIe0 & PCIe1 are 1-lane Gen3
-> host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
-> 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
-> Changes in V3:
-> 	- Replace all instances of ‘0’ with ‘0x0’ wherever applicable in
-> 	  PCIe nodes.
-> 	- Place both compatible entries in a single line for each PCIe
-> 	  controller node.
-> 	- Global interrupt is defined for each PCIe controller node.
-> 	- Remove all clocks except the RCHNG clock from the assigned-clocks.
-> 	- ICC tag is defined for the interconnect path of each pcie controller
-> 	  node.
+BRANCH_HALT_ENABLE and BRANCH_HALT_ENABLE_VOTED flags are used to check
+halt status of branch clocks, which have an inverted logic for the halt
+bit in CBCR register. However, the current logic in the _check_halt()
+method only compares the BRANCH_HALT_ENABLE flags, ignoring the votable
+branch clocks.
 
-This one is wrong, please undo..
+Update the logic to correctly handle the invert logic for votable clocks
+using the BRANCH_HALT_ENABLE_VOTED flags.
 
-Konrad
+Fixes: 9092d1083a62 ("clk: qcom: branch: Extend the invert logic for branch2 clocks")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ajit Pandey <quic_ajipan@quicinc.com>
+---
+This patch update the logic to correctly handle the invert logic for votable
+clocks using the BRANCH_HALT_ENABLE_VOTED flags.
+---
+ drivers/clk/qcom/clk-branch.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
+index 229480c5b075..0f10090d4ae6 100644
+--- a/drivers/clk/qcom/clk-branch.c
++++ b/drivers/clk/qcom/clk-branch.c
+@@ -28,7 +28,7 @@ static bool clk_branch_in_hwcg_mode(const struct clk_branch *br)
+ 
+ static bool clk_branch_check_halt(const struct clk_branch *br, bool enabling)
+ {
+-	bool invert = (br->halt_check == BRANCH_HALT_ENABLE);
++	bool invert = (br->halt_check & BRANCH_HALT_ENABLE);
+ 	u32 val;
+ 
+ 	regmap_read(br->clkr.regmap, br->halt_reg, &val);
+@@ -44,7 +44,7 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
+ {
+ 	u32 val;
+ 	u32 mask;
+-	bool invert = (br->halt_check == BRANCH_HALT_ENABLE);
++	bool invert = (br->halt_check & BRANCH_HALT_ENABLE);
+ 
+ 	mask = CBCR_NOC_FSM_STATUS;
+ 	mask |= CBCR_CLK_OFF;
+
+---
+base-commit: 9a87ce288fe30f268b3a598422fe76af9bb2c2d2
+change-id: 20250128-push_fix-133e5e3c4529
+
+Best regards,
+-- 
+Ajit Pandey <quic_ajipan@quicinc.com>
+
 
