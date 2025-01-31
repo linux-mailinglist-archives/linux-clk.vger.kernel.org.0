@@ -1,131 +1,178 @@
-Return-Path: <linux-clk+bounces-17551-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17553-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B575AA23E09
-	for <lists+linux-clk@lfdr.de>; Fri, 31 Jan 2025 13:56:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F5EDA23EAC
+	for <lists+linux-clk@lfdr.de>; Fri, 31 Jan 2025 14:54:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96E741693A9
-	for <lists+linux-clk@lfdr.de>; Fri, 31 Jan 2025 12:56:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A3DE18866AF
+	for <lists+linux-clk@lfdr.de>; Fri, 31 Jan 2025 13:54:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37CC1C2443;
-	Fri, 31 Jan 2025 12:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jgN5Y0x9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2338B1C5D72;
+	Fri, 31 Jan 2025 13:53:59 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FFA1C4A16
-	for <linux-clk@vger.kernel.org>; Fri, 31 Jan 2025 12:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922C51BE238
+	for <linux-clk@vger.kernel.org>; Fri, 31 Jan 2025 13:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738328182; cv=none; b=Zwz64Swd0uYvqtzUGuX6lTFwDqhXCYsBIf5cmDoVdM1yUXFtpuzV1I6f9QenqOM0rGB60Du9L0ZWvuyfFmkj2rlUJWEHibV7dHyBsN2NAPNEbTylCKuPuiioWfKU241APdQftnvflGHaHzXDQVRvBi6DQFLppUsbyilCtj7G9lE=
+	t=1738331639; cv=none; b=NVaIcE7Hi4bCcJ+k22wH25af5DDlBFFRKFlgdBfxRftZFcNoNNtKXECJjg37fqWbGc3IlM+VoXupvPjCHS/ugm+0ghMxeNwxkZahLaNuElutqtU17djoNRGHZx/8Obng6RDwB5gdT++5CmHOVnF6F0ZqcKvxQGeMgGwonKaMCUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738328182; c=relaxed/simple;
-	bh=UsFe8VlEZCmQ0sbihU2b0JFZi9Ej2TKBlU/qdva3I+o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lKIwuQ4ActeDKwayeWIIAACQKD5cOvtmpWOoM9kp+llSAUWPAqPAeSKnoMfJPaYaOTeOuu3H0q9vRAQ0tbJTCutF9X8ycM1mdU41ljuttGd6Te9wDgxtLo7owxlg5Q2SvbHUe50E6HMKoBzkhwbOl9Kx6cTR/0t7xvUo3HImdxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jgN5Y0x9; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50VC4pRB007349
-	for <linux-clk@vger.kernel.org>; Fri, 31 Jan 2025 12:56:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	plPbCbgdcFippG/lsXp/DeHtnj+WORRPmcLa8nmWJkc=; b=jgN5Y0x96Go1UduD
-	qPTkezkZNl4TjSCDabOLqPG5SZpYJING4ZSY53LpGiqCD/dhk9v1GP59UPmwgzNg
-	+bXi/QmM5eFMpVyQIzOnRDDEFF5U4dQHmTgDPFRpZ2Vp2U8HGDZGWoFCL2Urw4az
-	p4lNBIpcgnxP17yQXy1fqHgJ62AuhkgMjI73j+9z157Q5D0gqPuecRaUixIg+IgL
-	tT1YM/zKcW7hYfzJWOHsUqd5VEcQN21F35FpUGyXHLRK8hisiJe0mxdFHarc1WP2
-	uWAICI+NeTRDsDgFmpPfDCyd07xNij4TExRPYphccjqkMmxeZSIvNfRAWXppEIJ8
-	iOk2Tw==
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44gx76r3j2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Fri, 31 Jan 2025 12:56:20 +0000 (GMT)
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6dfba8de3cdso5550626d6.0
-        for <linux-clk@vger.kernel.org>; Fri, 31 Jan 2025 04:56:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738328177; x=1738932977;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=plPbCbgdcFippG/lsXp/DeHtnj+WORRPmcLa8nmWJkc=;
-        b=MdmpJ6O2m9fW/p/b0hRSqDHD4HzEEHnSg8kQVMq91LhmBGA2emGIhft/Jm/J9JFsss
-         xohazF0FZ/sPEa0Ybkmge55PvmiKixP3d9psMin0HM+dDdh74SiIIBN7YMYP9m3275+v
-         G1AfZVS+Ih3bauv2f7XUddQICrGda09kq7KmIwmoXREzqQwRejA3YOMSbxcG1GdRyLeW
-         pRQ+TfNKD++DrhJXDzPeY2L2kE9plpTcZM7eeSywGouq4H7ASWXRHr3v9bfZ4dxfC9Q6
-         44VwoH3k8DB3RsKMm8crqpXk8qraEywBXIBVqm0LDO2Sezur4sPKjldRQtx9YHGbnN+D
-         zEFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVs81mWJVJGkPtV9rtT2fvUsG+NijEQvcaKjZIWhJxUCa3mT3LDe8sU+vYssDGMu2/svcr7QK+AaVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxemxeOyp+6II286o5nEYXFxhL6400zH+iiJ4DlPpYBQi8wi6o7
-	n97DTSlyW8XQaTuQMufCYjlAQFooDtyO6ub9GC33kYZQRsGCOOVwJ7Sk0g96f2kzXgKIkM6vfe7
-	GMLtt5BYVY4WGPFscuHH5YQL0grz/96EJ/CTg0K3/dccr6tXb1aSdRFzoJPU=
-X-Gm-Gg: ASbGncsBWJaTxEgLs0y6N3Q//DIydkqJex9MMt15YQV52rufJgMjQwaYYTKea5vQP9O
-	CDfxnxnvF6bQnTbimBQmnD4mzYvycUvkmgcyRhI7wByZf/gUKG4OnPSqeZeNPxpKjsSRm8wyoZi
-	f8d7j/ttoWr+enEYpi0gbtqlimGHdubGAguEze/hq6d7QFP30V/azUDXCF6V88Pdj2ir2ako1pS
-	vXCdIraba+z67Y4tYMclbxpEq/KSROhVtdRLPU99phl76b4TxtnsI1pT7m7nSvBUMqtwDGLH5IB
-	Y84KH6j+q/HooX+iaw4BxwC8iOcNXCWVFBifH2+HJQJ8quCuNLx8gFP1WU0=
-X-Received: by 2002:a05:620a:43a5:b0:7a9:b8d1:a26 with SMTP id af79cd13be357-7c009b37be4mr397853485a.9.1738328177122;
-        Fri, 31 Jan 2025 04:56:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFGm9+/5z7jb7xy21B+AJ8JUsYwxTcI6SmhkN7nHUwGclLh3z290C8ViPSJPsRA1U3ApIjkHg==
-X-Received: by 2002:a05:620a:43a5:b0:7a9:b8d1:a26 with SMTP id af79cd13be357-7c009b37be4mr397852185a.9.1738328176714;
-        Fri, 31 Jan 2025 04:56:16 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e4a31531sm291583566b.141.2025.01.31.04.56.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jan 2025 04:56:16 -0800 (PST)
-Message-ID: <e9fb5ee4-9ded-44e7-bbfb-cb2f897015b5@oss.qualcomm.com>
-Date: Fri, 31 Jan 2025 13:56:14 +0100
+	s=arc-20240116; t=1738331639; c=relaxed/simple;
+	bh=xc3M33C0iwXkHtkGreXFYtXp9BYNda0pGb+ISZTOV/A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b7KsLI8rwZ/LfnL64uVqimUDSu6U53yRz5LcaMUpk3+9Mv0Cd75jquLq0dVK2EqtYiYe6zyh9gThp6/6v3dElzb+NTyDaLq38K5VRI+Sk/HvMugcdYOGzI4ObLAV1wFWef+ZFxt8bad0odDeOhh3m6hF99iNNTOU/p1bUlJVHtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4Ykxz06cwTz4x16l
+	for <linux-clk@vger.kernel.org>; Fri, 31 Jan 2025 14:47:24 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:a916:3147:9f19:c260])
+	by baptiste.telenet-ops.be with cmsmtp
+	id 7pmw2E00W0naHe801pmwxH; Fri, 31 Jan 2025 14:47:24 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tdrM6-0000000FHxr-1qQW;
+	Fri, 31 Jan 2025 14:46:56 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tdrMG-0000000DFVN-1Vog;
+	Fri, 31 Jan 2025 14:46:56 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Crt Mori <cmo@melexis.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Alex Elder <elder@ieee.org>
+Cc: linux-clk@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	qat-linux@intel.com,
+	linux-gpio@vger.kernel.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-iio@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 0/3] Non-const bitfield helpers
+Date: Fri, 31 Jan 2025 14:46:50 +0100
+Message-ID: <cover.1738329458.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] clk: qcom: gcc-sdm660: Add missing SDCC block
- resets
-To: Alexey Minnekhanov <alexeymin@postmarketos.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
- <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        Craig Tatlor <ctatlor97@gmail.com>, Rob Herring <robh@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20250129212328.1627891-1-alexeymin@postmarketos.org>
- <20250129212328.1627891-2-alexeymin@postmarketos.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250129212328.1627891-2-alexeymin@postmarketos.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: fV9MG1IXTzLZUNOYFAZmlZGR9tOZEkt7
-X-Proofpoint-ORIG-GUID: fV9MG1IXTzLZUNOYFAZmlZGR9tOZEkt7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-31_04,2025-01-31_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- priorityscore=1501 adultscore=0 mlxlogscore=834 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
- definitions=main-2501310099
+Content-Transfer-Encoding: 8bit
 
-On 29.01.2025 10:23 PM, Alexey Minnekhanov wrote:
-> This will allow linux to properly reset eMMC/SD blocks.
-> 
-> Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
-> Fixes: f2a76a2955c0 ("clk: qcom: Add Global Clock controller (GCC) driver for SDM660")
-> ---
+	Hi all,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+This is an updated subset of a patch series I sent more than 3 years
+ago[1].
 
-Konrad
+<linux/bitfield.h> contains various helpers for accessing bitfields, as
+typically used in hardware registers for memory-mapped I/O blocks.
+These helpers ensure type safety, and deduce automatically shift values
+from mask values, avoiding mistakes due to inconsistent shifts and
+masks, and leading to a reduction in source code size.
+
+The existing FIELD_{GET,PREP}() macros are limited to compile-time
+constants.  However, it is very common to prepare or extract bitfield
+elements where the bitfield mask is not a compile-time constant.
+To avoid this limitation, the AT91 clock driver introduced its own
+field_{prep,get}() macros.  Hence my v1 series aimed to make them
+available for general use, and convert several drivers to the existing
+FIELD_{GET,PREP}() and the new field_{get,prep}() helpers.
+
+Due to some pushback (mostly centered around using the typed
+{u*,be*,le*,...}_get_bits() macros instead, which of course would
+require making them work with non-constant masks first, too), this
+series was never applied, and became buried deep in my TODO haystack...
+However, several people still liked the idea: since v1, multiple copies
+of the field_{prep,get}() macros appeared upstream, and one more is
+queued for v6.15.
+
+Hence I think it's time to revive and consolidate...
+
+Changes compared to v1:
+  - Cast val resp. reg to the mask type,
+  - Fix 64-bit use on 32-bit architectures,
+  - Convert new upstream users:
+      - drivers/crypto/intel/qat/qat_common/adf_gen4_pm_debugfs.c
+      - drivers/gpio/gpio-aspeed.c
+      - drivers/iio/temperature/mlx90614.c
+      - drivers/pinctrl/nuvoton/pinctrl-ma35.c
+      - sound/usb/mixer_quirks.c
+  - Convert new user queued in renesas-devel for v6.15:
+      - drivers/soc/renesas/rz-sysc.c
+  - Drop the last 14 RFC patches.
+    They can be updated/resubmitted/applied later.
+
+I can take all three patches through the Renesas tree, and provide an
+immutable branch with the first patch for ther interested parties.
+
+Thanks for your comments!
+
+[1] "[PATCH 00/17] Non-const bitfield helper conversions"
+    https://lore.kernel.org/all/cover.1637592133.git.geert+renesas@glider.be
+
+Geert Uytterhoeven (3):
+  bitfield: Add non-constant field_{prep,get}() helpers
+  clk: renesas: Use bitfield helpers
+  soc: renesas: Use bitfield helpers
+
+ drivers/clk/at91/clk-peripheral.c             |  1 +
+ drivers/clk/at91/pmc.h                        |  3 --
+ drivers/clk/renesas/clk-div6.c                |  6 ++--
+ drivers/clk/renesas/rcar-gen3-cpg.c           | 15 +++-----
+ drivers/clk/renesas/rcar-gen4-cpg.c           |  9 ++---
+ .../qat/qat_common/adf_gen4_pm_debugfs.c      |  8 +----
+ drivers/gpio/gpio-aspeed.c                    |  5 +--
+ drivers/iio/temperature/mlx90614.c            |  5 +--
+ drivers/pinctrl/nuvoton/pinctrl-ma35.c        |  4 ---
+ drivers/soc/renesas/renesas-soc.c             |  4 +--
+ drivers/soc/renesas/rz-sysc.c                 |  3 +-
+ include/linux/bitfield.h                      | 34 +++++++++++++++++++
+ sound/usb/mixer_quirks.c                      |  4 ---
+ 13 files changed, 52 insertions(+), 49 deletions(-)
+
+-- 
+2.43.0
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
