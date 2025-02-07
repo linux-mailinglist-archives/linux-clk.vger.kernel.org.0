@@ -1,140 +1,113 @@
-Return-Path: <linux-clk+bounces-17749-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17751-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07880A2BF2D
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Feb 2025 10:24:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 176E8A2BF89
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Feb 2025 10:38:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33B993A2C4B
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Feb 2025 09:24:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D271C3AB992
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Feb 2025 09:37:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1511DBB37;
-	Fri,  7 Feb 2025 09:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B3E11DDA31;
+	Fri,  7 Feb 2025 09:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CGFSBx+5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h+CqAoLq"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEDA1D7E21
-	for <linux-clk@vger.kernel.org>; Fri,  7 Feb 2025 09:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FA51DD88D;
+	Fri,  7 Feb 2025 09:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738920292; cv=none; b=i5Vxy2+IZYPzcdENs7abjnvpj1Fl7bevWefGfkuhsF/LZyP0sOEmffWzMZM8vsFeGhTWoi+Ngp+fJLyfocaqtSLbqBV5XZ9pF98oEr9IT2MQBHB9s4UmtohThMrc7gqRSLaU2BiyQtX4fhU27kRX7cHrFdspjw4KIRXI4lfOwbA=
+	t=1738921024; cv=none; b=MV+k33HOA+NW4AOJoYMdcoT+cOg1oaHRP+o1vkXfRe9v6RDQp5oqDua4fE71A7FSxyO/9Zm6P2TOJb7ZToHs/kWxiOR3wR/wb23a16QlZ+/G++0Lj4AZ7DG3GJ+an+OB7cKAp52BUqAmy1OGcYidLHqs8g315XnWiyvYfDA2whw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738920292; c=relaxed/simple;
-	bh=Vq6CUwJXWYbkjDC7skgUbjbcr4p8ss61GgbWBNDKbAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QTb9NdnJKFZXjLVVYm96meZVQrbU7ck+IUWbDl6K6f+3/P3GcN+gzstZS6OxKys+XRZkInwqpAA/9yz9yCFWITRxW3HD8WGAPlucK1eXnccEA+ZvHa9vdO4CkMZdaEwAGKtrLHf8cwew8rhX5PO+YioNvN60cLx2y6xO4qiiIPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CGFSBx+5; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2fa0f222530so2985343a91.0
-        for <linux-clk@vger.kernel.org>; Fri, 07 Feb 2025 01:24:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738920291; x=1739525091; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jyMoNKIK2pZy7zQTX2COMHoUJUhrdblavVK+AecRfNk=;
-        b=CGFSBx+5I8t/y3TaiqyYYmlUG0WUBraUnOiQMv8mgr9lfgbox2VpDJzti8IeJ9TCVT
-         R0v60eltDn/zyC7gWqzrd1n6GruPdw7tDjunCAOnojL0LYxtr5b+nHEu1rvwroOVZjsk
-         stUJkxBGfIgXP83vgT7PKBl0fhGREb/eZkT6e3858gu6N6Uq6esrSVeQ5vyf80oWins9
-         gZqCwHqEv+ezDotyEiCu219rxHpg7sjcm+PebukDH+8iGP+d50lhBMTK1YMyMwRUd5Wh
-         DVDu5quUfRvZdqexjV872ug2PHnSBZEj/Qum5iffo7SVQH2NP9RNgy6NfsBZ/u7BsphU
-         lmJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738920291; x=1739525091;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jyMoNKIK2pZy7zQTX2COMHoUJUhrdblavVK+AecRfNk=;
-        b=qtLv9+cJqhRJ+aJf7eUJ+0Al+wndxmIqhsZb33STOKbN4GnQcgoOH5KQT9daw/OJsf
-         E0ZHKtxSrm0QULICqYQxIABmNgjyFGffM5Mo35zyytyN1d26JYsWy0o5OMFM77eVq3Yp
-         aOqkAqv0jOFk79D6lDa9zE78aR3D0XXIl2sN+X5UMcT7J2upQHeXMClwu2H5LJLAcSj4
-         UOnauDc0E0jzrOwinUrcbjq0cp8XwUfqW7kkaRoxsc3LiXrxVWdk6LMZPexyD41YheTZ
-         YaSYM3YBPyybNjorSwens5/mEWrJitP68RmXsG9Atm958yVu9xravGM+sTpQnrE1+xIo
-         8s/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCHKFzXh+LIDEy0GemkyZut+J3hoogj5cVzLaJEw5A4WersUYvk/5CSvzHdEoBBKrw4RZOfIbnmQw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/m6bIyvPZK4vcdIwToq7Mlyf7qQlYMXj/RF/ckXpGReaGHRuL
-	wzmryKV9BMOH64vxKfXH+PWZGUVeA2m4+g4JBmKAC9YwLcLW/XMmamlWoe87vEmfcRCQa8z48uO
-	M
-X-Gm-Gg: ASbGncsEqIZ+xO1IQrP+w/jNGpIqD7QwLIMkfDIuhSaTxx3vSMrVYZWmpzPd4m/oegj
-	yWsFSxiLnKkHWuJNgbHrt0Ob0jCmbUi647AU1vpztuosDNbzRLZy4dXsGbAWYmkmDmwim5AzK9Q
-	gG9jGnrMxwuCuaJwhmoWIeHE6yUljCpTs0WuDA65FO74JsuEaTMu8DZg2+IsgZXsI+GfooGdv2p
-	34WDRhaBWPVT7cNYMBbwszJb9kpMnPlMdJv3mzIdXJatm76NISLsIwqHUg1lTKMUxFKuSMihlaK
-	9wrkz6B58yGMm6Ig+g==
-X-Google-Smtp-Source: AGHT+IFEKR0JxuatWJ2AklG8UzCn4EcpeDD3hWFpQpf/pmwLI6IFCUWB6fjH3ryxFX3kwpn3v+ZUlQ==
-X-Received: by 2002:a17:90b:3588:b0:2ee:d193:f3d5 with SMTP id 98e67ed59e1d1-2fa23f5703fmr4175215a91.7.1738920290813;
-        Fri, 07 Feb 2025 01:24:50 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fa099f4d6asm2891280a91.6.2025.02.07.01.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 01:24:50 -0800 (PST)
-Date: Fri, 7 Feb 2025 14:54:48 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH V8 06/14] rust: Add bare minimal bindings for clk
- framework
-Message-ID: <20250207092448.n5mzbt6lg6zqud4a@vireshk-i7>
-References: <cover.1738832118.git.viresh.kumar@linaro.org>
- <c68081e18d939aefc7f6dac798df6b72e81bba4b.1738832118.git.viresh.kumar@linaro.org>
- <Z6ShsuLykigNscz8@pollux>
- <Z6SiiRubSXGInbgj@pollux>
- <0cd42d2d683ea057e6034978b02c7f84.sboyd@kernel.org>
- <Z6VBo51g54xAmelQ@cassiopeiae>
+	s=arc-20240116; t=1738921024; c=relaxed/simple;
+	bh=f8S5Z26MQ4v00FiRKizfZIrEOYaW+rK3aHSMP+4o0HY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=eYPygVfulTvRIBL5wSYQ2a4wdXZoJIBu6lpBJ+w5P2+vDJXL4YCcQu4zC+HPm5UMsrxcbY1G6rMM1FTxjBofiQLOsTQ39pcgRBu7sTRfmvc43A7GQbKHyUGzuAX+XLSVlLZsQ/H5GjNAVQm0rhsbRPeO7zVqm7JwamB3OLnLlmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h+CqAoLq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BAAE2C4CED1;
+	Fri,  7 Feb 2025 09:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738921023;
+	bh=f8S5Z26MQ4v00FiRKizfZIrEOYaW+rK3aHSMP+4o0HY=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=h+CqAoLqfWodIlcT3E1goZycS0fH2ARZzvspuepmfVQRN8e/4R6ZmXXwAD/CeceZP
+	 3LKwJJISJuBYojRQZ+WFiesGfqF9yix1uiYWixcywfkcVG8PvwU9xrw13mbc8SAeBY
+	 4uTGNEP62Nw3Blil+RiPt9GWTAR1ZHU6Czpp7irFkEtlBHDKiS56Gkm8+4d/Cf9FgU
+	 1xv6jS/D+an01o2ehJWb40AICepUBq+rmhCsl48v4MAzxFr03bhg7qFwv5v3iW1alW
+	 qHJpB6pNayqXKm3Dk1Yl2MHib/THDE0eSGTVxTKOXmev/RAhQc6xnnhqC/Zd1oC7FQ
+	 uRHhvFiC02bfQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE96BC02196;
+	Fri,  7 Feb 2025 09:37:03 +0000 (UTC)
+From: Chuan Liu via B4 Relay <devnull+chuan.liu.amlogic.com@kernel.org>
+Date: Fri, 07 Feb 2025 17:36:10 +0800
+Subject: [PATCH] clk: Correct the data types of the variables in
+ clk_calc_new_rates
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z6VBo51g54xAmelQ@cassiopeiae>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250207-correct_data_types-v1-1-f22bc7ea220d@amlogic.com>
+X-B4-Tracking: v=1; b=H4sIAAnUpWcC/x3MTQqAIBBA4avErBNM+oGuEhGTTjUbi1GiEO+et
+ PwW7yUIJEwBxiqB0M2BT1/Q1BXYA/1Oil0xGG06bfSg7ClCNi4OIy7xvSioDR0SYtuveoASXkI
+ bP/90mnP+AOo8U/tkAAAA
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Chuan Liu <chuan.liu@amlogic.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1738921022; l=877;
+ i=chuan.liu@amlogic.com; s=20240902; h=from:subject:message-id;
+ bh=kAjBoWOCJ4Ktd9GA2YrUkGuLwEKid48PkvX+9Mpiwa0=;
+ b=bOGjHFE86GTkOgfuiMiFJ2HgIDxYB+nL6hQ5zLfsBT3io0i9+CYMt0vF2wV3Q9XTRoJola1oj
+ HpJMjHnIE+UA0Xg1yf8L4IHfXfd+Lh0V4FU+6TNriHw4gihEglu4w+i
+X-Developer-Key: i=chuan.liu@amlogic.com; a=ed25519;
+ pk=fnKDB+81SoWGKW2GJNFkKy/ULvsDmJZRGBE7pR5Xcpo=
+X-Endpoint-Received: by B4 Relay for chuan.liu@amlogic.com/20240902 with
+ auth_id=203
+X-Original-From: Chuan Liu <chuan.liu@amlogic.com>
+Reply-To: chuan.liu@amlogic.com
 
-On 07-02-25, 00:11, Danilo Krummrich wrote:
-> On Thu, Feb 06, 2025 at 12:05:59PM -0800, Stephen Boyd wrote:
-> > Quoting Danilo Krummrich (2025-02-06 03:52:41)
-> > > On Thu, Feb 06, 2025 at 12:49:14PM +0100, Danilo Krummrich wrote:
-> > > > On Thu, Feb 06, 2025 at 02:58:27PM +0530, Viresh Kumar wrote:
+From: Chuan Liu <chuan.liu@amlogic.com>
 
-> > > > > +/// A simple implementation of `struct clk` from the C code.
-> > > > > +#[repr(transparent)]
-> > > > > +pub struct Clk(*mut bindings::clk);
-> > > > 
-> > > > Guess this should be Opaque<bindings::clk>.
-> > > 
-> > > Sorry, I meant NonNull<bindings::clk>.
-> > 
-> > NULL is a valid clk. It's like "don't care" in the common clk framework
-> 
-> Thanks for clarifying!
+In clk_calc_new_rates, the "ret" is only used to store the return value
+of clk_core_determine_round_nolock, and the data type of the return
+value of clk_core_determine_round_nolock is int.
 
-> Guess this should be Opaque<bindings::clk>.
+Signed-off-by: Chuan Liu <chuan.liu@amlogic.com>
+---
+ drivers/clk/clk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So it should be this now ?
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 9b45fa005030..e153d1901a60 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -2283,7 +2283,7 @@ static struct clk_core *clk_calc_new_rates(struct clk_core *core,
+ 	unsigned long min_rate;
+ 	unsigned long max_rate;
+ 	int p_index = 0;
+-	long ret;
++	int ret;
+ 
+ 	/* sanity */
+ 	if (IS_ERR_OR_NULL(core))
 
+---
+base-commit: 1e1fd26ed4ca05cc1f0e5857918da4dd54967f7d
+change-id: 20250207-correct_data_types-fadaeaa46b07
+
+Best regards,
 -- 
-viresh
+Chuan Liu <chuan.liu@amlogic.com>
+
+
 
