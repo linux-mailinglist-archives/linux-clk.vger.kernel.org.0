@@ -1,34 +1,34 @@
-Return-Path: <linux-clk+bounces-17831-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17828-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5757BA2FD18
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EA706A2FD11
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:32:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2089C3A4F31
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:32:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8A163A50B1
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6EC253F31;
-	Mon, 10 Feb 2025 22:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A880625332A;
+	Mon, 10 Feb 2025 22:32:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="GfnF3P8b"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="jVJznroL"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA89B253335;
-	Mon, 10 Feb 2025 22:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC45B2512ED;
+	Mon, 10 Feb 2025 22:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739226770; cv=none; b=D2OffUT5/mGipymJFUUcB04ivcZ0Xgzd84Gtcd5FqeCkUCQqWvLhtg05fx3Dr6k/Xdb38m/d8NEyxrGuIUELHPvXlPby3PAQ4bgzKPSG8R0r/Hg1UPGxsO2zCn6dvgElPdLx3uiy+3CQKNSm5mi/R3KDS3Vomrl70gnPVx4/Idc=
+	t=1739226767; cv=none; b=Xt0PEKp9sW+f5qIQbBZ2R3NhyA0x7XTBruX2oytXYblqlosQZAdtvReUzPdIuuhQckDrHW1YKsjPcKSy0asndzEs/9CH3DSXV/02vuGuRHIdUUI366uwz5O1QJdSV0red2O5Fv7yu1y92lGeWy7Rwfl3mHbWKtfMhVTMK2rNI+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739226770; c=relaxed/simple;
-	bh=ftEo79nVrBwy7ELzoRgROXCAYRUE2bRoCXZ+F7CDVVo=;
+	s=arc-20240116; t=1739226767; c=relaxed/simple;
+	bh=Fk1CFlse0fOzf7hyLwkoZOv8fJZ86dz0i7DYgJbGnDo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vz7BfMs6MfV46k1V5ok/rJoqtOo+isX/rHD3VsvVNJ0RdR2EZAZSgTIviiciwFaPYlAc4hu/PLvN0TbQnhhDXDY+onBF9WQAiAdzvbFg5P+Hty8lKMGjMSCp8GE7RyXnHqyi2+Os8CmSqlSzjCEpuQYv9Jw7lxJyf8oEAnuClpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=GfnF3P8b; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version; b=Mlemr7q+cEvftu4TJVHZeY2CL+S6RaPauNVg6+qKQTr8oSlD2USbqBKpNO6QIJCGlCs7OCcnQtcIsRLPT2O/eP23+stco+CibhdTi8P2CRQ0AE2QibW25WLQcG2/agIC6t+a7SVTGe/6Lvaug+WfdVX4MjG8Hq8KOfeww2HhGEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=jVJznroL; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
@@ -37,17 +37,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=GidM2RkVPSnp2I62eKw/eMu8qqKqT/4Si7o7i4IuzDE=; b=GfnF3P8bhvS9jzHK42chkWADiE
-	WuuLSjKiarYcW4+B1VCieQyy0/LmG3Ar5FjU6MUPDcDisJAO4osHCiLu1vPZ2zXe3r6ZMh2E6xB+i
-	Exj6wCLJ/cvLo2/InQzd7/MTSwPaS1U5azHVeFM6D9wGJSxehZeZkM2RIyxh3dRBTKMvBWW7wiVzm
-	DDRrNb72vs+hztUiYA7cjR53RBFJnrH66HhR++kxyLBUsVeamyVRu/P4LmafAKA9Uge/2pOiT6nan
-	ZILSW+7AirKurunsweT+U7UXjPtpq3euE+y6Q7JYsECR/z7BHCXwSBamwfZgUdq4smJGII2+3S0T5
-	sgDquNvg==;
+	bh=gScTzSF5SmDK0ItX+9bERNg9WxTsYpnT5wGwYZDdZ9I=; b=jVJznroLLXwS8UOrupccZJB2qf
+	I/0LaWZxs6cLc7Kq98/Tjiwa7wOp3fA83fF5CaEUrPu0JfMgT9MnqGnGy9ELf7W0T1bJLwFT947dQ
+	afkAXNPRg0XFX7fd723sV5o45i9UiUwA0UFtOTEpi/VrcRemR/tFsoCSVxgpoutYFw+WAhpgqmw7a
+	v70K7hWD9b8vR0cGGxlKq3ms/Mx6Vx+USZyPH7fT3u4Su8924fO43e8Jg4MpAQZftVSFq66acwcL3
+	Dac+q5Nr/fg0YEVB0EMRbio4L1WPlbvyBmYqLD9J3DOTZ39PEFUOTbtvPKiLTEDb03EiQyUO9HzgK
+	d19LYBVA==;
 Received: from i53875bc0.versanet.de ([83.135.91.192] helo=localhost.localdomain)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1thcKY-0008Cw-Qn; Mon, 10 Feb 2025 23:32:42 +0100
+	id 1thcKZ-0008Cw-CH; Mon, 10 Feb 2025 23:32:43 +0100
 From: Heiko Stuebner <heiko@sntech.de>
 To: srinivas.kandagatla@linaro.org
 Cc: robh@kernel.org,
@@ -60,10 +60,11 @@ Cc: robh@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	detlev.casanova@collabora.com,
-	sebastian.reichel@collabora.com
-Subject: [PATCH v2 2/6] nvmem: rockchip-otp: Move read-offset into variant-data
-Date: Mon, 10 Feb 2025 23:32:08 +0100
-Message-ID: <20250210223219.1193346-3-heiko@sntech.de>
+	sebastian.reichel@collabora.com,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH v2 3/6] dt-bindings: nvmem: rockchip,otp: add missing limits for clock-names
+Date: Mon, 10 Feb 2025 23:32:09 +0100
+Message-ID: <20250210223219.1193346-4-heiko@sntech.de>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250210223219.1193346-1-heiko@sntech.de>
 References: <20250210223219.1193346-1-heiko@sntech.de>
@@ -75,56 +76,38 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RK3588 has an offset into the OTP area where the readable area begins
-and automatically adds this to the start address.
-Other variants are very much similar to rk3588, just with a different
-offset, so move that value into variant-data.
+The clocks property correctly declares minItems and maxItems for its
+variants, but clock-names does not. Both properties are always used
+together, so should declare the same limits.
 
-To match the size in bytes, store this value also in bytes and not in
-number of blocks.
-
+Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 ---
- drivers/nvmem/rockchip-otp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/nvmem/rockchip-otp.c b/drivers/nvmem/rockchip-otp.c
-index ebc3f0b24166..3edfbfc2d722 100644
---- a/drivers/nvmem/rockchip-otp.c
-+++ b/drivers/nvmem/rockchip-otp.c
-@@ -59,7 +59,6 @@
- #define RK3588_OTPC_AUTO_EN		0x08
- #define RK3588_OTPC_INT_ST		0x84
- #define RK3588_OTPC_DOUT0		0x20
--#define RK3588_NO_SECURE_OFFSET		0x300
- #define RK3588_NBYTES			4
- #define RK3588_BURST_NUM		1
- #define RK3588_BURST_SHIFT		8
-@@ -69,6 +68,7 @@
- 
- struct rockchip_data {
- 	int size;
-+	int read_offset;
- 	const char * const *clks;
- 	int num_clks;
- 	nvmem_reg_read_t reg_read;
-@@ -196,7 +196,7 @@ static int rk3588_otp_read(void *context, unsigned int offset,
- 	addr_start = round_down(offset, RK3588_NBYTES) / RK3588_NBYTES;
- 	addr_end = round_up(offset + bytes, RK3588_NBYTES) / RK3588_NBYTES;
- 	addr_len = addr_end - addr_start;
--	addr_start += RK3588_NO_SECURE_OFFSET;
-+	addr_start += otp->data->read_offset / RK3588_NBYTES;
- 
- 	buf = kzalloc(array_size(addr_len, RK3588_NBYTES), GFP_KERNEL);
- 	if (!buf)
-@@ -280,6 +280,7 @@ static const char * const rk3588_otp_clocks[] = {
- 
- static const struct rockchip_data rk3588_data = {
- 	.size = 0x400,
-+	.read_offset = 0xc00,
- 	.clks = rk3588_otp_clocks,
- 	.num_clks = ARRAY_SIZE(rk3588_otp_clocks),
- 	.reg_read = rk3588_otp_read,
+diff --git a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+index a44d44b32809..3201ff8f9334 100644
+--- a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
++++ b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
+@@ -62,6 +62,8 @@ allOf:
+       properties:
+         clocks:
+           maxItems: 3
++        clock-names:
++          maxItems: 3
+         resets:
+           maxItems: 1
+         reset-names:
+@@ -78,6 +80,8 @@ allOf:
+       properties:
+         clocks:
+           minItems: 4
++        clock-names:
++          minItems: 4
+         resets:
+           minItems: 3
+         reset-names:
 -- 
 2.47.2
 
