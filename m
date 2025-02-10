@@ -1,75 +1,105 @@
-Return-Path: <linux-clk+bounces-17827-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17830-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F09BA2FC9D
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:08:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE258A2FD16
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:33:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBFCA7A2175
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:07:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A2DA165036
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:33:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF8624CEF1;
-	Mon, 10 Feb 2025 22:07:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F262253F23;
+	Mon, 10 Feb 2025 22:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQIrr4TP"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="XrtwWuMN"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA308264604;
-	Mon, 10 Feb 2025 22:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDBB253348;
+	Mon, 10 Feb 2025 22:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739225272; cv=none; b=ml6FtKjqPSc20TaLvX+5RUPVUYoy4WrVnjDC4OnLJLKXqplJUHsGphiYe9hnLr/tjNtGCQP45JDCfvl8uSuRj9h6fQmaORbRZbBOTR6Y30TZg7QHTf9lYqVrfI2tSJBIHbr+PYfekQ4UXzHe09KSNYnua3kJYuk9nfOPTufxtmw=
+	t=1739226770; cv=none; b=LxTr4sFOnDu31I9ChQFOFy/c3UFDSEjLVNksdoY72PBXfrQNJCpM6WClPZwMsYqrhMKTc3dOOpT5h7bqkTeRFqgR6NRc1lXbgy2JDbsi7x770E9lTrkyBp4iJfz2FrJsWMEhKiTSxgR1Zb8xOBSzbvkWWrixah/S6H7zMg+mylE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739225272; c=relaxed/simple;
-	bh=soGGYi5SZ7hfquIE86n6wxhLDKzRy/sjal53c1wfsY0=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=crzJh6qJ7dTnKaqz4b0yTJfeqazVRvyOMBXqSUp5erj8YueqfcbGl1WyWY3ZzUmGCC5zG//Nt6VJ/RXmiWaGL1csN7hPvbYL9V3dQjg4+cEt47EYnnGq9da3P99ZmHIr3AlDyhEl4ECTZjrrm/IaU+cqEIPseefQfNU7qr4tGAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQIrr4TP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F00C4CED1;
-	Mon, 10 Feb 2025 22:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739225272;
-	bh=soGGYi5SZ7hfquIE86n6wxhLDKzRy/sjal53c1wfsY0=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=kQIrr4TPbWfLCp09znKaOCMCRcXmAsnF6bsbBaRFkl9EQDQwQDEjMAA98sXrWr/hK
-	 t4al5X+2jM0+HVKP1cXr/YSu36GJ8IF0hF7BD7vKVPGVAoOFYNCUzn48K2uUz8ZWMV
-	 GueGQ6rWq8BEtYatNcVQ+GZntF6n+fdO8oKCcU9P54cmMIOqZflrfbD5LOpMCYx37L
-	 EXCE1bF4kdkfgo0/Yqmf0GWoQtyiRtTPcgHW7OEhUkW30U7abDpQWtVr/6jZCZ8E94
-	 fLOv3BG8kd2D7tdjy0CGyf+NrTWsAUn+5aG8d5urK8S5oo1io+ykfDu6Crn/e2ACuP
-	 Ge2Z+QtLTbRbQ==
-Message-ID: <a66c949345e9118b2ebbdca39e4962c5.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1739226770; c=relaxed/simple;
+	bh=Be/S9wejoLNlaFFJb1yzC+zkuobb1yX3lX/voglLalI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RiKiNqHMncpQDsoQGMn1QYbHwILXXLE/ae7lcL6KuxBIWb/pFmLBL+7utlZMqDG8fxYMhVV5G4ULIfPOww9aKy7ItgnHuWipE5c8ntIu9+tZUlAQXg8aOC/eBd9avnjJMMEiB5mA6TacdDV4MgzALWiA7fNenJwg6xp4Dp0VxL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=XrtwWuMN; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:
+	Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=C8lPyp1bEijzK7iT320e9XZGAhLFEPTQgrUvk5jBPAI=; b=XrtwWuMN8Z4GIiO8gWleFph/yS
+	X0hzAGiFktxhcaEJt+715qRAKJgVlmjTxczfJhIkNBNCc+bBkkE23r2zvgQAKItF8Ux/O81KFa6bS
+	t3hATFSJqaRmD7vb9ysVTT4mzlBCkk+x8qYyA0a8ezxf1h4BXryu3JF3CwcoqHWHlos1PUOPL7G//
+	Ycu4ysmvKpEBwWw1CNWHEBAwv2vgiBHaopa+BNSF7Oy9qUzh0l3Rimkek+Vuh3LAY1u6UAhkD4l+v
+	xDLvp0Y/aTarSqipIT8wjo4We1WZ7sYwNz+icQgV73J9S/pHknDdfE4yoyBCUQgCMmxRcIP5SMirG
+	AV77aziQ==;
+Received: from i53875bc0.versanet.de ([83.135.91.192] helo=localhost.localdomain)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1thcKX-0008Cw-Op; Mon, 10 Feb 2025 23:32:41 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: srinivas.kandagatla@linaro.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	heiko@sntech.de,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	detlev.casanova@collabora.com,
+	sebastian.reichel@collabora.com
+Subject: [PATCH v2 0/6] RK3576 OTP support
+Date: Mon, 10 Feb 2025 23:32:06 +0100
+Message-ID: <20250210223219.1193346-1-heiko@sntech.de>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Z6VBo51g54xAmelQ@cassiopeiae>
-References: <cover.1738832118.git.viresh.kumar@linaro.org> <c68081e18d939aefc7f6dac798df6b72e81bba4b.1738832118.git.viresh.kumar@linaro.org> <Z6ShsuLykigNscz8@pollux> <Z6SiiRubSXGInbgj@pollux> <0cd42d2d683ea057e6034978b02c7f84.sboyd@kernel.org> <Z6VBo51g54xAmelQ@cassiopeiae>
-Subject: Re: [PATCH V8 06/14] rust: Add bare minimal bindings for clk framework
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, Rafael J. Wysocki <rafael@kernel.org>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Michael Turquette <mturquette@baylibre.com>, linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, Alex =?utf-8?q?Benn=C3=A9e?= <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-To: Danilo Krummrich <dakr@kernel.org>
-Date: Mon, 10 Feb 2025 14:07:49 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Transfer-Encoding: 8bit
 
-Quoting Danilo Krummrich (2025-02-06 15:11:31)
-> On Thu, Feb 06, 2025 at 12:05:59PM -0800, Stephen Boyd wrote:
->=20
-> > as most clk consumer operations bail out early in that case.
->=20
-> Most? Does that mean NULL isn't *always* valid?
+This enables OTP support in the nvmem driver for rk3576.
 
-I'm hedging because the common clk framework is just one implementation
-of the clk.h API in the kernel. We still have a couple other
-implementations (sadly) where I haven't checked to see what they do if a
-NULL pointer is passed in. But NULL should always be a valid clk handle
-per the clk.h API documentation, so an implementation that fails at that
-is broken.
+I expect to pick the clock patch (patch1) and the arm64-dts patch (patch6)
+myself, after the nvmem-driver and -binding patches have been applied
+(patches 2-5).
+
+But kept them together for people wanting to try this series.
+
+changes in v2:
+- fix register constant in clock definition (Diederik)
+- add patch to set limits on variant-specific clock-names
+- use correct limits for clocks + resets on rk3576 binding
+
+Heiko Stuebner (6):
+  clk: rockchip: rk3576: define clk_otp_phy_g
+  nvmem: rockchip-otp: Move read-offset into variant-data
+  dt-bindings: nvmem: rockchip,otp: add missing limits for clock-names
+  dt-bindings: nvmem: rockchip,otp: Add compatible for RK3576
+  nvmem: rockchip-otp: add rk3576 variant data
+  arm64: dts: rockchip: add rk3576 otp node
+
+ .../bindings/nvmem/rockchip,otp.yaml          | 25 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 39 +++++++++++++++++++
+ drivers/clk/rockchip/clk-rk3576.c             |  2 +
+ drivers/nvmem/rockchip-otp.c                  | 17 +++++++-
+ 4 files changed, 81 insertions(+), 2 deletions(-)
+
+-- 
+2.47.2
+
 
