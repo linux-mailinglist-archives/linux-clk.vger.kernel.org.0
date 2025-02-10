@@ -1,53 +1,52 @@
-Return-Path: <linux-clk+bounces-17838-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17845-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CE39A2FD8D
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:43:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A75E2A2FDAA
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:45:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A77997A25E4
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:42:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52A931648F6
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30582586F3;
-	Mon, 10 Feb 2025 22:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D5F2586D5;
+	Mon, 10 Feb 2025 22:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="vz9QGDTt"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="l1Do6j5r"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69C825335E;
-	Mon, 10 Feb 2025 22:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB57254AE3;
+	Mon, 10 Feb 2025 22:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739227195; cv=none; b=GAAdmSuP51S6zIcT5xqW8Bc8jDlZrH1Obm+Lk9dAmzvxiJbwfEp3R3ZtYbAGNMXakEMJ1JjfDVg+czb2d4zkWK5ppkZsqnUBk7PkMuKDrg6niP+8iukM1etPQVk0g3FsxfYmZFW13t/2siNJQn3HOGaPjE+eyALhWOgn4J4vqK4=
+	t=1739227530; cv=none; b=PCN/fgvBObKPHIj6nBDuKLh+mTv2B7VZHznJhfJH+9weKcdb32EoUbFV4hSA2JobW32BZKgBlnLMcZTOIUIoWHSLofO2IL4/Tb63Z2InSEdBamMQrva08QBoB5D8/EOm7iv/ihHOFJ5UGhQiQSEEx/MAL7g1jJjKAyxzAK2CesU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739227195; c=relaxed/simple;
-	bh=w95MJfxzfRGWFOpMQJPgSmIkbW+uGttHTGyC1aMnmdA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uHZmjZR414UyVdt5l0S2A42dRpeAGIVj9wujMJhZohNBTA8zY+okjNLcQqHHOxS+38+M+PuGh6cqVKYAnlxKNgi/tmvSLepsPYbsreSHwbsMtwiq31JPS0ByBVjmO7ntHIvhGB5/14uZ047LNQvXllw9dKNnVAFfLiquBapjoew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=vz9QGDTt; arc=none smtp.client-ip=185.11.138.130
+	s=arc-20240116; t=1739227530; c=relaxed/simple;
+	bh=BVxPZgKzHyHS2zRy8D9/+2kpxmjJpMpZiYx6yiRcSOI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bUrhjtc8dRsK7qav/ylnNx0icVeNfc2H69+O89BECbHeX82XBJWSd11QJ0EI/wS/+4PNA0wcRKfPEj8QB1EBxIbLyNC+NF142P0x9qniDyOWJknHub+iHGiRELq9E2+gTTFtxcBwm6i/4dHxuHY9ngsiKbmqP9Jtr+JmG+d2zQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=l1Do6j5r; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:References:
-	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	s=gloria202408; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:
+	Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=q4Sl4j7z0914oZOToKd009OuMMVWZTH/qa7XeAPVimQ=; b=vz9QGDTtxm2pH7WNpUnco3aKFP
-	45VuVhIFJxmM0zxWcaqz4tKnYriuvIPUDywQhhgA0NnMnq7m4oceeOlA7DDh7CK3hVLoyfpSvjbaN
-	h2a2sneibS79NieSwNjnn2WvL4uGzdDKARkCGauHTNWwVXnS/Lj+JrLnQ2gORBcPLXbQl/qoLV9xK
-	c/ymuiEIaan5fgFoPD9OTjCvNn074oBaZgdpatcjEpIvA5o2VgF9JizZl5EnTeaFrmhY9Z+b/YAJC
-	K/ywni3cBV8CQYjPVl8q7hd74Z8+eGxhSuXvYgTsqMN6sW+IKIlZo2uTO5tTa93yUdtbyT1db2tw3
-	whJ8sCrg==;
+	bh=LrXXAyUOuS7rEeLYNGIPSPz3dA1DubuM1MKnNi6fXrU=; b=l1Do6j5rWvMdrCZXx5aFRWW5Ew
+	8o1ONrJQYloMRj1N3UflHnZg9Ca7+KRN/WSD/huX7BWngnkEIT0AQOueUjC5ngCf/pJtjkubC6wVL
+	X1ymW7GEFYF5l4BPZD4oAJHxde4m7NClIU0qqTXwzMC+maywSoer44BaW5kCQCiCi2PgWqPYlWB+1
+	J8ILB+LAsBYXS12gtSX38FIdPgEL1VmIQwwwuPuIdx47jjqjdukkowyeCWuYz/E0LkKz/aOP/I5fs
+	Ci66l+vLP3YAxGkfuD+rpd7VjKRdwI0+ff7wpzT4hCBYzjZkxZO3bY04qP2n0BxweQg8slhAHeaZZ
+	XcisWbaA==;
 Received: from i53875bc0.versanet.de ([83.135.91.192] helo=localhost.localdomain)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1thcKe-0008Cw-Ei; Mon, 10 Feb 2025 23:32:48 +0100
+	id 1thcWo-0008Re-Bi; Mon, 10 Feb 2025 23:45:22 +0100
 From: Heiko Stuebner <heiko@sntech.de>
 To: srinivas.kandagatla@linaro.org
 Cc: robh@kernel.org,
@@ -61,12 +60,10 @@ Cc: robh@kernel.org,
 	linux-clk@vger.kernel.org,
 	detlev.casanova@collabora.com,
 	sebastian.reichel@collabora.com
-Subject: [PATCH v2 6/6] arm64: dts: rockchip: add rk3576 otp node
-Date: Mon, 10 Feb 2025 23:32:19 +0100
-Message-ID: <20250210223219.1193346-14-heiko@sntech.de>
+Subject: [PATCH RESEND v2 0/6] RK3576 OTP support
+Date: Mon, 10 Feb 2025 23:45:04 +0100
+Message-ID: <20250210224510.1194963-1-heiko@sntech.de>
 X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250210223219.1193346-1-heiko@sntech.de>
-References: <20250210223219.1193346-1-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -75,64 +72,37 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds the otp node to the rk3576 soc devicetree including the
-individual fields we know about.
+This enables OTP support in the nvmem driver for rk3576.
 
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- arch/arm64/boot/dts/rockchip/rk3576.dtsi | 39 ++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+I expect to pick the clock patch (patch1) and the arm64-dts patch (patch6)
+myself, after the nvmem-driver and -binding patches have been applied
+(patches 2-5).
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-index 4dde954043ef..29b47799849a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-@@ -1260,6 +1260,45 @@ sdhci: mmc@2a330000 {
- 			status = "disabled";
- 		};
- 
-+		otp: otp@2a580000 {
-+			compatible = "rockchip,rk3576-otp";
-+			reg = <0x0 0x2a580000 0x0 0x400>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			clocks = <&cru CLK_OTPC_NS>, <&cru PCLK_OTPC_NS>,
-+				 <&cru CLK_OTP_PHY_G>;
-+			clock-names = "otp", "apb_pclk", "phy";
-+			resets = <&cru SRST_OTPC_NS>, <&cru SRST_P_OTPC_NS>;
-+			reset-names = "otp", "apb";
-+
-+			/* Data cells */
-+			cpu_code: cpu-code@2 {
-+				reg = <0x02 0x2>;
-+			};
-+			otp_cpu_version: cpu-version@5 {
-+				reg = <0x05 0x1>;
-+				bits = <3 3>;
-+			};
-+			otp_id: id@a {
-+				reg = <0x0a 0x10>;
-+			};
-+			cpub_leakage: cpub-leakage@1e {
-+				reg = <0x1e 0x1>;
-+			};
-+			cpul_leakage: cpul-leakage@1f {
-+				reg = <0x1f 0x1>;
-+			};
-+			npu_leakage: npu-leakage@20 {
-+				reg = <0x20 0x1>;
-+			};
-+			gpu_leakage: gpu-leakage@21 {
-+				reg = <0x21 0x1>;
-+			};
-+			log_leakage: log-leakage@22 {
-+				reg = <0x22 0x1>;
-+			};
-+		};
-+
- 		gic: interrupt-controller@2a701000 {
- 			compatible = "arm,gic-400";
- 			reg = <0x0 0x2a701000 0 0x10000>,
+But kept them together for people wanting to try this series.
+
+changes in v2:
+- fix register constant in clock definition (Diederik)
+- add patch to set limits on variant-specific clock-names
+- use correct limits for clocks + resets on rk3576 binding
+
+
+RESEND, because I messed up my git-send-email which caused it to include
+the list of patches 2 times, duplicating everything :-( .
+
+Heiko Stuebner (6):
+  clk: rockchip: rk3576: define clk_otp_phy_g
+  nvmem: rockchip-otp: Move read-offset into variant-data
+  dt-bindings: nvmem: rockchip,otp: add missing limits for clock-names
+  dt-bindings: nvmem: rockchip,otp: Add compatible for RK3576
+  nvmem: rockchip-otp: add rk3576 variant data
+  arm64: dts: rockchip: add rk3576 otp node
+
+ .../bindings/nvmem/rockchip,otp.yaml          | 25 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 39 +++++++++++++++++++
+ drivers/clk/rockchip/clk-rk3576.c             |  2 +
+ drivers/nvmem/rockchip-otp.c                  | 17 +++++++-
+ 4 files changed, 81 insertions(+), 2 deletions(-)
+
 -- 
 2.47.2
 
