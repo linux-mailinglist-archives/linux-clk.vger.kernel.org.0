@@ -1,163 +1,167 @@
-Return-Path: <linux-clk+bounces-17813-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17815-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18D60A2F6B8
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 19:18:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6F1A2F7C0
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 19:49:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B7CB7A23F9
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 18:17:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68C20166F96
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 18:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D650C256C87;
-	Mon, 10 Feb 2025 18:18:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC4825E44E;
+	Mon, 10 Feb 2025 18:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="csph2HZM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PPm95gnQ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0882566F3
-	for <linux-clk@vger.kernel.org>; Mon, 10 Feb 2025 18:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656B8288DB;
+	Mon, 10 Feb 2025 18:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739211487; cv=none; b=n8LJyzVnEtKjBkuo7Vp74dq6X/l8F6HMwOrK5YHFzOszQt23UgeTmtfTWMUWFppBX2vq710sCgy8n1kYlz2/YWgaLBEgcgJjtKeQgQywXK4V0B4i7jVhVRw6lIEG39H9nF8LpB6xI9RdYo8NLMN5gQV0u7djBqTfN/jnTIk2Dck=
+	t=1739213370; cv=none; b=j/YCEf8IDKQ7tSLnFf7YRL/3pN0G4/T352DtGgOSKFLZiY8NmNIn7JkdQlK4fr/cFtKPSGzbH/g11SVlNYBqrwUgMVGb3D1Dsm4PhwOrer8KFthmawoZXIFC/hJgVPH4+9GyFpf1DW4JsQjIUJG+gw8bAT17sEf25rxbSaOuz7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739211487; c=relaxed/simple;
-	bh=qinDKoM++ZG8IXfNfU1TPPoop+f/Y0BBrjoaVcAsZJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FTWq2FE6dHdnTqNQV6VfGVLbR9AJkMGHA5Ac6Il6RAqA8krSt/R2DRgtZ4jl5le2WW169d/vrS+1aC6gt4ywHJZ7HECJb3xXJ8FMXTSgaXsAmZIH7GDK0ffG3xyX895Hs/IhObVg1rlAeHyyfFT3gcChVHQnzsPeXOWGqFW5PAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=csph2HZM; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51AA4uwh002259
-	for <linux-clk@vger.kernel.org>; Mon, 10 Feb 2025 18:18:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	B7hH0YIMetgk89Mc/p2t6ycOF8BT5TouaRT/5posNTE=; b=csph2HZMhsirrzl4
-	T303c8Kj9wX3eqW3ayV9n+Moh8D0+ZH/4Pm5VXsxjBzAEsuxt+wGJ6LtmkvQ0NW/
-	oYg5OwMfheB4W4nnuiuvyfl94VNUigU0UAqycfsDbVe+lyvcxq9XJzduR3rl0EXg
-	n6a/qZoPBqKqkw9bJESlqvQDyd9i/hz8C7ROqQ6w1D3JCZqQ2Z7ihRepBkcuHqNy
-	At2zzPpygI7S5rRwdQm/INwpUeBsC1SSSKoqsPTr9rNIFQV77XgRocLKxKq8NjjD
-	2h5jFWF/hr6FhJczYYpnNPnaYgN5RY7wdGSXQJmLC7EANr/PybDVsympdx2dacx8
-	OeCd6A==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44p0dyn7fw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Mon, 10 Feb 2025 18:18:05 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4719173db00so2559521cf.0
-        for <linux-clk@vger.kernel.org>; Mon, 10 Feb 2025 10:18:05 -0800 (PST)
+	s=arc-20240116; t=1739213370; c=relaxed/simple;
+	bh=s/03vz3+zcS0GzCnONNZFFovZBJSY2YPl3k0UdN49gU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qdvo/07akOEKFYbL1d6Wjp19jXdF+7nds1FeGoFKPZqOmN7utuN4uDqeaeeFtXrhfJfLH2weDzbBmnMB5pUKmx4q8owLWe+GKgmnzOZBh0SFGCIzwT0TGnC5IcNElyk9L1uY0Oo+qlqGj5LliqvXWS/w2A5mMusDRb0emPY0gOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PPm95gnQ; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38dcb97e8a3so2768816f8f.3;
+        Mon, 10 Feb 2025 10:49:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739213366; x=1739818166; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+AGEFkz36wQgS5zJ0YJZL/2/iDepMDeR3aqGvq13mbk=;
+        b=PPm95gnQWPDU3OUGMbEeRqnhk3DJvjgbP8eem/0Wn+tshUuO/dhWoRfGLTAeNb78BX
+         J73tyBUNDzWHJUHokMbAknUBiyMIk2CqzEAznRSYe9RqZyLSEibI9DK3Xf2BEn8RmGfy
+         8AZO+pf0O5fLVv53cVecmn/XFD3d12HepDnDccku6kS2RXM4QnSeKwcgLlad4WlPqlVt
+         Rvv3aFIYw3obMhBBi7CPOxCsBLcmsiOk2DmCYbw7DGyTiQvqrdbIoxXk+zxXUsyKmyJd
+         j8RUmB5/Bxl0qYWXrmSAnCJn7dBk6KtwD3H2a2FqhKt8hZQHMJKJBzk4iBwFuPH+9I/S
+         rptw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739211484; x=1739816284;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B7hH0YIMetgk89Mc/p2t6ycOF8BT5TouaRT/5posNTE=;
-        b=rfGGSGu+Kjk9O+E8kZgRF2npknlnvoJF4YImFQ3e6/KcQbzQykzY3ArYorUqMpIhQk
-         qerEcRpo6/Iu6VmE7c3rqJC01Q1fkSAeUx0aBbAfEOxM6nUQCrADYXvMcpBFjHf24jsN
-         MWyLaqHXAByW6blnqlx18NJcahKMpnWDdk3sBSfDtkVlWj9pdXFe5XgD4aaccjXKZeZg
-         Ue6snHBWncSPJLFZIrF7cEeiMbRyeE2nw25rdke40LMuG7hbp0M4+c9Cfr9pfd5peYdH
-         mJk4hB+1MIZ36igHsmESkK/Af8zH+tOzdYdak1qO/KHRVkDwWp0ALP8xnKCgJo7+I6or
-         HMkw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9Uqwi9ysn/tu3Spnqd6Xxg+O03DgVrpKUWK2lHutDWESSHPfFOvXnI9r2DFYAmoJ1RiPjEVTwoyU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaD9kxb8qbAVXK5SKxl9JPuK9+LsJ1Q6SR6ikKfkJPEcOUBvip
-	KqzeeKZzyUZypNhkJ4WcOIazGadlZJqnaui+3tFHdjSemYEhFpZV8tPRBEXo2T9Zlx4nAcOlUH+
-	HZ6qZaVv/gq16PpuJffzSXc2uu9pu9oQFuADEuOJ3vFnkIfSrfdvqDbjMAT4=
-X-Gm-Gg: ASbGncv8H/9vLNMbhimBpJxwekkhZEiKz3u4FEmxyf4weQTVOEaSblZiU6M2nbPXUOK
-	BwdPlQQQvk90Hs+OqHD8ggzki5ETswFC/gqh/a1tdZ9caeHCltuQJ4kzB+/FSULthPcvwcqLIiW
-	ShadyiIlw/s+n7oZY3skvyNARhKFyN8FRqvVlxOD1Gjzae35tfzl+uMZNrrFuQrqgmz9dIgBrJG
-	Gm8uUGKjmC2DVmocluHsKoCewX/G7l4z+yqpu8uWDGaJIrKIK3ZD4S+c6bseSFMgRJj+k4m4lZ6
-	6wFH+F0ccm3sFjT6OIRriG+UQ5yCA9owddiPn+/fbJxy7yJGhyn20hQKvEw=
-X-Received: by 2002:ac8:590e:0:b0:471:a14c:6847 with SMTP id d75a77b69052e-471a14c8663mr1571181cf.5.1739211483901;
-        Mon, 10 Feb 2025 10:18:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGAXNmuIboEgfBo9SyYi4AwkYGvwLe1amQ3mO7hi9Y7qYBpldJid3eLK1F44rXVgl2m4+M4pA==
-X-Received: by 2002:ac8:590e:0:b0:471:a14c:6847 with SMTP id d75a77b69052e-471a14c8663mr1570831cf.5.1739211483535;
-        Mon, 10 Feb 2025 10:18:03 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de44e4bc17sm7129357a12.70.2025.02.10.10.17.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Feb 2025 10:18:03 -0800 (PST)
-Message-ID: <ee166cf3-4486-4172-a510-bafa1624ab79@oss.qualcomm.com>
-Date: Mon, 10 Feb 2025 19:17:58 +0100
+        d=1e100.net; s=20230601; t=1739213366; x=1739818166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+AGEFkz36wQgS5zJ0YJZL/2/iDepMDeR3aqGvq13mbk=;
+        b=CahPWamWgdBU0TKPEWCBlRajP283wVU/Du/1ShgyeeutnUGb/wRdJHgHBMhruIdKk9
+         iyUM9NalNqFaul1bKm9Lw8QcfRmUVtazOLI2rFRldrqgn7KbkJ3VQAjwsElOl67DOTa8
+         nDXSNrpaOMRLO+G8G9Cd9TXTleIbDRmHBLfwOoCtfPYdLVs4hUAhSuiX5tgmTNT7pXiQ
+         Cn0bEKoTur4iA6DgPl5D/1fY/bdX08AO5/O196/RUqg68RQxmw4/asuMby2KgNKgDQ9O
+         EH+TPkyoNHkoNPzmC0CAziirQaN0pjnN0jbX5TUvHXpePuOrYIjDTuY017yUkhzhTqwW
+         lx/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUp/P80PWYiPNib1dzmeRwXSy0R3Os2XDqB5FXlI554dlKxLzTYpih3Np5xHFoOLFIBq2No2d/taakS@vger.kernel.org, AJvYcCV8qZG2rLQ+yQFJKOlNZ87/m+s1HUPGZ2LHOPB4WSZaHdiYws+OkqmkxuxE+lZ3LXfzBqPEn6LjNqpV8e0vrc4=@vger.kernel.org, AJvYcCVCzLiQByXsMZ37jStwbyR18M3yS0lgniAhovDm94JEcV2eMX9wC9I6flSwopWSdsffigwODk3Zph71@vger.kernel.org, AJvYcCWeiEWLGw1sFntfBNOY2RZVrjXgpmrq2PfpuxLSgiQ8LvUWY+K3zddhYv1udt8kfqpUcfB9fZTrZe4kHrBZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/hKCA4naOlZOIp3vi83rBvpjn9UJPzcrUHQw6qAfu+G73D67L
+	2jygJ2nT/njRFIir62G7i+Z+KE9rxjkcAlbvHjPYcadKe+meseos/YmT8opz
+X-Gm-Gg: ASbGncsS8rezG4Ovepy9d//K0PWH5nFcbewhwhXOjJUhA4n7y77FbRSZ5XLfPjJs0Uo
+	mbCibL3gD5es1tKqmPQlJkdLT/EPNGC1LWGcrD86i6fX925gZD+5LzDBvAiMp5vQ//P8RBu0His
+	I3nzhZaa3emnb2NhM+7S5RbgfTxaR1SRNZGkhkNSqxNjXf3nIPZbKjOtpp1E4za+c1zxqwhwSzr
+	yh8EVXXuKu+xDc8da3JIzwz/M7J6ZqK2bLkf3q+T3bjmZWCZRC0wKa/VLDqRL96v14jr5VLOTMH
+	pZDFjLF3Qu1HlqN6bSzMssmhzUYTatCRxkxB/k7w1Tw1
+X-Google-Smtp-Source: AGHT+IHWE+qEKJlce2UoT4pFR81zlYOstYhwToVKp7zANrcb4fO1+h9jdyIykT0jVgd15OhkBML3mQ==
+X-Received: by 2002:a5d:47ae:0:b0:38d:e384:5559 with SMTP id ffacd0b85a97d-38de3845713mr1834322f8f.23.1739213366284;
+        Mon, 10 Feb 2025 10:49:26 -0800 (PST)
+Received: from prasmi.Home ([2a06:5906:61b:2d00:b833:1deb:a929:b461])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439452533ecsm22911525e9.0.2025.02.10.10.49.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 10:49:25 -0800 (PST)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 0/9] Add support to configure CPG block for watchdog on RZ/V2H(P) and RZ/G3E SoCs
+Date: Mon, 10 Feb 2025 18:49:01 +0000
+Message-ID: <20250210184910.161780-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 5/6] arm64: dts: qcom: ipq9574: Add nsscc node
-To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, andersson@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        richardcochran@gmail.com, geert+renesas@glider.be,
-        dmitry.baryshkov@linaro.org, arnd@arndb.de, nfraprado@collabora.com,
-        biju.das.jz@bp.renesas.com, quic_tdas@quicinc.com, ebiggers@google.com,
-        ardb@kernel.org, ross.burton@arm.com, quic_anusha@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20250207073926.2735129-1-quic_mmanikan@quicinc.com>
- <20250207073926.2735129-6-quic_mmanikan@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250207073926.2735129-6-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: yk8n2BvSwJ0SrqqTRW7OLgiE0MsSLxOS
-X-Proofpoint-GUID: yk8n2BvSwJ0SrqqTRW7OLgiE0MsSLxOS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-10_10,2025-02-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 mlxlogscore=874
- mlxscore=0 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502100148
+Content-Transfer-Encoding: 8bit
 
-On 7.02.2025 8:39 AM, Manikanta Mylavarapu wrote:
-> From: Devi Priya <quic_devipriy@quicinc.com>
-> 
-> Add a node for the nss clock controller found on ipq9574 based devices.
-> 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
-> Changes in V9:
-> 	- Rebased on linux-next tip.
-> 
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 942290028972..29008b156a7e 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -1193,6 +1193,25 @@ pcie0: pci@28000000 {
->  			status = "disabled";
->  		};
->  
-> +		nsscc: clock-controller@39b00000 {
-> +			compatible = "qcom,ipq9574-nsscc";
-> +			reg = <0x39b00000 0x80000>;
-> +			clocks = <&xo_board_clk>,
-> +				 <&cmn_pll NSS_1200MHZ_CLK>,
-> +				 <&cmn_pll PPE_353MHZ_CLK>,
-> +				 <&gcc GPLL0_OUT_AUX>,
-> +				 <0>,
-> +				 <0>,
-> +				 <0>,
-> +				 <0>,
-> +				 <0>,
-> +				 <0>,
-> +				 <&gcc GCC_NSSCC_CLK>;
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-This last clock doesn't seem to be used in the driver - is that by design?
+Hi All,
 
-Konrad
+This patch series adds SYSCON support to configure and retrieve boot
+status information from the CPG block for the RZ/V2H(P) and RZ/G3E SoCs.
+Summary of Changes,
+
+    Clock:
+        Add syscon compatible support to the CPG block in bindings and
+        device trees.
+
+    Watchdog:
+        Document the renesas,r9a09g057-syscon-wdt-errorrst property.
+        Update the watchdog driver to fetch and report boot status via
+        Error Reset Registers (CPG_ERROR_RSTm) and configure the
+        CPG_ERRORRST_SEL2 register.
+
+    Device Tree:
+        -Add the syscon property to CPG nodes in R9A09G057 and R9A09G047
+         SoC DTSI.
+        -Add the renesas,syscon-cpg-error-rst property to WDT nodes in
+         R9A09G057 and R9A09G047 SoC DTSI.
+
+v3->v4
+- Added support to configure CPG_ERRORRST_SEL2 register
+- Updated commit messages
+
+v2->v3
+- Updated comment section to mention there aren't any ABI breakages with
+  this patch series.
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (9):
+  dt-bindings: clock: rzv2h-cpg: Add syscon compatible for CPG
+  clk: renesas: Kconfig: Select MFD_SYSCON for RZ/V2H(P) family driver
+  arm64: dts: renesas: r9a09g047: Add `syscon` compatible for CPG node
+  arm64: dts: renesas: r9a09g057: Add `syscon` compatible for CPG node
+  dt-bindings: watchdog: renesas: Document
+    `renesas,syscon-cpg-error-rst` property
+  watchdog: rzv2h_wdt: Add support to retrieve the bootstatus
+    information
+  watchdog: rzv2h_wdt: Configure CPG_ERRORRST_SEL2 register
+  arm64: dts: renesas: r9a09g057: Add `renesas,syscon-cpg-error-rst`
+    property to WDT node
+  arm64: dts: renesas: r9a09g047: Add `renesas,syscon-cpg-error-rst`
+    property to WDT node
+
+ .../bindings/clock/renesas,rzv2h-cpg.yaml     | 10 ++--
+ .../bindings/watchdog/renesas,wdt.yaml        | 17 ++++++
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi    |  5 +-
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi    |  6 ++-
+ drivers/clk/renesas/Kconfig                   |  1 +
+ drivers/watchdog/rzv2h_wdt.c                  | 54 +++++++++++++++++++
+ 6 files changed, 87 insertions(+), 6 deletions(-)
+
+-- 
+2.43.0
+
 
