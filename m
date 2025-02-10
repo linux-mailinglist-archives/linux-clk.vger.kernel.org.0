@@ -1,34 +1,34 @@
-Return-Path: <linux-clk+bounces-17828-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17837-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA706A2FD11
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:32:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C674A2FD2B
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 23:34:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8A163A50B1
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:32:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 831921889734
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Feb 2025 22:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A880625332A;
-	Mon, 10 Feb 2025 22:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE5D325A2B6;
+	Mon, 10 Feb 2025 22:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="jVJznroL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="CNVDhRiu"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC45B2512ED;
-	Mon, 10 Feb 2025 22:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE25254AFB;
+	Mon, 10 Feb 2025 22:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739226767; cv=none; b=Xt0PEKp9sW+f5qIQbBZ2R3NhyA0x7XTBruX2oytXYblqlosQZAdtvReUzPdIuuhQckDrHW1YKsjPcKSy0asndzEs/9CH3DSXV/02vuGuRHIdUUI366uwz5O1QJdSV0red2O5Fv7yu1y92lGeWy7Rwfl3mHbWKtfMhVTMK2rNI+8=
+	t=1739226772; cv=none; b=mv5ZHvhBbHOsR2v3WptHOytIp4emp0UEfZQezNhvrazp2msN2jU8veftEPoPNqAw7GC7lhlTb2gvSIUBO6a/r0wUM+Ekqjk737V4KKIcMeD2azbT4N94oSE0/pJ5j8q84Bf2BRg5bIeXPYjW73dWjLoJFzaAWkkeOxRZxHsOAXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739226767; c=relaxed/simple;
-	bh=Fk1CFlse0fOzf7hyLwkoZOv8fJZ86dz0i7DYgJbGnDo=;
+	s=arc-20240116; t=1739226772; c=relaxed/simple;
+	bh=X19WOOPYgP+DuZFchChLeLEFY5CA1hNJzhrLmeGnrWk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mlemr7q+cEvftu4TJVHZeY2CL+S6RaPauNVg6+qKQTr8oSlD2USbqBKpNO6QIJCGlCs7OCcnQtcIsRLPT2O/eP23+stco+CibhdTi8P2CRQ0AE2QibW25WLQcG2/agIC6t+a7SVTGe/6Lvaug+WfdVX4MjG8Hq8KOfeww2HhGEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=jVJznroL; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version; b=VD+V/Dk4OBGb07CH94VdkI32hp1IXprwU/Ll0IC7bKcLEGRnwvtPQKO0JPK9Ps3+Wm6jxCz2y1Vvm1JQG5Hgh22P9tk+YrUzScdrKzEMlKQiozxm7M7ehAMsiBt4uT7GexKLsdbIgpNaPrNENP1olo1yqhvvUbZOaoL5n/nA5ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=CNVDhRiu; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
@@ -37,17 +37,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=gScTzSF5SmDK0ItX+9bERNg9WxTsYpnT5wGwYZDdZ9I=; b=jVJznroLLXwS8UOrupccZJB2qf
-	I/0LaWZxs6cLc7Kq98/Tjiwa7wOp3fA83fF5CaEUrPu0JfMgT9MnqGnGy9ELf7W0T1bJLwFT947dQ
-	afkAXNPRg0XFX7fd723sV5o45i9UiUwA0UFtOTEpi/VrcRemR/tFsoCSVxgpoutYFw+WAhpgqmw7a
-	v70K7hWD9b8vR0cGGxlKq3ms/Mx6Vx+USZyPH7fT3u4Su8924fO43e8Jg4MpAQZftVSFq66acwcL3
-	Dac+q5Nr/fg0YEVB0EMRbio4L1WPlbvyBmYqLD9J3DOTZ39PEFUOTbtvPKiLTEDb03EiQyUO9HzgK
-	d19LYBVA==;
+	bh=GpXTu8Jl9+ElR55rXNmhyGQY8Q6lpRd3ddRiifaA3MA=; b=CNVDhRiuVFz4HaYiB42Rf9J1Tb
+	PapWjRIMClwgYxNo5dcOZ1vx+SqIFLiNCE7dNHbb49VIfjH7w390FEKt6Vd/AgtH0ujBtxydPNhBl
+	vdgi91fphzxk1pxXt0e0Nf2b1o2ojjP4pntFBz8QCvqWpw/OL4ApZOZcbuWKzcf2FIqWmLAFXqTtJ
+	8dNnfoJgCWzedSmOUfWh4Hv+laNQubzMqa34+ebXiGuyPF/0ZOIpQzpHjOgKrD37OHBeoboYqQVpD
+	Vrb8qvEfTsexlXA/Zo0AvgDeCtdGaaUGXhbUsFWhv3vFmAogHo8VwpHNeXzhNutuLAaYAtcWGMlKX
+	OwR3TUDA==;
 Received: from i53875bc0.versanet.de ([83.135.91.192] helo=localhost.localdomain)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1thcKZ-0008Cw-CH; Mon, 10 Feb 2025 23:32:43 +0100
+	id 1thcKZ-0008Cw-SL; Mon, 10 Feb 2025 23:32:43 +0100
 From: Heiko Stuebner <heiko@sntech.de>
 To: srinivas.kandagatla@linaro.org
 Cc: robh@kernel.org,
@@ -60,11 +60,10 @@ Cc: robh@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	detlev.casanova@collabora.com,
-	sebastian.reichel@collabora.com,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 3/6] dt-bindings: nvmem: rockchip,otp: add missing limits for clock-names
-Date: Mon, 10 Feb 2025 23:32:09 +0100
-Message-ID: <20250210223219.1193346-4-heiko@sntech.de>
+	sebastian.reichel@collabora.com
+Subject: [PATCH v2 4/6] dt-bindings: nvmem: rockchip,otp: Add compatible for RK3576
+Date: Mon, 10 Feb 2025 23:32:10 +0100
+Message-ID: <20250210223219.1193346-5-heiko@sntech.de>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250210223219.1193346-1-heiko@sntech.de>
 References: <20250210223219.1193346-1-heiko@sntech.de>
@@ -76,38 +75,56 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The clocks property correctly declares minItems and maxItems for its
-variants, but clock-names does not. Both properties are always used
-together, so should declare the same limits.
+Document the OTP memory found on Rockchip RK3576 SoC.
 
-Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
+The RK3576 uses the same set of clocks as the px30/rk3308
+but has one reset more, so adapt the binding to handle this
+variant as well.
+
 Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 ---
- Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../bindings/nvmem/rockchip,otp.yaml          | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-index a44d44b32809..3201ff8f9334 100644
+index 3201ff8f9334..dc89020b0950 100644
 --- a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
 +++ b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-@@ -62,6 +62,8 @@ allOf:
-       properties:
-         clocks:
-           maxItems: 3
+@@ -14,6 +14,7 @@ properties:
+     enum:
+       - rockchip,px30-otp
+       - rockchip,rk3308-otp
++      - rockchip,rk3576-otp
+       - rockchip,rk3588-otp
+ 
+   reg:
+@@ -70,6 +71,26 @@ allOf:
+           items:
+             - const: phy
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - rockchip,rk3576-otp
++    then:
++      properties:
++        clocks:
++          maxItems: 3
 +        clock-names:
 +          maxItems: 3
-         resets:
-           maxItems: 1
-         reset-names:
-@@ -78,6 +80,8 @@ allOf:
++        resets:
++          minItems: 2
++          maxItems: 2
++        reset-names:
++          items:
++            - const: otp
++            - const: apb
++
+   - if:
        properties:
-         clocks:
-           minItems: 4
-+        clock-names:
-+          minItems: 4
-         resets:
-           minItems: 3
-         reset-names:
+         compatible:
 -- 
 2.47.2
 
