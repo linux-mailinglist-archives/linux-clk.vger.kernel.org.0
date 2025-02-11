@@ -1,518 +1,315 @@
-Return-Path: <linux-clk+bounces-17900-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17902-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FB21A318E4
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Feb 2025 23:40:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 377E7A31A06
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Feb 2025 00:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 320077A3F7D
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Feb 2025 22:39:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D93143A1147
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Feb 2025 23:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9878B26FD92;
-	Tue, 11 Feb 2025 22:38:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACC0E271835;
+	Tue, 11 Feb 2025 23:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="cqN32ge8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VPl9AQ4f"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C83F26F45B;
-	Tue, 11 Feb 2025 22:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11E927181F;
+	Tue, 11 Feb 2025 23:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739313505; cv=none; b=koCUY3AV1MD4uKdjUe5isGUVzHJkNouzAhNmaYkIhWdihEPwugUrSekiVDz8u/OLC/J54G2NzJUx5cvfcf24NDiu/o4e3LNoQVNt+7srcQXSaymp0p1KDYQoNTWtaKTYisSgTvM8fIbAm8UAwU/hrhWmSmT1sqVEh3wWAWNcW64=
+	t=1739318188; cv=none; b=H6dbaAx/dSv4zjmpgauyzw02hqbO6eT9HM4iHJTHu1wCbeWcQuiQ3qoXuoUQXM+Xv/1c2TYOF8dNxYw4Jh5pXp2N/9/q+UZMa124QrJtgsDVhEDPcC3Rtzfv//DifGHLwEkzCh9Ia8gJc8ch8yKz1+Ra9OqxZOtY50+wbbVzhCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739313505; c=relaxed/simple;
-	bh=XrDG6cJ7Znm3MYNEA0g9g+f4KIS+HpIdNachXJLtRoE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AVByGrcPfT2MEJHzIc+P7tf2JEjA1fd2IPtQNL2HG5QJtQC5qWAfc/rUkiOQ9H41tfcg5DwBG1p1Z0dGZZiP/ukClJviI7EkpIl4WXiKuuNTaG7u75O8mdgHyIRthSPz24NBy5mBc9Uhx4NCU7io1ROf70/zLDIkD67CqlkQxic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=cqN32ge8; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
-Received: from [192.168.244.162] (254C21CD.nat.pool.telekom.hu [37.76.33.205])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 6B571E4533;
-	Tue, 11 Feb 2025 22:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1739313501;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=643BFBiyMT2GIqqHLVDLrJjWeBjJ/C+QADvp9Eruf1c=;
-	b=cqN32ge8f6MMJ6RG88K+arp2eoXsjXKnjqTD3dv892UeQmzfiH9/MaYXvdKHO6U1AEDY5e
-	M/Un86GwCB4VBn5tWzXPwZTkJ7fd4HPiWFPB7FjCPLixszfh0kwGt4nLg9re8lgX1fTCcs
-	1FusO34sunsGYwFJ1I9hcBrh3vxvQXP4kO8YkAW50VmqEQyF5PYyWZ8BuUt8GCyeTy6Znj
-	ihkNd4OWSlK5dt2LmFtplGJBudWkacgKeoTC7/z49GJfcXU8ITWD7kYa/FBRDVdxt/SL31
-	5yS8/iU1gEaRiavGTRX7fJBQWkG1kja7GXLmpphqQXMztFdtkdXHZpfJu5MZsQ==
-From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Date: Tue, 11 Feb 2025 23:37:54 +0100
-Subject: [PATCH 10/10] arm64: dts: qcom: Add Xiaomi Redmi 3S
+	s=arc-20240116; t=1739318188; c=relaxed/simple;
+	bh=PSn0Zmv5N7ytlJwYw0DWAn3cbqPBj9i+Z2EniPfj4ww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GGbxp6DNydgG9unYPAsF6jJ6V2QIjn4YTSkooOWelg0e3YiI9dt0x2Az7IRX4nAOmx9Knwds1lkQSpuUYpXKvciWGMyz7WNDXhauxQRZj8hGml9euGngAD6a+gT53Mmuhkyt0EAUb2rhkJbzNxCi/4jyzA8c2dXZl+3ItIbxmOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VPl9AQ4f; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739318187; x=1770854187;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PSn0Zmv5N7ytlJwYw0DWAn3cbqPBj9i+Z2EniPfj4ww=;
+  b=VPl9AQ4fvg0N9x7rxokjRO3oap37CGw+yczgqPNFgUrPfA0TPJyexEhm
+   ZKPdhe1L0xewSfgRfcSVaZ11r7yErCrgzzAprwBjC4AS9XlHMmS0VdycB
+   owp8p9cAz0H+Nr+DXNyJ2dYz0dypybqtW+0201iiD5ERMf2uEmm5qxsY8
+   mcKgNC/y8aR3mcMlwKhlQKbv7fPXkWrrFgdj90gTspvbILlxznzusMkLV
+   +IEFyqzgMKePB+HjIMMjHoaRnRdzfhcv6mNzo7gDM/4SgyHC47YHTD6ZR
+   pX0PzyIrcjICWhdAjY5YnbOR7qwG/UIRC35we1ScQl+V2/3Fyb9VXqu9B
+   Q==;
+X-CSE-ConnectionGUID: lrZlHw8cRhemPf/jsE71fg==
+X-CSE-MsgGUID: fPa6RE94QHqXzyqRDpg5mg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="62427120"
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="62427120"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 15:56:26 -0800
+X-CSE-ConnectionGUID: BGEregKiTOCpjOcaSYt5Ow==
+X-CSE-MsgGUID: DUSwUO8RTy6ArYggwXccmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112518747"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 11 Feb 2025 15:56:22 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ti071-0014qp-1u;
+	Tue, 11 Feb 2025 23:56:19 +0000
+Date: Wed, 12 Feb 2025 07:55:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryan Chen <ryan_chen@aspeedtech.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+	linux-clk@vger.kernel.org, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v8 3/3] clk: aspeed: add AST2700 clock driver
+Message-ID: <202502120701.cqyc1KZw-lkp@intel.com>
+References: <20250210085004.1898895-4-ryan_chen@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250211-msm8937-v1-10-7d27ed67f708@mainlining.org>
-References: <20250211-msm8937-v1-0-7d27ed67f708@mainlining.org>
-In-Reply-To: <20250211-msm8937-v1-0-7d27ed67f708@mainlining.org>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
- Linus Walleij <linus.walleij@linaro.org>, Lee Jones <lee@kernel.org>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
- Robin Murphy <robin.murphy@arm.com>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, iommu@lists.linux.dev, 
- =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739313484; l=10280;
- i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=XrDG6cJ7Znm3MYNEA0g9g+f4KIS+HpIdNachXJLtRoE=;
- b=tUDswN3BrdPDkJrkeQCnazOPJAsjs+MBpj0HZzGOA/To+eh4nZxCeRXmxetZfLNzjdOpbLFbS
- c2KW9YyZneKBDHgkIMH232KDpSd5MIQet7T2TL5xFslNmxreG3lKIMT
-X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
- pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250210085004.1898895-4-ryan_chen@aspeedtech.com>
 
-Add initial support for Xiaomi Redmi 3S (land).
+Hi Ryan,
 
-Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
----
- arch/arm64/boot/dts/qcom/Makefile                |   1 +
- arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts | 402 +++++++++++++++++++++++
- 2 files changed, 403 insertions(+)
+kernel test robot noticed the following build warnings:
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 140b0b2abfb555b8ef61bd9ed0217d8997800809..18f0c0f7ebadf86a36b02461c02bdba7bfebe397 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -64,6 +64,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8917-xiaomi-riva.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8929-wingtech-wt82918hd.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8937-xiaomi-land.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-huawei-kiwi.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-longcheer-l9100.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-samsung-a7.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts b/arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..3bc324851d54df01f08aa61548ce1794261c7313
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8937-xiaomi-land.dts
-@@ -0,0 +1,402 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2024, Barnabas Czeman
-+ */
-+/dts-v1/;
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+#include "msm8937.dtsi"
-+#include "pm8937.dtsi"
-+#include "pmi8950.dtsi"
-+
-+/delete-node/ &qseecom_mem;
-+
-+/ {
-+	model = "Xiaomi Redmi 3S (land)";
-+	compatible = "xiaomi,land", "qcom,msm8937";
-+	chassis-type = "handset";
-+
-+	qcom,msm-id = <QCOM_ID_MSM8937 0x0>;
-+	qcom,board-id = <0x1000b 1>, <0x2000b 1>;
-+
-+	aliases {
-+		serial0 = &blsp1_uart2;
-+		mmc0 = &sdhc_1;
-+		mmc1 = &sdhc_2;
-+	};
-+
-+	speaker_amp: audio-amplifier {
-+		compatible = "awinic,aw8738";
-+		mode-gpios = <&tlmm 124 GPIO_ACTIVE_HIGH>;
-+		awinic,mode = <5>;
-+		sound-name-prefix = "Speaker Amp";
-+		pinctrl-0 = <&speaker_amp_default>;
-+		pinctrl-names = "default";
-+	};
-+
-+	headphones_switch: audio-switch {
-+		compatible = "simple-audio-amplifier";
-+		enable-gpios = <&tlmm 129 GPIO_ACTIVE_HIGH>;
-+		sound-name-prefix = "Headphones Switch";
-+		pinctrl-0 = <&headphones_switch_default>;
-+		pinctrl-names = "default";
-+	};
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+
-+		charge-full-design-microamp-hours = <4100000>;
-+		constant-charge-current-max-microamp = <1000000>;
-+		voltage-min-design-microvolt = <3400000>;
-+		voltage-max-design-microvolt = <4400000>;
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		stdout-path = "framebuffer0";
-+
-+		framebuffer0: framebuffer@8dd01000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x0 0x8dd01000 0x0 (720 * 1280 * 3)>;
-+			width = <720>;
-+			height = <1280>;
-+			stride = <(720 * 3)>;
-+			format = "r8g8b8";
-+
-+			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_MDSS_AXI_CLK>,
-+				 <&gcc GCC_MDSS_VSYNC_CLK>,
-+				 <&gcc GCC_MDSS_MDP_CLK>,
-+				 <&gcc GCC_MDSS_BYTE0_CLK>,
-+				 <&gcc GCC_MDSS_PCLK0_CLK>,
-+				 <&gcc GCC_MDSS_ESC0_CLK>;
-+			power-domains = <&gcc MDSS_GDSC>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&gpio_keys_default>;
-+		pinctrl-names = "default";
-+
-+		key-volup {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+		};
-+	};
-+
-+	irled {
-+		compatible = "gpio-ir-tx";
-+		gpios = <&tlmm 45 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	reserved-memory {
-+		reserved@84a00000 {
-+			reg = <0x0 0x84a00000 0x0 0x1900000>;
-+			no-map;
-+		};
-+
-+		framebuffer: memory@8dd01000 {
-+			reg = <0x0 0x8dd01000 0x0 (720 * 1280 * 3)>;
-+			no-map;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&blsp1_i2c2 {
-+	status = "okay";
-+
-+	led-controller@45 {
-+		compatible = "awinic,aw2013";
-+		reg = <0x45>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		vcc-supply = <&pm8937_l10>;
-+		vio-supply = <&pm8937_l5>;
-+
-+		led@0 {
-+			reg = <0>;
-+			function = LED_FUNCTION_INDICATOR;
-+			led-max-microamp = <5000>;
-+			color = <LED_COLOR_ID_RED>;
-+		};
-+
-+		led@1 {
-+			reg = <1>;
-+			function = LED_FUNCTION_INDICATOR;
-+			led-max-microamp = <5000>;
-+			color = <LED_COLOR_ID_GREEN>;
-+		};
-+	};
-+};
-+
-+&blsp1_i2c3 {
-+	status = "okay";
-+
-+	touchscreen@3e {
-+		compatible = "edt,edt-ft5306";
-+		reg = <0x3e>;
-+
-+		interrupts-extended = <&tlmm 65 IRQ_TYPE_LEVEL_LOW>;
-+		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+		vcc-supply = <&pm8937_l10>;
-+		iovcc-supply = <&pm8937_l5>;
-+
-+		pinctrl-0 = <&tsp_int_rst_default>;
-+		pinctrl-names = "default";
-+
-+		touchscreen-size-x = <720>;
-+		touchscreen-size-y = <1280>;
-+	};
-+};
-+
-+&pm8937_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&pm8937_spmi_regulators {
-+	pm8937_s5: s5 {
-+		regulator-min-microvolt = <1050000>;
-+		regulator-max-microvolt = <1350000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&pmi8950_wled {
-+	qcom,num-strings = <2>;
-+	qcom,external-pfet;
-+	qcom,current-limit-microamp = <20000>;
-+	qcom,ovp-millivolt = <29600>;
-+
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators-0 {
-+		compatible = "qcom,rpm-pm8937-regulators";
-+
-+		vdd_s1-supply = <&vph_pwr>;
-+		vdd_s2-supply = <&vph_pwr>;
-+		vdd_s3-supply = <&vph_pwr>;
-+		vdd_s4-supply = <&vph_pwr>;
-+
-+		vdd_l1_l19-supply = <&pm8937_s3>;
-+		vdd_l2_l23-supply = <&pm8937_s3>;
-+		vdd_l3-supply = <&pm8937_s3>;
-+		vdd_l4_l5_l6_l7_l16-supply = <&pm8937_s4>;
-+		vdd_l8_l11_l12_l17_l22-supply = <&vph_pwr>;
-+		vdd_l9_l10_l13_l14_l15_l18-supply = <&vph_pwr>;
-+
-+		pm8937_s1: s1 {
-+			regulator-min-microvolt = <1000000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+
-+		pm8937_s3: s3 {
-+			regulator-min-microvolt = <1300000>;
-+			regulator-max-microvolt = <1300000>;
-+		};
-+
-+		pm8937_s4: s4 {
-+			regulator-min-microvolt = <2050000>;
-+			regulator-max-microvolt = <2050000>;
-+		};
-+
-+		pm8937_l2: l2 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+
-+		pm8937_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8937_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l8: l8 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l9: l9 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l10: l10 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8937_l11: l11 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+			regulator-allow-set-load;
-+			regulator-system-load = <200000>;
-+		};
-+
-+		pm8937_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8937_l13: l13 {
-+			regulator-min-microvolt = <3075000>;
-+			regulator-max-microvolt = <3075000>;
-+		};
-+
-+		pm8937_l14: l14 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l15: l15 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8937_l16: l16 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8937_l17: l17 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8937_l19: l19 {
-+			regulator-min-microvolt = <1225000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8937_l22: l22 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+		};
-+
-+		pm8937_l23: l23 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+		};
-+	};
-+};
-+
-+&sdc2_cmd_default {
-+	drive-strength = <12>;
-+};
-+
-+&sdc2_data_default {
-+	drive-strength = <12>;
-+};
-+
-+&sdhc_1 {
-+	vmmc-supply = <&pm8937_l8>;
-+	vqmmc-supply = <&pm8937_l5>;
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 67 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&pm8937_l11>;
-+	vqmmc-supply = <&pm8937_l12>;
-+	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
-+	pinctrl-names = "default", "sleep";
-+	status = "okay";
-+};
-+
-+&sleep_clk {
-+	clock-frequency = <32768>;
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <0 4>, <20 4>;
-+
-+	gpio_keys_default: gpio-keys-default-state {
-+		pins = "gpio91";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	headphones_switch_default: headphones-switch-default-state {
-+		pins = "gpio129";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio67";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	speaker_amp_default: speaker-amp-default-state {
-+		pins = "gpio124";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	tsp_int_rst_default: tsp-int-rst-default-state {
-+		pins = "gpio64", "gpio65";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+};
-+
-+&wcnss {
-+	vddpx-supply = <&pm8937_l5>;
-+	status = "okay";
-+};
-+
-+&wcnss_iris {
-+	compatible = "qcom,wcn3620";
-+	vddxo-supply = <&pm8937_l7>;
-+	vddrfa-supply = <&pm8937_l19>;
-+	vddpa-supply = <&pm8937_l9>;
-+	vdddig-supply = <&pm8937_l5>;
-+};
-+
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
-+&xo_board {
-+	clock-frequency = <19200000>;
-+};
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on pza/reset/next linus/master v6.14-rc2 next-20250210]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Chen/dt-binding-clock-ast2700-modify-soc0-1-clock-define/20250210-165421
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20250210085004.1898895-4-ryan_chen%40aspeedtech.com
+patch subject: [PATCH v8 3/3] clk: aspeed: add AST2700 clock driver
+config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20250212/202502120701.cqyc1KZw-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502120701.cqyc1KZw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502120701.cqyc1KZw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/clk-ast2700.c:369:37: warning: 'd_clk_sels' defined but not used [-Wunused-const-variable=]
+     369 | static const struct clk_parent_data d_clk_sels[] = {
+         |                                     ^~~~~~~~~~
+>> drivers/clk/clk-ast2700.c:353:37: warning: 'soc1_ahb' defined but not used [-Wunused-const-variable=]
+     353 | static const struct clk_parent_data soc1_ahb[] = {
+         |                                     ^~~~~~~~
+>> drivers/clk/clk-ast2700.c:349:37: warning: 'uart16clk' defined but not used [-Wunused-const-variable=]
+     349 | static const struct clk_parent_data uart16clk[] = {
+         |                                     ^~~~~~~~~
+>> drivers/clk/clk-ast2700.c:345:37: warning: 'uart15clk' defined but not used [-Wunused-const-variable=]
+     345 | static const struct clk_parent_data uart15clk[] = {
+         |                                     ^~~~~~~~~
+>> drivers/clk/clk-ast2700.c:341:37: warning: 'uart14clk' defined but not used [-Wunused-const-variable=]
+     341 | static const struct clk_parent_data uart14clk[] = {
+         |                                     ^~~~~~~~~
+>> drivers/clk/clk-ast2700.c:337:37: warning: 'uart13clk' defined but not used [-Wunused-const-variable=]
+     337 | static const struct clk_parent_data uart13clk[] = {
+         |                                     ^~~~~~~~~
+>> drivers/clk/clk-ast2700.c:237:37: warning: 'soc0_ahb' defined but not used [-Wunused-const-variable=]
+     237 | static const struct clk_parent_data soc0_ahb[] = {
+         |                                     ^~~~~~~~
+>> drivers/clk/clk-ast2700.c:209:37: warning: 'soc0_mpll_div8' defined but not used [-Wunused-const-variable=]
+     209 | static const struct clk_parent_data soc0_mpll_div8[] = {
+         |                                     ^~~~~~~~~~~~~~
+
+
+vim +/d_clk_sels +369 drivers/clk/clk-ast2700.c
+
+   208	
+ > 209	static const struct clk_parent_data soc0_mpll_div8[] = {
+   210		{ .fw_name = "soc0-mpll_div8", .name = "soc0-mpll_div8" },
+   211	};
+   212	
+   213	static const struct clk_parent_data mphysrc[] = {
+   214		{ .fw_name = "mphysrc", .name = "mphysrc" },
+   215	};
+   216	
+   217	static const struct clk_parent_data u2phy_refclksrc[] = {
+   218		{ .fw_name = "u2phy_refclksrc", .name = "u2phy_refclksrc" },
+   219	};
+   220	
+   221	static const struct clk_parent_data soc0_hpll[] = {
+   222		{ .fw_name = "soc0-hpll", .name = "soc0-hpll" },
+   223	};
+   224	
+   225	static const struct clk_parent_data soc0_mpll[] = {
+   226		{ .fw_name = "soc0-mpll", .name = "soc0-mpll" },
+   227	};
+   228	
+   229	static const struct clk_parent_data axi0clk[] = {
+   230		{ .fw_name = "axi0clk", .name = "axi0clk" },
+   231	};
+   232	
+   233	static const struct clk_parent_data soc0_ahbmux[] = {
+   234		{ .fw_name = "soc0-ahbmux", .name = "soc0-ahbmux" },
+   235	};
+   236	
+ > 237	static const struct clk_parent_data soc0_ahb[] = {
+   238		{ .fw_name = "soc0-ahb", .name = "soc0-ahb" },
+   239	};
+   240	
+   241	static const struct clk_parent_data soc0_uartclk[] = {
+   242		{ .fw_name = "soc0-uartclk", .name = "soc0-uartclk" },
+   243	};
+   244	
+   245	static const struct clk_parent_data emmcclk[] = {
+   246		{ .fw_name = "emmcclk", .name = "emmcclk" },
+   247	};
+   248	
+   249	static const struct clk_parent_data emmcsrc_mux[] = {
+   250		{ .fw_name = "emmcsrc-mux", .name = "emmcsrc-mux" },
+   251	};
+   252	
+   253	static const struct clk_parent_data soc1_clkin[] = {
+   254		{ .fw_name = "soc1-clkin", .name = "soc1-clkin" },
+   255	};
+   256	
+   257	static const struct clk_parent_data soc1_hpll[] = {
+   258		{ .fw_name = "soc1-hpll", .name = "soc1-hpll" },
+   259	};
+   260	
+   261	static const struct clk_parent_data soc1_apll[] = {
+   262		{ .fw_name = "soc1-apll", .name = "soc1-apll" },
+   263	};
+   264	
+   265	static const struct clk_parent_data sdclk[] = {
+   266		{ .fw_name = "sdclk", .name = "sdclk" },
+   267	};
+   268	
+   269	static const struct clk_parent_data sdclk_mux[] = {
+   270		{ .fw_name = "sdclk-mux", .name = "sdclk-mux" },
+   271	};
+   272	
+   273	static const struct clk_parent_data huartxclk[] = {
+   274		{ .fw_name = "huartxclk", .name = "huartxclk" },
+   275	};
+   276	
+   277	static const struct clk_parent_data uxclk[] = {
+   278		{ .fw_name = "uxclk", .name = "uxclk" },
+   279	};
+   280	
+   281	static const struct clk_parent_data huxclk[] = {
+   282		{ .fw_name = "huxclk", .name = "huxclk" },
+   283	};
+   284	
+   285	static const struct clk_parent_data uart0clk[] = {
+   286		{ .fw_name = "uart0clk", .name = "uart0clk" },
+   287	};
+   288	
+   289	static const struct clk_parent_data uart1clk[] = {
+   290		{ .fw_name = "uart1clk", .name = "uart1clk" },
+   291	};
+   292	
+   293	static const struct clk_parent_data uart2clk[] = {
+   294		{ .fw_name = "uart2clk", .name = "uart2clk" },
+   295	};
+   296	
+   297	static const struct clk_parent_data uart3clk[] = {
+   298		{ .fw_name = "uart3clk", .name = "uart3clk" },
+   299	};
+   300	
+   301	static const struct clk_parent_data uart5clk[] = {
+   302		{ .fw_name = "uart5clk", .name = "uart5clk" },
+   303	};
+   304	
+   305	static const struct clk_parent_data uart4clk[] = {
+   306		{ .fw_name = "uart4clk", .name = "uart4clk" },
+   307	};
+   308	
+   309	static const struct clk_parent_data uart6clk[] = {
+   310		{ .fw_name = "uart6clk", .name = "uart6clk" },
+   311	};
+   312	
+   313	static const struct clk_parent_data uart7clk[] = {
+   314		{ .fw_name = "uart7clk", .name = "uart7clk" },
+   315	};
+   316	
+   317	static const struct clk_parent_data uart8clk[] = {
+   318		{ .fw_name = "uart8clk", .name = "uart8clk" },
+   319	};
+   320	
+   321	static const struct clk_parent_data uart9clk[] = {
+   322		{ .fw_name = "uart9clk", .name = "uart9clk" },
+   323	};
+   324	
+   325	static const struct clk_parent_data uart10clk[] = {
+   326		{ .fw_name = "uart10clk", .name = "uart10clk" },
+   327	};
+   328	
+   329	static const struct clk_parent_data uart11clk[] = {
+   330		{ .fw_name = "uart11clk", .name = "uart11clk" },
+   331	};
+   332	
+   333	static const struct clk_parent_data uart12clk[] = {
+   334		{ .fw_name = "uart12clk", .name = "uart12clk" },
+   335	};
+   336	
+ > 337	static const struct clk_parent_data uart13clk[] = {
+   338		{ .fw_name = "uart13clk", .name = "uart13clk" },
+   339	};
+   340	
+ > 341	static const struct clk_parent_data uart14clk[] = {
+   342		{ .fw_name = "uart14clk", .name = "uart14clk" },
+   343	};
+   344	
+ > 345	static const struct clk_parent_data uart15clk[] = {
+   346		{ .fw_name = "uart15clk", .name = "uart15clk" },
+   347	};
+   348	
+ > 349	static const struct clk_parent_data uart16clk[] = {
+   350		{ .fw_name = "uart16clk", .name = "uart16clk" },
+   351	};
+   352	
+ > 353	static const struct clk_parent_data soc1_ahb[] = {
+   354		{ .fw_name = "soc1-ahb", .name = "soc1-ahb" },
+   355	};
+   356	
+   357	static const struct clk_parent_data soc1_i3c[] = {
+   358		{ .fw_name = "soc1-i3c", .name = "soc1-i3c" },
+   359	};
+   360	
+   361	static const struct clk_parent_data canclk[] = {
+   362		{ .fw_name = "canclk", .name = "canclk" },
+   363	};
+   364	
+   365	static const struct clk_parent_data rmii[] = {
+   366		{ .fw_name = "rmii", .name = "rmii" },
+   367	};
+   368	
+ > 369	static const struct clk_parent_data d_clk_sels[] = {
+   370		{ .fw_name = "soc0-hpll_div2", .name = "soc0-hpll_div2" },
+   371		{ .fw_name = "soc0-mpll_div2", .name = "soc0-mpll_div2" },
+   372	};
+   373	
 
 -- 
-2.48.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
