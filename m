@@ -1,246 +1,247 @@
-Return-Path: <linux-clk+bounces-17971-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-17975-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E669A33F43
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Feb 2025 13:36:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 562C9A34214
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Feb 2025 15:31:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 935A57A22C3
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Feb 2025 12:35:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80DA73AC033
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Feb 2025 14:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CEE220C48E;
-	Thu, 13 Feb 2025 12:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C9A9241669;
+	Thu, 13 Feb 2025 14:28:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="icTFJmDw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mP48NQyN"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2064.outbound.protection.outlook.com [40.107.22.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7121820D4F0;
-	Thu, 13 Feb 2025 12:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739450157; cv=fail; b=ISOV+6u3quJYYgUew3e2FmCUn7tRiwsN/w0rvIZ1EfKWBSGaK0AXDyFTKMuWCWa6Nsn+5IXxcYkIx9E+CnamolY9A4LYjalYO6Vlkl4Y7SQAU2tN5aMDbslBmLt4Ivp+65dxVNLu9mG/cV2+N48tqdVZTSnzZJBC48bkjz4kJiY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739450157; c=relaxed/simple;
-	bh=loVFR4P7MN/j+AT+D5MfYZ907zoLkli4oVlmKewPNlw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oke7aCPCiJg1QTno06I2t7inz6ovMaoWzon6cpVMN3yvS3hPpsLra4AumM+G8PW9U8YYkcOkAbNcCG3iXONLLOKFh/TMjJwiHI5qc1i/Pwlq2nC57ttVQZ6XC6epMLjMf481Ml86KehTyWyojUR+q65RkJ6U+aVtuY71DJxgoq0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=icTFJmDw; arc=fail smtp.client-ip=40.107.22.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bBAo5otyh69t8ECvtJjYIvSknhoKPXI1rShpgGYiGm3SJjL00onwtjqCKCwulOg80GThpSw4bTbY01n3mBVfBHkIDpxxUvzR+vsFcmKpvfaVS4AmjbSD1L+47OVRDw0Jg2mObUvFvyCiw/YNiR3H14yJKjaMFRySbRmJSeGhRJ1paJSWSzYedjaGyIRJv1Crs8CpeckTnAGgbQMxZVOz5HtfYo3uTaqq3TVwe8zuTBesEm9K6OBLXMZXWu9U8G02xkcf3KuVoPashienFYS6E+1vXcSIq2/vr4vaZRLvaUVdcfUbswnbZ5nIL+7AzL95WWlLbmVYcx261DJaGRQivg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jkhjL1lc8aA3m0M9qa2GzB+XMzHvaRfKjhrhDRQcd1g=;
- b=v3x6pblsbHEoyqEqUlPZq6YZRX2zseL3KQVBPhjrX5+56IgmOc/tBD2MyH3quLW5WU+3QPjAdxPZ/pLDRPNehZ7iPfOWcJY7VPApjmuAhD2M/2K+dILhM9TNMoerFM5ig/J4dBWVQkZLqzlPvEBFm3cBcrd8reTx+Nud0fNxWKOUb5+NNQI0uH1uMMEPbsHEHpSPdy6vPVIIvSG/UliFEmt11lpySdOyE9wk/3DA4nmRa2HP1qHzLjgX7Ce9mIBMczl9mC0HjxH9tjStq+9ygHqs0BS12gVXRvrniKm9h69n5FYnnkpxyxkMXq3FESS2LPth70GGIFsR75aNzE87Vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jkhjL1lc8aA3m0M9qa2GzB+XMzHvaRfKjhrhDRQcd1g=;
- b=icTFJmDwZ2+yo/WH9pG46SE9e0jJC5TwZSJ+5hmMpZZDiBavcAKYbcczfrtBYLcpOTA/M7HoIpZwOvEn7C8yayyCGknVaCUCkfaPF5pKxqWR+XZ+y6LNCDfiDd6nE++AoOaRSo1UuTupUoZ7U0R5K5UHz5p5ANDOowsh/aMgi0u68LJlQkxv307NXsXWVulyt/7fxTi4280Ddku9+hzHOnYp2EA2zg2SKd0wWdDlInMC0z+J03MQcfn7LtdUJlaLilH6oH4tZT5tMKqr8EoPL/JrB92+E133OZeKsDTNBzG0lmPHiPVkdk9nyepfCmKhut5uajLecn7rt2lDTvFqFg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by PAXPR04MB8640.eurprd04.prod.outlook.com (2603:10a6:102:21f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.13; Thu, 13 Feb
- 2025 12:35:52 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%3]) with mapi id 15.20.8445.008; Thu, 13 Feb 2025
- 12:35:52 +0000
-Date: Thu, 13 Feb 2025 21:42:47 +0800
-From: Peng Fan <peng.fan@oss.nxp.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [devicetree-org/dt-schema] schemas: introduce
- assigned-clock-sscs (PR #154)
-Message-ID: <20250213134247.GB1208@localhost.localdomain>
-References: <devicetree-org/dt-schema/pull/154@github.com>
- <d385e871-f33f-4133-8347-3f108f8a6736@kernel.org>
- <CAMuHMdWLWDTi1jeSOGKDAmvhGZzxAVTM-NjBJzW__1jfECHFQg@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWLWDTi1jeSOGKDAmvhGZzxAVTM-NjBJzW__1jfECHFQg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: SI1PR02CA0043.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::19) To PAXPR04MB8459.eurprd04.prod.outlook.com
- (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2532523F422
+	for <linux-clk@vger.kernel.org>; Thu, 13 Feb 2025 14:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739456926; cv=none; b=EZ9vWvS4rrOXboIa5JQZLhUSPfKtNE9FZb16Vq3d0qcqdwjwTvcl0QRHMgedVDarn3evcUWX9NOwm6SGZBC8IMjFd68OWrTDLwJO3N9qHaxFDFz4SaIZ6a4sEKoNd8sgLDisTj+q0uBiwewiK1ktY7uEGb12X/EKuqQS3YxQXn0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739456926; c=relaxed/simple;
+	bh=olY4mBN5+LgaqDjLR1wm1qyN18oxeG0QjyL+rpLXqik=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NofDok2AP+mP2a6nVVYLaDmeOnbIEGwZvvOIfUdeAurjTXmSCOUk/1ZcLhH+yMo2Y9pmJl+WI655M5gyXfGL76YHnKIYJgteczy8zk/MC6wyAxkuv3uTwuAHQKdNkdjKv+GhC/5Qo0bb8F1XVLXrVx9cLegIqbfGtWG1sDojsfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mP48NQyN; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6f9625c0fccso8351697b3.1
+        for <linux-clk@vger.kernel.org>; Thu, 13 Feb 2025 06:28:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739456923; x=1740061723; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pfYpXrDl+rUlmnTpgbRJTwg81BgmauUKiaO1pjrmwJQ=;
+        b=mP48NQyNb2e3n5ftJWucGRlWUywwdWC4PS+Fu1FcXOFNcpCeKdORe2JX4W8XCyAjZx
+         pvV4V0klfTHQ3MyXoryQr1yrLnMOyraior907lZpnrqbhgPtPKf/ibldc7k/H/tSAq7/
+         zNLTXIa0jOk64EAQJYjWRA9aap1nLAKue2MTZvPPCh3NQcS4t0EC7uuIyRoOdW88nMka
+         U4YxCATNzccvqzO/faI9slOiG5bj5owUPJOnwGuZ4rn81v+noHNp4Omh1ubhQVcTWJJI
+         eQGFlC+1SRsXnrwN/oUER0vM0x5LYEBUcMjC7u2DWsV//iWPf0Yguhjxywx4hsSVKx8Y
+         PL8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739456923; x=1740061723;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pfYpXrDl+rUlmnTpgbRJTwg81BgmauUKiaO1pjrmwJQ=;
+        b=sYcyn8b5765fS6I56wzW1STT7kwUaY4fiBACTlunjoZYVBYFZ5PFyKUHbtq7aNNA2X
+         Bgjb+DTrrDdeAAJVZlVrJn186eStv5ZLDcsYeGcxiLFUAqu0QNK9y7JvpHx0QsP/mO6S
+         aYFYZo4Md7AvHGoGgawqRQSgSBU0OhuoP3gQ+cSuFVcxxKBYh2Q/BHJyP56LHbzIZa8H
+         9Pjk42lCrQjq45EMKyS1pkpUD2oQzryD9OP+1z1QJGhjmI+yl2o4LSoaJIy/DG9kcJZr
+         m+XLMWYV1tyTKpo/blcSWw2IcwPgQdhd8vLeQDxV4fT4FZygjdtoby+Mh6T3NBeU67Im
+         k6jw==
+X-Forwarded-Encrypted: i=1; AJvYcCVEIsv5eHSTC4+tfTI/aU54tuQa/aM5o8MpcJWT1h1mb0y83b4AfEjy/i5AKoPaw8SswqO46rlmszg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBI8mc3K3qq5CAFmShLFh94iPjIrHSP+oFKhSvAufXKnRgCk99
+	oZg7OqSdbrdY1mHWPee9pNdI2CokqD8fV4Uly90d2QtuATIFEm6JNtaX6/DA0m4ioozMnaBuBIS
+	FjLOz2gryq+kjGe3Lvk3+AWTSLHoyxcw/lGrrBQ==
+X-Gm-Gg: ASbGncuk2aZm5GECFWj0cNPpKNr0XRErJJSVVFQbtYtxZRLhPgH73F2TuVSR6F19reP
+	UWJH8OeueYcEDE7RAsqzvrQsz+bAvoFQZgFD5hjU2Wc/d8/OcF2hRe1IcURrCbK55JY9TiC6HuA
+	qvTXQe7MdbO+aEjrHNHXcf4K9v2wPL
+X-Google-Smtp-Source: AGHT+IEeJa44o+XSvJZx8Jdms+oYMNreohnRoUx+hnesCryJtVqnxtGNEIN81nIsmMg4dnxmRUZEPcuZvqeWVs6CE+Y=
+X-Received: by 2002:a05:690c:6488:b0:6f9:a6bd:2053 with SMTP id
+ 00721157ae682-6fb32d6daa3mr33461967b3.34.1739456923002; Thu, 13 Feb 2025
+ 06:28:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|PAXPR04MB8640:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5dc51b00-7883-42cf-6a57-08dd4c2af3ef
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?gUcl+QVdIscPzcmw2QtMNZ7aungm3OLgoTsH4sMCZB5Ph1IKrd0WD8DiojDG?=
- =?us-ascii?Q?0q0xlrYAFGnbvZFvlr6LSqy7q4nCwyg2fv+GdAT9CA6HoXL9Q9UcmZmaIWLk?=
- =?us-ascii?Q?W5PLIcL8XiqYTim0q8Xg658h8yw3H8YNQ1UjmEyyTbfbW2jwXCf2RYW4a+J9?=
- =?us-ascii?Q?x6jUIse45whvkpDoyQVzTuesqPvo7+7hy+dOn5/NmNc5UZRudloFFPCR4an+?=
- =?us-ascii?Q?zXPYliVtGkHG3CJ/YlbaGA5/zY7WUFB7fFKse1BpVUMkqoaa3QZmOzcZGhIH?=
- =?us-ascii?Q?QM2T7/lb7eDJ82KSafiTdaMPqVw+KBzxzSMuHaN7Vj7P3IXqbvgMcp8cIRV+?=
- =?us-ascii?Q?7frCMsVHADRwwUgN4OKq3//fpsdBLO5WJJBnxTUjws3E8hirmxlv2jAEinp1?=
- =?us-ascii?Q?X2ss7C9BQ7xNzTa6qa2HuFR6pgQqn2YGT/oUFfMZ+vZRWQbdh3tV5ZmkmgC7?=
- =?us-ascii?Q?3ejougTbOGqilGP0zQ6zTlRiMNw/8JKLjflaGwEAiEyN+BxxtwxtC1tODoRF?=
- =?us-ascii?Q?X1wEHCcSrR4BTrUD6cvxHJqCugHWGac+rgnvH/GoTCJ15EoDag+0UQ5qjzxQ?=
- =?us-ascii?Q?b7fgm1e1d4zeDp6OIi70/FOY+6rgTTqOcrGnAPIFKW2EWU74yjX7nEGKhsKg?=
- =?us-ascii?Q?2XHGXuIZk8KYWNfCiq3VGLfotQFVJmYKnXtX924+3cx6CRUs8yF50kuOB9EM?=
- =?us-ascii?Q?Gha4ChLbLx1Rj3CrmKWB43ARL2AZ68Zcvcj/+iPokF2m6eGCZcBm2Z7SGnrI?=
- =?us-ascii?Q?dthnKRGgqLdRe5dEBMlcJtBoncNzFHqRk87KBrmxyn6W7+ktjS5r/buMdLuc?=
- =?us-ascii?Q?AMQKXPXVHBmVZmlLCGiw3vV8AyuSeOO9buCITqIfVdlFIX2n3SsNVBkRlSj6?=
- =?us-ascii?Q?PT5FfE9d3YKUhdV9v7XJtYjvNbCpUrwf2zKUB3z/o7N6flMfRQ93harBhesX?=
- =?us-ascii?Q?WFF0Dx9hJG/JzWcHI5mPxRv8D8wmo5dkGWT0sc3IP00tvAEBQ7YaG5ZR8eiW?=
- =?us-ascii?Q?A47IFAH/tK+fCNyCtGK2O+GR6Pd9BdeMjX68G55/HvF16jnzZ/eRMl0HEPB4?=
- =?us-ascii?Q?H26FCO/y3H36Dck/bwR5Mgm5qyMnSBgH7Y5PbQYIFqJs/G98XT+nRRp4wKep?=
- =?us-ascii?Q?U3n8Dky/tDLQdPVdHa3IlwTI1sxIay+1jBgMq1RDeSfYxb3YYsrWCeeu/9iO?=
- =?us-ascii?Q?4tMxzrdGcqOGN57qaEISR3QI/K7Tq9iLV/brrHhC4oU7+d3gvEjm6UIoHrzz?=
- =?us-ascii?Q?Lf8Igo8QmYsk1fEjEdzPeHsJdCF/EYfIAKXTO691VsdmFO8S2dgHoZYMpiYL?=
- =?us-ascii?Q?Nqb5EJkrMco/XP8NQWB9gPeuFkaG7cfshG8z/ujXYWncUvug89AVMOd9us4V?=
- =?us-ascii?Q?BNGUczyX/808/sPuJy+XFji/fTwyrzMdzXeqb+GqxCNGgcZeig=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?VoFjb3BQ5oktkdNq1cNpWROCJdB1t0i1aGK5SILufn+z2HN+MkY1nsBGYm9K?=
- =?us-ascii?Q?+rXGZ3BK9c/vgkk3XnpKfFb8kj6WT+qeV5OTaSvE/C2un9s9pNNMlP0v8BSK?=
- =?us-ascii?Q?WjixG8Sw4FO0f2YrJLJ1rguFcUaZGr3f8idxl1BDYEhwKNRejSmzSNi4K3fZ?=
- =?us-ascii?Q?4uzhLR8XAS1i64FDPvpn8k36bnliKrZ7GeFYQ3XZYyhEoxoA+N6ECWhGQ4pk?=
- =?us-ascii?Q?HegnbngX9FmJI/2uSSZWv7RiRRtLuYuC6HQozZI2v+NzuKWkX8QWoZH65R61?=
- =?us-ascii?Q?RaLmy2siAeEv8N7X22EyJJ8VYuTueJqdbXtsiqcS+12XMXMCHJZ9G/pNFQ7B?=
- =?us-ascii?Q?raCmYtPhZ3ytRCRuoPmQcxBQLxuHHm9py7Wr5/q6uUnhzprBHuwYfsxipOOy?=
- =?us-ascii?Q?+MNEaDK7oEMJ54MYWDYs8TGv0qPe7b7Co54wbecYiBW8G3YLi+LRTB2PmJ++?=
- =?us-ascii?Q?zjpbayUjDw6x12l4QO/SjzrPPnGh5HThg6k8AHPDKUgM13o45Ay5vMummy0r?=
- =?us-ascii?Q?9CEImUT0RHzf+47/WPWcA1qzieLqKqltWmqVjiK2dXdMW2iwgUkr/LQhsNip?=
- =?us-ascii?Q?9ZFIimqUBShM4vdtl7VeOOW0Q9xNhaVLGxzRluu3lVO7ngt6iY6nYyg/BRKU?=
- =?us-ascii?Q?VqeDAbKmPRjZvE1kLE5jg0rUyDdBXyPypgE0CxLw9Vkvzx/b00L2mtCm1R69?=
- =?us-ascii?Q?dz3m9nbjucAD7cbpz1Sy6CDtFw8RWV4IoDqpDL5RAma3C+ivvv+gLb8RuVY5?=
- =?us-ascii?Q?Rtodce52W84uELHs58IzUenVPM93BbklXBTa6IPP8cibSUMaGChZT7Hdr2Sz?=
- =?us-ascii?Q?69b2d+55qPXyGlGpqhZud3UCPZpGSQ/5BXUr+stquo/zoAh01NLT9byUDt+x?=
- =?us-ascii?Q?NyaJJrG1gz+/NI4gRrwNIYY7mzJl4QSGTl/L17AIiKTHUx/kwZOxHRbFBI3m?=
- =?us-ascii?Q?4OnaaiPQ23/2/yM/3U7vn+78XiLqEf0/HFhrsvp3i8RW9kvYHdOBJjEHTCr+?=
- =?us-ascii?Q?JB0Ad66xfyBVj4i6E0QVFmrX29q2cKSq1O4LyG8nkxmE4I856epik6C7TSOD?=
- =?us-ascii?Q?wr3o12xcnmwDTdhPiPrISXfrRajrqA1W2hEZXHGKEaxs3mQxpYEpfDPCcW3q?=
- =?us-ascii?Q?x9gTWFDakJ5tDP0DmwRL56vHyjwb05SIPwfM+Qd6HY2xUDKgn1YAvQ8qbMpV?=
- =?us-ascii?Q?8qo9kG0D2/bL0sxHrDf3QV36jdwPFzLj7YcUBqmiP6sJMVNf3LM9VkabeNDZ?=
- =?us-ascii?Q?kUEZ7iuh9f9MaFp6KXqTgu67jpqcY30A1+DExSoRXlRKjelzIeVlCrjl5ovX?=
- =?us-ascii?Q?iymfacFm0b0CyMAo6hAxjpTzn8YNWHvA21f2ynXn+KM8g+PyuudCt+sMBvmh?=
- =?us-ascii?Q?rK/vNX8Wudyj56426pCc4hzli8fDj0FwSEn3NlMx84BmytOjaBqiiLLSM7XY?=
- =?us-ascii?Q?5zyZtbfn0lhdbt1PjodVx5ItLxnXK8amLSEHtMyoeVW9mb3p6HxmrNjtcuk4?=
- =?us-ascii?Q?QuZlw+tXW0c6u2ZZHixFGBhCz3u9dQ52bxD/vhZflu3iBx497EBQoWxZcPCI?=
- =?us-ascii?Q?GI8liVYLSvgd7L8d0FRnUF4nmE+pIZmBZLQW2k3y?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5dc51b00-7883-42cf-6a57-08dd4c2af3ef
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2025 12:35:52.2835
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tJ4OBTgEO3qVxBaJBRfAXL3Sxd+oS8upRh1+5r/Do24WvNW6fY6WQkJNpLVQZv4y64H1+UygRJ07GqyiQOP9Lg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8640
+References: <20250212-lpass_qcm6490_resets-v3-0-0b1cfb35b38e@quicinc.com>
+ <20250212-lpass_qcm6490_resets-v3-2-0b1cfb35b38e@quicinc.com>
+ <exyxni7td5vow2n6jarav5euje6dnbue5f5yxzu6az554dthfe@zn5yd2byvkoj>
+ <ccc87c55-d157-4ffc-8081-1a5900752931@quicinc.com> <CAA8EJpp7e5q36jGmB-TZX5A=XVGKsDtmBF8kJmxoga8NqGZP1A@mail.gmail.com>
+ <c820c697-c3ec-4ae3-9720-fb80cb3a0450@quicinc.com>
+In-Reply-To: <c820c697-c3ec-4ae3-9720-fb80cb3a0450@quicinc.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Thu, 13 Feb 2025 16:28:32 +0200
+X-Gm-Features: AWEUYZnOrZ0wV8U14CBBJrqDdK_JlTRGkwtYPMzrOyTphzKXgQHiPDt9IEDIQeA
+Message-ID: <CAA8EJpon5+R5s0HXUmoikjtuyEf3sQUqBVYvWrxuh14h2DvjQg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] clk: qcom: lpassaudiocc-sc7280: Add support for
+ LPASS resets for QCM6490
+To: Taniya Das <quic_tdas@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>, 
+	Imran Shaik <quic_imrashai@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Geert,
-
-On Thu, Feb 13, 2025 at 11:16:31AM +0100, Geert Uytterhoeven wrote:
->CC devicetree
+On Thu, 13 Feb 2025 at 08:52, Taniya Das <quic_tdas@quicinc.com> wrote:
 >
->On Fri, 24 Jan 2025 at 15:42, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> Just FYI, below is a foward of pull request for dtschema for bindings
->> adding spread spectrum to clocks. As Clock framework maintainers this
->> might be relevant to you.
->>
->> -------- Forwarded Message --------
->> Subject: [devicetree-org/dt-schema] schemas: introduce
->> assigned-clock-sscs (PR #154)
->> Date: Fri, 24 Jan 2025 04:31:30 -0800
->> From: Peng Fan <notifications@github.com>
->> Reply-To: devicetree-org/dt-schema
->> <reply+ACPRLI5YLXX27TFZX2P7NVOFT5USFEVBNHHKO4ZXHM@reply.github.com>
->> To: devicetree-org/dt-schema <dt-schema@noreply.github.com>
->> CC: Subscribed <subscribed@noreply.github.com>
->>
->> To support spread spectrum clock, introduce assigned-clock-sscs, it is
->> an uint32-matrix with format multiple elements of below
->> &lt;modfreq spreadpercentage modmethod&gt;, &lt;...&gt;
->> You can view, comment on, or merge this pull request online at:
->>
->>   https://github.com/devicetree-org/dt-schema/pull/154
->>
->> -- Commit Summary --
->>
->>   * schemas: introduce assigned-clock-sscs
 >
->>   assigned-clock-sscs:
->>     $ref: /schemas/types.yaml#/definitions/uint32-matrix
->>     items:
->>       items:
->>         - description: The modulation frequency
->>         - description: The modulation depth in permyriad
->>         - description: The modulation method, down(2), up(1), center(0)
 >
->Is there a way to explicitly disable it, if it was enabled by the
->firmware? See also my comment in "Re: [PATCH v2 1/4] clk: Introduce
-
-The binding here is just to describe the parameter to configure
-spread spectrum of a clk.
-
-To disable spread spectrum, the clk_hw_set_spread_spectrum could be
-used with enable as false or as you suggested using CLK_SSC_NONE_SPREAD?
-
->clk_hw_set_spread_spectrum".
+> On 2/13/2025 1:30 AM, Dmitry Baryshkov wrote:
+> > On Wed, 12 Feb 2025 at 19:15, Taniya Das <quic_tdas@quicinc.com> wrote:
+> >>
+> >>
+> >>
+> >> On 2/12/2025 4:39 PM, Dmitry Baryshkov wrote:
+> >>> On Wed, Feb 12, 2025 at 01:52:20PM +0530, Taniya Das wrote:
+> >>>> On the QCM6490 boards the LPASS firmware controls the complete clock
+> >>>> controller functionalities. But the LPASS resets are required to be
+> >>>> controlled from the high level OS. The Audio SW driver should be able to
+> >>>> assert/deassert the audio resets as required. Thus in clock driver add
+> >>>> support for the resets.
+> >>>>
+> >>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> >>>> ---
+> >>>>  drivers/clk/qcom/lpassaudiocc-sc7280.c | 23 +++++++++++++++++++----
+> >>>>  1 file changed, 19 insertions(+), 4 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+> >>>> index 45e7264770866f929a3f4663c477330f0bf7aa84..b6439308926371891cc5f9a5e0d4e8393641560d 100644
+> >>>> --- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
+> >>>> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+> >>>> @@ -1,6 +1,7 @@
+> >>>>  // SPDX-License-Identifier: GPL-2.0-only
+> >>>>  /*
+> >>>>   * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> >>>> + * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+> >>>>   */
+> >>>>
+> >>>>  #include <linux/clk-provider.h>
+> >>>> @@ -713,14 +714,24 @@ static const struct qcom_reset_map lpass_audio_cc_sc7280_resets[] = {
+> >>>>      [LPASS_AUDIO_SWR_WSA_CGCR] = { 0xb0, 1 },
+> >>>>  };
+> >>>>
+> >>>> +static const struct regmap_config lpass_audio_cc_sc7280_reset_regmap_config = {
+> >>>> +    .name = "lpassaudio_cc_reset",
+> >>>> +    .reg_bits = 32,
+> >>>> +    .reg_stride = 4,
+> >>>> +    .val_bits = 32,
+> >>>> +    .fast_io = true,
+> >>>> +    .max_register = 0xc8,
+> >>>> +};
+> >>>> +
+> >>>>  static const struct qcom_cc_desc lpass_audio_cc_reset_sc7280_desc = {
+> >>>> -    .config = &lpass_audio_cc_sc7280_regmap_config,
+> >>>> +    .config = &lpass_audio_cc_sc7280_reset_regmap_config,
+> >>>>      .resets = lpass_audio_cc_sc7280_resets,
+> >>>>      .num_resets = ARRAY_SIZE(lpass_audio_cc_sc7280_resets),
+> >>>>  };
+> >>>>
+> >>>>  static const struct of_device_id lpass_audio_cc_sc7280_match_table[] = {
+> >>>> -    { .compatible = "qcom,sc7280-lpassaudiocc" },
+> >>>> +    { .compatible = "qcom,qcm6490-lpassaudiocc", .data = &lpass_audio_cc_reset_sc7280_desc },
+> >>>> +    { .compatible = "qcom,sc7280-lpassaudiocc", .data = &lpass_audio_cc_sc7280_desc },
+> >>>>      { }
+> >>>>  };
+> >>>>  MODULE_DEVICE_TABLE(of, lpass_audio_cc_sc7280_match_table);
+> >>>> @@ -752,13 +763,17 @@ static int lpass_audio_cc_sc7280_probe(struct platform_device *pdev)
+> >>>>      struct regmap *regmap;
+> >>>>      int ret;
+> >>>>
+> >>>> +    desc = device_get_match_data(&pdev->dev);
+> >>>> +
+> >>>> +    if (desc->num_resets)
+> >>>> +            return qcom_cc_probe_by_index(pdev, 1, desc);
+> >>>
+> >>> Won't this break SC7280 support by causing an early return?
+> >>>
+> >>
+> >> The resets are not defined for SC7280.
+> >> static const struct qcom_cc_desc lpass_audio_cc_sc7280_desc = {
+> >>         .config = &lpass_audio_cc_sc7280_regmap_config,
+> >>         .clks = lpass_audio_cc_sc7280_clocks,
+> >>         .num_clks = ARRAY_SIZE(lpass_audio_cc_sc7280_clocks),
+> >> };
+> >>
+> >> The reset get registered for SC7280 after the clocks are registered.
+> >> qcom_cc_probe_by_index(pdev, 1,  &lpass_audio_cc_reset_sc7280_desc);
+> >
+> > Could you please make this condition more obvious and error-prone
+> > rather than checking one particular non-obvious property?
+> >
 >
->>           minimum: 0
->>           maximum: 2
+> Dmitry, we had earlier tried [1], but seems like we could not align on
+> this patchset.
 >
->What's the meaning of these limits?
+> If you are aligned, please let me know I can fall back on the approach.
 
-Modulation has three methods:
-Down-spread modulation
-Up-spread modulation
-Center-spread modulation.
+You have been using of_device_is_compatible(). Krzysztof suggested
+using mach data. Both approaches are fine with me (I'm sorry,
+Krzysztof, this is a clock driver for a single platform, it doesn't
+need to scale).
 
-I use 2 for down, 1 for up, 0 for center here. So the limits:
-min: 0, max: 2.
+You've settled on the second one. So far so good.
 
-Thanks,
-Peng
+But! The problem is in readability. Checking for desc->num_resets is a
+_hidden_ or cryptic way of checking whether to register only a first
+controller or both.
+
+BTW: the commit message also tells nothing about the dropped power
+domain and skipped PM code. Is it not required anymore? Is it handled
+automatically by the firmware? But I see that audio codecs still use
+that power domain.
 
 >
->[1] https://lore.kernel.org/CAMuHMdWn+sKiC1B4MF1vHwS2ArFYQXGzpYi2EcsyERPSCc9bvQ@mail.gmail.com
+> [1]:
+> https://lore.kernel.org/all/20240318053555.20405-3-quic_tdas@quicinc.com/
 >
->Gr{oetje,eeting}s,
+> Do you have any suggestions that we could consider?
 >
->                        Geert
+> >>
+> >>>> +
+> >>>>      ret = lpass_audio_setup_runtime_pm(pdev);
+> >>>>      if (ret)
+> >>>>              return ret;
+> >>>>
+> >>>>      lpass_audio_cc_sc7280_regmap_config.name = "lpassaudio_cc";
+> >>>>      lpass_audio_cc_sc7280_regmap_config.max_register = 0x2f000;
+> >>>> -    desc = &lpass_audio_cc_sc7280_desc;
+> >>>>
+> >>>>      regmap = qcom_cc_map(pdev, desc);
+> >>>>      if (IS_ERR(regmap)) {
+> >>>> @@ -772,7 +787,7 @@ static int lpass_audio_cc_sc7280_probe(struct platform_device *pdev)
+> >>>>      regmap_write(regmap, 0x4, 0x3b);
+> >>>>      regmap_write(regmap, 0x8, 0xff05);
+> >>>>
+> >>>> -    ret = qcom_cc_really_probe(&pdev->dev, &lpass_audio_cc_sc7280_desc, regmap);
+> >>>> +    ret = qcom_cc_really_probe(&pdev->dev, desc, regmap);
+> >>>>      if (ret) {
+> >>>>              dev_err(&pdev->dev, "Failed to register LPASS AUDIO CC clocks\n");
+> >>>>              goto exit;
+> >>>>
+> >>>> --
+> >>>> 2.45.2
+> >>>>
+> >>>
+> >>
+> >
+> >
 >
->
->--
->Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
->In personal conversations with technical people, I call myself a hacker. But
->when I'm talking to journalists I just say "programmer" or something like that.
->                                -- Linus Torvalds
->
+
+
+-- 
+With best wishes
+Dmitry
 
