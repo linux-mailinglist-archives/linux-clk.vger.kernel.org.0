@@ -1,83 +1,85 @@
-Return-Path: <linux-clk+bounces-18004-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18009-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADD59A35565
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2025 04:39:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45CF6A35605
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2025 06:09:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3533516D733
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2025 03:39:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED8A116BFE9
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2025 05:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9128F1547D8;
-	Fri, 14 Feb 2025 03:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3968416DC28;
+	Fri, 14 Feb 2025 05:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="LGlSC3po"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="yDWlhNId"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2041.outbound.protection.outlook.com [40.107.249.41])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2067.outbound.protection.outlook.com [40.107.20.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C2D5153BD9;
-	Fri, 14 Feb 2025 03:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85281519AA;
+	Fri, 14 Feb 2025 05:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.67
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739504349; cv=fail; b=uKImlQwd0CnI28QrVnrvlSUNPnXen2KjeBwZBzyUBZw+OEieRuNRzPthfpXd+QZmc7z4cXjsv13FPPL122dKjc5HfJxyDhvtGXGRM/V685DJ/4WjyyoyCMi1njBwQjn3ZuoRVkTudAw/h3ZPnqJWiFET6k0uf37iom6YUiztXgk=
+	t=1739509736; cv=fail; b=hTPUV2ti8fdLhZf2RU2yNZRqEm/KxTZVNEVTnPSbWGcPM1n2pUu3gZClNTAM/H8iYYK3bq5JuhfCe92xBmmGNDszNekqo7sll4bAw9wGbnbZedf6W5gEB4ff9nNm2o2IjmtwA8gX3xz0gJ9WmumytTIOj4KyMmSSYCjEiEyS+Eg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739504349; c=relaxed/simple;
-	bh=7SJh+3WinxlRgkX+uFePTuCEAQHdJDXYmGI7jjCP6HA=;
+	s=arc-20240116; t=1739509736; c=relaxed/simple;
+	bh=GlJ/eBcNo+kCc+vuaMLkOiOOSkSx5sluDkzCu98qPWo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=tLe3d7kWNpHTGq3KanT2umKbCyI8jWMp03+6SW0LJ7s2N6sLidsOMl4i026DfsVVt/ULmT1gVV2mNVq+Y5Wtz6U6K0xyUu11ZsBSdQeO+ew2Vbv03bKLaHbQgfiH7J4+v6p/fhuT9Iv7WpMp/o59tHfDLkDeAwGFa3ObO1Esy28=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=LGlSC3po; arc=fail smtp.client-ip=40.107.249.41
+	 Content-Disposition:In-Reply-To:MIME-Version; b=FjfT3MgmSNpfBN7LCp4J8cUWsLzqrp1Duop253itASYnngOQEcPsaYO4k3feD/T2G10OoHYooZO8eSNYkYni/kaSzLNCgLPfmG2voupQEn7kSLV9L14lIPmTo5Fsv/r/+LVsMgzay5absuAkMdjXJMoVz52aDQSayqRCmZpAjQA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=yDWlhNId; arc=fail smtp.client-ip=40.107.20.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NAP1Edwwrx/MbEOCJIJG5QBuFCJ2mOhL39CR0hGBme+SwgkYQi1QiNFAXcIZaXHszyH3eDsIQU4GIojGdhEcgu1lRF+zDE336tvZ2axY7RkEXcazKMLFtlnPU1xiewGMZ/Ca8ro9qrxTag3TkUouz+YK5j+V1SUbC7v2/pyfmVsbVCjF4+qw1QJnZYJtTZAaUjGVnQWZq5R5zCt3Fprve1r9gyWtSwmrt2chsQAr5ROVnTX+5xAX+gf/sLZbdrHdx1OmhhC75udsuZ7+G/rlBHzuZP6KpXwdbu7eWr3OzWfxcQZa9IdXpXMG+e5lk4iMptCR2ca8Cms3+HJqrCB4XQ==
+ b=lKpWROHccFErqye9c7Y15ANTiGSYxRuJvVreLPZL4KkR32u1M4N/VQJdi7Ne3IxFlN3Cg6nZErx0dhVnQI8oMaeF2iD3F9IppYD6bb+cn/4Jzsa7hsSGc+TPdGKRH3dkSKJGImWq2x/b0C6sYNZtBZsqsQqqbZJza7kR1ZmSB66Pv/hD+yV0qNqICrInP6sVCh/zii9QlA/sNaijUAcp2u1UBANmHw3a+ke2t6FoNnmtiM5KofgPtSYCeN5PpmUSlz+UGssfPCJRbADeeS17GB+hRokvePLmYJ1KYja4o5L8PMQorO4OFSIZql0mlxX5wYwgs5c26VCm5GbCUbvzIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u4AJVE+8SxqzR3voZ4y7Gp6hBz3h+QhSqIheL7G01Lg=;
- b=YZBickSgvSpxP7L1eJGDcdClMqgl+GUFAhzhrkZdXsHVBTVd5T10xX+TGGUifOcZoyj8coOzAoe++HyxVOCnpFxPhtZORRNnZ0b+VghaJl4ff3PD08OrZ3A159lqQ3mtzzKKfUcZ8KBGMHkGzYVN2P7tTXprz7oEGtQc8NLSd6Dmc05fAl3AlTlFdLcgHmViRqBQ5hHDTi8/pUiwC6PGk2qG2aKDVWJQ2rbTfSNc2arUHDFYBJ1z5p0W3viTDdLyOSpzPCdY8TAk35YEAef9Kf9ZucCoOL2Vb1wuf4ceYNec2MyPXEvDs/xWcybooC5Wy0yGlciMDO5f4jgJ4oPClQ==
+ bh=P5pSaPO52CqZO97GOXa/mqSB84NFaKMq9B6+LChsflA=;
+ b=DXqxbiGqgMHcikdH65ufv7pwrC+MaqNBTchL9/oz/6GbcKoroktQwyIhWdS6shvIfFWLpEUcUhfct+xO0OI8CPV0ISZsx+eIttdDwih9CYwiXiSnWbpZ0BnDFvXIWWUf9LEvKHEfaOUkrh8iMk8h7qYMP+tO2XGgqJhdimv+YJUbhd5MIZH45YO0b/4lPz82rhuX7SBZ6E8+CbcDUmMv/hhQo9yVbqacuYGDZGb5ZpCT73YRjpYbyE/OEEBJKeSGLQmHktNrEnQE6JWUQmNGADPSzxovBoTHzP+lTJlkJNpV/CynYoGMrYip5SEdHnRygqeU0So3qGksvskDItJc3Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector1-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u4AJVE+8SxqzR3voZ4y7Gp6hBz3h+QhSqIheL7G01Lg=;
- b=LGlSC3poAiYpM4SalNgWovr7qEopJI1P02aST9ewmsFDck+/U6XRyfhoLZ/wPF1D2+qlAooRuzoS0trvIxQ8egGz50UxvAfZvxzngBrU2KB3Oj5dhhh03rzXVnI3vLp1u4DmPUAkCPy7CjQS18vDACfduxxhH5OaK9U0qq7cqC6M3ZEdR3aDeRxhi9U2rDUbo//O4H8EmzhGCRUFoffIdWDJInbSD8aT8I5CAz1EeTEeDHgkQeoatkRHd9B18SBWZC3+8j0zDgMEknv+gyJ48rImMBtKbR+mTiB8gup9Xubu2gHQ7G1U5kH/vAFJswXwmzii/oym9Mf/3/GgwC/Cwg==
+ bh=P5pSaPO52CqZO97GOXa/mqSB84NFaKMq9B6+LChsflA=;
+ b=yDWlhNIdzL9M8l25z2lkUqtjciDyHjgKYZ26lG8gWsGOTGmXaYxY9HykQ22lNSQZNuLzuIoKsCiFtnwoKuSnK0vvSLXl4KFAW4TWSbtwg6dRWYLJYvfbMPiSvMEJvmZ4QZ6cDWaTSpC/iiG5A/szV9wT5v4JEc+poeaHX1Zb55jCO4yUv+AeUfat0ByUOCvMojFRvgxBSKMQPwsUl0xpFcIK7eL6byu516vX+aptdwQOP60O49OGyg8eVnCCBTbhj21Cl9s54YkIAWEkLibrHKx3TpoWtnU1y+8Lr+Vz5DZsJy2xOllCH01rg0t1dQ8GBx6pegslwrsQ2k9CRwI0SA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by PA1PR04MB10525.eurprd04.prod.outlook.com (2603:10a6:102:444::12) with
+ by GVXPR04MB10474.eurprd04.prod.outlook.com (2603:10a6:150:1da::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.16; Fri, 14 Feb
- 2025 03:39:02 +0000
+ 2025 05:08:48 +0000
 Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
  ([fe80::165a:30a2:5835:9630%3]) with mapi id 15.20.8445.008; Fri, 14 Feb 2025
- 03:39:02 +0000
-Date: Fri, 14 Feb 2025 12:45:57 +0800
+ 05:08:48 +0000
+Date: Fri, 14 Feb 2025 14:15:41 +0800
 From: Peng Fan <peng.fan@oss.nxp.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-clk@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 3/3] clk: imx: clk-fracn-gppll: Support dynamic rates
-Message-ID: <20250214044557.GE20275@localhost.localdomain>
-References: <20250210160012.783446-1-alexander.stein@ew.tq-group.com>
- <20250210160012.783446-3-alexander.stein@ew.tq-group.com>
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [devicetree-org/dt-schema] schemas: introduce
+ assigned-clock-sscs (PR #154)
+Message-ID: <20250214061541.GA23652@localhost.localdomain>
+References: <devicetree-org/dt-schema/pull/154@github.com>
+ <d385e871-f33f-4133-8347-3f108f8a6736@kernel.org>
+ <CAMuHMdWLWDTi1jeSOGKDAmvhGZzxAVTM-NjBJzW__1jfECHFQg@mail.gmail.com>
+ <20250213134247.GB1208@localhost.localdomain>
+ <CAMuHMdX78GBk3Fm-USGgGyCo+Fy028qccLrDuE1Vrkw=OAz1Vw@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250210160012.783446-3-alexander.stein@ew.tq-group.com>
+In-Reply-To: <CAMuHMdX78GBk3Fm-USGgGyCo+Fy028qccLrDuE1Vrkw=OAz1Vw@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-ClientProxiedBy: SI2PR01CA0004.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::22) To PAXPR04MB8459.eurprd04.prod.outlook.com
+X-ClientProxiedBy: SI2PR04CA0010.apcprd04.prod.outlook.com
+ (2603:1096:4:197::11) To PAXPR04MB8459.eurprd04.prod.outlook.com
  (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -87,380 +89,167 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|PA1PR04MB10525:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a275bb5-55ed-4d0f-360f-08dd4ca91fec
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|GVXPR04MB10474:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa6af48e-6e3a-4448-430a-08dd4cb5a9f9
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|7416014|1800799024|366016|7053199007|38350700014;
+	BCL:0;ARA:13230040|52116014|366016|376014|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?LdjBeJfINWhwgR3W2gtSpGAhNWBg5hbupSz2GkJvOWR6GL4U3XQBv7ssnt4I?=
- =?us-ascii?Q?jMUvxGnKL9noUoz+/oQTzLI5iM8pTdi+pWk1sSnsmEzt/OUAGgYyxxuykJjh?=
- =?us-ascii?Q?Pl84cczoWH3NYGikeT42CkW5w/6m7Aj6x28rJUoeV5c3Ybw/k2He1JmXoiMn?=
- =?us-ascii?Q?XC2E1N2qr+VsnFyec65TSbYaNhK2zyh597tobS9OOIMyucVGyLTxu6JdGzSo?=
- =?us-ascii?Q?qK1FU5x+t21Y70a0YTRGtUhf7k2nf71ZvFhB6DSc1f6XfP9wclCuQ58fFRsA?=
- =?us-ascii?Q?3AICo4QP7Y4Hmuy0uRtF/dmFTQz9iB47ViVMk3apM7/iif9XOIQYjdbHmDLX?=
- =?us-ascii?Q?xdddfxgllIL2dFoaTqPUjzEG4x6o0ZSbPTawT6iMDRM/eQq+Qp3dYZNXgyPI?=
- =?us-ascii?Q?qsN56lxR83zzqmbJdWkImiv/DFI0ZmjshfP98mAjv6bkLylQeouupstZKmES?=
- =?us-ascii?Q?Exa6rJUgxJ/IMHuYpApHCLPMZjzwh4LfEgwJAsPqzjfHgh/mVFWXkNWHijOg?=
- =?us-ascii?Q?EMRaYJHsesPNZoB9DnLsB5R0WGgMr/kNcEbnTnTFgg5Xv2cWAaXVXHWldyzb?=
- =?us-ascii?Q?xtHakNfOQoQyZc4CTGAHzb8J4swiKa5BIcGxQo6mlM9jGIAVLoU5cjKMwTLY?=
- =?us-ascii?Q?8XTjnX3Q7bY+xfAuokgGdOLbOTm0j/A/p1cWiVFA/Hsrv312Bb5dPrTFZLqL?=
- =?us-ascii?Q?KgreGAKzIE1+AAZPd5zw8vRKMVY5+6FJaOAnkHOoUK0ZEcT/uLjJ6grt1Caz?=
- =?us-ascii?Q?e5535bzFBBFZn5aMzR5LXyaDHkoUsLWgwaOCVcetBd9hf/ei39yup2AJqhh8?=
- =?us-ascii?Q?L1YMXDkGXIPDtKDz2FSp98TxE1ffmTRoG+LzmfQPzYMjIxjmDKK+iuPk3bG0?=
- =?us-ascii?Q?4wDSB6IBuBj0B4tfRSu2WjeJJuNuXFQS2oITg19Zfs5IPQtMCo+EpTwoVjD4?=
- =?us-ascii?Q?lg6Ptp5RKkc36Z4xwGcwhyuvZB5+A2MOmud7/o9+LWSbVrJnepu4O2eb8oXB?=
- =?us-ascii?Q?8izCfnG8zvE+pvBYmvQ3X0NytHCbVdzjxD9YMVySLeKOBTRa4mPj7WEVFZjG?=
- =?us-ascii?Q?dXhqvrchwqPGPuaeAF9LCjHMGuEiKOOIOxY08MLgdY2DBg/Dr6oM8bXmLaDf?=
- =?us-ascii?Q?7lk0tMDvSlBVg1U7+PFg6D7HSrcJ/LeQj8S9wrCdOy+Fugke4YCWUp1SMdXO?=
- =?us-ascii?Q?AQoDwRc/h8+f22aljojiFavhwVGbtg0qwZ8v7vwLPnQpgDc1JZM+VsCVZbKT?=
- =?us-ascii?Q?QF4fwWt+9xITiaefpw50LmRsToII+/2e35yzc3WZepovi05WTLVU2gbQKdZJ?=
- =?us-ascii?Q?wxMyUUhJ+8gxOZiy4qHkSqL7Q3widYkw1DFRfdvhvOXmjxwW3DwEppCNUBjR?=
- =?us-ascii?Q?AvfAiVUkiJBXCcuwfkBrjme89fldaDGXU7HVXNuXAz9LoSorPVwe4Vk4m/c4?=
- =?us-ascii?Q?cQaXY/Bg+nknLY+Thb4ZUt3QzNTtbBpA?=
+	=?us-ascii?Q?yhVSHxKLBQu5fduDRsgjNRgYGEtcxgGA6GaKR3Z93+kHsEWr1OcKvC/c9MTP?=
+ =?us-ascii?Q?bwQ4wN4jy9fC3W92Leksy2SIYCyMAOnhyCUv0NHYgPLQAdoZs5TdVlkwyiJh?=
+ =?us-ascii?Q?z8YQ88z5N83le/QpM7V4J6clzS/2+mm8mnkrvPexG4nL76M/Z8f4IV8PCxPZ?=
+ =?us-ascii?Q?RAJALAzEfZqa7hgscTaD+TyqWo50r/oO7ypAx716GhnsqRmMJXpTafWOkcQw?=
+ =?us-ascii?Q?UE8izPO/EdnK4CxjYqo1Ss11FFYDn5pP3Ohlp5pftdoupoU28wCdd0Ua8kOz?=
+ =?us-ascii?Q?jHUTBazjAzkLCpc/aNJHdjfRK7v9rnR8QpdpNWUSCXjyjxrOfeWPiZtIgv6J?=
+ =?us-ascii?Q?f+dhsP3tydlQBsJKJhI9WMihqatkzeOjx/QV8QSKK9FQROxkfdoTTa3aVKBc?=
+ =?us-ascii?Q?MAEoUpRc/rnjp9vQRD6TW1kH3IsyxwINzTWFfSaRKs+cbIDCAcN3QfdUOU/6?=
+ =?us-ascii?Q?wC/rAzEEtw8QfpcwAWJzHiU113mM0491sGjenLeCekAP7phAJGf37n5KcFkg?=
+ =?us-ascii?Q?cRRnI2ieZ4qRuWA5Pq/WXw9vRGMVfV5cktZDZT2LGZMF9zOkjNSI7dpjh6Gw?=
+ =?us-ascii?Q?Q1/hzXynXnMWjX3tgA3cy90Cn9ehpJOdd4+yt3xeV4MFhj0t1gKcC6FfEiPT?=
+ =?us-ascii?Q?jmG0hEQuB7HTpFvbhwVOZcsIaxhVcuH1erdXCKQ5KyGDWNAuHDStacQVYtsv?=
+ =?us-ascii?Q?2AD2Gl+gwupyPv3mKVD5e/kFkmVlw9LQBlZhlDdlx3lzhnpdgMsuO0BWyoZw?=
+ =?us-ascii?Q?NoaYYAhW9RZ9K2by2aZPNa7iLaEtWBEC8+a7zDPua6Fb4FLDJXTQBtoTjPnO?=
+ =?us-ascii?Q?yx3pmEHU4D5rIbuvFISjH9Vkp6D0FPF75b6QC4vOsj8Tff9+mhGeiN55QVSc?=
+ =?us-ascii?Q?I3F4snhxw4+ohK4ca/0y4TGp7bgKIkUQNUIc6XzOPEhBjVgXSVN0Uo4TNrid?=
+ =?us-ascii?Q?LUQoeCnJvOxYMXl05BWzLKrrhaJAi7uSLX9lxtl2o25UcKkouT3dT6kF1gx5?=
+ =?us-ascii?Q?nIiYADWlqzPIM4Rv6p6udLOkAod59GcSYQJ6RW8q/C04Zv8RU8ZqLiWovxX+?=
+ =?us-ascii?Q?HPIYHXc/HD2NkvuYMCQ+oHaRgJfsZwP4/d83Bs6v4rLrx8XEZIZQlnxKbziD?=
+ =?us-ascii?Q?KTsIj+B2dpUFojvqQ10P3fDY06k2SsrWIGSkhUxv/1xq1gPa8CaHWgV2GS4V?=
+ =?us-ascii?Q?kMqayqP8svk35xhjabJwp7vk5z8utiE3AvNEu1hxUbENJ9Xa498Wo8vDRoFH?=
+ =?us-ascii?Q?x1btkWPP2gm5/50GyPZ92vO7xmhxhv780Y3o6qzxyegkC0w77EWGGUe7pDcD?=
+ =?us-ascii?Q?+9naHagj61zhhMp3tpxX0Xvns/Xd+BZYRsdLTohHLyos9a8Gx7T0q+qlTVW1?=
+ =?us-ascii?Q?E5M8p2ZK56ieoX/zUKdeSZAnRRO6JXSv8MlLQ1UHpd/u85/5SQUp2rS3TCiE?=
+ =?us-ascii?Q?TUfXo5W/cMZ2Q9H7At+Hi/WGRBM8+50E?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(1800799024)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(366016)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?FykfB9PB18Orag5QnuGsMP1m5gNkBDHZkM9hHb0LP8DbFbq4nzTJKc5VDtRX?=
- =?us-ascii?Q?KppusdvQ8osiXnAm64mGMEZ2XhRMND3b2ouvUWasfmjS8JflhnmG4Fxj6VjV?=
- =?us-ascii?Q?U7VxRaKhoFMVyRVVjbuJfTPZvRT4/fzk1mloT9+9GoE5tRUl+i0XejzgT5r1?=
- =?us-ascii?Q?csVJgOjykp8YplkBiikWtNzvzIHRkYCRHdm5612d92zYHlVMaPSRMKfsuvAz?=
- =?us-ascii?Q?GYTROJ8xOSmdzgAgx/0qnRLrtF0sPMyt2A5Iroi5rwvWj0LnKMEftmtt/oOc?=
- =?us-ascii?Q?pxRIy28haqNdJdTMJxgXiP/DWg+ffRJu/xE2HRuwJWagMil9skkJFVMezY03?=
- =?us-ascii?Q?jxX9i7gHLST7aZiWqvZQ72KwYHxnFPNzOpltqnrFozPC37LjreLYHm4E4HXP?=
- =?us-ascii?Q?E5YbNP4vCC0sPR8BnEFphKXf82lhsaPGE3y+C2FL881HUPGFOOsKhCX6JEA9?=
- =?us-ascii?Q?xMRR6K+Zq4Vkpo3r+hb/a1/5Yc905Hv0HqpG+qNvBqyNeCMsuiuOKxYXnE2f?=
- =?us-ascii?Q?FLqJvLyvHC+spBaBVvDl+mXpKm7fiKRm7vnuMfyZjQb/BprVe2rSz9HKde/d?=
- =?us-ascii?Q?bFP+rcjYsC0n33e5bi13CiJ5GGenw2NmNj2uUZdRFFf5JBnlY7Qc8z6suD4A?=
- =?us-ascii?Q?+2xINt6IoCQOHr0HcZJ3Q3lA+fMw58ccObs+b8JUiKYdLUydlTzJI52UITJ2?=
- =?us-ascii?Q?HFA3GxGDOVZ7fgfvDbCKWcuja2Hi6Y0tp/J6dVryZJKvZ04Nwa3VAAuVRH9J?=
- =?us-ascii?Q?zbEOSDn8uCcRx+8JjlRgku127JHRL+nCM4y/fC4o/hRL55BSxCF5xwKHOoGX?=
- =?us-ascii?Q?Z6yBo97kLax5es/u2bfoPel/vPGxRyIDKmlbaHDv6E0azHsiHTI5V3hz96fQ?=
- =?us-ascii?Q?8x1lCnNH/E1ae+4Mscmm/2toFxjtMgvs7OMvL9St4kkJxUAHX5Y8FZGNhYca?=
- =?us-ascii?Q?fC64mV45/hDDo2VRFjXtwTitgLT5ovvsrZ5+bcvbDKdSaWziaVdmpRz04xXI?=
- =?us-ascii?Q?FkzJXx9TBDBk8WARn1oiCZVYmGM904NAItmcqbxLYALHbVSQ8vSoJesgXNj9?=
- =?us-ascii?Q?niedVU9I276TKHxhvgCWz6d195DzuCPi0dfNqAk5S6H3Nw2yfJpclPfuH5Yr?=
- =?us-ascii?Q?yjHn5LCATvfp4Cc2PkSJgCUtMZYFN9Zav9lkFTYGiI2PnGFfWug4Gg1JgjPD?=
- =?us-ascii?Q?geOE6n73bei/3o5NdHVxFJ+o8PKiY4A1D1PtbFQnJKHbk3Xs3D+FAhYBZSid?=
- =?us-ascii?Q?kv45uJyuScLBucNjsYlyUmY2esMjW1YDfglHbHJZ8P9MBn67VsxQWfyGJWHK?=
- =?us-ascii?Q?vkamM4ei2OfHd78qK7/mB7sXRzOLuCcAZyYglQtH132NnPW5MhtmFbOHMYaA?=
- =?us-ascii?Q?alu0kLdjt/p2YlPPiShDWqQ/SFOL8BprGZJbLe8+eqTLn5vTyjfTzLc2FRb/?=
- =?us-ascii?Q?0ShwbpOHZF/JamXK8Ytty/Q4eYM48k/aouU6/XHUMXvTSqvS5U/eyK2uQxAk?=
- =?us-ascii?Q?lNiXIq2Jlvzo+9BW/JDtwFiSL5qgqw84FikF7vMAnbTvjtRSfTt93K5J3tFt?=
- =?us-ascii?Q?V0/SVsHqNOZakxFY5soOZ5XoIz1YpdNX69ZLLXHM?=
+	=?us-ascii?Q?jyHmT/Wv9cfNKlq+LdgrvSMNEsJYv6oGioOjm8HiuSa6XFD3llyLagpSB/Cy?=
+ =?us-ascii?Q?yT/LBrsXbM/wuWD2lqpljE3VYktY8graUXS16Q+1KMlB87Ub9QCD3RvVitMl?=
+ =?us-ascii?Q?DXaPchT8SrWKPPVWt+7T7vPycgb3YfXFEpdHg6u/J9loQVKX+MEK+8lvSZNL?=
+ =?us-ascii?Q?RyDrSL3V2srLmf+l6B6dwPykYFP49fLr7ZkgLwANZ1qOnAaWE6+7M23qA+l+?=
+ =?us-ascii?Q?KRTPKwMoD4w3ev+kEt8TPDWNz0iuFT5EOM9+KnfwJT6+vEm1K6CoRdjpiDEz?=
+ =?us-ascii?Q?Pb8H/CGoOm+ASNbSZitN1Z5uHyR1bVBB/i87UoHa9Z+xXTV/J6PGI2CuJyv/?=
+ =?us-ascii?Q?mv8w5GbZCaJAu35Zh9GKwWMSwNOfNP+oIqszwkZyaqAF5RTJYzxKveWCD8cJ?=
+ =?us-ascii?Q?7JUpwwVzk7DHBFLlXsgIkO7FIRIB2GRPGBCqb5rOW+eHYu49smI8vI+fAGcN?=
+ =?us-ascii?Q?K+aa8A3yhKE44AUjYxbSE9d29Qf7hrtuCkpcEgCfouaYMS/6M+2BakdiNoym?=
+ =?us-ascii?Q?VsDzwgEsa4xpqUprUrCnWaZkoMVDipKFEq4/Ek8c1iddM2XPHt5YhxihyD+Z?=
+ =?us-ascii?Q?xLKlgybC8c5L2+SYdnYtl2d5iDXXXV7CV4wSbwPIAUmwohYWLW0OPKuMCx1n?=
+ =?us-ascii?Q?k8UE5eq5f9T8P6KtpR9xW3d51z8WwfiE0zYnGw7aZJCXXOJoKwqVdulN/1SA?=
+ =?us-ascii?Q?F9oahC/xW2gyc8ooDqhUmAMLdojgLvkHcdFEEIJKMPZ4OpYulrH8V4AWfK7g?=
+ =?us-ascii?Q?CYMFdqVxANWkKm0gaSmBoeHHa1VsddOiUZ2ZNXipJWQZh5Tjh/Cw1mzqR/vy?=
+ =?us-ascii?Q?/0IM6KfHxc3WtnONz21jJShJYJRt/00JZ8Gt6svUKsUBeFyiibiGcS6cjc1+?=
+ =?us-ascii?Q?veFCALGk9KRUJKeaZyGGnlEjPd6s+MfaV9c4r/54ksJfaH/aSDeKKsHdzdum?=
+ =?us-ascii?Q?W6OU0XFbO4SLUSV3euiMZWPZsjC8/QsBwCxuAosQ3RZv3UhZh4gcbaM41WP6?=
+ =?us-ascii?Q?vLos8nnPbUcUdsLHiMxVKdlKxNTxzEH2wXUp21S7Unvef2RmW2xvYLLnGppI?=
+ =?us-ascii?Q?Uyc+5sn9szod82Jvo37Zts7B5MpWNGAD+8gDNo8JdU/mCm5MvqEufgcz7rbf?=
+ =?us-ascii?Q?bsoFbYcQfrytOX4Z6SWWU2SDh2IQMi2ofX1Bhw1o0c52s85nzBxZ5wj+4Adr?=
+ =?us-ascii?Q?iin6XBKaROkI4TW/JKuPnrCc2PQOBjI2HGRZneWNvTOsS3Cy5N7vpwyiDR8r?=
+ =?us-ascii?Q?h+o6DpvIIQ16RdOYqLLASkGAS6RnRvf9c5u4bEh5z8jUWVDjB/WuUWSd3Mhz?=
+ =?us-ascii?Q?zkYRYvnilhaNHT+/LUZc21jbEK2l+3TKx5GbE4d5sV9yqNiniqSuAfjyf84F?=
+ =?us-ascii?Q?VUrmEg6q+X3ypWJREQXvzP9x8mq8DdU0hhrpPqS5W6u2ZpGiiQmxG/8CFbEK?=
+ =?us-ascii?Q?Qh1SevCzUMw96U6oKrM8fyS/K+UM1Ka1Tt7+ITxYTbotD3glwrzM3hiCGv+Z?=
+ =?us-ascii?Q?O1Oh6GFOzFkEIbCjOUDR7wuJ7AejcV20ClOuzoW9PTN2/v7xn6ie2Fo1kqF7?=
+ =?us-ascii?Q?Ev2Znuph1NtcOSRhxUuXcUW7EWViWLFGL/2Ynm97?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a275bb5-55ed-4d0f-360f-08dd4ca91fec
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa6af48e-6e3a-4448-430a-08dd4cb5a9f9
 X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 03:39:02.6819
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 05:08:48.3491
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RjLlrG+rf+kwPagoS0N+0TGcY7oCgzFnIu84vnvCqiyUElMeYNn/1PcYRk4iCzTlsj7vxGzvLizVlDNCDfoaKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10525
+X-MS-Exchange-CrossTenant-UserPrincipalName: R2wNlVPU5CyccIp5+gOTgSPQsJ9gnyBGLSeCKV3h7HlUfZlI/3MKt+eFMpRsMkq5bwzqGQre6V8wxSBRNUdQng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10474
 
-On Mon, Feb 10, 2025 at 05:00:11PM +0100, Alexander Stein wrote:
->The fracn gppll PLL so far only supports rates from a rate table passed
->during initialization. Calculating PLL settings dynamically helps audio
->applications to get their desired rates, so support for this is added
->in this patch.
+On Thu, Feb 13, 2025 at 02:29:41PM +0100, Geert Uytterhoeven wrote:
+>Hi Peng,
 >
->The strategy to get to the PLL setting for a rate is:
+>On Thu, 13 Feb 2025 at 13:35, Peng Fan <peng.fan@oss.nxp.com> wrote:
+>> On Thu, Feb 13, 2025 at 11:16:31AM +0100, Geert Uytterhoeven wrote:
+>> >On Fri, 24 Jan 2025 at 15:42, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> >> Just FYI, below is a foward of pull request for dtschema for bindings
+>> >> adding spread spectrum to clocks. As Clock framework maintainers this
+>> >> might be relevant to you.
+>> >>
+>> >> -------- Forwarded Message --------
+>> >> Subject: [devicetree-org/dt-schema] schemas: introduce
+>> >> assigned-clock-sscs (PR #154)
+>> >> Date: Fri, 24 Jan 2025 04:31:30 -0800
+>> >> From: Peng Fan <notifications@github.com>
+>> >> Reply-To: devicetree-org/dt-schema
+>> >> <reply+ACPRLI5YLXX27TFZX2P7NVOFT5USFEVBNHHKO4ZXHM@reply.github.com>
+>> >> To: devicetree-org/dt-schema <dt-schema@noreply.github.com>
+>> >> CC: Subscribed <subscribed@noreply.github.com>
+>> >>
+>> >> To support spread spectrum clock, introduce assigned-clock-sscs, it is
+>> >> an uint32-matrix with format multiple elements of below
+>> >> &lt;modfreq spreadpercentage modmethod&gt;, &lt;...&gt;
+>> >> You can view, comment on, or merge this pull request online at:
+>> >>
+>> >>   https://github.com/devicetree-org/dt-schema/pull/154
+>> >>
+>> >> -- Commit Summary --
+>> >>
+>> >>   * schemas: introduce assigned-clock-sscs
+>> >
+>> >>   assigned-clock-sscs:
+>> >>     $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>> >>     items:
+>> >>       items:
+>> >>         - description: The modulation frequency
+>> >>         - description: The modulation depth in permyriad
+>> >>         - description: The modulation method, down(2), up(1), center(0)
+>> >
+>> >Is there a way to explicitly disable it, if it was enabled by the
+>> >firmware? See also my comment in "Re: [PATCH v2 1/4] clk: Introduce
+>>
+>> The binding here is just to describe the parameter to configure
+>> spread spectrum of a clk.
+>>
+>> To disable spread spectrum, the clk_hw_set_spread_spectrum could be
+>> used with enable as false or as you suggested using CLK_SSC_NONE_SPREAD?
 >
->- The rate table is searched for suitable rates, so for standard rates the
->  same settings are used as without this patch
->- Then try to only adjust mfn, on fractional PLLs only, which specifies
->  the fractional part of the PLL. This setting can be changed without
->  glitches on the output and is therefore preferred
->- As a last resort the best settings are calculated dynamically
->
->Implementation is inspired by commit b09c68dc57c9d ("clk: imx: pll14xx:
->Support dynamic rates")
+>But the bindings don't have an enable flag...
 
-Not a fan of this, we have seen issues that not able to calculate
-out exact audio frequency with dynamic rates. But anyway
-if your setup needs this feature, it is ok to add.
+The modulation method maybe updated to
+down(3), up(2), center(1), no modulation(0).
+
+Then no need a separate entry for enable.
+
+Thanks,
+Peng.
 
 >
->Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
->---
->This is the first time I'm touching PLL code, I might be missing things
->or not being aware of important aspects when it comes to PLL.
->Thus this is a RFC
+>> >clk_hw_set_spread_spectrum".
+>> >
+>> >>           minimum: 0
+>> >>           maximum: 2
+>> >
+>> >What's the meaning of these limits?
+>>
+>> Modulation has three methods:
+>> Down-spread modulation
+>> Up-spread modulation
+>> Center-spread modulation.
+>>
+>> I use 2 for down, 1 for up, 0 for center here. So the limits:
+>> min: 0, max: 2.
 >
-> drivers/clk/imx/clk-fracn-gppll.c | 203 ++++++++++++++++++++++++++----
-> 1 file changed, 181 insertions(+), 22 deletions(-)
+>Silly me, they apply to the last description...
 >
->diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
->index a7d57fbe93196..68c5b4a95efbe 100644
->--- a/drivers/clk/imx/clk-fracn-gppll.c
->+++ b/drivers/clk/imx/clk-fracn-gppll.c
->@@ -25,6 +25,12 @@
-> 
-> #define PLL_NUMERATOR		0x40
-> #define PLL_MFN_MASK		GENMASK(31, 2)
->+#define PLL_MFI_MIN		0x2
->+#define PLL_MFI_MAX		0x1ff
->+#define PLL_MFN_MIN		0x0
->+#define PLL_MFN_MAX		0x3fffffff
->+#define PLL_MFD_MIN		0x1
->+#define PLL_MFD_MAX		0x3fffffff
-> 
-> #define PLL_DENOMINATOR		0x50
-> #define PLL_MFD_MASK		GENMASK(29, 0)
->@@ -134,21 +140,6 @@ imx_get_pll_settings(struct clk_fracn_gppll *pll, unsigned long rate)
-> 	return NULL;
-> }
-> 
->-static long clk_fracn_gppll_round_rate(struct clk_hw *hw, unsigned long rate,
->-				       unsigned long *prate)
->-{
->-	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
->-	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
->-	int i;
->-
->-	/* Assuming rate_table is in descending order */
->-	for (i = 0; i < pll->rate_count; i++)
->-		if (rate >= rate_table[i].rate)
->-			return rate_table[i].rate;
->-
->-	/* return minimum supported value */
->-	return rate_table[pll->rate_count - 1].rate;
->-}
-> 
-> static long clk_fracn_gppll_calc_rate(struct clk_fracn_gppll *pll, u32 mfn,
-> 				      u32 mfd, u32 mfi, u32 rdiv, u32 odiv,
->@@ -202,6 +193,174 @@ static long clk_fracn_gppll_calc_rate(struct clk_fracn_gppll *pll, u32 mfn,
-> 	return (unsigned long)fvco;
-> }
-> 
->+static u32 clk_fracn_gppll_calc_mfi(int rdiv, unsigned long fvco,
->+				    unsigned long fref)
->+{
->+	u32 mfi;
->+
->+	/* fvco = fref / rdiv * mfi */
->+	mfi = DIV_ROUND_CLOSEST(fvco * rdiv, fref);
->+	return clamp_t(u32, mfi, PLL_MFI_MIN, PLL_MFI_MAX);
->+}
->+
->+static long clk_fracn_gppll_calc_mfn(int mfd, int mfi, int odiv, int rdiv,
->+				     unsigned long rate, unsigned long prate)
->+{
->+	unsigned long tmp;
->+	long mfn;
->+
->+	/* calc mfn = ((rate * odiv * rdiv / prate) - mfi) * mfd */
->+	tmp = rate * odiv * rdiv - (mfi * prate);
->+	mfn = DIV_ROUND_CLOSEST(tmp * mfd, prate);
->+	return clamp_t(long, mfn, PLL_MFN_MIN, PLL_MFN_MAX);
->+}
->+
->+static void clk_fracn_gppll_calc_settings(struct clk_fracn_gppll *pll, unsigned long rate,
->+					  unsigned long prate, struct imx_fracn_gppll_rate_table *t)
->+{
->+	u32 pll_denominator, pll_numerator, pll_div;
->+	u32 mfi, mfn, mfd, rdiv, odiv;
->+	long fout, rate_min, rate_max, dist, best = LONG_MAX;
->+	const struct imx_fracn_gppll_rate_table *tt;
->+
->+	/*
->+	 * PLL constrains:
->+	 *
->+	 * a) 1 <= MFN <= 0x3fffffff (fractional only)
->+	 * b) 1 <= MFD <= 0x3fffffff (fractional only)
->+	 * c) 2 <= MFI <= 0x1ff
->+	 * d) 1 <= RDIV <= 7
->+	 * e) 2 <= ODIV <= 255
->+	 * f) -2 <= MFN/MFD <= 2
->+	 * g) 20MHz <= (Fref / rdiv) <= 40MHz
->+	 * h) 2.5GHz <= Fvco <= 5Ghz
->+	 *
->+	 * Fvco = (Fref / rdiv) * (MFI + MFN / MFD)
->+	 * Fout = Fvco / odiv
->+	 */
->+
->+	/* First try if we can get the desired rate from one of the static entries */
->+	tt = imx_get_pll_settings(pll, rate);
->+	if (tt) {
->+		pr_debug("%s: in=%ld, want=%ld, Using PLL setting from table\n",
->+			 clk_hw_get_name(&pll->hw), prate, rate);
->+		t->rate = tt->rate;
->+		t->mfi = tt->mfi;
->+		t->mfn = tt->mfn;
->+		t->mfd = tt->mfd;
->+		t->rdiv = tt->rdiv;
->+		t->odiv = tt->odiv;
->+		return;
->+	}
->+
->+	/* glitch free MFN adjustment only for fractional PLL */
->+	if (pll->flags & CLK_FRACN_GPPLL_FRACN) {
->+		pll_numerator = readl_relaxed(pll->base + PLL_NUMERATOR);
->+
->+		pll_denominator = readl_relaxed(pll->base + PLL_DENOMINATOR);
->+		mfd = FIELD_GET(PLL_MFD_MASK, pll_denominator);
->+
->+		pll_div = readl_relaxed(pll->base + PLL_DIV);
->+		mfi = FIELD_GET(PLL_MFI_MASK, pll_div);
->+		rdiv = FIELD_GET(PLL_RDIV_MASK, pll_div);
->+		odiv = FIELD_GET(PLL_ODIV_MASK, pll_div);
->+
->+		/* Then see if we can get the desired rate by only adjusting MFN (glitch free) */
->+		rate_min = clk_fracn_gppll_calc_rate(pll, PLL_MFN_MIN, mfd, mfi, rdiv, odiv, prate);
->+		rate_max = clk_fracn_gppll_calc_rate(pll, PLL_MFN_MAX, mfd, mfi, rdiv, odiv, prate);
->+
->+		if (rate >= rate_min && rate <= rate_max) {
->+			mfn = clk_fracn_gppll_calc_mfn(mfd, mfi, odiv, rdiv, rate, prate);
->+			pr_debug("%s: in=%ld, want=%ld Only adjust mfn %ld -> %d\n",
->+				 clk_hw_get_name(&pll->hw), prate, rate,
->+				 FIELD_GET(PLL_MFN_MASK, pll_numerator), mfn);
->+			fout = clk_fracn_gppll_calc_rate(pll, mfn, mfd, mfi, rdiv, odiv, prate);
->+			t->rate = (unsigned int)fout;
->+			t->mfi = mfi;
->+			t->mfn = mfn;
->+			t->mfd = mfd;
->+			t->rdiv = rdiv;
->+			t->odiv = odiv;
->+			return;
->+		}
->+	}
->+
->+	/* Finally calculate best values */
->+	for (rdiv = 1; rdiv <= 7; rdiv++) {
->+		if ((prate / rdiv) < 20000000)
->+			continue;
->+		if ((prate / rdiv) > 40000000)
->+			continue;
->+
->+		for (odiv = 2; odiv <= 255; odiv++) {
->+			mfi = clk_fracn_gppll_calc_mfi(rdiv, rate * odiv, prate);
->+			mfd = 1;
->+			mfn = 0;
->+
->+			/* Try integer PLL part only first */
->+			fout = clk_fracn_gppll_calc_rate(pll, mfn, mfd, mfi, rdiv, odiv, prate);
->+			if (fout * odiv < 2500000000UL)
->+				continue;
->+			if (fout * odiv > 5000000000UL)
->+				continue;
->+
->+			if (pll->flags & CLK_FRACN_GPPLL_FRACN) {
->+				if (!dist) {
->+					/* Disable fractional part upon exact match */
->+					mfd = 1;
->+					mfn = 0;
->+				} else {
->+					mfd = 100;
-
-why hardcode mfd to 100?
-
->+					mfd = clamp(mfd, PLL_MFD_MIN, PLL_MFN_MAX);
->+
->+					mfn = clk_fracn_gppll_calc_mfn(mfd, mfi, odiv, rdiv, rate, prate);
->+					if ((mfn / mfd) > 2)
->+						continue;
->+
->+					fout = clk_fracn_gppll_calc_rate(pll, mfn, mfd, mfi, rdiv, odiv, prate);
->+					if (fout * odiv < 2500000000)
->+						continue;
->+					if (fout * odiv > 5000000000)
->+						continue;
->+				}
->+			} else {
->+				mfd = 0;
->+				mfn = 0;
->+			}
->+
->+			/* best match */
->+			dist = abs((long)rate - (long)fout);
->+			if (dist < best) {
->+				best = dist;
->+				t->rate = (unsigned int)fout;
->+				t->mfi = mfi;
->+				t->mfn = mfn;
->+				t->mfd = mfd;
->+				t->rdiv = rdiv;
->+				t->odiv = odiv;
->+
->+				if (!dist)
->+					goto found;
->+			}
->+		}
->+	}
->+found:
->+	pr_debug("%s: in=%lu, want=%lu got=%u (mfi=%u mfn=%u mfd=%u rdiv=%u odiv=%u)\n",
->+		 clk_hw_get_name(&pll->hw), prate, rate, t->rate, t->mfi, t->mfn, t->mfd,
->+		 t->rdiv, t->odiv);
->+}
->+
->+static long clk_fracn_gppll_round_rate(struct clk_hw *hw, unsigned long rate,
->+				       unsigned long *prate)
->+{
->+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
->+	struct imx_fracn_gppll_rate_table t;
->+
->+	clk_fracn_gppll_calc_settings(pll, rate, *prate, &t);
->+
->+	return t.rate;
->+}
->+
-> static unsigned long clk_fracn_gppll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> {
-> 	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
->@@ -242,11 +401,11 @@ static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
-> 				    unsigned long prate)
-> {
-> 	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
->-	const struct imx_fracn_gppll_rate_table *rate;
->+	struct imx_fracn_gppll_rate_table rate;
-> 	u32 tmp, pll_div, ana_mfn;
-> 	int ret;
-> 
->-	rate = imx_get_pll_settings(pll, drate);
->+	clk_fracn_gppll_calc_settings(pll, drate, prate, &rate);
-> 
-> 	/* Hardware control select disable. PLL is control by register */
-> 	tmp = readl_relaxed(pll->base + PLL_CTRL);
->@@ -266,13 +425,13 @@ static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
-> 	tmp &= ~CLKMUX_BYPASS;
-> 	writel_relaxed(tmp, pll->base + PLL_CTRL);
-
-As Sascha mentioned, set rate will first disable output, power down pll based
-on current implementation. So this patch might not get tested.
-
-Regards
-Peng
-
-> 
->-	pll_div = FIELD_PREP(PLL_RDIV_MASK, rate->rdiv) | rate->odiv |
->-		FIELD_PREP(PLL_MFI_MASK, rate->mfi);
->+	pll_div = FIELD_PREP(PLL_RDIV_MASK, rate.rdiv) | rate.odiv |
->+		FIELD_PREP(PLL_MFI_MASK, rate.mfi);
-> 	writel_relaxed(pll_div, pll->base + PLL_DIV);
-> 	readl(pll->base + PLL_DIV);
-> 	if (pll->flags & CLK_FRACN_GPPLL_FRACN) {
->-		writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
->-		writel_relaxed(FIELD_PREP(PLL_MFN_MASK, rate->mfn), pll->base + PLL_NUMERATOR);
->+		writel_relaxed(rate.mfd, pll->base + PLL_DENOMINATOR);
->+		writel_relaxed(FIELD_PREP(PLL_MFN_MASK, rate.mfn), pll->base + PLL_NUMERATOR);
-> 		readl(pll->base + PLL_NUMERATOR);
-> 	}
-> 
->@@ -296,7 +455,7 @@ static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
-> 	ana_mfn = readl_relaxed(pll->base + PLL_STATUS);
-> 	ana_mfn = FIELD_GET(PLL_MFN_MASK, ana_mfn);
-> 
->-	WARN(ana_mfn != rate->mfn, "ana_mfn != rate->mfn\n");
->+	WARN(ana_mfn != rate.mfn, "ana_mfn != rate->mfn\n");
-> 
-> 	return 0;
-> }
+>Gr{oetje,eeting}s,
+>
+>                        Geert
+>
 >-- 
->2.34.1
+>Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+>In personal conversations with technical people, I call myself a hacker. But
+>when I'm talking to journalists I just say "programmer" or something like that.
+>                                -- Linus Torvalds
 >
 
