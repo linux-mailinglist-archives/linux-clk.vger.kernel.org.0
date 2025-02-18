@@ -1,123 +1,136 @@
-Return-Path: <linux-clk+bounces-18203-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18205-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA1EA393A8
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 08:06:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E130A3950F
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 09:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F31918857AB
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 07:04:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6B8118987E1
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 08:19:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FBB187FEC;
-	Tue, 18 Feb 2025 07:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 926E123C8A1;
+	Tue, 18 Feb 2025 08:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Efn8E4w3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f4mC4+xj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1CF33E4;
-	Tue, 18 Feb 2025 07:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB57749A;
+	Tue, 18 Feb 2025 08:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739862242; cv=none; b=p0ZX0S+X9hI+U6qY0x6RBS9sbUXalEKHIA7eYy0kvA5GN84kGDYKRQcVNfj6zqYsuKJ5cPfGkL1/UzvWA2+3O1T+Qbd9QSqOzNG5fNfEu7i8oRxlrXpHCbe+u0P9m61q6k/5rwzXHYpyWQQLwJoXSES/34qpJDnSlnXJ9EahCpc=
+	t=1739866503; cv=none; b=F9ycMRELl+Rsb7jZfDH79A0+JXBMmfXoPxPZejS2OFi1ft+yoTFhCi2P5yymo8zoEonFrvCyyXTf7If8+4PbEf1a699N8gdIGD4lWpmNtXK/J7O9pz7HaEXjOdRhvWw2FT32J+TAQSgTXV4OTDyn2SQEvbCPmZOdwTji4GfLqVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739862242; c=relaxed/simple;
-	bh=/liv7crXvwWAbjuQyGYyE5HVh1xY5iD4gq7qw0UMzgQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=iJnKR6ybOyL24rybHDnASJXpo+rCY8usEVHFHsb8pThC9tHj/B1kYtzzZPDHa6sU/CD2QqGApR99MjB1mefM4MNg8m1IPuHc9tjHzJ38fRTtCYGx6C/X3fVwC37Y8gt+AucPo9AWwKfZ3AR7zKmd3RQl50pffNWHRl54xoj8/Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Efn8E4w3; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51I1p3Ya017072;
-	Tue, 18 Feb 2025 07:03:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Nu9QXqKpYlT7UJ+KoRgIAsvAzOLcOhqUfQwqUtu3uYQ=; b=Efn8E4w3Tth8bX/0
-	9UBtVmZc5e0uSVACZV/KMjH85A8JjXqJwFuNXd+SvyBaTrAGmc//Bqj+IsEF8RjD
-	O/kAdnudGLy1mL9Abtks2M7izW/BScURh266oBnm7kV4Inw23Cun/7YAVzM71Ete
-	nLTQ/UCxBIUhZSmrAUfwi5l4rRZ5kRFu4pdAZMxnL8/WjvIJlS9PGE0iVqBBuvis
-	CtUP9UVIyQGiEmI0J0K7I4S5PMHerUtLTfdBLn3FQNcpQplMXhS8120BN2Iiwfui
-	w8QbBiJICi+SDTo0VpAGUSIovblVaEHjlfCCo+gh0CqaRsiO3Be08NRW5PViSiL2
-	uzi5Wg==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ut7uuxap-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Feb 2025 07:03:57 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51I73ux2016901
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Feb 2025 07:03:56 GMT
-Received: from [10.218.33.29] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 17 Feb
- 2025 23:03:52 -0800
-Message-ID: <7834c2e5-8c0a-4223-abfb-e21ae82d9e0a@quicinc.com>
-Date: Tue, 18 Feb 2025 12:33:45 +0530
+	s=arc-20240116; t=1739866503; c=relaxed/simple;
+	bh=UFdR7IbguGl7iKpceVwoQo+fFJc+Ocd7Dgzg0nOOeAE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QR0TTmQpVg9VULZAspdn3kAXaCZJChPkVIgXhsTYTZbzZVqgBBNZoz0wAp3d7nmjlQNxnAR0aYXJhD8IWKBH+ur1iKiUOBz2XASSXQVyfPO1LB6oe+AwzwMqPB4q2W9x1nJZa+Az6/z5rPiZqgOKYUn2m6kp347tvTIBHSeLW6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f4mC4+xj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303D0C4CEE2;
+	Tue, 18 Feb 2025 08:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1739866502;
+	bh=UFdR7IbguGl7iKpceVwoQo+fFJc+Ocd7Dgzg0nOOeAE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f4mC4+xjy8+3Ap3+zmCq4f4juZVPx3MmLXCA2pN+OuMHab5gaVtMq0RgIb/vmcIt4
+	 5pomyFm6UrsvIjuGwEbtdC0Cnn6HgTkNdbLBGtu/S6H3634IT4Qh8f1TMWeYpsxTMx
+	 HEiie4JkezV19OJAsaovd47Bq7gU0JDqjGhlceHw=
+Date: Tue, 18 Feb 2025 09:14:59 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Douglas Anderson <dianders@chromium.org>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	dri-devel@lists.freedesktop.org,
+	platform-driver-x86@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-clk@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH v3 1/7] driver core: auxiliary bus: add device creation
+ helpers
+Message-ID: <2025021826-smile-batting-e52f@gregkh>
+References: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
+ <20250211-aux-device-create-helper-v3-1-7edb50524909@baylibre.com>
+ <2025021437-washout-stonewall-d13e@gregkh>
+ <1jwmdsxugx.fsf@starbuckisacylon.baylibre.com>
+ <2025021501-tamer-sank-142a@gregkh>
+ <1jikp8xx01.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] clk: qcom: gdsc: Set retain_ff before moving to HW
- CTRL
-To: Taniya Das <quic_tdas@quicinc.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen
- Boyd" <sboyd@kernel.org>
-CC: Ajit Pandey <quic_ajipan@quicinc.com>,
-        Jagadeesh Kona
-	<quic_jkona@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20250214-gdsc_fixes-v1-0-73e56d68a80f@quicinc.com>
- <20250214-gdsc_fixes-v1-1-73e56d68a80f@quicinc.com>
-Content-Language: en-US
-From: Imran Shaik <quic_imrashai@quicinc.com>
-In-Reply-To: <20250214-gdsc_fixes-v1-1-73e56d68a80f@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6UK_BgimCiztUGJuub_i3LL7fKFWuvN4
-X-Proofpoint-ORIG-GUID: 6UK_BgimCiztUGJuub_i3LL7fKFWuvN4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-18_02,2025-02-18_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=768 spamscore=0 clxscore=1011 malwarescore=0 bulkscore=0
- mlxscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502180053
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1jikp8xx01.fsf@starbuckisacylon.baylibre.com>
 
-
-
-On 2/14/2025 9:56 AM, Taniya Das wrote:
-> Enable the retain_ff_enable bit of GDSCR only if the GDSC is already ON.
-> Once the GDSCR moves to HW control, SW no longer can determine the state
-> of the GDSCR and setting the retain_ff bit could destroy all the register
-> contents we intended to save.
-> Therefore, move the retain_ff configuration before switching the GDSC to
-> HW trigger mode.
+On Mon, Feb 17, 2025 at 07:10:54PM +0100, Jerome Brunet wrote:
+> On Sat 15 Feb 2025 at 07:53, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 173722995cdb ("clk: qcom: gdsc: Add support to enable retention of GSDCR")
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
->  drivers/clk/qcom/gdsc.c | 21 +++++++++++----------
->  1 file changed, 11 insertions(+), 10 deletions(-)
+> [...]
 > 
+> >> 
+> >> >
+> >> >> +							int id)
+> >> >> +{
+> >> >> +	struct auxiliary_device *auxdev;
+> >> >> +	int ret;
+> >> >> +
+> >> >> +	auxdev = kzalloc(sizeof(*auxdev), GFP_KERNEL);
+> >> >> +	if (!auxdev)
+> >> >> +		return ERR_PTR(-ENOMEM);
+> >> >
+> >> > Ick, who cares what the error value really is?  Why not just do NULL or
+> >> > a valid pointer?  That makes the caller much simpler to handle, right?
+> >> >
+> >> 
+> >> Sure why not
+> 
+> I have tried the 'NULL or valid' approach. In the consumers,
+> which mostly return an integer from their various init function, I got
+> this weird to come up with one from NULL. EINVAL, ENOMEM, etc ... can't
+> really pick one.
+> 
+> It is actually easier to pass something along.
 
-Reviewed-by: Imran Shaik <quic_imrashai@quicinc.com>
-Tested-by: Imran Shaik <quic_imrashai@quicinc.com> # on QCS8300
+Ok, fair enough, thanks for trying.  But I would have returned just
+-ENODEV in all cases, as that's what the end result was :)
+
+thanks,
+
+greg k-h
 
