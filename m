@@ -1,31 +1,31 @@
-Return-Path: <linux-clk+bounces-18256-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18252-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9DDA3A57D
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 19:27:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B46D5A3A573
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 19:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BB97188AB02
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 18:28:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 870D41678AD
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 18:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 026A92356D8;
-	Tue, 18 Feb 2025 18:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633732356BC;
+	Tue, 18 Feb 2025 18:27:00 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E60C2356BD
-	for <linux-clk@vger.kernel.org>; Tue, 18 Feb 2025 18:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058BA2356AF
+	for <linux-clk@vger.kernel.org>; Tue, 18 Feb 2025 18:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739903239; cv=none; b=W7+LXUB4CdsBnw43P3KiqyElDBaNVL88Xpz2W/lz2D1AacxdoN1BXRIvKNysJNobec0LgjaZc2SEtyif3JPviqM6VlXjmh7zRlNXIVMNhdeB02oCX2SrfeJfq84iTYL9mbiMmcUiYOdmGZvAkHeMX6Lmd/jWTTL6CTvK1uUXV68=
+	t=1739903220; cv=none; b=MSV1223yEMoIzfWcj6B0wUFciTGSOtbUYz9DehMGt9E0i9GnMJpaBjMUYpUAtzaqye6SSdUEtLP7Ge1re1Qaw/bg4qOTeq3WIooJBXSzCDAtamV72a9dx+9ldCKivrpOOGdOPDucHG4N6yH4+wG8Uj3XKANQ4qE1PKfaBUaDqZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739903239; c=relaxed/simple;
-	bh=QingAdBWEQbqiJhLelCQaU7rvUBDQR2RcgntHJJclcg=;
+	s=arc-20240116; t=1739903220; c=relaxed/simple;
+	bh=Z5PJWTXHUpdDNMvkpgBC58f9J1RgsGcmAkDtpVMsujk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UtHs8krwyTmJNxOWgNi9gfDQYYuPNrBMl5xbdu+2RNf9Box207xPIkneoUU24IYzbtwgG3HnmfHW9FdQ5znjqLcheG3IQup4z889JgBlMmr4/LKDe/rFIaFsp0N0KQBe7GJDdSgsvoyBEYljLXowOAX3CXDFvR2KqLeQpJeDEiM=
+	 In-Reply-To:To:Cc; b=lvUNPjih8DqgWFdVQZ7CRFy0P3qExEzrz3rEd0Ze/zDoPw1ONkIH1WBUL6pyoiWyUqdG7iJZEoymW0WH/7R6buG/+5jzpMBqv+85U9NZfbja/b5bg87zJtPV3KKkXDKXlBdEzBGvO3HwhTKCIJQN7Yvc32uUrSg77DYp4YfkC+I=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,22 +33,22 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tkSIy-0006Bj-0z; Tue, 18 Feb 2025 19:26:48 +0100
+	id 1tkSIy-0006Bh-10; Tue, 18 Feb 2025 19:26:48 +0100
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tkSIx-001dVD-1g;
+	id 1tkSIx-001dVE-1d;
 	Tue, 18 Feb 2025 19:26:47 +0100
 Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
 	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tkSIx-00A9Hm-1E;
+	id 1tkSIx-00A9Hm-1F;
 	Tue, 18 Feb 2025 19:26:47 +0100
 From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Date: Tue, 18 Feb 2025 19:26:44 +0100
-Subject: [PATCH v4 4/6] arm64: dts: freescale: imx8mp-skov: configure LDB
- clock automatically
+Date: Tue, 18 Feb 2025 19:26:45 +0100
+Subject: [PATCH v4 5/6] arm64: dts: freescale: imx8mp-skov: operate SoC in
+ nominal mode
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250218-imx8m-clk-v4-4-b7697dc2dcd0@pengutronix.de>
+Message-Id: <20250218-imx8m-clk-v4-5-b7697dc2dcd0@pengutronix.de>
 References: <20250218-imx8m-clk-v4-0-b7697dc2dcd0@pengutronix.de>
 In-Reply-To: <20250218-imx8m-clk-v4-0-b7697dc2dcd0@pengutronix.de>
 To: Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
@@ -78,57 +78,41 @@ X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-The comment in the DT mentions that "currently it is not possible to let
-display clocks configure automatically, so we need to set them manually".
+To reduce heat generation, the Skov i.MX8MP boards should run in nominal
+drive mode with a VDD_SOC voltage of 850 mV.
 
-Since commit ff06ea04e4cf ("clk: imx: clk-imx8mp: Allow media_disp pixel
-clock reconfigure parent rate"), this is no longer the case.
-
-Make use of this new functionality by dropping the now unneeded
-assigned-clock-rates in &media_blk_ctrl.
+At this operating point, not all frequencies that are achievable with
+overdrive mode are possible, so import imx8mp-nominal.dtsi to clock down
+the clocks.
 
 Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
- .../dts/freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts b/arch/arm64/boot/dts/freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts
-index 2c75da5f064f2b0cd97f5040febac13c4adc020b..a13f6d76a495936575ead53e4ea69ed39f80d61c 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-skov-revb-mi1010ait-1cp1.dts
-@@ -51,8 +51,11 @@ &lcdif2 {
- };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi
+index 59813ef8e2bb3a3d5672ba1c5776cf0e45fb6862..9dc36517e90c16dd10d14f55d8d5582e845b0f60 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-skov-reva.dtsi
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: (GPL-2.0 OR MIT)
  
- &lvds_bridge {
--	/* IMX8MP_CLK_MEDIA_LDB = IMX8MP_CLK_MEDIA_DISP2_PIX * 7 */
--	assigned-clock-rates = <490000000>;
-+	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_LDB>,
-+				 <&clk IMX8MP_VIDEO_PLL1>;
-+	assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>;
-+	/* IMX8MP_VIDEO_PLL1 = IMX8MP_CLK_MEDIA_DISP2_PIX * 2 * 7 */
-+	assigned-clock-rates = <0>, <980000000>;
- 	status = "okay";
+ #include "imx8mp.dtsi"
++#include "imx8mp-nominal.dtsi"
  
- 	ports {
-@@ -64,18 +67,6 @@ ldb_lvds_ch0: endpoint {
- 	};
- };
+ #include <dt-bindings/leds/common.h>
  
--&media_blk_ctrl {
--	/* currently it is not possible to let display clocks confugure
--	 * automatically, so we need to set them manually
--	 */
--	assigned-clock-rates = <500000000>, <200000000>, <0>,
--		/* IMX8MP_CLK_MEDIA_DISP2_PIX = pixelclk of lvds panel */
--		<70000000>,
--		<500000000>,
--		/* IMX8MP_VIDEO_PLL1 = IMX8MP_CLK_MEDIA_LDB */
--		<490000000>;
--};
--
- &pwm4 {
- 	status = "okay";
- };
+@@ -237,8 +238,8 @@ pmic@25 {
+ 		regulators {
+ 			reg_vdd_soc: BUCK1 {
+ 				regulator-name = "VDD_SOC";
+-				regulator-min-microvolt = <600000>;
+-				regulator-max-microvolt = <2187500>;
++				regulator-min-microvolt = <850000>;
++				regulator-max-microvolt = <850000>;
+ 				vin-supply = <&reg_5v_p>;
+ 				regulator-boot-on;
+ 				regulator-always-on;
 
 -- 
 2.39.5
