@@ -1,166 +1,123 @@
-Return-Path: <linux-clk+bounces-18233-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18236-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82D40A39FDB
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 15:32:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8961BA39FE7
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 15:33:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A59E17472A
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 14:29:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 720B83AB751
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2025 14:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0112326B2D1;
-	Tue, 18 Feb 2025 14:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Z45Xk+GA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD2A26A0FB;
+	Tue, 18 Feb 2025 14:28:43 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D4026AAAA;
-	Tue, 18 Feb 2025 14:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49266269B11;
+	Tue, 18 Feb 2025 14:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739888865; cv=none; b=mEBerpG7jP1cmcvEkCBkUKFuPNwtGkTUo5ZUP+NXiYfWG4FoMaGXNYcbG5DFHdJCOJaajASF19WUs8aoneqLIG+l3khoEaGXpLjbfeIKvuDX0Oc4C5/VgYTqGEDOD643VSSmxK+gDPbDtTBg1pLGqi0q/anEW+cC1GhfV2kCnFA=
+	t=1739888923; cv=none; b=KPYqoMqqNQ2/j2MLTYDqLAh9nZGZbfBgDZxR0bZqFXt+6iSegHKDCPsweS0am6ZWhA1RAv3JCNtHeNLwzgrsVEC9/7LPC/Q1ykz0HUTMnyTevZbyeQ9BbgulagHw+E2mpxnGUwgiIuBwBN30ziPs/+T2vvLSRqtlpe15HhtXJ10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739888865; c=relaxed/simple;
-	bh=3rgyOH9/26VcayvUAl8fp+rwStdFKTqhMgSME8hwOF8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=nDXZbblcHKlNE5BEO7egH5PfZ/aiIVtMqbbX6SDLZXuNq9zyKtXUpuM8BjNQxlm4QMS7BuDwFWQoUPezdt1kDk0sBkdKTh6hzDtetBwhoC3T+kGo4JlRTjVKeL+c1DXAmJfUWWp1iNcedknMx0A21C5zTzmoxkJUpP27udV1ugI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Z45Xk+GA; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51ICp3sp003065;
-	Tue, 18 Feb 2025 14:27:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	n9StW93AuXkZCvTTk7MV8gn/vtGlMrxPbQD13sZg6xE=; b=Z45Xk+GAQNqay8hU
-	5vFIZsDPNjyqV1BQLfMXCzRRAMAtvqwhUWSU6DUtkPb4LF4Tav0C1Zrj2jWbHO2p
-	YFOu6KuOuNgh7EqOfYx0brTd85UcMczUoBuPsqUNQeNMdgzu6Pu9q1N56iF/iAhX
-	59m8f9LAOn8aJCMhKllChlHm4u+2QvCCkmdKGur0m66aNImxN/q3MMUM3CWwydHD
-	CKrg+l2cK96KCAHGMAva7yqUpWLghqQ3Nr0zmXZE0fGHYf/uYSoGnOQc5eBBye5h
-	hEOjdH+zqbRHUhSqrHUcUNpW7Ra5LC683tx1VPfOhHxGeA6RuWbwM9wnR0Odr1UD
-	+/iiuQ==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ut7tw587-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Feb 2025 14:27:39 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51IERbJ0026562
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Feb 2025 14:27:37 GMT
-Received: from [10.213.98.28] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 18 Feb
- 2025 06:27:33 -0800
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-Date: Tue, 18 Feb 2025 19:56:50 +0530
-Subject: [PATCH 5/5] arm64: dts: qcom: Add MXC power domain to videocc
- nodes
+	s=arc-20240116; t=1739888923; c=relaxed/simple;
+	bh=Z9rlFMQcTaXGXJtgSgn0wszw+r58kBJN6c8X9V6cb/c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GrkwdimDsSdQT95q1uF0r75uxBPQvmW0nOfjRL4WeXcB9E/P31Y+g6Al0sXxJJNz+5N6JGt5FAs2LPDQMD78HfJd3Nur18w3+YinYM4b5pJLXkZKrnkwszEe+Mmip5WAcXgJmsnCZIbpg/9cdO6PXg5HaI0qz7C7TEgzScOoQ0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-4be55c93be1so439814137.0;
+        Tue, 18 Feb 2025 06:28:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739888919; x=1740493719;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WM9l/UfrQw+Mtu9b3G/axW371PcduIizjNc8jc9K35M=;
+        b=OCBIvK2IURWajHd8Dhw1mqChZHK9Aj3dfz4BH+OnEbDl4a7e4er2fnfB+rmZt0imwv
+         dxwt3GX8dT7GJwW1VBEhc1yA30FI1l1vzXk8+sldiz6RzFZK7JbkU6cZ9kB0hE4waScw
+         rP+pWq3rn9C+A8NzxiqDThOlvpcvqcsMmARNa/Y9urUvnQWk6AHViuQ9Hz21gjfdBsg6
+         +Ghw8Kyw+4Lp8Coy6K+kkCxvMvz04X6D4+ztBS+crDvewLmsfqHTO4IyflpRZkAUQvC6
+         +x6Nsnz8+scFWxlsmVQTZ/E7tYT4scJy9N4X33EyvhWtNO+NTQ8uVf9Vth40zdL7Nifd
+         Q3lg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcyHwZjY8vXgSnCQXAKPgC0n/GG9T0UDNo2FvX0ObERVW9gTmmJFCPzufkn9aDg54Mjdo92KwEewc=@vger.kernel.org, AJvYcCViWD/YlT0z97eezlKoyUIhmb18SRXOoxq8Xy0QdrCvuZ2NKAMoAjsaChE+N8sfqz8J3PxGM6SnooNKb/K7NhVd7Qc=@vger.kernel.org, AJvYcCXjqIlwy1Lxqd/LiAHNCPlrkBj/0ph8b0LT7rnnZUHoOC19/6Z8cxqF4KpyN9g72+fUhtJYfl4ZkKRwVlKb@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWOHoBbXwk/UQp+AWKaYrvbHd+UIFFNdIG0ljMNZXjIrWXgxy5
+	C9aRs5iuDAY4BXSAIf3V0Qtlh+fL8AGY8nBAJR2IoSp33zsyX4Cwmv6qtTf7
+X-Gm-Gg: ASbGncvAIDYVIZ1L+tcUiSQ/Fc3Kliw3T7JTV7FgtX7rBEblB4bSONUlkwCxPwilRoM
+	XJy3Yia3ZNcMSpIiLy3CtGzl7kNpz1oFBQuvSyde+lT8li6yiiCq51P95dwZEqSrIEAorMmLy11
+	cPJ9LXJrloYAFE8nYwG5HbUEQYa4doA31vrKQkCR+k7LlvOnEbi7u6W82vcL+cuAPNg+63T8Mba
+	RJOJ26Jny8RTBwFHgoIGU8njXiasAtI7yLHopNi5CJIsnvwKO1puyHXuSfOZ+IC8BDQ6M9VCcat
+	S2Uz5x4EhV1KODd0WgfJE+7cZNeaRSR1sUtFh7lzpVvKHC2q47qK6oLRyA==
+X-Google-Smtp-Source: AGHT+IFom9kAQjltWdnqKeMQcEIOS8FlqBQ02cRRDUXOCckSGuhBu8QQ5tyByph0ietrOGyb0X485g==
+X-Received: by 2002:a05:6102:4b0d:b0:4ba:eb24:fb02 with SMTP id ada2fe7eead31-4bd3fc818c2mr8746030137.3.1739888919229;
+        Tue, 18 Feb 2025 06:28:39 -0800 (PST)
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com. [209.85.221.180])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-868e86cbfa7sm2457763241.31.2025.02.18.06.28.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Feb 2025 06:28:38 -0800 (PST)
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-5209ca3e9a6so995232e0c.2;
+        Tue, 18 Feb 2025 06:28:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWfugqgNPFcZeWn7UyJ69DachFm2Pdr8VHRF4zkj2EwUmyuln0SlYf6bQDtK7/sOwsnc9Dh4SnRj5uFu6O/fd0GTyQ=@vger.kernel.org, AJvYcCXLrsiIwxZnUWw+WLqizsCEvrRFx1/XVeiym2Y9Pa14MIraylxOF5z75iO3RulfmqUD+1ikfNIlj6Y=@vger.kernel.org, AJvYcCXi+cqKhWYacfepBRdbs5erSBjDj3DWJOe1sksx1K5rmjh2k9djsTwuQGagm/6Dg+HyMLzmFPa/wezFglaM@vger.kernel.org
+X-Received: by 2002:a05:6122:488a:b0:519:fcf2:ef51 with SMTP id
+ 71dfb90a1353d-5209dbc02a2mr7024460e0c.5.1739888918607; Tue, 18 Feb 2025
+ 06:28:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250218-videocc-pll-multi-pd-voting-v1-5-cfe6289ea29b@quicinc.com>
-References: <20250218-videocc-pll-multi-pd-voting-v1-0-cfe6289ea29b@quicinc.com>
-In-Reply-To: <20250218-videocc-pll-multi-pd-voting-v1-0-cfe6289ea29b@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya
- Kakitapalli" <quic_skakitap@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Vn4iktO0PAaQ8dE0xNnSJHtCQY_ngKHR
-X-Proofpoint-ORIG-GUID: Vn4iktO0PAaQ8dE0xNnSJHtCQY_ngKHR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-18_07,2025-02-18_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- suspectscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- mlxscore=0 mlxlogscore=470 clxscore=1011 phishscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502180109
+References: <20250217105354.551788-1-thierry.bultel.yh@bp.renesas.com> <20250217105354.551788-6-thierry.bultel.yh@bp.renesas.com>
+In-Reply-To: <20250217105354.551788-6-thierry.bultel.yh@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 18 Feb 2025 15:28:26 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXAfrLOFFbt63tJvU_g08zCR_QBQQMzUz-Ceg=G5FQnOA@mail.gmail.com>
+X-Gm-Features: AWEUYZmBgG79ffvBXB4gPQQg9HaeWPl4SFfOE4EOdmrMgWSoOWsSQYwJL7kGJYE
+Message-ID: <CAMuHMdXAfrLOFFbt63tJvU_g08zCR_QBQQMzUz-Ceg=G5FQnOA@mail.gmail.com>
+Subject: Re: [PATCH v2 05/13] clk: renesas: Pass sub struct of cpg_mssr_priv
+ to cpg_clk_register
+To: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
+Cc: thierry.bultel@linatsea.fr, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Videocc requires both MMCX and MXC rails to be powered ON
-to configure the video PLLs on SM8450, SM8550 and SM8650
-platforms. Hence add MXC power domain to videocc node on
-these platforms.
+Hi Thierry,
 
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 3 ++-
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 3 ++-
- arch/arm64/boot/dts/qcom/sm8650.dtsi | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+On Mon, 17 Feb 2025 at 11:54, Thierry Bultel
+<thierry.bultel.yh@bp.renesas.com> wrote:
+> In a coming evolution, the registration callback will need more parameters
+> from cpg_mssr_priv (like another base address with clock controllers
+> with double register block).
+> Instead of adding more parameters, mode the needed parameters to a public
+> sub-struct.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 9c809fc5fa45a98ff5441a0b6809931588897243..4f8dca8fc64212191780067c5d8815e3a2bb137f 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -3136,7 +3136,8 @@ videocc: clock-controller@aaf0000 {
- 			reg = <0 0x0aaf0000 0 0x10000>;
- 			clocks = <&rpmhcc RPMH_CXO_CLK>,
- 				 <&gcc GCC_VIDEO_AHB_CLK>;
--			power-domains = <&rpmhpd RPMHPD_MMCX>;
-+			power-domains = <&rpmhpd RPMHPD_MMCX>,
-+					<&rpmhpd RPMHPD_MXC>;
- 			required-opps = <&rpmhpd_opp_low_svs>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index eac8de4005d82f246bc50f64f09515631d895c99..a039ae71e1b7bba8124128d19de5e00c65217770 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -2889,7 +2889,8 @@ videocc: clock-controller@aaf0000 {
- 			reg = <0 0x0aaf0000 0 0x10000>;
- 			clocks = <&bi_tcxo_div2>,
- 				 <&gcc GCC_VIDEO_AHB_CLK>;
--			power-domains = <&rpmhpd RPMHPD_MMCX>;
-+			power-domains = <&rpmhpd RPMHPD_MMCX>,
-+					<&rpmhpd RPMHPD_MXC>;
- 			required-opps = <&rpmhpd_opp_low_svs>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
-diff --git a/arch/arm64/boot/dts/qcom/sm8650.dtsi b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-index 86684cb9a9325618ddb74458621cf4bbdc1cc0d1..32af2a0f7a0030f155b7d8c93faeffa384a42768 100644
---- a/arch/arm64/boot/dts/qcom/sm8650.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-@@ -3524,7 +3524,8 @@ videocc: clock-controller@aaf0000 {
- 			reg = <0 0x0aaf0000 0 0x10000>;
- 			clocks = <&bi_tcxo_div2>,
- 				 <&gcc GCC_VIDEO_AHB_CLK>;
--			power-domains = <&rpmhpd RPMHPD_MMCX>;
-+			power-domains = <&rpmhpd RPMHPD_MMCX>,
-+					<&rpmhpd RPMHPD_MXC>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
+No SoB?
+
+>  drivers/clk/renesas/r7s9210-cpg-mssr.c  |  7 +-
+>  drivers/clk/renesas/r8a77970-cpg-mssr.c | 11 +--
+>  drivers/clk/renesas/rcar-gen3-cpg.c     |  8 +-
+>  drivers/clk/renesas/rcar-gen3-cpg.h     |  6 +-
+>  drivers/clk/renesas/rcar-gen4-cpg.c     |  9 ++-
+>  drivers/clk/renesas/rcar-gen4-cpg.h     |  3 +-
+>  drivers/clk/renesas/renesas-cpg-mssr.c  | 99 +++++++++++++------------
+>  drivers/clk/renesas/renesas-cpg-mssr.h  | 21 +++++-
+>  8 files changed, 93 insertions(+), 71 deletions(-)
+
+As you forgot to update drivers/clk/renesas/rcar-gen2-cpg.[ch], this
+breaks the build for R-Car Gen2 and RZ/G1 (e.g. shmobile_defconfig),
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
