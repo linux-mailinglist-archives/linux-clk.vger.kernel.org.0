@@ -1,153 +1,207 @@
-Return-Path: <linux-clk+bounces-18482-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18484-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F7B2A3FCA3
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 18:03:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7528EA3FD61
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 18:25:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCFF216B687
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 17:02:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 599353A8068
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 17:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CBB24336E;
-	Fri, 21 Feb 2025 17:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5DE24FC09;
+	Fri, 21 Feb 2025 17:19:49 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED39C24397C
-	for <linux-clk@vger.kernel.org>; Fri, 21 Feb 2025 17:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50C024CEC2;
+	Fri, 21 Feb 2025 17:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740157325; cv=none; b=g/L7RcHL9FF6cpSORupAIcdODykURI3gg2L0ac7jiR5vQDWl+R3nNCOv6cUT33dlmAy41JrMYZfcbHNBAeGiYHHiIC5Bbm5knwEIzxqL+RrYzZzbfApy86pr5BAHNHQjwTfGtafST7nDWLh5t6or4oj/M+4YIAH+eUI83qKsUj8=
+	t=1740158389; cv=none; b=eig1x6EIUbmM4GfsUO/2KhKr7UVj0B9hwYfopDZO2FbZMUUlPQts/zeeOCeE0exH0LwuujnB75UBaY3bRQW44kXG4hAIqDVgroYqd/35K1CxGzPWNcx/i6CSbFtomj7X0ehnVbZQULlCvT9vcIcj0KURrLQsvy5vEwMtWw9JPDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740157325; c=relaxed/simple;
-	bh=G5jh78CS0PPFWm2IO43oDWs13N7ANvB9PlARKyawR+4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PIgmqXHTfk2GUzgjELez6vGef9LuOvU+DmxvQSr5aaImQDPULqQEXBjv3Rt2o4+RJaTRmeO+isfDvJ1lL5NGI0S4mtYW02cnly6LBd1R0pGNTgyWEebe2C+GrZa6+1ZaTEx62y9qchMlXtvlAFiB4gJNlP78ACJHf8kx8Zagz+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:ae9a:419e:d123:9695])
-	by xavier.telenet-ops.be with cmsmtp
-	id GH212E00L0y8aK501H21Cd; Fri, 21 Feb 2025 18:02:01 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tlWPF-0000000BMsv-0Ddx;
-	Fri, 21 Feb 2025 18:02:01 +0100
-Received: from geert by rox.of.borg with local (Exim 4.97)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1tlWPZ-0000000EP5f-1eof;
-	Fri, 21 Feb 2025 18:02:01 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [GIT PULL] clk: renesas: Updates for v6.15
-Date: Fri, 21 Feb 2025 18:01:59 +0100
-Message-ID: <cover.1740157133.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1740158389; c=relaxed/simple;
+	bh=/DHdgcTv11J19FjTFiLnbR5oX2dg/1u2Cc/F1VKW0yM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k/SuIVZv1pFbIViGBhkeLRSkSWakBJcn5pHJL6QtOFo1UsW6AYC/kV55Cqxgr0aqpJesbVEboWU56rgFyMtoTdUF6WLFLYdzPaSaMzIKi5LJyGQtxuz3dQh4ql+SXATtiBK+mqlBGq7qWK8CGHTD92u0DwUSlnSu55hT/ysFXlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tlWgj-00028I-00; Fri, 21 Feb 2025 18:19:45 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id DC6B1C0135; Fri, 21 Feb 2025 18:18:32 +0100 (CET)
+Date: Fri, 21 Feb 2025 18:18:32 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org, yangshiji66@outlook.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] mips: dts: ralink: mt7628a: update system
+ controller node and its consumers
+Message-ID: <Z7i1aDGiHLsOFYyz@alpha.franken.de>
+References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+ <20250120092146.471951-7-sergio.paracuellos@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250120092146.471951-7-sergio.paracuellos@gmail.com>
 
-	Hi Mike, Stephen,
+On Mon, Jan 20, 2025 at 10:21:46AM +0100, Sergio Paracuellos wrote:
+> Current MT7628A device tree file system controller node is wrong since it is
+> not matching bindings. Hence, update it to match current bindings updating
+> it also to use new introduced clock constants.
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  arch/mips/boot/dts/ralink/mt7628a.dtsi | 38 ++++++++++++++++----------
+>  1 file changed, 24 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> index 45a15e005cc4..309966049c56 100644
+> --- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> +++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> @@ -1,4 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <dt-bindings/clock/mediatek,mtmips-sysc.h>
+>  
+>  / {
+>  	#address-cells = <1>;
+> @@ -16,11 +17,6 @@ cpu@0 {
+>  		};
+>  	};
+>  
+> -	resetc: reset-controller {
+> -		compatible = "ralink,rt2880-reset";
+> -		#reset-cells = <1>;
+> -	};
+> -
+>  	cpuintc: interrupt-controller {
+>  		#address-cells = <0>;
+>  		#interrupt-cells = <1>;
+> @@ -36,9 +32,11 @@ palmbus@10000000 {
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+>  
+> -		sysc: system-controller@0 {
+> -			compatible = "ralink,mt7620a-sysc", "syscon";
+> +		sysc: syscon@0 {
+> +			compatible = "ralink,mt7628-sysc", "syscon";
+>  			reg = <0x0 0x60>;
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+>  		};
+>  
+>  		pinmux: pinmux@60 {
+> @@ -138,7 +136,7 @@ watchdog: watchdog@100 {
+>  			compatible = "mediatek,mt7621-wdt";
+>  			reg = <0x100 0x30>;
+>  
+> -			resets = <&resetc 8>;
+> +			resets = <&sysc 8>;
+>  			reset-names = "wdt";
+>  
+>  			interrupt-parent = <&intc>;
+> @@ -154,7 +152,7 @@ intc: interrupt-controller@200 {
+>  			interrupt-controller;
+>  			#interrupt-cells = <1>;
+>  
+> -			resets = <&resetc 9>;
+> +			resets = <&sysc 9>;
+>  			reset-names = "intc";
+>  
+>  			interrupt-parent = <&cpuintc>;
+> @@ -190,7 +188,9 @@ spi: spi@b00 {
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&pinmux_spi_spi>;
+>  
+> -			resets = <&resetc 18>;
+> +			clocks = <&sysc MT76X8_CLK_SPI1>;
+> +
+> +			resets = <&sysc 18>;
+>  			reset-names = "spi";
+>  
+>  			#address-cells = <1>;
+> @@ -206,7 +206,9 @@ i2c: i2c@900 {
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&pinmux_i2c_i2c>;
+>  
+> -			resets = <&resetc 16>;
+> +			clocks = <&sysc MT76X8_CLK_I2C>;
+> +
+> +			resets = <&sysc 16>;
+>  			reset-names = "i2c";
+>  
+>  			#address-cells = <1>;
+> @@ -222,7 +224,9 @@ uart0: uartlite@c00 {
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&pinmux_uart0_uart>;
+>  
+> -			resets = <&resetc 12>;
+> +			clocks = <&sysc MT76X8_CLK_UART0>;
+> +
+> +			resets = <&sysc 12>;
+>  			reset-names = "uart0";
+>  
+>  			interrupt-parent = <&intc>;
+> @@ -238,7 +242,9 @@ uart1: uart1@d00 {
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&pinmux_uart1_uart>;
+>  
+> -			resets = <&resetc 19>;
+> +			clocks = <&sysc MT76X8_CLK_UART1>;
+> +
+> +			resets = <&sysc 19>;
+>  			reset-names = "uart1";
+>  
+>  			interrupt-parent = <&intc>;
+> @@ -254,7 +260,9 @@ uart2: uart2@e00 {
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&pinmux_uart2_uart>;
+>  
+> -			resets = <&resetc 20>;
+> +			clocks = <&sysc MT76X8_CLK_UART2>;
+> +
+> +			resets = <&sysc 20>;
+>  			reset-names = "uart2";
+>  
+>  			interrupt-parent = <&intc>;
+> @@ -290,6 +298,8 @@ wmac: wmac@10300000 {
+>  		compatible = "mediatek,mt7628-wmac";
+>  		reg = <0x10300000 0x100000>;
+>  
+> +		clocks = <&sysc MT76X8_CLK_WMAC>;
+> +
+>  		interrupt-parent = <&cpuintc>;
+>  		interrupts = <6>;
+>  
+> -- 
+> 2.25.1
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+I get
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+  DTC     arch/mips/boot/dts/ralink/vocore2.dtb
+/local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/mt7628a.dtsi:275.28-284.4: ERROR (phandle_references): /usb-phy@10120000: Reference to non-existent node or label "resetc"
 
-are available in the Git repository at:
+/local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/mt7628a.dtsi:275.28-284.4: ERROR (phandle_references): /usb-phy@10120000: Reference to non-existent node or label "resetc"
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git tags/renesas-clk-for-v6.15-tag1
+ERROR: Input tree has errors, aborting (use -f to force output)
 
-for you to fetch changes up to 9b12504e8c8c2f1f7e5f16afdd829603dd0c9508:
+for CONFIG_DTB_VOCORE2=y and a similair failure for CONFIG_DTB_OMEGA2P=y
 
-  clk: renesas: r9a09g047: Add CANFD clocks and resets (2025-02-20 17:42:03 +0100)
+I'll apply rest of the series, please send a fixed patch for mt7628a
 
-----------------------------------------------------------------
-clk: renesas: Updates for v6.15
+Thomas.
 
-  - Add thermal (TSU) clock, reset, and power domain on RZ/G3S,
-  - Add AI accelerator (DRP-AI) clocks and reset on RZ/V2L,
-  - Add Image Signal Processor (ISP, FCPVX, VSPX) clocks on R-Car V3U,
-    V4H, and V4M,
-  - Add Watchdog (WDT), SDHI, Interrupt Controller (ICU), Camera (CRU0),
-    and CAN-FD clocks and resets on RZ/G3E,
-  - Miscellaneous fixes and improvements.
-
-Thanks for pulling!
-
-----------------------------------------------------------------
-Biju Das (4):
-      clk: renesas: r9a09g047: Add WDT clocks and resets
-      clk: renesas: r9a09g047: Add SDHI clocks/resets
-      clk: renesas: r9a09g047: Add ICU clock/reset
-      clk: renesas: r9a09g047: Add CANFD clocks and resets
-
-Claudiu Beznea (2):
-      clk: renesas: r9a08g045: Add clocks, resets and power domain support for the TSU IP
-      clk: renesas: r8a08g045: Check the source of the CPU PLL settings
-
-Lad Prabhakar (5):
-      clk: renesas: rzg2l-cpg: Refactor Runtime PM clock validation
-      clk: renesas: r9a07g044: Add clock and reset entry for DRP-AI
-      clk: renesas: r9a07g043: Fix HP clock source for RZ/Five
-      clk: renesas: rzg2l: Update error message
-      clk: renesas: rzv2h: Update error message
-
-Niklas Söderlund (6):
-      clk: renesas: r8a779a0: Add FCPVX clocks
-      clk: renesas: r8a779a0: Add ISP core clocks
-      clk: renesas: r8a779g0: Add ISP core clocks
-      clk: renesas: r8a779h0: Add ISP core clocks
-      clk: renesas: r8a779h0: Add FCPVX clock
-      clk: renesas: r8a779h0: Add VSPX clock
-
-Tommaso Merciai (1):
-      clk: renesas: r9a09g047: Add CRU0 clocks and resets
-
- drivers/clk/renesas/r8a779a0-cpg-mssr.c |   8 +++
- drivers/clk/renesas/r8a779g0-cpg-mssr.c |   2 +
- drivers/clk/renesas/r8a779h0-cpg-mssr.c |   3 +
- drivers/clk/renesas/r9a07g043-cpg.c     |   7 ++
- drivers/clk/renesas/r9a07g044-cpg.c     |  55 ++++++++++++++-
- drivers/clk/renesas/r9a08g045-cpg.c     |   9 ++-
- drivers/clk/renesas/r9a09g047-cpg.c     |  83 ++++++++++++++++++++++
- drivers/clk/renesas/rzg2l-cpg.c         | 119 ++++++++++++++++++--------------
- drivers/clk/renesas/rzg2l-cpg.h         |  12 +++-
- drivers/clk/renesas/rzv2h-cpg.c         |   4 +-
- 10 files changed, 242 insertions(+), 60 deletions(-)
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
-
-Thanks for pulling!
-
-Gr{oetje,eeting}s,
-
-						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-							    -- Linus Torvalds
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
