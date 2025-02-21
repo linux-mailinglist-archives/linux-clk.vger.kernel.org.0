@@ -1,45 +1,45 @@
-Return-Path: <linux-clk+bounces-18431-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18430-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759AEA3EEF2
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 09:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F55CA3EEF1
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 09:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76E1A189AE51
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 08:45:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E6BD189A6E9
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2025 08:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B74F4201036;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BD1201031;
 	Fri, 21 Feb 2025 08:45:00 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [195.130.132.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6D920102C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2A420102E
 	for <linux-clk@vger.kernel.org>; Fri, 21 Feb 2025 08:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740127500; cv=none; b=MyF8CBa9EjLw/QMr7WIojCkbLqw97kMC5FSo3M2qqwbhetfxTH36/uIFbw6BJh6uOzLmhAGLZdktwhVfI2uqndAvmQNpn0XqlHg/NfaAN7RHJN5namum3K8V7FCd9a49MtKM7UtX/FzeVGuHaYZSn5Mknv7dvlaSsW0ynPw89yw=
+	t=1740127500; cv=none; b=emhgqMh5VgMPEw5mvgfOhRznLsqlWDRyuxfXuERvJ9zp55qfdu+shghZ3B7aUQcHhi4E9SywFDo6XttwOxRdIW9PxNQ1Zb64xMIjxTY/a1BN4LQSzIOa4IOvG3WjEL0UqERcRe0zpFvRbruH0EIHY8Qplnbo90DcGXV3DnS31RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740127500; c=relaxed/simple;
-	bh=6i83hX6VwKD3ElMxhPpSnKnbx/de5TK77AP6kfQbiqA=;
+	bh=ErKt/IX3ty7Ak0Cdt/zKYdEi7M2ihahZ7kTQA445DEs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YuEvzo6a/JrpqV358ja9Cr7vw9xMZ9YeCQvlmbjHeoA9vJ3BDh4/01Je7I8HIoXu60XYbiPFptVSRvl4wSeJW+AMKZH1jVBqtM4zdOmmgMrhyyxO4ClkhuiPoYaFRabT1bjPFwB5UkMcr27WnpHboHmUmtaP91e4C6d+1zQP3KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
+	 MIME-Version; b=GkmCuPQ0BANDHAMd3VjLZ8LjTkGyMimrvUBrqZbsgI+pFXyhQX42Xx67T3mYYTxFwvmNyClzkQJuEYFAo+f1niRmao+Uia1nDx9CUMDOpOQ/g3vaNcqlKR5mUPK1oaovy4xIWuUj62fc/iZlDpwaPaMlNqSCnrYS/oOnP/yRu2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:ae9a:419e:d123:9695])
-	by albert.telenet-ops.be with cmsmtp
-	id G8kp2E0080y8aK5068kpU7; Fri, 21 Feb 2025 09:44:50 +0100
+	by baptiste.telenet-ops.be with cmsmtp
+	id G8kp2E0090y8aK5018kp1S; Fri, 21 Feb 2025 09:44:50 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1tlOe4-0000000BKsd-33gP;
+	id 1tlOe4-0000000BKsg-38xd;
 	Fri, 21 Feb 2025 09:44:49 +0100
 Received: from geert by rox.of.borg with local (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1tlOeP-0000000E5K4-0fTB;
+	id 1tlOeP-0000000E5K9-0kmb;
 	Fri, 21 Feb 2025 09:44:49 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
@@ -50,9 +50,9 @@ To: Michael Turquette <mturquette@baylibre.com>,
 Cc: linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 2/3] clk: renesas: rzg2l: Remove unneeded nullify checks
-Date: Fri, 21 Feb 2025 09:44:46 +0100
-Message-ID: <64702c33396dde2689b44d3e326aa1727ef1557a.1740126560.git.geert+renesas@glider.be>
+Subject: [PATCH 3/3] clk: renesas: r7s9210: Distinguish clocks by clock type
+Date: Fri, 21 Feb 2025 09:44:47 +0100
+Message-ID: <7e61ea78e9919148e73867088ccbc3509364952e.1740126560.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1740126560.git.geert+renesas@glider.be>
 References: <cover.1740126560.git.geert+renesas@glider.be>
@@ -64,42 +64,45 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RZ/G2L family clock drivers never had a need to nullify clocks.
-Remove the unneeded checks.
+When registering a clock, its type should be devised from the clock's
+type member, not from its id member.
+Merge the two checks for the main clock, to improve readability.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/clk/renesas/rzg2l-cpg.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/clk/renesas/r7s9210-cpg-mssr.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/renesas/rzg2l-cpg.c b/drivers/clk/renesas/rzg2l-cpg.c
-index a6b87cc66cbba485..b91dfbfb01e31cd8 100644
---- a/drivers/clk/renesas/rzg2l-cpg.c
-+++ b/drivers/clk/renesas/rzg2l-cpg.c
-@@ -1116,11 +1116,6 @@ rzg2l_cpg_register_core_clk(const struct cpg_core_clk *core,
- 	WARN_DEBUG(id >= priv->num_core_clks);
- 	WARN_DEBUG(PTR_ERR(priv->clks[id]) != -ENOENT);
+diff --git a/drivers/clk/renesas/r7s9210-cpg-mssr.c b/drivers/clk/renesas/r7s9210-cpg-mssr.c
+index a85227c248f31cb2..e1812867a6da4ea9 100644
+--- a/drivers/clk/renesas/r7s9210-cpg-mssr.c
++++ b/drivers/clk/renesas/r7s9210-cpg-mssr.c
+@@ -170,11 +170,12 @@ static struct clk * __init rza2_cpg_clk_register(struct device *dev,
+ 	if (IS_ERR(parent))
+ 		return ERR_CAST(parent);
  
--	if (!core->name) {
--		/* Skip NULLified clock */
--		return;
--	}
--
- 	switch (core->type) {
- 	case CLK_TYPE_IN:
- 		clk = of_clk_get_by_name(priv->dev->of_node, core->name);
-@@ -1355,11 +1350,6 @@ rzg2l_cpg_register_mod_clk(const struct rzg2l_mod_clk *mod,
- 	WARN_DEBUG(mod->parent >= priv->num_core_clks + priv->num_mod_clks);
- 	WARN_DEBUG(PTR_ERR(priv->clks[id]) != -ENOENT);
+-	switch (core->id) {
+-	case CLK_MAIN:
++	switch (core->type) {
++	case CLK_TYPE_RZA_MAIN:
++		r7s9210_update_clk_table(parent, base);
+ 		break;
  
--	if (!mod->name) {
--		/* Skip NULLified clock */
--		return;
--	}
+-	case CLK_PLL:
++	case CLK_TYPE_RZA_PLL:
+ 		if (cpg_mode)
+ 			mult = 44;	/* Divider 1 is 1/2 */
+ 		else
+@@ -185,9 +186,6 @@ static struct clk * __init rza2_cpg_clk_register(struct device *dev,
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	if (core->id == CLK_MAIN)
+-		r7s9210_update_clk_table(parent, base);
 -
- 	parent = priv->clks[mod->parent];
- 	if (IS_ERR(parent)) {
- 		clk = parent;
+ 	return clk_register_fixed_factor(NULL, core->name,
+ 					 __clk_get_name(parent), 0, mult, div);
+ }
 -- 
 2.43.0
 
