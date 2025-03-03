@@ -1,142 +1,235 @@
-Return-Path: <linux-clk+bounces-18801-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18803-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDD1A4BA0C
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Mar 2025 09:57:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9635AA4BB7A
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Mar 2025 10:58:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D3617A948B
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Mar 2025 08:54:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C28E1649A1
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Mar 2025 09:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BBE1F2BBB;
-	Mon,  3 Mar 2025 08:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2781F1531;
+	Mon,  3 Mar 2025 09:58:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H5bBw+sC"
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="yFMzXf6x";
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="d/tG6KbQ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bayard.4d2.org (bayard.4d2.org [155.254.16.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD041F1508;
-	Mon,  3 Mar 2025 08:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E193D1F12E8;
+	Mon,  3 Mar 2025 09:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=155.254.16.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740991961; cv=none; b=Yw9G10JwTRtN04kzdytFKfvhXiQA5/krc2cHwvtiksLmNmbY3Kp/VAB+rl4iTA7+2pxpsgYqU8cyuAgQ/e2fGqzWza/4xdBZASD1dI6pKHKlkGh9NxcS3thiD9bw3A1JpipvKY/pMzhevezeMgBV/WxAB9kibG331/7iTspvAc4=
+	t=1740995924; cv=none; b=dd1ii7eiz+FHerUW1/kwh9bBXNQFw7tdppEgYpZf6g/YfHbDHoiuPQwT6xdVNReGa42WO7oABf88Kq3vLnqrbG9vQR1Y7CM8YJkBUHcqQ2VCxuFRtyODFUHmW/vNfi4xXYvZWOib96rMyUOJL1RmafFfPHwTrEBeWqa2LNJsofU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740991961; c=relaxed/simple;
-	bh=ZHfPcRu3w6X4uOEal8YGwnhiBv+LQjiuBdcRJVG07co=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r7JgO9nPgG9c00qr59Ncag54I4FV2UFr5d7gBLQtvIEAhFesOoqrj8/Wkkf6aJKrKR9aoILupTQkd1CcDSFkt2axDwBRd9OPDR4xCjLPPTa/S56NU/dy84featI/2jLUf2F0LKBoE6rNj5jLW1Vqlqifg8M2L8HLv6qHNXvgmF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H5bBw+sC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1F5C4CED6;
-	Mon,  3 Mar 2025 08:52:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740991961;
-	bh=ZHfPcRu3w6X4uOEal8YGwnhiBv+LQjiuBdcRJVG07co=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=H5bBw+sC1xLk4F8+u9tHxnMv0U7KKbadL8pdYOC840vnMrjRGHY5ia2ninPQwXkIe
-	 PftPYTcdMvdSeuBpcuKqBFm+qRfEj1snXY4+b/PBGc2WjtucJnB+TYMjPyohF1XxLx
-	 wvfXg97cwuRo1SomO0LpLuCXJyPK/19JJvOje9qpywQFCL4zpXT3erARdfLg9bWckE
-	 Sis1jEPtpAVUPkTob/0+T/qzJBmq8AjtY6LkduxlwetxY3hffBdTt7jSS5nnTAz5IS
-	 jIE5vaqB7qEJy8vc83RSlAHc59OMrCVGC7KWQNAeJQ23tAYv6CH3H0TMK5UzGAAF4H
-	 lQxhU2ehVylyg==
-Message-ID: <df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
-Date: Mon, 3 Mar 2025 09:52:29 +0100
+	s=arc-20240116; t=1740995924; c=relaxed/simple;
+	bh=XsOhRhGgIDJZEEWgUUzXOzwpJUSE7vf/DDvuB57+LP0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qN3eS+nWQGcF5BRXSQBC9jAM4EoUIjlvTWPtH6wV1R7fWCXZ/PnqnvbuXt7hmoiAb5VAlvYZt0TB8xo9Cg5rcQ1ig5eMaxCgRdt+JGj1erxZ1dp/v2F1MhRe86cK9OlCDd2+UhOpjhVSi4kM9zAc+FFN01cDElL5dCLExGOiW88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=yFMzXf6x; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=d/tG6KbQ; arc=none smtp.client-ip=155.254.16.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=4d2.org
+Received: from bayard.4d2.org (bayard.4d2.org [127.0.0.1])
+	by bayard.4d2.org (Postfix) with ESMTP id 3AC39EC59F4;
+	Mon, 03 Mar 2025 01:41:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
+	t=1740994897; bh=XsOhRhGgIDJZEEWgUUzXOzwpJUSE7vf/DDvuB57+LP0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=yFMzXf6x+euNhqYdyFc2mk88iMskDnSIVOTDXSspYDwR61/P5TtT40yJaGze14i99
+	 tQuWMrU1/jJkEUPl7lMg/y62pOd3WbyclC+UBtUVcdognCJTCkQXU9pcukBFwMGfdO
+	 MFpPPwV4YtsO8RLngunqoBnjFw2PjlOGEq1upPxN7sWbuLb/p1Mz8b4YSLQ7IEFcXn
+	 S/loUzkMUg8yqRGlah9v2CZD0xvadgb7TtV05K8J9eDW0F734GoseYmsG/PyH/X0lu
+	 0zwNLde4wN4SCC7DmrfK228b5/g3biZSihXiQnDYecKy1nY0B4wijv2IJM0cPiepT1
+	 IRQB0sWDRg4Hw==
+X-Virus-Scanned: amavisd-new at 4d2.org
+Received: from bayard.4d2.org ([127.0.0.1])
+ by bayard.4d2.org (bayard.4d2.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id hd0nTS58Kd8d; Mon,  3 Mar 2025 01:41:29 -0800 (PST)
+Received: from ketchup (unknown [183.217.83.155])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: heylenay@4d2.org)
+	by bayard.4d2.org (Postfix) with ESMTPSA id A2B54EC59F2;
+	Mon, 03 Mar 2025 01:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
+	t=1740994889; bh=XsOhRhGgIDJZEEWgUUzXOzwpJUSE7vf/DDvuB57+LP0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d/tG6KbQJ4zHh11BSoOdeU+HJBzVDLNbNySGcG3MspSkwmzZQsHkPzJwYts033mig
+	 yVsZyD230U/1mJDn+eTLyke8iQT0H6X+2iM9iFn4C0UiAS6ZN28fC/f4+XYoU7vGK2
+	 Me5seqNlkGmH4/KibAMv2yg1VI4j0uPK7IugBcqMiWJ5DJJsx+Q7Fu5y0n/zsC2ESE
+	 4D/nzftIbi2cDyklPBDP9LXJTe2/g1oOMGsMfM1Upohi9pHUGbeCY5LHK4ju91QokZ
+	 /P/GUY2tK/YeM1sGisZi0ZPo5b8166LDKRjgeINFNixcYoWhDz0Oh7kRQ5Z+KWE3/n
+	 +cWz0VMMjQo3A==
+Date: Mon, 3 Mar 2025 09:41:14 +0000
+From: Haylen Chu <heylenay@4d2.org>
+To: Alex Elder <elder@riscstar.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Haylen Chu <heylenay@outlook.com>, Yixun Lan <dlan@gentoo.org>
+Cc: linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Chen Wang <unicornxdotw@foxmail.com>,
+	Guodong Xu <guodong@riscstar.com>
+Subject: Re: [PATCH v4 3/4] clk: spacemit: Add clock support for Spacemit K1
+ SoC
+Message-ID: <Z8V5OjQTxVeRLAOU@ketchup>
+References: <20250103215636.19967-2-heylenay@4d2.org>
+ <20250103215636.19967-5-heylenay@4d2.org>
+ <f8b30551-25e7-4626-8c03-6d8807041d8a@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/21] dt-bindings: clock: thead: Add GPU clkgen reset
- property
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
- wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
- matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
- ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
- m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
- linux-pm@vger.kernel.org
-References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
- <CGME20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639@eucas1p2.samsung.com>
- <20250219140239.1378758-10-m.wilczynski@samsung.com>
- <20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
- <7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8b30551-25e7-4626-8c03-6d8807041d8a@riscstar.com>
 
-On 03/03/2025 09:42, Michal Wilczynski wrote:
->>> +allOf:
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const: thead,th1520-clk-vo
->>> +    then:
->>> +      required:
->>> +        - resets
->>
->> else:
->> ? What's there? Also reset or no?
+On Thu, Feb 13, 2025 at 10:04:10PM -0600, Alex Elder wrote:
+> On 1/3/25 3:56 PM, Haylen Chu wrote:
+> > The clock tree of K1 SoC contains three main types of clock hardware
+> > (PLL/DDN/MIX) and is managed by several independent controllers in
+> > different SoC parts (APBC, APBS and etc.), thus different compatible
+> > strings are added to distinguish them.
+> > 
+> > Some controllers may share IO region with reset controller and other low
+> > speed peripherals like watchdog, so all register operations are done
+> > through regmap to avoid competition.
+> > 
+> > Signed-off-by: Haylen Chu <heylenay@4d2.org>
 > 
-> If the else: case the reset is not required, as it's only required in
-> the th1520clk-vo, so there is no need for else:.
-That's not the question. I know it is not required, I can read code.
-What is in the hardware?
+> This is a really big patch (over 3000 lines), and a fairly large
+> amount of code to review.  But I've given it a really thorough
+> read and I have a *lot* of review comments for you to consider.
+> 
+> First, a few top-level comments.
+> - This driver is very comprehensive.  It represents essentially
+>   *all* of the clocks in the tree diagram shown here:
+> https://developer.spacemit.com/resource/file/images?fileName=DkWGb4ed7oAziVxE6PIcbjTLnpd.png
+>   (I can tell you what's missing but I don't think it matters.)
+> - In almost all cases, the names of the clocks match the names
+>   shown in that diagram, which is very helpful.
+> - All of the clocks are implemented using "custom" clock
+>   implementations.  I'm fairly certain that almost all of
+>   them can use standard clock framework types instead
+>   (fixed-rate, fixed-factor, fractional-divider, mux, and
+>   composite).  But for now I think there are other things
+>   more important to improve.
+> - A great deal of my commentary below is simply saying that the
+>   code is more complex than necessary.  Some simple (though
+>   widespread) refactoring would improve things a lot.  And
+>   some of the definitions can be done without having to
+>   specify nearly so many values.
+> - Much of what might be considered generality in the
+>   implementation actually isn't needed, because it isn't used.
+>   This is especially true given that there are essentially no
+>   clocks left unspecified for the K1 SoC.
+> - Once the refactoring I suggest has been done, I expect
+>   that more opportunities for simplification and cleanup will
+>   become obvious; we'll see.
+> - I suggest these changes because the resulting simplicity
+>   will make the code much more understandable and maintainable
+>   in the long term.  And if it's simpler to understand, it
+>   should be easier for a maintainer to accept.
+> 
+> I'm not going to comment on the things related to Device Tree
+> that have already been mentioned, nor on the Makefile or Kconfig,
+> etc.  I'm focusing just on the code.
+> 
+> > ---
+> >   drivers/clk/Kconfig               |    1 +
+> >   drivers/clk/Makefile              |    1 +
+> >   drivers/clk/spacemit/Kconfig      |   20 +
+> >   drivers/clk/spacemit/Makefile     |    5 +
+> >   drivers/clk/spacemit/ccu-k1.c     | 1747 +++++++++++++++++++++++++++++
+> >   drivers/clk/spacemit/ccu_common.h |   51 +
+> >   drivers/clk/spacemit/ccu_ddn.c    |  140 +++
+> >   drivers/clk/spacemit/ccu_ddn.h    |   84 ++
+> >   drivers/clk/spacemit/ccu_mix.c    |  304 +++++
+> >   drivers/clk/spacemit/ccu_mix.h    |  309 +++++
+> >   drivers/clk/spacemit/ccu_pll.c    |  189 ++++
+> >   drivers/clk/spacemit/ccu_pll.h    |   80 ++
+> >   12 files changed, 2931 insertions(+)
+> >   create mode 100644 drivers/clk/spacemit/Kconfig
+> >   create mode 100644 drivers/clk/spacemit/Makefile
+> >   create mode 100644 drivers/clk/spacemit/ccu-k1.c
+> >   create mode 100644 drivers/clk/spacemit/ccu_common.h
+> >   create mode 100644 drivers/clk/spacemit/ccu_ddn.c
+> >   create mode 100644 drivers/clk/spacemit/ccu_ddn.h
+> >   create mode 100644 drivers/clk/spacemit/ccu_mix.c
+> >   create mode 100644 drivers/clk/spacemit/ccu_mix.h
+> >   create mode 100644 drivers/clk/spacemit/ccu_pll.c
+> >   create mode 100644 drivers/clk/spacemit/ccu_pll.h
+> > 
 
-Best regards,
-Krzysztof
+...
+
+> > diff --git a/drivers/clk/spacemit/ccu-k1.c b/drivers/clk/spacemit/ccu-k1.c
+> > new file mode 100644
+> > index 000000000000..6fb0a12ec261
+> > --- /dev/null
+> > +++ b/drivers/clk/spacemit/ccu-k1.c
+
+...
+
+> The next set of clocks differ from essentially all others, in that
+> they don't encode their frequency in the name.  I.e., I would expect
+> the first one to be named pll1_d2_1228p8.
+
+I found this change may not be possible: with the frequency appended,
+their names conflict with another set of MPMU gates.
+
+> 
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d2, "pll1_d2", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(1), BIT(1), 0, 2, 1, 0);
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d3, "pll1_d3", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(2), BIT(2), 0, 3, 1, 0);
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d4, "pll1_d4", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(3), BIT(3), 0, 4, 1, 0);
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d5, "pll1_d5", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(4), BIT(4), 0, 5, 1, 0);
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d6, "pll1_d6", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(5), BIT(5), 0, 6, 1, 0);
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d7, "pll1_d7", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(6), BIT(6), 0, 7, 1, 0);
+> > +static CCU_GATE_FACTOR_DEFINE(pll1_d8, "pll1_d8", CCU_PARENT_HW(pll1),
+> > +			      APB_SPARE2_REG,
+> > +			      BIT(7), BIT(7), 0, 8, 1, 0);
+> > +
+
+...
+
+> > +/*	MPMU clocks start	*/
+
+...
+
+> > +static CCU_GATE_DEFINE(pll1_d3_819p2, "pll1_d3_819p2", CCU_PARENT_HW(pll1_d3),
+> > +		       MPMU_ACGR,
+> > +		       BIT(14), BIT(14), 0, 0);
+> > +
+> > +static CCU_GATE_DEFINE(pll1_d2_1228p8, "pll1_d2_1228p8", CCU_PARENT_HW(pll1_d2),
+> > +		       MPMU_ACGR,
+> > +		       BIT(16), BIT(16), 0, 0);
+
+Here're the conflicts.
+
+Although they don't happen on all the clocks, I prefer to keep the clock
+names as is for now to keep the consistency.
+
+Thanks,
+Haylen Chu
 
