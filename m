@@ -1,119 +1,122 @@
-Return-Path: <linux-clk+bounces-18928-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18932-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8455EA4E9AE
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:46:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 285AFA4EB6C
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 19:25:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA1F8188D350
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 17:41:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E81FA1883A72
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D001E2BE7A8;
-	Tue,  4 Mar 2025 17:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D290259CBC;
+	Tue,  4 Mar 2025 18:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="iOuR5pQS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pY+m9FKQ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5007927CB00
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 17:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABA8284B59
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.116
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741108589; cv=pass; b=CsdP4KrL8mn/l2yHVLPBPb3MJB1QcsHCvGksFOUWJb3hCAFRSzPJoQQzcYJNzU+UHjunoED9xThTsi5gGptzMEsRdFkrSs7N4zXXgpyiPhBjaStuBm18Rz9ZZuofWBB66Fz20kR2JGQboWaGR39SOgehTL3FvXH7BxXLrCuaBmw=
+	t=1741111664; cv=pass; b=pVBr8I/djCU67vmXOzhEVVQ8pKcpwGYbDAy4R85iNMCU5usqxikaLq0RrnskSzrePXyA11t8+VbrRBW0m5Ic7rTpbzuZgHwYU/tyRZfODGNgLsgjaRsMVpKZFM6q6Z59mx6H3X/Ji1+/6OT3eWXWyOc0r8Yndv2tRT6RDb3vpxk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741108589; c=relaxed/simple;
-	bh=6dFKW+lioLDu60dHVNyKGbg+VYbzqtMUAtM10HSxmKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=YAlPWoBgL/blVj6ECtuQqSLguOMIaEWflEZGohgrx0lrf0+RegqQiQvoeItzlojgFKJYdYcQa5l/Z2oa0S1PV/2LGSfoxK+9ZimSpEcWtUEIk5IlQBhlSZIIdpH/p5rLPXkJTTc7u6tKvchgeXpUCyba/LGBSPau3MHcKpl4R+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iOuR5pQS; arc=none smtp.client-ip=210.118.77.12; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; arc=pass smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+	s=arc-20240116; t=1741111664; c=relaxed/simple;
+	bh=7jatznALkxiqBPL+NMCYO4jhDNWV0Puk67f6y/obF/Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mrbAQztOSUGtb/KPJuB7W2vKqjlNVXe7dPVUyQ6FOEeq48yu8ztpREff8hM+fYZ0WiJbTgZx2V+P0CPuKAep8dmnntW0vLoHrMyHiUPYowsFRrP5dW0Qu/TzJM+IMl9fxI27X6npunYEaSWe6ntmsBgefd3/B+9MT40LNmg0evE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pY+m9FKQ; arc=none smtp.client-ip=209.85.221.47; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; arc=pass smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 9A98140D1F40
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 20:16:26 +0300 (+03)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 9DCA64089197
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 21:07:40 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20230601 header.b=pY+m9FKQ
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gQQ70ZszG28f
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 19:01:02 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gKp3cYPzG1rj
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:57:02 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 0153242725; Tue,  4 Mar 2025 19:00:21 +0300 (+03)
+	id EAD5642731; Tue,  4 Mar 2025 18:57:01 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iOuR5pQS
-X-Envelope-From: <linux-kernel+bounces-541317-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pY+m9FKQ
+X-Envelope-From: <linux-kernel+bounces-541333-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iOuR5pQS
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pY+m9FKQ
 Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id A874841B84
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:56:52 +0300 (+03)
+	by le2 (Postfix) with ESMTP id A2D5E435AD
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:04:58 +0300 (+03)
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 5CD2C2DCDE
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:56:52 +0300 (+03)
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 549522DCE5
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:04:58 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89ABA171B30
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 09:56:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69E95166EC3
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1101F30CC;
-	Mon,  3 Mar 2025 09:55:29 +0000 (UTC)
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7461F236E;
+	Mon,  3 Mar 2025 10:04:43 +0000 (UTC)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B2B1F1520
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 09:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377521E9907
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 10:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740995726; cv=none; b=TBqoNOc/v7J4tfj7mcAmtIsmAsP9IRNrA0ahuQhq3SMRftueNBn1p0YOdZZy/uYjoradSoOb108GT8HjNV2jQZOrwE0lTYscGEv97kEop5BL3562wpWNoeImVEIDhiwwEQRjP9/cb5047Yft+ht8Mhle8m1f29ggZKth9cKCZxI=
+	t=1740996280; cv=none; b=Vq3Spr1RGVvDOqo3dOI0qISlZSMYLCkqiXLlL4kPAnUafG+IxFZXYftgJgM0RDlpIBWQnx5Zl6rNbxtVnU7MTlhSQMlFrT1Wrk2jyHm74+F9y6JLbb1DYQvo5Hff70O2CL8pOQpLSVdCdPq+zKAXSz+BdINfRBwXTqRQr8EdRtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740995726; c=relaxed/simple;
-	bh=6dFKW+lioLDu60dHVNyKGbg+VYbzqtMUAtM10HSxmKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=mFhGcmHfoOMfqM+eTOU6EuPzTDKrliDUNVJLItPnRsTXyYJOsUi9l6Oi7PTSHVgeCPgNUln26uCbDUCyr4RESSck23wTaM/0vM4VecTzksQ1t+4oYv7tUVNMa93ZjuCAnb3QhXRTAgJoCUs9d0I4K/F7geP+pRB+NOWAQjeXHnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iOuR5pQS; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250303095522euoutp029734b3b1c192f40d4c435687fcde8bfb~pQmK1sciJ2969329693euoutp02h
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 09:55:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250303095522euoutp029734b3b1c192f40d4c435687fcde8bfb~pQmK1sciJ2969329693euoutp02h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1740995722;
-	bh=jkAx3oP1ERyW9hpWianokfe1kkMolVE+K5Ndsqy3gk0=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=iOuR5pQS7+qqFtOPV46S4Hy6dQuMPQhYuid5Ci7LELDTRFVkVQug3gKvcpxU135Mo
-	 1APKhmYi1jvFdS8DZZ/67aOStH8U6ztnCndaJuOAHa4dQZFCKwOmoY85IYUA/NvaMC
-	 bd9i0Z0/cgaARw/1oYfXFSJWfWfZ6M2GHxn1D95E=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20250303095521eucas1p18b3e85146d3b4e58d374ee65443f510c~pQmKDy2hP1876818768eucas1p1H;
-	Mon,  3 Mar 2025 09:55:21 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id A3.CF.20397.98C75C76; Mon,  3
-	Mar 2025 09:55:21 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250303095521eucas1p24b0494320e01283259315a138346d672~pQmJhIYUQ1753017530eucas1p2w;
-	Mon,  3 Mar 2025 09:55:21 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250303095521eusmtrp2a5ece5c802ffd421b11eeb5d30ebd786~pQmJgJtYD1593015930eusmtrp2I;
-	Mon,  3 Mar 2025 09:55:21 +0000 (GMT)
-X-AuditID: cbfec7f5-e59c770000004fad-c5-67c57c899582
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id A8.7F.19920.98C75C76; Mon,  3
-	Mar 2025 09:55:21 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250303095519eusmtip10a4185fb739894007312f6777ae0b061~pQmIDKL-s0171201712eusmtip1D;
-	Mon,  3 Mar 2025 09:55:19 +0000 (GMT)
-Message-ID: <4deba4d6-b82d-4e57-bd27-f4e1523b38ea@samsung.com>
-Date: Mon, 3 Mar 2025 10:55:19 +0100
+	s=arc-20240116; t=1740996280; c=relaxed/simple;
+	bh=7jatznALkxiqBPL+NMCYO4jhDNWV0Puk67f6y/obF/Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bRn3u+aSq2aQqscTU8m/TdlP9mFlcNV4JRj3rh0XiLXoK8K2iF5BbTkhby2lQa/CXLqyuSUkzqvxod/U0u9dm7/2sDTi0gRwEovZsLai55xdK2pWL6t73jCcfihhEdEnCZ0NNrB2LDtyTjkbl08ymZZxEbv2QFsDxL+jJbM75kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pY+m9FKQ; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-390e3b3d3f4so2043360f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 02:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740996276; x=1741601076; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CZfm0COZB/L4TTnNAi8+cOMnMfkfk6c9qb6QWtBVoCs=;
+        b=pY+m9FKQG8uaV/Na/0QCgzMHM437/e4VOvahD99H44M1/h65/d0lDXCBGWgcfBcbDo
+         vF+ocpNlfbeeUxrN8CqoL/ij7qO2jHDDoaHcdoT+UEdXvzceAQx8uiRS4ogsd6D6LKsk
+         bShdaG90BqB1LzSmrfj0mONkcqImMyk3DFzHNuI32I5uLxc03SZlnWRhHE6ulsyJKrdw
+         iB3Lb1ZutbEGT/xAj2W/HUaDYuYcGIld+qlTaVtT0fte2JS/zqWaM7TNAj61551T94Jy
+         a5WIq/wG3nOKXhD65iNK8kfEecq7EQGgImrB31iDxbgh2ryv4LCK9bbVr6cFQKq7pZ+L
+         4/Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740996276; x=1741601076;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CZfm0COZB/L4TTnNAi8+cOMnMfkfk6c9qb6QWtBVoCs=;
+        b=IDagN8BoFCQuPgiutHhQTOMrs3c4UJwiPKrtNmhyN6pOBHOyAX/okTSItUt5xxtCym
+         7BKQ43gwzRKEZM3xaalg+aOHDcpT6JfSip0/N2hQry6U64SQUmahri9c1Icv0tajCxev
+         FmjEngnPNwGhD/JVsqAd6OHYJfu6nUlbB/w+vSESBlGjw587jtUrvPCj4fUvVNiQ+Ysk
+         6R8UoU0uI2q1K1i/kEpdJtF7clFon03c5hdZpNrY+wgM/QffFtR8fGsgLzDlSkTdWnoK
+         tMGso/v3SuLMwnopQxgkv1dbppJD8YVbUl4XQ6DuWzFAVR4dbx2GCPog3udkwn9BoiPd
+         HtTA==
+X-Forwarded-Encrypted: i=1; AJvYcCXHxi7iqnxEJ4U9N6CLPB+d8TkYvg4lBg/eEEtC7Dx04+tbCYZN8m3xzNqGSMgWkQ/qk6kMoPkpuzCpdXY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgkP0e2UX79yfYkkSp36VsqXd0shi81i1e72FngzH6tyD5kK9K
+	3wKR4ejRkNDFW1JvbMHgPu4CHOW8KQTEjUYUyzpgx2urjMDR4yxZwpMH9gc8U9GkeiENr2NdxQc
+	W8t3FbzgxFBiGSeJ0rkU086+ryNDpldLso5CV
+X-Gm-Gg: ASbGncu9ZXBZSf7vWibUkt0kG2iW9JUwcyHY+FY7qWM7dT3TCAG3fLSkjFUZLN0fvzA
+	rRT6+gXZtghtqyaEWV6vL1005JjzXL0076ZfgESWr7g/EE8sddgSTySMBi42jWpiQYlYzXu/gCf
+	/sUugUYstLrQqfnwlO7uKmfYEkHy3PCJnMHNUpN27WULfTHYkRbBydX+Wx
+X-Google-Smtp-Source: AGHT+IF6mYPjM2ZdG1TBhFws1xzfvflCivFfZUBo4SOc/4y/Zm8Qnq7qa1G7WknkW81HNcXY6VsNMMco8YsqzJRcRg8=
+X-Received: by 2002:a5d:5f93:0:b0:38f:23f4:2d7a with SMTP id
+ ffacd0b85a97d-390eca070a7mr10178653f8f.40.1740996275924; Mon, 03 Mar 2025
+ 02:04:35 -0800 (PST)
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -121,112 +124,239 @@ List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/21] dt-bindings: clock: thead: Add GPU clkgen
- reset property
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
-	m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	linux-pm@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTVxzHc+69vffSCFyqC2dgZOsIi4sCKrKTsZnBILlbjI+5OLcxt0Zv
-	ihsUbGE4ZzIYyKxWZA5BO4TizEQUYawUigUmsNYK8lRKeBSz1QYqyKuCG6+1XN347/P7/h7f
-	3+/k0LioifSjD8mSOblMEi8mhYTO+Hf7RuWxP6Sh47c2otuWSxiqmlNT6HpdG4aKmtsEyNql
-	xdC9J+MkuvGwg0LDdekE6im5SKEMYzmJRtRWErW3V1BoUmUVoO7aAhJNn24GSDedSaKy5kEK
-	FU9WEehyTS1AWcpfBKjzTgwatN4m0Ei3CkdZam+0ZKih0GLPrwT66XEDhbSjPwiQqexDlNmQ
-	S7y9jh3vPU6xoyMjBNt0wkmxdTMagtWrBylWpW8FbGWpkmQHegwkW2jezQ6dMmHsb5e/ZTPL
-	jBh7ZiGUHa+/T7LZ2lLAdmVYqF2ij4VvHuTiD33FyUO2fS6M+9HyO5l0njoydyedTAMVgpPA
-	g4ZMGGydzXOxkBYxJQA6G3MBHzgBtOWMknwwDaA120A8b+m351F84gqAmefsGB+MAWgqMAJ3
-	lSezDRqvGnE3E0wgrHfMULzuA80XbMuTXmAC4FDf+WV9NbMP3l3KX9bXMOuhZWF2eSmcMQhg
-	Xi6/Lc74wj5bEeZmktkMH1wpWtY9XGaVZ0wYXxMAq8cKcHczZDqF8OS9689OjYYdT/tInldD
-	h0lL8bwWLun5oZBJhA+qpnCej0G9yvSMI+BA2z+uXtplsB6W14bwciS0VbsPoF3sBXvHfPgV
-	vOBZXT7Oy57wRJaIrw6C51Sn/zNtK9FhOUCsXvEq6hVHqlcco/7fVwOIUuDLpSgSpJxii4xL
-	DVZIEhQpMmnwgcSESuD65y2Lpic1oMQxGdwIMBo0Akjj4jWeh99vloo8D0q+PsrJEz+Tp8Rz
-	ikbgTxNiX89LDcelIkYqSea+5LgkTv48i9EefmkYvraw0JY7ry9XGu3K+Zc3KIOkZSETX+ze
-	OewRTcTZHeaKIFwYle7YsXi3r+7G94GzHRHGv0IiU9Nl/rGf5Gzfs+Vp/l5zhKg7ZuujiMG6
-	AIet18/of9PLkISNbR/3i+xUWcM+iMqeeGnDq4oU7d6jh4vN9c5rpaF77Kcy9s8syg6E3Wrw
-	xi500Nc+zRLtiC23pD6O0UX/+XpAt05T9lHez5p5b5vw4bubO4db1r2zqvq7qy9i4RrDe4Fn
-	fWUgdml4zrkT739lf/SmNxxF/lt9ar2akiam9EcGxNmOFt+09igf+9D8o/urrN+ET7U2dV0c
-	DZ/u17+F7Vu4OVcVkF+cPLhLKyYUcZJNr+FyheRfLoBNOFYEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKKsWRmVeSWpSXmKPExsVy+t/xu7qdNUfTDS6dYLc4cX0Rk8XW37PY
-	LdbsPcdkMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYXFsxl92i+dh6NouXs+6xWZw/v4Hd
-	4mPPPVaLy7vmsFl87j3CaLHtcwubxdojd9ktFn7cymKxZMcuRou2zmWsFhdPuVrcvXeCxeLl
-	5R5mi7ZZ/Bb/9+xgt/h3bSOLxex3+9kttryZyGpxfG24Rcv+KSwOch7vb7Sye7x5+ZLF43DH
-	F3aPvd8WsHjsnHWX3aNn5xlGj02rOtk87lzbw+Yx72Sgx/3u40wem5fUe7SsPcbk0f/XwOP9
-	vqtsHn1bVjF6XGq+zh4gFKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
-	k5Kak1mWWqRvl6CXMfn6AbaCGewVv081sjUwbmDtYuTkkBAwkbj9bBp7FyMXh5DAUkaJy1sW
-	QCVkJK51v2SBsIUl/lzrYoMoes0oceVpJxtIglfATuLYymPMIDaLgIrEvlff2CHighInZz4B
-	axYVkJe4f2sGWFxYIELi9px7YLaIgKbE9b/fWUGGMgvsYZU4vPkz1IYXTBITJrwB28AsIC5x
-	68l8JhCbTcBI4sHy+WDncQJt3tR/HCjOAVSjLrF+nhBEubzE9rdzmCcwCs1CcscsJJNmIXTM
-	QtKxgJFlFaNIamlxbnpusaFecWJucWleul5yfu4mRmD62nbs5+YdjPNefdQ7xMjEwXiIUYKD
-	WUmEtzDoSLoQb0piZVVqUX58UWlOavEhRlNgWExklhJNzgcm0LySeEMzA1NDEzNLA1NLM2Ml
-	cV63y+fThATSE0tSs1NTC1KLYPqYODilGpjWZbgu4amz51zbvclj01cdjUnB7xdYVmeqrsja
-	lHJliV3H+hP8nxQuRrvencq9k2vizncTfDeoHDXxEroaIDXvaVrAp50rXHLqeb1YD5dXV65r
-	OnP2V0SUxt1/7U2vJDZNPiWQeWI2v6KlFPOXpx+c/rTf3Cmafr15/9VDZ1t3Pc5kT2itOHtv
-	gi/PQ9aDUk9vnv2anRFst4T7z5o7Sp8fr+TScqlPaLc6/t9e6P7aFRd4jHcy/wxgWhj587da
-	MPPRuJc274uC26W89PNKEmaLttVONk4XNL0ntLT1Q6jM/EDbr4GLe9Ojj889anB45bzO3cdm
-	M561sA2U4Ei78O/s/RbH6QqT/ry5Ujf/L6O0EktxRqKhFnNRcSIACJJKEugDAAA=
-X-CMS-MailID: 20250303095521eucas1p24b0494320e01283259315a138346d672
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639
-References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
-	<CGME20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639@eucas1p2.samsung.com>
-	<20250219140239.1378758-10-m.wilczynski@samsung.com>
-	<20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
-	<7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
-	<df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
+References: <cover.1740995194.git.viresh.kumar@linaro.org> <023e3061cc164087b9079a9f6cb7e9fbf286794e.1740995194.git.viresh.kumar@linaro.org>
+In-Reply-To: <023e3061cc164087b9079a9f6cb7e9fbf286794e.1740995194.git.viresh.kumar@linaro.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Mon, 3 Mar 2025 11:04:24 +0100
+X-Gm-Features: AQ5f1Jrv8CfkwtaCjmL4Tc9x8A7QhEGhB8E7QjwjYN-fWaS7PfezdipAC3EplYU
+Message-ID: <CAH5fLggcPo9g7Ep22aUj+5t+zdUQqa96NopZa946nsN649PQ2g@mail.gmail.com>
+Subject: Re: [PATCH V3 2/2] rust: Add initial clk abstractions
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Daniel Almeida <daniel.almeida@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6gQQ70ZszG28f
+X-ITU-Libra-ESVA-ID: 4Z6gKp3cYPzG1rj
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741713298.10932@mSpnuBDv0Vrmsyc5JSV55A
+X-ITU-Libra-ESVA-Watermark: 1741716341.68056@vHYQixiFv5O+/kW5HK90Aw
 X-ITU-MailScanner-SpamCheck: not spam
 
+On Mon, Mar 3, 2025 at 11:00=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Add initial abstractions for the clk APIs. These provide the minimal
+> functionality needed for common use cases, making them straightforward
+> to introduce in the first iteration.
+>
+> These will be used by Rust based cpufreq / OPP layers to begin with.
+>
+> Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
+Every function in this patch could be #[inline]. Otherwise rustc will
+generate a bunch of wrapper functions that just forward a call into C.
 
-On 3/3/25 09:52, Krzysztof Kozlowski wrote:
-> On 03/03/2025 09:42, Michal Wilczynski wrote:
->>>> +allOf:
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            const: thead,th1520-clk-vo
->>>> +    then:
->>>> +      required:
->>>> +        - resets
->>>
->>> else:
->>> ? What's there? Also reset or no?
->>
->> If the else: case the reset is not required, as it's only required in
->> the th1520clk-vo, so there is no need for else:.
-> That's not the question. I know it is not required, I can read code.
-> What is in the hardware?
+>  MAINTAINERS        |   1 +
+>  rust/kernel/clk.rs | 134 +++++++++++++++++++++++++++++++++++++++++++++
+>  rust/kernel/lib.rs |   1 +
+>  3 files changed, 136 insertions(+)
+>  create mode 100644 rust/kernel/clk.rs
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 726110d3c988..96e2574f41c0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5779,6 +5779,7 @@ F:        include/linux/clk-pr*
+>  F:     include/linux/clk/
+>  F:     include/linux/of_clk.h
+>  F:     rust/helpers/clk.c
+> +F:     rust/kernel/clk.rs
+>  X:     drivers/clk/clkdev.c
+>
+>  COMMON INTERNET FILE SYSTEM CLIENT (CIFS and SMB3)
+> diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
+> new file mode 100644
+> index 000000000000..1fa5b7298373
+> --- /dev/null
+> +++ b/rust/kernel/clk.rs
+> @@ -0,0 +1,134 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Clock abstractions.
+> +//!
+> +//! C header: [`include/linux/clk.h`](srctree/include/linux/clk.h)
+> +
+> +use crate::{
+> +    bindings,
+> +    device::Device,
+> +    error::{from_err_ptr, to_result, Result},
+> +    prelude::*,
+> +};
+> +
+> +use core::{ops::Deref, ptr};
+> +
+> +/// Frequency unit.
+> +pub type Hertz =3D crate::ffi::c_ulong;
+> +
+> +/// A simple implementation of `struct clk` from the C code.
+> +#[repr(transparent)]
+> +pub struct Clk(*mut bindings::clk);
 
-I noticed the register SW_GMAC1_GRST_N in section 5.4.2.2.66 of the
-manual (GMAC1_SWRST [2]), which indicates a GMAC1 CLKGEN soft reset.
-Although this could theoretically reset part of the AP clock, it is not
-actually used by the AP clock driver or needed for initialization.
+This needs an invariants section.
 
-> 
-> Best regards,
-> Krzysztof
-> 
+> +
+> +impl Clk {
+> +    /// Gets clock corresponding to a device and a connection id and ret=
+urns `Clk`.
+> +    pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
+> +        let con_id =3D if let Some(name) =3D name {
+> +            name.as_ptr() as *const _
+> +        } else {
+> +            ptr::null()
+> +        };
+> +
+> +        // SAFETY: It is safe to call `clk_get()` for a valid device poi=
+nter.
+> +        Ok(Self(from_err_ptr(unsafe {
+> +            bindings::clk_get(dev.as_raw(), con_id)
+> +        })?))
+> +    }
+> +
+> +    /// Obtain the raw `struct clk *`.
+> +    pub fn as_raw(&self) -> *mut bindings::clk {
+> +        self.0
+> +    }
+> +
+> +    /// Clock enable.
+> +    pub fn enable(&self) -> Result<()> {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        to_result(unsafe { bindings::clk_enable(self.as_raw()) })
+> +    }
+> +
+> +    /// Clock disable.
+> +    pub fn disable(&self) {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        unsafe { bindings::clk_disable(self.as_raw()) };
+> +    }
+> +
+> +    /// Clock prepare.
+> +    pub fn prepare(&self) -> Result<()> {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        to_result(unsafe { bindings::clk_prepare(self.as_raw()) })
+> +    }
+> +
+> +    /// Clock unprepare.
+> +    pub fn unprepare(&self) {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        unsafe { bindings::clk_unprepare(self.as_raw()) };
+> +    }
+> +
+> +    /// Clock prepare enable.
+> +    pub fn prepare_enable(&self) -> Result<()> {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        to_result(unsafe { bindings::clk_prepare_enable(self.as_raw()) }=
+)
+> +    }
+> +
+> +    /// Clock disable unprepare.
+> +    pub fn disable_unprepare(&self) {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        unsafe { bindings::clk_disable_unprepare(self.as_raw()) };
+> +    }
+> +
+> +    /// Clock get rate.
+> +    pub fn rate(&self) -> Hertz {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        unsafe { bindings::clk_get_rate(self.as_raw()) }
+> +    }
+> +
+> +    /// Clock set rate.
+> +    pub fn set_rate(&self, rate: Hertz) -> Result<()> {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        to_result(unsafe { bindings::clk_set_rate(self.as_raw(), rate) }=
+)
+> +    }
+> +}
+> +
+> +impl Drop for Clk {
+> +    fn drop(&mut self) {
+> +        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
+> +        // by `clk_get()`.
+> +        unsafe { bindings::clk_put(self.as_raw()) };
+> +    }
+> +}
+> +
+> +/// A simple implementation of optional `Clk`.
+> +pub struct OptionalClk(Clk);
+
+What is this?
+
+> +impl OptionalClk {
+> +    /// Gets optional clock corresponding to a device and a connection i=
+d and returns `Clk`.
+> +    pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
+> +        let con_id =3D if let Some(name) =3D name {
+> +            name.as_ptr() as *const _
+> +        } else {
+> +            ptr::null()
+> +        };
+> +
+> +        // SAFETY: It is safe to call `clk_get_optional()` for a valid d=
+evice pointer.
+> +        Ok(Self(Clk(from_err_ptr(unsafe {
+> +            bindings::clk_get_optional(dev.as_raw(), con_id)
+> +        })?)))
+> +    }
+> +}
+> +
+> +// Make `OptionalClk` behave like `Clk`.
+> +impl Deref for OptionalClk {
+> +    type Target =3D Clk;
+> +
+> +    fn deref(&self) -> &Clk {
+> +        &self.0
+> +    }
+> +}
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 496ed32b0911..324b86f127a0 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -40,6 +40,7 @@
+>  pub mod block;
+>  #[doc(hidden)]
+>  pub mod build_assert;
+> +pub mod clk;
+>  pub mod cred;
+>  pub mod device;
+>  pub mod device_id;
+> --
+> 2.31.1.272.g89b43f80a514
+>
 
 
