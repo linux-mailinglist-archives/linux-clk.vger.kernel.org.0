@@ -1,138 +1,214 @@
-Return-Path: <linux-clk+bounces-18903-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18908-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA763A4E1AC
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 15:49:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E701BA4E454
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8668D3BB853
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 14:34:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A710A19C4DA4
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 15:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136B12638AF;
-	Tue,  4 Mar 2025 14:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94FF62780F1;
+	Tue,  4 Mar 2025 15:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a1+JpL1H"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LZfmi2mf"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86CC2780E9
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 15:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.117
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741102303; cv=fail; b=pYYzUej1iwf74UVoLJMe83HMb0kV9mQsarJDxr+vbyPZIG46o4nPbmMCc2GNB/c8xhd/g0tQlkkc+ui6kv+Z1yO28Hry12RfEgW0KOlmeCixmn/ccw/faj6whwIj6h+d9nSzMCKqjOCyu18sBYcBMA5ovn19i0tvzTZSdHlIbI0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741102303; c=relaxed/simple;
+	bh=+GESS41zZMwknv3jzLMF+8OwA0DxTwcd/v3C9+s2/8Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u1V2bp6AasWQ8ZCv9QsQAKP68Ufxu+SiJOBqIA/o1l0Q7WyeqHdhpSAo1UnsPhpIFVw/ncEjIt+FZnZYIx35PrKm1wSN3Y2LWARMpoKzM1dC89XX9eV88WJ/LIrP01dT+298ZtU4yc3QqFTXYsvjLq7Fgpn6EzrQxFOe434TYR8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf reason="signature verification failed"; arc=none smtp.client-ip=209.85.214.179; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; arc=fail smtp.client-ip=160.75.25.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 1F0D640CFBBC
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:31:40 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=LZfmi2mf
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fk90D6FzG0N1
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:29:37 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id A74E842741; Tue,  4 Mar 2025 18:29:20 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf
+X-Envelope-From: <linux-kernel+bounces-541326-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf
+Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
+	by le2 (Postfix) with ESMTP id 76992434B6
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:00:38 +0300 (+03)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id 32C453064C0C
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:00:38 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 896F8166B6A
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:00:37 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFD11F237D;
+	Mon,  3 Mar 2025 10:00:26 +0000 (UTC)
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA3F263881
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 14:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E731EFF8E
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 10:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741098722; cv=none; b=biafgUNjuQXhoIzAJBjGqZ2Atm0u0vXZvSoRQ/20VwN2xSI/4EgeFOtq7hy07t0RlYGaXCvtJOuz0f6yMbR7Zc5quIY8ZAEmtbFdxUoY1U5SNpQmWvOyTAY4pRNxZjNym8AVslRTKhBHElq1OiRFz6yfk6iknkuqnAuFQXjSseA=
+	t=1740996023; cv=none; b=Jq1h8ATE46QL5r6MgVsXrsELo1wN7mlhgM7S0vKXru1ZfFgibIwmBVrA/m1IEKrArAhLICjQ6lPL3YYo5Nd6LLxFdUkl/i6EN/Y8NBZWE7u/ZQG7fYqorNvXVwSLXQQGTxiV6N/ON+xVYGcApXxfqHKZJqdSZ0W4sMUPI9DxHQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741098722; c=relaxed/simple;
-	bh=VL1eomr7TYKNMZFzlAbBFJ5Cl5ZiG3QKGLhOiDkJJFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FMlxxYfyoCQ7J/FnLLH3u3xYdw2HOJada8VXvndCrv9qElWMBtn7W69BC8sqZMFN+65dEQTvVXITA1lozrjNc5sUn5c+f4it9PoIF0xXLItxvXlNCEwFXIGzq7V0u5tjonHulXsnXq/Wt2h4t/4vndEiH4AVJDXTmsi9YqxCMHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=a1+JpL1H; arc=none smtp.client-ip=209.85.167.42
+	s=arc-20240116; t=1740996023; c=relaxed/simple;
+	bh=W/MWmFyRzRaY/L8mQHhIyX4NsQyvm3lJ3qdXyxFuKQA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rcIxnesOFZdEQ3ltoQcXBFdHtDOMwfVSy06gMcRHbkOwDLQwliQY5juywTeQg2/eB+/Ev5yVnHp6CI/N67Y5HMAueP/kdYJMqaAQTyykUOy9MSGGM0a5ZndMsBbtdqJPSElevdDSnJnKn6IFXuVWl7nh9dapCol7JYEU6ltvjgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5496bc767abso248029e87.2
-        for <linux-clk@vger.kernel.org>; Tue, 04 Mar 2025 06:31:59 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-223959039f4so23547485ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 02:00:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741098718; x=1741703518; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1740996021; x=1741600821; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zQnSQpQb2bQVsADPOwC5vQPziAGbC3qGxhORonLAzC0=;
-        b=a1+JpL1HTOxL5irqgn/SRJoUMD1jfWfrSSuQwewTaPQJNBe0+GPiTHS+Ls8LvmsLBd
-         r3xM/1jCJXL2T7Q9aEk59C4s7YCXBUrCEYZ9LcjV6lvpHiOhycO3IoYqPTaLrjN/0nc7
-         l2WO5FpzYrLpklz6oAPfro4wX50edtVv7gxN2hRGzv9/XpmKHEePTKroZadRDcrUg/aR
-         05pSdNmCI9PGDbVFhTeu0Ee4fF2hzE1pLl0rWkVVKgWQ1hC6b158NaR7jL0ytcDPNR6m
-         PClafMTpQkFiZ82Se6e56lttZiFqiQh0TNtmcVc34Co+SWr+U176KVQ/8qAMoBz2+hDU
-         U14Q==
+        bh=ui+QueMnTsbsw0Ov5sY4KY3gRDEpJNDApjz73wwqkjA=;
+        b=LZfmi2mfw8rquM1K61TDxyhk3do1+8SmeVxNSBf0CnylS2idN1uHBgltGIqEhe01P6
+         t5X8aIcDqIpNk4XmlzjsjHC/mYTkissaMAAXuMot/H+vdZOUlixw2m4/iK17ut/pULHz
+         p0Hraz/e+ASkIrR3lPa/WJZ+senZeQGCqu82EyO1CKMSDCTz9Lwz0NLmEyhnB67wUEUe
+         43QW0NAaa0Nhz2McwFLhwoQAuheCiPCx0/NcVrE0c1LKZGAAg3jT7nA5hDCQdzvb56Wg
+         VZMS7bGL9ufSlFeU/WroF31HQu9WlWWy1wN9jzF3W91Erk8yhJIVoWeCDfqbtFWh4s+h
+         lGtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741098718; x=1741703518;
+        d=1e100.net; s=20230601; t=1740996021; x=1741600821;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zQnSQpQb2bQVsADPOwC5vQPziAGbC3qGxhORonLAzC0=;
-        b=BRs+TX7zdFQcA9C7mM7ZOWflDbFFB6WYnpBWAVOmx6GjWbnB22631M/9r6SnnumUXF
-         aOTx06fz4ASNrvr6OdKHyr4w4jty4rdKwbwx9KXVgjrrcNl8ZgvScBJemLW9KUuLATQR
-         S5og0u1gdRjzOlXSj89T9KLzZJ44xXXqlv51bYd5JnU4WfMjhgX21YPWNLHTk3ltEeci
-         XOAdyIWj1WTCB+E+sMxOqIY/vcmrgVHdHRZEtsxkIBCf3kQJLWQ99WM/v9OCXkJdcqw+
-         HwkvhMwLyFfgHzuq8DWx7Ju5K/0BgsmI6yekXYsxmLmrZQ8p3xUwn+yhp6IWqzG2aMhc
-         abHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWf8xwQcWepLOOgmVmx0615D9ixvO5eLb0xQt10rp1jQUxIFSRnjGE+1rU9kn2nGr4DlZce3bhfFQQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDHvImUi5ROF/fUNOIDqZYUmYEhbKH1iJQR2KbGVEMO9VmB1La
-	+nszBjZNtsT1hhyaXN9NHJ3S8RcYOhjSSBg54oa6zs90Hmv/krq1iCRZG3zjcUg=
-X-Gm-Gg: ASbGncvelHVwRAI6l94wgzFVWelA/xMY5DEn7Kg8mXiJzYMzlB43XEDo2w4I8GNZf9y
-	ccS2eR0laueDVfY/0jI8/BxS93AZ79BNfVOyqdO53gcTi9xell2Rf+DST0w8iiG4H6gBUa6sh8K
-	pJUd5J9g5/bNQEqTCQlbJphM06o7Hojbki8gQNqYppa4+tNCWn62agaQSUnUEQChFKfS58PkCW9
-	mP732MKQgKRuWAO9GJd22P/yXTYtM6TqbXEbbXHqaKk/KwmFGRl5fL5oLBuzNaFcaJR3k5UXZwh
-	C9ybc8Bbf5tKN7cHybQ7TcAM9ZbpB/rs2+TfXo5dK1+M7NgbDAwUwX5FmnHRv74jGzH7St1+FPK
-	cRa4/CGLQJkD2EG+40JM8CuBG1yZKfYUrSw==
-X-Google-Smtp-Source: AGHT+IFhc6yFO+VR/PFQ6SlkWPLfhadsyPa+Xiq2trlhv6hTkDGgE+oaR83aYaPKsRsQzXMcSNIbbQ==
-X-Received: by 2002:a05:6512:3b10:b0:545:8a1:536d with SMTP id 2adb3069b0e04-549763adbb1mr409879e87.2.1741098718068;
-        Tue, 04 Mar 2025 06:31:58 -0800 (PST)
-Received: from localhost.localdomain (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5496862ee0fsm672202e87.189.2025.03.04.06.31.54
+        bh=ui+QueMnTsbsw0Ov5sY4KY3gRDEpJNDApjz73wwqkjA=;
+        b=eIvKjg59ac5idrj6SfhwXrLrRilCjXdZbgSXt51qStIZ5w7pMxHYdN5ppQJWqQUZI0
+         gSTU2exhyMJlcIMoVm3axxoQFzhDmhxQ0mrlbbuT0JdT6YZHhI9sjRtxCMMRvxcP48Qp
+         t5xnzXSga/MV9t6vPRE1J14fVtt4dCp8usqlKM0OUdJPNkbqma19TBwfDhKk9MV8/sSN
+         ITCoAz/qrCyh2if8La1Tcn+H/TdY8BRMdBSmlmVsaT2JPJNGHcyAYCunkAhsugN7+6hd
+         qpuOdbRCOIhVGfY5Tu3XsgSdS4uRV69xN2L1czDDi3+FKc0C9YIth2ijXFEgCQJmNT3M
+         97yQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWiZYf7sBj/jpd/sKf9OOzNB5Vr3ewv+bp83KykAowGXBOHRIA6jEDtm5m6EQVnvO45i9L0mBGRf5YpoaE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyM9T6U2V8DlEBe986UYU98L5DDXPu+S9R1hqAgbG1I4XC50BZE
+	pIoKHa+lJS5tYwd4b7diOCvTEdcdWOBYUVKgEDWTM1Tys9OOZDBfgWX8BwB4uKQ=
+X-Gm-Gg: ASbGncsl93tQe+JhYSLao7nbJYkl4feACs8qph0IxNCA1w2EQ5slemkjDnXQFPkmFAi
+	ID1kLDqRW6bNVzPZ56KAroIt/FIg4u/QvJxfBotFBkzJ2mVosRHKkU1SmboF5T/bTFYE8ZFOy/X
+	loL1fnDK8bhtM58oUtXPE4+inQ0vFpl6e0cQ84kOET6uTODfMlU1Jn+15mQr1YfuduQxGjAy8QB
+	0RYk9W7BrkHoyAV9JoQDEdc8ltzhe1bfL0k4i0EHWdT4QGbmSoY4luTgRK3IYQOh/zVTVipoALC
+	HIw99siqEV2Cl39o1Nme4sI0cB0Yf1XpmafHve75SYs0vA==
+X-Google-Smtp-Source: AGHT+IFJ/3EtNRcapiKvA/LhInnujARn41J0eZebYdMRMc5AqmzRtaclMoy8+PxW2aUq83BCOeNAyQ==
+X-Received: by 2002:a05:6a00:14c9:b0:736:3979:369e with SMTP id d2e1a72fcca58-73639793857mr10236218b3a.9.1740996020598;
+        Mon, 03 Mar 2025 02:00:20 -0800 (PST)
+Received: from localhost ([122.172.84.15])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7363288529dsm4567764b3a.41.2025.03.03.02.00.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 06:31:56 -0800 (PST)
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
+        Mon, 03 Mar 2025 02:00:19 -0800 (PST)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Alex Gaynor <alex.gaynor@gmail.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Benno Lossin <benno.lossin@proton.me>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
 	Stephen Boyd <sboyd@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-arm-msm@vger.kernel.org,
+	Trevor Gross <tmgross@umich.edu>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Russell King <linux@armlinux.org.uk>,
 	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH] dt-bindings: clock: qcom,x1e80100-camcc: Fix the list of required-opps
-Date: Tue,  4 Mar 2025 16:31:52 +0200
-Message-ID: <20250304143152.1799966-1-vladimir.zapolskiy@linaro.org>
-X-Mailer: git-send-email 2.45.2
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>
+Subject: [PATCH V3 0/2] rust: Add basic clock abstractions
+Date: Mon,  3 Mar 2025 15:28:08 +0530
+Message-Id: <cover.1740995194.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6fk90D6FzG0N1
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741706996.26577@D5+5nJMeH5pPClDwkoO5OQ
+X-ITU-MailScanner-SpamCheck: not spam
 
-The switch to multiple power domains implies that the required-opps
-property shall be updated accordingly, a record in one property
-corresponds to a record in another one.
+Hello,
 
-Fixes: 7ec95ff9abf4 ("dt-bindings: clock: move qcom,x1e80100-camcc to its own file")
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
----
- .../devicetree/bindings/clock/qcom,x1e80100-camcc.yaml   | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+This adds initial abstractions for the clk APIs. These provide the minima=
+l
+functionality needed for common use cases, making them straightforward to
+introduce in the first iteration.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,x1e80100-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,x1e80100-camcc.yaml
-index 5bbbaa15a260..938a2f1ff3fc 100644
---- a/Documentation/devicetree/bindings/clock/qcom,x1e80100-camcc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,x1e80100-camcc.yaml
-@@ -40,9 +40,9 @@ properties:
-       - description: A phandle to the MMCX power-domain
- 
-   required-opps:
--    maxItems: 1
--    description:
--      A phandle to an OPP node describing MMCX performance points.
-+    items:
-+      - description: A phandle to an OPP node describing MXC performance points
-+      - description: A phandle to an OPP node describing MMCX performance points
- 
- required:
-   - compatible
-@@ -66,7 +66,8 @@ examples:
-                <&sleep_clk>;
-       power-domains = <&rpmhpd RPMHPD_MXC>,
-                       <&rpmhpd RPMHPD_MMCX>;
--      required-opps = <&rpmhpd_opp_low_svs>;
-+      required-opps = <&rpmhpd_opp_low_svs>,
-+                      <&rpmhpd_opp_low_svs>;
-       #clock-cells = <1>;
-       #reset-cells = <1>;
-       #power-domain-cells = <1>;
--- 
-2.45.2
+These will be used by Rust based cpufreq / OPP layers to begin with.
+
+For now I have added them under the maintainership umbrella of the common=
+ clk
+framework, please let me know if I should do it differently.
+
+If possible, I would like to get these merged via the PM tree along with
+cpufreq/OPP abstractions, but its okay otherwise too.
+
+Danilo: I haven't done anything about MaybeNull<T> yet, as we can not acc=
+ess
+fields of the C clk pointer from Rust code. Not sure if that is still req=
+uired
+or not.
+
+--
+Viresh
+
+V2->V3:
+- Add type Hertz (Daniel Almeida).
+- Improved comments in helpers.rs (Daniel Almeida).
+- s/Clk::new/Clk::get/ (Daniel Almeida).
+- Implement OptionalClk as well (Rob Herring).
+- Fix Safety comments (Danilo Krummrich).
+- Add tags from Daniel Almeida.
+
+V1->V2:
+- Post this as an independent series.
+- Include more APIs, apart from clk_get() and clk_put().
+
+Viresh Kumar (2):
+  rust: Add clk helpers
+  rust: Add initial clk abstractions
+
+ MAINTAINERS                     |   2 +
+ rust/bindings/bindings_helper.h |   1 +
+ rust/helpers/clk.c              |  66 ++++++++++++++++
+ rust/helpers/helpers.c          |   1 +
+ rust/kernel/clk.rs              | 134 ++++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs              |   1 +
+ 6 files changed, 205 insertions(+)
+ create mode 100644 rust/helpers/clk.c
+ create mode 100644 rust/kernel/clk.rs
+
+--=20
+2.31.1.272.g89b43f80a514
+
 
 
