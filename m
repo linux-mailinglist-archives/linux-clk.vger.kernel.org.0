@@ -1,134 +1,137 @@
-Return-Path: <linux-clk+bounces-18908-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18919-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E701BA4E454
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:53:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67BEFA4E5F5
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 17:31:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A710A19C4DA4
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 15:46:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 625AE8A56E5
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:16:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94FF62780F1;
-	Tue,  4 Mar 2025 15:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51DE02836BE;
+	Tue,  4 Mar 2025 15:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LZfmi2mf"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="urmRmFxZ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86CC2780E9
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 15:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2470E2836BA
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 15:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741102303; cv=fail; b=pYYzUej1iwf74UVoLJMe83HMb0kV9mQsarJDxr+vbyPZIG46o4nPbmMCc2GNB/c8xhd/g0tQlkkc+ui6kv+Z1yO28Hry12RfEgW0KOlmeCixmn/ccw/faj6whwIj6h+d9nSzMCKqjOCyu18sBYcBMA5ovn19i0tvzTZSdHlIbI0=
+	t=1741103777; cv=fail; b=TrZxjhKRYT+N2nY0tKQByNyVvGWxG08+BowJsh5tpo0azj5RFMwEvAtLXu3CdF77T00zlhOJQVKySfadtHo0bVIEOszCUsmQIJXhmjjA4XBMvkqHxpMIPc0bGmsaPdsiEiAvh221hAptZtuNp1lb8n9lYN7BGKOyaRmH6BrtDJs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741102303; c=relaxed/simple;
-	bh=+GESS41zZMwknv3jzLMF+8OwA0DxTwcd/v3C9+s2/8Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u1V2bp6AasWQ8ZCv9QsQAKP68Ufxu+SiJOBqIA/o1l0Q7WyeqHdhpSAo1UnsPhpIFVw/ncEjIt+FZnZYIx35PrKm1wSN3Y2LWARMpoKzM1dC89XX9eV88WJ/LIrP01dT+298ZtU4yc3QqFTXYsvjLq7Fgpn6EzrQxFOe434TYR8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf reason="signature verification failed"; arc=none smtp.client-ip=209.85.214.179; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; arc=fail smtp.client-ip=160.75.25.117
+	s=arc-20240116; t=1741103777; c=relaxed/simple;
+	bh=0xtVuIRMcJ9mrqBKv9b2M3AjxOMkL6ET0xlLfjPOm+I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=V1WZBitVpV1pmugXEsv8khTQ/Jsg02jNOpzSlzM8ShfCUcXDJ8h0qCfZfH9NGCZ7I9OfVRKNazFXdQGVbUAW7nBqnpysu+jMPzmE1xfWYo9rpY0QtfUvAX1bt/l2Cqlgv/flBMiMXAUCJirFuFEA+wCwZL3jNDTOftrccIz6m0o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=urmRmFxZ reason="signature verification failed"; arc=none smtp.client-ip=209.85.216.45; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; arc=fail smtp.client-ip=160.75.25.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 1F0D640CFBBC
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:31:40 +0300 (+03)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 3E41D408B65E
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:56:13 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=LZfmi2mf
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=urmRmFxZ
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fk90D6FzG0N1
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:29:37 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gGX64PfzG1h7
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:54:12 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id A74E842741; Tue,  4 Mar 2025 18:29:20 +0300 (+03)
+	id 839D341898; Tue,  4 Mar 2025 18:54:10 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf
-X-Envelope-From: <linux-kernel+bounces-541326-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=urmRmFxZ
+X-Envelope-From: <linux-kernel+bounces-541328-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 76992434B6
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:00:38 +0300 (+03)
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id 32C453064C0C
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:00:38 +0300 (+03)
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=urmRmFxZ
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 9E39143449
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:01:43 +0300 (+03)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 30AE72DCEC
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:01:43 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 896F8166B6A
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:00:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37FCF3AA753
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFD11F237D;
-	Mon,  3 Mar 2025 10:00:26 +0000 (UTC)
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AFF51F1513;
+	Mon,  3 Mar 2025 10:00:35 +0000 (UTC)
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E731EFF8E
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 10:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EBF1F2C3B
+	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 10:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740996023; cv=none; b=Jq1h8ATE46QL5r6MgVsXrsELo1wN7mlhgM7S0vKXru1ZfFgibIwmBVrA/m1IEKrArAhLICjQ6lPL3YYo5Nd6LLxFdUkl/i6EN/Y8NBZWE7u/ZQG7fYqorNvXVwSLXQQGTxiV6N/ON+xVYGcApXxfqHKZJqdSZ0W4sMUPI9DxHQY=
+	t=1740996031; cv=none; b=QQNepQ09rL3wIsuvZnqlTLCJdbHY9MakUYYFvyfMCj5OHSr5KcrVmgACirzp0acLjzZbi7OUGJ6GQMPdWoTtXiiXqPmxUVsNIesEhHBOsJ+Uxsf32cjnHzJAg19FSsgPKnoV03W5omOS7JYwsrS+SPAR7U57z/TSViRMDK3IRNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740996023; c=relaxed/simple;
-	bh=W/MWmFyRzRaY/L8mQHhIyX4NsQyvm3lJ3qdXyxFuKQA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rcIxnesOFZdEQ3ltoQcXBFdHtDOMwfVSy06gMcRHbkOwDLQwliQY5juywTeQg2/eB+/Ev5yVnHp6CI/N67Y5HMAueP/kdYJMqaAQTyykUOy9MSGGM0a5ZndMsBbtdqJPSElevdDSnJnKn6IFXuVWl7nh9dapCol7JYEU6ltvjgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LZfmi2mf; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1740996031; c=relaxed/simple;
+	bh=4ePiwYSbOCYH3v1SviQDg3/HbMk9bKn0Y0srxW3uClM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bwwkvbyc405K1zOu+XcR3d2kczPqCred/y0iopMWXlfONvR/QCXJs8PJ0lsAfX6eRO1tlZUmZY7ve7M1YP/VAj3uXi2o8bPldV7xyzsYKUoEN+DCcl0+TZjlsBwyxx/iCncjlCIIkqd9EU5N470pJcsZgALxrGrrc0TBHnWuuPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=urmRmFxZ; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-223959039f4so23547485ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 02:00:21 -0800 (PST)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2fec13a4067so4269747a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 02:00:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740996021; x=1741600821; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ui+QueMnTsbsw0Ov5sY4KY3gRDEpJNDApjz73wwqkjA=;
-        b=LZfmi2mfw8rquM1K61TDxyhk3do1+8SmeVxNSBf0CnylS2idN1uHBgltGIqEhe01P6
-         t5X8aIcDqIpNk4XmlzjsjHC/mYTkissaMAAXuMot/H+vdZOUlixw2m4/iK17ut/pULHz
-         p0Hraz/e+ASkIrR3lPa/WJZ+senZeQGCqu82EyO1CKMSDCTz9Lwz0NLmEyhnB67wUEUe
-         43QW0NAaa0Nhz2McwFLhwoQAuheCiPCx0/NcVrE0c1LKZGAAg3jT7nA5hDCQdzvb56Wg
-         VZMS7bGL9ufSlFeU/WroF31HQu9WlWWy1wN9jzF3W91Erk8yhJIVoWeCDfqbtFWh4s+h
-         lGtg==
+        d=linaro.org; s=google; t=1740996029; x=1741600829; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bCtpbarqcsWFDUrFSqXD3/5LnWihrLhv2toR5uStrCc=;
+        b=urmRmFxZYbF12HuDunEnhJfhZde8ejtb3l2vNYsoImsuixO7ZPmrI1WIHeGJcVt3dl
+         2aYzQV8gOoq1KBxJKuAycUErUqsx1z5elD+4QJX7LWOcb7dHSSFtFBHwziB1ZcQJSgog
+         rp0F8t6Fle2x+FYztrnLRWowhSNMryZ9S5MfPJ800H/DmN/iBXwPQoMVMu5K7kcmdO94
+         dDbn5Qva8xzi7NZ/fOz73GA2s2jaQrqiz8rl/vps9mkbiLbpzHOFHeoyFXswtlTcP2ZE
+         8ABhtvCWlX0dLLdgiBg10kcpaahpaw03aG97Ogq9r0PIYl4hjKXTKTk4qtYKuT3GwLoZ
+         liRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740996021; x=1741600821;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ui+QueMnTsbsw0Ov5sY4KY3gRDEpJNDApjz73wwqkjA=;
-        b=eIvKjg59ac5idrj6SfhwXrLrRilCjXdZbgSXt51qStIZ5w7pMxHYdN5ppQJWqQUZI0
-         gSTU2exhyMJlcIMoVm3axxoQFzhDmhxQ0mrlbbuT0JdT6YZHhI9sjRtxCMMRvxcP48Qp
-         t5xnzXSga/MV9t6vPRE1J14fVtt4dCp8usqlKM0OUdJPNkbqma19TBwfDhKk9MV8/sSN
-         ITCoAz/qrCyh2if8La1Tcn+H/TdY8BRMdBSmlmVsaT2JPJNGHcyAYCunkAhsugN7+6hd
-         qpuOdbRCOIhVGfY5Tu3XsgSdS4uRV69xN2L1czDDi3+FKc0C9YIth2ijXFEgCQJmNT3M
-         97yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWiZYf7sBj/jpd/sKf9OOzNB5Vr3ewv+bp83KykAowGXBOHRIA6jEDtm5m6EQVnvO45i9L0mBGRf5YpoaE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM9T6U2V8DlEBe986UYU98L5DDXPu+S9R1hqAgbG1I4XC50BZE
-	pIoKHa+lJS5tYwd4b7diOCvTEdcdWOBYUVKgEDWTM1Tys9OOZDBfgWX8BwB4uKQ=
-X-Gm-Gg: ASbGncsl93tQe+JhYSLao7nbJYkl4feACs8qph0IxNCA1w2EQ5slemkjDnXQFPkmFAi
-	ID1kLDqRW6bNVzPZ56KAroIt/FIg4u/QvJxfBotFBkzJ2mVosRHKkU1SmboF5T/bTFYE8ZFOy/X
-	loL1fnDK8bhtM58oUtXPE4+inQ0vFpl6e0cQ84kOET6uTODfMlU1Jn+15mQr1YfuduQxGjAy8QB
-	0RYk9W7BrkHoyAV9JoQDEdc8ltzhe1bfL0k4i0EHWdT4QGbmSoY4luTgRK3IYQOh/zVTVipoALC
-	HIw99siqEV2Cl39o1Nme4sI0cB0Yf1XpmafHve75SYs0vA==
-X-Google-Smtp-Source: AGHT+IFJ/3EtNRcapiKvA/LhInnujARn41J0eZebYdMRMc5AqmzRtaclMoy8+PxW2aUq83BCOeNAyQ==
-X-Received: by 2002:a05:6a00:14c9:b0:736:3979:369e with SMTP id d2e1a72fcca58-73639793857mr10236218b3a.9.1740996020598;
-        Mon, 03 Mar 2025 02:00:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740996029; x=1741600829;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bCtpbarqcsWFDUrFSqXD3/5LnWihrLhv2toR5uStrCc=;
+        b=Gf0Pz0drz2U/RzFmwDDlDyptQMIOinQ3k30Oxi+0dUhcl57PntM7cLN7RYrjFvlP23
+         r5JQ+Lr6eD4wMqbbOKwWqKl/w7dvzYkDjvIU45Uca6rzHB4Fo6Lo+cBO70s68Z6eqUpC
+         14y324pOqThUqWio6QvAhBkCPq1RRkr7wZiYYZKZDMCdSk8AYJIUr868KcfWOjDEuaqZ
+         fL81F2NwvFjsISG29Oj04Ng3uJOFkjwInO4XV2yHYO+2sohYKRphWXKckJW2hF5cvtYI
+         Il6vr6jTmgTiHtUlAYPz5ynut/bWGdA3utkCD9XSTFueHa2UAxlhyIOkq4IGvErSJDAh
+         qDMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUoKah/vwEpeUb9pdp6MAHsa8B8w5Bp5hIvI0ZnGnCnqR96VZbvIHVyDLMZN8G8+iYmOvrKTtz+YvIfxKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4NhOERgOWnPO9Av/kljzfVF7EVnw/+1L8O3EZi0jJC91J68QG
+	CzQ88gKmQr1zsbLVlE53annGLHTw+afR0f9H+ha59FmIODkuce8yuM1rEZ9Y76Y=
+X-Gm-Gg: ASbGnctPBmBZ8HZJ7au7IvQR10OA4WxeXdn01x6+BfgJzL2nomRAmlEp+16LvhEnJkG
+	NNEmVb5vfkML+UpZa7L/YSZsDKicwp4xBkcw2PjyQCYboNM9JpUQo49ewqWXUQzKsfr5G9Ypdv4
+	5285aY74jOxe7cyEeT1N/nzzp3tPPnP3f+w5F0WTISw0kA3jYmAql+MvKpD0WD0JTHKhyb89Q+e
+	qVDfmnwZOvPx71VlysN4Ih3oLGWXGjwphsMMw7fBi6fZCLjBrrR5g1pJpkNE0uy6PHZZaebSAsp
+	XRUk5fXuUSpiGsCe1BONgSNxzjnxmdeUBjS1m2Dc54grYA==
+X-Google-Smtp-Source: AGHT+IFU5ll4u6S7m0NrVB1a+FHvXW54L7A2aqExOXgrVGjy78eyLcfNYLvSU8KeXTNKCT43lKxykw==
+X-Received: by 2002:a17:90b:528b:b0:2fe:a336:fe65 with SMTP id 98e67ed59e1d1-2febab3c6f0mr20234955a91.10.1740996029494;
+        Mon, 03 Mar 2025 02:00:29 -0800 (PST)
 Received: from localhost ([122.172.84.15])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7363288529dsm4567764b3a.41.2025.03.03.02.00.19
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fe6ded6ebfsm13571496a91.1.2025.03.03.02.00.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 02:00:19 -0800 (PST)
+        Mon, 03 Mar 2025 02:00:28 -0800 (PST)
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Alex Gaynor <alex.gaynor@gmail.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Benno Lossin <benno.lossin@proton.me>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Gary Guo <gary@garyguo.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
 	Trevor Gross <tmgross@umich.edu>
 Cc: Viresh Kumar <viresh.kumar@linaro.org>,
 	Russell King <linux@armlinux.org.uk>,
@@ -137,10 +140,12 @@ Cc: Viresh Kumar <viresh.kumar@linaro.org>,
 	rust-for-linux@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: [PATCH V3 0/2] rust: Add basic clock abstractions
-Date: Mon,  3 Mar 2025 15:28:08 +0530
-Message-Id: <cover.1740995194.git.viresh.kumar@linaro.org>
+Subject: [PATCH V3 2/2] rust: Add initial clk abstractions
+Date: Mon,  3 Mar 2025 15:28:10 +0530
+Message-Id: <023e3061cc164087b9079a9f6cb7e9fbf286794e.1740995194.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1740995194.git.viresh.kumar@linaro.org>
+References: <cover.1740995194.git.viresh.kumar@linaro.org>
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -150,63 +155,207 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fk90D6FzG0N1
+X-ITU-Libra-ESVA-ID: 4Z6gGX64PfzG1h7
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741706996.26577@D5+5nJMeH5pPClDwkoO5OQ
+X-ITU-Libra-ESVA-Watermark: 1741708478.0654@BqHw+t9+Z1Ervt/GnP2bwA
 X-ITU-MailScanner-SpamCheck: not spam
 
-Hello,
-
-This adds initial abstractions for the clk APIs. These provide the minima=
-l
-functionality needed for common use cases, making them straightforward to
-introduce in the first iteration.
+Add initial abstractions for the clk APIs. These provide the minimal
+functionality needed for common use cases, making them straightforward
+to introduce in the first iteration.
 
 These will be used by Rust based cpufreq / OPP layers to begin with.
 
-For now I have added them under the maintainership umbrella of the common=
- clk
-framework, please let me know if I should do it differently.
-
-If possible, I would like to get these merged via the PM tree along with
-cpufreq/OPP abstractions, but its okay otherwise too.
-
-Danilo: I haven't done anything about MaybeNull<T> yet, as we can not acc=
-ess
-fields of the C clk pointer from Rust code. Not sure if that is still req=
-uired
-or not.
-
---
-Viresh
-
-V2->V3:
-- Add type Hertz (Daniel Almeida).
-- Improved comments in helpers.rs (Daniel Almeida).
-- s/Clk::new/Clk::get/ (Daniel Almeida).
-- Implement OptionalClk as well (Rob Herring).
-- Fix Safety comments (Danilo Krummrich).
-- Add tags from Daniel Almeida.
-
-V1->V2:
-- Post this as an independent series.
-- Include more APIs, apart from clk_get() and clk_put().
-
-Viresh Kumar (2):
-  rust: Add clk helpers
-  rust: Add initial clk abstractions
-
- MAINTAINERS                     |   2 +
- rust/bindings/bindings_helper.h |   1 +
- rust/helpers/clk.c              |  66 ++++++++++++++++
- rust/helpers/helpers.c          |   1 +
- rust/kernel/clk.rs              | 134 ++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |   1 +
- 6 files changed, 205 insertions(+)
- create mode 100644 rust/helpers/clk.c
+Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
+Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ MAINTAINERS        |   1 +
+ rust/kernel/clk.rs | 134 +++++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs |   1 +
+ 3 files changed, 136 insertions(+)
  create mode 100644 rust/kernel/clk.rs
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 726110d3c988..96e2574f41c0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5779,6 +5779,7 @@ F:	include/linux/clk-pr*
+ F:	include/linux/clk/
+ F:	include/linux/of_clk.h
+ F:	rust/helpers/clk.c
++F:	rust/kernel/clk.rs
+ X:	drivers/clk/clkdev.c
+=20
+ COMMON INTERNET FILE SYSTEM CLIENT (CIFS and SMB3)
+diff --git a/rust/kernel/clk.rs b/rust/kernel/clk.rs
+new file mode 100644
+index 000000000000..1fa5b7298373
+--- /dev/null
++++ b/rust/kernel/clk.rs
+@@ -0,0 +1,134 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Clock abstractions.
++//!
++//! C header: [`include/linux/clk.h`](srctree/include/linux/clk.h)
++
++use crate::{
++    bindings,
++    device::Device,
++    error::{from_err_ptr, to_result, Result},
++    prelude::*,
++};
++
++use core::{ops::Deref, ptr};
++
++/// Frequency unit.
++pub type Hertz =3D crate::ffi::c_ulong;
++
++/// A simple implementation of `struct clk` from the C code.
++#[repr(transparent)]
++pub struct Clk(*mut bindings::clk);
++
++impl Clk {
++    /// Gets clock corresponding to a device and a connection id and ret=
+urns `Clk`.
++    pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
++        let con_id =3D if let Some(name) =3D name {
++            name.as_ptr() as *const _
++        } else {
++            ptr::null()
++        };
++
++        // SAFETY: It is safe to call `clk_get()` for a valid device poi=
+nter.
++        Ok(Self(from_err_ptr(unsafe {
++            bindings::clk_get(dev.as_raw(), con_id)
++        })?))
++    }
++
++    /// Obtain the raw `struct clk *`.
++    pub fn as_raw(&self) -> *mut bindings::clk {
++        self.0
++    }
++
++    /// Clock enable.
++    pub fn enable(&self) -> Result<()> {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        to_result(unsafe { bindings::clk_enable(self.as_raw()) })
++    }
++
++    /// Clock disable.
++    pub fn disable(&self) {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        unsafe { bindings::clk_disable(self.as_raw()) };
++    }
++
++    /// Clock prepare.
++    pub fn prepare(&self) -> Result<()> {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        to_result(unsafe { bindings::clk_prepare(self.as_raw()) })
++    }
++
++    /// Clock unprepare.
++    pub fn unprepare(&self) {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        unsafe { bindings::clk_unprepare(self.as_raw()) };
++    }
++
++    /// Clock prepare enable.
++    pub fn prepare_enable(&self) -> Result<()> {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        to_result(unsafe { bindings::clk_prepare_enable(self.as_raw()) }=
+)
++    }
++
++    /// Clock disable unprepare.
++    pub fn disable_unprepare(&self) {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        unsafe { bindings::clk_disable_unprepare(self.as_raw()) };
++    }
++
++    /// Clock get rate.
++    pub fn rate(&self) -> Hertz {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        unsafe { bindings::clk_get_rate(self.as_raw()) }
++    }
++
++    /// Clock set rate.
++    pub fn set_rate(&self, rate: Hertz) -> Result<()> {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        to_result(unsafe { bindings::clk_set_rate(self.as_raw(), rate) }=
+)
++    }
++}
++
++impl Drop for Clk {
++    fn drop(&mut self) {
++        // SAFETY: It is safe to call clk APIs of the C code for a clock=
+ pointer earlier returned
++        // by `clk_get()`.
++        unsafe { bindings::clk_put(self.as_raw()) };
++    }
++}
++
++/// A simple implementation of optional `Clk`.
++pub struct OptionalClk(Clk);
++
++impl OptionalClk {
++    /// Gets optional clock corresponding to a device and a connection i=
+d and returns `Clk`.
++    pub fn get(dev: &Device, name: Option<&CStr>) -> Result<Self> {
++        let con_id =3D if let Some(name) =3D name {
++            name.as_ptr() as *const _
++        } else {
++            ptr::null()
++        };
++
++        // SAFETY: It is safe to call `clk_get_optional()` for a valid d=
+evice pointer.
++        Ok(Self(Clk(from_err_ptr(unsafe {
++            bindings::clk_get_optional(dev.as_raw(), con_id)
++        })?)))
++    }
++}
++
++// Make `OptionalClk` behave like `Clk`.
++impl Deref for OptionalClk {
++    type Target =3D Clk;
++
++    fn deref(&self) -> &Clk {
++        &self.0
++    }
++}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 496ed32b0911..324b86f127a0 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -40,6 +40,7 @@
+ pub mod block;
+ #[doc(hidden)]
+ pub mod build_assert;
++pub mod clk;
+ pub mod cred;
+ pub mod device;
+ pub mod device_id;
 --=20
 2.31.1.272.g89b43f80a514
 
