@@ -1,62 +1,62 @@
-Return-Path: <linux-clk+bounces-18922-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18924-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B8F9A4E7BD
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B7D7A4E8B6
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:29:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E3688A107B
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:31:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A2FB885678
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D2427CB2C;
-	Tue,  4 Mar 2025 16:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7E6C2BD5A9;
+	Tue,  4 Mar 2025 16:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Z7xNwILY"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="J1PRIbCm"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013043.outbound.protection.outlook.com [52.101.67.43])
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2085.outbound.protection.outlook.com [40.107.103.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629B527CB0C;
-	Tue,  4 Mar 2025 16:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFEB25F99E;
+	Tue,  4 Mar 2025 16:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741104616; cv=fail; b=NSbJYaJ+S4pkBKRK8JU/wZa0WJShFyWriaAmcUQ82JagiKpJu/vuVJjlmnO6GatfgtMvV/J2aXMJAahntsvruGhTSq1sp3yBLmIK33fF9k2u3NDtw0r5XAT9Z+Umm5KjjOiEGnCKZpsq9HTE4hkQtJMzG87d3k2dUxZERDjWGNY=
+	t=1741104821; cv=fail; b=MW7PBbTdZ5jEMLk3bIja38sPnrHLsxgY86M5UmHSb2kXpNFdaF5TrID5681AoTi44frM/S/76ZWgTqIWZNpGrtZpQXJJ0CPRQjkn/a41K8BdX37T3G3cMBjpIerKfwkPYss+0SDXPqmQSH+nqMOMtAt3C2rcvlwQzDXxFRRjRU4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741104616; c=relaxed/simple;
-	bh=591ax5HgNUjMBPnjwqYbnvwHiwAkFKlf1efFl3ALsqA=;
+	s=arc-20240116; t=1741104821; c=relaxed/simple;
+	bh=RLUo8swae1tW7ZUJHxGMBMvt12iQeoXWICAX3bANaGA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=lnqrhSBs8J9N9TPC9SLBKqAvcRXlkSnMCptoqW8f9Yf9g8YrvHE6UKFsFKeFsNaoGlsi6mCHRrAVzZRXu6mikLCovU3UzZRSrjyevDgo8ufi0GSwXR6j3uI1IpPX9t+FB0SA4Ny/2FnqeR8bKAhaWvRN7E3Jmax5/8Gsksc7AOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Z7xNwILY; arc=fail smtp.client-ip=52.101.67.43
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ftyYKPlT8mWg3hLkKGS8i+6UmImI5aPiK6t5pSrSInUfGpV5uR1RzWMYnqGbTC6/Tfs0ne3uIFz6Vkn4QtIarfB41BDGXqhB9QTGfvX7fvwt/C8f/Nr5TiIBo71viKIQ9dK9V2MRNzfNOhaCGCG9T/z5RlomyPsJ10ldsQ4vwxw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=J1PRIbCm; arc=fail smtp.client-ip=40.107.103.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oYhopeAPOGRDii60jrrPn6Q741p6oDinqGv9pc7QTngQfYTFoITDLEaudr+PYJo31GQcKOwrtxsp/GC6CMzRl1JJmZMPByApzLwX4eeSj8HfAVPa45jnAEpylkkhVpG4RATLv4s2t4k1ipeoDDS+es7S22M9q7/TVTbiZ5cNTT2SY9QmzX3gU10QcdpcawBU2vadujHvJQ/G1ZjI0jAQKXOY2G7V+zrgSwKt2alxlyHyy41qZa7/pop755gjW/dPG/Qode+xHiDG+dy3yzB+ITJSkrfIS9VBt0LoQ0+2jMjmraGS93Yx3nA8AxFEGQoMMN+HWWEVJzOHuTNCyAyEOA==
+ b=pedbYHYbP/hq/SqsJiGA4eugLcJ+uhnchxPiVeK9spLryWaivoj7dKwmXut76YEJPdT8IpNwrubi+kPRH/zbx1v0loAkc9uKgBoki8TdkOoIS0Mp2fJhzYP46dt+v07GGhy4B0EUUDahkNiSdS6Tv/43Bi8xRge5+70k2A9n/VyZ3Z7Anad0zPrvU1RfIfgNa01tJhUS2ulPUKuRztR9U2G515Qsp2qPebOTaVvvvGpWtWBWRZGLOrF6s7nXJ1xzfZQnpOticQfT60ck2mYSRBQSqm9IFI/olbyt+4Nt2aSTAexkdIGKg6cdUgRQnOT2YfGMfdCv0cO4ZpmmtlkbzQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MOTE2cHaeVEdvkl4fnHP4GWrQZqQ0FAgH5/D5Hck9Xs=;
- b=CfKOeRiUcOYRZIvgbZjlb4723anMK+k4DUYT4qYhbR0YL3v6KcUGupLRHZSUrLNTlX2XN2ye/LwVmYFWzspe/rfKHKT7Kq6ltRFqYTUMMLUGTF5wLHOgIz6wl9gMbXsvqx6Dms+vnmwrfTaq3GaKxPB7aM6CqmAKFkL5HCqC0koQat93T1SVVVziD6J7uXqnd1DNKa3utfrqCfdWvPQTQWQGTytzm7fRBT6m5r+3KjwgedU79zrokO2XZqx9lJ637iC6jJ1i0ejCkGBN0pFegdjsB07mmy6B8QZiIAlap2p4BF0PCo/1pRF1e4Wg/duZndA26YSDGEtf5XpstAqElg==
+ bh=a3jq+K9w/3hF8rR+MY5/EMA4G9TPGh8jF21WmzdkXDM=;
+ b=eJJ+4DahYnIQlwOAg1pZL3JxcN4kmpT1nPL7AIll0Ac+lm+NTRYC9Z5W01tkFlvt9hNfguiBg+K6hGjLnvpz95LSofmYodQ0VHvHrPpe+AvC/drsGiUAK0Ght+XHjEFzTuYD/YFi7+HMiCJXnBGqOQHAWXAsmI4PNQpYT5S13OCF/21dCzJ+q56yBnGpjp7guVeiN8KTgCe3130ZekEb4FqO4/hk3A0il7ZCgKqR93E8Mi3TN62jqw9CU4TeEmeKSuFfaA/cQ4Vg1XHFBlWLes+ecnC/l2TW6c2soPsADAqzd9OEH5BSe4AEG7QLgVShX6KMX1qan1EysH2PjmscTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MOTE2cHaeVEdvkl4fnHP4GWrQZqQ0FAgH5/D5Hck9Xs=;
- b=Z7xNwILYhY2ZYtlCcxAyMkZaLaPreKnnVknEaJSdBfIXmfTR9fGe+RohPmg51teZpOO4TfGxJ3MtomH3KLx5fPxtzZJOXLsynxxci8Y/bNHbIfRzgNRKThlugBa3GV0oAMdU5NNCn9CmfzB8oweKJsQeoMMIk6mxBonV2c3pGMZ9woXCa3igtlB64236z2TVGGtksTcuG8tASl0WgDfyCE59YEnZtdTEKXxgPNcN9NuqLXV4wnzYWjUo2EL8hWlKKEL0ypOnrc8fyXtytnaI3HOjX9ufu+MwgkmhTr+/XfMZObkOQHe2CT3JuWwxvMheaZDtETHDVpOeTzUg51itzQ==
+ bh=a3jq+K9w/3hF8rR+MY5/EMA4G9TPGh8jF21WmzdkXDM=;
+ b=J1PRIbCm4nBAdiBgjGh4oCiIHiS6XxhFOxJXHiuQt5x1DI7I3SXIBDhFhkmhMMkAAgtU3d68s17rkuKYPrtENUEvt5k/luG7olhlH6JlCHfT2Ogov9S37Cy3dLcqtAJhrRs1t080j6FDZEy3ay2hGF4mdyMYwN/HNeVanz9zhyssv83w5ot3iSb77VVMlTfYcUKwBPNABbdEFLvFtpaxRCw+uEv6n9WATXB1qX/RaL+NFI7KoDx6h31XzP9OqVeq1Bgy4dsG47TndP3f64eRD3h09fGCmd2pNu7XVqmHk55078fUxRXviT4ybVi6ONfgxu7kg7b5UTLx2/OND3I6HQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
- by DU0PR04MB9369.eurprd04.prod.outlook.com (2603:10a6:10:358::22) with
+ by AS1PR04MB9383.eurprd04.prod.outlook.com (2603:10a6:20b:4d9::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.16; Tue, 4 Mar
- 2025 16:10:11 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.28; Tue, 4 Mar
+ 2025 16:13:34 +0000
 Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
  ([fe80::e81:b393:ebc5:bc3d]) by DB9PR04MB9626.eurprd04.prod.outlook.com
  ([fe80::e81:b393:ebc5:bc3d%4]) with mapi id 15.20.8489.025; Tue, 4 Mar 2025
- 16:10:11 +0000
-Date: Tue, 4 Mar 2025 11:10:01 -0500
+ 16:13:34 +0000
+Date: Tue, 4 Mar 2025 11:13:24 -0500
 From: Frank Li <Frank.li@nxp.com>
 To: Alexander Stein <alexander.stein@ew.tq-group.com>
 Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -71,16 +71,16 @@ Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
 	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] arm64: dts: imx93: Add LCDIF & LDB nodes
-Message-ID: <Z8cl2bwpYFiS2lnr@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH v3 6/6] arm64: dts: tqma9352-mba93xxca: Add LVDS overlay
+Message-ID: <Z8cmpPy40ztL/hA/@lizhi-Precision-Tower-5810>
 References: <20250304154929.1785200-1-alexander.stein@ew.tq-group.com>
- <20250304154929.1785200-5-alexander.stein@ew.tq-group.com>
+ <20250304154929.1785200-7-alexander.stein@ew.tq-group.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250304154929.1785200-5-alexander.stein@ew.tq-group.com>
-X-ClientProxiedBy: SJ0PR13CA0049.namprd13.prod.outlook.com
- (2603:10b6:a03:2c2::24) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+In-Reply-To: <20250304154929.1785200-7-alexander.stein@ew.tq-group.com>
+X-ClientProxiedBy: BYAPR08CA0024.namprd08.prod.outlook.com
+ (2603:10b6:a03:100::37) To DB9PR04MB9626.eurprd04.prod.outlook.com
+ (2603:10a6:10:309::18)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -88,192 +88,202 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|DU0PR04MB9369:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2913b20d-d543-4898-ff06-08dd5b370a04
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|AS1PR04MB9383:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f6ac5b2-07a0-436f-fcfd-08dd5b378360
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|52116014|7053199007|38350700014;
+	BCL:0;ARA:13230040|366016|1800799024|7416014|52116014|376014|7053199007|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ZbfvADZY+875wP5SqFFNqtx8wwxNfllrH3dKpzBI0m9rC6M8bFsm8mv4aZk3?=
- =?us-ascii?Q?vgFsFebO0HZPgHXddbOlbD99XIykkVaqMA+0qy6yAUY3C8P5LqqzkZrUZu8m?=
- =?us-ascii?Q?m8NGnulX6JU8f0GzoRMZ+1cUzeaEoaRe8mV8d5yY/jAhb3FCicAjSwNAUgWi?=
- =?us-ascii?Q?3aatapM7CJBD63GDVF7iXNOVzvhIpQ3lgXQU5HewwmxsKIAPb+coHVBKw352?=
- =?us-ascii?Q?ZSpMIKVBqR+PqqTSJn5HYMkJvj4/Nqgro39UsfyzzyPd2gcNkJH6GNjfeI4/?=
- =?us-ascii?Q?1V1NMyqjJnZfesTIRpcS/qfCL55ygHNrni730HIFESJAQ5yxGcDAkCQqdFSn?=
- =?us-ascii?Q?RcRFCLiKdEDYzfUXH/HmP4QDkZuf7wQYFD3P/ceB26ThX0rhAXewVUMUj+X8?=
- =?us-ascii?Q?gzQ3ZZ7AwvxB+hcCbH/8yQwYQTGv35tjWTv1OPhrdFua/r3c6ZjXYW7vEiQL?=
- =?us-ascii?Q?rk759NswEMGDTpUchDYSiIxS6O1TfxDepOasJ0ZlD9sFvB0sumZRrSNkl8K4?=
- =?us-ascii?Q?8TxMN+QsIb7GhhOzWTr+eqItPXjcRSlMRx0XSp5agTcICeAhKPuYlavaea/K?=
- =?us-ascii?Q?4ZTGgE6/q5P7H66fsZIpBsPlu8iQAYTSH9NrGKEueIMSZIPHzsGricjNz2m1?=
- =?us-ascii?Q?BrKiSYP8efC3W1nwg3GgSW2NHqV+e0I39FuSkSxeJLzazezx1/2KwiUqbhPx?=
- =?us-ascii?Q?92LWwF7zh0eHqoEr3jaEkQPq3YXNMMEjddwVhfPN0yNgbnSEAdbRIlb0bmLE?=
- =?us-ascii?Q?1ZzBBqhfEeXn9M0dUGt0CwIets+1ggYhQEKyHarr3qn32Ewa3TnkFYuTAfX6?=
- =?us-ascii?Q?10Uj+6DWvwkAPYtLzdTDLyFXn+INQttslOb1ercKN5iirukJFD19+oF/j3GH?=
- =?us-ascii?Q?hV4ZIv8MDDE4b1LdusZ2cLTcNFbW5i0330GDSu2033Z9jstkfOkUTFhAOl8y?=
- =?us-ascii?Q?6Bhj03lYuN77Jp78LrXYBcgyy49UScK7Hix+5N16cje8o6eRkN3WLRy+01nB?=
- =?us-ascii?Q?p1zPtn74tM+85QmaSF0U3coR28nByAgowi+Y09hlLaNxCsRpi5TSEt9ChH8I?=
- =?us-ascii?Q?/un1GLgX8i9qqc0uHjOtseaTnmhbHSmikw1gHszWUmi0t9FhRRZC484d9EP2?=
- =?us-ascii?Q?h+geC5OyKmh6A1Ak7qPkXH1nmSzki4aJMl1M4iFThtH9mK2k2kN1JM/+HvHL?=
- =?us-ascii?Q?BFbwtvIrbDYN9IK8WyasSHtZGfk8fmlZhbCnzMZDBGXb0CdyuE1YWjDswCP7?=
- =?us-ascii?Q?Cid9dDJddt4X5qUu3WF9alu07n9Ab8YU+wsurO1x+in4yf7GsP16Udxuucp9?=
- =?us-ascii?Q?ocZHqBa0fRKdRBLPo0e+MRMQOz+mSOgrPUqmXjKTEGiaSfPSUMVKlrLOpXHy?=
- =?us-ascii?Q?LDIotxhTRkoCHLHZTOhkhwAIVenp7epSvwePKkudccQW8sVLOJKiPclZwTpU?=
- =?us-ascii?Q?8ObA9AkCohIzTv0hRKU1tVT/Rn1HgiYu?=
+	=?us-ascii?Q?LmTIIxztn15cA9vLaQcFsaJqxtmnjzFiNjCESWpvOaXCVtnUYr8/G3qw/pMU?=
+ =?us-ascii?Q?0bl1V4dycW+esbaV/sIK5YIVUvnC4FcM977tIl/Hm9qqEPw6Bog2KaClcQJE?=
+ =?us-ascii?Q?1g8TjhEeXoATD882sMROnRgx9NjTcZgt2jM9a9DCjC+veYc7Hibqyn0JBuk7?=
+ =?us-ascii?Q?xjR39msPZ69rBvG67L4velaK0J3AGWNuZU1FJiJVpC7nKtxyGiT+UUisaKsW?=
+ =?us-ascii?Q?ZagAxuig55OXX5ZbiGKaEoZYERYlzEvX1UevorpEnPif0ysp+isNL4tlUKvB?=
+ =?us-ascii?Q?vClGRqBL/MNC2UfVa7LMVkw7kFKO8eX/yy9/Ow7eeC8bfz382vOqAnurcaMn?=
+ =?us-ascii?Q?1Zenb2dK792cN5WsLD/3U7PrnEyGsa5psfEc7mXc9887UaUxRRQqllY29/Rz?=
+ =?us-ascii?Q?iEgrn5yeXRpSKRIbCrNhqi2EH+Y+oH57w11iA+2BzrDGb71Hu2h2EHucZxIb?=
+ =?us-ascii?Q?cLubkP4xqRWUdyoiSfqh1YcZesIR9GeZtyvAsCZw4Gjo3M2jPDsKU/PTSd9b?=
+ =?us-ascii?Q?vK1T62lFPKva1xUQlIxe01SURvoonJIhjX54SVBprYrnroynJ92OimGDIVVx?=
+ =?us-ascii?Q?yEgg2yEJnUuyNrQ1emGERzGLUOMu5xzKmjsI+vM8uKbPs0dOo4V0Vhvopofv?=
+ =?us-ascii?Q?+754Qnrdwm4s32u8JlWI5mirCvB3d1N5NvED9gxHTbVD1dmkaymGSpNgZnex?=
+ =?us-ascii?Q?a3g2IOUKcsK8+/DOvIuhVu0aD1IH6uX04STJ4pAggiBYZapkBF6B7lGsucjc?=
+ =?us-ascii?Q?5ARiMD3wy+Jy3FCmvKIM1+QFWRqZe+5ioqV8ewe3+6kRQuq+yxt+z3PH1hEC?=
+ =?us-ascii?Q?rWPCa8qfqCUJOz661gERv14Xc3vHYJcGZNN6xOy7bhk74dd9+BosyoFmh10z?=
+ =?us-ascii?Q?9WdU1NLJBomV4Tq7i+tLdL7VkztyPw9ibrfBwcQs/M0sw+9yQH5Gj/ELCC6k?=
+ =?us-ascii?Q?0g0pH5i6mSsAQqRsPmkZrNsp3kp9+6vdkYUbZpxFFzIFJ9fnOgCY4zONEenF?=
+ =?us-ascii?Q?EPHE4LZq8ciPJ7BwL+S7fDZN2EeKE4nt40dLzmehvuSqF2D4v7hsQhI/EhJQ?=
+ =?us-ascii?Q?CTKqGqxjf+ac2Vl0NsPlftLrmpO/vMs64iq4oCsiUpi5g2WLK7TVyZYsKHP1?=
+ =?us-ascii?Q?xfGStDqUUDWNKypJcymtDvgZQ0F7DZuR1MPE7jcQZ1WXKLM3LFSk2KKx2SwU?=
+ =?us-ascii?Q?et3/qddRQwTK1wyPeE1Ss6qd6VfzQgFffg7RcUyaTnU6zS28zw9Fnk8UEOgn?=
+ =?us-ascii?Q?IXAfaLDYdnbuRQLba8V3++aSoHcQJyigGv1o6OwNZXbOiiIftKR8GGyz4anx?=
+ =?us-ascii?Q?M4l5MhDbyWoYgIjwi5toxCHq2hPhi67f7EBsd3d45yYhc/HlLjdufqNxz6O4?=
+ =?us-ascii?Q?znchn9s4815BO4oZcwasy7pGO4D9GPqsJkfER36fHl8aFxij9N55Uj2bt5a4?=
+ =?us-ascii?Q?BIbL46XDXnZgk/GgIpJ6TQEKt/Uy7csT?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(52116014)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(52116014)(376014)(7053199007)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?QCTGGoyQ+PlfmboB6jScsjT/XehKSzUyvcD8VfOn7vMTEHda+g2Q6iGZO/0F?=
- =?us-ascii?Q?UelNv+5RjvINGZtRwbHqdtViPgecHs92fTNk6+t7G3Bismh36Jxkmu6iszOT?=
- =?us-ascii?Q?673HHk/Yi4OwatmftukEMpkurIKZwp6VfjXcXQNmVlJGFefYXPN1T1AONtIF?=
- =?us-ascii?Q?FGjgEgy5lPuP4+KVmAFLIUY4CP/uAz2ZGBPqIn5vU44/qYaCFEwRrzIrjCBL?=
- =?us-ascii?Q?w12e9JPEZ97LVVQiTdLjshkmWh6jWdpnkZ5W5PjSiBP3BVoVWmoz4ZJ9THuF?=
- =?us-ascii?Q?YFANa1TQJ7jISVP8HV45OmrTcWE3b7Jmw+6lDYwG4O0ycM3QYA0zVN4s3/Fm?=
- =?us-ascii?Q?t/9a7EUgzR32+aEV1TxnQBQ1BCgi5aUwCGX/p3dW7K0dvSZVU9qHmHYMYXmA?=
- =?us-ascii?Q?W6CycMQa0uR6GNCnFhr/qXMgyImO6x1MoNcjDNnwox8ozsLDxy2gY4CO+GI+?=
- =?us-ascii?Q?BsfctUbNKt73irTZLF7RVButKx83uhh9SZOyLaxTR6jTygrEtmQIk/bc4/j3?=
- =?us-ascii?Q?+VlFmk2WIfzDAIA/GWX6YiwjZdeA/Ypn4nOZSB6FpdJNxU7wkgyfAEwQGVbQ?=
- =?us-ascii?Q?w6xeixzALDpo1kJWIrG1FA3BrNxHB1YZfDtSy3H0Tks0+N+42CMgOArFSqKW?=
- =?us-ascii?Q?pj7D4HZIQK69RuL/9j9H1t5N7Tyk+9lVpczoZt1eo3djrT13Jx3lTUl4Snu3?=
- =?us-ascii?Q?N5ESY/8sQTonil2U5xJUAKRyqsB6U+hw+fimuK3T6tK/jc30f80hjEqi9oRg?=
- =?us-ascii?Q?rAuZNJN4IERM3eUAiO23iYIe4oe7Jh2AAp/4iJudjBAZoKVh89V0l0M0t19f?=
- =?us-ascii?Q?C86FRiLYpVx/nYs1iXakHyLBVVYMBDWBRFFW8q7PPJfv5bjW3FlfeSSZ433h?=
- =?us-ascii?Q?ZSXJsHT8I+7vI498Ka10obUUKjTTXfA/8spI7Cek+U/Rnc740sGLsmnyF8GC?=
- =?us-ascii?Q?opxGbPSlgvhKJ61UUpHLY6hTzFXyM/XlaDpqhF7RE8h8tQFRO6DD1WBJTH1e?=
- =?us-ascii?Q?9ttFq9g7XgmXCqMzHA9G/lKgxmF2TxofOYsRgmwKXKQBdVwDPe6pGqmJCVHf?=
- =?us-ascii?Q?m9dTEBqW6FOpQUvboxWFSItjRE9HKy/kj7P/p+EP+Tryg6j4exCrHNevOqBi?=
- =?us-ascii?Q?fnKLgOQF9VXDu97mO1ravMg64bsQMj9ytuim5YAeKPl/NanLWh9i1PDQJNJD?=
- =?us-ascii?Q?MLdKjDxWcXCXyvvGqtQsd2irXVtXO3YBmEYKHkkMaCo4705IWfTRG6YGnMtQ?=
- =?us-ascii?Q?WQ2EabkfQbBPN1sk026G8HecAr38FpEQpaVEkSZ26Xpx10q+YInlg8b4E9Tj?=
- =?us-ascii?Q?HW0rc3HadlQ8IqKGH9yuHHwbMZsdqpijrg+8LJhhCrb89uyHH/J2vyU0kmXU?=
- =?us-ascii?Q?4a4rsZMwy2jTZ9YZX+K2sf8VBDubp0wnQmXg0gGnT0Wmz/VAgpZESXlh4EhM?=
- =?us-ascii?Q?X2qlW8M/UcFtIohYyPemwqVuWIklEWDc5iEoEz46i74JCaonegGL1zlnqBFg?=
- =?us-ascii?Q?loWg+65D59uqJULXKgZu9wuSSPqGwFU8N0jSU4rIMbAUoYON2mLe8qwlfd4X?=
- =?us-ascii?Q?0iLK/4bxqRuCYdiqXMgfuaLUEozZUALq5cOYK3Zr?=
+	=?us-ascii?Q?ZTbGZ0yviVWizCczzHsE8kzpdqZ4OzCyFbTgbjNgjUiC9hTqOND6V0/EqK2s?=
+ =?us-ascii?Q?5qCvh/8LguHNBN09KV0v34BNPIkdACj4x/i5q6UsmWZG/sA6/D7YHZUp/6xN?=
+ =?us-ascii?Q?J4MXpeNz1OVLNXZKpafVddyPutTVAuP7rZ3pWmMBS7ZbozRs9SeU6s03nYOA?=
+ =?us-ascii?Q?DfE8UuWLcGo1tj/hpsCE+K1ld3StnCfQaFWH5IJQDQ/NVdcgG7vdQFsK+JD/?=
+ =?us-ascii?Q?sMqlzrFI/PK6sIoYr6h0sJDA108SCX9zateb2kQX4CtnpoxdQPhWMGbWd11O?=
+ =?us-ascii?Q?G9P90K57Z82MKlnHTUMnJiLele6KJ8xXjsi99itVUaUcFHCmDWncCk+xB9bG?=
+ =?us-ascii?Q?NiRiC3m9xyljTb7IhzGx6Ea/mTmufh8U9LqKrlrYKXAw3tsgxncQT4hlXD1D?=
+ =?us-ascii?Q?I/tQT9L4zEwk+UwlDdRAaD87zOEgQei4uqkVFf7Me/SKD48v4RjOR42eao3A?=
+ =?us-ascii?Q?bPMCqOKH1b/l7Ne2sQUIl3ZFX4oul8kJ66O7jbUYme7viisQSzoX1uUxQwnx?=
+ =?us-ascii?Q?KthT0LD7fmWRiruT5b6xneZZefSD1vL/p26miUEYtwwW/kDqKc5tt00mxGl+?=
+ =?us-ascii?Q?xBvrV7StsYNl6GnQMq255xiY5l1cRUC3JSZkhCidr6uZFzi6ifOgm79/gErk?=
+ =?us-ascii?Q?dNwiS6iO1OGX9SZhN0OZK2KUM93oKw352APocZXVYqdDXFHa8WLcKw2WCEMR?=
+ =?us-ascii?Q?qkRY1ORcZxqtZoVlr+303YdxqGhJk+gkLxNkdwWddmjyCp1rg2j6quqNKk+U?=
+ =?us-ascii?Q?OB1o9TkKJAT2tUpfdOAMImuDp0ZYhbREMNixKQnA4sobXUH9rHSliauIAOuo?=
+ =?us-ascii?Q?boqbiVeKkoMOX+/JW0ywgI699e1L8xWudb3FZ0T5uAATFB7SnA4SQJeiZcMN?=
+ =?us-ascii?Q?6sTDfAD4F9sjgZ+E9gYRsFgxmHGnnC+fm/2uIOjHMK0/mIxvkYxebNOOXUHW?=
+ =?us-ascii?Q?eXB7OtPfCRrEprVBLWd7+w8M9Tk5y5p6mgPD17+QmmLAjMfpGgpni5MAOJeA?=
+ =?us-ascii?Q?E93sBuo4CzaWCfdjjQ6Ra/Hguc7N3Fy12sBuLvCGOpVJ69mtUY5zkrhvAtz0?=
+ =?us-ascii?Q?Q1K04tzuCYTjJ3nbQxap3PhPAKn7Ap5tZXzYZtJh9pKP0srBPjGSvJ/V7IMY?=
+ =?us-ascii?Q?L8VBORBpBhsgv6jPBYqzc8cpv5n8qpZ3NatJzDEkkUAkaMVwshece7qtfo89?=
+ =?us-ascii?Q?dYcg/XbrBPJXDS9QdNQ+YkpFKNfBeVH5aMbCR47ZeCo2sy/PmCJzMrryUi5a?=
+ =?us-ascii?Q?lNYwWRI+9itBOXLh0wWuSJLtZvvT32QiC98nXnffuVwHjXKjcqlRsWdGccx4?=
+ =?us-ascii?Q?uVBUQpwIFZubjxGN1LQheUrzoM8I2+2yyDSmnC1PqdGWqzTHy+hOwP6+Vevj?=
+ =?us-ascii?Q?A/H/X8B4Ohf1kAMz7wQaPcm/iZrNTn9VM0nBxmu/bEbrvl6totAfZWvq9Cvc?=
+ =?us-ascii?Q?3B+uB4tGUbEpyVveec983oCKXKYxKTdY05VRG5n+7hLl3g1yf6dFT9hXZxh+?=
+ =?us-ascii?Q?XojNXB9PzbW+v55JTkPX/8ReKW2JMhvdB6N8uceQJ4ut0eOfBwEry+w3RLOl?=
+ =?us-ascii?Q?utPACTwpfEOmJmHG66U=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2913b20d-d543-4898-ff06-08dd5b370a04
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f6ac5b2-07a0-436f-fcfd-08dd5b378360
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2025 16:10:11.1962
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2025 16:13:34.3486
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gBxgVtjXCR8ozgz6l4sOrVAh6AWlL0kVuUpYXz1CivcyWkSbldzbYCEy35qKdxa1BOKvaJN5qv4SuTU++zzH5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9369
+X-MS-Exchange-CrossTenant-UserPrincipalName: M1jQvwqZJIfJMIwys/xhLTogAtR+qDJPqALdxo7bUd84mCKW3qZBNTelv6CZFJbVAC+8WhkxfC2797x91KHiog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9383
 
-On Tue, Mar 04, 2025 at 04:49:23PM +0100, Alexander Stein wrote:
-> LCDIF port 1 is directly attached to the LVDS Display Bridge (LDB).
-> Both need the same clock source (VIDEO_PLL1).
->
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx93.dtsi | 77 ++++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> index 56766fdb0b1e5..69a639a8c833f 100644
-> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> @@ -1273,6 +1273,9 @@ s4muap: mailbox@47520000 {
->  		media_blk_ctrl: system-controller@4ac10000 {
->  			compatible = "fsl,imx93-media-blk-ctrl", "syscon";
->  			reg = <0x4ac10000 0x10000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges = <0x0 0x4ac10000 0x10000>;
+On Tue, Mar 04, 2025 at 04:49:25PM +0100, Alexander Stein wrote:
+> This adds the overlay for the Tianma TM070JVHG33 LVDS display.
 
-I remember ranges should be after reg.
+Nit: Add the overlay ...
 
 Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
->  			power-domains = <&mediamix>;
->  			clocks = <&clk IMX93_CLK_MEDIA_APB>,
->  				 <&clk IMX93_CLK_MEDIA_AXI>,
-> @@ -1286,8 +1289,82 @@ media_blk_ctrl: system-controller@4ac10000 {
->  				 <&clk IMX93_CLK_MIPI_DSI_GATE>;
->  			clock-names = "apb", "axi", "nic", "disp", "cam",
->  				      "pxp", "lcdif", "isi", "csi", "dsi";
-> +			assigned-clocks = <&clk IMX93_CLK_MEDIA_AXI>,
-> +					  <&clk IMX93_CLK_MEDIA_APB>,
-> +					  <&clk IMX93_CLK_VIDEO_PLL>,
-> +					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
-> +			assigned-clock-parents = <&clk IMX93_CLK_SYS_PLL_PFD0>,
-> +						 <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>,
-> +						 <&clk IMX93_CLK_24M>,
-> +						 <&clk IMX93_CLK_VIDEO_PLL>;
-> +			assigned-clock-rates = <333333333>, <133333333>, <0>, <200000000>;
->  			#power-domain-cells = <1>;
->  			status = "disabled";
+>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  arch/arm64/boot/dts/freescale/Makefile        |  2 +
+>  ...3-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso | 40 +++++++++++++++++++
+>  .../freescale/imx93-tqma9352-mba93xxca.dts    | 27 +++++++++++++
+>  3 files changed, 69 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso
+>
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index ac4f14c69cdd8..48991e9a9c076 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -300,7 +300,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxla.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx93-var-som-symphony.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk.dtb
+>
+> +imx93-tqma9352-mba93xxca-lvds-tm070jvhg33-dtbs += imx93-tqma9352-mba93xxca.dtb imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtbo
+>  imx93-tqma9352-mba93xxla-lvds-tm070jvhg33-dtbs += imx93-tqma9352-mba93xxla.dtb imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtbo
+> +dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtb
+>
+>  imx8mm-kontron-dl-dtbs			:= imx8mm-kontron-bl.dtb imx8mm-kontron-dl.dtbo
+> diff --git a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso
+> new file mode 100644
+> index 0000000000000..d21e5ccca2e93
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso
+> @@ -0,0 +1,40 @@
+> +// SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
+> +/*
+> + * Copyright (c) 2025 TQ-Systems GmbH <linux@ew.tq-group.com>,
+> + * D-82229 Seefeld, Germany.
+> + * Author: Alexander Stein
+> + */
 > +
-> +			lvds_bridge: bridge@20 {
-> +				compatible = "fsl,imx93-ldb";
-> +				reg = <0x20 0x4>, <0x24 0x4>;
-> +				reg-names = "ldb", "lvds";
-> +				clocks = <&clk IMX93_CLK_LVDS_GATE>;
-> +				clock-names = "ldb";
-> +				assigned-clocks = <&clk IMX93_CLK_MEDIA_LDB>;
-> +				assigned-clock-parents = <&clk IMX93_CLK_VIDEO_PLL>;
-> +				status = "disabled";
+> +#include <dt-bindings/clock/imx93-clock.h>
+> +#include <dt-bindings/gpio/gpio.h>
 > +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
+> +/dts-v1/;
+> +/plugin/;
 > +
-> +					port@0 {
-> +						reg = <0>;
+> +&backlight_lvds {
+> +	status = "okay";
+> +};
 > +
-> +						ldb_from_lcdif: endpoint {
-> +							remote-endpoint = <&lcdif_to_ldb>;
-> +						};
-> +					};
+> +&display {
+> +	compatible = "tianma,tm070jvhg33";
+> +	status = "okay";
+> +};
 > +
-> +					port@1 {
-> +						reg = <1>;
+> +&lcdif {
+> +	assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
+> +			  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
+> +	assigned-clock-rates = <477400000>;
+> +	status = "okay";
+> +};
 > +
-> +						ldb_lvds: endpoint {
-> +						};
-> +					};
-> +				};
+> +&lvds_bridge {
+> +	status = "okay";
+> +};
+> +
+> +&media_blk_ctrl {
+> +	status = "okay";
+> +};
+> +
+> +&tpm5 {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca.dts b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca.dts
+> index ebbac5f8d2b2d..e70c3995e89da 100644
+> --- a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca.dts
+> @@ -42,6 +42,23 @@ backlight_lvds: backlight {
+>  		status = "disabled";
+>  	};
+>
+> +	display: display {
+> +		/*
+> +		 * Display is not fixed, so compatible has to be added from
+> +		 * DT overlay
+> +		 */
+> +		power-supply = <&reg_3v3>;
+> +		enable-gpios = <&expander2 1 GPIO_ACTIVE_HIGH>;
+> +		backlight = <&backlight_lvds>;
+> +		status = "disabled";
+> +
+> +		port {
+> +			panel_in_lvds0: endpoint {
+> +				remote-endpoint = <&ldb_lvds>;
 > +			};
 > +		};
+> +	};
 > +
-> +		lcdif: display-controller@4ae30000 {
-> +			compatible = "fsl,imx93-lcdif";
-> +			reg = <0x4ae30000 0x23c>;
-> +			interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clk IMX93_CLK_MEDIA_DISP_PIX>,
-> +				 <&clk IMX93_CLK_LCDIF_GATE>,
-> +				 <&clk IMX93_CLK_MEDIA_AXI>;
-> +			clock-names = "pix", "axi", "disp_axi";
-> +			assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
-> +					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
-> +			assigned-clock-parents = <&clk IMX93_CLK_24M>,
-> +						 <&clk IMX93_CLK_VIDEO_PLL>;
-> +			power-domains = <&media_blk_ctrl IMX93_MEDIABLK_PD_LCDIF>;
-> +			status = "disabled";
-> +
-> +			port {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				lcdif_to_dsi: endpoint@0 {
-> +					reg = <0>;
-> +				};
-> +
-> +				lcdif_to_ldb: endpoint@1 {
-> +					reg = <1>;
-> +					remote-endpoint = <&ldb_from_lcdif>;
-> +				};
-> +
-> +				lcdif_to_dpi: endpoint@2 {
-> +					reg = <2>;
-> +				};
-> +			};
->  		};
+>  	fan0: pwm-fan {
+>  		compatible = "pwm-fan";
+>  		pinctrl-names = "default";
+> @@ -546,6 +563,16 @@ &lpuart8 {
+>  	status = "okay";
+>  };
 >
->  		usbotg1: usb@4c100000 {
+> +&lvds_bridge {
+> +	ports {
+> +		port@1 {
+> +			ldb_lvds: endpoint {
+> +				remote-endpoint = <&panel_in_lvds0>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+>  &pcf85063 {
+>  	/* RTC_EVENT# from SoM is connected on mainboard */
+>  	pinctrl-names = "default";
 > --
 > 2.43.0
 >
