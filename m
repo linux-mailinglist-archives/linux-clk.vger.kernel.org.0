@@ -1,234 +1,427 @@
-Return-Path: <linux-clk+bounces-18905-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18900-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FACA4E236
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:04:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05A78A4DF5B
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 14:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FE3117E6E8
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 14:56:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26CA31770D0
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 13:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1CE27935D;
-	Tue,  4 Mar 2025 14:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B856202F88;
+	Tue,  4 Mar 2025 13:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b="DuYMaTJs"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="TchGrC0W"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286672702C9
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 14:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741100054; cv=pass; b=Mq/ytRxntz4WDUb5eXfOkzGaww5uoB62Axzz71OpNaPoAh6PUhS9VnpR/Hu/OXpGYQGM70l7bz0SzEvpisQH/lXEQlzKWt8kO/bXJdHaBvjUoQeZ5ThWDo/vz74kTq34bIUEq1VyIEecgMExgRdd8C2y+qaI0GPorByFIRiYEx0=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741100054; c=relaxed/simple;
-	bh=IudflqImdm+ZwbpvNjpoNoGi2CoQwHJjQFVz8r3/Sj8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=m7z4fkcJ+fSCnBllgXjOwNc92gL4N4HptNrrnDQXDbOaJKMnTW9dYzT4ivTydygbD1TN7lSipnASL8iwhhwJZFz0099Lv5qW2zoVYURREjy1LzMnjzaX777RMOKILfq4UNDKBCFpT5i6A1wXc/F3/IJgsxaFbWNN94FQU7Hgj0Y=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b=DuYMaTJs; arc=pass smtp.client-ip=136.143.188.94; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; arc=pass smtp.client-ip=160.75.25.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 5F13640D204C
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 17:54:11 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dvX4vflzFxsQ
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 17:52:40 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 43BB442732; Tue,  4 Mar 2025 17:52:34 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b=DuYMaTJs
-X-Envelope-From: <linux-kernel+bounces-541696-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b=DuYMaTJs
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 3BC6942461
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:24:09 +0300 (+03)
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id C74B73064C07
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:24:08 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9DDB3AB2ED
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:23:18 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DC80212D66;
-	Mon,  3 Mar 2025 12:22:18 +0000 (UTC)
-Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054B2212B02;
-	Mon,  3 Mar 2025 12:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.94
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741004535; cv=pass; b=JClR+cplaTw6XeeNS4xY0hkiwNrHfDU/4aRId67wsV8xIdrlEDdk0DHFPE00jgypA7wmdEzIvmwncttTDXcsVyJ49jnGjCCTZpO4kDqku2YtvJPjIT+nf6ZQEzr92kqcyrtrKDhWPHoAEFrcGZt1td25870mltZcCVKFag6yTQA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741004535; c=relaxed/simple;
-	bh=IudflqImdm+ZwbpvNjpoNoGi2CoQwHJjQFVz8r3/Sj8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IGnfdL2+L8hlhUkhEaMFleHGfKDhKhWGXshAOrtaC5i8hKwphG0aV3CLYCNSHZHECc3q8HoolooZzq+sT0Q5MsrdbZ+jOwZvZK8RhgIYLtYhoIE6snzfwVJneJ5Q0GLvBsdRMPHFrRV0ir/uzaYadTq9Da4I2kYE/KBl4REFpxY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=kingxukai@zohomail.com header.b=DuYMaTJs; arc=pass smtp.client-ip=136.143.188.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
-ARC-Seal: i=1; a=rsa-sha256; t=1741004505; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=VU/H2PZZzU95D3j8gNHRHKj0WtOBpiPI98KgbepbzlvJIKbnDU3qfSgYD1p0gWmeZgDMa95zh5hi5nge8mDwJB2UyPZHH5Ivrj9x8XgLexDX39BmLW5lRHKZFxmDCC57KXyq58fBx75bxer1GqWhSJwFvlVIdGgqdCRi+/xCyGY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1741004505; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=EPlebBCWRgSBAYpdwC7xAZIbyevkA4TQGmd5kkCqttQ=; 
-	b=Ji/wcOeQ3aoSY0tnUXO6IZqOki1B7LB/jN46tQ9ZP4mPTT+PwoS6AuyxU6I5DhMSYk5YpuetT8OdGwlTbyxb+CkYD1Ycre0auVkJEiR9m5zUGQz+i0pu6ETEDWamq1OBKEuGWR1LnEoKajN9wOk4PH1/DxLfrCvw51Z5DdPEKZI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zohomail.com;
-	spf=pass  smtp.mailfrom=kingxukai@zohomail.com;
-	dmarc=pass header.from=<kingxukai@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741004505;
-	s=zm2022; d=zohomail.com; i=kingxukai@zohomail.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Feedback-ID:Reply-To;
-	bh=EPlebBCWRgSBAYpdwC7xAZIbyevkA4TQGmd5kkCqttQ=;
-	b=DuYMaTJsOHfjiX9+2+C7LGiuI22AFbdTzNCjhb44sxpcGTYuaZcY36v/guV1dCdt
-	ZKDsHCdxqDO2Ec8s1Ord0BxzVHnQWBS1wb2oYQ6XZ/9G3aJMCjCggF1S1tpH+hl5XXp
-	PHBvdYtn8oDUyor5o2rMEdSx0JPDse7gA3QUA6qo=
-Received: by mx.zohomail.com with SMTPS id 1741004501200414.4200697404116;
-	Mon, 3 Mar 2025 04:21:41 -0800 (PST)
-From: Xukai Wang <kingxukai@zohomail.com>
-Date: Mon, 03 Mar 2025 20:20:39 +0800
-Subject: [PATCH v5 3/3] riscv: dts: canaan: Add clock definition for K230
-Precedence: bulk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902B61F5616
+	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 13:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741095273; cv=none; b=OcAdWtzUlYlA6yzOxuGbEZJ/U8sQ91oJlOqbE0X0beT9qljNYOMSBBrX49nQQRP4YogPpC+/APugSybsHBfunpzPBAKeElB4UgguGtcoXRoynXybKUv/oZx1unwcIje/uNMw4ClJl5BF8XCKeAsDLOy91JK/UJpQl7ZMXlpRxYE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741095273; c=relaxed/simple;
+	bh=/rCkizq4IRRloXDG42ITHhdHtwJv7jdVSCB3pANcMfw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WbPSOFtUHqTID2Z0xVfjFly4e0ZQrwfAZUyLIg0rH+iwgIkAgLUpLjgonknxIDsGfsFpjxzv0Z5Z2SRUtNFBTOgz7askKrtehU44BV6+Fkf2C7kBVxruAA3clME8Ueb0JhAT3vR0LrDyHZ8wu7hJlig3+AHOd2pKqG+PRM07c+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=TchGrC0W; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4399ee18a57so35591995e9.1
+        for <linux-clk@vger.kernel.org>; Tue, 04 Mar 2025 05:34:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1741095269; x=1741700069; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sPOgL4f8sfrIYPZQLvxv+Jdq+OKI+5ZA8zIqn7CnvPM=;
+        b=TchGrC0WYP3uOuhD04nZFHA2iRkFMC6iRFWPRYOYEUZ58G+1hC5m/iyMhiOcufTAfT
+         9miSjXRjez18x7FwS3Fa+9rdbFJ0ZXtFqAZwZgZ0xoNr50kmy8BisL5bSc1cN9YOxmQH
+         hzVdemx9WxWz+w5FhnHj2txq2rWIxA8u5Dqeth+7OfvV9W93FMw6jPCTFFDekA2KNt2B
+         EN16eKgUNkeH1F36eNBABfs4o9CoVfjIV1+/0K4T7sAjuCjfSHtomCFG4LzT7XXz1xlq
+         NPdya173AZSrSfmaNdNl9tSP6CUJXC38FKFemYqdm3AgU0oEsKaMMdDt5d7+MUb5Jwqr
+         Z1gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741095269; x=1741700069;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sPOgL4f8sfrIYPZQLvxv+Jdq+OKI+5ZA8zIqn7CnvPM=;
+        b=IHKNXiEckQnUVdNyk1LOx1h5AxU4qxfRJNjk7KBn+Flt2wYr2m8RrNHhvPg7Zie38u
+         boV5EP4rlr05q46CAfRaHWwv29uAZMIV8+WERSkEQJA5CakLx1y7IwPCIlHcyYWvwPtH
+         Ln45JLUKSlVJrtNofE4M6Rm6KbVYSt6I/V6M5tz/ZneZC2ciFNYcWeaSzPpZG7giivpf
+         sOw91bN1p06J5yj1Qq6qMczVZib8jYAkbI71ayst2TjG1BqalcyiguQAllwIobxS6saG
+         GhE+8uKr1A6Xi1IvSMYj9Xsxo14JxT0VEPPPWQiLXvk16YMq2VOkFTUxT4fbbTWDSvAC
+         d7jg==
+X-Forwarded-Encrypted: i=1; AJvYcCVhgX8dN9n8tQyaRwshPXf09kZtd88HzuthC/9lJBjiKt0mAW13gey94gbsdyKTNkaSYmBUbslsaQ0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE8F+CidwLHuOs4zM6KoyriDGjk8owCzxRg8iGbeaVwaLqdfvq
+	CuSf+ATsSHpEaOPEPYDSrx9cau3AGjvRQ2go1bEc4nxh8EzA4meL6CnUzJsFbfF+qLTNYc8gPHV
+	O
+X-Gm-Gg: ASbGncuAdulq+qb2ICxK5/bwx1jhTW9ih/fSZE58TU0eWaTiAquuF2s2p7Tv6s+5kj/
+	nI/MqOMb7dw9X7+3lHfGFM8V/OpyfKjgBbLSEMD0d90CBox07Fbh88bkcte/g6GgWCzEN4C5XWE
+	d9092rPEdcsmCemcxq6kDx6lngFG+L0/a0o/JZpS/vNJJtIFN1aX7yxDkZIoD0NIt3pWBsUZpTB
+	EOgH9ilfId++j2jJRTzUiUpcaBJcJ+awSh75POK1tmkkCzCnflBEhd406eqJZ+ZlZt3u74OOdbG
+	EumcnWrENsnS9v0CxPIsYiv9C1Aw9+Qa0czbibD6JHGu
+X-Google-Smtp-Source: AGHT+IEfCoI/q/nFT7OiFsdhAXSL5yP73nINDD8ABijDCnNaZNn54lK6VcZ8bg8sbbjHczqHkHJQbA==
+X-Received: by 2002:a05:600c:3551:b0:43b:4829:8067 with SMTP id 5b1f17b1804b1-43bcae19446mr23622505e9.6.1741095268689;
+        Tue, 04 Mar 2025 05:34:28 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:6018:7257:350d:e85e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bce4313f7sm11803595e9.30.2025.03.04.05.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Mar 2025 05:34:28 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: David Lechner <david@lechnology.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] clk: davinci: remove support for da830
+Date: Tue,  4 Mar 2025 14:34:23 +0100
+Message-ID: <20250304133423.100884-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250303-b4-k230-clk-v5-3-748d121283e3@zohomail.com>
-References: <20250303-b4-k230-clk-v5-0-748d121283e3@zohomail.com>
-In-Reply-To: <20250303-b4-k230-clk-v5-0-748d121283e3@zohomail.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Xukai Wang <kingxukai@zohomail.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Conor Dooley <conor@kernel.org>
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- Samuel Holland <samuel.holland@sifive.com>, 
- Troy Mitchell <TroyMitchell988@gmail.com>
-X-Mailer: b4 0.14.2
-Feedback-ID: rr08011227e2147aa24874712226dc26760000586f8874787f4a6d72561c1308b8421776f82c43f9d82fc0af:zu080112270093cfddc4763c54b4577d2900007b6bb1e3fb3d534e2083681ede70111f5b98537885daf9054d:rf0801122c3ebd15007b09d8c36c868581000091f3a48bbb219b948ec20d7df113f5ee97e31ac3b1a866027a26bb0bee98:ZohoMail
-X-ZohoMailClient: External
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6dvX4vflzFxsQ
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741704773.15187@o9y6j6f8Vr00iRartkohXw
-X-ITU-MailScanner-SpamCheck: not spam
+Content-Transfer-Encoding: 8bit
 
-This patch describes the clock controller integrated in K230 SoC
-and replace dummy clocks with the real ones for UARTs.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Co-developed-by: Troy Mitchell <TroyMitchell988@gmail.com>
-Signed-off-by: Troy Mitchell <TroyMitchell988@gmail.com>
-Signed-off-by: Xukai Wang <kingxukai@zohomail.com>
+This SoC has some leftover code all over the kernel but no boards are
+supported anymore. Remove support for da830 from the davinci clock
+driver. With it: remove the ifdefs around the data structures as the
+da850 remains the only davinci SoC supported and the only user of this
+driver.
+
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- arch/riscv/boot/dts/canaan/k230.dtsi | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ drivers/clk/davinci/Makefile    |   2 -
+ drivers/clk/davinci/pll-da830.c |  71 -------------------
+ drivers/clk/davinci/pll.c       |   9 ---
+ drivers/clk/davinci/psc-da830.c | 118 --------------------------------
+ drivers/clk/davinci/psc.c       |   8 ---
+ drivers/clk/davinci/psc.h       |   7 +-
+ include/linux/clk/davinci.h     |   6 --
+ 7 files changed, 1 insertion(+), 220 deletions(-)
+ delete mode 100644 drivers/clk/davinci/pll-da830.c
+ delete mode 100644 drivers/clk/davinci/psc-da830.c
 
-diff --git a/arch/riscv/boot/dts/canaan/k230.dtsi b/arch/riscv/boot/dts/canaan/k230.dtsi
-index 95c1a3d8fb1192e30113d96d3e96329545bc6ae7..e688633acbbf2cee36354220c557252111f56ff5 100644
---- a/arch/riscv/boot/dts/canaan/k230.dtsi
-+++ b/arch/riscv/boot/dts/canaan/k230.dtsi
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2024 Yangyu Chen <cyy@cyyself.name>
-  */
+diff --git a/drivers/clk/davinci/Makefile b/drivers/clk/davinci/Makefile
+index 5d0ae1ee72ec..f9d5c9a392e4 100644
+--- a/drivers/clk/davinci/Makefile
++++ b/drivers/clk/davinci/Makefile
+@@ -4,10 +4,8 @@ ifeq ($(CONFIG_COMMON_CLK), y)
+ obj-$(CONFIG_ARCH_DAVINCI_DA8XX)	+= da8xx-cfgchip.o
  
-+#include <dt-bindings/clock/canaan,k230-clk.h>
- #include <dt-bindings/interrupt-controller/irq.h>
+ obj-y += pll.o
+-obj-$(CONFIG_ARCH_DAVINCI_DA830)	+= pll-da830.o
+ obj-$(CONFIG_ARCH_DAVINCI_DA850)	+= pll-da850.o
  
- /dts-v1/;
-@@ -58,10 +59,10 @@ l2_cache: l2-cache {
- 		};
- 	};
+ obj-y += psc.o
+-obj-$(CONFIG_ARCH_DAVINCI_DA830)	+= psc-da830.o
+ obj-$(CONFIG_ARCH_DAVINCI_DA850)	+= psc-da850.o
+ endif
+diff --git a/drivers/clk/davinci/pll-da830.c b/drivers/clk/davinci/pll-da830.c
+deleted file mode 100644
+index 0a0d06fb25fd..000000000000
+--- a/drivers/clk/davinci/pll-da830.c
++++ /dev/null
+@@ -1,71 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * PLL clock descriptions for TI DA830/OMAP-L137/AM17XX
+- *
+- * Copyright (C) 2018 David Lechner <david@lechnology.com>
+- */
+-
+-#include <linux/clkdev.h>
+-#include <linux/clk/davinci.h>
+-#include <linux/bitops.h>
+-#include <linux/init.h>
+-#include <linux/types.h>
+-
+-#include "pll.h"
+-
+-static const struct davinci_pll_clk_info da830_pll_info = {
+-	.name = "pll0",
+-	.pllm_mask = GENMASK(4, 0),
+-	.pllm_min = 4,
+-	.pllm_max = 32,
+-	.pllout_min_rate = 300000000,
+-	.pllout_max_rate = 600000000,
+-	.flags = PLL_HAS_CLKMODE | PLL_HAS_PREDIV | PLL_HAS_POSTDIV,
+-};
+-
+-/*
+- * NB: Technically, the clocks flagged as SYSCLK_FIXED_DIV are "fixed ratio",
+- * meaning that we could change the divider as long as we keep the correct
+- * ratio between all of the clocks, but we don't support that because there is
+- * currently not a need for it.
+- */
+-
+-SYSCLK(2, pll0_sysclk2, pll0_pllen, 5, SYSCLK_FIXED_DIV);
+-SYSCLK(3, pll0_sysclk3, pll0_pllen, 5, 0);
+-SYSCLK(4, pll0_sysclk4, pll0_pllen, 5, SYSCLK_FIXED_DIV);
+-SYSCLK(5, pll0_sysclk5, pll0_pllen, 5, 0);
+-SYSCLK(6, pll0_sysclk6, pll0_pllen, 5, SYSCLK_FIXED_DIV);
+-SYSCLK(7, pll0_sysclk7, pll0_pllen, 5, 0);
+-
+-int da830_pll_init(struct device *dev, void __iomem *base, struct regmap *cfgchip)
+-{
+-	struct clk *clk;
+-
+-	davinci_pll_clk_register(dev, &da830_pll_info, "ref_clk", base, cfgchip);
+-
+-	clk = davinci_pll_sysclk_register(dev, &pll0_sysclk2, base);
+-	clk_register_clkdev(clk, "pll0_sysclk2", "da830-psc0");
+-	clk_register_clkdev(clk, "pll0_sysclk2", "da830-psc1");
+-
+-	clk = davinci_pll_sysclk_register(dev, &pll0_sysclk3, base);
+-	clk_register_clkdev(clk, "pll0_sysclk3", "da830-psc0");
+-
+-	clk = davinci_pll_sysclk_register(dev, &pll0_sysclk4, base);
+-	clk_register_clkdev(clk, "pll0_sysclk4", "da830-psc0");
+-	clk_register_clkdev(clk, "pll0_sysclk4", "da830-psc1");
+-
+-	clk = davinci_pll_sysclk_register(dev, &pll0_sysclk5, base);
+-	clk_register_clkdev(clk, "pll0_sysclk5", "da830-psc1");
+-
+-	clk = davinci_pll_sysclk_register(dev, &pll0_sysclk6, base);
+-	clk_register_clkdev(clk, "pll0_sysclk6", "da830-psc0");
+-
+-	clk = davinci_pll_sysclk_register(dev, &pll0_sysclk7, base);
+-
+-	clk = davinci_pll_auxclk_register(dev, "pll0_auxclk", base);
+-	clk_register_clkdev(clk, NULL, "i2c_davinci.1");
+-	clk_register_clkdev(clk, "timer0", NULL);
+-	clk_register_clkdev(clk, NULL, "davinci-wdt");
+-
+-	return 0;
+-}
+diff --git a/drivers/clk/davinci/pll.c b/drivers/clk/davinci/pll.c
+index 82727b1fc67a..6807a2efa93b 100644
+--- a/drivers/clk/davinci/pll.c
++++ b/drivers/clk/davinci/pll.c
+@@ -840,25 +840,16 @@ int of_davinci_pll_init(struct device *dev, struct device_node *node,
+ }
  
--	apb_clk: apb-clk-clock {
-+	osc24m: clock-24m {
- 		compatible = "fixed-clock";
--		clock-frequency = <50000000>;
--		clock-output-names = "apb_clk";
-+		clock-frequency = <24000000>;
-+		clock-output-names = "osc24m";
- 		#clock-cells = <0>;
- 	};
+ /* needed in early boot for clocksource/clockevent */
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ CLK_OF_DECLARE(da850_pll0, "ti,da850-pll0", of_da850_pll0_init);
+-#endif
  
-@@ -89,10 +90,18 @@ clint: timer@f04000000 {
- 			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>;
- 		};
+ static const struct of_device_id davinci_pll_of_match[] = {
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ 	{ .compatible = "ti,da850-pll1", .data = of_da850_pll1_init },
+-#endif
+ 	{ }
+ };
  
-+		sysclk: clock-controller@91102000 {
-+			compatible = "canaan,k230-clk";
-+			reg = <0x0 0x91102000 0x0 0x1000>,
-+			      <0x0 0x91100000 0x0 0x1000>;
-+			clocks = <&osc24m>;
-+			#clock-cells = <1>;
-+		};
+ static const struct platform_device_id davinci_pll_id_table[] = {
+-#ifdef CONFIG_ARCH_DAVINCI_DA830
+-	{ .name = "da830-pll",   .driver_data = (kernel_ulong_t)da830_pll_init   },
+-#endif
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ 	{ .name = "da850-pll0",  .driver_data = (kernel_ulong_t)da850_pll0_init  },
+ 	{ .name = "da850-pll1",  .driver_data = (kernel_ulong_t)da850_pll1_init  },
+-#endif
+ 	{ }
+ };
+ 
+diff --git a/drivers/clk/davinci/psc-da830.c b/drivers/clk/davinci/psc-da830.c
+deleted file mode 100644
+index 6481337382a6..000000000000
+--- a/drivers/clk/davinci/psc-da830.c
++++ /dev/null
+@@ -1,118 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * PSC clock descriptions for TI DA830/OMAP-L137/AM17XX
+- *
+- * Copyright (C) 2018 David Lechner <david@lechnology.com>
+- */
+-
+-#include <linux/clk-provider.h>
+-#include <linux/clk.h>
+-#include <linux/clkdev.h>
+-#include <linux/init.h>
+-#include <linux/kernel.h>
+-#include <linux/types.h>
+-
+-#include "psc.h"
+-
+-LPSC_CLKDEV1(aemif_clkdev,	NULL,	"ti-aemif");
+-LPSC_CLKDEV1(spi0_clkdev,	NULL,	"spi_davinci.0");
+-LPSC_CLKDEV1(mmcsd_clkdev,	NULL,	"da830-mmc.0");
+-LPSC_CLKDEV1(uart0_clkdev,	NULL,	"serial8250.0");
+-
+-static const struct davinci_lpsc_clk_info da830_psc0_info[] = {
+-	LPSC(0,  0, tpcc,     pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(1,  0, tptc0,    pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(2,  0, tptc1,    pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(3,  0, aemif,    pll0_sysclk3, aemif_clkdev, LPSC_ALWAYS_ENABLED),
+-	LPSC(4,  0, spi0,     pll0_sysclk2, spi0_clkdev,  0),
+-	LPSC(5,  0, mmcsd,    pll0_sysclk2, mmcsd_clkdev, 0),
+-	LPSC(6,  0, aintc,    pll0_sysclk4, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(7,  0, arm_rom,  pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(8,  0, secu_mgr, pll0_sysclk4, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(9,  0, uart0,    pll0_sysclk2, uart0_clkdev, 0),
+-	LPSC(10, 0, scr0_ss,  pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(11, 0, scr1_ss,  pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(12, 0, scr2_ss,  pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(13, 0, pruss,    pll0_sysclk2, NULL,         LPSC_ALWAYS_ENABLED),
+-	LPSC(14, 0, arm,      pll0_sysclk6, NULL,         LPSC_ALWAYS_ENABLED),
+-	{ }
+-};
+-
+-static int da830_psc0_init(struct device *dev, void __iomem *base)
+-{
+-	return davinci_psc_register_clocks(dev, da830_psc0_info, 16, base);
+-}
+-
+-static struct clk_bulk_data da830_psc0_parent_clks[] = {
+-	{ .id = "pll0_sysclk2" },
+-	{ .id = "pll0_sysclk3" },
+-	{ .id = "pll0_sysclk4" },
+-	{ .id = "pll0_sysclk6" },
+-};
+-
+-const struct davinci_psc_init_data da830_psc0_init_data = {
+-	.parent_clks		= da830_psc0_parent_clks,
+-	.num_parent_clks	= ARRAY_SIZE(da830_psc0_parent_clks),
+-	.psc_init		= &da830_psc0_init,
+-};
+-
+-LPSC_CLKDEV3(usb0_clkdev,	"fck",	"da830-usb-phy-clks",
+-				NULL,	"musb-da8xx",
+-				NULL,	"cppi41-dmaengine");
+-LPSC_CLKDEV1(usb1_clkdev,	NULL,	"ohci-da8xx");
+-/* REVISIT: gpio-davinci.c should be modified to drop con_id */
+-LPSC_CLKDEV1(gpio_clkdev,	"gpio",	NULL);
+-LPSC_CLKDEV2(emac_clkdev,	NULL,	"davinci_emac.1",
+-				"fck",	"davinci_mdio.0");
+-LPSC_CLKDEV1(mcasp0_clkdev,	NULL,	"davinci-mcasp.0");
+-LPSC_CLKDEV1(mcasp1_clkdev,	NULL,	"davinci-mcasp.1");
+-LPSC_CLKDEV1(mcasp2_clkdev,	NULL,	"davinci-mcasp.2");
+-LPSC_CLKDEV1(spi1_clkdev,	NULL,	"spi_davinci.1");
+-LPSC_CLKDEV1(i2c1_clkdev,	NULL,	"i2c_davinci.2");
+-LPSC_CLKDEV1(uart1_clkdev,	NULL,	"serial8250.1");
+-LPSC_CLKDEV1(uart2_clkdev,	NULL,	"serial8250.2");
+-LPSC_CLKDEV1(lcdc_clkdev,	"fck",	"da8xx_lcdc.0");
+-LPSC_CLKDEV2(pwm_clkdev,	"fck",	"ehrpwm.0",
+-				"fck",	"ehrpwm.1");
+-LPSC_CLKDEV3(ecap_clkdev,	"fck",	"ecap.0",
+-				"fck",	"ecap.1",
+-				"fck",	"ecap.2");
+-LPSC_CLKDEV2(eqep_clkdev,	NULL,	"eqep.0",
+-				NULL,	"eqep.1");
+-
+-static const struct davinci_lpsc_clk_info da830_psc1_info[] = {
+-	LPSC(1,  0, usb0,   pll0_sysclk2, usb0_clkdev,   0),
+-	LPSC(2,  0, usb1,   pll0_sysclk4, usb1_clkdev,   0),
+-	LPSC(3,  0, gpio,   pll0_sysclk4, gpio_clkdev,   0),
+-	LPSC(5,  0, emac,   pll0_sysclk4, emac_clkdev,   0),
+-	LPSC(6,  0, emif3,  pll0_sysclk5, NULL,          LPSC_ALWAYS_ENABLED),
+-	LPSC(7,  0, mcasp0, pll0_sysclk2, mcasp0_clkdev, 0),
+-	LPSC(8,  0, mcasp1, pll0_sysclk2, mcasp1_clkdev, 0),
+-	LPSC(9,  0, mcasp2, pll0_sysclk2, mcasp2_clkdev, 0),
+-	LPSC(10, 0, spi1,   pll0_sysclk2, spi1_clkdev,   0),
+-	LPSC(11, 0, i2c1,   pll0_sysclk4, i2c1_clkdev,   0),
+-	LPSC(12, 0, uart1,  pll0_sysclk2, uart1_clkdev,  0),
+-	LPSC(13, 0, uart2,  pll0_sysclk2, uart2_clkdev,  0),
+-	LPSC(16, 0, lcdc,   pll0_sysclk2, lcdc_clkdev,   0),
+-	LPSC(17, 0, pwm,    pll0_sysclk2, pwm_clkdev,    0),
+-	LPSC(20, 0, ecap,   pll0_sysclk2, ecap_clkdev,   0),
+-	LPSC(21, 0, eqep,   pll0_sysclk2, eqep_clkdev,   0),
+-	{ }
+-};
+-
+-static int da830_psc1_init(struct device *dev, void __iomem *base)
+-{
+-	return davinci_psc_register_clocks(dev, da830_psc1_info, 32, base);
+-}
+-
+-static struct clk_bulk_data da830_psc1_parent_clks[] = {
+-	{ .id = "pll0_sysclk2" },
+-	{ .id = "pll0_sysclk4" },
+-	{ .id = "pll0_sysclk5" },
+-};
+-
+-const struct davinci_psc_init_data da830_psc1_init_data = {
+-	.parent_clks		= da830_psc1_parent_clks,
+-	.num_parent_clks	= ARRAY_SIZE(da830_psc1_parent_clks),
+-	.psc_init		= &da830_psc1_init,
+-};
+diff --git a/drivers/clk/davinci/psc.c b/drivers/clk/davinci/psc.c
+index 355d1be0b5d8..b48322176c21 100644
+--- a/drivers/clk/davinci/psc.c
++++ b/drivers/clk/davinci/psc.c
+@@ -494,22 +494,14 @@ int of_davinci_psc_clk_init(struct device *dev,
+ }
+ 
+ static const struct of_device_id davinci_psc_of_match[] = {
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ 	{ .compatible = "ti,da850-psc0", .data = &of_da850_psc0_init_data },
+ 	{ .compatible = "ti,da850-psc1", .data = &of_da850_psc1_init_data },
+-#endif
+ 	{ }
+ };
+ 
+ static const struct platform_device_id davinci_psc_id_table[] = {
+-#ifdef CONFIG_ARCH_DAVINCI_DA830
+-	{ .name = "da830-psc0", .driver_data = (kernel_ulong_t)&da830_psc0_init_data },
+-	{ .name = "da830-psc1", .driver_data = (kernel_ulong_t)&da830_psc1_init_data },
+-#endif
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ 	{ .name = "da850-psc0", .driver_data = (kernel_ulong_t)&da850_psc0_init_data },
+ 	{ .name = "da850-psc1", .driver_data = (kernel_ulong_t)&da850_psc1_init_data },
+-#endif
+ 	{ }
+ };
+ 
+diff --git a/drivers/clk/davinci/psc.h b/drivers/clk/davinci/psc.h
+index bd23f6fd56df..742672843776 100644
+--- a/drivers/clk/davinci/psc.h
++++ b/drivers/clk/davinci/psc.h
+@@ -94,14 +94,9 @@ struct davinci_psc_init_data {
+ 	int (*psc_init)(struct device *dev, void __iomem *base);
+ };
+ 
+-#ifdef CONFIG_ARCH_DAVINCI_DA830
+-extern const struct davinci_psc_init_data da830_psc0_init_data;
+-extern const struct davinci_psc_init_data da830_psc1_init_data;
+-#endif
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ extern const struct davinci_psc_init_data da850_psc0_init_data;
+ extern const struct davinci_psc_init_data da850_psc1_init_data;
+ extern const struct davinci_psc_init_data of_da850_psc0_init_data;
+ extern const struct davinci_psc_init_data of_da850_psc1_init_data;
+-#endif
 +
- 		uart0: serial@91400000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x91400000 0x0 0x1000>;
--			clocks = <&apb_clk>;
-+			clocks = <&sysclk K230_LS_UART0>;
- 			interrupts = <16 IRQ_TYPE_LEVEL_HIGH>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -102,7 +111,7 @@ uart0: serial@91400000 {
- 		uart1: serial@91401000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x91401000 0x0 0x1000>;
--			clocks = <&apb_clk>;
-+			clocks = <&sysclk K230_LS_UART1>;
- 			interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -112,7 +121,7 @@ uart1: serial@91401000 {
- 		uart2: serial@91402000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x91402000 0x0 0x1000>;
--			clocks = <&apb_clk>;
-+			clocks = <&sysclk K230_LS_UART2>;
- 			interrupts = <18 IRQ_TYPE_LEVEL_HIGH>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -122,7 +131,7 @@ uart2: serial@91402000 {
- 		uart3: serial@91403000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x91403000 0x0 0x1000>;
--			clocks = <&apb_clk>;
-+			clocks = <&sysclk K230_LS_UART3>;
- 			interrupts = <19 IRQ_TYPE_LEVEL_HIGH>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -132,7 +141,7 @@ uart3: serial@91403000 {
- 		uart4: serial@91404000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x91404000 0x0 0x1000>;
--			clocks = <&apb_clk>;
-+			clocks = <&sysclk K230_LS_UART4>;
- 			interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-
+ #endif /* __CLK_DAVINCI_PSC_H__ */
+diff --git a/include/linux/clk/davinci.h b/include/linux/clk/davinci.h
+index e1d37451e03f..787a81116b00 100644
+--- a/include/linux/clk/davinci.h
++++ b/include/linux/clk/davinci.h
+@@ -12,12 +12,6 @@
+ #include <linux/regmap.h>
+ 
+ /* function for registering clocks in early boot */
+-
+-#ifdef CONFIG_ARCH_DAVINCI_DA830
+-int da830_pll_init(struct device *dev, void __iomem *base, struct regmap *cfgchip);
+-#endif
+-#ifdef CONFIG_ARCH_DAVINCI_DA850
+ int da850_pll0_init(struct device *dev, void __iomem *base, struct regmap *cfgchip);
+-#endif
+ 
+ #endif /* __LINUX_CLK_DAVINCI_PLL_H___ */
 -- 
-2.34.1
-
+2.45.2
 
 
