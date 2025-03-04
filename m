@@ -1,86 +1,155 @@
-Return-Path: <linux-clk+bounces-18927-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18935-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF28A4E8DE
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:31:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AED69A4EBA2
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 19:30:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6D419C7267
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 17:25:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D04237A8D12
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95270292391;
-	Tue,  4 Mar 2025 17:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BAE250C18;
+	Tue,  4 Mar 2025 18:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HdY0ZHSy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WqMAvySZ"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B88292385;
-	Tue,  4 Mar 2025 17:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7B62111;
+	Tue,  4 Mar 2025 18:19:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741107631; cv=none; b=EcCFi/e41zzrVlKqVs8No8NBbDAYgla45L+i3XmQzPitl9bRnBVcDLvwmMU7YYd1qWiBJoDniEfWrhcdzlNWm+ka6z8dV7lOstKtvV/FUDR169RjgrEBKvWV5TBA4t4jBWqEKJtLdwm0f24btRDTtFlf1nE1Y7Nn6Vxf+iGbxxw=
+	t=1741112343; cv=none; b=YnEwbievNevV/rI7Gl9Z32KfjCdZ8KlcZHRzr5ggE5v8UTefOcyiSRciAjowLltEK52C5ZjrPTwd/jFMEbiQ3IBpbooy1LfOe5FsnIO22R53d++hVWOt2HhMtz5rPgkTTOHJQUGzgvDdJnbHqLbf8ODwj14t8eVVAm0Mn4luUzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741107631; c=relaxed/simple;
-	bh=P9EBUUhSDv8YAhAMlI9j9Wq8atw0atGmA0EIGY1k0S8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AjHZghKiUUdwyVsMwFtf/QsHnR0R06kYzxOvvWBOpqDPsIrW5vrwVs/Z6dAp/avXwf65iYW3wdEfu2LqqCXS6s3dsObnGlzdEO13bowhm1MPLaMrORu/ATXLzM994Q7UC+glPObwUqUbLCpFyl7lDVU7EsD29Fg50bMeqeMdrfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HdY0ZHSy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DA6C4CEEB;
-	Tue,  4 Mar 2025 17:00:29 +0000 (UTC)
+	s=arc-20240116; t=1741112343; c=relaxed/simple;
+	bh=7bw48i0H6/MBvyCOgup5IexafXe/jlFudSz/GS/f0jE=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=LUwBVmO3o2QHbQtLFYaEbsxA/elRqphdFahhLAMN/EiUxq8qv0XqBcKEd1LH/nn6lWLcS3AOgdRvjxTGL8fAGFFpbYFXNRIkrJiDFzrVIABoD4M7/TjBqr00CI6og2ohO3lPYrUcbFHfbFvYZpI8BTezrK62aCyye7S5hQB3dwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WqMAvySZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B625BC4CEE5;
+	Tue,  4 Mar 2025 18:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741107630;
-	bh=P9EBUUhSDv8YAhAMlI9j9Wq8atw0atGmA0EIGY1k0S8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HdY0ZHSyvXBRvN0Kxqcweq7HErWseQLLPDMZTLoau0ZmVT6LHtG9Uj2CWd0QXXivp
-	 IQsLfFMnTe2XHqYivnJcds0Mj9ZQkneqkn4TTAkuXrq1J9/HCMoUEz/835ZZKW0kwp
-	 IlSzJZkn5QGgQuXZrQyn0O9Crura7f0KGkS/3idos+Sp7XHH0gFhwp9sx1u8a0y/TI
-	 ZMPej2ApBrWqgsb5xWPmLQy2TX0gf4WRA1L4T6mED9W77Dk7SF/igCMdEyuyqoP2H6
-	 VltfFmtdUZ+BRyRoT79hRdlEI8yPm0frjIzINEZ0kWWZxCk9BQJt7VDwVjo5u3raJh
-	 c0Pw1Tx3p1MqA==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jagadeesh Kona <quic_jkona@quicinc.com>,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: clock: qcom: sm8450-camcc: Remove qcom,x1e80100-camcc leftover
-Date: Tue,  4 Mar 2025 11:00:17 -0600
-Message-ID: <174110761297.741733.9623107008860729417.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250303223936.1780441-1-vladimir.zapolskiy@linaro.org>
-References: <20250303223936.1780441-1-vladimir.zapolskiy@linaro.org>
+	s=k20201202; t=1741112342;
+	bh=7bw48i0H6/MBvyCOgup5IexafXe/jlFudSz/GS/f0jE=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=WqMAvySZGaDBm0Jxa8T9HSI/EwuV+hxw9GHoBqXTHCROXsqHZejECMhM+x5Y5Ggrg
+	 14BWwQDJ4LEq17AAtgjK/N+furYAIzI212zZrUeVssXvQoKD4su+rP1YERhsiZ0JhE
+	 Y1h2awhCY2iVZajCPjRq/c0N355Xo5iBVK/QZ2/8egIBMATG3mbe+jbW4wCD3MyoKc
+	 0G/i0e3C1LRrUxELu+x01yqP/QeHlS6crW7w4pFe2ZCwT/+gqX7fKQ5kS98z4e8ZIu
+	 lEJ1omW9CKM04dgieEM9LRj0bdWSFSRBC/SnazC6o7WqAD1notKcHPPQTHGgOlaFQx
+	 F6VxzEwDJuRmA==
+Message-ID: <7b182615f1439dd39a17b8e74cf740bf.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250223115601.723886-4-ivo.ivanov.ivanov1@gmail.com>
+References: <20250223115601.723886-1-ivo.ivanov.ivanov1@gmail.com> <20250223115601.723886-4-ivo.ivanov.ivanov1@gmail.com>
+Subject: Re: [PATCH v2 3/3] clk: samsung: introduce Exynos2200 clock driver
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Alim Akhtar <alim.akhtar@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Conor Dooley <conor+dt@kernel.org>, Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>
+Date: Tue, 04 Mar 2025 10:19:00 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
+Quoting Ivaylo Ivanov (2025-02-23 03:56:00)
+> diff --git a/drivers/clk/samsung/clk-exynos2200.c b/drivers/clk/samsung/c=
+lk-exynos2200.c
+> new file mode 100644
+> index 000000000..151bdb35a
+> --- /dev/null
+> +++ b/drivers/clk/samsung/clk-exynos2200.c
+> @@ -0,0 +1,3928 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2025 Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+> + * Author: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+> + *
+> + * Common Clock Framework support for Exynos2200 SoC.
+> + */
+> +
+> +#include <linux/clk.h>
 
-On Tue, 04 Mar 2025 00:39:36 +0200, Vladimir Zapolskiy wrote:
-> Qualcomm x1e80100-camcc was moved to its own dt bindings description
-> file, however a small leftover was left, remove it.
-> 
-> 
+Remove this include because this is a clk provider and not a clk
+consumer.
 
-Applied, thanks!
+> +#include <linux/clk-provider.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <dt-bindings/clock/samsung,exynos2200-cmu.h>
+> +
+> +#include "clk.h"
+> +#include "clk-exynos-arm64.h"
+> +
+> +/* NOTE: Must be equal to the last clock ID increased by one */
+> +#define CLKS_NR_TOP                    (CLK_DOUT_TCXO_DIV4 + 1)
+> +#define CLKS_NR_ALIVE                  (CLK_DOUT_ALIVE_DSP_NOC + 1)
+> +#define CLKS_NR_PERIS                  (CLK_DOUT_PERIS_DDD_CTRL + 1)
+> +#define CLKS_NR_CMGP                   (CLK_DOUT_CMGP_USI6 + 1)
+> +#define CLKS_NR_HSI0                   (CLK_DOUT_DIV_CLK_HSI0_EUSB + 1)
+[...]
+> +
+> +static int __init exynos2200_cmu_probe(struct platform_device *pdev)
+> +{
+> +       const struct samsung_cmu_info *info;
+> +       struct device *dev =3D &pdev->dev;
+> +
+> +       info =3D of_device_get_match_data(dev);
 
-[1/1] dt-bindings: clock: qcom: sm8450-camcc: Remove qcom,x1e80100-camcc leftover
-      commit: 53fc6fe160c1b941e531a35e3a2e6d2aaef86999
+Use device APIs to be firmware agnostic: device_get_match_data()=20
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> +       exynos_arm64_register_cmu(dev, dev->of_node, info);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id exynos2200_cmu_of_match[] =3D {
+> +       {
+> +               .compatible =3D "samsung,exynos2200-cmu-cmgp",
+> +               .data =3D &cmgp_cmu_info,
+> +       }, {
+> +               .compatible =3D "samsung,exynos2200-cmu-hsi0",
+> +               .data =3D &hsi0_cmu_info,
+> +       }, {
+> +               .compatible =3D "samsung,exynos2200-cmu-peric0",
+> +               .data =3D &peric0_cmu_info,
+> +       }, {
+> +               .compatible =3D "samsung,exynos2200-cmu-peric1",
+> +               .data =3D &peric1_cmu_info,
+> +       }, {
+> +               .compatible =3D "samsung,exynos2200-cmu-peric2",
+> +               .data =3D &peric2_cmu_info,
+> +       }, {
+> +               .compatible =3D "samsung,exynos2200-cmu-ufs",
+> +               .data =3D &ufs_cmu_info,
+> +       }, {
+> +               .compatible =3D "samsung,exynos2200-cmu-vts",
+> +               .data =3D &vts_cmu_info,
+> +       }, { }
+> +};
+> +
+> +static struct platform_driver exynos2200_cmu_driver __refdata =3D {
+> +       .driver =3D {
+> +               .name =3D "exynos2200-cmu",
+> +               .of_match_table =3D exynos2200_cmu_of_match,
+> +               .suppress_bind_attrs =3D true,
+> +       },
+> +       .probe =3D exynos2200_cmu_probe,
+> +};
+> +
+> +static int __init exynos2200_cmu_init(void)
+> +{
+> +       return platform_driver_register(&exynos2200_cmu_driver);
+
+Was this supposed to be platform_driver_probe()? The __refdata usage
+suggests that but all of the __init markings and stuff in the samsung
+clk driver worry me.
 
