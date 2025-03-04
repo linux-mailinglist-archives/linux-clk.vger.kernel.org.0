@@ -1,212 +1,211 @@
-Return-Path: <linux-clk+bounces-18918-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18907-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A10E1A4E58A
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 17:21:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DACC8A4E587
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 17:21:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C19F2177AB2
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8ECF886861
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 15:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9FC527EC63;
-	Tue,  4 Mar 2025 15:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84EA8292F89;
+	Tue,  4 Mar 2025 15:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyqxOXPF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OMlf2K7m"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0383E27D764
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 15:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741103483; cv=pass; b=rUoneuCL7ltEnyOtU8Y1XiF4ZVGM5dTHfVzO8/3IDnE4qgym888fomh0L2eqNVJM7lqHw1LSDc7h1wZoJ8LzpdFQT2eqEzlM8wdBnieMIZ8gFwl2fE/oPiBg94S7odNGgU51GGQq6NRgGqUv1AUK979HkR7k7q3zK8/n8XxOcog=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741103483; c=relaxed/simple;
-	bh=lpis/SLy0ij+CNsW36P4QCLyGtfJ/WP7YKd97ynHmys=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yy328S8zvo5fxLCOHIrWsnd2vetuNLYh8G4Oxb2gdC6aKxks1R7XE/WiUvch4DtMc2Dq5vuSF1gh0iDxstxyQlvEj1DqJEECjZpLjNeynip1gAwXNMLzk0RKQwWmEZBtQSXnjMRySfb1x7BfLvMhQyJQGhG00R2zVLvWNsTEYjY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF; arc=none smtp.client-ip=10.30.226.201; arc=pass smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 7CBCB40CEC9B
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:51:20 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=lyqxOXPF
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6g9951jJzG1Z9
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:49:33 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 1E17E42726; Tue,  4 Mar 2025 18:49:20 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF
-X-Envelope-From: <linux-kernel+bounces-541880-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 968C441E12
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:07:48 +0300 (+03)
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id CF84E305F789
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:07:47 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B60C7A192A
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:06:37 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4823213E67;
-	Mon,  3 Mar 2025 14:07:16 +0000 (UTC)
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2022212B0A;
-	Mon,  3 Mar 2025 14:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B99292F86;
+	Tue,  4 Mar 2025 15:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741010833; cv=none; b=W5RfAskR4c/NWRZXTbpajebB8fj/kqRMX0LPtY5cq9uxrQiVy/IKp1HaLxWBv0mRcYhvQ5woKtFOO+1Fuj4lHtpY//ekSNn+NWtWqENck5bEpC0ImqJcf39WCTEWDl1qNWAfhg4lBaa1WtuloyFKt9c4tS6Nq8pGGsfXoM4PAmI=
+	t=1741102134; cv=none; b=k58zz/OQpRKOwlqYtTt9Zg2oNFI84M6ZU/CsLGPH50EsL5MdyAK7mIlwtjC5TFK8B2c66WZ6hH+r+IFQpIdcUrfhMZD8/pUBxhM3pGZ63Ge90yjsWJxSD60FzKWEe6SbW8MriSpFJJCrb3068tZ/69CRZZk8qBgrvYvjkhkGMQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741010833; c=relaxed/simple;
-	bh=lpis/SLy0ij+CNsW36P4QCLyGtfJ/WP7YKd97ynHmys=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X8H5C1QK4ZnC76a/vdQeWMSg9MOrd3nzaFZXjrfFgLssOrWdks4SCA5qodA5mhNWvx6cf5rb/x2Rta34zm2/ZpdihWFqZmreiwwLOQ10K1M7S8+H0bLf/5hEegeEycUFuXL3nvrVyPolG9fMWUqQmZkuJcOMEgeA4NjxDd5CKQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF78C4CEE6;
-	Mon,  3 Mar 2025 14:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741010833;
-	bh=lpis/SLy0ij+CNsW36P4QCLyGtfJ/WP7YKd97ynHmys=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lyqxOXPFsF9x17qZNcmlg/aMg5WJcN3dEmFdqOUp5TKVY2X9vYws8CtZpeYV15+xI
-	 yb6xay/8CPcpToj+RmlgZ7fStV71XpSEtKtxmGFNz1pHa6QaL0zwgiAG86jJ98ZjnL
-	 LivAuVHNTYJpNEd6zv/A4I5FTFMD/FYWfIc3LUipTFR3lDjRhdeZfu+NigDKfa981O
-	 HVSdH3bcPmFY8rKBgN3p+FKcfvJ+Apx+VA4r3z9kl2IDcGLFMjLH2gJn1wsY85T1sf
-	 pH58Mald0DF0MaX0hznMWrCg72fFrNTZ4+vemz+ODOBB5V97qeQhkoJBWQ7VcTgFPC
-	 XpAAtoqRP6hxQ==
-Message-ID: <16e6d822-97c1-4dcf-b538-04b6d8881d32@kernel.org>
-Date: Mon, 3 Mar 2025 15:07:00 +0100
-Precedence: bulk
+	s=arc-20240116; t=1741102134; c=relaxed/simple;
+	bh=JD81ilNYFouAKsUXwRzwNxXUtg6eNoEjBJCvikF5+Ds=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FYzTyLPn+0QzAMqqkUS3SMJJOf2jQZcUnmVRU4RHceJqyJv++fh+awFfmwjr4egY7iNvyzcVaYG3oOdRhqFsRkOuMGOFBTr74dnQx3Vr5IqaIuC2ja32az3pR3tEJCUH7Wv9T8Ocy27iasD9flmjyj40gb80j+UXS9RoqNJrOfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OMlf2K7m; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43bc48ff815so13559875e9.0;
+        Tue, 04 Mar 2025 07:28:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741102131; x=1741706931; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1GJGl+C+XNyqfDThAEBolXrcWZxVz5MRHfSv1hTEwQU=;
+        b=OMlf2K7mb9amZfSPX3NVYvY4v9/yCPhWh4SUiQucP8cNxHgRpzANMHRAdV3IXMjeJo
+         ajdW8GBXqVcfAR6hBCJX6tXZhpXY/5iR8AhwigO21yUFXZ7T5h5/A+xAcKSij3Aiq9Rb
+         z1yMohdtS9fWD48E1eM8npwVqPUp2kdhuFdE/3NyObZJE1cw0jkllWWk48C6fzSuNNsw
+         PL854D0mwCdGoG+tyVpByi9XwtmB80n/wVWa/7hhz+GwwLRvbiNizll3zeEHKvcTsLzm
+         Y2Jjhe21y4hLJ9UafBHNgoxXGDZmsWf7wCKXW7goK5VxmLpJDDWk2+Cc5srGztVk+AB3
+         JYTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741102131; x=1741706931;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1GJGl+C+XNyqfDThAEBolXrcWZxVz5MRHfSv1hTEwQU=;
+        b=tnUfdmbcHs+zF69EQmJCD9aNwvYP26Fvm17hPSE39xZzqN9ZQ9uNgTP413eGmBql9C
+         pLboYzQsT9cwXEWeWsQP48u0E3PEIvtpeVfdYbELGmmInPewevtUNiqSRkIdZ65HUOnt
+         It370mS8tYqaP+hIcHl74x2rqPhKqBVSX/iKg3hkqi6OWToGw1OQ9rEuApXol0cVzteP
+         sq4EWTrv9bBIsQ0LB2oMjLWtykapIPp1D+pOGfCmhOL+XOmeNTgG3+Vq8oslqEhkyvno
+         knz4K1Rok7KRdruf3OMDKf7vsiM8X8eEdIyC2qM8NCNSInbHyECrTxKnW9TedSWzufPj
+         6u+w==
+X-Forwarded-Encrypted: i=1; AJvYcCU8Gx54TiOYcbvH4b68nIKLQr8VuFXQPVvMLPixQPLKvs+Rn/RhqAn4MozxHpV/lSh9R3nk93R2mzTmRoK2@vger.kernel.org, AJvYcCW4BDM3M7jHSxNJwsahSe2wLKz5/LaZvCzyLaggQkgPO2eQOk+lD0O6QHQdw+GYzGfNrq8onJRhfaL8@vger.kernel.org, AJvYcCXmXb6WN3IriZGwWZ+DGxMbkzJM5NP+zB0VCzCHvAYxXNMW1A7jtgwVwcAgU7Smo5J9sKXD4xhirjhS@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHLYNn0FQ+sr5m/B77Zyr/Etd0mUhVTIx/yOcBCFdzv0PrYbos
+	fLS60vk+pQ/T6CWYsFqpd3BovcRfJ4Q5y2tcXUrSqWAndNyoBOAJ
+X-Gm-Gg: ASbGncuCJdOw30BVeU7VrkP0LQ0oReJCqYrm92uPbwYEkTHLyqQVqLdQfdnBC74EFbX
+	bss4VZYl3w9SNjHG2SZlKg9hRekMUHSBN8Ss+VizKhRDVRscUS3HQD3TepE8qBzQEhauCJq2fzh
+	1hCqXZJVbai4QtHGDnDJ6XezmNnFv3Mf68jT7oPLUUL+LSN1JHwnese7i7xcLGMBTmV2eHl849b
+	M/i+COpV5IB5sQLuC6Li33uKawB8nERinhZGXsBCEl4sVjfCQdx26mU6TTPk4MTTB3lpTNXGV49
+	mHvAVnuuehqiMl7/rff1Wdv2sTzaMva74ahNvb5ZB2CaZ8zys7vI2ItLlINZncrUwwRA10HCzuw
+	fiNnFi+E5Md40DQxHHyk7
+X-Google-Smtp-Source: AGHT+IFPb9waA98CjEsodSk/NmmLQ1ZnBzxU9eF7fwwfV3+Lk/QdrRxr//FWTFj6LpiihIZeVHwMXg==
+X-Received: by 2002:a05:600c:4917:b0:43b:c824:97fa with SMTP id 5b1f17b1804b1-43bcb04f0e3mr27784975e9.14.1741102130656;
+        Tue, 04 Mar 2025 07:28:50 -0800 (PST)
+Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba5710ebsm238381775e9.26.2025.03.04.07.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Mar 2025 07:28:50 -0800 (PST)
+From: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+ Andre Przywara <andre.przywara@arm.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 03/15] clk: sunxi-ng: Add support for update bit
+Date: Tue, 04 Mar 2025 16:28:48 +0100
+Message-ID: <3616088.iIbC2pHGDl@jernej-laptop>
+In-Reply-To: <20250304012805.28594-4-andre.przywara@arm.com>
+References:
+ <20250304012805.28594-1-andre.przywara@arm.com>
+ <20250304012805.28594-4-andre.przywara@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/21] dt-bindings: clock: thead: Add GPU clkgen reset
- property
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
- wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
- matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
- mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
- ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
- m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
- linux-pm@vger.kernel.org
-References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
- <CGME20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639@eucas1p2.samsung.com>
- <20250219140239.1378758-10-m.wilczynski@samsung.com>
- <20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
- <7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
- <df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
- <4deba4d6-b82d-4e57-bd27-f4e1523b38ea@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <4deba4d6-b82d-4e57-bd27-f4e1523b38ea@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6g9951jJzG1Z9
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741708182.17307@Ef6/c/LdRsQsztdBghGQPQ
-X-ITU-MailScanner-SpamCheck: not spam
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On 03/03/2025 10:55, Michal Wilczynski wrote:
-> 
-> 
-> On 3/3/25 09:52, Krzysztof Kozlowski wrote:
->> On 03/03/2025 09:42, Michal Wilczynski wrote:
->>>>> +allOf:
->>>>> +  - if:
->>>>> +      properties:
->>>>> +        compatible:
->>>>> +          contains:
->>>>> +            const: thead,th1520-clk-vo
->>>>> +    then:
->>>>> +      required:
->>>>> +        - resets
->>>>
->>>> else:
->>>> ? What's there? Also reset or no?
->>>
->>> If the else: case the reset is not required, as it's only required in
->>> the th1520clk-vo, so there is no need for else:.
->> That's not the question. I know it is not required, I can read code.
->> What is in the hardware?
-> 
-> I noticed the register SW_GMAC1_GRST_N in section 5.4.2.2.66 of the
-> manual (GMAC1_SWRST [2]), which indicates a GMAC1 CLKGEN soft reset.
-> Although this could theoretically reset part of the AP clock, it is not
-> actually used by the AP clock driver or needed for initialization.
+Dne torek, 4. marec 2025 ob 02:27:53 Srednjeevropski standardni =C4=8Das je=
+ Andre Przywara napisal(a):
+> Some clocks in the Allwinner A523 SoC contain an "update bit" (bit 27),
+> which must be set to apply any register changes, namely the mux
+> selector, the divider and the gate bit.
+>=20
+> Add a new CCU feature bit to mark those clocks, and set bit 27 whenever
+> we are applying any changes.
+>=20
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  drivers/clk/sunxi-ng/ccu_common.h | 4 ++++
+>  drivers/clk/sunxi-ng/ccu_div.c    | 2 ++
+>  drivers/clk/sunxi-ng/ccu_gate.c   | 4 ++++
+>  drivers/clk/sunxi-ng/ccu_mux.c    | 2 ++
+>  4 files changed, 12 insertions(+)
+>=20
+> diff --git a/drivers/clk/sunxi-ng/ccu_common.h b/drivers/clk/sunxi-ng/ccu=
+_common.h
+> index 50fd268329671..d41d33bdff470 100644
+> --- a/drivers/clk/sunxi-ng/ccu_common.h
+> +++ b/drivers/clk/sunxi-ng/ccu_common.h
+> @@ -20,10 +20,14 @@
+>  #define CCU_FEATURE_KEY_FIELD		BIT(8)
+>  #define CCU_FEATURE_CLOSEST_RATE	BIT(9)
+>  #define CCU_FEATURE_DUAL_DIV		BIT(10)
+> +#define CCU_FEATURE_UPDATE_BIT27	BIT(11)
 
-Thanks, this answers here.
+There is no reason to have "BIT27" in the name of the macro. This is similar
+to KEY_FIELD, which is generic name and doesn't specify either key or posit=
+ion
+of this key field. Maybe just CCU_FEATURE_UPDATE_BIT or something equaly
+generic.
+
+With that fixed:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
-Krzysztof
+Jernej
+
+> =20
+>  /* MMC timing mode switch bit */
+>  #define CCU_MMC_NEW_TIMING_MODE		BIT(30)
+> =20
+> +/* Some clocks need this bit to actually apply register changes */
+> +#define CCU_SUNXI_UPDATE_BIT		BIT(27)
+> +
+>  struct device_node;
+> =20
+>  struct ccu_common {
+> diff --git a/drivers/clk/sunxi-ng/ccu_div.c b/drivers/clk/sunxi-ng/ccu_di=
+v.c
+> index 7f4691f09e01f..2d8b98fe4b13a 100644
+> --- a/drivers/clk/sunxi-ng/ccu_div.c
+> +++ b/drivers/clk/sunxi-ng/ccu_div.c
+> @@ -106,6 +106,8 @@ static int ccu_div_set_rate(struct clk_hw *hw, unsign=
+ed long rate,
+> =20
+>  	reg =3D readl(cd->common.base + cd->common.reg);
+>  	reg &=3D ~GENMASK(cd->div.width + cd->div.shift - 1, cd->div.shift);
+> +	if (cd->common.features & CCU_FEATURE_UPDATE_BIT27)
+> +		reg |=3D CCU_SUNXI_UPDATE_BIT;
+> =20
+>  	writel(reg | (val << cd->div.shift),
+>  	       cd->common.base + cd->common.reg);
+> diff --git a/drivers/clk/sunxi-ng/ccu_gate.c b/drivers/clk/sunxi-ng/ccu_g=
+ate.c
+> index ac52fd6bff677..0490f95781361 100644
+> --- a/drivers/clk/sunxi-ng/ccu_gate.c
+> +++ b/drivers/clk/sunxi-ng/ccu_gate.c
+> @@ -20,6 +20,8 @@ void ccu_gate_helper_disable(struct ccu_common *common,=
+ u32 gate)
+>  	spin_lock_irqsave(common->lock, flags);
+> =20
+>  	reg =3D readl(common->base + common->reg);
+> +	if (common->features & CCU_FEATURE_UPDATE_BIT27)
+> +		reg |=3D CCU_SUNXI_UPDATE_BIT;
+>  	writel(reg & ~gate, common->base + common->reg);
+> =20
+>  	spin_unlock_irqrestore(common->lock, flags);
+> @@ -44,6 +46,8 @@ int ccu_gate_helper_enable(struct ccu_common *common, u=
+32 gate)
+>  	spin_lock_irqsave(common->lock, flags);
+> =20
+>  	reg =3D readl(common->base + common->reg);
+> +	if (common->features & CCU_FEATURE_UPDATE_BIT27)
+> +		reg |=3D CCU_SUNXI_UPDATE_BIT;
+>  	writel(reg | gate, common->base + common->reg);
+> =20
+>  	spin_unlock_irqrestore(common->lock, flags);
+> diff --git a/drivers/clk/sunxi-ng/ccu_mux.c b/drivers/clk/sunxi-ng/ccu_mu=
+x.c
+> index d7ffbdeee9e04..82ee21e0d3a68 100644
+> --- a/drivers/clk/sunxi-ng/ccu_mux.c
+> +++ b/drivers/clk/sunxi-ng/ccu_mux.c
+> @@ -197,6 +197,8 @@ int ccu_mux_helper_set_parent(struct ccu_common *comm=
+on,
+>  	/* The key field always reads as zero. */
+>  	if (common->features & CCU_FEATURE_KEY_FIELD)
+>  		reg |=3D CCU_MUX_KEY_VALUE;
+> +	if (common->features & CCU_FEATURE_UPDATE_BIT27)
+> +		reg |=3D CCU_SUNXI_UPDATE_BIT;
+> =20
+>  	reg &=3D ~GENMASK(cm->width + cm->shift - 1, cm->shift);
+>  	writel(reg | (index << cm->shift), common->base + common->reg);
+>=20
+
+
+
 
 
