@@ -1,229 +1,280 @@
-Return-Path: <linux-clk+bounces-18933-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18922-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD25FA4EB8A
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 19:28:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B8F9A4E7BD
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:09:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3DBF16F541
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:23:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E3688A107B
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 16:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557C52505CE;
-	Tue,  4 Mar 2025 18:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D2427CB2C;
+	Tue,  4 Mar 2025 16:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pN4BIftL"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Z7xNwILY"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013043.outbound.protection.outlook.com [52.101.67.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7822E3371
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 18:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629B527CB0C;
+	Tue,  4 Mar 2025 16:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741111992; cv=pass; b=kZrZajma4BS6yOBWxQQIHfntdyGSi39LE5Z+QH/DtWhHiD7qnDlsEN8XQLtklJTNBFQ4D9B2OlDe0r2w+uyPEoRnthbuYOyF7qtSRWu9mTEgUdvshfWXkzfrLcWyXHmtQ0W44b+fKpwtNRXYHIDQwPE78fXtEa4bWzr1zsQgY4A=
+	t=1741104616; cv=fail; b=NSbJYaJ+S4pkBKRK8JU/wZa0WJShFyWriaAmcUQ82JagiKpJu/vuVJjlmnO6GatfgtMvV/J2aXMJAahntsvruGhTSq1sp3yBLmIK33fF9k2u3NDtw0r5XAT9Z+Umm5KjjOiEGnCKZpsq9HTE4hkQtJMzG87d3k2dUxZERDjWGNY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741111992; c=relaxed/simple;
-	bh=r0ACFUP8gmClzRtzoxXd/Ng22ZxFYgefb4nyAq8SEaU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=B2yr7/br0hEnvYYdpowuWYVehCaCYKOUWUCQh1NM1lkUkwDDArd8on0p7vxRxAMCXe7CPbEByO5pzznBozhMLDUxT5pZXbmdKYnEk10/krtPzPzw7+jBDM8bV2xGIkjjuLYFutLgq33jhC5vvoc6OcL+40CdY91ZJNxa/khJOL4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pN4BIftL; arc=none smtp.client-ip=209.85.128.42; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; arc=pass smtp.client-ip=160.75.25.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id D8E554089261
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 21:13:08 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key, unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256 header.s=google header.b=pN4BIftL
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6hRf0CGDzG49R
-	for <linux-clk@vger.kernel.org>; Tue,  4 Mar 2025 19:47:10 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 677AD4272D; Tue,  4 Mar 2025 19:47:08 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pN4BIftL
-X-Envelope-From: <linux-kernel+bounces-541770-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pN4BIftL
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id F1BB3421D1
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:11:45 +0300 (+03)
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id A2EE52DCE0
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:11:45 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D957316B7FD
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:11:44 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615AE211A13;
-	Mon,  3 Mar 2025 13:11:31 +0000 (UTC)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A41210F6A
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 13:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741007488; cv=none; b=PnY0LUl3C9nZNvok7wlauuQqQju1ShZbSs7Vm7MuSQ4cI+i9Bg8AjQ6aEOuExYHv574CRCrFPAQaCqdBojR4nQ5E7wD04gxn7uaxZs6ZDtl49XcWK/GS765UxryCfRJkJNFapFD2n25/LVlgqiC19kqaV2xKyOXqbsT0B54+dJM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741007488; c=relaxed/simple;
-	bh=r0ACFUP8gmClzRtzoxXd/Ng22ZxFYgefb4nyAq8SEaU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Z641CvWww4bhJW8lZfaZHAWqmtkSseSFfFRulOFwHHOZpbHAeZgvCYy1PnLoMoBKtK194gyBmsnOi0qFvV2Jmh3ldWQWZerzPkxR4urCzcVMteUPHsU1NklI3Ax5AZfsN4eu7QDEaA3vSCT6yHr2X6KL2QckKLtb9x4tiXqrvmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pN4BIftL; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43995b907cfso27797545e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 05:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741007485; x=1741612285; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kBkIEoZc6BXsEi/Xl/zpbl5kQzqAT2D5l+fVFL9X634=;
-        b=pN4BIftLkHFRfR5AiJpuj19pHI5ut4jL33Ps2somyZnfde4kwsmxWa5EWjNccUAGsx
-         Aa/vUiFbOV8VpatiTYUh6iIvB36u+gDT8D7B4CalZ9xcEcr4iBDut5N1lqsCfNCDB8Xi
-         elv1Lg3eEJ9NUeVlmxFAwC7Tb1Tu9nk4GJmQb7t56JLL3/Y8EWqDzABdZ0OCDqMZn67i
-         +BnauNVri/z/ZjPDFShIjaZv+2JNzM2XfKWG3u34waH04tR/tYKETBogDDYqOrLUr3e6
-         xhp8k+jDkInJZbIgSm8PruesGfGGWBLDEwVJZE8ZKtaZJZxWOe459VwyTFlNbH/LdBEv
-         UVxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741007485; x=1741612285;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kBkIEoZc6BXsEi/Xl/zpbl5kQzqAT2D5l+fVFL9X634=;
-        b=U1jVXd9QlT9x1gidMMalUVVJhBIXdSXPmIIpWpl8kxVVz7kZJiqpXEExVl5UXiWpg5
-         3aexsi51BmUIYxaAG13R3Lu8wQOaYyuFQwD5R2UcOHm6wFqKEG52qvW0zsUypuQBlc93
-         t80zK0vNVqOAuLsRIWVPSr+E/Y2uHAmvC81OorO9s0ifRGWcuHVR9nZlkO1ABIT26Y9S
-         ogx/mpEAtDcZbPEaVZcjWczoeG96Mouou/b/FPLkNIThKTSiybLdP7GGNlubkaJLesxx
-         sX7+h4fG+el5rCRBpV5Jo4VcdJewlOIJHUFvG6Y3Lr2+PyIJOicv1TSxUbvBY4xaDQgB
-         59iA==
-X-Forwarded-Encrypted: i=1; AJvYcCVOORa8azeocJHn1p0JW4BasW3/2LJHLZZ4M/G6ChqiIoka/VZAk9R2Ol6p9VRCsuJYUmGFNOd4pbUMNEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiAAPZXTof8fdCtuWlqLFDZd6mqhD+A5uTlvcM6O3jhuoHsCKc
-	oO/hvZ/pXxcgPg121feM7VSBVP8czpCoLc5ukr2L4GwJROrSQNLDNtv6ZkiYdrA=
-X-Gm-Gg: ASbGncswNe+ynMmtU1IV6/mUxArwHC05ys/aYzIbnj/l5m2ieVlKQSxmFxS9zAoMS24
-	QuBmB9aq4sWZwOmNYoBb2y4OPwxHsVa2XRV4EFFi4Pb7l0iQBGdfjsusceVA0gQW9BxgcA9k83U
-	Cy262WvxcZCt2U1yVgE+v/l2ZLqEZT0aKFwTMzwAGwUZzM7zKcoPANVKpUTV+QpUGHT5Jfi/Hj8
-	++eLCZMVozVos4T+q92d5FLrFX0sxyfhVU/xtyNxRuuqhqau8vInR0kc/vdZfGd8EzHrSTxEDma
-	rnewmwtKOes/yXw30decpJ1tmL8RtXrB2dt+8mtrrPAowWm6FEPRU0VGl+c9RDVtPoavTTqC8Cs
-	=
-X-Google-Smtp-Source: AGHT+IFogfy4vTLX2D880m2Emlv1b0QxLptjPdeT4ir4OaH0lDrtdJ8Ijk5zG3y61SkNW3iZImJ9Gw==
-X-Received: by 2002:a5d:5f96:0:b0:38d:e3e2:27e5 with SMTP id ffacd0b85a97d-390ec7ca98fmr10768345f8f.5.1741007484699;
-        Mon, 03 Mar 2025 05:11:24 -0800 (PST)
-Received: from gpeter-l.roam.corp.google.com ([209.198.129.23])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43b73703caesm158307785e9.12.2025.03.03.05.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Mar 2025 05:11:24 -0800 (PST)
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Mon, 03 Mar 2025 13:11:21 +0000
-Subject: [PATCH] clk: samsung: gs101: fix synchronous external abort in
- samsung_clk_save()
-Precedence: bulk
+	s=arc-20240116; t=1741104616; c=relaxed/simple;
+	bh=591ax5HgNUjMBPnjwqYbnvwHiwAkFKlf1efFl3ALsqA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=lnqrhSBs8J9N9TPC9SLBKqAvcRXlkSnMCptoqW8f9Yf9g8YrvHE6UKFsFKeFsNaoGlsi6mCHRrAVzZRXu6mikLCovU3UzZRSrjyevDgo8ufi0GSwXR6j3uI1IpPX9t+FB0SA4Ny/2FnqeR8bKAhaWvRN7E3Jmax5/8Gsksc7AOE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Z7xNwILY; arc=fail smtp.client-ip=52.101.67.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oYhopeAPOGRDii60jrrPn6Q741p6oDinqGv9pc7QTngQfYTFoITDLEaudr+PYJo31GQcKOwrtxsp/GC6CMzRl1JJmZMPByApzLwX4eeSj8HfAVPa45jnAEpylkkhVpG4RATLv4s2t4k1ipeoDDS+es7S22M9q7/TVTbiZ5cNTT2SY9QmzX3gU10QcdpcawBU2vadujHvJQ/G1ZjI0jAQKXOY2G7V+zrgSwKt2alxlyHyy41qZa7/pop755gjW/dPG/Qode+xHiDG+dy3yzB+ITJSkrfIS9VBt0LoQ0+2jMjmraGS93Yx3nA8AxFEGQoMMN+HWWEVJzOHuTNCyAyEOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MOTE2cHaeVEdvkl4fnHP4GWrQZqQ0FAgH5/D5Hck9Xs=;
+ b=CfKOeRiUcOYRZIvgbZjlb4723anMK+k4DUYT4qYhbR0YL3v6KcUGupLRHZSUrLNTlX2XN2ye/LwVmYFWzspe/rfKHKT7Kq6ltRFqYTUMMLUGTF5wLHOgIz6wl9gMbXsvqx6Dms+vnmwrfTaq3GaKxPB7aM6CqmAKFkL5HCqC0koQat93T1SVVVziD6J7uXqnd1DNKa3utfrqCfdWvPQTQWQGTytzm7fRBT6m5r+3KjwgedU79zrokO2XZqx9lJ637iC6jJ1i0ejCkGBN0pFegdjsB07mmy6B8QZiIAlap2p4BF0PCo/1pRF1e4Wg/duZndA26YSDGEtf5XpstAqElg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MOTE2cHaeVEdvkl4fnHP4GWrQZqQ0FAgH5/D5Hck9Xs=;
+ b=Z7xNwILYhY2ZYtlCcxAyMkZaLaPreKnnVknEaJSdBfIXmfTR9fGe+RohPmg51teZpOO4TfGxJ3MtomH3KLx5fPxtzZJOXLsynxxci8Y/bNHbIfRzgNRKThlugBa3GV0oAMdU5NNCn9CmfzB8oweKJsQeoMMIk6mxBonV2c3pGMZ9woXCa3igtlB64236z2TVGGtksTcuG8tASl0WgDfyCE59YEnZtdTEKXxgPNcN9NuqLXV4wnzYWjUo2EL8hWlKKEL0ypOnrc8fyXtytnaI3HOjX9ufu+MwgkmhTr+/XfMZObkOQHe2CT3JuWwxvMheaZDtETHDVpOeTzUg51itzQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
+ by DU0PR04MB9369.eurprd04.prod.outlook.com (2603:10a6:10:358::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.16; Tue, 4 Mar
+ 2025 16:10:11 +0000
+Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
+ ([fe80::e81:b393:ebc5:bc3d]) by DB9PR04MB9626.eurprd04.prod.outlook.com
+ ([fe80::e81:b393:ebc5:bc3d%4]) with mapi id 15.20.8489.025; Tue, 4 Mar 2025
+ 16:10:11 +0000
+Date: Tue, 4 Mar 2025 11:10:01 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 4/6] arm64: dts: imx93: Add LCDIF & LDB nodes
+Message-ID: <Z8cl2bwpYFiS2lnr@lizhi-Precision-Tower-5810>
+References: <20250304154929.1785200-1-alexander.stein@ew.tq-group.com>
+ <20250304154929.1785200-5-alexander.stein@ew.tq-group.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304154929.1785200-5-alexander.stein@ew.tq-group.com>
+X-ClientProxiedBy: SJ0PR13CA0049.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::24) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250303-clk-suspend-fix-v1-1-c2edaf66260f@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAHiqxWcC/x2MSQqAMAwAvyI5G+iCWvyKeJA2alCqNCiC9O8Wj
- zMw84JQYhLoqxcS3Sx8xAK6rsCvU1wIORQGo0yjrLLo9w3lkpNiwJkfdNo3obXOdGShVGeiov/
- jMOb8AUPfVtthAAAA
-To: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, willmcvicker@google.com, kernel-team@android.com, 
- Peter Griffin <peter.griffin@linaro.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1935;
- i=peter.griffin@linaro.org; h=from:subject:message-id;
- bh=r0ACFUP8gmClzRtzoxXd/Ng22ZxFYgefb4nyAq8SEaU=;
- b=owEBbQKS/ZANAwAKAc7ouNYCNHK6AcsmYgBnxap7U2WN1YaRHw7W9uRbiu+2fenuf1A5eZ5Xs
- bFL73mvclGJAjMEAAEKAB0WIQQO/I5vVXh1DVa1SfzO6LjWAjRyugUCZ8WqewAKCRDO6LjWAjRy
- urfgD/9/FuIh/ujTyKiv8Fzda0+kpo71fe+GrwZib/NQ3obhlvSc2WG2XGPhRQqKlMOt+DkEN5R
- pkLY3fshHXDFGhS39zEkhSA7qIaltThWozUvf38use4WQqs4eriaJxl2vWe4+s2/uztjluGDzsO
- 3h4ya7IYa8MwskiloUzzctUj72lrg1OatkYUBxed0T8dky1XnyAMxKJhvDO0b7pleAuVzbEaY6J
- HOpd+dJS0SoZXlir3FNdpL1Tj9AO40Bi+GtLOYFu2qoBsIpAvgfZgsWkKgudL4fatx1TyChxbIU
- WciyJusPm8nN9ZhblpHBPvx1TZBYKTqgSJH4l49LreqaSvPkll4IiVBtYdiTii3WKT/VYKpEQLm
- eS1C0DH11KnPbQGXvk9hqQk/Hvnrwy/8H0By6KghKQZ1/KmpHEIEK3SzD9iYzK6ipbaMi53ihFx
- MQ5YkGLXWljT8CAnz8WiWR+kP5Rc0ePEgX1/AH9j28xALgYmvS1oLEefx2divEis2r1ubctopys
- xXiMu4ffHKQX/TM6zqkIFpeoXMvS+S/DjCpYVPeixRCu43QIBUO2/cSWIH8ArxA8OLg3vIZyTEe
- n5W+B9NFHjIOfmXhKKZnbNo61bf2pAIkXP7TZPPB6X2Moqeo50SGuhjSusHrW7SMp9zX4j8mjvL
- eagVef8tl5/9+hg==
-X-Developer-Key: i=peter.griffin@linaro.org; a=openpgp;
- fpr=0EFC8E6F5578750D56B549FCCEE8B8D6023472BA
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6hRf0CGDzG49R
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741716700.32211@zaOKwYK27w0mdPdpDQZS+g
-X-ITU-MailScanner-SpamCheck: not spam
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|DU0PR04MB9369:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2913b20d-d543-4898-ff06-08dd5b370a04
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|52116014|7053199007|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ZbfvADZY+875wP5SqFFNqtx8wwxNfllrH3dKpzBI0m9rC6M8bFsm8mv4aZk3?=
+ =?us-ascii?Q?vgFsFebO0HZPgHXddbOlbD99XIykkVaqMA+0qy6yAUY3C8P5LqqzkZrUZu8m?=
+ =?us-ascii?Q?m8NGnulX6JU8f0GzoRMZ+1cUzeaEoaRe8mV8d5yY/jAhb3FCicAjSwNAUgWi?=
+ =?us-ascii?Q?3aatapM7CJBD63GDVF7iXNOVzvhIpQ3lgXQU5HewwmxsKIAPb+coHVBKw352?=
+ =?us-ascii?Q?ZSpMIKVBqR+PqqTSJn5HYMkJvj4/Nqgro39UsfyzzyPd2gcNkJH6GNjfeI4/?=
+ =?us-ascii?Q?1V1NMyqjJnZfesTIRpcS/qfCL55ygHNrni730HIFESJAQ5yxGcDAkCQqdFSn?=
+ =?us-ascii?Q?RcRFCLiKdEDYzfUXH/HmP4QDkZuf7wQYFD3P/ceB26ThX0rhAXewVUMUj+X8?=
+ =?us-ascii?Q?gzQ3ZZ7AwvxB+hcCbH/8yQwYQTGv35tjWTv1OPhrdFua/r3c6ZjXYW7vEiQL?=
+ =?us-ascii?Q?rk759NswEMGDTpUchDYSiIxS6O1TfxDepOasJ0ZlD9sFvB0sumZRrSNkl8K4?=
+ =?us-ascii?Q?8TxMN+QsIb7GhhOzWTr+eqItPXjcRSlMRx0XSp5agTcICeAhKPuYlavaea/K?=
+ =?us-ascii?Q?4ZTGgE6/q5P7H66fsZIpBsPlu8iQAYTSH9NrGKEueIMSZIPHzsGricjNz2m1?=
+ =?us-ascii?Q?BrKiSYP8efC3W1nwg3GgSW2NHqV+e0I39FuSkSxeJLzazezx1/2KwiUqbhPx?=
+ =?us-ascii?Q?92LWwF7zh0eHqoEr3jaEkQPq3YXNMMEjddwVhfPN0yNgbnSEAdbRIlb0bmLE?=
+ =?us-ascii?Q?1ZzBBqhfEeXn9M0dUGt0CwIets+1ggYhQEKyHarr3qn32Ewa3TnkFYuTAfX6?=
+ =?us-ascii?Q?10Uj+6DWvwkAPYtLzdTDLyFXn+INQttslOb1ercKN5iirukJFD19+oF/j3GH?=
+ =?us-ascii?Q?hV4ZIv8MDDE4b1LdusZ2cLTcNFbW5i0330GDSu2033Z9jstkfOkUTFhAOl8y?=
+ =?us-ascii?Q?6Bhj03lYuN77Jp78LrXYBcgyy49UScK7Hix+5N16cje8o6eRkN3WLRy+01nB?=
+ =?us-ascii?Q?p1zPtn74tM+85QmaSF0U3coR28nByAgowi+Y09hlLaNxCsRpi5TSEt9ChH8I?=
+ =?us-ascii?Q?/un1GLgX8i9qqc0uHjOtseaTnmhbHSmikw1gHszWUmi0t9FhRRZC484d9EP2?=
+ =?us-ascii?Q?h+geC5OyKmh6A1Ak7qPkXH1nmSzki4aJMl1M4iFThtH9mK2k2kN1JM/+HvHL?=
+ =?us-ascii?Q?BFbwtvIrbDYN9IK8WyasSHtZGfk8fmlZhbCnzMZDBGXb0CdyuE1YWjDswCP7?=
+ =?us-ascii?Q?Cid9dDJddt4X5qUu3WF9alu07n9Ab8YU+wsurO1x+in4yf7GsP16Udxuucp9?=
+ =?us-ascii?Q?ocZHqBa0fRKdRBLPo0e+MRMQOz+mSOgrPUqmXjKTEGiaSfPSUMVKlrLOpXHy?=
+ =?us-ascii?Q?LDIotxhTRkoCHLHZTOhkhwAIVenp7epSvwePKkudccQW8sVLOJKiPclZwTpU?=
+ =?us-ascii?Q?8ObA9AkCohIzTv0hRKU1tVT/Rn1HgiYu?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(52116014)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?QCTGGoyQ+PlfmboB6jScsjT/XehKSzUyvcD8VfOn7vMTEHda+g2Q6iGZO/0F?=
+ =?us-ascii?Q?UelNv+5RjvINGZtRwbHqdtViPgecHs92fTNk6+t7G3Bismh36Jxkmu6iszOT?=
+ =?us-ascii?Q?673HHk/Yi4OwatmftukEMpkurIKZwp6VfjXcXQNmVlJGFefYXPN1T1AONtIF?=
+ =?us-ascii?Q?FGjgEgy5lPuP4+KVmAFLIUY4CP/uAz2ZGBPqIn5vU44/qYaCFEwRrzIrjCBL?=
+ =?us-ascii?Q?w12e9JPEZ97LVVQiTdLjshkmWh6jWdpnkZ5W5PjSiBP3BVoVWmoz4ZJ9THuF?=
+ =?us-ascii?Q?YFANa1TQJ7jISVP8HV45OmrTcWE3b7Jmw+6lDYwG4O0ycM3QYA0zVN4s3/Fm?=
+ =?us-ascii?Q?t/9a7EUgzR32+aEV1TxnQBQ1BCgi5aUwCGX/p3dW7K0dvSZVU9qHmHYMYXmA?=
+ =?us-ascii?Q?W6CycMQa0uR6GNCnFhr/qXMgyImO6x1MoNcjDNnwox8ozsLDxy2gY4CO+GI+?=
+ =?us-ascii?Q?BsfctUbNKt73irTZLF7RVButKx83uhh9SZOyLaxTR6jTygrEtmQIk/bc4/j3?=
+ =?us-ascii?Q?+VlFmk2WIfzDAIA/GWX6YiwjZdeA/Ypn4nOZSB6FpdJNxU7wkgyfAEwQGVbQ?=
+ =?us-ascii?Q?w6xeixzALDpo1kJWIrG1FA3BrNxHB1YZfDtSy3H0Tks0+N+42CMgOArFSqKW?=
+ =?us-ascii?Q?pj7D4HZIQK69RuL/9j9H1t5N7Tyk+9lVpczoZt1eo3djrT13Jx3lTUl4Snu3?=
+ =?us-ascii?Q?N5ESY/8sQTonil2U5xJUAKRyqsB6U+hw+fimuK3T6tK/jc30f80hjEqi9oRg?=
+ =?us-ascii?Q?rAuZNJN4IERM3eUAiO23iYIe4oe7Jh2AAp/4iJudjBAZoKVh89V0l0M0t19f?=
+ =?us-ascii?Q?C86FRiLYpVx/nYs1iXakHyLBVVYMBDWBRFFW8q7PPJfv5bjW3FlfeSSZ433h?=
+ =?us-ascii?Q?ZSXJsHT8I+7vI498Ka10obUUKjTTXfA/8spI7Cek+U/Rnc740sGLsmnyF8GC?=
+ =?us-ascii?Q?opxGbPSlgvhKJ61UUpHLY6hTzFXyM/XlaDpqhF7RE8h8tQFRO6DD1WBJTH1e?=
+ =?us-ascii?Q?9ttFq9g7XgmXCqMzHA9G/lKgxmF2TxofOYsRgmwKXKQBdVwDPe6pGqmJCVHf?=
+ =?us-ascii?Q?m9dTEBqW6FOpQUvboxWFSItjRE9HKy/kj7P/p+EP+Tryg6j4exCrHNevOqBi?=
+ =?us-ascii?Q?fnKLgOQF9VXDu97mO1ravMg64bsQMj9ytuim5YAeKPl/NanLWh9i1PDQJNJD?=
+ =?us-ascii?Q?MLdKjDxWcXCXyvvGqtQsd2irXVtXO3YBmEYKHkkMaCo4705IWfTRG6YGnMtQ?=
+ =?us-ascii?Q?WQ2EabkfQbBPN1sk026G8HecAr38FpEQpaVEkSZ26Xpx10q+YInlg8b4E9Tj?=
+ =?us-ascii?Q?HW0rc3HadlQ8IqKGH9yuHHwbMZsdqpijrg+8LJhhCrb89uyHH/J2vyU0kmXU?=
+ =?us-ascii?Q?4a4rsZMwy2jTZ9YZX+K2sf8VBDubp0wnQmXg0gGnT0Wmz/VAgpZESXlh4EhM?=
+ =?us-ascii?Q?X2qlW8M/UcFtIohYyPemwqVuWIklEWDc5iEoEz46i74JCaonegGL1zlnqBFg?=
+ =?us-ascii?Q?loWg+65D59uqJULXKgZu9wuSSPqGwFU8N0jSU4rIMbAUoYON2mLe8qwlfd4X?=
+ =?us-ascii?Q?0iLK/4bxqRuCYdiqXMgfuaLUEozZUALq5cOYK3Zr?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2913b20d-d543-4898-ff06-08dd5b370a04
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2025 16:10:11.1962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gBxgVtjXCR8ozgz6l4sOrVAh6AWlL0kVuUpYXz1CivcyWkSbldzbYCEy35qKdxa1BOKvaJN5qv4SuTU++zzH5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9369
 
-EARLY_WAKEUP_SW_TRIG_*_SET and EARLY_WAKEUP_SW_TRIG_*_CLEAR
-registers are only writeable. Attempting to read these registers
-during samsung_clk_save() causes a synchronous external abort.
+On Tue, Mar 04, 2025 at 04:49:23PM +0100, Alexander Stein wrote:
+> LCDIF port 1 is directly attached to the LVDS Display Bridge (LDB).
+> Both need the same clock source (VIDEO_PLL1).
+>
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx93.dtsi | 77 ++++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> index 56766fdb0b1e5..69a639a8c833f 100644
+> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> @@ -1273,6 +1273,9 @@ s4muap: mailbox@47520000 {
+>  		media_blk_ctrl: system-controller@4ac10000 {
+>  			compatible = "fsl,imx93-media-blk-ctrl", "syscon";
+>  			reg = <0x4ac10000 0x10000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0x0 0x4ac10000 0x10000>;
 
-Remove these 8 registers from cmu_top_clk_regs[] array so that
-system suspend gets further.
+I remember ranges should be after reg.
 
-Note: the code path can be exercised using the following command:
-echo mem > /sys/power/state
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-Fixes: 2c597bb7d66a ("clk: samsung: clk-gs101: Add cmu_top, cmu_misc and cmu_apm support")
-Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-Cc: stable@vger.kernel.org
----
-Note: to hit this clock driver issue you also need the CPU hotplug
-series otherwise system fails earlier offlining CPUs
-Link: https://lore.kernel.org/linux-arm-kernel/20241213-contrib-pg-cpu-hotplug-suspend2ram-fixes-v1-v1-0-c72978f63713@linaro.org/T/
----
- drivers/clk/samsung/clk-gs101.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-gs101.c
-index 86b39edba122..08b867ae3ed9 100644
---- a/drivers/clk/samsung/clk-gs101.c
-+++ b/drivers/clk/samsung/clk-gs101.c
-@@ -382,17 +382,9 @@ static const unsigned long cmu_top_clk_regs[] __initconst = {
- 	EARLY_WAKEUP_DPU_DEST,
- 	EARLY_WAKEUP_CSIS_DEST,
- 	EARLY_WAKEUP_SW_TRIG_APM,
--	EARLY_WAKEUP_SW_TRIG_APM_SET,
--	EARLY_WAKEUP_SW_TRIG_APM_CLEAR,
- 	EARLY_WAKEUP_SW_TRIG_CLUSTER0,
--	EARLY_WAKEUP_SW_TRIG_CLUSTER0_SET,
--	EARLY_WAKEUP_SW_TRIG_CLUSTER0_CLEAR,
- 	EARLY_WAKEUP_SW_TRIG_DPU,
--	EARLY_WAKEUP_SW_TRIG_DPU_SET,
--	EARLY_WAKEUP_SW_TRIG_DPU_CLEAR,
- 	EARLY_WAKEUP_SW_TRIG_CSIS,
--	EARLY_WAKEUP_SW_TRIG_CSIS_SET,
--	EARLY_WAKEUP_SW_TRIG_CSIS_CLEAR,
- 	CLK_CON_MUX_MUX_CLKCMU_BO_BUS,
- 	CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS,
- 	CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS,
-
----
-base-commit: 480112512bd6e770fa1902d01173731d02377705
-change-id: 20250303-clk-suspend-fix-81c5d63827e3
-
-Best regards,
--- 
-Peter Griffin <peter.griffin@linaro.org>
-
-
+>  			power-domains = <&mediamix>;
+>  			clocks = <&clk IMX93_CLK_MEDIA_APB>,
+>  				 <&clk IMX93_CLK_MEDIA_AXI>,
+> @@ -1286,8 +1289,82 @@ media_blk_ctrl: system-controller@4ac10000 {
+>  				 <&clk IMX93_CLK_MIPI_DSI_GATE>;
+>  			clock-names = "apb", "axi", "nic", "disp", "cam",
+>  				      "pxp", "lcdif", "isi", "csi", "dsi";
+> +			assigned-clocks = <&clk IMX93_CLK_MEDIA_AXI>,
+> +					  <&clk IMX93_CLK_MEDIA_APB>,
+> +					  <&clk IMX93_CLK_VIDEO_PLL>,
+> +					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
+> +			assigned-clock-parents = <&clk IMX93_CLK_SYS_PLL_PFD0>,
+> +						 <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>,
+> +						 <&clk IMX93_CLK_24M>,
+> +						 <&clk IMX93_CLK_VIDEO_PLL>;
+> +			assigned-clock-rates = <333333333>, <133333333>, <0>, <200000000>;
+>  			#power-domain-cells = <1>;
+>  			status = "disabled";
+> +
+> +			lvds_bridge: bridge@20 {
+> +				compatible = "fsl,imx93-ldb";
+> +				reg = <0x20 0x4>, <0x24 0x4>;
+> +				reg-names = "ldb", "lvds";
+> +				clocks = <&clk IMX93_CLK_LVDS_GATE>;
+> +				clock-names = "ldb";
+> +				assigned-clocks = <&clk IMX93_CLK_MEDIA_LDB>;
+> +				assigned-clock-parents = <&clk IMX93_CLK_VIDEO_PLL>;
+> +				status = "disabled";
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +
+> +						ldb_from_lcdif: endpoint {
+> +							remote-endpoint = <&lcdif_to_ldb>;
+> +						};
+> +					};
+> +
+> +					port@1 {
+> +						reg = <1>;
+> +
+> +						ldb_lvds: endpoint {
+> +						};
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		lcdif: display-controller@4ae30000 {
+> +			compatible = "fsl,imx93-lcdif";
+> +			reg = <0x4ae30000 0x23c>;
+> +			interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&clk IMX93_CLK_MEDIA_DISP_PIX>,
+> +				 <&clk IMX93_CLK_LCDIF_GATE>,
+> +				 <&clk IMX93_CLK_MEDIA_AXI>;
+> +			clock-names = "pix", "axi", "disp_axi";
+> +			assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
+> +					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
+> +			assigned-clock-parents = <&clk IMX93_CLK_24M>,
+> +						 <&clk IMX93_CLK_VIDEO_PLL>;
+> +			power-domains = <&media_blk_ctrl IMX93_MEDIABLK_PD_LCDIF>;
+> +			status = "disabled";
+> +
+> +			port {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				lcdif_to_dsi: endpoint@0 {
+> +					reg = <0>;
+> +				};
+> +
+> +				lcdif_to_ldb: endpoint@1 {
+> +					reg = <1>;
+> +					remote-endpoint = <&ldb_from_lcdif>;
+> +				};
+> +
+> +				lcdif_to_dpi: endpoint@2 {
+> +					reg = <2>;
+> +				};
+> +			};
+>  		};
+>
+>  		usbotg1: usb@4c100000 {
+> --
+> 2.43.0
+>
 
