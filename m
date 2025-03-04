@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-18934-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18939-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A39AA4ECEC
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 20:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDBA4A4ED91
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 20:38:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6FBC8C7216
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 18:26:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FA033A681C
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 19:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF6F25D539;
-	Tue,  4 Mar 2025 18:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D2525F79B;
+	Tue,  4 Mar 2025 19:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="arLobDPT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BxmRyCbI"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E8E239579;
-	Tue,  4 Mar 2025 18:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDF52E3385;
+	Tue,  4 Mar 2025 19:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741112166; cv=none; b=Zql45AqJSaD5XnqTTBjog8/IiDOM7yFWYn47ppkzJHk2TNuJvhljep6yWvRu1iLwFdJpoj3lokisVKLDrt8wbabVb9eIq6qLI9GBk8yaLwd9xfuT9sJfJMB8kBZfs/upRx9kSiTm+2QGA6k74X/rcb+bxptlXsmNOyBEsvWOUuk=
+	t=1741116862; cv=none; b=E7VzizgJ384ti+ESD7Xahx9ay6DYwRp8+ziKC/kxsOJnCqpGzVw57mzkC5MI3NgZQOLPY7hdjbii2i7u5/gwzcXlrCSOKbnMaErz+1Y5CqoC8nQ9ijTEez0QzHkzOLmEDvCN/rxNeCorp8pmK/m9mayMAgbkS06SKWRIqm8qQhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741112166; c=relaxed/simple;
-	bh=TjiK3dy6VtxMzpyEGZ59HRvoPz9f2mzhsPZT7T2eWnU=;
+	s=arc-20240116; t=1741116862; c=relaxed/simple;
+	bh=0PhniFa8GHtdXz3Hb41lDuOBvw8xpGDuE72A/qcIDEI=;
 	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=okj9PBu2zxvgD5prfL2rOc5UMwUZfhM5romrVp21PohPL7ArQTvD85ftyvh+vLrneYOpOGhMW5OvcuRjkrP49LB/vQQWZSobVHNN84x/8LPBhqEEY/Z6t++h094h8ggJivDTqwoB9dammXYP+PSEvEUmLsI3mXnFuxTB0D/bsQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=arLobDPT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097A8C4CEE5;
-	Tue,  4 Mar 2025 18:16:06 +0000 (UTC)
+	 Subject:From:Cc:To:Date; b=o9JKnO46c7ii3DyW86twEWdzqrACB3b1TK2+LmBbfTiRxmvG2d4MZS53cPKqCNdQeG0ZTGS06r66Qgw6D9V9Tt/BwlkA3F/F84w5R9w0b+tg73vEU0kKFzW0KVTaPx9hQnOlJolrOm6oJOxfpDSBcrBzsWR8dSsvrfFG4VLGkmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BxmRyCbI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014BBC4CEE5;
+	Tue,  4 Mar 2025 19:34:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741112166;
-	bh=TjiK3dy6VtxMzpyEGZ59HRvoPz9f2mzhsPZT7T2eWnU=;
+	s=k20201202; t=1741116862;
+	bh=0PhniFa8GHtdXz3Hb41lDuOBvw8xpGDuE72A/qcIDEI=;
 	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=arLobDPTfb+VaUBCkCpX2TEeRqAqSHAELYPc8ObZkWzMQKhT+yCu1KFwupzYjGm0G
-	 vgDiwRkW4dC2pApZZ05eKIvfD91/SWFaQ9R0hID/hhbhAAL1zywLO0aKBRixIwgQuz
-	 kfBLhQRB47lGrthuWQjAq7/4pcqbtUygmCUAlabgm1Xi3ypDps51vvR3KiLB6N8aJt
-	 CP3/v1hen2/7T4KgAuO+EYJaIFprcJWJOwI5j/GXKl2Teg01wRKx4Jm/92TkcoCviT
-	 RmXeI3jgKyRl/y0hvoeWBvPAdZ5nNL0Tj7tj+msGJqFJA5bQfjL1CzthgEHt5WAUpq
-	 Ddgj0rzvqukqw==
-Message-ID: <b4fb36bc3970293ebdf1ac793bb3d752.sboyd@kernel.org>
+	b=BxmRyCbIP+sVdCIPPe6g96Y5dIlBdxGQa0FU25O1gOKceaLMv+GXSzdSP4pmao+oO
+	 MBcINv3xhVP1vks5eaGu/w+LdwSCQ5OZJjvHhV7mK6Bu1ht1lLviB2CfkYEqe8shdl
+	 gq/gD9idsvgcq84Qh8KzA6os+eMVXUmzMt6KaMxCEMWitQ2FWZVpD4pJxmyd/1U7eG
+	 3DAlAyZcYw/7Beey1Z3vSunHjvRkjL1WJfzVqOSjgrSpdC2bi2uswtpnQ6W3FhpM+h
+	 XEqYNNTavETHowHYhvI5R4uoJfu1+f5PX5zottflQqWAPt2/ezQ9VyVTX867+Gbn3X
+	 jtju8vXvlvJkQ==
+Message-ID: <efd38edbed2743a258bbec7e80ff2238.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -50,117 +50,51 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250301-exynos7870-pmu-clocks-v5-2-715b646d5206@disroot.org>
-References: <20250301-exynos7870-pmu-clocks-v5-0-715b646d5206@disroot.org> <20250301-exynos7870-pmu-clocks-v5-2-715b646d5206@disroot.org>
-Subject: Re: [PATCH v5 2/2] clk: samsung: add initial exynos7870 clock driver
+In-Reply-To: <CAA8EJppgU7_BoVCDfTuKVveBnnhtHUN6jEzkUaAou7=aypD-Dw@mail.gmail.com>
+References: <20250201-topic-ignore_unused_warn-v1-1-f29db78cea3a@oss.qualcomm.com> <93b5004dacfe1151ca3abbb0fa31eaa6.sboyd@kernel.org> <87241686-90b5-44fe-b4e9-1a59451e3575@broadcom.com> <CAA8EJppgU7_BoVCDfTuKVveBnnhtHUN6jEzkUaAou7=aypD-Dw@mail.gmail.com>
+Subject: Re: [PATCH] clk: Warn (and therefore taint the kernel) on clk_ignore_unused
 From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
-To: Alim Akhtar <alim.akhtar@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Conor Dooley <conor+dt@kernel.org>, Kaustabh Chakraborty <kauschluss@disroot.org>, Krzysztof Kozlowski <krzk@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>
-Date: Tue, 04 Mar 2025 10:16:03 -0800
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Marijn Suijten <marijn.suijten@somainline.org>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Florian Fainelli <florian.fainelli@broadcom.com>
+Date: Tue, 04 Mar 2025 11:34:19 -0800
 User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-Quoting Kaustabh Chakraborty (2025-02-28 19:57:13)
-> diff --git a/drivers/clk/samsung/clk-exynos7870.c b/drivers/clk/samsung/c=
-lk-exynos7870.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..2ec4a4e489be30bd1cd2e6dea=
-c006bb8ac5bdc57
-> --- /dev/null
-> +++ b/drivers/clk/samsung/clk-exynos7870.c
-> @@ -0,0 +1,1830 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2015 Samsung Electronics Co., Ltd.
-> + * Author: Kaustabh Chakraborty <kauschluss@disroot.org>
-> + *
-> + * Common Clock Framework support for Exynos7870.
-> + */
-> +
-> +#include <linux/clk.h>
-
-Please remove this include as this is a clk provider and not a clk
-consumer.
-
-> +#include <linux/clk-provider.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <dt-bindings/clock/samsung,exynos7870-cmu.h>
-> +
-> +#include "clk.h"
-> +#include "clk-exynos-arm64.h"
-> +
-> +/*
-> + * Register offsets for CMU_MIF (0x10460000)
-> + */
+Quoting Dmitry Baryshkov (2025-03-03 15:17:21)
+> On Tue, 4 Mar 2025 at 00:16, Florian Fainelli
+> <florian.fainelli@broadcom.com> wrote:
+> >
+> > On 3/3/25 14:48, Stephen Boyd wrote:
+> > > Quoting Konrad Dybcio (2025-02-01 08:52:30)
 [...]
-> +
-> +static const struct samsung_cmu_info peri_cmu_info __initconst =3D {
-> +       .gate_clks              =3D peri_gate_clks,
-> +       .nr_gate_clks           =3D ARRAY_SIZE(peri_gate_clks),
-> +       .clk_regs               =3D peri_clk_regs,
-> +       .nr_clk_regs            =3D ARRAY_SIZE(peri_clk_regs),
-> +       .nr_clk_ids             =3D PERI_NR_CLK,
-> +};
-> +
-> +static int __init exynos7870_cmu_probe(struct platform_device *pdev)
-> +{
-> +       const struct samsung_cmu_info *info;
-> +       struct device *dev =3D &pdev->dev;
-> +
-> +       info =3D of_device_get_match_data(dev);
+> > >>
+> > >> The clock subsystem plays a crucial part in this quest, as even if
+> > >> the clock controllers themselves don't draw a lot of power when on
+> > >> (comparatively), improper description of clock requirements has been
+> > >> the #1 cause of incomplete/incorrect devicetree bindings in my
+> > >> experience.
+> > >
+> > > What is a user supposed to do about this warning stack? We already pr=
+int
+> > > a warning. I don't see us dumping the stack when a driver is unfinish=
+ed
+> > > and doesn't implement runtime PM to save power.
+> > >
+> >
+> > Agreed, I don't think this is tremendously helpful given that it does
+> > not even tell you what part is incomplete, it's just a broad warning for
+> > the entire system.
+> >
+> > Assuming you have a clock provided that can be used to turn clocks off,
+> > and you did not boot with 'clk_ignore_unused' set on the kernel command
+> > line, then you should discover pretty quickly which driver is not
+> > managing the clocks as it should no?
+>=20
+> Unfortunately it's sometimes not that easy. And some developers
+> pretend that 'clk_ignore_unused' is a viable way to run the system.
+>=20
 
-Use device APIs please: device_get_match_data()
-
-> +       exynos_arm64_register_cmu(dev, dev->of_node, info);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id exynos7870_cmu_of_match[] =3D {
-> +       {
-> +               .compatible =3D "samsung,exynos7870-cmu-mif",
-> +               .data =3D &mif_cmu_info,
-> +       }, {
-> +               .compatible =3D "samsung,exynos7870-cmu-dispaud",
-> +               .data =3D &dispaud_cmu_info,
-> +       }, {
-> +               .compatible =3D "samsung,exynos7870-cmu-fsys",
-> +               .data =3D &fsys_cmu_info,
-> +       }, {
-> +               .compatible =3D "samsung,exynos7870-cmu-g3d",
-> +               .data =3D &g3d_cmu_info,
-> +       }, {
-> +               .compatible =3D "samsung,exynos7870-cmu-isp",
-> +               .data =3D &isp_cmu_info,
-> +       }, {
-> +               .compatible =3D "samsung,exynos7870-cmu-mfcmscl",
-> +               .data =3D &mfcmscl_cmu_info,
-> +       }, {
-> +               .compatible =3D "samsung,exynos7870-cmu-peri",
-> +               .data =3D &peri_cmu_info,
-> +       }, {
-> +       },
-> +};
-> +
-> +static struct platform_driver exynos7870_cmu_driver __refdata =3D {
-
-Having __refdata here looks wrong.
-
-> +       .driver =3D {
-> +               .name =3D "exynos7870-cmu",
-> +               .of_match_table =3D exynos7870_cmu_of_match,
-> +               .suppress_bind_attrs =3D true,
-> +       },
-> +       .probe =3D exynos7870_cmu_probe,
-> +};
-> +
-> +static int __init exynos7870_cmu_init(void)
-> +{
-> +       return platform_driver_register(&exynos7870_cmu_driver);
-
-Is this supposed to be platform_driver_probe()? All the __init markings
-in the samsung clk driver look like potential problems if anything
-defers or is made into a module.
+Maybe we would be better off with a config option that removes the clk
+ignore unused ability entirely. Then you can have a kernel config check
+somewhere in the build process that verifies that a user can't even set
+the kernel commandline to change the behavior.
 
