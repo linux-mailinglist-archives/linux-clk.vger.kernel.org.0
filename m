@@ -1,100 +1,164 @@
-Return-Path: <linux-clk+bounces-18939-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-18941-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDBA4A4ED91
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 20:38:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09F0EA4EDD5
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 20:50:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FA033A681C
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 19:36:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 358F3171586
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Mar 2025 19:50:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7D2525F79B;
-	Tue,  4 Mar 2025 19:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A442025F7B4;
+	Tue,  4 Mar 2025 19:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BxmRyCbI"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="EWOlvoXB"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDF52E3385;
-	Tue,  4 Mar 2025 19:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457752E3399;
+	Tue,  4 Mar 2025 19:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741116862; cv=none; b=E7VzizgJ384ti+ESD7Xahx9ay6DYwRp8+ziKC/kxsOJnCqpGzVw57mzkC5MI3NgZQOLPY7hdjbii2i7u5/gwzcXlrCSOKbnMaErz+1Y5CqoC8nQ9ijTEez0QzHkzOLmEDvCN/rxNeCorp8pmK/m9mayMAgbkS06SKWRIqm8qQhw=
+	t=1741117814; cv=none; b=EcKx31YywJ9XEvAJ9I8MnVl0CBUPB+M0K1tYlfbavZFhYpBpTjr78a+94l4eUzzTrdbZUmrBEORyxBsvq3ubccgiKCnNRZy9DNWjqEhJX7+2J+qeofkSQTH5qPXSkIkXUojL+czlh59tTy2TJbLBizOwkuBHjctw9lDW2jHOueM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741116862; c=relaxed/simple;
-	bh=0PhniFa8GHtdXz3Hb41lDuOBvw8xpGDuE72A/qcIDEI=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=o9JKnO46c7ii3DyW86twEWdzqrACB3b1TK2+LmBbfTiRxmvG2d4MZS53cPKqCNdQeG0ZTGS06r66Qgw6D9V9Tt/BwlkA3F/F84w5R9w0b+tg73vEU0kKFzW0KVTaPx9hQnOlJolrOm6oJOxfpDSBcrBzsWR8dSsvrfFG4VLGkmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BxmRyCbI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014BBC4CEE5;
-	Tue,  4 Mar 2025 19:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741116862;
-	bh=0PhniFa8GHtdXz3Hb41lDuOBvw8xpGDuE72A/qcIDEI=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=BxmRyCbIP+sVdCIPPe6g96Y5dIlBdxGQa0FU25O1gOKceaLMv+GXSzdSP4pmao+oO
-	 MBcINv3xhVP1vks5eaGu/w+LdwSCQ5OZJjvHhV7mK6Bu1ht1lLviB2CfkYEqe8shdl
-	 gq/gD9idsvgcq84Qh8KzA6os+eMVXUmzMt6KaMxCEMWitQ2FWZVpD4pJxmyd/1U7eG
-	 3DAlAyZcYw/7Beey1Z3vSunHjvRkjL1WJfzVqOSjgrSpdC2bi2uswtpnQ6W3FhpM+h
-	 XEqYNNTavETHowHYhvI5R4uoJfu1+f5PX5zottflQqWAPt2/ezQ9VyVTX867+Gbn3X
-	 jtju8vXvlvJkQ==
-Message-ID: <efd38edbed2743a258bbec7e80ff2238.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741117814; c=relaxed/simple;
+	bh=/vRWKQtZKb8AVks66fKFJNA8Q7HHHVpV5dIgIcKRJh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1hnNqRWs9nRa/GCBrZwc+9fEblU+wo1lkpRSIwI3jBDlKmwa+wcVU8Ch1dXsU8ALBlLZVA54xC+yHE1PF3EP6fKEzAeZeK4SIDldI1SHVJ5jg1lTlr2FvVkCX+ehCtB8ccF+XhTf7whnwVFLOl3mGACXK/j1hDs7CYx6Hr6hgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=EWOlvoXB; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 0095C252B4;
+	Tue,  4 Mar 2025 20:50:09 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YOe44yWLNYEa; Tue,  4 Mar 2025 20:50:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1741117804; bh=/vRWKQtZKb8AVks66fKFJNA8Q7HHHVpV5dIgIcKRJh8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EWOlvoXB2lKejxwrdke4Er6of5ABdK3jBS9BAXlXEL0XFcLS/7C0FI/oEB1pz5JpR
+	 yStJAX5kufOc7R5KTMYtpQvzZZClaZe1L05PLt1BJlCvyAp0TMiVt3jZyiEQhZKrrh
+	 DC1g3n0EnlgV3+tBx61eFGMHLWBzWJuq3kRkNOP16r7p/9ZOBZKIVKjByeqdnt8ry/
+	 pkLkd8wXvLy+ItQptFHSWKUtx0nVA9JiMlh7MObc7kiMZrzVqHDyUo+bduvDD9iybP
+	 ZvfPyhbDp0qziwtu+YrJ/xUroOCsLzWzkjRo3HlIu3EkzYRmFG0gxi1zzBElz5i8f4
+	 /EsfnkVnFBvTg==
+Date: Tue, 4 Mar 2025 19:49:45 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Chukun Pan <amadeus@jmu.edu.cn>
+Cc: conor+dt@kernel.org, cristian.ciocaltea@collabora.com,
+	detlev.casanova@collabora.com, devicetree@vger.kernel.org,
+	frank.wang@rock-chips.com, heiko@sntech.de, jonas@kwiboo.se,
+	krzk+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 8/8] arm64: dts: rockchip: Enable SD-card interface on
+ Radxa E20C
+Message-ID: <Z8dZWYpABghRHHge@pie.lan>
+References: <20250301104835.36439-1-ziyao@disroot.org>
+ <20250304121036.1453284-1-amadeus@jmu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAA8EJppgU7_BoVCDfTuKVveBnnhtHUN6jEzkUaAou7=aypD-Dw@mail.gmail.com>
-References: <20250201-topic-ignore_unused_warn-v1-1-f29db78cea3a@oss.qualcomm.com> <93b5004dacfe1151ca3abbb0fa31eaa6.sboyd@kernel.org> <87241686-90b5-44fe-b4e9-1a59451e3575@broadcom.com> <CAA8EJppgU7_BoVCDfTuKVveBnnhtHUN6jEzkUaAou7=aypD-Dw@mail.gmail.com>
-Subject: Re: [PATCH] clk: Warn (and therefore taint the kernel) on clk_ignore_unused
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Marijn Suijten <marijn.suijten@somainline.org>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Florian Fainelli <florian.fainelli@broadcom.com>
-Date: Tue, 04 Mar 2025 11:34:19 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304121036.1453284-1-amadeus@jmu.edu.cn>
 
-Quoting Dmitry Baryshkov (2025-03-03 15:17:21)
-> On Tue, 4 Mar 2025 at 00:16, Florian Fainelli
-> <florian.fainelli@broadcom.com> wrote:
-> >
-> > On 3/3/25 14:48, Stephen Boyd wrote:
-> > > Quoting Konrad Dybcio (2025-02-01 08:52:30)
-[...]
-> > >>
-> > >> The clock subsystem plays a crucial part in this quest, as even if
-> > >> the clock controllers themselves don't draw a lot of power when on
-> > >> (comparatively), improper description of clock requirements has been
-> > >> the #1 cause of incomplete/incorrect devicetree bindings in my
-> > >> experience.
-> > >
-> > > What is a user supposed to do about this warning stack? We already pr=
-int
-> > > a warning. I don't see us dumping the stack when a driver is unfinish=
-ed
-> > > and doesn't implement runtime PM to save power.
-> > >
-> >
-> > Agreed, I don't think this is tremendously helpful given that it does
-> > not even tell you what part is incomplete, it's just a broad warning for
-> > the entire system.
-> >
-> > Assuming you have a clock provided that can be used to turn clocks off,
-> > and you did not boot with 'clk_ignore_unused' set on the kernel command
-> > line, then you should discover pretty quickly which driver is not
-> > managing the clocks as it should no?
->=20
-> Unfortunately it's sometimes not that easy. And some developers
-> pretend that 'clk_ignore_unused' is a viable way to run the system.
->=20
+On Tue, Mar 04, 2025 at 08:10:36PM +0800, Chukun Pan wrote:
+> Hi,
+> 
+> > +	aliases {
+> > +		mmc0 = &sdmmc;
+> 
+> s/mmc0/mmc1
 
-Maybe we would be better off with a config option that removes the clk
-ignore unused ability entirely. Then you can have a kernel config check
-somewhere in the build process that verifies that a user can't even set
-the kernel commandline to change the behavior.
+Will take it and add the missing pinctrl, as Jonas already pointed out.
+
+> > +&sdmmc {
+> > +	bus-width = <4>;
+> > +	cap-mmc-highspeed;
+> > +	cap-sd-highspeed;
+> 
+> I think for sdcard, only cap-sd-highspeed
+> is needed, not cap-mmc-highspeed?
+
+This makes sense, will remove it in the next version.
+
+> > +	disable-wp;
+> 
+> Missing pinctrl.
+>
+> > +	rockchip,default-sample-phase = <90>;
+> 
+> It seems that all rk3528 devices need to set this
+> default phase, so maybe this can be placed in dtsi?
+
+Yes, since the tuned phase offset is a SoC-specific value, as pointed
+out by comment in the driver,
+
+	this is _not_ a value that is dynamically tuned and is also
+	_not_ a value that will vary from board to board.  It is a value
+	that could vary between different SoC models.
+
+Will take it in the next version, thanks for finding it!
+
+> > +	sd-uhs-sdr104;
+> 
+> The rk3528 devices uses gpio to switch IO voltage, maybe
+> more modes should be added here like vendor kernel?
+
+I cannot get the relationship between things you mentioned. For the
+regulator, yes, here vqmmc-supply is missing, as already pointed out by
+Jonas.
+
+> And these devices use 3.3V IO voltage by default.
+> 
+> 	sd-uhs-sdr12;
+> 	sd-uhs-sdr25;
+> 	sd-uhs-sdr50;
+> 	sd-uhs-sdr104;
+
+But I don't think it's necessary to lay out these slower modes
+explicitly, since SDR104 seems to imply them, see
+sd_update_bus_speed_mode() in drivers/mmc/core/sd.c[1],
+
+        if ((card->host->caps & MMC_CAP_UHS_SDR104) &&
+            (card->sw_caps.sd3_bus_mode & SD_MODE_UHS_SDR104)) {
+                        card->sd_bus_speed = UHS_SDR104_BUS_SPEED;
+        } else if ((card->host->caps & MMC_CAP_UHS_DDR50) &&
+                   (card->sw_caps.sd3_bus_mode & SD_MODE_UHS_DDR50)) {
+                        card->sd_bus_speed = UHS_DDR50_BUS_SPEED;
+        } else if ((card->host->caps & (MMC_CAP_UHS_SDR104 |
+                    MMC_CAP_UHS_SDR50)) && (card->sw_caps.sd3_bus_mode &
+                    SD_MODE_UHS_SDR50)) {
+                        card->sd_bus_speed = UHS_SDR50_BUS_SPEED;
+        } else if ((card->host->caps & (MMC_CAP_UHS_SDR104 |
+                    MMC_CAP_UHS_SDR50 | MMC_CAP_UHS_SDR25)) &&
+                   (card->sw_caps.sd3_bus_mode & SD_MODE_UHS_SDR25)) {
+                        card->sd_bus_speed = UHS_SDR25_BUS_SPEED;
+        } else if ((card->host->caps & (MMC_CAP_UHS_SDR104 |
+                    MMC_CAP_UHS_SDR50 | MMC_CAP_UHS_SDR25 |
+                    MMC_CAP_UHS_SDR12)) && (card->sw_caps.sd3_bus_mode &
+                    SD_MODE_UHS_SDR12)) {
+                        card->sd_bus_speed = UHS_SDR12_BUS_SPEED;
+        }
+
+> Thanks,
+> Chukun
+> 
+> -- 
+> 2.25.1
+> 
+
+Regards,
+Yao Zi
+
+[1]: https://elixir.bootlin.com/linux/v6.13.5/source/drivers/mmc/core/sd.c#L448-L479
 
