@@ -1,101 +1,68 @@
-Return-Path: <linux-clk+bounces-19052-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19041-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BD28A54987
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 12:35:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC51A5493B
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 12:29:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7071D7A241B
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 11:34:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE194188E2ED
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 11:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373592192E9;
-	Thu,  6 Mar 2025 11:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2AC209F2E;
+	Thu,  6 Mar 2025 11:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="dZCz4B3m"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="oSPqkvZn"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A402153D2
-	for <linux-clk@vger.kernel.org>; Thu,  6 Mar 2025 11:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405062063E8;
+	Thu,  6 Mar 2025 11:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741260658; cv=none; b=hqGh2L4xmURV1tbPz9bPx39QSfvHLKzbkt3+rBTEjeT2U6n8hdZFcasOgfT2jDSWIuD/uiOdfQvp9ZTLa3tkVj1FA0jqvfF8WAhQ2pkAbMDtmsJHNSibSa2Y8lJMosZZCiQTI7gJRnqIm4fXkKfDeLmJMO0C+FyBosMsAhdUE/I=
+	t=1741260560; cv=none; b=R0W7fzaQB6hqAa/p/yRrVc3tYU/75qDv82F7NQY83P8cfMOZLaYjWQ0Y9LFbzF4K2nlr9Uvu+vzED9+MXJMzxH9DZPUqSFGLOg1iiyHahPfwRinTeL4YHZSF75D2yufaXCI7Rlp5k0lTfztHr14g4Xsd86PFMTSx4JLL6eXlMDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741260658; c=relaxed/simple;
-	bh=3HpG5JSfnp1rR8LM9tLDyGAnkrv7gQYHSv7Ks+OYcRk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KHawXjiBWCMZBvW8DsglV7COHLDzSRzfmzyrcAn8dq2kAFffwFskQHvE8qVZrmSa1Xs5pIG0dgyrAMx0sq852O0hxI0S+CamdYDpWceiK6VfSjqcIjCem+avxm0aTD/xVkdeU5R3Lgt9pizMQmKCfqV7s6EMNzS+gfgi5xcNnUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=dZCz4B3m; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-390f69f8083so521592f8f.0
-        for <linux-clk@vger.kernel.org>; Thu, 06 Mar 2025 03:30:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1741260653; x=1741865453; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AjwlhaAOkrwwhyUyrS6nha6mqO5aPDlQoHWfonPTSAw=;
-        b=dZCz4B3mo1aJhl/32RYWzj3TKW6fTmDe004hw3Nel2Ub5pvvKpoflzJg2ObwKji0Gw
-         2xs9/MVvP9sfulN62JvIpELZLs25hc/LiRNbTz9T0/vwD3v/7YKrjRPT/OwJpT710+Gr
-         P9c9BcmzDxu8Jm6UZyCR4ioipG1JjvcsckrYY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741260653; x=1741865453;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AjwlhaAOkrwwhyUyrS6nha6mqO5aPDlQoHWfonPTSAw=;
-        b=kcADhWSXhF3N8gD+1AjcwNzDugya7O3me3GYOnshVIenQ0IeQwGeGi3FNMsO4g+5c7
-         hV2YUD1JtQXKdRhMfDY71PnDSR9wXJeKWdhZAcb3z77qiOAXISfYZBxs/ZxnOdREnWBG
-         TSXqZGoXTkb4lbhgE1bJxONl5oCs5OgYqhhCBqapkTBIlZnKsQetxNbpEExy05DNpj6I
-         1Qw1FmhLl9ym49MI6epGGoZASBMpX5weY67Dm1m3/v2PTuYhh63Mibq7X9l0IeeR87v+
-         Jl6nAw4I8pRCp1btPpn4xFw0fQm8ySXoMkYhLXCsYTYcI58250rlvo+lOu19HtWwRTNu
-         HXSw==
-X-Forwarded-Encrypted: i=1; AJvYcCUP2jq5wolI274VCnOmueLatdqC2goZOV+4j5txPJoK2SbBxoOB+TFX4fxgxv4YpKqmddi+j+0lOTk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr4Nx8l7nXHb49rvBIXfHcLnuP5cSV3V/BOnbSyL+qy5MWiVQq
-	f9pibQa+N1L90u6q5H5ewbz9RRfYFGt0BFK6NUmuptrCC4OSFcqUtrFa8p1jTic=
-X-Gm-Gg: ASbGncvfqM5vctpHxGk6jw0IxBYO+UYJOHjjYTCwqMkIbq2aD+W1MgZUEWrjtUu1iam
-	A2dAQCaLOgcIElT3U2cER2W6SFaxhV5K+dd4pekPRb5H1Iof4XW52VQK7sTrb7Nii3axlpLT9JG
-	G4JgfGOHQR0djYNALX+fKVeDuF2elvAmAGOkMYVoO//49uLfCnwaUhoY2HtAvR1CNNnYm8eTIvw
-	2lD1JBVgAakAelTcZHUr+ATtQNWYw8y5ZMcUsEBOmoq+6nK59OUEisJkOUAh90ZCNNrYbXax+OI
-	mOSZ81pJGFaRn/ejx2ztrZ7mjETq9ueNLsqsc90ICkCAtdzaaP5E4rIwCnz+onppIndKkD4WmDF
-	Aw+1nDQ==
-X-Google-Smtp-Source: AGHT+IGSCIcSTKiT7I3EfkCIRWduueONT660Ga+g5wK4QQGoA8bK63FcMx77szIfKMFdz74Of9fxSA==
-X-Received: by 2002:a05:6000:1ac9:b0:390:de58:d7fe with SMTP id ffacd0b85a97d-3911f7d1074mr7102679f8f.51.1741260653419;
-        Thu, 06 Mar 2025 03:30:53 -0800 (PST)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:4703:aa8c:6eab:8161])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912bfb79b9sm1749650f8f.3.2025.03.06.03.30.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 03:30:53 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: linux-kernel@vger.kernel.org
-Cc: Stephen Boyd <sboyd@kernel.org>,
-	Peng Fan <peng.fan@nxp.com>,
-	Abel Vesa <abelvesa@kernel.org>,
-	linux-amarula@amarulasolutions.com,
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org
-Subject: [PATCH v10 15/18] dt-bindings: clock: imx8m-clock: add PLLs
-Date: Thu,  6 Mar 2025 12:28:04 +0100
-Message-ID: <20250306112959.242131-16-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250306112959.242131-1-dario.binacchi@amarulasolutions.com>
-References: <20250306112959.242131-1-dario.binacchi@amarulasolutions.com>
+	s=arc-20240116; t=1741260560; c=relaxed/simple;
+	bh=ElzB3DuPBRiTLKUz/1G4RQ3IeosBY5hIKAZ7kA57ygA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aIK3cQsC1/jWV/ByI9PBZ7vyTf0U6Bpg38c5z7Owwd0E9nNkkAaHxP7XPgD1PqetlmSen7CayYcQBT35nAxdZ94wLt0C8ugBDpFGdOQrXaWr6KtyJiLlX6sMB6xjCV3wWedaS+MPnhNKrVUPLJNM2CqB9M5uYuGImeKNfnBPN10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=oSPqkvZn; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5267mNcn005530;
+	Thu, 6 Mar 2025 11:29:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=2H9MZ+wuyKLTvka/vs+A8B
+	rH5oQwxB1fktDD7A9jEj8=; b=oSPqkvZnEkOSkH737o7HzhZHHUJ9eIAWFksuNO
+	1aWvhEM75Y0ibcqg1J1BmH85sg78YjsNs5KFS1ndCp3a/YTNeXsrn0G+L8DYLRi9
+	3zMaouLOOIQMii8x705uBKLhu17m9Uei5LFMt8xIbE2IIaNP7mXNHPuSHUnJ4HJq
+	7pT0MjYvxWaoukx2N662AxoSQWPOismi2tNc2GazzIzttDdNDlGGMDDL+F1Zw60M
+	10qVtxbC3qY8kjh03NnocCZ1Pi95hzBSOmRoVUkW4bba8GvHhfIQZQVmJrufBjY+
+	ZFx1HeLHVEwRTCEa7wJZvwf2Yq5oIFAtZbM5I6JxI7amZZ9w==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4577mx8myj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Mar 2025 11:29:14 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 526BTDOQ010452
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 6 Mar 2025 11:29:13 GMT
+Received: from hu-mmanikan-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 6 Mar 2025 03:29:10 -0800
+From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To: <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] drivers: clk: qcom: ipq5424: fix the freq table of sdcc1_apps clock
+Date: Thu, 6 Mar 2025 16:59:00 +0530
+Message-ID: <20250306112900.3319330-1-quic_mmanikan@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -103,95 +70,64 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oLxJ3pwSi9Wgl_KiwPI4dRIonyJVGN3n
+X-Authority-Analysis: v=2.4 cv=cOIaskeN c=1 sm=1 tr=0 ts=67c9870a cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=3yUitucLZDAhSqLVeBgA:9 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: oLxJ3pwSi9Wgl_KiwPI4dRIonyJVGN3n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-06_05,2025-03-06_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 adultscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503060087
 
-Though adding the PLLs to clocks and clock-names properties will break
-the ABI, it is required to accurately describe the hardware. Indeed,
-the Clock Control Module (CCM) receives clocks from the PLLs and
-oscillators and generates clocks for on-chip peripherals.
+The divider values in the sdcc1_apps frequency table were incorrectly
+updated, assuming the frequency of gpll2_out_main to be 1152MHz.
+However, the frequency of the gpll2_out_main clock is actually 576MHz
+(gpll2/2).
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Due to these incorrect divider values, the sdcc1_apps clock is running
+at half of the expected frequency.
 
+Fixing the frequency table of sdcc1_apps allows the sdcc1_apps clock to
+run according to the frequency plan.
+
+Fixes: 21b5d5a4a311 ("clk: qcom: add Global Clock controller (GCC) driver for IPQ5424 SoC")
+Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 ---
+ drivers/clk/qcom/gcc-ipq5424.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-(no changes since v7)
+diff --git a/drivers/clk/qcom/gcc-ipq5424.c b/drivers/clk/qcom/gcc-ipq5424.c
+index 37b1a3ff8f4e..3d42f3d85c7a 100644
+--- a/drivers/clk/qcom/gcc-ipq5424.c
++++ b/drivers/clk/qcom/gcc-ipq5424.c
+@@ -640,11 +640,11 @@ static struct clk_rcg2 gcc_qupv3_uart1_clk_src = {
+ static const struct freq_tbl ftbl_gcc_sdcc1_apps_clk_src[] = {
+ 	F(144000, P_XO, 16, 12, 125),
+ 	F(400000, P_XO, 12, 1, 5),
+-	F(24000000, P_XO, 1, 0, 0),
+-	F(48000000, P_GPLL2_OUT_MAIN, 12, 1, 2),
+-	F(96000000, P_GPLL2_OUT_MAIN, 6, 1, 2),
++	F(24000000, P_GPLL2_OUT_MAIN, 12, 1, 2),
++	F(48000000, P_GPLL2_OUT_MAIN, 12, 0, 0),
++	F(96000000, P_GPLL2_OUT_MAIN, 6, 0, 0),
+ 	F(177777778, P_GPLL0_OUT_MAIN, 4.5, 0, 0),
+-	F(192000000, P_GPLL2_OUT_MAIN, 6, 0, 0),
++	F(192000000, P_GPLL2_OUT_MAIN, 3, 0, 0),
+ 	F(200000000, P_GPLL0_OUT_MAIN, 4, 0, 0),
+ 	{ }
+ };
 
-Changes in v7:
-- Add 'Reviewed-by' tag of Krzysztof Kozlowski
-
-Changes in v6:
-- New
-
- .../bindings/clock/imx8m-clock.yaml           | 27 ++++++++++++++-----
- 1 file changed, 21 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-index c643d4a81478..d96570bf60dc 100644
---- a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-@@ -29,12 +29,12 @@ properties:
-     maxItems: 2
- 
-   clocks:
--    minItems: 6
--    maxItems: 7
-+    minItems: 7
-+    maxItems: 10
- 
-   clock-names:
--    minItems: 6
--    maxItems: 7
-+    minItems: 7
-+    maxItems: 10
- 
-   '#clock-cells':
-     const: 1
-@@ -86,6 +86,10 @@ allOf:
-             - description: ext2 clock input
-             - description: ext3 clock input
-             - description: ext4 clock input
-+            - description: audio1 PLL input
-+            - description: audio2 PLL input
-+            - description: dram PLL input
-+            - description: video PLL input
- 
-         clock-names:
-           items:
-@@ -95,20 +99,31 @@ allOf:
-             - const: clk_ext2
-             - const: clk_ext3
-             - const: clk_ext4
-+            - const: audio_pll1
-+            - const: audio_pll2
-+            - const: dram_pll
-+            - const: video_pll
- 
- additionalProperties: false
- 
- examples:
-   # Clock Control Module node:
-   - |
-+    #include <dt-bindings/clock/imx8mm-clock.h>
-+
-     clock-controller@30380000 {
-         compatible = "fsl,imx8mm-ccm";
-         reg = <0x30380000 0x10000>;
-         #clock-cells = <1>;
-         clocks = <&osc_32k>, <&osc_24m>, <&clk_ext1>, <&clk_ext2>,
--                 <&clk_ext3>, <&clk_ext4>;
-+                 <&clk_ext3>, <&clk_ext4>,
-+                 <&anatop IMX8MM_ANATOP_AUDIO_PLL1>,
-+                 <&anatop IMX8MM_ANATOP_AUDIO_PLL2>,
-+                 <&anatop IMX8MM_ANATOP_DRAM_PLL>,
-+                 <&anatop IMX8MM_ANATOP_VIDEO_PLL>;
-         clock-names = "osc_32k", "osc_24m", "clk_ext1", "clk_ext2",
--                      "clk_ext3", "clk_ext4";
-+                      "clk_ext3", "clk_ext4", "audio_pll1", "audio_pll2",
-+                      "dram_pll", "video_pll";
-     };
- 
-   - |
+base-commit: 7ec162622e66a4ff886f8f28712ea1b13069e1aa
 -- 
-2.43.0
+2.34.1
 
 
