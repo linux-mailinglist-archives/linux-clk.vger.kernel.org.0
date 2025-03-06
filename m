@@ -1,201 +1,263 @@
-Return-Path: <linux-clk+bounces-19040-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19042-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E10E5A54763
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 11:11:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63A6CA54944
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 12:30:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1553D188EAE9
-	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 10:11:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 924111737A0
+	for <lists+linux-clk@lfdr.de>; Thu,  6 Mar 2025 11:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F1B81F5845;
-	Thu,  6 Mar 2025 10:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5661920B1EF;
+	Thu,  6 Mar 2025 11:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="HC6qe5Nv"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="UbKxdJTA"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011037.outbound.protection.outlook.com [40.107.74.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272DE1FDA84;
-	Thu,  6 Mar 2025 10:10:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741255861; cv=fail; b=Em7zoGQyu4QcMzwG03B9undGfKwoxWt6SR991plG/8AzFdAFCaDC2bXX0NhFOXiOOf0ykCAL2FynHYsABSjIL7Au1+jNTKC6cP7qlwIT6qmAhdDu/4ickP2x2ucsf1z+ZQqzQPqyzAQhmzp/D0XRvZ3mkHVipbOYn5fP4+JE87Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741255861; c=relaxed/simple;
-	bh=Zh/kcl2QaW2DS1UUsCDHeTPjPW/h+A0PX9qq2fSNxlw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=K+3ktN9LtHOjlD8WiwlMzADycXxDolMVFsqEA8Nhma2TczfS0OTCG0PCcoNOVXkGNM80534MjZff/7+09gP2iN5WAb/gsatFtsfeXx5Jck8+uTLfpfpnSbzuEBZaI1AyrN68Eskgf7GTPY2BQLn6fofePK/nRajkML6tKSLKNjA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=HC6qe5Nv; arc=fail smtp.client-ip=40.107.74.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=NdXsSXGKNAkYMHoGGk33s3Ji58kfGPrfiZktdFgCw/yJZ848xuYpvcvOHTNqGJp6FAfVtutjxZsntgcW5XzGPcmDCIl9SvpFWdxBbFUaJMYGt2XS/0Qy7DTyIQ2kBEZsoLoxa3IeUSauL8UlDrg6Zy+k8lpu2mtbqTfEyZoC+bHMPIJtH112cg0adV9nD0l/GUshitzXBBik8xXJwJeH8nH65TrEtF6KCNQwoP13s815N5TyMUUVMHefvDNdp6ClhteuU33pLH0SlFBZuKUx4fe1nQAUle2kkB4LDjVMFB+uy48Qk0kjtHaa8PqxlLo8f1Hzhxwc6FgexKuImLSBOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Zh/kcl2QaW2DS1UUsCDHeTPjPW/h+A0PX9qq2fSNxlw=;
- b=Hd9IGKmDHR/Qlb+fWpUU1BOHiGHyYBMmy6GxwfQnx8ahQByi8WJHI7ufDtRF1vT+a0qVycjCEORBeqrczXpHJSZA75aN5OIBSMQhI0L68aiaVNNcWtI/66Zwd5ECBRr7PykkqhlX5JKK/egf+2A+29XcxWdOcA7fjOvavx/feK6QhoV3fjx6rl3HoVRylPUe84AnlN84ZWCCuhP3GObiHYQocpOZwpmwtptPn5gEvY5pUH4JzCniMoyoI0gb7M+++PvRmVYPsWrcp7rrjRugTZbBlNRk5X5+NoaMNtVaixPm6fMuFMXS/hwUcjGVVbcyS0rgI72gdfj4a/YxGkAIdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Zh/kcl2QaW2DS1UUsCDHeTPjPW/h+A0PX9qq2fSNxlw=;
- b=HC6qe5Nv3ppbq1sOa5NJ41sDNZT9+WHCR+XbK+SUjAyZLkPi+HMvx6xwRmQFTvsmYD1VDlf++Yxkq1AJK1bKb3hVccyeWIaRnSzc+DaV4SoNUjvq2X/UWOoFVSbjhkXmjOdlOqNRHvTLAYPJrvJssbeSLOLDsBQfzli5YHd5O4w=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by OS7PR01MB14794.jpnprd01.prod.outlook.com (2603:1096:604:396::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.27; Thu, 6 Mar
- 2025 10:10:51 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%4]) with mapi id 15.20.8511.017; Thu, 6 Mar 2025
- 10:10:50 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Stephen Boyd <sboyd@kernel.org>, Geert Uytterhoeven
-	<geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>
-CC: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, Prabhakar Mahadev
- Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
-	<biju.das.au@gmail.com>
-Subject: RE: [PATCH 1/4] clk: renesas: rzv2h-cpg: Add support for coupled
- clock
-Thread-Topic: [PATCH 1/4] clk: renesas: rzv2h-cpg: Add support for coupled
- clock
-Thread-Index: AQHbjCwSQtFnS5HRQ0O4YyzU/N2JT7NlMPsAgAC1N4A=
-Date: Thu, 6 Mar 2025 10:10:50 +0000
-Message-ID:
- <TY3PR01MB11346C31C2533FD074D87BBD286CA2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20250303110433.76576-1-biju.das.jz@bp.renesas.com>
- <20250303110433.76576-2-biju.das.jz@bp.renesas.com>
- <1347ee4d678ce81c33917b3802601aee.sboyd@kernel.org>
-In-Reply-To: <1347ee4d678ce81c33917b3802601aee.sboyd@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|OS7PR01MB14794:EE_
-x-ms-office365-filtering-correlation-id: 37ab9072-2c1c-4343-9b65-08dd5c972c47
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?aE03eno1c2Jmazl2ZUFnd1U3UmdtdlJmbldBVVE1cmoxT2xjcEFxRUpyQUdX?=
- =?utf-8?B?TGNoQ3J4RG1iVVh4NWUrbDU2M3NQM2FnSXdZNWNLc1FXTlV0aXV4emlEMTJU?=
- =?utf-8?B?anlIQStMaEc0TXZNSWt5L1UvTlRudGdoSENaUWtLbkZySjZtUE9DY2lwRldi?=
- =?utf-8?B?U25ob0l2ZTlybkdCSEh4ZlJCYnZsdGtZNC93OXkwcUgzUHJxOWR6bzVFWUFN?=
- =?utf-8?B?cUFmc0cwbUc2ZTdEM0FDMDNXblphTDhnMHpOT1pCdUZSMkJGYTFIelFhOUJ1?=
- =?utf-8?B?akg3TjF4Tm1wQStJMnpWYnFFb0djOU9NTjBKWnRiQkdGa0ZIREI5ZkxtblF3?=
- =?utf-8?B?VHNHZGtENVJQK2NtMXFIUldEN1BFWUtxajFRdTA1N2tVdmVsZnFwL2sxQXB5?=
- =?utf-8?B?bkpwTnM5THZiNFN5YUprenppdmd5Z3VKd0NqeXdDc3EzOTdCek9KQ0xjTjRw?=
- =?utf-8?B?dVgrYkd1NEJFU1pvaTNZUnlGY1VJMnV1N0Uwa2U1NnpEK3FRbFVKWlFQSkhD?=
- =?utf-8?B?bzdlZG9QQk9CWXVCazd1WHpLQUgvdlVibmJDR0RMbkR3UnAzK3BDWmFOcmVa?=
- =?utf-8?B?cGwvdlUwNE5nQUJPM1h1MFpMSThSa0pnVXVxaFRpQkpJSHFqRTVSSkZmZ21l?=
- =?utf-8?B?MFUzZC9zSDk4TUFIdmtLMlFzY3YzTHVoRkswTHY5VUpSYlBUOGtNRUwzZzJ6?=
- =?utf-8?B?YTdNOUo1U1I1UkFKd1JnOEhxNE5qaG96Y1ZiVTUyRHdYaDlMYVF6U2pGUzNC?=
- =?utf-8?B?UTdpS2tSYWdWZXpHb09wZjN5TmFPZjdOWVlyNWg4K3pTS244VnUyZ1Ewa3pv?=
- =?utf-8?B?NTJFMWZTWTBidi9nckFpaVJLK1FHQzBMaGhsMUg0S2s1N1Z4REwzZm9lT2Fq?=
- =?utf-8?B?S3ZYN25lbVdRelYrUVlrZmVYN3oyS29VaHZ1blM4SXFkZG5EL1J4c2VPRHl2?=
- =?utf-8?B?TFFMWFVzMkhpS2czR3Jpb24zTzZjUS8xbkpSWkVOeXRNR2Q2cnBaR1RkaU8v?=
- =?utf-8?B?U2ZtNktHRWszVDJNYzh2S0o3TDZoWnFNeE9VdGVFdVZaaWV6b090bFpxdGtw?=
- =?utf-8?B?ZTdXTFVEdW04WkpwNFBnUk1YT0NUWldwcy9sR1dTL041U2Z0YlNzS29wQUhW?=
- =?utf-8?B?dlJFQmJXTERDQ21TR29zUTlENzVzMlpmTko2V0hFWm5ZZGViNjhPaVZ6NjNQ?=
- =?utf-8?B?ZjR6TUtaNVE3UUhjRzM0US91WWwwU3BXSEIwQXV1QktMcHN3dHlRZnZQZUp2?=
- =?utf-8?B?cVphSGY0RytWQmVoa2hMYjZaeTlleGhlYWtiZmhMV0s0bDBnMk5jM2t6b0or?=
- =?utf-8?B?WUtJTm5QYmVmRXBYc1NGNnZXYlZ6YVNiMDZHcUZ3cUpRM0F6VE1jUW1rQnJZ?=
- =?utf-8?B?aHBua3plSkFJQXNuSnA1ajhxQ0tEL1VKZDJNWlAzWjdnRWZwbXhXV0ljK2pi?=
- =?utf-8?B?TnlsUVN0cU1vclpQRmlHbzJ5NjQxUkZQYmZRQkhuQXVQTHd4ckMvMGFGTy9V?=
- =?utf-8?B?NjNJUzBHS0JJOVpOY3NXd2N5Z0FrTFUzR2dCZng2NzJWb004Q2Uxcis2NHBT?=
- =?utf-8?B?WW1rVmtqRHVTeHJSL0dTZmpPaEpUK252MllBS2lwdU1yNFkrRHZ2ZEI1T2Jv?=
- =?utf-8?B?blBDOVFtL0QwVU1QV0tKVUxMUjlzS1EveFRSQU96T3ZHWkFpUmxYTGJySERh?=
- =?utf-8?B?bE9KM2NVTWJsMUgwMWJ6YWhWQ1RmMUxDc0xMME1CL1hwN0JENzNwUm5MdExH?=
- =?utf-8?B?cTBWeExRbGg2czB6VEFHdDFxMGtLSFl6UTUzdmd4blN6MkFwSWlVSUprK2dB?=
- =?utf-8?B?MDVVcGc4Z3R3TU15YVdEK3ZNRHBGZkRvQW0xb0RXRytFUmZiM0J1eTRocVRD?=
- =?utf-8?B?Q1RCZC9DOVR5YlM4bjhhcW5sWE5ndWJrMHF2N2ljTGVGdkcxMlZpdzIwdmZF?=
- =?utf-8?Q?EljL+DVGn31ds1bs4MINXee5njwWJwWG?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?d1pteG1YcmlmRys5YzNrN0hoeG5qMEtxOU4wYklTdEtOQ3FFRUVrdVZmcVRK?=
- =?utf-8?B?andLK3AycVBtRjJLYTBCd1IwUW1Ea2lLWVlhSGVuYW5USFJFaTl0S0srNkJk?=
- =?utf-8?B?amtPcjNRS0hWVlBLMTNJcW55eDBvZ0tTNWQwbHkxN055a1BzTm5nMTRmalRq?=
- =?utf-8?B?SDVkWERuY3FWbVJCcGdZNHlmSFExcSs3NkpRLzkxcEREVXZ2cW9wQmd0UGFj?=
- =?utf-8?B?TzZxOEk3N3dlMmpob0dQZ2l1c09IMXJrZnpjSGZDSWV2UHg4NUN2eFN2UWtZ?=
- =?utf-8?B?R2FYUmloZVhjRzlKbUwyTzFkYzVZUzh0V2xpTXA2RVZpV2YxbWxRVndQa1Yy?=
- =?utf-8?B?WEpqeWhoczhCUGxrbHIxRFU5TUdYc0xldDF5ZmM2dlN6WU5zb1F4Lzg3QXU0?=
- =?utf-8?B?dDR0VFl4M1J3UkVoN1JVS0toMm82cFhJOVRxK2V0a3c2RDZyL0J5L29Sb1Qw?=
- =?utf-8?B?VnZwZ1VneUJYNzVuRU1wVUFBM1BMYjFHZ05EOVVhT0JRSHVjQ0l0WDNaNzZQ?=
- =?utf-8?B?ZmFFWlJiaUQrMDRLcWVBM1dQS2xvVld6U0JVV05USzdaU1hzTFVMVVBLVE5V?=
- =?utf-8?B?WHBWOEFnK1h4OGpNYys1Ylhhc1cwVVh1VnlpL3JJWmhiNkhjbVdaNktLVmlT?=
- =?utf-8?B?c1o4dHc0ODAwNk1XQ0dpMDNIT3MxamVIMEExMmJLaE9BU0FYZlpuRDFiRFM1?=
- =?utf-8?B?ZEtDa3hzQ2NUNEZxZElpbk42L3dGUzY1WHB6S3BSeDdqT2ZCRWJEcFdkeE1I?=
- =?utf-8?B?dk9QY3oyZHR6K3oxYkY1dWVqSVFQMjIySVYyZDViaUdsYTFSaFprWEtZa0pE?=
- =?utf-8?B?cDdldTYvcElBYldsN1lTa2kvTjFVS2JYNjhaTjVZZjNhRzZhTWdZaC85Mkd1?=
- =?utf-8?B?bU5FRzlQb0J1M2syOE4vY3ZmaFlFNjAyQkZYZytJdkMvQ3h3aER2WnFIdk5V?=
- =?utf-8?B?VjA4NjlrVTRVU1NRVVJyMDcxN3dPRzVqSEE4MC9LWm8vZkc3RVl3aWY5R2h6?=
- =?utf-8?B?Nk9sVENDcVloRmMwVzlNRlczVlBmMmdCUGFBVlV3YW84aHpnQVRIWHRBaDRi?=
- =?utf-8?B?TGxuemVhaWl6a1hZRUVCc3BoeUlNdDJMelczUEdQM0l6KzU4aFYwR3ZNTHhU?=
- =?utf-8?B?a3ZzQTRtNTZMZjdWcW1xVTdoS0V1VjZadWg0eHlqMXdabEk0dlhKemdpeU1P?=
- =?utf-8?B?MmtCMzR6ZExUOC94aUJtYjkwdjVwZU5tamZld0N4S2pGQnZMcm9HeThwMCto?=
- =?utf-8?B?cUFadlRDMHZqU0V5NXhRSGFQUHd4QWplME4yeldLV0xLY09wU2hVd2k3OS92?=
- =?utf-8?B?WHNkajlrL210Vk5nbkxqa2FsTS9KbVdzc3VlVGk1WllHYXh0R1YwKzJVTlpW?=
- =?utf-8?B?VXBWVG0vWlBtd05GWGQxTTF3VUtEUHp0c2FDTjl6SVR3NzRIVGNzSVZKRUpl?=
- =?utf-8?B?WDJUdzNRMnphVi9kR0crM2lnNFZLdm1MeGQ5dWhLR0E5bzlhY29FNmlwSm9n?=
- =?utf-8?B?RFJIKyszSWxDamdUcGJrNHhSMi9INnI0ZWlMTUFZSHRzSFoxdDNobXlHdmxo?=
- =?utf-8?B?YVVzNlBXSW9CNEdvVnlVWXBjTm0vdjhSbk03QnI3MDJIZ3dMaFpoZlpUcmZG?=
- =?utf-8?B?K0ZnRFR6Wk0wR0VaYmJwdzhjYnZQTGVFd2lkekhERCsxRy9Yc0dNeUZ3ZVRu?=
- =?utf-8?B?eXExSmFvRTN5a2xuLy9BbU9lL3luT2xaUTRscFBCdERtNEF4MlhaeHBJQloz?=
- =?utf-8?B?MnYzS0RLcHdUZzhNWnpCaFFqblFVUGdZRTJkWVpvcWwzK20zbktocjNod1J1?=
- =?utf-8?B?WndETWZUelY2T2dZN0liTFZlNTNSVmJIc2hwWkRKODh2R2M5dnZ1WDM1Vis3?=
- =?utf-8?B?Z0trTVg2NkRBVzZ0d3FnejFuOFBFMnQ0MnE1SG8xMTduT2lZOVdkaDhXUVYz?=
- =?utf-8?B?MTI4VjhnQ0xMZ3NRa1dCbjVqa2dVaWFhdTA4VTFEUnR5YldwOXBqZXVKTU82?=
- =?utf-8?B?MzJEczFzNDZKVnNMaVF6VzJIdDVNVnNMQ2ppT3lQL0pxclRVejZ6bnJXNi95?=
- =?utf-8?B?dnRGTXhJUWtIc29tbjIwaG9PVzFpS280ZEVvUERPamtZSzl4UzFmKzhVQWln?=
- =?utf-8?B?LytVOWJuY2FDbDNZWmU1UjVHN2MvZEdtbmRObjhXTjd3Y0ZrQ1QzeEFhSEZ3?=
- =?utf-8?B?L0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D61820AF71
+	for <linux-clk@vger.kernel.org>; Thu,  6 Mar 2025 11:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741260637; cv=none; b=sa2UrGHoyuJcQsWajfDS8L04KbkbOCLnQ+XjfkZ9xzqMuPbelZuge4HotmHK3+lFvZkTJ8EYa3O/SS8ulLnE1TQjU2jqW0d33WTFW+mqg386198zhiUwYXmlkZh15ROyw//p2PhMNNcxk2MD/YP0apqzXhHuyfCY400/H+r/UCc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741260637; c=relaxed/simple;
+	bh=bLfPdxBF2Z0/DguVhNOFs3TZhUfDJOJ4M/LtG48XDEk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YJ/nl3wlGlN+/+aCKDHW5BW5SxsDfoNRHQs5sgSWyohiLHdlXHwNE/PAILGHvTjGplwVJXE/K8+Cly22Hoih/EopHKgoXOPbt1J1YPxBhJpVLEtKgdtCwJTtgzIf/P42UN0sbyVO9OCUPkXdS8aYplisrZmmKbxhK61RCBbn/bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=UbKxdJTA; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-390e702d481so291740f8f.1
+        for <linux-clk@vger.kernel.org>; Thu, 06 Mar 2025 03:30:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1741260632; x=1741865432; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwtYTrDkWH6misbjcDOah4aj3UXSwDbuBhEff6JQElI=;
+        b=UbKxdJTAckBmgUzOvR5T1OFZ7F5RkZ/Xrvwe0zjo+wA/kxA5/Z+wpC9vHXPyo0qW7c
+         NUsSTc6NTB8WSSI1lYv6i9NMERuhm87sPcXvFlHR22Q5P1hw58Gs3KU8K965QZhd2OY2
+         nOYAdeVgEtt4gl71LIr7FjEPLYfI8Y1/kl6x4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741260632; x=1741865432;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QwtYTrDkWH6misbjcDOah4aj3UXSwDbuBhEff6JQElI=;
+        b=bbohWPzfEaGOzwyQcQgN6V32WTqTjVDG862dFLFlxqXwH79tR0aMCfbD90TZnO8djp
+         HJSb68K9ejytbN1FV9TxGp8pWLdVS9rmz0j+tp7nkmRYL73Xds1leHLVyoYh35gM8ikG
+         v5G38TbfJUtAejzaUuY7geNJF7DsXe0+1AJKZ3NUXBad9p0PfbV+/IjE1txx229xD4sT
+         16XhmSXv7k4wSRwk7bYNOo8lxD4NzHcvTAc/xkPQAcOaWkgLhUYFbByIpACqzzEle+34
+         diuIa2ThFxhFL2vdJWsLl+10WrHC61Cn26MSnxDhD9s2+oDwYkgVhKV8YqHc3mskvbyx
+         Aj0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV53XZGTU7r1Cg1ZI2AiqLTQnq5iVxLk4deflkmua+tpZj/rHrEk9fk3x0S1vEcrv+9C1WD06ddb3I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxfct4xwEh/sLu4FlkXwy418tZGzU3PRdF5WBZPII+b8Gsy/o/G
+	Ip5Aqh8yb85Jq7GpFpnv0XRbK8vIKnRU0+IhAnLR1e/H2eX/Sh62BD1u/K78HnY=
+X-Gm-Gg: ASbGncuqjjwWRimDhENXfSj7LE8YaWD2pIaA115Eunl6HYdL0WYLQ2wj+qUt+HH/njh
+	7ZgRAhHp4DoM8/CivLU2ra6ykF0kTmaOQkIfo0xrYf2S3lql++G3FVVKJ/hxdbf4i6w0E99gud0
+	OhBQOyg1ACrwSrrCiq4z3cA7ag9M62VEFWF7FZVvIXTT7Dk0NbZCCwvWHCUQz6qw6BVAMMDGCxw
+	XFr6R2zFmfC3txPW1+sppx2RvUlvaobtafv+KeQtnE7Nf4XQ3rsqY2N/Q1c4OHJCHL0M8uEe9ca
+	Ze6HcmupRVfX7HlrAldPXJYVisneVhaoQMl6GAdTvNgy2mzLjM9a+njYjpAzY4DxwHp4rb+7mrS
+	3RyRrvg==
+X-Google-Smtp-Source: AGHT+IG+TcbJyD3W5mUa064KhIh9QfeUH7pp3e0x4snBKzkDHDCXO3ufzJW4A84fTYipKUabpUNjwQ==
+X-Received: by 2002:a05:6000:4022:b0:390:ffd0:4138 with SMTP id ffacd0b85a97d-3911f756719mr5772700f8f.24.1741260632475;
+        Thu, 06 Mar 2025 03:30:32 -0800 (PST)
+Received: from localhost.localdomain ([2001:b07:6474:ebbf:4703:aa8c:6eab:8161])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912bfb79b9sm1749650f8f.3.2025.03.06.03.30.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Mar 2025 03:30:31 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: linux-kernel@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Abel Vesa <abelvesa@kernel.org>,
+	linux-amarula@amarulasolutions.com,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH v10 00/18] Support spread spectrum clocking for i.MX8M PLLs
+Date: Thu,  6 Mar 2025 12:27:49 +0100
+Message-ID: <20250306112959.242131-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37ab9072-2c1c-4343-9b65-08dd5c972c47
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2025 10:10:50.9107
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ILnxfW1jkzvbjhADBWdDI0ePlhVRU/TiTkyb0MdazaZO2HDum3kinEa5SQO0H6Ql6+peaxKsKK7FvtDXmLrvoqhilArmpCRLvtnOveMyYgk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7PR01MB14794
+Content-Transfer-Encoding: 8bit
 
-SGkgU3RlcGhlbiwNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gLS0tLS1PcmlnaW5h
-bCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3RlcGhlbiBCb3lkIDxzYm95ZEBrZXJuZWwub3JnPg0K
-PiBTZW50OiAwNSBNYXJjaCAyMDI1IDIzOjE3DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS80XSBj
-bGs6IHJlbmVzYXM6IHJ6djJoLWNwZzogQWRkIHN1cHBvcnQgZm9yIGNvdXBsZWQgY2xvY2sNCj4g
-DQo+IFF1b3RpbmcgQmlqdSBEYXMgKDIwMjUtMDMtMDMgMDM6MDQ6MTkpDQo+ID4gVGhlIHNwaSBh
-bmQgc3BpeDIgY2xrIHNoYXJlIHNhbWUgYml0IGZvciBjbG9jayBnYXRpbmcuIEFkZCBzdXBwb3J0
-IGZvcg0KPiA+IGNvdXBsZWQgY2xvY2sgd2l0aCBjaGVja2luZyB0aGUgbW9uaXRvciBiaXQgZm9y
-IGJvdGggdGhlIGNsb2Nrcy4NCj4gDQo+IENvdWxkIHlvdSBhZGQgYW4gaW50ZXJtZWRpYXRlIHBh
-cmVudCBjbGsgb2YgYm90aCBzcGkgYW5kIHNwaXgyIHRoYXQgb25seSBoYW5kbGVzIHRoZSBlbmFi
-bGUgYml0IGZvcg0KPiBjbG9jayBnYXRpbmc/IFRoZW4gdGhlIGVuYWJsZSBjb3VudCBoYW5kbGlu
-ZyB3b3VsZCBiZSBpbiB0aGUgY29yZSBjbGsgY29kZS4NCg0KVGhlIHBhcmVudCBjbG9jayByYXRl
-IG9mIHNwaSBhbmQgc3BpeDIgYXJlIGRpZmZlcmVudC4gSWYgd2UgdXNlIGFuIGludGVybWVkaWF0
-ZSBwYXJlbnQgY2xrLA0KV2hhdCBjbGsgcmF0ZSB0aGUgcGFyZW50IHdpbGwgdXNlPz8NCg0KVGhl
-IHBhcmVudCBvZiBzcGl4MiBhbmQgZ3JhbmQgcGFyZW50IG9mIHNwaSBhcmUgc2FtZS4gSXQgaXMg
-YSBtdXguDQoNCk11eC0+c3BpeDItPmNsayBnYXRpbmcNCk11eC0+ZGl2aWRlci0+c3BpLT5jbGsg
-Z2F0aW5nIA0KDQpDaGVlcnMsDQpCaWp1DQoNCg==
+This version keeps the version v9 patches that can be merged and
+removes the patches that will need to be modified in case Peng's
+PR https://github.com/devicetree-org/dt-schema/pull/154 is accepted.
+The idea is to speed up the merging of the patches in the series
+that have already been reviewed and are not dependent on the
+introduction of the assigned-clocks-sscs property, and postpone
+the patches for spread spectrum to a future series once it becomes
+clear what needs to be done.
+
+Specifically, the patches:
+
+01/18 dt-bindings: clock: imx8mm: add VIDEO_PLL clocks
+02/18 clk: imx8mm: rename video_pll1 to video_pll
+03/18 dt-bindings: clock: imx8mp: add VIDEO_PLL clocks
+04/18 clk: imx8mp: rename video_pll1 to video_pll
+
+are a replica for i.MX8MM and i.MX8MP of the patch for i.MX8MM
+bedcf9d1dcf88 ("clk: imx: rename video_pll1 to video_pll"), which was
+merged some time ago. The patches are split into four because, during
+the review, Krzysztof asked me to separate the driver modifications
+from the dt-bindings changes.
+
+All the other patches in the series, from 5 to 18, are necessary for
+the implementation of the anatop driver for i.MX8M{M,N,P}. The review of
+this series has taken a long time, partly due to misunderstandings
+arising from incorrect design choices.
+
+As Peng stated in [1]:
+"In current design, CCM is taken as producer of CLK_IMX8M_VIDEO_PLL, not consumer."
+
+These patches fix this issue by ensuring that the PLLs are now produced by
+Anatop and consumed by CCM, aligning with the hardware logic.
+
+Finally, a clarification: I decided to keep the same title for the series
+despite having removed all the patches for spread spectrum support in order
+to maintain a clear connection with the previous versions.
+
+[1] https://patchwork.kernel.org/project/linux-clk/patch/20241106090549.3684963-2-dario.binacchi@amarulasolutions.com/
+
+Changes in v10:
+- Drop the v9 patches:
+  16/23 dt-bindings: clock: imx8m-clock: support spread spectrum clocking
+  17/23 clk: imx: pll14xx: support spread spectrum clock generation
+  17/23 clk: imx8mn: support spread spectrum clock generation
+  21/23 clk: imx8mp: support spread spectrum clock generation
+  23/23 clk: imx8mm: support spread spectrum clock generation
+
+Changes in v9:
+- Add 'Reviewed-by' tag of Peng Fan for imx8mn platform patches
+- Fix building warning raised by the kernel test robot for patch
+  v8, 11/18 clk: imx: add support for i.MX8MN anatop clock driver
+- Add patches for imx8m{m,p} platforms:
+  - 23/23 clk: imx8mm: support spread spectrum clock generation
+  - 22/23 clk: imx: add support for i.MX8MM anatop clock driver
+  - 21/23 clk: imx8mp: support spread spectrum clock generation
+  - 20/23 clk: imx8mp: rename ccm_base to base
+  - 19/23 clk: imx: add support for i.MX8MP anatop clock driver
+
+Changes in v8:
+- Drop the patches added in version 7:
+  - 10/23 dt-bindings: clock: imx8m-clock: add phandle to the anatop
+  - 11/23 arm64: dts: imx8mm: add phandle to anatop within CCM
+  - 12/23 arm64: dts: imx8mn: add phandle to anatop within CCM
+  - 13/23 arm64: dts: imx8mp: add phandle to anatop within CCM
+  - 14/23 arm64: dts: imx8mq: add phandle to anatop within CCM
+
+Changes in v7:
+- Add and manage fsl,anatop property as phandle to the anatop node with
+  the new patches:
+  - 10/23 dt-bindings: clock: imx8m-clock: add phandle to the anatop
+  - 11/23 arm64: dts: imx8mm: add phandle to anatop within CCM
+  - 12/23 arm64: dts: imx8mn: add phandle to anatop within CCM
+  - 13/23 arm64: dts: imx8mp: add phandle to anatop within CCM
+  - 14/23 arm64: dts: imx8mq: add phandle to anatop within CCM
+
+Changes in v6:
+- Merge patches:
+  10/20 dt-bindings: clock: imx8mm: add binding definitions for anatop
+  11/20 dt-bindings: clock: imx8mn: add binding definitions for anatop
+  12/20 dt-bindings: clock: imx8mp: add binding definitions for anatop
+  to
+  05/20 dt-bindings: clock: imx8m-anatop: define clocks/clock-names
+  now renamed
+  05/18 dt-bindings: clock: imx8m-anatop: add oscillators and PLLs
+- Split the patch
+  15/20 dt-bindings-clock-imx8m-clock-support-spread-spectru.patch
+  into
+  12/18 dt-bindings: clock: imx8m-clock: add PLLs
+  16/18 dt-bindings: clock: imx8m-clock: support spread spectrum clocking
+
+Changes in v5:
+- Fix compilation errors.
+- Separate driver code from dt-bindings
+
+Changes in v4:
+- Add dt-bindings for anatop
+- Add anatop driver
+- Drop fsl,ssc-clocks from spread spectrum dt-bindings
+
+Changes in v3:
+- Patches 1/8 has been added in version 3. The dt-bindings have
+  been moved from fsl,imx8m-anatop.yaml to imx8m-clock.yaml. The
+  anatop device (fsl,imx8m-anatop.yaml) is indeed more or less a
+  syscon, so it represents a memory area accessible by ccm
+  (imx8m-clock.yaml) to setup the PLLs.
+- Patches {3,5}/8 have been added in version 3.
+- Patches {4,6,8}/8 use ccm device node instead of the anatop one.
+
+Changes in v2:
+- Add "allOf:" and place it after "required:" block, like in the
+  example schema.
+- Move the properties definition to the top-level.
+- Drop unit types as requested by the "make dt_binding_check" command.
+
+Dario Binacchi (18):
+  dt-bindings: clock: imx8mm: add VIDEO_PLL clocks
+  clk: imx8mm: rename video_pll1 to video_pll
+  dt-bindings: clock: imx8mp: add VIDEO_PLL clocks
+  clk: imx8mp: rename video_pll1 to video_pll
+  dt-bindings: clock: imx8m-anatop: add oscillators and PLLs
+  arm64: dts: imx8mm: add anatop clocks
+  arm64: dts: imx8mn: add anatop clocks
+  arm64: dts: imx8mp: add anatop clocks
+  arm64: dts: imx8mq: add anatop clocks
+  clk: imx: add hw API imx_anatop_get_clk_hw
+  clk: imx: add support for i.MX8MM anatop clock driver
+  clk: imx: add support for i.MX8MN anatop clock driver
+  clk: imx: add support for i.MX8MP anatop clock driver
+  clk: imx8mp: rename ccm_base to base
+  dt-bindings: clock: imx8m-clock: add PLLs
+  arm64: dts: imx8mm: add PLLs to clock controller module (CCM)
+  arm64: dts: imx8mn: add PLLs to clock controller module (CCM)
+  arm64: dts: imx8mp: add PLLs to clock controller module (CCM)
+
+ .../bindings/clock/fsl,imx8m-anatop.yaml      |  53 +-
+ .../bindings/clock/imx8m-clock.yaml           |  27 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  11 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  11 +-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  11 +-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |   2 +
+ drivers/clk/imx/Makefile                      |   6 +-
+ drivers/clk/imx/clk-imx8mm-anatop.c           | 287 ++++++++
+ drivers/clk/imx/clk-imx8mm.c                  | 262 ++++---
+ drivers/clk/imx/clk-imx8mn-anatop.c           | 283 ++++++++
+ drivers/clk/imx/clk-imx8mn.c                  | 183 +++--
+ drivers/clk/imx/clk-imx8mp-anatop.c           | 306 ++++++++
+ drivers/clk/imx/clk-imx8mp.c                  | 672 +++++++++---------
+ drivers/clk/imx/clk.c                         |  15 +
+ drivers/clk/imx/clk.h                         |   2 +
+ include/dt-bindings/clock/imx8mm-clock.h      |  76 +-
+ include/dt-bindings/clock/imx8mn-clock.h      |  64 ++
+ include/dt-bindings/clock/imx8mp-clock.h      |  80 ++-
+ 18 files changed, 1740 insertions(+), 611 deletions(-)
+ create mode 100644 drivers/clk/imx/clk-imx8mm-anatop.c
+ create mode 100644 drivers/clk/imx/clk-imx8mn-anatop.c
+ create mode 100644 drivers/clk/imx/clk-imx8mp-anatop.c
+
+-- 
+2.43.0
+
 
