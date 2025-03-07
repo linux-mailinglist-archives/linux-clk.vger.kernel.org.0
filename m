@@ -1,47 +1,47 @@
-Return-Path: <linux-clk+bounces-19160-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19161-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4D6A56270
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Mar 2025 09:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB6E9A5627B
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Mar 2025 09:19:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C0CA3AF963
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Mar 2025 08:16:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A26823AE4AA
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Mar 2025 08:19:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0FC1AF0B6;
-	Fri,  7 Mar 2025 08:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF601B412B;
+	Fri,  7 Mar 2025 08:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ErLB7r+P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzQlrVaa"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB2F1885B4;
-	Fri,  7 Mar 2025 08:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C197D1A5B86;
+	Fri,  7 Mar 2025 08:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741335402; cv=none; b=sdLtH6ilNleDpHJl21dKEMlTW2Qxx36cyOkKLOuetY+YOOmNI32KkCtDl0D+poF6wMs2wSxurOPe6V/Ql1WTQWEJOsr73+BIIxkgGRaxMY/raVWNvBL+xui0J14DoZHjjTHV4PFR68pzuPUZep2aY4prkJ1ZpJIeoAKv5qlkBf4=
+	t=1741335568; cv=none; b=In436CgXODwJOhCbWXRlug0wvLo5cDNuaVR5yFQCDSH1yUuKrjjFHBhhk/cmHIBi//60qMFxcqdYKAs5NZe8czheoH/RAhFtm2iLRhM83OgbwroVQi8fbh06aZy/VQpkpXxWOEYLK1znHo8jFTi07ngkoc30ThkVXgDR2kC6pUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741335402; c=relaxed/simple;
-	bh=DEVRT3pYUTzTLAgL5CavIfRYoF9HgZxDGxwhWCp6/R4=;
+	s=arc-20240116; t=1741335568; c=relaxed/simple;
+	bh=O5yS4mHGI/dch51w5HPDfMdgFq2Kpq0OWX4IjLSKzZM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qyYZJgkHvMKMoh/foiVFG/jLwTO3t1SJTSpQI4Zyo0u/0XCi1RKe+T8MdxtgjVPuIrOMcjoxeS3MtXREKMp2Pue7GCS+eZN2RUUzivoGabgxEip0ajs2lfvWtGjcMvGxHdqXo68CCIB+XTzcaiTfkdCKktXgIf/vy43m0jGsbJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ErLB7r+P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F7BC4CED1;
-	Fri,  7 Mar 2025 08:16:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mvjds9k4rWeBU+G62jc0yW7GnS2tHh02nnCRG0tgnT6A6WKPEDpI2+4tYaXfMaTX3PRyMRFVD9rwUjJMC3M+3vkL7QAYXwPCSx6WsFVBc7vS7lIvlOQ5R/qQKWFrNQVlD7qci0lFRpKIZseoYJ1IlAI2Y/lfCkAxtzLl5H5WTmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rzQlrVaa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 020ADC4CED1;
+	Fri,  7 Mar 2025 08:19:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741335401;
-	bh=DEVRT3pYUTzTLAgL5CavIfRYoF9HgZxDGxwhWCp6/R4=;
+	s=k20201202; t=1741335568;
+	bh=O5yS4mHGI/dch51w5HPDfMdgFq2Kpq0OWX4IjLSKzZM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ErLB7r+PME0AvpLr3Uk77LtGmuAPKrLDCGGk0MonxsZLFZO8/gYN1aJuuVHfJMr7j
-	 ZqvX9b1HxwVz9lGKboQGqCKrsrk8Hmz+FUC2EI7HCr9p63FhHHCM8VCdKkiz6xmiwJ
-	 S11pJzDLVRMWK0f9bVmDRg0yxj1NCEnqeeL282iAd4X8D62weuS/D7eCAK+1YLmKPR
-	 jed64eIOKI6SZqvhmvK42SMkUNKwOwokWvHRzPPBWj6XhrvukYUrmaS06Ri+T+1B28
-	 4xYaas6OuVYbqrw+NWuLJZI3aUp8MwXEEgL3UgH3gGOZYh7iw8NaZaokmv257pq1U2
-	 loRCy+nPVMMiA==
-Date: Fri, 7 Mar 2025 09:16:36 +0100
+	b=rzQlrVaa4RjdBeyCkD5UADcrV34MMvcjAG+N4ruhxpeXAek8mAx+n60Qv1CrN+Bwr
+	 PhWmkhIayjQaQmS7RQNXMXRqEGK+eP9qbASGxqudKiDYDF6fuuk6FSdBtymVr0IJ1T
+	 QOZnJUrZRWrq2OtUNDZ3nbXVTKuPymX3bXhuFQlcWUFL2XO7aFvYn4iEVdU9Xc6vvX
+	 +9B512qSBQgaBnMJa8/UVIl4qpKT9j8puDdxJ0IwXlCE2W+A7ZngsOgokFhULgGm7R
+	 doV4kG7xQ56qRQ49w488TLbwTbwMd0O7uwXygXGb0Ctb7+BPn3bFhfmYFJAUEpMTss
+	 x5g9DM4k7He2g==
+Date: Fri, 7 Mar 2025 09:19:23 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Haylen Chu <heylenay@4d2.org>
 Cc: Michael Turquette <mturquette@baylibre.com>, 
@@ -52,10 +52,10 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
 	spacemit@lists.linux.dev, Inochi Amaoto <inochiama@outlook.com>, 
 	Chen Wang <unicornxdotw@foxmail.com>, Jisheng Zhang <jszhang@kernel.org>, 
 	Meng Zhang <zhangmeng.kevin@linux.spacemit.com>
-Subject: Re: [PATCH v5 1/5] dt-bindings: soc: spacemit: Add spacemit,k1-syscon
-Message-ID: <20250307-gay-apricot-porpoise-9b0aff@krzk-bin>
+Subject: Re: [PATCH v5 2/5] dt-bindings: clock: spacemit: Add spacemit,k1-pll
+Message-ID: <20250307-magnificent-piculet-of-culture-4fe5dd@krzk-bin>
 References: <20250306175750.22480-2-heylenay@4d2.org>
- <20250306175750.22480-3-heylenay@4d2.org>
+ <20250306175750.22480-4-heylenay@4d2.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -64,22 +64,14 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250306175750.22480-3-heylenay@4d2.org>
+In-Reply-To: <20250306175750.22480-4-heylenay@4d2.org>
 
-On Thu, Mar 06, 2025 at 05:57:47PM +0000, Haylen Chu wrote:
-> Document APMU, MPMU and APBC syscons found on Spacemit K1 SoC, which are
-> capable of generating clock and reset signals. Additionally, APMU and MPMU
-> manage power domains.
+On Thu, Mar 06, 2025 at 05:57:48PM +0000, Haylen Chu wrote:
+> Add definition for the PLL found on Spacemit K1 SoC, which takes the
+> external 24MHz oscillator as input and generates clocks in various
+> frequencies for the system.
 > 
 > Signed-off-by: Haylen Chu <heylenay@4d2.org>
-> ---
->  .../soc/spacemit/spacemit,k1-syscon.yaml      |  80 +++++++
->  include/dt-bindings/clock/spacemit,k1-ccu.h   | 210 ++++++++++++++++++
-
-Filename matching binding, so spacemit,k1-syscon.h
-(or vice-versa)
-
-With this fixed:
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
