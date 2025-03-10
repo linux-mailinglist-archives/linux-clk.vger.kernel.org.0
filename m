@@ -1,193 +1,137 @@
-Return-Path: <linux-clk+bounces-19295-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19292-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E96D1A5909B
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Mar 2025 11:01:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50027A59090
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Mar 2025 11:00:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24E8716C528
-	for <lists+linux-clk@lfdr.de>; Mon, 10 Mar 2025 10:01:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCDA87A4BDA
+	for <lists+linux-clk@lfdr.de>; Mon, 10 Mar 2025 09:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90239225A4F;
-	Mon, 10 Mar 2025 10:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A2A224230;
+	Mon, 10 Mar 2025 10:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="IQxgjB9l"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Pgy2XlTx"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F75B29A2;
-	Mon, 10 Mar 2025 10:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741600874; cv=pass; b=NJF1+NciMSJrHQB/UTCTURTZwJ1R+nSVhEi2bisj51f9pQiPaiXnaVHB0hn9NDDt1SRneHpNiiT6xtqVex3Z3I5mkauCH01j66jyEjmNKxh4vVRNiFKEsZbuScmOWb+heZhMxKfW9pR4UuRaVVLNnkcZltPfuJs9RNiEd/pcDME=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741600874; c=relaxed/simple;
-	bh=b76qrhBUBBQgOxNEP24/iaezZ47DqFJATqoAHC9PA6A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Rofkw5F97fyJ05StyiCFyXusbPk5IK5wKXVW1iN6y3qtbPKKuM8zursQsIEoo2aC9TfjXimFEYAw0M55E3q9CFFzgviV8CptM2neN1IEkIGQJpN7hmGjmXuYwoR63Ma7ea9dBYwe/YaJ14F7i4TwyqAANtroiwpjcD9dA2PT0WQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=IQxgjB9l; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1741600844; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=LUAZ4AB574FF/KkzPzySh74VUqaKk7Up4geZssi+tUWNoVBPmbOXaAB0X2kT4+3Wbwj1fV/MKAEB7dANewJ33AqC8P4Oss8Iipj6Y97OwfM4KJ/c+VSRs1O1gLlaE9xuzeOnE90bxczUP5GDESSsbObyinaN12NBVrqijYEffFQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1741600844; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=sG0ZptlmWh6usz+6gYzu3av5prS4D953FeG+EZTRlmE=; 
-	b=Fyv59Hi6jM+QmMMz4EVYjOWDyqSx9Tdyog8JkvORFtntRG92twzxE0N61oF1iAv7x8o4qbhLsFLqKux87Hwt7QYYOlnQ4LFMYVFMLuXhhrCucZR8+ZZWZZWFS2WthKQfmqwC4VzPjrC/HclcCnESvi9XePFtgQ1mv5zh+rcgpYQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
-	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741600844;
-	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=sG0ZptlmWh6usz+6gYzu3av5prS4D953FeG+EZTRlmE=;
-	b=IQxgjB9lLAHcZuF00S0hPyH4P/moK4+Fc+IszQagDcah2y50VQSL1g435V4GGsjF
-	V2PW5GMQwJNtc/Xrg2fZ9rdxCtoJVRjFBeGPmQu2AdYVtZuO+U6SD0ms2XPVGWgkpwZ
-	6YCFoC8OeRm6qM5vLsMZvOGvmwcK+dGLvtsEqN6E=
-Received: by mx.zohomail.com with SMTPS id 174160084194050.598305390263135;
-	Mon, 10 Mar 2025 03:00:41 -0700 (PDT)
-From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Mon, 10 Mar 2025 10:59:57 +0100
-Subject: [PATCH 2/2] arm64: dts: rockchip: fix RK3576 SCMI clock IDs
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F5D14B092
+	for <linux-clk@vger.kernel.org>; Mon, 10 Mar 2025 10:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741600833; cv=none; b=Dft5bQD22TrQrXvuElx8uvS+hAYHE2I6n1sRH/Cien6FyfwQW7aj+yLWpoCk+gZ0b051C9LlKeC1KhzQrqm+nc32wT1MN3Cu9nSlu+GgisO7BUVxt1wKVx+Hvk9COZzP1JdnUIspG01MwqHtk91zLrAflXXtkgIdWgJhpApQP3A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741600833; c=relaxed/simple;
+	bh=/WFGkSucmQQVqC4YRwLmx2Q0dcE6jZVaFroVNYU1Qnw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ggSImsou2zcFzGjYaDUYb4rjLbVYJbAv4EHDYbeqf/XfVOcIKy+2HPrjkHAE/h5vYG21Pauv7ctFVAdJzobVUQfDyvFwdBR73Fr4aAn8xA6jMiTnH1UxWd2cTStf8QuIAFRQPI+p4RO/1RmdF/WccFcXVKpDkQTSew5cgwzZb90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Pgy2XlTx; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52A9cC9b001680
+	for <linux-clk@vger.kernel.org>; Mon, 10 Mar 2025 10:00:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	o/gEoqv9b7eMEoqWazb0zYafPZy1bYCDNTUQlmA/QxU=; b=Pgy2XlTxWpU8uLAX
+	zx0dbb9Qc1lsGe2Zxn+RenQS+DywssgNwDKqey4AnlfDrU+ZF6VQbInYJ/kurxwi
+	nZ+oEUbStS+u8BgvBzCTEBcT9s4wrXpvn6OCXPbfC1Z/IyFMMyDnsBgt56I6EswI
+	BfvTFiqCqqwEflpVkPyrozuJDuM8pW3bqyFl7EbySwU2SiByZvjtfwtyoB6QkL7O
+	bkLD2rT8JMsgmpn6Vqc7qXiDUpE1jKPVwgTVwzAvuJ6cQYRnD79cf7wyzJbvewbP
+	OLzt3PzZwwSjgzDbnzdMS0hG21/9kv22gxMLgby2iTU3Eg+C+o8MBBrV97Y6WOH6
+	w7dCqw==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 458ewk4dc6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Mon, 10 Mar 2025 10:00:30 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2ff55176edcso7195113a91.1
+        for <linux-clk@vger.kernel.org>; Mon, 10 Mar 2025 03:00:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741600830; x=1742205630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/gEoqv9b7eMEoqWazb0zYafPZy1bYCDNTUQlmA/QxU=;
+        b=gvGsFnqVGDqNseQ72Q7cuH3UttlpBn3prTNnxndEObitFde0Up1J2VjpZS6oMSbo7k
+         x6XTq85fyiwe2g2HFeFNIVaQjDt0SKcHT95Hb5/4JwUY4rBvm8dze+RcInE5rJ7vQzwc
+         dmEzJF2aztNYXnNxvF4490oNTpTcVJ+tsh1Hz9jZyvnOe8aG+3gL3y/hBiWS24shpF5M
+         z49SVO33Z4hNNXxy6uE8CDy5P136EL5HMwe5Vlr6t9JzPcLfmnzeSDla573gUJZ7Oe7Z
+         Whc7vy7GTYyHmXjimVJ8fBR8CToAkpeupVWr8DGYEfT/wCwtxbL7k0UbOZUSlOyD4pim
+         FXcg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1nYAG0vgHGtj8Y4PGvALQBzNUU392d+JAlwoJsaacuC5hrqHVhdactGlv/HJzDuNRm1yJStKLQXw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwItc6f/7MpUXp7+dER3NrRVdNkwc5uj+2M83IsRlFDw/wVCcNl
+	pfSoWPajcdFu92+J2VLL1HgfSyLdDq2qV+C8efJMiUmzRBJOx5bez8pseEJNoS0SXxWA2YY8w0O
+	Ug38Q5Vs4dorb3TBGjxhzsvKkzVpCsG+v/sLEO4k8s+0J5RuybPyJS0bo1vM=
+X-Gm-Gg: ASbGncsh7zRFjRTKtUzWzQJqdmIQVdnpERwKGHT+SHulg4/u6+HPEMhz1k/F7DPH6H7
+	2fXb0OJ3vcqKrLb09FrUFVhZUKUpzqO/q7KPgid+A1mtEZMD4sspZIiIqoTzl+CFi3HHmn1iKwW
+	IKkBWVBXKJR3BftJIVVlvnSpCi5MbrPhNRMatTVambZFP9CYLXFZIQB0wggPT9UjaKut33Yvy36
+	qrt7I0VgVsMtvbeS6wIZmgVKcDX7lpfJCTQdI8XTr6C0ReE+kKkMRd+2wY3cdOg8l65HkrpleMO
+	tBvKlKqOpcAOsoWpl1OwmOcfrE2U60OpQV6lIbNTD/vI30KfrigljE4P
+X-Received: by 2002:a17:90b:54cf:b0:2fa:f8d:65de with SMTP id 98e67ed59e1d1-2ff7cf09609mr17131115a91.22.1741600829610;
+        Mon, 10 Mar 2025 03:00:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH2PnlBORgrtsnN495wyn9nxcbur0ZbfXPq3v1ScLmErAorXFDXK/mJYeYf0Bj2DhaFWSa+2g==
+X-Received: by 2002:a17:90b:54cf:b0:2fa:f8d:65de with SMTP id 98e67ed59e1d1-2ff7cf09609mr17131087a91.22.1741600829242;
+        Mon, 10 Mar 2025 03:00:29 -0700 (PDT)
+Received: from [10.151.37.217] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a7f9f9sm73645885ad.125.2025.03.10.03.00.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Mar 2025 03:00:28 -0700 (PDT)
+Message-ID: <bf79cf5a-0c50-49e0-b930-1ec5028e7d0c@oss.qualcomm.com>
+Date: Mon, 10 Mar 2025 15:30:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] drivers: clk: qcom: ipq5424: fix the freq table of
+ sdcc1_apps clock
+To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, andersson@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, dmitry.baryshkov@linaro.org,
+        quic_srichara@quicinc.com, quic_varada@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20250306112900.3319330-1-quic_mmanikan@quicinc.com>
+Content-Language: en-US
+From: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+In-Reply-To: <20250306112900.3319330-1-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250310-rk3576-scmi-clocks-v1-2-e165deb034e8@collabora.com>
-References: <20250310-rk3576-scmi-clocks-v1-0-e165deb034e8@collabora.com>
-In-Reply-To: <20250310-rk3576-scmi-clocks-v1-0-e165deb034e8@collabora.com>
-To: Jonas Karlman <jonas@kwiboo.se>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- Heiko Stuebner <heiko@sntech.de>, 
- Detlev Casanova <detlev.casanova@collabora.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liang Chen <cl@rock-chips.com>, 
- Elaine Zhang <zhangqing@rock-chips.com>, 
- Finley Xiao <finley.xiao@rock-chips.com>, 
- Yifeng Zhao <yifeng.zhao@rock-chips.com>
-Cc: kernel@collabora.com, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-X-Mailer: b4 0.14.2
+X-Authority-Analysis: v=2.4 cv=Tr8chCXh c=1 sm=1 tr=0 ts=67ceb83e cx=c_pps a=vVfyC5vLCtgYJKYeQD43oA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=o3auzIaOksCvpTgIIaIA:9 a=QEXdDO2ut3YA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: MpfIpinjjDH9E_sqjObVZ36L5kOTPCPj
+X-Proofpoint-ORIG-GUID: MpfIpinjjDH9E_sqjObVZ36L5kOTPCPj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-10_04,2025-03-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ priorityscore=1501 mlxlogscore=795 spamscore=0 lowpriorityscore=0
+ mlxscore=0 clxscore=1011 phishscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503100079
 
-Downstream Linux, and consequently both downstream and mainline TF-A,
-all use a different set of clock IDs from mainline Linux. If we want to
-fiddle with these clocks through SCMI, we'll need to use the right IDs.
-If we don't do this we'll end up changing unrelated clocks all over the
-place.
+On 3/6/2025 4:59 PM, Manikanta Mylavarapu wrote:
+> The divider values in the sdcc1_apps frequency table were incorrectly
+> updated, assuming the frequency of gpll2_out_main to be 1152MHz.
+> However, the frequency of the gpll2_out_main clock is actually 576MHz
+> (gpll2/2).
+>
+> Due to these incorrect divider values, the sdcc1_apps clock is running
+> at half of the expected frequency.
+>
+> Fixing the frequency table of sdcc1_apps allows the sdcc1_apps clock to
+> run according to the frequency plan.
+>
+> Fixes: 21b5d5a4a311 ("clk: qcom: add Global Clock controller (GCC) driver for IPQ5424 SoC")
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 
-Change the clock IDs to the newly added SCMI clock IDs for the CPU and
-GPU nodes, which are currently the only ones using SCMI clocks. This
-fixes the terrible GPU performance, as we weren't reclocking it
-properly.
-
-Fixes: 57b1ce903966 ("arm64: dts: rockchip: Add rk3576 SoC base DT")
-Reported-by: Jonas Karlman <jonas@kwiboo.se>
-Closes: https://libera.irclog.whitequark.org/linux-rockchip/2025-03-09#1741542223-1741542875;
-Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
----
- arch/arm64/boot/dts/rockchip/rk3576.dtsi | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-index 8591065b575223a5eb2da70f723f16969aa2ecf7..1fddf298795e5c914a76d9779b6f8563ee15c8e3 100644
---- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-@@ -111,7 +111,7 @@ cpu_l0: cpu@0 {
- 			reg = <0x0>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <485>;
--			clocks = <&scmi_clk ARMCLK_L>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_L>;
- 			operating-points-v2 = <&cluster0_opp_table>;
- 			#cooling-cells = <2>;
- 			dynamic-power-coefficient = <120>;
-@@ -124,7 +124,7 @@ cpu_l1: cpu@1 {
- 			reg = <0x1>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <485>;
--			clocks = <&scmi_clk ARMCLK_L>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_L>;
- 			operating-points-v2 = <&cluster0_opp_table>;
- 			cpu-idle-states = <&CPU_SLEEP>;
- 		};
-@@ -135,7 +135,7 @@ cpu_l2: cpu@2 {
- 			reg = <0x2>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <485>;
--			clocks = <&scmi_clk ARMCLK_L>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_L>;
- 			operating-points-v2 = <&cluster0_opp_table>;
- 			cpu-idle-states = <&CPU_SLEEP>;
- 		};
-@@ -146,7 +146,7 @@ cpu_l3: cpu@3 {
- 			reg = <0x3>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <485>;
--			clocks = <&scmi_clk ARMCLK_L>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_L>;
- 			operating-points-v2 = <&cluster0_opp_table>;
- 			cpu-idle-states = <&CPU_SLEEP>;
- 		};
-@@ -157,7 +157,7 @@ cpu_b0: cpu@100 {
- 			reg = <0x100>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
--			clocks = <&scmi_clk ARMCLK_B>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_B>;
- 			operating-points-v2 = <&cluster1_opp_table>;
- 			#cooling-cells = <2>;
- 			dynamic-power-coefficient = <320>;
-@@ -170,7 +170,7 @@ cpu_b1: cpu@101 {
- 			reg = <0x101>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
--			clocks = <&scmi_clk ARMCLK_B>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_B>;
- 			operating-points-v2 = <&cluster1_opp_table>;
- 			cpu-idle-states = <&CPU_SLEEP>;
- 		};
-@@ -181,7 +181,7 @@ cpu_b2: cpu@102 {
- 			reg = <0x102>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
--			clocks = <&scmi_clk ARMCLK_B>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_B>;
- 			operating-points-v2 = <&cluster1_opp_table>;
- 			cpu-idle-states = <&CPU_SLEEP>;
- 		};
-@@ -192,7 +192,7 @@ cpu_b3: cpu@103 {
- 			reg = <0x103>;
- 			enable-method = "psci";
- 			capacity-dmips-mhz = <1024>;
--			clocks = <&scmi_clk ARMCLK_B>;
-+			clocks = <&scmi_clk SCMI_ARMCLK_B>;
- 			operating-points-v2 = <&cluster1_opp_table>;
- 			cpu-idle-states = <&CPU_SLEEP>;
- 		};
-@@ -932,7 +932,7 @@ power-domain@RK3576_PD_VO1 {
- 		gpu: gpu@27800000 {
- 			compatible = "rockchip,rk3576-mali", "arm,mali-bifrost";
- 			reg = <0x0 0x27800000 0x0 0x200000>;
--			assigned-clocks = <&scmi_clk CLK_GPU>;
-+			assigned-clocks = <&scmi_clk SCMI_CLK_GPU>;
- 			assigned-clock-rates = <198000000>;
- 			clocks = <&cru CLK_GPU>;
- 			clock-names = "core";
-
--- 
-2.48.1
+Reviewed-by: Kathiravan Thirumoorthy 
+<kathiravan.thirumoorthy@oss.qualcomm.com>
 
 
