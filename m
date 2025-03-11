@@ -1,183 +1,141 @@
-Return-Path: <linux-clk+bounces-19346-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19349-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E457A5C3E9
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 15:35:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E26CA5CB9E
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 18:06:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D31267A8E9A
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 14:34:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F22B8189E8C4
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 17:06:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EA91E9901;
-	Tue, 11 Mar 2025 14:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B371262D3A;
+	Tue, 11 Mar 2025 17:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GU3jOMES"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Fr9Y2VbK"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88896158A13
-	for <linux-clk@vger.kernel.org>; Tue, 11 Mar 2025 14:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1978262809
+	for <linux-clk@vger.kernel.org>; Tue, 11 Mar 2025 17:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741703747; cv=none; b=XUZzM/dJCN1jxl7FZX/rVMZWbhNhMTcJCLEhNkn3GdO18FgHI2IVu3HG0Khx/wzZjmRhZwSUjHo8gvkn9NrbZPyw4KkQfk6D0ZbSzB5ofR48JZ+VX2yBksFil5NHPbdjegFYdMLrIhUNYazs3x4JJOCejZX5D+8PZrC0nCK9PoM=
+	t=1741712734; cv=none; b=E1v2L81v6DPZV+CNjp/7nIhlNMxXL+FCQlwzER6F0rzUPz1dV+JYgKnVFVWUeX5kiwHiedxe5Te76leCAR700OMJuROg6BvKZSL7gnRQtW6di6t7NauM0i4721mEpxGL2dOqkgg49YcUmoudhZWCfYVgPGYMjSrLhCt8p+1xJmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741703747; c=relaxed/simple;
-	bh=rty27olN5qtT2FiJsZAnVeMcI3IQWlc6A0m+F2XfCzA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rep7xNVo0R7J9kgGDXXudge6SBr1axYZ+T2K1QCJ+TnMJ8Tyg+rOaifXJ3GiNv0wgj/BLv2DilfhpAv4Lo+akYlkFh+1ay8mhcHwFNFFnYVM4WfSt3vIrqHN/Mu9lM/yBOMZ03bRdBN9FFVBh8+ofjcPuen+xs+zRuJ0CvEVsZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GU3jOMES; arc=none smtp.client-ip=209.85.218.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-ac2a81e41e3so399863066b.1
-        for <linux-clk@vger.kernel.org>; Tue, 11 Mar 2025 07:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741703744; x=1742308544; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hlcozNRCUn2cDnJKUvdb8kPLVFjOiAX9tvU5DyWpFbs=;
-        b=GU3jOMESekZDdTWy5z1Z3dpQgkXwFi6DXlPpnvBhmzJ7I2BBkGP4aDHIhYYp2cl/H1
-         Jb09vev6yW/KF5JPE0/4XtrPgauwJDhYr0OhGS12+qPy/Llo/sMH2jRnaXa/0NgpmdbM
-         MTftcdpClpyKf54p2vFufW7gQ49ecO1YPksWebiwWsUzUnA4EMOJst1yMmb60lG1qugf
-         ckz0zalrLXHu6UrY/RJJh9Bv/IVR9we8MEJWyYcivSaMJpky3h/JHlzjzqljeiHyBLUk
-         4pviQhS7SYOV1LlEHPEdK3IlpMXgZ1dPKsfSUv1gJoCNIamLzqqfbe0HEV3Vgpt6vxxH
-         tTtg==
+	s=arc-20240116; t=1741712734; c=relaxed/simple;
+	bh=695GR/KZLkHZ1WKu8d8I3wFJq7e0VRh8DjOiryU8o1I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZeUr8U4nLjfZxOLu1qT94aAJYGoVeFNmJnDRju4VPLBJWrRvhex9XmD16z2QPSrqcUQUqjppt1VKUvR/j5vlFp/NQOw7Mr9SieSfuKxxnNtej7x34SGVMph4olDQ0CYPGe9Qe0a4Av1n7NteEoRCJKSEaPEIQIp+GDvEbP49hlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Fr9Y2VbK; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52BG5WsU010282
+	for <linux-clk@vger.kernel.org>; Tue, 11 Mar 2025 17:05:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	695GR/KZLkHZ1WKu8d8I3wFJq7e0VRh8DjOiryU8o1I=; b=Fr9Y2VbKb77uybHC
+	SsjKJrzPBcGaari0g6jOfZG9ym0t8sY6Dqvh83l8nq/eF2482GASQmd3zklKQudH
+	u7WehTizAFyh9I/RbYG6LgLtlKB5SCa1lNKiXIMMdBAESZ1JwKmpWsd0rsUB4WRT
+	vSP0eCnRheAANu6kzK6gvxYn/47JdM/ioIcE9mC3iE9G25z5No4yKhCnt3RHQbrR
+	pzDCn/kuBNvf6gLtK8gULvirstcFrX52MzSG5toVSLxJJG/MRJPRUb7jcpdZ0TrR
+	ri4JjGtu7dNZ0sZknlLIWi3zaWeKZHb3gC+O7Suh7OulvYjpYGtEwn1GUd24ALeR
+	49I/jg==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ah4s1qx6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-clk@vger.kernel.org>; Tue, 11 Mar 2025 17:05:30 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2242ade807fso125795635ad.2
+        for <linux-clk@vger.kernel.org>; Tue, 11 Mar 2025 10:05:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741703744; x=1742308544;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
+        d=1e100.net; s=20230601; t=1741712729; x=1742317529;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hlcozNRCUn2cDnJKUvdb8kPLVFjOiAX9tvU5DyWpFbs=;
-        b=XSAaw8NHVEeYuOc8D522zPf0icl7pA6L5KapLgM0qXS/hDJiwjULRO5uhEh/b3Qui7
-         LpTzAFLidY+o/dv+UL8OHLcfg/X/o8EcgkfDfRE0+q4uLrq3xOcvd1uy+TASOYtpwPSg
-         +DVFOfId42wnuJUCcJBqMwWdbXRuqBOkNDTftXrxQq58KOD091qT7HNsCijbAPje+gJE
-         140J0LFbdklBV8svrr9uytXNwWOIb1fn4MWeh+JRUwIZcek8CArcssUJI1nSg6gIqJOc
-         akg03n8+p/JvMyyFwnf05kRft+zKH8LEQRx2aaHR/J7o7mnjNbSJSKP3o3nPmK7MsfnS
-         2+Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgRORujWgKjWXjl+zsQ44qLPuSfBNCT2EvKz7G1jZyZTSnbno6F8HHR7PkUusWa/mPwpZuOGInDIs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+S6KR30oo9i5LHgMvUbwHEUMLJPRi9dGFQgKPg/aP8Lqh/C8O
-	dSlkepy0y5PALL/EW6nDWjjzQX44SZSVpy7Vk9s+f092uBfhQb9sBhgTAk5USc0=
-X-Gm-Gg: ASbGnct/sgXEL1prMEg9Wx9F3d1CPyuk67C4cvjZUkrqDLQKZXcL6llzVAKG4oK5KJl
-	4kb0tR9L9x0oAptKm3q+qPmr/F08EqkbC5NvkP2/N9pXrKenVTdIRpKslrUqTtuoDFPknwOhf9e
-	RWLgm8KQul1HndxVk0ZgVQxDt93cNnK2ARXFL/C6vo1rAbNWv471bFQ6KojIRAHPbEwCcQrjSpy
-	0GZDzRPzUkEaJZFREnraHKxxz32pCZ9fhLcWceDdrACJi1XocrWt+mOyDIC7h5vMn+s4nJhu8qv
-	LS/VIRYOW7LHUUYYMvzNoBU3u46vhgX/u8n/t6sJISRRFSOikgAdT33B16OLM8U9Dl6NAqd7z1w
-	CZFGCdTwdEXto
-X-Google-Smtp-Source: AGHT+IFLdM9vCnSAq2tyDNO5yPeJsNiGhv4R/i7mo9dqAzSuL9h81HaDVtVXHdqZ5ge8YgeZcopV0g==
-X-Received: by 2002:a17:907:d27:b0:ac2:9e1a:bf95 with SMTP id a640c23a62f3a-ac29e1ac5camr1178043966b.18.1741703743784;
-        Tue, 11 Mar 2025 07:35:43 -0700 (PDT)
-Received: from localhost (host-87-14-236-98.retail.telecomitalia.it. [87.14.236.98])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2a96a22d8sm278255366b.158.2025.03.11.07.35.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Mar 2025 07:35:43 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-X-Google-Original-From: Andrea della Porta <aporta@suse.de>
-Date: Tue, 11 Mar 2025 15:36:53 +0100
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Wilczynski <kw@linux.com>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Saravana Kannan <saravanak@google.com>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v7 03/11] dt-bindings: pci: Add common schema for devices
- accessible through PCI BARs
-Message-ID: <Z9BKhR5exw13yN36@apocalypse>
-References: <cover.1738963156.git.andrea.porta@suse.com>
- <c0acc51a7210fb30cae7b26f4ad1f0449beed95e.1738963156.git.andrea.porta@suse.com>
- <20250310212125.GB2377483@rocinante>
- <CAL_JsqKPGOdS_8KDggO5tBHAnC-NTLAC5iS9GANm9BuxBfQUsw@mail.gmail.com>
+        bh=695GR/KZLkHZ1WKu8d8I3wFJq7e0VRh8DjOiryU8o1I=;
+        b=HDmHUfXHkSbVn+N08VRJBbw8BioTTqk3BPxh2N5D5Q1X8C6xKy8JkEk/5ekei/eX8v
+         3Jekrq6nHMhhzGCREz2qkNGbgotcR/k/nFRK8QEuLWj8B+uG/lK+s9R+VBz9UQLRrNhZ
+         QbiVAuemmIk09rl37S6qKtJQkFsWoL6vSyJaX+amvABQW6r55aFhNKWHgpjvIlgpYmmo
+         d8U0CejrjawXUQJhP1KeKTDBIJk7nOJZ2Oc685rM0UOtyz0rNlsLE8/brpjArapcpAB/
+         KfNrrlTvvXsNFaag+h2gHIWuTut9XjmfZw6jxqwhASIgCrCdSERxxIBOL56jxoy2OYF+
+         ZXOw==
+X-Gm-Message-State: AOJu0YxagaxYo/aWwK8WR+3zkEeTCop7ML7OnlxUOkcSPTuhbFhx5U4j
+	RiWcKVWFQxChHYzzOkRheIHCxg+P4i8m0ZKODFIc35Cn+NSiPGUJ08NvSEp2bV1IrbOCVNzxplN
+	Peu7YgqXKsp//GvPdkL/C3VcWHBKdRLatz8eCyVUqClQPxaD5r8L9wv3aPDM=
+X-Gm-Gg: ASbGncsbbNbxy64OS00v4DDoHhBiPI0V56WXK2L98glPN/dYa3lfEXGCLskedNLXvVt
+	u7k1ooz87Ex2njebQ75nc8Kpw+BG+FDoq2q85q9E+VUp+05xtdgFnYgCeINJhnd6wW259h/ahda
+	Bbm2Yg4VA+1jn6baPq2bV8Gu4uaEaC0kliVMSNo3IL7lfcng4wMS3kYJu45GLPJB2zWswzQfjz6
+	hQ1rN5ros7M6QkGQE/OTNRgN41mmUiqPMQaAVgyYLZN6YbnDG0yHwg3DEClDr3e1uemu8IFkFX9
+	Wabhhxs6A4e6WoHUBI4oVpGo/kaStsuWJOP8AHs9TPpUWVjsEXyX
+X-Received: by 2002:a17:902:ce8f:b0:224:1c41:a4bc with SMTP id d9443c01a7336-224288951edmr291368235ad.12.1741712729219;
+        Tue, 11 Mar 2025 10:05:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGNmYfTMSW/XGFFejAsebRCu/XXSDKUCbe/u23gMVpwPCacZeb0zlctyyAvyI50SfrBGmgbZg==
+X-Received: by 2002:a17:902:ce8f:b0:224:1c41:a4bc with SMTP id d9443c01a7336-224288951edmr291367805ad.12.1741712728800;
+        Tue, 11 Mar 2025 10:05:28 -0700 (PDT)
+Received: from [10.81.24.74] (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410abb088sm100321875ad.256.2025.03.11.10.05.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 10:05:28 -0700 (PDT)
+Message-ID: <7dc00288-1e12-4524-97e7-a427ee24d984@oss.qualcomm.com>
+Date: Tue, 11 Mar 2025 10:05:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKPGOdS_8KDggO5tBHAnC-NTLAC5iS9GANm9BuxBfQUsw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/26] clk: mediatek: Add MT8196 apmixedsys clock support
+To: Guangjie Song <guangjie.song@mediatek.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20250307032942.10447-1-guangjie.song@mediatek.com>
+ <20250307032942.10447-8-guangjie.song@mediatek.com>
+From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <20250307032942.10447-8-guangjie.song@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=YYVH5xRf c=1 sm=1 tr=0 ts=67d06d5a cx=c_pps a=IZJwPbhc+fLeJZngyXXI0A==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=xSbqf6NU4cea1KmgExsA:9 a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+ a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-GUID: gCh8tlL1s-EutPERrQIcYcYQ_u8WtkOZ
+X-Proofpoint-ORIG-GUID: gCh8tlL1s-EutPERrQIcYcYQ_u8WtkOZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-11_04,2025-03-11_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ mlxlogscore=943 bulkscore=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 clxscore=1011
+ priorityscore=1501 mlxscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503110108
 
-Hi Rob,
+On 3/6/25 19:27, Guangjie Song wrote:
+> +module_platform_driver(clk_mt8196_apmixed_drv);
+> +MODULE_LICENSE("GPL");
 
-On 08:32 Tue 11 Mar     , Rob Herring wrote:
-> On Mon, Mar 10, 2025 at 4:21 PM Krzysztof Wilczynski <kw@linux.com> wrote:
-> >
-> > Hello,
-> >
-> > [...]
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index d45c88955072..af2e4652bf3b 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -19752,6 +19752,7 @@ RASPBERRY PI RP1 PCI DRIVER
-> > >  M:   Andrea della Porta <andrea.porta@suse.com>
-> > >  S:   Maintained
-> > >  F:   Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.yaml
-> > > +F:   Documentation/devicetree/bindings/pci/pci-ep-bus.yaml
-> > >  F:   Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.yaml
-> > >  F:   include/dt-bindings/clock/rp1.h
-> > >  F:   include/dt-bindings/misc/rp1.h
-> >
-> > I would be happy to pick this via the PCI tree as per the standard
-> > operating procedure.  However, the MAINTAINERS changes do not exist
-> > for us yet, and are added in the first patch of the series, which is
-> > not ideal.
-> >
-> > I can add the missing dependency manually, but that would cause issues
-> > for linux-next tree, which is also not ideal.
-> >
-> > I saw some review feedback, as such, when you are going to be sending
-> > another version, can you make MAINTAINERS changes to be the last patch,
-> > perhaps.  Basically, something standalone that perhaps whoever will pick
-> > the misc patch could also pick and apply at the same time.
-> >
-> > Alternatively, someone else picking up the PCI dt-bindings would work, too.
-> >
-> > Your thoughts?
-> 
-> I guess I missed this in review, but why is a common schema buried in
-> a device maintainer entry? Also, an entry in MAINTAINERS is redundant
-> anyway because get_maintainers.pl can fetch maintainers from the
-> schema file.
+Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
+description is missing"), a module without a MODULE_DESCRIPTION() will
+result in a warning with make W=1. Please add a MODULE_DESCRIPTION()
+to avoid this warning.
 
-Oh nice, I've added all that .yaml entries in MAINTAINERS because I saw many
-reference already existing there, so I was thinking that was a good behaviour.
-Now I guess I can get rid of all .yaml references in MAINTAINERS file from all my
-patches, since they will be solved automatically by get_mainatainer.pl... 
-There's only one minor caveat though: I have a middle name, and it turns out
-that get_maintainer.pl is skipping my first name. Unluckily I'm not a Perl guy
-so I guess I have to dive a little bit in Perl regex and send a separate patch
-for that.
+This is a canned review based upon finding a MODULE_LICENSE without a
+MODULE_DESCRIPTION.
 
-Many thanks,
-Andrea
-
-> 
-> Rob
+Note this issue appears in multiple patches in this series, so please
+fix all instances.
 
