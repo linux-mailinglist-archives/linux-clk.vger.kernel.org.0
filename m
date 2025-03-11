@@ -1,136 +1,140 @@
-Return-Path: <linux-clk+bounces-19345-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19348-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A52EAA5C2BF
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 14:32:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98FFFA5C46A
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 16:03:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4810171AE8
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 13:32:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04678189A374
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Mar 2025 15:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9CCB1C1F2F;
-	Tue, 11 Mar 2025 13:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51E025E822;
+	Tue, 11 Mar 2025 15:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjUGOna9"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b="PFkPUa2c"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919551487E9;
-	Tue, 11 Mar 2025 13:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB5D25E80A;
+	Tue, 11 Mar 2025 15:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.142.107.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741699964; cv=none; b=Wj64mCmbCbkKqDYPGc8ANA5TAQpx3vPvFDDMFGf7oOQzCbUt9fHEDoWeSUrtDE9iczlVQIhhiyw1zqYFDdQh5Q0WQrnZIKdeAY5Fwit2hqXcCRagH+bxWBBlMzuw2lrFXxuutv3zITRCfhabsu1OXmOy17ARO/qmISdrGfbyNIo=
+	t=1741705350; cv=none; b=klVHx/ADM+Rp+zfuVMm/8LHGO0Wz7QAUD9cl0LkpVe/BCg+Akpp1TvE9xb6c0avUgua1do+pZ6R9TyuGuNoOphfelv6kPyi9yaq6iFhKNdHiVxC5zXrvS6WJFQ/UdTF7dai1vw1LAb1zyvnksI0JmKFT1uDof7IPV64HhUTJB/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741699964; c=relaxed/simple;
-	bh=foFBmGFbc+QCSONoZVpR+givHeN3h/c5aJuICUYGiE0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DXNuSj4+ueC4+4VILS36C8qLSsy+Ke6mtZjwPpHczd70V4caUSDwjheL0xWSv8u0WWI3y5cqMQ2KmRajk7Sz/13SiM4nWk9C4i6/PYhu16jzIZ1WnGbk3w8gpv9qtGVsi3CQRaPB3FK4KDWC8Kk/+L9bKDhlQsL5XFEOHH9By2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjUGOna9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2A3C4CEF3;
-	Tue, 11 Mar 2025 13:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741699964;
-	bh=foFBmGFbc+QCSONoZVpR+givHeN3h/c5aJuICUYGiE0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IjUGOna96P6PIijXA/JopSCd1d/VyKBBN+ce/Ed0nBiLhKysYuXMOO8ntjKoNJFoo
-	 KvvRKcBWnITLYLhGRnSUQitn+rIdSSRK2Cpm5n6Mn/118FAtbrimE5jYp/UXlZTfql
-	 gprF+LsaUajaD4mfZOL8d+MWXSTnEbYoMmCi0oUOd2lKGUmCmlD38v+i4Wiq5Pmpjr
-	 ayzyPa2JHPukyRerL2/P8O+UDUAqMM7QygXATRowtyikvNNz/2O+EBnThkGFsw2KTR
-	 mnRaXP7EryYvf+2VABTSHwEZzyziKQIuYIaobgi/ftZzS8lPgE5Ag3aYBUTqbdFhEr
-	 HnFlBeThaEv+w==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e5c9662131so8324312a12.3;
-        Tue, 11 Mar 2025 06:32:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVE/etq7yYVR731//mLbIx6fuz4N3WBsp/taDv6DUAdjSAvEFKqUOOcbNyt/mjSFvGPbId9zBqo21EC1w==@vger.kernel.org, AJvYcCVFFxWXi1G8EDjZ5tpKHuBLeDYh4rjTO2HNngx05BKIuJGzRJWd0LGcG/kHH0ZIDsQJKt2BCiE2koKJ@vger.kernel.org, AJvYcCW8UgNm2ORV6uv3gidMyg8hIgmUN1Lt9mJoi+wO2yxk3H2Rn4pAsnqQt1dohVxqKOsczdONO8z4Tw5a@vger.kernel.org, AJvYcCXkMokhN/355TGe12OSjeljQvVcn00quRImZ2ljZ6tIYzQ4VTmMH7PvgM8LtAe7ue13DOn99RcbuXyV@vger.kernel.org, AJvYcCXsHpk+Kco0TOlhTmQxQXJOw/sJn9QgRvlPYy+FAXFETqK6kuxts8w7ztT6RQVlVCkfabZPUZ8p2Ny2wNuE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyvnou1cphY4sdaDF6XuvRYP/txe/G9yT/v+J9yb9bKE0VqXdDN
-	KvnBxlQ8CXvCoJnhV1poU82s4+iFqTkRNkkMVcKGumV5WsZTjOlXsmeX06w6v9K1ITKFtPLZnjO
-	2tXt6e1OYEiuildher/TYDvdidw==
-X-Google-Smtp-Source: AGHT+IEifrCmqJfikkidIDTYr2jS6o8iDBri/VlKwu/FWmzn0+fbwXWdCCMBLNQSNY6IZ7RZHzcbstx5Fj81dc05srU=
-X-Received: by 2002:a05:6402:2353:b0:5e5:c5f5:f82 with SMTP id
- 4fb4d7f45d1cf-5e5e211e1f1mr21034407a12.0.1741699962525; Tue, 11 Mar 2025
- 06:32:42 -0700 (PDT)
+	s=arc-20240116; t=1741705350; c=relaxed/simple;
+	bh=Cy+71VcXCOOzs/J/43059Y8THTLHNg003tEovm84ml0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NbD3o4eoDuaUBkGEXAJe5JzUbW1bvTw4T60/n28R5OMDdgnQflSv1e2D2IjAV/hyeSAAnsZ+tH9NPQZyXEfns5Qq2YKvqLHTD0mK7vzKQSt8oUlhMq12p0yOaqfkzoPBNHDkbXK2rsyv62Rdw9PGTYbL563jEgKf3BoFRdKMoiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com; spf=pass smtp.mailfrom=lechnology.com; dkim=pass (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b=PFkPUa2c; arc=none smtp.client-ip=98.142.107.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lechnology.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=2JDSu/sViV6MZ1MM5jcSmv9LPOd2pZ1vqlMF0+khSII=; b=PFkPUa2cAjL/euXKcSAQ/ea5f4
+	jTbwuHDIQsOq8nqjW1tGe4UYzjzUwEBUoyKVc6WsEZ1+6IKz98Srkj1Q2896+hxxf3WWD5jB9Pe7W
+	LgueAJYCHTs9ReqtlegmZ4CYplw2BPcw1o/buozYvZ7x+HxoYLj5m5RMSM8P2WWVlhInY5kr1ZhQv
+	eY/Mfgo+xDjiYgxKNJGB6fI7DmXdNfFOP9H9Te4MNnOkDEQ3Lo38xKP3gpGJRhLP2Mir41KRl498Y
+	g1LTnLA0ocqtk2/xujshWXpxQbBV3OH+Z/neaiPxBe1ounwdT3M8NWkVS/xOmet3fTVEFN76zIFmG
+	W2wXr59w==;
+Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:55876 helo=[192.168.0.142])
+	by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.98.1)
+	(envelope-from <david@lechnology.com>)
+	id 1ts0dK-0000000040E-3v2h;
+	Tue, 11 Mar 2025 10:29:29 -0400
+Message-ID: <c540bd72-0d78-4e4f-a6f9-392166cc48c4@lechnology.com>
+Date: Tue, 11 Mar 2025 09:29:28 -0500
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1738963156.git.andrea.porta@suse.com> <c0acc51a7210fb30cae7b26f4ad1f0449beed95e.1738963156.git.andrea.porta@suse.com>
- <20250310212125.GB2377483@rocinante>
-In-Reply-To: <20250310212125.GB2377483@rocinante>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 11 Mar 2025 08:32:28 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKPGOdS_8KDggO5tBHAnC-NTLAC5iS9GANm9BuxBfQUsw@mail.gmail.com>
-X-Gm-Features: AQ5f1JpFqtVYiSlkH0QD-dTfJ4bf9VAjFuYNndnQ1jy7PeA-IWSalDclsIDbfBA
-Message-ID: <CAL_JsqKPGOdS_8KDggO5tBHAnC-NTLAC5iS9GANm9BuxBfQUsw@mail.gmail.com>
-Subject: Re: [PATCH v7 03/11] dt-bindings: pci: Add common schema for devices
- accessible through PCI BARs
-To: Krzysztof Wilczynski <kw@linux.com>
-Cc: Andrea della Porta <andrea.porta@suse.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Derek Kiernan <derek.kiernan@amd.com>, 
-	Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Saravana Kannan <saravanak@google.com>, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	Stefan Wahren <wahrenst@gmx.net>, Herve Codina <herve.codina@bootlin.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Andrew Lunn <andrew@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] clk: davinci: remove support for da830
+To: Bartosz Golaszewski <brgl@bgdev.pl>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20250304133423.100884-1-brgl@bgdev.pl>
+From: David Lechner <david@lechnology.com>
+Content-Language: en-US
+Autocrypt: addr=david@lechnology.com; keydata=
+ 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
+In-Reply-To: <20250304133423.100884-1-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Mon, Mar 10, 2025 at 4:21=E2=80=AFPM Krzysztof Wilczynski <kw@linux.com>=
- wrote:
->
-> Hello,
->
-> [...]
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index d45c88955072..af2e4652bf3b 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -19752,6 +19752,7 @@ RASPBERRY PI RP1 PCI DRIVER
-> >  M:   Andrea della Porta <andrea.porta@suse.com>
-> >  S:   Maintained
-> >  F:   Documentation/devicetree/bindings/clock/raspberrypi,rp1-clocks.ya=
-ml
-> > +F:   Documentation/devicetree/bindings/pci/pci-ep-bus.yaml
-> >  F:   Documentation/devicetree/bindings/pinctrl/raspberrypi,rp1-gpio.ya=
-ml
-> >  F:   include/dt-bindings/clock/rp1.h
-> >  F:   include/dt-bindings/misc/rp1.h
->
-> I would be happy to pick this via the PCI tree as per the standard
-> operating procedure.  However, the MAINTAINERS changes do not exist
-> for us yet, and are added in the first patch of the series, which is
-> not ideal.
->
-> I can add the missing dependency manually, but that would cause issues
-> for linux-next tree, which is also not ideal.
->
-> I saw some review feedback, as such, when you are going to be sending
-> another version, can you make MAINTAINERS changes to be the last patch,
-> perhaps.  Basically, something standalone that perhaps whoever will pick
-> the misc patch could also pick and apply at the same time.
->
-> Alternatively, someone else picking up the PCI dt-bindings would work, to=
-o.
->
-> Your thoughts?
+On 3/4/25 7:34 AM, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> This SoC has some leftover code all over the kernel but no boards are
+> supported anymore. Remove support for da830 from the davinci clock
+> driver. With it: remove the ifdefs around the data structures as the
+> da850 remains the only davinci SoC supported and the only user of this
+> driver.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+Acked-by: David Lechner <david@lechnology.com>
 
-I guess I missed this in review, but why is a common schema buried in
-a device maintainer entry? Also, an entry in MAINTAINERS is redundant
-anyway because get_maintainers.pl can fetch maintainers from the
-schema file.
-
-Rob
 
