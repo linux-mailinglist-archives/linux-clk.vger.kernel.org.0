@@ -1,165 +1,113 @@
-Return-Path: <linux-clk+bounces-19442-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19437-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8964A5FA9A
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 17:00:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B6BFA5F95B
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 16:14:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8187188A35A
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 15:59:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE757179C4B
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 15:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1B5268FF4;
-	Thu, 13 Mar 2025 15:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6EA6268C62;
+	Thu, 13 Mar 2025 15:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwwLNNyS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s8mBlLuJ"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69EF268FDA;
-	Thu, 13 Mar 2025 15:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF09267F77;
+	Thu, 13 Mar 2025 15:14:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741881546; cv=none; b=XQIXaZ6pUbVst5J5FyxkuebyXJ8GnU2brKFw9y/Lbdri+8GCKRS5NuzidIALbVXlpmpE/3z4b7TZlIv8g4YEI3M5khm7GyX0Kkk6KMiGBEBocmiSnZCYX40h1/U5UaLPGITeFj7HkBBZoDf3c0nQpJzgiiodwZXronYMeYehUsk=
+	t=1741878881; cv=none; b=hXhblR7/hvbZWjfT+VzwJF/sqzuughvWLsBQiCxcfXKVdrpz8nk3DQKi2Kg67VDsAeLDA+H9ywejZw9+tjFrmiic2FSpxuX07FTeeZqNDRIrqyZXd0+KWXyt5+c0mNWtFYJSKV2Yc7MaWyQD1KQyP2ntezXe3M8lKScrpMI51tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741881546; c=relaxed/simple;
-	bh=YdJP8+QDoYdAq2M2+D8RCJ3BFb0YTP9XgW1vPZERICE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CIbZCUqINNHmuMCRXao6W7GpfC6jJpMGmLWBjctPU5xg9qkjQsgg7+zWMZ4N+HzeB0sYUntNhyY+1clDvW+7ubhoAf57gvYClJ+j9ZTgfQmJKXa0lNCQ4dIgB4lS9aYSZTiUHzEKqViKYRr0h+rhD5javrtzgB8VP4hoptNlS3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwwLNNyS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EFFC4CEDD;
-	Thu, 13 Mar 2025 15:59:06 +0000 (UTC)
+	s=arc-20240116; t=1741878881; c=relaxed/simple;
+	bh=zcGj1uOEL8WR4UP614EhP+WDUNi3KOZTpWDDpUBnmv0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lZaUKQbkOLeImqsjGOfhORNDRIR9xepw9YlZ9ptYjoyqgTiNwh43dEa8zzN2UlWEdKZx4yVSWxvx49Afj1ERmaXGcZ5iRuRi1xAzjBUlW4g0ggImnQg4hUC/8qDkrEy5510gbOj2D053vGa3m1pSf19/noMuF3ZnZlV8PXLrflo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s8mBlLuJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07142C4CEDD;
+	Thu, 13 Mar 2025 15:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741881546;
-	bh=YdJP8+QDoYdAq2M2+D8RCJ3BFb0YTP9XgW1vPZERICE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=uwwLNNySG0cOE7KXx8jV6AJwtHR5rJCwZhfaUXUGudTfy8QAbWbD1H4oK32oJOIHp
-	 ykIzi5ExxwdzaEUg2B9rYApBopTRzwB5qsaXGeTQram6bfJVrzwMof1YmhItftH58j
-	 cVY1ssQ9pPeWGHb0cFJVVqPkPKSkTE0r4rWnzimm9hO8b4KEcfJ49ykQUdWY+jZynQ
-	 6ehL3FOPHguWw9b54IrySiAnisZXqOxwDEvr7brLvKPKiDUG3zf6ndu+wR+j9ah6Wd
-	 rLjzEnyt1piHAI3K+z9zNV39ZLAiLX1HL2eUyRTzecleAkUivIoZykrELdqhc6jTaE
-	 XRRUjWTJuMIng==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 490985F99C; Thu, 13 Mar 2025 21:25:03 +0800 (CST)
-Date: Thu, 13 Mar 2025 21:25:03 +0800
-From: Chen-Yu Tsai <wens@kernel.org>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
-	linux-clk@vger.kernel.org
-Subject: [GIT PULL] Allwinner clock changes for 6.15
-Message-ID: <Z9Lcr8FyJLWdbp-J@wens.tw>
+	s=k20201202; t=1741878881;
+	bh=zcGj1uOEL8WR4UP614EhP+WDUNi3KOZTpWDDpUBnmv0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=s8mBlLuJGnQR/Yd9aio0WV727q2o2yBudAk0vbuRvEyvHWQjWEcQBLVSaTIB+6Al6
+	 SEYLnonhfqK1TbFRNzLJwxd9qx42JgykZi5u4i1sGsX38j2eQdqS6t7yimg2X3fPDm
+	 3o84Iw3VdywC2MSL+tU/qlTew6tC/MlO3pJa3fJra1CiPQCZBo/t+DXAwIeziC5weQ
+	 pzj3T2P/ooIsX/whgegHI/96WQILrEhFe2st5Rt3rFSkvtbs6B1p60Sw/g1WsoBjoL
+	 yUUY7Pdekrz/FSvgtoOdMC1NS9KXdhd+JSvCnMFj5RjTCRCY1Eqneb5kY5bPf/fl4h
+	 pyqEXWFmkdSUg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5357C282DE;
+	Thu, 13 Mar 2025 15:14:40 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v2 0/6] clk: clk-axi-clkgen: improvements and some fixes
+Date: Thu, 13 Mar 2025 15:14:42 +0000
+Message-Id: <20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QOVA6zihwAqP3/dp"
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGL20mcC/3WNwQ6CMBAFf4X07Jq2CIIn/8NwKGULG6E1LWkwp
+ P9uJfHocSZ583YW0BMGdit25jFSIGczyFPB9KTsiEBDZia5rLgUDQwYQW0Een6OaGGmhdYAdWl
+ 6rivUZdOzvH15NLQd3UeXeaKwOv8+bqL42l+x/VOMAjjI2lzRiIseWn1XVs1uPGu3sC6l9AF9n
+ do9uwAAAA==
+X-Change-ID: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741878886; l=1074;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=zcGj1uOEL8WR4UP614EhP+WDUNi3KOZTpWDDpUBnmv0=;
+ b=ElfHDd6UrzzxERpEEORfL8eDB3IhstNDMUwliSk6zJ3yJiMTKaTL63/+YKLInzQ23liTiBpUQ
+ o5jYG6ac+X8BA0jv0IF+tCvzSPHPqz1C1GKSksccbnDfpImNCWM4uwz
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
+
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
+
+---
+Changes in v2:
+- Patch 3
+   * Rename adi_axi_fgpa_technology -> adi_axi_fpga_technology.
+
+- Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
+
+---
+Nuno Sá (6):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: fpga: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
+
+ drivers/clk/clk-axi-clkgen.c        | 149 +++++++++++++++++++++++++-----------
+ include/linux/fpga/adi-axi-common.h |  35 +++++++++
+ 2 files changed, 141 insertions(+), 43 deletions(-)
+---
+base-commit: 82f69876ef45ad66c0b114b786c7c6ac0f6a4580
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
+
+Thanks!
+- Nuno Sá
 
 
---QOVA6zihwAqP3/dp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
-
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi-clk-for-6.15
-
-for you to fetch changes up to 8cea339cfb81eb3354b0f27ceb27e2bb107efa6d:
-
-  clk: sunxi-ng: add support for the A523/T527 PRCM CCU (2025-03-12 11:58:11 +0800)
-
-----------------------------------------------------------------
-Allwinner clock changes for 6.15
-
-- Extend H616 clock driver to cover TCON clock and reset
-- Enable H616 GPU clock reparenting during rate change
-- Add new clock driver for A523/T527
-
-----------------------------------------------------------------
-Andre Przywara (14):
-      clk: sunxi-ng: mp: introduce dual-divider clock
-      clk: sunxi-ng: mp: provide wrappers for setting feature flags
-      clk: sunxi-ng: Add support for update bit
-      dt-bindings: clk: sunxi-ng: document two Allwinner A523 CCUs
-      clk: sunxi-ng: Add support for the A523/T527 CCU PLLs
-      clk: sunxi-ng: a523: Add support for bus clocks
-      clk: sunxi-ng: a523: add video mod clocks
-      clk: sunxi-ng: a523: add system mod clocks
-      clk: sunxi-ng: a523: add interface mod clocks
-      clk: sunxi-ng: a523: add USB mod clocks
-      clk: sunxi-ng: a523: remaining mod clocks
-      clk: sunxi-ng: a523: add bus clock gates
-      clk: sunxi-ng: a523: add reset lines
-      clk: sunxi-ng: add support for the A523/T527 PRCM CCU
-
-Chris Morgan (2):
-      dt-bindings: clock: sun50i-h616-ccu: Add LCD TCON clk and reset
-      clk: sunxi-ng: h616: Add clock/reset for LCD TCON
-
-Philippe Simons (1):
-      clk: sunxi-ng: h616: Reparent GPU clock during frequency changes
-
- .../bindings/clock/allwinner,sun55i-a523-ccu.yaml  |  103 ++
- drivers/clk/sunxi-ng/Kconfig                       |   10 +
- drivers/clk/sunxi-ng/Makefile                      |    4 +
- drivers/clk/sunxi-ng/ccu-sun50i-h616.c             |   60 +-
- drivers/clk/sunxi-ng/ccu-sun50i-h616.h             |    2 +-
- drivers/clk/sunxi-ng/ccu-sun55i-a523-r.c           |  248 +++
- drivers/clk/sunxi-ng/ccu-sun55i-a523-r.h           |   14 +
- drivers/clk/sunxi-ng/ccu-sun55i-a523.c             | 1685 ++++++++++++++++++++
- drivers/clk/sunxi-ng/ccu-sun55i-a523.h             |   14 +
- drivers/clk/sunxi-ng/ccu_common.h                  |    5 +
- drivers/clk/sunxi-ng/ccu_div.c                     |    2 +
- drivers/clk/sunxi-ng/ccu_gate.c                    |    4 +
- drivers/clk/sunxi-ng/ccu_mp.c                      |   51 +-
- drivers/clk/sunxi-ng/ccu_mp.h                      |   58 +-
- drivers/clk/sunxi-ng/ccu_mux.c                     |    2 +
- include/dt-bindings/clock/sun50i-h616-ccu.h        |    4 +
- include/dt-bindings/clock/sun55i-a523-ccu.h        |  189 +++
- include/dt-bindings/clock/sun55i-a523-r-ccu.h      |   37 +
- include/dt-bindings/reset/sun50i-h616-ccu.h        |    2 +
- include/dt-bindings/reset/sun55i-a523-ccu.h        |   88 +
- include/dt-bindings/reset/sun55i-a523-r-ccu.h      |   25 +
- 21 files changed, 2590 insertions(+), 17 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun55i-a523-ccu.yaml
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523-r.c
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523-r.h
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523.c
- create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523.h
- create mode 100644 include/dt-bindings/clock/sun55i-a523-ccu.h
- create mode 100644 include/dt-bindings/clock/sun55i-a523-r-ccu.h
- create mode 100644 include/dt-bindings/reset/sun55i-a523-ccu.h
- create mode 100644 include/dt-bindings/reset/sun55i-a523-r-ccu.h
-
---QOVA6zihwAqP3/dp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmfS3K0ACgkQOJpUIZwP
-JDCVlg/1Ed/twZroOZ4PTp8VoZqnQEijolGt+zZXwlRDCdPPVNzoJBK+PxEU7pUn
-NFnMd/iBICscNSLKZTCOodgSGPiyp0McVTI25IghxUSYvFnB8Wi1ZTRKLrAFJRm6
-x4uUQPFl5nmXvlv3eTsdEqQvbqsRcDqyQKI88/Be/WLMcJ/yOTW06oHK0wKDaWhJ
-VhVcJnQEITwEHXGGRQJZmsCO24dAf2NiWXuZljd9JvO75+mpGyfsuKvRKXWY9wLE
-rki/gzL82NuMUeu2TGzQ5I6bUowgGY1IXX9zemp6HCwlNQDDlPuVfd6Z+J2cyzMu
-TwFpQin93txp6X63P8byhmXtw8t6AqsiZ8edtN+M9PhFAG5rM3ccOv32vptiblSW
-G/KUSm/Jerah7SI8+uDRuEnVxYNN03cApKf8OvvNvU4gjX+xJvSSOsL2PdvX7ReZ
-fJpLk7v8eoIVTHoicsttj72sX2iMiPBtA2jCLSCho/9aJlg/Xapbtqwl9FrmPDwo
-WbxfMvZlFWElwc7c86ylGr50ZKuj7Q/cv6SwQEKUkXj9Ricm4fCJ/8Sna7mlhJKe
-MFq/hMVpVERFn6rDFjO14DwowVvi2AzfbPdFZmivHY2Pp5U/GhB9fe7IyG1g0cyq
-7mKzPlfZgbRjmlIkhulK4d+JwJ3+MFiDQDZwU6S20j5mmsSFNg==
-=/9Mb
------END PGP SIGNATURE-----
-
---QOVA6zihwAqP3/dp--
 
