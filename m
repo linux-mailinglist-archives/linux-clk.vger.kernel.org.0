@@ -1,88 +1,165 @@
-Return-Path: <linux-clk+bounces-19434-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19442-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DBE7A5F90A
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 15:53:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8964A5FA9A
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 17:00:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B3373B42B2
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 14:53:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8187188A35A
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Mar 2025 15:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12740267F7D;
-	Thu, 13 Mar 2025 14:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1B5268FF4;
+	Thu, 13 Mar 2025 15:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlk75RX4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwwLNNyS"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC397126C1E;
-	Thu, 13 Mar 2025 14:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69EF268FDA;
+	Thu, 13 Mar 2025 15:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741877592; cv=none; b=EgdmLkew8yPkINVLAPKfI8XXrglktUXBKBjGqxVjTKr4XpDzyOJRn/XfH5pk6J78MYtU2Zav1ZPNLTCUmessy+JT0TFk8dTxve6oSckPPD8knEfmKqvcsO9MHI2/m7iNBHnWtYrdqbW4BX2hAmPP6YUCwtv3/R6eESbLcR5oNKc=
+	t=1741881546; cv=none; b=XQIXaZ6pUbVst5J5FyxkuebyXJ8GnU2brKFw9y/Lbdri+8GCKRS5NuzidIALbVXlpmpE/3z4b7TZlIv8g4YEI3M5khm7GyX0Kkk6KMiGBEBocmiSnZCYX40h1/U5UaLPGITeFj7HkBBZoDf3c0nQpJzgiiodwZXronYMeYehUsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741877592; c=relaxed/simple;
-	bh=w52BMGEb/zNW6DRdLAa5vip7+Q6bfilfvxV8/qdG/Ak=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Mb3E5Mt2Zi0arT7cWVva/w6YOThhNxFwb8Hn4MQuJWFMVnlT3sm99ylNpsAeSbBK7LzCoasD3UwnC59ee/xIDHQlWoHYK/gR1dgMTmvtpkHkaxGxDVVz4quWnskvfOXsaQvhD3RpjI+n9DdH04ewuSH3GXVbUejwHGAhJutL3XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlk75RX4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4519BC4CEDD;
-	Thu, 13 Mar 2025 14:53:07 +0000 (UTC)
+	s=arc-20240116; t=1741881546; c=relaxed/simple;
+	bh=YdJP8+QDoYdAq2M2+D8RCJ3BFb0YTP9XgW1vPZERICE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CIbZCUqINNHmuMCRXao6W7GpfC6jJpMGmLWBjctPU5xg9qkjQsgg7+zWMZ4N+HzeB0sYUntNhyY+1clDvW+7ubhoAf57gvYClJ+j9ZTgfQmJKXa0lNCQ4dIgB4lS9aYSZTiUHzEKqViKYRr0h+rhD5javrtzgB8VP4hoptNlS3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwwLNNyS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EFFC4CEDD;
+	Thu, 13 Mar 2025 15:59:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741877591;
-	bh=w52BMGEb/zNW6DRdLAa5vip7+Q6bfilfvxV8/qdG/Ak=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=dlk75RX4BJJymKAK8ib8Bfq9GxVJVC5iw3D4UtFdjm3m2z8Pg2Q0X5iVmpCQ0sOnh
-	 uCT6cH49pKZGgqc62hABR3U7O1RQ5siUeNePNUP6Rq0fBAdTqYIriSK/ZoNx4Ai4ea
-	 pXhb/F+3VhgbaATFUYtUDKS6Ma968EHvM7riUwkHra5//pnsNNS/3akhiVw7GGCOIi
-	 aL+xpG5U+UgWe8c3YYiaykJg8kZhQDlU6Mxg501HsmyBYhfpBOeQaJSNZEc+Bxt5a7
-	 tAzNeP3CJQrOG15HT62bQh47ak3koZanZsE9XgkKjU7/pDnDSC8NiiVpSAsfhq1/B3
-	 EOlmQNs44gKaw==
-From: Lee Jones <lee@kernel.org>
-To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
- claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org, 
- arnd@arndb.de, Ryan.Wanner@microchip.com
-Cc: dharma.b@microchip.com, mihai.sain@microchip.com, 
- romain.sioen@microchip.com, varshini.rajendran@microchip.com, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9656d46ee0255b9aba404d77d2d204376a9cb248.1736522006.git.Ryan.Wanner@microchip.com>
-References: <cover.1736522006.git.Ryan.Wanner@microchip.com>
- <9656d46ee0255b9aba404d77d2d204376a9cb248.1736522006.git.Ryan.Wanner@microchip.com>
-Subject: Re: (subset) [PATCH v6 3/3] dt-bindings: mfd:
- atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
-Message-Id: <174187758697.3701280.18234838828113464973.b4-ty@kernel.org>
-Date: Thu, 13 Mar 2025 14:53:06 +0000
+	s=k20201202; t=1741881546;
+	bh=YdJP8+QDoYdAq2M2+D8RCJ3BFb0YTP9XgW1vPZERICE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=uwwLNNySG0cOE7KXx8jV6AJwtHR5rJCwZhfaUXUGudTfy8QAbWbD1H4oK32oJOIHp
+	 ykIzi5ExxwdzaEUg2B9rYApBopTRzwB5qsaXGeTQram6bfJVrzwMof1YmhItftH58j
+	 cVY1ssQ9pPeWGHb0cFJVVqPkPKSkTE0r4rWnzimm9hO8b4KEcfJ49ykQUdWY+jZynQ
+	 6ehL3FOPHguWw9b54IrySiAnisZXqOxwDEvr7brLvKPKiDUG3zf6ndu+wR+j9ah6Wd
+	 rLjzEnyt1piHAI3K+z9zNV39ZLAiLX1HL2eUyRTzecleAkUivIoZykrELdqhc6jTaE
+	 XRRUjWTJuMIng==
+Received: by wens.tw (Postfix, from userid 1000)
+	id 490985F99C; Thu, 13 Mar 2025 21:25:03 +0800 (CST)
+Date: Thu, 13 Mar 2025 21:25:03 +0800
+From: Chen-Yu Tsai <wens@kernel.org>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej@kernel.org>,
+	Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev,
+	linux-clk@vger.kernel.org
+Subject: [GIT PULL] Allwinner clock changes for 6.15
+Message-ID: <Z9Lcr8FyJLWdbp-J@wens.tw>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-510f9
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="QOVA6zihwAqP3/dp"
+Content-Disposition: inline
 
-On Fri, 10 Jan 2025 08:25:42 -0700, Ryan.Wanner@microchip.com wrote:
-> Add flexcom binding documentation for sama7d65.
-> 
-> Consolidated entries into one enum to match proper coding style.
-> 
-> 
 
-Applied, thanks!
+--QOVA6zihwAqP3/dp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[3/3] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
-      commit: c37ee2ed38391eef476fea6af8eccd0d31f5ed98
+The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
 
---
-Lee Jones [李琼斯]
+  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
 
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi-clk-for-6.15
+
+for you to fetch changes up to 8cea339cfb81eb3354b0f27ceb27e2bb107efa6d:
+
+  clk: sunxi-ng: add support for the A523/T527 PRCM CCU (2025-03-12 11:58:11 +0800)
+
+----------------------------------------------------------------
+Allwinner clock changes for 6.15
+
+- Extend H616 clock driver to cover TCON clock and reset
+- Enable H616 GPU clock reparenting during rate change
+- Add new clock driver for A523/T527
+
+----------------------------------------------------------------
+Andre Przywara (14):
+      clk: sunxi-ng: mp: introduce dual-divider clock
+      clk: sunxi-ng: mp: provide wrappers for setting feature flags
+      clk: sunxi-ng: Add support for update bit
+      dt-bindings: clk: sunxi-ng: document two Allwinner A523 CCUs
+      clk: sunxi-ng: Add support for the A523/T527 CCU PLLs
+      clk: sunxi-ng: a523: Add support for bus clocks
+      clk: sunxi-ng: a523: add video mod clocks
+      clk: sunxi-ng: a523: add system mod clocks
+      clk: sunxi-ng: a523: add interface mod clocks
+      clk: sunxi-ng: a523: add USB mod clocks
+      clk: sunxi-ng: a523: remaining mod clocks
+      clk: sunxi-ng: a523: add bus clock gates
+      clk: sunxi-ng: a523: add reset lines
+      clk: sunxi-ng: add support for the A523/T527 PRCM CCU
+
+Chris Morgan (2):
+      dt-bindings: clock: sun50i-h616-ccu: Add LCD TCON clk and reset
+      clk: sunxi-ng: h616: Add clock/reset for LCD TCON
+
+Philippe Simons (1):
+      clk: sunxi-ng: h616: Reparent GPU clock during frequency changes
+
+ .../bindings/clock/allwinner,sun55i-a523-ccu.yaml  |  103 ++
+ drivers/clk/sunxi-ng/Kconfig                       |   10 +
+ drivers/clk/sunxi-ng/Makefile                      |    4 +
+ drivers/clk/sunxi-ng/ccu-sun50i-h616.c             |   60 +-
+ drivers/clk/sunxi-ng/ccu-sun50i-h616.h             |    2 +-
+ drivers/clk/sunxi-ng/ccu-sun55i-a523-r.c           |  248 +++
+ drivers/clk/sunxi-ng/ccu-sun55i-a523-r.h           |   14 +
+ drivers/clk/sunxi-ng/ccu-sun55i-a523.c             | 1685 ++++++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun55i-a523.h             |   14 +
+ drivers/clk/sunxi-ng/ccu_common.h                  |    5 +
+ drivers/clk/sunxi-ng/ccu_div.c                     |    2 +
+ drivers/clk/sunxi-ng/ccu_gate.c                    |    4 +
+ drivers/clk/sunxi-ng/ccu_mp.c                      |   51 +-
+ drivers/clk/sunxi-ng/ccu_mp.h                      |   58 +-
+ drivers/clk/sunxi-ng/ccu_mux.c                     |    2 +
+ include/dt-bindings/clock/sun50i-h616-ccu.h        |    4 +
+ include/dt-bindings/clock/sun55i-a523-ccu.h        |  189 +++
+ include/dt-bindings/clock/sun55i-a523-r-ccu.h      |   37 +
+ include/dt-bindings/reset/sun50i-h616-ccu.h        |    2 +
+ include/dt-bindings/reset/sun55i-a523-ccu.h        |   88 +
+ include/dt-bindings/reset/sun55i-a523-r-ccu.h      |   25 +
+ 21 files changed, 2590 insertions(+), 17 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun55i-a523-ccu.yaml
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523-r.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523-r.h
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun55i-a523.h
+ create mode 100644 include/dt-bindings/clock/sun55i-a523-ccu.h
+ create mode 100644 include/dt-bindings/clock/sun55i-a523-r-ccu.h
+ create mode 100644 include/dt-bindings/reset/sun55i-a523-ccu.h
+ create mode 100644 include/dt-bindings/reset/sun55i-a523-r-ccu.h
+
+--QOVA6zihwAqP3/dp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIyBAABCgAdFiEE2nN1m/hhnkhOWjtHOJpUIZwPJDAFAmfS3K0ACgkQOJpUIZwP
+JDCVlg/1Ed/twZroOZ4PTp8VoZqnQEijolGt+zZXwlRDCdPPVNzoJBK+PxEU7pUn
+NFnMd/iBICscNSLKZTCOodgSGPiyp0McVTI25IghxUSYvFnB8Wi1ZTRKLrAFJRm6
+x4uUQPFl5nmXvlv3eTsdEqQvbqsRcDqyQKI88/Be/WLMcJ/yOTW06oHK0wKDaWhJ
+VhVcJnQEITwEHXGGRQJZmsCO24dAf2NiWXuZljd9JvO75+mpGyfsuKvRKXWY9wLE
+rki/gzL82NuMUeu2TGzQ5I6bUowgGY1IXX9zemp6HCwlNQDDlPuVfd6Z+J2cyzMu
+TwFpQin93txp6X63P8byhmXtw8t6AqsiZ8edtN+M9PhFAG5rM3ccOv32vptiblSW
+G/KUSm/Jerah7SI8+uDRuEnVxYNN03cApKf8OvvNvU4gjX+xJvSSOsL2PdvX7ReZ
+fJpLk7v8eoIVTHoicsttj72sX2iMiPBtA2jCLSCho/9aJlg/Xapbtqwl9FrmPDwo
+WbxfMvZlFWElwc7c86ylGr50ZKuj7Q/cv6SwQEKUkXj9Ricm4fCJ/8Sna7mlhJKe
+MFq/hMVpVERFn6rDFjO14DwowVvi2AzfbPdFZmivHY2Pp5U/GhB9fe7IyG1g0cyq
+7mKzPlfZgbRjmlIkhulK4d+JwJ3+MFiDQDZwU6S20j5mmsSFNg==
+=/9Mb
+-----END PGP SIGNATURE-----
+
+--QOVA6zihwAqP3/dp--
 
