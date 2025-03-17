@@ -1,115 +1,123 @@
-Return-Path: <linux-clk+bounces-19532-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19534-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27929A659E0
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 18:11:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5353CA65CE0
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 19:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 113D3189F8CC
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 17:05:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68AE0164673
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 18:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302381A0711;
-	Mon, 17 Mar 2025 17:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfoKHWtw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A3E1D8E01;
+	Mon, 17 Mar 2025 18:38:18 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18FF176FB0;
-	Mon, 17 Mar 2025 17:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60457176ADB;
+	Mon, 17 Mar 2025 18:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742231058; cv=none; b=b6b3cwUBF06S60k+Bud5LWRLR6yFLGKQPjEk5Eoc0fBaA6vSeSLefEW/kaTKuY5K+MGKMKYGNuEOT5xn+ItgbSyKYLX50B+jlHlt0PFG389+7IMF39zlaPT8qTYKpH8zsdRJN8Zr59Y6oFZpThq2bXLvnxWCCeP/vGPJ49g9l/8=
+	t=1742236698; cv=none; b=KRQGP7dQVzLTljbStIO+CL7MmsiyxzSmzKYnabxgJA+cJVF+3lWrrAE5SYgZo6Waw3lRpB0KY7yl55fkp5XuP1q5HFf68VqDGWF/9r/UYdmA/ukpnOK4/CbcGEWQb5ne5ntn+Spv3mMxBBTPAyjuqCxAyyOEuifr0yCG0Ye7leY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742231058; c=relaxed/simple;
-	bh=+0Yok0f4BvfhWWxYAciYqdDpMnOmtFLo3n6+UuKVRgw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ui/SswNE3BMIPtnAXBI2ylKPeUsNyEO1xI/BNKNlxGZwsQHXgTmWuNPTaAY86VesWhb0Pcwj2BxhNhVqbTM6N+ymY/EFKsNtiROjM3DW+7SfWxcVKU8BjO1uJQCek13ukNXllgHClJV4rB7R60A63DBUjT2/g8TaFZb1tiWepgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfoKHWtw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954E4C4CEE3;
-	Mon, 17 Mar 2025 17:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742231057;
-	bh=+0Yok0f4BvfhWWxYAciYqdDpMnOmtFLo3n6+UuKVRgw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kfoKHWtwnkmFbMNWJlgQddRElUpFQ964Egvhgn+4DBOHbw1x1hxBwBOWIpdr+V6gN
-	 +uXysXkEPYgBcnny+7t2souzVBkzw+MFZBgzpDT5SRIJEsBQWwz+263CKI5GX5FbFi
-	 Q82LTP7hXXc+GlW+P2OVgkhvJRTih6XF99NJ1OeivS8Q5sDJMIaSwG2Xm8NYBYcxiV
-	 a2Y6T5tgWCJwrJA5yl4uznPRdi9Xt0AWMf3Dm2oqYgXTG3xBvSpV6dRV7rQK9wD80u
-	 7PpD8CCA4gxsVOFgUus5fGj6hgwq8DtZcQFoe4yNY0RdViWTHwXu/wLAzN6vX9yh/g
-	 6LJPH6HCIcDFw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	konradybcio@kernel.org,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	p.zabel@pengutronix.de,
-	richardcochran@gmail.com,
-	geert+renesas@glider.be,
-	lumag@kernel.org,
-	heiko@sntech.de,
-	biju.das.jz@bp.renesas.com,
-	quic_tdas@quicinc.com,
-	nfraprado@collabora.com,
-	elinor.montmasson@savoirfairelinux.com,
-	ross.burton@arm.com,
-	javier.carrasco@wolfvision.net,
-	ebiggers@google.com,
-	quic_anusha@quicinc.com,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	netdev@vger.kernel.org,
-	Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-Cc: quic_varada@quicinc.com,
-	quic_srichara@quicinc.com
-Subject: Re: (subset) [PATCH v12 0/6] Add NSS clock controller support for IPQ9574
-Date: Mon, 17 Mar 2025 12:04:13 -0500
-Message-ID: <174223105141.2000272.10352611755097062716.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250313110359.242491-1-quic_mmanikan@quicinc.com>
-References: <20250313110359.242491-1-quic_mmanikan@quicinc.com>
+	s=arc-20240116; t=1742236698; c=relaxed/simple;
+	bh=x8VzNlnfyxrbj98l+2sMkUMZwVMQl42R9kHvQVPYs+k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L8TCpwvAnqX/xWaXVn3GNPIxnV4MuiS88d170d3qG0pW2eG/7kNO+5TIlOFR6I2NyZ7CTMqCA/aKsQ5xgw65nQhkWMxODOeC7bLu7QvayAtzh1HeJSleTMAgi+rItZMJQd25NyD89ZKOslkchsaMEgK7VtkNlPX8D84Z5Z+JBGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.98)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1tuFLa-000000007G3-0hL0;
+	Mon, 17 Mar 2025 18:37:58 +0000
+Date: Mon, 17 Mar 2025 18:37:54 +0000
+From: Daniel Golle <daniel@makrotopia.org>
+To: "Lucien.Jheng" <lucienx123@gmail.com>
+Cc: linux-clk@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
+	linux@armlinux.org.uk, kuba@kernel.org, davem@davemloft.net,
+	edumazet@google.com, pabeni@redhat.com, ericwouds@gmail.com,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	joseph.lin@airoha.com, wenshin.chung@airoha.com
+Subject: Re: [PATCH v4 net-next PATCH 1/1] net: phy: air_en8811h: Add clk
+ provider for CKO pin
+Message-ID: <Z9hsAmiD9sZ_NAR-@makrotopia.org>
+References: <20250317143111.28824-1-lucienX123@gmail.com>
+ <20250317143111.28824-2-lucienX123@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250317143111.28824-2-lucienX123@gmail.com>
 
+On Mon, Mar 17, 2025 at 10:31:11PM +0800, Lucien.Jheng wrote:
+> EN8811H outputs 25MHz or 50MHz clocks on CKO, selected by GPIO3.
+> CKO clock activates on power-up and continues through md32 firmware loading.
 
-On Thu, 13 Mar 2025 16:33:53 +0530, Manikanta Mylavarapu wrote:
-> Add bindings, driver and devicetree node for networking sub system clock
-> controller on IPQ9574. Also add support for gpll0_out_aux clock
-> which serves as the parent for some nss clocks.
-> 
-> Changes in V12:
-> 	- nsscc driver
-> 		- Pick up R-b tag.
-> 	- dtsi
-> 		- Pick up R-b tag.
-> 	- defconfig
-> 		- Pick up R-b tag.
-> 	- Rebased on linux-next tip.
-> 
-> [...]
+Maybe add here:
+"Implement clk provider driver so we can disable the clock output in case
+it isn't needed, which also helps to reduce EMF noise"
 
-Applied, thanks!
+Ie. the description you had was fine and good to have, just the lines had to
+be shorter (ie. just insert linebreaks at 70~75 chars).
 
-[6/6] arm64: defconfig: Build NSS Clock Controller driver for IPQ9574
-      commit: 95204a95fd9657ffbd3f3c4a726e458833e4213d
+See more comments inline below:
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> ...
+> @@ -806,6 +817,84 @@ static int en8811h_led_hw_is_supported(struct phy_device *phydev, u8 index,
+>  	return 0;
+>  };
+>  
+> +static unsigned long en8811h_recalc_rate(struct clk_hw *hw, unsigned long parent)
+
+calling this en8811h_clk_recalc_rate() would be better imho.
+
+> +{
+> +	struct en8811h_priv *priv = clk_hw_to_en8811h_priv(hw);
+> +	struct phy_device *phydev = priv->phydev;
+> +	u32 pbus_value;
+> +	int ret;
+> +
+> +	ret = air_buckpbus_reg_read(phydev, EN8811H_HWTRAP1, &pbus_value);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return (pbus_value & EN8811H_HWTRAP1_CKO) ? 50000000 : 25000000;
+> +}
+> +
+> +static int en8811h_enable(struct clk_hw *hw)
+
+call this en8811h_clk_enable()
+
+> +{
+> +	struct en8811h_priv *priv = clk_hw_to_en8811h_priv(hw);
+> +	struct phy_device *phydev = priv->phydev;
+> +
+> +	return air_buckpbus_reg_modify(phydev, EN8811H_CLK_CGM,
+> +				EN8811H_CLK_CGM_CKO, EN8811H_CLK_CGM_CKO);
+> +}
+> +
+> +static void en8811h_disable(struct clk_hw *hw)
+
+call this en8811h_clk_disable()
+
+> +{
+> +	struct en8811h_priv *priv = clk_hw_to_en8811h_priv(hw);
+> +	struct phy_device *phydev = priv->phydev;
+> +
+> +	air_buckpbus_reg_modify(phydev, EN8811H_CLK_CGM,
+> +				EN8811H_CLK_CGM_CKO, 0);
+> +}
+> +
+> +static int en8811h_is_enabled(struct clk_hw *hw)
+
+call this en8811h_clk_is_enabled()
 
