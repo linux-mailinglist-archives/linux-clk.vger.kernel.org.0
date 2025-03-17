@@ -1,126 +1,97 @@
-Return-Path: <linux-clk+bounces-19531-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19533-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BF7EA6592B
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 17:56:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2475A65A72
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 18:20:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CA673A8C57
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 16:51:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54CE5189FCC0
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Mar 2025 17:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69211A3031;
-	Mon, 17 Mar 2025 16:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9151DF97E;
+	Mon, 17 Mar 2025 17:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KIp/fOc2"
+	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="iYuN7RWt"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F7B1598F4;
-	Mon, 17 Mar 2025 16:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5742F1A3163;
+	Mon, 17 Mar 2025 17:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742230028; cv=none; b=EQrk1ZOYybW2SOBSMW244fTTxLBcFOyS+QNfvCKclg3V0WboC4fL2SYw1w3ttoxPjl4xeMwBDMZvX69ZzbmmQUIavGBT7xAjUOMLy4SLhgQrW5+CsShlhPuYMScTPp234LdD4aleVDNS/bimakQTKxvmvLjrtOdd/s3RF1fwgOI=
+	t=1742231492; cv=none; b=EnxJFj7enoR9YExa/VYei8msdAVyRip4Xtq4r7fIGTcDlE7XAVoDM25sSpbTnORLO0jC/lwLDLCEuIAHdR66QpUmIlyK+NYQgNoE3fBu+zFMeNuv8QmS4opLTPHmFACjhr4oeHffhvNae4xgUvcJcuXeepg8LPrpPGnzpoiyB4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742230028; c=relaxed/simple;
-	bh=J9MYRq0WSIpjJanPWTYYQQLbbK9VS3BGLDpohw/VGZE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=r5PHXmJCdlEGs1OoaLGG3xAWhh7cs7rtr5GVzXuCtD9a3uc3cGXRE21YCrNNx3P2t2cDgGPcf5gUqAoCa6u0SleCmEZU7iVmy9DGtLJZbn5Yp1IaNdwqAU9EFhZ+PSt1PTF8HhMpkXjkVA4bQ+tWrzj2IOka4v6DSAjxSzmPTek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KIp/fOc2; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-390e3b3d3f4so2784404f8f.2;
-        Mon, 17 Mar 2025 09:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742230025; x=1742834825; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uAyBxKzTxvJRC5/WGGhhGtnTs5BTKzKF6XvR/H/spN8=;
-        b=KIp/fOc2IhUcV73THkXfY+REb3AlzarjBb6S2UVfAEgBHODiWAxkpOH6X41fP+CiRP
-         xoVhc3hgQJPXhlfm18AkC5MRT4GHMAZDgRNpnZx4QGAEOdoC5H8XDSlPxtQw1i6Rv39g
-         O5zh3IXlSVOgLR/QaS37Bq8xgevJyM7jkzsFpyKmVDtCCQGuq93ymwQMOvUH83wJQPGV
-         eTn1X8T8KlhthFq94VXXSZpz1P6KmO9yHdbJ/k/Flt1d7FblO7154TY8aQoiSnceTo/0
-         181sEMrZaDxqwwtvXUhv/mPh1AwX4Gx4dDh1tbXsCHE+jqK5r0yuBASY+/Ed404FB1rR
-         C5qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742230025; x=1742834825;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uAyBxKzTxvJRC5/WGGhhGtnTs5BTKzKF6XvR/H/spN8=;
-        b=NIjws4xkpI0wK3r6uucqcDCyuMIjfBt+wQUk94fhQWrU2qWhuPuW7YSqgDFMohlHYO
-         rsQhKgm1cMI5Eu4ydMG/wGd50L2WkbuEUZMwt3dcgLn/1M+6wsJpgnQJLU6rn+xepJBh
-         w0VblPilX3sFZAnU3gMrWJae5UcwbcFPoruMMg/4UEZPNdliOMoMKvO9N1ai+Ut/HaV9
-         24Q1955r8zQ7/br4PAXR9ymDPUOSooJIYa+0QYDC8yvcU4cqvoMVVwhaP18Qlf58namr
-         Z3pXpNEW9CswH/JODgrHI4KoUuEz4JKYglmQYKv7JGPNCovERKpiJFlPzU3ONVMqknF/
-         wWIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZvUS4S3v5XF0ayJtJLkRy7MS/y2hjRM9ZHwHFFIE8tVXiRJULDzTHbVs7H3nz2+G6NcaWy3bu2Wtf@vger.kernel.org
-X-Gm-Message-State: AOJu0YytNWxGnBFA45UBMCZpuPmrsmrQresmiv/YzSrJQCv7WloRSqtB
-	Mhpn1yyZvJZmW6bIhIWE8VpyDZxRqttRwFT2Vc2EGgQZaT6XrtYErHQdmmvKHqPh+Q==
-X-Gm-Gg: ASbGnct9bOCbHuIc7PGP1SK54JnJp2yE2ry0hRDlJqmeX8LadTZgu4TfZqYlgDb/LUF
-	+WSha5U+hVD6t2eG0/0HyBhDPkuyCH44+BoESyAmISJKRktMxgrqVNyYXYLImvu4EF5zp8yISgv
-	nF4DBT8RWmqoTTzILOAy0qDq9N2FVL7ZyB33j4R4mvXwHyiIr75QefU8oDAGcCyRL29P7B/3CQJ
-	Orte8IOIC74H7YlLy7+gGszhb3Mef/0DtQBIvqGe2WoByl5Q4CStkXgz+q710wFtU0PimVitx2x
-	UZHIf5enYoXiyUsK125QV2ttyAATFFu3YMTDHlT9viP4K+f0wy6f+cjuFL0oGMqOOPMr17U/bkO
-	DanQwh53aLef8fn4yPKvRLBECGXQ=
-X-Google-Smtp-Source: AGHT+IG9YBsksBRMimxUXllxOj4pW95lHtJ5m4l0SffJMko1iYGRDEII9ew95NTswdejpnWrn0Nv6A==
-X-Received: by 2002:a05:6000:2a8:b0:391:10c5:d1c6 with SMTP id ffacd0b85a97d-3996b43e7ffmr458905f8f.2.1742230025480;
-        Mon, 17 Mar 2025 09:47:05 -0700 (PDT)
-Received: from ?IPv6:2001:818:ea8e:7f00:2575:914:eedd:620e? ([2001:818:ea8e:7f00:2575:914:eedd:620e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395c83b6e4esm15342361f8f.29.2025.03.17.09.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Mar 2025 09:47:05 -0700 (PDT)
-Message-ID: <7011e3f92e812c6b35ef71c3e314faabdc7d6793.camel@gmail.com>
-Subject: Re: [PATCH v2 6/6] clk: clk-axi-clkgen: fix coding style issues
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>, Nuno =?ISO-8859-1?Q?S=E1?=
-	 <nuno.sa@analog.com>
-Cc: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, Stephen Boyd	
- <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Moritz
- Fischer	 <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun
- <yilun.xu@intel.com>,  Tom Rix <trix@redhat.com>
-Date: Mon, 17 Mar 2025 16:47:11 +0000
-In-Reply-To: <402a575c-5bfc-4dac-bac6-d7f4e7ee5462@stanley.mountain>
-References: <20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com>
-	 <20250313-dev-axi-clkgen-limits-v2-6-173ae2ad6311@analog.com>
-	 <402a575c-5bfc-4dac-bac6-d7f4e7ee5462@stanley.mountain>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 
+	s=arc-20240116; t=1742231492; c=relaxed/simple;
+	bh=ql3BNZNoZ6lCMjPIVaKAHFDnwQ4YjwOtyGLg0W57xL4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YS9waF2mD+qfANiSa7DpQivVFXIqhCJP1yjh9cykUEQ09U1pfBkURjyuv26UNCmlcj4VYTIidp4bKXd7dhNbP79Ais5XaOmHC95Is91Ds9LzXrWBuZFXQQw5TNB1RY5cQzrIl0/Aq7Zat36HMFaNQD7KhSF4tptfU8pK8Q4L1Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=iYuN7RWt; arc=none smtp.client-ip=128.199.32.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lucaweiss.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucaweiss.eu; s=s1;
+	t=1742231050; bh=ql3BNZNoZ6lCMjPIVaKAHFDnwQ4YjwOtyGLg0W57xL4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=iYuN7RWtR7xkVp/Oaez2Phtb2ec5XJp8Bc3yk5cxNtfKk/Td6OQKFAsbuY+oERIp2
+	 Tj3dgLdvJdLbbXggpi/mijUD0qQif9fOSq8bvRwpL/zEn7mx1510Xt3qA+poAEQVuj
+	 Xeq09prGXz7lgfLNv6ofUhClPHRCF8Yxg3C7V3+w=
+Message-ID: <d605e4df-594d-49e0-a8fc-5992e36d6310@lucaweiss.eu>
+Date: Mon, 17 Mar 2025 18:04:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH 1/7] dt-bindings: mailbox: qcom: add compatible for
+ MSM8226 SoC
+To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ Jassi Brar <jassisinghbrar@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Jassi Brar <jassisinghbrar@gmail.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20240619-msm8226-cpufreq-v1-0-85143f5291d1@lucaweiss.eu>
+ <20240619-msm8226-cpufreq-v1-1-85143f5291d1@lucaweiss.eu>
+Content-Language: en-US
+From: Luca Weiss <luca@lucaweiss.eu>
+In-Reply-To: <20240619-msm8226-cpufreq-v1-1-85143f5291d1@lucaweiss.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2025-03-17 at 08:26 +0300, Dan Carpenter wrote:
-> On Thu, Mar 13, 2025 at 03:14:48PM +0000, Nuno S=C3=A1 wrote:
-> > @@ -224,8 +226,8 @@ static void axi_clkgen_calc_clk_params(unsigned int
-> > divider,
-> > =C2=A0
-> > =C2=A0		if (params->edge =3D=3D 0 || frac_divider =3D=3D 1)
-> > =C2=A0			params->low--;
-> > -		if (((params->edge =3D=3D 0) ^ (frac_divider =3D=3D 1)) ||
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^^^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^^^^^^^
->=20
-> > -			(divider =3D=3D 2 && frac_divider =3D=3D 1))
-> > +		if ((params->edge =3D=3D 0 ^ frac_divider =3D=3D 1) ||
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^^^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^^^^
-> This works, but the code was a lot easier to read with parentheses.
->=20
->=20
+On 6/19/24 11:02 PM, Luca Weiss wrote:
+> Add the mailbox compatible for MSM8226 SoC.
 
-Yes, I'll do it in v3. Just waiting a few more days for additional comments=
-.
+Hi all,
 
-- Nuno S=C3=A1
+This patch is still pending.
+
+Regards
+Luca
+
+> 
+> Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
+> ---
+>   Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+> index 982c741e6225..dc75ea2383f1 100644
+> --- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+> +++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
+> @@ -25,6 +25,7 @@ properties:
+>             - const: qcom,ipq6018-apcs-apps-global
+>         - items:
+>             - enum:
+> +              - qcom,msm8226-apcs-kpss-global
+>                 - qcom,qcs404-apcs-apps-global
+>             - const: qcom,msm8916-apcs-kpss-global
+>             - const: syscon
+> 
 
 
