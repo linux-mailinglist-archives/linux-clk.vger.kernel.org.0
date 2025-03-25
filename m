@@ -1,155 +1,147 @@
-Return-Path: <linux-clk+bounces-19794-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19799-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72716A7059A
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Mar 2025 16:55:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8680A705FB
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Mar 2025 17:04:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80F773A5AF4
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Mar 2025 15:55:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B126916406E
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Mar 2025 16:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5132066E8;
-	Tue, 25 Mar 2025 15:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D5621D3F4;
+	Tue, 25 Mar 2025 16:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="PmxVGHTh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFQFl3oU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E24F18A6AB;
-	Tue, 25 Mar 2025 15:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F8B1BD9C8;
+	Tue, 25 Mar 2025 16:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742918133; cv=none; b=Rn96fzV65uwe/aibVTaYAtClqTD6pYA0lQa+gwG1vi17SWo2h0rfZkz0A53T+GFoTd761dLAiqGzq+gHNFt4vjFpzOaQ9zp7hpiOt2PqDFvqJthXxNaAAOaczXES8pYf3ss9P99tsHak5zFkSJS+Zdn7r+NLiN2YQmXr4Q3vIFU=
+	t=1742918617; cv=none; b=PaaCjx7gs8fH8E9cDkLLqV2/gUPKMNNbuRKPg4Fdv+aRmhKMvCtCRIalz6Luuet1/uahOrtGIZOC38LYySBLAjg54aN+r43etfWO7s1WbxIe4r+JC37ymd6E7dVNY39pc5/e2c4jJrhJn5KhtZ6Kf02cIQ4PrQJA1dj1C7Ye68g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742918133; c=relaxed/simple;
-	bh=jfgSiqLCqwkZI4qYAO/dSdiUYlqbnqAIsGKA2fS7izw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sqHgvtj2G+43cEwRMw07bw8SNVKpqESUBcOHL4SRgPj0KKTIpHaq52o1LOxGG/sly0JDvSsJ24OBwQOz/AyxHjEikws6IUEq5BjUCBP1h6Dtufn6A/YSL7W7srCUFsNZEHexMLOV8/2A2WXKL7s4Xp319fU3UHeXUvOo0YX3NIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=PmxVGHTh; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1742918131; x=1774454131;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jfgSiqLCqwkZI4qYAO/dSdiUYlqbnqAIsGKA2fS7izw=;
-  b=PmxVGHTh+d5Am8/eFdrEtYTgLwHEr6kGm25vwmL3/drOXVXNjnuQDrOn
-   69/lX0zfabu5QfXGtxod3xOqiO6Ezg9SphDfV1/Crn8Kkl8WBO+WlXZiM
-   Gyt9PnCSBlwdw+GC56laCfp22cv/7w/ikeK/6fZEH1tJrN6E6vE5+GImv
-   KjGDhLu80MZkAJBtKU7uB7vS5VE/c/7J/gEnlknQTHVb9PYvGSnCLNIKL
-   RBTWuagrSx6fy4uZpqOk3GO1BVPEm9k5Ieai6xv2nVoGRQq62MGK5rlwZ
-   sAPMkOhELzpM0RI8Z6dt/8U1YQXGrzsTKAP71BYrNPt+BCQKZH2XwwKZ6
-   A==;
-X-CSE-ConnectionGUID: 5ZRRXf5LQVCIU2dRAgtdWw==
-X-CSE-MsgGUID: ptw/juAZTZWwDMU9R8w8+g==
-X-IronPort-AV: E=Sophos;i="6.14,275,1736838000"; 
-   d="scan'208";a="40152236"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 25 Mar 2025 08:55:25 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Tue, 25 Mar 2025 08:54:54 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Tue, 25 Mar 2025 08:54:54 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>
-CC: <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-clk@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH v2 4/4] ARM: dts: microchip: sama7g5: Adjust clock xtal phandle
-Date: Tue, 25 Mar 2025 08:55:10 -0700
-Message-ID: <95c33a95347b098bd32861a59bf6ec658c52f65d.1742916867.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1742916867.git.Ryan.Wanner@microchip.com>
-References: <cover.1742916867.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1742918617; c=relaxed/simple;
+	bh=Uv1XF8v9S9z8FOJgIj6yPF0v787n7/slgtL5peSFUV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T54WErdLRPsK83mFZfT5/ZoS2xTNN80bH6K7YMFn3K1ckh2x0WPGa/6JGMoSLoTbhAlRNoEalYQR/NeuL2oleHGf7AmQvgaBFIHg1kyPDlmAcu8h7OSD+s/B44CcjCUw/wKIT5IeOmLPdZWv23Z6+jE3KDlSprKZOakvwqQvUL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFQFl3oU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E514C4CEED;
+	Tue, 25 Mar 2025 16:03:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742918616;
+	bh=Uv1XF8v9S9z8FOJgIj6yPF0v787n7/slgtL5peSFUV0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lFQFl3oUGhZFZYbVJ6KTPzRZPcHuVzGRpvTwThMVO2ZdvvT5w6taPLBd61GiIxpOo
+	 KVMELhfKXQuiDcMd9SGOpd88skWUWldK3GwwUDAPexBYEknxs9VNJMEXSNxEh9r2mo
+	 1r5FzSqbpH2OP1YVlLTHZA/vhohcW7YACW+z9nWjVY8yoFzOhDMMvn6RFxk0BjOOZN
+	 fDf5S5SwrMDBJvogOA+t9XhjuaJEkm9nUJL1AUEx5wtce4g/f8BGOCeTnaEfVLkj05
+	 UArXGGPbXIGq4oVKwsAovg31pLmWiQMfqTdOxUZwD8JPlRFC9l2mJWXKtiui89EHX8
+	 g4V1KsBRaPXoQ==
+Date: Tue, 25 Mar 2025 16:03:30 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Stephen Boyd <sboyd@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	pierre-henry.moussay@microchip.com,
+	valentina.fernandezalanis@microchip.com,
+	Michael Turquette <mturquette@baylibre.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>, Lee Jones <lee@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/9] dt-bindings: soc: microchip: document the
+ simple-mfd syscon on PolarFire SoC
+Message-ID: <20250325-feline-roundworm-dc391b755673@spud>
+References: <20250321-cuddly-hazily-d0ab1e1747b5@spud>
+ <20250321-ramrod-scabby-a1869f9979b6@spud>
+ <20250325-quiet-waxbill-of-realization-675469@krzk-bin>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="RsVPJiZ0GmQKz8rg"
+Content-Disposition: inline
+In-Reply-To: <20250325-quiet-waxbill-of-realization-675469@krzk-bin>
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Adjust clock xtal phandles to match the new xtal phandle formatting.
+--RsVPJiZ0GmQKz8rg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- arch/arm/boot/dts/microchip/at91-sama7g5ek.dts | 18 ++++++++----------
- arch/arm/boot/dts/microchip/sama7g5.dtsi       |  4 ++--
- 2 files changed, 10 insertions(+), 12 deletions(-)
+On Tue, Mar 25, 2025 at 09:13:22AM +0100, Krzysztof Kozlowski wrote:
+> On Fri, Mar 21, 2025 at 05:22:35PM +0000, Conor Dooley wrote:
+> > +title: Microchip PolarFire SoC Microprocessor Subsystem (MSS) sysreg r=
+egister region
+> > +
+> > +maintainers:
+> > +  - Conor Dooley <conor.dooley@microchip.com>
+> > +
+> > +description:
+> > +  An wide assortment of registers that control elements of the MSS on =
+PolarFire
+> > +  SoC, including pinmuxing, resets and clocks among others.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: microchip,mpfs-mss-top-sysreg
+> > +      - const: syscon
+> > +      - const: simple-mfd
+>=20
+> You need to list the children if you use simple-mfd. Commit msg
+> mentioned clock controller, so where is it?
 
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts b/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts
-index 2543599013b1..79bf58f8c02e 100644
---- a/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts
-+++ b/arch/arm/boot/dts/microchip/at91-sama7g5ek.dts
-@@ -35,16 +35,6 @@ aliases {
- 		i2c2 = &i2c9;
- 	};
- 
--	clocks {
--		slow_xtal {
--			clock-frequency = <32768>;
--		};
--
--		main_xtal {
--			clock-frequency = <24000000>;
--		};
--	};
--
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
-@@ -512,6 +502,10 @@ spi11: spi@400 {
- 	};
- };
- 
-+&main_xtal {
-+	clock-frequency = <24000000>;
-+};
-+
- &gmac0 {
- 	#address-cells = <1>;
- 	#size-cells = <0>;
-@@ -917,3 +911,7 @@ &vddout25 {
- 	vin-supply = <&vdd_3v3>;
- 	status = "okay";
- };
-+
-+&slow_xtal {
-+	clock-frequency = <32768>;
-+};
-diff --git a/arch/arm/boot/dts/microchip/sama7g5.dtsi b/arch/arm/boot/dts/microchip/sama7g5.dtsi
-index 17bcdcf0cf4a..250c9e98a8bb 100644
---- a/arch/arm/boot/dts/microchip/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/microchip/sama7g5.dtsi
-@@ -117,12 +117,12 @@ map1 {
- 	};
- 
- 	clocks {
--		slow_xtal: slow_xtal {
-+		slow_xtal: clock-slowxtal {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 		};
- 
--		main_xtal: main_xtal {
-+		main_xtal: clock-mainxtal {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 		};
--- 
-2.43.0
+I don't think a child node is required here, there's not enough
+clock-related properties for it to require one. However, I think you're
+correct about missing properties in a general sense - there should be a
+#clock-cells here and a clocks/clock-names too.
+The reason there aren't is because the existing driver (that binds to
+microchip,mpfs-clkcfg) looks this node up by compatible, and implements
+the clock parent for this node etc. Obviously that's not an excuse to
+leave the properties out, so I'll add them even though they're going to
+end up ignored.
 
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#reset-cells':
+> > +    description:
+> > +      The AHB/AXI peripherals on the PolarFire SoC have reset support,=
+ so
+> > +      from CLK_ENVM to CLK_CFM. The reset consumer should specify the
+> > +      desired peripheral via the clock ID in its "resets" phandle cell.
+> > +      See include/dt-bindings/clock/microchip,mpfs-clock.h for the ful=
+l list
+> > +      of PolarFire clock/reset IDs.
+> > +    const: 1
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
+--RsVPJiZ0GmQKz8rg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ+LT0gAKCRB4tDGHoIJi
+0vN+AP4t8YJUz+gmpo9mQKUTUBdHoSDi7e3nBrvIm/mCF/we4wEA1jBDbRKUs6Ny
+zoe8o2WcUJLVSpT03NVcKTxFiD46Sw0=
+=9sfG
+-----END PGP SIGNATURE-----
+
+--RsVPJiZ0GmQKz8rg--
 
