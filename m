@@ -1,82 +1,81 @@
-Return-Path: <linux-clk+bounces-19945-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19940-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CAC3A74AEA
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 14:41:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20FD7A74AD6
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 14:40:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82BD9189DDB7
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 13:38:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 800BF189E7C5
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 13:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C019422E3E6;
-	Fri, 28 Mar 2025 13:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16638214A70;
+	Fri, 28 Mar 2025 13:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dnwHkSEP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="udZ7EYqk"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AF221ABDB
-	for <linux-clk@vger.kernel.org>; Fri, 28 Mar 2025 13:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8450194A44
+	for <linux-clk@vger.kernel.org>; Fri, 28 Mar 2025 13:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743168667; cv=none; b=GKiN50pa66iqOtqTwXZEo0AwCI6eq04RB63cKY2MKgtzADyE3tfrvHhXUA4WKj2TovA5tbhRy47xSLgBCybS0Te0YvUxP0fdVRb2EdhmAqZ5WUDU8yESw00ptAAJQIvi7vQY36XhmxB3uti4a0uKkyfRCCRaxMGhbWudBD0bbi0=
+	t=1743168660; cv=none; b=kkLHZNJKEZUnFRpLTUZfRlQ3BxjXaK/MVe+U3SkrT1UjbShZ9o8UJPzYoShBT8u5kKoPJMO1+IrJmHxzRMThK8mwDCxTIUZKUsjtNlEj3lsS97qWuHDLyxoU6gvd8nz2T98j82hi/1lt0bCQ3ZixMCyb3Y+sPl878o+VjnqngyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743168667; c=relaxed/simple;
-	bh=qCh6oRLfLTgTThIJ6lv+09+QKw9X55onfRfdQJjsxHI=;
+	s=arc-20240116; t=1743168660; c=relaxed/simple;
+	bh=rtY22MgptB+tLy3QVxclIgluL35Op8OhX0cRjsl/mJo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BAC2JsHFs8flgJbsO1u85t2VpSDpQcZjtdrGl5P2CCRWx2TCXb9g1fDOiJPnTQ+zzl08X9dxqsscArkznCT4IgausY372/nZ1SlhrfsXRMKgNeQQ8bnxC0d1fKqHBUDyG6MtRGcblxQTXmwVbcXP8U4+rvta4VZOoZbfBE1HcX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dnwHkSEP; arc=none smtp.client-ip=209.85.208.44
+	 In-Reply-To:To:Cc; b=QNS/RvdM6WIX98xcDv5AABTl8RCeyNjMVZzqgYr9ZsoKtRnDUP33mr1UinxKGIf5OT0ryqOKpp3aZ2Ind5+9UIDGRZuC4aKDNEq1be7G59W3KlJH2yWNXwtitJ020rumixdEpXNWTTeqZNbELNcdlvvcIXRo01cGmqUD9eR7EwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=udZ7EYqk; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e673822f76so3540698a12.2
-        for <linux-clk@vger.kernel.org>; Fri, 28 Mar 2025 06:31:01 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e8be1c6ff8so4131779a12.1
+        for <linux-clk@vger.kernel.org>; Fri, 28 Mar 2025 06:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743168660; x=1743773460; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1743168656; x=1743773456; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E1w11rlVw/TNBQvhMqe/HobIw1/0AFB8/Oe+GpWOJoY=;
-        b=dnwHkSEPZFiGk+OcEy/DAYW1ouVXV5Jwdra0hyPGewWDktilyifgmdREiwDoTi2P3G
-         wLrJTMGpq4kKdiCCAd1OocCJ9qJFhvWx5RQ13Fm1EwPDa590K9EAlXIi5Z6+BeG9aays
-         ILBUJN3XTkiQgn5uMfyV8Jjclg3sEDZToX493NPHKKb6voIDRYysyB/+IcrKRYOs51CF
-         ReA3JcLGakkcIpnVFOKpxBV4K//Unf5f7rZ/0QPPLPEJF41oz+qZe5n2cN4kaxJEaiSo
-         Q63oiqV0LzdZiyPB5GYT0HTxmnVYLECJS+e8ZAuGL3jrukIzKAP44lkmgGF6iHGARP09
-         KxMg==
+        bh=eMxQ7UQKMt0+Oaxy9pEE80XpNTXV7CL+WPCOZ4uzjjQ=;
+        b=udZ7EYqkiqCuXbSiRXCMBZmiDe3QWEWva5a3Tl21XVIONFFX3Ga/CUAOfR4oJNO7Fa
+         7wvSQQEP23kKdZ+CiLQncc0Gfz7pFq5bpayn9fMgltnzJutksKItUmRbte5hGgJcLA42
+         JP/Jp4ERedHbLVmXjXBUgKWzIDu3LWlVxfJnaKxhNrwn/2Lyiu3my9hjnXrkNawzJVrs
+         AbT2qJ59MzOKV/fKVGYE6k9fnCN1Om0tsjVSXQcGff3YJS/oU/8brGL1vuPFAx/hQm0i
+         b6BKdcme94J24CtPFbz2DioFe4X0kmvZyfxH7HbhsRvhNXAE7RK/Tnar73n0lyB1L2+h
+         q1sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743168660; x=1743773460;
+        d=1e100.net; s=20230601; t=1743168656; x=1743773456;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E1w11rlVw/TNBQvhMqe/HobIw1/0AFB8/Oe+GpWOJoY=;
-        b=Vodx+HSUBt3FLqRAUDrsSYPnURITqhw85Kl6ALBFUR9h72VPZq5JRzk5OcIil4noS4
-         cOSICaBWY+st6LdPIybRMS6vpoOv+Hx6NMM4fimsV5SfRO4bNukWGZqL7ieCLO9Yyvvb
-         hMi4AuHvc64j75qQxRE1jmlGVoZGTcfKmylHUPnygP2T9lwiUO6kGenGpuMGRiyswGkT
-         PaILJtzV20IJoi0O2Nix6zT+qP3iEUHgAIBuw6AfftLgwKzuEOGe38jjvugu2QcbGHjW
-         znD0HX7hKJSQzCGZSWM9SgN5m+61QznBVztZVCOVf4agJ5O+QPBbaqZ+Z/xQyU5Ptqsr
-         I1Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCWfN0URVpLI0hdFP301v3tWwfYIBC6SboZbEiNacxBePS5npkwgWoy0u6lQFFtFOuPijA2KeF1mHsc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcS2ugzC6/Jw8AUny6y9Dv2IO/cptjSxXGq5kQYYskrQ8m6/YF
-	A+UOZA5zn1VMsO4wETBHvMTwf82Je4aSd4gW4Uec8Ay04M2vFapu5kBZ8UxZGbU=
-X-Gm-Gg: ASbGncsCwx14jbX/ZL7j4jk8HvevYGAou6KKakeJNZdoY1Up0ovmmTfaJO6Hwd0E+ge
-	m/U99zvQT/+CEtJfHWRkGasP5P1NuFhW+71rVxbXaQpIozg9HC/8UmoRnX2VvL+dzaVGBAOWBWd
-	C73pk31EZmAF1Bx8zAhjgE8mcgVGpg/FSH0K4AGY8ay2z+/nCgFbIPZj1yI42s1BbLWrfFYzviM
-	wEJwEU7/4AZSYstf8biDEz/HNWdtVoNdfLIjpT+RoWYQj8onrTI9tk+kXHoWfTTZmiEeaG1OiGF
-	PclQMyFCpuVQgzzn7dY6JdcF4J1V2iBBt/VLFkIBKeiq6ZNaSHPIskxeWG4TzU+/jcLLqT2rOOg
-	JUNt/WraBZkRf9ISuQC84rzNX7+XD
-X-Google-Smtp-Source: AGHT+IEq06ryYPSRFnijp9zBT7TVwvuxmad5wvipQF5Or+uJmUZMEkHYbtpAEod3NTnJDeU/8eOeEA==
-X-Received: by 2002:a17:907:7b99:b0:ac2:7ec8:c31d with SMTP id a640c23a62f3a-ac6faea0f0amr608739366b.17.1743168654961;
-        Fri, 28 Mar 2025 06:30:54 -0700 (PDT)
+        bh=eMxQ7UQKMt0+Oaxy9pEE80XpNTXV7CL+WPCOZ4uzjjQ=;
+        b=Ts/kpBCdUj/SyWs2k90SWFnF2QSEmAoIgQ/Fn9fuiwBmjQg9WgQPsE8c0LGy3WT2ap
+         nndFOvbAXUZZOobRBLMy+XgHTB8c5O4Lv4/aNpJgyWJDFKkK1Sbn+rrUIPiUwMr12Y8E
+         r0Qhhy6tXfx4ISElclRfDXSOV/KOBhhtR1YutrbWPwLKZxnNnP3E7SrrOfR15e4NGMD/
+         cNF/Mdxj6RFlrtVRNHdSA6/Ko0o6pJ/Kd1CaHWm3nne1YQ9/9L74ubtFY5iUjAZ2vahB
+         h/Bey0mqbSClWTxquhX4IqToIF74npidmBAELYxNnYFvhSZHlcZVkzmDyQ0xYLUEKSLs
+         xsgA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKfwBWV1eIvIkNGmDPAawxC0/BH3S5SVvzFetRmw0YKkYVcIcGjImAs+4sIFJ1q95fW9RxyWjzv/Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfyJpen45zteOKuIiV8e40fZbcHXP+ofDUFftH88sEwxsNcqcJ
+	uKHSeEGLmpkIPNEmxnfG3tQ/8gUtSX8tonhbobnbC43MsVBOVpPyRH3vO/ePmWY=
+X-Gm-Gg: ASbGnctrndPGhD3XXUqViYBctPJ+R1+vmdIJnuHtoFsRWwUTt4Ody1tOMIDBnGwjola
+	R5i+E73ueZf4I8GAcu4uNzhS2Qjn2uzETTlxtzgs6PF00LfhOvARFXsey71SmBtdwVJPGxWtE/Q
+	hpPIVl8xD2oaSCyoDs5tXinMZG+Y5w8dLYBuPgtXvSa3VAxrt+OpCq6VKxT2gqt0oTyY+DEteBD
+	Ml1ip0dkKd7csEoC84HzROAiXl8xMTULBRlKU2LEKT3AGZNL/lIWvQrd/d4/7u6Y8iwTwsH0lAl
+	rvLD0huvH81eqnGA85CJGOXreSL3C1e+8QGEBTlitytFVCkT13ZDkWtuGQ7C52lQNvD8VI0iEQB
+	RAb6Qdg6WXlHpo998IgJzO9vM2Y8eEPuRP1J9v4U=
+X-Google-Smtp-Source: AGHT+IH35FaKYo+gSI6anwiHIjdD3ef6MXj/ihpM/TgWINmZ8ShobAVb92+tkqSJyQ+wsMpl6rBS1A==
+X-Received: by 2002:a05:6402:51ca:b0:5e0:82a0:50ab with SMTP id 4fb4d7f45d1cf-5ed8f9027ffmr7884197a12.27.1743168655554;
+        Fri, 28 Mar 2025 06:30:55 -0700 (PDT)
 Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc17e01f7sm1355284a12.79.2025.03.28.06.30.54
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc17e01f7sm1355284a12.79.2025.03.28.06.30.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Mar 2025 06:30:54 -0700 (PDT)
+        Fri, 28 Mar 2025 06:30:55 -0700 (PDT)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Fri, 28 Mar 2025 13:28:49 +0000
-Subject: [PATCH v2 03/32] dt-bindings: firmware: google,gs101-acpm-ipc: add
- PMIC child node
+Date: Fri, 28 Mar 2025 13:28:50 +0000
+Subject: [PATCH v2 04/32] mfd: sec: drop non-existing forward declarations
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250328-s2mpg10-v2-3-b54dee33fb6b@linaro.org>
+Message-Id: <20250328-s2mpg10-v2-4-b54dee33fb6b@linaro.org>
 References: <20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org>
 In-Reply-To: <20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org>
 To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
@@ -102,54 +101,36 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
  linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
 
-The PMIC is supposed to be a child of ACPM, add it here to describe the
-connection.
+sec_irq_resume() was removed in commit 6445b84abf91 ("mfd: Add s2mps11
+irq driver") and sec_irq_exit() in commit 3dc6f4aaafbe ("mfd: sec: Use
+devm_mfd_add_devices and devm_regmap_add_irq_chip") while the
+prototypes were left. They should be removed.
 
+Do so.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- .../bindings/firmware/google,gs101-acpm-ipc.yaml        | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ include/linux/mfd/samsung/core.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/firmware/google,gs101-acpm-ipc.yaml b/Documentation/devicetree/bindings/firmware/google,gs101-acpm-ipc.yaml
-index 2cdad1bbae73bb1795eccf47e1a58e270acd022c..5524f2af5bda2d29b5113f8fe14ece7f02366a60 100644
---- a/Documentation/devicetree/bindings/firmware/google,gs101-acpm-ipc.yaml
-+++ b/Documentation/devicetree/bindings/firmware/google,gs101-acpm-ipc.yaml
-@@ -27,6 +27,16 @@ properties:
-   mboxes:
-     maxItems: 1
+diff --git a/include/linux/mfd/samsung/core.h b/include/linux/mfd/samsung/core.h
+index f35314458fd22e43fa13034439406bea17a155c9..b7008b50392ab857751b89e0a05d2c27f6306906 100644
+--- a/include/linux/mfd/samsung/core.h
++++ b/include/linux/mfd/samsung/core.h
+@@ -72,8 +72,6 @@ struct sec_pmic_dev {
+ };
  
-+  pmic:
-+    description: Child node describing the main PMIC.
-+    type: object
-+    $ref: /schemas/mfd/samsung,s2mps11.yaml
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: samsung,s2mpg10-pmic
-+
-   shmem:
-     description:
-       List of phandle pointing to the shared memory (SHM) area. The memory
-@@ -43,8 +53,15 @@ additionalProperties: false
+ int sec_irq_init(struct sec_pmic_dev *sec_pmic);
+-void sec_irq_exit(struct sec_pmic_dev *sec_pmic);
+-int sec_irq_resume(struct sec_pmic_dev *sec_pmic);
  
- examples:
-   - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-     power-management {
-         compatible = "google,gs101-acpm-ipc";
-         mboxes = <&ap2apm_mailbox>;
-         shmem = <&apm_sram>;
-+
-+        pmic {
-+            compatible = "samsung,s2mpg10-pmic";
-+            interrupts-extended = <&gpa0 6 IRQ_TYPE_LEVEL_LOW>;
-+        };
-     };
+ struct sec_platform_data {
+ 	struct sec_regulator_data	*regulators;
 
 -- 
 2.49.0.472.ge94155a9ec-goog
