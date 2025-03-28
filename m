@@ -1,82 +1,82 @@
-Return-Path: <linux-clk+bounces-19958-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-19954-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB935A74AC7
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 14:39:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E97F6A74B29
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 14:43:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 500C97A6E43
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 13:38:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C97B716CC9E
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Mar 2025 13:38:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD4C23770A;
-	Fri, 28 Mar 2025 13:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7D321ADA7;
+	Fri, 28 Mar 2025 13:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QRqSUpIF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="En+/83zz"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24B121CA0F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA832192E1
 	for <linux-clk@vger.kernel.org>; Fri, 28 Mar 2025 13:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743168676; cv=none; b=e71I1lN1QDkebySI4XiIQNN0v4aOk3Q3WmhbWvxuuwMTseqTEuZEXtsyE3qmMSy4Tg2pdve5iB4Cb7zZImJE9QVBTYx2HDVGOhW6Vm3Y+C8ZWFqtGjf6x9vdIWJvgoY+M/a89God5IOBBgOvnYn11MkwJaQ8XLhMCNhZhYl5Hdw=
+	t=1743168674; cv=none; b=XjdZTZv8dmsAJIjLa176oPpQItkZ5vyGE1Op7MnhdpH7pFFExskq9J+Bi0UsZEEibmmIQZIhwHN4bhVeNknhG1ZGflWxziMUG7/QZ3k7nravwqW1vWTOefTArH7sJVLqWh6satt1qXnYcCJ5K7uGESQkqBYMmIbJ3ReUk7Bjprc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743168676; c=relaxed/simple;
-	bh=3HQSCKKi1fwFRVm95IbU9t5Hr7ITyiskN+9xAwmrKhQ=;
+	s=arc-20240116; t=1743168674; c=relaxed/simple;
+	bh=X0QQTgyZyBPIURJ3v2tympUyOwlqSVYuYyMtIMSpfpo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KmdVgBQb1yb3SFz5HK0GiG+n8dW/js/Ox68nJnIMDrXfjToZ89bduqmsOGya5IZ5c/j3r6hreKcXeV/R9PPIKYuwfcjcAtjQK0uu2BRA0cSA77NuKKXXRR41lsp4XElY2OULio4rIsJxOf4PqfYuIeLo9J0a/7x+TqkTwxLgRmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QRqSUpIF; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:To:Cc; b=uW/jXBQq6OX31GFGJT8uXuZRdHOqqkaAy36ZW0q9GVpOBzgZS7Ubp+b+MBM8eeo3yHvWEwR2o5kY1RJrrf1ioxn9n2YD6VF/7QYsn56aBvdCY3mPiEN7DUk/Nuk/QFK5eFoJDQ0rzhF3U+o+X1DrddxJrHxgLQcob6BK+P2ZwC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=En+/83zz; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5e6194e9d2cso4222813a12.2
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5edc07c777eso1349583a12.3
         for <linux-clk@vger.kernel.org>; Fri, 28 Mar 2025 06:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1743168664; x=1743773464; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=c021jwV5dbsG8JoPrCRgjZmmvCnTfk3Xe/yBggRzooI=;
-        b=QRqSUpIFu1zTWw6+9awS0D5ocSQe16gTsUSBPfCpqSBLIl/my2TT5lcTYfnhI360Bb
-         tcz7fC7RRzhCYwM3psqfg4LLbdfeM9mGi+dDKA/N2defEO+EDN8G3t0fJNvM83oaC8fY
-         e3EQgoXKSLhQYA+7oeUtHx46xhdJiG3n5pWnxP/yBGruvT2i5aa3bD4r+9h1KwECoOMd
-         CzzHvPF/C0FxCHrns1S0TtV7azk1pBVuMWo3TYbiIeTgRNg9N/RAzwd1yZqAQX1djeNe
-         uW53SMkIKUrLgPNB82Kj8x75szdHYOlNmfhUUCXZUF4lkrND0KTvd+Q/e1c7WGo0vHZH
-         J19g==
+        bh=kV75c5wurwfdiB4LfjbAT+jBLqgbz3xs0SfJTGIePwA=;
+        b=En+/83zz2JnMpQOWtuk2jCDJ+XxaXrWiMelE/N8tSqAWNlQjxSxlMoVEEmE6b33Sfk
+         NTdaOnhFa94eLQmjNm0kQX9LkllxVIDbU0jX95dZG3s26gd0JJk0H2UYYfLo62vvjKjf
+         fnVNqpK0uxH3NSfbnQYY0Cs0UQD3VnK0PRhGQtW99BP2c0ZYhui+pddKFsu6/BbjMEJ8
+         zN5/RQBoIdNDbbIDDtUR2jvqr3ZdbOGfRIpuIAf0rNr3I2aDjSfPDJgoqXvQSULs3eDe
+         SHS86+6HeMQPVvrg6x0rJ2IHK5sir5Tjuqxtqg6lIo4mVJXez7M2lduvv1DNech54jG0
+         6NOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1743168664; x=1743773464;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=c021jwV5dbsG8JoPrCRgjZmmvCnTfk3Xe/yBggRzooI=;
-        b=csyfKjl+v7sDNjETbWrRKzarYqhU01L8wb/QaTd961qNlHqKtaI+3Q/8IrHgQAZ113
-         QunvQavMr9eQYC8b5kdndpDOMoWVGKTO/gOR7AK8PJTrTbJRZHyMJq5AZEJS2sKQf3z0
-         EiwvZYA0p10Ph3G9m/LZAOPcxpp9t7Bemri6iYJ4tl2pFr941Pu6yRxGRLmptxTlq67i
-         c57c0c8Lo9P4q8u0/X+xVztN99kJj1Dx9znbkoEG3QRa5UKMonoq+x/lzMGBkr3RUHtp
-         wuO+gVB45LieacNQqZVli/VlRCCADWoDaAvmz7CbGIte7pA7bhXKfMfsxp5NiQDA1j2g
-         Y33Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXHVINE0lKUufiTQfbhGnq5cdb2d1TtnG1YI1hdR67JMQXIMnpCvCaYp+gBARUB4icTa2W8PPShig4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQtzmr1FkEan2Rg8DiSfEHUNlDIwWpLzVxRcrQJJMjUtSx5O3U
-	jUKR+3T94SbgSkh4u/yORtyz/2oRfdBHKQ1bGB1grkjruCDrdEDVSJeggbT3Y54=
-X-Gm-Gg: ASbGnctkRUj3veIMTV+tpJ9gaa8/ijJQOqexPvqKqlcaQ/FpTGXW9WBmNsNFTBCL31Z
-	5Qqg9XyYV8rnLibmQ4n6j3+oRExqu/po/wmtGFTzNZb77xvbYDSgROABzlLcFrIEx8bTP7UdKiG
-	5KKrtsKk8BhuZpfbAYbvSWbt4LfxcSy0R5y7FDsNPEZpEAwLxyvmn9XOfXZKY2te3QaZ+oyXGz2
-	z0jEGoaYZr20omPIRV1OgAPGhRdnRu462t7EGqnWvIrvl1L9XJcEg98RBIg3FK+0X5cKyYoy+HL
-	ghBeU10jbAi8Sv81k2Z1zbNLCMBe86Xk7s1OqE5rXP6JQAhcE2yD46+qREK/TTjtY6yJqA0vT5W
-	aeZQ4xzgZe9FGI3hJthww9UJ69pd9
-X-Google-Smtp-Source: AGHT+IH7/8CmVUYmY+VoEFkvACO8hVh6RcnR9A51bOSMoMHldWSTPOqvDoAP3eGhyaAbNPpxpMZqQg==
-X-Received: by 2002:a05:6402:5109:b0:5e6:e842:f9eb with SMTP id 4fb4d7f45d1cf-5ed8ec1e7f5mr6687208a12.21.1743168663711;
-        Fri, 28 Mar 2025 06:31:03 -0700 (PDT)
+        bh=kV75c5wurwfdiB4LfjbAT+jBLqgbz3xs0SfJTGIePwA=;
+        b=WCAEhAj5aoRZU4hs6L7aMlp8425I+MliGitYJfTkHjHdB0AqJkiip3WOiNcMEXZZG8
+         RjWcgZcxIUE81vFwVYsPvrmRucsEWNc5zYHPT3MYpULJc949lsxA6X6oWcJbxIq4B/l0
+         WrMQ3ZAJ+X7zeeDjhvrMrk1idH4+tUyS9V9rhPNMQh097ACxs316OiDdh/GeoO1OSbTD
+         UYjOoX5qLDmlzQrNZjdYd3xSeYW5qOssF2wlN4XX1hl336sE72pkwHvUB4g5N+ayk2w9
+         oWDLgcGtHqa+CMer8ydNdUzeQUw7CTWXCHu3v1HRm/r3OgTGQTfVNZmxu6GT9s7p2oiw
+         /Ifw==
+X-Forwarded-Encrypted: i=1; AJvYcCWWA2GwF8ycyvZ7yYjZkW5EtJpMmS54gy2vsiTgNJw65LR/ZffQD1I7dxOaox0a+Ct6tXzkbn/e3Xk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQIfF5MvkafV+KFsKK4AsZjQP2gBbaqrYxZzy+6SAl0d6eImat
+	jGscRWhqqHp83yQBVDlps9OImA8X+SNOFuahTLV9XADrzWvGuEiVKamr2TbBXik=
+X-Gm-Gg: ASbGncsW2HTc9U+6/yTxz9NAfieNGjUVCpAf9xja2+Sg68k1+6aRT893fvNcs0/Xhya
+	acWo6aiYX4uGv8c96GMxyFTt6fqPvGTiwL0Tu4PdHneAfcNGg7hX3ziuf4yns+VFTAQrmijF0+3
+	wlfAQFaX2QlyGV1hkMFD+04vETwHJBRz1u0RDuIUzpRxPEvxkW2AuAhL93CF8Fn7JVBVtYpRy3V
+	9mlq/zFRNgogxwYjWMFp5PP+kUkeImEWW38KSveCcY6XWFSZnj78gt3ktda8NmaFwhFXqVU2K5g
+	YzTeV/Oot3vk/nQt9I5ut+50cvWaWnMhRF+okDL5bR18KfkZ3N+SU1gUBkekcE2IdRZjOPbmKnV
+	RBtfbBkTYc1UhiVevITWjVLVfiqU/
+X-Google-Smtp-Source: AGHT+IH82jsJ04KqxSx2urRuI126Wc6BqmkR0wyKM63ai8QchgotV1y1Ewu8V3BijV087u2FKOXDPg==
+X-Received: by 2002:a05:6402:26d0:b0:5e5:c637:b69 with SMTP id 4fb4d7f45d1cf-5ed8df6b334mr7910381a12.6.1743168664240;
+        Fri, 28 Mar 2025 06:31:04 -0700 (PDT)
 Received: from puffmais.c.googlers.com (8.239.204.35.bc.googleusercontent.com. [35.204.239.8])
         by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5edc17e01f7sm1355284a12.79.2025.03.28.06.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 28 Mar 2025 06:31:03 -0700 (PDT)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Fri, 28 Mar 2025 13:29:05 +0000
-Subject: [PATCH v2 19/32] mfd: sec: don't compare against NULL / 0 for
- errors, use !
+Date: Fri, 28 Mar 2025 13:29:06 +0000
+Subject: [PATCH v2 20/32] mfd: sec: use sizeof(*var), not sizeof(struct
+ type_of_var)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250328-s2mpg10-v2-19-b54dee33fb6b@linaro.org>
+Message-Id: <20250328-s2mpg10-v2-20-b54dee33fb6b@linaro.org>
 References: <20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org>
 In-Reply-To: <20250328-s2mpg10-v2-0-b54dee33fb6b@linaro.org>
 To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
@@ -105,53 +105,33 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.14.2
 
-Follow general style and use if (!arg) instead of comparing against
-NULL.
+Using sizeof(*var) is generally preferred over using the size of its
+open-coded type when allocating memory.
 
-While at it, drop a useless init in sec-irq.c.
+This helps avoiding bugs when the variable type changes but the memory
+allocation isn't updated, and it simplifies renaming of the struct if
+ever necessary.
+
+No functional change.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
  drivers/mfd/sec-common.c | 2 +-
- drivers/mfd/sec-irq.c    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/mfd/sec-common.c b/drivers/mfd/sec-common.c
-index 4871492548f5efde4248b5b3db74045ec8c9d676..55edeb0f73ff4643f23b9759b115658d3bf03e9a 100644
+index 55edeb0f73ff4643f23b9759b115658d3bf03e9a..e8e35f7d5f06b522a953e8f21603e6904401c983 100644
 --- a/drivers/mfd/sec-common.c
 +++ b/drivers/mfd/sec-common.c
-@@ -164,7 +164,7 @@ int sec_pmic_probe(struct device *dev, int device_type, unsigned int irq,
+@@ -163,7 +163,7 @@ int sec_pmic_probe(struct device *dev, int device_type, unsigned int irq,
+ 	struct sec_pmic_dev *sec_pmic;
  	int ret, num_sec_devs;
  
- 	sec_pmic = devm_kzalloc(dev, sizeof(struct sec_pmic_dev), GFP_KERNEL);
--	if (sec_pmic == NULL)
-+	if (!sec_pmic)
+-	sec_pmic = devm_kzalloc(dev, sizeof(struct sec_pmic_dev), GFP_KERNEL);
++	sec_pmic = devm_kzalloc(dev, sizeof(*sec_pmic), GFP_KERNEL);
+ 	if (!sec_pmic)
  		return -ENOMEM;
  
- 	dev_set_drvdata(dev, sec_pmic);
-diff --git a/drivers/mfd/sec-irq.c b/drivers/mfd/sec-irq.c
-index c4db58813059f07372679223ec570ed07f52cd73..5cd9667a21e9e8b052b2ef0b5d2991369bffe8bb 100644
---- a/drivers/mfd/sec-irq.c
-+++ b/drivers/mfd/sec-irq.c
-@@ -448,8 +448,8 @@ static const struct regmap_irq_chip s5m8767_irq_chip = {
- 
- int sec_irq_init(struct sec_pmic_dev *sec_pmic)
- {
--	int ret = 0;
- 	const struct regmap_irq_chip *sec_irq_chip;
-+	int ret;
- 
- 	switch (sec_pmic->device_type) {
- 	case S5M8767X:
-@@ -496,7 +496,7 @@ int sec_irq_init(struct sec_pmic_dev *sec_pmic)
- 	ret = devm_regmap_add_irq_chip(sec_pmic->dev, sec_pmic->regmap_pmic,
- 				       sec_pmic->irq, IRQF_ONESHOT,
- 				       0, sec_irq_chip, &sec_pmic->irq_data);
--	if (ret != 0)
-+	if (ret)
- 		return dev_err_probe(sec_pmic->dev, ret,
- 				     "Failed to add %s IRQ chip\n",
- 				     sec_irq_chip->name);
 
 -- 
 2.49.0.472.ge94155a9ec-goog
