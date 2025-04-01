@@ -1,159 +1,307 @@
-Return-Path: <linux-clk+bounces-20060-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20062-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51F2AA78158
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Apr 2025 19:21:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 936D4A7816B
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Apr 2025 19:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A93C7A1B42
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Apr 2025 17:20:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41E8F16B07C
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Apr 2025 17:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37BB220C48A;
-	Tue,  1 Apr 2025 17:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2F420F076;
+	Tue,  1 Apr 2025 17:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b="WFJURWel"
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="12dWZVIn";
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="0nY0TcwV"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+Received: from bayard.4d2.org (bayard.4d2.org [155.254.16.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C561C8612;
-	Tue,  1 Apr 2025 17:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.142.107.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BCBBA42;
+	Tue,  1 Apr 2025 17:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=155.254.16.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743528101; cv=none; b=Nv3t34ITdTUltGuezdTPIpdVJBarmwKSpixxzfiBxT+VDTNN1AJAwFjWe1Si7bpOzq645Xm88lHP9JMZ4p40wKY8oAY6/+uFi1+Qc8hw2YOKPymZgzD4zoD/TPvHDgMgPSC8xIu/OOhCMKEfeAJ1A3LnIz9PsE3sw9PeYyBO3L4=
+	t=1743528298; cv=none; b=bEWA5jLi5HxOyDuv0IY7O2793mPGCwjDwBM7nRv2aGX9AwjCT7UYsMdhtSUeiOpSZ100Lvs0eQ6DR0x5AfRi1+EYNIsv0DqKGUb/SnbyQPu6WNA5t0GxPSYp7by0p1gDiR+4a2vBafwNZ/kesBDUYzQXqQtc4OEe38xwCXGGbC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743528101; c=relaxed/simple;
-	bh=w11IGACrChvN5h9qvFXuxbYJFturzczFTb0ewPiQf8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KpIBnQ/gaaQSczB2fg/ubLHGgMqty+fJe1Rb9UyEc+TBrOTAjln7Pept7W8qG96Exm9KpjM5/cNwABupmlOem6sutfuXoW9hWF6fEhlkjV8BqJdsNvsjhKRG5ELJqOHkar+APdWoBx29y5I8Gd7SnBk/UASg6mOGBWA+LMf36Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com; spf=pass smtp.mailfrom=lechnology.com; dkim=pass (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b=WFJURWel; arc=none smtp.client-ip=98.142.107.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lechnology.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=vsU7s/UMazXBgdqWSRo/9CWN1D/POxYAe2IXD6Jx6pI=; b=WFJURWel1LzhHk0lTeDkSkFar5
-	htLUUBzf7Yh7dQppa3LZG0Yvjp7BnT6O9AUBT3B430jZP0Tpll/lKlnXkXxDNF5Dr3K4N7xaKdnuL
-	1HOjSxX0W+nOwT+fS5RRMiOCD0wX3IjsXKZHGsf2cFd9LjcGlV9hf9yxWwHQXK0CZQfRsHIwRHC2W
-	bphiy80p3tnvs22r0xtECfnHW2K4+++phIhqeC1LfD310Z/yeBWmL4FCsHKKurqGd4cKI7SmcFwGn
-	VCYq07BPbX3YbsOSiJNoMQX32LiNNYOsvdtrd5LAbpaSKb3xK2uR5FKMtKU32zwWosr2atJZCxVID
-	C60dngmA==;
-Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:56528 helo=[192.168.0.113])
-	by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.98.1)
-	(envelope-from <david@lechnology.com>)
-	id 1tzfKT-000000006yD-2DyG;
-	Tue, 01 Apr 2025 13:21:37 -0400
-Message-ID: <7513fb2c-3abe-4c29-aa94-42f0efe93396@lechnology.com>
-Date: Tue, 1 Apr 2025 12:21:36 -0500
+	s=arc-20240116; t=1743528298; c=relaxed/simple;
+	bh=3Afbh4zUUKkEfX+R9Ta4ThObmPq4HIGfRvVzx39itXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YsCKizpJKOmobrpCNFPVs6ZhU4m9hkbUSYMkBC7ybGly+jaChjszM7GIntvYV6aQK7l7AO6qORfYqiWkb69k/8Q3pyxmW+QIqr22sO5UVKLHVRn4Py5+8pREKQ/nV1XW/OdcLNg3AoFhzetPgw/RG/GS+ZXuZz60oDKQz7pLjPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=12dWZVIn; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=0nY0TcwV; arc=none smtp.client-ip=155.254.16.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=4d2.org
+Received: from bayard.4d2.org (bayard.4d2.org [127.0.0.1])
+	by bayard.4d2.org (Postfix) with ESMTP id 75B0EEC59FD;
+	Tue, 01 Apr 2025 10:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
+	t=1743528288; bh=3Afbh4zUUKkEfX+R9Ta4ThObmPq4HIGfRvVzx39itXc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=12dWZVInVE9lgg1cmm9k5KbZo7xwtDxVANgRYjNJ6LzVhOXIlOEPxVNcH/mNDiPtH
+	 m97vm4DNNg1mS1KPRPgcA0Rj/G9ZM7547Wq9omRUZ5yfFCqSMrYryZBKzPuT1WgNJi
+	 txwen86h/duE4qdktjjw6y0ITGX+4KEkFCl4N/DWpRsCsdvmEaa7BEkUG/+2tkez3j
+	 MJYNKGWcQRdmZIR0UnfkJVA0uT5X93I1TeORTzWWDG0E3Xxu+zVQ27KD+gNiPtMYUI
+	 Iy45qqCY7FliaFNrB47CTq75gOWzVkfXp4fpmncr8tvaEU8WRk7t6gE/U1jg54KaWG
+	 7B0vavTBBUKtg==
+X-Virus-Scanned: amavisd-new at 4d2.org
+Authentication-Results: bayard.4d2.org (amavisd-new); dkim=pass (2048-bit key)
+ header.d=4d2.org
+Received: from bayard.4d2.org ([127.0.0.1])
+ by bayard.4d2.org (bayard.4d2.org [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id uTNXRoqBoSe0; Tue,  1 Apr 2025 10:24:46 -0700 (PDT)
+Received: from localhost.localdomain (unknown [183.217.81.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: heylenay@4d2.org)
+	by bayard.4d2.org (Postfix) with ESMTPSA id BCE12EC59F9;
+	Tue, 01 Apr 2025 10:24:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
+	t=1743528286; bh=3Afbh4zUUKkEfX+R9Ta4ThObmPq4HIGfRvVzx39itXc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=0nY0TcwVzsJOFP8SgPJnrlF/au70PECL8pZpgk33FZhkQQOdvz//saN5aUi3kM5WU
+	 HMMvOBDCRu2aLGzDSXYq4c7jfG1QA4cLSmoYwjPxpCsbOjccacyj2iPZFErQooLj4J
+	 5vvtEi5kg8sh5W5/wa8WExuiKhk2hg0OftOauDcSBWd0+DnGKLt6/y8jxsbOac8IOZ
+	 9tpq2PdeGn76dbWZFWgFl63P7dnXa7iiYjBE/qCWnHkooVbulngOGaE8+rIBGxiNYv
+	 H0mTg0O9i/ptuTio0F3j8C8Dr55Qy3sbHdtLUefe6YmMU5uCwXFDqp6k7b0/k5VtY8
+	 g+urgRDXRqYDg==
+From: Haylen Chu <heylenay@4d2.org>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Haylen Chu <heylenay@outlook.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-riscv@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	spacemit@lists.linux.dev,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Chen Wang <unicornxdotw@foxmail.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Meng Zhang <zhangmeng.kevin@linux.spacemit.com>,
+	Haylen Chu <heylenay@4d2.org>
+Subject: [PATCH v6 0/6] Add clock controller support for SpacemiT K1
+Date: Tue,  1 Apr 2025 17:24:28 +0000
+Message-ID: <20250401172434.6774-1-heylenay@4d2.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] clk: davinci: Add NULL check in
- davinci_lpsc_clk_register()
-To: Markus Elfring <Markus.Elfring@web.de>,
- Henry Martin <bsdhenrymartin@gmail.com>, linux-clk@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
-References: <20250401131341.26800-1-bsdhenrymartin@gmail.com>
- <57fac291-6d7b-40e8-a4bf-8b8704662b9f@web.de>
-Content-Language: en-US
-From: David Lechner <david@lechnology.com>
-Autocrypt: addr=david@lechnology.com; keydata=
- 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
-In-Reply-To: <57fac291-6d7b-40e8-a4bf-8b8704662b9f@web.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 
-On 4/1/25 11:46 AM, Markus Elfring wrote:
->> devm_kasprintf() return NULL if memory allocation fails. Currently,
-> …
->                 call?                               failed?
-> 
-> 
->> Add NULL check after devm_kasprintf() to prevent this issue.
-> 
-> I propose to avoid duplicate source code also for the completion of
-> the corresponding exception handling.
-> 
-> * You may avoid repeated function calls by using another label instead.
->   https://wiki.sei.cmu.edu/confluence/display/c/MEM12-C.+Consider+using+a+goto+chain+when+leaving+a+function+on+error+when+using+and+releasing+resources#MEM12C.Considerusingagotochainwhenleavingafunctiononerrorwhenusingandreleasingresources-CompliantSolution(copy_process()fromLinuxkernel)
+The clock tree of SpacemiT K1 is managed by several independent
+multifunction devices, some of them are
 
-That would be OK too. I didn't worry about it in this case though
-since we are only duplicating 1 very short line of code. And the
-smaller diff has a better chance of successfully backporting to older
-stable kernels that will also pick up this patch.
+- Application Power Manage Unit, APMU
+- Main Power Manage Unit, MPMU
+- APB Bus Clock Unit, APBC
+- APB Spare, APBS
 
-> 
-> * How do you think about to benefit any more from the application of the attribute “__free”?
->   https://elixir.bootlin.com/linux/v6.14-rc6/source/include/linux/slab.h#L472
+These four devices provide hardware bits for three purposes: power
+management, reset signals and clocks. Not every device is capable of all
+the three functionalities,
 
-Not a good fit for this specific use case.
+- APMU, MPMU: power, reset, clock
+- APBC: clock, reset
+- APBS: clock (PLL clocks)
 
-> 
-> 
-> Regards,
-> Markus
+This series adds support for clock hardwares in these four regions,
+which covers most peripherals except DDR and the realtime processor.
+
+Tested on BananaPi-F3 board. With some out-of-tree drivers, I've
+successfully brought up I2C, RTC, MMC and ethernet controllers. A clock
+tree dump could be obtained here[1].
+
+[1]: https://gist.github.com/heylenayy/73df0b6b075615a944990507112cfc5b
+
+Changed from v5
+- Correct "Spacemit" to "SpacemiT" in commit messages and code
+- Always use space instead of TAB in comments for consistency
+- dt-bindings
+  - Rename binding header to "spacemit,k1-syscon.h"
+  - apply review tags
+- driver code
+  - remove "default" properties from Kconfig
+  - misc style and naming improvements
+  - make ccu_read() directly return the read value, drop ccu_poll() and
+    reorder the arguments to ccu_{read,update} macros
+  - drop ccu_common.reg_swcr2
+  - clock tree for K1
+    - define PLL3 with the correct offset of SWCR3 register
+    - synchronize PLL configuration entries with the vendor kernel
+    - reformat clocks definitions
+    - explain why PLLs require the MPMU syscon to function
+    - log a message when failing to register a clock
+    - simplify clock registration with ARRAY_SIZE()
+  - ddn
+    - correctly handle masks which doesn't start from BIT(0) when
+      calculating the best rate
+    - improve precision of frequency calculation
+    - derive _{den,num}_shift from corresponding masks with __ffs()
+  - mix
+    - match the full mask of gate in ccu_gate_is_enabled()
+    - add a note about "frequency change" bit and simplify FC-triggering
+      logic
+    - drop unnecessary local variables and initialization from clock
+      operations
+    - round to the closest rate in ccu_mix_calc_best_rate()
+    - change names of all mix subtypes to follow the order of mux ->
+      factor/div -> gate -> fc
+    - drop unused _flags argument from CCU_GATE_FACTOR_DEFINE()
+  - pll
+    - ensure PLLs are initialized to a known state
+    - drop extra check in ccu_pll_enable()
+    - round to the closest rate in ccu_pll_round_rate()
+- TWSI8 support
+  - Split cleanly from the main driver commit
+- devicetree
+  - drop extra "*-cells" and "ranges" properties
+- Enable SpacemiT K1 CCU in RISC-V defconfig
+- Link to v5: https://lore.kernel.org/all/20250306175750.22480-2-heylenay@4d2.org/
+
+Changed from v4
+- bindings:
+  - Drop CLK_*_NUM macros from binding headers
+  - Rename spacemit,k1-ccu.yaml to spacemit,k1-pll.yaml, change to
+    describe only the PLL in APBS region
+  - k1-syscon.yaml
+    - drop spacemit,k1-syscon-apbs, it should be the PLL device
+    - drop child nodes
+    - describe the syscons as clock, reset and power-domain controllers
+    - drop "syscon" from the compatible list, as these syscons aren't
+      compatible with the generic one
+- driver:
+  - misc style fixes and naming improvements
+  - drop unused fields from data structures
+  - drop unused clock types: CCU_DDN_GATE
+  - ddn type:
+    - improve the comments
+    - dynamically calculate appropriate rates
+    - hardcode the x2 factor
+  - mix type
+    - drop val_{disable,enable} for gate subtype
+    - drop unncessary polling when enabling a gate
+    - encode subtypes directly in struct ccu_mix
+    - generate clock names from identifiers of the data structure
+    - rename CCU_DIV2_FC_MUX_GATE_DEFINE to CCU_DIV_SPLIT_FC_MUX_GATE
+  - pll type:
+    - correctly claim the parent clock
+    - make rate tables const
+    - drop SWCR2-related fields
+    - combine fields of registers as a whole instead of working with
+      each field
+  - clock tree for k1:
+    - removed duplicated offsets
+    - drop the placeholder 1:1 factor, pll1_d7_351p8
+    - workaround the quirk of TWSI8 clocks
+    - fix the definition of ripc_clk, wdt_bus_clk, dpu_bit_clk and
+      timers_*_clk
+    - drop structure spacemit_ccu_priv and spacemit_ccu_data
+    - rework clock registration
+    - split the PCIe clocks correctly (there're three distinct clocks
+      for each PCIe port)
+- devicetree:
+  - adapt the new binding
+- Link to v4: https://lore.kernel.org/all/20250103215636.19967-2-heylenay@4d2.org/
+
+Changed from v3
+- spacemit,k1-ccu binding
+  - allow spacemit,mpmu property only for controllers requiring it
+    (spacemit,k1-ccu-apbs)
+- spacemit,k1-syscon binding
+  - drop unnecessary *-cells properties
+  - drop unrelated nodes in the example
+- driver
+  - remove unnecessary divisions during rate calucalation in ccu_ddn.c
+  - use independent clk_ops for different ddn/mix variants, drop
+    reg_type field in struct ccu_common
+  - make the register containing frequency change bit a sperate field in
+    ccu_common
+  - unify DIV_MFC_MUX_GATE and DIV_FC_MUX_GATE
+  - implement a correct determine_rate() for mix type
+  - avoid reparenting in set_rate() for mix type
+  - fix build failure when SPACEMIT_CCU and SPACEMIT_CCU_K1 are
+    configured differently
+- use "osc" instead of "osc_32k" in clock input names
+- misc style fixes
+- Link to v3: https://lore.kernel.org/all/20241126143125.9980-2-heylenay@4d2.org/
+
+Changed from v2
+- dt-binding fixes
+  - drop clocks marked as deprecated by the vendor (CLK_JPF_4KAFBC and
+    CLK_JPF_2KAFBC)
+  - add binding of missing bus clocks
+  - change input clocks to use frequency-aware and more precise names
+  - mark input clocks and their names as required
+  - move the example to the (parent) syscon node and complete it
+  - misc style fixes
+- misc improvements in code
+- drop unnecessary spinlock in the driver
+- implement missing bus clocks
+- Link to v2: https://lore.kernel.org/all/SEYPR01MB4221829A2CD4D4C1704BABD7D7602@SEYPR01MB4221.apcprd01.prod.exchangelabs.com/
+
+Changed from v1
+- add SoC prefix (k1)
+- relicense dt-binding header
+- misc fixes and style improvements for dt-binding
+- document spacemit,k1-syscon
+- implement all APBS, MPMU, APBC and APMU clocks
+- code cleanup
+- Link to v1: https://lore.kernel.org/all/SEYPR01MB4221B3178F5233EAB5149E41D7902@SEYPR01MB4221.apcprd01.prod.exchangelabs.com/
+
+Haylen Chu (6):
+  dt-bindings: soc: spacemit: Add spacemit,k1-syscon
+  dt-bindings: clock: spacemit: Add spacemit,k1-pll
+  clk: spacemit: Add clock support for SpacemiT K1 SoC
+  clk: spacemit: k1: Add TWSI8 bus and function clocks
+  riscv: dts: spacemit: Add clock tree for SpacemiT K1
+  riscv: defconfig: enable clock controller unit support for SpacemiT K1
+
+ .../bindings/clock/spacemit,k1-pll.yaml       |   50 +
+ .../soc/spacemit/spacemit,k1-syscon.yaml      |   80 +
+ arch/riscv/boot/dts/spacemit/k1.dtsi          |   75 +
+ arch/riscv/configs/defconfig                  |    2 +
+ drivers/clk/Kconfig                           |    1 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/spacemit/Kconfig                  |   18 +
+ drivers/clk/spacemit/Makefile                 |    5 +
+ drivers/clk/spacemit/apbc_clks                |  100 ++
+ drivers/clk/spacemit/ccu-k1.c                 | 1321 +++++++++++++++++
+ drivers/clk/spacemit/ccu_common.h             |   48 +
+ drivers/clk/spacemit/ccu_ddn.c                |   83 ++
+ drivers/clk/spacemit/ccu_ddn.h                |   47 +
+ drivers/clk/spacemit/ccu_mix.c                |  268 ++++
+ drivers/clk/spacemit/ccu_mix.h                |  218 +++
+ drivers/clk/spacemit/ccu_pll.c                |  157 ++
+ drivers/clk/spacemit/ccu_pll.h                |   86 ++
+ .../dt-bindings/clock/spacemit,k1-syscon.h    |  247 +++
+ 18 files changed, 2807 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/spacemit,k1-pll.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/spacemit/spacemit,k1-syscon.yaml
+ create mode 100644 drivers/clk/spacemit/Kconfig
+ create mode 100644 drivers/clk/spacemit/Makefile
+ create mode 100644 drivers/clk/spacemit/apbc_clks
+ create mode 100644 drivers/clk/spacemit/ccu-k1.c
+ create mode 100644 drivers/clk/spacemit/ccu_common.h
+ create mode 100644 drivers/clk/spacemit/ccu_ddn.c
+ create mode 100644 drivers/clk/spacemit/ccu_ddn.h
+ create mode 100644 drivers/clk/spacemit/ccu_mix.c
+ create mode 100644 drivers/clk/spacemit/ccu_mix.h
+ create mode 100644 drivers/clk/spacemit/ccu_pll.c
+ create mode 100644 drivers/clk/spacemit/ccu_pll.h
+ create mode 100644 include/dt-bindings/clock/spacemit,k1-syscon.h
+
+-- 
+2.49.0
 
 
