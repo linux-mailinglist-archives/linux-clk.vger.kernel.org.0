@@ -1,165 +1,150 @@
-Return-Path: <linux-clk+bounces-20117-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20119-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D330CA7A049
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Apr 2025 11:45:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86AD3A7A22D
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Apr 2025 13:52:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D2A51895B7D
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Apr 2025 09:45:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A4E23B48D3
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Apr 2025 11:51:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5CF524BBF8;
-	Thu,  3 Apr 2025 09:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F31824BC17;
+	Thu,  3 Apr 2025 11:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="s5Rrs3fl"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Wl9TvV97"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335B6242914
-	for <linux-clk@vger.kernel.org>; Thu,  3 Apr 2025 09:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BDF3597B;
+	Thu,  3 Apr 2025 11:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743673483; cv=none; b=RbcD6+DBND6F96GeOx7Wn6V07J5TuU//PQTioAyQiu80X4G2CXANi1t6uRT/RtISpwudIWvrGLPsfRaGTeM/gfXfv6z/xshE7D1T3d4edgPOerKIhTRF/Ak59SAbZPlhNQs7z7mzCIKxSUyBP3F3wark0uPwBY8Lphf17RfYnu4=
+	t=1743681127; cv=none; b=qMIb2SqIazupD8DgOQVPFcuS85oox3Q8Hmqt40RBMoKwolFd4rW9ZttZQSS5tDvjT9O9DX6/qcyBe7F2YLdsdOIudQixksCyfjYUUnMssYq6rXWCvM+m4JLolcK1wj6PN0o/evf8g18BCUOQtdPkCy8wOEaxXg6N41UB/IGJGBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743673483; c=relaxed/simple;
-	bh=/f9RUGuRkg81S+9vEr4rF6E2a7sH/TZ3cI1ZNfn6e/M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=VrigpL2Rg1oszIsyrmhiBQtLy9e/SHtFHPk/EyTZKeOeswdQJjHzBUBQ0PYWsMTtsFKGhK01NZYth6f3u7yxeVbKUjdJ3lloa7W0GbpyfaM6HPtMbM64Niw0dVmoYz+PAekAbA2S1rpC1gSESDdiaWdvG5cRbDImrrYCefAF8dQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=s5Rrs3fl; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250403094434euoutp014e98ae6a6434fc7935513374cc3d8dfb~yxclaFPDT0662606626euoutp018
-	for <linux-clk@vger.kernel.org>; Thu,  3 Apr 2025 09:44:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250403094434euoutp014e98ae6a6434fc7935513374cc3d8dfb~yxclaFPDT0662606626euoutp018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1743673474;
-	bh=zWpSPctGzB1QFcIv8f8mPGsvFF5oZ87O6t+skARlCj4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s5Rrs3flXjXZLCH6rEqIfZpjYdYq25Gt4vADUmgHTsaYdYD+DZA/+nye2N2joEmjK
-	 KEkq0Ol1Hv4ekBvDjs64ivkx2ZhS43A6v1vAIl8DBOHpOR3TDKKk7y0AFOLurLrOoq
-	 5lCGbEHRL46NLfLDPjDPIyrsE4TVjORAvJ/tQsn4=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20250403094433eucas1p2ac0ecff48840a11e974d418b3f372fc9~yxck5OjcX1404914049eucas1p2O;
-	Thu,  3 Apr 2025 09:44:33 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id C2.79.20409.1885EE76; Thu,  3
-	Apr 2025 10:44:33 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250403094433eucas1p2da03e00ef674c1f5aa8d41f2a7371319~yxckiSN4R0789407894eucas1p2U;
-	Thu,  3 Apr 2025 09:44:33 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250403094433eusmtrp2885ba86520c1e37e943077d94852f880~yxckhi9os1352013520eusmtrp2n;
-	Thu,  3 Apr 2025 09:44:33 +0000 (GMT)
-X-AuditID: cbfec7f4-c0df970000004fb9-ea-67ee5881f257
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id A4.FF.19654.1885EE76; Thu,  3
-	Apr 2025 10:44:33 +0100 (BST)
-Received: from AMDC4942.home (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250403094432eusmtip24ab6de2b4e1d8767ed3f8da4f00574ba~yxcjocdlD1024010240eusmtip2W;
-	Thu,  3 Apr 2025 09:44:32 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-	aou@eecs.berkeley.edu, alex@ghiti.fr, jszhang@kernel.org,
-	p.zabel@pengutronix.de, m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, Michal
-	Wilczynski <m.wilczynski@samsung.com>
-Subject: [PATCH v7 3/3] riscv: dts: thead: Add device tree VO clock
- controller
-Date: Thu,  3 Apr 2025 11:44:25 +0200
-Message-Id: <20250403094425.876981-4-m.wilczynski@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250403094425.876981-1-m.wilczynski@samsung.com>
+	s=arc-20240116; t=1743681127; c=relaxed/simple;
+	bh=1v9o/eYae1l9oDDnFj+Krp0jgYRK2JYUcGfai2r3zF8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MHFE3j5g60mkPZLPWEI0/Hml3cIBtG+3qtLUraA8UUVYMhhOQDZiOgaXUdqthcBfF9LNtA7jheBPWGXZ8ymbauihPo44NxSaEcfODjyc/ff4Z4d9KTKISbOCeu2xlvjQzIkqXxQyZW6wW0ORtdfxbNCuAU/QQCFWCVdGzeEYaKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=Wl9TvV97; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id EA6F68FA;
+	Thu,  3 Apr 2025 13:50:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1743681009;
+	bh=1v9o/eYae1l9oDDnFj+Krp0jgYRK2JYUcGfai2r3zF8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Wl9TvV97WTKEJGdxIhMGL7RJlHBWycINq5RLlKQHhdpxSFog5sYNJUPp4zy4x3PH9
+	 AUVcnP5x4PiCWnOid129ErNDV8Va8yKMRYZcMqSwLxSNC5DVbc9cNtwgp3GXO9uHAu
+	 qfK4cJ3i1Yaeo8Cw9mYYJRZQx4u7hUK/1MWHBLbA=
+Message-ID: <49b12329-87d8-4f6f-8498-0ff7430e31e6@ideasonboard.com>
+Date: Thu, 3 Apr 2025 14:51:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrIKsWRmVeSWpSXmKPExsWy7djPc7qNEe/SDf4u0LF4ducrq8XW37PY
-	LdbsPcdkMf/IOVaLe5e2MFm82NvIYtF8bD2bxctZ99gsPvbcY7W4vGsOm8W2zy1sFmuP3GW3
-	WP91PpPFxVOuFnfvnWCxeHm5h9mibRa/xf89O9gt/l3byGLRsn8Ki4OIx/sbreweb16+ZPE4
-	3PGF3ePeiWmsHptWdbJ5bF5S79Gy9hiTR/9fA4/3+66yefRtWcXocan5OrvH501yATxRXDYp
-	qTmZZalF+nYJXBkfumcyF5xir1jftJmtgXEOWxcjJ4eEgInElmPzWbsYuTiEBFYwShz9eIkJ
-	wvnCKLGvdwojhPOZUeLc3jfMMC2bb7cwQySWM0r8mdbIAuG8AervucMCUsUmYCTxYDnEYBGB
-	PUwS37//BGthFljFKPHk20f2LkYODmGBAInjfzlAGlgEVCXaZuwBu4pXwE5i7r0jUOvkJfYf
-	PAtmcwrYS2yY8pgRokZQ4uTMJ2DLmIFqmrfOhqo/xSkxd0kFhO0ice3NLXYIW1ji1fEtULaM
-	xP+d85kg7HyJB1s/QfXWSOzsOQ5lW0vcOfeLDeRMZgFNifW79CHCjhKTfm8CC0sI8EnceCsI
-	cQGfxKRt05khwrwSHW1CENVqElN7euGWnluxDWqph8Tt1ulMExgVZyH5ZRaSX2Yh7F3AyLyK
-	UTy1tDg3PbXYKC+1XK84Mbe4NC9dLzk/dxMjMFWe/nf8yw7G5a8+6h1iZOJgPMQowcGsJMJb
-	qPU2XYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvov2t6UIC6YklqdmpqQWpRTBZJg5OqQam3Zbn
-	HFktm9ZOdyrtYixZ76eh/s9BQ3tWt5FcSkf5XP178Z5PPkiXnWGIm/Lb9MJ0p5Pti91jnoZw
-	m+nOvxLzLKaC75qu21mlojSP0vJtD2/XhX2yl/bfxHsjdE9F+c9k40/CbwJypT2OLml88nAZ
-	10mLs2wTrsw/tIafdWbgrvV9zGWnRLqlttiVMNp5i2YemsJSWvP6aQH77VKp/OCXNbZxp5Km
-	+yY8N1iWKim9eUX2zZaUyWrC/BMur1291vS7hNfTkH0MHI/bnjisu23B7HKz/ODCNQa3Qs4x
-	PI/aeS+Nf45m7G6nNRvWGP4UuSYgajF9qc+tLK4gn5P5swPc3ZMUCzRtgme+ObDW/YwSS3FG
-	oqEWc1FxIgDUxk5BBAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRmVeSWpSXmKPExsVy+t/xe7qNEe/SDQ61iFg8u/OV1WLr71ns
-	Fmv2nmOymH/kHKvFvUtbmCxe7G1ksWg+tp7N4uWse2wWH3vusVpc3jWHzWLb5xY2i7VH7rJb
-	rP86n8ni4ilXi7v3TrBYvLzcw2zRNovf4v+eHewW/65tZLFo2T+FxUHE4/2NVnaPNy9fsngc
-	7vjC7nHvxDRWj02rOtk8Ni+p92hZe4zJo/+vgcf7fVfZPPq2rGL0uNR8nd3j8ya5AJ4oPZui
-	/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYwP3TOZC06x
-	V6xv2szWwDiHrYuRk0NCwERi8+0WZhBbSGApo8TyhxoQcRmJa90vWSBsYYk/17rYIGpeMUp8
-	n8QBYrMJGEk8WD6ftYuRi0NE4AKTxK51q5lAHGaBdYwSU7bvYAKpEhbwkzi68B7YBhYBVYm2
-	GXvAJvEK2EnMvXeEGWKDvMT+g2fBbE4Be4kNUx4zQmyzk/hzs58Zol5Q4uTMJ2AXMQPVN2+d
-	zTyBUWAWktQsJKkFjEyrGEVSS4tz03OLjfSKE3OLS/PS9ZLzczcxAqN627GfW3Ywrnz1Ue8Q
-	IxMH4yFGCQ5mJRHeQq236UK8KYmVValF+fFFpTmpxYcYTYHunsgsJZqcD0wreSXxhmYGpoYm
-	ZpYGppZmxkrivGxXzqcJCaQnlqRmp6YWpBbB9DFxcEo1MDW67Vw3abf9lf9rStZfXi1wqUlu
-	XekdqW/nzZ9PW3X5/c1LZQdiDtZcnvlh6+nyf/+0Da/7et58+foZG+fTlYxr2r+q5nzYcb7I
-	3mSLysHJIu+LVnv5tMzzd46qeSWg6p72NSJROD33/ua2jwaXJnz8pvvpQO4iER2eqKN5N/+d
-	yf73rvH9f3ad5sKwVlVf0wxNT/td5+x1DvbGb++fG7O/w9Hmw6wDXU/lX13ZnTL5+OeThWyJ
-	/yY4uadPSYliCG5ruj8jX/xL8u2GjZEnxRkaJn5tWLf7uXwRh+mP2Ath/RVJm9i+vNELag5c
-	sv6tpvmP2fyRS/0kdlsnLBCZKx93WtHdaA6zvcWlf53TuXSVWIozEg21mIuKEwFp71JucwMA
-	AA==
-X-CMS-MailID: 20250403094433eucas1p2da03e00ef674c1f5aa8d41f2a7371319
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250403094433eucas1p2da03e00ef674c1f5aa8d41f2a7371319
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250403094433eucas1p2da03e00ef674c1f5aa8d41f2a7371319
-References: <20250403094425.876981-1-m.wilczynski@samsung.com>
-	<CGME20250403094433eucas1p2da03e00ef674c1f5aa8d41f2a7371319@eucas1p2.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/17] Add support for DU and DSI on the Renesas RZ/V2H(P)
+ SoC
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-clk@vger.kernel.org, Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
+References: <20250330210717.46080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+In-Reply-To: <20250330210717.46080-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-VO clocks reside in a different address space from the AP clocks on the
-T-HEAD SoC. Add the device tree node of a clock-controller to handle
-VO address space as well.
+Hi,
 
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
----
- arch/riscv/boot/dts/thead/th1520.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+On 31/03/2025 00:06, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Hi All,
+> 
+> This patch series adds support for the Display Unit (DU) and MIPI DSI
+> interface on the Renesas RZ/V2H(P) SoC. The inital patches add PLLDSI
+> clocks and reset entries for the DSI and LCDC and the later patches add
+> support for the DU and DSI drivers. The DU block is similar to the
+> RZ/G2L SoC, but the DSI interface is slightly different. The patches
+> include updates to the device tree bindings, clock and reset
+> controllers, and the DU driver to accommodate these changes.
+> 
+> Note, my initail intention was to split the clock patches and the DU/DSI
+> driver patches into two separate series. However, I found that sending
+> them together will make it easier for the reviewers to understand clock
+> related changes.
+> 
+> Note, the clock patches aplly on top of the following patch series:
+> - https://lore.kernel.org/all/20250228202655.491035-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+> - https://lore.kernel.org/all/20250328200105.176129-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-index 527336417765..d4cba0713cab 100644
---- a/arch/riscv/boot/dts/thead/th1520.dtsi
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -489,6 +489,13 @@ clk: clock-controller@ffef010000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		clk_vo: clock-controller@ffef528050 {
-+			compatible = "thead,th1520-clk-vo";
-+			reg = <0xff 0xef528050 0x0 0xfb0>;
-+			clocks = <&clk CLK_VIDEO_PLL>;
-+			#clock-cells = <1>;
-+		};
-+
- 		dmac0: dma-controller@ffefc00000 {
- 			compatible = "snps,axi-dma-1.01a";
- 			reg = <0xff 0xefc00000 0x0 0x1000>;
--- 
-2.34.1
+This is missing dri-devel list from the to/cc. Did you use 
+scripts/get_maintainer.pl?
+
+  Tomi
+
+> Cheers,
+> Prabhakar
+> 
+> Lad Prabhakar (17):
+>    clk: renesas: rzv2h-cpg: Add support for DSI clocks
+>    clk: renesas: r9a09g057: Add clock and reset entries for DSI and LCDC
+>    media: dt-bindings: media: renesas,vsp1: Document RZ/V2H(P)
+>    media: dt-bindings: media: renesas,fcp: Document RZ/V2H(P) SoC
+>    dt-bindings: display: renesas,rzg2l-du: Add support for RZ/V2H(P) SoC
+>    dt-bindings: display: bridge: renesas,dsi: Add support for RZ/V2H(P)
+>      SoC
+>    drm: renesas: rz-du: Add support for RZ/V2H(P) SoC
+>    drm: renesas: rz-du: mipi_dsi: Add min check for VCLK range
+>    drm: renesas: rz-du: mipi_dsi: Simplify HSFREQ calculation
+>    drm: renesas: rz-du: mipi_dsi: Use VCLK for HSFREQ calculation
+>    drm: renesas: rz-du: mipi_dsi: Add OF data support
+>    drm: renesas: rz-du: mipi_dsi: Use mHz for D-PHY frequency
+>      calculations
+>    drm: renesas: rz-du: mipi_dsi: Add feature flag for 16BPP support
+>    drm: renesas: rz-du: mipi_dsi: Add dphy_late_init() callback for
+>      RZ/V2H(P)
+>    drm: renesas: rz-du: mipi_dsi: Add function pointers for configuring
+>      VCLK and mode validation
+>    drm: renesas: rz-du: mipi_dsi: Add support for LPCLK handling
+>    drm: renesas: rz-du: mipi_dsi: Add support for RZ/V2H(P) SoC
+> 
+>   .../bindings/display/bridge/renesas,dsi.yaml  | 117 +++-
+>   .../bindings/display/renesas,rzg2l-du.yaml    |  28 +-
+>   .../bindings/media/renesas,fcp.yaml           |   2 +
+>   .../bindings/media/renesas,vsp1.yaml          |   1 +
+>   drivers/clk/renesas/r9a09g057-cpg.c           |  63 ++
+>   drivers/clk/renesas/rzv2h-cpg.c               | 284 ++++++++
+>   drivers/clk/renesas/rzv2h-cpg.h               |  17 +
+>   drivers/gpu/drm/renesas/rz-du/rzg2l_du_drv.c  |  11 +
+>   .../gpu/drm/renesas/rz-du/rzg2l_mipi_dsi.c    | 607 +++++++++++++++++-
+>   .../drm/renesas/rz-du/rzg2l_mipi_dsi_regs.h   |  42 +-
+>   include/linux/clk/renesas-rzv2h-dsi.h         | 207 ++++++
+>   11 files changed, 1309 insertions(+), 70 deletions(-)
+>   create mode 100644 include/linux/clk/renesas-rzv2h-dsi.h
+> 
 
 
