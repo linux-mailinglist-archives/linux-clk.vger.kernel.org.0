@@ -1,34 +1,34 @@
-Return-Path: <linux-clk+bounces-20298-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20299-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75967A80DA4
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 16:18:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0893A80DE1
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 16:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DDF019E04BF
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 14:14:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FEA41751A7
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 14:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634BE1D5CCD;
-	Tue,  8 Apr 2025 14:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 606631D63FF;
+	Tue,  8 Apr 2025 14:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b="iQWtKUM4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b="TV58gn5N"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B78B17B402;
-	Tue,  8 Apr 2025 14:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CBA1DF267;
+	Tue,  8 Apr 2025 14:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.142.107.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744121677; cv=none; b=DpZv+pqzcycurdpQqNPvUj+7tYNfJghznRKgNsurIxkyVXh9bXtna9iSZ5Qt3ZpBjehntfyIxE1RwhgQOVZVWZCjJblktOXVDRL3+YbusIJWfy8VLDvKXz2W6qwdy73kNthgu9ReCFggY0TBgfgaMBVwuVrhB6htrzSK5U0w2QI=
+	t=1744122352; cv=none; b=AVD1psR4cI9EomAgaJnQjGlXUcLEKGpRBqxDjVrEQ8+2wZ3jG271uODK05Z0UxOKpA78KOYKu7iC+xOG7uIG5qOYTU/2M+wAgHKzQ17WvCkc4t2Z069x8RkKUBocGx9bisRGEKSSmVFWqZfHfdpYwtJ9FjY9dVLBDVa/BvSYRO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744121677; c=relaxed/simple;
-	bh=s+qOBAVQpvLqN9//v1tqyB5DUBWzwAQcZ3fYm/ougrA=;
+	s=arc-20240116; t=1744122352; c=relaxed/simple;
+	bh=jDFoTQwi6ltGbdjAoarYcxe3yorhLXPh90F3YuCN5TM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BihiNcFDdZEVhx2ejA8a4WEVCQRBYX/QRWgJsxjS+5RrGwf1dwOBvM+6oITKr1N+/ldxu2bQp3md2DlW0UpjvNo7eJbgYbu3+Ku8EK8sUg3N4yDP4IIZc07fo17db5XAy+3USw1ovQOMCAYH9Bhk5oDv9D3cyNQzkJN4xXxx65Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com; spf=pass smtp.mailfrom=lechnology.com; dkim=pass (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b=iQWtKUM4; arc=none smtp.client-ip=98.142.107.122
+	 In-Reply-To:Content-Type; b=DWcOoKL6minBcjNQKUFWuUZjcOg8IDbBaJkWuZejVkcC2VlVwvutXPQNce9DtKTplzbCQ/gPOsPCZVLaezXBpSfmxH0r/Cty08DXzymIB9FV6jmhzPL/e5F824hQh+jYEgjYbcumMXYZ/zTCGXUfEKE9rvposIEJqoZuoImq/00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com; spf=pass smtp.mailfrom=lechnology.com; dkim=pass (2048-bit key) header.d=lechnology.com header.i=@lechnology.com header.b=TV58gn5N; arc=none smtp.client-ip=98.142.107.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lechnology.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lechnology.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,20 +37,20 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=km5apth/lJMRMaoitZa8+7iBhXLzzDOt5FW/izV8Agg=; b=iQWtKUM4x/cn/gv0dOQW0I2q6W
-	3vO1DFeoo/HD3tCeyhF8OE7vnjIhflVkEE58DS/2ox/p/MVDUaStukcqtOCeXll9Y5I2jX35+Y9mS
-	ri9aGYni6wJT+aZEBm5FAMUnp8SO6r/LHsj2qj/OtX8713JlCG5lDFDUzQBlRyZYNsfAonb6Ph4sy
-	I5ZGoejZlYx3NIQ0UTXvqt1CeCDF0wQrFtxNaiDMsIHTapjCBPqnVNsq3pwjj0Lp6h6LlBZhUPAip
-	UiSB1QjHLdMqSSlA+x+o+0CYo4vPkBstm9cp72fXtJV15CV15wNHV91nsDrBZVXQ/pzbJVt2o15QQ
-	YRJQKaAw==;
-Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:46774 helo=[192.168.0.113])
+	bh=QgFOekxPjA1lZplw4yEOv7wkhGY107bqBduOM8Zw0qI=; b=TV58gn5NLBHZ90DgCittZWxtgQ
+	73XqaO0N0Uy0arOcRxfU8CzX2JZHWZDFl913j2pDWQKXbjP692wcXZQeQyrmsR7EcoxiPUeruIYKC
+	Hdwp8VQ0b15j40PbCAVtYjXPVr0oseSS7M/sG/ETlCBX1/tQP9aSERV0uQeLE8YYPCjxxHM812JAp
+	AcW0j8kuwrP4G5gkUWtsX1OlaLlOL9r5b0MvUPIVxjBFqm/wHEl3FZ3obXcAPxz0kMmVs2DBK2vWD
+	ItxdTNQIjlzugyprm1wJM1yU3y5MvcwhpomtZ9yOvyRz3TeFRCYL6+kMMUYQIwUcOUym0XE8UG7Hs
+	ORWjF81g==;
+Received: from ip98-183-112-25.ok.ok.cox.net ([98.183.112.25]:54260 helo=[192.168.0.113])
 	by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.98.1)
 	(envelope-from <david@lechnology.com>)
-	id 1u29k6-000000001BP-1ijI;
-	Tue, 08 Apr 2025 10:14:27 -0400
-Message-ID: <b652a76d-508a-4b46-b330-4479dd63158b@lechnology.com>
-Date: Tue, 8 Apr 2025 09:14:24 -0500
+	id 1u29v6-000000004rK-1ela;
+	Tue, 08 Apr 2025 10:25:48 -0400
+Message-ID: <449e458d-6698-41dd-8a5f-ade964909b21@lechnology.com>
+Date: Tue, 8 Apr 2025 09:25:46 -0500
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -58,11 +58,13 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] clk: davinci: Add NULL check in davinci_lpsc_clk_register
-To: Charles Han <hanchunchao@inspur.com>, mturquette@baylibre.com,
- sboyd@kernel.org
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250407092010.6243-1-hanchunchao@inspur.com>
+Subject: Re: [PATCH v2] clk: davinci: Use of_get_available_child_by_name()
+To: Biju Das <biju.das.jz@bp.renesas.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+References: <20250407093623.36974-1-biju.das.jz@bp.renesas.com>
 Content-Language: en-US
 From: David Lechner <david@lechnology.com>
 Autocrypt: addr=david@lechnology.com; keydata=
@@ -109,7 +111,7 @@ Autocrypt: addr=david@lechnology.com; keydata=
  4VJ96sVvnQFzls3motvG+pq/c37Ms1gYayeCzA2iCDuKx6ZkybHg7IzNEduqZQ4bkaBpnEt+
  vwE3Gg5l4dAUFWAs9qY13nyBANQ282FNctziEHCUJZ/Map6TdzHWO6hU1HuvmlwcJSFCOey8
  yhkt386E6KfVYzrIhwTtabg+DLyMZK40Rop1VcU7Nx0M
-In-Reply-To: <20250407092010.6243-1-hanchunchao@inspur.com>
+In-Reply-To: <20250407093623.36974-1-biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -123,17 +125,38 @@ X-Source:
 X-Source-Args: 
 X-Source-Dir: 
 
-On 4/7/25 4:20 AM, Charles Han wrote:
-> devm_kasprintf() can return a NULL pointer on failure,but this
-> returned value in davinci_lpsc_clk_register() is not checked.
-> Add NULL check in davinci_lpsc_clk_register(), to handle kernel
-> NULL pointer dereference error.
+On 4/7/25 4:36 AM, Biju Das wrote:
+> Simplify of_davinci_pll_init() by using of_get_available_child_by_name().
 > 
-> Fixes: c6ed4d734bc7 ("clk: davinci: New driver for davinci PSC clocks")
-> Signed-off-by: Charles Han <hanchunchao@inspur.com>
+> While at it, move of_node_put(child) inside the if block to avoid
+> additional check if of_child is NULL.
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
-Thanks, but this looks like a duplicate of [1].
+> v1->v2:
+>  * Rebased to next as the dependency patch hits on 6.15-rc1.
+> ---
 
-[1]: https://lore.kernel.org/linux-clk/20250401131341.26800-1-bsdhenrymartin@gmail.com/
+Reviewed-by: David Lechner <david@lechnology.com>
+
+>  drivers/clk/davinci/pll.c | 23 ++++++++++++-----------
+>  1 file changed, 12 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/clk/davinci/pll.c b/drivers/clk/davinci/pll.c
+> index 6807a2efa93b..a236dfeccdb1 100644
+> --- a/drivers/clk/davinci/pll.c
+> +++ b/drivers/clk/davinci/pll.c
+> @@ -763,13 +763,13 @@ int of_davinci_pll_init(struct device *dev, struct device_node *node,
+>  		return PTR_ERR(clk);
+>  	}
+>  
+> -	child = of_get_child_by_name(node, "pllout");
+> -	if (of_device_is_available(child))
+> +	child = of_get_available_child_by_name(node, "pllout");
+> +	if (child)
+>  		of_clk_add_provider(child, of_clk_src_simple_get, clk);
+>  	of_node_put(child);
+
+It is a bit odd to move the other of_node_put() inside the if but not this one.
 
 
