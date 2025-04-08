@@ -1,117 +1,114 @@
-Return-Path: <linux-clk+bounces-20285-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20289-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 500D0A8023E
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 13:46:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEC88A80476
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 14:09:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C65E63A60A4
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 11:39:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A03891892B64
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Apr 2025 12:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6543F265CDD;
-	Tue,  8 Apr 2025 11:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798A026B2D8;
+	Tue,  8 Apr 2025 12:00:58 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAA0224AEB;
-	Tue,  8 Apr 2025 11:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0214F26B2CF
+	for <linux-clk@vger.kernel.org>; Tue,  8 Apr 2025 12:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744112350; cv=none; b=FEzEtGRs2aZoRg5JN6dHiuJNb247O5RlOpxxg6WLcR/iBG/IlBIyi9Xx5yRRGC94r5LJ+V0ifwgJTqyA+YHe4SmiuF6p/DhNGn890A5UafNGTgKBbilamY/V9ETml+/EoB0vFlhUFACDoBqR+SO3Ptb/sM2ZFNIWCcRKZtUs8Bo=
+	t=1744113658; cv=none; b=pTtdvU1g54R7np68Lwg0qUMDsFT4z7Oa68m+l99jU7hjG+pESPHP4RkW78nbgUSvWVZQD3fq0DLNvht0of9kZ+2Rvyvth0HznD0R9bQCeeD+aNhDqbRT0Ka3l8Y7b66we/MYhmN9uJUUPeAxCNiHOf4yr34Uq4X2MSt+wBRmI4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744112350; c=relaxed/simple;
-	bh=3ocL9zCtnOLBfKP5GnoT5dV2BU9f2MZjaGUtKsG7Y0A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mSnT98Wxb2gK5/rNAMAYC1TifUR0KPIhoFs0NoO8W0SOYRCzHl0J+QCGOgWKOdZdwz7dqhfn1XT+XfgoVVEV0NX4IjCZMuejPmFyYmLoTqs2NU5MyJZKDeMod7B3KewZwqJRfle7FLIr53WNDUyIFs040FQBA2OURtQtj7DyFj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: +bJbOWRNRNeQso5jtz6dIg==
-X-CSE-MsgGUID: 1I/VSMtsTv2505k4r/ZwgQ==
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 08 Apr 2025 20:39:00 +0900
-Received: from localhost.localdomain (unknown [10.226.92.125])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 99B3B40138ED;
-	Tue,  8 Apr 2025 20:38:58 +0900 (JST)
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: biju.das.au@gmail.com,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Subject: [PATCH v2 2/2] clk: renesas: r9a09g047: Add XSPI clock/reset
-Date: Tue,  8 Apr 2025 12:38:45 +0100
-Message-ID: <20250408113845.130950-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250408113845.130950-1-biju.das.jz@bp.renesas.com>
-References: <20250408113845.130950-1-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1744113658; c=relaxed/simple;
+	bh=WCYcLaPyaKFiwHds0BySkvFmWYNWbayrnTdk6SHycB0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AHvBn3h2P7nhkP3zLDhk3Txv3CKRqIEXT4dINyw2lDd4lY+HZ5a0WJFL5vNcE8MtsledCDrRLin54DgNl0qYQoRrc5dGnN01MKV+5shCE6LtGDIvchAOKhHzuq13M1sjyOBpG5nMgdSkzf9fkzqa6tAdbnqmZY7Z5eMNqjY6t98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1u27d0-0000jo-Eg; Tue, 08 Apr 2025 14:00:30 +0200
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1u27d0-003vPz-09;
+	Tue, 08 Apr 2025 14:00:30 +0200
+Received: from localhost ([::1] helo=dude02.red.stw.pengutronix.de)
+	by dude02.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1u27cz-00GJS1-33;
+	Tue, 08 Apr 2025 14:00:29 +0200
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH 0/3] clk: add support for TI CDCE6214
+Date: Tue, 08 Apr 2025 14:00:21 +0200
+Message-Id: <20250408-clk-cdce6214-v1-0-bd4e7092a91f@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANUP9WcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDEwML3eScbN3klORUMyNDE12DZHMTAxPjlGQjM3MloJaCotS0zAqwcdG
+ xtbUAAE0jal4AAAA=
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, kernel@pengutronix.de, 
+ =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>, 
+ Sascha Hauer <s.hauer@pengutronix.de>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744113629; l=1148;
+ i=s.hauer@pengutronix.de; s=20230412; h=from:subject:message-id;
+ bh=WCYcLaPyaKFiwHds0BySkvFmWYNWbayrnTdk6SHycB0=;
+ b=Zje8+eOrxhjpIVlEv8nwHadcM1kKFZpWgwF1ZgMzi44aVx7s92t0kJTdrNW4Ggoz87xV8Gs4H
+ 7HMHsL1bGXPBgEf02f3UHwouEccVPEZOfh8a1yax5zBfVFQMsvJxr4C
+X-Developer-Key: i=s.hauer@pengutronix.de; a=ed25519;
+ pk=4kuc9ocmECiBJKWxYgqyhtZOHj5AWi7+d0n/UjhkwTg=
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: s.hauer@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-Add XSPI clock and reset entries.
+The CDCE6214 is a Ultra-Low Power Clock Generator With One PLL, Four
+Differential Outputs, Two Inputs, and Internal EEPROM.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+This series adds a common clk framework driver for this chip along with
+the dt-bindings document and a small fix needed for the common clk
+framework.
+
+Sascha
+
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 ---
-v1->v2:
- * spi_clk_spix2 is handled as module clock with RPM.
- * Dropped CDDIV0_DIVCTL1 as it is already merged in clk tree.
----
- drivers/clk/renesas/r9a09g047-cpg.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Sascha Hauer (3):
+      clk: make determine_rate optional for non reparenting clocks
+      clk: add TI CDCE6214 clock driver
+      dt-bindings: clock: add TI CDCE6214 binding
 
-diff --git a/drivers/clk/renesas/r9a09g047-cpg.c b/drivers/clk/renesas/r9a09g047-cpg.c
-index 741ee025ce02..d3d1ce39db8e 100644
---- a/drivers/clk/renesas/r9a09g047-cpg.c
-+++ b/drivers/clk/renesas/r9a09g047-cpg.c
-@@ -35,6 +35,7 @@ enum clk_ids {
- 	CLK_PLLCM33_DIV4,
- 	CLK_PLLCM33_DIV5,
- 	CLK_PLLCM33_DIV16,
-+	CLK_PLLCM33_GEAR,
- 	CLK_SMUX2_XSPI_CLK0,
- 	CLK_SMUX2_XSPI_CLK1,
- 	CLK_PLLCM33_XSPI,
-@@ -106,6 +107,8 @@ static const struct cpg_core_clk r9a09g047_core_clks[] __initconst = {
- 	DEF_FIXED(".pllcm33_div5", CLK_PLLCM33_DIV5, CLK_PLLCM33, 1, 5),
- 	DEF_FIXED(".pllcm33_div16", CLK_PLLCM33_DIV16, CLK_PLLCM33, 1, 16),
- 
-+	DEF_DDIV(".pllcm33_gear", CLK_PLLCM33_GEAR, CLK_PLLCM33_DIV4, CDDIV0_DIVCTL1, dtable_2_64),
-+
- 	DEF_SMUX(".smux2_xspi_clk0", CLK_SMUX2_XSPI_CLK0, SSEL1_SELCTL2, smux2_xspi_clk0),
- 	DEF_SMUX(".smux2_xspi_clk1", CLK_SMUX2_XSPI_CLK1, SSEL1_SELCTL3, smux2_xspi_clk1),
- 	DEF_CSDIV(".pllcm33_xspi", CLK_PLLCM33_XSPI, CLK_SMUX2_XSPI_CLK1, CSDIV0_DIVCTL3,
-@@ -179,6 +182,12 @@ static const struct rzv2h_mod_clk r9a09g047_mod_clks[] __initconst = {
- 						BUS_MSTOP(10, BIT(14))),
- 	DEF_MOD("canfd_0_clkc",			CLK_PLLCLN_DIV20, 9, 14, 4, 30,
- 						BUS_MSTOP(10, BIT(14))),
-+	DEF_MOD("spi_hclk",			CLK_PLLCM33_GEAR, 9, 15, 4, 31,
-+						BUS_MSTOP(4, BIT(5))),
-+	DEF_MOD("spi_aclk",			CLK_PLLCM33_GEAR, 10, 0, 5, 0,
-+						BUS_MSTOP(4, BIT(5))),
-+	DEF_MOD_NO_PM("spi_clk_spix2",		CLK_PLLCM33_XSPI, 10, 1, 5, 2,
-+						BUS_MSTOP(4, BIT(5))),
- 	DEF_MOD("sdhi_0_imclk",			CLK_PLLCLN_DIV8, 10, 3, 5, 3,
- 						BUS_MSTOP(8, BIT(2))),
- 	DEF_MOD("sdhi_0_imclk2",		CLK_PLLCLN_DIV8, 10, 4, 5, 4,
-@@ -233,6 +242,8 @@ static const struct rzv2h_reset r9a09g047_resets[] __initconst = {
- 	DEF_RST(10, 0, 4, 17),		/* RIIC_8_MRST */
- 	DEF_RST(10, 1, 4, 18),		/* CANFD_0_RSTP_N */
- 	DEF_RST(10, 2, 4, 19),		/* CANFD_0_RSTC_N */
-+	DEF_RST(10, 3, 4, 20),		/* SPI_HRESETN */
-+	DEF_RST(10, 4, 4, 21),		/* SPI_ARESETN */
- 	DEF_RST(10, 7, 4, 24),		/* SDHI_0_IXRST */
- 	DEF_RST(10, 8, 4, 25),		/* SDHI_1_IXRST */
- 	DEF_RST(10, 9, 4, 26),		/* SDHI_2_IXRST */
+ .../devicetree/bindings/clock/ti,cdce6214.yaml     |  157 +++
+ drivers/clk/Kconfig                                |    7 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/clk-cdce6214.c                         | 1105 ++++++++++++++++++++
+ drivers/clk/clk.c                                  |    3 +-
+ include/dt-bindings/clock/ti,cdce6214.h            |   24 +
+ 6 files changed, 1296 insertions(+), 1 deletion(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250408-clk-cdce6214-0c74043dc267
+
+Best regards,
 -- 
-2.43.0
+Sascha Hauer <s.hauer@pengutronix.de>
 
 
