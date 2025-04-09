@@ -1,133 +1,163 @@
-Return-Path: <linux-clk+bounces-20394-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20397-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B71B4A8325D
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Apr 2025 22:39:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA492A83334
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Apr 2025 23:20:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADE271B62F3B
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Apr 2025 20:39:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 906A13AC7FB
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Apr 2025 21:17:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520D6227BAA;
-	Wed,  9 Apr 2025 20:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BF12147E3;
+	Wed,  9 Apr 2025 21:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uQ2JPrfy"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="bVPY8moo"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61A021CA10
-	for <linux-clk@vger.kernel.org>; Wed,  9 Apr 2025 20:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D088620299B
+	for <linux-clk@vger.kernel.org>; Wed,  9 Apr 2025 21:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744231077; cv=none; b=Xz7uz/CitgCz2frcOdoHH4wIGjAshfgZO1TwbDrcypuF1fxBF/GCjhM5UB5LL5Yj97TyTMQEjm2LPAC2KfmZxCHCr0vLBlVrR9NYs1G1EmTmn73J3G2lpXYFxnzvxmqcH2r+fObSZrPzqpIjoSVKkrUZSB8j2enIZ0FYdHynAPE=
+	t=1744233468; cv=none; b=OeZNGDjAlSceRWdinD1P0McNi+muU5KD6wm398g2+4EpQP03BYwwdlGpZP+OpB97NhOJneYcp8965yHAUvPbmU1AxSMmmjWC0XTyTf9Bna3e94UuRqyr8ih+6rFRRPzIcOg3D6LWtBXhQKd/sIEHpLfvfdQP78S0E8A4SBIqjrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744231077; c=relaxed/simple;
-	bh=CoKrSJInLiIXwlY1ZZ7M5lRUgwJwFwDmaqWcxDpmqQ8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TdmT6WqSBX/0qR8fDl4j/z9bsCYBDdjY3gUB49ltE9Eq1OgLqq2WQj9p/roMIgR+FqPA/nQj85bhOPfFxlbs3PrLmwaamqa6PKEGeTxwmdQVzrkPv3ByyH5kFawNxT0HPhfzgmeC+sm3UpOx1vPv5FpYV9w5iqYQxOnNbcDHezQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uQ2JPrfy; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ab78e6edb99so13304766b.2
-        for <linux-clk@vger.kernel.org>; Wed, 09 Apr 2025 13:37:48 -0700 (PDT)
+	s=arc-20240116; t=1744233468; c=relaxed/simple;
+	bh=VMdYZrLAD8DMV1DpO50jqiz0vFY6aFjrLaJXiBM7mvI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MeDY1zfuF2i/ckgT7DHHxlZZJsyRDrjSuPsx8vg0SFurJIgZxF/HrBRE8GcMq8i2nGneOCeAh/0Hv3YU+kqz53uIlstHyPRXwOGETF9A7EaHyv4NTUt7TfxwiXm+U0dafdQP8dozLyUP449TpVSlVWgh463dOLqLswBVGgxDwfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=bVPY8moo; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-85dac9728cdso5052139f.0
+        for <linux-clk@vger.kernel.org>; Wed, 09 Apr 2025 14:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744231066; x=1744835866; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Ow5hOPbiIZXZpWZ6Uu6oQmw7CcTYqg39bQG6yedoPQ=;
-        b=uQ2JPrfyUL4InhIYJFfMorllx1mzrBQFlwuQghTNuTEbVA9uzUptUuwbdJBoR7sROh
-         daTsVIxDMfBXo7w+dSyQIlEzyUb9SpHT0s+U2OejvKDOAe3f63hTr98Ocglgvzu0kOiW
-         5aPEr7xyLzTl/SR6ZlMYr3KMb2J5nR6dp7PwMY4q7l3ifdl5qy1+OgUVTT277z/DVMtl
-         2C09nOWOU+haKmfD+V5qqmX+QlaBeru5pUvZXVlQFAbDo2gCCRE1xllwbOGyryoVxG9o
-         dXbAP/8Wj70FG/MrKFv2EC/bpoxg3391AilSGNJjDySBH7hlpRXOohBHIJSVpJIL6W02
-         aTBg==
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1744233466; x=1744838266; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rrV5UlJLrK5aj5lTpRQRYMaHqlL0u3EBGUfh4HcWOG4=;
+        b=bVPY8mooGRXZnFbyiZgysvh7XZ+c1nIRhkLwk9qtWfFI/KTkPZW5d/QjeUO0H6Jhqj
+         FeoyiT/0JUaPh2f+2pzBaJsW40YRETM9N7jMIfQhD4Xfstc9JiqGWLMC3xome1KsaN0/
+         BzJpScvxyL+8joBKnnHnXZJTbEbfT5MglkcwPsBGXCFqT+nr7KQuHgpifT5mrYNcFFR0
+         1Kc9qpqRn0xhcmzcqCGCXNLVzv57aLhpkrZgX6LFVmnwrtfPtfmK4IxganXVQDydYbxK
+         XuURMpGoF56af+0HiNYJbRpULycS1SUrxGBaGsbGf0IhzTure6XfuD+gdWc2m+fKICeF
+         VGsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744231066; x=1744835866;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Ow5hOPbiIZXZpWZ6Uu6oQmw7CcTYqg39bQG6yedoPQ=;
-        b=jikRmuVXsCLTd+JQF7f+ePkn8TCTFcwqsOemM3PYr7m6NQR00zPs+5YmGwGsi+49cP
-         /kmTQTZcOCeQsAHfxupUxqk3WjtknKMWtJVZUD2WbViAEOwEKoA8Na0qWnP9JUaVrjuV
-         ji0ouD+TLixv7oteO+E438OKQx0LaYoPnwQlI/4cxViE0sHlKUkjZS7pelXkbudFQixw
-         kMPFZQayvv4poFCuWVDd9zd/ZgNsAb7o/SFD4vIIp3KIQiOpxFIJLT0G3JSsYdDwbRfw
-         zwm2xqlcbLhHgc3B4EcxE/hu/1IbhK/RjSQo4oFWfTZx/+qUQaTw+OoweSOca/ipx0VW
-         VtsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVL1fEVgwTMHC6gSSqDwT340Q8ZVsnAIww1Mzn6Fa7H7Ze4x+0K0nL5yfyGdsjAcC/0PK3H1y1BdYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5MXGrRnz4xLSeiXfos88rtf03DTaXOjIpJ/drPFql+hwM2v14
-	NElTTnKRb6Ub1omkwkuW9SEZz2XXIpbzpFgYy0Bfe30ZZSRhrCwHZHBeLsOFcj0=
-X-Gm-Gg: ASbGncuLPvCclMe5V4x1arxofziLNoGsBNKAS7RP1DOzZf41bv/fI7PAJhqncwE9fJT
-	Kq+rRlp6l2uemPYRZCaBF/YPgW0H3s+yBXdpHdkIbaw2euFNqa15hsKIV+hQLe2hUmrD6vKrQgj
-	nHu8xl5pd5VY9csatnEAa0WWYaC8rGsWJeLCzO3xi3IwchNcSexgVFSDgjY2hr3Drt8yt1ia9O4
-	qOMriRBQUr7ITQRaB6fzHtmoCkZQHwgMd9T1DjfUPUNudi6hrL5B/WP6gXxu9QjCt7OADb7/FNy
-	1mzklKfn+ljoCSB/QRjuMMrusZ/vT7EqbPfzgkWq6BoSLPr4LzAEKj2EX/q3YoTZYOf76CEuhsj
-	NrTNXo54t2jGGbAChDwo0Aa1RoDM=
-X-Google-Smtp-Source: AGHT+IHIxFKwjUo5uFV6Jyj3wWXPZsF8lPwam2ydOiylWhWcuYhWeTd4XU5X8ZDB51XZhRzJ2FSu4w==
-X-Received: by 2002:a17:907:7d8b:b0:ac7:9acf:4ef with SMTP id a640c23a62f3a-acabd4d7131mr6904366b.56.1744231066055;
-        Wed, 09 Apr 2025 13:37:46 -0700 (PDT)
-Received: from puffmais.c.googlers.com (40.162.204.35.bc.googleusercontent.com. [35.204.162.40])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acaa1ccc001sm145850366b.126.2025.04.09.13.37.45
+        d=1e100.net; s=20230601; t=1744233466; x=1744838266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rrV5UlJLrK5aj5lTpRQRYMaHqlL0u3EBGUfh4HcWOG4=;
+        b=U8WsnvxAOnsC0+OEhVcQzwWHkbKLaBw5McxkZwgdPTsHiLYC5i1fzi8BjFiuzRTE2o
+         zipNyOvi0tFFcOWTOynJvOW8wMoOjZ8O2usVno/BnmjovrMWQJVBltdr+HiU5bTCw9wh
+         wIDj7E2NYkZCd4jaQidhSmYukR38Cj8gZb7C+L7HLfmUAOEH4do0cliAqOIvapdsVLCJ
+         BnXYFlAQ8Feo44trYl3vBzRFWX6rc60Pqojc7BPHrIRvKKaaQg7o5ES2ykqbS4n9srUD
+         RlRFKr8+u5XND3wzcnTEo/jdBmA5qE5XMPg/QxG8Ox1ppJWkvFFVGMb9HZna8u/+efRE
+         RFhA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqbda2geuG+I3v71ZZ516VkZ5KRIfC/nB0E6K6mN/lVuBuhJfzMwVXyybdIxL1ITHiMuduAWPEZDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfJvWvwNxkTuwYK9aPzf26pgB5McJOhgD4zmC37nO+aLh4qYO4
+	D6xHgBn6Md9/ZJsbIqQuPEOJBuKPJjpnU580j3OBgf9OCpoh+C4NPVs+rAxDFcg=
+X-Gm-Gg: ASbGncvWmSYSYzQ5qILafOkZYrWmqi/hVuB8OU6Qn3FpzWBeCyLgGlNwpDh/r+j6clE
+	Hyaj5ZyK+5K1xVcWXtJ/PD4krwHEhM6BokoYYy+bF9WGTN248LBNIiOd2AC32zNYXUqW2ZeWRxP
+	H699aSuTBHvyApF9fLcgNIGLIvl9fpbCv3NOnT83yq8AE+J9fA0xcTjBcwBMmyoToH6Cj7MpSQy
+	Hr0ZQ0zJ6AQZW3qZb3RiUruMVGxW88hyOZyNYs5NRquuZZM37GKEf4oaKSnXLq1vdqQVIzgWHMG
+	MhFqP7w1VRlX84RTeFh9TuCa5QthGp7X61l2pKFzJyWP8foc6ndAfrzrq1HF8LTEQMT3z03szdU
+	aao6B4e3ImTsgLg==
+X-Google-Smtp-Source: AGHT+IG6Fs0mDXRYU2o6Td0yWxwYb8N9uHgcDDzyd75KPdUxyiPuO9N5OH70dXQk1TVcz0gCoG5PKQ==
+X-Received: by 2002:a05:6e02:1887:b0:3d2:6768:c4fa with SMTP id e9e14a558f8ab-3d7e4780824mr6626785ab.21.1744233465833;
+        Wed, 09 Apr 2025 14:17:45 -0700 (PDT)
+Received: from localhost.localdomain (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505cf8e91sm420735173.6.2025.04.09.14.17.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 13:37:45 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Wed, 09 Apr 2025 21:37:53 +0100
-Subject: [PATCH v4 32/32] MAINTAINERS: add myself as reviewer for Samsung
- S2M MFD
+        Wed, 09 Apr 2025 14:17:45 -0700 (PDT)
+From: Alex Elder <elder@riscstar.com>
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org
+Cc: p.zabel@pengutronix.de,
+	dlan@gentoo.org,
+	heylenay@4d2.org,
+	guodong@riscstar.com,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	spacemit@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/7] clk: spacemit: add K1 reset support
+Date: Wed,  9 Apr 2025 16:17:33 -0500
+Message-ID: <20250409211741.1171584-1-elder@riscstar.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250409-s2mpg10-v4-32-d66d5f39b6bf@linaro.org>
-References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
-In-Reply-To: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, 
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.14.2
 
-I'm working on a Samsung device which includes this MFD and would like
-to be Cc'ed to further contributions and help on reviewing them. Add me
-as reviewer.
+This series adds reset controller support for the SpacemiT K1 SoC.
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+As before, this version is built upon the clock controller driver that
+Haylen Chu has out for review (currently at v6):
+  https://lore.kernel.org/lkml/20250401172434.6774-1-heylenay@4d2.org/
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d4d577b54d798938b7a8ff0c2bdbd0b61f87650f..9f05af52b062d8cab0f8b48b2625432108604c3e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21397,6 +21397,7 @@ F:	drivers/platform/x86/samsung-laptop.c
- 
- SAMSUNG MULTIFUNCTION PMIC DEVICE DRIVERS
- M:	Krzysztof Kozlowski <krzk@kernel.org>
-+R:	André Draszik <andre.draszik@linaro.org>
- L:	linux-kernel@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
+All of these patches are available here:
+  https://github.com/riscstar/linux/tree/outgoing/reset-v3
+
+Between version 2 and version 3 there was no feedback, however:
+  - Haylen posted v6 of the clock series, and it included some changes
+    that affected the logic in this reset code.
+  - I was informed that defining CCU nodes without any clocks led to
+    warnings about "clocks" being a required property when running
+    "make dtbs_check".  For that reason, I made clock properties
+    optional for reset-only CCU nodes.
+  - This code is now based on v6.15-rc1, which includes a few commits
+    that were listed as dependencies previously.
+
+Here is version 2 of this series.
+  https://lore.kernel.org/lkml/20250328210233.1077035-1-elder@riscstar.com/
+
+Between version 1 and version 2:
+  - Added Rob's Reviewed-by tag on the first patch
+  - Renamed the of_match_data data type (and one or two other symbols) to
+    use "spacemit" rather than "k1".
+  - Replaced the abbreviated "rst" or "RST" in names of newly-defined
+    sympols with "reset" or "RESET" respectively.
+  - Eliminated rcdev_to_controller(), which was only used once.
+  - Changed a function that unsafely did a read/modify/write of a register
+    to use regmap_update_bits() instead as suggested by Haylen.
+  - Eliminated a null check for a pointer known to be non-null.
+  - Reordered the assignment of reset controller device fields.
+  - Added a "sentinel" comment as requested by Yixun.
+  - Updated to be based on Linux v6.14 final.
+
+Here is the first version of this series.
+  https://lore.kernel.org/lkml/20250321151831.623575-1-elder@riscstar.com/
+
+					-Alex
+
+Alex Elder (7):
+  dt-bindings: soc: spacemit: define spacemit,k1-ccu resets
+  clk: spacemit: rename spacemit_ccu_data fields
+  clk: spacemit: add reset controller support
+  clk: spacemit: define existing syscon resets
+  clk: spacemit: make clocks optional
+  clk: spacemit: define new syscons with only resets
+  riscv: dts: spacemit: add reset support for the K1 SoC
+
+ .../soc/spacemit/spacemit,k1-syscon.yaml      |  29 +-
+ arch/riscv/boot/dts/spacemit/k1.dtsi          |  18 +
+ drivers/clk/spacemit/ccu-k1.c                 | 340 ++++++++++++++++--
+ .../dt-bindings/clock/spacemit,k1-syscon.h    | 128 +++++++
+ 4 files changed, 488 insertions(+), 27 deletions(-)
 
 -- 
-2.49.0.604.gff1f9ca942-goog
+2.45.2
 
 
