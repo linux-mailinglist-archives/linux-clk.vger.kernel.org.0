@@ -1,141 +1,115 @@
-Return-Path: <linux-clk+bounces-20418-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20420-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B64C0A837B8
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 06:12:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC24BA8390E
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 08:19:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B09C11B60595
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 04:12:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC9E61B63832
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 06:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94CAA1F0E3C;
-	Thu, 10 Apr 2025 04:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655D8202979;
+	Thu, 10 Apr 2025 06:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="hCWABpiE";
-	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="LBc7TJQ6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OgzaIHlH"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from bayard.4d2.org (bayard.4d2.org [155.254.16.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904031BB6BA;
-	Thu, 10 Apr 2025 04:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=155.254.16.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258861D9A54;
+	Thu, 10 Apr 2025 06:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744258351; cv=none; b=VZ0vToLZJy1GBOhEwolSwhuT9lD88y3JfVu7fhtanF9AxybJhIqVf5rPbTPaU+eAjITTXaJINnU1DRqL2rr4ihUL8bkkcl1NH/gsUZhmWX1ZyBUNoVTBdVjsS2usYOp/jNurpqlEq3ZNCZEdw8aibdAajtSkb/Mll29vZqKnMzg=
+	t=1744265916; cv=none; b=QDADwOVoYL26Ih6f2ygIqjST0CDlSxUsrCZS/JTpJO/07EgOhBiVe8oVH0Uf2b808VkW+4lPH+RDfwLVVoYOU2GORC7QOSyZKiy+dvhfFr8Ozolc5pSrUFMPL7M6Kqcfz0pRQKahgHRxe9jWvwZwN2CeKKltGKIdwkBi5WjxMNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744258351; c=relaxed/simple;
-	bh=vpU0jqyzYggE9pqYkka5SOv7jl7U8aHC+OFdlFP+Mus=;
+	s=arc-20240116; t=1744265916; c=relaxed/simple;
+	bh=N/Eq3oO6cAKqd4CF4xM3K5jQF+XUdMLxEdRDr+rjO6Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o+AoAEEOPAW1KeYyuFg8ZNahQSszQ2NqHkvo1OAxvu8PgOtZGMOBEh6bwp6qm91j4zj4oVJPKGwQTL35fH1lXvt0QqBmjDojCtRiKvftO2VsXTXloiCJcFEQgjGPzKKPHwavQ7kupX4FquEI37LaFO7fPUzYJz51vSp4fvje1TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=hCWABpiE; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=LBc7TJQ6; arc=none smtp.client-ip=155.254.16.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=4d2.org
-Received: from bayard.4d2.org (bayard.4d2.org [127.0.0.1])
-	by bayard.4d2.org (Postfix) with ESMTP id C899C12FB451;
-	Wed, 09 Apr 2025 21:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
-	t=1744258348; bh=vpU0jqyzYggE9pqYkka5SOv7jl7U8aHC+OFdlFP+Mus=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kkm8Ishd46sm9PWR4xCcpvK6FCtu3w3j7/yMQ6crfavA7uv5JmRe6oHR7rrVulR/y3IniyEUnGMFg3wVve/OvwIV9EbkOcrMOewv4PK7T3Vmqu2tVDuofHCFO2XVE7Eu6DrP3mC+14BDZq3VBtZt0XL/HTXQAjVcWGftehRcqAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OgzaIHlH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF988C4CEDD;
+	Thu, 10 Apr 2025 06:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744265914;
+	bh=N/Eq3oO6cAKqd4CF4xM3K5jQF+XUdMLxEdRDr+rjO6Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hCWABpiESCZwmNdguKYrROd+srKJ6YMfrJrbZTm0uKb8zOxUw2TXWYOL9D5fB1/gx
-	 g2DTOAGxD3TKSnglhXv5CWVNmChorZRMrhB7kXKz9asGah0uwdA9+7xnsMvRjAssj5
-	 GMmaKGZlLpVW4xsH4z8DxzwxJbUtJkSz6be3es9tPkOGT1Zvm11hZx7iaE5yNGPfcE
-	 CP/oQXwDdLjrH4KG1LTeJZDGkVMIfXTPO0+GgoxwA1oonn35WMUfrRnQ4xeVJ7ZBj8
-	 ic1BeQ2kN1gDqk4q5H5w1btSkWm0F4mS0HOP4+VrVt92atiBuk2aZh67d1RU3yvr0s
-	 R5vWuvn1EhGTg==
-X-Virus-Scanned: amavisd-new at 4d2.org
-Received: from bayard.4d2.org ([127.0.0.1])
- by bayard.4d2.org (bayard.4d2.org [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id 5CSmZvWc90vW; Wed,  9 Apr 2025 21:12:25 -0700 (PDT)
-Received: from ketchup (unknown [183.217.80.181])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: heylenay@4d2.org)
-	by bayard.4d2.org (Postfix) with ESMTPSA id AAACE12FB430;
-	Wed, 09 Apr 2025 21:12:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
-	t=1744258345; bh=vpU0jqyzYggE9pqYkka5SOv7jl7U8aHC+OFdlFP+Mus=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LBc7TJQ6LNgmZMi0U0v3CO6KLvvq1xjvWdg6L+o+h0WboloJpHGJi+QZUr8BbXHVK
-	 hqmVbmedYMqMGQd8mNz+SwYnZMFW31lcviw5g2ABrC21uY52PWyhYzb8AkOsfDUAP5
-	 ZAfsIU4xWyDZiFioL3DP6boikHFqnl24hf7Q46qaGXX+2uOKycHxDEnPKXpVvQxLtp
-	 IN2+DwEqtcWegErlM83Di6BluBZhaOByUXmGZ8Wg+WqFiVLoVJy1gymZuZM54Bcea8
-	 tWyyXn+pEAx107Wq48guANSAiPW8KjYhKzg/nhaICsIbfJmGbi/rNTQt3dRm603YeZ
-	 h8JHrHFstcz6w==
-Date: Thu, 10 Apr 2025 04:12:17 +0000
-From: Haylen Chu <heylenay@4d2.org>
-To: Alex Elder <elder@riscstar.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Haylen Chu <heylenay@outlook.com>, Yixun Lan <dlan@gentoo.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	spacemit@lists.linux.dev, Inochi Amaoto <inochiama@outlook.com>,
-	Chen Wang <unicornxdotw@foxmail.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Meng Zhang <zhangmeng.kevin@linux.spacemit.com>
-Subject: Re: [PATCH v6 6/6] riscv: defconfig: enable clock controller unit
- support for SpacemiT K1
-Message-ID: <Z_dFIavJT9_KwT1O@ketchup>
-References: <20250401172434.6774-1-heylenay@4d2.org>
- <20250401172434.6774-7-heylenay@4d2.org>
- <e2c5c2c2-61a8-458d-8e95-521c5ea752f9@riscstar.com>
+	b=OgzaIHlHHtE0k8XMPIzNNeKxfWMEWFu7Fb7zdKLcQserP3WkyzcrpRmhCueuk2Rlv
+	 M7RQlkWqOlBxJl/Okb0KGD1CfZyFjcANp0maFk15EgzE94lmCUe8QW6syR9i6rP/fs
+	 19IBb8kqDrFCAE4RnLNRegJp45caw01cAbwgibsXB8BlIEfE4i8QAmr/Pisxur8TqH
+	 c6ct+7hdJVB7RhLaqvRTePLViGfRT44QLIAY0bCnSGkedQ0vjy9MNTGiFeFWVkNZfD
+	 jCMG+6SVA/KaBUrW41KOowuiwPqc8AamB4drQgT1T2I0rnBUEY9YFuh68hERIRpzbt
+	 d9I4YXgKYqkkg==
+Date: Thu, 10 Apr 2025 08:18:31 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: =?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Will McVicker <willmcvicker@google.com>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v4 00/32] Samsung S2MPG10 PMIC MFD-based drivers
+Message-ID: <20250410-dancing-free-peacock-536c24@shite>
+References: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e2c5c2c2-61a8-458d-8e95-521c5ea752f9@riscstar.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250409-s2mpg10-v4-0-d66d5f39b6bf@linaro.org>
 
-On Tue, Apr 08, 2025 at 02:37:35PM -0500, Alex Elder wrote:
-> On 4/1/25 12:24 PM, Haylen Chu wrote:
-> > Clock controller unit, or CCU, generates various clocks frequency for
-> > peripherals integrated in SpacemiT K1 SoC and is essential for normal
-> > operation. Let's enable it in defconfig.
-> > 
-> > Signed-off-by: Haylen Chu <heylenay@4d2.org>
-> > ---
-> >   arch/riscv/configs/defconfig | 2 ++
-> >   1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-> > index 0f7dcbe3c45b..011788d16d93 100644
-> > --- a/arch/riscv/configs/defconfig
-> > +++ b/arch/riscv/configs/defconfig
-> > @@ -252,6 +252,8 @@ CONFIG_CLK_SOPHGO_CV1800=y
-> >   CONFIG_CLK_SOPHGO_SG2042_PLL=y
-> >   CONFIG_CLK_SOPHGO_SG2042_CLKGEN=y
-> >   CONFIG_CLK_SOPHGO_SG2042_RPGATE=y
-> > +CONFIG_SPACEMIT_CCU=y
-> > +CONFIG_SPACEMIT_K1_CCU=y
-> 
-> Maybe these could be specified with default values that
-> are based on the value of CONFIG_ARCH_SPACEMIT instead of
-> forcing them to be defined here?
+On Wed, Apr 09, 2025 at 09:37:21PM GMT, Andr=C3=A9 Draszik wrote:
+> This series adds initial support for the Samsung S2MPG10 PMIC using the
+> MFD framework. This is a PMIC for mobile applications and is used on
+> the Google Pixel 6 and 6 Pro (oriole / raven).
+>=20
+> *** dependency note ***
+>=20
+> To compile, this depends on the Samsung ACPM driver in Linux next with
 
-As mentioned by Inochi earlier[1], putting defaults configuration in
-defconfig instead through a "default" kconfig property is the preference
-of clk subsystem, so I'd like to follow.
+Are you sure these are build time dependencies? Do not look like. Also,
+if they are, the patchset will wait for quite some time.
 
-> 					-Alex
-> 
-> >   CONFIG_SUN8I_DE2_CCU=m
-> >   CONFIG_SUN50I_IOMMU=y
-> >   CONFIG_RPMSG_CHAR=y
-> 
+> the following additional patches:
+> https://lore.kernel.org/all/20250324-acpm-atomic-v2-0-7d87746e1765@linaro=
+=2Eorg/
+> https://lore.kernel.org/all/20250319-acpm-fixes-v2-0-ac2c1bcf322b@linaro.=
+org/
+> https://lore.kernel.org/all/20250327-acpm-children-v1-0-0afe15ee2ff7@lina=
+ro.org/
+>=20
+> *** dependency note end ***
+>=20
+> +++ Kconfig update +++
+>=20
+> There is a Kconfig symbol update in this series, because the existing
+> Samsung S2M driver has been split into core and transport (I2C & ACPM)
+> parts. CONFIG_MFD_SEC_CORE is now truly a core driver, and
+> the I2C code that was part of it is now enabled via CONFIG_MFD_SEC_I2C.
+>=20
+> This was necessary because unlike the other S2M PMICs, S2MPG10 doesn't
+> talk via I2C, but via the Samsung ACPM firmware.
+>=20
+> +++ Kconfig update end +++
+>=20
+> This series must be applied in-order, due to interdependencies of some
+> of the patches. There are also various cleanup patches to the S2M
+> drivers. I've kept them ordered as:
 
-Regards,
-Haylen Chu
+They should not depend... although actually not my trees, except the
+firmware.
 
-[1] https://lore.kernel.org/all/xwo2jjqy634z4rimgyrbjmxlgzxzauxmqzl57qr5oasph74qwj@7we45fnhwfzh/
+Best regards,
+Krzysztof
+
 
