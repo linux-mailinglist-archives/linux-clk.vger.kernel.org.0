@@ -1,121 +1,135 @@
-Return-Path: <linux-clk+bounces-20438-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20440-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D59A84087
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 12:25:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11779A840CF
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 12:36:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 470844A4A1A
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 10:24:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 648C81742CB
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Apr 2025 10:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6649D281365;
-	Thu, 10 Apr 2025 10:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F5528136B;
+	Thu, 10 Apr 2025 10:35:18 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8CE281351;
-	Thu, 10 Apr 2025 10:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AF0280CF8
+	for <linux-clk@vger.kernel.org>; Thu, 10 Apr 2025 10:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744280637; cv=none; b=ss3CBHt/8uAT6EnECJac1ASis2MSnSUXlhnJdKvdu/lGZW2+Ejjmk3so1ZuKqQenaRgAinDoY7EtlzYubGYzHQitl9qmJg44VgRxqc8pukMOf2UNqbZHntThofAFFzmdPnD98JVXE0BucxJY49Fke4kvdIfgzzbGN+FL3sWaemA=
+	t=1744281318; cv=none; b=jWnGqlI6/PzdITA9SD+3v42WdfIH5n27FhlfJs402WK2t1sul8ORahrvzoC/FdBbLMZSmaSfZ2qzCQPZy2EvJctS8SV1RJ0okIrc5KeUNuuzy5Wyzh/wp885mjHY4cOynJ8gxWretbm9VqsnzHv7RSswBj8hzVbXho29u2fDTfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744280637; c=relaxed/simple;
-	bh=lH8sNp8HpBJeRN7YlG0k90bwTE4mkEU6hE3Rl7ug34Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qKm/jS0i10LLyEg4V3e3R1hDsMuf1q8EUUu8Olg3+SVT67sNYsut9bmJlr/8T7Bz71IInWbE9W9MTYkI2t27I9UEzXyfij3uk06oxC1p52rBFY5G4tlonuBgWMRSQ/c4W7br+hBJh9SdVWPdHvz90QWZDwRzYcUfiQUOFogM4Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-86dc3482b3dso1723606241.0;
-        Thu, 10 Apr 2025 03:23:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744280632; x=1744885432;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=du50G3lIjNxLx6W3pkF9CbKUDTzcKCdeCv4Naa5/YUs=;
-        b=L2PCkRfuor4x+GVHlN0w1mObi9q2wTwtjfHMn5lM4mU4FZ73uWFzQbIpD95QVuWcgf
-         Pu3lmvX7FpAdTrWebvH54S92LmeoLk7T3i1NoVT/OahkdCK2gOAb82gfGNrTSZQs6reN
-         RFBwsYOpc/vCOiMxk+WQlFxYk+rcUKFT238+d9Ts3S1qm8OCu4zvlyNtLy/tXJo5Cbqo
-         zcycqXEY3I6LhJ/ufU1SG103PaYFL2vdUoh0eOwuf+HQuCULHfS7tRmHsZSXJ5S4ZTZU
-         wR8++DGo4IeHZZzITXNiRlz7zBZw+94eEwJoMNdEo6PEKzLYtIEBLXOOwF4pmFOjPstZ
-         Wl2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU8ucHSV8BOqldm3hX/a7E/cr2slOJu4Dc260g0f0Vr+2YQMs1FN8KYPsNglhrjZf6nqqZFJd6kz8UYxpzu@vger.kernel.org, AJvYcCVP9rYzeBdhdxA2Og2O7TzIg82N64nPM9H9GN6VfP861EKdbfdxfvltXuJkDcvQsOyvHhbmU+4E1nPG@vger.kernel.org, AJvYcCWLRLLkMzc1gYomipsbSbe0w/FBE2O646p7AvgdrW7tPR4bIan2VSbQzV1HoFlb4TBWtkqHg+KkQb0P@vger.kernel.org, AJvYcCWPf2lRUPKq+OBN4LdZVTlvesp3lM0HoJHu/RSFVgr0elMWEuoNG3nKpQIAVaJn2A09rKqo4kbYGNLw/KnB@vger.kernel.org, AJvYcCWVYLKwyfhh9dIAv3YRJAgK1aZhZNU6667sLjtgsW4THQUsyfoLqEaqQi5yjx9wQUAwG9ufw8pLRVwX@vger.kernel.org, AJvYcCWxMRZaff0OHry2uxmvJwp6fyR0sYfNhu6SReQg2jbpT7E7WAYixhT2ViDH2HNn7dA9b3rBGDTQV2VI9EfZ10+N3V8=@vger.kernel.org, AJvYcCX7bx+iAZMssGRJdwkr2pw8jrfcTKPDPqN0YBPzsCAYtfmuxjy66lKPf2/k/hKeKzA3333fc4+TQwfpAw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoUJyImApm+49KfSWLKMxs23biSVvWuOlzBm+OIsDmzNEucjoS
-	eSStcRTf3IulZmzhzIgxV/28+DFSGBsXffZEphr3Pebh6pI4oKSxKrQh2IP2oac=
-X-Gm-Gg: ASbGncvIHo8/jifl2J4NZMNCLFxNcrih+XzohdjZQvvQSRjFxeQFw5ocfR/UpGX0BCq
-	saZaebU3iiWie/bEP492dHA0scYKbqGTJ6w8bbOqjUGwczrEhgxN1MgoeIaFRQdG4glP8sZJTxB
-	lIYciKPUaBCvUYCfUeurE/Z20NX0BBukueaCMn/H5t6LLKQR0KgoGSP2e6iEGahcIl+fEZYYJqf
-	ycUxlS411f9mmZXvftFGa2j9QxB4vH9DFBncVErvhD6CrrNe6+x10ejHXx4wfvoU/3F0Qwb2S9U
-	+3KqY3G15HK2hDCzvOAbHdRc9QwWz8rlun/TuoFdFH+w/t8EzsO6O8lWnOXaq76dSDlCay3G92w
-	sY0dJYDQ=
-X-Google-Smtp-Source: AGHT+IFlmPNBgH/fbxo94LAfY524vLnHQycXUDhBB6glwqW9iCYstTqjhHghkEq5EG0qo/OULlE5TA==
-X-Received: by 2002:a05:6102:4601:b0:4c5:2e31:8818 with SMTP id ada2fe7eead31-4c9d3eac9c3mr843625137.4.1744280632375;
-        Thu, 10 Apr 2025 03:23:52 -0700 (PDT)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-875572b6989sm592393241.32.2025.04.10.03.23.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 03:23:52 -0700 (PDT)
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-5240a432462so640467e0c.1;
-        Thu, 10 Apr 2025 03:23:52 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUCMRmmihY7bYe2KXEN2DtLBZb7K7se1c27EVrf4xVe4ApumzbcT41jMt0qdC8YCN5Hv4e7S+X7w9XmHQ==@vger.kernel.org, AJvYcCURpxtUYbL1DoV8qoJqJ1fJFi/tuOmeaNm6yG1+1Kkf0mb24+lmOvdoAipIojs8cxXFfgJS2GhO3irhqayh@vger.kernel.org, AJvYcCUrUKGqO0DeGPEeAusGggfuyZiUFcMJGHAi4g3RmKrVmzJa4AU00goOuzgHJE/KsDGqF+MG0lzKq73C@vger.kernel.org, AJvYcCV4eIiTk5SB16M7Yb04TdA2Ee/qvK9qCabYcKODskBuqbVpaw1Z88MlizWVYZVnFESQL8haxLd36G6Gqy/Y@vger.kernel.org, AJvYcCW8HCsbA9wTI7e6nab++yuY+6Sj9iQv+pRv87Z1L4lrpzJruNysK6bEVeVr+75M6KjCnIGTLcEfTleD@vger.kernel.org, AJvYcCXeRqPLA6OjvNmZXrByUF0hIfCffE+ulrBXoCPaoMd8dVxRY6rEx51cQmzbJXm3KS1MSg9RS54D9WPG7GlEZ2wf9OM=@vger.kernel.org, AJvYcCXfbos4qdgzSf5hxXRNQpEnPKjDTPKOqzeMKQIWhDmnl8wglOeASndPys7pDvwHWrb9A52ZDSRG9gBC@vger.kernel.org
-X-Received: by 2002:a05:6122:2202:b0:524:2fe0:3898 with SMTP id
- 71dfb90a1353d-527b5ecab7cmr1028303e0c.5.1744280631864; Thu, 10 Apr 2025
- 03:23:51 -0700 (PDT)
+	s=arc-20240116; t=1744281318; c=relaxed/simple;
+	bh=P6qo8qAHeJPS2kB9aX7XoqA5Cr9gFdS6Ku0Dtv4Opmo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CtrrTq1bsQ8YlgBnMFvwQRVWiS2H7GyTe1JbXb/p/uCYbuLIdlFdhP+6xNYeLnNz67y6fr4MeONMs7MRGR9xDKy2XgLsGPqI96nDmyua0EgCwDGlpEYOYwSu21qmN42Qt2XkCt0sRCmqRtyB2rWncK6cqUdfndEVNACDG7UIios=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1u2pFS-0004gX-AB; Thu, 10 Apr 2025 12:35:06 +0200
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1u2pFR-004Fts-2i;
+	Thu, 10 Apr 2025 12:35:05 +0200
+Received: from localhost ([::1] helo=dude02.red.stw.pengutronix.de)
+	by dude02.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1u2pFR-002dX6-2R;
+	Thu, 10 Apr 2025 12:35:05 +0200
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v3 0/3] clk: add support for TI CDCE6214
+Date: Thu, 10 Apr 2025 12:34:55 +0200
+Message-Id: <20250410-clk-cdce6214-v3-0-d73cf9ff3d80@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250326143945.82142-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250326143945.82142-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20250326143945.82142-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Apr 2025 12:23:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWG5gPs0u-E+Q0ipigU-qXwNLt3jGE3bLP0AiYU4Po-Yg@mail.gmail.com>
-X-Gm-Features: ATxdqUHYP0k90KOlJEk8_KKWCI_v7YKprTDnlrpYy60dvQGy6IKe5uQi4lW1XhI
-Message-ID: <CAMuHMdWG5gPs0u-E+Q0ipigU-qXwNLt3jGE3bLP0AiYU4Po-Yg@mail.gmail.com>
-Subject: Re: [PATCH 07/15] dt-bindings: mmc: renesas,sdhi: Document RZ/V2N support
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM+e92cC/3XMQQ6CMBCF4auQrq2ZDoWKK+9hXNB2gEYDpMUGQ
+ 7i7hZXRuPxf8r6FBfKOAjtnC/MUXXBDnyI/ZMx0dd8SdzY1Q8ACJJy4edy5sYZKFJKDURJkbg2
+ WiqXL6Klx885db6k7F6bBv3Y9im39A0XBgWsrSUGFdSWay0h9+5z80Lv5aIltWsRPofoSMAkSN
+ BZaIZLRP8K6rm+XZG+I7wAAAA==
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, kernel@pengutronix.de, 
+ =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>, 
+ Sascha Hauer <s.hauer@pengutronix.de>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744281305; l=2029;
+ i=s.hauer@pengutronix.de; s=20230412; h=from:subject:message-id;
+ bh=P6qo8qAHeJPS2kB9aX7XoqA5Cr9gFdS6Ku0Dtv4Opmo=;
+ b=vu/q6ZvKaYA3RqE6e56y1bzkcwgb8VnZhbbrsRAIxkJ4OMuuBSC00Pb0b2uf04jdyL0AW6xsB
+ HkrUCF8HgMIChe/9s/p6sWgLckWfvBEWyMgTt7Jsgvs+JvlgwELMkkR
+X-Developer-Key: i=s.hauer@pengutronix.de; a=ed25519;
+ pk=4kuc9ocmECiBJKWxYgqyhtZOHj5AWi7+d0n/UjhkwTg=
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: s.hauer@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-On Wed, 26 Mar 2025 at 15:40, Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Add SDHI bindings for the Renesas RZ/V2N (a.k.a R9A09G056) SoC. Use
-> `renesas,sdhi-r9a09g057` as a fallback since the SD/MMC block on
-> RZ/V2N is identical to the one on RZ/V2H(P), allowing reuse of the
-> existing driver without modifications.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+The CDCE6214 is a Ultra-Low Power Clock Generator With One PLL, Four
+Differential Outputs, Two Inputs, and Internal EEPROM.
 
-JFTR
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+This series adds a common clk framework driver for this chip along with
+the dt-bindings document and a small fix needed for the common clk
+framework.
 
-Gr{oetje,eeting}s,
+Sascha
 
-                        Geert
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+Changes in v3:
+- Use string properties instead of int for enums
+- Use units from property-units in dtschema
+- Link to v2: https://lore.kernel.org/r/20250409-clk-cdce6214-v2-0-40b25b722ecb@pengutronix.de
 
+Changes in v2:
+- Use consistent quotes in binding document
+- make clock-names an enum to make each clock fully optional
+- drop '|' in binding description where not needed
+- encode clock input mode into integer
+- encode clock output mode into integer
+- do not use defines for reg properties
+- support setting load capacity for the oscillator via device tree
+- support setting Bias current for the oscillator via device tree
+- support setting polarities of CMOS outputs via device tree
+- fix compatible string in driver
+- remove unused struct cdce6214_config
+- Link to v1: https://lore.kernel.org/r/20250408-clk-cdce6214-v1-0-bd4e7092a91f@pengutronix.de
+
+---
+Sascha Hauer (3):
+      clk: make determine_rate optional for non reparenting clocks
+      dt-bindings: clock: add TI CDCE6214 binding
+      clk: add TI CDCE6214 clock driver
+
+ .../devicetree/bindings/clock/ti,cdce6214.yaml     |  155 +++
+ drivers/clk/Kconfig                                |    7 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/clk-cdce6214.c                         | 1311 ++++++++++++++++++++
+ drivers/clk/clk.c                                  |    3 +-
+ include/dt-bindings/clock/ti,cdce6214.h            |   24 +
+ 6 files changed, 1500 insertions(+), 1 deletion(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250408-clk-cdce6214-0c74043dc267
+
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Sascha Hauer <s.hauer@pengutronix.de>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
