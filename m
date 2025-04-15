@@ -1,103 +1,191 @@
-Return-Path: <linux-clk+bounces-20614-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20616-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6868AA8968F
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 10:29:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 732EFA897D8
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 11:25:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCA9A7A8D8F
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 08:28:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75D3016B085
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 09:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83F028468A;
-	Tue, 15 Apr 2025 08:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C3A2820BD;
+	Tue, 15 Apr 2025 09:25:39 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195042820BD
-	for <linux-clk@vger.kernel.org>; Tue, 15 Apr 2025 08:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D5B27FD4F
+	for <linux-clk@vger.kernel.org>; Tue, 15 Apr 2025 09:25:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744705495; cv=none; b=ZJSnVAC8LPtwlx+mi3Gjt+D5drkJ8DTeQHWMe8rPjPLnmXMeeQ6693RBEzqaN3zFE13wHZV8BiIVQIZMZW05YwyyGK5478TiHUlY6FhnbrRvnWiEEdYYQGEfAAq5tTvXPa/2FQ9nOs1s2lID6i4q1Lz3OetHALXyasPsiICGejk=
+	t=1744709139; cv=none; b=FC1pgPqEw9LIuqNMQxRFZYI+lJZoMyjlkTMHADnHeoeofPalFl5J9x8Quar0E1lwTp0PFnZxXiceP/1ywp0Mu6g7vtfddKFmcV2u+Gdno0YT1HbT6s1HSbOCM5iGaLf96JZafKPo4t0r3ySz0rqGAeoGnwIpihUd2wEsRPHFh6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744705495; c=relaxed/simple;
-	bh=sFGMekDjeVuOQRwXezlB0hJR41CNbYrITZjFMlKUWVA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JaGkqIh87OZRUMIG6gNWJwSV7NVYq4eA6i0L/ei+Gd3BIRrrQWBs7u5Q55/TIkSzDaWU9S5k2jo/kIqWJwRg3hgoXAzDO0RW6eQomYc/oXlxd88bil/uj9IeZNcciNDBQIp4raMWBvto8/P3+szMIh7ZrgXdCIC+9xKnn6QGAQo=
+	s=arc-20240116; t=1744709139; c=relaxed/simple;
+	bh=Js0OYHUDBggbN21MupHzDCzb95swyEh3y+c7AxltwS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JWdWeRjsUBZkWivBcHzhqOUA5QJsj3eijdJZGxWB697DbmG+JvC9EvSw0LZcXJyoiIlq9rv5PJrH6csQvZ+xwiEQfznGY+G0cbzoz9+D4dWkLmAm2UzG4jQnGyzWCSGYWqTK9WFeKkdJ+x2vTrq/ho593WL5iZ75eDrKrfxzwFg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1u4bay-0002GN-5b; Tue, 15 Apr 2025 10:24:40 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1u4cXf-0003Vx-Gq; Tue, 15 Apr 2025 11:25:19 +0200
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1u4bax-000O1M-2z;
-	Tue, 15 Apr 2025 10:24:39 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1u4bax-0003O6-2l;
-	Tue, 15 Apr 2025 10:24:39 +0200
-Message-ID: <dbd81c1b07f65edc77329ff479bdf9c790c78120.camel@pengutronix.de>
-Subject: Re: [PATCH v4 3/7] clk: spacemit: add reset controller support
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Alex Elder <elder@riscstar.com>, mturquette@baylibre.com,
- sboyd@kernel.org,  robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: dlan@gentoo.org, heylenay@4d2.org, guodong@riscstar.com, 
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
- spacemit@lists.linux.dev, devicetree@vger.kernel.org,
- linux-clk@vger.kernel.org,  linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Date: Tue, 15 Apr 2025 10:24:39 +0200
-In-Reply-To: <20250414191715.2264758-4-elder@riscstar.com>
-References: <20250414191715.2264758-1-elder@riscstar.com>
-	 <20250414191715.2264758-4-elder@riscstar.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	(envelope-from <mkl@pengutronix.de>)
+	id 1u4cXe-000OZz-20;
+	Tue, 15 Apr 2025 11:25:18 +0200
+Received: from pengutronix.de (p5b1645f7.dip0.t-ipconnect.de [91.22.69.247])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id B93643F9ADA;
+	Tue, 15 Apr 2025 09:03:05 +0000 (UTC)
+Date: Tue, 15 Apr 2025 11:03:05 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Ciprian Costea <ciprianmarian.costea@oss.nxp.com>, 
+	Maxime Ripard <mripard@kernel.org>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, NXP S32 Linux Team <s32@nxp.com>, 
+	imx@lists.linux.dev, Christophe Lizzi <clizzi@redhat.com>, 
+	Alberto Ruiz <aruizrui@redhat.com>, Enric Balletbo <eballetb@redhat.com>, 
+	Eric Chanudet <echanude@redhat.com>, Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>, 
+	Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] can: flexcan: enable PER clock before obtaining its rate
+Message-ID: <20250415-olive-bulldog-of-acumen-f8ada3-mkl@pengutronix.de>
+References: <20250414073646.1473157-1-ciprianmarian.costea@oss.nxp.com>
+ <20250414-camouflaged-silver-dodo-d0c000-mkl@pengutronix.de>
+ <e4bd8e47aeab761e409121ac9bc19408@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ea3nv5gvbkpg3kof"
+Content-Disposition: inline
+In-Reply-To: <e4bd8e47aeab761e409121ac9bc19408@kernel.org>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-On Mo, 2025-04-14 at 14:17 -0500, Alex Elder wrote:
-> Define ccu_reset_data as a structure that contains the constant
-> register offset and bitmasks used to assert and deassert a reset
-> control on a SpacemiT K1 CCU. Add a pointer to an array of those
-> structures to the spacemit_ccu_data structure, along with a field
-> indicating how many elements are in that array.  Resets will be
-> optional, and if none are defined the reset array pointer will be
-> null.
->=20
-> Define a new ccu_reset_controller structure, which (for a CCU with
-> resets) contains a pointer to the constant reset data, the regmap
-> to be used for the controller, and an embedded a reset controller
-> structure.
->=20
-> Each reset control is asserted or deasserted by updating bits in
-> a register.  The bits used are defined by an assert mask and a
-> deassert mask.  In some cases, one (non-zero) mask asserts reset
-> and a different (non-zero) mask deasserts it.  Otherwise one mask
-> is nonzero, and the other is zero.  Either way, the bits in
-> both masks are cleared, then either the assert mask or the deassert
-> mask is set in a register to affect the state of a reset control.
->=20
-> Signed-off-by: Alex Elder <elder@riscstar.com>
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+--ea3nv5gvbkpg3kof
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] can: flexcan: enable PER clock before obtaining its rate
+MIME-Version: 1.0
 
-regards
-Philipp
+Hello Stephen,
+
+thanks for your input.
+
+On 14.04.2025 17:27:10, Stephen Boyd wrote:
+> Quoting Marc Kleine-Budde (2025-04-14 02:55:34)
+> > On 14.04.2025 10:36:46, Ciprian Costea wrote:
+> > > From: Ciprian Marian Costea <ciprianmarian.costea@oss.nxp.com>
+> > >=20
+> > > The FlexCan driver assumes that the frequency of the 'per' clock can =
+be
+> > > obtained even on disabled clocks, which is not always true.
+> > >=20
+> > > According to 'clk_get_rate' documentation, it is only valid once the =
+clock
+> > > source has been enabled.
+> >=20
+> > In commit bde8870cd8c3 ("clk: Clarify clk_get_rate() expectations")
+> > Maxime Ripard changed the documentation of the of the function in clk.c
+> > to say it's allowed. However clk.h states "This is only valid once the
+> > clock source has been enabled.".
+> >=20
+> > I've added the common clock maintainers to Cc.
+> >=20
+> > Which documentation is correct? Is the clk.h correct for archs not using
+> > the common clock framework?
+> >=20
+>=20
+> I don't know what arches not using the common clk framework (CCF) do so
+> I can't comment there.
+
+The driver is used on Freescale/NXP SoCs: m68k (coldfire), arm, arm64.
+Coldfire provides us directly with the fixed clock rate, so no clk_*()
+functions are used there.
+
+> If you want something to work on an architecture
+> that doesn't use the CCF then follow the header file, but in all
+> practical cases _some_ rate will be returned from clk_get_rate() and
+> we're not going to BUG_ON() or crash the system in the CCF
+> implementation for this case. Enabling the clk is good hygiene though,
+> so is it really a problem to enable it here?
+
+It's not a problem to enable the clock. If it would stay enabled, it
+means a higher power consumption (I cannot quantify how much), as the
+clock is only needed if the CAN interface is up. But we have more things
+to cleanup:
+
+For CAN controllers, information about the clock is more important than
+for e.g. serial interfaces, so it's exported to user space. During probe
+a CAN driver typically queries the clock rate with clk_get_rate()
+(without enabling the clock) and stores the rate in a structure.
+
+If the user space configures the bit rate of the CAN bus, the stored
+clock rate is used to calculate the bit timing parameters. During ifup
+the clocks are enabled and the previously calculated bit timing
+parameters are programmed into the hardware.
+
+In the early days of the stm32mp1 this has previously caused problems
+because the frequency of the CAN clock changed between the initial
+clk_get_rate() and the ifup.
+
+For SoCs with CAN interfaces, the system designer usually configures the
+CAN clock to a specific rate, so this problem does currently not occur.
+
+What are our options?
+- enable the clock before clk_get_rate(), disable it afterwards?
+  -> This might be a bit more "hygienic", but doesn't solve the clock
+     rate changes problem.
+
+- clk_notifier_register() and update the saved rate
+  -or-
+- give our framework a pointer to the clock, so that it can do the
+  query every time needed, instead of using the value from probe time
+
+- delay the calculation of the bit timing parameter until ifup, do a
+  clk_rate_exclusive_get(), re-calculate the bit timing parameters and
+  program them into the HW
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--ea3nv5gvbkpg3kof
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmf+IMUACgkQDHRl3/mQ
+kZxK2Qf9HAn4ob3h6aUeP89LLoGXCIV0BwaTLfdq/FfE8cdPJFaNYPqKfAQR0hCX
+W09FS52Qo1YkODvj6fImAtavgZm6P3TCcJW8zORMyqI35BOVDYFz7oTkY1pUxx1N
+8dqrIzX3orDTum9tY6N/lfaqb87hiBeNB1r4cJljtVBr0B/yU8xdDRdDYriejITs
+WHbl5vkgTEIjuD6Tt26lf7Vm/8DPnsFok7+FCNlfwqGFaCsiiAxlKrmDhZbI1GVN
+x4gNJ4I3j6T/muZaIyyEPgMH6HJijXFDMfzwiOlSUsMMjYJ6C+HzrHJgOEFxBB3/
+1Fym0NSFmTKKNEqecO05pfEcccbDZg==
+=ABXE
+-----END PGP SIGNATURE-----
+
+--ea3nv5gvbkpg3kof--
 
