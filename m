@@ -1,209 +1,234 @@
-Return-Path: <linux-clk+bounces-20615-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20617-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D40EBA8979C
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 11:13:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 924FFA897F6
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 11:28:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B2E53B80B8
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 09:13:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BDC1169FB0
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Apr 2025 09:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E33327FD6A;
-	Tue, 15 Apr 2025 09:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 266FC284671;
+	Tue, 15 Apr 2025 09:28:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Get02uRv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/KXfKir"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BE727F731
-	for <linux-clk@vger.kernel.org>; Tue, 15 Apr 2025 09:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37839205AA3;
+	Tue, 15 Apr 2025 09:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744708403; cv=none; b=GuKU61DEuAoIyOUifSmXyw7kw+CXWvQ+qgkJBkRA2xB0d4F7jpwf7FFS45aPfyWxbOyYy/csxW1Hcv8bhFaQD+8+m82N5LVJJ7EmJno6UjgjSASt1i9G7zgAT558CvOFJ5j9IbdsCYpzcqowbwnqjSUbJIIeELtp61XBN7SNnUY=
+	t=1744709322; cv=none; b=PSR3oJ7toq/Sd+H0YQBFFBkDNCn08AgxyL1E3l5Ji74tstsHV+JKBe0JhiugaAbWk/vUv3NM3qIKAdzjNfz0MjSM1NkUOg23v0SpI4c9eqigGcoxa+BuIygxDoj606K5WjitKyk9FKewMqk4WyXHvvwaldd6lT9n8Gd5QIAZOs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744708403; c=relaxed/simple;
-	bh=Y3cF4eZoT0Tuq6lyHi7dJ/kFBdodGF0lWp44qmkdgv4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fCcwrH18oNHFwFCPFO2VvZmTPDpFfhGD2VEM9JhMZLsOpLV1icSdLosjrFC6YVwgMO0z5Mx1RU4u5xKoWjO+nPgWpDJlRtcam4OHBHyO4V/aA0/2d4KxZvFEqzvGlNJwSbUOtbk6kKXTl2v+7nVEVZ9GJKE9i6pmDguxrIMY1Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Get02uRv; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53F8tNDf005961
-	for <linux-clk@vger.kernel.org>; Tue, 15 Apr 2025 09:13:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+rR/+ftTAIsUkZ0fyx0/CUkeHOOpZznIIF7t4NeJeNc=; b=Get02uRvEClbLNVW
-	Za/NGMqD2SjwhAF1sQ+mUGp65SqHxDQ+/nEsap/p/jPrSq6ecxoLpky4Cz0LrCjh
-	F75iploxuFy3ymU2u2C22tdJwydEt80jEY880WksKEO04ZKgtBI8Ss+IZ84pErPi
-	bGu0ZcsDvYJbfUcEJZHWrE0+DgVc7xeL0Ri+7KHMuWRKTO6T+Ae3odONED1qhwh9
-	PbpckzaoYHB3rjVCjV74QlB66dqzewYhrXjLyy2I1WPoA2MO2yugxjk5FhYWgkQM
-	h3hUD81z06d3r+POH6pRKqxlu2Mov4PJUfeirxp/SipoaRXkjc8D+JyW66JaZv5W
-	0p9Ing==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ydvj7mwu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Tue, 15 Apr 2025 09:13:20 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c5af539464so127350585a.0
-        for <linux-clk@vger.kernel.org>; Tue, 15 Apr 2025 02:13:20 -0700 (PDT)
+	s=arc-20240116; t=1744709322; c=relaxed/simple;
+	bh=1h6lGzDQGCxsNKEF9zey7TCs2yGJWPFreLHmCD65QQ0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SdKRnYAyOANzkUzAiXZiPCSdniOZR+drdrG/Vamnf1Q0TlRooCTA2EezIR2xWuIm2akWfXMxm6wSUvtJMcEKJqdPdwj2CyBxKTSOlVJuMmyzDUapv5KYGoPpSsAc8R07IANWompN5Cr6K8gxAx7n6idrBNrcgSLH4DU4PEo3DDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/KXfKir; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43690d4605dso41539545e9.0;
+        Tue, 15 Apr 2025 02:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744709318; x=1745314118; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4ydEHSC0AwYAy9R1jvtmBV2VFl/0Hbq9Dg03lKhyDtg=;
+        b=P/KXfKirUsMydSvuo+LGyO7Iin3lohuloZ2zQxOiZNskFLGFbJo+WTmC6mVfIuo0f3
+         rqYdBmR+WguONHc72g9dY4FABsTOMpd4Z5qD3QuZU3Hn9rxwzl4bQtWNXo7m8Vu8TGZq
+         +Jleby+TRQG0H77ZRH7ymYniuLo3AXiDSyt+5EgOUOms83hvaKCVbLwYJlonlbzfqmXU
+         67HN6A2F6vMtNipm+FeHfPQUVZAL15AJrMCw+nGlr0pfbl+wssx18p1e3Ws6Ll+iardo
+         bz4pl6FwotR5cReSXJE/UtpfN7YBT2kQgaYlayE9lBsMK8jLgCOBakADFBxqxUclug4Z
+         cOjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744708399; x=1745313199;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+rR/+ftTAIsUkZ0fyx0/CUkeHOOpZznIIF7t4NeJeNc=;
-        b=QrQqAtyrCe/9QRz8H2N7ifnq2/3210YRs/eUJYDt9tMFZ6AJakOoIa1HMjg31dcTYa
-         vyd/BBm8boyObgRK1yH4shBxr0YuHbMBBh87pbSUbMOolOdOA4O2creeqgbNNBdZDvZv
-         3rHQLqXiP5jmi/hO1jEZDPp+Y70ETyE7izpF6iV32mXHeRsZjQ5bHGv83QGxCHE+jSSr
-         dCBf7pQrL30IIPLFs1erJS8GUuZRsz1ygicj9XRYfpe1CxSRdrb2xTfojz+cdTJxW34b
-         F5KwT9mDknsqCR4G5v0b2KxK40Esyvvg0Mji2T+BsPjNNLrOS1BPH78E/W0QVzG8Zu26
-         aWRw==
-X-Forwarded-Encrypted: i=1; AJvYcCWrQvaHgPBCKjNOu1K7GWpm2zPy4zatzNtmtvVeVxxWRGmO1QztOQYf13kyJcmwSC92WvuGJWWJZGk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9sqpzMMXOzNURkQ2O3mIUwSTl9yY3t7YTotdPNWoANm2yx32c
-	Z5SJ0VSye6Iw0Smia7WQvIjTkfeA5qVgn4qZvkqoZ49N2gAKA/RbRPJNlIZlzOBJXos1U8+xZwj
-	elnLex2BPoMnlEKgWru/8VdIAkpzh+xmr2XSg8a/jgRBnQFY2cIElsC17D38=
-X-Gm-Gg: ASbGncuWqPRuxWjAalKc/HVdSTN9M5+rB93NGaJT6dCGqsM7Vlg2p8Y/N7//KyDu0qS
-	VjeYaplppddqg6UZcbHIahvbkRewqq+Jzk4Xz71ihgxojUlr15HMJVdkUYLf9TjLp4t5/KvuDFX
-	vF8V5PlLqOee9U1ah4cqdXJaM/lNdKp1oVUMufKfdFdy8OL3SMhJSNsMXv7RfpR9ddF6dt8jBbm
-	npuUzNAhFlV/xfRpQabZZLgZ8a6IVI/hiyeLUquzf30ccsY5q1rMF7AAqY+ZjPVfwGpG75qP4+w
-	/7P6YGrG0Y1Iraj5y41Uj2fDnc+yNNKudZo1wUXw4wa9kRwlTB6+glQvux9kZNGlZr8=
-X-Received: by 2002:a05:620a:450b:b0:7c0:a1ca:93cb with SMTP id af79cd13be357-7c7dd7355f2mr150176985a.1.1744708398827;
-        Tue, 15 Apr 2025 02:13:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE5b7ibStatFaNQd403wS1RPgFmV1TghCWOGZLKiMrn2UNIPOtfVqPrSYwuKnQ0CSbSEiFzWA==
-X-Received: by 2002:a05:620a:450b:b0:7c0:a1ca:93cb with SMTP id af79cd13be357-7c7dd7355f2mr150176085a.1.1744708398451;
-        Tue, 15 Apr 2025 02:13:18 -0700 (PDT)
-Received: from [192.168.65.246] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f36f6491c4sm6271585a12.81.2025.04.15.02.13.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Apr 2025 02:13:17 -0700 (PDT)
-Message-ID: <702ba6b2-b84d-41e0-aedf-747535d6ab32@oss.qualcomm.com>
-Date: Tue, 15 Apr 2025 11:13:14 +0200
+        d=1e100.net; s=20230601; t=1744709318; x=1745314118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ydEHSC0AwYAy9R1jvtmBV2VFl/0Hbq9Dg03lKhyDtg=;
+        b=YZnmkpERPTeqg+gkvCbttGskXVGNQmdiIAK9CY4t3yEco/a1vE1Mj9/MknRa6wyrtI
+         sbc6rP8i44p5/oILQ4BW+0KQop36UhdzVYBHSUn6rXY+LjTWg4FaGqWVtBzmtw0hZzYx
+         oxOJ9tZQkuccnhIZHh/2FetkAXlwP83pb7OYNV3noBj7rzQm53WlkTiF9NFM4lBI+IQn
+         TbE4xBw62I8S1FiS+yn/Gf4ohI5HUcOVorgPwf4hhBvUOAvaKztvRhKU/Vrk2804+WWJ
+         KgEK/V3YQqmrTPVyiBhZLcYCw77stRCoiYiAOGGyKUTdI7siy8NH/sHIlAnTk7XYjZR6
+         UVTw==
+X-Forwarded-Encrypted: i=1; AJvYcCU7Lb1cynKWllaJwyjTQBc7qzEepS+O2ptwWQWqaItK6SML/QtliTRG2a1iPGUt2GxuNwPV/Vq7ikJ8@vger.kernel.org, AJvYcCVoDmu2Jn9+l7ttCGVWfomimag9n/+nIBI9ouG+xkqc/y6ffW7Xc7qHL6/xhHcTnYZPZVQev1ltXVE2mMuQIh7T6SM=@vger.kernel.org, AJvYcCW813gISA8IjX4/ywg8hPNf8GbsZ4gSLsbmTfdON4gYrjEeO6+cFEAg3cn4QDnz111No6j6/iy3s/XS@vger.kernel.org, AJvYcCX1OpK3P1+p8D1iErrhj6dEK4v4cDG3bQ+/hAR8LXOZZ38FlAXyyVbQkhHiSY7f1Zk1qHysgJnJsPVcaJ4A@vger.kernel.org, AJvYcCXdocy2J2mw0RAjlh6dBZG4IXkcRn+uMogxT6mgGGUn9It9N7I1AaYlpmq+fe8foKXbBUmSFCqxCw/WelIV@vger.kernel.org, AJvYcCXrFysT6wYbNKo+6wLSKfRuIBdW/PqAbgTV5KEc/NTfnZz2iuqAxShkZlmJ2PR0IRrSLR8bYoJ9WzyfEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ9F3MKC6MwM1Rf9tCc1VSnH8Sjsn9EddvXY7wRhAYYOf8AKu+
+	l3bUOt/2Zy5q4A7a+4q1CNIWZEkA0RECZzGtdV95S7t6l+Hqf7Xcsen1of8YtzUGoTCLTRHUSHh
+	Db8kzM3kf5s9bIY3rsjDfEjCpLkY=
+X-Gm-Gg: ASbGnct3OtpTM1tQqOwyUQ4EHVswA0NVEMLYqz8czk0zm3X5KR+d8H0T0SNSJvI3HxI
+	qRAx5f+ZVHBKSO5Qe+CcjoLgdXzQ6gWydjUtn0yRiSGIJL3nsCA1u0hcA19l7gmpF5GonR9+BbM
+	byOIz+hw77+pdFz29uJF+U9gZdSvyGLZ99nqWFrDL1pTXaOz0ajli/SQ==
+X-Google-Smtp-Source: AGHT+IFG+fUPEngMYO3MgfRmjXhAKt8D7GZyaPURDVd3wp/sgNtuZ0IgjriVoFPeF0qbRTK2UdbZcD/1eJv8nHqPJoE=
+X-Received: by 2002:a05:6000:18a5:b0:39c:2692:4259 with SMTP id
+ ffacd0b85a97d-39ea51f5a85mr11986754f8f.21.1744709318100; Tue, 15 Apr 2025
+ 02:28:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sm6350: Add video clock
- controller
-To: Taniya Das <quic_tdas@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Bjorn Andersson
- <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250324-sm6350-videocc-v2-0-cc22386433f4@fairphone.com>
- <20250324-sm6350-videocc-v2-4-cc22386433f4@fairphone.com>
- <1c09fee5-9626-4540-83fb-6d90db2ce595@oss.qualcomm.com>
- <9eb6dfd7-2716-4150-9392-98e26892d82d@quicinc.com>
- <e3dda8bf-e19e-4dde-83a4-7876ca81e5e6@oss.qualcomm.com>
- <69fba227-ed47-4004-9451-777ca19b687f@quicinc.com>
- <cfa4003c-e8b0-40f6-821d-07f8d44752af@oss.qualcomm.com>
- <0db798bf-04b3-40b5-af90-7dda5b606727@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <0db798bf-04b3-40b5-af90-7dda5b606727@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=ZIrXmW7b c=1 sm=1 tr=0 ts=67fe2330 cx=c_pps a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=6H0WHjuAAAAA:8 a=KHwu0kPLBxgQqcPLut8A:9
- a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22 a=TjNXssC_j7lpFel5tvFf:22 a=Soq9LBFxuPC4vsCAQt-j:22
-X-Proofpoint-GUID: RJwaUnoac_LRmY9CstgKcMOMCnkHlB9H
-X-Proofpoint-ORIG-GUID: RJwaUnoac_LRmY9CstgKcMOMCnkHlB9H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-15_04,2025-04-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- clxscore=1015 priorityscore=1501 bulkscore=0 phishscore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504150063
+References: <20250407191628.323613-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8useBh5m+MqGXQwQJhuemehm=bPidL6XydR-FOmVN9QNQ@mail.gmail.com> <CAMuHMdU+U8D8iQdks72=Kki2HL+bo8tw9gA1S4D3c4hOphLTuA@mail.gmail.com>
+In-Reply-To: <CAMuHMdU+U8D8iQdks72=Kki2HL+bo8tw9gA1S4D3c4hOphLTuA@mail.gmail.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Tue, 15 Apr 2025 10:28:12 +0100
+X-Gm-Features: ATxdqUGnCZezFZPsrc8goTpv1icFSVC02yaUa5urXIuUAs8z1znekIaVpOgJiI4
+Message-ID: <CA+V-a8tH9BLjy5aG1qkRJnUFO_4VARu6rW4fQzHoSxvaMgo1Xg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/12] Add support for Renesas RZ/V2N SoC and EVK
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-serial@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/15/25 6:05 AM, Taniya Das wrote:
-> 
-> 
-> On 4/12/2025 12:56 AM, Konrad Dybcio wrote:
->> On 4/11/25 1:37 PM, Jagadeesh Kona wrote:
->>>
->>>
->>> On 4/11/2025 2:42 PM, Konrad Dybcio wrote:
->>>> On 4/11/25 9:15 AM, Jagadeesh Kona wrote:
->>>>>
->>>>>
->>>>> On 4/1/2025 10:03 PM, Konrad Dybcio wrote:
->>>>>> On 3/24/25 9:41 AM, Luca Weiss wrote:
->>>>>>> Add a node for the videocc found on the SM6350 SoC.
->>>>>>>
->>>>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>>>>>> ---
->>>>>>>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 14 ++++++++++++++
->>>>>>>  1 file changed, 14 insertions(+)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
->>>>>>> index 42f9d16c2fa6da66a8bb524a33c2687a1e4b40e0..4498d6dfd61a7e30a050a8654d54dae2d06c220c 100644
->>>>>>> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
->>>>>>> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
->>>>>>> @@ -1952,6 +1952,20 @@ usb_1_dwc3_ss_out: endpoint {
->>>>>>>  			};
->>>>>>>  		};
->>>>>>>  
->>>>>>> +		videocc: clock-controller@aaf0000 {
->>>>>>> +			compatible = "qcom,sm6350-videocc";
->>>>>>> +			reg = <0x0 0x0aaf0000 0x0 0x10000>;
->>>>>>> +			clocks = <&gcc GCC_VIDEO_AHB_CLK>,
->>>>>>> +				 <&rpmhcc RPMH_CXO_CLK>,
->>>>>>> +				 <&sleep_clk>;
->>>>>>> +			clock-names = "iface",
->>>>>>> +				      "bi_tcxo",
->>>>>>> +				      "sleep_clk";
->>>>>>> +			#clock-cells = <1>;
->>>>>>> +			#reset-cells = <1>;
->>>>>>> +			#power-domain-cells = <1>;
->>>>>>> +		};
->>>>>>
->>>>>> You'll probably want to hook up some additional power domains here, see
->>>>>>
->>>>>> https://lore.kernel.org/linux-arm-msm/20250327-videocc-pll-multi-pd-voting-v3-0-895fafd62627@quicinc.com/
->>>>>>
->>>>>
->>>>> On SM6350, videocc doesn't need multiple power domains at HW level, it is only on CX rail which would be ON
->>>>> when system is active, hence power-domains are not mandatory here.
->>>>
->>>> 6350 doesn't have either MMCX nor a split MX - shouldn't both normal
->>>> CX and MX be in there?
->>>>
->>>
->>> All clocks & GDSC's of SM6350 videocc are only on CX rail, so it requires only CX power domain. But when HLOS
->>> is active, CX rail will be ON and operate at a level above retention, which is sufficient for videocc to operate.
->>> Hence clock driver don't need to explicitly vote on CX rail.
->>>
->>> The same is not true for other rails like MMCX and Split MX(MXC), hence clock drivers had to explicitly vote on
->>> those rails.
->>
->> I'm worried about MX being undervolted for higher OPPs
->>
-> 
-> From a videocc PoV there is no requirement of Mx on SM6350. The CX
-> levels would be taken care by Video SW driver from their defined OPP. Mx
-> at system level would be catered via the BW votes.
+Hi Geert,
 
-So I'm specifically thinking about the videocc (and other) PLLs, which
-have defined vdd levels downstream - currently we're relying on random
-luck rather than ensuring each one of them has its requirements fulfilled
+On Mon, Apr 14, 2025 at 2:40=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Mon, 14 Apr 2025 at 13:19, Lad, Prabhakar <prabhakar.csengg@gmail.com>=
+ wrote:
+> > On Mon, Apr 7, 2025 at 8:16=E2=80=AFPM Prabhakar <prabhakar.csengg@gmai=
+l.com> wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > This patch series adds initial support for the Renesas RZ/V2N (R9A09G=
+056)
+> > > SoC and its evaluation board (EVK). The Renesas RZ/V2N is a vision AI
+> > > microprocessor (MPU) designed for power-efficient AI inference and
+> > > real-time vision processing. It features Renesas' proprietary AI
+> > > accelerator (DRP-AI3), delivering up to 15 TOPS AI performance, makin=
+g
+> > > it ideal for applications such as Driver Monitoring Systems (DMS),
+> > > industrial monitoring cameras, and mobile robots.
+> > >
+> > > Key features of the RZ/V2N SoC:
+> > >   Processing Power:
+> > >     - Quad Arm Cortex-A55 cores at 1.8GHz for high-performance comput=
+ing
+> > >     - Single Arm Cortex-M33 core at 200MHz for real-time processing
+> > >     - 1.5MB on-chip SRAM for fast data access
+> > >     - LPDDR4/LPDDR4X memory interface for high-speed RAM access
+> > >
+> > >   AI and Vision Processing:
+> > >     - DRP-AI3 accelerator for low-power, high-efficiency AI inference
+> > >     - Arm Mali-C55 ISP (optional) for image signal processing
+> > >     - Dual MIPI CSI-2 camera interfaces for multi-camera support
+> > >
+> > >   High-Speed Interfaces:
+> > >     - PCIe Gen3 (2-lane) 1ch for external device expansion
+> > >     - USB 3.2 (Gen2) 1ch (Host-only) for high-speed data transfer
+> > >     - USB 2.0 (Host/Function) 1ch for legacy connectivity
+> > >     - Gigabit Ethernet (2 channels) for network communication
+> > >
+> > >   Industrial and Automotive Features:
+> > >     - 6x CAN FD channels for automotive and industrial networking
+> > >     - 24-channel ADC for sensor data acquisition
+> > >
+> > > LINK: https://tinyurl.com/renesas-rz-v2n-soc
+> > >
+> > > The series introduces:
+> > > - Device tree bindings for various subsystems (SYS, SCIF, SDHI, CPG, =
+pinctrl).
+> > > - RZ/V2N SoC identification support.
+> > > - Clock and pinctrl driver updates for RZ/V2N.
+> > > - Initial DTSI and device tree for the RZ/V2N SoC and EVK.
+> > >
+> > > These patches have been tested on the RZ/V2N EVK with v6.15-rc1 kerne=
+l,
+> > > logs can be found here:
+> > > https://gist.github.com/prabhakarlad/aa3da7558d007aab8a288550005565d3
+> > >
+> > > @Geert, Ive rebased the patches on top of v6.15-rc1 + renesas-dts-for=
+-v6.16
+> > > + renesas-clk-for-v6.16 branches. Also these patches apply on top of =
+the below
+> > > series [1] and [2]. I had to sort the order in Makefile for patch [3]=
+ to
+> > > avoid conflicts.
+> > > [1] https://lore.kernel.org/all/20250401090133.68146-1-prabhakar.maha=
+dev-lad.rj@bp.renesas.com/
+> > > [2] https://lore.kernel.org/all/20250403212919.1137670-1-thierry.bult=
+el.yh@bp.renesas.com/#t
+> > > [3] https://lore.kernel.org/all/20250403212919.1137670-13-thierry.bul=
+tel.yh@bp.renesas.com/
+> > >
+> > > Note, dtbs_check will generate the below warnings this is due to miss=
+ing
+> > > ICU support as part of initial series. I will be sending a follow-up =
+patch
+> > > series to add ICU support which will fix these warnings.
+> > > arch/arm64/boot/dts/renesas/r9a09g056n48-rzv2n-evk.dtb: pinctrl@10410=
+000 (renesas,r9a09g056-pinctrl): 'interrupt-controller' is a required prope=
+rty
+> > >         from schema $id: http://devicetree.org/schemas/pinctrl/renesa=
+s,rzg2l-pinctrl.yaml#
+> > > arch/arm64/boot/dts/renesas/r9a09g056n48-rzv2n-evk.dtb: pinctrl@10410=
+000 (renesas,r9a09g056-pinctrl): '#interrupt-cells' is a required property
+> > >         from schema $id: http://devicetree.org/schemas/pinctrl/renesa=
+s,rzg2l-pinctrl.yaml#
+> > >
+> > > v1->v2:
+> > > - Added acks from Rob.
+> > > - Squashed the RZ/V2N EVK and SoC variant documentation into a single
+> > >   commit.
+> > > - Updated the commit messages.
+> > > - Added RZV2N_Px, RZV2N_PORT_PINMUX, and RZV2N_GPIO macros in
+> > >   SoC DTSI as we are re-using renesas,r9a09g057-pinctrl.h
+> > >   in pictrl driver hence to keep the consistency with the
+> > >   RZ/V2H(P) SoC these macros are added.
+> > > - Dropped `renesas,r9a09g056-pinctrl.h` header file.
+> > > - Followed DTS coding style guidelines
+> > > - Dropped defconfig changes from the series.
+> > > - Dropped SDHI dt-binding patch as its already applied to mmc -next t=
+ree.
+> > >
+> > > Cheers,
+> > > Prabhakar
+> > >
+> > > Lad Prabhakar (12):
+> > >   dt-bindings: soc: renesas: Document Renesas RZ/V2N SoC variants and
+> > >     EVK
+> > >   soc: renesas: Add config option for RZ/V2N (R9A09G056) SoC
+> > >   dt-bindings: soc: renesas: Document SYS for RZ/V2N SoC
+> > >   soc: renesas: sysc: Add SoC identification for RZ/V2N SoC
+> > >   dt-bindings: serial: renesas: Document RZ/V2N SCIF
+> > >   dt-bindings: clock: renesas: Document RZ/V2N SoC CPG
+> > >   clk: renesas: rzv2h-cpg: Sort compatible list based on SoC part num=
+ber
+> > >   clk: renesas: rzv2h: Add support for RZ/V2N SoC
+> > >   dt-bindings: pinctrl: renesas: Document RZ/V2N SoC
+> > >   pinctrl: renesas: rzg2l: Add support for RZ/V2N SoC
+> > >   arm64: dts: renesas: Add initial SoC DTSI for RZ/V2N
+> > >   arm64: dts: renesas: Add initial device tree for RZ/V2N EVK
+> > >
+> > Would it be OK if I send version 3 containing only patches 4/12 and 10/=
+12?
+>
+> For patch 4/12: yes, that is fine. Thx!
+> For patch 10/12: I have already applied it.
+>
+For patch 10/12 ("pinctrl: renesas: rzg2l: Add support for RZ/V2N
+SoC") will that be part of renesas-pinctrl-for-v6.16 branch (which is
+yet to be pushed)?
 
-Konrad
+Cheers,
+Prabhakar
 
