@@ -1,155 +1,170 @@
-Return-Path: <linux-clk+bounces-20852-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20854-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1741CA95D77
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 07:43:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6437CA95FB3
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 09:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB33C3A9954
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 05:42:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EBDD188A5E3
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 07:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E3F11E9B38;
-	Tue, 22 Apr 2025 05:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="c44bTB7T"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9B31EB1AB;
+	Tue, 22 Apr 2025 07:41:26 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085EF1E503C;
-	Tue, 22 Apr 2025 05:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE0C524C;
+	Tue, 22 Apr 2025 07:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745300569; cv=none; b=RAYAxcUUJPl2rtTpaS5a/jM3XvysYYjvcHiORn2Gri/z6Y7ppruBCxEgofDpjcWVbaOGSIfb09qOqBShJv3pl++R6S3PkDu17nAlH4INB7hqg0H+wL+ZlgqIF4EtXLtCqZDJb7mO3gUqWGFva6e+3f1zsBvp6uP65jpdayCIzlc=
+	t=1745307686; cv=none; b=X/2nuMwAUz/QrfSbAkdTephUzvjqlBfHlQX+lBWG/Ngwfhsc0YnpDdfBRQCnzd+77cL4fmOcgZmubGBV8/XbDJZvaTu8CH2Uameax0r2fnIwoXwdE25iqa2RcIuBHER0wM3sI57wW2oFQeEgEBsx5APwwaZsZAHuIXBbb4+kBkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745300569; c=relaxed/simple;
-	bh=Xi4w8Pw14towfsIYXC2h2bTNPVlHcod6+YCMqluxCzU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=OHQfwFegkP2D+I9vRid0pfs2R5vYV1KwwK6C7zbUdfVcP026tzrRlDHP47O5ZLa2Ggiwo/ibwWMLr5rdjrSYS8Ec0oab793ZeFRJrBgPAEXkqQQSfJMraLzd32z9SxwiOGUVt0Ezy/aMfViUhl/5wskXU1RZnzQbZV0+39cpR8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=c44bTB7T; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53M4OsGR011412;
-	Tue, 22 Apr 2025 05:42:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	F3Tw4HEzjXI+VFLuonINWc2kavveyztEildSD+vi+aM=; b=c44bTB7TjkNWj9Jc
-	z7+gDQkcyaHMmdOtW7JhYDUgpvCBGwGRQhJqPn9Uwe3XxKNmZBPGXMuTOYT53R/N
-	vqUcDx7bdUP6ArSqWMG5KSu7X8Xus3gM0zUj0r6CRK/yvtgxDG9OixyJMvng8sVx
-	taz55j4buKyoEWR1q3xFMP3MCnl/AiON3JHfggLCortVFN8PUHAdvvm/1uRlayFE
-	BEPsTEwc4+J8zlmN/zRDNVeOxEjFMxNTjm2z0N1+sT3yHpno/+yaxJ6Ua6uwHIEz
-	uAw6Eqx/n2TGk6cO/5NUG8rYaralPSI3DliKLx4OfBSgx+vcTAov2wjCPRdOB5Pi
-	wWZK/g==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46450pe428-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 22 Apr 2025 05:42:44 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53M5ghcx030414
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 22 Apr 2025 05:42:44 GMT
-Received: from hu-skakitap-hyd.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 21 Apr 2025 22:42:39 -0700
-From: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-Date: Tue, 22 Apr 2025 11:12:12 +0530
-Subject: [PATCH 3/3] arm64: dts: qcom: Add camera clock controller for
- sc8180x
+	s=arc-20240116; t=1745307686; c=relaxed/simple;
+	bh=FxOW94RSk0PhfFr/bcRz1bIIkwQd1iZ7rYc2ls+gbhE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i5Cm1fsd9p6/kz/Ml9QpEInNhJRst2iKdiHPmR1FjxVOG+MofZgDtzwjibSFbisU7zUOdIXwWyNRuxuN9PYq0d4mOGl+e5A9YBzSsGQr3NG+yKWB5ncHiCVw1YhA5f8BlgM0Mr2YOrGgqpZ+4fm/JhC+KNTIDjeA4cKnjlsFDuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-86f9c719d63so1547300241.1;
+        Tue, 22 Apr 2025 00:41:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745307681; x=1745912481;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CchbbGjqvUvjIqESIBqdCzQiBA7qsjtrrzbifnEpKqk=;
+        b=RSpSp0ajuVg8GxYgupymLh37kJzQ5mT+SurO5X6yEcW8Z05tg1/kfvIDmttooO2UoD
+         hndZIXQzDiNpgrBjKaNHecPIqh54FoXJePo2cSr+E+HEx1wTKnCO7tLEm/SBt++ddH4c
+         SLZi6Vp/Zk8/AieJmWvKKKi3Zbo301CrViWx1omRHGcUHIM5GobpOKaUXBGTX6B/Xdt2
+         1TVqqU8GuNZq3y0PjhWLoC/FuxWlmSnL5TTCLogm0ipGLFiry4Pf9w4tKlKaLQivZwUM
+         Qp5X/Jxca9daWsvKgRBKr/HW6srudhkxLlUCpam6gorThKgKUprJLH8ZunVXxYyWQ0gH
+         eMgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUlveypS3bZXsmVdvk/Aw5mREHaVgTgcLzvy0BNJVsl70w2DywU695cpc3uZlXgXAq0mhDUFU9TGjzXDOxdyfixJr4=@vger.kernel.org, AJvYcCWVA5HU6Nl3eDfVHLqT5s0+dVGBlWDpI8F3J4vJh/fJCHtT1Coh8Blhwy78QyFTzw1CegmwTCmi0PA6@vger.kernel.org, AJvYcCWcFX856CQbuDRxYzuj8Dp/2G0lYZQjwZPLcN5QIeWsBrpVaOzt7WrcCdPpJQoJTOYp8NW/iWV+tECm@vger.kernel.org, AJvYcCXhyn6kSbnAbR7uToNZT4wfLs2qdaWkfwOSvhdp66h0ExV1xfpNRBRIQjYv0TcxH1BdiYek1z1phYB43+HY@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxx9OgzLamtQB4D0q2UdDWvKDaCzTNzkplsWWwivvTTtCwYreYn
+	R5XWq28Y1COOzDWt0lLqkp2P4o9Nsgkx9DDAo3dZqfzJitsAtupQeX9/U1Rz
+X-Gm-Gg: ASbGncshra5DV/QOdqUhQMDxsJ20tww6v9d8faOTHZdy6+FMjlRmFQr1h10ycN2KcQV
+	OgrLRlb7WcFB0v/W8xdLQgGiD8CeERput6+sIdV8k8d5KnIZvnfRykS7LRFIB4em+Xu7yKFw7if
+	JcuLIetyfBHdQhMqbCAhiNkvV9uANQ5NhqeyTLpqEcHIuhZfwpJI2iUJDeFCCxwwJVbEzhp2rM2
+	LtwxF8CQGvOXB9wvDmRx6nYGTNE5Nm4F1/LHCi7+pXUtuh1cfkJy0wtbc15aanFwUouj1sJciK2
+	EER77S4SIF6sLOF6Ly6QG93ZfvlNbxQPvOqf94d/rbKNU7wyhSAli8EOUzm2OQbgnrGdvaM37gc
+	oGkE=
+X-Google-Smtp-Source: AGHT+IHcUQZUEexCvSUT1zjP8LMLjqDuURWPRPRNEprBILwEitFTscx+/3xSURl2HwbOud5CUO8YzA==
+X-Received: by 2002:a05:6102:226f:b0:4c4:e415:6737 with SMTP id ada2fe7eead31-4cb802368f5mr7887164137.23.1745307681024;
+        Tue, 22 Apr 2025 00:41:21 -0700 (PDT)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4cb7dde4512sm1994847137.18.2025.04.22.00.41.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Apr 2025 00:41:20 -0700 (PDT)
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-86f9c719d63so1547275241.1;
+        Tue, 22 Apr 2025 00:41:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVHSa7nRFESbfAVlwjFKqopdauUQIY6dwdykDEAPBepX8qrhBoKDauNC9Big0V1uLl5vvAcpJYZtIoO7/Lz@vger.kernel.org, AJvYcCVVazg+jfwaKjHpFhSaxhtLfEiqpSuTzLEoLSnsVg8hMxXZCBqh5qxEBbZE2UQcuE+wWT0mYQwvRJNS@vger.kernel.org, AJvYcCVsnCtQnnH1lkH5USOemUVUNwN/1kSnecR9elIh6MlxQSAkPj3WP9oIfm7kLdOG/+t3FG7YHHVj6oPiFYDbPenboWM=@vger.kernel.org, AJvYcCWUhfbeEjQL3DLelHoch8RWhE8xIKQTcPpeMkBCakGnE/cYAghM2vFd1wO7DE9+skVCJU7nphYthySp@vger.kernel.org
+X-Received: by 2002:a05:6102:3235:b0:4bb:cdc0:5dd7 with SMTP id
+ ada2fe7eead31-4cb801fcb0emr7598638137.16.1745307679790; Tue, 22 Apr 2025
+ 00:41:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250422-sc8180x-camcc-support-v1-3-691614d13f06@quicinc.com>
-References: <20250422-sc8180x-camcc-support-v1-0-691614d13f06@quicinc.com>
-In-Reply-To: <20250422-sc8180x-camcc-support-v1-0-691614d13f06@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Jagadeesh
- Kona" <quic_jkona@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Satya Priya Kakitapalli
-	<quic_skakitap@quicinc.com>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=Hd0UTjE8 c=1 sm=1 tr=0 ts=68072c54 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=fv2zVKLHILqpzYTyU3AA:9 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: -P8Z-9RW_CT84lHFe7Y5L1GtIwpDAnbx
-X-Proofpoint-ORIG-GUID: -P8Z-9RW_CT84lHFe7Y5L1GtIwpDAnbx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-22_03,2025-04-21_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- adultscore=0 mlxlogscore=631 phishscore=0 clxscore=1015 spamscore=0
- impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504220042
+References: <20250418184658.456398-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250418184658.456398-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250418184658.456398-11-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 22 Apr 2025 09:41:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWs7R9rtS7Ur6PP9e3m9ghkM1jc_Xn3QOWG4rvTtB2omA@mail.gmail.com>
+X-Gm-Features: ATxdqUFBeCs2oJ7izTqYxFnW1BxjoUqkEqYOurERQsS1p8loeCSNnydQw8JebiM
+Message-ID: <CAMuHMdWs7R9rtS7Ur6PP9e3m9ghkM1jc_Xn3QOWG4rvTtB2omA@mail.gmail.com>
+Subject: Re: [PATCH v3 10/15] drm: renesas: rz-du: mipi_dsi: Use mHz for D-PHY
+ frequency calculations
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Add device node for camera clock controller on Qualcomm
-SC8180X platform.
+Hi Prabhakar,
 
-Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc8180x.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+On Fri, 18 Apr 2025 at 20:47, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Pass the HSFREQ in milli-Hz to the `dphy_init()` callback to improve
+> precision, especially for the RZ/V2H(P) SoC, where PLL dividers require
+> high accuracy.
+>
+> These changes prepare the driver for upcoming RZ/V2H(P) SoC support.
+>
+> Co-developed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2->v3:
+> - Replaced `unsigned long long` with `u64`
+> - Replaced *_mhz with *_millihz` in functions
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index b84e47a461a014871ef11e08d18af70bec8e2d63..a28360ec0a8c85c2215ee9d47307ef07c8835334 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -12,6 +12,7 @@
- #include <dt-bindings/interconnect/qcom,icc.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interconnect/qcom,sc8180x.h>
-+#include <dt-bindings/clock/qcom,sc8180x-camcc.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/phy/phy-qcom-qmp.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-@@ -2934,6 +2935,18 @@ usb_sec_dwc3_ss: endpoint {
- 			};
- 		};
- 
-+		camcc: clock-controller@ad00000 {
-+			compatible = "qcom,sc8180x-camcc";
-+			reg = <0 0x0ad00000 0 0x20000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&sleep_clk>;
-+			power-domains = <&rpmhpd SC8180X_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss: mdss@ae00000 {
- 			compatible = "qcom,sc8180x-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
+Thanks for the update!
+
+> @@ -203,8 +203,9 @@ static u32 rzg2l_mipi_dsi_link_read(struct rzg2l_mipi_dsi *dsi, u32 reg)
+>   */
+>
+>  static int rzg2l_mipi_dsi_dphy_init(struct rzg2l_mipi_dsi *dsi,
+> -                                   unsigned long hsfreq)
+> +                                   u64 hsfreq_millihz)
+>  {
+> +       unsigned long hsfreq = DIV_ROUND_CLOSEST_ULL(hsfreq_millihz, KILO);
+
+MILLI (everywhere)
+
+It's a strange world where KILO == MILLI ;-)
+
+    include/linux/units.h:#define KILO      1000UL
+    include/linux/units.h-#define MILLI     1000UL
+
+>         const struct rzg2l_mipi_dsi_timings *dphy_timings;
+>         unsigned int i;
+>         u32 dphyctrl0;
+> @@ -277,6 +278,7 @@ static int rzg2l_mipi_dsi_startup(struct rzg2l_mipi_dsi *dsi,
+>                                   const struct drm_display_mode *mode)
+>  {
+>         unsigned long hsfreq, vclk_rate;
+> +       u64 hsfreq_millihz;
+>         unsigned int bpp;
+>         u32 txsetr;
+>         u32 clstptsetr;
+> @@ -305,9 +307,9 @@ static int rzg2l_mipi_dsi_startup(struct rzg2l_mipi_dsi *dsi,
+>          */
+>         bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+>         vclk_rate = clk_get_rate(dsi->vclk);
+> -       hsfreq = DIV_ROUND_CLOSEST_ULL(vclk_rate * bpp, dsi->lanes);
+> +       hsfreq_millihz = DIV_ROUND_CLOSEST_ULL(vclk_rate * bpp * KILO * 1ULL, dsi->lanes);
+
+The "* 1ULL" only makes the last factor unsigned long long.
+"vclk_rate * bpp" is still unsigned long, causing overflow on 32-bit.
+As there is no rounding variant of mul_u64_u32_div(), you probably
+want to use mul_u32_u32() instead.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
