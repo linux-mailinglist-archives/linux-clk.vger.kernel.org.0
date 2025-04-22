@@ -1,48 +1,48 @@
-Return-Path: <linux-clk+bounces-20856-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20857-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 701BEA96013
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 09:54:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3C8DA9604E
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 10:01:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DE603BA22D
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 07:54:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 045A67A6B95
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Apr 2025 08:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 297341EF372;
-	Tue, 22 Apr 2025 07:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE0DC2417FB;
+	Tue, 22 Apr 2025 07:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAGHDrOk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cmoZVKWT"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E973F1EEA5C;
-	Tue, 22 Apr 2025 07:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756D31EEA40;
+	Tue, 22 Apr 2025 07:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745308461; cv=none; b=BRowAJAwyihIINnvj4O9w6ny8lSv/wYJKuA+f08BYb7DeBI8lxtMyVe0+c/BdSyqDPs3oNxo9esHbu6WCm3iU30htbkXu1mZIGY7iculmjD/oYqkEm7DLCVdsZKPeXJUmunGSJLDM3+mZ8DsaNYuPwDyfWf9dlJm3QzFfcW7hfI=
+	t=1745308756; cv=none; b=d/18Qvs2qh/D57yU2X/2/qwBd21XXb700DGrlfovbVIFNLhXvYlol1oYnQ1OjbdpGKhw6O9ZK/eetmX8EPk7xxhm4PDnSnSa6ms1+ASVz9umIfZ5xJbISOvhEpk65RMoma99WjJUyR4tXEm79WbPyxwACRAaYnvIxAcEymJh6Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745308461; c=relaxed/simple;
-	bh=OQNwaf3owJm8HUcBOJNFd8lymmXZ3QEafQN9fN49b7k=;
+	s=arc-20240116; t=1745308756; c=relaxed/simple;
+	bh=UAPA1cBdJuhl2cpNWrYkJ/eaemaqFe7c4XOIf1O/9k0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GMUEARkwQn0fr4NfFb6RrhYOyTa6uA4y7vdV1bHWCl9q/PuVxjTyO6t9P8j4dW4tdruvW8qc5fVSj8WTDxzFewduItQQQ8fjRvCJiygJa+d4Wneu3Zp8QQR4WSuJ7tESb6+5d4OLnQkgk1ge8AOCRmMtsQtwOS65dnSqQoOuf6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAGHDrOk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CA9C4CEE9;
-	Tue, 22 Apr 2025 07:54:15 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=uHPyNKVvtDznH7lyR5IYmB8PLYIZl+/7+auUia9WQyo85J0Z1mbWMCZp4Q/WmGdHaWD9AL7Ssrsr3e0dHgVf877/1i60PrSAaHjFi6JcVpOGTFYeN6NJu8ZBjzmRuycl6+lzVqInrz1G53ZNxt1urHWDrf0QwQn5h3IaZRgO1MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cmoZVKWT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60ECC4CEEA;
+	Tue, 22 Apr 2025 07:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745308460;
-	bh=OQNwaf3owJm8HUcBOJNFd8lymmXZ3QEafQN9fN49b7k=;
+	s=k20201202; t=1745308756;
+	bh=UAPA1cBdJuhl2cpNWrYkJ/eaemaqFe7c4XOIf1O/9k0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GAGHDrOkwFIwffCOhkL91d2DcxXEGu7QN8Mdwz/8QaY6K4RHr179dlUqYbJl93oL1
-	 hIzkVS3kBUY29U/Iq9xoQ3mZcBB8dzgUWEHq8Hf7mMr+bgVk/v5O5eOPWzeY8ch4Ds
-	 bbHQi66JzLQyRksBD2DVBCNRwgfdN2FsT0iuBByHm+wDeD3nE1j8qrqi+6fi7Jf/Jw
-	 lCeTPkZNdkBaqnjzzS/1QRtI91oK9fKEo45mCgCZZXdwrU1qqt7YHYUzAFo7PexUge
-	 vZPd6bKLop+QZd5FL4NnjtgjxanbFBhzmXuRvKhbxxQFLvFk7GTgkosHULMNhIoVBD
-	 PH9f/9avTNoaA==
-Message-ID: <b5ada346-94e7-41f2-852b-6372f02b4122@kernel.org>
-Date: Tue, 22 Apr 2025 09:54:12 +0200
+	b=cmoZVKWTflUAR9TEvpZN8KuqhtxZtJzEpcDyfMZkO5IQeX8fXKlq8BaEnwWHJWlp0
+	 wjKq/SCQA2OkRKtpThVKw1D9OhdUFTf3NS52oYku+aicOrcecoFUsqR/Yc5PUCsS9R
+	 1qfzjWUQHopXAwgDWlk5c7OBI1BOoaVTEOaJcKf3keSv9xgKHGL85GSPARxYAFi/N2
+	 9Izydx/TbO3dkkwWse/l/L294yKz6gS6Y3Tt4A/kC6umOa+T5gld9pMcLl74bsYMUi
+	 glH5oc9VJ6SyF+5mGGSs5wBRAsHlkLmfwAQB5G+8eUxVy1xd86k5XADpy6tCrcMS0H
+	 y/DGnxAnoIMwA==
+Message-ID: <6de6030a-af26-4fda-8d49-fa8ac65a672f@kernel.org>
+Date: Tue, 22 Apr 2025 09:59:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: clock: exynosautov920: add cpucl0 clock
- definitions
+Subject: Re: [PATCH 2/3] clk: samsung: exynosautov920: add cpucl0 clock
+ support
 To: Shin Son <shin.son@samsung.com>,
  Sylwester Nawrocki <s.nawrocki@samsung.com>,
  Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>,
@@ -62,8 +62,8 @@ Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
 References: <20250418061500.1629200-1-shin.son@samsung.com>
- <CGME20250418061515epcas2p3d2dd703db7eb645f4866dcb01cc288fc@epcas2p3.samsung.com>
- <20250418061500.1629200-2-shin.son@samsung.com>
+ <CGME20250418061515epcas2p138fa2f5edacbfba8f73b40182fb8d83f@epcas2p1.samsung.com>
+ <20250418061500.1629200-3-shin.son@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,14 +109,17 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250418061500.1629200-2-shin.son@samsung.com>
+In-Reply-To: <20250418061500.1629200-3-shin.son@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/04/2025 08:14, Shin Son wrote:
-> Add cpucl0 clock definitions.
+> Register compatible and cmu_info data to support clock CMU_CPUCL0,
+> this provides clock for CPUCL0_SWTICH/DBG/CLUSTER.
+> 
 
-... and cpucl0 is? Describe the hardware in the commit msg in the future.
+Explain why this is needed as clk of declare, instead of platform driver.
+
 
 
 Best regards,
