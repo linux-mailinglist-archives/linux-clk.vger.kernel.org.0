@@ -1,198 +1,132 @@
-Return-Path: <linux-clk+bounces-20937-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20939-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5FF9A97E98
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 08:05:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE073A9806D
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 09:20:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 934801B60314
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 06:05:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 387777AE760
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 07:19:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D85D626982A;
-	Wed, 23 Apr 2025 06:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="P625Zp0j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D1E2580D0;
+	Wed, 23 Apr 2025 07:19:19 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C722526981A
-	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 06:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDC118D63A;
+	Wed, 23 Apr 2025 07:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745388202; cv=none; b=EH+UKOReZuhc17MM+I0x3FkiEjeTXqHEiKlNO2s3UYnrp860nDeihAlYAXwYfUid/9NAx2pnegUUxl0JRGJECP/IQBHYW0AkTSJen/biw2fp/yOHc+/U0TYFvRwDSvQzoQs6jYdSh+2nZcdDMfqLpoln04yjMDDqryjc/+y510s=
+	t=1745392759; cv=none; b=KoGHOF5Q/Ma0bCgq/86X8+997u1VXSIrHF4uql1Ci1e0PA+S+xPBL4FROX1YETcgANHG8CbQzaf0+5hjPmo5DU0yPHGVCCYDIUQwUKn4KeR3ikOOhNtEGfCqS6t3nBDuJ2jlrnI3zrti1pI0VYuS3qqid5QpRfPugMZ5+U9M3HQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745388202; c=relaxed/simple;
-	bh=hkq6fHmdJC3Lk8cO5+DRsRwOVcxTWLet80Z76mwc3rg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IXzRaMpcshSM44iEzuY3Z5Wb8ZEqeWvsAGSiQOYFGC8Eo4TDnSRDMixnpSdHoQkwpWImqlx8KLLYlnt8wDEHYhZg018iFOBHBIx0i8/K39aUS1euC7RiwkLVL4SFk+Sed/lxfaDP16f2n2lT8QLWtp/eLwD2HVRa6MEynS7i2MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=P625Zp0j; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac3b12e8518so975805566b.0
-        for <linux-clk@vger.kernel.org>; Tue, 22 Apr 2025 23:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1745388199; x=1745992999; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qlcrl/s66F8iW4Dfes9I7PvLNwTvzV7zn6ge9EdXk3Q=;
-        b=P625Zp0jczns1ZSi5WPIf6dbVXWksPnRToz2OsyR0jp2DCgEjhqmOSh4KAVW73Htnm
-         qfC1rp4xGtRVtQm5unCo8twqHEtuujeTisSLD+wivAzRJz60Nb2HBpvRSd3q8cz0tQgF
-         qGi6NkZ1QmKcLGpt9GHoKane8l/hyKhN1/Lew=
+	s=arc-20240116; t=1745392759; c=relaxed/simple;
+	bh=OelUuagaoJNGvmq4zulFutE63UpEPJUFjETU5gHmmRU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C+hlnMM8UvvShkOs+vC4FSce/y/NI+Mrs3N4THulGviujqWWrGiZTzIAGuuYfwjahEqZMvR8ye2Xpys6Hc3DbyYfd9vuBRTZA1FAlyga/h33mQVDclU9r0nEFbz2HY29l0IibqxkjAVgd/U5HFHk3aKRW1RZDiWk4JOdWq4ENR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5ed43460d6bso9101415a12.0;
+        Wed, 23 Apr 2025 00:19:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745388199; x=1745992999;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1745392754; x=1745997554;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Qlcrl/s66F8iW4Dfes9I7PvLNwTvzV7zn6ge9EdXk3Q=;
-        b=NI2NVRYA598LyvmirW2M+nZJekUYPgc8psvBUtchKn9+M7uLvdJCQ66cIOpnWJlkAk
-         atoO1FBp/vLvwShuMZZY0rGpUWxI2F65MmANr4W/zDFhPYxWv1+uTY5waUIfEKWdnVcG
-         sL96znYahhcG3i2yUkVCDd4FmeFur52l0GXqwNCRnf2jt9kztCZt51SdUt3AMgKLFRSR
-         27Co0qIvVe01ey3IgQAyR0sInBV0Cuzask4tRhnfMbyCtaOlQfSdS3Hwtl3irEx/kM0M
-         zTtIbb0PTCZTM8VCiYFoB4v1fRD+lRjEKkdAq9re1lQbO8uYhcRdw2vEvOnk0KyD9Jsi
-         yP+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVse7Ps7kHJ0/2XA3Tt2dFO/LPn4M6KrN84COCAxqGwGSAJ9Sf0H3ylJyAGaQheAADJKEaU1GPjdXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGPnmxwpgST9JtuYbfe7un/IHHnwASLcgCylKDRIMfZybbZ3d7
-	45ZyXWpW0euOQ+4IXlthZ0Hw3KxwRiQXm8hmIY5/eqpakgdBYQEsu7siPenYfyY=
-X-Gm-Gg: ASbGncsAyzjCZPgMBN9K6bC8cIbcBtBUyPYb1XDH2cHeK2lqyPFZjqa0GQ4CFGkNPKB
-	hnd/3Q9nnJpAmTqvpmU9jHzUBl1D2jYqvYZH3mFSA4D0uVPybe9aBKubC/Uc60Ohl+oRbosxkKg
-	7G3qFaTw3ObbO7DZsqBAJ+ZyQt4UbJWBS69fRzIKmuPyaiEk8Xn369/948rHOaD1wBv4X3SzmrZ
-	C1tNpHynkaPvPCD/vIpsTyXRotKC3QpV62L2fTLaBQA4PBWecCSD2HVjINolYUZVRpxZcheHlH8
-	v3tt+pPBxw7DZGlaXvn5KXbO1NdgMrPNmxpGSwy8nU05HJthScmzVoWhYYCfA3Bodl++crdTdj4
-	zfuMt
-X-Google-Smtp-Source: AGHT+IFXK5t2CjXs/VSaGgLG16geNEJEoOfNTY2wN1N5E9kGgqXmwH2XgsdysdftJFFBu3tzrfnH1g==
-X-Received: by 2002:a17:906:c154:b0:aca:a162:8707 with SMTP id a640c23a62f3a-acb74ad9629mr1643817866b.7.1745388199239;
-        Tue, 22 Apr 2025 23:03:19 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.29])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6ef9e7e6sm745234366b.162.2025.04.22.23.03.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Apr 2025 23:03:18 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-amarula@amarulasolutions.com,
-	Abel Vesa <abelvesa@kernel.org>,
-	Peng Fan <peng.fan@nxp.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org
-Subject: [PATCH v11 15/18] dt-bindings: clock: imx8m-clock: add PLLs
-Date: Wed, 23 Apr 2025 08:02:32 +0200
-Message-ID: <20250423060241.95521-16-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250423060241.95521-1-dario.binacchi@amarulasolutions.com>
-References: <20250423060241.95521-1-dario.binacchi@amarulasolutions.com>
+        bh=NVmtrUo1YbYw/X4g84zkSdEwr7vBSfOVDVsuajCd9Rg=;
+        b=OQmc6vDkip9IEDHkdoeskpcRda8miBdQPmEfl0sLI1AduDtKw47F3SJOT33zdZFSCH
+         6msPkayLOPkoTJ8XlObhdmMVlin4H0LbSF5aZ2ugckQTcaT4tSTvVynzYI82m+40AzcG
+         s1qaIL0rphBspZqIwuS3hjk7QINdu+xMPAlNfImvGYUBHufYF4b7gOfgcb0YBIkfe92e
+         QIU7V4xgXVZfHwZ+99gCWFYT8EI7+8a8HABOhlHwSDR8/jt8KhbObLIspG8Q7R5WqTW6
+         reBG7LljdgGZY+0ienhhScx1QSmYKN32V5Dtre6K92rOJZEk4xRD1NFATFFKxQYNfqK0
+         KIRA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2S0J8NBMhfhwCrNSRpClufxmpQH81kyKAr5d2YKzjqCEJjosbnEqz7V4CsGPzrAoHeKSSfxOlFbs=@vger.kernel.org, AJvYcCV+FiossHQlt/8g2KFEmQge2D7k0IrZ2jwjARcMLwAM0ILBksd0nxwUl1PeCCLU3gwpEdZPK0yVZssnigHgB1MsA9Y=@vger.kernel.org, AJvYcCVw0Vn78FT1kOnvmu6S/foua06NTukEDUhqYBkgDD4wCmyj71d6blJVrwCp74IWCdj3g0by+OUlgC/O9Yl7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3HhmuX0STitvgCsV59B5Uqx1fAl1oX/y5zJOMFIH8SuaH7p/E
+	Ma76WFehYJDrMzs94lZmH50HyioQSf2s96HjL5hT1TdHJLbXRuVAgScpOUepG4o=
+X-Gm-Gg: ASbGncv5ucOuUl5j40cF7P7on0K3xRxXGpsRSnao9kCNiGvDGoLJnXRcNVAihfRnzNk
+	gcYAcgsfMlamD6Zfli6WJvsmm0Z13k5rlk3/lueUIKKFQT0AMV5IsKuZNklYcn/dWqb62xM9Kvb
+	5HNfyuRAG67lrYUDik4PiBJ4XjUa4wlILSSZ5i/i/iR6pN7zR0lq/yr2TBTF4mrvBRLWZAMTYo3
+	HdKC6/4ntdB4485XST4arlR5QTe6+wd+t2PvWzQjlmvQ2h9HHyzCo+w7+D78gcvejaJN2yLs5l2
+	YgVF6a3qd/seg9SodGdC9EOCN8L04Q+Vo6jV0aiEVD3NAaf6t7bMSKZBKPC3vMrLqdQXvJlVwm0
+	KR9o=
+X-Google-Smtp-Source: AGHT+IE/0Y2NIRV8KG4Gr+qUXlRMfGPzfBaObygtzvunOWGq2sXZ22/uADoRMSPJasXsp/i45raY1Q==
+X-Received: by 2002:a17:907:1c90:b0:aca:96a7:d373 with SMTP id a640c23a62f3a-acb74ddd2f4mr1453407066b.57.1745392754178;
+        Wed, 23 Apr 2025 00:19:14 -0700 (PDT)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6eefcf16sm768563066b.105.2025.04.23.00.19.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Apr 2025 00:19:13 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ac25d2b2354so859139866b.1;
+        Wed, 23 Apr 2025 00:19:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWqmcTzGUzBfrClcOx/R9fIHetA6D7LJq0Iata0oUrRqR6Hut5FwFDCDBBTQCLXqwvaMZZ1EZ3cBUdWdZekDFLD7Pc=@vger.kernel.org, AJvYcCXOTvpPZAcTrcJmh9MOzhtFfzkHgQcgXO5OkcSnBwSm8wZt10u/hYxq1y6IDWVkf8CattIJIIO8Tns=@vger.kernel.org, AJvYcCXirlgRPibLsmHWPLGDUI7KeKYYywWPhxWZiIF8WaRrM1RPPAvLJHrxH7CvbFCWV/wXdpIh+pmwTW6AVd0S@vger.kernel.org
+X-Received: by 2002:a17:906:dc93:b0:ac1:ea29:4e63 with SMTP id
+ a640c23a62f3a-acb74b4f63fmr1755632266b.26.1745392753452; Wed, 23 Apr 2025
+ 00:19:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250403212919.1137670-1-thierry.bultel.yh@bp.renesas.com>
+ <20250403212919.1137670-7-thierry.bultel.yh@bp.renesas.com>
+ <CAMuHMdVpiZ+F0TMbLm000M_Scwozj2-SHPrUwTHqFKckVcmufQ@mail.gmail.com> <TYCPR01MB11492BCF416760E978541AFE18ABF2@TYCPR01MB11492.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYCPR01MB11492BCF416760E978541AFE18ABF2@TYCPR01MB11492.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 23 Apr 2025 09:18:59 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVQPbP0Fi5SDN8uOJ23S=_8pqHRVR2QFS8vHNfohzae2g@mail.gmail.com>
+X-Gm-Features: ATxdqUGnPcr5nw2bU8kZXewmcWmaBnKwPIbVqw74OHQUy0h-V5sZQcUv4L5lrRM
+Message-ID: <CAMuHMdVQPbP0Fi5SDN8uOJ23S=_8pqHRVR2QFS8vHNfohzae2g@mail.gmail.com>
+Subject: Re: [PATCH v7 06/13] clk: renesas: Add support for R9A09G077 SoC
+To: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
+Cc: "thierry.bultel@linatsea.fr" <thierry.bultel@linatsea.fr>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	Paul Barker <paul.barker.ct@bp.renesas.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Though adding the PLLs to clocks and clock-names properties will break
-the ABI, it is required to accurately describe the hardware. Indeed,
-the Clock Control Module (CCM) receives clocks from the PLLs and
-oscillators and generates clocks for on-chip peripherals.
+Hi Thierry,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, 18 Apr 2025 at 23:22, Thierry Bultel
+<thierry.bultel.yh@bp.renesas.com> wrote:
+ > +};
+> > > +
+> > > +static const struct mssr_mod_clk r9a09g077_mod_clks[] __initconst =
+=3D {
+> > > +       DEF_MOD("sci0", 108, R9A09G077_PCLKM),
+> >
+> > Shouldn't that be 8 instead of 108?
+> > Using R9A09G077_PCLKM as the parent is a temporary simplification, righ=
+t?
+>
+> I am probably missing something, isn=E2=80=99t PCKML actually the parent =
+clock ?
 
----
+According to Figure 7.1 ("Block diagram of clock generation circuit"),
+it is PCLKSCI0, which can be switched to PCLKM.  I guess that is the
+default, hence my "temporary simplification" question.
 
-Changes in v11:
-- Fix conflict while rebasing on master
+As the actual switching is controlled through the SCI's CCR3 register,
+the SCI block should have two clock inputs in DT (PCLKM and PCLKSCIn),
+and thus the DT bindings should be amended.  See also Figure 33.1
+("SCI block diagram").
 
-Changes in v7:
-- Add 'Reviewed-by' tag of Krzysztof Kozlowski
+Gr{oetje,eeting}s,
 
-Changes in v6:
-- New
+                        Geert
 
- .../bindings/clock/imx8m-clock.yaml           | 27 ++++++++++++++-----
- 1 file changed, 21 insertions(+), 6 deletions(-)
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-diff --git a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-index 4fec55832702..e83f08abd44c 100644
---- a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-@@ -29,12 +29,12 @@ properties:
-     maxItems: 2
- 
-   clocks:
--    minItems: 6
--    maxItems: 7
-+    minItems: 7
-+    maxItems: 10
- 
-   clock-names:
--    minItems: 6
--    maxItems: 7
-+    minItems: 7
-+    maxItems: 10
- 
-   '#clock-cells':
-     const: 1
-@@ -93,6 +93,10 @@ allOf:
-             - description: ext2 clock input
-             - description: ext3 clock input
-             - description: ext4 clock input
-+            - description: audio1 PLL input
-+            - description: audio2 PLL input
-+            - description: dram PLL input
-+            - description: video PLL input
- 
-         clock-names:
-           items:
-@@ -102,20 +106,31 @@ allOf:
-             - const: clk_ext2
-             - const: clk_ext3
-             - const: clk_ext4
-+            - const: audio_pll1
-+            - const: audio_pll2
-+            - const: dram_pll
-+            - const: video_pll
- 
- additionalProperties: false
- 
- examples:
-   # Clock Control Module node:
-   - |
-+    #include <dt-bindings/clock/imx8mm-clock.h>
-+
-     clock-controller@30380000 {
-         compatible = "fsl,imx8mm-ccm";
-         reg = <0x30380000 0x10000>;
-         #clock-cells = <1>;
-         clocks = <&osc_32k>, <&osc_24m>, <&clk_ext1>, <&clk_ext2>,
--                 <&clk_ext3>, <&clk_ext4>;
-+                 <&clk_ext3>, <&clk_ext4>,
-+                 <&anatop IMX8MM_ANATOP_AUDIO_PLL1>,
-+                 <&anatop IMX8MM_ANATOP_AUDIO_PLL2>,
-+                 <&anatop IMX8MM_ANATOP_DRAM_PLL>,
-+                 <&anatop IMX8MM_ANATOP_VIDEO_PLL>;
-         clock-names = "osc_32k", "osc_24m", "clk_ext1", "clk_ext2",
--                      "clk_ext3", "clk_ext4";
-+                      "clk_ext3", "clk_ext4", "audio_pll1", "audio_pll2",
-+                      "dram_pll", "video_pll";
-         fsl,operating-mode = "nominal";
-     };
- 
--- 
-2.43.0
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
