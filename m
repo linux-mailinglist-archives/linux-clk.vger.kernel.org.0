@@ -1,85 +1,97 @@
-Return-Path: <linux-clk+bounces-20923-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20927-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FB33A97DD7
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 06:42:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3C07A97E7A
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 08:03:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CA9116811C
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 04:42:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F2F517E522
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 06:03:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F285C264619;
-	Wed, 23 Apr 2025 04:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16BFB21764B;
+	Wed, 23 Apr 2025 06:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="o5KzQvT2"
+	dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b="Xt3n5tk0"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A2B265633
-	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 04:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21AF1DED56
+	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 06:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745383325; cv=none; b=Dl4qq2BFQNzzzVl49YbilIOFj39fTLetZ9Qmm3YWVF4+6nsCnFcrCAqYfnJAKkx1e+92UIkD6ymUaOdD+vtoZ0eLKHZuoJTCM0wV2OLu87zjhr0+JDuurjFiBtV3GnhQvWmKnf+QbQQF098Dd2wx8xAzCNps30gzyIng5IlAnYQ=
+	t=1745388180; cv=none; b=df1tW0GFRN6i+5F4FWvyfXRH5G1K9FCsl85Rn3k5KE/zQG+bsnbzoO2yHEWLNVB01kVAtmOa2nq4+8WxXCsYYMPmPxLySEChVOJmeArwKqQqkdNz9bDXN5PwwuZOlioVh5CxFU4LB0jwTpt0WlJPEm8nCU9OGB3jRcLVdpJdnKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745383325; c=relaxed/simple;
-	bh=t5DaisifXwKPNwY2T4idWwVxiiAmoaKVOit+9LQTnBQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=L2ye8kxgkmZ+kJFUiaJbYwkPk6c6CdSMT3wI/7uz55y8cgJtdBJGfCUZtt4Q7myntx7B1US4ZaunvYs77k3R8gAQJRgzdyN8QJlexNTSIW2g2gpSwh39Sp4a1BD+NGERG0YMCsUefCSrWtuZGrHDinh3qRvkQK1OaHXBH9FuEms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=o5KzQvT2; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250423044201epoutp02b009942ef0896e1311ce2876cb0c39c8~42OIfmK3z0604806048epoutp02H
-	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 04:42:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250423044201epoutp02b009942ef0896e1311ce2876cb0c39c8~42OIfmK3z0604806048epoutp02H
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1745383321;
-	bh=GU+48ZGdizWwg6Vf3muLEZWn/Xw0qRfPL7KyFAHNY70=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=o5KzQvT20V75nF++sqrZJJ4gIpn+DN8lcpRhmFfTeKGmQzqShEY+7G/vmtLYzHrTQ
-	 S4WlABprJT26WOhiErZjN5diFaDLCb0og1VLLNJwoD2pkjYoz1KdPbd46m6IAt/YL0
-	 grBcqooXa/xZUxS0K3/SP2GDGFNwCONQYNt5RSgU=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250423044200epcas2p484f196d630ab8125d4e7e49a93876bae~42OICNB2g0898908989epcas2p44;
-	Wed, 23 Apr 2025 04:42:00 +0000 (GMT)
-Received: from epcas2p2.samsung.com (unknown [182.195.36.91]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4Zj5zr3BwSz6B9mH; Wed, 23 Apr
-	2025 04:42:00 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250423044159epcas2p4a2e844c6ab502d7d5e6e6c18ecc7ee97~42OHAuRGS0820008200epcas2p4y;
-	Wed, 23 Apr 2025 04:41:59 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250423044159epsmtrp1099ef836f0bd87678ba05c666c222b79~42OG-2F1u2437724377epsmtrp1V;
-	Wed, 23 Apr 2025 04:41:59 +0000 (GMT)
-X-AuditID: b6c32a2a-d63ff70000002265-42-68086f97e343
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	FC.04.08805.79F68086; Wed, 23 Apr 2025 13:41:59 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.60]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250423044159epsmtip1ded9e7298e017afab48bec3f749c3067~42OGxJC5D1228512285epsmtip1d;
-	Wed, 23 Apr 2025 04:41:59 +0000 (GMT)
-From: Shin Son <shin.son@samsung.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Sylwester Nawrocki
-	<s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Sunyeal Hong <sunyeal.hong@samsung.com>
-Cc: Shin Son <shin.son@samsung.com>, linux-samsung-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: exynosautov920: add cpucl0 clock DT
- nodes
-Date: Wed, 23 Apr 2025 13:41:53 +0900
-Message-ID: <20250423044153.1288077-4-shin.son@samsung.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250423044153.1288077-1-shin.son@samsung.com>
+	s=arc-20240116; t=1745388180; c=relaxed/simple;
+	bh=V56AnhCq51AC6cpw1cn//jl7eE+ZC1HK9+zLgbL1RYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0b4P0unHuaRrEKbEXYB7t80EQOtiE0sfzQCpimm09WuMFn2NvwOQX21vulH90MLaEcSxQW4N8zb329+Nfpkm7pzvkgJq3iUeSmPPThfNW4x7l23gwHvGc5xPwNRUctOc722Hov523B1ifR4MkQUihIO3kZyX6QUhUYVcuudnlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com; spf=pass smtp.mailfrom=amarulasolutions.com; dkim=pass (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.b=Xt3n5tk0; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amarulasolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amarulasolutions.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acae7e7587dso797401366b.2
+        for <linux-clk@vger.kernel.org>; Tue, 22 Apr 2025 23:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1745388176; x=1745992976; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UegMke0ZPpKqBiMJ5YRl1JaxGTUTvUTdULo7VXOczdM=;
+        b=Xt3n5tk0GQAqn4ShodAwn5inigKgv7jy+uRtLIG5HhznmPIEM0+AueekgFMvsjylvj
+         5khlCjsZY0eKoenJyLUiFzaQl8QLzvwLyegnKrKwd6TUYCuOzp2PZmgPkBYZLrhggfX2
+         qAvwp9QewO/anv/fGz02KugTdYm4wqquJIqr8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745388176; x=1745992976;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UegMke0ZPpKqBiMJ5YRl1JaxGTUTvUTdULo7VXOczdM=;
+        b=Mt7Xnw/E1VNp+a45GlGAwEgpKZhKcPDkTXl+zlkyV+72l9sDSJjOO1DAg42Fu/XkEi
+         1leD4Q+uVFE9uK2QpNT6vougI1SyGpvsBUc2xuqe43T8Hb+oiZ9AFO1K/EjApBVPGhX6
+         8XPIstOakVyipgbZrntmOnpSSLhrD/trITaVAX2dV0IFNA224J1D4V/DlpJYIKOB67kp
+         cswV8Aa+31/ZXMV6q/78XiEFFl4bjEW2jHX7C5xUNKSEA0RZdr+U0cUEE6mf+sowTaZg
+         d2OlT7Vg0uXKQAgIgJHQkg9SfkuL0ZUoqugdqqanOqAt6tK7YqoSOiD5gsXABBMhIqqo
+         yoQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQlSzGaQnsNJsRgD2EFI2c2jztRDj+3UtC3F8l4fEV+pJT9eiiqHgJHnrqYweDC20OW5zqT1MsRPE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjcyWit1H9QKfzH+1apulDhuOXLfpkoNlu8L1V7TGr9EBVKL4k
+	U6gNvKfWrFPt4llG/oz0hKJA7gSjl+6bGd2rDtbIPMF+SyuCTGoZ+5rcvxK06Uc=
+X-Gm-Gg: ASbGnctfGF8T4Eyf5ceXL51/lkvx+s05E5ax2Tn8OF8xnLbc2TusXBkD5ycIO+vqrzw
+	BuB1Qj/iRy7Pg190gyeJRXQudZkyStBf2tNLRRK209ItnjJcNubZ+TAivY3emKLCKNsx7N4iUle
+	7NSBLBB7L6jadky4RriU46l7eWEFxPoZOYHMsaeqxS32yURood8kH/bsRQn+jI8X7JPtzeCA0tx
+	6N2XYs+Wqk2SDFdNRTEjAg73+0MAqz+5sMgGgFM7QXw/32dB73MkTjwA3AteHDc9CT5lIw2QZLG
+	iLmkhjPf5OCBlcxnqEZHHomK+qpeMlDdn3ODBZzsi8sv9COFgvnUCY3Pm2DkryTMmxlTPNsuIah
+	h3k0W
+X-Google-Smtp-Source: AGHT+IETACthyZR6mpNT7AW6KK9CgI5hk9JQDDmeQABy70P9N8crtchpQ3fvS0eJyTCxvqLgWSIaAA==
+X-Received: by 2002:a17:907:1b2a:b0:aca:cb18:9ad0 with SMTP id a640c23a62f3a-acb74d83229mr1642757466b.45.1745388175781;
+        Tue, 22 Apr 2025 23:02:55 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.29])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6ef9e7e6sm745234366b.162.2025.04.22.23.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Apr 2025 23:02:55 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: linux-kernel@vger.kernel.org
+Cc: linux-amarula@amarulasolutions.com,
+	Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: [PATCH v11 00/18] Support spread spectrum clocking for i.MX8M PLLs
+Date: Wed, 23 Apr 2025 08:02:17 +0200
+Message-ID: <20250423060241.95521-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -87,65 +99,175 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsWy7bCSnO70fI4Mg55bahYP5m1js1iz9xyT
-	xfUvz1kt5h85x2px/vwGdotNj6+xWnzsucdqcXnXHDaLGef3MVlcPOVq8X/PDnaLw2/aWS3+
-	XdvIYjH5+FpWi6Zl65kc+D3e32hl99i0qpPNY/OSeo++LasYPT5vkgtgjeKySUnNySxLLdK3
-	S+DKaFsoU3Cco2LLtBWsDYzf2LoYOTkkBEwkpk6Ywd7FyMUhJLCbUeLo+0lQCQmJwzMmMELY
-	whL3W46wQhS9Z5TYdfMPSxcjBwebgKrEpt/yIHERgbdMEsv/H2ACaWAWOM0osfOMDIgtLOAr
-	cXDFbVYQmwWo/vvE62ALeAWsJeavfs4OMkdCQF6iv0MCJMwpYCMxs2EX2F4hoJLJS75AlQtK
-	nJz5hAVivLxE89bZzBMYBWYhSc1CklrAyLSKUTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93
-	EyM4PrS0djDuWfVB7xAjEwfjIUYJDmYlEd5fbuwZQrwpiZVVqUX58UWlOanFhxilOViUxHm/
-	ve5NERJITyxJzU5NLUgtgskycXBKNTDpCrXat04+u+CowoY3CxbLrdN2mnd3+mz3Sc9t+c2V
-	22Vry761t/aXH9wt/G1z3fY3Vf/zWAT8rp6+xhXjszJze4zYcym2X6yWu0Q4JodG3VesPut6
-	rTf6TW1YzY0L/JtlD57qunZf3vKKvLukg/JPteAvL19FL74d+aLdYoa1kBpv46+vk1kVk7oE
-	85IyD/7Qf7jm08/6E/UHXW5e+/aC40f6WSfva42tqrzPWdffqJsaFH1KM3zlynVNl1YVnA9J
-	fqTgeLo1V9emjWvr5neRfo7iN/6Hbt+lfizTSPXAp46vEiUHewNjltflTcsu/s++2nGOpGrj
-	9wzuucZsIv4eEdKd9iLza56/OdXE+1OJpTgj0VCLuag4EQADtUwW/gIAAA==
-X-CMS-MailID: 20250423044159epcas2p4a2e844c6ab502d7d5e6e6c18ecc7ee97
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250423044159epcas2p4a2e844c6ab502d7d5e6e6c18ecc7ee97
-References: <20250423044153.1288077-1-shin.son@samsung.com>
-	<CGME20250423044159epcas2p4a2e844c6ab502d7d5e6e6c18ecc7ee97@epcas2p4.samsung.com>
 
-Add cmu_cpucl0 clocks for switch, cluster, and dbg domains respectively.
+This version keeps the version v9 patches that can be merged and
+removes the patches that will need to be modified in case Peng's
+PR https://github.com/devicetree-org/dt-schema/pull/154 is accepted.
+The idea is to speed up the merging of the patches in the series
+that have already been reviewed and are not dependent on the
+introduction of the assigned-clocks-sscs property, and postpone
+the patches for spread spectrum to a future series once it becomes
+clear what needs to be done.
 
-Signed-off-by: Shin Son <shin.son@samsung.com>
----
- arch/arm64/boot/dts/exynos/exynosautov920.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Specifically, the patches:
 
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-index fc6ac531d597..23f077806db4 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-@@ -582,6 +582,21 @@ pinctrl_aud: pinctrl@1a460000 {
- 			compatible = "samsung,exynosautov920-pinctrl";
- 			reg = <0x1a460000 0x10000>;
- 		};
-+
-+		cmu_cpucl0: clock-controller@1ec00000 {
-+			compatible = "samsung,exynosautov920-cmu-cpucl0";
-+			reg = <0x1ec00000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&xtcxo>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL0_SWITCH>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL0_CLUSTER>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL0_DBG>;
-+			clock-names = "oscclk",
-+				      "switch",
-+				      "cluster",
-+				      "dbg";
-+		};
- 	};
- 
- 	timer {
+01/18 dt-bindings: clock: imx8mm: add VIDEO_PLL clocks
+02/18 clk: imx8mm: rename video_pll1 to video_pll
+03/18 dt-bindings: clock: imx8mp: add VIDEO_PLL clocks
+04/18 clk: imx8mp: rename video_pll1 to video_pll
+
+are a replica for i.MX8MM and i.MX8MP of the patch for i.MX8MM
+bedcf9d1dcf88 ("clk: imx: rename video_pll1 to video_pll"), which was
+merged some time ago. The patches are split into four because, during
+the review, Krzysztof asked me to separate the driver modifications
+from the dt-bindings changes.
+
+All the other patches in the series, from 5 to 18, are necessary for
+the implementation of the anatop driver for i.MX8M{M,N,P}. The review of
+this series has taken a long time, partly due to misunderstandings
+arising from incorrect design choices.
+
+As Peng stated in [1]:
+"In current design, CCM is taken as producer of CLK_IMX8M_VIDEO_PLL, not consumer."
+
+These patches fix this issue by ensuring that the PLLs are now produced by
+Anatop and consumed by CCM, aligning with the hardware logic.
+
+Finally, a clarification: I decided to keep the same title for the series
+despite having removed all the patches for spread spectrum support in order
+to maintain a clear connection with the previous versions.
+
+[1] https://patchwork.kernel.org/project/linux-clk/patch/20241106090549.3684963-2-dario.binacchi@amarulasolutions.com/
+
+Changes in v11:
+- Fix conflict while rebasing on master for patches:
+  13/18 clk: imx: add support for i.MX8MP anatop clock driver
+  14/18 clk: imx8mp: rename ccm_base to base
+  15/18 dt-bindings: clock: imx8m-clock: add PLLs
+- Add 'Reviewed-by' tag of Peng Fan for patches:
+  11/18 clk: imx: add support for i.MX8MM anatop clock driver
+  13/18 clk: imx: add support for i.MX8MP anatop clock driver
+  14/18 clk: imx8mp: rename ccm_base to base
+
+Changes in v10:
+- Drop the v9 patches:
+  16/23 dt-bindings: clock: imx8m-clock: support spread spectrum clocking
+  17/23 clk: imx: pll14xx: support spread spectrum clock generation
+  17/23 clk: imx8mn: support spread spectrum clock generation
+  21/23 clk: imx8mp: support spread spectrum clock generation
+  23/23 clk: imx8mm: support spread spectrum clock generation
+
+Changes in v9:
+- Add 'Reviewed-by' tag of Peng Fan for imx8mn platform patches
+- Fix building warning raised by the kernel test robot for patch
+  v8, 11/18 clk: imx: add support for i.MX8MN anatop clock driver
+- Add patches for imx8m{m,p} platforms:
+  - 23/23 clk: imx8mm: support spread spectrum clock generation
+  - 22/23 clk: imx: add support for i.MX8MM anatop clock driver
+  - 21/23 clk: imx8mp: support spread spectrum clock generation
+  - 20/23 clk: imx8mp: rename ccm_base to base
+  - 19/23 clk: imx: add support for i.MX8MP anatop clock driver
+
+Changes in v8:
+- Drop the patches added in version 7:
+  - 10/23 dt-bindings: clock: imx8m-clock: add phandle to the anatop
+  - 11/23 arm64: dts: imx8mm: add phandle to anatop within CCM
+  - 12/23 arm64: dts: imx8mn: add phandle to anatop within CCM
+  - 13/23 arm64: dts: imx8mp: add phandle to anatop within CCM
+  - 14/23 arm64: dts: imx8mq: add phandle to anatop within CCM
+
+Changes in v7:
+- Add and manage fsl,anatop property as phandle to the anatop node with
+  the new patches:
+  - 10/23 dt-bindings: clock: imx8m-clock: add phandle to the anatop
+  - 11/23 arm64: dts: imx8mm: add phandle to anatop within CCM
+  - 12/23 arm64: dts: imx8mn: add phandle to anatop within CCM
+  - 13/23 arm64: dts: imx8mp: add phandle to anatop within CCM
+  - 14/23 arm64: dts: imx8mq: add phandle to anatop within CCM
+
+Changes in v6:
+- Merge patches:
+  10/20 dt-bindings: clock: imx8mm: add binding definitions for anatop
+  11/20 dt-bindings: clock: imx8mn: add binding definitions for anatop
+  12/20 dt-bindings: clock: imx8mp: add binding definitions for anatop
+  to
+  05/20 dt-bindings: clock: imx8m-anatop: define clocks/clock-names
+  now renamed
+  05/18 dt-bindings: clock: imx8m-anatop: add oscillators and PLLs
+- Split the patch
+  15/20 dt-bindings-clock-imx8m-clock-support-spread-spectru.patch
+  into
+  12/18 dt-bindings: clock: imx8m-clock: add PLLs
+  16/18 dt-bindings: clock: imx8m-clock: support spread spectrum clocking
+
+Changes in v5:
+- Fix compilation errors.
+- Separate driver code from dt-bindings
+
+Changes in v4:
+- Add dt-bindings for anatop
+- Add anatop driver
+- Drop fsl,ssc-clocks from spread spectrum dt-bindings
+
+Changes in v3:
+- Patches 1/8 has been added in version 3. The dt-bindings have
+  been moved from fsl,imx8m-anatop.yaml to imx8m-clock.yaml. The
+  anatop device (fsl,imx8m-anatop.yaml) is indeed more or less a
+  syscon, so it represents a memory area accessible by ccm
+  (imx8m-clock.yaml) to setup the PLLs.
+- Patches {3,5}/8 have been added in version 3.
+- Patches {4,6,8}/8 use ccm device node instead of the anatop one.
+
+Changes in v2:
+- Add "allOf:" and place it after "required:" block, like in the
+  example schema.
+- Move the properties definition to the top-level.
+- Drop unit types as requested by the "make dt_binding_check" command.
+
+Dario Binacchi (18):
+  dt-bindings: clock: imx8mm: add VIDEO_PLL clocks
+  clk: imx8mm: rename video_pll1 to video_pll
+  dt-bindings: clock: imx8mp: add VIDEO_PLL clocks
+  clk: imx8mp: rename video_pll1 to video_pll
+  dt-bindings: clock: imx8m-anatop: add oscillators and PLLs
+  arm64: dts: imx8mm: add anatop clocks
+  arm64: dts: imx8mn: add anatop clocks
+  arm64: dts: imx8mp: add anatop clocks
+  arm64: dts: imx8mq: add anatop clocks
+  clk: imx: add hw API imx_anatop_get_clk_hw
+  clk: imx: add support for i.MX8MM anatop clock driver
+  clk: imx: add support for i.MX8MN anatop clock driver
+  clk: imx: add support for i.MX8MP anatop clock driver
+  clk: imx8mp: rename ccm_base to base
+  dt-bindings: clock: imx8m-clock: add PLLs
+  arm64: dts: imx8mm: add PLLs to clock controller module (CCM)
+  arm64: dts: imx8mn: add PLLs to clock controller module (CCM)
+  arm64: dts: imx8mp: add PLLs to clock controller module (CCM)
+
+ .../bindings/clock/fsl,imx8m-anatop.yaml      |  53 +-
+ .../bindings/clock/imx8m-clock.yaml           |  27 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  11 +-
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  11 +-
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  11 +-
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi     |   2 +
+ drivers/clk/imx/Makefile                      |   6 +-
+ drivers/clk/imx/clk-imx8mm-anatop.c           | 287 ++++++++
+ drivers/clk/imx/clk-imx8mm.c                  | 262 ++++---
+ drivers/clk/imx/clk-imx8mn-anatop.c           | 283 ++++++++
+ drivers/clk/imx/clk-imx8mn.c                  | 183 +++--
+ drivers/clk/imx/clk-imx8mp-anatop.c           | 306 ++++++++
+ drivers/clk/imx/clk-imx8mp.c                  | 672 +++++++++---------
+ drivers/clk/imx/clk.c                         |  15 +
+ drivers/clk/imx/clk.h                         |   2 +
+ include/dt-bindings/clock/imx8mm-clock.h      |  76 +-
+ include/dt-bindings/clock/imx8mn-clock.h      |  64 ++
+ include/dt-bindings/clock/imx8mp-clock.h      |  80 ++-
+ 18 files changed, 1740 insertions(+), 611 deletions(-)
+ create mode 100644 drivers/clk/imx/clk-imx8mm-anatop.c
+ create mode 100644 drivers/clk/imx/clk-imx8mn-anatop.c
+ create mode 100644 drivers/clk/imx/clk-imx8mp-anatop.c
+
 -- 
-2.49.0
+2.43.0
 
 
