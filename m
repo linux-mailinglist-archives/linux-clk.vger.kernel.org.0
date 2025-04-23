@@ -1,143 +1,299 @@
-Return-Path: <linux-clk+bounces-20951-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-20953-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A168A98B31
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 15:33:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A86F8A98B65
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 15:38:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A67816A1EF
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 13:33:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90C75189E85D
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Apr 2025 13:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB141624D2;
-	Wed, 23 Apr 2025 13:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0C1B1A315D;
+	Wed, 23 Apr 2025 13:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Sn3gscLE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kazjBkX5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042DC339A8
-	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 13:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE9E1A3029;
+	Wed, 23 Apr 2025 13:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745415179; cv=none; b=BFR2XO8TnLpjQcSAFfOnaxJCz4IA5wp4EkjXievF7+JBFHXEhFSoo/hFLLPUxLUUGXpK2ldjDmtmwbvVyLzw9oKnfufz1FUYZDdebtKHF6fFtnuryEvSJm3akQH/1+tcvpuh9pHSvZOmYzNzJa/CxVZiv319dJcWbw7RVhJDaYs=
+	t=1745415462; cv=none; b=CgVcgQiP//+ASIYMQTLGLsnWN9rPLmqTMZrNA406+kmuQ2vpr+GBtrcP5mGdZV4/YTfPWUocxUPoWtNc9g1F4TjNBSn82VtXaQRQt4NhMH+C7DaLItQ5HuAxBy2I87z/bgJxWJi3A7Ouh0ZDpVyn47H4nW8KIrt/1+D1h8oBltM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745415179; c=relaxed/simple;
-	bh=f0LlhMP1zTgqOM4s2hdfTmDlKmxklAfVmO36hNkZkBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=swdd695yuL5f3hS/0NkdwBBM1TMaa4ujtXgM0vEF1e5rEDZ1Udli5HX4gAxSRZv5CjHGUy4Ivm5vXjHUKCCcNKNI8FAKx2KWqlW099yYPXPaUphQakgZV9u5OMSITfng+OchCTE7E0DEMWV6v7GcL6PYJ9uMB5XeFY8VOaAoFcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Sn3gscLE; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53NAIRCr016863
-	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 13:32:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	CzVvCAFn7NPfsPWqPTLJfwY8YHOBJ7V8/Y9zpb3WIbg=; b=Sn3gscLE2KDwm+rH
-	HGKMLOTiQHbz2mYKaLRRtu90C45DK5FAu3roDrgmgc0PGrusB1rO2pU+GAw2OOiY
-	NQiuEx3H1ZzaGAnUcZtyXcRVfy5BKLinFWvdFG9EeXetbRjrs5yYK8qQiXn4Ckh1
-	/1qFh53fhhcF8l2L2PciBFccacHcZsz0Ca8jJ7NtQmQkoAQks5G4qNMNdjgdBzCk
-	GFUCr3kf8JtsYD/ftffjkMoGwsfcVeJkKjrAv+uXPdcfzInbxW5vLcEdEeW1fCTN
-	nDnGGvJFyeo1lCCdiU5R16d60Rili8GTympINz+PulI0Nj/OdpR52FQral8kYWFy
-	lx74KQ==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh028w8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 13:32:57 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c547ab8273so62134885a.3
-        for <linux-clk@vger.kernel.org>; Wed, 23 Apr 2025 06:32:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745415176; x=1746019976;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CzVvCAFn7NPfsPWqPTLJfwY8YHOBJ7V8/Y9zpb3WIbg=;
-        b=O8b5GQjRlcwtic9RTYqiPaUr1RWtcALlFzb1GkD0fjGjbxRmFCPDKbgNiTY/K7GgoP
-         mbm14OMgyoUf31/7t+aS0koDb0AnnPOlSAq9b6pR3uWOI6fcKTahJepo8iLIkhWLZ5QS
-         VgY0G5G1BMzIS+VE0K/GqQpWc37SsV4tmRQ7pvU9cVadpGtSs0zRYRx9YBdh2y62gsBJ
-         A7qvcX0cvysaeFuRUnoqrVq8XXgDZ47MJBjnqQO9FEps507LrfTafpJN/8i0mBF+1KPH
-         mYzSVFoRZ6KwoWNMVMa8tbHkXOnbdX/RduJKP9GTQKHyiKGnpClxBxc8XqjCX7ZdMt6I
-         jv5A==
-X-Forwarded-Encrypted: i=1; AJvYcCX+OOZTfNA1022Wk837RDTikSKoUbLGW319B8hmHen5XFFxV/xRZNhPk4a49LKf+i8fUHbZVoX7XXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX7pI0GOk8PyYQGyeani6kk15JntfL2drEPMn5XD5SSolbi0kj
-	QFG5hNE+uAogQ+I44+9tYZbA4aorKZ4PochKro5yy5/8AbMiaSIBdEqczB8YgkdKm3Cq5hRCfcO
-	GblvBepZ06FYYV91jF0EWx2pI8bdJ1EKBEqshShjCTItg85NjVyqTlvDn3uE=
-X-Gm-Gg: ASbGncvcKUa/0syVsw7ysbX3gRYMo2/3HprztzMMG3LL16AnXYhvGOuO84h5NyEmk0s
-	RwgQl43Vp7b72iVeOkZF6y8XquJv+3yqI+U2+Scw81a4VWu1oUIulfsiZjljEoxqinSH0Epsae4
-	S7O88flo1vpZdFtdH2G7kyAVJ4ojavj6k6UQ00H+QeVzGgT/ttCFLCys5IqyqGDjUO/Y+fNHcGv
-	cdiwRU2tUBJmqv5hyILRiRHBIJYaPnqp2aTrYfwOXvEGYnIlYPjnh1Wl44ow4VUd49byqD/H+iJ
-	lgLeiV73rSoSnzkBNoC+Zb329mzLG5ks900oPmifs6TWUmOSbDu1xGhjAUbHvp8u3lk=
-X-Received: by 2002:a05:620a:2550:b0:7c5:6fee:1634 with SMTP id af79cd13be357-7c94d242721mr177991185a.3.1745415176318;
-        Wed, 23 Apr 2025 06:32:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGSsZ93i//Sk78zRZIql3z4o3BYAs8oVlEvuFZbuWq+7X6SIajLVb3vJpkuS6Qujy/FvIh6EQ==
-X-Received: by 2002:a05:620a:2550:b0:7c5:6fee:1634 with SMTP id af79cd13be357-7c94d242721mr177988785a.3.1745415175951;
-        Wed, 23 Apr 2025 06:32:55 -0700 (PDT)
-Received: from [192.168.65.183] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f6258340b8sm7466337a12.56.2025.04.23.06.32.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Apr 2025 06:32:54 -0700 (PDT)
-Message-ID: <563f1e36-c6af-4bb5-a5cb-91324e0e60b9@oss.qualcomm.com>
-Date: Wed, 23 Apr 2025 15:32:52 +0200
+	s=arc-20240116; t=1745415462; c=relaxed/simple;
+	bh=eywy900SjYxtAyo4CfVaSLEC3OTfBf1b1QhPnJKjZ1o=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=SEf/dxyJU3IUyjg4RroqF5oYWyGKFRmFfWOSeivpT0k2Qh0Q+Mmc8ZKch9E2OJkCP536JGZ0xMr94+Vz8sQywZ0QZKjqCOrKbt6AgAvJbV7/oooP1t9qaWC9SzwwS9UeC55VpgdPTgZIYSzv5pUye0Zqh1jLCYeY3cwLdn3LLcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kazjBkX5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C09C4CEED;
+	Wed, 23 Apr 2025 13:37:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745415462;
+	bh=eywy900SjYxtAyo4CfVaSLEC3OTfBf1b1QhPnJKjZ1o=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=kazjBkX5KBgtLtmEUmbE7O7EHp1X297RTN17di/ekpdAykhJwaTz1UOOnYJbsFNRg
+	 hhp3gkOaRrpDXcKLm+ssabVvI4Yv/AJgfuDF5F+ChBJNE3u/mHXHETaJ+zTCihPsRm
+	 kwVadg7W/hURrq2qs2kpxYj+Drm7qjnKo33ibuWk3bWoPRmhxMihGMFn6X110RLjlE
+	 STlAHD0aY87O8mFi0+PN8qjHh4C+OUIuCUg2uUyDb4iL5qu4NiTVOuLM2aPa2X11+i
+	 LMvPG/r8uyyKv2I6AWSo+/eQl4mnLAX6E2xNwD4NetncjvtU37u2RtpEQ3Wixgmv/J
+	 4QFhqkhkKtgiQ==
+Date: Wed, 23 Apr 2025 08:37:40 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: Add camera clock controller for
- sc8180x
-To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20250422-sc8180x-camcc-support-v1-0-691614d13f06@quicinc.com>
- <20250422-sc8180x-camcc-support-v1-3-691614d13f06@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250422-sc8180x-camcc-support-v1-3-691614d13f06@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDIzMDA5NSBTYWx0ZWRfX+k9ZhrMGgDVG KCNU/BBHSNag7Yjw24gez2DE9BPQIzgMi4H2U+z4LAF0wqyPHbCnkNONBhyBO2LJJoe21djkrTt pesymKagZujunWAdvX3xgKz9ID80G6OdIKH/rf2xPx59SxU7Gg5V+gBZn5rcvUUbrW0lx+sTgKx
- 2MmI4oTNwEvcQJCi+mcY+LHHn25VY1oglj528MEh6Nu7XDlkZaU/Pej7c4nHDZvadb3G2DNSSV7 2CQeWpce2qIHeraM4c3n96FAtUqXQszjoiUZHV9FBla0Sj48RPhvLypTaYO9ZWP6QZSoZr3EtpR JkxkO28LjixFEsHvHaz1Ri7QQCTInSBtd0UCey6jk11Abtv4xAH1pXkvRN4yhNJUvXceMA4NW4B
- EdoE3GQj9FDpY4O3COttmpIJEGPSUZ16l4BEAx8OsqCgngsrVK8Vmd582sMObx9Eewp2tJMn
-X-Proofpoint-GUID: NalFJ5G2WabnkJUq1hxIYcDh4gHLiqHy
-X-Authority-Analysis: v=2.4 cv=ZuTtK87G c=1 sm=1 tr=0 ts=6808ec09 cx=c_pps a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=TyFXSi68Uxypal7PjtQA:9 a=QEXdDO2ut3YA:10
- a=pgX1na8PQfsA:10 a=IoWCM6iH3mJn3m4BftBB:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: NalFJ5G2WabnkJUq1hxIYcDh4gHLiqHy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.680,FMLib:17.12.80.40
- definitions=2025-04-23_08,2025-04-22_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- impostorscore=0 bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- mlxlogscore=776 priorityscore=1501 malwarescore=0 suspectscore=0
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504230095
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Sascha Hauer <s.hauer@pengutronix.de>, devicetree@vger.kernel.org, 
+ Shawn Guo <shawnguo@kernel.org>, imx@lists.linux.dev, 
+ Peng Fan <peng.fan@nxp.com>, linux-amarula@amarulasolutions.com, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, Abel Vesa <abelvesa@kernel.org>, 
+ Fabio Estevam <festevam@gmail.com>, Stephen Boyd <sboyd@kernel.org>, 
+ linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20250423060241.95521-1-dario.binacchi@amarulasolutions.com>
+References: <20250423060241.95521-1-dario.binacchi@amarulasolutions.com>
+Message-Id: <174541475668.315199.12653523227980789003.robh@kernel.org>
+Subject: Re: [PATCH v11 00/18] Support spread spectrum clocking for i.MX8M
+ PLLs
 
-On 4/22/25 7:42 AM, Satya Priya Kakitapalli wrote:
-> Add device node for camera clock controller on Qualcomm
-> SC8180X platform.
+
+On Wed, 23 Apr 2025 08:02:17 +0200, Dario Binacchi wrote:
+> This version keeps the version v9 patches that can be merged and
+> removes the patches that will need to be modified in case Peng's
+> PR https://github.com/devicetree-org/dt-schema/pull/154 is accepted.
+> The idea is to speed up the merging of the patches in the series
+> that have already been reviewed and are not dependent on the
+> introduction of the assigned-clocks-sscs property, and postpone
+> the patches for spread spectrum to a future series once it becomes
+> clear what needs to be done.
 > 
-> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-> ---
+> Specifically, the patches:
+> 
+> 01/18 dt-bindings: clock: imx8mm: add VIDEO_PLL clocks
+> 02/18 clk: imx8mm: rename video_pll1 to video_pll
+> 03/18 dt-bindings: clock: imx8mp: add VIDEO_PLL clocks
+> 04/18 clk: imx8mp: rename video_pll1 to video_pll
+> 
+> are a replica for i.MX8MM and i.MX8MP of the patch for i.MX8MM
+> bedcf9d1dcf88 ("clk: imx: rename video_pll1 to video_pll"), which was
+> merged some time ago. The patches are split into four because, during
+> the review, Krzysztof asked me to separate the driver modifications
+> from the dt-bindings changes.
+> 
+> All the other patches in the series, from 5 to 18, are necessary for
+> the implementation of the anatop driver for i.MX8M{M,N,P}. The review of
+> this series has taken a long time, partly due to misunderstandings
+> arising from incorrect design choices.
+> 
+> As Peng stated in [1]:
+> "In current design, CCM is taken as producer of CLK_IMX8M_VIDEO_PLL, not consumer."
+> 
+> These patches fix this issue by ensuring that the PLLs are now produced by
+> Anatop and consumed by CCM, aligning with the hardware logic.
+> 
+> Finally, a clarification: I decided to keep the same title for the series
+> despite having removed all the patches for spread spectrum support in order
+> to maintain a clear connection with the previous versions.
+> 
+> [1] https://patchwork.kernel.org/project/linux-clk/patch/20241106090549.3684963-2-dario.binacchi@amarulasolutions.com/
+> 
+> Changes in v11:
+> - Fix conflict while rebasing on master for patches:
+>   13/18 clk: imx: add support for i.MX8MP anatop clock driver
+>   14/18 clk: imx8mp: rename ccm_base to base
+>   15/18 dt-bindings: clock: imx8m-clock: add PLLs
+> - Add 'Reviewed-by' tag of Peng Fan for patches:
+>   11/18 clk: imx: add support for i.MX8MM anatop clock driver
+>   13/18 clk: imx: add support for i.MX8MP anatop clock driver
+>   14/18 clk: imx8mp: rename ccm_base to base
+> 
+> Changes in v10:
+> - Drop the v9 patches:
+>   16/23 dt-bindings: clock: imx8m-clock: support spread spectrum clocking
+>   17/23 clk: imx: pll14xx: support spread spectrum clock generation
+>   17/23 clk: imx8mn: support spread spectrum clock generation
+>   21/23 clk: imx8mp: support spread spectrum clock generation
+>   23/23 clk: imx8mm: support spread spectrum clock generation
+> 
+> Changes in v9:
+> - Add 'Reviewed-by' tag of Peng Fan for imx8mn platform patches
+> - Fix building warning raised by the kernel test robot for patch
+>   v8, 11/18 clk: imx: add support for i.MX8MN anatop clock driver
+> - Add patches for imx8m{m,p} platforms:
+>   - 23/23 clk: imx8mm: support spread spectrum clock generation
+>   - 22/23 clk: imx: add support for i.MX8MM anatop clock driver
+>   - 21/23 clk: imx8mp: support spread spectrum clock generation
+>   - 20/23 clk: imx8mp: rename ccm_base to base
+>   - 19/23 clk: imx: add support for i.MX8MP anatop clock driver
+> 
+> Changes in v8:
+> - Drop the patches added in version 7:
+>   - 10/23 dt-bindings: clock: imx8m-clock: add phandle to the anatop
+>   - 11/23 arm64: dts: imx8mm: add phandle to anatop within CCM
+>   - 12/23 arm64: dts: imx8mn: add phandle to anatop within CCM
+>   - 13/23 arm64: dts: imx8mp: add phandle to anatop within CCM
+>   - 14/23 arm64: dts: imx8mq: add phandle to anatop within CCM
+> 
+> Changes in v7:
+> - Add and manage fsl,anatop property as phandle to the anatop node with
+>   the new patches:
+>   - 10/23 dt-bindings: clock: imx8m-clock: add phandle to the anatop
+>   - 11/23 arm64: dts: imx8mm: add phandle to anatop within CCM
+>   - 12/23 arm64: dts: imx8mn: add phandle to anatop within CCM
+>   - 13/23 arm64: dts: imx8mp: add phandle to anatop within CCM
+>   - 14/23 arm64: dts: imx8mq: add phandle to anatop within CCM
+> 
+> Changes in v6:
+> - Merge patches:
+>   10/20 dt-bindings: clock: imx8mm: add binding definitions for anatop
+>   11/20 dt-bindings: clock: imx8mn: add binding definitions for anatop
+>   12/20 dt-bindings: clock: imx8mp: add binding definitions for anatop
+>   to
+>   05/20 dt-bindings: clock: imx8m-anatop: define clocks/clock-names
+>   now renamed
+>   05/18 dt-bindings: clock: imx8m-anatop: add oscillators and PLLs
+> - Split the patch
+>   15/20 dt-bindings-clock-imx8m-clock-support-spread-spectru.patch
+>   into
+>   12/18 dt-bindings: clock: imx8m-clock: add PLLs
+>   16/18 dt-bindings: clock: imx8m-clock: support spread spectrum clocking
+> 
+> Changes in v5:
+> - Fix compilation errors.
+> - Separate driver code from dt-bindings
+> 
+> Changes in v4:
+> - Add dt-bindings for anatop
+> - Add anatop driver
+> - Drop fsl,ssc-clocks from spread spectrum dt-bindings
+> 
+> Changes in v3:
+> - Patches 1/8 has been added in version 3. The dt-bindings have
+>   been moved from fsl,imx8m-anatop.yaml to imx8m-clock.yaml. The
+>   anatop device (fsl,imx8m-anatop.yaml) is indeed more or less a
+>   syscon, so it represents a memory area accessible by ccm
+>   (imx8m-clock.yaml) to setup the PLLs.
+> - Patches {3,5}/8 have been added in version 3.
+> - Patches {4,6,8}/8 use ccm device node instead of the anatop one.
+> 
+> Changes in v2:
+> - Add "allOf:" and place it after "required:" block, like in the
+>   example schema.
+> - Move the properties definition to the top-level.
+> - Drop unit types as requested by the "make dt_binding_check" command.
+> 
+> Dario Binacchi (18):
+>   dt-bindings: clock: imx8mm: add VIDEO_PLL clocks
+>   clk: imx8mm: rename video_pll1 to video_pll
+>   dt-bindings: clock: imx8mp: add VIDEO_PLL clocks
+>   clk: imx8mp: rename video_pll1 to video_pll
+>   dt-bindings: clock: imx8m-anatop: add oscillators and PLLs
+>   arm64: dts: imx8mm: add anatop clocks
+>   arm64: dts: imx8mn: add anatop clocks
+>   arm64: dts: imx8mp: add anatop clocks
+>   arm64: dts: imx8mq: add anatop clocks
+>   clk: imx: add hw API imx_anatop_get_clk_hw
+>   clk: imx: add support for i.MX8MM anatop clock driver
+>   clk: imx: add support for i.MX8MN anatop clock driver
+>   clk: imx: add support for i.MX8MP anatop clock driver
+>   clk: imx8mp: rename ccm_base to base
+>   dt-bindings: clock: imx8m-clock: add PLLs
+>   arm64: dts: imx8mm: add PLLs to clock controller module (CCM)
+>   arm64: dts: imx8mn: add PLLs to clock controller module (CCM)
+>   arm64: dts: imx8mp: add PLLs to clock controller module (CCM)
+> 
+>  .../bindings/clock/fsl,imx8m-anatop.yaml      |  53 +-
+>  .../bindings/clock/imx8m-clock.yaml           |  27 +-
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  11 +-
+>  arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  11 +-
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi     |  11 +-
+>  arch/arm64/boot/dts/freescale/imx8mq.dtsi     |   2 +
+>  drivers/clk/imx/Makefile                      |   6 +-
+>  drivers/clk/imx/clk-imx8mm-anatop.c           | 287 ++++++++
+>  drivers/clk/imx/clk-imx8mm.c                  | 262 ++++---
+>  drivers/clk/imx/clk-imx8mn-anatop.c           | 283 ++++++++
+>  drivers/clk/imx/clk-imx8mn.c                  | 183 +++--
+>  drivers/clk/imx/clk-imx8mp-anatop.c           | 306 ++++++++
+>  drivers/clk/imx/clk-imx8mp.c                  | 672 +++++++++---------
+>  drivers/clk/imx/clk.c                         |  15 +
+>  drivers/clk/imx/clk.h                         |   2 +
+>  include/dt-bindings/clock/imx8mm-clock.h      |  76 +-
+>  include/dt-bindings/clock/imx8mn-clock.h      |  64 ++
+>  include/dt-bindings/clock/imx8mp-clock.h      |  80 ++-
+>  18 files changed, 1740 insertions(+), 611 deletions(-)
+>  create mode 100644 drivers/clk/imx/clk-imx8mm-anatop.c
+>  create mode 100644 drivers/clk/imx/clk-imx8mn-anatop.c
+>  create mode 100644 drivers/clk/imx/clk-imx8mp-anatop.c
+> 
+> --
+> 2.43.0
+> 
+> 
+> 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Konrad
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/v6.15-rc1-1-g7ed7d1ed852d (exact match)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/freescale/' for 20250423060241.95521-1-dario.binacchi@amarulasolutions.com:
+
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-proton2s.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clock-names: ['osc_32k', 'osc_24m', 'clk_ext1', 'clk_ext2', 'clk_ext3', 'clk_ext4'] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-proton2s.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clocks: [[34], [35], [37], [38], [39], [40]] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-proton2s.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clock-names: ['osc_32k', 'osc_24m', 'clk_ext1', 'clk_ext2', 'clk_ext3', 'clk_ext4'] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-proton2s.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clocks: [[34], [35], [37], [38], [39], [40]] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-adpismarc.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clock-names: ['osc_32k', 'osc_24m', 'clk_ext1', 'clk_ext2', 'clk_ext3', 'clk_ext4'] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-adpismarc.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clocks: [[33], [34], [36], [37], [38], [39]] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-adpismarc.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clock-names: ['osc_32k', 'osc_24m', 'clk_ext1', 'clk_ext2', 'clk_ext3', 'clk_ext4'] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-adpismarc.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clocks: [[33], [34], [36], [37], [38], [39]] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-helios.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clock-names: ['osc_32k', 'osc_24m', 'clk_ext1', 'clk_ext2', 'clk_ext3', 'clk_ext4'] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-helios.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clocks: [[33], [34], [36], [37], [38], [39]] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-helios.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clock-names: ['osc_32k', 'osc_24m', 'clk_ext1', 'clk_ext2', 'clk_ext3', 'clk_ext4'] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+arch/arm64/boot/dts/freescale/imx8mp-aristainetos3-helios.dtb: clock-controller@30380000 (fsl,imx8mp-ccm): clocks: [[33], [34], [36], [37], [38], [39]] is too short
+	from schema $id: http://devicetree.org/schemas/clock/imx8m-clock.yaml#
+
+
+
+
+
 
