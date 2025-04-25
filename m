@@ -1,81 +1,82 @@
-Return-Path: <linux-clk+bounces-21044-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21046-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F1CA9C8B2
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Apr 2025 14:13:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3E52A9C8B8
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Apr 2025 14:14:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC0DE9C3FC6
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Apr 2025 12:13:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE05C1BC0E09
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Apr 2025 12:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04D12500DF;
-	Fri, 25 Apr 2025 12:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610162522B4;
+	Fri, 25 Apr 2025 12:13:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="3EAXAlIP"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="fgmQVASi"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1C824A06A
-	for <linux-clk@vger.kernel.org>; Fri, 25 Apr 2025 12:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E4F24C06A
+	for <linux-clk@vger.kernel.org>; Fri, 25 Apr 2025 12:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745583194; cv=none; b=KCE7L5SSwIRdqJ952cwrxmlG6MgJKG/JvS6/xxQ80cu7/zBeGHsNczT1YsWXhWniAkEo4sd5oNoT0QZQWP2ahEMcSLKGf7cj05qC7qGUJ9QNAOup+hfIWY7dHa4RNjW4htBvyS56h884A2W2IwJrmoGghjBL2Xgd3sXpTW7Fwbw=
+	t=1745583195; cv=none; b=O+BXlIEtF5xmcoJcx8z3baUv9ok2i3l9FAz46yTeCWI5naDuDsUu/ojLnbu2IN4rqlOfgT006RH5FoyTQ1yiw/lC5KHs4hvP5iqydad/1xYNtRxy+CqjVEVz/g/tW/1P9fBxoW/D0H7wRKYS2hMJNDmHaih0jD+p6RQPq23x2JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745583194; c=relaxed/simple;
-	bh=JVSzmCDGp4nuQ6agq8glyL213yGkNRHdBwMtv9WYkiw=;
+	s=arc-20240116; t=1745583195; c=relaxed/simple;
+	bh=66IJFF8tZyQ+XtDp+dxYFdjNhXj7sR1ftMG5k7qIick=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aFg1YWD/IlfNGrPDcQc3y/IDSgDbIkPaZxkQxvlQR05jYIQwJiFEbJ/+Jddec+VHnOFhu+SR+q9FMCp0wc2qdowxwsqDyYyDIL5r6EuDDZNIEp8AR95j3kUfIeTfDPiIVniacbSHyqw9KJLCdtuqO+jzn7SqaTPkuEmyiQJCl6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=3EAXAlIP; arc=none smtp.client-ip=209.85.221.49
+	 In-Reply-To:To:Cc; b=Xmc1dznd6OuhQs47922GvqwhI+ZaFDMAPOLxaa4TJSrBir5Andj8ikaLklEMJZWhpC+dd2lZ2N+jdfcLKrF/hZYEnLcsUbYEYuVv2gzlUj0tvlkmoqE24x+w8VAoVbde8jlTzahlQTIJFz4c4UeAUC2HMIP2P2D8c8uE3LgGI6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=fgmQVASi; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-39c13fa05ebso1446265f8f.0
-        for <linux-clk@vger.kernel.org>; Fri, 25 Apr 2025 05:13:12 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-39ee57c0b8cso2361383f8f.0
+        for <linux-clk@vger.kernel.org>; Fri, 25 Apr 2025 05:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1745583191; x=1746187991; darn=vger.kernel.org;
+        d=fairphone.com; s=fair; t=1745583192; x=1746187992; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q/1Wlg6H1/gsC3xe3K5/5ZBy+8/izEwpHo4955zg7uw=;
-        b=3EAXAlIPUmU+447uG4dAXS2Nmt11G1sQ5LvL+i7L1v68+ykwrXzN91290WI9xq1sII
-         RlsdZ+OauloicARLTH/d3rur097WhMO1L50/qg+ckBZ6zmjXQudEiCf7LBagx7uiT9ld
-         3BRrJXz/V1f52uCc6AtbJ6QRPJyBlA9baR0r9SxDT7C1il5JzMuVdLComsglWApPTSyn
-         jG/saWdpVsJ/QqvgpzOcTfp0J4FpBhGRDwXZDMaLz7envjFfZwqpZ3Vk3eDsMk4tFleN
-         MOMi1kXk3jN+IfWUBmXJsU4wFdVYgdNiw0rS2FJSfOwWI/4nHauUo+kCwGY9YXGZjRTl
-         kvfQ==
+        bh=9TgKVC0Gmp7hs9p7yLYcMp+rPuHQS+f7+bOOeFXRsfs=;
+        b=fgmQVASicR4SH+b8RGOqbjkNFZRAaYz/zeEdy9DaP3LYtnhZGwAFnD/MJXPPNbv7Hm
+         STsLbV2i6kI8E1WRNJxHUqcK+wEgSXVm+KHNkhqRmsmnujUSmqfJpPA1Wp48uJAsxthj
+         cZ3yrnJq9Kmiu4Nav3gjy7uvbblnHwug2swGjmkondzLwfE3/oePiy4gmpW9E+zQLlXD
+         7bL5NDkuaMzhsDJD4/eL7Q+UQ3U49aHCTEdRP+ZEZP7iIKCa9kmDlLCAtLQ725BjQjRB
+         LasD38JhNlk82q45NlJjVYAtZPvpdwmb73jtcijChUx1+9m97VlAHsDa2i6mvi8yhZtY
+         eN2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745583191; x=1746187991;
+        d=1e100.net; s=20230601; t=1745583192; x=1746187992;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q/1Wlg6H1/gsC3xe3K5/5ZBy+8/izEwpHo4955zg7uw=;
-        b=rVnan7v/kMMb22R4CZZPtH6byX63Bx65MlRrv67oiw4EO6Kds03wJ1zC8GOylXbd13
-         EoY5XUzCQfRaNJckjta/M0SkchkQp3PJWk8+/0M0EilWk+px3urOz96DNf/akO33msBr
-         XQvV1WF4Y12prSFJFsu4QLOnJTK5oBRCsbKBz0fSVbt79BxG2k2M2VGfGxOwplhGu/zy
-         w3l1bqYO24R3XSvr1iVv9mLLhkpP42oK/NUJ6aBQGGr/pNbaShHhjdigE8Zx19bLjMUF
-         we+EdbZk3jxXLQnnjJPtyRTzidc5MCHj9FikqWhO9UjMe+HER3uQxtJT9sf0VKVZhtOZ
-         zG/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVptE5yupZ0d8CSxbzxpgRI5EIGlelB+6OExuVZelJknuZQiex5aarXsPyEjHdst8iuAdmVlXj13P0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0SPWIyzKHESAc7vDqlbLBwV46u7zRGE7bV76ybxUxWCRrrLGF
-	sdbyvrNnfT7CsksEIw/uvfshtcpY95TW2PVBu/13kuczpOmf6rcbwqa6PlCVcVg=
-X-Gm-Gg: ASbGncucJZTQkr2Zm5V4WlroIFbxjej1D2WvZcEsazHGGkX02J/xWWSr+VSHDDkZaSc
-	4oVlC5PkOpUh2WdkCV1zfdTRvpPufFZPAuNz0bNIsz01ezp86UKAEQZRpNR2wRktMI5wEy8CHgc
-	GHBRVYM8znmKzWw0CEiowPrliJZZ1+7NbK0GijfT0bRZPd3lo1e02PKSiZPcm+OPORQqf3I/8rz
-	y4/rxRypIsdNsYradFv0nNi/V/SXQZJo0V80IM3BWCFA44A3mYMTbsRsYUD3/dm7cC1UHfUByn9
-	9ISjdfgYXeOb3WURp4eLTRIosXCbf/evMuzXUIM+H4xf4TJ90ilvqP8bUELRTH7g6MySE+XFk1F
-	PpKwhsAuDWo3AcONyUUDBX8FLw1tCVqzekqIWaKU57fJoe4Xt5dLY3c/7
-X-Google-Smtp-Source: AGHT+IEz/JdBLzuttdV2d717kw4v6NRxmdBkm3ghbvJLmxaD7EJVTw/4WP622g4Rua3FQUiTc2w5bw==
-X-Received: by 2002:a05:6000:2482:b0:39c:1257:c96f with SMTP id ffacd0b85a97d-3a074fbc451mr1574899f8f.59.1745583190713;
-        Fri, 25 Apr 2025 05:13:10 -0700 (PDT)
+        bh=9TgKVC0Gmp7hs9p7yLYcMp+rPuHQS+f7+bOOeFXRsfs=;
+        b=jnOrB2oK9gYGBQm7FK+x1EANSOb8uxKBMRUUc7jjGB8vDIoLgLPS1Q4sg0R9mA5eyo
+         vN7eHm0JmIrC0wP6UDDAHPcOVqdigBmtlG8TEaoeFW110HHBBTrq1vTpK9u9QW9WoOn8
+         nhMgHdaUwkDFl4etGayI77c/iW3IqcYhR2FnAw0eRTX/hoGnsxDQHiwdWZNqESGH+un9
+         d5Xkf1eqWLB8NxvbVRCvhqPQ8rrltyxDyg5UDuDg7EkgNEvlO3txXBfV/vP7yQyiXK2d
+         vMlgsobjRMkz8kKkz2HL/Mx2xIq0zONhUvTxuoKGae+g+dDE37P48BGJCsO1g9zdI2o9
+         +Uuw==
+X-Forwarded-Encrypted: i=1; AJvYcCWieOzeR5TzEm8k3/Z0kHoPfNO/Cs+OIuqPC+yW0IMLddbpQWMYFewil8oJHdzmCmHWnzIpzemfu98=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdAEUdR5LY7R0Bgdnx7akbBo/rllOphqABNFArz9P65meeU3bV
+	jgQ+A5tEVNXNQ+j7WeLNzMxK0HUM2GHcmngQT0kEvaq5sk8LoBIPsXjFMuP8ics=
+X-Gm-Gg: ASbGnctRLxbpD/Sms/v0MwdMLpn3QUcGQgE7m/J3/tl/pP9gKDB76yJ6kV8xofnVTFa
+	GTbJccy2G6OW/UaN80sysW5UXFrLxhMSd4GJczbdkjNLy2ZCrzQCcaPd6kBcrwMB8H6rlHC/iA2
+	Pq3PMUPlfsk/4AQRbnlvRweAmrSaTPB+Kbmzo6F/AVLWusTf72r5XCP8pq48Eg7MIQP9NMyycl7
+	fmxFiAsuyW1EOd0Hav8sZvWWEtYlZukheYUsZckiiMSya4vDbQbNyk6ekr4xhjA+l3b7qWa8WUh
+	/kF+LsKnxgbQH0ieTzlsq7eR72jOH3IidqqPl3VaSwnsqSLLx1DlhbFB27/Elq6SY4C22wM3a+5
+	FmPYvnJBu7q8ih6lRJApdZ8h6WPvgDtX5MdaiQwdLiCEqxbOnkHP+1oc1
+X-Google-Smtp-Source: AGHT+IE0cfvasr+2ToJg0EBKEjRJcaZvkAeSTDJGgH4fyh6HVWM2G+6IlyQw8XahahxPUHgOjOSGHg==
+X-Received: by 2002:a05:6000:1849:b0:39b:330d:9719 with SMTP id ffacd0b85a97d-3a074e2ee14mr1430875f8f.17.1745583191703;
+        Fri, 25 Apr 2025 05:13:11 -0700 (PDT)
 Received: from [100.64.0.4] (2a02-8388-6584-6400-d322-7350-96d2-429d.cable.dynamic.v6.surfer.at. [2a02:8388:6584:6400:d322:7350:96d2:429d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e46501sm2147310f8f.73.2025.04.25.05.13.09
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073e46501sm2147310f8f.73.2025.04.25.05.13.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 05:13:10 -0700 (PDT)
+        Fri, 25 Apr 2025 05:13:11 -0700 (PDT)
 From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Fri, 25 Apr 2025 14:12:57 +0200
-Subject: [PATCH 3/4] clk: qcom: gcc-sm6350: Add *_wait_val values for GDSCs
+Date: Fri, 25 Apr 2025 14:12:58 +0200
+Subject: [PATCH 4/4] clk: qcom: gpucc-sm6350: Add *_wait_val values for
+ GDSCs
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -84,7 +85,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250425-sm6350-gdsc-val-v1-3-1f252d9c5e4e@fairphone.com>
+Message-Id: <20250425-sm6350-gdsc-val-v1-4-1f252d9c5e4e@fairphone.com>
 References: <20250425-sm6350-gdsc-val-v1-0-1f252d9c5e4e@fairphone.com>
 In-Reply-To: <20250425-sm6350-gdsc-val-v1-0-1f252d9c5e4e@fairphone.com>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -103,38 +104,39 @@ driver is used. The downstream driver only conditionally sets
 clk_dis_wait_val if qcom,clk-dis-wait-val is given in devicetree.
 
 Correct this situation by explicitly setting those values. For all GDSCs
-the reset value of those bits are used.
+the reset value of those bits are used, with the exception of
+gpu_cx_gdsc which has an explicit value (qcom,clk-dis-wait-val = <8>).
 
-Fixes: 131abae905df ("clk: qcom: Add SM6350 GCC driver")
+Fixes: 013804a727a0 ("clk: qcom: Add GPU clock controller driver for SM6350")
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/clk/qcom/gcc-sm6350.c | 6 ++++++
+ drivers/clk/qcom/gpucc-sm6350.c | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-sm6350.c b/drivers/clk/qcom/gcc-sm6350.c
-index 74346dc026068a224e173fdc0472fbaf878052c4..a4d6dff9d0f7f1216c778165a1fe9604d9ae41dc 100644
---- a/drivers/clk/qcom/gcc-sm6350.c
-+++ b/drivers/clk/qcom/gcc-sm6350.c
-@@ -2320,6 +2320,9 @@ static struct clk_branch gcc_video_xo_clk = {
- 
- static struct gdsc usb30_prim_gdsc = {
- 	.gdscr = 0x1a004,
+diff --git a/drivers/clk/qcom/gpucc-sm6350.c b/drivers/clk/qcom/gpucc-sm6350.c
+index 35ed0500bc59319f9659aef81031b34d29fc06a4..ee89c42413f885f21f1470b1f7887d052e52a75e 100644
+--- a/drivers/clk/qcom/gpucc-sm6350.c
++++ b/drivers/clk/qcom/gpucc-sm6350.c
+@@ -413,6 +413,9 @@ static struct clk_branch gpu_cc_gx_vsense_clk = {
+ static struct gdsc gpu_cx_gdsc = {
+ 	.gdscr = 0x106c,
+ 	.gds_hw_ctrl = 0x1540,
 +	.en_rest_wait_val = 0x2,
 +	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xf,
++	.clk_dis_wait_val = 0x8,
  	.pd = {
- 		.name = "usb30_prim_gdsc",
+ 		.name = "gpu_cx_gdsc",
  	},
-@@ -2328,6 +2331,9 @@ static struct gdsc usb30_prim_gdsc = {
- 
- static struct gdsc ufs_phy_gdsc = {
- 	.gdscr = 0x3a004,
+@@ -423,6 +426,9 @@ static struct gdsc gpu_cx_gdsc = {
+ static struct gdsc gpu_gx_gdsc = {
+ 	.gdscr = 0x100c,
+ 	.clamp_io_ctrl = 0x1508,
 +	.en_rest_wait_val = 0x2,
 +	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xf,
++	.clk_dis_wait_val = 0x2,
  	.pd = {
- 		.name = "ufs_phy_gdsc",
- 	},
+ 		.name = "gpu_gx_gdsc",
+ 		.power_on = gdsc_gx_do_nothing_enable,
 
 -- 
 2.49.0
