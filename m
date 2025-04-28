@@ -1,162 +1,196 @@
-Return-Path: <linux-clk+bounces-21092-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21096-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F146BA9EB17
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Apr 2025 10:47:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45BB8A9EB5E
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Apr 2025 11:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48ED217AE72
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Apr 2025 08:47:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 955E2188B141
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Apr 2025 09:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9F225E821;
-	Mon, 28 Apr 2025 08:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E04255233;
+	Mon, 28 Apr 2025 09:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="FtWP69PJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OjLEe4FZ"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2498525E45D
-	for <linux-clk@vger.kernel.org>; Mon, 28 Apr 2025 08:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB4F17BA6;
+	Mon, 28 Apr 2025 09:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745830054; cv=none; b=kfuAiz0lyWkctxRrf/6zPDF+jqpbBlJATDdudOatRuSA31rEWfTTsLUl9xZBbyP0Z19Tfm+rcsvGpcSaDtW9sijMo0+n4CHTfrDJKXAm1JI6hMvCl2/O8u+xYnq2Z7R3ZXSSvUrAVqXFR7zxgvp4SbOHHFsQI+oSDolLUbm1dU8=
+	t=1745830949; cv=none; b=p9N9+ZPGNHvZ5sjeEQGTCVJbO1tDrc0jcMBrY2BdRLfM47/Yc5HEuMBT5uigh4R4qYOBGdvCllp9YuxQTCrpSkIRVetWSc3AV+AVGd9N9KVABm+dMwya5dP/a+pGeOupiCPZLB+e1zwXq/fxLLsJovtYn/920oB0k9MNuKCzbhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745830054; c=relaxed/simple;
-	bh=iFzGuACWvPdMTtprDZH7JP48uol6IThkiaU/81eK7TE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=ZdLnjC+x6Zy92hhxiRkOQUkBbHhKyz/IA9R4s74tr4Qiu+L5kPnvkRUvIH52oL9ij8iWg1OPkHzvjBE0d7ZUqMLHlOpc9ULg2CbLNd1KFZOL3eenGh6wCIpRyny1p9qPfBgNstxDaW2vzB0eVqTlY2+VjrGjxFQj8dW/zI12yrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=FtWP69PJ; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250428084730epoutp0407f11f76135cc724110b31dd571c90b7~6by5Zzit22806428064epoutp04m
-	for <linux-clk@vger.kernel.org>; Mon, 28 Apr 2025 08:47:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250428084730epoutp0407f11f76135cc724110b31dd571c90b7~6by5Zzit22806428064epoutp04m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1745830050;
-	bh=kwb6sfk/OTplMs5Q5TACguVNBchZ6pfP8g0wZXekkjI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FtWP69PJmEYKxMEkxF1kxz7LVhM9oGKF/8DK7HZxgvOkQQn+FgQlnsEqCW+06W4j+
-	 QncPE5D44wKiI14CIwxC2fcj1V1yCgejGmAnGsDExLnZEuKODA9U7oyubL0yXCQA7Z
-	 jewE/aGHVv50mBWmEAq6RSSXS1kD8znWW6QTX86o=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250428084729epcas2p47daf637f98853b875a65d0910ebc72e6~6by427dZC0662806628epcas2p4z;
-	Mon, 28 Apr 2025 08:47:29 +0000 (GMT)
-Received: from epcas2p1.samsung.com (unknown [182.195.36.97]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4ZmHBn2n6Mz6B9m7; Mon, 28 Apr
-	2025 08:47:29 +0000 (GMT)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250428084728epcas2p1d293e6a40eae00465c6b2f5f037dbfef~6by32lK6f0605306053epcas2p1q;
-	Mon, 28 Apr 2025 08:47:28 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250428084728epsmtrp2bfe7deabe0f8a74a1e52e70d4ff5330a~6by3zmG6z1061810618epsmtrp2G;
-	Mon, 28 Apr 2025 08:47:28 +0000 (GMT)
-X-AuditID: b6c32a52-41dfa70000004c16-cd-680f40a0f99b
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	E3.CF.19478.0A04F086; Mon, 28 Apr 2025 17:47:28 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.60]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250428084728epsmtip1e211e99deb8a28118667e82b210a4aa5~6by3m-rTj1942219422epsmtip1H;
-	Mon, 28 Apr 2025 08:47:28 +0000 (GMT)
-From: Shin Son <shin.son@samsung.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Sylwester Nawrocki
-	<s.nawrocki@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Sunyeal Hong <sunyeal.hong@samsung.com>
-Cc: Shin Son <shin.son@samsung.com>, linux-samsung-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: exynosautov920: add cpucl1/2 clock DT nodes
-Date: Mon, 28 Apr 2025 17:47:21 +0900
-Message-ID: <20250428084721.3832664-4-shin.son@samsung.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250428084721.3832664-1-shin.son@samsung.com>
+	s=arc-20240116; t=1745830949; c=relaxed/simple;
+	bh=pT3WDzu78kO/va+SQ0+NZHFS9bs7FfRts9JiVPsCcYA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YjhSl9u/nTpkWbmRkZUsunR2FxTsKGyyVzqxIEf5cYIuKhdH+PnbrVVutU8w9U6Eb2W8KjAW7xP/VHs8I6gyU6e1O+DHfENB2aqlfqGt462PjjPciMTESNmwwori2W6sGp+LyA8cMHZR1oYfNZctFBGY3cFy2MWGDBvrLEadjsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OjLEe4FZ; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3913d129c1aso2942496f8f.0;
+        Mon, 28 Apr 2025 02:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745830945; x=1746435745; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1i8aCXxUVK2DhAP1mfTWOQhU4rxphPR3JI63bKHZ020=;
+        b=OjLEe4FZRXv1eng2JgIEm7USL8B44ALBd+yEI87P31C1N6LKIMz7Rijk7kJFjLFGk6
+         EOil6joMQ7ApnYkJdPau1b47abQamQ4GuX5OumG3Hl9lK1QkAczv0xi9YO+ltAwe8Bgy
+         +9S3m7RvxlUD153d19NAgXTHqiWzpHFAYHCySz8ZWoRjKpTtrhK55H5ZEoRkCYJAm+Lp
+         pZ/wcWT833PZjscAShBLl/YsLWCQia7R77JDwytMnZYiK7A4I+/cYPNu5pBLyE/+24ic
+         tzjNIdOT04Yof6WSEffkD7KibCyBSaX+z3Hn7l6fX/vOwtSw6dETXHkJ1QEMeeIydh2D
+         vOUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745830945; x=1746435745;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1i8aCXxUVK2DhAP1mfTWOQhU4rxphPR3JI63bKHZ020=;
+        b=ILY4fzW+TfuDlIPGNWUvFn6McKk/pRpcIjASogufEv6xR2FM3ioeOpScN+WXmdef3Z
+         ymvVB9xAz7pV2PlUuxKUeHnJsv1nQtu+dvYZH4cxYCYBJoyoD8r+ZBHeFpCJunn/Te4d
+         3ygU1VEfyO7atHmq/9ybVsIAmdlN+eeRD1AeYSg7+gGbIWPqP2hrB7/oSZzL1T+/udG8
+         byPqle0vBKoFQjRkTsG2bUEsHAEtWaobelTZvMupiMTCbUfaiVQXoCEhbkojxkAvIzNw
+         iu/ctEwTSBcBo2yip6ejISNn6s8hcJjBucKcdDXR0FGdV8D+M1aTM9tsK6RTE9aBQvjn
+         8XSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtBzqv+q2eTQfFMT6pTRh5OOifwWKSjVigmzcM+pDnPN3wcE7lZ1WsAtw193+0YwNZ10kAbGJRVYps@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ6o1H+ehLxRDQQOXPip/7J1tAZC5jOSWhLOxRS3AMWjUSSJsG
+	92Du9GPfQhfke4481jof3NyOAcLjlPibzeDNgo/QrPnmisb5H0I3
+X-Gm-Gg: ASbGnctQp7X5XkJ3f3+k0TFtN7eDsB+jV+wMnuLwktHq860P7Q4E9+xr89I6H4x8M9G
+	GzCcB++IiNKCZye5tGRYao4hppY4bgN7VI4ZtM6Dvxy6A2UT/05wITxmu6Yq0VCP58tfJfkLWOD
+	wki7tdDVLfVtyQEUM1SsSEKDuVvu9bQh8p04vuzzKlPDsYNfkkGOWYPawDdrSSvargSSE3dJHjf
+	78q5Ru6YkKLuWHK0IGSgjpfcorpqQwPp1hi18OSCXBGRkWW5sLTgD+sA2CID/SI1/2VGPqV7SZa
+	busV9fM0NPjYQg12TxwhvpAGbELJHoy72Xg75LEZK1T1GVYd80Fdg22lQR3GRyepKPvmMo2OPRX
+	VkiH27McU01QG
+X-Google-Smtp-Source: AGHT+IEc7ek5RrreSChhQRkzG9P4f7KbWmnhJuiHSgS+idRdwAlTAm9F6+ZYYeMxAM77RmhbFcm5zQ==
+X-Received: by 2002:a05:6000:2507:b0:39e:cbca:74cf with SMTP id ffacd0b85a97d-3a074cdb95emr8931367f8f.6.1745830945358;
+        Mon, 28 Apr 2025 02:02:25 -0700 (PDT)
+Received: from ?IPv6:2001:818:ea8e:7f00:2575:914:eedd:620e? ([2001:818:ea8e:7f00:2575:914:eedd:620e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a073c8cc74sm10684829f8f.11.2025.04.28.02.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Apr 2025 02:02:24 -0700 (PDT)
+Message-ID: <85b09bd3217ed573438bde3f0f37424c9b582bd0.camel@gmail.com>
+Subject: Re: [PATCH RESEND v3 3/6] include: fpga: adi-axi-common: add new
+ helper macros
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Xu Yilun <yilun.xu@linux.intel.com>, nuno.sa@analog.com
+Cc: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, Stephen Boyd	
+ <sboyd@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Moritz
+ Fischer	 <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun
+ <yilun.xu@intel.com>,  Tom Rix <trix@redhat.com>
+Date: Mon, 28 Apr 2025 10:02:29 +0100
+In-Reply-To: <aAoPfoL8ZDBK7hf6@yilunxu-OptiPlex-7050>
+References: <20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com>
+	 <20250421-dev-axi-clkgen-limits-v3-3-4203b4fed2c9@analog.com>
+	 <aAoPfoL8ZDBK7hf6@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.1 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsWy7bCSnO4CB/4Mg857ahYP5m1js1iz9xyT
-	xfUvz1kt5h85x2px/vwGdotNj6+xWnzsucdqcXnXHDaLGef3MVlcPOVq8X/PDnaLw2/aWS3+
-	XdvIYjH5+FpWi6Zl65kc+D3e32hl99i0qpPNY/OSeo++LasYPT5vkgtgjeKySUnNySxLLdK3
-	S+DKeHFKqOAtV8XOxslsDYwnOLoYOTkkBEwktl15wQRiCwlsZ5SYcNcVIi4hcXjGBEYIW1ji
-	fssRVoia94wSb59kdjFycLAJqEps+i3fxcjFISLwlkli+f8DYHOYBU4zSuw8IwNiCwv4SPyc
-	f4UZxGYBqn85dxIjSC+vgLVE+95yEFNCQF6iv0MCpIJTwEbi/MVONpCwEFBFXw83SJhXQFDi
-	5MwnLBDD5SWat85mnsAoMAtJahaS1AJGplWMoqkFxbnpuckFhnrFibnFpXnpesn5uZsYwfGg
-	FbSDcdn6v3qHGJk4GA8xSnAwK4nwVhnwZwjxpiRWVqUW5ccXleakFh9ilOZgURLnVc7pTBES
-	SE8sSc1OTS1ILYLJMnFwSjUwccwMbN6nXyM22b21bF/slWcJqkIfWn6LXFGtk431+ZlxxTgq
-	SeGu3LqzDWkvVvQd2GG7dt8LX8VC3l1fQ6R+MDetelJ70M3W4dLaZ8fOMbCebPCJW/fLICq9
-	abV8UF60gMg9p5UT7NytV657mya18LhK4p7pNRX7nPXTjv/0qe9+/XjGWa4Nsc48fzqinkdt
-	Zrc4IvS8zO2NZl50yIyvb/3eJPjoNjgoXlmQZsp07t7sVSbLVk1ZvHH2mQJtRalJ7nsv3eDQ
-	PDIzQEJ2tglvvvKyrme/9bfEGZecvrfhlskW4XAD+bTGNtmiAJEnnhtqTSzcVLzEeg5ba1yT
-	fNlSvzdGxs/J9Vxo3oW0Je+UWIozEg21mIuKEwHpfgtO9gIAAA==
-X-CMS-MailID: 20250428084728epcas2p1d293e6a40eae00465c6b2f5f037dbfef
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250428084728epcas2p1d293e6a40eae00465c6b2f5f037dbfef
-References: <20250428084721.3832664-1-shin.son@samsung.com>
-	<CGME20250428084728epcas2p1d293e6a40eae00465c6b2f5f037dbfef@epcas2p1.samsung.com>
 
-Add cmu_cpucl1/2(CPU Cluster 1 and CPU Cluster 2) clocks
-for switch, cluster domains respectively.
+On Thu, 2025-04-24 at 18:16 +0800, Xu Yilun wrote:
+> On Mon, Apr 21, 2025 at 03:58:04PM +0100, Nuno S=C3=A1 via B4 Relay wrote=
+:
+> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
+> >=20
+> > Add new helper macros and enums to help identifying the platform and so=
+me
+> > characteristics of it at runtime.
+> >=20
+> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> > ---
+> > =C2=A0include/linux/fpga/adi-axi-common.h | 35
+> > +++++++++++++++++++++++++++++++++++
+>=20
+> I'm wondering why these definitions (including existing ones) are in
+> fpga directory. They are not specific for any fpga_manager driver. I
+> suggest move the whole file out of fpga/
+>=20
 
-Signed-off-by: Shin Son <shin.son@samsung.com>
----
- .../arm64/boot/dts/exynos/exynosautov920.dtsi | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Just placed them in here because the header already existed in here... If
+acceptable, I have not problems in moving this file to include/linux.
 
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-index 9350c53f935e..2cb8041c8a9f 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-@@ -1090,6 +1090,32 @@ cmu_cpucl0: clock-controller@1ec00000 {
- 				      "cluster",
- 				      "dbg";
- 		};
-+
-+		cmu_cpucl1: clock-controller@1ed00000 {
-+			compatible = "samsung,exynosautov920-cmu-cpucl1";
-+			reg = <0x1ed00000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&xtcxo>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL1_SWITCH>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL1_CLUSTER>;
-+			clock-names = "oscclk",
-+				      "switch",
-+				      "cluster";
-+		};
-+
-+		cmu_cpucl2: clock-controller@1ee00000 {
-+			compatible = "samsung,exynosautov920-cmu-cpucl2";
-+			reg = <0x1ee00000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&xtcxo>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL2_SWITCH>,
-+				 <&cmu_top DOUT_CLKCMU_CPUCL2_CLUSTER>;
-+			clock-names = "oscclk",
-+				      "switch",
-+				      "cluster";
-+		};
- 	};
- 
- 	timer {
--- 
-2.49.0
+- Nuno S=C3=A1
 
+> Thanks,
+> Yilun
+>=20
+> > =C2=A01 file changed, 35 insertions(+)
+> >=20
+> > diff --git a/include/linux/fpga/adi-axi-common.h b/include/linux/fpga/a=
+di-
+> > axi-common.h
+> > index
+> > 141ac3f251e6f256526812b9d55cd440a2a46e76..a832ef9b37473ca339a2a2ff8a4a5=
+716d4
+> > 28fd29 100644
+> > --- a/include/linux/fpga/adi-axi-common.h
+> > +++ b/include/linux/fpga/adi-axi-common.h
+> > @@ -12,6 +12,8 @@
+> > =C2=A0#define ADI_AXI_COMMON_H_
+> > =C2=A0
+> > =C2=A0#define ADI_AXI_REG_VERSION			0x0000
+> > +#define ADI_AXI_REG_FPGA_INFO			0x001C
+> > +#define ADI_AXI_REG_FPGA_VOLTAGE		0x0140
+> > =C2=A0
+> > =C2=A0#define ADI_AXI_PCORE_VER(major, minor, patch)	\
+> > =C2=A0	(((major) << 16) | ((minor) << 8) | (patch))
+> > @@ -20,4 +22,37 @@
+> > =C2=A0#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff=
+)
+> > =C2=A0#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
+> > =C2=A0
+> > +#define ADI_AXI_INFO_FPGA_TECH(info)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (((info) >> 24) & 0xff)
+> > +#define ADI_AXI_INFO_FPGA_FAMILY(info)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 (((info) >> 16) & 0xff)
+> > +#define ADI_AXI_INFO_FPGA_SPEED_GRADE(info)=C2=A0=C2=A0=C2=A0=C2=A0 ((=
+(info) >> 8) & 0xff)
+> > +#define ADI_AXI_INFO_FPGA_VOLTAGE(val)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 ((val) & 0xffff)
+> > +
+> > +enum adi_axi_fpga_technology {
+> > +	ADI_AXI_FPGA_TECH_UNKNOWN =3D 0,
+> > +	ADI_AXI_FPGA_TECH_SERIES7,
+> > +	ADI_AXI_FPGA_TECH_ULTRASCALE,
+> > +	ADI_AXI_FPGA_TECH_ULTRASCALE_PLUS,
+> > +};
+> > +
+> > +enum adi_axi_fpga_family {
+> > +	ADI_AXI_FPGA_FAMILY_UNKNOWN =3D 0,
+> > +	ADI_AXI_FPGA_FAMILY_ARTIX,
+> > +	ADI_AXI_FPGA_FAMILY_KINTEX,
+> > +	ADI_AXI_FPGA_FAMILY_VIRTEX,
+> > +	ADI_AXI_FPGA_FAMILY_ZYNQ,
+> > +};
+> > +
+> > +enum adi_axi_fpga_speed_grade {
+> > +	ADI_AXI_FPGA_SPEED_UNKNOWN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D 0,
+> > +	ADI_AXI_FPGA_SPEED_1=C2=A0=C2=A0=C2=A0 =3D 10,
+> > +	ADI_AXI_FPGA_SPEED_1L=C2=A0=C2=A0 =3D 11,
+> > +	ADI_AXI_FPGA_SPEED_1H=C2=A0=C2=A0 =3D 12,
+> > +	ADI_AXI_FPGA_SPEED_1HV=C2=A0 =3D 13,
+> > +	ADI_AXI_FPGA_SPEED_1LV=C2=A0 =3D 14,
+> > +	ADI_AXI_FPGA_SPEED_2=C2=A0=C2=A0=C2=A0 =3D 20,
+> > +	ADI_AXI_FPGA_SPEED_2L=C2=A0=C2=A0 =3D 21,
+> > +	ADI_AXI_FPGA_SPEED_2LV=C2=A0 =3D 22,
+> > +	ADI_AXI_FPGA_SPEED_3=C2=A0=C2=A0=C2=A0 =3D 30,
+> > +};
+> > +
+> > =C2=A0#endif /* ADI_AXI_COMMON_H_ */
+> >=20
+> > --=20
+> > 2.49.0
+> >=20
+> >=20
+> >=20
 
