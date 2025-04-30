@@ -1,179 +1,142 @@
-Return-Path: <linux-clk+bounces-21166-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21168-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C306DAA45CF
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Apr 2025 10:45:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ED13AA4635
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Apr 2025 11:02:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE3D5171921
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Apr 2025 08:44:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB31917998F
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Apr 2025 09:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 673E221ADA2;
-	Wed, 30 Apr 2025 08:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="QuzRoyMy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D85E21B9DB;
+	Wed, 30 Apr 2025 09:02:02 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003C2219A7D
-	for <linux-clk@vger.kernel.org>; Wed, 30 Apr 2025 08:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FA3219A6B
+	for <linux-clk@vger.kernel.org>; Wed, 30 Apr 2025 09:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746002679; cv=none; b=krZgvb9W0Hpgl9R96AgL9YR6Zp5EABG8kAq5U6NbP2YUE5cYPj7RzzFb54v1xtP98vvSGJNcZQo/wP35yNHklVx/YmcAofEVBA1MmNJtnKp3N9Txlr9u38NI1EoVEhWPZCC5GCyqzaJu2gLvW/Sb6kFRTOciS2chYT7Zfz0hwD8=
+	t=1746003722; cv=none; b=crzyiEBJyhqLxIpg3YMLjX4Yot+A3Tm31/GZ/v+93W1DclF1ffUpb9IjWjV0XgVC6zOjzELoCJvqE1JqJiR5eIrEFZ2DfY1XuwsuHFIHnpS6cRvOQSOju9JNapRmlfb9xVIgL0ZpL1yw3Wpyeu7se8uwo5s/BHujdpVD/lmkyHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746002679; c=relaxed/simple;
-	bh=+vmijnahmzqgvBOY0vSFX0jDJzO9B2yPyewutBO/kKI=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=nYHrydlUiaqg3fWZ9iShKQjV4DHUKmCg8o3eNZTrn18jIJyVOJZF1sudIYL0oqhvnXln0F7dJmxs4DJsAXb38zPykMbm4D7pb3QbENGPCSRmacmHIh6QZl5aOTCUDZqW6xrwI4dirqElQ2pHwhR9OVFRwCNHUBb7GnE5azNNzro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=QuzRoyMy; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250430084434epoutp042597056ea646d826936fdd4cdf380a16~7DC6V7cfd1743717437epoutp04g
-	for <linux-clk@vger.kernel.org>; Wed, 30 Apr 2025 08:44:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250430084434epoutp042597056ea646d826936fdd4cdf380a16~7DC6V7cfd1743717437epoutp04g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1746002674;
-	bh=+vmijnahmzqgvBOY0vSFX0jDJzO9B2yPyewutBO/kKI=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=QuzRoyMy4s1E0Yxy3E2erMCKXV5XcXhfeA549uW7YETfEikXj9TF4rPygc4uUDN2M
-	 jdKjuTa9/P4TT68iMq46YU9OGF0/9YYqzeYmfaGhxwcXYmWJQp2SZk4i0MTu4hseeq
-	 98yY83AikXZvkAtBi5lhX4h1eIGW8J2e/Ro/ziAI=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
-	20250430084433epcas2p27e1db1c7198c4324ab807ce33e41371d~7DC5gvq1W0138101381epcas2p2k;
-	Wed, 30 Apr 2025 08:44:33 +0000 (GMT)
-Received: from epcas2p4.samsung.com (unknown [182.195.36.101]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4ZnW2T3bzzz2SSKr; Wed, 30 Apr
-	2025 08:44:33 +0000 (GMT)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250430084432epcas2p49ec3562a8e09555b3c1de9bd84e5fb8f~7DC4fP_el2366723667epcas2p4C;
-	Wed, 30 Apr 2025 08:44:32 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250430084432epsmtrp2f9a6eeaf557de57d66e880627510c49e~7DC4eXuv51265712657epsmtrp2F;
-	Wed, 30 Apr 2025 08:44:32 +0000 (GMT)
-X-AuditID: b6c32a2a-d57fe70000002265-5c-6811e2f04d9d
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	3E.C1.08805.0F2E1186; Wed, 30 Apr 2025 17:44:32 +0900 (KST)
-Received: from KORCO115296 (unknown [12.36.150.221]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20250430084432epsmtip2969e7c98e0532399bb9136e22ac75a64~7DC4R7PHd3272732727epsmtip2V;
-	Wed, 30 Apr 2025 08:44:32 +0000 (GMT)
-From: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>
-To: "'Krzysztof Kozlowski'" <krzk@kernel.org>
-Cc: "'Sylwester Nawrocki'" <s.nawrocki@samsung.com>, "'Chanwoo Choi'"
-	<cw00.choi@samsung.com>, "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-	"'Michael	Turquette'" <mturquette@baylibre.com>, "'Stephen Boyd'"
-	<sboyd@kernel.org>, "'Rob	Herring'" <robh@kernel.org>, "'Conor Dooley'"
-	<conor+dt@kernel.org>, "'Sunyeal Hong'" <sunyeal.hong@samsung.com>,
-	<linux-samsung-soc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-In-Reply-To: <20250430-wonderful-meticulous-groundhog-cbe6e1@kuoka>
-Subject: RE: [PATCH v2 3/4] clk: samsung: exynosautov920: Fix incorrect
- CLKS_NR_CPUCL0 definition
-Date: Wed, 30 Apr 2025 17:44:31 +0900
-Message-ID: <04c801dbb9ac$17eb1f40$47c15dc0$@samsung.com>
+	s=arc-20240116; t=1746003722; c=relaxed/simple;
+	bh=L7m7/oDOVyLCTBoHwxcpvzWEPQ5God4FzUVY+/hwE20=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k79xDw9tQVmjU4jIFeHGHvn5zt+S8N2nS4bPuQG3wT6xY/B9bXKyC0AfLzcG4seNXPOuxuRmCbF+FPVlZe8VfHIWBZ5iV1uYqTxcDWbGmmdwbtQwPVLZ2P4hvj0BguthWW7LaZPLnNnAcqJsT3DrLgOR6XpyWHtPbhW7AFav5zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1uA3K3-00036b-RX; Wed, 30 Apr 2025 11:01:43 +0200
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1uA3K3-000OlJ-1Y;
+	Wed, 30 Apr 2025 11:01:43 +0200
+Received: from localhost ([::1] helo=dude02.red.stw.pengutronix.de)
+	by dude02.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <s.hauer@pengutronix.de>)
+	id 1uA3K3-00E1q2-1F;
+	Wed, 30 Apr 2025 11:01:43 +0200
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v4 0/3] clk: add support for TI CDCE6214
+Date: Wed, 30 Apr 2025 11:01:33 +0200
+Message-Id: <20250430-clk-cdce6214-v4-0-9f15e7126ac6@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQKVz8E4gWpx1pKf+PhrDO9dWLB9vQKrOtICAhAmCl4B8oDt7rISRXng
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsWy7bCSvO6HR4IZBitnalo8mLeNzWLN3nNM
-	Fte/PGe1mH/kHKvF+fMb2C02Pb7GavGx5x6rxeVdc9gsZpzfx2Rx8ZSrxf89O9gtDr9pZ7X4
-	d20ji0XTsvVMDnwe72+0sntsWtXJ5rF5Sb1H35ZVjB6fN8kFsEZx2aSk5mSWpRbp2yVwZbTt
-	esBcMF+woqN5IlMD42G+LkZODgkBE4l5j9YxdjFycQgJ7GaUWDZhNhtEQkLi8IwJjBC2sMT9
-	liOsEEXPGSX+LZ/GApJgEzCUWPVjOxOILSKgK7H5xnJ2kCJmgWksEm/390J1fGKUuHlrGztI
-	FaeAs0T/3UZmEFtYIFHi0u7vYOtYBFQlFuxZyQpi8wpYSsz7/wjKFpQ4OfMJ2DZmAW2J3oet
-	jDD2soWvmSHOU5DY/ekoK8QVbhKbWp+yQ9SISMzubGOewCg8C8moWUhGzUIyahaSlgWMLKsY
-	JVMLinPTc4sNC4zyUsv1ihNzi0vz0vWS83M3MYKjUktrB+OeVR/0DjEycTAeYpTgYFYS4Z10
-	SzBDiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+3170pQgLpiSWp2ampBalFMFkmDk6pBqbT59et
-	kfHiZ7ZdpvE7IDlyopzKWyWVppZdYROdDe/lTduxnTk/8KzKs/c6Z+beu/Xw68mI6mdM4jHX
-	Qq6fjQkT9FNeO8Euf+Lh6Rek9to5MT9+eP7qvnUiZ6yaz1hHzrZYsaOPu/UD40fHwz6bWB0+
-	MW1zj+OecETB9re02lyFO3ZLXZ3vTvPSfbX6ovDGFbUr3qw6v9LIfwqL/VLFm2t2zTma8p7z
-	pyibQ/h63iWzjnsGrv7tXMykOXVmWmCVyTzpWWeUfq1LLzgzLW528sSYPk7lsw/jT71rvbJw
-	q6D7xym2M+cwc290EBB2yF193ca95f+qYMFqTddr26VdftbbXjY5MFPbIdWnq37Z3ovqSizF
-	GYmGWsxFxYkAAiBDMjkDAAA=
-X-CMS-MailID: 20250430084432epcas2p49ec3562a8e09555b3c1de9bd84e5fb8f
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250428113558epcas2p1f2980cbc58f71dde78a9529e2b85ac20
-References: <20250428113517.426987-1-shin.son@samsung.com>
-	<CGME20250428113558epcas2p1f2980cbc58f71dde78a9529e2b85ac20@epcas2p1.samsung.com>
-	<20250428113517.426987-4-shin.son@samsung.com>
-	<20250430-wonderful-meticulous-groundhog-cbe6e1@kuoka>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO3mEWgC/3XMQQ6CMBCF4auQrq2ZTgsFV97DuIB2qo0GSEGCI
+ dzdwoqgLv+XvG9iHQVPHTslEws0+M43dQx1SJi5l/WNuLexGQKmoCDn5vngxhrKUCgORitQ0hr
+ MNIuXNpDz48pdrrHvvuub8F71QSzrH2gQHHhlFWkosCyEO7dU3159aGo/Hi2xRRtwKxQ7AaOgo
+ MK00ohkqp+C3AgCdoKMgtXSuMI5aXP4EuZ5/gACoD8MMQEAAA==
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, kernel@pengutronix.de, 
+ =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>, 
+ Sascha Hauer <s.hauer@pengutronix.de>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746003703; l=2340;
+ i=s.hauer@pengutronix.de; s=20230412; h=from:subject:message-id;
+ bh=L7m7/oDOVyLCTBoHwxcpvzWEPQ5God4FzUVY+/hwE20=;
+ b=bgdEW5W5Ln/+GzTpAi73T021/b4KxvzNBza+YfQ0zZUa9FbpFmSWQ+HDyom7uRyTHsbXv1+lP
+ hi20JrJ0DE3BcwblgEbzmtHvbCcJIItJRvyoxSmm0PS9ec4BM7WqmoF
+X-Developer-Key: i=s.hauer@pengutronix.de; a=ed25519;
+ pk=4kuc9ocmECiBJKWxYgqyhtZOHj5AWi7+d0n/UjhkwTg=
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: s.hauer@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 
-Hello Krzysztof Kozlowski,
+The CDCE6214 is a Ultra-Low Power Clock Generator With One PLL, Four
+Differential Outputs, Two Inputs, and Internal EEPROM.
 
-> -----Original Message-----
-> From: Krzysztof Kozlowski =5Bmailto:krzk=40kernel.org=5D
-> Sent: Wednesday, April 30, 2025 4:26 PM
-> To: Shin Son <shin.son=40samsung.com>
-> Cc: Sylwester Nawrocki <s.nawrocki=40samsung.com>; Chanwoo Choi
-> <cw00.choi=40samsung.com>; Alim Akhtar <alim.akhtar=40samsung.com>; Micha=
-el
-> Turquette <mturquette=40baylibre.com>; Stephen Boyd <sboyd=40kernel.org>;=
- Rob
-> Herring <robh=40kernel.org>; Conor Dooley <conor+dt=40kernel.org>; Sunyea=
-l
-> Hong <sunyeal.hong=40samsung.com>; linux-samsung-soc=40vger.kernel.org; l=
-inux-
-> clk=40vger.kernel.org; devicetree=40vger.kernel.org; linux-arm-
-> kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org
-> Subject: Re: =5BPATCH v2 3/4=5D clk: samsung: exynosautov920: Fix incorre=
-ct
-> CLKS_NR_CPUCL0 definition
->=20
-> On Mon, Apr 28, 2025 at 08:35:16PM GMT, Shin Son wrote:
-> > The CLKS_NR_CPUCL0 macro was incorrectly defined based on a wrong clock
-> ID.
-> > It mistakenly referenced CLK_DOUT_CLUSTER0_PERIPHCLK, which
-> > corresponds to a cluster peripheral clock, not the last clock ID for
-> CPUCL0 as intended.
-> >
-> > This patch corrects the definition to use CLK_DOUT_CPUCL0_NOCP + 1,
->=20
-> Please do not use =22This commit/patch/change=22, but imperative mood. Se=
-e
-> longer explanation here:
-> https://protect2.fireeye.com/v1/url?k=3D2e90faf7-4f1befd2-2e9171b8-
-> 74fe485cbff6-28bf0169b8fd9187&q=3D1&e=3Ddfbde4e5-fe38-4140-aa45-
-> b3362eb2dc00&u=3Dhttps%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.17.1%2Fsou=
-rce
-> %2FDocumentation%2Fprocess%2Fsubmitting-patches.rst%23L95
->=20
-> > properly matching the last clock ID for CPUCL0 as intended.
-> >
-> > This error was due to confusion with the hardware diagram, and this
-> > patch ensures that the number of clocks for CPUCL0 is correctly defined=
-.
->=20
-> Fixes: 59636ec89c2c (=22clk: samsung: exynosautov920: add cpucl0 clock
-> support=22)
->=20
->=20
-> And proper order - fixes are *ALWAYS* before new features.
->=20
-> Best regards,
-> Krzysztof
+This series adds a common clk framework driver for this chip along with
+the dt-bindings document and a small fix needed for the common clk
+framework.
 
-Thank you for applying my patches.
-I appreciate your feedback, and I=E2=80=99ll=20make=20sure=20to=20improve=
-=20those=20parts=20in=20the=20future.=0D=0A=0D=0AHave=20a=20great=20day.=0D=
-=0A=0D=0ABest=20regards,=0D=0AShin=20Son.=0D=0A=0D=0A
+Sascha
+
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+Changes in v4:
+- add missing '>' modifier in include/dt-bindings/clock/ti,cdce6214.h
+- fix clocks maxItems should be 2
+- add missing license in include/dt-bindings/clock/ti,cdce6214.h
+- Fix checkpatch issues
+- Link to v3: https://lore.kernel.org/r/20250410-clk-cdce6214-v3-0-d73cf9ff3d80@pengutronix.de
+
+Changes in v3:
+- Use string properties instead of int for enums
+- Use units from property-units in dtschema
+- Link to v2: https://lore.kernel.org/r/20250409-clk-cdce6214-v2-0-40b25b722ecb@pengutronix.de
+
+Changes in v2:
+- Use consistent quotes in binding document
+- make clock-names an enum to make each clock fully optional
+- drop '|' in binding description where not needed
+- encode clock input mode into integer
+- encode clock output mode into integer
+- do not use defines for reg properties
+- support setting load capacity for the oscillator via device tree
+- support setting Bias current for the oscillator via device tree
+- support setting polarities of CMOS outputs via device tree
+- fix compatible string in driver
+- remove unused struct cdce6214_config
+- Link to v1: https://lore.kernel.org/r/20250408-clk-cdce6214-v1-0-bd4e7092a91f@pengutronix.de
+
+---
+Sascha Hauer (3):
+      clk: make determine_rate optional for non reparenting clocks
+      dt-bindings: clock: add TI CDCE6214 binding
+      clk: add TI CDCE6214 clock driver
+
+ .../devicetree/bindings/clock/ti,cdce6214.yaml     |  155 +++
+ drivers/clk/Kconfig                                |    7 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/clk-cdce6214.c                         | 1310 ++++++++++++++++++++
+ drivers/clk/clk.c                                  |    3 +-
+ include/dt-bindings/clock/ti,cdce6214.h            |   25 +
+ 6 files changed, 1500 insertions(+), 1 deletion(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20250408-clk-cdce6214-0c74043dc267
+
+Best regards,
+-- 
+Sascha Hauer <s.hauer@pengutronix.de>
+
 
