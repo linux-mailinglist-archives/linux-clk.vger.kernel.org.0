@@ -1,318 +1,127 @@
-Return-Path: <linux-clk+bounces-21266-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21271-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E462DAA6DD0
-	for <lists+linux-clk@lfdr.de>; Fri,  2 May 2025 11:15:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EF26AA6F3C
+	for <lists+linux-clk@lfdr.de>; Fri,  2 May 2025 12:16:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8224F1BC53B7
-	for <lists+linux-clk@lfdr.de>; Fri,  2 May 2025 09:15:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E9CE7B628D
+	for <lists+linux-clk@lfdr.de>; Fri,  2 May 2025 10:14:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DD322B8B8;
-	Fri,  2 May 2025 09:15:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A2F23C4E8;
+	Fri,  2 May 2025 10:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ImFeBpZf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M6OUgtrU"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D022E2AD3E
-	for <linux-clk@vger.kernel.org>; Fri,  2 May 2025 09:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B8022E3F1;
+	Fri,  2 May 2025 10:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746177322; cv=none; b=pq6Yo6SB2Nwy7X1UdzQ9lH1FONJ5No2wa0ELcyEYXHVRPtuf5EZbbzKF3xcKn5I00rwYgyUjJc0NLbmqa1KZSJNuEmoit0xyF9Wxw6bWZw9lbh1CGp8vHyvghlymoS6etU0kYYBGF4zMBvDMqKITXbDCzgN6h/JM6fVY7GDkJ80=
+	t=1746180949; cv=none; b=l6bR9wIP1Wpcvl+mW/QVtHJauHBSaEgyMFaEF/MphMfix9hUNoCEpr2yS7eCbBJH8pA639gHHg8H8s0YmZ/n/Ls8e2CGFesnqV5Kg39+WfSmJajASuEAVW+a9DDCLpgFAWnqmkYqCOFzWXHbl2z7V4yHWb4AOFFGQcbFut5v7gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746177322; c=relaxed/simple;
-	bh=6bEpawpXIDzZfqyu4PYlTXodaquhp8PzImJzwv3zh4M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UeurFh/wcgrJh8w+x3U5UxXyLkytMHNkP3/+okgSyC1LAaxe61XMJnxjqD2xlPLSWAOiz5O0hL86JrEeGPKvBNMqhiZFHY1X5APJYXRAgNFgBOj/Yg3MC7B+XoszcQ2Oruwui6DpUhgp7pWZVtn6Pyic+yE28cD5xSjMdWWZdd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ImFeBpZf; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54b09cb06b0so1910151e87.1
-        for <linux-clk@vger.kernel.org>; Fri, 02 May 2025 02:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1746177319; x=1746782119; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ySX9w+oPBio7ccREiLDzIFMncjou8m/kgRIbKYHKSu8=;
-        b=ImFeBpZfvXFC0MnPcSTArYWil6kUeNjnmxM9p8Ljj3xaOqJY6XrSLLwQgQzzjlSkKf
-         J0UfqjCvlInVcOEnmjal8GLiHoO3tpJ8UxsTCM/+ZYSEhXQF0zE9IB7gnJJhaTWyPD18
-         FCDQkU5yBC5UvPrPgm1PCnXN0hHy1MWbKbbxkuMCacnUi4MpN8Lm8Q5c1Mr7HNGI1+FC
-         42mLspxFX9Er4qPrGyfFsRlzozzDTdcAIxUoqqUEZHtWyU/w917J68utjb0qkqK6RwWG
-         08TToHy9j4QTR8nhVLGgztjNU1UmGa17CZUAtoZs6kOvRFb/xcABX0eTnRTuqMWEN4qm
-         9x7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746177319; x=1746782119;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ySX9w+oPBio7ccREiLDzIFMncjou8m/kgRIbKYHKSu8=;
-        b=kphmRAOK5dGFRDX4LxA1csDjsL6YD+lKhtOEJJILaMuW8dvtp4dWBFOKZEgGDUgzDp
-         toWMF+55miKzCF+J1rrCrC5q+p3z2IfejD96UBX+n4T7qtgne2EiHd8JWBvcobq7rUhV
-         5Y7Mq3i/ACAGdu6ept88ot72H9XMwAhgl7A5uCOkUoZ7nAHLEJjLqFZ/85n5ps7fNxDh
-         D2Z37UFFUlr9T+cBKJ7iEp/a+LGSz2eRTNf9Aabmc74oE2tV8KhGfQq3xSL/bW15l0By
-         ksKH0m0dOwHcqeUpAXbHgRyQ0Jwp6kIl4FLe+F6rlOhV0K3xuiKhUYd+hC5YVuLe7jQs
-         pWVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVqW4lXMFcblLMSArqr37mwMHuSNtaxsjKjiBn/SEVYD0TZJfEBjJR+cuLOOiZPwAfHy/Y7eJcWeWE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQiyvjNHwVBFGr5aB6rd0PfULxHkLU4zCxnO8NzUMkcphOQ9v0
-	Tz6yD3dEa38a3aj81XpLy47AdddVYqT7jkLumcpagskvVfrTA1bc3V/10ZjSvd3I1rxdrCf94QX
-	cI5uXlVPuXKIUDAjJPs4/ojwhehi7h8/57FQQzw==
-X-Gm-Gg: ASbGncueBEiOuaq2z6gALV3yQmJ0St13CfHMXKVPYlKCkOtzC+YuX5jeF9RQ/Ego3AF
-	Fr9E3XgN+CZ2X/SN2/1j9INe9dYWDCe+ZuVlo+zCXW5d3GkG6EsNEU5tM+AYIEshD/SuCi/TlVe
-	HRTPpuIq469tSSq9tBXasdjBQ=
-X-Google-Smtp-Source: AGHT+IH05W+rHs8mZ1MIYxcHQsBlr++/4hOQdFgIvbgfRF1B9qUyGrmZWQ8wKGlpA+Rc8/GY0pzZWNyON1esrRA5bVg=
-X-Received: by 2002:a05:6512:3e15:b0:54a:cc76:ad5e with SMTP id
- 2adb3069b0e04-54eac1f0a74mr544047e87.3.1746177318745; Fri, 02 May 2025
- 02:15:18 -0700 (PDT)
+	s=arc-20240116; t=1746180949; c=relaxed/simple;
+	bh=3c3+5z27CJFct2aKCPDEIOAcWESjT7K/nmpBVR7j1XA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Hr8FKn051iuw+2JAfNshyBGfbgNCpfF7WfXYjQqfc7gPhVy1LH9lxV9XJc2GI10RUU6oK96jnc9s636mBj/F38avm3mhGiGPm7F5trbV67L+AvJCwfztwob8KscPi+cP3LL1RKemya7rIpvC7ntcWb4VVNoLzdEZoS1NE4BgorU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M6OUgtrU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E36E5C4CEE4;
+	Fri,  2 May 2025 10:15:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746180949;
+	bh=3c3+5z27CJFct2aKCPDEIOAcWESjT7K/nmpBVR7j1XA=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=M6OUgtrUlHVua3jtsjavMsPBHBhayoY9AEcU5jKX5fWPK3EEa7jKlDE9Uf160GV97
+	 B39HpHULYqA1acYVn5g0P/2fUr6VC/jFn2k/WozJ1qhplc//mC/onm1vy/UXHj4H/F
+	 2c6q5aesy7ox299X2b58BnChFO01FsRqDSs9sI7/fRXkbjFTtvz+QBTjykPuKQP4lI
+	 L4619phjP4zvgf+BOv5ZlTbHG1C5vk60nAgPLIv6Tv3knf3zfd/5sSlsuCxME8oiR8
+	 aRgfuR7j+xIUuzJ7/aTNoDLm5sqviDkZ36gSaMZ1DS+INXHohPXg++GfR0BKu9MJ30
+	 ILdiri8OjhxLA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF73AC3ABAA;
+	Fri,  2 May 2025 10:15:48 +0000 (UTC)
+From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
+Subject: [PATCH 0/6] Add CMN PLL clock controller support for IPQ5018
+Date: Fri, 02 May 2025 14:15:42 +0400
+Message-Id: <20250502-ipq5018-cmn-pll-v1-0-27902c1c4071@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250203084906.681418-1-apatel@ventanamicro.com>
- <20250203084906.681418-3-apatel@ventanamicro.com> <20250203223020.GA277987-robh@kernel.org>
-In-Reply-To: <20250203223020.GA277987-robh@kernel.org>
-From: Anup Patel <apatel@ventanamicro.com>
-Date: Fri, 2 May 2025 14:45:08 +0530
-X-Gm-Features: ATxdqUH92AZUQ116dRuBh-zB0wpJxtNGQiHH2dWPIJIE2lX8xStUOkLcjPgQASo
-Message-ID: <CAK9=C2VOxFJVfZxCPBi-79ZynexTMCa4nHinbH_MNt3Bdm-arg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 02/17] dt-bindings: mailbox: Add bindings for RPMI
- shared memory transport
-To: Rob Herring <robh@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>, 
-	Rahul Pathak <rpathak@ventanamicro.com>, Leyfoon Tan <leyfoon.tan@starfivetech.com>, 
-	Atish Patra <atishp@atishpatra.org>, Andrew Jones <ajones@ventanamicro.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Anup Patel <anup@brainfault.org>, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE6bFGgC/02OXQqDMBAGryL73EB+jK5epYikyaYNqNVopSDev
+ VFf+rTMwjfMBjPFQDPU2QaR1jCH95BA3DKwLzM8iQWXGCSXmmsuWBindJDZfmBj1zEkLUpHWCq
+ PkFZjJB++p/HeXBxp+iTxcj3hYWZi9t33YakzNNJpZUlZ7VEWqIxTzlemMlqjlCgKT0VOJfwH1
+ dmZkwvBpiRqj6Zc5m1qOpKqghv0uiq5UvUqodn3H/kC1FroAAAA
+X-Change-ID: 20250501-ipq5018-cmn-pll-8e517de873f8
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Luo Jie <quic_luoj@quicinc.com>, 
+ Lee Jones <lee@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ George Moussalem <george.moussalem@outlook.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746180945; l=1972;
+ i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
+ bh=3c3+5z27CJFct2aKCPDEIOAcWESjT7K/nmpBVR7j1XA=;
+ b=4vvd5Svjyxb5OLpkhk7VVUVphoiGh7arQX79G3tzygL39SN53iPp0e+3DY/IKAX/+oN2XMX94
+ tommmv5sfSDB2awRhaeCYC55VYwNSQN/DLfIO8IgljvxL9sa5tfb7Di
+X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
+ pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
+X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
+ with auth_id=364
+X-Original-From: George Moussalem <george.moussalem@outlook.com>
+Reply-To: george.moussalem@outlook.com
 
-On Tue, Feb 4, 2025 at 4:00=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Feb 03, 2025 at 02:18:51PM +0530, Anup Patel wrote:
-> > Add device tree bindings for the common RISC-V Platform Management
-> > Interface (RPMI) shared memory transport as a mailbox controller.
-> >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  .../mailbox/riscv,rpmi-shmem-mbox.yaml        | 150 ++++++++++++++++++
-> >  1 file changed, 150 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mailbox/riscv,rpm=
-i-shmem-mbox.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/mailbox/riscv,rpmi-shmem=
--mbox.yaml b/Documentation/devicetree/bindings/mailbox/riscv,rpmi-shmem-mbo=
-x.yaml
-> > new file mode 100644
-> > index 000000000000..c339df5d9e24
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mailbox/riscv,rpmi-shmem-mbox.y=
-aml
-> > @@ -0,0 +1,150 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mailbox/riscv,rpmi-shmem-mbox.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: RISC-V Platform Management Interface (RPMI) shared memory mailb=
-ox
-> > +
-> > +maintainers:
-> > +  - Anup Patel <anup@brainfault.org>
-> > +
-> > +description: |
-> > +  The RISC-V Platform Management Interface (RPMI) [1] defines a common=
- shared
-> > +  memory based RPMI transport. This RPMI shared memory transport integ=
-rates as
-> > +  mailbox controller in the SBI implementation or supervisor software =
-whereas
-> > +  each RPMI service group is mailbox client in the SBI implementation =
-and
-> > +  supervisor software.
-> > +
-> > +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +  References
-> > +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +  [1] RISC-V Platform Management Interface (RPMI)
-> > +      https://github.com/riscv-non-isa/riscv-rpmi/releases
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: riscv,rpmi-shmem-mbox
-> > +
-> > +  reg:
-> > +    oneOf:
-> > +      - items:
-> > +          - description: A2P request queue base address
-> > +          - description: P2A acknowledgment queue base address
-> > +          - description: P2A request queue base address
-> > +          - description: A2P acknowledgment queue base address
-> > +          - description: A2P doorbell address
-> > +      - items:
-> > +          - description: A2P request queue base address
-> > +          - description: P2A acknowledgment queue base address
-> > +          - description: P2A request queue base address
-> > +          - description: A2P acknowledgment queue base address
-> > +      - items:
-> > +          - description: A2P request queue base address
-> > +          - description: P2A acknowledgment queue base address
-> > +          - description: A2P doorbell address
-> > +      - items:
-> > +          - description: A2P request queue base address
-> > +          - description: P2A acknowledgment queue base address
-> > +
-> > +  reg-names:
-> > +    oneOf:
-> > +      - items:
-> > +          - const: a2p-req
-> > +          - const: p2a-ack
-> > +          - const: p2a-req
-> > +          - const: a2p-ack
-> > +          - const: doorbell
-> > +      - items:
-> > +          - const: a2p-req
-> > +          - const: p2a-ack
-> > +          - const: p2a-req
-> > +          - const: a2p-ack
->
-> These first 2 items lists can be combined with the addition of
-> 'minItems: 4'
+The CMN PLL block of IPQ5018 supplies output clocks for XO at 24 MHZ,
+sleep at 32KHZ, and the ethernet block at 50MHZ.
 
-It seems "minItems" is not allowed under "items".
+This patch series extends the CMN PLL driver to support IPQ5018.
+It also adds the SoC specific header file to export the CMN PLL
+output clock specifiers for IPQ5018. The new table of output
+clocks is added for the CMN PLL of IPQ5018, which is acquired
+from the device according to the compatible.
 
-If we put "minItems: 4" under "reg-names" then below
-combinations become invalid.
+Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+---
+George Moussalem (6):
+      dt-bindings: clock: qcom: Add CMN PLL support for IPQ5018 SoC
+      clk: qcom: ipq5018: mark XO clock as critical
+      clk: qcom: ipq-cmn-pll: Add IPQ5018 SoC support
+      dt-bindings: mfd: qcom,tcsr: Add compatible for IPQ5018
+      arm64: dts: ipq5018: Add CMN PLL node
+      arm64: dts: qcom: Update IPQ5018 xo_board_clk to use fixed factor clock
 
->
-> > +      - items:
-> > +          - const: a2p-req
-> > +          - const: p2a-ack
-> > +          - const: doorbell
-> > +      - items:
-> > +          - const: a2p-req
-> > +          - const: p2a-ack
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +    description:
-> > +      The RPMI shared memory transport supports wired interrupt specif=
-ied by
-> > +      this property as the P2A doorbell.
-> > +
-> > +  msi-parent:
-> > +    description:
-> > +      The RPMI shared memory transport supports MSI as P2A doorbell an=
-d this
-> > +      property specifies the target MSI controller.
-> > +
-> > +  riscv,slot-size:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    minimum: 64
-> > +    description:
-> > +      Power-of-2 RPMI slot size of the RPMI shared memory transport.
-> > +
-> > +  riscv,doorbell-mask:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    default: 0xffffffff
-> > +    description:
-> > +      Update only the register bits of doorbell defined by the mask (3=
-2 bit).
-> > +
-> > +  riscv,doorbell-value:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    default: 0x1
-> > +    description:
-> > +      Value written to the doorbell register bits (32-bit access) spec=
-ified
-> > +      by the riscv,db-mask property.
->
-> You mean riscv,doorbell-mask?
->
-> I'm confused why you would need both? If the value to write is fixed
-> here, then why do you need a mask? You could just mask the value here.
->
-> I assume there's some dependency between these 2 properties. That needs
-> to be captured with 'dependencies'.
+ .../bindings/clock/qcom,ipq9574-cmn-pll.yaml       | 11 +++-
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml         |  1 +
+ arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts     |  3 +-
+ .../dts/qcom/ipq5018-tplink-archer-ax55-v1.dts     |  3 +-
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi              | 40 +++++++++++-
+ drivers/clk/qcom/gcc-ipq5018.c                     |  2 +-
+ drivers/clk/qcom/ipq-cmn-pll.c                     | 72 ++++++++++++++++++----
+ include/dt-bindings/clock/qcom,ipq5018-cmn-pll.h   | 16 +++++
+ 8 files changed, 129 insertions(+), 19 deletions(-)
+---
+base-commit: 8a2d53ce3c5f82683ad3df9a9a55822816fe64e7
+change-id: 20250501-ipq5018-cmn-pll-8e517de873f8
+prerequisite-change-id: 20250411-qcom_ipq5424_cmnpll-960a8f597033:v2
+prerequisite-patch-id: dc3949e10baf58f8c28d24bb3ffd347a78a1a2ee
+prerequisite-patch-id: da645619780de3186a3cccf25beedd4fefab36df
+prerequisite-patch-id: 4b5d81954f1f43d450a775bcabc1a18429933aaa
+prerequisite-patch-id: 541f835fb279f83e6eb2405c531bd7da9aacf4bd
 
-We don't need the "riscv,doorbell-mask" property because the
-latest frozen RPMI specification only defines a write-only 32-bit
-doorbell register. I will remove this property in the next revision.
+Best regards,
+-- 
+George Moussalem <george.moussalem@outlook.com>
 
->
-> > +
-> > +  "#mbox-cells":
-> > +    const: 1
-> > +    description:
-> > +      The first cell specifies RPMI service group ID.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - riscv,slot-size
-> > +  - "#mbox-cells"
-> > +
-> > +anyOf:
-> > +  - required:
-> > +      - interrupts
-> > +  - required:
-> > +      - msi-parent
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    // Example 1 (RPMI shared memory with only 2 queues):
-> > +    mailbox@10080000 {
-> > +        compatible =3D "riscv,rpmi-shmem-mbox";
-> > +        reg =3D <0x10080000 0x10000>,
-> > +              <0x10090000 0x10000>,
-> > +              <0x100a0000 0x4>;
-> > +        reg-names =3D "a2p-req", "p2a-ack", "doorbell";
-> > +        msi-parent =3D <&imsic_mlevel>;
-> > +        riscv,slot-size =3D <64>;
-> > +        #mbox-cells =3D <1>;
-> > +    };
-> > +  - |
-> > +    // Example 2 (RPMI shared memory with only 4 queues):
-> > +    mailbox@10001000 {
-> > +        compatible =3D "riscv,rpmi-shmem-mbox";
-> > +        reg =3D <0x10001000 0x800>,
-> > +              <0x10001800 0x800>,
-> > +              <0x10002000 0x800>,
-> > +              <0x10002800 0x800>,
-> > +              <0x10003000 0x4>;
-> > +        reg-names =3D "a2p-req", "p2a-ack", "p2a-req", "a2p-ack", "doo=
-rbell";
-> > +        msi-parent =3D <&imsic_mlevel>;
-> > +        riscv,slot-size =3D <64>;
-> > +        riscv,doorbell-mask =3D <0x00008000>;
-> > +        riscv,doorbell-value =3D <0x00008000>;
-> > +        #mbox-cells =3D <1>;
-> > +    };
-> > --
-> > 2.43.0
-> >
 
-Regards,
-Anup
 
