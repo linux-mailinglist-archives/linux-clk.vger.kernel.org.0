@@ -1,46 +1,46 @@
-Return-Path: <linux-clk+bounces-21407-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21409-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 528E9AAB36D
-	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 06:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DF09AAB55C
+	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 07:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35FD33B03A6
-	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 04:39:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 325DE3A6D10
+	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 05:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9FA238C05;
-	Tue,  6 May 2025 00:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DB734734D;
+	Tue,  6 May 2025 00:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pvMavcx7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVOTEtEi"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6B2288514;
-	Mon,  5 May 2025 23:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DEC284B4E;
+	Mon,  5 May 2025 23:17:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486306; cv=none; b=Eb/jbAWe5syN4ZsOAcBGhwqcBfFiwkx8jBmZKIJnyuhiClai8LzaHk4lO2TFH7xLIVbdh799ljuSOvlZZEagQJgXhB/WXVqCsovmWrsm21IKNKPJ6bO1/WxWWt7SF79rBJK9I0AEktLIKLXX05sj0q2CwuvIV3pib3xcMZLyXEo=
+	t=1746487060; cv=none; b=qCHUUt8mQr/82H0885BS0AZlwo+Sp5yAS43VDewi6RufDT/+H2ODjCZj6DP+obd0qDVTg8CwPN7VvV6BWW4L7xOAAIISU63+Tba0FxgYUo6D0dAeDvXhmsRNQOjoIlHqqMOgbL9USI15sjGpjc82aAc99tB839zt/JN6dTFIq44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486306; c=relaxed/simple;
+	s=arc-20240116; t=1746487060; c=relaxed/simple;
 	bh=LjtPLenDw+woKWSyHy09BKPetQD7xzkBJ+8SpJ/cWcI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QJZXdIT4ZL7ruHUeRjza8NlDu7CgZKxmgbsfRtYI4SudVcN/VSQ6VZKQmfnn7eRXcAyOJX/1f/Maf77utt9q+YGaVHQb8gggpozd0jfCSgwrfNtiQJbbhqreiQvAILKcfx23kt6t80kna8bsphPlNvujDPZh9bWqgjnHargxd6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pvMavcx7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DADBEC4CEEE;
-	Mon,  5 May 2025 23:05:04 +0000 (UTC)
+	 MIME-Version; b=nYFfDDkwKkuo8NBHX5x4X6aIRuiy0RPAi5ZdrD17YlAUZs7tph6vZOOhqdN7dLSwtsmodmPO/4qTmJWsF6Vp/f9fhhm2YNL8Vs1vOAyAGrQ4+Peo8DsuzMueE8IwkyZbp3CcjGB84UsW+ttjXHlL4iUTkLcK3nq6mFjb7oY/OzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVOTEtEi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A941C4CEE4;
+	Mon,  5 May 2025 23:17:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486306;
+	s=k20201202; t=1746487059;
 	bh=LjtPLenDw+woKWSyHy09BKPetQD7xzkBJ+8SpJ/cWcI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pvMavcx723HllmI0LiXC4dWNdw8EYxitmsb7IKJGekKs2N+WkOHclDn6t1ZwxnrHQ
-	 Tjcl99jbSWqSN/gz+416U07jI09oCPDxOJ73KWOp0d9A7GklJRIH0ATe/kuTuHyfS9
-	 EznI1h6Ym//TQzklAXvEz4dOGqno9kSe+4JxwxmCCjg/sqFQWzujsO/k+9TJBlOfDF
-	 Pip4iTJd7aoTjhgLEPOtfyZMi921bzD98YdIF0LLokmgt93k0/IK211TDTE0dBNNEY
-	 eYHUCfW+eVJi9hpGeLdny7YnjJjp2yMdPd2Ohkt67B2NHfU05WLnjZY8m4VotkSFib
-	 0ShRR35laqugQ==
+	b=gVOTEtEir/+Dsdsv8T1FRYt8p10u5i0w5ahbqOOkjrq5ucRb+B+nx92JARdWS1gxQ
+	 XxO43nA7MQx7ggbhfC2mjcGkJsym9epPmDbOJ1A23Ax63QTyltEiNyB2UxjOOsUnad
+	 vy8+ZdnzZ/CrUSrDo9g0Ii/3yYtR9OhgX7rJ9jnOTCOVZpAHGRN3amMpNWc+PdfcvA
+	 985qYtR1y2Oa0l2p9rmMGx+1gLlOS1X6dM2Vj2AMC6eLqGKKuF0ahBRYTqRtPI8AwX
+	 2ic6kcW+IBi7/jK/NAHbYSwxoKl4aSlOTSLePsKt6/uNM+raQQJUGUBbWvQN7D3XPz
+	 PcNw1/KY6dIOA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: Jordan Crouse <jorcrous@amazon.com>,
 	sboyd@kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 250/294] clk: qcom: camcc-sm8250: Use clk_rcg2_shared_ops for some RCGs
-Date: Mon,  5 May 2025 18:55:50 -0400
-Message-Id: <20250505225634.2688578-250-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 132/153] clk: qcom: camcc-sm8250: Use clk_rcg2_shared_ops for some RCGs
+Date: Mon,  5 May 2025 19:12:59 -0400
+Message-Id: <20250505231320.2695319-132-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505225634.2688578-1-sashal@kernel.org>
-References: <20250505225634.2688578-1-sashal@kernel.org>
+In-Reply-To: <20250505231320.2695319-1-sashal@kernel.org>
+References: <20250505231320.2695319-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.89
+X-stable-base: Linux 5.15.181
 Content-Transfer-Encoding: 8bit
 
 From: Jordan Crouse <jorcrous@amazon.com>
