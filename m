@@ -1,77 +1,120 @@
-Return-Path: <linux-clk+bounces-21425-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21427-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB5DAABF4F
-	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 11:25:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C25AAC11B
+	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 12:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6774463FBC
-	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 09:24:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAA7A3B26E5
+	for <lists+linux-clk@lfdr.de>; Tue,  6 May 2025 10:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CB326A087;
-	Tue,  6 May 2025 09:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 522E627817A;
+	Tue,  6 May 2025 10:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="bzbc8dF8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CY6oH42E"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67367252906;
-	Tue,  6 May 2025 09:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EA5277036;
+	Tue,  6 May 2025 10:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746523454; cv=none; b=s4FN4L9N9mTKSzvK305Kxv1iQe93pWkxsDpWH/PEctvWcacP34LR88QqeePJN35Zg3nrLTvXtj/+A4eDb5OLOCobv4pf2hB/5/5lQCcHlvRZeVIOHrd1VBOIVMqgiNDJNuhwxhaE8wNW8AK5Gp5uTFLKYD70ykUd3uOPn+RGIus=
+	t=1746526512; cv=none; b=qDvxu9CCcoHXg5kpTnWeZRBr24W4YLavDeWKTqklc+2IVs1RQM9m85khE4+I08xFRUwmsguXQcCZSLENUJtkSpWycByr6pNJD+LA7TGe0D78M+Ujmh2UMmZ3wuxWtWNWlE9KlOn1VoxPF5X7mlvxRkFJKicHDljiHANl6DzpnUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746523454; c=relaxed/simple;
-	bh=6w+tXU7Z8tsTcrJtTb1oifhiSkHhaVbmuA7KCza1/rU=;
+	s=arc-20240116; t=1746526512; c=relaxed/simple;
+	bh=H3fLQxygZC6XKdNmeZEZ2FzeMvkZHRYPXqX08psAQ6s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hmQUVqTO8YUUxKoSvKlUoiOjlM7rxrZtXRp5/ZShqY71i2xWfg1APzhMbuSRK7b9K3KZ5+L+1aZb9ieW+lQ+Zl7GKxOKRk7zsNPlUAjLjhc337fKTAz/1W6rPHOyBUPcwYqpCqdWh/OzQgOMZ1pVHHg6R4fut3x7qGEdV2z9yY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=bzbc8dF8; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id C4B0D25A88;
-	Tue,  6 May 2025 11:24:11 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WKdrIXse09H6; Tue,  6 May 2025 11:24:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1746523451; bh=6w+tXU7Z8tsTcrJtTb1oifhiSkHhaVbmuA7KCza1/rU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bzbc8dF8Okg0jQcz0QdqchtwqlD3B9UslylP0fk1n1d5FBGEkvutT0d8W4eJNXQJp
-	 xKFKGRt2BSraG+16zvoDmsfHw/0nFYFq1pifYO5yLZtPuiexBZkYhsJOV56Tdquq18
-	 oWCheiEZx2zZJipHA3i6NoPNS/2OSsQGklUwWl+Ktj4eiRMqhV69WvJbMWaGSbIZJw
-	 mQeKwLFHbrL5e/gEQxW6viSh18SIMd4gae70pV1gJYR5WouacHRjLh0Pf+IDSNpU3G
-	 BRq6s47TGxGF2eY9Nsbk+nFGd0yh0AYoElMHoq+No+E5ytm6IjQxBDOvklbi9J77N0
-	 N8Rnrktmetqug==
-From: Yao Zi <ziyao@disroot.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Chukun Pan <amadeus@jmu.edu.cn>
-Cc: linux-mmc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
+	 MIME-Version; b=N4l5A2vPQU2mVg6LWyQxH/3HOvfnvhu3bc1bzBAkNKREZuUQEJQsqgNZ8HDVG5W7GUtZL8teCWnbRIA8F2oeTll1Z30RFP5j/ZrIoFmd4K+CPVQHTAt6LQCgFHQ8Y8Su9SzTpsBnQh7MF9bW49irGpqw4fLRkZTtrY8LJzZB0JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CY6oH42E; arc=none smtp.client-ip=209.85.167.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-40337dd3847so2996774b6e.0;
+        Tue, 06 May 2025 03:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746526508; x=1747131308; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xKR53B3qPFijXew46vboZyZL5TEINx3Tkrkttdk5rDA=;
+        b=CY6oH42E+cITuANaDNBxhcIp6x0aB9LX9HvhOf2zCx/nIKrLwMQIMGUWew89Cmn2T3
+         hYK/OpK/fZgadoX0d4m+fGGb71oFv4q/SNOT/cqCTrOGYmvIAkIa+Qrsi3CKV5CBz8rR
+         1mwCP9iqcyTMKvz9h0KaPuohQ3K5qurTvJR35/e750VHpC2x55vEMFFOkhLl8hTTymUt
+         rGjBdk242WCwkc5HS7EdEJmWOU18MNlZKMSAAajV4Pgw77NXp7D0I2F15/IJNQfPJQ7E
+         IHSpof3Ot+LkErh8Y10v1IxmzOAxGEqMwLDuEo44FrH0dEewEPjMTSG3MxNL5ze0JD6a
+         jRQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746526508; x=1747131308;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xKR53B3qPFijXew46vboZyZL5TEINx3Tkrkttdk5rDA=;
+        b=kOUS2XQCT0helJ5Omwl9xbu4xgQCOtVvsEzSYsFvDZUwESd9vKj1Quqh6Hpxv8DQoa
+         4AefvFjCor10dYmke9SdJQ2K41XfZLMuW1UrqjofVZzJ0KYBxIjwnUagu5CZAv1WjpXy
+         Kf+azi1Ayzdu3mCIek51eJyZFaZXKYQLI0H4JrATl5e+LJsUHu09yinJ0YpRvX8m9uD1
+         h2r7vVA7xnJIKf+2RPthNnPLpb2ROa2RKhediaZdPhmr9QCdKLaVlqoZiUJhdlVYmb7U
+         S8DrRZoOl4PIJ3tz7EVUjJ9XPMAVJZRTqmXGFTmsPNR9t+42NAtCH4dJDHOhEwEFHGAb
+         nzeg==
+X-Forwarded-Encrypted: i=1; AJvYcCU88Ic4rrMDiesPPdufJgMEA5tKsDgFQ1LxPMa4AQmw9qHzqc7PfLg7f9SavObtWYRY4ZvMA+aeX8Y=@vger.kernel.org, AJvYcCVfI5aFptHrDF/EX6VCoOo1pObYRsWLCwqUDCWGwkBt65IqtV1ln1rDCpS8qSfJTER1xuNPUrh7knXZKZGn@vger.kernel.org, AJvYcCVrXxvlf7WrLlnIg0yklX1TZQY2dceNDbFxaf3Qr9kgo5rpCVHJIbvimyKjt5rowiOsNGjNXCV5kOA=@vger.kernel.org, AJvYcCXIszgkY4l/dUX01NSnUDeUMDgFsotMMtJDzXc1jLh7GDupoWPmCOwUjdFSjYXztJ8KqpkB1n6Woy5liv7zcCA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywrbh+Jn73X5hiZ8WiWdMQl1PcaqcLZiFI+2CMzgN+02wpr8OKp
+	9o0cFZp+w1uo1AECeHW1j+Apz1DRzGdkGSHETsqPEnUwoMM3D8nW
+X-Gm-Gg: ASbGnctUJVUzmm+F225uwsO3dRUBsINAyOdDxw6m41PrDrvaT5BNi4JmolQDsnUDsYX
+	Xxz3Bo5cHHtrpSDEeAcvmzaWl13H/1b9cAbT7DQRGDtOIi7PixUg+7EMHW0MRFR5Uyc6xZsYCY/
+	YKs3gjYGCXXbX9sZvDo0s6wUar9Y9e0avfM5mAZo0fwDMqLFdBY+eNaeDMesYNX2iZMMgNLYbE/
+	TnG0/tiL+jC+5VdvtQyl70VPJb79KSewbEd758/MvfQQeXZvbNo1b1SEpjh+DyNFzzTCX4GKcSX
+	noy862e42bu15QSkQ8LfLrCUeThCvzn9ywWXqYOfRW+PAwB9pT7VWjy12FNom14ZCKgESceJIOv
+	er9lTPmpCZGKtKQd7Xc2KM10=
+X-Google-Smtp-Source: AGHT+IHE8caFW7rhcABhjbpxTvjrWJ3oASf6F/4xoBjVlsPODe2HL2MtdDc5iad7lX+dv3sdRNkD1g==
+X-Received: by 2002:a05:6808:3008:b0:3f9:36ec:dab3 with SMTP id 5614622812f47-40368ca72d7mr1345277b6e.14.1746526508421;
+        Tue, 06 May 2025 03:15:08 -0700 (PDT)
+Received: from my-computer.lan (c-73-76-29-249.hsd1.tx.comcast.net. [73.76.29.249])
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4033dae726dsm2390904b6e.30.2025.05.06.03.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 03:15:07 -0700 (PDT)
+From: Andrew Ballance <andrewjballance@gmail.com>
+To: viresh.kumar@linaro.org
+Cc: a.hindborg@kernel.org,
+	alex.bennee@linaro.org,
+	alex.gaynor@gmail.com,
+	aliceryhl@google.com,
+	anisse@astier.eu,
+	benno.lossin@proton.me,
+	bjorn3_gh@protonmail.com,
+	boqun.feng@gmail.com,
+	bqe@google.com,
+	dakr@kernel.org,
+	dakr@redhat.com,
+	daniel.almeida@collabora.com,
+	gary@garyguo.net,
+	joakim.bech@linaro.org,
 	linux-clk@vger.kernel.org,
-	Yao Zi <ziyao@disroot.org>
-Subject: [PATCH v5 5/5] arm64: dts: rockchip: Enable SD-card interface on Radxa E20C
-Date: Tue,  6 May 2025 09:22:06 +0000
-Message-ID: <20250506092206.46143-6-ziyao@disroot.org>
-In-Reply-To: <20250506092206.46143-1-ziyao@disroot.org>
-References: <20250506092206.46143-1-ziyao@disroot.org>
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux@armlinux.org.uk,
+	linux@rasmusvillemoes.dk,
+	manos.pitsidianakis@linaro.org,
+	miguel.ojeda.sandonis@gmail.com,
+	mturquette@baylibre.com,
+	nm@ti.com,
+	ojeda@kernel.org,
+	peterz@infradead.org,
+	rafael@kernel.org,
+	robh@kernel.org,
+	rust-for-linux@vger.kernel.org,
+	sboyd@kernel.org,
+	tglx@linutronix.de,
+	tmgross@umich.edu,
+	vincent.guittot@linaro.org,
+	vireshk@kernel.org,
+	yury.norov@gmail.com
+Subject: Re: [PATCH V11 00/15] Rust abstractions for clk, cpumask, cpufreq, OPP
+Date: Tue,  6 May 2025 05:13:11 -0500
+Message-ID: <20250506101311.142475-1-andrewjballance@gmail.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250502070109.inpes2ou3rxx2fxp@vireshk-i7>
+References: <20250502070109.inpes2ou3rxx2fxp@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -80,76 +123,51 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-SD-card is available on Radxa E20C board.
+On Fri, May 02, 2025 at 12:31:09PM +0530, Viresh Kumar wrote:
+> Applied to the cpufreq tree few days back and is now included in
+> linux-next:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/log/?h=cpufreq/arm/linux-next
+> 
+> Will send it for v6.16-rc1 (unless there are any objections).
+> 
+> -- 
+> viresh
 
-Signed-off-by: Yao Zi <ziyao@disroot.org>
----
- .../boot/dts/rockchip/rk3528-radxa-e20c.dts   | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
+Hi,
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts b/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-index 6e77f7753ff7..d0b194b7e66e 100644
---- a/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3528-radxa-e20c.dts
-@@ -17,6 +17,7 @@ / {
- 
- 	aliases {
- 		mmc0 = &sdhci;
-+		mmc1 = &sdmmc;
- 	};
- 
- 	chosen {
-@@ -108,6 +109,18 @@ vcc5v0_sys: regulator-5v0-vcc-sys {
- 		regulator-min-microvolt = <5000000>;
- 		regulator-max-microvolt = <5000000>;
- 	};
-+
-+	vccio_sd: regulator-vccio-sd {
-+		compatible = "regulator-gpio";
-+		gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&sdmmc_vol_ctrl_h>;
-+		regulator-name = "vccio_sd";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		states = <1800000 0x0>, <3300000 0x1>;
-+		vin-supply = <&vcc5v0_sys>;
-+	};
- };
- 
- &i2c1 {
-@@ -144,6 +157,12 @@ wan_led_g: wan-led-g {
- 			rockchip,pins = <4 RK_PC0 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
- 	};
-+
-+	sdmmc {
-+		sdmmc_vol_ctrl_h: sdmmc-vol-ctrl-h {
-+			rockchip,pins = <4 RK_PB6 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
- };
- 
- &saradc {
-@@ -162,6 +181,17 @@ &sdhci {
- 	status = "okay";
- };
- 
-+&sdmmc {
-+	bus-width = <4>;
-+	cap-mmc-highspeed;
-+	cap-sd-highspeed;
-+	disable-wp;
-+	sd-uhs-sdr104;
-+	vmmc-supply = <&vcc_3v3>;
-+	vqmmc-supply = <&vccio_sd>;
-+	status = "okay";
-+};
-+
- &uart0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart0m0_xfer>;
--- 
-2.49.0
+I have tried building the latest linux-next and I think that this
+patch series causes a build error with the defconfig for x86_64.
 
+commit: 407f60a151df3c44397e5afc0111eb9b026c38d3
+
+steps to reproduce:
+    make LLVM=1 defconfig
+    make LLVM=1 rust.config
+    make LLVM=1
+
+build error message:
+    error[E0432]: unresolved import `crate::clk`
+      --> rust/kernel/cpufreq.rs:12:5
+       |
+    12 |     clk::{Clk, Hertz},
+       |     ^^^ could not find `clk` in the crate root
+       |
+    note: found an item that was configured out
+      --> rust/kernel/lib.rs:48:9
+       |
+    48 | pub mod clk;
+       |         ^^^
+    note: the item is gated here
+      --> rust/kernel/lib.rs:47:1
+       |
+    47 | #[cfg(CONFIG_COMMON_CLK)]
+       | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    error: aborting due to 1 previous error
+
+it looks like this occurs when CONFIG_COMMON_CLK=n and CONFIG_CPU_FREQ=y.
+
+Best regards,
+Andrew Ballance
 
