@@ -1,189 +1,166 @@
-Return-Path: <linux-clk+bounces-21493-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21490-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAD19AAD6E4
-	for <lists+linux-clk@lfdr.de>; Wed,  7 May 2025 09:11:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65163AAD63C
+	for <lists+linux-clk@lfdr.de>; Wed,  7 May 2025 08:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B80763B7994
-	for <lists+linux-clk@lfdr.de>; Wed,  7 May 2025 07:11:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 665131B6866A
+	for <lists+linux-clk@lfdr.de>; Wed,  7 May 2025 06:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 533C32144AD;
-	Wed,  7 May 2025 07:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A797B210F5B;
+	Wed,  7 May 2025 06:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5RX8B9N"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UwoD3P+7"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716DA1D61BC;
-	Wed,  7 May 2025 07:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF082139579;
+	Wed,  7 May 2025 06:38:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746601893; cv=none; b=F1kDVd7cEc/TRfWlmOt4esAaUrkS4vcbSKrAxp093eUJFsMi+wDE81G4D5cZRLZOahFLA0H/UzaG4B5cVcOvHbcX8w+oXX/J+/6XfyOgiFDAGAHV7hHZ8fiUW4ul215dAuyLRQI4drMFHnmNtFsQiqRUkjN+QuyhZ06tn78pNr4=
+	t=1746599921; cv=none; b=G1vRAKyzYoRLPvt6eKKIoxkcj874B3bOwVRyMUsv9JnnyuUNPg6DhJteQvx5cFEDw0pdCNoQKGbXjqOHtyZMvr9MHVdAWNOyZD41mVsQ9NZGUxa/aaPowIXeSg2QcDiGs0W0SRtlYjbA1TjewKgh6OvjZ24pBIfA6hDXqkdhZFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746601893; c=relaxed/simple;
-	bh=HNkP2z7fO8dRjzXPZ7zZcqQkaQmQMB+gSMGx+hs7H8A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F5cnYyKqGJlNSxUtYceXyXDY6K+eaf57L5h+h51Esq8SycuSfWSTRjaslespmAXf+bZDDiQqEjhOFb6AwwqrZCuRYdonEYU4RrjAhMI8ZIJVdfH+kazx9seE0vHXJY9KRV/SK8r6l4OKy/ozYJ2H0NtDGUusFVdWrBy4nJ9KMv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5RX8B9N; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-441d437cfaaso3408585e9.1;
-        Wed, 07 May 2025 00:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746601890; x=1747206690; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Jn2G++5P5iR4QIZl9LBB+QOBbe9aArcNf9gSE3QaJs8=;
-        b=l5RX8B9N5xlX1AessZ1yBLDY6pk4rXVmApcN52SPgRXWbhXOIF+pPjhRaFoASxl1MJ
-         M4RRWIkWDXF83R6taA6gegJ0t8Y2d9APDn95HXTKpUcxo9LE0nqV6QGl4D/X+0r/rDrk
-         8kzyl/GEzEyClsbOcFTDT1RPVKGJ6O7Zk5zv4nHjp/dZtyVccW5TcfCfN4jcVl3Zjp/p
-         Q1iG/xjW8oqKtIHLqHg0/mOSF3Irc2OxVtVJJ8rxXLd/8QJRFS+pdJ81vsoGpCcC41oT
-         yqiEX0QyPHHMO2aJLlr212GPYEujfOxoqvRYZ/7BREkNOf+4jVYrgO66E+wgzeZ2drlK
-         aOYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746601890; x=1747206690;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jn2G++5P5iR4QIZl9LBB+QOBbe9aArcNf9gSE3QaJs8=;
-        b=upTo1AQAerSJ0sypdZTAR5J14jfG4iLK+TVJgbdSfbwuY4mER5XwBTO6zXEwUoiMC5
-         imLnYVMSdejPxnBdZA3wmwrW0ntFxbNKrLBkSHGaeKKDXG9E5G1l90uzoYnGm5pX0EMn
-         qFAPeU0vP466JgS18InkkdVlBla30PPTsvgRSX131KWkC+DryaDqUYOGjh4ZUSIP3Nc1
-         PNRIpDUF/xIotJu56eDmoKSW9ieEV0wguqr9H5N28qXVtGX26Ia1QtOD5QYcqvLd9qz1
-         VpyCX9cFJhTr4TXH3EgHimk9XDr3ooPrx8satsQegLCnuNSSlFdIvYFOBNi87i8RWSmn
-         pkOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+GOTOmdQGql8m5H2005rwsY/OdSF+D/QMKLl6jkY4aSs87RhTXETkVhlsKL57YlAfqeGtX3GV0b2+@vger.kernel.org, AJvYcCU8cnQKqAJdTqoreQ//Z0HW3GPYrMZzmP84unHlY2DQMcK/uhw6UihFo1wV/cReEz8XaeogoBW/bZT0@vger.kernel.org, AJvYcCUf/IdUbPCnx9/JENEQMmIePXxBEFtnKXAvR5rLBBOQfHFNcoBqxEFY68UKlvvxR6ddhvIXV47WpzQ=@vger.kernel.org, AJvYcCV8Kdczc3DWLlw8StWhjTZ/Tv/3ZfFmj9ZdHUQ5AnRN4WY4nrnCuzzrstFpeV13qweRrHbz9aruLTVV@vger.kernel.org, AJvYcCWKNNXHGX68zQGVYc6qBtlqmBYKcJObkfTD2hhpIgMDW1YTIDlVkHJIy+GYVHxwPj7oAHCr7vu6RA8u@vger.kernel.org, AJvYcCWtHqZuiAGRhONDWA42p+KzPPba//QPmLa3S6fiUv6d7sA25VePr2m+pUcDdVGNJKdU7Tf7deylVBGKjg==@vger.kernel.org, AJvYcCWu4ez2Lvqxe5DnmpmOwe7KweQzlWi+AYk7wJYNWykjoQnpOh2t58mjsAs0J8UdhcgU8HR9JMiPrDYIslg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxayOEO05l816MxYEfASy3S5X3KkFR/yBjKLrsRcibyE3cqz95P
-	wzjArMfNjX4cea7W5+yh8zjbEud5tmD63GB2/3fG5V6NhavspBJz
-X-Gm-Gg: ASbGncu1ZttCnXmhy8wqux31Z5EnGBediXWiuBHO+vYuVGGckx/vyaxNklld6VE+DiZ
-	tMYbGkt6neDkBE8s90pQIsugXkfzTCYYHNiHGtNqhbpmELuF9scrUZHNqESvRckDPqkqp4KlpGs
-	FXonwQ+7zT6HjhhMaS6DNxiRmACs+PNwLNCQcxSI6+jAmH8/96b6fDQNiKm0c2blIhftCinENFT
-	ldvkaR73RVEDayY6IQZDthkfQZJbvgTQElQ5AnB82fmTExHyB16oD+wchJWYgzsLfrikG9cFCg/
-	GUGuQ7Tmnlh7NzR4B2W/Hiz2C0fhLxkEnw9Pn6lElc6Mo49weYLJS2t36HIyoPudpqmllOpwzHC
-	SR+CBmhLG0lIQH5I=
-X-Google-Smtp-Source: AGHT+IFP/BGLUhNjkANF9Q5NNHil9mQ7V1wjQN+dodd00ido4Dc9LAmYaJnyVsjC3DmY9ZMTKkKmAQ==
-X-Received: by 2002:a05:600c:6749:b0:43d:ea:51d2 with SMTP id 5b1f17b1804b1-441d44c3a91mr16863985e9.14.1746601889628;
-        Wed, 07 May 2025 00:11:29 -0700 (PDT)
-Received: from ?IPv6:2001:818:ea56:d000:56e0:ceba:7da4:6673? ([2001:818:ea56:d000:56e0:ceba:7da4:6673])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441d43cb584sm20895405e9.8.2025.05.07.00.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 00:11:29 -0700 (PDT)
-Message-ID: <ffebef8dd4255da67a8d6b7228f4e04e789532d5.camel@gmail.com>
-Subject: Re: [PATCH v4 4/7] include: fpga: adi-axi-common: add new helper
- macros
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, nuno.sa@analog.com, 
- linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
- dmaengine@vger.kernel.org,  linux-hwmon@vger.kernel.org,
- linux-iio@vger.kernel.org,  linux-pwm@vger.kernel.org,
- linux-spi@vger.kernel.org
-Cc: Stephen Boyd <sboyd@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>,  Moritz Fischer <mdf@kernel.org>, Wu Hao
- <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,  Tom Rix
- <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare
- <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor
- Gamblin <tgamblin@baylibre.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
- <ukleinek@kernel.org>, Mark Brown <broonie@kernel.org>, Mike Turquette
- <mturquette@linaro.org>
-Date: Wed, 07 May 2025 07:11:53 +0100
-In-Reply-To: <79c256ab-3d21-481c-ab9d-eca643d3d998@baylibre.com>
-References: <20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com>
-	 <20250505-dev-axi-clkgen-limits-v4-4-3ad5124e19e1@analog.com>
-	 <79c256ab-3d21-481c-ab9d-eca643d3d998@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1746599921; c=relaxed/simple;
+	bh=zoPVNfQfngSR07iIP+gMGPRpdmcR+TKOkCqpe3dtipE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=QDJX1TqK1pTX5ckti/3NOgVAVYlo4KXqD+wcyz2W9VOMl/LGR0+AuBtpC9KaL+i9wdI5VTlSYmPrTD5laREOkl0GrmSOXeVd0UOkFJFsbd5nmtAl+IwsJQATBxFIZc4tb4n5fbJ2cHCxWIHH1kmOUzcBEU8FVjeh+a3R+TcIP5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UwoD3P+7; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5471HmAb017086;
+	Wed, 7 May 2025 06:38:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	dYgH+XlFKDus3frugKdFHUJb0KxUeDoyMriUEOT3RUo=; b=UwoD3P+7OVQH/63H
+	29Bx8LKdbrsaCjW6cOwF15eNoy8O+TekI6gWRZvgMx/1LyZD2XFWbsmbxqDJcJ9X
+	u48jDiNzmn/DzFy2qL3jHwKW6NZ6S9wfopXl+/sit/OozLiaKADnxwe843i0z45g
+	kLHjHi1dvnLR4iLIQedMrYgdxnQy9kC8KkO8vZwCfgSV0UJnxf/lE9/grTb/UnGI
+	8bT/VkIEaH2aeO4VH9TTs83IIl59Ao6UY0FvWBtkQU3DZjRSkUtLwrwo1bvsvbM0
+	l7C8UTzFUM1VcR6alqXkFsYhz9IFamKHMQHxxyRtK5aSdV4R+p/LbXwL4RoRZmvo
+	h1eHXQ==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46f5u44r3w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 May 2025 06:38:36 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5476cZIE017059
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 7 May 2025 06:38:35 GMT
+Received: from [10.216.63.157] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 6 May 2025
+ 23:38:31 -0700
+Message-ID: <b7e630de-07f9-4b21-9055-e9b387627564@quicinc.com>
+Date: Wed, 7 May 2025 12:08:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6] clk: qcom: Add support for Camera Clock Controller on
+ QCS8300
+To: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC: Ajit Pandey <quic_ajipan@quicinc.com>, Taniya Das <quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli
+	<quic_skakitap@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Dmitry Baryshkov
+	<lumag@kernel.org>
+References: <20250327-qcs8300-mm-patches-v6-1-b3fbde2820a6@quicinc.com>
+Content-Language: en-US
+From: Imran Shaik <quic_imrashai@quicinc.com>
+In-Reply-To: <20250327-qcs8300-mm-patches-v6-1-b3fbde2820a6@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=KcfSsRYD c=1 sm=1 tr=0 ts=681affec cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8
+ a=COk6AnOGAAAA:8 a=KKAkSRfTAAAA:8 a=k8wuuItXO5eEtyapRm4A:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: zCIemlL0gdt5rO_L-xoqI0QSGiRmL84D
+X-Proofpoint-ORIG-GUID: zCIemlL0gdt5rO_L-xoqI0QSGiRmL84D
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA3MDA2MCBTYWx0ZWRfXyHPKY1U6nePd
+ 96lypzFwuVwtJbLkUwHq3syxzrgfGiEJmDsbOtRbxSmF5UPLhcMAlvO1WDJHBV+u+w56zc5o9+f
+ 2+IkYa/u9OhwHxULEyABeRjJ9hfhkqQ3JTonayq/tNCB5GnHDicEb529dp1N4E2bR3rF5PlMgat
+ FqE0y6a9jMfg3bIAH5ZPzcSS4ERxi7oKJjr1sYbZZ+KvP/8wi4bwSHUgSKO9rp4+6lxWEpTQ0D9
+ tawU7uKRMqV6pwbmLrGvQM/UkxHBAyTJeNAB8ksdTXk4DqZdz2C4deuZ4dq5OFBWwQ6KOm3uu8S
+ 4ud3vi1kIpZUWAwHS7USyj0Ndp9850+AYOoYLoqLj2lWrcU5svnLj5qnninR7aaThGtWmLmE2G1
+ FiEtfJwgi75bHFMRszIOKaqP5pbLEA5FWlZ+ynQLrpLkMzDPbEcgO1pTdtJ/wYhLqn6XGrUy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-07_02,2025-05-06_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
+ phishscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 adultscore=0
+ clxscore=1015 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505070060
 
-On Mon, 2025-05-05 at 12:21 -0500, David Lechner wrote:
-> On 5/5/25 11:41 AM, Nuno S=C3=A1 via B4 Relay wrote:
-> > From: Nuno S=C3=A1 <nuno.sa@analog.com>
-> >=20
-> > Add new helper macros and enums to help identifying the platform and so=
-me
-> > characteristics of it at runtime.
-> >=20
-> > Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> > ---
-> > =C2=A0include/linux/adi-axi-common.h | 35 +++++++++++++++++++++++++++++=
-++++++
->=20
-> Since this file was moved in the previous patch, should we drop "fpga:" f=
-rom the
-> subject of this patch?
-
-sure
-
->=20
-> > =C2=A01 file changed, 35 insertions(+)
-> >=20
-> > diff --git a/include/linux/adi-axi-common.h b/include/linux/adi-axi-com=
-mon.h
-> > index
-> > 141ac3f251e6f256526812b9d55cd440a2a46e76..a832ef9b37473ca339a2a2ff8a4a5=
-716d428fd2
-> > 9 100644
-> > --- a/include/linux/adi-axi-common.h
-> > +++ b/include/linux/adi-axi-common.h
-> > @@ -12,6 +12,8 @@
-> > =C2=A0#define ADI_AXI_COMMON_H_
-> > =C2=A0
-> > =C2=A0#define ADI_AXI_REG_VERSION			0x0000
-> > +#define ADI_AXI_REG_FPGA_INFO			0x001C
-> > +#define ADI_AXI_REG_FPGA_VOLTAGE		0x0140
->=20
-> Doesn't the voltage register only apply to AXI CLKGEN and therefore would
-> belong in the clock driver rather than here? 0x1C seems to be the last of=
- the
-> defined "common to all IP cores" address before we possibly get into
-> core-specific register definitions starting at 0x40.
->=20
-> I guess there are 1 or 2 other cores that define it at the same place, bu=
-t it
-> still seems not-global.
 
 
-Hmm, to be honest I did not checked. This patch was out of tree and I blind=
-ly pushed
-it (as its straightforward). Will drop the above.
+On 3/27/2025 3:32 PM, Imran Shaik wrote:
+> The QCS8300 Camera clock controller is a derivative of SA8775P, but has
+> few additional clocks and offset differences. Hence, add support for
+> QCS8300 Camera clock controller by extending the SA8775P CamCC.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> ---
+> This patch series add support for GPUCC, CAMCC and VIDEOCC on Qualcomm
+> QCS8300 platform.
+> 
+> Changes in v6:
+> - Use device_is_compatible() as per Stephen's review comment.
+> - Link to v5: https://lore.kernel.org/r/20250321-qcs8300-mm-patches-v5-1-9d751d7e49ef@quicinc.com
+> 
+> Changes in v5:
+> - Subset of this patch series is alreday applied, but CamCC driver patch
+> is not picked yet. Hence resend the CamCC driver patch.
+> - Link to v4: https://lore.kernel.org/all/20250109-qcs8300-mm-patches-new-v4-0-63e8ac268b02@quicinc.com/
+> 
+> Changes in v4:
+> - Updated the commit text as per the comment from Bjorn.
+> - Fixed the CamCC QDSS clock offset.
+> - Link to v3: https://lore.kernel.org/all/20241106-qcs8300-mm-patches-v3-0-f611a8f87f15@quicinc.com/
+> 
+> Changes in v3:
+> - Added new GPUCC and CAMCC binding headers for QCS8300 as per the review comments
+> - Updated the new bindings header files for GPUCC and CAMCC drivers.
+> - Added the R-By tags received in v2.
+> - Link to v2: https://lore.kernel.org/r/20241024-qcs8300-mm-patches-v2-0-76c905060d0a@quicinc.com
+> 
+> Changes in v2:
+> - Updated commit text details in bindings patches as per the review comments.
+> - Sorted the compatible order and updated comment in VideoCC driver patch as per the review comments.
+> - Added the R-By tags received in V1.
+> - Link to v1: https://lore.kernel.org/r/20241018-qcs8300-mm-patches-v1-0-859095e0776c@quicinc.com
+> ---
+>  drivers/clk/qcom/camcc-sa8775p.c | 103 +++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 98 insertions(+), 5 deletions(-)
+> 
 
->=20
-> > =C2=A0
-> > =C2=A0#define ADI_AXI_PCORE_VER(major, minor, patch)	\
-> > =C2=A0	(((major) << 16) | ((minor) << 8) | (patch))
-> > @@ -20,4 +22,37 @@
-> > =C2=A0#define ADI_AXI_PCORE_VER_MINOR(version)	(((version) >> 8) & 0xff=
-)
-> > =C2=A0#define ADI_AXI_PCORE_VER_PATCH(version)	((version) & 0xff)
-> > =C2=A0
-> > +#define ADI_AXI_INFO_FPGA_TECH(info)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (((info) >> 24) & 0xff)
-> > +#define ADI_AXI_INFO_FPGA_FAMILY(info)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 (((info) >> 16) & 0xff)
-> > +#define ADI_AXI_INFO_FPGA_SPEED_GRADE(info)=C2=A0=C2=A0=C2=A0=C2=A0 ((=
-(info) >> 8) & 0xff)
->=20
-> I guess we don't care about the DEV_PACKAGE field?
+Hi Bjorn,
 
-ack
+Could you please help pick this CamCC driver patch? The DT and bindings patches are picked already from this series, expect for this one.
 
->=20
-> > +#define ADI_AXI_INFO_FPGA_VOLTAGE(val)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 ((val) & 0xffff)
->=20
-> This VOLTAGE also goes applies to the first comment.
->=20
+Please let me know if anything is required from my end.
 
-ack
+Thanks,
+Imran
 
