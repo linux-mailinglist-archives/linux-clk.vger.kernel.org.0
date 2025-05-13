@@ -1,143 +1,187 @@
-Return-Path: <linux-clk+bounces-21800-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21802-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD9E2AB4D47
-	for <lists+linux-clk@lfdr.de>; Tue, 13 May 2025 09:48:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08AEFAB4D92
+	for <lists+linux-clk@lfdr.de>; Tue, 13 May 2025 10:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCE8E7A3672
-	for <lists+linux-clk@lfdr.de>; Tue, 13 May 2025 07:46:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16DD71885F3A
+	for <lists+linux-clk@lfdr.de>; Tue, 13 May 2025 08:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92AF21F2B85;
-	Tue, 13 May 2025 07:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="vcocX/vp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1A91E8356;
+	Tue, 13 May 2025 08:03:11 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695D81F17EB
-	for <linux-clk@vger.kernel.org>; Tue, 13 May 2025 07:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479BC1F151D;
+	Tue, 13 May 2025 08:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747122466; cv=none; b=j8+vf21HqJuEkHHEryExQBYzmRqrejQ7LwkOxeEGaYOcWKeX3CInBvxZ7cn+RDs6uNEFeP01qEMiU2Mk3LqzTyI5RqI8B0ZEf1ZYfvHB0nHP9Ykm96gWBas8tclYgMMABFXJvS2ZFJS62cC7S459Wzs8PUxX+IHP8NR86D6+bu4=
+	t=1747123391; cv=none; b=fPin9uqLmLpEvwA+2OR6mAF8ZaDBcUNlEwDwBLHlWaFyeIO5sHe9lHsT8veIHmtNJgeL36JplYjwedNYr3NvER9HtV5hQyOW50wo5QrYirBswuuRhhsPZynaDlx/R3AJAkmRLrhedLX4IMoW2FPYhNK1bh0RGgdUmMi17vfu16M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747122466; c=relaxed/simple;
-	bh=24LJEQNBtPANRsvRmA7VhJPkuYyfg6dz5LevvdvxJ1s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J0ZYia45Y8k5gJuRBEO2uGRAwaT3c5YVFGO44mM01QJQEksoasqY5d9byb6+BcBpOLiz0Ng6XxTBcGeo9ufgb2dMLIwknyRNa817oR8OuqfyF/5Lns+nryGUQze/2gWeGe3TDgXJKbeU8aTyRKoLbb9kWOG4HNHCurdrpiIxC1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=vcocX/vp; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cfa7e7f54so33670785e9.1
-        for <linux-clk@vger.kernel.org>; Tue, 13 May 2025 00:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1747122462; x=1747727262; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RtKA7NZNuHzBQS6CrTPRAttssEFDmPD1Z8kR1U88AY=;
-        b=vcocX/vpjp8BiwIOfktZn7zPT3sQRvimXQxVQFKwW7SpKPHmz6dFJPKyXQ3d1O34zI
-         CyZKRUcdlUDWQjlmJ6va0KGdloLmKanjgmxedpkTUkCPBRiu9KFh+gA+MXYfgk4FKlUG
-         yZK8UjJcpZ9Lr+5mm0VLMbBrxuTVL6AA/QSkkhsLzmITL+ymveLa0cxhna3M5qbooUEr
-         LmiDyaqAo1UCOgV2omgs0AUFj0stRLaOl/jl4g+s3wUXg8DPou+Jm7Ax48ew+9G5AZ9A
-         eB2jw2ESEqNoiPFPKLMzhf6yW2nXqHocpe6R/0tv1Kia1F7Lo9cUjqB+dBnSlBwjnTh2
-         FgYQ==
+	s=arc-20240116; t=1747123391; c=relaxed/simple;
+	bh=Xz0gdXDv5XHURHHQ+iUWHrD/33XfS6r/5Bx860rTeI8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kVHAJq6f5sbVsAdHL3eNWw2hHR3Haz0oiCe+jLNmbym78ald6h6aePExhJmdBIKkt9qBe0leUeU6KyYgAV4CFgHObdDm1mvVLOZrlcyvDdjAe5fIZk+Y9SKw2yLvs3pDdEG3oEoGbqmRbHRUaswK3YwsbuXJpcb574+aM1cCJpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4def6435699so1354462137.2;
+        Tue, 13 May 2025 01:03:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747122462; x=1747727262;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2RtKA7NZNuHzBQS6CrTPRAttssEFDmPD1Z8kR1U88AY=;
-        b=s6XqwjLqcSTjPY9+wHlI4aEmt8RrPOGz31HlpxKCt1Jdo3NNMuKbZRMRiBRqvIZ9Z+
-         vTCgmPL9qC6XMJrA8oRgIj8YZ+j6lM4/UuzEL9RmfjSkJFrDARllf9YtcbJAmFaahZcY
-         H6JaY4qIBj/Uico4R/iiLxc8no+tbpgw9KqiDDkVMZFKCLUe5n94B+jgSWn/WuE+fcEC
-         tzsOPXOQjrxPfxMZ2WJpPruckC5PYFbuyoqdbSUnBUVpaATp13rLRq9lTfeXQjF1HfdY
-         /I5yVBDquG0FtIi1PnJsucBp9q3lEgzZKNrngOArHHIyipkMKqXlRUs0xmbQhGgrv+8c
-         JDlA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDmUJ0jBPQlc/vfIIU0Bbr1QHSQqq4vs2u02SXQ/uoUIGTNqqr5GwYr8rOPBPcdZpGJWD59WrVHXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMgZzcWdDgoDJdIYJKPKLYet2RGIUSNOnDVYav9vAxNSp5pp1u
-	ETAAIKcafKD2PNoVLeXJcrC+Xv6BbhHer7ycTi39SWRgztVRV6oq4Mrg4J4V4og=
-X-Gm-Gg: ASbGncuJkQd60UK0A8xy7xud4mft+FSr0cn/pBP7F2ql4gc38gYKLCKBYMOTrM/qVNM
-	fbH2UHp7qTv6zs5MOq20sjysfSpPNJazkZ85DD0CIWGD1tUaJGrNhYkq8AM7Z6I7YkdV8xM4/Z2
-	hGflxV7qSsKG1Gkcef+2vrR9BHAu6ep9cxu+xFil8XY+HYgaDblvzl2q4yARR8q/2Z4Z/Iajt5Y
-	PO12U747YLQeAAXch/xIr5CnBUsshYXyNfpgb8CySwR28pcfQp6UGbKaJym8vz6oO5wv6HmNEPr
-	glL9Fz1skIDausMMRm3/ACVHc+tthTTPcpXm3DvYTcJdTD+WDGg=
-X-Google-Smtp-Source: AGHT+IFAnCZ6nPY5UPyadmr7YhyYRo5ZU39JgB3mmEwc8mv+oARHGq0H1ti0jbO/TdUIglDMyD/fWQ==
-X-Received: by 2002:a05:600c:5d6:b0:442:e27c:48da with SMTP id 5b1f17b1804b1-442eacabc61mr13471135e9.8.1747122461595;
-        Tue, 13 May 2025 00:47:41 -0700 (PDT)
-Received: from localhost ([2a01:e0a:3c5:5fb1:780d:7cd3:15cf:b5d6])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a1f5a2d30asm15070456f8f.76.2025.05.13.00.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 00:47:41 -0700 (PDT)
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Da Xue <da@libre.computer>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,  Michael Turquette
- <mturquette@baylibre.com>,  Stephen Boyd <sboyd@kernel.org>,  Kevin Hilman
- <khilman@baylibre.com>,  Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>,  stable@vger.kernel.org,
-  linux-amlogic@lists.infradead.org,  linux-clk@vger.kernel.org,
-  linux-arm-kernel@lists.infradead.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] clk: meson-g12a: add missing fclk_div2 to spicc
-In-Reply-To: <20250512142617.2175291-1-da@libre.computer> (Da Xue's message of
-	"Mon, 12 May 2025 10:26:16 -0400")
-References: <20250512142617.2175291-1-da@libre.computer>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Tue, 13 May 2025 09:47:40 +0200
-Message-ID: <1jecwtymsj.fsf@starbuckisacylon.baylibre.com>
+        d=1e100.net; s=20230601; t=1747123387; x=1747728187;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nXHqo7rRyIaXhw3+qc8NNegThcbgELXIOOOxT+mjhq0=;
+        b=I7yr1OvQubGGULbPeFwlIXyA7Eiexbuyc3itc9/thPaTDtrtHm33ykV4Vbc70I91xt
+         P0w6wwMrxCmRsQcBnGYoYiCOQ9O1Patg6HN+ZuwYZo1PTzJbsDhufQRFI3ED/e3A+JRS
+         HNoh+DXommcjrqCADIj6z6NoI57Jh6wwwvdTkH3OyxQ3z9tNj62Efccjbc4F9MjP8FAx
+         AkRLmbuFi8/ItqTOUjsrDX8axDfeaxD5h+b++opDdomqnvqppZwT1uW1oimjMsItnAl0
+         e9OKnzT/gdv44xbYT13Qo2hvd80q8mL2CVHDIivzllAgGyS5x+F/4Mt/gadj1hkmqyuq
+         3s3w==
+X-Forwarded-Encrypted: i=1; AJvYcCU86pNTRfu8hsLLqfLMDM4RRFnRbZCB05Oi0Ch952tnZRsPqrDA71FN0rB1QOb40/+Ba6OzaMWKSJdapGsS@vger.kernel.org, AJvYcCUOoeT/TBpYksfuT48erN0ttoeSfjQbzJSKEPP7nxYboCE5fXfCrNtvJC6xPfG10UVQBw7vggjBXEo=@vger.kernel.org, AJvYcCVmNyPkZnKTdc55B0zKPycCD4CKpP6w7GXoWaC9+E9JBTqtIQ2zl2Bm2GrrzI7TsAHcparfcd99iuSy6VzxAYzJkUM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw61wpyfSd19jeTf4uE/8p/wpQvhGcHAUoEUwxU6URuj3RbVTDX
+	0f/cfQeM7Yxa+bMNRDTSdTS6h/EkLbFHwtGkvzi41L+ZWclEN9Mfx/6Uvnxf
+X-Gm-Gg: ASbGncvaR+aQyQS3aR8wmHpBiicEkEHlmKuVPSqKPz5DUo6vYppfFgUwVQboB/L8cKn
+	t1bARx2wrlzKL2ezsiV40XzdWek7aA5Vjs7xLmUwkv/oRmxlGXVBuKZ/1quyx+jZej9oFAZe/PV
+	yLTOWvlPqzVMQCgrRiRcEbrYEsaoQcOaAMa1QLtPxFMTe6BmOAUk5RIQW6qDmZxGLVJsY8w/o2c
+	ak4u0ppsW0Fql+il87nAHWfZGWwsS/3sUa69xpeSM8+H6blz2m6nUkUz/CAxWFGWTDwa/18xt/T
+	FmOYQHP4tDiZj+V2VqO4tl1rh/rcizb/a0psXh2q6f54cp91PsVIRcHPnLbGRKG+G4X9k6NBUvW
+	EDwbHjLBTH1OdyA==
+X-Google-Smtp-Source: AGHT+IFNBmAhsFL43gvU0VzFXgaltHnEj9qIZ1CPyp8IDUg/7wcLQ/6MnY7yyQgya0nEi0HM68f6AQ==
+X-Received: by 2002:a05:6102:fa8:b0:4de:a850:9a0 with SMTP id ada2fe7eead31-4deed34e325mr13464936137.8.1747123386897;
+        Tue, 13 May 2025 01:03:06 -0700 (PDT)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-879f6297d59sm6426287241.31.2025.05.13.01.03.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 May 2025 01:03:06 -0700 (PDT)
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4de317a6fbcso1868926137.1;
+        Tue, 13 May 2025 01:03:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUf/wIo+/k2s/LedI8j1TqWWui3qEGobr8mrF63fl1eNd5HwvLUvXrQOxvWDexsnXaFB5z/CSTJc/bCAYMU8H7p8Gg=@vger.kernel.org, AJvYcCVLpW8BQ750UEdpZIQo4wvwR+mFVD767VbIPMHHmsi7z1gOiSduCu6Wl0n7Bb3VLhI7oWWUrInv+5M=@vger.kernel.org, AJvYcCVSg5r6N8nqeCKjjyZ4pANlvAiD2KklqtQQeGoGiai3ezPr9uePXgrrdHEb97iWLowNeJQjqvJmNbF+l+dr@vger.kernel.org
+X-Received: by 2002:a67:e7c1:0:b0:4c1:924e:1a2a with SMTP id
+ ada2fe7eead31-4deed410e33mr14297941137.25.1747123386337; Tue, 13 May 2025
+ 01:03:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20250509160121.331073-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20250509160121.331073-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250509160121.331073-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 13 May 2025 10:02:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVpWxVDOXHGhRqHPTjG6_z3XVqT7ZdJGz7Axk8Rut3Lsw@mail.gmail.com>
+X-Gm-Features: AX0GCFuKF8GYuJOLu2uJ3z1OHoS0MlWBI9eBM2Mke_jwI2a_qYrsjfzFe5egwRg
+Message-ID: <CAMuHMdVpWxVDOXHGhRqHPTjG6_z3XVqT7ZdJGz7Axk8Rut3Lsw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] clk: renesas: rzv2h-cpg: Skip monitor checks for
+ external clocks
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon 12 May 2025 at 10:26, Da Xue <da@libre.computer> wrote:
+Hi Prabhakar,
 
-> SPICC is missing fclk_div2 which causes the spicc module to output sclk at
-> 2.5x the expected rate. Adding the missing fclk_div2 resolves this.
-
-I had to re-read that a few times to get the what the actual problem is.
-If you don't mind, I'll amend the commit message with
-
-'''
-SPICC is missing fclk_div2, which means fclk_div5 and fclk_div7 indexes
-are wrong on this clock. This causes the spicc module to output sclk at
-2.5x the expected rate when clock index 3 is picked.
-
-Adding the missing fclk_div2 resolves this.
-'''
-
-Is that OK with you Da ?
-
+On Fri, 9 May 2025 at 18:01, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> Fixes: a18c8e0b7697 ("clk: meson: g12a: add support for the SPICC SCLK Source clocks")
-> Cc: <stable@vger.kernel.org> # 6.1
-> Signed-off-by: Da Xue <da@libre.computer>
+> For module clocks whose parent mux may select an external source, bypass
+> the normal monitor (CLK_MON) register check when the external clock is
+> active. Introduce a new `ext_clk_mux_index` in `struct rzv2h_mod_clk` and
+> `struct mod_clock`, and detect the current mux index in
+> `rzv2h_mod_clock_is_enabled()` to disable monitoring if it matches the
+> external source index.
+>
+> Provide the `DEF_MOD_MUX_EXTERNAL()` macro for declaring external-source
+> module clocks, and populate the `ext_clk_mux_index` field in
+> `rzv2h_cpg_register_mod_clk()`.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
-> Changelog:
->
-> v2 -> v3: remove gp0
-> v1 -> v2: add Fixes as an older version of the patch was sent as v1
-> ---
->  drivers/clk/meson/g12a.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
-> index 4f92b83965d5a..b72eebd0fa474 100644
-> --- a/drivers/clk/meson/g12a.c
-> +++ b/drivers/clk/meson/g12a.c
-> @@ -4099,6 +4099,7 @@ static const struct clk_parent_data spicc_sclk_parent_data[] = {
->  	{ .hw = &g12a_clk81.hw },
->  	{ .hw = &g12a_fclk_div4.hw },
->  	{ .hw = &g12a_fclk_div3.hw },
-> +	{ .hw = &g12a_fclk_div2.hw },
->  	{ .hw = &g12a_fclk_div5.hw },
->  	{ .hw = &g12a_fclk_div7.hw },
->  };
+> v3->v4:
+> - Dropped external_clk_mux_index and external_clk and introduced
+>   ext_clk_mux_index.
+> - Updated DEF_MOD_*() macros to include ext_clk_mux_index.
+> - Added a new helper function `rzv2h_clk_mux_to_index()` to get the
+>   current mux index.
+> - Dropped IS_ERR() check for parent_clk in `rzv2h_clk_mux_to_index()`.
+> - Updated commit description to clarify the purpose of the patch.
 
--- 
-Jerome
+Thanks for the update!
+
+> --- a/drivers/clk/renesas/rzv2h-cpg.c
+> +++ b/drivers/clk/renesas/rzv2h-cpg.c
+> @@ -563,14 +565,38 @@ static void rzv2h_mod_clock_mstop_disable(struct rzv2h_cpg_priv *priv,
+>         spin_unlock_irqrestore(&priv->rmw_lock, flags);
+>  }
+>
+> +static int rzv2h_clk_mux_to_index(struct clk_hw *hw)
+
+Renaming to rzv2h_parent_clk_mux_to_index(), as it operates on the parent...
+
+> +{
+> +       struct clk_hw *parent_hw;
+> +       struct clk *parent_clk;
+> +       struct clk_mux *mux;
+> +       u32 val;
+> +
+> +       /* This will always succeed, so no need to check for IS_ERR() */
+> +       parent_clk = clk_get_parent(hw->clk);
+> +
+> +       parent_hw = __clk_get_hw(parent_clk);
+> +       mux = to_clk_mux(parent_hw);
+> +
+> +       val = readl(mux->reg) >> mux->shift;
+> +       val &= mux->mask;
+> +       return clk_mux_val_to_index(parent_hw, mux->table, 0, val);
+> +}
+> +
+>  static int rzv2h_mod_clock_is_enabled(struct clk_hw *hw)
+>  {
+>         struct mod_clock *clock = to_mod_clock(hw);
+>         struct rzv2h_cpg_priv *priv = clock->priv;
+> +       int mon_index = clock->mon_index;
+>         u32 bitmask;
+>         u32 offset;
+>
+> -       if (clock->mon_index >= 0) {
+> +       if (clock->ext_clk_mux_index >= 0) {
+> +               if (rzv2h_clk_mux_to_index(hw) == clock->ext_clk_mux_index)
+
+Collapsing into a single if-statement...
+
+> +                       mon_index = -1;
+> +       }
+> +
+> +       if (mon_index >= 0) {
+>                 offset = GET_CLK_MON_OFFSET(clock->mon_index);
+
+Dropping "clock->"...
+
+>                 bitmask = BIT(clock->mon_bit);
+>
+>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.17 with the above changes.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
