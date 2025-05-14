@@ -1,411 +1,162 @@
-Return-Path: <linux-clk+bounces-21867-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21869-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C08CAB6A5B
-	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 13:43:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78A27AB6D55
+	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 15:53:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CC224C1A62
-	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 11:42:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 372D03BA014
+	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 13:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD932777F7;
-	Wed, 14 May 2025 11:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4097327A462;
+	Wed, 14 May 2025 13:52:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="LyE2LB9E"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="lLkhrenp"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4080276049
-	for <linux-clk@vger.kernel.org>; Wed, 14 May 2025 11:41:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D543727702D
+	for <linux-clk@vger.kernel.org>; Wed, 14 May 2025 13:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747222876; cv=none; b=iirC9OMW8VyHG7j2OIBF7m+RkquQ4oKrJoimQaHdbvpu4YBt9RPs2GhSyICmqe59RJxZwRzoa2pymAaI1AowznQLseVKdv5BH2MURFaPRjK6WPtWc/0kiSmD8C/xs7l3alYmtlmSOkvyRRrAsz8pGpP/nW9PdBVjoDjG/zJFMwA=
+	t=1747230759; cv=none; b=D5tS27dmi7T/tNcdEz7SnwevL/PXQP5+8GbzZRdoYKiSsUYL3mYhkEK4xgRIfq1ig7dG/2xPWGsRjWdsX+cu5H9304oCmw3xm4axg3opqHftZL3EV089PoJsSEG3Qh6ipyoGr33zuUK95ak4fXJFFbAqfShdDti+MYVBh55L85Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747222876; c=relaxed/simple;
-	bh=7JkTC5mLx9u4BimVTeAQi6DGPhg7Opww3j1Bu0kfoWs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HOYZVWOt3LNy4KRWJ5WM57U0mqVBDYk4H61MR1CGmZWDKEtNCAoC0INt7fd3JlSn9I9q7016I0Scb+KOeLBp1UMTFVSU2GYHByV/IYxuDgBwyCW+/CUOB3Z8xv+sYrMV7UkGBcH0HOdVvjeyeWpqMIO8vJGyE4WaXKnBnnnjjeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=LyE2LB9E; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a0bdcd7357so4762968f8f.1
-        for <linux-clk@vger.kernel.org>; Wed, 14 May 2025 04:41:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1747222872; x=1747827672; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1iaWgi2+6QGoD6Bh6MAYJTWH0TqBtpBBy9hMdUN0b9I=;
-        b=LyE2LB9EWey131iU5nV94RgjWBZKnmJV0FNFC6RW8e0LVClQ6L0sU2qFOPQXrHwxGU
-         e6VZuimb85awUW8bsm7nzIdRoQ4dATJstSAZneMU21yY1ZoiJSdELXuqy+y8Cw7vH8R+
-         /eyxR9ngJJfI6STayDqFHoZWVaQdgIBCx16lLhdDvjp+UNH3yyP2qyoIdIboPgNnCgvU
-         buBqynTieGow6Kkv+WMT3JcY9kpQIorkDebV3WNxgDttmGqs91g5KWYF+0eQrPQr5ayz
-         GqYymkFhYXI1QXuCxDnytLqoDK/9cduJV/v3ezPqjpjOKkb183CevRY0biPgnmr7lAKX
-         9hNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747222872; x=1747827672;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1iaWgi2+6QGoD6Bh6MAYJTWH0TqBtpBBy9hMdUN0b9I=;
-        b=PhircqwKbEftR6TCK6RvEiEgcX93V2zrPRaCu4pBe9LeI0xU3sR/bUeJg1lJogMN9E
-         LoowMhb5ZPa63AHZTq1He7Tevwf/jvOUYs4z5wfb1xE1Fy5w7bf18HOyIU0CNaULoReB
-         P6hNyrlniHNb6u9Uz3XyK48ZwegxZDmr5A9FGjI4fmVolDQelc4BoX+gzD50BiBoHmni
-         vrm6xRB5vnwPb1ewfxINb/u3bpsRgjrLjYgsd8bIeO+iBSfcIpIVhCWi0ZUDax/9cbvH
-         aSwo0pkhrck8v9ohaNqdarVLwXbtxBdQzbVBJ+oHQtZPSoPJynx7+XRXeP6ikL/pTfEt
-         0emg==
-X-Forwarded-Encrypted: i=1; AJvYcCWH3U9GXFldm+yKl/NPIpLy+/40UQbpwyxN8OGMNRVqcKq+E7QToZUUAadQAdQBC0Bmkjwh+nYLADE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHbx7zlH0Rj1YC8dvoUVnOhpoRti5+cx1pTkAb0BW4y2LzsgXx
-	3jm2puq+oPxTaktSldMCIR849wFlJmoowRcWaJYOx06LzB/7j1A6DQQH3YU32Yc=
-X-Gm-Gg: ASbGnct5vy/GEMNCQFsoNvEwEaF3HLjWNXixApGJ4X87IVmhBd4Gyh/nVGhbFJVvyiS
-	RQIAxg6uBAUC85riX4H/5AmfbszQDNR7yHAt0VneyvDYHnJc6xkekZSz35hnTPASuAAvkIb/GDv
-	fh1c2ZzeUWNbp2/EsWJ8Suctm/XeI/4cXtNfKACCe2+N/y0LiC32M6/9yYt4QFPea5xe2IRJSfv
-	0Jl60KUm8/vXrbZTIqn6zgkGIy6oDz2Vnn1XDiJK4Qc7VsTQq/gZO1Kwfo08gFXSSYI+an93XsS
-	w6Tmr4f+Uwut4AIU4/QlMS31M1P13rAct2vAEPuPg32iBbY/Rk2pjaxzvYo=
-X-Google-Smtp-Source: AGHT+IH2CN5E5d5IiEul9fORo75uv9zJHPufVjipSowLqASUDKgEkIqOTizOIqaf2tZjC9ZhGWR8Tg==
-X-Received: by 2002:a05:6000:1868:b0:3a0:7aa3:cc74 with SMTP id ffacd0b85a97d-3a34969a54dmr2881005f8f.6.1747222872006;
-        Wed, 14 May 2025 04:41:12 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.58])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f5a2d2f4sm19387956f8f.78.2025.05.14.04.41.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 May 2025 04:41:11 -0700 (PDT)
-Message-ID: <2b2efbf8-a5df-4f2b-8660-67fc13168f58@tuxon.dev>
-Date: Wed, 14 May 2025 14:41:08 +0300
+	s=arc-20240116; t=1747230759; c=relaxed/simple;
+	bh=sk9+Hmx76K9353/YSJ7f5CerbKr8aapCJIG+K320SkM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=D2PayljLWBTS0T2/+OUw3OUGtBHV1P1APV0Rj3VwPI2DlQOZhKbGlzJYYxWD6t1JG5IxGCo9EIXavIiNvuKZY8EuCvbinok7jYy6lbs5W3bLgoa+ah/nS9QLW+//DcCmoeMRX0PQwb5FDS8KLuNfoq/UZHAAGg3Owf0oqBYWEGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=lLkhrenp; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250514135234epoutp03a4919d58d3d98b3e20c2767ea370fdfc~-aR066rvB2840628406epoutp03L
+	for <linux-clk@vger.kernel.org>; Wed, 14 May 2025 13:52:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250514135234epoutp03a4919d58d3d98b3e20c2767ea370fdfc~-aR066rvB2840628406epoutp03L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1747230754;
+	bh=fS6WP64nxk5RGLAeXo0j9rsjSAjpHA9bB1CIdrtYv24=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=lLkhrenpf4Ang8OJcMujjFvGUsmln4m5a0oWv9u2tKHHC8Q+egyTspbQWDmdF0+iX
+	 ZG2sijOPbFyVC0MAD4gfvJG5qqJrnqOBvgggrIh+RQSVkoGt3q2lN9Xrx1vsecUSwd
+	 qJLNgnGpZgebvt0EJedbmnQecu88JePj0s30AGEU=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20250514135233epcas5p2cd9c912a0768e52b0bb584a54b97caca~-aR0NkYDl1501215012epcas5p2p;
+	Wed, 14 May 2025 13:52:33 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4ZyFCN0GBvz3hhT3; Wed, 14 May
+	2025 13:52:32 +0000 (GMT)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250514095233epcas5p3f51037e71e60a1e690709f8497606385~-XAQ6OqjD2612726127epcas5p3Q;
+	Wed, 14 May 2025 09:52:33 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250514095233epsmtrp1fbfec6ef430e6f4547e13f7a873b93dd~-XAQ3FzyG1927519275epsmtrp1D;
+	Wed, 14 May 2025 09:52:33 +0000 (GMT)
+X-AuditID: b6c32a52-40bff70000004c16-01-682467e1cbba
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5E.35.19478.1E764286; Wed, 14 May 2025 18:52:33 +0900 (KST)
+Received: from bose.samsungds.net (unknown [107.108.83.9]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250514095230epsmtip2a60aed22479ca7753f78aa377417c155~-XAOEOn-v1808418084epsmtip2i;
+	Wed, 14 May 2025 09:52:30 +0000 (GMT)
+From: Raghav Sharma <raghav.s@samsung.com>
+To: krzk@kernel.org, s.nawrocki@samsung.com, cw00.choi@samsung.com,
+	alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
+	robh@kernel.org, conor+dt@kernel.org, richardcochran@gmail.com,
+	sunyeal.hong@samsung.com, shin.son@samsung.com
+Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	dev.tailor@samsung.com, chandan.vn@samsung.com, karthik.sun@samsung.com,
+	Raghav Sharma <raghav.s@samsung.com>
+Subject: [PATCH v2 0/3] Add clock support for CMU_HSI2
+Date: Wed, 14 May 2025 15:32:11 +0530
+Message-Id: <20250514100214.2479552-1-raghav.s@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/8] dt-bindings: PCI: renesas,r9a08g045s33-pcie: Add
- documentation for the PCIe IP on Renesas RZ/G3S
-To: Rob Herring <robh@kernel.org>
-Cc: bhelgaas@google.com, lpieralisi@kernel.org, kw@linux.com,
- manivannan.sadhasivam@linaro.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com,
- sboyd@kernel.org, saravanak@google.com, p.zabel@pengutronix.de,
- linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20250430103236.3511989-1-claudiu.beznea.uj@bp.renesas.com>
- <20250430103236.3511989-5-claudiu.beznea.uj@bp.renesas.com>
- <20250509210800.GB4080349-robh@kernel.org>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <20250509210800.GB4080349-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrELMWRmVeSWpSXmKPExsWy7bCSvO7DdJUMgztrFC0ezNvGZjHhS4TF
+	mr3nmCyuf3nOanFvxzJ2i/lHzrFaNM54w2Rx/vwGdotNj6+xWnzsucdqcXnXHDaLGef3MVlc
+	POVqcWyBmMX3lXcYLY6cecFs8X/PDnaLw2/aWS3+XdvIYjH5+FpWi6Zl65kcRD3e32hl99g5
+	6y67x6ZVnWwem5fUe/RtWcXo8XmTXABbFJdNSmpOZllqkb5dAlfGu8ehBW/4Kv6v2MzewLie
+	p4uRk0NCwESib/Vi1i5GLg4hge2MEl8+HWSBSEhI7Pv/mxHCFpZY+e85O0TRW0aJ9xMPMoMk
+	2AS0JK5sf8cGkhAR6GKSOPfvFVg3s8BOJomV6yVAbGEBM4llV9aCxVkEVCV6zs9kArF5Bawl
+	blzvhdomL7H/4FlmiLigxMmZT6DmyEs0b53NPIGRbxaS1CwkqQWMTKsYRVMLinPTc5MLDPWK
+	E3OLS/PS9ZLzczcxgqNFK2gH47L1f/UOMTJxMB5ilOBgVhLhvZ6lnCHEm5JYWZValB9fVJqT
+	WnyIUZqDRUmcVzmnM0VIID2xJDU7NbUgtQgmy8TBKdXANN8ieoat3X+PUqv5T9+yX46yWOGQ
+	HnJvxnfP13qP5IzEJe/kK+f3/F///LV+1ifVnjIPhzCxxTLMK9SX9TXuvsniW7i4ckb8HKfE
+	Td86dlj5++1SFDu6+a/woY5o3qppWdyC0u81d2gvYZSza7n7jnH/qbSjniEbeZ7f35G7YF/7
+	p2/PL+kuedCfdav5q/LXxqdVj/YWdeY0fWnxEDEXFYv3ndwz4+LiymKez22RUyNr/I13rutf
+	1MDjXnJD59acx2p/9l2ds+f+kbNq9SLOZj6vGdxv5jkk7xVpqNRpU2Y+nbFso6zfW3aZFrb9
+	LAl/XhxrrO29qHsj3n5DiczR48tvRj4ofSe7yYJp9dY5SizFGYmGWsxFxYkAP1DrSAUDAAA=
+X-CMS-MailID: 20250514095233epcas5p3f51037e71e60a1e690709f8497606385
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-543,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250514095233epcas5p3f51037e71e60a1e690709f8497606385
+References: <CGME20250514095233epcas5p3f51037e71e60a1e690709f8497606385@epcas5p3.samsung.com>
 
-Hi, Rob,
+This series adds clock support for the CMU_HSI2 block.
 
-On 10.05.2025 00:08, Rob Herring wrote:
-> On Wed, Apr 30, 2025 at 01:32:32PM +0300, Claudiu wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> The PCIe IP available on the Renesas RZ/G3S complies with the PCI Express
->> Base Specification 4.0. It is designed for root complex applications and
->> features a single-lane (x1) implementation. Add documentation for it.
->> The interrupts, interrupt-names, resets, reset-names, clocks, clock-names
->> description were obtained from the hardware manual.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>  .../pci/renesas,r9a08g045s33-pcie.yaml        | 242 ++++++++++++++++++
->>  1 file changed, 242 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml b/Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml
->> new file mode 100644
->> index 000000000000..354f9c3be139
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml
->> @@ -0,0 +1,242 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/pci/renesas,r9a08g045s33-pcie.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Renesas RZ/G3S PCIe host controller
->> +
->> +maintainers:
->> +  - Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> +
->> +description:
->> +  Renesas RZ/G3S PCIe host controller complies with PCIe Base Specification
->> +  4.0 and supports up to 5 GT/s (Gen2).
->> +
->> +properties:
->> +  compatible:
->> +    const: renesas,r9a08g045s33-pcie # RZ/G3S
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    items:
->> +      - description: System error interrupt
->> +      - description: System error on correctable error interrupt
->> +      - description: System error on non-fatal error interrupt
->> +      - description: System error on fatal error interrupt
->> +      - description: AXI error interrupt
->> +      - description: INTA interrupt
->> +      - description: INTB interrupt
->> +      - description: INTC interrupt
->> +      - description: INTD interrupt
->> +      - description: MSI interrupt
->> +      - description: Link bandwidth interrupt
->> +      - description: PME interrupt
->> +      - description: DMA interrupt
->> +      - description: PCIe event interrupt
->> +      - description: Message interrupt
->> +      - description: All interrupts
->> +
->> +  interrupt-names:
->> +    items:
->> +      - description: int_serr
->> +      - description: int_ser_cor
->> +      - description: int_serr_nonfatal
->> +      - description: int_serr_fatal
->> +      - description: axi_err_int
->> +      - description: inta_rc
->> +      - description: intb_rc
->> +      - description: intc_rc
->> +      - description: intd_rc
->> +      - description: intmsi_rc
-> 
-> Isn't every interrupt for the root complex?
+Patch[1/3]: dt-bindings: clock: exynosautov920: add hsi2 clock definitions
+        - Adds DT binding for CMU_HSI2 and clock definitions
 
-It is! I just used the names that were available in the hardware manual.
-I'll drop the "_rc" it in the next version.
+Patch[2/3]: clk: samsung: exynosautov920: add block hsi2 clock support
+        - Adds CMU_HSI2 clock driver support
 
-> 
->> +      - description: int_link_bandwidth
->> +      - description: int_pm_pme
->> +      - description: dma_int
->> +      - description: pcie_evt_int
->> +      - description: msg_int
->> +      - description: int_all
-> 
-> 'int_' or '_int' is redundant (and inconsistent). Drop.
+Patch[3/3]: arm64: dts: exynosautov920: add CMU_HSI2 clock DT nodes
+        - Adds dt node for CMU_HSI2
 
-OK
+Signed-off-by: Raghav Sharma <raghav.s@samsung.com>
+---
+Changes in v2:
+- Added cover letter with the patches
+- Submit the patches as a series as they are inter-dependent
+  as pointed by Krzysztof Kozlowski
 
-> 
->> +
->> +  clocks:
->> +    items:
->> +      - description: System clock
->> +      - description: PM control clock
->> +
->> +  clock-names:
->> +    items:
->> +      - description: aclk
->> +      - description: clkl1pm
-> 
-> 'l1pm' or 'pm'
+Links to v1:
+[1/3]: https://lore.kernel.org/all/20250509132414.3752159-1-raghav.s@samsung.com/
+[2/3]: https://lore.kernel.org/all/20250509131210.3192208-1-raghav.s@samsung.com/
+[3/3]: https://lore.kernel.org/all/20250509125646.2727393-1-raghav.s@samsung.com/
 
-OK
+I also got warning about build failure from robot
+Link: https://lore.kernel.org/all/202505100814.gnMY3LoZ-lkp@intel.com/ 
 
-> 
->> +
->> +  resets:
->> +    items:
->> +      - description: AXI2PCIe Bridge reset
->> +      - description: Data link layer/transaction layer reset
->> +      - description: Transaction layer (ACLK domain) reset
->> +      - description: Transaction layer (PCLK domain) reset
->> +      - description: Physical layer reset
->> +      - description: Configuration register reset
->> +      - description: Configuration register reset
->> +
->> +  reset-names:
->> +    items:
->> +      - description: aresetn
->> +      - description: rst_b
->> +      - description: rst_gp_b
->> +      - description: rst_ps_b
->> +      - description: rst_rsm_b
->> +      - description: rst_cfg_b
->> +      - description: rst_load_b
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +
->> +  dma-ranges:
->> +    description:
->> +      A single range for the inbound memory region.
->> +    maxItems: 1
->> +
->> +  renesas,sysc:
->> +    description: System controller phandle
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +
->> +  vendor-id:
->> +    const: 0x1912
->> +
->> +  device-id:
->> +    const: 0x0033
->> +
->> +  legacy-interrupt-controller:
->> +    description: Interrupt controller node for handling legacy PCI interrupts
->> +    type: object
->> +
->> +    properties:
->> +      "#address-cells":
->> +        const: 0
->> +
->> +      "#interrupt-cells":
->> +        const: 1
->> +
->> +      interrupt-controller: true
->> +
->> +      interrupts:
->> +        items:
->> +          - description: INTA interrupt
->> +          - description: INTB interrupt
->> +          - description: INTC interrupt
->> +          - description: INTD interrupt
->> +
->> +    required:
->> +      - "#address-cells"
->> +      - "#interrupt-cells"
->> +      - interrupt-controller
->> +      - interrupts
->> +
->> +    additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - resets
->> +  - reset-names
->> +  - interrupts
->> +  - interrupt-names
->> +  - interrupt-map
->> +  - interrupt-map-mask
->> +  - power-domains
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - "#interrupt-cells"
->> +  - renesas,sysc
->> +  - vendor-id
->> +  - device-id
->> +
->> +allOf:
->> +  - $ref: /schemas/pci/pci-host-bridge.yaml#
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/r9a08g045-cpg.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +
->> +    bus {
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +
->> +        gic: interrupt-controller {
->> +            interrupt-controller;
->> +            #interrupt-cells = <3>;
->> +        };
-> 
-> Drop. Don't need to show provider nodes for the example.
+As the fix is  just a new version of
+the same patch/commit, there is NO need to add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505100814.gnMY3LoZ-lkp@intel.com/
 
-This was needed for the schema to compile with the intx node.
+So for now, not adding Reported-by: tag
 
-> 
->> +
->> +        pcie@11e40000 {
->> +            compatible = "renesas,r9a08g045s33-pcie";
->> +            reg = <0 0x11e40000 0 0x10000>;
->> +            ranges = <0x03000000 0 0x30000000 0 0x30000000 0 0x8000000>;
->> +            dma-ranges = <0x42000000 0 0x48000000 0 0x48000000 0 0x8000000>;
->> +            bus-range = <0x0 0xff>;
->> +            clocks = <&cpg CPG_MOD R9A08G045_PCI_ACLK>,
->> +                     <&cpg CPG_MOD R9A08G045_PCI_CLKL1PM>;
->> +            clock-names = "aclk", "clkl1pm";
->> +            resets = <&cpg R9A08G045_PCI_ARESETN>,
->> +                     <&cpg R9A08G045_PCI_RST_B>,
->> +                     <&cpg R9A08G045_PCI_RST_GP_B>,
->> +                     <&cpg R9A08G045_PCI_RST_PS_B>,
->> +                     <&cpg R9A08G045_PCI_RST_RSM_B>,
->> +                     <&cpg R9A08G045_PCI_RST_CFG_B>,
->> +                     <&cpg R9A08G045_PCI_RST_LOAD_B>;
->> +            reset-names = "aresetn", "rst_b", "rst_gp_b", "rst_ps_b",
->> +                          "rst_rsm_b", "rst_cfg_b", "rst_load_b";
->> +            interrupts = <GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 398 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 399 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>,
-> 
-> It is very odd that you have the INTx interrupts here and below.
-> 
-> As I mentioned in the driver, you don't need the legacy node any more. 
-> Just add 'interrupt-controller' to this node and point interrupt-map to 
-> this node.
-Will try it like this.
+Raghav Sharma (3):
+  dt-bindings: clock: exynosautov920: add hsi2 clock definitions
+  clk: samsung: exynosautov920: add block hsi2 clock support
+  arm64: dts: exynosautov920: add cmu_hsi2 clock DT nodes
 
-Thank you for your review,
-Claudiu
+ .../clock/samsung,exynosautov920-clock.yaml   | 29 +++++++-
+ .../arm64/boot/dts/exynos/exynosautov920.dtsi | 17 +++++
+ drivers/clk/samsung/clk-exynosautov920.c      | 72 +++++++++++++++++++
+ .../clock/samsung,exynosautov920.h            |  9 +++
+ 4 files changed, 125 insertions(+), 2 deletions(-)
 
-> 
->> +                         <GIC_SPI 404 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 405 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 406 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 407 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 408 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>,
->> +                         <GIC_SPI 410 IRQ_TYPE_LEVEL_HIGH>;
->> +            interrupt-names = "int_serr", "int_serr_cor", "int_serr_nonfatal",
->> +                              "int_serr_fatal", "axi_err_int", "inta_rc",
->> +                              "intb_rc", "intc_rc", "intd_rc",
->> +                              "intmsi_rc", "int_link_bandwidth", "int_pm_pme",
->> +                              "dma_int", "pcie_evt_int", "msg_int",
->> +                              "int_all";
->> +            #interrupt-cells = <1>;
->> +            interrupt-map-mask = <0 0 0 7>;
->> +            interrupt-map = <0 0 0 1 &pcie_intx 0>, /* INT A */
->> +                            <0 0 0 2 &pcie_intx 1>, /* INT B */
->> +                            <0 0 0 3 &pcie_intx 2>, /* INT C */
->> +                            <0 0 0 4 &pcie_intx 3>; /* INT D */
->> +            device_type = "pci";
->> +            num-lanes = <1>;
->> +            #address-cells = <3>;
->> +            #size-cells = <2>;
->> +            power-domains = <&cpg>;
->> +            renesas,sysc = <&sysc>;
->> +            vendor-id = <0x1912>;
->> +            device-id = <0x0033>;
->> +
->> +            pcie_intx: legacy-interrupt-controller {
->> +                interrupt-controller;
->> +                #interrupt-cells = <1>;
->> +                #address-cells = <0>;
->> +                interrupt-parent = <&gic>;
->> +                interrupts = <GIC_SPI 400 IRQ_TYPE_LEVEL_HIGH>,
->> +                             <GIC_SPI 401 IRQ_TYPE_LEVEL_HIGH>,
->> +                             <GIC_SPI 402 IRQ_TYPE_LEVEL_HIGH>,
->> +                             <GIC_SPI 403 IRQ_TYPE_LEVEL_HIGH>;
->> +            };
->> +        };
->> +    };
->> +
->> +...
->> -- 
->> 2.43.0
->>
+
+base-commit: aa94665adc28f3fdc3de2979ac1e98bae961d6ca
+-- 
+2.34.1
 
 
