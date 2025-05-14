@@ -1,156 +1,147 @@
-Return-Path: <linux-clk+bounces-21872-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-21868-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB9AAB6D5F
-	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 15:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33238AB6B9F
+	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 14:43:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D41D4C5363
-	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 13:53:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C28CF4C3FF9
+	for <lists+linux-clk@lfdr.de>; Wed, 14 May 2025 12:43:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB9C27F4D9;
-	Wed, 14 May 2025 13:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F74279798;
+	Wed, 14 May 2025 12:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="PWHXu7GU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wlm2+c1W"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1328B27E7DA
-	for <linux-clk@vger.kernel.org>; Wed, 14 May 2025 13:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187F125C71A;
+	Wed, 14 May 2025 12:43:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747230766; cv=none; b=BpBeK5oAB0x/3D5shv8HOm0CYtky6XgRzrvhucOXmMAXb3w9wMhoXGtLoXO1qHnLHqZPg50wcfHp2r6glbvuoCjiAATPef56T6JujBAIc3wOpl4nLOBCID4QLvbnAnpXRKlPqkV8TNubKdzoxylEJF0FsSdSdcmUncDBx4sak6Q=
+	t=1747226599; cv=none; b=uiTOU/flSlSFOgiMXFZMGHrPCYlRoVHL8GCbqbxhbGNrDpzW0poa908Puc0FrNH0EdK2lyPaJxKKuhHXH8naEo6aMGelkwhJTNuDyjDWFUvI8caKz3EgNT4ulD4fqu/ULFh0ki9sstYgkvneTd7P0p2098c7QL2KG6EQtb9u3Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747230766; c=relaxed/simple;
-	bh=yBKN8id0e8i0mID56sBX04JKOMEpNFcKtfCE5gt4YyQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=kY+28LRPUu1c63UlF5RLVWdorna41Xz09K2xswrq5x2um0GSJYS3pNleGkVCd72+nWJl8t1bXCz8kocWNc3UCTOeD3CvzWKx5pGUBJt4VbNXwpmjGoWU52FA9VgR2iNij4PwNy7gU78APlM031bpNBhylG6kd2vTrvinTU8Ro9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=PWHXu7GU; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250514135242epoutp0149ddf952557bf2e0b7aa053d2cd46285~-aR8DY8LG3002730027epoutp01a
-	for <linux-clk@vger.kernel.org>; Wed, 14 May 2025 13:52:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250514135242epoutp0149ddf952557bf2e0b7aa053d2cd46285~-aR8DY8LG3002730027epoutp01a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1747230762;
-	bh=gCzfbZekv4htNUijIC+SbkqBGyLEFOMaleFjXJEgatk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PWHXu7GU4DodhpP21c0owWh81IqdK3akqHsSTo555BlTK6RSln4LIHHSVH0bVf+FJ
-	 0b+/niCp/EE4DH/Nslvd0KkURVvHgenmh3kfh5NIywxvPsmHACnlF+nfYTAl1I+aL4
-	 DtyVhBBhJ+QoUc4L1LJC3fBMg7CyNtAhLWvO1kLg=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20250514135241epcas5p1c532029629ae732c7dd6c2ed2db26353~-aR7f6P0V0362903629epcas5p13;
-	Wed, 14 May 2025 13:52:41 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.178]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4ZyFCW6JtDz6B9m5; Wed, 14 May
-	2025 13:52:39 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250514095242epcas5p43aab99ca456684f1689d3e37a44b0c88~-XAZkOEZN1927219272epcas5p4H;
-	Wed, 14 May 2025 09:52:42 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250514095242epsmtrp1cf1ae3b2305367497a64be3bf5ea5ed6~-XAZi_ipV1927519275epsmtrp1a;
-	Wed, 14 May 2025 09:52:42 +0000 (GMT)
-X-AuditID: b6c32a29-55afd7000000223e-73-682467eac1b0
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	11.9B.08766.AE764286; Wed, 14 May 2025 18:52:42 +0900 (KST)
-Received: from bose.samsungds.net (unknown [107.108.83.9]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250514095239epsmtip24e9d87979a0f3e94d227111f61c1db9a~-XAWwEijB1817318173epsmtip2M;
-	Wed, 14 May 2025 09:52:39 +0000 (GMT)
-From: Raghav Sharma <raghav.s@samsung.com>
-To: krzk@kernel.org, s.nawrocki@samsung.com, cw00.choi@samsung.com,
-	alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, conor+dt@kernel.org, richardcochran@gmail.com,
-	sunyeal.hong@samsung.com, shin.son@samsung.com
-Cc: linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	dev.tailor@samsung.com, chandan.vn@samsung.com, karthik.sun@samsung.com,
-	Raghav Sharma <raghav.s@samsung.com>
-Subject: [PATCH v2 3/3] arm64: dts: exynosautov920: add CMU_HSI2 clock DT
- nodes
-Date: Wed, 14 May 2025 15:32:14 +0530
-Message-Id: <20250514100214.2479552-4-raghav.s@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250514100214.2479552-1-raghav.s@samsung.com>
+	s=arc-20240116; t=1747226599; c=relaxed/simple;
+	bh=D/UhFncoTOD+fb3+ydS2upDmu7EB98QPAuGaj00u5jo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k80sEwtRUqq0cKZyja7EQ86FHB4Eh6C4m4xsWJn1BUe1kqH80n6tp0/lXh5cR+L6IM/UGbVq1dx0PFIE8Ex9lSVMd+E9R5N4UGQdlldQZ30wabLDQCdeX19Bm1AbtLEFUBNapr12Q5o942LwDQuBh1rD2rEVDPCAw8W0WQV04RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wlm2+c1W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEA3C4CEF2;
+	Wed, 14 May 2025 12:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747226596;
+	bh=D/UhFncoTOD+fb3+ydS2upDmu7EB98QPAuGaj00u5jo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wlm2+c1WoBARvxNkE2J1kIKh0KgE/rWg6Li4Br2uQjHmtItBVy2zt4/IUKcFs3W00
+	 F2GBZQAsjxI9SDdJ35sVDM0u4uJ4/BgahzwXyRDH/wqRSjM73wUPEHWJj6bL36E0/S
+	 TB95yXaRj5rnjesp/8I3aDcHBQM+dwVW+AUjbr7+ETW6QciXU6haseIO+BJzuTJZt/
+	 gCECTsv78TsN00uUeTmbjK6siPuSAdzWWyt5vIsM4K/5k+o7SjTUPwNHXlzcMRYJEZ
+	 R6t9+rXvS7jAxHMvcZyPv7J3gcSECd1BbBOnwTsuKDzZ5qMpxE49fnHfoL6usQkr8t
+	 PclJojWMhXjnw==
+Date: Wed, 14 May 2025 07:43:14 -0500
+From: Rob Herring <robh@kernel.org>
+To: dongxuyang@eswincomputing.com
+Cc: mturquette@baylibre.com, sboyd@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	ningyu@eswincomputing.com, linmin@eswincomputing.com,
+	huangyifeng@eswincomputing.com
+Subject: Re: [PATCH 1/2] dt-bindings: clock: eswin: Documentation for eic7700
+ SoC
+Message-ID: <20250514124314.GA1770882-robh@kernel.org>
+References: <20250514002233.187-1-dongxuyang@eswincomputing.com>
+ <20250514002516.290-1-dongxuyang@eswincomputing.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupjkeLIzCtJLcpLzFFi42LZdlhJXvdVukqGQet/E4sH87axWUz4EmGx
-	Zu85JovrX56zWtzbsYzdYv6Rc6wWjTPeMFmcP7+B3WLT42usFh977rFaXN41h81ixvl9TBYX
-	T7laHFsgZvF95R1GiyNnXjBb/N+zg93i8Jt2Vot/1zayWEw+vpbVomnZeiYHUY/3N1rZPXbO
-	usvusWlVJ5vH5iX1Hn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJWxf3InW8EDzoqrvVvYGxjf
-	sncxcnJICJhI3Nk9jbGLkYtDSGA3o8T2PU+ZIRISEvv+/2aEsIUlVv57DtYgJPCWUWLFixwQ
-	m01AS+LK9ndsIM0iAl1MEuf+vWIBSTAL7GSSWLleAsQWFvCX2Lj8MFicRUBVYt32PlYQm1fA
-	WmL9zC8sEAvkJfYfPAu2mFPARuLri8vMEMusJVpezWGCqBeUODnzCdR8eYnmrbOZJzAKzEKS
-	moUktYCRaRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnCUaWnuYNy+6oPeIUYmDsZD
-	jBIczEoivNezlDOEeFMSK6tSi/Lji0pzUosPMUpzsCiJ84q/6E0REkhPLEnNTk0tSC2CyTJx
-	cEo1MK3b/HpX2G6R0pszorWnbry2MKH1zKIbQQ9WiE7tsorvD/4puyXq89sc/wtdNiHThDel
-	Wu1++33dg0XKsU7LNWRWdkrft9meu/oo+z+rllnXFwQ/P9+7dOW7mVz8tzZJZ+Ye8BNebPaw
-	/qO4nUT+vGuSfwRiZiuozcgzUz5XJN/vtvFp3WGh+eK/ru2XS0+YtuKb7Xcd05ZnzE9/aTlv
-	Fbi2bWpJq8oiRq7983rkWxWzOd5G/Tntbt33zsvzuETqbq4e89vAuCp++6eRz/f3g5hF9aLt
-	QtY3Gn9vFKheONP6Eee77+8+nQv7s4J1yS+1XS8m972YJHvnpZy9x8PuzVuv1VuFfdZcvusN
-	41sPvTlKLMUZiYZazEXFiQD/aOo/IQMAAA==
-X-CMS-MailID: 20250514095242epcas5p43aab99ca456684f1689d3e37a44b0c88
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-543,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250514095242epcas5p43aab99ca456684f1689d3e37a44b0c88
-References: <20250514100214.2479552-1-raghav.s@samsung.com>
-	<CGME20250514095242epcas5p43aab99ca456684f1689d3e37a44b0c88@epcas5p4.samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250514002516.290-1-dongxuyang@eswincomputing.com>
 
-Add required dt node for CMU_HSI2 block, which
-provides clocks to ufs and ethernet IPs
+On Wed, May 14, 2025 at 08:25:16AM +0800, dongxuyang@eswincomputing.com wrote:
+> From: Xuyang Dong <dongxuyang@eswincomputing.com>
+> 
+> Add device tree binding documentation and header file for
+> the ESWIN EIC7700 clock controller module.
+> 
+> Signed-off-by: Yifeng Huang <huangyifeng@eswincomputing.com>
+> Signed-off-by: Xuyang Dong <dongxuyang@eswincomputing.com>
+> ---
+>  .../bindings/clock/eswin,eic7700-clock.yaml   |  43 ++
+>  .../dt-bindings/clock/eswin,eic7700-clock.h   | 588 ++++++++++++++++++
+>  2 files changed, 641 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/eswin,eic7700-clock.yaml
+>  create mode 100644 include/dt-bindings/clock/eswin,eic7700-clock.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/eswin,eic7700-clock.yaml b/Documentation/devicetree/bindings/clock/eswin,eic7700-clock.yaml
+> new file mode 100644
+> index 000000000000..c39fa99b503c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/eswin,eic7700-clock.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/eswin,eic7700-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Eswin EIC7700 SoC clock controller
+> +
+> +maintainers:
+> +  - Yifeng Huang <huangyifeng@eswincomputing.com>
+> +  - Xuyang Dong <dongxuyang@eswincomputing.com>
+> +
+> +description: |
 
-Signed-off-by: Raghav Sharma <raghav.s@samsung.com>
----
- arch/arm64/boot/dts/exynos/exynosautov920.dtsi | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Don't need '|'.
 
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-index 2cb8041c8a9f..7890373f5da0 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-@@ -1048,6 +1048,23 @@ pinctrl_hsi1: pinctrl@16450000 {
- 			interrupts = <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_hsi2: clock-controller@16b00000 {
-+			compatible = "samsung,exynosautov920-cmu-hsi2";
-+			reg = <0x16b00000 0x8000>;
-+			#clock-cells = <1>;
-+
-+			clocks = <&xtcxo>,
-+				 <&cmu_top DOUT_CLKCMU_HSI2_NOC>,
-+				 <&cmu_top DOUT_CLKCMU_HSI2_NOC_UFS>,
-+				 <&cmu_top DOUT_CLKCMU_HSI2_UFS_EMBD>,
-+				 <&cmu_top DOUT_CLKCMU_HSI2_ETHERNET>;
-+			clock-names = "oscclk",
-+				      "noc",
-+				      "ufs",
-+				      "embd",
-+				      "ethernet";
-+		};
-+
- 		pinctrl_hsi2: pinctrl@16c10000 {
- 			compatible = "samsung,exynosautov920-pinctrl";
- 			reg = <0x16c10000 0x10000>;
--- 
-2.34.1
+> +  The clock controller registers are part of the syscrg block on
+> +  eic7700 SoC.
 
+Wrap at 80
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: eswin,eic7700-clock
+
+Drop 'oneOf' and 'items'.
+
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/eswin,eic7700-clock.h>
+> +
+> +    sys_crg: sys-crg@51828000 {
+> +        compatible = "syscon", "simple-mfd";
+
+Must have a specific compatible for the block.
+
+> +        reg = <0x000000 0x51828000 0x000000 0x80000>;
+> +        clock: clock-controller {
+> +            compatible = "eswin,eic7700-clock";
+> +            #clock-cells = <1>;
+
+There's no need for a child node here. Just add '#clock-cells' to the 
+parent node.
+
+> +        };
+> +    };
 
