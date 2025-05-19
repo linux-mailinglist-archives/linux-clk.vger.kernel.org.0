@@ -1,154 +1,112 @@
-Return-Path: <linux-clk+bounces-22055-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-22064-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EE2FABC2C9
-	for <lists+linux-clk@lfdr.de>; Mon, 19 May 2025 17:44:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4D46ABC350
+	for <lists+linux-clk@lfdr.de>; Mon, 19 May 2025 17:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2A3B3B6E82
-	for <lists+linux-clk@lfdr.de>; Mon, 19 May 2025 15:44:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EF7F7A1C2E
+	for <lists+linux-clk@lfdr.de>; Mon, 19 May 2025 15:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B9C6286889;
-	Mon, 19 May 2025 15:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3B728642A;
+	Mon, 19 May 2025 15:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gOMWIman"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kj6KqOS+"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D912820C6;
-	Mon, 19 May 2025 15:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5321A38F9;
+	Mon, 19 May 2025 15:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747669470; cv=none; b=fTSnr74qZOvgdGVe149C7Bk08UIXwQW5PQ6OSsxoThj2HBSP3+TQPOwMjxNef46k0rTmZnjxfhD+4pZD4A5HGIzncViSltESc3uxefIgd2bxjh7cngYurzZlEC8DcS7CMokrtf8CvHwePvi48tTM8Vxv8F4tgm2XTUeFW1Xo4K4=
+	t=1747670250; cv=none; b=p0DPntE2zVX2u9hh0ZHgwSnhPXP8C8b/7ZjdmTkiA1QxP+yMA/pzw6/H59ltu3qMla5BkKgDdeaXH4e0R0Qv8muLYB8XxWFSEXDlnVpYVP9+LAwLtH0GF0OV8UZ7uFCWK3TBPP/ciQH/Ki19fG+wJPcTwzM1FSYYf172KC5PBz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747669470; c=relaxed/simple;
-	bh=ucbRC+By9t6hiwEjSnTGEwM8Sp7zd3PXSGJLq749aGA=;
+	s=arc-20240116; t=1747670250; c=relaxed/simple;
+	bh=VUzSHqjWRHEw8aOWm4K55qRWmHvDt0y25jCW53sFSaA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qm92AmcR87mf6YgWqphb2IWpliXJ34Epejc8119Sq6cqpJcbaXX0pagIl+7WLlYnLx/dH9buWEVbWl5znbOm6Kop1FfR+RTfZF5oguHp6w8gR14h4i1R/IDYKraJq5GIicufo0QjBXbdCjNJuvYit0cepe/m5V+dYVzOtSwK0Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gOMWIman; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747669469; x=1779205469;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ucbRC+By9t6hiwEjSnTGEwM8Sp7zd3PXSGJLq749aGA=;
-  b=gOMWImanockod7A/QxMhBip60hxhwDqRMjfZuqjMPulix1cJgkOeSY9G
-   uVp4Yfeopxznj7KPDWdx8aDdTANeeh0rx/ejfIZCzjkxiti+WqL+PmzFf
-   o1nKoJkAzHClGxWTcgXkZnlKwp4AhiTlkj+901XhieoRlr1OeDhQ1GuCe
-   ztEM0zzEnZyGd/e813Xl1dy35NKQ6y1kG+fb5ugBZeRgcOZQ0s42OGZaB
-   h6DRoK8EOBiuZzWHD4AbfQO1MQw0rWE+a5DeGvFSD1A2mdz0gEuP4HjH3
-   3stFLGelmUzcOHA/rhR55DG/iKyxCkWH6ilFRwL5H5rubH2wuP/0bcbzZ
-   w==;
-X-CSE-ConnectionGUID: WKLKd6ubTY+f8O88tW3VcA==
-X-CSE-MsgGUID: /UA6LEhJRMWQmdgoLNy3YA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11438"; a="60966638"
-X-IronPort-AV: E=Sophos;i="6.15,301,1739865600"; 
-   d="scan'208";a="60966638"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 08:44:28 -0700
-X-CSE-ConnectionGUID: D9nnBx4yRm2U9Gb6be0UuQ==
-X-CSE-MsgGUID: O7jOjWPERG2e6Txxz393/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,301,1739865600"; 
-   d="scan'208";a="176513494"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2025 08:44:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uH2f0-000000034rN-2cA2;
-	Mon, 19 May 2025 18:44:14 +0300
-Date: Mon, 19 May 2025 18:44:14 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=HvuSfGyblu2A+sbplci4Rmmv6PvbBgdWDQthFwaZpqVD9Op5iWG2wogNQOS2Rn0KkVb4+DRFE+qBGsEAYldDXAI9i0BA7h62NgvsSvrkj1zeRENrZcomezfeuSQWuU8yVdp1UhpNI4Qm8sDbS4erfSRpVn5JV1oCqSW+QDE30Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kj6KqOS+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5225CC4CEE4;
+	Mon, 19 May 2025 15:57:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747670250;
+	bh=VUzSHqjWRHEw8aOWm4K55qRWmHvDt0y25jCW53sFSaA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Kj6KqOS+YLK/A6KTIkPXUepkPrDauNFinWc15/s+AVkSF8qc8Zj2KQzylbVHaem3W
+	 +IBXyR+bp1rMnJCEc6/PbTp84IuYihfA8uF9a6DcyyfUsD2FoeCErOr2OSzUHxrU+c
+	 puZ3f1f0bq47U9Uu7ORjMWffPLePNZPZL9mZp0GxWoq1gdykbNiiSYrghC4celz0Tz
+	 q17/evx2CtruU8U8CuyT4NnfCu7uwZKXprlqVR8hesbGXsOfvkOoggXMVumlpCHBvp
+	 +eQiN2SNGfXGRlFCROnuABlF8jGWFamWpYeLtQbf8OvCrKZ3VZ1pEqkoVlLjeeU0iD
+	 Lpa65m4MYEiLQ==
+Date: Mon, 19 May 2025 16:57:21 +0100
+From: Mark Brown <broonie@kernel.org>
+To: nuno.sa@analog.com
+Cc: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-spi@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 23/26] misc: lan966x_pci: Introduce board specific data
-Message-ID: <aCtRzm6nPk61WtRj@smile.fi.intel.com>
-References: <20250507071315.394857-1-herve.codina@bootlin.com>
- <20250507071315.394857-24-herve.codina@bootlin.com>
- <aB0ERYKdRreDe7Wt@smile.fi.intel.com>
- <20250519170004.631d99af@bootlin.com>
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Trevor Gamblin <tgamblin@baylibre.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Mike Turquette <mturquette@linaro.org>,
+	Xu Yilun <yilun.xu@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v6 3/7] include: linux: move adi-axi-common.h out of fpga
+Message-ID: <ee2cd70a-53d1-4693-bd79-966303177da6@sirena.org.uk>
+References: <20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com>
+ <20250519-dev-axi-clkgen-limits-v6-3-bc4b3b61d1d4@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qdDeMOGITLcb8Xta"
 Content-Disposition: inline
-In-Reply-To: <20250519170004.631d99af@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Mon, May 19, 2025 at 05:00:04PM +0200, Herve Codina wrote:
-> On Thu, 8 May 2025 22:21:41 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, May 07, 2025 at 09:13:05AM +0200, Herve Codina wrote:
-
-...
-
-> > >  static struct pci_device_id lan966x_pci_ids[] = {
-> > > -	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, 0x9660) },
-> > > +	{ PCI_VDEVICE(EFAR, 0x9660), (kernel_ulong_t)&evb_lan9662_nic_info },  
-> > 
-> > PCI_DEVICE_DATA() ?
-> 
-> PCI_DEVICE_DATA() need the device ID defined using a #define in the form
-> PCI_DEVICE_ID_##vend##_##dev
-> 
-> PCI_VDEVICE() allows the device ID value passed as an integer in the same
-> way as for PCI_DEVICE().
-> 
-> Also, according to its kdoc, it allows the next field to follow as the
-> device private data.
-> 
-> IMHO, I think PCI_VDEVICE() use is correct here and I will keep it.
-
-It's correct, no doubts, but using PCI_DEVICE_DATA() makes sense when you need
-to supply driver_data. In particular it will take care of needed castings and
-also as you noticed asks users to apply the regular pattern for PCI ID
-definitions.
-
-Moreover, the 0x9660 is used in two drivers and it's a good candidate to be in
-pci_ids.h. (Note drivers/pci/quirks.c:6286)
-
--- 
-With Best Regards,
-Andy Shevchenko
+In-Reply-To: <20250519-dev-axi-clkgen-limits-v6-3-bc4b3b61d1d4@analog.com>
+X-Cookie: We have ears, earther...FOUR OF THEM!
 
 
+--qdDeMOGITLcb8Xta
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, May 19, 2025 at 04:41:08PM +0100, Nuno S=E1 via B4 Relay wrote:
+> From: Nuno S=E1 <nuno.sa@analog.com>
+>=20
+> The adi-axi-common.h header has some common defines used in various ADI
+> IPs. However they are not specific for any fpga manager so it's
+> questionable for the header to live under include/linux/fpga. Hence
+> let's just move one directory up and update all users.
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--qdDeMOGITLcb8Xta
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgrVOAACgkQJNaLcl1U
+h9Dd3wf/cHFUuNwaFGNjWnYSDMN7dQksfI+rVKAFdOxYLQfhicIF2vdJ7gUOYQUB
+f3diPdVJG2mU09JQtoOWAH3VOf50DQCPSgW+NDRLNhPA1wT4dmnZpS1hCIh7Jhg6
+O3hZDUugRtY4BbhLxS2lUrzPaf5Jvtg03ibVoj5ONuFAJ7DxoGVnJ+gRlQe3ZJGK
+QrQKgTZMOv+rONUNhsX25zcu6j5LEag4zcbwuuhC/IAGu0xOx5eDyTg/OUafYdlZ
+ZSIj1LdiXfZpJYWun8U3MMjS1lUVTmrO/5N9QDZZJhvmX7Eykvjtdc1lQxChsifU
+5gulW79p9Kbvl3ncHoZRu11Vp1EGnQ==
+=tVIC
+-----END PGP SIGNATURE-----
+
+--qdDeMOGITLcb8Xta--
 
