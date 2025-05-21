@@ -1,197 +1,304 @@
-Return-Path: <linux-clk+bounces-22127-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-22129-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BE6AABF0AD
-	for <lists+linux-clk@lfdr.de>; Wed, 21 May 2025 12:03:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E6A8ABF2FF
+	for <lists+linux-clk@lfdr.de>; Wed, 21 May 2025 13:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D241E7B0E07
-	for <lists+linux-clk@lfdr.de>; Wed, 21 May 2025 10:01:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D203D163140
+	for <lists+linux-clk@lfdr.de>; Wed, 21 May 2025 11:37:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FBA25A34D;
-	Wed, 21 May 2025 10:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 666B52641C6;
+	Wed, 21 May 2025 11:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WL/b4UT/"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="IOVFI/f9"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F8B22B59D;
-	Wed, 21 May 2025 10:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C123238140
+	for <linux-clk@vger.kernel.org>; Wed, 21 May 2025 11:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747821772; cv=none; b=eA6qm9cg3zYPmbNnWBBlLZQMHqP1Pi4A9VUejlEyCBvtJSCaK/9bZQVWgkV+9B6oXMTyydiDXvlNmqsATcWS6JhaNV46PHATWKtUdkcUJOSKPP/Zc6Aqq8RpbvoeqZkUC4KUaUf2tolSf7TTHd3qalfPoD/d8cHiJBaNLs60Ydw=
+	t=1747827443; cv=none; b=rwmdk7kmWbmPM3NNGGc1uEaf4Iu1Cs0RoJlbY/7wAB82a0xPlkrO4ZNbMKa07ow3/8pisrjxkgFjMETzL3dyIHYaltsDMIhbBWYCL2kISGd/3DkBzZU2tsw1xrQnnwlEMPS3tur6neRJNrRDNS0GcE6ngRCICphvf7RGoiGHo6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747821772; c=relaxed/simple;
-	bh=s5n+/vzAdQy/+BLtMYMB0dflYdmUHeprpP/7P/3ufBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=owBvfSt8BsIiYbDGu5MZY1lyvHxpShp18tnCJhJkfqjtl1pSW42GJY7X1LfAYWD7k/1lkRTe6IrVX86QpH1iOc+mF4G+Kgs+XWP22+ZZ6tVb3/zl/YwD7xya4X6bzNFBo/+1qoUDjTlkrXn1lHBkgtOmuZNnaI0op/ynJhqtHYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WL/b4UT/; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54L9XNAk027636;
-	Wed, 21 May 2025 10:02:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	aglXn5bbF2Mtfu9pUWzztj7c2/bF74z/9HclfhgJmw8=; b=WL/b4UT/rXDeE7nC
-	DXpdXIAdM8nilIPYkhMNcywzy23Ctnf+jCJ7z89GlQP51xWC482GGe4z9NQK2Wjz
-	4msxrAjGaw2raeszO8kdsmg0qB7a314hbGyR87/ONLxINku1aMG0WO1wuyPrtz2k
-	bjMMNBCi4yC3b7ELuxr+/BPld2s0slbc08Hx3gqyGphmjjH+XFFtdKwfC1aBKO5h
-	LA4dGy34DzHkjv3RvFQhRQZjZdLJ3YO4TqWnX7EKW8KAVilZcah2ymSnWMXkVJzS
-	qvjtbK6sfOdjsRba8RqE8iEpa2Iu0KZEa3CK+6+g6EGA+EPsRbCWeN+Wr1/geGMs
-	tGCQnw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46rwf9afga-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 May 2025 10:02:44 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54LA2h8Y031585
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 21 May 2025 10:02:43 GMT
-Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 21 May
- 2025 03:02:37 -0700
-Message-ID: <ec4ee2f5-162b-430d-aeb9-90ad4559707b@quicinc.com>
-Date: Wed, 21 May 2025 15:32:34 +0530
+	s=arc-20240116; t=1747827443; c=relaxed/simple;
+	bh=aUwu7ynv58jsNshaez4JIBjecCiqdiO1cl4puDm3Iac=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KKkkLXMbvY9CviEkmzzjh5lq7kGdJ88rJKI//0Wt/efYA9FcNCjlr2qj+fM3Od3KRh/Qh6KII0EAw/9EbWCF2k3yGfYJxzrcEzXsDPzcbh/B6GMCtV8F1OrLJ4r1w/bm7Nbvzqe7AJAWQZRpzGXNeNbPXXJepcL5UXfhjIujcqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=IOVFI/f9; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54298ec925bso10400250e87.3
+        for <linux-clk@vger.kernel.org>; Wed, 21 May 2025 04:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1747827438; x=1748432238; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bq2unRbgv/HFo6D86aX5CmiwTp0UijkhqdpWvEJewKM=;
+        b=IOVFI/f9EZHjLaBXQ0rzZ3jCUAuHfmyOQegFv45I1TdIeKHGa9Yt+yucH/32yskZ1f
+         smItKMoZbPRYow0QlD+GZ8ETeuUflINGPA3G7oEyKh4iMka3dEv0YUXblj6ie+iWiAJS
+         7MPxjKzyLfwwEnM0eyTgBEIRxWi5NCFWzFj400iiSZN4FRwVISMP7rJKNJuEkBD8zFjC
+         AfRXPTrLbTniFvMu1htF376WKsgJ5WVFW3L3w3yX6+8j+7fz/Vgr51lwAujpqnxhh1Vt
+         q1nP/AaG0LhhbGcxegGq9/VXtmeGsVREwNrD0xPAfIPWaRzJcGoheKvk1MGg3tCoIXHd
+         ULHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747827438; x=1748432238;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bq2unRbgv/HFo6D86aX5CmiwTp0UijkhqdpWvEJewKM=;
+        b=LoHnnieGndZ1BdgnI0icQ3zGj/TS94gaeRzljcGMqG2iMeibdkHgbE5xXlcoZ7wQxZ
+         oUX35IQnezkSfTY9UiUw7dsnkiB9XXpcveIzNa+8p5wlv+xNpxTgRR+IXl3gkLxhqrR7
+         QwchEh7XY8F4Xhfdvt1IEBiIHXRasZZ8cwNSczTMLJcpS8ESmW6VLgVfiM4zhD1NjPWf
+         Zsp1GLZsxeXV0UDcRaeahb59wxIhIs5F9PGYdFUAPduqfHrhEZLc0E67PmAqapNPKQFg
+         HyqPp5brBbvFi9QqXVu6un6aKCC+mLaal9VAlIGL3jMCgmiDenlzYWQM6VHlFnrM8iPW
+         6Mew==
+X-Forwarded-Encrypted: i=1; AJvYcCX5QUtQgFvsglLQT1XIgxWouB1cGoVpVYSshO6c5+teuW1xXj+lANOhDNeqa4Qk2RsI3j8EY1yIVug=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEgCZodaD9XhOtSbKY/X5yrTa3LpSj67ZbSp/ARA9lRAgiS+YO
+	bmLK4K29sa72TWDifqNyTRLzwKQY2pcHCiHbewwEEKCJ8UqPNeXNmIybfJHc1iErGgPUk8NmLLw
+	T0pP5fuGON5IWvKC0cPXGa6aA3Q0AFdln9TcebJVTBg==
+X-Gm-Gg: ASbGncvPOdUdTqEYjEsd5ncIfh/iA5lzgljVNUMxviyIJVxUqUZYkTT21ez19hpbzFw
+	w2zFJ4UzHb6zksZfIg40jKix/QeSProDqMgBVbbhc9Fe4GHDgt1wSWH3rJZMhR2JQknFuosZZPO
+	5Ou8Li7a0MUnttowV3W+YhkNXXfhVSiS5eY3XaLVItmyyt
+X-Google-Smtp-Source: AGHT+IEfFRJ1uCRuqmP4owkMAUn9fjXR/6fk30LYXalgtbRk3jIERMhcf1RDrfIEzlwpn6xl8q47m+FQo99BZm7P7qM=
+X-Received: by 2002:a05:6512:22d1:b0:550:f012:96a with SMTP id
+ 2adb3069b0e04-550f0120cdbmr4068337e87.20.1747827438295; Wed, 21 May 2025
+ 04:37:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 02/18] dt-bindings: clock: qcom: Update sc8280xp camcc
- bindings
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        "Vladimir
- Zapolskiy" <vladimir.zapolskiy@linaro.org>,
-        Dmitry Baryshkov
-	<lumag@kernel.org>,
-        Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Satya Priya
- Kakitapalli" <quic_skakitap@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-References: <20250515-videocc-pll-multi-pd-voting-v4-0-571c63297d01@quicinc.com>
- <20250515-videocc-pll-multi-pd-voting-v4-2-571c63297d01@quicinc.com>
- <20250519-barnacle-of-beautiful-enthusiasm-4e6af0@kuoka>
-Content-Language: en-US
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <20250519-barnacle-of-beautiful-enthusiasm-4e6af0@kuoka>
+References: <20250511133939.801777-1-apatel@ventanamicro.com>
+ <20250511133939.801777-14-apatel@ventanamicro.com> <aCGaKXOOWyM4JQMg@smile.fi.intel.com>
+In-Reply-To: <aCGaKXOOWyM4JQMg@smile.fi.intel.com>
+From: Anup Patel <apatel@ventanamicro.com>
+Date: Wed, 21 May 2025 17:07:05 +0530
+X-Gm-Features: AX0GCFvNwxTxwAgZLci2dmWWitFjI2kQU-baZRFrggBnWcQZjGdOl85COFKoeDQ
+Message-ID: <CAK9=C2U1rzSa42qMNqxfTtjAC5RiJrhwg_32_B86nT2+xJ4Qow@mail.gmail.com>
+Subject: Re: [PATCH v3 13/23] irqchip: Add driver for the RPMI system MSI
+ service group
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>, 
+	Rahul Pathak <rpathak@ventanamicro.com>, Leyfoon Tan <leyfoon.tan@starfivetech.com>, 
+	Atish Patra <atish.patra@linux.dev>, Andrew Jones <ajones@ventanamicro.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Anup Patel <anup@brainfault.org>, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: F2cKs9OAE1xTReTfOzMV6iBsg0rAphRC
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIxMDA5OCBTYWx0ZWRfX2wwsWNzVbQBb
- NQSSzzRoUsAyB9Sff9ElOO+ZDrQZ6nqt2MQ/eFg1nUrt+pHqTP3/JX8JgPGSWPQOqu/qofBLuAm
- L+Gy+2kiS/GGqhD13DtKWPQJjcGt2tZVNjKtkJO+TG9JFoMcdDtI1tivDTUSj28tdBPVraUMGMR
- WZAgOn9SUcQbzaI248ils+fbIIp1Ubh4lRmzr8fWy9TG5ncON4jehgDSgn5gneKBDllXXxD8wHq
- FJt+K7MoV0MH7AfMHCCnysa+ilFhOyiigkBMoYHLCdf0WZqqPd4e9SNRIVoJoxku9cfGwFa+9zQ
- F98cL3pxHpFGSadhzcf5ylr8NH1vigDu9dNjDS+q+HA0H02+QAlQTYjKNVbY3pCpZ4UTDwbiJpf
- k6rHXajZFlfRj0BESqsdh9bCuyhVUxbG+5psm82T92+pQSQQ6a4dKhZz+SuY0mMiI2M1X894
-X-Authority-Analysis: v=2.4 cv=GawXnRXL c=1 sm=1 tr=0 ts=682da4c4 cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=P-IC7800AAAA:8
- a=FCd5T-TvBLVYlDZUGUwA:9 a=QEXdDO2ut3YA:10 a=d3PnA9EDa4IxuAV0gXij:22
-X-Proofpoint-GUID: F2cKs9OAE1xTReTfOzMV6iBsg0rAphRC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-21_03,2025-05-20_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 malwarescore=0 phishscore=0 bulkscore=0
- spamscore=0 suspectscore=0 adultscore=0 classifier=spam authscore=0
- authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505160000 definitions=main-2505210098
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 12, 2025 at 12:20=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Sun, May 11, 2025 at 07:09:29PM +0530, Anup Patel wrote:
+> > The RPMI specification defines a system MSI service group which
+> > allows application processors to receive MSIs upon system events
+> > such as graceful shutdown/reboot request, CPU hotplug event, memory
+> > hotplug event, etc.
+> >
+> > Add an irqchip driver for the RISC-V RPMI system MSI service group
+> > to directly receive system MSIs in Linux kernel.
+>
+> ...
+>
+> > +/*
+> > + * Copyright (C) 2025 Ventana Micro Systems Inc.
+> > + */
+>
+> It can occupy a single line instead of 3 LoCs.
 
+Okay, I will update.
 
-On 5/19/2025 1:48 PM, Krzysztof Kozlowski wrote:
-> On Thu, May 15, 2025 at 12:38:47AM GMT, Jagadeesh Kona wrote:
->> SC8280XP camcc only requires the MMCX power domain, unlike
->> SM8450 camcc which will now support both MMCX and MXC power
-> 
-> I do not see change to sm8450 here. This makes no sense on its own. You
-> do not move compatibles - what is the point of such change?
+>
+> ...
+>
+> > +#include <linux/bitfield.h>
+> > +#include <linux/bitops.h>
+> > +#include <linux/cpu.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/irqchip.h>
+> > +#include <linux/mailbox_client.h>
+> > +#include <linux/mailbox/riscv-rpmi-message.h>
+> > +#include <linux/module.h>
+> > +#include <linux/msi.h>
+> > +#include <linux/of_irq.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/printk.h>
+> > +#include <linux/smp.h>
+>
+> + types.h
+>
+> Actually this one is most clean, the rest of the patches where the new co=
+de
+> is introduced has semi-random list of the inclusions, please, follow the =
+IWYU
+> principle.
+
+Sure, I will simplify the #includes
+
+>
+> ...
+>
+> > +static void rpmi_sysmsi_irq_mask(struct irq_data *d)
+> > +{
+> > +     struct rpmi_sysmsi_priv *priv =3D irq_data_get_irq_chip_data(d);
+> > +     int ret;
+> > +
+> > +     ret =3D rpmi_sysmsi_set_msi_state(priv, d->hwirq, 0);
+>
+> Please, use the respective getter and the type:
+
+Okay
+
+>
+>         irq_hw_number_t hwirq =3D irqd_to_hwirq(d);
+>
+> Ditto for all other similar cases.
+>
+> > +     if (ret) {
+> > +             dev_warn(priv->dev, "Failed to mask hwirq %d (error %d)\n=
+",
+> > +                      (u32)d->hwirq, ret);
+>
+> No, this is wrong in two ways: usage of specified for signed value and
+> passing the unsigned; using explicit casting to something unsigned.
+> Instead ofa the explicit casting, find the best formatting specifier
+> and use it.
+>
+> Ditto for  all your code.
+
+Okay, I will update.
+
+>
+> > +     }
+> > +     irq_chip_mask_parent(d);
+> > +}
+>
+> ...
+>
+> > +static int rpmi_sysmsi_probe(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev =3D &pdev->dev;
+> > +     struct rpmi_sysmsi_priv *priv;
+> > +     int rc;
+> > +
+> > +     priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > +     if (!priv)
+> > +             return -ENOMEM;
+> > +     priv->dev =3D dev;
+> > +     platform_set_drvdata(pdev, priv);
+> > +
+> > +     /* Setup mailbox client */
+> > +     priv->client.dev                =3D priv->dev;
+> > +     priv->client.rx_callback        =3D NULL;
+> > +     priv->client.tx_block           =3D false;
+> > +     priv->client.knows_txdone       =3D true;
+> > +     priv->client.tx_tout            =3D 0;
+> > +
+> > +     /* Request mailbox channel */
+> > +     priv->chan =3D mbox_request_channel(&priv->client, 0);
+> > +     if (IS_ERR(priv->chan))
+> > +             return PTR_ERR(priv->chan);
+> > +
+> > +     /* Get number of system MSIs */
+> > +     rc =3D rpmi_sysmsi_get_num_msi(priv);
+> > +     if (rc < 1) {
+> > +             mbox_free_channel(priv->chan);
+> > +             return dev_err_probe(dev, -ENODEV, "No system MSIs found\=
+n");
+>
+> Can rc be negative holding an error code? If so, why does the code shadow=
+ that?
+
+Ahh yes, we should print a different error message when rc < 0. I will upda=
+te.
+
+>
+> > +     }
+> > +     priv->nr_irqs =3D rc;
+> > +
+> > +     /* Set the device MSI domain if not available */
+> > +     if (!dev_get_msi_domain(dev)) {
+> > +             /*
+> > +              * The device MSI domain for OF devices is only set at th=
+e
+> > +              * time of populating/creating OF device. If the device M=
+SI
+> > +              * domain is discovered later after the OF device is crea=
+ted
+> > +              * then we need to set it explicitly before using any pla=
+tform
+> > +              * MSI functions.
+> > +              */
+> > +             if (is_of_node(dev_fwnode(dev)))
+> > +                     of_msi_configure(dev, to_of_node(dev_fwnode(dev))=
+);
+> > +
+> > +             if (!dev_get_msi_domain(dev))
+> > +                     return -EPROBE_DEFER;
+> > +     }
+> > +
+> > +     if (!msi_create_device_irq_domain(dev, MSI_DEFAULT_DOMAIN,
+> > +                                       &rpmi_sysmsi_template,
+> > +                                       priv->nr_irqs, priv, priv))
+> > +             return dev_err_probe(dev, -ENOMEM, "failed to create MSI =
+irq domain\n");
+> > +
+> > +     dev_info(dev, "%d system MSIs registered\n", priv->nr_irqs);
+> > +     return 0;
+> > +}
+>
+> ...
+>
+> > +/** RPMI system MSI service IDs */
+>
+> Why does this have a kernel-doc marker?
+
+Okay, I will use "/* */".
+
+>
+> > +enum rpmi_sysmsi_service_id {
+> > +     RPMI_SYSMSI_SRV_ENABLE_NOTIFICATION =3D 0x01,
+> > +     RPMI_SYSMSI_SRV_GET_ATTRIBUTES =3D 0x2,
+> > +     RPMI_SYSMSI_SRV_GET_MSI_ATTRIBUTES =3D 0x3,
+> > +     RPMI_SYSMSI_SRV_SET_MSI_STATE =3D 0x4,
+> > +     RPMI_SYSMSI_SRV_GET_MSI_STATE =3D 0x5,
+> > +     RPMI_SYSMSI_SRV_SET_MSI_TARGET =3D 0x6,
+> > +     RPMI_SYSMSI_SRV_GET_MSI_TARGET =3D 0x7,
+>
+> Please, be consistent in the style of values.
+
+Okay, I will update.
+
+>
+> > +     RPMI_SYSMSI_SRV_ID_MAX_COUNT,
+>
+> No comma in the terminator entry.
+
+Okay.
+
+>
+> > +};
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
 >
 
-I did the SM8450 changes in next patch (3/18). But I agree with you, this needs to
-be more structured. So I am planning to drop this patch and instead take care of
-single power domain requirement for SC8280XP within SM8450 camcc bindings using
-minItems and maxItems properties based on if check for sc8280xp compatible similar
-to below snippet.
-
-   power-domains:
--    maxItems: 1
-+    minItems: 1
-     description:
--      A phandle and PM domain specifier for the MMCX power domain.
-+      Power domains required for the clock controller to operate
-+    items:
-+      - description: MMCX power domain
-+      - description: MXC power domain
-
-......
-
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc8280xp-camcc
-+    then:
-+      properties:
-+        power-domains:
-+          maxItems: 1
-+        required-opps:
-+          maxItems: 1
-+
-
-
->> domains. Hence move SC8280XP camcc bindings from SM8450 to
->> SA8775P camcc.
-> 
-> Subject: everything could be an update. Be specific.
-> 
-> A nit, subject: drop second/last, redundant "bindings". The
-> "dt-bindings" prefix is already stating that these are bindings.
-> See also:
-> https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-> 
-
-Sure, I will take care of above in next series.
-
-Thanks,
-Jagadeesh
-
->>
->> SA8775P camcc doesn't support required-opps property currently
->> but SC8280XP camcc need that property,  so add required-opps
->> based on SC8280XP camcc conditional check in SA8775P camcc
->> bindings.
-> 
-> Best regards,
-> Krzysztof
-> 
+Regards,
+Anup
 
