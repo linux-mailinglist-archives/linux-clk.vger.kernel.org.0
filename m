@@ -1,119 +1,132 @@
-Return-Path: <linux-clk+bounces-22166-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-22168-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0144AAC0E9D
-	for <lists+linux-clk@lfdr.de>; Thu, 22 May 2025 16:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5160EAC11C2
+	for <lists+linux-clk@lfdr.de>; Thu, 22 May 2025 19:00:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B145B4A62BB
-	for <lists+linux-clk@lfdr.de>; Thu, 22 May 2025 14:46:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0956A17B98A
+	for <lists+linux-clk@lfdr.de>; Thu, 22 May 2025 16:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8739628C5CA;
-	Thu, 22 May 2025 14:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6548D29AB1F;
+	Thu, 22 May 2025 16:58:43 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FBA28C025;
-	Thu, 22 May 2025 14:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCE129A317
+	for <linux-clk@vger.kernel.org>; Thu, 22 May 2025 16:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747925201; cv=none; b=CPPBowhrsEGN09gqNXjes8xI9nsUtx5qFgSE4HIqOQc2QZQj8rQAoQYnSgocUVrP25mOJes5R3w106GL38hcgy6ePBFb+ArH2J2Qfgj9FZC//6PYkbAuwdzN/cY76ImCnqU1RjWtvRafkpyVb1deCzJIrjpTUGWffzB2H3D5ca0=
+	t=1747933123; cv=none; b=PvS32CSYDw1gIIBYJ3PEYIAxWJorDMfuPLldOt0sGMNChCU+eWTzyo7RMhQnArrm1Sk0RMIo7ZKPlQKAitJpPBh2ZNQOj0SROrDQo3i8zb81WerAsW9uQQkr5yxlcbkIlQOSJqudaSjA1vsxcfG7XZqBC4vU0BgcOX/TqQsVk44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747925201; c=relaxed/simple;
-	bh=tkdNjecwk5czBscvpRc/be7wQ0ftkkenBXvx0D5y+zE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uir+EGPpvmupInHSf0xpUM/zzmzSqhYFUcsQbYW8aClMG7I8XQjCSXiTdidQU4jGZcPSa4MWP6jPL+vQ4XVEeJwTlutKIckAPqcWPCZq3zapBy1bIzSPWREkTRpaIb5fcubFNrKjHO4lcxs2F1AjxrX5UjMyuO6V3HF6BC0K1ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4e130b8b9acso2406591137.3;
-        Thu, 22 May 2025 07:46:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747925198; x=1748529998;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y52tezzcpCUVN3gKIUjkdR+er8m1Gq5bInxI/qs2aUI=;
-        b=kl3FZpoORw6grFtVbANBMXiwhfWjQYRwwJ5W3cPEm8B2t6uJNvEz/hs965ncJUP1PJ
-         3tjt7EOxMfY4YssEs4yL/hLuJMj1m2MqBYflqcaPSLpFy0JKRHftlxNAS+Nu4CBeBXVi
-         a492d4Au59gQjNUe6Pge1TOnGstNi2En3m+zdUfP6ZZdoGpvIdaYYdor11GOlZe5qfGJ
-         kp4m4/wK7QET1iKd6LyWCHCtHfp63NJtH15HnYj7grNsSnRzLVhEqUn73nxYZZ92c7DU
-         EQiblcbGKU5yqo23cSdJILrsneE5wsFZoNfRpDDBneuijAeAsBdKmiinMMcEltyf2HHu
-         wFIw==
-X-Forwarded-Encrypted: i=1; AJvYcCVWroFlzwXsqrzrUUudpz4dHKYU6Ppgu4jNmGO3nemWEZrnjXGmXTPBXYPBY+OzRRL+E+pEmsDTuJgnT5lfze9y16E=@vger.kernel.org, AJvYcCVbyORhZkEDzPtrhHneaOxzw5ZzE1myIRcoR6wlhcqN9SwivGquDKVzYZFiTlxiacK8WddhpwGuQ50U@vger.kernel.org, AJvYcCWf1QImxXjY6XBYYjXBKhsg+MYnqK2FueNQClpIhw8EOQP2pLt7LYxEZiRp+T8aYtBHs1TDd441JCnWcAmr@vger.kernel.org, AJvYcCXlvQq9x1JGJc3HlCYHto6jgXoW//ZghaJmGfAiZzh4D1+8g21TumEcAsaEwBUSOroghqUYTx1tQZYe@vger.kernel.org
-X-Gm-Message-State: AOJu0YxigscEwhV09ApHxmN9DanDG9HQZ30NjQZ9zlwV4/3oZhbjPgyC
-	JB6fFBS/cbP48Kl5q4R7+KqwZXZzc5zh8bcfE4n8KPekF5wvlir5dvYVfqVl5/9F
-X-Gm-Gg: ASbGncsVCsNaVImL5Eyu1CJLMiLgNCX8ZA0bMSmIUQzha7qSb3n4StC8hX7vbNJszAl
-	R7CGfQp37qqBqKt6p8/teDkVybV0ndpylf7P6ok2w+ihYnRjZaa957lil1j43248et0QjNNdWNe
-	A4m8OiDYI/kEnJ571sau6sur3G8Tw/1bnYCXxLuz+7g5Ree0YBL6f1Cxfw2+pI+8F5zYzPY0fm+
-	BNSWIwiWv2yBCyH4cHT69BqyZ/ggri6rIkCSowY6wMyqe80sJ9EqoqwAZ6P6/76YF8RiCW/n8kr
-	8CFOKJzZrPD61uQa+pWfxKQMnaVCwv06twR/KV70/C9YuXW4V3wGEUp3ctybMzzMNiA2+tY1Yke
-	5zx765goJtg023359FfUUOyTk
-X-Google-Smtp-Source: AGHT+IGx10ive68RO5F6G3nhO42yq//VbGxb2oAQ7SMvRSOrdBWkfxyEr8xzfbnlCmuqZKqN23+q1Q==
-X-Received: by 2002:a05:6102:1628:b0:4db:154f:aa02 with SMTP id ada2fe7eead31-4dfa6ac0d8bmr22619868137.1.1747925198445;
-        Thu, 22 May 2025 07:46:38 -0700 (PDT)
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4dfa682e051sm11134564137.20.2025.05.22.07.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 07:46:38 -0700 (PDT)
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-4c32f1f7801so2759356137.2;
-        Thu, 22 May 2025 07:46:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUOR27lSfVn1sB9NjEwTLGvD35Hk63kOq1DzJ6qjHPYS1ZwNf49RVTR4YGQj9qzpAR279SNZFfT2XRAQqSJwOagXNU=@vger.kernel.org, AJvYcCURqvxkjEkIZiq+/K2uGltdXfNbd/t3sOMUGpoAMtGXMf6tDrI8upsllfj+ALbJ2nobl61bIeMFjL8i3OIm@vger.kernel.org, AJvYcCW+E9AlsmEcJK2+f+Di0lbSw6k2/KLOKmlRRqivMYNPj8XqDddoF7wHnu4jOdZIT7QTo+yPlZH2l/Jz@vger.kernel.org, AJvYcCW14MULY1wOTGzuhodNlw7as/cQ51b8Wm67YWzi8m209Y5vWC4lIsNfCUlcf3n399RgXNqqTqDExzcD@vger.kernel.org
-X-Received: by 2002:a05:6102:b15:b0:4b2:c391:7d16 with SMTP id
- ada2fe7eead31-4dfa6b5ff89mr23604430137.7.1747925198122; Thu, 22 May 2025
- 07:46:38 -0700 (PDT)
+	s=arc-20240116; t=1747933123; c=relaxed/simple;
+	bh=MDIiRkETpweUIwbIp2D/iMG81qbXBE4dZD6fYofTR+Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fqYleOtIvDD9NveeBDid01u7rpMlfPZkBjpP/mBJrmq1qnKl2tScEcubtNpX5nbneLGgvGRZihM0CTTr9aWZqEUg8dalhQ9+FcfbOSAF+qh6s+v9jRNusqUFg9mpLSO5MB3F5Q9F724I6j0D6/zqMLId2tNvQS5xRJ0SvO5kb1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:d2b9:ec6f:2b7c:8637])
+	by albert.telenet-ops.be with cmsmtp
+	id sGyX2E00B2sH3jG06GyXhB; Thu, 22 May 2025 18:58:31 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uI9FJ-00000002pSk-0fZn;
+	Thu, 22 May 2025 18:58:31 +0200
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1uI7oZ-00000003K9w-0fp1;
+	Thu, 22 May 2025 17:26:35 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] clk: renesas: rzg2l: Rename to_mod_clock() to to_mstp_clock()
+Date: Thu, 22 May 2025 17:26:32 +0200
+Message-ID: <cb0d43138aa443578dcfdaab146bf9215cde9408.1747927483.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250514090415.4098534-1-claudiu.beznea.uj@bp.renesas.com> <20250514090415.4098534-6-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20250514090415.4098534-6-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 22 May 2025 16:46:26 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU0EHrFz9d=QSGAhFeFKPmCX8=ofBLeK98R+MBLZZKJaQ@mail.gmail.com>
-X-Gm-Features: AX0GCFt8QyPA7E6eF8bf2pNKmHWl5X4VV9KNcduAM9qHCgrKuZjYWFuc5C3q3D8
-Message-ID: <CAMuHMdU0EHrFz9d=QSGAhFeFKPmCX8=ofBLeK98R+MBLZZKJaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] clk: renesas: r9a08g045: Drop power domain instantiation
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, magnus.damm@gmail.com, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 14 May 2025 at 11:04, Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> Since the configuration order between the individual MSTOP and CLKON bits
-> cannot be preserved with the power domain abstraction, drop the power
-> domain instantiations.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v2:
-> - added RTC MSTOP bit on the VBATB clock; the RTC and VBATTB clock
->   is gated by the same bit (CPG_CLKON_VBAT, BIT 0) but they have
->   different MSTOP bits (bit 8 for VBAT, bit 7 for RTC); this is
->   not described in HW manual ATM.
+Rename the to_mod_clock() helper macro to to_mstp_clock(), to match the
+type of the returned structure.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+This depends on "[PATCH v2 3/8] clk: renesas: rzg2l-cpg: Add macro to
+loop through module clocks"
+https://lore.kernel.org/20250514090415.4098534-4-claudiu.beznea.uj@bp.renesas.co,
 
-Gr{oetje,eeting}s,
+To be queued in renesas-clk for v6.17.
+---
+ drivers/clk/renesas/rzg2l-cpg.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-                        Geert
+diff --git a/drivers/clk/renesas/rzg2l-cpg.c b/drivers/clk/renesas/rzg2l-cpg.c
+index dc92f09d5616223b..9449a5a5714302f8 100644
+--- a/drivers/clk/renesas/rzg2l-cpg.c
++++ b/drivers/clk/renesas/rzg2l-cpg.c
+@@ -1200,18 +1200,18 @@ struct mstp_clock {
+ 	bool enabled;
+ };
+ 
+-#define to_mod_clock(_hw) container_of(_hw, struct mstp_clock, hw)
++#define to_mstp_clock(_hw) container_of(_hw, struct mstp_clock, hw)
+ 
+ #define for_each_mstp_clock(mstp_clock, hw, priv) \
+ 	for (unsigned int i = 0; (priv) && i < (priv)->num_mod_clks; i++) \
+ 		if ((priv)->clks[(priv)->num_core_clks + i] == ERR_PTR(-ENOENT)) \
+ 			continue; \
+ 		else if (((hw) = __clk_get_hw((priv)->clks[(priv)->num_core_clks + i])) && \
+-			 ((mstp_clock) = to_mod_clock(hw)))
++			 ((mstp_clock) = to_mstp_clock(hw)))
+ 
+ static int rzg2l_mod_clock_endisable(struct clk_hw *hw, bool enable)
+ {
+-	struct mstp_clock *clock = to_mod_clock(hw);
++	struct mstp_clock *clock = to_mstp_clock(hw);
+ 	struct rzg2l_cpg_priv *priv = clock->priv;
+ 	unsigned int reg = clock->off;
+ 	struct device *dev = priv->dev;
+@@ -1251,7 +1251,7 @@ static int rzg2l_mod_clock_endisable(struct clk_hw *hw, bool enable)
+ 
+ static int rzg2l_mod_clock_enable(struct clk_hw *hw)
+ {
+-	struct mstp_clock *clock = to_mod_clock(hw);
++	struct mstp_clock *clock = to_mstp_clock(hw);
+ 
+ 	if (clock->sibling) {
+ 		struct rzg2l_cpg_priv *priv = clock->priv;
+@@ -1271,7 +1271,7 @@ static int rzg2l_mod_clock_enable(struct clk_hw *hw)
+ 
+ static void rzg2l_mod_clock_disable(struct clk_hw *hw)
+ {
+-	struct mstp_clock *clock = to_mod_clock(hw);
++	struct mstp_clock *clock = to_mstp_clock(hw);
+ 
+ 	if (clock->sibling) {
+ 		struct rzg2l_cpg_priv *priv = clock->priv;
+@@ -1291,7 +1291,7 @@ static void rzg2l_mod_clock_disable(struct clk_hw *hw)
+ 
+ static int rzg2l_mod_clock_is_enabled(struct clk_hw *hw)
+ {
+-	struct mstp_clock *clock = to_mod_clock(hw);
++	struct mstp_clock *clock = to_mstp_clock(hw);
+ 	struct rzg2l_cpg_priv *priv = clock->priv;
+ 	u32 bitmask = BIT(clock->bit);
+ 	u32 value;
+-- 
+2.43.0
 
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
