@@ -1,134 +1,149 @@
-Return-Path: <linux-clk+bounces-22371-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-22374-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EDC8AC6B97
-	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 16:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86938AC6C19
+	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 16:46:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C5171BC370C
-	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 14:19:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 529D81BA37F4
+	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 14:46:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD36288C8C;
-	Wed, 28 May 2025 14:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CB1D28B4F0;
+	Wed, 28 May 2025 14:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VkeOzXk5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNxar7ja"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8C62882AB;
-	Wed, 28 May 2025 14:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBB91CD21C;
+	Wed, 28 May 2025 14:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748441943; cv=none; b=ItLbbT6MXSAa8HXISsDbTnhF7DS3ucr2zduTR+WA9JPi+dJFcOs5wCX8JAe7+oieWnaOTyoYk5MJrjLutMtBuLrHcaTH20j64+a6ew17ueHfPm0synGu4uP4coIglj3/7ffGmoQkgSFKs9lcnt4R5bWXWF/lgoGvOGPMjW6zXsU=
+	t=1748443552; cv=none; b=fom9FDxeIyz+GpB+Kid5+EJM5NOYx/oSH5eBJGrVIjjrC4JRC+4rkxcAp8LC+WLVKgkcRReUoeVxr6yg4Z9jWx5qe0h4Bm39NRkzCP70lrYYMcbXh5ZvBy6aUvpBUzJol2NM89U+x6ZRobaVKo8pyMes7Ab7BolvxlSJJx9sfH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748441943; c=relaxed/simple;
-	bh=78K9IapfEUA0fFpl8LYkfjYQvXb/zqZqFdh+VYT4FJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DkLXKmZwE6eeN1k5rQ7gP5s7ejwLouPEFY9AqV5bmxP8hMkQzgvaDd8TBQ0r3NYq36t1Fquu8xjxBXYByvZ+cRzj/XUXf41BsNotCBTwHfepzsXa5DLAXQ83Fp+8xxNLXPnm0nNPHHOrgCtG9wsUKb9ZJFhR8K1lcBFciB16iGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VkeOzXk5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB70CC4CEE3;
-	Wed, 28 May 2025 14:19:02 +0000 (UTC)
+	s=arc-20240116; t=1748443552; c=relaxed/simple;
+	bh=mcxHScRRpkp4Uu2d9/8fUpUC++QWS+mrt+7i0BGybRw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NaF5m1uO8/YhKKShnXQ2A671L8tArPeZoKOmQVF4inxpnNUCxf39L3bJHyJW+Ga87EN7MA7kXf0e9Zx75DVl7RBoW9cr++m9zg/S3BRd5QaKs/fQ0y8La32nclzl3JW78kgS+c6+29XQ2HspQ2X3JtqAOpx4OFsyFVOzjEHTwuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNxar7ja; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D5E1C4CEE3;
+	Wed, 28 May 2025 14:45:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748441943;
-	bh=78K9IapfEUA0fFpl8LYkfjYQvXb/zqZqFdh+VYT4FJQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VkeOzXk5eN+qrU03KZerCJkDAKnh8wRqro+X+AhBJBc8PifbmrRAc7xFN7hOyrJhv
-	 YuWH3To3Cku6KJ6Bj4LyKfoGNRaQt+JCqQi/HpFULd1mEXAAMfNVTJrYyJXBGFi9t/
-	 CiI7iQfuvkIIi3N+R8u5PnQI3VT07VKW86Uy6Fq67CgEpm7Z2BTV4KDWrCFMw7rR/X
-	 DG1T56yPZ9LShXI/wJZGo4wrbTVonT2ei3JlAf4qD9t3Mc4zL69HkK4qubSV76E+rN
-	 aqs/b1z/Ix2qzhtSvjo6CrXO6LPVQy60spli6q5XfIGfNYT5NmG3VUxjqzV4stWCft
-	 xrS69ZDzlonEQ==
-Date: Wed, 28 May 2025 09:19:01 -0500
-From: Rob Herring <robh@kernel.org>
-To: "Edgar E. Iglesias" <edgar.iglesias@gmail.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, jank@cadence.com, edgar.iglesias@amd.com,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: clk: fixed-mmio-clock: Add optional
- ready reg
-Message-ID: <20250528141901.GA3966725-robh@kernel.org>
-References: <20250528140917.876453-1-edgar.iglesias@gmail.com>
- <20250528140917.876453-2-edgar.iglesias@gmail.com>
+	s=k20201202; t=1748443551;
+	bh=mcxHScRRpkp4Uu2d9/8fUpUC++QWS+mrt+7i0BGybRw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=cNxar7jauXnukzP9wHTPQvY9aZbUDCBDtwkvaqzNAZV978+r2bTUKV+EivkasdSJc
+	 Skc3x5nJJZUVFM9yoSfs/9QHCTN9WSFOOAsE7fDrX8LPDxWMMThvlsmAH+hm0+eD2v
+	 h3i5Y8Z7RQ3glWMoMRHirmg6PM8u95vTVYf4SPQBbIntom+ZHUbNMx6L69qtvEyYiy
+	 PsKwSiue9aIXJD4Zr/JIr1Q87ENu8N4CfbVmpl+PAFGHvR/hhsuG3oThLaSv3/Lain
+	 ColKAKoZNelWuolMdgaXvCIgcaTzVmekXDhbnaYwmWq+DEk+AC32VhGRdnTe0cISot
+	 DXnYLfrjvSYIA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68289C3ABB2;
+	Wed, 28 May 2025 14:45:51 +0000 (UTC)
+From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
+Subject: [PATCH v2 0/5] Add support for the IPQ5018 Internal GE PHY
+Date: Wed, 28 May 2025 18:45:46 +0400
+Message-Id: <20250528-ipq5018-ge-phy-v2-0-dd063674c71c@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250528140917.876453-2-edgar.iglesias@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJohN2gC/13MQQ6CMBCF4auQWVtTSscQV97DsCh0sBOVQouNh
+ HB3K+5c/jN53wqRAlOEc7FCoMSR/ZBDHQronBluJNjmBiUVSl1JweOEsqxF/oxuEbY9oTa90R1
+ ZyKMxUM/vHbw2uR3H2Ydl91P5vf4oVPhPpVJIYa1p6xo1Kawu/jU/vL8fO/+EZtu2D0swIkSuA
+ AAA
+X-Change-ID: 20250430-ipq5018-ge-phy-db654afa4ced
+To: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>, 
+ Russell King <linux@armlinux.org.uk>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-clk@vger.kernel.org, George Moussalem <george.moussalem@outlook.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1748443549; l=2668;
+ i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
+ bh=mcxHScRRpkp4Uu2d9/8fUpUC++QWS+mrt+7i0BGybRw=;
+ b=6y1+mzVRoK34jBTmE2aoRxLBA16LvQBIi3RENJ/8xDnL4keYU/GcoKnpIA+UdpJPgWJyYlRlE
+ Qb7IoK10bvVBmW1HkRfAgHHcx9uQPPwmzvUx/ftcpq56uxRbl0/XvF6
+X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
+ pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
+X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
+ with auth_id=364
+X-Original-From: George Moussalem <george.moussalem@outlook.com>
+Reply-To: george.moussalem@outlook.com
 
-On Wed, May 28, 2025 at 04:09:16PM +0200, Edgar E. Iglesias wrote:
-> From: "Edgar E. Iglesias" <edgar.iglesias@amd.com>
-> 
-> Add an optional ready register and properties describing bitfields
-> that signal when the clock is ready. This can for example be useful
-> to describe PLL lock bits.
-> 
-> Signed-off-by: Edgar E. Iglesias <edgar.iglesias@amd.com>
-> ---
->  .../bindings/clock/fixed-mmio-clock.yaml      | 37 ++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/fixed-mmio-clock.yaml b/Documentation/devicetree/bindings/clock/fixed-mmio-clock.yaml
-> index e22fc272d023..57419b4de343 100644
-> --- a/Documentation/devicetree/bindings/clock/fixed-mmio-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/fixed-mmio-clock.yaml
-> @@ -10,6 +10,11 @@ description:
->    This binding describes a fixed-rate clock for which the frequency can
->    be read from a single 32-bit memory mapped I/O register.
->  
-> +  An optional ready register can be specified in a second reg entry.
-> +  The ready register will be polled until it signals ready prior to reading
-> +  the fixed rate. This is useful for example to optionally wait for a PLL
-> +  to lock.
-> +
->    It was designed for test systems, like FPGA, not for complete,
->    finished SoCs.
->  
-> @@ -21,7 +26,10 @@ properties:
->      const: fixed-mmio-clock
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: Fixed rate register
-> +      - description: Optional clock ready register
->  
->    "#clock-cells":
->      const: 0
-> @@ -29,6 +37,24 @@ properties:
->    clock-output-names:
->      maxItems: 1
->  
-> +  ready-timeout-us:
-> +    description:
-> +      Optional timeout in micro-seconds when polling for clock readiness.
-> +      0 means no timeout.
-> +    default: 0
-> +
-> +  ready-mask:
-> +    description:
-> +      Optional mask to apply when reading the ready register.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: 0xffffffff
-> +
-> +  ready-value:
-> +    description:
-> +      When a ready register is specified in reg, poll the ready reg until
-> +      ready-reg & ready-mask == ready-value.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+The IPQ5018 SoC contains an internal Gigabit Ethernet PHY with its
+output pins that provide an MDI interface to either an external switch
+in a PHY to PHY link architecture or directly to an attached RJ45
+connector.
 
-And next someone wants to add an enable bit, so there's another 2-3 new 
-properties. And it never ends...
+The PHY supports 10/100/1000 mbps link modes, CDT, auto-negotiation and
+802.3az EEE.
 
-So no, create a specific binding for your h/w.
+The LDO controller found in the IPQ5018 SoC needs to be enabled to drive
+power to the CMN Ethernet Block (CMN BLK) which the GE PHY depends on.
+The LDO must be enabled in TCSR by writing to a specific register.
 
-Rob
+In a phy to phy architecture, DAC values need to be set to accommodate
+for the short cable length.
+
+Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+---
+Changes in v2:
+- Moved values for MDAC and EDAC into the driver and converted DT
+  property qca,dac to a new boolean: qcom,dac-preset-short-cable as per
+  discussion.
+- Added compatible string along with a condition with a description of
+  properties including clocks, resets, and qcom,dac-preset-short-cable
+  in the bindings to address bindings issues reported by Rob and to
+  bypass restrictions on nr of clocks and resets in ethernet-phy.yaml
+- Added example to bindings file
+- Renamed all instances of IPQ5018_PHY_MMD3* macros to IPQ5018_PHY_PCS*
+- Removed qca,eth-ldo-ready property and moved the TCSR register to the
+  mdio bus the phy is on as there's already support for setting this reg
+  property in the mdio-ipq4019 driver as per commit:
+  23a890d493e3ec1e957bc925fabb120962ae90a7
+- Explicitly probe on PHY ID as otherwise the PHY wouldn't come up and
+  initialize as found during further testing when the kernel is flashed
+  to NAND
+- Link to v1: https://lore.kernel.org/r/20250525-ipq5018-ge-phy-v1-0-ddab8854e253@outlook.com
+
+---
+George Moussalem (5):
+      clk: qcom: gcc-ipq5018: fix GE PHY reset
+      dt-bindings: net: qca,ar803x: Add IPQ5018 Internal GE PHY support
+      net: phy: qcom: at803x: Add Qualcomm IPQ5018 Internal PHY support
+      arm64: dts: qcom: ipq5018: Add MDIO buses
+      arm64: dts: qcom: ipq5018: Add GE PHY to internal mdio bus
+
+ .../devicetree/bindings/net/qca,ar803x.yaml        |  52 +++++-
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi              |  51 +++++-
+ drivers/clk/qcom/gcc-ipq5018.c                     |   2 +-
+ drivers/net/phy/qcom/Kconfig                       |   2 +-
+ drivers/net/phy/qcom/at803x.c                      | 197 ++++++++++++++++++++-
+ 5 files changed, 291 insertions(+), 13 deletions(-)
+---
+base-commit: ebfff09f63e3efb6b75b0328b3536d3ce0e26565
+change-id: 20250430-ipq5018-ge-phy-db654afa4ced
+
+Best regards,
+-- 
+George Moussalem <george.moussalem@outlook.com>
+
+
 
