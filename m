@@ -1,173 +1,126 @@
-Return-Path: <linux-clk+bounces-22376-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-22378-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0EB1AC6C21
-	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 16:46:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39CACAC6E06
+	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 18:30:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C9491BC1DE6
-	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 14:46:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 135C49E8489
+	for <lists+linux-clk@lfdr.de>; Wed, 28 May 2025 16:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958C028BA81;
-	Wed, 28 May 2025 14:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2477828D8E5;
+	Wed, 28 May 2025 16:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bu3Ddp2k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qM2hQoUQ"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FC728B419;
-	Wed, 28 May 2025 14:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE86B28D84D;
+	Wed, 28 May 2025 16:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748443552; cv=none; b=saULwrNKzQQJk4UWpQxD3CrmirwOi00l44i12xjeddd8/4Q/5fln5d6RbF3bsyIlCeBYGWi42AFHR2Owbxj3neVQMr6C7XqTgU776IzjICfVa/faa41RSnMK36RgzF3QhNEwgpJp6zo7LNIb8ICwiz5xpBVcZauUBwaZcpbrP5I=
+	t=1748449814; cv=none; b=TUDbZEfRBCrhA/ZL3BqfUKQ+B86PD2n/0T2sg4COXSMeeu9shroJmFX3SJDlpp5lR9Sl1Pm+9RMTsj09yXHOOBaNHV1OrnGMtONVOtmSfZJbSxXJtfnLwYEctUgsfS7Z2iS7XvurfzEFh8eH1SN9xxeEU7nsUrPgABwWbgvgIgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748443552; c=relaxed/simple;
-	bh=fY+l6Ps6NFjPp8H1FTNbFmkXe5TI6m53tpp5kLmq6ks=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=I96Y0IdtRVUycnvEUWFO+eTk7PuwqZe41RduFCFVojT4I9ykRTEorYTLS9jsxj3xdI65BuihmoyzVICND3SM2e+h89ESSs05ePvldqq0Zlkzwc/+8GDWSYf3rZxMErighWSpg1UM/Ni0AvzufOCoZs3GnYCXxtX8Mf6lovozCaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bu3Ddp2k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C9514C4CEEF;
-	Wed, 28 May 2025 14:45:51 +0000 (UTC)
+	s=arc-20240116; t=1748449814; c=relaxed/simple;
+	bh=7Ddco8Bs8XoPP7Sgox9+6gs/ynZ2ONDg+RF4XTZ26x8=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=EDSZ1TC0qx4X4gUb5CYV61y4l2buIUet7B2xUkkmQmp2W1si3JhyiFJIkyzXWUSJYrLS2BjrhZvTFtMBOVVphpVYl3uR5Z49VJn7tHvv30rM3oD1ys7uuN2jkwAeCNRpbB6Md92Yf1zp9CIIgJs5JiwJmGWjVNtfVOshRkFGfjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qM2hQoUQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 124ACC4CEED;
+	Wed, 28 May 2025 16:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748443551;
-	bh=fY+l6Ps6NFjPp8H1FTNbFmkXe5TI6m53tpp5kLmq6ks=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=bu3Ddp2ka9q5DyNFUz9Mr98I1vQjHBAMtfVqGyF929IZjna3PpCXfPW/VwbNJ0qRZ
-	 C46gIGhwpc/Ow5CzMuvFlM+wEH+hEXZfU5bl5Z+aKTUKNEH29R4gwUvciW0fezeVsi
-	 J5+pe4Q2PcMoL/XQstlE/1NnstuLUxDfgRFrTxaOCk41tdQV5+5owQo/z/Gz3sUEn2
-	 2A477zqYoxACEfzzRAeKnwVJYOcmecknZ12dIMbqYrUD/RTvSMeH9t+b0wrZBNUdMg
-	 iw5L5cSItk/hbHofdgkK7BzB/8YU9oBos930OF2MG1ITz/upkw3m/M4e9iiw8Tgwvg
-	 wxarXmu2prKvg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF04BC5B552;
-	Wed, 28 May 2025 14:45:51 +0000 (UTC)
-From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
-Date: Wed, 28 May 2025 18:45:51 +0400
-Subject: [PATCH v2 5/5] arm64: dts: qcom: ipq5018: Add GE PHY to internal
- mdio bus
+	s=k20201202; t=1748449813;
+	bh=7Ddco8Bs8XoPP7Sgox9+6gs/ynZ2ONDg+RF4XTZ26x8=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=qM2hQoUQRoa+sjl+Pd34UZ8gWk9fmaucPWGcXjz2hhNVtu0jQ7cosdxFBtew2i8mg
+	 eijOPXuC37GVroVoy8qFYJdRZ3aDCMTDZklItaIlYhJ8t5NEmf1qVm2ilGq6R7toz/
+	 C6PA5DLY5uu04KrGsgJ0TlP+fw+XBsxB+4MNt1njgkdHntLx2xQKKoQkTmnB3XbZ/x
+	 zxQovxJHQ43ngRcCqoHp9z/4bxJJANwnF06U/+W7dnH6ZEuG0HU09oE6Fk9VecnkMG
+	 XsKkKFXd9WxKXjMLxbuU/yVPLZUPXBDfDkckVDfPv81s9KyUBh7whN0nhQaq4IBR0H
+	 f2dGfD0xkFkjg==
+Date: Wed, 28 May 2025 11:30:11 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250528-ipq5018-ge-phy-v2-5-dd063674c71c@outlook.com>
-References: <20250528-ipq5018-ge-phy-v2-0-dd063674c71c@outlook.com>
-In-Reply-To: <20250528-ipq5018-ge-phy-v2-0-dd063674c71c@outlook.com>
-To: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>, 
- Russell King <linux@armlinux.org.uk>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+ Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
  Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- linux-clk@vger.kernel.org, George Moussalem <george.moussalem@outlook.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1748443549; l=2303;
- i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
- bh=y1umjiNASV+etOSubDvR4l343800ONATOPkAQu4T8kA=;
- b=kcj8aIQFIt/fW5UDnVZlEfilk6D5Bz84KOgRmYFPp4kkSwV9MLqq/D9RGVOla8XY9WTcrI+uB
- EYMY9578cqCBb8V/l36iuGVB4YIVhdxWUZunRRJr1jwWxv0USERltjR
-X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
- pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
-X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
- with auth_id=364
-X-Original-From: George Moussalem <george.moussalem@outlook.com>
-Reply-To: george.moussalem@outlook.com
+ Konrad Dybcio <konradybcio@kernel.org>, linux-clk@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+ Heiner Kallweit <hkallweit1@gmail.com>, Conor Dooley <conor+dt@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: George Moussalem <george.moussalem@outlook.com>
+In-Reply-To: <20250528-ipq5018-ge-phy-v2-2-dd063674c71c@outlook.com>
+References: <20250528-ipq5018-ge-phy-v2-0-dd063674c71c@outlook.com>
+ <20250528-ipq5018-ge-phy-v2-2-dd063674c71c@outlook.com>
+Message-Id: <174844980913.122039.6315970844779589359.robh@kernel.org>
+Subject: Re: [PATCH v2 2/5] dt-bindings: net: qca,ar803x: Add IPQ5018
+ Internal GE PHY support
 
-From: George Moussalem <george.moussalem@outlook.com>
 
-The IPQ5018 SoC contains an internal GE PHY, always at phy address 7.
-As such, let's add the GE PHY node to the SoC dtsi.
+On Wed, 28 May 2025 18:45:48 +0400, George Moussalem wrote:
+> Document the IPQ5018 Internal Gigabit Ethernet PHY found in the IPQ5018
+> SoC. Its output pins provide an MDI interface to either an external
+> switch in a PHY to PHY link scenario or is directly attached to an RJ45
+> connector.
+> 
+> The PHY supports 10/100/1000 mbps link modes, CDT, auto-negotiation and
+> 802.3az EEE.
+> 
+> For operation, the LDO controller found in the IPQ5018 SoC for which
+> there is provision in the mdio-4019 driver. In addition, the PHY needs
+> to take itself out of reset and enable the RX and TX clocks.
+> 
+> Two common archictures across IPQ5018 boards are:
+> 1. IPQ5018 PHY --> MDI --> RJ45 connector
+> 2. IPQ5018 PHY --> MDI --> External PHY
+> In a phy to phy architecture, DAC values need to be set to accommodate
+> for the short cable length. As such, add an optional boolean property so
+> the driver sets the correct register values for the DAC accordingly.
+> 
+> Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+> ---
+>  .../devicetree/bindings/net/qca,ar803x.yaml        | 52 +++++++++++++++++++++-
+>  1 file changed, 51 insertions(+), 1 deletion(-)
+> 
 
-The LDO controller found in the SoC must be enabled to provide constant
-low voltages to the PHY. The mdio-ipq4019 driver already has support
-for this, so adding the appropriate TCSR register offset.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-In addition, the GE PHY outputs both the RX and TX clocks to the GCC
-which gate controls them and routes them back to the PHY itself.
-So let's create two DT fixed clocks and register them in the GCC node.
+yamllint warnings/errors:
 
-Signed-off-by: George Moussalem <george.moussalem@outlook.com>
----
- arch/arm64/boot/dts/qcom/ipq5018.dtsi | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/qca,ar803x.example.dtb: ethernet-phy@7 (ethernet-phy-id004d.d0c0): clocks: [[4294967295, 36], [4294967295, 37]] is too long
+	from schema $id: http://devicetree.org/schemas/net/ethernet-phy.yaml#
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-index 03ebc3e305b267c98a034c41ce47a39269afce75..6c42ed826c3c60960b08afb0b324cfb89f02329d 100644
---- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-@@ -16,6 +16,18 @@ / {
- 	#size-cells = <2>;
- 
- 	clocks {
-+		gephy_rx_clk: gephy-rx-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <125000000>;
-+			#clock-cells = <0>;
-+		};
-+
-+		gephy_tx_clk: gephy-tx-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <125000000>;
-+			#clock-cells = <0>;
-+		};
-+
- 		sleep_clk: sleep-clk {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
-@@ -184,7 +196,8 @@ pcie0_phy: phy@86000 {
- 
- 		mdio0: mdio@88000 {
- 			compatible = "qcom,ipq5018-mdio";
--			reg = <0x00088000 0x64>;
-+			reg = <0x00088000 0x64>,
-+			      <0x019475c4 0x4>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
-@@ -192,6 +205,16 @@ mdio0: mdio@88000 {
- 			clock-names = "gcc_mdio_ahb_clk";
- 
- 			status = "disabled";
-+
-+			ge_phy: ethernet-phy@7 {
-+				compatible = "ethernet-phy-id004d.d0c0";
-+				reg = <7>;
-+
-+				clocks = <&gcc GCC_GEPHY_RX_CLK>,
-+					 <&gcc GCC_GEPHY_TX_CLK>;
-+
-+				resets = <&gcc GCC_GEPHY_MISC_ARES>;
-+			};
- 		};
- 
- 		mdio1: mdio@90000 {
-@@ -232,8 +255,8 @@ gcc: clock-controller@1800000 {
- 				 <&pcie0_phy>,
- 				 <&pcie1_phy>,
- 				 <0>,
--				 <0>,
--				 <0>,
-+				 <&gephy_rx_clk>,
-+				 <&gephy_tx_clk>,
- 				 <0>,
- 				 <0>;
- 			#clock-cells = <1>;
+doc reference errors (make refcheckdocs):
 
--- 
-2.49.0
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250528-ipq5018-ge-phy-v2-2-dd063674c71c@outlook.com
 
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
