@@ -1,227 +1,138 @@
-Return-Path: <linux-clk+bounces-22825-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-22827-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AB0BAD5A9A
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Jun 2025 17:35:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A42BAD5BA6
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Jun 2025 18:16:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CD83172944
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Jun 2025 15:35:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9B5D3A6BE3
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Jun 2025 16:16:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 275DA1C863B;
-	Wed, 11 Jun 2025 15:35:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58268202C5A;
+	Wed, 11 Jun 2025 16:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dt5WqDfY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="izrdkLHp"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644FA1990D8;
-	Wed, 11 Jun 2025 15:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C9974059;
+	Wed, 11 Jun 2025 16:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749656134; cv=none; b=OxpV/B7e4QG7yanDIdI4Hcsl8MTsa467m68wd9NWKPrrRG25DxOL2uZq3UFR5dsWKqJk3LvBC8BMDxQiDfikY1SKyAEq41Thgw+i5Ar0luikl83XW5A1y7NDxiiOdtAGuNS25teX0yYdhhlGfr3scouxgBPLo9CXhEXKaF+7aPA=
+	t=1749658528; cv=none; b=N6GqOjIeFokWhybNQRJJF2f06qzszCWQVf8RRoBrMYKoluRWAdr9cLy7L5GXk21SjSz/mZtVnka7jVXCnRO1WUvFWrIfBJW/9GMjJFGOk8zXw/lCzSYOARG3YnP3wEV6BesAV9pnK+u4qTh2KCfnnYvWLCTx7kPHpwJUUkD3ZAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749656134; c=relaxed/simple;
-	bh=wtS78pPmQeKtNXLAVDUqcIovJ+ivy0sR/W7vIR6YqYU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FP/6rF4U2xTaw1jKT3VOAvXHvroj+LOwnUSlcijbOeaEYdglIvuZNb9zCaT9n3yAXbm831I4LXaw9YhRbOAF0p7Rq9zChy4F1YZRvVPE0swnxfeT4xdJy/MztLuOUh6aE2s9dfPtQGiSL1vSjSVDVC3Wp7riP3Ey2gYXm1iKtcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dt5WqDfY; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749656132; x=1781192132;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wtS78pPmQeKtNXLAVDUqcIovJ+ivy0sR/W7vIR6YqYU=;
-  b=dt5WqDfYeLg41V+GWfLAWbHTM9D6lV1e4GSE500spaTrV3ECHgnPNp+k
-   qgBCFcrrLubgQ8w7EIB8DegGx2avGE5ghgAHcggva8KxlsHQ7Y+zi0eC4
-   UA+bjr+5/KpC5DgjjmwcjJ+kLtV3nyzbw9es299bEa2bS/snLSDK/s01N
-   8BSbTXQnBHYfrxOqzFLTH6UiLtlJ1czC4e0EY+jmqRfNuhBWBmHox5j8K
-   q65j2gm6GtYCkumpYolxU+Zc6fQ/5F4PJlWU8Hdr2+FLa4eghlOOuQ8FK
-   vVGeAQIySDfX6UK6ABOLTkgHZkd7ml2s7NoTXIU06Me69TqDzD9mvk+LO
-   g==;
-X-CSE-ConnectionGUID: Q+AEINx7QVGkeM4pCQi9lA==
-X-CSE-MsgGUID: ljuUb7rISSimvtZ6gH7SMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11461"; a="55600016"
-X-IronPort-AV: E=Sophos;i="6.16,228,1744095600"; 
-   d="scan'208";a="55600016"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 08:35:31 -0700
-X-CSE-ConnectionGUID: 3p/wA2aPQdyG41GuMigxwA==
-X-CSE-MsgGUID: Go7CJ2mwSm+nXLNn8eq13A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,228,1744095600"; 
-   d="scan'208";a="147118627"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2025 08:35:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uPNU0-00000005gZ7-2TyD;
-	Wed, 11 Jun 2025 18:35:20 +0300
-Date: Wed, 11 Jun 2025 18:35:20 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>,
-	Rahul Pathak <rpathak@ventanamicro.com>,
-	Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-	Atish Patra <atish.patra@linux.dev>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Anup Patel <anup@brainfault.org>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 05/23] mailbox: Allow controller specific mapping
- using fwnode
-Message-ID: <aEmiOFwofEJyXm4R@smile.fi.intel.com>
-References: <20250611062238.636753-1-apatel@ventanamicro.com>
- <20250611062238.636753-6-apatel@ventanamicro.com>
+	s=arc-20240116; t=1749658528; c=relaxed/simple;
+	bh=LcRIuFbM1cuh0iJM4xeVjUdgUfBnzrnn8Y4VYEQkqDg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=N68FYa4ojrf25zQ66BuQ4sOewSLyiuZUTyztkwFbTWWkcpeCiDF+eckWvnMyBKKFOviluAC/avtjPdHnSjCgpYqhtDm8201xLcS7QLlOvKN6ceHBdeZXhCaXzQ/rSMF/Cd1JPhXColwMquAr2IZKKCrTgh3+rDHnHykfsLbFpkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=izrdkLHp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 83BD9C4CEF0;
+	Wed, 11 Jun 2025 16:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749658527;
+	bh=LcRIuFbM1cuh0iJM4xeVjUdgUfBnzrnn8Y4VYEQkqDg=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=izrdkLHpCp7KDqJZeWV03eR2yrZKoS/xUuvzjv+L1amUILi6Z1txNoqr2TVAnVCk3
+	 nP/vk9f9hmYd2gmO+86S0XWlP+fgIlXzdu8AShY0Yx2FbqbF5KlqG+IpxnjPlKSSLq
+	 CQ69u95ACgJuzZtGHy3q3p2+ppCwR+jtjqtBQL66FePVjCflozzBn2SwVr7pRg7lwQ
+	 qEC9tAQsa8JDzc7jH9p8ZUYpPINvzJxCvNRus9ICy92j0ZujKDLSPDXLMLUoRXy0CO
+	 CuYHYtPKquLdbhCH9ucFtunYwGo6Sv/iMQL0eKeqvHuEQ1kFtWFroFa40Nr1p0ULFc
+	 9iYJ5lPS93nwA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76127C71131;
+	Wed, 11 Jun 2025 16:15:27 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v7 0/7] clk: clk-axi-clkgen: improvements and some fixes
+Date: Wed, 11 Jun 2025 17:15:32 +0100
+Message-Id: <20250611-dev-axi-clkgen-limits-v7-0-3e7ff89dc366@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250611062238.636753-6-apatel@ventanamicro.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKSrSWgC/33RTWrDMBAF4KsEraOimZFlK6veo3Shn7EjmtjFD
+ iYl+O6VQ4tdjItWTzCfnqSHGLhPPIjT4SF6HtOQujaH8ngQ4ezahmWKOQtUWCiESkYepbsnGS4
+ fDbfykq7pNkhDtVeh4ECVF3n2s+c63Z/u23vO5zTcuv7recwI8+6vaHfEEaSSaOqSa9Ah2vDqW
+ nfpmpfQXcVMjrgwBLTHYGagJMfooiGADUMLo1W5x1BmiEJZYxlsNHbNHH+eRyP8N65Rkdc1Rwx
+ 200IvLfLaY/TcwsUCUDNY3l6mWDGAe0yRGVcZbx2ZilWxYcya2f0hkxkftCdvIELUf5hpmr4BX
+ uAVi10CAAA=
+X-Change-ID: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
+ Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
+ Mike Turquette <mturquette@linaro.org>, Xu Yilun <yilun.xu@linux.intel.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749658534; l=1918;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=LcRIuFbM1cuh0iJM4xeVjUdgUfBnzrnn8Y4VYEQkqDg=;
+ b=UdP/tocAWz8o+9vYBOVduAReLpWi575YBu7LlGCJxEas2urPks4ef/H+i0LSNSVjLCJvlmMfs
+ CZHRMcT+yNOBy9thdxlzV4LX7k51YJ9uWydk/iUC0fi9v9DAaff1mIm
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-On Wed, Jun 11, 2025 at 11:52:20AM +0530, Anup Patel wrote:
-> Introduce optional fw_node() callback which allows a mailbox controller
-> driver to provide controller specific mapping using fwnode.
-> 
-> The Linux OF framework already implements fwnode operations for the
-> Linux DD framework so the fw_xlate() callback works fine with device
-> tree as well.
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
 
-...
+---
+Changes in v7:
+ - Just include new tags.
 
->  struct mbox_chan *mbox_request_channel(struct mbox_client *cl, int index)
->  {
-> +	struct fwnode_reference_args fwspec;
+- Link to v6: https://lore.kernel.org/r/20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com
+- Link to v5: https://lore.kernel.org/r/20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com
+- Link to v4: https://lore.kernel.org/r/20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com
+- Link to v3: https://lore.kernel.org/r/20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com
+- Link to v2: https://lore.kernel.org/r/20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com
+- Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
 
-Define
+---
+Nuno Sá (7):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: linux: move adi-axi-common.h out of fpga
+      include: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
 
-	struct fwnode_handle *fwnode;
+ drivers/clk/clk-axi-clkgen.c        | 159 +++++++++++++++++++++++++-----------
+ drivers/dma/dma-axi-dmac.c          |   2 +-
+ drivers/hwmon/axi-fan-control.c     |   2 +-
+ drivers/iio/adc/adi-axi-adc.c       |   3 +-
+ drivers/iio/dac/adi-axi-dac.c       |   2 +-
+ drivers/pwm/pwm-axi-pwmgen.c        |   2 +-
+ drivers/spi/spi-axi-spi-engine.c    |   2 +-
+ include/linux/adi-axi-common.h      |  56 +++++++++++++
+ include/linux/fpga/adi-axi-common.h |  23 ------
+ 9 files changed, 174 insertions(+), 77 deletions(-)
+---
+base-commit: 82f69876ef45ad66c0b114b786c7c6ac0f6a4580
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
 
-
->  	struct device *dev = cl->dev;
-
-This better to be just a declaration.
-
->  	struct mbox_controller *mbox;
->  	struct of_phandle_args spec;
->  	struct mbox_chan *chan;
-> +	unsigned int i;
->  	int ret;
-
-With the above the below will look like...
-
-> -	if (!dev || !dev->of_node) {
-> -		pr_debug("%s: No owner device node\n", __func__);
-> +	if (!dev || !dev_fwnode(dev)) {
-> +		pr_debug("No owner %s\n", dev ? "fwnode" : "device");
->  		return ERR_PTR(-ENODEV);
->  	}
->  
-> -	ret = of_parse_phandle_with_args(dev->of_node, "mboxes", "#mbox-cells",
-> -					 index, &spec);
-> +	ret = fwnode_property_get_reference_args(dev_fwnode(dev), "mboxes",
-> +						 "#mbox-cells", 0, index, &fwspec);
->  	if (ret) {
->  		dev_err(dev, "%s: can't parse \"mboxes\" property\n", __func__);
->  		return ERR_PTR(ret);
->  	}
-
-...this
-
-	dev = cl->dev;
-	if (!dev) {
-		pr_debug("No owner device\n");
-		return ERR_PTR(-ENODEV);
-	}
-
-	fwnode = dev_fwnode(dev);
-	if (!fwnode) {
-		dev_dbg(dev, "No owner fwnode\n");
-		return ERR_PTR(-ENODEV);
-	}
-
-	ret = fwnode_property_get_reference_args(fwnode, "mboxes",
-						 "#mbox-cells", 0, index, &fwspec);
-	if (ret) {
-		dev_err(dev, "%s: can't parse \"mboxes\" property\n", __func__);
-
-You may save a few bytes by doing it as
-
-		dev_err(dev, "%s: can't parse \"%s\" property\n", __func__, "mboxes");
-
-		return ERR_PTR(ret);
-	}
-
-> +	spec.np = to_of_node(fwspec.fwnode);
-> +	spec.args_count = fwspec.nargs;
-> +	for (i = 0; i < spec.args_count; i++)
-> +		spec.args[i] = fwspec.args[i];
-> +
->  	scoped_guard(mutex, &con_mutex) {
->  		chan = ERR_PTR(-EPROBE_DEFER);
-> -		list_for_each_entry(mbox, &mbox_cons, node)
-> -			if (mbox->dev->of_node == spec.np) {
-> +		list_for_each_entry(mbox, &mbox_cons, node) {
-
-> +			if (mbox->fw_xlate && dev_fwnode(mbox->dev) == fwspec.fwnode) {
-
-We have a helper device_match_fwnode()
-
-> +				chan = mbox->fw_xlate(mbox, &fwspec);
-> +				if (!IS_ERR(chan))
-> +					break;
-> +			} else if (mbox->of_xlate && mbox->dev->of_node == spec.np) {
-
-No need to check OF node (again). Instead refactor as
-
-			if (device_match_fwnode(...)) {
-				if (fw_xlate) {
-					...
-				} else if (of_xlate) {
-					...
-				}
-			}
-
->  				chan = mbox->of_xlate(mbox, &spec);
->  				if (!IS_ERR(chan))
->  					break;
->  			}
-> +		}
->  
-> -		of_node_put(spec.np);
-> +		fwnode_handle_put(fwspec.fwnode);
->  
->  		if (IS_ERR(chan))
->  			return chan;
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
+- Nuno Sá
 
 
 
