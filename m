@@ -1,164 +1,161 @@
-Return-Path: <linux-clk+bounces-23357-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-23359-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE86EAE399D
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 11:14:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5C43AE3A40
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 11:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 790E9188E155
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 09:14:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E5CB3B0D30
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 09:29:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF1B5231846;
-	Mon, 23 Jun 2025 09:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4630C2376E0;
+	Mon, 23 Jun 2025 09:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9+TxHmB"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="bNwUveSW"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E558230BCB;
-	Mon, 23 Jun 2025 09:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB77233722;
+	Mon, 23 Jun 2025 09:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750670067; cv=none; b=hv7sVJGJXPFNuGDs54V9/4NfN6yIu/1vInAS1nEu8MCmhsEpHXlSp4URwN8+BKpQkkzEitonO68sgxdQEPr0kPcMFtGDzUH3LUg4vQ0SRZF1Pbg/KGhtgj38SfwAj6yV5BLZvYozFx3i7YEVDQbRb8HSWUbzg8234JNM3sp0Y0U=
+	t=1750671001; cv=none; b=DBzdGqASlas4401QN7fEGHul/lEm47gOqxFtw2JHAns29uOWJrs1julwzomEEF8Z5/UeLVHllMP6FDXgw8vXtE/+jZIluWf9hAFyCe/n8nGs+ZsIoHUV0pUqa4Cnnl92v7DX6QBBnviq0R1bvbnrg4QUoy4va6ueOElNHx6+kA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750670067; c=relaxed/simple;
-	bh=eIeY3heN+gnrpZQU6Tbcw37VApX8DZLMbgNPQw+j5oI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b94k48Mja8JBcxkupEgRrPFFEeR6LgElEFtBeXABQyWCSIHdfgCAxdADgTPpH2oTrr+WkLdP3lYkFhSQBQEezvdj85dF+AFet1f7222ofomsxtsUgVpH3Z5Sjn7/DPXifRFS1e+5PdjWDuZts18rS0h/wgydFfPuaIjCQ02haxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9+TxHmB; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750670066; x=1782206066;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eIeY3heN+gnrpZQU6Tbcw37VApX8DZLMbgNPQw+j5oI=;
-  b=M9+TxHmB9wMgmsHBBpmUDchcKOU6YAl3mI8DuUGWfIicDk19tplmuc1v
-   73lH+yr47P0JZkrvf3oxSye32TQ9TrT+l0wmH0ko8ND85Y1swOhHzskYq
-   o4u+ZXEURzBD7KwqocIhCCiseqejnqr31hfGeEPBsVvgyc4s9V5hr7Xrj
-   BGKTGIrehIqSjGclcx6oYOf+D/mGYtjBgLu67CNoRak3IjaJwFb687tnv
-   HkguNDEAYNeb3g2e66UTmQCHafHM16G4FZec7/HT3i6fM5Dy+uwoG3gXq
-   RpEjbxd2UyYTw9600vohNowxr+y1hOFyJD0monrkhGARvE6zI7XHrZ9Cr
-   w==;
-X-CSE-ConnectionGUID: lRLPUT1fTqSYrRuoXbqzGw==
-X-CSE-MsgGUID: YSNtN8uSR6GjswPq2vbwzg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="75401274"
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="75401274"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 02:14:18 -0700
-X-CSE-ConnectionGUID: e4ekD39qTday9sIFTi7Scg==
-X-CSE-MsgGUID: 9gtBh0Q9Tb6PnnFaBaRxUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="155846754"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 02:14:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uTdFf-000000097Qy-3DMk;
-	Mon, 23 Jun 2025 12:14:07 +0300
-Date: Mon, 23 Jun 2025 12:14:07 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>,
-	Rahul Pathak <rpathak@ventanamicro.com>,
-	Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-	Atish Patra <atish.patra@linux.dev>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Anup Patel <anup@brainfault.org>, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 14/23] ACPI: property: Add support for cells property
-Message-ID: <aFka3y1494LIzyUA@smile.fi.intel.com>
-References: <20250618121358.503781-1-apatel@ventanamicro.com>
- <20250618121358.503781-15-apatel@ventanamicro.com>
+	s=arc-20240116; t=1750671001; c=relaxed/simple;
+	bh=WR2nn99oRtkTnSZ2SlyuWLFzELsSDiZdzTX63mcOHA8=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=YkzSGv9kxO+V6y4lBSQYPMXdO3PWFSjl+7Iqq7EqYTjHCc1jPehrPetxxlwE6bECNSfcs26l8/rHQCcLXPN7lGdFZNXGqtaH+L1+7fpyEYMmb/kPqLpkDo2SmyKCfd9gpWpc2UkbOabEneh4NRbna8t9vblIbOC+lhIVNSFanso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=bNwUveSW; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55N8swqj011088;
+	Mon, 23 Jun 2025 11:29:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=pfOir4ecl8ee1I6IoTA4SW
+	3MSW1FhLPJ2AAoMv1lBVo=; b=bNwUveSWYjtHQBMM1/hOzqx9Bp3NwBCqXHAS17
+	u2MrUumsYbWgSla4q2Tr4pGCMTEgkVYf0RGA7w5gRYirFmSJPVDAA2+BhN+LnIB7
+	A/8hxo/dpj0CWns3PcmKSI+nmua27t8nSThbmPScY/mSgmUA60s/uocEu0XAnM30
+	aQdmyQs5HQnxzvKEJD2RTdHmfpgbLf2uzC4nmXHamdn+Eh8BKuPVXZEnm+x9r0GN
+	Co6WwTrVngV20SkVlI3WqjpYhQkBNhods3Sv6G7BngPq0RfMsa5xVK2+J37dLDmQ
+	3gXRBC4rndYYEM2vbEd33SCdg9PizR/HG/NzPuW+jw9rJ88w==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47e6a6cjpb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Jun 2025 11:29:39 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 25F6640049;
+	Mon, 23 Jun 2025 11:28:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C65DE562948;
+	Mon, 23 Jun 2025 11:27:20 +0200 (CEST)
+Received: from localhost (10.252.18.29) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 23 Jun
+ 2025 11:27:20 +0200
+From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+Subject: [PATCH 00/13] Introduce STM32 DDR PMU for STM32MP platforms
+Date: Mon, 23 Jun 2025 11:27:05 +0200
+Message-ID: <20250623-ddrperfm-upstream-v1-0-7dffff168090@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250618121358.503781-15-apatel@ventanamicro.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOkdWWgC/x3MQQqAIBBA0avErBNMMKGrRAvLsWahyVgRiHdPW
+ r7F/wUyMmGGqSvA+FCmMzYMfQfbYeOOglwzKKm01GoUznFC9kHcKV+MNojVS+O1MUY7C61LjJ7
+ e/zkvtX6z1g3LYwAAAA==
+X-Change-ID: 20250526-ddrperfm-upstream-bf07f57775da
+To: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor
+ Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gatien Chevallier
+	<gatien.chevallier@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Gabriel Fernandez
+	<gabriel.fernandez@foss.st.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-perf-users@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+X-Mailer: b4 0.15-dev-c25d1
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-23_03,2025-06-23_02,2025-03-28_01
 
-On Wed, Jun 18, 2025 at 05:43:49PM +0530, Anup Patel wrote:
-> From: Sunil V L <sunilvl@ventanamicro.com>
-> 
-> Currently, ACPI doesn't support cells property when
-> fwnode_property_get_reference_args() is called. ACPI always expects
-> the number of arguments to be passed. However, the above mentioned
-> call being a common interface for OF and ACPI, it is better to have
-> single calling convention which works for both. Hence, add support
-> for cells property on the reference device to get the number of
-> arguments dynamically.
+This patch series introduces the DDR Performance Monitor (DDRPERFM) support for
+STM32MP platforms.
 
-...
+The series firstly improves the STM32MP25 RCC driver to make it usable
+as an access controller, needed for driver probe.
 
-> +static unsigned int acpi_fwnode_get_args_count(const struct acpi_device *device,
-> +					       const char *nargs_prop)
-> +{
-> +	const union acpi_object *obj;
+It also includes the addition of device tree bindings, the HDP driver,
+documentation and updates to the device tree files for
+STM32MP13, STM32MP15 and STM32MP25 SoCs.
+The series also updates the MAINTAINERS file to include myself as the
+maintainer for the STM32 DDR PMU driver.
 
-> +	if (!nargs_prop)
-> +		return 0;
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+---
+Clément Le Goffic (13):
+      bus: firewall: move stm32_firewall header file in include folder
+      dt-bindings: stm32: stm32mp25: add `access-controller-cell` property
+      clk: stm32mp25: add firewall grant_access ops
+      arm64: dts: st: set rcc as an access-controller
+      dt-bindings: perf: stm32: introduce DDRPERFM dt-bindings
+      perf: stm32: introduce DDRPERFM driver
+      Documentation: perf: stm32: add ddrperfm support
+      MAINTAINERS: add myself as STM32 DDR PMU maintainer
+      ARM: dts: stm32: add ddrperfm on stm32mp131
+      ARM: dts: stm32: add ddrperfm on stm32mp151
+      arm64: dts: st: add ddrperfm on stm32mp251
+      arm64: dts: st: support ddrperfm on stm32mp257f-dk
+      arm64: dts: st: support ddrperfm on stm32mp257f-ev1
 
-This check is implied by the call. No need to duplicate.
+ Documentation/admin-guide/perf/index.rst           |   1 +
+ Documentation/admin-guide/perf/stm32-ddr-pmu.rst   |  86 ++
+ .../bindings/clock/st,stm32mp25-rcc.yaml           |   6 +
+ .../devicetree/bindings/perf/st,stm32-ddr-pmu.yaml |  93 +++
+ MAINTAINERS                                        |   7 +
+ arch/arm/boot/dts/st/stm32mp131.dtsi               |   7 +
+ arch/arm/boot/dts/st/stm32mp151.dtsi               |   7 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi             |   8 +
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts          |   5 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts         |   5 +
+ drivers/bus/stm32_etzpc.c                          |   3 +-
+ drivers/bus/stm32_firewall.c                       |   3 +-
+ drivers/bus/stm32_rifsc.c                          |   3 +-
+ drivers/clk/stm32/clk-stm32mp25.c                  |  40 +-
+ drivers/perf/Kconfig                               |  11 +
+ drivers/perf/Makefile                              |   1 +
+ drivers/perf/stm32_ddr_pmu.c                       | 893 +++++++++++++++++++++
+ {drivers => include/linux}/bus/stm32_firewall.h    |   0
+ 18 files changed, 1172 insertions(+), 7 deletions(-)
+---
+base-commit: 86731a2a651e58953fc949573895f2fa6d456841
+change-id: 20250526-ddrperfm-upstream-bf07f57775da
 
-> +	if (acpi_dev_get_property(device, nargs_prop, ACPI_TYPE_INTEGER, &obj))
-> +		return 0;
-> +
-> +	return obj->integer.value;
-> +}
-
-...
-
-> +			if (nargs_prop)
-
-Again, if you don't won't to reassign the existing value, it's better to have
-this data be collected in the temporary variable of the same semantics. Then
-you will choose one when it's needed, no need to have this dup check (again!).
-
-> +				args_count = acpi_fwnode_get_args_count(device, nargs_prop);
-> +
->  			element++;
->  
->  			ret = acpi_get_ref_args(idx == index ? args : NULL,
-
-...
-
-> +			if (nargs_prop) {
-
-Ditto.
-
-> +				device = to_acpi_device_node(ref_fwnode);
-> +				args_count = acpi_fwnode_get_args_count(device, nargs_prop);
-> +			}
-
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Clément Le Goffic <clement.legoffic@foss.st.com>
 
 
