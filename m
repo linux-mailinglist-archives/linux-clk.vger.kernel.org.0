@@ -1,565 +1,253 @@
-Return-Path: <linux-clk+bounces-23431-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-23433-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ECD8AE47DB
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 17:06:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 475C7AE49AF
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 18:07:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5EBA16255E
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 15:03:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 678253B437A
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Jun 2025 16:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D6826FA6A;
-	Mon, 23 Jun 2025 15:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC0A0299A87;
+	Mon, 23 Jun 2025 16:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="Ur91gAI5"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960EA267700;
-	Mon, 23 Jun 2025 15:03:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750691010; cv=none; b=ap3D5ONh2MonyX65U7cXUN0EOEovTH7HOH9q7uuOZ0vKio32TzaPtXCEYoonsAB60OYj7Qr7dtfqs6NE3/ERH94pB+ky/2kzwnOnx1xiHb23WwdYMNYBlOxmMeiE1981qMTzYfVAD6Y14kWK18LEezhyZ+8DXvBQ690I5vOltzQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750691010; c=relaxed/simple;
-	bh=TPqeMh80gQBOcHpui5dsDRlcE8x3uF7B3//Ah9f+stc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k/Upoc3YIBrZKLbj5/evrj51+AWkCx9r6p4PWEYReIwqadlxHWTnzKTGGcIRQsqoAKkH5zInXHA4viGESchFXVMYt/Tq6m87jsuBHAjQCE7PkkFWjeTJ35YlMFWATFPtiCiju+eqjYN/ytXrLWucu2gpjctzuMOONTIPLR8RoKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=altera.com; spf=fail smtp.mailfrom=altera.com; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=altera.com
-X-CSE-ConnectionGUID: QwuqUjL3QVKS4/6Sfm/35w==
-X-CSE-MsgGUID: O/9RSt4nSu229B0X91O2sw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="56709636"
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="56709636"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 08:03:26 -0700
-X-CSE-ConnectionGUID: 3E3SWQexTg6PAFqqgWO47w==
-X-CSE-MsgGUID: rH7YcLrxQXaPzoxIyMff6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="156186349"
-Received: from sramkris-mobl1.amr.corp.intel.com (HELO mgerlach-mobl1.intel.com) ([10.124.222.185])
-  by orviesa004.jf.intel.com with ESMTP; 23 Jun 2025 08:03:16 -0700
-From: Matthew Gerlach <matthew.gerlach@altera.com>
-To: dinguyen@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	richardcochran@gmail.com,
-	linux-clk@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>,
-	Teh Wen Ping <wen.ping.teh@intel.com>,
-	Matthew Gerlach <matthew.gerlach@altera.com>
-Subject: [PATCH v5 RESEND] clk: socfpga: agilex: add support for the Intel Agilex5
-Date: Mon, 23 Jun 2025 08:03:14 -0700
-Message-ID: <20250623150314.19243-1-matthew.gerlach@altera.com>
-X-Mailer: git-send-email 2.49.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A46145B3E;
+	Mon, 23 Jun 2025 16:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750694835; cv=pass; b=mfwfeKDlgMqq3WxwKOntxXHqOc0fMDym5UpPzG+LB/5eYfefzCRTuIRF0k/wpuEUespsOBnF7mqwWXd5/adrvkODs6Hc81Mr4T7KFlgQUezoUkNgfgeAUpwPf42osM0QHLfxEyRNuPJ+FpZAK1zzFyGgXozim7nMKpeK+ZziXlY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750694835; c=relaxed/simple;
+	bh=Idu57VDjF3mSyGxyHJymDuIMS3y1xL0aqQtnUD2e9qw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gKE7YqobSzQgyT2xhvMZcjXBETzclRrDl7E9ozeqx9bu8hZT8Ad79Rgn/0x/RGBAjFQg9CKfj+2yi4Ve88ablbduISqryBeeYyFi68+nu+IHKggnZ44rhjvwS/nCfQkwTo0LjHnBNXGkdLcww3QtKJ6nUKNI/Jlq3o/5iheiFJA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=Ur91gAI5; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1750694752; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ALvgrtg+SBpE7ZZ5IkKOvEGS2SR4IufJdiOtiRVy68FjasB3QJgnA6RvY/N+EWWViRfyhEVxnTbdcTnv2v5XfDJzm7WEQ0UnzaDPAyseLdjkl1hb650UOTbiPdDATgqwdQ0m5LpepSWI3r6mky17Jk1JFGkOO2tMYLrNthhObwc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1750694752; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=OBRKd+xA4VsUyeckNojrdNQY/i5zR4hbYSAkGkUAxmI=; 
+	b=f3ISUawrfRo5+VIsmDCuLxBzcU2wsRYh8AzkHPaZdDI7cgoz33XFITfsgEElgM9NSiGaUM3OQfm+dYsD9LIHYxcv+/b6ZROeF56zQHjEWzyGwaqBBxO33FdbDSPb6iXhG6JZJ0LIg+Xrl2mcrBRdGxRMwgFHPpAjRG9/ITc6ZEA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1750694752;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=OBRKd+xA4VsUyeckNojrdNQY/i5zR4hbYSAkGkUAxmI=;
+	b=Ur91gAI5Pg4ujGe9cgYtIhXeRdyWF4npt8XEVb3xB6c3gzjKDMoCcqGXSa540LUH
+	6uxd/EWPKNeFn3LrQ2TzaIZiMHsCyJroUlVvMjiRyJDgSkbfLlkadlnnc8+V/IkF3gU
+	4xPwrh5EMDEFFEwzxIcgQctKEDXccsek567/7Rjw=
+Received: by mx.zohomail.com with SMTPS id 1750694748824857.0971844130715;
+	Mon, 23 Jun 2025 09:05:48 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH v2 00/20] BYEWORD_UPDATE: unifying (most) HIWORD_UPDATE
+ macros
+Date: Mon, 23 Jun 2025 18:05:28 +0200
+Message-Id: <20250623-byeword-update-v2-0-cf1fc08a2e1f@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEh7WWgC/12OzQ6DIBAGX8XsuTSAf42nvkfjAWSpJCoW0GqM7
+ 16qPfU4m8x8u4FHZ9BDlWzgcDbe2CECvyTQtGJ4IjEqMnDKc1owSuSKb+sUmUYlApIsyxuKKMq
+ SKYjS6FCb5Qg+6pMdvqbYDecRpPBIGtv3JlTJgEsgZ5un8BVa44N16/HQzA7jt83/t2dGKNGZ0
+ PKmi5Sl+t7YrhPSOnGNA1Dv+/4BLKkE/uEAAAA=
+X-Change-ID: 20250610-byeword-update-445c0eea771d
+To: Yury Norov <yury.norov@gmail.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Jaehoon Chung <jh80.chung@samsung.com>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
+ Shreeya Patel <shreeya.patel@collabora.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Sandy Huang <hjc@rock-chips.com>, Andy Yan <andy.yan@rock-chips.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Nicolas Frattaroli <frattaroli.nicolas@gmail.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Shawn Lin <shawn.lin@rock-chips.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+ MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, Qin Jian <qinjian@cqplus1.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org, 
+ linux-sound@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, linux-pci@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, llvm@lists.linux.dev, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+ Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+X-Mailer: b4 0.14.2
 
-From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+This series was spawned by [1], where I was asked to move every instance
+of HIWORD_UPDATE et al that I could find to a common macro in the same
+series that I am introducing said common macro.
 
-Add support for Intel's SoCFPGA Agilex5 platform. The clock manager
-driver for the Agilex5 is very similar to the Agilex platform, so
-it is reusing most of the Agilex clock driver code.
+The first patch of the series introduces a new header file,
+hw_bitfield.h, which contains two new macros: FIELD_PREP_WM16 and
+FIELD_PREP_WM16_CONST. The latter can be used in initializers.
 
-Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
-Reviewed-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-Signed-off-by: Matthew Gerlach <matthew.gerlach@altera.com>
+I've cheekily added the hw_bitfield.h header to the BITMAP API section
+of the MAINTAINERS file.
+
+This macro definition checks that the mask fits, and that the value fits
+in the mask. Like FIELD_PREP, it also shifts the value up to the mask,
+so turning off a bit does not require using the mask as a value. Masks
+are also required to be contiguous, like with FIELD_PREP.
+
+For each definition of such a macro, the driver(s) that used it were
+evaluated for three different treatments:
+ - full conversion to the new macro, for cases where replacing the
+   implementation of the old macro wouldn't have worked, or where the
+   conversion was trivial. These are the most complex patches in this
+   series, as they sometimes have to pull apart definitions of masks
+   and values due to the new semantics, which require a contiguous
+   mask and shift the value for us.
+ - replacing the implementation of the old macro with an instance of the
+   new macro, done where I felt it made the patch much easier to review
+   because I didn't want to drop a big diff on people.
+ - skipping conversion entirely, usually because the mask is
+   non-constant and it's not trivial to make it constant. Sometimes an
+   added complication is that said non-constant mask is either used in a
+   path where runtime overhead may not be desirable, or in an
+   initializer.
+
+Left out of conversion:
+ - drivers/mmc/host/sdhci-of-arasan.c: mask is non-constant.
+ - drivers/phy/rockchip/phy-rockchip-inno-csidphy.c: mask is
+   non-constant likely by way of runtime pointer dereferencing, even if
+   struct and members are made const.
+ - drivers/clk/rockchip/clk.h: way too many clock drivers use non-const
+   masks in the context of an initializer.
+
+I will not be addressing these 3 remaining users in this series, as
+implementing a runtime checked version on top of this and verifying that
+it doesn't cause undue overhead just for 3 stragglers is a bit outside
+the scope of wanting to get my RK3576 PWM series unblocked. Please have
+mercy.
+
+In total, I count 19 different occurrences of such a macro fixed out of
+22 I found. The vast majority of these patches have either undergone
+static testing to ensure the values end up the same during development,
+or have been verified to not break the device the driver is for at
+runtime. Only a handful are just compile-tested, and the individual
+patches remark which ones those are.
+
+This took a lot of manual work as this wasn't really something that
+could be automated: code had to be refactored to ensure masks were
+contiguous, made sense to how the hardware actually works and to human
+readers, were constant, and that the code uses unshifted values.
+
+Please note that I will not be resending the whole series again for
+purely subjective cosmetic changes. This series touches a lot of
+subsystems, which means many clashing tastes. You've had a week's notice
+to get any low-effort naming nitpicks out of the way after v1. If you as
+a maintainer are unhappy with a commit prefix or such, then you have my
+express permission to modify it while applying the patch, so that I
+don't need to bombard everyone else's inboxes again.
+
+https://lore.kernel.org/all/aD8hB-qJ4Qm6IFuS@yury/ [1]
+
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
-Changes in v5:
-- Remove incorrect usage of .index and continue with the old way
-  of using string names.
-- Add lore links to revision history.
-- Link to v4: https://lore.kernel.org/lkml/20250417145238.31657-1-matthew.gerlach@altera.com/T/#u
-
-Changes in v4:
-- Add .index to clk_parent_data.
-- Link to v3: https://lore.kernel.org/linux-clk/20231003120402.4186270-1-niravkumar.l.rabara@intel.com/
-
-Changes in v3:
-- Used different name for stratix10_clock_data pointer.
-- Used a single function call, devm_platform_ioremap_resource().
-- Used only .name in clk_parent_data.
-- Link to v2: https://lore.kernel.org/linux-clk/20230801010234.792557-1-niravkumar.l.rabara@intel.com/
-
-Stephen suggested to use .fw_name or .index, But since the changes are on top
-of existing driver and current driver code is not using clk_hw and removing
-.name and using .fw_name and/or .index resulting in parent clock_rate &
-recalc_rate to 0.
-
-In order to use .index, I would need to refactor the common code that is shared
-by a few Intel SoCFPGA platforms (S10, Agilex and N5x). So, if using .name for
-this patch is acceptable then I will upgrade clk-agilex.c in future submission.
-
 Changes in v2:
-- Instead of creating separate clock manager driver, re-use agilex clock
-  manager driver and modified it for agilex5 changes to avoid code
-  duplicate.
-- Link to v1: https://lore.kernel.org/linux-clk/20230618132235.728641-4-niravkumar.l.rabara@intel.com/
----
- drivers/clk/socfpga/clk-agilex.c | 413 ++++++++++++++++++++++++++++++-
- 1 file changed, 412 insertions(+), 1 deletion(-)
+- rebase onto next-20250623. This involved solving two conflicts in
+  pcie-dw-rockchip.
+- move new macros to a new hw_bitfield.h, and rename them to
+  FIELD_PREP_WM16*. All patches in the series have been updated to use
+  the new names.
+- hw_bitfield.h: fix macro param re-use in FIELD_PREP_WM16. I don't know
+  if there's any way to do the same in FIELD_PREP_WM16_CONST, but the
+  bitfield.h FIELD_PREP functions don't do it for either, so I'm already
+  strictly better anyway.
+- hw_bitfield.h: remove whitespace after cast operators.
+- change newly introduced U literal suffixes to UL, as they are more
+  commonly used in the kernel.
+- pcie-dw-rockchip: remove the legacy mode flag, as it's unused.
+- Link to v1: https://lore.kernel.org/r/20250612-byeword-update-v1-0-f4afb8f6313f@collabora.com
 
-diff --git a/drivers/clk/socfpga/clk-agilex.c b/drivers/clk/socfpga/clk-agilex.c
-index 8dd94f64756b..43c1e4e26cf0 100644
---- a/drivers/clk/socfpga/clk-agilex.c
-+++ b/drivers/clk/socfpga/clk-agilex.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (C) 2019, Intel Corporation
-+ * Copyright (C) 2019-2024, Intel Corporation
-+ * Copyright (C) 2025, Altera Corporation
-  */
- #include <linux/slab.h>
- #include <linux/clk-provider.h>
-@@ -8,6 +9,7 @@
- #include <linux/platform_device.h>
- 
- #include <dt-bindings/clock/agilex-clock.h>
-+#include <dt-bindings/clock/intel,agilex5-clkmgr.h>
- 
- #include "stratix10-clk.h"
- 
-@@ -334,6 +336,375 @@ static const struct stratix10_gate_clock agilex_gate_clks[] = {
- 	  10, 0, 0, 0, 0, 0, 4},
- };
- 
-+static const struct clk_parent_data agilex5_pll_mux[] = {
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_boot_mux[] = {
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core0_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c0", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core1_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c0", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core2_free_mux[] = {
-+	{ .name = "main_pll_c0", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core3_free_mux[] = {
-+	{ .name = "main_pll_c0", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_dsu_free_mux[] = {
-+	{ .name = "main_pll_c2", },
-+	{ .name = "peri_pll_c0", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_noc_free_mux[] = {
-+	{ .name = "main_pll_c3", },
-+	{ .name = "peri_pll_c1", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_emaca_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c3", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_emacb_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c3", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_emac_ptp_free_mux[] = {
-+	{ .name = "main_pll_c3", },
-+	{ .name = "peri_pll_c3", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_gpio_db_free_mux[] = {
-+	{ .name = "main_pll_c3", },
-+	{ .name = "peri_pll_c1", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_psi_ref_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c3", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_usb31_free_mux[] = {
-+	{ .name = "main_pll_c3", },
-+	{ .name = "peri_pll_c2", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_s2f_usr0_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c3", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_s2f_usr1_free_mux[] = {
-+	{ .name = "main_pll_c1", },
-+	{ .name = "peri_pll_c3", },
-+	{ .name = "osc1", },
-+	{ .name = "cb-intosc-hs-div2-clk", },
-+	{ .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core0_mux[] = {
-+	{ .name = "core0_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core1_mux[] = {
-+	{ .name = "core1_free_clk", .index = AGILEX5_CORE1_FREE_CLK },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core2_mux[] = {
-+	{ .name = "core2_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_core3_mux[] = {
-+	{ .name = "core3_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_dsu_mux[] = {
-+	{ .name = "dsu_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_emac_mux[] = {
-+	{ .name = "emaca_free_clk", },
-+	{ .name = "emacb_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_noc_mux[] = {
-+	{ .name = "noc_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_s2f_user0_mux[] = {
-+	{ .name = "s2f_user0_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_s2f_user1_mux[] = {
-+	{ .name = "s2f_user1_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_psi_mux[] = {
-+	{ .name = "psi_ref_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_gpio_db_mux[] = {
-+	{ .name = "gpio_db_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_emac_ptp_mux[] = {
-+	{ .name = "emac_ptp_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data agilex5_usb31_mux[] = {
-+	{ .name = "usb31_free_clk", },
-+	{ .name = "boot_clk", },
-+};
-+
-+/*
-+ * clocks in AO (always on) controller
-+ */
-+static const struct stratix10_pll_clock agilex5_pll_clks[] = {
-+	{ AGILEX5_BOOT_CLK, "boot_clk", agilex5_boot_mux, ARRAY_SIZE(agilex5_boot_mux), 0,
-+	  0x0 },
-+	{ AGILEX5_MAIN_PLL_CLK, "main_pll", agilex5_pll_mux, ARRAY_SIZE(agilex5_pll_mux), 0,
-+	  0x48 },
-+	{ AGILEX5_PERIPH_PLL_CLK, "periph_pll", agilex5_pll_mux, ARRAY_SIZE(agilex5_pll_mux), 0,
-+	  0x9C },
-+};
-+
-+static const struct stratix10_perip_c_clock agilex5_main_perip_c_clks[] = {
-+	{ AGILEX5_MAIN_PLL_C0_CLK, "main_pll_c0", "main_pll", NULL, 1, 0,
-+	  0x5C },
-+	{ AGILEX5_MAIN_PLL_C1_CLK, "main_pll_c1", "main_pll", NULL, 1, 0,
-+	  0x60 },
-+	{ AGILEX5_MAIN_PLL_C2_CLK, "main_pll_c2", "main_pll", NULL, 1, 0,
-+	  0x64 },
-+	{ AGILEX5_MAIN_PLL_C3_CLK, "main_pll_c3", "main_pll", NULL, 1, 0,
-+	  0x68 },
-+	{ AGILEX5_PERIPH_PLL_C0_CLK, "peri_pll_c0", "periph_pll", NULL, 1, 0,
-+	  0xB0 },
-+	{ AGILEX5_PERIPH_PLL_C1_CLK, "peri_pll_c1", "periph_pll", NULL, 1, 0,
-+	  0xB4 },
-+	{ AGILEX5_PERIPH_PLL_C2_CLK, "peri_pll_c2", "periph_pll", NULL, 1, 0,
-+	  0xB8 },
-+	{ AGILEX5_PERIPH_PLL_C3_CLK, "peri_pll_c3", "periph_pll", NULL, 1, 0,
-+	  0xBC },
-+};
-+
-+/* Non-SW clock-gated enabled clocks */
-+static const struct stratix10_perip_cnt_clock agilex5_main_perip_cnt_clks[] = {
-+	{ AGILEX5_CORE0_FREE_CLK, "core0_free_clk", NULL, agilex5_core0_free_mux,
-+	ARRAY_SIZE(agilex5_core0_free_mux), 0, 0x0104, 0, 0, 0},
-+	{ AGILEX5_CORE1_FREE_CLK, "core1_free_clk", NULL, agilex5_core1_free_mux,
-+	ARRAY_SIZE(agilex5_core1_free_mux), 0, 0x0104, 0, 0, 0},
-+	{ AGILEX5_CORE2_FREE_CLK, "core2_free_clk", NULL, agilex5_core2_free_mux,
-+	ARRAY_SIZE(agilex5_core2_free_mux), 0, 0x010C, 0, 0, 0},
-+	{ AGILEX5_CORE3_FREE_CLK, "core3_free_clk", NULL, agilex5_core3_free_mux,
-+	ARRAY_SIZE(agilex5_core3_free_mux), 0, 0x0110, 0, 0, 0},
-+	{ AGILEX5_DSU_FREE_CLK, "dsu_free_clk", NULL, agilex5_dsu_free_mux,
-+	ARRAY_SIZE(agilex5_dsu_free_mux), 0, 0x0100, 0, 0, 0},
-+	{ AGILEX5_NOC_FREE_CLK, "noc_free_clk", NULL, agilex5_noc_free_mux,
-+	  ARRAY_SIZE(agilex5_noc_free_mux), 0, 0x40, 0, 0, 0 },
-+	{ AGILEX5_EMAC_A_FREE_CLK, "emaca_free_clk", NULL, agilex5_emaca_free_mux,
-+	  ARRAY_SIZE(agilex5_emaca_free_mux), 0, 0xD4, 0, 0x88, 0 },
-+	{ AGILEX5_EMAC_B_FREE_CLK, "emacb_free_clk", NULL, agilex5_emacb_free_mux,
-+	  ARRAY_SIZE(agilex5_emacb_free_mux), 0, 0xD8, 0, 0x88, 1 },
-+	{ AGILEX5_EMAC_PTP_FREE_CLK, "emac_ptp_free_clk", NULL,
-+	  agilex5_emac_ptp_free_mux, ARRAY_SIZE(agilex5_emac_ptp_free_mux), 0, 0xDC, 0, 0x88,
-+	  2 },
-+	{ AGILEX5_GPIO_DB_FREE_CLK, "gpio_db_free_clk", NULL, agilex5_gpio_db_free_mux,
-+	  ARRAY_SIZE(agilex5_gpio_db_free_mux), 0, 0xE0, 0, 0x88, 3 },
-+	{ AGILEX5_S2F_USER0_FREE_CLK, "s2f_user0_free_clk", NULL,
-+	  agilex5_s2f_usr0_free_mux, ARRAY_SIZE(agilex5_s2f_usr0_free_mux), 0, 0xE8, 0, 0x30,
-+	  2 },
-+	{ AGILEX5_S2F_USER1_FREE_CLK, "s2f_user1_free_clk", NULL,
-+	  agilex5_s2f_usr1_free_mux, ARRAY_SIZE(agilex5_s2f_usr1_free_mux), 0, 0xEC, 0, 0x88,
-+	  5 },
-+	{ AGILEX5_PSI_REF_FREE_CLK, "psi_ref_free_clk", NULL, agilex5_psi_ref_free_mux,
-+	  ARRAY_SIZE(agilex5_psi_ref_free_mux), 0, 0xF0, 0, 0x88, 6 },
-+	{ AGILEX5_USB31_FREE_CLK, "usb31_free_clk", NULL, agilex5_usb31_free_mux,
-+	  ARRAY_SIZE(agilex5_usb31_free_mux), 0, 0xF8, 0, 0x88, 7},
-+};
-+
-+/* SW Clock gate enabled clocks */
-+static const struct stratix10_gate_clock agilex5_gate_clks[] = {
-+	/* Main PLL0 Begin */
-+	/* MPU clocks */
-+	{ AGILEX5_CORE0_CLK, "core0_clk", NULL, agilex5_core0_mux,
-+	  ARRAY_SIZE(agilex5_core0_mux), 0, 0x24, 8, 0, 0, 0, 0x30, 5, 0 },
-+	{ AGILEX5_CORE1_CLK, "core1_clk", NULL, agilex5_core1_mux,
-+	  ARRAY_SIZE(agilex5_core1_mux), 0, 0x24, 9, 0, 0, 0, 0x30, 5, 0 },
-+	{ AGILEX5_CORE2_CLK, "core2_clk", NULL, agilex5_core2_mux,
-+	  ARRAY_SIZE(agilex5_core2_mux), 0, 0x24, 10, 0, 0, 0, 0x30, 6, 0 },
-+	{ AGILEX5_CORE3_CLK, "core3_clk", NULL, agilex5_core3_mux,
-+	  ARRAY_SIZE(agilex5_core3_mux), 0, 0x24, 11, 0, 0, 0, 0x30, 7, 0 },
-+	{ AGILEX5_MPU_CLK, "dsu_clk", NULL, agilex5_dsu_mux, ARRAY_SIZE(agilex5_dsu_mux), 0, 0,
-+	  0, 0, 0, 0, 0x34, 4, 0 },
-+	{ AGILEX5_MPU_PERIPH_CLK, "mpu_periph_clk", NULL, agilex5_dsu_mux,
-+	  ARRAY_SIZE(agilex5_dsu_mux), 0, 0, 0, 0x44, 20, 2, 0x34, 4, 0 },
-+	{ AGILEX5_MPU_CCU_CLK, "mpu_ccu_clk", NULL, agilex5_dsu_mux,
-+	  ARRAY_SIZE(agilex5_dsu_mux), 0, 0, 0, 0x44, 18, 2, 0x34, 4, 0 },
-+	{ AGILEX5_L4_MAIN_CLK, "l4_main_clk", NULL, agilex5_noc_mux,
-+	  ARRAY_SIZE(agilex5_noc_mux), 0, 0x24, 1, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_L4_MP_CLK, "l4_mp_clk", NULL, agilex5_noc_mux, ARRAY_SIZE(agilex5_noc_mux), 0,
-+	  0x24, 2, 0x44, 4, 2, 0x30, 1, 0 },
-+	{ AGILEX5_L4_SYS_FREE_CLK, "l4_sys_free_clk", NULL, agilex5_noc_mux,
-+	  ARRAY_SIZE(agilex5_noc_mux), 0, 0, 0, 0x44, 2, 2, 0x30, 1, 0 },
-+	{ AGILEX5_L4_SP_CLK, "l4_sp_clk", NULL, agilex5_noc_mux, ARRAY_SIZE(agilex5_noc_mux),
-+	  CLK_IS_CRITICAL, 0x24, 3, 0x44, 6, 2, 0x30, 1, 0 },
-+
-+	/* Core sight clocks*/
-+	{ AGILEX5_CS_AT_CLK, "cs_at_clk", NULL, agilex5_noc_mux, ARRAY_SIZE(agilex5_noc_mux), 0,
-+	  0x24, 4, 0x44, 24, 2, 0x30, 1, 0 },
-+	{ AGILEX5_CS_TRACE_CLK, "cs_trace_clk", NULL, agilex5_noc_mux,
-+	  ARRAY_SIZE(agilex5_noc_mux), 0, 0x24, 4, 0x44, 26, 2, 0x30, 1, 0 },
-+	{ AGILEX5_CS_PDBG_CLK, "cs_pdbg_clk", "cs_at_clk", NULL, 1, 0, 0x24, 4,
-+	  0x44, 28, 1, 0, 0, 0 },
-+	/* Main PLL0 End */
-+
-+	/* Main Peripheral PLL1 Begin */
-+	{ AGILEX5_EMAC0_CLK, "emac0_clk", NULL, agilex5_emac_mux, ARRAY_SIZE(agilex5_emac_mux),
-+	  0, 0x7C, 0, 0, 0, 0, 0x94, 26, 0 },
-+	{ AGILEX5_EMAC1_CLK, "emac1_clk", NULL, agilex5_emac_mux, ARRAY_SIZE(agilex5_emac_mux),
-+	  0, 0x7C, 1, 0, 0, 0, 0x94, 27, 0 },
-+	{ AGILEX5_EMAC2_CLK, "emac2_clk", NULL, agilex5_emac_mux, ARRAY_SIZE(agilex5_emac_mux),
-+	  0, 0x7C, 2, 0, 0, 0, 0x94, 28, 0 },
-+	{ AGILEX5_EMAC_PTP_CLK, "emac_ptp_clk", NULL, agilex5_emac_ptp_mux,
-+	  ARRAY_SIZE(agilex5_emac_ptp_mux), 0, 0x7C, 3, 0, 0, 0, 0x88, 2, 0 },
-+	{ AGILEX5_GPIO_DB_CLK, "gpio_db_clk", NULL, agilex5_gpio_db_mux,
-+	  ARRAY_SIZE(agilex5_gpio_db_mux), 0, 0x7C, 4, 0x98, 0, 16, 0x88, 3, 1 },
-+	  /* Main Peripheral PLL1 End */
-+
-+	  /* Peripheral clocks  */
-+	{ AGILEX5_S2F_USER0_CLK, "s2f_user0_clk", NULL, agilex5_s2f_user0_mux,
-+	  ARRAY_SIZE(agilex5_s2f_user0_mux), 0, 0x24, 6, 0, 0, 0, 0x30, 2, 0 },
-+	{ AGILEX5_S2F_USER1_CLK, "s2f_user1_clk", NULL, agilex5_s2f_user1_mux,
-+	  ARRAY_SIZE(agilex5_s2f_user1_mux), 0, 0x7C, 6, 0, 0, 0, 0x88, 5, 0 },
-+	{ AGILEX5_PSI_REF_CLK, "psi_ref_clk", NULL, agilex5_psi_mux,
-+	  ARRAY_SIZE(agilex5_psi_mux), 0, 0x7C, 7, 0, 0, 0, 0x88, 6, 0 },
-+	{ AGILEX5_USB31_SUSPEND_CLK, "usb31_suspend_clk", NULL, agilex5_usb31_mux,
-+	  ARRAY_SIZE(agilex5_usb31_mux), 0, 0x7C, 25, 0, 0, 0, 0x88, 7, 0 },
-+	{ AGILEX5_USB31_BUS_CLK_EARLY, "usb31_bus_clk_early", "l4_main_clk",
-+	  NULL, 1, 0, 0x7C, 25, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_USB2OTG_HCLK, "usb2otg_hclk", "l4_mp_clk", NULL, 1, 0, 0x7C,
-+	  8, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SPIM_0_CLK, "spim_0_clk", "l4_mp_clk", NULL, 1, 0, 0x7C, 9,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SPIM_1_CLK, "spim_1_clk", "l4_mp_clk", NULL, 1, 0, 0x7C, 11,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SPIS_0_CLK, "spis_0_clk", "l4_sp_clk", NULL, 1, 0, 0x7C, 12,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SPIS_1_CLK, "spis_1_clk", "l4_sp_clk", NULL, 1, 0, 0x7C, 13,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_DMA_CORE_CLK, "dma_core_clk", "l4_mp_clk", NULL, 1, 0, 0x7C,
-+	  14, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_DMA_HS_CLK, "dma_hs_clk", "l4_mp_clk", NULL, 1, 0, 0x7C, 14,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I3C_0_CORE_CLK, "i3c_0_core_clk", "l4_mp_clk", NULL, 1, 0,
-+	  0x7C, 18, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I3C_1_CORE_CLK, "i3c_1_core_clk", "l4_mp_clk", NULL, 1, 0,
-+	  0x7C, 19, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I2C_0_PCLK, "i2c_0_pclk", "l4_sp_clk", NULL, 1, 0, 0x7C, 15,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I2C_1_PCLK, "i2c_1_pclk", "l4_sp_clk", NULL, 1, 0, 0x7C, 16,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I2C_EMAC0_PCLK, "i2c_emac0_pclk", "l4_sp_clk", NULL, 1, 0,
-+	  0x7C, 17, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I2C_EMAC1_PCLK, "i2c_emac1_pclk", "l4_sp_clk", NULL, 1, 0,
-+	  0x7C, 22, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_I2C_EMAC2_PCLK, "i2c_emac2_pclk", "l4_sp_clk", NULL, 1, 0,
-+	  0x7C, 27, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_UART_0_PCLK, "uart_0_pclk", "l4_sp_clk", NULL, 1, 0, 0x7C, 20,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_UART_1_PCLK, "uart_1_pclk", "l4_sp_clk", NULL, 1, 0, 0x7C, 21,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SPTIMER_0_PCLK, "sptimer_0_pclk", "l4_sp_clk", NULL, 1, 0,
-+	  0x7C, 23, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SPTIMER_1_PCLK, "sptimer_1_pclk", "l4_sp_clk", NULL, 1, 0,
-+	  0x7C, 24, 0, 0, 0, 0, 0, 0 },
-+
-+	/*NAND, SD/MMC and SoftPHY overall clocking*/
-+	{ AGILEX5_DFI_CLK, "dfi_clk", "l4_mp_clk", NULL, 1, 0, 0, 0, 0x44, 16,
-+	  2, 0, 0, 0 },
-+	{ AGILEX5_NAND_NF_CLK, "nand_nf_clk", "dfi_clk", NULL, 1, 0, 0x7C, 10,
-+	  0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_NAND_BCH_CLK, "nand_bch_clk", "l4_mp_clk", NULL, 1, 0, 0x7C,
-+	  10, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SDMMC_SDPHY_REG_CLK, "sdmmc_sdphy_reg_clk", "l4_mp_clk", NULL,
-+	  1, 0, 0x7C, 5, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SDMCLK, "sdmclk", "dfi_clk", NULL, 1, 0, 0x7C, 5, 0, 0, 0, 0,
-+	  0, 0 },
-+	{ AGILEX5_SOFTPHY_REG_PCLK, "softphy_reg_pclk", "l4_mp_clk", NULL, 1, 0,
-+	  0x7C, 26, 0, 0, 0, 0, 0, 0 },
-+	{ AGILEX5_SOFTPHY_PHY_CLK, "softphy_phy_clk", "l4_mp_clk", NULL, 1, 0,
-+	  0x7C, 26, 0x44, 16, 2, 0, 0, 0 },
-+	{ AGILEX5_SOFTPHY_CTRL_CLK, "softphy_ctrl_clk", "dfi_clk", NULL, 1, 0,
-+	  0x7C, 26, 0, 0, 0, 0, 0, 0 },
-+};
-+
- static int n5x_clk_register_c_perip(const struct n5x_perip_c_clock *clks,
- 				       int nums, struct stratix10_clock_data *data)
- {
-@@ -542,11 +913,51 @@ static int agilex_clkmgr_probe(struct platform_device *pdev)
- 	return	probe_func(pdev);
- }
- 
-+static int agilex5_clkmgr_init(struct platform_device *pdev)
-+{
-+	struct stratix10_clock_data *stratix_data;
-+	struct device *dev = &pdev->dev;
-+	void __iomem *base;
-+	int i, num_clks;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	num_clks = AGILEX5_NUM_CLKS;
-+
-+	stratix_data = devm_kzalloc(dev,
-+				    struct_size(stratix_data, clk_data.hws, num_clks), GFP_KERNEL);
-+	if (!stratix_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_clks; i++)
-+		stratix_data->clk_data.hws[i] = ERR_PTR(-ENOENT);
-+
-+	stratix_data->base = base;
-+	stratix_data->clk_data.num = num_clks;
-+
-+	agilex_clk_register_pll(agilex5_pll_clks, ARRAY_SIZE(agilex5_pll_clks),
-+				stratix_data);
-+
-+	agilex_clk_register_c_perip(agilex5_main_perip_c_clks,
-+				    ARRAY_SIZE(agilex5_main_perip_c_clks), stratix_data);
-+
-+	agilex_clk_register_cnt_perip(agilex5_main_perip_cnt_clks,
-+				      ARRAY_SIZE(agilex5_main_perip_cnt_clks), stratix_data);
-+
-+	agilex_clk_register_gate(agilex5_gate_clks,
-+				 ARRAY_SIZE(agilex5_gate_clks), stratix_data);
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, &stratix_data->clk_data);
-+}
-+
- static const struct of_device_id agilex_clkmgr_match_table[] = {
- 	{ .compatible = "intel,agilex-clkmgr",
- 	  .data = agilex_clkmgr_init },
- 	{ .compatible = "intel,easic-n5x-clkmgr",
- 	  .data = n5x_clkmgr_init },
-+	{ .compatible = "intel,agilex5-clkmgr",
-+	  .data = agilex5_clkmgr_init },
- 	{ }
- };
- 
+---
+Nicolas Frattaroli (20):
+      bitmap: introduce hardware-specific bitfield operations
+      mmc: dw_mmc-rockchip: switch to FIELD_PREP_WM16 macro
+      soc: rockchip: grf: switch to FIELD_PREP_WM16_CONST macro
+      media: synopsys: hdmirx: replace macros with bitfield variants
+      drm/rockchip: lvds: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-emmc: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: dsi: switch to FIELD_PREP_WM16* macros
+      drm/rockchip: vop2: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-samsung-dcphy: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: dw_hdmi_qp: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: inno-hdmi: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-usb: switch to FIELD_PREP_WM16 macro
+      drm/rockchip: dw_hdmi: switch to FIELD_PREP_WM16* macros
+      ASoC: rockchip: i2s-tdm: switch to FIELD_PREP_WM16_CONST macro
+      net: stmmac: dwmac-rk: switch to FIELD_PREP_WM16 macro
+      PCI: rockchip: Switch to FIELD_PREP_WM16* macros
+      PCI: dw-rockchip: Switch to FIELD_PREP_WM16 macro
+      PM / devfreq: rockchip-dfi: switch to FIELD_PREP_WM16 macro
+      clk: sp7021: switch to FIELD_PREP_WM16 macro
+      phy: rockchip-pcie: switch to FIELD_PREP_WM16 macro
+
+ MAINTAINERS                                        |   1 +
+ drivers/clk/clk-sp7021.c                           |  22 ++--
+ drivers/devfreq/event/rockchip-dfi.c               |  27 ++--
+ drivers/gpu/drm/rockchip/dw-mipi-dsi-rockchip.c    | 142 ++++++++++-----------
+ drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c        |  80 ++++++------
+ drivers/gpu/drm/rockchip/dw_hdmi_qp-rockchip.c     |  68 +++++-----
+ drivers/gpu/drm/rockchip/inno_hdmi.c               |  11 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.h       |   1 -
+ drivers/gpu/drm/rockchip/rockchip_lvds.h           |  21 +--
+ drivers/gpu/drm/rockchip/rockchip_vop2_reg.c       |  15 ++-
+ .../media/platform/synopsys/hdmirx/snps_hdmirx.h   |   6 +-
+ drivers/mmc/host/dw_mmc-rockchip.c                 |   9 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c     |   3 +-
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c      |  42 +++---
+ drivers/pci/controller/pcie-rockchip.h             |  35 ++---
+ drivers/phy/rockchip/phy-rockchip-emmc.c           |   3 +-
+ drivers/phy/rockchip/phy-rockchip-pcie.c           |  72 +++--------
+ drivers/phy/rockchip/phy-rockchip-samsung-dcphy.c  |  11 +-
+ drivers/phy/rockchip/phy-rockchip-usb.c            |  51 +++-----
+ drivers/soc/rockchip/grf.c                         |  35 +++--
+ include/linux/hw_bitfield.h                        |  62 +++++++++
+ sound/soc/rockchip/rockchip_i2s_tdm.h              |   4 +-
+ 22 files changed, 367 insertions(+), 354 deletions(-)
+---
+base-commit: 0491b8f4897c1ed267446959628592fd1cf8107d
+change-id: 20250610-byeword-update-445c0eea771d
+
+Best regards,
 -- 
-2.35.3
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 
