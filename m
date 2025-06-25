@@ -1,136 +1,158 @@
-Return-Path: <linux-clk+bounces-23657-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-23673-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37052AE8F2F
-	for <lists+linux-clk@lfdr.de>; Wed, 25 Jun 2025 22:08:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A2EDAE91FA
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Jun 2025 01:17:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B3C216E5F0
-	for <lists+linux-clk@lfdr.de>; Wed, 25 Jun 2025 20:08:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C770C4AA0FF
+	for <lists+linux-clk@lfdr.de>; Wed, 25 Jun 2025 23:17:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F6C2D4B47;
-	Wed, 25 Jun 2025 20:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37EEF2FCFFD;
+	Wed, 25 Jun 2025 23:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dFJvusXS"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="UR97XCXw"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.166.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D98E1FE47B;
-	Wed, 25 Jun 2025 20:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986842FC00E;
+	Wed, 25 Jun 2025 23:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.166.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750882108; cv=none; b=lPuDGtAVmYbK8nvw6avknZVQrziNFMlikSBjO7Ymb0QM6o69l8tCHKhfVW1KL1F4arkVXNU2VR3k748CKxnDM8Ts5PUpZUG3Uz2QfvKT7aZroJ2Te1e6zxOTbxPGtF0+0qgXPT0UuAEpXquVCgdesoWY7L4dE0uczVsFuZSmAJU=
+	t=1750893204; cv=none; b=CB5Xa7ceLGVvGWcN9yLQ7CWASNbpgH7WDoKIVezCc2Ojnflb6mnjBlxV3amGrRLi/2/tBVE98saanFC+Mqv6x5i3ngLBLSh2ioPEqhfwLf+oQ49QMbrDst4OnCn81JUMNI1cRCSl0UGVCMZcTWypSaVqEp1xBsJd/y25WxmDSUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750882108; c=relaxed/simple;
-	bh=xUpMEIzpFjRDAERBUMObbNI+oufFrlvJkWbPLwaUzp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etBUnZUQTQCsToX2sWMTogAZVQ5GfbdC5xirLfPl3TZ0kbefPQ8uci7dJymeENqMMNfYQtfRYK4nzw+3yiZ8iiMphlZEc/m7MK6IxuKDhC+JW0HVDioDEAv5pq0ZmurGcsGG4v2Nzk7v17/9Tg+SpMvBdgvUB+Pjq/SlGMNtljo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dFJvusXS; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750882107; x=1782418107;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xUpMEIzpFjRDAERBUMObbNI+oufFrlvJkWbPLwaUzp0=;
-  b=dFJvusXSSnTUtEoMw+ge5lgkqAsi2YMxLLvv0V/xwhkZ/bsjImzSEPmC
-   PEMKIMD1Bfs/PwlZeBJ5lcZarbauTwHOeijR5Ltltg7JXTBuq55hCVgBn
-   TMuHYW5vWPm/PgMXylaLHeFLZi4N4wRy1xqisFNXBpJEObgWKsIrPYef7
-   Z2uBtYL/P6rTq/RV5uaRHu8D6sOww6PdT+MjRYHG37U3xnxD5MXdJ0LvW
-   KC2m5LYYj62Mfi7zSckoYU3VzlVTUd/xmeclOW99jTz9cRltAGCuZI3Z+
-   G52/YB7eoBl0GFsE75rDen+rYn37F38FBgN3TZDCPhbc32LEsG7b4uNvg
-   A==;
-X-CSE-ConnectionGUID: +UaOQrb5Q/mlId2UukCGXg==
-X-CSE-MsgGUID: sV/HvzV3TAeWvbnSQxuxPA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11475"; a="63766168"
-X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
-   d="scan'208";a="63766168"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2025 13:08:26 -0700
-X-CSE-ConnectionGUID: YpEsUcroSXaqWKY9aziD2Q==
-X-CSE-MsgGUID: Tn6UOuwBSeC9ZqjURSczQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,265,1744095600"; 
-   d="scan'208";a="153033344"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 25 Jun 2025 13:08:23 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uUWPt-000TRa-0m;
-	Wed, 25 Jun 2025 20:08:21 +0000
-Date: Thu, 26 Jun 2025 04:07:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luca Weiss <luca.weiss@fairphone.com>,
-	Bjorn Andersson <andersson@kernel.org>,
+	s=arc-20240116; t=1750893204; c=relaxed/simple;
+	bh=eXXly6tGtLsmBw6lCsjPx67mhmn8LroQ0FK0/kx/LVI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NxoYecoMRuGTZ0iv7iTq3zxv6x71iAEzDp0nPAYsNuEu55sT2n8TAp5USRxkU3T6lLaBpqrFC6phrXh/8RAXa4WNlu341l3B2bxmANX61v0V7knz4K7jT0+Fe6TM21GT8coKNnP+XWatWK7Zi2ZZfCsUUmoAPd3/nssKUZyJ2ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=UR97XCXw; arc=none smtp.client-ip=192.19.166.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id A7625C0008FB;
+	Wed, 25 Jun 2025 16:13:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com A7625C0008FB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1750893185;
+	bh=eXXly6tGtLsmBw6lCsjPx67mhmn8LroQ0FK0/kx/LVI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UR97XCXwWrJw0/aZBRZo/JKVPotWwFEtsL/aBtlB+wSvXPeiozPpG/asFdd7RsmCD
+	 ZrJTjRqAGOSX92XJSvbjLZmxUW41+X04+ZfXVAhAmwDCaz8pMOlnUtFZCnUuN46tY0
+	 OPI+4xZv2jMbUM4YdCDuYZWzTizLn195LslcPdVw=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 215DC18000530;
+	Wed, 25 Jun 2025 16:13:05 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: linux-kernel@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Kieran Bingham <kbingham@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
-Subject: Re: [PATCH 08/10] clk: qcom: Add Graphics Clock controller (GPUCC)
- driver for SM7635
-Message-ID: <202506260357.DyPYkEZb-lkp@intel.com>
-References: <20250625-sm7635-clocks-v1-8-ca3120e3a80e@fairphone.com>
+	Stephen Boyd <sboyd@kernel.org>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Etienne Buira <etienne.buira@free.fr>,
+	Antonio Quartulli <antonio@mandelbit.com>,
+	Illia Ostapyshyn <illia@yshyn.com>,
+	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+	linux-mm@kvack.org (open list:PER-CPU MEMORY ALLOCATOR),
+	linux-pm@vger.kernel.org (open list:GENERIC PM DOMAINS),
+	kasan-dev@googlegroups.com (open list:KASAN),
+	maple-tree@lists.infradead.org (open list:MAPLE TREE),
+	linux-modules@vger.kernel.org (open list:MODULE SUPPORT),
+	linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM)
+Subject: [PATCH 00/16] MAINTAINERS: Include GDB scripts under their relevant subsystems
+Date: Wed, 25 Jun 2025 16:10:37 -0700
+Message-ID: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250625-sm7635-clocks-v1-8-ca3120e3a80e@fairphone.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Luca,
+Linux has a number of very useful GDB scripts under scripts/gdb/linux/*
+that provide OS awareness for debuggers and allows for debugging of a
+variety of data structures (lists, timers, radix tree, mapletree, etc.)
+as well as subsystems (clocks, devices, classes, busses, etc.).
 
-kernel test robot noticed the following build warnings:
+These scripts are typically maintained in isolation from the subsystem
+that they parse the data structures and symbols of, which can lead to
+people playing catch up with fixing bugs or updating the script to work
+with updates made to the internal APIs/objects etc. Here are some
+recents examples:
 
-[auto build test WARNING on 19272b37aa4f83ca52bdf9c16d5d81bdd1354494]
+https://lore.kernel.org/all/20250601055027.3661480-1-tony.ambardar@gmail.com/
+https://lore.kernel.org/all/20250619225105.320729-1-florian.fainelli@broadcom.com/
+https://lore.kernel.org/all/20250625021020.1056930-1-florian.fainelli@broadcom.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luca-Weiss/dt-bindings-clock-qcom-document-the-SM7635-Global-Clock-Controller/20250625-171703
-base:   19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-patch link:    https://lore.kernel.org/r/20250625-sm7635-clocks-v1-8-ca3120e3a80e%40fairphone.com
-patch subject: [PATCH 08/10] clk: qcom: Add Graphics Clock controller (GPUCC) driver for SM7635
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20250626/202506260357.DyPYkEZb-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250626/202506260357.DyPYkEZb-lkp@intel.com/reproduce)
+This patch series is intentionally split such that each subsystem
+maintainer can decide whether to accept the extra
+review/maintenance/guidance that can be offered when GDB scripts are
+being updated or added.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506260357.DyPYkEZb-lkp@intel.com/
+Thanks!
 
-All warnings (new ones prefixed by >>):
+Florian Fainelli (16):
+  MAINTAINERS: Include clk.py under COMMON CLK FRAMEWORK entry
+  MAINTAINERS: Include device.py under DRIVER CORE entry
+  MAINTAINERS: Include genpd.py under GENERIC PM DOMAINS entry
+  MAINTAINERS: Include radixtree.py under GENERIC RADIX TREE entry
+  MAINTAINERS: Include interrupts.py under IRQ SUBSYSTEM entry
+  MAINTAINERS: Include kasan.py under KASAN entry
+  MAINTAINERS: Include mapletree.py under MAPLE TREE entry
+  MAINTAINERS: Include GDB scripts under MEMORY MANAGEMENT entry
+  MAINTAINERS: Include modules.py under MODULE SUPPORT entry
+  MAINTAINERS: Include cpus.py under PER-CPU MEMORY ALLOCATOR entry
+  MAINTAINERS: Include timerlist.py under POSIX CLOCKS and TIMERS entry
+  MAINTAINERS: Include dmesg.py under PRINTK entry
+  MAINTAINERS: Include proc.py under PROC FILESYSTEM entry
+  MAINTAINERS: Include vmalloc.py under VMALLOC entry
+  MAINTAINERS: Include xarray.py under XARRAY entry
+  MAINTAINERS: Include vfs.py under FILESYSTEMS entry
 
->> drivers/clk/qcom/gpucc-sm7635.c:135:37: warning: 'gpu_cc_parent_data_2' defined but not used [-Wunused-const-variable=]
-     135 | static const struct clk_parent_data gpu_cc_parent_data_2[] = {
-         |                                     ^~~~~~~~~~~~~~~~~~~~
->> drivers/clk/qcom/gpucc-sm7635.c:131:32: warning: 'gpu_cc_parent_map_2' defined but not used [-Wunused-const-variable=]
-     131 | static const struct parent_map gpu_cc_parent_map_2[] = {
-         |                                ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/gpu_cc_parent_data_2 +135 drivers/clk/qcom/gpucc-sm7635.c
-
-   130	
- > 131	static const struct parent_map gpu_cc_parent_map_2[] = {
-   132		{ P_BI_TCXO, 0 },
-   133	};
-   134	
- > 135	static const struct clk_parent_data gpu_cc_parent_data_2[] = {
-   136		{ .index = DT_BI_TCXO },
-   137	};
-   138	
+ MAINTAINERS | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
