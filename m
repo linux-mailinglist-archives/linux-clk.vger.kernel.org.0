@@ -1,82 +1,81 @@
-Return-Path: <linux-clk+bounces-23996-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-23999-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3C76AF5D11
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Jul 2025 17:30:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E67EAF5D0A
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Jul 2025 17:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F50B487F92
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Jul 2025 15:29:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F09917ACE5
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Jul 2025 15:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44EA72E7BC9;
-	Wed,  2 Jul 2025 15:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EEF2D7805;
+	Wed,  2 Jul 2025 15:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="KJFWatgH"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Xcg+V/gG"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367102D7805
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0242D7818
 	for <linux-clk@vger.kernel.org>; Wed,  2 Jul 2025 15:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751470054; cv=none; b=X6cbwMVPkxH5cx15z+oi2PbriVXu81OPeuieYnaB/QFWufLDRJzEdlqJsEtVO37z2UZPVLNG2gDd4/Qcl8l6JY2XCOaG3meEsKR9SpGh5VEgPi8oygdOr/B15qlhDubPMK8ee77NQbigHEmdm0PaMLqTmVC67poyDYPMUCBpyQI=
+	t=1751470056; cv=none; b=byMxpa0K9ykFnCVraJzTo8Y0OsHcJ+gKFj+9ysjF/P4befpJCosNAC9tHFTwXEND9ytSuirYp56zuFDTWa8GBThSHEqRkOpfV6yEMyJvsK+i4wZ8vLwj4n0VC/3djEGvHGgPnX7But4zvQWXq1XZ3EF4TJ5vgVcG4JZLglf8stM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751470054; c=relaxed/simple;
-	bh=GoRUGsUnjViszPLATa2jyFADH3UQuWxdu+h4Qd6gJsw=;
+	s=arc-20240116; t=1751470056; c=relaxed/simple;
+	bh=pDD38k0SIxrSHiG/SWcjxn+yqzh3OgAiTIc+fdsRAf4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hR3+hGQmThtQSCK6ICDbi8vpCL7GbEdiY1RmPO36DNqNNkDZsBvgv/faik+3eOVCcJ8MOC+8lbfnQl1vFOGmKoJqNGUt1X9NXxteXVjNxIqje3H1PvgKjeVrengMLO2LjJqcFqI3VwrlUtJpL1aVHVhXGfJ0s7bOebdzqrneTM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=KJFWatgH; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:To:Cc; b=GcPFNqPNhGoIp6AJjmwf9/fehPlNOCgwbIpi5OzSA2LumSXymD/1LcEKOUPbp3ADFywACMiEeTBfCz7/PuRV5Wj5swyHl9+IGPxaynRs045fZaC18bjs5LZzdSdJfNuBNw2nups+7tpK0hr5KmWZNkXbbyU7/ESYM842d62gSGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Xcg+V/gG; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-450ce671a08so30708115e9.3
-        for <linux-clk@vger.kernel.org>; Wed, 02 Jul 2025 08:27:29 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-450ccda1a6eso37065195e9.2
+        for <linux-clk@vger.kernel.org>; Wed, 02 Jul 2025 08:27:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1751470048; x=1752074848; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1751470049; x=1752074849; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+/rEMnGeD4qvZyBGNuDDr/e/nsVy27ZDZfCTdz4n+TQ=;
-        b=KJFWatgHzoNdFsrbUztWqX05A1il5wChVzJTS8bsO4w1BjlHgv2UXI4OFtDKlyE3Bn
-         0JwVaSjTEDIyqVG5SylY7tlohGiu6F0D/hhBqwAMgjUyl9lKuKbbE/VfeGFibvbiKu+J
-         bqAqrLxWDBo2wRqq9H4qZkxeUl3jf476JZ+Wprjd83W3SOjpGmScRUHE02iiThe8hcW3
-         xLadPqWi4EX357MGxZpIrtNk0Nz3Uw3H+oEm8p1EM7BQkU0nwQgRGnidhv71e2cOMoCE
-         fLt8Zfiu1VVYC+kezNBvguG3CQfeBYaAcqIXzHnBkhTawpgzu803orFgS1WDg9ajjxC6
-         qJdA==
+        bh=nUNhaEN8gzwDkf+1nNZTJLoKinJ1pGlF7GtwCVhKJLE=;
+        b=Xcg+V/gG4Xm4UTJGAJxDGRJ4ffjn7v3GwTdms4V5tQnxqeFxTemFBTltbZXA5CXqlV
+         59/vnh7AAhbZlOZnkl/9sdxLrAw7Ro7N4nypALXUdfkxDCLq+vKQE6mqpk/wV+H31yPb
+         4RexDxLEEFh7TLWhVKsHP+VJ243n0UG7bp5xdOtBNq3tFagFjVmbZiaYxRRQ83xnvcCA
+         KAj3+sQgv0phTzJog9oYrhnmlwa2jxTl3GI1n1kfkvMu1KUjhjiZ+zJEYRdjpyXczn8T
+         hWrdfENv7UYTHHFoISq7lvCfaJQ51WnmnEIUMRs/Jp7geaGQv+abGX9JALDzE3mVo88c
+         1slA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751470048; x=1752074848;
+        d=1e100.net; s=20230601; t=1751470049; x=1752074849;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+/rEMnGeD4qvZyBGNuDDr/e/nsVy27ZDZfCTdz4n+TQ=;
-        b=HbmsvEhe7yuCewRiXvk5pSe1/3OZI8MgS+OXKc09KYvHDDyMqoyU+v2g4Zg+UsUkNQ
-         ICi62z1P9CGH25lhe1Twr0El6wyUJlM/kJmbfvqUIglVXmMPtR39XF9K2idz1X+aYVwB
-         YGcD6udnfTJq1RWGEBA+X9tD6fTc9dlES4+hUszm1YXVu8U0yVbO6turfXjiwjhwzBvQ
-         j5vnMFZHQV7Y7jgrnkXpHM1OmrSnwQNojCacMgmo20zGmb989PUHrbf9dC1kBE55d0Br
-         ZedEDLdRHhNnOUyMSSelUkI3msHU/3FUMQMpRXIYYnuRRy+sRk1SS3IIeiQv3NtQ4XAP
-         dM4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX+w71rfsBWbKwIojZcays321zigzRJoFPiR0s+y+fva2PyThiiTzlRa8DVUpjYIBFlgtbybutRd/o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzo8uNcqLryJZ/G0LRqEnauIwpo9bPV+ia9cdyLPqFX7UHV2NUw
-	5IFI6f86o8CeKcGkkS/7zssTUgVBJsbpDfMVdYlIGMZLqoAtdEiIGYxX3WWqiE6su1U=
-X-Gm-Gg: ASbGncsQbxM8cX9bj3rryDAlabDNcWQ9E4qB9OpVRrl5Qvo5iwBP56mrddweo+8WoM3
-	L+K4ndtB0Eun0IeX7Ugs/yFS7hND68B660UD98FN2tBVasu/ppJ8+9cYWmP60uB2a4/VQBW59L9
-	LJaW7INWCDMWil/YuxWCVaH2HEhjTquiQc2t5xA+Ee1hIqEn3kZ51zxYLeJZ9yKq6RzmdIF/IFm
-	M+3oeTk8so21EDYcv0s3ETIqWtiRC/IyRDuhwxAGFJMY/Qo4Y8ASfuPXoZidXjGR9F/DvgEMLET
-	8zxBwDHnl0hXZSPledOKvvbn9gaD57/3/wGlFswTbHVo62n/rQ6IUaxeCIdUkBbRTaowbUYXMiA
-	Z
-X-Google-Smtp-Source: AGHT+IHahoxmKnDB02LYfoZM5uHtVJlqRyi8ul0wrW+Qb+0qZK32tlqLlnVRa8VTgImck9/poeHQlg==
-X-Received: by 2002:a05:600c:4e90:b0:43d:fa59:cc8f with SMTP id 5b1f17b1804b1-454a373b017mr35366795e9.33.1751470048195;
-        Wed, 02 Jul 2025 08:27:28 -0700 (PDT)
+        bh=nUNhaEN8gzwDkf+1nNZTJLoKinJ1pGlF7GtwCVhKJLE=;
+        b=ayDvzqQSV1eCKBPjiNaV5vt3qTLAGYip/eIMeTdICUaEoQOaI318jIi+bXY0Tg7LkQ
+         zaPDAmcfqQ0ZmmI9SZeO55Dx47DRMaMsZLbBnoxllZllz3UP/+v5RfMKSyXJpOgSS/Cs
+         tsNf8h5X14nkdzZe3arsCHcdtqhuLo/RyFaBwWaLTdengM/Bhmt/x3JTUWvtiGgv/aUo
+         ez9XJt3KBDE1DYZF9xajWhB38imy+KCAxSlaW3w95driv3x7PpNFMHldSyfrglkjUbEo
+         8w35Np93gZ78LrlXpBM6+i9IUUKS8f4RvpCfjGzUgt7y5QAf9sqp4rm3/JIefWBt7NT0
+         V31A==
+X-Forwarded-Encrypted: i=1; AJvYcCXFYY4FoYKlfQMRDZq9o05UQ4aQRTHUvCOdxZSzSnYAlX36eguWcbWqnzk2k9trjUZGdGFISyEXFeI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV+up6jNIebIbVzI0mLbQr9i3PSu2gE1IZv0U2r/xopZV7gw+8
+	K9rxB7zo5ney/SpLgVukIZQGJUJ3n3EvbTYwwmBEBDOzDU4VtI/Fr6QTxAsYgo/sPuU=
+X-Gm-Gg: ASbGncv+02D32voW/eiHCNbWWRJ6dxsWB2wZmShNHYT93Ep+xRiIiL7pJPzo6JL15zH
+	JBdCaf0pO3SsR4NBSgWdYYnVkCt4geBjW2yBpd4CG8mDzCzvzLoyvwAUZpT1Mxe3bhBLreKikfQ
+	9C2GVCNUAp1Gn6FO+mrpUMl5OaUoPuy5oa3StqI3Sfos4iES0Cj8XPKSGKOXhuvleNsuY0fSQjj
+	ixYFxgkPnvB7HldXB4rptjqPrB99LSTj8k/ZYhQoDm7E6z8MyDzKREO5lW+hOaTroOsH6mcg3/Z
+	x5/IPU4pWjhw6RevBZFQIzUhXmqtTIIlGSU3ZVyzpgikS6tlY0llStxuOgPWYDxvxHmHCimMVPb
+	F
+X-Google-Smtp-Source: AGHT+IF5sq3L5rbtucbJzAATx3BzQioRLaZZqwtzwDYJYPBfxUgrQVqfp37cllquwb8S+2PlibE59w==
+X-Received: by 2002:a05:600c:840f:b0:450:d3b9:4bac with SMTP id 5b1f17b1804b1-454a9ca9fe5mr623515e9.28.1751470049058;
+        Wed, 02 Jul 2025 08:27:29 -0700 (PDT)
 Received: from toaster.baylibre.com ([2a01:e0a:3c5:5fb1:5542:4bad:e07b:9489])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-454a9bcf35csm869205e9.20.2025.07.02.08.27.27
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-454a9bcf35csm869205e9.20.2025.07.02.08.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 08:27:27 -0700 (PDT)
+        Wed, 02 Jul 2025 08:27:28 -0700 (PDT)
 From: Jerome Brunet <jbrunet@baylibre.com>
-Date: Wed, 02 Jul 2025 17:26:12 +0200
-Subject: [PATCH 14/26] clk: amlogic: meson8-ddr: naming consistency
- alignment
+Date: Wed, 02 Jul 2025 17:26:13 +0200
+Subject: [PATCH 15/26] clk: amlogic: drop meson-clkcee
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-meson-clk-cleanup-24-v1-14-e163c9a1fc21@baylibre.com>
+Message-Id: <20250702-meson-clk-cleanup-24-v1-15-e163c9a1fc21@baylibre.com>
 References: <20250702-meson-clk-cleanup-24-v1-0-e163c9a1fc21@baylibre.com>
 In-Reply-To: <20250702-meson-clk-cleanup-24-v1-0-e163c9a1fc21@baylibre.com>
 To: Neil Armstrong <neil.armstrong@linaro.org>, 
@@ -95,120 +94,475 @@ To: Neil Armstrong <neil.armstrong@linaro.org>,
 Cc: linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3620; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=GoRUGsUnjViszPLATa2jyFADH3UQuWxdu+h4Qd6gJsw=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBoZU/DPxkoHZIJ97lDN9ytfXkN1hQtyq0tH90Ab
- EBAvpbwlL6JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCaGVPwwAKCRDm/A8cN/La
- hQmxD/45yEiAXoag5hm097lT1KWnHb/uEVW0SgXHcEbpGveuEqrnsPx7DgMWESiWGwtINokytBJ
- RUvOsuMELTM8XbSiYKbspLcj0MSah1NyPrl+e8F9nvwEMmIgfXFsk8fkGJpvLpnwuq7zYIZpsDx
- Frm7J5ZkCN0Tq1aPuMvPcEQAKG7b1Oc+L/MhXR6Gat/RY/rnmFywkvshMBHFNp/A9d8iKQAe2TS
- ZRTuErqcQxBIShHvjeQTJC0jquA8RuvwcMj3Ozq6n8OuphQrXBvSTzp9BNnfR0lu6KyrvkbGtOx
- f6EW56HQ0mscED3PdVyTrJOuihA/qUfGi9pnL92d8iKmE2WKeYGue2AibpCQzt9mvJT4Ic0UrVB
- tlW2OcG8/gshyciD5gOrsEQ1XqZfij1tn4XMcZyTOmqt0vweD/eqdJnp+faLPFSYG/Y+9UtGLSB
- /g8BzAtZr1SRfKIMp4eO+qk1iT4LRgyHmxWbnvnYbpbwDNQ25tHW9jPamX0NtQS4CZUaQidYs6b
- 7r/839QzdtFV+iasInyGTKRt6g08z0mqxxd+yCu/3gT0v7eLCBzyfeIDqkp+HhK0jjFv9dTWz7T
- a0Gd/C3BxqceA01Uc4O2770E4SLjmZhvci2CSnO17G01/SggnjOcRxuwMLBPSsvZ50UA2ejhT4W
- K0FmExSB5zCEZSA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=14449; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=pDD38k0SIxrSHiG/SWcjxn+yqzh3OgAiTIc+fdsRAf4=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBoZU/EIoCTJpyZwX6o6uh8j8f3tw/5Hji6gO2mW
+ qz2zRxtE3+JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCaGVPxAAKCRDm/A8cN/La
+ heAPD/9ILZWvS/2NA5AtwkX1v0mhNe75Qhho2KElCMyT2hwtHEyEaLz0WZkib/9kDxJzJbzdEph
+ MB4uQ9mXSwXeL03+xSXvLNqOUfsc9B3OUrinKTP9JRRdRyLX8QRH2yyR5dsWX3RWOhuoceDPJmq
+ xUOuXXp6kiRBMusEs4ItltSPnaaXWPyMEt6AV1uWqJSfvGUTcAE21RA0DcTkYl1n5EBEN6rDPHw
+ zgDwKJ39jh6myL6TOLuUM/IMB3RIoWZqawQvMl7kJ7zcdIydNqekuUPLRVs0+kVs9+VmknIkx0f
+ VrV9MWxVDYtT01PmA6c1nwhB1Ztc7H2URCWWxVAMxIIKO2HzB66kshGFU1oXG55bRJO/SBvvwfh
+ L0RcAP+rnB0QGZDAKz/TDwip0s+fKUeIIvaX5NwKujb7V5fTpS0mEHwCDFNX/irjoPNWItl149H
+ Km/erAZNY5WTYU1ipMIUS3bj8xg5ivl+LJ28N4MOjWOChOEAOS7z1kDlbBEJHH+j1xEfoGayrp8
+ 1U9GNQcvmDOS2O9RCu+y6kuv4p3/KGrxddYZ0X8gR5m9QTNli5d5YduZq58jm0KpT2M8gOalo53
+ H0wk11UMr6s0YXdoR+hVJVtzqbg8/LJOBJTTKpocP/sBenSy5N/wCeJKt3tyo+RqTeIpq2zgEkv
+ IO98yX/19eDyefA==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp;
  fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 
-Amlogic clock controller drivers are all doing the same thing, more or
-less. Yet, over the years, tiny (and often pointless) differences have
-emerged.
+What is being done by the Amlogic clock controller registration helper for
+EE controllers could benefit other controllers. As such, having a specific
+module for this makes little sense.
 
-This makes reviews more difficult, allows some errors to slip through and
-make it more difficult to exploit SoC commonalities, leading to code
-duplication.
-
-This change enforce, wherever possible, a consistent and predictable scheme
-when it comes to code organisation and naming, The scheme chosen is what
-was used the most already, to try and minimise the size of the ugly
-resulting diff. Here are some of the rules applied:
-- Aligning clock names, variable names and IDs.
-  - ID cannot change (used in DT)
-  - Variable names w/ SoC name prefixes
-  - Clock names w/o SoC name prefixes, except pclks for historic reasons
-- Composite clock systematic naming : mux: X_sel, div:X_div, gate:X
-- Parent table systematically named with the same name as the clock and
-  a '_parents' suffix
-- Group various tables next to the related clock
-- etc ...
-
-Doing so removes what would otherwise show up as unrelated diff in
-following changes. It will allow to introduce common definitions for
-peripheral clocks, probe helpers, composite clocks, etc ... making further
-review and maintenance easier.
+Move the helper function to clkc-utils and rename it to describe what it
+does, registering syscon based controller, instead of what it serves.
 
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/meson/meson8-ddr.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ drivers/clk/meson/Kconfig            | 13 +++-----
+ drivers/clk/meson/Makefile           |  1 -
+ drivers/clk/meson/axg.c              |  6 ++--
+ drivers/clk/meson/g12a.c             | 28 ++++++++---------
+ drivers/clk/meson/gxbb.c             |  8 ++---
+ drivers/clk/meson/meson-clkc-utils.c | 50 +++++++++++++++++++++++++++++-
+ drivers/clk/meson/meson-clkc-utils.h | 10 ++++++
+ drivers/clk/meson/meson-eeclk.c      | 60 ------------------------------------
+ drivers/clk/meson/meson-eeclk.h      | 24 ---------------
+ 9 files changed, 85 insertions(+), 115 deletions(-)
 
-diff --git a/drivers/clk/meson/meson8-ddr.c b/drivers/clk/meson/meson8-ddr.c
-index 1975fc3987e2cb28823ffd69a5e2aa7b33f4853e..6a9efde9b570d8a2609c118d7d38334a3b4a5dcc 100644
---- a/drivers/clk/meson/meson8-ddr.c
-+++ b/drivers/clk/meson/meson8-ddr.c
-@@ -12,6 +12,7 @@
+diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+index 7197d23543b8bb8a9020cde316170b50bc359a6c..71481607a6d55d14898f9ecca68f004ccc6f6231 100644
+--- a/drivers/clk/meson/Kconfig
++++ b/drivers/clk/meson/Kconfig
+@@ -36,6 +36,8 @@ config COMMON_CLK_MESON_VCLK
+ 	select COMMON_CLK_MESON_REGMAP
  
+ config COMMON_CLK_MESON_CLKC_UTILS
++	select REGMAP
++	select MFD_SYSCON
+ 	tristate
+ 
+ config COMMON_CLK_MESON_AO_CLKC
+@@ -44,11 +46,6 @@ config COMMON_CLK_MESON_AO_CLKC
+ 	select COMMON_CLK_MESON_CLKC_UTILS
+ 	select RESET_CONTROLLER
+ 
+-config COMMON_CLK_MESON_EE_CLKC
+-	tristate
+-	select COMMON_CLK_MESON_REGMAP
+-	select COMMON_CLK_MESON_CLKC_UTILS
+-
+ config COMMON_CLK_MESON_CPU_DYNDIV
+ 	tristate
+ 	select COMMON_CLK_MESON_REGMAP
+@@ -73,12 +70,12 @@ config COMMON_CLK_GXBB
+ 	depends on ARM64
+ 	default ARCH_MESON
+ 	select COMMON_CLK_MESON_REGMAP
++	select COMMON_CLK_MESON_CLKC_UTILS
+ 	select COMMON_CLK_MESON_DUALDIV
+ 	select COMMON_CLK_MESON_VID_PLL_DIV
+ 	select COMMON_CLK_MESON_MPLL
+ 	select COMMON_CLK_MESON_PLL
+ 	select COMMON_CLK_MESON_AO_CLKC
+-	select COMMON_CLK_MESON_EE_CLKC
+ 	select MFD_SYSCON
+ 	help
+ 	  Support for the clock controller on AmLogic S905 devices, aka gxbb.
+@@ -89,11 +86,11 @@ config COMMON_CLK_AXG
+ 	depends on ARM64
+ 	default ARCH_MESON
+ 	select COMMON_CLK_MESON_REGMAP
++	select COMMON_CLK_MESON_CLKC_UTILS
+ 	select COMMON_CLK_MESON_DUALDIV
+ 	select COMMON_CLK_MESON_MPLL
+ 	select COMMON_CLK_MESON_PLL
+ 	select COMMON_CLK_MESON_AO_CLKC
+-	select COMMON_CLK_MESON_EE_CLKC
+ 	select MFD_SYSCON
+ 	help
+ 	  Support for the clock controller on AmLogic A113D devices, aka axg.
+@@ -167,11 +164,11 @@ config COMMON_CLK_G12A
+ 	depends on ARM64
+ 	default ARCH_MESON
+ 	select COMMON_CLK_MESON_REGMAP
++	select COMMON_CLK_MESON_CLKC_UTILS
+ 	select COMMON_CLK_MESON_DUALDIV
+ 	select COMMON_CLK_MESON_MPLL
+ 	select COMMON_CLK_MESON_PLL
+ 	select COMMON_CLK_MESON_AO_CLKC
+-	select COMMON_CLK_MESON_EE_CLKC
+ 	select COMMON_CLK_MESON_CPU_DYNDIV
+ 	select COMMON_CLK_MESON_VID_PLL_DIV
+ 	select COMMON_CLK_MESON_VCLK
+diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+index bc56a47931c1d27db7dde72b73d9842c93e74f62..c6998e752c683ec9d1736a6811b1cfd71559b289 100644
+--- a/drivers/clk/meson/Makefile
++++ b/drivers/clk/meson/Makefile
+@@ -5,7 +5,6 @@ obj-$(CONFIG_COMMON_CLK_MESON_CLKC_UTILS) += meson-clkc-utils.o
+ obj-$(CONFIG_COMMON_CLK_MESON_AO_CLKC) += meson-aoclk.o
+ obj-$(CONFIG_COMMON_CLK_MESON_CPU_DYNDIV) += clk-cpu-dyndiv.o
+ obj-$(CONFIG_COMMON_CLK_MESON_DUALDIV) += clk-dualdiv.o
+-obj-$(CONFIG_COMMON_CLK_MESON_EE_CLKC) += meson-eeclk.o
+ obj-$(CONFIG_COMMON_CLK_MESON_MPLL) += clk-mpll.o
+ obj-$(CONFIG_COMMON_CLK_MESON_PHASE) += clk-phase.o
+ obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
+diff --git a/drivers/clk/meson/axg.c b/drivers/clk/meson/axg.c
+index 3839dfe9c7c540c2aec731be84e4e6520264c525..675f051ea5241b0f51e54a238470e4fe947e5ba5 100644
+--- a/drivers/clk/meson/axg.c
++++ b/drivers/clk/meson/axg.c
+@@ -18,7 +18,7 @@
  #include "clk-regmap.h"
  #include "clk-pll.h"
+ #include "clk-mpll.h"
+-#include "meson-eeclk.h"
 +#include "meson-clkc-utils.h"
  
- #define AM_DDR_PLL_CNTL			0x00
- #define AM_DDR_PLL_CNTL1		0x04
-@@ -77,15 +78,17 @@ static struct clk_regmap meson8_ddr_pll = {
+ #include <dt-bindings/clock/axg-clkc.h>
+ 
+@@ -2110,7 +2110,7 @@ static struct clk_hw *axg_hw_clks[] = {
+ 	[CLKID_VDIN_MEAS]		= &axg_vdin_meas.hw,
+ };
+ 
+-static const struct meson_eeclkc_data axg_clkc_data = {
++static const struct meson_clkc_data axg_clkc_data = {
+ 	.hw_clks = {
+ 		.hws = axg_hw_clks,
+ 		.num = ARRAY_SIZE(axg_hw_clks),
+@@ -2124,7 +2124,7 @@ static const struct of_device_id axg_clkc_match_table[] = {
+ MODULE_DEVICE_TABLE(of, axg_clkc_match_table);
+ 
+ static struct platform_driver axg_clkc_driver = {
+-	.probe		= meson_eeclkc_probe,
++	.probe		= meson_clkc_syscon_probe,
+ 	.driver		= {
+ 		.name	= "axg-clkc",
+ 		.of_match_table = axg_clkc_match_table,
+diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+index 9de0531821a8f0297273189b44a81024d8bf9093..cdaaa165a0ff1f3b4d5250a96428c54cc3e37381 100644
+--- a/drivers/clk/meson/g12a.c
++++ b/drivers/clk/meson/g12a.c
+@@ -23,7 +23,7 @@
+ #include "clk-cpu-dyndiv.h"
+ #include "vid-pll-div.h"
+ #include "vclk.h"
+-#include "meson-eeclk.h"
++#include "meson-clkc-utils.h"
+ 
+ #include <dt-bindings/clock/g12a-clkc.h>
+ 
+@@ -5360,26 +5360,26 @@ static int g12a_dvfs_setup(struct platform_device *pdev)
+ }
+ 
+ struct g12a_clkc_data {
+-	const struct meson_eeclkc_data eeclkc_data;
++	const struct meson_clkc_data clkc_data;
+ 	int (*dvfs_setup)(struct platform_device *pdev);
+ };
+ 
+ static int g12a_clkc_probe(struct platform_device *pdev)
+ {
+-	const struct meson_eeclkc_data *eeclkc_data;
++	const struct meson_clkc_data *clkc_data;
+ 	const struct g12a_clkc_data *g12a_data;
+ 	int ret;
+ 
+-	eeclkc_data = of_device_get_match_data(&pdev->dev);
+-	if (!eeclkc_data)
++	clkc_data = of_device_get_match_data(&pdev->dev);
++	if (!clkc_data)
+ 		return -EINVAL;
+ 
+-	ret = meson_eeclkc_probe(pdev);
++	ret = meson_clkc_syscon_probe(pdev);
+ 	if (ret)
+ 		return ret;
+ 
+-	g12a_data = container_of(eeclkc_data, struct g12a_clkc_data,
+-				 eeclkc_data);
++	g12a_data = container_of(clkc_data, struct g12a_clkc_data,
++				 clkc_data);
+ 
+ 	if (g12a_data->dvfs_setup)
+ 		return g12a_data->dvfs_setup(pdev);
+@@ -5388,7 +5388,7 @@ static int g12a_clkc_probe(struct platform_device *pdev)
+ }
+ 
+ static const struct g12a_clkc_data g12a_clkc_data = {
+-	.eeclkc_data = {
++	.clkc_data = {
+ 		.hw_clks = {
+ 			.hws = g12a_hw_clks,
+ 			.num = ARRAY_SIZE(g12a_hw_clks),
+@@ -5400,7 +5400,7 @@ static const struct g12a_clkc_data g12a_clkc_data = {
+ };
+ 
+ static const struct g12a_clkc_data g12b_clkc_data = {
+-	.eeclkc_data = {
++	.clkc_data = {
+ 		.hw_clks = {
+ 			.hws = g12b_hw_clks,
+ 			.num = ARRAY_SIZE(g12b_hw_clks),
+@@ -5410,7 +5410,7 @@ static const struct g12a_clkc_data g12b_clkc_data = {
+ };
+ 
+ static const struct g12a_clkc_data sm1_clkc_data = {
+-	.eeclkc_data = {
++	.clkc_data = {
+ 		.hw_clks = {
+ 			.hws = sm1_hw_clks,
+ 			.num = ARRAY_SIZE(sm1_hw_clks),
+@@ -5422,15 +5422,15 @@ static const struct g12a_clkc_data sm1_clkc_data = {
+ static const struct of_device_id g12a_clkc_match_table[] = {
+ 	{
+ 		.compatible = "amlogic,g12a-clkc",
+-		.data = &g12a_clkc_data.eeclkc_data
++		.data = &g12a_clkc_data.clkc_data
+ 	},
+ 	{
+ 		.compatible = "amlogic,g12b-clkc",
+-		.data = &g12b_clkc_data.eeclkc_data
++		.data = &g12b_clkc_data.clkc_data
+ 	},
+ 	{
+ 		.compatible = "amlogic,sm1-clkc",
+-		.data = &sm1_clkc_data.eeclkc_data
++		.data = &sm1_clkc_data.clkc_data
+ 	},
+ 	{}
+ };
+diff --git a/drivers/clk/meson/gxbb.c b/drivers/clk/meson/gxbb.c
+index f969e3cf9566de5dff615d59360729d963507b36..a57cdf884ae900f8651b2cd84c5019270e684026 100644
+--- a/drivers/clk/meson/gxbb.c
++++ b/drivers/clk/meson/gxbb.c
+@@ -13,7 +13,7 @@
+ #include "clk-regmap.h"
+ #include "clk-pll.h"
+ #include "clk-mpll.h"
+-#include "meson-eeclk.h"
++#include "meson-clkc-utils.h"
+ #include "vid-pll-div.h"
+ 
+ #include <dt-bindings/clock/gxbb-clkc.h>
+@@ -3234,14 +3234,14 @@ static struct clk_hw *gxl_hw_clks[] = {
+ 	[CLKID_ACODEC]		    = &gxl_acodec.hw,
+ };
+ 
+-static const struct meson_eeclkc_data gxbb_clkc_data = {
++static const struct meson_clkc_data gxbb_clkc_data = {
+ 	.hw_clks = {
+ 		.hws = gxbb_hw_clks,
+ 		.num = ARRAY_SIZE(gxbb_hw_clks),
  	},
  };
  
--static struct clk_hw_onecell_data meson8_ddr_clk_hw_onecell_data = {
--	.hws = {
--		[DDR_CLKID_DDR_PLL_DCO]		= &meson8_ddr_pll_dco.hw,
--		[DDR_CLKID_DDR_PLL]		= &meson8_ddr_pll.hw,
--	},
--	.num = 2,
-+static struct clk_hw *meson8_ddr_hw_clks[] = {
-+	[DDR_CLKID_DDR_PLL_DCO]		= &meson8_ddr_pll_dco.hw,
-+	[DDR_CLKID_DDR_PLL]		= &meson8_ddr_pll.hw,
+-static const struct meson_eeclkc_data gxl_clkc_data = {
++static const struct meson_clkc_data gxl_clkc_data = {
+ 	.hw_clks = {
+ 		.hws = gxl_hw_clks,
+ 		.num = ARRAY_SIZE(gxl_hw_clks),
+@@ -3256,7 +3256,7 @@ static const struct of_device_id gxbb_clkc_match_table[] = {
+ MODULE_DEVICE_TABLE(of, gxbb_clkc_match_table);
+ 
+ static struct platform_driver gxbb_clkc_driver = {
+-	.probe		= meson_eeclkc_probe,
++	.probe		= meson_clkc_syscon_probe,
+ 	.driver		= {
+ 		.name	= "gxbb-clkc",
+ 		.of_match_table = gxbb_clkc_match_table,
+diff --git a/drivers/clk/meson/meson-clkc-utils.c b/drivers/clk/meson/meson-clkc-utils.c
+index 6937d1482719bda00da127381025a165907e5db6..49f562d0f203b9a7d15b5119100216564c10cb21 100644
+--- a/drivers/clk/meson/meson-clkc-utils.c
++++ b/drivers/clk/meson/meson-clkc-utils.c
+@@ -3,9 +3,13 @@
+  * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
+  */
+ 
+-#include <linux/of_device.h>
+ #include <linux/clk-provider.h>
++#include <linux/mfd/syscon.h>
+ #include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++
+ #include "meson-clkc-utils.h"
+ 
+ struct clk_hw *meson_clk_hw_get(struct of_phandle_args *clkspec, void *clk_hw_data)
+@@ -22,6 +26,50 @@ struct clk_hw *meson_clk_hw_get(struct of_phandle_args *clkspec, void *clk_hw_da
+ }
+ EXPORT_SYMBOL_NS_GPL(meson_clk_hw_get, "CLK_MESON");
+ 
++int meson_clkc_syscon_probe(struct platform_device *pdev)
++{
++	const struct meson_clkc_data *data;
++	struct device *dev = &pdev->dev;
++	struct device_node *np;
++	struct regmap *map;
++	struct clk_hw *hw;
++	int ret, i;
++
++	data = of_device_get_match_data(dev);
++	if (!data)
++		return -EINVAL;
++
++	np = of_get_parent(dev->of_node);
++	map = syscon_node_to_regmap(np);
++	of_node_put(np);
++	if (IS_ERR(map)) {
++		dev_err(dev,
++			"failed to get parent syscon regmap\n");
++		return PTR_ERR(map);
++	}
++
++	if (data->init_count)
++		regmap_multi_reg_write(map, data->init_regs, data->init_count);
++
++	for (i = 0; i < data->hw_clks.num; i++) {
++		hw = data->hw_clks.hws[i];
++
++		/* array might be sparse */
++		if (!hw)
++			continue;
++
++		ret = devm_clk_hw_register(dev, hw);
++		if (ret) {
++			dev_err(dev, "registering %s clock failed\n",
++				hw->init->name);
++			return ret;
++		}
++	}
++
++	return devm_of_clk_add_hw_provider(dev, meson_clk_hw_get, (void *)&data->hw_clks);
++}
++EXPORT_SYMBOL_NS_GPL(meson_clkc_syscon_probe, "CLK_MESON");
++
+ MODULE_DESCRIPTION("Amlogic Clock Controller Utilities");
+ MODULE_LICENSE("GPL");
+ MODULE_IMPORT_NS("CLK_MESON");
+diff --git a/drivers/clk/meson/meson-clkc-utils.h b/drivers/clk/meson/meson-clkc-utils.h
+index fe6f407289496c5c4821b7c9e5a6b6e8a45068b2..26cd47544302b28ca1a342e178956559a84b152a 100644
+--- a/drivers/clk/meson/meson-clkc-utils.h
++++ b/drivers/clk/meson/meson-clkc-utils.h
+@@ -9,6 +9,8 @@
+ #include <linux/of_device.h>
+ #include <linux/clk-provider.h>
+ 
++struct platform_device;
++
+ struct meson_clk_hw_data {
+ 	struct clk_hw	**hws;
+ 	unsigned int	num;
+@@ -16,4 +18,12 @@ struct meson_clk_hw_data {
+ 
+ struct clk_hw *meson_clk_hw_get(struct of_phandle_args *clkspec, void *clk_hw_data);
+ 
++struct meson_clkc_data {
++	const struct reg_sequence	*init_regs;
++	unsigned int			init_count;
++	struct meson_clk_hw_data	hw_clks;
 +};
 +
-+static struct meson_clk_hw_data meson8_ddr_clks = {
-+	.hws = meson8_ddr_hw_clks,
-+	.num = ARRAY_SIZE(meson8_ddr_hw_clks),
- };
- 
--static const struct regmap_config meson8_ddr_clkc_regmap_config = {
-+static const struct regmap_config meson8_ddr_regmap_cfg = {
- 	.reg_bits = 8,
- 	.val_bits = 32,
- 	.reg_stride = 4,
-@@ -104,13 +107,13 @@ static int meson8_ddr_clkc_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	regmap = devm_regmap_init_mmio(&pdev->dev, base,
--				       &meson8_ddr_clkc_regmap_config);
-+				       &meson8_ddr_regmap_cfg);
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
- 
- 	/* Register all clks */
--	for (i = 0; i < meson8_ddr_clk_hw_onecell_data.num; i++) {
--		hw = meson8_ddr_clk_hw_onecell_data.hws[i];
-+	for (i = 0; i < meson8_ddr_clks.num; i++) {
-+		hw = meson8_ddr_clks.hws[i];
- 
- 		ret = devm_clk_hw_register(&pdev->dev, hw);
- 		if (ret) {
-@@ -119,8 +122,8 @@ static int meson8_ddr_clkc_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	return devm_of_clk_add_hw_provider(&pdev->dev, of_clk_hw_onecell_get,
--					   &meson8_ddr_clk_hw_onecell_data);
-+	return devm_of_clk_add_hw_provider(&pdev->dev, meson_clk_hw_get,
-+					   &meson8_ddr_clks);
- }
- 
- static const struct of_device_id meson8_ddr_clkc_match_table[] = {
++int meson_clkc_syscon_probe(struct platform_device *pdev);
++
+ #endif
+diff --git a/drivers/clk/meson/meson-eeclk.c b/drivers/clk/meson/meson-eeclk.c
+deleted file mode 100644
+index 6236bf970d79e85b1e739c713c03f35a00c291b9..0000000000000000000000000000000000000000
+--- a/drivers/clk/meson/meson-eeclk.c
++++ /dev/null
+@@ -1,60 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright (c) 2019 BayLibre, SAS.
+- * Author: Jerome Brunet <jbrunet@baylibre.com>
+- */
+-
+-#include <linux/clk-provider.h>
+-#include <linux/of.h>
+-#include <linux/platform_device.h>
+-#include <linux/mfd/syscon.h>
+-#include <linux/regmap.h>
+-#include <linux/module.h>
+-
+-#include "clk-regmap.h"
+-#include "meson-eeclk.h"
+-
+-int meson_eeclkc_probe(struct platform_device *pdev)
+-{
+-	const struct meson_eeclkc_data *data;
+-	struct device *dev = &pdev->dev;
+-	struct device_node *np;
+-	struct regmap *map;
+-	int ret, i;
+-
+-	data = of_device_get_match_data(dev);
+-	if (!data)
+-		return -EINVAL;
+-
+-	/* Get the hhi system controller node */
+-	np = of_get_parent(dev->of_node);
+-	map = syscon_node_to_regmap(np);
+-	of_node_put(np);
+-	if (IS_ERR(map)) {
+-		dev_err(dev,
+-			"failed to get HHI regmap\n");
+-		return PTR_ERR(map);
+-	}
+-
+-	if (data->init_count)
+-		regmap_multi_reg_write(map, data->init_regs, data->init_count);
+-
+-	for (i = 0; i < data->hw_clks.num; i++) {
+-		/* array might be sparse */
+-		if (!data->hw_clks.hws[i])
+-			continue;
+-
+-		ret = devm_clk_hw_register(dev, data->hw_clks.hws[i]);
+-		if (ret) {
+-			dev_err(dev, "Clock registration failed\n");
+-			return ret;
+-		}
+-	}
+-
+-	return devm_of_clk_add_hw_provider(dev, meson_clk_hw_get, (void *)&data->hw_clks);
+-}
+-EXPORT_SYMBOL_NS_GPL(meson_eeclkc_probe, "CLK_MESON");
+-
+-MODULE_DESCRIPTION("Amlogic Main Clock Controller Helpers");
+-MODULE_LICENSE("GPL");
+-MODULE_IMPORT_NS("CLK_MESON");
+diff --git a/drivers/clk/meson/meson-eeclk.h b/drivers/clk/meson/meson-eeclk.h
+deleted file mode 100644
+index 6a81d67b46b2270315e24eb58042de8c09b37763..0000000000000000000000000000000000000000
+--- a/drivers/clk/meson/meson-eeclk.h
++++ /dev/null
+@@ -1,24 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Copyright (c) 2019 BayLibre, SAS.
+- * Author: Jerome Brunet <jbrunet@baylibre.com>
+- */
+-
+-#ifndef __MESON_CLKC_H
+-#define __MESON_CLKC_H
+-
+-#include <linux/clk-provider.h>
+-#include "clk-regmap.h"
+-#include "meson-clkc-utils.h"
+-
+-struct platform_device;
+-
+-struct meson_eeclkc_data {
+-	const struct reg_sequence	*init_regs;
+-	unsigned int			init_count;
+-	struct meson_clk_hw_data	hw_clks;
+-};
+-
+-int meson_eeclkc_probe(struct platform_device *pdev);
+-
+-#endif /* __MESON_CLKC_H */
 
 -- 
 2.47.2
