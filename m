@@ -1,62 +1,65 @@
-Return-Path: <linux-clk+bounces-24200-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24203-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F347AF9730
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 17:42:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57AB4AF975A
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 17:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF9625A457E
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 15:42:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABE933A9515
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 15:53:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FDA2D46A7;
-	Fri,  4 Jul 2025 15:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F657307480;
+	Fri,  4 Jul 2025 15:53:59 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from leonov.paulk.fr (leonov.paulk.fr [185.233.101.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C280286413;
-	Fri,  4 Jul 2025 15:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7A42F85E5;
+	Fri,  4 Jul 2025 15:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.101.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751643700; cv=none; b=cve3pf/oJuXvZ3eN2J+I6S/U9AWfRtwSdcJJnJ76CV4M9Mvnl7ZRGHRXPknld0M9PSYNeZm1C1PQiqgPPIzbrBEpP/n6IRyKPA9ujkGnzG87KafXPPIZkAXFXRWoSvHmc/0Up0TcICOpziGkuJZSmH+Ew/l0R9FGLsr9+B39eeo=
+	t=1751644439; cv=none; b=VHAIh1muq0CbX9GKPJtU9NHEzgEm2ggvYjAk1ADSprubN/4zzQ4OfuYgTuhjDmUDWGSjL8TFEtsswavW61sk5YCtLMYt/BaxfiFb80rSVwB9gMut9GenoM9BW7KiqAQNTTZSAaPq9OUAsJf350gItpY+7jKrMRoAfByk7ySID/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751643700; c=relaxed/simple;
-	bh=TPsN4jIDaCqGcxQvwW7smz2AHs80b+pwC6XHk4Ve0eQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nMKAaXHia/mLs9bZjVvg/E0UcmWOnT2kksskGqJ1+SXlu+RPaKFaWUl2OFNpRSmVQKaRZ4opoeHGZlHJ6+bsimSqyd+I+uZ69ct0RoB7ITcgkF0fYBfbi6lOD98+Kh/DMSDY/bCmSnVpPL/xv0UBEVAf4Z2aW3pR27EOvW5bUac=
+	s=arc-20240116; t=1751644439; c=relaxed/simple;
+	bh=E8Qrxe2tkVcRjYKO7kQLn2qa3sPHJLcrn2gLaWrinnE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uFTT3TbYsJZxHxfZcbosxCnLUqCOXrKGKrGj3xwXg8vGKZe5umVZ+IvkOovB6cK6e8WZLyu29vbXWHTC8kXphwm/CUBlIbSSjnj7E+ax1tygmxJpVdF5RqmpoqeV2nORFxrdxbsCq5wvWy79+bgS7zIOehL4gxTrEptK1XYH5Vw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io; spf=pass smtp.mailfrom=sys-base.io; arc=none smtp.client-ip=185.233.101.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sys-base.io
 Received: from laika.paulk.fr (12.234.24.109.rev.sfr.net [109.24.234.12])
-	by leonov.paulk.fr (Postfix) with ESMTPS id 558C51F00036;
-	Fri,  4 Jul 2025 15:41:34 +0000 (UTC)
+	by leonov.paulk.fr (Postfix) with ESMTPS id 62C8C1F0004D;
+	Fri,  4 Jul 2025 15:53:53 +0000 (UTC)
 Received: by laika.paulk.fr (Postfix, from userid 65534)
-	id CACBEACA649; Fri,  4 Jul 2025 15:41:29 +0000 (UTC)
+	id 77123ACA64C; Fri,  4 Jul 2025 15:47:18 +0000 (UTC)
 X-Spam-Level: *
 Received: from localhost.localdomain (unknown [192.168.1.64])
-	by laika.paulk.fr (Postfix) with ESMTP id 8BD7DACA63A;
-	Fri,  4 Jul 2025 15:40:12 +0000 (UTC)
+	by laika.paulk.fr (Postfix) with ESMTP id 630A6ACA64C;
+	Fri,  4 Jul 2025 15:46:33 +0000 (UTC)
 From: Paul Kocialkowski <paulk@sys-base.io>
-To: linux-clk@vger.kernel.org,
+To: linux-media@vger.kernel.org,
+	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org
+Cc: Yong Deng <yong.deng@magewell.com>,
+	Paul Kocialkowski <paulk@sys-base.io>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Chen-Yu Tsai <wens@csie.org>,
 	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Samuel Holland <samuel@sholland.org>,
-	Icenowy Zheng <icenowy@aosc.xyz>,
-	Maxime Ripard <mripard@kernel.org>,
-	Paul Kocialkowski <paulk@sys-base.io>
-Subject: [PATCH 2/2] clk: sunxi-ng: v3s: Assign the de and tcon clocks to the video pll
-Date: Fri,  4 Jul 2025 17:40:08 +0200
-Message-ID: <20250704154008.3463257-2-paulk@sys-base.io>
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH v8 0/9] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / Platform Support
+Date: Fri,  4 Jul 2025 17:46:17 +0200
+Message-ID: <20250704154628.3468793-1-paulk@sys-base.io>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250704154008.3463257-1-paulk@sys-base.io>
-References: <20250704154008.3463257-1-paulk@sys-base.io>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -65,69 +68,72 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It appears (based on experimentation) that both the de and tcon clocks
-need to have the same parent for the two units to work together.
+This series adds platform support for the V3s/V3/S3 MIPI CSI-2 and ISP units
+as well the as A83T MIPI CSI-2 unit in the respective device-trees.
+Overlays for the BananaPi M3 cameras are also provided as actual users of the
+camera pipeline on A83T.
 
-Assign them both to the video pll by manually clearing the parent
-selection bits (effectively setting index 0) and marking the clocks
-with the CLK_SET_RATE_NO_REPARENT flag, which ensures that they will
-never use a different parent.
+The corresponding drivers and dt bindings were merged a long time ago but this
+series was never actually picked up. It seems more than ready to be merged!
 
-The video pll is also a possible parent for the camera subsystem,
-but it can use the dedicated isp pll if needed so there should be
-no negative side-effect due to this change.
+Changes since v7:
+- Added collected review tags;
+- Added interconnect properties to bindings;
+- Added compatible for device-tree overlays;
+- Moved mclk pin to sensor node in bpi-m3 overlays;
+- Removed duplicated assigned-clocks in bpi-m3 overlays.
 
-Note that ccu_mux_helper_set_parent cannot be used at this stage as
-it requires the clock driver to be initialized and this configuration
-is best done before the clock driver is available to consumers.
+Changes since v6:
+- Rebased on top of the latest media tree, renamed dts to dtso for overlays.
 
-Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
----
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Changes since v5:
+- Added BananaPi M3 camera sensor support as device-tree overlays;
+- Cleaned-up OV8865 regulator definitions;
+- Always declared the internal links between CSI and MIPI CSI-2 on A83T
+  in device-tree.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-index df345a620d8d..05595ac51b76 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-@@ -347,11 +347,13 @@ static SUNXI_CCU_GATE(dram_ohci_clk,	"dram-ohci",	"dram",
- 
- static const char * const de_parents[] = { "pll-video", "pll-periph0" };
- static SUNXI_CCU_M_WITH_MUX_GATE(de_clk, "de", de_parents,
--				 0x104, 0, 4, 24, 3, BIT(31), 0);
-+				 0x104, 0, 4, 24, 3, BIT(31),
-+				 CLK_SET_RATE_NO_REPARENT);
- 
- static const char * const tcon_parents[] = { "pll-video", "pll-periph0" };
- static SUNXI_CCU_M_WITH_MUX_GATE(tcon_clk, "tcon", tcon_parents,
--				 0x118, 0, 4, 24, 3, BIT(31), 0);
-+				 0x118, 0, 4, 24, 3, BIT(31),
-+				 CLK_SET_RATE_NO_REPARENT);
- 
- static SUNXI_CCU_GATE(csi_misc_clk,	"csi-misc",	"osc24M",
- 		      0x130, BIT(31), 0);
-@@ -753,6 +755,21 @@ static int sun8i_v3s_ccu_probe(struct platform_device *pdev)
- 	val &= ~GENMASK(19, 16);
- 	writel(val, reg + SUN8I_V3S_PLL_AUDIO_REG);
- 
-+	/*
-+	 * Assign the DE and TCON clock to the video PLL. Both clocks need to
-+	 * have the same parent for the units to work together.
-+	 */
-+
-+	val = readl(reg + de_clk.common.reg);
-+	val &= ~GENMASK(de_clk.mux.shift + de_clk.mux.width - 1,
-+			de_clk.mux.shift);
-+	writel(val, reg + de_clk.common.reg);
-+
-+	val = readl(reg + tcon_clk.common.reg);
-+	val &= ~GENMASK(tcon_clk.mux.shift + tcon_clk.mux.width - 1,
-+			tcon_clk.mux.shift);
-+	writel(val, reg + tcon_clk.common.reg);
-+
- 	return devm_sunxi_ccu_probe(&pdev->dev, reg, desc);
- }
- 
+Changes since v4:
+- Removed mbus bindings patch: an equivalent change was merged;
+- Added collected tags;
+- Rebased on latest media tree.
+
+Changes since v3:
+- Reordered v3s mbus compatible in binding;
+- Added collected tag;
+- Removed rejected interconnects fix.
+
+Changes since all-in-one v2:
+- Corrected mbus index used for the interconnects;
+- Used extended mbus binding and exported the DRAM clock for that;
+- Reworked the description of the core openfirmware change to give
+  more insight about the situation.
+
+Paul Kocialkowski (9):
+  dt-bindings: media: sun6i-a31-csi: Add optional interconnect
+    properties
+  dt-bindings: media: sun6i-a31-isp: Add optional interconnect
+    properties
+  clk: sunxi-ng: v3s: Export MBUS and DRAM clocks to the public header
+  ARM: dts: sun8i: v3s: Add mbus node to represent the interconnect
+  ARM: dts: sun8i: v3s: Add nodes for MIPI CSI-2 support
+  ARM: dts: sun8i: v3s: Add support for the ISP
+  ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller node
+  ARM: dts: sun8i-a83t: Add BananaPi M3 OV5640 camera overlay
+  ARM: dts: sun8i-a83t: Add BananaPi M3 OV8865 camera overlay
+
+ .../media/allwinner,sun6i-a31-csi.yaml        |   6 +
+ .../media/allwinner,sun6i-a31-isp.yaml        |   6 +
+ arch/arm/boot/dts/allwinner/Makefile          |   2 +
+ .../sun8i-a83t-bananapi-m3-camera-ov5640.dtso | 117 +++++++++++++++++
+ .../sun8i-a83t-bananapi-m3-camera-ov8865.dtso | 103 +++++++++++++++
+ arch/arm/boot/dts/allwinner/sun8i-a83t.dtsi   |  43 +++++++
+ arch/arm/boot/dts/allwinner/sun8i-v3s.dtsi    | 121 ++++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun8i-v3s.h          |   4 -
+ include/dt-bindings/clock/sun8i-v3s-ccu.h     |   4 +-
+ 9 files changed, 400 insertions(+), 6 deletions(-)
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-a83t-bananapi-m3-camera-ov5640.dtso
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-a83t-bananapi-m3-camera-ov8865.dtso
+
 -- 
 2.49.0
 
