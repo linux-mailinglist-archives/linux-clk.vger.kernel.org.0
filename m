@@ -1,214 +1,128 @@
-Return-Path: <linux-clk+bounces-24201-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24205-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B76AFAF9751
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 17:53:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F947AF9761
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 17:55:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 542441BC7C0C
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 15:53:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10FBA5A4EFA
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 15:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BB52BE7A0;
-	Fri,  4 Jul 2025 15:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05CB3074BD;
+	Fri,  4 Jul 2025 15:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="Zt5tu1Dj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from leonov.paulk.fr (leonov.paulk.fr [185.233.101.22])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BB0221729;
-	Fri,  4 Jul 2025 15:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.101.22
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751644404; cv=none; b=tqdOrJLZiqvQFZDhXUPVfVbuV1L1mVTsZWhjLQrle6M8Mz60Irg+zjAg9rYdGi+WY2Fths7UALXS3jBK15P4oNwkZQ1ZKmv7Hr1UVP9XQhfeLoSNzzndQIuHjKloBe/9ez3Exft1hE6snF7JiO+B46eUXWrf3z4W/DmEPYPNIdw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751644404; c=relaxed/simple;
-	bh=Ac2dVxUn5PnUUyJh9iw8W5B9z4asDbD9T/zEkCzrtp8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tRYJFgObsD5VaV6V+QpKIaBBSlUK4cy/DgxhHyEOsjpeqK0/ON5owYyWQ5y5acZyXF/9OQW9bKtCAuUYD4u/dyugrOsdgwit+cUV6j42o++jE0rlTrIijs5dsA+9E2gVPniycB3evFDVKPJyk58xvo0jdLx10p8Ui8G7n5DREJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io; spf=pass smtp.mailfrom=sys-base.io; arc=none smtp.client-ip=185.233.101.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sys-base.io
-Received: from laika.paulk.fr (12.234.24.109.rev.sfr.net [109.24.234.12])
-	by leonov.paulk.fr (Postfix) with ESMTPS id B066D1F00036;
-	Fri,  4 Jul 2025 15:53:20 +0000 (UTC)
-Received: by laika.paulk.fr (Postfix, from userid 65534)
-	id 3925BACA6CB; Fri,  4 Jul 2025 15:53:20 +0000 (UTC)
-X-Spam-Level: *
-Received: from localhost.localdomain (unknown [192.168.1.64])
-	by laika.paulk.fr (Postfix) with ESMTP id 15CC7ACA65E;
-	Fri,  4 Jul 2025 15:46:50 +0000 (UTC)
-From: Paul Kocialkowski <paulk@sys-base.io>
-To: linux-media@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org
-Cc: Yong Deng <yong.deng@magewell.com>,
-	Paul Kocialkowski <paulk@sys-base.io>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v8 9/9] ARM: dts: sun8i-a83t: Add BananaPi M3 OV8865 camera overlay
-Date: Fri,  4 Jul 2025 17:46:26 +0200
-Message-ID: <20250704154628.3468793-10-paulk@sys-base.io>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250704154628.3468793-1-paulk@sys-base.io>
-References: <20250704154628.3468793-1-paulk@sys-base.io>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5984501A;
+	Fri,  4 Jul 2025 15:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751644527; cv=pass; b=GacZsE+iBH0C6vslCxGMD44sLtFGsk9kzZV043DDuEADYK0Y+GhAzWXKvvJTk66YY05t2s8dlAc3hIucuAY9+qAiO0K3WaKvpZGQpVj2z7cEqY8XulJ/L2tS5jUkdvKKnDzhd6+czJ5JA8KmbUFUVSwuWrgmm8n2UsCX0E/bQiA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751644527; c=relaxed/simple;
+	bh=y9shy4WABjMXApP03CgNPKXgv/nf2wQ3YGULRdAM/EE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OrSWXI8vvIC+9fp8eXqgq3d+8lflmpeA1H1UYL5yrDKtg5XHfXv+geeDPk1e5B5DkrjikEJqmXA8Jrymdsa4P4fG+9tJhPl0hr+2ZZmQa2eIAHV889s0QbzW7TQ3g19u3rAPNr+M55x2qcKqHxuKFdT50eukE/WEiSpuz6ZBlvQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=Zt5tu1Dj; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
+ARC-Seal: i=1; a=rsa-sha256; t=1751644499; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=cdeygm4lRsrhT0J7mAzrQZsYAWPAovjxuALljDuK/7lWBABchyzXX/2qx+MkA8iPWWxRbq3TjLKiKCZQGGAVN4iwOgtjtYDF++UbporfluQbBytBqFp1L3L2QazuqoxB8LoPZsADrtynUIsyqaCsSaoRctloMrJiPptzlRLOLWY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1751644499; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=y9shy4WABjMXApP03CgNPKXgv/nf2wQ3YGULRdAM/EE=; 
+	b=F3i2rZPeDCiu+XbCS6U9D16xSAA/y4R8tEzJESWRI5+htDWmZJWjEpbGcjHuvA+ZlBCiJVuldRJ0gcnXCHN2oe28eibZcwGqOBm9rlgWQe9d4z9dERKa96p30+yQJkzUwTq6oiKgvta6mXd3vbWBiR/4SQZOetCdyl6aRkOXrGE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=icenowy.me;
+	spf=pass  smtp.mailfrom=uwu@icenowy.me;
+	dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751644499;
+	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+	bh=y9shy4WABjMXApP03CgNPKXgv/nf2wQ3YGULRdAM/EE=;
+	b=Zt5tu1Djn9hVKTEtlodlT6YUFACQSNWam8KJRf2/fWGO/g5Rvzy0w6pRSuML46No
+	PNiGQatgAoLulpnxC96K4qPQm0aKgCFKbBWyUZMdXl+nz/rmGY0UDqMePXl24IDUtn+
+	mBXNIB2FcAVPzgmjXUjz0XbZUTPjutwvaD9Kk73l77P6iseCbEpS85/Uvp7qhWq8+Sq
+	x31HsLmnZ6Muj6VGiX1NkOivfAYEiEOE2cx27Gyg64MocBs7o9R00zjnIy7Mf0+y3/t
+	OwaFzGKk++T9s/rszaoaRfJ3LddGQZE9dZw8e1mNBE3aNdolCFLf+z/gDe/WYSYcmmT
+	sfkIZu4ATg==
+Received: by mx.zohomail.com with SMTPS id 1751644497723754.7368487298465;
+	Fri, 4 Jul 2025 08:54:57 -0700 (PDT)
+Message-ID: <4cd84b9e2227c9225d977107eb05b9c3813b8846.camel@icenowy.me>
+Subject: Re: [PATCH 1/2] clk: sunxi-ng: v3s: Fix de clock definition
+From: Icenowy Zheng <uwu@icenowy.me>
+To: Paul Kocialkowski <paulk@sys-base.io>, linux-clk@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>,  Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
+ <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Icenowy
+ Zheng <icenowy@aosc.xyz>, Maxime Ripard <mripard@kernel.org>
+Date: Fri, 04 Jul 2025 23:54:50 +0800
+In-Reply-To: <20250704154008.3463257-1-paulk@sys-base.io>
+References: <20250704154008.3463257-1-paulk@sys-base.io>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+=E5=9C=A8 2025-07-04=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 17:40 +0200=EF=BC=
+=8CPaul Kocialkowski=E5=86=99=E9=81=93=EF=BC=9A
+> The de clock is marked with CLK_SET_RATE_PARENT, which is really not
+> necessary (as confirmed from experimentation) and significantly
+> restricts flexibility for other clocks using the same parent.
 
-Add an overlay supporting the OV8865 from the BananaPi Camera v3
-peripheral board. The board has two sensors (OV5640 and OV8865)
-which cannot be supported in parallel as they share the same reset
-pin and the kernel currently has no support for this case.
+With it not setting parent, is arbitary pixel clocks still possible?
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
----
- arch/arm/boot/dts/allwinner/Makefile          |   1 +
- .../sun8i-a83t-bananapi-m3-camera-ov8865.dtso | 103 ++++++++++++++++++
- 2 files changed, 104 insertions(+)
- create mode 100644 arch/arm/boot/dts/allwinner/sun8i-a83t-bananapi-m3-camera-ov8865.dtso
-
-diff --git a/arch/arm/boot/dts/allwinner/Makefile b/arch/arm/boot/dts/allwinner/Makefile
-index de13da013732..6bfa51266445 100644
---- a/arch/arm/boot/dts/allwinner/Makefile
-+++ b/arch/arm/boot/dts/allwinner/Makefile
-@@ -220,6 +220,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
- 	sun8i-a83t-allwinner-h8homlet-v2.dtb \
- 	sun8i-a83t-bananapi-m3.dtb \
- 	sun8i-a83t-bananapi-m3-camera-ov5640.dtbo \
-+	sun8i-a83t-bananapi-m3-camera-ov8865.dtbo \
- 	sun8i-a83t-cubietruck-plus.dtb \
- 	sun8i-a83t-tbs-a711.dtb \
- 	sun8i-h2-plus-bananapi-m2-zero.dtb \
-diff --git a/arch/arm/boot/dts/allwinner/sun8i-a83t-bananapi-m3-camera-ov8865.dtso b/arch/arm/boot/dts/allwinner/sun8i-a83t-bananapi-m3-camera-ov8865.dtso
-new file mode 100644
-index 000000000000..50f965741f4a
---- /dev/null
-+++ b/arch/arm/boot/dts/allwinner/sun8i-a83t-bananapi-m3-camera-ov8865.dtso
-@@ -0,0 +1,103 @@
-+// SPDX-License-Identifier: GPL-2.0 OR X11
-+/*
-+ * Copyright 2022 Bootlin
-+ * Author: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-+ * Author: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/clock/sun8i-a83t-ccu.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+&{/} {
-+	compatible = "sinovoip,bpi-m3";
-+
-+	/*
-+	 * These regulators actually have DLDO4 tied to their EN pin, which is
-+	 * described as input supply here for lack of a better representation.
-+	 * Their actual supply is PS, which is always-on.
-+	 */
-+
-+	ov8865_avdd: ov8865-avdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ov8865-avdd";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_dldo4>;
-+	};
-+
-+	ov8865_dovdd: ov8865-dovdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ov8865-dovdd";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		vin-supply = <&reg_dldo4>;
-+	};
-+
-+	ov8865_dvdd: ov8865-dvdd {
-+		compatible = "regulator-fixed";
-+		regulator-name = "ov8865-dvdd";
-+		regulator-min-microvolt = <1200000>;
-+		regulator-max-microvolt = <1200000>;
-+		vin-supply = <&reg_dldo4>;
-+	};
-+};
-+
-+&csi {
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pe_pins>;
-+	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	ov8865: camera@36 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&csi_mclk_pin>;
-+
-+		compatible = "ovti,ov8865";
-+		reg = <0x36>;
-+
-+		clocks = <&ccu CLK_CSI_MCLK>;
-+		assigned-clocks = <&ccu CLK_CSI_MCLK>;
-+		assigned-clock-parents = <&osc24M>;
-+		assigned-clock-rates = <24000000>;
-+
-+		avdd-supply = <&ov8865_avdd>;
-+		dovdd-supply = <&ov8865_dovdd>;
-+		dvdd-supply = <&ov8865_dvdd>;
-+
-+		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-+		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-+
-+		port {
-+			ov8865_out_mipi_csi2: endpoint {
-+				remote-endpoint = <&mipi_csi2_in_ov8865>;
-+				link-frequencies = /bits/ 64 <360000000>;
-+				data-lanes = <1 2 3 4>;
-+			};
-+		};
-+	};
-+};
-+
-+&mipi_csi2 {
-+	status = "okay";
-+};
-+
-+&mipi_csi2_in {
-+	mipi_csi2_in_ov8865: endpoint {
-+		remote-endpoint = <&ov8865_out_mipi_csi2>;
-+		data-lanes = <1 2 3 4>;
-+	};
-+};
-+
-+&reg_dldo4 {
-+	regulator-min-microvolt = <2800000>;
-+	regulator-max-microvolt = <2800000>;
-+};
--- 
-2.49.0
+>=20
+> In addition the source selection (parent) field is marked as using
+> 2 bits, when it the documentation reports that it uses 3.
+>=20
+> Fix both issues in the de clock definition.
+>=20
+> Fixes: d0f11d14b0bc ("clk: sunxi-ng: add support for V3s CCU")
+> Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
+> ---
+> =C2=A0drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 3 +--
+> =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
+> b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
+> index 52e4369664c5..df345a620d8d 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
+> @@ -347,8 +347,7 @@ static
+> SUNXI_CCU_GATE(dram_ohci_clk,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0"dram-ohci",=C2=A0=C2=A0=C2=A0=C2=A0"dram",
+> =C2=A0
+> =C2=A0static const char * const de_parents[] =3D { "pll-video", "pll-
+> periph0" };
+> =C2=A0static SUNXI_CCU_M_WITH_MUX_GATE(de_clk, "de", de_parents,
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x104, 0, 4, 24, 2, BIT(31),
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 CLK_SET_RATE_PARENT);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x104, 0, 4, 24, 3, BIT(31), 0);
+> =C2=A0
+> =C2=A0static const char * const tcon_parents[] =3D { "pll-video", "pll-
+> periph0" };
+> =C2=A0static SUNXI_CCU_M_WITH_MUX_GATE(tcon_clk, "tcon", tcon_parents,
 
 
