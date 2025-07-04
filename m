@@ -1,128 +1,188 @@
-Return-Path: <linux-clk+bounces-24205-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24212-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F947AF9761
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 17:55:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE585AF97A5
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 18:14:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10FBA5A4EFA
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 15:55:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 406871CA4113
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Jul 2025 16:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05CB3074BD;
-	Fri,  4 Jul 2025 15:55:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDF332625B;
+	Fri,  4 Jul 2025 16:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="Zt5tu1Dj"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="PaB3f47z"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5984501A;
-	Fri,  4 Jul 2025 15:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751644527; cv=pass; b=GacZsE+iBH0C6vslCxGMD44sLtFGsk9kzZV043DDuEADYK0Y+GhAzWXKvvJTk66YY05t2s8dlAc3hIucuAY9+qAiO0K3WaKvpZGQpVj2z7cEqY8XulJ/L2tS5jUkdvKKnDzhd6+czJ5JA8KmbUFUVSwuWrgmm8n2UsCX0E/bQiA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751644527; c=relaxed/simple;
-	bh=y9shy4WABjMXApP03CgNPKXgv/nf2wQ3YGULRdAM/EE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OrSWXI8vvIC+9fp8eXqgq3d+8lflmpeA1H1UYL5yrDKtg5XHfXv+geeDPk1e5B5DkrjikEJqmXA8Jrymdsa4P4fG+9tJhPl0hr+2ZZmQa2eIAHV889s0QbzW7TQ3g19u3rAPNr+M55x2qcKqHxuKFdT50eukE/WEiSpuz6ZBlvQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=Zt5tu1Dj; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
-ARC-Seal: i=1; a=rsa-sha256; t=1751644499; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=cdeygm4lRsrhT0J7mAzrQZsYAWPAovjxuALljDuK/7lWBABchyzXX/2qx+MkA8iPWWxRbq3TjLKiKCZQGGAVN4iwOgtjtYDF++UbporfluQbBytBqFp1L3L2QazuqoxB8LoPZsADrtynUIsyqaCsSaoRctloMrJiPptzlRLOLWY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1751644499; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=y9shy4WABjMXApP03CgNPKXgv/nf2wQ3YGULRdAM/EE=; 
-	b=F3i2rZPeDCiu+XbCS6U9D16xSAA/y4R8tEzJESWRI5+htDWmZJWjEpbGcjHuvA+ZlBCiJVuldRJ0gcnXCHN2oe28eibZcwGqOBm9rlgWQe9d4z9dERKa96p30+yQJkzUwTq6oiKgvta6mXd3vbWBiR/4SQZOetCdyl6aRkOXrGE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1751644499;
-	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=y9shy4WABjMXApP03CgNPKXgv/nf2wQ3YGULRdAM/EE=;
-	b=Zt5tu1Djn9hVKTEtlodlT6YUFACQSNWam8KJRf2/fWGO/g5Rvzy0w6pRSuML46No
-	PNiGQatgAoLulpnxC96K4qPQm0aKgCFKbBWyUZMdXl+nz/rmGY0UDqMePXl24IDUtn+
-	mBXNIB2FcAVPzgmjXUjz0XbZUTPjutwvaD9Kk73l77P6iseCbEpS85/Uvp7qhWq8+Sq
-	x31HsLmnZ6Muj6VGiX1NkOivfAYEiEOE2cx27Gyg64MocBs7o9R00zjnIy7Mf0+y3/t
-	OwaFzGKk++T9s/rszaoaRfJ3LddGQZE9dZw8e1mNBE3aNdolCFLf+z/gDe/WYSYcmmT
-	sfkIZu4ATg==
-Received: by mx.zohomail.com with SMTPS id 1751644497723754.7368487298465;
-	Fri, 4 Jul 2025 08:54:57 -0700 (PDT)
-Message-ID: <4cd84b9e2227c9225d977107eb05b9c3813b8846.camel@icenowy.me>
-Subject: Re: [PATCH 1/2] clk: sunxi-ng: v3s: Fix de clock definition
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Paul Kocialkowski <paulk@sys-base.io>, linux-clk@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>,  Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Icenowy
- Zheng <icenowy@aosc.xyz>, Maxime Ripard <mripard@kernel.org>
-Date: Fri, 04 Jul 2025 23:54:50 +0800
-In-Reply-To: <20250704154008.3463257-1-paulk@sys-base.io>
-References: <20250704154008.3463257-1-paulk@sys-base.io>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7317E0E8
+	for <linux-clk@vger.kernel.org>; Fri,  4 Jul 2025 16:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751645679; cv=none; b=r7bQ+wvfZ3CMIrrV7s5szfSebQ38khxTFwNjGsQoKEtSuW3O5U3SVeRxakWYa5BTEGsaPZdC9dWRRvdZc+T1IPNpWKIwW5g9Q01TehQmMPLOm6oWWUp5seRT8JzYGKfK0RpCzZex++3zDpTL04Lozly5eCslbeP8/hDbqx7qu+I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751645679; c=relaxed/simple;
+	bh=1yDT1jqjeSarkP/ETvqJMjt8SgFkac1TqmvFja6mNy4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GfG8Cd48g8mBk2K4U8YsGFaDGn/n3WjglYPYoz5QUpSyGWptJ/cvNW5yUZGaJaxKrySIaZa0No4HpnCxWNS0cvlF7xRTvPRh0+2hzDHMZVo6Jg5Q2dazyETPDyVd43SfNPtU+M2Dr9wsAnQOYKRgwzG6+stlL0XzJ9kwEqiVrZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=PaB3f47z; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ad56cbc7b07so186488666b.0
+        for <linux-clk@vger.kernel.org>; Fri, 04 Jul 2025 09:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1751645675; x=1752250475; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h6lG/AjsJH9S6BFCzOBiq+0c8U6DQuyEYF2+hQ6MY5k=;
+        b=PaB3f47z/EKi1DWmy68M1PUPn3pYdh8ZvL/IxOgmT8RW5Dn9lPirdKQc0hf7pXU+ZD
+         olZ+8GRYgW9SDs3jitfA7X/LFOXNYwFSCbpB20zSM63rQLEOI7usnfYrx534uDGT81Xb
+         ONqPHSXlz/0zcKQKoVlX1mAhGS6TMsqYsVlnaFTiAC+66JN/IU29XyW2nMBpyR3idmYf
+         QlUxxOyUX2WCAa+YRvhd+HiVIxreDsYjUpOhsaz1mYI4SewihqDQZbu1RrjelkIjnIkk
+         eV0PcFlk/OQ8mju1GZcufKoVl1FcdeN2w06Z+lEmZpqIn8PmBf9IHPwIaZa3dlvONIcE
+         J9bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751645675; x=1752250475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h6lG/AjsJH9S6BFCzOBiq+0c8U6DQuyEYF2+hQ6MY5k=;
+        b=w8Ul25589CK3UXBksC9dpwmxKTHBoWp9qiUNMwxxRCIKt/7T8HF2YinUgsMCsBeSB0
+         J2JvAIKrV1X0xAh5mZ32bqHmNkSlVSvJYTRnnRA/2iX1P5DM16w26fRjsJztzyIRPi9g
+         4JJw+9s9ijjkVE07dFbntseFW3hB57OKCFL+vfvI3zo8+1hszpj6CCIt5yW2+4Lnu9RS
+         SZX2e2a6PjQL66uXhodxwZWqHfGEcY+QwmjxkA/nBdpOkM+bRwmhm5UbSWFMYsi5HqlE
+         SBle6d5qYK75EhH1JI+MCKHgdDQnJwXB43HkKRBsask+6iN3YfC1vMuKrkQLgz7bo1T/
+         iwpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVkimS8tau1gVYfYcjRQ5uebkEzllmDWYZReclSM2OlZYRiGRIJwyrLFjiD7VAD67WmikUfxw9Ne30=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ4KmcYcP+1YMhZSx8SIpPL/1HAXb9RD7vgs73fk5UvKcfVBAo
+	4Y1QU4RCX/NOKJot2Ovw0Pvi8UhuYLp1aSZy9wqWgt9teAtYfKqT6dXCBTf+B/g8x/I=
+X-Gm-Gg: ASbGncto8dHErFEWNclWM8V4FtHXxDHF8dzKjOVWDIY+dBZbsz2BJ7dDixbx6I61mIe
+	YyYlrK9EH5UO37pcaAikXM85KN8coOF2j9DU5VPyxTjg1DoVuZzb605YcdgcrsNfI2nPtqOWO0A
+	fec4StPU4y8XIVWU7ZBXBCHdB6wrztb9Sljh7TB6ZtOrTg+fmrmLOMvokPYJDjlq+slni8cJvzU
+	PQuDIeE4uCLwN1SBuyEaBaxft5XDklcoNlZlLFvtlwQN/ybdahtOoU11oooEh4fDGIK4grzoZ0d
+	DnRbvLdGByOaSepEIVGIHzfjES0sjU8QUSLGreu3Qz5VspLibljGvoLZIaLst6E+qUeXxCtvnxB
+	SIfNGu5kDaGjzeAY=
+X-Google-Smtp-Source: AGHT+IEb528uiNOCOvEavhvPClvCp90Qlmh60cyGaa2Bd5e1NI48LJ+veXRwIR+jYzpAkq2kId7/kw==
+X-Received: by 2002:a17:907:9308:b0:ae3:b371:e7d3 with SMTP id a640c23a62f3a-ae3fe69333emr265030866b.22.1751645675327;
+        Fri, 04 Jul 2025 09:14:35 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.83])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f66d9215sm194703766b.2.2025.07.04.09.14.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jul 2025 09:14:34 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: bhelgaas@google.com,
+	lpieralisi@kernel.org,
+	kwilczynski@kernel.org,
+	mani@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de,
+	lizhi.hou@amd.com
+Cc: claudiu.beznea@tuxon.dev,
+	linux-pci@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v3 0/9] PCI: rzg3s-host: Add PCIe driver for Renesas RZ/G3S SoC
+Date: Fri,  4 Jul 2025 19:14:00 +0300
+Message-ID: <20250704161410.3931884-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 
-=E5=9C=A8 2025-07-04=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 17:40 +0200=EF=BC=
-=8CPaul Kocialkowski=E5=86=99=E9=81=93=EF=BC=9A
-> The de clock is marked with CLK_SET_RATE_PARENT, which is really not
-> necessary (as confirmed from experimentation) and significantly
-> restricts flexibility for other clocks using the same parent.
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-With it not setting parent, is arbitary pixel clocks still possible?
+Hi,
 
->=20
-> In addition the source selection (parent) field is marked as using
-> 2 bits, when it the documentation reports that it uses 3.
->=20
-> Fix both issues in the de clock definition.
->=20
-> Fixes: d0f11d14b0bc ("clk: sunxi-ng: add support for V3s CCU")
-> Signed-off-by: Paul Kocialkowski <paulk@sys-base.io>
-> ---
-> =C2=A0drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 3 +--
-> =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-> b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-> index 52e4369664c5..df345a620d8d 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-> +++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-> @@ -347,8 +347,7 @@ static
-> SUNXI_CCU_GATE(dram_ohci_clk,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0"dram-ohci",=C2=A0=C2=A0=C2=A0=C2=A0"dram",
-> =C2=A0
-> =C2=A0static const char * const de_parents[] =3D { "pll-video", "pll-
-> periph0" };
-> =C2=A0static SUNXI_CCU_M_WITH_MUX_GATE(de_clk, "de", de_parents,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x104, 0, 4, 24, 2, BIT(31),
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 CLK_SET_RATE_PARENT);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x104, 0, 4, 24, 3, BIT(31), 0);
-> =C2=A0
-> =C2=A0static const char * const tcon_parents[] =3D { "pll-video", "pll-
-> periph0" };
-> =C2=A0static SUNXI_CCU_M_WITH_MUX_GATE(tcon_clk, "tcon", tcon_parents,
+Series adds a PCIe driver for the Renesas RZ/G3S SoC.
+It is split as follows:
+- patch 1/9:		updates the max register offset for RZ/G3S SYSC;
+			this is necessary as the PCIe need to setup the
+			SYSC for proper functioning
+- patch 2/9:		adds clocks and resets support for the PCIe IP
+- patch 3/9:		fix the legacy interrupt request failure
+- patches 4-5/9:	add PCIe support for the RZ/G3S SoC
+- patches 6-9/9:	add device tree support and defconfig flag
+
+Please provide your feedback.
+
+Merge strategy, if any:
+- patches 1-2,6-9/9 can go through the Renesas tree
+- patches 3-5/9 can go through the PCI tree
+
+Thank you,
+Claudiu Beznea
+
+Changes in v3:
+- added patch "PCI: of_property: Restore the arguments of the next level parent"
+  to fix the legacy interrupt request
+- addressed review comments
+- per-patch changes are described in each individual patch
+
+Changes in v2:
+- dropped "of/irq: Export of_irq_count()" as it is not needed anymore
+  in this version
+- added "arm64: dts: renesas: rzg3s-smarc-som: Update dma-ranges for PCIe"
+  to reflect the board specific memory constraints
+- addressed review comments
+- updated patch "soc: renesas: rz-sysc: Add syscon/regmap support"
+- per-patch changes are described in each individual patch
+
+
+Claudiu Beznea (8):
+  clk: renesas: r9a08g045: Add clocks and resets support for PCIe
+  PCI: of_property: Restore the arguments of the next level parent
+  dt-bindings: PCI: renesas,r9a08g045s33-pcie: Add documentation for the
+    PCIe IP on Renesas RZ/G3S
+  PCI: rzg3s-host: Add Initial PCIe Host Driver for Renesas RZ/G3S SoC
+  arm64: dts: renesas: r9a08g045s33: Add PCIe node
+  arm64: dts: renesas: rzg3s-smarc-som: Update dma-ranges for PCIe
+  arm64: dts: renesas: rzg3s-smarc: Enable PCIe
+  arm64: defconfig: Enable PCIe for the Renesas RZ/G3S SoC
+
+John Madieu (1):
+  soc: renesas: rz-sysc: Add syscon/regmap support
+
+ .../pci/renesas,r9a08g045s33-pcie.yaml        |  202 ++
+ MAINTAINERS                                   |    8 +
+ arch/arm64/boot/dts/renesas/r9a08g045s33.dtsi |   60 +
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |    5 +
+ arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi  |   11 +
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/clk/renesas/r9a08g045-cpg.c           |   19 +
+ drivers/pci/controller/Kconfig                |    7 +
+ drivers/pci/controller/Makefile               |    1 +
+ drivers/pci/controller/pcie-rzg3s-host.c      | 1715 +++++++++++++++++
+ drivers/pci/of_property.c                     |    8 +
+ drivers/soc/renesas/Kconfig                   |    1 +
+ drivers/soc/renesas/r9a08g045-sysc.c          |   10 +
+ drivers/soc/renesas/r9a09g047-sys.c           |   10 +
+ drivers/soc/renesas/r9a09g057-sys.c           |   10 +
+ drivers/soc/renesas/rz-sysc.c                 |   17 +-
+ drivers/soc/renesas/rz-sysc.h                 |    3 +
+ 17 files changed, 2087 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml
+ create mode 100644 drivers/pci/controller/pcie-rzg3s-host.c
+
+-- 
+2.43.0
 
 
