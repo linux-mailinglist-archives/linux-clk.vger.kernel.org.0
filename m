@@ -1,97 +1,139 @@
-Return-Path: <linux-clk+bounces-24260-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24262-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22CC6AFB01B
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Jul 2025 11:47:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C809AFB074
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Jul 2025 11:57:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E16FC1897123
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Jul 2025 09:48:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86396179271
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Jul 2025 09:57:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A60D29008E;
-	Mon,  7 Jul 2025 09:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06BF4293C6A;
+	Mon,  7 Jul 2025 09:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="CkzlkaDS"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F6728ECEF
-	for <linux-clk@vger.kernel.org>; Mon,  7 Jul 2025 09:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D32292B3D
+	for <linux-clk@vger.kernel.org>; Mon,  7 Jul 2025 09:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751881641; cv=none; b=Jeg+LIoD1d2PpO6YfMet8D2PY6iPLz90qAO5Ay4XraeuuHZIv15fdTSdBjLWBt/0C9qC36H/hiJxg3iQ5gvaqxGZS0i4i6AjjoXLDXaRrtQXyqxllCML0qxnvCy4O6UFelPljdXwwNsTQRzNVPTLF7j2k7tF/P5Cz5ELS94SO9c=
+	t=1751882225; cv=none; b=OboI+nLtBTPzK82Yt+GgC6KytlDi6GICxyGmZJfYGubyX0VC1UwIw3tuW8YpNMF2+qt2BA4T7BDFr4rrLe+HyeChVm4aH1xQPH6EJ/hIRgwJ/b5tluHSsbT6P20+tLfrn0QIxZQ57W2YxjckucbQWKwK+PVimhypHCN7kwOaxnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751881641; c=relaxed/simple;
-	bh=1/be2royPIkQLfr/HcPh/TJaKZHLxpX7JL+qtcyAGq8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l2lXZcJT3dPKaepIP1eCqgTkbCA2Lxf9WqpFlHbenij11PTeZglHGQP4e+MCJI+507gruW++LBQ3bk/j/QwfR+A4YwmPaj26bQMrtM2sZXCMuZsvAnM57Q8fmIhm6bb15eTg/5QB855aK0rJxqr75VJ7roX74vv43JaqFMLq9wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1uYiRA-0006RW-Fn; Mon, 07 Jul 2025 11:47:00 +0200
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1uYiR8-007E6Q-38;
-	Mon, 07 Jul 2025 11:46:58 +0200
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1uYiR8-000IEH-2o;
-	Mon, 07 Jul 2025 11:46:58 +0200
-Message-ID: <33a20f6abac7400c8b4842b99c14ea118def2780.camel@pengutronix.de>
-Subject: Re: [PATCH v12 5/6] reset: spacemit: add support for SpacemiT CCU
- resets
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Alex Elder <elder@riscstar.com>, robh@kernel.org, krzk+dt@kernel.org, 
- conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- alex@ghiti.fr,  dlan@gentoo.org
-Cc: heylenay@4d2.org, inochiama@outlook.com, guodong@riscstar.com, 
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- spacemit@lists.linux.dev,  linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Date: Mon, 07 Jul 2025 11:46:58 +0200
-In-Reply-To: <20250702113709.291748-6-elder@riscstar.com>
-References: <20250702113709.291748-1-elder@riscstar.com>
-	 <20250702113709.291748-6-elder@riscstar.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1751882225; c=relaxed/simple;
+	bh=58ZfGXq5HliUApxwu0tCwXNooa/9w1FGf0esQaJhPOU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=t/zdD6rAP/qQ2fx8hh984F+y6qUhrkClzZ+DHCzbApVrACxxKlxTnYrfykh+WZ8wFW62eEnrZgTM+8M6FDFzvgOIHym5Mi4OzIKfR17y3WR67Oky8tMFPZkCAvHYQzoWGcYGqsBJjl2rq0CyQ9Pa4XHi2wuanYHltToRJuqwbas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=CkzlkaDS; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-608acb0a27fso3839219a12.0
+        for <linux-clk@vger.kernel.org>; Mon, 07 Jul 2025 02:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1751882222; x=1752487022; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ODEVf5zXYu0yH/oCoUjJ1b0O3E3Qx4wf8X/BiLQdvvE=;
+        b=CkzlkaDSHWgFPkzUuWbqSWxfY28RE+ODAcJInkuPJZo2qybcc0SXwHZ2NwzlxSNFcY
+         uC+IoBh88Ke2MooK3HDhp+X/1ueS5ttavd7CaGax2ma+6pB3bWNMg9xrk0vlLFym0lam
+         gZQJfe5kS9dBqabcvsO1UrUwxJcV5DSmLBrQOhHtL7l5mqZIOC5y/JEQEISzR/B72m0+
+         tyI6aTRKkZ4XRmeuaVVOpzDJzzb0bzywjYABOm66RtlJo5ivlXyd1CH9IOL9Uqy+cD7Y
+         1McIoHK7y17X6d0SGtOSLJ3Sdk1fiSlUYDliVdCQjq6U4GLuy3yMB/qx+DJvNBoSKgQE
+         FDeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751882222; x=1752487022;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ODEVf5zXYu0yH/oCoUjJ1b0O3E3Qx4wf8X/BiLQdvvE=;
+        b=MG0ii+l8J8Ff+yZX3/igoSKSC+SxGbMWBiK0PCUsU1VCNt8RqDOHSYipPN4ZpFEFlX
+         udAe5659jRYc9XUezLjhOFMnUtlKTTjOcMw13cZvoU8mOOiaRE9seDMD940U93eNtya+
+         A2Dt83oDVIgidI2B/IO6R/Tza6PZamKFtNoClTxdYq+TS9orY6DEyAfBgio9fKL3bHFz
+         AjYPiqQSzWwk0gmZNzxsc2Rq7AOWfguSbZhxp80YLZZI4jsCGPrK0DKfvbf/U5SxF7Ro
+         o1lYpBmGdBcCi3wGZJe3KEd1eOiw/F6z9LXogNMbKxki4sC3NuABCMrG53bdC+DALbls
+         bMYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXwdPVtFQHs5kHq3nsDfguVKrjt+oIm67egi9Vzj9VnmugLysnBLyS5w8qI9E0gAI6BsucrTReHTrI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDlkGspcMASkZum6H8ak3aePG4iqoV43cC7KbV0uKZEnDD8p1A
+	LbgNZ0sU8xKJGFtHt2kUlY32tKCr7XYaqflMSB8arNS2zFSgVvWU+bcbIRXJ9LsJu9w=
+X-Gm-Gg: ASbGnctz4i22kT0snIFZwbTfoP9R20Hs3AirpXGc++cpKSjYdRTVe+TQJmwKMvpu0eH
+	ipS3C2fR5bEJsmGW4Aabt8FhFduLkZZq6w8yOpcMvVZVjhdGIZ21pX3VBCh2u0phjpoP3es3rHf
+	Rg5qIPLwFUXl9boSU7fqVOWp519u189EJCbBaX6pgb+tVwTQ77huWwV2fga0qh8rtcTJq9eLsKp
+	oHwcqt944bG+d2CJVhBwasyJ6XluFSoDvkAttIlQc9b7ae1HnPTkPfUoGUahS4uKnJF5WreIQe4
+	4zO0YJsGnJ6N44/jSAAp6avtl4IU0dbkev8jHnsygAr1XAl6GQ0UbGDvsC4IfDxtuOEB9jTxpN2
+	Q/WybnOiBK2sJUNgLPTVYwbu6JBF1PLL01te0oK4Oz1g=
+X-Google-Smtp-Source: AGHT+IGZ95rMuA2Wn1IQaIyHUgRgWlbpUIuXzYBujf+9D//LAmIETPS+IQZyFCmoipIJ+gohRL4NQg==
+X-Received: by 2002:a05:6402:d0d:b0:60c:4a96:423a with SMTP id 4fb4d7f45d1cf-60fd6d504e4mr9543330a12.18.1751882222225;
+        Mon, 07 Jul 2025 02:57:02 -0700 (PDT)
+Received: from otso.local (144-178-202-139.static.ef-service.nl. [144.178.202.139])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60fca6641fbsm5235815a12.3.2025.07.07.02.57.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jul 2025 02:57:01 -0700 (PDT)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v2 0/4] Add RPMh and TCSR clock support for Milos (SM7635)
+Date: Mon, 07 Jul 2025 11:56:36 +0200
+Message-Id: <20250707-sm7635-clocks-misc-v2-0-b49f19055768@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANWZa2gC/22NQQ6CMBBFr0Jm7ZjSUhRX3sOwqGUqE4WSjiEaw
+ t2tJO5cvpf89xcQSkwCp2KBRDMLxzGD3hXgezfeCLnLDFppq2qtUIZDbSz6R/R3wYHFowrGNq4
+ 7GkUO8nBKFPi1RS9t5p7lGdN7+5jLr/3l7L/cXKLCygZydWU701zPwXGa+jjS3scB2nVdP8y4T
+ yq4AAAA
+X-Change-ID: 20250620-sm7635-clocks-misc-0f359ad830ea
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Luca Weiss <luca.weiss@fairphone.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751882221; l=1169;
+ i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
+ bh=58ZfGXq5HliUApxwu0tCwXNooa/9w1FGf0esQaJhPOU=;
+ b=+qWmgG+A7sZEea6VSnoAqFep+mSdABlWvwutydJ/nj2l3sV3wTqA8VZ4NK8OmD1XSu47kkMKg
+ b14o+/g1z3cAQoJJvs75BQVX+Exk4IdHgAOUqAYt2d15JahfmKekkk8
+X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
+ pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
 
-Hi Stephen, Mike
+Add support in the RPMh and TCSR clock drivers for the Milos SoC.
 
-On Mi, 2025-07-02 at 06:37 -0500, Alex Elder wrote:
-> Implement reset support for SpacemiT CCUs.  A SpacemiT reset controller
-> device is an auxiliary device associated with a clock controller (CCU).
->=20
-> This patch defines the reset controllers for the MPMU, APBC, and MPMU
-> CCUs, which already define clock controllers.  It also adds RCPU, RCPU2,
-> and ACPB2 CCUs, which only define resets.
->=20
-> Signed-off-by: Alex Elder <elder@riscstar.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> Reviewed-by: Yixun Lan <dlan@gentoo.org>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Changes in v2:
+- Rebrand SM7635 to Milos as requested: https://lore.kernel.org/linux-arm-msm/aGMI1Zv6D+K+vWZL@hu-bjorande-lv.qualcomm.com/
+- Pick up tags from Konrad
+- Link to v1: https://lore.kernel.org/r/20250625-sm7635-clocks-misc-v1-0-45fea645d39b@fairphone.com
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+Luca Weiss (4):
+      dt-bindings: clock: qcom: Document the Milos RPMH Clock Controller
+      clk: qcom: rpmh: Add support for RPMH clocks on Milos
+      dt-bindings: clock: qcom: document the Milos TCSR Clock Controller
+      clk: qcom: tcsrcc-sm8650: Add support for Milos SoC
 
-To be merged via the clk tree, if Stephen is ok with that.
+ .../devicetree/bindings/clock/qcom,rpmhcc.yaml     |  1 +
+ .../bindings/clock/qcom,sm8550-tcsr.yaml           |  1 +
+ drivers/clk/qcom/clk-rpmh.c                        | 26 ++++++++++++++++++++++
+ drivers/clk/qcom/tcsrcc-sm8650.c                   |  8 +++++++
+ 4 files changed, 36 insertions(+)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250620-sm7635-clocks-misc-0f359ad830ea
 
-regards
-Philipp
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
+
 
