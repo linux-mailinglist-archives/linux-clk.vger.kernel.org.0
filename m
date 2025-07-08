@@ -1,188 +1,134 @@
-Return-Path: <linux-clk+bounces-24306-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24308-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA32FAFC800
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Jul 2025 12:11:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB0A1AFC88E
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Jul 2025 12:41:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC5F016476F
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Jul 2025 10:10:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7664F7A69BF
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Jul 2025 10:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D97267F59;
-	Tue,  8 Jul 2025 10:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B2242D879D;
+	Tue,  8 Jul 2025 10:40:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="FpJd+aRR"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="m+tJ9zxj"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015AC3595C
-	for <linux-clk@vger.kernel.org>; Tue,  8 Jul 2025 10:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4172D660D
+	for <linux-clk@vger.kernel.org>; Tue,  8 Jul 2025 10:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751969402; cv=none; b=mfEWTs3oyfD5awDsvKehKYg/FEOq7NQphzYPKQ2B2w62rJUluhUMPeQlm7aW9KfWZtcl2n7/NjrfI0xkvbX4H27Qt5qrxcKNf+WK3zoBdfByVthwMnzxFDobw9B/zTvrl6k9Oe72FuCbN71k72JQqCuLMEPLnNnKHECsQpHG/HI=
+	t=1751971254; cv=none; b=mWDqGvbsFMip/tALKuQQ+31shrkVX5fKFo8ei3Y/XQGFdz77UCUoCj8hqYR+jIsHWpehqSUZ0I0QGUOGCSEIfEzsrd10FElV1z7GmBqhbR2uH5rkFVKXcnS903n7+Y+zFYsRZcYGMaJXl+ywZUtOq7omfneZYJ8f7unGYWAKzfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751969402; c=relaxed/simple;
-	bh=47O6nAGkTl4F+LjVK4KzSkuF78FXCIFg8NWc0TWYEJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgIX48dZR0J5nLXgLtPgajOMC9PcU0t1GtN7EmXAm3ICacQDD0Yd+bMKcdq/5ln4gGAsq98pCVyVbizDlfPpqSc8gm9R5Gb+bp7d5ADgKz+BhTTo/1T9onrFgFR2QH6bqAUWa8nA1TDRH5S8ENi8yx1hwqyhja22rkYMsZCPGvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=FpJd+aRR; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ae3b336e936so773311366b.3
-        for <linux-clk@vger.kernel.org>; Tue, 08 Jul 2025 03:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1751969398; x=1752574198; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wW9jD4nttc2FFz4tK+x1u/l3hcsbPGY6bGVXePrYDv4=;
-        b=FpJd+aRRb1it8uGgFDuY0XeugoGH9+Xt8YLCtgSGvAG9ttAdIiF6uTEQDfV2vJt7pF
-         saS4jmFqJQgGfBAcYzMAuCSTyeJufjPSAKbukbKLwp0qRzoEfRZLDxXSCT67yvKKuZPe
-         WyRiz67d4dZPVTXwIZBmqYRMJqhH82gCHwxRHywXE8tZEP3m6Aaq6Qm/ffcZSFJI4HOw
-         IN9N5kR/UrRAwUhV+x2QQO2jo4bt4H88JL/nAETv+t59F9B8Wz3jd1W9w21UCZZkUtmO
-         nlIj+NTkhLtlvVIup1M1bUoAQcFfQ/9CLcp2NgLe0nPXqUbuA9FLNxm6d+zS/dX7X6gF
-         uL8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751969398; x=1752574198;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wW9jD4nttc2FFz4tK+x1u/l3hcsbPGY6bGVXePrYDv4=;
-        b=vz0ELNL5N7idDmBFNipilKnPsxt/s25bTr17R0wnf7lJziHle2HwhAmFeg8FgsZN5r
-         QENJU+ISemrCDYCZxmsRrfO2ghIOh06mP837AAOwUuMwDgmFz1on6vxzlYqN5yCgxSiI
-         w0FSLJoXHGm2YIhqYGzAn4EDYI5iX89qse7EhcDsrkQJK+fLWvsidjZMLWo1tE9aITvF
-         PsMs2VqeyKQ90EJcb+2XU8BXDeUSNvNu7UrQaHHn9JA7Ax0P2DFS7OsKR7FoPMxQrQ0+
-         W3H/qz1ciOo02J0pi4s3IQcH+yLO4DLHz7umzK/UpM07weMUqOOplKfO5VlvxkkHCq75
-         RVlA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/7DS8JmtnNbkJiyx2RgBRkZwDUIyr74n3zNwpy/9jBOcRgz5W4aK8IaBEvkp1oCdgQBCchLwdQsE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWDpBdNwDVaXRuwWhUhL/cip3wt+MByDlRf4kcVD6wtZXuqAgK
-	Huxktk6McpuOdyIqzRyZBQlF75AyXsG1nZv2fxaepBZlGnGdrWsZCGAbQbrY5rcOJl4=
-X-Gm-Gg: ASbGncsumcGAwQOc2VqF2hZ3RBgTGM8xIivjQ6tkWi5untTzZTtenys4iLfkHmAPwIN
-	zT2SsXXHOhEvVnZQnDqA+wYk2ug/M7VckNJbmiXdk1Ufp/7dvrEYeSRhoLFRCxFsN7eAuPyiX5j
-	ub24/wC3dlr7zlViWYoF0I7ZEzm6PdHWZTpHZ5bqWpws6r+3fyvIokUtX5LG42b07E7J8EWnVrs
-	hsR8BOGUyIbL7egqOIHsw0L8R/z5+IspgphbIaqIrhxetVMLe5dXrDSXSGwOsQYIudSfJsYwbU/
-	kZI/pZ7rAh2sr/8kgZYhWzxsLZqXrxpkBmDmYSsJXu4S+zUxBEIrQNIaPrbCXXkiNiQ0UA==
-X-Google-Smtp-Source: AGHT+IFDhnpFLf+9SokY6ajJmYa0R4eHOoHCTd+GxI/yEq5DE0Ci4xD7oIth8WUim7upiSOwhgaH5Q==
-X-Received: by 2002:a17:907:1c26:b0:ad8:8719:f6f3 with SMTP id a640c23a62f3a-ae3fe5c28d7mr1545563166b.22.1751969397715;
-        Tue, 08 Jul 2025 03:09:57 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f66d931csm875767566b.10.2025.07.08.03.09.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jul 2025 03:09:57 -0700 (PDT)
-Message-ID: <7c8c7a25-c373-452a-9fe8-8b2d92ddd885@tuxon.dev>
-Date: Tue, 8 Jul 2025 13:09:55 +0300
+	s=arc-20240116; t=1751971254; c=relaxed/simple;
+	bh=h9ffOMpprHtUlA4KIyfZI6VRD+DRW1c4F7q6RurLTgo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=YLr36TcJ3JuyBSMcEm3ELhQp27De1Obi6zjvS9AK01uMLrF5tgtPmIoYmvD7gWfDw0MqfiXhHYL6W86VUn3t3kyGtZqAHbjQgtal0rU+O7P93mWPsuG37H/6FIuYwfUar3Npr4AjGjK+cgVpzxuSeBwVX26+OH5Tq7J8Kxf7rA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=m+tJ9zxj; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250708104043epoutp033ab8fecf0aa7b063b09c5c2abe1cd9ff~QQJAryUbm2788227882epoutp03Y
+	for <linux-clk@vger.kernel.org>; Tue,  8 Jul 2025 10:40:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250708104043epoutp033ab8fecf0aa7b063b09c5c2abe1cd9ff~QQJAryUbm2788227882epoutp03Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1751971243;
+	bh=RZMbreJckeTZ7d9E/bDbGIS9B9tPEE2bV8tHwU4GBm0=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=m+tJ9zxjg3e2Ppo0qDrAkOwfLyyRAVGPWb266MqgxZTHik1/opyBbw9mz6NK7+8iu
+	 AKsyb3KfUa6VsdOxZKOC/AT7hdg9XqDDUJANHhl22lbjDZql12zf53nbUGqvfXZdYB
+	 /f49nqAah0LckRS7tF2oAk1A1lQNyh+hLQtyeP4A=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250708104042epcas5p33bd592360cafe5d32801a3b6f3a0732c~QQJAFd4LA0190201902epcas5p3s;
+	Tue,  8 Jul 2025 10:40:42 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4bbyLd0vbqz6B9m7; Tue,  8 Jul
+	2025 10:40:41 +0000 (GMT)
+Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250708103228epcas5p27886821d1ff225f2e5cdd4d948d03a66~QQBzzm5CC0702607026epcas5p29;
+	Tue,  8 Jul 2025 10:32:28 +0000 (GMT)
+Received: from cheetah.samsungds.net (unknown [107.109.115.53]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250708103225epsmtip179cdbb1505bb6b730e052501f82e992d~QQBxLrGTX2131221312epsmtip1V;
+	Tue,  8 Jul 2025 10:32:25 +0000 (GMT)
+From: Vivek Yadav <vivek.2311@samsung.com>
+To: pankaj.dubey@samsung.com, ravi.patel@samsung.com, shradha.t@samsung.com,
+	mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, krzk@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, will@kernel.org,
+	mark.rutland@arm.com, s.nawrocki@samsung.com, cw00.choi@samsung.com,
+	alim.akhtar@samsung.com, linux-fsd@tesla.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org, linux-samsung-soc@vger.kernel.org, Vivek
+	Yadav <vivek.2311@samsung.com>
+Subject: [PATCH 0/6] Add PPMU support for Tesla FSD 
+Date: Tue,  8 Jul 2025 16:02:02 +0530
+Message-ID: <20250708103208.79444-1-vivek.2311@samsung.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 7/9] arm64: dts: renesas: rzg3s-smarc-som: Update
- dma-ranges for PCIe
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- "bhelgaas@google.com" <bhelgaas@google.com>,
- "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
- "kwilczynski@kernel.org" <kwilczynski@kernel.org>,
- "mani@kernel.org" <mani@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "geert+renesas@glider.be" <geert+renesas@glider.be>,
- "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
- "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
- "will@kernel.org" <will@kernel.org>,
- "mturquette@baylibre.com" <mturquette@baylibre.com>,
- "sboyd@kernel.org" <sboyd@kernel.org>,
- "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
- "lizhi.hou@amd.com" <lizhi.hou@amd.com>
-Cc: "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
- "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20250704161410.3931884-1-claudiu.beznea.uj@bp.renesas.com>
- <20250704161410.3931884-8-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB113464920ECAC2C3CB89DE2D5864FA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <TY3PR01MB113464920ECAC2C3CB89DE2D5864FA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20250708103228epcas5p27886821d1ff225f2e5cdd4d948d03a66
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-541,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250708103228epcas5p27886821d1ff225f2e5cdd4d948d03a66
+References: <CGME20250708103228epcas5p27886821d1ff225f2e5cdd4d948d03a66@epcas5p2.samsung.com>
 
-Hi, Biju,
+The Platform Performance Measuring Unit (PPMU) is an AMBA-compliant
+performance measurement tool designed to provide observability into
+system-level operations. It provides performance statistics such as
+as bandwidth, read and write request, transactions count for AXI masters.
 
-On 07.07.2025 11:18, Biju Das wrote:
-> Hi Claudiu,
-> 
->> -----Original Message-----
->> From: Claudiu <claudiu.beznea@tuxon.dev>
->> Sent: 04 July 2025 17:14
->> Subject: [PATCH v3 7/9] arm64: dts: renesas: rzg3s-smarc-som: Update dma-ranges for PCIe
->>
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> The first 128MB of memory is reserved on this board for secure area.
->> Update the PCIe dma-ranges property to reflect this.
-> 
-> I see R-Car PCIe dma-ranges[1] and [2] maps all possible DDR area supported by the SoC?
-> Do we need to make board specific as well there?
+FSD platform has two instances of PPMU IP in MFC. This patch series
+contains PPMU clock binding definitions, device tree binding
+documentation, PPMU24 driver support which configures the
+PPMU24 hardware and the PPMU device tree node support
+for Tesla FSD platform.
 
-I'm not familiar with R-Car, but if there are ranges reserved for other
-purposes, I think we should reflect it in board specific device trees.
+Vivek Yadav (6):
+  dt-bindings: clock: Add PPMU clock definitions for FSD platform
+  clk: samsung: fsd: Use clock IDs for PPMU MFC block
+  dt-bindings: perf: Add devicetree binding for custom PPMU
+  drivers: perf: samsung: Add PPMU driver support
+  arm64: dts: fsd: Add PPMU support for MFC block of FSD SoC
+  MAINTAINERS: Add maintainers for Samsung PPMU driver
 
-But that would have to be address though a different series as it has
-nothing to do with enabling the RZ/G3S PCIe support.
+ .../bindings/perf/samsung,ppmu-v2.yaml        |  62 +++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   8 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  20 +
+ drivers/clk/samsung/clk-fsd.c                 |  10 +-
+ drivers/perf/Kconfig                          |   2 +
+ drivers/perf/Makefile                         |   1 +
+ drivers/perf/samsung/Kconfig                  |  13 +
+ drivers/perf/samsung/Makefile                 |   2 +
+ drivers/perf/samsung/ppmu.c                   | 494 ++++++++++++++++++
+ drivers/perf/samsung/ppmu_platform.c          | 338 ++++++++++++
+ drivers/perf/samsung/samsung_ppmu.h           | 128 +++++
+ include/dt-bindings/clock/fsd-clk.h           |   4 +
+ 13 files changed, 1084 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/perf/samsung,ppmu-v2.yaml
+ create mode 100644 drivers/perf/samsung/Kconfig
+ create mode 100644 drivers/perf/samsung/Makefile
+ create mode 100644 drivers/perf/samsung/ppmu.c
+ create mode 100644 drivers/perf/samsung/ppmu_platform.c
+ create mode 100644 drivers/perf/samsung/samsung_ppmu.h
 
-Thank you,
-Claudiu
-
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/renesas/r8a774e1.dtsi?h=next-20250704#n2487
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/renesas/salvator-common.dtsi?h=next-20250704
-> 
-> Cheers,
-> Biju
-> 
->>
->> Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>
->> Changes in v3:
->> - collected tags
->>
->> Changes in v2:
->> - none, this patch is new
->>
->>  arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg3s-
->> smarc-som.dtsi
->> index 39845faec894..1b03820a6f02 100644
->> --- a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
->> +++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
->> @@ -214,6 +214,11 @@ &sdhi2 {
->>  };
->>  #endif
->>
->> +&pcie {
->> +	/* First 128MB is reserved for secure area. */
->> +	dma-ranges = <0x42000000 0 0x48000000 0 0x48000000 0x0 0x38000000>; };
->> +
->>  &pinctrl {
->>  #if SW_CONFIG3 == SW_ON
->>  	eth0-phy-irq-hog {
->> --
->> 2.43.0
->>
-> 
+-- 
+2.49.0
 
 
