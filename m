@@ -1,86 +1,88 @@
-Return-Path: <linux-clk+bounces-24607-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24610-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0636B00FC9
-	for <lists+linux-clk@lfdr.de>; Fri, 11 Jul 2025 01:42:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AACB5B00FD8
+	for <lists+linux-clk@lfdr.de>; Fri, 11 Jul 2025 01:45:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3DA81CA734A
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 23:42:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC4681C247FB
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 23:45:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D30028B418;
-	Thu, 10 Jul 2025 23:42:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08440292B3A;
+	Thu, 10 Jul 2025 23:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Syg7dlfq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jUZz/8YT"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978E11FBEA2
-	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 23:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBE6246326
+	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 23:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752190956; cv=none; b=fw5xGUqlt3n0Cd0DsgvpXA3arnSQH+5scnYDPMbs1ZsTRotKaqOknLtqd54zOGb7lFu4h7moourQzVS528Rb6dkGVn2oV+YmlwgrHIsHHvTo+q9haLhDU/GXVQ7yxtztwIQUyMH1yRFwF6VlqS1rwcearTdNmpvJlSkvnkTmfMc=
+	t=1752191095; cv=none; b=IChQ2deg9zZdJTEuRyupy/kizkhfR/QbS56OqEU8aBCFZEWXHNKRWdKqjnZG+SrLF9HQ3cAuC2Jr5HUqquDU/e0+1Te2v/EU7TygW/CO5JVHV+VumB6mD1NbKTo69mbXz/KX7lIwRLZuYp7vV82dYGQ/nzCwrBm2mYpKy+esyoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752190956; c=relaxed/simple;
-	bh=al6nz9adATLIR7FYrUCMOsShOW+3Oeiwsw0ZybmNjqs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=m5oVe6AV0k1aiQH4a+pRBy0I5mo2Mz6oYiQD+P0kv0CVc+d3X7jWQphPTYYylXv9/FsdRSzCbtQbrbP8LOn2vOGjz7Wdh1X5vHiDtNGvQDOpiIDbulBisM4YN+Zgw6gALBQM4DP3PQyDuve+O0Mmd5iPaQTP5pnnNXoXHH71FYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Syg7dlfq; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1752191095; c=relaxed/simple;
+	bh=Mg6lKUg0ZmZeW6JyF1mVcF9O9A9v/XbSlh+3Q+sOozQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=I7K7IZ/xkzj5QuTTXWnL80OvgdzYxCfP6aCWr7ang/Py+bdZtODw1NFwmWc3gq44BX2dutOCz3MQBBRV1zQ1RFm1yD4hHlCuRvcx9tUisPUQJdABSVKoNELLHuI8OI96plDXpRrYt2yoJ7caEe9IGZVoY4+Rm6sX6ZbPoXtpDV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jUZz/8YT; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752190953;
+	s=mimecast20190719; t=1752191093;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=e94ZV7qj0UFkUQZZLwJjFJBBkRpaB6KPVGZwmSboBfo=;
-	b=Syg7dlfq0fc2NtwTL2wHQJZRivsOVu8TyZRqic01i8zkGwll58nno+8eYCVW3su7EIbhC+
-	EgbF7fkhfN4hlXyUUbRFOuYgbrs+fntHmsp2dDrPgUrFlFn0r8MevaHlXO/zLJk08SMpTx
-	jkElJ1D3fbeScu21orEv2oCVRfHeAMs=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C+vFXF+6sAs+f0qJzoysFGKJfCbzyDXKLN+W95anZkc=;
+	b=jUZz/8YTb33vxEG+3k9NOgHoNMv6YSQT8dMKWtz/tI7055Y9Q71YxERyhFJXZdNiAOkt71
+	3n/pNSPyswT4NNz2YVeI/lPukJkJqqhR9rjFVVn1W9Y++8ULMkWtzH5+SUlYN8QdT5eyVy
+	oWyOwmA6XMYafJwBw8Q132Wlu9k+qA8=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-130-_-XuBSWCPHeIZb77x5W7ig-1; Thu, 10 Jul 2025 19:42:32 -0400
-X-MC-Unique: _-XuBSWCPHeIZb77x5W7ig-1
-X-Mimecast-MFC-AGG-ID: _-XuBSWCPHeIZb77x5W7ig_1752190952
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6fac45de153so21651436d6.2
-        for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 16:42:32 -0700 (PDT)
+ us-mta-216-9qSebqkuNsCOdaj2C3fC9w-1; Thu, 10 Jul 2025 19:42:35 -0400
+X-MC-Unique: 9qSebqkuNsCOdaj2C3fC9w-1
+X-Mimecast-MFC-AGG-ID: 9qSebqkuNsCOdaj2C3fC9w_1752190955
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6ff810877aaso34686216d6.3
+        for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 16:42:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752190952; x=1752795752;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e94ZV7qj0UFkUQZZLwJjFJBBkRpaB6KPVGZwmSboBfo=;
-        b=AAXGMNSZ+RBDOTYk6j573404nxflCtjrmI0xFSToj5yj4XG7EV5EcxOccoCiN4GQQh
-         87oUVSFAIrwzeLL0eJg5Veg0tkchXfvE8lcG1/8vuq230+QHu+y/iHDL5Jxg7clUegwb
-         nxMeFFrt6KUnCECU/ZhV0Ar/1ICpAhEKkPEYUSBKK+LP8e36S5KrMkPQ5Lby4tIA3sqM
-         Yem7qyVp5CllbZqs5elqz2XwKiyIVDdoGdAN6BB0cuknpHuiVyJ6o+lZU7ZwPnbA50Kj
-         3O0wpCnH9WMBYyhmXef2aezm4XFqp3qEqoeM3MERV5Xvb5l9VFIrTEFyAaYgBpvjmcR/
-         rE9Q==
-X-Gm-Message-State: AOJu0YzcPbL6kQRZzqRBgpT4vAhHwMW5hYiCDavrDwLLHGlKDdktMedr
-	TjPxEVrg8HEVDRfMk3cIzcE6sZbCeo7XjH7k8qKwh8crWDn4lTJdpDnCm/GeRItm/Vc3LmiYmrG
-	mUQNuVX2Bm+L0Q48T8hxEqU0dI0qrdkSukOg8IF/Ug3jW8qiNpePjm59a7Du0RA==
-X-Gm-Gg: ASbGnctsSbV0u43Rt0nRbYv8GZmlt6tXQLMsGCMPzuQA2JJpbuUxDiqwvSFZUZIOgpa
-	404qZqMmRfvjeMw1Xxo59uHUcy6wA4Ipy3gIWOq4vMWQjuq1xrLBe45GpKAJKR4BLDjkMxkr+Qg
-	ZI7JA4OWmH0XHosUJDn7/dxaNnqQqKbAliBZyekIn2ozK2bSxG1HYzpDy/JLlghvoIyQLs2v71r
-	8F7c/mZ4B3p4oMLUyyUqpuny4gpEtAVYVJZ3fYKEjZ+v6zU7eV7ga9JSinTVKVUQMrHw7kLE1mI
-	AnSNTKYveQ80RFLZvJpTNEYk1cnREP8UTMFi1UvtzCql3uL8Q+oJl0YGfO+Kp4Ap3VkgdHz2s2E
-	EVwM=
-X-Received: by 2002:a05:6214:4286:b0:6fd:75ef:3dc3 with SMTP id 6a1803df08f44-704a3878fe0mr20570976d6.28.1752190951847;
-        Thu, 10 Jul 2025 16:42:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFJPET4l5Q7pb7AJesD0qMFA+J1X+JY68upvMvP5yWTEV64eVycbSgaCQEqLya1yThh36Ihxg==
-X-Received: by 2002:a05:6214:4286:b0:6fd:75ef:3dc3 with SMTP id 6a1803df08f44-704a3878fe0mr20570546d6.28.1752190951467;
-        Thu, 10 Jul 2025 16:42:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1752190955; x=1752795755;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C+vFXF+6sAs+f0qJzoysFGKJfCbzyDXKLN+W95anZkc=;
+        b=R1RT5D6zMDhYSw79HA8FPRBXmpyoAyUJzGAffByBCfPEcpokZeezP3LKAAD9NW+aa9
+         nT6sWRhkFtw5teHhSpxL58mm0+pKx5QM4M6k4iL7G8pTDNEOWvAMRRgK0+bFl+GBYfXi
+         V7QtrQ3a5AI5tohBiacWtbIcDC6bW041CFCM51bLCRW+v8BRvXSIkEqI5QcKxzBr+hcG
+         83MKSAkoNK4bFgOasIQnhObOcipQNYxW6NWiXgF+SSBPI4p7nMqOeveHPgtr5C8i3PU8
+         HGdj+OZk8g96b1eMAV5k6Cy7o5HU/UnJJkuuWyUsQ12vIqb5QZwT9jSuFOTerUqzpdez
+         0RPg==
+X-Gm-Message-State: AOJu0YzLho/e3S0nBPFGkqVNNpzyOEpOjxcuSu9tksTeQBRlq2D2SDxU
+	6c8z5aecKLYLoVT3Vn+zHSgRoutfASOWZxZZpjmmDO0JP3B9oou/zRbu83OpglH5Tz+FM0S4EJH
+	fGOY9JSvgBK+Nob0PsB0kUrpW5QqNnJNU4VNT2Fqj+5CqQQKnSnjaiUn9q3SArw==
+X-Gm-Gg: ASbGncuOwZA9GZZYBB8Vlt16cEL+FmTjI0SJwlnO6OGIoaNLfCmxo8tA9Ddi6WTvqIw
+	6a3MVR8NIuGeJDghPUnpRNw0z1NUfzh+Mn98Rm+LMKvqIFvSkdPRzawAetfdXBY5ayuZVU23CjH
+	pbPNrMtbsnd870ZWdQQqeS80mGJt8XKzYGpWmIIoR9nMyle482Yhntw9WdnmzkOcogS7q8TfqcD
+	4x32HlDW4tteUpgQT9QbZOwzInjccLlKpprGR6KDLpCo8MsfFpe5xS6kNFGot0kIICrXPmmRPzd
+	M4UPbHWUs9pmTcSKK/aPQiR5FIY7fxiFbom3EwdjJRLnMULw2stjGp28Z5Y+pA+Oh/rs420mxNw
+	tPUM=
+X-Received: by 2002:a05:6214:2b0f:b0:6fa:ab49:4482 with SMTP id 6a1803df08f44-704a39c69b2mr21404196d6.35.1752190955044;
+        Thu, 10 Jul 2025 16:42:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFumn70XFYKB3ncuCZuDvnrY3eq7TQ8pExUAVWgvlsUQZnKHPa4PRg6OW5Hg6N9pNtleWcQuQ==
+X-Received: by 2002:a05:6214:2b0f:b0:6fa:ab49:4482 with SMTP id 6a1803df08f44-704a39c69b2mr21403936d6.35.1752190954732;
+        Thu, 10 Jul 2025 16:42:34 -0700 (PDT)
 Received: from [192.168.1.15] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7dcde422e03sm153989385a.69.2025.07.10.16.42.29
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7dcde422e03sm153989385a.69.2025.07.10.16.42.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 16:42:30 -0700 (PDT)
+        Thu, 10 Jul 2025 16:42:33 -0700 (PDT)
 From: Brian Masney <bmasney@redhat.com>
-Subject: [PATCH 0/3] ARM: convert from clk round_rate() to determine_rate()
-Date: Thu, 10 Jul 2025 19:42:15 -0400
-Message-Id: <20250710-arm32-clk-round-rate-v1-0-a9146b77aca9@redhat.com>
+Date: Thu, 10 Jul 2025 19:42:16 -0400
+Subject: [PATCH 1/3] ARM: OMAP1: clock: convert from round_rate() to
+ determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -89,10 +91,9 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANhPcGgC/x3MQQqEMAxA0atI1hOo0TriVYZZlDZqGK2SOiKId
- 7e4fIv/T0iswgm64gTlXZIsMaN8FeBHFwdGCdlAhqx5lwadzhWhn36oyz8GVLcxsqXQ1pabljz
- kdFXu5Xi2n+913bQdPmNmAAAA
-X-Change-ID: 20250710-arm32-clk-round-rate-e52d845e682c
+Message-Id: <20250710-arm32-clk-round-rate-v1-1-a9146b77aca9@redhat.com>
+References: <20250710-arm32-clk-round-rate-v1-0-a9146b77aca9@redhat.com>
+In-Reply-To: <20250710-arm32-clk-round-rate-v1-0-a9146b77aca9@redhat.com>
 To: Paul Walmsley <paul@pwsan.com>, Aaro Koskinen <aaro.koskinen@iki.fi>, 
  Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>, 
  Russell King <linux@armlinux.org.uk>, 
@@ -105,166 +106,73 @@ Cc: linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752190949; l=4739;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752190949; l=2053;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=al6nz9adATLIR7FYrUCMOsShOW+3Oeiwsw0ZybmNjqs=;
- b=3Q0yi8DRBblqOemRVD6yfPZ3j82f3KJqt3sROeWm+I3JnvzPuG213PuuABwJdF06b5Zc7bIdB
- TQ/efS5E36aDaYQpeIWnskVhTOg8xT7IYWoLqgf2UhPz/Z0uU8VOGHc
+ bh=Mg6lKUg0ZmZeW6JyF1mVcF9O9A9v/XbSlh+3Q+sOozQ=;
+ b=ov92GEq3BT5OONUOsWz17TkRNeO7aRt0ZTlbqbGGEi2UetR1fyivK2G2OnOxYZ6sBy6ucti7a
+ gdJoDFLK4SjCrEBjFyAn/syo/iDX4IRPGYT5L0Z4Z0c9YriPb7H9LJX
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 
-The round_rate() clk ops is deprecated in the clk framework in favor
-of the determine_rate() clk ops, so let's go ahead and convert the
-drivers in the arm32 subsystem using the Coccinelle semantic patch
-posted below. I did a few minor cosmetic cleanups of the code in a
-few cases.
-
-Coccinelle semantic patch:
-
-    virtual patch
-
-    // Look up the current name of the round_rate function
-    @ has_round_rate @
-    identifier round_rate_name =~ ".*_round_rate";
-    identifier hw_param, rate_param, parent_rate_param;
-    @@
-
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    	...
-    }
-
-    // Rename the route_rate function name to determine_rate()
-    @ script:python generate_name depends on has_round_rate @
-    round_rate_name << has_round_rate.round_rate_name;
-    new_name;
-    @@
-
-    coccinelle.new_name = round_rate_name.replace("_round_rate", "_determine_rate")
-
-    // Change rate to req->rate; also change occurrences of 'return XXX'.
-    @ chg_rate depends on generate_name @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    identifier ERR =~ "E.*";
-    expression E;
-    @@
-
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    <...
-    (
-    -return -ERR;
-    +return -ERR;
-    |
-    - return rate_param;
-    + return 0;
-    |
-    - return E;
-    + req->rate = E;
-    +
-    + return 0;
-    |
-    - rate_param
-    + req->rate
-    )
-    ...>
-    }
-
-    // Coccinelle only transforms the first occurrence of the rate parameter
-    // Run a second time. FIXME: Is there a better way to do this?
-    @ chg_rate2 depends on generate_name @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    @@
-
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    <...
-    - rate_param
-    + req->rate
-    ...>
-    }
-
-    // Change parent_rate to req->best_parent_rate
-    @ chg_parent_rate depends on generate_name @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    @@
-
-    long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-                  unsigned long *parent_rate_param)
-    {
-    <...
-    (
-    - *parent_rate_param
-    + req->best_parent_rate
-    |
-    - parent_rate_param
-    + &req->best_parent_rate
-    )
-    ...>
-    }
-
-    // Convert the function definition from round_rate() to determine_rate()
-    @ func_definition depends on chg_rate @
-    identifier has_round_rate.round_rate_name;
-    identifier has_round_rate.hw_param;
-    identifier has_round_rate.rate_param;
-    identifier has_round_rate.parent_rate_param;
-    identifier generate_name.new_name;
-    @@
-
-    - long round_rate_name(struct clk_hw *hw_param, unsigned long rate_param,
-    -               unsigned long *parent_rate_param)
-    + int new_name(struct clk_hw *hw, struct clk_rate_request *req)
-    {
-        ...
-    }
-
-    // Update the ops from round_rate() to determine_rate()
-    @ ops depends on func_definition @
-    identifier has_round_rate.round_rate_name;
-    identifier generate_name.new_name;
-    @@
-
-    {
-        ...,
-    -   .round_rate = round_rate_name,
-    +   .determine_rate = new_name,
-        ...,
-    }
-
-Note that I used coccinelle 1.2 instead of 1.3 since the newer version
-adds unnecessary braces as described in this post.
-https://lore.kernel.org/cocci/67642477-5f3e-4b2a-914d-579a54f48cbd@intel.com/
+The round_rate() clk ops is deprecated, so migrate this driver from
+round_rate() to determine_rate() using the Coccinelle semantic patch
+on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
-Brian Masney (3):
-      ARM: OMAP1: clock: convert from round_rate() to determine_rate()
-      ARM: OMAP2+: clock: convert from round_rate() to determine_rate()
-      ARM: versatile: clock: convert from round_rate() to determine_rate()
+ arch/arm/mach-omap1/clock.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
- arch/arm/mach-omap1/clock.c                  | 19 +++++++++++++------
- arch/arm/mach-omap2/clkt2xxx_virt_prcm_set.c | 12 +++++++-----
- arch/arm/mach-versatile/spc.c                |  9 +++++----
- 3 files changed, 25 insertions(+), 15 deletions(-)
----
-base-commit: b551c4e2a98a177a06148cf16505643cd2108386
-change-id: 20250710-arm32-clk-round-rate-e52d845e682c
+diff --git a/arch/arm/mach-omap1/clock.c b/arch/arm/mach-omap1/clock.c
+index 83381e23fab983522ca01b8feffb861b02fee730..afc6404f62d39c4ddbac6f1ee04d889be6c47186 100644
+--- a/arch/arm/mach-omap1/clock.c
++++ b/arch/arm/mach-omap1/clock.c
+@@ -705,14 +705,21 @@ static unsigned long omap1_clk_recalc_rate(struct clk_hw *hw, unsigned long p_ra
+ 	return clk->rate;
+ }
+ 
+-static long omap1_clk_round_rate(struct clk_hw *hw, unsigned long rate, unsigned long *p_rate)
++static int omap1_clk_determine_rate(struct clk_hw *hw,
++				    struct clk_rate_request *req)
+ {
+ 	struct omap1_clk *clk = to_omap1_clk(hw);
+ 
+-	if (clk->round_rate != NULL)
+-		return clk->round_rate(clk, rate, p_rate);
++	if (clk->round_rate != NULL) {
++		req->rate = clk->round_rate(clk, req->rate,
++					    &req->best_parent_rate);
+ 
+-	return omap1_clk_recalc_rate(hw, *p_rate);
++		return 0;
++	}
++
++	req->rate = omap1_clk_recalc_rate(hw, req->best_parent_rate);
++
++	return 0;
+ }
+ 
+ static int omap1_clk_set_rate(struct clk_hw *hw, unsigned long rate, unsigned long p_rate)
+@@ -771,7 +778,7 @@ const struct clk_ops omap1_clk_gate_ops = {
+ 
+ const struct clk_ops omap1_clk_rate_ops = {
+ 	.recalc_rate	= omap1_clk_recalc_rate,
+-	.round_rate	= omap1_clk_round_rate,
++	.determine_rate = omap1_clk_determine_rate,
+ 	.set_rate	= omap1_clk_set_rate,
+ 	.init		= omap1_clk_init_op,
+ };
+@@ -784,7 +791,7 @@ const struct clk_ops omap1_clk_full_ops = {
+ 	.disable_unused	= omap1_clk_disable_unused,
+ #endif
+ 	.recalc_rate	= omap1_clk_recalc_rate,
+-	.round_rate	= omap1_clk_round_rate,
++	.determine_rate = omap1_clk_determine_rate,
+ 	.set_rate	= omap1_clk_set_rate,
+ 	.init		= omap1_clk_init_op,
+ };
 
-Best regards,
 -- 
-Brian Masney <bmasney@redhat.com>
+2.50.0
 
 
