@@ -1,87 +1,87 @@
-Return-Path: <linux-clk+bounces-24477-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24486-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D04F0B0066F
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 17:22:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D2C0B00692
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 17:26:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54E70588741
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 15:22:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0EB25469F3
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 15:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6316E2777E8;
-	Thu, 10 Jul 2025 15:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDFF274FD3;
+	Thu, 10 Jul 2025 15:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OsR4exhg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cgDD4YX5"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B254D2749FE
-	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 15:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4053A2749C3
+	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 15:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752160874; cv=none; b=cdZBu4lVsxHdHX5i73IrdfUce2zHeNIYrccWazwTOGJrw2xKI/4qgPCM3vDrpsQUt6upmf/o47piW0aG+c58DuelXK648DCGH3Hx5YbYriygeWnsjxWsp0uhH/U2dsnH/ndYDYuUrusT6u1K7jIIW6GW57xymkWLixBDNi4Orzo=
+	t=1752161024; cv=none; b=NBE+mY2NpcqYOYaSKZ50LhheT5iwEcBOLxOOCmpJUUGIvgTqp6WeQ7FsHNcOM6e4+0sHsIbl1E4hpQmOS4KZ5YMRcz60VVnE4mb66Pj2NGtVYHARFst6XEdr/dZXGFJYps9wCVwJX9fYyRXsIWVeijfDSHnS8NlqmKH+j1j6/EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752160874; c=relaxed/simple;
-	bh=y+AZFWJL051hZPxzrLPHAl9zoCHqdwam8bIR61IfRhQ=;
+	s=arc-20240116; t=1752161024; c=relaxed/simple;
+	bh=4BgFJNK2KApAx8BvGXfufY73usovEfW4jGfRZpX6CSI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Qmt8j2/bc6A9HVvWtbPKDlKvGtzEd9IDnWwd22pIOzSSXxNtuZMaR34J+PoG5QkFGdfsSCOjeV5wSmyuew2Y+AZpxeZdovwar6Cyoox1UuwmtNI/Ajb+Xm55UiKmY9iudaC5w0x+clv8tlJA/e2SUmqtiYYUL+j7+76fBQmN/ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OsR4exhg; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:To:Cc; b=pqyceTttziD9N5PrW+PORtVODBeuk/e8bd113Bx9G3xYH3eqQ3SZw7WRih0/6FAaVXem/fTM4bQ3EpwCvySSimjPgLNKNXAH6F1IGWrXOEXA1I7fvzpIvJT9yHagUIPypGw/ONvo1HGO53KiNhEvfA0COIE1pqUlMAj/j5IU7W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cgDD4YX5; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752160871;
+	s=mimecast20190719; t=1752161022;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tSPmB88QF1UNyRARNUEoZz86JZ+YjWuFEV+8k9Qdm2c=;
-	b=OsR4exhgTnVq3VC69wQn+eztYZHBvFsaIYSZa/Qhb+x41wsCdK+zvpg1C6PxmDjjx+MveF
-	3wVAso1QSYzQVZkkECqwMHGkA/CE68SQE6K/fKz5aCaNS5qoX0MyhcUsj6d2Qn0g0wMKos
-	WjuYx1zJ6y5pumzI8UlZVKqgueNa9wQ=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=epgV58m9AxzfEVbf4g4531apupWzR+R9RAW0WcCGVGc=;
+	b=cgDD4YX5Fx3F+I6ioxS0xkkta9b1dvX0QenWHFTtCP/bfJ6vc6L/SetiB8uPGXeAdKmR7A
+	6q1SCSqfXEGF9XzyrvFIHoeeoEgd7dExxU5eYkvsEFqKOeXddokmKyf+EGAsDXxx6zDBW9
+	a5QJ1zXwGwbRCKHcPwMKMVNr4Xa0OoU=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-2GEpZrsKMwO18l_y6g9cbg-1; Thu, 10 Jul 2025 11:21:09 -0400
-X-MC-Unique: 2GEpZrsKMwO18l_y6g9cbg-1
-X-Mimecast-MFC-AGG-ID: 2GEpZrsKMwO18l_y6g9cbg_1752160869
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4a9aa439248so13781011cf.1
-        for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 08:21:09 -0700 (PDT)
+ us-mta-145-JQMVlro2P1aaEoXMKdc2PQ-1; Thu, 10 Jul 2025 11:21:12 -0400
+X-MC-Unique: JQMVlro2P1aaEoXMKdc2PQ-1
+X-Mimecast-MFC-AGG-ID: JQMVlro2P1aaEoXMKdc2PQ_1752160872
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4a9cce09a9aso23567951cf.0
+        for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 08:21:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752160869; x=1752765669;
+        d=1e100.net; s=20230601; t=1752160872; x=1752765672;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tSPmB88QF1UNyRARNUEoZz86JZ+YjWuFEV+8k9Qdm2c=;
-        b=pXXgmiEr3t5TUdLwtcCa498fXhoEEgpJTuLVKIeCglgdGt20Srb/Meo1BCVjso70Ab
-         Bgs385tSepJPRerQbgS7uzC1VS6Tcx66VTzYD6Gwf4UGHf/xE/zv23enDiVwrRkgqjgG
-         mXZ7XxI1zJkVXbCkEO1vJmpDSnj2U0VPrth6a4OFD1BduU5LHcwUmfrO/Wy8M5ked9rS
-         uWiGVWjQrJYYinCwzW8qRYJTefYDqiQ83YgAKJTaywLdf9JqZw7Qyfo3DzR86o4QwqX4
-         KwE8o493qACU+bF1GwtRg5kEDtDkgArmBbPx6IvuIKgCtA6kDwY2DaSVvS2qCZKGQdtr
-         t04Q==
-X-Gm-Message-State: AOJu0Yy8tRCOpj2rZlcpSA7T2HB+N53CJo7FJf6QPaAd3lpwmwE0rRHl
-	TyXBuXEBfh6Mb06y2PspYDTlLfr3SpKp8p1tRe65WbMyamU9X/iSXPUkj//HvqgrbgLC9qPOjiL
-	eBgMjd/RbZPorUdaLIWRJ80asoqid9zuygeiUxuJK+wffj+ChkZc7dYLPY9Oyvg==
-X-Gm-Gg: ASbGncs+NELw6xdwev8ExwkuLg9VUtuNoGddZnPPUlmJzPcAx11o81ZNg+IJKoTlVVY
-	CW325Akhq6raLhN7LKEumpxNipflSeCn+gN600Z5P6iyBmKZ7cGLMSHdxfiCNwoEmC9gBP79/Vd
-	MEOZDceJ0YdGImSIV5MFe5t2G5BcwhtRBp5kPQ3jXvfO/OkeESlBV4OKi+k+K18jCo2R/4mC9ga
-	xR5OJRh8w5xX0T63DYcacwKajWp9aBnjMNGyNIu85oj8bRAVuxLl6Vk9QqXvCgvYgfligxD4K2o
-	53MeIjKSVv4X6s2kFfDTX7L831evYhyTQ5U6fp6N6l8Af5QevY6ylveTPs00
-X-Received: by 2002:a05:622a:4110:b0:4a6:ef9c:eaf6 with SMTP id d75a77b69052e-4a9ec7fc1a9mr45333511cf.41.1752160868725;
-        Thu, 10 Jul 2025 08:21:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFuCfhZPQ7Idmvh1qtK7kQPM/uffYT3OzQJBiz87ujd30b3ETbzpQriwnIDdG+tuY1zMSqkBA==
-X-Received: by 2002:a05:622a:4110:b0:4a6:ef9c:eaf6 with SMTP id d75a77b69052e-4a9ec7fc1a9mr45332871cf.41.1752160868384;
-        Thu, 10 Jul 2025 08:21:08 -0700 (PDT)
+        bh=epgV58m9AxzfEVbf4g4531apupWzR+R9RAW0WcCGVGc=;
+        b=Qat90A4exAyMHOshh31RS4Q58Htz5HWQTX4b5lsc7uEtKgrL12/7uBb8rJHmZriP8n
+         3cFmmCL/I3U+2SwgT62LIWIt9b8OVErFvDk51CKWXm0maAtiBUpdkE1DYqgAXymNginu
+         cw+Gvpyvh8qA2sHdb1Bnyo2H+ElrzZS9QtWi4+KUuwREz/6q5UfKUFZxrzGXe+gLUBo0
+         pQgnuNi8DAt9amKQlu1Ej9ETUTfUIaLNerv+64QBYi1X6lrTtTSFX/f7x7UlOavJsMe9
+         paLzWaxpzsJIE6yXok/VrcrfQFCrFRxV6eODpMIiljmBFX3eVOzhwSkjhThGrwX01dvA
+         yTKg==
+X-Gm-Message-State: AOJu0YzgPCaCXfLC6We5PV6obE6gwSE3CSHFfcA1Dkf31N2IcuGG61rC
+	Uq5ybaoLMyODXwnyNMVKjZ8XZK7pT3Rb/DLe5MH2ntAqyce0QDR/ihmPchTWlRRwqFSA6FAELjQ
+	5Pe8xf2wdjEIwQzf/zURlL3D4wZO69O9VkfSu7EkdmAR3IT19hygT/BR2B5Tl6Q==
+X-Gm-Gg: ASbGncuABlacbpHQr30dpSU68MkkeF2tsVjVXaBGHBqLkz5PZpqmbpSV5AYyWxZ2Tws
+	v4ePCfkulUCkvxNI1BIfNe9LSgrHD3oUfKDWo2LVVaX444C3o1z71CajnuaBJN8qnZrkia4VkC4
+	sLbNTHGf7xgRVg7HwKVoBHYXviv/FFPwwA1knvWVIu6h8P3gv0+ZcNgqwNLAgh3bFXdJ0E5n7xG
+	6ydpCesTj9nQSz9qhthGE18CeTW0pJWl3ycbTlGhz4J1XY16wNlFNwDJMh7udUhqhzp/zzzH39P
+	PmXTnHaosEYbkG4WXoEfvu9IcPQhCySF84z28u068wTHjI1p4gkdKOv2CGlT
+X-Received: by 2002:a05:622a:13cf:b0:4a7:9b9b:aad7 with SMTP id d75a77b69052e-4a9ec844349mr45147541cf.49.1752160871471;
+        Thu, 10 Jul 2025 08:21:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFLT1XiJrU+UqNY9Ntq3luY8jImtJ3Zw7F09c9Cj0qnJVdBHLwN1EIzNkD/8bD8ThuDgwCtJA==
+X-Received: by 2002:a05:622a:13cf:b0:4a7:9b9b:aad7 with SMTP id d75a77b69052e-4a9ec844349mr45146771cf.49.1752160870836;
+        Thu, 10 Jul 2025 08:21:10 -0700 (PDT)
 Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9edeee2c2sm9654471cf.74.2025.07.10.08.21.05
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a9edeee2c2sm9654471cf.74.2025.07.10.08.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 08:21:07 -0700 (PDT)
+        Thu, 10 Jul 2025 08:21:10 -0700 (PDT)
 From: Brian Masney <bmasney@redhat.com>
-Date: Thu, 10 Jul 2025 11:20:26 -0400
-Subject: [PATCH 06/15] rtc: rv3028: fix incorrect maximum clock rate
- handling
+Date: Thu, 10 Jul 2025 11:20:27 -0400
+Subject: [PATCH 07/15] rtc: ds1307: convert from round_rate() to
+ determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -90,7 +90,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-rtc-clk-round-rate-v1-6-33140bb2278e@redhat.com>
+Message-Id: <20250710-rtc-clk-round-rate-v1-7-33140bb2278e@redhat.com>
 References: <20250710-rtc-clk-round-rate-v1-0-33140bb2278e@redhat.com>
 In-Reply-To: <20250710-rtc-clk-round-rate-v1-0-33140bb2278e@redhat.com>
 To: Alexandre Belloni <alexandre.belloni@bootlin.com>, 
@@ -109,39 +109,64 @@ Cc: linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
  linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752160847; l=1044;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752160847; l=1810;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=y+AZFWJL051hZPxzrLPHAl9zoCHqdwam8bIR61IfRhQ=;
- b=0KJSbBt0DCZNkUMOmwxns1NITMSVMXCg2QJNQ7+FpDcQdwXvMZxfWyFb+ZQw34oW708cql8Z0
- 8ZzDlOPfUDOCuuTRShwnoG3D5ui88qCACdqmSjcf+TQTW6jSrQvcPZi
+ bh=4BgFJNK2KApAx8BvGXfufY73usovEfW4jGfRZpX6CSI=;
+ b=gO9ysBDglD/2ypzU7AUASOweu+17QRdU21E2uZnqmFKCHQ+Uy7Pcv2JFbQadunS2Oz2cuRLHO
+ oMy1rC7ws2ODWASKzDRAvMEp2urJXIZdGJLVZN2+KQPl6b+ZWpTWi8t
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 
-When rv3028_clkout_round_rate() is called with a requested rate higher
-than the highest supported rate, it currently returns 0, which disables
-the clock. According to the clk API, round_rate() should instead return
-the highest supported rate. Update the function to return the maximum
-supported rate in this case.
+The round_rate() clk ops is deprecated, so migrate this driver from
+round_rate() to determine_rate() using the Coccinelle semantic patch
+on the cover letter of this series.
 
-Fixes: f583c341a515f ("rtc: rv3028: add clkout support")
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/rtc/rtc-rv3028.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-ds1307.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
-index 868d1b1eb0f42e8cdf2895033c24f0d2690587ca..278841c2e47edfefd339f04bf5193f6970ba0c65 100644
---- a/drivers/rtc/rtc-rv3028.c
-+++ b/drivers/rtc/rtc-rv3028.c
-@@ -740,7 +740,7 @@ static long rv3028_clkout_round_rate(struct clk_hw *hw, unsigned long rate,
- 		if (clkout_rates[i] <= rate)
- 			return clkout_rates[i];
- 
--	return 0;
-+	return clkout_rates[0];
+diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
+index c8a666de9cbe9163ab7e112b01b99d97c94970d3..d9d0e482b5ea9300ec9d7e77e4c3ec531b9df867 100644
+--- a/drivers/rtc/rtc-ds1307.c
++++ b/drivers/rtc/rtc-ds1307.c
+@@ -1456,17 +1456,22 @@ static unsigned long ds3231_clk_sqw_recalc_rate(struct clk_hw *hw,
+ 	return ds3231_clk_sqw_rates[rate_sel];
  }
  
- static int rv3028_clkout_set_rate(struct clk_hw *hw, unsigned long rate,
+-static long ds3231_clk_sqw_round_rate(struct clk_hw *hw, unsigned long rate,
+-				      unsigned long *prate)
++static int ds3231_clk_sqw_determine_rate(struct clk_hw *hw,
++					 struct clk_rate_request *req)
+ {
+ 	int i;
+ 
+ 	for (i = ARRAY_SIZE(ds3231_clk_sqw_rates) - 1; i >= 0; i--) {
+-		if (ds3231_clk_sqw_rates[i] <= rate)
+-			return ds3231_clk_sqw_rates[i];
++		if (ds3231_clk_sqw_rates[i] <= req->rate) {
++			req->rate = ds3231_clk_sqw_rates[i];
++
++			return 0;
++		}
+ 	}
+ 
+-	return ds3231_clk_sqw_rates[ARRAY_SIZE(ds3231_clk_sqw_rates) - 1];
++	req->rate = ds3231_clk_sqw_rates[ARRAY_SIZE(ds3231_clk_sqw_rates) - 1];
++
++	return 0;
+ }
+ 
+ static int ds3231_clk_sqw_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -1525,7 +1530,7 @@ static const struct clk_ops ds3231_clk_sqw_ops = {
+ 	.unprepare = ds3231_clk_sqw_unprepare,
+ 	.is_prepared = ds3231_clk_sqw_is_prepared,
+ 	.recalc_rate = ds3231_clk_sqw_recalc_rate,
+-	.round_rate = ds3231_clk_sqw_round_rate,
++	.determine_rate = ds3231_clk_sqw_determine_rate,
+ 	.set_rate = ds3231_clk_sqw_set_rate,
+ };
+ 
 
 -- 
 2.50.0
