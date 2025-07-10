@@ -1,144 +1,160 @@
-Return-Path: <linux-clk+bounces-24419-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24423-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4476DAFF62B
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 02:52:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D8DCAFF78C
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 05:36:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 321263BA7E5
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 00:52:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0097916BFB1
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 03:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6512972621;
-	Thu, 10 Jul 2025 00:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9294128369D;
+	Thu, 10 Jul 2025 03:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5hSEqGT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0398539A;
-	Thu, 10 Jul 2025 00:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6F627F18C;
+	Thu, 10 Jul 2025 03:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752108766; cv=none; b=ecLdItJNOQ8ckJQ71eBJifbv4IewbDMWLRH3Ft9ZM7vhtNAELYgPczWx9eY0Xzfe7MyygXQBBioS6Zivi50HE7Db0tNDRexScUZXJmuElkE3G3s78JoOu/+UZnF6WtGyl0QF/qbsEJXoNSabaEO/iHNXRclLiGJM2Evrad+yn/s=
+	t=1752118572; cv=none; b=OSjUf3Td91pBKV1mrMUTOfCuCJnnGkJvFsrIaICoLBYCKQSTNG+FbHApJ5HK5JWFO8ibfyXZeOoy+DqaKRZUB2Ov1zwb0zMc0kbi5cwIvTOPyEYu8vaiHtBNfx/LiIEtoROr4p3Iweoigh6MRki0fTrf3m6CKYYv71XFJuKB60E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752108766; c=relaxed/simple;
-	bh=PcQOAmMRi9eC9ZiSQYO5b0e3eoTemRSNUMyF/PHyqt4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=rY2uqZm6tNjw6ftqjN+bQcEQk23ESk2yFoSQ2A1J0Mn3H3JwLXatPZNt7hK02kaucT+jukauAOwgROrVnh3fWIFo4CKS0b6BPcJMNUIs33ciaAPaUxXJhd2hxMKjkCSGGKhsH4FtTUsai/ieenSMCqRGxDPTI5N35KLSaKoXOcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com; spf=pass smtp.mailfrom=eswincomputing.com; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=eswincomputing.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eswincomputing.com
-Received: from dongxuyang$eswincomputing.com ( [10.12.96.41] ) by
- ajax-webmail-app2 (Coremail) ; Thu, 10 Jul 2025 08:52:26 +0800 (GMT+08:00)
-Date: Thu, 10 Jul 2025 08:52:26 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From: "Xuyang Dong" <dongxuyang@eswincomputing.com>
-To: "Bo Gan" <ganboing@gmail.com>, mturquette@baylibre.com, sboyd@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com,
-	huangyifeng@eswincomputing.com, pinkesh.vaghela@einfochips.com
-Subject: Re: Re: [PATCH v3 2/2] clock: eswin: Add eic7700 clock driver
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2024.2-cmXT6 build
- 20241203(6b039d88) Copyright (c) 2002-2025 www.mailtech.cn
- mispb-72143050-eaf5-4703-89e0-86624513b4ce-eswincomputing.com
-In-Reply-To: <97c55ec2-500b-476e-b99c-a4065b6ba574@gmail.com>
-References: <20250624103212.287-1-dongxuyang@eswincomputing.com>
- <20250624103314.400-1-dongxuyang@eswincomputing.com>
- <0f3aff5b-ff54-48a2-ae95-b344d311c3a1@gmail.com>
- <7a325b0b.2de1.197e94c605b.Coremail.dongxuyang@eswincomputing.com>
- <97c55ec2-500b-476e-b99c-a4065b6ba574@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	s=arc-20240116; t=1752118572; c=relaxed/simple;
+	bh=J9IHr1KctOiK5uQHZbL/z3dzePJcspSYALMm97MYSQ4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KNL03EwOUHoRyBJsTCUhpwtrQmsB3rN/X+x0qTujbtOInucAmihWWd6Un4GgWrNPrn7eT+ie7FTB7ra8iyPaQ1yikUK2aTuR7vRg0YscoXiUjq+bse1REPiZv6aiOPCCiX1WxWWIaDUb23q4G1Te1NFx2FUSQgeDGxOme/0W1VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5hSEqGT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CDAAEC4CEEF;
+	Thu, 10 Jul 2025 03:36:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752118571;
+	bh=J9IHr1KctOiK5uQHZbL/z3dzePJcspSYALMm97MYSQ4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Y5hSEqGTXu/Pj3yyA4uWS0LpBDCYQuOGTxum+FvU6lh+QU+0iRrgASLXoH8nCmxVD
+	 Sexi7U27kS355BYYEQVuJb18uGpgGEoSf/Ne3MghxggY+1RHKU8nmkkIuPsCCVitET
+	 UzjAHhC4vSkVMjaKGstgMX3QK9ymKfXBEhIRNaQTrLt8BF54F7dl95H0Qt918XzEtI
+	 0HB69onL0ZDh/sWchE6WSSfnpYFyvvltuHb4Z9anqALLGfRmdhiMfYyv+kNmfFhhdN
+	 q0y3SdSytqVo+uflv/Uv97avlpJzLzPitppHMTWN3UoOFIystTvykHZHRagTUUUsVO
+	 bmmM/xpWo1w1Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B920AC83F09;
+	Thu, 10 Jul 2025 03:36:11 +0000 (UTC)
+From: jiebing chen via B4 Relay <devnull+jiebing.chen.amlogic.com@kernel.org>
+Subject: [PATCH v5 0/6] Add support for S4 audio
+Date: Thu, 10 Jul 2025 11:35:36 +0800
+Message-Id: <20250710-audio_drvier-v5-0-d4155f1e7464@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <5bbfd825.2ea1.197f1d1c88a.Coremail.dongxuyang@eswincomputing.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:TQJkCgA31pTKDm9oYBCsAA--.18496W
-X-CM-SenderInfo: pgrqw5xx1d0w46hv4xpqfrz1xxwl0woofrz/1tbiAgETAmhumckFf
-	QAAs8
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWkCw
-	CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-	daVFxhVjvjDU=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAk1b2gC/2XM3WoCMRCG4VuRHDdlJpM1WY96HyIl5kcH6qZkN
+ Siy994oFHVljr6B572KMRaOo1gtrqLEyiPnoY3uYyH83g27KDm0LRSoDhBBulPg/B1K5VgkGNe
+ RRa97vRWN/JaY+HzPrTdt73k85nK51yvevv8heg1VlCCtR20MJLIOvtzhJ+/Yf/p8ELdUVQ+uU
+ M+4apyMtZgcGd/Hd05PXNkZp8bDNgWCDkzU/p3rByfsZ1w3vrTtTHLBYP/Kp2n6A3i68TRnAQA
+ A
+X-Change-ID: 20250110-audio_drvier-07a5381c494b
+To: Jerome Brunet <jbrunet@baylibre.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>
+Cc: linux-sound@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org, 
+ jian.xu@amlogic.com, shuai.li@amlogic.com, zhe.wang@amlogic.com, 
+ jiebing chen <jiebing.chen@amlogic.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752118569; l=2849;
+ i=jiebing.chen@amlogic.com; s=20250110; h=from:subject:message-id;
+ bh=J9IHr1KctOiK5uQHZbL/z3dzePJcspSYALMm97MYSQ4=;
+ b=rqiq0Hm8pHRGBFSUb4QfYzyj05BRkcTHYujviz7z7Z/l5KLn0NWIymzBLMeVCmcJ3cqtxuVOm
+ LGEhApJJnhPD/vCifRnMFRD2RT6AyICY0sQw5MuzIpTVJl80EgjXfNv
+X-Developer-Key: i=jiebing.chen@amlogic.com; a=ed25519;
+ pk=6rFvvF45A84pLNRy03hfUHeROxHCnZ+1KAGw/DoqKic=
+X-Endpoint-Received: by B4 Relay for jiebing.chen@amlogic.com/20250110 with
+ auth_id=316
+X-Original-From: jiebing chen <jiebing.chen@amlogic.com>
+Reply-To: jiebing.chen@amlogic.com
 
-SGkgQm8sCgpUaGFua3MgZm9yIHRoZSBncmVhdCBpbnB1dC13ZeKAmWxsIHdvcmsgb24gdGhlc2Ug
-Y2hhbmdlcyEKCj4gSGkgWHV5YW5nCj4gCj4gT24gNy84LzI1IDAyOjA5LCBYdXlhbmcgRG9uZyB3
-cm90ZToKPiA+IEhpIEJvLAo+ID4gCj4gPiBUaGFuayB5b3UgZm9yIHlvdXIgc3VnZ2VzdGlvbiwg
-aXQgaW1wcm92ZXMgb3VyIGRyaXZlciBkZXZlbG9wbWVudCBlZmZvcnRzLgo+ID4gUGVyIHlvdXIg
-cmVjb21tZW5kYXRpb25zLCB3ZSB3aWxsIG9wdGltaXplIHRoZSBkcml2ZXIgcHJvZ3JhbS4KPiA+
-IAo+ID4+IE9uIDYvMjQvMjUgMDM6MzMsIGRvbmd4dXlhbmdAZXN3aW5jb21wdXRpbmcuY29tIHdy
-b3RlOgo+ID4+IFRoaXMgaXMgdG90YWxseSB3cm9uZyBJIHRoaW5rLiBXaHkgZG9lcyB0aGUgY2xv
-Y2sgZHJpdmVyIGhhdmUgdG8gY2FyZSBhYm91dAo+ID4+IENQVSB2b2x0YWdlPyBUaGlzIGZ1bmN0
-aW9uYWxpdHkgYmVsb25ncyB0byBjcHVmcmVxLiBZb3UgY2FuIHRha2UgSkg3MTEwIGFzCj4gPj4g
-cmVmZXJlbmNlIGFuZCBzZWUgaG93IGl0J3MgZG9uZTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-YWxsLzIwMjMwNjA2MTA1NjU2LjEyNDM1NS00LW1hc29uLmh1b0BzdGFyZml2ZXRlY2guY29tLwo+
-ID4+IExvb2tpbmcgYXQgZXN3aW4gdmVuZG9yIHUtYm9vdCwgaXQgc2VlbXMgeW91IGhhdmUgc29t
-ZSBTb0MgdGhhdCBjYW4gb3BlcmF0ZQo+ID4+IGF0IDEuNkdoeiB3aXRob3V0IGJ1bXBpbmcgdGhl
-IHZvbHRhZ2UuIFdoeSBub3QgZG8gaXQgdmlhIG9wZXJhdGluZy1wb2ludHMtdjIsCj4gPj4gbGlr
-ZSB0aGUgb3RoZXIgU29Dcz8gSXQgY2FuIHRoZW4gYmUgb3ZlcnJpZGRlbiBieSBib2FyZCBkZXZp
-Y2UtdHJlZSBhbmQgdS1ib290Cj4gPj4gQWxzbyB0aGUgbG9naWMgb2Ygc3dpdGNoaW5nIGNsb2Nr
-IGJlZm9yZSBjaGFuZ2luZyBQTEwgc2hvdWxkIGJlIGRvbmUgdXNpbmcKPiA+PiBub3RpZmllcjog
-aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI0MDgyNjA4MDQzMC4xNzk3ODgtMi14aW5neXUu
-d3VAc3RhcmZpdmV0ZWNoLmNvbQo+ID4+IFJlbW92ZSB1bmRvY3VtZW50ZWQgcGFyYW1ldGVycyBz
-dWNoIGFzICJjcHVfbm9fYm9vc3RfMV82Z2h6IiBhbmQKPiA+PiAiY3B1LWRlZmF1bHQtZnJlcXVl
-bmN5Ii4KPiA+IAo+ID4gV2hlbiBoaWdoZXIgY3B1IGZyZXF1ZW5jeSBpcyBhcHBsaWVkLCB0aGUg
-aGlnaGVyIHZvbHRhZ2UgbXVzdCBiZQo+ID4gY29uZmlndXJlZCBhY2NvcmRpbmdseS4gU28sIGZy
-b20gbXkgcGVyc3BlY3RpdmUsIGl0J3MgYmV0dGVyIHRvCj4gPiBpbXBsZW1lbnQgdGhlIGNsaywg
-cmVndWxhdG9yIGFuZCBjcHUgZnJlcXVlbmN5IHNlcGFyYXRlbHkuCj4gPiBjbGsuYyBhbmQgY2xr
-LWVpYzc3MDAuYyBhcmUgcmVzcG9uc2libGUgZm9yIHNldHRpbmcgY2xrIG9ubHkuCj4gPiByZWd1
-bGF0b3ItZWljNzcwMC5jIGlzIGZvciB2b2x0YWdlIGNvbmZpZ3VyYXRpb24uCj4gPiBjcHVmcmVx
-LWVpYzc3MDAuYyBpcyBmb3IgY3B1IGZyZXF1ZW5jeSBjb25maWd1cmF0aW9uLCBhbmQgaXQgd2ls
-bCBjYWxsCj4gPiB0aGUgQVBJcyBvZiBjbGsgYW5kIHJlZ3VsYXRvci4KPiA+IAo+ID4gSXMgdGhp
-cyB0aGUgcmlnaHQgYXBwcm9hY2g/Cj4gPiAKPiAKPiBTb21lIGNvbnRleHQgZm9yIHBlb3BsZSBu
-b3QgZmFtaWxpYXIgd2l0aCB0aGlzIFNvQy9Cb2FyZC4gVGhlIHJlZ3VsYXRvciBpcyBub3QKPiBw
-YXJ0IG9mIHRoZSBTb0MsIGJ1dCBvbiB0aGUgYm9hcmQuIFRoZSBHUElPIHBpbiBpcyBjb250cm9s
-bGluZyB0aGUgcmF0aW8gb2YgYQo+IERDL0RDIGNvbnZlcnRlciB0byBzZWxlY3QgYmV0d2VlbiAw
-LjhWIGFuZCAwLjlWLiBJIHRoaW5rIHRoZXJlJ3Mgbm8gbmVlZCBmb3IKPiByZWd1bGF0b3ItZWlj
-NzcwMC5jLCBhbmQgaXQgYWN0dWFsbHkgd291bGQgYmUgd3JvbmcgaWYgeW91IGRvIGl0IHRoaXMg
-d2F5LAo+IGJlY2F1c2UgcGVyIHlvdXIgZGF0YXNoZWV0LCBDUFUgdm9sdGFnZSBjYW4gYmUgYW55
-IHZhbHVlIHdpdGhpbiBhIHN1cHBvcnRlZAo+IHJhbmdlLCBhbmQgaXQncyB1cCB0byB0aGUgYm9h
-cmQgdmVuZG9yIHRvIGRldGVybWluZSB0aGUgdm9sdGFnZS4gVGh1cywgYmV0dGVyCj4gdG8gbW9k
-ZWwgaXQgd2l0aCBhICJyZWd1bGF0b3ItZ3BpbyIgaW4gdGhlIGRldmljZS10cmVlLiBObyBjb2Rl
-IGNoYW5nZSBuZWVkZWQuCj4gKEFzc3VtaW5nIHlvdSBoYXZlIEdQSU8vcGluY3RybCBtZXJnZWQs
-IHdoaWNoIHRoaW5rIHlvdSBhbHJlYWR5IGRpZD8pCj4gCj4gRm9yIGNwdWZyZXEsIEkgZG9uJ3Qg
-c2VlIHdoeSBpdCBjYW4ndCBiZSBqdXN0IG1vZGVsZWQgYnkgIm9wZXJhdGluZy1wb2ludHMtdjIi
-Cj4ganVzdCBsaWtlIG90aGVyIFNvQy9ib2FyZHMuIE9uY2UgY29tcGxpY2F0aW9uIGlzIHRoZSAw
-LjgvMC45IHZvbHRhZ2Ugc2VsZWN0aW9uCj4gSSBzZWUgdHdvIHBvdGVudGlhbCB3YXlzIHRvIHNv
-bHZlIGl0IChhc3N1bWluZyB1c2luZyBvcHApOgo+IAo+IDEuIEV4dGVuZCB0aGUgb3BwIHRvIGR5
-bmFtaWNhbGx5IGNob29zZSAwLjgvMC45IGJhc2VkIG9uIHlvdXIgT1RQIHNldHRpbmdzCj4gMi4g
-SXNvbGF0ZSB0aGlzIGxvZ2ljIGluIHUtYm9vdCB0byBwYXRjaCB0aGUgb3BwLXRhYmxlIGluIGRl
-dmljZS10cmVlIGJlZm9yZQo+ICAgICBib290LCBvciBpbiBncnViIGJvb3Qgc2NlbmFyaW8sIGFs
-c28gaG9vayB0aGUgRUZJX0RUX0ZJWFVQIHByb3RvY29sIGluCj4gICAgIHUtYm9vdCB0byBwYXRj
-aCBkZXZpY2UtdHJlZSBiZWZvcmUgZ3J1YiBoYW5kcyBvZmYgdG8gTGludXgKPiAKPiBGb3IgMSwg
-eW91IHByb2JhYmx5IG5lZWQgdG8gaGF2ZSBhIHN0YWJsZSBPVFAgbGF5b3V0LCB3aGljaCBkb2Vz
-bid0IHZhcnkgZnJvbQo+IGNoaXAgdG8gY2hpcCBhbmQgYm9hcmQgdG8gYm9hcmQuIEl0IGFsc28g
-cmVxdWlyZXMgeW91IHRvIGhhdmUgYSBPVFAgZHJpdmVyIGluCj4gTGludXgga2VybmVsIHRvIHJl
-YWQgZnJvbSBPVFAuCj4gCj4gMiBpcyBwcm9iYWJseSBzaW1wbGVyIGFuZCBhIGxvdCBlYXNpZXIg
-dG8gaW1wbGVtZW50LiBUaGVyZSdzIGFsc28gdmVyeSBtaW5pbWFsCj4gb3IgdmlydHVhbGx5IG5v
-IGNvZGUgY2hhbmdlIHRvIExpbnV4LiBJdCdzIHBlcmhhcHMgZWFzaWVyIHRvIGRvIGJvYXJkIHNw
-ZWNpZmljCj4gc3R1ZmYgaW4gdS1ib290LiBZb3UgY2FuIHVzZSAwLjlWIGJ5IGRlZmF1bHQgaW4g
-b3BwLXRhYmxlIGluIGRldmljZS10cmVlIGFuZAo+IHUtYm9vdCBjYW4gZG8gdGhlIHdvcmsgb2Yg
-YWRqdXN0aW5nIGl0IGRvd24gdG8gMC44IGJhc2VkIG9uIHNvbWUgT1RQIHNldHRpbmdzLgo+IFRo
-ZXJlJ3MgYWxzbyBubyBoYXJtIGlmIHNvbWV0aGluZyB3ZW50IHdyb25nLCBlLmcuLCBPVFAgaXMg
-ZW1wdHkgb3IgdS1ib290Cj4gZG9lc24ndCBpbXBsZW1lbnQgdGhlIHBhdGNoaW5nIGxvZ2ljLiBJ
-biB0aGF0IGNhc2UsIHlvdSBqdXN0IHdhc3RlIHNvbWUgcG93ZXIuCj4gSXQncyBhbHNvIHBvc3Np
-YmxlIHRvIHJlbW92ZSBzb21lIGZyZXF1ZW5jaWVzIGluIHUtYm9vdCBpZiB0aGF0IGZyZXEgY2Fu
-J3QgYmUKPiBhY2hpZXZlZCBubyBtYXR0ZXIgaG93IGhpZ2ggdGhlIHZvbHRhZ2UuCj4gCj4gPj4g
-T3ZlcmFsbCBJIHRoaW5rIHlvdSBiZXR0ZXIgZG8gc29tZSByZWFsIGNsZWFudXAgYW5kIHJlZmFj
-dG9yIG9mIHRoaXMgcGF0Y2gKPiA+PiBiZWZvcmUgc2VuZGluZyBpdCBvdXQgYWdhaW4uIFRoZSBk
-cml2ZXIgaXMgcXVpdGUgbG9uZywgYW5kIEkgc3VnZ2VzdCB5b3Ugc2hvdWxkCj4gPj4gY29uc2lk
-ZXIgb3B0aW1pemluZy9jb25kZW5zaW5nIHRoZSBsb2dpYy4gSSBndWVzcyB5b3UgcHJvYmFibHkg
-Y2FycmllZCBvdmVyIHRoZQo+ID4+IHNhbWUgY29kZSBhbmQgaGFja3MgeW91IG1hZGUgZm9yIHRo
-ZSB2ZW5kb3IgdHJlZSAoZXN3aW5jb21wdXRpbmcvbGludXgtc3RhYmxlKQo+ID4+IFRoZXJlJ3Mg
-bm8gd2F5IHRoZXkgY2FuIGJlIGFjY2VwdGVkIGJ5IHVwc3RyZWFtLiBUYWtlIGEgbG9vayBhdCBv
-dGhlciBjbGsgdHJlZQo+ID4+IGltcGxlbWVudGF0aW9ucyBhbmQgc3BlbmQgc29tZSByZWFsIGVm
-Zm9ydCBmaXhpbmcgdGhlIGNvZGUuIERvbid0IGxldCB0aGUKPiA+PiByZXZpZXdlcnMgZ3JvdyBp
-bXBhdGllbnQgYnkgb25seSBjaGFuZ2luZyBzb21ldGhpbmcgc3VwZXJmaWNpYWxseS4KPiA+IAo+
-ID4gV2UnbGwgaW1wcm92ZSB0aGUgcXVhbGl0eSBvZiBvdXIgcmVzcG9uc2VzLgo+ID4gCj4gPiBC
-ZXN0IHJlZ2FyZHMsCj4gPiBYdXlhbmcKPiBCbwoKQmVzdCByZWdhcmRzLApYdXlhbmcK
+This series completes the end-to-end audio support
+for S4 SoC from hardware bindings to driver implementation
+and system integration.
+
+1 Device Tree Bindings Updates 
+Added audio power domain support for S4 SoC.Defined mclk/sclk pad clock IDs in AXG audio bindings.
+Add S4 audio tocodec binding support.
+
+2 Driver Implementation
+Implemented S4 tocodec driver for G12A architecture.
+Add mclk pad divider support for S4 in AXG audio clock.
+
+3 Device Tree Integration
+Add Amlogic S4 audio subsystem support in arm64 DTS.
+
+Signed-off-by: jiebing chen <jiebing.chen@amlogic.com>
+---
+Changes in v5:
+- Fix warning Documentation/devicetree/bindings/clock/amlogic,axg-audio-clkc.yam when make dt_binding_check
+- The audio reg is mounted below the APB bus in dts file.
+- Deal with pad clock in a distinct controller.
+- Fix warning for sound/soc/meson/g12a-toacodec.c
+- Link to v4: https://lore.kernel.org/r/20250319-audio_drvier-v4-0-686867fad719@amlogic.com
+
+Changes in v4:
+- fix dtb check warning 
+- add maxItems of power domain for dt-bindings
+- fixed audio clock pads regmap base and reg offset 
+- use dapm widget to control tocodec bclk and mclk enable
+- Link to v3: https://lore.kernel.org/r/20250228-audio_drvier-v3-0-dbfd30507e4c@amlogic.com
+
+Changes in v3:
+- remove g12a tocodec switch event
+- Modify the incorrect title for dt-bindings
+- Link to v2: https://lore.kernel.org/r/20250214-audio_drvier-v2-0-37881fa37c9e@amlogic.com
+
+Changes in v2:
+- remove tdm pad control and change tocodec base on g12a
+- change hifipll rate to support 24bit
+- add s4 audio clock
+- Link to v1: https://lore.kernel.org/r/20250113-audio_drvier-v1-0-8c14770f38a0@amlogic.com
+
+---
+jiebing chen (6):
+      dt-bindings: clock: meson: Add audio power domain for s4 soc
+      dt-bindings: clock: axg-audio: Add mclk and sclk pad clock ids
+      dt-bindings: Asoc: axg-audio: Add s4 audio tocodec
+      ASoC: meson: g12a-toacodec: Add s4 tocodec driver
+      clk: meson: axg-audio: Add the mclk pad div for s4 chip
+      arm64: dts: amlogic: Add Amlogic S4 Audio
+
+ .../bindings/clock/amlogic,axg-audio-clkc.yaml     |  55 ++-
+ .../bindings/sound/amlogic,g12a-toacodec.yaml      |   1 +
+ .../boot/dts/amlogic/meson-s4-s805x2-aq222.dts     | 218 +++++++++++
+ arch/arm64/boot/dts/amlogic/meson-s4.dtsi          | 387 ++++++++++++++++++
+ drivers/clk/meson/axg-audio.c                      | 435 ++++++++++++++++++++-
+ drivers/clk/meson/axg-audio.h                      |   6 +
+ include/dt-bindings/clock/axg-audio-clkc.h         |  11 +
+ sound/soc/meson/g12a-toacodec.c                    |  42 ++
+ 8 files changed, 1152 insertions(+), 3 deletions(-)
+---
+base-commit: 6ecd20965bdc21b265a0671ccf36d9ad8043f5ab
+change-id: 20250110-audio_drvier-07a5381c494b
+
+Best regards,
+-- 
+Jiebing Chen <jiebing.chen@amlogic.com>
+
+
 
