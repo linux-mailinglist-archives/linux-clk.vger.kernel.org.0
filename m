@@ -1,127 +1,110 @@
-Return-Path: <linux-clk+bounces-24569-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24582-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B426B00C9B
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 22:11:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4696CB00D74
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 23:00:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EACD57BD90A
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 20:09:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96B4F567634
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 21:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0102C303DFE;
-	Thu, 10 Jul 2025 20:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1B12FD878;
+	Thu, 10 Jul 2025 21:00:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="g5pW/LLR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cw0Po9jz"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DC1302CAA;
-	Thu, 10 Jul 2025 20:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24BB288C0A;
+	Thu, 10 Jul 2025 21:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752178079; cv=none; b=AvmdIBurNSOg2bfSuG7R4xYyyEvwQrPqMZ1HTdMoiNFsA/9JvGunNzPd2nW6VJUrdKFpLjcfnISWy6+KgTGEt35ZWP7Mx3/7WBRPAkKpGdLypioCI5/eP8lWEyDk02+xdV2XoRDfRshp4IfXUlOjpxLO3v+ry905yqJQLsJpan8=
+	t=1752181208; cv=none; b=LoFwcXZ+eF5T34wAlNop2Wek3hgZDzMuLHcdPB8x2kRzFKxA8JbmPcHMAay3R7CupbEF8VnSmCCQjYDhXooMhyhxMT8eZNHyWjqEYVSBMwXonwGdrU28BF6jZfA8BA2lojA9Ys3cE5TNLZ2Ogoi5a+n+N/sJ/uLEDDKu8lsEH6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752178079; c=relaxed/simple;
-	bh=lA2OIDdTOCkwdk+6eUUqk+oLgsWQashBUKnhjCCsbEc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cZQG54uGEaTDSy+/mzP+YGroACMuHJax61jwfDHT0/4/vgOCHklO9KN+kd/ra51glTs6ginHnIs9U7CGToBQFRZZeZfEWZ05Bpt270Wg3Ee+xL5vmsEbYHP1wEiw3KEe8dngUl1BnLAe6kNF2NVzZtu8VwQ7AVyIygd12aRoYlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=g5pW/LLR; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1752178079; x=1783714079;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lA2OIDdTOCkwdk+6eUUqk+oLgsWQashBUKnhjCCsbEc=;
-  b=g5pW/LLRPv3rAVWH6ES3TL7NPnBs3qd4XNzYiGfeVVLHQjtLfXB5ZeyL
-   i4Fb0a37J93ImaQtA/wyfpBtE4eyy33+E6N0/mZZf3hXAlLw/WoFvAvCt
-   m4NlRp/AVwrih4Lxr81kyxCCCQrIVRMe+1xFKrDX5RN3w/guDdT+pgIqE
-   A9WxfIckHze6T0WcybYuIeKSHkKS3QhxfPKr7HJdh4qaCecrngoq1+Hmk
-   iIMQneaEiSydkrOEQGW1E4qQNzks1wFJESFH3mdAFkuGACM8YNIn3+4Bk
-   Ka9oczkWobC7I3Rm/MSKZ1gzY+3fL0PNczVOVSAaZzMkkwjgCyenTfT23
-   A==;
-X-CSE-ConnectionGUID: qOQSLemoQZOGUxBCHa7nXg==
-X-CSE-MsgGUID: 1J0KURvdTXiUsa0PWS/rbQ==
-X-IronPort-AV: E=Sophos;i="6.16,301,1744095600"; 
-   d="scan'208";a="275215690"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Jul 2025 13:07:41 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Thu, 10 Jul 2025 13:07:35 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Thu, 10 Jul 2025 13:07:35 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <mturquette@baylibre.com>, <sboyd@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>
-CC: <varshini.rajendran@microchip.com>, <linux-clk@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<robh@kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH v3 32/32] clk: at91: sam9x7: Clean up formatting
-Date: Thu, 10 Jul 2025 13:07:25 -0700
-Message-ID: <6e904e4dbb0f591e0fd8200e948c3c0d8debec6f.1752176711.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1752176711.git.Ryan.Wanner@microchip.com>
-References: <cover.1752176711.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1752181208; c=relaxed/simple;
+	bh=MewW7/+o8jjvZCCPAiXzkcATxmHODd29D85iDo4C6/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=esHzv+/lYcMIJkW9ET0JP/UHCGR+bHEBcXABLYMIY7cV/keqFMojHQLUq5Fdo7pq/oqqdRvYRKJ7OdJ4mXTRa+YnM2J1gYGDlBUoEVL4zfMycn3ygvtfcoc67lRlZg7mSmIja8eGSa3cVLayMJ21CK1N6myHTE9yR62rkvwu0gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cw0Po9jz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A4CC4CEE3;
+	Thu, 10 Jul 2025 21:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752181208;
+	bh=MewW7/+o8jjvZCCPAiXzkcATxmHODd29D85iDo4C6/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cw0Po9jzlMUjPqWpMGa3JmmBs8qRn4ccQxsczXqp7qgR6aRRsHF+DE2bSDEwQQBP4
+	 I0b0G/fSn3B7wsgm9pMdPjLO/IZc1SbO2D81ch1852sxjhGtQuUK5/+8r9JvFllG0s
+	 Z7OYhhl15781l/ITp0MO26j7ZK6Sc7q5bmjdkQPM6yegffImghltyi/rJg/57P542s
+	 ABRuHxHyoWse9e/GL2hh4AjgDy0mxvD0NAd2MBekD8PfWFupXjR7Z4NRsGWVh9uGL6
+	 QxY+PWYQXib4cQNtLPsI24Hdwb1dkhsXRIZaZcmb3x67rQLmcG8v8erktQz/1oP3vs
+	 baVNbw2mfKzrw==
+Date: Thu, 10 Jul 2025 14:00:06 -0700
+From: Drew Fustini <fustini@kernel.org>
+To: Yao Zi <ziyao@disroot.org>
+Cc: Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Jisheng Zhang <jszhang@kernel.org>,
+	Yangtao Li <frank.li@vivo.com>, linux-riscv@lists.infradead.org,
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] clk: thead: th1520-ap: Correctly refer the parent
+ of osc_12m
+Message-ID: <aHAp1q9tLy465gnO@x1>
+References: <20250710092135.61049-1-ziyao@disroot.org>
+ <20250710092135.61049-2-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250710092135.61049-2-ziyao@disroot.org>
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On Thu, Jul 10, 2025 at 09:21:34AM +0000, Yao Zi wrote:
+> The "osc_12m" fixed factor clock refers the external oscillator by
+> setting clk_parent_data.fw_name to osc_24m, which is obviously wrong
+> since no clock-names property is allowed for compatible
+> thead,th1520-clk-ap.
+> 
+> Refer the oscillator as parent by index instead.
+> 
+> Fixes: ae81b69fd2b1 ("clk: thead: Add support for T-Head TH1520 AP_SUBSYS clocks")
+> Signed-off-by: Yao Zi <ziyao@disroot.org>
+> ---
+>  drivers/clk/thead/clk-th1520-ap.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/clk-th1520-ap.c
+> index ebfb1d59401d..42feb4bb6329 100644
+> --- a/drivers/clk/thead/clk-th1520-ap.c
+> +++ b/drivers/clk/thead/clk-th1520-ap.c
+> @@ -582,7 +582,14 @@ static const struct clk_parent_data peri2sys_apb_pclk_pd[] = {
+>  	{ .hw = &peri2sys_apb_pclk.common.hw }
+>  };
+>  
+> -static CLK_FIXED_FACTOR_FW_NAME(osc12m_clk, "osc_12m", "osc_24m", 2, 1, 0);
+> +static struct clk_fixed_factor osc12m_clk = {
+> +	.div		= 2,
+> +	.mult		= 1,
+> +	.hw.init	= CLK_HW_INIT_PARENTS_DATA("osc_12m",
+> +						   osc_24m_clk,
+> +						   &clk_fixed_factor_ops,
+> +						   0),
+> +};
+>  
+>  static const char * const out_parents[] = { "osc_24m", "osc_12m" };
+>  
+> -- 
+> 2.50.0
 
-Clean up variable formatting as well as add an extra space to improve
-readability.
+Reviewed-by: Drew Fustini <fustini@kernel.org>
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- drivers/clk/at91/sam9x7.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks for fixing this. osc_12m now appears under osc_24m in
+clk_summary.
 
-diff --git a/drivers/clk/at91/sam9x7.c b/drivers/clk/at91/sam9x7.c
-index 56243f6f7e65..ce6ad2a0be98 100644
---- a/drivers/clk/at91/sam9x7.c
-+++ b/drivers/clk/at91/sam9x7.c
-@@ -739,16 +739,16 @@ static void __init sam9x7_pmc_setup(struct device_node *np)
- {
- 	u8 td_slck_index = 0, md_slck_index = 1, main_xtal_index = 2;
- 	struct clk_hw *hw, *main_rc_hw, *main_osc_hw, *usbck_hw;
--	struct clk_range range = CLK_RANGE(0, 0);
- 	const char *const main_xtal_name = "main_xtal";
- 	const char *const td_slck_name = "td_slck";
- 	const char *const md_slck_name = "md_slck";
-+	struct clk_range range = CLK_RANGE(0, 0);
-+	struct clk_parent_data parent_data[9];
- 	struct pmc_data *sam9x7_pmc;
- 	void **clk_mux_buffer = NULL;
- 	int clk_mux_buffer_size = 0;
- 	struct clk *main_xtal;
- 	struct regmap *regmap;
--	struct clk_parent_data parent_data[9];
- 	int i, j;
- 
- 	main_xtal = of_clk_get(np, main_xtal_index);
-@@ -943,6 +943,7 @@ static void __init sam9x7_pmc_setup(struct device_node *np)
- 		PMC_INIT_TABLE(mux_table, 4);
- 		PMC_FILL_TABLE(&mux_table[4], sam9x7_gck[i].pp_mux_table,
- 			       sam9x7_gck[i].pp_count);
-+
- 		for (j = 0; j < sam9x7_gck[i].pp_count; j++) {
- 			u8 pll_id = sam9x7_gck[i].pp[j].pll_id;
- 			u8 pll_compid = sam9x7_gck[i].pp[j].pll_compid;
--- 
-2.43.0
-
+Drew
 
