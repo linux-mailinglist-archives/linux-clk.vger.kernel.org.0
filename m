@@ -1,86 +1,86 @@
-Return-Path: <linux-clk+bounces-24516-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24518-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79F4AB00845
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 18:12:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5424B00847
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 18:13:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52B265603CB
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 16:09:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BBC9562493
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 16:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABD82F0C54;
-	Thu, 10 Jul 2025 16:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF2C2F0C64;
+	Thu, 10 Jul 2025 16:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DDA2dW+P"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GuYCCDt2"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C067E2EFD87
-	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 16:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900702F0C62
+	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 16:08:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752163704; cv=none; b=fyEqk5Oesh6uDs0B1TH4V5kGfj8buwU4U6eqWrdgl+sTitRsp+H20eqBpvn2nY6iRVwmDty/97bpHQG/nCp8vQMd13XjGoBnhMPlrFoaWF0tc4Xjct4gb8V9ZpbAKbWv9bl8ARhM2z5gCGlBegKFybF1wqevsCoOL1Yy94RJbuE=
+	t=1752163708; cv=none; b=bl6IqmvDF5YbdtBmXhunPrpMv70NAO7LQYQdOZvooiJleKP60G9ETARRgRSjgi5HB8NAVzeY9GFUYEOTnF9vrZ9dlSXIqiUihwkajqrFlbf+UAZ8iX3of3Ixfs64JcJP1xpmJT0dBPdWGCKHKqVqhG/iEzWUF/x1Y7rksICHUhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752163704; c=relaxed/simple;
-	bh=DwS1eyPB/neaQufQvNJoTsoU5XhXKJIB7F14A2pZwIo=;
+	s=arc-20240116; t=1752163708; c=relaxed/simple;
+	bh=Sp7TBqvADBjUTdYv865HJDuwxPugQD7l6ebJ7mJAKsk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O4gnEgrNOd5Zlv+BeSO9fqZwty3iOwNfTh59y9rJNpUFW00tHdT1hvncAGC/lNUOb61tKoxKBAyD3vJrvn87UmMczcywijRHdDseHDQh3MPhm4vu/8FBWXTNA1eTanRWuN+fBk7jTrRbkeMiLOUHwS27rEGYXXFevTL6CEmJDu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DDA2dW+P; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=JPbkHvdlbcW/ofIt/aJgL4miXmF56S/spIqEYm+fpdYKmg/Y7hzbTMDeeBRjNuWaEHFmOO1r2Ep8GJG0VNjURArXUyJqnn+URqPVWx2Ktj+XdHe5pjyEngdAZzIlG/2dG1w0fRd1qAxhX1ghhYi7gsw5hn82FVMBEewQjcEs0uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GuYCCDt2; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1752163701;
+	s=mimecast20190719; t=1752163705;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4I0PFIaMBaCPYEhsVGTxsNMaZSF2zv8K67vNW2wzfuw=;
-	b=DDA2dW+PejeZf5W0sjt4dHdLgzRy96Or1l3+OyFcND9zm10RFhYyrJL6y1kp3GrBGYfcwT
-	W3unCtuHiM0arwFi7dryAjYA0weDeO7rNwjVCNK5OueA24rMtK90eZq94c+ZjdJ4s1vp5G
-	pMIEtHJzTad9fI00gAQbnqE7nN0S45Q=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=/4ASla69sSqfjU35JM1zsmkkZLK8k4ITigVacA38LgM=;
+	b=GuYCCDt2a4SfJkuTr/A8Vn5//3EJOVA+MslLvrcCVd3UJGwMF4FOLZOcz4mG/kHPI6yYcq
+	nHqutictmmaOgPrqVzMJMX8YqeaQoVmtXzHHhc0q8eqdEGlWOOR8fz+Te8g683j/BaSPcP
+	5ZEQSikIQyTfVJ7vtSMv2oAR1flbjOU=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-504-9qlvxo5aObejUWJ4sKzPSg-1; Thu, 10 Jul 2025 12:08:19 -0400
-X-MC-Unique: 9qlvxo5aObejUWJ4sKzPSg-1
-X-Mimecast-MFC-AGG-ID: 9qlvxo5aObejUWJ4sKzPSg_1752163699
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-700c2d3f3d6so13262006d6.2
-        for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 09:08:19 -0700 (PDT)
+ us-mta-329-zcQZUTvQP7iZv29EjJzBfA-1; Thu, 10 Jul 2025 12:08:22 -0400
+X-MC-Unique: zcQZUTvQP7iZv29EjJzBfA-1
+X-Mimecast-MFC-AGG-ID: zcQZUTvQP7iZv29EjJzBfA_1752163702
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7d460764849so390302385a.1
+        for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 09:08:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752163699; x=1752768499;
+        d=1e100.net; s=20230601; t=1752163701; x=1752768501;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4I0PFIaMBaCPYEhsVGTxsNMaZSF2zv8K67vNW2wzfuw=;
-        b=K47PhAzB4a9i65f2dpQuqD+7GlnTRJvdBKqBzCVl3Cvv2YpRXnI/j/POemWLVB7R4R
-         FnkqJaVYDIjfirLxPwHMu2SRYCwLf2yefsA8ywWgR2kPd3VJin1GfAgH1OXK601nMKMS
-         yzGO0/SmvUmL4d7ZaT4TOoY1dFesCBDXZQDiw8rHhqMs6kOrwkuNia+ab5E8Xld9W/fP
-         U+2f/WCyYQgKRkFo5D8j5T/vkn/p12eGcMHp1ZjQc1jiFKBT2eucVWvgRbo4gbm02DaA
-         7KCkF6SAQpc//WZwxf7nuU1DJfcH+MZsq41v0byns4djAfavnEaEIN1Ri2MEKHS/NdQr
-         FjNg==
-X-Gm-Message-State: AOJu0YwOF0kU6rauV8k9sDxHsc9jfRikeq8Da41GpDGHr/JAdbTMQhwo
-	iss5nz2Ap8THMu7H1kbfLijmoxJkCtnEORpzYlvmgKTW6kx9Yzlpm8uWe3neoKNYa154F21lMl2
-	cv+oX7FZdsdLJrsUWWaenVkcXglpx+kIignIIU0pv4+3jdkpugnk5ODjbFw2HAQ==
-X-Gm-Gg: ASbGncsZUe35EIjinDc3udawilgPrurNmVPZpGkB5O9RyKyR4/dEDmEnC7aJQRBPDX9
-	4PJw8DydEuORMSbL2JxG0h1N2O4zpqkrLRRP44TTYjNPpQy9Mb8c5yuv5TgcdpzX16/Cb6YjEmt
-	lOKJBL9glExTaybo7k0e6BjluH1Pg4Zp6xirkesRG8N+RPySpeE6HwwoCJF21m+fRsgNhvf8yRt
-	yjFa4GB/e6GczofSTC7qMg6R/zIb+aFN2gmcoUwR5MIFG85kj8BgjBcEqnUgLjm+nN8mUemjEh3
-	aN8YtjiRbKxe3ipyNLMV3s5qjKxAu3NHRmKEUG/b2cxmdRWvLElZFXJR2cUp
-X-Received: by 2002:a05:6214:4a84:b0:704:8aaa:319b with SMTP id 6a1803df08f44-70497fab6f5mr54886696d6.7.1752163698887;
-        Thu, 10 Jul 2025 09:08:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGPjEiUWwXCCHctPequGjvxsmcP2oTYR8PP+05MEZihcEYQLxAz0y6yXBwiYJgaIGBkfIQAEQ==
-X-Received: by 2002:a05:6214:4a84:b0:704:8aaa:319b with SMTP id 6a1803df08f44-70497fab6f5mr54885916d6.7.1752163698330;
-        Thu, 10 Jul 2025 09:08:18 -0700 (PDT)
+        bh=/4ASla69sSqfjU35JM1zsmkkZLK8k4ITigVacA38LgM=;
+        b=GT2vJlDN5CtzEb8hI//1glI50BwkTlhjIrcvuRH0FMMK5QdSFSqiNEkVbBx6+qPLFA
+         TZhHmHQKziymEAJGlveAaIDj5xZ5TSRL8dRidDYEeDveX52SI4FGUUrVFIWQdEcb5mwd
+         VK83CjjIwUwyWQgcxErVe0WsImVwZfwyqBqoI8BPumciHzNFx+QR69sNGqVEfEsFOhTF
+         S2sJGFl4IcRgM5BNf6aKOSBRyMMC8jJBJyKX1KpPGMxmN/ebWgDyTvYbcJZ88mSflsi5
+         qAMmqYQ/mYnNJ8WYHRL6hXOtT//OJXPiew+hjQU1TZ0bAq4FXzkW9ViThXm7tm8Lrw7b
+         MrHA==
+X-Gm-Message-State: AOJu0Yxskhx0CCeMcuNKS605y4acZR8D7054cc0nUwi/7UVZYAnCQGiV
+	1R+f5nAQe5BXCRePo1Gdt7it0NCQXWkhaZw1pLpNlXGExvBrE7LKzm/UWASe+p1RLBXXF6jTpmQ
+	odHTEJDs+WjHLIzIsjE1pGu6RBkXar+Zfmbb/T/K68NHRNBHRA4TAYWZ5/QGoSQ==
+X-Gm-Gg: ASbGncvvVhnFQ4LJwSBoA/7x9sJ0Y55G57EBKyqZ5iBgYeqTHqbNDWoDncllAhBci/W
+	c3/L+01dXYczHFs5zNmp7MjaBdt9iOzIl+ZVDdrM5NIJLs03Q0ww+XK0/K+h44sunXh8A1/ANcH
+	voBs96/2nNi4Jg/FEnRnlwhxeR39otih5f98Ymkk8AlzOqAm7/1v/bdHrHCOEJIGl5jYsiGR4VG
+	t7tvrPlht5f0rpzcx3IoXfU6AOni8Qol4rsk33B6LVsPNJBCFK2K0s0vyODuTkpWcqAZSYo5QN6
+	rf0Tmhi72bNre3kyI4gWv5cLHiHrZwRviRlz9WUqHnpZiV2MU0EFNzzKZKlC
+X-Received: by 2002:a05:6214:54c2:b0:704:9584:c370 with SMTP id 6a1803df08f44-70495a595bamr70247736d6.7.1752163701108;
+        Thu, 10 Jul 2025 09:08:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHDRrDKWwpckJ37fdbyhC+PMLfUgyhQZCTV67/zNoDsc5Ut1ZyXEkNXO6Agbo3M33HxjAj7/A==
+X-Received: by 2002:a05:6214:54c2:b0:704:9584:c370 with SMTP id 6a1803df08f44-70495a595bamr70246876d6.7.1752163700571;
+        Thu, 10 Jul 2025 09:08:20 -0700 (PDT)
 Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70497d39749sm9670216d6.58.2025.07.10.09.08.16
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-70497d39749sm9670216d6.58.2025.07.10.09.08.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Jul 2025 09:08:17 -0700 (PDT)
+        Thu, 10 Jul 2025 09:08:19 -0700 (PDT)
 From: Brian Masney <bmasney@redhat.com>
-Date: Thu, 10 Jul 2025 12:07:14 -0400
-Subject: [PATCH 4/9] phy: mediatek: phy-mtk-hdmi-mt8195: convert from
+Date: Thu, 10 Jul 2025 12:07:15 -0400
+Subject: [PATCH 5/9] phy: mediatek: phy-mtk-mipi-dsi-mt8173: convert from
  round_rate() to determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
@@ -90,7 +90,7 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250710-phy-clk-round-rate-v1-4-0ff274055e42@redhat.com>
+Message-Id: <20250710-phy-clk-round-rate-v1-5-0ff274055e42@redhat.com>
 References: <20250710-phy-clk-round-rate-v1-0-0ff274055e42@redhat.com>
 In-Reply-To: <20250710-phy-clk-round-rate-v1-0-0ff274055e42@redhat.com>
 To: Vinod Koul <vkoul@kernel.org>, 
@@ -107,11 +107,11 @@ Cc: linux-clk@vger.kernel.org, linux-phy@lists.infradead.org,
  linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
  linux-rockchip@lists.infradead.org, Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752163685; l=1601;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752163685; l=1519;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=DwS1eyPB/neaQufQvNJoTsoU5XhXKJIB7F14A2pZwIo=;
- b=4cPcXNvbK3LJUngty9/hS4Cci5iNskdrVCzBboRgMF/vVZq4JO3qCRcMs3ZcshnLpFzqFvn2A
- ZJ4lm2QjCh4CBdhbHz6OimHjO2IugpTJTJVBSFGBISv7EeMJ0RGydsb
+ bh=Sp7TBqvADBjUTdYv865HJDuwxPugQD7l6ebJ7mJAKsk=;
+ b=QdRXZy3WXcCDAKY+nITPfzBZtQ8RpvdKNlvOltT6ZNVcwHEAkVhWAcnk2UBWK7KubiIjAaW2b
+ RaP8yKzs4UnCzedb/XCmTGOR6M6qboXHNuqR38QkPjLse9NBJ4Rx33V
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 
@@ -121,40 +121,36 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-index b38f3ae26b3f3d8c9e73b43d86510acf6cedb471..1426a2db984d53b91125b18f7725738c44f19555 100644
---- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-+++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-@@ -418,13 +418,13 @@ static int mtk_hdmi_pll_set_rate(struct clk_hw *hw, unsigned long rate,
- 	return mtk_hdmi_pll_calc(hdmi_phy, hw, rate, parent_rate);
+diff --git a/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c b/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
+index 673cb0f08959e0e4f2b1ade2ebaf796e8b76f8bc..438ff3605d90121b7bfe02b3ddca8194437ed9ba 100644
+--- a/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
++++ b/drivers/phy/mediatek/phy-mtk-mipi-dsi-mt8173.c
+@@ -237,16 +237,18 @@ static void mtk_mipi_tx_pll_unprepare(struct clk_hw *hw)
+ 	mtk_phy_clear_bits(base + MIPITX_DSI_PLL_CON0, RG_DSI_MPPLL_DIV_MSK);
  }
  
--static long mtk_hdmi_pll_round_rate(struct clk_hw *hw, unsigned long rate,
--				    unsigned long *parent_rate)
-+static int mtk_hdmi_pll_determine_rate(struct clk_hw *hw,
-+				       struct clk_rate_request *req)
+-static long mtk_mipi_tx_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+-				       unsigned long *prate)
++static int mtk_mipi_tx_pll_determine_rate(struct clk_hw *hw,
++					  struct clk_rate_request *req)
  {
- 	struct mtk_hdmi_phy *hdmi_phy = to_mtk_hdmi_phy(hw);
- 
--	hdmi_phy->pll_rate = rate;
--	return rate;
-+	hdmi_phy->pll_rate = req->rate;
+-	return clamp_val(rate, 50000000, 1250000000);
++	req->rate = clamp_val(req->rate, 50000000, 1250000000);
++
 +	return 0;
  }
  
- static unsigned long mtk_hdmi_pll_recalc_rate(struct clk_hw *hw,
-@@ -439,7 +439,7 @@ static const struct clk_ops mtk_hdmi_pll_ops = {
- 	.prepare = mtk_hdmi_pll_prepare,
- 	.unprepare = mtk_hdmi_pll_unprepare,
- 	.set_rate = mtk_hdmi_pll_set_rate,
--	.round_rate = mtk_hdmi_pll_round_rate,
-+	.determine_rate = mtk_hdmi_pll_determine_rate,
- 	.recalc_rate = mtk_hdmi_pll_recalc_rate,
+ static const struct clk_ops mtk_mipi_tx_pll_ops = {
+ 	.prepare = mtk_mipi_tx_pll_prepare,
+ 	.unprepare = mtk_mipi_tx_pll_unprepare,
+-	.round_rate = mtk_mipi_tx_pll_round_rate,
++	.determine_rate = mtk_mipi_tx_pll_determine_rate,
+ 	.set_rate = mtk_mipi_tx_pll_set_rate,
+ 	.recalc_rate = mtk_mipi_tx_pll_recalc_rate,
  };
- 
 
 -- 
 2.50.0
