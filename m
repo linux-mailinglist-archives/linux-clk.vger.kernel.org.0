@@ -1,177 +1,206 @@
-Return-Path: <linux-clk+bounces-24401-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24402-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 931FAAFF501
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 00:53:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88870AFF59E
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 02:21:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC1E916B612
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Jul 2025 22:53:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ACE01C24F8E
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Jul 2025 00:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E407F229B18;
-	Wed,  9 Jul 2025 22:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F67A78F34;
+	Thu, 10 Jul 2025 00:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nMyI7iuo"
+	dkim=pass (1024-bit key) header.d=coasia.com header.i=@coasia.com header.b="DYjoVkqB"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from spam.coasia.com (mail2.coasia.com [112.168.119.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56534801;
-	Wed,  9 Jul 2025 22:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B60AD23
+	for <linux-clk@vger.kernel.org>; Thu, 10 Jul 2025 00:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=112.168.119.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752101576; cv=none; b=QyCmEDNuz7wyo8K639/5bkQpp9m70hkg86s5NCcidhYlEPN4uBf6RXMVHBX7+vEeAm9OqNUQQwQZmSq3IicEfz239KpqiKb1/DAa5GqW2MKLAAoZwcRn2L1TvZpMv64G+vfYf+sDJ3ZTTPQVGnjcS3Cpp6ctsN3WVkHw7sY8QS0=
+	t=1752106861; cv=none; b=do+lvrKvsVDsmQJ/WZDa1tUhgCjlFjuG9sooG0/1adYm0vfNNZIhKtn504ZvLb+EQpJGypXdZd2zfdojRpXYjXu9tS56OrOikXxayJouNX28lVgSfyr7A0QpF6WIwLSjrg6Z5yKzM/bIXuOv8e5enmc+Sy6co+KtKi4Y+04cvqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752101576; c=relaxed/simple;
-	bh=mduGN1yJiHucUotgWYDElpYHrjHdAOSNb8vAqPrzkHk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nxVaIBhsfkC8cOWTpV0L2BJ/cTBIPXMiDie3V0VwH/PlalgA6+TkH/nePX1n6ifmFS24H7YbZlNQyx1lfgbG+gLeMSAgb+7/p27ydzeiSaLoy6hGPhVxZZAu0v9EN9tyrtZsPGDu0AV1y1kkHCzwWwSqFJyWJQ5WrSb+UbxINwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nMyI7iuo; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-74924255af4so366225b3a.1;
-        Wed, 09 Jul 2025 15:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752101574; x=1752706374; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7pGyJ74sJAHPwSq0M5kKX3Ley3GiaOjrmlTbO8aXVCI=;
-        b=nMyI7iuo01uwF5wT4Q8EMp/UtCjEGR2eq/kfFUhs68pqZZzNsfJJl+Ry9XicTDAo9I
-         8DIBCzwreDGC/PEwovhcMW220gtWnaE2E3k5GZQ+qcm0xwg9aC1JiEPMUba+vy/PZ3Q4
-         AsP45v0LL4g2whmzEYvsxH1/FyTuRJx9tsHvtiF8M830k8CFlnSzaiZViG5pKOcQSQ16
-         SVBd+rIL61jWXujV5/uaLxy08gCqKZ3pGe++PQ1gkgqH84h3mr05eZiwGoQl92/Y10Ui
-         t0yrScdrYboTi05m0y8dq7/v2LWfUwqMdcB0F1vv1rYKBGmrahu+rvPVoQahYLQb14/P
-         WaUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752101574; x=1752706374;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7pGyJ74sJAHPwSq0M5kKX3Ley3GiaOjrmlTbO8aXVCI=;
-        b=AYnjcyggX+ZOLh9CGit5ssQQ/fop0CuQSGMuwF3OSSFYTU51DIM4JdHLXIKBBkyOnD
-         howO7pNbHY2j9fBpcTdqTjWtQFRJCy5JT9T7kLz7/RDcjirxqzqbaR0mPMP0LWP1OWdQ
-         jIEHo83+m0qltjxYCB1LPMZoOI/k03XpsRaTgazP4/9CnbquFbAmFyCr5aHu22/eUPtm
-         trSbLJ88ZgSbMKzwU2howccd9CZwxrj9JQzj5Ly8rHyyuwjVG5RDMFXclU08e14fDhGD
-         HI6tZebg1MVhcxt3UBR/tpYJ0vNEeErI+RKdD8N/dLpL77GyvqwE5/bXspIaNEXUSOMi
-         mnPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVP2Mp0NW3iE5ukrFWlF1b2bbDFYJD4/2HksizMfaUFgKxdvJw9ZRJbZjdIiKmhTBZTkX4OUW7xM0swJrRk@vger.kernel.org, AJvYcCVQIkkZQ7ozPWgrC26i/OmUwkFHEUxCvwOV/k6zuE/r9LKVKrRewYO2uI9YVPFWqgOlowuRyENHvWAF@vger.kernel.org, AJvYcCVYD/052tjNDUYxPpQth11gd1Avj8/2TBAzRW6cITRqNYbQ0hi+eZZxmelcAQVX/KwPyXw7UdAIkXgc@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHM44SkpkpF/kOiE4fsLIZEz3ug0StsiprQ5fCp6vsGTx2CMR0
-	KiRNMl0egNXUtYU8e04RfXgf+qADcjbMmFuJaminDL0ZaEAnQTvF/BEv
-X-Gm-Gg: ASbGncuJonsA+gSjPQn9gj0+IuaZmq4L+vuac48nNC+7/E+nRLNjYZ2CBnQY7yBMWMi
-	QOV+HKhVKerImBP2NbuIVow/hu8j7JAVcsTA3xyjNcbOaGDQzoo565409Fo3H+IrFTzvH97ksfS
-	UJdhaXljLBuhijgKOvhr5fWY6IjFGS57jjndIvbsMPDWYezFMgwTVYd75iWqUm52oI5P1znygNn
-	iPJCknsyozEQ8pbr7OBCyY1IkdMOxf7KoPjooNAIJXmYqjxQBz9FvDs7iottjnlwM9BQRh6KH0j
-	rzI5uc05CK3J1v72BMCazp+vwlQ38NaJnM7rK7u+sLqQzg1ILSJwVnWpYkezCRsch4BWLA1vbMI
-	=
-X-Google-Smtp-Source: AGHT+IHahCIpZmuEf3/YdV/SH/U9HkJCe0XpP5p5h+uSRbD71aZLs5Ns93G8nOL7yh7fSlnp+bdYaQ==
-X-Received: by 2002:a05:6a20:7291:b0:220:8ce7:d6b8 with SMTP id adf61e73a8af0-2300656f034mr602815637.37.1752101574383;
-        Wed, 09 Jul 2025 15:52:54 -0700 (PDT)
-Received: from [192.168.0.13] ([172.92.174.142])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b3bbe7297bcsm261744a12.73.2025.07.09.15.52.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Jul 2025 15:52:53 -0700 (PDT)
-Message-ID: <97c55ec2-500b-476e-b99c-a4065b6ba574@gmail.com>
-Date: Wed, 9 Jul 2025 15:52:26 -0700
+	s=arc-20240116; t=1752106861; c=relaxed/simple;
+	bh=5TCqIKAAZraTPISadWHH3ICmjB1H6s6kj8mUhsQHdN4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HljhlnZdF+N7024z8He5EA6q5ZgRGnS7gG4OjuWkqu/TNbkW+Eh01/9cmUGBhmjqi+OS0l9jIQeXCCW4rwzuu/eYX/ARUw2Rp+tIqwIEZC7i+A7vSJ46LHswMHnqbpkKKoiOFtz5/y0Hafxwt6aXMn6fBZw7tPU203+2wZi6n7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=coasia.com; spf=pass smtp.mailfrom=coasia.com; dkim=pass (1024-bit key) header.d=coasia.com header.i=@coasia.com header.b=DYjoVkqB; arc=none smtp.client-ip=112.168.119.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=coasia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coasia.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=coasia.com; s=coasia;
+	t=1752106849; bh=5TCqIKAAZraTPISadWHH3ICmjB1H6s6kj8mUhsQHdN4=;
+	l=3410; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=DYjoVkqBmuQGkRBwZTGZHDjx9QRAz3kCc8AHXdSyuNrIOWvSGso8apc/shFMjuHNy
+	 bU/6WB8K81rKKfOSU75Nkhf2KTDLsNzIpDQt+qxAzR6MbAmAld0dOq5hC+K8uZwb2h
+	 k0mQfmGBOdlVRPFlYyNTt41E8XRcG9TS2KhAON78=
+Received: from unknown (HELO kangseongu..) (ksk4725@coasia.com@115.23.218.194)
+	by 192.168.10.159 with ESMTP; 10 Jul 2025 09:20:49 +0900
+X-Original-SENDERIP: 115.23.218.194
+X-Original-SENDERCOUNTRY: KR, South Korea 
+X-Original-MAILFROM: ksk4725@coasia.com
+X-Original-RCPTTO: jesper.nilsson@axis.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	krzk@kernel.org,
+	s.nawrocki@samsung.com,
+	cw00.choi@samsung.com,
+	alim.akhtar@samsung.com,
+	linus.walleij@linaro.org,
+	tomasz.figa@gmail.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	kenkim@coasia.com,
+	pjsin865@coasia.com,
+	gwk1013@coasia.com,
+	ksk4725@coasia.com,
+	hgkim05@coasia.com,
+	mingyoungbo@coasia.com,
+	smn1196@coasia.com,
+	pankaj.dubey@samsung.com,
+	shradha.t@samsung.com,
+	ravi.patel@samsung.com,
+	inbaraj.e@samsung.com,
+	swathi.ks@samsung.com,
+	hrishikesh.d@samsung.com,
+	dj76.yang@samsung.com,
+	hypmean.kim@samsung.com,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@axis.com,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	soc@lists.linux.dev
+From: ksk4725@coasia.com
+To: Jesper Nilsson <jesper.nilsson@axis.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Tomasz Figa <tomasz.figa@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: kenkim <kenkim@coasia.com>,
+	Jongshin Park <pjsin865@coasia.com>,
+	GunWoo Kim <gwk1013@coasia.com>,
+	SeonGu Kang <ksk4725@coasia.com>,
+	HaGyeong Kim <hgkim05@coasia.com>,
+	GyoungBo Min <mingyoungbo@coasia.com>,
+	SungMin Park <smn1196@coasia.com>,
+	Pankaj Dubey <pankaj.dubey@samsung.com>,
+	Shradha Todi <shradha.t@samsung.com>,
+	Ravi Patel <ravi.patel@samsung.com>,
+	Inbaraj E <inbaraj.e@samsung.com>,
+	Swathi K S <swathi.ks@samsung.com>,
+	Hrishikesh <hrishikesh.d@samsung.com>,
+	Dongjin Yang <dj76.yang@samsung.com>,
+	Sang Min Kim <hypmean.kim@samsung.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-arm-kernel@axis.com,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	soc@lists.linux.dev
+Subject: [PATCH 00/16] Add support for the Axis ARTPEC-8 SoC
+Date: Thu, 10 Jul 2025 09:20:30 +0900
+Message-Id: <20250710002047.1573841-1-ksk4725@coasia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] clock: eswin: Add eic7700 clock driver
-To: Xuyang Dong <dongxuyang@eswincomputing.com>, mturquette@baylibre.com,
- sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: ningyu@eswincomputing.com, linmin@eswincomputing.com,
- huangyifeng@eswincomputing.com, pinkesh.vaghela@einfochips.com
-References: <20250624103212.287-1-dongxuyang@eswincomputing.com>
- <20250624103314.400-1-dongxuyang@eswincomputing.com>
- <0f3aff5b-ff54-48a2-ae95-b344d311c3a1@gmail.com>
- <7a325b0b.2de1.197e94c605b.Coremail.dongxuyang@eswincomputing.com>
-Content-Language: en-US
-From: Bo Gan <ganboing@gmail.com>
-In-Reply-To: <7a325b0b.2de1.197e94c605b.Coremail.dongxuyang@eswincomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Xuyang
+From: SeonGu Kang <ksk4725@coasia.com>
 
-On 7/8/25 02:09, Xuyang Dong wrote:
-> Hi Bo,
-> 
-> Thank you for your suggestion, it improves our driver development efforts.
-> Per your recommendations, we will optimize the driver program.
-> 
->> On 6/24/25 03:33, dongxuyang@eswincomputing.com wrote:
->> This is totally wrong I think. Why does the clock driver have to care about
->> CPU voltage? This functionality belongs to cpufreq. You can take JH7110 as
->> reference and see how it's done: https://lore.kernel.org/all/20230606105656.124355-4-mason.huo@starfivetech.com/
->> Looking at eswin vendor u-boot, it seems you have some SoC that can operate
->> at 1.6Ghz without bumping the voltage. Why not do it via operating-points-v2,
->> like the other SoCs? It can then be overridden by board device-tree and u-boot
->> Also the logic of switching clock before changing PLL should be done using
->> notifier: https://lore.kernel.org/r/20240826080430.179788-2-xingyu.wu@starfivetech.com
->> Remove undocumented parameters such as "cpu_no_boost_1_6ghz" and
->> "cpu-default-frequency".
-> 
-> When higher cpu frequency is applied, the higher voltage must be
-> configured accordingly. So, from my perspective, it's better to
-> implement the clk, regulator and cpu frequency separately.
-> clk.c and clk-eic7700.c are responsible for setting clk only.
-> regulator-eic7700.c is for voltage configuration.
-> cpufreq-eic7700.c is for cpu frequency configuration, and it will call
-> the APIs of clk and regulator.
-> 
-> Is this the right approach?
-> 
+Add basic support for the Axis ARTPEC-8 SoC.
+This SoC contains four Cortex-A53 CPUs and other several IPs.
 
-Some context for people not familiar with this SoC/Board. The regulator is not
-part of the SoC, but on the board. The GPIO pin is controlling the ratio of a
-DC/DC converter to select between 0.8V and 0.9V. I think there's no need for
-regulator-eic7700.c, and it actually would be wrong if you do it this way,
-because per your datasheet, CPU voltage can be any value within a supported
-range, and it's up to the board vendor to determine the voltage. Thus, better
-to model it with a "regulator-gpio" in the device-tree. No code change needed.
-(Assuming you have GPIO/pinctrl merged, which think you already did?)
+Patches 1 to 10 provide the support for the clock controller,
+which is similar to other Samsung SoCs.
 
-For cpufreq, I don't see why it can't be just modeled by "operating-points-v2"
-just like other SoC/boards. Once complication is the 0.8/0.9 voltage selection
-I see two potential ways to solve it (assuming using opp):
+The remaining patches provide pinctrl support and
+initial device tree support.
 
-1. Extend the opp to dynamically choose 0.8/0.9 based on your OTP settings
-2. Isolate this logic in u-boot to patch the opp-table in device-tree before
-    boot, or in grub boot scenario, also hook the EFI_DT_FIXUP protocol in
-    u-boot to patch device-tree before grub hands off to Linux
+Hakyeong Kim (9):
+  dt-bindings: clock: Add ARTPEC-8 CMU bindings
+  clk: samsung: Add clock PLL support for ARTPEC-8 SoC
+  clk: samsung: artpec-8: Add initial clock support
+  clk: samsung: artpec-8: Add clock support for CMU_CMU block
+  clk: samsung: artpec-8: Add clock support for CMU_BUS block
+  clk: samsung: artpec-8: Add clock support for CMU_CORE block
+  clk: samsung: artpec-8: Add clock support for CMU_CPUCL block
+  clk: samsung: artpec-8: Add clock support for CMU_FSYS block
+  clk: samsung: artpec-8: Add clock support for CMU_PERI block
 
-For 1, you probably need to have a stable OTP layout, which doesn't vary from
-chip to chip and board to board. It also requires you to have a OTP driver in
-Linux kernel to read from OTP.
+Ravi Patel (2):
+  dt-bindings: clock: Add CMU bindings definitions for ARTPEC-8 platform
+  dt-bindings: arm: Add Axis ARTPEC SoC platform
 
-2 is probably simpler and a lot easier to implement. There's also very minimal
-or virtually no code change to Linux. It's perhaps easier to do board specific
-stuff in u-boot. You can use 0.9V by default in opp-table in device-tree and
-u-boot can do the work of adjusting it down to 0.8 based on some OTP settings.
-There's also no harm if something went wrong, e.g., OTP is empty or u-boot
-doesn't implement the patching logic. In that case, you just waste some power.
-It's also possible to remove some frequencies in u-boot if that freq can't be
-achieved no matter how high the voltage.
+SeonGu Kang (3):
+  dt-bindings: pinctrl: samsung: Add compatible for ARTPEC-8 SoC
+  pinctrl: samsung: Add ARTPEC-8 SoC specific configuration
+  arm64: dts: axis: Add initial pinctrl support
 
->> Overall I think you better do some real cleanup and refactor of this patch
->> before sending it out again. The driver is quite long, and I suggest you should
->> consider optimizing/condensing the logic. I guess you probably carried over the
->> same code and hacks you made for the vendor tree (eswincomputing/linux-stable)
->> There's no way they can be accepted by upstream. Take a look at other clk tree
->> implementations and spend some real effort fixing the code. Don't let the
->> reviewers grow impatient by only changing something superficially.
-> 
-> We'll improve the quality of our responses.
-> 
-> Best regards,
-> Xuyang
-Bo
+sungminpark (2):
+  arm64: dts: axis: Add initial device tree support
+  arm64: defconfig: Enable Axis ARTPEC SoC
+
+ .../devicetree/bindings/arm/axis.txt          |  13 -
+ .../devicetree/bindings/arm/axis.yaml         |  35 +
+ .../bindings/clock/axis,artpec8-clock.yaml    | 224 +++++
+ .../bindings/pinctrl/samsung,pinctrl.yaml     |   1 +
+ MAINTAINERS                                   |  14 +
+ arch/arm64/Kconfig.platforms                  |  13 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/axis/Makefile             |   4 +
+ arch/arm64/boot/dts/axis/artpec-pinctrl.h     |  36 +
+ arch/arm64/boot/dts/axis/artpec8-grizzly.dts  |  68 ++
+ arch/arm64/boot/dts/axis/artpec8-pinctrl.dtsi | 373 ++++++++
+ arch/arm64/boot/dts/axis/artpec8.dtsi         | 269 ++++++
+ arch/arm64/configs/defconfig                  |   2 +
+ drivers/clk/samsung/Kconfig                   |   8 +
+ drivers/clk/samsung/Makefile                  |   1 +
+ drivers/clk/samsung/clk-artpec8.c             | 890 ++++++++++++++++++
+ drivers/clk/samsung/clk-pll.c                 | 129 ++-
+ drivers/clk/samsung/clk-pll.h                 |   2 +
+ .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  50 +
+ drivers/pinctrl/samsung/pinctrl-exynos.h      |  10 +
+ drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
+ drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
+ include/dt-bindings/clock/axis,artpec8-clk.h  | 122 +++
+ 23 files changed, 2254 insertions(+), 14 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/axis.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/axis.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/axis,artpec8-clock.yaml
+ create mode 100644 arch/arm64/boot/dts/axis/Makefile
+ create mode 100644 arch/arm64/boot/dts/axis/artpec-pinctrl.h
+ create mode 100644 arch/arm64/boot/dts/axis/artpec8-grizzly.dts
+ create mode 100644 arch/arm64/boot/dts/axis/artpec8-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/axis/artpec8.dtsi
+ create mode 100644 drivers/clk/samsung/clk-artpec8.c
+ create mode 100644 include/dt-bindings/clock/axis,artpec8-clk.h
+
+-- 
+2.34.1
+
 
