@@ -1,138 +1,357 @@
-Return-Path: <linux-clk+bounces-24655-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24662-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FDF5B01FBF
-	for <lists+linux-clk@lfdr.de>; Fri, 11 Jul 2025 16:55:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2F55B02116
+	for <lists+linux-clk@lfdr.de>; Fri, 11 Jul 2025 18:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BF175C3786
-	for <lists+linux-clk@lfdr.de>; Fri, 11 Jul 2025 14:54:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D3B6A43E2D
+	for <lists+linux-clk@lfdr.de>; Fri, 11 Jul 2025 16:04:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4FE2EB5C7;
-	Fri, 11 Jul 2025 14:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="GLwIa/U4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9ECD2ED862;
+	Fri, 11 Jul 2025 16:04:23 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378EF2EACF8;
-	Fri, 11 Jul 2025 14:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5926320F;
+	Fri, 11 Jul 2025 16:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752245564; cv=none; b=jmlr8sVIi4MUPmlN5Da/QBJOQl8TxQ+XoWBgvitccIShNC7uamuKTHXrsCt8xadt2yRCrpVuuJ9HaMEkvxsnWtNadoVShTjbGouF6CSpOYNhCWHkIvUC/e1tv6yFNFFsY2mlnnvSELZ8q8IWtUDxGeIIL1euq5yhUg76V+Domy4=
+	t=1752249863; cv=none; b=OjSNGBnlp5sE5/qmdjg5etk3/tKyRRURFSt7eYjk1J7gPaVdO7ssbqSbtYPE2Cr/kR/4mtsm7mLGqqz5qIJVYG4+EmzRH7ET3YfRKfBAMFyijgraUDpSz+89wtB2E6dBXSLQ7V4uQT27Rl22Huj1TeJKGP6i0UkZn36PshYlrg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752245564; c=relaxed/simple;
-	bh=q/FVeQueIyKVrnp1NcfhHAttXLTMCRvWb2aBdG6Nx4o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=uT8z//fcLfjR8aAyMtoioqmkFhQ7c43JNvIV4PpV5FTV3n5b1q3UCv1wtTRIkS/uucsqhKwebeg+dsPQL6ZuaE3WV7EdmhEnZFlc36iInv+3ohbOtAUFI/1zkmiiG2epdkbHEl6b4su2QFDTEjoPwBxVVTuZpwaRbVjlTATU+Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=GLwIa/U4; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56BEHQjM027785;
-	Fri, 11 Jul 2025 16:52:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	F0RaanQr/Y01Kr3e9l6yvosGEYhnzl8fsIwEj1CuG6c=; b=GLwIa/U4Pms3zJYJ
-	Vf6J02Gisg1Ta4puNDbzsRHGlPFLIH6DIxCks5O8Xa1cKnjO0hXVB7a4cISVoN1n
-	q8zYShB0re5FueScRBFZN1aQ5rdOfisRaiYktnzX+qK0abR4UCG1yuGbZJOtEV9I
-	X5W6esz3NDy1OWP4hO6pJLsQfdKxn9BMlNqA/DvYXUBaXY2zfZ+zVPtaL9SuiKU7
-	vgVx68hnzZUh5nbPyAhp5JPDt/IqI60gLjHi771kfkVnqRYSMjndzDKt1UYCrx0G
-	6XYxO8IrkeXgCrx0NygjkS++agXq9iYTFatMUGSRUdVHpvE/JGMMdIikmZN92LaN
-	t8o0ag==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47pud3qfjm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 11 Jul 2025 16:52:28 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B7B5C4004D;
-	Fri, 11 Jul 2025 16:51:21 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E9575B56893;
-	Fri, 11 Jul 2025 16:49:26 +0200 (CEST)
-Received: from localhost (10.252.16.187) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 11 Jul
- 2025 16:49:26 +0200
-From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Date: Fri, 11 Jul 2025 16:49:08 +0200
-Subject: [PATCH v2 16/16] arm64: dts: st: support ddrperfm on
- stm32mp257f-ev1
+	s=arc-20240116; t=1752249863; c=relaxed/simple;
+	bh=IAq0avLztA0tQGKDBGVN9zA80D9EBuaQyMbPP2yTD0A=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GVtVRtzCXOV6KyoDYngeHTxo/YsSG9dgxFXVj3jR3i/fC6qQ5dXtmhV6fOscbK7TT6byHP+/CPicsZJbN6EMikyKasEvMPYAetzeD6Y1On9I5SRHYar+4dPYeahS3tTNGVInqLY7eZM+RVLefUitIF07D2wNyTyQQLtBvA86m9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4bdxMK40mpz6M4mZ;
+	Sat, 12 Jul 2025 00:03:09 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 353E81402FE;
+	Sat, 12 Jul 2025 00:04:18 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 11 Jul
+ 2025 18:04:17 +0200
+Date: Fri, 11 Jul 2025 17:04:15 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: =?ISO-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
+CC: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Rob
+ Herring" <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Philipp Zabel
+	<p.zabel@pengutronix.de>, Jonathan Corbet <corbet@lwn.net>, "Gatien
+ Chevallier" <gatien.chevallier@foss.st.com>, Michael Turquette
+	<mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, "Gabriel
+ Fernandez" <gabriel.fernandez@foss.st.com>, Krzysztof Kozlowski
+	<krzk@kernel.org>, Le Goffic <legoffic.clement@gmail.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-perf-users@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v2 09/16] perf: stm32: introduce DDRPERFM driver
+Message-ID: <20250711170415.00001901@huawei.com>
+In-Reply-To: <20250711-ddrperfm-upstream-v2-9-cdece720348f@foss.st.com>
+References: <20250711-ddrperfm-upstream-v2-0-cdece720348f@foss.st.com>
+	<20250711-ddrperfm-upstream-v2-9-cdece720348f@foss.st.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20250711-ddrperfm-upstream-v2-16-cdece720348f@foss.st.com>
-References: <20250711-ddrperfm-upstream-v2-0-cdece720348f@foss.st.com>
-In-Reply-To: <20250711-ddrperfm-upstream-v2-0-cdece720348f@foss.st.com>
-To: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Gatien Chevallier
-	<gatien.chevallier@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Gabriel Fernandez
-	<gabriel.fernandez@foss.st.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Le
- Goffic <legoffic.clement@gmail.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-perf-users@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-X-Mailer: b4 0.15-dev-7616d
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-11_03,2025-07-09_01,2025-03-28_01
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-Configure DDRPERFM node on stm32mp257f-ev1 board.
-Disable the node as DDRPERFM will produce an error message if it's clock
-(shared with the DDRCTRL on STM32MP25x) is secured by common bootloaders.
+On Fri, 11 Jul 2025 16:49:01 +0200
+Cl=E9ment Le Goffic <clement.legoffic@foss.st.com> wrote:
 
-Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
----
- arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+> Introduce the driver for the DDR Performance Monitor available on
+> STM32MPU SoC.
+>=20
+> On STM32MP2 platforms, the DDRPERFM allows to monitor up to 8 DDR events
+> that come from the DDR Controller such as read or write events.
+>=20
+> On STM32MP1 platforms, the DDRPERFM cannot monitor any event on any
+> counter, there is a notion of set of events.
+> Events from different sets cannot be monitored at the same time.
+> The first chosen event selects the set.
+> The set is coded in the first two bytes of the config value which is on 4
+> bytes.
+>=20
+> On STM32MP25x series, the DDRPERFM clock is shared with the DDR controller
+> and may be secured by bootloaders.
+> Access controllers allow to check access to a resource. Use the access
+> controller defined in the devicetree to know about the access to the
+> DDRPERFM clock.
+>=20
+> Signed-off-by: Cl=E9ment Le Goffic <clement.legoffic@foss.st.com>
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index f987d86d350f..7533b500135c 100644
---- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-+++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -128,6 +128,11 @@ csi_source: endpoint {
- 	};
- };
- 
-+&ddrperfm {
-+	memory-channel = <&ddr_channel>;
-+	status = "disabled";
-+};
-+
- &dcmipp {
- 	status = "okay";
- 	port {
+Hi Cl=E9ment,
 
--- 
-2.43.0
+A quick drive by review as it's Friday afternoon and I was curious..
+
+Mostly superficial stuff. I didn't look closely at the perf logic.
+
+Jonathan
+
+> diff --git a/drivers/perf/stm32_ddr_pmu.c b/drivers/perf/stm32_ddr_pmu.c
+> new file mode 100644
+> index 000000000000..1be5bbe12978
+> --- /dev/null
+> +++ b/drivers/perf/stm32_ddr_pmu.c
+> @@ -0,0 +1,910 @@
+
+> +#define EVENT_NUMBER(group, index)	(((group) << 8) | (index))
+> +#define GROUP_VALUE(event_number)		((event_number) >> 8)
+> +#define EVENT_INDEX(event_number)	((event_number) & 0xFF)
+
+Prefix these macro names with something driver specific.  They are
+very likely to clash with something in a header in future otherwise.
+
+> +
+> +enum stm32_ddr_pmu_memory_type {
+> +	STM32_DDR_PMU_LPDDR4,
+> +	STM32_DDR_PMU_LPDDR3,
+> +	STM32_DDR_PMU_DDR4,
+> +	STM32_DDR_PMU_DDR3
+
+This should have a trailing comma as might well be more
+added in future if this IP gets used in more devices.
+
+> +};
+>
+
+
+> +
+> +static const struct attribute_group *stm32_ddr_pmu_attr_groups_mp2[] =3D=
+ {
+> +	&stm32_ddr_pmu_events_attrs_group_mp2,
+> +	&stm32_ddr_pmu_format_attr_group,
+> +	NULL,
+
+No comma needed on terminating entries.
+
+> +};
+> +
+> +static int stm32_ddr_pmu_device_probe(struct platform_device *pdev)
+> +{
+> +	struct stm32_firewall firewall;
+> +	struct stm32_ddr_pmu *pmu;
+> +	struct reset_control *rst;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	pmu =3D devm_kzalloc(&pdev->dev, struct_size(pmu, counters, MP2_CNT_NB)=
+, GFP_KERNEL);
+> +	if (!pmu)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, pmu);
+> +	pmu->dev =3D &pdev->dev;
+> +
+> +	pmu->cfg =3D device_get_match_data(&pdev->dev);
+> +
+> +	pmu->membase =3D devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+> +	if (IS_ERR(pmu->membase))
+> +		return PTR_ERR(pmu->membase);
+> +
+> +	if (of_property_present(pmu->dev->of_node, "access-controllers")) {
+> +		ret =3D stm32_firewall_get_firewall(pmu->dev->of_node, &firewall, 1);
+> +		if (ret)
+> +			return dev_err_probe(pmu->dev, ret, "Failed to get firewall\n");
+> +		ret =3D stm32_firewall_grant_access_by_id(&firewall, firewall.firewall=
+_id);
+> +		if (ret)
+> +			return dev_err_probe(pmu->dev, ret, "Failed to grant access\n");
+> +	}
+> +
+> +	pmu->clk =3D devm_clk_get_optional_prepared(pmu->dev, NULL);
+
+Given there are quite a few uses of pmu->dev, maybe worth a local
+struct device *dev =3D &pdev->dev; at the top and use dev to replace all th=
+ese.
+
+> +	if (IS_ERR(pmu->clk))
+> +		return dev_err_probe(pmu->dev, PTR_ERR(pmu->clk), "Failed to get prepa=
+re clock\n");
+> +
+> +	clk_enable(pmu->clk);
+> +
+> +	rst =3D devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
+
+You mix and match between pdev->dev, and pmu->dev. Good to pick one or use =
+local
+variable as suggested above.
+
+> +	if (IS_ERR(rst)) {
+> +		clk_disable_unprepare(pmu->clk);
+Given use of _prepared() get above. This doesn't look right - the unprepare
+should be handled by devm unwinding. clk_disable()=20
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(rst), "Failed to get reset\n"=
+);
+> +	}
+> +
+> +	reset_control_assert(rst);
+> +	reset_control_deassert(rst);
+> +
+> +	pmu->poll_period =3D ms_to_ktime(POLL_MS);
+> +	hrtimer_setup(&pmu->hrtimer, stm32_ddr_pmu_poll, CLOCK_MONOTONIC, HRTIM=
+ER_MODE_REL);
+> +
+> +	for (int i =3D 0; i < MP2_CNT_NB; i++)
+> +		INIT_LIST_HEAD(&pmu->counters[i]);
+> +
+> +	pmu->selected_set =3D -1;
+> +
+> +	pmu->pmu =3D (struct pmu) {
+> +		.task_ctx_nr =3D perf_invalid_context,
+> +		.start =3D stm32_ddr_pmu_event_start,
+> +		.stop =3D stm32_ddr_pmu_event_stop,
+> +		.add =3D stm32_ddr_pmu_event_add,
+> +		.del =3D stm32_ddr_pmu_event_del,
+> +		.read =3D stm32_ddr_pmu_event_read,
+> +		.event_init =3D stm32_ddr_pmu_event_init,
+> +		.attr_groups =3D pmu->cfg->attribute,
+> +		.module =3D THIS_MODULE,
+> +	};
+> +
+> +	ret =3D perf_pmu_register(&pmu->pmu, DRIVER_NAME, -1);
+
+Calling this exposes user interfaces etc.  Does it really make sense to
+do that and then write another register?  I'd normally expect this
+last in probe.
+
+> +	if (ret) {
+> +		clk_disable_unprepare(pmu->clk);
+
+As above.
+
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "Couldn't register DDRPERFM driver as a PMU\n");
+> +	}
+> +
+> +	if (pmu->cfg->regs->dram_inf.reg) {
+> +		ret =3D stm32_ddr_pmu_get_memory_type(pmu);
+> +		if (ret) {
+> +			perf_pmu_unregister(&pmu->pmu);
+> +			clk_disable_unprepare(pmu->clk);
+> +			return dev_err_probe(&pdev->dev, ret, "Failed to get memory type\n");
+> +		}
+> +
+> +		writel_relaxed(pmu->dram_type, pmu->membase + pmu->cfg->regs->dram_inf=
+.reg);
+> +	}
+> +
+> +	clk_disable(pmu->clk);
+> +
+> +	return 0;
+> +}
+
+> +static const struct stm32_ddr_pmu_regspec stm32_ddr_pmu_regspec_mp2 =3D {
+> +	.stop =3D		{ DDRPERFM_CTRL, CTRL_STOP },
+> +	.start =3D	{ DDRPERFM_CTRL, CTRL_START },
+> +	.status =3D	{ DDRPERFM_MP2_STATUS, MP2_STATUS_BUSY },
+> +	.clear_cnt =3D	{ DDRPERFM_CLR, MP2_CLR_CNT},
+> +	.clear_time =3D	{ DDRPERFM_CLR, MP2_CLR_TIME},
+
+Spaces before } are missing
+There are a few others above that I'll not mention directly.
+
+
+> +	.cfg0 =3D		{ DDRPERFM_MP2_CFG0 },
+> +	.cfg1 =3D		{ DDRPERFM_MP2_CFG1 },
+> +	.enable =3D	{ DDRPERFM_MP2_CFG5 },
+> +	.dram_inf =3D	{ DDRPERFM_MP2_DRAMINF },
+> +	.counter_time =3D	{ DDRPERFM_MP2_TCNT },
+> +	.counter_evt =3D	{
+> +				{ DDRPERFM_MP2_EVCNT(0) },
+Somewhat unusual formatting though neat I guess so fine if you
+really like it!.
+	.counter_evt =3D	{
+		{ DDRPERFM_MP2_EVCNT(0) },
+
+would be what I'd normally expect.
+> +				{ DDRPERFM_MP2_EVCNT(1) },
+> +				{ DDRPERFM_MP2_EVCNT(2) },
+> +				{ DDRPERFM_MP2_EVCNT(3) },
+> +				{ DDRPERFM_MP2_EVCNT(4) },
+> +				{ DDRPERFM_MP2_EVCNT(5) },
+> +				{ DDRPERFM_MP2_EVCNT(6) },
+> +				{ DDRPERFM_MP2_EVCNT(7) },
+> +	},
+> +};
+> +
+> +static const struct stm32_ddr_pmu_cfg stm32_ddr_pmu_cfg_mp1 =3D {
+> +	.regs =3D &stm32_ddr_pmu_regspec_mp1,
+> +	.attribute =3D stm32_ddr_pmu_attr_groups_mp1,
+> +	.counters_nb =3D MP1_CNT_NB,
+> +	.evt_counters_nb =3D MP1_CNT_NB - 1, /* Time counter is not an event co=
+unter */
+> +	.time_cnt_idx =3D MP1_TIME_CNT_IDX,
+> +	.get_counter =3D stm32_ddr_pmu_get_event_counter_mp1,
+> +};
+> +
+> +static const struct stm32_ddr_pmu_cfg stm32_ddr_pmu_cfg_mp2 =3D {
+> +	.regs =3D &stm32_ddr_pmu_regspec_mp2,
+> +	.attribute =3D stm32_ddr_pmu_attr_groups_mp2,
+> +	.counters_nb =3D MP2_CNT_NB,
+> +	.evt_counters_nb =3D MP2_CNT_NB - 1, /* Time counter is an event counte=
+r */
+> +	.time_cnt_idx =3D MP2_TIME_CNT_IDX,
+> +	.get_counter =3D stm32_ddr_pmu_get_event_counter_mp2,
+> +};
+> +
+> +static const struct dev_pm_ops stm32_ddr_pmu_pm_ops =3D {
+> +	SET_SYSTEM_SLEEP_PM_OPS(NULL, stm32_ddr_pmu_device_resume)
+> +};
+
+static DEFINE_SIMPLE_DEV_PM_OPS() looks appropriate here.
+
+
+> +
+> +static const struct of_device_id stm32_ddr_pmu_of_match[] =3D {
+> +	{
+> +		.compatible =3D "st,stm32mp131-ddr-pmu",
+> +		.data =3D &stm32_ddr_pmu_cfg_mp1
+> +	},
+> +	{
+> +		.compatible =3D "st,stm32mp251-ddr-pmu",
+> +		.data =3D &stm32_ddr_pmu_cfg_mp2
+> +	},
+> +	{ },
+
+No comma need after terminating entry.  Nice to make it hard
+to accidentally add entries after one of these!
+
+> +};
+> +MODULE_DEVICE_TABLE(of, stm32_ddr_pmu_of_match);
+> +
+> +static struct platform_driver stm32_ddr_pmu_driver =3D {
+> +	.driver =3D {
+> +		.name =3D DRIVER_NAME,
+> +		.pm =3D pm_sleep_ptr(&stm32_ddr_pmu_pm_ops),
+> +		.of_match_table =3D stm32_ddr_pmu_of_match,
+> +	},
+> +	.probe =3D stm32_ddr_pmu_device_probe,
+> +	.remove =3D stm32_ddr_pmu_device_remove,
+> +};
+> +
+> +module_platform_driver(stm32_ddr_pmu_driver);
+> +
+> +MODULE_AUTHOR("Cl=E9ment Le Goffic");
+> +MODULE_DESCRIPTION("STMicroelectronics STM32 DDR performance monitor dri=
+ver");
+> +MODULE_LICENSE("GPL");
+>=20
 
 
