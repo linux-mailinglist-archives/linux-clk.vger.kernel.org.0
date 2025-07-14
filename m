@@ -1,94 +1,94 @@
-Return-Path: <linux-clk+bounces-24690-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24692-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47CB9B0374B
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Jul 2025 08:41:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DE4B037C4
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Jul 2025 09:21:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0F8D3B2B3E
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Jul 2025 06:40:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39929165664
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Jul 2025 07:21:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C14F2264D4;
-	Mon, 14 Jul 2025 06:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF68923315A;
+	Mon, 14 Jul 2025 07:21:29 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33C534CF9;
-	Mon, 14 Jul 2025 06:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF4D22F772;
+	Mon, 14 Jul 2025 07:21:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752475270; cv=none; b=Bq5RulJbYXUO7Eg19MM6KKV8QKcakckFdKK2uUPrWrFAMK3uGIwAVfzU8jJVzyEeWtNrHmPcY3+ZlwofAJ37xaYbDt/RKUKiebj/ENxi9Aehn3pyEx0UW/5PcCNodd/3eEtNjpvyb1vV3a2ecVvCGOdm4vU0IbFE8aLOQsfsAdM=
+	t=1752477689; cv=none; b=oMkif9mwfFpoqiqAOOTBG0SybMNCxtuFr7WMLeIQc22BZv/rbMR4is80oTRaJuJIvo5h0mFwv9ja/kn/CJ6dW0BSL4WMrqOurHATLUjyyw5fXjy1e0fSKiCANrgU33IqC8apuEUHHtCApXN8VKpW060UxXmbjsaBMgD4VpLiHUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752475270; c=relaxed/simple;
-	bh=5ATHMX9AThV1+HT52RPqloerGobaOpiT9IMioipvwzU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YGUjcoBBMe4ujOZoj/U/Bu/SK0g5bB0mWO33YUXEGWN2sRSTQPS43EudvOFOL/Y9DwnYUHZd4K+L6T4ZttHnznTAIRbr8UcHE+b1R/9g9xBs1bPV4TV/9vUxwWYoauVg8zXuw0AKwEjqJuHw5SweKwq2cZqzEgg+I0hgxPTQfJs=
+	s=arc-20240116; t=1752477689; c=relaxed/simple;
+	bh=31zPVtFzDYB0pfKAV+z+qFaQhpWSePR/M/ur2bh52hY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=p33i9/B1ZGeW7SxBmjxszQA3tT3fgKMO8LmxVOx7SvaZX10IpzpJfaZ5DXiZFNroAPKLc9ltITpF6i2Km5WseCzKo1qzTLIijkcsfKpt4/3936FEGd94fiRNoN/y7y+8T93FkdOfD/bS8bzuzO+U0J8kRZYSrQDpqL8zwBRenLA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBF2C4CEED;
-	Mon, 14 Jul 2025 06:41:09 +0000 (UTC)
-Date: Mon, 14 Jul 2025 08:41:06 +0200
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v7 01/15] dt-bindings: media: qcom,x1e80100-camss: Assign
- correct main register bank to first address
-Message-ID: <20250714-overjoyed-celadon-crocodile-4bec3a@krzk-bin>
-References: <20250711-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v7-0-0bc5da82f526@linaro.org>
- <20250711-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v7-1-0bc5da82f526@linaro.org>
- <f4fd544b-bd5e-49eb-83d9-290f77e503ef@linaro.org>
- <6ca1b24b-5f9d-48e7-9afd-7dac47b486b1@linaro.org>
- <03ba99cb-18ef-48eb-9504-cbce752c85fd@linaro.org>
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A213C4CEF5;
+	Mon, 14 Jul 2025 07:21:29 +0000 (UTC)
+Received: from wens.tw (localhost [127.0.0.1])
+	by wens.tw (Postfix) with ESMTP id 6D3BD5FE7F;
+	Mon, 14 Jul 2025 15:21:26 +0800 (CST)
+From: Chen-Yu Tsai <wens@csie.org>
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Maxime Ripard <mripard@redhat.com>, 
+ Brian Masney <bmasney@redhat.com>
+Cc: linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev
+In-Reply-To: <20250703-clk-cocci-drop-round-rate-v1-0-3a8da898367e@redhat.com>
+References: <20250703-clk-cocci-drop-round-rate-v1-0-3a8da898367e@redhat.com>
+Subject: Re: (subset) [PATCH 00/10] clk: convert drivers from deprecated
+ round_rate() to determine_rate()
+Message-Id: <175247768644.1732129.7805401715825787511.b4-ty@csie.org>
+Date: Mon, 14 Jul 2025 15:21:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <03ba99cb-18ef-48eb-9504-cbce752c85fd@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-On Sun, Jul 13, 2025 at 11:34:18AM +0200, Krzysztof Kozlowski wrote:
-> On 13/07/2025 11:12, Bryan O'Donoghue wrote:
-> > On 13/07/2025 09:15, Krzysztof Kozlowski wrote:
-> >> On 11/07/2025 14:57, Bryan O'Donoghue wrote:
-> >>> The first register bank should be the 'main' register bank, in this case
-> >>> the CSID wrapper register is responsible for muxing PHY/TPG inputs directly
-> >>> to CSID or to other blocks such as the Sensor Front End.
-> >>>
-> >>> commit f4792eeaa971 ("dt-bindings: media: qcom,x1e80100-camss: Fix isp unit address")
-> >>
-> >> I have next from few days ago and I don't have this commit.
-> > 
-> > https://gitlab.freedesktop.org/linux-media/media-committers/-/commit/1da245b6b73436be0d9936bb472f8a55900193cb
-> > 
-> >>> assigned the address to the first register bank "csid0" whereas what we
-> >>> should have done is retained the unit address and moved csid_wrapper to be
-> >>> the first listed bank.
-> >>
-> >> This is confusing. Did that commit change entries in the binding?
-> > Fixed the unit address.
-> > 
-> > What we _should_ have done is put csid_wrapper as the first entry.
+On Thu, 03 Jul 2025 19:22:24 -0400, Brian Masney wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() ops, so let's go ahead and convert some of the
+> outstanding bcm, qcom, and sunxi drivers that have a round_rate()
+> implementation over to determine_rate() using the Coccinelle semantic
+> patch posted below.
 > 
-> That's different problem then. The commit fixed only DTC warning and it
-> was perfectly fine from that point of view. I would not refer it,
-> because it just makes impression that commit was not correct or even
-> complete.
+> This Coccinelle semantic patch is able to automatically convert ~95% of
+> the clk drivers, and I can clean up the remaining ones by hand. I'll
+> initially post some small changes to get feedback about the approach,
+> and I can post some larger series by submaintainer once we get
+> agreement that the approach looks good.
+> 
+> [...]
 
-BTW, you have here also checkpatch warnings.
+Applied to sunxi/clk-for-6.17 in local tree, thanks!
+
+[07/10] clk: sunxi-ng: ccu_gate: convert from round_rate() to determine_rate()
+        commit: ee9c15ca0f628435334afef74d2ff03112d80bf0
+[08/10] clk: sunxi-ng: ccu_nk: convert from round_rate() to determine_rate()
+        commit: 2b0d4f1b3f8524b413208d47099c445eaf7c18f5
+[09/10] clk: sunxi-ng: ccu_nkmp: convert from round_rate() to determine_rate()
+        commit: 8bc614c6ac3c97cef385aebc6520ddcfa0fca8f7
+[10/10] clk: sunxi-ng: ccu_nm: convert from round_rate() to determine_rate()
+        commit: 80395c3b47577c12121d4e408e7b9478f7f88d02
 
 Best regards,
-Krzysztof
+-- 
+Chen-Yu Tsai <wens@csie.org>
 
 
