@@ -1,131 +1,350 @@
-Return-Path: <linux-clk+bounces-24740-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24751-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59B7AB052B8
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 09:22:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DC82B05337
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 09:31:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF4DE56135C
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 07:22:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0403E1884131
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 07:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C62D275B13;
-	Tue, 15 Jul 2025 07:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF2B2701D0;
+	Tue, 15 Jul 2025 07:28:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IL2rJNoA"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SACTP6Vx"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A8026FDA5
-	for <linux-clk@vger.kernel.org>; Tue, 15 Jul 2025 07:19:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59E626FA67
+	for <linux-clk@vger.kernel.org>; Tue, 15 Jul 2025 07:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752563961; cv=none; b=CbSxZ5NkCpWD9nM3jkN9lIDXa4/gNptL2z4KMyM4swRF9Zeqw8mNdzT4unh+3DSta3U+460qBXeHrDzkxL0fR7+NLxTiVpdo58ManD0nsWzC3ChK7e6e1pcJve6PajKsRMS8hq6JR6vd7hsVAWyuuaZya9RY0YG/EW8nbzlhVmc=
+	t=1752564496; cv=none; b=WWGS8I8Syw1Ix7TCFu3siUn1O/qA0aUywWRH8upbMWmj1z9emr8G6q4ufYnAoyDMoWgBVGmfW4SRnRXSGPOwrhmXkw9QLXe4gkTrtDLO4xppE7BCZmcMFwVMAdQ0TtuxywmAQs+OLqb0GHHcuKQaGyg07BcdpbG1izddBv9P+k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752563961; c=relaxed/simple;
-	bh=dOb9Epf/TTGBkZ5gyzcRhX8nkY6+Xl8serOtV4krvFA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SK4XKTawYRjooovx1H9ylEyUrB0jwGbM8bkQQSja0rd9tk960s7Fza8shOJqToxqohxmhDgEtJAEJ32sD9+dZA6VX0Uss5RtKn6YpMkIMsefe0Ej+/UDuf77EMtxR8Cgd1ky+UD6gK8IuTZ2VINP1hYEaf7Ns8U3bRkil+ylwGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IL2rJNoA; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-558fd84fd59so752682e87.0
-        for <linux-clk@vger.kernel.org>; Tue, 15 Jul 2025 00:19:17 -0700 (PDT)
+	s=arc-20240116; t=1752564496; c=relaxed/simple;
+	bh=BK4PRwXIV83i4q+617lou8DQ231b26kX7zcVhKVZMmk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WwrcwOzzDAQNZ5/CENymKSsz238uPG7mnKCp6nkZZcS57w0WBRaRPnyzUy10cygK1ZEuED1H1utuKa8gnS2bQYloc1uWKgb1+FKLKRpIPZfwuHVzhBwWBk3lrOuVfjzKGyvX6+XAqy9WKc9UTj3A7o1BXVaecURlD/xhNBFHnXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SACTP6Vx; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-553d771435fso4532370e87.3
+        for <linux-clk@vger.kernel.org>; Tue, 15 Jul 2025 00:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752563956; x=1753168756; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1752564493; x=1753169293; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/RSJvNlWoWjahN3C/yzd7QKoGlsR79XtnIfFExv1q1o=;
-        b=IL2rJNoAuObhJpOEXDT3LhkNDxmMhFUZ7SNrXTUXbt4B9rRH9lFxisWwpr8rdpCiNa
-         8Csr/zifh477uqmedPTsrXXIXE7ccOJGq8zKr64UaI+rD7LfXsBKoNTuTq9MWRz8slBa
-         wZEWkyetyjLKsMawGfOMjY6mLKtr9Os3f9mbs06g36XiJL5NBiKPwLLkDAD5Xlb2QUyA
-         zf0CCiahELywgUIWfzdZ90jX1k8NUAg0SwspWRijGPQomLIxsqwn3wLm8opWpJTkXSIf
-         FPi9IKN4yxMCrG/9lCgq1IX4AOkvYr/lRflj4s75DZWgg8JMzctiitEBQDdWX4q19rJ4
-         reqw==
+        bh=dZzpiYZwNaf+7GMBi0VLlcvQKHbRH+NQQeTOtdaqsaY=;
+        b=SACTP6Vxysm66Ktsx+EWd1HmyJguBTFQ01wPveYd0GcEmc8vGi916XUyRaIqMbctRm
+         JBgPm2sNdX7kHdoYfbj1EsOS9SLgtKvU70OpBKwdUYg53b8S3TRWqrok+dRgfTVGgOCo
+         kPtWvXtBZsK/ZteLzm6adGWExHPLt4xIcXXEw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752563956; x=1753168756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/RSJvNlWoWjahN3C/yzd7QKoGlsR79XtnIfFExv1q1o=;
-        b=mYBv/Ub5e/AuhJdSSyR5rZJn6pWqEhMu5CEpYd0YIHkO9QAAaZQPCdVa3YtYWneB8T
-         IHofrdgMr1UMj1pycsJA6Hd6yXFy4tM7Rv/luv7KzjXaAKMRMOd8hLxrE+hUEd9palnD
-         qj4wExS1+oO25ojeAYaaeN8sBFa0ZC45djdmtmaFaCtsD+ejylLnfM2E3/BTIRGV60Gt
-         DxYig5FkANxyeTbNH75YnNaDbUNajEkscBrjC4QWPKXvxTx5Z9/hOsj1v2iOS+9vFICR
-         KfMO21Q3n7FPJVGb1eBG44BITZj+q93ROW6VZIw+MYjRE4UzcsjvmdoEL70NpFnxDsH+
-         Qcsw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/ZrXucUT8NQNPCLNeh2Qw9t4leSSogyHg1fdSCeAhfwGehj8Bp5PrfUWbjhx69ZQBU0rRjGsjI6Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz7Mxce1cadhbD6xTHlfcJk2ozKwgjK+ecdW+6TLsHhUMxVxbk
-	At382I7v7d0iCClYByrs9brRZ1ARZkNAqFNGH/NyCGoZqBTVSDv4v2nYJfVci+DLLWQ=
-X-Gm-Gg: ASbGncscqSWM7UJqkoDIo1rqrveUQlTJ5z6uSQBs23tC5U23+mIz7x26BQCkaxHq40L
-	aXi2KmjW3SA8Gqvc54cxK4ZyY4S+Jr4VONFf+TMKj5WBi9eu2tpbdNnjwjzhAFrN6l+W75r7hL4
-	r3rziH2cfMvJ1xaXlqIJppfSnk6U97Xv3nBPLW7T5R035fSus90Aa2pVyHvY0cVtut5e6jcIk2G
-	pmnH4Suu3/K8JK7aSuv0LS26bVGXWH6tMlsFdYlen+Orjeh0pFX7tqDbke4HZwpLeqh7AkUuu2b
-	9DvEgjJHtFJuryJt1+JA2pW008bf+Ogs4BmJAJaUyx5PRFPRBgFw7fbXrj6TrLiDeb/VQoptB5o
-	OzHwFFMzScfVllqxLVfokcSvGxC8+onKAxVEpsRDMXemJ/4ph6Sv17Y32AL+NAFnrXsEr1VgO/l
-	aS
-X-Google-Smtp-Source: AGHT+IFIHphgOuWL4hHbYQo8BUYKQWMRs2PJ8O0o5nTLr+EyV7m9/xz8o904WRm6rWfLBy+6fENRug==
-X-Received: by 2002:a05:6512:4027:b0:556:2764:d207 with SMTP id 2adb3069b0e04-55a1fdce413mr78512e87.11.1752563956166;
-        Tue, 15 Jul 2025 00:19:16 -0700 (PDT)
-Received: from [192.168.1.100] (88-112-128-43.elisa-laajakaista.fi. [88.112.128.43])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-55a05daa619sm1688569e87.41.2025.07.15.00.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Jul 2025 00:19:15 -0700 (PDT)
-Message-ID: <bd7cab62-f0ba-440d-8dc2-3304afe884df@linaro.org>
-Date: Tue, 15 Jul 2025 10:19:14 +0300
+        d=1e100.net; s=20230601; t=1752564493; x=1753169293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dZzpiYZwNaf+7GMBi0VLlcvQKHbRH+NQQeTOtdaqsaY=;
+        b=Zf9FR+aryGRcE+ZCU0ZrsArsb45phsGZl4qEp0cmBG9odlXo4xMOywnyQUb5kv/qbt
+         NN+S4xvvUMtnON/BPVWBYBV+DE/rnWif9eBkcvgnYquDdnTNzI2F/dQ2psWoZ2ik27eq
+         u2CeF1t7K/JH9n69Ol0WVu+vtvRk3G1xoaWQz0TCOAYP8MbPQQpefQVWuT2woRieanBC
+         H2ctDZDk6nd2UdhkUXc2VWJpwrxfRRIA6ar4MrEQoiMH5CIqVvMiajy1Uo2QXXiedUOw
+         97I7mOqnJnbBHl3yhriuHGI22yv70nKoIy8bRA873ArgTDTpapcqTnwMTZWq0CCoH3dh
+         Fqtg==
+X-Forwarded-Encrypted: i=1; AJvYcCURJt+ZnM+kKdDadpBAr4x0DuPySDGavGz1Uv7SQj6NOWLqWQxJ0E0Sc9Vy6yY5uX/3OpctGtdscu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVX43yuZPLPogqR6mKACtFWQmhLpdxOj17Bo3hGNlI9G9xjtmh
+	efM3rMPAqUSgmLoe9G0gw8zs3KNyOYl4WqNl3Ao7gowE2tAHQECKJ9pUmC/p6xu/xMa37fcTXsJ
+	5/kXtO/2rJsWSToOLd2LtFl9Eug1zt/ErlB9Q9xdU
+X-Gm-Gg: ASbGncu4TpDEQbnyKt46+rTl5slNZLX66qaU8ui4/DJG2AKIrYseBc9PWGq7Aq2WjAV
+	R0PEjKu5/PZ9RtTy6EVP+9pUy7hhL62trFJhFqAxCyqn33JWijzuDCHOmImJoILVIqUZoM4/8Xo
+	oLNWJxhCmR/VXAVljP1X5cusbk8LSWlmQlGqk7cBJhQn6GWHUmhSSLWoovcm/Jm9AVF8A7IaREE
+	4JpHC/Ff12DxA5cHLrohRFIH4y8y80jbL/eEfm8FpFESA==
+X-Google-Smtp-Source: AGHT+IE+I2EKW/Vlk3fRtykPHngODTfgQlgraXU23nzszgS13v7r+PoSUsWI29YIuHFK4Z4/TZxfjJyjsgNva6Nvih0=
+X-Received: by 2002:a05:6512:23a0:b0:553:a32a:6c6 with SMTP id
+ 2adb3069b0e04-55a058cca78mr3983896e87.51.1752564492768; Tue, 15 Jul 2025
+ 00:28:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 00/15] Add dt-bindings and dtsi changes for CAMSS on
- x1e80100 silicon
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Robert Foss <rfoss@kernel.org>,
- Todor Tomov <todor.too@gmail.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-References: <20250711-b4-linux-next-25-03-13-dtsi-x1e80100-camss-v7-0-0bc5da82f526@linaro.org>
- <9361e954-e2c9-41c6-be4c-12b0e4f367f5@linaro.org>
- <5f3b2bda-92f9-479a-9af7-5d08e420121d@kernel.org>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <5f3b2bda-92f9-479a-9af7-5d08e420121d@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250624143220.244549-1-laura.nao@collabora.com> <20250624143220.244549-15-laura.nao@collabora.com>
+In-Reply-To: <20250624143220.244549-15-laura.nao@collabora.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Tue, 15 Jul 2025 15:28:01 +0800
+X-Gm-Features: Ac12FXyU8Sq6NaxHfbh3KFMLAH5aLMP41sVO2AcuKk50klccx7LXTjHhhdUwccY
+Message-ID: <CAGXv+5EsVOPC+i2=9d-Be1U-DuB8tPDAyokzhTOeVZQtZJ9+CQ@mail.gmail.com>
+Subject: Re: [PATCH v2 14/29] clk: mediatek: Add MT8196 vlpckgen clock support
+To: Laura Nao <laura.nao@collabora.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com, 
+	angelogioacchino.delregno@collabora.com, p.zabel@pengutronix.de, 
+	richardcochran@gmail.com, guangjie.song@mediatek.com, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, netdev@vger.kernel.org, 
+	kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/15/25 10:01, Krzysztof Kozlowski wrote:
-> On 15/07/2025 08:53, Vladimir Zapolskiy wrote:
->>
->> 2. The whole new changes for legacy/new CSIPHY support is not present
->> in v1-v6 of this changeset, it just appears out of nowhere in the v7,
->> and since it is broken it should be removed from v8 expectedly.
-> 
-> 
-> Why? If it is broken, should be fixed in v8, not dropped from v8.
+Hi,
 
-There is a conflict between these new v7 changes and another old and
-still unreviewed/uncommented changeset, which provides quite a similar
-functionality, but it has slightly different CSIPHY device tree node
-descriptions and their connections to CAMSS.
 
-This technical conflict should be resolved before making a bet which
-one of two CHIPHY series is better and should be fixed in the next
-version.
+On Tue, Jun 24, 2025 at 10:33=E2=80=AFPM Laura Nao <laura.nao@collabora.com=
+> wrote:
+>
+> Add support for the MT8196 vlpckgen clock controller, which provides
+> muxes and dividers for clock selection in other IP blocks.
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+> ---
+>  drivers/clk/mediatek/Makefile              |   2 +-
+>  drivers/clk/mediatek/clk-mt8196-vlpckgen.c | 769 +++++++++++++++++++++
+>  2 files changed, 770 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/clk/mediatek/clk-mt8196-vlpckgen.c
+>
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefil=
+e
+> index 0688d7bf4979..24683dd51783 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -161,7 +161,7 @@ obj-$(CONFIG_COMMON_CLK_MT8195_VENCSYS) +=3D clk-mt81=
+95-venc.o
+>  obj-$(CONFIG_COMMON_CLK_MT8195_VPPSYS) +=3D clk-mt8195-vpp0.o clk-mt8195=
+-vpp1.o
+>  obj-$(CONFIG_COMMON_CLK_MT8195_WPESYS) +=3D clk-mt8195-wpe.o
+>  obj-$(CONFIG_COMMON_CLK_MT8196) +=3D clk-mt8196-apmixedsys.o clk-mt8196-=
+topckgen.o \
+> -                                  clk-mt8196-topckgen2.o
+> +                                  clk-mt8196-topckgen2.o clk-mt8196-vlpc=
+kgen.o
+>  obj-$(CONFIG_COMMON_CLK_MT8365) +=3D clk-mt8365-apmixedsys.o clk-mt8365.=
+o
+>  obj-$(CONFIG_COMMON_CLK_MT8365_APU) +=3D clk-mt8365-apu.o
+>  obj-$(CONFIG_COMMON_CLK_MT8365_CAM) +=3D clk-mt8365-cam.o
+> diff --git a/drivers/clk/mediatek/clk-mt8196-vlpckgen.c b/drivers/clk/med=
+iatek/clk-mt8196-vlpckgen.c
+> new file mode 100644
+> index 000000000000..23a673dd4c5c
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8196-vlpckgen.c
+> @@ -0,0 +1,769 @@
 
--- 
-Best wishes,
-Vladimir
+[...]
+
+> +static const char * const vlp_camtg0_parents[] =3D {
+> +       "clk26m",
+> +       "univpll_192m_d32",
+> +       "univpll_192m_d16",
+> +       "clk13m",
+> +       "osc_d40",
+> +       "osc_d32",
+> +       "univpll_192m_d10",
+> +       "univpll_192m_d8",
+> +       "univpll_d6_d16",
+> +       "ulposc3",
+> +       "osc_d20",
+> +       "ck2_tvdpll1_d16",
+> +       "univpll_d6_d8"
+> +};
+
+It seems all the vlp_camtg* parents are the same. Please merge them
+and just have one list.
+
+> +static const char * const vlp_sspm_26m_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d20"
+> +};
+> +
+> +static const char * const vlp_ulposc_sspm_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d2",
+> +       "mainpll_d4_d2"
+> +};
+> +
+> +static const char * const vlp_vlp_pbus_26m_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d20"
+> +};
+> +
+> +static const char * const vlp_debug_err_flag_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d20"
+> +};
+> +
+> +static const char * const vlp_dpmsrdma_parents[] =3D {
+> +       "clk26m",
+> +       "mainpll_d7_d2"
+> +};
+> +
+> +static const char * const vlp_vlp_pbus_156m_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d2",
+> +       "mainpll_d7_d2",
+> +       "mainpll_d7"
+> +};
+> +
+> +static const char * const vlp_spm_parents[] =3D {
+> +       "clk26m",
+> +       "mainpll_d7_d4"
+> +};
+> +
+> +static const char * const vlp_mminfra_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d4",
+> +       "mainpll_d3"
+> +};
+> +
+> +static const char * const vlp_usb_parents[] =3D {
+> +       "clk26m",
+> +       "mainpll_d9"
+> +};
+
+The previous and the next one are the same.
+
+> +static const char * const vlp_usb_xhci_parents[] =3D {
+> +       "clk26m",
+> +       "mainpll_d9"
+> +};
+> +
+> +static const char * const vlp_noc_vlp_parents[] =3D {
+> +       "clk26m",
+> +       "osc_d20",
+> +       "mainpll_d9"
+> +};
+> +
+> +static const char * const vlp_audio_h_parents[] =3D {
+> +       "clk26m",
+> +       "vlp_apll1",
+> +       "vlp_apll2"
+> +};
+> +
+> +static const char * const vlp_aud_engen1_parents[] =3D {
+> +       "clk26m",
+> +       "apll1_d8",
+> +       "apll1_d4"
+> +};
+
+The previous and the next one are the same.
+
+> +static const char * const vlp_aud_engen2_parents[] =3D {
+> +       "clk26m",
+> +       "apll2_d8",
+> +       "apll2_d4"
+> +};
+> +
+> +static const char * const vlp_aud_intbus_parents[] =3D {
+> +       "clk26m",
+> +       "mainpll_d7_d4",
+> +       "mainpll_d4_d4"
+> +};
+> +
+> +static const char * const vlp_spvlp_26m
+
+[...]
+
+> +static int clk_mt8196_vlp_probe(struct platform_device *pdev)
+> +{
+> +       struct clk_hw_onecell_data *clk_data;
+> +       int r;
+> +       struct device_node *node =3D pdev->dev.of_node;
+> +
+> +       clk_data =3D mtk_alloc_clk_data(ARRAY_SIZE(vlp_muxes) +
+> +                                     ARRAY_SIZE(vlp_plls));
+> +       if (!clk_data)
+> +               return -ENOMEM;
+> +
+> +       r =3D mtk_clk_register_muxes(&pdev->dev, vlp_muxes, ARRAY_SIZE(vl=
+p_muxes),
+> +                                  node, &mt8196_clk_vlp_lock, clk_data);
+> +       if (r)
+> +               goto free_clk_data;
+> +
+> +       r =3D mtk_clk_register_plls(node, vlp_plls, ARRAY_SIZE(vlp_plls),
+> +                                 clk_data);
+> +       if (r)
+> +               goto unregister_muxes;
+> +
+> +       r =3D of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_dat=
+a);
+> +       if (r)
+> +               goto unregister_plls;
+> +
+> +       platform_set_drvdata(pdev, clk_data);
+> +
+> +       return r;
+> +
+> +unregister_plls:
+> +       mtk_clk_unregister_plls(vlp_plls, ARRAY_SIZE(vlp_plls), clk_data)=
+;
+> +unregister_muxes:
+> +       mtk_clk_unregister_muxes(vlp_muxes, ARRAY_SIZE(vlp_muxes), clk_da=
+ta);
+> +free_clk_data:
+> +       mtk_free_clk_data(clk_data);
+
+The AFE driver sets some tuner parameters in the VLPCKGEN block at probe
+time. Maybe we could do that here instead?
+
+/* vlp_cksys_clk: 0x1c016000 */
+#define VLP_APLL1_TUNER_CON0 0x02a4
+#define VLP_APLL2_TUNER_CON0 0x02a8
+
+/* vlp apll1 tuner default value*/
+#define VLP_APLL1_TUNER_CON0_VALUE 0x6f28bd4d
+/* vlp apll2 tuner default value + 1*/
+#define VLP_APLL2_TUNER_CON0_VALUE 0x78fd5265
+
+       regmap_write(afe_priv->vlp_ck, VLP_APLL1_TUNER_CON0,
+VLP_APLL1_TUNER_CON0_VALUE);
+       regmap_write(afe_priv->vlp_ck, VLP_APLL2_TUNER_CON0,
+VLP_APLL2_TUNER_CON0_VALUE);
+
+ChenYu
+
+> +
+> +       return r;
+> +}
+> +
+> +static void clk_mt8196_vlp_remove(struct platform_device *pdev)
+> +{
+> +       struct clk_hw_onecell_data *clk_data =3D platform_get_drvdata(pde=
+v);
+> +       struct device_node *node =3D pdev->dev.of_node;
+> +
+> +       of_clk_del_provider(node);
+> +       mtk_clk_unregister_plls(vlp_plls, ARRAY_SIZE(vlp_plls), clk_data)=
+;
+> +       mtk_clk_unregister_muxes(vlp_muxes, ARRAY_SIZE(vlp_muxes), clk_da=
+ta);
+> +       mtk_free_clk_data(clk_data);
+> +}
+> +
+> +static const struct of_device_id of_match_clk_mt8196_vlp_ck[] =3D {
+> +       { .compatible =3D "mediatek,mt8196-vlpckgen" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_match_clk_mt8196_vlp_ck);
+> +
+> +static struct platform_driver clk_mt8196_vlp_drv =3D {
+> +       .probe =3D clk_mt8196_vlp_probe,
+> +       .remove =3D clk_mt8196_vlp_remove,
+> +       .driver =3D {
+> +               .name =3D "clk-mt8196-vlpck",
+> +               .of_match_table =3D of_match_clk_mt8196_vlp_ck,
+> +       },
+> +};
+> +
+> +MODULE_DESCRIPTION("MediaTek MT8196 VLP clock generator driver");
+> +module_platform_driver(clk_mt8196_vlp_drv);
+> +MODULE_LICENSE("GPL");
+> --
+> 2.39.5
+>
 
