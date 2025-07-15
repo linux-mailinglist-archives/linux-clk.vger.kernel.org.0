@@ -1,141 +1,149 @@
-Return-Path: <linux-clk+bounces-24772-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24774-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F90CB06189
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 16:43:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2567EB061D2
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 16:50:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D56781C24575
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 14:36:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E39C3ABFDA
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Jul 2025 14:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D895E20127B;
-	Tue, 15 Jul 2025 14:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5E671E1DEC;
+	Tue, 15 Jul 2025 14:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="XkYJMeOj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nhOI4oOc"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E3F218AA0;
-	Tue, 15 Jul 2025 14:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8378C17B425;
+	Tue, 15 Jul 2025 14:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752590131; cv=none; b=BWqH+5iSuTzoe+BtkeEctozfv1Y+YS5UESaHCkra0BhjUGwg7W1VZL7UpCAbHxE1NoqGB/SyvunNnPwvg5KsM46IQrnFAfY9Gc+cx4wCutAliUtYcrhPhhDAWGlvXzYIlVPZQV9V3Vc+UvKHPJKqZKKzOXNZssexFhqzQO/No8Y=
+	t=1752590778; cv=none; b=oIsgVK+PkQp35W7/T6IOb+7tjntXPjtmQi+sZzw6hr4tagyaKS3SNjPN4Vbi+aJzg0YCvBVFLmfP9XLmAFvqmp5jChfIhiXSt5AlUanAx83252qFKUchiKVawJ9wqgDjxvEUXwxhDyhFHsagwQw4J05oBPnuGrOo6zyjU7ApN8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752590131; c=relaxed/simple;
-	bh=dgu36HNp6Ey5tbWJzea7xTs+Q7Z2LXx/xuvpNQ1pA7w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=j+zqUkWqWI5oTU7BUIzZ2y7Ex3dv1svwi+FUtDRZKm5P8Xd1T9EES6qM/mKgBSLCe018gXl5SECZDSam1egGPjU005DGcEvTachN7ILiV6RTiVBpM2jCl6iR2vnmtJ4km4gmASXw6oOWtOXVPAQhHdkRIkk0saLqCVB/SGV0Cfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=XkYJMeOj; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56FEA0Ha001517;
-	Tue, 15 Jul 2025 16:34:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	dgu36HNp6Ey5tbWJzea7xTs+Q7Z2LXx/xuvpNQ1pA7w=; b=XkYJMeOjQWXDQIsy
-	AQrwvvvypCtw1ngsPhYp8oQ9Aqe7wOzkzXdMOAxAbPScx4bXrHX2e1thg5iUzkSa
-	/VBWSoLqEy9PR0f9nYSZSecU6G6cYi34gu5u3YM+vUUNw6BYdc1LJlFmmcv07LPD
-	G7LDAXvoo9Abm9p36i82R9TUKfFN/nktn0OvWmddLZ2E54SKQpUbFTiCZGN+2YLw
-	dY00weDuq9R4K57oMr74ZxASoS4SGojas1C3HP9vOXcN+v0EnesitM+3hYi+e39k
-	TUAqqBaeMsJ07VJMNLE2mJ56fDcacr+LZazECufXbNKpS1GCbg9f0vHEq0SEVnNg
-	FFMAJA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47ud4mp9ps-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Jul 2025 16:34:36 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 35BBA4002D;
-	Tue, 15 Jul 2025 16:32:02 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4399DB4B425;
-	Tue, 15 Jul 2025 16:30:04 +0200 (CEST)
-Received: from [10.130.74.78] (10.130.74.78) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 15 Jul
- 2025 16:30:03 +0200
-Message-ID: <45c2f3ec-2452-4f09-9b62-95a392a798b5@foss.st.com>
-Date: Tue, 15 Jul 2025 16:30:02 +0200
+	s=arc-20240116; t=1752590778; c=relaxed/simple;
+	bh=KZ1W7mzel2tzyENmIY/KyfG+sQOyLDK8atG59n7g34U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=g0c9EwCV6Sy199W37aG0IpkDavxAGlHDAIXgHJWTElUa7K6i5KqvhwIRSYz33hAm9fNHl+4aC988p/J6r+bH8m6DfD+8hw1yL9TWK2P3bb2QoufPEqtQTChFl2b3wiSNojuJLr9OmgpUxfR/d8YkeFIQqqELDnZH8OodCiUn3AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nhOI4oOc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3826DC4CEE3;
+	Tue, 15 Jul 2025 14:46:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752590778;
+	bh=KZ1W7mzel2tzyENmIY/KyfG+sQOyLDK8atG59n7g34U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=nhOI4oOcjdEd81/BA+chqSa9l8uanzEnEhr+bgfqoi60EpD0cwakUJpbZX2fvZD9c
+	 h0r1Tl3SHdyGUqyNniLCPaRBLWnhR4Mw4wlI0b9cxK2s7FO/4PCh/z68CLf37uqsbN
+	 Ss57RFtoC1bv1VmoENClwao3WYlFrjJ6yC7SIvm9bi5akXlS/Oy+9OsgqHLoZsWQN+
+	 aOS+cqX7rXhgqW0olOrGTZRfSSAUFdUoXJJXA1aV5LA9A12qLH5D2M+l2ZRGSowLbs
+	 FUNKbLBEz/i0hS2tpLxxlwcQJOY2rIHFi2EcPvKl2lBHzOWGB1F27V57vVQ2nL9Xb7
+	 ZNVpaMdVZGo+Q==
+Date: Tue, 15 Jul 2025 09:46:16 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Claudiu <claudiu.beznea@tuxon.dev>,
+	Manivannan Sadhasivam <mani@kernel.org>
+Cc: bhelgaas@google.com, lpieralisi@kernel.org, kw@linux.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	john.madieu.xa@bp.renesas.com,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v2 0/8] PCI: rzg3s-host: Add PCIe driver for Renesas
+ RZ/G3S SoC
+Message-ID: <20250715144616.GA2458869@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/9] drm/stm/lvds: convert from round_rate() to
- determine_rate()
-To: Brian Masney <bmasney@redhat.com>, Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard
-	<mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Shawn Guo
-	<shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix
- Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Clark
-	<robin.clark@oss.qualcomm.com>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav
- Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang
-	<jessica.zhang@oss.qualcomm.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten
-	<marijn.suijten@somainline.org>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>, Stephen Boyd <sboyd@kernel.org>
-CC: <dri-devel@lists.freedesktop.org>, <imx@lists.linux.dev>,
-        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-sunxi@lists.linux.dev>
-References: <20250710-drm-clk-round-rate-v1-0-601b9ea384c3@redhat.com>
- <20250710-drm-clk-round-rate-v1-7-601b9ea384c3@redhat.com>
-Content-Language: en-US
-From: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-In-Reply-To: <20250710-drm-clk-round-rate-v1-7-601b9ea384c3@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-15_03,2025-07-15_01,2025-03-28_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250530111917.1495023-1-claudiu.beznea.uj@bp.renesas.com>
 
+On Fri, May 30, 2025 at 02:19:09PM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> Hi,
+> 
+> Series adds a PCIe driver for the Renesas RZ/G3S SoC.
+> It is split as follows:
+> - patch 1/8:		updates the max register offset for RZ/G3S SYSC;
+> 			this is necessary as the PCIe need to setup the
+> 			SYSC for proper functioning
+> - patch 2/8:		adds clock, reset and power domain support for
+> 			the PCIe IP
+> - patches 3-4/8:	add PCIe support for the RZ/G3S SoC
+> - patches 5-8/8:	add device tree support and defconfig flag
+> 
+> Please provide your feedback.
+> 
+> Merge strategy, if any:
+> - patches 1-2,5-8/8 can go through the Renesas tree
+> - patches 3-4/8 can go through the PCI tree
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> Changes in v2:
+> - dropped "of/irq: Export of_irq_count()" as it is not needed anymore
+>   in this version
+> - added "arm64: dts: renesas: rzg3s-smarc-som: Update dma-ranges for PCIe"
+>   to reflect the board specific memory constraints
+> - addressed review comments
+> - updated patch "soc: renesas: rz-sysc: Add syscon/regmap support"
+> - per-patch changes are described in each individual patch
+> 
+> Claudiu Beznea (7):
+>   clk: renesas: r9a08g045: Add clocks, resets and power domain support
+>     for the PCIe
+>   dt-bindings: PCI: renesas,r9a08g045s33-pcie: Add documentation for the
+>     PCIe IP on Renesas RZ/G3S
+>   PCI: rzg3s-host: Add Initial PCIe Host Driver for Renesas RZ/G3S SoC
+>   arm64: dts: renesas: r9a08g045s33: Add PCIe node
+>   arm64: dts: renesas: rzg3s-smarc-som: Update dma-ranges for PCIe
+>   arm64: dts: renesas: rzg3s-smarc: Enable PCIe
+>   arm64: defconfig: Enable PCIe for the Renesas RZ/G3S SoC
+> 
+> John Madieu (1):
+>   soc: renesas: rz-sysc: Add syscon/regmap support
+> 
+>  .../pci/renesas,r9a08g045s33-pcie.yaml        |  202 ++
+>  MAINTAINERS                                   |    8 +
+>  arch/arm64/boot/dts/renesas/r9a08g045s33.dtsi |   60 +
+>  .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |    5 +
+>  arch/arm64/boot/dts/renesas/rzg3s-smarc.dtsi  |   11 +
+>  arch/arm64/configs/defconfig                  |    1 +
+>  drivers/clk/renesas/r9a08g045-cpg.c           |   19 +
+>  drivers/pci/controller/Kconfig                |    7 +
+>  drivers/pci/controller/Makefile               |    1 +
+>  drivers/pci/controller/pcie-rzg3s-host.c      | 1686 +++++++++++++++++
+>  drivers/soc/renesas/Kconfig                   |    1 +
+>  drivers/soc/renesas/r9a08g045-sysc.c          |   10 +
+>  drivers/soc/renesas/r9a09g047-sys.c           |   10 +
+>  drivers/soc/renesas/r9a09g057-sys.c           |   10 +
+>  drivers/soc/renesas/rz-sysc.c                 |   17 +-
+>  drivers/soc/renesas/rz-sysc.h                 |    3 +
+>  16 files changed, 2050 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml
+>  create mode 100644 drivers/pci/controller/pcie-rzg3s-host.c
 
+Where are we at with this series?
 
-On 7/10/25 19:43, Brian Masney wrote:
-> The round_rate() clk ops is deprecated, so migrate this driver from
-> round_rate() to determine_rate() using the Coccinelle semantic patch
-> on the cover letter of this series.
->
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> ---
+I see
+https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=controller/dwc-stm32&id=5a972a01e24b278f7302a834c6eaee5bdac12843,
+but also this kernel robot report at that commit:
+https://lore.kernel.org/all/202506270620.sf6EApJY-lkp@intel.com/
 
-Hi Brian,
+I normally don't include branches in pci/next until we get a
+"BUILD SUCCESS" report from the robot, so this branch is in limbo at
+the moment.
 
-Acked-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-
-Thanks !
-
-Best regards,
-Raphaël
+Bjorn
 
