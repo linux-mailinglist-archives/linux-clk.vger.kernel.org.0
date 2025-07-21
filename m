@@ -1,218 +1,275 @@
-Return-Path: <linux-clk+bounces-24942-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24945-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8685FB0BA58
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Jul 2025 04:19:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD352B0BBBC
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Jul 2025 06:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E08083ACD1E
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Jul 2025 02:18:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B94218963E8
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Jul 2025 04:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0525322541F;
-	Mon, 21 Jul 2025 02:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991C71E833C;
+	Mon, 21 Jul 2025 04:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEBvMVGd"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Yf1saEEI"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAFA21CA07;
-	Mon, 21 Jul 2025 02:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BE11A08CA
+	for <linux-clk@vger.kernel.org>; Mon, 21 Jul 2025 04:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753064241; cv=none; b=tNdMlOwgDk0NIor7FKJy1VNdFPF80yOrJ54HUZ+fgOV8E3foxUIxY8YSDLYcHph1fQmbmoBSDtQyNrL72x+wAgJ0JGYfn4CyOBl9TyYT1lEvHxKSiQYJI+tG9/4JM/reWYo0kesakb8qhQTN/p10mJEFMFxyS7/FbqHxf4rDdiM=
+	t=1753071908; cv=none; b=SGztYwT9z8/2eFvIMvsARcfiMwN3pUwrZi4Y4UMweN7LqQfnAoVKr2/U4GVOAPNWDllgwaOQEIXXxGX4EJXqJ0N4MFFcdmMD8MsjK8sjdFvc2lpJifXJuBZRQlph/9QTd1zISAUjBzszpy/dnR5p6fSHM9NxXOznC1lxJCIDW5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753064241; c=relaxed/simple;
-	bh=0Sl9ne1fNA79gjabf0syuWDSWv557+WLdkh+UrDoEwc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MPgibWhm149JN//NVJgCs9ahKfzCQx4FqlCQNV5Q95CvF3RWy+iaurUp+srWoKWu/wZwGfNLBoyY4u5RhAFdGAPwOpa96+e2FWlG7/pHafCsRkDlgD84uQoPFQjA+tXDw4h1dMhh5EW27V/NX1Jngjwu8BsATTtXYL64jos+/Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEBvMVGd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C964C4CEFC;
-	Mon, 21 Jul 2025 02:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753064241;
-	bh=0Sl9ne1fNA79gjabf0syuWDSWv557+WLdkh+UrDoEwc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=iEBvMVGdnmrpx3Gorr8MU9SBlunmSv+vZj9fsDtcAeC0Bw8XXdxqiWxZi08LSbRGY
-	 az9vNgK8NarxoRl4Y3E5RC2OVQLMk+EW+/r6rt0V+THT1g6wBilMDqsW8d4TmDutnN
-	 TO93MYMT+HfrgiWF7uRpa63xTFr8tuLi8NMxk83lulxzatf0uDssNsTuCDZ18J+d4G
-	 5PX6VEKR3jvkVXYmB5j+7Ur/QjxyQgVxVwEWlC9O3gfSc+ohJDGJEhCoMmKG7S3gjG
-	 p16IamcvwtNCoTrauC6wtIDbN0J/2TP5KHwZNZ9ntpeDNQhjL5AMXTYMoaZ1VPKUN8
-	 SpafUfr2VGuQw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63029C87FC6;
-	Mon, 21 Jul 2025 02:17:21 +0000 (UTC)
-From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
-Date: Sun, 20 Jul 2025 21:15:11 -0500
-Subject: [PATCH v2 17/17] arm64: tegra: Add support for NVIDIA Shield TV
- Pro 2019
+	s=arc-20240116; t=1753071908; c=relaxed/simple;
+	bh=YHpGq/EVF3hR1Mn16LA+qjwUkfBdGFxSmAKlt0kUjrY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pgYcknID24MgfocTJvTygWFC8i1+l4Y4JNTwLdwZZCClDYAQ2SngTk/U1SKIZk8USRCOcLpF8BFQAIfEgUIWYAQryzmIMMb5eMTfL3rejqSkaBlZQ/M3zDVhqUvAtYY24S1XEMb+OOdhwozowwGOMwv+Fb1SmUzUtPdtkXHmWDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=Yf1saEEI; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-32b561a861fso33485991fa.0
+        for <linux-clk@vger.kernel.org>; Sun, 20 Jul 2025 21:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1753071905; x=1753676705; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=quI4bQg7HruKkSCY0E/bW8y75jmL2fc1qxlCHyjOA4E=;
+        b=Yf1saEEIgz8OlGaFDGenCkqdMATtqCV3MtqJ6Fv4290iNM9CDP/vV5p694yN4YLZyF
+         xpupBF6Pb3o/10W33nCIU/RvEnDs2hFDVkus0trB3NLmJTpjTEEshgZJc5hcVRK6kzep
+         dXEpTvRRfUr+ynFy12Qa5iUIcLThg4xTBgpw453AbTzQvp0Xzwg6mvKxiFy5no5hJRSl
+         V7HwfensiDDyDXCkJPyVMeyo0QOLZlSfB2CsJ4pdbNtCItgSOveU8jBikP/VwvLwHGye
+         ohzQQRUQmSJ0ZW+M6WzDbxy4yMZ3tjgUzNKF+8iTpXxgsaf8YEOssfFbHUKW+LDps0Rf
+         uDnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753071905; x=1753676705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=quI4bQg7HruKkSCY0E/bW8y75jmL2fc1qxlCHyjOA4E=;
+        b=NQ/kTrOtrlc/5XqJCIPx70Xh8XAEjkshR4Z1NYD9ZREWuiemeqDLbiJUOC+GuMnGAM
+         gquW7xj/OCj1CGuXan2AigTlgkrbAqZWcBbOfaRGrKCeh9CNyqxON9dW26hBTlgKq/aI
+         OzXKuXCqInV1qFVP6vo1ODIRevWnAgiUn9J+jG88f0gZCcNoPg9P02rxbLE+Bv0xrm7L
+         d+BczZ2S2S53MuQ1Yf+i7WQXARTMBQ9Sf3KVxeBFcTMQt7P2BSj7Z9q+rUQagVNqpzpt
+         swbKIvFverMLFC2ckYTrEPoOBEo5iRofrJylKXf6jThNnb4fIm+8tR+h5DwF5yCy8giV
+         oahw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxp5RAvJofof7qOY9YMtDdYTTfUjimM2DxxoJLs70u5r8jNmUQZ6CAOUe8gwIzRBz2WqcJJqi77Yc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEQcqZvJZp3KqRTPEFl66lCZt5veykK6zPRidc6hlCMl9umFZE
+	pmI68tK1m3PqbtLWH6EUgrUiUR6dm0nT1pDYbRDWk+WEHtAa5wwyzn1a15rwooxnkIKOuO6kMdO
+	lv+HOf0/wpTZNlAVXeOn875dCpnF4Q4HBB458OI2iKA==
+X-Gm-Gg: ASbGncsE1KGOMHWx6rRAcXlziAB8M8TzxEFILKJqcTiqzQAUd9lnFn5Y9yPA9Ym6zeo
+	o1jBcy17uHfFmInRvkhr3JXR/askzyqcqeEuo577paMNDsHQMyDFrosUyDFOMvLcCyEDSbrBWw5
+	5EpruzGNjmyIpFSNbujw+ElKY2T366E4558posJFhJgsxVTWHZA+2iCknkKEaoGXnv2Tqb2vm9P
+	2Ob928S
+X-Google-Smtp-Source: AGHT+IFfBIZ9tw9xk6izt+Pp1RDKhrneM/4V0xMQ3SQcQyw8bxtVQ+yk7ZX4FkrasMb7cm8JZje8oaxcUAv/6th9jac=
+X-Received: by 2002:a2e:80d4:0:b0:32b:755e:6cd7 with SMTP id
+ 38308e7fff4ca-3308e56e179mr51708341fa.32.1753071904344; Sun, 20 Jul 2025
+ 21:25:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250720-t210b01-v2-17-9cb209f1edfc@gmail.com>
-References: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
-In-Reply-To: <20250720-t210b01-v2-0-9cb209f1edfc@gmail.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Nagarjuna Kristam <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>, 
- Peter De Schrijver <pdeschrijver@nvidia.com>, 
- Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc: devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
- linux-usb@vger.kernel.org, Thierry Reding <treding@nvidia.com>, 
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
- Aaron Kling <webgeek1234@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753064238; l=3522;
- i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
- bh=lBbPA4YnfIve2RzYnMMZrMuioshaXo0K/YzU1CSGgG0=;
- b=uZ18x9hPOETwB5r3x1VYui41gkdHxgunkMehPDkapwffmjyk9Z9GL845wi0QzejmISzNQ7Qte
- Wh8pVLrwHUIC3gw1diFucLnJPehp2XDs65AuWnzCj/LV+jaGFCmrF1V
-X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
- pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
-X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
- auth_id=342
-X-Original-From: Aaron Kling <webgeek1234@gmail.com>
-Reply-To: webgeek1234@gmail.com
+References: <20250704070356.1683992-1-apatel@ventanamicro.com> <CABb+yY0mf08KU-GgjCVKMFpSf-jVSSRadtYfk6VHcbcMw6xztA@mail.gmail.com>
+In-Reply-To: <CABb+yY0mf08KU-GgjCVKMFpSf-jVSSRadtYfk6VHcbcMw6xztA@mail.gmail.com>
+From: Anup Patel <apatel@ventanamicro.com>
+Date: Mon, 21 Jul 2025 09:54:52 +0530
+X-Gm-Features: Ac12FXy5l4nDu-013iesLxkoer-0bUk6pdvS3VWXraud9GJ1aiQP15I-8GohFJE
+Message-ID: <CAK9=C2VfZ8PneOnChoUn4-mYZFut+TXoW8iDzKXc4XOW9X2qKw@mail.gmail.com>
+Subject: Re: [PATCH v8 00/24] Linux SBI MPXY and RPMI drivers
+To: Jassi Brar <jassisinghbrar@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Len Brown <lenb@kernel.org>, Sunil V L <sunilvl@ventanamicro.com>, 
+	Rahul Pathak <rpathak@ventanamicro.com>, Leyfoon Tan <leyfoon.tan@starfivetech.com>, 
+	Atish Patra <atish.patra@linux.dev>, Andrew Jones <ajones@ventanamicro.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Anup Patel <anup@brainfault.org>, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Aaron Kling <webgeek1234@gmail.com>
+On Mon, Jul 21, 2025 at 1:09=E2=80=AFAM Jassi Brar <jassisinghbrar@gmail.co=
+m> wrote:
+>
+> On Fri, Jul 4, 2025 at 2:04=E2=80=AFAM Anup Patel <apatel@ventanamicro.co=
+m> wrote:
+> >
+> > The SBI v3.0 (MPXY extension) [1] and RPMI v1.0 [2] specifications
+> > are frozen and finished public review at the RISC-V International.
+> >
+> > Currently, most of the RPMI and MPXY drivers are in OpenSBI whereas
+> > Linux only has SBI MPXY mailbox controller driver, RPMI clock driver
+> > and RPMI system MSI driver This series also includes ACPI support
+> > for SBI MPXY mailbox controller and RPMI system MSI drivers.
+> >
+> > These patches can be found in the riscv_sbi_mpxy_mailbox_v8 branch
+> > at: https://github.com/avpatel/linux.git
+> >
+> > To test these patches, boot Linux on "virt,rpmi=3Don,aia=3Daplic-imsic"
+> > machine with OpenSBI and QEMU from the dev-upstream branch at:
+> > https://github.com/ventanamicro/opensbi.git
+> > https://github.com/ventanamicro/qemu.git
+> >
+> > [1] https://github.com/riscv-non-isa/riscv-sbi-doc/releases
+> > [2] https://github.com/riscv-non-isa/riscv-rpmi/releases
+> >
+> > Changes since v7:
+> >  - Addressed comments on PATCH3, PATCH7, PATCH10, PATCH14, and PATCH21
+> >
+> > Changes since v6:
+> >  - Rebased the series on Linux-6.16-rc4
+> >  - Added Stephen's Reviewed-by in appropriate patches
+> >  - Addressed Andy's comments on PATCH5, PATCH6, PATCH9, and PATCH14
+> >  - New PATCH6 in this series which is factored-out from PATCH7
+> >
+> > Changes since v5:
+> >  - Rebased the series on Linux-6.16-rc2
+> >  - Added Conor's Reviewed-by in all DT binding patches
+> >  - Addressed Andy's comments on PATCH5
+> >  - Addressed Tglx's comments on PATCH12 and PATCH21
+> >
+> > Changes since v4:
+> >  - Rebased the series on Linux-6.16-rc1
+> >  - Dropped PATCH1 since a similar change is already merged
+> >    https://lore.kernel.org/linux-riscv/20250523101932.1594077-4-cleger@=
+rivosinc.com/
+> >  - Addressed Andy's comments on PATCH4, PATCH5, PATCH6, PATCH7,
+> >    PATCH13, and PATCH17
+> >  - Addressed Atish's comments on PATCH11 and PATCH12
+> >  - Addressed Conor's comments on PATCH9
+> >
+> > Changes since v3:
+> >  - Rebased the series on Linux-6.15-rc7
+> >  - Updated PATCH2 DT bindings as-per Rob's suggestion
+> >  - Improved request_threaded_irq() usage in PATCH7
+> >  - Updated PATCH10 clk-rpmi driver as-per commments from Andy
+> >  - Updated PATCH13 irq-riscv-rpmi-sysmsi driver as-per comments
+> >    from Andy and Tglx
+> >  - Addressed ACPI related comments in PATCH14, PATCH15, PATCH18,
+> >    PATCH20 and PATCH21
+> >
+> > Changes since v2:
+> >  - Dropped the "RFC" tag from series since the SBI v3.0 and
+> >    RPMI v1.0 specifications are now frozen
+> >  - Rebased the series on Linux-6.15-rc5
+> >  - Split PATCH8 of v2 into two patches adding separate DT
+> >    bindings for "riscv,rpmi-mpxy-clock" and "riscv,rpmi-clock"
+> >  - Split PATCH10 of v2 into two patches adding separate DT
+> >    bindings for "riscv,rpmi-mpxy-system-msi" and
+> >    "riscv,rpmi-system-msi"
+> >  - Addressed comments from TGLX on PATCH11 of v2 adding irqchip
+> >    driver for RPMI system MSI
+> >  - Addressed ACPI related comments in PATCH15 and PATCH16 of v2
+> >  - New PATCH17 and PATCH18 in this series
+> >
+> > Changes since v1:
+> >  - Addressed DT bindings related comments in PATCH2, PATCH3, and
+> >    PATCH7 of v1 series
+> >  - Addressed comments in PATCH6 and PATCH8 of v1 series
+> >  - New PATCH6 in v2 series to allow fwnode based mailbox channel
+> >    request
+> >  - New PATCH10 and PATCH11 to add RPMI system MSI based interrupt
+> >    controller driver
+> >  - New PATCH12 to PATCH16 which adds ACPI support in SBI MPXY
+> >    mailbox driver and RPMI system MSI driver
+> >  - New PATCH17 to enable required kconfig option to allow graceful
+> >    shutdown on QEMU virt machine
+> >
+> > Anup Patel (14):
+> >   dt-bindings: mailbox: Add bindings for RPMI shared memory transport
+> >   dt-bindings: mailbox: Add bindings for RISC-V SBI MPXY extension
+> >   RISC-V: Add defines for the SBI message proxy extension
+> >   mailbox: Add common header for RPMI messages sent via mailbox
+> >   mailbox: Allow controller specific mapping using fwnode
+> >   byteorder: Add memcpy_to_le32() and memcpy_from_le32()
+> >   mailbox: Add RISC-V SBI message proxy (MPXY) based mailbox driver
+> >   dt-bindings: clock: Add RPMI clock service message proxy bindings
+> >   dt-bindings: clock: Add RPMI clock service controller bindings
+> >   dt-bindings: Add RPMI system MSI message proxy bindings
+> >   dt-bindings: Add RPMI system MSI interrupt controller bindings
+> >   irqchip: Add driver for the RPMI system MSI service group
+> >   RISC-V: Enable GPIO keyboard and event device in RV64 defconfig
+> >   MAINTAINERS: Add entry for RISC-V RPMI and MPXY drivers
+> >
+> > Rahul Pathak (1):
+> >   clk: Add clock driver for the RISC-V RPMI clock service group
+> >
+> > Sunil V L (9):
+> >   ACPI: property: Refactor acpi_fwnode_get_reference_args() to support
+> >     nargs_prop
+> >   ACPI: Add support for nargs_prop in acpi_fwnode_get_reference_args()
+> >   ACPI: scan: Update honor list for RPMI System MSI
+> >   ACPI: RISC-V: Create interrupt controller list in sorted order
+> >   ACPI: RISC-V: Add support to update gsi range
+> >   ACPI: RISC-V: Add RPMI System MSI to GSI mapping
+> >   irqchip/irq-riscv-imsic-early: Export imsic_acpi_get_fwnode()
+> >   mailbox/riscv-sbi-mpxy: Add ACPI support
+> >   irqchip/riscv-rpmi-sysmsi: Add ACPI support
+> >
+> >  .../bindings/clock/riscv,rpmi-clock.yaml      |   64 ++
+> >  .../bindings/clock/riscv,rpmi-mpxy-clock.yaml |   64 ++
+> >  .../riscv,rpmi-mpxy-system-msi.yaml           |   67 ++
+> >  .../riscv,rpmi-system-msi.yaml                |   74 ++
+> >  .../mailbox/riscv,rpmi-shmem-mbox.yaml        |  124 ++
+> >  .../bindings/mailbox/riscv,sbi-mpxy-mbox.yaml |   51 +
+> >  MAINTAINERS                                   |   15 +
+> >  arch/riscv/configs/defconfig                  |    2 +
+> >  arch/riscv/include/asm/irq.h                  |    6 +
+> >  arch/riscv/include/asm/sbi.h                  |   63 +
+> >  drivers/acpi/property.c                       |  128 ++-
+> >  drivers/acpi/riscv/irq.c                      |   75 +-
+> >  drivers/acpi/scan.c                           |    2 +
+> >  drivers/base/property.c                       |    2 +-
+> >  drivers/clk/Kconfig                           |    8 +
+> >  drivers/clk/Makefile                          |    1 +
+> >  drivers/clk/clk-rpmi.c                        |  616 ++++++++++
+> >  drivers/irqchip/Kconfig                       |    7 +
+> >  drivers/irqchip/Makefile                      |    1 +
+> >  drivers/irqchip/irq-riscv-imsic-early.c       |    2 +
+> >  drivers/irqchip/irq-riscv-rpmi-sysmsi.c       |  328 ++++++
+> >  drivers/mailbox/Kconfig                       |   11 +
+> >  drivers/mailbox/Makefile                      |    2 +
+> >  drivers/mailbox/mailbox.c                     |   65 +-
+> >  drivers/mailbox/riscv-sbi-mpxy-mbox.c         | 1017 +++++++++++++++++
+> >  include/linux/byteorder/generic.h             |   16 +
+> >  include/linux/mailbox/riscv-rpmi-message.h    |  243 ++++
+> >  include/linux/mailbox_controller.h            |    3 +
+> >  include/linux/wordpart.h                      |   16 +
+> >  29 files changed, 2990 insertions(+), 83 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/riscv,rpmi-=
+clock.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/clock/riscv,rpmi-=
+mpxy-clock.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/interrupt-control=
+ler/riscv,rpmi-mpxy-system-msi.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/interrupt-control=
+ler/riscv,rpmi-system-msi.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/mailbox/riscv,rpm=
+i-shmem-mbox.yaml
+> >  create mode 100644 Documentation/devicetree/bindings/mailbox/riscv,sbi=
+-mpxy-mbox.yaml
+> >  create mode 100644 drivers/clk/clk-rpmi.c
+> >  create mode 100644 drivers/irqchip/irq-riscv-rpmi-sysmsi.c
+> >  create mode 100644 drivers/mailbox/riscv-sbi-mpxy-mbox.c
+> >  create mode 100644 include/linux/mailbox/riscv-rpmi-message.h
+> >
+> For the mailbox changes ...
+> Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
 
-Add initial device-tree support for NVIDIA Shield TV Pro 2019 (a.k.a
-MDarcy) based up the Tegra210B01 SoC with 3 GiB of LPDDR4 RAM.
+Thanks Jassi !
 
-This is very basic, intended for checking initial Tegra210B01 support.
-More complete support for the device will be added later.
-
-Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
----
- arch/arm64/boot/dts/nvidia/Makefile                |  1 +
- .../boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts | 10 ++++
- arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi  | 70 ++++++++++++++++++++++
- 3 files changed, 81 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/nvidia/Makefile b/arch/arm64/boot/dts/nvidia/Makefile
-index 0fbb8a494dba5089d9b7243e766bd6028b7f3744..bc6f3e268020b6fdbc90b2fb2ec1daf30c80af0e 100644
---- a/arch/arm64/boot/dts/nvidia/Makefile
-+++ b/arch/arm64/boot/dts/nvidia/Makefile
-@@ -20,6 +20,7 @@ dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-p2571.dtb
- dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-p3450-0000.dtb
- dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-smaug.dtb
- dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210-p2894-0050-a08.dtb
-+dtb-$(CONFIG_ARCH_TEGRA_210_SOC) += tegra210b01-p2894-0050-a08.dtb
- dtb-$(CONFIG_ARCH_TEGRA_186_SOC) += tegra186-p2771-0000.dtb
- dtb-$(CONFIG_ARCH_TEGRA_186_SOC) += tegra186-p3509-0000+p3636-0001.dtb
- dtb-$(CONFIG_ARCH_TEGRA_194_SOC) += tegra194-p2972-0000.dtb
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..f18266b3d8ae341feaef5a1a911752f6a5ce2d0f
---- /dev/null
-+++ b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894-0050-a08.dts
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/dts-v1/;
-+
-+#include "tegra210b01-p2894.dtsi"
-+
-+/ {
-+	model = "NVIDIA Shield TV Pro 2019";
-+	compatible = "nvidia,p2894-0050-a08", "nvidia,darcy", "nvidia,tegra210b01",
-+		"nvidia,tegra210";
-+};
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi
-new file mode 100644
-index 0000000000000000000000000000000000000000..97c9bd8f293539e76d57b6cfee49c60fb482d6ab
---- /dev/null
-+++ b/arch/arm64/boot/dts/nvidia/tegra210b01-p2894.dtsi
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "tegra210b01.dtsi"
-+
-+/ {
-+	aliases {
-+		serial0 = &uarta;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x0 0xc0000000>;
-+	};
-+
-+	serial@70006000 {
-+		/delete-property/ dmas;
-+		/delete-property/ dma-names;
-+		status = "okay";
-+	};
-+
-+	pmc@7000e400 {
-+		nvidia,invert-interrupt;
-+		nvidia,suspend-mode = <0>;
-+		nvidia,cpu-pwr-good-time = <0>;
-+		nvidia,cpu-pwr-off-time = <0>;
-+		nvidia,core-pwr-good-time = <4587 3876>;
-+		nvidia,core-pwr-off-time = <39065>;
-+		nvidia,core-power-req-active-high;
-+		nvidia,sys-clock-req-active-high;
-+		status = "okay";
-+	};
-+
-+	mmc@700b0600 {
-+		bus-width = <8>;
-+		non-removable;
-+		status = "okay";
-+	};
-+
-+	clk32k_in: clock-32k {
-+		compatible = "fixed-clock";
-+		clock-frequency = <32768>;
-+		#clock-cells = <0>;
-+	};
-+
-+	cpus {
-+		cpu@0 {
-+			enable-method = "psci";
-+		};
-+
-+		cpu@1 {
-+			enable-method = "psci";
-+		};
-+
-+		cpu@2 {
-+			enable-method = "psci";
-+		};
-+
-+		cpu@3 {
-+			enable-method = "psci";
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+};
-
--- 
-2.50.1
-
-
+--Anup
 
