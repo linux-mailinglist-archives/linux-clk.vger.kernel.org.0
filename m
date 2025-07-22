@@ -1,81 +1,190 @@
-Return-Path: <linux-clk+bounces-24978-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24980-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EA2FB0CEB8
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 02:28:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33E20B0CF0B
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 03:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49BFA7A1A09
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 00:27:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6708E3BE525
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 01:22:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1D9224FD;
-	Tue, 22 Jul 2025 00:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 556CD158535;
+	Tue, 22 Jul 2025 01:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kEv/04ix"
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="huHajcKc";
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="wgJqGZBM"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bayard.4d2.org (bayard.4d2.org [155.254.16.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44BFF4FA;
-	Tue, 22 Jul 2025 00:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84686D17;
+	Tue, 22 Jul 2025 01:22:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=155.254.16.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753144127; cv=none; b=IRgEuVvo+T6CjuwIIgYGbJvlDBVbtLmcwV0ADuWYfWieo+VfPEyxlir4LtAtF1DLokDmOtswPoGysd1Zl5jJnR/GnHtj2Y4MjrQSgGAQIbupI641TwX38o1mbGV+sjApiy+wHk9knti6fXHscYuAyOFhACuYJLyYL4er2pVuv9Y=
+	t=1753147363; cv=none; b=rOa7QZ7TmF0097zXDMdTdRKNuv5tC0jPjJ9wGvq2hk+75YBlDRsIg2usx85BCBXobnQmxtcNhHpP/IT6KbRlpX27AuLUlsbK5qsQHTPNwLRxRjpVu8ka1XxZbigBfboKa/SGc95MVX5AW7/4g5NLOzvexHa4EgHp95thoNUDzNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753144127; c=relaxed/simple;
-	bh=lkj2iz50e05gBdLMWwNIikXAisnhw8Y2ADazq8uUrJk=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=h/0r61C1Ejn4wJse9UyRGTixJl6lUp/MWebaoBottGhC1IFRZUGSD1Vadz0RZVFqcO7r79boE+3w5JywhjMyujsPlHuv7jse/JlAZH5IV559Wr8HdvGogaDcBV4aEZH6cOyPdMNmTPwxFyoRW62rBispT2dYD4JdqN23t9SivBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kEv/04ix; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD274C4CEF5;
-	Tue, 22 Jul 2025 00:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753144127;
-	bh=lkj2iz50e05gBdLMWwNIikXAisnhw8Y2ADazq8uUrJk=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=kEv/04ix+WN83EBGQ2ITPE7dRRqyn2TYr0hPFBeC1uwEEbUPIioGTnHk+ZPypCgTR
-	 ndhYPeDwg1XyOtwSM85mEoXm63qiQNSQrTwlukrFvF7uD2IPucXTSb8eocJOBHw04r
-	 s2QbWCygpfMvGuhOZN5t5jwSO1ZQ4mQc4e8Da6cwktHK6AP91guOOthb8fZnBLV4Wv
-	 QDmANOZpvpwipchlDrekCi62O1zIPzNcmMFzrh8znGhbcKBHCzakM/pyBM1oHuQAmw
-	 t0mRBLhqF5RjOa3FiQIE5HjgDv3fi98lrmfFkTdECD3GjDwFxvZxrvXuVUiOq2FjhK
-	 9FKAX0T72D4NQ==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1753147363; c=relaxed/simple;
+	bh=EY7ok2pqfxBJbKCKYKEiVz7SgLQ58DjtTaUal/8LobY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eHKx4p1Y2VRJ7NDqmW4Bvdpo4hg/U5YI6prtO5k8dOLn1PoWYHN5lEdJ4uys7LKr0pSYMNs0IXMFFDrcZQgY5b2wpUyvv94bvVNFVdXKln6Gtdwg6QDLqigaCaqypdfEBmcCuhRcGXdAv1fLtnk0Q/6Rac+ySYSYWKPBGish4A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=huHajcKc; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=wgJqGZBM; arc=none smtp.client-ip=155.254.16.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=4d2.org
+Received: from localhost (bayard.4d2.org [127.0.0.1])
+	by bayard.4d2.org (Postfix) with ESMTP id E3C1312FB42B;
+	Mon, 21 Jul 2025 18:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
+	t=1753146178; bh=EY7ok2pqfxBJbKCKYKEiVz7SgLQ58DjtTaUal/8LobY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=huHajcKcVf0JO7BF/aTB4JZNS68kbeIswtO0pLah4JsDd91aD8to+xPXH1s+8ppL0
+	 Qb4M70RAfoA+aAcBosR9DutrX7iRLV9eEZmMx0Yxlf+RzU7tkHpWWcLa3+Yt60xKXf
+	 FJjWdVAfvEjfCFUmWfIYzS8w2v1gcUkaMRF/+av8gnzEVx0b9y+wzZ4rUprnXFJfYa
+	 Hrot1RPjrdXdJHU2DzTkzvqU6/tTm1gBWplYVBjS6rFvS2wWfE5iIR2z75yiZcA4q2
+	 LjerUWJErk+wifOoupRYnY3d9aazGoZVE/SXl/bCo4NUrIvU+cJc2ndb4g2XODWPRg
+	 uQQy54Lrmv/sg==
+X-Virus-Scanned: amavis at 4d2.org
+Received: from bayard.4d2.org ([127.0.0.1])
+ by localhost (bayard.4d2.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QtJ0SlhhwE5J; Mon, 21 Jul 2025 18:02:54 -0700 (PDT)
+Received: from ketchup (unknown [117.171.64.151])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: heylenay@4d2.org)
+	by bayard.4d2.org (Postfix) with ESMTPSA id BA8A212FB405;
+	Mon, 21 Jul 2025 18:02:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
+	t=1753146174; bh=EY7ok2pqfxBJbKCKYKEiVz7SgLQ58DjtTaUal/8LobY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wgJqGZBM8kn437TuW3Ur0ouaNXpgPGF9aviI22AC1XS8pksglo7CSpJ1jSoo0ozkM
+	 86Z55J0U75IZ7FKzdMF25pTX9KkpuLW0OF9J4hQBwaYFnbk1IvOB/dc2k2qqHUQPC9
+	 dH1GLNVVq3dp1HF4jo1SiXzEyaukzk/oJqo3In2cuXUQyBaKP9XNfrSE7sbhczYOSP
+	 ASnUPPQ3s8K2zRtNPznMvWto5DRrfilS31WHQNb9ihGkfZQ9Lf7Fx3F6tNYoCql6UG
+	 +v1a89i80omG9joEhjsXpklfarC8url7K8ih0wbLzWCKU0wCA8HzF9ylWIYh3eT/F+
+	 m3w1c6V27hpQQ==
+Date: Tue, 22 Jul 2025 01:02:43 +0000
+From: Haylen Chu <heylenay@4d2.org>
+To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>, mturquette@baylibre.com,
+	sboyd@kernel.org, dlan@gentoo.org, elder@riscstar.com,
+	inochiama@outlook.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, heylenay@outlook.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr
+Cc: linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org,
+	unicornxdotw@foxmail.com, jszhang@kernel.org,
+	zhangmeng.kevin@linux.spacemit.com, akhileshpatilvnit@gmail.com,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH] clk: spacemit: fix error handling in
+ ccu_pll_set_rate/_round_rate
+Message-ID: <aH7jM_q3y85o2Daf@ketchup>
+References: <aH6OC1aV6IcQnoSC@bhairav-test.ee.iitb.ac.in>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <aHt0ojYyO1OEZTmG@x1>
-References: <aHt0ojYyO1OEZTmG@x1>
-Subject: Re: [GIT PULL] clk: thead: Updates for v6.17
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, Michal Wilczynski <m.wilczynski@samsung.com>, Yao Zi <ziyao@disroot.org>
-To: Drew Fustini <fustini@kernel.org>
-Date: Mon, 21 Jul 2025 17:28:38 -0700
-Message-ID: <175314411891.3513.15061789735684884470@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aH6OC1aV6IcQnoSC@bhairav-test.ee.iitb.ac.in>
 
-Quoting Drew Fustini (2025-07-19 03:34:10)
-> The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd13544=
-94:
->=20
->   Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git tags/th=
-ead-clk-for-v6.17
->=20
-> for you to fetch changes up to d274c77ffa202b70ad01d579f33b73b4de123375:
->=20
->   clk: thead: th1520-ap: Correctly refer the parent of osc_12m (2025-07-1=
-3 12:46:58 -0700)
->=20
-> ----------------------------------------------------------------
+On Tue, Jul 22, 2025 at 12:29:23AM +0530, Akhilesh Patil wrote:
+> Initialize best_entry pointer with NULL in ccu_pll_lookup_best_rate()
+> to avoid returning garbage value when function fails to assign it
+> a valid rate entry.
 
-Thanks. Pulled into to clk-next
+This doesn't sound very reasonable to me. Looking through
+ccu_pll_lookup_best_rate(),
+
+	static const struct ccu_pll_rate_tbl *
+	ccu_pll_lookup_best_rate(struct ccu_pll *pll, unsigned long rate)
+	{
+	        struct ccu_pll_config *config = &pll->config;
+	        const struct ccu_pll_rate_tbl *best_entry;
+	        unsigned long best_delta = ULONG_MAX;
+	        int i;
+
+	        for (i = 0; i < config->tbl_num; i++) {
+	                const struct ccu_pll_rate_tbl *entry = &config->rate_tbl[i];
+	                unsigned long delta = abs_diff(entry->rate, rate);
+
+	                if (delta < best_delta) {
+	                        best_delta = delta;
+	                        best_entry = entry;
+	                }
+	        }
+
+	        return best_entry;
+	}
+
+best_entry is assigned as long as there's one entry fits the delta
+better. Since best_delta is set to ULONG_MAX, any entry with non-zero
+rates fits the required rate "better" at start of the loop. As long as
+we have at least one non-zero entry defined for the PLL, best_entry is
+always initialized and ccu_pll_lookup_best_rate() cannot return an
+invalid pointer. And all existing PLLs do define at least one entry.
+
+> Avoid passing invalid rate entry reference to
+> ccu_pll_update_param by adding appropriate error handling in
+> ccu_pll_set_rate and ccu_pll_round_rate.
+> Address the effects of uninitialized pointer as reported
+> by smatch and coverity static code analysis tools.
+> 
+> Addresses-Coverity-ID: 1649164
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/r/202505111057.ejK2J56K-lkp@intel.com/
+
+Thus this looks like a false-positive to me.
+
+> Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+
+Regards,
+Haylen Chu
+
+> ---
+>  drivers/clk/spacemit/ccu_pll.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/spacemit/ccu_pll.c b/drivers/clk/spacemit/ccu_pll.c
+> index 4427dcfbbb97..3fc6a30f98b7 100644
+> --- a/drivers/clk/spacemit/ccu_pll.c
+> +++ b/drivers/clk/spacemit/ccu_pll.c
+> @@ -21,7 +21,7 @@ static const struct ccu_pll_rate_tbl *ccu_pll_lookup_best_rate(struct ccu_pll *p
+>  							       unsigned long rate)
+>  {
+>  	struct ccu_pll_config *config = &pll->config;
+> -	const struct ccu_pll_rate_tbl *best_entry;
+> +	const struct ccu_pll_rate_tbl *best_entry = NULL;
+>  	unsigned long best_delta = ULONG_MAX;
+>  	int i;
+>  
+> @@ -107,6 +107,10 @@ static int ccu_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+>  	const struct ccu_pll_rate_tbl *entry;
+>  
+>  	entry = ccu_pll_lookup_best_rate(pll, rate);
+> +
+> +	if (!entry)
+> +		return -EINVAL;
+> +
+>  	ccu_pll_update_param(pll, entry);
+>  
+>  	return 0;
+> @@ -129,8 +133,11 @@ static long ccu_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+>  			       unsigned long *prate)
+>  {
+>  	struct ccu_pll *pll = hw_to_ccu_pll(hw);
+> +	const struct ccu_pll_rate_tbl *entry;
+> +
+> +	entry = ccu_pll_lookup_best_rate(pll, rate);
+>  
+> -	return ccu_pll_lookup_best_rate(pll, rate)->rate;
+> +	return entry ? entry->rate : 0;
+>  }
+>  
+>  static int ccu_pll_init(struct clk_hw *hw)
+> -- 
+> 2.34.1
+> 
 
