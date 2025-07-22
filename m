@@ -1,126 +1,163 @@
-Return-Path: <linux-clk+bounces-24979-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24981-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B630DB0CEFB
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 03:08:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5328B0D03A
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 05:21:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0135F6C2698
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 01:08:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16BB97AC623
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 03:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD13216F8E9;
-	Tue, 22 Jul 2025 01:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0061DED5D;
+	Tue, 22 Jul 2025 03:21:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="YpjlIG9X";
-	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="et0UNwGo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jke8srCC"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from bayard.4d2.org (bayard.4d2.org [155.254.16.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B23156677;
-	Tue, 22 Jul 2025 01:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=155.254.16.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0BE2E3701;
+	Tue, 22 Jul 2025 03:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753146525; cv=none; b=blngHyfaEd83rx0rb0Bk6vZDKJgk3znHlc/hkfXyu00HOb4U31RxknUE22jRlZq8Ce/r8+VB3qhNwAcXcXHxHkzxxTineSTfr0XBvyZ+abI7g0OXXmxSc390FJH/9OdEcULVAm+cpcqOxVSQOPlnZWBuw0RSJZ1qs8yOo8Ym8Dk=
+	t=1753154487; cv=none; b=PP5mIR83pT3ciaCTraJVNGmW42Svr1X9/teh0Z9BWR3vA8WIcPxnnUNtdP4vlpU5N1IFFJye6sZsmW8p1i+hV55NfiSgK/VKwCio2jg4gaEoWjvamcS2KNXrSF6RaLQtvXuhAh9vuDLNsEoLqsse1xzRT8QjGXO+Uqw8iAdkzFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753146525; c=relaxed/simple;
-	bh=hzdmz95quMdnRHb2ogS+Jsja1esz0IU+CTYKaAqwBy4=;
+	s=arc-20240116; t=1753154487; c=relaxed/simple;
+	bh=l5nvcoPWvqijod9BzVer5L//kq709mQgNUUoDuY2hbs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQ3O+bdlnsW3MtA27PrVAnV6wj6nB95daEq8Q8adBOJ0AnlDWnDd1n/WruNHcNpqLpuVM7lkmyIf/ble0WFOvJHrr+lvmsDcmXvBKAxREFeb4NU6y4XDV93CFb9YZI88ULRewMXn3QJRBwP3GKvXU7O4wqIhLDx91OZiW3mWuEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=YpjlIG9X; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=et0UNwGo; arc=none smtp.client-ip=155.254.16.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=4d2.org
-Received: from localhost (bayard.4d2.org [127.0.0.1])
-	by bayard.4d2.org (Postfix) with ESMTP id EC46212FB405;
-	Mon, 21 Jul 2025 18:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
-	t=1753146522; bh=hzdmz95quMdnRHb2ogS+Jsja1esz0IU+CTYKaAqwBy4=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=fAXQItNK+wYCutHSmSG+QtJh/DoKlaeAo22VKawToNBvuaoColG5hVAGjJK5dbblSFeMIBJTZC6XT8VggPC2QFVXq3PUaWn3+e6jQELvcfBfeK0TyUf3wHJJ82bI9EoClhfI8EfJlHwaMXqCsTh3HEFqm8zQ79GeU3SvV7BYGGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jke8srCC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A367C4CEEB;
+	Tue, 22 Jul 2025 03:21:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753154486;
+	bh=l5nvcoPWvqijod9BzVer5L//kq709mQgNUUoDuY2hbs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YpjlIG9X0fYRhCy7fPJxukgUtsATP1cL7cp/jkkFfEypXx4DQ0ZUIuEr7k/FFTBlM
-	 y1YxXEBBOwpkk9cacvkm8XRybsyHXzkxiwCOcP5YsyS5pXNAq4iJb7zWl7dAB/V3hb
-	 WTuytjfzmKPJwLVREVSkEmH2QEDD4hXC+3kzCe07jLdMEM91by8GptsNhMq2nM4V8w
-	 lKrXyTK4AAmkZy85a2SSRowJRloY6lar5ASCefHNuwzqT8Wo0xqkMk5SeAYpotbHfl
-	 d3+n5fZR8P3wtwvUOWCs7Kk0sJ6OpotRKY0K9k5/K6BuYtL4ErUl/mL/Ib/ArKGVVq
-	 2s9t4ThajmKvA==
-X-Virus-Scanned: amavis at 4d2.org
-Received: from bayard.4d2.org ([127.0.0.1])
- by localhost (bayard.4d2.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SLCFKPPPdY6W; Mon, 21 Jul 2025 18:08:39 -0700 (PDT)
-Received: from ketchup (unknown [117.171.64.151])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: heylenay@4d2.org)
-	by bayard.4d2.org (Postfix) with ESMTPSA id A2A2A12FB43F;
-	Mon, 21 Jul 2025 18:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
-	t=1753146519; bh=hzdmz95quMdnRHb2ogS+Jsja1esz0IU+CTYKaAqwBy4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=et0UNwGoYlgBCdiG4K4MpGoiHLRWz+FgFR125Mrse1zkZk7CFpTTBqiri2ZzY4fpm
-	 GQiRwoXFGAR/R0e2usVbi5884N6XQIV5cK1HzIcA1A2qaprVDYD2cnHhY25u8N0NwS
-	 sJ+X4Oj29p/U+BnnrffO499qQIZP9oiT1SWd6Oml2++dGNxc75fSshucIfLbZQz+Sd
-	 3XbTrSCo1cZmuDl2cE2zL71A6Gy9bi8yFHQ9MilMiIV0IzUzUonJ4HgzufCrLbwF4p
-	 qTcRRyFksV57gP5lc98J8nY0ljbWZLIuiAlqnAMQSU99+OieavZypLHDt7dXHOdWAt
-	 7lwgYYyFgS8qQ==
-Date: Tue, 22 Jul 2025 01:08:30 +0000
-From: Haylen Chu <heylenay@4d2.org>
-To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>, mturquette@baylibre.com,
-	sboyd@kernel.org, dlan@gentoo.org, elder@riscstar.com,
-	inochiama@outlook.com, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, heylenay@outlook.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr
-Cc: linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-kernel@vger.kernel.org,
-	unicornxdotw@foxmail.com, jszhang@kernel.org,
-	zhangmeng.kevin@linux.spacemit.com, akhileshpatilvnit@gmail.com,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH] clk: spacemit: ccu_pll: fix error return value in
- recalc_rate callback
-Message-ID: <aH7kjkC_YSEi7dFz@ketchup>
-References: <aH6P3lChCXhi3pe4@bhairav-test.ee.iitb.ac.in>
+	b=jke8srCCtAwuFdnsD0+Y3hEYpVrLMZcUNZMoEIhpWxL6h+Tm9XCROW/TTy+yLxEqP
+	 YK9AfV7xPrHwpjIf1vMR94hnyvCWrMIApYt51DGd+Knas8TuMmymfutUmEx4JTmQFf
+	 aFzOcKI06NukyRq6aW7OcVaH7/I90jslMmuKanv8f5/IdhNBJ7ztYbhwCLIF4aCli6
+	 qQ3d7dosDz59P/uhFfMexHH/1DWnqHpzUUhIDlC+5+tE7VMMerGKWOCL6maxBqGzOA
+	 HbLR0q0SJI9c869SPzaROkqlaVEgHbmXyNd7k12/x6gIVz756dmmmgI/LfjoCmU75i
+	 ueKUZSU1F8kcA==
+Date: Mon, 21 Jul 2025 22:21:23 -0500
+From: Bjorn Andersson <andersson@kernel.org>
+To: Taniya Das <taniya.das@oss.qualcomm.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, 
+	Abel Vesa <abel.vesa@linaro.org>, Pankaj Patil <pankaj.patil@oss.qualcomm.com>, sboyd@kernel.org, 
+	mturquette@baylibre.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	quic_rjendra@quicinc.com, linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] clk: qcom: gcc: Add support for Global Clock
+ Controller
+Message-ID: <keb6ljkvjdoi2pcfrgj2nvnytwprw3lmlv72f6zpcbzulzpw6n@vn62zoqlr7vu>
+References: <20250716152017.4070029-1-pankaj.patil@oss.qualcomm.com>
+ <20250716152017.4070029-8-pankaj.patil@oss.qualcomm.com>
+ <aHjJG2nrJJZvqxSu@linaro.org>
+ <40534488-24f6-4958-b032-d45a177dfd80@kernel.org>
+ <2f5b5e6e-5041-453e-b3f7-b10b40bc6f57@oss.qualcomm.com>
+ <52ytt5ag5l65hdjjmvjft2l7ofvt4rgdn6r3bytcpjvyqia7ry@uzajn7qjng4a>
+ <5b569e5f-066b-4e12-8a05-d77852ce11f6@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aH6P3lChCXhi3pe4@bhairav-test.ee.iitb.ac.in>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5b569e5f-066b-4e12-8a05-d77852ce11f6@oss.qualcomm.com>
 
-On Tue, Jul 22, 2025 at 12:37:10AM +0530, Akhilesh Patil wrote:
-> Return 0 instead of -EINVAL if function ccu_pll_recalc_rate() fails to
-> get correct rate entry. Follow .recalc_rate callback documentation
-> as mentioned in include/linux/clk-provider.h for error return value.
-
-Nice catch, thanks.
-
-> Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-
-Here misses a Fixes tag. With this added,
-
-Reviewed-by: Haylen Chu <heylenay@4d2.org>
-
-> ---
->  drivers/clk/spacemit/ccu_pll.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Jul 21, 2025 at 10:43:05PM +0530, Taniya Das wrote:
 > 
-> diff --git a/drivers/clk/spacemit/ccu_pll.c b/drivers/clk/spacemit/ccu_pll.c
-> index 4427dcfbbb97..45f540073a65 100644
-> --- a/drivers/clk/spacemit/ccu_pll.c
-> +++ b/drivers/clk/spacemit/ccu_pll.c
-> @@ -122,7 +122,7 @@ static unsigned long ccu_pll_recalc_rate(struct clk_hw *hw,
->  
->  	WARN_ON_ONCE(!entry);
->  
-> -	return entry ? entry->rate : -EINVAL;
-> +	return entry ? entry->rate : 0;
->  }
->  
->  static long ccu_pll_round_rate(struct clk_hw *hw, unsigned long rate,
-> -- 
-> 2.34.1
 > 
+> On 7/20/2025 9:30 AM, Bjorn Andersson wrote:
+> > On Fri, Jul 18, 2025 at 11:07:23PM +0530, Taniya Das wrote:
+> >>
+> >>
+> >> On 7/17/2025 3:38 PM, Krzysztof Kozlowski wrote:
+> >>> On 17/07/2025 11:57, Abel Vesa wrote:
+> >>>> On 25-07-16 20:50:17, Pankaj Patil wrote:
+> >>>>> From: Taniya Das <taniya.das@oss.qualcomm.com>
+> >>>>>
+> >>>>> Add support for Global clock controller for Glymur platform.
+> >>>>>
+> >>>>> Signed-off-by: Taniya Das <taniya.das@oss.qualcomm.com>
+> >>>>> Signed-off-by: Pankaj Patil <pankaj.patil@oss.qualcomm.com>
+> >>>>> ---
+> >>>>>  drivers/clk/qcom/Kconfig      |   10 +
+> >>>>>  drivers/clk/qcom/Makefile     |    1 +
+> >>>>>  drivers/clk/qcom/gcc-glymur.c | 8623 +++++++++++++++++++++++++++++++++
+> >>>>>  3 files changed, 8634 insertions(+)
+> >>>>>  create mode 100644 drivers/clk/qcom/gcc-glymur.c
+> >>>>>
+> >>>>> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> >>>>> index 051301007aa6..1d9e8c6aeaed 100644
+> >>>>> --- a/drivers/clk/qcom/Kconfig
+> >>>>> +++ b/drivers/clk/qcom/Kconfig
+> >>>>> @@ -645,6 +645,16 @@ config SAR_GPUCC_2130P
+> >>>>>  	  Say Y if you want to support graphics controller devices and
+> >>>>>  	  functionality such as 3D graphics.
+> >>>>>  
+> >>>>> +config SC_GCC_GLYMUR
+> >>>>
+> >>>> Wait, are we going back to this now?
+> >>>>
+> >>>> X Elite had CLK_X1E80100_GCC, so maybe this should be CLK_GLYMUR_GCC
+> >>>> then.
+> >>>
+> >>>
+> >>> Yeah, the SC is meaningless here, unless you call it CLK_SC8480XP_GCC,
+> >>> so the authors need to decide on one naming. Not mixtures..
+> >>>
+> >>>
+> >> Glymur follows the "SC" naming convention, and historically we've
+> >> adhered to the format: "SC/SM/SDX/SA_<Clock Controller>_<Target Name or
+> >> Chipset>". This structure has helped maintain consistency and clarity
+> >> across platforms.
+> >>
+> > 
+> > The platform isn't named SCGLYMUR - which is where the SC prefix would
+> > come from.
+> > 
+> > I'm not sure there's a benefit to quickly be able to know if a clock
+> > controller is for a SC, SM, SA, MSM, etc platform. Please let me know if
+> > I'm missing something.
+> > 
+> 
+> Bjorn it was more of an alignment for "Compute", "Mobile" and so on and
+> such was the definition to be used for the clock controllers as well.
+> 
+
+Right and look at e.g. SC7280, which should be SC, MSM, QCM, and QCS.
+This is one of the main reasons for my push to use the SoC code names
+instead.
+
+> >> The case of X1E80100 appears to be an exception—likely influenced by its
+> >> unique naming convention at the time.
+> >>
+> >> That said, I’d prefer to stay aligned with the established convention
+> >> used for earlier chipsets to preserve continuity. I’d appreciate hearing
+> >> your thoughts on this as well.
+> >>
+> > 
+> > We're changing the naming model completely, so there is no continuity.
+> > In fact the Hamoa "exception" would suite us very well for Glymur.
+> > 
+> > And look how nicely the CLK_X1E80100_* entries are grouped together in
+> > the Kconfig.
+> > 
+> > Change to CLK_GLYMUR_* please.
+> > 
+> 
+> Sure, will align, but hope we are all good with the clock driver name
+> <cc>-<target>.c.
+> 
+
+Yeah, let's stick with that format.
+
+Thanks,
+Bjorn
 
