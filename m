@@ -1,241 +1,283 @@
-Return-Path: <linux-clk+bounces-24983-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-24987-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69623B0D3A9
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 09:44:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E1E4B0D421
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 10:07:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42C1DAA458F
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 07:41:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FFAF173E34
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 08:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00052D9EE7;
-	Tue, 22 Jul 2025 07:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B4328B7F1;
+	Tue, 22 Jul 2025 08:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="Jd8wLbL1"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="FmwpoXPT"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652E32D3723;
-	Tue, 22 Jul 2025 07:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD86828C2DC;
+	Tue, 22 Jul 2025 08:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753169848; cv=none; b=TxfJmNzwtv1CdTx/S/IHGJwZ9nvwdoScZzGuHgdxG9e2LLQzor87B8dbGc77K1EIMW+C6kD2TYIiqo+YAW1m8d9w+RjhyJMMJ3bdewQiKaRcR1CfB4rjmXadcZKQXkAlZOzeIZGBPAeBjr9D9Q7XyxLzqkJghCZ48yHVGOb89lE=
+	t=1753171617; cv=none; b=skrx8wAXtaKm3r3YBw4b8hPxzVrL2to+AZZez/lrF4huKtQhhKZ69DeOedmkDkuxH65AnRxOMcxEfr2VsR/HUQ1j8xdhf0ahJPpcoClfELBr/1CsRdrWrpjaCmVthxOgz96fa8OqjT3NT235bnxle3DtdYm+O1Z7jzyxzQH1zTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753169848; c=relaxed/simple;
-	bh=0XUvAvsfHaff6g28QDK8UZbmnijtvMKUzjxWMgcstW0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Mcqar4ZWU8XMArg25xLO4D3XNby3uTD/2f2H+RM8wJBUGIi0Tk0e2Ws58XVALiLBY1YmdvULUuHW6gkhOhzvmLGeDKvyoo9CwSJigPxJk8r2xrC294JSNCQx+YbnirnJp9oAYA8XHnYAlcuQB5q9sFcjt9cBFMOWgVcZlgkE9B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=Jd8wLbL1; arc=none smtp.client-ip=18.169.211.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1753169831;
-	bh=JUyZIy4STLgGKV6n0Rtjh+3mXpolfFOBxvl+rc7sCTw=;
-	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=Jd8wLbL1MjJWf5mP2M3KuXPQ2VoHHYxpkeZmWggqptGi4uVAl+p4UQQ7Vb5sdi+kt
-	 WwF3QnJ6RhYRPD/aEAk1c2BCe0gH+w5CUl2ma+JqLKoMiN5+HWm335AxYFZJkCtoSb
-	 P205E/YUnV8sdx5JLpitd5v9NQthEDUYQOgu/mwg=
-X-QQ-mid: esmtpgz14t1753169829t213f62df
-X-QQ-Originating-IP: BRDEE0KNGCSRu018HljDnqbQ5/Bkizy8x9JNb6qaSPA=
-Received: from = ( [61.145.255.150])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 22 Jul 2025 15:37:07 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1888360680555149108
-EX-QQ-RecipientCnt: 15
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Date: Tue, 22 Jul 2025 15:36:31 +0800
-Subject: [PATCH v2 2/2] dt-bindings: clock: spacemit: CLK_SSPA_I2S_BCLK for
- SSPA
+	s=arc-20240116; t=1753171617; c=relaxed/simple;
+	bh=hVGzWh4Vvx6CSvwzllIJGxjDisw7/fzLjSvjtPvZXg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EdfPhzPCx+/gfECQWJQl3yWojsnja5A20uIkpc10mlT9rnsK4YZcKinqDESVy/Wi7YLR4BZ8qCtu98tl6gYcswFJK+zzZc0ZIvCA3Gnb7jxD/796OY79th/y24n0fY4bx/EWvgJdN9hSmR/4zs0BLYo0gu7gBIlBC5V1SLl2m9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=FmwpoXPT; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 846932000A;
+	Tue, 22 Jul 2025 10:06:51 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NSkwosCWrUf5; Tue, 22 Jul 2025 10:06:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1753171609; bh=hVGzWh4Vvx6CSvwzllIJGxjDisw7/fzLjSvjtPvZXg4=;
+	h=From:To:Cc:Subject:Date;
+	b=FmwpoXPTomLG7E+ru7ZPJ4rQaH8ipe8Zzlm9sgucYGXveZW6SxBMqfJfqmWOBys2V
+	 LfISEBCIlmFxH1K6dvIBGmnhSmCN2qwEMfCHIIVkY62W9Nq1N/ZNj6LzK+v3Gz4D6c
+	 wuP0tQePpFjHt42066+rluAn1ehkwHmQq2hxkJBMW1q0wIsWi2iXrQVRm/Kcd5obJb
+	 ep/4hQK3tQZRgfi7dfXVQZ8Bmqo/6SLgat/zjkPmLWYAyKdUxzQuDb2cSKO7wY3r9x
+	 2ES10eSAX/IzxtbhW5eEfVTfEFZgkeR0conowNalcl1Hecn31Fecuxm5zMcpbZuEE0
+	 AGEEKAva0DgbA==
+From: Yao Zi <ziyao@disroot.org>
+To: Drew Fustini <fustini@kernel.org>,
+	Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Yangtao Li <frank.li@vivo.com>
+Cc: linux-riscv@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yao Zi <ziyao@disroot.org>
+Subject: [PATCH v3] clk: thead: th1520-ap: Describe mux clocks with clk_mux
+Date: Tue, 22 Jul 2025 08:05:36 +0000
+Message-ID: <20250722080535.60027-2-ziyao@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250722-k1-clk-i2s-v2-2-2f8edfe3dab4@linux.spacemit.com>
-References: <20250722-k1-clk-i2s-v2-0-2f8edfe3dab4@linux.spacemit.com>
-In-Reply-To: <20250722-k1-clk-i2s-v2-0-2f8edfe3dab4@linux.spacemit.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Alex Elder <elder@riscstar.com>, Haylen Chu <heylenay@4d2.org>, 
- Inochi Amaoto <inochiama@outlook.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org, 
- spacemit@lists.linux.dev, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, 
- Troy Mitchell <troy.mitchell@linux.spacemit.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1753169819; l=3905;
- i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
- bh=0XUvAvsfHaff6g28QDK8UZbmnijtvMKUzjxWMgcstW0=;
- b=k5GPBMnuflbw6w5YYY/wSRbxzcKYTo+sAbNQujyR6OtwOjWRfniZlDNr1on6JbxWYRTUA4F5f
- GD09MtbJb+CC1vZ/84afMi0wLhIAFI0yt6fILL4Gv1ss8U3sJb4ccou
-X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
- pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: MoZqUia8aYdxJYUWpm9FkMaaL3pC8L7ePcF0YGgHG+PA+oca32o406+H
-	RWnDvawZQnyP6zaiui35fGhdFfdCfZ+VEY0SiE+wz/hxI7Ahw6Tz18feGJ7tz6SEVRjveNf
-	F5/1OsjIxrs/NCTZT8k44cFP2t1tabV2/VxukinrCU77whqzF17s97nNC6VezXnLJXo9D+2
-	sJWO8A1+yUZ0HdDq1BKNIk/A3Yuib1c4jD4GHiHzGa4p2J8eKASxHz+VwA0bmk3yHhH/ke6
-	3zQRTdPIkuqx8gEQgOecDj43vgGCWxDEkBlTHzZTalF322kaeqfHKf78I9OSblXSe+SP0p8
-	2FtWspUrxl1TEg0LYOU2HvFWs/BjsJrEvvUVQsNRRiVOwwGnqTLjS5FzXc0ZmBhPVZncKDi
-	10bCYoLjvs7Iz0w0m92U8DLBk2OA6dV37exv+HiVAwzrpKNwYQMl9+gtJHqCWxw7isJJKrX
-	hyv+wJGYtPybB+5M9eeaZHgyc+cTWyK5ulgUv/rtbKRRJXQc4xIm7M8LZSwZnxhPo8qW6f5
-	7IL6fa0sUp1BxPLIktvHY8B69L0VcC10D43YV6BSbaWz2cShYaaprlscBdu96AeNib9NiU+
-	BepfvJDNDTQxs3sX8F9rHu6WMZP2NAbaMjBTrzSCCKuSFw/U8ixDAhWdeIjcv8GH2UmYGyp
-	H9UPvJDVkcnq9XzFQgTTKf4r24QKD7sXCG+Y4P88rnQZWAo8y5DL23h6FZYdK/cNBAa48ck
-	c1v0srNioms6Orkl29/yASgCevREZI7HsJ6k0naO0ninArfr2v6QvzzYjWhAHk0jFEgm3wE
-	j4y9ZYVT4ynbyMlFvPDAYEnz5GzSkEwYxqp1NL12lrpxBJmaXB1mJ3LY5o4dWfeJ4QNKuhq
-	HY78v5Vg/IaRWA0CvS2uYolaGA93NBNObFKHyi4Ez40QUBr/dcmVbb7MfZrj4fH/4s2Jn93
-	Pu/n1j90TWF0RRJIuNY08iQJFCvlu7xvA1uuYtxcxit0i2Ok0t0E6/HvSNnSLrqum6QU36p
-	Lu3yDRssaDYVANYSsfEv0xYfxLEEGTTZAWeYT18mtT+sSCdWCldjD+u7R8PMBoFKUkk41jw
-	lI1/dQfxDxPFsv3XqoM6CE=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: 8bit
 
-This patch adds macro definitions: SSPAx_I2S_BCLK,
-to introduce a dummy gate for i2s_bclk.
+Mux clocks are now described with a customized ccu_mux structure
+consisting of ccu_internal and ccu_common substructures, and registered
+later with devm_clk_hw_register_mux_parent_data_table(). As this helper
+always allocates a new clk_hw structure, it's extremely hard to use mux
+clocks as parents statically by clk_hw pointers, since CCF has no
+knowledge about the clk_hw structure embedded in ccu_mux.
 
-Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+This scheme already causes issues for clock c910, which takes a mux
+clock, c910-i0, as a possible parent. With mainline U-Boot that
+reparents c910 to c910-i0 at boottime, c910 is considered as an orphan
+by CCF.
+
+This patch refactors handling of mux clocks, embeds a clk_mux structure
+in ccu_mux directly. Instead of calling devm_clk_hw_register_mux_*(),
+we could register mux clocks on our own without allocating any new
+clk_hw pointer, fixing c910 clock's issue.
+
+Fixes: ae81b69fd2b1 ("clk: thead: Add support for T-Head TH1520 AP_SUBSYS clocks")
+Signed-off-by: Yao Zi <ziyao@disroot.org>
 ---
- include/dt-bindings/clock/spacemit,k1-syscon.h | 114 +++++++++++++------------
- 1 file changed, 58 insertions(+), 56 deletions(-)
 
-diff --git a/include/dt-bindings/clock/spacemit,k1-syscon.h b/include/dt-bindings/clock/spacemit,k1-syscon.h
-index 35968ae98246609c889eb4a7d08b4ff7360de53b..6914ccf5be45a1071d5b6eac354cacb67888e00c 100644
---- a/include/dt-bindings/clock/spacemit,k1-syscon.h
-+++ b/include/dt-bindings/clock/spacemit,k1-syscon.h
-@@ -123,62 +123,64 @@
- #define CLK_TIMERS2		41
- #define CLK_AIB			42
- #define CLK_ONEWIRE		43
--#define CLK_SSPA0		44
--#define CLK_SSPA1		45
--#define CLK_DRO			46
--#define CLK_IR			47
--#define CLK_TSEN		48
--#define CLK_IPC_AP2AUD		49
--#define CLK_CAN0		50
--#define CLK_CAN0_BUS		51
--#define CLK_UART0_BUS		52
--#define CLK_UART2_BUS		53
--#define CLK_UART3_BUS		54
--#define CLK_UART4_BUS		55
--#define CLK_UART5_BUS		56
--#define CLK_UART6_BUS		57
--#define CLK_UART7_BUS		58
--#define CLK_UART8_BUS		59
--#define CLK_UART9_BUS		60
--#define CLK_GPIO_BUS		61
--#define CLK_PWM0_BUS		62
--#define CLK_PWM1_BUS		63
--#define CLK_PWM2_BUS		64
--#define CLK_PWM3_BUS		65
--#define CLK_PWM4_BUS		66
--#define CLK_PWM5_BUS		67
--#define CLK_PWM6_BUS		68
--#define CLK_PWM7_BUS		69
--#define CLK_PWM8_BUS		70
--#define CLK_PWM9_BUS		71
--#define CLK_PWM10_BUS		72
--#define CLK_PWM11_BUS		73
--#define CLK_PWM12_BUS		74
--#define CLK_PWM13_BUS		75
--#define CLK_PWM14_BUS		76
--#define CLK_PWM15_BUS		77
--#define CLK_PWM16_BUS		78
--#define CLK_PWM17_BUS		79
--#define CLK_PWM18_BUS		80
--#define CLK_PWM19_BUS		81
--#define CLK_SSP3_BUS		82
--#define CLK_RTC_BUS		83
--#define CLK_TWSI0_BUS		84
--#define CLK_TWSI1_BUS		85
--#define CLK_TWSI2_BUS		86
--#define CLK_TWSI4_BUS		87
--#define CLK_TWSI5_BUS		88
--#define CLK_TWSI6_BUS		89
--#define CLK_TWSI7_BUS		90
--#define CLK_TWSI8_BUS		91
--#define CLK_TIMERS1_BUS		92
--#define CLK_TIMERS2_BUS		93
--#define CLK_AIB_BUS		94
--#define CLK_ONEWIRE_BUS		95
--#define CLK_SSPA0_BUS		96
--#define CLK_SSPA1_BUS		97
--#define CLK_TSEN_BUS		98
--#define CLK_IPC_AP2AUD_BUS	99
-+#define CLK_SSPA0_I2S_BCLK	44
-+#define CLK_SSPA1_I2S_BCLK	45
-+#define CLK_SSPA0		46
-+#define CLK_SSPA1		47
-+#define CLK_DRO			48
-+#define CLK_IR			49
-+#define CLK_TSEN		50
-+#define CLK_IPC_AP2AUD		51
-+#define CLK_CAN0		52
-+#define CLK_CAN0_BUS		53
-+#define CLK_UART0_BUS		54
-+#define CLK_UART2_BUS		55
-+#define CLK_UART3_BUS		56
-+#define CLK_UART4_BUS		57
-+#define CLK_UART5_BUS		58
-+#define CLK_UART6_BUS		59
-+#define CLK_UART7_BUS		60
-+#define CLK_UART8_BUS		61
-+#define CLK_UART9_BUS		62
-+#define CLK_GPIO_BUS		63
-+#define CLK_PWM0_BUS		64
-+#define CLK_PWM1_BUS		65
-+#define CLK_PWM2_BUS		66
-+#define CLK_PWM3_BUS		67
-+#define CLK_PWM4_BUS		68
-+#define CLK_PWM5_BUS		69
-+#define CLK_PWM6_BUS		70
-+#define CLK_PWM7_BUS		71
-+#define CLK_PWM8_BUS		72
-+#define CLK_PWM9_BUS		73
-+#define CLK_PWM10_BUS		74
-+#define CLK_PWM11_BUS		75
-+#define CLK_PWM12_BUS		76
-+#define CLK_PWM13_BUS		77
-+#define CLK_PWM14_BUS		78
-+#define CLK_PWM15_BUS		79
-+#define CLK_PWM16_BUS		80
-+#define CLK_PWM17_BUS		81
-+#define CLK_PWM18_BUS		82
-+#define CLK_PWM19_BUS		83
-+#define CLK_SSP3_BUS		84
-+#define CLK_RTC_BUS		85
-+#define CLK_TWSI0_BUS		86
-+#define CLK_TWSI1_BUS		87
-+#define CLK_TWSI2_BUS		88
-+#define CLK_TWSI4_BUS		89
-+#define CLK_TWSI5_BUS		90
-+#define CLK_TWSI6_BUS		91
-+#define CLK_TWSI7_BUS		92
-+#define CLK_TWSI8_BUS		93
-+#define CLK_TIMERS1_BUS		94
-+#define CLK_TIMERS2_BUS		95
-+#define CLK_AIB_BUS		96
-+#define CLK_ONEWIRE_BUS		97
-+#define CLK_SSPA0_BUS		98
-+#define CLK_SSPA1_BUS		99
-+#define CLK_TSEN_BUS		100
-+#define CLK_IPC_AP2AUD_BUS	101
+This replaces the second patch in v2 of series "Fix orphan clocks in
+clk-th1520-ap driver".
+
+Note that the c910's issue cannot be reproduced with vendor U-Boot,
+which always reparents c910 to its second parent, cpu-pll1. Another way
+to confirm the bug is to examine
+/sys/kernel/debug/clk/c910/clk_possible_parents, which obviously doesn't
+match c910's definition. There's another patch[1] explaining and fixing
+the issue that the unknown parent isn't shown as "(missing)" in debugfs.
+
+[1]: https://lore.kernel.org/linux-clk/20250705095816.29480-2-ziyao@disroot.org/
+
+Changed from v2:
+- Avoid referring c910-i0 as parent for c910 with global names. Instead,
+  refactor mux clock handling to make referring to mux clocks by clk_hw
+  pointers possible
+- Link to v2: https://lore.kernel.org/linux-riscv/20250710092135.61049-1-ziyao@disroot.org/
+
+Changed from v1:
+- Split the two fixes into separate patches
+- Link to v1: https://lore.kernel.org/all/20250705052028.24611-1-ziyao@disroot.org/
+
+ drivers/clk/thead/clk-th1520-ap.c | 95 ++++++++++++-------------------
+ 1 file changed, 37 insertions(+), 58 deletions(-)
+
+diff --git a/drivers/clk/thead/clk-th1520-ap.c b/drivers/clk/thead/clk-th1520-ap.c
+index 5a102beb6ac1..cf1bba58f641 100644
+--- a/drivers/clk/thead/clk-th1520-ap.c
++++ b/drivers/clk/thead/clk-th1520-ap.c
+@@ -42,8 +42,9 @@ struct ccu_common {
+ };
  
- /* APMU clocks */
- #define CLK_CCI550		0
-
+ struct ccu_mux {
+-	struct ccu_internal	mux;
+-	struct ccu_common	common;
++	int			clkid;
++	u32			reg;
++	struct clk_mux		mux;
+ };
+ 
+ struct ccu_gate {
+@@ -75,6 +76,17 @@ struct ccu_pll {
+ 		.flags	= _flags,					\
+ 	}
+ 
++#define TH_CCU_MUX(_name, _parents, _shift, _width)			\
++	{								\
++		.mask		= GENMASK(_width - 1, 0),		\
++		.shift		= _shift,				\
++		.hw.init	= CLK_HW_INIT_PARENTS_DATA(		\
++					_name,				\
++					_parents,			\
++					&clk_mux_ops,			\
++					0),				\
++	}
++
+ #define CCU_GATE(_clkid, _struct, _name, _parent, _reg, _gate, _flags)	\
+ 	struct ccu_gate _struct = {					\
+ 		.enable	= _gate,					\
+@@ -94,13 +106,6 @@ static inline struct ccu_common *hw_to_ccu_common(struct clk_hw *hw)
+ 	return container_of(hw, struct ccu_common, hw);
+ }
+ 
+-static inline struct ccu_mux *hw_to_ccu_mux(struct clk_hw *hw)
+-{
+-	struct ccu_common *common = hw_to_ccu_common(hw);
+-
+-	return container_of(common, struct ccu_mux, common);
+-}
+-
+ static inline struct ccu_pll *hw_to_ccu_pll(struct clk_hw *hw)
+ {
+ 	struct ccu_common *common = hw_to_ccu_common(hw);
+@@ -415,32 +420,20 @@ static const struct clk_parent_data c910_i0_parents[] = {
+ };
+ 
+ static struct ccu_mux c910_i0_clk = {
+-	.mux	= TH_CCU_ARG(1, 1),
+-	.common	= {
+-		.clkid		= CLK_C910_I0,
+-		.cfg0		= 0x100,
+-		.hw.init	= CLK_HW_INIT_PARENTS_DATA("c910-i0",
+-					      c910_i0_parents,
+-					      &clk_mux_ops,
+-					      0),
+-	}
++	.clkid	= CLK_C910_I0,
++	.reg	= 0x100,
++	.mux	= TH_CCU_MUX("c910-i0", c910_i0_parents, 1, 1),
+ };
+ 
+ static const struct clk_parent_data c910_parents[] = {
+-	{ .hw = &c910_i0_clk.common.hw },
++	{ .hw = &c910_i0_clk.mux.hw },
+ 	{ .hw = &cpu_pll1_clk.common.hw }
+ };
+ 
+ static struct ccu_mux c910_clk = {
+-	.mux	= TH_CCU_ARG(0, 1),
+-	.common	= {
+-		.clkid		= CLK_C910,
+-		.cfg0		= 0x100,
+-		.hw.init	= CLK_HW_INIT_PARENTS_DATA("c910",
+-					      c910_parents,
+-					      &clk_mux_ops,
+-					      0),
+-	}
++	.clkid	= CLK_C910,
++	.reg	= 0x100,
++	.mux	= TH_CCU_MUX("c910", c910_parents, 0, 1),
+ };
+ 
+ static const struct clk_parent_data ahb2_cpusys_parents[] = {
+@@ -925,15 +918,9 @@ static const struct clk_parent_data uart_sclk_parents[] = {
+ };
+ 
+ static struct ccu_mux uart_sclk = {
+-	.mux	= TH_CCU_ARG(0, 1),
+-	.common	= {
+-		.clkid          = CLK_UART_SCLK,
+-		.cfg0		= 0x210,
+-		.hw.init	= CLK_HW_INIT_PARENTS_DATA("uart-sclk",
+-					      uart_sclk_parents,
+-					      &clk_mux_ops,
+-					      0),
+-	}
++	.clkid	= CLK_UART_SCLK,
++	.reg	= 0x210,
++	.mux	= TH_CCU_MUX("uart-sclk", uart_sclk_parents, 0, 1),
+ };
+ 
+ static struct ccu_common *th1520_pll_clks[] = {
+@@ -970,10 +957,10 @@ static struct ccu_common *th1520_div_clks[] = {
+ 	&dpu1_clk.common,
+ };
+ 
+-static struct ccu_common *th1520_mux_clks[] = {
+-	&c910_i0_clk.common,
+-	&c910_clk.common,
+-	&uart_sclk.common,
++static struct ccu_mux *th1520_mux_clks[] = {
++	&c910_i0_clk,
++	&c910_clk,
++	&uart_sclk,
+ };
+ 
+ static struct ccu_common *th1520_gate_clks[] = {
+@@ -1075,7 +1062,7 @@ static const struct regmap_config th1520_clk_regmap_config = {
+ struct th1520_plat_data {
+ 	struct ccu_common **th1520_pll_clks;
+ 	struct ccu_common **th1520_div_clks;
+-	struct ccu_common **th1520_mux_clks;
++	struct ccu_mux	  **th1520_mux_clks;
+ 	struct ccu_common **th1520_gate_clks;
+ 
+ 	int nr_clks;
+@@ -1162,23 +1149,15 @@ static int th1520_clk_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	for (i = 0; i < plat_data->nr_mux_clks; i++) {
+-		struct ccu_mux *cm = hw_to_ccu_mux(&plat_data->th1520_mux_clks[i]->hw);
+-		const struct clk_init_data *init = cm->common.hw.init;
+-
+-		plat_data->th1520_mux_clks[i]->map = map;
+-		hw = devm_clk_hw_register_mux_parent_data_table(dev,
+-								init->name,
+-								init->parent_data,
+-								init->num_parents,
+-								0,
+-								base + cm->common.cfg0,
+-								cm->mux.shift,
+-								cm->mux.width,
+-								0, NULL, NULL);
+-		if (IS_ERR(hw))
+-			return PTR_ERR(hw);
++		struct ccu_mux *cm = plat_data->th1520_mux_clks[i];
++
++		cm->mux.reg = base + cm->reg;
++
++		ret = devm_clk_hw_register(dev, &cm->mux.hw);
++		if (ret)
++			return ret;
+ 
+-		priv->hws[cm->common.clkid] = hw;
++		priv->hws[cm->clkid] = &cm->mux.hw;
+ 	}
+ 
+ 	for (i = 0; i < plat_data->nr_gate_clks; i++) {
 -- 
 2.50.1
 
