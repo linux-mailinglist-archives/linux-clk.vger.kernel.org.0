@@ -1,135 +1,249 @@
-Return-Path: <linux-clk+bounces-24993-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25002-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CABD8B0D9AF
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 14:33:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CA3B0DD5D
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 16:13:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8593A18848E6
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 12:33:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 699525810FE
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Jul 2025 14:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD76923ED75;
-	Tue, 22 Jul 2025 12:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A60F2EBDE6;
+	Tue, 22 Jul 2025 14:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="mn8J/94c"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="2fapeX4B"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5381DDC3
-	for <linux-clk@vger.kernel.org>; Tue, 22 Jul 2025 12:33:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB752EBBA1;
+	Tue, 22 Jul 2025 14:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753187582; cv=none; b=FIhuElquDN9/8Nn1rkm/PNe+uTckxMkF3AP4RN5h5VtEvAD7IzeT9gnZ3ulEqloAnswJ/XQPeTU4rDSGttA7WDLrQv+NFBaR0+E2yrcV7A4h5oEP+rXQ1aQRuHlAzXVmfq6O6BgBxTxoq0EOlfwz2MUVovhmnwm7W5VUIw9UBYQ=
+	t=1753193226; cv=none; b=Pje8r6ZoZfIDvqsrPiXAASNe0KjxOmL4qVnuYjTZ+l8KILDJUJxI9HnS7yh3dFFClotq99ivDouq1APfiN0S4lv+WkzJYFIMblv/Q/fZF2xgCCzD8+0mC2dda/oz4nry0ZbcNDilsRBY6q6tJ2EkFtExZFa4U+cXUg1qJhHV8jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753187582; c=relaxed/simple;
-	bh=XhhXlVRw6F1HLo12SCcAfi2XIRnFu3XLfX0xBUiPuF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QA65ONFJ/8zXJ49unnRz+Qd8JdgyFP2nistIO31xuxB173oRtbshqPvXpStSIMr3W833t8K6RciPjlTV0Yn4vG4rjWi8rryMsRi+J4DzUkxTvsP8yNmWMJnGwanGV5s+XzNHAhwbRWsTpNCnIdYnuk4CUumw1BQs0qG+b2uK15o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=mn8J/94c; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6fac7147cb8so78909756d6.1
-        for <linux-clk@vger.kernel.org>; Tue, 22 Jul 2025 05:33:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1753187580; x=1753792380; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GIXKcH5BFLN2ZbzCLvQD1G6ItZu5liVuUr8w7IySvR4=;
-        b=mn8J/94ckas+qD6AHT1wxCGpWUUDbTsFqRK2rmVvvc2KJP+c37eNIDchT4R232r0V9
-         JICl9zzUkYIkjSRJY+h3o7vY5fQFOEWUzjgTUBxhk89P7WAQZuQz9N6OzFIUVommiUdK
-         e9DqWKT3cCZEvsSshQXzoLnD3/gWD2srsF6lHwNa3MdkuB5gTrw0HJ+4+OL/zF1OdLDD
-         Hk+jE+yqqqNzVe6WvPWMGNiN97rfPjRlrMpg7EfwBZaYQ2dXdO490NqSM1YJlZ9bv0Dk
-         UvL7km8+wBo8iqBB+Ir+S1c0LDEoNiURLpQn6tUSF621M0vbt/FF4pZaabKtpq6L//po
-         WimA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753187580; x=1753792380;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GIXKcH5BFLN2ZbzCLvQD1G6ItZu5liVuUr8w7IySvR4=;
-        b=Wd6YU8Yq05GQMWMNFSYEPz9hAVc0qaFQTxMAHkl3dcXgyJRpryvuTOHw7Te1VwyuL2
-         hLWbjQT81fU+MpZmS0J3lPZnnI8xSnX1TIyq3m3vPR55YA2m7YGU0DvUP8AJfjuUwSzK
-         O+K6Ggz5zaDioFYFOkxhZXOCs7/gMrE3vN2L3cbiXEebs586tlMy26LN3ystPavNixGi
-         6QMHr2yQEmnWjoEsNtLxj5EikFYB7fFKIseYPrAMdb4PrwTWlgGb94opsGbSVwq0/f2m
-         RAmpDp5IBQL6vLTCJmhSatQCZC1b/U9w1Ku0XKwdaB7VdKKTDNSSnefaY4KTBmCthjYY
-         92OA==
-X-Gm-Message-State: AOJu0YylQ69yX7lfEL773VB9uFZUTGBLnybY8xk1Wb6GFID6rrXOv5O0
-	X32lvducVZ8J8jk89wrCppZLcXDpkAI8xsu3yKD7kwqpxLLHgyg+ERWd9VsC8maZNzQ=
-X-Gm-Gg: ASbGnctDtmjS/fGUDsdsEq8COQTlzkmPwue8PGhtBkN0yX+gLbXU0sREK+j5FdThwhM
-	WdHkp3ACKQPGSRrgfQI2o8crsbeNi0SZTTSMzEzOPa8y3Prxe46O1gug6CHC5dzk+ZQl4Vdr9h3
-	7w7sWVys4fKgEU+wMubMHRg2fJ9n8Jgk9bdJXQ9+o8iZOBH6wlYwbC4aoDsLei5QQ9/aHwDvCpM
-	tuJ82FjF/H3yc0vZnM6snAzb66ccBTnpTSEUnPLijqaFNoM69Xkka0PuMvH9HKWL8MM3dJNO1mX
-	hfXyxRb65KT2C9OAigvGnaOCYVc3eEjUgK6Fs1HtL3Kv67MpQBYg/mAFJTQLEEVTySVs+I0Er5m
-	gfshWhve0GdiSJN+ufdIfRBSHJwZPLNk+c3OstLIDQbGqcVLTsNd891+IKkYwIJjLZbxfQiM=
-X-Google-Smtp-Source: AGHT+IG1XORWN4jprJEi5Zq8+C3EGaNg8eBzovmEwMCoERAkUr764LT8y1WytHb49WzOljrg37pQSg==
-X-Received: by 2002:a05:6214:5886:b0:6fa:c2a4:f806 with SMTP id 6a1803df08f44-7051a11461dmr225240826d6.29.1753187578843;
-        Tue, 22 Jul 2025 05:32:58 -0700 (PDT)
-Received: from [10.211.55.5] (c-73-228-159-35.hsd1.mn.comcast.net. [73.228.159.35])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7051baa8760sm50251346d6.92.2025.07.22.05.32.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jul 2025 05:32:58 -0700 (PDT)
-Message-ID: <d6f147bf-2816-47d7-9a48-47562b8dde06@riscstar.com>
-Date: Tue, 22 Jul 2025 07:32:56 -0500
+	s=arc-20240116; t=1753193226; c=relaxed/simple;
+	bh=mg6fFUoOqdxNmiawjQ8njjV8F1W25uYsPGezNXnfzSQ=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=GokjtloqDmWDLpmNVHXVpbMhVOHJVR5gCZ/3qd8vKbjAbedRzPhpox5GX+XpLcLGNDuIbZJcF6v7CGFeI4T+qeZfOSY9XjvgJCb+p8mnG3Q00OCFoyq/5UspNM1VUu5Qbw4aOdrXbqlJg6jgIxkilXGt1aXEcbYyc21YhAWibAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=2fapeX4B; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56ME1oNY009466;
+	Tue, 22 Jul 2025 16:06:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=ibN3D5KFd0DY0HGihGpNxP
+	n6zt4eLguB92lFSdyHJss=; b=2fapeX4BOfmz6wdcm2zebSIkp2hqSKn7luTzNE
+	bQGdDRyJTDheqnozK/gEgYEx610ucf1NomA8EPlY7dGOcpEJfgiGg+u7kraKo3At
+	YIyEEwlv4U2Q4ugeeeEuwW8rMlwJWEHsRlU4XfFcQGe7C/76f4mSufJp1jeNNCOc
+	BaGZFVQVpRfvLlqFzmCAns2GGEejXjkspa8rzQhXBE++rq8tjRio7pRkUn+m+WfL
+	AXncTwW1LToXivUZLPZnOcp/jL9nwwEtpZsQvNJ582WqezWmIug4fSsml/eHQf1Y
+	oL54b5xQYuhAJxwLmT4RC+ALcphOJuUqtfWaWmrMwmHR6KNw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 48028g63ap-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Jul 2025 16:06:46 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1C0644002D;
+	Tue, 22 Jul 2025 16:05:08 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 52202761AE4;
+	Tue, 22 Jul 2025 16:03:49 +0200 (CEST)
+Received: from localhost (10.48.86.185) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 22 Jul
+ 2025 16:03:49 +0200
+From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+Subject: [PATCH v3 00/19] Introduce STM32 DDR PMU for STM32MP platforms
+Date: Tue, 22 Jul 2025 16:03:17 +0200
+Message-ID: <20250722-ddrperfm-upstream-v3-0-7b7a4f3dc8a0@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] clk: spacemit: ccu_pll: fix error return value in
- recalc_rate callback
-To: Akhilesh Patil <akhilesh@ee.iitb.ac.in>, mturquette@baylibre.com,
- sboyd@kernel.org, dlan@gentoo.org, heylenay@4d2.org, inochiama@outlook.com,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- heylenay@outlook.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr
-Cc: linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
- spacemit@lists.linux.dev, linux-kernel@vger.kernel.org,
- unicornxdotw@foxmail.com, jszhang@kernel.org,
- zhangmeng.kevin@linux.spacemit.com, akhileshpatilvnit@gmail.com,
- skhan@linuxfoundation.org
-References: <aH6P3lChCXhi3pe4@bhairav-test.ee.iitb.ac.in>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <aH6P3lChCXhi3pe4@bhairav-test.ee.iitb.ac.in>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIACWaf2gC/23NwQ6CMAyA4VchOzuyDUfRk+9hPODWyQ4wsuKiI
+ by7Aw/GhN7+Jv06M8Lokdi5mFnE5MmHIUd1KJjp2uGB3NvcTAmlhVY1tzaOGF3PnyNNEdue350
+ ApwFA25bluzGi86/NvN5yd56mEN/biyTX7VerVbWjJckFB+vyyLoRJ3FxgaikqTShZ6uX1M8AK
+ fcMlQ1j0SAoUR0b928sy/IBxdqAP/gAAAA=
+X-Change-ID: 20250526-ddrperfm-upstream-bf07f57775da
+To: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Rob
+ Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor
+ Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gatien Chevallier
+	<gatien.chevallier@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Gabriel Fernandez
+	<gabriel.fernandez@foss.st.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Le
+ Goffic <legoffic.clement@gmail.com>,
+        Julius Werner <jwerner@chromium.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-perf-users@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+X-Mailer: b4 0.15-dev-8018a
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-07-22_02,2025-07-21_02,2025-03-28_01
 
-On 7/21/25 2:07 PM, Akhilesh Patil wrote:
-> Return 0 instead of -EINVAL if function ccu_pll_recalc_rate() fails to
-> get correct rate entry. Follow .recalc_rate callback documentation
-> as mentioned in include/linux/clk-provider.h for error return value.
+This patch series introduces the DDR Performance Monitor (DDRPERFM) support for
+STM32MP platforms.
 
-"If the driver cannot figure out a rate for this clock, it
-must return 0."
+The series improves the STM32MP25 RCC driver to make it usable
+as an access controller, needed for driver probe.
 
-Looks good.
+The series introduces support of DDR channel through dt-binding and
+devicetree entries.
 
-Reviewed-by: Alex Elder <elder@riscstar.com>
+It also includes the addition of DDRPERFM device tree bindings,
+the DDRPERFM driver, the documentation and updates to the device tree files
+for STM32MP13, STM32MP15, STM32MP25 SoCs and stm32mp257f-dk and
+stm32mp257f-ev1 boards.
+The series also updates the MAINTAINERS file to include myself as the
+maintainer for the STM32 DDR PMU driver.
 
-> 
-> Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
-> ---
->   drivers/clk/spacemit/ccu_pll.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/spacemit/ccu_pll.c b/drivers/clk/spacemit/ccu_pll.c
-> index 4427dcfbbb97..45f540073a65 100644
-> --- a/drivers/clk/spacemit/ccu_pll.c
-> +++ b/drivers/clk/spacemit/ccu_pll.c
-> @@ -122,7 +122,7 @@ static unsigned long ccu_pll_recalc_rate(struct clk_hw *hw,
->   
->   	WARN_ON_ONCE(!entry);
->   
-> -	return entry ? entry->rate : -EINVAL;
-> +	return entry ? entry->rate : 0;
->   }
->   
->   static long ccu_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+---
+Changes in v3:
+- dt-bindings:
+  - perf:
+    - fix compatible conditions and dtbs_check/dt_binding_check errors
+  - memory:
+    - Remove ddr-channel binding added in v2
+    - Generalise lpddr-props binding into memory-props binding
+    - Add ddr4 binding
+    - Generalise lpddr-channel binding into memory-channel-binding
+- devicetree:
+    - update stm32mp257f-ev1 board devicetree as per new ddr4-channel
+      binding
+- driver:
+    - Remove unneeded pmu and event pointer tests in
+      `stm32_ddr_pmu_get_counter()` as it would break before if they are
+      NULL
+    - Rename macro to be more driver specific
+    - Fix few trailing commas in array and enum last entries
+    - Stick to the use of `pmu->dev` in the probe instead of
+      `&pdev->dev`
+    - s/devm_clk_get_optional_prepared/devm_clk_get_optional_enabled/ to
+      fix unwinding issue and remove the `clk_enable()` of the probe.
+    - Move the `perf_pmu_register()` at the end of the probe
+    - Add lacking spaces in regspec structs
+    - Use DEFINE_SIMPLE_DEV_PM_OPS instead of SET_SYSTEM_SLEEP_PM_OPS
+- Link to v2: https://lore.kernel.org/r/20250711-ddrperfm-upstream-v2-0-cdece720348f@foss.st.com
+
+Changes in v2:
+- MAINTAINERS:
+    Due to reorganisation, my contract with ST ends at the end of this month
+    and I will no longer have access to this mailbox.
+    Therefore, I will be available for any mission related to embedded and
+    kernel linux.
+    Change email address in MAINTAINERS file for STM32 DDR PMU driver.
+- devicetrees:
+  -stm32mp257f-dk: add LPDDR4 channel
+  -stm32mp257f-ev1: add DDR4 channel
+- dt-bindings:
+  - perf:
+    - Change Maintainer email address
+    - Drop obvious descriptions (clocks and reset property)
+    - Drop redundant "bindings" in commit message
+    - Drop unneedded "stm32mp151-ddr-pmu" compatible
+    - s/st,dram-type/memory-channel/, memory-channel property is not in
+      dtschema library so it will produce an error in the v2.
+  - rcc:
+    - Add required "access-controller-cells" property in example
+  - ddr-channel:
+    - Add bindings as per jedec,lpddrX-channel bindings
+- driver:
+  - Substitute the parsing of the 'st,dram-type' vendor devicetree
+    property value with the parsing of the [lp]ddr channel compatible
+  - Remove unneeded "stm32mp151-ddr-pmu" compatible
+  - Use dev_err_probe when possible
+  - Assert and deassert reset line unconditionnaly
+  - Use `devm_reset_control_get_optional_exclusive` instead of
+    `of_property_present` then `devm_reset_control_get`
+  - Use `devm_clk_get_optional_prepared` instead of `of_property_present`
+    then `devm_clk_get_prepared`
+  - Disable and unprepare the clock at end of probe
+  - Add io.h include as per LKP test report
+  - Removed `of_match_ptr` reference in `platform_driver` struct
+  - Add `pm_sleep_ptr` macro for `platform_driver` struct's `pm` field
+  - Link to v1: https://lore.kernel.org/r/20250623-ddrperfm-upstream-v1-0-7dffff168090@foss.st.com
+
+---
+Clément Le Goffic (19):
+      bus: firewall: move stm32_firewall header file in include folder
+      dt-bindings: stm32: stm32mp25: add `access-controller-cell` property
+      clk: stm32mp25: add firewall grant_access ops
+      arm64: dts: st: set rcc as an access-controller
+      dt-bindings: memory: factorise LPDDR props into memory props
+      dt-bindings: memory: introduce DDR4
+      dt-bindings: memory: factorise LPDDR channel binding into memory channel
+      dt-binding: memory: add DDR4 channel compatible
+      arm64: dts: st: add LPDDR channel to stm32mp257f-dk board
+      arm64: dts: st: add DDR channel to stm32mp257f-ev1 board
+      dt-bindings: perf: stm32: introduce DDRPERFM dt-bindings
+      perf: stm32: introduce DDRPERFM driver
+      Documentation: perf: stm32: add ddrperfm support
+      MAINTAINERS: add myself as STM32 DDR PMU maintainer
+      ARM: dts: stm32: add ddrperfm on stm32mp131
+      ARM: dts: stm32: add ddrperfm on stm32mp151
+      arm64: dts: st: add ddrperfm on stm32mp251
+      arm64: dts: st: support ddrperfm on stm32mp257f-dk
+      arm64: dts: st: support ddrperfm on stm32mp257f-ev1
+
+ Documentation/admin-guide/perf/index.rst           |   1 +
+ Documentation/admin-guide/perf/stm32-ddr-pmu.rst   |  86 ++
+ .../bindings/clock/st,stm32mp25-rcc.yaml           |   7 +
+ .../memory-controllers/ddr/jedec,ddr4.yaml         |  34 +
+ .../memory-controllers/ddr/jedec,lpddr2.yaml       |   2 +-
+ .../memory-controllers/ddr/jedec,lpddr3.yaml       |   2 +-
+ .../memory-controllers/ddr/jedec,lpddr4.yaml       |   2 +-
+ .../memory-controllers/ddr/jedec,lpddr5.yaml       |   2 +-
+ ...pddr-channel.yaml => jedec,memory-channel.yaml} |  36 +-
+ ...ec,lpddr-props.yaml => jedec,memory-props.yaml} |  24 +-
+ .../devicetree/bindings/perf/st,stm32-ddr-pmu.yaml |  94 +++
+ MAINTAINERS                                        |   7 +
+ arch/arm/boot/dts/st/stm32mp131.dtsi               |   7 +
+ arch/arm/boot/dts/st/stm32mp151.dtsi               |   7 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi             |   8 +
+ arch/arm64/boot/dts/st/stm32mp257f-dk.dts          |  12 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts         |  12 +
+ drivers/bus/stm32_etzpc.c                          |   3 +-
+ drivers/bus/stm32_firewall.c                       |   3 +-
+ drivers/bus/stm32_rifsc.c                          |   3 +-
+ drivers/clk/stm32/clk-stm32mp25.c                  |  40 +-
+ drivers/perf/Kconfig                               |  11 +
+ drivers/perf/Makefile                              |   1 +
+ drivers/perf/stm32_ddr_pmu.c                       | 896 +++++++++++++++++++++
+ {drivers => include/linux}/bus/stm32_firewall.h    |   0
+ 25 files changed, 1266 insertions(+), 34 deletions(-)
+---
+base-commit: 89be9a83ccf1f88522317ce02f854f30d6115c41
+change-id: 20250526-ddrperfm-upstream-bf07f57775da
+
+Best regards,
+--  
+Clément Le Goffic <clement.legoffic@foss.st.com>
 
 
