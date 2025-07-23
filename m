@@ -1,119 +1,128 @@
-Return-Path: <linux-clk+bounces-25064-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25067-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9337FB0F3B3
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Jul 2025 15:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C9D2DB0F3ED
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Jul 2025 15:25:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D5191881B6D
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Jul 2025 13:14:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B70581881C50
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Jul 2025 13:26:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8C62E7BBD;
-	Wed, 23 Jul 2025 13:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79ECE2E5B18;
+	Wed, 23 Jul 2025 13:25:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b="pIHmasZB"
+	dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b="vimqZbjm"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073992E765C
-	for <linux-clk@vger.kernel.org>; Wed, 23 Jul 2025 13:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D9938DDB
+	for <linux-clk@vger.kernel.org>; Wed, 23 Jul 2025 13:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753276228; cv=none; b=dNNzXtpNd74mBgo4PMTdR0tR0yWclmXzHo1bhuTp/U0j492yho9Zx1baBC6Rorlcm/ZESScmxWJYmmHoHe4HTa8s//3jhJwu5tFGkhA0QxLi4v3sMnTii7PF9TvusoM3WuvEw2dtO7rS8v7UNul1996WBz2W720hT0aAzSnHUt8=
+	t=1753277145; cv=none; b=eTwdgv9y4LC+0jPVYzPZ9ujxq+nK7i3o316K4p1bEU0f36ryCz9xbA4IVH40K3B9X15GodsqMcpbGpQ0CBoqzJY4W+qEkdfzrkCEDktI9y6szBO1xJjw2Z+4GlcTlWGviDVrZIIMmY2rxP9AMqhuvgnJYy7WdRPMGg4cI4b9Whk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753276228; c=relaxed/simple;
-	bh=vhBAalWa5gqDwmnSu/rBsFgFjTeJbqxDSovXVqBa20A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a3a+NFgYAMqXKXkARayfK3Zgd/Ac7pQshr1x0wxluQEgSH7jwHrVua1qL7699WfP/nUcEPBy103sdYOc1U+DGf4ap9m6H4hhWyFtQ5aZ13RgvQxOrHTqPCKQ1i3OH8Tg8lEKULx1mp94su+K/yrG4xtQtzk/Qa4YFciVU3AROfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be; spf=fail smtp.mailfrom=hammernet.be; dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b=pIHmasZB; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1753277145; c=relaxed/simple;
+	bh=IRWOjBedd9/hnuVTcXrjjqnFUAKjZDKX/qV1HyL1jLk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GX0fbwEL2jPji9N69Sj86wA7P+WI4PY7Qop7F6a4o/CsuxJCLxEwnLI0HMANUz6QYRS6SrdVbsibSBoTRUOFCp8RDPMMcEEApTubwq4AN4D8LiKFvStXbXFZA+NU1VsyS/+xDOgj72+UQmXzsNkj4M4T2YS7BOPXqLfbcEJcTuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be; spf=fail smtp.mailfrom=hammernet.be; dkim=pass (2048-bit key) header.d=hammernet-be.20230601.gappssmtp.com header.i=@hammernet-be.20230601.gappssmtp.com header.b=vimqZbjm; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hammernet.be
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=hammernet.be
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3a582e09144so3597126f8f.1
-        for <linux-clk@vger.kernel.org>; Wed, 23 Jul 2025 06:10:25 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a6e2d85705so3471388f8f.0
+        for <linux-clk@vger.kernel.org>; Wed, 23 Jul 2025 06:25:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=hammernet-be.20230601.gappssmtp.com; s=20230601; t=1753276224; x=1753881024; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vhBAalWa5gqDwmnSu/rBsFgFjTeJbqxDSovXVqBa20A=;
-        b=pIHmasZBcQ74ijjsISLBNbNCOz53btNAxANZfw66j3L2LkNuGcfR2DrQFNtLXsBQwD
-         VHNy38J5cr3iwKR29fa/BQZXz8P9XEq5NA5EWr9fmPhClXmBWFLxPpbWhAk6hn5TOoeU
-         s77tnfton5cD9h0NxX9sGNATlGU15cKyAY53l8jdOu86e8SG5f0Zl1ktAqPx7xUWeB+g
-         N0qK0CeWNDfSZU1v4dNQIF1CXDX5dEObdKUWXeDv/8rUCcXsXDVr7WjgzJh7w4HATBxM
-         sqS0a8Jai4OfHpaCbNM+1wf2hMkZlks83DkytfKCx/95sRkomREJJGUUYIX5VB2t30Lx
-         3DaA==
+        d=hammernet-be.20230601.gappssmtp.com; s=20230601; t=1753277142; x=1753881942; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/jOFjaGN3CsVqLePSDjEetRndyZpxQTsvQQ0tgo6UDc=;
+        b=vimqZbjmm/spvJmXK/kKPHBVAm+U/wAHIaaLk8ZPVLGZGzItLRZcjYh/vxcTTW3un1
+         XCslBPt8gt8zlDHgbUflgpoZysDlYVrBwrxpyZdE94z+3BaFz28+eVPa5XsN/79+waGk
+         cDAwI4jHBNW7gYSpb7KOSn5QTW40DP1bsZ02nQ4cno9/XPCAzgtwGQ15cT2yRzqWW2MW
+         HPaVdQbsZ3EQcynQLhUWWjgd+WCe/qp0FIX3SB0tK2Z0U0DSnDRR2bgs4RISZVinVJrz
+         K2zZuYgzwPUuPmrOtm7PmM2oI3XId5t7yZ86MjIveNG81zyfKCPjY/Rv6qcrb4FfV0lZ
+         bCjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753276224; x=1753881024;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhBAalWa5gqDwmnSu/rBsFgFjTeJbqxDSovXVqBa20A=;
-        b=iPsgsc/WHC8ASJtDWDG5zdOkSVXdTVdMig17ifi576TmgpplDfRJrVSqrGjjMDVa/G
-         bDfp2yDLy0LrQTD49GRxFEMtkIItwjyd7bOUrb4NDIzxhMZo1dN5Cq8PjsEL/rSjBOfy
-         DWYIxP6CLE7/cZa3pIFXVmVGwcoZj9dCCPkBLyZvcIK0BJ8tkY5FR68oDuh4sI4oqqpO
-         wzfYrOZr2UyyJAnTtmdj2Rqbr/wFse0DxBAlfHTObBLm47C25+knN5KSB7kZIPo/ls0u
-         hAW+jK+5UImarbgiT9TBtuHD+uhVP9KteICjHmgtZPEiWjktSbb4j1Q5eyjxFwwt/Zhi
-         rx1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWssU/eR2K6kRMXKtzAgjbLSc0TwadWyeYej4uCrSM5QSjPrKmn/jXfR6Ltqhub86aeFqaCQ77iBag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFrtpHKBJR71UUp4KSWpMRldUnGEFPjEwl4MqyhMKxqtZPYbJy
-	CQaKns8Kcp/4/LPhXgWLN/6fLX+2pe1zZhXjzi2qfhQrczCsRNJX4WkzQwvDeuawJ1M=
-X-Gm-Gg: ASbGnctxxZuZbAVHg2RitcmMKAzgbA9TydUzsIJX6NRtJBFPmvKj4S7U+BwwVslK6ZB
-	vY/KBz2TOYQT21f3Kah1OzCBv+BcSu/jBym5vtw6ImzBoltVMANeWeNP8wh3dIujgCavYzYLjs6
-	z8kEZGTcOJMM6j1oZpHHDkdA6wKc29e2rijRmVQRdFtJt1PIj0WOpXGQa5reAAKIkRb816mGekZ
-	YwxeDTQy7fMM8PLoqaNUEWPi8nauzHmlPKgZUQSGEKwyDAMPftDmCl7E2DGThkEehl4w+4v+Cmz
-	549SPtGl/ajzvX5WGpHA0q6Vv+zLs3g0GCinM+vl9Kjhc8bqK8r5hWRcbnhpx8kgAF+F7rmvlph
-	TfYkr+mD6PqaScTOcHbe7mjcTy485nqUka4f9INnQiZJiwtFBUVu2Jgbk5kvWnf4UmAfelqW5El
-	L6LCZ58DnUhDWz
-X-Google-Smtp-Source: AGHT+IHaikAjtXSOK7TzkgieFuqf48w0q0zzAkHwiGU+rMcHAorrKzxT8fl3tGpNBEzEAzrmfTi+OA==
-X-Received: by 2002:a05:6000:40da:b0:3a4:eae1:a79f with SMTP id ffacd0b85a97d-3b768ef3c90mr2447676f8f.33.1753276224129;
-        Wed, 23 Jul 2025 06:10:24 -0700 (PDT)
-Received: from ?IPV6:2a02:1807:2a00:3400:7fcb:5e01:8f11:1009? ([2a02:1807:2a00:3400:7fcb:5e01:8f11:1009])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca5c813sm16511400f8f.84.2025.07.23.06.10.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Jul 2025 06:10:23 -0700 (PDT)
-Message-ID: <fd4eba94-50f5-46c9-8675-cc0aaa4601c6@hammernet.be>
-Date: Wed, 23 Jul 2025 15:10:22 +0200
+        d=1e100.net; s=20230601; t=1753277142; x=1753881942;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/jOFjaGN3CsVqLePSDjEetRndyZpxQTsvQQ0tgo6UDc=;
+        b=c6GsDJ5CXlUACk8hGfO25qWTkFAtADHmPVVi4fnNhYPsFBTB9+UUNh9/8lKeRYW4Ms
+         C67xjAJxCwIZC/EuqDWtwfrkSdCkn56u7zRUvk9rVKgxkPOIPe0N0tkkTNMC43fx9Ity
+         w7OblMYJWfS4A8mWbwQpSCwMo1UdBD6+M9qshZdiRqiNzDk0yyQF134Vxu+IeCw9yDas
+         Q4+sRYstiXPhmLFnMv/wU56pzOzQkXfU18h852FoHCjst9GhVrZL67Fiq320HZ3lZt3B
+         2FKMk/D5hjx5mjhKnlnOs9jyr9VfzEU3WWvX2FkPYWcKInvOyddt+lumIQ9WTh5KgugV
+         CT+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUhPHgXbT9QGeAgTABO+dbzTiNyuuE93L/TiaOb49Es8NVtaj4m1qp1Hjv/+Nf1o+lJwqiurxEtFhk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHcy/fjvW7NL8iSWsM1p8UBp/3HvjxROuUcJG0ynNF5puNRCZk
+	cyUL1ggzQvTYFEafnMEjkEEZnjqAzhpGA7fZdXEaUNrZLiN5CgzkZ4I4MALxxCYF+9k=
+X-Gm-Gg: ASbGnctWGP0rS3iBNQb7hxHvXo0DRgEcobsVjSWU9PzlfWb8BswThV6+EgbAJcDs3Nm
+	zUYYnU+TyhNCyYl8/vWOFGkejHLcbheNEz2nUcdK0BwX2dVrCKigjiZ/a1jbLzkaLQ6dzacAUhB
+	CEOd0YXyxv3iVuHe2KZE3lvv1l9H7UytEqM2yKS5E0ulUKVHdOAIE9QMO3tqCHx8MYf9HjnaOlz
+	aGNxrT1xZLSSGz4LGbcgKEVxvu0EoHfdR6ihSNtXs6INJNVntF/5Oe3Hi4OhhRBn2FZrJz/8NsS
+	HB4I7fXkXy/QxYm/9JPDNar7G+Tv3X/WS95ojtE/WMs8QO9OgfRmKjf23CBj7pigchwFvw/xd/5
+	oG717xmS0xUhM35rAEYebE6PznzumwhqlibD/+cXQF7+C6uNM0Q==
+X-Google-Smtp-Source: AGHT+IG7lEmEEOErHvtFjRdp4cL9IAeiY0R7yViDRurEsfQTfNPWbZmrOYW259gPKET6e12uFu2ovw==
+X-Received: by 2002:a05:6000:288a:b0:3a3:67bb:8f3f with SMTP id ffacd0b85a97d-3b768f16391mr2725907f8f.53.1753277141746;
+        Wed, 23 Jul 2025 06:25:41 -0700 (PDT)
+Received: from pop-os.telenet.be ([2a02:1807:2a00:3400:7fcb:5e01:8f11:1009])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca315basm16320109f8f.39.2025.07.23.06.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Jul 2025 06:25:41 -0700 (PDT)
+From: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
+To: sboyd@kernel.org,
+	dlan@gentoo.org
+Cc: skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linux.dev,
+	linux-clk@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
+Subject: [PATCH v2] clk: spacemit: fix resource leak in spacemit_ccu_reset_register
+Date: Wed, 23 Jul 2025 15:25:04 +0200
+Message-ID: <20250723132504.66273-1-hendrik.hamerlinck@hammernet.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] clk: spacemit: fix resource leak in
- spacemit_ccu_reset_register
-To: Yixun Lan <dlan@gentoo.org>
-Cc: sboyd@kernel.org, skhan@linuxfoundation.org,
- linux-kernel-mentees@lists.linux.dev, linux-clk@vger.kernel.org,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250723124020.60897-1-hendrik.hamerlinck@hammernet.be>
- <20250723125416-GYA738759@gentoo>
-Content-Language: en-US
-From: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
-In-Reply-To: <20250723125416-GYA738759@gentoo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello Yixun,
+The function spacemit_ccu_reset_register() allocates memory for an
+auxiliary device. If auxiliary_device_add() fails, it skips cleanup of
+these resources, resulting in leaks.
 
-Thank you for the review.
+Fix this by using the appropriate error handling path.
 
-On 7/23/25 14:54, Yixun Lan wrote:
->> Signed-off-by: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
->> Fixes: 988543522ebd ("clk: spacemit: set up reset auxiliary devices")
-> Can you put Fixes tag before SoB? I'd suggest to follow tip tree's docs
->
-> https://docs.kernel.org/process/maintainer-tip.html
-> 4.2.6. Ordering of commit tags
->
-> otherwise, looks good
-Thanks for pointing that out. I'll send the corrected version in the v2
-and make sure to follow the guidelines in the future.
->
-> Reviewed-by: Yixun Lan <dlan@gentoo.org>
+Fixes: 988543522ebd ("clk: spacemit: set up reset auxiliary devices")
+Signed-off-by: Hendrik Hamerlinck <hendrik.hamerlinck@hammernet.be>
+Reviewed-by: Yixun Lan <dlan@gentoo.org>
+---
+Changes in v2:
+- Properly place the Fixes tip.
+---
+ drivers/clk/spacemit/ccu-k1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/spacemit/ccu-k1.c b/drivers/clk/spacemit/ccu-k1.c
+index 65e6de030717..5bb85e32c6cf 100644
+--- a/drivers/clk/spacemit/ccu-k1.c
++++ b/drivers/clk/spacemit/ccu-k1.c
+@@ -1059,7 +1059,7 @@ static int spacemit_ccu_reset_register(struct device *dev,
+ 	ret = auxiliary_device_add(adev);
+ 	if (ret) {
+ 		auxiliary_device_uninit(adev);
+-		return ret;
++		goto err_free_aux_id;
+ 	}
+ 
+ 	return devm_add_action_or_reset(dev, spacemit_adev_unregister, adev);
+-- 
+2.43.0
 
 
