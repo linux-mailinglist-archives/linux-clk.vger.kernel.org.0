@@ -1,67 +1,49 @@
-Return-Path: <linux-clk+bounces-25239-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25248-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EBE7B13EC2
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Jul 2025 17:38:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCB3EB13FAF
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Jul 2025 18:16:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DFE616D8A7
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Jul 2025 15:37:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F39FA3B91DF
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Jul 2025 16:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867C0275118;
-	Mon, 28 Jul 2025 15:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B961827465C;
+	Mon, 28 Jul 2025 16:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Q8MSKWUb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rSreTgP8"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DBF274B5F;
-	Mon, 28 Jul 2025 15:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A912741DA;
+	Mon, 28 Jul 2025 16:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753716922; cv=none; b=rcFZ7B6QeJDk38hWbu2VFflTYPJhCncnlK1ZBJCwK5vNHuvwKMUznxq2wjCYqO2mXaiBRFNjQvQ7HaRv1PIH/UFcUKw5QEIU8AKivlDFVzBSeaLaDIEHQ+7wfbGPuFelHhdKuWfrmW8PFeRX2EW/HqzI/QNseeStkU0IFkQVTlM=
+	t=1753719380; cv=none; b=UfwWRzKMyjern/Igxk/hQ9s+cYUb4NE2NgzZ3KB8ZZ60qYJ+ICE/+KoM5B0dSsmgYZHVVMv4Vp6lZqcRhek94apGFojWxj521JIXQwJ7TAs4GydiOVf1xHZmqfx+PJLsrYjRGNixaXehb+KhrZ8a4/3vofzwTc/tny6RLG/nB6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753716922; c=relaxed/simple;
-	bh=dsBC3EguWry8hjqdSMJSjmmwvKBOhx+LpeiASpxU3JM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=SGYFDPHnak6ZqzzEkOGyx1IwbG4hQOUSYWbaPAzpMhViLvorOi29nGYXgyBFHG4Pujsv3QWwhOLYMGZrofaW0ddeIBisHIa+YpmeylJPVLtsP69USfKRKrJiZVvpTI5no9hrfRr01tpyMaNw4UGraeejXn279ZotMRDGwscsV1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Q8MSKWUb; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56SFGvgq026171;
-	Mon, 28 Jul 2025 17:35:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	yH22w/zX/Kh1SA0KcC16iKvtnozL0k8lEkuhUtR9r24=; b=Q8MSKWUbBp6+r5T/
-	9h+LdGEEL/+wW/yKzywpJj+HhfcBvbP+0nFRYvl0yjFQ+KOghi9zvmLf7+iXtZzh
-	sVT9k33OHPWvzMwatwFrMQLF8p/6eyjND9UWutat07dB5J8UrRP9+7vC2O0NAriz
-	H47L0OGNVLHPLLsiP2VyCRqJc9VTe6f8u0HEr8homm2KgmuCKwb6UIzxgAWuOt4H
-	BGayJGpFsm6cViMGJP3YxII6f0Pj+kMACZBW6aBbPm4HefwimLqLUovqbdrUgW9d
-	FZCKWzPl2yDeMpCz1uP4sDZPsbU7gzWBwNrIeBf4msFv/O+WaMK+ZhEsQ6e+1Y69
-	BDEVNQ==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 484memhajd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Jul 2025 17:35:04 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id CCD2840044;
-	Mon, 28 Jul 2025 17:33:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3829378C911;
-	Mon, 28 Jul 2025 17:30:10 +0200 (CEST)
-Received: from localhost (10.252.23.100) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 28 Jul
- 2025 17:30:09 +0200
-From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Date: Mon, 28 Jul 2025 17:29:51 +0200
-Subject: [PATCH v5 20/20] arm64: dts: st: support ddrperfm on
- stm32mp257f-ev1
+	s=arc-20240116; t=1753719380; c=relaxed/simple;
+	bh=4dSevmpDXXvsWiL9Hu0X0i84/6KCVfmYhJp3n259wZQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cCe0eCnqJd+tw7Dr2zfFN8rgodCiJ7UdqzTiab7+8CTd39mEQEU2/Rj/E24P6U+vJhVgvFQcFTtmL42sbC959hYeeBf9BClb15WMvM9LQjQcwz65bzupXLWwNqecwrvkr2JcxNfZ43tt8/TGDUOLRbvbKINV/QDS7eGZQp8LONw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rSreTgP8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74861C4CEF7;
+	Mon, 28 Jul 2025 16:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753719379;
+	bh=4dSevmpDXXvsWiL9Hu0X0i84/6KCVfmYhJp3n259wZQ=;
+	h=From:Subject:Date:To:Cc:From;
+	b=rSreTgP8NNA967dpSRFLRfwASsfRsODU31GqHxbMjNpqPYkOlHak+8mVJfVhh9bzm
+	 0YSxae/JaGfCmSjw5sHwaEps4TbbFNoK00Zr2vgkZ++RgR0sHuUsNl2EThlQ1Pif2k
+	 HdXFhe0kv+WIJ4eOK9jQ+r8LbqEK0+zcmhzCDuNq86zeP1SWB1NnLmEpAm3KonZVYs
+	 Mq+kqgYybka8MnhbTC9d4XorUkv0Wst0O4vQsBKLpbQPwlAyWG9PaBj7yt61qpSZDr
+	 WePjvTltob83ofOrNELtTF8yI/TtTskw7oxJW+WPxwABxgFR7cicTCsn+Zc7k/NMq+
+	 1le8AXePqQx1g==
+From: Konrad Dybcio <konradybcio@kernel.org>
+Subject: [RFC PATCH 00/24] GPU_CC power requirements reality check
+Date: Mon, 28 Jul 2025 18:16:00 +0200
+Message-Id: <20250728-topic-gpucc_power_plumbing-v1-0-09c2480fe3e6@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -69,71 +51,116 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-ID: <20250728-ddrperfm-upstream-v5-20-03f1be8ad396@foss.st.com>
-References: <20250728-ddrperfm-upstream-v5-0-03f1be8ad396@foss.st.com>
-In-Reply-To: <20250728-ddrperfm-upstream-v5-0-03f1be8ad396@foss.st.com>
-To: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Gatien Chevallier
-	<gatien.chevallier@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Gabriel Fernandez
-	<gabriel.fernandez@foss.st.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Le
- Goffic <legoffic.clement@gmail.com>,
-        Julius Werner <jwerner@chromium.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-perf-users@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-X-Mailer: b4 0.15-dev-8018a
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-28_03,2025-07-28_01,2025-03-28_01
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAECih2gC/x3MSwqDMBAA0KvIrA3oUD94FRHR6RgHNBmS2gri3
+ Q1dvs27IHIQjtBlFwT+ShTvEso8A1onZ9nIOxmwwKposDUfr0LG6kE0qv9xGHU79lmcNfWrxqa
+ amJBmSIEGXuT85/1w3w/5tG9+bAAAAA==
+X-Change-ID: 20250728-topic-gpucc_power_plumbing-646275aec2cb
+To: Ulf Hansson <ulf.hansson@linaro.org>, 
+ Johan Hovold <johan+linaro@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Taniya Das <taniya.das@oss.qualcomm.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>, 
+ Imran Shaik <quic_imrashai@quicinc.com>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+ Dmitry Baryshkov <lumag@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
+ Douglas Anderson <dianders@chromium.org>, Vinod Koul <vkoul@kernel.org>, 
+ Richard Acayan <mailingradian@gmail.com>, 
+ Andy Gross <andy.gross@linaro.org>, Ajit Pandey <quic_ajipan@quicinc.com>, 
+ Luca Weiss <luca.weiss@fairphone.com>, Jonathan Marek <jonathan@marek.ca>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Jagadeesh Kona <quic_jkona@quicinc.com>, 
+ Akhil P Oommen <akhilpo@oss.qualcomm.com>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753719370; l=4105;
+ i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
+ bh=4dSevmpDXXvsWiL9Hu0X0i84/6KCVfmYhJp3n259wZQ=;
+ b=9MujO0KNKtHf3X06AAVxcysRg6EhZzCdHVgRpeDP6tnzLTTG9Rq+qyFx1uNZ6/b4wj6gDigtY
+ 0or/aFG+gmhB71N1BiXNMxS9G1RpowjsggA5ENpMYVROuitsUp1Gxph
+X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Configure DDRPERFM node on stm32mp257f-ev1 board.
-Disable the node as DDRPERFM will produce an error message if it's clock
-(shared with the DDRCTRL on STM32MP25x) is secured by common bootloaders.
+In an effort parallel to [1], the GPU clock controller requires more
+than 0/1 power domains to function properly.
+Describe these dependencies to ensure the hardware can always power on
+safely.
 
-Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+Patches 1 & 2 are separate (but related) fixes,  which need to be
+merged before the DT change for SC8280XP.
+
+Posting as RFC since I only got to test it on SC8280XP(-crd).
+
+[1] https://lore.kernel.org/all/20250530-videocc-pll-multi-pd-voting-v5-0-02303b3a582d@quicinc.com/
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- arch/arm64/boot/dts/st/stm32mp257f-ev1.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+Konrad Dybcio (24):
+      dt-bindings: power: qcom,rpmpd: Add SC8280XP_MXC_AO
+      pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
+      dt-bindings: clock: qcom,gpucc: Merge in sm8450-gpucc.yaml
+      dt-bindings: clock: qcom,gpucc: Describe actual power domain plumbing
+      dt-bindings: clock: qcom,gpucc: Sort out SA8540P constraints
+      arm64: dts: qcom: qcs8300: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sa8540p: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sa8775p: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sar2130p: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sc7180: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sc7280: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sc8180x: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sc8280xp: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sdm670: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sdm845: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm4450: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm6350: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm8150: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm8250: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm8350: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm8450: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm8550: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: sm8650: Describe GPU_CC power plumbing requirements
+      arm64: dts: qcom: x1e80100: Describe GPU_CC power plumbing requirements
 
-diff --git a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-index e11ce66be948..3d1e2000f631 100644
---- a/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-+++ b/arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
-@@ -130,6 +130,11 @@ csi_source: endpoint {
- 	};
- };
- 
-+&ddrperfm {
-+	memory-channel = <&ddr_channel>;
-+	status = "disabled";
-+};
-+
- &dcmipp {
- 	status = "okay";
- 	port {
+ .../devicetree/bindings/clock/qcom,gpucc.yaml      | 155 ++++++++++++++++++---
+ .../bindings/clock/qcom,sm8450-gpucc.yaml          |  75 ----------
+ arch/arm64/boot/dts/qcom/qcs8300.dtsi              |   6 +
+ arch/arm64/boot/dts/qcom/sa8155p.dtsi              |   6 +
+ arch/arm64/boot/dts/qcom/sa8540p.dtsi              |   6 +-
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi              |   5 +
+ arch/arm64/boot/dts/qcom/sar2130p.dtsi             |   5 +
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               |   5 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |   5 +
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi              |   5 +
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |   6 +-
+ arch/arm64/boot/dts/qcom/sdm670.dtsi               |   4 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |   4 +
+ arch/arm64/boot/dts/qcom/sm4450.dtsi               |   4 +
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |   4 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi               |   4 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |   5 +
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               |   6 +
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |   6 +
+ arch/arm64/boot/dts/qcom/sm8550.dtsi               |   6 +
+ arch/arm64/boot/dts/qcom/sm8650.dtsi               |   5 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             |   6 +
+ drivers/pmdomain/qcom/rpmhpd.c                     |   4 +
+ include/dt-bindings/power/qcom-rpmpd.h             |   1 +
+ 24 files changed, 240 insertions(+), 98 deletions(-)
+---
+base-commit: 0b90c3b6d76ea512dc3dac8fb30215e175b0019a
+change-id: 20250728-topic-gpucc_power_plumbing-646275aec2cb
 
+Best regards,
 -- 
-2.43.0
+Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
 
