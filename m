@@ -1,151 +1,194 @@
-Return-Path: <linux-clk+bounces-25355-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25357-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9B84B15E3B
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Jul 2025 12:32:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 123C2B15E94
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Jul 2025 12:58:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DC6A7AD8F8
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Jul 2025 10:31:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F2BE16C287
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Jul 2025 10:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341C026E6ED;
-	Wed, 30 Jul 2025 10:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C097A294A16;
+	Wed, 30 Jul 2025 10:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bflpJaa4"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="lW8Gg+Ge"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50827E0E4;
-	Wed, 30 Jul 2025 10:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEE418C928;
+	Wed, 30 Jul 2025 10:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753871573; cv=none; b=YHOoygoC1ih370lWo7W25HVzWCAFUVBmFfrX9Ajvo+S1GuXQlhp9Fgx7Kh7dozcXUdNIhAJjmPcLEnoQOG0bdyCY0wDnFC4Bp07pSzctwD+dOVEctUhfK6HTeMLcoW3TxMU2JVt2wOY7Ipjl94ULOJ0F1aGxxeUVXFUod5Fxfpc=
+	t=1753873097; cv=none; b=mjH7gco/x4EEWU0kVLsfQWOI+Wuqbe+VOiYOCHEL20YTaYU1f59S8GgQFCJQyd/TT2D7F0lE7AbiNs39ViGxGgxT+Eaf4MtHz7MZ04hOSgHhAISUC+sx/Wk5pZNEvow7/nO+5qVP/h+QRWyvNW8+cw0NpSmcXIwxlcy9EioGIVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753871573; c=relaxed/simple;
-	bh=WsXnp8r/2zMoLIEftKtTfeHwLISoTLNiYbjkcq7R4ds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eht4PND1ZtlVV7T1CHlbw5sWpzQgxyiRpbaya8UhXfdPhIIybBj0VR/fXFXFPcDss/qGknHkEXKPbzIRpM/vHaZBzsidl9sL23oWHa97j/aX7vPovAlZcWEfzGn+qXApfko9soNYe+Wz8pJ7VWnA9ynBGd+AHXN2HXB3oo9oNzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bflpJaa4; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56U5x8CL018829;
-	Wed, 30 Jul 2025 10:32:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	J8kzced2LqilmJR7AKpy5OJ5Hlxs74wJYSZaFOJSBX8=; b=bflpJaa4fBS4mN2V
-	EKs5isPY+YEwRdv8w4SG3On2OCAfR9Q1ST4CWPQoo3cScEBF2n2odONnnbPeCBv9
-	Flfp8xU6mcM9C1Q9YhrvdXTw3FW6oH0Cb1qaVlxsr90zhhQnN2PxqcZ/vm1czJv4
-	HmFhnyfpN95yQes2qOE86k4EDBN7YTfSCaN4zza9xSX8pOVWg5JX8wxQFpq+qjLu
-	JKy6n8MpCWB7QZoI09c44ePb3n0nwjBC7OHTiUNt6u5K1mGL2RUm8SDRGIZSN3G6
-	s67tysKZxNknIjdekg2GEurnxIwAeyCGAZgGQudTUqjhRDfprYSELRJFyIgWftym
-	ltB2oQ==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484q863ja2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Jul 2025 10:32:47 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 56UAWlT7028460
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Jul 2025 10:32:47 GMT
-Received: from [10.151.37.100] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Wed, 30 Jul
- 2025 03:32:41 -0700
-Message-ID: <051a4ad2-bc25-4e69-9b26-5888c469eda8@quicinc.com>
-Date: Wed, 30 Jul 2025 16:02:38 +0530
+	s=arc-20240116; t=1753873097; c=relaxed/simple;
+	bh=lYv7QHbDNZ0Rc0wYrcyojYSl0/lSp3gFzLiTa6zBXlY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=pa636sJ4DtvUjp0j+Ar5F/vZTFLDpxICv1Uncd3Yr9B7Mr2qgnd+ZpmpY0eJNa/W9M1/KFwO9Ng5XvLrm2G/uSPSOY6ohoI7IwYZ7Um3rle1TCkpOiLA/dtVVC3Clqd6/NjNWPuU3YuLtrgb6TeN2wdSC8orzftHBfG4N1nX+Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=lW8Gg+Ge; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1753873086;
+	bh=lYv7QHbDNZ0Rc0wYrcyojYSl0/lSp3gFzLiTa6zBXlY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lW8Gg+GeZCJ9O8G3LKJcykUKKJbkTpmyGUycdZchqGWe0jTwwl7ejAwNzKgyYjoNw
+	 qAK7vYEdH3ZiQ7c15eCC9Cl/rDm+2Rg/L01XqJcTxECJeZd5aED5Tiu49JHZZaImnL
+	 OYqHmUXwldaDKg1waTILTaUglqVEVp/g4qS5hni9bPdJFbKfP8Ar6b/h25jY44pKxy
+	 qECYxEzCUkRA0bMNv7oN4J/VNcdUtRZyF1i6ogUDy8ukK1UB8lav1o998PzWpIV/a0
+	 4ehYdZMGogmBOBC+O721hqkhGvOPUmJwAFt0nIrx1dofTx3BTzDoCuLavTnfd0uC3v
+	 qo3FjjI19katQ==
+Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:4db2:e926:c82d:3276])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id EA0B817E130E;
+	Wed, 30 Jul 2025 12:58:04 +0200 (CEST)
+From: Laura Nao <laura.nao@collabora.com>
+To: mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	p.zabel@pengutronix.de,
+	richardcochran@gmail.com
+Cc: guangjie.song@mediatek.com,
+	wenst@chromium.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	netdev@vger.kernel.org,
+	kernel@collabora.com,
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH v3 00/27] Add support for MT8196 clock controllers
+Date: Wed, 30 Jul 2025 12:56:26 +0200
+Message-Id: <20250730105653.64910-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/4] dt-bindings: clock: ipq5424-apss-clk: Add ipq5424
- apss clock controller
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Varadarajan Narayanan
-	<quic_varada@quicinc.com>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <konradybcio@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>, <djakov@kernel.org>,
-        <quic_mdalam@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <20250730081316.547796-1-quic_varada@quicinc.com>
- <20250730081316.547796-2-quic_varada@quicinc.com>
- <1705cfd6-95fe-4668-ae3b-f8fc7321d32a@kernel.org>
- <2c165ddd-f6b6-45b6-a319-8944fab324f2@quicinc.com>
- <02084269-f591-420f-8f60-7ac0aca9097a@kernel.org>
-Content-Language: en-US
-From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <02084269-f591-420f-8f60-7ac0aca9097a@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzMwMDA3MiBTYWx0ZWRfX7ypCNs8cuebz
- cvXNNV5FhgPlEjcW8tPKA+Gxu7QAha0BqEhSajsJ9T35uZguQutLDqjH3CjXaZImrn6B6hXloZM
- vHK1MXB2dLc9y1O4h+SFOx+Lg6TZOyvjK6bZdaGSDiJ/5MmjRkHJRZDlS099wnjZMCMh4KLyX3X
- wcQdPs3lb41jztXoEAJDH+X+8JPY+K+1nC4ojzRGwnfoib7NOoqXF8zVnVKc0y1GFYVXFKx6tLK
- vmTvKo8Fzm9csWbtipTIS6aoKdgWPQrKMbPywscT0g2jLbG+MbR1K3WL/QtAbfKXbV5Jn1qkdkq
- g7TtlvqxgfnSUlmCxl4h7e4/F5RydZCR6wWo4QBrzscorbGdekeXjiAPGUsoJ/rdnxpuvMPXK8g
- fb/dkwnv3OY2mAWvwRiPjioMEqaJ6gv/I55EpDaT/7H/xdrilFC69EgncS/mEk+taKvdirAv
-X-Authority-Analysis: v=2.4 cv=TqLmhCXh c=1 sm=1 tr=0 ts=6889f4cf cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=gEfo2CItAAAA:8
- a=COk6AnOGAAAA:8 a=iDVmcDSDRtdF4r9CFTYA:9 a=QEXdDO2ut3YA:10
- a=sptkURWiP4Gy88Gu7hUp:22 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-ORIG-GUID: Ps5V9MMwIT2tmYjGimBXfbkcOrP8c8gQ
-X-Proofpoint-GUID: Ps5V9MMwIT2tmYjGimBXfbkcOrP8c8gQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-07-30_04,2025-07-30_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
- malwarescore=0 adultscore=0 spamscore=0 priorityscore=1501 clxscore=1015
- impostorscore=0 mlxlogscore=847 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2507300072
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+This patch series introduces support for the clock controllers on the
+MediaTek MT8196 platform, following up on an earlier submission[1].
 
+MT8196 uses a hardware voting mechanism to control some of the clock muxes
+and gates, along with a fence register responsible for tracking PLL and mux
+gate readiness. The series introduces support for these voting and fence
+mechanisms, and includes drivers for all clock controllers on the platform.
 
-On 7/30/2025 3:06 PM, Krzysztof Kozlowski wrote:
-> On 30/07/2025 11:22, Sricharan Ramabadhran wrote:
->>
->>
->> On 7/30/2025 2:32 PM, Krzysztof Kozlowski wrote:
->>> On 30/07/2025 10:13, Varadarajan Narayanan wrote:
->>>> +---
->>>> +$id: http://devicetree.org/schemas/clock/qcom,ipq5424-apss-clk.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Qualcomm APSS IPQ5424 Clock Controller
->>>> +
->>>> +maintainers:
->>>> +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>>> +  - Md Sadre Alam <quic_mdalam@quicinc.com>
->>>
->>> My v2 comments seems still valid. Your explanation suggests they moved
->>> on, so it is confusing to see them here.
->>>
->>> Sricharan and Md Sadre, can you provide Acks for this?
->>>
->> Ack. Please feel free to remove my name.
-> 
-> 
-> I meant Ack that you still maintain this hardware and bindingd.
+[1] https://lore.kernel.org/all/20250307032942.10447-1-guangjie.song@mediatek.com/
 
-I still work on his hardware, but wont be involved in maintaining this
-binding.
+Changes in v3:
+- Removed duplication in clock parent lists in the topckgen, topckgen2, and vlpckgen drivers
+- Added vlp_clk26m parent and index table for audio clocks in the vlpckgen driver
+- Added APLL tuner initialization to the probe function of the vlpckgen driver
+- Dropped the adsp driver
+- Merged reset controller binding into the clock binding doc commit
+- Dropped .owner entry from mfg driver
+- Added R-b tags
 
-Regards,
-  Sricharan
+Link to v2: https://lore.kernel.org/all/20250624143220.244549-1-laura.nao@collabora.com
+
+Laura Nao (27):
+  clk: mediatek: clk-pll: Add set/clr regs for shared PLL enable control
+  clk: mediatek: clk-pll: Add ops for PLLs using set/clr regs and FENC
+  clk: mediatek: clk-mux: Add ops for mux gates with set/clr/upd and
+    FENC
+  clk: mediatek: clk-mtk: Introduce mtk_clk_get_hwv_regmap()
+  clk: mediatek: clk-mux: Add ops for mux gates with HW voter and FENC
+  clk: mediatek: clk-gate: Refactor mtk_clk_register_gate to use
+    mtk_gate struct
+  clk: mediatek: clk-gate: Add ops for gates with HW voter
+  clk: mediatek: clk-mtk: Add MUX_DIV_GATE macro
+  dt-bindings: clock: mediatek: Describe MT8196 clock controllers
+  clk: mediatek: Add MT8196 apmixedsys clock support
+  clk: mediatek: Add MT8196 topckgen clock support
+  clk: mediatek: Add MT8196 topckgen2 clock support
+  clk: mediatek: Add MT8196 vlpckgen clock support
+  clk: mediatek: Add MT8196 peripheral clock support
+  clk: mediatek: Add MT8196 ufssys clock support
+  clk: mediatek: Add MT8196 pextpsys clock support
+  clk: mediatek: Add MT8196 I2C clock support
+  clk: mediatek: Add MT8196 mcu clock support
+  clk: mediatek: Add MT8196 mdpsys clock support
+  clk: mediatek: Add MT8196 mfg clock support
+  clk: mediatek: Add MT8196 disp0 clock support
+  clk: mediatek: Add MT8196 disp1 clock support
+  clk: mediatek: Add MT8196 disp-ao clock support
+  clk: mediatek: Add MT8196 ovl0 clock support
+  clk: mediatek: Add MT8196 ovl1 clock support
+  clk: mediatek: Add MT8196 vdecsys clock support
+  clk: mediatek: Add MT8196 vencsys clock support
+
+ .../bindings/clock/mediatek,mt8196-clock.yaml |  86 ++
+ .../clock/mediatek,mt8196-sys-clock.yaml      |  81 ++
+ drivers/clk/mediatek/Kconfig                  |  71 ++
+ drivers/clk/mediatek/Makefile                 |  13 +
+ drivers/clk/mediatek/clk-gate.c               | 106 +-
+ drivers/clk/mediatek/clk-gate.h               |   3 +
+ drivers/clk/mediatek/clk-mt8196-apmixedsys.c  | 203 ++++
+ drivers/clk/mediatek/clk-mt8196-disp0.c       | 169 +++
+ drivers/clk/mediatek/clk-mt8196-disp1.c       | 170 +++
+ .../clk/mediatek/clk-mt8196-imp_iic_wrap.c    | 117 +++
+ drivers/clk/mediatek/clk-mt8196-mcu.c         | 166 +++
+ drivers/clk/mediatek/clk-mt8196-mdpsys.c      | 187 ++++
+ drivers/clk/mediatek/clk-mt8196-mfg.c         | 149 +++
+ drivers/clk/mediatek/clk-mt8196-ovl0.c        | 154 +++
+ drivers/clk/mediatek/clk-mt8196-ovl1.c        | 153 +++
+ drivers/clk/mediatek/clk-mt8196-peri_ao.c     | 144 +++
+ drivers/clk/mediatek/clk-mt8196-pextp.c       | 131 +++
+ drivers/clk/mediatek/clk-mt8196-topckgen.c    | 984 ++++++++++++++++++
+ drivers/clk/mediatek/clk-mt8196-topckgen2.c   | 567 ++++++++++
+ drivers/clk/mediatek/clk-mt8196-ufs_ao.c      | 109 ++
+ drivers/clk/mediatek/clk-mt8196-vdec.c        | 253 +++++
+ drivers/clk/mediatek/clk-mt8196-vdisp_ao.c    |  79 ++
+ drivers/clk/mediatek/clk-mt8196-venc.c        | 235 +++++
+ drivers/clk/mediatek/clk-mt8196-vlpckgen.c    | 726 +++++++++++++
+ drivers/clk/mediatek/clk-mtk.c                |  16 +
+ drivers/clk/mediatek/clk-mtk.h                |  23 +
+ drivers/clk/mediatek/clk-mux.c                | 119 ++-
+ drivers/clk/mediatek/clk-mux.h                |  87 ++
+ drivers/clk/mediatek/clk-pll.c                |  46 +-
+ drivers/clk/mediatek/clk-pll.h                |   9 +
+ .../dt-bindings/clock/mediatek,mt8196-clock.h | 802 ++++++++++++++
+ .../reset/mediatek,mt8196-resets.h            |  26 +
+ 32 files changed, 6160 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8196-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8196-sys-clock.yaml
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-disp0.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-disp1.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-imp_iic_wrap.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-mcu.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-mdpsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-mfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-ovl0.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-ovl1.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-peri_ao.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-pextp.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-topckgen.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-topckgen2.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-ufs_ao.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-vdec.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-vdisp_ao.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-venc.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8196-vlpckgen.c
+ create mode 100644 include/dt-bindings/clock/mediatek,mt8196-clock.h
+ create mode 100644 include/dt-bindings/reset/mediatek,mt8196-resets.h
+
+-- 
+2.39.5
+
 
