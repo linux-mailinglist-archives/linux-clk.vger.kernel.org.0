@@ -1,73 +1,72 @@
-Return-Path: <linux-clk+bounces-25426-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25427-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1083B17255
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Jul 2025 15:50:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EC9BB17278
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Jul 2025 15:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 849DC3B7B17
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Jul 2025 13:49:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8CF83AA6D8
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Jul 2025 13:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF3B2C3242;
-	Thu, 31 Jul 2025 13:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9922D0C76;
+	Thu, 31 Jul 2025 13:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OYvfVm/Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjjlSHCS"
 X-Original-To: linux-clk@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5361E502;
-	Thu, 31 Jul 2025 13:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C66739ACF;
+	Thu, 31 Jul 2025 13:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753969804; cv=none; b=t/fvFR7fmJM9O3XIz0BppctDmkqTlaerywGS7mNVaE5WLYHtPP1j7LMUmssor21pgpOgOvUbEl3bHtcHWQwTTCUhkVN1det0pdFbNkyngoSchobAS5Db94tyhMUuBIfDU7BOgurE68KftS3dphrfDzx+v3VW4+FAtpr7livlcE8=
+	t=1753969925; cv=none; b=IEA47UAG704WulION9g/dtu2KR7hhLR3S+Z8vvxQc0oeddbwMzseODGBDD6MOudIyzwN10OV1L1snto1J/sFDUsQfOIJaumSkuP0Ua+y0tebPVry219LwpX8h+mDGaFv0y6Aa5f94nrZweYhZ78jt1LNZF+GZLvLVO5lPXCrX6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753969804; c=relaxed/simple;
-	bh=jawTeo3jrKl31BlPRVIr+R1PBzhaxmiMePBk8kxuwVE=;
+	s=arc-20240116; t=1753969925; c=relaxed/simple;
+	bh=VVahUZQ1Biwbin4MULCT2k9NK1SumhMf83loM/viyg4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TJzO03ywRHSBoj3AlxXLAACFF2YPRJl5cDxvekkMod9BZ5XrbTfBKEf/JQhbKqAhoI1C6259T7huHopdqPgqIbP+gXx+5FY9+ooy9X9QM/L+6tx7tsVcQIPhZSUt4F3fzGIUyenY3PyxIkz3S5moNwe6AQMKs6YB0lQUWKXYA3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OYvfVm/Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466DCC4CEEF;
-	Thu, 31 Jul 2025 13:50:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fb7Ytxk9gdBStTJwtsNohIV3QlQ9wDu4dl/fTLuIZOTjTg4AJZGe4tTPCwBcU8wIn4EPWyOISbyUsh5Dp8pyg6MKcwyZlyxYbOwUofKPMpgNAWH1lP/YF+GTtX9EA3X4zT6P8md53jRuY8N59GrtJTOp/3wbCVf9zqO3xmh7wwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjjlSHCS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E67C4CEEF;
+	Thu, 31 Jul 2025 13:52:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753969803;
-	bh=jawTeo3jrKl31BlPRVIr+R1PBzhaxmiMePBk8kxuwVE=;
+	s=k20201202; t=1753969925;
+	bh=VVahUZQ1Biwbin4MULCT2k9NK1SumhMf83loM/viyg4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OYvfVm/ZsnER1HAKkEC4ux4CBvQVHusXAIuQa7z1ZbnKXII3hVV0Vn6nrQDFfiX8s
-	 IRdZpm0EQQII1M9WaXzoygW+pWRitgstvVXD/ZlpibPf1tutHLt/QsaliYM4OU3u1w
-	 qBs4XJvMcr091e+bw3lFfjJr5tAIDLaOboOA8r+jbb8ev/LYEcDbA4keqduCjzqmdL
-	 87p7crjoiKMwL4dJ7CAtIp7BJ8bfAGCAtE9FYCezeSVRHNfEcSxoPRB0kF+Mg8B3Ud
-	 sHuncQm80xlb2D2GQQ2hL52M1WqmHfZ0HkZnwQ9KqTy5t+q6zDZXtJgCkz2Pu/yzqc
-	 oyDag2pTvuaUg==
-Date: Thu, 31 Jul 2025 08:50:02 -0500
+	b=QjjlSHCStIOMpeo15olXb/biIbvxMM69OjYpZCudIwwOzoPQf1zBLe89/aFhlUOvV
+	 3F4703yIk33j41LiugyF4QgiVFY6nDdYD3d+KdMLueqv+pAsBp8izXLVL3QKz969xH
+	 zWQnfelBt1oXl7k9zdWL5n9YqchwmJDkyyZRv3ExfRJBfy2GWoK/BjluA6hTB3Y4/R
+	 JKpdvvwFD/aI6Glj41dXNcq17R3161h+BtL4ehO9BDx0v7+miQ39KnqiwnE3fR+m/S
+	 sY+6oYRrhcWpa6XWyGo7GM3KHVUkdFH6tt1DCOyZRml9dnUj6W6+I5zUWFK4P3f7po
+	 11PzPv+LO3guQ==
+Date: Thu, 31 Jul 2025 08:52:04 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
-Cc: linux-arm-kernel@lists.infradead.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>, linux-doc@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Will Deacon <will@kernel.org>,
-	Julius Werner <jwerner@chromium.org>,
-	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+Cc: Jonathan Corbet <corbet@lwn.net>,
 	Le Goffic <legoffic.clement@gmail.com>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Conor Dooley <conor+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
 	Gatien Chevallier <gatien.chevallier@foss.st.com>,
+	linux-doc@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+	linux-perf-users@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Julius Werner <jwerner@chromium.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, devicetree@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-clk@vger.kernel.org,
+	Will Deacon <will@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v5 02/20] dt-bindings: stm32: stm32mp25: add
- `#access-controller-cells` property
-Message-ID: <175396980193.2134840.5721329894183158883.robh@kernel.org>
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 07/20] dt-bindings: memory: factorise LPDDR channel
+ binding into SDRAM channel
+Message-ID: <175396992348.2137172.17706395913252452350.robh@kernel.org>
 References: <20250728-ddrperfm-upstream-v5-0-03f1be8ad396@foss.st.com>
- <20250728-ddrperfm-upstream-v5-2-03f1be8ad396@foss.st.com>
+ <20250728-ddrperfm-upstream-v5-7-03f1be8ad396@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -77,19 +76,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250728-ddrperfm-upstream-v5-2-03f1be8ad396@foss.st.com>
+In-Reply-To: <20250728-ddrperfm-upstream-v5-7-03f1be8ad396@foss.st.com>
 
 
-On Mon, 28 Jul 2025 17:29:33 +0200, Clément Le Goffic wrote:
-> RCC is able to check the availability of a clock.
-> Allow to query the RCC with a firewall ID.
+On Mon, 28 Jul 2025 17:29:38 +0200, Clément Le Goffic wrote:
+> LPDDR, DDR and so SDRAM channels exist and share the same properties, they
+> have a compatible, ranks, and an io-width.
 > 
 > Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
 > ---
->  Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  ...lpddr-channel.yaml => jedec,sdram-channel.yaml} | 23 +++++++++++-----------
+>  1 file changed, 12 insertions(+), 11 deletions(-)
 > 
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
