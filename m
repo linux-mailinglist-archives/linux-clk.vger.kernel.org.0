@@ -1,145 +1,124 @@
-Return-Path: <linux-clk+bounces-25464-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25466-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC008B17EDF
-	for <lists+linux-clk@lfdr.de>; Fri,  1 Aug 2025 11:10:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9E5BB180CF
+	for <lists+linux-clk@lfdr.de>; Fri,  1 Aug 2025 13:18:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53DC81C8160E
-	for <lists+linux-clk@lfdr.de>; Fri,  1 Aug 2025 09:11:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CA5C625117
+	for <lists+linux-clk@lfdr.de>; Fri,  1 Aug 2025 11:18:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E182206B2;
-	Fri,  1 Aug 2025 09:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584B7245007;
+	Fri,  1 Aug 2025 11:18:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WY1RSewN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="TuJJvz8v"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E6020D50C;
-	Fri,  1 Aug 2025 09:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD45221FCA;
+	Fri,  1 Aug 2025 11:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754039442; cv=none; b=GeEr7RzT94iBT3bOW/MW8vnsaNguWDV9dyl7NQq8fdugJ16TjURU7EQfN/hVMzWI56kY6mE5332BAtVnzHrOLnJsFLKnO/2QWFhywq4j7EJLOLp5PM329pwS+Y6gT18ePKeSCchtRxXNX883i0j0PCworN8mqYBx7tw43XYIe5A=
+	t=1754047091; cv=none; b=N2NvX9+AjFblsZ74I9AbvUuE+KF3SCUOCLmZkj9bd2te4L08IiaMBojAWULhP96o7+Ro/y5ZjiS0KEUCtcPrrK0aWdRPpt5fkExpbLAAyNbrcD9bJe3pCWbt6fVP9pKRWThngdGB5ozevhWpVxusWGCXGL33SwbHQalL0MqvBM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754039442; c=relaxed/simple;
-	bh=3nbg1I5E3GeZKawoY/D6ZcFXmMbptFSwP7oM5e9/i3g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J0RHMTRW5SCWsgOOal8susOF7IZjb118YBGV1mfzRWg1EzCD9EPaAMVGzdZ8C6Qif7Wvx8fgi7kNiacC3fWCVtjHQgTaCOHmJQIU2mkwudfPdGIq0SjTor6O7nBMpGuEmcJaPMxBsuReVc+UsiBjkcw1UYDFtmYnfWRzxh6yR2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WY1RSewN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E86C4CEE7;
-	Fri,  1 Aug 2025 09:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754039441;
-	bh=3nbg1I5E3GeZKawoY/D6ZcFXmMbptFSwP7oM5e9/i3g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WY1RSewN1F7+zuCssMWZRRRs2QDJC5aeEuTky/x1hRFbzfuAeGQ0gIZuuKqjqZZ/N
-	 mZXRLvoaDHGUN+7JmtKExmnW2A5KbuWWk8HM2yvChEiVCDmNHmgwETdpMVurWcThYV
-	 YHV62EpgbrNW/LEmk3gaSICwM1MOKur2T77cmVn9yzfL/1eYDuxudXdWU+c59AuzcE
-	 2vXNBPklEvW8luFF8ppoZA3OdQ8kyM0tzv8RCYm1FMJc0EvcocQQ7a9JjySEGwSh3i
-	 QiNthNPsLWP8h59fqxI5HqoMnulP0f00IfIBMJE3l+PGvJHEe5QNhhYcC047boJUrG
-	 CeS0n+UX+7qUA==
-Message-ID: <48610dd9-16c0-48ec-9997-2de9e0f7b3b6@kernel.org>
-Date: Fri, 1 Aug 2025 11:10:36 +0200
+	s=arc-20240116; t=1754047091; c=relaxed/simple;
+	bh=PuTz5rP+g1ZNjvUwlN2rQtxoXWKf+C3pIRkEwIk533k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W3KWcCp25vxGpU1w0fu07uuP0Jgqc17jyVtsn5z2IVvorttEKWBVyat8ExlKyL384zfu1hinY5R5qW1/YCDXRaQwBGI85ugsGKA1MAFseH7qXiWpDQrfrVtSKp0sPP/4f4uK9TZrjRdBoUEE5pa2+ci2WWARXwCmNoKk1JvP7Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=TuJJvz8v; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1754047085;
+	bh=PuTz5rP+g1ZNjvUwlN2rQtxoXWKf+C3pIRkEwIk533k=;
+	h=From:Subject:Date:To:Cc:From;
+	b=TuJJvz8vFL99CAaAFlgj7f3CllPTWHCLan9hM0cD1Cjr+Luo0h5MfgVGpC/p2waZX
+	 tzMVV5LhUvsYMg7w+rnZpXAupaLFoR7vx0FZbJ78yHPS1MEt7uSm2Ve7suHVi4kG9W
+	 D65RdIu23GcUpsaUqewq2iUTaFhHbeR3Mknbz+oDTM5lgbtZgr5UpUGqdGiKiU7REv
+	 mDkFkXBDqN4Y094si7k+fx8PG5BHD/bca8u+180HUyGbyQI+wI/FLjnLQOvI3M9Tak
+	 F+5a2PqNF1mZ5xjH24e+xoNQTthUuocashNJX8aZnPdovHcBCQBI/aECzBKEckVWmT
+	 Q/0VOoew0NODw==
+Received: from 2a01cb0892f2d600c8f85cf092d4af51.ipv6.abo.wanadoo.fr (2a01cb0892f2d600c8f85cF092d4af51.ipv6.abo.wanadoo.fr [IPv6:2a01:cb08:92f2:d600:c8f8:5cf0:92d4:af51])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: jmassot)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id ADD4417E01FD;
+	Fri,  1 Aug 2025 13:18:04 +0200 (CEST)
+From: Julien Massot <julien.massot@collabora.com>
+Subject: [PATCH 0/9] MediaTek devicetree/bindings warnings sanitization
+ second round
+Date: Fri, 01 Aug 2025 13:18:02 +0200
+Message-Id: <20250801-mtk-dtb-warnings-v1-0-6ba4e432427b@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/7] dt-bindings: clock: qcom: Document the Glymur TCSR
- Clock Controller
-To: Taniya Das <taniya.das@oss.qualcomm.com>
-Cc: kernel@oss.qualcomm.com, Pankaj Patil <quic_pankpati@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250729-glymur-gcc-tcsrcc-rpmhcc-v3-0-227cfe5c8ef4@oss.qualcomm.com>
- <20250729-glymur-gcc-tcsrcc-rpmhcc-v3-2-227cfe5c8ef4@oss.qualcomm.com>
- <20250730-mottled-myrtle-bull-3ae03c@kuoka>
- <9cb06263-2a61-4acd-a9cc-157abb832d62@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <9cb06263-2a61-4acd-a9cc-157abb832d62@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGqijGgC/x3MQQqAIBBA0avIrBvQKIyuEi1KxxoiC5UKwrsnL
+ d/i/xciBaYIvXgh0MWRD1+gKgFmnfxCyLYYalm3spMK97ShTTPeU/Dsl4iq1bZxRkmnNZTsDOT
+ 4+ZfDmPMHxs4ujGIAAAA=
+X-Change-ID: 20250801-mtk-dtb-warnings-157d4fc10f77
+To: kernel@collabora.com, Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Ikjoon Jang <ikjn@chromium.org>, 
+ Enric Balletbo i Serra <eballetbo@kernel.org>, 
+ Chen-Yu Tsai <wenst@chromium.org>, Weiyi Lu <weiyi.lu@mediatek.com>, 
+ Eugen Hristev <eugen.hristev@linaro.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Julien Massot <jmassot@collabora.com>, Sean Wang <sean.wang@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-sound@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, Julien Massot <julien.massot@collabora.com>
+X-Mailer: b4 0.14.2
 
-On 01/08/2025 06:14, Taniya Das wrote:
-> 
-> 
-> On 7/30/2025 12:47 PM, Krzysztof Kozlowski wrote:
->> On Tue, Jul 29, 2025 at 11:12:36AM +0530, Taniya Das wrote:
->>> Add bindings documentation for the Glymur TCSR Clock Controller.
->>
->> Same question as for v1, what is Glymur?
-> 
-> Glymur is the Qualcomm's next gen compute SoC.
+This patch series continues the effort to address Device Tree validation warnings for MediaTek platforms, with a focus on MT8183. It follows the initial cleanup series by Angelo (https://www.spinics.net/lists/kernel/msg5780177.html)
 
-Explain it in at least one commit msg, not in reply to me.
+The patches in this set eliminate several of the remaining warnings by improving or converting DT bindings to YAML, adding missing properties, and updating device tree files accordingly.
 
-> 
->>
->> Where is any DTS using this (or explanation of lack of DTS)?
->>
-> 
-> Krzysztof, the DTS will be posted separately once the driver and
-> bindings are reviewed.
+Signed-off-by: Julien Massot <julien.massot@collabora.com>
+---
+Julien Massot (9):
+      dt-bindings: clock: mediatek: Add power-domains property
+      dt-bindings: arm: mediatek: Support mt8183-audiosys binding variant
+      arm64: dts: mt8183: Rename nodes to match audiosys binding schema
+      ASoc: dt-binding: Convert mt8183-afe-pcm binding to YAML
+      dt-bindings: sound: Convert MT8183 DA7219 sound card bindings to YAML
+      ASoC: dt-binding: Convert MediaTek mt8183-mt6358 bindings to YAML
+      dt-bindings: pinctrl: mediatek: mt8183: Allow gpio-line-names
+      arm64: dts: mediatek: mt8183-kukui: Fix pull-down/up-adv values
+      arm64: dts: mediatek: mt8183-pumkin: Fix pull-down/up-adv values
 
-Hm? That's not what I was told thus I ask. I am sure that above is not
-true, but if you insist and put it that way it is incorrect. You cannot
-send DTS because you wait with drivers to be reviewed. We want to see
-entire picture.
+ .../bindings/arm/mediatek/mediatek,audsys.yaml     |  17 +-
+ .../devicetree/bindings/clock/mediatek,syscon.yaml |   3 +
+ .../bindings/pinctrl/mediatek,mt8183-pinctrl.yaml  |   2 +
+ .../devicetree/bindings/sound/mt8183-afe-pcm.txt   |  42 ----
+ .../devicetree/bindings/sound/mt8183-afe-pcm.yaml  | 225 +++++++++++++++++++++
+ .../bindings/sound/mt8183-da7219-max98357.txt      |  21 --
+ .../devicetree/bindings/sound/mt8183-da7219.yaml   |  49 +++++
+ .../sound/mt8183-mt6358-ts3a227-max98357.txt       |  25 ---
+ .../devicetree/bindings/sound/mt8183-mt6358.yaml   |  59 ++++++
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi     |  22 +-
+ arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    |  22 +-
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi           |   4 +-
+ 12 files changed, 378 insertions(+), 113 deletions(-)
+---
+base-commit: b9ddaa95fd283bce7041550ddbbe7e764c477110
+change-id: 20250801-mtk-dtb-warnings-157d4fc10f77
 
 Best regards,
-Krzysztof
+-- 
+Julien Massot <julien.massot@collabora.com>
+
 
