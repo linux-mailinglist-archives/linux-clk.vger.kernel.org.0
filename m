@@ -1,50 +1,55 @@
-Return-Path: <linux-clk+bounces-25667-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25669-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D081B1CAEF
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Aug 2025 19:35:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B02BB1D011
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Aug 2025 03:30:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 820D018C4C15
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Aug 2025 17:35:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1182E627EC1
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Aug 2025 01:30:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2693629E117;
-	Wed,  6 Aug 2025 17:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF0C15573A;
+	Thu,  7 Aug 2025 01:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="BACPZPJE"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="Q3NgA8OL"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mx.olsak.net (mx.olsak.net [37.205.8.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B41928A41C;
-	Wed,  6 Aug 2025 17:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585724C6C;
+	Thu,  7 Aug 2025 01:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754501718; cv=none; b=u76UVCMbRYcHIP2hk4g0oTZ3bd1tHF6qSfRWCUiOteL1JqLdf84hBLUv4xDnhqKWBAWZwUq3LkSpwHTHIPvEpi9pGjYuDPZRDkuZ0uNgAkyJX5iXJQI96l8mwENNoU7GgLWGoHm/xA3ywxIFpzZNpLzYlV1FDwDCLKaf9FGmH74=
+	t=1754530239; cv=none; b=BzdN3Y00YQTYvbEgx0TbrRoSzS7OcMZH1pqY9PUIVB5UPa4r0noH/6h1IdKSBgVo+HfwgIszHC7n5FV0w0kfWqnIoPsnWQv+SE++wBpUkGyO/hxKLnLNLn//ARj5jeCbInkRnmH540qbsIMPOzj083EHCfNv6MnEAtbLvQlqY+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754501718; c=relaxed/simple;
-	bh=r71dXU2Xc5Ubgu7RiIpKZnrZBJi4GnFBtADrF7xkhxA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=m3cuMYx0Xk7ng6CS7mMu17IKWCrV7QvGFJkZefQl18I5ZmyRZ0j+ZrhFsMbIav5u1m/Z8fU6nhh163ZR3hmCoqtzMLYBrDjBF+5eDO/7UEbGPnxNRRujHRrPCWzH3uitt3LQ/O0NHfh8LetbzaDwVSrJIxfVmI+J3rt2zvrlq8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=BACPZPJE; arc=none smtp.client-ip=37.205.8.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
-DKIM-Signature: a=rsa-sha256; bh=5EbWJqb/4DQjpXk7DGdlXqTWFl1RcFeqMA81OaV2jIo=;
- c=relaxed/relaxed; d=dujemihanovic.xyz;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
- i=@dujemihanovic.xyz; s=default; t=1754501633; v=1; x=1754933633;
- b=BACPZPJEum2eh/RUaHF9aC9eREO6BSmTetkPH28gaiwtw1FenJ4q09Fv9iZg/K2cKXZoYDbI
- MtyhXzJqW+AladUj+zPVkQi6PXv5n4rW5FYQ09/BQYjfUsy2rvFb1J8sUSguamwsIoM+IrtHqYj
- c+8pBsGEaJWP2bSM/zr0lZtQDOfQMYFGA2HW2UQ/iE+ADu559t3PTZZJ+Lp6vDyZekjMSbLXQfp
- ke4DMTWp5r0glj7/Gd91u5Z7ckSm8wV1pKuB9uxa/jx+YAWEmxVl2h+RW2dpQRxGnIw5bxjpupc
- nooIOSbwJVQgr35MFUwdOaUdlFWiO6Jq6F9dlXy44Zc7A==
-Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
- ESMTPS id f43a9c5f; Wed, 06 Aug 2025 19:33:53 +0200
-From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
-Date: Wed, 06 Aug 2025 19:33:24 +0200
-Subject: [PATCH RFC 5/5] arm64: dts: marvell: pxa1908: Add power controller
+	s=arc-20240116; t=1754530239; c=relaxed/simple;
+	bh=Zsnd2yhm0e8Z7N/XbjGsxi9+PjwfVA0yvEOrhmxO1r8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UBwTEvMFTiUPF9yTjt0kFhz6mEp3Umdzg28r6G+nRzApVanOekC5Qp/77qOOBVR/I4faWX23T+63RE5Zb2wKxEUK4PW6okeQ0EQYw3gKgU0jK4Y0s2PvN6MwvCN0Nt0tBiyXuck41v9oAIto90PPlzUct1UR22wqzQi7ZrvI1bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=Q3NgA8OL; arc=none smtp.client-ip=18.194.254.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1754530213;
+	bh=R55Ce30YMHeTG1lDNGUKrl/+gpE/GNdMkbzIFbY7bEI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:To;
+	b=Q3NgA8OLeYRV5iBUy+2dGz2qBTQU8LjhtidAZdKz/Vz+rbIhH7Up/tfdfzVmnO+hS
+	 /hSiHa/ivVVwDQW+Av93e6h1kVUwvYlgHlaEbpLvVgotPGE/NGPu2ixRCgugBB18Tb
+	 B90jKWVQz0YTTk68tYoOHMT/RvecvwgWMDDMOamA=
+X-QQ-mid: esmtpgz16t1754530212t66e66a1a
+X-QQ-Originating-IP: 87YQa/E+l5byIBWQdG0icPTbS7PxkSsJP/II3qCKtys=
+Received: from = ( [61.145.255.150])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 07 Aug 2025 09:30:10 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5881493761293327476
+EX-QQ-RecipientCnt: 16
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+Subject: [PATCH 0/2] clk: spacemit: fix i2s clock
+Date: Thu, 07 Aug 2025 09:30:09 +0800
+Message-Id: <20250807-k1-clk-i2s-generation-v1-0-7dc25eb4e4d3@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -52,118 +57,88 @@ List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250806-pxa1908-genpd-v1-5-16409309fc72@dujemihanovic.xyz>
-References: <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
-In-Reply-To: <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKEBlGgC/x3MSwqAIBRG4a3IHXdBpeixlWgg9VeXwkIjAmnvS
+ cMz+E6iiCCI1KlEAbdEOXwOUygaV+cXsEy5yWpb6UaXvBke943FRl7gEdyVBQOoddkCpnaU7Rk
+ wy/N/++F9PyMipt1nAAAA
+X-Change-ID: 20250804-k1-clk-i2s-generation-eee7049ee17a
 To: Michael Turquette <mturquette@baylibre.com>, 
  Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: David Wronek <david@mainlining.org>, Karel Balej <balejk@matfyz.cz>, 
- phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>
+ Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, Haylen Chu <heylenay@4d2.org>, 
+ Inochi Amaoto <inochiama@outlook.com>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, Jinmei Wei <weijinmei@linux.spacemit.com>, 
+ Troy Mitchell <troy.mitchell@linux.spacemit.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3014;
- i=duje@dujemihanovic.xyz; s=20240706; h=from:subject:message-id;
- bh=r71dXU2Xc5Ubgu7RiIpKZnrZBJi4GnFBtADrF7xkhxA=;
- b=owGbwMvMwCW21nBykGv/WmbG02pJDBmTJ/6pnXBOdlbNHyWGuEoz91lLbK4zHM7cOL1uSf4nG
- fkOG5u1HaUsDGJcDLJiiiy5/x2v8X4W2bo9e5kBzBxWJpAhDFycAjCR6WyMDHdZLaVifnivnSG1
- Y4NwJoudZe2Sx4dN18zQ5mu7Nm2KlAEjw8vnsS4aSRuYcpM+bAmpf/j/ufXxZCOdj9IK+R92sZW
- 3swMA
-X-Developer-Key: i=duje@dujemihanovic.xyz; a=openpgp;
- fpr=6DFF41D60DF314B5B76BA630AD319352458FAD03
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754530210; l=1573;
+ i=troy.mitchell@linux.spacemit.com; s=20250710; h=from:subject:message-id;
+ bh=Zsnd2yhm0e8Z7N/XbjGsxi9+PjwfVA0yvEOrhmxO1r8=;
+ b=0y4pPVuvzy8we9mgGSoUWCZEz15xMZi/SA/847+BJGpcTkqgMsSMohCJM+mYV7GLAqMsRhOle
+ LXLTBsvHm+6Cxooaj4TmFAcWbbyM7yOuDY9ZtiUXZegifGLQyE6s7is
+X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
+ pk=lQa7BzLrq8DfZnChqmwJ5qQk8fP2USmY/4xZ2/MSsXc=
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: OPv1v8QuUFDkJsuwDqEIRadsHqLmzvDVecahBjMLuUPJ0NX57+fmdXMx
+	3G4Jfk/vA9kMJlkz6r+ENoe8rLKQ9MCXsjx7WOqQHKd796JvgvtbaLxeE3I/QUqj8B8RLRj
+	wNsDSanul2lqSo+Xr1Pxi6QFWu79vzgdBRRobArxj6ix3Zb32mTs7qvhO0H46OIr39iNj1r
+	sa57hH8wRgHhgFMfe9j+J7TQ97Bp+SwvkTnet6hcRSTNROfR7Ilu8y/paTyhtdSIucTE+x8
+	KiM9gj9nli2zGh4WAmdWubh2efivCRS0lMbACUkoZtEdBCfTHYnxv0gy106PhpEek8Y6lcS
+	ksvT8hwSHbha7NWCcVKzVunnXyt5reEw6UcNKF1/nZzpuDEz4CPfK1V7n+ce2Afj39B+WJB
+	RminYSU1yjnQBBfsaCkVJvleKcCoHb1T2Ze6gxgIJ9AZRMwBFSfc5uhTTJB3u2Yc3alGvvF
+	BO6iEQ3dcW7g2VxwYA/fC664igyaeSRD9sFBbrKV1GRqYh7MFTC4XAjVzfni/5b+C0g6ojB
+	vH0CNLGDEmzEBNUf+3vsNjhIa7crJGP222OZzBI9hElTBzwBUsW0n9JQjAzFyzvwrHljEEN
+	MOaR2Ox8CpQxxfFIOFsSOjtnD4Zn+4v+pUSQx1FBj1kWOUhD+VqPsWl7hNQqV0PqO7p01DH
+	f5OE8Qnd1FfqgUTk+gXQ15SrsC3T//4b45pD0uuvLx8AreCh/ng0mgrGrFNMZjCgXmzSYlD
+	wNS7s91KZV/UhSnxnjpEBx+rLTLJUKQPYp8eN96cu4EYUZ/ryDQrju6sCpfkFQWrKXBbHmD
+	vRTJuS+6u5BfcsVnsEaR/fRI0OILezRtETcrLwdwylS0pzAl4xOxr2ANw8GBuQOGdw3X3OF
+	oZBt615UVTu56sBt1bHhmyU6sjKLLI2/Z6oJ/qqnjlWyu+7onCkcgNTU3I4UxKfNETbz8n7
+	9xq7AepOWpDeRWNWolvCUEoo8/DMUIdGA4rwaKpEyDOAuRdOEvqLU1mjThqdqOoXVmz1H/+
+	QRoNZJI+u7ZHBdWpHvWv0onLLNC2sowiwB6KSrmt3aywhtwsM5fAmwgYBtYL/NBp3fEWWPE
+	pLn53GFduAXG3/B7Bo/t6bn8DnD0IMt0FxIVwjmyGNGkzMUQmS/WS+WdBsldfvjcw==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-RECHKSPAM: 0
 
-Add a node for the newly implemented power domain controller. Also add
-the first two power domain consumers: IOMMU (fixes probing) and
-framebuffer.
+Previously, the driver defined two clocks for the I2S controller:
+i2s_bclk and its parent i2s_sysclk.
 
-Signed-off-by: Duje Mihanović <duje@dujemihanovic.xyz>
+Both i2s_bclk and i2s_sysclk were treated as fixed-rate clocks,
+which clearly does not reflect the practical requirements for I2S operation.
+
+Additionally, the original driver overlooked some upstream clock sources.
+
+To fix the I2S clock, this series also introduces several new clock definition macros.
+
+The I2S clock hierarchy can be found here [1].
+
+Link:
+https://developer.spacemit.com/documentation?token=LCrKwWDasiJuROkVNusc2pWTnEb
+[1]
+
+Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 ---
- .../marvell/mmp/pxa1908-samsung-coreprimevelte.dts |  1 +
- arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi       | 36 +++++++++++++++++++++-
- 2 files changed, 36 insertions(+), 1 deletion(-)
+Troy Mitchell (2):
+      dt-bindings: clock: spacemit: introduce i2s pre-clock
+      clk: spacemit: introduce i2s pre-clock and fix i2s clock
 
-diff --git a/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts b/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts
-index 47a4f01a7077bfafe2cc50d0e59c37685ec9c2e9..2f175ae48c6a2371c407b3a6ffd3cdd577f44e56 100644
---- a/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts
-+++ b/arch/arm64/boot/dts/marvell/mmp/pxa1908-samsung-coreprimevelte.dts
-@@ -23,6 +23,7 @@ chosen {
- 		fb0: framebuffer@17177000 {
- 			compatible = "simple-framebuffer";
- 			reg = <0 0x17177000 0 (480 * 800 * 4)>;
-+			power-domains = <&pd PXA1908_POWER_DOMAIN_DSI>;
- 			width = <480>;
- 			height = <800>;
- 			stride = <(480 * 4)>;
-diff --git a/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi b/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi
-index cf2b9109688ce560eec8a1397251ead68d78a239..630e99f2c309dca0872d824a098ac93b6e55c3a4 100644
---- a/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi
-+++ b/arch/arm64/boot/dts/marvell/mmp/pxa1908.dtsi
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/marvell,pxa1908.h>
-+#include <dt-bindings/power/marvell,pxa1908-power.h>
- 
- / {
- 	model = "Marvell Armada PXA1908";
-@@ -79,6 +80,7 @@ smmu: iommu@c0010000 {
- 			#iommu-cells = <1>;
- 			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
- 				<GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+			power-domains = <&pd PXA1908_POWER_DOMAIN_VPU>;
- 			status = "disabled";
- 		};
- 
-@@ -291,9 +293,41 @@ sdh2: mmc@81000 {
- 			};
- 
- 			apmu: clock-controller@82800 {
--				compatible = "marvell,pxa1908-apmu";
-+				compatible = "marvell,pxa1908-apmu", "simple-mfd", "syscon";
- 				reg = <0x82800 0x400>;
- 				#clock-cells = <1>;
-+
-+				pd: power-controller {
-+					compatible = "marvell,pxa1908-power-controller";
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+					#power-domain-cells = <1>;
-+
-+					power-domain@PXA1908_POWER_DOMAIN_VPU {
-+						reg = <PXA1908_POWER_DOMAIN_VPU>;
-+						#power-domain-cells = <0>;
-+					};
-+
-+					power-domain@PXA1908_POWER_DOMAIN_GPU {
-+						reg = <PXA1908_POWER_DOMAIN_GPU>;
-+						#power-domain-cells = <0>;
-+					};
-+
-+					power-domain@PXA1908_POWER_DOMAIN_GPU2D {
-+						reg = <PXA1908_POWER_DOMAIN_GPU2D>;
-+						#power-domain-cells = <0>;
-+					};
-+
-+					power-domain@PXA1908_POWER_DOMAIN_DSI {
-+						reg = <PXA1908_POWER_DOMAIN_DSI>;
-+						#power-domain-cells = <0>;
-+					};
-+
-+					power-domain@PXA1908_POWER_DOMAIN_ISP {
-+						reg = <PXA1908_POWER_DOMAIN_ISP>;
-+						#power-domain-cells = <0>;
-+					};
-+				};
- 			};
- 		};
- 	};
+ drivers/clk/spacemit/ccu-k1.c                  | 34 ++++++++++++++++---
+ drivers/clk/spacemit/ccu_common.h              | 13 +++++++
+ drivers/clk/spacemit/ccu_ddn.c                 | 47 ++++++++++++++++++++++----
+ drivers/clk/spacemit/ccu_ddn.h                 | 25 ++++++++++++--
+ drivers/clk/spacemit/ccu_mix.c                 | 47 +++++++++++++++++++-------
+ drivers/clk/spacemit/ccu_mix.h                 | 26 ++++++++------
+ include/dt-bindings/clock/spacemit,k1-syscon.h |  3 ++
+ include/soc/spacemit/k1-syscon.h               |  7 ++--
+ 8 files changed, 164 insertions(+), 38 deletions(-)
+---
+base-commit: e991acf1bce7a428794514cbbe216973c9c0a3c8
+change-id: 20250804-k1-clk-i2s-generation-eee7049ee17a
 
+Best regards,
 -- 
-2.50.1
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
 
 
