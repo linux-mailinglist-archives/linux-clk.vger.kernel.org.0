@@ -1,141 +1,113 @@
-Return-Path: <linux-clk+bounces-25724-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25726-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF84EB1ECF0
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Aug 2025 18:23:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8C61B1EF26
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Aug 2025 22:04:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99E847AB670
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Aug 2025 16:21:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E825B568361
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Aug 2025 20:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFAF287249;
-	Fri,  8 Aug 2025 16:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B127122068F;
+	Fri,  8 Aug 2025 20:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XF90Y6YB"
+	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="Gr2Alh4h"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx.olsak.net (mx.olsak.net [37.205.8.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B13286D5C;
-	Fri,  8 Aug 2025 16:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9191A3167;
+	Fri,  8 Aug 2025 20:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754670191; cv=none; b=XN7E/p7NsxtUTa2+SiwtJQtAsItQ8BaUgilZ8RYLUoaBqe5Fyb4eoIYzdNV+SAZVwScFZ+/I+qpAJ+WlNUOZh8YrcQKRbdA6vvxbsEfoRlM0wFlw56+MKX/nC2Y4Ds8RyQehjIl1VroLEaxrOCHYOr3Rmb3WTB7G191BXr+/cKU=
+	t=1754683425; cv=none; b=aCD7RTWOXLgy2X7T++FTUcOk4TRp9ERMer5K78qnbBvbIW3ArE0MeHl7Z218eg4aYD3XEm3Vjo7Q4VIHmr183vLei8GnRrCJayR729TVwqYmfe7ftYfe7YjeTK2WcduZJRAFcADFgvLRoK/zSUcKfjzhK5/w24y2cVrfxUgsJr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754670191; c=relaxed/simple;
-	bh=iBBShj+kZsRTtO2PKybZxG3EHNwRqduCpGMyk73b6/w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=WtdVNZ7DLJT9XKf+KL/ND+aaZx3OTtr410QWkHC63Q8FjY/KPt8wpAUtvNcRtcx3dWEX8EFa+ygUhveZGR7RqyCH4KTfPGHrFOUkO4KwXycqUsV2Bu1Fd4KIjzhhmZ0SoAAEsLyRpoCLgyofbSZ9WTb5uQkUGU6wNCDRP/f+J3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XF90Y6YB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D68CC4CEED;
-	Fri,  8 Aug 2025 16:23:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754670191;
-	bh=iBBShj+kZsRTtO2PKybZxG3EHNwRqduCpGMyk73b6/w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=XF90Y6YBtOHMrMWFtvVMPMjrlIPH9OCiu6I9jwKmgiryJUklB6n5n8haO86ChYETg
-	 RVFT/dCEyS81iOEmaT1bbvHuoVoAQwPvB6ZTq01EjUqsS+bo6NJqW9UIXKZzSBLFRj
-	 ox6jVPQXTDNBSIvLu5DwlghT6Cny8OM2oRx6d1tupOrQzu2tk7yIKFaKSj0Kg9UKMR
-	 A8aT9qSq4O6MOJ/v/AQtxiJCxeeJMi9Dat4G6XW6okDfrDzz5hFtMSeU+rDhRYvV8u
-	 HnzdeOa7Z6uLpU17/SsIGmVwrGXc+bqcxXLlW32JGqqAI9Nf7OeQtJF8Pi9p5cVAFG
-	 JWtWOvr5V8lzQ==
-Date: Fri, 8 Aug 2025 11:23:09 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: bhelgaas@google.com, lpieralisi@kernel.org, kwilczynski@kernel.org,
-	mani@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, geert+renesas@glider.be, magnus.damm@gmail.com,
-	catalin.marinas@arm.com, will@kernel.org, mturquette@baylibre.com,
-	sboyd@kernel.org, p.zabel@pengutronix.de, lizhi.hou@amd.com,
-	linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH v3 4/9] dt-bindings: PCI: renesas,r9a08g045s33-pcie: Add
- documentation for the PCIe IP on Renesas RZ/G3S
-Message-ID: <20250808162309.GA91528@bhelgaas>
+	s=arc-20240116; t=1754683425; c=relaxed/simple;
+	bh=gKRagEStvgjsGqBz58+tTFcCLr9nfkR8v6kbDBTUNds=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hMse1ui8jx4KhzooVDYSd023148miG0sI7klNiGMUgCbwdHz780M/+gjvi7UF2JuKRKo+A41xf7dTmhGRYAY2W66M1W4UvyEaY1uTILOg7y2RChdw7zaVOvSkmQqxkUhqerPunRwf6AbYrOPcym4qQFKFTP6mA7jDS0FHavC4GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=Gr2Alh4h; arc=none smtp.client-ip=37.205.8.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
+DKIM-Signature: a=rsa-sha256; bh=rm/KaI4gS5txCax60X3cOFqmUOa0+shLoOnPWo3LZg4=;
+ c=relaxed/relaxed; d=dujemihanovic.xyz;
+ h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Openpgp;
+ i=@dujemihanovic.xyz; s=default; t=1754682419; v=1; x=1755114419;
+ b=Gr2Alh4hi11EAN9rear4dDOE8QlaR46SNQPsFD1ooegKRm0HJHYnFWdUO9dBzTAtGiENCnPM
+ huKFchm21m8KKgRpiQItKnlXXQDpE80TXeVrwL2HUT8EpOrgrv2g2D3/zqdBH3cPO/qFaOEtuKk
+ oY7LL1TFJB9sCPodsO66g3HWZeR+Tv1Len1w/BvMvToZbblZG4k3kJQY8n//8yTuBFcwHdikJUN
+ ssJk/LQlEjCXtiG/hpDsFSVMqhJPwPf1tlX++/avZQObwj3Oibn5qL4bFFm2HQ0LRDzFeRj4UmC
+ kkzB0oBE0bugbMVT1WJnhN5pklZ8atDGCn8ZRWUbwzF6w==
+Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
+ ESMTPS id ca151574; Fri, 08 Aug 2025 21:46:59 +0200
+From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, David Wronek <david@mainlining.org>,
+ Karel Balej <balejk@matfyz.cz>, phone-devel@vger.kernel.org,
+ ~postmarketos/upstreaming@lists.sr.ht, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH RFC 2/5] dt-bindings: power: Add Marvell PXA1908 domains
+Date: Fri, 08 Aug 2025 21:46:58 +0200
+Message-ID: <2017616.PYKUYFuaPT@radijator>
+In-Reply-To: <20250808-portable-expert-turkey-4f8f19@kuoka>
+References:
+ <20250806-pxa1908-genpd-v1-0-16409309fc72@dujemihanovic.xyz>
+ <20250806-pxa1908-genpd-v1-2-16409309fc72@dujemihanovic.xyz>
+ <20250808-portable-expert-turkey-4f8f19@kuoka>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71d109a1-211a-45ee-8525-03f1859b789a@tuxon.dev>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Aug 08, 2025 at 02:25:42PM +0300, Claudiu Beznea wrote:
-> On 08.07.2025 19:34, Bjorn Helgaas wrote:
-> > On Fri, Jul 04, 2025 at 07:14:04PM +0300, Claudiu wrote:
-> >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>
-> >> The PCIe IP available on the Renesas RZ/G3S complies with the PCI Express
-> >> Base Specification 4.0. It is designed for root complex applications and
-> >> features a single-lane (x1) implementation. Add documentation for it.
-> > 
-> >> +++ b/Documentation/devicetree/bindings/pci/renesas,r9a08g045s33-pcie.yaml
+On Friday, 8 August 2025 09:34:54 Central European Summer Time Krzysztof Ko=
+zlowski wrote:
+> On Wed, Aug 06, 2025 at 07:33:21PM +0200, Duje Mihanovi=C4=87 wrote:
+> > +          A number of phandles to clocks that need to be enabled during
+> > domain +          power up.
+>=20
+> This does not exist in your example, so it is just confusing.
 
-> >> +        pcie@11e40000 {
-> >> +            compatible = "renesas,r9a08g045s33-pcie";
-> >> +            reg = <0 0x11e40000 0 0x10000>;
-> >> +            ranges = <0x02000000 0 0x30000000 0 0x30000000 0 0x8000000>;
-> >> +            dma-ranges = <0x42000000 0 0x48000000 0 0x48000000 0 0x38000000>;
-> >> +            bus-range = <0x0 0xff>;
-> ...
+This is because I have not implemented any of the clocks used by the
+domains at this moment.
 
-> >> +            device_type = "pci";
-> >> +            num-lanes = <1>;
-> >> +            #address-cells = <3>;
-> >> +            #size-cells = <2>;
-> >> +            power-domains = <&cpg>;
-> >> +            vendor-id = <0x1912>;
-> >> +            device-id = <0x0033>;
-> > 
-> > Some of this is specific to a Root Port, not to the Root Complex
-> > as a whole.  E.g., device-type = "pci", num-lanes, vendor-id,
-> > device-id, are Root Port properties.  Some of the resets, clocks,
-> > and interrupts might be as well.
-> > 
-> > I really want to separate those out because even though this
-> > particular version of this PCIe controller only supports a single
-> > Root Port, there are other controllers (and possibly future
-> > iterations of this controller) that support multiple Root Ports,
-> > and it makes maintenance easier if the DT bindings and the driver
-> > structures are similar.
-> 
-> I'll ask the Renesas HW team about the resets and clocks as the HW
-> manual don't offer any information about this.
-> 
-> If they will confirm some of the clocks and/or resets could be
-> controlled as part of a port then patch 3/9 "PCI: of_property:
-> Restore the arguments of the next level parent" in this series will
-> not be needed anymore. Would you prefer me to abandon it or post it
-> as individual patch, if any?
+Actually, I am not sure anymore whether it is necessary to assign
+clocks to the domains as I have just yesterday successfully brought up
+the GPU with some out-of-tree code and that did not require giving the
+domains any clocks even though the vendor kernel does this. Should I
+just go with that and drop all clock handling from the power domain
+driver, at which point there would be no need for the individual domain
+nodes? If not, how should I in the future assign clocks to the domains?
 
-[PATCH v3 3/9] ("PCI: of_property: Restore the arguments of the next
-level parent") isn't specific to Renesas RZ/G3S and it doesn't look
-like it has anything to do with clocks or resets.  I don't understand
-the patch well enough to know whether you should keep it, but it does
-look like you should post it separate from the RZ/G3S driver.
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/power/marvell,pxa1908-power.h>
+> > +
+> > +    clock-controller@d4282800 {
+> > +      compatible =3D "marvell,pxa1908-apmu", "simple-mfd", "syscon";
+> > +      reg =3D <0xd4282800 0x400>;
+> > +      #clock-cells =3D <1>;
+> > +
+> > +      power-controller {
+> > +        compatible =3D "marvell,pxa1908-power-controller";
+>=20
+> No address space, so this should be folded into the parent.
 
-When the devicetree contains required information specific to Root
-Ports, I would prefer that to be in a separate "pcie@x,y" stanza, even
-if there are clocks or resets that apply to all Root Ports.
+By this, do you mean that the clock driver registers the power domain
+controller through devm_mfd_add_devices()?
 
-"num-lanes" is obviously specific to an individual Root Port because
-a Root Complex doesn't have lanes at all.  But in the case of RZ/G3S,
-I'm not sure "num-lanes" is required in the devicetree; I don't see it
-being used in the driver.  If it's not needed, I would just omit it.
+Regards,
+=2D-
+Duje
 
-It looks like the driver *does* need "vendor-id" and "device-id"
-though, and those also are specific to a Root Port because a Root
-Complex is not a PCI device and doesn't have its own Vendor or Device
-ID.  So I would like them to be in a per-Root Port stanza.  If there
-are resets or clocks that affect a Root Port but not the Root Complex
-as a whole, they should also be in the Root Port stanza.
 
-Bjorn
 
