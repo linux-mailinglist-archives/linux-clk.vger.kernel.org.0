@@ -1,174 +1,107 @@
-Return-Path: <linux-clk+bounces-25803-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25920-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DED63B20B77
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 16:15:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B012B2105B
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 17:56:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4D7B3A6C06
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 14:12:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52E1418A5741
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 15:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8512472AD;
-	Mon, 11 Aug 2025 14:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D4C2E4266;
+	Mon, 11 Aug 2025 15:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KzniqePJ"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="eI3vf8ut"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-ed1-f68.google.com (mail-ed1-f68.google.com [209.85.208.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A34520CCE5
-	for <linux-clk@vger.kernel.org>; Mon, 11 Aug 2025 14:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7782DE1FE;
+	Mon, 11 Aug 2025 15:26:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754921455; cv=none; b=Ib5KtmvBoqjd1dPsWto8mJUBR1gUQ0B51/Teu8F9SHyWQjbYGxZviVgokZKOmZL1IoZynzRGjfka9dYtMI5sz9T7D76z+RALarx5cuT4VnPzAMHnDUtR1cMjrjJYvoZWuku36hi9bkFZ4aHzpw3yxd4RNBKzcxnRpQex8CPN7S4=
+	t=1754926013; cv=none; b=cjTKSjYnUeGYVuBazulQMdcYcA8KQsBEMgCv/TuOHMTgfnhEMr/JcgBTwhOEAsHSUYAJtqo6f476aerodJHNvQeEelgFI16G0PZ1U0TZ15R3FGTqe7hXsauj0gtITLMkI29OMmAB05E55OSPzasSSaGCqb71p9epPwcfWAskg04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754921455; c=relaxed/simple;
-	bh=YQdnjakWI6X1ZHqFhx7ybyszvQDMdraK7i+ce55DJ9Q=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ar7+zQS8OuMoSbPqhkUNYckaEPfh4KLhGGla12sju71uz78VCipkPu7EEJVIv4WvEIL8YC+NQkzm78T7eff6V6IsWvNaZwfs4i4CyUgEW9fA2cu1jW0Zl2AuDxM/9jtwU0EV8q30xlENtCNWgB7jot5F1Efc/J42p+LTXvKYHy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KzniqePJ; arc=none smtp.client-ip=209.85.208.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f68.google.com with SMTP id 4fb4d7f45d1cf-61576e33ce9so7541474a12.1
-        for <linux-clk@vger.kernel.org>; Mon, 11 Aug 2025 07:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1754921451; x=1755526251; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VlWQwa2PAoVxO2iD+h8/whtAT2rN/XrFrW/caXqog0A=;
-        b=KzniqePJ8BhCyIuG/HFbx8JlA4LqYA8hoQ4DW/g1hCknkihDX+ct9RMafEot1gWoKL
-         RBi7t5LHoAslJYNxQicWQA1HsAajiFIy4eQjrOPLBVeLTIZHH3Jwoz47pJyees8MFfcv
-         XUbwCImvfbyGp5JNc8Km7W5v0/FpjkAYorsskyJcpZ8sei2KCdVc7Rp9DZOG+Yd/FAzs
-         ceQrku/WelAwPWMnemBSjYHE78JqWARZcDeN+2ve5e04pB2kGjDoG9RXtW88m9tNwr5Y
-         J77nQI8UpGlH1eB5MlwiGXDOHtjp/s3mlMxaT/d4WcrBZV2o1pUsHLN42KMNG5+4mf3v
-         AY1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754921451; x=1755526251;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VlWQwa2PAoVxO2iD+h8/whtAT2rN/XrFrW/caXqog0A=;
-        b=wSN7ANfh5q2NuFaQTCNWAsc3qoqC2OJKH41rfKPrVz3ikXGK53j8gnmvSERu8Qb3J4
-         jkNL2zktNlsIqDHMAhqRcCtZtqlAa08ab2PMeIOie0k4db2bwHquaE9bDuK6u7wfL4zr
-         4oI4SV8RFT/3S96m1ykHWr7vxxaojEsMCfR7z4qoSen3VWQLSxFLnd9Wqza8GZUnSjjV
-         UcTqwgxb8UoksP8VfaSu4S+OKGs72xl4EIy+KbOJy6HuwfJJ3TdWvAzJJFpVsdGjo3aO
-         gd11+QsJs1C/sRY60/9VOuCL5UyD0QhDysMMPVnMmsTIBVQikm3SZ2pxzODeHMnKtlQM
-         NLUw==
-X-Forwarded-Encrypted: i=1; AJvYcCVF/+HCCb2Y09LkETkwVfu0LBfVPTtzQWoIDYFKrF5SCPgMsKvWHDWuSluBsg7kywwXaA3zQw7XS2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQPydc8R7LCNIJPbIVMjUtb8WlFncphb9Fw+Gac9h9iPBrnTdY
-	9Ah70/eCHXItadnJHgpR41F6HmwmDmr5v0cD9sCzhmC0St1oKRpzXPMylOmsAU4civo=
-X-Gm-Gg: ASbGncsfGa6sJ5TiYbnSDGm5+4TFE4aFByQWuAQbGW/Le5vMFh8LUJDPwmnFMurQSdP
-	qUqsSem39CmnI1+fWe20SBVHzzC2Ms6LaSFZ3VD3NdYy3s+fpdfkchQUnkh0nJMJQBUKWXYSB/M
-	0kCx6J2jXLhWQABGPAa6x0VO+fDaxtxQhX+4bgH/Foo0j43EKkthJBkQd0FA5YJ6wpIlnq2oLRL
-	MFfqk+te2iOYoYYO7gT69OQ87vEJl7AvAL5KD5UZD83pyAZCjuNaYTW5SSYhwCD/pUv7vsJA9x+
-	VyLNtFav3flPryHr4jQQWWcLd4XUJLT/5yvTTvcV3k/kc7baGzFLdCE8peITviJGT2fWREQygZk
-	8+2LMC4LKBjpVcOTKWI6WBIGsPjpGNJs6Vv9OBvFXnrya11afXQp3/kBJK6IAvXd0WA==
-X-Google-Smtp-Source: AGHT+IGSXO0okwpD5kpNnaGjEGTT73fQPhYl2aV7TxCeznx0RSbicpQ7u0NLlVgRRhjgMGZAIA2ZgA==
-X-Received: by 2002:a05:6402:3491:b0:618:4a1b:e311 with SMTP id 4fb4d7f45d1cf-6184a1be33amr433396a12.3.1754921451307;
-        Mon, 11 Aug 2025 07:10:51 -0700 (PDT)
-Received: from localhost (host-79-44-170-80.retail.telecomitalia.it. [79.44.170.80])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8f2c265sm18398979a12.26.2025.08.11.07.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Aug 2025 07:10:50 -0700 (PDT)
-From: Andrea della Porta <andrea.porta@suse.com>
-To: Andrea della Porta <andrea.porta@suse.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof Wilczynski <kw@linux.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Saravana Kannan <saravanak@google.com>,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	kernel-list@raspberrypi.com,
-	Matthias Brugger <mbrugger@suse.com>,
-	iivanov@suse.de,
-	svarbanov@suse.de
-Subject: [PATCH 2/2] arm64: dts: broadcom: amend the comment about the role of BCM2712 board DTS
-Date: Mon, 11 Aug 2025 16:12:35 +0200
-Message-ID: <47f6368a77d6bd846c02942d20c07dd48e0ae7df.1754914766.git.andrea.porta@suse.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1754914766.git.andrea.porta@suse.com>
-References: <cover.1754914766.git.andrea.porta@suse.com>
+	s=arc-20240116; t=1754926013; c=relaxed/simple;
+	bh=oZjSLsnOXOCW/QNPAEkDEC9Z/y/pdmjgkqli94Ckk2Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HOUn4NtLEEU5Sr9yROpLVYRp2/RN5IEsKf3ZuuxAVDwfut0j8a8bjQvOoyIbDoa57faEihUru9afDZi8+0kvACW5MkCKXn8Vamm51eQCX8x2h9WXYmVQE/j/qIGyy5nSqsfs1CRVPTrjNo9YSs00rxpHBXNVbrhkozZjJANxzxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=eI3vf8ut; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=OQusFukqhitT3LSxslVxlfEDgo7kN0aw4meYJgI5oek=; b=eI3vf8utFxTWIarm9k3CG7eO6v
+	ogSovJhoIApfhVgExgULrnzaDoLUxtqammtz2lkSyG6FTTMeRpzymM2UMxfsZQzB5LOR+/8C4HFOy
+	TjUc3IJWPZmlIEngNb9UtE6NEys02ii2OKpbaptSv/ESOKFggy+/OJ+JEw8o64Nd/U+x2BrNPRTu+
+	nuKaUcDgaE09SW1plFh2wP5rtwtlnUn3r4IEU1EGGZfErcHFX9iFMu53YXtQ/lNocWjHVEzOm0/dq
+	2ID1hmKcgk42aMllTNVy3MUU7D76Rl1Tr6sErhuozYOU2y6VHmgak4FvyTSg7IkcVvSP8mu2oSDog
+	HSiBAKGw==;
+Date: Mon, 11 Aug 2025 16:53:58 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Miaoqian Lin <linmq006@gmail.com>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>, Kevin Hilman
+ <khilman@baylibre.com>, Roger Quadros <rogerq@kernel.org>, Tony Lindgren
+ <tony@atomide.com>, linux-omap@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH] bus: ti-sysc: Fix potential double free in
+ sysc_add_named_clock_from_child()
+Message-ID: <20250811165358.79b3128c@akair>
+In-Reply-To: <20250804120403.97959-1-linmq006@gmail.com>
+References: <20250804120403.97959-1-linmq006@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Current board DTS for Raspberry Pi5 states that bcm2712-rpi-5-b.dts
-should not be modified and all declarations should go in the overlay
-board DTS instead (bcm2712-rpi-5-b-ovl-rp1.dts).
+Hi,
 
-There's a caveat though: there's currently no infrastructure to reliably
-reference nodes that have not been declared yet, as is the case when
-loading those nodes from a runtime overlay. For more details about
-these limitations see [1] and follow-ups.
+Am Mon,  4 Aug 2025 20:04:03 +0800
+schrieb Miaoqian Lin <linmq006@gmail.com>:
 
-Change the comment to make it clear which DTS file will host specific
-nodes, especially the RP1 related nodes which should be customized
-outside the overlay DTS.
+> The devm_get_clk_from_child() function uses device-managed resources
+> that are automatically cleaned up. The clk_put() call after
+> devm_get_clk_from_child() is redundant and
+> may lead to double-free issues.
+> 
+> Fixes: a54275f4ab20 ("bus: ti-sysc: Add quirk handling for external optional functional clock")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/bus/ti-sysc.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
+> index 9f624e5da991..5441b0739faa 100644
+> --- a/drivers/bus/ti-sysc.c
+> +++ b/drivers/bus/ti-sysc.c
+> @@ -362,7 +362,6 @@ static int sysc_add_named_clock_from_child(struct sysc *ddata,
+>  	cl->clk = clock;
+>  	clkdev_add(cl);
+>  
+> -	clk_put(clock);
+>  
+>  	return 0;
+>  }
+I understand the double-free issue, but I have some questions to make
+sure I understand it correctly what we are doing here. So lets ask the
+possibly stupid questions and check assumptions:
 
-Link
-[1] - https://lore.kernel.org/all/CAMEGJJ3=W8_R0xBvm8r+Q7iExZx8xPBHEWWGAT9ngpGWDSKCaQ@mail.gmail.com/
+- clk_hw hardware still lives after clk_put(), so we do not have
+  problems normally here after that put when we do not remove the
+  device?
 
-Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
----
- arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+- With your patch the put is delayed, so things live longer. So why
+we do not use devm_clk_put() or avoid using devres at all here?
 
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts b/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts
-index adad85e68f1b..865f092608a6 100644
---- a/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts
-+++ b/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts
-@@ -4,8 +4,14 @@
-  * the RP1 driver to load the RP1 dtb overlay at runtime, while
-  * bcm2712-rpi-5-b.dts (this file) is the fully defined one (i.e. it
-  * already contains RP1 node, so no overlay is loaded nor needed).
-- * This file is not intended to be modified, nodes should be added
-- * to the included bcm2712-rpi-5-b-ovl-rp1.dts.
-+ * This file is intended to host the override nodes for the RP1 peripherals,
-+ * e.g. to declare the phy of the ethernet interface or the custom pin setup
-+ * for several RP1 peripherals.
-+ * This in turn is due to the fact that there's no current generic
-+ * infrastructure to reference nodes (i.e. the nodes in rp1-common.dtsi) that
-+ * are not yet defined in the DT since they are loaded at runtime via overlay.
-+ * All other nodes that do not have anything to do with RP1 should be added
-+ * to the included bcm2712-rpi-5-b-ovl-rp1.dts instead.
-  */
- 
- /dts-v1/;
--- 
-2.35.3
-
+Regards,
+Andreas
 
