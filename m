@@ -1,55 +1,55 @@
-Return-Path: <linux-clk+bounces-25795-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25799-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F2B9B20A8C
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 15:41:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51073B20B44
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 16:08:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72C1118A286F
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 13:41:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B91471889DC7
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Aug 2025 14:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6682DEA73;
-	Mon, 11 Aug 2025 13:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B45C23ED76;
+	Mon, 11 Aug 2025 14:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="aEvimXYB"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="VPeTNaNv"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCB92DEA65;
-	Mon, 11 Aug 2025 13:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008B5231825;
+	Mon, 11 Aug 2025 14:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754919684; cv=none; b=UvOiOhkPC7gtlCykVffvv6djb0/KWmHg1WmQt0x5Hs7IUU6l47QXTcd+KcOhMQDGkXdRfnDz+7P1Qu5UK3WAd35jiM7JHrCnaytLNoIwnVpXpsnhD6I6s/C9KpV4IuflRzPD48z/QoGvgn60tOrWjOwFdzoYRmxxWu6FreFAKzY=
+	t=1754921107; cv=none; b=RZDFpB5BWHHnauP/LvVce2IM+E/QUefMUafXNTxohB9+MQq4UrGOBexRvvKKBcGyDhxhw1YoZiSuHd6WqCkqS8qS+E+0Y6UgKUtdmUHXkpexhiOj5wFiltsVIEmkbt8S+YNcOYPtM+DLvd7sUys6HH60BdDr2t7rhLPW7bv0Gi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754919684; c=relaxed/simple;
-	bh=EwKVSE+xlhWtppMsIC0wFkFKY+Ek8JZOdL9HhV7w8qQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GckKHJozwF7prupTMLpDQFG9Kr2AmcAlYfVG75MWQ9RwSSd0v56PfEB0/8QG3/oViXsr8sW29is15wzA5rZYDXPA+ZUIwFTDBuet99iE7X+TWnd+NWMmhPBA3Zyr+4QOeb9K3MexTjmHP2sS0BPChl+Pnyhb8mHCwn1CAD5WfWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=aEvimXYB; arc=none smtp.client-ip=54.204.34.129
+	s=arc-20240116; t=1754921107; c=relaxed/simple;
+	bh=zplxlX8M8Ix32mf9GhxThytJEQARRj5h3yz1CZH/uYs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sX8gmGrJEZYmsI7MqSELP0GM2lGvE6djnlgC1hBEkvdFARmpAZTArtJyVEuDza7py7J98t4B9ddukkUFhSLlZ8J+OQQuRh6gjpk3yj0GBtDvIZ+vaAfUJGlW/4l07BynZRn7x/8n9WHh7pgnvfB6vH6qTpO2SWEKjhunBNvksyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=VPeTNaNv; arc=none smtp.client-ip=54.92.39.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1754919651;
-	bh=+0D/xtSyclY9YeXodV2ESPW/VNymBxUPSTcmaRsZFQk=;
-	h=From:Date:Subject:MIME-Version:Message-Id:To;
-	b=aEvimXYBDVAIGQEN0suPUyWajG4qfbA8gdJE38xMKDyvL4iFKDVLO6tJcNWNl00Nv
-	 L6pI44rcHWpjWWhbRqfPqN7+6l7tLb7WJ5KDA79BwqsYsEH7F68lHzcWZLZ6u2MlZg
-	 X+QTxn3/7tGfXTdTg1PvzaRh7uDX5eO+m9J6vQ7o=
-X-QQ-mid: zesmtpip3t1754919646t750cf849
-X-QQ-Originating-IP: 1I4WHGqpVJrS9nwcYnSEwg1mh0FiNErlU+HTTj7t5Cs=
+	s=mxsw2412; t=1754921078;
+	bh=6P1D/ZrZD05cWpNUR0xzM5levw6Qt08PvmnlyU17ke8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:To;
+	b=VPeTNaNvxnhMBJXlPHubon/N+5ARXqDpP210poe3XlaU3aSLibA/0awKkI2ZjUedd
+	 TIoyPddgnE4g72NwHJ+W0Cx+vT6Ki4lxmzB0dZnJduwWy3C4DcS1BTzMEcuCZcl3bp
+	 9mD5Lq2B2z3w9Qzzid3gxrQkidOkLWYlqPTFA0Zk=
+X-QQ-mid: zesmtpip4t1754921076t7e138ce9
+X-QQ-Originating-IP: eTLoZc3p7oyCNC0JObN64YGwyJoMr/R24ZnHCNREhb8=
 Received: from = ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 11 Aug 2025 21:40:44 +0800 (CST)
+	id ; Mon, 11 Aug 2025 22:04:35 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5142891819712798634
+X-BIZMAIL-ID: 12834372004282179725
 EX-QQ-RecipientCnt: 16
 From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-Date: Mon, 11 Aug 2025 21:40:34 +0800
-Subject: [PATCH v5 2/2] clk: spacemit: fix sspax_clk
+Subject: [PATCH v2 0/4] clk: spacemit: fix i2s clock
+Date: Mon, 11 Aug 2025 22:04:26 +0800
+Message-Id: <20250811-k1-clk-i2s-generation-v2-0-e4d3ec268b7a@linux.spacemit.com>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
@@ -58,121 +58,101 @@ List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-k1-clk-i2s-v5-2-ebadd06e1e91@linux.spacemit.com>
-References: <20250811-k1-clk-i2s-v5-0-ebadd06e1e91@linux.spacemit.com>
-In-Reply-To: <20250811-k1-clk-i2s-v5-0-ebadd06e1e91@linux.spacemit.com>
+X-B4-Tracking: v=1; b=H4sIAGr4mWgC/3WNQQ6CMBQFr0K69pO2llRdeQ/DopYn/IBAWiQYw
+ t2tJC5dzktm3ioiAiOKS7aKgJkjD30CfciEb1xfg7hKLLTUhTxJQ60i37XEOlKNHsFNySAAVpo
+ zoKwTyR0DHrzs3VuZuOE4DeG938zqu/6K9k9xViTJVl4XuBuY6njtuH8teRydx5On3A9PUW7b9
+ gF8hnJZwwAAAA==
+X-Change-ID: 20250804-k1-clk-i2s-generation-eee7049ee17a
 To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Alex Elder <elder@riscstar.com>, Haylen Chu <heylenay@4d2.org>, 
- Inochi Amaoto <inochiama@outlook.com>, Rob Herring <robh@kernel.org>, 
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org, 
- spacemit@lists.linux.dev, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, 
- Troy Mitchell <troy.mitchell@linux.spacemit.com>, 
- Yao Zi <ziyao@disroot.org>
+ Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
+ Alex Elder <elder@riscstar.com>, Haylen Chu <heylenay@4d2.org>, 
+ Inochi Amaoto <inochiama@outlook.com>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, Jinmei Wei <weijinmei@linux.spacemit.com>, 
+ Troy Mitchell <troy.mitchell@linux.spacemit.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754919637; l=3086;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754921074; l=1959;
  i=troy.mitchell@linux.spacemit.com; s=20250712; h=from:subject:message-id;
- bh=EwKVSE+xlhWtppMsIC0wFkFKY+Ek8JZOdL9HhV7w8qQ=;
- b=26/O+mjSBSWiF1/RhGR5NKfnNd1X96Hv85kfc7sUe88X6jtIL1refAZMItUiZxCo6aDVLlSi8
- mDIipJ33GBXBecTM/a5QKi/6ALjLFFRctjm69TMpYQYR2DNm7YZuZgs
+ bh=zplxlX8M8Ix32mf9GhxThytJEQARRj5h3yz1CZH/uYs=;
+ b=SX+mVoR/mVC5cwNpdmanNecKYAdkxQ5ek+Nhb1qNPL3qB5Z8mofIfNgzg42Bih6vN1QYSbeqi
+ ObP9CxSzyyhCx8jozDp/fnHMXUI2VmGvCeN7UwFFYnzCH0c+cEeEKIA
 X-Developer-Key: i=troy.mitchell@linux.spacemit.com; a=ed25519;
  pk=zhRP1xE0bftrurqSWI+SzcSdJGIZ0BTTY9Id0ESzqlI=
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: M3ziZXKDk+iOPR+UgAZS/ckQSVE4v9nl/JPC8zEsfbnTtjMwLHy39RAC
-	pVmDjmw8o3e7md3OP8UmTaqQyjofjBJfSiIEUjOtYadf09egDFtQKqT6aDHu1FPskBVZfq7
-	RZhX6qZVnJn8lzaFFh2GBICXT6JcdKb/sRZyT7JVYRyUExzybUemcfug3AB9aWlVe0vveoU
-	BdaMktQAHEhKQ0TDsokCfE3jNkzbqpx9BU85gU/c8cwX77qp8pGaiBTF5olGnEskwqaoUZk
-	cbd4N23qL3ccCt3rwN4bjdXDMRSkFlpRMVoASQuJiBj9mPhp7tQrAttZ2OgoZQinskpVCSc
-	RHcwRgTF8VAJDpBF6N0Zd6bO5eEBp27lGG6MxgINondghvF8tkRqsrmWKtZSgsNQMe31js0
-	+6bSbSwMrWL38PcJHifjyYFU5hC4y5tXZ9NVN4kv2P7aL53ZNDduOzCmmi8wdhDVEQGhUqY
-	zeTN1ua1gdegaEYP/VkM/WrLECpCI5XMU8XATxPkzfi5eBOI7WWPEFRkrRU23/9oUMh+cNr
-	5aR8noBFFeQp7DLYQKYjfFM2msxKarhgWdQUBMn2gUYbbkBURC1SAiLPIAqwDnFeCIj2a93
-	0sL/iFu2OklYJ+A+oQxnQroTcwyF/nAJtXL/0jcfVj7375z4abcziaZlQqe8kMfblwlMQhh
-	qkwR+gsb8k4+q+0VuPwK+7WkbvS2UeyySISRjyvvaoH7UH4iLVGXEOtSsYWM/Z3v0bbrXQu
-	WktxgQJ/FefgwprTmrbetEe/6CmU+4RvSG3caAmWPFyenJBzaDcy1y/Onl+SVAExhaEz+aj
-	6yZYqX3kh5GJ+2sVsBZoUxfwQ6WYT/9ISY4Mik+TfsAgfpkAYnq4bGvR0BvVoWY2FFKNY7y
-	hkDN+EWNxbwyb3bMgEYDS/ChqD48Gm76kyuowrc9NIuHWMcAF5IoLIo1ScaRGjRoz6kG74s
-	5Zqi4RmiMel8xqWJJTbtmagAgfsX63pgOzdMcU0o0COeta/H2FRaZp3wAxuhnmLYL7md5bj
-	QOOs8UqD5mekwRBNL4DhAGPGC1xcME0p+vef3nO+/e0s7+I/wyMhc8p+irWf08dSfMfdjHc
-	g==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+X-QQ-XMAILINFO: OGMw2CL+mwjsKdPCCQALXfVIefO859FOhyDPcn3KYL92gPYJnfLAIcSS
+	6Vw0FECkbELWxyhcnX+Z9nH1zYCNyJXnIG+iO3nWflHHTJ+G8tYBkmeyQfOv6kJcfdx998e
+	MW4sk404o+4OXGJuRAGWQ4ns4IACIMIWV3+e9kvV3eSZcgmmYi9eY2avEwlM+SAoqAyf6uv
+	QIr6NFNvYNamQYzrR8iItZSo3NDBuAfTkUbZCGeVZ2hKtCFPAcc/K1sXZBIqxFqM+BYL5Xo
+	lAiZGfJ+ckzgvoY95qBTunF0L7b82bh6ZeGQU5QcSAo7nvZWIzBCrsDW9T09J1bAoFDCyZB
+	FbW6g7yNxkhj0riduQMc6OPR+C1nPowcnATrqPJX3qtuetzLFA/9KGk8oiijYK7pTTKllJb
+	mxSfNneHRmq+X9w54est+oXgqIeHDOcCta0OOv7J9p/VCbglB2xmx0HL9jYwbZpuy7xa/tc
+	FxyI6P92jdTm2hUCu1zp3sJAIN78QzY7vnLvm2ouCJ7lM2VX49affrdIkwg1QoPc8y7jvBf
+	3Kss75zQc99ZoWx0LU+zLHqlQethcJv66PgQcRdMkxSkVTrv1oGPBpWcAHlolyHBn4BiKLi
+	mnHwXpBmYQ0PGOSLO9zkAytDdVJ4sYluy6Ek/ckMJIvOW2LFr1A/R8/44N8DcJU0th/WSCi
+	SuyYGKyMl7nJ7YUeW07/aDqL0kCxr2RAcXWagcLcemO1EtvX/JwXQPgZZayeYMO2VZ03bA4
+	7W1ImR0lGQ5aQz6qIOMkFy/DXuALOsK0hlpr6n0MRSTc+6C138mj23KjbYpro4l4HyUprrY
+	GHzb+0HseGthI85vVVxDpF46SnUIYtZLyZClptiqHS4Uoohm44Cnq62u6B61VQwNycyqBAR
+	RJFH3zwY6ptmWutX0F/KKGNicn6cylmpCyCIDLSrS7BOFoprTB8C/rzAFhC9tolnH7ibWLR
+	tVhYvMjZYjv37OVGjl0PbzSvOGW/Ne4JdAMPruG0/6y09yBocImPp5ZPkgQRVf0dt4Gzkvw
+	67rGanjIwRTImU3gSjnKB6q5P2jLZZNYTWKL+/H2DgnWTgbelviMFEySuD21pMvnjhGfJQk
+	jOgFbAZ18pkKng0786OMNVYVU+V9vgU4ViWDHLOPDCVBJyipg0XQceMTwO/zRB2qnNi7O9Q
+	HVk8Ws2h7lAQoGUFes+Bot6axVZ/jeCr1bvU
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
 X-QQ-RECHKSPAM: 0
 
-Hardware Requirement:
+Previously, the driver defined two clocks for the I2S controller:
+i2s_bclk and its parent i2s_sysclk.
 
-BIT[3] of this register must be set if need to select i2s_bclk as
-SSPA parent clock, to solve this, introduces a new SSPAx_I2S_BCLK
-clock as the virtual gate clock.
+Both i2s_bclk and i2s_sysclk were treated as fixed-factor clocks,
+which clearly does not reflect the practical requirements for I2S operation.
 
-Fixes: 1b72c59db0add ("clk: spacemit: Add clock support for SpacemiT K1 SoC")
-Suggested-by: Yao Zi <ziyao@disroot.org>
-Reviewed-by: Haylen Chu <heylenay@4d2.org>
+Additionally, the original driver overlooked some upstream clock sources.
+
+To fix the I2S clock, this series also introduces several new clock definition macros.
+
+The I2S clock hierarchy can be found here [1].
+
+Link:
+https://developer.spacemit.com/documentation?token=LCrKwWDasiJuROkVNusc2pWTnEb
+[1]
+
 Signed-off-by: Troy Mitchell <troy.mitchell@linux.spacemit.com>
 ---
- drivers/clk/spacemit/ccu-k1.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+Changes in v2:
+- change the macro for i2s_sysclk_src to CCU_MUX_GATE_DEFINE
+- introduce factor for div clock
+- modify commit messages
+- remove CCU_DDN_GATE_DEFINE
+- remove CCU_DIV_TABLE_GATE_DEFINE
+- remove reformatting in k1-syscon.h
+- split patch2/2 into separate patches
+- Link to v1: https://lore.kernel.org/r/20250807-k1-clk-i2s-generation-v1-0-7dc25eb4e4d3@linux.spacemit.com
 
-diff --git a/drivers/clk/spacemit/ccu-k1.c b/drivers/clk/spacemit/ccu-k1.c
-index 65e6de030717afa60eefab7bda88f9a13b857650..62cdba516a29f960e15e04642470f55e3d85bfad 100644
---- a/drivers/clk/spacemit/ccu-k1.c
-+++ b/drivers/clk/spacemit/ccu-k1.c
-@@ -247,7 +247,14 @@ CCU_GATE_DEFINE(aib_clk, CCU_PARENT_NAME(vctcxo_24m), APBC_AIB_CLK_RST, BIT(1),
- 
- CCU_GATE_DEFINE(onewire_clk, CCU_PARENT_NAME(vctcxo_24m), APBC_ONEWIRE_CLK_RST, BIT(1), 0);
- 
--static const struct clk_parent_data sspa_parents[] = {
-+/*
-+ * When i2s_bclk is selected as the parent clock of sspa,
-+ * the hardware requires bit3 to be set
-+ */
-+CCU_GATE_DEFINE(sspa0_i2s_bclk, CCU_PARENT_HW(i2s_bclk), APBC_SSPA0_CLK_RST, BIT(3), 0);
-+CCU_GATE_DEFINE(sspa1_i2s_bclk, CCU_PARENT_HW(i2s_bclk), APBC_SSPA1_CLK_RST, BIT(3), 0);
-+
-+static const struct clk_parent_data sspa0_parents[] = {
- 	CCU_PARENT_HW(pll1_d384_6p4),
- 	CCU_PARENT_HW(pll1_d192_12p8),
- 	CCU_PARENT_HW(pll1_d96_25p6),
-@@ -255,10 +262,22 @@ static const struct clk_parent_data sspa_parents[] = {
- 	CCU_PARENT_HW(pll1_d768_3p2),
- 	CCU_PARENT_HW(pll1_d1536_1p6),
- 	CCU_PARENT_HW(pll1_d3072_0p8),
--	CCU_PARENT_HW(i2s_bclk),
-+	CCU_PARENT_HW(sspa0_i2s_bclk),
- };
--CCU_MUX_GATE_DEFINE(sspa0_clk, sspa_parents, APBC_SSPA0_CLK_RST, 4, 3, BIT(1), 0);
--CCU_MUX_GATE_DEFINE(sspa1_clk, sspa_parents, APBC_SSPA1_CLK_RST, 4, 3, BIT(1), 0);
-+CCU_MUX_GATE_DEFINE(sspa0_clk, sspa0_parents, APBC_SSPA0_CLK_RST, 4, 3, BIT(1), 0);
-+
-+static const struct clk_parent_data sspa1_parents[] = {
-+	CCU_PARENT_HW(pll1_d384_6p4),
-+	CCU_PARENT_HW(pll1_d192_12p8),
-+	CCU_PARENT_HW(pll1_d96_25p6),
-+	CCU_PARENT_HW(pll1_d48_51p2),
-+	CCU_PARENT_HW(pll1_d768_3p2),
-+	CCU_PARENT_HW(pll1_d1536_1p6),
-+	CCU_PARENT_HW(pll1_d3072_0p8),
-+	CCU_PARENT_HW(sspa1_i2s_bclk),
-+};
-+CCU_MUX_GATE_DEFINE(sspa1_clk, sspa1_parents, APBC_SSPA1_CLK_RST, 4, 3, BIT(1), 0);
-+
- CCU_GATE_DEFINE(dro_clk, CCU_PARENT_HW(apb_clk), APBC_DRO_CLK_RST, BIT(1), 0);
- CCU_GATE_DEFINE(ir_clk, CCU_PARENT_HW(apb_clk), APBC_IR_CLK_RST, BIT(1), 0);
- CCU_GATE_DEFINE(tsen_clk, CCU_PARENT_HW(apb_clk), APBC_TSEN_CLK_RST, BIT(1), 0);
-@@ -865,6 +884,8 @@ static struct clk_hw *k1_ccu_apbc_hws[] = {
- 	[CLK_SSPA1_BUS]		= &sspa1_bus_clk.common.hw,
- 	[CLK_TSEN_BUS]		= &tsen_bus_clk.common.hw,
- 	[CLK_IPC_AP2AUD_BUS]	= &ipc_ap2aud_bus_clk.common.hw,
-+	[CLK_SSPA0_I2S_BCLK]	= &sspa0_i2s_bclk.common.hw,
-+	[CLK_SSPA1_I2S_BCLK]	= &sspa1_i2s_bclk.common.hw,
- };
- 
- static const struct spacemit_ccu_data k1_ccu_apbc_data = {
+---
+Troy Mitchell (4):
+      dt-bindings: clock: spacemit: introduce i2s pre-clock to fix i2s clock
+      clk: spacemit: introduce pre-div for ddn clock
+      clk: spacemit: introduce factor for div clock
+      clk: spacemit: fix i2s clock
 
+ drivers/clk/spacemit/ccu-k1.c                  | 28 +++++++++++++++++++++-----
+ drivers/clk/spacemit/ccu_ddn.c                 | 12 +++++------
+ drivers/clk/spacemit/ccu_ddn.h                 |  6 ++++--
+ drivers/clk/spacemit/ccu_mix.c                 |  7 ++++++-
+ drivers/clk/spacemit/ccu_mix.h                 |  4 +++-
+ include/dt-bindings/clock/spacemit,k1-syscon.h |  3 +++
+ include/soc/spacemit/k1-syscon.h               |  1 +
+ 7 files changed, 46 insertions(+), 15 deletions(-)
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250804-k1-clk-i2s-generation-eee7049ee17a
+
+Best regards,
 -- 
-2.50.1
+Troy Mitchell <troy.mitchell@linux.spacemit.com>
 
 
