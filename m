@@ -1,128 +1,194 @@
-Return-Path: <linux-clk+bounces-25972-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-25974-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9461AB2297B
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Aug 2025 16:01:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24C17B229AA
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Aug 2025 16:08:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 194225059AB
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Aug 2025 13:43:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EECB684BD7
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Aug 2025 13:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C3F283FFA;
-	Tue, 12 Aug 2025 13:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCF72882AB;
+	Tue, 12 Aug 2025 13:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="lvUjqhfh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FsOBs53M"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C8B227FB27;
-	Tue, 12 Aug 2025 13:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755006165; cv=pass; b=VeV3URzZbhcEniWIjT5NVJRazeKV7wwyojhr6lugzuSs+NQ6OOJ5so6gWRlHLm2EdwHvCTA2eARWUXcRJtnnOJg+e6M3ACPbsFAuiVbujxE8WFqvLH2JTHleO2bMeBL874KVBRU8WE3/nxqbptT/rxOqzOtPtpzbvubPnvGN6eo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755006165; c=relaxed/simple;
-	bh=VA/IhSA+wElgw/TQpAmNJns2NWQ8O3CCkvUy+PyqOsQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XdsTC53mQnMzpukaGcSIdZQnNp/uJMtLDhiIYdjwE5oQcLM3xxRMxMT0VJjhea0rRuN+p9/KGw9czqrk6g9qejcxptJfZk4a6DeJtBThf6YLtnzli7GWCRAgeUX5sJJ1NUIzSLtvnhUhNl4wxzZ1H/LIhdaS91SYebxWXYjL2E8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=lvUjqhfh; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
-ARC-Seal: i=1; a=rsa-sha256; t=1755006152; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Ob2a/f0eaZdCkypYg4XmY5b8LnjcS5jzNQY8Wclo5TdSrhceyUMocmxn0bkcW5f65So9ut1pn/JU5WWc3W7WiMG3RUbHu/joNlg9JqadynXkD6k91ql301mUqzLY99f2b+fZs203uDCSZ918kYc08zgIqJzUdy7pmnCgS3iktfo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1755006152; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=VA/IhSA+wElgw/TQpAmNJns2NWQ8O3CCkvUy+PyqOsQ=; 
-	b=gd328Pg5XKwKeKvMXDpmob07Vb0f7nFIFU/c2nV1mNLzQbBUwgMTcmWepbg52MqvfF8lD4o2nFvPScY5DGbGxcUyiPxyhDP2ZgCLB+893DAhY6QSncBN5YEEJjUIb6+xWpQRftwCN+b2/JC7Ab/bba1OPKHYIlP/VfV6lHiV+6I=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755006152;
-	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=VA/IhSA+wElgw/TQpAmNJns2NWQ8O3CCkvUy+PyqOsQ=;
-	b=lvUjqhfh0BPdd0ewTbefpOQPYoD9rafGuCkqLGNeaojQjm7bQwnGfagG/yDm7wFh
-	hLIocF23EIbk23cW+rhqo0QzNQ9M/R4JYAGKi/SY0qvceCZFIJUtHxXuTe6R1gVQPH6
-	sDM9v3oEMe3RoUXJIHrTaUTAGrAurbov4orvNqaziPkhpaJEzTJa9i47mMSaWHuC6HE
-	BgWrZ37mp3xgQCa4vNmWUSg7OIMSdn+coL1DF+fk2Ko25yODGRFMGF+EbWvqe3BTAH6
-	tt6bN9nPUmdrJd20Qs8ASA3fUtEPmiu9ytH9x7TQ3uobdvI0bqlGb/4z50UZwf+whj+
-	W7j84GJwhA==
-Received: by mx.zohomail.com with SMTPS id 1755006149202627.0494069115554;
-	Tue, 12 Aug 2025 06:42:29 -0700 (PDT)
-Message-ID: <50a61990b5009217dcc0ed74142c4ffeba137f73.camel@icenowy.me>
-Subject: Re: [PATCH 0/4] clk: thead: Misc changes to TH1520 clock driver
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei
- <wefu@redhat.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd <sboyd@kernel.org>, Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 12 Aug 2025 21:42:23 +0800
-In-Reply-To: <20250812054258.1968351-1-uwu@icenowy.me>
-References: <20250812054258.1968351-1-uwu@icenowy.me>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9A02877F1
+	for <linux-clk@vger.kernel.org>; Tue, 12 Aug 2025 13:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755006846; cv=none; b=IIShkviXTwTz9Ew2e4rHwpprPUcb/wejxhKz+x4YEOZYE1ioS1YZiW32u6P8nDvXTt1X0ZH5P8ZdNbSQ4vTU8Rmz1tNf8DGp1/3YVkvEJwlH8bdmWJJOfxYYxXpZ6TaoZ0QRkEzQzgJLvYm/5epCRMo5CAwYLby8NK6dTSEOv6g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755006846; c=relaxed/simple;
+	bh=Q//s+/zCNBEzjNslOllCQGV4nFuLBeOueQxvALXBZS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FndACPmgoxjCDHjplpe1CPO0u3UV0KTCSyeQoGadidEWBzxxUt5LHb2iADgeHQaMXp8pSNbnX+cHrBl/lpInAPC1Xq1SkJJ/xTCQ6dk5jWU6e8b9KhzJ7O3aypsF0qGdjOX7RoewzYDlyBVQsAnfp1O0DFtwWtxSqIcnY9bsPpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FsOBs53M; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755006843;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q//s+/zCNBEzjNslOllCQGV4nFuLBeOueQxvALXBZS0=;
+	b=FsOBs53MFI0jFR+2T3HZfYzHe/dHKoSUNhMoSBaobcr77iFZmWKEnd7i6AAHdtzlJkdBEl
+	kp7lVaUVT/jutIpiaJi7eRiEJ/BYN98gGLoS98vppqx/GdDiuudGJ/ktsycbezuDgVmln4
+	U0xYXm5hHSNNh9lA4cylY+S9O8F7nT4=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-576-7qohdxj3NyiU7FMboMvVig-1; Tue, 12 Aug 2025 09:54:02 -0400
+X-MC-Unique: 7qohdxj3NyiU7FMboMvVig-1
+X-Mimecast-MFC-AGG-ID: 7qohdxj3NyiU7FMboMvVig_1755006842
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b061ad3cc0so167530051cf.0
+        for <linux-clk@vger.kernel.org>; Tue, 12 Aug 2025 06:54:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755006842; x=1755611642;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q//s+/zCNBEzjNslOllCQGV4nFuLBeOueQxvALXBZS0=;
+        b=Lu8gyCGO8C5ETZr5EAr6379wglpr+IkyDZ0QV9Zb7ru6tUBzoAP4Yx9D1x2Fg/eas1
+         AOnqUFujpEPgfWWzVdGby1JI8jGW6YWSnY+Z+cPgVC6aPoqXEBnhOL3JMYlKTm7sCk3E
+         KkUv9EEiHUEdcdcJnWgVTsySUs6I1hRBK40Bq0aQ5OIIgOI8JC4t7XQmHzBGyxtX8byi
+         ZydcavJRmIwD2qCmuXcrTBihMJ1VQqyu/rTTo4QGMQ1AQCLQtAuVljQcXPBATRAOoMUx
+         YDCqps1tKA0zAjjybittu7ifkVjyKXPsJqixnHqOX0bpkeiWxVJW5NTUk9duLJmgazX8
+         bYBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP1lPX6VDW3o3p25HEIC0xUQgdZk0Ij7OiG9V2Xw5q7IOjuwn3b/75JNYCPQcp52zn3TmPOtVyl0I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLo5ZvpGrS/LL9r0C6N3A7rzIVUsKHQcogTTtJn3VkUlCuRODK
+	O/8pOmbplRbBlRAXTPR3puCHRHk/FTabkIMSLhzdLFm5e5yMbph4ghbSgKv9IWQQCoiPfVMMP1g
+	8yQJW/qcvxr5n5l4dWixdXi4ZmW8bfbgH0Nwkbuk6ZRhNHby2veUzJEZry01WXw==
+X-Gm-Gg: ASbGncsz5SYHQZ4z5DtRYiLWIy0+58vvtNNZOpKO7MXen+L7Au2gLGRqdOanZCAzyBV
+	XsEHeYaxF7Rg+ZI0BXgkGMur7BN1OmdMi1hPOVN83D3isXryjCEvJ6zR6ovUCj6GNzBpYcanBpp
+	2dCwnWo8stZiR4uNUqOUzRuwuy6PXJWnpTlzOLTRFmVbcP4cq/No582/20ZVXf2yvuCFo5UwZC+
+	8uFfBFfs0OhigdUj+y5xGkfngb8nGdb59hKN6g3WyktHAj/eu2h9zg5VYh0x9RrrqeMkhzLxy+m
+	rvTnl/RSulsupOXviArxyB5l70VlxLmH5hkML+mCmbZG2J+9lRJ3Q8+A2WX0wJI=
+X-Received: by 2002:a05:622a:30c:b0:4a4:2c4c:ccb3 with SMTP id d75a77b69052e-4b0aed36723mr265510331cf.38.1755006841701;
+        Tue, 12 Aug 2025 06:54:01 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHL0wdDdlaxY3Jk0TgFfLYMOMEPwCaVnL7cxWLBN3HaRHoOlakRNGI4PvbhwBJNSUpcz9s5eQ==
+X-Received: by 2002:a05:622a:30c:b0:4a4:2c4c:ccb3 with SMTP id d75a77b69052e-4b0aed36723mr265508911cf.38.1755006840909;
+        Tue, 12 Aug 2025 06:54:00 -0700 (PDT)
+Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b0aa1efe78sm75493211cf.8.2025.08.12.06.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 06:54:00 -0700 (PDT)
+Date: Tue, 12 Aug 2025 09:53:54 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Icenowy Zheng <uwu@icenowy.me>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Alex Helms <alexander.helms.jy@renesas.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
+	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
+	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
+ round_rate() to determine_rate()
+Message-ID: <aJtHcs8_671G33Ez@x1>
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
+ <a151ed7c1caac83e872cf6075c215fa55bd21f82.camel@icenowy.me>
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a151ed7c1caac83e872cf6075c215fa55bd21f82.camel@icenowy.me>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-=E5=9C=A8 2025-08-12=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 13:42 +0800=EF=BC=
-=8CIcenowy Zheng=E5=86=99=E9=81=93=EF=BC=9A
-> This patchset is my changes to the TH1520 clock driver, mainly for
-> supporting the display controller (the first 3).
->=20
-> The first two are functionality additions, with the first one adding
-> support for enabling/disabling PLLs (for DPU PLL) and the second one
-> adding support for changing DPU dividers.
->=20
-> The 3rd one is to address hang issues met when testing the DPU driver
-> w/o clk_ignore_unused command line option.
->=20
-> The 4th one has no relationship to display, and only exists for my
-> need
-> to change an arbitrary GPIO (well, GPIO3_3, the one controlling the
-> fan
-> on Lichee Pi 4A) with gpioset.
->=20
-> This patchset has a dependency (a 0th one) [1].
->=20
-> [1]
-> https://lore.kernel.org/linux-riscv/20250809-fix_clocks_thead_aug_9-v1-1-=
-299c33d7a593@samsung.com/
->=20
+On Tue, Aug 12, 2025 at 09:39:45PM +0800, Icenowy Zheng wrote:
+> I was doing a patch to add divider setting support to clk-th1520-ap
+> driver and sent patch now, should I remove round_rate from the next
+> revision and just keep determine_rate? Is it safe to do this even if
+> this patchset is not merged?
 
-Oops, looks like this patchset deserves a new revision now...
+Yes, you only need to implement the determine_rate() clk op. Please
+remove any references to the round_rate() clk op from your driver. If
+you implement both, then only the determine_rate() clk op is actually
+used by the clk core.
 
-PATCH 2/4 has a round_rate() implementation, which is considered out-
-of-date and determine_rate() will replace it.
+> In addition, will the clk_round_rate() API exported to other subsystems
+> be affected?
 
-PATCH 3/4 was broken during rebasing.
+No, that will stay as is, and with the same name. The underlying
+implementation in the clk core uses the determine_rate() clk op.
 
-PATCH 4/4 is found to be not working (and even makes padctrl0 an orphan
-clock). Yao Zi told me that I need to first do some changes to ccu_gate
-code.
-
-> Icenowy Zheng (4):
-> =C2=A0 clk: thead: add support for enabling/disabling PLLs
-> =C2=A0 clk: thead: support changing DPU pixel clock rate
-> =C2=A0 clk: thead: th1520-ap: set all AXI clocks to CLK_IS_CRITICAL
-> =C2=A0 clk: thead: th1520-ap: fix parent of padctrl0 clock
->=20
-> =C2=A0drivers/clk/thead/clk-th1520-ap.c | 174 ++++++++++++++++++++++++---=
--
-> --
-> =C2=A01 file changed, 143 insertions(+), 31 deletions(-)
->=20
+Brian
 
 
