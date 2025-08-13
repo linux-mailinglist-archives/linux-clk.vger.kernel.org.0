@@ -1,123 +1,70 @@
-Return-Path: <linux-clk+bounces-26053-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26055-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02300B251D8
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Aug 2025 19:16:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15182B252B5
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Aug 2025 20:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E3AD74E514D
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Aug 2025 17:16:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FB75189B252
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Aug 2025 18:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3338303CBC;
-	Wed, 13 Aug 2025 17:16:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D2E2BE033;
+	Wed, 13 Aug 2025 18:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="hRsC4Ts2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RLKpA9CI"
 X-Original-To: linux-clk@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36715303C89;
-	Wed, 13 Aug 2025 17:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755105400; cv=pass; b=boWJ6g2IiGZqerBS90+hEmy8hz5DTgGeD9BE/2NelzPI9v7tL6yf1xeIwlOTYVwW6exe5Oxd9aU3eCAKkjPniwz++xBwYVRF6o86u5rtVfnVZRj8EgMWi1cn/UH+dCqH1W7s0+7K9Y8+qfWIjIOBIwHZq4uKOWVTXyfhsG00suI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755105400; c=relaxed/simple;
-	bh=/vzN8wPcA9iD7oRNZZjvZq9B0/vfABdMxfyd+edq4jg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DE8Mz3/kkeQRcZ+deFRj1C2zfBlt1NuPt4R0ex4uHOhqvRH73biF04kFNzfLN4MOwYPHnxwS5oLcgly/rBoc9dBGvxxI5yBWvUsoDMMqYwz0EBYgK6Nyq2BADV9/tXpaebaUOwUixKfIhmrz05BoywZJXp5Th3QGQhaaV1g2hnI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=hRsC4Ts2; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
-ARC-Seal: i=1; a=rsa-sha256; t=1755105383; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=jCQPNJr6Utb/IlNo0c8yh/wBg6V3a4jV4YOu499PaP5V9JNEo+37DQdj1L8DDWz6x9MtSmbbSkcvgdXVSXYhbrLavEUw+9QqHBcEZ7hR8aZ9VOd643rMtBnKa4P4UPiI+d//GI8cP5rNSDQzk9kqaunePIashDXg/JWkXjWWeBA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1755105383; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=/vzN8wPcA9iD7oRNZZjvZq9B0/vfABdMxfyd+edq4jg=; 
-	b=fzIOjNerQkYl18WMmAC95Xva0mnqlL85u99Fb2jQn5i4MUfbGEbfZzFART+YdTWbL63X8R1zaRMKziXHIZZlXjr09fUGsFTEj5VXChsJS0SNNYc0zQwPKwoyej/HkEsTethv8vCv+03hYFYGXBmE8IsvEboYLYivWrhixtG9XGU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=icenowy.me;
-	spf=pass  smtp.mailfrom=uwu@icenowy.me;
-	dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1755105383;
-	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=/vzN8wPcA9iD7oRNZZjvZq9B0/vfABdMxfyd+edq4jg=;
-	b=hRsC4Ts2ejnqno6bRuz+O9Q/ODtnrI0mKpm0GFsGLwoZHtwuVM+pe5GydElQxCgM
-	17N169BmTmgSC0N0gGho9RSnrg8cwH3cIfQI9H4HIXiTsfDFziFaYOZowCyW6SaS0Pl
-	AQdQI3VJ3vsBnmEsMt1WWESs69+Yv6GysbI3W6GqvhbZIYC+8vcDHcfTUbNaGkDQdQS
-	ewG9cCUxSrO36kQuIpb+BqZjBicn3q64ybDiSObDyk7sYdOTcQ+T1EqBAz/+RewdvKw
-	qrLdtmJl+ZFdoW7SSygBQ2DpLay8Nz9kxEXAxdPLguJQbTFuwBYsIGANNoCYEKwRA90
-	TGWvmJh+6w==
-Received: by mx.zohomail.com with SMTPS id 1755105381384154.6661811070984;
-	Wed, 13 Aug 2025 10:16:21 -0700 (PDT)
-Message-ID: <eedd44480a76840e1fec73d4433c772c5bdc7011.camel@icenowy.me>
-Subject: Re: [PATCH 0/2] clk: thead: th1520-ap: allow gate cascade and fix
- padctrl0
-From: Icenowy Zheng <uwu@icenowy.me>
-To: Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei
- <wefu@redhat.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd <sboyd@kernel.org>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>, Yao Zi
- <ziyao@disroot.org>,  Han Gao <rabenda.cn@gmail.com>,
- linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-Date: Thu, 14 Aug 2025 01:16:16 +0800
-In-Reply-To: <20250813171136.2213309-1-uwu@icenowy.me>
-References: <20250813171136.2213309-1-uwu@icenowy.me>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D845292B56;
+	Wed, 13 Aug 2025 18:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755108092; cv=none; b=lx/YpdRz/dB//Vh0z4xzoYOVjlbSVCMtZJ/lG2xEHAMIdj20Z1RDlkoGEr64IbfxQ4iNw1sfTF6CiQP2m2CQajKDAJpdbtv54kk8sH+n000+kc9afvPO+lkHGPvXGd5PUWC/yaOvSBoHtW2uSytuCOPkWf39eJmGKv4r8GICUNI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755108092; c=relaxed/simple;
+	bh=s9epfny743R+e3V9os6m+gXRE+kEQ2otXiXqPsjz5cc=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=JpphZJaTOSQLiNj0pVpikY+Pm6U4KfOPV49vuUrSKNrRaO8kB6/WA42PV9YknLGHofCXVQ20rGbicuEmLnjilqlSwarTr1BREnC5xSHoNnaWJafmN4GjH6RmRodyQjeU9bh9cJyOgHiCl3mYkcBwPf3hs7A0KlRSoPVDPrQPTCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RLKpA9CI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4144C4CEEB;
+	Wed, 13 Aug 2025 18:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755108091;
+	bh=s9epfny743R+e3V9os6m+gXRE+kEQ2otXiXqPsjz5cc=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=RLKpA9CIk9EexhNVSJBQluICEaKbUCupXg1KrOXWV4iyI22HbxBBSTKeOx0U1LoVb
+	 M8W73T0ArlltBYLPOy3LlB5e+AUbcpIO8sTfkQWt0SRTr7jN9OiJ0G36CWOuJT+XIy
+	 9N4bXeS849tMZW25WRfe45IelO/3Gn7I+tk+Xjl6RuTegRus/EAR4JMS4Wmab/PWmD
+	 pNqsJOWIbFMuQo8s6I6YH1VP8ehaJEUVfURipehWtgnBQ7tO34jgD3O85eg23n4foW
+	 QwRaqAOFd+OOCHt9Y9PPIWPWRP3ye8th38DauZp2ctT1jBhbOtBsxVCqCp1rfg3Le8
+	 y+DX8n5jzy8TQ==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250804222042.4083656-1-robh@kernel.org>
+References: <20250804222042.4083656-1-robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: clock: Convert silabs,si514/544 to DT schema
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Mike Looijmans <mike.looijmans@topic.nl>, Rob Herring (Arm) <robh@kernel.org>
+Date: Wed, 13 Aug 2025 11:01:30 -0700
+Message-ID: <175510809083.11333.5316863238551613465@lazor>
+User-Agent: alot/0.11
 
-=E5=9C=A8 2025-08-14=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 01:11 +0800=EF=BC=
-=8CIcenowy Zheng=E5=86=99=E9=81=93=EF=BC=9A
-> Current ccu_gate implementation does not easily allow gates to be
-> clock
-> parents because of the waste of struct clk_hw in struct ccu_gate;
-> however it's found that the padctrl0 apb clock gate seems to be
-> downstream of perisys-apb4-hclk, gating the latter w/o gating the
-> former
-> makes the padctrl0 registers inaccessible too.
+Quoting Rob Herring (Arm) (2025-08-04 15:20:40)
+> Convert the Silicon Labs SI514 and SI544 bindings to DT schema format.
+> Combine the bindings into a single schema as they are the same.
 >=20
-> Fix this by refactor ccu_gate code, mimicing what Yao Zi did on
-> ccu_mux; and then assign perisys-apb4-hclk as parent of padctrl0 bus
-> gate.
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> ---
 
-Forgot to mention a easy test of this patchset:
-
-Just install `gpioset` from `libgpiod` on a Lichee Pi 4A, plug a fan to
-its fan port, and run `gpioset 3 3=3D1`. The expected behavior is the fan
-starts to spin (because GPIO3_3 is the pin controlling the fan),
-however without this patchset Linux will fail to switch that pin.
-
->=20
-> This patchset depends on the display clock patchset at [1], although
-> a
-> rebasing to get rid of this dependency is possible.
->=20
-> [1]
-> https://lore.kernel.org/linux-riscv/20250813072702.2176993-1-uwu@icenowy.=
-me/
->=20
-> Icenowy Zheng (2):
-> =C2=A0 clk: thead: th1520-ap: describe gate clocks with clk_gate
-> =C2=A0 clk: thead: th1520-ap: fix parent of padctrl0 clock
->=20
-> =C2=A0drivers/clk/thead/clk-th1520-ap.c | 385 +++++++++++++++------------=
--
-> --
-> =C2=A01 file changed, 188 insertions(+), 197 deletions(-)
->=20
-
+Applied to clk-next
 
