@@ -1,177 +1,154 @@
-Return-Path: <linux-clk+bounces-26110-lists+linux-clk=lfdr.de@vger.kernel.org>
+Return-Path: <linux-clk+bounces-26116-lists+linux-clk=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC2BCB269F7
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Aug 2025 16:49:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C235B26AFF
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Aug 2025 17:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6953E1885BA2
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Aug 2025 14:43:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24F6A7B0516
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Aug 2025 15:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096A91EF091;
-	Thu, 14 Aug 2025 14:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lACj2DGd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7021C84C7;
+	Thu, 14 Aug 2025 15:30:11 +0000 (UTC)
 X-Original-To: linux-clk@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B3D1DE3B5;
-	Thu, 14 Aug 2025 14:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8D5217F34;
+	Thu, 14 Aug 2025 15:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755182570; cv=none; b=p+rHp5u56gcu5cINPQpL0EXtrOsPMCwbHOFB+YvxjAoOacSSvfk0ZEeOGXgwwwIrBOJHT5/ylvbD8MKBXdNyfOssDXzGM2ufMieuUPcaXnP6KYlo9C8XtHTZbFYtpowdLmq6GmjOdOaUnLG0TGL2Jni2Ln7iWrK21vt1ZDlOMaU=
+	t=1755185410; cv=none; b=k7rOo7uJVir9MYoLiuz4umSFH/aM7hL3b9G09uOmNUCWQedFh2p9nlMuuZxXfIkfKJCsxkUigagRjheewOfIhdg232rOjRJ4eaYPXthFA+1kVcrYYoB1a77paXHcxWbU8/N4IxxXSMJ7LpGHbyruZcy7Nueu9x68iakeBNNWCvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755182570; c=relaxed/simple;
-	bh=MobfB4SZ6VjZKXzrXbLomGeTlLEdXpJz0vuRlj/n+Io=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E8z+vLXmujltHJU88qAgGujoJcRK4QLJ/FyMuBMBociupQN8UScy3To2ihldyacYZJX8S8WHvznTNfHrAxhKlXW4fJghwfVUA4mI5yLBpK/ohXs/R34/xt2Hb/lNaGkrRatst9MXMSjBUHa+FfYldxGtMkJZqc9ZimHbfjz4Hfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lACj2DGd; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1755185410; c=relaxed/simple;
+	bh=QYRUK4EXKQ3Br3Wc32yS0rLX0zRpM2iSrQbV0k4msLA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W5HaWJNB5yFOWH6ORohcWcjxlNHxkOlGsKLnAmPqyscyHSFNo7kq5OUrqGGCp6C7e42BMNNGupoqRf6DyZwQ6TFFZSIogP4IZWK4cA74b8oa9iUzFCB7+U+p64mxiQB/mAtjLohw4qzWxsMh3MNWIy5gAXao3fcIRK+Nyv1jb5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45a1b004a31so7024685e9.0;
-        Thu, 14 Aug 2025 07:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755182567; x=1755787367; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p2VPK+LGzPHiwIqFk3Ohj/RoTK5gsaz46bIEazLhBRA=;
-        b=lACj2DGdF6YwEyiWB+E+cAgkbqQeGIURjoHZi+Vc8Cwvc7BOX5Rj37X7cRVRzyUrwC
-         2yOLO3GtcA7gYkbIcLUWX0ZG/WligU6Q6oh3dPGLed8s3BmYGLSOYkvoJ9hxXUkuuGmT
-         tuq6QBO6Z+QgKCaYLZeIUgErJiGmStxTVVMzX7mk2sQiiKCg+BvaKwUmlw+bfFrTkQDx
-         /vsa7DSb6ppZpAkoveCTFQw1xBZH5QJKxrfJ9gkdqD/J3H54nOck4NDUvmjpE3H4lWv+
-         F3GZBq0phxKS1ICxruwuweD7UA1Mmetm9kW1/g0xfPPmfLKuoXH0XxKGi1HdpYRYGPB9
-         1kbg==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-74381ed5567so549123a34.1;
+        Thu, 14 Aug 2025 08:30:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755182567; x=1755787367;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p2VPK+LGzPHiwIqFk3Ohj/RoTK5gsaz46bIEazLhBRA=;
-        b=mFAjcqRV95tcLVWiICk2Xz9gOtLdkcH/yuVBwgWiY4nZgFSIwCg4JgRCQvBNALNhF9
-         l1Hq90wLjktnbIbdT/hcLFr3yTpSEFVQbS0Bztyj/1fWM/DclGoxqzmm5hK6ss0JePap
-         7F0rVwmQVQ2R+L1/FuWsGmAPmDiXToSF8WksYYPccIxIK2+mOrWv7ZFzesgzFIHyb8og
-         4h7mHL8mG6tXUKbdxC4+gaLSZshD64pgpUsIXWVZx+L5iAOoh5qhW+aRoT56e7Eh7Egj
-         h5BYm/rYilz4Qfstt4tqElIyEh70KUDFA3Q4/+ePUS2WqkEW7oCGQM9Buh5Z407xOfbT
-         4c+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUjK5T6oOGriTjWZ6SREBpSoXhAY9QXpZGeqbhN0930tK367/fpVYapVuQy9NKGezbMV1xbw9LxL6tq@vger.kernel.org, AJvYcCVNSmH5Wfu6URIXsucvJX/z7SSK1mgp7pr4mpmyD1fZvUegCUSIu2AdQ+V9DJ9yGBpKL1YY4yUfTgCwEKodx+22eA==@vger.kernel.org, AJvYcCVSropR0Cl+fwoQFwIq3daJg7zCUsOnBbNWDVGPZFKJU9Pq7gBg+WgtYH8IiY7bPyeFOV1XRfHWVLCb@vger.kernel.org, AJvYcCVwzBpwQVAHsfHBg+S5jq7ydUftLB+X7Ykn9o20mhPZayhoAhr1+HWQPsyn06FdGsU1J6dMdgGz1X126uwl@vger.kernel.org, AJvYcCWw65ZP+Bl+iEMSmCfvsyGr0cCodufTgUvsr+cMwsXeWR4HGwlMYFwhvN5s0BCzWEksJOwtVOtqkoia@vger.kernel.org
-X-Gm-Message-State: AOJu0YzATodbTaqvU8jbB4bQjkQr3m/56WXNTl8b5G0tzY8mlwQRo177
-	hro/Q2eFoReoCIMmFyZStrnA7i7pAMrUwMbixhetAB4J/eLTMQEmIGnK
-X-Gm-Gg: ASbGncskHf6A28yLvJKrlWB8b7Wx93wl0XTQ8apx/7wOGFpf1/DqG2wrVfr7j7++hEd
-	DfnljX0VqrwspoIgrDhbO/m+ozdAQYC8uziY+80L+W7DVyZkQ1AQ1DoxKO4l2DAKoEOv9UAIJqJ
-	GtO2SiiKt2CqkXF3e+jvcywmCaUBaxqrIYHKl+WOU/GAaLX0mbUQUFOi7rNR1jWP06tozXIe1bu
-	9me5Gr30hJ8rSeIDTb75GoLSafULYpXYee8CGpy80AqGqs0Pn0gH6Rh52r+W4bD77P00i9OcDlc
-	uhFCE+8agsl5gyjEVcc3z2QVayWMPRktcb7HshKUOqOGduke8kacglZoWxPBbY2KfACsg+idzwL
-	YxR5PczYWIZcKrE87XFMIT7/7QMgVrjL4NgY+xiaHWiMPdv5LqK+TbS6AYf6Y1SAKseKWppPGGT
-	oSmceIoTU1vNdX5W9YYHvGAbVvvuH0dqfUh3Q0Y88Ziquqj6octTNQ5yzFvzBX66O6H5tQFGhLa
-	po=
-X-Google-Smtp-Source: AGHT+IFhCWJEojvA7i+pME+fago4vJDtFzuQD2e2yOvIROciTuu5CIqY7MvPDw7EgLATDPP7poH6og==
-X-Received: by 2002:a05:600c:4f49:b0:440:6a1a:d89f with SMTP id 5b1f17b1804b1-45a1fe78624mr4900695e9.4.1755182567395;
-        Thu, 14 Aug 2025 07:42:47 -0700 (PDT)
-Received: from ?IPV6:2a01:cb08:941b:4c00:f383:4db2:82a:81e9? (2a01cb08941b4c00f3834db2082a81e9.ipv6.abo.wanadoo.fr. [2a01:cb08:941b:4c00:f383:4db2:82a:81e9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a1c718769sm24256305e9.30.2025.08.14.07.42.45
+        d=1e100.net; s=20230601; t=1755185408; x=1755790208;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n9du/Bs1Vwkuk15qOOpl62+YeIchI37tbTZ/WdEUy2s=;
+        b=WaHN2/mYnRT+unxLRZOZ+kEa3l1yZdDfqt7WWxL9VEVeCN7GwnyTLXeHAUkrlga27k
+         7+OV3iSRxu6EKR5KS8H8hQ47/PGO7LfStqt9DG9dlyginSlE5s30L3XmdiaHRs5LOsjt
+         XCMHvOi7AgaNy93QOKKuZ/Bz3/uq3V8QMiRymwVJziXgsXkgNOIx+fUBVQ39LOuWGTIi
+         peA8nuuB9l4ZcI0F1zQ2U6rkd5hTccS2ejCK6xQ0DSJ5SxzER4tWaqvGDaZVkCGTXYys
+         U8lPGvBBiTKYxiJxFFgewcYuEfOupqaGFQa7WG5uY5w/F36mTJgSNxwLAdalGjOyxP9v
+         AC9A==
+X-Forwarded-Encrypted: i=1; AJvYcCU4gRhRyvAySezY67c6igw65uZ5HuUFdUpoTdGUxBE2gVibmJQIFkqO8MVWGU6DYNzCRnEMANcH7Q==@vger.kernel.org, AJvYcCUBVf5+8s4eAmJe9ntYm4gGyLCWcDxy/+0J+Q1svNLn6l8p/vCQDAAclRja7xM4LZFq6p7ei6o0LzL0VQ==@vger.kernel.org, AJvYcCUWur4iOlN14ame+Y5nhwwpzIli8pvJxmrW4CqWKzk+tbSygDcmQhE10i921un6B9JsWCFSW1DYKscpekooww==@vger.kernel.org, AJvYcCVVW9nJ++owPEt/fgroLh2NS4H6t88vdsOfxBEVMcwYTHgGa5EmadgnIYKcQvi9XMMJlc9VgmdN6PVom4dYP/Ze4FI=@vger.kernel.org, AJvYcCVs48fAsh1ErLmLhzxf/Fao4/5VJMoacj8/M6ik8A8q8ax4Un4D/DpvAvFSER7QUojHCNxa+Qdwq2YilcC79SZAvR8=@vger.kernel.org, AJvYcCWn8oFMEqlJoluVsfrFni2hJ2x1XxXdUa0PFsmbfbKEkN4hdMzH3LYjl6Ng1Pmih15J/Yj9I12qIFeEGMqf@vger.kernel.org, AJvYcCXGTOzeWqWg5O15R60qs/XJaO5jsrr8x7y17lG23YB0rfG+GT2hCjnllMbhrVi7SG11h4sWf1j56C2y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBDw0THRN4Q46qgLQkFoW8FpLg3CaVPomqdcCkOsZhPQ/woOyx
+	kakVk76E0EdfNMXS8TvQBvlQIj4muuTJRldymROE1iPF4IM7o0X29lF++927D1oZ
+X-Gm-Gg: ASbGncscS+Sbh+mDgUneinz05aB0yT7boHrW9WHr8ADWJnj8pGBhVVgWQ0gOOEDIbA8
+	M2KADpZKSCgrAJFNzv/FqKyQ/ZHwuWHAydHAvTjmEUz+c/Lu4SN34KKYf8q7MMUK4Bb/9zImor+
+	VUAipw396zRgvllF1NLWDmiTD5LKdawyfIUzugTlXMUKAIBG/q8CEMU2Grb7J88TJKU43THncG5
+	Yg37bn0IHJXSAGfTa9+fprHoWlnWLwPy2wmLqLgJ5rLIwJ8saMw75+CxkOUmZuhQV0jjvhBlY1s
+	CedxA0s/4KSeokUBoPmFLWjZFcXoYs/+xW65Qez9q75TBi9m4j1X0ymLkM5oUFeTIWc/gZrQIWw
+	4QcHhJ4k2l4jkoIznp1sHJCP9PvRmaMbN/P0XO0hSfWT7v1FEE3nYSL8XDXVS2JIZ7b+md6g=
+X-Google-Smtp-Source: AGHT+IEBDxnMmtw1mGlZxi3sooeebHiN8D20hnUAg1n9o8DiDqOJlvJCPF0OHdbMATdI2suzUal3RA==
+X-Received: by 2002:a05:6830:661a:b0:741:b827:feda with SMTP id 46e09a7af769-74382c02786mr2278808a34.25.1755185408212;
+        Thu, 14 Aug 2025 08:30:08 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7436f7a3e73sm1514152a34.0.2025.08.14.08.30.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Aug 2025 07:42:46 -0700 (PDT)
-Message-ID: <da8578ae-3f79-4082-b0fb-760553004c93@gmail.com>
-Date: Thu, 14 Aug 2025 16:42:45 +0200
+        Thu, 14 Aug 2025 08:30:07 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-74381dd4c61so502515a34.0;
+        Thu, 14 Aug 2025 08:30:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+5+VbG8A5HplG2YF5gMN5YBXYrcmt9co6DXu2dQwbs115RxWEzBT9tkbWPviUZ4scC9pEZTvAXot0phoM@vger.kernel.org, AJvYcCU3caaQfm9J4CkDm4Xxc6tFebVuGkUM7gzmc4IG/nOWQ+RGV7JV3RWHCNb7otHImvLJbTBtV7ug4w==@vger.kernel.org, AJvYcCV2VHiy91g1zcG/3ec3wR8HE3lY+kGnSpTXsd3eOwakmPO7vK8KgU/5s3dipWYSgKPMD4s4IcQNMRdq@vger.kernel.org, AJvYcCW4a0S7PVZTtUTpIQmbikGoIZRXYqpq9pXzuimfZpxc8ANuu8bZjJEInNdct40klHVS83YARanaQoAStmdyQQ==@vger.kernel.org, AJvYcCWN1BCj0jaVuIfUzcr11dN35Ed8iFJQWDts/s9d3mlHrzsFwVOnHGyBnBA8ScXEp4iwHGHqk1dIv+CSO6wvhRuMdoM=@vger.kernel.org, AJvYcCWroU6fm2UL6HGy7s6/1XLC4aiaSan0APJb+J8iwBvVGfR1obVluDaebcomd6+Didl11tP24iNmZOb3CQ==@vger.kernel.org, AJvYcCXxrcwzKyKPkXZczkpFUZYAhPpGyTGoRBJT7H+MGODzLbDOSxwhPLfWHeaesnsC17nG6oo5ueIdRwdnOZbuLMx8Eh8=@vger.kernel.org
+X-Received: by 2002:a05:690c:700b:b0:719:f582:be17 with SMTP id
+ 00721157ae682-71d635fe81bmr48846567b3.35.1755183986689; Thu, 14 Aug 2025
+ 08:06:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-clk@vger.kernel.org
 List-Id: <linux-clk.vger.kernel.org>
 List-Subscribe: <mailto:linux-clk+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-clk+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/20] dt-bindings: memory: introduce DDR4
-To: Rob Herring <robh@kernel.org>,
- =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Cc: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Jonathan Corbet <corbet@lwn.net>,
- Gatien Chevallier <gatien.chevallier@foss.st.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, Julius Werner <jwerner@chromium.org>,
- linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org,
- devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-clk@vger.kernel.org
-References: <20250728-ddrperfm-upstream-v5-0-03f1be8ad396@foss.st.com>
- <20250728-ddrperfm-upstream-v5-6-03f1be8ad396@foss.st.com>
- <20250730211151.GA1749004-robh@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <legoffic.clement@gmail.com>
-In-Reply-To: <20250730211151.GA1749004-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com> <20250811-clk-for-stephen-round-rate-v1-92-b3bf97b038dc@redhat.com>
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-92-b3bf97b038dc@redhat.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 14 Aug 2025 17:06:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUR9phiPyhi9=f3gdA_f5oRmaX=ucj8SUquXQEq7bUTkg@mail.gmail.com>
+X-Gm-Features: Ac12FXzt8_e3pGt50aBSDpwDZhCGVBhDLrUDheSmsSXHpMoy_pb5BR_R7aHtEdE
+Message-ID: <CAMuHMdUR9phiPyhi9=f3gdA_f5oRmaX=ucj8SUquXQEq7bUTkg@mail.gmail.com>
+Subject: Re: [PATCH 092/114] clk: renesas: rzg2l-cpg: convert from
+ round_rate() to determine_rate()
+To: bmasney@redhat.com
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Paul Cercueil <paul@crapouillou.net>, Keguang Zhang <keguang.zhang@gmail.com>, 
+	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, 
+	Vladimir Zapolskiy <vz@mleia.com>, Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	Yixun Lan <dlan@gentoo.org>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
+	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
+	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Chunyan Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek <michal.simek@amd.com>, 
+	Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Daniel Palmer <daniel@thingy.jp>, 
+	Romain Perier <romain.perier@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Andrea della Porta <andrea.porta@suse.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Alex Helms <alexander.helms.jy@renesas.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, sophgo@lists.linux.dev, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+	linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com, 
+	linux-actions@lists.infradead.org, asahi@lists.linux.dev, 
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Rob,
+On Mon, 11 Aug 2025 at 17:19, Brian Masney via B4 Relay
+<devnull+bmasney.redhat.com@kernel.org> wrote:
+> From: Brian Masney <bmasney@redhat.com>
+>
+> The round_rate() clk ops is deprecated, so migrate this driver from
+> round_rate() to determine_rate() using the Coccinelle semantic patch
+> on the cover letter of this series.
+>
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 
-On 30/07/2025 23:11, Rob Herring wrote:
-> On Mon, Jul 28, 2025 at 05:29:37PM +0200, Clément Le Goffic wrote:
->> Introduce JEDEC compliant DDR bindings, that use new memory-props binding.
->>
->> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
->> ---
->>   .../memory-controllers/ddr/jedec,ddr4.yaml         | 34 ++++++++++++++++++++++
->>   1 file changed, 34 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,ddr4.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,ddr4.yaml
->> new file mode 100644
->> index 000000000000..f457066a2f8b
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,ddr4.yaml
->> @@ -0,0 +1,34 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,ddr4.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: DDR3 SDRAM compliant to JEDEC JESD79-4D
->> +
->> +maintainers:
->> +  - Krzysztof Kozlowski <krzk@kernel.org>
->> +
->> +allOf:
->> +  - $ref: jedec,sdram-props.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - pattern: "^ddr4-[0-9a-f]{2},[0-9a-f]{1}$"
-> 
-> Shouldn't this be 'jedec,ddr4-...'
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.18.
 
-That's not the case for lpddr bindings, I wanted both lpddr and ddr 
-bindings to be similar but this can change.
+Gr{oetje,eeting}s,
 
-> 
->> +      - const: jedec,ddr4
->> +
->> +required:
->> +  - compatible
->> +  - density
->> +  - io-width
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    ddr {
->> +        compatible = "ddr4-ff,f", "jedec,ddr4";
->> +        density = <8192>;
->> +        io-width = <8>;
->> +    };
->>
->> -- 
->> 2.43.0
->>
+                        Geert
 
-Best regards,
-Clément
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
